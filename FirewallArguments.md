@@ -1,5 +1,9 @@
 
-# PORTS
+Parameters and their values are not the same as they are displaied in Firewall GUI such as GPO or Adv Windows firewall.
+
+This documents helps understand what is what by mapping powershell parameters to GUI display equivalents.
+
+# PORT
 **LocalPort/RemotePort**
 - `Any` All Ports
 
@@ -33,3 +37,15 @@
 - `IntranetRemoteAccess` Remote Corp Network
 - `PlayToDevice` PlayTo Renderers
 - `?` Captive Portal Addresses
+
+# INTERFACE
+`Any` All interface types
+`Wired` Wired
+`Wireless` Wireless
+`RemoteAccess` Remote access
+
+# USERS
+`Localuser` Authorized local Principals
+`?` Excepted local Principals
+`Owner` Local User Owner
+`RemoteUser` Authorized Users
