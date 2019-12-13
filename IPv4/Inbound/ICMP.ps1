@@ -22,82 +22,82 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Inboun
 # Destination filtering
 #
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
--DisplayName "ICMP Local Subnet" -Program $Program `
+-DisplayName "ICMP Local Subnet" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
--Direction Inbound -Protocol ICMPv4 -IcmpType 0 -LocalAddress Any -RemoteAddress LocalSubnet4 `
+-Direction Inbound -Protocol ICMPv4 -IcmpType Any -LocalAddress Any -RemoteAddress LocalSubnet4 `
 -Localuser $NT_AUTHORITY_SYSTEM -Description $Description
 
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
--DisplayName "ICMP Subnet APIPA" -Program $Program `
+-DisplayName "ICMP Subnet APIPA" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
--Direction Inbound -Protocol ICMPv4 -IcmpType 0 -LocalAddress Any -RemoteAddress 169.254.1.0-169.254.254.255 `
+-Direction Inbound -Protocol ICMPv4 -IcmpType Any -LocalAddress Any -RemoteAddress 169.254.1.0-169.254.254.255 `
 -Localuser $NT_AUTHORITY_SYSTEM -Description $Description
 
 #
 # Type filtering
 #
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
--DisplayName "Echo Reply" -Program $Program `
+-DisplayName "Echo Reply" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 0 -LocalAddress Any -RemoteAddress $RemoteAddr `
 -Localuser $NT_AUTHORITY_SYSTEM -Description $Description
 
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
--DisplayName "Destination Unreachable" -Program $Program `
+-DisplayName "Destination Unreachable" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 3 -LocalAddress Any -RemoteAddress $RemoteAddr `
 -Localuser $NT_AUTHORITY_SYSTEM -Description $Description
 
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
--DisplayName "Redirect" -Program $Program `
+-DisplayName "Redirect" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 5 -LocalAddress Any -RemoteAddress $RemoteAddr `
 -Localuser $NT_AUTHORITY_SYSTEM -Description $Description
 
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
--DisplayName "Echo Request" -Program $Program `
+-DisplayName "Echo Request" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 8 -LocalAddress Any -RemoteAddress $RemoteAddr `
 -Localuser $NT_AUTHORITY_SYSTEM -Description $Description
 
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
--DisplayName "Router Advertisement" -Program $Program `
+-DisplayName "Router Advertisement" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 9 -LocalAddress Any -RemoteAddress $RemoteAddr `
 -Localuser $NT_AUTHORITY_SYSTEM -Description $Description
 
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
--DisplayName "Router Selection" -Program $Program `
+-DisplayName "Router Selection" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 10 -LocalAddress Any -RemoteAddress $RemoteAddr `
 -Localuser $NT_AUTHORITY_SYSTEM -Description $Description
 
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
--DisplayName "Time Exceeded" -Program $Program `
+-DisplayName "Time Exceeded" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 11 -LocalAddress Any -RemoteAddress $RemoteAddr `
 -Localuser $NT_AUTHORITY_SYSTEM -Description $Description
 
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
--DisplayName "Parameter Problem" -Program $Program `
+-DisplayName "Parameter Problem" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 12 -LocalAddress Any -RemoteAddress $RemoteAddr `
 -Localuser $NT_AUTHORITY_SYSTEM -Description $Description
 
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
--DisplayName "Timestamp" -Program $Program `
+-DisplayName "Timestamp" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 13 -LocalAddress Any -RemoteAddress $RemoteAddr `
 -Localuser $NT_AUTHORITY_SYSTEM -Description $Description
 
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
--DisplayName "Timestamp Reply" -Program $Program `
+-DisplayName "Timestamp Reply" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 14 -LocalAddress Any -RemoteAddress $RemoteAddr `
 -Localuser $NT_AUTHORITY_SYSTEM -Description $Description
 
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
--DisplayName "Photuris" -Program $Program `
+-DisplayName "Photuris" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 40 -LocalAddress Any -RemoteAddress $RemoteAddr `
 -Localuser $NT_AUTHORITY_SYSTEM -Description $Description
