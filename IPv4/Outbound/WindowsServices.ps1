@@ -136,3 +136,10 @@ New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
 -Description "The service is responsible for applying settings configured by administrators for the computer and users through the Group Policy component.
 If the service is disabled, the settings will not be applied and applications and components will not be manageable through Group Policy.
 Any components or applications that depend on the Group Policy component might not be functional if the service is disabled."
+
+New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Device Setup Manager" -Program $ServiceHost -Service DsmSvc `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet -LocalPort Any -RemotePort 80 `
+-Description "Enables the detection, download and installation of device-related software.
+If this service is disabled, devices may be configured with outdated software, and may not work correctly."
