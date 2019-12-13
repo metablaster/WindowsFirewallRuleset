@@ -11,7 +11,7 @@ $Deubg = $false
 
 
 #First remove all existing rules matching setup
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Outbound -ErrorAction SilentlyContinue
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Inbound -ErrorAction SilentlyContinue
 
 #
 # Loopback
@@ -20,31 +20,14 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Outbou
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Loopback" -Service Any -Program Any `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
--Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress 127.0.0.1 -LocalPort Any -RemotePort Any `
+-Direction Inbound -Protocol TCP -LocalAddress Any -RemoteAddress 127.0.0.1 -LocalPort Any -RemotePort Any `
 -Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources."
 
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Loopback" -Service Any -Program Any `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
--Direction Outbound -Protocol TCP -LocalAddress 127.0.0.1 -RemoteAddress Any -LocalPort Any -RemotePort Any `
+-Direction Inbound -Protocol TCP -LocalAddress 127.0.0.1 -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources."
-
-#
-# DNS (Domain Name System)
-#
-
-# TODO: official rule uses loose source mapping
-New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
--DisplayName "Domain Name System" -Service Dnscache -Program "%SystemRoot%\System32\svchost.exe" `
--Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress DNS4 -LocalPort Any -RemotePort 53 `
--Description "Allow DNS requests."
-
-New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
--DisplayName "Domain Name System" -Service Any -Program System `
--Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress DefaultGateway4 -LocalPort Any -RemotePort 53 `
--LocalUser $NT_AUTHORITY_SYSTEM -Description "Allow DNS requests by System to default gateway."
 
 #
 # DHCP (Dynamic Host Configuration Protocol)
@@ -53,7 +36,8 @@ New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform -Po
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Dynamic Host Configuration Protocol" -Service Dhcp -Program "%SystemRoot%\System32\svchost.exe" `
 -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress DHCP4 -LocalPort 68 -RemotePort 67 `
+-Direction Inbound -Protocol UDP -LocalAddress Any -RemoteAddress DHCP4 -LocalPort 68 -RemotePort 67 `
+-EdgeTraversalPolicy Block `
 -Description "Allow DHCPv4 messages for stateful auto-configuration."
 
 #
@@ -63,7 +47,8 @@ New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform -Po
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Internet Group Management Protocol" -Service Any -Program System `
 -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction Outbound -Protocol 2 -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
+-Direction Inbound -Protocol 2 -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
+-EdgeTraversalPolicy Block `
 -LocalUser $NT_AUTHORITY_SYSTEM -Description "IGMP messages are sent and received by nodes to create, join and depart multicast groups."
 
 #
@@ -73,7 +58,8 @@ New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform -Po
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "IPv4 over HTTPS" -Service iphlpsvc -Program "%SystemRoot%\system32\svchost.exe" `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort IPHTTPSout `
+-Direction Inbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort IPHTTPSIn -RemotePort Any `
+-EdgeTraversalPolicy Block `
 -Description "Allow IPv4 IPHTTPS tunneling technology to provide connectivity across HTTP proxies and firewalls."
 
 #
@@ -83,6 +69,7 @@ New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform -Po
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Teredo" -Service iphlpsvc -Program "%SystemRoot%\system32\svchost.exe" `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 3544 `
+-Direction Inbound -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Teredo -RemotePort Any `
+-EdgeTraversalPolicy Block `
 -Description "Allow Teredo edge traversal, a technology that provides address assignment and automatic tunneling
 for unicast IPv6 traffic when an IPv6/IPv4 host is located behind an IPv4 network address translator."
