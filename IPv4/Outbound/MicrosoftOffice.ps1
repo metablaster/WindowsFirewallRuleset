@@ -38,7 +38,7 @@ New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
 
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Document Cache" -Program "%ProgramFiles%\Microsoft Office\root\Office16\MSOSYNC.EXE" `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet -LocalPort Any -RemotePort 443 `
 -Description "The Office Document Cache is a concept used in Microsoft Office Upload Center
 to give you a way to see the state of files you are uploading to a SharePoint server. "
@@ -63,37 +63,37 @@ New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
 
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Outlook (HTTP/S)" -Program "%ProgramFiles%\Microsoft Office\root\Office16\OUTLOOK.EXE" `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet -LocalPort Any -RemotePort 80, 443 `
 -Description ""
 
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Outlook (IMAP SSL)" -Program "%ProgramFiles%\Microsoft Office\root\Office16\OUTLOOK.EXE" `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet -LocalPort Any -RemotePort 993 `
 -Description "Incoming mail server over SSL."
 
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Outlook (IMAP)" -Program "%ProgramFiles%\Microsoft Office\root\Office16\OUTLOOK.EXE" `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet -LocalPort Any -RemotePort 143 `
 -Description "Incoming mail server."
 
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Outlook (POP3 SSL)" -Program "%ProgramFiles%\Microsoft Office\root\Office16\OUTLOOK.EXE" `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet -LocalPort Any -RemotePort 110 `
 -Description "Incoming mail server over SSL."
 
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Outlook (POP3)" -Program "%ProgramFiles%\Microsoft Office\root\Office16\OUTLOOK.EXE" `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet -LocalPort Any -RemotePort 995 `
 -Description "Incoming mail server."
 
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Outlook (SMTP)" -Program "%ProgramFiles%\Microsoft Office\root\Office16\OUTLOOK.EXE" `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet -LocalPort Any -RemotePort 25 `
 -Description "Outgoing mail server."
 
@@ -123,13 +123,13 @@ New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
 
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Skype for business" -Program "%ProgramFiles%\Microsoft Office\root\Office16\lync.exe" `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet -LocalPort Any -RemotePort 80, 443, 33033 `
 -Description "Skype for business, previously lync."
 
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Telemetry Agent" -Program "%ProgramFiles%\Microsoft Office\root\Office16\msoia.exe" `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet -LocalPort Any -RemotePort 443 `
 -Description "The telemetry agent collects several types of telemetry data for Office.
 https://docs.microsoft.com/en-us/deployoffice/compat/data-that-the-telemetry-agent-collects-in-office"
