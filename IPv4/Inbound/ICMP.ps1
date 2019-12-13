@@ -16,7 +16,6 @@ $Deubg = $false
 
 
 #First remove all existing rules matching setup
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Outbound -ErrorAction SilentlyContinue
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Inbound -ErrorAction SilentlyContinue
 
 #
