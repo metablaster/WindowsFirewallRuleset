@@ -36,12 +36,14 @@ New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
 -Description "Its purpose is to scans your hardware, devices, and installed programs for known compatibility issues
 with a newer Windows version by comparing them against a specific database."
 
+# TODO: need to check if port 22 is OK.
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Background task host" -Program "%SystemRoot%\System32\backgroundTaskHost.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet -LocalPort Any -RemotePort 80 `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet -LocalPort Any -RemotePort 22, 80 `
 -Description "backgroundTaskHost.exe is the process that starts background tasks.
 So Cortana and the other Microsoft app registered a background task which is now started by Windows.
+Port 22 is most likely used for installation.
 https://docs.microsoft.com/en-us/windows/uwp/launch-resume/support-your-app-with-background-tasks"
 
 # TODO: no comment
@@ -229,3 +231,9 @@ New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet -LocalPort Any -RemotePort 443 `
 -Description "Anti malware service executable."
+
+New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
+-DisplayName "WMI Provider Host" -Program "%SystemRoot%\System32\wbem\WmiPrvSE.exe" `
+-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet -LocalPort Any -RemotePort 22 `
+-Description ""
