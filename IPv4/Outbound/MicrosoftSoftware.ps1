@@ -119,3 +119,51 @@ New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
 -Description "mscorsvw.exe is precompiling .NET assemblies in the background.
 Once it's done, it will go away. Typically, after you install the .NET Redist,
 it will be done with the high priority assemblies in 5 to 10 minutes and then will wait until your computer is idle to process the low priority assemblies."
+
+New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
+-DisplayName "vcpkg" -Program "%SystemDrive%\Users\User\source\repos\vcpkg\vcpkg.exe" `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet -LocalPort Any -RemotePort 443 `
+-Description "install package source code"
+
+New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
+-DisplayName "vcpkg (powershell)" -Program "%SystemDrive%\Users\User\source\repos\vcpkg\downloads\tools\powershell-core-6.2.1-windows\powershell.exe" `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet -LocalPort Any -RemotePort 443 `
+-Description "vcpkg has it's own powershell"
+
+New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Nuget CLI" -Program "%SystemDrive%\tools\nuget.exe" `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet -LocalPort Any -RemotePort 80, 443 `
+-Description ""
+
+New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Sysinternals Autoruns" -Program "%SystemDrive%\tools\Autoruns\Autoruns64.exe" `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet -LocalPort Any -RemotePort 443 `
+-Description "Access to VirusTotal"
+
+New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Sysinternals ProcessExplorer" -Program "%SystemDrive%\tools\ProcessExplorer\procexp64.exe" `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet -LocalPort Any -RemotePort 443 `
+-Description "Access to VirusTotal"
+
+New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Sysinternals ProcessMonitor" -Program "%SystemDrive%\tools\ProcessMonitor\Procmon.exe" `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet -LocalPort Any -RemotePort 443 `
+-Description "Access to symbols server"
+
+New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Sysinternals TcpView" -Program "%SystemDrive%\tools\TCPView\Tcpview.exe" `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet -LocalPort Any -RemotePort 43 `
+-Description "WhoIs access"
+
+New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Sysinternals WhoIs" -Program "%SystemDrive%\tools\WhoIs\whois64.exe" `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet -LocalPort Any -RemotePort 43 `
+-Description ""

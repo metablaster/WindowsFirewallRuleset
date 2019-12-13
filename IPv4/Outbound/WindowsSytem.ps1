@@ -237,3 +237,9 @@ New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet -LocalPort Any -RemotePort 22 `
 -Description ""
+
+New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
+-DisplayName "OpenSSH" -Program "%SystemRoot%\System32\OpenSSH\ssh.exe" `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet -LocalPort Any -RemotePort 22 `
+-Description ""
