@@ -100,3 +100,29 @@ $ACL | ParseSDDL
 # Or call with parameter string
 ParseSDDL $ACL.SDDL
  #>
+
+function RunThis($str)
+{
+    if($str)
+    {
+        $title = $str
+    }
+    else
+    {
+        $title = "Executing: "
+        $title += Split-Path -Leaf $MyInvocation.ScriptName
+    }
+
+    $question = "Are you sure you want to proceed?"
+    $choices  = "&Yes", "&No"
+
+    $decision = $Host.UI.PromptForChoice($title, $question, $choices, 0)
+    if ($decision -eq 0)
+    {
+        return $true
+    }
+    else
+    {
+        return $false
+    }
+}
