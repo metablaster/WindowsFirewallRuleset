@@ -27,6 +27,8 @@ SOFTWARE.
 # Import global variables
 #
 . "$PSScriptRoot\..\..\Modules\GlobalVariables.ps1"
+
+# Ask user if he wants to load these rules
 if (!(RunThis)) { exit }
 
 #

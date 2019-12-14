@@ -27,6 +27,8 @@ SOFTWARE.
 # Import global variables
 #
 . "$PSScriptRoot\..\..\Modules\GlobalVariables.ps1"
+
+# Ask user if he wants to load these rules
 if (!(RunThis)) { exit }
 
 #
@@ -52,9 +54,7 @@ $YandexApp = "$YandexRoot\YandexBrowser\Application\browser.exe"
 $TorRoot = "%SystemDrive%\Users\User\AppData\Local\Tor Browser"
 $TorApp = "$TorRoot\Browser\TorBrowser\Tor\tor.exe"
 
-#
 # First remove all existing rules matching group
-#
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Outbound -ErrorAction SilentlyContinue
 
 #

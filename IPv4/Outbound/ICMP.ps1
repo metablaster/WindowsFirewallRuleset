@@ -39,11 +39,17 @@ SOFTWARE.
 # 30 Traceroute
 # 31 to 39
 
+#
 # Import global variables
+#
 . "$PSScriptRoot\..\..\Modules\GlobalVariables.ps1"
+
+# Ask user if he wants to load these rules
 if (!(RunThis)) { exit }
 
+#
 # Setup local variables:
+#
 $Group = "ICMPv4"
 $Program = "System"
 $Interface = "Wired, Wireless"
@@ -68,6 +74,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Outbou
 #
 # ICMP type filtering for All profiles
 #
+
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Echo Request" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
@@ -120,6 +127,7 @@ Code 0 may be received from a gateway or a host."
 #
 # ICMP type filtering for public profile
 #
+
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Echo Reply" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $Interface `

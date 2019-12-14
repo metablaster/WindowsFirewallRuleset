@@ -47,6 +47,8 @@ Address Range                 Size       Designation
 # Import global variables
 #
 . "$PSScriptRoot\..\..\Modules\GlobalVariables.ps1"
+
+# Ask user if he wants to load these rules
 if (!(RunThis)) { exit }
 
 #
@@ -62,6 +64,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Inboun
 #
 # ICMP type filtering for All profiles
 #
+
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Local Network Control Block" -Service Any -Program Any `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

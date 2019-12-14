@@ -27,6 +27,8 @@ SOFTWARE.
 # Import global variables
 #
 . "$PSScriptRoot\..\..\Modules\GlobalVariables.ps1"
+
+# Ask user if he wants to load these rules
 if (!(RunThis)) { exit }
 
 #
@@ -41,7 +43,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Outbou
 
 #
 # Windows system rules
-# Rules that apply to Windows programs and utilities
+# Rules that apply to Windows programs and utilities, which are not handled by predefined rules
 #
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `

@@ -23,11 +23,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+#
 # Import global variables
+#
 . "$PSScriptRoot\..\..\Modules\GlobalVariables.ps1"
+
+# Ask user if he wants to load these rules
 if (!(RunThis)) { exit }
 
+#
 # Setup local variables:
+#
 $Group = "Basic Networking - IPv4"
 $Interface = "Wired, Wireless"
 $Profile = "Any"

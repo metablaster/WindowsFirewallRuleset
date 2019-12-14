@@ -39,11 +39,17 @@ SOFTWARE.
 # 30 Traceroute
 # 31 to 39
 
+#
 # Import global variables
+#
 . "$PSScriptRoot\..\..\Modules\GlobalVariables.ps1"
+
+# Ask user if he wants to load these rules
 if (!(RunThis)) { exit }
 
+#
 # Setup local variables:
+#
 $Group = "ICMPv4"
 $Program = "System"
 $Interface = "Wired, Wireless"

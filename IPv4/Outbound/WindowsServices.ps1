@@ -23,11 +23,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+#
 # Import global variables
+#
 . "$PSScriptRoot\..\..\Modules\GlobalVariables.ps1"
+
+# Ask user if he wants to load these rules
 if (!(RunThis)) { exit }
 
+#
 # Setup local variables:
+#
 $Group = "Windows Services"
 $Profile = "Private, Public"
 $Interface = "Wired, Wireless"
@@ -35,11 +41,10 @@ $ServiceHost = "%SystemRoot%\System32\svchost.exe"
 
 #First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Outbound -ErrorAction SilentlyContinue
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Inbound -ErrorAction SilentlyContinue
 
 #
 # Windows services rules
-# Rules that apply to Windows services
+# Rules that apply to Windows services which are not handled by predefined rules
 #
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
