@@ -75,7 +75,8 @@ function Get-UserSDDL
 # ParseSDDL sample usage:
 # Experiment with these different path values to see what the ACL objects do
 
-<# $path = "C:\users\User\" #Not inherited
+<#
+$path = "C:\users\User\" #Not inherited
 $path = "C:\users\username\desktop\" #Inherited
 $path = "HKCU:\" #Not Inherited
 $path = "HKCU:\Software" #Inherited
