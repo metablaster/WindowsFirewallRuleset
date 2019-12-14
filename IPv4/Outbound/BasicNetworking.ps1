@@ -15,14 +15,14 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Outbou
 # Loopback
 #
 
-New-NetFirewallRule -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Loopback" -Service Any -Program Any `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress 127.0.0.1 -LocalPort Any -RemotePort Any `
 -LocalUser Any `
 -Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources."
 
-New-NetFirewallRule -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Loopback" -Service Any -Program Any `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 -Direction Outbound -Protocol TCP -LocalAddress 127.0.0.1 -RemoteAddress Any -LocalPort Any -RemotePort Any `
@@ -34,14 +34,14 @@ New-NetFirewallRule -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 #
 
 # TODO: official rule uses loose source mapping
-New-NetFirewallRule -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Domain Name System" -Service Dnscache -Program "%SystemRoot%\System32\svchost.exe" `
 -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress DNS4 -LocalPort Any -RemotePort 53 `
 -LocalUser Any `
 -Description "Allow DNS requests."
 
-New-NetFirewallRule -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Domain Name System" -Service Any -Program System `
 -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress DefaultGateway4 -LocalPort Any -RemotePort 53 `
@@ -52,7 +52,7 @@ New-NetFirewallRule -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -Po
 # DHCP (Dynamic Host Configuration Protocol)
 #
 
-New-NetFirewallRule -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Dynamic Host Configuration Protocol" -Service Dhcp -Program "%SystemRoot%\System32\svchost.exe" `
 -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress DHCP4 -LocalPort 68 -RemotePort 67 `
@@ -63,7 +63,7 @@ New-NetFirewallRule -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -Po
 # IGMP (Internet Group Management Protocol)
 #
 
-New-NetFirewallRule -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Internet Group Management Protocol" -Service Any -Program System `
 -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol 2 -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
@@ -74,7 +74,7 @@ New-NetFirewallRule -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -Po
 # IPHTTPS (IPv4 over HTTPS)
 #
 
-New-NetFirewallRule -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "IPv4 over HTTPS" -Service iphlpsvc -Program "%SystemRoot%\system32\svchost.exe" `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort IPHTTPSout `
@@ -85,7 +85,7 @@ New-NetFirewallRule -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -Po
 # Teredo
 #
 
-New-NetFirewallRule -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Teredo" -Service iphlpsvc -Program "%SystemRoot%\system32\svchost.exe" `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 3544 `

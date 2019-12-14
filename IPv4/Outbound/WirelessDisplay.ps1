@@ -15,7 +15,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Inboun
 # Windows system predefined rules for Wireless Display
 #
 
-New-NetFirewallRule -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Wireless Display" -Service Any -Program "%SystemRoot%\System32\WUDFHost.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
