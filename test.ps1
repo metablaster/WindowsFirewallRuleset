@@ -7,7 +7,7 @@ New-NetFirewallRule -ErrorAction Stop -PolicyStore "localhost" `
 -DisplayName "Test Rule" -Service Any -Program Any `
 -Enabled False -Action Allow -Group "Test" -Profile Domain -InterfaceType Any `
 -Direction Inbound -Protocol UDP -LocalAddress Any -RemoteAddress PlayToDevice -LocalPort PlayToDiscovery -RemotePort Any `
--EdgeTraversalPolicy Block
+-LocalUser Any -EdgeTraversalPolicy Block
 
 # New-NetFirewallRule -ErrorAction Stop -PolicyStore "localhost" `
 # -DisplayName "Test Rule" -Service Any -Program Any `
