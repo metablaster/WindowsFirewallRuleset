@@ -1,6 +1,6 @@
 
 # Import global variables
-Import-Module "$PSScriptRoot\..\..\Modules\GlobalVariables.psm1"
+. "$PSScriptRoot\..\..\Modules\GlobalVariables.ps1"
 
 # Setup local variables:
 $Group = "Browser"
@@ -16,7 +16,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Inboun
 #
 
 # Google Chrome
-New-NetFirewallRule -Whatif:$Deubg -ErrorAction Continue -Platform $Platform `
+New-NetFirewallRule -Whatif:$Debug -ErrorAction Continue -Platform $Platform `
 -DisplayName "Google Chrome HTTP" -Program "%LocalAppData%\Google\Chrome\Application\chrome.exe" `
 -PolicyStore $PolicyStore -Enabled True -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 80 `
