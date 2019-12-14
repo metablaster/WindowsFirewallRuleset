@@ -21,7 +21,14 @@
 
 # Minimum system requirements
 1. Windows 10 Pro/Enterprise
-2. Windows Powershell 5
+2. Windows Powershell 5 [Download Powershell](https://github.com/PowerShell/PowerShell)
+3. Git (Optinal) [Download Git](https://git-scm.com/downloads)
+
+For older system such as Windows 7 most of the rules will work, ie. rules for Store Apps will not work.
+To be able to apply rules to older system, edit the GlobalVariables.ps1 and edit the line:
+```$Platform = "10.0+" #Windows 10 and above``` by specifying windows version, for example for Windows 7
+it should look like:
+```$Platform = "6.1" #Windows 7```
 
 # Step by step quick usage
 1. Right click on the Task bar and select `Taskbar settings`
@@ -29,19 +36,20 @@
 3. Right click on Start button in Windows system
 4. Click `Windows Powershell (Administrator)` to open Powershell as Administrator (Input Admin password if needed)
 5. Type: ```cd C:```
-6. Copy paste into console: ```git clone git@github.com:metablaster/WindowsFirewallRuleset.git``` hit enter
-7. Copy paste into console: ```cd WindowsFirewallRuleset``` hit enter
+6. Copy paste into console: ```git clone git@github.com:metablaster/WindowsFirewallRuleset.git``` and hit enter
+7. Copy paste into console: ```cd WindowsFirewallRuleset``` and hit enter
 8. Open file explorer and navigate to `C:\WindowsFirewallRuleset\Modules`
 9. Open `GlobalVariables.ps1` with your preffered code editor such as VS Code or Powershell ISE
 10. Edit the line `$User = Get-UserSDDL User`, input your username by replaing 'User' with your username,
 for example if your username is Patrick the line should look like `$User = Get-UserSDDL Patrick`
 11. Save and close the Powershell script file.
-12. Back to Powershell console and copy paste into console: ```.\Main.ps1``` hit enter (this will load all the rulles)
+12. Back to Powershell console and copy paste into console: ```.\Main.ps1``` and hit enter (this will load all the rulles)
 13. Follow prompt output, (ie. hit enter each time to proceed until done)
 
 # Where are my rules?
 Rules are loaded into Local group policy, follow bellow steps to open local group policy.
 1. Press Windows key and type: `secpol.msc`
+2. Righ click on `secpol.msc` and click `Run as administrator`
 2. Expand node: `Windows Defender Firewall with Advanced Security`
 3. Expand node: `Windows Defender Firewall with Advanced Security - Local Group Policy Object`
 4. Click on either `Inbound` or `Outbound` node to view and manage the rulles you applied with Powershell script.
@@ -61,3 +69,7 @@ At the moment the easiest way is to select all the rules you want to delete in L
 There are 2 ways to manage your rules:
 1. Using Local Group Policy, this method gives you limited freedom on what you can do whith the rules, such as disabling them or changing some attributes.
 2. Editting Powershell scripts, this method gives you full control, you can improve the rules, add new ones or screw them up.
+
+# Contribution
+Feel free to contribute new rules, or improvements for existing rules or scripts.
+Just make sure you follow existing code style.
