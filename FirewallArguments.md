@@ -39,13 +39,13 @@ This documents helps understand what is what by mapping powershell parameters to
 - `?` Captive Portal Addresses
 
 # INTERFACE
-`Any` All interface types
-`Wired` Wired
-`Wireless` Wireless
-`RemoteAccess` Remote access
+- `Any` All interface types
+- `Wired` Wired
+- `Wireless` Wireless
+- `RemoteAccess` Remote access
 
 # USERS
-`Localuser` Authorized local Principals
-`?` Excepted local Principals
-`Owner` Local User Owner
-`RemoteUser` Authorized Users
+- `Localuser` Authorized local Principals
+- `?` Excepted local Principals
+- `Owner` Local User Owner
+- `RemoteUser` Authorized Users
