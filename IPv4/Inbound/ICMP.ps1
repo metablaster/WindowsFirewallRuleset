@@ -43,6 +43,118 @@ $APIPA = "169.254.1.0-169.254.254.255"
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Inbound -ErrorAction SilentlyContinue
 
 #
+# ICMP type filtering for All profiles
+#
+New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Echo Reply" -Service Any -Program $Program `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
+-Direction Inbound -Protocol ICMPv4 -IcmpType 0 -LocalAddress Any -RemoteAddress Any `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_SYSTEM `
+-Description "The data received in the echo message must be returned in the echo reply message.
+The identifier and sequence number may be used by the echo sender to aid in matching the replies with the echo requests.
+For example, the identifier might be used like a port in TCP or UDP to identify a session,
+and the sequence number might be incremented on each echo request sent.
+The echoer returns these same values in the echo reply.
+
+IP Fields:
+Addresses
+The address of the source in an echo message will be the destination of the echo reply message.
+To form an echo reply message, the source and destination addresses are simply reversed,
+the type code changed to 0, and the checksum recomputed.
+
+Code:
+0
+Code 0 may be received from a gateway or a host."
+
+New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Destination Unreachable" -Service Any -Program $Program `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
+-Direction Inbound -Protocol ICMPv4 -IcmpType 3 -LocalAddress Any -RemoteAddress Any `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_SYSTEM `
+-Description "network specified in the RemoteAddress is unreachable, ie,
+the distance to the network is infinity, the gateway may send a destination unreachable message to the internet source host of the datagram.
+
+IP Fields:
+Destination Address
+The source network and address from the original datagram's data.
+
+Code:
+0 = net unreachable;
+1 = host unreachable;
+2 = protocol unreachable;
+3 = port unreachable;
+4 = fragmentation needed and DF set;
+5 = source route failed.
+Codes 0, 1, 4, and 5 may be received from a gateway.
+Codes 2 and 3 may be received from a host."
+
+New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Parameter Problem" -Service Any -Program $Program `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
+-Direction Inbound -Protocol ICMPv4 -IcmpType 12 -LocalAddress Any -RemoteAddress Any `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_SYSTEM `
+-Description "If the gateway or host processing a datagram finds a problem with the header parameters such that it cannot complete processing the
+datagram it must discard the datagram.  One potential source of such a problem is with incorrect arguments in an option.
+The gateway or host may also notify the source host via the parameter problem message.
+This message is only sent if the error caused the datagram to be discarded.
+
+IP Fields:
+Destination Address
+The source network and address from the original datagram's data.
+
+Code:
+0 = pointer indicates the error.
+Code 0 may be received from a gateway or a host."
+
+New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Timestamp Reply" -Service Any -Program $Program `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
+-Direction Inbound -Protocol ICMPv4 -IcmpType 14 -LocalAddress Any -RemoteAddress Any `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_SYSTEM `
+-Description "The data received (a timestamp) in the message is returned in the reply together with an additional timestamp.
+The timestamp is 32 bits of milliseconds since midnight UT.
+One use of these timestamps is described by Mills.
+
+The Originate Timestamp is the time the sender last touched the message before sending it,
+the Receive Timestamp is the time the echoer first touched it on receipt, and the Transmit Timestamp is
+the time the echoer last touched the message on sending it.
+
+If the time is not available in miliseconds or cannot be provided with respect to midnight UT then any time can be inserted in a
+timestamp provided the high order bit of the timestamp is also set to indicate this non-standard value.
+
+IP Fields:
+Addresses
+The address of the source in a timestamp message will be the
+destination of the timestamp reply message.
+To form a timestamp reply message, the source and destination addresses are simply
+reversed, the type code changed to 14, and the checksum recomputed.
+
+Code:
+0 = pointer indicates the error.
+Code 0 may be received from a gateway or a host."
+
+New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Time Exceeded" -Service Any -Program $Program `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
+-Direction Inbound -Protocol ICMPv4 -IcmpType 11 -LocalAddress Any -RemoteAddress Any `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_SYSTEM `
+-Description "If the gateway processing a datagram finds the time to live field is zero it must discard the datagram.
+The gateway may also notify the source host via the time exceeded message.
+If a host reassembling a fragmented datagram cannot complete the reassembly due to missing fragments within its time limit it discards the datagram,
+and it may send a time exceeded message.
+If fragment zero is not available then no time exceeded need be sent at all.
+
+IP Fields:
+Destination Address
+The source network and address from the original datagram's data.
+
+Code:
+0 = time to live exceeded in transit;
+1 = fragment reassembly time exceeded.
+Code 0 may be received from a gateway.
+Code 1 may be received from a host."
+
+#
 # ICMP type filtering for public profile
 #
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
@@ -65,49 +177,6 @@ the type code changed to 0, and the checksum recomputed.
 Code:
 0
 Code 0 may be received from a gateway or a host."
-
-New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
--DisplayName "Echo Reply" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Public -InterfaceType $Interface `
--Direction Inbound -Protocol ICMPv4 -IcmpType 0 -LocalAddress Any -RemoteAddress $RemoteAddrWAN `
--EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_SYSTEM `
--Description "The data received in the echo message must be returned in the echo reply message.
-The identifier and sequence number may be used by the echo sender to aid in matching the replies with the echo requests.
-For example, the identifier might be used like a port in TCP or UDP to identify a session,
-and the sequence number might be incremented on each echo request sent.
-The echoer returns these same values in the echo reply.
-
-IP Fields:
-Addresses
-The address of the source in an echo message will be the destination of the echo reply message.
-To form an echo reply message, the source and destination addresses are simply reversed,
-the type code changed to 0, and the checksum recomputed.
-
-Code:
-0
-Code 0 may be received from a gateway or a host."
-
-New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
--DisplayName "Destination Unreachable" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Public -InterfaceType $Interface `
--Direction Inbound -Protocol ICMPv4 -IcmpType 3 -LocalAddress Any -RemoteAddress $RemoteAddrWAN `
--EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_SYSTEM `
--Description "network specified in the RemoteAddress is unreachable, ie,
-the distance to the network is infinity, the gateway may send a destination unreachable message to the internet source host of the datagram.
-
-IP Fields:
-Destination Address
-The source network and address from the original datagram's data.
-
-Code:
-0 = net unreachable;
-1 = host unreachable;
-2 = protocol unreachable;
-3 = port unreachable;
-4 = fragmentation needed and DF set;
-5 = source route failed.
-Codes 0, 1, 4, and 5 may be received from a gateway.
-Codes 2 and 3 may be received from a host."
 
 <# Edge Traversal comment for redirect:
 There are certain cases where ICMP packets can be used to attack a network. Although this type of problem is not common today,
@@ -185,76 +254,10 @@ To obtain Router Advertisements quickly, a host SHOULD transmit up to MAX_RTR_SO
 each separated by at least RTR_SOLICITATION_INTERVAL seconds."
 
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
--DisplayName "Time Exceeded" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Public -InterfaceType $Interface `
--Direction Inbound -Protocol ICMPv4 -IcmpType 11 -LocalAddress Any -RemoteAddress $RemoteAddrWAN `
--EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_SYSTEM `
--Description "If the gateway processing a datagram finds the time to live field is zero it must discard the datagram.
-The gateway may also notify the source host via the time exceeded message.
-If a host reassembling a fragmented datagram cannot complete the reassembly due to missing fragments within its time limit it discards the datagram,
-and it may send a time exceeded message.
-If fragment zero is not available then no time exceeded need be sent at all.
-
-IP Fields:
-Destination Address
-The source network and address from the original datagram's data.
-
-Code:
-0 = time to live exceeded in transit;
-1 = fragment reassembly time exceeded.
-Code 0 may be received from a gateway.
-Code 1 may be received from a host."
-
-New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
--DisplayName "Parameter Problem" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Public -InterfaceType $Interface `
--Direction Inbound -Protocol ICMPv4 -IcmpType 12 -LocalAddress Any -RemoteAddress $RemoteAddrWAN `
--EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_SYSTEM `
--Description "If the gateway or host processing a datagram finds a problem with the header parameters such that it cannot complete processing the
-datagram it must discard the datagram.  One potential source of such a problem is with incorrect arguments in an option.
-The gateway or host may also notify the source host via the parameter problem message.
-This message is only sent if the error caused the datagram to be discarded.
-
-IP Fields:
-Destination Address
-The source network and address from the original datagram's data.
-
-Code:
-0 = pointer indicates the error.
-Code 0 may be received from a gateway or a host."
-
-New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Timestamp" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 13 -LocalAddress Any -RemoteAddress $RemoteAddrWAN `
 -EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_SYSTEM `
--Description "The data received (a timestamp) in the message is returned in the reply together with an additional timestamp.
-The timestamp is 32 bits of milliseconds since midnight UT.
-One use of these timestamps is described by Mills.
-
-The Originate Timestamp is the time the sender last touched the message before sending it,
-the Receive Timestamp is the time the echoer first touched it on receipt, and the Transmit Timestamp is
-the time the echoer last touched the message on sending it.
-
-If the time is not available in miliseconds or cannot be provided with respect to midnight UT then any time can be inserted in a
-timestamp provided the high order bit of the timestamp is also set to indicate this non-standard value.
-
-IP Fields:
-Addresses
-The address of the source in a timestamp message will be the
-destination of the timestamp reply message.
-To form a timestamp reply message, the source and destination addresses are simply
-reversed, the type code changed to 14, and the checksum recomputed.
-
-Code:
-0 = pointer indicates the error.
-Code 0 may be received from a gateway or a host."
-
-New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
--DisplayName "Timestamp Reply" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Public -InterfaceType $Interface `
--Direction Inbound -Protocol ICMPv4 -IcmpType 14 -LocalAddress Any -RemoteAddress $RemoteAddrWAN `
--EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_SYSTEM `
 -Description "The data received (a timestamp) in the message is returned in the reply together with an additional timestamp.
 The timestamp is 32 bits of milliseconds since midnight UT.
 One use of these timestamps is described by Mills.
@@ -300,49 +303,6 @@ the type code changed to 0, and the checksum recomputed.
 Code:
 0
 Code 0 may be received from a gateway or a host."
-
-New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
--DisplayName "Echo Reply" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
--Direction Inbound -Protocol ICMPv4 -IcmpType 0 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
--EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_SYSTEM `
--Description "The data received in the echo message must be returned in the echo reply message.
-The identifier and sequence number may be used by the echo sender to aid in matching the replies with the echo requests.
-For example, the identifier might be used like a port in TCP or UDP to identify a session,
-and the sequence number might be incremented on each echo request sent.
-The echoer returns these same values in the echo reply.
-
-IP Fields:
-Addresses
-The address of the source in an echo message will be the destination of the echo reply message.
-To form an echo reply message, the source and destination addresses are simply reversed,
-the type code changed to 0, and the checksum recomputed.
-
-Code:
-0
-Code 0 may be received from a gateway or a host."
-
-New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
--DisplayName "Destination Unreachable" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
--Direction Inbound -Protocol ICMPv4 -IcmpType 3 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
--EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_SYSTEM `
--Description "network specified in the RemoteAddress is unreachable, ie,
-the distance to the network is infinity, the gateway may send a destination unreachable message to the internet source host of the datagram.
-
-IP Fields:
-Destination Address
-The source network and address from the original datagram's data.
-
-Code:
-0 = net unreachable;
-1 = host unreachable;
-2 = protocol unreachable;
-3 = port unreachable;
-4 = fragmentation needed and DF set;
-5 = source route failed.
-Codes 0, 1, 4, and 5 may be received from a gateway.
-Codes 2 and 3 may be received from a host."
 
 <# Edge Traversal comment for redirect:
 There are certain cases where ICMP packets can be used to attack a network. Although this type of problem is not common today,
@@ -419,76 +379,10 @@ To obtain Router Advertisements quickly, a host SHOULD transmit up to MAX_RTR_SO
 each separated by at least RTR_SOLICITATION_INTERVAL seconds."
 
 New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
--DisplayName "Time Exceeded" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
--Direction Inbound -Protocol ICMPv4 -IcmpType 11 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
--EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_SYSTEM `
--Description "If the gateway processing a datagram finds the time to live field is zero it must discard the datagram.
-The gateway may also notify the source host via the time exceeded message.
-If a host reassembling a fragmented datagram cannot complete the reassembly due to missing fragments within its time limit it discards the datagram,
-and it may send a time exceeded message.
-If fragment zero is not available then no time exceeded need be sent at all.
-
-IP Fields:
-Destination Address
-The source network and address from the original datagram's data.
-
-Code:
-0 = time to live exceeded in transit;
-1 = fragment reassembly time exceeded.
-Code 0 may be received from a gateway.
-Code 1 may be received from a host."
-
-New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
--DisplayName "Parameter Problem" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
--Direction Inbound -Protocol ICMPv4 -IcmpType 12 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
--EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_SYSTEM `
--Description "If the gateway or host processing a datagram finds a problem with the header parameters such that it cannot complete processing the
-datagram it must discard the datagram.  One potential source of such a problem is with incorrect arguments in an option.
-The gateway or host may also notify the source host via the parameter problem message.
-This message is only sent if the error caused the datagram to be discarded.
-
-IP Fields:
-Destination Address
-The source network and address from the original datagram's data.
-
-Code:
-0 = pointer indicates the error.
-Code 0 may be received from a gateway or a host."
-
-New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Timestamp" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 13 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 -EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_SYSTEM `
--Description "The data received (a timestamp) in the message is returned in the reply together with an additional timestamp.
-The timestamp is 32 bits of milliseconds since midnight UT.
-One use of these timestamps is described by Mills.
-
-The Originate Timestamp is the time the sender last touched the message before sending it,
-the Receive Timestamp is the time the echoer first touched it on receipt, and the Transmit Timestamp is
-the time the echoer last touched the message on sending it.
-
-If the time is not available in miliseconds or cannot be provided with respect to midnight UT then any time can be inserted in a
-timestamp provided the high order bit of the timestamp is also set to indicate this non-standard value.
-
-IP Fields:
-Addresses
-The address of the source in a timestamp message will be the
-destination of the timestamp reply message.
-To form a timestamp reply message, the source and destination addresses are simply
-reversed, the type code changed to 14, and the checksum recomputed.
-
-Code:
-0 = pointer indicates the error.
-Code 0 may be received from a gateway or a host."
-
-New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform `
--DisplayName "Timestamp Reply" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
--Direction Inbound -Protocol ICMPv4 -IcmpType 14 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
--EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_SYSTEM `
 -Description "The data received (a timestamp) in the message is returned in the reply together with an additional timestamp.
 The timestamp is 32 bits of milliseconds since midnight UT.
 One use of these timestamps is described by Mills.
