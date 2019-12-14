@@ -15,17 +15,15 @@
 # 30 Traceroute
 # 31 to 39
 
-#setup variables:
-$PolicyStore = "localhost" #local group policy
-$Platform = "10.0+" #Windows 10 and above
-$NT_AUTHORITY_SYSTEM = "D:(A;;CC;;;S-1-5-18)"
+# Import global variables
+Import-Module "$PSScriptRoot\..\..\Modules\GlobalVariables.psm1"
+
+# Setup local variables:
 $Group = "ICMPv4"
 $Program = "System"
 $Interface = "Wired, Wireless"
 $RemoteAddrWAN = "Any"
 $RemoteAddrLAN = "LocalSubnet4"
-$OnError = "Stop"
-$Deubg = $false
 
 <#
 If a network client fails to get an IP address using DHCP, it can discover an address on its own using APIPA.

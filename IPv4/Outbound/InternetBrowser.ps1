@@ -1,17 +1,11 @@
 
-#setup variables:
-$Platform = "10.0+" #Windows 10 and above
+# Import global variables
+Import-Module "$PSScriptRoot\..\..\Modules\GlobalVariables.psm1"
+
+# Setup local variables:
 $Group = "Browser"
 $Profile = "Private, Public"
 $Interface = "Wired, Wireless"
-$PolicyStore = "localhost"
-$Deubg = $false
-
-#Valid users
-#$USER
-#$ADMIN
-$NT_AUTHORITY_SYSTEM = "D:(A;;CC;;;S-1-5-18)"
-$NT_AUTHORITY_LOCAL_SERVICE = "D:(A;;CC;;;S-1-5-19)"
 
 #First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Outbound -ErrorAction SilentlyContinue

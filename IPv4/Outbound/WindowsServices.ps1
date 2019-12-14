@@ -1,13 +1,12 @@
 
-#setup variables:
-$Platform = "10.0+" #Windows 10 and above
+# Import global variables
+Import-Module "$PSScriptRoot\..\..\Modules\GlobalVariables.psm1"
+
+# Setup local variables:
 $Group = "Windows Services"
 $Profile = "Private, Public"
 $Interface = "Wired, Wireless"
-$PolicyStore = "localhost"
-$OnError = "Stop"
 $ServiceHost = "%SystemRoot%\System32\svchost.exe"
-$Deubg = $false
 
 #First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Outbound -ErrorAction SilentlyContinue

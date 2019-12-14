@@ -1,13 +1,11 @@
 
-#setup variables:
-$PolicyStore = "localhost" #local group policy
-$Platform = "10.0+" #Windows 10 and above
+# Import global variables
+Import-Module "$PSScriptRoot\..\..\Modules\GlobalVariables.psm1"
+
+# Setup local variables:
 $Group = "Basic Networking - IPv4"
-$NT_AUTHORITY_SYSTEM = "D:(A;;CC;;;S-1-5-18)"
 $Interface = "Wired, Wireless"
 $Profile = "Any"
-$OnError = "Stop"
-$Deubg = $false
 
 
 #First remove all existing rules matching setup
@@ -50,7 +48,7 @@ New-NetFirewallRule -Whatif:$Deubg -ErrorAction $OnError -Platform $Platform -Po
 -DisplayName "Internet Group Management Protocol" -Service Any -Program System `
 -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Inbound -Protocol 2 -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
--EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_SYSTEM
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_SYSTEM `
 -Description "IGMP messages are sent and received by nodes to create, join and depart multicast groups."
 
 #
