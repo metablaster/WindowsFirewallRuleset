@@ -10,8 +10,23 @@ $Debug = $false #To add rules to firewall for real set to false
 $Execute = $false #To prompt for each rule set to true
 
 # NOTE: -LocalUser, -Owner etc. firewall parameters accepts SDDL format only
-# For a more complete list see: https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/81d92bba-d22b-4a8c-908a-554ab29148ab
+# For more complete list see: https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/81d92bba-d22b-4a8c-908a-554ab29148ab
 # If link is not valid google out: "well known SID msdn" or similar search string
+
+# Human users (Enter usernames here)
+$User = Get-UserSDDL User
+$Admin = Get-UserSDDL Admin
+
+# If users not found, to avoid execution error set Local Principal(-LocalUser) to 'Any'
+if(!$User)
+{
+    $User = "Any"
+}
+
+if(!$Admin)
+{
+    $Admin = "Any"
+}
 
 # System users
 # "D:(A;;CC;;;S-1-5-0)" # Unknown
@@ -46,18 +61,3 @@ $APPLICATION_PACKAGE_AUTHORITY_AllRestrictedApplicationPackages = "D:(A;;CC;;;S-
 
 # Other System Users
 $NT_AUTHORITY_UserModeDrivers = "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
-
-# Human users (Enter usernames here)
-$User = Get-UserSDDL User
-$Admin = Get-UserSDDL Admin
-
-# If users not found, to avoid execution error set Local Principal(-LocalUser) to 'Any'
-if(!$User)
-{
-    $User = "Any"
-}
-
-if(!$Admin)
-{
-    $Admin = "Any"
-}
