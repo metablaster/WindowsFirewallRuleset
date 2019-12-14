@@ -18,7 +18,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Inboun
 New-NetFirewallRule -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Visual Studio Code" -Service Any -Program "%ProgramFiles%\Microsoft VS Code\Code.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser Any `
 -Description ""
 
