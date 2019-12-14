@@ -22,13 +22,20 @@
 # Minimum system requirements
 1. Windows 10 Pro/Enterprise
 2. Windows Powershell 5 [Download Powershell](https://github.com/PowerShell/PowerShell)
-3. Git (Optinal) [Download Git](https://git-scm.com/downloads)
+3. Git (Optional) [Download Git](https://git-scm.com/downloads)
 
 For older system such as Windows 7 most of the rules will work, ie. rules for Store Apps will not work.
-To be able to apply rules to older system, edit the GlobalVariables.ps1 and edit the line:
+
+To be able to apply rules to older system, edit the `GlobalVariables.ps1` and edit the line:
+
 ```$Platform = "10.0+" #Windows 10 and above``` by specifying windows version, for example for Windows 7
+
 it should look like:
 ```$Platform = "6.1" #Windows 7```
+
+Next you can delete or comment out Widnows 10 related rules by editing the scripts.
+
+Otherwise try just ignore the execution errors and run the scripts by force, you can delete irrelevant rules in GPO later.
 
 # Step by step quick usage
 1. Right click on the Task bar and select `Taskbar settings`
