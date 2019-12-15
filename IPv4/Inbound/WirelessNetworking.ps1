@@ -35,8 +35,7 @@ if (!(RunThis)) { exit }
 # Setup local variables:
 #
 $Group = "Wireless Networking"
-$Profile = "Private, Public"
-$Interface = "Wired, Wireless"
+$Interface = "Wireless"
 
 #First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Inbound -ErrorAction SilentlyContinue
@@ -48,8 +47,8 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Inboun
 # TODO: local user may need to be 'Any', needs testing.
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Wireless Display" -Service Any -Program "%SystemRoot%\System32\WUDFHost.exe" `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction Inbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
+-Direction Inbound -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort 443 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_UserModeDrivers `
 -Description "Driver Foundation - User-mode Driver Framework Host Process.
 The driver host process (Wudfhost.exe) is a child process of the driver manager service.
@@ -58,8 +57,8 @@ loads one or more UMDF driver DLLs, in addition to the framework DLLs."
 # TODO: remote port unknown, rule added because predefined rule for UDP exists
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Wireless Display Infrastructure back channel" -Service Any -Program "%systemroot%\system32\CastSrv.exe" `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction Inbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort 7250 -RemotePort Any `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
+-Direction Inbound -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort 7250 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "Miracast is a Wi-Fi display certification program announced by Wi-Fi Alliance for seamlessly displaying video between devices.
 Users attempt to connect to a Miracast receiver as they did previously.
@@ -72,28 +71,50 @@ If the name is not resolvable via either DNS method, Windows 10 will fall back t
 #
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "WFD ASP Coordination Protocol" -Service WlanSvc -Program "%SystemRoot%\System32\WUDFHost.exe" `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-DisplayName "WLAN Service WFD ASP Coordination Protocol" -Service WlanSvc -Program "%systemroot%\system32\svchost.exe" `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction Inbound -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 7325 -RemotePort 7325 `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "WLAN Service to allow coordination protocol for WFD Service sessions.
 Wi-Fi Direct (WFD) Protocol Specifies: Proximity Extensions, which enable two or more devices that are running the same application
-to establish a direct connection without requiring an intermediary, such as an infrastructure wireless access point (WAP)."
+to establish a direct connection without requiring an intermediary, such as an infrastructure wireless access point (WAP).
+For more info see description of WLAN AutoConfig service."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "WFD Driver-only" -Service Any -Program System `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-DisplayName "WLAN Service WFD Driver-only" -Service Any -Program System `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction Inbound -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
--EdgeTraversalPolicy Block -LocalUser Any `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 -Description "Rule for drivers to communicate over WFD, WFD Services kernel mode driver rule.
 Wi-Fi Direct (WFD) Protocol Specifies: Proximity Extensions, which enable two or more devices that are running the same application
-to establish a direct connection without requiring an intermediary, such as an infrastructure wireless access point (WAP)."
+to establish a direct connection without requiring an intermediary, such as an infrastructure wireless access point (WAP).
+For more info see description of WLAN AutoConfig service."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "WFD Driver-only" -Service Any -Program System `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-DisplayName "WLAN Service WFD Driver-only" -Service Any -Program System `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction Inbound -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
--EdgeTraversalPolicy Block -LocalUser Any `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 -Description "Rule for drivers to communicate over WFD, WFD Services kernel mode driver rule.
 Wi-Fi Direct (WFD) Protocol Specifies: Proximity Extensions, which enable two or more devices that are running the same application
-to establish a direct connection without requiring an intermediary, such as an infrastructure wireless access point (WAP)."
+to establish a direct connection without requiring an intermediary, such as an infrastructure wireless access point (WAP).
+For more info see description of WLAN AutoConfig service."
+
+#
+# Windows system predefined rules for Wireless portable devices
+#
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Wireless portable devices (SSDP)" -Service SSDPSRV -Program "%systemroot%\system32\svchost.exe" `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
+-Direction Inbound -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 1900 -RemotePort Any `
+-EdgeTraversalPolicy Block -LocalUser Any `
+-Description "Wireless Portable Devices to allow use of the Simple Service Discovery Protocol."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Wireless portable devices (UPnP)" -Service Any -Program System `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
+-Direction Inbound -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 2869 -RemotePort Any `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
+-Description "Wireless Portable Devices to allow use of Universal Plug and Play."
+
