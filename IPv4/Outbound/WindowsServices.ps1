@@ -194,9 +194,24 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "Enables user sign-in through Microsoft account identity services.
 If this service is stopped, users will not be able to logon to the computer with their Microsoft account."
 
+#
+# Recommended Troubleshooting predefined rule
+#
+
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Recommended Troubleshooting Client" -Service TroubleshootingSvc -Program "%SystemRoot%\System32\svchost.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 80, 443 `
 -LocalUser Any `
 -Description "Allow outbound HTTP/HTTPS traffic from Recommended Troubleshooting Client."
+
+#
+# @FirewallAPI.dll,-80204 predefined rule
+#
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Windows Camera Frame Server" -Service FrameServer -Program "%SystemRoot%\System32\svchost.exe" `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 554, 8554-8558 `
+-LocalUser Any `
+-Description "Service enables multiple clients to access video frames from camera devices."

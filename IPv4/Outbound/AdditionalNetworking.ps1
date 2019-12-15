@@ -45,7 +45,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Outbou
 #
 
 #
-# Cast to device
+# Cast to device predefined rules
 #
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
@@ -90,7 +90,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "Rule for the Cast to Device server to allow streaming using RTSP and RTP."
 
 #
-# Connected devices platform
+# Connected devices platform predefined rules
 #
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
@@ -115,7 +115,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "Outbound rule for Connected Devices Platform traffic."
 
 #
-# AllJoyn Router
+# AllJoyn Router predefined rules
 #
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
@@ -137,7 +137,7 @@ AllJoyn Router service routes AllJoyn messages for the local AllJoyn clients.
 If this service is stopped the AllJoyn clients that do not have their own bundled routers will be unable to run."
 
 #
-# Proximity sharing
+# Proximity sharing predefined rule
 #
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `

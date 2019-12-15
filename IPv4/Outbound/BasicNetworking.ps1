@@ -42,6 +42,10 @@ $Profile = "Any"
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Outbound -ErrorAction SilentlyContinue
 
 #
+# Predefined rules from Core Networking are here
+#
+
+#
 # Loopback
 #
 

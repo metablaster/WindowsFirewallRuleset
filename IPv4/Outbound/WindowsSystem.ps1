@@ -296,3 +296,42 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 22 `
 -LocalUser Any `
 -Description ""
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Console Host" -Service Any -Program "%SystemRoot%\System32\conhost.exe" `
+-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+-LocalUser Any `
+-Description ""
+
+#
+# Windows Device Management (predefined rules)
+#
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Windows Device Management Certificate Installer" -Service Any -Program "%SystemRoot%\System32\dmcertinst.exe" `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
+-LocalUser Any `
+-Description "Allow outbound TCP traffic from Windows Device Management Certificate Installer."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Windows Device Management Device Enroller" -Service Any -Program "%SystemRoot%\System32\deviceenroller.exe" `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+-LocalUser Any `
+-Description "Allow outbound TCP traffic from Windows Device Management Device Enroller"
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Windows Device Management Enrollment Service" -Service DmEnrollmentSvc -Program "%SystemRoot%\System32\svchost.exe" `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
+-LocalUser Any `
+-Description "Allow outbound TCP traffic from Windows Device Management Enrollment Service."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Windows Device Management Sync Client" -Service Any -Program "%SystemRoot%\System32\omadmclient.exe" `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
+-LocalUser Any `
+-Description "Allow outbound TCP traffic from Windows Device Management Sync Client."

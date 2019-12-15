@@ -45,7 +45,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Inboun
 #
 
 #
-# Cast to device
+# Cast to device predefined rules
 #
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
@@ -146,7 +146,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "Inbound rule to allow receiving UPnP Events from Cast to Device targets."
 
 #
-# Connected devices platform
+# Connected devices platform predefined rules
 #
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
@@ -171,7 +171,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "Inbound rule for Connected Devices Platform traffic."
 
 #
-# AllJoyn Router
+# AllJoyn Router predefined rules
 #
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
@@ -193,7 +193,7 @@ AllJoyn Router service routes AllJoyn messages for the local AllJoyn clients.
 If this service is stopped the AllJoyn clients that do not have their own bundled routers will be unable to run."
 
 #
-# Proximity sharing
+# Proximity sharing predefined rules
 #
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `

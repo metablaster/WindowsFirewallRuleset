@@ -47,6 +47,10 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Inboun
 # Rules that apply to Windows services which are not handled by predefined rules
 #
 
+#
+# Delivery Optimization predefined rules
+#
+
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Delivery Optimization" -Program $ServiceHost -Service DoSvc `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -66,3 +70,21 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 Windows Update Delivery Optimization works by letting you get Windows updates and Microsoft Store apps from sources in addition to Microsoft,
 like other PCs on your local network, or PCs on the Internet that are downloading the same files.
 Delivery Optimization also sends updates and apps from your PC to other PCs on your local network or PCs on the Internet, based on your settings."
+
+#
+# @FirewallAPI.dll,-80204 predefined rule
+#
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Windows Camera Frame Server" -Service FrameServer -Program "%SystemRoot%\System32\svchost.exe" `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $Interface `
+-Direction Inbound -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 554, 8554-8558 -RemotePort Any `
+-EdgeTraversalPolicy Block -LocalUser Any `
+-Description "Service enables multiple clients to access video frames from camera devices."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Windows Camera Frame Server" -Service FrameServer -Program "%SystemRoot%\System32\svchost.exe" `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $Interface `
+-Direction Inbound -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 5000-5020 -RemotePort Any `
+-EdgeTraversalPolicy Block -LocalUser Any `
+-Description "Service enables multiple clients to access video frames from camera devices."
