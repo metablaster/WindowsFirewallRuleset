@@ -55,14 +55,16 @@ if (!(RunThis)) { exit }
 # Setup local variables:
 #
 $Group = "Multicast IPv4"
-$Profile = "Private, Domain" #Boot time multicast dropped due to WFP Operation (The transition from boot-time to persistent filters could be several seconds, or even longer on a slow machine.)
+$Profile = "Private, Domain"
 $Interface = "Wired, Wireless"
 
 #First remove all existing rules matching setup
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Inbound -ErrorAction SilentlyContinue
 
 #
-# ICMP type filtering for All profiles
+# IPv4 Multicast Address Space
+# NOTE: Boot time multicast dropped due to WFP Operation (Windows Filtering Platform),
+# The transition from boot-time to persistent filters could be several seconds, or even longer on a slow machine.
 #
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `

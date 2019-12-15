@@ -99,48 +99,48 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Cast to Device streaming server (RTP)" -Service Any -Program "%SystemRoot%\System32\mdeserver.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType $Interface `
--Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress PlayToDevice4 -LocalPort Any -RemotePort Any `
+-Direction Inbound -Protocol UDP -LocalAddress Any -RemoteAddress PlayToDevice4 -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "Inbound ror the Cast to Device server to allow streaming using RTSP and RTP."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Cast to Device streaming server (RTP)" -Service Any -Program "%SystemRoot%\System32\mdeserver.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
--Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
+-Direction Inbound -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Cast to Device streaming server (RTP)" -Service Any -Program "%SystemRoot%\System32\mdeserver.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $Interface `
--Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
+-Direction Inbound -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Cast to Device streaming server (RTSP)" -Service Any -Program "%SystemRoot%\System32\mdeserver.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType $Interface `
--Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress PlayToDevice4 -LocalPort 23554-23556 -RemotePort Any `
+-Direction Inbound -Protocol TCP -LocalAddress Any -RemoteAddress PlayToDevice4 -LocalPort 23554-23556 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Cast to Device streaming server (RTSP)" -Service Any -Program "%SystemRoot%\System32\mdeserver.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
--Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 23554-23556 -RemotePort Any `
+-Direction Inbound -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 23554-23556 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Cast to Device streaming server (RTSP)" -Service Any -Program "%SystemRoot%\System32\mdeserver.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $Interface `
--Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort 23554-23556 -RemotePort Any `
+-Direction Inbound -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort 23554-23556 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Cast to Device UPnP Events" -Service Any -Program System `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType $Interface `
--Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress PlayToDevice4 -LocalPort 2869 -RemotePort Any `
+-Direction Inbound -Protocol TCP -LocalAddress Any -RemoteAddress PlayToDevice4 -LocalPort 2869 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 -Description "Inbound rule to allow receiving UPnP Events from Cast to Device targets."

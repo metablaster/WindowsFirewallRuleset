@@ -48,25 +48,6 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Outbou
 #
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Background Intelligent Transfer Service" -Program $ServiceHost -Service BITS `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--Description "Used for background update,
-note that BITS is used by many third-party tools to download their own updates like AcrobatReader.
-Transfers files in the background using idle network bandwidth. If the service is disabled,
-then any applications that depend on BITS, such as Windows Update or MSN Explorer,
-will be unable to automatically download programs and other information."
-
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Cryptographic Services" -Program $ServiceHost -Service CryptSvc `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--Description "Provides three management services:
-Catalog Database Service, which confirms the signatures of Windows files and allows new programs to be installed;
-Protected Root Service, which adds and removes Trusted Root Certification Authority certificates from this computer;
-and Automatic Root Certificate Update Service, which retrieves root certificates from Windows Update and enable scenarios such as SSL."
-
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Delivery Optimization" -Program $ServiceHost -Service DoSvc `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
@@ -76,26 +57,11 @@ like other PCs on your local network, or PCs on the Internet that are downloadin
 Delivery Optimization also sends updates and apps from your PC to other PCs on your local network or PCs on the Internet, based on your settings."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Windows update service" -Program $ServiceHost -Service wuauserv `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--Description "Enables the detection, download, and installation of updates for Windows and other programs.
-If this service is disabled, users of this computer will not be able to use Windows Update or its automatic updating feature,
-and programs will not be able to use the Windows Update Agent (WUA) API."
-
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Windows Modules Installer" -Program $ServiceHost -Service TrustedInstaller `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 -Description "Enables installation, modification, and removal of Windows updates and optional components.
 If this service is disabled, install or uninstall of Windows updates might fail for this computer."
-
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Microsoft Account Sign-in Assistant" -Program $ServiceHost -Service wlidsvc `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--Description "Enables user sign-in through Microsoft account identity services.
-If this service is stopped, users will not be able to logon to the computer with their Microsoft account."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Windows Time (NTP/SNTP)" -Program $ServiceHost -Service W32Time `
@@ -172,3 +138,57 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 -Description "Enables the detection, download and installation of device-related software.
 If this service is disabled, devices may be configured with outdated software, and may not work correctly."
+
+#
+# Windows services rules for human users
+# see ProblematicTraffic.md for more info
+#
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Services for current user" -Program $ServiceHost -Service Any `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+-LocalUser $User `
+-Description "Following services need access based on user account:
+Cryptographic Services(CryptSvc),
+Microsoft Account Sign-in Assistant(wlidsvc),
+Windows Update(wuauserv),
+Background Intelligent Transfer Service(BITS)"
+
+#
+# Following rules are reserved until MS fixes the problem, resolved by above rule
+#
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Background Intelligent Transfer Service (FAIL)" -Program $ServiceHost -Service BITS `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+-Description "Used for background update,
+note that BITS is used by many third-party tools to download their own updates like AcrobatReader.
+Transfers files in the background using idle network bandwidth. If the service is disabled,
+then any applications that depend on BITS, such as Windows Update or MSN Explorer,
+will be unable to automatically download programs and other information."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Cryptographic Services (FAIL)" -Program $ServiceHost -Service CryptSvc `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+-Description "Provides three management services:
+Catalog Database Service, which confirms the signatures of Windows files and allows new programs to be installed;
+Protected Root Service, which adds and removes Trusted Root Certification Authority certificates from this computer;
+and Automatic Root Certificate Update Service, which retrieves root certificates from Windows Update and enable scenarios such as SSL."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Windows update service (FAIL)" -Program $ServiceHost -Service wuauserv `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+-Description "Enables the detection, download, and installation of updates for Windows and other programs.
+If this service is disabled, users of this computer will not be able to use Windows Update or its automatic updating feature,
+and programs will not be able to use the Windows Update Agent (WUA) API."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Microsoft Account Sign-in Assistant (FAIL)" -Program $ServiceHost -Service wlidsvc `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+-Description "Enables user sign-in through Microsoft account identity services.
+If this service is stopped, users will not be able to logon to the computer with their Microsoft account."

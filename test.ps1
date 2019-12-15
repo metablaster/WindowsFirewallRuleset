@@ -17,10 +17,10 @@ New-NetFirewallRule -ErrorAction Stop -PolicyStore "localhost" `
 -DisplayName "Test Rule" -Service Any -Program Any `
 -Enabled False -Action Allow -Group "Test" -Profile Domain -InterfaceType Any `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress IntranetRemoteAccess -LocalPort Any -RemotePort Any `
--EdgeTraversalPolicy Block -LocalUser "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
+-EdgeTraversalPolicy Block -LocalUser "O:SYG:SYD:(A;;CCRC;;;S-1-5-80-1014140700-3308905587-3330345912-272242898-93311788)"
  #>
-# ParseSDDL "D:(A;;CC;;;S-1-5-19)"
-
+ParseSDDL "O:SYG:SYD:(A;;CCRC;;;S-1-5-80-1014140700-3308905587-3330345912-272242898-93311788)"
+ParseSDDL "O:SYG:SYD:(A;;CCRC;;;S-1-5-80-4267341169-2882910712-659946508-2704364837-2204554466)"
 # Get-UserSDDL uSER
 
 <# Write-Host "";
@@ -47,6 +47,7 @@ Write-Host " *   Direct: $($MyInvocation.PSCommandPath)";
 Write-Host " * Function: $(PSCommandPath)";
 Write-Host "";
  #>
-$ScriptPath = Split-Path $MyInvocation.InvocationName
+<# $ScriptPath = Split-Path $MyInvocation.InvocationName
 
 & "$ScriptPath\IPv4\Outbound\WirelessDisplay.ps1"
+ #>

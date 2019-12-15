@@ -12,8 +12,9 @@ $Execute = $false #To prompt for each rule set to true
 # NOTE: -LocalUser, -Owner etc. firewall parameters accepts SDDL format only
 # For more complete list see: https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/81d92bba-d22b-4a8c-908a-554ab29148ab
 # If link is not valid google out: "well known SID msdn" or similar search string
+# Another way to get information of SDDL string is to create a test rule with that string and see what turns out.
 
-# Human users (Enter usernames here)
+# Human users (Enter usernames here, separate by comma if more users or admins)
 $User = Get-UserSDDL User
 $Admin = Get-UserSDDL Admin
 
