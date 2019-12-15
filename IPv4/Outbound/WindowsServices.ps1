@@ -159,9 +159,10 @@ Background Intelligent Transfer Service(BITS)"
 # Following rules are reserved until MS fixes the problem, resolved by above rule
 #
 
+# TODO: try with localuser: Any
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Background Intelligent Transfer Service (FAIL)" -Program $ServiceHost -Service BITS `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -Description "Used for background update,
 note that BITS is used by many third-party tools to download their own updates like AcrobatReader.

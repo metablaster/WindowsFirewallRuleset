@@ -97,21 +97,21 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "Inbound rule for the Cast to Device server to allow streaming using HTTP."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Cast to Device streaming server (RTP)" -Service Any -Program "%SystemRoot%\System32\mdeserver.exe" `
+-DisplayName "Cast to Device streaming server (RTCP)" -Service Any -Program "%SystemRoot%\System32\mdeserver.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType $Interface `
 -Direction Inbound -Protocol UDP -LocalAddress Any -RemoteAddress PlayToDevice4 -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "Inbound ror the Cast to Device server to allow streaming using RTSP and RTP."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Cast to Device streaming server (RTP)" -Service Any -Program "%SystemRoot%\System32\mdeserver.exe" `
+-DisplayName "Cast to Device streaming server (RTCP)" -Service Any -Program "%SystemRoot%\System32\mdeserver.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
 -Direction Inbound -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Cast to Device streaming server (RTP)" -Service Any -Program "%SystemRoot%\System32\mdeserver.exe" `
+-DisplayName "Cast to Device streaming server (RTCP)" -Service Any -Program "%SystemRoot%\System32\mdeserver.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $Interface `
 -Direction Inbound -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `
@@ -144,3 +144,28 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Direction Inbound -Protocol TCP -LocalAddress Any -RemoteAddress PlayToDevice4 -LocalPort 2869 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 -Description "Inbound rule to allow receiving UPnP Events from Cast to Device targets."
+
+#
+# Connected devices platform
+#
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Connected Devices Platform - Wi-Fi Direct Transport" -Service CDPSvc -Program "%SystemRoot%\System32\svchost.exe" `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType $Interface `
+-Direction Inbound -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
+-EdgeTraversalPolicy Block -LocalUser Any `
+-Description "Inbound rule to use Wi-Fi Direct traffic in the Connected Devices Platform."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Connected Devices Platform" -Service CDPSvc -Program "%SystemRoot%\System32\svchost.exe" `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
+-Direction Inbound -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
+-EdgeTraversalPolicy Block -LocalUser Any `
+-Description "Inbound rule for Connected Devices Platform traffic."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Connected Devices Platform" -Service CDPSvc -Program "%SystemRoot%\System32\svchost.exe" `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile  Private, Domain -InterfaceType $Interface `
+-Direction Inbound -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
+-EdgeTraversalPolicy Block -LocalUser Any `
+-Description "Inbound rule for Connected Devices Platform traffic."
