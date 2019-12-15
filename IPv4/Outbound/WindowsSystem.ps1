@@ -94,14 +94,6 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser Any `
 -Description "This program collects and sends usage data to Microsoft, can be disabled in GPO."
 
-# TODO: missing protocol and port
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Device Association Framework Provider Host" -Service Any -Program "%SystemRoot%\System32\dasHost.exe" `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction Outbound -Protocol Any -LocalAddress Any -RemoteAddress LocalSubnet -LocalPort Any -RemotePort Any `
--LocalUser Any `
--Description "Host enables pairing between the system and wired or wireless devices. This service is new since Windows 8."
-
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Windows Indexing Service" -Service Any -Program "%SystemRoot%\System32\SearchProtocolHost.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `

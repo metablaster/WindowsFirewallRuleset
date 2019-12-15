@@ -107,7 +107,7 @@ For more info see description of WLAN AutoConfig service."
 # TODO: missing protocol and port for WiFi Direct Network Discovery
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Wi-Fi Direct Network Discovery" -Service Any -Program "%SystemRoot%\System32\dasHost.exe" `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType Wired, Wireless `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType Wired, Wireless `
 -Direction Inbound -Protocol Any -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "Rule to discover WSD devices on Wi-Fi Direct networks.
@@ -116,7 +116,7 @@ Executable also known as Device Association Framework Provider Host"
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Wi-Fi Direct Scan Service" -Service stisvc -Program "%SystemRoot%\System32\svchost.exe" `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType Wired, Wireless `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType Wired, Wireless `
 -Direction Inbound -Protocol Any -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "Rule to use WSD scanners on Wi-Fi Direct networks.
@@ -124,7 +124,7 @@ Windows Image Acquisition (WIA) service provides image acquisition services for 
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Wi-Fi Direct Spooler Use" -Service Spooler -Program "%SystemRoot%\System32\svchost.exe" `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType Wired, Wireless `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType Wired, Wireless `
 -Direction Inbound -Protocol Any -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "Rule to use WSD printers on Wi-Fi Direct networks.

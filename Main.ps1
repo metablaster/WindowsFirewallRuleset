@@ -46,6 +46,7 @@ if(!$PSScriptRoot)
 if(RunThis("Applying Inbound Rules..."))
 {
     # Load Inbound rules
+    & "$ScriptPath\IPv4\Inbound\AdditionalNetworking.ps1"
     & "$ScriptPath\IPv4\Inbound\BasicNetworking.ps1"
     & "$ScriptPath\IPv4\Inbound\ICMP.ps1"
     & "$ScriptPath\IPv4\Inbound\InternetBrowser.ps1"
@@ -56,6 +57,7 @@ if(RunThis("Applying Inbound Rules..."))
 if(RunThis("Applying Outbound Rules..."))
 {
     # Load Outbound rules
+    & "$ScriptPath\IPv4\Outbound\AdditionalNetworking.ps1"
     & "$ScriptPath\IPv4\Outbound\BasicNetworking.ps1"
     & "$ScriptPath\IPv4\Outbound\ICMP.ps1"
     & "$ScriptPath\IPv4\Outbound\InternetBrowser.ps1"
