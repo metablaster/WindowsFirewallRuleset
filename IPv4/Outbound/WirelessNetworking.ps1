@@ -34,7 +34,7 @@ if (!(RunThis)) { exit }
 #
 # Setup local variables:
 #
-$Group = "Wireless Display"
+$Group = "Wireless Networking"
 $Profile = "Private, Public"
 $Interface = "Wired, Wireless"
 
@@ -58,9 +58,40 @@ loads one or more UMDF driver DLLs, in addition to the framework DLLs."
 # TODO: remote port unknown, rule added because predefined rule for UDP exists
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Wireless Display" -Service Any -Program "%SystemRoot%\System32\WUDFHost.exe" `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
 -LocalUser $NT_AUTHORITY_UserModeDrivers `
 -Description "Driver Foundation - User-mode Driver Framework Host Process.
 The driver host process (Wudfhost.exe) is a child process of the driver manager service.
 loads one or more UMDF driver DLLs, in addition to the framework DLLs."
+
+#
+# Windows system predefined rules for WiFi Direct
+#
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "WFD ASP Coordination Protocol" -Service WlanSvc -Program "%SystemRoot%\System32\WUDFHost.exe" `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 7325 -RemotePort 7325 `
+-LocalUser Any `
+-Description "WLAN Service to allow coordination protocol for WFD Service sessions.
+Wi-Fi Direct (WFD) Protocol Specifies: Proximity Extensions, which enable two or more devices that are running the same application
+to establish a direct connection without requiring an intermediary, such as an infrastructure wireless access point (WAP)."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "WFD Driver-only" -Service Any -Program System `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
+-LocalUser Any `
+-Description "Rule for drivers to communicate over WFD, WFD Services kernel mode driver rule.
+Wi-Fi Direct (WFD) Protocol Specifies: Proximity Extensions, which enable two or more devices that are running the same application
+to establish a direct connection without requiring an intermediary, such as an infrastructure wireless access point (WAP)."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "WFD Driver-only" -Service Any -Program System `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
+-LocalUser Any `
+-Description "Rule for drivers to communicate over WFD, WFD Services kernel mode driver rule.
+Wi-Fi Direct (WFD) Protocol Specifies: Proximity Extensions, which enable two or more devices that are running the same application
+to establish a direct connection without requiring an intermediary, such as an infrastructure wireless access point (WAP)."

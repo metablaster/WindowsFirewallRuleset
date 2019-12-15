@@ -79,6 +79,30 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "Allow DNS requests by System to default gateway."
 
 #
+# mDNS (Multicast Domain Name System)
+#
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+-DisplayName "Multicast Domain Name System" -Service Dnscache -Program "%SystemRoot%\System32\svchost.exe" `
+-Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
+-Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 5353 `
+-LocalUser Any `
+-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
+within small networks that do not include a local name server.
+It is a zero-configuration service, using essentially the same programming interfaces,
+packet formats and operating semantics as the unicast Domain Name System (DNS)."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+-DisplayName "Multicast Domain Name System" -Service Dnscache -Program "%SystemRoot%\System32\svchost.exe" `
+-Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
+-Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 5353 `
+-LocalUser Any `
+-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
+within small networks that do not include a local name server.
+It is a zero-configuration service, using essentially the same programming interfaces,
+packet formats and operating semantics as the unicast Domain Name System (DNS)."
+
+#
 # DHCP (Dynamic Host Configuration Protocol)
 #
 

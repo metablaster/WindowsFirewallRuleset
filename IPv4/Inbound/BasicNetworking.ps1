@@ -50,15 +50,39 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Loopback" -Service Any -Program Any `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 -Direction Inbound -Protocol TCP -LocalAddress Any -RemoteAddress 127.0.0.1 -LocalPort Any -RemotePort Any `
--LocalUser Any `
+-EdgeTraversalPolicy Block -LocalUser Any `
 -Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Loopback" -Service Any -Program Any `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 -Direction Inbound -Protocol TCP -LocalAddress 127.0.0.1 -RemoteAddress Any -LocalPort Any -RemotePort Any `
--LocalUser Any `
+-EdgeTraversalPolicy Block -LocalUser Any `
 -Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources."
+
+#
+# mDNS (Multicast Domain Name System)
+#
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+-DisplayName "Multicast Domain Name System" -Service Dnscache -Program "%SystemRoot%\System32\svchost.exe" `
+-Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
+-Direction Inbound -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 5353 -RemotePort Any `
+-EdgeTraversalPolicy Block -LocalUser Any `
+-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
+within small networks that do not include a local name server.
+It is a zero-configuration service, using essentially the same programming interfaces,
+packet formats and operating semantics as the unicast Domain Name System (DNS)."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+-DisplayName "Multicast Domain Name System" -Service Dnscache -Program "%SystemRoot%\System32\svchost.exe" `
+-Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
+-Direction Inbound -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 5353 -RemotePort Any `
+-EdgeTraversalPolicy Block -LocalUser Any `
+-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
+within small networks that do not include a local name server.
+It is a zero-configuration service, using essentially the same programming interfaces,
+packet formats and operating semantics as the unicast Domain Name System (DNS)."
 
 #
 # DHCP (Dynamic Host Configuration Protocol)
