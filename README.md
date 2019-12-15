@@ -62,7 +62,7 @@ Rules are loaded into Local group policy, follow bellow steps to open local grou
 4. Click on either `Inbound` or `Outbound` node to view and manage the rulles you applied with Powershell script.
 
 # Applying individual rulesets
-If you want to apply only specific rulles there are 2 ways to do this:
+If you want to apply only specific rules there are 2 ways to do this:
 1. Execute `Main.ps1` and hit enter only for rullesets you want, otherwise type `n` and hit enter to skip current ruleset.
 2. Inside powershell navigate to folder containing the ruleset script you want, and execute individual Powershell script.
 
