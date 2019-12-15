@@ -1,0 +1,68 @@
+
+<#
+MIT License
+
+Copyright (c) 2019 metablaster zebal@protonmail.ch
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+#>
+
+#
+# Import global variables
+#
+. "$PSScriptRoot\..\..\Modules\GlobalVariables.ps1"
+
+# Ask user if he wants to load these rules
+if (!(RunThis)) { exit }
+
+#
+# Setup local variables:
+#
+$Group = "Windows Services"
+$Profile = "Private, Public"
+$Interface = "Wired, Wireless"
+$ServiceHost = "%SystemRoot%\System32\svchost.exe"
+
+#First remove all existing rules matching group
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Inbound -ErrorAction SilentlyContinue
+
+#
+# Windows services rules
+# Rules that apply to Windows services which are not handled by predefined rules
+#
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Delivery Optimization" -Program $ServiceHost -Service DoSvc `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Inbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort 7680 -RemotePort Any `
+-EdgeTraversalPolicy Allow `
+-Description "Service responsible for delivery optimization.
+Windows Update Delivery Optimization works by letting you get Windows updates and Microsoft Store apps from sources in addition to Microsoft,
+like other PCs on your local network, or PCs on the Internet that are downloading the same files.
+Delivery Optimization also sends updates and apps from your PC to other PCs on your local network or PCs on the Internet, based on your settings."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Delivery Optimization" -Program $ServiceHost -Service DoSvc `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Inbound -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort 7680 -RemotePort Any `
+-EdgeTraversalPolicy Allow `
+-Description "Service responsible for delivery optimization.
+Windows Update Delivery Optimization works by letting you get Windows updates and Microsoft Store apps from sources in addition to Microsoft,
+like other PCs on your local network, or PCs on the Internet that are downloading the same files.
+Delivery Optimization also sends updates and apps from your PC to other PCs on your local network or PCs on the Internet, based on your settings."

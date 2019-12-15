@@ -193,3 +193,10 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 -Description "Enables user sign-in through Microsoft account identity services.
 If this service is stopped, users will not be able to logon to the computer with their Microsoft account."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Recommended Troubleshooting Client" -Service TroubleshootingSvc -Program "%SystemRoot%\System32\svchost.exe" `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 80, 443 `
+-LocalUser Any `
+-Description "Allow outbound HTTP/HTTPS traffic from Recommended Troubleshooting Client."
