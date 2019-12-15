@@ -66,7 +66,7 @@ If any other machine is using that address, the client will generate another ran
 The entire address range 169.254.0.0/16 has been set aside for "link local" addresses (the first and last 256 addresses have been reserved for future use).
 They should not be manually assigned or assigned using DHCP.
 #>
-$APIPA = "169.254.1.0-169.254.254.255"
+# $APIPA = "169.254.1.0-169.254.254.255"
 
 #First remove all existing rules matching setup
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Inbound -ErrorAction SilentlyContinue
@@ -78,7 +78,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Echo Reply" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 0 -LocalAddress Any -RemoteAddress Any `
--EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_SYSTEM `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 -Description "The data received in the echo message must be returned in the echo reply message.
 The identifier and sequence number may be used by the echo sender to aid in matching the replies with the echo requests.
 For example, the identifier might be used like a port in TCP or UDP to identify a session,
@@ -99,7 +99,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Destination Unreachable" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 3 -LocalAddress Any -RemoteAddress Any `
--EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_SYSTEM `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 -Description "network specified in the RemoteAddress is unreachable, ie,
 the distance to the network is infinity, the gateway may send a destination unreachable message to the internet source host of the datagram.
 
@@ -121,7 +121,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Parameter Problem" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 12 -LocalAddress Any -RemoteAddress Any `
--EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_SYSTEM `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 -Description "If the gateway or host processing a datagram finds a problem with the header parameters such that it cannot complete processing the
 datagram it must discard the datagram.  One potential source of such a problem is with incorrect arguments in an option.
 The gateway or host may also notify the source host via the parameter problem message.
@@ -139,7 +139,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Timestamp Reply" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 14 -LocalAddress Any -RemoteAddress Any `
--EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_SYSTEM `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 -Description "The data received (a timestamp) in the message is returned in the reply together with an additional timestamp.
 The timestamp is 32 bits of milliseconds since midnight UT.
 One use of these timestamps is described by Mills.
@@ -166,7 +166,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Time Exceeded" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 11 -LocalAddress Any -RemoteAddress Any `
--EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_SYSTEM `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 -Description "If the gateway processing a datagram finds the time to live field is zero it must discard the datagram.
 The gateway may also notify the source host via the time exceeded message.
 If a host reassembling a fragmented datagram cannot complete the reassembly due to missing fragments within its time limit it discards the datagram,
@@ -190,7 +190,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Echo Request" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 8 -LocalAddress Any -RemoteAddress $RemoteAddrWAN `
--EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_SYSTEM `
+-EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_System `
 -Description "The data received in the echo message must be returned in the echo reply message.
 The identifier and sequence number may be used by the echo sender to aid in matching the replies with the echo requests.
 For example, the identifier might be used like a port in TCP or UDP to identify a session,
@@ -227,7 +227,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Redirect" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 5 -LocalAddress Any -RemoteAddress $RemoteAddrWAN `
--EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_SYSTEM `
+-EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_System `
 -Description "ICMP redirect messages are used by routers to notify the hosts on the data link that a better route is available for a particular destination.
 The gateway sends a redirect message to a host in the following situation.
 A gateway, G1, receives an internet datagram from a host on a network to which the gateway is attached.
@@ -255,7 +255,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Router Advertisement" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 9 -LocalAddress Any -RemoteAddress $RemoteAddrWAN `
--EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_SYSTEM `
+-EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_System `
 -Description "the ICMP Internet Router Discovery Protocol (IRDP), also called the Internet Router Discovery Protocol,
 is a protocol for computer hosts to discover the presence and location of routers on their IPv4 local area network.
 Router discovery is useful for accessing computer systems on other nonlocal area networks.
@@ -271,7 +271,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Router Solicitation" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 10 -LocalAddress Any -RemoteAddress $RemoteAddrWAN `
--EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_SYSTEM `
+-EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_System `
 -Description "the ICMP Internet Router Discovery Protocol (IRDP), also called the Internet Router Discovery Protocol,
 is a protocol for computer hosts to discover the presence and location of routers on their IPv4 local area network.
 Router discovery is useful for accessing computer systems on other nonlocal area networks.
@@ -286,7 +286,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Timestamp" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 13 -LocalAddress Any -RemoteAddress $RemoteAddrWAN `
--EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_SYSTEM `
+-EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_System `
 -Description "The data received (a timestamp) in the message is returned in the reply together with an additional timestamp.
 The timestamp is 32 bits of milliseconds since midnight UT.
 One use of these timestamps is described by Mills.
@@ -316,7 +316,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Echo Request" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 8 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
--EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_SYSTEM `
+-EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_System `
 -Description "The data received in the echo message must be returned in the echo reply message.
 The identifier and sequence number may be used by the echo sender to aid in matching the replies with the echo requests.
 For example, the identifier might be used like a port in TCP or UDP to identify a session,
@@ -353,7 +353,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Redirect" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 5 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
--EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_SYSTEM `
+-EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_System `
 -Description "ICMP redirect messages are used by routers to notify the hosts on the data link that a better route is available for a particular destination.
 The gateway sends a redirect message to a host in the following situation.
 A gateway, G1, receives an internet datagram from a host on a network to which the gateway is attached.
@@ -380,7 +380,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Router Advertisement" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 9 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
--EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_SYSTEM `
+-EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_System `
 -Description "the ICMP Internet Router Discovery Protocol (IRDP), also called the Internet Router Discovery Protocol,
 is a protocol for computer hosts to discover the presence and location of routers on their IPv4 local area network.
 Router discovery is useful for accessing computer systems on other nonlocal area networks.
@@ -396,7 +396,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Router Solicitation" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 10 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
--EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_SYSTEM `
+-EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_System `
 -Description "the ICMP Internet Router Discovery Protocol (IRDP), also called the Internet Router Discovery Protocol,
 is a protocol for computer hosts to discover the presence and location of routers on their IPv4 local area network.
 Router discovery is useful for accessing computer systems on other nonlocal area networks.
@@ -411,7 +411,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Timestamp" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 13 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
--EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_SYSTEM `
+-EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_System `
 -Description "The data received (a timestamp) in the message is returned in the reply together with an additional timestamp.
 The timestamp is 32 bits of milliseconds since midnight UT.
 One use of these timestamps is described by Mills.
