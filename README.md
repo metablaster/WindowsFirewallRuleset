@@ -47,7 +47,7 @@ Otherwise try just ignore the execution errors and run the scripts by force, you
 7. Copy paste into console: ```cd WindowsFirewallRuleset``` and hit enter
 8. Open file explorer and navigate to `C:\WindowsFirewallRuleset\Modules`
 9. Open `GlobalVariables.ps1` with your preffered code editor such as VS Code or Powershell ISE
-10. Edit the line `$User = Get-UserSDDL User`, input your username by replaing 'User' with your username,
+10. Edit the line `$User = Get-UserSDDL User`, input your username by replacing 'User' with your username,
 for example if your username is Patrick the line should look like `$User = Get-UserSDDL Patrick`
 11. Save and close the Powershell script file.
 12. Back to Powershell console and copy paste into console: ```.\Main.ps1``` and hit enter (this will load all the rulles)
