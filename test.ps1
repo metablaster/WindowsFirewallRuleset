@@ -58,44 +58,32 @@ $ServiceHost = "%SystemRoot%\System32\svchost.exe"
 
 # O:LSD:(A;;CC;;;SY)(A;;CC;;;S-1-5-21-3400361277-1888300462-2581876478-1002)
 
-Function Convert-SDDLToACL {
-    [Cmdletbinding()]
-    Param (
-        #One or more strings of SDDL syntax.
-        [string[]]$SDDLString
-    )
-
-    foreach ($SDDL in $SDDLString) {
-        $ACLObject = New-Object -Type Security.AccessControl.DirectorySecurity
-        $ACLObject.SetSecurityDescriptorSddlForm($SDDL)
-        $ACLObject.Access
-    }
-}
-
 <# $sddl = "O:LSD:(A;;CC;;;SY)(A;;CC;;;S-1-5-21-3400361277-1888300462-2581876478-1002)"
 Convert-SDDLToACL $sddl |
     Select-Object -Expand IdentityReference |
     Select-Object -Expand Value
  #>
- $NT_AUTHORITY_System = "D:(A;;CC;;;S-1-5-18)"
+<#  $NT_AUTHORITY_System = "D:(A;;CC;;;S-1-5-18)"
  $User = "D:(A;;CC;;;S-1-5-21-3400361277-1888300462-2581876478-1002)"
 
 $sddl = "D:(A;;CC;;;S-1-5-18)(A;;CC;;;S-1-5-21-3400361277-1888300462-2581876478-1002)"
 Convert-SDDLToACL $sddl |
 Select-Object -Expand IdentityReference |
 Select-Object -Expand Value
-    
-$UserAndSystem = $User + "(A;;CC;;;S-1-5-18)"
+ #>
 
-$MultiUser
-<# New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "TEST RULE" -Program $ServiceHost -Service Any `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group "TEST" -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser $sddl `
+-LocalUser (Get-SDDLFromAccounts @("NT AUTHORITY\SYSTEM", "$UserAccount")) `
 -Description "Following services need access based on user account:
 Cryptographic Services(CryptSvc),
 Microsoft Account Sign-in Assistant(wlidsvc),
 Windows Update(wuauserv),
 Background Intelligent Transfer Service(BITS)"
- #>
+
+
+#  Get-WmiObject -ComputerName "localhost" -Class Win32_UserAccount -Filter "LocalAccount='True'" | Select-Object PSComputername, Name, Status, Disabled, AccountType, Lockout, PasswordRequired, PasswordChangeable, SID
+#  Get-WmiObject -class win32_account -Filter 'name="LOCAL SERVICE"'
+

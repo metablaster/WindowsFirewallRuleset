@@ -15,8 +15,10 @@ $Execute = $false #To prompt for each rule set to true
 # Another way to get information of SDDL string is to create a test rule with that string and see what turns out.
 
 # Human users (Enter usernames here, separate by comma if more users or admins)
-$User = Get-UserSDDL User
+$UserName = "User"
+$User = Get-UserSDDL $UserName
 $Admin = Get-UserSDDL Admin
+$UserAccount = "$Env:Computername" + '\' + "$Username"
 
 # If users not found, to avoid execution error set Local Principal(-LocalUser) to 'Any'
 if(!$User)

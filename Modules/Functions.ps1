@@ -1,6 +1,9 @@
 
 # TODO: convert to module, and import where needed
 
+# Returns SDDL of local user account
+# Sample usage:
+# New-NetFirewallRule -DisplayName "BlockWWW" -Action Block -LocalUser (Get-UserSDDL user1, user2) -Protocol TCP -Direction Outbound -RemotePort 80, 443
 # Credits to: https://stackoverflow.com/questions/49608182/powershell-new-netfirewallrule-with-localuser-example
 function Get-UserSDDL
 {
@@ -24,10 +27,45 @@ function Get-UserSDDL
     return $SDDL -f ($ACEs -join '')
 }
 
-# Get-UserSDDL sample usage:
-# New-NetFirewallRule -DisplayName "BLOCKWWW" -LocalUser (Get-FirewallLocalUserSddl user1,user2) -Direction Outbound -LocalPort 80,443 -Protocol TCP -Action Block
+#
+# Returns SDDL from multiple Accounts, in form of: COMPUTERNAME\USERNAME
+# Sample usage:
+# Get-SDDL-FromAccounts @("NT AUTHORITY\SYSTEM", "MY_DESKTOP\MY_USERNAME")
+#
+function Get-SDDLFromAccounts($Accounts)
+{
+    $SDDL = "D:"
 
+    foreach ($UserEntry in $Accounts)
+    {
+        $Domain = ($UserEntry.split("\"))[0]
+        $User = ($UserEntry.split("\"))[1]
+
+        $NTAccount = New-Object System.Security.Principal.NTAccount($Domain,$User)
+        $SID = ($NTAccount.Translate([System.Security.Principal.SecurityIdentifier])).Value
+    
+        if (!$SID)
+        {
+            "User $User cannot be resolved to a SID. Does the account exist?"
+            continue
+        }
+    
+        $SDDL += '(A;;CC;;;{0})' -f $SID
+
+    }
+
+    return $SDDL
+}
+
+# Convert-SDDLToACL returns the ACEs of the generated security descriptor object.
 # Credits to: https://stackoverflow.com/questions/48406474/return-user-data-from-sid
+# Sample usage:
+# You can extract the user/group/principal names from that list like this:
+
+# $sddl = "O:LSD:(A;;CC;;;SY)(A;;CC;;;S-1-5-21-3400361277-1888300462-2581876478-1002)"
+# Convert-SDDLToACL $sddl | 
+# Select-Object -Expand IdentityReference |
+# Select-Object -Expand Value
 Function Convert-SDDLToACL
 {
     [Cmdletbinding()]
@@ -45,62 +83,10 @@ Function Convert-SDDLToACL
     }
 }
 
-# Convert-SDDLToACL sample usage:
-# The function returns the ACEs of the generated security descriptor object.
-# You can extract the user/group/principal names from that list like this:
-
-# $sddl = "O:LSD:(A;;CC;;;SY)(A;;CC;;;S-1-5-21-3400361277-1888300462-2581876478-1002)"
-# Convert-SDDLToACL $sddl | 
-# Select-Object -Expand IdentityReference |
-# Select-Object -Expand Value
-
-  # Credits to: https://blogs.technet.microsoft.com/ashleymcglone/2011/08/29/powershell-sid-walker-texas-ranger-part-1/
-  function ParseSDDL
-  {
-    [CmdletBinding()]
-    param ([Parameter(valueFromPipelineByPropertyName=$true)]$SDDL)
-            
-    $SDDLSplit = $SDDL.Split("(")
-            
-    "`n---SDDL Split:"
-    $SDDLSplit
-            
-    "`n---SDDL SID Parsing:"
-    # Skip index 0 where owner and/or primary group are stored            
-    For ($i=1;$i -lt $SDDLSplit.Length;$i++)
-    {
-        $ACLSplit = $SDDLSplit[$i].Split(";")
-
-        If ($ACLSplit[1].Contains("ID"))
-        {
-            "Inherited"
-        }
-        Else
-        {
-            $ACLEntrySID = $null
-
-            # Remove the trailing ")"
-            $ACLEntry = $ACLSplit[5].TrimEnd(")")
-            
-            # Parse out the SID using a handy RegEx
-            $ACLEntrySIDMatches = [regex]::Matches($ACLEntry,"(S(-\d+){2,8})")
-            $ACLEntrySIDMatches | ForEach-Object {$ACLEntrySID = $_.value}
-            
-            If ($ACLEntrySID)
-            {
-                $ACLEntrySID
-            }
-            Else
-            {
-                "Not inherited - No SID"
-            }
-        }
-    }
-    return $null
-}
-
-# ParseSDDL sample usage:
+# ParseSDDL returns SDDL based on "object"
+# Sample usage:
 # Experiment with these different path values to see what the ACL objects do
+# Credits to: https://blogs.technet.microsoft.com/ashleymcglone/2011/08/29/powershell-sid-walker-texas-ranger-part-1/
 
 <#
 $path = "C:\users\User\" #Not inherited
@@ -126,8 +112,54 @@ $ACL.SDDL
 $ACL | ParseSDDL
 # Or call with parameter string
 ParseSDDL $ACL.SDDL
- #>
+#>
+function ParseSDDL
+{
+    [CmdletBinding()]
+    param ([Parameter(valueFromPipelineByPropertyName=$true)]$SDDL)
 
+    $SDDLSplit = $SDDL.Split("(")
+
+    "`n---SDDL Split:"
+    $SDDLSplit
+
+    "`n---SDDL SID Parsing:"
+    # Skip index 0 where owner and/or primary group are stored            
+    For ($i=1;$i -lt $SDDLSplit.Length;$i++)
+    {
+        $ACLSplit = $SDDLSplit[$i].Split(";")
+
+        If ($ACLSplit[1].Contains("ID"))
+        {
+            "Inherited"
+        }
+        Else
+        {
+            $ACLEntrySID = $null
+
+            # Remove the trailing ")"
+            $ACLEntry = $ACLSplit[5].TrimEnd(")")
+
+            # Parse out the SID using a handy RegEx
+            $ACLEntrySIDMatches = [regex]::Matches($ACLEntry,"(S(-\d+){2,8})")
+            $ACLEntrySIDMatches | ForEach-Object {$ACLEntrySID = $_.value}
+
+            If ($ACLEntrySID)
+            {
+                $ACLEntrySID
+            }
+            Else
+            {
+                "Not inherited - No SID"
+            }
+        }
+    }
+    return $null
+}
+
+#
+# Used to ask user if he want to run script.
+#
 function RunThis($str)
 {
     if($str)

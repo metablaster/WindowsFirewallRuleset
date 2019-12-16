@@ -155,12 +155,11 @@ Microsoft Account Sign-in Assistant(wlidsvc),
 Windows Update(wuauserv),
 Background Intelligent Transfer Service(BITS)"
 
-$UserAndSystem = $User + "(A;;CC;;;S-1-5-18)"
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Background Intelligent Transfer Service" -Program $ServiceHost -Service Any `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress DefaultGateway4 -LocalPort Any -RemotePort Any `
--LocalUser $UserAndSystem `
+-LocalUser (Get-SDDLFromAccounts @("NT AUTHORITY\SYSTEM", "$UserAccount")) `
 -Description "Extension rule for active users to allow BITS to Internet gateway device (IGD)"
 
 #
