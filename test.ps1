@@ -76,13 +76,14 @@ Select-Object -Expand Value
 -DisplayName "TEST RULE" -Program $ServiceHost -Service Any `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group "TEST" -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser (Get-SDDLFromAccounts @("NT AUTHORITY\SYSTEM", "$UserAccount")) `
+-LocalUser (Get-SDDLFromAccounts @("NT AUTHORITY\SYSTEM", "NT AUTHORITY\NETWORK SERVICE", "$UserAccount")) `
 -Description "Following services need access based on user account:
 Cryptographic Services(CryptSvc),
 Microsoft Account Sign-in Assistant(wlidsvc),
 Windows Update(wuauserv),
 Background Intelligent Transfer Service(BITS)"
 
+(Get-SDDLFromAccounts @("NT AUTHORITY\SYSTEM", "NT AUTHORITY\NETWORK SERVICE", "$UserAccount"))
 
 #  Get-WmiObject -ComputerName "localhost" -Class Win32_UserAccount -Filter "LocalAccount='True'" | Select-Object PSComputername, Name, Status, Disabled, AccountType, Lockout, PasswordRequired, PasswordChangeable, SID
 #  Get-WmiObject -class win32_account -Filter 'name="LOCAL SERVICE"'

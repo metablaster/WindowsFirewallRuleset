@@ -139,31 +139,56 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "Enables the detection, download and installation of device-related software.
 If this service is disabled, devices may be configured with outdated software, and may not work correctly."
 
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Network Location Awareness" -Program $ServiceHost -Service NlaSvc `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
+-Description "Collects and stores configuration information for the network and notifies programs when this information is modified.
+If this service is stopped, configuration information might be unavailable.
+If this service is disabled, any services that explicitly depend on it will fail to start."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Network infrastructure discovery" -Program $ServiceHost -Service fdPHost `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress DefaultGateway4 -LocalPort Any -RemotePort Any `
+-Description "Used to discover router in workgroup. The FDPHOST service hosts the Function Discovery (FD) network discovery providers.
+These FD providers supply network discovery services for the Simple Services Discovery Protocol (SSDP) and Web Services."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Network services discovery" -Program $ServiceHost -Service FDResPub `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 3702 `
+-Description "Web Services Dynamic Discovery (WS-Discovery) is a technical specification that defines a multicast discovery protocol
+to locate services on a local network.
+It operates over TCP and UDP port 3702 and uses IP multicast address 239.255.255.250."
+
 #
-# Windows services rules for human users
+# Windows services extension rules
 # see ProblematicTraffic.md for more info
 #
 
+# TODO: how do we make use of an array of user accounts for Get-SDDLFromAccounts
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Services for current user" -Program $ServiceHost -Service Any `
+-DisplayName "Extension rule for complex services" -Program $ServiceHost -Service Any `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser $User `
--Description "Extension rule for active users, following services need access based on loged on user:
+-LocalUser (Get-SDDLFromAccounts @("NT AUTHORITY\SYSTEM", "NT AUTHORITY\NETWORK SERVICE", "$UserAccount")) `
+-Description "Extension rule for active users and NT localsystem, following services need access based on loged on user:
 Cryptographic Services(CryptSvc),
 Microsoft Account Sign-in Assistant(wlidsvc),
 Windows Update(wuauserv),
-Background Intelligent Transfer Service(BITS)"
+Background Intelligent Transfer Service(BITS),
+BITS and CryptSvc in addition need System account and wlidsvc needs Network Service account"
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Background Intelligent Transfer Service" -Program $ServiceHost -Service Any `
+-DisplayName "Extension rule for BITS Router capability check" -Program $ServiceHost -Service Any `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress DefaultGateway4 -LocalPort Any -RemotePort Any `
 -LocalUser (Get-SDDLFromAccounts @("NT AUTHORITY\SYSTEM", "$UserAccount")) `
 -Description "Extension rule for active users to allow BITS to Internet gateway device (IGD)"
 
 #
-# Following rules are needed in addition to above "master" rules
+# Following rules are in "ProblematicTraffic" pseudo group, these need extension rules (above)
 #
 
 # TODO: try with localuser: Any
@@ -179,18 +204,17 @@ will be unable to automatically download programs and other information."
 
 # BITS to Router info: https://docs.microsoft.com/en-us/windows/win32/bits/network-bandwidth
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Background Intelligent Transfer Service" -Program $ServiceHost -Service BITS `
+-DisplayName "BITS Router capability check" -Program $ServiceHost -Service BITS `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress DefaultGateway4 -LocalPort Any -RemotePort Any `
--Description "BITS monitors the network traffic at the Internet gateway device (IGD) or the client's network interface card (NIC)
-and uses only the idle portion of the network bandwidth.
+-Description "BITS (Background Intelligent Transfer Service) monitors the network traffic at the Internet gateway device (IGD)
+or the client's network interface card (NIC) and uses only the idle portion of the network bandwidth.
 If BITS uses the network interface card to measure traffic and there are no network applications running on the client,
 BITS will consume most of the available bandwidth.
 This can be an issue if the client has a fast network adapter but the full internet connection is through a slow link (like a DSL router)
 because BITS will compete for the full bandwidth instead of using only the available bandwidth on the slow link;
 To use a gateway device, the device must support byte counters (the device must respond to the GetTotalBytesSent and GetTotalBytesReceived actions)
-and Universal Plug and Play (UPnP) must be enabled.
-"
+and Universal Plug and Play (UPnP) must be enabled."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Cryptographic Services" -Program $ServiceHost -Service CryptSvc `
