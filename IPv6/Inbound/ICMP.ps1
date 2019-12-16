@@ -81,6 +81,8 @@ Type    Name
 
 # TODO: edge traversal unknown for some ICMPv6 rules
 # TODO: remote address not strict enough for all rules
+# TODO: add block rules based on remote address
+# TODO: add rule for ISATAP and 4to6
 
 #
 # Import global variables

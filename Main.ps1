@@ -43,7 +43,7 @@ if(!$PSScriptRoot)
 # Execute IPv4 rules
 #
 
-if(RunThis("Applying Inbound Rules..."))
+if(RunThis("Applying Inbound IPv4 Rules..."))
 {
     # Load Inbound rules
     & "$ScriptPath\IPv4\Inbound\AdditionalNetworking.ps1"
@@ -54,7 +54,7 @@ if(RunThis("Applying Inbound Rules..."))
     & "$ScriptPath\IPv4\Inbound\WirelessNetworking.ps1"
 }
 
-if(RunThis("Applying Outbound Rules..."))
+if(RunThis("Applying Outbound IPv4 Rules..."))
 {
     # Load Outbound rules
     & "$ScriptPath\IPv4\Outbound\AdditionalNetworking.ps1"
@@ -68,6 +68,24 @@ if(RunThis("Applying Outbound Rules..."))
     & "$ScriptPath\IPv4\Outbound\WindowsServices.ps1"
     & "$ScriptPath\IPv4\Outbound\WindowsSystem.ps1"
     & "$ScriptPath\IPv4\Outbound\WirelessNetworking.ps1"
+}
+
+#
+# Execute IPv6 rules
+#
+
+if(RunThis("Applying Inbound IPv6 Rules..."))
+{
+    # Load Inbound rules
+    & "$ScriptPath\IPv6\Inbound\ICMP.ps1"
+    & "$ScriptPath\IPv6\Inbound\Multicast.ps1"
+}
+
+if(RunThis("Applying Outbound IPv6 Rules..."))
+{
+    # Load Outbound rules
+    & "$ScriptPath\IPv6\Outbound\ICMP.ps1"
+    & "$ScriptPath\IPv6\Outbound\Multicast.ps1"
 }
 
 Write-Host "All operations completed successfuly!"
