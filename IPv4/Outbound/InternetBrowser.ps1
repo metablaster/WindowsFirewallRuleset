@@ -93,10 +93,11 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $User `
 -Description "Google cloud messaging, google services use 5228, hangouts, google play, GCP.. etc use 5228."
 
+# TODO: removed port 80, probably not used
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Chrome QUIC" -Service Any -Program $ChromeApp `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+-Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 -LocalUser $User `
 -Description "Quick UDP Internet Connections,
 Experimental transport layer network protocol developed by Google and implemented in 2013."

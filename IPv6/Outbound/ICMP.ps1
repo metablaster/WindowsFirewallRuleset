@@ -173,7 +173,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Router Solicitation (133)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol ICMPv6 -IcmpType 133 -LocalAddress Any -RemoteAddress $RouterSpace -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
@@ -187,7 +187,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Neighbor Solicitation (135)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol ICMPv6 -IcmpType 135 -LocalAddress Any -RemoteAddress $RemoteAddr -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
@@ -248,7 +248,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Multicast Listener Report Version 2 (143)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol ICMPv6 -IcmpType 143 -LocalAddress Any -RemoteAddress LocalSubnet6 -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description

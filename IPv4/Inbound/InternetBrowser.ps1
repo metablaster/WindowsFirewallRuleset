@@ -77,3 +77,11 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Direction Inbound -Protocol UDP -LocalAddress Any -RemoteAddress 239.255.255.250 -LocalPort 1900 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $User `
 -Description "Network Discovery to allow use of the Simple Service Discovery Protocol."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Chrome QUIC" -Service Any -Program $ChromeApp `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Inbound -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort 443 -RemotePort Any `
+-EdgeTraversalPolicy Block -LocalUser $User `
+-Description "Quick UDP Internet Connections,
+Experimental transport layer network protocol developed by Google and implemented in 2013."
