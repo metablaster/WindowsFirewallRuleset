@@ -57,7 +57,7 @@ if (!(RunThis)) { exit }
 #
 $Group = "Multicast IPv6"
 $Interface = "Wired, Wireless"
-$Profile = "Any"
+$Profile = "Private, Domain"
 $Description = "http://www.iana.org/assignments/ipv6-multicast-addresses/ipv6-multicast-addresses.xhtml"
 
 #First remove all existing rules matching setup
@@ -297,7 +297,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - All-dhcp-agents" -Service Any -Program Any `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress ff02::1:2 -LocalPort Any -RemotePort Any `
 -Localuser Any `
 -Description $Description

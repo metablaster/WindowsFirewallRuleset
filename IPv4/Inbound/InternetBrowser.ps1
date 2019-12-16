@@ -38,6 +38,10 @@ $Group = "Internet Browser"
 $Profile = "Private, Public"
 $Interface = "Wired, Wireless"
 
+# Chromecast IP
+# Adjust to the Chromecast IP in your local network
+$CHROMECAST_IP = 192.168.8.50
+
 #
 # Browser installation directories
 #
@@ -73,10 +77,10 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Google Chrome Chromecast" -Service Any -Program $ChromeApp `
--PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction Inbound -Protocol UDP -LocalAddress Any -RemoteAddress 239.255.255.250 -LocalPort 1900 -RemotePort Any `
+-PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Inbound -Protocol UDP -LocalAddress Any -RemoteAddress $CHROMECAST_IP -LocalPort 32768-61000 -RemotePort 32768-61000 `
 -EdgeTraversalPolicy Block -LocalUser $User `
--Description "Network Discovery to allow use of the Simple Service Discovery Protocol."
+-Description "Allow Chromecast Inbound UDP data"
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Chrome QUIC" -Service Any -Program $ChromeApp `

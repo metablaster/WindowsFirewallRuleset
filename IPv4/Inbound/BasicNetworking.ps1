@@ -48,34 +48,21 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Inboun
 
 #
 # Loopback
+# Used on TCP, UDP, IGMP
 #
 
 # TODO: should we use -InterfaceAlias set to Loopback pseudo interface?
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Loopback" -Service Any -Program Any `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
--Direction Inbound -Protocol TCP -LocalAddress Any -RemoteAddress 127.0.0.1 -LocalPort Any -RemotePort Any `
+-Direction Inbound -Protocol Any -LocalAddress Any -RemoteAddress 127.0.0.1 -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Loopback" -Service Any -Program Any `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
--Direction Inbound -Protocol TCP -LocalAddress 127.0.0.1 -RemoteAddress Any -LocalPort Any -RemotePort Any `
--EdgeTraversalPolicy Block -LocalUser Any `
--Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources."
-
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Loopback" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
--Direction Inbound -Protocol UDP -LocalAddress Any -RemoteAddress 127.0.0.1 -LocalPort Any -RemotePort Any `
--EdgeTraversalPolicy Block -LocalUser Any `
--Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources."
-
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Loopback" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
--Direction Inbound -Protocol UDP -LocalAddress 127.0.0.1 -RemoteAddress Any -LocalPort Any -RemotePort Any `
+-Direction Inbound -Protocol Any -LocalAddress 127.0.0.1 -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources."
 

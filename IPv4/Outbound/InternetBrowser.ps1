@@ -38,6 +38,10 @@ $Group = "Internet Browser"
 $Profile = "Private, Public"
 $Interface = "Wired, Wireless"
 
+# Chromecast IP
+# Adjust to the Chromecast IP in your local network
+$CHROMECAST_IP = 192.168.8.50
+
 #
 # Browser installation directories
 #
@@ -88,7 +92,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Chrome GCM" -Service Any -Program $ChromeApp `
--PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 5228 `
 -LocalUser $User `
 -Description "Google cloud messaging, google services use 5228, hangouts, google play, GCP.. etc use 5228."
@@ -125,11 +129,25 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "The multicast Domain Name System (mDNS) resolves host names to IP addresses within small networks that do not include a local name server."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Chrome Chromecast" -Service Any -Program $ChromeApp `
--PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+-DisplayName "Chrome Chromecast SSDP" -Service Any -Program $ChromeApp `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress 239.255.255.250 -LocalPort Any -RemotePort 1900 `
 -LocalUser $User `
 -Description "Network Discovery to allow use of the Simple Service Discovery Protocol."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Chrome Chromecast" -Service Any -Program $ChromeApp `
+-PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress $CHROMECAST_IP -LocalPort Any -RemotePort 8008, 8009 `
+-LocalUser $User `
+-Description "Allow Chromecast outbound TCP data"
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Chrome Chromecast" -Service Any -Program $ChromeApp `
+-PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress $CHROMECAST_IP -LocalPort 32768-61000 -RemotePort 32768-61000 `
+-LocalUser $User `
+-Description "Allow Chromecast outbound UDP data"
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Chrome Update" -Service Any -Program $ChromeUpdate `

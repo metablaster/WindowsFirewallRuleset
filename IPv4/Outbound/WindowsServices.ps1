@@ -149,19 +149,27 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser $User `
--Description "Following services need access based on user account:
+-Description "Extension rule for active users, following services need access based on loged on user:
 Cryptographic Services(CryptSvc),
 Microsoft Account Sign-in Assistant(wlidsvc),
 Windows Update(wuauserv),
 Background Intelligent Transfer Service(BITS)"
 
+$UserAndSystem = $User + "(A;;CC;;;S-1-5-18)"
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Background Intelligent Transfer Service" -Program $ServiceHost -Service Any `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress DefaultGateway4 -LocalPort Any -RemotePort Any `
+-LocalUser $UserAndSystem `
+-Description "Extension rule for active users to allow BITS to Internet gateway device (IGD)"
+
 #
-# Following rules are reserved until MS fixes the problem, resolved by above rule
+# Following rules are needed in addition to above "master" rules
 #
 
 # TODO: try with localuser: Any
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Background Intelligent Transfer Service (FAIL)" -Program $ServiceHost -Service BITS `
+-DisplayName "Background Intelligent Transfer Service" -Program $ServiceHost -Service BITS `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -Description "Used for background update,
@@ -170,9 +178,24 @@ Transfers files in the background using idle network bandwidth. If the service i
 then any applications that depend on BITS, such as Windows Update or MSN Explorer,
 will be unable to automatically download programs and other information."
 
+# BITS to Router info: https://docs.microsoft.com/en-us/windows/win32/bits/network-bandwidth
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Cryptographic Services (FAIL)" -Program $ServiceHost -Service CryptSvc `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-DisplayName "Background Intelligent Transfer Service" -Program $ServiceHost -Service BITS `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress DefaultGateway4 -LocalPort Any -RemotePort Any `
+-Description "BITS monitors the network traffic at the Internet gateway device (IGD) or the client's network interface card (NIC)
+and uses only the idle portion of the network bandwidth.
+If BITS uses the network interface card to measure traffic and there are no network applications running on the client,
+BITS will consume most of the available bandwidth.
+This can be an issue if the client has a fast network adapter but the full internet connection is through a slow link (like a DSL router)
+because BITS will compete for the full bandwidth instead of using only the available bandwidth on the slow link;
+To use a gateway device, the device must support byte counters (the device must respond to the GetTotalBytesSent and GetTotalBytesReceived actions)
+and Universal Plug and Play (UPnP) must be enabled.
+"
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Cryptographic Services" -Program $ServiceHost -Service CryptSvc `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -Description "Provides three management services:
 Catalog Database Service, which confirms the signatures of Windows files and allows new programs to be installed;
@@ -180,16 +203,16 @@ Protected Root Service, which adds and removes Trusted Root Certification Author
 and Automatic Root Certificate Update Service, which retrieves root certificates from Windows Update and enable scenarios such as SSL."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Windows update service (FAIL)" -Program $ServiceHost -Service wuauserv `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+-DisplayName "Windows update service" -Program $ServiceHost -Service wuauserv `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -Description "Enables the detection, download, and installation of updates for Windows and other programs.
 If this service is disabled, users of this computer will not be able to use Windows Update or its automatic updating feature,
 and programs will not be able to use the Windows Update Agent (WUA) API."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Microsoft Account Sign-in Assistant (FAIL)" -Program $ServiceHost -Service wlidsvc `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-DisplayName "Microsoft Account Sign-in Assistant" -Program $ServiceHost -Service wlidsvc `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 -Description "Enables user sign-in through Microsoft account identity services.
 If this service is stopped, users will not be able to logon to the computer with their Microsoft account."

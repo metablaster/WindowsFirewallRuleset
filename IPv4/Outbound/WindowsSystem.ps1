@@ -259,7 +259,16 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 -LocalUser Any `
 -Description "wuauclt.exe is deprecated on Windows 10 (and Server 2016 and newer). The command line tool has been replaced by usoclient.exe.
-When the system starts an update session, it launches usoclient.ex, which in turn launches usocoreworker.exe.
+When the system starts an update session, it launches usoclient.exe, which in turn launches usocoreworker.exe.
+Usocoreworker is the worker process for usoclient.exe and essentially it does all the work that the USO component needs done."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Update Session Orchestrator" -Service Any -Program "%SystemRoot%\System32\usoclient.exe" `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+-LocalUser $NT_AUTHORITY_System `
+-Description "wuauclt.exe is deprecated on Windows 10 (and Server 2016 and newer). The command line tool has been replaced by usoclient.exe.
+When the system starts an update session, it launches usoclient.exe, which in turn launches usocoreworker.exe.
 Usocoreworker is the worker process for usoclient.exe and essentially it does all the work that the USO component needs done."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `

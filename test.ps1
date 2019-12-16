@@ -1,5 +1,5 @@
 
-. "$PSScriptRoot\Modules\Functions.ps1"
+. "$PSScriptRoot\Modules\GlobalVariables.ps1"
 
 # Remove previous test
 # Remove-NetFirewallRule -PolicyStore "localhost" -Group "Test" -Direction Inbound -ErrorAction SilentlyContinue
@@ -19,8 +19,8 @@ New-NetFirewallRule -ErrorAction Stop -PolicyStore "localhost" `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress IntranetRemoteAccess -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser "O:SYG:SYD:(A;;CCRC;;;S-1-5-80-1014140700-3308905587-3330345912-272242898-93311788)"
  #>
-ParseSDDL "O:SYG:SYD:(A;;CCRC;;;S-1-5-80-1014140700-3308905587-3330345912-272242898-93311788)"
-ParseSDDL "O:SYG:SYD:(A;;CCRC;;;S-1-5-80-4267341169-2882910712-659946508-2704364837-2204554466)"
+# ParseSDDL "O:SYG:SYD:(A;;CCRC;;;S-1-5-80-1014140700-3308905587-3330345912-272242898-93311788)"
+# ParseSDDL "O:SYG:SYD:(A;;CCRC;;;S-1-5-80-4267341169-2882910712-659946508-2704364837-2204554466)"
 # Get-UserSDDL uSER
 
 <# Write-Host "";
@@ -50,4 +50,52 @@ Write-Host "";
 <# $ScriptPath = Split-Path $MyInvocation.InvocationName
 
 & "$ScriptPath\IPv4\Outbound\WirelessDisplay.ps1"
+ #>
+
+$Profile = "Private, Public"
+$Interface = "Wired, Wireless"
+$ServiceHost = "%SystemRoot%\System32\svchost.exe"
+
+# O:LSD:(A;;CC;;;SY)(A;;CC;;;S-1-5-21-3400361277-1888300462-2581876478-1002)
+
+Function Convert-SDDLToACL {
+    [Cmdletbinding()]
+    Param (
+        #One or more strings of SDDL syntax.
+        [string[]]$SDDLString
+    )
+
+    foreach ($SDDL in $SDDLString) {
+        $ACLObject = New-Object -Type Security.AccessControl.DirectorySecurity
+        $ACLObject.SetSecurityDescriptorSddlForm($SDDL)
+        $ACLObject.Access
+    }
+}
+
+<# $sddl = "O:LSD:(A;;CC;;;SY)(A;;CC;;;S-1-5-21-3400361277-1888300462-2581876478-1002)"
+Convert-SDDLToACL $sddl |
+    Select-Object -Expand IdentityReference |
+    Select-Object -Expand Value
+ #>
+ $NT_AUTHORITY_System = "D:(A;;CC;;;S-1-5-18)"
+ $User = "D:(A;;CC;;;S-1-5-21-3400361277-1888300462-2581876478-1002)"
+
+$sddl = "D:(A;;CC;;;S-1-5-18)(A;;CC;;;S-1-5-21-3400361277-1888300462-2581876478-1002)"
+Convert-SDDLToACL $sddl |
+Select-Object -Expand IdentityReference |
+Select-Object -Expand Value
+    
+$UserAndSystem = $User + "(A;;CC;;;S-1-5-18)"
+
+$MultiUser
+<# New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "TEST RULE" -Program $ServiceHost -Service Any `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group "TEST" -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+-LocalUser $sddl `
+-Description "Following services need access based on user account:
+Cryptographic Services(CryptSvc),
+Microsoft Account Sign-in Assistant(wlidsvc),
+Windows Update(wuauserv),
+Background Intelligent Transfer Service(BITS)"
  #>

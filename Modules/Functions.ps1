@@ -22,10 +22,37 @@ function Get-UserSDDL
         }
     }
     return $SDDL -f ($ACEs -join '')
-  }
+}
 
-  # Get-UserSDDL sample usage:
-  # New-NetFirewallRule -DisplayName "BLOCKWWW" -LocalUser (Get-FirewallLocalUserSddl user1,user2) -Direction Outbound -LocalPort 80,443 -Protocol TCP -Action Block
+# Get-UserSDDL sample usage:
+# New-NetFirewallRule -DisplayName "BLOCKWWW" -LocalUser (Get-FirewallLocalUserSddl user1,user2) -Direction Outbound -LocalPort 80,443 -Protocol TCP -Action Block
+
+# Credits to: https://stackoverflow.com/questions/48406474/return-user-data-from-sid
+Function Convert-SDDLToACL
+{
+    [Cmdletbinding()]
+    Param
+    (
+        #One or more strings of SDDL syntax.
+        [string[]]$SDDLString
+    )
+
+    foreach ($SDDL in $SDDLString)
+    {
+        $ACLObject = New-Object -Type Security.AccessControl.DirectorySecurity
+        $ACLObject.SetSecurityDescriptorSddlForm($SDDL)
+        $ACLObject.Access
+    }
+}
+
+# Convert-SDDLToACL sample usage:
+# The function returns the ACEs of the generated security descriptor object.
+# You can extract the user/group/principal names from that list like this:
+
+# $sddl = "O:LSD:(A;;CC;;;SY)(A;;CC;;;S-1-5-21-3400361277-1888300462-2581876478-1002)"
+# Convert-SDDLToACL $sddl | 
+# Select-Object -Expand IdentityReference |
+# Select-Object -Expand Value
 
   # Credits to: https://blogs.technet.microsoft.com/ashleymcglone/2011/08/29/powershell-sid-walker-texas-ranger-part-1/
   function ParseSDDL

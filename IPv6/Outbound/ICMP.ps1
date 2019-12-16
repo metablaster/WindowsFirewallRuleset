@@ -194,7 +194,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Neighbor Advertisement (136)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol ICMPv6 -IcmpType 136 -LocalAddress Any -RemoteAddress $RemoteAddr -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
