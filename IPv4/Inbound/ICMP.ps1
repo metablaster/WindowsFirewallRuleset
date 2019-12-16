@@ -118,6 +118,14 @@ Codes 0, 1, 4, and 5 may be received from a gateway.
 Codes 2 and 3 may be received from a host."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Destination Unreachable Fragmentation Needed (3)" -Service Any -Program $Program `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
+-Direction Inbound -Protocol ICMPv4 -IcmpType 3:4 -LocalAddress Any -RemoteAddress Any `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
+-Description "Destination Unreachable Fragmentation Needed error messages are sent from any node that a packet traverses which is
+unable to forward the packet because fragmentation was needed and the don't fragment bit was set."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Parameter Problem (12)" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 12 -LocalAddress Any -RemoteAddress Any `

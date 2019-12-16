@@ -130,10 +130,10 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 #
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
--DisplayName "IPv4 over HTTPS" -Service iphlpsvc -Program "%SystemRoot%\system32\svchost.exe" `
+-DisplayName "IPv4 over HTTPS" -Service Any -Program System `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Inbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort IPHTTPSIn -RemotePort Any `
--EdgeTraversalPolicy Block -LocalUser Any `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 -Description "Allow IPv4 IPHTTPS tunneling technology to provide connectivity across HTTP proxies and firewalls."
 
 #
