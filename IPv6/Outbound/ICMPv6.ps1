@@ -242,7 +242,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
--DisplayName "Version 2 Multicast Listener Report (143)" -Service Any -Program System `
+-DisplayName "Multicast Listener Report Version 2 (143)" -Service Any -Program System `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol ICMPv6 -IcmpType 143 -LocalAddress Any -RemoteAddress LocalSubnet6 -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `

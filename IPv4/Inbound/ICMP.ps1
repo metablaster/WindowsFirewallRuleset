@@ -99,7 +99,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Destination Unreachable" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 3 -LocalAddress Any -RemoteAddress Any `
--EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
+-EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_System `
 -Description "network specified in the RemoteAddress is unreachable, ie,
 the distance to the network is infinity, the gateway may send a destination unreachable message to the internet source host of the datagram.
 
@@ -121,7 +121,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Parameter Problem" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 12 -LocalAddress Any -RemoteAddress Any `
--EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
+-EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_System `
 -Description "If the gateway or host processing a datagram finds a problem with the header parameters such that it cannot complete processing the
 datagram it must discard the datagram.  One potential source of such a problem is with incorrect arguments in an option.
 The gateway or host may also notify the source host via the parameter problem message.
@@ -166,7 +166,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Time Exceeded" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 11 -LocalAddress Any -RemoteAddress Any `
--EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
+-EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_System `
 -Description "If the gateway processing a datagram finds the time to live field is zero it must discard the datagram.
 The gateway may also notify the source host via the time exceeded message.
 If a host reassembling a fragmented datagram cannot complete the reassembly due to missing fragments within its time limit it discards the datagram,
@@ -183,9 +183,25 @@ Code:
 Code 0 may be received from a gateway.
 Code 1 may be received from a host."
 
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Router Solicitation" -Service Any -Program $Program `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
+-Direction Inbound -Protocol ICMPv4 -IcmpType 10 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
+-Description "the ICMP Internet Router Discovery Protocol (IRDP), also called the Internet Router Discovery Protocol,
+is a protocol for computer hosts to discover the presence and location of routers on their IPv4 local area network.
+Router discovery is useful for accessing computer systems on other nonlocal area networks.
+
+Sending Router Solicitations:
+When an interface becomes enabled, a host may be unwilling to wait for the next unsolicited Router Advertisement
+to locate default routers or learn prefixes.
+To obtain Router Advertisements quickly, a host SHOULD transmit up to MAX_RTR_SOLICITATIONS Router Solicitation messages,
+each separated by at least RTR_SOLICITATION_INTERVAL seconds."
+
 #
 # ICMP type filtering for public profile
 #
+
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Echo Request" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
@@ -225,9 +241,9 @@ it is still a recommended practice to disable ICMP redirect messages (ignore the
 # TODO: figure out if redirects can be unsolicited, to set up EdgeTraversalPolicy (currently allowing by logic of comments)
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Redirect" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
--Direction Inbound -Protocol ICMPv4 -IcmpType 5 -LocalAddress Any -RemoteAddress $RemoteAddrWAN `
--EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_System `
+-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
+-Direction Inbound -Protocol ICMPv4 -IcmpType 5 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 -Description "ICMP redirect messages are used by routers to notify the hosts on the data link that a better route is available for a particular destination.
 The gateway sends a redirect message to a host in the following situation.
 A gateway, G1, receives an internet datagram from a host on a network to which the gateway is attached.
@@ -253,9 +269,9 @@ Codes 0, 1, 2, and 3 may be received from a gateway."
 # TODO: we should probably allow this in public profile
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Router Advertisement" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
--Direction Inbound -Protocol ICMPv4 -IcmpType 9 -LocalAddress Any -RemoteAddress $RemoteAddrWAN `
--EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_System `
+-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
+-Direction Inbound -Protocol ICMPv4 -IcmpType 9 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 -Description "the ICMP Internet Router Discovery Protocol (IRDP), also called the Internet Router Discovery Protocol,
 is a protocol for computer hosts to discover the presence and location of routers on their IPv4 local area network.
 Router discovery is useful for accessing computer systems on other nonlocal area networks.
@@ -266,21 +282,6 @@ A router might want to send Router Advertisements without advertising itself as 
 For instance, a router might advertise prefixes for stateless address autoconfiguration while not wishing to forward p ackets.
 Unsolicited Router Advertisements are not strictly periodic:
 the interval between subsequent transmissions is randomized to reduce the probability of synchronization with the advertisements from other routers on the same link."
-
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Router Solicitation" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
--Direction Inbound -Protocol ICMPv4 -IcmpType 10 -LocalAddress Any -RemoteAddress $RemoteAddrWAN `
--EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_System `
--Description "the ICMP Internet Router Discovery Protocol (IRDP), also called the Internet Router Discovery Protocol,
-is a protocol for computer hosts to discover the presence and location of routers on their IPv4 local area network.
-Router discovery is useful for accessing computer systems on other nonlocal area networks.
-
-Sending Router Solicitations:
-When an interface becomes enabled, a host may be unwilling to wait for the next unsolicited Router Advertisement
-to locate default routers or learn prefixes.
-To obtain Router Advertisements quickly, a host SHOULD transmit up to MAX_RTR_SOLICITATIONS Router Solicitation messages,
-each separated by at least RTR_SOLICITATION_INTERVAL seconds."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Timestamp" -Service Any -Program $Program `
@@ -353,7 +354,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Redirect" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 5 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
--EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_System `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 -Description "ICMP redirect messages are used by routers to notify the hosts on the data link that a better route is available for a particular destination.
 The gateway sends a redirect message to a host in the following situation.
 A gateway, G1, receives an internet datagram from a host on a network to which the gateway is attached.
@@ -380,7 +381,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Router Advertisement" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction Inbound -Protocol ICMPv4 -IcmpType 9 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
--EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_System `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 -Description "the ICMP Internet Router Discovery Protocol (IRDP), also called the Internet Router Discovery Protocol,
 is a protocol for computer hosts to discover the presence and location of routers on their IPv4 local area network.
 Router discovery is useful for accessing computer systems on other nonlocal area networks.
@@ -391,21 +392,6 @@ A router might want to send Router Advertisements without advertising itself as 
 For instance, a router might advertise prefixes for stateless address autoconfiguration while not wishing to forward p ackets.
 Unsolicited Router Advertisements are not strictly periodic:
 the interval between subsequent transmissions is randomized to reduce the probability of synchronization with the advertisements from other routers on the same link."
-
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Router Solicitation" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
--Direction Inbound -Protocol ICMPv4 -IcmpType 10 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
--EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_System `
--Description "the ICMP Internet Router Discovery Protocol (IRDP), also called the Internet Router Discovery Protocol,
-is a protocol for computer hosts to discover the presence and location of routers on their IPv4 local area network.
-Router discovery is useful for accessing computer systems on other nonlocal area networks.
-
-Sending Router Solicitations:
-When an interface becomes enabled, a host may be unwilling to wait for the next unsolicited Router Advertisement
-to locate default routers or learn prefixes.
-To obtain Router Advertisements quickly, a host SHOULD transmit up to MAX_RTR_SOLICITATIONS Router Solicitation messages,
-each separated by at least RTR_SOLICITATION_INTERVAL seconds."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Timestamp" -Service Any -Program $Program `
