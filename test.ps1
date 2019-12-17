@@ -72,7 +72,7 @@ Select-Object -Expand IdentityReference |
 Select-Object -Expand Value
  #>
 
- New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+<#  New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "TEST RULE" -Program $ServiceHost -Service Any `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group "TEST" -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
@@ -82,6 +82,15 @@ Cryptographic Services(CryptSvc),
 Microsoft Account Sign-in Assistant(wlidsvc),
 Windows Update(wuauserv),
 Background Intelligent Transfer Service(BITS)"
+ #>
+ 
+# 0:0:0:0:0:0:0:1
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+-DisplayName "TEST RULE" -Service Any -Program Any `
+-Enabled False -Action Allow -Group "TEST" -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress ::1/128 -RemoteAddress Any -LocalPort Any -RemotePort Any `
+-LocalUser Any `
+-Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources."
 
 # (Get-SDDLFromAccounts @("NT AUTHORITY\SYSTEM", "NT AUTHORITY\NETWORK SERVICE", "$UserAccount"))
 

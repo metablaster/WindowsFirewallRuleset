@@ -128,3 +128,19 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 3702 `
 -LocalUser Any `
 -Description "Rule for Network Discovery to discover devices via Function Discovery."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Device Association Framework Provider Host (WSD)" -Service Any -Program "%SystemRoot%\System32\dasHost.exe" `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress DefaultGateway4 -LocalPort Any -RemotePort Any `
+-LocalUser $NT_AUTHORITY_LocalService `
+-Description "Rule for Network Discovery to discover devices via Function Discovery.
+This service is new since Windows 8.
+Executable also known as Device Association Framework Provider Host"
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Network infrastructure discovery" -Service fdPHost -Program $ServiceHost `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress DefaultGateway4 -LocalPort Any -RemotePort Any `
+-Description "Used to discover router in workgroup. The FDPHOST service hosts the Function Discovery (FD) network discovery providers.
+These FD providers supply network discovery services for the Simple Services Discovery Protocol (SSDP) and Web Services."

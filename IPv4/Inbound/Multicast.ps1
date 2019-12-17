@@ -57,7 +57,7 @@ if (!(RunThis)) { exit }
 $Group = "Multicast IPv4"
 $Profile = "Private, Domain"
 $Direction = "Inbound"
-$MulticastUsers = Get-SDDLFromAccounts @("NT AUTHORITY\NETWORK SERVICE") # "NT AUTHORITY\LOCAL SERVICE" "NT AUTHORITY\SYSTEM"
+$MulticastUsers = Get-SDDLFromAccounts @("NT AUTHORITY\NETWORK SERVICE", "NT AUTHORITY\LOCAL SERVICE") # "NT AUTHORITY\SYSTEM"
 
 #First remove all existing rules matching setup
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue

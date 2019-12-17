@@ -166,13 +166,6 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 If this rule is disabled, configuration information might be unavailable."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Network infrastructure discovery" -Service fdPHost -Program $ServiceHost `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress DefaultGateway4 -LocalPort Any -RemotePort Any `
--Description "Used to discover router in workgroup. The FDPHOST service hosts the Function Discovery (FD) network discovery providers.
-These FD providers supply network discovery services for the Simple Services Discovery Protocol (SSDP) and Web Services."
-
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Network services discovery" -Service FDResPub -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 3702 `

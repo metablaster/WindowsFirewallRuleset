@@ -110,7 +110,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Wi-Fi Direct Network Discovery" -Service Any -Program "%SystemRoot%\System32\dasHost.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType Wired, Wireless `
 -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
--EdgeTraversalPolicy Block -LocalUser Any `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_LocalService `
 -Description "Rule to discover WSD devices on Wi-Fi Direct networks.
 Host enables pairing between the system and wired or wireless devices. This service is new since Windows 8.
 Executable also known as Device Association Framework Provider Host"

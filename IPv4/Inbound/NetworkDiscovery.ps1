@@ -123,7 +123,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Device Association Framework Provider Host (WSD)" -Service Any -Program "%SystemRoot%\System32\dasHost.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 3702 -RemotePort Any `
--EdgeTraversalPolicy Block -LocalUser Any `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_LocalService `
 -Description "Rule for Network Discovery to discover devices via Function Discovery.
 This service is new since Windows 8.
 Executable also known as Device Association Framework Provider Host"
