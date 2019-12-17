@@ -50,3 +50,9 @@ This documents helps understand what is what by mapping powershell parameters to
 - `?` Excepted local Principals
 - `Owner` Local User Owner
 - `RemoteUser` Authorized Users
+
+# EDGE TRAVERSAL
+- `Block` Allow edge traversal
+- `Allow` Block edge traversal
+- `DeferToUser` Defer to user / Defer allow to user
+- `DeferToApp` Defer to application / Defer allow to application

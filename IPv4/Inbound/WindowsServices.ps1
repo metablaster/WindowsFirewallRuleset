@@ -35,7 +35,7 @@ if (!(RunThis)) { exit }
 # Setup local variables:
 #
 $Group = "Windows Services"
-$Profile = "Private, Public"
+# $Profile = "Private, Public"
 $Direction = "Inbound"
 
 #First remove all existing rules matching group
@@ -52,7 +52,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Delivery Optimization" -Service DoSvc -Program $ServiceHost `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 7680 -RemotePort Any `
 -EdgeTraversalPolicy Allow `
 -Description "Service responsible for delivery optimization.
@@ -62,7 +62,7 @@ Delivery Optimization also sends updates and apps from your PC to other PCs on y
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Delivery Optimization" -Service DoSvc -Program $ServiceHost `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 7680 -RemotePort Any `
 -EdgeTraversalPolicy Allow `
 -Description "Service responsible for delivery optimization.

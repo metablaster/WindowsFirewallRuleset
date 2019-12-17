@@ -141,7 +141,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "FTP Client" -Service Any -Program "%SystemRoot%\System32\ftp.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4, LocalSubnet -LocalPort Any -RemotePort 21 `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4, LocalSubnet4 -LocalPort Any -RemotePort 21 `
 -LocalUser Any `
 -Description "File transfer protocol client."
 
@@ -196,23 +196,9 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Name server lookup" -Service Any -Program "%SystemRoot%\System32\nslookup.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4, DefaultGateway -LocalPort Any -RemotePort 53 `
+-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4, DefaultGateway4 -LocalPort Any -RemotePort 53 `
 -LocalUser Any `
 -Description ""
-
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Remote desktop" -Service Any -Program "%SystemRoot%\System32\mstsc.exe" `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4, LocalSubnet -LocalPort Any -RemotePort 3389 `
--LocalUser Any `
--Description "Remote desktop connection."
-
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Remote desktop" -Service Any -Program "%SystemRoot%\System32\mstsc.exe" `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4, LocalSubnet -LocalPort Any -RemotePort 3389 `
--LocalUser Any `
--Description "Remote desktop connection."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Settings sync" -Service Any -Program "%SystemRoot%\System32\SettingSyncHost.exe" `
