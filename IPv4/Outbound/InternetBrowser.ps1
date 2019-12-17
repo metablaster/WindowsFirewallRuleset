@@ -36,7 +36,6 @@ if (!(RunThis)) { exit }
 #
 $Group = "Internet Browser"
 $Profile = "Private, Public"
-$Interface = "Wired, Wireless"
 
 # Chromecast IP
 # Adjust to the Chromecast IP in your local network

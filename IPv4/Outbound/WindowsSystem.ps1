@@ -36,7 +36,6 @@ if (!(RunThis)) { exit }
 #
 $Group = "Windows System"
 $Profile = "Private, Public"
-$Interface = "Wired, Wireless"
 
 #First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Outbound -ErrorAction SilentlyContinue

@@ -35,7 +35,6 @@ if (!(RunThis)) { exit }
 # Setup local variables:
 #
 $Group = "Basic Networking - IPv6"
-$Interface = "Wired, Wireless"
 $Profile = "Any"
 $ISATAP_Remotes = @("Internet6", "LocalSubnet6")
 

@@ -91,7 +91,6 @@ if (!(RunThis)) { exit }
 # Setup local variables:
 #
 $Group = "ICMPv6"
-$Interface = "Wired, Wireless"
 $Profile = "Any"
 $RemoteAddr = @("Internet6", "LocalSubnet6")
 $RouterSpace = @("LocalSubnet6", "ff02::2", "fe80::/64") # Messages to/from router

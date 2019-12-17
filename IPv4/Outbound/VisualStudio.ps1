@@ -36,7 +36,6 @@ if (!(RunThis)) { exit }
 #
 $Group = "Visual Studio"
 $Profile = "Private, Public"
-$Interface = "Wired, Wireless"
 
 #
 # Visual Studio installation directories

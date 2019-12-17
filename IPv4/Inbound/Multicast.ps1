@@ -56,7 +56,6 @@ if (!(RunThis)) { exit }
 #
 $Group = "Multicast IPv4"
 $Profile = "Private, Domain"
-$Interface = "Wired, Wireless"
 
 #First remove all existing rules matching setup
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Inbound -ErrorAction SilentlyContinue

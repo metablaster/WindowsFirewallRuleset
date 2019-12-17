@@ -35,7 +35,6 @@ if (!(RunThis)) { exit }
 # Setup local variables:
 #
 $Group = "Additional Networking"
-$Interface = "Wired, Wireless"
 
 #First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Outbound -ErrorAction SilentlyContinue

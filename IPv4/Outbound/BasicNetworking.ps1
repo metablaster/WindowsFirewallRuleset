@@ -35,7 +35,6 @@ if (!(RunThis)) { exit }
 # Setup local variables:
 #
 $Group = "Basic Networking - IPv4"
-$Interface = "Wired, Wireless"
 $Profile = "Any"
 
 #First remove all existing rules matching setup

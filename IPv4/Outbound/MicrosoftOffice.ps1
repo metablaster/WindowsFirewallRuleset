@@ -36,7 +36,6 @@ if (!(RunThis)) { exit }
 #
 $Group = "Microsoft Office"
 $Profile = "Private, Public"
-$Interface = "Wired, Wireless"
 
 #
 # Office installation directories

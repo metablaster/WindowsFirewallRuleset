@@ -9,6 +9,7 @@ $OnError = "Stop" #Stop executing if error
 $Debug = $false #To add rules to firewall for real set to false
 $Execute = $false #To prompt for each rule set to true
 $ServiceHost = "%SystemRoot%\System32\svchost.exe"
+$Interface = "Wired, Wireless"
 
 # NOTE: -LocalUser, -Owner etc. firewall parameters accepts SDDL format only
 # For more complete list see: https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/81d92bba-d22b-4a8c-908a-554ab29148ab

@@ -52,7 +52,6 @@ if (!(RunThis)) { exit }
 #
 $Group = "ICMPv4"
 $Program = "System"
-$Interface = "Wired, Wireless"
 $RemoteAddrWAN = "Any"
 $RemoteAddrLAN = "LocalSubnet4"
 
