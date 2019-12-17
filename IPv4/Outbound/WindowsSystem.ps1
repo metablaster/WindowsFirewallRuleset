@@ -240,6 +240,17 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 It is a host for processes that are responsible for executing a DLL rather than an Exe."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Service Initiated Healing" -Service Any -Program "%SystemRoot%\System32\sihclient.exe" `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+-LocalUser Any `
+-Description "sihclient.exe SIH Client is the client for fixing system components that are important for automatic Windows updates.
+This daily task runs the SIHC client (initiated by the healing server) to detect and repair system components that are vital to
+automatically update Windows and the Microsoft software installed on the computer.
+The task can go online, assess the usefulness of the healing effect,
+download the necessary equipment to perform the action, and perform therapeutic actions.)"
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Windows Update (Devicecensus)" -Service Any -Program "%SystemRoot%\System32\DeviceCensus.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `

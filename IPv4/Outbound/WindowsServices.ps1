@@ -162,6 +162,14 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 to locate services on a local network.
 It operates over TCP and UDP port 3702 and uses IP multicast address 239.255.255.250."
 
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Router services discovery (SSDP)" -Program $ServiceHost -Service FDResPub `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress DefaultGateway4 -LocalPort Any -RemotePort Any `
+-Description "SSDP service discovers networked devices and services that use the SSDP discovery protocol, such as UPnP devices.
+Also announces SSDP devices and services running on the local computer.
+If this rule is blocked, router SSDP-based services will not be discovered."
+
 #
 # Windows services extension rules
 # see ProblematicTraffic.md for more info
@@ -180,11 +188,12 @@ Windows Update(wuauserv),
 Background Intelligent Transfer Service(BITS),
 BITS and CryptSvc in addition need System account and wlidsvc needs Network Service account"
 
+# TODO: Temporary using network service account
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Extension rule for BITS Router capability check" -Program $ServiceHost -Service Any `
+-DisplayName "Extension rule for Router capability check (BITS)" -Program $ServiceHost -Service Any `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress DefaultGateway4 -LocalPort Any -RemotePort Any `
--LocalUser (Get-SDDLFromAccounts @("NT AUTHORITY\SYSTEM", "$UserAccount")) `
+-LocalUser (Get-SDDLFromAccounts @("NT AUTHORITY\SYSTEM", "NT AUTHORITY\NETWORK SERVICE", "$UserAccount")) `
 -Description "Extension rule for active users to allow BITS to Internet gateway device (IGD)"
 
 #
@@ -204,7 +213,7 @@ will be unable to automatically download programs and other information."
 
 # BITS to Router info: https://docs.microsoft.com/en-us/windows/win32/bits/network-bandwidth
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "BITS Router capability check" -Program $ServiceHost -Service BITS `
+-DisplayName "Router capability check (BITS)" -Program $ServiceHost -Service BITS `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress DefaultGateway4 -LocalPort Any -RemotePort Any `
 -Description "BITS (Background Intelligent Transfer Service) monitors the network traffic at the Internet gateway device (IGD)

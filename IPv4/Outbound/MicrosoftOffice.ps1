@@ -52,6 +52,11 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser Any `
 -Description ""
 
+# Clicktorun.exe starts downloading the most recent version of itself.
+# After finishing the download Clicktorun.exe starts THE DOWNLOADED Version which then downloads the new office version.
+# For some odd fucking reason the downloaded clicktorun wants to communicate with ms servers directly completely ignoring the proxy.
+# https://www.reddit.com/r/sysadmin/comments/7hync7/updating_office_2016_hb_click_to_run_through/
+# TL;DR: netsh winhttp set proxy proxy-server="fubar" bypass-list="<local>"
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Click to Run" -Service Any -Program "%ProgramFiles%\Common Files\microsoft shared\ClickToRun\OfficeClickToRun.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
