@@ -158,11 +158,10 @@ If this service is disabled, devices may be configured with outdated software, a
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Network Location Awareness" -Service NlaSvc -Program $ServiceHost `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 -Description "Collects and stores configuration information for the network and notifies programs when this information is modified.
-If this service is stopped, configuration information might be unavailable.
-If this service is disabled, any services that explicitly depend on it will fail to start."
+If this rule is disabled, configuration information might be unavailable."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Network infrastructure discovery" -Service fdPHost -Program $ServiceHost `

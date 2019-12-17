@@ -71,7 +71,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Interface-Local Multicast" -Service Any -Program Any `
 -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff01::/16 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 #
@@ -82,21 +82,21 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Interface-Local Multicast - All Nodes" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff01::1 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Interface-Local Multicast - All Routers" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff01::2 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Interface-Local Multicast - mDNSv6" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff01::fb -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 
@@ -108,7 +108,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Link-Local Multicast" -Service Any -Program Any `
 -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::/16 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 #
@@ -119,168 +119,168 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Link-Local Multicast - All Nodes" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::1 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - All Routers" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::2 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - DVMRP Routers" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::4 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - OSPFIGP" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::5 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - OSPFIGP Designated Routers" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::6 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - ST Routers" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::7 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - ST Hosts" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::8 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - RIP Routers" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::9 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - EIGRP Routers" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::a -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - Mobile-Agents" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::b -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - SSDP" -Service Any -Program Any `
 -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::c -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - All PIM Routers" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::d -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - RSVP-ENCAPSULATION" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::e -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - UPnP" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::f -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - All-BBF-Access-Nodes" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::10 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - VRRP" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::12 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - All MLDv2-capable routers" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::16 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - all-RPL-nodes" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::1a -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - All-Snoopers" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::6a -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - PTP-pdelay" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::6b -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - Saratoga" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::6c -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - LL-MANET-Routers" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::6d -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - IGRS" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::6e -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - iADT Discovery" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::6f -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
@@ -292,56 +292,56 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Link-Local Multicast - Link Name" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::1:1 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - All-dhcp-agents" -Service Any -Program Any `
 -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::1:2 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - Link-local Multicast Name Resolution" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::1:3 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - DTCP Announcement" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::1:4 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - afore_vdp" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::1:5 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - Babel" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::1:6 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - Solicited-Node Address" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::1:ff00:0000/104 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - Node Information Queries" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress FF02:0:0:0:0:2:FF00::/104 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 #
@@ -352,7 +352,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Site-Local Multicast - All Routers" -Service Any -Program Any `
 -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff05::/16 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 #
@@ -363,28 +363,28 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Site-Local Multicast - All Routers" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff05::2 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Site-Local Multicast - mDNSv6" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff05::fb -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Site-Local Multicast - All-dhcp-servers" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff05::1:3 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Site-Local Multicast - SL-MANET-ROUTERS" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff05::1:5 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 #
@@ -395,7 +395,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Realm-Local Multicast" -Service Any -Program Any `
 -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff01::/16 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 #
@@ -406,7 +406,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Admin-Local Multicast" -Service Any -Program Any `
 -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff01::/16 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 #
@@ -417,7 +417,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Organization-Local Multicast" -Service Any -Program Any `
 -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff01::/16 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
 #
@@ -428,5 +428,5 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Global scope Multicast" -Service Any -Program Any `
 -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff01::/16 -LocalPort Any -RemotePort Any `
--Localuser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description $Description
