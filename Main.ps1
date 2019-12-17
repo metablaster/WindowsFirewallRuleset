@@ -51,6 +51,7 @@ if(RunThis("Applying Inbound IPv4 Rules..."))
     & "$ScriptPath\IPv4\Inbound\ICMP.ps1"
     & "$ScriptPath\IPv4\Inbound\InternetBrowser.ps1"
     & "$ScriptPath\IPv4\Inbound\Multicast.ps1"
+    & "$ScriptPath\IPv4\Inbound\WindowsServices.ps1"
     & "$ScriptPath\IPv4\Inbound\WirelessNetworking.ps1"
 }
 
@@ -64,6 +65,7 @@ if(RunThis("Applying Outbound IPv4 Rules..."))
     & "$ScriptPath\IPv4\Outbound\MicrosoftOffice.ps1"
     & "$ScriptPath\IPv4\Outbound\MicrosoftSoftware.ps1"
     & "$ScriptPath\IPv4\Outbound\Multicast.ps1"
+    & "$ScriptPath\IPv4\Outbound\Temporary.ps1"
     & "$ScriptPath\IPv4\Outbound\VisualStudio.ps1"
     & "$ScriptPath\IPv4\Outbound\WindowsServices.ps1"
     & "$ScriptPath\IPv4\Outbound\WindowsSystem.ps1"
@@ -77,17 +79,17 @@ if(RunThis("Applying Outbound IPv4 Rules..."))
 if(RunThis("Applying Inbound IPv6 Rules..."))
 {
     # Load Inbound rules
+    & "$ScriptPath\IPv6\Inbound\BasicNetworking.ps1"
     & "$ScriptPath\IPv6\Inbound\ICMP.ps1"
     & "$ScriptPath\IPv6\Inbound\Multicast.ps1"
-    & "$ScriptPath\IPv6\Inbound\BasicNetworking.ps1"
 }
 
 if(RunThis("Applying Outbound IPv6 Rules..."))
 {
     # Load Outbound rules
+    & "$ScriptPath\IPv6\Outbound\BasicNetworking.ps1"
     & "$ScriptPath\IPv6\Outbound\ICMP.ps1"
     & "$ScriptPath\IPv6\Outbound\Multicast.ps1"
-    & "$ScriptPath\IPv6\Outbound\BasicNetworking.ps1"
 }
 
 Write-Host "All operations completed successfuly!"

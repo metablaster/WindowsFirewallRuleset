@@ -37,9 +37,10 @@ if (!(RunThis)) { exit }
 $Group = "Basic Networking - IPv6"
 $Profile = "Any"
 $ISATAP_Remotes = @("Internet6", "LocalSubnet6")
+$Direction = "Outbound"
 
 #First remove all existing rules matching setup
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Outbound -ErrorAction SilentlyContinue
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
 # Predefined rules from Core Networking are here
@@ -55,14 +56,14 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Outbou
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Loopback" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction Outbound -Protocol TCP -LocalAddress ::1/128 -RemoteAddress Any -LocalPort Any -RemotePort Any`
+-Direction $Direction -Protocol TCP -LocalAddress ::1/128 -RemoteAddress Any -LocalPort Any -RemotePort Any`
 -LocalUser Any `
 -Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Loopback" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction Outbound -Protocol UDP -LocalAddress ::1/128 -RemoteAddress Any -LocalPort Any -RemotePort Any`
+-Direction $Direction -Protocol UDP -LocalAddress ::1/128 -RemoteAddress Any -LocalPort Any -RemotePort Any`
 -LocalUser Any `
 -Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources."
 #>
@@ -74,14 +75,14 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Domain Name System" -Service Dnscache -Program $ServiceHost `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress DNS6 -LocalPort Any -RemotePort 53 `
+-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress DNS6 -LocalPort Any -RemotePort 53 `
 -LocalUser Any `
 -Description "Rule to allow IPv6 DNS requests."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Domain Name System" -Service Any -Program System `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress DefaultGateway6 -LocalPort Any -RemotePort 53 `
+-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress DefaultGateway6 -LocalPort Any -RemotePort 53 `
 -LocalUser $NT_AUTHORITY_System `
 -Description "Rule to allow IPv6 DNS requests by System to default gateway."
 
@@ -98,7 +99,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Multicast Domain Name System" -Service Dnscache -Program $ServiceHost `
 -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
--Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress ff05::fb -LocalPort 5353 -RemotePort 5353 `
+-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff05::fb -LocalPort 5353 -RemotePort 5353 `
 -LocalUser Any `
 -Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
 within small networks that do not include a local name server.
@@ -108,7 +109,7 @@ packet formats and operating semantics as the unicast Domain Name System (DNS)."
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Multicast Domain Name System" -Service Dnscache -Program $ServiceHost `
 -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
--Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress ff05::fb -LocalPort 5353 -RemotePort 5353 `
+-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff05::fb -LocalPort 5353 -RemotePort 5353 `
 -LocalUser Any `
 -Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
 within small networks that do not include a local name server.
@@ -122,7 +123,7 @@ packet formats and operating semantics as the unicast Domain Name System (DNS)."
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Dynamic Host Configuration Protocol" -Service Dhcp -Program $ServiceHost `
 -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress DHCP6 -LocalPort 546 -RemotePort 547 `
+-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress DHCP6 -LocalPort 546 -RemotePort 547 `
 -LocalUser Any `
 -Description "Allows DHCPv6 messages for stateful auto-configuration."
 
@@ -141,7 +142,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "IPv6 over HTTPS" -Service Any -Program System `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet6 -LocalPort Any -RemotePort IPHTTPSout `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet6 -LocalPort Any -RemotePort IPHTTPSout `
 -LocalUser $NT_AUTHORITY_System `
 -Description "Allow IPv6 IPHTTPS tunneling technology to provide connectivity across HTTP proxies and firewalls."
 
@@ -152,6 +153,6 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "IPv6 Encapsulation" -Service Any -Program System `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction Outbound -Protocol 41 -LocalAddress Any -RemoteAddress $ISATAP_Remotes -LocalPort Any -RemotePort Any `
+-Direction $Direction -Protocol 41 -LocalAddress Any -RemoteAddress $ISATAP_Remotes -LocalPort Any -RemotePort Any `
 -LocalUser $NT_AUTHORITY_System `
 -Description "Rule required to permit IPv6 traffic for ISATAP (Intra-Site Automatic Tunnel Addressing Protocol) and 6to4 tunneling services."
