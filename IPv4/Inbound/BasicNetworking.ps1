@@ -68,12 +68,18 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 
 #
 # mDNS (Multicast Domain Name System)
+# NOTE: this should be placed in Multicast.ps1 like it is for IPv6, but it's here because of specific address,
+# which is part of "Local Network Control Block" (224.0.0.0 - 224.0.0.255)
+# An mDNS message is a multicast UDP packet sent using the following addressing:
+# IPv4 address 224.0.0.251 or IPv6 address ff02::fb
+# UDP port 5353
+# https://en.wikipedia.org/wiki/Multicast_DNS
 #
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Multicast Domain Name System" -Service Dnscache -Program "%SystemRoot%\System32\svchost.exe" `
 -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
--Direction Inbound -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 5353 -RemotePort Any `
+-Direction Inbound -Protocol UDP -LocalAddress 224.0.0.251 -RemoteAddress LocalSubnet4 -LocalPort 5353 -RemotePort 5353 `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
 within small networks that do not include a local name server.
@@ -83,7 +89,7 @@ packet formats and operating semantics as the unicast Domain Name System (DNS)."
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Multicast Domain Name System" -Service Dnscache -Program "%SystemRoot%\System32\svchost.exe" `
 -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
--Direction Inbound -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 5353 -RemotePort Any `
+-Direction Inbound -Protocol UDP -LocalAddress 224.0.0.251 -RemoteAddress LocalSubnet4 -LocalPort 5353 -RemotePort 5353 `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
 within small networks that do not include a local name server.

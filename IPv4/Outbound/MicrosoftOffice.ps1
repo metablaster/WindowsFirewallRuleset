@@ -38,6 +38,12 @@ $Group = "Microsoft Office"
 $Profile = "Private, Public"
 $Interface = "Wired, Wireless"
 
+#
+# Office installation directories
+#
+$OfficeRoot = "%ProgramFiles%\Microsoft Office\root\Office16"
+$OfficeShared = "%ProgramFiles%\Common Files\microsoft shared"
+
 #First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Outbound -ErrorAction SilentlyContinue
 
@@ -46,7 +52,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Outbou
 #
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Access" -Service Any -Program "%ProgramFiles%\Microsoft Office\root\Office16\MSACCESS.EXE" `
+-DisplayName "Access" -Service Any -Program "$OfficeRoot\MSACCESS.EXE" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser Any `
@@ -58,7 +64,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 # https://www.reddit.com/r/sysadmin/comments/7hync7/updating_office_2016_hb_click_to_run_through/
 # TL;DR: netsh winhttp set proxy proxy-server="fubar" bypass-list="<local>"
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Click to Run" -Service Any -Program "%ProgramFiles%\Common Files\microsoft shared\ClickToRun\OfficeClickToRun.exe" `
+-DisplayName "Click to Run" -Service Any -Program "$OfficeShared\ClickToRun\OfficeClickToRun.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser Any `
@@ -67,14 +73,14 @@ of installing and updating Office, that utilizes streaming and virtualization te
 to reduce the time required to install Office and help run multiple versions of Office on the same computer."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "ClickC2RClient" -Service Any -Program "%ProgramFiles%\Common Files\microsoft shared\ClickToRun\OfficeC2RClient.exe" `
+-DisplayName "ClickC2RClient" -Service Any -Program "$OfficeShared\ClickToRun\OfficeC2RClient.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 -LocalUser Any `
 -Description "Allows users to check for and install updates for Office on demand."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Document Cache" -Service Any -Program "%ProgramFiles%\Microsoft Office\root\Office16\MSOSYNC.EXE" `
+-DisplayName "Document Cache" -Service Any -Program "$OfficeRoot\MSOSYNC.EXE" `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 -LocalUser Any `
@@ -82,105 +88,105 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 to give you a way to see the state of files you are uploading to a SharePoint server. "
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Excel" -Service Any -Program "%ProgramFiles%\Microsoft Office\root\Office16\EXCEL.EXE" `
+-DisplayName "Excel" -Service Any -Program "$OfficeRoot\EXCEL.EXE" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser Any `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Excel (Mashup Container)" -Service Any -Program "%ProgramFiles%\Microsoft Office\root\Office16\ADDINS\Microsoft Power Query for Excel Integrated\bin\Microsoft.Mashup.Container.NetFX40.exe" `
+-DisplayName "Excel (Mashup Container)" -Service Any -Program "$OfficeRoot\ADDINS\Microsoft Power Query for Excel Integrated\bin\Microsoft.Mashup.Container.NetFX40.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser Any `
 -Description "Used to query data from web in excel."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Help" -Service Any -Program "%ProgramFiles%\Microsoft Office\root\Office16\CLVIEW.EXE" `
+-DisplayName "Help" -Service Any -Program "$OfficeRoot\CLVIEW.EXE" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser Any `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Outlook (HTTP/S)" -Service Any -Program "%ProgramFiles%\Microsoft Office\root\Office16\OUTLOOK.EXE" `
+-DisplayName "Outlook (HTTP/S)" -Service Any -Program "$OfficeRoot\OUTLOOK.EXE" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser Any `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Outlook (IMAP SSL)" -Service Any -Program "%ProgramFiles%\Microsoft Office\root\Office16\OUTLOOK.EXE" `
+-DisplayName "Outlook (IMAP SSL)" -Service Any -Program "$OfficeRoot\OUTLOOK.EXE" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 993 `
 -LocalUser Any `
 -Description "Incoming mail server over SSL."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Outlook (IMAP)" -Service Any -Program "%ProgramFiles%\Microsoft Office\root\Office16\OUTLOOK.EXE" `
+-DisplayName "Outlook (IMAP)" -Service Any -Program "$OfficeRoot\OUTLOOK.EXE" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 143 `
 -LocalUser Any `
 -Description "Incoming mail server."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Outlook (POP3 SSL)" -Service Any -Program "%ProgramFiles%\Microsoft Office\root\Office16\OUTLOOK.EXE" `
+-DisplayName "Outlook (POP3 SSL)" -Service Any -Program "$OfficeRoot\OUTLOOK.EXE" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 110 `
 -LocalUser Any `
 -Description "Incoming mail server over SSL."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Outlook (POP3)" -Service Any -Program "%ProgramFiles%\Microsoft Office\root\Office16\OUTLOOK.EXE" `
+-DisplayName "Outlook (POP3)" -Service Any -Program "$OfficeRoot\OUTLOOK.EXE" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 995 `
 -LocalUser Any `
 -Description "Incoming mail server."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Outlook (SMTP)" -Service Any -Program "%ProgramFiles%\Microsoft Office\root\Office16\OUTLOOK.EXE" `
+-DisplayName "Outlook (SMTP)" -Service Any -Program "$OfficeRoot\OUTLOOK.EXE" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 25 `
 -LocalUser Any `
 -Description "Outgoing mail server."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "PowerPoint" -Service Any -Program "%ProgramFiles%\Microsoft Office\root\Office16\POWERPNT.EXE" `
+-DisplayName "PowerPoint" -Service Any -Program "$OfficeRoot\POWERPNT.EXE" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser Any `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Project" -Service Any -Program "%ProgramFiles%\Microsoft Office\root\Office16\WINPROJ.EXE" `
+-DisplayName "Project" -Service Any -Program "$OfficeRoot\WINPROJ.EXE" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser Any `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Publisher" -Service Any -Program "%ProgramFiles%\Microsoft Office\root\Office16\MSPUB.EXE" `
+-DisplayName "Publisher" -Service Any -Program "$OfficeRoot\MSPUB.EXE" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser Any `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "sdxhelper" -Service Any -Program "%ProgramFiles%\Microsoft Office\root\Office16\SDXHelper.exe" `
+-DisplayName "sdxhelper" -Service Any -Program "$OfficeRoot\SDXHelper.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser Any `
 -Description "this executable is used when later Office versions are installed in parallel with an earlier version so that they can peacefully coexist."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Skype for business" -Service Any -Program "%ProgramFiles%\Microsoft Office\root\Office16\lync.exe" `
+-DisplayName "Skype for business" -Service Any -Program "$OfficeRoot\lync.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 33033 `
 -LocalUser Any `
 -Description "Skype for business, previously lync."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Telemetry Agent" -Service Any -Program "%ProgramFiles%\Microsoft Office\root\Office16\msoia.exe" `
+-DisplayName "Telemetry Agent" -Service Any -Program "$OfficeRoot\msoia.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 -LocalUser Any `
@@ -188,14 +194,14 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 https://docs.microsoft.com/en-us/deployoffice/compat/data-that-the-telemetry-agent-collects-in-office"
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Visio" -Service Any -Program "%ProgramFiles%\Microsoft Office\root\Office16\VISIO.EXE" `
+-DisplayName "Visio" -Service Any -Program "$OfficeRoot\VISIO.EXE" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser Any `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Word" -Service Any -Program "%ProgramFiles%\Microsoft Office\root\Office16\WINWORD.EXE" `
+-DisplayName "Word" -Service Any -Program "$OfficeRoot\WINWORD.EXE" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser Any `

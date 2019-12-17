@@ -96,7 +96,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Multicast Domain Name System" -Service Dnscache -Program "%SystemRoot%\System32\svchost.exe" `
 -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
--Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress 224.0.0.251 -LocalPort Any -RemotePort 5353 `
+-Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress 224.0.0.251 -LocalPort 5353 -RemotePort 5353 `
 -LocalUser Any `
 -Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
 within small networks that do not include a local name server.
@@ -106,7 +106,7 @@ packet formats and operating semantics as the unicast Domain Name System (DNS)."
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Multicast Domain Name System" -Service Dnscache -Program "%SystemRoot%\System32\svchost.exe" `
 -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
--Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress 224.0.0.251 -LocalPort Any -RemotePort 5353 `
+-Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress 224.0.0.251 -LocalPort 5353 -RemotePort 5353 `
 -LocalUser Any `
 -Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
 within small networks that do not include a local name server.
