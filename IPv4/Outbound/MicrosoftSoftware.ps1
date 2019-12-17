@@ -53,28 +53,28 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "WinDbg Symbol Server x86" -Service Any -Program "%ProgramFiles% (x86)\Windows Kits\10\Debuggers\x86\windbg.exe" `
+-DisplayName "WinDbg Symbol Server x86" -Service Any -Program "%ProgramFiles(x86)%\Windows Kits\10\Debuggers\x86\windbg.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser $User `
 -Description "WinDbg access to Symbols Server."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "WinDbg Symbol Server x64" -Service Any -Program "%ProgramFiles% (x86)\Windows Kits\10\Debuggers\x64\windbg.exe" `
+-DisplayName "WinDbg Symbol Server x64" -Service Any -Program "%ProgramFiles(x86)%\Windows Kits\10\Debuggers\x64\windbg.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser $User `
 -Description "WinDbg access to Symbols Server"
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Symchk Symbol Server x86" -Service Any -Program "%ProgramFiles% (x86)\Windows Kits\10\Debuggers\x86\symchk.exe" `
+-DisplayName "Symchk Symbol Server x86" -Service Any -Program "%ProgramFiles(x86)%\Windows Kits\10\Debuggers\x86\symchk.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 -LocalUser $User `
 -Description "WinDbg Symchk access to Symbols Server."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Symchk Symbol Server x64" -Service Any -Program "%ProgramFiles% (x86)\Windows Kits\10\Debuggers\x64\symchk.exe" `
+-DisplayName "Symchk Symbol Server x64" -Service Any -Program "%ProgramFiles(x86)%\Windows Kits\10\Debuggers\x64\symchk.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 -LocalUser $User `
@@ -88,14 +88,14 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "SQL Server Management Studio" -Service Any -Program "%ProgramFiles% (x86)\Microsoft SQL Server\140\Tools\Binn\ManagementStudio\Ssms.exe" `
+-DisplayName "SQL Server Management Studio" -Service Any -Program "%ProgramFiles(x86)%\Microsoft SQL Server\140\Tools\Binn\ManagementStudio\Ssms.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 -LocalUser $User `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "SQL Server Import and Export Wizard" -Service Any -Program "%ProgramFiles% (x86)\Microsoft SQL Server\140\DTS\Binn\DTSWizard.exe" `
+-DisplayName "SQL Server Import and Export Wizard" -Service Any -Program "%ProgramFiles(x86)%\Microsoft SQL Server\140\DTS\Binn\DTSWizard.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 -LocalUser $User `
@@ -130,28 +130,28 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "Rule to allow update of powershell"
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "OneDrive Update" -Service Any -Program "%ProgramFiles% (x86)\Microsoft OneDrive\OneDriveStandaloneUpdater.exe" `
+-DisplayName "OneDrive Update" -Service Any -Program "%ProgramFiles(x86)%\Microsoft OneDrive\OneDriveStandaloneUpdater.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser $User `
 -Description "Updater for OneDrive"
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "OneDrive" -Service Any -Program "%ProgramFiles% (x86)\Microsoft OneDrive\OneDrive.exe" `
+-DisplayName "OneDrive" -Service Any -Program "%ProgramFiles(x86)%\Microsoft OneDrive\OneDrive.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser $User `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Help Viewer (Content manager)" -Service Any -Program "%ProgramFiles% (x86)\Microsoft Help Viewer\v2.3\HlpCtntMgr.exe" `
+-DisplayName "Help Viewer (Content manager)" -Service Any -Program "%ProgramFiles(x86)%\Microsoft Help Viewer\v2.3\HlpCtntMgr.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser $User `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Help Viewer" -Service Any -Program "%ProgramFiles% (x86)\Microsoft Help Viewer\v2.3\HlpViewer.exe" `
+-DisplayName "Help Viewer" -Service Any -Program "%ProgramFiles(x86)%\Microsoft Help Viewer\v2.3\HlpViewer.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser $User `

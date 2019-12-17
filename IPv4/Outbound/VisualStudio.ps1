@@ -41,8 +41,8 @@ $Direction = "Outbound"
 #
 # Visual Studio installation directories
 #
-$VSRoot = "%ProgramFiles% (x86)\Microsoft Visual Studio\2019\Community"
-$VSInstallerRoot = "%ProgramFiles% (x86)\Microsoft Visual Studio\Installer"
+$VSRoot = "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community"
+$VSInstallerRoot = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
 
 #First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
@@ -93,6 +93,13 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser $User `
 -Description "Run when updating or using add features to VS in installer."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "VS 2019 ServiceHub Installer" -Service Any -Program "$VSInstallerRoot\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\BackgroundDownload.exe" `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+-LocalUser $User `
+-Description "Run in background probably for some updates"
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "VS 2019 ServiceHub Installer" -Service Any -Program "$VSInstallerRoot\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\BackgroundDownload.exe" `
