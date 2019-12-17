@@ -52,9 +52,9 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Inboun
 #
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Delivery Optimization" -Program $ServiceHost -Service DoSvc `
+-DisplayName "Delivery Optimization" -Service DoSvc -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction Inbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort 7680 -RemotePort Any `
+-Direction Inbound -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 7680 -RemotePort Any `
 -EdgeTraversalPolicy Allow `
 -Description "Service responsible for delivery optimization.
 Windows Update Delivery Optimization works by letting you get Windows updates and Microsoft Store apps from sources in addition to Microsoft,
@@ -62,9 +62,9 @@ like other PCs on your local network, or PCs on the Internet that are downloadin
 Delivery Optimization also sends updates and apps from your PC to other PCs on your local network or PCs on the Internet, based on your settings."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Delivery Optimization" -Program $ServiceHost -Service DoSvc `
+-DisplayName "Delivery Optimization" -Service DoSvc -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction Inbound -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort 7680 -RemotePort Any `
+-Direction Inbound -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 7680 -RemotePort Any `
 -EdgeTraversalPolicy Allow `
 -Description "Service responsible for delivery optimization.
 Windows Update Delivery Optimization works by letting you get Windows updates and Microsoft Store apps from sources in addition to Microsoft,
