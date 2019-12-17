@@ -111,7 +111,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser Any `
 -Description "Rule to discover WSD devices on Wi-Fi Direct networks.
 Host enables pairing between the system and wired or wireless devices. This service is new since Windows 8.
-Executable also known as Device Association Framework Provider Host"
+Executable also known as Device Association Framework Provider Host."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Wi-Fi Direct Scan Service" -Service stisvc -Program $ServiceHost `

@@ -94,11 +94,12 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $User `
 -Description "Run when updating or using add features to VS in installer."
 
+# TODO: testing:  # (Get-SDDLFromAccounts @("NT AUTHORITY\SYSTEM", "$UserAccount")) `
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "VS 2019 ServiceHub Installer" -Service Any -Program "$VSInstallerRoot\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\BackgroundDownload.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser $User `
+-LocalUser $NT_AUTHORITY_System `
 -Description "Run in background probably for some updates"
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
@@ -119,6 +120,15 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 # TODO: same comment in 4 rules
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "VS 2019 ServiceHub" -Service Any -Program "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.Host.CLR.x86.exe" `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+-LocalUser $User `
+-Description "ServiceHub services provide identity (sign-in for VS),
+and support for internal services (like extension managenent, compiler support, etc).
+These are not optional and are designed to be running side-by-side with devenv.exe."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "VS 2019 ServiceHub" -Service Any -Program "$VSRoot\Common7\ServiceHub\controller\Microsoft.ServiceHub.Controller.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 -LocalUser $User `

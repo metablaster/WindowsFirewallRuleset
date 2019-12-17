@@ -1,0 +1,130 @@
+
+<#
+MIT License
+
+Copyright (c) 2019 metablaster zebal@protonmail.ch
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+#>
+
+#
+# Import global variables
+#
+. "$PSScriptRoot\..\..\Modules\GlobalVariables.ps1"
+
+# Ask user if he wants to load these rules
+if (!(RunThis)) { exit }
+
+#
+# Setup local variables:
+#
+$Group = "Network Discovery"
+$Profile = "Private, Domain"
+$Direction = "Outbound"
+
+#First remove all existing rules matching group
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
+
+#
+# Network Discovery predefined rules + additional rules
+# Rules apply to network discovery on LAN
+#
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Link Local Multicast Name Resolution" -Service Dnscache -Program $ServiceHost `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 5355 `
+-LocalUser Any `
+-Description "Rule for Network Discovery to allow Link Local Multicast Name Resolution.
+The DNS Client service (dnscache) caches Domain Name System (DNS) names and registers the full computer name for this computer.
+If the rule is disabled, DNS names will continue to be resolved.
+However, the results of DNS name queries will not be cached and the computer's name will not be registered."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "NetBIOS Datagram" -Service Any -Program System `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 138 `
+-LocalUser $NT_AUTHORITY_System `
+-Description "Rule for Network Discovery to allow NetBIOS Datagram transmission and reception."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "NetBIOS Name" -Service Any -Program System `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 137 `
+-LocalUser $NT_AUTHORITY_System `
+-Description "Rule for Network Discovery to allow NetBIOS Name Resolution."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Function Discovery Resource Publication WSD" -Service FDResPub -Program $ServiceHost `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 3702 `
+-LocalUser Any `
+-Description "Rule for Network Discovery to discover devices via Function Discovery.
+Publishes this computer and resources attached to this computer so they can be discovered over the network. 
+If this rule is disabled, network resources will no longer be published and they will not be discovered by other computers on the network."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "SSDP Discovery" -Service SSDPSRV -Program $ServiceHost `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 1900 `
+-LocalUser Any `
+-Description "Rule for Network Discovery to allow use of the Simple Service Discovery Protocol.
+Service discovers networked devices and services that use the SSDP discovery protocol, such as UPnP devices.
+Also announces SSDP devices and services running on the local computer.
+If this rule is disabled, SSDP-based devices will not be discovered."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "UPnP Device Host" -Service upnphost -Program $ServiceHost `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 2869 `
+-LocalUser Any `
+-Description "Rule for Network Discovery to allow use of Universal Plug and Play.
+Allows UPnP devices to be hosted on this computer.
+If this rule is disabled, any hosted UPnP devices will stop functioning and no additional hosted devices can be added."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Function Discovery Provider Host" -Service fdPHost -Program $ServiceHost `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 2869 `
+-LocalUser Any `
+-Description "Rule for Network Discovery to allow use of Universal Plug and Play.
+The FDPHOST service hosts the Function Discovery (FD) network discovery providers.
+These FD providers supply network discovery services for the Simple Services Discovery Protocol (SSDP) and Web Services - Discovery (WS-D) protocol.
+Disabling this rule will disable network discovery for these protocols when using FD."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "WSD Events" -Service fdPHost -Program $ServiceHost `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 5357 `
+-LocalUser Any `
+-Description "Rule for Network Discovery to allow WSDAPI Events via Function Discovery."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "WSD Events Secure" -Service fdPHost -Program $ServiceHost `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 5358 `
+-LocalUser Any `
+-Description "Rule for Network Discovery to allow Secure WSDAPI Events via Function Discovery."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "FDPHost (WSD)" -Service fdPHost -Program $ServiceHost `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 3702 `
+-LocalUser Any `
+-Description "Rule for Network Discovery to discover devices via Function Discovery."

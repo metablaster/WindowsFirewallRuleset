@@ -17,10 +17,15 @@ $Interface = "Wired, Wireless" #Default network interface card
 # Another way to get information of SDDL string is to create a test rule with that string and see what turns out.
 
 # Human users (Enter usernames here, separate by comma if more users or admins)
+# TODO: we need better way to do this, also what will Get-SDDLFromAccounts @("$AdminAccount", "$UserAccount") do if input wrong?
 $UserName = "User"
+$AdminName = "Admin"
+
 $User = Get-UserSDDL $UserName
-$Admin = Get-UserSDDL Admin
+$Admin = Get-UserSDDL $AdminName
+
 $UserAccount = "$Env:Computername" + '\' + "$Username"
+$AdminAccount = "$Env:Computername" + '\' + "$AdminName"
 
 # If users not found, to avoid execution error set Local Principal(-LocalUser) to 'Any'
 if(!$User)
