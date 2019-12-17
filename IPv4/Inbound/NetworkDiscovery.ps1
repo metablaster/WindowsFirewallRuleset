@@ -58,20 +58,34 @@ However, the results of DNS name queries will not be cached and the computer's n
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "NetBIOS Datagram" -Service Any -Program System `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 138 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 -Description "Rule for Network Discovery to allow NetBIOS Datagram transmission and reception."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "NetBIOS Datagram" -Service Any -Program System `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $Interface `
+-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Intranet4 -LocalPort 138 -RemotePort Any `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
+-Description "Rule for Network Discovery to allow NetBIOS Datagram transmission and reception."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "NetBIOS Name" -Service Any -Program System `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 137 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 -Description "Rule for Network Discovery to allow NetBIOS Name Resolution."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Function Discovery Resource Publication WSD" -Service FDResPub -Program $ServiceHost `
+-DisplayName "NetBIOS Name" -Service Any -Program System `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $Interface `
+-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Intranet4 -LocalPort 137 -RemotePort Any `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
+-Description "Rule for Network Discovery to allow NetBIOS Name Resolution."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Function Discovery Resource Publication (WSD)" -Service FDResPub -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 3702 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `
@@ -91,7 +105,7 @@ If this rule is disabled, SSDP-based devices will not be discovered."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "UPnP Device Host" -Service Any -Program System `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 2869 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 -Description "Rule for Network Discovery to allow use of Universal Plug and Play.
@@ -99,16 +113,39 @@ Allows UPnP devices to be hosted on this computer.
 If this rule is disabled, any hosted UPnP devices will stop functioning and no additional hosted devices can be added."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "UPnP Device Host" -Service Any -Program System `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Intranet4 -LocalPort 2869 -RemotePort Any `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
+-Description "Rule for Network Discovery to allow use of Universal Plug and Play.
+Allows UPnP devices to be hosted on this computer.
+If this rule is disabled, any hosted UPnP devices will stop functioning and no additional hosted devices can be added."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "WSD Events" -Service Any -Program System `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 5357 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 -Description "Rule for Network Discovery to allow WSDAPI Events via Function Discovery."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "WSD Events" -Service Any -Program System `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Intranet4 -LocalPort 5357 -RemotePort Any `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
+-Description "Rule for Network Discovery to allow WSDAPI Events via Function Discovery."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "WSD Events Secure" -Service Any -Program System `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 5358 -RemotePort Any `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
+-Description "Rule for Network Discovery to allow Secure WSDAPI Events via Function Discovery."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "WSD Events Secure" -Service Any -Program System `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Intranet4 -LocalPort 5358 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 -Description "Rule for Network Discovery to allow Secure WSDAPI Events via Function Discovery."
 
