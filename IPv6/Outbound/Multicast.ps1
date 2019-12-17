@@ -144,7 +144,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - All Nodes" -Service Any -Program Any `
--Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::1 -LocalPort Any -RemotePort Any `
 -LocalUser $MulticastUsers `
 -Description $Description
@@ -333,7 +333,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - Link-local Multicast Name Resolution" -Service Any -Program Any `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::1:3 -LocalPort Any -RemotePort Any `
 -LocalUser $MulticastUsers `
 -Description $Description

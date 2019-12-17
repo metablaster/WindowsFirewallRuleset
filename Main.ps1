@@ -50,6 +50,7 @@ if(RunThis("Applying Inbound IPv4 Rules..."))
     & "$ScriptPath\IPv4\Inbound\BasicNetworking.ps1"
     & "$ScriptPath\IPv4\Inbound\ICMP.ps1"
     & "$ScriptPath\IPv4\Inbound\InternetBrowser.ps1"
+    & "$ScriptPath\IPv4\Inbound\MicrosoftOffice.ps1"
     & "$ScriptPath\IPv4\Inbound\Multicast.ps1"
     & "$ScriptPath\IPv4\Inbound\NetworkDiscovery.ps1"
     & "$ScriptPath\IPv4\Inbound\NetworkSharing.ps1"

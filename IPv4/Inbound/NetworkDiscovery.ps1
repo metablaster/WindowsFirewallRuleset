@@ -164,3 +164,17 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "Rule for Network Discovery to discover devices via Function Discovery.
 This service is new since Windows 8.
 Executable also known as Device Association Framework Provider Host"
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Teredo SSDP Discovery" -Service SSDPSRV -Program $ServiceHost `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType $Interface `
+-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
+-EdgeTraversalPolicy Block -LocalUser Any `
+-Description "Rule for Network Discovery to allow use of the Simple Service Discovery Protocol."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Teredo UPnP Discovery" -Service Any -Program System `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_LocalService `
+-Description "Rule for Network Discovery to allow use of the Simple Service Discovery Protocol."
