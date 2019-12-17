@@ -30,18 +30,18 @@ IPv6 multicast addresses are distinguished from unicast addresses by the value o
 a value of 0xFF (binary 11111111) identifies an address as a multicast address;
 any other value identifies an address as a unicast address.
 
-ff00/16 	Reserved
-ff01/16	    Interface-Local scope
-ff02/16	    Link-Local scope
-ff03/16	    Realm-Local scope
-ff04/16	    Admin-Local scope
-ff05/16	    Site-Local scope
-ff06/16	    Unassigned
-ff07/16	    Unassigned
-ff08/16	    Organization-Local scope
-ff09/16 - ff0D/16	Unassigned	
-ff0e/16	    Global scope
-ff0f/16  	Reserved
+ff00::/16 	Reserved
+ff01::/16	Interface-Local scope
+ff02::/16	Link-Local scope
+ff03::/16	Realm-Local scope
+ff04::/16	Admin-Local scope
+ff05::/16   Site-Local scope
+ff06::/16	Unassigned
+ff07::/16	Unassigned
+ff08::/16	Organization-Local scope
+ff09::/16 - ff0D/16	Unassigned	
+ff0e::/16	Global scope
+ff0f::/16  	Reserved
 #>
 
 # TODO: see if edge traversal should be Allow in some rules
@@ -100,7 +100,6 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Direction $Direction -Protocol UDP -LocalAddress ff01::fb -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 -Description $Description
-
 
 #
 # Link-Local Multicast filtering (All destinations)
@@ -289,6 +288,8 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Link-Local Multicast - mDNSv6" -Service Any -Program Any `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress ff02::fb -RemoteAddress Any -LocalPort Any -RemotePort Any `
+-LocalUser $NT_AUTHORITY_System `
+-Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Link-Local Multicast - Link Name" -Service Any -Program Any `
@@ -396,7 +397,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Realm-Local Multicast" -Service Any -Program Any `
 -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol UDP -LocalAddress ff01::/16 -RemoteAddress Any -LocalPort Any -RemotePort Any `
+-Direction $Direction -Protocol UDP -LocalAddress ff03::/16 -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
@@ -407,7 +408,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Admin-Local Multicast" -Service Any -Program Any `
 -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol UDP -LocalAddress ff01::/16 -RemoteAddress Any -LocalPort Any -RemotePort Any `
+-Direction $Direction -Protocol UDP -LocalAddress ff04::/16 -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
@@ -418,7 +419,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Organization-Local Multicast" -Service Any -Program Any `
 -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol UDP -LocalAddress ff01::/16 -RemoteAddress Any -LocalPort Any -RemotePort Any `
+-Direction $Direction -Protocol UDP -LocalAddress ff08::/16 -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 -Description $Description
 
@@ -429,6 +430,6 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Global scope Multicast" -Service Any -Program Any `
 -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol UDP -LocalAddress ff01::/16 -RemoteAddress Any -LocalPort Any -RemotePort Any `
+-Direction $Direction -Protocol UDP -LocalAddress ff0e::/16 -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 -Description $Description

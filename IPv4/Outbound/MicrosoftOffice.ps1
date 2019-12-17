@@ -67,7 +67,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Click to Run" -Service Any -Program "$OfficeShared\ClickToRun\OfficeClickToRun.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser $User `
+-LocalUser $NT_AUTHORITY_System `
 -Description "Required for updates to work. Click-to-Run is an alternative to the traditional Windows Installer-based (MSI) method
 of installing and updating Office, that utilizes streaming and virtualization technology
 to reduce the time required to install Office and help run multiple versions of Office on the same computer."
