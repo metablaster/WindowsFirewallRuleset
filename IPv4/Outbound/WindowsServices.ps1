@@ -37,7 +37,6 @@ if (!(RunThis)) { exit }
 $Group = "Windows Services"
 $Profile = "Private, Public"
 $Interface = "Wired, Wireless"
-$ServiceHost = "%SystemRoot%\System32\svchost.exe"
 
 #First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Outbound -ErrorAction SilentlyContinue

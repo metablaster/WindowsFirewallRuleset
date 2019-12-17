@@ -49,7 +49,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Outbou
 #
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Cast to Device functionality (qWave)" -Service QWAVE -Program "%SystemRoot%\System32\svchost.exe" `
+-DisplayName "Cast to Device functionality (qWave)" -Service QWAVE -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress PlayToDevice4 -LocalPort Any -RemotePort 2177 `
 -LocalUser Any `
@@ -59,7 +59,7 @@ qWave enhances AV streaming performance and reliability by ensuring network qual
 It provides mechanisms for admission control, run time monitoring and enforcement, application feedback, and traffic prioritization."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Cast to Device functionality (qWave)" -Service QWAVE -Program "%SystemRoot%\System32\svchost.exe" `
+-DisplayName "Cast to Device functionality (qWave)" -Service QWAVE -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $Interface `
 -Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress PlayToDevice4 -LocalPort Any -RemotePort 2177 `
 -LocalUser Any `
@@ -94,21 +94,21 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 #
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Connected Devices Platform - Wi-Fi Direct Transport" -Service CDPSvc -Program "%SystemRoot%\System32\svchost.exe" `
+-DisplayName "Connected Devices Platform - Wi-Fi Direct Transport" -Service CDPSvc -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -LocalUser Any `
 -Description "Outbound rule to use Wi-Fi Direct traffic in the Connected Devices Platform."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Connected Devices Platform" -Service CDPSvc -Program "%SystemRoot%\System32\svchost.exe" `
+-DisplayName "Connected Devices Platform" -Service CDPSvc -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -LocalUser Any `
 -Description "Outbound rule for Connected Devices Platform traffic."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Connected Devices Platform" -Service CDPSvc -Program "%SystemRoot%\System32\svchost.exe" `
+-DisplayName "Connected Devices Platform" -Service CDPSvc -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile  Private, Domain -InterfaceType $Interface `
 -Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -LocalUser Any `
@@ -119,7 +119,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 #
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "AllJoyn Router" -Service AJRouter -Program "%SystemRoot%\System32\svchost.exe" `
+-DisplayName "AllJoyn Router" -Service AJRouter -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -LocalUser Any `
@@ -128,7 +128,7 @@ AllJoyn Router service routes AllJoyn messages for the local AllJoyn clients.
 If this service is stopped the AllJoyn clients that do not have their own bundled routers will be unable to run."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "AllJoyn Router" -Service AJRouter -Program "%SystemRoot%\System32\svchost.exe" `
+-DisplayName "AllJoyn Router" -Service AJRouter -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -LocalUser Any `

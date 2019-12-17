@@ -71,7 +71,7 @@ If the name is not resolvable via either DNS method, Windows 10 will fall back t
 #
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "WLAN Service WFD ASP Coordination Protocol" -Service WlanSvc -Program "%SystemRoot%\System32\svchost.exe" `
+-DisplayName "WLAN Service WFD ASP Coordination Protocol" -Service WlanSvc -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction Inbound -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 7325 -RemotePort 7325 `
 -EdgeTraversalPolicy Block -LocalUser Any `
@@ -115,7 +115,7 @@ Host enables pairing between the system and wired or wireless devices. This serv
 Executable also known as Device Association Framework Provider Host"
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Wi-Fi Direct Scan Service" -Service stisvc -Program "%SystemRoot%\System32\svchost.exe" `
+-DisplayName "Wi-Fi Direct Scan Service" -Service stisvc -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType Wired, Wireless `
 -Direction Inbound -Protocol Any -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `
@@ -123,7 +123,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 Windows Image Acquisition (WIA) service provides image acquisition services for scanners and cameras."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Wi-Fi Direct Spooler Use" -Service Spooler -Program "%SystemRoot%\System32\svchost.exe" `
+-DisplayName "Wi-Fi Direct Spooler Use" -Service Spooler -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType Wired, Wireless `
 -Direction Inbound -Protocol Any -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `
@@ -136,7 +136,7 @@ If you turn off this service, you won’t be able to print or see your printers.
 #
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Wireless portable devices (SSDP)" -Service SSDPSRV -Program "%SystemRoot%\System32\svchost.exe" `
+-DisplayName "Wireless portable devices (SSDP)" -Service SSDPSRV -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
 -Direction Inbound -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 1900 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `

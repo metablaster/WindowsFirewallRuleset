@@ -37,7 +37,6 @@ if (!(RunThis)) { exit }
 $Group = "Windows Services"
 $Profile = "Private, Public"
 $Interface = "Wired, Wireless"
-$ServiceHost = "%SystemRoot%\System32\svchost.exe"
 
 #First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Inbound -ErrorAction SilentlyContinue
@@ -76,14 +75,14 @@ Delivery Optimization also sends updates and apps from your PC to other PCs on y
 #
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Windows Camera Frame Server" -Service FrameServer -Program "%SystemRoot%\System32\svchost.exe" `
+-DisplayName "Windows Camera Frame Server" -Service FrameServer -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $Interface `
 -Direction Inbound -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 554, 8554-8558 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "Service enables multiple clients to access video frames from camera devices."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Windows Camera Frame Server" -Service FrameServer -Program "%SystemRoot%\System32\svchost.exe" `
+-DisplayName "Windows Camera Frame Server" -Service FrameServer -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $Interface `
 -Direction Inbound -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 5000-5020 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `
