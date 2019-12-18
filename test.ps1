@@ -98,8 +98,9 @@ Background Intelligent Transfer Service(BITS)"
 #  Get-WmiObject -ComputerName "localhost" -Class Win32_UserAccount -Filter "LocalAccount='True'" | Select-Object PSComputername, Name, Status, Disabled, AccountType, Lockout, PasswordRequired, PasswordChangeable, SID
 #  Get-WmiObject -class win32_account -Filter 'name="LOCAL SERVICE"'
 
-# $Path = "C:\Program Files\WindowsApps\Microsoft.YourPhone_1.19111.85.0_x64__8wekyb3d8bbwe"
-
+#$Path = "C:\Windows\SystemApps\Microsoft.MicrosoftEdge_8wekyb3d8bbwe"
+#$Path = "C:\Program Files\WindowsApps\Microsoft.YourPhone_1.19111.85.0_x64__8wekyb3d8bbwe"
+# $Path = "C:\Windows\System32\MicrosoftEdgeCP.exe"
 # $Path
 
 # $ACL = Get-ACL $path
@@ -107,15 +108,21 @@ Background Intelligent Transfer Service(BITS)"
 # $ACL.AccessToString
 
 # "`n---Access entry details:"
-# $ACL.Access | fl *
+# $ACL.Access | Format-Table *
 
 # "`n---SDDL:"
 # $ACL.SDDL
 
-# Call with named parameter binding 
-# $ACL | ParseSDDL
-# Or call with parameter string
+# # Call with named parameter binding 
+# # $ACL | ParseSDDL
+# # Or call with parameter string
 # ParseSDDL $ACL.SDDL
+
+# Edge SID: S-1-15-2-3624051433-2125758914-1423191267-1740899205-1073925389-3782572162-737981194
+           #S-1-15-2-3624051433-2125758914-1423191267-1740899205-1073925389-3782572162-737981194
+           #S-1-15-2-3624051433-2125758914-1423191267-1740899205-1073925389-3782572162-737981194
+# our SID S-1-5-80-956008885-3418522649-1831038044-1853292631-2271478464
+# WIN://SYSAPPID
 
 # $Skype = Get-AppxPackage -User User | Where-Object {$_.PackageFamilyName -like "*skype*"} | Select-Object -ExpandProperty PackageFullName
 # $SkypeSID = Get-AppSID "$Skype"
@@ -164,3 +171,20 @@ Background Intelligent Transfer Service(BITS)"
 # }
 
 # Set-PackageOutboundRulesTEST
+
+# $App = "Microsoft.MicrosoftEdge_8wekyb3d8bbwe"
+# $Packages = "C:\Users\$UserName\AppData\Local\Packages"
+# $ACL = Get-ACL "$Packages\$App\AC"
+# $ACE = $ACL.Access.IdentityReference.Value
+# $SID = $ACE | ForEach-Object {
+#     if($_ -match "S-1-15-2-") {
+#         return $_
+#     }
+# }
+# $SID
+
+# Get-AppxPackage -PackageTypeFilter Main | Where-Object { $_.SignatureKind -eq "System" -and $_.Name -like "Microsoft*" } | Sort-Object Name | ForEach-Object {
+#     Get-AppSID($_.PackageFamilyName)
+# }
+
+

@@ -194,11 +194,27 @@ function RunThis($str)
     }
 }
 
+# Function to get SID for specified store app
+# Example usage: Get-AppSID("Microsoft.MicrosoftEdge_8wekyb3d8bbwe")
+function Get-AppSID ($AppName)
+{
+    $Packages = "C:\Users\$UserName\AppData\Local\Packages"
+    $ACL = Get-ACL "$Packages\$AppName\AC"
+    $ACE = $ACL.Access.IdentityReference.Value
+    
+    $ACE | ForEach-Object {
+        if($_ -match "S-1-15-2-") {
+            return $_
+        }
+    }
+}
+
+# This method is deprecated because it doesn't work with system apps, it's here only for reference.
 # Function based on ParseSDDL to obtain SID's for store apps
 # it takes install location of the app, checks all the SID's of all the stuff in directory
 # out of this result it returns only the relevant SID, which is then additionally modified
 # It's the ugly hack made of trial and error, it may not work in further windows versions.
-function Get-AppSID ($AppName)
+function Get-AppSID_Deprecated ($AppName)
 {
     $ACL = Get-ACL "$AppName"
     $SDDLSplit = $ACL.SDDL.Split("(")

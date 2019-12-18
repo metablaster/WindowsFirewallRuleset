@@ -39,7 +39,7 @@ $SystemGroup = "Store Apps - System"
 $Profile = "Private, Public"
 $Direction = "Inbound"
 $OwnerSID = Get-UserSID("$UserName")
-$NetworkApps = Get-Content -Path "..\NetworkApps.txt"
+# $NetworkApps = Get-Content -Path "..\NetworkApps.txt"
 
 #First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
@@ -63,13 +63,13 @@ Administrators should have limited or no connectivity at all for maximum securit
 
 Get-AppxPackage -User $UserName -PackageTypeFilter Bundle | ForEach-Object {
     
-    $PackageSID = Get-AppSID($_.InstallLocation)
+    $PackageSID = Get-AppSID($_.PackageFamilyName)
     $Enabled = "False"
 
-    if ($NetworkApps -contains $_.Name)
-    {
-        $Enabled = "True"
-    }
+    # if ($NetworkApps -contains $_.Name)
+    # {
+    #     $Enabled = "True"
+    # }
 
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName $_.Name -Service Any -Program Any `
@@ -85,13 +85,13 @@ Get-AppxPackage -User $UserName -PackageTypeFilter Bundle | ForEach-Object {
 
 Get-AppxPackage -PackageTypeFilter Main | Where-Object { $_.SignatureKind -eq "System" -and $_.Name -like "Microsoft*" } | ForEach-Object {
     
-    $PackageSID = Get-AppSID($_.InstallLocation)
+    $PackageSID = Get-AppSID($_.PackageFamilyName)
     $Enabled = "False"
 
-    if ($NetworkApps -contains $_.Name)
-    {
-        $Enabled = "True"
-    }
+    # if ($NetworkApps -contains $_.Name)
+    # {
+    #     $Enabled = "True"
+    # }
 
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName $_.Name -Service Any -Program Any `

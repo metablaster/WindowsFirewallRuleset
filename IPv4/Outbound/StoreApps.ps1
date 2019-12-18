@@ -131,7 +131,7 @@ Administrators should have limited or no connectivity at all for maximum securit
 
 Get-AppxPackage -User $UserName -PackageTypeFilter Bundle | ForEach-Object {
     
-    $PackageSID = Get-AppSID($_.InstallLocation)
+    $PackageSID = Get-AppSID($_.PackageFamilyName)
     $Enabled = "False"
 
     if ($NetworkApps -contains $_.Name)
@@ -153,7 +153,7 @@ Get-AppxPackage -User $UserName -PackageTypeFilter Bundle | ForEach-Object {
 
 Get-AppxPackage -PackageTypeFilter Main | Where-Object { $_.SignatureKind -eq "System" -and $_.Name -like "Microsoft*" } | ForEach-Object {
     
-    $PackageSID = Get-AppSID($_.InstallLocation)
+    $PackageSID = Get-AppSID($_.PackageFamilyName)
     $Enabled = "False"
 
     if ($NetworkApps -contains $_.Name)
