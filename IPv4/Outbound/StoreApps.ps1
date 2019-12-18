@@ -23,6 +23,74 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+<#
+Make sure to update this list from time to time!
+
+Predefined user apps rule list:
+
+Microsoft.GetHelp
+Microsoft.Xbox.TCUI
+Microsoft.XboxIdentityProvider
+Microsoft.XboxGameOverlay
+Microsoft.XboxGamingOverlay
+Microsoft.WindowsMaps
+Microsoft.WindowsCamera
+Microsoft.WindowsCalculator
+Microsoft.YourPhone
+Microsoft.SkypeApp
+Microsoft.Print3D
+microsoft.windowscommunicationsapps
+Microsoft.XboxApp
+Microsoft.Office.OneNote
+Microsoft.MicrosoftOfficeHub
+Microsoft.BingWeather
+Microsoft.OneConnect
+Microsoft.MixedReality.Portal
+Microsoft.Getstarted
+Microsoft.MicrosoftStickyNotes
+Microsoft.WindowsStore
+Microsoft.MicrosoftSolitaireCollection
+Microsoft.Messaging
+Microsoft.Wallet
+Microsoft.People
+Microsoft.Windows.Photos
+Microsoft.ZuneMusic
+Microsoft.StorePurchaseApp
+Microsoft.ZuneVideo
+Microsoft.WindowsFeedbackHub
+Microsoft.MSPaint
+Microsoft.DesktopAppInstaller
+Microsoft.Microsoft3DViewer
+
+
+predefined system apps rule list:
+
+Microsoft.Windows.CloudExperienceHost
+Microsoft.XboxGameCallableUI
+Microsoft.AAD.BrokerPlugin
+Microsoft.Windows.ShellExperienceHost
+Microsoft.Windows.PeopleExperienceHost
+Microsoft.Windows.SecHealthUI
+Microsoft.Windows.Cortana
+Microsoft.Windows.Apprep.ChxApp (smartscreen)
+Microsoft.LockApp
+Microsoft.Windows.SecureAssessmentBrowser
+Microsoft.Windows.StartMenuExperienceHost
+Microsoft.Windows.NarratorQuickStart
+Microsoft.Windows.ParentalControls
+Microsoft.MicrosoftEdge
+Microsoft.Windows.ContentDeliveryManager
+Microsoft.AccountsControl
+Microsoft.Win32WebViewHost
+Microsoft.PPIProjection
+Microsoft.Windows.OOBENetworkCaptivePortal
+
+
+predefined system apps not catched by our command:
+
+InputApp
+#>
+
 #
 # Import global variables
 #
@@ -35,12 +103,15 @@ if (!(RunThis)) { exit }
 # Setup local variables:
 #
 $Group = "Store Apps"
+$SystemGroup = "Store Apps - System"
 $Profile = "Private, Public"
 $Direction = "Outbound"
 $OwnerSID = Get-UserSID("$UserName")
+$NetworkApps = Get-Content -Path "..\NetworkApps.txt"
 
 #First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $SystemGroup -Direction $Direction -ErrorAction SilentlyContinue
 
 #
 # Firewall predefined rules for Microsoft store Apps
@@ -54,14 +125,46 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "Block admin activity for all store apps.
 Administrators should have limited or no connectivity at all for maximum security."
 
+#
+# Create rules for all apps for user
+#
+
 Get-AppxPackage -User $UserName -PackageTypeFilter Bundle | ForEach-Object {
     
     $PackageSID = Get-AppSID($_.InstallLocation)
+    $Enabled = "False"
+
+    if ($NetworkApps -contains $_.Name)
+    {
+        $Enabled = "True"
+    }
 
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName $_.Name -Service Any -Program Any `
-    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
     -LocalUser Any -Owner $OwnerSID -Package $PackageSID `
-    -Description "Store apps generated rule."
+    -Description "User store apps generated rule."
+}
+
+#
+# Create rules for system apps
+#
+
+Get-AppxPackage -PackageTypeFilter Main | Where-Object { $_.SignatureKind -eq "System" -and $_.Name -like "Microsoft*" } | ForEach-Object {
+    
+    $PackageSID = Get-AppSID($_.InstallLocation)
+    $Enabled = "False"
+
+    if ($NetworkApps -contains $_.Name)
+    {
+        $Enabled = "True"
+    }
+
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName $_.Name -Service Any -Program Any `
+    -PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $SystemGroup -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+    -LocalUser Any -Owner $OwnerSID -Package $PackageSID `
+    -Description "System store apps generated rule."
 }
