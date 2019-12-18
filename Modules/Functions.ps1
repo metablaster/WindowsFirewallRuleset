@@ -228,37 +228,3 @@ function Get-AppSID ($AppName)
         }
     }
 }
-
-function Set-PackageOutboundRules()
-{
-    $OwnerSID = Get-UserSID("$UserName")
-    Get-AppxPackage -User User -PackageTypeFilter Bundle | ForEach-Object {
-        
-        $PackageName = $_.Name
-        $PackageSID = Get-AppSID($_.InstallLocation)
-
-        New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-        -DisplayName "$PackageName" -Service Any -Program Any `
-        -PolicyStore $PolicyStore -Enabled True -Action Allow -Group "Store Apps" -Profile Private, Public -InterfaceType $Interface `
-        -Direction Outbound -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
-        -LocalUser Any -Owner $OwnerSID -Package $PackageSID `
-        -Description "Store apps generated rule."        
-    }
-}
-
-function Set-PackageInboundRules()
-{
-    $OwnerSID = Get-UserSID("$UserName")
-    Get-AppxPackage -User User -PackageTypeFilter Bundle | ForEach-Object {
-        
-        $PackageName = $_.Name
-        $PackageSID = Get-AppSID($_.InstallLocation)
-
-        New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-        -DisplayName "$PackageName" -Service Any -Program Any `
-        -PolicyStore $PolicyStore -Enabled True -Action Allow -Group "Store Apps" -Profile Private, Public -InterfaceType $Interface `
-        -Direction Inbound -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
-        -EdgeTraversalPolicy Block -LocalUser Any -Owner $OwnerSID -Package $PackageSID `
-        -Description "Store apps generated rule."        
-    }
-}

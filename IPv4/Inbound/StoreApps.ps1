@@ -34,20 +34,35 @@ if (!(RunThis)) { exit }
 #
 # Setup local variables:
 #
+$Group = "Store Apps"
+$Profile = "Private, Public"
+$Direction = "Inbound"
+# TODO: setting owner does not work
+$OwnerSID = "Any" #Get-UserSID("$UserName")
 
 #First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group "Store Apps" -Direction Inbound -ErrorAction SilentlyContinue
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
 # Firewall predefined rules for Microsoft store Apps
 #
 
-# New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-# -DisplayName "Store apps for Administrators" -Service Any -Program Any `
-# -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Any -InterfaceType $Interface `
-# -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
-# -EdgeTraversalPolicy Block -LocalUser Any -Owner $User -Package "Microsoft.SkypeApp_14.54.91.0_x64__kzf8qxf38zg5c" `
-# -Description "Block admin activity for all apps.
-# Administrators should have limited or no connectivity at all for maximum security."
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Store apps for Administrators" -Service Any -Program Any `
+-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Any -InterfaceType $Interface `
+-Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
+-EdgeTraversalPolicy Block -LocalUser Any -Owner (Get-UserSID("$AdminName")) -Package "S-1-15-2-1" ` `
+-Description "Block admin activity for all apps.
+Administrators should have limited or no connectivity at all for maximum security."
 
-Set-PackageInboundRules
+Get-AppxPackage -User $UserName -PackageTypeFilter Bundle | ForEach-Object {
+    
+    $PackageSID = Get-AppSID($_.InstallLocation)
+
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName $_.Name -Service Any -Program Any `
+    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
+    -EdgeTraversalPolicy Block -LocalUser Any -Owner $OwnerSID -Package $PackageSID `
+    -Description "Store apps generated rule."        
+}

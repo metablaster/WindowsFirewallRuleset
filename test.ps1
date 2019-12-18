@@ -153,14 +153,14 @@ Background Intelligent Transfer Service(BITS)"
 #     $PackageFullName = Get-AppxPackage -User User | Where-Object {$_.Name -like "*$PackageSubstring*"} | Select-Object -ExpandProperty Name
 # Get-AppSID
 
-function Set-PackageOutboundRulesTEST()
-{
-    Get-AppxPackage -User User -PackageTypeFilter Bundle | ForEach-Object {
+# function Set-PackageOutboundRulesTEST()
+# {
+#     Get-AppxPackage -User User -PackageTypeFilter Bundle | ForEach-Object {
         
-        $PackageName = $_.Name
-        $PackageSID = Get-AppSID($_.InstallLocation)
-        $PackageSID
-    }
-}
+#         $PackageName = $_.Name
+#         $PackageSID = Get-AppSID($_.InstallLocation)
+#         $PackageSID
+#     }
+# }
 
-Set-PackageOutboundRulesTEST
+# Set-PackageOutboundRulesTEST
