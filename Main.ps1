@@ -55,7 +55,7 @@ if(RunThis("Applying Inbound IPv4 Rules..."))
     & "$ScriptPath\IPv4\Inbound\NetworkDiscovery.ps1"
     & "$ScriptPath\IPv4\Inbound\NetworkSharing.ps1"
     & "$ScriptPath\IPv4\Inbound\RemoteWindows.ps1"
-    & "$ScriptPath\IPv4\Inbound\StoreApps.ps1"
+    # & "$ScriptPath\IPv4\Inbound\StoreApps.ps1"
     & "$ScriptPath\IPv4\Inbound\WindowsServices.ps1"
     & "$ScriptPath\IPv4\Inbound\WirelessNetworking.ps1"
 }
@@ -73,7 +73,7 @@ if(RunThis("Applying Outbound IPv4 Rules..."))
     & "$ScriptPath\IPv4\Outbound\NetworkDiscovery.ps1"
     & "$ScriptPath\IPv4\Outbound\NetworkSharing.ps1"
     & "$ScriptPath\IPv4\Outbound\RemoteWindows.ps1"
-    & "$ScriptPath\IPv4\Outbound\StoreApps.ps1"
+    # & "$ScriptPath\IPv4\Outbound\StoreApps.ps1"
     & "$ScriptPath\IPv4\Outbound\Temporary.ps1"
     & "$ScriptPath\IPv4\Outbound\VisualStudio.ps1"
     & "$ScriptPath\IPv4\Outbound\WindowsServices.ps1"

@@ -174,9 +174,9 @@ to locate services on a local network.
 It operates over TCP and UDP port 3702 and uses IP multicast address 239.255.255.250."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Router services discovery (SSDP)" -Service FDResPub -Program $ServiceHost `
+-DisplayName "Router SSDP discovery" -Service SSDPSRV -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress DefaultGateway4 -LocalPort Any -RemotePort Any `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress DefaultGateway4 -LocalPort Any -RemotePort 48300 `
 -Description "SSDP service discovers networked devices and services that use the SSDP discovery protocol, such as UPnP devices.
 Also announces SSDP devices and services running on the local computer.
 If this rule is blocked, router SSDP-based services will not be discovered."
@@ -204,7 +204,7 @@ BITS and CryptSvc in addition need System account and wlidsvc needs Network Serv
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Extension rule for Router capability check (BITS)" -Service Any -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress DefaultGateway4 -LocalPort Any -RemotePort Any `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress DefaultGateway4 -LocalPort Any -RemotePort 48300 `
 -LocalUser $ExtensionUsers `
 -Description "Extension rule for active users to allow BITS to Internet gateway device (IGD)"
 
@@ -227,7 +227,7 @@ will be unable to automatically download programs and other information."
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Router capability check (BITS)" -Service BITS -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress DefaultGateway4 -LocalPort Any -RemotePort Any `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress DefaultGateway4 -LocalPort Any -RemotePort 48300 `
 -Description "BITS (Background Intelligent Transfer Service) monitors the network traffic at the Internet gateway device (IGD)
 or the client's network interface card (NIC) and uses only the idle portion of the network bandwidth.
 If BITS uses the network interface card to measure traffic and there are no network applications running on the client,

@@ -37,8 +37,7 @@ if (!(RunThis)) { exit }
 $Group = "Store Apps"
 $Profile = "Private, Public"
 $Direction = "Inbound"
-# TODO: setting owner does not work
-$OwnerSID = "Any" #Get-UserSID("$UserName")
+$OwnerSID = Get-UserSID("$UserName")
 
 #First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
@@ -52,7 +51,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Any -InterfaceType $Interface `
 -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any -Owner (Get-UserSID("$AdminName")) -Package "S-1-15-2-1" ` `
--Description "Block admin activity for all apps.
+-Description "Block admin activity for all store apps.
 Administrators should have limited or no connectivity at all for maximum security."
 
 Get-AppxPackage -User $UserName -PackageTypeFilter Bundle | ForEach-Object {
@@ -64,5 +63,5 @@ Get-AppxPackage -User $UserName -PackageTypeFilter Bundle | ForEach-Object {
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
     -EdgeTraversalPolicy Block -LocalUser Any -Owner $OwnerSID -Package $PackageSID `
-    -Description "Store apps generated rule."        
+    -Description "Store apps generated rule."
 }
