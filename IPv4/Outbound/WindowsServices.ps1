@@ -187,6 +187,7 @@ If this rule is blocked, router SSDP-based services will not be discovered."
 #
 
 # TODO: how do we make use of an array of user accounts for Get-SDDLFromAccounts
+# TODO: network service use for wlidsvc doesn't seem to work, BITS also fails connecting to router sometimes but receives data.
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Extension rule for complex services" -Service Any -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

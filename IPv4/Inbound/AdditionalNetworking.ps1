@@ -202,3 +202,27 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "Inbound rule for Proximity sharing over."
+
+#
+# DIAL Protocol predefined rules
+#
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "DIAL protocol server (HTTP)" -Service Any -Program System `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 10247 -RemotePort Any `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
+-Description "rule for DIAL protocol server to allow remote control of Apps using HTTP.
+Discovery and Launch (DIAL) is a protocol co-developed by Netflix and YouTube with help from Sony and Samsung.
+It is a mechanism for discovering and launching applications on a single subnet, typically a home network.
+It relies on Universal Plug and Play (UPnP), Simple Service Discovery Protocol (SSDP), and HTTP protocols."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "DIAL protocol server (HTTP)" -Service Any -Program System `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Intranet4 -LocalPort 10247 -RemotePort Any `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
+-Description "rule for DIAL protocol server to allow remote control of Apps using HTTP.
+Discovery and Launch (DIAL) is a protocol co-developed by Netflix and YouTube with help from Sony and Samsung.
+It is a mechanism for discovering and launching applications on a single subnet, typically a home network.
+It relies on Universal Plug and Play (UPnP), Simple Service Discovery Protocol (SSDP), and HTTP protocols."

@@ -1,7 +1,15 @@
 
 # TODO: convert to module, and import where needed
 
-# Returns SDDL of local user account
+# Get SID for giver user name, example: Get-UserSID("TestUser")
+function Get-UserSID($UserName)
+{
+    $NTAccount = New-Object System.Security.Principal.NTAccount($UserName)
+    $SID = ($NTAccount.Translate([System.Security.Principal.SecurityIdentifier])).ToString()
+    return $SID
+}
+
+# Returns SDDL of specified local user or multiple users
 # Sample usage:
 # New-NetFirewallRule -DisplayName "BlockWWW" -Action Block -LocalUser (Get-UserSDDL user1, user2) -Protocol TCP -Direction Outbound -RemotePort 80, 443
 # Credits to: https://stackoverflow.com/questions/49608182/powershell-new-netfirewallrule-with-localuser-example
@@ -41,7 +49,7 @@ function Get-SDDLFromAccounts($Accounts)
         $Domain = ($UserEntry.split("\"))[0]
         $User = ($UserEntry.split("\"))[1]
 
-        $NTAccount = New-Object System.Security.Principal.NTAccount($Domain,$User)
+        $NTAccount = New-Object System.Security.Principal.NTAccount($Domain, $User)
         $SID = ($NTAccount.Translate([System.Security.Principal.SecurityIdentifier])).Value
     
         if (!$SID)
@@ -183,5 +191,74 @@ function RunThis($str)
     else
     {
         return $false
+    }
+}
+
+function Get-AppSID ($AppName)
+{
+    $ACL = Get-ACL "$AppName"
+    $SDDLSplit = $ACL.SDDL.Split("(")
+    $ACLEntrySID = $null
+
+    # Skip index 0 where owner and/or primary group are stored
+    For ($i=1; $i -lt $SDDLSplit.Length; $i++)
+    {
+        $ACLSplit = $SDDLSplit[$i].Split(";")
+
+        if ($ACLSplit[1])
+        {
+            # if it contains 'ID' it's inherited, ignore
+            If (!$ACLSplit[1].Contains("ID"))
+            {
+
+                # Remove the trailing ")"
+                $ACLEntry = $ACLSplit[5].TrimEnd(")")
+
+                # Parse out the SID using RegEx
+                $ACLEntrySIDMatches = [regex]::Matches($ACLEntry,"(S(-\d+){2,10})")
+                $ACLEntrySIDMatches | ForEach-Object {$ACLEntrySID = $_.value}
+
+                If ($ACLEntrySID)
+                {
+                    # Final hack!!
+                    $ACLEntrySID = $ACLEntrySID -replace "S-1-15-3", "S-1-15-2"
+                    return $ACLEntrySID
+                }
+            }
+        }
+    }
+}
+
+function Set-PackageOutboundRules()
+{
+    $OwnerSID = Get-UserSID("$UserName")
+    Get-AppxPackage -User User -PackageTypeFilter Bundle | ForEach-Object {
+        
+        $PackageName = $_.Name
+        $PackageSID = Get-AppSID($_.InstallLocation)
+
+        New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+        -DisplayName "$PackageName" -Service Any -Program Any `
+        -PolicyStore $PolicyStore -Enabled True -Action Allow -Group "Store Apps" -Profile Private, Public -InterfaceType $Interface `
+        -Direction Outbound -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
+        -LocalUser Any -Owner $OwnerSID -Package $PackageSID `
+        -Description "Store apps generated rule."        
+    }
+}
+
+function Set-PackageInboundRules()
+{
+    $OwnerSID = Get-UserSID("$UserName")
+    Get-AppxPackage -User User -PackageTypeFilter Bundle | ForEach-Object {
+        
+        $PackageName = $_.Name
+        $PackageSID = Get-AppSID($_.InstallLocation)
+
+        New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+        -DisplayName "$PackageName" -Service Any -Program Any `
+        -PolicyStore $PolicyStore -Enabled True -Action Allow -Group "Store Apps" -Profile Private, Public -InterfaceType $Interface `
+        -Direction Inbound -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
+        -EdgeTraversalPolicy Block -LocalUser Any -Owner $OwnerSID -Package $PackageSID `
+        -Description "Store apps generated rule."        
     }
 }

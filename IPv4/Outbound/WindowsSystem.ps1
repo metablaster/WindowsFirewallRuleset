@@ -102,6 +102,19 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "This program collects and sends usage data to Microsoft, can be disabled in GPO."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Microsoft Compatibility Telemetry" -Service Any -Program "%SystemRoot%\System32\CompatTelRunner.exe" `
+-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+-LocalUser $NT_AUTHORITY_System `
+-Description "The CompatTelRunnere.exe process is used by Windows to perform system diagnostics to determine if there are any compatibility issues.
+It also collects program telemetry information (if that option is selected) for the Microsoft Customer Experience Improvement Program.
+This allows Microsoft to ensure compatibility when installing the latest version of the Windows operating system.
+This process also takes place when upgrading the operating system.
+To disable this program: Task Scheduler Library > Microsoft > Windows > Application Experience
+In the middle pane, you will see all the scheduled tasks, such as Microsoft Compatibility Appraiser, ProgramDataUpdater and SartupAppTask.
+Right-click on the Microsoft Compatibility Appraiser and select Disable."
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Windows Indexing Service" -Service Any -Program "%SystemRoot%\System32\SearchProtocolHost.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
