@@ -194,6 +194,10 @@ function RunThis($str)
     }
 }
 
+# Function based on ParseSDDL to obtain SID's for store apps
+# it takes install location of the app, checks all the SID's of all the stuff in directory
+# out of this result it returns only the relevant SID, which is then additionally modified
+# It's the ugly hack made of trial and error, it may not work in further windows versions.
 function Get-AppSID ($AppName)
 {
     $ACL = Get-ACL "$AppName"
