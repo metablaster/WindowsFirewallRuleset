@@ -39,6 +39,9 @@ if(!$PSScriptRoot)
     $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
 }
 
+# Set up Firewall profile
+& .\FirewallProfile.ps1
+
 #
 # Execute IPv4 rules
 #
