@@ -104,30 +104,30 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # ICMP Type filtering ( Error messages )
 #
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Destination Unreachable (1)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 1 -LocalAddress Any -RemoteAddress $RemoteAddr -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Packet Too Big (2)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 2 -LocalAddress Any -RemoteAddress $RemoteAddr -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Time Exceeded (3)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 3 -LocalAddress Any -RemoteAddress $RemoteAddr -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Parameter Problem (4)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 4 -LocalAddress Any -RemoteAddress $RemoteAddr -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
@@ -136,72 +136,72 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 # ICMP Type filtering ( Informational messages )
 #
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Echo Request (128)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 128 -LocalAddress Any -RemoteAddress $RemoteAddr -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Echo Reply (129)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 129 -LocalAddress Any -RemoteAddress $RemoteAddr -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Multicast Listener Query (130)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 130 -LocalAddress Any -RemoteAddress LocalSubnet6 -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Multicast Listener Report (131)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 131 -LocalAddress Any -RemoteAddress LocalSubnet6 -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Multicast Listener Done (132)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 132 -LocalAddress Any -RemoteAddress LocalSubnet6 -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Router Solicitation (133)" -Service Any -Program System `
--Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 133 -LocalAddress Any -RemoteAddress $RouterSpace -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Router Advertisement (134)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 134 -LocalAddress fe80::/64 -RemoteAddress $RouterSpace -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Neighbor Solicitation (135)" -Service Any -Program System `
--Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 135 -LocalAddress Any -RemoteAddress $RemoteAddr -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Neighbor Advertisement (136)" -Service Any -Program System `
--Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 136 -LocalAddress Any -RemoteAddress $RemoteAddr -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Redirect Message (137)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 137 -LocalAddress Any -RemoteAddress $RemoteAddr -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description "Routers send Redirect packets to inform a host of a better first-hop
@@ -209,53 +209,53 @@ node on the path to a destination.  Hosts can be redirected to a
 better first-hop router but can also be informed by a redirect that
 the destination is in fact a neighbor."
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Router Renumbering (138)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 138 -LocalAddress Any -RemoteAddress $RouterSpace -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "ICMP Node Information Query (139)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 139 -LocalAddress Any -RemoteAddress $RemoteAddr -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description "Used for IPv6 Node Information Queries.
 a protocol for asking an IPv6 node to supply certain network information, such as its hostname or fully-qualified domain name."
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "ICMP Node Information Response (140)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 140 -LocalAddress Any -RemoteAddress $RemoteAddr -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description "Used for IPv6 Node Information Queries.
 a protocol for asking an IPv6 node to supply certain network information, such as its hostname or fully-qualified domain name."
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Inverse Neighbor Discovery Solicitation Message (141)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 141 -LocalAddress Any -RemoteAddress $RemoteAddr -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Inverse Neighbor Discovery Advertisement Message (142)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 142 -LocalAddress Any -RemoteAddress $RemoteAddr -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Multicast Listener Report Version 2 (143)" -Service Any -Program System `
--Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 143 -LocalAddress Any -RemoteAddress LocalSubnet6 -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Home Agent Address Discovery Request Message (144)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 144 -LocalAddress Any -RemoteAddress $RemoteAddr -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description "Used in Mobile IPv6, each mobile node is always identified by its home address,
@@ -263,9 +263,9 @@ regardless of its current point of attachment to the Internet.
 The mobile node and the home agent SHOULD use an IPsec security association to protect the integrity and authenticity
 of the Mobile Prefix Solicitations and Advertisements."
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Home Agent Address Discovery Reply Message (145)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 145 -LocalAddress Any -RemoteAddress $RemoteAddr -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description "Used in Mobile IPv6, each mobile node is always identified by its home address,
@@ -273,23 +273,23 @@ regardless of its current point of attachment to the Internet.
 The mobile node and the home agent SHOULD use an IPsec security association to protect the integrity and authenticity
 of the Mobile Prefix Solicitations and Advertisements."
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Mobile Prefix Solicitation (146)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 146 -LocalAddress Any -RemoteAddress $RemoteAddr -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Mobile Prefix Advertisement (147)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 147 -LocalAddress Any -RemoteAddress $RemoteAddr -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Certification Path Solicitation Message (148)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 148 -LocalAddress Any -RemoteAddress LocalSubnet6 -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description "Hosts send Certification Path Solicitations in order to prompt
@@ -304,9 +304,9 @@ Destination Address:
 Typically the All-Routers multicast address, the Solicited-Node
 multicast address, or the address of the host's default router."
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Certification Path Advertisement Message (149)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 149 -LocalAddress Any -RemoteAddress LocalSubnet6 -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description "Routers send out Certification Path Advertisement messages in
@@ -322,37 +322,37 @@ Destination Address:
 Either the Solicited-Node multicast address of the receiver or
 the link-scoped All-Nodes multicast address."
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "ICMP messages utilized by experimental mobility protocols such as Seamoby (150)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 150 -LocalAddress Any -RemoteAddress $RemoteAddr -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Multicast Router Advertisement (151)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 151 -LocalAddress Any -RemoteAddress $RouterSpace -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Multicast Router Solicitation (152)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 152 -LocalAddress Any -RemoteAddress $RouterSpace -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Multicast Router Termination (153)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 153 -LocalAddress Any -RemoteAddress $RouterSpace -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "FMIPv6 Messages (154)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 154 -LocalAddress Any -RemoteAddress $RemoteAddr -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description "Fast Mobile IPv6,
@@ -360,9 +360,9 @@ Mobile IPv6 enables a mobile node (MN) to maintain its connectivity
 to the Internet when moving from one Access Router to another, a process referred to as handover."
 
 # TODO: edge traversal unknown
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "RPL Control Message (155)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 155 -LocalAddress Any -RemoteAddress $RemoteAddr -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description "RPL: IPv6 Routing Protocol for Low-Power and Lossy Networks
@@ -375,9 +375,9 @@ For all other RPL control messages, the source address is a link-local address,
 and the destination address is either the all-RPL-nodes multicast address or a link-local unicast address of the destination.
 The all-RPL-nodes multicast address is a new address with a value of ff02::1a."
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "ILNPv6 Locator Update Message (156)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 156 -LocalAddress Any -RemoteAddress $RemoteAddr -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description "The Identifier-Locator Network Protocol (ILNP) is an experimental, evolutionary enhancement to IP.
@@ -395,9 +395,9 @@ short-distance wireless network technology such as IrDA, Wireless USB, Bluetooth
 The reach of a WPAN varies from a few centimeters to a few meters.
 #>
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Duplicate Address Request (157)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 157 -LocalAddress Any -RemoteAddress LocalSubnet6 -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description "Used in IPv6 over Low-Power Wireless Personal Area Networks (6LoWPANs)
@@ -408,9 +408,9 @@ IPv6 Destination:
 In a Duplicate Address Request (DAR), a non-link-local address of a 6LBR.
 In a Duplicate Address Confirmation (DAC), this is just the source from the DAR."
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Duplicate Address Confirmation (158)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 158 -LocalAddress Any -RemoteAddress LocalSubnet6 -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description "Used in IPv6 over Low-Power Wireless Personal Area Networks (6LoWPANs)
@@ -421,9 +421,9 @@ IPv6 Destination:
 In a Duplicate Address Request (DAR), a non-link-local address of a 6LBR.
 In a Duplicate Address Confirmation (DAC), this is just the source from the DAR."
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "MPL Control Message (159)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 159 -LocalAddress Any -RemoteAddress Intranet -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description "Multicast Protocol for Low-Power and Lossy Networks (MPL).
@@ -433,16 +433,16 @@ By default, MPL Forwarders subscribe to the ALL_MPL_FORWARDERS multicast address
 For each MPL Domain Address that an MPL Interface subscribes to, the MPL Interface MUST also subscribe to the MPL Domain Address with
 Link-Local scope (scop value 2) when reactive forwarding is in use."
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Extended Echo Request (160)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 160 -LocalAddress Any -RemoteAddress $RemoteAddr -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Extended Echo Reply (161)" -Service Any -Program System `
--Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv6 -IcmpType 161 -LocalAddress Any -RemoteAddress $RemoteAddr -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
