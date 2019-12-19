@@ -4,6 +4,8 @@ Parameters and their values are not the same as they are displaied in Firewall G
 
 This documents helps understand what is what by mapping powershell parameters to GUI display equivalents.
 
+In addition, explanation of other parameters which are not self explanatory or well documented and usually need googling out what they do.
+
 # PORT
 **LocalPort/RemotePort**
 - `Any` All Ports
@@ -56,3 +58,21 @@ This documents helps understand what is what by mapping powershell parameters to
 - `Allow` Block edge traversal
 - `DeferToUser` Defer to user / Defer allow to user
 - `DeferToApp` Defer to application / Defer allow to application
+
+# POLICY STORE
+1. Persistent Store (example: `-PolicyStore PersistentStore`)
+2. GPO              (example: `-PolicyStore localhost`)
+3. RSOP             (example: `-PolicyStore RSOP`)
+4. ActiveStore      (example: `-PolicyStore ActiveStore`)
+
+Persistent Store:
+- is what you see in Windows Firewall with Advanced security, accessed trough control panel or System settings.
+GPO Store:
+- is specified as computer name, and it is what you see in Local group policy, accessed trough secpol.msc or gpedit.msc
+RSOP:
+- stands for "resultant set of policy" and is collection of all GPO stores that apply to local computer.
+- this applies to domain computers, on your home computer RSOP consists of only single local GPO (group policy object)
+Active Store:
+- Active store is collection (sum) of Persistent store and all GPO stores (RSOP) that apply to local computer. in other words it's a master store.
+
+There are other stores not mentioned here, which are used in corporate networks, AD's or Domains, so irrelevant for home users.

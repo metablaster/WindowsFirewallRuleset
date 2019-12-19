@@ -39,6 +39,7 @@ Set-NetFirewallProfile -All -Confirm:$Execute -Whatif:$Debug -PolicyStore $Polic
 -AllowLocalFirewallRules False -AllowLocalIPsecRules False -AllowUnicastResponseToMulticast True `
 -NotifyOnListen True -EnableStealthModeForIPsec True `
 -LogAllowed False -LogBlocked True -LogIgnored True -LogMaxSizeKilobytes 1024 `
+-AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
 -LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log"
 
 #
