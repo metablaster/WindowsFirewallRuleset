@@ -61,6 +61,8 @@ if(RunThis("Applying Inbound IPv4 Rules..."))
     & "$ScriptPath\IPv4\Inbound\StoreApps.ps1"
     & "$ScriptPath\IPv4\Inbound\WindowsServices.ps1"
     & "$ScriptPath\IPv4\Inbound\WirelessNetworking.ps1"
+
+    & "$ScriptPath\IPv4\Inbound\Software\Steam.ps1"
 }
 
 if(RunThis("Applying Outbound IPv4 Rules..."))
@@ -82,6 +84,8 @@ if(RunThis("Applying Outbound IPv4 Rules..."))
     & "$ScriptPath\IPv4\Outbound\WindowsServices.ps1"
     & "$ScriptPath\IPv4\Outbound\WindowsSystem.ps1"
     & "$ScriptPath\IPv4\Outbound\WirelessNetworking.ps1"
+
+    & "$ScriptPath\IPv4\Outbound\Software\Steam.ps1"
 }
 
 #
