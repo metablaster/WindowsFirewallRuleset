@@ -212,11 +212,13 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description $Description
 
+# TODO: testing and not working with (Get-SDDLFromAccounts @("NT AUTHORITY\NETWORK SERVICE", "NT AUTHORITY\LOCAL SERVICE", "NT AUTHORITY\SYSTEM"))
+# nt system was added for testing, remove
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Link-Local Multicast - SSDP" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::c -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
+-LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
@@ -324,18 +326,20 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description $Description
 
+# TODO: testing with nt system during boot time
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Link-Local Multicast - All-dhcp-agents" -Service Any -Program Any `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::1:2 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
+-LocalUser (Get-SDDLFromAccounts @("NT AUTHORITY\NETWORK SERVICE", "NT AUTHORITY\LOCAL SERVICE", "NT AUTHORITY\SYSTEM")) -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description $Description
 
+# TODO: testing with nt system during boot time
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Link-Local Multicast - Link-local Multicast Name Resolution" -Service Any -Program Any `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::1:3 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
+-LocalUser (Get-SDDLFromAccounts @("NT AUTHORITY\NETWORK SERVICE", "NT AUTHORITY\LOCAL SERVICE", "NT AUTHORITY\SYSTEM")) -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `

@@ -292,21 +292,21 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Windows Defender" -Service Any -Program "%ALLUSERSPROFILE%\Microsoft\Windows Defender\Platform\4.18.1911.3-0\MsMpEng.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description "Anti malware service executable."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Windows Defender" -Service Any -Program "%ALLUSERSPROFILE%\Microsoft\Windows Defender\Platform\4.18.1910.4-0\MsMpEng.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description "Anti malware service executable."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Windows Defender CLI" -Service Any -Program "%ALLUSERSPROFILE%\Microsoft\Windows Defender\Platform\4.18.1911.3-0\MpCmdRun.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser Any `
+-LocalUser $NT_AUTHORITY_System `
 -Description "This utility can be useful when you want to automate Windows Defender Antivirus use."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `

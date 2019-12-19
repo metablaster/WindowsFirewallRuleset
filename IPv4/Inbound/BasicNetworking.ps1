@@ -37,6 +37,8 @@ if (!(RunThis)) { exit }
 $Group = "Basic Networking - IPv4"
 $Profile = "Any"
 $Direction = "Inbound"
+# NOTE: even thogh we specify "IPv4 the loopback interface alias is the same for for IPv4 and IPv6, meaning there is only one loopback interface!"
+$Loopback = Get-NetIPInterface | Where-Object {$_.InterfaceAlias -like "*Loopback*" -and $_.AddressFamily -eq "IPv4"} | Select-Object -ExpandProperty InterfaceAlias
 
 #First remove all existing rules matching setup
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
@@ -53,14 +55,14 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # TODO: should we use -InterfaceAlias set to Loopback pseudo interface?
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Loopback" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any -InterfaceAlias $Loopback `
 -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress 127.0.0.1 -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Loopback" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any -InterfaceAlias $Loopback `
 -Direction $Direction -Protocol Any -LocalAddress 127.0.0.1 -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources."

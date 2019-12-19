@@ -38,6 +38,8 @@ $Group = "Basic Networking - IPv6"
 $Profile = "Any"
 $ISATAP_Remotes = @("Internet6", "LocalSubnet6")
 $Direction = "Outbound"
+# NOTE: even thogh we specify "IPv6 the loopback interface alias is the same for for IPv4 and IPv6, meaning there is only one loopback interface!"
+$Loopback = Get-NetIPInterface | Where-Object {$_.InterfaceAlias -like "*Loopback*" -and $_.AddressFamily -eq "IPv6"} | Select-Object -ExpandProperty InterfaceAlias
 
 #First remove all existing rules matching setup
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
@@ -50,23 +52,15 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Loop back
 #
 
-# TODO: why does not this work?
-
-<#
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Loopback" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress ::1/128 -RemoteAddress Any -LocalPort Any -RemotePort Any `
--LocalUser Any `
--Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources."
+# TODO: why specifying loopback address ::1/128 doesn't work?
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Loopback" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol UDP -LocalAddress ::1/128 -RemoteAddress Any -LocalPort Any -RemotePort Any `
+-DisplayName "Loopback IP" -Service Any -Program Any `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any -InterfaceAlias $Loopback `
+-Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -LocalUser Any `
--Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources."
-#>
+-Description "This rule covers both IPv4 and IPv6 loopback interface.
+Network software and utilities use loopback address to access a local computer's TCP/IP network resources."
 
 #
 # DNS (Domain Name System)
@@ -98,7 +92,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Multicast Domain Name System" -Service Dnscache -Program $ServiceHost `
--PolicyStore $PolicyStore -Enabled True-Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::fb -LocalPort 5353 -RemotePort 5353 `
 -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
@@ -108,7 +102,7 @@ packet formats and operating semantics as the unicast Domain Name System (DNS)."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Multicast Domain Name System" -Service Dnscache -Program $ServiceHost `
--PolicyStore $PolicyStore -Enabled True-Action Block -Group $Group -Profile Public -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::fb -LocalPort 5353 -RemotePort 5353 `
 -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
@@ -122,7 +116,7 @@ packet formats and operating semantics as the unicast Domain Name System (DNS)."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Dynamic Host Configuration Protocol" -Service Dhcp -Program $ServiceHost `
--PolicyStore $PolicyStore -Enabled True-Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress DHCP6 -LocalPort 546 -RemotePort 547 `
 -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "Allows DHCPv6 messages for stateful auto-configuration."

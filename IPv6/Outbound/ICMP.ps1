@@ -188,14 +188,14 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Neighbor Solicitation (135)" -Service Any -Program System `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol ICMPv6 -IcmpType 135 -LocalAddress Any -RemoteAddress $RemoteAddr -LocalPort Any -RemotePort Any `
+-Direction $Direction -Protocol ICMPv6 -IcmpType 135 -LocalAddress Any -RemoteAddress Internet6, LocalSubnet6, ff02::1:ff00:0000/104 -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Neighbor Advertisement (136)" -Service Any -Program System `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol ICMPv6 -IcmpType 136 -LocalAddress Any -RemoteAddress $RemoteAddr -LocalPort Any -RemotePort Any `
+-Direction $Direction -Protocol ICMPv6 -IcmpType 136 -LocalAddress Any -RemoteAddress Internet6, LocalSubnet6, ff02::1 -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
 
@@ -249,7 +249,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Multicast Listener Report Version 2 (143)" -Service Any -Program System `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol ICMPv6 -IcmpType 143 -LocalAddress Any -RemoteAddress LocalSubnet6 -LocalPort Any -RemotePort Any `
+-Direction $Direction -Protocol ICMPv6 -IcmpType 143 -LocalAddress Any -RemoteAddress LocalSubnet6, ff02::16 -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
 

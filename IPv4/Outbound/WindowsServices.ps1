@@ -38,8 +38,7 @@ $Group = "Windows Services"
 $Profile = "Private, Public"
 $Direction = "Outbound"
 # Extension rules are special rules for problematic services, see ProblematicTraffic.md for more info
-# "NT AUTHORITY\NETWORK SERVICE" replaced with local service.
-$ExtensionUsers = Get-SDDLFromAccounts @("NT AUTHORITY\SYSTEM", "NT AUTHORITY\LOCAL SERVICE", "$UserAccount")
+$ExtensionUsers = Get-SDDLFromAccounts @("NT AUTHORITY\SYSTEM", "NT AUTHORITY\LOCAL SERVICE", "NT AUTHORITY\NETWORK SERVICE", "$UserAccount")
 
 #First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
@@ -216,7 +215,7 @@ Cryptographic Services(CryptSvc),
 Microsoft Account Sign-in Assistant(wlidsvc),
 Windows Update(wuauserv),
 Background Intelligent Transfer Service(BITS),
-BITS and CryptSvc in addition need System account and wlidsvc needs Network Service account"
+BITS and CryptSvc in addition need System account and wlidsvc needs both Network Service and local service account"
 
 # TODO: Temporary using network service account
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `

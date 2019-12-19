@@ -37,6 +37,8 @@ if (!(RunThis)) { exit }
 $Group = "Basic Networking - IPv4"
 $Profile = "Any"
 $Direction = "Outbound"
+# NOTE: even thogh we specify "IPv4 the loopback interface alias is the same for for IPv4 and IPv6, meaning there is only one loopback interface!"
+$Loopback = Get-NetIPInterface | Where-Object {$_.InterfaceAlias -like "*Loopback*" -and $_.AddressFamily -eq "IPv4"} | Select-Object -ExpandProperty InterfaceAlias
 
 #First remove all existing rules matching setup
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
@@ -52,14 +54,14 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Loopback" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any -InterfaceAlias $Loopback `
 -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress 127.0.0.1 -LocalPort Any -RemotePort Any `
 -LocalUser Any `
 -Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Loopback" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any -InterfaceAlias $Loopback `
 -Direction $Direction -Protocol Any -LocalAddress 127.0.0.1 -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -LocalUser Any `
 -Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources."
@@ -131,7 +133,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Internet Group Management Protocol" -Service Any -Program System `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol 2 -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
+-Direction $Direction -Protocol 2 -LocalAddress Any -RemoteAddress LocalSubnet4, 224.0.0.0/24 -LocalPort Any -RemotePort Any `
 -LocalUser $NT_AUTHORITY_System `
 -Description "IGMP messages are sent and received by nodes to create, join and depart multicast groups."
 
