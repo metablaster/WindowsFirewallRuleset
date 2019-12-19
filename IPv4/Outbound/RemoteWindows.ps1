@@ -50,7 +50,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Remote desktop - User Mode" -Service Any -Program "%SystemRoot%\System32\mstsc.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 3389 `
--LocalUser $User `
+-LocalUser $User -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "Remote desktop connection.
 Allows users to connect interactively to a remote computer.
 To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System properties control panel item."

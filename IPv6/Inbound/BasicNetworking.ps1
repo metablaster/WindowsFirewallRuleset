@@ -82,7 +82,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Multicast Domain Name System" -Service Dnscache -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress ff02::fb -RemoteAddress LocalSubnet6 -LocalPort 5353 -RemotePort 5353 `
--EdgeTraversalPolicy Block -LocalUser Any `
+-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
 within small networks that do not include a local name server.
 It is a zero-configuration service, using essentially the same programming interfaces,
@@ -92,7 +92,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Multicast Domain Name System" -Service Dnscache -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress ff02::fb -RemoteAddress LocalSubnet6 -LocalPort 5353 -RemotePort 5353 `
--EdgeTraversalPolicy Block -LocalUser Any `
+-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
 within small networks that do not include a local name server.
 It is a zero-configuration service, using essentially the same programming interfaces,
@@ -106,7 +106,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Dynamic Host Configuration Protocol" -Service Dhcp -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress DHCP6 -LocalPort 546 -RemotePort 547 `
--EdgeTraversalPolicy Block -LocalUser Any `
+-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "Allows DHCPv6 messages for stateful auto-configuration."
 
 #

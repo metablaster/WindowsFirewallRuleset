@@ -79,7 +79,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Multicast Domain Name System" -Service Dnscache -Program $ServiceHost `
 -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress 224.0.0.251 -RemoteAddress LocalSubnet4 -LocalPort 5353 -RemotePort 5353 `
--EdgeTraversalPolicy Block -LocalUser Any `
+-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
 within small networks that do not include a local name server.
 It is a zero-configuration service, using essentially the same programming interfaces,
@@ -89,7 +89,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Multicast Domain Name System" -Service Dnscache -Program $ServiceHost `
 -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress 224.0.0.251 -RemoteAddress LocalSubnet4 -LocalPort 5353 -RemotePort 5353 `
--EdgeTraversalPolicy Block -LocalUser Any `
+-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
 within small networks that do not include a local name server.
 It is a zero-configuration service, using essentially the same programming interfaces,
@@ -103,7 +103,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Dynamic Host Configuration Protocol" -Service Dhcp -Program $ServiceHost `
 -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress DHCP4 -LocalPort 68 -RemotePort 67 `
--EdgeTraversalPolicy Block -LocalUser Any `
+-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "Allow DHCPv4 messages for stateful auto-configuration."
 
 #
@@ -136,6 +136,6 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Teredo" -Service iphlpsvc -Program "%SystemRoot%\system32\svchost.exe" `
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Teredo -RemotePort Any `
--EdgeTraversalPolicy Block -LocalUser Any `
+-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "Allow Teredo edge traversal, a technology that provides address assignment and automatic tunneling
 for unicast IPv6 traffic when an IPv6/IPv4 host is located behind an IPv4 network address translator."

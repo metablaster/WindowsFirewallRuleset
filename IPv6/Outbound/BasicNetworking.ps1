@@ -76,14 +76,14 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Domain Name System" -Service Dnscache -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress DNS6 -LocalPort Any -RemotePort 53 `
--LocalUser Any `
+-LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "Rule to allow IPv6 DNS requests."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Domain Name System" -Service Any -Program System `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress DefaultGateway6 -LocalPort Any -RemotePort 53 `
--LocalUser $NT_AUTHORITY_System `
+-LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "Rule to allow IPv6 DNS requests by System to default gateway."
 
 #
@@ -100,7 +100,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Multicast Domain Name System" -Service Dnscache -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True-Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::fb -LocalPort 5353 -RemotePort 5353 `
--LocalUser Any `
+-LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
 within small networks that do not include a local name server.
 It is a zero-configuration service, using essentially the same programming interfaces,
@@ -110,7 +110,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Multicast Domain Name System" -Service Dnscache -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True-Action Block -Group $Group -Profile Public -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::fb -LocalPort 5353 -RemotePort 5353 `
--LocalUser Any `
+-LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
 within small networks that do not include a local name server.
 It is a zero-configuration service, using essentially the same programming interfaces,
@@ -124,7 +124,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Dynamic Host Configuration Protocol" -Service Dhcp -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True-Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress DHCP6 -LocalPort 546 -RemotePort 547 `
--LocalUser Any `
+-LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "Allows DHCPv6 messages for stateful auto-configuration."
 
 #

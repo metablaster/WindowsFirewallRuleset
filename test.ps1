@@ -73,17 +73,13 @@ Select-Object -Expand IdentityReference |
 Select-Object -Expand Value
  #>
 
-<#  New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "TEST RULE" -Program $ServiceHost -Service Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group "TEST" -Profile $Profile -InterfaceType $Interface `
--Direction Outbound -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser (Get-SDDLFromAccounts @("NT AUTHORITY\SYSTEM", "NT AUTHORITY\NETWORK SERVICE", "$UserAccount")) `
--Description "Following services need access based on user account:
-Cryptographic Services(CryptSvc),
-Microsoft Account Sign-in Assistant(wlidsvc),
-Windows Update(wuauserv),
-Background Intelligent Transfer Service(BITS)"
- #>
+# New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+# -DisplayName "TEST RULE" -Program $ServiceHost -Service Any `
+# -PolicyStore $PolicyStore -Enabled False -Action Allow -Group "TEST" -Profile $Profile -InterfaceType $Interface `
+# -Direction Outbound -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+# -LocalUser (Get-SDDLFromAccounts @("NT AUTHORITY\SYSTEM", "NT AUTHORITY\NETWORK SERVICE", "$UserAccount")) `
+# -Description "" -LocalOnlyMapping $true -LooseSourceMapping $true
+
  
 # 0:0:0:0:0:0:0:1
 <# New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `

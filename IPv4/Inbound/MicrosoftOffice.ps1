@@ -54,7 +54,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Outlook" -Service Any -Program "$OfficeRoot\OUTLOOK.EXE" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort 6004 -RemotePort Any `
--EdgeTraversalPolicy Block -LocalUser $User `
+-EdgeTraversalPolicy Block -LocalUser $User -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description ""
 
 # TODO: Skype for bussiness has complex port requirements, see:
@@ -71,7 +71,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Skype for business" -Service Any -Program "$OfficeRoot\lync.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
--EdgeTraversalPolicy Block -LocalUser $User `
+-EdgeTraversalPolicy Block -LocalUser $User -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "Skype for business, previously lync."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
@@ -85,5 +85,5 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "UcMapi" -Service Any -Program "$OfficeRoot\UcMapi.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
--EdgeTraversalPolicy Block -LocalUser $User `
+-EdgeTraversalPolicy Block -LocalUser $User -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "Unified Communications Messaging Application Programming Interface"
