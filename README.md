@@ -37,12 +37,9 @@ For more info see respective licences:\
 2. Windows Powershell 5 [Download Powershell](https://github.com/PowerShell/PowerShell)
 3. Git (Optional) [Download Git](https://git-scm.com/downloads)
 
-For older system such as Windows 7 most of the rules will work, ie. rules for Store Apps will fail to load.\
-Also ie. rules for programs and services that were introduced in Windows 10 will be applied but redundant.
+To be able to apply rules to older systems such as Windows 7, edit the `GlobalVariables.ps1` and add a new variable that defines your system version:
 
-To be able to apply rules to older systems, edit the `GlobalVariables.ps1` and add a new variable that defines your system version:
-
-```$Platform = "10.0+" #Windows 10 and above``` is defined to target Windows 10 version by default for all rules, for example for Windows 7, define a new variable that looks like this:\
+```$Platform = "10.0+" #Windows 10 and above``` is defined to target Windows 10 and above by default for all rules, for example for Windows 7, define a new variable that looks like this:\
 
 ```$PlatformWin7 = "6.1" #Windows 7```
 
@@ -52,6 +49,11 @@ then simply replace ```-Platform $Platform``` with ```-Platform $PatformWin7``` 
 In VS Code for example you would simply (CTRL + F) for each script and replace all instances. very simple.
 
 If you miss something you can delete, add or modify rules in GPO later.
+
+Note that if you define your platform globaly (ie. ```$Platform = "6.1"```) instead of making your own variable, just replacing the string, but do not exclude unrelated rules, most of the rules will work, but ie. rules for Store Apps will fail to load.\
+Also ie. rules for programs and services that were introduced in Windows 10 will be most likely applied but redundant.
+
+What this means, is, just edit the GPO later to refine your imports if you go that route.
 
 # Step by step quick usage
 1. Right click on the Task bar and select `Taskbar settings`
