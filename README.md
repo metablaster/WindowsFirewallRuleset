@@ -55,6 +55,8 @@ Also ie. rules for programs and services that were introduced in Windows 10 will
 
 What this means, is, just edit the GPO later to refine your imports if you go that route.
 
+In any case, new system or old, **know that Home versions of Windows do not have GPO (Local Group Policy), therefore not possible to make use of this project.**
+
 # Step by step quick usage
 Note: these steps here are for somebody who doesn't know how to use `git`, `Powershell` or `Local group policy`
 1. Right click on the Task bar and select `Taskbar settings`
