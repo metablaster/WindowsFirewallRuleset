@@ -1,5 +1,14 @@
 ## WindowsFirewallRuleset
 
+# License notice
+WindowsFirewallRuleset  Copyright (c) 2019 metablaster\
+Indented.Net.IP         Copyright (c) 2016 Chris Dent
+
+For more info see:\
+LICENSE.md\
+LICENSE\
+Indented.Net.IP\LICENSE
+
 # About WindowsFirewallRuleset
 - Windows firewall rulles organized into individual powershell scripts according to:
 1. Rule group
