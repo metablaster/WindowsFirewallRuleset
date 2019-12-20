@@ -78,7 +78,7 @@ In addition, explanation of other parameters which are not self explanatory or w
 There are other stores not mentioned here, which are used in corporate networks, AD's or Domains, so irrelevant for home users.
 
 # PARAMETER VALUES EXAMPLE
-This is how parameters are used on command line, most of them need to enclosed in quotes if assigned to variable first.
+This is how parameters are used on command line, most of them need to be enclosed in quotes if assigned to variable first.
 ```Name                  = "NotePadFirewallRule"
 DisplayName           = "Firewall Rule for program.exe"
 Group                 = "Program Firewall Rule Group"
