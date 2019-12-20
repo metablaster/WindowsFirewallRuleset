@@ -182,5 +182,3 @@ Select-Object -Expand Value
 # Get-AppxPackage -PackageTypeFilter Main | Where-Object { $_.SignatureKind -eq "System" -and $_.Name -like "Microsoft*" } | Sort-Object Name | ForEach-Object {
 #     Get-AppSID($_.PackageFamilyName)
 # }
-
-
