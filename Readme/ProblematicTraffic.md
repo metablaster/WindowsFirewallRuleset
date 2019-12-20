@@ -1,7 +1,7 @@
 
-## Problematic network traffic
+# Problematic network traffic
 
-# Case 1: List of Windows services failing to connect outbound**
+## Case 1: List of Windows services failing to connect outbound
 
 Program: `"%SystemRoot%\System32\svchost.exe"`
 
@@ -52,7 +52,7 @@ and that means our allow rule did not work. (Possible bug in WFP or lack of info
 3. NT AUTHORITY\LOCAL SERVICE
 4. NT AUTHORITY\NETWORK SERVICE
 
-# Case 2: List of dropped outbound packets during system boot**
+## Case 2: List of dropped outbound packets during system boot
 1. svchost.exe sending DNS request to configure DNS server (service unknown)
 2. svchost.exe UDP multicast to 239.255.555.250 (service unknown)
 3. svchost.exe UDP multicast to 224.0.0.252 (service unknown)
@@ -74,7 +74,7 @@ and that means our allow rule did not work. (Possible bug in WFP or lack of info
 - what this means is, there is no other way but to ignore these drops, there is nothing we can do about this.
 - Additional investigation needed by allowing all explicitly.
 
-# Case 3: Event log shows inbound packet drops, firewall log does not show these drops
+## Case 3: Event log shows inbound packet drops, firewall log does not show these drops
 1. Inbound from DNS server source port 53 to random local port
 2. Inbound from github source port 22 to random local port
 3. Inbound TCP (protocol 6) source port 443 to random local port
@@ -91,7 +91,7 @@ such as google chrome, CDN ensures download of content from server most close to
 > My Firewall is reporting an "Unknown" Akamai Connection from port 443 of your server. Why?
 >> When you connect to a site that is "Akamaized" with SSL content (Secure Sockets Layer), your browser downloads an HTML file containing embedded URLs that tell your browser that some of the objects necessary to finish displaying the page are located on Akamai servers. Next, your browser contacts an Akamai server to obtain these images or streaming content. Since the contact is made from port 443 of our server, this transaction is a legitimate HTTPS connection. Generally a TCP service runs on a server on a well-known port number less than 1024; in this case SSL service runs on port 443. A client connects with a random port number greater than 1023 that is assigned by the local operating system.
 
-# Case 4: Updating Microsoft Office fails
+## Case 4: Updating Microsoft Office fails
 1. either manually or automatic, updating office fails because outbound connection is blocked despite correct allow rules
 
 **Case 4: Troubleshooting**
@@ -104,5 +104,5 @@ such as google chrome, CDN ensures download of content from server most close to
 1. Impossible to define a rule which would monitor behavior of such stupidly designed programs.
 - Resolution is to define a "temporary" rule which would be disabled by default, and enabled only during update of office.
 
-# Case 5: Inbound protocol = 0 ports = 0
+## Case 5: Inbound protocol = 0 ports = 0
 - TODO: Investigation needed.
