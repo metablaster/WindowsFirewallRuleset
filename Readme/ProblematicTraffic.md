@@ -38,7 +38,7 @@ Background Intelligent Transfer Service
 firewall is set to block all outbound by default.
 and that means our allow rule did not work. (Possible bug in WFP or lack of information)
 
-[Reference](https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/event-5157)
+[Reference for auditing](https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/event-5157)
 
 **Case 1: Audit result**
 - Rules based on services automatically assign SID which is service SID, and only those SID's are allowed network access.
@@ -75,7 +75,7 @@ and that means our allow rule did not work. (Possible bug in WFP or lack of info
 - what this means is, there is no other way but to ignore these drops, there is nothing we can do about this.
 - Additional investigation needed by allowing all explicitly.
 
-[Reference](https://docs.microsoft.com/en-us/windows/win32/fwp/basic-operation)
+[Reference for WFP Operation](https://docs.microsoft.com/en-us/windows/win32/fwp/basic-operation)
 
 ## Case 3: Event log shows inbound packet drops, firewall log does not show these drops
 1. Inbound from DNS server source port 53 to random local port
@@ -95,7 +95,7 @@ such as google chrome, CDN ensures download of content from server most close to
 >> When you connect to a site that is "Akamaized" with SSL content (Secure Sockets Layer), your browser downloads an HTML file containing embedded URLs that tell your browser that some of the objects necessary to finish displaying the page are located on Akamai servers. Next, your browser contacts an Akamai server to obtain these images or streaming content. Since the contact is made from port 443 of our server, this transaction is a legitimate HTTPS connection. Generally a TCP service runs on a server on a well-known port number less than 1024; in this case SSL service runs on port 443. A client connects with a random port number greater than 1023 that is assigned by the local operating system.
 - Additinoal investigation needed for possible firewall rule resolution, for now it's safer to ignore these than defining a rule that would possibly compromize our system.
 
-[Reference](https://www.akamai.com/us/en/support/end-user-faq.jsp)
+[Reference for akamai](https://www.akamai.com/us/en/support/end-user-faq.jsp)
 
 ## Case 4: Updating Microsoft Office fails
 1. either manually or automatic, updating office fails because outbound connection is blocked despite correct allow rules
@@ -105,12 +105,15 @@ such as google chrome, CDN ensures download of content from server most close to
 - Clicktorun.exe starts downloading the most recent version of itself.
 - After finishing the download Clicktorun.exe starts the downloaded version which then downloads the new office version.
 - The downloaded clicktorun wants to communicate with Microsoft servers directly completely bypassing our rules.
+- The downloaded clicktorun resides in folder whose name is random number of unknown meaning
 
-[Reference](https://www.reddit.com/r/sysadmin/comments/7hync7/updating_office_2016_hb_click_to_run_through)
+[Reference for ClickToRun](https://www.reddit.com/r/sysadmin/comments/7hync7/updating_office_2016_hb_click_to_run_through)
 
 **Case 4: Audit result**
 1. Impossible to define a rule which would monitor behavior of such stupidly designed programs.
 - Resolution is to define a "temporary" rule which would be disabled by default, and enabled only during update of office.
+- Note that you can't specify program in this rule before starting download because the download process creates a new random folder each time where it puts the executable, so you end up in Cat and Mouse game.
+- What we can do however is specify protocol, ports and users allowed, which is NT AUTHORITY\SYSTEM
 
 ## Case 5: Outbound protocol 0 port 0
 - TODO: Investigation needed.
