@@ -51,6 +51,7 @@ if(RunThis("Applying Inbound IPv4 Rules..."))
     # Load Inbound rules
     & "$ScriptPath\IPv4\Inbound\AdditionalNetworking.ps1"
     & "$ScriptPath\IPv4\Inbound\BasicNetworking.ps1"
+    & "$ScriptPath\IPv4\Inbound\Broadcast.ps1"
     & "$ScriptPath\IPv4\Inbound\ICMP.ps1"
     & "$ScriptPath\IPv4\Inbound\InternetBrowser.ps1"
     & "$ScriptPath\IPv4\Inbound\MicrosoftOffice.ps1"
@@ -70,6 +71,7 @@ if(RunThis("Applying Outbound IPv4 Rules..."))
     # Load Outbound rules
     & "$ScriptPath\IPv4\Outbound\AdditionalNetworking.ps1"
     & "$ScriptPath\IPv4\Outbound\BasicNetworking.ps1"
+    & "$ScriptPath\IPv4\Outbound\Broadcast.ps1"
     & "$ScriptPath\IPv4\Outbound\ICMP.ps1"
     & "$ScriptPath\IPv4\Outbound\InternetBrowser.ps1"
     & "$ScriptPath\IPv4\Outbound\MicrosoftOffice.ps1"
