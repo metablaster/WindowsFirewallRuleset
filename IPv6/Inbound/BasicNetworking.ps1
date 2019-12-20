@@ -50,15 +50,14 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 #
 # Loop back
-#
-
 # TODO: why specifying loopback address ::1/128 doesn't work?
+#
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Loopback IP" -Service Any -Program Any `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any -InterfaceAlias $Loopback `
 -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
--LocalUser Any `
+-EdgeTraversalPolicy Block -LocalUser Any `
 -Description "This rule covers both IPv4 and IPv6 loopback interface.
 Network software and utilities use loopback address to access a local computer's TCP/IP network resources."
 

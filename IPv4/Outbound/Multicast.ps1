@@ -57,7 +57,7 @@ if (!(RunThis)) { exit }
 $Group = "Multicast IPv4"
 $Profile = "Private, Domain"
 $Direction = "Outbound"
-$MulticastUsers = Get-SDDLFromAccounts @("NT AUTHORITY\NETWORK SERVICE", "NT AUTHORITY\LOCAL SERVICE") # "NT AUTHORITY\SYSTEM"
+$MulticastUsers = Get-SDDLFromAccounts @("NT AUTHORITY\NETWORK SERVICE", "NT AUTHORITY\LOCAL SERVICE")
 
 #First remove all existing rules matching setup
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
@@ -68,12 +68,11 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # The transition from boot-time to persistent filters could be several seconds, or even longer on a slow machine.
 #
 
-# TODO: Testing with nt system
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Local Network Control Block" -Service Any -Program Any `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 224.0.0.0-224.0.0.255 `
--LocalUser (Get-SDDLFromAccounts @("NT AUTHORITY\NETWORK SERVICE", "NT AUTHORITY\LOCAL SERVICE", "NT AUTHORITY\SYSTEM")) -LocalOnlyMapping $false -LooseSourceMapping $false `
+-LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "Addresses in the Local Network Control Block are used for protocol control traffic that is not forwarded off link.
 Examples of this type of use include OSPFIGP All Routers (224.0.0.5)."
 
@@ -165,10 +164,9 @@ The extension presented in this document allows for unicast-prefix-based assignm
 By delegating multicast addresses at the same time as unicast prefixes, network operators will be able to identify
 their multicast addresses without needing to run an inter-domain allocation protocol."
 
-# TODO: testing with nt system during boot time
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Administratively Scoped Block" -Service Any -Program Any `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 239.0.0.0-239.255.255.255 `
--LocalUser (Get-SDDLFromAccounts @("NT AUTHORITY\NETWORK SERVICE", "NT AUTHORITY\LOCAL SERVICE", "NT AUTHORITY\SYSTEM")) -LocalOnlyMapping $false -LooseSourceMapping $false `
+-LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "Addresses in the Administratively Scoped Block are for local use within a domain."

@@ -85,7 +85,7 @@ $Group = "Multicast IPv6"
 $Profile = "Private, Domain"
 $Description = "http://www.iana.org/assignments/ipv6-multicast-addresses/ipv6-multicast-addresses.xhtml"
 $Direction = "Outbound"
-$MulticastUsers = Get-SDDLFromAccounts @("NT AUTHORITY\NETWORK SERVICE", "NT AUTHORITY\LOCAL SERVICE") # "NT AUTHORITY\SYSTEM"
+$MulticastUsers = Get-SDDLFromAccounts @("NT AUTHORITY\NETWORK SERVICE", "NT AUTHORITY\LOCAL SERVICE")
 
 #First remove all existing rules matching setup
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
@@ -212,13 +212,11 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description $Description
 
-# TODO: testing and not working with (Get-SDDLFromAccounts @("NT AUTHORITY\NETWORK SERVICE", "NT AUTHORITY\LOCAL SERVICE", "NT AUTHORITY\SYSTEM"))
-# nt system was added for testing, remove
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Link-Local Multicast - SSDP" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::c -LocalPort Any -RemotePort Any `
--LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
+-LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
@@ -326,20 +324,18 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description $Description
 
-# TODO: testing with nt system during boot time
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Link-Local Multicast - All-dhcp-agents" -Service Any -Program Any `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::1:2 -LocalPort Any -RemotePort Any `
--LocalUser (Get-SDDLFromAccounts @("NT AUTHORITY\NETWORK SERVICE", "NT AUTHORITY\LOCAL SERVICE", "NT AUTHORITY\SYSTEM")) -LocalOnlyMapping $false -LooseSourceMapping $false `
+-LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description $Description
 
-# TODO: testing with nt system during boot time
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Link-Local Multicast - Link-local Multicast Name Resolution" -Service Any -Program Any `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::1:3 -LocalPort Any -RemotePort Any `
--LocalUser (Get-SDDLFromAccounts @("NT AUTHORITY\NETWORK SERVICE", "NT AUTHORITY\LOCAL SERVICE", "NT AUTHORITY\SYSTEM")) -LocalOnlyMapping $false -LooseSourceMapping $false `
+-LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description $Description
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `

@@ -50,9 +50,8 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 #
 # Loop back
-#
-
 # TODO: why specifying loopback address ::1/128 doesn't work?
+#
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Loopback IP" -Service Any -Program Any `
