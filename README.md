@@ -1,14 +1,5 @@
 ## WindowsFirewallRuleset
 
-# License notice
-WindowsFirewallRuleset  Copyright (c) 2019 metablaster\
-Indented.Net.IP         Copyright (c) 2016 Chris Dent
-
-For more info see:\
-LICENSE.md\
-LICENSE\
-Indented.Net.IP\LICENSE
-
 # About WindowsFirewallRuleset
 - Windows firewall rulles organized into individual powershell scripts according to:
 1. Rule group
@@ -27,6 +18,18 @@ Indented.Net.IP\LICENSE
 
 - You can choose which rulles you want, and apply only those or apply them all with single command.
 - All the rules are loaded into Local group policy giving you full power over default windows firewall.
+
+# License notice
+WindowsFirewallRuleset
+> Copyright (c) 2019 metablaster
+
+Indented.Net.IP
+> Copyright (c) 2016 Chris Dent
+
+For more info see:\
+LICENSE.md\
+LICENSE\
+Indented.Net.IP\LICENSE
 
 # Minimum system requirements
 1. Windows 10 Pro/Enterprise
