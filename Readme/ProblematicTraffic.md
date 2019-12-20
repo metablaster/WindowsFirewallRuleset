@@ -37,7 +37,7 @@ Background Intelligent Transfer Service
 13. if value is "Default Outbound" it means no specific block rule, but,
 firewall is set to block all outbound by default.
 and that means our allow rule did not work. (Possible bug in WFP or lack of information)
-14. For more info see: https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/event-5157
+[Reference](https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/event-5157)
 
 **Case 1: Audit result**
 - Rules based on services automatically assign SID which is service SID, and only those SID's are allowed network access.
@@ -73,6 +73,7 @@ and that means our allow rule did not work. (Possible bug in WFP or lack of info
 - During boot WFP (part of windows firewall) is set to block all, regardless of rules.
 - what this means is, there is no other way but to ignore these drops, there is nothing we can do about this.
 - Additional investigation needed by allowing all explicitly.
+[Reference](https://docs.microsoft.com/en-us/windows/win32/fwp/basic-operation)
 
 ## Case 3: Event log shows inbound packet drops, firewall log does not show these drops
 1. Inbound from DNS server source port 53 to random local port
@@ -90,6 +91,8 @@ and not unsolicited.
 such as google chrome, CDN ensures download of content from server most close to your location.
 > My Firewall is reporting an "Unknown" Akamai Connection from port 443 of your server. Why?
 >> When you connect to a site that is "Akamaized" with SSL content (Secure Sockets Layer), your browser downloads an HTML file containing embedded URLs that tell your browser that some of the objects necessary to finish displaying the page are located on Akamai servers. Next, your browser contacts an Akamai server to obtain these images or streaming content. Since the contact is made from port 443 of our server, this transaction is a legitimate HTTPS connection. Generally a TCP service runs on a server on a well-known port number less than 1024; in this case SSL service runs on port 443. A client connects with a random port number greater than 1023 that is assigned by the local operating system.
+- Additinoal investigation needed for possible firewall rule resolution, for now it's safer to ignore these than defining a rule that would possibly compromize our system.
+[Reference](https://www.akamai.com/us/en/support/end-user-faq.jsp)
 
 ## Case 4: Updating Microsoft Office fails
 1. either manually or automatic, updating office fails because outbound connection is blocked despite correct allow rules
@@ -99,6 +102,7 @@ such as google chrome, CDN ensures download of content from server most close to
 - Clicktorun.exe starts downloading the most recent version of itself.
 - After finishing the download Clicktorun.exe starts the downloaded version which then downloads the new office version.
 - The downloaded clicktorun wants to communicate with Microsoft servers directly completely bypassing our rules.
+[Reference](https://www.reddit.com/r/sysadmin/comments/7hync7/updating_office_2016_hb_click_to_run_through)
 
 **Case 4: Audit result**
 1. Impossible to define a rule which would monitor behavior of such stupidly designed programs.
