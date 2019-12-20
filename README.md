@@ -19,15 +19,13 @@
 - You can choose which rulles you want, and apply only those or apply them all with single command.
 - All the rules are loaded into Local group policy giving you full power over default windows firewall.
 
-# License notice
-WindowsFirewallRuleset (MIT)
-> Copyright (c) 2019 metablaster
+This project **"WindowsFirewallRuleset"** is licensed under **MIT** license.\
+Subproject **"Indented.Net.IP"** (3rd party code) located in "Indented.Net.IP" subfolder is licensed under **ISC** license.
 
-Indented.Net.IP (ISC)
-> Copyright (c) 2016 Chris Dent
+License, Copyright notices and all material of subproject is in it's own folder\
+License and Copyright notices for this project is in project root folder
 
-For more info see:\
-LICENSE.md\
+For more info see respective licences:\
 LICENSE\
 Indented.Net.IP\LICENSE
 
