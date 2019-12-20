@@ -56,6 +56,7 @@ Also ie. rules for programs and services that were introduced in Windows 10 will
 What this means, is, just edit the GPO later to refine your imports if you go that route.
 
 # Step by step quick usage
+Note: these steps here are for somebody who doesn't know how to use `git`, `Powershell` or `Local group policy`
 1. Right click on the Task bar and select `Taskbar settings`
 2. Toggle on `Replace Command Prompt with Windows Powershell in the menu when I right click the start button`
 3. Right click on Start button in Windows system
