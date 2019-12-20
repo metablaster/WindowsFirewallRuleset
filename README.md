@@ -63,7 +63,7 @@ Note: these steps here are for somebody who doesn't know how to use `git`, `Powe
 2. Toggle on `Replace Command Prompt with Windows Powershell in the menu when I right click the start button`
 3. Right click on Start button in Windows system
 4. Click `Windows Powershell (Administrator)` to open Powershell as Administrator (Input Admin password if needed)
-5. Type: ```Get-ExecutionPolicy``` and remeber what the ouput is.
+5. Type: (or copy paste command) ```Get-ExecutionPolicy``` and remeber what the ouput is.
 6. Type ```Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force```
 7. Type: ```cd C:```
 8. Copy paste into console: ```git clone git@github.com:metablaster/WindowsFirewallRuleset.git``` and hit enter
@@ -76,7 +76,8 @@ for example if your username is Patrick the line should look like `$UserName = "
 14. Back to Powershell console and copy paste into console: ```.\Main.ps1``` and hit enter (this will load all the rulles)
 15. Follow prompt output, (ie. hit enter each time to proceed until done), it will take at least 10 minutes of your attention.
 16. If you encounter errors, you have several options such as, ignore the errors or fix the script that produced the error and re-run that script only once again later.
-17. Once execution is done recall execution policy from step 5 and type: ```Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force``` (if previous policy was "RemoteSigned")
+17. Once execution is done recall execution policy from step 5 and type:\
+```Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force``` (if previous policy was "RemoteSigned")
 
 # Where are my rules?
 Rules are loaded into Local group policy, follow bellow steps to open local group policy.
