@@ -104,5 +104,5 @@ such as google chrome, CDN ensures download of content from server most close to
 1. Impossible to define a rule which would monitor behavior of such stupidly designed programs.
 - Resolution is to define a "temporary" rule which would be disabled by default, and enabled only during update of office.
 
-## Case 5: Inbound protocol = 0 ports = 0
+## Case 5: Outbound protocol 0 port 0
 - TODO: Investigation needed.
