@@ -39,7 +39,7 @@ $SystemGroup = "Store Apps - System"
 $Profile = "Private, Public"
 $Direction = "Inbound"
 $OwnerSID = Get-UserSID("$UserName")
-# $NetworkApps = Get-Content -Path "..\NetworkApps.txt"
+# $NetworkApps = Get-Content -Path "$PSScriptRoot\..\NetworkApps.txt"
 
 #First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue

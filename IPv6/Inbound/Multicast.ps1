@@ -95,7 +95,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Interface-Local Multicast" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled True-Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress ff01::/16 -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description $Description
