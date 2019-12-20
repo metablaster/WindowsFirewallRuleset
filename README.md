@@ -20,10 +20,10 @@
 - All the rules are loaded into Local group policy giving you full power over default windows firewall.
 
 # License notice
-WindowsFirewallRuleset
+WindowsFirewallRuleset (MIT)
 > Copyright (c) 2019 metablaster
 
-Indented.Net.IP
+Indented.Net.IP (ISC)
 > Copyright (c) 2016 Chris Dent
 
 For more info see:\
