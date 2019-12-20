@@ -65,48 +65,49 @@ In addition, explanation of other parameters which are not self explanatory or w
 3. RSOP             (example: `-PolicyStore RSOP`)
 4. ActiveStore      (example: `-PolicyStore ActiveStore`)
 
-Persistent Store:
-- is what you see in Windows Firewall with Advanced security, accessed trough control panel or System settings.
-GPO Store:
-- is specified as computer name, and it is what you see in Local group policy, accessed trough secpol.msc or gpedit.msc
-RSOP:
-- stands for "resultant set of policy" and is collection of all GPO stores that apply to local computer.
-- this applies to domain computers, on your home computer RSOP consists of only single local GPO (group policy object)
-Active Store:
-- Active store is collection (sum) of Persistent store and all GPO stores (RSOP) that apply to local computer. in other words it's a master store.
+- Persistent Store:
+> is what you see in Windows Firewall with Advanced security, accessed trough control panel or System settings.
+- GPO Store:
+> is specified as computer name, and it is what you see in Local group policy, accessed trough secpol.msc or gpedit.mscq
+- RSOP:
+> stands for "resultant set of policy" and is collection of all GPO stores that apply to local computer.
+> this applies to domain computers, on your home computer RSOP consists of only single local GPO (group policy object)
+- Active Store:
+> Active store is collection (sum) of Persistent store and all GPO stores (RSOP) that apply to local computer. in other words it's a master store.
 
 There are other stores not mentioned here, which are used in corporate networks, AD's or Domains, so irrelevant for home users.
 
 # PARAMETER VALUES EXAMPLE
-
-`Name                 = "NotePadFirewallRule"
-DisplayName           = "Firewall Rule for Notepad.exe"
-Group                 = "NotePad Firewall Rule Group"
+This is how parameters are used on command line, most of them need to enclosed in quotes if assigned to variable first.
+```Name                  = "NotePadFirewallRule"
+DisplayName           = "Firewall Rule for program.exe"
+Group                 = "Program Firewall Rule Group"
 Ensure                = "Present"
-Enabled               = "True"
-Profile               = ("Domain", "Private")
-Direction             = "OutBound"
-RemotePort            = ("8080", "8081")
-LocalPort             = ("9080", "9081")
-Protocol              = "TCP"
-Description           = "Firewall Rule for Notepad.exe"
-Program               = "c:\windows\system32\notepad.exe"
-Service               = "WinRM"
+Enabled               = True
+Profile               = "Domain, Private"
+Direction             = Outbound
+RemotePort            = 8080, 8081
+LocalPort             = 9080, 9081
+Protocol              = TCP
+Description           = "Firewall Rule for program.exe"
+Program               = "c:\windows\system32\program.exe"
+Service               = WinRM
 Authentication        = "Required"
 Encryption            = "Required"
 InterfaceAlias        = "Ethernet"
-InterfaceType         = "Wired"
-LocalAddress          = ("192.168.2.0-192.168.2.128","192.168.1.0/255.255.255.0","10.0.0.0/8")
+InterfaceType         = Wired
+LocalAddress          = 192.168.2.0-192.168.2.128, 192.168.1.0/255.255.255.0, 10.0.0.0/8
 LocalUser             = "O:LSD:(D;;CC;;;S-1-15-3-4)(A;;CC;;;S-1-5-21-3337988176-3917481366-464002247-1001)"
 Package               = "S-1-15-2-3676279713-3632409675-756843784-3388909659-2454753834-4233625902-1413163418"
 Platform              = "6.1"
-RemoteAddress         = ("192.168.2.0-192.168.2.128","192.168.1.0/255.255.255.0","10.0.0.0/8")
+RemoteAddress         = 192.168.2.0-192.168.2.128, 192.168.1.0/255.255.255.0, 10.0.0.0/8
 RemoteMachine         = "O:LSD:(D;;CC;;;S-1-5-21-1915925333-479612515-2636650677-1621)(A;;CC;;;S-1-5-21-1915925333-479612515-2636650677-1620)"
 RemoteUser            = "O:LSD:(D;;CC;;;S-1-15-3-4)(A;;CC;;;S-1-5-21-3337988176-3917481366-464002247-1001)"
-DynamicTransport      = "ProximitySharing"
-EdgeTraversalPolicy   = "Block"
-IcmpType              = ("51","52")
+DynamicTransport      = ProximitySharing
+EdgeTraversalPolicy   = Block
+IcmpType              = 51, 52
+IcmpType              = 34:4
 LocalOnlyMapping      = $true
 LooseSourceMapping    = $true
 OverrideBlockRules    = $true
-Owner                 = "S-1-5-21-3337988176-3917481366-464002247-500"`
+Owner                 = "S-1-5-21-3337988176-3917481366-464002247-500"```
