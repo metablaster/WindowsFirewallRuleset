@@ -4,19 +4,22 @@
 - Windows firewall rulles organized into individual powershell scripts according to:
 1. Rule group
 2. Traffic direction
-3. Further sorted according to programs and services
+3. IP version (IPv4 / IPv6)
+4. Further sorted according to programs and services
 
 - such as for example:
 2. ICMP traffic
 3. Browser rules
 4. rules for Windows system
-5. Windows services
-6. Microsoft programs
-7. 3rd party programs
-8. multicast traffic
-9. etc... 
+5. Store apps
+6. Windows services
+7. Microsoft programs
+8. 3rd party programs
+9. broadcast traffic
+10. multicast traffic
+11. and the list goes on... 
 
-- You can choose which rulles you want, and apply only those or apply them all with single command.
+- You can choose which rulles you want, and apply only those or apply them all with single command to your firewall.
 - All the rules are loaded into Local group policy giving you full power over default windows firewall.
 
 This project **"WindowsFirewallRuleset"** is licensed under **MIT** license.\
@@ -34,34 +37,41 @@ Indented.Net.IP\LICENSE
 2. Windows Powershell 5 [Download Powershell](https://github.com/PowerShell/PowerShell)
 3. Git (Optional) [Download Git](https://git-scm.com/downloads)
 
-For older system such as Windows 7 most of the rules will work, ie. rules for Store Apps will not work.
+For older system such as Windows 7 most of the rules will work, ie. rules for Store Apps will fail to load.\
+Also ie. rules for programs and services that were introduced in Windows 10 will be applied but redundant.
 
-To be able to apply rules to older system, edit the `GlobalVariables.ps1` and edit the line:
+To be able to apply rules to older systems, edit the `GlobalVariables.ps1` and add a new variable that defines your system version:
 
-```$Platform = "10.0+" #Windows 10 and above``` by specifying windows version, for example for Windows 7
+```$Platform = "10.0+" #Windows 10 and above``` is defined to target Windows 10 version by default for all rules, for example for Windows 7, define a new variable that looks like this:\
 
-it should look like:
-```$Platform = "6.1" #Windows 7```
+```$PlatformWin7 = "6.1" #Windows 7```
 
-Next you can delete or comment out Widnows 10 related rules by editing the scripts.
+Next you open individual ruleset scripts, and take a look which rules you want to be loaded into your firewall,\
+then simply replace ```-Platform $Platform``` with ```-Platform $PatformWin7``` for each rule you want.
 
-Otherwise try just ignore the execution errors and run the scripts by force, you can delete irrelevant rules in GPO later.
+In VS Code for example you would simply (CTRL + F) for each script and replace all instances. very simple.
+
+If you miss something you can delete, add or modify rules in GPO later.
 
 # Step by step quick usage
 1. Right click on the Task bar and select `Taskbar settings`
 2. Toggle on `Replace Command Prompt with Windows Powershell in the menu when I right click the start button`
 3. Right click on Start button in Windows system
 4. Click `Windows Powershell (Administrator)` to open Powershell as Administrator (Input Admin password if needed)
-5. Type: ```cd C:```
-6. Copy paste into console: ```git clone git@github.com:metablaster/WindowsFirewallRuleset.git``` and hit enter
-7. Copy paste into console: ```cd WindowsFirewallRuleset``` and hit enter
-8. Open file explorer and navigate to `C:\WindowsFirewallRuleset\Modules`
-9. Open `GlobalVariables.ps1` with your preffered code editor such as VS Code or Powershell ISE
-10. Edit the line `$User = Get-UserSDDL User`, input your username by replacing 'User' with your username,
-for example if your username is Patrick the line should look like `$User = Get-UserSDDL Patrick`
-11. Save and close the Powershell script file.
-12. Back to Powershell console and copy paste into console: ```.\Main.ps1``` and hit enter (this will load all the rulles)
-13. Follow prompt output, (ie. hit enter each time to proceed until done)
+5. Type: ```Get-ExecutionPolicy``` and remeber what the ouput is.
+6. Type ```Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force```
+7. Type: ```cd C:```
+8. Copy paste into console: ```git clone git@github.com:metablaster/WindowsFirewallRuleset.git``` and hit enter
+9. Copy paste into console: ```cd WindowsFirewallRuleset``` and hit enter
+10. Open file explorer and navigate to `C:\WindowsFirewallRuleset\Modules`
+11. Open `GlobalVariables.ps1` with your preffered code editor such as VS Code or Powershell ISE
+12. Edit the line `$UserName = "User"`, input your username by replacing "User" with your username,
+for example if your username is Patrick the line should look like `$UserName = "Patrick"`
+13. Save and close the Powershell script file.
+14. Back to Powershell console and copy paste into console: ```.\Main.ps1``` and hit enter (this will load all the rulles)
+15. Follow prompt output, (ie. hit enter each time to proceed until done), it will take at least 10 minutes of your attention.
+16. If you encounter errors, you have several options such as, ignore the errors or fix the script that produced the error and re-run that script only once again later.
+17. Once execution is done recall execution policy from step 5 and type: ```Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force``` (if previous policy was "RemoteSigned")
 
 # Where are my rules?
 Rules are loaded into Local group policy, follow bellow steps to open local group policy.
@@ -80,13 +90,19 @@ In both cases the script will delete all of the existing rules that match the ru
 into Local Group Policy.
 
 # Deleting rules
-At the moment the easiest way is to select all the rules you want to delete in Local Group Policy, right click and delete.
+At the moment the easiest way is to select all the rules you want to delete in Local Group Policy, right click and delete.\
+To revert to your old firewall state, you will need to delete all the rules from GPO, and set all properties to "Not configured" when right clicking on node `Windows Defender Firewall with Advanced Security - Local Group Policy Object`
 
 # Manage loaded rules
 There are 2 ways to manage your rules:
 1. Using Local Group Policy, this method gives you limited freedom on what you can do whith the rules, such as disabling them or changing some attributes.
 2. Editting Powershell scripts, this method gives you full control, you can improve the rules, add new ones or screw them up.
 
-# Contribution
-Feel free to contribute new rules, or improvements for existing rules or scripts.
-Just make sure you follow existing code style.
+# Contribution or suggestions
+Feel free to suggest or contribute new rules, or improvements for existing rules or scripts.\
+Just make sure you follow existing code style, as follows:
+1. Note that each rule uses exactly the same order or paramters split into exactly the same number of lines.\
+This is so that when you need to search for something it's easy to see what is where right away.
+2. Provide documentation and official reference for your rules so that it can be easy to verify that these rules do not contain mistakes, for example, for ICMP rules you would provide a link to [IANA](https://www.iana.org/) with relevant reference document.
+3. If you would like to suggest new rules or improving existing ones, but you do not have the skills to upload an update here, please open new issue here on github and provide details prefferably with documentation.
+
