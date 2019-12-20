@@ -29,8 +29,8 @@ License, Copyright notices and all material of subproject is in it's own folder\
 License and Copyright notices for this project is in project root folder
 
 For more info see respective licences:\
-LICENSE\
-Indented.Net.IP\LICENSE
+[LICENSE](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/LICENSE)\
+[Indented.Net.IP\LICENSE](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Indented.Net.IP/LICENSE)
 
 # Minimum system requirements
 1. Windows 10 Pro/Enterprise
