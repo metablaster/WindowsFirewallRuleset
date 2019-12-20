@@ -182,3 +182,18 @@ Select-Object -Expand Value
 # Get-AppxPackage -PackageTypeFilter Main | Where-Object { $_.SignatureKind -eq "System" -and $_.Name -like "Microsoft*" } | Sort-Object Name | ForEach-Object {
 #     Get-AppSID($_.PackageFamilyName)
 # }
+
+# Import-Module -Name .\Indented.Net.IP
+
+# $NIC_CONFIG = Get-WmiObject Win32_NetworkAdapterConfiguration | Where-Object {$_.DefaultIPGateway -ne $null}
+# $IPAddress = $NIC_CONFIG.IPAddress
+
+# $IPAddress = $IPAddress[0]
+# $SubnetMask = $NIC_CONFIG.IPSubnet[0]
+
+
+# $BroadCast = Get-NetworkSummary $IPAddress $SubnetMask | Select-Object -ExpandProperty BroadcastAddress | Select-Object -ExpandProperty IPAddressToString
+
+# $IPAddress
+# $SubnetMask
+# $BroadCast

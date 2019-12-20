@@ -48,7 +48,7 @@ if (!(RunThis)) { exit }
 $Group = "Multicast IPv6"
 $Profile = "Private, Domain"
 $Group = "Broadcast"
-$Direction = "Outbound"
+$Direction = "Inbound"
 
 # First remove all existing rules matching setup
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
@@ -59,16 +59,16 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Limited Broadcast" -Service Any -Program System `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 255.255.255.255 -LocalPort Any -RemotePort Any `
--LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
+-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction $Direction -Protocol UDP -LocalAddress 255.255.255.255 -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "LAN Broadcast" -Service Any -Program System `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol UDP -LocalAddress $LocalHost -RemoteAddress $Broadcast -LocalPort Any -RemotePort Any `
--LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
+-Direction $Direction -Protocol UDP -LocalAddress $Broadcast -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
+-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description ""
 
 # TODO: check if virtual adapter exists and apply rule

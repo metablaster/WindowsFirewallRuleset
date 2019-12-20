@@ -1,6 +1,7 @@
 
 # Includes
 . "$PSScriptRoot\Functions.ps1"
+Import-Module -Name $PSScriptRoot\..\Indented.Net.IP
 
 # Project wide variables
 $Platform = "10.0+" #Windows 10 and above
@@ -10,6 +11,12 @@ $Debug = $false #To add rules to firewall for real set to false
 $Execute = $false #To prompt for each rule set to true
 $ServiceHost = "%SystemRoot%\System32\svchost.exe" #Most used program
 $Interface = "Wired, Wireless" #Default network interface card
+
+# Network IP configuration (get only IPv4 config, index 0, if IPv6 is configured it's at index 1)
+$NIC_CONFIG = Get-WmiObject Win32_NetworkAdapterConfiguration | Where-Object {$_.DefaultIPGateway -ne $null}
+$LocalHost = $NIC_CONFIG.IPAddress[0]
+$SubnetMask = $NIC_CONFIG.IPSubnet[0]
+$BroadCast = Get-NetworkSummary $LocalHost $SubnetMask | Select-Object -ExpandProperty BroadcastAddress | Select-Object -ExpandProperty IPAddressToString
 
 # NOTE: -LocalUser, -Owner etc. firewall parameters accepts SDDL format only
 # For more complete list see: https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/81d92bba-d22b-4a8c-908a-554ab29148ab
