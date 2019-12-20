@@ -4,7 +4,7 @@ This document explains how to monitor Windows firewall activity and network acti
 
 ## Monitor your firewall like a pro
 As you may already know, Windows firewall does not give us any easy to use tools to monitor what the firewall is doing.\
-However there are few programs and techniques available to monitor firewall activity in live.\
+However there are few programs and techniques available to monitor firewall activity in live.
 
 **Process Monitor**
 - Process monitor is must have program, here is a screenshot as I monitor process network activity right now:\
@@ -18,7 +18,7 @@ click on image to enlarge!
 - Here is a screenshot as I monitor the logs right now, click on image to enlarge:
 ![](https://i.imgur.com/ljHcJss.png)
 
-- Default mTail does not have speial coloring, the colors you see in the screenshot are which I made myself, you can grab\
+- Default mTail does not have speial coloring, the colors you see in the screenshot are which I made myself, you can grab
 this configuration from "Config" folder in this repository, just place it next to mTail executable, restart mTail and 
 open firewall log, which is by default placed in *C:\Windows\System32\LogFiles\Firewall\pfirewall.log*
 
