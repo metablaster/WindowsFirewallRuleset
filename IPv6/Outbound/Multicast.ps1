@@ -68,7 +68,7 @@ Global scope:
 these IPv6 addresses are valid globally and are globally routable.
 #>
 
-# TODO: local address should be known, for inbound rules remote should be known
+# TODO: local address should be known for outbound, for inbound rules remote should be known
 
 #
 # Import global variables
@@ -86,7 +86,7 @@ $Profile = "Private, Domain"
 $Description = "http://www.iana.org/assignments/ipv6-multicast-addresses/ipv6-multicast-addresses.xhtml"
 $Direction = "Outbound"
 
-# TEST: users, interface and loopback
+# TEST: users, interface and loopback, then update inbound rules
 $MulticastUsers = Get-SDDLFromAccounts @("NT AUTHORITY\NETWORK SERVICE", "NT AUTHORITY\LOCAL SERVICE") # , "NT AUTHORITY\SYSTEM"
 # NOTE: we need Any to include IPv6 loopback interface because IPv6 loopback rule does not work on boot, (neither ::1 address nor interface alias)
 $Interface = "Any"

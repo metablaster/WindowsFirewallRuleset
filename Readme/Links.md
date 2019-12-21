@@ -34,3 +34,6 @@ Nobody has all the knowledge in his head, here is a quick "jump" table:
 
 [IPv6 address space](https://www.iana.org/assignments/ipv6-address-space/ipv6-address-space.xml)
 
+[IPv6 link-local address](https://www.cisco.com/c/en/us/support/docs/ip/ip-version-6-ipv6/113328-ipv6-lla.html)
+
+[IPv4 link-local address aka APIPA](https://wiki.wireshark.org/APIPA)

@@ -117,3 +117,15 @@ such as google chrome, CDN ensures download of content from server most close to
 
 ## Case 5: Outbound protocol 0 port 0
 - TODO: Investigation needed.
+
+## Case 6: Dropped inbound UDP from LAN
+1. Firewall log may report inbound UDP drop, ie. from router to local 1900
+
+**Case 6: Troubleshooting**
+1. Use process monitor to detect what processs/service sent/requested UDP connection
+- adjust filter in process monitor to see if any UDP packets are received from same IP to same port.
+- use TCP view or netstat to detect what service is listening on local 1900
+
+**Audit result**
+1. Packets are received just fine but small portion is dropped.
+- additional investigation needed to figure out why.

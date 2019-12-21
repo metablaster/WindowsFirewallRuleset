@@ -26,7 +26,6 @@ SOFTWARE.
 # Make sure to check for updated content!
 #http://www.iana.org/assignments/icmpv6-parameters/icmpv6-parameters.xhtml
 
-
 <#
 Type    Name
 0   Reserved	
@@ -78,6 +77,8 @@ Type    Name
 201	Private experimentation
 255	Reserved for expansion of ICMPv6 informational messages
 #>
+
+# TODO: local and remote addresses need to be adjusted
 
 #
 # Import global variables
@@ -181,7 +182,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Router Advertisement (134)" -Service Any -Program System `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol ICMPv6 -IcmpType 134 -LocalAddress fe80::/64 -RemoteAddress $RouterSpace -LocalPort Any -RemotePort Any `
+-Direction $Direction -Protocol ICMPv6 -IcmpType 134 -LocalAddress Any -RemoteAddress $RouterSpace -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
 
@@ -246,10 +247,11 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
 
+# TODO: inbound equivalent not updated, (reason, localhost IP should be added as well to LocalAddress)
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Multicast Listener Report Version 2 (143)" -Service Any -Program System `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol ICMPv6 -IcmpType 143 -LocalAddress Any -RemoteAddress LocalSubnet6 -LocalPort Any -RemotePort Any `
+-Direction $Direction -Protocol ICMPv6 -IcmpType 143 -LocalAddress Any -RemoteAddress LocalSubnet6, ff02::16 -LocalPort Any -RemotePort Any `
 -Localuser $NT_AUTHORITY_System `
 -Description $Description
 

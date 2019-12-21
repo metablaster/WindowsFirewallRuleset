@@ -80,7 +80,7 @@ Type    Name
 #>
 
 # TODO: edge traversal unknown for some ICMPv6 rules
-# TODO: remote address not strict enough for all rules
+# TODO: local and remote addresses need to be adjusted
 # TODO: add block rules based on remote address
 # TODO: add rule for ISATAP and 4to6
 
@@ -194,7 +194,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Router Advertisement (134)" -Service Any -Program System `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol ICMPv6 -IcmpType 134 -LocalAddress fe80::/64 -RemoteAddress $RouterSpace -LocalPort Any -RemotePort Any `
+-Direction $Direction -Protocol ICMPv6 -IcmpType 134 -LocalAddress Any -RemoteAddress $RouterSpace -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -Localuser $NT_AUTHORITY_System `
 -Description $Description
 
