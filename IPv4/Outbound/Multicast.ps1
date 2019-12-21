@@ -59,7 +59,7 @@ $Profile = "Private, Domain"
 $Direction = "Outbound"
 $MulticastUsers = Get-SDDLFromAccounts @("NT AUTHORITY\NETWORK SERVICE", "NT AUTHORITY\LOCAL SERVICE")
 
-#First remove all existing rules matching setup
+# First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #

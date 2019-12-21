@@ -43,7 +43,7 @@ $Direction = "Inbound"
 #
 $OfficeRoot = "%ProgramFiles%\Microsoft Office\root\Office16"
 
-#First remove all existing rules matching group
+# First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #

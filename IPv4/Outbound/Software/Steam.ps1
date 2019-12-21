@@ -44,7 +44,7 @@ $Direction = "Outbound"
 #
 $SteamRoot = "%ProgramFiles(x86)%\Steam"
 
-#First remove all existing rules matching group
+# First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #

@@ -44,7 +44,7 @@ $Direction = "Outbound"
 $VSRoot = "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community"
 $VSInstallerRoot = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
 
-#First remove all existing rules matching group
+# First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #

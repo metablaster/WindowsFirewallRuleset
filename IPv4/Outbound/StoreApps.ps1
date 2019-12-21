@@ -109,7 +109,7 @@ $Direction = "Outbound"
 $OwnerSID = Get-UserSID("$UserName")
 $NetworkApps = Get-Content -Path "$PSScriptRoot\..\NetworkApps.txt"
 
-#First remove all existing rules matching group
+# First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $SystemGroup -Direction $Direction -ErrorAction SilentlyContinue
 

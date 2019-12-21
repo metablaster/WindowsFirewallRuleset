@@ -97,7 +97,7 @@ $RouterSpace = @("LocalSubnet6", "ff02::2", "fe80::/64") # Messages to/from rout
 $Description = "https://www.iana.org/assignments/icmpv6-parameters/icmpv6-parameters.xhtml"
 $Direction = "Outbound"
 
-#First remove all existing rules matching setup
+# First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #

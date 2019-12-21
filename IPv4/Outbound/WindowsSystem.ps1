@@ -38,7 +38,7 @@ $Group = "Windows System"
 $Profile = "Private, Public"
 $Direction = "Outbound"
 
-#First remove all existing rules matching group
+# First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
@@ -88,7 +88,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Cortana Speach Runtime" -Service Any -Program "%SystemRoot%\System32\Speech_OneCore\common\SpeechModelDownload.exe" `
+-DisplayName "Cortana Speach Model" -Service Any -Program "%SystemRoot%\System32\Speech_OneCore\common\SpeechModelDownload.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 -LocalUser $NT_AUTHORITY_NetworkService `

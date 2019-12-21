@@ -68,7 +68,7 @@ They should not be manually assigned or assigned using DHCP.
 #>
 # $APIPA = "169.254.1.0-169.254.254.255"
 
-#First remove all existing rules matching setup
+# First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #

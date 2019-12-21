@@ -38,7 +38,7 @@ $Group = "Wireless Networking"
 $Interface = "Wireless"
 $Direction = "Outbound"
 
-#First remove all existing rules matching group
+# First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #

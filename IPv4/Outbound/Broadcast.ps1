@@ -50,7 +50,7 @@ $Profile = "Private, Domain"
 $Group = "Broadcast"
 $Direction = "Outbound"
 
-# First remove all existing rules matching setup
+# First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #

@@ -38,7 +38,7 @@ $Group = "Network Discovery"
 $Profile = "Private, Domain"
 $Direction = "Inbound"
 
-#First remove all existing rules matching group
+# First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #

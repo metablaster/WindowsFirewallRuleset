@@ -48,9 +48,7 @@ $CHROMECAST_IP = 192.168.8.50
 $ChromeRoot = "%SystemDrive%\Users\User\AppData\Local\Google"
 $ChromeApp = "$ChromeRoot\Chrome\Application\chrome.exe"
 
-#
 # First remove all existing rules matching group
-#
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #

@@ -37,7 +37,7 @@ if (!(RunThis)) { exit }
 $Group = "Network Sharing"
 $Direction = "Inbound"
 
-#First remove all existing rules matching group
+# First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
