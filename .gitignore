@@ -1,0 +1,34 @@
+
+# Precompiled Headers
+*.pch
+*.ipch
+
+# Visual Studio Files
+*.suo
+*.user
+
+# Visual Studio database files
+*.db
+*.db-shm
+*.db-wal
+*.opendb
+*.idb
+*.pdb
+*.ipdb
+*.opensdf
+*.sdf
+
+# Visual Studio log files
+*.log
+*.tlog
+*.lastbuildstate
+
+# Visual Studio browse files
+*.sbr
+*.bsc
+
+#Visual studio settings
+.vs/
+
+#Private Stuff
+test.ps1
