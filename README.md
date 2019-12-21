@@ -111,4 +111,12 @@ Just make sure you follow existing code style, as follows:
 This is so that when you need to search for something it's easy to see what is where right away.
 2. Provide documentation and official reference for your rules so that it can be easy to verify that these rules do not contain mistakes, for example, for ICMP rules you would provide a link to [IANA](https://www.iana.org/) with relevant reference document.
 3. If you would like to suggest new rules or improving existing ones, but you do not have the skills to upload an update here, please open new issue here on github and provide details prefferably with documentation.
+4. To contribute rules, it is also important that each rule contains good description of it's purpose, when a user clicks on a rule in firewall GUI he wants to see what this rule is about and easily conclude whether to enable/disable the rule or allow/block the traffic.
+5. It is also important that a rule is very specific and not generic, that means specifying protocol, IP addresses, ports, system user, interface type and other relevant information.\
+for example just saying: allow TCP outbound port 80 for any address or any user or no explanation what is this supposed to allow or block is not acceptable.
+
+# More information and help
+Inside the Readme folder you will find very usefull information not only about this project but also general information on how to troubleshoot problems, or gather more information.\
+It may answer some of your questions, you should go ahead and read it!\
+btw. I recommend you read those papers on github because of formatting and screenshots.
 
