@@ -85,9 +85,7 @@ $Group = "Multicast IPv6"
 $Profile = "Private, Domain"
 $Description = "http://www.iana.org/assignments/ipv6-multicast-addresses/ipv6-multicast-addresses.xhtml"
 $Direction = "Outbound"
-
-# TEST: users, interface and loopback, then update inbound rules
-$MulticastUsers = Get-SDDLFromAccounts @("NT AUTHORITY\NETWORK SERVICE", "NT AUTHORITY\LOCAL SERVICE") # , "NT AUTHORITY\SYSTEM"
+$MulticastUsers = Get-SDDLFromAccounts @("NT AUTHORITY\NETWORK SERVICE", "NT AUTHORITY\LOCAL SERVICE")
 # NOTE: we need Any to include IPv6 loopback interface because IPv6 loopback rule does not work on boot, (neither ::1 address nor interface alias)
 $Interface = "Any"
 
@@ -316,7 +314,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Link-Local Multicast - mDNSv6" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::fb -LocalPort Any -RemotePort Any `
 -LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description $Description

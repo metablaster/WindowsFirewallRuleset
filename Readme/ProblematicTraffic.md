@@ -1,6 +1,12 @@
 
 # Problematic network traffic
 
+## About this document
+List of dropped packets, blocked programs, how to troubleshoot the problem and possible resolutions.
+
+Note that all of these resolutions here are "forced", meaning weakening the firewall just to fix the problem
+or to make firewall logs clean.
+
 ## Case 1: List of Windows services failing to connect outbound
 
 Program: `"%SystemRoot%\System32\svchost.exe"`
@@ -54,7 +60,7 @@ and that means our allow rule did not work. (Possible bug in WFP or lack of info
 4. NT AUTHORITY\NETWORK SERVICE
 
 ## Case 2: List of dropped outbound packets during system boot
-1. svchost.exe sending DNS request to configure DNS server (service unknown)
+1. svchost.exe sending DNS request to configured DNS server (service unknown)
 2. svchost.exe UDP multicast to 239.255.555.250 (service unknown)
 3. svchost.exe UDP multicast to 224.0.0.252 (service unknown)
 4. System IGMP (protocol 2) multicast to 224.0.0.22
@@ -73,17 +79,18 @@ and that means our allow rule did not work. (Possible bug in WFP or lack of info
 - The transition from boot-time to persistent filters could be several seconds, or even longer on a slow machine.
 - During boot WFP (part of windows firewall) is set to block all, regardless of rules.
 - what this means is, there is no other way but to ignore these drops, there is nothing we can do about this.
-- Additional investigation needed by allowing all explicitly.
+- For all this to be true however, xml logs should tell that boot filter was hit, but that's not the case.
+- Additional investigation needed by allowing all ICMP and UDP explicitly.
 
 [Reference for WFP Operation](https://docs.microsoft.com/en-us/windows/win32/fwp/basic-operation)
 
-## Case 3: Event log shows inbound packet drops, firewall log does not show these drops
-1. Inbound from DNS server source port 53 to random local port
+## Case 3: Event log shows packet drops, firewall log does not show these drops
+1. Inbound from DNS servers source port 53 to random local port
 2. Inbound from github source port 22 to random local port
-3. Inbound TCP (protocol 6) source port 443 to random local port
+3. Inbound TCP (protocol 6) source port 443 from akamai to random local port
 
 **Case 3: Troubleshooting**
-- TODO: input missing
+- same as case 1
 
 **Case 3: Audit result**
 1. set outbound DNS rule with LooseSourceMapping to true, and firewall will know that these packets are related
@@ -93,7 +100,7 @@ and not unsolicited.
 such as google chrome, CDN ensures download of content from server most close to your location.
 > My Firewall is reporting an "Unknown" Akamai Connection from port 443 of your server. Why?
 >> When you connect to a site that is "Akamaized" with SSL content (Secure Sockets Layer), your browser downloads an HTML file containing embedded URLs that tell your browser that some of the objects necessary to finish displaying the page are located on Akamai servers. Next, your browser contacts an Akamai server to obtain these images or streaming content. Since the contact is made from port 443 of our server, this transaction is a legitimate HTTPS connection. Generally a TCP service runs on a server on a well-known port number less than 1024; in this case SSL service runs on port 443. A client connects with a random port number greater than 1023 that is assigned by the local operating system.
-- Additinoal investigation needed for possible firewall rule resolution, for now it's safer to ignore these than defining a rule that would possibly compromize our system.
+- Additinoal investigation needed for possible firewall rule resolution, for now it's safer to ignore these than defining a rule that would possibly compromize system.
 
 [Reference for akamai](https://www.akamai.com/us/en/support/end-user-faq.jsp)
 
@@ -129,3 +136,22 @@ such as google chrome, CDN ensures download of content from server most close to
 **Audit result**
 1. Packets are received just fine but small portion is dropped.
 - additional investigation needed to figure out why.
+
+## Case 7: IPv6 loopback rule
+1. IPv6 loopback packets dropped despite allow rule, Especially dropped during boot time.
+2. unable to define loopback rule for IPv6
+3. Defining a rule that would say allow all from ::1 or allow all to ::1 is not possible,
+firefall will tell you ::1 (loopback address) is not valid or unspecified address.
+
+**Case 7: Troubleshoot**
+- Define a rule that allows all possible traffic, but specify interface alias (applicable to powershell only)
+for loopback to limit such traffic to loopback interface only
+- Why firewall allows 127.0.0.1 but not ::1 is hard to tell, both are valid loopback addresses,
+need to look for more information on MSDN
+
+**Case 7: Audit result**
+- Making IPv6 loopback rule will not work, probably because both IPv4 and IPv6 loopback interfaces have exactly the same alias.
+- Solution is to set interface to "Any" for ICMPv6 and IPv6 multicast rules, that will work across restarts, however
+shuting down system and turning back on will reproduce the problem regardless of rules.
+- Another possible cause could be that some other hidden interface is generating this traffic.
+- Additional investigation need by allowing all packets explicitly.

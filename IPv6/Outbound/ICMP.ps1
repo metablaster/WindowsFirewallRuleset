@@ -97,6 +97,8 @@ $RemoteAddr = @("Internet6", "LocalSubnet6")
 $RouterSpace = @("LocalSubnet6", "ff02::2", "fe80::/64") # Messages to/from router
 $Description = "https://www.iana.org/assignments/icmpv6-parameters/icmpv6-parameters.xhtml"
 $Direction = "Outbound"
+# NOTE: we need Any to include IPv6 loopback interface because IPv6 loopback rule does not work on boot, (neither ::1 address nor interface alias)
+$Interface = "Any"
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue

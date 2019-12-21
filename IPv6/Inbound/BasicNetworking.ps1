@@ -38,8 +38,6 @@ $Group = "Basic Networking - IPv6"
 $Profile = "Any"
 $ISATAP_Remotes = @("Internet6", "LocalSubnet6")
 $Direction = "Inbound"
-# NOTE: even thogh we specify "IPv6 the loopback interface alias is the same for for IPv4 and IPv6, meaning there is only one loopback interface!"
-$Loopback = Get-NetIPInterface | Where-Object {$_.InterfaceAlias -like "*Loopback*" -and $_.AddressFamily -eq "IPv6"} | Select-Object -ExpandProperty InterfaceAlias
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
@@ -51,15 +49,17 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # Loop back
 # TODO: why specifying loopback address ::1/128 doesn't work?
+# NOTE: even thogh we specify "IPv6 the loopback interface alias is the same for for IPv4 and IPv6, meaning there is only one loopback interface!"
+# $Loopback = Get-NetIPInterface | Where-Object {$_.InterfaceAlias -like "*Loopback*" -and $_.AddressFamily -eq "IPv6"} | Select-Object -ExpandProperty InterfaceAlias
 #
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Loopback IP" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any -InterfaceAlias $Loopback `
--Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
--EdgeTraversalPolicy Block -LocalUser Any `
--Description "This rule covers both IPv4 and IPv6 loopback interface.
-Network software and utilities use loopback address to access a local computer's TCP/IP network resources."
+# New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+# -DisplayName "Loopback IP" -Service Any -Program Any `
+# -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any -InterfaceAlias $Loopback `
+# -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
+# -EdgeTraversalPolicy Block -LocalUser Any `
+# -Description "This rule covers both IPv4 and IPv6 loopback interface.
+# Network software and utilities use loopback address to access a local computer's TCP/IP network resources."
 
 #
 # mDNS (Multicast Domain Name System)
