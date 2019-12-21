@@ -77,9 +77,16 @@ And of course we have Windows firewall it self in it's full glory.
 - The firewall GUI will let you see and manage all your active rules in a user friendly way, you can access either GPO firewall interface, (which is where this project loads the rules) or open up firewall interface from control panel.
 - the difference is that GPO firewall has precedence over the firewall in control panel, (GPO store vs Persitent store, combined = Active Store)
 - btw. Other documents in this repository will give you a reference and expalin more about these stores and what they are.
+- another difference is that only in firewall from control panel you can see inbound and outbound rules combined (aka. monitoring)
 - Here is a screenshot on how to monitor the Active store, click on image to enlarge:
 
+Monitoring: (control panel firewall, Active store)
+
 ![](https://i.imgur.com/a97OEhS.png)
+
+Management (Local group policy, GPO store)
+
+![](https://i.imgur.com/rB2vtsH.png)
 
 ## TCP View
 
