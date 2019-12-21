@@ -8,6 +8,7 @@ not resolve your problems.
 
 **Follow bellow steps to revert firewall**
 1. Press start button
+2. type: `secpol.msc`
 2. Righ click on `secpol.msc` and click `Run as administrator`
 3. Expand node: `Windows Defender Firewall with Advanced Security`
 4. Right click on: `Windows Defender Firewall with Advanced Security - Local Group Policy Object`
@@ -22,7 +23,7 @@ This should not be the case, but can happen if you modified firewall in control 
 Follow bellow steps to reset default windows firewall:
 
 1. Open control panel and click on "Windows defender firewall"
-2. Click on "Restore default" to restore firewall to defaults
+2. Click on "Restore defaults" to restore firewall to defaults
 3. If problem is not fixed right away you may need to reboot system
 4. Also try disabling firewall in control panel.
 
