@@ -68,7 +68,7 @@ In addition, explanation of other parameters which are not self explanatory or w
 - Persistent Store:
 > is what you see in Windows Firewall with Advanced security, accessed trough control panel or System settings.
 - GPO Store:
-> is specified as computer name, and it is what you see in Local group policy, accessed trough secpol.msc or gpedit.mscq
+> is specified as computer name, and it is what you see in Local group policy, accessed trough secpol.msc or gpedit.msc
 - RSOP:
 > stands for "resultant set of policy" and is collection of all GPO stores that apply to local computer.
 > this applies to domain computers, on your home computer RSOP consists of only single local GPO (group policy object)
@@ -110,4 +110,4 @@ IcmpType              = 34:4
 LocalOnlyMapping      = $true
 LooseSourceMapping    = $true
 OverrideBlockRules    = $true
-Owner                 = "S-1-5-21-3337988176-3917481366-464002247-500"```
+Owner                 = "S-1-5-21-3337988176-3917481366-464002247-500"
