@@ -111,3 +111,26 @@ LocalOnlyMapping      = $true
 LooseSourceMapping    = $true
 OverrideBlockRules    = $true
 Owner                 = "S-1-5-21-3337988176-3917481366-464002247-500"
+```
+
+# LOG FILE FIELDS
+Depending on settings, firewall log can contain dropped and alloweded packets, setting in powershell allow us to log ignored packets too however this does not happen probably due to a bug.\
+Sample values and their meaning in order how they appear in firewall log file:
+```date        = 2019-12-21
+time        = 13:35:31
+action      = DROP
+protocol    = UDP
+src-ip      = 192.168.8.110
+dst-ip      = 224.0.0.22
+src-port    = 61148
+dst-port    = 3702
+size        = 0
+tcpflags    = -
+tcpsyn      = -
+tcpack      = -
+tcpwin      = -
+icmptype    = 134
+icmpcode    = 1
+info        = -
+path        = RECEIVE
+```
