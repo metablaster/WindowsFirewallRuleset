@@ -73,21 +73,22 @@ In any case, new system or old, **know that Home versions of Windows do not have
 2. Toggle on `Replace Command Prompt with Windows Powershell in the menu when I right click the start button`
 3. Right click on Start button in Windows system
 4. Click `Windows Powershell (Administrator)` to open Powershell as Administrator (Input Admin password if needed)
-5. Type: (or copy paste command) ```Get-ExecutionPolicy``` and remeber what the ouput is.
-6. Type ```Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force```
+5. Type: (or copy paste commands and hit enter) ```Get-ExecutionPolicy``` and **remeber** what the ouput is.
+6. Type: ```Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force```
 7. Type: ```cd C:\```
-8. Copy paste into console: ```git clone git@github.com:metablaster/WindowsFirewallRuleset.git``` and hit enter
-9. Copy paste into console: ```cd WindowsFirewallRuleset``` and hit enter
+8. Type: ```git clone git@github.com:metablaster/WindowsFirewallRuleset.git```
+9. Type: ```cd WindowsFirewallRuleset```
 10. Open file explorer and navigate to `C:\WindowsFirewallRuleset\Modules`
 11. Open `GlobalVariables.ps1` with your preffered code editor such as VS Code or Powershell ISE
 12. Edit the line `$UserName = "User"`, input your username by replacing "User" with your username,
 for example if your username is Patrick the line should look like `$UserName = "Patrick"`
 13. Save and close the Powershell script file.
-14. Back to Powershell console and copy paste into console: ```.\Main.ps1``` and hit enter (this will load all the rulles)
+14. Back to Powershell console and type into console: ```.\Main.ps1``` and hit enter (this will attempt to load all the rules)
 15. Follow prompt output, (ie. hit enter each time to proceed until done), it will take at least 10 minutes of your attention.
-16. If you encounter errors, you have several options such as, ignore the errors or fix the script that produced the error and re-run that script only once again later.
+16. If you encounter errors, you have several options such as, ignore the errors or fix the script that produced the error and re-run that script once again later.
 17. Once execution is done recall execution policy from step 5 and type:\
-```Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force``` (if previous policy was "RemoteSigned")
+```Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force```\
+(if previous policy was "RemoteSigned")
 
 # Where are my rules?
 Rules are loaded into Local group policy, follow bellow steps to open local group policy.
@@ -126,7 +127,8 @@ This is so that when you need to search for something it's easy to see what is w
 for example just saying: allow TCP outbound port 80 for any address or any user or no explanation what is this supposed to allow or block is not acceptable.
 
 # More information and help
-Inside the Readme folder you will find very usefull information not only about this project but also general information on how to troubleshoot problems, or gather more information.\
+Inside the Readme folder you will find very usefull information not only about this project but also general information on how to troubleshoot firewall and network problems, or gather more relevant information.
+
 It may answer some of your questions, you should go ahead and read it!\
-btw. I recommend you read those papers on github because of formatting and screenshots.
+btw. It's recommended you read those papers here on github because of formatting and screenshots.
 
