@@ -34,63 +34,68 @@ if (!(RunThis)) { exit }
 #
 # Setup local variables:
 #
-$Group = "Software - Github"
+$Group = "Development - MSYS2"
 $Interface = "Wired, Wireless"
 $Profile = "Private, Public"
 $Direction = "Outbound"
 
 #
-# Git and Git Desktop installation directories
+# Steam installation directories
 #
-$GitRoot = "%ProgramFiles%\Git"
-$GithubRoot = "%SystemDrive%\Users\$UserName\AppData\Local\GitHubDesktop\app-2.2.3"
+$MSYS2Root = "%ProgramFiles%\msys64"
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
-# Rules for git and Github desktop
+# Rules for Steam client
 #
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Git - curl" -Service Any -Program "$GitRoot\mingw64\bin\curl.exe" `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+-DisplayName "MSYS2 - curl" -Service Any -Program "$MSYS2Root\usr\bin\curl.exe" `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21, 80 `
 -LocalUser $User `
--Description "curl download tool"
-
-# TODO: unsure if it's 443 or 80
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Git - git" -Service Any -Program "$GitRoot\mingw64\bin\git.exe" `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser $User `
--Description ""
+-Description "download with curl in MSYS2 shell"
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Git - remote-https" -Service Any -Program "$GitRoot\mingw64\libexec\git-core\git-remote-https.exe" `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+-DisplayName "MSYS2 - git protocol" -Service Any -Program "$MSYS2Root\usr\bin\git.exe" `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 9418 `
 -LocalUser $User `
--Description "git HTTPS acces (https cloning)"
+-Description "git access over git:// protocol"
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Git - ssh" -Service Any -Program "$GitRoot\usr\bin\ssh.exe" `
+-DisplayName "MSYS2 - git-remote-https" -Service Any -Program "$MSYS2Root\usr\bin\git-remote-https.exe" `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+-LocalUser $User `
+-Description "git over HTTPS in MSYS2 shell"
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "MSYS2 - git SSH" -Service Any -Program "$MSYS2Root\usr\bin\ssh.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 22 `
 -LocalUser $User `
--Description "git SSH acces"
+-Description "git over SSH in MSYS2 shell"
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "GitHub Desktop - App" -Service Any -Program "$GithubRoot\GitHubDesktop.exe" `
+-DisplayName "MSYS2 - glade help" -Service Any -Program "$MSYS2Root\mingw64\bin\glade.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser $User `
--Description ""
+-Description "Get online help for glade"
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "GitHub Desktop - remote-https" -Service Any -Program "$GithubRoot\resources\app\git\mingw64\bin\git-remote-https.exe" `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+-DisplayName "MSYS2 - pacman" -Service Any -Program "$MSYS2Root\usr\bin\pacman.exe" `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser $User `
--Description "cloning repos"
+-Description "pacman package manager in MSYS2 shell"
+
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "MSYS2 - wget" -Service Any -Program "$MSYS2Root\usr\bin\pacman.exe" `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
+-LocalUser $User `
+-Description "HTTP dowload manager"

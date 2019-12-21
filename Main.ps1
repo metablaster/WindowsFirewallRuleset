@@ -46,9 +46,12 @@ if(!$PSScriptRoot)
 # Execute IPv4 rules
 #
 
+#
+# Load Inbound rules
+#
 if(RunThis("Applying Inbound IPv4 Rules..."))
 {
-    # Load Inbound rules
+    # Common rules
     & "$ScriptPath\IPv4\Inbound\AdditionalNetworking.ps1"
     & "$ScriptPath\IPv4\Inbound\BasicNetworking.ps1"
     & "$ScriptPath\IPv4\Inbound\Broadcast.ps1"
@@ -63,14 +66,20 @@ if(RunThis("Applying Inbound IPv4 Rules..."))
     & "$ScriptPath\IPv4\Inbound\WindowsServices.ps1"
     & "$ScriptPath\IPv4\Inbound\WirelessNetworking.ps1"
 
-    & "$ScriptPath\IPv4\Inbound\Software\EpicGames.ps1"
+    # Rules for developers
+    & "$ScriptPath\IPv4\Inbound\Development\EpicGames.ps1"
+    
+    # rules for programs
     & "$ScriptPath\IPv4\Inbound\Software\Steam.ps1"
     & "$ScriptPath\IPv4\Inbound\Software\uTorrent.ps1"
 }
 
+#
+# Load Outbound rules
+#
 if(RunThis("Applying Outbound IPv4 Rules..."))
 {
-    # Load Outbound rules
+    # Common rules
     & "$ScriptPath\IPv4\Outbound\AdditionalNetworking.ps1"
     & "$ScriptPath\IPv4\Outbound\BasicNetworking.ps1"
     & "$ScriptPath\IPv4\Outbound\Broadcast.ps1"
@@ -89,9 +98,15 @@ if(RunThis("Applying Outbound IPv4 Rules..."))
     & "$ScriptPath\IPv4\Outbound\WindowsSystem.ps1"
     & "$ScriptPath\IPv4\Outbound\WirelessNetworking.ps1"
 
-    & "$ScriptPath\IPv4\Outbound\Software\EpicGames.ps1"
-    & "$ScriptPath\IPv4\Outbound\Software\Github.ps1"
-    & "$ScriptPath\IPv4\Outbound\Software\MSYS2.ps1"
+    # Rules for developers
+    & "$ScriptPath\IPv4\Outbound\Development\EpicGames.ps1"
+    & "$ScriptPath\IPv4\Outbound\Development\Github.ps1"
+    & "$ScriptPath\IPv4\Outbound\Development\MSYS2.ps1"
+
+    # Rules for games
+    & "$ScriptPath\IPv4\Outbound\Games\PokerStars.ps1"
+
+    # rules for programs
     & "$ScriptPath\IPv4\Outbound\Software\Nvidia.ps1"
     & "$ScriptPath\IPv4\Outbound\Software\Steam.ps1"
     & "$ScriptPath\IPv4\Outbound\Software\Thunderbird.ps1"
@@ -102,17 +117,23 @@ if(RunThis("Applying Outbound IPv4 Rules..."))
 # Execute IPv6 rules
 #
 
+#
+# Load Inbound rules
+#
 if(RunThis("Applying Inbound IPv6 Rules..."))
 {
-    # Load Inbound rules
+    # Common rules
     & "$ScriptPath\IPv6\Inbound\BasicNetworking.ps1"
     & "$ScriptPath\IPv6\Inbound\ICMP.ps1"
     & "$ScriptPath\IPv6\Inbound\Multicast.ps1"
 }
 
+#
+# Load Outbound rules
+#
 if(RunThis("Applying Outbound IPv6 Rules..."))
 {
-    # Load Outbound rules
+    # Common rules
     & "$ScriptPath\IPv6\Outbound\BasicNetworking.ps1"
     & "$ScriptPath\IPv6\Outbound\ICMP.ps1"
     & "$ScriptPath\IPv6\Outbound\Multicast.ps1"

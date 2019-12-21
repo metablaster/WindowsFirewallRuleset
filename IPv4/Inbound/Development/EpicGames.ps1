@@ -34,7 +34,7 @@ if (!(RunThis)) { exit }
 #
 # Setup local variables:
 #
-$Group = "Software - Epic Games"
+$Group = "Development - Epic Games"
 $Interface = "Wired, Wireless"
 $Profile = "Any"
 $Direction = "Inbound"
@@ -85,14 +85,14 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "Swarm agent is used for build farm."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Epic Games - UnrealInsights" -Service Any -Program "$EngineRoot\Binaries\Win64\UnrealInsights.exe" `
+-DisplayName "Unreal Engine - UnrealInsights" -Service Any -Program "$EngineRoot\Binaries\Win64\UnrealInsights.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $User `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Epic Games - UnrealInsights" -Service Any -Program "$EngineRoot\Binaries\Win64\UnrealInsights.exe" `
+-DisplayName "Unreal Engine - UnrealInsights" -Service Any -Program "$EngineRoot\Binaries\Win64\UnrealInsights.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $User -LocalOnlyMapping $false -LooseSourceMapping $false `

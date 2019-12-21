@@ -34,7 +34,7 @@ if (!(RunThis)) { exit }
 #
 # Setup local variables:
 #
-$Group = "Software - Epic Games"
+$Group = "Development - Epic Games"
 $Interface = "Wired, Wireless"
 $Profile = "Any"
 $Direction = "Outbound"
