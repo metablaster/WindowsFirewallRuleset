@@ -59,3 +59,12 @@ your some code editor such VS Code.
 - here you are looking for "dispalyData" node which will tell what cause the drop, this will be the name of a firewall rule or default firewall action such as default action or boot time filter.
 - There are other cool informations you can get out of this file, go ahead and experiment.
 - NOTE: you need to enable at a minimum, auditing of dropped packet as explained in section "Event log" above.
+
+**Windows Firewall**
+
+And finally we have Windows firewall it self in it's full glory.
+- The firewall GUI will let you see and manage all your active rules in a user friendly way, you can access either GPO firewall interface, (which is where this project loads the rules) or open up firewall interface from control panel.
+- the difference is that GPO firewall has precedence over the firewall in control panel, (GPO store vs Persitent store, combined = Active Store)
+- btw. Other documents in this repository will give you a reference and expalin more about these stores and what they are.
+- Here is a screenshot on how to monitor the Active store, click on image to enlarge:
+![](https://i.imgur.com/a97OEhS.png)
