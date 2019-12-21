@@ -92,9 +92,9 @@ for example if your username is Patrick the line should look like `$UserName = "
 Rules are loaded into Local group policy, follow bellow steps to open local group policy.
 1. Press Windows key and type: `secpol.msc`
 2. Righ click on `secpol.msc` and click `Run as administrator`
-2. Expand node: `Windows Defender Firewall with Advanced Security`
-3. Expand node: `Windows Defender Firewall with Advanced Security - Local Group Policy Object`
-4. Click on either `Inbound` or `Outbound` node to view and manage the rulles you applied with Powershell script.
+3. Expand node: `Windows Defender Firewall with Advanced Security`
+4. Expand node: `Windows Defender Firewall with Advanced Security - Local Group Policy Object`
+5. Click on either `Inbound` or `Outbound` node to view and manage the rulles you applied with Powershell script.
 
 # Applying individual rulesets
 If you want to apply only specific rules there are 2 ways to do this:
