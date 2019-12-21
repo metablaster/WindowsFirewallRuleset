@@ -75,7 +75,7 @@ In any case, new system or old, **know that Home versions of Windows do not have
 4. Click `Windows Powershell (Administrator)` to open Powershell as Administrator (Input Admin password if needed)
 5. Type: (or copy paste command) ```Get-ExecutionPolicy``` and remeber what the ouput is.
 6. Type ```Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force```
-7. Type: ```cd C:```
+7. Type: ```cd C:\```
 8. Copy paste into console: ```git clone git@github.com:metablaster/WindowsFirewallRuleset.git``` and hit enter
 9. Copy paste into console: ```cd WindowsFirewallRuleset``` and hit enter
 10. Open file explorer and navigate to `C:\WindowsFirewallRuleset\Modules`
