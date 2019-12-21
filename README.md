@@ -64,7 +64,7 @@ In any case, new system or old, **know that Home versions of Windows do not have
 **WARNING:**
 - these steps here are for somebody who doesn't know how to use `git`, `Powershell` or `Local group policy`
 - You may loose internet conectivity for some of your programs or in rare cases even lose internet conectivity completely, if that happens, you can run `ResetFirewall.ps1` to reset firewall to previous state.
-- Inside the Readme folder there is a `ResetFirewall.md`, a guide on how to do it manually, by hand, if for some reason you're unable to run the script.
+- Inside the Readme folder there is a `ResetFirewall.md`, a guide on how to do it manually, by hand, if for some reason you're unable to run the script, or the script does not solve your problems.
 - Also note that your current/existing rules will not be deleted unless you have rules in GPO whose group name interfere with group names from this ruleset.
 - to be 100% sure please export your current GPO rules first, (if you don't know to do that, then ignore this, you don't have GPO rules)
 
