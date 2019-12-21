@@ -6,7 +6,12 @@ This document explains how to monitor Windows firewall activity and network acti
 As you may already know, Windows firewall does not give us any easy to use tools to monitor what the firewall is doing.\
 However there are few programs and techniques available to monitor firewall activity in live.
 
-**Process Monitor**
+Note that there isn't an "All in one" solution, an ultimate program that does all the job. instead we have to deal with multiple tools, each specialized for certain prupose, if you're serious you will need them all.
+
+Some tools are easy to use, some require learning how to use them, some have graphical interface some are command line programs.\
+Some tools do the same job as other tools that is they complement missing features of other programs, but have other drawbacks.
+
+## Process Monitor
 - Process monitor will let you monitor process network activity, in addition of IP address and port you will also know which process and which user (either system or human user) initiated connection, and several other stuff which you can enable as needed in options.
 - Process monitor is must have program, here is a screenshot as I monitor process network activity right now:\
 click on image to enlarge!
@@ -16,9 +21,10 @@ click on image to enlarge!
 
 - [Download process monitor](https://docs.microsoft.com/en-us/sysinternals/downloads/procmon)
 
-**mTail**
+## mTail
 - mTail is another must have program, it will let you monitor firewall logs in real time.
 - Here is a screenshot as I monitor the logs right now, click on image to enlarge:
+
 ![](https://i.imgur.com/ljHcJss.png)
 
 - Default mTail does not have speial coloring, the colors you see in the screenshot are which I made myself, you can grab
@@ -27,12 +33,13 @@ open firewall log, which is by default placed in *C:\Windows\System32\LogFiles\F
 
 [Download mTail](http://ophilipp.free.fr/op_tail.htm)
 
-**Event log**
+## Event log
 - Event viewer is built into Windows, it will tell you stuff that no other program can tell you!\
 for example with this tool you can tell if somebody is intruding your firewall.
 - Note that most of data you will see isn't available in firewall logs (even if you enable "log ignored packets"), why is that so?
 I don't know, maybe we should ask Microsoft, anyway, at least here is how to gain this hidden firewall information.
 - Here is sample screenshot, click on image to enlarge:
+
 ![](https://i.imgur.com/8vo7aYD.png)
 
 - To enable packet filter monitoring with event viewer you need to enable auditing option as follows:
@@ -44,10 +51,12 @@ I don't know, maybe we should ask Microsoft, anyway, at least here is how to gai
 6. Audit Filtering Platfrom Connection (Audit failure) (this is optional, I do not recommend enabling this to reduce amount of data,
 and to focus on relevant, which is monitoring dropped packets)
 
-**WFP state and filter logs**
+## WFP state and filter logs
 
 Another powerfull tool which will let you gather more information about specific firewall event. click on image to enlarge:
+
 ![](https://i.imgur.com/NMw1bpB.png)
+
 ![](https://i.imgur.com/UF6an7e.png)
 
 - WFP stand for "Windows Filtering Platform", a low level packet filter upon which Windows firewall is built.
@@ -62,11 +71,30 @@ your code editor such VS Code.
 - There are other cool informations you can get out of this file, go ahead and experiment.
 - NOTE: you need to enable at a minimum, auditing of dropped packet as explained in section "Event log" above.
 
-**Windows Firewall**
+## Windows Firewall
 
-And finally we have Windows firewall it self in it's full glory.
+And of course we have Windows firewall it self in it's full glory.
 - The firewall GUI will let you see and manage all your active rules in a user friendly way, you can access either GPO firewall interface, (which is where this project loads the rules) or open up firewall interface from control panel.
 - the difference is that GPO firewall has precedence over the firewall in control panel, (GPO store vs Persitent store, combined = Active Store)
 - btw. Other documents in this repository will give you a reference and expalin more about these stores and what they are.
 - Here is a screenshot on how to monitor the Active store, click on image to enlarge:
+
 ![](https://i.imgur.com/a97OEhS.png)
+
+## TCP View
+
+TCP view is another tool that wil let you see what programs are listening on which ports on local system
+![](https://i.imgur.com/Joe7tMM.png)
+
+[Downlod TCPView](https://docs.microsoft.com/en-us/sysinternals/downloads/tcpview)
+
+## netstat
+
+- Netstat is another tool built into Windows that does the same job as TCP view, but unlike TCP View it will give you information that isn't available in TCP View, such as which service is involved in connection.
+- ie. usefull to discover listening UDP related windows services or to show icmp statistics
+
+![](https://i.imgur.com/JSf5TZk.png)
+
+[netstat reference](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/netstat)
+
+
