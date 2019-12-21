@@ -68,6 +68,7 @@ In any case, new system or old, **know that Home versions of Windows do not have
 - Also note that your current/existing rules will not be deleted unless you have rules in GPO whose group name interfere with group names from this ruleset.
 - to be 100% sure please export your current GPO rules first, (if you don't know to do that, then ignore this, you don't have GPO rules)
 
+**STEPS:**
 1. Right click on the Task bar and select `Taskbar settings`
 2. Toggle on `Replace Command Prompt with Windows Powershell in the menu when I right click the start button`
 3. Right click on Start button in Windows system
