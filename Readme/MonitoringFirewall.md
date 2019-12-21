@@ -42,6 +42,8 @@ and to focus on relevant, which is monitoring dropped packets)
 **WFP state and filter logs**
 
 Another powerfull tool which will let you gather more information about specific firewall event.
+![](https://i.imgur.com/NMw1bpB.png)
+![](https://i.imgur.com/UF6an7e.png)
 
 - WFP stand for "Windows Filtering Platform", a low level packet filter upon which Windows firewall is built.
 - you can access WFP logs, filter and state by executing following commands:\
@@ -53,4 +55,4 @@ your some code editor such VS Code.
 - select the "Filter Run-Time ID" number in event log (Filtering platform packet drop event of your choice), press CTRL + C to copy, go to VS Code, press CTRL + F to open "find box" and CTRL + V to paste the number, and hit enter to jump to this event.
 - here you are looking for "dispalyData" node which will tell what cause the drop, this will be the name of a firewall rule or default firewall action such as default action of boot time filter.
 - There are other cool information you can get out of this file, go ahead and experiment.
-
+- NOTE: you need to enable at a minimum, auditing of dropped packet as explained in section "Event log" above.
