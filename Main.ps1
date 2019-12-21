@@ -93,7 +93,6 @@ if(RunThis("Applying Outbound IPv4 Rules..."))
     & "$ScriptPath\IPv4\Outbound\RemoteWindows.ps1"
     & "$ScriptPath\IPv4\Outbound\StoreApps.ps1"
     & "$ScriptPath\IPv4\Outbound\Temporary.ps1"
-    & "$ScriptPath\IPv4\Outbound\VisualStudio.ps1"
     & "$ScriptPath\IPv4\Outbound\WindowsServices.ps1"
     & "$ScriptPath\IPv4\Outbound\WindowsSystem.ps1"
     & "$ScriptPath\IPv4\Outbound\WirelessNetworking.ps1"
@@ -102,9 +101,11 @@ if(RunThis("Applying Outbound IPv4 Rules..."))
     & "$ScriptPath\IPv4\Outbound\Development\EpicGames.ps1"
     & "$ScriptPath\IPv4\Outbound\Development\Github.ps1"
     & "$ScriptPath\IPv4\Outbound\Development\MSYS2.ps1"
+    & "$ScriptPath\IPv4\Outbound\Development\VisualStudio.ps1"
 
     # Rules for games
     & "$ScriptPath\IPv4\Outbound\Games\PokerStars.ps1"
+    & "$ScriptPath\IPv4\Outbound\Games\WarThunder.ps1"
 
     # rules for programs
     & "$ScriptPath\IPv4\Outbound\Software\Nvidia.ps1"

@@ -26,7 +26,7 @@ SOFTWARE.
 #
 # Import global variables
 #
-. "$PSScriptRoot\..\..\Modules\GlobalVariables.ps1"
+. "$PSScriptRoot\..\..\..\Modules\GlobalVariables.ps1"
 
 # Ask user if he wants to load these rules
 if (!(RunThis)) { exit }
@@ -34,7 +34,7 @@ if (!(RunThis)) { exit }
 #
 # Setup local variables:
 #
-$Group = "Visual Studio"
+$Group = "Development - Visual Studio"
 $Profile = "Private, Public"
 $Direction = "Outbound"
 
