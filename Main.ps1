@@ -24,8 +24,8 @@ SOFTWARE.
 #>
 
 # Print Powershell version
-Write-Host "";
-Write-Host "PSVersion: $($PSVersionTable.PSVersion)";
+Write-Host ""
+Write-Host "PSVersion: $($PSVersionTable.PSVersion)"
 
 # Import needed functions
 . "$PSScriptRoot\Modules\Functions.ps1"

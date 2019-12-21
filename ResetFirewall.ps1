@@ -24,8 +24,8 @@ SOFTWARE.
 #>
 
 # Print Powershell version
-Write-Host "";
-Write-Host "PSVersion: $($PSVersionTable.PSVersion)";
+Write-Host ""
+Write-Host "PSVersion: $($PSVersionTable.PSVersion)"
 
 #
 # Import global variables
@@ -45,6 +45,11 @@ Set-NetFirewallProfile -All -Confirm:$Execute -Whatif:$Debug -PolicyStore $Polic
 -LogAllowed NotConfigured -LogBlocked NotConfigured -LogIgnored NotConfigured -LogMaxSizeKilobytes 4096 `
 -AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
 -LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log"
+
+#
+# Remove all the rules
+#
+Remove-NetFirewallRule -All -PolicyStore $PolicyStore -ErrorAction SilentlyContinue
 
 Write-Host "Firewall reset is done!"
 Write-Host "If internet conectivity problem stays, please rebot system."
