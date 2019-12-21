@@ -15,7 +15,8 @@ not resolve your problems.
 5. Select properties
 6. There are 3 tabls: "Domain", "Private" and "Public"
 7. set every available property to "Not configured", do so under "Customize" buttons too
-8. If problem is not fixed right away you may need to reboot system
+8. under "Inbound" and "outbound" node select all the rules right click and delete them all.
+9. If problem is not fixed right away you may need to reboot system
 
 **Problem still not resolved**
 
