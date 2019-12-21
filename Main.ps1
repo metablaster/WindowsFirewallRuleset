@@ -92,7 +92,9 @@ if(RunThis("Applying Outbound IPv4 Rules..."))
     & "$ScriptPath\IPv4\Outbound\Software\EpicGames.ps1"
     & "$ScriptPath\IPv4\Outbound\Software\Github.ps1"
     & "$ScriptPath\IPv4\Outbound\Software\MSYS2.ps1"
+    & "$ScriptPath\IPv4\Outbound\Software\Nvidia.ps1"
     & "$ScriptPath\IPv4\Outbound\Software\Steam.ps1"
+    & "$ScriptPath\IPv4\Outbound\Software\Thunderbird.ps1"
     & "$ScriptPath\IPv4\Outbound\Software\uTorrent.ps1"
 }
 

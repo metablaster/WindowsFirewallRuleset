@@ -60,7 +60,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Unreal Engine - CrashReportClientEditor" -Service Any -Program "$EngineRoot\Binaries\Win64\CrashReportClientEditor-Win64-Development.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
--EdgeTraversalPolicy Block -LocalUser $User -LocalOnlyMapping $false -LooseSourceMapping $false `
+-EdgeTraversalPolicy Block -LocalUser $User `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
@@ -74,7 +74,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Unreal Engine - SwarmAgent" -Service Any -Program "$EngineRoot\Binaries\DotNET\SwarmAgent.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
--EdgeTraversalPolicy Block -LocalUser $User -LocalOnlyMapping $false -LooseSourceMapping $false `
+-EdgeTraversalPolicy Block -LocalUser $User `
 -Description "Swarm agent is used for build farm."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
@@ -88,7 +88,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Epic Games - UnrealInsights" -Service Any -Program "$EngineRoot\Binaries\Win64\UnrealInsights.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
--EdgeTraversalPolicy Block -LocalUser $User -LocalOnlyMapping $false -LooseSourceMapping $false `
+-EdgeTraversalPolicy Block -LocalUser $User `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
