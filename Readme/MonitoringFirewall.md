@@ -55,6 +55,8 @@ I don't know, maybe we should ask Microsoft, anyway, at least here is how to gai
 6. Audit Filtering Platfrom Connection (Audit failure) (this is optional, I do not recommend enabling this to reduce amount of data,
 and to focus on relevant, which is monitoring dropped packets)
 
+[Event loggin reference](https://docs.microsoft.com/en-us/windows/win32/eventlog/event-logging)
+
 ## WFP state and filter logs
 
 Another powerfull tool which will let you gather more information about specific firewall event. click on image to enlarge:
@@ -75,7 +77,7 @@ your code editor such VS Code.
 - There are other cool informations you can get out of this file, go ahead and experiment.
 - NOTE: you need to enable at a minimum, auditing of dropped packet as explained in section "Event log" above.
 
-(WFP Reference](https://docs.microsoft.com/en-us/windows/win32/fwp/about-windows-filtering-platform)
+[WFP Reference](https://docs.microsoft.com/en-us/windows/win32/fwp/about-windows-filtering-platform)
 
 ## Windows Firewall
 
