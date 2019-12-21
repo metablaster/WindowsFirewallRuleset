@@ -18,7 +18,7 @@ Nobody has all the knowledge in his head, here is a quick "jump" table:
 
 [WFP Operation](https://docs.microsoft.com/en-us/windows/win32/fwp/basic-operation)
 
-[ICMP](https://www.iana.org/assignments/icmp-parameters/icmp-parameters.xhtml)
+[ICMPv6](https://www.iana.org/assignments/icmp-parameters/icmp-parameters.xhtml)
 
 [IPv6 multicast](https://www.iana.org/assignments/multicast-addresses/multicast-addresses.xhtml)
 
