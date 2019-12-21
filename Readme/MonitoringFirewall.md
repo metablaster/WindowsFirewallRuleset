@@ -11,6 +11,8 @@ However there are few programs and techniques available to monitor firewall acti
 - Process monitor is must have program, here is a screenshot as I monitor process network activity right now:\
 click on image to enlarge!
 ![](https://i.imgur.com/wNtDw8D.png)
+- Inside the "Config" folder you will find process monitor configuration specialized for firewall monitoring which you can import into your copy of process monitor.
+- Note that configuration filters some network traffic which you may want to be able to see, click on filter options to disable specific filters and add new ones.
 
 - [Download process monitor](https://docs.microsoft.com/en-us/sysinternals/downloads/procmon)
 
@@ -44,7 +46,7 @@ and to focus on relevant, which is monitoring dropped packets)
 
 **WFP state and filter logs**
 
-Another powerfull tool which will let you gather more information about specific firewall event.
+Another powerfull tool which will let you gather more information about specific firewall event. click on image to enlarge:
 ![](https://i.imgur.com/NMw1bpB.png)
 ![](https://i.imgur.com/UF6an7e.png)
 
@@ -53,7 +55,7 @@ Another powerfull tool which will let you gather more information about specific
 ```netsh wfp show state``` to show current state, such as detailed information about dropped or allowed network packets.
 ```netsh wfp show filters``` to show current firewall filters (filters are made of firewall rules btw, rules by them self are just high level specifications traslated into these low leve filters.)
 - when you execute show state, it will generate xml file in the same directory where you executed the command, open this file with
-your some code editor such VS Code.
+your code editor such VS Code.
 - what you are looking for here is an ID called "Filter Run-Time ID" and "Layer Run-Time ID", you can obtain these ID's from event viewer as shown in Event log (screen shot above).
 - select the "Filter Run-Time ID" number in event log (Filtering platform packet drop event of your choice), press CTRL + C to copy, go to VS Code, press CTRL + F to open "find box" and CTRL + V to paste the number, and hit enter to jump to this event.
 - here you are looking for "dispalyData" node which will tell what cause the drop, this will be the name of a firewall rule or default firewall action such as default action or boot time filter.
