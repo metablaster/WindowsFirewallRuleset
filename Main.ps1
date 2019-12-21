@@ -71,6 +71,7 @@ if(RunThis("Applying Inbound IPv4 Rules..."))
     
     # rules for programs
     & "$ScriptPath\IPv4\Inbound\Software\Steam.ps1"
+    & "$ScriptPath\IPv4\Inbound\Software\TeamViewer.ps1"
     & "$ScriptPath\IPv4\Inbound\Software\uTorrent.ps1"
 }
 
@@ -110,6 +111,7 @@ if(RunThis("Applying Outbound IPv4 Rules..."))
     # rules for programs
     & "$ScriptPath\IPv4\Outbound\Software\Nvidia.ps1"
     & "$ScriptPath\IPv4\Outbound\Software\Steam.ps1"
+    & "$ScriptPath\IPv4\Outbound\Software\TeamViewer.ps1"
     & "$ScriptPath\IPv4\Outbound\Software\Thunderbird.ps1"
     & "$ScriptPath\IPv4\Outbound\Software\uTorrent.ps1"
 }
