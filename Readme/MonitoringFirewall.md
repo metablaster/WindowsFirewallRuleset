@@ -11,6 +11,10 @@ Note that there isn't an "All in one" solution, an ultimate program that does al
 Some tools are easy to use, some require learning how to use them, some have graphical interface some are command line programs.\
 Some tools do the same job as other tools that is they complement missing features of other programs, but have other drawbacks.
 
+For each program listed here you have a reference link (for tools built into Windows) and download link (for external programs).
+
+All of the tools listed here are signed by Microsoft, the only exception is mTail, many people use it so it's easy to verify it's trusted, anyway you can verify it's behavir with process monitor if you're suspicious.
+
 ## Process Monitor
 - Process monitor will let you monitor process network activity, in addition of IP address and port you will also know which process and which user (either system or human user) initiated connection, and several other stuff which you can enable as needed in options.
 - Process monitor is must have program, here is a screenshot as I monitor process network activity right now:\
@@ -71,6 +75,8 @@ your code editor such VS Code.
 - There are other cool informations you can get out of this file, go ahead and experiment.
 - NOTE: you need to enable at a minimum, auditing of dropped packet as explained in section "Event log" above.
 
+(WFP Reference](https://docs.microsoft.com/en-us/windows/win32/fwp/about-windows-filtering-platform)
+
 ## Windows Firewall
 
 And of course we have Windows firewall it self in it's full glory.
@@ -87,6 +93,8 @@ Monitoring: (control panel firewall, Active store)
 Management (Local group policy, GPO store)
 
 ![](https://i.imgur.com/rB2vtsH.png)
+
+[Windows Firewall reference](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-firewall/windows-firewall-with-advanced-security)
 
 ## TCP View
 
