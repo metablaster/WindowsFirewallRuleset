@@ -34,14 +34,14 @@ For more info see respective licences:\
 
 # Minimum system requirements
 1. Windows 10 Pro/Enterprise
-2. Windows Powershell 5 [Download Powershell](https://github.com/PowerShell/PowerShell)
+2. Windows Powershell 5.1 [Download Powershell](https://github.com/PowerShell/PowerShell)
 3. Git (Optional) [Download Git](https://git-scm.com/downloads)
 
 Note that Powershell is built into Windows by default, you will probably need to install it or update on some old systems.
 
 To be able to apply rules to older systems such as Windows 7, edit the `GlobalVariables.ps1` and add a new variable that defines your system version:
 
-```$Platform = "10.0+" #Windows 10 and above``` is defined to target Windows 10 and above by default for all rules, for example for Windows 7, define a new variable that looks like this:\
+```$Platform = "10.0+" #Windows 10 and above``` is defined to target Windows 10 and above by default for all rules, for example for Windows 7, define a new variable that looks like this:
 
 ```$PlatformWin7 = "6.1" #Windows 7```
 
@@ -59,8 +59,15 @@ What this means, is, just edit the GPO later to refine your imports if you go th
 
 In any case, new system or old, **know that Home versions of Windows do not have GPO (Local Group Policy), therefore not possible to make use of this project.**
 
-# Step by step quick usage
-Note: these steps here are for somebody who doesn't know how to use `git`, `Powershell` or `Local group policy`
+# Step by step quick start
+
+**WARNING:**
+- these steps here are for somebody who doesn't know how to use `git`, `Powershell` or `Local group policy`
+- You may loose internet conectivity for some of your programs or in rare cases even lose internet conectivity completely, if that happens, you can run `ResetFirewall.ps1` to reset firewall to previous state.
+- Inside the Readme folder there is a `ResetFirewall.md`, a guide on how to do it manually, by hand, if for some reason you're unable to run the script.
+- Also note that your current/existing rules will not be deleted unless you have rules in GPO whose group name interfere with group names from this ruleset.
+- to be 100% sure please export your current GPO rules first, (if you don't know to do that, then ignore this, you don't have GPO rules)
+
 1. Right click on the Task bar and select `Taskbar settings`
 2. Toggle on `Replace Command Prompt with Windows Powershell in the menu when I right click the start button`
 3. Right click on Start button in Windows system
