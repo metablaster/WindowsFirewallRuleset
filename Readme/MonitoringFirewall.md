@@ -7,6 +7,7 @@ As you may already know, Windows firewall does not give us any easy to use tools
 However there are few programs and techniques available to monitor firewall activity in live.
 
 **Process Monitor**
+- Process monitor will let you monitor process network activity, in addition of IP address and port you will also know which process and which user (either system or human user) initiated connection, and several other stuff which you can enable as needed in options.
 - Process monitor is must have program, here is a screenshot as I monitor process network activity right now:\
 click on image to enlarge!
 ![](https://i.imgur.com/wNtDw8D.png)
@@ -26,7 +27,9 @@ open firewall log, which is by default placed in *C:\Windows\System32\LogFiles\F
 
 **Event log**
 - Event viewer is built into Windows, it will tell you stuff that no other program can tell you!\
-for example with this tool you can tell if somebody is intruding your firewall
+for example with this tool you can tell if somebody is intruding your firewall.
+- Note that most of data you will see isn't available in firewall logs (even if you enable "log ignored packets"), why is that so?
+I don't know, maybe we should ask Microsoft, anyway, at least here is how to gain this hidden firewall information.
 - Here is sample screenshot, click on image to enlarge:
 ![](https://i.imgur.com/8vo7aYD.png)
 
@@ -53,6 +56,6 @@ Another powerfull tool which will let you gather more information about specific
 your some code editor such VS Code.
 - what you are looking for here is an ID called "Filter Run-Time ID" and "Layer Run-Time ID", you can obtain these ID's from event viewer as shown in Event log (screen shot above).
 - select the "Filter Run-Time ID" number in event log (Filtering platform packet drop event of your choice), press CTRL + C to copy, go to VS Code, press CTRL + F to open "find box" and CTRL + V to paste the number, and hit enter to jump to this event.
-- here you are looking for "dispalyData" node which will tell what cause the drop, this will be the name of a firewall rule or default firewall action such as default action of boot time filter.
-- There are other cool information you can get out of this file, go ahead and experiment.
+- here you are looking for "dispalyData" node which will tell what cause the drop, this will be the name of a firewall rule or default firewall action such as default action or boot time filter.
+- There are other cool informations you can get out of this file, go ahead and experiment.
 - NOTE: you need to enable at a minimum, auditing of dropped packet as explained in section "Event log" above.
