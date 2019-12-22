@@ -5,7 +5,6 @@
 # Input: User group on local computer
 # output: Array of enabled user accounts in specified group, in form of COMPUTERNAME\USERNAME
 # sample: Get-UserAccounts("Administrators")
-# TODO: multiple enabled accounts format
 function Get-UserAccounts
 {
     param(
@@ -112,14 +111,24 @@ function Get-AccountSID
 # about: get store app SID
 # input: "PackageFamilyName" string
 # output: store app SID (security identifier) as string
-# sample: Get-AppSID("Microsoft.MicrosoftEdge_8wekyb3d8bbwe")
-function Get-AppSID ($AppName)
+# sample: Get-AppSID("User", "Microsoft.MicrosoftEdge_8wekyb3d8bbwe")
+function Get-AppSID
 {
-    $Packages = "C:\Users\$UserName\AppData\Local\Packages"
-    $ACL = Get-ACL "$Packages\$AppName\AC"
+    param (
+        [parameter(Mandatory = $true, Position=0)]
+        [ValidateLength(1, 100)]
+        [string] $UserName,
+
+        [parameter(Mandatory = $true, Position=1)]
+        [ValidateLength(1, 100)]
+        [string] $AppName
+    )
+    
+    $ACL = Get-ACL "C:\Users\$UserName\AppData\Local\Packages\$AppName\AC"
     $ACE = $ACL.Access.IdentityReference.Value
     
     $ACE | ForEach-Object {
+        # package SID starts with S-1-15-2-
         if($_ -match "S-1-15-2-") {
             return $_
         }
@@ -193,73 +202,55 @@ function Get-AccountSDDL
     return $SDDL
 }
 
-# Convert-SDDLToACL returns the ACEs of the generated security descriptor object.
-# Credits to: https://stackoverflow.com/questions/48406474/return-user-data-from-sid
-# Sample usage:
-# You can extract the user/group/principal names from that list like this:
-
-# $sddl = "O:LSD:(A;;CC;;;SY)(A;;CC;;;S-1-5-21-3400361277-1888300462-2581876478-1002)"
-# Convert-SDDLToACL $sddl | 
-# Select-Object -Expand IdentityReference |
-# Select-Object -Expand Value
+# about: Convert SDDL entries to computer accounts
+# input: String array of one or more strings of SDDL syntax
+# output: String array of computer accounts
+# sample: Convert-SDDLToACL $SDDL1, $SDDL2
 function Convert-SDDLToACL
 {
-    [Cmdletbinding()]
-    Param
-    (
-        #One or more strings of SDDL syntax.
-        [string[]] $SDDLString
+    param (
+        [parameter(Mandatory = $true)]
+        [ValidateCount(1, 1000)]
+        [ValidateLength(1, 1000)]
+        [string[]] $SDDL
     )
 
-    foreach ($SDDL in $SDDLString)
+    [string[]] $ACL = @()
+    foreach ($Entry in $SDDL)
     {
         $ACLObject = New-Object -Type Security.AccessControl.DirectorySecurity
-        $ACLObject.SetSecurityDescriptorSddlForm($SDDL)
-        $ACLObject.Access
+        $ACLObject.SetSecurityDescriptorSddlForm($Entry)
+        $ACL += $ACLObject.Access | Select-Object -ExpandProperty IdentityReference | Select-Object -ExpandProperty Value
     }
+
+    return $ACL
 }
 
 # ParseSDDL returns SDDL based on "object"
-# Sample usage:
-# Experiment with these different path values to see what the ACL objects do
 # Credits to: https://blogs.technet.microsoft.com/ashleymcglone/2011/08/29/powershell-sid-walker-texas-ranger-part-1/
+# sample: see Test\Parse-SDDL.ps1 for example
 
-<#
-$path = "C:\users\User\" #Not inherited
-$path = "C:\users\username\desktop\" #Inherited
-$path = "HKCU:\" #Not Inherited
-$path = "HKCU:\Software" #Inherited
-$path = "HKLM:\" #Not Inherited
-
-"`n---Path:"
-$Path
-
-$ACL = Get-ACL $path
-"`n---Access To string:"
-$ACL.AccessToString
-
-"`n---Access entry details:"
-$ACL.Access | fl *
-
-"`n---SDDL:"
-$ACL.SDDL
-
-# Call with named parameter binding 
-$ACL | ParseSDDL
-# Or call with parameter string
-ParseSDDL $ACL.SDDL
-#>
-function ParseSDDL
+function Parse-SDDL
 {
     [CmdletBinding()]
-    param ([Parameter(valueFromPipelineByPropertyName=$true)]$SDDL)
+    param (
+        [Parameter(
+            Mandatory = $true,
+            valueFromPipelineByPropertyName=$true)] $SDDL
+    )
 
     $SDDLSplit = $SDDL.Split("(")
 
-    "`n---SDDL Split:"
+    Write-Host ""
+    Write-Host "SDDL Split:"
+    Write-Host "****************"
+
     $SDDLSplit
 
-    "`n---SDDL SID Parsing:"
+    Write-Host ""
+    Write-Host "SDDL SID Parsing:"
+    Write-Host "****************"
+
     # Skip index 0 where owner and/or primary group are stored            
     For ($i=1;$i -lt $SDDLSplit.Length;$i++)
     {
@@ -290,17 +281,25 @@ function ParseSDDL
             }
         }
     }
+    
     return $null
 }
 
-#
-# Used to ask user if he want to run script.
-#
-function RunThis($str)
+# about: Used to ask user if he want to run script.
+# input: string to present the user
+# output: true if user wants to continue
+# sample: RunThis("sample text")
+function RunThis
 {
-    if($str)
+    param (
+        [parameter(Mandatory = $false)]
+        [ValidateLength(1, 300)]
+        [string] $info
+    )
+
+    if($info)
     {
-        $title = $str
+        $title = $info
     }
     else
     {
@@ -319,45 +318,5 @@ function RunThis($str)
     else
     {
         return $false
-    }
-}
-
-# This method is deprecated because it doesn't work with system apps, it's here only for reference.
-# Function based on ParseSDDL to obtain SID's for store apps
-# it takes install location of the app, checks all the SID's of all the stuff in directory
-# out of this result it returns only the relevant SID, which is then additionally modified
-# It's the ugly hack made of trial and error, it may not work in further windows versions.
-function Get-AppSID_Deprecated ($AppName)
-{
-    $ACL = Get-ACL "$AppName"
-    $SDDLSplit = $ACL.SDDL.Split("(")
-    $ACLEntrySID = $null
-
-    # Skip index 0 where owner and/or primary group are stored
-    For ($i=1; $i -lt $SDDLSplit.Length; $i++)
-    {
-        $ACLSplit = $SDDLSplit[$i].Split(";")
-
-        if ($ACLSplit[1])
-        {
-            # if it contains 'ID' it's inherited, ignore
-            If (!$ACLSplit[1].Contains("ID"))
-            {
-
-                # Remove the trailing ")"
-                $ACLEntry = $ACLSplit[5].TrimEnd(")")
-
-                # Parse out the SID using RegEx
-                $ACLEntrySIDMatches = [regex]::Matches($ACLEntry,"(S(-\d+){2,10})")
-                $ACLEntrySIDMatches | ForEach-Object {$ACLEntrySID = $_.value}
-
-                If ($ACLEntrySID)
-                {
-                    # Final hack!!
-                    $ACLEntrySID = $ACLEntrySID -replace "S-1-15-3", "S-1-15-2"
-                    return $ACLEntrySID
-                }
-            }
-        }
     }
 }
