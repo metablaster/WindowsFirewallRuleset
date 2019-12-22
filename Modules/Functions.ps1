@@ -1,69 +1,192 @@
 
 # TODO: convert to module, and import where needed
 
-# Get SID for giver user name, example: Get-UserSID("TestUser")
-function Get-UserSID($UserName)
+# about: get computer accounts for a giver user group
+# Input: User group on local computer
+# output: Array of enabled user accounts in specified group, in form of COMPUTERNAME\USERNAME
+# sample: Get-UserAccounts("Administrators")
+# TODO: multiple enabled accounts format
+function Get-UserAccounts
 {
-    $NTAccount = New-Object System.Security.Principal.NTAccount($UserName)
-    $SID = ($NTAccount.Translate([System.Security.Principal.SecurityIdentifier])).ToString()
-    return $SID
+    param(
+        [Parameter(Mandatory = $true)]
+        [ValidateLength(1, 100)]
+        [string] $UserGroup
+    )
+
+    # Get all accounts from given group
+    $AllAccounts = Get-LocalGroupMember -Group $UserGroup | Where-Object {$_.PrincipalSource -eq "Local"} | Select-Object -ExpandProperty Name
+
+    # Get disabled accounts
+    $DisabledAccounts = Get-WmiObject -Class Win32_UserAccount -Filter "Disabled=True" | Select-Object -ExpandProperty Caption
+
+    # Assemble enabled accounts into an array
+    $EnabledAccounts = @()
+    foreach ($Account in $AllAccounts)
+    {
+        if (!($DisabledAccounts -contains $Account))
+        {
+            $EnabledAccounts = $EnabledAccounts += $Account
+        }
+    }
+
+    if([string]::IsNullOrEmpty($EnabledAccounts))
+    {
+        Write-Warning "Get-UserAccounts: Failed to get UserAccounts"
+    }
+
+    return $EnabledAccounts
 }
 
-# Returns SDDL of specified local user name or multiple users names
-# Sample usage:
-# New-NetFirewallRule -DisplayName "BlockWWW" -Action Block -LocalUser (Get-UserSDDL user1, user2) -Protocol TCP -Direction Outbound -RemotePort 80, 443
-# Credits to: https://stackoverflow.com/questions/49608182/powershell-new-netfirewallrule-with-localuser-example
+# about: strip computer names out of computer acounts
+# Input: Array of user computer accounts in form of: COMPUTERNAME\USERNAME
+# output: String array of usernames in form of: USERNAME
+# sample: Get-UserNames(@("DESKTOP_PC\USERNAME", "LAPTOP\USERNAME"))
+function Get-UserNames
+{
+    param(
+        [Parameter(Mandatory = $true)]
+        [ValidateCount(1, 1000)]
+        [ValidateLength(1, 100)]
+        [string[]] $UserAccounts
+    )
+
+    [string[]] $UserNames = @()
+    foreach($Account in $UserAccounts)
+    {
+        $UserNames = $UserNames += $Account.split("\")[1]
+    }
+
+    return $UserNames
+}
+
+# about: get SID for giver user name
+# input: username string
+# output: SID (security identifier) as string
+# sample: Get-UserSID("TestUser")
+function Get-UserSID
+{
+    param (
+        [parameter(Mandatory = $true)]
+        [ValidateLength(1, 100)]
+        [string] $UserName
+    )
+
+    try
+    {
+        $NTAccount = New-Object System.Security.Principal.NTAccount($UserName)
+        return ($NTAccount.Translate([System.Security.Principal.SecurityIdentifier])).ToString()  
+    }
+    catch
+    {
+        Write-Warning "Get-UserSID: User '$UserName' cannot be resolved to a SID."
+    }
+}
+
+# about: get SID for giver computer account
+# input: computer account string
+# output: SID (security identifier) as string
+# sample: Get-AccountSID("COMPUTERNAME\USERNAME")
+function Get-AccountSID
+{
+    param (
+        [parameter(Mandatory = $true)]
+        [ValidateLength(1, 100)]
+        [string] $UserAccount
+    )
+
+    [string] $Domain = ($UserAccount.split("\"))[0]
+    [string] $User = ($UserAccount.split("\"))[1]
+
+    try
+    {
+        $NTAccount = New-Object System.Security.Principal.NTAccount($Domain, $User)
+        return ($NTAccount.Translate([System.Security.Principal.SecurityIdentifier])).Value    
+    }
+    catch
+    {
+        Write-Warning "Get-AccountSID: Account '$UserAccount' cannot be resolved to a SID."
+    }
+}
+
+# about: get store app SID
+# input: "PackageFamilyName" string
+# output: store app SID (security identifier) as string
+# sample: Get-AppSID("Microsoft.MicrosoftEdge_8wekyb3d8bbwe")
+function Get-AppSID ($AppName)
+{
+    $Packages = "C:\Users\$UserName\AppData\Local\Packages"
+    $ACL = Get-ACL "$Packages\$AppName\AC"
+    $ACE = $ACL.Access.IdentityReference.Value
+    
+    $ACE | ForEach-Object {
+        if($_ -match "S-1-15-2-") {
+            return $_
+        }
+    }
+}
+
+# about: return SDDL of specified local user name or multiple users names
+# input: String array of user names
+# output: SDDL string for given usernames
+# sample: Get-UserSDDL user1, user2
 function Get-UserSDDL
 {
-    param([string[]]$UserName)
+    param (
+        [parameter(Mandatory = $true)]
+        [ValidateCount(1, 1000)]
+        [ValidateLength(1, 100)]
+        [string[]] $UserNames
+    )
   
-    $SDDL = 'D:{0}'
+    [string] $SDDL = "D:"
   
-    $ACEs = foreach($Name in $UserName)
+    foreach($User in $UserNames)
     {
         try
         {
-            $LocalUser = Get-LocalUser -Name $UserName -ErrorAction Stop
-            '(A;;CC;;;{0})' -f $LocalUser.Sid.Value
+            $SID = Get-UserSID($User)
         }
         catch
         {
-            Write-Warning "Local user '$Username' not found"
+            Write-Warning "Get-UserSDDL: User '$User' not found"
             continue
         }
+
+        $SDDL += "(A;;CC;;;{0})" -f $SID
     }
-    return $SDDL -f ($ACEs -join '')
+
+    return $SDDL
 }
 
-#
-# Returns SDDL from multiple Accounts, in form of: COMPUTERNAME\USERNAME
-# Sample usage:
-# Get-SDDL-FromAccounts @("NT AUTHORITY\SYSTEM", "MY_DESKTOP\MY_USERNAME")
-#
-function Get-SDDLFromAccounts($Accounts)
+# about: return SDDL of multiple computer accounts, in form of: COMPUTERNAME\USERNAME
+# input: String array of computer accounts
+# output: SDDL string for given accounts
+# sample: Get-AccountSDDL @("NT AUTHORITY\SYSTEM", "MY_DESKTOP\MY_USERNAME")
+function Get-AccountSDDL
 {
-    if([string]::IsNullOrEmpty($Accounts))
+    param (
+        [parameter(Mandatory = $true)]
+        [ValidateCount(1, 1000)]
+        [ValidateLength(1, 100)]
+        [string[]] $UserAccounts
+    )
+
+    [string] $SDDL = "D:"
+
+    foreach ($Account in $UserAccounts)
     {
-        Write-Warning "Get-SDDLFromAccounts(Accounts): Function argument null or empty"
-    }
-
-    $SDDL = "D:"
-
-    foreach ($UserEntry in $Accounts)
-    {
-        $Domain = ($UserEntry.split("\"))[0]
-        $User = ($UserEntry.split("\"))[1]
-
-        $NTAccount = New-Object System.Security.Principal.NTAccount($Domain, $User)
-        $SID = ($NTAccount.Translate([System.Security.Principal.SecurityIdentifier])).Value
-    
-        if (!$SID)
+        try
         {
-            Write-Warning "User $User cannot be resolved to a SID."
+            $SID = Get-AccountSID($Account)
+        }
+        catch
+        {
+            Write-Warning "Get-AccountSDDL: User account $UserAccount not found"
             continue
         }
-    
-        $SDDL += '(A;;CC;;;{0})' -f $SID
+        
+        $SDDL += "(A;;CC;;;{0})" -f $SID
 
     }
 
@@ -79,13 +202,13 @@ function Get-SDDLFromAccounts($Accounts)
 # Convert-SDDLToACL $sddl | 
 # Select-Object -Expand IdentityReference |
 # Select-Object -Expand Value
-Function Convert-SDDLToACL
+function Convert-SDDLToACL
 {
     [Cmdletbinding()]
     Param
     (
         #One or more strings of SDDL syntax.
-        [string[]]$SDDLString
+        [string[]] $SDDLString
     )
 
     foreach ($SDDL in $SDDLString)
@@ -112,7 +235,7 @@ $path = "HKLM:\" #Not Inherited
 $Path
 
 $ACL = Get-ACL $path
-"`n---Access To String:"
+"`n---Access To string:"
 $ACL.AccessToString
 
 "`n---Access entry details:"
@@ -199,21 +322,6 @@ function RunThis($str)
     }
 }
 
-# Function to get SID for specified store app
-# Example usage: Get-AppSID("Microsoft.MicrosoftEdge_8wekyb3d8bbwe")
-function Get-AppSID ($AppName)
-{
-    $Packages = "C:\Users\$UserName\AppData\Local\Packages"
-    $ACL = Get-ACL "$Packages\$AppName\AC"
-    $ACE = $ACL.Access.IdentityReference.Value
-    
-    $ACE | ForEach-Object {
-        if($_ -match "S-1-15-2-") {
-            return $_
-        }
-    }
-}
-
 # This method is deprecated because it doesn't work with system apps, it's here only for reference.
 # Function based on ParseSDDL to obtain SID's for store apps
 # it takes install location of the app, checks all the SID's of all the stuff in directory
@@ -252,36 +360,4 @@ function Get-AppSID_Deprecated ($AppName)
             }
         }
     }
-}
-
-# Return an array of enabled user accounts in specified group, in form of COMPUTERNAME\USERNAME
-function Get-UserAccounts($UserGroup)
-{
-    if([string]::IsNullOrEmpty($UserGroup))
-    {
-        Write-Warning "Get-UserAccounts(UserGroup): Function argument null or empty"
-    }
-
-    # Get all Users from specified group
-    $AllUsers = Get-LocalGroupMember -Group $UserGroup | Where-Object {$_.PrincipalSource -eq "Local"} | Select-Object -ExpandProperty Name
-
-    # Get disabled accounts
-    $DisabledAccounts = Get-WmiObject -Class Win32_UserAccount -Filter "Disabled=True" | Select-Object -ExpandProperty Caption
-
-    # Assemble active users into an array
-    $ActiveUsers = @()
-    foreach ($User in $AllUsers)
-    {
-        if (!($DisabledAccounts -contains $User))
-        {
-            $ActiveUsers = $ActiveUsers += $User
-        }
-    }
-
-    if([string]::IsNullOrEmpty($ActiveUsers))
-    {
-        Write-Warning "Get-UserAccounts(UserGroup): Failed to get UserAccounts, variable empty"
-    }
-
-    return $ActiveUsers
 }

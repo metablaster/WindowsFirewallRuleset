@@ -25,7 +25,6 @@ $BroadCast = Get-NetworkSummary $LocalHost $SubnetMask | Select-Object -ExpandPr
 
 if(!(Test-Path variable:global:UserAccounts))
 {
-    Write-Host "generating users"
     # Get list of user account in form of COMPUTERNAME\USERNAME
     New-Variable -Name UserAccounts -Option Constant -Scope Global -Value (Get-UserAccounts("Users"))
     New-Variable -Name AdminAccounts -Option Constant -Scope Global -Value (Get-UserAccounts("Administrators"))
