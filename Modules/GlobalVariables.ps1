@@ -23,26 +23,31 @@ $BroadCast = Get-NetworkSummary $LocalHost $SubnetMask | Select-Object -ExpandPr
 # If link is not valid google out: "well known SID msdn" or similar search string
 # Another way to get information of SDDL string is to create a test rule with that string and see what turns out.
 
-# Human users (Enter usernames here, separate by comma if more users or admins)
-# TODO: we need better way to do this, also what will Get-SDDLFromAccounts @("$AdminAccount", "$UserAccount") do if input wrong?
-$UserName = "User"
-$AdminName = "Admin"
-
-$User = Get-UserSDDL $UserName
-$Admin = Get-UserSDDL $AdminName
-
-$UserAccount = "$Env:Computername" + '\' + "$Username"
-$AdminAccount = "$Env:Computername" + '\' + "$AdminName"
-
-# If users not found, to avoid execution error set Local Principal(-LocalUser) to 'Any'
-if(!$User)
+if(!(Test-Path variable:global:UserAccounts))
 {
-    $User = "Any"
-}
+    Write-Host "generating users"
+    # Get list of user account in form of COMPUTERNAME\USERNAME
+    New-Variable -Name UserAccounts -Option Constant -Scope Global -Value (Get-UserAccounts("Users"))
+    New-Variable -Name AdminAccounts -Option Constant -Scope Global -Value (Get-UserAccounts("Administrators"))
 
-if(!$Admin)
-{
-    $Admin = "Any"
+    # Generate SDDL string for accounts
+    New-Variable -Name UserAccountsSDDL -Option Constant -Scope Global -Value (Get-SDDLFromAccounts $UserAccounts)
+    New-Variable -Name AdminAccountsSDDL -Option Constant -Scope Global -Value (Get-SDDLFromAccounts $AdminAccounts)
+
+    # Generate array of usernames (get rid of ComputerName)
+    $temp = @()
+    foreach($Account in $UserAccounts)
+    {
+        $temp = $temp += $Account.split("\")[1]
+    }
+    New-Variable -Name UserNames -Option Constant -Scope Global -Value $temp 
+
+    $temp = @()
+    foreach($Account in $AdminAccounts)
+    {
+        $temp = $temp += $Account.split("\")[1]
+    }
+    New-Variable -Name AdminNames -Option Constant -Scope Global -Value $temp 
 }
 
 # System users (Uncomment as needed)

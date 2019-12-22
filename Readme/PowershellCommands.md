@@ -35,3 +35,37 @@ Not directly useful, but returns a few more packages than `Get-AppxPackage -Pack
 
 [Reference Get-AppxPackage](https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage?view=win10-ps)
 
+# Get users and computer name
+
+**List all users**
+
+```Get-WmiObject -Class Win32_UserAccount```
+
+**List only users**
+
+```Get-LocalGroupMember -name users```
+
+```Get-LocalGroupMember -Group "Users"```
+
+**Only Administrators**
+
+```Get-LocalGroupMember -Group "Administrators"```
+
+**Prompt user for info**
+
+```Get-Credential```
+
+**Computer information**
+
+```Get-WMIObject -class Win32_ComputerSystem```
+
+**Curently loged in user**
+
+user name, prefixed by its domain\
+```[System.Security.Principal.WindowsIdentity]::GetCurrent().Name```
+
+**Computer name**
+
+```[System.Net.Dns]::GetHostName()```
+
+```Get-WMIObject -class Win32_ComputerSystem | Select-Object -ExpandProperty Name```

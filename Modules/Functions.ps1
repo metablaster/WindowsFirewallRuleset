@@ -9,7 +9,7 @@ function Get-UserSID($UserName)
     return $SID
 }
 
-# Returns SDDL of specified local user or multiple users
+# Returns SDDL of specified local user name or multiple users names
 # Sample usage:
 # New-NetFirewallRule -DisplayName "BlockWWW" -Action Block -LocalUser (Get-UserSDDL user1, user2) -Protocol TCP -Direction Outbound -RemotePort 80, 443
 # Credits to: https://stackoverflow.com/questions/49608182/powershell-new-netfirewallrule-with-localuser-example
@@ -42,6 +42,11 @@ function Get-UserSDDL
 #
 function Get-SDDLFromAccounts($Accounts)
 {
+    if([string]::IsNullOrEmpty($Accounts))
+    {
+        Write-Warning "Get-SDDLFromAccounts(Accounts): Function argument null or empty"
+    }
+
     $SDDL = "D:"
 
     foreach ($UserEntry in $Accounts)
@@ -54,7 +59,7 @@ function Get-SDDLFromAccounts($Accounts)
     
         if (!$SID)
         {
-            "User $User cannot be resolved to a SID. Does the account exist?"
+            Write-Warning "User $User cannot be resolved to a SID."
             continue
         }
     
@@ -247,4 +252,36 @@ function Get-AppSID_Deprecated ($AppName)
             }
         }
     }
+}
+
+# Return an array of enabled user accounts in specified group, in form of COMPUTERNAME\USERNAME
+function Get-UserAccounts($UserGroup)
+{
+    if([string]::IsNullOrEmpty($UserGroup))
+    {
+        Write-Warning "Get-UserAccounts(UserGroup): Function argument null or empty"
+    }
+
+    # Get all Users from specified group
+    $AllUsers = Get-LocalGroupMember -Group $UserGroup | Where-Object {$_.PrincipalSource -eq "Local"} | Select-Object -ExpandProperty Name
+
+    # Get disabled accounts
+    $DisabledAccounts = Get-WmiObject -Class Win32_UserAccount -Filter "Disabled=True" | Select-Object -ExpandProperty Caption
+
+    # Assemble active users into an array
+    $ActiveUsers = @()
+    foreach ($User in $AllUsers)
+    {
+        if (!($DisabledAccounts -contains $User))
+        {
+            $ActiveUsers = $ActiveUsers += $User
+        }
+    }
+
+    if([string]::IsNullOrEmpty($ActiveUsers))
+    {
+        Write-Warning "Get-UserAccounts(UserGroup): Failed to get UserAccounts, variable empty"
+    }
+
+    return $ActiveUsers
 }
