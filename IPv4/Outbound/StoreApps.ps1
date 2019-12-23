@@ -94,10 +94,10 @@ InputApp
 #
 # Import global variables
 #
-. "$PSScriptRoot\..\..\Modules\GlobalVariables.ps1"
+Import-Module -Name $PSScriptRoot\..\FirewallModule
 
 # Ask user if he wants to load these rules
-if (!(RunThis)) { exit }
+if (!(Approve-Execute)) { exit }
 
 #
 # Setup local variables:
@@ -158,7 +158,7 @@ foreach ($User in $UserNames)
         -PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
         -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
         -LocalUser Any -Owner $OwnerSID -Package $PackageSID `
-        -Description "User store apps generated rule."
+        -Description "Store apps generated rule for $User"
     }
 
     #
@@ -180,6 +180,6 @@ foreach ($User in $UserNames)
         -PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $SystemGroup -Profile $Profile -InterfaceType $Interface `
         -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
         -LocalUser Any -Owner $OwnerSID -Package $PackageSID `
-        -Description "System store apps generated rule."
+        -Description "System store apps generated rule for $User"
     }
 }

@@ -39,11 +39,11 @@ For more info see respective licences:\
 
 Note that Powershell is built into Windows by default, you will probably need to install it or update on some old systems.
 
-To be able to apply rules to older systems such as Windows 7, edit the `GlobalVariables.ps1` and add a new variable that defines your system version:
+To be able to apply rules to older systems such as Windows 7, edit the `FirewallModule.psm1` and add a new variable that defines your system version:
 
-```$Platform = "10.0+" #Windows 10 and above``` is defined to target Windows 10 and above by default for all rules, for example for Windows 7, define a new variable that looks like this:
+```New-Variable -Name Platform -Option Constant -Scope Global -Value "10.0+""``` is defined to target Windows 10 and above by default for all rules, for example for Windows 7, define a new variable that looks like this:
 
-```$PlatformWin7 = "6.1" #Windows 7```
+```New-Variable -Name PlatformWin7 -Option Constant -Scope Global -Value "6.1"```
 
 Next you open individual ruleset scripts, and take a look which rules you want to be loaded into your firewall,\
 then simply replace ```-Platform $Platform``` with ```-Platform $PatformWin7``` for each rule you want.

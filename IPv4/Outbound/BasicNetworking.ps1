@@ -26,10 +26,10 @@ SOFTWARE.
 #
 # Import global variables
 #
-. "$PSScriptRoot\..\..\Modules\GlobalVariables.ps1"
+Import-Module -Name $PSScriptRoot\..\FirewallModule
 
 # Ask user if he wants to load these rules
-if (!(RunThis)) { exit }
+if (!(Approve-Execute)) { exit }
 
 #
 # Setup local variables:

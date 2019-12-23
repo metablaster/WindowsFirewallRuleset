@@ -1,5 +1,6 @@
 
-# TODO: convert to module, and import where needed
+# Includes
+Import-Module -Name $PSScriptRoot\..\Indented.Net.IP
 
 # about: get computer accounts for a giver user group
 # Input: User group on local computer
@@ -17,7 +18,7 @@ function Get-UserAccounts
     $AllAccounts = Get-LocalGroupMember -Group $UserGroup | Where-Object {$_.PrincipalSource -eq "Local"} | Select-Object -ExpandProperty Name
 
     # Get disabled accounts
-    $DisabledAccounts = "" #Get-WmiObject -Class Win32_UserAccount -Filter "Disabled=True" | Select-Object -ExpandProperty Caption
+    $DisabledAccounts = Get-WmiObject -Class Win32_UserAccount -Filter "Disabled=True" | Select-Object -ExpandProperty Caption
 
     # Assemble enabled accounts into an array
     $EnabledAccounts = @()
@@ -226,11 +227,11 @@ function Convert-SDDLToACL
     return $ACL
 }
 
-# ParseSDDL returns SDDL based on "object"
+# Show-SDDL returns SDDL based on "object"
 # Credits to: https://blogs.technet.microsoft.com/ashleymcglone/2011/08/29/powershell-sid-walker-texas-ranger-part-1/
-# sample: see Test\Parse-SDDL.ps1 for example
+# sample: see Test\Show-SDDL.ps1 for example
 
-function Parse-SDDL
+function Show-SDDL
 {
     [CmdletBinding()]
     param (
@@ -288,8 +289,8 @@ function Parse-SDDL
 # about: Used to ask user if he want to run script.
 # input: string to present the user
 # output: true if user wants to continue
-# sample: RunThis("sample text")
-function RunThis
+# sample: Approve-Execute("sample text")
+function Approve-Execute
 {
     param (
         [parameter(Mandatory = $false)]
@@ -320,3 +321,126 @@ function RunThis
         return $false
     }
 }
+
+#
+# Predefined project wide variables
+#
+
+# Windows 10 and above
+New-Variable -Name Platform -Option Constant -Scope Global -Value "10.0+"
+# Local Group Policy
+New-Variable -Name PolicyStore -Option Constant -Scope Global -Value "localhost"
+# Stop executing if error
+New-Variable -Name OnError -Option Constant -Scope Global -Value "Stop"
+# To add rules to firewall for real set to false
+New-Variable -Name Debug -Scope Global -Value $false
+# To prompt for each rule set to true
+New-Variable -Name Execute -Scope Global -Value $false
+# Most used program
+New-Variable -Name ServiceHost -Option Constant -Scope Global -Value "%SystemRoot%\System32\svchost.exe"
+# Default network interface card
+New-Variable -Name Interface -Option Constant -Scope Global -Value "Wired, Wireless"
+
+# Network IP configuration (get only IPv4 config, index 0, if IPv6 is configured it's at index 1)
+New-Variable -Name NICConfig -Option Constant -Scope Global -Value (Get-WmiObject Win32_NetworkAdapterConfiguration | Where-Object {$_.DefaultIPGateway -ne $null})
+New-Variable -Name LocalHost -Option Constant -Scope Global -Value $NICConfig.IPAddress[0]
+New-Variable -Name SubnetMask -Option Constant -Scope Global -Value $NICConfig.IPSubnet[0]
+New-Variable -Name BroadCast -Option Constant -Scope Global -Value (Get-NetworkSummary $LocalHost $SubnetMask | Select-Object -ExpandProperty BroadcastAddress | Select-Object -ExpandProperty IPAddressToString)
+
+# NOTE: -LocalUser, -Owner etc. firewall parameters accept SDDL format only
+# For more complete list see: https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/81d92bba-d22b-4a8c-908a-554ab29148ab
+# If link is not valid google out: "well known SID msdn" or similar search string
+# Another way to get information of SDDL string is to create a test rule with that string and see what turns out.
+
+# Get list of user account in form of COMPUTERNAME\USERNAME
+New-Variable -Name UserAccounts -Option Constant -Scope Global -Value (Get-UserAccounts "Users")
+New-Variable -Name AdminAccounts -Option Constant -Scope Global -Value (Get-UserAccounts "Administrators")
+
+# Get list of user names in form of USERNAME
+New-Variable -Name UserNames -Option Constant -Scope Global -Value (Get-UserNames $UserAccounts)
+New-Variable -Name AdminNames -Option Constant -Scope Global -Value (Get-UserNames $AdminAccounts)
+
+# Generate SDDL string for accounts
+New-Variable -Name UserAccountsSDDL -Option Constant -Scope Global -Value (Get-AccountSDDL $UserAccounts)
+New-Variable -Name AdminAccountsSDDL -Option Constant -Scope Global -Value (Get-AccountSDDL $AdminAccounts)
+
+#
+# System users (define variables as needed)
+#
+
+New-Variable -Name NT_AUTHORITY_System -Option Constant -Scope Global -Value "D:(A;;CC;;;S-1-5-18)"
+New-Variable -Name NT_AUTHORITY_LocalService -Option Constant -Scope Global -Value "D:(A;;CC;;;S-1-5-19)"
+New-Variable -Name NT_AUTHORITY_NetworkService -Option Constant -Scope Global -Value "D:(A;;CC;;;S-1-5-20)"
+New-Variable -Name NT_AUTHORITY_UserModeDrivers -Option Constant -Scope Global -Value "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
+
+# "D:(A;;CC;;;S-1-5-0)" # Unknown
+# $NT_AUTHORITY_DialUp = "D:(A;;CC;;;S-1-5-1)"
+# $NT_AUTHORITY_Network = "D:(A;;CC;;;S-1-5-2)"
+# $NT_AUTHORITY_Batch = "D:(A;;CC;;;S-1-5-3)"
+# $NT_AUTHORITY_Interactive = "D:(A;;CC;;;S-1-5-4)"
+# "D:(A;;CC;;;S-1-5-5)" # Unknown
+# $NT_AUTHORITY_Service = "D:(A;;CC;;;S-1-5-6)"
+# $NT_AUTHORITY_AnonymousLogon = "D:(A;;CC;;;S-1-5-7)"
+# $NT_AUTHORITY_Proxy = "D:(A;;CC;;;S-1-5-8)"
+# $NT_AUTHORITY_EnterpriseDomainControlers = "D:(A;;CC;;;S-1-5-9)"
+# $NT_AUTHORITY_Self = "D:(A;;CC;;;S-1-5-10)"
+# $NT_AUTHORITY_AuthenticatedUsers = "D:(A;;CC;;;S-1-5-11)"
+# $NT_AUTHORITY_Restricted = "D:(A;;CC;;;S-1-5-12)"
+# $NT_AUTHORITY_TerminalServerUser = "D:(A;;CC;;;S-1-5-13)"
+# $NT_AUTHORITY_RemoteInteractiveLogon = "D:(A;;CC;;;S-1-5-14)"
+# $NT_AUTHORITY_ThisOrganization = "D:(A;;CC;;;S-1-5-15)"
+# "D:(A;;CC;;;S-1-5-16)" # Unknown
+# $NT_AUTHORITY_Iusr = "D:(A;;CC;;;S-1-5-17)"
+# $NT_AUTHORITY_System = "D:(A;;CC;;;S-1-5-18)"
+# $NT_AUTHORITY_LocalService = "D:(A;;CC;;;S-1-5-19)"
+# $NT_AUTHORITY_NetworkService = "D:(A;;CC;;;S-1-5-20)"
+# "D:(A;;CC;;;S-1-5-21)" ENTERPRISE_READONLY_DOMAIN_CONTROLLERS (S-1-5-21-<root domain>-498)
+# $NT_AUTHORITY_EnterpriseReadOnlyDomainControlersBeta = "D:(A;;CC;;;S-1-5-22)"
+# "D:(A;;CC;;;S-1-5-23)" # Unknown
+
+# Application packages
+# $APPLICATION_PACKAGE_AUTHORITY_AllApplicationPackages = "D:(A;;CC;;;S-1-15-2-1)"
+# $APPLICATION_PACKAGE_AUTHORITY_AllRestrictedApplicationPackages = "D:(A;;CC;;;S-1-15-2-2)"
+# "D:(A;;CC;;;S-1-15-2-3)" #Unknown
+
+# Other System Users
+# $NT_AUTHORITY_UserModeDrivers = "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
+
+#
+# Exports
+#
+
+Export-ModuleMember -Function Get-UserAccounts
+Export-ModuleMember -Function Get-UserNames
+Export-ModuleMember -Function Get-UserSID
+Export-ModuleMember -Function Get-AccountSID
+Export-ModuleMember -Function Get-AppSID
+Export-ModuleMember -Function Get-UserSDDL
+Export-ModuleMember -Function Get-AccountSDDL
+Export-ModuleMember -Function Convert-SDDLToACL
+Export-ModuleMember -Function Show-SDDL
+Export-ModuleMember -Function Approve-Execute
+
+Export-ModuleMember -Variable Platform
+Export-ModuleMember -Variable PolicyStore
+Export-ModuleMember -Variable OnError
+Export-ModuleMember -Variable Debug
+Export-ModuleMember -Variable Execute
+Export-ModuleMember -Variable ServiceHost
+Export-ModuleMember -Variable Interface
+
+Export-ModuleMember -Variable NICConfig
+Export-ModuleMember -Variable LocalHost
+Export-ModuleMember -Variable SubnetMask
+Export-ModuleMember -Variable BroadCast
+Export-ModuleMember -Variable UserAccounts
+Export-ModuleMember -Variable AdminAccounts
+Export-ModuleMember -Variable UserNames
+Export-ModuleMember -Variable AdminNames
+Export-ModuleMember -Variable UserAccountsSDDL
+Export-ModuleMember -Variable AdminAccountsSDDL
+
+Export-ModuleMember -Variable NT_AUTHORITY_System
+Export-ModuleMember -Variable NT_AUTHORITY_LocalService
+Export-ModuleMember -Variable NT_AUTHORITY_NetworkService
+Export-ModuleMember -Variable NT_AUTHORITY_UserModeDrivers

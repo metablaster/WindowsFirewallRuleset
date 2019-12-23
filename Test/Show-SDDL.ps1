@@ -3,7 +3,7 @@
 # Unit test for Parse-SDDL
 #
 
-. "$PSScriptRoot\..\Modules\Functions.ps1"
+Import-Module -Name $PSScriptRoot\..\FirewallModule
 
 # Experiment with different path values to see what the ACL objects do
 $path = "C:\users\User\" #Not inherited
@@ -37,9 +37,9 @@ Write-Host "************************"
 $ACL.SDDL
 
 # Call with named parameter binding 
-# $ACL | ParseSDDL
+# $ACL | Show-SDDL
 
 # Or call with parameter string
-Parse-SDDL $ACL.SDDL
+Show-SDDL $ACL.SDDL
 
 Write-Host ""

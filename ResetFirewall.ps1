@@ -30,7 +30,7 @@ Write-Host "PSVersion: $($PSVersionTable.PSVersion)"
 #
 # Import global variables
 #
-. "$PSScriptRoot\Modules\GlobalVariables.ps1"
+Import-Module -Name $PSScriptRoot\FirewallModule
 
 # Setting up profile seem to be slow, tell user what is going on
 Write-Host "Reseting Firewall to previous state..."

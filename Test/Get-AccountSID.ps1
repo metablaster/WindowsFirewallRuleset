@@ -3,7 +3,7 @@
 # Unit test for Get-AccountSID
 #
 
-. "$PSScriptRoot\..\Modules\Functions.ps1"
+Import-Module -Name $PSScriptRoot\..\FirewallModule
 
 Write-Host ""
 Write-Host "Get-UserAccounts:"

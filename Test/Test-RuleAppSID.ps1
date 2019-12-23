@@ -3,7 +3,7 @@
 # Unit test for Get-AppSID
 #
 
-. "$PSScriptRoot\..\Modules\Functions.ps1"
+Import-Module -Name $PSScriptRoot\..\FirewallModule
 
 $Platform = "10.0+" #Windows 10 and above
 $PolicyStore = "localhost" #Local Group Policy
