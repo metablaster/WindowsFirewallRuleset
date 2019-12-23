@@ -35,7 +35,6 @@ if (!(Approve-Execute)) { exit }
 # Setup local variables:
 #
 $Group = "Development - Github"
-$Interface = "Wired, Wireless"
 $Profile = "Private, Public"
 $Direction = "Outbound"
 

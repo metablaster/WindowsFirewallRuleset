@@ -35,7 +35,6 @@ if (!(Approve-Execute)) { exit }
 # Setup local variables:
 #
 $Group = "Software - TeamViewer"
-$Interface = "Wired, Wireless"
 $Profile = "Any"
 $Direction = "Inbound"
 

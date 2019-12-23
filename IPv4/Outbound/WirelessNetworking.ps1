@@ -35,7 +35,7 @@ if (!(Approve-Execute)) { exit }
 # Setup local variables:
 #
 $Group = "Wireless Networking"
-$Interface = "Wireless"
+$WNInterface = "Wireless"
 $Direction = "Outbound"
 
 # First remove all existing rules matching group
@@ -48,7 +48,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # TODO: local user may need to be 'Any', needs testing.
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Wireless Display" -Service Any -Program "%SystemRoot%\System32\WUDFHost.exe" `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $WNInterface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 443 `
 -LocalUser $NT_AUTHORITY_UserModeDrivers `
 -Description "Driver Foundation - User-mode Driver Framework Host Process.
@@ -58,7 +58,7 @@ loads one or more UMDF driver DLLs, in addition to the framework DLLs."
 # TODO: remote port unknown, rule added because predefined rule for UDP exists
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Wireless Display" -Service Any -Program "%SystemRoot%\System32\WUDFHost.exe" `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $WNInterface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -LocalUser $NT_AUTHORITY_UserModeDrivers -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "Driver Foundation - User-mode Driver Framework Host Process.
@@ -71,7 +71,7 @@ loads one or more UMDF driver DLLs, in addition to the framework DLLs."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "WLAN Service WFD ASP Coordination Protocol" -Service WlanSvc -Program $ServiceHost `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $WNInterface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 7325 -RemotePort 7325 `
 -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "WLAN Service to allow coordination protocol for WFD Service sessions.
@@ -81,7 +81,7 @@ For more info see description of WLAN AutoConfig service."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "WLAN Service WFD Driver-only" -Service Any -Program System `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $WNInterface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 -LocalUser $NT_AUTHORITY_System `
 -Description "Rule for drivers to communicate over WFD, WFD Services kernel mode driver rule.
@@ -91,7 +91,7 @@ For more info see description of WLAN AutoConfig service."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "WLAN Service WFD Driver-only" -Service Any -Program System `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $WNInterface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 -LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "Rule for drivers to communicate over WFD, WFD Services kernel mode driver rule.
@@ -136,28 +136,28 @@ If you turn off this service, you won’t be able to print or see your printers.
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Wireless portable devices (SSDP)" -Service SSDPSRV -Program $ServiceHost `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $WNInterface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 1900 `
 -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "Wireless Portable Devices to allow use of the Simple Service Discovery Protocol."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Wireless portable devices" -Service Any -Program "%SystemRoot%\System32\WUDFHost.exe" `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $WNInterface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 15740 `
 -LocalUser Any `
 -Description "Wireless Portable Devices to allow use of the Usermode Driver Framework."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Wireless portable devices" -Service Any -Program "%SystemRoot%\System32\WUDFHost.exe" `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $WNInterface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Intranet4 -LocalPort Any -RemotePort 15740 `
 -LocalUser Any `
 -Description "Wireless Portable Devices to allow use of the Usermode Driver Framework."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Wireless portable devices (UPnPHost)" -Service upnphost -Program $ServiceHost `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $WNInterface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 2869 `
 -LocalUser Any `
 -Description "Wireless Portable Devices to allow use of Universal Plug and Play."
@@ -165,7 +165,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 #TODO: possible bug in predefined rule, description is not consistent with service paramter
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Wireless portable devices (FDPHost)" -Service fdphost -Program $ServiceHost `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $WNInterface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 2869 `
 -LocalUser Any `
 -Description "Wireless Portable Devices to allow use of Function discovery provider host."

@@ -35,7 +35,6 @@ if (!(Approve-Execute)) { exit }
 # Setup local variables:
 #
 $Group = "Software - Steam"
-$Interface = "Wired, Wireless"
 $Profile = "Private, Public"
 $Direction = "Outbound"
 

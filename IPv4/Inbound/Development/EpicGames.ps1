@@ -35,7 +35,6 @@ if (!(Approve-Execute)) { exit }
 # Setup local variables:
 #
 $Group = "Development - Epic Games"
-$Interface = "Wired, Wireless"
 $Profile = "Any"
 $Direction = "Inbound"
 

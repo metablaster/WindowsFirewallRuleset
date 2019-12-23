@@ -35,7 +35,6 @@ if (!(Approve-Execute)) { exit }
 # Setup local variables:
 #
 $Group = "Games - PokerStars"
-$Interface = "Wired, Wireless"
 $Profile = "Private, Public"
 $Direction = "Outbound"
 
