@@ -84,9 +84,7 @@ Type    Name
 # TODO: add block rules based on remote address
 # TODO: add rule for ISATAP and 4to6
 
-#
-# Import global variables
-#
+# Includes
 Import-Module -Name $PSScriptRoot\..\..\FirewallModule
 
 # Ask user if he wants to load these rules

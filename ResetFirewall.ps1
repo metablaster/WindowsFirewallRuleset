@@ -27,9 +27,7 @@ SOFTWARE.
 Write-Host ""
 Write-Host "PSVersion: $($PSVersionTable.PSVersion)"
 
-#
-# Import global variables
-#
+# Includes
 Import-Module -Name $PSScriptRoot\FirewallModule
 
 # Setting up profile seem to be slow, tell user what is going on

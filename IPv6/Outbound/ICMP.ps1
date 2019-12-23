@@ -80,9 +80,7 @@ Type    Name
 
 # TODO: local and remote addresses need to be adjusted
 
-#
-# Import global variables
-#
+# Includes
 Import-Module -Name $PSScriptRoot\..\..\FirewallModule
 
 # Ask user if he wants to load these rules

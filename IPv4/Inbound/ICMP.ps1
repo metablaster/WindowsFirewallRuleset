@@ -39,9 +39,7 @@ SOFTWARE.
 # 30 Traceroute
 # 31 to 39
 
-#
-# Import global variables
-#
+# Includes
 Import-Module -Name $PSScriptRoot\..\..\FirewallModule
 
 # Ask user if he wants to load these rules

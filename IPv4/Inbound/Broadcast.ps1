@@ -34,9 +34,7 @@ Address                          CIDR / Subnet Mask               Designation
 169.254.0.0-169.254.255.255      169.254.0.0/16 (255.255.0.0)     Automatic Private IP Addressing APIPA
 #>
 
-#
-# Import global variables
-#
+# Includes
 Import-Module -Name $PSScriptRoot\..\..\FirewallModule
 
 # Ask user if he wants to load these rules

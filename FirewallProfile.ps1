@@ -23,9 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Import global variables
-#
+# Includes
 Import-Module -Name $PSScriptRoot\FirewallModule
 
 # Setting up profile seem to be slow, tell user what is going on

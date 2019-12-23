@@ -70,9 +70,7 @@ these IPv6 addresses are valid globally and are globally routable.
 
 # TODO: local address should be known for outbound, for inbound rules remote should be known
 
-#
-# Import global variables
-#
+# Includes
 Import-Module -Name $PSScriptRoot\..\..\FirewallModule
 
 # Ask user if he wants to load these rules

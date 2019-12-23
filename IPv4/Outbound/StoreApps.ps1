@@ -91,9 +91,7 @@ predefined system apps not catched by our command:
 InputApp
 #>
 
-#
-# Import global variables
-#
+# Includes
 Import-Module -Name $PSScriptRoot\..\..\FirewallModule
 
 # Ask user if he wants to load these rules
