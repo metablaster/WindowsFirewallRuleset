@@ -26,27 +26,16 @@ $BroadCast = Get-NetworkSummary $LocalHost $SubnetMask | Select-Object -ExpandPr
 if(!(Test-Path variable:global:UserAccounts))
 {
     # Get list of user account in form of COMPUTERNAME\USERNAME
-    New-Variable -Name UserAccounts -Option Constant -Scope Global -Value (Get-UserAccounts("Users"))
-    New-Variable -Name AdminAccounts -Option Constant -Scope Global -Value (Get-UserAccounts("Administrators"))
+    New-Variable -Name UserAccounts -Option Constant -Scope Global -Value (Get-UserAccounts "Users")
+    New-Variable -Name AdminAccounts -Option Constant -Scope Global -Value (Get-UserAccounts "Administrators")
 
+    # Get list of user names in form of USERNAME
+    New-Variable -Name UserNames -Option Constant -Scope Global -Value (Get-UserNames $UserAccounts)
+    New-Variable -Name AdminNames -Option Constant -Scope Global -Value (Get-UserNames $AdminAccounts)
+    
     # Generate SDDL string for accounts
-    New-Variable -Name UserAccountsSDDL -Option Constant -Scope Global -Value (Get-SDDLFromAccounts $UserAccounts)
-    New-Variable -Name AdminAccountsSDDL -Option Constant -Scope Global -Value (Get-SDDLFromAccounts $AdminAccounts)
-
-    # Generate array of usernames (get rid of ComputerName)
-    $temp = @()
-    foreach($Account in $UserAccounts)
-    {
-        $temp = $temp += $Account.split("\")[1]
-    }
-    New-Variable -Name UserNames -Option Constant -Scope Global -Value $temp 
-
-    $temp = @()
-    foreach($Account in $AdminAccounts)
-    {
-        $temp = $temp += $Account.split("\")[1]
-    }
-    New-Variable -Name AdminNames -Option Constant -Scope Global -Value $temp 
+    New-Variable -Name UserAccountsSDDL -Option Constant -Scope Global -Value (Get-AccountSDDL $UserAccounts)
+    New-Variable -Name AdminAccountsSDDL -Option Constant -Scope Global -Value (Get-AccountSDDL $AdminAccounts)
 }
 
 # System users (Uncomment as needed)

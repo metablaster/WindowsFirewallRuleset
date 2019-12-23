@@ -55,12 +55,12 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Teamviewer Remote Control Application" -Service Any -Program "$TeamViewerRoot\TeamViewer.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 80, 443, 5938 `
--LocalUser $User `
+-LocalUser $UserAccountsSDDL `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Teamviewer Remote Control Service" -Service Any -Program "$TeamViewerRoot\TeamViewer_Service.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 80, 443, 5938 `
--LocalUser $User `
+-LocalUser $UserAccountsSDDL `
 -Description ""

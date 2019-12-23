@@ -38,7 +38,9 @@ $Group = "Windows Services"
 $Profile = "Private, Public"
 $Direction = "Outbound"
 # Extension rules are special rules for problematic services, see ProblematicTraffic.md for more info
-$ExtensionUsers = Get-SDDLFromAccounts @("NT AUTHORITY\SYSTEM", "NT AUTHORITY\LOCAL SERVICE", "NT AUTHORITY\NETWORK SERVICE", "$UserAccount")
+[string[]] $ExtensionAccounts = @("NT AUTHORITY\SYSTEM", "NT AUTHORITY\LOCAL SERVICE", "NT AUTHORITY\NETWORK SERVICE")
+$ExtensionAccounts += $UserAccounts
+$ExtensionUsers = (Get-AccountSDDL $ExtensionAccounts)
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue

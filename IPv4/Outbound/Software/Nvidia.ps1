@@ -56,54 +56,54 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Nvidia Container x64" -Service Any -Program "$NvidiaRoot64\NvContainer\nvcontainer.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser $User `
+-LocalUser $UserAccountsSDDL `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Nvidia Container x86" -Service Any -Program "$NvidiaRoot86\NvContainer\nvcontainer.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser $User `
+-LocalUser $UserAccountsSDDL `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Nvidia GeForce Experience x64" -Service Any -Program "$NvidiaRoot64\NVIDIA GeForce Experience\NVIDIA GeForce Experience.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser $User `
+-LocalUser $UserAccountsSDDL `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Nvidia GeForce Experience x86" -Service Any -Program "$NvidiaRoot86\NVIDIA GeForce Experience\NVIDIA GeForce Experience.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser $User `
+-LocalUser $UserAccountsSDDL `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Nvidia NVDisplay Container x64" -Service Any -Program "$NvidiaRoot64\Display.NvContainer\NVDisplay.Container.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser $User `
+-LocalUser $UserAccountsSDDL `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Nvidia Profile Updater" -Service Any -Program "$NvidiaRoot64\Update Core\NvProfileUpdater64.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser $User `
+-LocalUser $UserAccountsSDDL `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Nvidia Telemetry Container" -Service Any -Program "$NvidiaRoot86\NvTelemetry\NvTelemetryContainer.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser $User `
+-LocalUser $UserAccountsSDDL `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Nvidia WebHelper TCP" -Service Any -Program "$NvidiaRoot86\NvNode\NVIDIA Web Helper.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser $User `
+-LocalUser $UserAccountsSDDL `
 -Description ""

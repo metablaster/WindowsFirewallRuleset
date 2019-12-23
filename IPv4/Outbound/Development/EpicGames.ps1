@@ -56,61 +56,61 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Unreal Engine - CrashReportClientEditor" -Service Any -Program "$EngineRoot\Binaries\Win64\CrashReportClientEditor-Win64-Development.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser $User `
+-LocalUser $UserAccountsSDDL `
 -Description "Used to send crash report to epic games."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Unreal Engine - GitDependencies" -Service Any -Program "$EngineRoot\Binaries\DotNET\GitDependencies.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
--LocalUser $User `
+-LocalUser $UserAccountsSDDL `
 -Description "Engine repo source tool to dowload binaries."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Unreal Engine - SwarmAgent" -Service Any -Program "$EngineRoot\Binaries\DotNET\SwarmAgent.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 80 `
--LocalUser $User `
+-LocalUser $UserAccountsSDDL `
 -Description "Swarm agent is used for build farm."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Unreal Engine - Editor x64" -Service Any -Program "$EngineRoot\Binaries\Win64\UE4Editor.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
--LocalUser $User -LocalOnlyMapping $false -LooseSourceMapping $false `
+-LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Unreal Engine - Editor x64" -Service Any -Program "$EngineRoot\Binaries\Win64\UE4Editor.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser $User `
+-LocalUser $UserAccountsSDDL `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Unreal Engine - UnrealBuildTool" -Service Any -Program "$EngineRoot\Binaries\DotNET\UnrealBuildTool.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
--LocalUser $User `
+-LocalUser $UserAccountsSDDL `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Epic Games - Launcher x32" -Service Any -Program "$LauncherRoot\Portal\Binaries\Win32\EpicGamesLauncher.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser $User `
+-LocalUser $UserAccountsSDDL `
 -Description "Used for initial setup only"
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Epic Games - Launcher x64" -Service Any -Program "$LauncherRoot\Portal\Binaries\Win64\EpicGamesLauncher.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 5222 `
--LocalUser $User `
+-LocalUser $UserAccountsSDDL `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Epic Games - Launcher x64" -Service Any -Program "$LauncherRoot\Portal\Binaries\Win64\EpicGamesLauncher.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
--LocalUser $User -LocalOnlyMapping $false -LooseSourceMapping $false `
+-LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description ""

@@ -60,40 +60,40 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Unreal Engine - CrashReportClientEditor" -Service Any -Program "$EngineRoot\Binaries\Win64\CrashReportClientEditor-Win64-Development.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
--EdgeTraversalPolicy Block -LocalUser $User `
+-EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Unreal Engine - CrashReportClientEditor" -Service Any -Program "$EngineRoot\Binaries\Win64\CrashReportClientEditor-Win64-Development.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
--EdgeTraversalPolicy Block -LocalUser $User -LocalOnlyMapping $false -LooseSourceMapping $false `
+-EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Unreal Engine - SwarmAgent" -Service Any -Program "$EngineRoot\Binaries\DotNET\SwarmAgent.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
--EdgeTraversalPolicy Block -LocalUser $User `
+-EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL `
 -Description "Swarm agent is used for build farm."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Unreal Engine - SwarmAgent" -Service Any -Program "$EngineRoot\Binaries\DotNET\SwarmAgent.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
--EdgeTraversalPolicy Block -LocalUser $User -LocalOnlyMapping $false -LooseSourceMapping $false `
+-EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "Swarm agent is used for build farm."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Unreal Engine - UnrealInsights" -Service Any -Program "$EngineRoot\Binaries\Win64\UnrealInsights.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
--EdgeTraversalPolicy Block -LocalUser $User `
+-EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Unreal Engine - UnrealInsights" -Service Any -Program "$EngineRoot\Binaries\Win64\UnrealInsights.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
--EdgeTraversalPolicy Block -LocalUser $User -LocalOnlyMapping $false -LooseSourceMapping $false `
+-EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description ""

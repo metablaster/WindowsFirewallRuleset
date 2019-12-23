@@ -17,7 +17,7 @@ function Get-UserAccounts
     $AllAccounts = Get-LocalGroupMember -Group $UserGroup | Where-Object {$_.PrincipalSource -eq "Local"} | Select-Object -ExpandProperty Name
 
     # Get disabled accounts
-    $DisabledAccounts = Get-WmiObject -Class Win32_UserAccount -Filter "Disabled=True" | Select-Object -ExpandProperty Caption
+    $DisabledAccounts = "" #Get-WmiObject -Class Win32_UserAccount -Filter "Disabled=True" | Select-Object -ExpandProperty Caption
 
     # Assemble enabled accounts into an array
     $EnabledAccounts = @()
@@ -25,7 +25,7 @@ function Get-UserAccounts
     {
         if (!($DisabledAccounts -contains $Account))
         {
-            $EnabledAccounts = $EnabledAccounts += $Account
+            $EnabledAccounts += $Account
         }
     }
 
@@ -53,7 +53,7 @@ function Get-UserNames
     [string[]] $UserNames = @()
     foreach($Account in $UserAccounts)
     {
-        $UserNames = $UserNames += $Account.split("\")[1]
+        $UserNames += $Account.split("\")[1]
     }
 
     return $UserNames

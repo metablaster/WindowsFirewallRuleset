@@ -50,21 +50,21 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Port 443" -Service Any -Program Any `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser $User `
+-LocalUser $UserAccountsSDDL `
 -Description "Temporary open port 443 to internet, and disable ASAP."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Port 80" -Service Any -Program Any `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
--LocalUser $User `
+-LocalUser $UserAccountsSDDL `
 -Description "Temporary open port 80 to internet, and disable ASAP."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Installer" -Service Any -Program Any `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser $User `
+-LocalUser $UserAccountsSDDL `
 -Description "Enable only to let some installer update or communicate to internet such as office update, and disable ASAP.
 required for ie. downloaded Click-to-Run which does not have persitent location."
 
@@ -72,5 +72,5 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Services" -Service Any -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser $User `
+-LocalUser $UserAccountsSDDL `
 -Description "Enable only to let a service communicate to internet, useful for troubleshooting, and disable ASAP."
