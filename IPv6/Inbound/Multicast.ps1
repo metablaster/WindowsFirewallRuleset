@@ -73,7 +73,7 @@ these IPv6 addresses are valid globally and are globally routable.
 #
 # Import global variables
 #
-Import-Module -Name $PSScriptRoot\..\FirewallModule
+Import-Module -Name $PSScriptRoot\..\..\FirewallModule
 
 # Ask user if he wants to load these rules
 if (!(Approve-Execute)) { exit }
