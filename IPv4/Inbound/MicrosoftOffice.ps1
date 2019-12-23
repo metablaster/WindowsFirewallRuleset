@@ -28,14 +28,15 @@ SOFTWARE.
 . $PSScriptRoot\..\IPSetup.ps1
 Import-Module -Name $PSScriptRoot\..\..\FirewallModule
 
-# Ask user if he wants to load these rules
-if (!(Approve-Execute)) { exit }
-
 #
 # Setup local variables:
 #
 $Group = "Microsoft Office"
 $Profile = "Private, Public"
+
+# Ask user if he wants to load these rules
+Update-Context $IPVersion $Direction $Group
+if (!(Approve-Execute)) { exit }
 
 #
 # Office installation directories

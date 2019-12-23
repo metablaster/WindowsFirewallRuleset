@@ -28,14 +28,15 @@ SOFTWARE.
 . $PSScriptRoot\..\IPSetup.ps1
 Import-Module -Name $PSScriptRoot\..\..\FirewallModule
 
-# Ask user if he wants to load these rules
-if (!(Approve-Execute)) { exit }
-
 #
 # Setup local variables:
 #
 $Group = "Basic Networking - IPv4"
 $Profile = "Any"
+
+# Ask user if he wants to load these rules
+Update-Context $IPVersion $Direction $Group
+if (!(Approve-Execute)) { exit }
 
 # TODO: specifiying -InterfaceAlias $Loopback does not work, dropped packets
 # NOTE: even thogh we specify "IPv4 the loopback interface alias is the same for for IPv4 and IPv6, meaning there is only one loopback interface!"

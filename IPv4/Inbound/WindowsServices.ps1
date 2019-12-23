@@ -28,14 +28,15 @@ SOFTWARE.
 . $PSScriptRoot\..\IPSetup.ps1
 Import-Module -Name $PSScriptRoot\..\..\FirewallModule
 
-# Ask user if he wants to load these rules
-if (!(Approve-Execute)) { exit }
-
 #
 # Setup local variables:
 #
 $Group = "Windows Services"
 # $Profile = "Private, Public"
+
+# Ask user if he wants to load these rules
+Update-Context $IPVersion $Direction $Group
+if (!(Approve-Execute)) { exit }
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue

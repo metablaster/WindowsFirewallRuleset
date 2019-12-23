@@ -44,9 +44,6 @@ SOFTWARE.
 . $PSScriptRoot\..\IPSetup.ps1
 Import-Module -Name $PSScriptRoot\..\..\FirewallModule
 
-# Ask user if he wants to load these rules
-if (!(Approve-Execute)) { exit }
-
 #
 # Setup local variables:
 #
@@ -54,6 +51,10 @@ $Group = "ICMPv4"
 $Program = "System"
 $RemoteAddrWAN = "Any"
 $RemoteAddrLAN = "LocalSubnet4"
+
+# Ask user if he wants to load these rules
+Update-Context $IPVersion $Direction $Group
+if (!(Approve-Execute)) { exit }
 
 <#
 If a network client fails to get an IP address using DHCP, it can discover an address on its own using APIPA.
