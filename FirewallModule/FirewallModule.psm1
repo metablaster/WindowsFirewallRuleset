@@ -39,7 +39,7 @@ function Get-UserAccounts
 }
 
 # about: strip computer names out of computer acounts
-# Input: Array of user computer accounts in form of: COMPUTERNAME\USERNAME
+# Input: Array of user accounts in form of: COMPUTERNAME\USERNAME
 # output: String array of usernames in form of: USERNAME
 # sample: Get-UserNames(@("DESKTOP_PC\USERNAME", "LAPTOP\USERNAME"))
 function Get-UserNames
@@ -110,7 +110,7 @@ function Get-AccountSID
 }
 
 # about: get store app SID
-# input: "PackageFamilyName" string
+# input: Username and "PackageFamilyName" string
 # output: store app SID (security identifier) as string
 # sample: Get-AppSID("User", "Microsoft.MicrosoftEdge_8wekyb3d8bbwe")
 function Get-AppSID
@@ -294,18 +294,23 @@ function Approve-Execute
 {
     param (
         [parameter(Mandatory = $false)]
-        [ValidateLength(1, 300)]
+        [ValidateLength(2, 3)]
+        [string] $DefaultAction = "Yes",
+
+        [parameter(Mandatory = $false)]
         [string] $title = "Executing: " + ((Split-Path -Leaf $MyInvocation.ScriptName).TrimEnd(".ps1")),
 
         [parameter(Mandatory = $false)]
-        [ValidateLength(1, 300)]
         [string] $question = "Are you sure you want to proceed?"
     )
 
     $choices  = "&Yes", "&No"
-    $decision = $Host.UI.PromptForChoice($title, $question, $choices, 0)
+    $default = 0
+    if ($DefaultAction -like "No") { $default = 1 }
 
-    if ($decision -eq 0)
+    $decision = $Host.UI.PromptForChoice($title, $question, $choices, $default)
+
+    if ($decision -eq $default)
     {
         return $true
     }
@@ -321,24 +326,30 @@ function Test-File
 {
     param (
         [parameter(Mandatory = $true)]
+        [bool] $status,
+
+        [parameter(Mandatory = $true)]
         [string] $FilePath
     )
 
-    $ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($FilePath)
-
-    if (!([System.IO.File]::Exists($ExpandedPath)))
+    if ($status)
     {
-        $Executable = Split-Path -Path $ExpandedPath -Leaf
-        Write-Warning "Executable '$Executable' not found, rule won't have any effect
-        Searched path was: $ExpandedPath"
+        $ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($FilePath)
+
+        if (!([System.IO.File]::Exists($ExpandedPath)))
+        {
+            $Executable = Split-Path -Path $ExpandedPath -Leaf
+            Write-Warning "Executable '$Executable' not found, rule won't have any effect
+            Searched path was: $ExpandedPath"
+        }
     }
 }
 
 # about: find installation directory for given program
 # input: predefined program name
 # output: installation directory if found, otherwise empty string
-# sample: Find-Program "Office"
-function Find-Program
+# sample: Find-Installation "Office"
+function Find-Installation
 {
     param (
         [parameter(Mandatory = $true)]
@@ -384,7 +395,7 @@ function Find-Program
 
     Write-Host "If you installed $Program elsewhere adjust the path in $Script and re-run this script later again,
 otherwise ignore this warning if you don't have $Program installed." -ForegroundColor Green
-    if (Approve-Execute "Rule group for $Program" "Do you want to skip loading these rules?") { exit }
+    if (Approve-Execute "No" "Rule group for $Program" "Do you want to force loading these rules anyway?") { exit }
 
     return ""
 }
@@ -392,8 +403,8 @@ otherwise ignore this warning if you don't have $Program installed." -Foreground
 # about: test if given installation directory is valid
 # input: predefined program name and path to program (excluding executable)
 # output: if test OK same path, if not try to update path, else return given path back
-# sample: Test-InstallRoot "Office" "%ProgramFiles(x86)%\Microsoft Office\root\Office16"
-function Test-InstallRoot
+# sample: Test-Installation "Office" "%ProgramFiles(x86)%\Microsoft Office\root\Office16"
+function Test-Installation
 {
     param (
         [parameter(Mandatory = $true, Position = 0)]
@@ -405,7 +416,7 @@ function Test-InstallRoot
 
     if (!(Test-Path -Path $FilePath))
     {
-        $InstallRoot = Find-Program $Program
+        $InstallRoot = Find-Installation $Program
         if (![string]::IsNullOrEmpty($InstallRoot))
         {
             $FilePath.Value = $InstallRoot
@@ -429,7 +440,7 @@ New-Variable -Name PolicyStore -Option Constant -Scope Global -Value "localhost"
 # Stop executing if error
 New-Variable -Name OnError -Option Constant -Scope Global -Value "Stop"
 # To add rules to firewall for real set to false
-New-Variable -Name Debug -Scope Global -Value $false
+New-Variable -Name Debug -Scope Global -Value $true
 # To prompt for each rule set to true
 New-Variable -Name Execute -Scope Global -Value $false
 # Most used program
@@ -517,8 +528,8 @@ Export-ModuleMember -Function Convert-SDDLToACL
 Export-ModuleMember -Function Show-SDDL
 Export-ModuleMember -Function Approve-Execute
 Export-ModuleMember -Function Test-File
-Export-ModuleMember -Function Find-Program
-Export-ModuleMember -Function Test-InstallRoot
+Export-ModuleMember -Function Find-Installation
+Export-ModuleMember -Function Test-Installation
 
 Export-ModuleMember -Variable Platform
 Export-ModuleMember -Variable PolicyStore

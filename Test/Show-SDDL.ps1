@@ -1,6 +1,6 @@
 
 #
-# Unit test for Parse-SDDL
+# Unit test for Show-SDDL
 #
 
 Import-Module -Name $PSScriptRoot\..\FirewallModule

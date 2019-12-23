@@ -1,6 +1,6 @@
 
 #
-# Unit test for Get-AppSID
+# Unit test for adding rules for store apps based on computer users
 #
 
 Import-Module -Name $PSScriptRoot\..\FirewallModule

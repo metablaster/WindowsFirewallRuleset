@@ -31,7 +31,7 @@ Write-Host "Powershell version: $($PSVersionTable.PSVersion)"
 $ScriptPath = Split-Path $MyInvocation.InvocationName
 
 # Set up Firewall profile
-& .\FirewallProfile.ps1
+#& .\FirewallProfile.ps1
 
 #
 # Execute IPv4 rules
@@ -40,7 +40,7 @@ $ScriptPath = Split-Path $MyInvocation.InvocationName
 #
 # Load Inbound rules
 #
-if(Approve-Execute("Applying Inbound IPv4 Rules..."))
+if(Approve-Execute "Yes" "Applying Inbound IPv4 Rules...")
 {
     # Common rules
     & "$ScriptPath\IPv4\Inbound\AdditionalNetworking.ps1"
@@ -57,13 +57,13 @@ if(Approve-Execute("Applying Inbound IPv4 Rules..."))
     & "$ScriptPath\IPv4\Inbound\WindowsServices.ps1"
     & "$ScriptPath\IPv4\Inbound\WirelessNetworking.ps1"
 
-    if(Approve-Execute("Applying Rules for developers..."))
+    if(Approve-Execute "Yes" "Applying Rules for developers...")
     {
         # Rules for developers
         & "$ScriptPath\IPv4\Inbound\Development\EpicGames.ps1"
     }
 
-    if(Approve-Execute("Applying Rules for 3rd party programs..."))
+    if(Approve-Execute "Yes" "Applying Rules for 3rd party programs...")
     {
         # rules for programs
         & "$ScriptPath\IPv4\Inbound\Software\Steam.ps1"
@@ -75,7 +75,7 @@ if(Approve-Execute("Applying Inbound IPv4 Rules..."))
 #
 # Load Outbound rules
 #
-if(Approve-Execute("Applying Outbound IPv4 Rules..."))
+if(Approve-Execute "Yes" "Applying Outbound IPv4 Rules...")
 {
     # Common rules
     & "$ScriptPath\IPv4\Outbound\AdditionalNetworking.ps1"
@@ -95,7 +95,7 @@ if(Approve-Execute("Applying Outbound IPv4 Rules..."))
     & "$ScriptPath\IPv4\Outbound\WindowsSystem.ps1"
     & "$ScriptPath\IPv4\Outbound\WirelessNetworking.ps1"
 
-    if(Approve-Execute("Applying Rules for developers..."))
+    if(Approve-Execute "Yes" "Applying Rules for developers...")
     {
         # Rules for developers
         & "$ScriptPath\IPv4\Outbound\Development\EpicGames.ps1"
@@ -104,14 +104,14 @@ if(Approve-Execute("Applying Outbound IPv4 Rules..."))
         & "$ScriptPath\IPv4\Outbound\Development\VisualStudio.ps1"
     }
 
-    if(Approve-Execute("Applying Rules for games..."))
+    if(Approve-Execute "Yes" "Applying Rules for games...")
     {
         # Rules for games
         & "$ScriptPath\IPv4\Outbound\Games\PokerStars.ps1"
         & "$ScriptPath\IPv4\Outbound\Games\WarThunder.ps1"
     }
 
-    if(Approve-Execute("Applying Rules for 3rd party programs..."))
+    if(Approve-Execute "Yes" "Applying Rules for 3rd party programs...")
     {
         # rules for programs
         & "$ScriptPath\IPv4\Outbound\Software\Nvidia.ps1"
@@ -129,7 +129,7 @@ if(Approve-Execute("Applying Outbound IPv4 Rules..."))
 #
 # Load Inbound rules
 #
-if(Approve-Execute("Applying Inbound IPv6 Rules..."))
+if(Approve-Execute "Yes" "Applying Inbound IPv6 Rules...")
 {
     # Common rules
     & "$ScriptPath\IPv6\Inbound\BasicNetworking.ps1"
@@ -140,7 +140,7 @@ if(Approve-Execute("Applying Inbound IPv6 Rules..."))
 #
 # Load Outbound rules
 #
-if(Approve-Execute("Applying Outbound IPv6 Rules..."))
+if(Approve-Execute "Yes" "Applying Outbound IPv6 Rules...")
 {
     # Common rules
     & "$ScriptPath\IPv6\Outbound\BasicNetworking.ps1"

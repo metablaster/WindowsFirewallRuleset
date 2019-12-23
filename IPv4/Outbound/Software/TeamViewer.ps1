@@ -43,15 +43,7 @@ $TeamViewerRoot = "%ProgramFiles(x86)%\TeamViewer"
 
 
 # Test if installation exists on system
-$status = Test-InstallRoot "TeamViewer" ([ref]$TeamViewerRoot)
-
-# if (!(Test-InstallRoot "TeamViewer" ([ref]$TeamViewerRoot)))
-# {
-#     $script = Split-Path -Leaf $MyInvocation.ScriptName
-#     if (Approve-Execute "Installation path is incorrect or program not installed,
-#     if you installed program elsewhere please adjust the path in $script and re-run this script later again"
-#     "Do you want to skip loading these rules?") { exit }
-# }
+$status = Test-Installation "TeamViewer" ([ref]$TeamViewerRoot)
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
@@ -60,17 +52,19 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Rules for TeamViewer remote control
 #
 
-if ($status) { Test-File "$TeamViewerRoot\TeamViewer.exe" }
+$program = "$TeamViewerRoot\TeamViewer.exe"
+Test-File $status $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Teamviewer Remote Control Application" -Service Any -Program "$TeamViewerRoot\TeamViewer.exe" `
+-DisplayName "Teamviewer Remote Control Application" -Service Any -Program $program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 80, 443, 5938 `
 -LocalUser $UserAccountsSDDL `
 -Description ""
 
-if ($status) { Test-File "$TeamViewerRoot\TeamViewer_Service.exe" }
+$program = "$TeamViewerRoot\TeamViewer_Service.exe"
+Test-File $status $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Teamviewer Remote Control Service" -Service Any -Program "$TeamViewerRoot\TeamViewer_Service.exe" `
+-DisplayName "Teamviewer Remote Control Service" -Service Any -Program $program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 80, 443, 5938 `
 -LocalUser $UserAccountsSDDL `

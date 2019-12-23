@@ -35,6 +35,10 @@ Not directly useful, but returns a few more packages than `Get-AppxPackage -Pack
 
 [Reference Get-AppxPackage](https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage?view=win10-ps)
 
+**Get app details**
+
+```(Get-AppxPackage -Name "*Yourphone*" | Get-AppxPackageManifest).Package.Capabilities```
+
 # Get users and computer name
 
 **List all users**
