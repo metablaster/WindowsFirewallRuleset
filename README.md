@@ -78,20 +78,15 @@ In any case, new system or old, **know that Home versions of Windows do not have
 7. Type: ```cd C:\```
 8. Type: ```git clone git@github.com:metablaster/WindowsFirewallRuleset.git```
 9. Type: ```cd WindowsFirewallRuleset```
-10. Open file explorer and navigate to `C:\WindowsFirewallRuleset\Modules`
-11. Open `GlobalVariables.ps1` with your preffered code editor such as VS Code or Powershell ISE
-12. Edit the line `$UserName = "User"`, input your username by replacing "User" with your username,
-for example if your username is Patrick the line should look like `$UserName = "Patrick"`
-13. Save and close the Powershell script file.
-14. Rules for programs such as internet browser, Visual Studio or whatever software depend on installation variable.\
+10. Rules for programs such as internet browser, Visual Studio or whatever software depend on installation variables.\
 You need to edit these scripts and update installation paths.
-15. Back to Powershell console and type into console: ```.\Main.ps1``` and hit enter (this will attempt to load all the rules)
-16. Follow prompt output, (ie. hit enter each time to proceed until done), it will take at least 10 minutes of your attention.
-17. If you encounter errors, you have several options such as, ignore the errors or fix the script that produced the error and re-run that script once again later.
-18. Once execution is done recall execution policy from step 5 and type:\
+11. Back to Powershell console and type into console: ```.\SetupFirewall.ps1``` and hit enter (this will attempt to load all the rules)
+12. Follow prompt output, (ie. hit enter each time to proceed until done), it will take at least 10 minutes of your attention.
+13. If you encounter errors, you have several options such as, ignore the errors or fix the script that produced the error and re-run that script once again later.
+14. Once execution is done recall execution policy from step 5 and type:\
 ```Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force```\
 (if previous policy was "RemoteSigned")
-19. Now that rules are applied you may need to adjust some of them in Local Group Policy, not all the rules are enabled by default and you may want to toggle default Allow/Block behavior for some rules, rules for programs which do not exist need to be made additionally.\
+15. Now that rules are applied you may need to adjust some of them in Local Group Policy, not all the rules are enabled by default and you may want to toggle default Allow/Block behavior for some rules, rules for programs which do not exist need to be made additionally.\
 See next sections for more info.
 
 # Where are my rules?
@@ -104,7 +99,7 @@ Rules are loaded into Local group policy, follow bellow steps to open local grou
 
 # Applying individual rulesets
 If you want to apply only specific rules there are 2 ways to do this:
-1. Execute `Main.ps1` and hit enter only for rullesets you want, otherwise type `n` and hit enter to skip current ruleset.
+1. Execute `SetupFirewall.ps1` and hit enter only for rullesets you want, otherwise type `n` and hit enter to skip current ruleset.
 2. Inside powershell navigate to folder containing the ruleset script you want, and execute individual Powershell script.
 3. You may want to run `FirewallProfile.ps1` to apply default firewall behavior, or you can do it manually in GPO.
 

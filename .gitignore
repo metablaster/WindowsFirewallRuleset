@@ -27,8 +27,8 @@
 *.sbr
 *.bsc
 
-#Visual studio settings
+# Visual studio settings
 .vs/
 
-#Private Stuff
+# Add your private stuff here
 test.ps1
