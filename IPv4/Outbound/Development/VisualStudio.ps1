@@ -44,6 +44,9 @@ if (!(Approve-Execute)) { exit }
 $VSRoot = "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community"
 $VSInstallerRoot = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
 
+# Test if installation exists on system
+$global:InstallationStatus = Test-Installation "VisualStudio" ([ref] $OfficeRoot)
+
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 

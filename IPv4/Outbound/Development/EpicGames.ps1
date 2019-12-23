@@ -44,6 +44,10 @@ if (!(Approve-Execute)) { exit }
 $EngineRoot = "%SystemDrive%\Users\User\source\repos\UnrealEngine\Engine"
 $LauncherRoot = "%ProgramFiles(x86)%\Epic Games\Launcher"
 
+# Test if installation exists on system
+$EngineStatus = Test-Installation "EpicGames" ([ref] $OfficeRoot)
+$LauncherStatus = Test-Installation "UnrealEngine" ([ref] $OfficeRoot)
+
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 

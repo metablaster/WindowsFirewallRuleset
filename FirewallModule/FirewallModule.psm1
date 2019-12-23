@@ -327,13 +327,10 @@ function Test-File
 {
     param (
         [parameter(Mandatory = $true)]
-        [bool] $status,
-
-        [parameter(Mandatory = $true)]
         [string] $FilePath
     )
 
-    if ($status)
+    if ($global:InstallationStatus)
     {
         $ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($FilePath)
 
@@ -361,7 +358,7 @@ function Find-Installation
     # otherwise firewall GUI will show full paths which is not desired for sorting reasons
     switch -Wildcard ($Program)
     {
-        "Office"
+        "MicrosoftOffice"
         {
             [string] $OfficeRoot = "%ProgramFiles%\Microsoft Office\root\Office16"
             if (Test-Path -Path ([System.Environment]::ExpandEnvironmentVariables($OfficeRoot)))
@@ -477,6 +474,8 @@ New-Variable -Name Interface -Option Constant -Scope Global -Value "Wired, Wirel
 
 # Global execution context, used in Approve-Execute
 New-Variable -Name Context -Scope Global -Value "Context not set"
+# Global status to check if installation directory exists, used by Test-File
+New-Variable -Name InstallationStatus -Scope Global -Value = $false
 
 # Network IP configuration (get only IPv4 config, index 0, if IPv6 is configured it's at index 1)
 New-Variable -Name NICConfig -Option Constant -Scope Global -Value (Get-WmiObject Win32_NetworkAdapterConfiguration | Where-Object {$_.DefaultIPGateway -ne $null})
@@ -571,6 +570,7 @@ Export-ModuleMember -Variable ServiceHost
 Export-ModuleMember -Variable Interface
 
 Export-ModuleMember -Variable Context
+Export-ModuleMember -Variable InstallationStatus
 
 Export-ModuleMember -Variable NICConfig
 Export-ModuleMember -Variable LocalHost

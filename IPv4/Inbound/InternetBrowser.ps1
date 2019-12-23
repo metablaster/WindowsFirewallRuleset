@@ -48,6 +48,12 @@ $CHROMECAST_IP = 192.168.8.50
 $ChromeRoot = "%SystemDrive%\Users\User\AppData\Local\Google"
 $ChromeApp = "$ChromeRoot\Chrome\Application\chrome.exe"
 
+# Test if installation exists on system
+$ChromeStatus = Test-Installation "Chrome" ([ref] $ChromeRoot)
+$FirefoxStatus = Test-Installation "Firefox" ([ref] $FirefoxRoot)
+$YandexStatus = Test-Installation "Yandex" ([ref] $YandexRoot)
+$TorStatus = Test-Installation "Tor" ([ref] $TorRoot)
+
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 

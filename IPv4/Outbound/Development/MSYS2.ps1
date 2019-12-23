@@ -43,6 +43,9 @@ if (!(Approve-Execute)) { exit }
 #
 $MSYS2Root = "%ProgramFiles%\msys64"
 
+# Test if installation exists on system
+$global:InstallationStatus = Test-Installation "MSYS2" ([ref] $OfficeRoot)
+
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 

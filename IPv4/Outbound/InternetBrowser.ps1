@@ -58,6 +58,12 @@ $YandexApp = "$YandexRoot\YandexBrowser\Application\browser.exe"
 $TorRoot = "%SystemDrive%\Users\User\AppData\Local\Tor Browser"
 $TorApp = "$TorRoot\Browser\TorBrowser\Tor\tor.exe"
 
+# Test if installation exists on system
+$ChromeStatus = Test-Installation "Chrome" ([ref] $ChromeRoot)
+$FirefoxStatus = Test-Installation "Firefox" ([ref] $FirefoxRoot)
+$YandexStatus = Test-Installation "Yandex" ([ref] $YandexRoot)
+$TorStatus = Test-Installation "Tor" ([ref] $TorRoot)
+
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 

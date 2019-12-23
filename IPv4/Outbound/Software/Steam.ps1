@@ -43,6 +43,9 @@ if (!(Approve-Execute)) { exit }
 #
 $SteamRoot = "%ProgramFiles(x86)%\Steam"
 
+# Test if installation exists on system
+$global:InstallationStatus = Test-Installation "Steam" ([ref] $OfficeRoot)
+
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 

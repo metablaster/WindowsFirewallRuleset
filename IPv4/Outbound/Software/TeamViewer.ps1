@@ -43,9 +43,8 @@ if (!(Approve-Execute)) { exit }
 #
 $TeamViewerRoot = "%ProgramFiles(x86)%\TeamViewer"
 
-
 # Test if installation exists on system
-$status = Test-Installation "TeamViewer" ([ref]$TeamViewerRoot)
+$global:InstallationStatus = Test-Installation "TeamViewer" ([ref]$TeamViewerRoot)
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
@@ -55,7 +54,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 $program = "$TeamViewerRoot\TeamViewer.exe"
-Test-File $status $program
+Test-File $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Teamviewer Remote Control Application" -Service Any -Program $program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -64,7 +63,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description ""
 
 $program = "$TeamViewerRoot\TeamViewer_Service.exe"
-Test-File $status $program
+Test-File $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Teamviewer Remote Control Service" -Service Any -Program $program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

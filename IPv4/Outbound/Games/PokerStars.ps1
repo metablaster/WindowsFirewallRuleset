@@ -43,6 +43,9 @@ if (!(Approve-Execute)) { exit }
 #
 $PokerStarsRoot = "%ProgramFiles(x86)%\PokerStars.EU"
 
+# Test if installation exists on system
+$global:InstallationStatus = Test-Installation "PokerStars" ([ref] $OfficeRoot)
+
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 

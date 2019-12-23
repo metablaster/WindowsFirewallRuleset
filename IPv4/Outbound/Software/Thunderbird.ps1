@@ -43,6 +43,9 @@ if (!(Approve-Execute)) { exit }
 #
 $ThunderbirdRoot = "%ProgramFiles%\Mozilla Thunderbird"
 
+# Test if installation exists on system
+$global:InstallationStatus = Test-Installation "Thuderbird" ([ref] $OfficeRoot)
+
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 

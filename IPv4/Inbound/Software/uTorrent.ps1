@@ -43,6 +43,9 @@ if (!(Approve-Execute)) { exit }
 #
 $uTorrentRoot = "%SystemDrive%\Users\$UserName\AppData\Local\uTorrent"
 
+# Test if installation exists on system
+$global:InstallationStatus = Test-Installation "uTorrent" ([ref] $OfficeRoot)
+
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 

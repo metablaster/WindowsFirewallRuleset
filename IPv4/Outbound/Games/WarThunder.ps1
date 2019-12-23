@@ -43,6 +43,9 @@ if (!(Approve-Execute)) { exit }
 #
 $WarThunderRoot = "%ProgramFiles(x86)%\Steam\steamapps\common\War Thunder"
 
+# Test if installation exists on system
+$global:InstallationStatus = Test-Installation "WarThunder" ([ref] $OfficeRoot)
+
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 

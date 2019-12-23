@@ -44,6 +44,10 @@ if (!(Approve-Execute)) { exit }
 $GitRoot = "%ProgramFiles%\Git"
 $GithubRoot = "%SystemDrive%\Users\$UserName\AppData\Local\GitHubDesktop\app-2.2.3"
 
+# Test if installation exists on system
+$GitStatus = Test-Installation "Git" ([ref] $OfficeRoot)
+$GithubStatus = Test-Installation "Github" ([ref] $OfficeRoot)
+
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
