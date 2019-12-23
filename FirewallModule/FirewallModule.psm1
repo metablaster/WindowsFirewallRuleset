@@ -295,31 +295,127 @@ function Approve-Execute
     param (
         [parameter(Mandatory = $false)]
         [ValidateLength(1, 300)]
-        [string] $info
+        [string] $title = "Executing: " + ((Split-Path -Leaf $MyInvocation.ScriptName).TrimEnd(".ps1")),
+
+        [parameter(Mandatory = $false)]
+        [ValidateLength(1, 300)]
+        [string] $question = "Are you sure you want to proceed?"
     )
 
-    if($info)
-    {
-        $title = $info
-    }
-    else
-    {
-        $title = "Executing: "
-        $title += Split-Path -Leaf $MyInvocation.ScriptName
-    }
-
-    $question = "Are you sure you want to proceed?"
     $choices  = "&Yes", "&No"
-
     $decision = $Host.UI.PromptForChoice($title, $question, $choices, 0)
+
     if ($decision -eq 0)
     {
         return $true
     }
-    else
+
+    return $false
+}
+
+# about: check if file such as an *.exe exists
+# input: path to file
+# output: warning message if file not found
+# sample: Test-File("C:\Users\User\AppData\Local\Google\Chrome\Application\chrome.exe")
+function Test-File
+{
+    param (
+        [parameter(Mandatory = $true)]
+        [string] $FilePath
+    )
+
+    $ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($FilePath)
+
+    if (!([System.IO.File]::Exists($ExpandedPath)))
     {
+        $Executable = Split-Path -Path $ExpandedPath -Leaf
+        Write-Warning "Executable '$Executable' not found, rule won't have any effect
+        Searched path was: $ExpandedPath"
+    }
+}
+
+# about: find installation directory for given program
+# input: predefined program name
+# output: installation directory if found, otherwise empty string
+# sample: Find-Program "Office"
+function Find-Program
+{
+    param (
+        [parameter(Mandatory = $true)]
+        [string] $Program
+    )
+
+    # NOTE: we want to preserve system environment variables for firewall GUI,
+    # otherwise firewall GUI will show full paths which is not desired for sorting reasons
+    switch -Wildcard ($Program)
+    {
+        "Office"
+        {
+            [string] $OfficeRoot = "%ProgramFiles%\Microsoft Office\root\Office16"
+            if (Test-Path -Path ([System.Environment]::ExpandEnvironmentVariables($OfficeRoot)))
+            {
+                return $OfficeRoot
+            }
+            $OfficeRoot = "%ProgramFiles(x86)%\Microsoft Office\root\Office16"
+            if (Test-Path -Path ([System.Environment]::ExpandEnvironmentVariables($OfficeRoot)))
+            {
+                return $OfficeRoot
+            }
+            break
+        }
+        "TeamViewer"
+        {
+            [string] $TeamViewerRoot = "%ProgramFiles(x86)%\TeamViewer"
+            if (Test-Path -Path ([System.Environment]::ExpandEnvironmentVariables($TeamViewerRoot)))
+            {
+                return $TeamViewerRoot
+            }
+            break
+        }
+        Default
+        {
+            Write-Warning "Parameter '$Program' not recognized"
+            return ""
+        }
+    }
+
+    Write-Warning "Installation directory for '$Program' not found"
+    $Script = (Get-PSCallStack)[2].Command
+
+    Write-Host "If you installed $Program elsewhere adjust the path in $Script and re-run this script later again,
+otherwise ignore this warning if you don't have $Program installed." -ForegroundColor Green
+    if (Approve-Execute "Rule group for $Program" "Do you want to skip loading these rules?") { exit }
+
+    return ""
+}
+
+# about: test if given installation directory is valid
+# input: predefined program name and path to program (excluding executable)
+# output: if test OK same path, if not try to update path, else return given path back
+# sample: Test-InstallRoot "Office" "%ProgramFiles(x86)%\Microsoft Office\root\Office16"
+function Test-InstallRoot
+{
+    param (
+        [parameter(Mandatory = $true, Position = 0)]
+        [string] $Program,
+
+        [parameter(Mandatory = $true, Position = 1)]
+        [ref] $FilePath
+    )
+
+    if (!(Test-Path -Path $FilePath))
+    {
+        $InstallRoot = Find-Program $Program
+        if (![string]::IsNullOrEmpty($InstallRoot))
+        {
+            $FilePath.Value = $InstallRoot
+            return $true
+        }
+
         return $false
     }
+
+    return $true
 }
 
 #
@@ -420,6 +516,9 @@ Export-ModuleMember -Function Get-AccountSDDL
 Export-ModuleMember -Function Convert-SDDLToACL
 Export-ModuleMember -Function Show-SDDL
 Export-ModuleMember -Function Approve-Execute
+Export-ModuleMember -Function Test-File
+Export-ModuleMember -Function Find-Program
+Export-ModuleMember -Function Test-InstallRoot
 
 Export-ModuleMember -Variable Platform
 Export-ModuleMember -Variable PolicyStore

@@ -42,6 +42,9 @@ $Direction = "Outbound"
 $OfficeRoot = "%ProgramFiles%\Microsoft Office\root\Office16"
 $OfficeShared = "%ProgramFiles%\Common Files\microsoft shared"
 
+# Test if installation exists on system
+$status = Test-InstallRoot "Office" ([ref] $OfficeRoot)
+
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
@@ -49,6 +52,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Microsoft office rules
 #
 
+if ($status) { Test-File "$OfficeRoot\MSACCESS.EXE" }
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Access" -Service Any -Program "$OfficeRoot\MSACCESS.EXE" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -61,6 +65,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 # For some odd fucking reason the downloaded clicktorun wants to communicate with ms servers directly completely ignoring the proxy.
 # https://www.reddit.com/r/sysadmin/comments/7hync7/updating_office_2016_hb_click_to_run_through/
 # TL;DR: netsh winhttp set proxy proxy-server="fubar" bypass-list="<local>"
+if ($status) { Test-File "$OfficeShared\ClickToRun\OfficeClickToRun.exe" }
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Click to Run" -Service Any -Program "$OfficeShared\ClickToRun\OfficeClickToRun.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -70,6 +75,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 of installing and updating Office, that utilizes streaming and virtualization technology
 to reduce the time required to install Office and help run multiple versions of Office on the same computer."
 
+if ($status) { Test-File "$OfficeShared\ClickToRun\OfficeC2RClient.exe" }
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "ClickC2RClient" -Service Any -Program "$OfficeShared\ClickToRun\OfficeC2RClient.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -77,6 +83,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $NT_AUTHORITY_System `
 -Description "Allows users to check for and install updates for Office on demand."
 
+if ($status) { Test-File "$OfficeRoot\MSOSYNC.EXE" }
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Document Cache" -Service Any -Program "$OfficeRoot\MSOSYNC.EXE" `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -85,6 +92,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "The Office Document Cache is a concept used in Microsoft Office Upload Center
 to give you a way to see the state of files you are uploading to a SharePoint server. "
 
+if ($status) { Test-File "$OfficeRoot\EXCEL.EXE" }
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Excel" -Service Any -Program "$OfficeRoot\EXCEL.EXE" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -92,6 +100,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description ""
 
+if ($status) { Test-File "$OfficeRoot\ADDINS\Microsoft Power Query for Excel Integrated\bin\Microsoft.Mashup.Container.NetFX40.exe" }
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Excel (Mashup Container)" -Service Any -Program "$OfficeRoot\ADDINS\Microsoft Power Query for Excel Integrated\bin\Microsoft.Mashup.Container.NetFX40.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -99,6 +108,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description "Used to query data from web in excel."
 
+if ($status) { Test-File "$OfficeRoot\CLVIEW.EXE" }
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Help" -Service Any -Program "$OfficeRoot\CLVIEW.EXE" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -106,6 +116,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description ""
 
+if ($status) { Test-File "$OfficeRoot\OUTLOOK.EXE" }
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Outlook (HTTP/S)" -Service Any -Program "$OfficeRoot\OUTLOOK.EXE" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -113,6 +124,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description ""
 
+if ($status) { Test-File "$OfficeRoot\OUTLOOK.EXE" }
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Outlook (IMAP SSL)" -Service Any -Program "$OfficeRoot\OUTLOOK.EXE" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -120,6 +132,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description "Incoming mail server over SSL."
 
+if ($status) { Test-File "$OfficeRoot\OUTLOOK.EXE" }
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Outlook (IMAP)" -Service Any -Program "$OfficeRoot\OUTLOOK.EXE" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -127,6 +140,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description "Incoming mail server."
 
+if ($status) { Test-File "$OfficeRoot\OUTLOOK.EXE" }
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Outlook (POP3 SSL)" -Service Any -Program "$OfficeRoot\OUTLOOK.EXE" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -134,6 +148,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description "Incoming mail server over SSL."
 
+if ($status) { Test-File "$OfficeRoot\OUTLOOK.EXE" }
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Outlook (POP3)" -Service Any -Program "$OfficeRoot\OUTLOOK.EXE" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -141,6 +156,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description "Incoming mail server."
 
+if ($status) { Test-File "$OfficeRoot\OUTLOOK.EXE" }
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Outlook (SMTP)" -Service Any -Program "$OfficeRoot\OUTLOOK.EXE" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -148,6 +164,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description "Outgoing mail server."
 
+if ($status) { Test-File "$OfficeRoot\POWERPNT.EXE" }
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "PowerPoint" -Service Any -Program "$OfficeRoot\POWERPNT.EXE" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -155,6 +172,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description ""
 
+if ($status) { Test-File "$OfficeRoot\WINPROJ.EXE" }
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Project" -Service Any -Program "$OfficeRoot\WINPROJ.EXE" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -162,6 +180,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description ""
 
+if ($status) { Test-File "$OfficeRoot\MSPUB.EXE" }
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Publisher" -Service Any -Program "$OfficeRoot\MSPUB.EXE" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -169,6 +188,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description ""
 
+if ($status) { Test-File "$OfficeRoot\SDXHelper.exe" }
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "sdxhelper" -Service Any -Program "$OfficeRoot\SDXHelper.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -176,6 +196,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description "this executable is used when later Office versions are installed in parallel with an earlier version so that they can peacefully coexist."
 
+if ($status) { Test-File "$OfficeRoot\lync.exe" }
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Skype for business" -Service Any -Program "$OfficeRoot\lync.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -183,6 +204,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description "Skype for business, previously lync."
 
+if ($status) { Test-File "$OfficeRoot\msoia.exe" }
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Telemetry Agent" -Service Any -Program "$OfficeRoot\msoia.exe" `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -191,6 +213,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "The telemetry agent collects several types of telemetry data for Office.
 https://docs.microsoft.com/en-us/deployoffice/compat/data-that-the-telemetry-agent-collects-in-office"
 
+if ($status) { Test-File "$OfficeRoot\VISIO.EXE" }
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Visio" -Service Any -Program "$OfficeRoot\VISIO.EXE" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -198,6 +221,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description ""
 
+if ($status) { Test-File "$OfficeRoot\WINWORD.EXE" }
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Word" -Service Any -Program "$OfficeRoot\WINWORD.EXE" `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

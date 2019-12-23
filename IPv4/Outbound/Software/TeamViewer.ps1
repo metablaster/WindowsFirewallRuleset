@@ -41,6 +41,18 @@ $Direction = "Outbound"
 #
 $TeamViewerRoot = "%ProgramFiles(x86)%\TeamViewer"
 
+
+# Test if installation exists on system
+$status = Test-InstallRoot "TeamViewer" ([ref]$TeamViewerRoot)
+
+# if (!(Test-InstallRoot "TeamViewer" ([ref]$TeamViewerRoot)))
+# {
+#     $script = Split-Path -Leaf $MyInvocation.ScriptName
+#     if (Approve-Execute "Installation path is incorrect or program not installed,
+#     if you installed program elsewhere please adjust the path in $script and re-run this script later again"
+#     "Do you want to skip loading these rules?") { exit }
+# }
+
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
@@ -48,6 +60,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Rules for TeamViewer remote control
 #
 
+if ($status) { Test-File "$TeamViewerRoot\TeamViewer.exe" }
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Teamviewer Remote Control Application" -Service Any -Program "$TeamViewerRoot\TeamViewer.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -55,6 +68,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description ""
 
+if ($status) { Test-File "$TeamViewerRoot\TeamViewer_Service.exe" }
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Teamviewer Remote Control Service" -Service Any -Program "$TeamViewerRoot\TeamViewer_Service.exe" `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
