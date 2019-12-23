@@ -85,6 +85,8 @@ Type    Name
 # TODO: add rule for ISATAP and 4to6
 
 # Includes
+. $PSScriptRoot\DirectionSetup.ps1
+. $PSScriptRoot\..\IPSetup.ps1
 Import-Module -Name $PSScriptRoot\..\..\FirewallModule
 
 # Ask user if he wants to load these rules
@@ -98,7 +100,6 @@ $Profile = "Any"
 $RemoteAddr = @("Internet6", "LocalSubnet6")
 $RouterSpace = @("LocalSubnet6", "ff02::2", "fe80::/64") # Messages to/from router
 $Description = "https://www.iana.org/assignments/icmpv6-parameters/icmpv6-parameters.xhtml"
-$Direction = "Inbound"
 # NOTE: we need Any to include IPv6 loopback interface because IPv6 loopback rule does not work on boot, (neither ::1 address nor interface alias)
 $ICMPInterface = "Any"
 

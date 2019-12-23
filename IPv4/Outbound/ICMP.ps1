@@ -40,6 +40,8 @@ SOFTWARE.
 # 31 to 39
 
 # Includes
+. $PSScriptRoot\DirectionSetup.ps1
+. $PSScriptRoot\..\IPSetup.ps1
 Import-Module -Name $PSScriptRoot\..\..\FirewallModule
 
 # Ask user if he wants to load these rules
@@ -52,7 +54,6 @@ $Group = "ICMPv4"
 $Program = "System"
 $RemoteAddrWAN = "Any"
 $RemoteAddrLAN = "LocalSubnet4"
-$Direction = "Outbound"
 
 <#
 If a network client fails to get an IP address using DHCP, it can discover an address on its own using APIPA.

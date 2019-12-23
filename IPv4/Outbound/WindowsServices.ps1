@@ -24,6 +24,8 @@ SOFTWARE.
 #>
 
 # Includes
+. $PSScriptRoot\DirectionSetup.ps1
+. $PSScriptRoot\..\IPSetup.ps1
 Import-Module -Name $PSScriptRoot\..\..\FirewallModule
 
 # Ask user if he wants to load these rules
@@ -34,7 +36,6 @@ if (!(Approve-Execute)) { exit }
 #
 $Group = "Windows Services"
 $Profile = "Private, Public"
-$Direction = "Outbound"
 # Extension rules are special rules for problematic services, see ProblematicTraffic.md for more info
 [string[]] $ExtensionAccounts = @("NT AUTHORITY\SYSTEM", "NT AUTHORITY\LOCAL SERVICE", "NT AUTHORITY\NETWORK SERVICE")
 $ExtensionAccounts += $UserAccounts

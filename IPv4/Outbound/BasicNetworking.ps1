@@ -24,6 +24,8 @@ SOFTWARE.
 #>
 
 # Includes
+. $PSScriptRoot\DirectionSetup.ps1
+. $PSScriptRoot\..\IPSetup.ps1
 Import-Module -Name $PSScriptRoot\..\..\FirewallModule
 
 # Ask user if he wants to load these rules
@@ -34,7 +36,7 @@ if (!(Approve-Execute)) { exit }
 #
 $Group = "Basic Networking - IPv4"
 $Profile = "Any"
-$Direction = "Outbound"
+
 # TODO: specifiying -InterfaceAlias $Loopback does not work, dropped packets
 # NOTE: even thogh we specify "IPv4 the loopback interface alias is the same for for IPv4 and IPv6, meaning there is only one loopback interface!"
 # $Loopback = Get-NetIPInterface | Where-Object {$_.InterfaceAlias -like "*Loopback*" -and $_.AddressFamily -eq "IPv4"} | Select-Object -ExpandProperty InterfaceAlias

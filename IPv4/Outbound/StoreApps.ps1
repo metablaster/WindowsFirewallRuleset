@@ -92,6 +92,8 @@ InputApp
 #>
 
 # Includes
+. $PSScriptRoot\DirectionSetup.ps1
+. $PSScriptRoot\..\IPSetup.ps1
 Import-Module -Name $PSScriptRoot\..\..\FirewallModule
 
 # Ask user if he wants to load these rules
@@ -103,7 +105,6 @@ if (!(Approve-Execute)) { exit }
 $Group = "Store Apps"
 $SystemGroup = "Store Apps - System"
 $Profile = "Private, Public"
-$Direction = "Outbound"
 $NetworkApps = Get-Content -Path "$PSScriptRoot\..\NetworkApps.txt"
 
 # First remove all existing rules matching group

@@ -44,6 +44,8 @@ Address Range                 Size       Designation
 #>
 
 # Includes
+. $PSScriptRoot\DirectionSetup.ps1
+. $PSScriptRoot\..\IPSetup.ps1
 Import-Module -Name $PSScriptRoot\..\..\FirewallModule
 
 # Ask user if he wants to load these rules
@@ -54,7 +56,6 @@ if (!(Approve-Execute)) { exit }
 #
 $Group = "Multicast IPv4"
 $Profile = "Private, Domain"
-$Direction = "Outbound"
 $MulticastUsers = Get-AccountSDDL @("NT AUTHORITY\NETWORK SERVICE", "NT AUTHORITY\LOCAL SERVICE")
 
 # First remove all existing rules matching group

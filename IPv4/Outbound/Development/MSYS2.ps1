@@ -24,6 +24,8 @@ SOFTWARE.
 #>
 
 # Includes
+. $PSScriptRoot\..\DirectionSetup.ps1
+. $PSScriptRoot\..\..\IPSetup.ps1
 Import-Module -Name $PSScriptRoot\..\..\..\FirewallModule
 
 # Ask user if he wants to load these rules
@@ -34,7 +36,6 @@ if (!(Approve-Execute)) { exit }
 #
 $Group = "Development - MSYS2"
 $Profile = "Private, Public"
-$Direction = "Outbound"
 
 #
 # Steam installation directories

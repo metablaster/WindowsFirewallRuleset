@@ -31,7 +31,7 @@ Write-Host "Powershell version: $($PSVersionTable.PSVersion)"
 Import-Module -Name $PSScriptRoot\FirewallModule
 
 # Set up Firewall profile
-#& .\FirewallProfile.ps1
+& .\FirewallProfile.ps1
 
 #
 # Execute IPv4 rules

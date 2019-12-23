@@ -71,6 +71,8 @@ these IPv6 addresses are valid globally and are globally routable.
 # TODO: local address should be known for outbound, for inbound rules remote should be known
 
 # Includes
+. $PSScriptRoot\DirectionSetup.ps1
+. $PSScriptRoot\..\IPSetup.ps1
 Import-Module -Name $PSScriptRoot\..\..\FirewallModule
 
 # Ask user if he wants to load these rules
@@ -82,7 +84,6 @@ if (!(Approve-Execute)) { exit }
 $Group = "Multicast IPv6"
 $Profile = "Private, Domain"
 $Description = "http://www.iana.org/assignments/ipv6-multicast-addresses/ipv6-multicast-addresses.xhtml"
-$Direction = "Outbound"
 $MulticastUsers = Get-AccountSDDL @("NT AUTHORITY\NETWORK SERVICE", "NT AUTHORITY\LOCAL SERVICE")
 # NOTE: we need Any to include IPv6 loopback interface because IPv6 loopback rule does not work on boot, (neither ::1 address nor interface alias)
 $MulticastInterface = "Any"
