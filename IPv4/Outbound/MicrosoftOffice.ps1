@@ -24,6 +24,8 @@ SOFTWARE.
 #>
 
 # Includes
+. $PSScriptRoot\DirectionSetup.ps1
+. $PSScriptRoot\..\IPSetup.ps1
 Import-Module -Name $PSScriptRoot\..\..\FirewallModule
 
 #
@@ -31,10 +33,9 @@ Import-Module -Name $PSScriptRoot\..\..\FirewallModule
 #
 $Group = "Microsoft Office"
 $Profile = "Private, Public"
-$Direction = "Outbound"
 
 # Ask user if he wants to load these rules
-Update-Context $Direction $Group
+Update-Context $IPVersion $Direction $Group
 if (!(Approve-Execute)) { exit }
 
 #

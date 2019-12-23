@@ -27,8 +27,8 @@ SOFTWARE.
 Write-Host ""
 Write-Host "Powershell version: $($PSVersionTable.PSVersion)"
 
-# Find current script path
-$ScriptPath = Split-Path $MyInvocation.InvocationName
+# Includes
+Import-Module -Name $PSScriptRoot\FirewallModule
 
 # Set up Firewall profile
 #& .\FirewallProfile.ps1
@@ -40,85 +40,96 @@ $ScriptPath = Split-Path $MyInvocation.InvocationName
 #
 # Load Inbound rules
 #
-if(Approve-Execute "Yes" "Applying Inbound IPv4 Rules...")
-{
-    # Common rules
-    & "$ScriptPath\IPv4\Inbound\AdditionalNetworking.ps1"
-    & "$ScriptPath\IPv4\Inbound\BasicNetworking.ps1"
-    & "$ScriptPath\IPv4\Inbound\Broadcast.ps1"
-    & "$ScriptPath\IPv4\Inbound\ICMP.ps1"
-    & "$ScriptPath\IPv4\Inbound\InternetBrowser.ps1"
-    & "$ScriptPath\IPv4\Inbound\MicrosoftOffice.ps1"
-    & "$ScriptPath\IPv4\Inbound\Multicast.ps1"
-    & "$ScriptPath\IPv4\Inbound\NetworkDiscovery.ps1"
-    & "$ScriptPath\IPv4\Inbound\NetworkSharing.ps1"
-    & "$ScriptPath\IPv4\Inbound\RemoteWindows.ps1"
-    & "$ScriptPath\IPv4\Inbound\StoreApps.ps1"
-    & "$ScriptPath\IPv4\Inbound\WindowsServices.ps1"
-    & "$ScriptPath\IPv4\Inbound\WirelessNetworking.ps1"
 
-    if(Approve-Execute "Yes" "Applying Rules for developers...")
+Update-Context 4 "Inbound"
+
+if(Approve-Execute "Yes" "Applying: Inbound IPv4 Rules")
+{
+    if(Approve-Execute "Yes" "Applying: Common rules")
     {
-        # Rules for developers
-        & "$ScriptPath\IPv4\Inbound\Development\EpicGames.ps1"
+        # Common rules
+        & "$PSScriptRoot\IPv4\Inbound\AdditionalNetworking.ps1"
+        & "$PSScriptRoot\IPv4\Inbound\BasicNetworking.ps1"
+        & "$PSScriptRoot\IPv4\Inbound\Broadcast.ps1"
+        & "$PSScriptRoot\IPv4\Inbound\ICMP.ps1"
+        & "$PSScriptRoot\IPv4\Inbound\InternetBrowser.ps1"
+        & "$PSScriptRoot\IPv4\Inbound\MicrosoftOffice.ps1"
+        & "$PSScriptRoot\IPv4\Inbound\Multicast.ps1"
+        & "$PSScriptRoot\IPv4\Inbound\NetworkDiscovery.ps1"
+        & "$PSScriptRoot\IPv4\Inbound\NetworkSharing.ps1"
+        & "$PSScriptRoot\IPv4\Inbound\RemoteWindows.ps1"
+        & "$PSScriptRoot\IPv4\Inbound\StoreApps.ps1"
+        & "$PSScriptRoot\IPv4\Inbound\WindowsServices.ps1"
+        & "$PSScriptRoot\IPv4\Inbound\WirelessNetworking.ps1"
     }
 
-    if(Approve-Execute "Yes" "Applying Rules for 3rd party programs...")
+    if(Approve-Execute "Yes" "Applying: Rules for developers")
+    {
+        # Rules for developers
+        & "$PSScriptRoot\IPv4\Inbound\Development\EpicGames.ps1"
+    }
+
+    if(Approve-Execute "Yes" "Applying: Rules for 3rd party programs")
     {
         # rules for programs
-        & "$ScriptPath\IPv4\Inbound\Software\Steam.ps1"
-        & "$ScriptPath\IPv4\Inbound\Software\TeamViewer.ps1"
-        & "$ScriptPath\IPv4\Inbound\Software\uTorrent.ps1"
+        & "$PSScriptRoot\IPv4\Inbound\Software\Steam.ps1"
+        & "$PSScriptRoot\IPv4\Inbound\Software\TeamViewer.ps1"
+        & "$PSScriptRoot\IPv4\Inbound\Software\uTorrent.ps1"
     }
 }
 
 #
 # Load Outbound rules
 #
-if(Approve-Execute "Yes" "Applying Outbound IPv4 Rules...")
-{
-    # Common rules
-    & "$ScriptPath\IPv4\Outbound\AdditionalNetworking.ps1"
-    & "$ScriptPath\IPv4\Outbound\BasicNetworking.ps1"
-    & "$ScriptPath\IPv4\Outbound\Broadcast.ps1"
-    & "$ScriptPath\IPv4\Outbound\ICMP.ps1"
-    & "$ScriptPath\IPv4\Outbound\InternetBrowser.ps1"
-    & "$ScriptPath\IPv4\Outbound\MicrosoftOffice.ps1"
-    & "$ScriptPath\IPv4\Outbound\MicrosoftSoftware.ps1"
-    & "$ScriptPath\IPv4\Outbound\Multicast.ps1"
-    & "$ScriptPath\IPv4\Outbound\NetworkDiscovery.ps1"
-    & "$ScriptPath\IPv4\Outbound\NetworkSharing.ps1"
-    & "$ScriptPath\IPv4\Outbound\RemoteWindows.ps1"
-    & "$ScriptPath\IPv4\Outbound\StoreApps.ps1"
-    & "$ScriptPath\IPv4\Outbound\Temporary.ps1"
-    & "$ScriptPath\IPv4\Outbound\WindowsServices.ps1"
-    & "$ScriptPath\IPv4\Outbound\WindowsSystem.ps1"
-    & "$ScriptPath\IPv4\Outbound\WirelessNetworking.ps1"
+Update-Context 4 "Outbound"
 
-    if(Approve-Execute "Yes" "Applying Rules for developers...")
+if(Approve-Execute "Yes" "Applying: Outbound IPv4 Rules")
+{
+    if(Approve-Execute "Yes" "Applying: Common rules")
+    {
+        # Common rules
+        & "$PSScriptRoot\IPv4\Outbound\AdditionalNetworking.ps1"
+        & "$PSScriptRoot\IPv4\Outbound\BasicNetworking.ps1"
+        & "$PSScriptRoot\IPv4\Outbound\Broadcast.ps1"
+        & "$PSScriptRoot\IPv4\Outbound\ICMP.ps1"
+        & "$PSScriptRoot\IPv4\Outbound\InternetBrowser.ps1"
+        & "$PSScriptRoot\IPv4\Outbound\MicrosoftOffice.ps1"
+        & "$PSScriptRoot\IPv4\Outbound\MicrosoftSoftware.ps1"
+        & "$PSScriptRoot\IPv4\Outbound\Multicast.ps1"
+        & "$PSScriptRoot\IPv4\Outbound\NetworkDiscovery.ps1"
+        & "$PSScriptRoot\IPv4\Outbound\NetworkSharing.ps1"
+        & "$PSScriptRoot\IPv4\Outbound\RemoteWindows.ps1"
+        & "$PSScriptRoot\IPv4\Outbound\StoreApps.ps1"
+        & "$PSScriptRoot\IPv4\Outbound\Temporary.ps1"
+        & "$PSScriptRoot\IPv4\Outbound\WindowsServices.ps1"
+        & "$PSScriptRoot\IPv4\Outbound\WindowsSystem.ps1"
+        & "$PSScriptRoot\IPv4\Outbound\WirelessNetworking.ps1"
+    }
+
+    if(Approve-Execute "Yes" "Applying: Rules for developers")
     {
         # Rules for developers
-        & "$ScriptPath\IPv4\Outbound\Development\EpicGames.ps1"
-        & "$ScriptPath\IPv4\Outbound\Development\Github.ps1"
-        & "$ScriptPath\IPv4\Outbound\Development\MSYS2.ps1"
-        & "$ScriptPath\IPv4\Outbound\Development\VisualStudio.ps1"
+        & "$PSScriptRoot\IPv4\Outbound\Development\EpicGames.ps1"
+        & "$PSScriptRoot\IPv4\Outbound\Development\Github.ps1"
+        & "$PSScriptRoot\IPv4\Outbound\Development\MSYS2.ps1"
+        & "$PSScriptRoot\IPv4\Outbound\Development\VisualStudio.ps1"
     }
 
-    if(Approve-Execute "Yes" "Applying Rules for games...")
+    if(Approve-Execute "Yes" "Applying: Rules for games")
     {
         # Rules for games
-        & "$ScriptPath\IPv4\Outbound\Games\PokerStars.ps1"
-        & "$ScriptPath\IPv4\Outbound\Games\WarThunder.ps1"
+        & "$PSScriptRoot\IPv4\Outbound\Games\PokerStars.ps1"
+        & "$PSScriptRoot\IPv4\Outbound\Games\WarThunder.ps1"
     }
 
-    if(Approve-Execute "Yes" "Applying Rules for 3rd party programs...")
+    if(Approve-Execute "Yes" "Applying: Rules for 3rd party programs")
     {
         # rules for programs
-        & "$ScriptPath\IPv4\Outbound\Software\Nvidia.ps1"
-        & "$ScriptPath\IPv4\Outbound\Software\Steam.ps1"
-        & "$ScriptPath\IPv4\Outbound\Software\TeamViewer.ps1"
-        & "$ScriptPath\IPv4\Outbound\Software\Thunderbird.ps1"
-        & "$ScriptPath\IPv4\Outbound\Software\uTorrent.ps1"
+        & "$PSScriptRoot\IPv4\Outbound\Software\Nvidia.ps1"
+        & "$PSScriptRoot\IPv4\Outbound\Software\Steam.ps1"
+        & "$PSScriptRoot\IPv4\Outbound\Software\TeamViewer.ps1"
+        & "$PSScriptRoot\IPv4\Outbound\Software\Thunderbird.ps1"
+        & "$PSScriptRoot\IPv4\Outbound\Software\uTorrent.ps1"
     }
 }
 
@@ -129,23 +140,36 @@ if(Approve-Execute "Yes" "Applying Outbound IPv4 Rules...")
 #
 # Load Inbound rules
 #
-if(Approve-Execute "Yes" "Applying Inbound IPv6 Rules...")
+Update-Context 6 "Inbound"
+
+if(Approve-Execute "Yes" "Applying: Inbound IPv6 Rules")
 {
-    # Common rules
-    & "$ScriptPath\IPv6\Inbound\BasicNetworking.ps1"
-    & "$ScriptPath\IPv6\Inbound\ICMP.ps1"
-    & "$ScriptPath\IPv6\Inbound\Multicast.ps1"
+    if(Approve-Execute "Yes" "Applying: Common rules")
+    {
+        # Common rules
+        & "$PSScriptRoot\IPv6\Inbound\BasicNetworking.ps1"
+        & "$PSScriptRoot\IPv6\Inbound\ICMP.ps1"
+        & "$PSScriptRoot\IPv6\Inbound\Multicast.ps1"
+    }
 }
 
 #
 # Load Outbound rules
 #
-if(Approve-Execute "Yes" "Applying Outbound IPv6 Rules...")
+Update-Context 6 "Outbound"
+
+if(Approve-Execute "Yes" "Applying: Outbound IPv6 Rules")
 {
-    # Common rules
-    & "$ScriptPath\IPv6\Outbound\BasicNetworking.ps1"
-    & "$ScriptPath\IPv6\Outbound\ICMP.ps1"
-    & "$ScriptPath\IPv6\Outbound\Multicast.ps1"
+    if(Approve-Execute "Yes" "Applying: Common rules")
+    {
+        # Common rules
+        & "$PSScriptRoot\IPv6\Outbound\BasicNetworking.ps1"
+        & "$PSScriptRoot\IPv6\Outbound\ICMP.ps1"
+        & "$PSScriptRoot\IPv6\Outbound\Multicast.ps1"
+    }
 }
 
-Write-Host "All operations completed successfuly!"
+Write-Host ""
+Write-Host "All operations completed successfuly!" -ForegroundColor Green
+Write-Host "Make sure you visit Local Group Policy and adjust your rules as needed." -ForegroundColor Green
+Write-Host ""

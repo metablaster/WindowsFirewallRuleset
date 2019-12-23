@@ -298,10 +298,10 @@ function Approve-Execute
         [string] $DefaultAction = "Yes",
 
         [parameter(Mandatory = $false)]
-        [string] $title = "Executing: " + ((Split-Path -Leaf $MyInvocation.ScriptName).TrimEnd(".ps1")),
+        [string] $title = "Executing: " + (Split-Path -Leaf $MyInvocation.ScriptName),
 
         [parameter(Mandatory = $false)]
-        [string] $question = "Are you sure you want to proceed?"
+        [string] $question = "Do you want to load this ruleset?"
     )
 
     $choices  = "&Yes", "&No"
@@ -396,7 +396,7 @@ function Find-Installation
 
     Write-Host "If you installed $Program elsewhere adjust the path in $Script and re-run this script later again,
 otherwise ignore this warning if you don't have $Program installed." -ForegroundColor Green
-    if (Approve-Execute "No" "Rule group for $Program" "Do you want to force loading these rules anyway?") { exit }
+    if (Approve-Execute "No" "Rule group for $Program" "Do you want to load these rules anyway?") { exit }
 
     return ""
 }
@@ -438,13 +438,21 @@ function Update-Context
 {
     param (
         [parameter(Mandatory = $true, Position = 0)]
-        [string] $Direction,
+        [string] $IPVersion,
 
         [parameter(Mandatory = $true, Position = 1)]
-        [string] $Group
+        [string] $Direction,
+
+        [parameter(Mandatory = $false, Position = 2)]
+        [string] $Group = $null
     )
 
-    [string] $NewContext = $IPVersion + "." + $Direction + "." + $Group
+    [string] $NewContext = "IPv" + "$IPVersion" + "." + $Direction
+    if ($Group)
+    {
+        $NewContext += "->" + $Group
+    }
+
     $global:Context = $NewContext
 }
 
@@ -469,8 +477,6 @@ New-Variable -Name Interface -Option Constant -Scope Global -Value "Wired, Wirel
 
 # Global execution context, used in Approve-Execute
 New-Variable -Name Context -Scope Global -Value "Context not set"
-# also used for context
-New-Variable -Name IPVersion -Scope Global -Value "IPv4"
 
 # Network IP configuration (get only IPv4 config, index 0, if IPv6 is configured it's at index 1)
 New-Variable -Name NICConfig -Option Constant -Scope Global -Value (Get-WmiObject Win32_NetworkAdapterConfiguration | Where-Object {$_.DefaultIPGateway -ne $null})
@@ -565,7 +571,6 @@ Export-ModuleMember -Variable ServiceHost
 Export-ModuleMember -Variable Interface
 
 Export-ModuleMember -Variable Context
-Export-ModuleMember -Variable IPVersion
 
 Export-ModuleMember -Variable NICConfig
 Export-ModuleMember -Variable LocalHost
