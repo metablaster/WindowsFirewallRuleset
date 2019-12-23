@@ -26,15 +26,16 @@ SOFTWARE.
 # Includes
 Import-Module -Name $PSScriptRoot\..\..\..\FirewallModule
 
-# Ask user if he wants to load these rules
-if (!(Approve-Execute)) { exit }
-
 #
 # Setup local variables:
 #
 $Group = "Software - TeamViewer"
 $Profile = "Any"
 $Direction = "Outbound"
+
+# Ask user if he wants to load these rules
+Update-Context $Direction $Group
+if (!(Approve-Execute)) { exit }
 
 #
 # TeamViewer installation directories

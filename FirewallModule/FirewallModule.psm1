@@ -308,6 +308,7 @@ function Approve-Execute
     $default = 0
     if ($DefaultAction -like "No") { $default = 1 }
 
+    $title += " [$Context]"
     $decision = $Host.UI.PromptForChoice($title, $question, $choices, $default)
 
     if ($decision -eq $default)
@@ -429,6 +430,24 @@ function Test-Installation
     return $true
 }
 
+# about: update context for Approve-Execute
+# input: rule traffic direction and rule group
+# output: none, global context variable is set
+# sample: Update-Context $Direction $Group
+function Update-Context
+{
+    param (
+        [parameter(Mandatory = $true, Position = 0)]
+        [string] $Direction,
+
+        [parameter(Mandatory = $true, Position = 1)]
+        [string] $Group
+    )
+
+    [string] $NewContext = $IPVersion + "." + $Direction + "." + $Group
+    $global:Context = $NewContext
+}
+
 #
 # Predefined project wide variables
 #
@@ -447,6 +466,11 @@ New-Variable -Name Execute -Scope Global -Value $false
 New-Variable -Name ServiceHost -Option Constant -Scope Global -Value "%SystemRoot%\System32\svchost.exe"
 # Default network interface card
 New-Variable -Name Interface -Option Constant -Scope Global -Value "Wired, Wireless"
+
+# Global execution context, used in Approve-Execute
+New-Variable -Name Context -Scope Global -Value "Context not set"
+# also used for context
+New-Variable -Name IPVersion -Scope Global -Value "IPv4"
 
 # Network IP configuration (get only IPv4 config, index 0, if IPv6 is configured it's at index 1)
 New-Variable -Name NICConfig -Option Constant -Scope Global -Value (Get-WmiObject Win32_NetworkAdapterConfiguration | Where-Object {$_.DefaultIPGateway -ne $null})
@@ -530,6 +554,7 @@ Export-ModuleMember -Function Approve-Execute
 Export-ModuleMember -Function Test-File
 Export-ModuleMember -Function Find-Installation
 Export-ModuleMember -Function Test-Installation
+Export-ModuleMember -Function Update-Context
 
 Export-ModuleMember -Variable Platform
 Export-ModuleMember -Variable PolicyStore
@@ -538,6 +563,9 @@ Export-ModuleMember -Variable Debug
 Export-ModuleMember -Variable Execute
 Export-ModuleMember -Variable ServiceHost
 Export-ModuleMember -Variable Interface
+
+Export-ModuleMember -Variable Context
+Export-ModuleMember -Variable IPVersion
 
 Export-ModuleMember -Variable NICConfig
 Export-ModuleMember -Variable LocalHost
