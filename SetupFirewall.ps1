@@ -31,7 +31,7 @@ Write-Host "Powershell version: $($PSVersionTable.PSVersion)"
 Import-Module -Name $PSScriptRoot\FirewallModule
 
 # Set up Firewall profile
-& .\FirewallProfile.ps1
+#& .\FirewallProfile.ps1
 
 #
 # Execute IPv4 rules
@@ -63,12 +63,14 @@ if(Approve-Execute "Yes" "Applying: Inbound IPv4 Rules")
         & "$PSScriptRoot\IPv4\Inbound\WirelessNetworking.ps1"
     }
 
+    Update-Context 4 "Outbound"
     if(Approve-Execute "Yes" "Applying: Rules for developers")
     {
         # Rules for developers
         & "$PSScriptRoot\IPv4\Inbound\Development\EpicGames.ps1"
     }
 
+    Update-Context 4 "Outbound"
     if(Approve-Execute "Yes" "Applying: Rules for 3rd party programs")
     {
         # rules for programs
@@ -106,6 +108,7 @@ if(Approve-Execute "Yes" "Applying: Outbound IPv4 Rules")
         & "$PSScriptRoot\IPv4\Outbound\WirelessNetworking.ps1"
     }
 
+    Update-Context 4 "Outbound"
     if(Approve-Execute "Yes" "Applying: Rules for developers")
     {
         # Rules for developers
@@ -115,6 +118,7 @@ if(Approve-Execute "Yes" "Applying: Outbound IPv4 Rules")
         & "$PSScriptRoot\IPv4\Outbound\Development\VisualStudio.ps1"
     }
 
+    Update-Context 4 "Outbound"
     if(Approve-Execute "Yes" "Applying: Rules for games")
     {
         # Rules for games
@@ -122,6 +126,7 @@ if(Approve-Execute "Yes" "Applying: Outbound IPv4 Rules")
         & "$PSScriptRoot\IPv4\Outbound\Games\WarThunder.ps1"
     }
 
+    Update-Context 4 "Outbound"
     if(Approve-Execute "Yes" "Applying: Rules for 3rd party programs")
     {
         # rules for programs

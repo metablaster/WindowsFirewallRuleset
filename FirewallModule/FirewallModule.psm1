@@ -360,15 +360,21 @@ function Test-File
 
         if (!([System.IO.File]::Exists($ExpandedPath)))
         {
+            $Script = (Get-PSCallStack)[2].Command
+            $SearchPath = Split-Path -Path $ExpandedPath -Parent
             $Executable = Split-Path -Path $ExpandedPath -Leaf
-            Write-Warning "Executable '$Executable' not found, rule won't have any effect
-            Searched path was: $ExpandedPath"
+
+            Write-Warning "Executable '$Executable' was not found, rule won't have any effect
+        Searched path was: $SearchPath"
+
+            Write-Host "To fix the problem visit $SearchPath
+        and find $Executable then adjust the path in $Script and re-run the script later again" -ForegroundColor Green
         }
     }
 }
 
 # about: Same as Test-Path but expands system environment variables
-Test-Environment
+function Test-Environment
 {
     param (
         [parameter(Mandatory = $true)]
@@ -389,12 +395,12 @@ function Find-Installation
         [string] $Program
     )
 
+    [string] $InstallationRoot = ""
+
     # NOTE: we want to preserve system environment variables for firewall GUI,
     # otherwise firewall GUI will show full paths which is not desired for sorting reasons
     switch -Wildcard ($Program)
     {
-        [string] $InstallationRoot = ""
-
         "MicrosoftOffice"
         {
             $InstallationRoot = "%ProgramFiles%\Microsoft Office\root\Office16"
@@ -573,7 +579,7 @@ function Find-Installation
             }
             break
         }
-        "Github"
+        "GithubDesktop"
         {
             # TODO: need to overcome version number
             foreach ($User in $global:UserNames)
@@ -618,7 +624,7 @@ function Find-Installation
     Write-Warning "Installation directory for '$Program' not found"
     $Script = (Get-PSCallStack)[2].Command
 
-    Write-Host "If you installed $Program elsewhere adjust the path in $Script and re-run this script later again,
+    Write-Host "If you installed $Program elsewhere adjust the path in $Script and re-run the script later again,
 otherwise ignore this warning if you don't have $Program installed." -ForegroundColor Green
     if (Approve-Execute "No" "Rule group for $Program" "Do you want to load these rules anyway?")
     {
@@ -645,7 +651,12 @@ function Test-Installation
         [bool] $Terminate = $true
     )
 
-    if (!(Test-Path -Path $FilePath))
+    if ($FilePath -contains "%UserProfile%")
+    {
+        Write-Warning "Bad environment variable detected '%UserProfile%', rule may not work!"
+    }
+
+    if (!(Test-Environment $FilePath))
     {
         $InstallRoot = Find-Installation $Program
         if ([string]::IsNullOrEmpty($InstallRoot))
@@ -665,7 +676,8 @@ function Test-Installation
         else
         {
             $FilePath.Value = $InstallRoot
-            Write-Host "Bad path specified, problem fixed" -ForegroundColor -Green
+            Write-Host "Path corrected from: $InstallRoot
+        to: $($FilePath.Value)" -ForegroundColor Green
             return $true # path updated
         }
 
@@ -695,7 +707,7 @@ function Update-Context
     [string] $NewContext = "IPv" + "$IPVersion" + "." + $Direction
     if ($Group)
     {
-        $NewContext += "->" + $Group
+        $NewContext += " -> " + $Group
     }
 
     $global:Context = $NewContext
@@ -723,7 +735,7 @@ New-Variable -Name Interface -Option Constant -Scope Global -Value "Wired, Wirel
 # Global execution context, used in Approve-Execute
 New-Variable -Name Context -Scope Global -Value "Context not set"
 # Global status to check if installation directory exists, used by Test-File
-New-Variable -Name InstallationStatus -Scope Global -Value = $false
+New-Variable -Name InstallationStatus -Scope Global -Value $false
 
 # Network IP configuration (get only IPv4 config, index 0, if IPv6 is configured it's at index 1)
 New-Variable -Name NICConfig -Option Constant -Scope Global -Value (Get-WmiObject Win32_NetworkAdapterConfiguration | Where-Object {$_.DefaultIPGateway -ne $null})

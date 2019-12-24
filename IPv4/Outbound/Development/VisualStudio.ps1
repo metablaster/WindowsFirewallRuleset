@@ -169,7 +169,7 @@ if ($VSRootStatus -ne $null)
     and support for internal services (like extension managenent, compiler support, etc).
     These are not optional and are designed to be running side-by-side with devenv.exe."
 
-    $program = "$VSRoot\VC\Tools\MSVC\14.22.27905\bin\Hostx86\x64\vctip.exe"
+    $program = "$VSRoot\VC\Tools\MSVC\14.24.28314\bin\Hostx86\x64\vctip.exe"
     Test-File $program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "VS 2019 VCTIP telemetry" -Service Any -Program $Program `

@@ -102,7 +102,7 @@ if ($GitStatus -ne $null)
 #
 
 # Test if installation exists on system
-$GithubStatus = Test-Installation "Github" ([ref] $GithubRoot)
+$GithubStatus = Test-Installation "GithubDesktop" ([ref] $GithubRoot)
 
 if ($GithubStatus -ne $null)
 {
