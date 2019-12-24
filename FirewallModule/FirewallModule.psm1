@@ -673,7 +673,7 @@ function Test-Installation
                 }
                 else
                 {
-                    return $null # installation not found
+                    return $null # installation not found, don't exit script
                 }
             }
         }
