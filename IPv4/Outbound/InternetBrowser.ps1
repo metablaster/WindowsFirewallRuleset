@@ -59,10 +59,10 @@ $TorRoot = "%SystemDrive%\Users\User\AppData\Local\Tor Browser"
 $TorApp = "$TorRoot\Browser\TorBrowser\Tor\tor.exe"
 
 # Test if installation exists on system
-$ChromeStatus = Test-Installation "Chrome" ([ref] $ChromeRoot)
-$FirefoxStatus = Test-Installation "Firefox" ([ref] $FirefoxRoot)
-$YandexStatus = Test-Installation "Yandex" ([ref] $YandexRoot)
-$TorStatus = Test-Installation "Tor" ([ref] $TorRoot)
+$ChromeStatus = Test-Installation "Chrome" ([ref] $ChromeRoot) $false
+$FirefoxStatus = Test-Installation "Firefox" ([ref] $FirefoxRoot) $false
+$YandexStatus = Test-Installation "Yandex" ([ref] $YandexRoot) $false
+$TorStatus = Test-Installation "Tor" ([ref] $TorRoot) $false
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
@@ -74,7 +74,9 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # Google Chrome
 #
+$global:InstallationStatus = $ChromeStatus
 
+Test-File $ChromeApp
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Chrome HTTP" -Service Any -Program $ChromeApp `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -155,6 +157,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "Allow Chromecast outbound UDP data"
 
+Test-File $ChromeUpdate
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Chrome Update" -Service Any -Program $ChromeUpdate `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -165,7 +168,9 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 #
 # Mozilla Firefox
 #
+$global:InstallationStatus = $FirefoxStatus
 
+Test-File $FirefoxApp
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Firefox HTTP" -Service Any -Program $FirefoxApp `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -190,7 +195,9 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 #
 # Yandex
 #
+$global:InstallationStatus = $YandexStatus
 
+Test-File $YandexApp
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Yandex HTTP" -Service Any -Program $YandexApp `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -215,7 +222,9 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 #
 # Tor
 #
+$global:InstallationStatus = $TorStatus
 
+Test-File $TorApp
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Tor HTTP" -Service Any -Program $TorApp `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

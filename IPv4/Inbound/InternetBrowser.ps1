@@ -49,10 +49,7 @@ $ChromeRoot = "%SystemDrive%\Users\User\AppData\Local\Google"
 $ChromeApp = "$ChromeRoot\Chrome\Application\chrome.exe"
 
 # Test if installation exists on system
-$ChromeStatus = Test-Installation "Chrome" ([ref] $ChromeRoot)
-$FirefoxStatus = Test-Installation "Firefox" ([ref] $FirefoxRoot)
-$YandexStatus = Test-Installation "Yandex" ([ref] $YandexRoot)
-$TorStatus = Test-Installation "Tor" ([ref] $TorRoot)
+$global:InstallationStatus = Test-Installation "Chrome" ([ref] $ChromeRoot)
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
@@ -65,6 +62,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Google Chrome
 #
 
+Test-File $ChromeApp
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Google Chrome mDNS IPv4" -Service Any -Program $ChromeApp `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `

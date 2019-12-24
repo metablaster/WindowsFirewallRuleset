@@ -44,7 +44,7 @@ if (!(Approve-Execute)) { exit }
 $SteamRoot = "%ProgramFiles(x86)%\Steam"
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "Steam" ([ref] $OfficeRoot)
+$global:InstallationStatus = Test-Installation "Steam" ([ref] $SteamRoot)
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
@@ -54,58 +54,66 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # TODO: unknown if some of these rules need LAN networking
 #
 
+$program = "$SteamRoot\Steam.exe"
+Test-File $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Steam (game client trafic)" -Service Any -Program "$SteamRoot\Steam.exe" `
+-DisplayName "Steam (game client trafic)" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 27000-27015 `
 -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Steam (HTTP/HTTPS)" -Service Any -Program "$SteamRoot\Steam.exe" `
+-DisplayName "Steam (HTTP/HTTPS)" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser $UserAccountsSDDL `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Steam (webhelper x86)" -Service Any -Program "$SteamRoot\bin\cef\cef.win7\steamwebhelper.exe" `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser $UserAccountsSDDL `
--Description ""
-
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Steam (webhelper x64)" -Service Any -Program "$SteamRoot\bin\cef\cef.win7x64\steamwebhelper.exe" `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser $UserAccountsSDDL `
--Description ""
-
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Steam downloads" -Service Any -Program "$SteamRoot\Steam.exe" `
+-DisplayName "Steam downloads" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 27015-27030 `
 -LocalUser $UserAccountsSDDL `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Steam Matchmaking and HLTV" -Service Any -Program "$SteamRoot\Steam.exe" `
+-DisplayName "Steam Matchmaking and HLTV" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 27015-27030 `
 -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Steam P2P Networking and Steam Voice Chat" -Service Any -Program "$SteamRoot\Steam.exe" `
+-DisplayName "Steam P2P Networking and Steam Voice Chat" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 3478, 4379, 4380 `
 -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description ""
 
+$program = "$SteamRoot\SteamService.exe"
+Test-File $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "SteamService" -Service Any -Program "$SteamRoot\SteamService.exe" `
+-DisplayName "SteamService" -Service Any -Program $program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+-Description ""
+
+$program = "$SteamRoot\bin\cef\cef.win7\steamwebhelper.exe"
+Test-File $program
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Steam (webhelper x86)" -Service Any -Program $program `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+-LocalUser $UserAccountsSDDL `
+-Description ""
+
+$program = "$SteamRoot\bin\cef\cef.win7x64\steamwebhelper.exe"
+Test-File $program
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "Steam (webhelper x64)" -Service Any -Program $program `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+-LocalUser $UserAccountsSDDL `
 -Description ""

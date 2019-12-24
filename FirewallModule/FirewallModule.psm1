@@ -393,7 +393,10 @@ function Find-Installation
 
     Write-Host "If you installed $Program elsewhere adjust the path in $Script and re-run this script later again,
 otherwise ignore this warning if you don't have $Program installed." -ForegroundColor Green
-    if (Approve-Execute "No" "Rule group for $Program" "Do you want to load these rules anyway?") { exit }
+    if (Approve-Execute "No" "Rule group for $Program" "Do you want to load these rules anyway?")
+    {
+        return $null
+    }
 
     return ""
 }
@@ -409,22 +412,32 @@ function Test-Installation
         [string] $Program,
 
         [parameter(Mandatory = $true, Position = 1)]
-        [ref] $FilePath
+        [ref] $FilePath,
+
+        [parameter(Mandatory = $false, Position = 2)]
+        [bool] $Terminate = $true
     )
 
     if (!(Test-Path -Path $FilePath))
     {
         $InstallRoot = Find-Installation $Program
-        if (![string]::IsNullOrEmpty($InstallRoot))
+        if ([string]::IsNullOrEmpty($InstallRoot))
+        {
+            if (($InstallRoot -eq $null) -and $Terminate)
+            {
+                exit # installation not found, exit script
+            }
+        }
+        else
         {
             $FilePath.Value = $InstallRoot
-            return $true
+            return $true # path updated
         }
 
-        return $false
+        return $false # installation not found, don't exit script
     }
 
-    return $true
+    return $true # path exists
 }
 
 # about: update context for Approve-Execute

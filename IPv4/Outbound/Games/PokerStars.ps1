@@ -44,7 +44,7 @@ if (!(Approve-Execute)) { exit }
 $PokerStarsRoot = "%ProgramFiles(x86)%\PokerStars.EU"
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "PokerStars" ([ref] $OfficeRoot)
+$global:InstallationStatus = Test-Installation "PokerStars" ([ref] $PokerStarsRoot)
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
@@ -53,29 +53,37 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Rules for PokerStars game
 #
 
+$program = "$PokerStarsRoot\PokerStars.exe"
+Test-File $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "PokerStars - Client" -Service Any -Program "$PokerStarsRoot\PokerStars.exe" `
+-DisplayName "PokerStars - Client" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 26002 `
 -LocalUser $UserAccountsSDDL `
 -Description "Main game interface."
 
+$program = "$PokerStarsRoot\br\PokerStarsBr.exe"
+Test-File $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "PokerStars - Browser" -Service Any -Program "$PokerStarsRoot\br\PokerStarsBr.exe" `
+-DisplayName "PokerStars - Browser" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 -LocalUser $UserAccountsSDDL `
 -Description "In game HTML browser"
 
+$program = "$PokerStarsRoot\PokerStarsOnlineUpdate.exe"
+Test-File $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "PokerStars - Online update" -Service Any -Program "$PokerStarsRoot\PokerStarsOnlineUpdate.exe" `
+-DisplayName "PokerStars - Online update" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 -LocalUser $UserAccountsSDDL `
 -Description ""
 
+$program = "$PokerStarsRoot\PokerStarsUpdate.exe"
+Test-File $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "PokerStars - Update" -Service Any -Program "$PokerStarsRoot\PokerStarsUpdate.exe" `
+-DisplayName "PokerStars - Update" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 -LocalUser $UserAccountsSDDL `

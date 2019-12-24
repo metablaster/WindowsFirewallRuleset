@@ -44,7 +44,7 @@ if (!(Approve-Execute)) { exit }
 $uTorrentRoot = "%SystemDrive%\Users\$UserName\AppData\Local\uTorrent"
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "uTorrent" ([ref] $OfficeRoot)
+$global:InstallationStatus = Test-Installation "uTorrent" ([ref] $uTorrentRoot)
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
@@ -53,22 +53,24 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Rules for uTorrent client
 #
 
+$Program = "$uTorrentRoot\uTorrent.exe"
+Test-File $Program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "uTorrent - Client to peers" -Service Any -Program "$uTorrentRoot\uTorrent.exe" `
+-DisplayName "uTorrent - Client to peers" -Service Any -Program  `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 1024-65535 `
 -LocalUser $UserAccountsSDDL `
 -Description "Torrent client"
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "uTorrent - DNS" -Service Any -Program "$uTorrentRoot\uTorrent.exe" `
+-DisplayName "uTorrent - DNS" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress DNS4, 208.67.222.222, 208.67.220.220 -LocalPort Any -RemotePort 53 `
 -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "Unknown why uTorrent needs DNS to OpenDNS, it also uses system DNS."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "uTorrent - NAT Port mapping protocol" -Service Any -Program "$uTorrentRoot\uTorrent.exe" `
+-DisplayName "uTorrent - NAT Port mapping protocol" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress DefaultGateway4 -LocalPort 5351 -RemotePort 5351 `
 -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
@@ -76,14 +78,14 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 and port forwarding configurations automatically without user effort."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "uTorrent - part of full range of ports used most often" -Service Any -Program "$uTorrentRoot\uTorrent.exe" `
+-DisplayName "uTorrent - part of full range of ports used most often" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 6881-6968, 6970-6999 `
 -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "BitTorrent part of full range of ports used most often (Trackers)	"
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "uTorrent - DHT" -Service Any -Program "$uTorrentRoot\uTorrent.exe" `
+-DisplayName "uTorrent - DHT" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort 1161 -RemotePort 1024-65535 `
 -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
@@ -92,28 +94,28 @@ You can also download .torrent files through DHT if you have a magnet link, whic
 All interface types for IPv6 to teredo"
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "uTorrent - HTTP/HTTPS" -Service Any -Program "$uTorrentRoot\uTorrent.exe" `
+-DisplayName "uTorrent - HTTP/HTTPS" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser $UserAccountsSDDL `
 -Description "HTTP/HTTPS for browsing, adds and client content"
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "uTorrent - Local Peer Discovery" -Service Any -Program "$uTorrentRoot\uTorrent.exe" `
+-DisplayName "uTorrent - Local Peer Discovery" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 224.0.0.0-239.255.255.255 -LocalPort 6771 -RemotePort 6771 `
 -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "UDP multicast search to identify other peers in your subnet that are also on torrents you are on."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "uTorrent - SSDP" -Service Any -Program "$uTorrentRoot\uTorrent.exe" `
+-DisplayName "uTorrent - SSDP" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 239.255.255.250 -LocalPort Any -RemotePort 1900 `
 -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "uTorrentie - WebHelper - HTTP" -Service Any -Program "$uTorrentRoot\uTorrent.exe" `
+-DisplayName "uTorrentie - WebHelper - HTTP" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 -LocalUser $UserAccountsSDDL `

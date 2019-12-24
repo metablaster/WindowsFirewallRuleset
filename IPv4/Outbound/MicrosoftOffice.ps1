@@ -134,8 +134,6 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description ""
 
-$program = "$OfficeRoot\OUTLOOK.EXE"
-Test-File $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Outlook (IMAP SSL)" -Service Any -Program $program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -143,8 +141,6 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description "Incoming mail server over SSL."
 
-$program = "$OfficeRoot\OUTLOOK.EXE"
-Test-File $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Outlook (IMAP)" -Service Any -Program $program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -152,8 +148,6 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description "Incoming mail server."
 
-$program = "$OfficeRoot\OUTLOOK.EXE"
-Test-File $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Outlook (POP3 SSL)" -Service Any -Program $program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -161,8 +155,6 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description "Incoming mail server over SSL."
 
-$program = "$OfficeRoot\OUTLOOK.EXE"
-Test-File $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Outlook (POP3)" -Service Any -Program $program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -170,8 +162,6 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description "Incoming mail server."
 
-$program = "$OfficeRoot\OUTLOOK.EXE"
-Test-File $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Outlook (SMTP)" -Service Any -Program $program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

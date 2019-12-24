@@ -44,7 +44,7 @@ if (!(Approve-Execute)) { exit }
 $TeamViewerRoot = "%ProgramFiles(x86)%\TeamViewer"
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "TeamViewer" ([ref] $OfficeRoot)
+$global:InstallationStatus = Test-Installation "TeamViewer" ([ref] $TeamViewerRoot)
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
@@ -53,15 +53,19 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Rules for TeamViewer remote control
 #
 
+$program = "$TeamViewerRoot\TeamViewer.exe"
+Test-File $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Teamviewer Remote Control Application" -Service Any -Program "$TeamViewerRoot\TeamViewer.exe" `
+-DisplayName "Teamviewer Remote Control Application" -Service Any -Program $program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort 80, 443, 5938 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL `
 -Description ""
 
+$program = "$TeamViewerRoot\TeamViewer_Service.exe"
+Test-File $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Teamviewer Remote Control Service" -Service Any -Program "$TeamViewerRoot\TeamViewer_Service.exe" `
+-DisplayName "Teamviewer Remote Control Service" -Service Any -Program $program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort 80, 443, 5938 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL `

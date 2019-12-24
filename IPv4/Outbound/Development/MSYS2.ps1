@@ -44,7 +44,7 @@ if (!(Approve-Execute)) { exit }
 $MSYS2Root = "%ProgramFiles%\msys64"
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "MSYS2" ([ref] $OfficeRoot)
+$global:InstallationStatus = Test-Installation "MSYS2" ([ref] $MSYS2Root)
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
@@ -53,50 +53,64 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Rules for Steam client
 #
 
+$program = "$MSYS2Root\usr\bin\curl.exe"
+Test-File $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "MSYS2 - curl" -Service Any -Program "$MSYS2Root\usr\bin\curl.exe" `
+-DisplayName "MSYS2 - curl" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21, 80 `
 -LocalUser $UserAccountsSDDL `
 -Description "download with curl in MSYS2 shell"
 
+$program = "$MSYS2Root\usr\bin\git.exe"
+Test-File $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "MSYS2 - git protocol" -Service Any -Program "$MSYS2Root\usr\bin\git.exe" `
+-DisplayName "MSYS2 - git protocol" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 9418 `
 -LocalUser $UserAccountsSDDL `
 -Description "git access over git:// protocol"
 
+$program = "$MSYS2Root\usr\bin\git-remote-https.exe"
+Test-File $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "MSYS2 - git-remote-https" -Service Any -Program "$MSYS2Root\usr\bin\git-remote-https.exe" `
+-DisplayName "MSYS2 - git-remote-https" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 -LocalUser $UserAccountsSDDL `
 -Description "git over HTTPS in MSYS2 shell"
 
+$program = "$MSYS2Root\usr\bin\ssh.exe"
+Test-File $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "MSYS2 - git SSH" -Service Any -Program "$MSYS2Root\usr\bin\ssh.exe" `
+-DisplayName "MSYS2 - git SSH" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 22 `
 -LocalUser $UserAccountsSDDL `
 -Description "git over SSH in MSYS2 shell"
 
+$program = "$MSYS2Root\mingw64\bin\glade.exe"
+Test-File $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "MSYS2 - glade help" -Service Any -Program "$MSYS2Root\mingw64\bin\glade.exe" `
+-DisplayName "MSYS2 - glade help" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser $UserAccountsSDDL `
 -Description "Get online help for glade"
 
+$program = "$MSYS2Root\usr\bin\pacman.exe"
+Test-File $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "MSYS2 - pacman" -Service Any -Program "$MSYS2Root\usr\bin\pacman.exe" `
+-DisplayName "MSYS2 - pacman" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser $UserAccountsSDDL `
 -Description "pacman package manager in MSYS2 shell"
 
+$program = "$MSYS2Root\usr\bin\pacman.exe"
+Test-File $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "MSYS2 - wget" -Service Any -Program "$MSYS2Root\usr\bin\pacman.exe" `
+-DisplayName "MSYS2 - wget" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 -LocalUser $UserAccountsSDDL `

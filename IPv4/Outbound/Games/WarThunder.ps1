@@ -44,7 +44,7 @@ if (!(Approve-Execute)) { exit }
 $WarThunderRoot = "%ProgramFiles(x86)%\Steam\steamapps\common\War Thunder"
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "WarThunder" ([ref] $OfficeRoot)
+$global:InstallationStatus = Test-Installation "WarThunder" ([ref] $WarThunderRoot)
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
@@ -53,50 +53,58 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Rules for WarThunder game
 #
 
+$program = "$WarThunderRoot\win64\aces.exe"
+Test-File $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "WarThunder - aces" -Service Any -Program "$WarThunderRoot\win64\aces.exe" `
+-DisplayName "WarThunder - aces" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 7800-7802, 7850-7854 `
 -LocalUser $UserAccountsSDDL `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "WarThunder - aces" -Service Any -Program "$WarThunderRoot\win64\aces.exe" `
+-DisplayName "WarThunder - aces" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 1900, 20010-20500 `
 -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description ""
 
+$program = "$WarThunderRoot\gaijin_downloader.exe"
+Test-File $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "WarThunder - gajin_downloader" -Service Any -Program "$WarThunderRoot\gaijin_downloader.exe" `
+-DisplayName "WarThunder - gajin_downloader" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 -LocalUser $UserAccountsSDDL `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "WarThunder - gajin_downloader" -Service Any -Program "$WarThunderRoot\gaijin_downloader.exe" `
+-DisplayName "WarThunder - gajin_downloader" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 20010 `
 -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description ""
 
+$program = "$WarThunderRoot\gjagent.exe"
+Test-File $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "WarThunder - gjagent" -Service Any -Program "$WarThunderRoot\gjagent.exe" `
+-DisplayName "WarThunder - gjagent" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 20010 `
 -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description ""
 
+$program = "$WarThunderRoot\launcher.exe"
+Test-File $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "WarThunder - Launcher" -Service Any -Program "$WarThunderRoot\launcher.exe" `
+-DisplayName "WarThunder - Launcher" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser $UserAccountsSDDL `
 -Description ""
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "WarThunder - Launcher" -Service Any -Program "$WarThunderRoot\launcher.exe" `
+-DisplayName "WarThunder - Launcher" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 20010 `
 -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `

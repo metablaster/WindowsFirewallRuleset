@@ -44,7 +44,7 @@ if (!(Approve-Execute)) { exit }
 $SteamRoot = "%ProgramFiles(x86)%\Steam"
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "Steam" ([ref] $OfficeRoot)
+$global:InstallationStatus = Test-Installation "Steam" ([ref] $SteamRoot)
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
@@ -53,15 +53,17 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Rules for Steam client
 #
 
+$program = "$SteamRoot\Steam.exe"
+Test-File $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Steam Dedicated or Listen Servers" -Service Any -Program "$SteamRoot\Steam.exe" `
+-DisplayName "Steam Dedicated or Listen Servers" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort 27015 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL `
 -Description "SRCDS Rcon port"
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Steam In-Home Streaming" -Service Any -Program "$SteamRoot\Steam.exe" `
+-DisplayName "Steam In-Home Streaming" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 27031-27036 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
@@ -69,7 +71,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 The other PC views the video and audio like it’s watching a movie, sending back mouse, keyboard, and controller input to the other PC."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Steam In-Home Streaming" -Service Any -Program "$SteamRoot\Steam.exe" `
+-DisplayName "Steam In-Home Streaming" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 27036, 27037 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL `
