@@ -78,14 +78,13 @@ In any case, new system or old, **know that Home versions of Windows do not have
 7. Type: ```cd C:\```
 8. Type: ```git clone git@github.com:metablaster/WindowsFirewallRuleset.git```
 9. Type: ```cd WindowsFirewallRuleset```
-10. Rules for programs such as internet browser, Visual Studio or whatever software depend on installation variables.\
-You need to edit these scripts and update installation paths.
-11. Back to Powershell console and type into console: ```.\SetupFirewall.ps1``` and hit enter (this will attempt to load all the rules)
+10. Rules for programs such as internet browser, Visual Studio etc. depend on installation variables.\
+Most paths are auto-searched and variables are updated, otherwise you get warning and description on how to fix the problem.
+11. Back to Powershell console and type into console: ```.\SetupFirewall.ps1``` and hit enter (You will be asked what kind of rulesets you want)
 12. Follow prompt output, (ie. hit enter each time to proceed until done), it will take at least 10 minutes of your attention.
 13. If you encounter errors, you have several options such as, ignore the errors or fix the script that produced the error and re-run that script once again later.
-14. Once execution is done recall execution policy from step 5 and type:\
+14. Once execution is done recall execution policy from step 5 and type: (ie. if previous policy was "RemoteSigned")\
 ```Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force```\
-(if previous policy was "RemoteSigned")
 15. Now that rules are applied you may need to adjust some of them in Local Group Policy, not all the rules are enabled by default and you may want to toggle default Allow/Block behavior for some rules, rules for programs which do not exist need to be made additionally.\
 See next sections for more info.
 
