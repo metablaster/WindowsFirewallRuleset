@@ -26,6 +26,12 @@ SOFTWARE.
 # Includes
 Import-Module -Name $PSScriptRoot\..\Indented.Net.IP
 
+# about: get localhost name
+function Get-ComputerName
+{
+    return Get-WmiObject Win32_ComputerSystem | Select-Object -ExpandProperty Name
+}
+
 # about: get computer accounts for a giver user group
 # Input: User group on local computer
 # output: Array of enabled user accounts in specified group, in form of COMPUTERNAME\USERNAME
@@ -384,6 +390,117 @@ function Test-Environment
     )
 
     return (Test-Path -Path ([System.Environment]::ExpandEnvironmentVariables($FilePath)))
+}
+
+# input: User account in form of "COMPUTERNAME\USERNAME"
+# output: list of programs for specified USERNAME
+# sample: Get-UserPrograms "COMPUTERNAME\USERNAME"
+function Get-UserPrograms
+{
+    param (
+        [parameter(Mandatory = $true)]
+        [string] $UserAccount
+    )
+
+    $ComputerName = ($UserAccount.split("\"))[0]
+
+    if (Test-Connection -ComputerName $ComputerName -Count 3 -Quiet)
+    {
+        $HKU = Get-AccountSID $UserAccount
+        $HKU += "\Software\Microsoft\Windows\CurrentVersion\Uninstall"
+        
+        $RegistryHive = [Microsoft.Win32.RegistryHive]::Users
+    
+        $RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
+        $UserKey = $RemoteKey.OpenSubkey($HKU)
+
+        $UserPrograms = @()
+        if ($UserKey)
+        {
+            foreach ($SubKey in $UserKey.GetSubKeyNames())
+            {
+                foreach ($KeyEntry in $UserKey.OpenSubkey($SubKey))
+                {
+                    # Get more key entries as needed
+                    $UserPrograms += (New-Object PSObject -Property @{
+                    "ComputerName" = $ComputerName
+                    "Name" = $KeyEntry.GetValue("displayname")
+                    "InstallLocation" = $KeyEntry.GetValue("InstallLocation")})
+                }
+            }
+        }
+        else
+        {
+            Write-Warning "Failed to open registry key: $HKU"
+        }
+
+        return $UserPrograms
+    } 
+    else
+    {
+        Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact $ComputerName"
+    }
+}
+
+# input: ComputerName
+# output: list of programs installed for all users
+# sample: Get-SystemPrograms "COMPUTERNAME"
+function Get-SystemPrograms
+{
+    param (
+        [parameter(Mandatory = $true)]
+        [string] $ComputerName
+    )
+
+    if (Test-Connection -ComputerName $ComputerName -Count 3 -Quiet)
+    {
+        # The value of the [IntPtr] property is 4 in a 32-bit process, and 8 in a 64-bit process.
+        if ([IntPtr]::Size -eq 4)
+        {
+            $HKLM = "Software\Microsoft\Windows\CurrentVersion\Uninstall"
+        }
+        else
+        {
+            $HKLM = @(
+                "Software\Microsoft\Windows\CurrentVersion\Uninstall"
+                "Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall"
+            )
+        }
+        
+        $RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
+        $RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
+
+        $SystemPrograms = @()
+        foreach ($HKLMKey in $HKLM)
+        {
+            $UserKey = $RemoteKey.OpenSubkey($HKLMKey)
+
+            if ($UserKey)
+            {
+                foreach ($SubKey in $UserKey.GetSubKeyNames())
+                {
+                    foreach ($KeyEntry in $UserKey.OpenSubkey($SubKey))
+                    {
+                        # Get more key entries as needed
+                        $SystemPrograms += (New-Object PSObject -Property @{
+                        "ComputerName" = $ComputerName
+                        "Name" = $KeyEntry.GetValue("DisplayName")
+                        "InstallLocation" = $KeyEntry.GetValue("InstallLocation")})
+                    }
+                }
+            }
+            else
+            {
+                Write-Warning "Failed to open registry key: $HKLMKey"
+            }
+        }
+
+        return $SystemPrograms | Where-Object { $_.InstallLocation }
+    }
+    else
+    {
+        Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact $ComputerName"
+    }
 }
 
 # about: find installation directory for given program
@@ -827,6 +944,9 @@ Export-ModuleMember -Function Test-File
 Export-ModuleMember -Function Find-Installation
 Export-ModuleMember -Function Test-Installation
 Export-ModuleMember -Function Update-Context
+Export-ModuleMember -Function Get-UserPrograms
+Export-ModuleMember -Function Get-SystemPrograms
+Export-ModuleMember -Function Get-ComputerName
 
 Export-ModuleMember -Variable Platform
 Export-ModuleMember -Variable PolicyStore

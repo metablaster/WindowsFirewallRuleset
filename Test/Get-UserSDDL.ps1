@@ -39,6 +39,7 @@ Write-Host ""
 Write-Host "Get-UserSDDL: (from array)"
 Write-Host "***************************"
 
-$(Get-UserSDDL @("MSIDESKTOP\User", "MSIDESKTOP\Admin"))
+$ComputerName = Get-ComputerName
+$(Get-UserSDDL @("$ComputerName\User", "$ComputerName\Admin"))
 
 Write-Host ""
