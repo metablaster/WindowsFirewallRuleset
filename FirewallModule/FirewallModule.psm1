@@ -314,6 +314,7 @@ function Show-SDDL
 # input: string to present the user
 # output: true if user wants to continue
 # sample: Approve-Execute("sample text")
+# TODO: implement help [?]
 function Approve-Execute
 {
     param (
@@ -360,15 +361,16 @@ function Test-File
 
         if (!([System.IO.File]::Exists($ExpandedPath)))
         {
-            $Script = (Get-PSCallStack)[2].Command
+            # NOTE: number for Get-PSCallStack is 1, which means 2 function calls back and then get script name (call at 0 is this script)
+            $Script = (Get-PSCallStack)[1].Command
             $SearchPath = Split-Path -Path $ExpandedPath -Parent
             $Executable = Split-Path -Path $ExpandedPath -Leaf
-
+            $global:WarningsDetected = $true
+            
             Write-Warning "Executable '$Executable' was not found, rule won't have any effect
         Searched path was: $SearchPath"
 
-            Write-Host "To fix the problem visit: $SearchPath
-and find '$Executable' then adjust the path in $Script and re-run the script later again" -ForegroundColor Green
+            Write-Host "NOTE: To fix the problem find '$Executable' then adjust the path in $Script and re-run the script later again" -ForegroundColor Green
         }
     }
 }
@@ -622,9 +624,10 @@ function Find-Installation
     }
 
     Write-Warning "Installation directory for '$Program' not found"
+    # NOTE: number for Get-PSCallStack is 2, which means 3 function calls back and then get script name (call at 0 and 1 is this script)
     $Script = (Get-PSCallStack)[2].Command
 
-    Write-Host "If you installed $Program elsewhere adjust the path in $Script and re-run the script later again,
+    Write-Host "NOTE: If you installed $Program elsewhere adjust the path in $Script and re-run the script later again,
 otherwise ignore this warning if you don't have $Program installed." -ForegroundColor Green
     if (Approve-Execute "No" "Rule group for $Program" "Do you want to load these rules anyway?")
     {
@@ -654,6 +657,7 @@ function Test-Installation
     if ($FilePath -contains "%UserProfile%")
     {
         Write-Warning "Bad environment variable detected '%UserProfile%', rule may not work!"
+        $global:WarningsDetected = $true
     }
 
     if (!(Test-Environment $FilePath))
@@ -675,7 +679,7 @@ function Test-Installation
         }
         else
         {
-            Write-Host "Path corrected from: $($FilePath.Value)
+            Write-Host "NOTE: Path corrected from: $($FilePath.Value)
 to: $InstallRoot" -ForegroundColor Green
             $FilePath.Value = $InstallRoot
             return $true # path updated

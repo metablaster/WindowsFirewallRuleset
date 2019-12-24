@@ -178,9 +178,10 @@ Write-Host ""
 
 if ($global:WarningsDetected)
 {
-    Write-Host "Warnings or errors were produced in some scripts!" -ForegroundColor Red
-    Write-Host "Make sure to update those scripts and re-run them individually" -ForegroundColor Red
-    Write-Warning "If module is edited don't forget to restart Powershell"
+    Write-Warning "Not all of the scripts ran cleanly!" -ForegroundColor Red
+    Write-Warning "Make sure to update those scripts and re-run them individually" -ForegroundColor Red
+    Write-Host "NOTE: If module is edited don't forget to restart Powershell"
+    Write-Host "NOTE: Make sure you visit Local Group Policy and adjust your rules as needed." -ForegroundColor Green
 }
 else
 {
