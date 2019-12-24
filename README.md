@@ -30,7 +30,7 @@ License, Copyright notices and all material of subprojects is in their own folde
 License and Copyright notices for this project is in project root folder
 
 For more info see respective licences:\
-[LICENSE](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/LICENSE)\
+[WindowsFirewallRuleset\LICENSE](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/LICENSE)\
 [Indented.Net.IP\LICENSE](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Indented.Net.IP/LICENSE)\
 [VSSetup\LICENSE.txt](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/VSSetup/LICENSE.txt)
 
