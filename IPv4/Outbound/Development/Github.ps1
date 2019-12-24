@@ -45,74 +45,84 @@ if (!(Approve-Execute)) { exit }
 $GitRoot = "%ProgramFiles%\Git"
 $GithubRoot = "%SystemDrive%\Users\$UserName\AppData\Local\GitHubDesktop\app-2.2.3"
 
-# Test if installation exists on system
-$GitStatus = Test-Installation "Git" ([ref] $GitRoot)
-$GithubStatus = Test-Installation "Github" ([ref] $GithubRoot)
-
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
 # Rules for git
 #
-$global:InstallationStatus = $GitStatus
 
-$program = "$GitRoot\mingw64\bin\curl.exe"
-Test-File $program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Git - curl" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser $UserAccountsSDDL `
--Description "curl download tool"
+# Test if installation exists on system
+$GitStatus = Test-Installation "Git" ([ref] $GitRoot)
 
-# TODO: unsure if it's 443 or 80
-$program = "$GitRoot\mingw64\bin\git.exe"
-Test-File $program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Git - git" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser $UserAccountsSDDL `
--Description ""
+if ($GitStatus -ne $null)
+{
+    $global:InstallationStatus = $GitStatus
 
-$program = "$GitRoot\mingw64\libexec\git-core\git-remote-https.exe"
-Test-File $program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Git - remote-https" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser $UserAccountsSDDL `
--Description "git HTTPS acces (https cloning)"
+    $program = "$GitRoot\mingw64\bin\curl.exe"
+    Test-File $program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "Git - curl" -Service Any -Program $Program `
+    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+    -LocalUser $UserAccountsSDDL `
+    -Description "curl download tool"
 
-$program = "$GitRoot\usr\bin\ssh.exe"
-Test-File $program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Git - ssh" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 22 `
--LocalUser $UserAccountsSDDL `
--Description "git SSH acces"
+    # TODO: unsure if it's 443 or 80
+    $program = "$GitRoot\mingw64\bin\git.exe"
+    Test-File $program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "Git - git" -Service Any -Program $Program `
+    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+    -LocalUser $UserAccountsSDDL `
+    -Description ""
+
+    $program = "$GitRoot\mingw64\libexec\git-core\git-remote-https.exe"
+    Test-File $program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "Git - remote-https" -Service Any -Program $Program `
+    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+    -LocalUser $UserAccountsSDDL `
+    -Description "git HTTPS acces (https cloning)"
+
+    $program = "$GitRoot\usr\bin\ssh.exe"
+    Test-File $program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "Git - ssh" -Service Any -Program $Program `
+    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 22 `
+    -LocalUser $UserAccountsSDDL `
+    -Description "git SSH acces"
+}
 
 #
 # Rules for Github desktop
 #
-$global:InstallationStatus = $GithubStatus
 
-$program = "$GithubRoot\GitHubDesktop.exe"
-Test-File $program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "GitHub Desktop - App" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser $UserAccountsSDDL `
--Description ""
+# Test if installation exists on system
+$GithubStatus = Test-Installation "Github" ([ref] $GithubRoot)
 
-$program = "$GithubRoot\resources\app\git\mingw64\bin\git-remote-https.exe"
-Test-File $program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "GitHub Desktop - remote-https" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser $UserAccountsSDDL `
--Description "cloning repos"
+if ($GithubStatus -ne $null)
+{
+    $global:InstallationStatus = $GithubStatus
+
+    $program = "$GithubRoot\GitHubDesktop.exe"
+    Test-File $program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "GitHub Desktop - App" -Service Any -Program $Program `
+    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+    -LocalUser $UserAccountsSDDL `
+    -Description ""
+
+    $program = "$GithubRoot\resources\app\git\mingw64\bin\git-remote-https.exe"
+    Test-File $program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "GitHub Desktop - remote-https" -Service Any -Program $Program `
+    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+    -LocalUser $UserAccountsSDDL `
+    -Description "cloning repos"
+}

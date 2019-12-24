@@ -423,9 +423,16 @@ function Test-Installation
         $InstallRoot = Find-Installation $Program
         if ([string]::IsNullOrEmpty($InstallRoot))
         {
-            if (($InstallRoot -eq $null) -and $Terminate)
+            if ($InstallRoot -eq $null)
             {
-                exit # installation not found, exit script
+                if ($Terminate)
+                {
+                    exit # installation not found, exit script
+                }
+                else
+                {
+                    return $null # installation not found
+                }
             }
         }
         else
@@ -434,7 +441,7 @@ function Test-Installation
             return $true # path updated
         }
 
-        return $false # installation not found, don't exit script
+        return $false # installation not found
     }
 
     return $true # path exists
