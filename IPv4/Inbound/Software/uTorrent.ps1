@@ -41,7 +41,7 @@ if (!(Approve-Execute)) { exit }
 #
 # Steam installation directories
 #
-$uTorrentRoot = "%SystemDrive%\Users\$UserName\AppData\Local\uTorrent"
+$uTorrentRoot = "%SystemDrive%\Users\User\AppData\Local\uTorrent"
 
 # Test if installation exists on system
 $global:InstallationStatus = Test-Installation "uTorrent" ([ref] $uTorrentRoot)

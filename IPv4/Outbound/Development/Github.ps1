@@ -43,7 +43,7 @@ if (!(Approve-Execute)) { exit }
 # TODO: Username?
 #
 $GitRoot = "%ProgramFiles%\Git"
-$GithubRoot = "%SystemDrive%\Users\$UserName\AppData\Local\GitHubDesktop\app-2.2.3"
+$GithubRoot = "%SystemDrive%\Users\User\AppData\Local\GitHubDesktop\app-2.2.3"
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue

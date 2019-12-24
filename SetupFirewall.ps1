@@ -175,6 +175,18 @@ if(Approve-Execute "Yes" "Applying: Outbound IPv6 Rules")
 }
 
 Write-Host ""
-Write-Host "All operations completed successfuly!" -ForegroundColor Green
-Write-Host "Make sure you visit Local Group Policy and adjust your rules as needed." -ForegroundColor Green
+
+if ($global:WarningsDetected)
+{
+    Write-Host "Warnings or errors were produced in some scripts!" -ForegroundColor Red
+    Write-Host "Make sure to update those scripts and re-run them individually" -ForegroundColor Red
+    Write-Warning "If module is edited don't forget to restart Powershell"
+}
+else
+{
+    Write-Host "All operations completed successfuly!" -ForegroundColor Green
+    Write-Host "Make sure you visit Local Group Policy and adjust your rules as needed." -ForegroundColor Green
+}
+
+$global:WarningsDetected = $false
 Write-Host ""

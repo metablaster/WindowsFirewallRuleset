@@ -367,8 +367,8 @@ function Test-File
             Write-Warning "Executable '$Executable' was not found, rule won't have any effect
         Searched path was: $SearchPath"
 
-            Write-Host "To fix the problem visit $SearchPath
-        and find $Executable then adjust the path in $Script and re-run the script later again" -ForegroundColor Green
+            Write-Host "To fix the problem visit: $SearchPath
+and find '$Executable' then adjust the path in $Script and re-run the script later again" -ForegroundColor Green
         }
     }
 }
@@ -661,7 +661,7 @@ function Test-Installation
         $InstallRoot = Find-Installation $Program
         if ([string]::IsNullOrEmpty($InstallRoot))
         {
-            if ($InstallRoot -eq $null)
+            if ($InstallRoot -ne "")
             {
                 if ($Terminate)
                 {
@@ -675,9 +675,9 @@ function Test-Installation
         }
         else
         {
+            Write-Host "Path corrected from: $($FilePath.Value)
+to: $InstallRoot" -ForegroundColor Green
             $FilePath.Value = $InstallRoot
-            Write-Host "Path corrected from: $InstallRoot
-        to: $($FilePath.Value)" -ForegroundColor Green
             return $true # path updated
         }
 
@@ -724,7 +724,7 @@ New-Variable -Name PolicyStore -Option Constant -Scope Global -Value "localhost"
 # Stop executing if error
 New-Variable -Name OnError -Option Constant -Scope Global -Value "Stop"
 # To add rules to firewall for real set to false
-New-Variable -Name Debug -Scope Global -Value $true
+New-Variable -Name Debug -Scope Global -Value $false
 # To prompt for each rule set to true
 New-Variable -Name Execute -Scope Global -Value $false
 # Most used program
@@ -736,6 +736,9 @@ New-Variable -Name Interface -Option Constant -Scope Global -Value "Wired, Wirel
 New-Variable -Name Context -Scope Global -Value "Context not set"
 # Global status to check if installation directory exists, used by Test-File
 New-Variable -Name InstallationStatus -Scope Global -Value $false
+
+# Global variable to tell if all scripts run clean
+New-Variable -Name WarningsDetected -Scope Global -Value $false
 
 # Network IP configuration (get only IPv4 config, index 0, if IPv6 is configured it's at index 1)
 New-Variable -Name NICConfig -Option Constant -Scope Global -Value (Get-WmiObject Win32_NetworkAdapterConfiguration | Where-Object {$_.DefaultIPGateway -ne $null})
@@ -831,6 +834,7 @@ Export-ModuleMember -Variable Interface
 
 Export-ModuleMember -Variable Context
 Export-ModuleMember -Variable InstallationStatus
+Export-ModuleMember -Variable WarningsDetected
 
 Export-ModuleMember -Variable NICConfig
 Export-ModuleMember -Variable LocalHost

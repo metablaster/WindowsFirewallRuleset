@@ -9,12 +9,18 @@ Import-Module -Name $PSScriptRoot\..\FirewallModule
 #
 # Office installation directories
 #
-$OfficeRoot = "%ProgramFiles(x86)%\Microsoft Office\root\Office16"
-$OfficeShared = "%ProgramFiles%\Common Files\microsoft shared"
+$OfficeRoot = "%ProgramFiles(x866666)%\Microsoft Office\root\Office16"
+$TeamViewerRoot = "%ProgramFiles(x86)%\TeamViewer"
+$TestBadVariable = "%UserProfile%\crazyFolder"
 
 Write-Host ""
-Write-Host "Test-Installation 'Office' $OfficeRoot"
-Test-Installation "Office" ([ref]$OfficeRoot)
+Write-Host "Test-Installation 'MicrosoftOffice' $OfficeRoot"
+Test-Installation "MicrosoftOffice" ([ref]$OfficeRoot) $false
 
-Write-Host "Adjusted install root for 'Office' is $OfficeRoot"
 Write-Host ""
+Write-Host "Test-Installation 'TeamViewer' $TeamViewerRoot"
+Test-Installation "TeamViewer" ([ref]$TeamViewerRoot) $false
+
+Write-Host ""
+Write-Host "Test-Installation 'VisualStudio' $TestBadVariable"
+Test-Installation "VisualStudio" ([ref]$TestBadVariable) $false
