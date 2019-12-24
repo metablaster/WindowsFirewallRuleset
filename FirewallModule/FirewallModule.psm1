@@ -1,4 +1,28 @@
 
+<#
+MIT License
+
+Copyright (c) 2019 metablaster zebal@protonmail.ch
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+#>
+
 # Includes
 Import-Module -Name $PSScriptRoot\..\Indented.Net.IP
 
@@ -343,6 +367,17 @@ function Test-File
     }
 }
 
+# about: Same as Test-Path but expands system environment variables
+Test-Environment
+{
+    param (
+        [parameter(Mandatory = $true)]
+        [string] $FilePath
+    )
+
+    return (Test-Path -Path ([System.Environment]::ExpandEnvironmentVariables($FilePath)))
+}
+
 # about: find installation directory for given program
 # input: predefined program name
 # output: installation directory if found, otherwise empty string
@@ -358,26 +393,218 @@ function Find-Installation
     # otherwise firewall GUI will show full paths which is not desired for sorting reasons
     switch -Wildcard ($Program)
     {
+        [string] $InstallationRoot = ""
+
         "MicrosoftOffice"
         {
-            [string] $OfficeRoot = "%ProgramFiles%\Microsoft Office\root\Office16"
-            if (Test-Path -Path ([System.Environment]::ExpandEnvironmentVariables($OfficeRoot)))
+            $InstallationRoot = "%ProgramFiles%\Microsoft Office\root\Office16"
+            if (Test-Environment $InstallationRoot)
             {
-                return $OfficeRoot
+                return $InstallationRoot
             }
-            $OfficeRoot = "%ProgramFiles(x86)%\Microsoft Office\root\Office16"
-            if (Test-Path -Path ([System.Environment]::ExpandEnvironmentVariables($OfficeRoot)))
+            $InstallationRoot = "%ProgramFiles(x86)%\Microsoft Office\root\Office16"
+            if (Test-Environment $InstallationRoot)
             {
-                return $OfficeRoot
+                return $InstallationRoot
             }
             break
         }
         "TeamViewer"
         {
-            [string] $TeamViewerRoot = "%ProgramFiles(x86)%\TeamViewer"
-            if (Test-Path -Path ([System.Environment]::ExpandEnvironmentVariables($TeamViewerRoot)))
+            $InstallationRoot = "%ProgramFiles(x86)%\TeamViewer"
+            if (Test-Environment $InstallationRoot)
             {
-                return $TeamViewerRoot
+                return $InstallationRoot
+            }
+            break
+        }
+        "Chrome"
+        {
+            # TODO: need default directory too
+            # TODO: need to return array of directories for multiple users
+            foreach ($User in $global:UserNames)
+            {
+                $InstallationRoot = "%SystemDrive%\Users\$User\AppData\Local\Google"
+                if (Test-Environment $InstallationRoot)
+                {
+                    return $InstallationRoot
+                }    
+            }
+            break
+        }
+        "Firefox"
+        {
+            # TODO: need default directory too
+            foreach ($User in $global:UserNames)
+            {
+                $InstallationRoot = "%SystemDrive%\Users\$User\AppData\Local\Mozilla Firefox"
+                if (Test-Environment $InstallationRoot)
+                {
+                    return $InstallationRoot
+                }
+            }
+            break
+        }
+        "Yandex"
+        {
+            # TODO: need default directory too
+            foreach ($User in $global:UserNames)
+            {
+                $InstallationRoot = "%SystemDrive%\Users\$User\AppData\Local\Yandex"
+                if (Test-Environment $InstallationRoot)
+                {
+                    return $InstallationRoot
+                }
+            }
+            break
+        }
+        "Tor"
+        {
+            foreach ($User in $global:UserNames)
+            {
+                $InstallationRoot = "%SystemDrive%\Users\$User\AppData\Local\Tor Browser"
+                if (Test-Environment $InstallationRoot)
+                {
+                    return $InstallationRoot
+                }
+            }
+            break
+        }
+        "uTorrent"
+        {
+            # TODO: need default directory too
+            foreach ($User in $global:UserNames)
+            {
+                $InstallationRoot = "%SystemDrive%\Users\$User\AppData\Local\uTorrent"
+                if (Test-Environment $InstallationRoot)
+                {
+                    return $InstallationRoot
+                }
+            }
+            break
+        }
+        "Thuderbird"
+        {
+            $InstallationRoot = "%ProgramFiles%\Mozilla Thunderbird"
+            if (Test-Environment $InstallationRoot)
+            {
+                return $InstallationRoot
+            }
+            break
+        }
+        "Steam"
+        {
+            $InstallationRoot = "%ProgramFiles(x86)%\Steam"
+            if (Test-Environment $InstallationRoot)
+            {
+                return $InstallationRoot
+            }
+            break
+        }
+        "Nvidia64"
+        {
+            $InstallationRoot = "%ProgramFiles%\NVIDIA Corporation"
+            if (Test-Environment $InstallationRoot)
+            {
+                return $InstallationRoot
+            }
+            break
+        }
+        "Nvidia86"
+        {
+            $InstallationRoot = "%ProgramFiles(x86)%\NVIDIA Corporation"
+            if (Test-Environment $InstallationRoot)
+            {
+                return $InstallationRoot
+            }
+            break
+        }
+        "WarThunder"
+        {
+            $InstallationRoot = "%ProgramFiles(x86)%\Steam\steamapps\common\War Thunder"
+            if (Test-Environment $InstallationRoot)
+            {
+                return $InstallationRoot
+            }
+            break
+        }
+        "PokerStars"
+        {
+            $InstallationRoot = "%ProgramFiles(x86)%\PokerStars.EU"
+            if (Test-Environment $InstallationRoot)
+            {
+                return $InstallationRoot
+            }
+            break
+        }
+        "VisualStudio"
+        {
+            $InstallationRoot = "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community"
+            if (Test-Environment $InstallationRoot)
+            {
+                return $InstallationRoot
+            }
+            break
+        }
+        "MSYS2"
+        {
+            $InstallationRoot = "%ProgramFiles%\msys64"
+            if (Test-Environment $InstallationRoot)
+            {
+                return $InstallationRoot
+            }
+            break
+        }
+        "VisualStudioInstaller"
+        {
+            $InstallationRoot = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
+            if (Test-Environment $InstallationRoot)
+            {
+                return $InstallationRoot
+            }
+            break
+        }
+        "Git"
+        {
+            $InstallationRoot = "%ProgramFiles%\Git"
+            if (Test-Environment $InstallationRoot)
+            {
+                return $InstallationRoot
+            }
+            break
+        }
+        "Github"
+        {
+            # TODO: need to overcome version number
+            foreach ($User in $global:UserNames)
+            {
+                $InstallationRoot = "%SystemDrive%\Users\$User\AppData\Local\GitHubDesktop\app-2.2.3"
+                if (Test-Environment $InstallationRoot)
+                {
+                    return $InstallationRoot
+                }
+            }
+            break
+        }
+        "EpicGames"
+        {
+            $InstallationRoot = "%ProgramFiles(x86)%\Epic Games\Launcher"
+            if (Test-Environment $InstallationRoot)
+            {
+                return $InstallationRoot
+            }
+            break
+        }
+        "UnrealEngine"
+        {
+            # TODO: need default installation
+            foreach ($User in $global:UserNames)
+            {
+                $InstallationRoot = "%SystemDrive%\Users\$User\source\repos\UnrealEngine\Engine"
+                if (Test-Environment $InstallationRoot)
+                {
+                    return $InstallationRoot
+                }
             }
             break
         }
@@ -438,6 +665,7 @@ function Test-Installation
         else
         {
             $FilePath.Value = $InstallRoot
+            Write-Host "Bad path specified, problem fixed" -ForegroundColor -Green
             return $true # path updated
         }
 
