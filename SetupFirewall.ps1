@@ -30,9 +30,6 @@ Write-Host "Powershell version: $($PSVersionTable.PSVersion)"
 # Includes
 Import-Module -Name $PSScriptRoot\FirewallModule
 
-# Set up Firewall profile
-#& .\FirewallProfile.ps1
-
 #
 # Execute IPv4 rules
 #
@@ -173,6 +170,11 @@ if(Approve-Execute "Yes" "Applying: Outbound IPv6 Rules")
         & "$PSScriptRoot\IPv6\Outbound\Multicast.ps1"
     }
 }
+
+Write-Host ""
+
+# Set up Firewall profile
+& .\FirewallProfile.ps1
 
 Write-Host ""
 
