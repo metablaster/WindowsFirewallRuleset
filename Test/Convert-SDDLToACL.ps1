@@ -3,21 +3,22 @@
 # Unit test for Convert-SDDLToACL
 #
 
-Import-Module -Name $PSScriptRoot\..\FirewallModule
+Import-Module -Name $PSScriptRoot\..\Modules\UserInfo
+Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
 
 Write-Host ""
 Write-Host "Get-UserAccounts:"
 Write-Host "***************************"
 
-[String[]]$UserAccounts = Get-UserAccounts("Users")
-$UserAccounts = $UserAccounts += (Get-UserAccounts("Administrators"))
+[String[]]$UserAccounts = Get-UserAccounts "Users"
+$UserAccounts += Get-UserAccounts "Administrators"
 $UserAccounts
 
 Write-Host ""
 Write-Host "Get-AccountSDDL: (user accounts)"
 Write-Host "***************************"
 
-$SDDL1 = Get-AccountSDDL($UserAccounts)
+$SDDL1 = Get-AccountSDDL $UserAccounts
 $SDDL1
 
 Write-Host ""

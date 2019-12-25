@@ -3,7 +3,7 @@
 # Unit test for Show-SDDL
 #
 
-Import-Module -Name $PSScriptRoot\..\FirewallModule
+Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
 
 # Experiment with different path values to see what the ACL objects do
 $path = "C:\users\User\" #Not inherited

@@ -3,21 +3,21 @@
 # Unit test for Get-UserSID
 #
 
-Import-Module -Name $PSScriptRoot\..\FirewallModule
+Import-Module -Name $PSScriptRoot\..\Modules\UserInfo
 
 Write-Host ""
 Write-Host "Get-UserAccounts:"
 Write-Host "***************************"
 
-[String[]]$UserAccounts = Get-UserAccounts("Users")
-$UserAccounts = $UserAccounts += (Get-UserAccounts("Administrators"))
+[String[]]$UserAccounts = Get-UserAccounts "Users"
+$UserAccounts += Get-UserAccounts "Administrators"
 $UserAccounts
 
 Write-Host ""
 Write-Host "Get-UserNames:"
 Write-Host "***************************"
 
-$UserNames = Get-UserNames($UserAccounts)
+$UserNames = Get-UserNames $UserAccounts
 $UserNames
 
 Write-Host ""
@@ -26,7 +26,7 @@ Write-Host "***************************"
 
 foreach($User in $UserNames)
 {
-    $(Get-UserSID($User))
+    $(Get-UserSID $User)
 }
 
 Write-Host ""
