@@ -23,6 +23,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+# Includes
+Import-Module -Name $PSScriptRoot\..\UserInfo
+Import-Module -Name $PSScriptRoot\..\ComputerInfo
+Import-Module -Name $PSScriptRoot\..\FirewallModule
+
 # about: get store app SID
 # input: Username and "PackageFamilyName" string
 # output: store app SID (security identifier) as string
@@ -138,7 +143,7 @@ function Get-UserPrograms
     } 
     else
     {
-        Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact $ComputerName"
+        Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact '$ComputerName'"
     }
 }
 
@@ -199,7 +204,7 @@ function Get-SystemPrograms
     }
     else
     {
-        Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact $ComputerName"
+        Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact '$ComputerName'"
     }
 }
 
@@ -257,6 +262,106 @@ to: $InstallRoot" -ForegroundColor Green
     return $true # path exists
 }
 
+function Initialize-Table
+{
+    param (
+        [parameter(Mandatory = $false)]
+        [string] $TableName = "InstallationTable"
+    )
+
+    if ($global:InstallTable)
+    {
+        $global:InstallTable.Clear()
+    }
+
+    # Create Table object
+    $global:InstallTable = New-Object System.Data.DataTable $TableName
+
+    # Define Columns
+    $UserColumn = New-Object System.Data.DataColumn User, ([string])
+    $InstallColumn = New-Object System.Data.DataColumn InstallRoot, ([string])
+
+    # Add the Columns
+    $global:InstallTable.Columns.Add($UserColumn)
+    $global:InstallTable.Columns.Add($InstallColumn)
+}
+
+function Update-Table
+{
+    param (
+        [parameter(Mandatory = $true)]
+        [string] $SearchString,
+
+        [parameter(Mandatory = $false)]
+        [bool] $UserProfile = $false
+    )
+
+    Initialize-Table
+    $SystemPrograms = Get-SystemPrograms (Get-ComputerName)
+
+    if ($SystemPrograms.Name -contains $SearchString)
+    {
+        foreach ($User in $global:UserNames)
+        {
+            # Create a row
+            $Row = $global:InstallTable.NewRow()
+
+            # Enter data in the row
+            $Row.User = $User
+            $Row.InstallRoot = $SystemPrograms.InstallLocation
+
+            # Add the row to the table
+            $global:InstallTable.Rows.Add($Row)
+        }
+    }
+
+    if ($UserProfile)
+    {
+        foreach ($Account in $global:UserAccounts)
+        {
+            $UserPrograms = Get-UserPrograms $Account
+            
+            if ($UserPrograms.Name -contains $SearchString)
+            {
+                # Create a row
+                $Row = $global:InstallTable.NewRow()
+
+                # Enter data in the row
+                $Row.User = $Account.Split("\")[1]
+                $Row.InstallRoot = $UserPrograms | Where-Object { $_.Name -contains $SearchString } | Select-Object -ExpandProperty InstallLocation
+
+                # Add the row to the table
+                $global:InstallTable.Rows.Add($Row)
+            }
+        }
+    }
+}
+
+function Edit-Table
+{
+    param (
+        [parameter(Mandatory = $true)]
+        [string] $InstallRoot
+    )
+
+    # test since input may come from user input too!
+    if (Test-Environment $InstallRoot)
+    {
+        foreach ($User in $global:UserNames)
+        {
+            # Create a row
+            $Row = $global:InstallTable.NewRow()
+
+            # Enter data in the row
+            $Row.User = $User
+            $Row.InstallRoot = $InstallRoot
+
+            # Add the row to the table
+            $global:InstallTable.Rows.Add($Row)
+        }
+    }
+}
+
 # about: find installation directory for given program
 # input: predefined program name
 # output: installation directory if found, otherwise empty string
@@ -268,7 +373,7 @@ function Find-Installation
         [string] $Program
     )
 
-    [string] $InstallationRoot = ""
+    [string] $InstallRoot = ""
 
     # NOTE: we want to preserve system environment variables for firewall GUI,
     # otherwise firewall GUI will show full paths which is not desired for sorting reasons
@@ -276,201 +381,139 @@ function Find-Installation
     {
         "MicrosoftOffice"
         {
-            $InstallationRoot = "%ProgramFiles%\Microsoft Office\root\Office16"
-            if (Test-Environment $InstallationRoot)
-            {
-                return $InstallationRoot
-            }
-            $InstallationRoot = "%ProgramFiles(x86)%\Microsoft Office\root\Office16"
-            if (Test-Environment $InstallationRoot)
-            {
-                return $InstallationRoot
-            }
+            Update-Table "Microsoft Office"
             break
         }
         "TeamViewer"
         {
-            $InstallationRoot = "%ProgramFiles(x86)%\TeamViewer"
-            if (Test-Environment $InstallationRoot)
+            Update-Table "Team Viewer"
+
+            # TODO: not sure if search string should be 'TeamViewer or 'Team Viewer'
+            if ($global:InstallTable.Rows.Count -eq 0)
             {
-                return $InstallationRoot
+                $InstallRoot = "%ProgramFiles(x86)%\TeamViewer"
+                if (Test-Environment $InstallRoot)
+                {
+                    Edit-Table $InstallRoot
+                }
             }
             break
         }
         "Chrome"
         {
-            # TODO: need default directory too
-            # TODO: need to return array of directories for multiple users
-            foreach ($User in $global:UserNames)
-            {
-                $InstallationRoot = "%SystemDrive%\Users\$User\AppData\Local\Google"
-                if (Test-Environment $InstallationRoot)
-                {
-                    return $InstallationRoot
-                }    
-            }
+            Update-Table "Google Chrome" $true
             break
         }
         "Firefox"
         {
-            # TODO: need default directory too
-            foreach ($User in $global:UserNames)
-            {
-                $InstallationRoot = "%SystemDrive%\Users\$User\AppData\Local\Mozilla Firefox"
-                if (Test-Environment $InstallationRoot)
-                {
-                    return $InstallationRoot
-                }
-            }
+            Update-Table "Firefox" $true
             break
         }
         "Yandex"
         {
-            # TODO: need default directory too
-            foreach ($User in $global:UserNames)
-            {
-                $InstallationRoot = "%SystemDrive%\Users\$User\AppData\Local\Yandex"
-                if (Test-Environment $InstallationRoot)
-                {
-                    return $InstallationRoot
-                }
-            }
+            Update-Table "Yandex" $true
             break
         }
         "Tor"
         {
-            foreach ($User in $global:UserNames)
-            {
-                $InstallationRoot = "%SystemDrive%\Users\$User\AppData\Local\Tor Browser"
-                if (Test-Environment $InstallationRoot)
-                {
-                    return $InstallationRoot
-                }
-            }
+            Update-Table "Tor" $true
             break
         }
         "uTorrent"
         {
-            # TODO: need default directory too
-            foreach ($User in $global:UserNames)
-            {
-                $InstallationRoot = "%SystemDrive%\Users\$User\AppData\Local\uTorrent"
-                if (Test-Environment $InstallationRoot)
-                {
-                    return $InstallationRoot
-                }
-            }
+            Update-Table "uTorrent" $true
             break
         }
         "Thuderbird"
         {
-            $InstallationRoot = "%ProgramFiles%\Mozilla Thunderbird"
-            if (Test-Environment $InstallationRoot)
-            {
-                return $InstallationRoot
-            }
+            Update-Table "Thuderbird" $true
             break
         }
         "Steam"
         {
-            $InstallationRoot = "%ProgramFiles(x86)%\Steam"
-            if (Test-Environment $InstallationRoot)
-            {
-                return $InstallationRoot
-            }
+            Update-Table "Steam"
             break
         }
         "Nvidia64"
         {
-            $InstallationRoot = "%ProgramFiles%\NVIDIA Corporation"
-            if (Test-Environment $InstallationRoot)
+            $InstallRoot = "%ProgramFiles%\NVIDIA Corporation"
+            if (Test-Environment $InstallRoot)
             {
-                return $InstallationRoot
+                Edit-Table $InstallRoot
             }
             break
         }
         "Nvidia86"
         {
-            $InstallationRoot = "%ProgramFiles(x86)%\NVIDIA Corporation"
-            if (Test-Environment $InstallationRoot)
+            $InstallRoot = "%ProgramFiles(x86)%\NVIDIA Corporation"
+            if (Test-Environment $InstallRoot)
             {
-                return $InstallationRoot
+                Edit-Table $InstallRoot
             }
             break
         }
         "WarThunder"
         {
-            $InstallationRoot = "%ProgramFiles(x86)%\Steam\steamapps\common\War Thunder"
-            if (Test-Environment $InstallationRoot)
+            $InstallRoot = "%ProgramFiles(x86)%\Steam\steamapps\common\War Thunder"
+            if (Test-Environment $InstallRoot)
             {
-                return $InstallationRoot
+                Edit-Table $InstallRoot
             }
             break
         }
         "PokerStars"
         {
-            $InstallationRoot = "%ProgramFiles(x86)%\PokerStars.EU"
-            if (Test-Environment $InstallationRoot)
-            {
-                return $InstallationRoot
-            }
+            Update-Table "PokerStars"
             break
         }
         "VisualStudio"
         {
-            $InstallationRoot = "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community"
-            if (Test-Environment $InstallationRoot)
+            $InstallRoot = "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community"
+            if (Test-Environment $InstallRoot)
             {
-                return $InstallationRoot
+                Edit-Table $InstallRoot
             }
             break
         }
         "MSYS2"
         {
-            $InstallationRoot = "%ProgramFiles%\msys64"
-            if (Test-Environment $InstallationRoot)
-            {
-                return $InstallationRoot
-            }
+            Update-Table "MSYS2" $true
             break
         }
         "VisualStudioInstaller"
         {
-            $InstallationRoot = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
-            if (Test-Environment $InstallationRoot)
+            $InstallRoot = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
+            if (Test-Environment $InstallRoot)
             {
-                return $InstallationRoot
+                Edit-Table $InstallRoot
             }
             break
         }
         "Git"
         {
-            $InstallationRoot = "%ProgramFiles%\Git"
-            if (Test-Environment $InstallationRoot)
-            {
-                return $InstallationRoot
-            }
+            Update-Table "Git"
             break
         }
         "GithubDesktop"
         {
             # TODO: need to overcome version number
+            # TODO: default location?
             foreach ($User in $global:UserNames)
             {
-                $InstallationRoot = "%SystemDrive%\Users\$User\AppData\Local\GitHubDesktop\app-2.2.3"
-                if (Test-Environment $InstallationRoot)
+                $InstallRoot = "%SystemDrive%\Users\$User\AppData\Local\GitHubDesktop\app-2.2.3"
+                if (Test-Environment $InstallRoot)
                 {
-                    return $InstallationRoot
+                    Edit-Table $InstallRoot
                 }
             }
             break
         }
         "EpicGames"
         {
-            $InstallationRoot = "%ProgramFiles(x86)%\Epic Games\Launcher"
-            if (Test-Environment $InstallationRoot)
+            $InstallRoot = "%ProgramFiles(x86)%\Epic Games\Launcher"
+            if (Test-Environment $InstallRoot)
             {
-                return $InstallationRoot
+                Edit-Table $InstallRoot
             }
             break
         }
@@ -479,10 +522,10 @@ function Find-Installation
             # TODO: need default installation
             foreach ($User in $global:UserNames)
             {
-                $InstallationRoot = "%SystemDrive%\Users\$User\source\repos\UnrealEngine\Engine"
-                if (Test-Environment $InstallationRoot)
+                $InstallRoot = "%SystemDrive%\Users\$User\source\repos\UnrealEngine\Engine"
+                if (Test-Environment $InstallRoot)
                 {
-                    return $InstallationRoot
+                    Edit-Table $InstallRoot
                 }
             }
             break
@@ -490,27 +533,56 @@ function Find-Installation
         Default
         {
             Write-Warning "Parameter '$Program' not recognized"
-            return ""
         }
     }
 
-    Write-Warning "Installation directory for '$Program' not found"
-    # NOTE: number for Get-PSCallStack is 2, which means 3 function calls back and then get script name (call at 0 and 1 is this script)
-    $Script = (Get-PSCallStack)[2].Command
-
-    Write-Host "NOTE: If you installed $Program elsewhere adjust the path in $Script and re-run the script later again,
-otherwise ignore this warning if you don't have $Program installed." -ForegroundColor Green
-    if (Approve-Execute "No" "Rule group for $Program" "Do you want to load these rules anyway?")
+    if ($global:InstallTable.Rows.Count -gt 0)
     {
-        return $null
-    }
+        # Display the table
+        $global:InstallTable | Format-Table -AutoSize
 
-    return ""
+        return $true
+    }
+    else
+    {
+        Write-Warning "Installation directory for '$Program' not found"
+        # NOTE: number for Get-PSCallStack is 2, which means 3 function calls back and then get script name (call at 0 and 1 is this script)
+        $Script = (Get-PSCallStack)[2].Command
+    
+        Write-Host "NOTE: If you installed $Program elsewhere you can input the correct path now
+        or adjust the path in $Script and re-run the script later.
+        otherwise ignore this warning if you don't have $Program installed." -ForegroundColor Green
+        if (Approve-Execute "Yes" "Rule group for $Program" "Do you want to input path now?")
+        {
+            while ($global:InstallTable.Rows.Count -eq 0)
+            {
+                $InstallRoot = Read-Host "Input path to '$Program' root directory:"
+                Edit-Table $InstallRoot
+    
+                if ($global:InstallTable.Rows.Count -gt 0)
+                {        
+                    return $true
+                }
+                else
+                {
+                    Write-Warning "Installation directory for '$Program' not found"
+                    if (Approve-Execute "No" "Unable to locate '$InstallRoot'" "Do you want to try again?")
+                    {
+                        break
+                    }
+                }
+            }
+        }
+        
+        return $false
+    }
 }
 
 
 # Global status to check if installation directory exists, used by Test-File
 New-Variable -Name InstallationStatus -Scope Global -Value $false
+
+New-Variable -Name InstallTable -Scope Global -Value $null
 
 #
 # Function exports
@@ -523,9 +595,11 @@ Export-ModuleMember -Function Find-Installation
 Export-ModuleMember -Function Test-Installation
 Export-ModuleMember -Function Get-AppSID
 Export-ModuleMember -Function Test-Environment
+Export-ModuleMember -Function Initialize-Table
 
 #
 # Variable exports
 #
 
 Export-ModuleMember -Variable InstallationStatus
+Export-ModuleMember -Variable InstallTable

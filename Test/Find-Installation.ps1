@@ -4,12 +4,12 @@
 #
 
 # Includes
-Import-Module -Name $PSScriptRoot\..\FirewallModule
+Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
 
 
 Write-Host ""
 Write-Host "Find-Installation 'Chrome'"
-Write-Host (Find-Installation "Chrome")
+Find-Installation "Chrome"
 
 Write-Host ""
 Write-Host "Find-Installation 'TeamViewer'"
