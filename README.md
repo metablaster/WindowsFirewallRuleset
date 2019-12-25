@@ -23,8 +23,8 @@
 - All the rules are loaded into Local group policy giving you full power over default windows firewall.
 
 This project **"WindowsFirewallRuleset"** is licensed under **MIT** license.\
-Subproject [Indented.Net.IP](https://github.com/indented-automation/Indented.Net.IP) (3rd party code) located in **"Indented.Net.IP"** subfolder is licensed under **ISC** license.\
-Subproject [VSSetup](https://github.com/microsoft/vssetup.powershell) (3rd party code) located in **"VSSetup"** subfolder is licensed under **MIT** license.
+Subproject [Indented.Net.IP](https://github.com/indented-automation/Indented.Net.IP) (3rd party code) located in **"Modules\Indented.Net.IP"** subfolder is licensed under **ISC** license.\
+Subproject [VSSetup](https://github.com/microsoft/vssetup.powershell) (3rd party code) located in **"Modules\VSSetup"** subfolder is licensed under **MIT** license.
 
 License, Copyright notices and all material of subprojects is in their own folder.\
 License and Copyright notices for this project is in project root folder
