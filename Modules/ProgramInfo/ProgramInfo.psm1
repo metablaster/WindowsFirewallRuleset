@@ -262,6 +262,10 @@ to: $InstallRoot" -ForegroundColor Green
     return $true # path exists
 }
 
+# about: Create data table used to hold information for specific program for each user
+# input: Table name, but not mandatory
+# output: Empty table with 2 columns, user entry and install location
+# sample: $MyTable = Initialize-Table
 function Initialize-Table
 {
     param (
@@ -269,21 +273,18 @@ function Initialize-Table
         [string] $TableName = "InstallationTable"
     )
 
-    if ($global:InstallTable)
-    {
-        $global:InstallTable.Clear()
-    }
-
     # Create Table object
-    $global:InstallTable = New-Object System.Data.DataTable $TableName
+    $InstallTable = New-Object System.Data.DataTable $TableName
 
     # Define Columns
     $UserColumn = New-Object System.Data.DataColumn User, ([string])
     $InstallColumn = New-Object System.Data.DataColumn InstallRoot, ([string])
 
     # Add the Columns
-    $global:InstallTable.Columns.Add($UserColumn)
-    $global:InstallTable.Columns.Add($InstallColumn)
+    $InstallTable.Columns.Add($UserColumn)
+    $InstallTable.Columns.Add($InstallColumn)
+
+    return Write-Output -NoEnumerate $InstallTable
 }
 
 function Update-Table

@@ -10,15 +10,15 @@ Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
 Write-Host "Initialize-Table"
 Write-Host "***************************"
 
-Initialize-Table
+$InstallTable = Initialize-Table
 
-if (!$global:InstallTable)
+if (!$InstallTable)
 {
     Write-Warning "Table not initialized"
     exit
 }
 
-if ($global:InstallTable.Rows.Count -ne 0)
+if ($InstallTable.Rows.Count -ne 0)
 {
     Write-Warning "Table not clear"
     exit
@@ -36,18 +36,18 @@ foreach ($Account in $global:UserAccounts)
     if ($UserPrograms.Name -contains "Google Chrome")
     {
         # Create a row
-        $Row = $global:InstallTable.NewRow()
+        $Row = $InstallTable.NewRow()
 
         # Enter data in the row
         $Row.User = $Account.Split("\")[1]
         $Row.InstallRoot = $UserPrograms | Where-Object { $_.Name -contains "Google Chrome" } | Select-Object -ExpandProperty InstallLocation
 
         # Add the row to the table
-        $global:InstallTable.Rows.Add($Row)
+        $InstallTable.Rows.Add($Row)
     }
 }
 
 Write-Host ""
 Write-Host "Table data"
 Write-Host "***************************"
-$global:InstallTable | Format-Table -AutoSize
+$InstallTable | Format-Table -AutoSize
