@@ -191,7 +191,7 @@ if ($VSInstallerRoot -ne $null)
 {
     $global:InstallationStatus = $VSInstallerRoot
 
-    $program = "$VSInstallerRoot\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.exe"
+    $program = "$VSInstallerRoot\resources\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.exe"
     Test-File $program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "VS 2019 ServiceHub Installer" -Service Any -Program $Program `
@@ -208,26 +208,17 @@ if ($VSInstallerRoot -ne $null)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $NT_AUTHORITY_System `
-    -Description "Run in background probably for some updates"
-
-    $program = "$VSInstallerRoot\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\BackgroundDownload.exe"
-    Test-File $program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "VS 2019 ServiceHub Installer" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-    -LocalUser $UserAccountsSDDL `
     -Description "Used when 'Automatically download updates' in VS2019?
     Tools->Options->Environment->Product Updates->Automatically download updates."
 
-    $program = "$VSInstallerRoot\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.x86.exe"
+    $program = "$VSInstallerRoot\resources\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.x86.exe"
     Test-File $program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "VS 2019 ServiceHub Installer" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description "Run when Installing update or using add features to VS."
+    -Description "Run when Installing update or using add features to VS, also for sign in, in report problem window."
 
     $program = "$VSInstallerRoot\setup.exe"
     Test-File $program
