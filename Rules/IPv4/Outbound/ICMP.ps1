@@ -42,7 +42,8 @@ SOFTWARE.
 # Includes
 . $PSScriptRoot\DirectionSetup.ps1
 . $PSScriptRoot\..\IPSetup.ps1
-Import-Module -Name $PSScriptRoot\..\..\FirewallModule
+Import-Module -Name $PSScriptRoot\..\..\..\Modules\UserInfo
+Import-Module -Name $PSScriptRoot\..\..\..\Modules\FirewallModule
 
 #
 # Setup local variables:

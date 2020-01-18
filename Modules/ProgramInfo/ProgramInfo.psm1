@@ -557,7 +557,8 @@ function Find-Installation
         {
             while ($global:InstallTable.Rows.Count -eq 0)
             {
-                $InstallRoot = Read-Host "Input path to '$Program' root directory:"
+                $InstallRoot = Read-Host "Input path to '$Program' root directory"
+
                 Edit-Table $InstallRoot
     
                 if ($global:InstallTable.Rows.Count -gt 0)

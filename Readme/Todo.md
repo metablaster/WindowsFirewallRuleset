@@ -7,5 +7,5 @@
 5. some rules are missing comments
 6. auto detect interfaces
 7. CTRL + F and search for "TODO"
-8. Implement unique names and groups for rules, -Name and Group paramter vs -Display*
+8. Implement unique names and groups for rules, -Name and -Group paramter vs -Display*
 9. make display names and groups modular for easy search, ie. group - subgroup, Company - Program
