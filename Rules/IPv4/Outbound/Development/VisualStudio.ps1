@@ -26,6 +26,7 @@ SOFTWARE.
 # Includes
 . $PSScriptRoot\..\DirectionSetup.ps1
 . $PSScriptRoot\..\..\IPSetup.ps1
+Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\VSSetup
 Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\UserInfo
 Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\ProgramInfo
 Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\FirewallModule
@@ -43,7 +44,9 @@ if (!(Approve-Execute)) { exit }
 #
 # Visual Studio installation directories
 #
-$VSRoot = "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community"
+
+# NOTE: VSSetup will return full path, no environment variables
+$VSRoot = Get-VSSetupInstance | Select-VSSetupInstance -Latest | Select-Object -ExpandProperty InstallationPath
 $VSInstallerRoot = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
 
 # First remove all existing rules matching group
@@ -57,7 +60,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Test if installation exists on system
 $VSRootStatus = Test-Installation "VisualStudio" ([ref] $VSRoot)
 
-if ($VSRootStatus -ne $null)
+if ($null -ne $VSRootStatus)
 {
     $global:InstallationStatus = $VSRootStatus
 
@@ -92,7 +95,7 @@ if ($VSRootStatus -ne $null)
     Test-File $program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "VS 2019 Liveshare" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $UserAccountsSDDL `
     -Description "liveshare extension."
@@ -189,7 +192,7 @@ if ($VSRootStatus -ne $null)
 # Test if installation exists on system
 $VSInstallerRootStatus = Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)
 
-if ($VSInstallerRoot -ne $null)
+if ($null -ne $VSInstallerRootStatus)
 {
     $global:InstallationStatus = $VSInstallerRoot
 

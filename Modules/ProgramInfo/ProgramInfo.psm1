@@ -208,6 +208,116 @@ function Get-SystemPrograms
     }
 }
 
+# about: Create data table used to hold information for specific program for each user
+# input: Table name, but not mandatory
+# output: Empty table with 2 columns, user entry and install location
+# sample: $MyTable = Initialize-Table
+function Initialize-Table
+{
+    param (
+        [parameter(Mandatory = $false)]
+        [string] $TableName = "InstallationTable"
+    )
+
+    # Create Table object
+    $InstallTable = New-Object System.Data.DataTable $TableName
+
+    # Define Columns
+    $UserColumn = New-Object System.Data.DataColumn User, ([string])
+    $InstallColumn = New-Object System.Data.DataColumn InstallRoot, ([string])
+
+    # Add the Columns
+    $InstallTable.Columns.Add($UserColumn)
+    $InstallTable.Columns.Add($InstallColumn)
+
+    return Write-Output -NoEnumerate $InstallTable
+}
+
+# about: Search and add new program installation directory to the global table
+# input: Search string which corresponds to the output of "Get programs" functions
+# input: true if user profile is to be searched too, system locations only otherwise
+# output: Global installation table is updated
+# sample: Update-Table "Google Chrome"
+function Update-Table
+{
+    param (
+        [parameter(Mandatory = $true)]
+        [string] $SearchString,
+
+        [parameter(Mandatory = $false)]
+        [bool] $UserProfile = $false
+    )
+
+    Initialize-Table
+    $SystemPrograms = Get-SystemPrograms (Get-ComputerName)
+
+    if ($SystemPrograms.Name -contains $SearchString)
+    {
+        foreach ($User in $global:UserNames)
+        {
+            # Create a row
+            $Row = $global:InstallTable.NewRow()
+
+            # Enter data in the row
+            $Row.User = $User
+            $Row.InstallRoot = $SystemPrograms.InstallLocation
+
+            # Add row to the table
+            $global:InstallTable.Rows.Add($Row)
+        }
+    }
+
+    if ($UserProfile)
+    {
+        foreach ($Account in $global:UserAccounts)
+        {
+            $UserPrograms = Get-UserPrograms $Account
+            
+            if ($UserPrograms.Name -contains $SearchString)
+            {
+                # Create a row
+                $Row = $global:InstallTable.NewRow()
+
+                # Enter data in the row
+                $Row.User = $Account.Split("\")[1]
+                $Row.InstallRoot = $UserPrograms | Where-Object { $_.Name -contains $SearchString } | Select-Object -ExpandProperty InstallLocation
+
+                # Add the row to the table
+                $global:InstallTable.Rows.Add($Row)
+            }
+        }
+    }
+}
+
+# about: Add new program installation directory to the global table from string
+# input: Program installation directory
+# output: Global installation table is updated
+# sample: Edit-Table "%ProgramFiles(x86)%\TeamViewer"
+function Edit-Table
+{
+    param (
+        [parameter(Mandatory = $true)]
+        [string] $InstallRoot
+    )
+
+    # test since input may come from user input too!
+    if (Test-Environment $InstallRoot)
+    {
+        foreach ($User in $global:UserNames)
+        {
+            # Create a row
+            $Row = $global:InstallTable.NewRow()
+
+            # Enter data in the row
+            $Row.User = $User
+            $Row.InstallRoot = $InstallRoot
+
+            # Add the row to the table
+            $global:InstallTable.Rows.Add($Row)
+        }
+    }
+}
+
 # about: test if given installation directory is valid
 # input: predefined program name and path to program (excluding executable)
 # output: if test OK same path, if not try to update path, else return given path back
@@ -262,107 +372,6 @@ to: $InstallRoot" -ForegroundColor Green
     return $true # path exists
 }
 
-# about: Create data table used to hold information for specific program for each user
-# input: Table name, but not mandatory
-# output: Empty table with 2 columns, user entry and install location
-# sample: $MyTable = Initialize-Table
-function Initialize-Table
-{
-    param (
-        [parameter(Mandatory = $false)]
-        [string] $TableName = "InstallationTable"
-    )
-
-    # Create Table object
-    $InstallTable = New-Object System.Data.DataTable $TableName
-
-    # Define Columns
-    $UserColumn = New-Object System.Data.DataColumn User, ([string])
-    $InstallColumn = New-Object System.Data.DataColumn InstallRoot, ([string])
-
-    # Add the Columns
-    $InstallTable.Columns.Add($UserColumn)
-    $InstallTable.Columns.Add($InstallColumn)
-
-    return Write-Output -NoEnumerate $InstallTable
-}
-
-function Update-Table
-{
-    param (
-        [parameter(Mandatory = $true)]
-        [string] $SearchString,
-
-        [parameter(Mandatory = $false)]
-        [bool] $UserProfile = $false
-    )
-
-    Initialize-Table
-    $SystemPrograms = Get-SystemPrograms (Get-ComputerName)
-
-    if ($SystemPrograms.Name -contains $SearchString)
-    {
-        foreach ($User in $global:UserNames)
-        {
-            # Create a row
-            $Row = $global:InstallTable.NewRow()
-
-            # Enter data in the row
-            $Row.User = $User
-            $Row.InstallRoot = $SystemPrograms.InstallLocation
-
-            # Add the row to the table
-            $global:InstallTable.Rows.Add($Row)
-        }
-    }
-
-    if ($UserProfile)
-    {
-        foreach ($Account in $global:UserAccounts)
-        {
-            $UserPrograms = Get-UserPrograms $Account
-            
-            if ($UserPrograms.Name -contains $SearchString)
-            {
-                # Create a row
-                $Row = $global:InstallTable.NewRow()
-
-                # Enter data in the row
-                $Row.User = $Account.Split("\")[1]
-                $Row.InstallRoot = $UserPrograms | Where-Object { $_.Name -contains $SearchString } | Select-Object -ExpandProperty InstallLocation
-
-                # Add the row to the table
-                $global:InstallTable.Rows.Add($Row)
-            }
-        }
-    }
-}
-
-function Edit-Table
-{
-    param (
-        [parameter(Mandatory = $true)]
-        [string] $InstallRoot
-    )
-
-    # test since input may come from user input too!
-    if (Test-Environment $InstallRoot)
-    {
-        foreach ($User in $global:UserNames)
-        {
-            # Create a row
-            $Row = $global:InstallTable.NewRow()
-
-            # Enter data in the row
-            $Row.User = $User
-            $Row.InstallRoot = $InstallRoot
-
-            # Add the row to the table
-            $global:InstallTable.Rows.Add($Row)
-        }
-    }
-}
-
 # about: find installation directory for given program
 # input: predefined program name
 # output: installation directory if found, otherwise empty string
@@ -376,6 +385,7 @@ function Find-Installation
 
     [string] $InstallRoot = ""
 
+    # TODO: need to check some of these search strings (cases), also remove hardcoded directories
     # NOTE: we want to preserve system environment variables for firewall GUI,
     # otherwise firewall GUI will show full paths which is not desired for sorting reasons
     switch -Wildcard ($Program)

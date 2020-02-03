@@ -42,7 +42,7 @@ if (!(Approve-Execute)) { exit }
 
 # Chromecast IP
 # Adjust to Chromecast IP in your local network
-$CHROMECAST_IP = 192.168.8.50
+$CHROMECAST_IP = 192.168.1.50
 
 #
 # Browser installation directories
