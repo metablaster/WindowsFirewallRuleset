@@ -71,23 +71,27 @@ In any case, new system or old, **know that Home versions of Windows do not have
 - to be 100% sure please export your current GPO rules first, (if you don't know to do that, then ignore this, you don't have GPO rules)
 
 **STEPS:**
-1. Right click on the Task bar and select `Taskbar settings`
-2. Toggle on `Replace Command Prompt with Windows Powershell in the menu when I right click the start button`
-3. Right click on Start button in Windows system
-4. Click `Windows Powershell (Administrator)` to open Powershell as Administrator (Input Admin password if needed)
-5. Type: (or copy paste commands and hit enter) ```Get-ExecutionPolicy``` and **remeber** what the ouput is.
-6. Type: ```Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force```
-7. Type: ```cd C:\```
-8. Type: ```git clone git@github.com:metablaster/WindowsFirewallRuleset.git```
-9. Type: ```cd WindowsFirewallRuleset```
-10. Rules for programs such as internet browser, Visual Studio etc. depend on installation variables.\
+1. Press Widnows key
+2. Type: services.msc
+3. Run "Services" as Administrator
+4. Make sure "TCP/IP NetBIOS Helper" service is started
+5. Right click on the Task bar and select `Taskbar settings`
+6. Toggle on `Replace Command Prompt with Windows Powershell in the menu when I right click the start button`
+7. Right click on Start button in Windows system
+8. Click `Windows Powershell (Administrator)` to open Powershell as Administrator (Input Admin password if needed)
+9. Type: (or copy paste commands and hit enter) ```Get-ExecutionPolicy``` and **remeber** what the ouput is.
+10. Type: ```Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force```
+11. Type: ```cd C:\```
+12. Type: ```git clone git@github.com:metablaster/WindowsFirewallRuleset.git```
+13. Type: ```cd WindowsFirewallRuleset```
+14. Rules for programs such as internet browser, Visual Studio etc. depend on installation variables.\
 Most paths are auto-searched and variables are updated, otherwise you get warning and description on how to fix the problem.
-11. Back to Powershell console and type into console: ```.\SetupFirewall.ps1``` and hit enter (You will be asked what kind of rulesets you want)
-12. Follow prompt output, (ie. hit enter each time to proceed until done), it will take at least 10 minutes of your attention.
-13. If you encounter errors, you have several options such as, ignore the errors or fix the script that produced the error and re-run that script once again later.
-14. Once execution is done recall execution policy from step 5 and type: (ie. if previous policy was "RemoteSigned")\
+15. Back to Powershell console and type into console: ```.\SetupFirewall.ps1``` and hit enter (You will be asked what kind of rulesets you want)
+16. Follow prompt output, (ie. hit enter each time to proceed until done), it will take at least 10 minutes of your attention.
+17. If you encounter errors, you have several options such as, ignore the errors or fix the script that produced the error and re-run that script once again later.
+18. Once execution is done recall execution policy from step 5 and type: (ie. if previous policy was "RemoteSigned")\
 ```Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force```\
-15. Now that rules are applied you may need to adjust some of them in Local Group Policy, not all the rules are enabled by default and you may want to toggle default Allow/Block behavior for some rules, rules for programs which do not exist need to be made additionally.\
+19. Now that rules are applied you may need to adjust some of them in Local Group Policy, not all the rules are enabled by default and you may want to toggle default Allow/Block behavior for some rules, rules for programs which do not exist need to be made additionally.\
 See next sections for more info.
 
 # Where are my rules?

@@ -177,7 +177,7 @@ New-Variable -Name PolicyStore -Option Constant -Scope Global -Value "localhost"
 # Stop executing if error
 New-Variable -Name OnError -Option Constant -Scope Global -Value "Stop"
 # To add rules to firewall for real set to false
-New-Variable -Name Debug -Scope Global -Value $true
+New-Variable -Name Debug -Scope Global -Value $false
 # To prompt for each rule set to true
 New-Variable -Name Execute -Scope Global -Value $false
 # Most used program

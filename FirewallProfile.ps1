@@ -24,7 +24,7 @@ SOFTWARE.
 #>
 
 # Includes
-Import-Module -Name $PSScriptRoot\..\..\..\Modules\FirewallModule
+Import-Module -Name $PSScriptRoot\Modules\FirewallModule
 
 # Setting up profile seem to be slow, tell user what is going on
 Write-Host "Setting up Firewall profiles..."

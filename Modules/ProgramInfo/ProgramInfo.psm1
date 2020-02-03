@@ -400,6 +400,11 @@ function Find-Installation
             }
             break
         }
+        "EdgeChromium"
+        {
+            Update-Table "Microsoft Edge" $true
+            break         
+        }
         "Chrome"
         {
             Update-Table "Google Chrome" $true
