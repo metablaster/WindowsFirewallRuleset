@@ -220,17 +220,17 @@ function Initialize-Table
     )
 
     # Create Table object
-    $InstallTable = New-Object System.Data.DataTable $TableName
+    $global:InstallTable = New-Object System.Data.DataTable $TableName
 
     # Define Columns
     $UserColumn = New-Object System.Data.DataColumn User, ([string])
     $InstallColumn = New-Object System.Data.DataColumn InstallRoot, ([string])
 
     # Add the Columns
-    $InstallTable.Columns.Add($UserColumn)
-    $InstallTable.Columns.Add($InstallColumn)
+    $global:InstallTable.Columns.Add($UserColumn)
+    $global:InstallTable.Columns.Add($InstallColumn)
 
-    return Write-Output -NoEnumerate $InstallTable
+    #return Write-Output -NoEnumerate $global:InstallTable
 }
 
 # about: Search and add new program installation directory to the global table
@@ -251,7 +251,7 @@ function Update-Table
     Initialize-Table
     $SystemPrograms = Get-SystemPrograms (Get-ComputerName)
 
-    if ($SystemPrograms.Name -contains $SearchString)
+    if ($SystemPrograms.Name -like $SearchString)
     {
         foreach ($User in $global:UserNames)
         {
@@ -260,7 +260,7 @@ function Update-Table
 
             # Enter data in the row
             $Row.User = $User
-            $Row.InstallRoot = $SystemPrograms.InstallLocation
+            $Row.InstallRoot = $SystemPrograms | Where-Object { $_.Name -like $SearchString } | Select-Object -ExpandProperty InstallLocation
 
             # Add row to the table
             $global:InstallTable.Rows.Add($Row)
@@ -273,14 +273,14 @@ function Update-Table
         {
             $UserPrograms = Get-UserPrograms $Account
             
-            if ($UserPrograms.Name -contains $SearchString)
+            if ($UserPrograms.Name -like $SearchString)
             {
                 # Create a row
                 $Row = $global:InstallTable.NewRow()
 
                 # Enter data in the row
                 $Row.User = $Account.Split("\")[1]
-                $Row.InstallRoot = $UserPrograms | Where-Object { $_.Name -contains $SearchString } | Select-Object -ExpandProperty InstallLocation
+                $Row.InstallRoot = $UserPrograms | Where-Object { $_.Name -like $SearchString } | Select-Object -ExpandProperty InstallLocation
 
                 # Add the row to the table
                 $global:InstallTable.Rows.Add($Row)
@@ -289,7 +289,7 @@ function Update-Table
     }
 }
 
-# about: Add new program installation directory to the global table from string
+# about: Add new (row) program installation directory to the global table from string for each user
 # input: Program installation directory
 # output: Global installation table is updated
 # sample: Edit-Table "%ProgramFiles(x86)%\TeamViewer"
@@ -335,7 +335,7 @@ function Test-Installation
         [bool] $Terminate = $true
     )
 
-    if ($FilePath -contains "%UserProfile%")
+    if ($FilePath -like "%UserProfile%")
     {
         Write-Warning "Bad environment variable detected '%UserProfile%', rule may not work!"
         Set-Variable -Name WarningsDetected -Scope Global -Value $true
@@ -343,30 +343,25 @@ function Test-Installation
 
     if (!(Test-Environment $FilePath))
     {
-        $InstallRoot = Find-Installation $Program
-        if ([string]::IsNullOrEmpty($InstallRoot))
+        if (!(Find-Installation $Program))
         {
-            if ($InstallRoot -ne "")
+            if ($Terminate)
             {
-                if ($Terminate)
-                {
-                    exit # installation not found, exit script
-                }
-                else
-                {
-                    return $null # installation not found, don't exit script
-                }
+                exit # installation not found, exit script
             }
+
+            return $false # installation not found
         }
         else
         {
+            $InstallRoot = $global:InstallTable | Select-Object -ExpandProperty InstallRoot
+
             Write-Host "NOTE: Path corrected from: $($FilePath.Value)
 to: $InstallRoot" -ForegroundColor Green
-            $FilePath.Value = $InstallRoot
-            return $true # path updated
-        }
 
-        return $false # installation not found
+            $FilePath.Value = $InstallRoot
+            # path updated
+        }
     }
 
     return $true # path exists
@@ -412,7 +407,7 @@ function Find-Installation
         }
         "EdgeChromium"
         {
-            Update-Table "Microsoft Edge" $true
+            Update-Table "Microsoft Edge"
             break         
         }
         "Chrome"
@@ -555,7 +550,8 @@ function Find-Installation
     if ($global:InstallTable.Rows.Count -gt 0)
     {
         # Display the table
-        $global:InstallTable | Format-Table -AutoSize
+        # TODO: is this temporary for debugging?
+        # $global:InstallTable | Format-Table -AutoSize
 
         return $true
     }
@@ -598,7 +594,6 @@ function Find-Installation
 
 # Global status to check if installation directory exists, used by Test-File
 New-Variable -Name InstallationStatus -Scope Global -Value $false
-
 New-Variable -Name InstallTable -Scope Global -Value $null
 
 #
@@ -613,6 +608,9 @@ Export-ModuleMember -Function Test-Installation
 Export-ModuleMember -Function Get-AppSID
 Export-ModuleMember -Function Test-Environment
 Export-ModuleMember -Function Initialize-Table
+
+# For debugging only
+Export-ModuleMember -Function Update-Table
 
 #
 # Variable exports

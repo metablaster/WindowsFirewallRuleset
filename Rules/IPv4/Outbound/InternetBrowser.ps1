@@ -46,22 +46,14 @@ $CHROMECAST_IP = 192.168.1.50
 
 #
 # Browser installation directories
+# TODO: update path for all users?
+# TODO: returned path will miss updaters
 #
-$EdgeChromiumRoot = "%ProgramFiles(x86)%\Microsoft\Edge"
-$EdgeChromiumApp = "$EdgeChromiumRoot\Application\msedge.exe"
-
+$EdgeChromiumRoot = "%ProgramFiles(x86)%\Microsoft\Edge\Application"
 $ChromeRoot = "%SystemDrive%\Users\User\AppData\Local\Google"
-$ChromeApp = "$ChromeRoot\Chrome\Application\chrome.exe"
-$ChromeUpdate = "$ChromeRoot\Update\GoogleUpdate.exe"
-
 $FirefoxRoot = "%SystemDrive%\Users\User\AppData\Local\Mozilla Firefox"
-$FirefoxApp = "$FirefoxRoot\firefox.exe"
-
 $YandexRoot = "%SystemDrive%\Users\User\AppData\Local\Yandex"
-$YandexApp = "$YandexRoot\YandexBrowser\Application\browser.exe"
-
 $TorRoot = "%SystemDrive%\Users\User\AppData\Local\Tor Browser"
-$TorApp = "$TorRoot\Browser\TorBrowser\Tor\tor.exe"
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
@@ -75,10 +67,11 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-$EdgeChromiumStatus = Test-Installation "EdgeChromium" ([ref] $EdgeChromiumApp) $false
+$global:InstallationStatus = Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot) $false
 
-if ($null -ne $EdgeChromiumStatus)
+if ($global:InstallationStatus)
 {
+    $EdgeChromiumApp = "$EdgeChromiumRoot\msedge.exe"
     Test-File $EdgeChromiumApp
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Edge-Chromium HTTP" -Service Any -Program $EdgeChromiumApp `
@@ -100,11 +93,12 @@ if ($null -ne $EdgeChromiumStatus)
 #
 
 # Test if installation exists on system
-$ChromeStatus = Test-Installation "Chrome" ([ref] $ChromeRoot) $false
+$global:InstallationStatus = Test-Installation "Chrome" ([ref] $ChromeRoot) $false
 
-if ($null -ne $ChromeStatus)
+if ($global:InstallationStatus)
 {
-    $global:InstallationStatus = $ChromeStatus
+    $ChromeApp = "$ChromeRoot\Chrome\Application\chrome.exe"
+    $ChromeUpdate = "$ChromeRoot\Update\GoogleUpdate.exe"
 
     Test-File $ChromeApp
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
@@ -201,11 +195,11 @@ if ($null -ne $ChromeStatus)
 #
 
 # Test if installation exists on system
-$FirefoxStatus = Test-Installation "Firefox" ([ref] $FirefoxRoot) $false
+$global:InstallationStatus = Test-Installation "Firefox" ([ref] $FirefoxRoot) $false
 
-if ($null -ne $FirefoxStatus)
+if ($global:InstallationStatus)
 {
-    $global:InstallationStatus = $FirefoxStatus
+    $FirefoxApp = "$FirefoxRoot\firefox.exe"
 
     Test-File $FirefoxApp
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
@@ -235,11 +229,11 @@ if ($null -ne $FirefoxStatus)
 #
 
 # Test if installation exists on system
-$YandexStatus = Test-Installation "Yandex" ([ref] $YandexRoot) $false
+$global:InstallationStatus = Test-Installation "Yandex" ([ref] $YandexRoot) $false
 
-if ($null -ne $YandexStatus)
+if ($global:InstallationStatus)
 {
-    $global:InstallationStatus = $YandexStatus
+    $YandexApp = "$YandexRoot\YandexBrowser\Application\browser.exe"
 
     Test-File $YandexApp
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
@@ -269,11 +263,11 @@ if ($null -ne $YandexStatus)
 #
 
 # Test if installation exists on system
-$TorStatus = Test-Installation "Tor" ([ref] $TorRoot) $false
+$global:InstallationStatus = Test-Installation "Tor" ([ref] $TorRoot) $false
 
-if ($null -ne $TorStatus)
+if ($global:InstallationStatus)
 {
-    $global:InstallationStatus = $TorStatus
+    $TorApp = "$TorRoot\Browser\TorBrowser\Tor\tor.exe"
 
     Test-File $TorApp
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
