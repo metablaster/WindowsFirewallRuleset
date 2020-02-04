@@ -47,9 +47,9 @@ $CHROMECAST_IP = 192.168.1.50
 #
 # Browser installation directories
 # TODO: update path for all users?
-# TODO: returned path will miss updaters
+# TODO: returned path will miss browser updaters
 #
-$EdgeChromiumRoot = "%ProgramFiles(x86)%\Microsoft\Edge\Application"
+$EdgeChromiumRoot = "%ProgramFiles(x86)%\Microsoft"
 $ChromeRoot = "%SystemDrive%\Users\User\AppData\Local\Google"
 $FirefoxRoot = "%SystemDrive%\Users\User\AppData\Local\Mozilla Firefox"
 $YandexRoot = "%SystemDrive%\Users\User\AppData\Local\Yandex"
@@ -71,8 +71,9 @@ $global:InstallationStatus = Test-Installation "EdgeChromium" ([ref] $EdgeChromi
 
 if ($global:InstallationStatus)
 {
-    $EdgeChromiumApp = "$EdgeChromiumRoot\msedge.exe"
+    $EdgeChromiumApp = "$EdgeChromiumRoot\Edge\Application\msedge.exe"
     Test-File $EdgeChromiumApp
+    
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Edge-Chromium HTTP" -Service Any -Program $EdgeChromiumApp `
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -86,6 +87,18 @@ if ($global:InstallationStatus)
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $UserAccountsSDDL `
     -Description "Hyper text transfer protocol over SSL."
+
+    $EdgeChromiumUpdate = "$EdgeChromiumRoot\EdgeUpdate\MicrosoftEdgeUpdate.exe"
+    Test-File $EdgeChromiumUpdate
+    [string[]] $UpdateAccounts = "NT AUTHORITY\SYSTEM"
+    $UpdateAccounts += $UserAccounts
+    
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "Edge-Chromium Update" -Service Any -Program $EdgeChromiumUpdate `
+    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+    -LocalUser (Get-AccountSDDL $UpdateAccounts) `
+    -Description "Update Microsoft Edge"
 }
 
 #
@@ -98,7 +111,6 @@ $global:InstallationStatus = Test-Installation "Chrome" ([ref] $ChromeRoot) $fal
 if ($global:InstallationStatus)
 {
     $ChromeApp = "$ChromeRoot\Chrome\Application\chrome.exe"
-    $ChromeUpdate = "$ChromeRoot\Update\GoogleUpdate.exe"
 
     Test-File $ChromeApp
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
@@ -180,6 +192,8 @@ if ($global:InstallationStatus)
     -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress $CHROMECAST_IP -LocalPort 32768-61000 -RemotePort 32768-61000 `
     -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
     -Description "Allow Chromecast outbound UDP data"
+
+    $ChromeUpdate = "$ChromeRoot\Update\GoogleUpdate.exe"
 
     Test-File $ChromeUpdate
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
