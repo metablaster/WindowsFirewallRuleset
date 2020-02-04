@@ -55,12 +55,10 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-$GitStatus = Test-Installation "Git" ([ref] $GitRoot)
+$global:InstallationStatus = Test-Installation "Git" ([ref] $GitRoot) $Terminate
 
-if ($GitStatus -ne $null)
+if ($global:InstallationStatus)
 {
-    $global:InstallationStatus = $GitStatus
-
     $program = "$GitRoot\mingw64\bin\curl.exe"
     Test-File $program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `

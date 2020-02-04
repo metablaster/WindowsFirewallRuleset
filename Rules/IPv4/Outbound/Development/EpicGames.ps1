@@ -54,12 +54,10 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-$EngineStatus = Test-Installation "UnrealEngine" ([ref] $EngineRoot)
+$global:InstallationStatus = Test-Installation "UnrealEngine" ([ref] $EngineRoot) $Terminate
 
-if ($EngineStatus -ne $null)
+if ($global:InstallationStatus)
 {
-    $global:InstallationStatus = $EngineStatus
-
     $program = "$EngineRoot\Binaries\Win64\CrashReportClientEditor-Win64-Development.exe"
     Test-File $program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `

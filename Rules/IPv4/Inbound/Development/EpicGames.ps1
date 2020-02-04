@@ -46,7 +46,7 @@ if (!(Approve-Execute)) { exit }
 $EngineRoot = "%SystemDrive%\Users\User\source\repos\UnrealEngine\Engine"
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "UnrealEngine" ([ref] $EngineRoot)
+$global:InstallationStatus = Test-Installation "UnrealEngine" ([ref] $EngineRoot) $Terminate
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue

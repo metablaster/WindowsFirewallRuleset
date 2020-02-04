@@ -189,6 +189,8 @@ New-Variable -Name Interface -Option Constant -Scope Global -Value "Wired, Wirel
 New-Variable -Name Context -Scope Global -Value "Context not set"
 # Global variable to tell if all scripts ran clean
 New-Variable -Name WarningsDetected -Scope Global -Value $false
+# To force loading rules regardless of presence of program set to false
+New-Variable -Name Terminate -Scope Global -Value $false
 
 #
 # Function exports

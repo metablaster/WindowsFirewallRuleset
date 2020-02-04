@@ -58,12 +58,10 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-$VSRootStatus = Test-Installation "VisualStudio" ([ref] $VSRoot)
+$global:InstallationStatus = Test-Installation "VisualStudio" ([ref] $VSRoot) $Terminate
 
-if ($null -ne $VSRootStatus)
+if ($global:InstallationStatus)
 {
-    $global:InstallationStatus = $VSRootStatus
-
     $program = "$VSRoot\Common7\IDE\CommonExtensions\Microsoft\TeamFoundation\Team Explorer\Git\mingw32\bin\git-remote-https.exe"
     Test-File $program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
@@ -190,12 +188,10 @@ if ($null -ne $VSRootStatus)
 #
 
 # Test if installation exists on system
-$VSInstallerRootStatus = Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)
+$global:InstallationStatus = Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot) $Terminate
 
-if ($null -ne $VSInstallerRootStatus)
+if ($global:InstallationStatus)
 {
-    $global:InstallationStatus = $VSInstallerRoot
-
     $program = "$VSInstallerRoot\resources\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.exe"
     Test-File $program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `

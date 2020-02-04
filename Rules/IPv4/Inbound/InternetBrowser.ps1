@@ -51,7 +51,7 @@ $ChromeRoot = "%SystemDrive%\Users\User\AppData\Local\Google"
 $ChromeApp = "$ChromeRoot\Chrome\Application\chrome.exe"
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "Chrome" ([ref] $ChromeRoot)
+$global:InstallationStatus = Test-Installation "Chrome" ([ref] $ChromeRoot) $Terminate
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue

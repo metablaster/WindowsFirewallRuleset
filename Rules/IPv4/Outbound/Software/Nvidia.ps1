@@ -54,12 +54,10 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-$Nvidia64Status = Test-Installation "Nvidia64" ([ref] $NvidiaRoot64) $false
+$global:InstallationStatus = Test-Installation "Nvidia64" ([ref] $NvidiaRoot64) $false
 
-if ($Nvidia64Status -ne $null)
+if ($global:InstallationStatus)
 {
-    $global:InstallationStatus = $Nvidia64Status
-
     $program = "$NvidiaRoot64\NvContainer\nvcontainer.exe"
     Test-File $program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
@@ -102,12 +100,10 @@ if ($Nvidia64Status -ne $null)
 #
 
 # Test if installation exists on system
-$Nvidia86Status = Test-Installation "Nvidia86" ([ref] $NvidiaRoot86) $false
+$global:InstallationStatus = Test-Installation "Nvidia86" ([ref] $NvidiaRoot86) $false
 
-if ($Nvidia86Status -ne $null)
+if ($global:InstallationStatus)
 {
-    $global:InstallationStatus = $Nvidia86Status
-
     $program = "$NvidiaRoot86\NvContainer\nvcontainer.exe"
     Test-File $program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `

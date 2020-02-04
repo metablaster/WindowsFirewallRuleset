@@ -47,7 +47,7 @@ $OfficeRoot = "%ProgramFiles%\Microsoft Office\root\Office16"
 $OfficeShared = "%ProgramFiles%\Common Files\microsoft shared"
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)
+$global:InstallationStatus = Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot) $Terminate
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
