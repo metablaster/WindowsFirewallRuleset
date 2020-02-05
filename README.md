@@ -125,11 +125,14 @@ There are 2 ways to manage your rules:
 What ever your setup is, you will surelly need to perform additinal work such as adding more rules in GPO to allow programs for which rules do not exist, or to reconfigure existing rules.
 
 # Contribution or suggestions
+Bellow are general notes regarldess if you're developer or just a user.\
+If you would like to contribute by writing scripts you should also read [CONTRIBUTION.md]()
+
 Feel free to suggest or contribute new rules, or improvements for existing rules or scripts.\
 Just make sure you follow existing code style, as follows:
 1. Note that each rule uses exactly the same order or paramters split into exactly the same number of lines.\
 This is so that when you need to search for something it's easy to see what is where right away.
-2. Provide documentation and official reference for your rules so that it can be easy to verify that these rules do not contain mistakes, for example, for ICMP rules you would provide a link to [IANA](https://www.iana.org/) with relevant reference document.
+2. Provide documentation and official reference for your rules so that it can be easy to verify that these rules do not contain mistakes, for example, for ICMP rules you would provide a link to [IANA](https://www.iana.org) with relevant reference document.
 3. If you would like to suggest new rules or improving existing ones, but you can't push an update here, please open new issue here on github and provide details prefferably with documentation.
 4. To contribute rules, it is also important that each rule contains good description of it's purpose, when a user clicks on a rule in firewall GUI he wants to see what this rule is about and easily conclude whether to enable/disable the rule or allow/block the traffic.
 5. It is also important that a rule is very specific and not generic, that means specifying protocol, IP addresses, ports, system user, interface type and other relevant information.\
