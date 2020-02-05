@@ -139,7 +139,7 @@ This is so that when you need to search for something it's easy to see what is w
 for example just saying: allow TCP outbound port 80 for any address or any user or no explanation what is this supposed to allow or block is not acceptable.
 
 # More information and help
-Inside the Readme folder you will find usefull information not only about this project but also general information on how to troubleshoot firewall and network problems, or gather more relevant information.
+Inside the [Readme](https://github.com/metablaster/WindowsFirewallRuleset/tree/develop/Readme) folder you will find usefull information not only about this project but also general information on how to troubleshoot firewall and network problems, or gather more relevant information.
 
 It may answer some of your questions, you should go ahead and read it!\
 btw. It's recommended you read those papers here on github because of formatting and screenshots.
