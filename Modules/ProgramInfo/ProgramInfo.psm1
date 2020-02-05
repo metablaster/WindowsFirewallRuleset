@@ -596,6 +596,9 @@ function Find-Installation
     }
 }
 
+# TODO: registry quering functions may return 2x slash \\ need to remove one
+# TODO: also convert returned strings to environment variables
+
 # about: Return installed NET Frameworks
 # input: Computer name for which to list installed installed framework
 # output: Table of installed NET Framework versions and install paths
@@ -672,6 +675,111 @@ function Get-NetFramework
     else
     {
         Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact '$ComputerName'"
+        return $null
+    }
+}
+
+# about: Return installed Windows SDK (Windows kits)
+# input: Computer name for which to list installed installed framework
+# output: Table of installed Windows SDK (Windows kits) versions and install paths
+# sample: Get-WindowsSDK COMPUTERNAME
+function Get-WindowsSDK
+{
+    param (
+        [parameter(Mandatory = $true)]
+        [string] $ComputerName
+    )
+
+    if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
+    {
+        $HKLM = "SOFTWARE\WOW6432Node\Microsoft\Microsoft SDKs\Windows"
+        
+        $RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
+        $RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
+
+        $WindowsSDK = @()
+        $RootKey = $RemoteKey.OpenSubkey($HKLM)
+
+        if (!$RootKey)
+        {
+            Write-Warning "Failed to open RootKey: $HKLM"
+        }
+        else
+        {
+            foreach ($HKLMKey in $RootKey.GetSubKeyNames())
+            {
+                $SubKey = $RootKey.OpenSubkey($HKLMKey)
+
+                if (!$SubKey)
+                {
+                    Write-Warning "Failed to open SubKey: $HKLMKey"
+                    continue
+                }
+                $WindowsSDK += New-Object -TypeName PSObject -Property @{
+                    "ComputerName" = $ComputerName
+                    "KeyEntry" = Split-Path $SubKey.ToString() -Leaf
+                    "Product" = $SubKey.GetValue("ProductName")
+                    "Version" = $SubKey.GetValue("ProductVersion")
+                    "InstallPath" = $SubKey.GetValue("InstallationFolder")}        
+            }
+        }
+
+        return $WindowsSDK
+    }
+    else
+    {
+        Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact '$ComputerName'"
+        return $null
+    }
+}
+# about: Return installed Windows Kits
+# input: Computer name for which to list installed installed framework
+# output: Table of installed Windows Kits versions and install paths
+# sample: Get-WindowsKits COMPUTERNAME
+function Get-WindowsKits
+{
+    param (
+        [parameter(Mandatory = $true)]
+        [string] $ComputerName
+    )
+
+    if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
+    {
+        $HKLM = "SOFTWARE\WOW6432Node\Microsoft\Windows Kits\Installed Roots"
+        
+        $RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
+        $RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
+
+        $WindowsKits = @()
+        $RootKey = $RemoteKey.OpenSubkey($HKLM)
+
+        if (!$RootKey)
+        {
+            Write-Warning "Failed to open RootKey: $HKLM"
+        }
+        else
+        {
+            foreach ($Entry in $RootKey.GetValueNames())
+            {
+                $Value = $RootKey.GetValue($Entry)
+
+                if ($Value -like "C:\Program Files*")
+                {
+                    $WindowsKits += New-Object -TypeName PSObject -Property @{
+                        "ComputerName" = $ComputerName
+                        "KeyEntry" = Split-Path $RootKey.ToString() -Leaf
+                        "Product" = $Entry
+                        "InstallPath" = $Value}
+                }
+            }
+        }
+
+        return $WindowsKits
+    }
+    else
+    {
+        Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact '$ComputerName'"
+        return $null
     }
 }
 
@@ -692,6 +800,8 @@ Export-ModuleMember -Function Get-AppSID
 Export-ModuleMember -Function Test-Environment
 Export-ModuleMember -Function Initialize-Table
 Export-ModuleMember -Function Get-NetFramework
+Export-ModuleMember -Function Get-WindowsKits
+Export-ModuleMember -Function Get-WindowsSDK
 
 # For debugging only
 Export-ModuleMember -Function Update-Table

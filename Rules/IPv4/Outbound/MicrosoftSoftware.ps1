@@ -47,8 +47,11 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # Installation directories for MS software
 #
+
+# Computer name
+$ComputerName = Get-ComputerName
+
 $VSCodeRoot = "%ProgramFiles%\Microsoft VS Code"
-$SDKRoot = "%ProgramFiles(x86)%\Windows Kits\10"
 $WebPlatformRoot = "%ProgramFiles%\Microsoft\Web Platform Installer"
 $SQLServerRoot = "%ProgramFiles(x86)%\Microsoft SQL Server\140"
 $PowerShell64Root = "%SystemRoot%\System32\WindowsPowerShell\v1.0"
@@ -56,12 +59,35 @@ $PowerShell86Root = "%SystemRoot%\SysWOW64\WindowsPowerShell\v1.0"
 $OneDriveRoot = "%ProgramFiles(x86)%\Microsoft OneDrive"
 $HelpViewerRoot = "%ProgramFiles(x86)%\Microsoft Help Viewer\v2.3"
 
+# Get Windows SDK root
+# $WindowsSDK = Get-WindowsSDK $ComputerName
+# if ($null -ne $WindowsKits)
+# {
+#     $SDKRoot = $WindowsSDK |
+#     Sort-Object -Property Version |
+#     Where-Object { $_.InstallPath } |
+#     Select-Object -Last 1 -ExpandProperty InstallPath
+# }
+
+# Get Windows SDK debuggers root (latest SDK)
+$WindowsKits = Get-WindowsKits $ComputerName
+if ($null -ne $WindowsKits)
+{
+    $SDKDebuggers = $WindowsKits |
+    Where-Object {$_.Product -like "WindowsDebuggersRoot*"} |
+    Sort-Object -Property Product |
+    Select-Object -Last 1 -ExpandProperty InstallPath
+}
+
 # Get latest NET Framework installation directory
-$ComputerName = Get-ComputerName
-$NETFrameworkRoot = Get-NetFramework $ComputerName |
- Sort-Object -Property Version |
-  Where-Object {$_.InstallPath} |
-   Select-Object -Last 1 -ExpandProperty InstallPath
+$NETFrameworkRoot = Get-NetFramework $ComputerName
+if ($null -ne $NETFrameworkRoot)
+{
+    $NETFrameworkRoot = $NETFrameworkRoot |
+    Sort-Object -Property Version |
+    Where-Object {$_.InstallPath} |
+    Select-Object -Last 1 -ExpandProperty InstallPath
+}
 
 $vcpkgRoot = "%SystemDrive%\Users\User\source\repos\vcpkg"
 $ToolsRoot = "%SystemDrive%\tools"
@@ -70,60 +96,66 @@ $ToolsRoot = "%SystemDrive%\tools"
 # Rules for Microsoft software
 #
 
+$global:InstallationStatus = Test-Installation "VSCode" ([ref] $VSCodeRoot) $false
+
+if ($global:InstallationStatus)
+{
+    $program = "$VSCodeRoot\Code.exe"
+    Test-File $program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "Visual Studio Code" -Service Any -Program $program `
+    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+    -LocalUser $UserAccountsSDDL `
+    -Description ""
+}
+
+if ($null -ne $SDKDebuggers)
+{
+    $program = "$SDKDebuggers\x86\windbg.exe"
+    Test-File $program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "WinDbg Symbol Server x86" -Service Any -Program $program `
+    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+    -LocalUser $UserAccountsSDDL `
+    -Description "WinDbg access to Symbols Server."
+
+    $program = "$SDKDebuggers\x64\windbg.exe"
+    Test-File $program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "WinDbg Symbol Server x64" -Service Any -Program $program `
+    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+    -LocalUser $UserAccountsSDDL `
+    -Description "WinDbg access to Symbols Server"
+
+    $program = "$SDKDebuggers\x86\symchk.exe"
+    Test-File $program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "Symchk Symbol Server x86" -Service Any -Program $program `
+    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+    -LocalUser $UserAccountsSDDL `
+    -Description "WinDbg Symchk access to Symbols Server."
+
+    $program = "$SDKDebuggers\x64\symchk.exe"
+    Test-File $program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "Symchk Symbol Server x64" -Service Any -Program $program `
+    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+    -LocalUser $UserAccountsSDDL `
+    -Description "WinDbg Symchk access to Symbols Server"
+}
+
 # TODO: need installation check, and need to separate these rules
-# Assume all of the above directories exist
-$global:InstallationStatus = $true
-Write-Host "NOTE: in this script confirm switch is enabled, and default is Yes, even for failures!"
+# Assume unfinished checks for all of the above directories exist
+Write-Host "NOTE: in this script confirm switch is enabled for unfinished rules, and default is Yes, even for failures!"
 
 $PreviousExecuteStatus = $global:Execute
 $global:Execute = $true
-
-$InstallationStatus = Test-Installation "VSCode" ([ref] $VSCodeRoot) $false
-
-$program = "$VSCodeRoot\Code.exe"
-Test-File $program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Visual Studio Code" -Service Any -Program $program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser $UserAccountsSDDL `
--Description ""
-
-$program = "$SDKRoot\Debuggers\x86\windbg.exe"
-Test-File $program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "WinDbg Symbol Server x86" -Service Any -Program $program `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser $UserAccountsSDDL `
--Description "WinDbg access to Symbols Server."
-
-$program = "$SDKRoot\Debuggers\x64\windbg.exe"
-Test-File $program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "WinDbg Symbol Server x64" -Service Any -Program $program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser $UserAccountsSDDL `
--Description "WinDbg access to Symbols Server"
-
-$program = "$SDKRoot\Debuggers\x86\symchk.exe"
-Test-File $program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Symchk Symbol Server x86" -Service Any -Program $program `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser $UserAccountsSDDL `
--Description "WinDbg Symchk access to Symbols Server."
-
-$program = "$SDKRoot\Debuggers\x64\symchk.exe"
-Test-File $program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Symchk Symbol Server x64" -Service Any -Program $program `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser $UserAccountsSDDL `
--Description "WinDbg Symchk access to Symbols Server"
+$global:InstallationStatus = $true
 
 $program = "$WebPlatformRoot\WebPlatformInstaller.exe"
 Test-File $program
@@ -224,16 +256,19 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description "Review downloadable content."
 
-$program = "$NETFrameworkRoot\mscorsvw.exe"
-Test-File $program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "CLR Optimization Service" -Service Any -Program $program `
--PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
--LocalUser $UserAccountsSDDL `
--Description "mscorsvw.exe is precompiling .NET assemblies in the background.
-Once it's done, it will go away. Typically, after you install the .NET Redist,
-it will be done with the high priority assemblies in 5 to 10 minutes and then will wait until your computer is idle to process the low priority assemblies."
+if ($null -ne $NETFrameworkRoot)
+{
+    $program = "$NETFrameworkRoot\mscorsvw.exe"
+    Test-File $program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "CLR Optimization Service" -Service Any -Program $program `
+    -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
+    -LocalUser $UserAccountsSDDL `
+    -Description "mscorsvw.exe is precompiling .NET assemblies in the background.
+    Once it's done, it will go away. Typically, after you install the .NET Redist,
+    it will be done with the high priority assemblies in 5 to 10 minutes and then will wait until your computer is idle to process the low priority assemblies."
+}
 
 $program = "$vcpkgRoot\vcpkg.exe"
 Test-File $program
