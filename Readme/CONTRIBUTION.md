@@ -19,10 +19,9 @@ Another example, the code in scripts is ordered into "sections" in following way
 ## Documentation and comments
 Sections of code should be documented as shown in existing scripts.\
 To comment on things that need to be done add "TODO:" + comment, similary for notes add "NOTE:" + comment.\
-For any generic comments you may want to add use line comments and block comments only if comment big.
+For any generic comments you may want to add use line comments (preferred) and block comments only if comment is big.
 
-Provide documentation and official reference for your rules so that it can be easy to verify that these rules do not contain mistakes,\
-for example, for ICMP rules you would provide a link to [IANA](https://www.iana.org) with relevant reference document.
+Provide documentation and official reference for your rules so that it can be easy to verify that these rules do not contain mistakes,  for example, for ICMP rules you would provide a link to [IANA](https://www.iana.org) with relevant reference document.
 
 it is important that each rule contains good description of it's purpose, when a user clicks on a rule in firewall GUI he wants to see
 what this rule is about and easily conclude whether to enable/disable the rule or allow/block the traffic.
@@ -34,9 +33,10 @@ It is important that a rule is very specific and not generic, that means specify
 for example just saying: allow TCP outbound port 80 for any address or any user or no explanation what is this supposed to allow or block is not acceptable.
 
 ## Testing code
-Write as much tests as possible, making changes to exiting code can then be easily tested!
+Write as much tests as possible, making changes to exiting code can then be easily tested!\
+Preferrably each function should be tested, if concept expands to several functions it should be a separate test.
 
-All tests reside in "Test" folder.
+All tests reside in "Test" folder, take a look there for examples.
 
 ## Modules and 3rd party code
 Project contains few custom modules of various types grouped by relevance on what the module is supposed to expose.
@@ -58,4 +58,4 @@ At the moment we focus on Windows Firewall, if you have skills to port code to o
 If you decide to port code it is mandatory that these code changes are done on separate branch.
 
 ## Repository folder structure
-See [DirectoryStructure.md]()
+See [DirectoryStructure.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/DirectoryStructure.md)
