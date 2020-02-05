@@ -126,7 +126,7 @@ What ever your setup is, you will surelly need to perform additinal work such as
 
 # Contribution or suggestions
 Bellow are general notes regarldess if you're developer or just a user.\
-If you would like to contribute by writing scripts you should also read [CONTRIBUTION.md]()
+If you would like to contribute by writing scripts you should also read [CONTRIBUTION.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CONTRIBUTION.md)
 
 Feel free to suggest or contribute new rules, or improvements for existing rules or scripts.\
 Just make sure you follow existing code style, as follows:
