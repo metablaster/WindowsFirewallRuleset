@@ -64,22 +64,23 @@ In any case, new system or old, **know that Home versions of Windows do not have
 # Step by step quick start
 
 **WARNING:**
-- these steps here are designed for for those who don't feel comfotable with `git`, `Powershell` or `Local group policy`
-- You may loose internet conectivity for some of your programs or in rare cases even lose internet conectivity completely, if that happens, you can run `ResetFirewall.ps1` to reset firewall to previous state.
+- These steps here are designed for for those who don't feel comfotable with `git`, `Powershell` or `Local group policy`
+- You may loose internet conectivity for some of your programs or in rare cases even lose internet conectivity completely, if that happens, you can run `ResetFirewall.ps1` to reset firewall to previous state and clear GPO firewall.
 - Inside the Readme folder there is a `ResetFirewall.md`, a guide on how to do it manually, by hand, if for some reason you're unable to run the script, or the script does not solve your problems.
 - Also note that your current/existing rules will not be deleted unless you have rules in GPO whose group name interfere with group names from this ruleset.
-- to be 100% sure please export your current GPO rules first, (if you don't know to do that, then ignore this, you don't have GPO rules)
+- To be 100% sure please export your current GPO rules first, (if you don't know to do that, then ignore this, you don't have GPO rules)
+- The script will ask you what rules you want, to avoid internet connectivity trouble you should apply at least all generic networking and OS related rules rules such as BasicNetworking, ICMP, WindowsSystem, WindowsServices, Multicast etc.
 
 **STEPS:**
 1. Press Widnows key
-2. Type: services.msc
+2. Type: `services.msc`
 3. Run "Services" as Administrator
-4. Make sure "TCP/IP NetBIOS Helper" service is started
+4. Make sure `TCP/IP NetBIOS Helper` service is started, this is needed to communicate GPO with either localhost or remote PC.
 5. Right click on the Task bar and select `Taskbar settings`
 6. Toggle on `Replace Command Prompt with Windows Powershell in the menu when I right click the start button`
 7. Right click on Start button in Windows system
 8. Click `Windows Powershell (Administrator)` to open Powershell as Administrator (Input Admin password if needed)
-9. Type: (or copy paste commands and hit enter) ```Get-ExecutionPolicy``` and **remeber** what the ouput is.
+9. Type: (or copy paste commands and hit enter) ```Get-ExecutionPolicy``` and remeber what the ouput is.
 10. Type: ```Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force```
 11. Type: ```cd C:\```
 12. Type: ```git clone git@github.com:metablaster/WindowsFirewallRuleset.git```
@@ -89,8 +90,8 @@ Most paths are auto-searched and variables are updated, otherwise you get warnin
 15. Back to Powershell console and type into console: ```.\SetupFirewall.ps1``` and hit enter (You will be asked what kind of rulesets you want)
 16. Follow prompt output, (ie. hit enter each time to proceed until done), it will take at least 10 minutes of your attention.
 17. If you encounter errors, you have several options such as, ignore the errors or fix the script that produced the error and re-run that script once again later.
-18. Once execution is done recall execution policy from step 5 and type: (ie. if previous policy was "RemoteSigned")\
-```Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force```\
+18. Once execution is done recall execution policy from step 5 and type: (ie. if it was "RemoteSigned" which is default)\
+```Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force```
 19. Now that rules are applied you may need to adjust some of them in Local Group Policy, not all the rules are enabled by default and you may want to toggle default Allow/Block behavior for some rules, rules for programs which do not exist need to be made additionally.\
 See next sections for more info.
 
@@ -129,14 +130,13 @@ Just make sure you follow existing code style, as follows:
 1. Note that each rule uses exactly the same order or paramters split into exactly the same number of lines.\
 This is so that when you need to search for something it's easy to see what is where right away.
 2. Provide documentation and official reference for your rules so that it can be easy to verify that these rules do not contain mistakes, for example, for ICMP rules you would provide a link to [IANA](https://www.iana.org/) with relevant reference document.
-3. If you would like to suggest new rules or improving existing ones, but you do not have the skills to upload an update here, please open new issue here on github and provide details prefferably with documentation.
+3. If you would like to suggest new rules or improving existing ones, but you can't push an update here, please open new issue here on github and provide details prefferably with documentation.
 4. To contribute rules, it is also important that each rule contains good description of it's purpose, when a user clicks on a rule in firewall GUI he wants to see what this rule is about and easily conclude whether to enable/disable the rule or allow/block the traffic.
 5. It is also important that a rule is very specific and not generic, that means specifying protocol, IP addresses, ports, system user, interface type and other relevant information.\
 for example just saying: allow TCP outbound port 80 for any address or any user or no explanation what is this supposed to allow or block is not acceptable.
 
 # More information and help
-Inside the Readme folder you will find very usefull information not only about this project but also general information on how to troubleshoot firewall and network problems, or gather more relevant information.
+Inside the Readme folder you will find usefull information not only about this project but also general information on how to troubleshoot firewall and network problems, or gather more relevant information.
 
 It may answer some of your questions, you should go ahead and read it!\
 btw. It's recommended you read those papers here on github because of formatting and screenshots.
-
