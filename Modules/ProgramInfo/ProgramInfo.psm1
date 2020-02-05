@@ -97,6 +97,7 @@ function Test-Environment
     return (Test-Path -Path ([System.Environment]::ExpandEnvironmentVariables($FilePath)))
 }
 
+# about: search installed programs in userprofile for all users
 # input: User account in form of "COMPUTERNAME\USERNAME"
 # output: list of programs for specified USERNAME
 # sample: Get-UserPrograms "COMPUTERNAME\USERNAME"
@@ -127,10 +128,10 @@ function Get-UserPrograms
                 foreach ($KeyEntry in $UserKey.OpenSubkey($SubKey))
                 {
                     # Get more key entries as needed
-                    $UserPrograms += (New-Object PSObject -Property @{
+                    $UserPrograms += New-Object PSObject -Property @{
                     "ComputerName" = $ComputerName
                     "Name" = $KeyEntry.GetValue("displayname")
-                    "InstallLocation" = $KeyEntry.GetValue("InstallLocation")})
+                    "InstallLocation" = $KeyEntry.GetValue("InstallLocation")}
                 }
             }
         }
@@ -144,9 +145,11 @@ function Get-UserPrograms
     else
     {
         Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact '$ComputerName'"
+        return $null
     }
 }
 
+# about: search installed programs for all users, system wide
 # input: ComputerName
 # output: list of programs installed for all users
 # sample: Get-SystemPrograms "COMPUTERNAME"
@@ -162,10 +165,12 @@ function Get-SystemPrograms
         # The value of the [IntPtr] property is 4 in a 32-bit process, and 8 in a 64-bit process.
         if ([IntPtr]::Size -eq 4)
         {
+            # 32 bit system
             $HKLM = "Software\Microsoft\Windows\CurrentVersion\Uninstall"
         }
         else
         {
+            # 64 bit system
             $HKLM = @(
                 "Software\Microsoft\Windows\CurrentVersion\Uninstall"
                 "Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall"
@@ -187,10 +192,10 @@ function Get-SystemPrograms
                     foreach ($KeyEntry in $UserKey.OpenSubkey($SubKey))
                     {
                         # Get more key entries as needed
-                        $SystemPrograms += (New-Object PSObject -Property @{
+                        $SystemPrograms += New-Object PSObject -Property @{
                         "ComputerName" = $ComputerName
                         "Name" = $KeyEntry.GetValue("DisplayName")
-                        "InstallLocation" = $KeyEntry.GetValue("InstallLocation")})
+                        "InstallLocation" = $KeyEntry.GetValue("InstallLocation")}
                     }
                 }
             }
@@ -205,6 +210,73 @@ function Get-SystemPrograms
     else
     {
         Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact '$ComputerName'"
+        return $null
+    }
+}
+
+# about: search program install properties for all users
+# input: ComputerName
+# output: list of programs installed for all users
+# sample: Get-SystemPrograms "COMPUTERNAME"
+function Get-AllUserPrograms
+{
+    param (
+        [parameter(Mandatory = $true)]
+        [string] $ComputerName
+    )
+
+    if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
+    {
+        $HKLM = "SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData"
+        
+        $RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
+        $RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
+
+        $AllUserPrograms = @()
+        $RootKey = $RemoteKey.OpenSubkey($HKLM)
+
+        if (!$RootKey)
+        {
+            Write-Warning "Failed to open RootKey: $HKLM"
+        }
+        else
+        {
+            foreach ($HKLMKey in $RootKey.GetSubKeyNames())
+            {
+                $UserProducts = $RootKey.OpenSubkey("$HKLMKey\Products")
+
+                if (!$UserProducts)
+                {
+                    Write-Warning "Failed to open UserKey: $HKLMKey\Products"
+                    continue
+                }
+
+                foreach ($HKLMSubKey in $UserProducts.GetSubKeyNames())
+                {
+                    $ProductKey = $UserProducts.OpenSubkey("$HKLMSubKey\InstallProperties")
+
+                    if (!$ProductKey)
+                    {
+                        Write-Warning "Failed to open ProductKey: $HKLMSubKey\InstallProperties"
+                        continue    
+                    }
+
+                    # Get more key entries as needed
+                    $AllUserPrograms += New-Object PSObject -Property @{
+                    "ComputerName" = $ComputerName
+                    "Name" = $ProductKey.GetValue("DisplayName")
+                    "Version" = $ProductKey.GetValue("DisplayVersion")
+                    "InstallLocation" = $ProductKey.GetValue("InstallLocation")}
+                }
+            }
+
+            return $AllUserPrograms | Where-Object { $_.InstallLocation }
+        }
+    }
+    else
+    {
+        Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact '$ComputerName'"
+        return $null
     }
 }
 
@@ -679,9 +751,9 @@ function Get-NetFramework
     }
 }
 
-# about: Return installed Windows SDK (Windows kits)
+# about: Return installed Windows SDK
 # input: Computer name for which to list installed installed framework
-# output: Table of installed Windows SDK (Windows kits) versions and install paths
+# output: Table of installed Windows SDK versions and install paths
 # sample: Get-WindowsSDK COMPUTERNAME
 function Get-WindowsSDK
 {
@@ -692,8 +764,18 @@ function Get-WindowsSDK
 
     if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
     {
-        $HKLM = "SOFTWARE\WOW6432Node\Microsoft\Microsoft SDKs\Windows"
-        
+        # The value of the [IntPtr] property is 4 in a 32-bit process, and 8 in a 64-bit process.
+        if ([IntPtr]::Size -eq 4)
+        {
+            # 32 bit system
+            $HKLM = "SOFTWARE\Microsoft\Microsoft SDKs\Windows"
+        }
+        else
+        {
+            # 64 bit system
+            $HKLM = "SOFTWARE\WOW6432Node\Microsoft\Microsoft SDKs\Windows"
+        }
+                
         $RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
         $RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
@@ -732,6 +814,7 @@ function Get-WindowsSDK
         return $null
     }
 }
+
 # about: Return installed Windows Kits
 # input: Computer name for which to list installed installed framework
 # output: Table of installed Windows Kits versions and install paths
@@ -745,8 +828,18 @@ function Get-WindowsKits
 
     if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
     {
-        $HKLM = "SOFTWARE\WOW6432Node\Microsoft\Windows Kits\Installed Roots"
-        
+        # The value of the [IntPtr] property is 4 in a 32-bit process, and 8 in a 64-bit process.
+        if ([IntPtr]::Size -eq 4)
+        {
+            # 32 bit system
+            $HKLM = "SOFTWARE\Microsoft\Windows Kits\Installed Roots"
+        }
+        else
+        {
+            # 64 bit system
+            $HKLM = "SOFTWARE\WOW6432Node\Microsoft\Windows Kits\Installed Roots"
+        }
+                
         $RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
         $RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
@@ -792,6 +885,7 @@ New-Variable -Name InstallTable -Scope Global -Value $null
 #
 
 Export-ModuleMember -Function Get-UserPrograms
+Export-ModuleMember -Function Get-AllUserPrograms
 Export-ModuleMember -Function Get-SystemPrograms
 Export-ModuleMember -Function Test-File
 Export-ModuleMember -Function Find-Installation

@@ -151,7 +151,7 @@ if ($null -ne $SDKDebuggers)
 
 # TODO: need installation check, and need to separate these rules
 # Assume unfinished checks for all of the above directories exist
-Write-Host "NOTE: in this script confirm switch is enabled for unfinished rules, and default is Yes, even for failures!"
+Write-Host "NOTE: in this script confirm switch is enabled for unfinished program detection, and default is Yes, even for failures!"
 
 $PreviousExecuteStatus = $global:Execute
 $global:Execute = $true
@@ -363,3 +363,4 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 
 # set Execute back to previous value
 $global:Execute = $PreviousExecuteStatus
+$global:InstallationStatus = $false
