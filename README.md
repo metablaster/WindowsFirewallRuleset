@@ -113,7 +113,8 @@ into Local Group Policy.
 
 # Deleting rules
 At the moment the easiest way is to select all the rules you want to delete in Local Group Policy, right click and delete.\
-To revert to your old firewall state, you will need to delete all the rules from GPO, and set all properties to "Not configured" when right clicking on node `Windows Defender Firewall with Advanced Security - Local Group Policy Object`
+To revert to your old firewall state, you will need to delete all the rules from GPO, and set all properties to "Not configured" when right clicking on node `Windows Defender Firewall with Advanced Security - Local Group Policy Object`\
+Deleting all rules or reveting to previsous state can be done with `ResetFirewall.ps1` script
 
 # Manage loaded rules
 There are 2 ways to manage your rules:
