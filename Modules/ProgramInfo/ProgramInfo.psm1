@@ -324,7 +324,7 @@ function Update-Table
     $ComputerName = Get-ComputerName
     $SystemPrograms = Get-SystemPrograms $ComputerName
 
-    if ($SystemPrograms.Name -like $SearchString)
+    if ($SystemPrograms.Name -like "*$SearchString*")
     {
         foreach ($User in $global:UserNames)
         {
@@ -333,7 +333,7 @@ function Update-Table
 
             # Enter data in the row
             $Row.User = $User
-            $Row.InstallRoot = $SystemPrograms | Where-Object { $_.Name -like $SearchString } | Select-Object -ExpandProperty InstallLocation
+            $Row.InstallRoot = $SystemPrograms | Where-Object { $_.Name -like "*$SearchString*" } | Select-Object -ExpandProperty InstallLocation
 
             # Add row to the table
             $global:InstallTable.Rows.Add($Row)
@@ -344,7 +344,7 @@ function Update-Table
         #Program not found on system, attempt alternative search
         $AllUserPrograms = Get-AllUserPrograms $ComputerName
 
-        if ($AllUserPrograms.Name -like $SearchString)
+        if ($AllUserPrograms.Name -like "*$SearchString*")
         {
             # TODO: it not known if it's for specific user in AllUserPrograms registry entry (most likely applies to all users)
             foreach ($User in $global:UserNames)
@@ -354,7 +354,7 @@ function Update-Table
 
                 # Enter data in the row
                 $Row.User = $User
-                $Row.InstallRoot = $SystemPrograms | Where-Object { $_.Name -like $SearchString } | Select-Object -ExpandProperty InstallLocation
+                $Row.InstallRoot = $SystemPrograms | Where-Object { $_.Name -like "*$SearchString*" } | Select-Object -ExpandProperty InstallLocation
 
                 # Add row to the table
                 $global:InstallTable.Rows.Add($Row)
@@ -368,14 +368,14 @@ function Update-Table
         {
             $UserPrograms = Get-UserPrograms $Account
             
-            if ($UserPrograms.Name -like $SearchString)
+            if ($UserPrograms.Name -like "*$SearchString*")
             {
                 # Create a row
                 $Row = $global:InstallTable.NewRow()
 
                 # Enter data in the row
                 $Row.User = $Account.Split("\")[1]
-                $Row.InstallRoot = $UserPrograms | Where-Object { $_.Name -like $SearchString } | Select-Object -ExpandProperty InstallLocation
+                $Row.InstallRoot = $UserPrograms | Where-Object { $_.Name -like "*$SearchString*" } | Select-Object -ExpandProperty InstallLocation
 
                 # Add the row to the table
                 $global:InstallTable.Rows.Add($Row)
@@ -481,6 +481,11 @@ function Find-Installation
     # otherwise firewall GUI will show full paths which is not desired for sorting reasons
     switch -Wildcard ($Program)
     {
+        "Greenshot"
+        {
+            Update-Table "Greenshot" $true
+            break
+        }
         "DnsCrypt"
         {
             Update-Table "Simple DNSCrypt"

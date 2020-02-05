@@ -28,16 +28,16 @@ SOFTWARE.
 # TODO: Uncomment modules as needed
 
 # Includes
-# . $PSScriptRoot\..\DirectionSetup.ps1
-# . $PSScriptRoot\..\..\IPSetup.ps1
-# Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\UserInfo
-# Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\ProgramInfo
-# Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\FirewallModule
+. $PSScriptRoot\..\DirectionSetup.ps1
+. $PSScriptRoot\..\..\IPSetup.ps1
+Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\UserInfo
+Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\ProgramInfo
+Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\FirewallModule
 
 #
 # Setup local variables:
 #
-$Group = "Template - TargetProgram"
+$Group = "Software - Greenshot"
 $Profile = "Private, Public"
 
 # Ask user if he wants to load these rules
@@ -45,25 +45,25 @@ Update-Context $IPVersion $Direction $Group
 if (!(Approve-Execute)) { exit }
 
 #
-# TargetProgram installation directories
+# Greenshot installation directories
 #
-$TargetProgramRoot = "%ProgramFiles%\TargetProgram"
+$GreenshotRoot = "%LocalAppData%\Greenshot"
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "TargetProgram" ([ref]$TargetProgramRoot) $Terminate
+$global:InstallationStatus = Test-Installation "Greenshot" ([ref]$GreenshotRoot) $Terminate
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
-# Rules for TargetProgram
+# Rules for Greenshot
 #
 
-$Program = "$TargetProgramRoot\TargetProgram.exe"
+$Program = "$GreenshotRoot\Greenshot.exe"
 Test-File $Program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "TargetProgram" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 80, 443, 5938 `
+-DisplayName "Greenshot" -Service Any -Program $Program `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 -LocalUser $UserAccountsSDDL `
--Description ""
+-Description "Screen capture tool, needs rules to upload screenshots to imgur"

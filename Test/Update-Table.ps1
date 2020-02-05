@@ -24,9 +24,9 @@ if ($global:InstallTable.Rows.Count -ne 0)
 }
 
 Write-Host ""
-Write-Host "Fill table with Microsoft Edge"
+Write-Host "Fill table with Greenshot"
 Write-Host "***************************"
-Update-Table "Microsoft Edge"
+Update-Table "Greenshot" $true
 
 Write-Host ""
 Write-Host "Table data"
