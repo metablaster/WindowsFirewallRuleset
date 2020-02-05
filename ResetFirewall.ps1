@@ -28,7 +28,7 @@ Write-Host ""
 Write-Host "PSVersion: $($PSVersionTable.PSVersion)"
 
 # Includes
-Import-Module -Name $PSScriptRoot\FirewallModule
+Import-Module -Name $PSScriptRoot\Modules\FirewallModule
 
 # Setting up profile seem to be slow, tell user what is going on
 Write-Host "Reseting Firewall to previous state..."
@@ -50,4 +50,4 @@ Set-NetFirewallProfile -All -Confirm:$Execute -Whatif:$Debug -PolicyStore $Polic
 Remove-NetFirewallRule -All -PolicyStore $PolicyStore -ErrorAction SilentlyContinue
 
 Write-Host "Firewall reset is done!"
-Write-Host "If internet conectivity problem stays, please rebot system."
+Write-Host "NOTE: If internet conectivity problem remains, please rebot system" -ForegroundColor Green

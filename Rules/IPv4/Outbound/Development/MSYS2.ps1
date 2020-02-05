@@ -43,7 +43,7 @@ if (!(Approve-Execute)) { exit }
 #
 # Steam installation directories
 #
-$MSYS2Root = "%ProgramFiles%\msys64"
+$MSYS2Root = "C:\dev\msys64"
 
 # Test if installation exists on system
 $global:InstallationStatus = Test-Installation "MSYS2" ([ref] $MSYS2Root) $Terminate

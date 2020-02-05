@@ -64,7 +64,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description "Main game interface."
 
-# TODO: browser for some reason need any interface and any remote address
+# TODO: browser for some reason needs any interface and any remote address
 # need to investigate why
 $program = "$PokerStarsRoot\br\PokerStarsBr.exe"
 Test-File $program

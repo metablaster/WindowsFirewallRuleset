@@ -10,3 +10,4 @@
 8. Implement unique names and groups for rules, -Name and -Group paramter vs -Display*
 9. make display names and groups modular for easy search, ie. group - subgroup, Company - Program
 10. make possible to apply or enable only rules relevant for current firewall profile
+11. make possible to apply rules to remote machine, currently partially supported
