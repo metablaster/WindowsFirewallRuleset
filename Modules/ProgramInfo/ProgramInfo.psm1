@@ -109,7 +109,7 @@ function Get-UserPrograms
 
     $ComputerName = ($UserAccount.split("\"))[0]
 
-    if (Test-Connection -ComputerName $ComputerName -Count 3 -Quiet)
+    if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
     {
         $HKU = Get-AccountSID $UserAccount
         $HKU += "\Software\Microsoft\Windows\CurrentVersion\Uninstall"
@@ -157,7 +157,7 @@ function Get-SystemPrograms
         [string] $ComputerName
     )
 
-    if (Test-Connection -ComputerName $ComputerName -Count 3 -Quiet)
+    if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
     {
         # The value of the [IntPtr] property is 4 in a 32-bit process, and 8 in a 64-bit process.
         if ([IntPtr]::Size -eq 4)
@@ -385,6 +385,11 @@ function Find-Installation
     # otherwise firewall GUI will show full paths which is not desired for sorting reasons
     switch -Wildcard ($Program)
     {
+        "VSCode"
+        {
+            Update-Table "Visual Studio Code"
+            break
+        }
         "MicrosoftOffice"
         {
             Update-Table "Microsoft Office"
@@ -591,6 +596,84 @@ function Find-Installation
     }
 }
 
+# about: Return installed NET Frameworks
+# input: Computer name for which to list installed installed framework
+# output: Table of installed NET Framework versions and install paths
+# sample: Get-NetFramework COMPUTERNAME
+function Get-NetFramework
+{
+    param (
+        [parameter(Mandatory = $true)]
+        [string] $ComputerName
+    )
+
+    if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
+    {
+        $HKLM = "SOFTWARE\Microsoft\NET Framework Setup\NDP"
+
+        $RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
+        $RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
+
+        $NetFramework = @()
+        $RootKey = $RemoteKey.OpenSubkey($HKLM)
+
+        if (!$RootKey)
+        {
+            Write-Warning "Failed to open RootKey: $HKLM"
+        }
+        else
+        {
+            foreach ($HKLMKey in $RootKey.GetSubKeyNames())
+            {
+                $KeyEntry = $RootKey.OpenSubkey($HKLMKey)
+
+                if (!$KeyEntry)
+                {
+                    Write-Warning "Failed to open KeyEntry: $HKLMKey"
+                    continue
+                }
+
+                $Version = $KeyEntry.GetValue("Version")
+                if ($null -ne $Version)
+                {
+                    $NetFramework += New-Object -TypeName PSObject -Property @{
+                        "ComputerName" = $ComputerName
+                        "KeyEntry" = Split-Path $KeyEntry.ToString() -Leaf
+                        "Version" = $Version
+                        "InstallPath" = $KeyEntry.GetValue("InstallPath")}        
+                }
+                else
+                {
+                    foreach ($SubKey in $KeyEntry.GetSubKeyNames())
+                    {
+                        $SubKeyEntry = $KeyEntry.OpenSubkey($SubKey)
+                        if (!$SubKeyEntry)
+                        {
+                            Write-Warning "Failed to open SubKeyEntry: $SubKey"
+                            continue
+                        }
+
+                        $Version = $SubKeyEntry.GetValue("Version")
+                        if ($null -ne $Version)
+                        {
+                            $NetFramework += New-Object -TypeName PSObject -Property @{
+                                "ComputerName" = $ComputerName
+                                "KeyEntry" = Split-Path $SubKeyEntry.ToString() -Leaf
+                                "Version" = $Version
+                                "InstallPath" = $SubKeyEntry.GetValue("InstallPath")}            
+                        }
+                    }
+                }
+            }
+        }
+
+        return $NetFramework
+    }
+    else
+    {
+        Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact '$ComputerName'"
+    }
+}
 
 # Global status to check if installation directory exists, used by Test-File
 New-Variable -Name InstallationStatus -Scope Global -Value $false
@@ -608,6 +691,7 @@ Export-ModuleMember -Function Test-Installation
 Export-ModuleMember -Function Get-AppSID
 Export-ModuleMember -Function Test-Environment
 Export-ModuleMember -Function Initialize-Table
+Export-ModuleMember -Function Get-NetFramework
 
 # For debugging only
 Export-ModuleMember -Function Update-Table

@@ -28,6 +28,7 @@ SOFTWARE.
 . $PSScriptRoot\..\IPSetup.ps1
 Import-Module -Name $PSScriptRoot\..\..\..\Modules\UserInfo
 Import-Module -Name $PSScriptRoot\..\..\..\Modules\ProgramInfo
+Import-Module -Name $PSScriptRoot\..\..\..\Modules\ComputerInfo
 Import-Module -Name $PSScriptRoot\..\..\..\Modules\FirewallModule
 
 #
@@ -54,7 +55,14 @@ $PowerShell64Root = "%SystemRoot%\System32\WindowsPowerShell\v1.0"
 $PowerShell86Root = "%SystemRoot%\SysWOW64\WindowsPowerShell\v1.0"
 $OneDriveRoot = "%ProgramFiles(x86)%\Microsoft OneDrive"
 $HelpViewerRoot = "%ProgramFiles(x86)%\Microsoft Help Viewer\v2.3"
-$NETFrameworkRoot = "%SystemRoot%\Microsoft.NET"
+
+# Get latest NET Framework installation directory
+$ComputerName = Get-ComputerName
+$NETFrameworkRoot = Get-NetFramework $ComputerName |
+ Sort-Object -Property Version |
+  Where-Object {$_.InstallPath} |
+   Select-Object -Last 1 -ExpandProperty InstallPath
+
 $vcpkgRoot = "%SystemDrive%\Users\User\source\repos\vcpkg"
 $ToolsRoot = "%SystemDrive%\tools"
 
@@ -70,7 +78,7 @@ Write-Host "NOTE: in this script confirm switch is enabled, and default is Yes, 
 $PreviousExecuteStatus = $global:Execute
 $global:Execute = $true
 
-# $InstallationStatus = Test-Installation "VSCode" ([ref] $VSCodeRoot) $false
+$InstallationStatus = Test-Installation "VSCode" ([ref] $VSCodeRoot) $false
 
 $program = "$VSCodeRoot\Code.exe"
 Test-File $program
@@ -216,7 +224,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description "Review downloadable content."
 
-$program = "$NETFrameworkRoot\Framework64\v4.0.30319\mscorsvw.exe"
+$program = "$NETFrameworkRoot\mscorsvw.exe"
 Test-File $program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "CLR Optimization Service" -Service Any -Program $program `
