@@ -321,7 +321,8 @@ function Update-Table
     )
 
     Initialize-Table
-    $SystemPrograms = Get-SystemPrograms (Get-ComputerName)
+    $ComputerName = Get-ComputerName
+    $SystemPrograms = Get-SystemPrograms $ComputerName
 
     if ($SystemPrograms.Name -like $SearchString)
     {
@@ -336,6 +337,28 @@ function Update-Table
 
             # Add row to the table
             $global:InstallTable.Rows.Add($Row)
+        }
+    }
+    else
+    {
+        #Program not found on system, attempt alternative search
+        $AllUserPrograms = Get-AllUserPrograms $ComputerName
+
+        if ($AllUserPrograms.Name -like $SearchString)
+        {
+            # TODO: it not known if it's for specific user in AllUserPrograms registry entry (most likely applies to all users)
+            foreach ($User in $global:UserNames)
+            {    
+                # Create a row
+                $Row = $global:InstallTable.NewRow()
+
+                # Enter data in the row
+                $Row.User = $User
+                $Row.InstallRoot = $SystemPrograms | Where-Object { $_.Name -like $SearchString } | Select-Object -ExpandProperty InstallLocation
+
+                # Add row to the table
+                $global:InstallTable.Rows.Add($Row)
+            }
         }
     }
 
@@ -361,7 +384,7 @@ function Update-Table
     }
 }
 
-# about: Add new (row) program installation directory to the global table from string for each user
+# about: Manually add new program installation directory to the global table from string for each user
 # input: Program installation directory
 # output: Global installation table is updated
 # sample: Edit-Table "%ProgramFiles(x86)%\TeamViewer"
@@ -453,10 +476,48 @@ function Find-Installation
     [string] $InstallRoot = ""
 
     # TODO: need to check some of these search strings (cases), also remove hardcoded directories
+    # TODO: Update-Table calls Get-SystemPrograms for every iteration, make it global and singe call
     # NOTE: we want to preserve system environment variables for firewall GUI,
     # otherwise firewall GUI will show full paths which is not desired for sorting reasons
     switch -Wildcard ($Program)
     {
+        "PowerShell64"
+        {
+            $InstallRoot = "%SystemRoot%\System32\WindowsPowerShell\v1.0"
+            if (Test-Environment $InstallRoot)
+            {
+                Edit-Table $InstallRoot
+            }
+            break
+        }
+        "PowerShell86"
+        {
+            $InstallRoot = "%SystemRoot%\SysWOW64\WindowsPowerShell\v1.0"
+            if (Test-Environment $InstallRoot)
+            {
+                Edit-Table $InstallRoot
+            }
+            break
+        }
+        "OneDrive"
+        {
+            $InstallRoot = "%ProgramFiles(x86)%\Microsoft OneDrive"
+            if (Test-Environment $InstallRoot)
+            {
+                Edit-Table $InstallRoot
+            }
+            break
+        }
+        "HelpViewer"
+        {
+            # TODO: is version number OK?
+            $InstallRoot = "%ProgramFiles(x86)%\Microsoft Help Viewer\v2.3"
+            if (Test-Environment $InstallRoot)
+            {
+                Edit-Table $InstallRoot
+            }
+            break
+        }
         "VSCode"
         {
             Update-Table "Visual Studio Code"

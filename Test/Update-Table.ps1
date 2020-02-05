@@ -38,3 +38,8 @@ Write-Host "Install Path"
 Write-Host "***************************"
 $global:InstallTable | Select-Object -ExpandProperty InstallRoot
 Write-Host ""
+
+Write-Host ""
+Write-Host "Failure Test"
+Write-Host "***************************"
+Update-Table "Greenshot" $true

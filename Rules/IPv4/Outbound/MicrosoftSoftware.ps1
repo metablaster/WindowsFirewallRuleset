@@ -69,6 +69,7 @@ $HelpViewerRoot = "%ProgramFiles(x86)%\Microsoft Help Viewer\v2.3"
 #     Select-Object -Last 1 -ExpandProperty InstallPath
 # }
 
+# TODO: should we set globalinstallationstatus instead?
 # Get Windows SDK debuggers root (latest SDK)
 $WindowsKits = Get-WindowsKits $ComputerName
 if ($null -ne $WindowsKits)
@@ -149,6 +150,112 @@ if ($null -ne $SDKDebuggers)
     -Description "WinDbg Symchk access to Symbols Server"
 }
 
+$global:InstallationStatus = Test-Installation "Powershell64" ([ref] $PowerShell64Root) $false
+
+if ($global:InstallationStatus)
+{
+    $program = "$PowerShell64Root\powershell_ise.exe"
+    Test-File $program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "PowerShell ISE x64" -Service Any -Program $program `
+    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+    -LocalUser $UserAccountsSDDL `
+    -Description "Rule to allow update of powershell"
+
+    $program = "$PowerShell64Root\powershell.exe"
+    Test-File $program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "PowerShell x64" -Service Any -Program $program `
+    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+    -LocalUser $UserAccountsSDDL `
+    -Description "Rule to allow update of powershell"
+}
+
+$global:InstallationStatus = Test-Installation "Powershell86" ([ref] $PowerShell86Root) $false
+
+if ($global:InstallationStatus)
+{
+    $program = "$PowerShell86Root\powershell_ise.exe"
+    Test-File $program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "PowerShell ISE x86" -Service Any -Program $program `
+    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+    -LocalUser $UserAccountsSDDL `
+    -Description "Rule to allow update of powershell"
+
+    $program = "$PowerShell86Root\powershell.exe"
+    Test-File $program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "PowerShell x86" -Service Any -Program $program `
+    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+    -LocalUser $UserAccountsSDDL `
+    -Description "Rule to allow update of powershell"
+}
+
+$global:InstallationStatus = Test-Installation "OneDrive" ([ref] $OneDriveRoot) $false
+
+if ($global:InstallationStatus)
+{
+    $program = "$OneDriveRoot\OneDriveStandaloneUpdater.exe"
+    Test-File $program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "OneDrive Update" -Service Any -Program $program `
+    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+    -LocalUser $UserAccountsSDDL `
+    -Description "Updater for OneDrive"
+
+    $program = "$OneDriveRoot\OneDrive.exe"
+    Test-File $program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "OneDrive" -Service Any -Program $program `
+    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+    -LocalUser $UserAccountsSDDL `
+    -Description ""
+}
+
+$global:InstallationStatus = Test-Installation "HelpViewer" ([ref] $HelpViewerRoot) $false
+
+if ($global:InstallationStatus)
+{
+    $program = "$HelpViewerRoot\HlpCtntMgr.exe"
+    Test-File $program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "Help Viewer (Content manager)" -Service Any -Program $program `
+    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+    -LocalUser $UserAccountsSDDL `
+    -Description ""
+
+    $program = "$HelpViewerRoot\HlpViewer.exe"
+    Test-File $program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "Help Viewer" -Service Any -Program $program `
+    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+    -LocalUser $UserAccountsSDDL `
+    -Description "Review downloadable content."
+}
+
+if ($null -ne $NETFrameworkRoot)
+{
+    $program = "$NETFrameworkRoot\mscorsvw.exe"
+    Test-File $program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "CLR Optimization Service" -Service Any -Program $program `
+    -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
+    -LocalUser $UserAccountsSDDL `
+    -Description "mscorsvw.exe is precompiling .NET assemblies in the background.
+    Once it's done, it will go away. Typically, after you install the .NET Redist,
+    it will be done with the high priority assemblies in 5 to 10 minutes and then will wait until your computer is idle to process the low priority assemblies."
+}
+
 # TODO: need installation check, and need to separate these rules
 # Assume unfinished checks for all of the above directories exist
 Write-Host "NOTE: in this script confirm switch is enabled for unfinished program detection, and default is Yes, even for failures!"
@@ -183,92 +290,6 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 -LocalUser $UserAccountsSDDL `
 -Description ""
-
-$program = "$PowerShell64Root\powershell_ise.exe"
-Test-File $program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "PowerShell ISE x64" -Service Any -Program $program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser $UserAccountsSDDL `
--Description "Rule to allow update of powershell"
-
-$program = "$PowerShell64Root\powershell.exe"
-Test-File $program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "PowerShell x64" -Service Any -Program $program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser $UserAccountsSDDL `
--Description "Rule to allow update of powershell"
-
-$program = "$PowerShell86Root\powershell_ise.exe"
-Test-File $program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "PowerShell ISE x86" -Service Any -Program $program `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser $UserAccountsSDDL `
--Description "Rule to allow update of powershell"
-
-$program = "$PowerShell86Root\powershell.exe"
-Test-File $program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "PowerShell x86" -Service Any -Program $program `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser $UserAccountsSDDL `
--Description "Rule to allow update of powershell"
-
-$program = "$OneDriveRoot\OneDriveStandaloneUpdater.exe"
-Test-File $program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "OneDrive Update" -Service Any -Program $program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser $UserAccountsSDDL `
--Description "Updater for OneDrive"
-
-$program = "$OneDriveRoot\OneDrive.exe"
-Test-File $program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "OneDrive" -Service Any -Program $program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser $UserAccountsSDDL `
--Description ""
-
-$program = "$HelpViewerRoot\HlpCtntMgr.exe"
-Test-File $program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Help Viewer (Content manager)" -Service Any -Program $program `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser $UserAccountsSDDL `
--Description ""
-
-$program = "$HelpViewerRoot\HlpViewer.exe"
-Test-File $program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Help Viewer" -Service Any -Program $program `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser $UserAccountsSDDL `
--Description "Review downloadable content."
-
-if ($null -ne $NETFrameworkRoot)
-{
-    $program = "$NETFrameworkRoot\mscorsvw.exe"
-    Test-File $program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "CLR Optimization Service" -Service Any -Program $program `
-    -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-    -LocalUser $UserAccountsSDDL `
-    -Description "mscorsvw.exe is precompiling .NET assemblies in the background.
-    Once it's done, it will go away. Typically, after you install the .NET Redist,
-    it will be done with the high priority assemblies in 5 to 10 minutes and then will wait until your computer is idle to process the low priority assemblies."
-}
 
 $program = "$vcpkgRoot\vcpkg.exe"
 Test-File $program

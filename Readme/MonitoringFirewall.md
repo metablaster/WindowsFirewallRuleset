@@ -17,7 +17,7 @@ All of the tools listed here are signed by Microsoft, the only exception is mTai
 
 ## Process Monitor
 - Process monitor will let you monitor process network activity, in addition of IP address and port you will also know which process and which user (either system or human user) initiated connection, and several other stuff which you can enable as needed in options.
-- Process monitor is must have program, here is a screenshot as I monitor process network activity right now:\
+- Process monitor is must have program, here is a screenshot as we monitor process network activity right now:\
 click on image to enlarge!
 ![](https://i.imgur.com/wNtDw8D.png)
 - Inside the "Config" folder you will find process monitor configuration specialized for firewall monitoring which you can import into your copy of process monitor.
@@ -27,7 +27,7 @@ click on image to enlarge!
 
 ## mTail
 - mTail is another must have program, it will let you monitor firewall logs in real time.
-- Here is a screenshot as I monitor the logs right now, click on image to enlarge:
+- Here is a screenshot as we monitor the logs right now, click on image to enlarge:
 
 ![](https://i.imgur.com/ljHcJss.png)
 

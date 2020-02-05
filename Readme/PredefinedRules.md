@@ -13,8 +13,10 @@ Custom rule groups do not interfere with predefined groups to be able to disting
 Some of the rules retain grouping while other are grouped into existing groups, grouping exceptions are listed bellow.
 
 # Grouping predefined rules
-Predefined group / new group
+Predefined group or comment / new group
 
-1. mDNS -> Basic Networking
+1. mDNS -> Basic Networking - IPv4
 2. Wireless Display -> Wireless Networking
 3. Cast to Device -> Additional Networking
+4. Rules for store apps -> Store Apps and Store Apps - System
+5. Some Core networking rules -> "ICMPv4" and Windows Services
