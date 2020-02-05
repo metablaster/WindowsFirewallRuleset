@@ -45,3 +45,6 @@ Contains all firewall ruels
 
 ## Test
 Contains test scripts to test out individual functions and concepts
+
+## Templates
+Contains template scripts with boilerplate code for new scripts

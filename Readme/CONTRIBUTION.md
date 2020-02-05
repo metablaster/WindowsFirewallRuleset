@@ -5,6 +5,8 @@ Here is a short and most important list of things to keep in mind.
 All of the scripts should use the same code style and order of code, without writing a long list of preffered code style\
 it should be enough to take a look at the existing scripts and figure it out right away.
 
+Use cammel case for variables, types, symbols etc; lowercase for language keywords.
+
 For example each rule uses exactly the same order or paramters split into exactly the same number of lines.\
 This is so that when you need to search for something it's easy to see what is where right away.
 
@@ -25,6 +27,11 @@ Provide documentation and official reference for your rules so that it can be ea
 
 it is important that each rule contains good description of it's purpose, when a user clicks on a rule in firewall GUI he wants to see
 what this rule is about and easily conclude whether to enable/disable the rule or allow/block the traffic.
+
+Documentation and comments reside in 3 places:
+1. In scripts (for developers)
+2. In rules (for users)
+3. In Readme folder (for general public)
 
 Commenting code is as important as writing it!
 
@@ -56,6 +63,10 @@ Do not wait too much to push large commits which are not clear enough in terms w
 At the moment we focus on Windows Firewall, if you have skills to port code to other firewalls go ahead, but it's not priority.
 
 If you decide to port code it is mandatory that these code changes are done on separate branch.
+
+## Making new scripts
+Inside "Templates" folder there are few template scripts as a starting point.\
+Copy them to target location, update code and start implementing code.
 
 ## Repository folder structure
 See [DirectoryStructure.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/DirectoryStructure.md)

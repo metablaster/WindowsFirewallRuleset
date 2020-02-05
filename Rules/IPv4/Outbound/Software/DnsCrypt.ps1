@@ -53,6 +53,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 #
 # DnsCrypt rules
+# TODO: remote servers from file
 #
 
 $Program = "$DnsCryptRoot\dnscrypt-proxy\dnscrypt-proxy.exe"
