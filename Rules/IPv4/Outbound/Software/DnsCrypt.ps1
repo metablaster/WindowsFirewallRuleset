@@ -33,42 +33,44 @@ Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\FirewallModule
 #
 # Setup local variables:
 #
-$Group = "Software - TeamViewer"
-$Profile = "Any"
+$Group = "Software - DnsCrypt"
+$Profile = "Private, Public"
 
 # Ask user if he wants to load these rules
 Update-Context $IPVersion $Direction $Group
 if (!(Approve-Execute)) { exit }
 
 #
-# TeamViewer installation directories
+# DnsCrypt installation directories
 #
-$TeamViewerRoot = "%ProgramFiles(x86)%\TeamViewer"
+$DnsCryptRoot = "%ProgramFiles%\Simple DNSCrypt x64"
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "TeamViewer" ([ref]$TeamViewerRoot) $Terminate
+$global:InstallationStatus = Test-Installation "DnsCrypt" ([ref] $DnsCryptRoot) $Terminate
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
-# Rules for TeamViewer remote control
+# DnsCrypt rules
 #
 
-$Program = "$TeamViewerRoot\TeamViewer.exe"
+$Program = "$DnsCryptRoot\dnscrypt-proxy\dnscrypt-proxy.exe"
 Test-File $Program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Teamviewer Remote Control Application" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 80, 443, 5938 `
--LocalUser $UserAccountsSDDL `
--Description ""
+-DisplayName "DnsCrypt" -Service Any -Program $Program `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 53, 443 `
+-LocalUser $NT_AUTHORITY_System `
+-Description "DNSCrypt is a protocol that authenticates communications between a DNS client and a DNS resolver.
+It prevents DNS spoofing. It uses cryptographic signatures to verify that responses originate from the chosen DNS resolver and haven’t been tampered with.
+This rule applies to Simple DnsCrypt which uses dnscrypt-proxy."
 
-$Program = "$TeamViewerRoot\TeamViewer_Service.exe"
-Test-File $Program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Teamviewer Remote Control Service" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 80, 443, 5938 `
--LocalUser $UserAccountsSDDL `
--Description ""
+-DisplayName "DnsCrypt" -Service Any -Program $Program `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 53, 443 `
+-LocalUser $NT_AUTHORITY_System `
+-Description "DNSCrypt is a protocol that authenticates communications between a DNS client and a DNS resolver.
+It prevents DNS spoofing. It uses cryptographic signatures to verify that responses originate from the chosen DNS resolver and haven’t been tampered with.
+This rule applies to Simple DnsCrypt which uses dnscrypt-proxy."

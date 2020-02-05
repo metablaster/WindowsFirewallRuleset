@@ -58,8 +58,8 @@ $global:InstallationStatus = Test-Installation "UnrealEngine" ([ref] $EngineRoot
 
 if ($global:InstallationStatus)
 {
-    $program = "$EngineRoot\Binaries\Win64\CrashReportClientEditor-Win64-Development.exe"
-    Test-File $program
+    $Program = "$EngineRoot\Binaries\Win64\CrashReportClientEditor-Win64-Development.exe"
+    Test-File $Program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Unreal Engine - CrashReportClientEditor" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -67,8 +67,8 @@ if ($global:InstallationStatus)
     -LocalUser $UserAccountsSDDL `
     -Description "Used to send crash report to epic games."
 
-    $program = "$EngineRoot\Binaries\DotNET\GitDependencies.exe"
-    Test-File $program
+    $Program = "$EngineRoot\Binaries\DotNET\GitDependencies.exe"
+    Test-File $Program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Unreal Engine - GitDependencies" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -76,8 +76,8 @@ if ($global:InstallationStatus)
     -LocalUser $UserAccountsSDDL `
     -Description "Engine repo source tool to dowload binaries."
 
-    $program = "$EngineRoot\Binaries\DotNET\SwarmAgent.exe"
-    Test-File $program
+    $Program = "$EngineRoot\Binaries\DotNET\SwarmAgent.exe"
+    Test-File $Program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Unreal Engine - SwarmAgent" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -85,8 +85,8 @@ if ($global:InstallationStatus)
     -LocalUser $UserAccountsSDDL `
     -Description "Swarm agent is used for build farm."
 
-    $program = "$EngineRoot\Binaries\Win64\UE4Editor.exe"
-    Test-File $program
+    $Program = "$EngineRoot\Binaries\Win64\UE4Editor.exe"
+    Test-File $Program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Unreal Engine - Editor x64" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -94,8 +94,8 @@ if ($global:InstallationStatus)
     -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
     -Description ""
 
-    $program = "$EngineRoot\Binaries\Win64\UE4Editor.exe"
-    Test-File $program
+    $Program = "$EngineRoot\Binaries\Win64\UE4Editor.exe"
+    Test-File $Program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Unreal Engine - Editor x64" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -103,8 +103,8 @@ if ($global:InstallationStatus)
     -LocalUser $UserAccountsSDDL `
     -Description ""
 
-    $program = "$EngineRoot\Binaries\DotNET\UnrealBuildTool.exe"
-    Test-File $program
+    $Program = "$EngineRoot\Binaries\DotNET\UnrealBuildTool.exe"
+    Test-File $Program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Unreal Engine - UnrealBuildTool" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -124,8 +124,8 @@ if ($LauncherStatus -ne $null)
 {
     $global:InstallationStatus = $LauncherStatus
 
-    $program = "$LauncherRoot\Portal\Binaries\Win32\EpicGamesLauncher.exe"
-    Test-File $program
+    $Program = "$LauncherRoot\Portal\Binaries\Win32\EpicGamesLauncher.exe"
+    Test-File $Program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Epic Games - Launcher x32" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -133,8 +133,8 @@ if ($LauncherStatus -ne $null)
     -LocalUser $UserAccountsSDDL `
     -Description "Used for initial setup only"
 
-    $program = "$LauncherRoot\Portal\Binaries\Win64\EpicGamesLauncher.exe"
-    Test-File $program
+    $Program = "$LauncherRoot\Portal\Binaries\Win64\EpicGamesLauncher.exe"
+    Test-File $Program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Epic Games - Launcher x64" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -142,8 +142,8 @@ if ($LauncherStatus -ne $null)
     -LocalUser $UserAccountsSDDL `
     -Description ""
 
-    $program = "$LauncherRoot\Portal\Binaries\Win64\EpicGamesLauncher.exe"
-    Test-File $program
+    $Program = "$LauncherRoot\Portal\Binaries\Win64\EpicGamesLauncher.exe"
+    Test-File $Program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Epic Games - Launcher x64" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

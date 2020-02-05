@@ -33,42 +33,35 @@ Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\FirewallModule
 #
 # Setup local variables:
 #
-$Group = "Software - TeamViewer"
-$Profile = "Any"
+$Group = "Software - OpenSSH"
+$Profile = "Private, Public"
 
 # Ask user if he wants to load these rules
 Update-Context $IPVersion $Direction $Group
 if (!(Approve-Execute)) { exit }
 
 #
-# TeamViewer installation directories
+# OpenSSH installation directories
 #
-$TeamViewerRoot = "%ProgramFiles(x86)%\TeamViewer"
+$OpenSSHRoot = "%ProgramFiles%\OpenSSH-Win64"
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "TeamViewer" ([ref]$TeamViewerRoot) $Terminate
+$global:InstallationStatus = Test-Installation "OpenSSH" ([ref] $OpenSSHRoot) $Terminate
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
-# Rules for TeamViewer remote control
+# OpenSSH rules
+# TODO: there are other OpenSSH networking executables in install dir
 #
 
-$Program = "$TeamViewerRoot\TeamViewer.exe"
+$Program = "$OpenSSHRoot\ssh.exe"
 Test-File $Program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Teamviewer Remote Control Application" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 80, 443, 5938 `
+-DisplayName "OpenSSH" -Service Any -Program $Program `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 22 `
 -LocalUser $UserAccountsSDDL `
--Description ""
-
-$Program = "$TeamViewerRoot\TeamViewer_Service.exe"
-Test-File $Program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Teamviewer Remote Control Service" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 80, 443, 5938 `
--LocalUser $UserAccountsSDDL `
--Description ""
+-Description "OpenSSH is connectivity tool for remote login with the SSH protocol,
+This rule applies to open source version of OpenSSH."

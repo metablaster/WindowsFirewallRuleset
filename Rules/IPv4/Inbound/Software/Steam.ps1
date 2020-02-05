@@ -55,8 +55,8 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Rules for Steam client
 #
 
-$program = "$SteamRoot\Steam.exe"
-Test-File $program
+$Program = "$SteamRoot\Steam.exe"
+Test-File $Program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Steam Dedicated or Listen Servers" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

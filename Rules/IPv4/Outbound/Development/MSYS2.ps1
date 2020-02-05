@@ -55,8 +55,8 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Rules for Steam client
 #
 
-$program = "$MSYS2Root\usr\bin\curl.exe"
-Test-File $program
+$Program = "$MSYS2Root\usr\bin\curl.exe"
+Test-File $Program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "MSYS2 - curl" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -64,8 +64,8 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description "download with curl in MSYS2 shell"
 
-$program = "$MSYS2Root\usr\bin\git.exe"
-Test-File $program
+$Program = "$MSYS2Root\usr\bin\git.exe"
+Test-File $Program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "MSYS2 - git protocol" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -73,8 +73,8 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description "git access over git:// protocol"
 
-$program = "$MSYS2Root\usr\bin\git-remote-https.exe"
-Test-File $program
+$Program = "$MSYS2Root\usr\bin\git-remote-https.exe"
+Test-File $Program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "MSYS2 - git-remote-https" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -82,8 +82,8 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description "git over HTTPS in MSYS2 shell"
 
-$program = "$MSYS2Root\usr\bin\ssh.exe"
-Test-File $program
+$Program = "$MSYS2Root\usr\bin\ssh.exe"
+Test-File $Program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "MSYS2 - git SSH" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -91,8 +91,8 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description "git over SSH in MSYS2 shell"
 
-$program = "$MSYS2Root\mingw64\bin\glade.exe"
-Test-File $program
+$Program = "$MSYS2Root\mingw64\bin\glade.exe"
+Test-File $Program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "MSYS2 - glade help" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -100,8 +100,8 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description "Get online help for glade"
 
-$program = "$MSYS2Root\usr\bin\pacman.exe"
-Test-File $program
+$Program = "$MSYS2Root\usr\bin\pacman.exe"
+Test-File $Program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "MSYS2 - pacman" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -109,8 +109,8 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description "pacman package manager in MSYS2 shell"
 
-$program = "$MSYS2Root\usr\bin\pacman.exe"
-Test-File $program
+$Program = "$MSYS2Root\usr\bin\pacman.exe"
+Test-File $Program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "MSYS2 - wget" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

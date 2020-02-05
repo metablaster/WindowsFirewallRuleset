@@ -61,8 +61,8 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # for defer to user, interface and address (and probably ports too) must not be specified, platform must not be defined
 # this does not suit our interests so removed
 
-$program = "$EngineRoot\Binaries\Win64\CrashReportClientEditor-Win64-Development.exe"
-Test-File $program
+$Program = "$EngineRoot\Binaries\Win64\CrashReportClientEditor-Win64-Development.exe"
+Test-File $Program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Unreal Engine - CrashReportClientEditor" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
@@ -77,8 +77,8 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description ""
 
-$program = "$EngineRoot\Binaries\DotNET\SwarmAgent.exe"
-Test-File $program
+$Program = "$EngineRoot\Binaries\DotNET\SwarmAgent.exe"
+Test-File $Program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Unreal Engine - SwarmAgent" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
@@ -93,8 +93,8 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "Swarm agent is used for build farm."
 
-$program = "$EngineRoot\Binaries\Win64\UnrealInsights.exe"
-Test-File $program
+$Program = "$EngineRoot\Binaries\Win64\UnrealInsights.exe"
+Test-File $Program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Unreal Engine - UnrealInsights" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

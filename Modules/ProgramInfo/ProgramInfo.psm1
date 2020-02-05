@@ -481,6 +481,20 @@ function Find-Installation
     # otherwise firewall GUI will show full paths which is not desired for sorting reasons
     switch -Wildcard ($Program)
     {
+        "DnsCrypt"
+        {
+            Update-Table "Simple DNSCrypt"
+            break
+        }
+        "OpenSSH"
+        {
+            $InstallRoot = "%ProgramFiles%\OpenSSH-Win64"
+            if (Test-Environment $InstallRoot)
+            {
+                Edit-Table $InstallRoot
+            }
+            break
+        }
         "PowerShell64"
         {
             $InstallRoot = "%SystemRoot%\System32\WindowsPowerShell\v1.0"

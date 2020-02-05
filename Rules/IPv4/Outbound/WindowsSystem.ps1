@@ -322,7 +322,8 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 22 `
 -LocalUser Any `
--Description ""
+-Description "OpenSSH is connectivity tool for remote login with the SSH protocol,
+This rule applies to open source version of OpenSSH that is built into Windows."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Console Host" -Service Any -Program "%SystemRoot%\System32\conhost.exe" `

@@ -55,8 +55,8 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Rules for PokerStars game
 #
 
-$program = "$PokerStarsRoot\PokerStars.exe"
-Test-File $program
+$Program = "$PokerStarsRoot\PokerStars.exe"
+Test-File $Program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "PokerStars - Client" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -66,8 +66,8 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 
 # TODO: browser for some reason needs any interface and any remote address
 # need to investigate why
-$program = "$PokerStarsRoot\br\PokerStarsBr.exe"
-Test-File $program
+$Program = "$PokerStarsRoot\br\PokerStarsBr.exe"
+Test-File $Program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "PokerStars - Browser" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
@@ -75,8 +75,8 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description "In game HTML browser"
 
-$program = "$PokerStarsRoot\PokerStarsOnlineUpdate.exe"
-Test-File $program
+$Program = "$PokerStarsRoot\PokerStarsOnlineUpdate.exe"
+Test-File $Program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "PokerStars - Online update" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -84,8 +84,8 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description ""
 
-$program = "$PokerStarsRoot\PokerStarsUpdate.exe"
-Test-File $program
+$Program = "$PokerStarsRoot\PokerStarsUpdate.exe"
+Test-File $Program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "PokerStars - Update" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

@@ -59,8 +59,8 @@ $global:InstallationStatus = Test-Installation "Git" ([ref] $GitRoot) $Terminate
 
 if ($global:InstallationStatus)
 {
-    $program = "$GitRoot\mingw64\bin\curl.exe"
-    Test-File $program
+    $Program = "$GitRoot\mingw64\bin\curl.exe"
+    Test-File $Program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Git - curl" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -69,8 +69,8 @@ if ($global:InstallationStatus)
     -Description "curl download tool"
 
     # TODO: unsure if it's 443 or 80
-    $program = "$GitRoot\mingw64\bin\git.exe"
-    Test-File $program
+    $Program = "$GitRoot\mingw64\bin\git.exe"
+    Test-File $Program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Git - git" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -78,8 +78,8 @@ if ($global:InstallationStatus)
     -LocalUser $UserAccountsSDDL `
     -Description ""
 
-    $program = "$GitRoot\mingw64\libexec\git-core\git-remote-https.exe"
-    Test-File $program
+    $Program = "$GitRoot\mingw64\libexec\git-core\git-remote-https.exe"
+    Test-File $Program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Git - remote-https" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -87,8 +87,8 @@ if ($global:InstallationStatus)
     -LocalUser $UserAccountsSDDL `
     -Description "git HTTPS acces (https cloning)"
 
-    $program = "$GitRoot\usr\bin\ssh.exe"
-    Test-File $program
+    $Program = "$GitRoot\usr\bin\ssh.exe"
+    Test-File $Program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Git - ssh" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -108,8 +108,8 @@ if ($GithubStatus -ne $null)
 {
     $global:InstallationStatus = $GithubStatus
 
-    $program = "$GithubRoot\GitHubDesktop.exe"
-    Test-File $program
+    $Program = "$GithubRoot\GitHubDesktop.exe"
+    Test-File $Program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "GitHub Desktop - App" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -117,8 +117,8 @@ if ($GithubStatus -ne $null)
     -LocalUser $UserAccountsSDDL `
     -Description ""
 
-    $program = "$GithubRoot\resources\app\git\mingw64\bin\git-remote-https.exe"
-    Test-File $program
+    $Program = "$GithubRoot\resources\app\git\mingw64\bin\git-remote-https.exe"
+    Test-File $Program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "GitHub Desktop - remote-https" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
