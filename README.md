@@ -69,7 +69,7 @@ In any case, new system or old, **know that Home versions of Windows do not have
 - Inside the Readme folder there is a `ResetFirewall.md`, a guide on how to do it manually, by hand, if for some reason you're unable to run the script, or the script does not solve your problems.
 - Also note that your current/existing rules will not be deleted unless you have rules in GPO whose group name interfere with group names from this ruleset.
 - To be 100% sure please export your current GPO rules first, (if you don't know to do that, then ignore this, you don't have GPO rules)
-- The script will ask you what rules you want, to avoid internet connectivity trouble you should apply at least all generic networking and OS related rules rules such as BasicNetworking, ICMP, WindowsSystem, WindowsServices, Multicast etc.
+- The script will ask you what rules you want, to minimize internet connectivity trouble you should apply at least all generic networking and OS related rules such as BasicNetworking, ICMP, WindowsSystem, WindowsServices, Multicast etc.
 
 **STEPS:**
 1. Press Widnows key
