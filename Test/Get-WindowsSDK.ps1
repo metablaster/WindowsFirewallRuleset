@@ -12,8 +12,9 @@ Write-Host "Get-WindowsSDK"
 Write-Host "***************************"
 
 $WindowsSDK = Get-WindowsSDK $ComputerName
+$WindowsSDK
 
-Write-Host "Get-WindowsSDK latest"
-Write-Host "***************************"
+# Write-Host "Get-WindowsSDK latest"
+# Write-Host "***************************"
 
-$WindowsSDK | Sort-Object -Property Version | Where-Object { $_.InstallPath } | Select-Object -Last 1 -ExpandProperty InstallPath
+# $WindowsSDK | Sort-Object -Property Version | Where-Object { $_.InstallPath } | Select-Object -Last 1 -ExpandProperty InstallPath

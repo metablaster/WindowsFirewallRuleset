@@ -97,6 +97,63 @@ function Test-Environment
     return (Test-Path -Path ([System.Environment]::ExpandEnvironmentVariables($FilePath)))
 }
 
+# about: format path into firewall compatible path
+# input: path to folder
+# output: formatted path, includes environment variables, stripped off of junk
+# sample: Format-Path "C:\Program Files\Dir\"
+function Format-Path
+{
+    param (
+        [parameter(Mandatory = $true)]
+        [string] $FilePath
+    )
+
+    # Strip away quotations
+    $FilePath = $FilePath.Trim('"')
+    $FilePath = $FilePath.Trim("'")
+
+    # Replace double slasses with single ones
+    $FilePath = $FilePath.Replace("\\", "\")
+
+    # Initialize SearchString to input path
+    $SearchString = $FilePath
+
+    # Sorting from longest paths which should be checked first
+    $Variables = @(Get-ChildItem Env:) | Sort-Object -Descending { $_.Value.length }
+
+    while (![System.String]::IsNullOrEmpty($SearchString))
+    {
+        foreach ($Value in $Variables.Value)
+        {
+            if ($Value -like "*$SearchString")
+            {
+                # Get Environment variable for current path
+                $Replacement = "%" + @(($Variables | Where-Object { $_.Value -eq $Value} ).Name)[0] + "%"
+
+                # Envirnment variable found, finally trim trailing slashes
+                return $FilePath.Replace($SearchString, $Replacement).TrimEnd('\\')
+            }
+        }
+    
+        # Strip away file or last folder in path
+        $SearchString = Split-Path -Path $SearchString -Parent
+    }
+
+    # path has been reduced to root drive so get that
+    $SearchString = Split-Path -Path $FilePath -Qualifier
+    $Replacement = "%" + @(($Variables | Where-Object { $_.Value -eq $SearchString} ).Name)[1] + "%"
+
+    if ($Replacement.Length -eq 2)
+    {
+        # There are no environment variables for input path
+        # Just trim trailing slashes
+        return $FilePath.TrimEnd('\\')
+    }
+
+    # Only root drive is converted, finally trim trailing slashes
+    return $FilePath.Replace($SearchString, $Replacement).TrimEnd('\\')
+}
+
 # about: search installed programs in userprofile for all users
 # input: User account in form of "COMPUTERNAME\USERNAME"
 # output: list of programs for specified USERNAME
@@ -127,12 +184,21 @@ function Get-UserPrograms
             {
                 foreach ($KeyEntry in $UserKey.OpenSubkey($SubKey))
                 {
-                    # Get more key entries as needed
-                    $UserPrograms += New-Object PSObject -Property @{
-                    "ComputerName" = $ComputerName
-                    "RegKey" = Split-Path $SubKey.ToString() -Leaf
-                    "Name" = $KeyEntry.GetValue("displayname")
-                    "InstallLocation" = $KeyEntry.GetValue("InstallLocation")}
+                    [string] $InstallLocation = $KeyEntry.GetValue("InstallLocation")
+
+                    if (![System.String]::IsNullOrEmpty($InstallLocation))
+                    {
+                        # Strip away quotations and ending backslash
+                        $InstallLocation = $InstallLocation.Trim('"')
+                        $InstallLocation = $InstallLocation.TrimEnd('\\')
+
+                        # Get more key entries as needed
+                        $UserPrograms += New-Object PSObject -Property @{
+                            "ComputerName" = $ComputerName
+                            "RegKey" = Split-Path $SubKey.ToString() -Leaf
+                            "Name" = $KeyEntry.GetValue("displayname")
+                            "InstallLocation" = $InstallLocation }
+                    }
                 }
             }
         }
@@ -221,10 +287,10 @@ function Get-SystemPrograms
 
                         # Get more key entries as needed
                         $SystemPrograms += New-Object PSObject -Property @{
-                        "ComputerName" = $ComputerName
-                        "RegKey" = Split-Path $SubKey.ToString() -Leaf
-                        "Name" = $KeyEntry.GetValue("DisplayName")
-                        "InstallLocation" = $InstallLocation }
+                            "ComputerName" = $ComputerName
+                            "RegKey" = Split-Path $SubKey.ToString() -Leaf
+                            "Name" = $KeyEntry.GetValue("DisplayName")
+                            "InstallLocation" = $InstallLocation }
                     }
                 }
             }
@@ -234,7 +300,7 @@ function Get-SystemPrograms
             }
         }
 
-        return $SystemPrograms #| Where-Object { $_.Name -contains "Name" -and $_.InstallLocation -contains "InstallLocation" }
+        return $SystemPrograms
     }
     else
     {
@@ -290,17 +356,26 @@ function Get-AllUserPrograms
                         continue    
                     }
 
-                    # Get more key entries as needed
-                    $AllUserPrograms += New-Object PSObject -Property @{
-                    "ComputerName" = $ComputerName
-                    "RegKey" = Split-Path $ProductKey.ToString() -Leaf
-                    "Name" = $ProductKey.GetValue("DisplayName")
-                    "Version" = $ProductKey.GetValue("DisplayVersion")
-                    "InstallLocation" = $ProductKey.GetValue("InstallLocation")}
+                    [string] $InstallLocation = $ProductKey.GetValue("InstallLocation")
+
+                    if (![System.String]::IsNullOrEmpty($InstallLocation))
+                    {
+                        # Strip away quotations and ending backslash
+                        $InstallLocation = $InstallLocation.Trim('"')
+                        $InstallLocation = $InstallLocation.TrimEnd('\\')
+
+                        # Get more key entries as needed
+                        $AllUserPrograms += New-Object PSObject -Property @{
+                            "ComputerName" = $ComputerName
+                            "RegKey" = Split-Path $ProductKey.ToString() -Leaf
+                            "Name" = $ProductKey.GetValue("DisplayName")
+                            "Version" = $ProductKey.GetValue("DisplayVersion")
+                            "InstallLocation" = $InstallLocation }
+                    }
                 }
             }
 
-            return $AllUserPrograms | Where-Object { $_.InstallLocation }
+            return $AllUserPrograms
         }
     }
     else
@@ -460,9 +535,10 @@ function Test-Installation
         [bool] $Terminate = $true
     )
 
-    if ($FilePath -like "*%UserProfile%*")
+    if ($FilePath -like "*%UserProfile%*" -or $FilePath -like "*%LocalAppData%*")
     {
-        Write-Warning "Bad environment variable detected '%UserProfile%', rule may not work!"
+        Write-Warning "Bad environment variable detected, rules with environment variables that lead to user profile will not work!"
+        Write-Host "Bad path detected is: $FilePath" -ForegroundColor Green
         Set-Variable -Name WarningsDetected -Scope Global -Value $true
     }
 
@@ -789,7 +865,6 @@ function Find-Installation
     }
 }
 
-# TODO: registry quering functions may return 2x slash \\ need to remove one
 # TODO: also convert returned strings to environment variables
 
 # about: Return installed NET Frameworks
@@ -830,15 +905,25 @@ function Get-NetFramework
                 }
 
                 $Version = $KeyEntry.GetValue("Version")
-                if ($null -ne $Version)
+                if (![System.String]::IsNullOrEmpty($Version))
                 {
+                    $InstallLocation = $KeyEntry.GetValue("InstallPath")
+
+                    if (![System.String]::IsNullOrEmpty($InstallLocation))
+                    {
+                        # Strip away quotations and ending backslash
+                        $InstallLocation = $InstallLocation.Trim('"')
+                        $InstallLocation = $InstallLocation.TrimEnd('\\')
+                    }
+
+                    #  we add entry regarldess of presence of install path
                     $NetFramework += New-Object -TypeName PSObject -Property @{
                         "ComputerName" = $ComputerName
                         "RegKey" = Split-Path $KeyEntry.ToString() -Leaf
                         "Version" = $Version
-                        "InstallPath" = $KeyEntry.GetValue("InstallPath")}        
+                        "InstallPath" = $InstallLocation }            
                 }
-                else
+                else # go one key down
                 {
                     foreach ($SubKey in $KeyEntry.GetSubKeyNames())
                     {
@@ -850,13 +935,22 @@ function Get-NetFramework
                         }
 
                         $Version = $SubKeyEntry.GetValue("Version")
-                        if ($null -ne $Version)
+                        if (![System.String]::IsNullOrEmpty($Version))
                         {
+                            $InstallLocation = $SubKeyEntry.GetValue("InstallPath")
+                            if (![System.String]::IsNullOrEmpty($InstallLocation))
+                            {
+                                # Strip away quotations and ending backslash
+                                $InstallLocation = $InstallLocation.Trim('"')
+                                $InstallLocation = $InstallLocation.TrimEnd('\\')
+                            }
+
+                            # we add entry regarldess of presence of install path
                             $NetFramework += New-Object -TypeName PSObject -Property @{
                                 "ComputerName" = $ComputerName
                                 "RegKey" = Split-Path $SubKey.ToString() -Leaf
                                 "Version" = $Version
-                                "InstallPath" = $SubKeyEntry.GetValue("InstallPath")}            
+                                "InstallPath" = $InstallLocation }
                         }
                     }
                 }
@@ -919,12 +1013,21 @@ function Get-WindowsSDK
                     continue
                 }
 
+                $InstallLocation = $SubKey.GetValue("InstallationFolder")
+                if (![System.String]::IsNullOrEmpty($InstallLocation))
+                {
+                    # Strip away quotations and ending backslash
+                    $InstallLocation = $InstallLocation.Trim('"')
+                    $InstallLocation = $InstallLocation.TrimEnd('\\')
+                }
+
+                # we add entry regarldess of presence of install path
                 $WindowsSDK += New-Object -TypeName PSObject -Property @{
                     "ComputerName" = $ComputerName
                     "RegKey" = Split-Path $SubKey.ToString() -Leaf
                     "Product" = $SubKey.GetValue("ProductName")
                     "Version" = $SubKey.GetValue("ProductVersion")
-                    "InstallPath" = $SubKey.GetValue("InstallationFolder")}        
+                    "InstallPath" = $InstallLocation }        
             }
         }
 
@@ -976,15 +1079,19 @@ function Get-WindowsKits
         {
             foreach ($Entry in $RootKey.GetValueNames())
             {
-                $Value = $RootKey.GetValue($Entry)
+                $InstallLocation = $RootKey.GetValue($Entry)
 
-                if ($Value -like "C:\Program Files*")
+                if (![System.String]::IsNullOrEmpty($InstallLocation) -and $InstallLocation -like "C:\Program Files*")
                 {
+                    # Strip away quotations and ending backslash
+                    $InstallLocation = $InstallLocation.Trim('"')
+                    $InstallLocation = $InstallLocation.TrimEnd('\\')
+    
                     $WindowsKits += New-Object -TypeName PSObject -Property @{
                         "ComputerName" = $ComputerName
                         "RegKey" = Split-Path $RootKey.ToString() -Leaf
                         "Product" = $Entry
-                        "InstallPath" = $Value}
+                        "InstallPath" = $InstallLocation}
                 }
             }
         }
@@ -1021,6 +1128,7 @@ Export-ModuleMember -Function Get-WindowsSDK
 
 # For debugging only
 Export-ModuleMember -Function Update-Table
+Export-ModuleMember -Function Format-Path
 
 #
 # Variable exports

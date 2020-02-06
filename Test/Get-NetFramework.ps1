@@ -11,8 +11,8 @@ Write-Host "***************************"
 $ComputerName = Get-ComputerName
 
 $NETFramework = Get-NetFramework $ComputerName
-#$NETFramework
+$NETFramework
 
-Write-Host "Get-NetFramework latest"
-Write-Host "***************************"
-$NETFramework | Sort-Object -Property Version | Where-Object {$_.InstallPath} | Select-Object -Last 1 -ExpandProperty InstallPath
+# Write-Host "Get-NetFramework latest"
+# Write-Host "***************************"
+# $NETFramework | Sort-Object -Property Version | Where-Object {$_.InstallPath} | Select-Object -Last 1 -ExpandProperty InstallPath
