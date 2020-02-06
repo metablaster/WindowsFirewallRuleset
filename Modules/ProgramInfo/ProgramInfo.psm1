@@ -2,7 +2,7 @@
 <#
 MIT License
 
-Copyright (c) 2019 metablaster zebal@protonmail.ch
+Copyright (c) 2019, 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -1134,6 +1134,7 @@ New-Variable -Name BlackListEnvironment -Scope Script -Option Constant -Value @(
 
 #
 # Function exports
+# TODO: see what need not be exported
 #
 
 Export-ModuleMember -Function Get-UserPrograms
