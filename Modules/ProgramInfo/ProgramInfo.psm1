@@ -108,7 +108,7 @@ function Get-UserPrograms
         [string] $UserAccount
     )
 
-    $ComputerName = ($UserAccount.split("\"))[0]
+    $ComputerName = ($UserAccount.Split("\"))[0]
 
     if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
     {
@@ -116,11 +116,11 @@ function Get-UserPrograms
         $HKU += "\Software\Microsoft\Windows\CurrentVersion\Uninstall"
         
         $RegistryHive = [Microsoft.Win32.RegistryHive]::Users
-    
         $RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
-        $UserKey = $RemoteKey.OpenSubkey($HKU)
 
+        $UserKey = $RemoteKey.OpenSubkey($HKU)
         $UserPrograms = @()
+        
         if ($UserKey)
         {
             foreach ($SubKey in $UserKey.GetSubKeyNames())
@@ -130,6 +130,7 @@ function Get-UserPrograms
                     # Get more key entries as needed
                     $UserPrograms += New-Object PSObject -Property @{
                     "ComputerName" = $ComputerName
+                    "RegKey" = Split-Path $SubKey.ToString() -Leaf
                     "Name" = $KeyEntry.GetValue("displayname")
                     "InstallLocation" = $KeyEntry.GetValue("InstallLocation")}
                 }
@@ -183,19 +184,47 @@ function Get-SystemPrograms
         $SystemPrograms = @()
         foreach ($HKLMKey in $HKLM)
         {
-            $UserKey = $RemoteKey.OpenSubkey($HKLMKey)
+            $RootKey = $RemoteKey.OpenSubkey($HKLMKey)
 
-            if ($UserKey)
+            if ($RootKey)
             {
-                foreach ($SubKey in $UserKey.GetSubKeyNames())
+                foreach ($SubKey in $RootKey.GetSubKeyNames())
                 {
-                    foreach ($KeyEntry in $UserKey.OpenSubkey($SubKey))
+                    foreach ($KeyEntry in $RootKey.OpenSubkey($SubKey))
                     {
+                        # First we get InstallLocation by normal means
+                        # Strip away quotations and ending backslash
+                        [string] $InstallLocation = $KeyEntry.GetValue("InstallLocation")
+                        $InstallLocation = $InstallLocation.Trim('"')
+                        $InstallLocation = $InstallLocation.TrimEnd('\\')
+
+                        if ([System.String]::IsNullOrEmpty($InstallLocation))
+                        {
+                            # Some programs do not install InstallLocation entry
+                            # so let's take a look at DisplayIcon which is the path to executable
+                            # then strip off all of the junk to get clean and relevant directory output
+                            $InstallLocation = $KeyEntry.GetValue("DisplayIcon")
+                            $InstallLocation = $InstallLocation.Trim('"')
+                            $InstallLocation = $InstallLocation.TrimEnd('\\')
+                            # regex to remove: \whatever.exe at the end
+                            $InstallLocation = $InstallLocation -Replace "\\(?:.(?!\\))+exe$", ""
+                            # once exe is removed, remove unistall folder too
+                            $InstallLocation = $InstallLocation -Replace "\\uninstall$", ""
+
+                            if ([System.String]::IsNullOrEmpty($InstallLocation) -or
+                            $InstallLocation -like "*{*}*" -or
+                            $InstallLocation -like "*.exe*")
+                            {
+                                continue
+                            }
+                        }
+
                         # Get more key entries as needed
                         $SystemPrograms += New-Object PSObject -Property @{
                         "ComputerName" = $ComputerName
+                        "RegKey" = Split-Path $SubKey.ToString() -Leaf
                         "Name" = $KeyEntry.GetValue("DisplayName")
-                        "InstallLocation" = $KeyEntry.GetValue("InstallLocation")}
+                        "InstallLocation" = $InstallLocation }
                     }
                 }
             }
@@ -205,7 +234,7 @@ function Get-SystemPrograms
             }
         }
 
-        return $SystemPrograms | Where-Object { $_.InstallLocation }
+        return $SystemPrograms #| Where-Object { $_.Name -contains "Name" -and $_.InstallLocation -contains "InstallLocation" }
     }
     else
     {
@@ -264,6 +293,7 @@ function Get-AllUserPrograms
                     # Get more key entries as needed
                     $AllUserPrograms += New-Object PSObject -Property @{
                     "ComputerName" = $ComputerName
+                    "RegKey" = Split-Path $ProductKey.ToString() -Leaf
                     "Name" = $ProductKey.GetValue("DisplayName")
                     "Version" = $ProductKey.GetValue("DisplayVersion")
                     "InstallLocation" = $ProductKey.GetValue("InstallLocation")}
@@ -430,7 +460,7 @@ function Test-Installation
         [bool] $Terminate = $true
     )
 
-    if ($FilePath -like "%UserProfile%")
+    if ($FilePath -like "*%UserProfile%*")
     {
         Write-Warning "Bad environment variable detected '%UserProfile%', rule may not work!"
         Set-Variable -Name WarningsDetected -Scope Global -Value $true
@@ -481,6 +511,16 @@ function Find-Installation
     # otherwise firewall GUI will show full paths which is not desired for sorting reasons
     switch -Wildcard ($Program)
     {
+        "OBSStudio"
+        {
+            Update-Table "OBSStudio"
+            break
+        }
+        "PasswordSafe"
+        {
+            Update-Table "Password Safe"
+            break
+        }
         "Greenshot"
         {
             Update-Table "Greenshot" $true
@@ -715,6 +755,7 @@ function Find-Installation
     else
     {
         Write-Warning "Installation directory for '$Program' not found"
+
         # NOTE: number for Get-PSCallStack is 2, which means 3 function calls back and then get script name (call at 0 and 1 is this script)
         $Script = (Get-PSCallStack)[2].Command
     
@@ -793,7 +834,7 @@ function Get-NetFramework
                 {
                     $NetFramework += New-Object -TypeName PSObject -Property @{
                         "ComputerName" = $ComputerName
-                        "KeyEntry" = Split-Path $KeyEntry.ToString() -Leaf
+                        "RegKey" = Split-Path $KeyEntry.ToString() -Leaf
                         "Version" = $Version
                         "InstallPath" = $KeyEntry.GetValue("InstallPath")}        
                 }
@@ -813,7 +854,7 @@ function Get-NetFramework
                         {
                             $NetFramework += New-Object -TypeName PSObject -Property @{
                                 "ComputerName" = $ComputerName
-                                "KeyEntry" = Split-Path $SubKeyEntry.ToString() -Leaf
+                                "RegKey" = Split-Path $SubKey.ToString() -Leaf
                                 "Version" = $Version
                                 "InstallPath" = $SubKeyEntry.GetValue("InstallPath")}            
                         }
@@ -877,9 +918,10 @@ function Get-WindowsSDK
                     Write-Warning "Failed to open SubKey: $HKLMKey"
                     continue
                 }
+
                 $WindowsSDK += New-Object -TypeName PSObject -Property @{
                     "ComputerName" = $ComputerName
-                    "KeyEntry" = Split-Path $SubKey.ToString() -Leaf
+                    "RegKey" = Split-Path $SubKey.ToString() -Leaf
                     "Product" = $SubKey.GetValue("ProductName")
                     "Version" = $SubKey.GetValue("ProductVersion")
                     "InstallPath" = $SubKey.GetValue("InstallationFolder")}        
@@ -940,7 +982,7 @@ function Get-WindowsKits
                 {
                     $WindowsKits += New-Object -TypeName PSObject -Property @{
                         "ComputerName" = $ComputerName
-                        "KeyEntry" = Split-Path $RootKey.ToString() -Leaf
+                        "RegKey" = Split-Path $RootKey.ToString() -Leaf
                         "Product" = $Entry
                         "InstallPath" = $Value}
                 }

@@ -23,21 +23,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# TODO: Include modules you need, update licence Copyright and start writing code
-
-# TODO: Uncomment modules as needed
-
 # Includes
-# . $PSScriptRoot\..\DirectionSetup.ps1
-# . $PSScriptRoot\..\..\IPSetup.ps1
-# Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\UserInfo
-# Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\ProgramInfo
-# Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\FirewallModule
+. $PSScriptRoot\..\DirectionSetup.ps1
+. $PSScriptRoot\..\..\IPSetup.ps1
+Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\UserInfo
+Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\ProgramInfo
+Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\FirewallModule
 
 #
 # Setup local variables:
 #
-$Group = "Template - TargetProgram"
+$Group = "Software - OBSStudio"
 $Profile = "Private, Public"
 
 # Ask user if he wants to load these rules
@@ -45,25 +41,25 @@ Update-Context $IPVersion $Direction $Group
 if (!(Approve-Execute)) { exit }
 
 #
-# TargetProgram installation directories
+# OBSStudio installation directories
 #
-$TargetProgramRoot = "%ProgramFiles%\TargetProgram"
+$OBSStudioRoot = "%ProgramFiles%\obs-studio\bin\64bit"
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "TargetProgram" ([ref]$TargetProgramRoot) $Terminate
+$global:InstallationStatus = Test-Installation "OBSStudio" ([ref]$OBSStudioRoot) $Terminate
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
-# Rules for TargetProgram
+# Rules for OBSStudio
 #
 
-$Program = "$TargetProgramRoot\TargetProgram.exe"
+$Program = "$OBSStudioRoot\obs64.exe"
 Test-File $Program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "TargetProgram" -Service Any -Program $Program `
+-DisplayName "OBSStudio" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 -LocalUser $UserAccountsSDDL `
--Description ""
+-Description "OBS Studio check for updates"
