@@ -1,17 +1,41 @@
 
+<#
+MIT License
+
+Copyright (c) 2019, 2020 metablaster zebal@protonmail.ch
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+#>
+
 #
 # Unit test for adding rules based on computer accounts
 #
 
-Import-Module -Name $PSScriptRoot\..\FirewallModule
+# Includes
+. $PSScriptRoot\IPSetup.ps1
+. $PSScriptRoot\DirectionSetup.ps1
+Import-Module -Name $PSScriptRoot\..\Modules\UserInfo
+Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
+Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
 
-$Platform = "10.0+" #Windows 10 and above
-$PolicyStore = "localhost" #Local Group Policy
-$OnError = "Stop" #Stop executing if error
-$Debug = $false #To add rules to firewall for real set to false
-$Execute = $false #To prompt for each rule set to true
-$Group = "Test"
-$Direction = "Outbound"
+$Group = "Test - AccountSDDL"
+$Profile = "Any"
 
 Write-Host ""
 Write-Host "Remove-NetFirewallRule"
@@ -48,7 +72,7 @@ Write-Host "***************************"
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Get-AccountSDDL" -Program Any -Service Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType Any `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -LocalUser $LocalUser `
 -Description ""

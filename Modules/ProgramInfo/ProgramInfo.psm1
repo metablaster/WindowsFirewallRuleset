@@ -603,6 +603,11 @@ function Find-Installation
     # otherwise firewall GUI will show full paths which is not desired for sorting reasons
     switch -Wildcard ($Program)
     {
+        "GPG"
+        {
+            Update-Table "GNU Privacy Guard"
+            break
+        }
         "OBSStudio"
         {
             Update-Table "OBSStudio"

@@ -25,8 +25,6 @@ SOFTWARE.
 
 # TODO: Include modules you need, update licence Copyright and start writing code
 
-# TODO: Uncomment modules as needed
-
 # Includes
 # . $PSScriptRoot\..\DirectionSetup.ps1
 # . $PSScriptRoot\..\..\IPSetup.ps1
