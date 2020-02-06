@@ -127,7 +127,12 @@ if(Approve-Execute "Yes" "Applying: Outbound IPv4 Rules")
     if(Approve-Execute "Yes" "Applying: Rules for 3rd party programs")
     {
         # rules for programs
+        & "$PSScriptRoot\Rules\IPv4\Outbound\Software\DnsCrypt.ps1"
+        & "$PSScriptRoot\Rules\IPv4\Outbound\Software\Greenshot.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Software\Nvidia.ps1"
+        & "$PSScriptRoot\Rules\IPv4\Outbound\Software\OBSStudio.ps1"
+        & "$PSScriptRoot\Rules\IPv4\Outbound\Software\OpenSSH.ps1"
+        & "$PSScriptRoot\Rules\IPv4\Outbound\Software\PasswordSafe.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Software\Steam.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Software\TeamViewer.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Software\Thunderbird.ps1"

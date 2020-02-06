@@ -83,7 +83,7 @@ function Approve-Execute
     return $false
 }
 
-# Show-SDDL returns SDDL based on "object"
+# about: Show-SDDL returns SDDL based on "object"
 # Credits to: https://blogs.technet.microsoft.com/ashleymcglone/2011/08/29/powershell-sid-walker-texas-ranger-part-1/
 # sample: see Test\Show-SDDL.ps1 for example
 function Show-SDDL

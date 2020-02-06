@@ -881,8 +881,6 @@ function Find-Installation
     }
 }
 
-# TODO: also convert returned strings to environment variables
-
 # about: Return installed NET Frameworks
 # input: Computer name for which to list installed installed framework
 # output: Table of installed NET Framework versions and install paths
