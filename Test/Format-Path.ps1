@@ -6,7 +6,6 @@
 # Uncomment modules as needed
 Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
 
-
 Write-Host ""
 Write-Host "Format-Path"
 Write-Host "***************************"
@@ -53,5 +52,9 @@ $Result
 Test-Environment $Result
 
 $Result = Format-Path "C:\\"
+$Result
+Test-Environment $Result
+
+$Result = Format-Path "C:\Users\haxor\AppData\Local\OneDrive"
 $Result
 Test-Environment $Result

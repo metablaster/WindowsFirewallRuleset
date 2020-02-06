@@ -104,9 +104,14 @@ function Test-Environment
 function Format-Path
 {
     param (
-        [parameter(Mandatory = $true)]
         [string] $FilePath
     )
+
+    # Impssible to know what the imput may be
+    if ([System.String]::IsNullOrEmpty($FilePath))
+    {
+        return $FilePath
+    }
 
     # Strip away quotations
     $FilePath = $FilePath.Trim('"')
@@ -118,8 +123,24 @@ function Format-Path
     # Initialize SearchString to input path
     $SearchString = $FilePath
 
+    # All environment variables, including user profile
+    $AllVariables = @(Get-ChildItem Env:)
+
+    # TODO: sorted result will have multiple same variables,
+    # sorting result is different if sorting AllVariables first
+    # Make a list of good environment variables (exclude user profile)
+    $Variables = @()
+    foreach ($Variable in $AllVariables)
+    {
+        $Current = "%" + $Variable.Name + "%"
+        if ($BlackListEnvironment -notcontains $Current)
+        {
+            $Variables += $Variable
+        }
+    }
+
     # Sorting from longest paths which should be checked first
-    $Variables = @(Get-ChildItem Env:) | Sort-Object -Descending { $_.Value.length }
+    $Variables = $Variables | Sort-Object -Descending { $_.Value.length }
 
     while (![System.String]::IsNullOrEmpty($SearchString))
     {
@@ -141,7 +162,7 @@ function Format-Path
 
     # path has been reduced to root drive so get that
     $SearchString = Split-Path -Path $FilePath -Qualifier
-    $Replacement = "%" + @(($Variables | Where-Object { $_.Value -eq $SearchString} ).Name)[1] + "%"
+    $Replacement = "%" + @(($Variables | Where-Object { $_.Value -eq $SearchString} ).Name)[0] + "%"
 
     if ($Replacement.Length -eq 2)
     {
@@ -188,9 +209,7 @@ function Get-UserPrograms
 
                     if (![System.String]::IsNullOrEmpty($InstallLocation))
                     {
-                        # Strip away quotations and ending backslash
-                        $InstallLocation = $InstallLocation.Trim('"')
-                        $InstallLocation = $InstallLocation.TrimEnd('\\')
+                        $InstallLocation = Format-Path $InstallLocation
 
                         # Get more key entries as needed
                         $UserPrograms += New-Object PSObject -Property @{
@@ -261,8 +280,7 @@ function Get-SystemPrograms
                         # First we get InstallLocation by normal means
                         # Strip away quotations and ending backslash
                         [string] $InstallLocation = $KeyEntry.GetValue("InstallLocation")
-                        $InstallLocation = $InstallLocation.Trim('"')
-                        $InstallLocation = $InstallLocation.TrimEnd('\\')
+                        $InstallLocation = Format-Path $InstallLocation
 
                         if ([System.String]::IsNullOrEmpty($InstallLocation))
                         {
@@ -270,12 +288,12 @@ function Get-SystemPrograms
                             # so let's take a look at DisplayIcon which is the path to executable
                             # then strip off all of the junk to get clean and relevant directory output
                             $InstallLocation = $KeyEntry.GetValue("DisplayIcon")
-                            $InstallLocation = $InstallLocation.Trim('"')
-                            $InstallLocation = $InstallLocation.TrimEnd('\\')
+                            $InstallLocation = Format-Path $InstallLocation
+
                             # regex to remove: \whatever.exe at the end
                             $InstallLocation = $InstallLocation -Replace "\\(?:.(?!\\))+exe$", ""
-                            # once exe is removed, remove unistall folder too
-                            $InstallLocation = $InstallLocation -Replace "\\uninstall$", ""
+                            # once exe is removed, remove unistall folder too if needed
+                            #$InstallLocation = $InstallLocation -Replace "\\uninstall$", ""
 
                             if ([System.String]::IsNullOrEmpty($InstallLocation) -or
                             $InstallLocation -like "*{*}*" -or
@@ -360,9 +378,7 @@ function Get-AllUserPrograms
 
                     if (![System.String]::IsNullOrEmpty($InstallLocation))
                     {
-                        # Strip away quotations and ending backslash
-                        $InstallLocation = $InstallLocation.Trim('"')
-                        $InstallLocation = $InstallLocation.TrimEnd('\\')
+                        $InstallLocation = Format-Path $InstallLocation
 
                         # Get more key entries as needed
                         $AllUserPrograms += New-Object PSObject -Property @{
@@ -535,14 +551,14 @@ function Test-Installation
         [bool] $Terminate = $true
     )
 
-    if ($FilePath -like "*%UserProfile%*" -or $FilePath -like "*%LocalAppData%*")
+    if ([Array]::Find($BlackListEnvironment, [Predicate[string]]{ $FilePath.Value -like "*$($args[0])*" }))
     {
         Write-Warning "Bad environment variable detected, rules with environment variables that lead to user profile will not work!"
-        Write-Host "Bad path detected is: $FilePath" -ForegroundColor Green
+        Write-Host "NOTE: Bad path detected is: $($FilePath.Value)" -ForegroundColor Green
         Set-Variable -Name WarningsDetected -Scope Global -Value $true
     }
 
-    if (!(Test-Environment $FilePath))
+    if (!(Test-Environment $FilePath.Value))
     {
         if (!(Find-Installation $Program))
         {
@@ -911,9 +927,7 @@ function Get-NetFramework
 
                     if (![System.String]::IsNullOrEmpty($InstallLocation))
                     {
-                        # Strip away quotations and ending backslash
-                        $InstallLocation = $InstallLocation.Trim('"')
-                        $InstallLocation = $InstallLocation.TrimEnd('\\')
+                        $InstallLocation = Format-Path $InstallLocation
                     }
 
                     #  we add entry regarldess of presence of install path
@@ -940,9 +954,7 @@ function Get-NetFramework
                             $InstallLocation = $SubKeyEntry.GetValue("InstallPath")
                             if (![System.String]::IsNullOrEmpty($InstallLocation))
                             {
-                                # Strip away quotations and ending backslash
-                                $InstallLocation = $InstallLocation.Trim('"')
-                                $InstallLocation = $InstallLocation.TrimEnd('\\')
+                                $InstallLocation = Format-Path $InstallLocation
                             }
 
                             # we add entry regarldess of presence of install path
@@ -1016,9 +1028,7 @@ function Get-WindowsSDK
                 $InstallLocation = $SubKey.GetValue("InstallationFolder")
                 if (![System.String]::IsNullOrEmpty($InstallLocation))
                 {
-                    # Strip away quotations and ending backslash
-                    $InstallLocation = $InstallLocation.Trim('"')
-                    $InstallLocation = $InstallLocation.TrimEnd('\\')
+                    $InstallLocation = Format-Path $InstallLocation
                 }
 
                 # we add entry regarldess of presence of install path
@@ -1083,10 +1093,8 @@ function Get-WindowsKits
 
                 if (![System.String]::IsNullOrEmpty($InstallLocation) -and $InstallLocation -like "C:\Program Files*")
                 {
-                    # Strip away quotations and ending backslash
-                    $InstallLocation = $InstallLocation.Trim('"')
-                    $InstallLocation = $InstallLocation.TrimEnd('\\')
-    
+                    $InstallLocation = Format-Path $InstallLocation
+
                     $WindowsKits += New-Object -TypeName PSObject -Property @{
                         "ComputerName" = $ComputerName
                         "RegKey" = Split-Path $RootKey.ToString() -Leaf
@@ -1108,6 +1116,21 @@ function Get-WindowsKits
 # Global status to check if installation directory exists, used by Test-File
 New-Variable -Name InstallationStatus -Scope Global -Value $false
 New-Variable -Name InstallTable -Scope Global -Value $null
+
+# Any environment variables to user profile are not valid for firewall
+New-Variable -Name BlackListEnvironment -Scope Script -Option Constant -Value @(
+    "%APPDATA%"
+    "%HOME%"
+    "%HOMEPATH%"
+    "%LOCALAPPDATA%"
+    "%OneDrive%"
+    "%OneDriveConsumer%"
+    "%Path%"
+    "%PSModulePath%"
+    "%TEMP%"
+    "%TMP%"
+    "%USERNAME%"
+    "%USERPROFILE%")
 
 #
 # Function exports
