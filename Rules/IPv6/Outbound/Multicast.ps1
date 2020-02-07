@@ -77,7 +77,7 @@ Import-Module -Name $PSScriptRoot\..\..\..\Modules\UserInfo
 Import-Module -Name $PSScriptRoot\..\..\..\Modules\FirewallModule
 
 # Test Powershell version required for this project
-Test-PowershellVersion
+Test-PowershellVersion $VersionCheck
 
 #
 # Setup local variables:

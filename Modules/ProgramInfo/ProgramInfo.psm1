@@ -462,6 +462,7 @@ function Update-Table
         [bool] $UserProfile = $false
     )
 
+    # TODO: Searchstring may pick up irrelevant paths (ie. unreal)
     Initialize-Table
     $ComputerName = Get-ComputerName
     $SystemPrograms = Get-SystemPrograms $ComputerName
@@ -883,8 +884,11 @@ function Find-Installation
             {
                 $InstallRoot = Read-Host "Input path to '$Program' root directory"
 
-                Edit-Table $InstallRoot
-    
+                if (![System.String]::IsNullOrEmpty($InstallRoot))
+                {
+                    Edit-Table $InstallRoot
+                }
+                
                 if ($global:InstallTable.Rows.Count -gt 0)
                 {        
                     return $true

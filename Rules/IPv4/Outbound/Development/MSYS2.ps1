@@ -31,7 +31,7 @@ Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\ProgramInfo
 Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\FirewallModule
 
 # Test Powershell version required for this project
-Test-PowershellVersion
+Test-PowershellVersion $VersionCheck
 
 #
 # Setup local variables:
@@ -49,7 +49,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # Steam installation directories
 #
-$MSYS2Root = "C:\dev\msys64"
+$MSYS2Root = "%SystemRoot%\dev\msys64"
 
 #
 # Rules for Steam client

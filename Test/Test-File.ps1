@@ -32,7 +32,7 @@ Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
 Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
 
 # Test Powershell version required for this project
-Test-PowershellVersion
+Test-PowershellVersion $VersionCheck
 
 $OfficeShared = "%ProgramFiles%\Common Files\microsoft shared"
 $VSInstallService = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.x86.exe"

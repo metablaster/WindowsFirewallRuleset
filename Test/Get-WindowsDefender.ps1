@@ -33,7 +33,7 @@ Import-Module -Name $PSScriptRoot\..\Modules\ComputerInfo
 Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
 
 # Test Powershell version required for this project
-Test-PowershellVersion
+Test-PowershellVersion $VersionCheck
 
 Write-Host ""
 Write-Host "Get-WindowsDefender"

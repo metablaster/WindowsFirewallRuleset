@@ -29,7 +29,7 @@ SOFTWARE.
 Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
 
 # Test Powershell version required for this project
-Test-PowershellVersion
+Test-PowershellVersion $VersionCheck
 
 # about: Sample function
 # input: nothing

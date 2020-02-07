@@ -227,7 +227,7 @@ function Get-NetworkServices
     $Content = $Content | Where-Object { $_ -ne '$Service' -and $_ -ne "Any" }
 
     # File name where to save all matches
-    $File = "$PSScriptRoot\..\..\Rules\IPv4\NetworkServices.txt"
+    $File = "$PSScriptRoot\..\..\Rules\NetworkServices.txt"
 
     # If output file exists clear it
     # otherwise create a new file
@@ -248,22 +248,31 @@ function Get-NetworkServices
 # about: Test and print Powershell version required for this project
 function Test-PowershellVersion
 {
-    $PowershellVersion = "$($PSVersionTable.PSVersion | Select-Object -ExpandProperty Major)" +
-    "." + "$($PSVersionTable.PSVersion | Select-Object -ExpandProperty Minor)"
+    param (
+        [parameter(Mandatory = $true)]
+        [string] $Folder
+    )
 
-    if ($PowershellVersion -eq "5.1")
+    # disabled when runing scripts from SetupFirewall.ps1 script
+    if ($VersionCheck)
     {
-        Write-Host ""
-        Write-Host "Powershell version: $PowershellVersion"
-        Write-Host ""
-    }
-    else
-    {
-        Write-Host ""
-        Write-Host "Unable to proceed, Powershell version 5.1 is required to run these scripts" -ForegroundColor Red -BackgroundColor Black
-        Write-Host "Your Powershell version is: $PowershellVersion"    
-        Write-Host ""
-        exit
+        $PowershellVersion = "$($PSVersionTable.PSVersion | Select-Object -ExpandProperty Major)" +
+        "." + "$($PSVersionTable.PSVersion | Select-Object -ExpandProperty Minor)"
+
+        if ($PowershellVersion -eq "5.1")
+        {
+            Write-Host ""
+            Write-Host "Powershell version: $PowershellVersion"
+            Write-Host ""
+        }
+        else
+        {
+            Write-Host ""
+            Write-Host "Unable to proceed, Powershell version 5.1 is required to run these scripts" -ForegroundColor Red -BackgroundColor Black
+            Write-Host "Your Powershell version is: $PowershellVersion"    
+            Write-Host ""
+            exit
+        }
     }
 }
 
@@ -285,7 +294,8 @@ New-Variable -Name Execute -Scope Global -Value $false
 New-Variable -Name ServiceHost -Option Constant -Scope Global -Value "%SystemRoot%\System32\svchost.exe"
 # Default network interface card
 New-Variable -Name Interface -Option Constant -Scope Global -Value "Wired, Wireless"
-
+# Set to false to avoid checking powershell version
+New-Variable -Name VersionCheck -Scope Global -Value $true
 # Global execution context, used in Approve-Execute
 New-Variable -Name Context -Scope Global -Value "Context not set"
 # Global variable to tell if all scripts ran clean
@@ -319,3 +329,4 @@ Export-ModuleMember -Variable Interface
 
 Export-ModuleMember -Variable Context
 Export-ModuleMember -Variable WarningsDetected
+Export-ModuleMember -Variable VersionCheck

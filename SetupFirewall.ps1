@@ -28,12 +28,13 @@ Import-Module -Name $PSScriptRoot\Modules\ProgramInfo
 Import-Module -Name $PSScriptRoot\Modules\FirewallModule
 
 # Test Powershell version required for this project
-Test-PowershellVersion
+Test-PowershellVersion $VersionCheck
+Set-Variable -Name VersionCheck -Scope Global -Value $false
 
 # Check all rules that apply to windows services
 Test-File $ServiceHost
-Get-NetworkServices $PSScriptRoot\Rules\IPv4
-Get-Content -Path $PSScriptRoot\Rules\IPv4\NetworkServices.txt | ForEach-Object {
+Get-NetworkServices $PSScriptRoot\Rules
+Get-Content -Path $PSScriptRoot\Rules\NetworkServices.txt | ForEach-Object {
     Test-Service $_
 }
 

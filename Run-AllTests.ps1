@@ -30,7 +30,7 @@ SOFTWARE.
 Import-Module -Name $PSScriptRoot\Modules\FirewallModule
 
 # Test Powershell version required for this project
-Test-PowershellVersion
+Test-PowershellVersion $VersionCheck
 
 # Recusively get powershell scripts in input folder
 $Files = Get-ChildItem -Path $PSScriptRoot\Test -Recurse -Filter *.ps1
