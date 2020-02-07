@@ -55,9 +55,7 @@ $GithubRoot = "%SystemDrive%\Users\User\AppData\Local\GitHubDesktop\app-2.2.3"
 #
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "Git" ([ref] $GitRoot) $false
-
-if ($global:InstallationStatus)
+if ((Test-Installation "Git" ([ref] $GitRoot)) -or $Force)
 {
     $Program = "$GitRoot\mingw64\bin\curl.exe"
     Test-File $Program
@@ -102,9 +100,7 @@ if ($global:InstallationStatus)
 #
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "GithubDesktop" ([ref] $GithubRoot) $Terminate
-
-if ($global:InstallationStatus)
+if ((Test-Installation "GithubDesktop" ([ref] $GithubRoot)) -or $Force)
 {
     $Program = "$GithubRoot\GitHubDesktop.exe"
     Test-File $Program

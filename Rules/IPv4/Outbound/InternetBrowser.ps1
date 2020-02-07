@@ -67,9 +67,7 @@ $TorRoot = "%SystemDrive%\Users\User\AppData\Local\Tor Browser"
 #
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot) $false
-
-if ($global:InstallationStatus)
+if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot)) -or $Force)
 {
     $EdgeChromiumApp = "$EdgeChromiumRoot\Edge\Application\msedge.exe"
     Test-File $EdgeChromiumApp
@@ -106,9 +104,7 @@ if ($global:InstallationStatus)
 #
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "Chrome" ([ref] $ChromeRoot) $false
-
-if ($global:InstallationStatus)
+if ((Test-Installation "Chrome" ([ref] $ChromeRoot)) -or $Force)
 {
     $ChromeApp = "$ChromeRoot\Chrome\Application\chrome.exe"
 
@@ -209,9 +205,7 @@ if ($global:InstallationStatus)
 #
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "Firefox" ([ref] $FirefoxRoot) $false
-
-if ($global:InstallationStatus)
+if ((Test-Installation "Firefox" ([ref] $FirefoxRoot)) -or $Force)
 {
     $FirefoxApp = "$FirefoxRoot\firefox.exe"
 
@@ -243,9 +237,7 @@ if ($global:InstallationStatus)
 #
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "Yandex" ([ref] $YandexRoot) $false
-
-if ($global:InstallationStatus)
+if ((Test-Installation "Yandex" ([ref] $YandexRoot)) -or $Force)
 {
     $YandexApp = "$YandexRoot\YandexBrowser\Application\browser.exe"
 
@@ -277,9 +269,7 @@ if ($global:InstallationStatus)
 #
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "Tor" ([ref] $TorRoot) $Terminate
-
-if ($global:InstallationStatus)
+if ((Test-Installation "Tor" ([ref] $TorRoot)) -or $Force)
 {
     $TorApp = "$TorRoot\Browser\TorBrowser\Tor\tor.exe"
 

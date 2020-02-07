@@ -48,18 +48,19 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 $PasswordSafeRoot = "%ProgramFiles%\Password Safe4"
 
-# Test if installation exists on system
-$global:InstallationStatus = Test-Installation "PasswordSafe" ([ref]$PasswordSafeRoot) $Terminate
-
 #
 # Rules for PasswordSafe
 #
 
-$Program = "$PasswordSafeRoot\pwsafe.exe"
-Test-File $Program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "PasswordSafe" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser $UserAccountsSDDL `
--Description "Password safe check for updates."
+# Test if installation exists on system
+if ((Test-Installation "PasswordSafe" ([ref]$PasswordSafeRoot)) -or $Force)
+{
+    $Program = "$PasswordSafeRoot\pwsafe.exe"
+    Test-File $Program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "PasswordSafe" -Service Any -Program $Program `
+    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+    -LocalUser $UserAccountsSDDL `
+    -Description "Password safe check for updates."
+}

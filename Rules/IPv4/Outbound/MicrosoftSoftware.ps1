@@ -36,6 +36,8 @@ Import-Module -Name $PSScriptRoot\..\..\..\Modules\FirewallModule
 #
 $Group = "Microsoft Software"
 $Profile = "Private, Public"
+# NetBIOS Computer name
+$ComputerName = Get-ComputerName
 
 # Ask user if he wants to load these rules
 Update-Context $IPVersion $Direction $Group
@@ -47,9 +49,6 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # Installation directories for MS software
 #
-
-# Computer name
-$ComputerName = Get-ComputerName
 
 $VSCodeRoot = "%ProgramFiles%\Microsoft VS Code"
 $WebPlatformRoot = "%ProgramFiles%\Microsoft\Web Platform Installer"
@@ -97,9 +96,8 @@ $ToolsRoot = "%SystemDrive%\tools"
 # Rules for Microsoft software
 #
 
-$global:InstallationStatus = Test-Installation "VSCode" ([ref] $VSCodeRoot) $false
-
-if ($global:InstallationStatus)
+# Test if installation exists on system
+if ((Test-Installation "VSCode" ([ref] $VSCodeRoot)) -or $Force)
 {
     $Program = "$VSCodeRoot\Code.exe"
     Test-File $Program
@@ -111,6 +109,7 @@ if ($global:InstallationStatus)
     -Description ""
 }
 
+# Test if installation exists on system
 if ($null -ne $SDKDebuggers)
 {
     $Program = "$SDKDebuggers\x86\windbg.exe"
@@ -150,9 +149,8 @@ if ($null -ne $SDKDebuggers)
     -Description "WinDbg Symchk access to Symbols Server"
 }
 
-$global:InstallationStatus = Test-Installation "Powershell64" ([ref] $PowerShell64Root) $false
-
-if ($global:InstallationStatus)
+# Test if installation exists on system
+if ((Test-Installation "Powershell64" ([ref] $PowerShell64Root)) -or $Force)
 {
     $Program = "$PowerShell64Root\powershell_ise.exe"
     Test-File $Program
@@ -173,9 +171,8 @@ if ($global:InstallationStatus)
     -Description "Rule to allow update of powershell"
 }
 
-$global:InstallationStatus = Test-Installation "Powershell86" ([ref] $PowerShell86Root) $false
-
-if ($global:InstallationStatus)
+# Test if installation exists on system
+if ((Test-Installation "Powershell86" ([ref] $PowerShell86Root)) -or $Force)
 {
     $Program = "$PowerShell86Root\powershell_ise.exe"
     Test-File $Program
@@ -196,9 +193,8 @@ if ($global:InstallationStatus)
     -Description "Rule to allow update of powershell"
 }
 
-$global:InstallationStatus = Test-Installation "OneDrive" ([ref] $OneDriveRoot) $false
-
-if ($global:InstallationStatus)
+# Test if installation exists on system
+if ((Test-Installation "OneDrive" ([ref] $OneDriveRoot)) -or $Force)
 {
     $Program = "$OneDriveRoot\OneDriveStandaloneUpdater.exe"
     Test-File $Program
@@ -219,9 +215,8 @@ if ($global:InstallationStatus)
     -Description ""
 }
 
-$global:InstallationStatus = Test-Installation "HelpViewer" ([ref] $HelpViewerRoot) $false
-
-if ($global:InstallationStatus)
+# Test if installation exists on system
+if ((Test-Installation "HelpViewer" ([ref] $HelpViewerRoot)) -or $Force)
 {
     $Program = "$HelpViewerRoot\HlpCtntMgr.exe"
     Test-File $Program
@@ -242,6 +237,7 @@ if ($global:InstallationStatus)
     -Description "Review downloadable content."
 }
 
+# Test if installation exists on system
 if ($null -ne $NETFrameworkRoot)
 {
     $Program = "$NETFrameworkRoot\mscorsvw.exe"
@@ -262,7 +258,6 @@ Write-Host "NOTE: in this script confirm switch is enabled for unfinished progra
 
 $PreviousExecuteStatus = $global:Execute
 $global:Execute = $true
-$global:InstallationStatus = $true
 
 $Program = "$WebPlatformRoot\WebPlatformInstaller.exe"
 Test-File $Program
@@ -384,4 +379,3 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 
 # set Execute back to previous value
 $global:Execute = $PreviousExecuteStatus
-$global:InstallationStatus = $false

@@ -66,7 +66,7 @@ function Test-File
         [string] $FilePath
     )
 
-    if ($global:InstallationStatus)
+    if ($LoadRules)
     {
         $ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($FilePath)
 
@@ -545,10 +545,7 @@ function Test-Installation
         [string] $Program,
 
         [parameter(Mandatory = $true, Position = 1)]
-        [ref] $FilePath,
-
-        [parameter(Mandatory = $false, Position = 2)]
-        [bool] $Terminate = $true
+        [ref] $FilePath
     )
 
     if ([Array]::Find($BlackListEnvironment, [Predicate[string]]{ $FilePath.Value -like "*$($args[0])*" }))
@@ -562,11 +559,6 @@ function Test-Installation
     {
         if (!(Find-Installation $Program))
         {
-            if ($Terminate)
-            {
-                exit # installation not found, exit script
-            }
-
             return $false # installation not found
         }
         else
@@ -1121,8 +1113,7 @@ function Get-WindowsKits
     }
 }
 
-# Global status to check if installation directory exists, used by Test-File
-New-Variable -Name InstallationStatus -Scope Global -Value $false
+# Installation table holds user and program directory pair
 New-Variable -Name InstallTable -Scope Global -Value $null
 
 # Any environment variables to user profile are not valid for firewall
@@ -1166,5 +1157,4 @@ Export-ModuleMember -Function Format-Path
 # Variable exports
 #
 
-Export-ModuleMember -Variable InstallationStatus
 Export-ModuleMember -Variable InstallTable

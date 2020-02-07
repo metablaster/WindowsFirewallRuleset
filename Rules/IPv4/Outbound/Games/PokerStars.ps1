@@ -48,47 +48,48 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 $PokerStarsRoot = "%ProgramFiles(x86)%\PokerStars.EU"
 
-# Test if installation exists on system
-$global:InstallationStatus = Test-Installation "PokerStars" ([ref] $PokerStarsRoot) $Terminate
-
 #
 # Rules for PokerStars game
 #
 
-$Program = "$PokerStarsRoot\PokerStars.exe"
-Test-File $Program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "PokerStars - Client" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 26002 `
--LocalUser $UserAccountsSDDL `
--Description "Main game interface."
+# Test if installation exists on system
+if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $Force)
+{
+    $Program = "$PokerStarsRoot\PokerStars.exe"
+    Test-File $Program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "PokerStars - Client" -Service Any -Program $Program `
+    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 26002 `
+    -LocalUser $UserAccountsSDDL `
+    -Description "Main game interface."
 
-# TODO: browser for some reason needs any interface and any remote address
-# need to investigate why
-$Program = "$PokerStarsRoot\br\PokerStarsBr.exe"
-Test-File $Program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "PokerStars - Browser" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 80, 443 `
--LocalUser $UserAccountsSDDL `
--Description "In game HTML browser"
+    # TODO: browser for some reason needs any interface and any remote address
+    # need to investigate why
+    $Program = "$PokerStarsRoot\br\PokerStarsBr.exe"
+    Test-File $Program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "PokerStars - Browser" -Service Any -Program $Program `
+    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 80, 443 `
+    -LocalUser $UserAccountsSDDL `
+    -Description "In game HTML browser"
 
-$Program = "$PokerStarsRoot\PokerStarsOnlineUpdate.exe"
-Test-File $Program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "PokerStars - Online update" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
--LocalUser $UserAccountsSDDL `
--Description ""
+    $Program = "$PokerStarsRoot\PokerStarsOnlineUpdate.exe"
+    Test-File $Program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "PokerStars - Online update" -Service Any -Program $Program `
+    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
+    -LocalUser $UserAccountsSDDL `
+    -Description ""
 
-$Program = "$PokerStarsRoot\PokerStarsUpdate.exe"
-Test-File $Program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "PokerStars - Update" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
--LocalUser $UserAccountsSDDL `
--Description "Game updater"
+    $Program = "$PokerStarsRoot\PokerStarsUpdate.exe"
+    Test-File $Program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "PokerStars - Update" -Service Any -Program $Program `
+    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
+    -LocalUser $UserAccountsSDDL `
+    -Description "Game updater"
+}

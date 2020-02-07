@@ -54,9 +54,7 @@ $LauncherRoot = "%ProgramFiles(x86)%\Epic Games\Launcher"
 #
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "UnrealEngine" ([ref] $EngineRoot) $false
-
-if ($global:InstallationStatus -or !$Terminate)
+if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $Force)
 {
     $Program = "$EngineRoot\Binaries\Win64\CrashReportClientEditor-Win64-Development.exe"
     Test-File $Program
@@ -118,9 +116,7 @@ if ($global:InstallationStatus -or !$Terminate)
 #
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "EpicGames" ([ref] $LauncherRoot) $Terminate
-
-if ($global:InstallationStatus -or !$Terminate)
+if ((Test-Installation "EpicGames" ([ref] $LauncherRoot)) -or $Force)
 {
     $Program = "$LauncherRoot\Portal\Binaries\Win32\EpicGamesLauncher.exe"
     Test-File $Program

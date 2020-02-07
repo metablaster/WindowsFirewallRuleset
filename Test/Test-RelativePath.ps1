@@ -49,9 +49,6 @@ if (!(Approve-Execute)) { exit }
 #
 $TargetProgramRoot = "C:\Program Files (x86)\Realtek\..\PokerStars.EU"
 
-# Test if installation exists on system
-$global:InstallationStatus = Test-Installation "TargetProgram" ([ref]$TargetProgramRoot) $Terminate
-
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
@@ -59,11 +56,15 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Rules for TargetProgram
 #
 
-$Program = "$TargetProgramRoot\PokerStars.exe"
-Test-File $Program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "TargetProgram" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 26002 `
--LocalUser $UserAccountsSDDL `
--Description ""
+# Test if installation exists on system
+if ((Test-Installation "TargetProgram" ([ref]$TargetProgramRoot)) -or $Force)
+{
+    $Program = "$TargetProgramRoot\PokerStars.exe"
+    Test-File $Program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "TargetProgram" -Service Any -Program $Program `
+    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 26002 `
+    -LocalUser $UserAccountsSDDL `
+    -Description ""
+}

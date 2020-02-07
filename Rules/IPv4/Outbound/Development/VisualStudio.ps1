@@ -58,9 +58,7 @@ $VSInstallerRoot = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
 #
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "VisualStudio" ([ref] $VSRoot) $false
-
-if ($global:InstallationStatus)
+if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $Force)
 {
     $Program = "$VSRoot\Common7\IDE\CommonExtensions\Microsoft\TeamFoundation\Team Explorer\Git\mingw32\bin\git-remote-https.exe"
     Test-File $Program
@@ -188,9 +186,7 @@ if ($global:InstallationStatus)
 #
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot) $Terminate
-
-if ($global:InstallationStatus)
+if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $Force)
 {
     $Program = "$VSInstallerRoot\resources\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.exe"
     Test-File $Program

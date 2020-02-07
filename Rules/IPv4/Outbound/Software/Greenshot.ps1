@@ -52,18 +52,19 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 $GreenshotRoot = "%LocalAppData%\Greenshot"
 
-# Test if installation exists on system
-$global:InstallationStatus = Test-Installation "Greenshot" ([ref]$GreenshotRoot) $Terminate
-
 #
 # Rules for Greenshot
 #
 
-$Program = "$GreenshotRoot\Greenshot.exe"
-Test-File $Program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Greenshot" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser $UserAccountsSDDL `
--Description "Screen capture tool, needs rules to upload screenshots to imgur"
+# Test if installation exists on system
+if ((Test-Installation "Greenshot" ([ref]$GreenshotRoot)) -or $Force)
+{
+    $Program = "$GreenshotRoot\Greenshot.exe"
+    Test-File $Program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "Greenshot" -Service Any -Program $Program `
+    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+    -LocalUser $UserAccountsSDDL `
+    -Description "Screen capture tool, needs rules to upload screenshots to imgur"
+}

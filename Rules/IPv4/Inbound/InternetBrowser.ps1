@@ -51,10 +51,6 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Browser installation directories
 #
 $ChromeRoot = "%SystemDrive%\Users\User\AppData\Local\Google"
-$ChromeApp = "$ChromeRoot\Chrome\Application\chrome.exe"
-
-# Test if installation exists on system
-$global:InstallationStatus = Test-Installation "Chrome" ([ref] $ChromeRoot) $Terminate
 
 #
 # Internet browser rules
@@ -64,32 +60,37 @@ $global:InstallationStatus = Test-Installation "Chrome" ([ref] $ChromeRoot) $Ter
 # Google Chrome
 #
 
-Test-File $ChromeApp
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Google Chrome mDNS IPv4" -Service Any -Program $ChromeApp `
--PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 224.0.0.251 -LocalPort 5353 -RemotePort 5353 `
--EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description "The multicast Domain Name System (mDNS) resolves host names to IP addresses within small networks that do not include a local name server."
+# Test if installation exists on system
+if ((Test-Installation "Chrome" ([ref] $ChromeRoot)) -or $Force)
+{
+    $ChromeApp = "$ChromeRoot\Chrome\Application\chrome.exe"
+    Test-File $ChromeApp
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "Google Chrome mDNS IPv4" -Service Any -Program $ChromeApp `
+    -PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 224.0.0.251 -LocalPort 5353 -RemotePort 5353 `
+    -EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+    -Description "The multicast Domain Name System (mDNS) resolves host names to IP addresses within small networks that do not include a local name server."
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Google Chrome mDNS IPv6" -Service Any -Program $ChromeApp `
--PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::fb -LocalPort 5353 -RemotePort 5353 `
--EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description "The multicast Domain Name System (mDNS) resolves host names to IP addresses within small networks that do not include a local name server."
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "Google Chrome mDNS IPv6" -Service Any -Program $ChromeApp `
+    -PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::fb -LocalPort 5353 -RemotePort 5353 `
+    -EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+    -Description "The multicast Domain Name System (mDNS) resolves host names to IP addresses within small networks that do not include a local name server."
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Google Chrome Chromecast" -Service Any -Program $ChromeApp `
--PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress $CHROMECAST_IP -LocalPort 32768-61000 -RemotePort 32768-61000 `
--EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description "Allow Chromecast Inbound UDP data"
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "Google Chrome Chromecast" -Service Any -Program $ChromeApp `
+    -PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress $CHROMECAST_IP -LocalPort 32768-61000 -RemotePort 32768-61000 `
+    -EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+    -Description "Allow Chromecast Inbound UDP data"
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Chrome QUIC" -Service Any -Program $ChromeApp `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort 443 -RemotePort Any `
--EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description "Quick UDP Internet Connections,
-Experimental transport layer network protocol developed by Google and implemented in 2013."
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "Chrome QUIC" -Service Any -Program $ChromeApp `
+    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort 443 -RemotePort Any `
+    -EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+    -Description "Quick UDP Internet Connections,
+    Experimental transport layer network protocol developed by Google and implemented in 2013."
+}

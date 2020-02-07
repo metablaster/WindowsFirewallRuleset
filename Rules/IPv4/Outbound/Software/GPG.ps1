@@ -48,18 +48,19 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 $GPGRoot = "%ProgramFiles% (x86)\GnuPG"
 
-# Test if installation exists on system
-$global:InstallationStatus = Test-Installation "GPG" ([ref]$GPGRoot) $Terminate
-
 #
 # Rules for GPG
 #
 
-$Program = "$GPGRoot\bin\dirmngr.exe"
-Test-File $Program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Certificate key servers" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 53, 443 `
--LocalUser $UserAccountsSDDL `
--Description "For Kleopatra server key lookup and key publish."
+# Test if installation exists on system
+if ((Test-Installation "GPG" ([ref]$GPGRoot)) -or $Force)
+{
+    $Program = "$GPGRoot\bin\dirmngr.exe"
+    Test-File $Program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "Certificate key servers" -Service Any -Program $Program `
+    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 53, 443 `
+    -LocalUser $UserAccountsSDDL `
+    -Description "For Kleopatra server key lookup and key publish."
+}
