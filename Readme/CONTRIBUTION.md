@@ -71,4 +71,4 @@ Inside "Templates" folder there are few template scripts as a starting point.\
 Copy them to target location, update code and start implementing code.
 
 ## Repository folder structure
-See [DirectoryStructure.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/DirectoryStructure.md)
+See [DirectoryStructure.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/DirectoryStructure.md)
