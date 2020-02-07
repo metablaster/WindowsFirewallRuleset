@@ -40,6 +40,9 @@ $Profile = "Private, Public"
 Update-Context $IPVersion $Direction $Group
 if (!(Approve-Execute)) { exit }
 
+# First remove all existing rules matching group
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
+
 #
 # Steam installation directories
 #
@@ -47,9 +50,6 @@ $uTorrentRoot = "%SystemDrive%\Users\User\AppData\Local\uTorrent"
 
 # Test if installation exists on system
 $global:InstallationStatus = Test-Installation "uTorrent" ([ref] $uTorrentRoot) $Terminate
-
-# First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
 # Rules for uTorrent client

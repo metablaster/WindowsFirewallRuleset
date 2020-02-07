@@ -36,13 +36,16 @@ Import-Module -Name $PSScriptRoot\..\..\..\Modules\FirewallModule
 $Group = "Internet Browser"
 $Profile = "Private, Public"
 
+# Chromecast IP
+# Adjust to the Chromecast IP in your local network
+$CHROMECAST_IP = 192.168.8.50
+
 # Ask user if he wants to load these rules
 Update-Context $IPVersion $Direction $Group
 if (!(Approve-Execute)) { exit }
 
-# Chromecast IP
-# Adjust to the Chromecast IP in your local network
-$CHROMECAST_IP = 192.168.8.50
+# First remove all existing rules matching group
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
 # Browser installation directories
@@ -52,9 +55,6 @@ $ChromeApp = "$ChromeRoot\Chrome\Application\chrome.exe"
 
 # Test if installation exists on system
 $global:InstallationStatus = Test-Installation "Chrome" ([ref] $ChromeRoot) $Terminate
-
-# First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
 # Internet browser rules

@@ -40,23 +40,23 @@ $Profile = "Any"
 Update-Context $IPVersion $Direction $Group
 if (!(Approve-Execute)) { exit }
 
+# First remove all existing rules matching group
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
+
 #
 # Epic games installation directories
 #
 $EngineRoot = "%SystemDrive%\Users\User\source\repos\UnrealEngine\Engine"
 $LauncherRoot = "%ProgramFiles(x86)%\Epic Games\Launcher"
 
-# First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
-
 #
 # Rules Epic games engine
 #
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "UnrealEngine" ([ref] $EngineRoot) $Terminate
+$global:InstallationStatus = Test-Installation "UnrealEngine" ([ref] $EngineRoot) $false
 
-if ($global:InstallationStatus)
+if ($global:InstallationStatus -or !$Terminate)
 {
     $Program = "$EngineRoot\Binaries\Win64\CrashReportClientEditor-Win64-Development.exe"
     Test-File $Program
@@ -118,12 +118,10 @@ if ($global:InstallationStatus)
 #
 
 # Test if installation exists on system
-$LauncherStatus = Test-Installation "EpicGames" ([ref] $LauncherRoot)
+$global:InstallationStatus = Test-Installation "EpicGames" ([ref] $LauncherRoot) $Terminate
 
-if ($LauncherStatus -ne $null)
+if ($global:InstallationStatus -or !$Terminate)
 {
-    $global:InstallationStatus = $LauncherStatus
-
     $Program = "$LauncherRoot\Portal\Binaries\Win32\EpicGamesLauncher.exe"
     Test-File $Program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `

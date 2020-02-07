@@ -553,9 +553,9 @@ function Test-Installation
 
     if ([Array]::Find($BlackListEnvironment, [Predicate[string]]{ $FilePath.Value -like "*$($args[0])*" }))
     {
+        Set-Variable -Name WarningsDetected -Scope Global -Value $true
         Write-Warning "Bad environment variable detected, rules with environment variables that lead to user profile will not work!"
         Write-Host "NOTE: Bad path detected is: $($FilePath.Value)" -ForegroundColor Green
-        Set-Variable -Name WarningsDetected -Scope Global -Value $true
     }
 
     if (!(Test-Environment $FilePath.Value))
@@ -581,7 +581,7 @@ to: $InstallRoot" -ForegroundColor Green
         }
     }
 
-    return $true # path exists
+    return $true # path exists, true even if path bad (user profile)
 }
 
 # about: find installation directory for given program
@@ -603,6 +603,11 @@ function Find-Installation
     # otherwise firewall GUI will show full paths which is not desired for sorting reasons
     switch -Wildcard ($Program)
     {
+        "MSIAfterburner"
+        {
+            Update-Table "MSI Afterburner"
+            break
+        }
         "GPG"
         {
             Update-Table "GNU Privacy Guard"

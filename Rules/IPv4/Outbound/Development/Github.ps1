@@ -40,6 +40,9 @@ $Profile = "Private, Public"
 Update-Context $IPVersion $Direction $Group
 if (!(Approve-Execute)) { exit }
 
+# First remove all existing rules matching group
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
+
 #
 # Git and Git Desktop installation directories
 # TODO: Username?
@@ -47,15 +50,12 @@ if (!(Approve-Execute)) { exit }
 $GitRoot = "%ProgramFiles%\Git"
 $GithubRoot = "%SystemDrive%\Users\User\AppData\Local\GitHubDesktop\app-2.2.3"
 
-# First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
-
 #
 # Rules for git
 #
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "Git" ([ref] $GitRoot) $Terminate
+$global:InstallationStatus = Test-Installation "Git" ([ref] $GitRoot) $false
 
 if ($global:InstallationStatus)
 {
@@ -102,12 +102,10 @@ if ($global:InstallationStatus)
 #
 
 # Test if installation exists on system
-$GithubStatus = Test-Installation "GithubDesktop" ([ref] $GithubRoot)
+$global:InstallationStatus = Test-Installation "GithubDesktop" ([ref] $GithubRoot) $Terminate
 
-if ($GithubStatus -ne $null)
+if ($global:InstallationStatus)
 {
-    $global:InstallationStatus = $GithubStatus
-
     $Program = "$GithubRoot\GitHubDesktop.exe"
     Test-File $Program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `

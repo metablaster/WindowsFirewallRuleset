@@ -40,6 +40,9 @@ $Profile = "Private, Public"
 Update-Context $IPVersion $Direction $Group
 if (!(Approve-Execute)) { exit }
 
+# First remove all existing rules matching group
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
+
 #
 # Thunderbird installation directories
 #
@@ -47,9 +50,6 @@ $ThunderbirdRoot = "%ProgramFiles%\Mozilla Thunderbird"
 
 # Test if installation exists on system
 $global:InstallationStatus = Test-Installation "Thuderbird" ([ref] $ThunderbirdRoot) $Terminate
-
-# First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
 # Rules for Mozilla Thunderbird mail client

@@ -41,6 +41,9 @@ $Profile = "Private, Public"
 Update-Context $IPVersion $Direction $Group
 if (!(Approve-Execute)) { exit }
 
+# First remove all existing rules matching group
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
+
 #
 # Visual Studio installation directories
 #
@@ -49,16 +52,13 @@ if (!(Approve-Execute)) { exit }
 $VSRoot = Get-VSSetupInstance | Select-VSSetupInstance -Latest | Select-Object -ExpandProperty InstallationPath
 $VSInstallerRoot = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
 
-# First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
-
 #
 # Visual Studio rules for executables from root directory
 # Rules that apply to Microsoft Visual Studio
 #
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "VisualStudio" ([ref] $VSRoot) $Terminate
+$global:InstallationStatus = Test-Installation "VisualStudio" ([ref] $VSRoot) $false
 
 if ($global:InstallationStatus)
 {

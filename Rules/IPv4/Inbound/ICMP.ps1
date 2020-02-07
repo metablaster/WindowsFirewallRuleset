@@ -57,6 +57,9 @@ $RemoteAddrLAN = "LocalSubnet4"
 Update-Context $IPVersion $Direction $Group
 if (!(Approve-Execute)) { exit }
 
+# First remove all existing rules matching group
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
+
 <#
 If a network client fails to get an IP address using DHCP, it can discover an address on its own using APIPA.
 To get an IPv4 address, the client will select an address at random in the range 169.254.1.0 to 169.254.254.255 (inclusive), with a netmask of 255.255.0.0.
@@ -68,9 +71,6 @@ The entire address range 169.254.0.0/16 has been set aside for "link local" addr
 They should not be manually assigned or assigned using DHCP.
 #>
 # $APIPA = "169.254.1.0-169.254.254.255"
-
-# First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
 # ICMP type filtering for All profiles

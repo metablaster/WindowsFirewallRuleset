@@ -40,14 +40,14 @@ $Profile = "Private, Public"
 Update-Context $IPVersion $Direction $Group
 if (!(Approve-Execute)) { exit }
 
+# First remove all existing rules matching group
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
+
 #
 # Nvidia installation directories
 #
 $NvidiaRoot64 = "%ProgramFiles%\NVIDIA Corporation"
 $NvidiaRoot86 = "%ProgramFiles(x86)%\NVIDIA Corporation"
-
-# First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
 # Rules for Nvidia 64bit executables
@@ -100,7 +100,7 @@ if ($global:InstallationStatus)
 #
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "Nvidia86" ([ref] $NvidiaRoot86) $false
+$global:InstallationStatus = Test-Installation "Nvidia86" ([ref] $NvidiaRoot86) $Terminate
 
 if ($global:InstallationStatus)
 {

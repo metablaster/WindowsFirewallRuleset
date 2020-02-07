@@ -44,6 +44,9 @@ $Profile = "Private, Public"
 Update-Context $IPVersion $Direction $Group
 if (!(Approve-Execute)) { exit }
 
+# First remove all existing rules matching group
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
+
 #
 # Greenshot installation directories
 #
@@ -51,9 +54,6 @@ $GreenshotRoot = "%LocalAppData%\Greenshot"
 
 # Test if installation exists on system
 $global:InstallationStatus = Test-Installation "Greenshot" ([ref]$GreenshotRoot) $Terminate
-
-# First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
 # Rules for Greenshot

@@ -40,13 +40,13 @@ $Profile = "Private, Public"
 Update-Context $IPVersion $Direction $Group
 if (!(Approve-Execute)) { exit }
 
+# First remove all existing rules matching group
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
+
 #
 # Steam installation directories
 #
 $WarThunderRoot = "%ProgramFiles(x86)%\Steam\steamapps\common\War Thunder"
-
-# First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 # Test if installation exists on system
 $global:InstallationStatus = Test-Installation "WarThunder" ([ref] $WarThunderRoot) $Terminate

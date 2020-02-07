@@ -40,6 +40,9 @@ $Profile = "Private, Public"
 Update-Context $IPVersion $Direction $Group
 if (!(Approve-Execute)) { exit }
 
+# First remove all existing rules matching group
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
+
 #
 # DnsCrypt installation directories
 #
@@ -47,9 +50,6 @@ $DnsCryptRoot = "%ProgramFiles%\Simple DNSCrypt x64"
 
 # Test if installation exists on system
 $global:InstallationStatus = Test-Installation "DnsCrypt" ([ref] $DnsCryptRoot) $Terminate
-
-# First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
 # DnsCrypt rules

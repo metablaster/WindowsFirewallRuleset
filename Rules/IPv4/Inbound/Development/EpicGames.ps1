@@ -40,6 +40,9 @@ $Profile = "Any"
 Update-Context $IPVersion $Direction $Group
 if (!(Approve-Execute)) { exit }
 
+# First remove all existing rules matching group
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
+
 #
 # Epic games installation directories
 #
@@ -47,9 +50,6 @@ $EngineRoot = "%SystemDrive%\Users\User\source\repos\UnrealEngine\Engine"
 
 # Test if installation exists on system
 $global:InstallationStatus = Test-Installation "UnrealEngine" ([ref] $EngineRoot) $Terminate
-
-# First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 # TODO: need to see listening ports
 

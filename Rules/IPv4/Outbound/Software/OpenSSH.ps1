@@ -40,6 +40,9 @@ $Profile = "Private, Public"
 Update-Context $IPVersion $Direction $Group
 if (!(Approve-Execute)) { exit }
 
+# First remove all existing rules matching group
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
+
 #
 # OpenSSH installation directories
 #
@@ -47,9 +50,6 @@ $OpenSSHRoot = "%ProgramFiles%\OpenSSH-Win64"
 
 # Test if installation exists on system
 $global:InstallationStatus = Test-Installation "OpenSSH" ([ref] $OpenSSHRoot) $Terminate
-
-# First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
 # OpenSSH rules

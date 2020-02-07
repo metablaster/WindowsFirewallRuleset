@@ -40,6 +40,9 @@ $Profile = "Private, Public"
 Update-Context $IPVersion $Direction $Group
 if (!(Approve-Execute)) { exit }
 
+# First remove all existing rules matching group
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
+
 #
 # Office installation directories
 #
@@ -48,9 +51,6 @@ $OfficeShared = "%ProgramFiles%\Common Files\microsoft shared"
 
 # Test if installation exists on system
 $global:InstallationStatus = Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot) $Terminate
-
-# First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
 # Microsoft office rules

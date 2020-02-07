@@ -40,6 +40,9 @@ $Profile = "Private, Public"
 Update-Context $IPVersion $Direction $Group
 if (!(Approve-Execute)) { exit }
 
+# First remove all existing rules matching group
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
+
 #
 # OBSStudio installation directories
 #
@@ -47,9 +50,6 @@ $OBSStudioRoot = "%ProgramFiles%\obs-studio\bin\64bit"
 
 # Test if installation exists on system
 $global:InstallationStatus = Test-Installation "OBSStudio" ([ref]$OBSStudioRoot) $Terminate
-
-# First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
 # Rules for OBSStudio

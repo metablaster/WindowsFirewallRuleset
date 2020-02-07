@@ -40,6 +40,9 @@ $Profile = "Private, Public"
 Update-Context $IPVersion $Direction $Group
 if (!(Approve-Execute)) { exit }
 
+# First remove all existing rules matching group
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
+
 #
 # PasswordSafe installation directories
 #
@@ -47,9 +50,6 @@ $PasswordSafeRoot = "%ProgramFiles%\Password Safe4"
 
 # Test if installation exists on system
 $global:InstallationStatus = Test-Installation "PasswordSafe" ([ref]$PasswordSafeRoot) $Terminate
-
-# First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
 # Rules for PasswordSafe

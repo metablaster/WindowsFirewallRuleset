@@ -40,6 +40,9 @@ $Profile = "Any"
 Update-Context $IPVersion $Direction $Group
 if (!(Approve-Execute)) { exit }
 
+# First remove all existing rules matching group
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
+
 #
 # TeamViewer installation directories
 #
@@ -47,9 +50,6 @@ $TeamViewerRoot = "%ProgramFiles(x86)%\TeamViewer"
 
 # Test if installation exists on system
 $global:InstallationStatus = Test-Installation "TeamViewer" ([ref]$TeamViewerRoot) $Terminate
-
-# First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
 # Rules for TeamViewer remote control

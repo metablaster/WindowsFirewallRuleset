@@ -36,13 +36,16 @@ Import-Module -Name $PSScriptRoot\..\..\..\Modules\FirewallModule
 $Group = "Internet Browser"
 $Profile = "Private, Public"
 
+# Chromecast IP
+# Adjust to Chromecast IP in your local network
+$CHROMECAST_IP = 192.168.1.50
+
 # Ask user if he wants to load these rules
 Update-Context $IPVersion $Direction $Group
 if (!(Approve-Execute)) { exit }
 
-# Chromecast IP
-# Adjust to Chromecast IP in your local network
-$CHROMECAST_IP = 192.168.1.50
+# First remove all existing rules matching group
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
 # Browser installation directories
@@ -54,9 +57,6 @@ $ChromeRoot = "%SystemDrive%\Users\User\AppData\Local\Google"
 $FirefoxRoot = "%SystemDrive%\Users\User\AppData\Local\Mozilla Firefox"
 $YandexRoot = "%SystemDrive%\Users\User\AppData\Local\Yandex"
 $TorRoot = "%SystemDrive%\Users\User\AppData\Local\Tor Browser"
-
-# First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
 # Internet browser rules
@@ -277,7 +277,7 @@ if ($global:InstallationStatus)
 #
 
 # Test if installation exists on system
-$global:InstallationStatus = Test-Installation "Tor" ([ref] $TorRoot) $false
+$global:InstallationStatus = Test-Installation "Tor" ([ref] $TorRoot) $Terminate
 
 if ($global:InstallationStatus)
 {
