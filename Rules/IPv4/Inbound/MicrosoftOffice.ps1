@@ -57,6 +57,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $Force)
 {
     $Program = "$OfficeRoot\OUTLOOK.EXE"
     Test-File $Program
+
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Outlook" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -69,6 +70,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $Force)
     # https://docs.microsoft.com/en-us/skypeforbusiness/plan-your-deployment/network-requirements/ports-and-protocols
     $Program = "$OfficeRoot\lync.exe"
     Test-File $Program
+    
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Skype for business" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

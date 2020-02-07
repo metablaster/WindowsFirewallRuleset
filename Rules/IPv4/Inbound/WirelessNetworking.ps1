@@ -46,9 +46,12 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Windows system predefined rules for Wireless Display
 #
 
+$Program = "%SystemRoot%\System32\WUDFHost.exe"
+Test-File $Program
+
 # TODO: local user may need to be 'Any', needs testing.
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Wireless Display" -Service Any -Program "%SystemRoot%\System32\WUDFHost.exe" `
+-DisplayName "Wireless Display" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $WNInterface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort 443 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_UserModeDrivers `
@@ -56,9 +59,12 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 The driver host process (Wudfhost.exe) is a child process of the driver manager service.
 loads one or more UMDF driver DLLs, in addition to the framework DLLs."
 
+$Program = "%SystemRoot%\System32\CastSrv.exe"
+Test-File $Program
+
 # TODO: remote port unknown, rule added because predefined rule for UDP exists
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Wireless Display Infrastructure back channel" -Service Any -Program "%SystemRoot%\System32\CastSrv.exe" `
+-DisplayName "Wireless Display Infrastructure back channel" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $WNInterface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort 7250 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `
@@ -106,9 +112,12 @@ For more info see description of WLAN AutoConfig service."
 # Windows system predefined rules for WiFi Direct Network Discovery
 #
 
+$Program = "%SystemRoot%\System32\dasHost.exe"
+Test-File $Program
+
 # TODO: missing protocol and port for WiFi Direct Network Discovery
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Wi-Fi Direct Network Discovery" -Service Any -Program "%SystemRoot%\System32\dasHost.exe" `
+-DisplayName "Wi-Fi Direct Network Discovery" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType Wired, Wireless `
 -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_LocalService `

@@ -51,15 +51,18 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Predefined rueles for remote desktop, here split for private and public profile
 #
 
+$Program = "%SystemRoot%\System32\RdpSa.exe"
+Test-File $Program
+
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Remote desktop - Shadow" -Service Any -Program "%SystemRoot%\System32\RdpSa.exe" `
+-DisplayName "Remote desktop - Shadow" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy DeferToApp -LocalUser Any `
 -Description "Inbound rule for the Remote Desktop service to allow shadowing of an existing Remote Desktop session. "
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Remote desktop - Shadow" -Service Any -Program "%SystemRoot%\System32\RdpSa.exe" `
+-DisplayName "Remote desktop - Shadow" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy DeferToApp -LocalUser Any `

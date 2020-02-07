@@ -46,9 +46,13 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Windows system predefined rules for Wireless Display
 #
 
+# NOTE: several rules down use this path
+$WUDFHost = "%SystemRoot%\System32\WUDFHost.exe"
+Test-File $WUDFHost
+
 # TODO: local user may need to be 'Any', needs testing.
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Wireless Display" -Service Any -Program "%SystemRoot%\System32\WUDFHost.exe" `
+-DisplayName "Wireless Display" -Service Any -Program $WUDFHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $WNInterface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 443 `
 -LocalUser $NT_AUTHORITY_UserModeDrivers `
@@ -58,7 +62,7 @@ loads one or more UMDF driver DLLs, in addition to the framework DLLs."
 
 # TODO: remote port unknown, rule added because predefined rule for UDP exists
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Wireless Display" -Service Any -Program "%SystemRoot%\System32\WUDFHost.exe" `
+-DisplayName "Wireless Display" -Service Any -Program $WUDFHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $WNInterface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -LocalUser $NT_AUTHORITY_UserModeDrivers -LocalOnlyMapping $false -LooseSourceMapping $false `
@@ -104,9 +108,12 @@ For more info see description of WLAN AutoConfig service."
 # Windows system predefined rules for WiFi Direct Network Discovery
 #
 
+$Program = "%SystemRoot%\System32\dasHost.exe"
+Test-File $Program
+
 # TODO: missing protocol and port for WiFi Direct Network Discovery
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Wi-Fi Direct Network Discovery" -Service Any -Program "%SystemRoot%\System32\dasHost.exe" `
+-DisplayName "Wi-Fi Direct Network Discovery" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Public -InterfaceType Wired, Wireless `
 -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 -LocalUser $NT_AUTHORITY_LocalService `
@@ -143,14 +150,14 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "Wireless Portable Devices to allow use of the Simple Service Discovery Protocol."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Wireless portable devices" -Service Any -Program "%SystemRoot%\System32\WUDFHost.exe" `
+-DisplayName "Wireless portable devices" -Service Any -Program $WUDFHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $WNInterface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 15740 `
 -LocalUser Any `
 -Description "Wireless Portable Devices to allow use of the Usermode Driver Framework."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Wireless portable devices" -Service Any -Program "%SystemRoot%\System32\WUDFHost.exe" `
+-DisplayName "Wireless portable devices" -Service Any -Program $WUDFHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $WNInterface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Intranet4 -LocalPort Any -RemotePort 15740 `
 -LocalUser Any `

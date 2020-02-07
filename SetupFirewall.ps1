@@ -30,6 +30,9 @@ Write-Host "Powershell version: $($PSVersionTable.PSVersion)"
 # Includes
 Import-Module -Name $PSScriptRoot\Modules\FirewallModule
 
+# Basic checks
+Test-File $ServiceHost
+
 #
 # Execute IPv4 rules
 #

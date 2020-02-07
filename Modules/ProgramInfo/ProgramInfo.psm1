@@ -66,23 +66,20 @@ function Test-File
         [string] $FilePath
     )
 
-    if ($LoadRules)
+    $ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($FilePath)
+
+    if (!([System.IO.File]::Exists($ExpandedPath)))
     {
-        $ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($FilePath)
+        # NOTE: number for Get-PSCallStack is 1, which means 2 function calls back and then get script name (call at 0 is this script)
+        $Script = (Get-PSCallStack)[1].Command
+        $SearchPath = Split-Path -Path $ExpandedPath -Parent
+        $Executable = Split-Path -Path $ExpandedPath -Leaf
+        Set-Variable -Name WarningsDetected -Scope Global -Value $true
+        
+        Write-Warning "Executable '$Executable' was not found, rule won't have any effect
+        Searched path was: $SearchPath"
 
-        if (!([System.IO.File]::Exists($ExpandedPath)))
-        {
-            # NOTE: number for Get-PSCallStack is 1, which means 2 function calls back and then get script name (call at 0 is this script)
-            $Script = (Get-PSCallStack)[1].Command
-            $SearchPath = Split-Path -Path $ExpandedPath -Parent
-            $Executable = Split-Path -Path $ExpandedPath -Leaf
-            Set-Variable -Name WarningsDetected -Scope Global -Value $true
-            
-            Write-Warning "Executable '$Executable' was not found, rule won't have any effect
-         Searched path was: $SearchPath"
-
-            Write-Host "NOTE: To fix the problem find '$Executable' then adjust the path in $Script and re-run the script later again" -ForegroundColor Green
-        }
+        Write-Host "NOTE: To fix the problem find '$Executable' then adjust the path in $Script and re-run the script later again" -ForegroundColor Green
     }
 }
 

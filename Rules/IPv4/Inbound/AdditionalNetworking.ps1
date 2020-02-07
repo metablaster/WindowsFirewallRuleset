@@ -97,43 +97,46 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 -Description "Inbound rule for the Cast to Device server to allow streaming using HTTP."
 
+$mdeserver = "%SystemRoot%\System32\mdeserver.exe"
+Test-File $mdeserver
+
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Cast to Device streaming server (RTCP)" -Service Any -Program "%SystemRoot%\System32\mdeserver.exe" `
+-DisplayName "Cast to Device streaming server (RTCP)" -Service Any -Program $mdeserver `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress PlayToDevice4 -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "Inbound ror the Cast to Device server to allow streaming using RTSP and RTP."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Cast to Device streaming server (RTCP)" -Service Any -Program "%SystemRoot%\System32\mdeserver.exe" `
+-DisplayName "Cast to Device streaming server (RTCP)" -Service Any -Program $mdeserver `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Cast to Device streaming server (RTCP)" -Service Any -Program "%SystemRoot%\System32\mdeserver.exe" `
+-DisplayName "Cast to Device streaming server (RTCP)" -Service Any -Program $mdeserver `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Cast to Device streaming server (RTSP)" -Service Any -Program "%SystemRoot%\System32\mdeserver.exe" `
+-DisplayName "Cast to Device streaming server (RTSP)" -Service Any -Program $mdeserver `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress PlayToDevice4 -LocalPort 23554-23556 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Cast to Device streaming server (RTSP)" -Service Any -Program "%SystemRoot%\System32\mdeserver.exe" `
+-DisplayName "Cast to Device streaming server (RTSP)" -Service Any -Program $mdeserver `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 23554-23556 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Cast to Device streaming server (RTSP)" -Service Any -Program "%SystemRoot%\System32\mdeserver.exe" `
+-DisplayName "Cast to Device streaming server (RTSP)" -Service Any -Program $mdeserver `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort 23554-23556 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `
@@ -197,8 +200,11 @@ If this service is stopped the AllJoyn clients that do not have their own bundle
 # Proximity sharing predefined rules
 #
 
+$Program = "%SystemRoot%\System32\ProximityUxHost.exe"
+Test-File $Program
+
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Proximity sharing" -Service Any -Program "%SystemRoot%\System32\ProximityUxHost.exe" `
+-DisplayName "Proximity sharing" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `

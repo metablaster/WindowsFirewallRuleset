@@ -47,8 +47,11 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Rules that apply to Windows programs and utilities, which are not handled by predefined rules
 #
 
+$Program = "%SystemRoot%\System32\mstsc.exe"
+Test-File $Program
+
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Remote desktop - User Mode" -Service Any -Program "%SystemRoot%\System32\mstsc.exe" `
+-DisplayName "Remote desktop - User Mode" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 3389 `
 -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
@@ -57,7 +60,7 @@ Allows users to connect interactively to a remote computer.
 To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System properties control panel item."
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Remote desktop - User Mode" -Service Any -Program "%SystemRoot%\System32\mstsc.exe" `
+-DisplayName "Remote desktop - User Mode" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 3389 `
 -LocalUser $UserAccountsSDDL `

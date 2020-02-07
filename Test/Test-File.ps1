@@ -34,7 +34,6 @@ $OfficeShared = "%ProgramFiles%\Common Files\microsoft shared"
 $VSInstallService = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.x86.exe"
 
 Write-Host "Installation status for VisualStudioInstaller"
-$LoadRules = $true
 
 Write-Host ""
 Write-Host "Test-File '$VSInstallService'"

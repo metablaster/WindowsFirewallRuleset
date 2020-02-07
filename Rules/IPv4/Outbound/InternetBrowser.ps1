@@ -107,8 +107,8 @@ if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot)) -or $Force)
 if ((Test-Installation "Chrome" ([ref] $ChromeRoot)) -or $Force)
 {
     $ChromeApp = "$ChromeRoot\Chrome\Application\chrome.exe"
-
     Test-File $ChromeApp
+
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Chrome HTTP" -Service Any -Program $ChromeApp `
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -208,8 +208,8 @@ if ((Test-Installation "Chrome" ([ref] $ChromeRoot)) -or $Force)
 if ((Test-Installation "Firefox" ([ref] $FirefoxRoot)) -or $Force)
 {
     $FirefoxApp = "$FirefoxRoot\firefox.exe"
-
     Test-File $FirefoxApp
+
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Firefox HTTP" -Service Any -Program $FirefoxApp `
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -240,8 +240,8 @@ if ((Test-Installation "Firefox" ([ref] $FirefoxRoot)) -or $Force)
 if ((Test-Installation "Yandex" ([ref] $YandexRoot)) -or $Force)
 {
     $YandexApp = "$YandexRoot\YandexBrowser\Application\browser.exe"
-
     Test-File $YandexApp
+
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Yandex HTTP" -Service Any -Program $YandexApp `
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -272,8 +272,8 @@ if ((Test-Installation "Yandex" ([ref] $YandexRoot)) -or $Force)
 if ((Test-Installation "Tor" ([ref] $TorRoot)) -or $Force)
 {
     $TorApp = "$TorRoot\Browser\TorBrowser\Tor\tor.exe"
-
     Test-File $TorApp
+    
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Tor HTTP" -Service Any -Program $TorApp `
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

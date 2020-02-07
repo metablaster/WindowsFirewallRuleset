@@ -65,6 +65,7 @@ if ((Test-Installation "Chrome" ([ref] $ChromeRoot)) -or $Force)
 {
     $ChromeApp = "$ChromeRoot\Chrome\Application\chrome.exe"
     Test-File $ChromeApp
+    
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Google Chrome mDNS IPv4" -Service Any -Program $ChromeApp `
     -PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
