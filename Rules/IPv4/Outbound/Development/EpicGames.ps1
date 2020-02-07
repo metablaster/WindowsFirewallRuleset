@@ -66,7 +66,7 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description "Used to send crash report to epic games."
+    -Description "Used to send crash report to epic games." | Format-Output
 
     $Program = "$EngineRoot\Binaries\DotNET\GitDependencies.exe"
     Test-File $Program
@@ -75,7 +75,7 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
     -LocalUser $UserAccountsSDDL `
-    -Description "Engine repo source tool to dowload binaries."
+    -Description "Engine repo source tool to dowload binaries." | Format-Output
 
     $Program = "$EngineRoot\Binaries\DotNET\SwarmAgent.exe"
     Test-File $Program
@@ -84,7 +84,7 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 80 `
     -LocalUser $UserAccountsSDDL `
-    -Description "Swarm agent is used for build farm."
+    -Description "Swarm agent is used for build farm." | Format-Output
 
     $Program = "$EngineRoot\Binaries\Win64\UE4Editor.exe"
     Test-File $Program
@@ -93,7 +93,7 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
     -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-    -Description ""
+    -Description "" | Format-Output
 
     $Program = "$EngineRoot\Binaries\Win64\UE4Editor.exe"
     Test-File $Program
@@ -102,7 +102,7 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description ""
+    -Description "" | Format-Output
 
     $Program = "$EngineRoot\Binaries\DotNET\UnrealBuildTool.exe"
     Test-File $Program
@@ -111,7 +111,7 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
     -LocalUser $UserAccountsSDDL `
-    -Description ""
+    -Description "" | Format-Output
 }
 
 #
@@ -128,7 +128,7 @@ if ((Test-Installation "EpicGames" ([ref] $LauncherRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description "Used for initial setup only"
+    -Description "Used for initial setup only" | Format-Output
 
     $Program = "$LauncherRoot\Portal\Binaries\Win64\EpicGamesLauncher.exe"
     Test-File $Program
@@ -137,7 +137,7 @@ if ((Test-Installation "EpicGames" ([ref] $LauncherRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 5222 `
     -LocalUser $UserAccountsSDDL `
-    -Description ""
+    -Description "" | Format-Output
 
     $Program = "$LauncherRoot\Portal\Binaries\Win64\EpicGamesLauncher.exe"
     Test-File $Program
@@ -146,5 +146,5 @@ if ((Test-Installation "EpicGames" ([ref] $LauncherRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
     -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-    -Description ""
+    -Description "" | Format-Output
 }

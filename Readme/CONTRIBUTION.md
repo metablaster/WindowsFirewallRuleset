@@ -56,8 +56,10 @@ Only if this is not enough we can try to look for 3rd party modules which could 
 3rd party code/module license should of course be compatible with existing licenses.
 
 ## Commits and pull requests
-Push small commits that solve or improve single problem.\
+Push small commits that solve or improve single problem, to reduce merge conflicts among other things.\
 Do not wait too much to push large commits which are not clear enough in terms what issue is supposed to be resolved or improved.
+
+**Avoid making huge changes to existing code** without first discusing the matter, new code is not problem thogh.
 
 ## Portability and other systems
 At the moment we focus on Windows Firewall, if you have skills to port code to other firewalls go ahead, but it's not priority.

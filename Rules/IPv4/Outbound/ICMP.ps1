@@ -99,7 +99,7 @@ the type code changed to 0, and the checksum recomputed.
 
 Code:
 0
-Code 0 may be received from a gateway or a host."
+Code 0 may be received from a gateway or a host." | Format-Output
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Timestamp (13)" -Service Any -Program $Program `
@@ -126,7 +126,7 @@ reversed, the type code changed to 14, and the checksum recomputed.
 
 Code:
 0 = pointer indicates the error.
-Code 0 may be received from a gateway or a host."
+Code 0 may be received from a gateway or a host." | Format-Output
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Router Advertisement (9)" -Service Any -Program $Program `
@@ -142,7 +142,8 @@ A router sends periodic as well as solicited Router Advertisements out its adver
 A router might want to send Router Advertisements without advertising itself as a default router.
 For instance, a router might advertise prefixes for stateless address autoconfiguration while not wishing to forward packets.
 Unsolicited Router Advertisements are not strictly periodic:
-the interval between subsequent transmissions is randomized to reduce the probability of synchronization with the advertisements from other routers on the same link."
+the interval between subsequent transmissions is randomized to reduce the probability of
+synchronization with the advertisements from other routers on the same link." | Format-Output
 
 # TODO: figure out if redirects can be unsolicited, to set up EdgeTraversalPolicy (currently allowing by logic of comments)
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
@@ -170,7 +171,7 @@ Code:
 1 = Redirect datagrams for the Host.
 2 = Redirect datagrams for the Type of Service and Network.
 3 = Redirect datagrams for the Type of Service and Host.
-Codes 0, 1, 2, and 3 may be received from a gateway."
+Codes 0, 1, 2, and 3 may be received from a gateway." | Format-Output
 
 #
 # ICMP type filtering for public profile
@@ -196,7 +197,7 @@ the type code changed to 0, and the checksum recomputed.
 
 Code:
 0
-Code 0 may be received from a gateway or a host."
+Code 0 may be received from a gateway or a host." | Format-Output
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Destination Unreachable (3)" -Service Any -Program $Program `
@@ -218,7 +219,7 @@ Code:
 4 = fragmentation needed and DF set;
 5 = source route failed.
 Codes 0, 1, 4, and 5 may be received from a gateway.
-Codes 2 and 3 may be received from a host."
+Codes 2 and 3 may be received from a host." | Format-Output
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Router Solicitation (10)" -Service Any -Program $Program `
@@ -233,7 +234,7 @@ Sending Router Solicitations:
 When an interface becomes enabled, a host may be unwilling to wait for the next unsolicited Router Advertisement
 to locate default routers or learn prefixes.
 To obtain Router Advertisements quickly, a host SHOULD transmit up to MAX_RTR_SOLICITATIONS Router Solicitation messages,
-each separated by at least RTR_SOLICITATION_INTERVAL seconds."
+each separated by at least RTR_SOLICITATION_INTERVAL seconds." | Format-Output
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Time Exceeded (11)" -Service Any -Program $Program `
@@ -254,7 +255,7 @@ Code:
 0 = time to live exceeded in transit;
 1 = fragment reassembly time exceeded.
 Code 0 may be received from a gateway.
-Code 1 may be received from a host."
+Code 1 may be received from a host." | Format-Output
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Parameter Problem (12)" -Service Any -Program $Program `
@@ -272,7 +273,7 @@ The source network and address from the original datagram's data.
 
 Code:
 0 = pointer indicates the error.
-Code 0 may be received from a gateway or a host."
+Code 0 may be received from a gateway or a host." | Format-Output
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Timestamp Reply (14)" -Service Any -Program $Program `
@@ -299,7 +300,7 @@ reversed, the type code changed to 14, and the checksum recomputed.
 
 Code:
 0 = pointer indicates the error.
-Code 0 may be received from a gateway or a host."
+Code 0 may be received from a gateway or a host." | Format-Output
 
 #
 # ICMP type filtering for private and domain profile
@@ -325,7 +326,7 @@ the type code changed to 0, and the checksum recomputed.
 
 Code:
 0
-Code 0 may be received from a gateway or a host."
+Code 0 may be received from a gateway or a host." | Format-Output
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Destination Unreachable (3)" -Service Any -Program $Program `
@@ -347,7 +348,7 @@ Code:
 4 = fragmentation needed and DF set;
 5 = source route failed.
 Codes 0, 1, 4, and 5 may be received from a gateway.
-Codes 2 and 3 may be received from a host."
+Codes 2 and 3 may be received from a host." | Format-Output
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Router Solicitation (10)" -Service Any -Program $Program `
@@ -362,7 +363,7 @@ Sending Router Solicitations:
 When an interface becomes enabled, a host may be unwilling to wait for the next unsolicited Router Advertisement
 to locate default routers or learn prefixes.
 To obtain Router Advertisements quickly, a host SHOULD transmit up to MAX_RTR_SOLICITATIONS Router Solicitation messages,
-each separated by at least RTR_SOLICITATION_INTERVAL seconds."
+each separated by at least RTR_SOLICITATION_INTERVAL seconds." | Format-Output
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Time Exceeded (11)" -Service Any -Program $Program `
@@ -383,7 +384,7 @@ Code:
 0 = time to live exceeded in transit;
 1 = fragment reassembly time exceeded.
 Code 0 may be received from a gateway.
-Code 1 may be received from a host."
+Code 1 may be received from a host." | Format-Output
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Parameter Problem (12)" -Service Any -Program $Program `
@@ -401,7 +402,7 @@ The source network and address from the original datagram's data.
 
 Code:
 0 = pointer indicates the error.
-Code 0 may be received from a gateway or a host."
+Code 0 may be received from a gateway or a host." | Format-Output
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Timestamp Reply (14)" -Service Any -Program $Program `
@@ -428,4 +429,4 @@ reversed, the type code changed to 14, and the checksum recomputed.
 
 Code:
 0 = pointer indicates the error.
-Code 0 may be received from a gateway or a host."
+Code 0 may be received from a gateway or a host." | Format-Output

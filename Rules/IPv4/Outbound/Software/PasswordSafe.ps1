@@ -65,5 +65,5 @@ if ((Test-Installation "PasswordSafe" ([ref]$PasswordSafeRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description "Password safe check for updates."
+    -Description "Password safe check for updates." | Format-Output
 }

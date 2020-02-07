@@ -67,5 +67,5 @@ if ((Test-Installation "OpenSSH" ([ref] $OpenSSHRoot)) -or $Force)
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 22 `
     -LocalUser $UserAccountsSDDL `
     -Description "OpenSSH is connectivity tool for remote login with the SSH protocol,
-    This rule applies to open source version of OpenSSH."
+    This rule applies to open source version of OpenSSH." | Format-Output
 }

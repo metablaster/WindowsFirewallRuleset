@@ -69,5 +69,5 @@ if ((Test-Installation "TargetProgram" ([ref]$TargetProgramRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 26002 `
     -LocalUser $UserAccountsSDDL `
-    -Description ""
+    -Description "" | Format-Output
 }

@@ -55,14 +55,14 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 -LocalUser $UserAccountsSDDL `
--Description "Temporary open port 443 to internet, and disable ASAP."
+-Description "Temporary open port 443 to internet, and disable ASAP." | Format-Output
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Port 80" -Service Any -Program Any `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 -LocalUser $UserAccountsSDDL `
--Description "Temporary open port 80 to internet, and disable ASAP."
+-Description "Temporary open port 80 to internet, and disable ASAP." | Format-Output
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Installer" -Service Any -Program Any `
@@ -70,11 +70,11 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser $UserAccountsSDDL `
 -Description "Enable only to let some installer update or communicate to internet such as office update, and disable ASAP.
-required for ie. downloaded Click-to-Run which does not have persitent location."
+required for ie. downloaded Click-to-Run which does not have persitent location." | Format-Output
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Services" -Service Any -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser $UserAccountsSDDL `
--Description "Enable only to let a service communicate to internet, useful for troubleshooting, and disable ASAP."
+-Description "Enable only to let a service communicate to internet, useful for troubleshooting, and disable ASAP." | Format-Output

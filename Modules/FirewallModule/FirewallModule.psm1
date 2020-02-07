@@ -262,7 +262,7 @@ function Test-PowershellVersion
         if ($PowershellVersion -eq "5.1")
         {
             Write-Host ""
-            Write-Host "Powershell version: $PowershellVersion"
+            Write-Host "Powershell version: $PowershellVersion" -ForegroundColor Cyan
             Write-Host ""
         }
         else
@@ -273,6 +273,25 @@ function Test-PowershellVersion
             Write-Host ""
             exit
         }
+    }
+}
+
+# about: format firewall rule output for display
+# input: CimInstance from Net-NewFirewallRule
+# outbput: formatted text
+# sample: Net-NewFirewallRule ... | Format-Output 
+function Format-Output
+{
+    [CmdletBinding()]
+    param (
+        [parameter(Mandatory = $true,
+        ValueFromPipeline = $true)]
+        [Microsoft.Management.Infrastructure.CimInstance] $Rule
+    )
+
+    Process
+    {
+        Write-Host "Load Rule: [$($Rule | Select-Object -ExpandProperty Group)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
     }
 }
 
@@ -301,7 +320,7 @@ New-Variable -Name Context -Scope Global -Value "Context not set"
 # Global variable to tell if all scripts ran clean
 New-Variable -Name WarningsDetected -Scope Global -Value $false
 # To force loading rules regardless of presence of program set to true
-New-Variable -Name Force -Scope Global -Value $false
+New-Variable -Name Force -Scope Global -Value $true
 
 #
 # Function exports
@@ -314,6 +333,7 @@ Export-ModuleMember -Function Show-SDDL
 Export-ModuleMember -Function Write-Note
 Export-ModuleMember -Function Get-NetworkServices
 Export-ModuleMember -Function Test-PowershellVersion
+Export-ModuleMember -Function Format-Output
 
 #
 # Variable exports

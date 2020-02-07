@@ -65,7 +65,7 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 26002 `
     -LocalUser $UserAccountsSDDL `
-    -Description "Main game interface."
+    -Description "Main game interface." | Format-Output
 
     # TODO: browser for some reason needs any interface and any remote address
     # need to investigate why
@@ -76,7 +76,7 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 80, 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description "In game HTML browser"
+    -Description "In game HTML browser" | Format-Output
 
     $Program = "$PokerStarsRoot\PokerStarsOnlineUpdate.exe"
     Test-File $Program
@@ -85,7 +85,7 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
     -LocalUser $UserAccountsSDDL `
-    -Description ""
+    -Description "" | Format-Output
 
     $Program = "$PokerStarsRoot\PokerStarsUpdate.exe"
     Test-File $Program
@@ -94,5 +94,5 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
     -LocalUser $UserAccountsSDDL `
-    -Description "Game updater"
+    -Description "Game updater" | Format-Output
 }

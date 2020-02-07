@@ -76,10 +76,8 @@ function Test-File
         $Executable = Split-Path -Path $ExpandedPath -Leaf
         Set-Variable -Name WarningsDetected -Scope Global -Value $true
         
-        Write-Warning "Executable '$Executable' was not found, rule won't have any effect
-        Searched path was: $SearchPath"
-
-        Write-Note "To fix the problem find '$Executable' then adjust the path in $Script and re-run the script later again"
+        Write-Warning "Executable '$Executable' was not found, rules for '$Executable' won't have any effect`nSearched path was: $SearchPath"
+        Write-Note "To fix the problem find '$Executable' then adjust the path in`n$Script and re-run the script later again"
     }
 }
 
@@ -462,7 +460,7 @@ function Update-Table
         [bool] $UserProfile = $false
     )
 
-    # TODO: Searchstring may pick up irrelevant paths (ie. unreal)
+    # TODO: SearchString may pick up irrelevant paths (ie. unreal)
     Initialize-Table
     $ComputerName = Get-ComputerName
     $SystemPrograms = Get-SystemPrograms $ComputerName
@@ -538,6 +536,7 @@ function Edit-Table
         [string] $InstallRoot
     )
 
+    # TODO: how can path be valid for all users??
     # test since input may come from user input too!
     if (Test-Environment $InstallRoot)
     {
@@ -875,9 +874,8 @@ function Find-Installation
         # NOTE: number for Get-PSCallStack is 2, which means 3 function calls back and then get script name (call at 0 and 1 is this script)
         $Script = (Get-PSCallStack)[2].Command
     
-        Write-Note "If you installed $Program elsewhere you can input the correct path now
-        or adjust the path in $Script and re-run the script later.
-        otherwise ignore this warning if you don't have $Program installed."
+        # TODO: this loops seem to be skiped, probably missing Test-File, need to check
+        Write-Note "If you installed $Program elsewhere you can input the correct path now `nor adjust the path in $Script and re-run the script later. `notherwise ignore this warning if you don't have $Program installed."
         if (Approve-Execute "Yes" "Rule group for $Program" "Do you want to input path now?")
         {
             while ($global:InstallTable.Rows.Count -eq 0)

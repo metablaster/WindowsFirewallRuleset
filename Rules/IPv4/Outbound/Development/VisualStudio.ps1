@@ -70,7 +70,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description "git bundled with Visual Studio over HTTPS."
+    -Description "git bundled with Visual Studio over HTTPS." | Format-Output
 
     $Program = "$VSRoot\Common7\IDE\CommonExtensions\Microsoft\TeamFoundation\Team Explorer\Git\usr\bin\ssh.exe"
     Test-File $Program
@@ -79,7 +79,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 22 `
     -LocalUser $UserAccountsSDDL `
-    -Description "Team explorer Git (looks like it's not used if using custom git installation)."
+    -Description "Team explorer Git (looks like it's not used if using custom git installation)." | Format-Output
 
     $Program = "$VSRoot\Common7\IDE\devenv.exe"
     Test-File $Program
@@ -88,7 +88,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description "Check for updates, symbols download and built in browser."
+    -Description "Check for updates, symbols download and built in browser." | Format-Output
 
     $Program = "$VSRoot\Common7\IDE\Extensions\Microsoft\LiveShare\Agent\vsls-agent.exe"
     Test-File $Program
@@ -97,7 +97,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description "liveshare extension."
+    -Description "liveshare extension." | Format-Output
 
     $Program = "$VSRoot\Common7\IDE\PerfWatson2.exe"
     Test-File $Program
@@ -106,7 +106,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description "PerfWatson monitors delays on the UI thread, and submits error reports on these delays with the user’s consent."
+    -Description "PerfWatson monitors delays on the UI thread, and submits error reports on these delays with the user’s consent." | Format-Output
 
     # TODO: same comment in 4 rules
     $Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.Host.CLR.x86.exe"
@@ -118,7 +118,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $Force)
     -LocalUser $UserAccountsSDDL `
     -Description "ServiceHub services provide identity (sign-in for VS),
     and support for internal services (like extension managenent, compiler support, etc).
-    These are not optional and are designed to be running side-by-side with devenv.exe."
+    These are not optional and are designed to be running side-by-side with devenv.exe." | Format-Output
 
     $Program = "$VSRoot\Common7\ServiceHub\controller\Microsoft.ServiceHub.Controller.exe"
     Test-File $Program
@@ -129,7 +129,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $Force)
     -LocalUser $UserAccountsSDDL `
     -Description "ServiceHub services provide identity (sign-in for VS),
     and support for internal services (like extension managenent, compiler support, etc).
-    These are not optional and are designed to be running side-by-side with devenv.exe."
+    These are not optional and are designed to be running side-by-side with devenv.exe." | Format-Output
 
     $Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.SettingsHost.exe"
     Test-File $Program
@@ -140,7 +140,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $Force)
     -LocalUser $UserAccountsSDDL `
     -Description "ServiceHub programs  provide identity (sign-in for VS),
     and support for internal services (like extension managenent, compiler support, etc).
-    These are not optional and are designed to be running side-by-side with devenv.exe."
+    These are not optional and are designed to be running side-by-side with devenv.exe." | Format-Output
 
     $Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.IdentityHost.exe"
     Test-File $Program
@@ -151,7 +151,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $Force)
     -LocalUser $UserAccountsSDDL `
     -Description "ServiceHub services provide identity (sign-in for VS),
     and support for internal services (like extension managenent, compiler support, etc).
-    These are not optional and are designed to be running side-by-side with devenv.exe."
+    These are not optional and are designed to be running side-by-side with devenv.exe." | Format-Output
 
     $Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.RoslynCodeAnalysisService32.exe"
     Test-File $Program
@@ -160,7 +160,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description "Managed language service (Roslyn)."
+    -Description "Managed language service (Roslyn)." | Format-Output
 
     $Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.VSDetouredHost.exe"
     Test-File $Program
@@ -171,7 +171,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $Force)
     -LocalUser $UserAccountsSDDL `
     -Description "ServiceHub services  provide identity (sign-in for VS),
     and support for internal services (like extension managenent, compiler support, etc).
-    These are not optional and are designed to be running side-by-side with devenv.exe."
+    These are not optional and are designed to be running side-by-side with devenv.exe." | Format-Output
 
     $Program = "$VSRoot\VC\Tools\MSVC\14.24.28314\bin\Hostx86\x64\vctip.exe"
     Test-File $Program
@@ -180,7 +180,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description "Runs when opening up VS, vctip.exe is 'Microsoft VC compiler and tools experience improvement data uploader'"
+    -Description "Runs when opening up VS, vctip.exe is 'Microsoft VC compiler and tools experience improvement data uploader'" | Format-Output
 }
 
 #
@@ -198,7 +198,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $Fo
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description "Run when updating or using add features to VS in installer."
+    -Description "Run when updating or using add features to VS in installer." | Format-Output
 
     # TODO: testing:  # (Get-SDDLFromAccounts @("NT AUTHORITY\SYSTEM", "$UserAccount")) `
     $Program = "$VSInstallerRoot\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\BackgroundDownload.exe"
@@ -209,7 +209,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $Fo
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $NT_AUTHORITY_System `
     -Description "Used when 'Automatically download updates' in VS2019?
-    Tools->Options->Environment->Product Updates->Automatically download updates."
+    Tools->Options->Environment->Product Updates->Automatically download updates." | Format-Output
 
     $Program = "$VSInstallerRoot\resources\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.x86.exe"
     Test-File $Program
@@ -218,7 +218,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $Fo
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description "Run when Installing update or using add features to VS, also for sign in, in report problem window."
+    -Description "Run when Installing update or using add features to VS, also for sign in, in report problem window." | Format-Output
 
     $Program = "$VSInstallerRoot\setup.exe"
     Test-File $Program
@@ -227,7 +227,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $Fo
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description "Used for updates since 16.0.3."
+    -Description "Used for updates since 16.0.3." | Format-Output
 
     $Program = "$VSInstallerRoot\vs_installer.exe"
     Test-File $Program
@@ -236,7 +236,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $Fo
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
     -LocalUser $UserAccountsSDDL `
-    -Description "Looks like it's not used anymore, but vs_installerservice is used instead"
+    -Description "Looks like it's not used anymore, but vs_installerservice is used instead" | Format-Output
 
     $Program = "$VSInstallerRoot\vs_installershell.exe"
     Test-File $Program
@@ -245,7 +245,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $Fo
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description "Run when running VS Installer for add new features"
+    -Description "Run when running VS Installer for add new features" | Format-Output
 
     # TODO: needs testing what users are needed for VSIX rules
     $Program = "$VSInstallerRoot\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\VSIXInstaller.exe"
@@ -255,7 +255,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $Fo
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description ""
+    -Description "" | Format-Output
 
     $Program = "$VSInstallerRoot\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\VSIXAutoUpdate.exe"
     Test-File $Program
@@ -264,7 +264,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $Fo
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $NT_AUTHORITY_System `
-    -Description ""
+    -Description "" | Format-Output
 
     $Program = "$VSInstallerRoot\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\VSIXConfigurationUpdater.exe"
     Test-File $Program
@@ -273,5 +273,5 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $Fo
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description ""
+    -Description "" | Format-Output
 }

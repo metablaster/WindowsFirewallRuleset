@@ -75,14 +75,14 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress DNS6 -LocalPort Any -RemotePort 53 `
 -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description "Rule to allow IPv6 DNS requests."
+-Description "Rule to allow IPv6 DNS requests." | Format-Output
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Domain Name System" -Service Any -Program System `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress DefaultGateway6 -LocalPort Any -RemotePort 53 `
 -LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description "Rule to allow IPv6 DNS requests by System to default gateway."
+-Description "Rule to allow IPv6 DNS requests by System to default gateway." | Format-Output
 
 #
 # mDNS (Multicast Domain Name System)
@@ -102,7 +102,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
 within small networks that do not include a local name server.
 It is a zero-configuration service, using essentially the same programming interfaces,
-packet formats and operating semantics as the unicast Domain Name System (DNS)."
+packet formats and operating semantics as the unicast Domain Name System (DNS)." | Format-Output
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Multicast Domain Name System" -Service Dnscache -Program $ServiceHost `
@@ -112,7 +112,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
 within small networks that do not include a local name server.
 It is a zero-configuration service, using essentially the same programming interfaces,
-packet formats and operating semantics as the unicast Domain Name System (DNS)."
+packet formats and operating semantics as the unicast Domain Name System (DNS)." | Format-Output
 
 #
 # DHCP (Dynamic Host Configuration Protocol)
@@ -123,7 +123,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress DHCP6 -LocalPort 546 -RemotePort 547 `
 -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description "Allows DHCPv6 messages for stateful auto-configuration."
+-Description "Allows DHCPv6 messages for stateful auto-configuration." | Format-Output
 
 #
 # IGMP (Internet Group Management Protocol)
@@ -142,7 +142,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet6 -LocalPort Any -RemotePort IPHTTPSout `
 -LocalUser $NT_AUTHORITY_System `
--Description "Allow IPv6 IPHTTPS tunneling technology to provide connectivity across HTTP proxies and firewalls."
+-Description "Allow IPv6 IPHTTPS tunneling technology to provide connectivity across HTTP proxies and firewalls." | Format-Output
 
 #
 # IPv6 Encapsulation
@@ -153,4 +153,4 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol 41 -LocalAddress Any -RemoteAddress $ISATAP_Remotes -LocalPort Any -RemotePort Any `
 -LocalUser $NT_AUTHORITY_System `
--Description "Rule required to permit IPv6 traffic for ISATAP (Intra-Site Automatic Tunnel Addressing Protocol) and 6to4 tunneling services."
+-Description "Rule required to permit IPv6 traffic for ISATAP (Intra-Site Automatic Tunnel Addressing Protocol) and 6to4 tunneling services." | Format-Output

@@ -67,7 +67,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description ""
+    -Description "" | Format-Output
 
     # Clicktorun.exe starts downloading the most recent version of itself.
     # After finishing the download Clicktorun.exe starts THE DOWNLOADED Version which then downloads the new office version.
@@ -84,7 +84,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $Force)
     -LocalUser $NT_AUTHORITY_System `
     -Description "Required for updates to work. Click-to-Run is an alternative to the traditional Windows Installer-based (MSI) method
     of installing and updating Office, that utilizes streaming and virtualization technology
-    to reduce the time required to install Office and help run multiple versions of Office on the same computer."
+    to reduce the time required to install Office and help run multiple versions of Office on the same computer." | Format-Output
 
     $Program = "$OfficeShared\ClickToRun\OfficeC2RClient.exe"
     Test-File $Program
@@ -94,7 +94,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $NT_AUTHORITY_System `
-    -Description "Allows users to check for and install updates for Office on demand."
+    -Description "Allows users to check for and install updates for Office on demand." | Format-Output
 
     $Program = "$OfficeRoot\MSOSYNC.EXE"
     Test-File $Program
@@ -105,7 +105,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $Force)
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $UserAccountsSDDL `
     -Description "The Office Document Cache is a concept used in Microsoft Office Upload Center
-    to give you a way to see the state of files you are uploading to a SharePoint server. "
+    to give you a way to see the state of files you are uploading to a SharePoint server. " | Format-Output
 
     $Program = "$OfficeRoot\EXCEL.EXE"
     Test-File $Program
@@ -115,7 +115,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description ""
+    -Description "" | Format-Output
 
     $Program = "$OfficeRoot\ADDINS\Microsoft Power Query for Excel Integrated\bin\Microsoft.Mashup.Container.NetFX40.exe"
     Test-File $Program
@@ -125,7 +125,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description "Used to query data from web in excel."
+    -Description "Used to query data from web in excel." | Format-Output
 
     $Program = "$OfficeRoot\CLVIEW.EXE"
     Test-File $Program
@@ -135,7 +135,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description ""
+    -Description "" | Format-Output
 
     $Program = "$OfficeRoot\OUTLOOK.EXE"
     Test-File $Program
@@ -145,42 +145,42 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description ""
+    -Description "" | Format-Output
 
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Outlook (IMAP SSL)" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 993 `
     -LocalUser $UserAccountsSDDL `
-    -Description "Incoming mail server over SSL."
+    -Description "Incoming mail server over SSL." | Format-Output
 
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Outlook (IMAP)" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 143 `
     -LocalUser $UserAccountsSDDL `
-    -Description "Incoming mail server."
+    -Description "Incoming mail server." | Format-Output
 
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Outlook (POP3 SSL)" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 110 `
     -LocalUser $UserAccountsSDDL `
-    -Description "Incoming mail server over SSL."
+    -Description "Incoming mail server over SSL." | Format-Output
 
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Outlook (POP3)" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 995 `
     -LocalUser $UserAccountsSDDL `
-    -Description "Incoming mail server."
+    -Description "Incoming mail server." | Format-Output
 
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Outlook (SMTP)" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 25 `
     -LocalUser $UserAccountsSDDL `
-    -Description "Outgoing mail server."
+    -Description "Outgoing mail server." | Format-Output
 
     $Program = "$OfficeRoot\POWERPNT.EXE"
     Test-File $Program
@@ -190,7 +190,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description ""
+    -Description "" | Format-Output
 
     $Program = "$OfficeRoot\WINPROJ.EXE"
     Test-File $Program
@@ -200,7 +200,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description ""
+    -Description "" | Format-Output
 
     $Program = "$OfficeRoot\MSPUB.EXE"
     Test-File $Program
@@ -210,7 +210,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description ""
+    -Description "" | Format-Output
 
     $Program = "$OfficeRoot\SDXHelper.exe"
     Test-File $Program
@@ -220,7 +220,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description "this executable is used when later Office versions are installed in parallel with an earlier version so that they can peacefully coexist."
+    -Description "this executable is used when later Office versions are installed in parallel with an earlier version so that they can peacefully coexist." | Format-Output
 
     $Program = "$OfficeRoot\lync.exe"
     Test-File $Program
@@ -230,7 +230,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 33033 `
     -LocalUser $UserAccountsSDDL `
-    -Description "Skype for business, previously lync."
+    -Description "Skype for business, previously lync." | Format-Output
 
     $Program = "$OfficeRoot\msoia.exe"
     Test-File $Program
@@ -241,7 +241,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $Force)
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $UserAccountsSDDL `
     -Description "The telemetry agent collects several types of telemetry data for Office.
-    https://docs.microsoft.com/en-us/deployoffice/compat/data-that-the-telemetry-agent-collects-in-office"
+    https://docs.microsoft.com/en-us/deployoffice/compat/data-that-the-telemetry-agent-collects-in-office" | Format-Output
 
     $Program = "$OfficeRoot\VISIO.EXE"
     Test-File $Program
@@ -251,7 +251,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description ""
+    -Description "" | Format-Output
 
     $Program = "$OfficeRoot\WINWORD.EXE"
     Test-File $Program
@@ -261,5 +261,5 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description ""
+    -Description "" | Format-Output
 }

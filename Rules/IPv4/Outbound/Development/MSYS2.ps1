@@ -65,7 +65,7 @@ if ((Test-Installation "MSYS2" ([ref] $MSYS2Root)) -or $Force)
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21, 80 `
     -LocalUser $UserAccountsSDDL `
-    -Description "download with curl in MSYS2 shell"
+    -Description "download with curl in MSYS2 shell" | Format-Output
 
     $Program = "$MSYS2Root\usr\bin\git.exe"
     Test-File $Program
@@ -74,7 +74,7 @@ if ((Test-Installation "MSYS2" ([ref] $MSYS2Root)) -or $Force)
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 9418 `
     -LocalUser $UserAccountsSDDL `
-    -Description "git access over git:// protocol"
+    -Description "git access over git:// protocol" | Format-Output
 
     $Program = "$MSYS2Root\usr\bin\git-remote-https.exe"
     Test-File $Program
@@ -83,7 +83,7 @@ if ((Test-Installation "MSYS2" ([ref] $MSYS2Root)) -or $Force)
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description "git over HTTPS in MSYS2 shell"
+    -Description "git over HTTPS in MSYS2 shell" | Format-Output
 
     $Program = "$MSYS2Root\usr\bin\ssh.exe"
     Test-File $Program
@@ -92,7 +92,7 @@ if ((Test-Installation "MSYS2" ([ref] $MSYS2Root)) -or $Force)
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 22 `
     -LocalUser $UserAccountsSDDL `
-    -Description "git over SSH in MSYS2 shell"
+    -Description "git over SSH in MSYS2 shell" | Format-Output
 
     $Program = "$MSYS2Root\mingw64\bin\glade.exe"
     Test-File $Program
@@ -101,7 +101,7 @@ if ((Test-Installation "MSYS2" ([ref] $MSYS2Root)) -or $Force)
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description "Get online help for glade"
+    -Description "Get online help for glade" | Format-Output
 
     $Program = "$MSYS2Root\usr\bin\pacman.exe"
     Test-File $Program
@@ -110,7 +110,7 @@ if ((Test-Installation "MSYS2" ([ref] $MSYS2Root)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description "pacman package manager in MSYS2 shell"
+    -Description "pacman package manager in MSYS2 shell" | Format-Output
 
     $Program = "$MSYS2Root\usr\bin\pacman.exe"
     Test-File $Program
@@ -119,5 +119,5 @@ if ((Test-Installation "MSYS2" ([ref] $MSYS2Root)) -or $Force)
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
     -LocalUser $UserAccountsSDDL `
-    -Description "HTTP dowload manager"
+    -Description "HTTP dowload manager" | Format-Output
 }

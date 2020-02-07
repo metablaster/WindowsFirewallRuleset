@@ -68,7 +68,7 @@ if ((Test-Installation "DnsCrypt" ([ref] $DnsCryptRoot)) -or $Force)
     -LocalUser $NT_AUTHORITY_System `
     -Description "DNSCrypt is a protocol that authenticates communications between a DNS client and a DNS resolver.
     It prevents DNS spoofing. It uses cryptographic signatures to verify that responses originate from the chosen DNS resolver and haven’t been tampered with.
-    This rule applies to Simple DnsCrypt which uses dnscrypt-proxy."
+    This rule applies to Simple DnsCrypt which uses dnscrypt-proxy." | Format-Output
 
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "DnsCrypt" -Service Any -Program $Program `
@@ -77,5 +77,5 @@ if ((Test-Installation "DnsCrypt" ([ref] $DnsCryptRoot)) -or $Force)
     -LocalUser $NT_AUTHORITY_System `
     -Description "DNSCrypt is a protocol that authenticates communications between a DNS client and a DNS resolver.
     It prevents DNS spoofing. It uses cryptographic signatures to verify that responses originate from the chosen DNS resolver and haven’t been tampered with.
-    This rule applies to Simple DnsCrypt which uses dnscrypt-proxy."
+    This rule applies to Simple DnsCrypt which uses dnscrypt-proxy." | Format-Output
 }

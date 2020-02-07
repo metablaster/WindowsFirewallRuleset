@@ -27,6 +27,7 @@ SOFTWARE.
 . $PSScriptRoot\DirectionSetup.ps1
 . $PSScriptRoot\..\IPSetup.ps1
 Import-Module -Name $PSScriptRoot\..\..\..\Modules\UserInfo
+Import-Module -Name $PSScriptRoot\..\..\..\Modules\ProgramInfo
 Import-Module -Name $PSScriptRoot\..\..\..\Modules\FirewallModule
 
 # Test Powershell version required for this project
@@ -60,7 +61,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "Remote desktop connection.
 Allows users to connect interactively to a remote computer.
-To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System properties control panel item."
+To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System properties control panel item." | Format-Output
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Remote desktop - User Mode" -Service Any -Program $Program `
@@ -69,4 +70,4 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $UserAccountsSDDL `
 -Description "Remote desktop connection.
 Allows users to connect interactively to a remote computer.
-To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System properties control panel item."
+To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System properties control panel item." | Format-Output

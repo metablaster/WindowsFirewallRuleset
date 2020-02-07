@@ -64,14 +64,14 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress 127.0.0.1 -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `
--Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources."
+-Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources." | Format-Output
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Loopback" -Service Any -Program Any `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 -Direction $Direction -Protocol Any -LocalAddress 127.0.0.1 -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any `
--Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources."
+-Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources." | Format-Output
 
 #
 # mDNS (Multicast Domain Name System)
@@ -91,7 +91,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
 within small networks that do not include a local name server.
 It is a zero-configuration service, using essentially the same programming interfaces,
-packet formats and operating semantics as the unicast Domain Name System (DNS)."
+packet formats and operating semantics as the unicast Domain Name System (DNS)." | Format-Output
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform -PolicyStore $PolicyStore `
 -DisplayName "Multicast Domain Name System" -Service Dnscache -Program $ServiceHost `
@@ -101,7 +101,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
 within small networks that do not include a local name server.
 It is a zero-configuration service, using essentially the same programming interfaces,
-packet formats and operating semantics as the unicast Domain Name System (DNS)."
+packet formats and operating semantics as the unicast Domain Name System (DNS)." | Format-Output
 
 #
 # DHCP (Dynamic Host Configuration Protocol)
@@ -112,7 +112,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress DHCP4 -LocalPort 68 -RemotePort 67 `
 -EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description "Allow DHCPv4 messages for stateful auto-configuration."
+-Description "Allow DHCPv4 messages for stateful auto-configuration." | Format-Output
 
 #
 # IGMP (Internet Group Management Protocol)
@@ -123,7 +123,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol 2 -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
--Description "IGMP messages are sent and received by nodes to create, join and depart multicast groups."
+-Description "IGMP messages are sent and received by nodes to create, join and depart multicast groups." | Format-Output
 
 #
 # IPHTTPS (IPv4 over HTTPS)
@@ -134,7 +134,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort IPHTTPSIn -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
--Description "Allow IPv4 IPHTTPS tunneling technology to provide connectivity across HTTP proxies and firewalls."
+-Description "Allow IPv4 IPHTTPS tunneling technology to provide connectivity across HTTP proxies and firewalls." | Format-Output
 
 #
 # Teredo
@@ -146,4 +146,4 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Teredo -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "Allow Teredo edge traversal, a technology that provides address assignment and automatic tunneling
-for unicast IPv6 traffic when an IPv6/IPv4 host is located behind an IPv4 network address translator."
+for unicast IPv6 traffic when an IPv6/IPv4 host is located behind an IPv4 network address translator." | Format-Output

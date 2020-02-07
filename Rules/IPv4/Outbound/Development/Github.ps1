@@ -67,7 +67,7 @@ if ((Test-Installation "Git" ([ref] $GitRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description "curl download tool"
+    -Description "curl download tool" | Format-Output
 
     # TODO: unsure if it's 443 or 80
     $Program = "$GitRoot\mingw64\bin\git.exe"
@@ -77,7 +77,7 @@ if ((Test-Installation "Git" ([ref] $GitRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description ""
+    -Description "" | Format-Output
 
     $Program = "$GitRoot\mingw64\libexec\git-core\git-remote-https.exe"
     Test-File $Program
@@ -86,7 +86,7 @@ if ((Test-Installation "Git" ([ref] $GitRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description "git HTTPS acces (https cloning)"
+    -Description "git HTTPS acces (https cloning)" | Format-Output
 
     $Program = "$GitRoot\usr\bin\ssh.exe"
     Test-File $Program
@@ -95,7 +95,7 @@ if ((Test-Installation "Git" ([ref] $GitRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 22 `
     -LocalUser $UserAccountsSDDL `
-    -Description "git SSH acces"
+    -Description "git SSH acces" | Format-Output
 }
 
 #
@@ -112,7 +112,7 @@ if ((Test-Installation "GithubDesktop" ([ref] $GithubRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description ""
+    -Description "" | Format-Output
 
     $Program = "$GithubRoot\resources\app\git\mingw64\bin\git-remote-https.exe"
     Test-File $Program
@@ -121,5 +121,5 @@ if ((Test-Installation "GithubDesktop" ([ref] $GithubRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description "cloning repos"
+    -Description "cloning repos" | Format-Output
 }
