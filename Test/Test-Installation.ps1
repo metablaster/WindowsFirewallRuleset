@@ -44,16 +44,16 @@ $TestBadVariable2 = "%UserProfile%\crazyFolder"
 
 Write-Host ""
 Write-Host "Test-Installation 'MicrosoftOffice' $OfficeRoot"
-Test-Installation "MicrosoftOffice" ([ref]$OfficeRoot) $false
+Test-Installation "MicrosoftOffice" ([ref]$OfficeRoot)
 
 Write-Host ""
 Write-Host "Test-Installation 'TeamViewer' $TeamViewerRoot"
-Test-Installation "TeamViewer" ([ref]$TeamViewerRoot) $false
+Test-Installation "TeamViewer" ([ref]$TeamViewerRoot)
 
 Write-Host ""
 Write-Host "Test-Installation 'VisualStudio' $TestBadVariable"
-Test-Installation "VisualStudio" ([ref]$TestBadVariable) $false
+Test-Installation "VisualStudio" ([ref]$TestBadVariable)
 
 Write-Host ""
 Write-Host "Test-Installation 'BadVariable' $TestBadVariable2"
-Test-Installation "BadVariable" ([ref]$TestBadVariable2) $true
+Test-Installation "BadVariable" ([ref]$TestBadVariable2)

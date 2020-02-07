@@ -24,50 +24,23 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Show-SDDL
+# Run all tests
 #
 
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+Import-Module -Name $PSScriptRoot\Modules\FirewallModule
 
 # Test Powershell version required for this project
 Test-PowershellVersion
 
-# Experiment with different path values to see what the ACL objects do
-$TestPath = "C:\Users\" #Not inherited
-# $TestPath = "C:\users\Public\desktop\" #Inherited
-# $TestPath = "HKCU:\" #Not Inherited
-# $TestPath = "HKCU:\Software" #Inherited
-# $TestPath = "HKLM:\" #Not Inherited
+# Recusively get powershell scripts in input folder
+$Files = Get-ChildItem -Path $PSScriptRoot\Test -Recurse -Filter *.ps1
+if (!$Files)
+{
+    Write-Warning "No powershell script files found"
+    return
+}
 
-Write-Host ""
-Write-Host "Path:"
-Write-Host "************************"
-$TestPath
-
-Write-Host ""
-Write-Host "ACL.AccessToString:"
-Write-Host "************************"
-
-$ACL = Get-ACL $TestPath
-$ACL.AccessToString
-
-Write-Host ""
-Write-Host "Access entry details:"
-Write-Host "************************"
-
-$ACL.Access | Format-list *
-
-Write-Host ""
-Write-Host "SDDL:"
-Write-Host "************************"
-
-$ACL.SDDL
-
-# Call with named parameter binding 
-# $ACL | Show-SDDL
-
-# Or call with parameter string
-Show-SDDL $ACL.SDDL
-
-Write-Host ""
+# Run them all
+$Files | ForEach-Object {
+    & $_.FullName
+}
