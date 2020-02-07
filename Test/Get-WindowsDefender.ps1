@@ -1,6 +1,6 @@
 
 #
-# Unit test for Test-Function
+# Unit test for Get-WindowsDefender
 #
 
 # Uncomment modules as needed

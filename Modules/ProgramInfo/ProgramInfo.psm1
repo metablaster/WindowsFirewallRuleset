@@ -94,6 +94,26 @@ function Test-Environment
     return (Test-Path -Path ([System.Environment]::ExpandEnvironmentVariables($FilePath)))
 }
 
+# about: check if service exists on system
+# input: service name (not display name)
+# output: warning and info message if service not found
+# sample: Test-Service dnscache
+function Test-Service
+{
+    param (
+        [parameter(Mandatory = $true)]
+        [string] $Service
+    )
+
+    if (!(Get-Service -Name $Service -ErrorAction SilentlyContinue))
+    {
+        Set-Variable -Name WarningsDetected -Scope Global -Value $true
+        
+        Write-Warning "Service '$Service' not found, rule won't have any effect"
+        Write-Note "To fix the problem update or comment out all firewall rules for '$Service' service"
+    }
+}
+
 # about: format path into firewall compatible path
 # input: path to folder
 # output: formatted path, includes environment variables, stripped off of junk
@@ -1212,6 +1232,7 @@ Export-ModuleMember -Function Get-NetFramework
 Export-ModuleMember -Function Get-WindowsKits
 Export-ModuleMember -Function Get-WindowsSDK
 Export-ModuleMember -Function Get-WindowsDefender
+Export-ModuleMember -Function Test-Service
 
 # For debugging only
 Export-ModuleMember -Function Update-Table

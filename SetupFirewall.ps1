@@ -28,10 +28,15 @@ Write-Host ""
 Write-Host "Powershell version: $($PSVersionTable.PSVersion)"
 
 # Includes
+Import-Module -Name $PSScriptRoot\Modules\ProgramInfo
 Import-Module -Name $PSScriptRoot\Modules\FirewallModule
 
-# Basic checks
+# Check all rules that apply to windows services
 Test-File $ServiceHost
+Get-NetworkServices $PSScriptRoot\Rules\IPv4
+Get-Content -Path $PSScriptRoot\Rules\IPv4\NetworkServices.txt | ForEach-Object {
+    Test-Service $_
+}
 
 #
 # Execute IPv4 rules

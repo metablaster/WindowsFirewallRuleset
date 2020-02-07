@@ -165,6 +165,85 @@ function Convert-SDDLToACL
     return $ACL
 }
 
+# about: Write informational note with 'NOTE:' label and green text
+# input: string to write
+# output: informational message: NOTE: sample note
+# sample: Write-Note "sample note"
+function Write-Note
+{
+    param (
+        [parameter(Mandatory = $true)]
+        [string] $Note
+    )
+
+    Write-Host "NOTE: $Note" -ForegroundColor Green
+}
+
+# about: Scan all scripts in repository and get windows service names involved in rules
+# input: Root folder name which to scan
+# output: None, file with the list of services is made
+# sample: Get-NetworkServices C:\PathToRepo
+function Get-NetworkServices
+{
+    param (
+        [parameter(Mandatory = $true)]
+        [string] $Folder
+    )
+
+    if (!(Test-Path -Path $Folder))
+    {
+        Write-Warning "Unable to locate path '$Folder'"
+        return
+    }
+
+    # Recusively get powershell scripts in input folder
+    $Files = Get-ChildItem -Path $Folder -Recurse -Filter *.ps1
+    if (!$Files)
+    {
+        Write-Warning "No powershell script files found in '$Folder'"
+        return
+    }
+
+    $Content = @()
+    # Filter out service names from each powershell file in input folder
+    $Files | Foreach-Object {
+        Get-Content $_.FullName | Where-Object {
+            if ($_ -match "(?<= -Service )(.*)(?= -Program)")
+            {
+                $Content += $Matches[0]
+            }
+        }
+    }
+
+    if (!$Content)
+    {
+        Write-Warning "No matches found in any of the bellow files:"
+        Write-Host "$($Files | Select-Object -ExpandProperty Name)"
+        return
+    }
+
+    # Get rid of duplicate matches and known bad values
+    $Content = $Content | Select-Object -Unique
+    $Content = $Content | Where-Object { $_ -ne '$Service' -and $_ -ne "Any" }
+
+    # File name where to save all matches
+    $File = "$PSScriptRoot\..\..\Rules\IPv4\NetworkServices.txt"
+
+    # If output file exists clear it
+    # otherwise create a new file
+    if (Test-Path -Path $File)
+    {
+        Clear-Content -Path $File
+    }
+    else
+    {
+        New-Item -ItemType File -Path $File
+    }
+
+    # Save filtered services to a new file 
+    Add-Content -Path $File -Value $Content
+    Write-Note "$($Content.Count) services involved in firewall rules"
+}
 
 #
 # Module variables
@@ -200,6 +279,8 @@ Export-ModuleMember -Function Approve-Execute
 Export-ModuleMember -Function Update-Context
 Export-ModuleMember -Function Convert-SDDLToACL
 Export-ModuleMember -Function Show-SDDL
+Export-ModuleMember -Function Write-Note
+Export-ModuleMember -Function Get-NetworkServices
 
 #
 # Variable exports
