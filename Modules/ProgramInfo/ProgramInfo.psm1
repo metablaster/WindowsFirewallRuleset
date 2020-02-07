@@ -200,9 +200,9 @@ function Get-UserPrograms
         {
             foreach ($SubKey in $UserKey.GetSubKeyNames())
             {
-                foreach ($KeyEntry in $UserKey.OpenSubkey($SubKey))
+                foreach ($Key in $UserKey.OpenSubkey($SubKey))
                 {
-                    [string] $InstallLocation = $KeyEntry.GetValue("InstallLocation")
+                    [string] $InstallLocation = $Key.GetValue("InstallLocation")
 
                     if (![System.String]::IsNullOrEmpty($InstallLocation))
                     {
@@ -212,9 +212,13 @@ function Get-UserPrograms
                         $UserPrograms += New-Object PSObject -Property @{
                             "ComputerName" = $ComputerName
                             "RegKey" = Split-Path $SubKey.ToString() -Leaf
-                            "Name" = $KeyEntry.GetValue("displayname")
+                            "Name" = $Key.GetValue("displayname")
                             "InstallLocation" = $InstallLocation }
                     }
+                    else
+                    {
+                        Write-Warning "Failed to read registry entry $Key\InstallLocation"    
+                    }        
                 }
             }
         }
@@ -922,6 +926,7 @@ function Get-NetFramework
                 {
                     $InstallLocation = $KeyEntry.GetValue("InstallPath")
 
+                    # else not warning because some versions are built in
                     if (![System.String]::IsNullOrEmpty($InstallLocation))
                     {
                         $InstallLocation = Format-Path $InstallLocation
@@ -949,6 +954,8 @@ function Get-NetFramework
                         if (![System.String]::IsNullOrEmpty($Version))
                         {
                             $InstallLocation = $SubKeyEntry.GetValue("InstallPath")
+
+                            # else not warning because some versions are built in
                             if (![System.String]::IsNullOrEmpty($InstallLocation))
                             {
                                 $InstallLocation = Format-Path $InstallLocation
@@ -1022,16 +1029,22 @@ function Get-WindowsSDK
                     continue
                 }
 
+                $RegKey = Split-Path $SubKey.ToString() -Leaf
                 $InstallLocation = $SubKey.GetValue("InstallationFolder")
+
                 if (![System.String]::IsNullOrEmpty($InstallLocation))
                 {
                     $InstallLocation = Format-Path $InstallLocation
                 }
+                else
+                {
+                    Write-Warning "Failed to read registry entry $RegKey\InstallationFolder"    
+                }    
 
                 # we add entry regarldess of presence of install path
                 $WindowsSDK += New-Object -TypeName PSObject -Property @{
                     "ComputerName" = $ComputerName
-                    "RegKey" = Split-Path $SubKey.ToString() -Leaf
+                    "RegKey" = $RegKey
                     "Product" = $SubKey.GetValue("ProductName")
                     "Version" = $SubKey.GetValue("ProductVersion")
                     "InstallPath" = $InstallLocation }        
@@ -1110,6 +1123,59 @@ function Get-WindowsKits
     }
 }
 
+# about: Return installed Windows Defender
+# input: Computer name for which to list installed Windows Defender
+# output: Table of installed Windows Defender, version and install paths
+# sample: Get-WindowsDefender COMPUTERNAME
+function Get-WindowsDefender
+{
+    param (
+        [parameter(Mandatory = $true)]
+        [string] $ComputerName
+    )
+
+    if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
+    {
+        # 32 bit system
+        $HKLM = "SOFTWARE\Microsoft\Windows Defender"
+                
+        $RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
+        $RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
+
+        $WindowsDefender = $null
+        $RootKey = $RemoteKey.OpenSubkey($HKLM)
+
+        if (!$RootKey)
+        {
+            Write-Warning "Failed to open RootKey: $HKLM"
+        }
+        else
+        {
+            $InstallLocation = $RootKey.GetValue("InstallLocation")
+            $RegKey = Split-Path $RootKey.ToString() -Leaf
+
+            if (![System.String]::IsNullOrEmpty($InstallLocation))
+            {
+                $WindowsDefender = New-Object -TypeName PSObject -Property @{
+                    "ComputerName" = $ComputerName
+                    "RegKey" = $RegKey
+                    "InstallPath" = Format-Path $InstallLocation }
+            }
+            else
+            {
+                Write-Warning "Failed to read registry entry $RegKey\InstallLocation"    
+            }
+        }
+
+        return $WindowsDefender
+    }
+    else
+    {
+        Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact '$ComputerName'"
+        return $null
+    }
+}
+
 # Installation table holds user and program directory pair
 New-Variable -Name InstallTable -Scope Global -Value $null
 
@@ -1145,6 +1211,7 @@ Export-ModuleMember -Function Initialize-Table
 Export-ModuleMember -Function Get-NetFramework
 Export-ModuleMember -Function Get-WindowsKits
 Export-ModuleMember -Function Get-WindowsSDK
+Export-ModuleMember -Function Get-WindowsDefender
 
 # For debugging only
 Export-ModuleMember -Function Update-Table

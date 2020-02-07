@@ -27,6 +27,7 @@ SOFTWARE.
 . $PSScriptRoot\DirectionSetup.ps1
 . $PSScriptRoot\..\IPSetup.ps1
 Import-Module -Name $PSScriptRoot\..\..\..\Modules\UserInfo
+Import-Module -Name $PSScriptRoot\..\..\..\Modules\ProgramInfo
 Import-Module -Name $PSScriptRoot\..\..\..\Modules\FirewallModule
 
 #
@@ -41,6 +42,11 @@ if (!(Approve-Execute)) { exit }
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
+
+#
+# Installation directories
+#
+$WindowsDefenderRoot = Get-WindowsDefender (Get-ComputerName) | Select-Object -ExpandProperty InstallPath
 
 #
 # Windows system rules
@@ -67,7 +73,8 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser Any `
 -Description "Activate Office and KMS based software."
 
-$Program = "%SystemRoot%\System32\CompatTel\QueryAppBlock.exe"
+# TODO: this app no longer exists on system, MS changed executable name?
+<# $Program = "%SystemRoot%\System32\CompatTel\QueryAppBlock.exe"
 Test-File $Program
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
@@ -77,7 +84,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser Any `
 -Description "Its purpose is to scans your hardware, devices, and installed programs for known compatibility issues
 with a newer Windows version by comparing them against a specific database."
-
+ #>
 $Program = "%SystemRoot%\System32\backgroundTaskHost.exe"
 Test-File $Program
 
@@ -180,9 +187,6 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser Any `
 -Description "File explorer checks for digital signatures verification, windows update."
 
-$Program = "%SystemRoot%\explorer.exe"
-Test-File $Program
-
 # TODO: possible deprecate
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "File Explorer" -Service Any -Program $Program `
@@ -223,7 +227,8 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "Loads and runs 32-bit dynamic-link libraries (DLLs), There are no configurable settings for Rundll32.
 possibly no longer uses networking since windows 10."
 
-$Program = "%SystemRoot%\System32\CompatTel\wicainventory.exe"
+# TODO: this app no longer exists on system, MS changed executable name?
+<# $Program = "%SystemRoot%\System32\CompatTel\wicainventory.exe"
 Test-File $Program
 
 # TODO: no comment
@@ -233,7 +238,8 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 -LocalUser Any `
 -Description ""
-
+ #>
+ 
 $Program = "%SystemRoot%\System32\msiexec.exe"
 Test-File $Program
 
@@ -376,7 +382,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 When the system starts an update session, it launches usoclient.exe, which in turn launches usocoreworker.exe.
 Usocoreworker is the worker process for usoclient.exe and essentially it does all the work that the USO component needs done."
 
-$Program = "%ALLUSERSPROFILE%\Microsoft\Windows Defender\Platform\4.18.1911.3-0\MsMpEng.exe"
+$Program = "$WindowsDefenderRoot\MsMpEng.exe"
 Test-File $Program
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
@@ -386,17 +392,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser $NT_AUTHORITY_System `
 -Description "Anti malware service executable."
 
-$Program = "%ALLUSERSPROFILE%\Microsoft\Windows Defender\Platform\4.18.1910.4-0\MsMpEng.exe"
-Test-File $Program
-
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "Windows Defender" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser $NT_AUTHORITY_System `
--Description "Anti malware service executable."
-
-$Program = "%ALLUSERSPROFILE%\Microsoft\Windows Defender\Platform\4.18.1911.3-0\MpCmdRun.exe"
+$Program = "$WindowsDefenderRoot\MpCmdRun.exe"
 Test-File $Program
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
