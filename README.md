@@ -80,7 +80,7 @@ In any case, new system or old, **know that Home versions of Windows do not have
 6. Toggle on `Replace Command Prompt with Windows Powershell in the menu when I right click the start button`
 7. Right click on Start button in Windows system
 8. Click `Windows Powershell (Administrator)` to open Powershell as Administrator (Input Admin password if needed)
-9. Type: (or copy paste commands and hit enter) ```Get-ExecutionPolicy``` and remeber what the ouput is.
+9. Type: (or copy paste command(s) and hit enter) ```Get-ExecutionPolicy``` and remeber what the ouput is.
 10. Type: ```Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force```
 11. Type: ```cd C:\```
 12. Type: ```git clone git@github.com:metablaster/WindowsFirewallRuleset.git```
@@ -123,6 +123,33 @@ There are 2 ways to manage your rules:
 2. Editting Powershell scripts, this method gives you full control, you can improve the rules, add new ones or screw them up.
 
 What ever your setup is, you will surelly need to perform additinal work such as adding more rules in GPO to allow programs for which rules do not exist, or to reconfigure existing rules.
+
+# Checking for updates
+This repository consists of 2 branches, "master" and "develop", develop (unstable) branch is the most recent one and is the one where all commits (updates) direcrtly go so it's beta product, unlike master branch which is updated from develop branch once in a while and
+not before all scripts are fully tested, meaning master brach is stable.
+
+So if you're fine to experiment with development/beta version switch to "develop" branch and try it out, otherwise stick to master if for example development version produces errors for you.
+
+There are two methods to be up to date with firewall:
+1. This method requires you to download scripts, first use the "branch" button here on this site to switch to either master or develop branch, next use "Clone or download" button and either downlaod zip file or copy clone link and make a new clone as shown in "Quick start" section.
+
+2. Second method is good if you want to do it in powershell console without visiting this site, you will need git (link above) to check for new updates on daily, weekly or what ever other basis you want, follow bellow steps to check for updates once you installed git:
+- Right click on Start button in Windows system
+- Click `Windows Powershell` to open Powershell
+- First navigate to folder where your instance of WindowsFirewallRuleset instance is, for example:
+- Type: `dir` to list directories, ```cd SomeDirectoryName``` to move to some directory or ```cd ..``` to go one directory back
+- Type: (or copy paste command(s) and hit enter) ```cd WindowsFirewallRuleset``` to move into WindowsFirewallRuleset folder
+- This command is typed only once for initial setup: ```git remote add upstream https://github.com/metablaster/WindowsFirewallRuleset```
+- Following 2 sets of commands are typed each time, to tell git you want updates from master (stable) branch:
+- Type: ```git checkout master```
+- Type: ```git fetch upstream```
+- Type: ```git merge upstream/master```
+- Following commands are to tell git you want updates from develop (unstable/beta) branch
+- Type: ```git checkout develop```
+- Type: ```git fetch upstream```
+- Type: ```git merge upstream/develop```
+
+That's it, your scripts are now up to date, execute them as you desire (or follow steps from "Quick start" section) to apply changes to your firewall.
 
 # Contribution or suggestions
 Bellow are general notes regarldess if you're developer or just a user.\
