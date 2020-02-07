@@ -23,6 +23,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+#
+# Unit test for Test-Function
+#
+
 # TODO: Include modules you need, update licence Copyright and start writing code
 
 # Includes
@@ -33,14 +37,8 @@ SOFTWARE.
 # Import-Module -Name $PSScriptRoot\..\Modules\ComputerInfo
 Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
 
-# Test Powershell version required for this project
-Test-PowershellVersion $VersionCheck
+Write-Host ""
+Write-Host "Test-Function"
+Write-Host "***************************"
 
-# about: Sample function
-# input: nothing
-# output: $null
-# sample: Test-Function
-function Test-Function
-{
-    return $null
-}
+Test-PowershellVersion $VersionCheck

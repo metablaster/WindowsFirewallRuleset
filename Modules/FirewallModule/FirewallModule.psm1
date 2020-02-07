@@ -246,30 +246,42 @@ function Get-NetworkServices
 }
 
 # about: Test and print Powershell version required for this project
+# input: true or false to check or not to check
+# output: error message if check failed, powershell version and edition otherwise
+# sample: Test-PowershellVersion $true
 function Test-PowershellVersion
 {
     param (
         [parameter(Mandatory = $true)]
-        [string] $Folder
+        [bool] $Check
     )
 
     # disabled when runing scripts from SetupFirewall.ps1 script
-    if ($VersionCheck)
+    if ($Check)
     {
-        $PowershellVersion = "$($PSVersionTable.PSVersion | Select-Object -ExpandProperty Major)" +
-        "." + "$($PSVersionTable.PSVersion | Select-Object -ExpandProperty Minor)"
-
-        if ($PowershellVersion -eq "5.1")
+        if ($PSVersionTable.PSEdition -ne "Desktop")
         {
             Write-Host ""
-            Write-Host "Powershell version: $PowershellVersion" -ForegroundColor Cyan
+            Write-Host "Unable to proceed, 'Desktop' edition of Powershell is required to run these scripts" -ForegroundColor Red -BackgroundColor Black
+            Write-Host "Your Powershell edition is: $($PSVersionTable.PSEdition)"    
+            Write-Host ""
+            exit
+        }
+        
+        $PowershellMajor = $PSVersionTable.PSVersion | Select-Object -ExpandProperty Major
+        $PowershellMinor = $PSVersionTable.PSVersion | Select-Object -ExpandProperty Minor
+
+        if (($PowershellMajor -eq 5) -and ($PowershellMinor -ge 1))
+        {
+            Write-Host ""
+            Write-Host "Powershell edition: $($PSVersionTable.PSEdition) $PowershellMajor.$PowershellMinor" -ForegroundColor Cyan
             Write-Host ""
         }
         else
         {
             Write-Host ""
             Write-Host "Unable to proceed, Powershell version 5.1 is required to run these scripts" -ForegroundColor Red -BackgroundColor Black
-            Write-Host "Your Powershell version is: $PowershellVersion"    
+            Write-Host "Your Powershell edition is: $($PSVersionTable.PSEdition) $PowershellMajor.$PowershellMinor"    
             Write-Host ""
             exit
         }
