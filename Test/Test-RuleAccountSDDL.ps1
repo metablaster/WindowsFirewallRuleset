@@ -37,6 +37,10 @@ Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
 # Test Powershell version required for this project
 Test-PowershellVersion $VersionCheck
 
+# Ask user if he wants to load these rules
+Update-Context $IPVersion $Direction $Group
+if (!(Approve-Execute)) { exit }
+
 $Group = "Test - AccountSDDL"
 $Profile = "Any"
 
@@ -78,4 +82,4 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -LocalUser $LocalUser `
--Description ""
+-Description "" | Format-Output

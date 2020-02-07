@@ -27,12 +27,19 @@ SOFTWARE.
 # Unit test for Get-UserPrograms
 #
 
+# Includes
+. $PSScriptRoot\IPSetup.ps1
+. $PSScriptRoot\DirectionSetup.ps1
 Import-Module -Name $PSScriptRoot\..\Modules\UserInfo
 Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
 Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
 
 # Test Powershell version required for this project
 Test-PowershellVersion $VersionCheck
+
+# Ask user if he wants to load these rules
+Update-Context $IPVersion $Direction $Group
+if (!(Approve-Execute)) { exit }
 
 Write-Host "Get-UserPrograms"
 Write-Host "***************************"

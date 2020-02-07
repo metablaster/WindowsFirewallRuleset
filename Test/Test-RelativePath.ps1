@@ -37,15 +37,15 @@ Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
 # Test Powershell version required for this project
 Test-PowershellVersion $VersionCheck
 
+# Ask user if he wants to load these rules
+Update-Context $IPVersion $Direction $Group
+if (!(Approve-Execute)) { exit }
+
 #
 # Setup local variables:
 #
 $Group = "Test - Relative path"
 $Profile = "Any"
-
-# Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
-if (!(Approve-Execute)) { exit }
 
 #
 # TargetProgram installation directories

@@ -30,7 +30,7 @@ SOFTWARE.
 # . $PSScriptRoot\..\..\IPSetup.ps1
 # Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\UserInfo
 # Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\ProgramInfo
-# Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\FirewallModule
+Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\FirewallModule
 
 # Test Powershell version required for this project
 Test-PowershellVersion $VersionCheck
@@ -67,5 +67,5 @@ if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot)) -or $Force)
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort 27015 -RemotePort Any `
     -EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL `
-    -Description ""
+    -Description "" | Format-Output
 }

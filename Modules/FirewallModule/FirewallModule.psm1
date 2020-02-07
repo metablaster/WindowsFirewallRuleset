@@ -108,15 +108,15 @@ function Show-SDDL
     Write-Host "****************"
 
     # Skip index 0 where owner and/or primary group are stored            
-    For ($i=1;$i -lt $SDDLSplit.Length;$i++)
+    for ($i=1;$i -lt $SDDLSplit.Length;$i++)
     {
         $ACLSplit = $SDDLSplit[$i].Split(";")
 
-        If ($ACLSplit[1].Contains("ID"))
+        if ($ACLSplit[1].Contains("ID"))
         {
             "Inherited"
         }
-        Else
+        else
         {
             $ACLEntrySID = $null
 
