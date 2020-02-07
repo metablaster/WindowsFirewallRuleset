@@ -26,7 +26,10 @@ SOFTWARE.
 # TODO: Include modules you need, update licence Copyright and start writing code
 
 # Includes
-Import-Module -Name $PSScriptRoot\..\Modules\Indented.Net.IP
+Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+
+# Test Powershell version required for this project
+Test-PowershellVersion
 
 # about: Sample function
 # input: nothing

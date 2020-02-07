@@ -245,6 +245,28 @@ function Get-NetworkServices
     Write-Note "$($Content.Count) services involved in firewall rules"
 }
 
+# about: Test and print Powershell version required for this project
+function Test-PowershellVersion
+{
+    $PowershellVersion = "$($PSVersionTable.PSVersion | Select-Object -ExpandProperty Major)" +
+    "." + "$($PSVersionTable.PSVersion | Select-Object -ExpandProperty Minor)"
+
+    if ($PowershellVersion -eq "5.1")
+    {
+        Write-Host ""
+        Write-Host "Powershell version: $PowershellVersion"
+        Write-Host ""
+    }
+    else
+    {
+        Write-Host ""
+        Write-Host "Unable to proceed, Powershell version 5.1 is required to run these scripts" -ForegroundColor Red -BackgroundColor Black
+        Write-Host "Your Powershell version is: $PowershellVersion"    
+        Write-Host ""
+        exit
+    }
+}
+
 #
 # Module variables
 #
@@ -281,6 +303,7 @@ Export-ModuleMember -Function Convert-SDDLToACL
 Export-ModuleMember -Function Show-SDDL
 Export-ModuleMember -Function Write-Note
 Export-ModuleMember -Function Get-NetworkServices
+Export-ModuleMember -Function Test-PowershellVersion
 
 #
 # Variable exports

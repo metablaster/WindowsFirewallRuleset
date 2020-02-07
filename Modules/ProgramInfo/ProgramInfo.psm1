@@ -183,7 +183,7 @@ function Format-Path
 
     if ($Replacement.Length -eq 2)
     {
-        # There are no environment variables for input path
+        # There are no environment variables for this drive
         # Just trim trailing slashes
         return $FilePath.TrimEnd('\\')
     }

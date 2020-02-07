@@ -13,4 +13,3 @@
 11. make possible to apply rules to remote machine, currently partially supported
 12. Function to check executables for signature and virus total hash
 13. Count invalid paths in each script
-14. Check if service exists on system

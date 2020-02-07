@@ -31,6 +31,9 @@ Import-Module -Name $PSScriptRoot\..\..\..\Modules\ProgramInfo
 Import-Module -Name $PSScriptRoot\..\..\..\Modules\ComputerInfo
 Import-Module -Name $PSScriptRoot\..\..\..\Modules\FirewallModule
 
+# Test Powershell version required for this project
+Test-PowershellVersion
+
 #
 # Setup local variables:
 #

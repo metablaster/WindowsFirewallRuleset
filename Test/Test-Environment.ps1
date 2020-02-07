@@ -29,6 +29,10 @@ SOFTWARE.
 
 # Includes
 Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
+Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+
+# Test Powershell version required for this project
+Test-PowershellVersion
 
 $path1 = "%ProgramFiles%\Common Files\microsoft shared"
 $path2 = "%ProgramFiles(x86)%\Microsoft Visual Studio"

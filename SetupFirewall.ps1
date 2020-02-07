@@ -23,13 +23,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# Print Powershell version
-Write-Host ""
-Write-Host "Powershell version: $($PSVersionTable.PSVersion)"
-
 # Includes
 Import-Module -Name $PSScriptRoot\Modules\ProgramInfo
 Import-Module -Name $PSScriptRoot\Modules\FirewallModule
+
+# Test Powershell version required for this project
+Test-PowershellVersion
 
 # Check all rules that apply to windows services
 Test-File $ServiceHost

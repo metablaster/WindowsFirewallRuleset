@@ -28,6 +28,10 @@ SOFTWARE.
 #
 
 Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+
+# Test Powershell version required for this project
+Test-PowershellVersion
 
 # Experiment with different path values to see what the ACL objects do
 $path = "C:\users\User\" #Not inherited

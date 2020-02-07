@@ -28,6 +28,10 @@ SOFTWARE.
 #
 
 Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+
+# Test Powershell version required for this project
+Test-PowershellVersion
 
 Write-Host ""
 Write-Host "Get-NetworkServices"
