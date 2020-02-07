@@ -74,9 +74,8 @@ function Test-File
         $Script = (Get-PSCallStack)[1].Command
         $SearchPath = Split-Path -Path $ExpandedPath -Parent
         $Executable = Split-Path -Path $ExpandedPath -Leaf
-        Set-Variable -Name WarningsDetected -Scope Global -Value $true
         
-        Write-Warning "Executable '$Executable' was not found, rules for '$Executable' won't have any effect`nSearched path was: $SearchPath"
+        Set-Warning "Executable '$Executable' was not found, rules for '$Executable' won't have any effect`nSearched path was: $SearchPath"
         Write-Note "To fix the problem find '$Executable' then adjust the path in`n$Script and re-run the script later again"
     }
 }
@@ -104,10 +103,8 @@ function Test-Service
     )
 
     if (!(Get-Service -Name $Service -ErrorAction SilentlyContinue))
-    {
-        Set-Variable -Name WarningsDetected -Scope Global -Value $true
-        
-        Write-Warning "Service '$Service' not found, rule won't have any effect"
+    { 
+        Set-Warning "Service '$Service' not found, rule won't have any effect"
         Write-Note "To fix the problem update or comment out all firewall rules for '$Service' service"
     }
 }
@@ -235,14 +232,14 @@ function Get-UserPrograms
                     }
                     else
                     {
-                        Write-Warning "Failed to read registry entry $Key\InstallLocation"    
+                        Set-Warning "Failed to read registry entry $Key\InstallLocation"    
                     }        
                 }
             }
         }
         else
         {
-            Write-Warning "Failed to open registry key: $HKU"
+            Set-Warning "Failed to open registry key: $HKU"
         }
 
         return $UserPrograms
@@ -333,7 +330,7 @@ function Get-SystemPrograms
             }
             else
             {
-                Write-Warning "Failed to open registry key: $HKLMKey"
+                Set-Warning "Failed to open registry key: $HKLMKey"
             }
         }
 
@@ -369,7 +366,7 @@ function Get-AllUserPrograms
 
         if (!$RootKey)
         {
-            Write-Warning "Failed to open RootKey: $HKLM"
+            Set-Warning "Failed to open RootKey: $HKLM"
         }
         else
         {
@@ -379,7 +376,7 @@ function Get-AllUserPrograms
 
                 if (!$UserProducts)
                 {
-                    Write-Warning "Failed to open UserKey: $HKLMKey\Products"
+                    Set-Warning "Failed to open UserKey: $HKLMKey\Products"
                     continue
                 }
 
@@ -389,7 +386,7 @@ function Get-AllUserPrograms
 
                     if (!$ProductKey)
                     {
-                        Write-Warning "Failed to open ProductKey: $HKLMSubKey\InstallProperties"
+                        Set-Warning "Failed to open ProductKey: $HKLMSubKey\InstallProperties"
                         continue    
                     }
 
@@ -569,10 +566,11 @@ function Test-Installation
         [ref] $FilePath
     )
 
+    $LastWarningStatus = $global:WarningStatus
+
     if ([Array]::Find($BlackListEnvironment, [Predicate[string]]{ $FilePath.Value -like "*$($args[0])*" }))
     {
-        Set-Variable -Name WarningsDetected -Scope Global -Value $true
-        Write-Warning "Bad environment variable detected, rules with environment variables that lead to user profile will not work!"
+        Set-Warning "Bad environment variable detected, rules with environment variables that lead to user profile will not work!"
         Write-Note "Bad path detected is: $($FilePath.Value)"
     }
 
@@ -585,14 +583,15 @@ function Test-Installation
         else
         {
             $InstallRoot = $global:InstallTable | Select-Object -ExpandProperty InstallRoot
-
-            Write-Note "Path corrected from: $($FilePath.Value)
-to: $InstallRoot"
-
+            
+            Write-Note "Path corrected from: $($FilePath.Value)`nto: $InstallRoot"
             $FilePath.Value = $InstallRoot
             # path updated
         }
     }
+
+    # remove previously set status
+    Set-Variable -Name WarningStatus -Scope Global -Value $LastWarningStatus
 
     return $true # path exists, true even if path bad (user profile)
 }
@@ -853,9 +852,9 @@ function Find-Installation
             }
             break
         }
-        Default
+        default
         {
-            Write-Warning "Parameter '$Program' not recognized"
+            Set-Warning "Parameter '$Program' not recognized" $false
         }
     }
 
@@ -869,7 +868,7 @@ function Find-Installation
     }
     else
     {
-        Write-Warning "Installation directory for '$Program' not found"
+        Set-Warning "Installation directory for '$Program' not found" $false
 
         # NOTE: number for Get-PSCallStack is 2, which means 3 function calls back and then get script name (call at 0 and 1 is this script)
         $Script = (Get-PSCallStack)[2].Command
@@ -888,12 +887,12 @@ function Find-Installation
                 }
                 
                 if ($global:InstallTable.Rows.Count -gt 0)
-                {        
+                {
                     return $true
                 }
                 else
                 {
-                    Write-Warning "Installation directory for '$Program' not found"
+                    Set-Warning "Installation directory for '$Program' not found" $false
                     if (Approve-Execute "No" "Unable to locate '$InstallRoot'" "Do you want to try again?")
                     {
                         break
@@ -901,7 +900,9 @@ function Find-Installation
                 }
             }
         }
-        
+
+        # Finaly status is bad
+        Set-Variable -Name WarningStatus -Scope Global -Value $true
         return $false
     }
 }
@@ -929,7 +930,7 @@ function Get-NetFramework
 
         if (!$RootKey)
         {
-            Write-Warning "Failed to open RootKey: $HKLM"
+            Set-Warning "Failed to open RootKey: $HKLM"
         }
         else
         {
@@ -939,7 +940,7 @@ function Get-NetFramework
 
                 if (!$KeyEntry)
                 {
-                    Write-Warning "Failed to open KeyEntry: $HKLMKey"
+                    Set-Warning "Failed to open KeyEntry: $HKLMKey"
                     continue
                 }
 
@@ -968,7 +969,7 @@ function Get-NetFramework
                         $SubKeyEntry = $KeyEntry.OpenSubkey($SubKey)
                         if (!$SubKeyEntry)
                         {
-                            Write-Warning "Failed to open SubKeyEntry: $SubKey"
+                            Set-Warning "Failed to open SubKeyEntry: $SubKey"
                             continue
                         }
 
@@ -1037,7 +1038,7 @@ function Get-WindowsSDK
 
         if (!$RootKey)
         {
-            Write-Warning "Failed to open RootKey: $HKLM"
+            Set-Warning "Failed to open RootKey: $HKLM"
         }
         else
         {
@@ -1047,7 +1048,7 @@ function Get-WindowsSDK
 
                 if (!$SubKey)
                 {
-                    Write-Warning "Failed to open SubKey: $HKLMKey"
+                    Set-Warning "Failed to open SubKey: $HKLMKey"
                     continue
                 }
 
@@ -1060,7 +1061,7 @@ function Get-WindowsSDK
                 }
                 else
                 {
-                    Write-Warning "Failed to read registry entry $RegKey\InstallationFolder"    
+                    Set-Warning "Failed to read registry entry $RegKey\InstallationFolder"    
                 }    
 
                 # we add entry regarldess of presence of install path
@@ -1115,7 +1116,7 @@ function Get-WindowsKits
 
         if (!$RootKey)
         {
-            Write-Warning "Failed to open RootKey: $HKLM"
+            Set-Warning "Failed to open RootKey: $HKLM"
         }
         else
         {
@@ -1169,7 +1170,7 @@ function Get-WindowsDefender
 
         if (!$RootKey)
         {
-            Write-Warning "Failed to open RootKey: $HKLM"
+            Set-Warning "Failed to open RootKey: $HKLM"
         }
         else
         {
@@ -1185,7 +1186,7 @@ function Get-WindowsDefender
             }
             else
             {
-                Write-Warning "Failed to read registry entry $RegKey\InstallLocation"    
+                Set-Warning "Failed to read registry entry $RegKey\InstallLocation"    
             }
         }
 

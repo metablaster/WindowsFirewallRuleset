@@ -24,7 +24,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Test-PowershellVersion
+# Unit test for Test-Function
 #
 
 # TODO: Include modules you need, update licence Copyright and start writing code
@@ -37,8 +37,18 @@ SOFTWARE.
 # Import-Module -Name $PSScriptRoot\..\Modules\ComputerInfo
 Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
 
-Write-Host ""
-Write-Host "Test-PowershellVersion"
-Write-Host "***************************"
-
+# Test Powershell version required for this project
 Test-PowershellVersion $VersionCheck
+
+function Test-ShowErrors
+{
+    Param(
+      [string] $Folder
+    )
+    
+    Get-ChildItem -Path $Folder
+    Set-Warning "Sample warning"
+}
+
+Test-ShowErrors "C:\CrazyFolder"
+Show-Errors

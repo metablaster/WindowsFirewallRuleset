@@ -88,7 +88,6 @@ function Approve-Execute
 # sample: see Test\Show-SDDL.ps1 for example
 function Show-SDDL
 {
-    [CmdletBinding()]
     param (
         [Parameter(
             Mandatory = $true,
@@ -176,7 +175,28 @@ function Write-Note
         [string] $Note
     )
 
-    Write-Host "NOTE: $Note" -ForegroundColor Green
+    Write-Host "NOTE: $Note" -ForegroundColor Green -BackgroundColor Black
+}
+
+# about: Custom Write-Warning which also sets global warning sttus
+# input: string to write and wether to update warning status
+# output: warning message: WARNING: sample warning
+# sample: Set-Warning "sample warning"
+function Set-Warning
+{
+    param (
+        [parameter(Mandatory = $true)]
+        [string] $Warning,
+        [parameter(Mandatory = $false)]
+        [bool] $SetWarning = $true
+    )
+
+    if ($SetWarning)
+    {
+        Set-Variable -Name WarningStatus -Scope Global -Value $true
+    }
+
+    Write-Host "WARNING: $Warning" -ForegroundColor Yellow -BackgroundColor Black
 }
 
 # about: Scan all scripts in repository and get windows service names involved in rules
@@ -192,7 +212,7 @@ function Get-NetworkServices
 
     if (!(Test-Path -Path $Folder))
     {
-        Write-Warning "Unable to locate path '$Folder'"
+        Set-Warning "Unable to locate path '$Folder'"
         return
     }
 
@@ -200,7 +220,7 @@ function Get-NetworkServices
     $Files = Get-ChildItem -Path $Folder -Recurse -Filter *.ps1
     if (!$Files)
     {
-        Write-Warning "No powershell script files found in '$Folder'"
+        Set-Warning "No powershell script files found in '$Folder'"
         return
     }
 
@@ -217,7 +237,7 @@ function Get-NetworkServices
 
     if (!$Content)
     {
-        Write-Warning "No matches found in any of the bellow files:"
+        Set-Warning "No matches found in any of the bellow files:"
         Write-Host "$($Files | Select-Object -ExpandProperty Name)"
         return
     }
@@ -301,10 +321,40 @@ function Format-Output
         [Microsoft.Management.Infrastructure.CimInstance] $Rule
     )
 
-    Process
+    process
     {
         Write-Host "Load Rule: [$($Rule | Select-Object -ExpandProperty Group)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
     }
+}
+
+# about: list all generated errors and clear error variable
+# input: none
+# output: list of errors
+# sample: Show-errors
+function Show-Errors
+{
+    if ($global:Error.Count -eq 0)
+    {
+        Write-Note "No errors detected"
+        return
+    }
+
+    $choices  = "&Yes", "&No"
+    $default = 0
+    $title = "$($global:Error.Count) errors detected"
+    $question = "Would you like to review all generated errors?"
+    $decision = $Host.UI.PromptForChoice($title, $question, $choices, $default)
+
+    if ($decision -eq $default)
+    {
+        foreach ($Err in $global:Error)
+        {
+            Write-Host "ERROR: $Err" -ForegroundColor Red -BackgroundColor Black
+            Write-Host "STACKTRACE: $($Err.ScriptStackTrace)" -ForegroundColor Red -BackgroundColor Black
+        }
+    }
+
+    $global:Error.Clear()
 }
 
 #
@@ -330,7 +380,7 @@ New-Variable -Name VersionCheck -Scope Global -Value $true
 # Global execution context, used in Approve-Execute
 New-Variable -Name Context -Scope Global -Value "Context not set"
 # Global variable to tell if all scripts ran clean
-New-Variable -Name WarningsDetected -Scope Global -Value $false
+New-Variable -Name WarningStatus -Scope Global -Value $false
 # To force loading rules regardless of presence of program set to true
 New-Variable -Name Force -Scope Global -Value $true
 
@@ -346,6 +396,8 @@ Export-ModuleMember -Function Write-Note
 Export-ModuleMember -Function Get-NetworkServices
 Export-ModuleMember -Function Test-PowershellVersion
 Export-ModuleMember -Function Format-Output
+Export-ModuleMember -Function Show-Errors
+Export-ModuleMember -Function Set-Warning
 
 #
 # Variable exports
@@ -360,5 +412,5 @@ Export-ModuleMember -Variable ServiceHost
 Export-ModuleMember -Variable Interface
 
 Export-ModuleMember -Variable Context
-Export-ModuleMember -Variable WarningsDetected
+Export-ModuleMember -Variable WarningStatus
 Export-ModuleMember -Variable VersionCheck

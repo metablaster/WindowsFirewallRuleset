@@ -27,6 +27,10 @@ SOFTWARE.
 Import-Module -Name $PSScriptRoot\Modules\ProgramInfo
 Import-Module -Name $PSScriptRoot\Modules\FirewallModule
 
+# Clear errors and warning status
+$Error.Clear()
+Set-Variable -Name WarningStatus -Scope Global -Value $false
+
 # Test Powershell version required for this project
 Test-PowershellVersion $VersionCheck
 Set-Variable -Name VersionCheck -Scope Global -Value $false
@@ -191,12 +195,14 @@ Write-Host ""
 
 Write-Host ""
 
-if ($global:WarningsDetected)
+if ($Error.Count -gt 0)
 {
-    Write-Warning "Not all of the scripts ran cleanly!"
-    Write-Warning "Make sure to update those scripts and re-run them individually"
+    Set-Warning "Not all of the scripts ran cleanly!" $false
+    Set-Warning "Make sure to update those scripts and re-run them individually" $false
     Write-Note "If module is edited don't forget to restart Powershell"
     Write-Note "Make sure you visit Local Group Policy and adjust your rules as needed."
+
+    Show-Errors
 }
 else
 {
@@ -204,5 +210,5 @@ else
     Write-Note "Make sure you visit Local Group Policy and adjust your rules as needed."
 }
 
-$global:WarningsDetected = $false
 Write-Host ""
+Set-Variable -Name WarningStatus -Scope Global -Value $false

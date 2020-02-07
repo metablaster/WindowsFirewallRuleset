@@ -29,13 +29,25 @@ Import-Module -Name $PSScriptRoot\Modules\FirewallModule
 # Test Powershell version required for this project
 Test-PowershellVersion $VersionCheck
 
-# Setting up profile seem to be slow, tell user what is going on
-Write-Host "Setting up Firewall profiles..."
+#
+# Firewall profile setup
+#
 
-#
-# Default setup for all profiles
-#
-Set-NetFirewallProfile -All -Confirm:$Execute -Whatif:$Debug -PolicyStore $PolicyStore `
+# Setting up profile seem to be slow, tell user what is going on
+Write-Host "Setting up public firewall profile..."
+
+Set-NetFirewallProfile -Profile Public -Confirm:$Execute -Whatif:$Debug -PolicyStore $PolicyStore `
+-Enabled True -DefaultInboundAction Block -DefaultOutboundAction Block -AllowInboundRules True `
+-AllowLocalFirewallRules False -AllowLocalIPsecRules False -AllowUnicastResponseToMulticast False `
+-NotifyOnListen True -EnableStealthModeForIPsec True `
+-LogAllowed False -LogBlocked True -LogIgnored True -LogMaxSizeKilobytes 1024 `
+-AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
+-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log"
+
+# Setting up profile seem to be slow, tell user what is going on
+Write-Host "Setting up private firewall profile..."
+
+Set-NetFirewallProfile -Profile Private -Confirm:$Execute -Whatif:$Debug -PolicyStore $PolicyStore `
 -Enabled True -DefaultInboundAction Block -DefaultOutboundAction Block -AllowInboundRules True `
 -AllowLocalFirewallRules False -AllowLocalIPsecRules False -AllowUnicastResponseToMulticast True `
 -NotifyOnListen True -EnableStealthModeForIPsec True `
@@ -43,8 +55,13 @@ Set-NetFirewallProfile -All -Confirm:$Execute -Whatif:$Debug -PolicyStore $Polic
 -AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
 -LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log"
 
-#
-# Override for public profile
-#
-Set-NetFirewallProfile -Name Public -Confirm:$Execute -Whatif:$Debug -PolicyStore $PolicyStore `
--AllowUnicastResponseToMulticast False
+# Setting up profile seem to be slow, tell user what is going on
+Write-Host "Setting up domain firewall profile..."
+
+Set-NetFirewallProfile -Profile Domain -Confirm:$Execute -Whatif:$Debug -PolicyStore $PolicyStore `
+-Enabled True -DefaultInboundAction Block -DefaultOutboundAction Block -AllowInboundRules True `
+-AllowLocalFirewallRules False -AllowLocalIPsecRules False -AllowUnicastResponseToMulticast True `
+-NotifyOnListen True -EnableStealthModeForIPsec True `
+-LogAllowed False -LogBlocked True -LogIgnored True -LogMaxSizeKilobytes 1024 `
+-AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
+-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log"

@@ -56,7 +56,7 @@ function Get-UserAccounts
 
     if([string]::IsNullOrEmpty($EnabledAccounts))
     {
-        Write-Warning "Get-UserAccounts: Failed to get UserAccounts for group '$UserGroup'"
+        Set-Warning "Get-UserAccounts: Failed to get UserAccounts for group '$UserGroup'"
     }
 
     return $EnabledAccounts
@@ -103,7 +103,7 @@ function Get-UserSID
     }
     catch
     {
-        Write-Warning "Get-UserSID: User '$UserName' cannot be resolved to a SID."
+        Set-Warning "Get-UserSID: User '$UserName' cannot be resolved to a SID."
     }
 }
 
@@ -129,7 +129,7 @@ function Get-AccountSID
     }
     catch
     {
-        Write-Warning "Get-AccountSID: Account '$UserAccount' cannot be resolved to a SID."
+        Set-Warning "Get-AccountSID: Account '$UserAccount' cannot be resolved to a SID."
     }
 }
 
@@ -156,7 +156,7 @@ function Get-UserSDDL
         }
         catch
         {
-            Write-Warning "Get-UserSDDL: User '$User' not found"
+            Set-Warning "Get-UserSDDL: User '$User' not found"
             continue
         }
 
@@ -189,7 +189,7 @@ function Get-AccountSDDL
         }
         catch
         {
-            Write-Warning "Get-AccountSDDL: User account $UserAccount not found"
+            Set-Warning "Get-AccountSDDL: User account $UserAccount not found"
             continue
         }
         

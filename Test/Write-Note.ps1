@@ -24,7 +24,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Test-PowershellVersion
+# Unit test for Write-Note
 #
 
 # TODO: Include modules you need, update licence Copyright and start writing code
@@ -37,8 +37,10 @@ SOFTWARE.
 # Import-Module -Name $PSScriptRoot\..\Modules\ComputerInfo
 Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
 
-Write-Host ""
-Write-Host "Test-PowershellVersion"
+# Test Powershell version required for this project
+Test-PowershellVersion $VersionCheck
+
+Write-Host "Write-Note"
 Write-Host "***************************"
 
-Test-PowershellVersion $VersionCheck
+Write-Note "Sample text"
