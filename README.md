@@ -69,7 +69,13 @@ In any case, new system or old, **know that Home versions of Windows do not have
 - Inside the Readme folder there is a `ResetFirewall.md`, a guide on how to do it manually, by hand, if for some reason you're unable to run the script, or the script does not solve your problems.
 - Also note that your current/existing rules will not be deleted unless you have rules in GPO whose group name interfere with group names from this ruleset.
 - To be 100% sure please export your current GPO rules first, (if you don't know to do that, then ignore this, you don't have GPO rules)
-- The script will ask you what rules you want, to minimize internet connectivity trouble you should apply at least all generic networking and OS related rules such as BasicNetworking, ICMP, WindowsSystem, WindowsServices, Multicast etc.
+- The script will ask you what rules you want, to minimize internet connectivity trouble you should apply at least all generic networking and OS related rules such as BasicNetworking, ICMP, WindowsSystem, WindowsServices, Multicast etc. also do not ignore IPv6, Windows really depends on these!
+- If you would like to modify basic behavior of execution, such as force loading rules and various default actions then visit `Modules\FirewallModule\FirewallModule.psm1`
+scroll down and there you'll find global variables which are used for this.
+- If you're funning scripts for first time it's higly recommended to load all rules, it should be easy to delete what you do not wan't in GPO, rather than\
+later searching scripts for what you may have missed.
+- Loading rules into empty GPO should be very fast, however loading into GPO which already contains rules will be significally slower (depends on number of existing rules)\
+so if you just want to overwrite all rules, delete them first manually to speed up execution process!
 
 **STEPS:**
 1. Press Widnows key

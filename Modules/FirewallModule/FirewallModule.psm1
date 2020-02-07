@@ -282,9 +282,9 @@ function Test-PowershellVersion
 
 # Windows 10 and above
 New-Variable -Name Platform -Option Constant -Scope Global -Value "10.0+"
-# Local Group Policy
+# Machine where to apply rules (default: Local Group Policy)
 New-Variable -Name PolicyStore -Option Constant -Scope Global -Value "localhost"
-# Stop executing if error
+# Stop executing commandlet if error
 New-Variable -Name OnError -Option Constant -Scope Global -Value "Stop"
 # To add rules to firewall for real set to false
 New-Variable -Name Debug -Scope Global -Value $false
@@ -292,7 +292,7 @@ New-Variable -Name Debug -Scope Global -Value $false
 New-Variable -Name Execute -Scope Global -Value $false
 # Most used program
 New-Variable -Name ServiceHost -Option Constant -Scope Global -Value "%SystemRoot%\System32\svchost.exe"
-# Default network interface card
+# Default network interface card, change this to NIC which your PC uses
 New-Variable -Name Interface -Option Constant -Scope Global -Value "Wired, Wireless"
 # Set to false to avoid checking powershell version
 New-Variable -Name VersionCheck -Scope Global -Value $true
@@ -301,7 +301,7 @@ New-Variable -Name Context -Scope Global -Value "Context not set"
 # Global variable to tell if all scripts ran clean
 New-Variable -Name WarningsDetected -Scope Global -Value $false
 # To force loading rules regardless of presence of program set to true
-New-Variable -Name Force -Scope Global -Value $true
+New-Variable -Name Force -Scope Global -Value $false
 
 #
 # Function exports

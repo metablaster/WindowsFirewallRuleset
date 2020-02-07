@@ -257,7 +257,7 @@ if ($null -ne $NETFrameworkRoot)
 
 # TODO: need installation check, and need to separate these rules
 # Assume unfinished checks for all of the above directories exist
-Write-Host "NOTE: in this script confirm switch is enabled for unfinished program detection, and default is Yes, even for failures!"
+Write-Note "in this script confirm switch is enabled for unfinished program detection, and default is Yes, even for failures!"
 
 $PreviousExecuteStatus = $global:Execute
 $global:Execute = $true

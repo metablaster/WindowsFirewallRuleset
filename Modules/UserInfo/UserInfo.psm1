@@ -200,7 +200,7 @@ function Get-AccountSDDL
     return $SDDL
 }
 
-
+# TODO: add more groups, guests, everyone etc...
 # Get list of user account in form of COMPUTERNAME\USERNAME
 New-Variable -Name UserAccounts -Option Constant -Scope Global -Value (Get-UserAccounts "Users")
 New-Variable -Name AdminAccounts -Option Constant -Scope Global -Value (Get-UserAccounts "Administrators")
