@@ -139,7 +139,8 @@ There are two methods to be up to date with firewall:
 - First navigate to folder where your instance of WindowsFirewallRuleset instance is, for example:
 - Type: `dir` to list directories, ```cd SomeDirectoryName``` to move to some directory or ```cd ..``` to go one directory back
 - Type: (or copy paste command(s) and hit enter) ```cd WindowsFirewallRuleset``` to move into WindowsFirewallRuleset folder
-- This command is typed only once for initial setup: ```git remote add upstream https://github.com/metablaster/WindowsFirewallRuleset```
+- This command is typed only once for initial setup:\
+```git remote add upstream https://github.com/metablaster/WindowsFirewallRuleset```
 - Following 2 sets of commands are typed each time, to tell git you want updates from master (stable) branch:
 - Type: ```git checkout master```
 - Type: ```git fetch upstream```
