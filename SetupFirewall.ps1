@@ -194,13 +194,13 @@ if ($global:WarningsDetected)
 {
     Write-Warning "Not all of the scripts ran cleanly!"
     Write-Warning "Make sure to update those scripts and re-run them individually"
-    Write-Host "NOTE: If module is edited don't forget to restart Powershell"
-    Write-Host "NOTE: Make sure you visit Local Group Policy and adjust your rules as needed." -ForegroundColor Green
+    Write-Note "If module is edited don't forget to restart Powershell"
+    Write-Note "Make sure you visit Local Group Policy and adjust your rules as needed."
 }
 else
 {
-    Write-Host "All operations completed successfuly!" -ForegroundColor Green
-    Write-Host "Make sure you visit Local Group Policy and adjust your rules as needed." -ForegroundColor Green
+    Write-Note "All operations completed successfuly!"
+    Write-Note "Make sure you visit Local Group Policy and adjust your rules as needed."
 }
 
 $global:WarningsDetected = $false

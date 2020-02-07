@@ -23,9 +23,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# Print Powershell version
-Write-Host ""
-Write-Host "PSVersion: $($PSVersionTable.PSVersion)"
+# Test Powershell version required for this project
+Test-PowershellVersion
 
 # Includes
 Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
@@ -53,4 +52,4 @@ Set-NetFirewallProfile -All -Confirm:$Execute -Whatif:$Debug -PolicyStore $Polic
 Remove-NetFirewallRule -All -PolicyStore $PolicyStore -ErrorAction SilentlyContinue
 
 Write-Host "Firewall reset is done!"
-Write-Host "NOTE: If internet conectivity problem remains, please rebot system" -ForegroundColor Green
+Write-Note "If internet conectivity problem remains, please rebot system"

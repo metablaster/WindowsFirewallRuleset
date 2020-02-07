@@ -79,7 +79,7 @@ function Test-File
         Write-Warning "Executable '$Executable' was not found, rule won't have any effect
         Searched path was: $SearchPath"
 
-        Write-Host "NOTE: To fix the problem find '$Executable' then adjust the path in $Script and re-run the script later again" -ForegroundColor Green
+        Write-Note "To fix the problem find '$Executable' then adjust the path in $Script and re-run the script later again"
     }
 }
 
@@ -573,7 +573,7 @@ function Test-Installation
     {
         Set-Variable -Name WarningsDetected -Scope Global -Value $true
         Write-Warning "Bad environment variable detected, rules with environment variables that lead to user profile will not work!"
-        Write-Host "NOTE: Bad path detected is: $($FilePath.Value)" -ForegroundColor Green
+        Write-Note "Bad path detected is: $($FilePath.Value)"
     }
 
     if (!(Test-Environment $FilePath.Value))
@@ -586,8 +586,8 @@ function Test-Installation
         {
             $InstallRoot = $global:InstallTable | Select-Object -ExpandProperty InstallRoot
 
-            Write-Host "NOTE: Path corrected from: $($FilePath.Value)
-to: $InstallRoot" -ForegroundColor Green
+            Write-Note "Path corrected from: $($FilePath.Value)
+to: $InstallRoot"
 
             $FilePath.Value = $InstallRoot
             # path updated
@@ -874,9 +874,9 @@ function Find-Installation
         # NOTE: number for Get-PSCallStack is 2, which means 3 function calls back and then get script name (call at 0 and 1 is this script)
         $Script = (Get-PSCallStack)[2].Command
     
-        Write-Host "NOTE: If you installed $Program elsewhere you can input the correct path now
+        Write-Note "If you installed $Program elsewhere you can input the correct path now
         or adjust the path in $Script and re-run the script later.
-        otherwise ignore this warning if you don't have $Program installed." -ForegroundColor Green
+        otherwise ignore this warning if you don't have $Program installed."
         if (Approve-Execute "Yes" "Rule group for $Program" "Do you want to input path now?")
         {
             while ($global:InstallTable.Rows.Count -eq 0)

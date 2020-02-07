@@ -176,7 +176,7 @@ function Write-Note
         [string] $Note
     )
 
-    Write-Host "NOTE: $Note" -ForegroundColor Green
+    Write-Note "NOTE: $Note" -ForegroundColor Green
 }
 
 # about: Scan all scripts in repository and get windows service names involved in rules
