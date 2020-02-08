@@ -1,7 +1,6 @@
-## WindowsFirewallRuleset
 
-# About WindowsFirewallRuleset
-- Windows firewall rulles organized into individual powershell scripts according to:
+# About Windows Firewall Ruleset
+- Windows firewall rules organized into individual powershell scripts according to:
 1. Rule group
 2. Traffic direction
 3. IP version (IPv4 / IPv6)
@@ -19,9 +18,17 @@
 10. multicast traffic
 11. and the list goes on... 
 
+- in addition to rules you will find a bunch of powershell functions to gather info relevant for firewall building such as:
+1. computers
+2. installed programs
+3. users on system
+4. network configuration etc;
+- meaning this project is a good base to easily extend your firewall and include more rules.
 - You can choose which rulles you want, and apply only those or apply them all with single command to your firewall.
 - All the rules are loaded into Local group policy giving you full power over default windows firewall.
+- Currently there are some 650 firewall rules.
 
+# Licenses
 This project **"WindowsFirewallRuleset"** is licensed under **MIT** license.\
 Subproject [Indented.Net.IP](https://github.com/indented-automation/Indented.Net.IP) (3rd party code) located in **"Modules\Indented.Net.IP"** subfolder is licensed under **ISC** license.\
 Subproject [VSSetup](https://github.com/microsoft/vssetup.powershell) (3rd party code) located in **"Modules\VSSetup"** subfolder is licensed under **MIT** license.
