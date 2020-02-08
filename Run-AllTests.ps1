@@ -27,13 +27,13 @@ SOFTWARE.
 # Run all tests
 # TODO: some test will output wrong results, better run each test separately
 #
-. $PSScriptRoot\Test\IPSetup.ps1
-. $PSScriptRoot\Test\DirectionSetup.ps1
-Import-Module -Name $PSScriptRoot\Modules\FirewallModule
 
 # Test Powershell version required for this project
+Import-Module -Name $PSScriptRoot\..\..\..\Modules\FirewallModule
 Test-PowershellVersion $VersionCheck
-Set-Variable -Name VersionCheck -Scope Global -Value $false
+
+. $PSScriptRoot\Test\IPSetup.ps1
+. $PSScriptRoot\Test\DirectionSetup.ps1
 
 # Ask user if he wants to load these rules
 Update-Context $IPVersion $Direction $Group

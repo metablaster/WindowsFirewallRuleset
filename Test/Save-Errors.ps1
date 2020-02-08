@@ -27,13 +27,17 @@ SOFTWARE.
 # Unit test for Save-Errors
 #
 
-# TODO: Include modules you need, update licence Copyright and start writing code
+# Test Powershell version required for this project
+Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+Test-PowershellVersion $VersionCheck
 
 # Includes
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+. $PSScriptRoot\IPSetup.ps1
+. $PSScriptRoot\DirectionSetup.ps1
 
-# Test Powershell version required for this project
-Test-PowershellVersion $VersionCheck
+# Ask user if he wants to load these rules
+Update-Context $IPVersion $Direction $Group
+if (!(Approve-Execute)) { exit }
 
 Write-Host ""
 Write-Host "Generate errors"

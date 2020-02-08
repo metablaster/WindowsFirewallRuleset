@@ -84,14 +84,14 @@ Type    Name
 # TODO: add block rules based on remote address
 # TODO: add rule for ISATAP and 4to6
 
+# Test Powershell version required for this project
+Import-Module -Name $PSScriptRoot\..\..\..\Modules\FirewallModule
+Test-PowershellVersion $VersionCheck
+
 # Includes
 . $PSScriptRoot\DirectionSetup.ps1
 . $PSScriptRoot\..\IPSetup.ps1
 Import-Module -Name $PSScriptRoot\..\..\..\Modules\UserInfo
-Import-Module -Name $PSScriptRoot\..\..\..\Modules\FirewallModule
-
-# Test Powershell version required for this project
-Test-PowershellVersion $VersionCheck
 
 #
 # Setup local variables:

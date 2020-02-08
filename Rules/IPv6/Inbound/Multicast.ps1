@@ -70,14 +70,14 @@ these IPv6 addresses are valid globally and are globally routable.
 # TODO: see if edge traversal should be Allow in some rules
 # TODO: local address should be known for outbound, for inbound rules remote should be known
 
+# Test Powershell version required for this project
+Import-Module -Name $PSScriptRoot\..\..\..\Modules\FirewallModule
+Test-PowershellVersion $VersionCheck
+
 # Includes
 . $PSScriptRoot\DirectionSetup.ps1
 . $PSScriptRoot\..\IPSetup.ps1
 Import-Module -Name $PSScriptRoot\..\..\..\Modules\UserInfo
-Import-Module -Name $PSScriptRoot\..\..\..\Modules\FirewallModule
-
-# Test Powershell version required for this project
-Test-PowershellVersion $VersionCheck
 
 #
 # Setup local variables:

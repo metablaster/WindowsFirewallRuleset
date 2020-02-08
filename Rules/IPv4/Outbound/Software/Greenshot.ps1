@@ -23,19 +23,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# TODO: Include modules you need, update licence Copyright and start writing code
-
-# TODO: Uncomment modules as needed
+# Test Powershell version required for this project
+Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\FirewallModule
+Test-PowershellVersion $VersionCheck
 
 # Includes
 . $PSScriptRoot\..\DirectionSetup.ps1
 . $PSScriptRoot\..\..\IPSetup.ps1
 Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\UserInfo
 Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\ProgramInfo
-Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\FirewallModule
-
-# Test Powershell version required for this project
-Test-PowershellVersion $VersionCheck
 
 #
 # Setup local variables:

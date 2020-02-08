@@ -28,13 +28,10 @@ SOFTWARE.
 # Includes
 # . $PSScriptRoot\IPSetup.ps1
 # . $PSScriptRoot\DirectionSetup.ps1
-# Import-Module -Name $PSScriptRoot\..\Modules\UserInfo
-# Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
-# Import-Module -Name $PSScriptRoot\..\Modules\ComputerInfo
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
-
-# Test Powershell version required for this project
-Test-PowershellVersion $VersionCheck
+# Import-Module -Name $PSScriptRoot\..\UserInfo
+# Import-Module -Name $PSScriptRoot\..\ProgramInfo
+# Import-Module -Name $PSScriptRoot\..\ComputerInfo
+# Import-Module -Name $PSScriptRoot\..\FirewallModule
 
 # about: Sample function
 # input: nothing

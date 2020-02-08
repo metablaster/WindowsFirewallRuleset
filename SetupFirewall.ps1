@@ -23,17 +23,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+# Test Powershell version required for this project
+Import-Module -Name $PSScriptRoot\..\..\..\Modules\FirewallModule
+Test-PowershellVersion $VersionCheck
+Set-Variable -Name VersionCheck -Scope Global -Value $false
+
+
 # Includes
 Import-Module -Name $PSScriptRoot\Modules\ProgramInfo
-Import-Module -Name $PSScriptRoot\Modules\FirewallModule
 
 # Clear errors and warning status
 $Error.Clear()
 Set-Variable -Name WarningStatus -Scope Global -Value $false
-
-# Test Powershell version required for this project
-Test-PowershellVersion $VersionCheck
-Set-Variable -Name VersionCheck -Scope Global -Value $false
 
 # Prompt to set screen buffer to recommended value
 Set-ScreenBuffer
@@ -194,7 +195,7 @@ if(Approve-Execute "Yes" "Applying: Outbound IPv6 Rules")
 Write-Host ""
 
 # Set up Firewall profile
-# & .\FirewallProfile.ps1
+& .\FirewallProfile.ps1
 
 # Show status of execution
 $ErrorCount = $Error.Count -gt 0

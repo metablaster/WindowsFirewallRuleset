@@ -27,15 +27,15 @@ SOFTWARE.
 # Unit test for Get-SystemPrograms
 #
 
+# Test Powershell version required for this project
+Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+Test-PowershellVersion $VersionCheck
+
 # Includes
 . $PSScriptRoot\IPSetup.ps1
 . $PSScriptRoot\DirectionSetup.ps1
 Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
 Import-Module -Name $PSScriptRoot\..\Modules\ComputerInfo
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
-
-# Test Powershell version required for this project
-Test-PowershellVersion $VersionCheck
 
 # Ask user if he wants to load these rules
 Update-Context $IPVersion $Direction $Group

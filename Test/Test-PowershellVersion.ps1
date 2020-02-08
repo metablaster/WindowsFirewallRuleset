@@ -27,15 +27,14 @@ SOFTWARE.
 # Unit test for Test-PowershellVersion
 #
 
-# TODO: Include modules you need, update licence Copyright and start writing code
-
 # Includes
-# . $PSScriptRoot\IPSetup.ps1
-# . $PSScriptRoot\DirectionSetup.ps1
-# Import-Module -Name $PSScriptRoot\..\Modules\UserInfo
-# Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
-# Import-Module -Name $PSScriptRoot\..\Modules\ComputerInfo
+. $PSScriptRoot\IPSetup.ps1
+. $PSScriptRoot\DirectionSetup.ps1
 Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+
+# Ask user if he wants to load these rules
+Update-Context $IPVersion $Direction $Group
+if (!(Approve-Execute)) { exit }
 
 Write-Host ""
 Write-Host "Test-PowershellVersion"

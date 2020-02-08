@@ -24,12 +24,7 @@ SOFTWARE.
 #>
 
 # Test Powershell version required for this project
-Test-PowershellVersion $VersionCheck
-
-# Includes
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
-
-# Test Powershell version required for this project
+Import-Module -Name $PSScriptRoot\..\..\..\Modules\FirewallModule
 Test-PowershellVersion $VersionCheck
 
 # Setting up profile seem to be slow, tell user what is going on

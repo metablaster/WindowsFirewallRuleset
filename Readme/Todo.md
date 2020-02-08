@@ -13,6 +13,5 @@
 11. make possible to apply rules to remote machine, currently partially supported
 12. Function to check executables for signature and virus total hash
 13. Count invalid paths in each script
-14. Write warnings, errors and notes etc. to file
 15. Test already loaded rules if pointing to valid program or service, also test for weakness
 16. Limit code to 80-100 columns rule, subject to exceptoins
