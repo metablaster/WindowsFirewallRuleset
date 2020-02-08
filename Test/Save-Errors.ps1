@@ -24,24 +24,26 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Write-Note
+# Unit test for Save-Errors
 #
 
 # TODO: Include modules you need, update licence Copyright and start writing code
 
 # Includes
-# . $PSScriptRoot\IPSetup.ps1
-# . $PSScriptRoot\DirectionSetup.ps1
-# Import-Module -Name $PSScriptRoot\..\Modules\UserInfo
-# Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
-# Import-Module -Name $PSScriptRoot\..\Modules\ComputerInfo
 Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
 
 # Test Powershell version required for this project
 Test-PowershellVersion $VersionCheck
 
-Write-Host "Write-Note"
+Write-Host ""
+Write-Host "Generate errors"
 Write-Host "***************************"
 
-Write-Note "single line"
-Write-Note "first line", "second line", "3rd line"
+$Folder = "C:\CrazyFolder"
+Get-ChildItem -Path $Folder
+
+Write-Host ""
+Write-Host "Save-Errors"
+Write-Host "***************************"
+
+Save-Errors

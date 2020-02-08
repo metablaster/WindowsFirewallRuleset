@@ -194,27 +194,37 @@ if(Approve-Execute "Yes" "Applying: Outbound IPv6 Rules")
 Write-Host ""
 
 # Set up Firewall profile
-& .\FirewallProfile.ps1
+# & .\FirewallProfile.ps1
 
-Write-Host ""
+# Show status of execution
+$ErrorCount = $Error.Count -gt 0
 
-if ($Error.Count -gt 0)
+if ($ErrorCount)
 {
-    Write-Warning "Not all of the scripts ran cleanly!"
-    Write-Warning "Make sure to update those scripts and re-run them individually"
+    Write-Host ""
+    Write-Warning "Errors were generated"
+    Save-Errors
+
+    Write-Host ""
     Write-Note "If module is edited don't forget to restart Powershell"
-    Write-Note "Make sure you visit Local Group Policy and adjust your rules as needed."
-
-    Show-Errors
 }
-else
+
+if ($WarningStatus)
 {
+    Write-Host ""
+    Write-Warning "Warnings were generated"
+    Write-Note "All warnings were saved to:", "$("$RepoDir\Logs")", "you can review these logs to see if you want to resolve some of them"
+}
+
+if (!$ErrorCount -and !$WarningStatus)
+{
+    Write-Host ""
     Write-Note "All operations completed successfuly!"
-    Write-Note "Make sure you visit Local Group Policy and adjust your rules as needed."
 }
 
 Write-Host ""
+Write-Note "Make sure you visit Local Group Policy and adjust your rules as needed."
+Write-Host ""
 
-# Clear errors and warning status
-$Error.Clear()
+# Clear warning status
 Set-Variable -Name WarningStatus -Scope Global -Value $false

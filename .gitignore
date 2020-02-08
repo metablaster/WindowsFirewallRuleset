@@ -31,4 +31,5 @@
 .vs/
 
 # Add your private stuff here
-test.ps1
+Logs/
+NetworkServices.txt

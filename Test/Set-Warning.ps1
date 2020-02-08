@@ -24,7 +24,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Write-Note
+# Unit test for Set-Warning
 #
 
 # TODO: Include modules you need, update licence Copyright and start writing code
@@ -40,8 +40,8 @@ Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
 # Test Powershell version required for this project
 Test-PowershellVersion $VersionCheck
 
-Write-Host "Write-Note"
+Write-Host ""
+Write-Host "Set-Warning"
 Write-Host "***************************"
 
-Write-Note "single line"
-Write-Note "first line", "second line", "3rd line"
+Set-Warning "sample warning"

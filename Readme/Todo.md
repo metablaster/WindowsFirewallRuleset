@@ -1,9 +1,9 @@
 # List of stuff that needs to be done
 
-1. make a list of system environment variables that are recognized by firewall, then update rules.
+1. Separate variables which alter the behavior of scripts into a separate module
 2. update FirewallParamters with a list of incompatible paramters for reference
 3. apply local IP to all rules
-4. separate config file for installation directories, or a script which would auto detect installed programs.
+4. Detect if script ran manually, to be able to reset errors and warning status
 5. some rules are missing comments
 6. auto detect interfaces
 7. CTRL + F and search for "TODO"
@@ -15,6 +15,4 @@
 13. Count invalid paths in each script
 14. Write warnings, errors and notes etc. to file
 15. Test already loaded rules if pointing to valid program or service, also test for weakness
-16. Limit code to 80 columns rule
-17. Detect if script ran manually, to be able to reset errors and warning status
-18. Separate variables which alter the behavior of scripts into a separate module
+16. Limit code to 80-100 columns rule, subject to exceptoins

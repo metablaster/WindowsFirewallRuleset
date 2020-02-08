@@ -54,6 +54,7 @@ function Update-Context
 # output: true if user wants to continue
 # sample: Approve-Execute("sample text")
 # TODO: implement help [?]
+# TODO: make this function more generic
 function Approve-Execute
 {
     param (
@@ -172,10 +173,16 @@ function Write-Note
 {
     param (
         [parameter(Mandatory = $true)]
-        [string] $Note
+        [string[]] $Notes
     )
 
-    Write-Host "NOTE: $Note" -ForegroundColor Green -BackgroundColor Black
+    Write-Host "NOTE: $($Notes[0])" -ForegroundColor Green -BackgroundColor Black
+
+    # Skip 'NOTE:' tag for all subsequent messages
+    for ($Index = 1; $Index -lt $Notes.Count; ++$Index)
+    {
+        Write-Host $Notes[$Index] -ForegroundColor Green -BackgroundColor Black
+    }
 }
 
 # about: Custom Write-Warning which also sets global warning sttus
@@ -186,13 +193,76 @@ function Set-Warning
 {
     param (
         [parameter(Mandatory = $true)]
-        [string] $Warning,
+        [string] $Message,
         [parameter(Mandatory = $false)]
         [bool] $Status = $true
     )
 
-    Set-Variable -Name WarningStatus -Scope Global -Value $Status
-    Write-Host "WARNING: $Warning" -ForegroundColor Yellow -BackgroundColor Black
+    # First show the warning before any possible error happens
+    $Warning = "WARNING: $Message"
+    Set-Variable -Name WarningStatus -Scope Global -Value ($WarningStatus -or $Status)
+    Write-Host $Warning -ForegroundColor Yellow -BackgroundColor Black
+
+    # Append warning to log file
+    $LogsFolder = $RepoDir + "\Logs"
+    $FileName = "Warning_$(Get-Date -Format "dd.MM.yy HH")h.log"
+    $LogFile = "$LogsFolder\$FileName"
+
+    if (!(Test-Path -PathType Container -Path $LogsFolder))
+    {
+        New-Item -ItemType Directory -Path $LogsFolder -ErrorAction Stop| Out-Null
+    }
+    
+    if (!(Test-Path -PathType Leaf -Path $LogFile))
+    {
+        New-Item -ItemType File -Path $LogFile -ErrorAction Stop| Out-Null
+    }
+
+    # Include time in file
+    $Warning = "WARNING: $(Get-Date -Format "HH:mm")h $Message"
+    Add-Content -Path $LogFile -Value $Warning
+}
+
+# about: list all generated errors and clear error variable
+# input: none
+# output: list of errors
+# sample: Save-Errors
+function Save-Errors
+{
+    if ($global:Error.Count -eq 0)
+    {
+        Write-Note "No errors detected"
+        return
+    }
+    
+    # Write all errors to log file
+    $LogsFolder = $RepoDir + "\Logs"
+    $FileName = "Error_$(Get-Date -Format "dd.MM.yy HH")h.log"
+    $LogFile = "$LogsFolder\$FileName"
+
+    if (!(Test-Path -PathType Container -Path $LogsFolder))
+    {
+        New-Item -ItemType Directory -Path $LogsFolder -ErrorAction Stop| Out-Null
+    }
+    
+    if (!(Test-Path -PathType Leaf -Path $LogFile))
+    {
+        New-Item -ItemType File -Path $LogFile -ErrorAction Stop| Out-Null
+    }
+
+    # Include time in file
+    $Time = "$(Get-Date -Format "HH:mm")h"
+
+    $AllErrors = @()
+    foreach ($Err in $global:Error)
+    {
+        $AllErrors += "ERROR: $Time $Err`nSTACKTRACE: $($Err.ScriptStackTrace)`n"
+    }
+
+    Add-Content -Path $LogFile -Value $AllErrors
+    Write-Note "All errors were saved to:", $LogsFolder, "you can review these logs to see which scripts need to be fixed and where"
+
+    $global:Error.Clear()
 }
 
 # about: Scan all scripts in repository and get windows service names involved in rules
@@ -253,7 +323,7 @@ function Get-NetworkServices
     }
     else
     {
-        New-Item -ItemType File -Path $File
+        New-Item -ItemType File -Path $File| Out-Null
     }
 
     # Save filtered services to a new file 
@@ -323,36 +393,6 @@ function Format-Output
     }
 }
 
-# about: list all generated errors and clear error variable
-# input: none
-# output: list of errors
-# sample: Show-errors
-function Show-Errors
-{
-    if ($global:Error.Count -eq 0)
-    {
-        Write-Note "No errors detected"
-        return
-    }
-
-    $choices  = "&Yes", "&No"
-    $default = 0
-    $title = "$($global:Error.Count) errors detected"
-    $question = "Would you like to review all generated errors?"
-    $decision = $Host.UI.PromptForChoice($title, $question, $choices, $default)
-
-    if ($decision -eq $default)
-    {
-        foreach ($Err in $global:Error)
-        {
-            Write-Host "ERROR: $Err" -ForegroundColor Red -BackgroundColor Black
-            Write-Host "STACKTRACE: $($Err.ScriptStackTrace)" -ForegroundColor Red -BackgroundColor Black
-        }
-    }
-
-    $global:Error.Clear()
-}
-
 # about: set vertical screen buffer to recommended value
 function Set-ScreenBuffer
 {
@@ -409,6 +449,8 @@ New-Variable -Name WarningStatus -Scope Global -Value $false
 New-Variable -Name Force -Scope Global -Value $true
 # Recommended vertical screen buffer value, to ensure user can scroll back all the output
 New-Variable -Name RecommendedBuffer -Scope Script -Value 3000
+# Repository root directory
+New-Variable -Name RepoDir -Scope Global -Option Constant -Value (Resolve-Path -Path "$PSScriptRoot\..\.." | Select-Object -ExpandProperty Path)
 
 #
 # Function exports
@@ -422,7 +464,7 @@ Export-ModuleMember -Function Write-Note
 Export-ModuleMember -Function Get-NetworkServices
 Export-ModuleMember -Function Test-PowershellVersion
 Export-ModuleMember -Function Format-Output
-Export-ModuleMember -Function Show-Errors
+Export-ModuleMember -Function Save-Errors
 Export-ModuleMember -Function Set-Warning
 Export-ModuleMember -Function Set-ScreenBuffer
 
@@ -441,3 +483,4 @@ Export-ModuleMember -Variable Interface
 Export-ModuleMember -Variable Context
 Export-ModuleMember -Variable WarningStatus
 Export-ModuleMember -Variable VersionCheck
+Export-ModuleMember -Variable RepoDir
