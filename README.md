@@ -73,7 +73,7 @@ In any case, new system or old, **know that Home versions of Windows do not have
 - If you would like to modify basic behavior of execution, such as force loading rules and various default actions then visit `Modules\FirewallModule\FirewallModule.psm1`
 scroll down and there you'll find global variables which are used for this.
 - If you're funning scripts for first time it's higly recommended to load all rules, it should be easy to delete what you do not wan't in GPO, rather than later searching scripts for what you may have missed.
-- Loading rules into an empty GPO should be very fast, however loading into GPO which already contains rules will be significally slower (depends on number of existing rules) so if you just want to overwrite all rules, delete them first manually to speed up execution process!
+- Loading rules into an empty GPO should be very fast, however loading into GPO which already contains rules will be significally slower (depends on number of existing rules)
 
 **STEPS:**
 1. Press Widnows key
@@ -170,7 +170,7 @@ This is so that when you need to search for something it's easy to see what is w
 5. It is also important that a rule is very specific and not generic, that means specifying protocol, IP addresses, ports, system user, interface type and other relevant information.\
 for example just saying: allow TCP outbound port 80 for any address or any user or no explanation what is this supposed to allow or block is not acceptable.
 
-# More information and help/develop
+# More information and help
 Inside the [Readme](https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Readme) folder you will find usefull information not only about this project but also general information on how to troubleshoot firewall and network problems, or gather more relevant information.
 
 It may answer some of your questions, you should go ahead and read it!\
