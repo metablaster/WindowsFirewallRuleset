@@ -23,21 +23,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# TODO: Include modules you need, update licence Copyright and start writing code
+#
+# Unit test for Test-SystemRequirements
+#
 
 # Includes
-# . $PSScriptRoot\IPSetup.ps1
-# . $PSScriptRoot\DirectionSetup.ps1
-# Import-Module -Name $PSScriptRoot\..\UserInfo
-# Import-Module -Name $PSScriptRoot\..\ProgramInfo
-# Import-Module -Name $PSScriptRoot\..\ComputerInfo
-# Import-Module -Name $PSScriptRoot\..\FirewallModule
+. $PSScriptRoot\IPSetup.ps1
+. $PSScriptRoot\DirectionSetup.ps1
+Import-Module -Name $PSScriptRoot\..\Modules\System
+Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
 
-# about: Sample function
-# input: nothing
-# output: $null
-# sample: Test-Function
-function Test-Function
-{
-    return $null
-}
+# Ask user if he wants to load these rules
+Update-Context $IPVersion $Direction $Group
+if (!(Approve-Execute)) { exit }
+
+Write-Host ""
+Write-Host "Test-SystemRequirements"
+Write-Host "***************************"
+
+Test-SystemRequirements $VersionCheck
+

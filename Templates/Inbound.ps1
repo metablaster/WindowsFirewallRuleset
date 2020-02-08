@@ -24,8 +24,8 @@ SOFTWARE.
 #>
 
 # Test Powershell version required for this project
-Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\FirewallModule
-Test-PowershellVersion $VersionCheck
+Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\System
+Test-SystemRequirements $VersionCheck
 
 # TODO: Include modules you need, update licence Copyright and start writing code
 
@@ -34,7 +34,7 @@ Test-PowershellVersion $VersionCheck
 # . $PSScriptRoot\..\..\IPSetup.ps1
 # Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\UserInfo
 # Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\ProgramInfo
-# Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\FirewallModule
+Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\FirewallModule
 
 #
 # Setup local variables:

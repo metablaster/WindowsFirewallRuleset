@@ -24,13 +24,13 @@ SOFTWARE.
 #>
 
 # Test Powershell version required for this project
-Import-Module -Name $PSScriptRoot\..\..\..\Modules\FirewallModule
-Test-PowershellVersion $VersionCheck
+Import-Module -Name $PSScriptRoot\Modules\System
+Test-SystemRequirements $VersionCheck
 Set-Variable -Name VersionCheck -Scope Global -Value $false
-
 
 # Includes
 Import-Module -Name $PSScriptRoot\Modules\ProgramInfo
+Import-Module -Name $PSScriptRoot\Modules\FirewallModule
 
 # Clear errors and warning status
 $Error.Clear()

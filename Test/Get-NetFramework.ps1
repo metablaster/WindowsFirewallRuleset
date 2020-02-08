@@ -28,14 +28,15 @@ SOFTWARE.
 #
 
 # Test Powershell version required for this project
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
-Test-PowershellVersion $VersionCheck
+Import-Module -Name $PSScriptRoot\..\Modules\System
+Test-SystemRequirements $VersionCheck
 
 # Includes
 . $PSScriptRoot\IPSetup.ps1
 . $PSScriptRoot\DirectionSetup.ps1
 Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
 Import-Module -Name $PSScriptRoot\..\Modules\ComputerInfo
+Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
 Update-Context $IPVersion $Direction $Group
@@ -52,3 +53,11 @@ $NETFramework
 # Write-Host "Get-NetFramework latest"
 # Write-Host "***************************"
 # $NETFramework | Sort-Object -Property Version | Where-Object {$_.InstallPath} | Select-Object -Last 1 -ExpandProperty InstallPath
+
+# Write-Host "Get-NetFramework latest version"
+# Write-Host "***************************"
+# $Version = $NETFramework | Sort-Object -Property Version | Select-Object -Last 1 -ExpandProperty Version
+# #$Version | get-member
+# $Major, $Minor, $Build, $Revision = $Version.Split(".")
+# $Major
+# $Minor

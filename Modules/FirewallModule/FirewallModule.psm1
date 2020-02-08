@@ -331,48 +331,6 @@ function Get-NetworkServices
     Write-Note "$($Content.Count) services involved in firewall rules"
 }
 
-# about: Test and print Powershell version required for this project
-# input: true or false to check or not to check
-# output: error message if check failed, powershell version and edition otherwise
-# sample: Test-PowershellVersion $true
-function Test-PowershellVersion
-{
-    param (
-        [parameter(Mandatory = $true)]
-        [bool] $Check
-    )
-
-    # disabled when runing scripts from SetupFirewall.ps1 script
-    if ($Check)
-    {
-        if ($PSVersionTable.PSEdition -ne "Desktop")
-        {
-            Write-Host ""
-            Write-Host "Unable to proceed, 'Desktop' edition of Powershell is required to run these scripts" -ForegroundColor Red -BackgroundColor Black
-            Write-Host "Your Powershell edition is: $($PSVersionTable.PSEdition)"    
-            Write-Host ""
-            exit
-        }
-        
-        $PowershellMajor = $PSVersionTable.PSVersion | Select-Object -ExpandProperty Major
-        $PowershellMinor = $PSVersionTable.PSVersion | Select-Object -ExpandProperty Minor
-
-        if (($PowershellMajor -ge 5) -and ($PowershellMinor -ge 1))
-        {
-            Write-Host ""
-            Write-Host "Powershell edition: $($PSVersionTable.PSEdition) $PowershellMajor.$PowershellMinor" -ForegroundColor Cyan
-            Write-Host ""
-        }
-        else
-        {
-            Write-Host ""
-            Write-Host "Unable to proceed, minimum Powershell version required to run these scripts is 5.1" -ForegroundColor Red -BackgroundColor Black
-            Write-Host "Your Powershell edition is: $($PSVersionTable.PSEdition) $PowershellMajor.$PowershellMinor"    
-            Write-Host ""
-            exit
-        }
-    }
-}
 
 # about: format firewall rule output for display
 # input: CimInstance from Net-NewFirewallRule
@@ -439,8 +397,6 @@ New-Variable -Name Execute -Scope Global -Value $false
 New-Variable -Name ServiceHost -Option Constant -Scope Global -Value "%SystemRoot%\System32\svchost.exe"
 # Default network interface card, change this to NIC which your PC uses
 New-Variable -Name Interface -Option Constant -Scope Global -Value "Wired, Wireless"
-# Set to false to avoid checking powershell version
-New-Variable -Name VersionCheck -Scope Global -Value $true
 # Global execution context, used in Approve-Execute
 New-Variable -Name Context -Scope Global -Value "Context not set"
 # Global variable to tell if all scripts ran clean
@@ -462,7 +418,6 @@ Export-ModuleMember -Function Convert-SDDLToACL
 Export-ModuleMember -Function Show-SDDL
 Export-ModuleMember -Function Write-Note
 Export-ModuleMember -Function Get-NetworkServices
-Export-ModuleMember -Function Test-PowershellVersion
 Export-ModuleMember -Function Format-Output
 Export-ModuleMember -Function Save-Errors
 Export-ModuleMember -Function Set-Warning
@@ -482,5 +437,4 @@ Export-ModuleMember -Variable Interface
 
 Export-ModuleMember -Variable Context
 Export-ModuleMember -Variable WarningStatus
-Export-ModuleMember -Variable VersionCheck
 Export-ModuleMember -Variable RepoDir

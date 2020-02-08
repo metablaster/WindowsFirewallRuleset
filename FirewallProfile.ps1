@@ -24,8 +24,8 @@ SOFTWARE.
 #>
 
 # Test Powershell version required for this project
-Import-Module -Name $PSScriptRoot\..\..\..\Modules\FirewallModule
-Test-PowershellVersion $VersionCheck
+Import-Module -Name $PSScriptRoot\Modules\System
+Test-SystemRequirements $VersionCheck
 
 #
 # Firewall profile setup

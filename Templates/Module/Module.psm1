@@ -23,21 +23,40 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Test-PowershellVersion
-#
+# TODO: Include modules you need, update licence Copyright and start writing code
 
 # Includes
-. $PSScriptRoot\IPSetup.ps1
-. $PSScriptRoot\DirectionSetup.ps1
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+# . $PSScriptRoot\IPSetup.ps1
+# . $PSScriptRoot\DirectionSetup.ps1
+# Import-Module -Name $PSScriptRoot\..\UserInfo
+# Import-Module -Name $PSScriptRoot\..\ProgramInfo
+# Import-Module -Name $PSScriptRoot\..\ComputerInfo
+# Import-Module -Name $PSScriptRoot\..\FirewallModule
 
-# Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
-if (!(Approve-Execute)) { exit }
+# about: Sample function
+# input: nothing
+# output: $null
+# sample: Test-Function
+function Test-Function
+{
+    return $null
+}
 
-Write-Host ""
-Write-Host "Test-PowershellVersion"
-Write-Host "***************************"
+#
+# Module variables
+#
 
-Test-PowershellVersion $VersionCheck
+# Set to false to avoid checking powershell version
+New-Variable -Name NewModule -Scope Global -Value $true
+
+#
+# Function exports
+#
+
+Export-ModuleMember -Function Test-Function
+
+#
+# Variable exports
+#
+
+Export-ModuleMember -Variable NewModule

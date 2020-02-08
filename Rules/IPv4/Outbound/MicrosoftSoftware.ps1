@@ -24,8 +24,8 @@ SOFTWARE.
 #>
 
 # Test Powershell version required for this project
-Import-Module -Name $PSScriptRoot\..\..\..\Modules\FirewallModule
-Test-PowershellVersion $VersionCheck
+Import-Module -Name $PSScriptRoot\..\..\..\Modules\System
+Test-SystemRequirements $VersionCheck
 
 # Includes
 . $PSScriptRoot\DirectionSetup.ps1
@@ -33,6 +33,7 @@ Test-PowershellVersion $VersionCheck
 Import-Module -Name $PSScriptRoot\..\..\..\Modules\UserInfo
 Import-Module -Name $PSScriptRoot\..\..\..\Modules\ProgramInfo
 Import-Module -Name $PSScriptRoot\..\..\..\Modules\ComputerInfo
+Import-Module -Name $PSScriptRoot\..\..\..\Modules\FirewallModule
 
 #
 # Setup local variables:

@@ -28,8 +28,8 @@ SOFTWARE.
 #
 
 # Test Powershell version required for this project
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
-Test-PowershellVersion $VersionCheck
+Import-Module -Name $PSScriptRoot\..\Modules\System
+Test-SystemRequirements $VersionCheck
 
 # TODO: Include modules you need, update licence Copyright and start writing code
 
@@ -39,6 +39,11 @@ Test-PowershellVersion $VersionCheck
 # Import-Module -Name $PSScriptRoot\..\Modules\UserInfo
 # Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
 # Import-Module -Name $PSScriptRoot\..\Modules\ComputerInfo
+Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+
+# Ask user if he wants to load these rules
+Update-Context $IPVersion $Direction $Group
+if (!(Approve-Execute)) { exit }
 
 # about:
 # input:

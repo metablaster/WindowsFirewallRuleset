@@ -264,19 +264,18 @@ function Get-SystemPrograms
 
     if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
     {
-        # The value of the [IntPtr] property is 4 in a 32-bit process, and 8 in a 64-bit process.
-        if ([IntPtr]::Size -eq 4)
-        {
-            # 32 bit system
-            $HKLM = "Software\Microsoft\Windows\CurrentVersion\Uninstall"
-        }
-        else
+        if ([System.Environment]::Is64BitOperatingSystem)
         {
             # 64 bit system
             $HKLM = @(
                 "Software\Microsoft\Windows\CurrentVersion\Uninstall"
                 "Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall"
-            )
+            )            
+        }
+        else
+        {
+            # 32 bit system
+            $HKLM = "Software\Microsoft\Windows\CurrentVersion\Uninstall"
         }
         
         $RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
@@ -1018,16 +1017,16 @@ function Get-WindowsSDK
 
     if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
     {
-        # The value of the [IntPtr] property is 4 in a 32-bit process, and 8 in a 64-bit process.
-        if ([IntPtr]::Size -eq 4)
-        {
-            # 32 bit system
-            $HKLM = "SOFTWARE\Microsoft\Microsoft SDKs\Windows"
-        }
-        else
+        if ([System.Environment]::Is64BitOperatingSystem)
         {
             # 64 bit system
             $HKLM = "SOFTWARE\WOW6432Node\Microsoft\Microsoft SDKs\Windows"
+        }
+        else
+        {
+            # 32 bit system
+            $HKLM = "SOFTWARE\Microsoft\Microsoft SDKs\Windows"
+
         }
                 
         $RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
@@ -1096,16 +1095,16 @@ function Get-WindowsKits
 
     if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
     {
-        # The value of the [IntPtr] property is 4 in a 32-bit process, and 8 in a 64-bit process.
-        if ([IntPtr]::Size -eq 4)
-        {
-            # 32 bit system
-            $HKLM = "SOFTWARE\Microsoft\Windows Kits\Installed Roots"
-        }
-        else
+        if ([System.Environment]::Is64BitOperatingSystem)
         {
             # 64 bit system
             $HKLM = "SOFTWARE\WOW6432Node\Microsoft\Windows Kits\Installed Roots"
+
+        }
+        else
+        {
+            # 32 bit system
+            $HKLM = "SOFTWARE\Microsoft\Windows Kits\Installed Roots"
         }
                 
         $RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine

@@ -24,8 +24,11 @@ SOFTWARE.
 #>
 
 # Test Powershell version required for this project
-Import-Module -Name $PSScriptRoot\..\..\..\Modules\FirewallModule
-Test-PowershellVersion $VersionCheck
+Import-Module -Name $PSScriptRoot\Modules\System
+Test-SystemRequirements $VersionCheck
+
+# Includes
+Import-Module -Name $PSScriptRoot\Modules\FirewallModule
 
 # Setting up profile seem to be slow, tell user what is going on
 Write-Host "Reseting Firewall to previous state..."
