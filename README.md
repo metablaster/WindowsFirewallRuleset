@@ -37,29 +37,52 @@ For more info see respective licences:\
 # Minimum system requirements
 1. Windows 10 Pro/Enterprise
 2. Windows Powershell 5.1 [Download Powershell](https://github.com/PowerShell/PowerShell)
-3. Git (Optional) [Download Git](https://git-scm.com/downloads)
+3. NET Framework 4.8 [Download Net Framework](https://dotnet.microsoft.com/download/dotnet-framework)
+4. Git (Optional) [Download Git](https://git-scm.com/downloads)
+5. Visual Studio Code (Optional) [Download VSCode](https://code.visualstudio.com)
+6. PowerShell Support for VSCode (Optional) [Download extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell)
 
-Note that Powershell is built into Windows by default, you will probably need to install it or update on some old systems.
+- Powershell is built into Windows by default, you will probably need to install it or update on different systems.
+- NET Framework 4.8 is automatically installed (trhough Windwos update) on Windows 10 1903 (May 2019 Update).
+- You may want to have git to check out for updates, to easily switch between branches or to contribute code.
+- VS Code is preferred editor to edit the scripts for your needs or for contribution, any other editor is of course your choice.
+- If you get VSCode, you'll also need powershell extension for syntax highliting among other cool features.
 
-To be able to apply rules to older systems such as Windows 7, edit the `FirewallModule.psm1` and add a new variable that defines your system version:
+If any of the requirements from point 1, 2 and 3 are not meet the scripts will refuse to run.
 
-```New-Variable -Name Platform -Option Constant -Scope Global -Value "10.0+""``` is defined to target Windows 10 and above by default for all rules, for example for Windows 7, define a new variable that looks like this:
+# I don't have Windows 10 Pro/Enterprise
+**First, note that Home versions of Windows do not have GPO (Local Group Policy), therefore not possible to make use of this project.**
 
+To be able to apply rules to older or different systems such as Windows 7 or Windows server, you'll need to modify code.\
+At a bare minimum you should do the following 4 modifications:
+
+**Modification 1:**\
+edit the `Modules\System\System.psm1` to allow execution for different system.
+
+**Modification 2:**\
+edit the `Modules\FirewallModule\FirewallModule.psm1` and define new variable that defines your system version, following variable is defined to target Windows 10 and above by default for all rules.\
+```New-Variable -Name Platform -Option Constant -Scope Global -Value "10.0+""```
+
+For example for Windows 7, define a new variable that looks like this:\
 ```New-Variable -Name PlatformWin7 -Option Constant -Scope Global -Value "6.1"```
 
-Next you open individual ruleset scripts, and take a look which rules you want to be loaded into your firewall,\
+`Platfrom` variable specifies which version of Windows the associated rule applies.\
+The acceptable format for this parameter is a number in the Major.Minor format.
+
+**Modification 3:**\
+edit individual ruleset scripts, and take a look which rules you want to be loaded into your firewall,\
 then simply replace ```-Platform $Platform``` with ```-Platform $PatformWin7``` for each rule you want.
 
-In VS Code for example you would simply (CTRL + F) for each script and replace all instances. very simple.
-
+In VS Code for example you can also simply (CTRL + F) for each script and replace all instances. very simple.\
 If you miss something you can delete, add or modify rules in GPO later.
 
-Note that if you define your platform globaly (ie. ```$Platform = "6.1"```) instead of making your own variable, just replacing the string, but do not exclude unrelated rules, most of the rules will work, but ie. rules for Store Apps will fail to load.\
-Also ie. rules for programs and services that were introduced in Windows 10 will be most likely applied but redundant.
+Note that if you define your platform globaly (ie. ```$Platform = "6.1"```) instead of making your own variable, just replacing the string, but do not exclude unrelated rules, most of the rules should work, but ie. rules for Store Apps will fail to load.\
+Also ie. rules for programs and services that do not exist on system will be most likely applied but redundant.
 
-What this means, is, just edit the GPO later to refine your imports if you go that route.
+What this means, is, just edit the GPO later to refine your imports if you go that route, or alternatively revisit your edits again.
 
-In any case, new system or old, **know that Home versions of Windows do not have GPO (Local Group Policy), therefore not possible to make use of this project.**
+**Modification 4:**
+Visit `Test` folder and run all tests individually to confirm modules and their functions work as expected, any failure should be fixed.
 
 # Step by step quick start
 
@@ -68,12 +91,14 @@ In any case, new system or old, **know that Home versions of Windows do not have
 - You may loose internet conectivity for some of your programs or in rare cases even lose internet conectivity completely, if that happens, you can run `ResetFirewall.ps1` to reset firewall to previous state and clear GPO firewall.
 - Inside the Readme folder there is a `ResetFirewall.md`, a guide on how to do it manually, by hand, if for some reason you're unable to run the script, or the script does not solve your problems.
 - Also note that your current/existing rules will not be deleted unless you have rules in GPO whose group name interfere with group names from this ruleset.
-- To be 100% sure please export your current GPO rules first, (if you don't know to do that, then ignore this, you don't have GPO rules)
+- To be 100% sure please export your current GPO rules first, (if you don't know to do that, then you most likely don't have GPO rules)
 - The script will ask you what rules you want, to minimize internet connectivity trouble you should apply at least all generic networking and OS related rules such as BasicNetworking, ICMP, WindowsSystem, WindowsServices, Multicast etc. also do not ignore IPv6, Windows really depends on these!
-- If you would like to modify basic behavior of execution, such as force loading rules and various default actions then visit `Modules\FirewallModule\FirewallModule.psm1`
-scroll down and there you'll find global variables which are used for this.
-- If you're funning scripts for first time it's higly recommended to load all rules, it should be easy to delete what you do not wan't in GPO, rather than later searching scripts for what you may have missed.
+
+**NOTE:**
+- If you would like to modify basic behavior of execution, such as force loading rules and various default actions then visit `Modules\FirewallModule\FirewallModule.psm1` scroll down and there you'll find global variables which are used for this.
+- If you're running scripts for first time it's higly recommended to load all rules, it should be easy to delete what you do not wan't in GPO, rather than later searching scripts for what you may have missed.
 - Loading rules into an empty GPO should be very fast, however loading into GPO which already contains rules will be significally slower (depends on number of existing rules)
+- All errors and warnings will be saved to `Logs` directory, so you can review these logs if you want to fix some problem.
 
 **STEPS:**
 1. Press Widnows key
