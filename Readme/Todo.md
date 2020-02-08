@@ -17,3 +17,4 @@
 15. Test already loaded rules if pointing to valid program or service, also test for weakness
 16. Limit code to 80 columns rule
 17. Detect if script ran manually, to be able to reset errors and warning status
+18. Separate variables which alter the behavior of scripts into a separate module

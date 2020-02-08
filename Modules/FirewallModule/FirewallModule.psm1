@@ -353,6 +353,34 @@ function Show-Errors
     $global:Error.Clear()
 }
 
+# about: set vertical screen buffer to recommended value
+function Set-ScreenBuffer
+{
+    $psHost = Get-Host
+    $psWindow = $psHost.UI.RawUI
+    $NewSize = $psWindow.BufferSize
+
+    $NewBuffer = (Get-Variable -Name RecommendedBuffer -Scope Script).Value
+    
+    if ($NewSize.Height -lt $NewBuffer)
+    {
+        Write-Warning "Your screen buffer of $($NewSize.Height) is below recommended $NewBuffer to preserve all execution output"
+
+        $Choices  = "&Yes", "&No"
+        $Default = 0
+        $Title = "Increase Screen Buffer"
+        $Question = "Would you like to increase screen buffer to $($NewBuffer)?"
+        $Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
+    
+        if ($Decision -eq $Default)
+        {
+            $NewSize.Height = $NewBuffer
+            $psWindow.BufferSize = $NewSize
+            Write-Note "Screen buffer changed to $NewBuffer"
+        }
+    }
+}
+
 #
 # Module variables
 #
@@ -379,6 +407,8 @@ New-Variable -Name Context -Scope Global -Value "Context not set"
 New-Variable -Name WarningStatus -Scope Global -Value $false
 # To force loading rules regardless of presence of program set to true
 New-Variable -Name Force -Scope Global -Value $true
+# Recommended vertical screen buffer value, to ensure user can scroll back all the output
+New-Variable -Name RecommendedBuffer -Scope Script -Value 3000
 
 #
 # Function exports
@@ -394,6 +424,7 @@ Export-ModuleMember -Function Test-PowershellVersion
 Export-ModuleMember -Function Format-Output
 Export-ModuleMember -Function Show-Errors
 Export-ModuleMember -Function Set-Warning
+Export-ModuleMember -Function Set-ScreenBuffer
 
 #
 # Variable exports

@@ -35,6 +35,9 @@ Set-Variable -Name WarningStatus -Scope Global -Value $false
 Test-PowershellVersion $VersionCheck
 Set-Variable -Name VersionCheck -Scope Global -Value $false
 
+# Prompt to set screen buffer to recommended value
+Set-ScreenBuffer
+
 # Check all rules that apply to windows services
 Test-File $ServiceHost
 Get-NetworkServices $PSScriptRoot\Rules
@@ -211,4 +214,7 @@ else
 }
 
 Write-Host ""
+
+# Clear errors and warning status
+$Error.Clear()
 Set-Variable -Name WarningStatus -Scope Global -Value $false
