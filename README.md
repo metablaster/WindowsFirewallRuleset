@@ -170,7 +170,7 @@ This is so that when you need to search for something it's easy to see what is w
 5. It is also important that a rule is very specific and not generic, that means specifying protocol, IP addresses, ports, system user, interface type and other relevant information.\
 for example just saying: allow TCP outbound port 80 for any address or any user or no explanation what is this supposed to allow or block is not acceptable.
 
-# More information and help/develop
+# More information and help
 Inside the [Readme](https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Readme) folder you will find usefull information not only about this project but also general information on how to troubleshoot firewall and network problems, or gather more relevant information.
 
 It may answer some of your questions, you should go ahead and read it!\
