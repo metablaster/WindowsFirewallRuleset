@@ -28,6 +28,12 @@
 - All the rules are loaded into Local group policy giving you full power over default windows firewall.
 - Currently there are some 650 firewall rules.
 
+# What are the core benefits of this firewall/project?
+1. Unlike normal windows firewall in control panel, these rules are loaded into GPO firewall, meaning random programs which install rules as part of their installation process or system settings changes will have no effect on firewall unless you explicitly make an exception, therefore you have full control over the firewall.
+2. Unlike default windows firewall rules, these rules are much more restrictive such as, tied to explicit system accounts, rules apply to specific ports, network interfaces, specific programs, services etc.
+3. Unlike default (or your custom) rules you will know which rules have no effect or are redundant due to ie. uninstalled program or a missing windows service which no longer exists or are redundant/invalid for what ever other reason.
+4. Changing rule attributes such as ports, adresses and similar is much easier since the rules are in scripts, so you can use editor tools such as CTRL + F to perform bulk operations on your rules, more rules you have the easier it is to manage them.
+
 # Licenses
 This project **"WindowsFirewallRuleset"** is licensed under **MIT** license.\
 Subproject [Indented.Net.IP](https://github.com/indented-automation/Indented.Net.IP) (3rd party code) located in **"Modules\Indented.Net.IP"** subfolder is licensed under **ISC** license.\
