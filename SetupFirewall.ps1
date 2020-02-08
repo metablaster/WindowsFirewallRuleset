@@ -197,8 +197,8 @@ Write-Host ""
 
 if ($Error.Count -gt 0)
 {
-    Set-Warning "Not all of the scripts ran cleanly!" $false
-    Set-Warning "Make sure to update those scripts and re-run them individually" $false
+    Write-Warning "Not all of the scripts ran cleanly!"
+    Write-Warning "Make sure to update those scripts and re-run them individually"
     Write-Note "If module is edited don't forget to restart Powershell"
     Write-Note "Make sure you visit Local Group Policy and adjust your rules as needed."
 

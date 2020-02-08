@@ -188,14 +188,10 @@ function Set-Warning
         [parameter(Mandatory = $true)]
         [string] $Warning,
         [parameter(Mandatory = $false)]
-        [bool] $SetWarning = $true
+        [bool] $Status = $true
     )
 
-    if ($SetWarning)
-    {
-        Set-Variable -Name WarningStatus -Scope Global -Value $true
-    }
-
+    Set-Variable -Name WarningStatus -Scope Global -Value $Status
     Write-Host "WARNING: $Warning" -ForegroundColor Yellow -BackgroundColor Black
 }
 
@@ -291,7 +287,7 @@ function Test-PowershellVersion
         $PowershellMajor = $PSVersionTable.PSVersion | Select-Object -ExpandProperty Major
         $PowershellMinor = $PSVersionTable.PSVersion | Select-Object -ExpandProperty Minor
 
-        if (($PowershellMajor -eq 5) -and ($PowershellMinor -ge 1))
+        if (($PowershellMajor -ge 5) -and ($PowershellMinor -ge 1))
         {
             Write-Host ""
             Write-Host "Powershell edition: $($PSVersionTable.PSEdition) $PowershellMajor.$PowershellMinor" -ForegroundColor Cyan
@@ -300,7 +296,7 @@ function Test-PowershellVersion
         else
         {
             Write-Host ""
-            Write-Host "Unable to proceed, Powershell version 5.1 is required to run these scripts" -ForegroundColor Red -BackgroundColor Black
+            Write-Host "Unable to proceed, minimum Powershell version required to run these scripts is 5.1" -ForegroundColor Red -BackgroundColor Black
             Write-Host "Your Powershell edition is: $($PSVersionTable.PSEdition) $PowershellMajor.$PowershellMinor"    
             Write-Host ""
             exit
