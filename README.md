@@ -42,13 +42,13 @@ For more info see respective licences:\
 5. Visual Studio Code (Optional) [Download VSCode](https://code.visualstudio.com)
 6. PowerShell Support for VSCode (Optional) [Download extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell)
 
+**If any of the requirements from point 1, 2 and 3 are not meet the scripts will refuse to run.**
+
 - Powershell is built into Windows by default, you will probably need to install it or update on different systems.
 - NET Framework 4.8 is automatically installed (trhough Windwos update) on Windows 10 1903 (May 2019 Update).
 - You may want to have git to check out for updates, to easily switch between branches or to contribute code.
 - VS Code is preferred editor to edit the scripts for your needs or for contribution, any other editor is of course your choice.
 - If you get VSCode, you'll also need powershell extension for syntax highliting among other cool features.
-
-If any of the requirements from point 1, 2 and 3 are not meet the scripts will refuse to run.
 
 # I don't have Windows 10 Pro/Enterprise
 **First, note that Home versions of Windows do not have GPO (Local Group Policy), therefore not possible to make use of this project.**
@@ -70,7 +70,7 @@ For example for Windows 7, define a new variable that looks like this:\
 The acceptable format for this parameter is a number in the Major.Minor format.
 
 **Modification 3:**\
-edit individual ruleset scripts, and take a look which rules you want to be loaded into your firewall,\
+edit individual ruleset scripts, and take a look which rules you want or need to be loaded on that system,\
 then simply replace ```-Platform $Platform``` with ```-Platform $PatformWin7``` for each rule you want.
 
 In VS Code for example you can also simply (CTRL + F) for each script and replace all instances. very simple.\
@@ -81,7 +81,7 @@ Also ie. rules for programs and services that do not exist on system will be mos
 
 What this means, is, just edit the GPO later to refine your imports if you go that route, or alternatively revisit your edits again.
 
-**Modification 4:**
+**Modification 4:**\
 Visit `Test` folder and run all tests individually to confirm modules and their functions work as expected, any failure should be fixed.
 
 # Step by step quick start
@@ -148,13 +148,13 @@ Deleting all rules or reveting to previsous state can be done with `ResetFirewal
 
 # Manage loaded rules
 There are 2 ways to manage your rules:
-1. Using Local Group Policy, this method gives you limited freedom on what you can do whith the rules, such as disabling them or changing some attributes.
+1. Using Local Group Policy, this method gives you basic freedom on what you can do whith the rules, such as disabling them or changing some attributes.
 2. Editting Powershell scripts, this method gives you full control, you can improve the rules, add new ones or screw them up.
 
 What ever your setup is, you will surelly need to perform additinal work such as adding more rules in GPO to allow programs for which rules do not exist, or to reconfigure existing rules.
 
 # Checking for updates
-This repository consists of 2 branches, "master" and "develop", develop (unstable) branch is the most recent one and is the one where all commits (updates) direcrtly go so it's beta product, unlike master branch which is updated from develop branch once in a while and
+This repository consists of 2 branches, "master" and "develop", develop (unstable) branch is the most recent one and is the one where all commits (updates) directly go so it's beta product, unlike master branch which is updated from develop branch once in a while and
 not before all scripts are fully tested, meaning master brach is stable.
 
 So if you're fine to experiment with development/beta version switch to "develop" branch and try it out, otherwise stick to master if for example development version produces errors for you.
