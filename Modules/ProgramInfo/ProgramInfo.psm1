@@ -43,10 +43,10 @@ function Get-AppSID
         [ValidateLength(1, 100)]
         [string] $AppName
     )
-    
+
     $ACL = Get-ACL "C:\Users\$UserName\AppData\Local\Packages\$AppName\AC"
     $ACE = $ACL.Access.IdentityReference.Value
-    
+
     $ACE | ForEach-Object {
         # package SID starts with S-1-15-2-
         if($_ -match "S-1-15-2-") {
@@ -74,19 +74,27 @@ function Test-File
         $Script = (Get-PSCallStack)[1].Command
         $SearchPath = Split-Path -Path $ExpandedPath -Parent
         $Executable = Split-Path -Path $ExpandedPath -Leaf
-        
+
         Set-Warning "Executable '$Executable' was not found, rules for '$Executable' won't have any effect`nSearched path was: $SearchPath"
         Write-Note "To fix the problem find '$Executable' then adjust the path in`n$Script and re-run the script later again"
     }
 }
 
 # about: Same as Test-Path but expands system environment variables
+# input: Path to folder, Allow null or empty since input may come from other commandlets which can return empty or null
+# output: $true if path exists, false otherwise
+# sample: Test-Evnironment %SystemDrive%
 function Test-Environment
 {
     param (
-        [parameter(Mandatory = $true)]
-        [string] $FilePath
+        [parameter(Mandatory = $false)]
+        [string] $FilePath = $null
     )
+
+    if ([System.String]::IsNullOrEmpty($FilePath))
+    {
+        return $false
+    }
 
     return (Test-Path -Path ([System.Environment]::ExpandEnvironmentVariables($FilePath)))
 }
@@ -103,7 +111,7 @@ function Test-Service
     )
 
     if (!(Get-Service -Name $Service -ErrorAction SilentlyContinue))
-    { 
+    {
         Set-Warning "Service '$Service' not found, rule won't have any effect"
         Write-Note "To fix the problem update or comment out all firewall rules for '$Service' service"
     }
@@ -125,65 +133,80 @@ function Format-Path
         return $FilePath
     }
 
-    # Strip away quotations
+    # Make an array of (environment variable/path) value pair,
+    # excluding user profile environment variables
+    $Variables = @()
+    foreach ($Entry in @(Get-ChildItem Env:))
+    {
+        $Entry.Name = "%" + $Entry.Name + "%"
+
+        if ($BlackListEnvironment -notcontains $Entry.Name)
+        {
+            $Variables += $Entry
+        }
+    }
+
+    # TODO: sorted result will have multiple same variables,
+    # Sorting from longest paths which should be checked first
+    $Variables = $Variables | Sort-Object -Descending { $_.Value.Length }
+
+    # Strip away quotations from path
     $FilePath = $FilePath.Trim('"')
     $FilePath = $FilePath.Trim("'")
 
     # Replace double slasses with single ones
     $FilePath = $FilePath.Replace("\\", "\")
 
-    # Initialize SearchString to input path
+    # If input path is root drive, removing a slash would produce bad path
+    # Otherwise remove trailing slahs for cases where entry path is convertible to variable
+    if ($FilePath.Length -gt 3)
+    {
+        $FilePath = $FilePath.TrimEnd('\\')
+    }
+
+    # Make a copy of file path because modification can be wrong
     $SearchString = $FilePath
 
-    # All environment variables, including user profile
-    $AllVariables = @(Get-ChildItem Env:)
-
-    # TODO: sorted result will have multiple same variables,
-    # sorting result is different if sorting AllVariables first
-    # Make a list of good environment variables (exclude user profile)
-    $Variables = @()
-    foreach ($Variable in $AllVariables)
+    # Check if file path already contains environment variable
+    foreach ($Variable in $Variables)
     {
-        $Current = "%" + $Variable.Name + "%"
-        if ($BlackListEnvironment -notcontains $Current)
+        if ($FilePath -like "$($Variable.Name)*")
         {
-            $Variables += $Variable
+            Write-Debug "[Format-Path] Input path already formatted"
+            return $FilePath
         }
     }
 
-    # Sorting from longest paths which should be checked first
-    $Variables = $Variables | Sort-Object -Descending { $_.Value.length }
-
+    # See if path is convertible to environment variable
     while (![System.String]::IsNullOrEmpty($SearchString))
     {
-        foreach ($Value in $Variables.Value)
+        foreach ($Entry in $Variables)
         {
-            if ($Value -like "*$SearchString")
+            if ($Entry.Value -like "*$SearchString")
             {
-                # Get Environment variable for current path
-                $Replacement = "%" + @(($Variables | Where-Object { $_.Value -eq $Value} ).Name)[0] + "%"
-
-                # Envirnment variable found, finally trim trailing slashes
-                return $FilePath.Replace($SearchString, $Replacement).TrimEnd('\\')
+                # Environment variable found, if this is first hit, trailing slash is already removed
+                return $FilePath.Replace($SearchString, $Entry.Name)
             }
         }
-    
-        # Strip away file or last folder in path
+
+        # Strip away file or last folder in path then try again (also trims trailing slash)
         $SearchString = Split-Path -Path $SearchString -Parent
     }
 
     # path has been reduced to root drive so get that
     $SearchString = Split-Path -Path $FilePath -Qualifier
-    $Replacement = "%" + @(($Variables | Where-Object { $_.Value -eq $SearchString} ).Name)[0] + "%"
+    # Since there are duplicate entries, we grab first one
+    $Replacement = @(($Variables | Where-Object { $_.Value -eq $SearchString} ).Name)[0]
 
-    if ($Replacement.Length -eq 2)
+    if ([System.String]::IsNullOrEmpty($Replacement))
     {
+        Write-Debug "[Format-Path] Environment variables for input path don't exist"
         # There are no environment variables for this drive
-        # Just trim trailing slashes
+        # Just trim trailing slash
         return $FilePath.TrimEnd('\\')
     }
 
-    # Only root drive is converted, finally trim trailing slashes
+    # Only root drive is converted, just trim away trailing slash
     return $FilePath.Replace($SearchString, $Replacement).TrimEnd('\\')
 }
 
@@ -204,13 +227,13 @@ function Get-UserPrograms
     {
         $HKU = Get-AccountSID $UserAccount
         $HKU += "\Software\Microsoft\Windows\CurrentVersion\Uninstall"
-        
+
         $RegistryHive = [Microsoft.Win32.RegistryHive]::Users
         $RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
         $UserKey = $RemoteKey.OpenSubkey($HKU)
         $UserPrograms = @()
-        
+
         if ($UserKey)
         {
             foreach ($SubKey in $UserKey.GetSubKeyNames())
@@ -221,6 +244,7 @@ function Get-UserPrograms
 
                     if (![System.String]::IsNullOrEmpty($InstallLocation))
                     {
+                        # TODO: move all instances to directly format (first call above)
                         $InstallLocation = Format-Path $InstallLocation
 
                         # Get more key entries as needed
@@ -232,8 +256,8 @@ function Get-UserPrograms
                     }
                     else
                     {
-                        Set-Warning "Failed to read registry entry $Key\InstallLocation"    
-                    }        
+                        Set-Warning "Failed to read registry entry $Key\InstallLocation"
+                    }
                 }
             }
         }
@@ -243,7 +267,7 @@ function Get-UserPrograms
         }
 
         return $UserPrograms
-    } 
+    }
     else
     {
         Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact '$ComputerName'"
@@ -270,14 +294,14 @@ function Get-SystemPrograms
             $HKLM = @(
                 "Software\Microsoft\Windows\CurrentVersion\Uninstall"
                 "Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall"
-            )            
+            )
         }
         else
         {
             # 32 bit system
             $HKLM = "Software\Microsoft\Windows\CurrentVersion\Uninstall"
         }
-        
+
         $RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
         $RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
@@ -356,7 +380,7 @@ function Get-AllUserPrograms
     if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
     {
         $HKLM = "SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData"
-        
+
         $RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
         $RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
@@ -386,7 +410,7 @@ function Get-AllUserPrograms
                     if (!$ProductKey)
                     {
                         Set-Warning "Failed to open ProductKey: $HKLMSubKey\InstallProperties"
-                        continue    
+                        continue
                     }
 
                     [string] $InstallLocation = $ProductKey.GetValue("InstallLocation")
@@ -457,23 +481,29 @@ function Update-Table
     )
 
     # TODO: SearchString may pick up irrelevant paths (ie. unreal)
-    Initialize-Table
+
     $ComputerName = Get-ComputerName
     $SystemPrograms = Get-SystemPrograms $ComputerName
 
     if ($SystemPrograms.Name -like "*$SearchString*")
     {
+        # TODO: need better mechanism for multiple maches
+        $TargetPrograms = $SystemPrograms | Where-Object { $_.Name -like "*$SearchString*" }
+
         foreach ($User in $global:UserNames)
         {
-            # Create a row
-            $Row = $global:InstallTable.NewRow()
+            foreach ($Program in $TargetPrograms)
+            {
+                # Create a row
+                $Row = $global:InstallTable.NewRow()
 
-            # Enter data in the row
-            $Row.User = $User
-            $Row.InstallRoot = $SystemPrograms | Where-Object { $_.Name -like "*$SearchString*" } | Select-Object -ExpandProperty InstallLocation
+                # Enter data in the row
+                $Row.User = $User
+                $Row.InstallRoot = $Program | Select-Object -ExpandProperty InstallLocation
 
-            # Add row to the table
-            $global:InstallTable.Rows.Add($Row)
+                # Add row to the table
+                $global:InstallTable.Rows.Add($Row)
+            }
         }
     }
     else
@@ -485,7 +515,7 @@ function Update-Table
         {
             # TODO: it not known if it's for specific user in AllUserPrograms registry entry (most likely applies to all users)
             foreach ($User in $global:UserNames)
-            {    
+            {
                 # Create a row
                 $Row = $global:InstallTable.NewRow()
 
@@ -504,7 +534,7 @@ function Update-Table
         foreach ($Account in $global:UserAccounts)
         {
             $UserPrograms = Get-UserPrograms $Account
-            
+
             if ($UserPrograms.Name -like "*$SearchString*")
             {
                 # Create a row
@@ -573,20 +603,47 @@ function Test-Installation
         Write-Note "Bad path detected is: $($FilePath.Value)"
     }
 
-    if (!(Test-Environment $FilePath.Value))
+    # If input path is valid just make sure it's formatted
+    if (Test-Environment $FilePath.Value)
     {
-        if (!(Find-Installation $Program))
+        $FilePath.Value = Format-Path $FilePath.Value
+    }
+    elseif (Find-Installation $Program)
+    {
+        # NOTE: the paths in installation table are supposed to be formatted
+        $InstallRoot = "unknown install location"
+        $Count = $global:InstallTable.Rows.Count
+
+        if ($Count -gt 1)
         {
-            return $false # installation not found
+            Write-Note "Found multiple candidate installation directories for $Program"
+
+            for ($Index = 0; $Index -lt $Count; ++$Index)
+            {
+                Write-Host "$($Index + 1). $($global:InstallTable.Rows[$Index].Item("InstallRoot"))"
+            }
+
+            $Choice = 0
+
+            while ($Choice -lt 1 -or $Choice -gt $Count)
+            {
+                Write-Host "Input number to choose which one is correct"
+                $Choice = Read-Host
+            }
+
+            $InstallRoot = $global:InstallTable.Rows[$Choice - 1].Item("InstallRoot")
         }
         else
         {
             $InstallRoot = $global:InstallTable | Select-Object -ExpandProperty InstallRoot
-            
-            Write-Note "Path corrected from: $($FilePath.Value)`nto: $InstallRoot"
-            $FilePath.Value = $InstallRoot
-            # path updated
         }
+
+        $FilePath.Value = $InstallRoot
+        Write-Note "Path corrected from: $($FilePath.Value)", "to: $InstallRoot"
+    }
+    else
+    {
+        return $false # installation not found
     }
 
     # remove previously set status
@@ -606,6 +663,7 @@ function Find-Installation
         [string] $Program
     )
 
+    Initialize-Table
     [string] $InstallRoot = ""
 
     # TODO: if it's program in user profile then how do we know it that applies to admins or users in rule?
@@ -794,7 +852,7 @@ function Find-Installation
         "EdgeChromium"
         {
             Update-Table "Microsoft Edge"
-            break         
+            break
         }
         "Chrome"
         {
@@ -865,11 +923,7 @@ function Find-Installation
         }
         "VisualStudio"
         {
-            $InstallRoot = "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community"
-            if (Test-Environment $InstallRoot)
-            {
-                Edit-Table $InstallRoot
-            }
+            Update-Table "Microsoft Visual Studio"
             break
         }
         "MSYS2"
@@ -947,7 +1001,7 @@ function Find-Installation
 
         # NOTE: number for Get-PSCallStack is 2, which means 3 function calls back and then get script name (call at 0 and 1 is this script)
         $Script = (Get-PSCallStack)[2].Command
-    
+
         # TODO: this loops seem to be skiped, probably missing Test-File, need to check
         Write-Note "If you installed $Program elsewhere you can input the correct path now `nor adjust the path in $Script and re-run the script later. `notherwise ignore this warning if you don't have $Program installed."
         if (Approve-Execute "Yes" "Rule group for $Program" "Do you want to input path now?")
@@ -960,7 +1014,7 @@ function Find-Installation
                 {
                     Edit-Table $InstallRoot
                 }
-                
+
                 if ($global:InstallTable.Rows.Count -gt 0)
                 {
                     return $true
@@ -1035,7 +1089,7 @@ function Get-NetFramework
                         "ComputerName" = $ComputerName
                         "RegKey" = Split-Path $KeyEntry.ToString() -Leaf
                         "Version" = $Version
-                        "InstallPath" = $InstallLocation }            
+                        "InstallPath" = $InstallLocation }
                 }
                 else # go one key down
                 {
@@ -1104,7 +1158,7 @@ function Get-WindowsSDK
             $HKLM = "SOFTWARE\Microsoft\Microsoft SDKs\Windows"
 
         }
-                
+
         $RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
         $RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
@@ -1136,8 +1190,8 @@ function Get-WindowsSDK
                 }
                 else
                 {
-                    Set-Warning "Failed to read registry entry $RegKey\InstallationFolder"    
-                }    
+                    Set-Warning "Failed to read registry entry $RegKey\InstallationFolder"
+                }
 
                 # we add entry regarldess of presence of install path
                 $WindowsSDK += New-Object -TypeName PSObject -Property @{
@@ -1145,7 +1199,7 @@ function Get-WindowsSDK
                     "RegKey" = $RegKey
                     "Product" = $SubKey.GetValue("ProductName")
                     "Version" = $SubKey.GetValue("ProductVersion")
-                    "InstallPath" = $InstallLocation }        
+                    "InstallPath" = $InstallLocation }
             }
         }
 
@@ -1182,7 +1236,7 @@ function Get-WindowsKits
             # 32 bit system
             $HKLM = "SOFTWARE\Microsoft\Windows Kits\Installed Roots"
         }
-                
+
         $RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
         $RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
@@ -1236,7 +1290,7 @@ function Get-WindowsDefender
     {
         # 32 bit system
         $HKLM = "SOFTWARE\Microsoft\Windows Defender"
-                
+
         $RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
         $RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
@@ -1261,7 +1315,7 @@ function Get-WindowsDefender
             }
             else
             {
-                Set-Warning "Failed to read registry entry $RegKey\InstallLocation"    
+                Set-Warning "Failed to read registry entry $RegKey\InstallLocation"
             }
         }
 

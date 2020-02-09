@@ -32,11 +32,9 @@ Import-Module -Name $PSScriptRoot\..\Modules\System
 Test-SystemRequirements $VersionCheck
 
 # Includes
-Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
-
-# Includes
 . $PSScriptRoot\IPSetup.ps1
 . $PSScriptRoot\DirectionSetup.ps1
+Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
 Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
 
 # Ask user if he wants to load these rules

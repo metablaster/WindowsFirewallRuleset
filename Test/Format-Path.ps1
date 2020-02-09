@@ -37,9 +37,13 @@ Test-SystemRequirements $VersionCheck
 Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
 Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
 
+# TODO: context for tests
 # Ask user if he wants to load these rules
 Update-Context $IPVersion $Direction $Group
 if (!(Approve-Execute)) { exit }
+
+# TODO: make use of debug for all tests
+$DebugPreference = "Continue"
 
 Write-Host ""
 Write-Host "Format-Path"
@@ -51,6 +55,10 @@ $Result
 Test-Environment $Result
 
 $Result = Format-Path "C:\\Windows\System32"
+$Result
+Test-Environment $Result
+
+$Result = Format-Path "C:\\Windows\"
 $Result
 Test-Environment $Result
 
@@ -70,7 +78,7 @@ $Result = Format-Path "C:\PerfLogs"
 $Result
 Test-Environment $Result
 
-$Result = Format-Path "C:\Windows\Microsoft.NET\Framework64\v3.5"
+$Result = Format-Path "C:\Windows\Microsoft.NET\Framework64\v3.5\\"
 $Result
 Test-Environment $Result
 
@@ -91,5 +99,21 @@ $Result
 Test-Environment $Result
 
 $Result = Format-Path "C:\Users\haxor\AppData\Local\OneDrive"
+$Result
+Test-Environment $Result
+
+$Result = Format-Path "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
+$Result
+Test-Environment $Result
+
+$Result = Format-Path "%SystemDrive%"
+$Result
+Test-Environment $Result
+
+$Result = Format-Path ""
+$Result
+Test-Environment $Result
+
+$Result = Format-Path $null
 $Result
 Test-Environment $Result

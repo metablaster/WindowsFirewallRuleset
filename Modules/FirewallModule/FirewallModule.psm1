@@ -107,7 +107,7 @@ function Show-SDDL
     Write-Host "SDDL SID Parsing:"
     Write-Host "****************"
 
-    # Skip index 0 where owner and/or primary group are stored            
+    # Skip index 0 where owner and/or primary group are stored
     for ($i=1;$i -lt $SDDLSplit.Length;$i++)
     {
         $ACLSplit = $SDDLSplit[$i].Split(";")
@@ -137,7 +137,7 @@ function Show-SDDL
             }
         }
     }
-    
+
     return $null
 }
 
@@ -212,7 +212,7 @@ function Set-Warning
     {
         New-Item -ItemType Directory -Path $LogsFolder -ErrorAction Stop| Out-Null
     }
-    
+
     if (!(Test-Path -PathType Leaf -Path $LogFile))
     {
         New-Item -ItemType File -Path $LogFile -ErrorAction Stop| Out-Null
@@ -234,7 +234,7 @@ function Save-Errors
         Write-Note "No errors detected"
         return
     }
-    
+
     # Write all errors to log file
     $LogsFolder = $RepoDir + "\Logs"
     $FileName = "Error_$(Get-Date -Format "dd.MM.yy HH")h.log"
@@ -244,7 +244,7 @@ function Save-Errors
     {
         New-Item -ItemType Directory -Path $LogsFolder -ErrorAction Stop| Out-Null
     }
-    
+
     if (!(Test-Path -PathType Leaf -Path $LogFile))
     {
         New-Item -ItemType File -Path $LogFile -ErrorAction Stop| Out-Null
@@ -326,7 +326,7 @@ function Get-NetworkServices
         New-Item -ItemType File -Path $File| Out-Null
     }
 
-    # Save filtered services to a new file 
+    # Save filtered services to a new file
     Add-Content -Path $File -Value $Content
     Write-Note "$($Content.Count) services involved in firewall rules"
 }
@@ -335,7 +335,7 @@ function Get-NetworkServices
 # about: format firewall rule output for display
 # input: CimInstance from Net-NewFirewallRule
 # outbput: formatted text
-# sample: Net-NewFirewallRule ... | Format-Output 
+# sample: Net-NewFirewallRule ... | Format-Output
 function Format-Output
 {
     [CmdletBinding()]
@@ -359,7 +359,7 @@ function Set-ScreenBuffer
     $NewSize = $psWindow.BufferSize
 
     $NewBuffer = (Get-Variable -Name RecommendedBuffer -Scope Script).Value
-    
+
     if ($NewSize.Height -lt $NewBuffer)
     {
         Write-Warning "Your screen buffer of $($NewSize.Height) is below recommended $NewBuffer to preserve all execution output"
@@ -369,7 +369,7 @@ function Set-ScreenBuffer
         $Title = "Increase Screen Buffer"
         $Question = "Would you like to increase screen buffer to $($NewBuffer)?"
         $Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
-    
+
         if ($Decision -eq $Default)
         {
             $NewSize.Height = $NewBuffer

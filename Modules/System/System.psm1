@@ -46,7 +46,7 @@ function Test-SystemRequirements
         {
             Write-Host ""
             Write-Host "Unable to proceed, minimum required operating system is Win32NT 10.0 to run these scripts" -ForegroundColor Red -BackgroundColor Black
-            Write-Host "Your operating system is: $OSPlatform $OSMajor.$OSMinor"    
+            Write-Host "Your operating system is: $OSPlatform $OSMajor.$OSMinor"
             Write-Host ""
             exit
         }
@@ -58,11 +58,11 @@ function Test-SystemRequirements
         {
             Write-Host ""
             Write-Host "Unable to proceed, 'Desktop' edition of Powershell is required to run these scripts" -ForegroundColor Red -BackgroundColor Black
-            Write-Host "Your Powershell edition is: $PowershellEdition"    
+            Write-Host "Your Powershell edition is: $PowershellEdition"
             Write-Host ""
             exit
         }
-        
+
         # Check Powershell version
         $PowershellMajor = $PSVersionTable.PSVersion | Select-Object -ExpandProperty Major
         $PowershellMinor = $PSVersionTable.PSVersion | Select-Object -ExpandProperty Minor
@@ -86,7 +86,7 @@ function Test-SystemRequirements
         {
             Write-Host ""
             Write-Host "Unable to proceed, minimum required Powershell required to run these scripts is: Desktop 5.1" -ForegroundColor Red -BackgroundColor Black
-            Write-Host "Your Powershell version is: $PowershellEdition $PowershellMajor.$PowershellMinor"    
+            Write-Host "Your Powershell version is: $PowershellEdition $PowershellMajor.$PowershellMinor"
             Write-Host ""
             exit
         }
@@ -94,7 +94,7 @@ function Test-SystemRequirements
         # Now that OS and Powershell is OK we can import these modules
         Import-Module -Name $PSScriptRoot\..\ProgramInfo
         Import-Module -Name $PSScriptRoot\..\ComputerInfo
-        
+
         # Check NET Framework version
         $NETFramework = Get-NetFramework (Get-ComputerName)
         $Version = $NETFramework | Sort-Object -Property Version | Select-Object -Last 1 -ExpandProperty Version
@@ -117,7 +117,7 @@ function Test-SystemRequirements
         {
             Write-Host ""
             Write-Host "Unable to proceed, minimum requried NET Framework version to run these scripts is 4.8" -ForegroundColor Red -BackgroundColor Black
-            Write-Host "Your NET Framework version is: $NETMajor.$NETMinor"    
+            Write-Host "Your NET Framework version is: $NETMajor.$NETMinor"
             Write-Host ""
             exit
         }
@@ -135,7 +135,7 @@ function Test-SystemRequirements
 #
 
 # Set to false to avoid checking powershell version
-New-Variable -Name VersionCheck -Scope Global -Value $true
+New-Variable -Name VersionCheck -Scope Global -Value $false
 
 #
 # Function exports

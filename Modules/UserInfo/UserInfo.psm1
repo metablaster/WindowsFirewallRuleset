@@ -99,7 +99,7 @@ function Get-UserSID
     try
     {
         $NTAccount = New-Object System.Security.Principal.NTAccount($UserName)
-        return ($NTAccount.Translate([System.Security.Principal.SecurityIdentifier])).ToString()  
+        return ($NTAccount.Translate([System.Security.Principal.SecurityIdentifier])).ToString()
     }
     catch
     {
@@ -125,7 +125,7 @@ function Get-AccountSID
     try
     {
         $NTAccount = New-Object System.Security.Principal.NTAccount($Domain, $User)
-        return ($NTAccount.Translate([System.Security.Principal.SecurityIdentifier])).ToString()    
+        return ($NTAccount.Translate([System.Security.Principal.SecurityIdentifier])).ToString()
     }
     catch
     {
@@ -145,9 +145,9 @@ function Get-UserSDDL
         [ValidateLength(1, 100)]
         [string[]] $UserNames
     )
-  
+
     [string] $SDDL = "D:"
-  
+
     foreach($User in $UserNames)
     {
         try
@@ -192,7 +192,7 @@ function Get-AccountSDDL
             Set-Warning "Get-AccountSDDL: User account $UserAccount not found"
             continue
         }
-        
+
         $SDDL += "(A;;CC;;;{0})" -f $SID
 
     }

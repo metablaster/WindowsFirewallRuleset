@@ -75,7 +75,38 @@ Write-Host "***************************"
 $global:InstallTable | Select-Object -ExpandProperty InstallRoot
 Write-Host ""
 
+Initialize-Table
+
 Write-Host ""
 Write-Host "Failure Test"
 Write-Host "***************************"
-Update-Table "Greenshot" $true
+Update-Table "Failure" $true
+
+Write-Host ""
+Write-Host "Table data"
+Write-Host "***************************"
+$global:InstallTable | Format-Table -AutoSize
+
+Write-Host ""
+Write-Host "Install Path"
+Write-Host "***************************"
+$global:InstallTable | Select-Object -ExpandProperty InstallRoot
+Write-Host ""
+
+Initialize-Table
+
+Write-Host ""
+Write-Host "Test multiple paths"
+Write-Host "***************************"
+Update-Table "Visual Studio" $true
+
+Write-Host ""
+Write-Host "Table data"
+Write-Host "***************************"
+$global:InstallTable | Format-Table -AutoSize
+
+Write-Host ""
+Write-Host "Install Path"
+Write-Host "***************************"
+$global:InstallTable | Select-Object -ExpandProperty InstallRoot
+Write-Host ""

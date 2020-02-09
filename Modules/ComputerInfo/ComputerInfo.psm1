@@ -47,7 +47,7 @@ function Get-IPAddress
 {
     param (
         [parameter(Mandatory = $true)]
-        [ValidateSet(4, 6)] 
+        [ValidateSet(4, 6)]
         [int16] $IPVersion
     )
 

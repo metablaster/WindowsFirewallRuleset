@@ -24,7 +24,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Find-Installation
+# Unit test for Get-VSSetupInstance
 #
 
 # Test Powershell version required for this project
@@ -34,6 +34,7 @@ Test-SystemRequirements $VersionCheck
 # Includes
 . $PSScriptRoot\IPSetup.ps1
 . $PSScriptRoot\DirectionSetup.ps1
+Import-Module -Name $PSScriptRoot\..\Modules\VSSetup
 Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
 Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
 
@@ -41,36 +42,24 @@ Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
 Update-Context $IPVersion $Direction $Group
 if (!(Approve-Execute)) { exit }
 
-Write-Host ""
-Write-Host "Find-Installation 'EdgeChromium'"
-Find-Installation "EdgeChromium"
+$NullVariable = $null
+$EmptryVariable = Get-VSSetupInstance -All |
+Select-VSSetupInstance -Require 'FailureTest' -Latest |
+Select-Object -ExpandProperty InstallationPath
 
 Write-Host ""
-Write-Host "Table data"
+Write-Host "Get-VSSetupInstance"
 Write-Host "***************************"
-$global:InstallTable | Format-Table -AutoSize
+
+Get-VSSetupInstance
+Get-VSSetupInstance | Select-VSSetupInstance -Latest | Select-Object -ExpandProperty InstallationPath
 
 Write-Host ""
-Write-Host "Install Root"
+Write-Host "Test-Installation 'NullVariable' $NullVariable"
 Write-Host "***************************"
-$global:InstallTable | Select-Object -ExpandProperty InstallRoot
+Test-Installation "MicrosoftOffice" ([ref]$NullVariable)
 
 Write-Host ""
-Write-Host "Find-Installation 'TeamViewer'"
-Write-Host (Find-Installation "TeamViewer")
-
-Write-Host ""
-Write-Host "Table data"
+Write-Host "Test-Installation 'EmptryVariable' $EmptryVariable"
 Write-Host "***************************"
-$global:InstallTable | Select-Object -ExpandProperty InstallRoot
-
-Write-Host ""
-Write-Host "Find-Installation 'FailureTest'"
-Write-Host (Find-Installation "FailureTest")
-
-Write-Host ""
-Write-Host "Table data"
-Write-Host "***************************"
-$global:InstallTable  | Select-Object -ExpandProperty InstallRoot
-
-Write-Host ""
+Test-Installation "MicrosoftOffice" ([ref]$EmptryVariable)
