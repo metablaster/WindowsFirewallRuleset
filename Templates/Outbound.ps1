@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# Test Powershell version required for this project
+# Check requirements for this project
 Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\System
 Test-SystemRequirements $VersionCheck
 

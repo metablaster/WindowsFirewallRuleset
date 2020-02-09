@@ -23,8 +23,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+# about: write output to separate test cases
+# input: message to print before test
+# output: formatted message block
+# sample: New-Test "my test"
+function New-Test
+{
+    param (
+        [Parameter(Mandatory = $true)]
+        [string] $InputMessage
+    )
+
+    $Message = "Testing: $InputMessage"
+    $Asterisks = $("*" * ($Message.Length + 4))
+
+    Write-Host $Asterisks
+    Write-Host "* $Message *"
+    Write-Host $Asterisks
+}
+
 #
-# Variables related to outbound rules
+# Function exports
 #
 
-$Direction = "Outbound"
+Export-ModuleMember -Function New-Test

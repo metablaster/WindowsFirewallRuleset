@@ -27,7 +27,7 @@ SOFTWARE.
 # Unit test for Show-SDDL
 #
 
-# Test Powershell version required for this project
+# Check requirements for this project
 Import-Module -Name $PSScriptRoot\..\Modules\System
 Test-SystemRequirements $VersionCheck
 
@@ -71,7 +71,7 @@ Write-Host "************************"
 
 $ACL.SDDL
 
-# Call with named parameter binding 
+# Call with named parameter binding
 # $ACL | Show-SDDL
 
 # Or call with parameter string

@@ -27,7 +27,7 @@ SOFTWARE.
 # Unit test for adding rules for store apps based on computer users
 #
 
-# Test Powershell version required for this project
+# Check requirements for this project
 Import-Module -Name $PSScriptRoot\..\Modules\System
 Test-SystemRequirements $VersionCheck
 
@@ -88,7 +88,7 @@ foreach($User in $Users) {
     Get-AppxPackage -User $User -PackageTypeFilter Bundle | ForEach-Object {
         $PackageSID = (Get-AppSID $User $_.PackageFamilyName)
         $PackageSID
-    }    
+    }
 }
 
 Write-Host ""

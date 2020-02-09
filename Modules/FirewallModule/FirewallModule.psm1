@@ -24,29 +24,30 @@ SOFTWARE.
 #>
 
 # about: update context for Approve-Execute
-# input: rule traffic direction and rule group
+# input: 2-3 strings to be shown in context
 # output: none, global context variable is set
-# sample: Update-Context $Direction $Group
+# sample: Update-Context $IPVersion $Direction $Group
 function Update-Context
 {
     param (
-        [parameter(Mandatory = $true, Position = 0)]
-        [string] $IPVersion,
+        [Parameter(Mandatory = $true, Position = 0)]
+        [string] $Root,
 
-        [parameter(Mandatory = $true, Position = 1)]
-        [string] $Direction,
+        [Parameter(Mandatory = $true, Position = 1)]
+        [string] $Section,
 
-        [parameter(Mandatory = $false, Position = 2)]
-        [string] $Group = $null
+        [Parameter(Mandatory = $false, Position = 2)]
+        [string] $Subsection = $null
     )
 
-    [string] $NewContext = "IPv" + "$IPVersion" + "." + $Direction
-    if ($Group)
+    $NewContext = $Root + "." + $Section
+    if (![System.String]::IsNullOrEmpty($Subsection))
     {
-        $NewContext += " -> " + $Group
+        $NewContext += " -> " + $Subsection
     }
 
     Set-Variable -Name Context -Scope Global -Value $NewContext
+    Write-Debug "Context set to '$NewContext'"
 }
 
 # about: Used to ask user if he wants to run script.
@@ -58,30 +59,25 @@ function Update-Context
 function Approve-Execute
 {
     param (
-        [parameter(Mandatory = $false)]
-        [ValidateLength(2, 3)]
+        [Parameter(Mandatory = $false)]
+        [ValidateSet("Yes", "No")]
         [string] $DefaultAction = "Yes",
 
-        [parameter(Mandatory = $false)]
-        [string] $title = "Executing: " + (Split-Path -Leaf $MyInvocation.ScriptName),
+        [Parameter(Mandatory = $false)]
+        [string] $Title = "Executing: " + (Split-Path -Leaf $MyInvocation.ScriptName),
 
-        [parameter(Mandatory = $false)]
-        [string] $question = "Do you want to load this ruleset?"
+        [Parameter(Mandatory = $false)]
+        [string] $Question = "Do you want to run this script?"
     )
 
-    $choices  = "&Yes", "&No"
-    $default = 0
-    if ($DefaultAction -like "No") { $default = 1 }
+    $Choices  = "&Yes", "&No"
+    $Default = 0
+    if ($DefaultAction -like "No") { $Default = 1 }
 
-    $title += " [$Context]"
-    $decision = $Host.UI.PromptForChoice($title, $question, $choices, $default)
+    $Title += " [$Context]"
+    $Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
 
-    if ($decision -eq $default)
-    {
-        return $true
-    }
-
-    return $false
+    return $Decision -eq $Default
 }
 
 # about: Show-SDDL returns SDDL based on "object"
@@ -405,8 +401,6 @@ New-Variable -Name WarningStatus -Scope Global -Value $false
 New-Variable -Name Force -Scope Global -Value $true
 # Recommended vertical screen buffer value, to ensure user can scroll back all the output
 New-Variable -Name RecommendedBuffer -Scope Script -Value 3000
-# Repository root directory
-New-Variable -Name RepoDir -Scope Global -Option Constant -Value (Resolve-Path -Path "$PSScriptRoot\..\.." | Select-Object -ExpandProperty Path)
 
 #
 # Function exports
@@ -437,4 +431,3 @@ Export-ModuleMember -Variable Interface
 
 Export-ModuleMember -Variable Context
 Export-ModuleMember -Variable WarningStatus
-Export-ModuleMember -Variable RepoDir

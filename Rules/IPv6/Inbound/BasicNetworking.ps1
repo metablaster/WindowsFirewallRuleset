@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# Test Powershell version required for this project
+# Check requirements for this project
 Import-Module -Name $PSScriptRoot\..\..\..\Modules\System
 Test-SystemRequirements $VersionCheck
 
@@ -113,7 +113,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 
 # Multicast Listener Discovery (MLD) is a component of the Internet Protocol Version 6 (IPv6) suite.
 # MLD is used by IPv6 routers for discovering multicast listeners on a directly attached link,
-# much like Internet Group Management Protocol (IGMP) is used in IPv4. 
+# much like Internet Group Management Protocol (IGMP) is used in IPv4.
 
 #
 # IPHTTPS (IPv6 over HTTPS)

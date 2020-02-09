@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# Test Powershell version required for this project
+# Check requirements for this project
 Import-Module -Name $PSScriptRoot\..\..\..\Modules\System
 Test-SystemRequirements $VersionCheck
 
@@ -75,7 +75,7 @@ if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot)) -or $Force)
 {
     $EdgeChromiumApp = "$EdgeChromiumRoot\Edge\Application\msedge.exe"
     Test-File $EdgeChromiumApp
-    
+
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Edge-Chromium HTTP" -Service Any -Program $EdgeChromiumApp `
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -94,7 +94,7 @@ if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot)) -or $Force)
     Test-File $EdgeChromiumUpdate
     [string[]] $UpdateAccounts = "NT AUTHORITY\SYSTEM"
     $UpdateAccounts += $UserAccounts
-    
+
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Edge-Chromium Update" -Service Any -Program $EdgeChromiumUpdate `
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -277,7 +277,7 @@ if ((Test-Installation "Tor" ([ref] $TorRoot)) -or $Force)
 {
     $TorApp = "$TorRoot\Browser\TorBrowser\Tor\tor.exe"
     Test-File $TorApp
-    
+
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "Tor HTTP" -Service Any -Program $TorApp `
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

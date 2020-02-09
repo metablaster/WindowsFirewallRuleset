@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# Test Powershell version required for this project
+# Check requirements for this project
 Import-Module -Name $PSScriptRoot\..\..\..\Modules\System
 Test-SystemRequirements $VersionCheck
 
@@ -95,7 +95,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 3702 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "Rule for Network Discovery to discover devices via Function Discovery.
-Publishes this computer and resources attached to this computer so they can be discovered over the network. 
+Publishes this computer and resources attached to this computer so they can be discovered over the network.
 If this rule is disabled, network resources will no longer be published and they will not be discovered by other computers on the network." | Format-Output
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `

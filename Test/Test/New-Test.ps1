@@ -24,42 +24,37 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-VSSetupInstance
+# Unit test for New-Test
 #
 
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\..\Modules\System
+Import-Module -Name $PSScriptRoot\..\..\Modules\System
 Test-SystemRequirements $VersionCheck
 
 # Includes
-. $PSScriptRoot\IPSetup.ps1
-. $PSScriptRoot\DirectionSetup.ps1
-Import-Module -Name $PSScriptRoot\..\Modules\VSSetup
-Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+. $RepoDir\Test\ContextSetup.ps1
+Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
 if (!(Approve-Execute)) { exit }
 
-$NullVariable = $null
-$EmptryVariable = Get-VSSetupInstance -All |
-Select-VSSetupInstance -Require 'FailureTest' -Latest |
-Select-Object -ExpandProperty InstallationPath
+$DebugPreference = "Continue"
 
-Write-Host ""
-Write-Host "Get-VSSetupInstance"
-Write-Host "***************************"
+function New-Test
+{
+    param (
+        [Parameter(Mandatory = $true)]
+        [string] $InputMessage
+    )
 
-Get-VSSetupInstance
-Get-VSSetupInstance | Select-VSSetupInstance -Latest | Select-Object -ExpandProperty InstallationPath
+    $Message = "Testing: $InputMessage"
+    $Asterisks = $("*" * ($Message.Length + 4))
 
-Write-Host ""
-Write-Host "Test-Installation 'NullVariable' $NullVariable"
-Write-Host "***************************"
-Test-Installation "MicrosoftOffice" ([ref]$NullVariable)
+    Write-Host $Asterisks
+    Write-Host "* $Message *"
+    Write-Host $Asterisks
+}
 
-Write-Host ""
-Write-Host "Test-Installation 'EmptryVariable' $EmptryVariable"
-Write-Host "***************************"
-Test-Installation "MicrosoftOffice" ([ref]$EmptryVariable)
+New-Test "New-Test"

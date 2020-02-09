@@ -23,10 +23,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# about: Test and print system requirements required for this project
-# input: true or false to check or not to check
-# output: error message and abort if check failed, system info otherwise
-# sample: Test-SystemRequirements $true
+#
+# Unit test for Test-SystemRequirements
+#
+
+# Check requirements for this project
+Import-Module -Name $PSScriptRoot\..\..\Modules\System
+
+# Includes
+. $RepoDir\Test\ContextSetup.ps1
+Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\FirewallModule
+
+# Ask user if he wants to load these rules
+Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
+if (!(Approve-Execute)) { exit }
+
+$DebugPreference = "Continue"
+New-Variable -Name VersionCheck -Scope Script -Option Constant -Value $true
+
 function Test-SystemRequirements
 {
     param (
@@ -130,24 +145,5 @@ function Test-SystemRequirements
     }
 }
 
-#
-# Module variables
-#
-
-# Set to false to avoid checking system requirements
-New-Variable -Name VersionCheck -Scope Script -Option Constant -Value $false
-# Repository root directory
-New-Variable -Name RepoDir -Scope Global -Option Constant -Value (Resolve-Path -Path "$PSScriptRoot\..\.." | Select-Object -ExpandProperty Path)
-
-#
-# Function exports
-#
-
-Export-ModuleMember -Function Test-SystemRequirements
-
-#
-# Variable exports
-#
-
-# Realocating scripts should be easy if root directory is constant
-Export-ModuleMember -Variable RepoDir
+New-Test "Test-SystemRequirements"
+Test-SystemRequirements $VersionCheck

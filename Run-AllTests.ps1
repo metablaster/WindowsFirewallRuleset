@@ -28,7 +28,7 @@ SOFTWARE.
 # TODO: some test will output wrong results, better run each test separately
 #
 
-# Test Powershell version required for this project
+# Check requirements for this project
 Import-Module -Name $PSScriptRoot\Modules\System
 Test-SystemRequirements $VersionCheck
 

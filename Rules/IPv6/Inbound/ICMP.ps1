@@ -29,15 +29,15 @@ SOFTWARE.
 
 <#
 Type    Name
-0   Reserved	
+0   Reserved
 1	Destination Unreachable
 2	Packet Too Big
 3	Time Exceeded
 4	Parameter Problem
-5-99	Unassigned	
+5-99	Unassigned
 100	Private experimentation
 101	Private experimentation
-102-126	Unassigned	
+102-126	Unassigned
 127	Reserved for expansion of ICMPv6 error messages
 128	Echo Request
 129	Echo Reply
@@ -73,7 +73,7 @@ Type    Name
 159	MPL Control Message
 160	Extended Echo Request
 161	Extended Echo Reply
-162-199	Unassigned	
+162-199	Unassigned
 200	Private experimentation
 201	Private experimentation
 255	Reserved for expansion of ICMPv6 informational messages
@@ -84,7 +84,7 @@ Type    Name
 # TODO: add block rules based on remote address
 # TODO: add rule for ISATAP and 4to6
 
-# Test Powershell version required for this project
+# Check requirements for this project
 Import-Module -Name $PSScriptRoot\..\..\..\Modules\System
 Test-SystemRequirements $VersionCheck
 

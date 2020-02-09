@@ -39,6 +39,11 @@ SOFTWARE.
 # sample: Test-Function
 function Test-Function
 {
+    param (
+        [Parameter(Mandatory = $true)]
+        [string] $Param
+    )
+
     return $null
 }
 

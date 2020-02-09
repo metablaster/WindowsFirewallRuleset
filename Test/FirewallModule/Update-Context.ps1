@@ -24,42 +24,51 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-VSSetupInstance
+# Unit test for Update-Context
 #
 
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\..\Modules\System
+Import-Module -Name $PSScriptRoot\..\..\Modules\System
 Test-SystemRequirements $VersionCheck
 
 # Includes
-. $PSScriptRoot\IPSetup.ps1
-. $PSScriptRoot\DirectionSetup.ps1
-Import-Module -Name $PSScriptRoot\..\Modules\VSSetup
-Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+. $RepoDir\Test\ContextSetup.ps1
+Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
 if (!(Approve-Execute)) { exit }
 
-$NullVariable = $null
-$EmptryVariable = Get-VSSetupInstance -All |
-Select-VSSetupInstance -Require 'FailureTest' -Latest |
-Select-Object -ExpandProperty InstallationPath
+$DebugPreference = "SilentlyContinue"
 
-Write-Host ""
-Write-Host "Get-VSSetupInstance"
-Write-Host "***************************"
+function Update-Context
+{
+    param (
+        [Parameter(Mandatory = $true, Position = 0)]
+        [string] $Root,
 
-Get-VSSetupInstance
-Get-VSSetupInstance | Select-VSSetupInstance -Latest | Select-Object -ExpandProperty InstallationPath
+        [Parameter(Mandatory = $true, Position = 1)]
+        [string] $Section,
 
-Write-Host ""
-Write-Host "Test-Installation 'NullVariable' $NullVariable"
-Write-Host "***************************"
-Test-Installation "MicrosoftOffice" ([ref]$NullVariable)
+        [Parameter(Mandatory = $false, Position = 2)]
+        [string] $Subsection = $null
+    )
 
-Write-Host ""
-Write-Host "Test-Installation 'EmptryVariable' $EmptryVariable"
-Write-Host "***************************"
-Test-Installation "MicrosoftOffice" ([ref]$EmptryVariable)
+    $NewContext = $Root + "." + $Section
+    if (![System.String]::IsNullOrEmpty($Subsection))
+    {
+        $NewContext += " -> " + $Subsection
+    }
+
+    Set-Variable -Name Context -Scope Global -Value $NewContext
+    Write-Debug "Context set to '$NewContext'"
+}
+
+New-Test "Update-Context IPv4.Outbound -> ICMPv4"
+Update-Context "IPv$IPVersion" "Outbound" "ICMPv4"
+Approve-Execute | Out-Null
+
+New-Test "Update-Context Test.Update-Context"
+Update-Context "Test" "Update-Context"
+Approve-Execute | Out-Null

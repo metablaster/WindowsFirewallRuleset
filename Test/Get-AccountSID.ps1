@@ -27,7 +27,7 @@ SOFTWARE.
 # Unit test for Get-AccountSID
 #
 
-# Test Powershell version required for this project
+# Check requirements for this project
 Import-Module -Name $PSScriptRoot\..\Modules\System
 Test-SystemRequirements $VersionCheck
 
@@ -45,7 +45,7 @@ Write-Host ""
 Write-Host "Get-UserAccounts:"
 Write-Host "***************************"
 
-[String[]]$UserAccounts = Get-UserAccounts "Users" 
+[String[]]$UserAccounts = Get-UserAccounts "Users"
 $UserAccounts += Get-UserAccounts "Administrators"
 $UserAccounts
 

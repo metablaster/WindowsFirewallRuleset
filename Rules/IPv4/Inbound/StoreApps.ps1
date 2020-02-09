@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# Test Powershell version required for this project
+# Check requirements for this project
 Import-Module -Name $PSScriptRoot\..\..\..\Modules\System
 Test-SystemRequirements $VersionCheck
 
@@ -82,7 +82,7 @@ foreach ($User in $UserNames)
     #
 
     Get-AppxPackage -User $User -PackageTypeFilter Bundle | ForEach-Object {
-        
+
         $PackageSID = (Get-AppSID $User $_.PackageFamilyName)
         $Enabled = "False"
 
@@ -104,7 +104,7 @@ foreach ($User in $UserNames)
     #
 
     Get-AppxPackage -PackageTypeFilter Main | Where-Object { $_.SignatureKind -eq "System" -and $_.Name -like "Microsoft*" } | ForEach-Object {
-        
+
         $PackageSID = (Get-AppSID $User $_.PackageFamilyName)
         $Enabled = "False"
 

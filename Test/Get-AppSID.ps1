@@ -27,7 +27,7 @@ SOFTWARE.
 # Unit test for Get-AppSID
 #
 
-# Test Powershell version required for this project
+# Check requirements for this project
 Import-Module -Name $PSScriptRoot\..\Modules\System
 Test-SystemRequirements $VersionCheck
 
@@ -83,7 +83,7 @@ foreach($User in $Users) {
     Write-Host "Processing for: $User"
     Get-AppxPackage -User $User -PackageTypeFilter Bundle | ForEach-Object {
         Get-AppSID $User $_.PackageFamilyName
-    }    
+    }
 }
 
 Write-Host ""
@@ -94,7 +94,7 @@ foreach($Admin in $Admins) {
     Write-Host "Processing for: $Admin"
     Get-AppxPackage -User $Admin -PackageTypeFilter Bundle | ForEach-Object {
         Get-AppSID $Admin $_.PackageFamilyName
-    }    
+    }
 }
 
 Write-Host ""

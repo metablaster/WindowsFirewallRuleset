@@ -40,7 +40,7 @@ ff05::/16   Site-Local scope
 ff06::/16	Unassigned
 ff07::/16	Unassigned
 ff08::/16	Organization-Local scope
-ff09::/16 - ff0D/16	Unassigned	
+ff09::/16 - ff0D/16	Unassigned
 ff0e::/16	Global scope
 ff0f::/16  	Reserved
 
@@ -70,7 +70,7 @@ these IPv6 addresses are valid globally and are globally routable.
 
 # TODO: local address should be known for outbound, for inbound rules remote should be known
 
-# Test Powershell version required for this project
+# Check requirements for this project
 Import-Module -Name $PSScriptRoot\..\..\..\Modules\System
 Test-SystemRequirements $VersionCheck
 

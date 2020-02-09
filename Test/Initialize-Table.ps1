@@ -27,7 +27,7 @@ SOFTWARE.
 # Unit test for Initialize-Table
 #
 
-# Test Powershell version required for this project
+# Check requirements for this project
 Import-Module -Name $PSScriptRoot\..\Modules\System
 Test-SystemRequirements $VersionCheck
 
@@ -68,7 +68,7 @@ foreach ($Account in $global:UserAccounts)
 {
     Write-Host "User programs for: $Account"
     $UserPrograms = Get-UserPrograms $Account
-    
+
     if ($UserPrograms.Name -like "Greenshot*")
     {
         # Create a row
