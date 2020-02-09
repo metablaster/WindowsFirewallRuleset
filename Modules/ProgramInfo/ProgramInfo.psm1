@@ -608,12 +608,38 @@ function Find-Installation
 
     [string] $InstallRoot = ""
 
+    # TODO: if it's program in user profile then how do we know it that applies to admins or users in rule?
     # TODO: need to check some of these search strings (cases), also remove hardcoded directories
     # TODO: Update-Table calls Get-SystemPrograms for every iteration, make it global and singe call
     # NOTE: we want to preserve system environment variables for firewall GUI,
     # otherwise firewall GUI will show full paths which is not desired for sorting reasons
     switch -Wildcard ($Program)
     {
+        "OpenTTD"
+        {
+            Update-Table "OpenTTD"
+            break
+        }
+        "EveOnline"
+        {
+            Update-Table "Eve Online"
+            break
+        }
+        "DemiseOfNations"
+        {
+            Update-Table "Demise of Nations - Rome"
+            break
+        }
+        "CounterStrikeGO"
+        {
+            Update-Table "Counter-Strike Global Offensive"
+            break
+        }
+        "PinballArcade"
+        {
+            Update-Table "PinballArcade"
+            break
+        }
         "JavaPlugin"
         {
             Update-Table "Java\jre1.8.0_45\bin"

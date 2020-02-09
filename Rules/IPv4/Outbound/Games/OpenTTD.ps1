@@ -37,7 +37,7 @@ Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\FirewallModule
 #
 # Setup local variables:
 #
-$Group = "Software - Filezilla"
+$Group = "Games - OpenTTD"
 $Profile = "Private, Public"
 
 # Ask user if he wants to load these rules
@@ -45,36 +45,26 @@ Update-Context $IPVersion $Direction $Group
 if (!(Approve-Execute)) { exit }
 
 #
-# Filezilla installation directories
+# OpenTTD installation directories
 #
-$FilezillaRoot = "%ProgramFiles%\FileZilla FTP Client"
+$OpenTTDRoot = "%ProgramFiles%\OpenTTD"
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
-# Rules for Filezilla
-# TODO: Update ProgramInfo module for Filezilla
+# Rules for OpenTTD
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Filezilla" ([ref]$FilezillaRoot)) -or $Force)
+if ((Test-Installation "OpenTTD" ([ref]$OpenTTDRoot)) -or $Force)
 {
-    $Program = "$FilezillaRoot\filezilla.exe"
+    $Program = "$OpenTTDRoot\openttd.exe"
     Test-File $Program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "Filezilla client (FTP)" -Service Any -Program $Program `
+    -DisplayName "OpenTTD" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21 `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 3978 `
     -LocalUser $UserAccountsSDDL `
-    -Description "FileZilla FTP protocol" | Format-Output
-
-    $Program = "$FilezillaRoot\fzsftp.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "Filezilla client (SFTP)" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21098 `
-    -LocalUser $UserAccountsSDDL `
-    -Description "FileZilla SSH FTP protocol" | Format-Output
+    -Description "" | Format-Output
 }

@@ -37,7 +37,7 @@ Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\FirewallModule
 #
 # Setup local variables:
 #
-$Group = "Software - Filezilla"
+$Group = "Games - Counter Strike GO"
 $Profile = "Private, Public"
 
 # Ask user if he wants to load these rules
@@ -45,36 +45,35 @@ Update-Context $IPVersion $Direction $Group
 if (!(Approve-Execute)) { exit }
 
 #
-# Filezilla installation directories
+# Counter Strike installation directories
 #
-$FilezillaRoot = "%ProgramFiles%\FileZilla FTP Client"
+$CounterStrikeRoot = "%ProgramFiles% (x86)\Steam\steamapps\common\Counter-Strike Global Offensive"
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
-# Rules for Filezilla
-# TODO: Update ProgramInfo module for Filezilla
+# Rules for Counter Strike
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Filezilla" ([ref]$FilezillaRoot)) -or $Force)
+if ((Test-Installation "CounterStrikeGO" ([ref]$CounterStrikeRoot)) -or $Force)
 {
-    $Program = "$FilezillaRoot\filezilla.exe"
+    $Program = "$CounterStrikeRoot\csgo.exe"
     Test-File $Program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "Filezilla client (FTP)" -Service Any -Program $Program `
+    -DisplayName "Counter Strike GO (HTTP)" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21 `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
     -LocalUser $UserAccountsSDDL `
-    -Description "FileZilla FTP protocol" | Format-Output
+    -Description "download maps" | Format-Output
 
-    $Program = "$FilezillaRoot\fzsftp.exe"
+    $Program = "$CounterStrikeRoot\csgo.exe.exe"
     Test-File $Program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "Filezilla client (SFTP)" -Service Any -Program $Program `
+    -DisplayName "Counter Strike GO" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21098 `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 27000-27100 `
     -LocalUser $UserAccountsSDDL `
-    -Description "FileZilla SSH FTP protocol" | Format-Output
+    -Description "" | Format-Output
 }
