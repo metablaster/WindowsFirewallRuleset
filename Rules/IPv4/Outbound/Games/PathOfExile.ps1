@@ -37,7 +37,7 @@ Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\FirewallModule
 #
 # Setup local variables:
 #
-$Group = "Software - Filezilla"
+$Group = "Games - PathOfExile"
 $Profile = "Private, Public"
 
 # Ask user if he wants to load these rules
@@ -45,40 +45,26 @@ Update-Context $IPVersion $Direction $Group
 if (!(Approve-Execute)) { exit }
 
 #
-# Filezilla installation directories
+# PathOfExile installation directories
 #
-$FilezillaRoot = "%ProgramFiles%\FileZilla FTP Client"
+$PathOfExileRoot = "%ProgramFiles% (x86)\Steam\steamapps\common\Path of Exile"
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
-# Rules for Filezilla
-# TODO: Update ProgramInfo module for Filezilla
+# Rules for TargetProgram
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Filezilla" ([ref]$FilezillaRoot)) -or $Force)
+if ((Test-Installation "PathOfExile" ([ref]$PathOfExileRoot)) -or $Force)
 {
-    $Program = "$FilezillaRoot\filezilla.exe"
+    $Program = "$PathOfExileRoot\PathOfExile_x64Steam.exe"
     Test-File $Program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "Filezilla client (FTP)" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21 `
+    -DisplayName "Path of exile" -Service Any -Program $Program `
+    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 6112, 20481 `
     -LocalUser $UserAccountsSDDL `
-    -Description "FileZilla FTP protocol" | Format-Output
-}
-
-# Test if installation exists on system
-if ((Test-Installation "Filezilla" ([ref]$FilezillaRoot)) -or $Force)
-{
-    $Program = "$FilezillaRoot\fzsftp.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "Filezilla client (SFTP)" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21098 `
-    -LocalUser $UserAccountsSDDL `
-    -Description "FileZilla SSH FTP protocol" | Format-Output
+    -Description "Needed for online gaming" | Format-Output
 }

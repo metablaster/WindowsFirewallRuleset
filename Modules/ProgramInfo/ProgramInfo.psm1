@@ -614,6 +614,41 @@ function Find-Installation
     # otherwise firewall GUI will show full paths which is not desired for sorting reasons
     switch -Wildcard ($Program)
     {
+        "JavaPlugin"
+        {
+            Update-Table "Java\jre1.8.0_45\bin"
+            break
+        }
+        "JavaUpdate"
+        {
+            Update-Table "Java Update"
+            break
+        }
+        "JavaRuntime"
+        {
+            Update-Table "Java\jre7\bin"
+            break
+        }
+        "AdobeARM"
+        {
+            Update-Table "Adobe\ARM"
+            break
+        }
+        "AdobeAcrobat"
+        {
+            Update-Table "Acrobat Reader DC"
+            break
+        }
+        "Filezilla"
+        {
+            Update-Table "FileZilla FTP Client"
+            break
+        }
+        "PathOfExile"
+        {
+            Update-Table "Path of Exile"
+            break
+        }
         "HWMonitor"
         {
             Update-Table "HWMonitor"

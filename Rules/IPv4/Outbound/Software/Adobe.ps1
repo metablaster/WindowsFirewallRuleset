@@ -37,7 +37,7 @@ Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\FirewallModule
 #
 # Setup local variables:
 #
-$Group = "Software - Filezilla"
+$Group = "Sofotware - Adobe"
 $Profile = "Private, Public"
 
 # Ask user if he wants to load these rules
@@ -45,40 +45,40 @@ Update-Context $IPVersion $Direction $Group
 if (!(Approve-Execute)) { exit }
 
 #
-# Filezilla installation directories
+# Adobe installation directories
 #
-$FilezillaRoot = "%ProgramFiles%\FileZilla FTP Client"
+$AdobeARMRoot = "%ProgramFiles% (x86)\Common Files\Adobe\ARM\1.0"
+$AcrobatRoot = "%ProgramFiles% (x86)\Adobe\Acrobat Reader DC\Reader"
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
-# Rules for Filezilla
-# TODO: Update ProgramInfo module for Filezilla
+# Rules for Adobe
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Filezilla" ([ref]$FilezillaRoot)) -or $Force)
+if ((Test-Installation "AdobeAcrobat" ([ref]$AcrobatRoot)) -or $Force)
 {
-    $Program = "$FilezillaRoot\filezilla.exe"
+    $Program = "$AcrobatRoot\AcroRd32.exe"
     Test-File $Program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "Filezilla client (FTP)" -Service Any -Program $Program `
+    -DisplayName "Acrobat Reader" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21 `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description "FileZilla FTP protocol" | Format-Output
+    -Description "" | Format-Output
 }
 
 # Test if installation exists on system
-if ((Test-Installation "Filezilla" ([ref]$FilezillaRoot)) -or $Force)
+if ((Test-Installation "AdobeARM" ([ref]$AdobeARMRoot)) -or $Force)
 {
-    $Program = "$FilezillaRoot\fzsftp.exe"
+    $Program = "$AdobeARMRoot\AdobeARM.exe.exe"
     Test-File $Program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "Filezilla client (SFTP)" -Service Any -Program $Program `
+    -DisplayName "Acrobat ARM" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21098 `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
     -LocalUser $UserAccountsSDDL `
-    -Description "FileZilla SSH FTP protocol" | Format-Output
+    -Description "" | Format-Output
 }
