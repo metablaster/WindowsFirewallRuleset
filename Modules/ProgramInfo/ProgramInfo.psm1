@@ -614,6 +614,16 @@ function Find-Installation
     # otherwise firewall GUI will show full paths which is not desired for sorting reasons
     switch -Wildcard ($Program)
     {
+        "HWMonitor"
+        {
+            Update-Table "HWMonitor"
+            break
+        }
+        "CPU-Z"
+        {
+            Update-Table "CPU-Z"
+            break
+        }
         "MSIAfterburner"
         {
             Update-Table "MSI Afterburner"

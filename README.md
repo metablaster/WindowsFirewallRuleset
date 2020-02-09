@@ -22,7 +22,7 @@
 1. computers
 2. installed programs
 3. users on system
-4. network configuration etc;
+4. network configuration etc
 - meaning this project is a good base to easily extend your firewall and include more rules.
 - You can choose which rulles you want, and apply only those or apply them all with single command to your firewall.
 - All the rules are loaded into Local group policy giving you full power over default windows firewall.
