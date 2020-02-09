@@ -135,6 +135,12 @@ if(Approve-Execute "Yes" "Applying: Outbound IPv4 Rules")
     if(Approve-Execute "Yes" "Applying: Rules for games")
     {
         # Rules for games
+        & "$PSScriptRoot\Rules\IPv4\Outbound\Games\CounterStrikeGO.ps1"
+        & "$PSScriptRoot\Rules\IPv4\Outbound\Games\DemiseOfNations.ps1"
+        & "$PSScriptRoot\Rules\IPv4\Outbound\Games\EVEOnline.ps1"
+        & "$PSScriptRoot\Rules\IPv4\Outbound\Games\OpenTTD.ps1"
+        & "$PSScriptRoot\Rules\IPv4\Outbound\Games\PathOfExile.ps1"
+        & "$PSScriptRoot\Rules\IPv4\Outbound\Games\PinbalArcade.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Games\PokerStars.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Games\WarThunder.ps1"
     }
@@ -143,12 +149,20 @@ if(Approve-Execute "Yes" "Applying: Outbound IPv4 Rules")
     if(Approve-Execute "Yes" "Applying: Rules for 3rd party programs")
     {
         # rules for programs
+        & "$PSScriptRoot\Rules\IPv4\Outbound\Software\Adobe.ps1"
+        & "$PSScriptRoot\Rules\IPv4\Outbound\Software\CPUID.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Software\DnsCrypt.ps1"
+        & "$PSScriptRoot\Rules\IPv4\Outbound\Software\FileZilla.ps1"
+        & "$PSScriptRoot\Rules\IPv4\Outbound\Software\GPG.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Software\Greenshot.ps1"
+        & "$PSScriptRoot\Rules\IPv4\Outbound\Software\Intel.ps1"
+        & "$PSScriptRoot\Rules\IPv4\Outbound\Software\Java.ps1"
+        & "$PSScriptRoot\Rules\IPv4\Outbound\Software\MSI.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Software\Nvidia.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Software\OBSStudio.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Software\OpenSSH.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Software\PasswordSafe.ps1"
+        & "$PSScriptRoot\Rules\IPv4\Outbound\Software\qBittorrent.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Software\Steam.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Software\TeamViewer.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Software\Thunderbird.ps1"

@@ -615,6 +615,11 @@ function Find-Installation
     # otherwise firewall GUI will show full paths which is not desired for sorting reasons
     switch -Wildcard ($Program)
     {
+        "qBittorrent"
+        {
+            Update-Table "qBittorrent"
+            break
+        }
         "OpenTTD"
         {
             Update-Table "OpenTTD"
