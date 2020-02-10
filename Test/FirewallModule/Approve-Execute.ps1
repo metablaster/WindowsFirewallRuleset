@@ -26,6 +26,7 @@ SOFTWARE.
 #
 # Unit test for Approve-Execute
 #
+. $PSScriptRoot\..\..\UnloadModules.ps1
 
 # Check requirements for this project
 Import-Module -Name $PSScriptRoot\..\..\Modules\System

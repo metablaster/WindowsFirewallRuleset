@@ -24,33 +24,16 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-AccountSID
+# Unit test for UnloadModules.ps1
 #
-. $PSScriptRoot\..\..\UnloadModules.ps1
+. $PSScriptRoot\..\UnloadModules.ps1
 
-# Check requirements for this project
-Import-Module -Name $PSScriptRoot\..\..\Modules\System
-Test-SystemRequirements
+Import-Module -Name $PSScriptRoot\..\Modules\System -Force
 
-# Includes
-. $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Test
-Import-Module -Name $RepoDir\Modules\UserInfo
-Import-Module -Name $RepoDir\Modules\FirewallModule
+Import-Module -Name $RepoDir\Modules\Test -Force
+Import-Module -Name $RepoDir\Modules\UserInfo -Force
 
-# Ask user if he wants to load these rules
-Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
-if (!(Approve-Execute)) { exit }
+Import-Module -Name $RepoDir\Modules\FirewallModule -Force
 
-$DebugPreference = "Continue"
-
-New-Test "Get-UserAccounts:"
-[String[]]$UserAccounts = Get-UserAccounts "Users"
-$UserAccounts += Get-UserAccounts "Administrators"
-$UserAccounts
-
-New-Test "Get-AccountSID:"
-foreach($Account in $UserAccounts)
-{
-    $(Get-AccountSID $Account)
-}
+Import-Module -Name $RepoDir\Modules\ProgramInfo -Force
+Import-Module -Name $RepoDir\Modules\ComputerInfo -Force

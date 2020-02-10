@@ -26,38 +26,32 @@ SOFTWARE.
 #
 # Unit test for Test-File
 #
+. $PSScriptRoot\..\..\UnloadModules.ps1
 
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\..\Modules\System
+Import-Module -Name $PSScriptRoot\..\..\Modules\System
 Test-SystemRequirements
 
 # Includes
-Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
-
-# Includes
-. $PSScriptRoot\IPSetup.ps1
-. $PSScriptRoot\DirectionSetup.ps1
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+. $RepoDir\Test\ContextSetup.ps1
+Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\ProgramInfo
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
 if (!(Approve-Execute)) { exit }
+
+$DebugPreference = "Continue"
 
 $OfficeShared = "%ProgramFiles%\Common Files\microsoft shared"
 $VSInstallService = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.x86.exe"
 
-Write-Host "Installation status for VisualStudioInstaller"
-
-Write-Host ""
-Write-Host "Test-File '$VSInstallService'"
+New-Test "Test-File '$VSInstallService'"
 Test-File "$VSInstallService"
 
-Write-Host ""
-Write-Host "Test-File '$OfficeShared\ClickToRun\OfficeClickToRun.exe'"
+New-Test "Test-File '$OfficeShared\ClickToRun\OfficeClickToRun.exe'"
 Test-File "$OfficeShared\ClickToRun\OfficeClickToRun.exe"
 
-Write-Host ""
-Write-Host "Test-File '%ProgramFiles%\ClickToRun\OfficeClickToRun.exe'"
+New-Test "Test-File '%ProgramFiles%\ClickToRun\OfficeClickToRun.exe'"
 Test-File "%ProgramFiles%\ClickToRun\OfficeClickToRun.exe"
-
-Write-Host ""

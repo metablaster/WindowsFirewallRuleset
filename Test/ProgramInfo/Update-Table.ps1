@@ -26,6 +26,7 @@ SOFTWARE.
 #
 # Unit test for Update-Table
 #
+. $PSScriptRoot\..\..\UnloadModules.ps1
 
 # Check requirements for this project
 Import-Module -Name $PSScriptRoot\..\..\Modules\System

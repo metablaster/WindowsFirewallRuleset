@@ -379,28 +379,36 @@ function Set-ScreenBuffer
 # Module variables
 #
 
-# Windows 10 and above
-New-Variable -Name Platform -Option Constant -Scope Global -Value "10.0+"
-# Machine where to apply rules (default: Local Group Policy)
-New-Variable -Name PolicyStore -Option Constant -Scope Global -Value "localhost"
-# Stop executing commandlet if error
-New-Variable -Name OnError -Option Constant -Scope Global -Value "Stop"
-# To add rules to firewall for real set to false
-New-Variable -Name Debug -Scope Global -Value $false
-# To prompt for each rule set to true
-New-Variable -Name Execute -Scope Global -Value $false
-# Most used program
-New-Variable -Name ServiceHost -Option Constant -Scope Global -Value "%SystemRoot%\System32\svchost.exe"
-# Default network interface card, change this to NIC which your PC uses
-New-Variable -Name Interface -Option Constant -Scope Global -Value "Wired, Wireless"
-# Global execution context, used in Approve-Execute
-New-Variable -Name Context -Scope Script -Value "Context not set"
+if (!(Get-Variable -Name CheckInitFirewallModule -Scope Global -ErrorAction Ignore))
+{
+    # check if constants alreay initialized, used for module reloading
+    New-Variable -Name CheckInitFirewallModule -Scope Global -Option Constant -Value $null
+
+    # Windows 10 and above
+    New-Variable -Name Platform -Scope Global -Option Constant -Value "10.0+"
+    # Machine where to apply rules (default: Local Group Policy)
+    New-Variable -Name PolicyStore -Scope Global -Option Constant -Value "localhost"
+    # Stop executing commandlet if error
+    New-Variable -Name OnError -Scope Global -Option Constant -Value "Stop"
+    # Most used program
+    New-Variable -Name ServiceHost -Scope Global -Option Constant -Value "%SystemRoot%\System32\svchost.exe"
+    # Default network interface card, change this to NIC which your PC uses
+    New-Variable -Name Interface -Scope Global -Option Constant -Value "Wired, Wireless"
+    # To force loading rules regardless of presence of program set to true
+    New-Variable -Name Force -Scope Global -Option Constant -Value $true
+}
+
 # Global variable to tell if all scripts ran clean
 New-Variable -Name WarningStatus -Scope Global -Value $false
-# To force loading rules regardless of presence of program set to true
-New-Variable -Name Force -Scope Global -Option Constant -Value $true
+# To add rules to firewall for real set to false
+New-Variable -Name Debug -Scope Global -Option ReadOnly -Value $false
+# To prompt for each rule set to true
+New-Variable -Name Execute -Scope Global -Value $false
+
+# Global execution context, used in Approve-Execute
+New-Variable -Name Context -Scope Script -Value "Context not set"
 # Recommended vertical screen buffer value, to ensure user can scroll back all the output
-New-Variable -Name RecommendedBuffer -Scope Script -Value 3000
+New-Variable -Name RecommendedBuffer -Scope Script -Option Constant -Value 3000
 
 #
 # Function exports

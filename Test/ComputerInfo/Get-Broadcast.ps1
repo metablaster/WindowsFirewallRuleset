@@ -26,6 +26,7 @@ SOFTWARE.
 #
 # Unit test for Get-Broadcast
 #
+. $PSScriptRoot\..\..\UnloadModules.ps1
 
 # Check requirements for this project
 Import-Module -Name $PSScriptRoot\..\..\Modules\System

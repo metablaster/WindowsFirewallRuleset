@@ -26,6 +26,7 @@ SOFTWARE.
 #
 # Unit test for adding rules based on computer users
 #
+. $PSScriptRoot\..\UnloadModules.ps1
 
 # Check requirements for this project
 Import-Module -Name $PSScriptRoot\..\Modules\System

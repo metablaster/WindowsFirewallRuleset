@@ -26,25 +26,27 @@ SOFTWARE.
 #
 # Unit test for Initialize-Table
 #
+. $PSScriptRoot\..\..\UnloadModules.ps1
 
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\..\Modules\System
+Import-Module -Name $PSScriptRoot\..\..\Modules\System
 Test-SystemRequirements
 
 # Includes
-. $PSScriptRoot\IPSetup.ps1
-. $PSScriptRoot\DirectionSetup.ps1
-Import-Module -Name $PSScriptRoot\..\Modules\UserInfo
-Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+. $RepoDir\Test\ContextSetup.ps1
+Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\UserInfo
+Import-Module -Name $RepoDir\Modules\ProgramInfo
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
 if (!(Approve-Execute)) { exit }
 
+$DebugPreference = "Continue"
 
-Write-Host "Initialize-Table"
-Write-Host "***************************"
+
+New-Test "Initialize-Table"
 
 Initialize-Table
 
@@ -60,9 +62,7 @@ if ($global:InstallTable.Rows.Count -ne 0)
     exit
 }
 
-Write-Host ""
-Write-Host "Fill table with data"
-Write-Host "***************************"
+New-Test "Fill table with data"
 
 foreach ($Account in $global:UserAccounts)
 {
@@ -83,7 +83,5 @@ foreach ($Account in $global:UserAccounts)
     }
 }
 
-Write-Host ""
-Write-Host "Table data"
-Write-Host "***************************"
+New-Test "Table data"
 $global:InstallTable | Format-Table -AutoSize

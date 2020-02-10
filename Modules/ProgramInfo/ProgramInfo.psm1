@@ -1369,9 +1369,11 @@ Export-ModuleMember -Function Test-Service
 # For debugging only
 Export-ModuleMember -Function Update-Table
 Export-ModuleMember -Function Format-Path
+Export-ModuleMember -Function Edit-Table
 
 #
 # Variable exports
 #
 
+# For deubgging only
 Export-ModuleMember -Variable InstallTable

@@ -26,6 +26,7 @@ SOFTWARE.
 #
 # Unit test for adding relative path
 #
+. $PSScriptRoot\..\UnloadModules.ps1
 
 # Check requirements for this project
 Import-Module -Name $PSScriptRoot\..\Modules\System

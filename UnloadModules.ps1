@@ -24,33 +24,25 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-AccountSID
+# Remove loaded modules and removable variables, usefull for module debugging
 #
-. $PSScriptRoot\..\..\UnloadModules.ps1
 
-# Check requirements for this project
-Import-Module -Name $PSScriptRoot\..\..\Modules\System
-Test-SystemRequirements
+# Set to true to force unloading moduels and removing variables
+$Unload = $true
 
-# Includes
-. $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Test
-Import-Module -Name $RepoDir\Modules\UserInfo
-Import-Module -Name $RepoDir\Modules\FirewallModule
-
-# Ask user if he wants to load these rules
-Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
-if (!(Approve-Execute)) { exit }
-
-$DebugPreference = "Continue"
-
-New-Test "Get-UserAccounts:"
-[String[]]$UserAccounts = Get-UserAccounts "Users"
-$UserAccounts += Get-UserAccounts "Administrators"
-$UserAccounts
-
-New-Test "Get-AccountSID:"
-foreach($Account in $UserAccounts)
+if ($Unload)
 {
-    $(Get-AccountSID $Account)
+    Remove-Module -Name System -ErrorAction Ignore
+
+    Remove-Module -Name FirewallModule -ErrorAction Ignore
+    Remove-Variable -Name WarningStatus -Scope Global -ErrorAction Ignore
+    Remove-Variable -Name Debug -Scope Global -Force -ErrorAction Ignore
+    Remove-Variable -Name Execute -Scope Global -ErrorAction Ignore
+
+    Remove-Module -Name Test -ErrorAction Ignore
+    Remove-Module -Name UserInfo -ErrorAction Ignore
+    Remove-Module -Name ComputerInfo -ErrorAction Ignore
+
+    Remove-Module -Name ProgramInfo -ErrorAction Ignore
+    Remove-Variable -Name InstallTable -Scope Global -ErrorAction Ignore
 }

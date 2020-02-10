@@ -26,32 +26,29 @@ SOFTWARE.
 #
 # Unit test for Test-Environment
 #
+. $PSScriptRoot\..\..\UnloadModules.ps1
 
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\..\Modules\System
+Import-Module -Name $PSScriptRoot\..\..\Modules\System
 Test-SystemRequirements
 
 # Includes
-Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
-
-# Includes
-. $PSScriptRoot\IPSetup.ps1
-. $PSScriptRoot\DirectionSetup.ps1
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+. $RepoDir\Test\ContextSetup.ps1
+Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\ProgramInfo
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
 if (!(Approve-Execute)) { exit }
+
+$DebugPreference = "Continue"
 
 $path1 = "%ProgramFiles%\Common Files\microsoft shared"
 $path2 = "%ProgramFiles(x86)%\Microsoft Visual Studio"
 
-Write-Host ""
-Write-Host "Test-Environment '$path1'"
+New-Test "Test-Environment '$path1'"
 Test-Environment "$path1"
 
-Write-Host ""
-Write-Host "Test-Environment '$path2'"
+New-Test "Test-Environment '$path2'"
 Test-Environment "$path2"
-
-Write-Host ""

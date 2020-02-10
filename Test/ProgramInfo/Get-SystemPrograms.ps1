@@ -26,36 +26,33 @@ SOFTWARE.
 #
 # Unit test for Get-SystemPrograms
 #
+. $PSScriptRoot\..\..\UnloadModules.ps1
 
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\..\Modules\System
+Import-Module -Name $PSScriptRoot\..\..\Modules\System
 Test-SystemRequirements
 
 # Includes
-. $PSScriptRoot\IPSetup.ps1
-. $PSScriptRoot\DirectionSetup.ps1
-Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
-Import-Module -Name $PSScriptRoot\..\Modules\ComputerInfo
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+. $RepoDir\Test\ContextSetup.ps1
+Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\ProgramInfo
+Import-Module -Name $RepoDir\Modules\ComputerInfo
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
 if (!(Approve-Execute)) { exit }
+
+$DebugPreference = "Continue"
 
 $ComputerName = Get-ComputerName
 $SystemPrograms = Get-SystemPrograms $ComputerName
 
-Write-Host ""
-Write-Host "Get-SystemPrograms Name"
-Write-Host "***************************"
+New-Test "Get-SystemPrograms Name"
 $SystemPrograms | Sort-Object -Property Name | Select-Object -ExpandProperty Name
 
-Write-Host ""
-Write-Host "Get-SystemPrograms InstallLocation"
-Write-Host "***************************"
+New-Test "Get-SystemPrograms InstallLocation"
 $SystemPrograms | Sort-Object -Property InstallLocation | Select-Object -ExpandProperty InstallLocation
 
-Write-Host ""
-Write-Host "Get-SystemPrograms"
-Write-Host "***************************"
+New-Test "Get-SystemPrograms"
 $SystemPrograms | Sort-Object -Property Name

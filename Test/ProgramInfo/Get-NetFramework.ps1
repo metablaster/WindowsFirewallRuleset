@@ -26,36 +26,36 @@ SOFTWARE.
 #
 # Unit test for Get-NetFramework
 #
+. $PSScriptRoot\..\..\UnloadModules.ps1
 
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\..\Modules\System
+Import-Module -Name $PSScriptRoot\..\..\Modules\System
 Test-SystemRequirements
 
 # Includes
-. $PSScriptRoot\IPSetup.ps1
-. $PSScriptRoot\DirectionSetup.ps1
-Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
-Import-Module -Name $PSScriptRoot\..\Modules\ComputerInfo
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+. $RepoDir\Test\ContextSetup.ps1
+Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\ProgramInfo
+Import-Module -Name $RepoDir\Modules\ComputerInfo
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
 if (!(Approve-Execute)) { exit }
 
-Write-Host "Get-NetFramework"
-Write-Host "***************************"
+$DebugPreference = "Continue"
+
+New-Test "Get-NetFramework"
 
 $ComputerName = Get-ComputerName
 
 $NETFramework = Get-NetFramework $ComputerName
 $NETFramework
 
-# Write-Host "Get-NetFramework latest"
-# Write-Host "***************************"
+# New-Test "Get-NetFramework latest"
 # $NETFramework | Sort-Object -Property Version | Where-Object {$_.InstallPath} | Select-Object -Last 1 -ExpandProperty InstallPath
 
-# Write-Host "Get-NetFramework latest version"
-# Write-Host "***************************"
+# New-Test "Get-NetFramework latest version"
 # $Version = $NETFramework | Sort-Object -Property Version | Select-Object -Last 1 -ExpandProperty Version
 # #$Version | get-member
 # $Major, $Minor, $Build, $Revision = $Version.Split(".")

@@ -26,51 +26,42 @@ SOFTWARE.
 #
 # Unit test for Find-Installation
 #
+. $PSScriptRoot\..\..\UnloadModules.ps1
 
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\..\Modules\System
+Import-Module -Name $PSScriptRoot\..\..\Modules\System
 Test-SystemRequirements
 
 # Includes
-. $PSScriptRoot\IPSetup.ps1
-. $PSScriptRoot\DirectionSetup.ps1
-Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+. $RepoDir\Test\ContextSetup.ps1
+Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\ProgramInfo
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
 if (!(Approve-Execute)) { exit }
 
-Write-Host ""
-Write-Host "Find-Installation 'EdgeChromium'"
+$DebugPreference = "Continue"
+
+New-Test "Find-Installation 'EdgeChromium'"
 Find-Installation "EdgeChromium"
 
-Write-Host ""
-Write-Host "Table data"
-Write-Host "***************************"
+New-Test "Table data"
 $global:InstallTable | Format-Table -AutoSize
 
-Write-Host ""
-Write-Host "Install Root"
-Write-Host "***************************"
+New-Test "Install Root"
 $global:InstallTable | Select-Object -ExpandProperty InstallRoot
 
-Write-Host ""
-Write-Host "Find-Installation 'TeamViewer'"
-Write-Host (Find-Installation "TeamViewer")
+New-Test "Find-Installation 'TeamViewer'"
+New-Test (Find-Installation "TeamViewer")
 
-Write-Host ""
-Write-Host "Table data"
-Write-Host "***************************"
+New-Test "Table data"
+New-Test "***************************"
 $global:InstallTable | Select-Object -ExpandProperty InstallRoot
 
-Write-Host ""
-Write-Host "Find-Installation 'FailureTest'"
-Write-Host (Find-Installation "FailureTest")
+New-Test "Find-Installation 'FailureTest'"
+New-Test (Find-Installation "FailureTest")
 
-Write-Host ""
-Write-Host "Table data"
-Write-Host "***************************"
+New-Test "Table data"
 $global:InstallTable  | Select-Object -ExpandProperty InstallRoot
-
-Write-Host ""

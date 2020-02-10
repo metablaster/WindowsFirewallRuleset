@@ -26,20 +26,23 @@ SOFTWARE.
 #
 # Unit test for Test-Installation
 #
+. $PSScriptRoot\..\..\UnloadModules.ps1
 
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\..\Modules\System
+Import-Module -Name $PSScriptRoot\..\..\Modules\System
 Test-SystemRequirements
 
 # Includes
-. $PSScriptRoot\IPSetup.ps1
-. $PSScriptRoot\DirectionSetup.ps1
-Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+. $RepoDir\Test\ContextSetup.ps1
+Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\ProgramInfo
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
 if (!(Approve-Execute)) { exit }
+
+$DebugPreference = "Continue"
 
 #
 # Office installation directories
@@ -49,18 +52,14 @@ $TeamViewerRoot = "%ProgramFiles(x86)%\TeamViewer"
 $TestBadVariable = "%UserProfile%\crazyFolder"
 $TestBadVariable2 = "%UserProfile%\crazyFolder"
 
-Write-Host ""
-Write-Host "Test-Installation 'MicrosoftOffice' $OfficeRoot"
+New-Test "Test-Installation 'MicrosoftOffice' $OfficeRoot"
 Test-Installation "MicrosoftOffice" ([ref]$OfficeRoot)
 
-Write-Host ""
-Write-Host "Test-Installation 'TeamViewer' $TeamViewerRoot"
+New-Test "Test-Installation 'TeamViewer' $TeamViewerRoot"
 Test-Installation "TeamViewer" ([ref]$TeamViewerRoot)
 
-Write-Host ""
-Write-Host "Test-Installation 'VisualStudio' $TestBadVariable"
+New-Test "Test-Installation 'VisualStudio' $TestBadVariable"
 Test-Installation "VisualStudio" ([ref]$TestBadVariable)
 
-Write-Host ""
-Write-Host "Test-Installation 'BadVariable' $TestBadVariable2"
+New-Test "Test-Installation 'BadVariable' $TestBadVariable2"
 Test-Installation "BadVariable" ([ref]$TestBadVariable2)

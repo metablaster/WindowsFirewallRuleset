@@ -201,26 +201,29 @@ function Get-AccountSDDL
 }
 
 # TODO: add more groups, guests, everyone etc...
-# Get list of user account in form of COMPUTERNAME\USERNAME
-New-Variable -Name UserAccounts -Option Constant -Scope Global -Value (Get-UserAccounts "Users")
-New-Variable -Name AdminAccounts -Option Constant -Scope Global -Value (Get-UserAccounts "Administrators")
+if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
+{
+    # check if constants alreay initialized, used for module reloading
+    New-Variable -Name CheckInitUserInfo -Scope Global -Option Constant -Value $null
 
-# Get list of user names in form of USERNAME
-New-Variable -Name UserNames -Option Constant -Scope Global -Value (Get-UserNames $UserAccounts)
-New-Variable -Name AdminNames -Option Constant -Scope Global -Value (Get-UserNames $AdminAccounts)
+    # Get list of user account in form of COMPUTERNAME\USERNAME
+    New-Variable -Name UserAccounts -Scope Global -Option Constant -Value (Get-UserAccounts "Users")
+    New-Variable -Name AdminAccounts -Scope Global -Option Constant -Value (Get-UserAccounts "Administrators")
 
-# Generate SDDL string for accounts
-New-Variable -Name UserAccountsSDDL -Option Constant -Scope Global -Value (Get-AccountSDDL $UserAccounts)
-New-Variable -Name AdminAccountsSDDL -Option Constant -Scope Global -Value (Get-AccountSDDL $AdminAccounts)
+    # Get list of user names in form of USERNAME
+    New-Variable -Name UserNames -Scope Global -Option Constant -Value (Get-UserNames $UserAccounts)
+    New-Variable -Name AdminNames -Scope Global -Option Constant -Value (Get-UserNames $AdminAccounts)
 
-#
-# System users (define variables as needed)
-#
+    # Generate SDDL string for accounts
+    New-Variable -Name UserAccountsSDDL -Scope Global -Option Constant -Value (Get-AccountSDDL $UserAccounts)
+    New-Variable -Name AdminAccountsSDDL -Scope Global -Option Constant -Value (Get-AccountSDDL $AdminAccounts)
 
-New-Variable -Name NT_AUTHORITY_System -Option Constant -Scope Global -Value "D:(A;;CC;;;S-1-5-18)"
-New-Variable -Name NT_AUTHORITY_LocalService -Option Constant -Scope Global -Value "D:(A;;CC;;;S-1-5-19)"
-New-Variable -Name NT_AUTHORITY_NetworkService -Option Constant -Scope Global -Value "D:(A;;CC;;;S-1-5-20)"
-New-Variable -Name NT_AUTHORITY_UserModeDrivers -Option Constant -Scope Global -Value "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
+    # System users (define variables as needed)
+    New-Variable -Name NT_AUTHORITY_System -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-18)"
+    New-Variable -Name NT_AUTHORITY_LocalService -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-19)"
+    New-Variable -Name NT_AUTHORITY_NetworkService -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-20)"
+    New-Variable -Name NT_AUTHORITY_UserModeDrivers -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
+}
 
 #
 # Function exports

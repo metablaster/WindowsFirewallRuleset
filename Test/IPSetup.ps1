@@ -24,7 +24,7 @@ SOFTWARE.
 #>
 
 #
-# Root context for tests
+# IPVersion for test rules
 #
 
-$TestContext = "Test"
+$IPVersion = 4

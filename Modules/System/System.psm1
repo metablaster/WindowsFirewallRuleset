@@ -137,10 +137,17 @@ function Test-SystemRequirements
 # Module variables
 #
 
+if (!(Get-Variable -Name CheckInitSystem -Scope Global -ErrorAction Ignore))
+{
+    # check if constants alreay initialized, used for module reloading
+    New-Variable -Name CheckInitSystem -Scope Global -Option Constant -Value $null
+
+    # Repository root directory
+    New-Variable -Name RepoDir -Scope Global -Option Constant -Value (Resolve-Path -Path "$PSScriptRoot\..\.." | Select-Object -ExpandProperty Path)
+}
+
 # Set to false to avoid checking system requirements
 New-Variable -Name VersionCheck -Scope Script -Option Constant -Value $false
-# Repository root directory
-New-Variable -Name RepoDir -Scope Global -Option Constant -Value (Resolve-Path -Path "$PSScriptRoot\..\.." | Select-Object -ExpandProperty Path)
 
 #
 # Function exports
