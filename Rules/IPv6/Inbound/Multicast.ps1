@@ -70,6 +70,8 @@ these IPv6 addresses are valid globally and are globally routable.
 # TODO: see if edge traversal should be Allow in some rules
 # TODO: local address should be known for outbound, for inbound rules remote should be known
 
+. $PSScriptRoot\..\..\..\UnloadModules.ps1
+
 # Check requirements for this project
 Import-Module -Name $PSScriptRoot\..\..\..\Modules\System
 Test-SystemRequirements
@@ -77,8 +79,8 @@ Test-SystemRequirements
 # Includes
 . $PSScriptRoot\DirectionSetup.ps1
 . $PSScriptRoot\..\IPSetup.ps1
-Import-Module -Name $PSScriptRoot\..\..\..\Modules\UserInfo
-Import-Module -Name $PSScriptRoot\..\..\..\Modules\FirewallModule
+Import-Module -Name $RepoDir\Modules\UserInfo
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
 #
 # Setup local variables:

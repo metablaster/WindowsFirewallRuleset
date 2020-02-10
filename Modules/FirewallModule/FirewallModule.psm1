@@ -309,7 +309,7 @@ function Get-NetworkServices
     $Content = $Content | Where-Object { $_ -ne '$Service' -and $_ -ne "Any" }
 
     # File name where to save all matches
-    $File = "$PSScriptRoot\..\..\Rules\NetworkServices.txt"
+    $File = "$RepoDir\Rules\NetworkServices.txt"
 
     # If output file exists clear it
     # otherwise create a new file

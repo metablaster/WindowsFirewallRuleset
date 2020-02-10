@@ -29,8 +29,8 @@ Test-SystemRequirements
 Set-Variable -Name VersionCheck -Scope Global -Value $false
 
 # Includes
-Import-Module -Name $PSScriptRoot\Modules\ProgramInfo
-Import-Module -Name $PSScriptRoot\Modules\FirewallModule
+Import-Module -Name $RepoDir\Modules\ProgramInfo
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Clear errors and warning status
 $Error.Clear()
@@ -41,8 +41,8 @@ Set-ScreenBuffer
 
 # Check all rules that apply to windows services
 Test-File $ServiceHost
-Get-NetworkServices $PSScriptRoot\Rules
-Get-Content -Path $PSScriptRoot\Rules\NetworkServices.txt | ForEach-Object {
+Get-NetworkServices $RepoDir\Rules
+Get-Content -Path $RepoDir\Rules\NetworkServices.txt | ForEach-Object {
     Test-Service $_
 }
 

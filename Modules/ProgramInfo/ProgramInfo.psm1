@@ -24,9 +24,9 @@ SOFTWARE.
 #>
 
 # Includes
-Import-Module -Name $PSScriptRoot\..\UserInfo
-Import-Module -Name $PSScriptRoot\..\ComputerInfo
-Import-Module -Name $PSScriptRoot\..\FirewallModule
+Import-Module -Name $RepoDir\UserInfo
+Import-Module -Name $RepoDir\ComputerInfo
+Import-Module -Name $RepoDir\FirewallModule
 
 # about: get store app SID
 # input: Username and "PackageFamilyName" string

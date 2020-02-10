@@ -23,11 +23,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+# TODO: Include modules you need, update licence Copyright and start writing test code
+
 #
 # Unit test for Test-Function
 #
-
-# TODO: Include modules you need, update licence Copyright and start writing test code
+. $PSScriptRoot\..\..\UnloadModules.ps1
 
 # Check requirements for this project
 Import-Module -Name $PSScriptRoot\..\..\Modules\System

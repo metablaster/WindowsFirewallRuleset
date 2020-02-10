@@ -26,12 +26,10 @@ SOFTWARE.
 # TODO: Include modules you need, update licence Copyright and start writing code
 
 # Includes
-# . $PSScriptRoot\IPSetup.ps1
-# . $PSScriptRoot\DirectionSetup.ps1
-# Import-Module -Name $PSScriptRoot\..\UserInfo
-# Import-Module -Name $PSScriptRoot\..\ProgramInfo
-# Import-Module -Name $PSScriptRoot\..\ComputerInfo
-# Import-Module -Name $PSScriptRoot\..\FirewallModule
+# Import-Module -Name $RepoDir\UserInfo
+# Import-Module -Name $RepoDir\ProgramInfo
+# Import-Module -Name $RepoDir\ComputerInfo
+# Import-Module -Name $RepoDir\FirewallModule
 
 # about: Sample function
 # input: nothing
