@@ -46,7 +46,7 @@ function Update-Context
         $NewContext += " -> " + $Subsection
     }
 
-    Set-Variable -Name Context -Scope Global -Value $NewContext
+    Set-Variable -Name Context -Scope Script -Value $NewContext
     Write-Debug "Context set to '$NewContext'"
 }
 

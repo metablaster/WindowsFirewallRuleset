@@ -28,38 +28,29 @@ SOFTWARE.
 #
 
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\..\Modules\System
+Import-Module -Name $PSScriptRoot\..\..\Modules\System
 Test-SystemRequirements
 
 # Includes
-. $PSScriptRoot\IPSetup.ps1
-. $PSScriptRoot\DirectionSetup.ps1
-Import-Module -Name $PSScriptRoot\..\Modules\UserInfo
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+. $RepoDir\Test\ContextSetup.ps1
+Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\UserInfo
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
 if (!(Approve-Execute)) { exit }
 
-Write-Host ""
-Write-Host "Get-UserAccounts(Users):"
-Write-Host "***************************"
+$DebugPreference = "Continue"
 
+New-Test "Get-UserAccounts(Users):"
 [string[]] $Users = Get-UserAccounts "Users"
 $Users
 
-Write-Host ""
-Write-Host "Get-UserAccounts(Administrators):"
-Write-Host "***************************"
-
+New-Test "Get-UserAccounts(Administrators):"
 [string[]] $Administrators = Get-UserAccounts "Administrators"
 $Administrators
 
-Write-Host ""
-Write-Host "Join arrays:"
-Write-Host "***************************"
-
+New-Test "Join arrays:"
 $UserAccounts = $Users + $Administrators
 $UserAccounts
-
-Write-Host ""

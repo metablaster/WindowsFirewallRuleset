@@ -24,50 +24,24 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-AccountSDDL
+# Unit test for Get-Broadcast
 #
 
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\..\Modules\System
+Import-Module -Name $PSScriptRoot\..\..\Modules\System
 Test-SystemRequirements
 
 # Includes
-. $PSScriptRoot\IPSetup.ps1
-. $PSScriptRoot\DirectionSetup.ps1
-Import-Module -Name $PSScriptRoot\..\Modules\UserInfo
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+. $RepoDir\Test\ContextSetup.ps1
+Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\ComputerInfo
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
 if (!(Approve-Execute)) { exit }
 
-Write-Host ""
-Write-Host "Get-UserAccounts:"
-Write-Host "***************************"
+$DebugPreference = "Continue"
 
-[String[]]$UserAccounts = Get-UserAccounts "Users"
-$UserAccounts += Get-UserAccounts "Administrators"
-$UserAccounts
-
-Write-Host ""
-Write-Host "Get-AccountSDDL: (separated)"
-Write-Host "***************************"
-
-foreach($Account in $UserAccounts)
-{
-    $(Get-AccountSDDL $Account)
-}
-
-Write-Host ""
-Write-Host "Get-AccountSDDL: (combined)"
-Write-Host "***************************"
-
-Get-AccountSDDL $UserAccounts
-
-Write-Host ""
-Write-Host "Get-AccountSDDL: (from array)"
-Write-Host "***************************"
-
-Get-AccountSDDL @("NT AUTHORITY\SYSTEM", "NT AUTHORITY\NETWORK SERVICE")
-
-Write-Host ""
+New-Test "Get-Broadcast"
+Get-Broadcast

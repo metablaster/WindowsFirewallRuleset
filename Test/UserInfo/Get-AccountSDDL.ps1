@@ -24,58 +24,38 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-UserSDDL
+# Unit test for Get-AccountSDDL
 #
 
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\..\Modules\System
+Import-Module -Name $PSScriptRoot\..\..\Modules\System
 Test-SystemRequirements
 
 # Includes
-. $PSScriptRoot\IPSetup.ps1
-. $PSScriptRoot\DirectionSetup.ps1
-Import-Module -Name $PSScriptRoot\..\Modules\UserInfo
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+. $RepoDir\Test\ContextSetup.ps1
+Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\UserInfo
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
 if (!(Approve-Execute)) { exit }
 
-Write-Host ""
-Write-Host "Get-UserAccounts:"
-Write-Host "***************************"
+$DebugPreference = "Continue"
 
+New-Test "Get-UserAccounts:"
 [String[]]$UserAccounts = Get-UserAccounts "Users"
 $UserAccounts += Get-UserAccounts "Administrators"
 $UserAccounts
 
-Write-Host ""
-Write-Host "Get-UserNames:"
-Write-Host "***************************"
-
-$UserNames = Get-UserNames $UserAccounts
-$UserNames
-
-Write-Host ""
-Write-Host "Get-UserSDDL: (separated)"
-Write-Host "***************************"
-
-foreach($User in $UserNames)
+New-Test "Get-AccountSDDL: (separated)"
+foreach($Account in $UserAccounts)
 {
-    Get-UserSDDL $User
+    $(Get-AccountSDDL $Account)
 }
 
-Write-Host ""
-Write-Host "Get-UserSDDL: (combined)"
-Write-Host "***************************"
+New-Test "Get-AccountSDDL: (combined)"
+Get-AccountSDDL $UserAccounts
 
-Get-UserSDDL $UserNames
-
-Write-Host ""
-Write-Host "Get-UserSDDL: (from array)"
-Write-Host "***************************"
-
-$ComputerName = Get-ComputerName
-Get-UserSDDL @("$ComputerName\$UserNames[0]", "$ComputerName\$AdminNames[0]")
-
-Write-Host ""
+New-Test "Get-AccountSDDL: (from array)"
+Get-AccountSDDL @("NT AUTHORITY\SYSTEM", "NT AUTHORITY\NETWORK SERVICE")

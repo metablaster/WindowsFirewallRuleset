@@ -24,27 +24,30 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-Broadcast
+# Unit test for Get-UserNames
 #
 
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\..\Modules\System
+Import-Module -Name $PSScriptRoot\..\..\Modules\System
 Test-SystemRequirements
 
 # Includes
-. $PSScriptRoot\IPSetup.ps1
-. $PSScriptRoot\DirectionSetup.ps1
-Import-Module -Name $PSScriptRoot\..\Modules\ComputerInfo
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+. $RepoDir\Test\ContextSetup.ps1
+Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\UserInfo
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
 if (!(Approve-Execute)) { exit }
 
-Write-Host ""
-Write-Host "Get-Broadcast"
-Write-Host "***************************"
+$DebugPreference = "Continue"
 
-Get-Broadcast
+New-Test "Get-UserAccounts:"
+[String[]]$UserAccounts = Get-UserAccounts "Users"
+$UserAccounts += Get-UserAccounts "Administrators"
+$UserAccounts
 
-Write-Host ""
+New-Test "Get-UserNames:"
+$UserNames = Get-UserNames $UserAccounts
+$UserNames

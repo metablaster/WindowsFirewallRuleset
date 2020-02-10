@@ -24,45 +24,44 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-UserSID
+# Unit test for Get-UserSDDL
 #
 
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\..\Modules\System
+Import-Module -Name $PSScriptRoot\..\..\Modules\System
 Test-SystemRequirements
 
 # Includes
-. $PSScriptRoot\IPSetup.ps1
-. $PSScriptRoot\DirectionSetup.ps1
-Import-Module -Name $PSScriptRoot\..\Modules\UserInfo
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+. $RepoDir\Test\ContextSetup.ps1
+Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\UserInfo
+Import-Module -Name $RepoDir\Modules\ComputerInfo
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
 if (!(Approve-Execute)) { exit }
 
-Write-Host ""
-Write-Host "Get-UserAccounts:"
-Write-Host "***************************"
+$DebugPreference = "Continue"
 
+New-Test "Get-UserAccounts:"
 [String[]]$UserAccounts = Get-UserAccounts "Users"
 $UserAccounts += Get-UserAccounts "Administrators"
 $UserAccounts
 
-Write-Host ""
-Write-Host "Get-UserNames:"
-Write-Host "***************************"
-
+New-Test "Get-UserNames:"
 $UserNames = Get-UserNames $UserAccounts
 $UserNames
 
-Write-Host ""
-Write-Host "Get-UserSID:"
-Write-Host "***************************"
-
+New-Test "Get-UserSDDL: (separated)"
 foreach($User in $UserNames)
 {
-    $(Get-UserSID $User)
+    Get-UserSDDL $User
 }
 
-Write-Host ""
+New-Test "Get-UserSDDL: (combined)"
+Get-UserSDDL $UserNames
+
+New-Test "Get-UserSDDL: (from array)"
+$ComputerName = Get-ComputerName
+Get-UserSDDL @("$ComputerName\$($UserNames[0])", "$ComputerName\$($UserNames[1])")

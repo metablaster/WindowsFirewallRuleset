@@ -24,36 +24,34 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-UserNames
+# Unit test for Get-IPAddress
 #
 
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\..\Modules\System
+Import-Module -Name $PSScriptRoot\..\..\Modules\System
 Test-SystemRequirements
 
 # Includes
-. $PSScriptRoot\IPSetup.ps1
-. $PSScriptRoot\DirectionSetup.ps1
-Import-Module -Name $PSScriptRoot\..\Modules\UserInfo
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+. $RepoDir\Test\ContextSetup.ps1
+Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\ComputerInfo
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
 if (!(Approve-Execute)) { exit }
 
-Write-Host ""
-Write-Host "Get-UserAccounts:"
-Write-Host "***************************"
+$DebugPreference = "Continue"
 
-[String[]]$UserAccounts = Get-UserAccounts "Users"
-$UserAccounts += Get-UserAccounts "Administrators"
-$UserAccounts
+New-Test "Get-IPAddress 4"
+Get-IPAddress 4
 
-Write-Host ""
-Write-Host "Get-UserNames:"
-Write-Host "***************************"
+New-Test "Get-IPAddress 6"
+Get-IPAddress 6
 
-$UserNames = Get-UserNames $UserAccounts
-$UserNames
+Write-Host "Get-IPAddress 3"
+Get-IPAddress 3
 
-Write-Host ""
+New-Test "Failure test"
+$AdapterConfig = Get-AdapterConfig
+Write-Error -Category NotEnabled -TargetObject $AdapterConfig -Message "IPv6 not configured on adapter"
