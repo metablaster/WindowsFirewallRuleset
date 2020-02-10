@@ -28,38 +28,33 @@ SOFTWARE.
 #
 
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\..\Modules\System
+Import-Module -Name $PSScriptRoot\..\..\Modules\System
 Test-SystemRequirements
 
 # Includes
-. $PSScriptRoot\IPSetup.ps1
-. $PSScriptRoot\DirectionSetup.ps1
-Import-Module -Name $PSScriptRoot\..\Modules\VSSetup
-Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+. $RepoDir\Test\ContextSetup.ps1
+Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\VSSetup
+Import-Module -Name $RepoDir\Modules\ProgramInfo
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
 if (!(Approve-Execute)) { exit }
+
+$DebugPreference = "Continue"
 
 $NullVariable = $null
 $EmptryVariable = Get-VSSetupInstance -All |
 Select-VSSetupInstance -Require 'FailureTest' -Latest |
 Select-Object -ExpandProperty InstallationPath
 
-Write-Host ""
-Write-Host "Get-VSSetupInstance"
-Write-Host "***************************"
-
+New-Test "Get-VSSetupInstance"
 Get-VSSetupInstance
 Get-VSSetupInstance | Select-VSSetupInstance -Latest | Select-Object -ExpandProperty InstallationPath
 
-Write-Host ""
-Write-Host "Test-Installation 'NullVariable' $NullVariable"
-Write-Host "***************************"
+New-Test "Test-Installation 'NullVariable' $NullVariable"
 Test-Installation "MicrosoftOffice" ([ref]$NullVariable)
 
-Write-Host ""
-Write-Host "Test-Installation 'EmptryVariable' $EmptryVariable"
-Write-Host "***************************"
+New-Test "Test-Installation 'EmptryVariable' $EmptryVariable"
 Test-Installation "MicrosoftOffice" ([ref]$EmptryVariable)

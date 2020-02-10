@@ -28,23 +28,22 @@ SOFTWARE.
 #
 
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\..\Modules\System
+Import-Module -Name $PSScriptRoot\..\..\Modules\System
 Test-SystemRequirements
 
 # Includes
-. $PSScriptRoot\IPSetup.ps1
-. $PSScriptRoot\DirectionSetup.ps1
-Import-Module -Name $PSScriptRoot\..\Modules\UserInfo
-Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+. $RepoDir\Test\ContextSetup.ps1
+Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\ProgramInfo
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
 if (!(Approve-Execute)) { exit }
 
-Write-Host "Initialize-Table"
-Write-Host "***************************"
+$DebugPreference = "Continue"
 
+New-Test "Initialize-Table"
 Initialize-Table
 
 if (!$global:InstallTable)
@@ -59,54 +58,33 @@ if ($global:InstallTable.Rows.Count -ne 0)
     exit
 }
 
-Write-Host ""
-Write-Host "Fill table with Greenshot"
-Write-Host "***************************"
+New-Test "Fill table with Greenshot"
 Update-Table "Greenshot" $true
 
-Write-Host ""
-Write-Host "Table data"
-Write-Host "***************************"
+New-Test "Table data"
 $global:InstallTable | Format-Table -AutoSize
 
-Write-Host ""
-Write-Host "Install Path"
-Write-Host "***************************"
+New-Test "Install Path"
 $global:InstallTable | Select-Object -ExpandProperty InstallRoot
-Write-Host ""
 
 Initialize-Table
 
-Write-Host ""
-Write-Host "Failure Test"
-Write-Host "***************************"
+New-Test "Failure Test"
 Update-Table "Failure" $true
 
-Write-Host ""
-Write-Host "Table data"
-Write-Host "***************************"
+New-Test "Table data"
 $global:InstallTable | Format-Table -AutoSize
 
-Write-Host ""
-Write-Host "Install Path"
-Write-Host "***************************"
+New-Test "Install Path"
 $global:InstallTable | Select-Object -ExpandProperty InstallRoot
-Write-Host ""
 
 Initialize-Table
 
-Write-Host ""
-Write-Host "Test multiple paths"
-Write-Host "***************************"
+New-Test "Test multiple paths"
 Update-Table "Visual Studio" $true
 
-Write-Host ""
-Write-Host "Table data"
-Write-Host "***************************"
+New-Test "Table data"
 $global:InstallTable | Format-Table -AutoSize
 
-Write-Host ""
-Write-Host "Install Path"
-Write-Host "***************************"
+New-Test "Install Path"
 $global:InstallTable | Select-Object -ExpandProperty InstallRoot
-Write-Host ""
