@@ -34,7 +34,6 @@ Test-SystemRequirements
 
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
-. $RepoDir\Test\DirectionSetup.ps1
 Import-Module -Name $RepoDir\Modules\Test
 Import-Module -Name $RepoDir\Modules\FirewallModule
 

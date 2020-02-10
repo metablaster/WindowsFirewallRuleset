@@ -24,7 +24,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for adding relative path
+# Unit test for unresolved path
 #
 . $PSScriptRoot\..\UnloadModules.ps1
 
@@ -33,15 +33,17 @@ Import-Module -Name $PSScriptRoot\..\Modules\System
 Test-SystemRequirements
 
 # Includes
-. $PSScriptRoot\IPSetup.ps1
-. $PSScriptRoot\DirectionSetup.ps1
-Import-Module -Name $PSScriptRoot\..\Modules\UserInfo
-Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+. $RepoDir\Test\ContextSetup.ps1
+Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\UserInfo
+Import-Module -Name $RepoDir\Modules\ProgramInfo
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context $TestContext $IPVersion $Direction
 if (!(Approve-Execute)) { exit }
+
+$DebugPreference = "Continue"
 
 #
 # Setup local variables:
@@ -61,6 +63,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Rules for TargetProgram
 #
 
+New-Test "Relative path"
 # Test if installation exists on system
 if ((Test-Installation "TargetProgram" ([ref]$TargetProgramRoot)) -or $Force)
 {

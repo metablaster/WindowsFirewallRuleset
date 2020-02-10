@@ -24,7 +24,9 @@ SOFTWARE.
 #>
 
 #
-# Root context for tests
+# Context setup for tests
 #
 
+$IPVersion = 4
 $TestContext = "Test"
+$Direction = "Outbound"

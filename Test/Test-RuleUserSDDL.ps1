@@ -33,59 +33,43 @@ Import-Module -Name $PSScriptRoot\..\Modules\System
 Test-SystemRequirements
 
 # Includes
-. $PSScriptRoot\IPSetup.ps1
-. $PSScriptRoot\DirectionSetup.ps1
-Import-Module -Name $PSScriptRoot\..\Modules\UserInfo
-Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+. $RepoDir\Test\ContextSetup.ps1
+Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\UserInfo
+Import-Module -Name $RepoDir\Modules\ProgramInfo
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context $TestContext $IPVersion $Direction
 if (!(Approve-Execute)) { exit }
+
+$DebugPreference = "Continue"
 
 $Group = "Test - Get-UserSDDL"
 $Profile = "Any"
 
-Write-Host ""
-Write-Host "Remove-NetFirewallRule"
-Write-Host "***************************"
-
+New-Test "Remove-NetFirewallRule"
 # Remove previous test
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
-Write-Host ""
-Write-Host "Get-UserAccounts(Users)"
-Write-Host "***************************"
-
+New-Test "Get-UserAccounts(Users)"
 [String[]]$UserAccounts = Get-UserAccounts("Users")
 $UserAccounts
 
-Write-Host ""
-Write-Host "Users + Get-UserAccounts(Administrators) + NT SYSTEM"
-Write-Host "***************************"
-
+New-Test "Users + Get-UserAccounts(Administrators) + NT SYSTEM"
 $UserAccounts = $UserAccounts += (Get-UserAccounts("Administrators"))
 $UserAccounts = $UserAccounts += "NT AUTHORITY\SYSTEM"
 $UserAccounts
 
-Write-Host ""
-Write-Host "Get-UserNames:"
-Write-Host "***************************"
-
+New-Test "Get-UserNames:"
 $UserNames = Get-UserNames($UserAccounts)
 $UserNames
 
-Write-Host ""
-Write-Host "Get-UserSDDL:"
-Write-Host "***************************"
-
+New-Test "Get-UserSDDL:"
 $LocalUser = Get-UserSDDL($UserNames)
 $LocalUser
 
-Write-Host ""
-Write-Host "New-NetFirewallRule"
-Write-Host "***************************"
-
+New-Test "New-NetFirewallRule"
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Get-UserSDDL" -Program Any -Service Any `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `

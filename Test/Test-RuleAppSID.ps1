@@ -33,57 +33,44 @@ Import-Module -Name $PSScriptRoot\..\Modules\System
 Test-SystemRequirements
 
 # Includes
-. $PSScriptRoot\IPSetup.ps1
-. $PSScriptRoot\DirectionSetup.ps1
-Import-Module -Name $PSScriptRoot\..\Modules\UserInfo
-Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+. $RepoDir\Test\ContextSetup.ps1
+Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\UserInfo
+Import-Module -Name $RepoDir\Modules\ProgramInfo
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context $TestContext $IPVersion $Direction
 if (!(Approve-Execute)) { exit }
+
+$DebugPreference = "Continue"
 
 $Group = "Test - AppSID"
 $Profile = "Any"
 
-Write-Host ""
-Write-Host "Remove-NetFirewallRule"
-Write-Host "***************************"
-
+New-Test "Remove-NetFirewallRule"
 # Remove previous test
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
-Write-Host ""
-Write-Host "Get-UserAccounts:"
-Write-Host "***************************"
-
+New-Test "Get-UserAccounts:"
 [string[]] $UserAccounts = Get-UserAccounts("Users")
 $UserAccounts
 
-Write-Host ""
-Write-Host "Get-UserNames:"
-Write-Host "***************************"
-
+New-Test "Get-UserNames:"
 $Users = Get-UserNames($UserAccounts)
 $Users
 
-Write-Host ""
-Write-Host "Get-UserSID:"
-Write-Host "***************************"
-
+New-Test "Get-UserSID:"
 foreach($User in $Users)
 {
     $(Get-UserSID($User))
 }
 
-Write-Host ""
-Write-Host "Get-AppSID: foreach User"
-Write-Host "***************************"
-
+New-Test "Get-AppSID: foreach User"
 [string] $PackageSID = ""
 [string] $OwnerSID = ""
 foreach($User in $Users) {
-    Write-Host "Processing for: $User"
+    New-Test "Processing for: $User"
     $OwnerSID = Get-UserSID($User)
 
     Get-AppxPackage -User $User -PackageTypeFilter Bundle | ForEach-Object {
@@ -92,10 +79,7 @@ foreach($User in $Users) {
     }
 }
 
-Write-Host ""
-Write-Host "New-NetFirewallRule"
-Write-Host "***************************"
-
+New-Test "New-NetFirewallRule"
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Get-AppSID" -Program Any -Service Any `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `

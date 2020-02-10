@@ -33,43 +33,31 @@ Import-Module -Name $PSScriptRoot\..\Modules\System
 Test-SystemRequirements
 
 # Includes
-. $PSScriptRoot\IPSetup.ps1
-. $PSScriptRoot\DirectionSetup.ps1
-Import-Module -Name $PSScriptRoot\..\Modules\UserInfo
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+. $RepoDir\Test\ContextSetup.ps1
+Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\UserInfo
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
 if (!(Approve-Execute)) { exit }
 
-Write-Host ""
-Write-Host "UserAccounts:"
-Write-Host "***************************"
+$DebugPreference = "Continue"
+
+New-Test "UserAccounts:"
 $UserAccounts
 
-Write-Host ""
-Write-Host "AdminAccounts:"
-Write-Host "***************************"
+New-Test "AdminAccounts:"
 $AdminAccounts
 
-Write-Host ""
-Write-Host "UserNames:"
-Write-Host "***************************"
+New-Test "UserNames:"
 $UserNames
 
-Write-Host ""
-Write-Host "AdminNames:"
-Write-Host "***************************"
+New-Test "AdminNames:"
 $AdminNames
 
-Write-Host ""
-Write-Host "UserAccountsSDDL:"
-Write-Host "***************************"
+New-Test "UserAccountsSDDL:"
 $UserAccountsSDDL
 
-Write-Host ""
-Write-Host "AdminAccountsSDDL:"
-Write-Host "***************************"
+New-Test "AdminAccountsSDDL:"
 $AdminAccountsSDDL
-
-Write-Host ""
