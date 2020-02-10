@@ -25,7 +25,7 @@ SOFTWARE.
 
 # TODO: learn required NET version by scaning scripts
 # TODO: learn repo dir automaticaly (using git?)
-# TODO: check for iphelper service
+
 # about: Test and print system requirements required for this project
 # input: true or false to check or not to check
 # output: error message and abort if check failed, system info otherwise
@@ -70,22 +70,22 @@ function Test-SystemRequirements
         $PowershellMajor = $PSVersionTable.PSVersion | Select-Object -ExpandProperty Major
         $PowershellMinor = $PSVersionTable.PSVersion | Select-Object -ExpandProperty Minor
 
-        $local:VersionStatus = $true
+        $local:StatusGood = $true
         switch ($PowershellMajor)
         {
-            1 { $VersionStatus = $false }
-            2 { $VersionStatus = $false }
-            3 { $VersionStatus = $false }
-            4 { $VersionStatus = $false }
+            1 { $StatusGood = $false }
+            2 { $StatusGood = $false }
+            3 { $StatusGood = $false }
+            4 { $StatusGood = $false }
             5 {
                 if ($PowershellMinor -lt 1)
                 {
-                    $VersionStatus = $false
+                    $StatusGood = $false
                 }
             }
         }
 
-        if (!$VersionStatus)
+        if (!$StatusGood)
         {
             Write-Host ""
             Write-Host "Unable to proceed, minimum required Powershell required to run these scripts is: Desktop 5.1" -ForegroundColor Red -BackgroundColor Black
@@ -105,22 +105,71 @@ function Test-SystemRequirements
 
         switch ($NETMajor)
         {
-            1 { $VersionStatus = $false }
-            2 { $VersionStatus = $false }
-            3 { $VersionStatus = $false }
+            1 { $StatusGood = $false }
+            2 { $StatusGood = $false }
+            3 { $StatusGood = $false }
             4 {
                 if ($NETMinor -lt 8)
                 {
-                    $VersionStatus = $false
+                    $StatusGood = $false
                 }
             }
         }
 
-        if (!$VersionStatus)
+        if (!$StatusGood)
         {
             Write-Host ""
             Write-Host "Unable to proceed, minimum requried NET Framework version to run these scripts is 4.8" -ForegroundColor Red -BackgroundColor Black
             Write-Host "Your NET Framework version is: $NETMajor.$NETMinor"
+            Write-Host ""
+            exit
+        }
+
+        # Check if in elevated powershell
+        $Principal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+        $StatusGood = $Principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+        
+        if (!$StatusGood)
+        {
+            Write-Host ""
+            Write-Host "Unable to proceed, please open powershell as Administrator" -ForegroundColor Red -BackgroundColor Black
+            Write-Host ""
+            exit
+        }
+
+        # Check required services are started
+        $LMHosts = Get-Service -Name lmhosts
+        $LMHostsStatus = $LMHosts | Select-Object -ExpandProperty Status
+
+        if ($LMHostsStatus -ne "Running")
+        {
+            $Choices  = "&Yes", "&No"
+            $Default = 0
+            $Title = "TCP/IP NetBIOS Helper service is required but not started"
+            $Question = "Do you want to start service now?"
+            $Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
+
+            if ($Decision -eq $Default)
+            {
+                Start-Service -Name lmhosts
+                $LMHostsStatus = Get-Service -Name lmhosts | Select-Object -ExpandProperty Status
+
+                if ($LMHostsStatus -ne "Running")
+                {
+                    Write-Host "Service can not be started, please start it manually and try again."
+                    $StatusGood = $false
+                }
+            }
+            else
+            {
+                $StatusGood = $false
+            }
+        }
+
+        if (!$StatusGood)
+        {
+            Write-Host ""
+            Write-Host "Unable to proceed, required services are not started" -ForegroundColor Red -BackgroundColor Black
             Write-Host ""
             exit
         }

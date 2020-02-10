@@ -267,7 +267,9 @@ function Save-Errors
     }
 
     Add-Content -Path $LogFile -Value $AllErrors
-    Write-Note "All errors were saved to:", $LogsFolder, "you can review these logs to see which scripts need to be fixed and where"
+    Write-Note @("All errors were saved to:"
+    $LogsFolder
+    "you can review these logs to see which scripts need to be fixed and where")
 
     $global:Error.Clear()
 }

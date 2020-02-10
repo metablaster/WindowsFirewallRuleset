@@ -43,4 +43,4 @@ if (!(Approve-Execute)) { exit }
 $DebugPreference = "Continue"
 
 New-Test "Test-SystemRequirements"
-Test-SystemRequirements
+Test-SystemRequirements $true

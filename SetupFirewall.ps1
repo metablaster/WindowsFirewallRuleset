@@ -228,7 +228,9 @@ if ($WarningStatus)
 {
     Write-Host ""
     Write-Warning "Warnings were generated"
-    Write-Note "All warnings were saved to:", "$("$RepoDir\Logs")", "you can review these logs to see if you want to resolve some of them"
+    Write-Note @("All warnings were saved to:"
+    "$("$RepoDir\Logs")"
+    "you can review these logs to see if you want to resolve some of them")
 }
 
 if (!$ErrorCount -and !$WarningStatus)
