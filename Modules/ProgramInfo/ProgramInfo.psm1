@@ -76,7 +76,8 @@ function Test-File
         $Executable = Split-Path -Path $ExpandedPath -Leaf
 
         Set-Warning "Executable '$Executable' was not found, rules for '$Executable' won't have any effect`nSearched path was: $SearchPath"
-        Write-Note "To fix the problem find '$Executable' then adjust the path in`n$Script and re-run the script later again"
+        Write-Note @("To fix the problem find '$Executable' then adjust the path in"
+        "$Script and re-run the script later again")
     }
 }
 
@@ -536,17 +537,17 @@ function Initialize-Table
     )
 
     # Create Table object
-    $global:InstallTable = New-Object System.Data.DataTable $TableName
+    Set-Variable -Name InstallTable -Scope Global -Value (New-Object System.Data.DataTable $TableName)
 
     # Define Columns
     $UserColumn = New-Object System.Data.DataColumn User, ([string])
     $InstallColumn = New-Object System.Data.DataColumn InstallRoot, ([string])
 
     # Add the Columns
-    $global:InstallTable.Columns.Add($UserColumn)
-    $global:InstallTable.Columns.Add($InstallColumn)
+    $InstallTable.Columns.Add($UserColumn)
+    $InstallTable.Columns.Add($InstallColumn)
 
-    #return Write-Output -NoEnumerate $global:InstallTable
+    #return Write-Output -NoEnumerate $InstallTable
 }
 
 # about: Search and add new program installation directory to the global table
@@ -573,19 +574,19 @@ function Update-Table
         # TODO: need better mechanism for multiple maches
         $TargetPrograms = $SystemPrograms | Where-Object { $_.Name -like "*$SearchString*" }
 
-        foreach ($User in $global:UserNames)
+        foreach ($User in $UserNames)
         {
             foreach ($Program in $TargetPrograms)
             {
                 # Create a row
-                $Row = $global:InstallTable.NewRow()
+                $Row = $InstallTable.NewRow()
 
                 # Enter data into row
                 $Row.User = $User
                 $Row.InstallRoot = $Program | Select-Object -ExpandProperty InstallLocation
 
                 # Add row to the table
-                $global:InstallTable.Rows.Add($Row)
+                $InstallTable.Rows.Add($Row)
             }
         }
     }
@@ -595,19 +596,19 @@ function Update-Table
         $TargetPrograms = $AllUserPrograms | Where-Object { $_.Name -like "*$SearchString*" }
 
         # TODO: it not known if it's for specific user in AllUserPrograms registry entry (most likely applies to all users)
-        foreach ($User in $global:UserNames)
+        foreach ($User in $UserNames)
         {
             foreach ($Program in $TargetPrograms)
             {
                 # Create a row
-                $Row = $global:InstallTable.NewRow()
+                $Row = $InstallTable.NewRow()
 
                 # Enter data into row
                 $Row.User = $User
                 $Row.InstallRoot = $Program | Select-Object -ExpandProperty InstallLocation
 
                 # Add row to the table
-                $global:InstallTable.Rows.Add($Row)
+                $InstallTable.Rows.Add($Row)
             }
         }
     }
@@ -615,7 +616,7 @@ function Update-Table
     # Search user profiles
     if ($UserProfile)
     {
-        foreach ($Account in $global:UserAccounts)
+        foreach ($Account in $UserAccounts)
         {
             $UserPrograms = Get-UserPrograms $Account
 
@@ -626,14 +627,14 @@ function Update-Table
                 foreach ($Program in $TargetPrograms)
                 {
                     # Create a row
-                    $Row = $global:InstallTable.NewRow()
+                    $Row = $InstallTable.NewRow()
 
                     # Enter data into row
                     $Row.User = $Account.Split("\")[1]
                     $Row.InstallRoot = $Program | Select-Object -ExpandProperty InstallLocation
 
                     # Add the row to the table
-                    $global:InstallTable.Rows.Add($Row)
+                    $InstallTable.Rows.Add($Row)
                 }
             }
         }
@@ -664,7 +665,7 @@ function Edit-Table
         $InstallRoot = Format-Path ([System.Environment]::ExpandEnvironmentVariables($InstallRoot))
 
         # Create a row
-        $Row = $global:InstallTable.NewRow()
+        $Row = $InstallTable.NewRow()
 
         # Enter data into row
         # TODO: learn who is user
@@ -672,24 +673,24 @@ function Edit-Table
         $Row.InstallRoot = $InstallRoot
 
         # Add the row to the table
-        $global:InstallTable.Rows.Add($Row)
+        $InstallTable.Rows.Add($Row)
         return
     }
 
     $InstallRoot = Format-Path $InstallRoot
 
     # Not user profile path, so it applies to all users
-    foreach ($User in $global:UserNames)
+    foreach ($User in $UserNames)
     {
         # Create a row
-        $Row = $global:InstallTable.NewRow()
+        $Row = $InstallTable.NewRow()
 
         # Enter data into row
         $Row.User = $User
         $Row.InstallRoot = $InstallRoot
 
         # Add the row to the table
-        $global:InstallTable.Rows.Add($Row)
+        $InstallTable.Rows.Add($Row)
     }
 }
 
@@ -716,19 +717,19 @@ function Test-Installation
     {
         # NOTE: the paths in installation table are supposed to be formatted
         $InstallRoot = "unknown install location"
-        $Count = $global:InstallTable.Rows.Count
+        $Count = $InstallTable.Rows.Count
 
         if ($Count -gt 1)
         {
             Write-Host "Table data"
-            $global:InstallTable | Format-Table -AutoSize
+            $InstallTable | Format-Table -AutoSize
 
             Write-Note "Found multiple candidate installation directories for $Program"
 
             # Print out all candidate installation directories
             for ($Index = 0; $Index -lt $Count; ++$Index)
             {
-                Write-Host "$($Index + 1). $($global:InstallTable.Rows[$Index].Item("InstallRoot"))"
+                Write-Host "$($Index + 1). $($InstallTable.Rows[$Index].Item("InstallRoot"))"
             }
 
             # Prompt user to chose one
@@ -739,11 +740,11 @@ function Test-Installation
                 $Choice = Read-Host
             }
 
-            $InstallRoot = $global:InstallTable.Rows[$Choice - 1].Item("InstallRoot")
+            $InstallRoot = $InstallTable.Rows[$Choice - 1].Item("InstallRoot")
         }
         else
         {
-            $InstallRoot = $global:InstallTable | Select-Object -ExpandProperty InstallRoot
+            $InstallRoot = $InstallTable | Select-Object -ExpandProperty InstallRoot
         }
 
         Write-Note "Path corrected from: $($FilePath.Value)", "to: $InstallRoot"
@@ -1024,7 +1025,7 @@ function Find-Installation
         }
     }
 
-    if ($global:InstallTable.Rows.Count -gt 0)
+    if ($InstallTable.Rows.Count -gt 0)
     {
         return $true
     }
@@ -1042,7 +1043,7 @@ function Find-Installation
 
         if (Approve-Execute "Yes" "Rule group for $Program" "Do you want to input path now?")
         {
-            while ($global:InstallTable.Rows.Count -eq 0)
+            while ($InstallTable.Rows.Count -eq 0)
             {
                 [string] $InstallRoot = Read-Host "Input path to '$Program' root directory"
 
@@ -1050,7 +1051,7 @@ function Find-Installation
                 {
                     Edit-Table $InstallRoot
 
-                    if ($global:InstallTable.Rows.Count -gt 0)
+                    if ($InstallTable.Rows.Count -gt 0)
                     {
                         return $true
                     }

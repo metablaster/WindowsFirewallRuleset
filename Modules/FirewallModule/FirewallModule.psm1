@@ -161,6 +161,7 @@ function Convert-SDDLToACL
     return $ACL
 }
 
+# TODO: rename to Info
 # about: Write informational note with 'NOTE:' label and green text
 # input: string to write
 # output: informational message: NOTE: sample note
@@ -189,34 +190,45 @@ function Set-Warning
 {
     param (
         [parameter(Mandatory = $true)]
-        [string] $Message,
+        [string[]] $Message,
         [parameter(Mandatory = $false)]
         [bool] $Status = $true
     )
 
-    # First show the warning before any possible error happens
-    $Warning = "WARNING: $Message"
+    # Update warning status variable
     Set-Variable -Name WarningStatus -Scope Global -Value ($WarningStatus -or $Status)
-    Write-Host $Warning -ForegroundColor Yellow -BackgroundColor Black
 
     # Append warning to log file
-    $LogsFolder = $RepoDir + "\Logs"
     $FileName = "Warning_$(Get-Date -Format "dd.MM.yy HH")h.log"
     $LogFile = "$LogsFolder\$FileName"
 
     if (!(Test-Path -PathType Container -Path $LogsFolder))
     {
-        New-Item -ItemType Directory -Path $LogsFolder -ErrorAction Stop| Out-Null
+        New-Item -ItemType Directory -Path $LogsFolder -ErrorAction Stop | Out-Null
     }
 
     if (!(Test-Path -PathType Leaf -Path $LogFile))
     {
-        New-Item -ItemType File -Path $LogFile -ErrorAction Stop| Out-Null
+        New-Item -ItemType File -Path $LogFile -ErrorAction Stop | Out-Null
     }
 
+    # First line
+    $LineOne = $Message[0]
+
+    # Show the warning and save to log file
+    $Warning = "WARNING: $LineOne"
+    Write-Host $Warning -ForegroundColor Yellow -BackgroundColor Black
+
     # Include time in file
-    $Warning = "WARNING: $(Get-Date -Format "HH:mm")h $Message"
+    $Warning = "WARNING: $(Get-Date -Format "HH:mm")h $LineOne"
     Add-Content -Path $LogFile -Value $Warning
+
+    # Skip 'WARNING:' tag for all subsequent lines (both console and log file)
+    for ($Index = 1; $Index -lt $Message.Count; ++$Index)
+    {
+        Write-Host $Message[$Index] -ForegroundColor Yellow -BackgroundColor Black
+        Add-Content -Path $LogFile -Value $Message[$Index]
+    }
 }
 
 # about: list all generated errors and clear error variable
@@ -232,7 +244,6 @@ function Save-Errors
     }
 
     # Write all errors to log file
-    $LogsFolder = $RepoDir + "\Logs"
     $FileName = "Error_$(Get-Date -Format "dd.MM.yy HH")h.log"
     $LogFile = "$LogsFolder\$FileName"
 
@@ -400,10 +411,10 @@ if (!(Get-Variable -Name CheckInitFirewallModule -Scope Global -ErrorAction Igno
     New-Variable -Name Force -Scope Global -Option Constant -Value $true
 }
 
-# Global variable to tell if all scripts ran clean
-New-Variable -Name WarningStatus -Scope Global -Value $false
 # To add rules to firewall for real set to false
 New-Variable -Name Debug -Scope Global -Option ReadOnly -Value $false
+# Global variable to tell if all scripts ran clean
+New-Variable -Name WarningStatus -Scope Global -Value $false
 # To prompt for each rule set to true
 New-Variable -Name Execute -Scope Global -Value $false
 
@@ -411,6 +422,8 @@ New-Variable -Name Execute -Scope Global -Value $false
 New-Variable -Name Context -Scope Script -Value "Context not set"
 # Recommended vertical screen buffer value, to ensure user can scroll back all the output
 New-Variable -Name RecommendedBuffer -Scope Script -Option Constant -Value 3000
+# Folder where logs get saved
+New-Variable -Name LogsFolder -Scope Script -Option Constant -Value ($RepoDir + "\Logs")
 
 #
 # Function exports

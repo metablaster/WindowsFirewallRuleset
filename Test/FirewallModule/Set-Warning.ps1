@@ -43,5 +43,20 @@ if (!(Approve-Execute)) { exit }
 
 $DebugPreference = "Continue"
 
-New-Test "Set-Warning"
-Set-Warning "sample warning"
+New-Test "Single line false"
+Set-Warning "Single line false" $false
+(Get-Variable -Name WarningStatus -Scope Global).Value
+
+New-Test "Single line true"
+Set-Warning "Single line"
+(Get-Variable -Name WarningStatus -Scope Global).Value
+
+Set-Variable -Name WarningStatus -Scope Global -Value $false
+
+New-Test "Multi line false"
+Set-Warning @("line one", "line two", "line 3") $false
+(Get-Variable -Name WarningStatus -Scope Global).Value
+
+New-Test "Multi line true"
+Set-Warning @("line one", "line two", "line 3") $true
+(Get-Variable -Name WarningStatus -Scope Global).Value
