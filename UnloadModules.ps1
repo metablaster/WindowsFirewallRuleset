@@ -27,11 +27,12 @@ SOFTWARE.
 # Remove loaded modules and removable variables, usefull for module debugging
 #
 
-# Set to true to force unloading moduels and removing variables
-$Unload = $true
+# Set to true to indicate development phase, force unloading modules and removing variables
+$Develop = $true
 
-if ($Unload)
+if ($Develop)
 {
+    Write-Host "DEBUG: Cleaning up environment" -ForegroundColor Yellow -BackgroundColor Black
     Remove-Module -Name System -ErrorAction Ignore
 
     Remove-Module -Name FirewallModule -ErrorAction Ignore

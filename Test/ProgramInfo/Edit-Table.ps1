@@ -44,5 +44,35 @@ if (!(Approve-Execute)) { exit }
 
 $DebugPreference = "Continue"
 
-New-Test "Edit-Table"
-Edit-Table
+$User = "haxor"
+
+New-Test "Good system path"
+Initialize-Table
+Edit-Table "%SystemRoot%\System32\WindowsPowerShell\v1.0"
+
+New-Test "Table data"
+$global:InstallTable | Format-Table -AutoSize
+
+
+New-Test "Bad system path"
+Initialize-Table
+Edit-Table "%ProgramFiles(x86)%\Microsoft Help Viewer\v2.3"
+
+New-Test "Table data"
+$global:InstallTable | Format-Table -AutoSize
+
+New-Test "Good user profile path"
+Initialize-Table
+Edit-Table "C:\\Users\$User\source\\repos\WindowsFirewallRuleset\"
+
+New-Test "Table data"
+$global:InstallTable | Format-Table -AutoSize
+
+New-Test "Bad user profile path"
+Initialize-Table
+Edit-Table "%HOME%\source\\repos\WindowsFirewallRuleset\"
+
+New-Test "Table data"
+$global:InstallTable | Format-Table -AutoSize
+
+Exit-Test

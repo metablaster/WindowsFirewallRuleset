@@ -37,9 +37,20 @@ function New-Test
     $Message = "Testing: $InputMessage"
     $Asterisks = $("*" * ($Message.Length + 4))
 
+    Write-Host ""
     Write-Host $Asterisks
     Write-Host "* $Message *"
     Write-Host $Asterisks
+    Write-Host ""
+}
+
+# about: write output to separate test cases
+# input: message to print before test
+# output: formatted message block
+# sample: New-Test "my test"
+function Exit-Test
+{
+    Write-Host ""
 }
 
 #
@@ -47,3 +58,4 @@ function New-Test
 #
 
 Export-ModuleMember -Function New-Test
+Export-ModuleMember -Function Exit-Test

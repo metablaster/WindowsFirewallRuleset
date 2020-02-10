@@ -24,9 +24,9 @@ SOFTWARE.
 #>
 
 # Includes
-Import-Module -Name $RepoDir\UserInfo
-Import-Module -Name $RepoDir\ComputerInfo
-Import-Module -Name $RepoDir\FirewallModule
+Import-Module -Name $PSScriptRoot\..\UserInfo
+Import-Module -Name $PSScriptRoot\..\ComputerInfo
+Import-Module -Name $PSScriptRoot\..\FirewallModule
 
 # about: get store app SID
 # input: Username and "PackageFamilyName" string
@@ -80,7 +80,7 @@ function Test-File
     }
 }
 
-# about: Same as Test-Path but expands system environment variables
+# about: Same as Test-Path but expands system environment variables, and checks if compatible path
 # input: Path to folder, Allow null or empty since input may come from other commandlets which can return empty or null
 # output: $true if path exists, false otherwise
 # sample: Test-Evnironment %SystemDrive%
@@ -93,6 +93,13 @@ function Test-Environment
 
     if ([System.String]::IsNullOrEmpty($FilePath))
     {
+        return $false
+    }
+
+    if ([Array]::Find($UserProfileEnvironment, [Predicate[string]]{ $FilePath -like "$($args[0])*" }))
+    {
+        Set-Warning "Bad environment variable detected, paths with environment variables that lead to user profile are not valid"
+        Write-Note "Bad path detected is: $FilePath"
         return $false
     }
 
@@ -115,6 +122,82 @@ function Test-Service
         Set-Warning "Service '$Service' not found, rule won't have any effect"
         Write-Note "To fix the problem update or comment out all firewall rules for '$Service' service"
     }
+}
+
+function Test-UserProfile
+{
+    param (
+        [string] $FilePath
+    )
+
+    # Impssible to know what the imput may be
+    if ([System.String]::IsNullOrEmpty($FilePath))
+    {
+        return $false
+    }
+
+    # Make an array of (environment variable/path) value pair,
+    # user profile environment variables only
+    $Variables = @()
+    foreach ($Entry in @(Get-ChildItem Env:))
+    {
+        $Entry.Name = "%" + $Entry.Name + "%"
+
+        if ($UserProfileEnvironment -contains $Entry.Name)
+        {
+            $Variables += $Entry
+        }
+    }
+
+    # TODO: sorted result will have multiple same variables,
+    # Sorting from longest paths which should be checked first
+    $Variables = $Variables | Sort-Object -Descending { $_.Value.Length }
+
+    # Strip away quotations from path
+    $FilePath = $FilePath.Trim('"')
+    $FilePath = $FilePath.Trim("'")
+
+    # Replace double slasses with single ones
+    $FilePath = $FilePath.Replace("\\", "\")
+
+    # If input path is root drive, removing a slash would produce bad path
+    # Otherwise remove trailing slahs for cases where entry path is convertible to variable
+    if ($FilePath.Length -gt 3)
+    {
+        $FilePath = $FilePath.TrimEnd('\\')
+    }
+
+    # Make a copy of file path because modification can be wrong
+    $SearchString = $FilePath
+
+    # Check if file path already contains user profile environment variable
+    foreach ($Variable in $Variables)
+    {
+        if ($FilePath -like "$($Variable.Name)*")
+        {
+            Write-Debug "[Format-Path] Input path already formatted"
+            return $true
+        }
+    }
+
+    # See if path is convertible to environment variable
+    while (![System.String]::IsNullOrEmpty($SearchString))
+    {
+        foreach ($Entry in $Variables)
+        {
+            if ($Entry.Value -like "*$SearchString")
+            {
+                # Environment variable found, if this is first hit, trailing slash is already removed
+                return $true
+            }
+        }
+
+        # Strip away file or last folder in path then try again (also trims trailing slash)
+        $SearchString = Split-Path -Path $SearchString -Parent
+    }
+
+    Write-Debug "[Format-Path] Environment variables for input path don't exist"
+    return $false
 }
 
 # about: format path into firewall compatible path
@@ -210,7 +293,7 @@ function Format-Path
     return $FilePath.Replace($SearchString, $Replacement).TrimEnd('\\')
 }
 
-# about: search installed programs in userprofile for all users
+# about: search installed programs in userprofile for specifit user account
 # input: User account in form of "COMPUTERNAME\USERNAME"
 # output: list of programs for specified USERNAME
 # sample: Get-UserPrograms "COMPUTERNAME\USERNAME"
@@ -377,6 +460,7 @@ function Get-AllUserPrograms
         [string] $ComputerName
     )
 
+    # TODO: make global connection timeout
     if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
     {
         $HKLM = "SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData"
@@ -481,10 +565,7 @@ function Update-Table
     )
 
     # TODO: SearchString may pick up irrelevant paths (ie. unreal)
-
-    $ComputerName = Get-ComputerName
-    $SystemPrograms = Get-SystemPrograms $ComputerName
-
+    # Search system wide installed programs
     if ($SystemPrograms.Name -like "*$SearchString*")
     {
         # TODO: need better mechanism for multiple maches
@@ -497,7 +578,7 @@ function Update-Table
                 # Create a row
                 $Row = $global:InstallTable.NewRow()
 
-                # Enter data in the row
+                # Enter data into row
                 $Row.User = $User
                 $Row.InstallRoot = $Program | Select-Object -ExpandProperty InstallLocation
 
@@ -506,22 +587,22 @@ function Update-Table
             }
         }
     }
-    else
+    #Program not found on system, attempt alternative search
+    elseif ($AllUserPrograms.Name -like "*$SearchString*")
     {
-        #Program not found on system, attempt alternative search
-        $AllUserPrograms = Get-AllUserPrograms $ComputerName
+        $TargetPrograms = $AllUserPrograms | Where-Object { $_.Name -like "*$SearchString*" }
 
-        if ($AllUserPrograms.Name -like "*$SearchString*")
+        # TODO: it not known if it's for specific user in AllUserPrograms registry entry (most likely applies to all users)
+        foreach ($User in $global:UserNames)
         {
-            # TODO: it not known if it's for specific user in AllUserPrograms registry entry (most likely applies to all users)
-            foreach ($User in $global:UserNames)
+            foreach ($Program in $TargetPrograms)
             {
                 # Create a row
                 $Row = $global:InstallTable.NewRow()
 
-                # Enter data in the row
+                # Enter data into row
                 $Row.User = $User
-                $Row.InstallRoot = $SystemPrograms | Where-Object { $_.Name -like "*$SearchString*" } | Select-Object -ExpandProperty InstallLocation
+                $Row.InstallRoot = $Program | Select-Object -ExpandProperty InstallLocation
 
                 # Add row to the table
                 $global:InstallTable.Rows.Add($Row)
@@ -529,6 +610,7 @@ function Update-Table
         }
     }
 
+    # Search user profiles
     if ($UserProfile)
     {
         foreach ($Account in $global:UserAccounts)
@@ -537,15 +619,20 @@ function Update-Table
 
             if ($UserPrograms.Name -like "*$SearchString*")
             {
-                # Create a row
-                $Row = $global:InstallTable.NewRow()
+                $TargetPrograms = $UserPrograms | Where-Object { $_.Name -like "*$SearchString*" }
 
-                # Enter data in the row
-                $Row.User = $Account.Split("\")[1]
-                $Row.InstallRoot = $UserPrograms | Where-Object { $_.Name -like "*$SearchString*" } | Select-Object -ExpandProperty InstallLocation
+                foreach ($Program in $TargetPrograms)
+                {
+                    # Create a row
+                    $Row = $global:InstallTable.NewRow()
 
-                # Add the row to the table
-                $global:InstallTable.Rows.Add($Row)
+                    # Enter data into row
+                    $Row.User = $Account.Split("\")[1]
+                    $Row.InstallRoot = $Program | Select-Object -ExpandProperty InstallLocation
+
+                    # Add the row to the table
+                    $global:InstallTable.Rows.Add($Row)
+                }
             }
         }
     }
@@ -562,22 +649,45 @@ function Edit-Table
         [string] $InstallRoot
     )
 
-    # TODO: how can path be valid for all users??
-    # test since input may come from user input too!
-    if (Test-Environment $InstallRoot)
+    # Nothing to do if the path does not exist
+    if (!(Test-Environment $InstallRoot))
     {
-        foreach ($User in $global:UserNames)
-        {
-            # Create a row
-            $Row = $global:InstallTable.NewRow()
+        return
+    }
 
-            # Enter data in the row
-            $Row.User = $User
-            $Row.InstallRoot = $InstallRoot
+    # Check if input path leads to user profile
+    if (Test-UserProfile $InstallRoot)
+    {
+        # Make sure user profile variables are removed
+        $InstallRoot = Format-Path ([System.Environment]::ExpandEnvironmentVariables($InstallRoot))
 
-            # Add the row to the table
-            $global:InstallTable.Rows.Add($Row)
-        }
+        # Create a row
+        $Row = $global:InstallTable.NewRow()
+
+        # Enter data into row
+        # TODO: learn who is user
+        # $Row.User = $User
+        $Row.InstallRoot = $InstallRoot
+
+        # Add the row to the table
+        $global:InstallTable.Rows.Add($Row)
+        return
+    }
+
+    $InstallRoot = Format-Path $InstallRoot
+
+    # Not user profile path, so it applies to all users
+    foreach ($User in $global:UserNames)
+    {
+        # Create a row
+        $Row = $global:InstallTable.NewRow()
+
+        # Enter data into row
+        $Row.User = $User
+        $Row.InstallRoot = $InstallRoot
+
+        # Add the row to the table
+        $global:InstallTable.Rows.Add($Row)
     }
 }
 
@@ -594,14 +704,6 @@ function Test-Installation
         [parameter(Mandatory = $true, Position = 1)]
         [ref] $FilePath
     )
-
-    $LastWarningStatus = $global:WarningStatus
-
-    if ([Array]::Find($BlackListEnvironment, [Predicate[string]]{ $FilePath.Value -like "*$($args[0])*" }))
-    {
-        Set-Warning "Bad environment variable detected, rules with environment variables that lead to user profile will not work!"
-        Write-Note "Bad path detected is: $($FilePath.Value)"
-    }
 
     # If input path is valid just make sure it's formatted
     if (Test-Environment $FilePath.Value)
@@ -646,9 +748,6 @@ function Test-Installation
         return $false # installation not found
     }
 
-    # remove previously set status
-    Set-Variable -Name WarningStatus -Scope Global -Value $LastWarningStatus
-
     return $true # path exists, true even if path bad (user profile)
 }
 
@@ -664,7 +763,6 @@ function Find-Installation
     )
 
     Initialize-Table
-    [string] $InstallRoot = ""
 
     # TODO: if it's program in user profile then how do we know it that applies to admins or users in rule?
     # TODO: need to check some of these search strings (cases), also remove hardcoded directories
@@ -780,48 +878,28 @@ function Find-Installation
         }
         "OpenSSH"
         {
-            $InstallRoot = "%ProgramFiles%\OpenSSH-Win64"
-            if (Test-Environment $InstallRoot)
-            {
-                Edit-Table $InstallRoot
-            }
+            Edit-Table "%ProgramFiles%\OpenSSH-Win64"
             break
         }
         "PowerShell64"
         {
-            $InstallRoot = "%SystemRoot%\System32\WindowsPowerShell\v1.0"
-            if (Test-Environment $InstallRoot)
-            {
-                Edit-Table $InstallRoot
-            }
+            Edit-Table "%SystemRoot%\System32\WindowsPowerShell\v1.0"
             break
         }
         "PowerShell86"
         {
-            $InstallRoot = "%SystemRoot%\SysWOW64\WindowsPowerShell\v1.0"
-            if (Test-Environment $InstallRoot)
-            {
-                Edit-Table $InstallRoot
-            }
+            Edit-Table "%SystemRoot%\SysWOW64\WindowsPowerShell\v1.0"
             break
         }
         "OneDrive"
         {
-            $InstallRoot = "%ProgramFiles(x86)%\Microsoft OneDrive"
-            if (Test-Environment $InstallRoot)
-            {
-                Edit-Table $InstallRoot
-            }
+            Edit-Table "%ProgramFiles(x86)%\Microsoft OneDrive"
             break
         }
         "HelpViewer"
         {
             # TODO: is version number OK?
-            $InstallRoot = "%ProgramFiles(x86)%\Microsoft Help Viewer\v2.3"
-            if (Test-Environment $InstallRoot)
-            {
-                Edit-Table $InstallRoot
-            }
+            Edit-Table "%ProgramFiles(x86)%\Microsoft Help Viewer\v2.3"
             break
         }
         "VSCode"
@@ -836,17 +914,7 @@ function Find-Installation
         }
         "TeamViewer"
         {
-            Update-Table "Team Viewer"
-
-            # TODO: not sure if search string should be 'TeamViewer or 'Team Viewer'
-            if ($global:InstallTable.Rows.Count -eq 0)
-            {
-                $InstallRoot = "%ProgramFiles(x86)%\TeamViewer"
-                if (Test-Environment $InstallRoot)
-                {
-                    Edit-Table $InstallRoot
-                }
-            }
+            Update-Table "TeamViewer"
             break
         }
         "EdgeChromium"
@@ -891,29 +959,17 @@ function Find-Installation
         }
         "Nvidia64"
         {
-            $InstallRoot = "%ProgramFiles%\NVIDIA Corporation"
-            if (Test-Environment $InstallRoot)
-            {
-                Edit-Table $InstallRoot
-            }
+            Edit-Table "%ProgramFiles%\NVIDIA Corporation"
             break
         }
         "Nvidia86"
         {
-            $InstallRoot = "%ProgramFiles(x86)%\NVIDIA Corporation"
-            if (Test-Environment $InstallRoot)
-            {
-                Edit-Table $InstallRoot
-            }
+            Edit-Table "%ProgramFiles(x86)%\NVIDIA Corporation"
             break
         }
         "WarThunder"
         {
-            $InstallRoot = "%ProgramFiles(x86)%\Steam\steamapps\common\War Thunder"
-            if (Test-Environment $InstallRoot)
-            {
-                Edit-Table $InstallRoot
-            }
+            Edit-Table "%ProgramFiles(x86)%\Steam\steamapps\common\War Thunder"
             break
         }
         "PokerStars"
@@ -933,11 +989,7 @@ function Find-Installation
         }
         "VisualStudioInstaller"
         {
-            $InstallRoot = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
-            if (Test-Environment $InstallRoot)
-            {
-                Edit-Table $InstallRoot
-            }
+            Edit-Table "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
             break
         }
         "Git"
@@ -947,38 +999,17 @@ function Find-Installation
         }
         "GithubDesktop"
         {
-            # TODO: need to overcome version number
-            # TODO: default location?
-            foreach ($User in $global:UserNames)
-            {
-                $InstallRoot = "%SystemDrive%\Users\$User\AppData\Local\GitHubDesktop\app-2.2.3"
-                if (Test-Environment $InstallRoot)
-                {
-                    Edit-Table $InstallRoot
-                }
-            }
+            Update-Table "GitHubDesktop" $true
             break
         }
         "EpicGames"
         {
-            $InstallRoot = "%ProgramFiles(x86)%\Epic Games\Launcher"
-            if (Test-Environment $InstallRoot)
-            {
-                Edit-Table $InstallRoot
-            }
+            Edit-Table "%ProgramFiles(x86)%\Epic Games\Launcher"
             break
         }
         "UnrealEngine"
         {
-            # TODO: need default installation
-            foreach ($User in $global:UserNames)
-            {
-                $InstallRoot = "%SystemDrive%\Users\$User\source\repos\UnrealEngine\Engine"
-                if (Test-Environment $InstallRoot)
-                {
-                    Edit-Table $InstallRoot
-                }
-            }
+            Update-Table "UnrealEngine"
             break
         }
         default
@@ -989,10 +1020,6 @@ function Find-Installation
 
     if ($global:InstallTable.Rows.Count -gt 0)
     {
-        # Display the table
-        # TODO: is this temporary for debugging?
-        # $global:InstallTable | Format-Table -AutoSize
-
         return $true
     }
     else
@@ -1008,24 +1035,19 @@ function Find-Installation
         {
             while ($global:InstallTable.Rows.Count -eq 0)
             {
-                $InstallRoot = Read-Host "Input path to '$Program' root directory"
+                [string] $InstallRoot = Read-Host "Input path to '$Program' root directory"
 
-                if (![System.String]::IsNullOrEmpty($InstallRoot))
-                {
-                    Edit-Table $InstallRoot
-                }
+                Edit-Table $InstallRoot
 
                 if ($global:InstallTable.Rows.Count -gt 0)
                 {
                     return $true
                 }
-                else
+
+                Set-Warning "Installation directory for '$Program' not found" $false
+                if (Approve-Execute "No" "Unable to locate '$InstallRoot'" "Do you want to try again?")
                 {
-                    Set-Warning "Installation directory for '$Program' not found" $false
-                    if (Approve-Execute "No" "Unable to locate '$InstallRoot'" "Do you want to try again?")
-                    {
-                        break
-                    }
+                    break
                 }
             }
         }
@@ -1346,30 +1368,53 @@ New-Variable -Name BlackListEnvironment -Scope Script -Option Constant -Value @(
     "%USERNAME%"
     "%USERPROFILE%")
 
+New-Variable -Name UserProfileEnvironment -Scope Script -Option Constant -Value @(
+    "%APPDATA%"
+    "%HOME%"
+    "%HOMEPATH%"
+    "%LOCALAPPDATA%"
+    "%OneDrive%"
+    "%OneDriveConsumer%"
+    "%TEMP%"
+    "%TMP%"
+    "%USERNAME%"
+    "%USERPROFILE%")
+
+# Computer name for use use in this module
+New-Variable -Name ComputerName -Scope Script -Option ReadOnly -Value (Get-ComputerName)
+
+# Programs installed for all users
+New-Variable -Name SystemPrograms -Scope Script -Option ReadOnly -Value (Get-SystemPrograms $ComputerName)
+
+# Programs installed for all users
+New-Variable -Name AllUserPrograms -Scope Script -Option ReadOnly -Value (Get-AllUserPrograms $ComputerName)
+
 #
 # Function exports
-# TODO: see what need not be exported
 #
+
+Export-ModuleMember -Function Test-File
+Export-ModuleMember -Function Test-Installation
+Export-ModuleMember -Function Get-AppSID
+Export-ModuleMember -Function Test-Service
+
+# Exporting for testing only
+Export-ModuleMember -Function Format-Path
+Export-ModuleMember -Function Test-UserProfile
+Export-ModuleMember -Function Find-Installation
+Export-ModuleMember -Function Test-Environment
+
+Export-ModuleMember -Function Update-Table
+Export-ModuleMember -Function Edit-Table
+Export-ModuleMember -Function Initialize-Table
 
 Export-ModuleMember -Function Get-UserPrograms
 Export-ModuleMember -Function Get-AllUserPrograms
 Export-ModuleMember -Function Get-SystemPrograms
-Export-ModuleMember -Function Test-File
-Export-ModuleMember -Function Find-Installation
-Export-ModuleMember -Function Test-Installation
-Export-ModuleMember -Function Get-AppSID
-Export-ModuleMember -Function Test-Environment
-Export-ModuleMember -Function Initialize-Table
 Export-ModuleMember -Function Get-NetFramework
 Export-ModuleMember -Function Get-WindowsKits
 Export-ModuleMember -Function Get-WindowsSDK
 Export-ModuleMember -Function Get-WindowsDefender
-Export-ModuleMember -Function Test-Service
-
-# For debugging only
-Export-ModuleMember -Function Update-Table
-Export-ModuleMember -Function Format-Path
-Export-ModuleMember -Function Edit-Table
 
 #
 # Variable exports

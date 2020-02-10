@@ -44,11 +44,76 @@ if (!(Approve-Execute)) { exit }
 
 $DebugPreference = "Continue"
 
-$path1 = "%ProgramFiles%\Common Files\microsoft shared"
-$path2 = "%ProgramFiles(x86)%\Microsoft Visual Studio"
+New-Test "Test-Environment"
 
-New-Test "Test-Environment '$path1'"
-Test-Environment "$path1"
+$Result = "C:\"
+$Result
+Test-Environment $Result
 
-New-Test "Test-Environment '$path2'"
-Test-Environment "$path2"
+$Result = "C:\\Windows\System32"
+$Result
+Test-Environment $Result
+
+$Result = "C:\\Windows\"
+$Result
+Test-Environment $Result
+
+$Result = "C:\Program Files (x86)\Windows Defender\"
+$Result
+Test-Environment $Result
+
+$Result = "C:\Program Files\WindowsPowerShell"
+$Result
+Test-Environment $Result
+
+$Result = '"C:\ProgramData\Git"'
+$Result
+Test-Environment $Result
+
+$Result = "C:\PerfLogs"
+$Result
+Test-Environment $Result
+
+$Result = "C:\Windows\Microsoft.NET\Framework64\v3.5\\"
+$Result
+Test-Environment $Result
+
+$Result = "'C:\Windows\Microsoft.NET\Framework64\v3.5'"
+$Result
+Test-Environment $Result
+
+$Result = "D:\\microsoft\\windows"
+$Result
+Test-Environment $Result
+
+$Result = "D:\"
+$Result
+Test-Environment $Result
+
+$Result = "C:\\"
+$Result
+Test-Environment $Result
+
+$Result = "%LOCALAPPDATA%\OneDrive"
+$Result
+Test-Environment $Result
+
+$Result = "%HOME%\AppData\Local\OneDrive"
+$Result
+Test-Environment $Result
+
+$Result = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
+$Result
+Test-Environment $Result
+
+$Result = "%SystemDrive%"
+$Result
+Test-Environment $Result
+
+$Result = ""
+$Result
+Test-Environment $Result
+
+$Result = $null
+$Result
+Test-Environment $Result

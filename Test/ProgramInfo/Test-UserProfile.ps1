@@ -24,7 +24,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Update-Table
+# Unit test for Test-UserProfile
 #
 . $PSScriptRoot\..\..\UnloadModules.ps1
 
@@ -44,48 +44,44 @@ if (!(Approve-Execute)) { exit }
 
 $DebugPreference = "Continue"
 
-New-Test "Initialize-Table"
-Initialize-Table
+$User = "haxor"
 
-if (!$global:InstallTable)
-{
-    Write-Warning "Table not initialized"
-    exit
-}
+New-Test "User profile - full"
+$TestPath = "C:\Users\$User\source\repos\WindowsFirewallRuleset"
+$TestPath
+Test-UserProfile $TestPath
 
-if ($global:InstallTable.Rows.Count -ne 0)
-{
-    Write-Warning "Table not clear"
-    exit
-}
+New-Test "User profile - environment"
+$TestPath = "%LOCALAPPDATA%\Microsoft"
+$TestPath
+Test-UserProfile $TestPath
 
-New-Test "Fill table with Greenshot"
-Update-Table "Greenshot" $true
+New-Test "User profile - full unformatted"
+$TestPath = "C:\\Users\$User\source\\repos\WindowsFirewallRuleset\"
+$TestPath
+Test-UserProfile $TestPath
 
-New-Test "Table data"
-$global:InstallTable | Format-Table -AutoSize
+New-Test "User profile - environment unformatted"
+$TestPath = "%LOCALAPPDATA%\\Microsoft\"
+$TestPath
+Test-UserProfile $TestPath
 
-New-Test "Install Path"
-$global:InstallTable | Select-Object -ExpandProperty InstallRoot
+New-Test "System - full"
+$TestPath = "C:\Program Files\\Microsoft SQL Server\140"
+$TestPath
+Test-UserProfile $TestPath
 
-New-Test "Failure Test"
-Initialize-Table
-Update-Table "Failure" $true
+New-Test "System - envoronment"
+$TestPath = "%ProgramFiles(x86)%\Microsoft SQL Server\140\"
+$TestPath
+Test-UserProfile $TestPath
 
-New-Test "Table data"
-$global:InstallTable | Format-Table -AutoSize
+New-Test "Drive"
+$TestPath = "C:\"
+$TestPath
+Test-UserProfile $TestPath
 
-New-Test "Install Path"
-$global:InstallTable | Select-Object -ExpandProperty InstallRoot
-
-New-Test "Test multiple paths"
-Initialize-Table
-Update-Table "Visual Studio" $true
-
-New-Test "Table data"
-$global:InstallTable | Format-Table -AutoSize
-
-New-Test "Install Path"
-$global:InstallTable | Select-Object -ExpandProperty InstallRoot
-
-Exit-Test
+New-Test "Drive"
+$TestPath = "C:\\"
+$TestPath
+Test-UserProfile $TestPath

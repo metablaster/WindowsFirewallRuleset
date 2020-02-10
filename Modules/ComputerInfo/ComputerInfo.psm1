@@ -24,7 +24,7 @@ SOFTWARE.
 #>
 
 # Includes
-Import-Module -Name $RepoDir\Indented.Net.IP
+Import-Module -Name $PSScriptRoot\..\Indented.Net.IP
 
 # TODO: what happens in Get-AdapterConfig and other functions that call it if there are multiple configured adapters?
 
