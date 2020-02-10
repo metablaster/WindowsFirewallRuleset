@@ -29,7 +29,7 @@ SOFTWARE.
 
 # Check requirements for this project
 Import-Module -Name $PSScriptRoot\..\..\Modules\System
-Test-SystemRequirements $VersionCheck
+Test-SystemRequirements
 
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
@@ -41,29 +41,6 @@ Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
 if (!(Approve-Execute)) { exit }
 
 $DebugPreference = "SilentlyContinue"
-
-function Update-Context
-{
-    param (
-        [Parameter(Mandatory = $true, Position = 0)]
-        [string] $Root,
-
-        [Parameter(Mandatory = $true, Position = 1)]
-        [string] $Section,
-
-        [Parameter(Mandatory = $false, Position = 2)]
-        [string] $Subsection = $null
-    )
-
-    $NewContext = $Root + "." + $Section
-    if (![System.String]::IsNullOrEmpty($Subsection))
-    {
-        $NewContext += " -> " + $Subsection
-    }
-
-    Set-Variable -Name Context -Scope Global -Value $NewContext
-    Write-Debug "Context set to '$NewContext'"
-}
 
 New-Test "Update-Context IPv4.Outbound -> ICMPv4"
 Update-Context "IPv$IPVersion" "Outbound" "ICMPv4"

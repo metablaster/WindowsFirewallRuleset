@@ -23,6 +23,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+# TODO: learn required NET version by scaning scripts
+# TODO: learn repo dir automaticaly (using git?)
+# TODO: check for iphelper service
 # about: Test and print system requirements required for this project
 # input: true or false to check or not to check
 # output: error message and abort if check failed, system info otherwise
@@ -31,7 +34,7 @@ function Test-SystemRequirements
 {
     param (
         [parameter(Mandatory = $false)]
-        [bool] $Check = $VersionCheck
+        [bool] $Check = $script:VersionCheck
     )
 
     # disabled when runing scripts from SetupFirewall.ps1 script

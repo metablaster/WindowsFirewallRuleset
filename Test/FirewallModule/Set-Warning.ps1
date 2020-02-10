@@ -24,57 +24,23 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Show-SDDL
+# Unit test for Set-Warning
 #
 
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\..\Modules\System
-Test-SystemRequirements $VersionCheck
+Import-Module -Name $PSScriptRoot\..\..\Modules\System
+Test-SystemRequirements
 
 # Includes
-. $PSScriptRoot\IPSetup.ps1
-. $PSScriptRoot\DirectionSetup.ps1
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+. $RepoDir\Test\ContextSetup.ps1
+Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
 if (!(Approve-Execute)) { exit }
 
-# Experiment with different path values to see what the ACL objects do
-$TestPath = "C:\Users\" #Not inherited
-# $TestPath = "C:\users\Public\desktop\" #Inherited
-# $TestPath = "HKCU:\" #Not Inherited
-# $TestPath = "HKCU:\Software" #Inherited
-# $TestPath = "HKLM:\" #Not Inherited
+$DebugPreference = "Continue"
 
-Write-Host ""
-Write-Host "Path:"
-Write-Host "************************"
-$TestPath
-
-Write-Host ""
-Write-Host "ACL.AccessToString:"
-Write-Host "************************"
-
-$ACL = Get-ACL $TestPath
-$ACL.AccessToString
-
-Write-Host ""
-Write-Host "Access entry details:"
-Write-Host "************************"
-
-$ACL.Access | Format-list *
-
-Write-Host ""
-Write-Host "SDDL:"
-Write-Host "************************"
-
-$ACL.SDDL
-
-# Call with named parameter binding
-# $ACL | Show-SDDL
-
-# Or call with parameter string
-Show-SDDL $ACL.SDDL
-
-Write-Host ""
+New-Test "Set-Warning"
+Set-Warning "sample warning"

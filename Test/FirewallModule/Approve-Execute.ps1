@@ -29,7 +29,7 @@ SOFTWARE.
 
 # Check requirements for this project
 Import-Module -Name $PSScriptRoot\..\..\Modules\System
-Test-SystemRequirements $VersionCheck
+Test-SystemRequirements
 
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
@@ -41,30 +41,6 @@ Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
 if (!(Approve-Execute)) { exit }
 
 $DebugPreference = "Continue"
-
-function Approve-Execute
-{
-    param (
-        [Parameter(Mandatory = $false)]
-        [ValidateSet("Yes", "No")]
-        [string] $DefaultAction = "Yes",
-
-        [Parameter(Mandatory = $false)]
-        [string] $Title = "Executing: " + (Split-Path -Leaf $MyInvocation.ScriptName),
-
-        [Parameter(Mandatory = $false)]
-        [string] $Question = "Do you want to run this script?"
-    )
-
-    $Choices  = "&Yes", "&No"
-    $Default = 0
-    if ($DefaultAction -like "No") { $Default = 1 }
-
-    $Title += " [$Context]"
-    $Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
-
-    return $Decision -eq $Default
-}
 
 New-Test "Approve-Execute"
 Approve-Execute

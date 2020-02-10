@@ -30,19 +30,19 @@ SOFTWARE.
 
 # Check requirements for this project
 Import-Module -Name $PSScriptRoot\Modules\System
-Test-SystemRequirements $VersionCheck
+Test-SystemRequirements
 
 # Includes
-. $PSScriptRoot\Test\IPSetup.ps1
-. $PSScriptRoot\Test\DirectionSetup.ps1
-Import-Module -Name $PSScriptRoot\Modules\FirewallModule
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context "Master" $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
 if (!(Approve-Execute)) { exit }
 
+$DebugPreference = "Continue"
+
 # Recusively get powershell scripts in input folder
-$Files = Get-ChildItem -Path $PSScriptRoot\Test -Recurse -Filter *.ps1
+$Files = Get-ChildItem -Path $RepoDir\Test -Recurse -Filter *.ps1
 if (!$Files)
 {
     Write-Warning "No powershell script files found"

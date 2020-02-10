@@ -24,24 +24,23 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Write-Note
+# Unit test Get-NetworkServices
 #
 
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\..\Modules\System
-Test-SystemRequirements $VersionCheck
+Import-Module -Name $PSScriptRoot\..\..\Modules\System
+Test-SystemRequirements
 
 # Includes
-. $PSScriptRoot\IPSetup.ps1
-. $PSScriptRoot\DirectionSetup.ps1
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+. $RepoDir\Test\ContextSetup.ps1
+Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
 if (!(Approve-Execute)) { exit }
 
-Write-Host "Write-Note"
-Write-Host "***************************"
+$DebugPreference = "Continue"
 
-Write-Note "single line"
-Write-Note "first line", "second line", "3rd line"
+New-Test "Get-NetworkServices"
+Get-NetworkServices "$RepoDir\Rules"

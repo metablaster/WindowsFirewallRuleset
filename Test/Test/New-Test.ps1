@@ -29,7 +29,7 @@ SOFTWARE.
 
 # Check requirements for this project
 Import-Module -Name $PSScriptRoot\..\..\Modules\System
-Test-SystemRequirements $VersionCheck
+Test-SystemRequirements
 
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
@@ -41,20 +41,5 @@ Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
 if (!(Approve-Execute)) { exit }
 
 $DebugPreference = "Continue"
-
-function New-Test
-{
-    param (
-        [Parameter(Mandatory = $true)]
-        [string] $InputMessage
-    )
-
-    $Message = "Testing: $InputMessage"
-    $Asterisks = $("*" * ($Message.Length + 4))
-
-    Write-Host $Asterisks
-    Write-Host "* $Message *"
-    Write-Host $Asterisks
-}
 
 New-Test "New-Test"

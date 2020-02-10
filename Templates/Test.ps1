@@ -27,23 +27,25 @@ SOFTWARE.
 # Unit test for Test-Function
 #
 
-# Check requirements for this project
-Import-Module -Name $PSScriptRoot\..\Modules\System
-Test-SystemRequirements $VersionCheck
+# TODO: Include modules you need, update licence Copyright and start writing test code
 
-# TODO: Include modules you need, update licence Copyright and start writing code
+# Check requirements for this project
+Import-Module -Name $PSScriptRoot\..\..\Modules\System
+Test-SystemRequirements
 
 # Includes
-# . $PSScriptRoot\IPSetup.ps1
-# . $PSScriptRoot\DirectionSetup.ps1
-# Import-Module -Name $PSScriptRoot\..\Modules\UserInfo
-# Import-Module -Name $PSScriptRoot\..\Modules\ProgramInfo
-# Import-Module -Name $PSScriptRoot\..\Modules\ComputerInfo
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+. $RepoDir\Test\ContextSetup.ps1
+Import-Module -Name $RepoDir\Modules\Test
+# Import-Module -Name $RepoDir\Modules\UserInfo
+# Import-Module -Name $RepoDir\Modules\ProgramInfo
+# Import-Module -Name $RepoDir\Modules\ComputerInfo
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
 if (!(Approve-Execute)) { exit }
+
+$DebugPreference = "Continue"
 
 # about:
 # input:
@@ -57,8 +59,5 @@ function Test-Function
     )
 }
 
-Write-Host ""
-Write-Host "Test-Function"
-Write-Host "***************************"
-
+New-Test "Test-Function"
 Test-Function

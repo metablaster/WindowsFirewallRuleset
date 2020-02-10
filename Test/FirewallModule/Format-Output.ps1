@@ -24,49 +24,37 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Convert-SDDLToACL
+# Unit test for Format-Output
 #
 
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\..\Modules\System
-Test-SystemRequirements $VersionCheck
+Import-Module -Name $PSScriptRoot\..\..\Modules\System
+Test-SystemRequirements
 
 # Includes
-. $PSScriptRoot\IPSetup.ps1
-. $PSScriptRoot\DirectionSetup.ps1
-Import-Module -Name $PSScriptRoot\..\Modules\UserInfo
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+. $RepoDir\Test\ContextSetup.ps1
+. $RepoDir\Test\DirectionSetup.ps1
+Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
 if (!(Approve-Execute)) { exit }
 
-Write-Host ""
-Write-Host "Get-UserAccounts:"
-Write-Host "***************************"
+$DebugPreference = "Continue"
 
-[String[]]$UserAccounts = Get-UserAccounts "Users"
-$UserAccounts += Get-UserAccounts "Administrators"
-$UserAccounts
+#
+# Setup local variables:
+#
+$Group = "Test - Format output"
 
-Write-Host ""
-Write-Host "Get-AccountSDDL: (user accounts)"
-Write-Host "***************************"
+# First remove all existing rules matching group
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
-$SDDL1 = Get-AccountSDDL $UserAccounts
-$SDDL1
-
-Write-Host ""
-Write-Host "Get-AccountSDDL: (system accounts)"
-Write-Host "***********************************"
-
-$SDDL2 = Get-AccountSDDL @("NT AUTHORITY\SYSTEM", "NT AUTHORITY\NETWORK SERVICE")
-$SDDL2
-
-Write-Host ""
-Write-Host "Convert-SDDLToACL"
-Write-Host "***********************************"
-
-Convert-SDDLToACL $SDDL1, $SDDL2
-
-Write-Host ""
+New-Test "Format-Output"
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "TargetProgram" -Service Any -Program Any `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 26002 `
+-LocalUser Any `
+-Description "" | Format-Output

@@ -24,15 +24,17 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Test-SystemRequirements
+# Unit test for Convert-SDDLToACL
 #
 
 # Check requirements for this project
 Import-Module -Name $PSScriptRoot\..\..\Modules\System
+Test-SystemRequirements
 
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
 Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\UserInfo
 Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
@@ -41,5 +43,18 @@ if (!(Approve-Execute)) { exit }
 
 $DebugPreference = "Continue"
 
-New-Test "Test-SystemRequirements"
-Test-SystemRequirements
+New-Test "Get-UserAccounts:"
+[String[]]$UserAccounts = Get-UserAccounts "Users"
+$UserAccounts += Get-UserAccounts "Administrators"
+$UserAccounts
+
+New-Test "Get-AccountSDDL: (user accounts)"
+$SDDL1 = Get-AccountSDDL $UserAccounts
+$SDDL1
+
+New-Test "Get-AccountSDDL: (system accounts)"
+$SDDL2 = Get-AccountSDDL @("NT AUTHORITY\SYSTEM", "NT AUTHORITY\NETWORK SERVICE")
+$SDDL2
+
+New-Test "Convert-SDDLToACL"
+Convert-SDDLToACL $SDDL1, $SDDL2

@@ -24,24 +24,47 @@ SOFTWARE.
 #>
 
 #
-# Unit test Get-NetworkServices
+# Unit test for Show-SDDL
 #
 
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\..\Modules\System
-Test-SystemRequirements $VersionCheck
+Import-Module -Name $PSScriptRoot\..\..\Modules\System
+Test-SystemRequirements
 
 # Includes
-. $PSScriptRoot\IPSetup.ps1
-. $PSScriptRoot\DirectionSetup.ps1
-Import-Module -Name $PSScriptRoot\..\Modules\FirewallModule
+. $RepoDir\Test\ContextSetup.ps1
+Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
 if (!(Approve-Execute)) { exit }
 
-Write-Host ""
-Write-Host "Get-NetworkServices"
-Write-Host "***************************"
+$DebugPreference = "Continue"
 
-Get-NetworkServices "$PSScriptRoot\..\Rules\IPv4"
+# Experiment with different path values to see what the ACL objects do
+$TestPath = "C:\Users\" #Not inherited
+# $TestPath = "C:\users\Public\desktop\" #Inherited
+# $TestPath = "HKCU:\" #Not Inherited
+# $TestPath = "HKCU:\Software" #Inherited
+# $TestPath = "HKLM:\" #Not Inherited
+
+New-Test "Path:"
+$TestPath
+
+New-Test "ACL.AccessToString:"
+$ACL = Get-ACL $TestPath
+$ACL.AccessToString
+
+New-Test "Access entry details:"
+$ACL.Access | Format-list *
+
+New-Test "SDDL:"
+$ACL.SDDL
+
+# Call with named parameter binding
+# $ACL | Show-SDDL
+
+New-Test "Show-SDDL"
+# Or call with parameter string
+Show-SDDL $ACL.SDDL

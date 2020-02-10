@@ -394,11 +394,11 @@ New-Variable -Name ServiceHost -Option Constant -Scope Global -Value "%SystemRoo
 # Default network interface card, change this to NIC which your PC uses
 New-Variable -Name Interface -Option Constant -Scope Global -Value "Wired, Wireless"
 # Global execution context, used in Approve-Execute
-New-Variable -Name Context -Scope Global -Value "Context not set"
+New-Variable -Name Context -Scope Script -Value "Context not set"
 # Global variable to tell if all scripts ran clean
 New-Variable -Name WarningStatus -Scope Global -Value $false
 # To force loading rules regardless of presence of program set to true
-New-Variable -Name Force -Scope Global -Value $true
+New-Variable -Name Force -Scope Global -Option Constant -Value $true
 # Recommended vertical screen buffer value, to ensure user can scroll back all the output
 New-Variable -Name RecommendedBuffer -Scope Script -Value 3000
 
@@ -428,6 +428,4 @@ Export-ModuleMember -Variable Debug
 Export-ModuleMember -Variable Execute
 Export-ModuleMember -Variable ServiceHost
 Export-ModuleMember -Variable Interface
-
-Export-ModuleMember -Variable Context
 Export-ModuleMember -Variable WarningStatus

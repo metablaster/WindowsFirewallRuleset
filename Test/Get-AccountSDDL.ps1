@@ -29,7 +29,7 @@ SOFTWARE.
 
 # Check requirements for this project
 Import-Module -Name $PSScriptRoot\..\Modules\System
-Test-SystemRequirements $VersionCheck
+Test-SystemRequirements
 
 # Includes
 . $PSScriptRoot\IPSetup.ps1
