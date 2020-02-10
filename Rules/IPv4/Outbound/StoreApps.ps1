@@ -113,7 +113,7 @@ $Profile = "Private, Public"
 $NetworkApps = Get-Content -Path "$PSScriptRoot\..\NetworkApps.txt"
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context "IPv$IPVersion" $Direction $Group
 if (!(Approve-Execute)) { exit }
 
 # First remove all existing rules matching group

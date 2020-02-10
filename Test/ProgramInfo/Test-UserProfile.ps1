@@ -85,3 +85,5 @@ New-Test "Drive"
 $TestPath = "C:\\"
 $TestPath
 Test-UserProfile $TestPath
+
+Exit-Test

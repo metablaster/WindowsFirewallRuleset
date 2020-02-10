@@ -48,3 +48,5 @@ $DebugPreference = "Continue"
 New-Test "Get-WindowsDefender"
 
 Get-WindowsDefender (Get-ComputerName) #| Select-Object -ExpandProperty InstallPath
+
+Exit-Test

@@ -69,3 +69,5 @@ $ACL.SDDL
 New-Test "Show-SDDL"
 # Or call with parameter string
 Show-SDDL $ACL.SDDL
+
+Exit-Test

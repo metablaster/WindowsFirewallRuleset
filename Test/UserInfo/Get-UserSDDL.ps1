@@ -66,3 +66,5 @@ Get-UserSDDL $UserNames
 New-Test "Get-UserSDDL: (from array)"
 $ComputerName = Get-ComputerName
 Get-UserSDDL @("$ComputerName\$($UserNames[0])", "$ComputerName\$($UserNames[1])")
+
+Exit-Test

@@ -51,3 +51,5 @@ foreach ($Account in $UserAccounts)
     Write-Host "Programs installed by $Account"
     Get-UserPrograms $Account
 }
+
+Exit-Test

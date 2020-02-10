@@ -59,3 +59,5 @@ $SDDL2
 
 New-Test "Convert-SDDLToACL"
 Convert-SDDLToACL $SDDL1, $SDDL2
+
+Exit-Test

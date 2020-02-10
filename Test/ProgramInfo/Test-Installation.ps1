@@ -63,3 +63,5 @@ Test-Installation "VisualStudio" ([ref]$TestBadVariable)
 
 New-Test "Test-Installation 'BadVariable' $TestBadVariable2"
 Test-Installation "BadVariable" ([ref]$TestBadVariable2)
+
+Exit-Test

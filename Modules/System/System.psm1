@@ -128,7 +128,7 @@ function Test-SystemRequirements
         # Check if in elevated powershell
         $Principal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
         $StatusGood = $Principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-        
+
         if (!$StatusGood)
         {
             Write-Host ""
@@ -138,10 +138,9 @@ function Test-SystemRequirements
         }
 
         # Check required services are started
-        $LMHosts = Get-Service -Name lmhosts
-        $LMHostsStatus = $LMHosts | Select-Object -ExpandProperty Status
+        $LMHosts = Get-Service -Name lmhosts | Select-Object -ExpandProperty Status
 
-        if ($LMHostsStatus -ne "Running")
+        if ($LMHosts -ne "Running")
         {
             $Choices  = "&Yes", "&No"
             $Default = 0
@@ -152,9 +151,9 @@ function Test-SystemRequirements
             if ($Decision -eq $Default)
             {
                 Start-Service -Name lmhosts
-                $LMHostsStatus = Get-Service -Name lmhosts | Select-Object -ExpandProperty Status
+                $LMHosts = Get-Service -Name lmhosts | Select-Object -ExpandProperty Status
 
-                if ($LMHostsStatus -ne "Running")
+                if ($LMHosts -ne "Running")
                 {
                     Write-Host "Service can not be started, please start it manually and try again."
                     $StatusGood = $false

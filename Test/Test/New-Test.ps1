@@ -44,3 +44,4 @@ if (!(Approve-Execute)) { exit }
 $DebugPreference = "Continue"
 
 New-Test "New-Test"
+Exit-Test

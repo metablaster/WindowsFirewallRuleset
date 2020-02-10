@@ -113,3 +113,5 @@ Test-Environment $Result
 $Result = Format-Path $null
 $Result
 Test-Environment $Result
+
+Exit-Test

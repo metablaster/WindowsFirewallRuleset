@@ -45,3 +45,5 @@ $DebugPreference = "Continue"
 
 New-Test "Approve-Execute"
 Approve-Execute
+
+Exit-Test

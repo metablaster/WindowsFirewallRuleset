@@ -42,7 +42,7 @@ $Group = "Network Discovery"
 $Profile = "Private, Domain"
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context "IPv$IPVersion" $Direction $Group
 if (!(Approve-Execute)) { exit }
 
 # First remove all existing rules matching group

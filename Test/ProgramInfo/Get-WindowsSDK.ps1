@@ -55,3 +55,5 @@ $WindowsSDK
 # New-Test "Get-WindowsSDK latest"
 
 # $WindowsSDK | Sort-Object -Property Version | Where-Object { $_.InstallPath } | Select-Object -Last 1 -ExpandProperty InstallPath
+
+Exit-Test

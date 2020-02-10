@@ -49,3 +49,5 @@ Test-Service "FailureTest"
 
 New-Test "Test-Service dnscache"
 Test-Service dnscache
+
+Exit-Test

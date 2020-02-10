@@ -46,3 +46,5 @@ $DebugPreference = "Continue"
 
 New-Test "Get-Broadcast"
 Get-Broadcast
+
+Exit-Test

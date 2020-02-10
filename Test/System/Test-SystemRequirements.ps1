@@ -44,3 +44,5 @@ $DebugPreference = "Continue"
 
 New-Test "Test-SystemRequirements"
 Test-SystemRequirements $true
+
+Exit-Test

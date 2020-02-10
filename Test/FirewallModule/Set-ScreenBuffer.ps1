@@ -45,3 +45,4 @@ $DebugPreference = "Continue"
 
 New-Test "Set-ScreenBuffer"
 Set-ScreenBuffer
+Exit-Test

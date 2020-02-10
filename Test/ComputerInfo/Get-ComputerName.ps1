@@ -46,3 +46,5 @@ $DebugPreference = "Continue"
 
 New-Test "Get-ComputerName"
 Get-ComputerName
+
+Exit-Test

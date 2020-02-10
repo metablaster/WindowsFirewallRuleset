@@ -43,7 +43,7 @@ $Group = "Games - Counter Strike GO"
 $Profile = "Private, Public"
 
 # Ask user if he wants to load these rules
-Update-Context $IPVersion $Direction $Group
+Update-Context "IPv$IPVersion" $Direction $Group
 if (!(Approve-Execute)) { exit }
 
 #

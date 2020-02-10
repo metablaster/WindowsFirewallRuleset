@@ -117,3 +117,5 @@ Test-Environment $Result
 $Result = $null
 $Result
 Test-Environment $Result
+
+Exit-Test

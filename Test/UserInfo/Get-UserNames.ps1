@@ -52,3 +52,5 @@ $UserAccounts
 New-Test "Get-UserNames:"
 $UserNames = Get-UserNames $UserAccounts
 $UserNames
+
+Exit-Test

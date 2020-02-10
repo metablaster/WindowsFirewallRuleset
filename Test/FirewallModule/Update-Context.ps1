@@ -50,3 +50,5 @@ Approve-Execute | Out-Null
 New-Test "Update-Context Test.Update-Context"
 Update-Context "Test" "Update-Context"
 Approve-Execute | Out-Null
+
+Exit-Test

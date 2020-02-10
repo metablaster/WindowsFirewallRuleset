@@ -56,3 +56,5 @@ $SystemPrograms | Sort-Object -Property InstallLocation | Select-Object -ExpandP
 
 New-Test "Get-SystemPrograms"
 $SystemPrograms | Sort-Object -Property Name
+
+Exit-Test

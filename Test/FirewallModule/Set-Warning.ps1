@@ -60,3 +60,5 @@ Set-Warning @("line one", "line two", "line 3") $false
 New-Test "Multi line true"
 Set-Warning @("line one", "line two", "line 3") $true
 (Get-Variable -Name WarningStatus -Scope Global).Value
+
+Exit-Test

@@ -54,3 +54,5 @@ foreach($Account in $UserAccounts)
 {
     $(Get-AccountSID $Account)
 }
+
+Exit-Test

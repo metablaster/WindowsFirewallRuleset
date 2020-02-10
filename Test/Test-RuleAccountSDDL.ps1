@@ -72,3 +72,5 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -LocalUser $LocalUser `
 -Description "" | Format-Output
+
+Exit-Test

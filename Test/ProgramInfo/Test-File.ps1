@@ -55,3 +55,5 @@ Test-File "$OfficeShared\ClickToRun\OfficeClickToRun.exe"
 
 New-Test "Test-File '%ProgramFiles%\ClickToRun\OfficeClickToRun.exe'"
 Test-File "%ProgramFiles%\ClickToRun\OfficeClickToRun.exe"
+
+Exit-Test

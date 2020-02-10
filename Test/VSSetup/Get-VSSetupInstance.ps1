@@ -59,3 +59,5 @@ Test-Installation "MicrosoftOffice" ([ref]$NullVariable)
 
 New-Test "Test-Installation 'EmptryVariable' $EmptryVariable"
 Test-Installation "MicrosoftOffice" ([ref]$EmptryVariable)
+
+Exit-Test

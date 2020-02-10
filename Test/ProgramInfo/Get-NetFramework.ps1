@@ -61,3 +61,5 @@ $NETFramework
 # $Major, $Minor, $Build, $Revision = $Version.Split(".")
 # $Major
 # $Minor
+
+Exit-Test

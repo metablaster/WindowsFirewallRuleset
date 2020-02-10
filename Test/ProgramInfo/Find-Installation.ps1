@@ -71,3 +71,5 @@ Find-Installation "VisualStudio"
 
 New-Test "Table data"
 $global:InstallTable | Format-Table -AutoSize
+
+Exit-Test

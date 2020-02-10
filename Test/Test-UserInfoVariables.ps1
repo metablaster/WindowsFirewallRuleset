@@ -61,3 +61,5 @@ $UserAccountsSDDL
 
 New-Test "AdminAccountsSDDL:"
 $AdminAccountsSDDL
+
+Exit-Test

@@ -55,3 +55,5 @@ $WindowsKits
 # New-Test "Get-WindowsKits DebuggersRoot latest"
 
 # $WindowsKits | Where-Object {$_.Product -like "WindowsDebuggersRoot*"} | Sort-Object -Property Product | Select-Object -Last 1 -ExpandProperty InstallPath
+
+Exit-Test

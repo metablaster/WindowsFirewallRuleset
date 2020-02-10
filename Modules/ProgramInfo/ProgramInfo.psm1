@@ -668,8 +668,7 @@ function Edit-Table
         $Row = $InstallTable.NewRow()
 
         # Enter data into row
-        # TODO: learn who is user
-        # $Row.User = $User
+        $Row.User = ($InstallRoot.Split("\"))[2]
         $Row.InstallRoot = $InstallRoot
 
         # Add the row to the table

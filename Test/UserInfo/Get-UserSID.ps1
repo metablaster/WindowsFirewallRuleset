@@ -58,3 +58,5 @@ foreach($User in $UserNames)
 {
     $(Get-UserSID $User)
 }
+
+Exit-Test

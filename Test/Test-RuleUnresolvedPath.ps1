@@ -76,3 +76,5 @@ if ((Test-Installation "TargetProgram" ([ref]$TargetProgramRoot)) -or $Force)
     -LocalUser $UserAccountsSDDL `
     -Description "" | Format-Output
 }
+
+Exit-Test

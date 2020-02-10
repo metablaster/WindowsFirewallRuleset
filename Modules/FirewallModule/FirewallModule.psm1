@@ -26,7 +26,7 @@ SOFTWARE.
 # about: update context for Approve-Execute
 # input: 2-3 strings to be shown in context
 # output: none, global context variable is set
-# sample: Update-Context $IPVersion $Direction $Group
+# sample: Update-Context "IPv$IPVersion" $Direction $Group
 function Update-Context
 {
     param (

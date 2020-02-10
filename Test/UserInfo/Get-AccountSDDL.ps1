@@ -60,3 +60,5 @@ Get-AccountSDDL $UserAccounts
 
 New-Test "Get-AccountSDDL: (from array)"
 Get-AccountSDDL @("NT AUTHORITY\SYSTEM", "NT AUTHORITY\NETWORK SERVICE")
+
+Exit-Test

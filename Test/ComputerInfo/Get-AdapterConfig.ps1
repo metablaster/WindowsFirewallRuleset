@@ -46,3 +46,5 @@ $DebugPreference = "Continue"
 
 New-Test "Get-AdapterConfig"
 Get-AdapterConfig
+
+Exit-Test

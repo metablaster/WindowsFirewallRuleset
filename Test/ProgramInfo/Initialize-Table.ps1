@@ -85,3 +85,5 @@ foreach ($Account in $global:UserAccounts)
 
 New-Test "Table data"
 $global:InstallTable | Format-Table -AutoSize
+
+Exit-Test

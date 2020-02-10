@@ -48,3 +48,5 @@ $DebugPreference = "Continue"
 New-Test "Get-AllUserPrograms"
 $ComputerName = Get-ComputerName
 Get-AllUserPrograms $ComputerName | Sort-Object -Property Name
+
+Exit-Test

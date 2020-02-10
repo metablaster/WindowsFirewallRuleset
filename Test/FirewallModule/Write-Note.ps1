@@ -46,3 +46,5 @@ $DebugPreference = "Continue"
 New-Test "Write-Note"
 Write-Note "single line"
 Write-Note "first line", "second line", "3rd line"
+
+Exit-Test

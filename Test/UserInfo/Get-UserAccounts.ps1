@@ -55,3 +55,5 @@ $Administrators
 New-Test "Join arrays:"
 $UserAccounts = $Users + $Administrators
 $UserAccounts
+
+Exit-Test

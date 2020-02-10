@@ -45,3 +45,5 @@ $DebugPreference = "Continue"
 
 New-Test "Get-NetworkServices"
 Get-NetworkServices "$RepoDir\Rules"
+
+Exit-Test

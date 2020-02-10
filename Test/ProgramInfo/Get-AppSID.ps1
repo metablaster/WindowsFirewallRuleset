@@ -89,3 +89,5 @@ foreach($Admin in $Admins) {
         Get-AppSID $Admin $_.PackageFamilyName
     }
 }
+
+Exit-Test
