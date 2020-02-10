@@ -137,6 +137,8 @@ function Test-SystemRequirements
 # Module variables
 #
 
+# $DebugPreference = "Continue"
+
 if (!(Get-Variable -Name CheckInitSystem -Scope Global -ErrorAction Ignore))
 {
     # check if constants alreay initialized, used for module reloading

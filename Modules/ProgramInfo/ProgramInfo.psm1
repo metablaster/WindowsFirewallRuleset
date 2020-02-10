@@ -564,7 +564,9 @@ function Update-Table
         [bool] $UserProfile = $false
     )
 
-    # TODO: SearchString may pick up irrelevant paths (ie. unreal)
+    Write-Debug "Update-Table, Search string = $SearchString"
+
+    # TODO: SearchString may pick up irrelevant paths (ie. unreal), or even miss
     # Search system wide installed programs
     if ($SystemPrograms.Name -like "*$SearchString*")
     {
@@ -718,15 +720,19 @@ function Test-Installation
 
         if ($Count -gt 1)
         {
+            Write-Host "Table data"
+            $global:InstallTable | Format-Table -AutoSize
+
             Write-Note "Found multiple candidate installation directories for $Program"
 
+            # Print out all candidate installation directories
             for ($Index = 0; $Index -lt $Count; ++$Index)
             {
                 Write-Host "$($Index + 1). $($global:InstallTable.Rows[$Index].Item("InstallRoot"))"
             }
 
-            $Choice = 0
-
+            # Prompt user to chose one
+            [int] $Choice = 0
             while ($Choice -lt 1 -or $Choice -gt $Count)
             {
                 Write-Host "Input number to choose which one is correct"
@@ -740,15 +746,15 @@ function Test-Installation
             $InstallRoot = $global:InstallTable | Select-Object -ExpandProperty InstallRoot
         }
 
-        $FilePath.Value = $InstallRoot
         Write-Note "Path corrected from: $($FilePath.Value)", "to: $InstallRoot"
+        $FilePath.Value = $InstallRoot
     }
     else
     {
         return $false # installation not found
     }
 
-    return $true # path exists, true even if path bad (user profile)
+    return $true # path exists
 }
 
 # about: find installation directory for given program
@@ -914,7 +920,7 @@ function Find-Installation
         }
         "TeamViewer"
         {
-            Update-Table "TeamViewer"
+            Update-Table "Team Viewer"
             break
         }
         "EdgeChromium"
@@ -979,7 +985,7 @@ function Find-Installation
         }
         "VisualStudio"
         {
-            Update-Table "Microsoft Visual Studio"
+            Update-Table "Visual Studio"
             break
         }
         "MSYS2"
@@ -1030,18 +1036,24 @@ function Find-Installation
         $Script = (Get-PSCallStack)[2].Command
 
         # TODO: this loops seem to be skiped, probably missing Test-File, need to check
-        Write-Note "If you installed $Program elsewhere you can input the correct path now `nor adjust the path in $Script and re-run the script later. `notherwise ignore this warning if you don't have $Program installed."
+        Write-Note @("If you installed $Program elsewhere you can input the correct path now"
+        "or adjust the path in $Script and re-run the script later."
+        "otherwise ignore this warning if you don't have $Program installed.")
+
         if (Approve-Execute "Yes" "Rule group for $Program" "Do you want to input path now?")
         {
             while ($global:InstallTable.Rows.Count -eq 0)
             {
                 [string] $InstallRoot = Read-Host "Input path to '$Program' root directory"
 
-                Edit-Table $InstallRoot
-
-                if ($global:InstallTable.Rows.Count -gt 0)
+                if (![System.String]::IsNullOrEmpty($InstallRoot))
                 {
-                    return $true
+                    Edit-Table $InstallRoot
+
+                    if ($global:InstallTable.Rows.Count -gt 0)
+                    {
+                        return $true
+                    }
                 }
 
                 Set-Warning "Installation directory for '$Program' not found" $false
@@ -1349,6 +1361,12 @@ function Get-WindowsDefender
         return $null
     }
 }
+
+#
+# Module variables
+#
+
+# $DebugPreference = "Continue"
 
 # Installation table holds user and program directory pair
 New-Variable -Name InstallTable -Scope Global -Value $null

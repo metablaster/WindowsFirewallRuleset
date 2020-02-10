@@ -79,6 +79,11 @@ function Get-Broadcast
     Select-Object -ExpandProperty BroadcastAddress | Select-Object -ExpandProperty IPAddressToString
 }
 
+#
+# Module variables
+#
+
+# $DebugPreference = "Continue"
 
 #
 # Function exports

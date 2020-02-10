@@ -54,6 +54,12 @@ function Exit-Test
 }
 
 #
+# Module variables
+#
+
+# $DebugPreference = "Continue"
+
+#
 # Function exports
 #
 

@@ -379,6 +379,8 @@ function Set-ScreenBuffer
 # Module variables
 #
 
+# $DebugPreference = "Continue"
+
 if (!(Get-Variable -Name CheckInitFirewallModule -Scope Global -ErrorAction Ignore))
 {
     # check if constants alreay initialized, used for module reloading

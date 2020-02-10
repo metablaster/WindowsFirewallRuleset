@@ -54,14 +54,20 @@ New-Test "Install Root"
 $global:InstallTable | Select-Object -ExpandProperty InstallRoot
 
 New-Test "Find-Installation 'TeamViewer'"
-New-Test (Find-Installation "TeamViewer")
+Find-Installation "TeamViewer"
+# C:\Program Files (x86)\Microsoft
 
 New-Test "Table data"
-New-Test "***************************"
-$global:InstallTable | Select-Object -ExpandProperty InstallRoot
+$global:InstallTable | Format-Table -AutoSize
 
 New-Test "Find-Installation 'FailureTest'"
-New-Test (Find-Installation "FailureTest")
+Find-Installation "FailureTest"
 
 New-Test "Table data"
-$global:InstallTable  | Select-Object -ExpandProperty InstallRoot
+$global:InstallTable | Format-Table -AutoSize
+
+New-Test "Find-Installation 'VisualStudio'"
+Find-Installation "VisualStudio"
+
+New-Test "Table data"
+$global:InstallTable | Format-Table -AutoSize

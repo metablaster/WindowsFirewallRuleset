@@ -200,6 +200,12 @@ function Get-AccountSDDL
     return $SDDL
 }
 
+#
+# Module variables
+#
+
+# $DebugPreference = "Continue"
+
 # TODO: add more groups, guests, everyone etc...
 if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 {

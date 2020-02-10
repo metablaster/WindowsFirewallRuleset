@@ -75,9 +75,6 @@ Update-Table "Failure" $true
 New-Test "Table data"
 $global:InstallTable | Format-Table -AutoSize
 
-New-Test "Install Path"
-$global:InstallTable | Select-Object -ExpandProperty InstallRoot
-
 New-Test "Test multiple paths"
 Initialize-Table
 Update-Table "Visual Studio" $true
