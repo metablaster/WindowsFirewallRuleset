@@ -197,7 +197,7 @@ if (!(Get-Variable -Name CheckInitSystem -Scope Global -ErrorAction Ignore))
 }
 
 # Set to false to avoid checking system requirements
-New-Variable -Name VersionCheck -Scope Global -Option ReadOnly -Value $true
+New-Variable -Name VersionCheck -Scope Global -Option ReadOnly -Value $false
 
 #
 # Function exports
@@ -210,4 +210,6 @@ Export-ModuleMember -Function Test-SystemRequirements
 #
 
 # Realocating scripts should be easy if root directory is constant
+Export-ModuleMember -Variable CheckInitSystem
 Export-ModuleMember -Variable RepoDir
+Export-ModuleMember -Variable VersionCheck

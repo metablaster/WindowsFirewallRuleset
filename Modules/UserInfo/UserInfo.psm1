@@ -245,6 +245,7 @@ Export-ModuleMember -Function Get-AccountSDDL
 #
 # Variable exports
 #
+Export-ModuleMember -Variable CheckInitUserInfo
 
 Export-ModuleMember -Variable UserAccounts
 Export-ModuleMember -Variable AdminAccounts

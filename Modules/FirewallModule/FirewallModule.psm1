@@ -454,3 +454,5 @@ Export-ModuleMember -Variable Execute
 Export-ModuleMember -Variable ServiceHost
 Export-ModuleMember -Variable Interface
 Export-ModuleMember -Variable WarningStatus
+Export-ModuleMember -Variable Force
+Export-ModuleMember -Variable CheckInitFirewallModule
