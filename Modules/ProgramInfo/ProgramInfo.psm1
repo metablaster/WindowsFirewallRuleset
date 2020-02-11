@@ -781,6 +781,11 @@ function Find-Installation
     # otherwise firewall GUI will show full paths which is not desired for sorting reasons
     switch -Wildcard ($Program)
     {
+        "Chocolatey"
+        {
+            Edit-Table "%ALLUSERSPROFILE%\chocolatey"
+            break
+        }
         "ArenaChess"
         {
             Update-Table "Arena Chess"

@@ -42,6 +42,9 @@ Import-Module -Name $RepoDir\Modules\FirewallModule
 #
 $Group = "Development - Visual Studio"
 $Profile = "Private, Public"
+[string[]] $AllUsers = $AdminAccounts
+$AllUsers += $UserAccounts
+$VSUpdateUsers = (Get-AccountSDDL $AllUsers)
 
 # Ask user if he wants to load these rules
 Update-Context "IPv$IPVersion" $Direction $Group
@@ -90,7 +93,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $Force)
     -DisplayName "VS 2019 HTTPS/S" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-    -LocalUser $UserAccountsSDDL `
+    -LocalUser $VSUpdateUsers `
     -Description "Check for updates, symbols download and built in browser." | Format-Output
 
     $Program = "$VSRoot\Common7\IDE\Extensions\Microsoft\LiveShare\Agent\vsls-agent.exe"
@@ -229,7 +232,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $Fo
     -DisplayName "VS 2019 Installer setup" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-    -LocalUser $UserAccountsSDDL `
+    -LocalUser $VSUpdateUsers `
     -Description "Used for updates since 16.0.3." | Format-Output
 
     $Program = "$VSInstallerRoot\vs_installer.exe"
