@@ -404,7 +404,7 @@ if (!(Get-Variable -Name CheckInitFirewallModule -Scope Global -ErrorAction Igno
     # Machine where to apply rules (default: Local Group Policy)
     New-Variable -Name PolicyStore -Scope Global -Option Constant -Value "localhost"
     # Stop executing commandlet if error
-    New-Variable -Name OnError -Scope Global -Option Constant -Value "Stop"
+    New-Variable -Name OnError -Scope Global -Option Constant -Value "Continue"
     # Most used program
     New-Variable -Name ServiceHost -Scope Global -Option Constant -Value "%SystemRoot%\System32\svchost.exe"
     # Default network interface card, change this to NIC which your PC uses
