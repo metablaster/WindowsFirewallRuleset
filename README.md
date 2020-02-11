@@ -101,7 +101,6 @@ Visit `Test` folder and run all tests individually to confirm modules and their 
 # Step by step quick start
 
 **WARNING:**
-- These steps here are designed for for those who don't feel comfotable with `git`, `Powershell` or `Local group policy`
 - You may loose internet conectivity for some of your programs or in rare cases even lose internet conectivity completely, if that happens, you can run `ResetFirewall.ps1` to reset firewall to previous state and clear GPO firewall.
 - Inside the Readme folder there is a `ResetFirewall.md`, a guide on how to do it manually, by hand, if for some reason you're unable to run the script, or the script does not solve your problems.
 - Also note that your current/existing rules will not be deleted unless you have rules in GPO whose group name interfere with group names from this ruleset.
@@ -116,7 +115,7 @@ Visit `Test` folder and run all tests individually to confirm modules and their 
 
 **STEPS:**
 1. If you don't have ssh keys and other setup required to clone then just download the zip file by clicking on green "Clone or download" button here on this site.
-2. extract the archive somewhere, this steps assume you've extracted the zip into C:\ root drive directly.
+2. extract the archive somewhere, this steps assume you've extracted the zip into `C:\` root drive directly.
 3. Right click on the Task bar and select `Taskbar settings`
 4. Toggle on `Replace Command Prompt with Windows Powershell in the menu when I right click the start button`
 5. Right click on Start button in Windows system
