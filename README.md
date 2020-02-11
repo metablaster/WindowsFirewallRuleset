@@ -172,9 +172,9 @@ not before all scripts are fully tested, meaning master brach is stable.
 So if you're fine to experiment with development/beta version switch to "develop" branch and try it out, otherwise stick to master if for example development version produces errors for you.
 
 There are two methods to be up to date with firewall:
-1. First method requires you to download scripts, first use the "branch" button here on this site to switch to either master or develop branch, next use "Clone or download" button and either downlaod zip file or copy clone link and make a new clone as shown in "Quick start" section.
+1. First method requires you to download scripts, first use the "branch" button here on this site to switch to either master or develop branch, next use "Clone or download" button and either downlaod zip file or copy clone link and make a new clone.
 
-2. Second method is good if you want to do it in powershell console without visiting this site, you will need git (link above) to check for new updates on daily, weekly or what ever other basis you want, follow bellow steps to check for updates once you installed git:
+2. Second method is good if you want to do it in powershell console without visiting this site, you will need git (link above), github account and [SSH key](https://help.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account) to check for new updates on daily, weekly or what ever other basis you want, follow bellow steps to check for updates once you installed git:
 - Right click on Start button in Windows system
 - Click `Windows Powershell` to open Powershell
 - First navigate to folder where your instance of WindowsFirewallRuleset instance is, for example:
