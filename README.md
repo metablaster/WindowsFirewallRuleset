@@ -26,11 +26,11 @@
 - meaning this project is a good base to easily extend your firewall and include more rules.
 - You can choose which rulles you want, and apply only those or apply them all with single command to your firewall.
 - All the rules are loaded into Local group policy giving you full power over default windows firewall.
-- Currently there are some 650 firewall rules.
+- Currently there are some 650+ firewall rules.
 
 # What are the core benefits of this firewall/project?
 1. Unlike normal windows firewall in control panel, these rules are loaded into GPO firewall, meaning random programs which install rules as part of their installation process or system settings changes will have no effect on firewall unless you explicitly make an exception, therefore you have full control over the firewall.
-2. Unlike default windows firewall rules, these rules are much more restrictive such as, tied to explicit system accounts, rules apply to specific ports, network interfaces, specific programs, services etc.
+2. Unlike default windows firewall rules, these rules are much more restrictive such as, tied to explicit user accounts, rules apply to specific ports, network interfaces, specific programs, services etc.
 3. Unlike default (or your custom) rules you will know which rules have no effect or are redundant due to ie. uninstalled program or a missing windows service which no longer exists or are redundant/invalid for what ever other reason.
 4. Changing rule attributes such as ports, adresses and similar is much easier since the rules are in scripts, so you can use editor tools such as CTRL + F to perform bulk operations on your rules, more rules you have the easier it is to manage them.
 
@@ -92,7 +92,7 @@ If you miss something you can delete, add or modify rules in GPO later.
 Note that if you define your platform globaly (ie. ```$Platform = "6.1"```) instead of making your own variable, just replacing the string, but do not exclude unrelated rules, most of the rules should work, but ie. rules for Store Apps will fail to load.\
 Also ie. rules for programs and services that do not exist on system will be most likely applied but redundant.
 
-What this means, is, just edit the GPO later to refine your imports if you go that route, or alternatively revisit your edits again.
+What this means, is, just edit the GPO later to refine your imports if you go that route, or alternatively revisit your edits and re-run individual scripts again.
 
 **Modification 4:**\
 Visit `Test` folder and run all tests individually to confirm modules and their functions work as expected, any failure should be fixed.
@@ -108,34 +108,32 @@ Visit `Test` folder and run all tests individually to confirm modules and their 
 - The script will ask you what rules you want, to minimize internet connectivity trouble you should apply at least all generic networking and OS related rules such as BasicNetworking, ICMP, WindowsSystem, WindowsServices, Multicast etc. also do not ignore IPv6, Windows really depends on these!
 
 **NOTE:**
-- If you would like to modify basic behavior of execution, such as force loading rules and various default actions then visit `Modules\FirewallModule\FirewallModule.psm1` scroll down and there you'll find global variables which are used for this.
+- If you would like to modify basic behavior of execution, such as force loading rules and various default actions then visit `Modules` folder, open each module, scroll down and there you'll find global variables which are used for this.
 - If you're running scripts for first time it's higly recommended to load all rules, it should be easy to delete what you do not wan't in GPO, rather than later searching scripts for what you may have missed.
 - Loading rules into an empty GPO should be very fast, however loading into GPO which already contains rules will be significally slower (depends on number of existing rules)
 - All errors and warnings will be saved to `Logs` directory, so you can review these logs if you want to fix some problem.
 
 **STEPS:**
-1. Press Widnows key
-2. Type: `services.msc`
-3. Run "Services" as Administrator
-4. Make sure `TCP/IP NetBIOS Helper` service is started, this is needed to communicate GPO with either localhost or remote PC.
-5. Right click on the Task bar and select `Taskbar settings`
-6. Toggle on `Replace Command Prompt with Windows Powershell in the menu when I right click the start button`
-7. Right click on Start button in Windows system
-8. Click `Windows Powershell (Administrator)` to open Powershell as Administrator (Input Admin password if needed)
-9. Type: (or copy paste command(s) and hit enter) ```Get-ExecutionPolicy``` and remeber what the ouput is.
-10. Type: ```Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force```
-11. Type: ```cd C:\```
-12. Type: ```git clone git@github.com:metablaster/WindowsFirewallRuleset.git```
-13. Type: ```cd WindowsFirewallRuleset```
-14. Rules for programs such as internet browser, Visual Studio etc. depend on installation variables.\
-Most paths are auto-searched and variables are updated, otherwise you get warning and description on how to fix the problem.
-15. Back to Powershell console and type into console: ```.\SetupFirewall.ps1``` and hit enter (You will be asked what kind of rulesets you want)
-16. Follow prompt output, (ie. hit enter each time to proceed until done), it will take at least 10 minutes of your attention.
-17. If you encounter errors, you have several options such as, ignore the errors or fix the script that produced the error and re-run that script once again later.
-18. Once execution is done recall execution policy from step 5 and type: (ie. if it was "RemoteSigned" which is default)\
+1. Right click on the Task bar and select `Taskbar settings`
+2. Toggle on `Replace Command Prompt with Windows Powershell in the menu when I right click the start button`
+3. Right click on Start button in Windows system
+4. Click `Windows Powershell (Administrator)` to open Powershell as Administrator (Input Admin password if needed)
+5. Type: (or copy paste command(s) and hit enter) ```Get-ExecutionPolicy``` and remeber what the ouput is.
+6. Type: ```Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force```
+7. Type: ```cd C:\```
+8. Type: ```git clone git@github.com:metablaster/WindowsFirewallRuleset.git```
+9. Type: ```cd WindowsFirewallRuleset```
+10. Rules for programs such as internet browser, Visual Studio etc. depend on installation variables.\
+Most paths are auto-searched and variables are updated, otherwise you get warning and description on how to fix the problem,
+If needed, you can find these installation variables in individual scripts inside `Rules` folder.
+11. Back to Powershell console and type into console: ```.\SetupFirewall.ps1``` and hit enter (You will be asked what kind of rulesets you want)
+12. Follow prompt output, (ie. hit enter each time to proceed until done), it will take at least 10 minutes of your attention.
+13. If you encounter errors or warnings, you have several options such as, ignore the errors/warnings or update script that produced the error and re-run that script once again later.
+14. Once execution is done recall execution policy from step 5 and type: (ie. if it was "RemoteSigned" which is default)\
 ```Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force```
-19. Now that rules are applied you may need to adjust some of them in Local Group Policy, not all the rules are enabled by default and you may want to toggle default Allow/Block behavior for some rules, rules for programs which do not exist need to be made additionally.\
+15. Now that rules are applied you may need to adjust some of them in Local Group Policy, not all the rules are enabled by default and you may want to toggle default Allow/Block behavior for some rules, rules for programs which do not exist need to be made additionally.\
 See next sections for more info.
+16. If you're unable to connect to internet, you can temporarly open outbound firewall in GPO, that should work, if not, reset firewall as explained before.
 
 # Where are my rules?
 Rules are loaded into Local group policy, follow bellow steps to open local group policy.
@@ -173,7 +171,7 @@ not before all scripts are fully tested, meaning master brach is stable.
 So if you're fine to experiment with development/beta version switch to "develop" branch and try it out, otherwise stick to master if for example development version produces errors for you.
 
 There are two methods to be up to date with firewall:
-1. This method requires you to download scripts, first use the "branch" button here on this site to switch to either master or develop branch, next use "Clone or download" button and either downlaod zip file or copy clone link and make a new clone as shown in "Quick start" section.
+1. First method requires you to download scripts, first use the "branch" button here on this site to switch to either master or develop branch, next use "Clone or download" button and either downlaod zip file or copy clone link and make a new clone as shown in "Quick start" section.
 
 2. Second method is good if you want to do it in powershell console without visiting this site, you will need git (link above) to check for new updates on daily, weekly or what ever other basis you want, follow bellow steps to check for updates once you installed git:
 - Right click on Start button in Windows system
@@ -192,6 +190,7 @@ There are two methods to be up to date with firewall:
 - Type: ```git fetch upstream```
 - Type: ```git merge upstream/develop```
 
+Of course you can switch to from one branch to another with git in powershell as many times as you want and all files will be auto updated without the need to redownload or re-setup anything.\
 That's it, your scripts are now up to date, execute them as you desire (or follow steps from "Quick start" section) to apply changes to your firewall.
 
 # Contribution or suggestions
