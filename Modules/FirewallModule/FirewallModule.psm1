@@ -410,7 +410,7 @@ if (!(Get-Variable -Name CheckInitFirewallModule -Scope Global -ErrorAction Igno
     # Default network interface card, change this to NIC which your PC uses
     New-Variable -Name Interface -Scope Global -Option Constant -Value "Wired, Wireless"
     # To force loading rules regardless of presence of program set to true
-    New-Variable -Name Force -Scope Global -Option Constant -Value $true
+    New-Variable -Name Force -Scope Global -Option Constant -Value $false
 }
 
 # To add rules to firewall for real set to false

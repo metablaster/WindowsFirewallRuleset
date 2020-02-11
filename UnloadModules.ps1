@@ -28,12 +28,13 @@ SOFTWARE.
 #
 
 # Set to true to indicate development phase, force unloading modules and removing variables
-$Develop = $true
+$Develop = $false
 
 if ($Develop)
 {
-    Write-Host "DEBUG: Cleaning up environment" -ForegroundColor Yellow -BackgroundColor Black
+    Write-Host "DEBUG: Clean up environment" -ForegroundColor Yellow -BackgroundColor Black
     Remove-Module -Name System -ErrorAction Ignore
+    Remove-Variable -Name VersionCheck -Scope Global -Force -ErrorAction Ignore
 
     Remove-Module -Name FirewallModule -ErrorAction Ignore
     Remove-Variable -Name WarningStatus -Scope Global -ErrorAction Ignore

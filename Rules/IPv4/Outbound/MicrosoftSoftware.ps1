@@ -302,6 +302,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "install package source code" | Format-Output
 
 # TODO: need to update for all users
+# TODO: this bad path somehow gets into rule
 $Program = "%LOCALAPPDATA%\Temp\vcpkg\vcpkgmetricsuploader-2019.09.12.exe"
 Test-File $Program
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `

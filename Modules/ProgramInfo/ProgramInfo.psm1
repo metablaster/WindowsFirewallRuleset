@@ -75,7 +75,8 @@ function Test-File
         $SearchPath = Split-Path -Path $ExpandedPath -Parent
         $Executable = Split-Path -Path $ExpandedPath -Leaf
 
-        Set-Warning @("Executable '$Executable' was not found, rules for '$Executable' won't have any effect"
+        Set-Warning @("Executable '$Executable' was not found"
+        "rules for '$Executable' won't have any effect"
         "Searched path was: $SearchPath")
 
         Write-Note @("To fix the problem find '$Executable' then adjust the path in"

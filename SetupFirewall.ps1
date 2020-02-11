@@ -23,10 +23,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+. $PSScriptRoot\UnloadModules.ps1
+
 # Check requirements for this project
 Import-Module -Name $PSScriptRoot\Modules\System
 Test-SystemRequirements
-Set-Variable -Name VersionCheck -Scope Global -Value $false
+Remove-Variable -Name VersionCheck -Scope Global -Force
+New-Variable -Name VersionCheck -Scope Global -Option ReadOnly -Value $false
 
 # Includes
 Import-Module -Name $RepoDir\Modules\ProgramInfo
@@ -54,7 +57,7 @@ Get-Content -Path $RepoDir\Rules\NetworkServices.txt | ForEach-Object {
 # Load Inbound rules
 #
 
-Update-Context 4 "Inbound"
+Update-Context "IPv4" "Inbound"
 
 if(Approve-Execute "Yes" "Applying: Inbound IPv4 Rules")
 {
@@ -76,17 +79,18 @@ if(Approve-Execute "Yes" "Applying: Inbound IPv4 Rules")
         & "$PSScriptRoot\Rules\IPv4\Inbound\WirelessNetworking.ps1"
     }
 
-    Update-Context 4 "Outbound"
+    Update-Context "IPv4" "Inbound"
     if(Approve-Execute "Yes" "Applying: Rules for developers")
     {
         # Rules for developers
         & "$PSScriptRoot\Rules\IPv4\Inbound\Development\EpicGames.ps1"
     }
 
-    Update-Context 4 "Outbound"
+    Update-Context "IPv4" "Inbound"
     if(Approve-Execute "Yes" "Applying: Rules for 3rd party programs")
     {
         # rules for programs
+        & "$PSScriptRoot\Rules\IPv4\Inbound\Software\Filezilla.ps1"
         & "$PSScriptRoot\Rules\IPv4\Inbound\Software\Steam.ps1"
         & "$PSScriptRoot\Rules\IPv4\Inbound\Software\TeamViewer.ps1"
         & "$PSScriptRoot\Rules\IPv4\Inbound\Software\uTorrent.ps1"
@@ -96,7 +100,7 @@ if(Approve-Execute "Yes" "Applying: Inbound IPv4 Rules")
 #
 # Load Outbound rules
 #
-Update-Context 4 "Outbound"
+Update-Context "IPv4" "Outbound"
 
 if(Approve-Execute "Yes" "Applying: Outbound IPv4 Rules")
 {
@@ -121,31 +125,35 @@ if(Approve-Execute "Yes" "Applying: Outbound IPv4 Rules")
         & "$PSScriptRoot\Rules\IPv4\Outbound\WirelessNetworking.ps1"
     }
 
-    Update-Context 4 "Outbound"
+    Update-Context "IPv4" "Outbound"
     if(Approve-Execute "Yes" "Applying: Rules for developers")
     {
         # Rules for developers
+        & "$PSScriptRoot\Rules\IPv4\Outbound\Development\Chocolatey.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Development\EpicGames.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Development\Github.ps1"
+        & "$PSScriptRoot\Rules\IPv4\Outbound\Development\Incredibuild.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Development\MSYS2.ps1"
+        & "$PSScriptRoot\Rules\IPv4\Outbound\Development\RealWorld.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Development\VisualStudio.ps1"
     }
 
-    Update-Context 4 "Outbound"
+    Update-Context "IPv4" "Outbound"
     if(Approve-Execute "Yes" "Applying: Rules for games")
     {
         # Rules for games
+        & "$PSScriptRoot\Rules\IPv4\Outbound\Games\ArenaChess.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Games\CounterStrikeGO.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Games\DemiseOfNations.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Games\EVEOnline.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Games\OpenTTD.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Games\PathOfExile.ps1"
-        & "$PSScriptRoot\Rules\IPv4\Outbound\Games\PinbalArcade.ps1"
+        & "$PSScriptRoot\Rules\IPv4\Outbound\Games\PinballArcade.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Games\PokerStars.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Games\WarThunder.ps1"
     }
 
-    Update-Context 4 "Outbound"
+    Update-Context "IPv4" "Outbound"
     if(Approve-Execute "Yes" "Applying: Rules for 3rd party programs")
     {
         # rules for programs
@@ -153,16 +161,19 @@ if(Approve-Execute "Yes" "Applying: Outbound IPv4 Rules")
         & "$PSScriptRoot\Rules\IPv4\Outbound\Software\CPUID.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Software\DnsCrypt.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Software\FileZilla.ps1"
+        & "$PSScriptRoot\Rules\IPv4\Outbound\Software\Google.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Software\GPG.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Software\Greenshot.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Software\Intel.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Software\Java.ps1"
+        & "$PSScriptRoot\Rules\IPv4\Outbound\Software\Metatrader.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Software\MSI.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Software\Nvidia.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Software\OBSStudio.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Software\OpenSSH.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Software\PasswordSafe.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Software\qBittorrent.ps1"
+        & "$PSScriptRoot\Rules\IPv4\Outbound\Software\RivaTuner.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Software\Steam.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Software\TeamViewer.ps1"
         & "$PSScriptRoot\Rules\IPv4\Outbound\Software\Thunderbird.ps1"
@@ -177,7 +188,7 @@ if(Approve-Execute "Yes" "Applying: Outbound IPv4 Rules")
 #
 # Load Inbound rules
 #
-Update-Context 6 "Inbound"
+Update-Context "IPv6" "Inbound"
 
 if(Approve-Execute "Yes" "Applying: Inbound IPv6 Rules")
 {
@@ -193,7 +204,7 @@ if(Approve-Execute "Yes" "Applying: Inbound IPv6 Rules")
 #
 # Load Outbound rules
 #
-Update-Context 6 "Outbound"
+Update-Context "IPv6" "Outbound"
 
 if(Approve-Execute "Yes" "Applying: Outbound IPv6 Rules")
 {

@@ -34,7 +34,7 @@ function Test-SystemRequirements
 {
     param (
         [parameter(Mandatory = $false)]
-        [bool] $Check = $script:VersionCheck
+        [bool] $Check = $VersionCheck
     )
 
     # disabled when runing scripts from SetupFirewall.ps1 script
@@ -197,7 +197,7 @@ if (!(Get-Variable -Name CheckInitSystem -Scope Global -ErrorAction Ignore))
 }
 
 # Set to false to avoid checking system requirements
-New-Variable -Name VersionCheck -Scope Script -Option Constant -Value $false
+New-Variable -Name VersionCheck -Scope Global -Option ReadOnly -Value $true
 
 #
 # Function exports

@@ -81,7 +81,7 @@ if ((Test-Installation "WarThunder" ([ref] $WarThunderRoot)) -or $Force)
     Test-File $Program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
     -DisplayName "WarThunder - gajin_downloader" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
     -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $UserAccountsSDDL `
     -Description "" | Format-Output

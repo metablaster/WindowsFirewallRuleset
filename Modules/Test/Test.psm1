@@ -23,9 +23,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# Includes
-Import-Module -Name $PSScriptRoot\..\FirewallModule
-
 # about: write output to separate test cases
 # input: message to print before test
 # output: formatted message block
@@ -53,8 +50,8 @@ function New-Test
 # sample: New-Test "my test"
 function Exit-Test
 {
-    Write-Host ""
-    Save-Errors
+    # Write-Host ""
+    # Save-Errors
     Write-Host ""
 }
 

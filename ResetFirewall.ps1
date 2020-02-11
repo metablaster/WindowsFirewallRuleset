@@ -50,4 +50,4 @@ Set-NetFirewallProfile -All -Confirm:$Execute -Whatif:$Debug -PolicyStore $Polic
 Remove-NetFirewallRule -All -PolicyStore $PolicyStore -ErrorAction SilentlyContinue
 
 Write-Host "Firewall reset is done!"
-Write-Note "If internet conectivity problem remains, please rebot system"
+Write-Note "If internet conectivity problem remains, please reboot system"

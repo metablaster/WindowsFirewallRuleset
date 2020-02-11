@@ -52,7 +52,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # PasswordSafe installation directories
 #
-$PasswordSafeRoot = "%ProgramFiles%\Password Safe4"
+$PasswordSafeRoot = "%ProgramFiles%\Password Safe"
 
 #
 # Rules for PasswordSafe

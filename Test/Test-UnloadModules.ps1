@@ -28,12 +28,20 @@ SOFTWARE.
 #
 . $PSScriptRoot\..\UnloadModules.ps1
 
+Write-Host "Import-Module System"
 Import-Module -Name $PSScriptRoot\..\Modules\System -Force
 
+Write-Host "Import-Module Test"
 Import-Module -Name $RepoDir\Modules\Test -Force
+
+Write-Host "Import-Module UserInfo"
 Import-Module -Name $RepoDir\Modules\UserInfo -Force
 
+Write-Host "Import-Module FirewallModule"
 Import-Module -Name $RepoDir\Modules\FirewallModule -Force
 
+Write-Host "Import-Module ProgramInfo"
 Import-Module -Name $RepoDir\Modules\ProgramInfo -Force
+
+Write-Host "Import-Module ComputerInfo"
 Import-Module -Name $RepoDir\Modules\ComputerInfo -Force

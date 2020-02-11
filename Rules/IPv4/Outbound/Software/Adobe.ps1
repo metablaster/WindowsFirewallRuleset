@@ -39,7 +39,7 @@ Import-Module -Name $RepoDir\Modules\FirewallModule
 #
 # Setup local variables:
 #
-$Group = "Sofotware - Adobe"
+$Group = "Software - Adobe"
 $Profile = "Private, Public"
 
 # Ask user if he wants to load these rules
