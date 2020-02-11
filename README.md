@@ -124,7 +124,7 @@ Visit `Test` folder and run all tests individually to confirm modules and their 
 7. Type: (or copy paste command(s) and hit enter) ```Get-ExecutionPolicy``` and remeber what the ouput is.
 6. Type: ```Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force```
 7. Type: ```cd C:\```
-8. Type: ```cd WindowsFirewallRuleset```
+8. Type: ```cd WindowsFirewallRuleset-master``` (ofcourse if extracted folder name is something else then update this command)
 9. Rules for programs such as internet browser, Visual Studio etc. depend on installation variables.\
 Most paths are auto-searched and variables are updated, otherwise you get warning and description on how to fix the problem,
 If needed, you can find these installation variables in individual scripts inside `Rules` folder.
