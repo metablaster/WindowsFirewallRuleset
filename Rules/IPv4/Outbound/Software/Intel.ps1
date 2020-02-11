@@ -49,7 +49,7 @@ if (!(Approve-Execute)) { exit }
 #
 # Intel installation directories
 #
-$IntelXTURoot = "%ProgramFiles% (x86)\Intel\Intel(R) Extreme Tuning Utility\Client"
+$IntelXTURoot = "%ProgramFiles(x86)%\Intel\Intel(R) Extreme Tuning Utility\Client"
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue

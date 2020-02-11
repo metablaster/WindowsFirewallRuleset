@@ -50,8 +50,8 @@ if (!(Approve-Execute)) { exit }
 # Java installation directories
 #
 $JavaRuntimeRoot = "%ProgramFiles%\Java\jre7\bin"
-$JavaPluginRoot = "%ProgramFiles% (x86)\Java\jre1.8.0_45\bin"
-$JavaUpdateRoot = "%ProgramFiles% (x86)\Common Files\Java\Java Update"
+$JavaPluginRoot = "%ProgramFiles(x86)%\Java\jre1.8.0_45\bin"
+$JavaUpdateRoot = "%ProgramFiles(x86)%\Common Files\Java\Java Update"
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue

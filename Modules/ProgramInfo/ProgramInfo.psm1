@@ -75,7 +75,9 @@ function Test-File
         $SearchPath = Split-Path -Path $ExpandedPath -Parent
         $Executable = Split-Path -Path $ExpandedPath -Leaf
 
-        Set-Warning "Executable '$Executable' was not found, rules for '$Executable' won't have any effect`nSearched path was: $SearchPath"
+        Set-Warning @("Executable '$Executable' was not found, rules for '$Executable' won't have any effect"
+        "Searched path was: $SearchPath")
+
         Write-Note @("To fix the problem find '$Executable' then adjust the path in"
         "$Script and re-run the script later again")
     }
@@ -125,6 +127,7 @@ function Test-Service
     }
 }
 
+# TODO: see references and how to make it shorter
 function Test-UserProfile
 {
     param (
@@ -567,6 +570,7 @@ function Update-Table
 
     Write-Debug "Update-Table, Search string = $SearchString"
 
+    # TODO: try to search also for path in addition to program name (3rd parameter)
     # TODO: SearchString may pick up irrelevant paths (ie. unreal), or even miss
     # Search system wide installed programs
     if ($SystemPrograms.Name -like "*$SearchString*")
@@ -777,6 +781,36 @@ function Find-Installation
     # otherwise firewall GUI will show full paths which is not desired for sorting reasons
     switch -Wildcard ($Program)
     {
+        "ArenaChess"
+        {
+            Update-Table "Arena Chess"
+            break
+        }
+        "GoogleDrive"
+        {
+            Update-Table "Google Drive"
+            break
+        }
+        "RivaTuner"
+        {
+            Update-Table "RivaTuner Statistics Server"
+            break
+        }
+        "Incredibuild"
+        {
+            Update-Table "Incredibuild"
+            break
+        }
+        "Metatrader"
+        {
+            Update-Table "InstaTrader"
+            break
+        }
+        "RealWorld"
+        {
+            Edit-Table "%ProgramFiles(x86)%\RealWorld Cursor Editor"
+            break
+        }
         "qBittorrent"
         {
             Update-Table "qBittorrent"

@@ -49,7 +49,7 @@ if (!(Approve-Execute)) { exit }
 #
 # EveOnline installation directories
 #
-$EveOnlineRoot = "%ProgramFiles% (x86)\Steam\steamapps\common\Eve Online\Launcher"
+$EveOnlineRoot = "%ProgramFiles(x86)%\Steam\steamapps\common\Eve Online\Launcher"
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue

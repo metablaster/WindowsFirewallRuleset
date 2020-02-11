@@ -39,7 +39,7 @@ Import-Module -Name $RepoDir\Modules\FirewallModule
 #
 # Setup local variables:
 #
-$Group = "Games - PathOfExile"
+$Group = "Software - Google"
 $Profile = "Private, Public"
 
 # Ask user if he wants to load these rules
@@ -47,26 +47,26 @@ Update-Context "IPv$IPVersion" $Direction $Group
 if (!(Approve-Execute)) { exit }
 
 #
-# PathOfExile installation directories
+# Google installation directories
 #
-$PathOfExileRoot = "%ProgramFiles(x86)%\Steam\steamapps\common\Path of Exile"
+$GoogleDriveRoot = "%ProgramFiles%\Google\Drive"
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
-# Rules for TargetProgram
+# Rules for Google
 #
 
 # Test if installation exists on system
-if ((Test-Installation "PathOfExile" ([ref]$PathOfExileRoot)) -or $Force)
+if ((Test-Installation "GoogleDrive" ([ref]$GoogleDriveRoot)) -or $Force)
 {
-    $Program = "$PathOfExileRoot\PathOfExile_x64Steam.exe"
+    $Program = "$GoogleDriveRoot\googledrivesync.exe"
     Test-File $Program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "Path of exile" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 6112, 20481 `
+    -DisplayName "Google drive" -Service Any -Program $Program `
+    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $UserAccountsSDDL `
-    -Description "Needed for online gaming" | Format-Output
+    -Description "Google drive syncronization service" | Format-Output
 }

@@ -52,8 +52,8 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # MSIAfterburner installation directories
 #
-$MSIRoot = "%ProgramFiles% (x86)\MSI"
-$MSIAfterburnerRoot = "%ProgramFiles% (x86)\MSI Afterburner"
+$MSIRoot = "%ProgramFiles(x86)%\MSI"
+$MSIAfterburnerRoot = "%ProgramFiles(x86)%\MSI Afterburner"
 
 #
 # Rules for MSI programs

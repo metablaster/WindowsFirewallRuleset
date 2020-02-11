@@ -49,8 +49,8 @@ if (!(Approve-Execute)) { exit }
 #
 # Adobe installation directories
 #
-$AdobeARMRoot = "%ProgramFiles% (x86)\Common Files\Adobe\ARM\1.0"
-$AcrobatRoot = "%ProgramFiles% (x86)\Adobe\Acrobat Reader DC\Reader"
+$AdobeARMRoot = "%ProgramFiles(x86)%\Common Files\Adobe\ARM\1.0"
+$AcrobatRoot = "%ProgramFiles(x86)%\Adobe\Acrobat Reader DC\Reader"
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue

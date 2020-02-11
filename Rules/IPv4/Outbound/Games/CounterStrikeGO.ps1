@@ -49,7 +49,7 @@ if (!(Approve-Execute)) { exit }
 #
 # Counter Strike installation directories
 #
-$CounterStrikeRoot = "%ProgramFiles% (x86)\Steam\steamapps\common\Counter-Strike Global Offensive"
+$CounterStrikeRoot = "%ProgramFiles(x86)%\Steam\steamapps\common\Counter-Strike Global Offensive"
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue

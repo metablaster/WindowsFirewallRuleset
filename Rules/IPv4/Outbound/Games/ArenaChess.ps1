@@ -39,7 +39,7 @@ Import-Module -Name $RepoDir\Modules\FirewallModule
 #
 # Setup local variables:
 #
-$Group = "Games - PathOfExile"
+$Group = "Games - Arena Chess"
 $Profile = "Private, Public"
 
 # Ask user if he wants to load these rules
@@ -47,26 +47,26 @@ Update-Context "IPv$IPVersion" $Direction $Group
 if (!(Approve-Execute)) { exit }
 
 #
-# PathOfExile installation directories
+# Arena Chess installation directories
 #
-$PathOfExileRoot = "%ProgramFiles(x86)%\Steam\steamapps\common\Path of Exile"
+$ArenaChessRoot = "%ProgramFiles%\Arena"
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 #
-# Rules for TargetProgram
+# Rules for Arena Chess
 #
 
 # Test if installation exists on system
-if ((Test-Installation "PathOfExile" ([ref]$PathOfExileRoot)) -or $Force)
+if ((Test-Installation "ArenaChess" ([ref]$ArenaChessRoot)) -or $Force)
 {
-    $Program = "$PathOfExileRoot\PathOfExile_x64Steam.exe"
+    $Program = "$ArenaChessRoot\Timeseal.exe"
     Test-File $Program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "Path of exile" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 6112, 20481 `
+    -DisplayName "Arena Chess" -Service Any -Program $Program `
+    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 5000 `
     -LocalUser $UserAccountsSDDL `
-    -Description "Needed for online gaming" | Format-Output
+    -Description "Chess client program" | Format-Output
 }

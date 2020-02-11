@@ -52,7 +52,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # GPG installation directories
 #
-$GPGRoot = "%ProgramFiles% (x86)\GnuPG"
+$GPGRoot = "%ProgramFiles(x86)%\GnuPG"
 
 #
 # Rules for GPG

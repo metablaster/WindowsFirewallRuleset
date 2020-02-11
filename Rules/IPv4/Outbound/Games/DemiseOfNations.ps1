@@ -49,7 +49,7 @@ if (!(Approve-Execute)) { exit }
 #
 # Demise of Nations installation directories
 #
-$TargetProgramRoot = "%ProgramFiles% (x86)\Steam\steamapps\common\Demise of Nations - Rome"
+$TargetProgramRoot = "%ProgramFiles(x86)%\Steam\steamapps\common\Demise of Nations - Rome"
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
