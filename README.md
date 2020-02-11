@@ -18,7 +18,7 @@
 10. multicast traffic
 11. and the list goes on... 
 
-- in addition to rules you will find a bunch of powershell functions to gather info relevant for firewall building such as:
+- in addition to rules you will find a bunch of powershell functions to gather info relevant for building a firewall such as:
 1. computers
 2. installed programs
 3. users on system
@@ -29,10 +29,11 @@
 - Currently there are some 650+ firewall rules.
 
 # What are the core benefits of this firewall/project?
-1. Unlike normal windows firewall in control panel, these rules are loaded into GPO firewall, meaning random programs which install rules as part of their installation process or system settings changes will have no effect on firewall unless you explicitly make an exception, therefore you have full control over the firewall.
+1. Unlike normal windows firewall in control panel, these rules are loaded into GPO firewall (Local group policy), meaning random programs which install rules as part of their installation process or system settings changes will have no effect on firewall unless you explicitly make an exception, therefore you have full control over the firewall.
 2. Unlike default windows firewall rules, these rules are much more restrictive such as, tied to explicit user accounts, rules apply to specific ports, network interfaces, specific programs, services etc.
 3. Unlike default (or your custom) rules you will know which rules have no effect or are redundant due to ie. uninstalled program or a missing windows service which no longer exists or are redundant/invalid for what ever other reason.
-4. Changing rule attributes such as ports, adresses and similar is much easier since the rules are in scripts, so you can use editor tools such as CTRL + F to perform bulk operations on your rules, more rules you have the easier it is to manage them.
+4. Changing rule attributes such as ports, adresses and similar is so much easier since the rules are in scripts, so you can use editor tools such as CTRL + F to perform bulk operations on your rules, doing this in Windows firewall GUI is beyond all pain.
+5. Default outbound is block unless there is a rule to explicitly allow traffic, in default windows firewall this is not possible unless you have rules for every possible windows program/service, thanks to this collection of rules setting default outbound to block requres very little additinoal work.
 
 # Licenses
 This project **"WindowsFirewallRuleset"** is licensed under **MIT** license.\
@@ -61,7 +62,7 @@ For more info see respective licences:\
 - NET Framework 4.8 is automatically installed (trhough Windwos update) on Windows 10 1903 (May 2019 Update).
 - You may want to have git to check out for updates, to easily switch between branches or to contribute code.
 - VS Code is preferred editor to edit the scripts for your needs or for contribution, any other editor is of course your choice.
-- If you get VSCode, you'll also need powershell extension for syntax highliting among other cool features.
+- If you get VSCode, you'll also need powershell extension for syntax highliting and code navigation among other cool features.
 
 # I don't have Windows 10 Pro/Enterprise
 **First, note that Home versions of Windows do not have GPO (Local Group Policy), therefore not possible to make use of this project.**
