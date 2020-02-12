@@ -1,0 +1,39 @@
+TOPIC
+    about_FirewallModule
+
+SHORT DESCRIPTION
+    Core module for Windows Firewall Ruleset project
+
+LONG DESCRIPTION
+    Functions in FirewallModule module are designed to be helper for building a
+    better widnows firewall, specifically to write rules, write logs to both
+    console and files and provide better environment.
+
+VARIABLES
+    Platform:       Defiens OS to which a rule applies
+    PolicyStore:    Machine where to apply rules (default: Local Group Policy)
+    OnError:        Controls what happes in case of an error
+    ServiceHost:    Windows service host
+    Interface:      Default network interface card, change this to NIC which your PC uses
+    Force:          To force loading rules regardless of presence of program set to true
+    Debug:          To add rules to firewall for real set to false
+    WarningStatus:  Global variable to tell if all scripts ran clean
+    Execute:        To prompt for each rule set to true
+
+EXAMPLES
+    For better looking output of Net-NewFirewallRule
+    Net-NewFirewallRule ... | Format-Output
+
+    To save execution errors to file
+    Save-Errors
+
+    To prompt user to set recommended screen buffer
+    Set-ScreenBuffer
+
+KEYWORDS
+    Firewall
+    FirewallModule
+    FirewallHelper
+
+SEE ALSO
+    TODO: Add link for more help
