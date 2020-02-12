@@ -25,6 +25,7 @@ SOFTWARE.
 
 # TODO: learn required NET version by scaning scripts
 # TODO: learn repo dir automaticaly (using git?)
+# TODO: check OS is not home version
 
 # about: Test and print system requirements required for this project
 # input: true or false to check or not to check

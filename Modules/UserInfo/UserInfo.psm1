@@ -25,11 +25,22 @@ SOFTWARE.
 
 # TODO: write function to query system users
 
-
-# about: get computer accounts for a giver user group
-# Input: User group on local computer
-# output: Array of enabled user accounts in specified group, in form of COMPUTERNAME\USERNAME
-# sample: Get-UserAccounts("Administrators")
+<#
+.SYNOPSIS
+get computer accounts for a giver user group
+.DESCRIPTION
+TODO: provide detailed description
+.PARAMETER UserGroup
+User group on local computer
+.EXAMPLE
+Get-UserAccounts("Administrators")
+.INPUTS
+None. You cannot pipe objects to Get-UserAccounts
+.OUTPUTS
+System.String[] Array of enabled user accounts in specified group, in form of COMPUTERNAME\USERNAME
+.NOTES
+TODO: implement queriying computers on network
+#>
 function Get-UserAccounts
 {
     param(
@@ -62,10 +73,22 @@ function Get-UserAccounts
     return $EnabledAccounts
 }
 
-# about: strip computer names out of computer acounts
-# Input: Array of user accounts in form of: COMPUTERNAME\USERNAME
-# output: String array of usernames in form of: USERNAME
-# sample: Get-UserNames(@("DESKTOP_PC\USERNAME", "LAPTOP\USERNAME"))
+<#
+.SYNOPSIS
+Strip computer names out of computer acounts
+.DESCRIPTION
+TODO: provide detailed description
+.PARAMETER UserAccounts
+String array of user accounts in form of: COMPUTERNAME\USERNAME
+.EXAMPLE
+Get-UserNames(@("DESKTOP_PC\USERNAME", "LAPTOP\USERNAME"))
+.INPUTS
+None. You cannot pipe objects to Get-UserAccounts
+.OUTPUTS
+System.String[] Array of usernames in form of: USERNAME
+.NOTES
+TODO: implement queriying computers on network
+#>
 function Get-UserNames
 {
     param(
@@ -84,10 +107,22 @@ function Get-UserNames
     return $UserNames
 }
 
-# about: get SID for giver user name
-# input: username string
-# output: SID (security identifier) as string
-# sample: Get-UserSID("TestUser")
+<#
+.SYNOPSIS
+get SID for giver user name
+.DESCRIPTION
+TODO: provide detailed description
+.PARAMETER UserName
+username string
+.EXAMPLE
+Get-UserSID("TestUser")
+.INPUTS
+None. You cannot pipe objects to Get-UserAccounts
+.OUTPUTS
+System.String SID (security identifier)
+.NOTES
+TODO: implement queriying computers on network
+#>
 function Get-UserSID
 {
     param (
@@ -107,10 +142,22 @@ function Get-UserSID
     }
 }
 
-# about: get SID for giver computer account
-# input: computer account string
-# output: SID (security identifier) as string
-# sample: Get-AccountSID("COMPUTERNAME\USERNAME")
+<#
+.SYNOPSIS
+get SID for giver computer account
+.DESCRIPTION
+TODO: provide detailed description
+.PARAMETER UserAccount
+computer account string
+.EXAMPLE
+Get-AccountSID("COMPUTERNAME\USERNAME")
+.INPUTS
+None. You cannot pipe objects to Get-UserAccounts
+.OUTPUTS
+System.String SID (security identifier)
+.NOTES
+TODO: implement queriying computers on network
+#>
 function Get-AccountSID
 {
     param (
@@ -133,10 +180,22 @@ function Get-AccountSID
     }
 }
 
-# about: return SDDL of specified local user name or multiple users names
-# input: String array of user names
-# output: SDDL string for given usernames
-# sample: Get-UserSDDL user1, user2
+<#
+.SYNOPSIS
+get SDDL of specified local user name or multiple users names
+.DESCRIPTION
+TODO: provide detailed description
+.PARAMETER UserNames
+String array of user names
+.EXAMPLE
+Get-UserSDDL user1, user2
+.INPUTS
+None. You cannot pipe objects to Get-UserAccounts
+.OUTPUTS
+System.String SDDL for given usernames
+.NOTES
+TODO: implement queriying computers on network
+#>
 function Get-UserSDDL
 {
     param (
@@ -166,10 +225,22 @@ function Get-UserSDDL
     return $SDDL
 }
 
-# about: return SDDL of multiple computer accounts, in form of: COMPUTERNAME\USERNAME
-# input: String array of computer accounts
-# output: SDDL string for given accounts
-# sample: Get-AccountSDDL @("NT AUTHORITY\SYSTEM", "MY_DESKTOP\MY_USERNAME")
+<#
+.SYNOPSIS
+get SDDL of multiple computer accounts, in form of: COMPUTERNAME\USERNAME
+.DESCRIPTION
+TODO: provide detailed description
+.PARAMETER UserAccounts
+String array of computer accounts
+.EXAMPLE
+Get-AccountSDDL @("NT AUTHORITY\SYSTEM", "MY_DESKTOP\MY_USERNAME")
+.INPUTS
+None. You cannot pipe objects to Get-UserAccounts
+.OUTPUTS
+System.String SDDL string for given accounts
+.NOTES
+TODO: implement queriying computers on network
+#>
 function Get-AccountSDDL
 {
     param (
