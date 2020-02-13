@@ -65,20 +65,30 @@ if ((Test-Installation "DnsCrypt" ([ref] $DnsCryptRoot)) -or $Force)
     $Program = "$DnsCryptRoot\dnscrypt-proxy\dnscrypt-proxy.exe"
     Test-File $Program
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "DnsCrypt" -Service Any -Program $Program `
+    -DisplayName "dnscrypt-proxy" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 53, 443 `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
     -LocalUser $NT_AUTHORITY_System `
     -Description "DNSCrypt is a protocol that authenticates communications between a DNS client and a DNS resolver.
     It prevents DNS spoofing. It uses cryptographic signatures to verify that responses originate from the chosen DNS resolver and haven’t been tampered with.
-    This rule applies to Simple DnsCrypt which uses dnscrypt-proxy." | Format-Output
+    This rule applies to Simple DnsCrypt which uses dnscrypt-proxy for DOH protocol" | Format-Output
 
+    # TODO: see if LooseSourceMapping is needed
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "DnsCrypt" -Service Any -Program $Program `
+    -DisplayName "dnscrypt-proxy" -Service Any -Program $Program `
     -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 53, 443 `
-    -LocalUser $NT_AUTHORITY_System `
+    -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
+    -LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
     -Description "DNSCrypt is a protocol that authenticates communications between a DNS client and a DNS resolver.
     It prevents DNS spoofing. It uses cryptographic signatures to verify that responses originate from the chosen DNS resolver and haven’t been tampered with.
-    This rule applies to Simple DnsCrypt which uses dnscrypt-proxy." | Format-Output
+    This rule applies to Simple DnsCrypt which uses dnscrypt-proxy for DnsCrypt Protocol" | Format-Output
+
+    $Program = "$DnsCryptRoot\SimpleDnsCrypt.exe"
+    Test-File $Program
+    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+    -DisplayName "Symple DNS Crypt" -Service Any -Program $Program `
+    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+    -LocalUser $AdminAccountsSDDL `
+    -Description "Symple DNS Crypt update check on startup" | Format-Output
 }

@@ -35,25 +35,24 @@ None. You cannot pipe objects to Test-SystemRequirements
 .OUTPUTS
 error message and abort if check failed, system info otherwise
 .NOTES
-TODO: learn required NET version by scaning scripts
+TODO: learn required NET version by scaning scripts (ie. adding .COMPONENT to comments)
 TODO: learn repo dir automaticaly (using git?)
-TODO: check OS is not home version
 #>
 function Test-SystemRequirements
 {
     param (
         [parameter(Mandatory = $false)]
-        [bool] $Check = $VersionCheck
+        [bool] $Check = $SystemCheck
     )
 
     # disabled when runing scripts from SetupFirewall.ps1 script
     if ($Check)
     {
+        # Check operating system
         $OSPlatform = [System.Environment]::OSVersion.Platform
         $OSMajor = [System.Environment]::OSVersion.Version.Major
         $OSMinor = [System.Environment]::OSVersion.Version.Minor
 
-        # Check operating system
         if (!($OSPlatform -eq "Win32NT" -and $OSMajor -ge 10))
         {
             Write-Host ""
@@ -63,9 +62,32 @@ function Test-SystemRequirements
             exit
         }
 
-        $PowershellEdition = $PSVersionTable.PSEdition
+        # Check if in elevated powershell
+        $Principal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+        $local:StatusGood = $Principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+
+        if (!$StatusGood)
+        {
+            Write-Host ""
+            Write-Host "Unable to proceed, please open powershell as Administrator" -ForegroundColor Red -BackgroundColor Black
+            Write-Host ""
+            exit
+        }
+
+        # Check OS is not Home edition
+        $OSEdition = Get-WindowsEdition -Online | Select-Object -ExpandProperty Edition
+
+        if ($OSEdition -like "*Home*")
+        {
+            Write-Host ""
+            Write-Host "Unable to proceed, home editions of Windows do not have Local Group Policy" -ForegroundColor Red -BackgroundColor Black
+            Write-Host ""
+            exit
+        }
 
         # Check Powershell edition
+        $PowershellEdition = $PSVersionTable.PSEdition
+
         if ($PowershellEdition -ne "Desktop")
         {
             Write-Host ""
@@ -79,7 +101,6 @@ function Test-SystemRequirements
         $PowershellMajor = $PSVersionTable.PSVersion | Select-Object -ExpandProperty Major
         $PowershellMinor = $PSVersionTable.PSVersion | Select-Object -ExpandProperty Minor
 
-        $local:StatusGood = $true
         switch ($PowershellMajor)
         {
             1 { $StatusGood = $false }
@@ -134,18 +155,6 @@ function Test-SystemRequirements
             exit
         }
 
-        # Check if in elevated powershell
-        $Principal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
-        $StatusGood = $Principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-
-        if (!$StatusGood)
-        {
-            Write-Host ""
-            Write-Host "Unable to proceed, please open powershell as Administrator" -ForegroundColor Red -BackgroundColor Black
-            Write-Host ""
-            exit
-        }
-
         # Check required services are started
         $LMHosts = Get-Service -Name lmhosts | Select-Object -ExpandProperty Status
 
@@ -182,6 +191,7 @@ function Test-SystemRequirements
             exit
         }
 
+        # Everything OK, print environment status
         Write-Host ""
         Write-Host "System:`t`t $OSPlatform v$OSMajor.$OSMinor" -ForegroundColor Cyan
         Write-Host "Powershell:`t $PowershellEdition v$PowershellMajor.$PowershellMinor" -ForegroundColor Cyan
@@ -206,7 +216,7 @@ if (!(Get-Variable -Name CheckInitSystem -Scope Global -ErrorAction Ignore))
 }
 
 # Set to false to avoid checking system requirements
-New-Variable -Name VersionCheck -Scope Global -Option ReadOnly -Value $false
+New-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Value $false
 
 #
 # Function exports
@@ -221,4 +231,4 @@ Export-ModuleMember -Function Test-SystemRequirements
 # Realocating scripts should be easy if root directory is constant
 Export-ModuleMember -Variable CheckInitSystem
 Export-ModuleMember -Variable RepoDir
-Export-ModuleMember -Variable VersionCheck
+Export-ModuleMember -Variable SystemCheck

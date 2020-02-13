@@ -28,8 +28,8 @@ SOFTWARE.
 # Check requirements for this project
 Import-Module -Name $PSScriptRoot\Modules\System
 Test-SystemRequirements
-Remove-Variable -Name VersionCheck -Scope Global -Force
-New-Variable -Name VersionCheck -Scope Global -Option ReadOnly -Value $false
+Remove-Variable -Name SystemCheck -Scope Global -Force
+New-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Value $false
 
 # Includes
 Import-Module -Name $RepoDir\Modules\ProgramInfo
