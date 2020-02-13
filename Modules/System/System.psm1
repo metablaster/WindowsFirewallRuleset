@@ -23,14 +23,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# TODO: learn required NET version by scaning scripts
-# TODO: learn repo dir automaticaly (using git?)
-# TODO: check OS is not home version
-
-# about: Test and print system requirements required for this project
-# input: true or false to check or not to check
-# output: error message and abort if check failed, system info otherwise
-# sample: Test-SystemRequirements $true
+<#
+.SYNOPSIS
+Test and print system requirements required for this project
+.PARAMETER Check
+true or false to check or not to check
+.EXAMPLE
+Test-SystemRequirements $true
+.INPUTS
+None. You cannot pipe objects to Test-SystemRequirements
+.OUTPUTS
+error message and abort if check failed, system info otherwise
+.NOTES
+TODO: learn required NET version by scaning scripts
+TODO: learn repo dir automaticaly (using git?)
+TODO: check OS is not home version
+#>
 function Test-SystemRequirements
 {
     param (

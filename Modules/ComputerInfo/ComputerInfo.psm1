@@ -28,21 +28,56 @@ Import-Module -Name $PSScriptRoot\..\Indented.Net.IP
 
 # TODO: what happens in Get-AdapterConfig and other functions that call it if there are multiple configured adapters?
 
-# about: get localhost name
+<#
+.SYNOPSIS
+get localhost name
+.EXAMPLE
+Get-ComputerName
+.INPUTS
+None. You cannot pipe objects to Get-ComputerName
+.OUTPUTS
+System.String[] computer name in form of COMPUTERNAME
+.NOTES
+TODO: implement queriying computers on network by specifying IP address
+#>
 function Get-ComputerName
 {
     return Get-WmiObject Win32_ComputerSystem | Select-Object -ExpandProperty Name
 }
 
-# about: helper method to get adapter configuration
+<#
+.SYNOPSIS
+helper method to get adapter configuration
+.EXAMPLE
+Get-AdapterConfig
+.INPUTS
+None. You cannot pipe objects to Get-AdapterConfig
+.OUTPUTS
+System.Management.ManagementObject#root\cimv2\Win32_NetworkAdapterConfiguration
+.NOTES
+TODO: implement queriying computers on network by specifying IP address
+#>
 function Get-AdapterConfig
 {
-    return Get-WmiObject Win32_NetworkAdapterConfiguration | Where-Object {$_.DefaultIPGateway}
+    return Get-WmiObject Win32_NetworkAdapterConfiguration | Where-Object { $_.DefaultIPGateway }
 }
 
-# about: helper method to get IP address of local machine
-# input: IP version (4 or 6)
-# output: IPAddress
+<#
+.SYNOPSIS
+helper method to get IP address of local machine
+.PARAMETER IPVersion
+IP version number, 4 or 6
+.EXAMPLE
+Get-IPAddress 4
+.EXAMPLE
+Get-IPAddress 6
+.INPUTS
+None. You cannot pipe objects to Get-IPAddress
+.OUTPUTS
+System.String IP Address
+.NOTES
+TODO: implement queriying computers on network by specifying COMPUTERNAME
+#>
 function Get-IPAddress
 {
     param (
@@ -69,7 +104,16 @@ function Get-IPAddress
     }
 }
 
-# about: helper method to get broadcast address
+<#
+.SYNOPSIS
+helper method to get broadcast address
+.EXAMPLE
+Get-Broadcast
+.INPUTS
+None. You cannot pipe objects to Get-Broadcast
+.OUTPUTS
+System.String Broadcast address
+#>
 function Get-Broadcast
 {
     $AdapterConfig = Get-AdapterConfig

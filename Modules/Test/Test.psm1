@@ -23,10 +23,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# about: write output to separate test cases
-# input: message to print before test
-# output: formatted message block
-# sample: New-Test "my test"
+<#
+.SYNOPSIS
+write output to separate test cases
+.PARAMETER InputMessage
+message to print before test
+.EXAMPLE
+New-Test "my test"
+.INPUTS
+None. You cannot pipe objects to New-Test
+.OUTPUTS
+formatted message block is shown in console
+#>
 function New-Test
 {
     param (
@@ -44,10 +52,16 @@ function New-Test
     Write-Host ""
 }
 
-# about: write output to separate test cases
-# input: message to print before test
-# output: formatted message block
-# sample: New-Test "my test"
+<#
+.SYNOPSIS
+write output to tell script scope test is done
+.EXAMPLE
+Exit-Test
+.INPUTS
+None. You cannot pipe objects to Exit-Test
+.OUTPUTS
+formatted message block is shown in console
+#>
 function Exit-Test
 {
     # Write-Host ""

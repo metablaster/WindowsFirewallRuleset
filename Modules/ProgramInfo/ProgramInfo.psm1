@@ -28,10 +28,22 @@ Import-Module -Name $PSScriptRoot\..\UserInfo
 Import-Module -Name $PSScriptRoot\..\ComputerInfo
 Import-Module -Name $PSScriptRoot\..\FirewallModule
 
-# about: get store app SID
-# input: Username and "PackageFamilyName" string
-# output: store app SID (security identifier) as string
-# sample: Get-AppSID("User", "Microsoft.MicrosoftEdge_8wekyb3d8bbwe")
+<#
+.SYNOPSIS
+get store app SID
+.PARAMETER UserName
+Username for which to query app SID
+.PARAMETER AppName
+"PackageFamilyName" string
+.EXAMPLE
+sample: Get-AppSID("User", "Microsoft.MicrosoftEdge_8wekyb3d8bbwe")
+.INPUTS
+None. You cannot pipe objects to Get-AppSID
+.OUTPUTS
+System.String store app SID (security identifier)
+.NOTES
+TODO: Test if path exists
+#>
 function Get-AppSID
 {
     param (
@@ -55,10 +67,18 @@ function Get-AppSID
     }
 }
 
-# about: check if file such as an *.exe exists
-# input: path to file
-# output: warning message if file not found
-# sample: Test-File("C:\Users\User\AppData\Local\Google\Chrome\Application\chrome.exe")
+<#
+.SYNOPSIS
+check if file such as an *.exe exists
+.PARAMETER FilePath
+path to file
+.EXAMPLE
+Test-File "C:\Users\User\AppData\Local\Google\Chrome\Application\chrome.exe"
+.INPUTS
+None. You cannot pipe objects to Test-File
+.OUTPUTS
+warning message if file not found
+#>
 function Test-File
 {
     param (
@@ -84,10 +104,18 @@ function Test-File
     }
 }
 
-# about: Same as Test-Path but expands system environment variables, and checks if compatible path
-# input: Path to folder, Allow null or empty since input may come from other commandlets which can return empty or null
-# output: $true if path exists, false otherwise
-# sample: Test-Evnironment %SystemDrive%
+<#
+.SYNOPSIS
+Same as Test-Path but expands system environment variables, and checks if compatible path
+.PARAMETER FilePath
+Path to folder, Allow null or empty since input may come from other commandlets which can return empty or null
+.EXAMPLE
+Test-Evnironment %SystemDrive%
+.INPUTS
+None. You cannot pipe objects to Test-Environment
+.OUTPUTS
+$true if path exists, false otherwise
+#>
 function Test-Environment
 {
     param (
@@ -110,10 +138,18 @@ function Test-Environment
     return (Test-Path -Path ([System.Environment]::ExpandEnvironmentVariables($FilePath)))
 }
 
-# about: check if service exists on system
-# input: service name (not display name)
-# output: warning and info message if service not found
-# sample: Test-Service dnscache
+<#
+.SYNOPSIS
+check if service exists on system
+.PARAMETER Service
+service name (not display name)
+.EXAMPLE
+Test-Service dnscache
+.INPUTS
+None. You cannot pipe objects to Test-Service
+.OUTPUTS
+warning and info message if service not found
+#>
 function Test-Service
 {
     param (
@@ -128,7 +164,19 @@ function Test-Service
     }
 }
 
-# TODO: see references and how to make it shorter
+
+<#
+.SYNOPSIS
+Check if input path leads to user profile
+.PARAMETER FilePath
+File path to check, can be unformatted or have environment variables
+.EXAMPLE
+Test-UserProfile "C:\Users\User\AppData\Local\Google\Chrome\Application\chrome.exe"
+.INPUTS
+None. You cannot pipe objects to Test-UserProfile
+.OUTPUTS
+$true or $false
+#>
 function Test-UserProfile
 {
     param (
@@ -205,10 +253,18 @@ function Test-UserProfile
     return $false
 }
 
-# about: format path into firewall compatible path
-# input: path to folder
-# output: formatted path, includes environment variables, stripped off of junk
-# sample: Format-Path "C:\Program Files\Dir\"
+<#
+.SYNOPSIS
+format path into firewall compatible path
+.PARAMETER FilePath
+File path to check, can be unformatted or have environment variables
+.EXAMPLE
+Format-Path "C:\Program Files\\Dir\"
+.INPUTS
+None. You cannot pipe objects to Format-Path
+.OUTPUTS
+System.String formatted path, includes environment variables, stripped off of junk
+#>
 function Format-Path
 {
     param (
@@ -298,10 +354,18 @@ function Format-Path
     return $FilePath.Replace($SearchString, $Replacement).TrimEnd('\\')
 }
 
-# about: search installed programs in userprofile for specifit user account
-# input: User account in form of "COMPUTERNAME\USERNAME"
-# output: list of programs for specified USERNAME
-# sample: Get-UserPrograms "COMPUTERNAME\USERNAME"
+<#
+.SYNOPSIS
+search installed programs in userprofile for specifit user account
+.PARAMETER UserAccount
+User account in form of "COMPUTERNAME\USERNAME"
+.EXAMPLE
+Get-UserPrograms "COMPUTERNAME\USERNAME"
+.INPUTS
+None. You cannot pipe objects to Get-UserPrograms
+.OUTPUTS
+System.Management.Automation.PSCustomObject list of programs for specified account if form of COMPUTERNAME\USERNAME
+#>
 function Get-UserPrograms
 {
     param (
@@ -363,10 +427,18 @@ function Get-UserPrograms
     }
 }
 
-# about: search installed programs for all users, system wide
-# input: ComputerName
-# output: list of programs installed for all users
-# sample: Get-SystemPrograms "COMPUTERNAME"
+<#
+.SYNOPSIS
+search installed programs for all users, system wide
+.PARAMETER ComputerName
+Computer name which to check
+.EXAMPLE
+Get-SystemPrograms "COMPUTERNAME"
+.INPUTS
+None. You cannot pipe objects to Get-SystemPrograms
+.OUTPUTS
+System.Management.Automation.PSCustomObject list of programs installed for all users
+#>
 function Get-SystemPrograms
 {
     param (
@@ -454,10 +526,18 @@ function Get-SystemPrograms
     }
 }
 
-# about: search program install properties for all users
-# input: ComputerName
-# output: list of programs installed for all users
-# sample: Get-SystemPrograms "COMPUTERNAME"
+<#
+.SYNOPSIS
+search program install properties for all users
+.PARAMETER ComputerName
+Computer name which to check
+.EXAMPLE
+Get-AllUserPrograms "COMPUTERNAME"
+.INPUTS
+None. You cannot pipe objects to Get-AllUserPrograms
+.OUTPUTS
+System.Management.Automation.PSCustomObject list of programs installed for all users
+#>
 function Get-AllUserPrograms
 {
     param (
@@ -529,10 +609,18 @@ function Get-AllUserPrograms
     }
 }
 
-# about: Create data table used to hold information for specific program for each user
-# input: Table name, but not mandatory
-# output: Empty table with 2 columns, user entry and install location
-# sample: $MyTable = Initialize-Table
+<#
+.SYNOPSIS
+Create data table used to hold information for specific program for each user
+.PARAMETER TableName
+Table name
+.EXAMPLE
+$MyTable = Initialize-Table
+.INPUTS
+None. You cannot pipe objects to Initialize-Table
+.OUTPUTS
+System.Data.DataTable empty table with 2 columns, user entry and install location
+#>
 function Initialize-Table
 {
     param (
@@ -554,11 +642,20 @@ function Initialize-Table
     #return Write-Output -NoEnumerate $InstallTable
 }
 
-# about: Search and add new program installation directory to the global table
-# input: Search string which corresponds to the output of "Get programs" functions
-# input: true if user profile is to be searched too, system locations only otherwise
-# output: Global installation table is updated
-# sample: Update-Table "Google Chrome"
+<#
+.SYNOPSIS
+Search and add new program installation directory to the global table
+.PARAMETER SearchString
+Search string which corresponds to the output of "Get programs" functions
+.PARAMETER UserProfile
+true if user profile is to be searched too, system locations only otherwise
+.EXAMPLE
+Update-Table "Google Chrome"
+.INPUTS
+None. You cannot pipe objects to Update-Table
+.OUTPUTS
+None, global installation table is updated
+#>
 function Update-Table
 {
     param (
@@ -646,10 +743,18 @@ function Update-Table
     }
 }
 
-# about: Manually add new program installation directory to the global table from string for each user
-# input: Program installation directory
-# output: Global installation table is updated
-# sample: Edit-Table "%ProgramFiles(x86)%\TeamViewer"
+<#
+.SYNOPSIS
+Manually add new program installation directory to the global table from string for each user
+.PARAMETER InstallRoot
+Program installation directory
+.EXAMPLE
+Edit-Table "%ProgramFiles(x86)%\TeamViewer"
+.INPUTS
+None. You cannot pipe objects to Edit-Table
+.OUTPUTS
+None, global installation table is updated
+#>
 function Edit-Table
 {
     param (
@@ -698,10 +803,20 @@ function Edit-Table
     }
 }
 
-# about: test if given installation directory is valid
-# input: predefined program name and path to program (excluding executable)
-# output: if test OK same path, if not try to update path, else return given path back
-# sample: Test-Installation "Office" "%ProgramFiles(x86)%\Microsoft Office\root\Office16"
+<#
+.SYNOPSIS
+Test if given installation directory is valid
+.PARAMETER Program
+predefined program name
+.PARAMETER FilePath
+Path to program (excluding executable)
+.EXAMPLE
+Test-Installation "Office" "%ProgramFiles(x86)%\Microsoft Office\root\Office16"
+.INPUTS
+None. You cannot pipe objects to Test-Installation
+.OUTPUTS
+If test OK same path, if not try to update path, else return given path back
+#>
 function Test-Installation
 {
     param (
@@ -762,10 +877,18 @@ function Test-Installation
     return $true # path exists
 }
 
-# about: find installation directory for given program
-# input: predefined program name
-# output: installation directory if found, otherwise empty string
-# sample: Find-Installation "Office"
+<#
+.SYNOPSIS
+find installation directory for given program
+.PARAMETER Program
+predefined program name
+.EXAMPLE
+Find-Installation "Office"
+.INPUTS
+None. You cannot pipe objects to Find-Installation
+.OUTPUTS
+True or false if installation directory if found, installation table is updated
+#>
 function Find-Installation
 {
     param (
@@ -777,7 +900,6 @@ function Find-Installation
 
     # TODO: if it's program in user profile then how do we know it that applies to admins or users in rule?
     # TODO: need to check some of these search strings (cases), also remove hardcoded directories
-    # TODO: Update-Table calls Get-SystemPrograms for every iteration, make it global and singe call
     # NOTE: we want to preserve system environment variables for firewall GUI,
     # otherwise firewall GUI will show full paths which is not desired for sorting reasons
     switch -Wildcard ($Program)
@@ -1110,10 +1232,18 @@ function Find-Installation
     }
 }
 
-# about: Return installed NET Frameworks
-# input: Computer name for which to list installed installed framework
-# output: Table of installed NET Framework versions and install paths
-# sample: Get-NetFramework COMPUTERNAME
+<#
+.SYNOPSIS
+Return installed NET Frameworks
+.PARAMETER ComputerName
+Computer name for which to list installed installed framework
+.EXAMPLE
+Get-NetFramework COMPUTERNAME
+.INPUTS
+None. You cannot pipe objects to Get-NetFramework
+.OUTPUTS
+System.Management.Automation.PSCustomObject for installed NET Frameworks and install paths
+#>
 function Get-NetFramework
 {
     param (
@@ -1208,10 +1338,18 @@ function Get-NetFramework
     }
 }
 
-# about: Return installed Windows SDK
-# input: Computer name for which to list installed installed framework
-# output: Table of installed Windows SDK versions and install paths
-# sample: Get-WindowsSDK COMPUTERNAME
+<#
+.SYNOPSIS
+Return installed Windows SDK
+.PARAMETER ComputerName
+Computer name for which to list installed installed framework
+.EXAMPLE
+Get-WindowsSDK COMPUTERNAME
+.INPUTS
+None. You cannot pipe objects to Get-WindowsSDK
+.OUTPUTS
+System.Management.Automation.PSCustomObject for installed Windows SDK versions and install paths
+#>
 function Get-WindowsSDK
 {
     param (
@@ -1286,10 +1424,18 @@ function Get-WindowsSDK
     }
 }
 
-# about: Return installed Windows Kits
-# input: Computer name for which to list installed installed framework
-# output: Table of installed Windows Kits versions and install paths
-# sample: Get-WindowsKits COMPUTERNAME
+<#
+.SYNOPSIS
+Return installed Windows Kits
+.PARAMETER ComputerName
+Computer name for which to list installed installed windows kits
+.EXAMPLE
+Get-WindowsKits COMPUTERNAME
+.INPUTS
+None. You cannot pipe objects to Get-WindowsKits
+.OUTPUTS
+System.Management.Automation.PSCustomObject for installed Windows Kits versions and install paths
+#>
 function Get-WindowsKits
 {
     param (
@@ -1349,10 +1495,18 @@ function Get-WindowsKits
     }
 }
 
-# about: Return installed Windows Defender
-# input: Computer name for which to list installed Windows Defender
-# output: Table of installed Windows Defender, version and install paths
-# sample: Get-WindowsDefender COMPUTERNAME
+<#
+.SYNOPSIS
+Return installed Windows Defender
+.PARAMETER ComputerName
+Computer name for which to list installed Windows Defender
+.EXAMPLE
+Get-WindowsDefender COMPUTERNAME
+.INPUTS
+None. You cannot pipe objects to Get-WindowsDefender
+.OUTPUTS
+System.Management.Automation.PSCustomObject for installed Windows Defender, version and install paths
+#>
 function Get-WindowsDefender
 {
     param (

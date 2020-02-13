@@ -28,8 +28,6 @@ SOFTWARE.
 <#
 .SYNOPSIS
 get computer accounts for a giver user group
-.DESCRIPTION
-TODO: provide detailed description
 .PARAMETER UserGroup
 User group on local computer
 .EXAMPLE
@@ -59,6 +57,7 @@ function Get-UserAccounts
     $EnabledAccounts = @()
     foreach ($Account in $AllAccounts)
     {
+        # TODO: -notcontains ?
         if (!($DisabledAccounts -contains $Account))
         {
             $EnabledAccounts += $Account
@@ -76,14 +75,12 @@ function Get-UserAccounts
 <#
 .SYNOPSIS
 Strip computer names out of computer acounts
-.DESCRIPTION
-TODO: provide detailed description
 .PARAMETER UserAccounts
 String array of user accounts in form of: COMPUTERNAME\USERNAME
 .EXAMPLE
 Get-UserNames(@("DESKTOP_PC\USERNAME", "LAPTOP\USERNAME"))
 .INPUTS
-None. You cannot pipe objects to Get-UserAccounts
+None. You cannot pipe objects to Get-UserNames
 .OUTPUTS
 System.String[] Array of usernames in form of: USERNAME
 .NOTES
@@ -110,14 +107,12 @@ function Get-UserNames
 <#
 .SYNOPSIS
 get SID for giver user name
-.DESCRIPTION
-TODO: provide detailed description
 .PARAMETER UserName
 username string
 .EXAMPLE
 Get-UserSID("TestUser")
 .INPUTS
-None. You cannot pipe objects to Get-UserAccounts
+None. You cannot pipe objects to Get-UserSID
 .OUTPUTS
 System.String SID (security identifier)
 .NOTES
@@ -145,14 +140,12 @@ function Get-UserSID
 <#
 .SYNOPSIS
 get SID for giver computer account
-.DESCRIPTION
-TODO: provide detailed description
 .PARAMETER UserAccount
 computer account string
 .EXAMPLE
 Get-AccountSID("COMPUTERNAME\USERNAME")
 .INPUTS
-None. You cannot pipe objects to Get-UserAccounts
+None. You cannot pipe objects to Get-AccountSID
 .OUTPUTS
 System.String SID (security identifier)
 .NOTES
@@ -183,14 +176,12 @@ function Get-AccountSID
 <#
 .SYNOPSIS
 get SDDL of specified local user name or multiple users names
-.DESCRIPTION
-TODO: provide detailed description
 .PARAMETER UserNames
 String array of user names
 .EXAMPLE
 Get-UserSDDL user1, user2
 .INPUTS
-None. You cannot pipe objects to Get-UserAccounts
+None. You cannot pipe objects to Get-UserSDDL
 .OUTPUTS
 System.String SDDL for given usernames
 .NOTES
@@ -228,14 +219,12 @@ function Get-UserSDDL
 <#
 .SYNOPSIS
 get SDDL of multiple computer accounts, in form of: COMPUTERNAME\USERNAME
-.DESCRIPTION
-TODO: provide detailed description
 .PARAMETER UserAccounts
 String array of computer accounts
 .EXAMPLE
 Get-AccountSDDL @("NT AUTHORITY\SYSTEM", "MY_DESKTOP\MY_USERNAME")
 .INPUTS
-None. You cannot pipe objects to Get-UserAccounts
+None. You cannot pipe objects to Get-AccountSDDL
 .OUTPUTS
 System.String SDDL string for given accounts
 .NOTES

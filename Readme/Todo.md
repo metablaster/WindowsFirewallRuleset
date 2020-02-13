@@ -15,3 +15,4 @@
 13. Count invalid paths in each script
 15. Test already loaded rules if pointing to valid program or service, also test for weakness
 16. Limit code to 80-100 columns rule, subject to exceptoins
+17. Provide following keywords in function comments: .DESCRIPTION .LINK .COMPONENT

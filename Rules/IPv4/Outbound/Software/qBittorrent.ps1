@@ -29,8 +29,6 @@ SOFTWARE.
 Import-Module -Name $PSScriptRoot\..\..\..\..\Modules\System
 Test-SystemRequirements
 
-# TODO: Include modules you need, update licence Copyright and start writing code
-
 # Includes
 . $PSScriptRoot\..\DirectionSetup.ps1
 . $PSScriptRoot\..\..\IPSetup.ps1

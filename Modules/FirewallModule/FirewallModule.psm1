@@ -23,10 +23,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# about: update context for Approve-Execute
-# input: 2-3 strings to be shown in context
-# output: none, global context variable is set
-# sample: Update-Context "IPv$IPVersion" $Direction $Group
+<#
+.SYNOPSIS
+update context for Approve-Execute function
+.PARAMETER Root
+First context string before . (dot)
+.PARAMETER Section
+Second context string after . (dot)
+.PARAMETER Subsection
+Additional string after -> (arrow)
+.EXAMPLE
+Update-Context "IPv4" "Outbound" "RuleGroup"
+.INPUTS
+None. You cannot pipe objects to Update-Context
+.OUTPUTS
+Note, script scope variable is updated
+#>
 function Update-Context
 {
     param (
@@ -50,12 +62,25 @@ function Update-Context
     Write-Debug "Context set to '$NewContext'"
 }
 
-# about: Used to ask user if he wants to run script.
-# input: string to present the user
-# output: true if user wants to continue
-# sample: Approve-Execute("sample text")
-# TODO: implement help [?]
-# TODO: make this function more generic
+<#
+.SYNOPSIS
+Used to ask user if he wants to run script
+.PARAMETER DefaultAction
+Default prompt action, either 'YES' or 'NO'
+.PARAMETER Title
+Title of the prompt
+.PARAMETER Question
+Prompt question
+.EXAMPLE
+Approve-Execute "No" "Sample title" "Sample question"
+.INPUTS
+None. You cannot pipe objects to Approve-Execute
+.OUTPUTS
+true if user wants to continue, false otherwise
+.NOTES
+TODO: implement help [?]
+TODO: make this function more generic
+#>
 function Approve-Execute
 {
     param (
@@ -80,9 +105,17 @@ function Approve-Execute
     return $Decision -eq $Default
 }
 
-# about: Show-SDDL returns SDDL based on "object"
-# Credits to: https://blogs.technet.microsoft.com/ashleymcglone/2011/08/29/powershell-sid-walker-texas-ranger-part-1/
-# sample: see Test\Show-SDDL.ps1 for example
+<#
+.SYNOPSIS
+Show-SDDL returns SDDL based on "object" such as path, or registry entry
+.EXAMPLE
+see Test\Show-SDDL.ps1 for example
+.INPUTS
+None. You cannot pipe objects to Show-SDDL
+.NOTES
+This function is used only for debugging and discovery of object SDDL
+Credits to: https://blogs.technet.microsoft.com/ashleymcglone/2011/08/29/powershell-sid-walker-texas-ranger-part-1
+#>
 function Show-SDDL
 {
     param (
@@ -137,10 +170,18 @@ function Show-SDDL
     return $null
 }
 
-# about: Convert SDDL entries to computer accounts
-# input: String array of one or more strings of SDDL syntax
-# output: String array of computer accounts
-# sample: Convert-SDDLToACL $SDDL1, $SDDL2
+<#
+.SYNOPSIS
+Convert SDDL entries to computer accounts
+.PARAMETER SDDL
+String array of one or more strings of SDDL syntax
+.EXAMPLE
+Convert-SDDLToACL $SDDL1, $SDDL2
+.INPUTS
+None. You cannot pipe objects to Convert-SDDLToACL
+.OUTPUTS
+System.String[] array of computer accounts
+#>
 function Convert-SDDLToACL
 {
     param (
@@ -161,11 +202,27 @@ function Convert-SDDLToACL
     return $ACL
 }
 
-# TODO: rename to Info
-# about: Write informational note with 'NOTE:' label and green text
-# input: string to write
-# output: informational message: NOTE: sample note
-# sample: Write-Note "sample note"
+<#
+.SYNOPSIS
+Write informational note with 'NOTE:' label and green text
+.PARAMETER Notes
+string array to write
+.EXAMPLE
+Write-Note "sample note"
+.EXAMPLE
+Write-Note "first line", "second line"
+.EXAMPLE
+Write-Note @(
+    "first line"
+    "second line"
+    "3rd line")
+.INPUTS
+None. You cannot pipe objects to Write-Note
+.OUTPUTS
+Formatted note is shown in console on single or multiple lines in form of: NOTE: sample note
+.NOTES
+TODO: rename to Info
+#>
 function Write-Note
 {
     param (
@@ -182,10 +239,22 @@ function Write-Note
     }
 }
 
-# about: Custom Write-Warning which also sets global warning sttus
-# input: string to write and wether to update warning status
-# output: warning message: WARNING: sample warning
-# sample: Set-Warning "sample warning"
+<#
+.SYNOPSIS
+Custom Write-Warning which also sets global warning status
+.PARAMETER Message
+string to write to console
+.PARAMETER Status
+boolean to tell if warning status should be updated
+.EXAMPLE
+Set-Warning "sample warning"
+.EXAMPLE
+Set-Warning "sample warning" $false
+.INPUTS
+None. You cannot pipe objects to Set-Warning
+.OUTPUTS
+Formatted warning message is shown in console in form of: WARNING: sample warning
+#>
 function Set-Warning
 {
     param (
@@ -231,10 +300,16 @@ function Set-Warning
     }
 }
 
-# about: list all generated errors and clear error variable
-# input: none
-# output: list of errors
-# sample: Save-Errors
+<#
+.SYNOPSIS
+list all generated errors and clear error variable
+.EXAMPLE
+Save-Errors
+.INPUTS
+None. You cannot pipe objects to Save-Errors
+.OUTPUTS
+None, list of all errors is logged into a file
+#>
 function Save-Errors
 {
     if ($global:Error.Count -eq 0)
@@ -274,10 +349,18 @@ function Save-Errors
     $global:Error.Clear()
 }
 
-# about: Scan all scripts in repository and get windows service names involved in rules
-# input: Root folder name which to scan
-# output: None, file with the list of services is made
-# sample: Get-NetworkServices C:\PathToRepo
+<#
+.SYNOPSIS
+Scan all scripts in this repository and get windows service names involved in rules
+.PARAMETER Folder
+Root folder name which to scan
+.EXAMPLE
+Get-NetworkServices C:\PathToRepo
+.INPUTS
+None. You cannot pipe objects to Get-NetworkServices
+.OUTPUTS
+None, file with the list of services is made
+#>
 function Get-NetworkServices
 {
     param (
@@ -340,11 +423,18 @@ function Get-NetworkServices
     Write-Note "$($Content.Count) services involved in firewall rules"
 }
 
-
-# about: format firewall rule output for display
-# input: CimInstance from Net-NewFirewallRule
-# outbput: formatted text
-# sample: Net-NewFirewallRule ... | Format-Output
+<#
+.SYNOPSIS
+format firewall rule output for display
+.PARAMETER Rule
+Firewall rule to format
+.EXAMPLE
+Net-NewFirewallRule ... | Format-Output
+.INPUTS
+Microsoft.Management.Infrastructure.CimInstance Firewall rule to format
+.OUTPUTS
+Formatted text
+#>
 function Format-Output
 {
     [CmdletBinding()]
@@ -360,7 +450,16 @@ function Format-Output
     }
 }
 
-# about: set vertical screen buffer to recommended value
+<#
+.SYNOPSIS
+set vertical screen buffer to recommended value
+.EXAMPLE
+Set-ScreenBuffer
+.INPUTS
+None. You cannot pipe objects to Set-ScreenBuffer
+.OUTPUTS
+None, screen buffer is set for current powershell session
+#>
 function Set-ScreenBuffer
 {
     $psHost = Get-Host
