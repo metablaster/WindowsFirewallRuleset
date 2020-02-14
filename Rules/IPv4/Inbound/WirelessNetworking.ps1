@@ -85,7 +85,7 @@ If the name is not resolvable via either DNS method, Windows 10 will fall back t
 # Windows system predefined rules for WiFi Direct
 #
 
-# TODO: WlanSvc most likely does not exist in Windows Server 2019
+# NOTE: WlanSvc not enable by default in Windows Server 2019
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "WLAN Service WFD ASP Coordination Protocol" -Service WlanSvc -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $WNInterface `

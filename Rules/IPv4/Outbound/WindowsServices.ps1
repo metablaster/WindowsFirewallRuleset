@@ -297,7 +297,7 @@ If this service is stopped, users will not be able to logon to the computer with
 # Recommended Troubleshooting predefined rule
 #
 
-# TODO: probably does not exist in Windows Server 2019
+# NOTE: does not exist in Windows Server 2019
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Recommended Troubleshooting Client" -Service TroubleshootingSvc -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $Interface `

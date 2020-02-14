@@ -92,7 +92,9 @@ if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot)) -or $Force)
 	-LocalUser $UserAccountsSDDL `
 	-Description "Hyper text transfer protocol over SSL." | Format-Output
 
-	$EdgeChromiumUpdate = "$EdgeChromiumRoot\EdgeUpdate\MicrosoftEdgeUpdate.exe"
+	# TODO: we should probably have a function for this?
+	$EdgeUpdateRoot = "$(Split-Path -Path $(Split-path -Path $EdgeChromiumRoot -Parent) -Parent)\EdgeUpdate"
+	$EdgeChromiumUpdate = "$EdgeUpdateRoot\MicrosoftEdgeUpdate.exe"
 	Test-File $EdgeChromiumUpdate
 	[string[]] $UpdateAccounts = "NT AUTHORITY\SYSTEM"
 	$UpdateAccounts += $UserAccounts

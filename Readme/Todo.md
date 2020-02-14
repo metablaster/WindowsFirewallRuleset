@@ -16,3 +16,4 @@
 15. Test already loaded rules if pointing to valid program or service, also test for weakness
 16. Limit code to 80-100 columns rule, subject to exceptoins
 17. Provide following keywords in function comments: .DESCRIPTION .LINK .COMPONENT
+18. Access is denied randomly while executing rules, need some check around this

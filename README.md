@@ -112,6 +112,7 @@ Visit `Test` folder and run all tests individually to confirm modules and their 
 - If you're running scripts for first time it's higly recommended to load all rules, it should be easy to delete what you do not wan't in GPO, rather than later searching scripts for what you may have missed.
 - Loading rules into an empty GPO should be very fast, however loading into GPO which already contains rules will be significally slower (depends on number of existing rules)
 - All errors and warnings will be saved to `Logs` directory, so you can review these logs if you want to fix some problem.
+- Any rule that results in "Access denied" while loading should be reloaded by executing specific script again.
 
 **STEPS:**
 1. If you don't have ssh keys and other setup required to clone then just download the zip file by clicking on green "Clone or download" button here on this site.
