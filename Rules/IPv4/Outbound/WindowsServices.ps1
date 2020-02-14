@@ -148,6 +148,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "This service runs in session 0 and hosts the notification platform and connection provider
 which handles the connection between the device and WNS server." | Format-Output
 
+# TODO: this service's name most likely isn't constant
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Windows Push Notifications User Service" -Service WpnUserService_e13583 -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -296,6 +297,7 @@ If this service is stopped, users will not be able to logon to the computer with
 # Recommended Troubleshooting predefined rule
 #
 
+# TODO: probably does not exist in Windows Server 2019
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Recommended Troubleshooting Client" -Service TroubleshootingSvc -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $Interface `
