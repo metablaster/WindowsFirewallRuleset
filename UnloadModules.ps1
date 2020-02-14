@@ -32,19 +32,19 @@ $Develop = $true
 
 if ($Develop)
 {
-    Write-Host "DEBUG: Clean up environment" -ForegroundColor Yellow -BackgroundColor Black
-    Remove-Module -Name System -ErrorAction Ignore
-    Remove-Variable -Name SystemCheck -Scope Global -Force -ErrorAction Ignore
+	Write-Host "DEBUG: Clean up environment" -ForegroundColor Yellow -BackgroundColor Black
+	Remove-Module -Name System -ErrorAction Ignore
+	Remove-Variable -Name SystemCheck -Scope Global -Force -ErrorAction Ignore
 
-    Remove-Module -Name FirewallModule -ErrorAction Ignore
-    Remove-Variable -Name WarningStatus -Scope Global -ErrorAction Ignore
-    Remove-Variable -Name Debug -Scope Global -Force -ErrorAction Ignore
-    Remove-Variable -Name Execute -Scope Global -ErrorAction Ignore
+	Remove-Module -Name FirewallModule -ErrorAction Ignore
+	Remove-Variable -Name WarningStatus -Scope Global -ErrorAction Ignore
+	Remove-Variable -Name Debug -Scope Global -Force -ErrorAction Ignore
+	Remove-Variable -Name Execute -Scope Global -ErrorAction Ignore
 
-    Remove-Module -Name Test -ErrorAction Ignore
-    Remove-Module -Name UserInfo -ErrorAction Ignore
-    Remove-Module -Name ComputerInfo -ErrorAction Ignore
+	Remove-Module -Name Test -ErrorAction Ignore
+	Remove-Module -Name UserInfo -ErrorAction Ignore
+	Remove-Module -Name ComputerInfo -ErrorAction Ignore
 
-    Remove-Module -Name ProgramInfo -ErrorAction Ignore
-    Remove-Variable -Name InstallTable -Scope Global -ErrorAction Ignore
+	Remove-Module -Name ProgramInfo -ErrorAction Ignore
+	Remove-Variable -Name InstallTable -Scope Global -ErrorAction Ignore
 }
