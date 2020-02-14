@@ -56,6 +56,16 @@ function Get-AppSID
 		[string] $AppName
 	)
 
+	<# TODO: This error spams out for newly created users, most likely for packages not yet installed,
+	Need to force install them before applying rules, or skip applying rules.
+	Get-ACL : Cannot find path 'C:\Users\Test\AppData\Local\Packages\Microsoft.AccountsControl_cw5n1h2txyewy\AC' because it
+	does not exist.
+	At C:\Users\haxor\GitHub\WindowsFirewallRuleset\Modules\ProgramInfo\ProgramInfo.psm1:59 char:9
+	+     $ACL = Get-ACL "C:\Users\$UserName\AppData\Local\Packages\$AppNam ...
+	+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (:) [Get-Acl], ItemNotFoundException
+    + FullyQualifiedErrorId : GetAcl_PathNotFound_Exception,Microsoft.PowerShell.Commands.GetAclCommand
+	#>
 	$ACL = Get-ACL "C:\Users\$UserName\AppData\Local\Packages\$AppName\AC"
 	$ACE = $ACL.Access.IdentityReference.Value
 

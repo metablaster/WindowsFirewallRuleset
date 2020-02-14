@@ -96,6 +96,8 @@ if ($null -ne $NETFrameworkRoot)
 }
 
 # TODO: path not real and program not installed
+# NOTE: we could make use of user repositry if learned somehow?
+# and scan repositories for networking applications
 $vcpkgRoot = "%SystemDrive%\Users\User\source\repos\vcpkg"
 $ToolsRoot = "%SystemDrive%\tools"
 

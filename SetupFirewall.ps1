@@ -23,6 +23,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+# Set-StrictMode -Version Latest
+
 . $PSScriptRoot\UnloadModules.ps1
 
 # Check requirements for this project

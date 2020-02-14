@@ -267,6 +267,7 @@ function Get-AccountSDDL
 # $DebugPreference = "Continue"
 
 # TODO: add more groups, guests, everyone etc...
+# TODO: global configuration variables (in a separate script) should also include to set "USERS" instead of single user
 if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 {
 	# check if constants alreay initialized, used for module reloading

@@ -122,10 +122,12 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $SystemGroup -Direction 
 
 #
 # Firewall predefined rules for Microsoft store Apps
+# TODO: making rules for each user separatelly, is it possible to make rules for all users?
 #
 
 #
 # Block Administrators by defalut
+# TODO: this rule doesn't seem to be good, -Package parameter is OK?
 #
 
 foreach ($Admin in $AdminNames)
