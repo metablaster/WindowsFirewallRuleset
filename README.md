@@ -49,32 +49,33 @@ For more info see respective licences:\
 [VSSetup\LICENSE.txt](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Modules/VSSetup/LICENSE.txt)
 
 # Minimum system requirements
-1. Windows 10 Pro/Enterprise
+1. Windows 10 Pro/Enterprise, Windows Server 2019
 2. Windows Powershell 5.1 [Download Powershell](https://github.com/PowerShell/PowerShell)
-3. NET Framework 4.8 [Download Net Framework](https://dotnet.microsoft.com/download/dotnet-framework)
+3. NET Framework 4.7 [Download Net Framework](https://dotnet.microsoft.com/download/dotnet-framework)
 4. Git (Optional) [Download Git](https://git-scm.com/downloads)
 5. Visual Studio Code (Optional) [Download VSCode](https://code.visualstudio.com)
 6. PowerShell Support for VSCode (Optional) [Download extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell)
 
 **If any of the requirements from point 1, 2 and 3 are not meet the scripts will refuse to run.**
 
+- All operating systems 10.0 (Major 10, Minor 0) and up are supported.
 - Powershell is built into Windows by default, you will probably need to install it or update on different systems.
 - NET Framework 4.8 is automatically installed (trhough Windwos update) on Windows 10 1903 (May 2019 Update).
 - You may want to have git to check out for updates, to easily switch between branches or to contribute code.
 - VS Code is preferred editor to edit the scripts for your needs or for contribution, any other editor is of course your choice.
 - If you get VSCode, you'll also need powershell extension for syntax highliting and code navigation among other cool features.
 
-# I don't have Windows 10 Pro/Enterprise
+# I don't have Windows 10 or Windows Server
 **First, note that Home versions of Windows do not have GPO (Local Group Policy), therefore not possible to make use of this project.**
 
-To be able to apply rules to older or different systems such as Windows 7 or Windows server, you'll need to modify code.\
+To be able to apply rules to older systems such as Windows 7 or Windows server 2008, you'll need to modify code.\
 At a bare minimum you should do the following 4 modifications:
 
 **Modification 1:**\
-edit the `Modules\System\System.psm1` to allow execution for different system.
+edit the `Modules\System\System.psm1` to allow execution for older system.
 
 **Modification 2:**\
-edit the `Modules\FirewallModule\FirewallModule.psm1` and define new variable that defines your system version, following variable is defined to target Windows 10 and above by default for all rules.\
+edit the `Modules\FirewallModule\FirewallModule.psm1` and define new variable that defines your system version, following variable is defined to target Windows 10.0 editions and above by default for all rules.\
 ```New-Variable -Name Platform -Option Constant -Scope Global -Value "10.0+""```
 
 For example for Windows 7, define a new variable that looks like this:\
