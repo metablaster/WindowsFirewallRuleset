@@ -42,7 +42,7 @@ TODO: implement queriying computers on network by specifying IP address
 #>
 function Get-ComputerName
 {
-    return Get-WmiObject Win32_ComputerSystem | Select-Object -ExpandProperty Name
+	return Get-WmiObject Win32_ComputerSystem | Select-Object -ExpandProperty Name
 }
 
 <#
@@ -59,7 +59,7 @@ TODO: implement queriying computers on network by specifying IP address
 #>
 function Get-AdapterConfig
 {
-    return Get-WmiObject Win32_NetworkAdapterConfiguration | Where-Object { $_.DefaultIPGateway }
+	return Get-WmiObject Win32_NetworkAdapterConfiguration | Where-Object { $_.DefaultIPGateway }
 }
 
 <#
@@ -80,28 +80,28 @@ TODO: implement queriying computers on network by specifying COMPUTERNAME
 #>
 function Get-IPAddress
 {
-    param (
-        [parameter(Mandatory = $true)]
-        [ValidateSet(4, 6)]
-        [int16] $IPVersion
-    )
+	param (
+		[parameter(Mandatory = $true)]
+		[ValidateSet(4, 6)]
+		[int16] $IPVersion
+	)
 
-    $AdapterConfig = Get-AdapterConfig
+	$AdapterConfig = Get-AdapterConfig
 
-    # IPv4 address is at index 0, if IPv6 if configured it's at index 1)
-    if ($IPVersion -eq 4)
-    {
-        return $AdapterConfig.IPAddress[0]
-    }
-    elseif ($AdapterConfig.IPAddress[1])
-    {
-        return $AdapterConfig.IPAddress[1]
-    }
-    else
-    {
-        Write-Error -Category NotEnabled -TargetObject $AdapterConfig -Message "IPv6 not configured on adapter"
-        return $null
-    }
+	# IPv4 address is at index 0, if IPv6 if configured it's at index 1)
+	if ($IPVersion -eq 4)
+	{
+		return $AdapterConfig.IPAddress[0]
+	}
+	elseif ($AdapterConfig.IPAddress[1])
+	{
+		return $AdapterConfig.IPAddress[1]
+	}
+	else
+	{
+		Write-Error -Category NotEnabled -TargetObject $AdapterConfig -Message "IPv6 not configured on adapter"
+		return $null
+	}
 }
 
 <#
@@ -116,11 +116,11 @@ System.String Broadcast address
 #>
 function Get-Broadcast
 {
-    $AdapterConfig = Get-AdapterConfig
+	$AdapterConfig = Get-AdapterConfig
 
-    # Broadcast address makes sense only for IPv4
-    Get-NetworkSummary $AdapterConfig.IPAddress[0] $AdapterConfig.IPSubnet[0] |
-    Select-Object -ExpandProperty BroadcastAddress | Select-Object -ExpandProperty IPAddressToString
+	# Broadcast address makes sense only for IPv4
+	Get-NetworkSummary $AdapterConfig.IPAddress[0] $AdapterConfig.IPSubnet[0] |
+	Select-Object -ExpandProperty BroadcastAddress | Select-Object -ExpandProperty IPAddressToString
 }
 
 #

@@ -37,19 +37,19 @@ formatted message block is shown in console
 #>
 function New-Test
 {
-    param (
-        [Parameter(Mandatory = $true)]
-        [string] $InputMessage
-    )
+	param (
+		[Parameter(Mandatory = $true)]
+		[string] $InputMessage
+	)
 
-    $Message = "Testing: $InputMessage"
-    $Asterisks = $("*" * ($Message.Length + 4))
+	$Message = "Testing: $InputMessage"
+	$Asterisks = $("*" * ($Message.Length + 4))
 
-    Write-Host ""
-    Write-Host $Asterisks
-    Write-Host "* $Message *"
-    Write-Host $Asterisks
-    Write-Host ""
+	Write-Host ""
+	Write-Host $Asterisks
+	Write-Host "* $Message *"
+	Write-Host $Asterisks
+	Write-Host ""
 }
 
 <#
@@ -64,9 +64,9 @@ formatted message block is shown in console
 #>
 function Exit-Test
 {
-    # Write-Host ""
-    # Save-Errors
-    Write-Host ""
+	# Write-Host ""
+	# Save-Errors
+	Write-Host ""
 }
 
 #

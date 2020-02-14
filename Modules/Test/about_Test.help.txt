@@ -1,22 +1,22 @@
 TOPIC
-    about_Test
+	about_Test
 
 SHORT DESCRIPTION
-    Helper functions to write powershell unit tests
+	Helper functions to write powershell unit tests
 
 LONG DESCRIPTION
-    TODO: add description
+	TODO: add description
 
 EXAMPLES
-    Before starting a new test case:
-    New-Test
+	Before starting a new test case:
+	New-Test
 
-    To end test:
-    Exit-Test
+	To end test:
+	Exit-Test
 
 KEYWORDS
-    PowerShellTest
-    UnitTest
+	PowerShellTest
+	UnitTest
 
 SEE ALSO
-    TODO: Add link for more help
+	TODO: Add link for more help

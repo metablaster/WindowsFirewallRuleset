@@ -41,25 +41,25 @@ Note, script scope variable is updated
 #>
 function Update-Context
 {
-    param (
-        [Parameter(Mandatory = $true, Position = 0)]
-        [string] $Root,
+	param (
+		[Parameter(Mandatory = $true, Position = 0)]
+		[string] $Root,
 
-        [Parameter(Mandatory = $true, Position = 1)]
-        [string] $Section,
+		[Parameter(Mandatory = $true, Position = 1)]
+		[string] $Section,
 
-        [Parameter(Mandatory = $false, Position = 2)]
-        [string] $Subsection = $null
-    )
+		[Parameter(Mandatory = $false, Position = 2)]
+		[string] $Subsection = $null
+	)
 
-    $NewContext = $Root + "." + $Section
-    if (![System.String]::IsNullOrEmpty($Subsection))
-    {
-        $NewContext += " -> " + $Subsection
-    }
+	$NewContext = $Root + "." + $Section
+	if (![System.String]::IsNullOrEmpty($Subsection))
+	{
+		$NewContext += " -> " + $Subsection
+	}
 
-    Set-Variable -Name Context -Scope Script -Value $NewContext
-    Write-Debug "Context set to '$NewContext'"
+	Set-Variable -Name Context -Scope Script -Value $NewContext
+	Write-Debug "Context set to '$NewContext'"
 }
 
 <#
@@ -83,26 +83,26 @@ TODO: make this function more generic
 #>
 function Approve-Execute
 {
-    param (
-        [Parameter(Mandatory = $false)]
-        [ValidateSet("Yes", "No")]
-        [string] $DefaultAction = "Yes",
+	param (
+		[Parameter(Mandatory = $false)]
+		[ValidateSet("Yes", "No")]
+		[string] $DefaultAction = "Yes",
 
-        [Parameter(Mandatory = $false)]
-        [string] $Title = "Executing: " + (Split-Path -Leaf $MyInvocation.ScriptName),
+		[Parameter(Mandatory = $false)]
+		[string] $Title = "Executing: " + (Split-Path -Leaf $MyInvocation.ScriptName),
 
-        [Parameter(Mandatory = $false)]
-        [string] $Question = "Do you want to run this script?"
-    )
+		[Parameter(Mandatory = $false)]
+		[string] $Question = "Do you want to run this script?"
+	)
 
-    $Choices  = "&Yes", "&No"
-    $Default = 0
-    if ($DefaultAction -like "No") { $Default = 1 }
+	$Choices  = "&Yes", "&No"
+	$Default = 0
+	if ($DefaultAction -like "No") { $Default = 1 }
 
-    $Title += " [$Context]"
-    $Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
+	$Title += " [$Context]"
+	$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
 
-    return $Decision -eq $Default
+	return $Decision -eq $Default
 }
 
 <#
@@ -118,56 +118,56 @@ Credits to: https://blogs.technet.microsoft.com/ashleymcglone/2011/08/29/powersh
 #>
 function Show-SDDL
 {
-    param (
-        [Parameter(
-            Mandatory = $true,
-            valueFromPipelineByPropertyName=$true)] $SDDL
-    )
+	param (
+		[Parameter(
+			Mandatory = $true,
+			valueFromPipelineByPropertyName=$true)] $SDDL
+	)
 
-    $SDDLSplit = $SDDL.Split("(")
+	$SDDLSplit = $SDDL.Split("(")
 
-    Write-Host ""
-    Write-Host "SDDL Split:"
-    Write-Host "****************"
+	Write-Host ""
+	Write-Host "SDDL Split:"
+	Write-Host "****************"
 
-    $SDDLSplit
+	$SDDLSplit
 
-    Write-Host ""
-    Write-Host "SDDL SID Parsing:"
-    Write-Host "****************"
+	Write-Host ""
+	Write-Host "SDDL SID Parsing:"
+	Write-Host "****************"
 
-    # Skip index 0 where owner and/or primary group are stored
-    for ($i=1;$i -lt $SDDLSplit.Length;$i++)
-    {
-        $ACLSplit = $SDDLSplit[$i].Split(";")
+	# Skip index 0 where owner and/or primary group are stored
+	for ($i=1;$i -lt $SDDLSplit.Length;$i++)
+	{
+		$ACLSplit = $SDDLSplit[$i].Split(";")
 
-        if ($ACLSplit[1].Contains("ID"))
-        {
-            "Inherited"
-        }
-        else
-        {
-            $ACLEntrySID = $null
+		if ($ACLSplit[1].Contains("ID"))
+		{
+			"Inherited"
+		}
+		else
+		{
+			$ACLEntrySID = $null
 
-            # Remove the trailing ")"
-            $ACLEntry = $ACLSplit[5].TrimEnd(")")
+			# Remove the trailing ")"
+			$ACLEntry = $ACLSplit[5].TrimEnd(")")
 
-            # Parse out the SID using a handy RegEx
-            $ACLEntrySIDMatches = [regex]::Matches($ACLEntry,"(S(-\d+){2,8})")
-            $ACLEntrySIDMatches | ForEach-Object {$ACLEntrySID = $_.value}
+			# Parse out the SID using a handy RegEx
+			$ACLEntrySIDMatches = [regex]::Matches($ACLEntry,"(S(-\d+){2,8})")
+			$ACLEntrySIDMatches | ForEach-Object {$ACLEntrySID = $_.value}
 
-            If ($ACLEntrySID)
-            {
-                $ACLEntrySID
-            }
-            Else
-            {
-                "Not inherited - No SID"
-            }
-        }
-    }
+			If ($ACLEntrySID)
+			{
+				$ACLEntrySID
+			}
+			Else
+			{
+				"Not inherited - No SID"
+			}
+		}
+	}
 
-    return $null
+	return $null
 }
 
 <#
@@ -184,22 +184,22 @@ System.String[] array of computer accounts
 #>
 function Convert-SDDLToACL
 {
-    param (
-        [parameter(Mandatory = $true)]
-        [ValidateCount(1, 1000)]
-        [ValidateLength(1, 1000)]
-        [string[]] $SDDL
-    )
+	param (
+		[parameter(Mandatory = $true)]
+		[ValidateCount(1, 1000)]
+		[ValidateLength(1, 1000)]
+		[string[]] $SDDL
+	)
 
-    [string[]] $ACL = @()
-    foreach ($Entry in $SDDL)
-    {
-        $ACLObject = New-Object -Type Security.AccessControl.DirectorySecurity
-        $ACLObject.SetSecurityDescriptorSddlForm($Entry)
-        $ACL += $ACLObject.Access | Select-Object -ExpandProperty IdentityReference | Select-Object -ExpandProperty Value
-    }
+	[string[]] $ACL = @()
+	foreach ($Entry in $SDDL)
+	{
+		$ACLObject = New-Object -Type Security.AccessControl.DirectorySecurity
+		$ACLObject.SetSecurityDescriptorSddlForm($Entry)
+		$ACL += $ACLObject.Access | Select-Object -ExpandProperty IdentityReference | Select-Object -ExpandProperty Value
+	}
 
-    return $ACL
+	return $ACL
 }
 
 <#
@@ -213,9 +213,9 @@ Write-Note "sample note"
 Write-Note "first line", "second line"
 .EXAMPLE
 Write-Note @(
-    "first line"
-    "second line"
-    "3rd line")
+	"first line"
+	"second line"
+	"3rd line")
 .INPUTS
 None. You cannot pipe objects to Write-Note
 .OUTPUTS
@@ -225,18 +225,18 @@ TODO: rename to Info
 #>
 function Write-Note
 {
-    param (
-        [parameter(Mandatory = $true)]
-        [string[]] $Notes
-    )
+	param (
+		[parameter(Mandatory = $true)]
+		[string[]] $Notes
+	)
 
-    Write-Host "NOTE: $($Notes[0])" -ForegroundColor Green -BackgroundColor Black
+	Write-Host "NOTE: $($Notes[0])" -ForegroundColor Green -BackgroundColor Black
 
-    # Skip 'NOTE:' tag for all subsequent messages
-    for ($Index = 1; $Index -lt $Notes.Count; ++$Index)
-    {
-        Write-Host $Notes[$Index] -ForegroundColor Green -BackgroundColor Black
-    }
+	# Skip 'NOTE:' tag for all subsequent messages
+	for ($Index = 1; $Index -lt $Notes.Count; ++$Index)
+	{
+		Write-Host $Notes[$Index] -ForegroundColor Green -BackgroundColor Black
+	}
 }
 
 <#
@@ -257,47 +257,47 @@ Formatted warning message is shown in console in form of: WARNING: sample warnin
 #>
 function Set-Warning
 {
-    param (
-        [parameter(Mandatory = $true)]
-        [string[]] $Message,
-        [parameter(Mandatory = $false)]
-        [bool] $Status = $true
-    )
+	param (
+		[parameter(Mandatory = $true)]
+		[string[]] $Message,
+		[parameter(Mandatory = $false)]
+		[bool] $Status = $true
+	)
 
-    # Update warning status variable
-    Set-Variable -Name WarningStatus -Scope Global -Value ($WarningStatus -or $Status)
+	# Update warning status variable
+	Set-Variable -Name WarningStatus -Scope Global -Value ($WarningStatus -or $Status)
 
-    # Append warning to log file
-    $FileName = "Warning_$(Get-Date -Format "dd.MM.yy HH")h.log"
-    $LogFile = "$LogsFolder\$FileName"
+	# Append warning to log file
+	$FileName = "Warning_$(Get-Date -Format "dd.MM.yy HH")h.log"
+	$LogFile = "$LogsFolder\$FileName"
 
-    if (!(Test-Path -PathType Container -Path $LogsFolder))
-    {
-        New-Item -ItemType Directory -Path $LogsFolder -ErrorAction Stop | Out-Null
-    }
+	if (!(Test-Path -PathType Container -Path $LogsFolder))
+	{
+		New-Item -ItemType Directory -Path $LogsFolder -ErrorAction Stop | Out-Null
+	}
 
-    if (!(Test-Path -PathType Leaf -Path $LogFile))
-    {
-        New-Item -ItemType File -Path $LogFile -ErrorAction Stop | Out-Null
-    }
+	if (!(Test-Path -PathType Leaf -Path $LogFile))
+	{
+		New-Item -ItemType File -Path $LogFile -ErrorAction Stop | Out-Null
+	}
 
-    # First line
-    $LineOne = $Message[0]
+	# First line
+	$LineOne = $Message[0]
 
-    # Show the warning and save to log file
-    $Warning = "WARNING: $LineOne"
-    Write-Host $Warning -ForegroundColor Yellow -BackgroundColor Black
+	# Show the warning and save to log file
+	$Warning = "WARNING: $LineOne"
+	Write-Host $Warning -ForegroundColor Yellow -BackgroundColor Black
 
-    # Include time in file
-    $Warning = "WARNING: $(Get-Date -Format "HH:mm")h $LineOne"
-    Add-Content -Path $LogFile -Value $Warning
+	# Include time in file
+	$Warning = "WARNING: $(Get-Date -Format "HH:mm")h $LineOne"
+	Add-Content -Path $LogFile -Value $Warning
 
-    # Skip 'WARNING:' tag for all subsequent lines (both console and log file)
-    for ($Index = 1; $Index -lt $Message.Count; ++$Index)
-    {
-        Write-Host $Message[$Index] -ForegroundColor Yellow -BackgroundColor Black
-        Add-Content -Path $LogFile -Value $Message[$Index]
-    }
+	# Skip 'WARNING:' tag for all subsequent lines (both console and log file)
+	for ($Index = 1; $Index -lt $Message.Count; ++$Index)
+	{
+		Write-Host $Message[$Index] -ForegroundColor Yellow -BackgroundColor Black
+		Add-Content -Path $LogFile -Value $Message[$Index]
+	}
 }
 
 <#
@@ -312,41 +312,41 @@ None, list of all errors is logged into a file
 #>
 function Save-Errors
 {
-    if ($global:Error.Count -eq 0)
-    {
-        Write-Note "No errors detected"
-        return
-    }
+	if ($global:Error.Count -eq 0)
+	{
+		Write-Note "No errors detected"
+		return
+	}
 
-    # Write all errors to log file
-    $FileName = "Error_$(Get-Date -Format "dd.MM.yy HH")h.log"
-    $LogFile = "$LogsFolder\$FileName"
+	# Write all errors to log file
+	$FileName = "Error_$(Get-Date -Format "dd.MM.yy HH")h.log"
+	$LogFile = "$LogsFolder\$FileName"
 
-    if (!(Test-Path -PathType Container -Path $LogsFolder))
-    {
-        New-Item -ItemType Directory -Path $LogsFolder -ErrorAction Stop| Out-Null
-    }
+	if (!(Test-Path -PathType Container -Path $LogsFolder))
+	{
+		New-Item -ItemType Directory -Path $LogsFolder -ErrorAction Stop| Out-Null
+	}
 
-    if (!(Test-Path -PathType Leaf -Path $LogFile))
-    {
-        New-Item -ItemType File -Path $LogFile -ErrorAction Stop| Out-Null
-    }
+	if (!(Test-Path -PathType Leaf -Path $LogFile))
+	{
+		New-Item -ItemType File -Path $LogFile -ErrorAction Stop| Out-Null
+	}
 
-    # Include time in file
-    $Time = "$(Get-Date -Format "HH:mm")h"
+	# Include time in file
+	$Time = "$(Get-Date -Format "HH:mm")h"
 
-    $AllErrors = @()
-    foreach ($Err in $global:Error)
-    {
-        $AllErrors += "ERROR: $Time $Err`nSTACKTRACE: $($Err.ScriptStackTrace)`n"
-    }
+	$AllErrors = @()
+	foreach ($Err in $global:Error)
+	{
+		$AllErrors += "ERROR: $Time $Err`nSTACKTRACE: $($Err.ScriptStackTrace)`n"
+	}
 
-    Add-Content -Path $LogFile -Value $AllErrors
-    Write-Note @("All errors were saved to:"
-    $LogsFolder
-    "you can review these logs to see which scripts need to be fixed and where")
+	Add-Content -Path $LogFile -Value $AllErrors
+	Write-Note @("All errors were saved to:"
+	$LogsFolder
+	"you can review these logs to see which scripts need to be fixed and where")
 
-    $global:Error.Clear()
+	$global:Error.Clear()
 }
 
 <#
@@ -363,64 +363,64 @@ None, file with the list of services is made
 #>
 function Get-NetworkServices
 {
-    param (
-        [parameter(Mandatory = $true)]
-        [string] $Folder
-    )
+	param (
+		[parameter(Mandatory = $true)]
+		[string] $Folder
+	)
 
-    if (!(Test-Path -Path $Folder))
-    {
-        Set-Warning "Unable to locate path '$Folder'"
-        return
-    }
+	if (!(Test-Path -Path $Folder))
+	{
+		Set-Warning "Unable to locate path '$Folder'"
+		return
+	}
 
-    # Recusively get powershell scripts in input folder
-    $Files = Get-ChildItem -Path $Folder -Recurse -Filter *.ps1
-    if (!$Files)
-    {
-        Set-Warning "No powershell script files found in '$Folder'"
-        return
-    }
+	# Recusively get powershell scripts in input folder
+	$Files = Get-ChildItem -Path $Folder -Recurse -Filter *.ps1
+	if (!$Files)
+	{
+		Set-Warning "No powershell script files found in '$Folder'"
+		return
+	}
 
-    $Content = @()
-    # Filter out service names from each powershell file in input folder
-    $Files | Foreach-Object {
-        Get-Content $_.FullName | Where-Object {
-            if ($_ -match "(?<= -Service )(.*)(?= -Program)")
-            {
-                $Content += $Matches[0]
-            }
-        }
-    }
+	$Content = @()
+	# Filter out service names from each powershell file in input folder
+	$Files | Foreach-Object {
+		Get-Content $_.FullName | Where-Object {
+			if ($_ -match "(?<= -Service )(.*)(?= -Program)")
+			{
+				$Content += $Matches[0]
+			}
+		}
+	}
 
-    if (!$Content)
-    {
-        Set-Warning "No matches found in any of the bellow files:"
-        Write-Host "$($Files | Select-Object -ExpandProperty Name)"
-        return
-    }
+	if (!$Content)
+	{
+		Set-Warning "No matches found in any of the bellow files:"
+		Write-Host "$($Files | Select-Object -ExpandProperty Name)"
+		return
+	}
 
-    # Get rid of duplicate matches and known bad values
-    $Content = $Content | Select-Object -Unique
-    $Content = $Content | Where-Object { $_ -ne '$Service' -and $_ -ne "Any" }
+	# Get rid of duplicate matches and known bad values
+	$Content = $Content | Select-Object -Unique
+	$Content = $Content | Where-Object { $_ -ne '$Service' -and $_ -ne "Any" }
 
-    # File name where to save all matches
-    $File = "$RepoDir\Rules\NetworkServices.txt"
+	# File name where to save all matches
+	$File = "$RepoDir\Rules\NetworkServices.txt"
 
-    # If output file exists clear it
-    # otherwise create a new file
-    if (Test-Path -Path $File)
-    {
-        Clear-Content -Path $File
-    }
-    else
-    {
-        New-Item -ItemType File -Path $File| Out-Null
-    }
+	# If output file exists clear it
+	# otherwise create a new file
+	if (Test-Path -Path $File)
+	{
+		Clear-Content -Path $File
+	}
+	else
+	{
+		New-Item -ItemType File -Path $File| Out-Null
+	}
 
-    # Save filtered services to a new file
-    Add-Content -Path $File -Value $Content
-    Write-Note "$($Content.Count) services involved in firewall rules"
+	# Save filtered services to a new file
+	Add-Content -Path $File -Value $Content
+	Write-Note "$($Content.Count) services involved in firewall rules"
 }
 
 <#
@@ -437,17 +437,17 @@ Formatted text
 #>
 function Format-Output
 {
-    [CmdletBinding()]
-    param (
-        [parameter(Mandatory = $true,
-        ValueFromPipeline = $true)]
-        [Microsoft.Management.Infrastructure.CimInstance] $Rule
-    )
+	[CmdletBinding()]
+	param (
+		[parameter(Mandatory = $true,
+		ValueFromPipeline = $true)]
+		[Microsoft.Management.Infrastructure.CimInstance] $Rule
+	)
 
-    process
-    {
-        Write-Host "Load Rule: [$($Rule | Select-Object -ExpandProperty Group)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
-    }
+	process
+	{
+		Write-Host "Load Rule: [$($Rule | Select-Object -ExpandProperty Group)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
+	}
 }
 
 <#
@@ -462,29 +462,29 @@ None, screen buffer is set for current powershell session
 #>
 function Set-ScreenBuffer
 {
-    $psHost = Get-Host
-    $psWindow = $psHost.UI.RawUI
-    $NewSize = $psWindow.BufferSize
+	$psHost = Get-Host
+	$psWindow = $psHost.UI.RawUI
+	$NewSize = $psWindow.BufferSize
 
-    $NewBuffer = (Get-Variable -Name RecommendedBuffer -Scope Script).Value
+	$NewBuffer = (Get-Variable -Name RecommendedBuffer -Scope Script).Value
 
-    if ($NewSize.Height -lt $NewBuffer)
-    {
-        Write-Warning "Your screen buffer of $($NewSize.Height) is below recommended $NewBuffer to preserve all execution output"
+	if ($NewSize.Height -lt $NewBuffer)
+	{
+		Write-Warning "Your screen buffer of $($NewSize.Height) is below recommended $NewBuffer to preserve all execution output"
 
-        $Choices  = "&Yes", "&No"
-        $Default = 0
-        $Title = "Increase Screen Buffer"
-        $Question = "Would you like to increase screen buffer to $($NewBuffer)?"
-        $Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
+		$Choices  = "&Yes", "&No"
+		$Default = 0
+		$Title = "Increase Screen Buffer"
+		$Question = "Would you like to increase screen buffer to $($NewBuffer)?"
+		$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
 
-        if ($Decision -eq $Default)
-        {
-            $NewSize.Height = $NewBuffer
-            $psWindow.BufferSize = $NewSize
-            Write-Note "Screen buffer changed to $NewBuffer"
-        }
-    }
+		if ($Decision -eq $Default)
+		{
+			$NewSize.Height = $NewBuffer
+			$psWindow.BufferSize = $NewSize
+			Write-Note "Screen buffer changed to $NewBuffer"
+		}
+	}
 }
 
 #
@@ -495,21 +495,21 @@ function Set-ScreenBuffer
 
 if (!(Get-Variable -Name CheckInitFirewallModule -Scope Global -ErrorAction Ignore))
 {
-    # check if constants alreay initialized, used for module reloading
-    New-Variable -Name CheckInitFirewallModule -Scope Global -Option Constant -Value $null
+	# check if constants alreay initialized, used for module reloading
+	New-Variable -Name CheckInitFirewallModule -Scope Global -Option Constant -Value $null
 
-    # Windows 10 and above
-    New-Variable -Name Platform -Scope Global -Option Constant -Value "10.0+"
-    # Machine where to apply rules (default: Local Group Policy)
-    New-Variable -Name PolicyStore -Scope Global -Option Constant -Value "localhost"
-    # Stop executing commandlet if error
-    New-Variable -Name OnError -Scope Global -Option Constant -Value "Continue"
-    # Most used program
-    New-Variable -Name ServiceHost -Scope Global -Option Constant -Value "%SystemRoot%\System32\svchost.exe"
-    # Default network interface card, change this to NIC which your PC uses
-    New-Variable -Name Interface -Scope Global -Option Constant -Value "Wired, Wireless"
-    # To force loading rules regardless of presence of program set to true
-    New-Variable -Name Force -Scope Global -Option Constant -Value $false
+	# Windows 10 and above
+	New-Variable -Name Platform -Scope Global -Option Constant -Value "10.0+"
+	# Machine where to apply rules (default: Local Group Policy)
+	New-Variable -Name PolicyStore -Scope Global -Option Constant -Value "localhost"
+	# Stop executing commandlet if error
+	New-Variable -Name OnError -Scope Global -Option Constant -Value "Continue"
+	# Most used program
+	New-Variable -Name ServiceHost -Scope Global -Option Constant -Value "%SystemRoot%\System32\svchost.exe"
+	# Default network interface card, change this to NIC which your PC uses
+	New-Variable -Name Interface -Scope Global -Option Constant -Value "Wired, Wireless"
+	# To force loading rules regardless of presence of program set to true
+	New-Variable -Name Force -Scope Global -Option Constant -Value $false
 }
 
 # To add rules to firewall for real set to false

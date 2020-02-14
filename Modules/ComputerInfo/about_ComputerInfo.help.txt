@@ -1,27 +1,27 @@
 TOPIC
-    about_ComputerInfo
+	about_ComputerInfo
 
 SHORT DESCRIPTION
-    Query information about computer configuration
+	Query information about computer configuration
 
 LONG DESCRIPTION
-    Functions in ComputerInfo module can be used to query information about computer,
-    operating system and network configuration, currently supported only for localhost.
+	Functions in ComputerInfo module can be used to query information about computer,
+	operating system and network configuration, currently supported only for localhost.
 
 EXAMPLES
-    To get IPv4 address for computer:
-    Get-IPAddress 4
+	To get IPv4 address for computer:
+	Get-IPAddress 4
 
-    To get computer name:
-    Get-ComputerName
+	To get computer name:
+	Get-ComputerName
 
-    To get broadcast address:
-    Get-Broadcast
+	To get broadcast address:
+	Get-Broadcast
 
 KEYWORDS
-    ComputerInfo
-    WindowsInfo
-    Computer
+	ComputerInfo
+	WindowsInfo
+	Computer
 
 SEE ALSO
-    TODO: Add link for more help
+	TODO: Add link for more help

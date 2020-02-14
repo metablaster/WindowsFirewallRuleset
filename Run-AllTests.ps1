@@ -45,11 +45,11 @@ $DebugPreference = "Continue"
 $Files = Get-ChildItem -Path $RepoDir\Test -Recurse -Filter *.ps1
 if (!$Files)
 {
-    Write-Warning "No powershell script files found"
-    return
+	Write-Warning "No powershell script files found"
+	return
 }
 
 # Run them all
 $Files | ForEach-Object {
-    & $_.FullName
+	& $_.FullName
 }

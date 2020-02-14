@@ -37,12 +37,12 @@ SOFTWARE.
 # sample: Test-Function
 function Test-Function
 {
-    param (
-        [Parameter(Mandatory = $true)]
-        [string] $Param
-    )
+	param (
+		[Parameter(Mandatory = $true)]
+		[string] $Param
+	)
 
-    return $null
+	return $null
 }
 
 #

@@ -54,10 +54,10 @@ $DebugPreference = "Continue"
 # sample:
 function Test-Function
 {
-    param (
-        [parameter(Mandatory = $true)]
-        [string] $Param
-    )
+	param (
+		[parameter(Mandatory = $true)]
+		[string] $Param
+	)
 }
 
 New-Test "Test-Function"

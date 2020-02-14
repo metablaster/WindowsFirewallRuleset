@@ -41,35 +41,35 @@ TODO: implement queriying computers on network
 #>
 function Get-UserAccounts
 {
-    param(
-        [Parameter(Mandatory = $true)]
-        [ValidateLength(1, 100)]
-        [string] $UserGroup
-    )
+	param(
+		[Parameter(Mandatory = $true)]
+		[ValidateLength(1, 100)]
+		[string] $UserGroup
+	)
 
-    # Get all accounts from given group
-    $AllAccounts = Get-LocalGroupMember -Group $UserGroup | Where-Object {$_.PrincipalSource -eq "Local"} | Select-Object -ExpandProperty Name
+	# Get all accounts from given group
+	$AllAccounts = Get-LocalGroupMember -Group $UserGroup | Where-Object {$_.PrincipalSource -eq "Local"} | Select-Object -ExpandProperty Name
 
-    # Get disabled accounts
-    $DisabledAccounts = Get-WmiObject -Class Win32_UserAccount -Filter "Disabled=True" | Select-Object -ExpandProperty Caption
+	# Get disabled accounts
+	$DisabledAccounts = Get-WmiObject -Class Win32_UserAccount -Filter "Disabled=True" | Select-Object -ExpandProperty Caption
 
-    # Assemble enabled accounts into an array
-    $EnabledAccounts = @()
-    foreach ($Account in $AllAccounts)
-    {
-        # TODO: -notcontains ?
-        if (!($DisabledAccounts -contains $Account))
-        {
-            $EnabledAccounts += $Account
-        }
-    }
+	# Assemble enabled accounts into an array
+	$EnabledAccounts = @()
+	foreach ($Account in $AllAccounts)
+	{
+		# TODO: -notcontains ?
+		if (!($DisabledAccounts -contains $Account))
+		{
+			$EnabledAccounts += $Account
+		}
+	}
 
-    if([string]::IsNullOrEmpty($EnabledAccounts))
-    {
-        Set-Warning "Get-UserAccounts: Failed to get UserAccounts for group '$UserGroup'"
-    }
+	if([string]::IsNullOrEmpty($EnabledAccounts))
+	{
+		Set-Warning "Get-UserAccounts: Failed to get UserAccounts for group '$UserGroup'"
+	}
 
-    return $EnabledAccounts
+	return $EnabledAccounts
 }
 
 <#
@@ -88,20 +88,20 @@ TODO: implement queriying computers on network
 #>
 function Get-UserNames
 {
-    param(
-        [Parameter(Mandatory = $true)]
-        [ValidateCount(1, 1000)]
-        [ValidateLength(1, 100)]
-        [string[]] $UserAccounts
-    )
+	param(
+		[Parameter(Mandatory = $true)]
+		[ValidateCount(1, 1000)]
+		[ValidateLength(1, 100)]
+		[string[]] $UserAccounts
+	)
 
-    [string[]] $UserNames = @()
-    foreach($Account in $UserAccounts)
-    {
-        $UserNames += $Account.split("\")[1]
-    }
+	[string[]] $UserNames = @()
+	foreach($Account in $UserAccounts)
+	{
+		$UserNames += $Account.split("\")[1]
+	}
 
-    return $UserNames
+	return $UserNames
 }
 
 <#
@@ -120,21 +120,21 @@ TODO: implement queriying computers on network
 #>
 function Get-UserSID
 {
-    param (
-        [parameter(Mandatory = $true)]
-        [ValidateLength(1, 100)]
-        [string] $UserName
-    )
+	param (
+		[parameter(Mandatory = $true)]
+		[ValidateLength(1, 100)]
+		[string] $UserName
+	)
 
-    try
-    {
-        $NTAccount = New-Object System.Security.Principal.NTAccount($UserName)
-        return ($NTAccount.Translate([System.Security.Principal.SecurityIdentifier])).ToString()
-    }
-    catch
-    {
-        Set-Warning "Get-UserSID: User '$UserName' cannot be resolved to a SID."
-    }
+	try
+	{
+		$NTAccount = New-Object System.Security.Principal.NTAccount($UserName)
+		return ($NTAccount.Translate([System.Security.Principal.SecurityIdentifier])).ToString()
+	}
+	catch
+	{
+		Set-Warning "Get-UserSID: User '$UserName' cannot be resolved to a SID."
+	}
 }
 
 <#
@@ -153,24 +153,24 @@ TODO: implement queriying computers on network
 #>
 function Get-AccountSID
 {
-    param (
-        [parameter(Mandatory = $true)]
-        [ValidateLength(1, 100)]
-        [string] $UserAccount
-    )
+	param (
+		[parameter(Mandatory = $true)]
+		[ValidateLength(1, 100)]
+		[string] $UserAccount
+	)
 
-    [string] $Domain = ($UserAccount.split("\"))[0]
-    [string] $User = ($UserAccount.split("\"))[1]
+	[string] $Domain = ($UserAccount.split("\"))[0]
+	[string] $User = ($UserAccount.split("\"))[1]
 
-    try
-    {
-        $NTAccount = New-Object System.Security.Principal.NTAccount($Domain, $User)
-        return ($NTAccount.Translate([System.Security.Principal.SecurityIdentifier])).ToString()
-    }
-    catch
-    {
-        Set-Warning "Get-AccountSID: Account '$UserAccount' cannot be resolved to a SID."
-    }
+	try
+	{
+		$NTAccount = New-Object System.Security.Principal.NTAccount($Domain, $User)
+		return ($NTAccount.Translate([System.Security.Principal.SecurityIdentifier])).ToString()
+	}
+	catch
+	{
+		Set-Warning "Get-AccountSID: Account '$UserAccount' cannot be resolved to a SID."
+	}
 }
 
 <#
@@ -189,31 +189,31 @@ TODO: implement queriying computers on network
 #>
 function Get-UserSDDL
 {
-    param (
-        [parameter(Mandatory = $true)]
-        [ValidateCount(1, 1000)]
-        [ValidateLength(1, 100)]
-        [string[]] $UserNames
-    )
+	param (
+		[parameter(Mandatory = $true)]
+		[ValidateCount(1, 1000)]
+		[ValidateLength(1, 100)]
+		[string[]] $UserNames
+	)
 
-    [string] $SDDL = "D:"
+	[string] $SDDL = "D:"
 
-    foreach($User in $UserNames)
-    {
-        try
-        {
-            $SID = Get-UserSID($User)
-        }
-        catch
-        {
-            Set-Warning "Get-UserSDDL: User '$User' not found"
-            continue
-        }
+	foreach($User in $UserNames)
+	{
+		try
+		{
+			$SID = Get-UserSID($User)
+		}
+		catch
+		{
+			Set-Warning "Get-UserSDDL: User '$User' not found"
+			continue
+		}
 
-        $SDDL += "(A;;CC;;;{0})" -f $SID
-    }
+		$SDDL += "(A;;CC;;;{0})" -f $SID
+	}
 
-    return $SDDL
+	return $SDDL
 }
 
 <#
@@ -232,32 +232,32 @@ TODO: implement queriying computers on network
 #>
 function Get-AccountSDDL
 {
-    param (
-        [parameter(Mandatory = $true)]
-        [ValidateCount(1, 1000)]
-        [ValidateLength(1, 100)]
-        [string[]] $UserAccounts
-    )
+	param (
+		[parameter(Mandatory = $true)]
+		[ValidateCount(1, 1000)]
+		[ValidateLength(1, 100)]
+		[string[]] $UserAccounts
+	)
 
-    [string] $SDDL = "D:"
+	[string] $SDDL = "D:"
 
-    foreach ($Account in $UserAccounts)
-    {
-        try
-        {
-            $SID = Get-AccountSID($Account)
-        }
-        catch
-        {
-            Set-Warning "Get-AccountSDDL: User account $UserAccount not found"
-            continue
-        }
+	foreach ($Account in $UserAccounts)
+	{
+		try
+		{
+			$SID = Get-AccountSID($Account)
+		}
+		catch
+		{
+			Set-Warning "Get-AccountSDDL: User account $UserAccount not found"
+			continue
+		}
 
-        $SDDL += "(A;;CC;;;{0})" -f $SID
+		$SDDL += "(A;;CC;;;{0})" -f $SID
 
-    }
+	}
 
-    return $SDDL
+	return $SDDL
 }
 
 #
@@ -269,26 +269,26 @@ function Get-AccountSDDL
 # TODO: add more groups, guests, everyone etc...
 if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 {
-    # check if constants alreay initialized, used for module reloading
-    New-Variable -Name CheckInitUserInfo -Scope Global -Option Constant -Value $null
+	# check if constants alreay initialized, used for module reloading
+	New-Variable -Name CheckInitUserInfo -Scope Global -Option Constant -Value $null
 
-    # Get list of user account in form of COMPUTERNAME\USERNAME
-    New-Variable -Name UserAccounts -Scope Global -Option Constant -Value (Get-UserAccounts "Users")
-    New-Variable -Name AdminAccounts -Scope Global -Option Constant -Value (Get-UserAccounts "Administrators")
+	# Get list of user account in form of COMPUTERNAME\USERNAME
+	New-Variable -Name UserAccounts -Scope Global -Option Constant -Value (Get-UserAccounts "Users")
+	New-Variable -Name AdminAccounts -Scope Global -Option Constant -Value (Get-UserAccounts "Administrators")
 
-    # Get list of user names in form of USERNAME
-    New-Variable -Name UserNames -Scope Global -Option Constant -Value (Get-UserNames $UserAccounts)
-    New-Variable -Name AdminNames -Scope Global -Option Constant -Value (Get-UserNames $AdminAccounts)
+	# Get list of user names in form of USERNAME
+	New-Variable -Name UserNames -Scope Global -Option Constant -Value (Get-UserNames $UserAccounts)
+	New-Variable -Name AdminNames -Scope Global -Option Constant -Value (Get-UserNames $AdminAccounts)
 
-    # Generate SDDL string for accounts
-    New-Variable -Name UserAccountsSDDL -Scope Global -Option Constant -Value (Get-AccountSDDL $UserAccounts)
-    New-Variable -Name AdminAccountsSDDL -Scope Global -Option Constant -Value (Get-AccountSDDL $AdminAccounts)
+	# Generate SDDL string for accounts
+	New-Variable -Name UserAccountsSDDL -Scope Global -Option Constant -Value (Get-AccountSDDL $UserAccounts)
+	New-Variable -Name AdminAccountsSDDL -Scope Global -Option Constant -Value (Get-AccountSDDL $AdminAccounts)
 
-    # System users (define variables as needed)
-    New-Variable -Name NT_AUTHORITY_System -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-18)"
-    New-Variable -Name NT_AUTHORITY_LocalService -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-19)"
-    New-Variable -Name NT_AUTHORITY_NetworkService -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-20)"
-    New-Variable -Name NT_AUTHORITY_UserModeDrivers -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
+	# System users (define variables as needed)
+	New-Variable -Name NT_AUTHORITY_System -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-18)"
+	New-Variable -Name NT_AUTHORITY_LocalService -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-19)"
+	New-Variable -Name NT_AUTHORITY_NetworkService -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-20)"
+	New-Variable -Name NT_AUTHORITY_UserModeDrivers -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
 }
 
 #
