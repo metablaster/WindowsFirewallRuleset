@@ -95,6 +95,7 @@ if ($null -ne $NETFrameworkRoot)
     Select-Object -Last 1 -ExpandProperty InstallPath
 }
 
+# TODO: path not real and program not installed
 $vcpkgRoot = "%SystemDrive%\Users\User\source\repos\vcpkg"
 $ToolsRoot = "%SystemDrive%\tools"
 

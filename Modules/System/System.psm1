@@ -139,7 +139,7 @@ function Test-SystemRequirements
             2 { $StatusGood = $false }
             3 { $StatusGood = $false }
             4 {
-                if ($NETMinor -lt 8)
+                if ($NETMinor -lt 7)
                 {
                     $StatusGood = $false
                 }

@@ -207,6 +207,7 @@ If this service is stopped the AllJoyn clients that do not have their own bundle
 # Proximity sharing predefined rules
 #
 
+# TODO: probably does not exist in Windows Server 2019
 $Program = "%SystemRoot%\System32\ProximityUxHost.exe"
 Test-File $Program
 

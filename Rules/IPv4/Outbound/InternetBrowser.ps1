@@ -58,7 +58,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # TODO: update path for all users?
 # TODO: returned path will miss browser updaters
 #
-$EdgeChromiumRoot = "%ProgramFiles(x86)%\Microsoft"
+$EdgeChromiumRoot = "%ProgramFiles(x86)%\Microsoft\Edge\Application"
 $ChromeRoot = "%SystemDrive%\Users\User\AppData\Local\Google"
 $FirefoxRoot = "%SystemDrive%\Users\User\AppData\Local\Mozilla Firefox"
 $YandexRoot = "%SystemDrive%\Users\User\AppData\Local\Yandex"
@@ -75,7 +75,7 @@ $TorRoot = "%SystemDrive%\Users\User\AppData\Local\Tor Browser"
 # Test if installation exists on system
 if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot)) -or $Force)
 {
-    $EdgeChromiumApp = "$EdgeChromiumRoot\Edge\Application\msedge.exe"
+    $EdgeChromiumApp = "$EdgeChromiumRoot\msedge.exe"
     Test-File $EdgeChromiumApp
 
     New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `

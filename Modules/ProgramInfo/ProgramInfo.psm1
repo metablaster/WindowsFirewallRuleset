@@ -548,6 +548,7 @@ function Get-AllUserPrograms
     # TODO: make global connection timeout
     if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
     {
+        # TODO: this key does not exist in Windows Server 2019
         $HKLM = "SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData"
 
         $RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
@@ -904,6 +905,11 @@ function Find-Installation
     # otherwise firewall GUI will show full paths which is not desired for sorting reasons
     switch -Wildcard ($Program)
     {
+        "XTU"
+        {
+            Edit-Table "%ProgramFiles(x86)%\Intel\Intel(R) Extreme Tuning Utility\Client"
+            break
+        }
         "Chocolatey"
         {
             Edit-Table "%ALLUSERSPROFILE%\chocolatey"

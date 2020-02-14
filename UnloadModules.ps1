@@ -28,7 +28,7 @@ SOFTWARE.
 #
 
 # Set to true to indicate development phase, force unloading modules and removing variables
-$Develop = $true
+$Develop = $false
 
 if ($Develop)
 {

@@ -365,6 +365,7 @@ In order to target builds to your machine, we need to know a few important thing
 - selected Insider ring
 - etc." | Format-Output
 
+# TODO: probably not available in Windows Server
 $Program = "%SystemRoot%\System32\usocoreworker.exe"
 Test-File $Program
 
