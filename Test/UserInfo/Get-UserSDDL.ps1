@@ -57,7 +57,7 @@ $UserNames
 New-Test "Get-UserSDDL: (separated)"
 foreach($User in $UserNames)
 {
-    Get-UserSDDL $User
+	Get-UserSDDL $User
 }
 
 New-Test "Get-UserSDDL: (combined)"

@@ -62,30 +62,30 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Test if installation exists on system
 if ((Test-Installation "qBittorrent" ([ref]$qBittorentRoot)) -or $Force)
 {
-    $Program = "$qBittorentRoot\qbittorrent.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "qBittorent (HTTP)" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-    -LocalUser $UserAccountsSDDL `
-    -Description "HTTP check for updates" | Format-Output
+	$Program = "$qBittorentRoot\qbittorrent.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "qBittorent (HTTP)" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
+	-LocalUser $UserAccountsSDDL `
+	-Description "HTTP check for updates" | Format-Output
 
-    $Program = "$qBittorentRoot\qbittorrent.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "qBittorent (TCP)" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-    -LocalUser $UserAccountsSDDL `
-    -Description "Torrent client" | Format-Output
+	$Program = "$qBittorentRoot\qbittorrent.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "qBittorent (TCP)" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
+	-LocalUser $UserAccountsSDDL `
+	-Description "Torrent client" | Format-Output
 
-    $Program = "$qBittorentRoot\qbittorrent.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "qBittorent (UDP)" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-    -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-    -Description "Torrent client" | Format-Output
+	$Program = "$qBittorentRoot\qbittorrent.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "qBittorent (UDP)" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
+	-LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description "Torrent client" | Format-Output
 }

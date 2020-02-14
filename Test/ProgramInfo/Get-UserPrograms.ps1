@@ -48,8 +48,8 @@ $DebugPreference = "Continue"
 New-Test "Get-UserPrograms"
 foreach ($Account in $UserAccounts)
 {
-    Write-Host "Programs installed by $Account"
-    Get-UserPrograms $Account
+	Write-Host "Programs installed by $Account"
+	Get-UserPrograms $Account
 }
 
 Exit-Test

@@ -62,21 +62,21 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Test if installation exists on system
 if ((Test-Installation "Filezilla" ([ref]$FilezillaRoot)) -or $Force)
 {
-    $Program = "$FilezillaRoot\filezilla.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "Filezilla client (FTP)" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21 `
-    -LocalUser $UserAccountsSDDL `
-    -Description "FileZilla FTP protocol" | Format-Output
+	$Program = "$FilezillaRoot\filezilla.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "Filezilla client (FTP)" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21 `
+	-LocalUser $UserAccountsSDDL `
+	-Description "FileZilla FTP protocol" | Format-Output
 
-    $Program = "$FilezillaRoot\fzsftp.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "Filezilla client (SFTP)" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21098 `
-    -LocalUser $UserAccountsSDDL `
-    -Description "FileZilla SSH FTP protocol" | Format-Output
+	$Program = "$FilezillaRoot\fzsftp.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "Filezilla client (SFTP)" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21098 `
+	-LocalUser $UserAccountsSDDL `
+	-Description "FileZilla SSH FTP protocol" | Format-Output
 }

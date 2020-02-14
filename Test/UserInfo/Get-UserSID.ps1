@@ -56,7 +56,7 @@ $UserNames
 New-Test "Get-UserSID:"
 foreach($User in $UserNames)
 {
-    $(Get-UserSID $User)
+	$(Get-UserSID $User)
 }
 
 Exit-Test

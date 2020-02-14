@@ -64,12 +64,12 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Test if installation exists on system
 if ((Test-Installation "Chocolatey" ([ref]$ChocolateyRoot)) -or $Force)
 {
-    $Program = "$ChocolateyRoot\choco.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "Chocolatey" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-    -LocalUser $ChocolateyAccounts `
-    -Description "Chocolatey package manager" | Format-Output
+	$Program = "$ChocolateyRoot\choco.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "Chocolatey" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+	-LocalUser $ChocolateyAccounts `
+	-Description "Chocolatey package manager" | Format-Output
 }

@@ -62,13 +62,13 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $SystemGroup -Direction 
 
 foreach ($Admin in $AdminNames)
 {
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "Store apps for Administrators" -Service Any -Program Any `
-    -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Any -InterfaceType $Interface `
-    -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
-    -EdgeTraversalPolicy Block -LocalUser Any -Owner (Get-UserSID $Admin) -Package "S-1-15-2-1" `
-    -Description "Block admin activity for all store apps.
-    Administrators should have limited or no connectivity at all for maximum security." | Format-Output
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "Store apps for Administrators" -Service Any -Program Any `
+	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Any -InterfaceType $Interface `
+	-Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
+	-EdgeTraversalPolicy Block -LocalUser Any -Owner (Get-UserSID $Admin) -Package "S-1-15-2-1" `
+	-Description "Block admin activity for all store apps.
+	Administrators should have limited or no connectivity at all for maximum security." | Format-Output
 }
 
 #
@@ -77,49 +77,49 @@ foreach ($Admin in $AdminNames)
 
 foreach ($User in $UserNames)
 {
-    $OwnerSID = Get-UserSID($User)
+	$OwnerSID = Get-UserSID($User)
 
-    #
-    # Create rules for apps installed by user
-    #
+	#
+	# Create rules for apps installed by user
+	#
 
-    Get-AppxPackage -User $User -PackageTypeFilter Bundle | ForEach-Object {
+	Get-AppxPackage -User $User -PackageTypeFilter Bundle | ForEach-Object {
 
-        $PackageSID = (Get-AppSID $User $_.PackageFamilyName)
-        $Enabled = "False"
+		$PackageSID = (Get-AppSID $User $_.PackageFamilyName)
+		$Enabled = "False"
 
-        # if ($NetworkApps -contains $_.Name)
-        # {
-        #     $Enabled = "True"
-        # }
+		# if ($NetworkApps -contains $_.Name)
+		# {
+		#     $Enabled = "True"
+		# }
 
-        New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-        -DisplayName $_.Name -Service Any -Program Any `
-        -PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-        -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-        -EdgeTraversalPolicy Block -LocalUser Any -Owner $OwnerSID -Package $PackageSID `
-        -Description "Store apps generated rule." | Format-Output
-    }
+		New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+		-DisplayName $_.Name -Service Any -Program Any `
+		-PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
+		-EdgeTraversalPolicy Block -LocalUser Any -Owner $OwnerSID -Package $PackageSID `
+		-Description "Store apps generated rule." | Format-Output
+	}
 
-    #
-    # Create rules for system apps
-    #
+	#
+	# Create rules for system apps
+	#
 
-    Get-AppxPackage -PackageTypeFilter Main | Where-Object { $_.SignatureKind -eq "System" -and $_.Name -like "Microsoft*" } | ForEach-Object {
+	Get-AppxPackage -PackageTypeFilter Main | Where-Object { $_.SignatureKind -eq "System" -and $_.Name -like "Microsoft*" } | ForEach-Object {
 
-        $PackageSID = (Get-AppSID $User $_.PackageFamilyName)
-        $Enabled = "False"
+		$PackageSID = (Get-AppSID $User $_.PackageFamilyName)
+		$Enabled = "False"
 
-        # if ($NetworkApps -contains $_.Name)
-        # {
-        #     $Enabled = "True"
-        # }
+		# if ($NetworkApps -contains $_.Name)
+		# {
+		#     $Enabled = "True"
+		# }
 
-        New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-        -DisplayName $_.Name -Service Any -Program Any `
-        -PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $SystemGroup -Profile $Profile -InterfaceType $Interface `
-        -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-        -EdgeTraversalPolicy Block -LocalUser Any -Owner $OwnerSID -Package $PackageSID `
-        -Description "System store apps generated rule." | Format-Output
-    }
+		New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+		-DisplayName $_.Name -Service Any -Program Any `
+		-PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $SystemGroup -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
+		-EdgeTraversalPolicy Block -LocalUser Any -Owner $OwnerSID -Package $PackageSID `
+		-Description "System store apps generated rule." | Format-Output
+	}
 }

@@ -52,7 +52,7 @@ $UserAccounts
 New-Test "Get-AccountSID:"
 foreach($Account in $UserAccounts)
 {
-    $(Get-AccountSID $Account)
+	$(Get-AccountSID $Account)
 }
 
 Exit-Test

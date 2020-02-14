@@ -61,12 +61,12 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Test if installation exists on system
 if ((Test-Installation "DemiseOfNations" ([ref]$TargetProgramRoot)) -or $Force)
 {
-    $Program = "$TargetProgramRoot\app_main.exe.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "Demise of Nations" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-    -LocalUser $UserAccountsSDDL `
-    -Description "" | Format-Output
+	$Program = "$TargetProgramRoot\app_main.exe.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "Demise of Nations" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
+	-LocalUser $UserAccountsSDDL `
+	-Description "" | Format-Output
 }

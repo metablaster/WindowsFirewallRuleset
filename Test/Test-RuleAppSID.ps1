@@ -63,20 +63,20 @@ $Users
 New-Test "Get-UserSID:"
 foreach($User in $Users)
 {
-    $(Get-UserSID($User))
+	$(Get-UserSID($User))
 }
 
 New-Test "Get-AppSID: foreach User"
 [string] $PackageSID = ""
 [string] $OwnerSID = ""
 foreach($User in $Users) {
-    New-Test "Processing for: $User"
-    $OwnerSID = Get-UserSID($User)
+	New-Test "Processing for: $User"
+	$OwnerSID = Get-UserSID($User)
 
-    Get-AppxPackage -User $User -PackageTypeFilter Bundle | ForEach-Object {
-        $PackageSID = (Get-AppSID $User $_.PackageFamilyName)
-        $PackageSID
-    }
+	Get-AppxPackage -User $User -PackageTypeFilter Bundle | ForEach-Object {
+		$PackageSID = (Get-AppSID $User $_.PackageFamilyName)
+		$PackageSID
+	}
 }
 
 New-Test "New-NetFirewallRule"

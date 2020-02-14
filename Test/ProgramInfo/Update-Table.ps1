@@ -49,14 +49,14 @@ Initialize-Table
 
 if (!$global:InstallTable)
 {
-    Write-Warning "Table not initialized"
-    exit
+	Write-Warning "Table not initialized"
+	exit
 }
 
 if ($global:InstallTable.Rows.Count -ne 0)
 {
-    Write-Warning "Table not clear"
-    exit
+	Write-Warning "Table not clear"
+	exit
 }
 
 New-Test "Fill table with Greenshot"

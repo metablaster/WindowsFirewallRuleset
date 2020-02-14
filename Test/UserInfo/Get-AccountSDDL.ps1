@@ -52,7 +52,7 @@ $UserAccounts
 New-Test "Get-AccountSDDL: (separated)"
 foreach($Account in $UserAccounts)
 {
-    $(Get-AccountSDDL $Account)
+	$(Get-AccountSDDL $Account)
 }
 
 New-Test "Get-AccountSDDL: (combined)"

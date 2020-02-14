@@ -67,14 +67,14 @@ New-Test "Relative path"
 # Test if installation exists on system
 if ((Test-Installation "TargetProgram" ([ref]$TargetProgramRoot)) -or $Force)
 {
-    $Program = "$TargetProgramRoot\PokerStars.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "TargetProgram" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 26002 `
-    -LocalUser $UserAccountsSDDL `
-    -Description "" | Format-Output
+	$Program = "$TargetProgramRoot\PokerStars.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "TargetProgram" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 26002 `
+	-LocalUser $UserAccountsSDDL `
+	-Description "" | Format-Output
 }
 
 Exit-Test

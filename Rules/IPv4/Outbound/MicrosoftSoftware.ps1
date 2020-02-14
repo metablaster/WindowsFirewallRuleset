@@ -79,20 +79,20 @@ $HelpViewerRoot = "%ProgramFiles(x86)%\Microsoft Help Viewer\v2.3"
 $WindowsKits = Get-WindowsKits $ComputerName
 if ($null -ne $WindowsKits)
 {
-    $SDKDebuggers = $WindowsKits |
-    Where-Object {$_.Product -like "WindowsDebuggersRoot*"} |
-    Sort-Object -Property Product |
-    Select-Object -Last 1 -ExpandProperty InstallPath
+	$SDKDebuggers = $WindowsKits |
+	Where-Object {$_.Product -like "WindowsDebuggersRoot*"} |
+	Sort-Object -Property Product |
+	Select-Object -Last 1 -ExpandProperty InstallPath
 }
 
 # Get latest NET Framework installation directory
 $NETFrameworkRoot = Get-NetFramework $ComputerName
 if ($null -ne $NETFrameworkRoot)
 {
-    $NETFrameworkRoot = $NETFrameworkRoot |
-    Sort-Object -Property Version |
-    Where-Object {$_.InstallPath} |
-    Select-Object -Last 1 -ExpandProperty InstallPath
+	$NETFrameworkRoot = $NETFrameworkRoot |
+	Sort-Object -Property Version |
+	Where-Object {$_.InstallPath} |
+	Select-Object -Last 1 -ExpandProperty InstallPath
 }
 
 # TODO: path not real and program not installed
@@ -106,157 +106,157 @@ $ToolsRoot = "%SystemDrive%\tools"
 # Test if installation exists on system
 if ((Test-Installation "VSCode" ([ref] $VSCodeRoot)) -or $Force)
 {
-    $Program = "$VSCodeRoot\Code.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "Visual Studio Code" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-    -LocalUser $UserAccountsSDDL `
-    -Description "" | Format-Output
+	$Program = "$VSCodeRoot\Code.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "Visual Studio Code" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+	-LocalUser $UserAccountsSDDL `
+	-Description "" | Format-Output
 }
 
 # Test if installation exists on system
 if ($null -ne $SDKDebuggers)
 {
-    $Program = "$SDKDebuggers\x86\windbg.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "WinDbg Symbol Server x86" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-    -LocalUser $UserAccountsSDDL `
-    -Description "WinDbg access to Symbols Server." | Format-Output
+	$Program = "$SDKDebuggers\x86\windbg.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "WinDbg Symbol Server x86" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+	-LocalUser $UserAccountsSDDL `
+	-Description "WinDbg access to Symbols Server." | Format-Output
 
-    $Program = "$SDKDebuggers\x64\windbg.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "WinDbg Symbol Server x64" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-    -LocalUser $UserAccountsSDDL `
-    -Description "WinDbg access to Symbols Server" | Format-Output
+	$Program = "$SDKDebuggers\x64\windbg.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "WinDbg Symbol Server x64" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+	-LocalUser $UserAccountsSDDL `
+	-Description "WinDbg access to Symbols Server" | Format-Output
 
-    $Program = "$SDKDebuggers\x86\symchk.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "Symchk Symbol Server x86" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-    -LocalUser $UserAccountsSDDL `
-    -Description "WinDbg Symchk access to Symbols Server." | Format-Output
+	$Program = "$SDKDebuggers\x86\symchk.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "Symchk Symbol Server x86" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+	-LocalUser $UserAccountsSDDL `
+	-Description "WinDbg Symchk access to Symbols Server." | Format-Output
 
-    $Program = "$SDKDebuggers\x64\symchk.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "Symchk Symbol Server x64" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-    -LocalUser $UserAccountsSDDL `
-    -Description "WinDbg Symchk access to Symbols Server" | Format-Output
+	$Program = "$SDKDebuggers\x64\symchk.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "Symchk Symbol Server x64" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+	-LocalUser $UserAccountsSDDL `
+	-Description "WinDbg Symchk access to Symbols Server" | Format-Output
 }
 
 # Test if installation exists on system
 if ((Test-Installation "Powershell64" ([ref] $PowerShell64Root)) -or $Force)
 {
-    $Program = "$PowerShell64Root\powershell_ise.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "PowerShell ISE x64" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-    -LocalUser $UserAccountsSDDL `
-    -Description "Rule to allow update of powershell" | Format-Output
+	$Program = "$PowerShell64Root\powershell_ise.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "PowerShell ISE x64" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+	-LocalUser $UserAccountsSDDL `
+	-Description "Rule to allow update of powershell" | Format-Output
 
-    $Program = "$PowerShell64Root\powershell.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "PowerShell x64" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-    -LocalUser $UserAccountsSDDL `
-    -Description "Rule to allow update of powershell" | Format-Output
+	$Program = "$PowerShell64Root\powershell.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "PowerShell x64" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+	-LocalUser $UserAccountsSDDL `
+	-Description "Rule to allow update of powershell" | Format-Output
 }
 
 # Test if installation exists on system
 if ((Test-Installation "Powershell86" ([ref] $PowerShell86Root)) -or $Force)
 {
-    $Program = "$PowerShell86Root\powershell_ise.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "PowerShell ISE x86" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-    -LocalUser $UserAccountsSDDL `
-    -Description "Rule to allow update of powershell" | Format-Output
+	$Program = "$PowerShell86Root\powershell_ise.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "PowerShell ISE x86" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+	-LocalUser $UserAccountsSDDL `
+	-Description "Rule to allow update of powershell" | Format-Output
 
-    $Program = "$PowerShell86Root\powershell.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "PowerShell x86" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-    -LocalUser $UserAccountsSDDL `
-    -Description "Rule to allow update of powershell" | Format-Output
+	$Program = "$PowerShell86Root\powershell.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "PowerShell x86" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+	-LocalUser $UserAccountsSDDL `
+	-Description "Rule to allow update of powershell" | Format-Output
 }
 
 # Test if installation exists on system
 if ((Test-Installation "OneDrive" ([ref] $OneDriveRoot)) -or $Force)
 {
-    $Program = "$OneDriveRoot\OneDriveStandaloneUpdater.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "OneDrive Update" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-    -LocalUser $UserAccountsSDDL `
-    -Description "Updater for OneDrive" | Format-Output
+	$Program = "$OneDriveRoot\OneDriveStandaloneUpdater.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "OneDrive Update" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+	-LocalUser $UserAccountsSDDL `
+	-Description "Updater for OneDrive" | Format-Output
 
-    $Program = "$OneDriveRoot\OneDrive.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "OneDrive" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-    -LocalUser $UserAccountsSDDL `
-    -Description "" | Format-Output
+	$Program = "$OneDriveRoot\OneDrive.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "OneDrive" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+	-LocalUser $UserAccountsSDDL `
+	-Description "" | Format-Output
 }
 
 # Test if installation exists on system
 if ((Test-Installation "HelpViewer" ([ref] $HelpViewerRoot)) -or $Force)
 {
-    $Program = "$HelpViewerRoot\HlpCtntMgr.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "Help Viewer (Content manager)" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-    -LocalUser $UserAccountsSDDL `
-    -Description "" | Format-Output
+	$Program = "$HelpViewerRoot\HlpCtntMgr.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "Help Viewer (Content manager)" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+	-LocalUser $UserAccountsSDDL `
+	-Description "" | Format-Output
 
-    $Program = "$HelpViewerRoot\HlpViewer.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "Help Viewer" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-    -LocalUser $UserAccountsSDDL `
-    -Description "Review downloadable content." | Format-Output
+	$Program = "$HelpViewerRoot\HlpViewer.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "Help Viewer" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+	-LocalUser $UserAccountsSDDL `
+	-Description "Review downloadable content." | Format-Output
 }
 
 # Test if installation exists on system
 if ($null -ne $NETFrameworkRoot)
 {
-    $Program = "$NETFrameworkRoot\mscorsvw.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "CLR Optimization Service" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-    -LocalUser $UserAccountsSDDL `
-    -Description "mscorsvw.exe is precompiling .NET assemblies in the background.
-    Once it's done, it will go away. Typically, after you install the .NET Redist,
-    it will be done with the high priority assemblies in 5 to 10 minutes and then will wait until your computer is idle to process the low priority assemblies." | Format-Output
+	$Program = "$NETFrameworkRoot\mscorsvw.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "CLR Optimization Service" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
+	-LocalUser $UserAccountsSDDL `
+	-Description "mscorsvw.exe is precompiling .NET assemblies in the background.
+	Once it's done, it will go away. Typically, after you install the .NET Redist,
+	it will be done with the high priority assemblies in 5 to 10 minutes and then will wait until your computer is idle to process the low priority assemblies." | Format-Output
 }
 
 # TODO: need installation check, and need to separate these rules

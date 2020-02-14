@@ -61,12 +61,12 @@ $OBSStudioRoot = "%ProgramFiles%\obs-studio\bin\64bit"
 # Test if installation exists on system
 if ((Test-Installation "OBSStudio" ([ref]$OBSStudioRoot)) -or $Force)
 {
-    $Program = "$OBSStudioRoot\obs64.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "OBSStudio" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-    -LocalUser $UserAccountsSDDL `
-    -Description "OBS Studio check for updates" | Format-Output
+	$Program = "$OBSStudioRoot\obs64.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "OBSStudio" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+	-LocalUser $UserAccountsSDDL `
+	-Description "OBS Studio check for updates" | Format-Output
 }

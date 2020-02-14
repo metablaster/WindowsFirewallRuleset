@@ -63,38 +63,38 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Test if installation exists on system
 if ((Test-Installation "JavaRuntime" ([ref]$JavaRuntimeRoot)) -or $Force)
 {
-    $Program = "$JavaRuntimeRoot\java.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "Runa java applets" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-    -LocalUser $UserAccountsSDDL `
-    -Description "Runa java applets" | Format-Output
+	$Program = "$JavaRuntimeRoot\java.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "Runa java applets" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+	-LocalUser $UserAccountsSDDL `
+	-Description "Runa java applets" | Format-Output
 }
 
 # Test if installation exists on system
 if ((Test-Installation "JavaUpdate" ([ref]$JavaUpdateRoot)) -or $Force)
 {
-    $Program = "$JavaUpdateRoot\jucheck.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "Java update" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-    -LocalUser $UserAccountsSDDL `
-    -Description "Update java software" | Format-Output
+	$Program = "$JavaUpdateRoot\jucheck.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "Java update" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+	-LocalUser $UserAccountsSDDL `
+	-Description "Update java software" | Format-Output
 }
 
 # Test if installation exists on system
 if ((Test-Installation "JavaPlugin" ([ref]$JavaPluginRoot)) -or $Force)
 {
-    $Program = "$JavaPluginRoot\jp2launcher.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "Java Plugin HTTP" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-    -LocalUser $UserAccountsSDDL `
-    -Description "Runa java applets" | Format-Output
+	$Program = "$JavaPluginRoot\jp2launcher.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "Java Plugin HTTP" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
+	-LocalUser $UserAccountsSDDL `
+	-Description "Runa java applets" | Format-Output
 }

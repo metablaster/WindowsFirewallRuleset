@@ -62,13 +62,13 @@ $OpenSSHRoot = "%ProgramFiles%\OpenSSH-Win64"
 # Test if installation exists on system
 if ((Test-Installation "OpenSSH" ([ref] $OpenSSHRoot)) -or $Force)
 {
-    $Program = "$OpenSSHRoot\ssh.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "OpenSSH" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 22 `
-    -LocalUser $UserAccountsSDDL `
-    -Description "OpenSSH is connectivity tool for remote login with the SSH protocol,
-    This rule applies to open source version of OpenSSH." | Format-Output
+	$Program = "$OpenSSHRoot\ssh.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "OpenSSH" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 22 `
+	-LocalUser $UserAccountsSDDL `
+	-Description "OpenSSH is connectivity tool for remote login with the SSH protocol,
+	This rule applies to open source version of OpenSSH." | Format-Output
 }

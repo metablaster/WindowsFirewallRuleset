@@ -62,25 +62,25 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Test if installation exists on system
 if ((Test-Installation "HWMonitor" ([ref]$HWMonitorRoot)) -or $Force)
 {
-    $Program = "$HWMonitorRoot\HWMonitor.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "HWMonitor" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-    -LocalUser $AdminAccountsSDDL `
-    -Description "Used for manual check for update" | Format-Output
+	$Program = "$HWMonitorRoot\HWMonitor.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "HWMonitor" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
+	-LocalUser $AdminAccountsSDDL `
+	-Description "Used for manual check for update" | Format-Output
 }
 
 # Test if installation exists on system
 if ((Test-Installation "CPU-Z" ([ref]$CPUZRoot)) -or $Force)
 {
-    $Program = "$CPUZRoot\cpuz.exe"
-    Test-File $Program
-    New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-    -DisplayName "CPU-Z" -Service Any -Program $Program `
-    -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-    -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-    -LocalUser $AdminAccountsSDDL `
-    -Description "Used for manual check for update" | Format-Output
+	$Program = "$CPUZRoot\cpuz.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "CPU-Z" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
+	-LocalUser $AdminAccountsSDDL `
+	-Description "Used for manual check for update" | Format-Output
 }

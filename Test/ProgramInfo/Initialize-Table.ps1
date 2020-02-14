@@ -52,35 +52,35 @@ Initialize-Table
 
 if (!$global:InstallTable)
 {
-    Write-Warning "Table not initialized"
-    exit
+	Write-Warning "Table not initialized"
+	exit
 }
 
 if ($global:InstallTable.Rows.Count -ne 0)
 {
-    Write-Warning "Table not clear"
-    exit
+	Write-Warning "Table not clear"
+	exit
 }
 
 New-Test "Fill table with data"
 
 foreach ($Account in $global:UserAccounts)
 {
-    Write-Host "User programs for: $Account"
-    $UserPrograms = Get-UserPrograms $Account
+	Write-Host "User programs for: $Account"
+	$UserPrograms = Get-UserPrograms $Account
 
-    if ($UserPrograms.Name -like "Greenshot*")
-    {
-        # Create a row
-        $Row = $global:InstallTable.NewRow()
+	if ($UserPrograms.Name -like "Greenshot*")
+	{
+		# Create a row
+		$Row = $global:InstallTable.NewRow()
 
-        # Enter data in the row
-        $Row.User = $Account.Split("\")[1]
-        $Row.InstallRoot = $UserPrograms | Where-Object { $_.Name -like "Greenshot*" } | Select-Object -ExpandProperty InstallLocation
+		# Enter data in the row
+		$Row.User = $Account.Split("\")[1]
+		$Row.InstallRoot = $UserPrograms | Where-Object { $_.Name -like "Greenshot*" } | Select-Object -ExpandProperty InstallLocation
 
-        # Add row to the table
-        $global:InstallTable.Rows.Add($Row)
-    }
+		# Add row to the table
+		$global:InstallTable.Rows.Add($Row)
+	}
 }
 
 New-Test "Table data"

@@ -64,30 +64,30 @@ New-Test "Get-UserSID:"
 
 foreach($User in $Users)
 {
-    Get-UserSID $User
+	Get-UserSID $User
 }
 
 foreach($Admin in $Admins)
 {
-    Get-UserSID $Admin
+	Get-UserSID $Admin
 }
 
 New-Test "Get-AppSID: foreach User"
 
 foreach($User in $Users) {
-    Write-Host "Processing for: $User"
-    Get-AppxPackage -User $User -PackageTypeFilter Bundle | ForEach-Object {
-        Get-AppSID $User $_.PackageFamilyName
-    }
+	Write-Host "Processing for: $User"
+	Get-AppxPackage -User $User -PackageTypeFilter Bundle | ForEach-Object {
+		Get-AppSID $User $_.PackageFamilyName
+	}
 }
 
 New-Test "Get-AppSID: foreach Admin"
 
 foreach($Admin in $Admins) {
-    Write-Host "Processing for: $Admin"
-    Get-AppxPackage -User $Admin -PackageTypeFilter Bundle | ForEach-Object {
-        Get-AppSID $Admin $_.PackageFamilyName
-    }
+	Write-Host "Processing for: $Admin"
+	Get-AppxPackage -User $Admin -PackageTypeFilter Bundle | ForEach-Object {
+		Get-AppSID $Admin $_.PackageFamilyName
+	}
 }
 
 Exit-Test
