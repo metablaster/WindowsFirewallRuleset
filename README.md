@@ -57,10 +57,10 @@ For more info see respective licences:\
 6. PowerShell Support for VSCode (Optional) [Download extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell)
 
 **If any of the requirements from point 1, 2 and 3 are not meet the scripts will refuse to run.**
-
+Anniversary Update (Version 1607)
 - All operating systems 10.0 (Major 10, Minor 0) and up are supported.
 - Powershell is built into Windows by default, you will probably need to install it or update on different systems.
-- NET Framework 4.8 is automatically installed (trhough Windwos update) on Windows 10 1903 (May 2019 Update).
+- NET Framework 4.7 is automatically installed (through Windwos update) on Windows 10 1607, in addition make sure you have [.NET 3.5 enabled](https://docs.microsoft.com/en-us/dotnet/framework/install/dotnet-35-windows-10), see control panel option.
 - You may want to have git to check out for updates, to easily switch between branches or to contribute code.
 - VS Code is preferred editor to edit the scripts for your needs or for contribution, any other editor is of course your choice.
 - If you get VSCode, you'll also need powershell extension for syntax highliting and code navigation among other cool features.
