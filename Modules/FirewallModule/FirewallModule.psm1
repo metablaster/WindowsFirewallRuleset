@@ -154,7 +154,8 @@ function Show-SDDL
 
 			# Parse out the SID using a handy RegEx
 			$ACLEntrySIDMatches = [regex]::Matches($ACLEntry,"(S(-\d+){2,8})")
-			$ACLEntrySIDMatches | ForEach-Object {$ACLEntrySID = $_.value}
+			# NOTE: original changed from $ACLEntrySID = $_.value to $ACLEntrySID += $_.value
+			$ACLEntrySIDMatches | ForEach-Object { $ACLEntrySID += $_.value }
 
 			If ($ACLEntrySID)
 			{

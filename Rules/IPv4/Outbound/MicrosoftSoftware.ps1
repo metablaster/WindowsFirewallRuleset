@@ -158,6 +158,11 @@ if ($null -ne $SDKDebuggers)
 	-Description "WinDbg Symchk access to Symbols Server" | Format-Output
 }
 
+# NOTE: administartors may need powershell, let them add them self temporary? currently adding them for PS x64
+[string[]] $AllUsers = $AdminAccounts
+$AllUsers += $UserAccounts
+$PowerShellUsers = (Get-AccountSDDL $AllUsers)
+
 # Test if installation exists on system
 if ((Test-Installation "Powershell64" ([ref] $PowerShell64Root)) -or $Force)
 {
@@ -176,7 +181,7 @@ if ((Test-Installation "Powershell64" ([ref] $PowerShell64Root)) -or $Force)
 	-DisplayName "PowerShell x64" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UserAccountsSDDL `
+	-LocalUser $PowerShellUsers `
 	-Description "Rule to allow update of powershell" | Format-Output
 }
 

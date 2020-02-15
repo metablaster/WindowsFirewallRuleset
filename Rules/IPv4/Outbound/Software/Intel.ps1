@@ -56,6 +56,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 #
 # Rules for Intel software
+# NOTE: these are rules for update checks, since these are ran as Administrator they disabled by default
 #
 
 # Test if installation exists on system
@@ -65,7 +66,7 @@ if ((Test-Installation "XTU" ([ref]$IntelXTURoot)) -or $Force)
 	Test-File $Program
 	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 	-DisplayName "Extreme tuning utility" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $AdminAccountsSDDL `
 	-Description "Extreme Tuning utility check for updates" | Format-Output

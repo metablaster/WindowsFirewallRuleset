@@ -89,6 +89,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $Force)
 	-LocalUser $UserAccountsSDDL `
 	-Description "Team explorer Git (looks like it's not used if using custom git installation)." | Format-Output
 
+	# TODO: need better approach for administrators, ie. powershell, VS, services etc. maybe separate group, or put into "temporary" group?
 	$Program = "$VSRoot\Common7\IDE\devenv.exe"
 	Test-File $Program
 	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `

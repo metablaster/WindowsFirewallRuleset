@@ -57,6 +57,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 #
 # Rules for HWMonitor
+# NOTE: these are rules for update checks, since these are ran as Administrator they disabled by default
 #
 
 # Test if installation exists on system
@@ -66,7 +67,7 @@ if ((Test-Installation "HWMonitor" ([ref]$HWMonitorRoot)) -or $Force)
 	Test-File $Program
 	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 	-DisplayName "HWMonitor" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 	-LocalUser $AdminAccountsSDDL `
 	-Description "Used for manual check for update" | Format-Output
@@ -79,7 +80,7 @@ if ((Test-Installation "CPU-Z" ([ref]$CPUZRoot)) -or $Force)
 	Test-File $Program
 	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 	-DisplayName "CPU-Z" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 	-LocalUser $AdminAccountsSDDL `
 	-Description "Used for manual check for update" | Format-Output

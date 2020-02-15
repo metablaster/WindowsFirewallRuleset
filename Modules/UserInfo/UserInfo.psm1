@@ -266,7 +266,9 @@ function Get-AccountSDDL
 
 # $DebugPreference = "Continue"
 
-# TODO: add more groups, guests, everyone etc...
+# TODO: add more groups, guests, everyone etc; we should make use of groups instead of SDDL for existing users probably?
+# but then individual users can't be removed by admin, on the other side there are rules which need all users regardless such as
+# browser updater for edge-chromium and extension users for problem services.
 # TODO: global configuration variables (in a separate script) should also include to set "USERS" instead of single user
 if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 {
