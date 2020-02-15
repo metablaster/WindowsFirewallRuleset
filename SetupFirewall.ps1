@@ -23,6 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+# TODO: set strict mode, use PSScriptAnalyzer from MS
 # Set-StrictMode -Version Latest
 
 . $PSScriptRoot\UnloadModules.ps1

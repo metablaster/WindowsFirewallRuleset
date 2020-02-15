@@ -36,7 +36,7 @@ Username for which to query app SID
 .PARAMETER AppName
 "PackageFamilyName" string
 .EXAMPLE
-sample: Get-AppSID("User", "Microsoft.MicrosoftEdge_8wekyb3d8bbwe")
+sample: Get-AppSID "User" "Microsoft.MicrosoftEdge_8wekyb3d8bbwe"
 .INPUTS
 None. You cannot pipe objects to Get-AppSID
 .OUTPUTS
@@ -56,24 +56,24 @@ function Get-AppSID
 		[string] $AppName
 	)
 
-	<# TODO: This error spams out for newly created users, most likely for packages not yet installed,
-	Need to force install them before applying rules, or skip applying rules.
-	Get-ACL : Cannot find path 'C:\Users\Test\AppData\Local\Packages\Microsoft.AccountsControl_cw5n1h2txyewy\AC' because it
-	does not exist.
-	At C:\Users\haxor\GitHub\WindowsFirewallRuleset\Modules\ProgramInfo\ProgramInfo.psm1:59 char:9
-	+     $ACL = Get-ACL "C:\Users\$UserName\AppData\Local\Packages\$AppNam ...
-	+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : ObjectNotFound: (:) [Get-Acl], ItemNotFoundException
-    + FullyQualifiedErrorId : GetAcl_PathNotFound_Exception,Microsoft.PowerShell.Commands.GetAclCommand
-	#>
-	$ACL = Get-ACL "C:\Users\$UserName\AppData\Local\Packages\$AppName\AC"
-	$ACE = $ACL.Access.IdentityReference.Value
+	$TargetPath = "C:\Users\$UserName\AppData\Local\Packages\$AppName\AC"
+	if (Test-Path -PathType Container -Path $TargetPath)
+	{
+		$ACL = Get-ACL "C:\Users\$UserName\AppData\Local\Packages\$AppName\AC"
+		$ACE = $ACL.Access.IdentityReference.Value
 
-	$ACE | ForEach-Object {
-		# package SID starts with S-1-15-2-
-		if($_ -match "S-1-15-2-") {
-			return $_
+		$ACE | ForEach-Object {
+			# package SID starts with S-1-15-2-
+			if($_ -match "S-1-15-2-") {
+				return $_
+			}
 		}
+	}
+	else
+	{
+		Set-Warning @("Store app '$AppName'", "not isnstalled by user '$UserName' or the app is missing")
+		Write-Note "To fix the problem let this user update all of it's apps in Windows store"
+		return $null
 	}
 }
 

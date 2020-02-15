@@ -87,4 +87,47 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -LocalUser Any -Owner $OwnerSID -Package $PackageSID `
 -Description "" | Format-Output
 
+New-Test "Test store apps for $User"
+$User = "testuser-apps"
+$OwnerSID = Get-UserSID($User)
+
+Get-AppxPackage -User $User -PackageTypeFilter Bundle | ForEach-Object {
+	$PackageSID = (Get-AppSID $User $_.PackageFamilyName)
+
+	if ($PackageSID)
+	{
+		New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+		-DisplayName $_.Name -Program Any -Service Any `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
+		-Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
+		-LocalUser Any -Owner $OwnerSID -Package $PackageSID `
+		-Description "" | Format-Output
+	}
+}
+
+New-Test "Test system apps for $User"
+Get-AppxPackage -User $User -PackageTypeFilter Main | Where-Object { $_.SignatureKind -eq "System" -and $_.Name -like "Microsoft*" } | ForEach-Object {
+	$PackageSID = (Get-AppSID $User $_.PackageFamilyName)
+
+	if ($PackageSID)
+	{
+		New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+		-DisplayName $_.Name -Program Any -Service Any `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
+		-Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
+		-LocalUser Any -Owner $OwnerSID -Package $PackageSID `
+		-Description "" | Format-Output
+	}
+}
+
+# New-Test "Test all aps for Admins"
+# $OwnerSID = Get-UserSID("Admin")
+
+# New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+# -DisplayName "All store apps" -Program Any -Service Any `
+# -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
+# -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
+# -LocalUser Any -Owner $OwnerSID -Package "*" `
+# -Description "" | Format-Output
+
 Exit-Test

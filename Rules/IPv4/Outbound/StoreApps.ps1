@@ -25,6 +25,7 @@ SOFTWARE.
 
 <#
 Make sure to update this list from time to time!
+This list is obtained from default windows firewall.
 
 Predefined user apps rule list:
 
@@ -122,12 +123,12 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $SystemGroup -Direction 
 
 #
 # Firewall predefined rules for Microsoft store Apps
-# TODO: making rules for each user separatelly, is it possible to make rules for all users?
+# TODO: exclude store apps rules for servers
+# TODO: currently making rules for each user separatelly, is it possible to make rules for all users?
 #
 
 #
 # Block Administrators by defalut
-# TODO: this rule doesn't seem to be good, -Package parameter is OK?
 #
 
 foreach ($Admin in $AdminNames)
@@ -136,13 +137,17 @@ foreach ($Admin in $AdminNames)
 	-DisplayName "Store apps for Administrators" -Service Any -Program Any `
 	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Any -InterfaceType $Interface `
 	-Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
-	-LocalUser Any -Owner (Get-UserSID $Admin) -Package "S-1-15-2-1" `
+	-LocalUser Any -Owner (Get-UserSID $Admin) -Package "*" `
 	-Description "Block admin activity for all store apps.
 	Administrators should have limited or no connectivity at all for maximum security." | Format-Output
 }
 
 #
 # Create rules for all network apps for each standard user
+# HACK: in Firewall GUI the rule may state wrong user in "Application packages" window, but the SID is the same for all users anyway, so OK,
+# also it doesn't matter because in the GUI, SID radio button is checked, not the package name.
+# TODO: rules for *some* apps which have not been updated by user will not work, example solitaire app; need to either update them or detect this case.
+# NOTE: updating apps will not work unless also "Extension users" are updated in WindowsServices.ps1, meaning re-run the script.
 #
 
 foreach ($User in $UserNames)
@@ -156,40 +161,53 @@ foreach ($User in $UserNames)
 	Get-AppxPackage -User $User -PackageTypeFilter Bundle | ForEach-Object {
 
 		$PackageSID = (Get-AppSID $User $_.PackageFamilyName)
-		$Enabled = "False"
 
-		if ($NetworkApps -contains $_.Name)
+		# Possible package not found
+		if ($PackageSID)
 		{
-			$Enabled = "True"
-		}
+			$Enabled = "False"
 
-		New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-		-DisplayName $_.Name -Service Any -Program Any `
-		-PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-		-LocalUser Any -Owner $OwnerSID -Package $PackageSID `
-		-Description "Store apps generated rule for $User" | Format-Output
+			# Enable only networking apps
+			if ($NetworkApps -contains $_.Name)
+			{
+				$Enabled = "True"
+			}
+
+			New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+			-DisplayName $_.Name -Service Any -Program Any `
+			-PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+			-LocalUser Any -Owner $OwnerSID -Package $PackageSID `
+			-Description "Store apps generated rule for $User" | Format-Output
+		}
 	}
 
 	#
 	# Create rules for system apps
 	#
 
-	Get-AppxPackage -PackageTypeFilter Main | Where-Object { $_.SignatureKind -eq "System" -and $_.Name -like "Microsoft*" } | ForEach-Object {
+	# NOTE: -User parameter is probably not needed here? aded while troubleshooting the hack above.
+	Get-AppxPackage -User $User -PackageTypeFilter Main | Where-Object { $_.SignatureKind -eq "System" -and $_.Name -like "Microsoft*" } | ForEach-Object {
 
 		$PackageSID = (Get-AppSID $User $_.PackageFamilyName)
-		$Enabled = "False"
 
-		if ($NetworkApps -contains $_.Name)
+		# Possible package not found
+		if ($PackageSID)
 		{
-			$Enabled = "True"
-		}
+			$Enabled = "False"
 
-		New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
-		-DisplayName $_.Name -Service Any -Program Any `
-		-PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $SystemGroup -Profile $Profile -InterfaceType $Interface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-		-LocalUser Any -Owner $OwnerSID -Package $PackageSID `
-		-Description "System store apps generated rule for $User" | Format-Output
+			# Enable only networking apps
+			if ($NetworkApps -contains $_.Name)
+			{
+				$Enabled = "True"
+			}
+
+			New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+			-DisplayName $_.Name -Service Any -Program Any `
+			-PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $SystemGroup -Profile $Profile -InterfaceType $Interface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+			-LocalUser Any -Owner $OwnerSID -Package $PackageSID `
+			-Description "System store apps generated rule for $User" | Format-Output
+		}
 	}
 }
