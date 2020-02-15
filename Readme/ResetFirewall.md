@@ -37,8 +37,8 @@ Follow bellow steps to reset default windows firewall:
 6. if still problems verify your router and conectivity with other devices on same router.
 
 **Follow bellow steps to reset network**
-Type each command into elevated powershell:
 
+Type each command into elevated powershell:
 ```
 ipconfig /flushdns
 ipconfig /release
