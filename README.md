@@ -49,7 +49,7 @@ For more info see respective licences:\
 [WindowsFirewallRuleset\LICENSE](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/LICENSE)\
 [Indented.Net.IP\LICENSE](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Modules/Indented.Net.IP/LICENSE)\
 [VSSetup\LICENSE.txt](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Modules/VSSetup/LICENSE.txt)\
-[Utility\Licences](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Utility/Licences/)
+[Utility\Licences](https://github.com/metablaster/WindowsFirewallRuleset/tree/develop/Utility/Licenses/)
 
 # Minimum system requirements
 1. Windows 10 Pro/Enterprise, Windows Server 2019
