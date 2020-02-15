@@ -36,10 +36,14 @@
 
 # What are the core benefits of this firewall/project?
 
-1. Unlike normal windows firewall in control panel, these rules are loaded into GPO firewall (Local group policy), meaning random programs which install rules as part of their installation process or system settings changes will have no effect on firewall unless you explicitly make an exception, therefore you have full control over the firewall.
-2. Unlike default windows firewall rules, these rules are much more restrictive such as, tied to explicit user accounts, rules apply to specific ports, network interfaces, specific programs, services etc.
-3. Unlike default (or your custom) rules you will know which rules have no effect or are redundant due to ie. uninstalled program or a missing windows service which no longer exists or are redundant/invalid for what ever other reason.
+1. Unlike windows firewall in control panel, these rules are loaded into GPO firewall (Local group policy), meaning random programs which install rules as part of their installation process or system settings changes will have no effect on firewall unless you explicitly make an exception.
+
+2. Unlike default windows firewall rules, these rules are more restrictive such as, tied to explicit user accounts, rules apply to specific ports, network interfaces, specific programs, services etc.
+
+3. Unlike default (or your own) rules you will know which rules have no effect or are redundant due to ie. uninstalled program or a missing windows service which no longer exists or are redundant/invalid for what ever other reason.
+
 4. Changing rule attributes such as ports, adresses and similar is so much easier since the rules are in scripts, so you can use editor tools such as CTRL + F to perform bulk operations on your rules, doing this in Windows firewall GUI is beyond all pain.
+
 5. Default outbound is block unless there is a rule to explicitly allow traffic, in default windows firewall this is not possible unless you have rules for every possible windows program/service, thanks to this collection of rules setting default outbound to block requres very little additinoal work.
 
 # Licenses
@@ -78,6 +82,8 @@ For more info see respective licences:\
 
 # I don't have Windows 10 or Windows Server
 
+By default this project is tested and designed for most recent Windows/Servers and that is known to work, making use of it on older systems requires a bit of work.
+
 [This document](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/LegacySupport.md) describes how to make use of this project on older Windows systems such as Windows 7 or Server 2008
 
 # Step by step quick start
@@ -86,7 +92,7 @@ For more info see respective licences:\
 - You may loose internet conectivity for some of your programs or in rare cases even lose internet conectivity completely, if that happens, you can either temporarily allow outbound rules or run `ResetFirewall.ps1` script, to reset firewall to previous state and clear GPO firewall.
 - Inside the Readme folder there is a `ResetFirewall.md`, a guide on how to do it manually, by hand, if for some reason you're unable to run the script, or the script does not solve your problems.
 - Also note that your current/existing rules will not be deleted unless you have rules in GPO whose group name interfere with group names from this ruleset.
-- If you want to be 100% sure please export your current GPO rules first, for more info see [ManageGPOFirewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/ManageGPOFirewall.md)
+- If you want to be 100% sure please export your current GPO rules first, for more info see [ManageGPOFirewall.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/ManageGPOFirewall.md)
 - The scripts will ask you what rules you want, to minimize internet connectivity trouble you should apply at least all generic networking and OS related rules such as BasicNetworking, ICMP, WindowsSystem, WindowsServices, Multicast etc. also do not ignore IPv6, Windows does need IPv6!
 
 **NOTE:**
@@ -142,7 +148,7 @@ Deleting all rules or reveting to previsous state can also be done with `ResetFi
 
 # Manage loaded rules
 There are 2 ways to manage your rules:
-1. Using Local Group Policy, this method gives you basic freedom on what you can do whith the rules, such as disabling them or changing some attributes.
+1. Using Local Group Policy, this method gives you basic freedom on what you can do whith the rules, such as disabling them or changing some attributes. For more information see [ManageGPOFirewall.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/ManageGPOFirewall.md)
 2. Editting Powershell scripts, this method gives you full control, you can improve the rules, add new ones or screw them up.
 
 What ever your setup is, you will surelly need to perform additinal work such as adding more rules in GPO to allow programs for which rules do not exist, or to reconfigure existing rules.
@@ -201,5 +207,5 @@ for example just saying: allow TCP outbound port 80 for any address or any user 
 # More information and help
 Inside the [Readme](https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Readme) folder you will find usefull information not only about this project but also general information on how to troubleshoot firewall and network problems, or gather more relevant information.
 
-It may answer some of your questions, you should go ahead and read it!\
+It may answer some of your questions, for example [MonitoringFirewall.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/MonitoringFirewall.md) explains how to monitor firewall you should go ahead and read it!\
 btw. It's recommended you read those papers here on github because of formatting and screenshots.
