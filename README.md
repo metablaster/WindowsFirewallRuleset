@@ -1,15 +1,18 @@
 
 # About Windows Firewall Ruleset
+
 - Windows firewall rules organized into individual powershell scripts according to:
+
 1. Rule group
 2. Traffic direction
 3. IP version (IPv4 / IPv6)
 4. Further sorted according to programs and services
 
-- such as for example:
+- Such as for example:
+
 2. ICMP traffic
 3. Browser rules
-4. rules for Windows system
+4. Rules for Windows system
 5. Store apps
 6. Windows services
 7. Microsoft programs
@@ -18,17 +21,21 @@
 10. multicast traffic
 11. and the list goes on...
 
-- in addition to rules you will find a bunch of powershell functions to gather info relevant for building a firewall such as:
-1. computers
+- In addition to firewall rules you will find a number of powershell modules, scripts and functions used to gather info relevant for building a firewall such as:
+
+1. computers on network
 2. installed programs
 3. users on system
-4. network configuration etc
-- meaning this project is a good base to easily extend your firewall and include more rules.
-- You can choose which rulles you want, and apply only those or apply them all with single command to your firewall.
-- All the rules are loaded into Local group policy giving you full power over default windows firewall.
-- Currently there are some 650+ firewall rules.
+4. network configuration etc.
+
+- Meaning this project is a good base to easily extend your firewall and include more rules.
+- Currently there are some 650+ firewall rules included.
+- You can choose which rulles you want, and apply only those or apply them all with master script to your firewall.
+- All the rules are loaded into Local Group Policy (GPO), giving you full power over the default windows firewall.
+
 
 # What are the core benefits of this firewall/project?
+
 1. Unlike normal windows firewall in control panel, these rules are loaded into GPO firewall (Local group policy), meaning random programs which install rules as part of their installation process or system settings changes will have no effect on firewall unless you explicitly make an exception, therefore you have full control over the firewall.
 2. Unlike default windows firewall rules, these rules are much more restrictive such as, tied to explicit user accounts, rules apply to specific ports, network interfaces, specific programs, services etc.
 3. Unlike default (or your custom) rules you will know which rules have no effect or are redundant due to ie. uninstalled program or a missing windows service which no longer exists or are redundant/invalid for what ever other reason.
@@ -36,6 +43,7 @@
 5. Default outbound is block unless there is a rule to explicitly allow traffic, in default windows firewall this is not possible unless you have rules for every possible windows program/service, thanks to this collection of rules setting default outbound to block requres very little additinoal work.
 
 # Licenses
+
 This project **"WindowsFirewallRuleset"** is licensed under **MIT** license.\
 Subproject [Indented.Net.IP](https://github.com/indented-automation/Indented.Net.IP) (3rd party code) located in **"Modules\Indented.Net.IP"** subfolder is licensed under **ISC** license.\
 Subproject [VSSetup](https://github.com/microsoft/vssetup.powershell) (3rd party code) located in **"Modules\VSSetup"** subfolder is licensed under **MIT** license.\
@@ -43,7 +51,7 @@ Various 3rd party scripts located in **"Utility"** subfolder have their own lice
 
 License, Copyright notices and all material of subprojects is in their own folder.\
 License and Copyright notices for this project is in project root folder.\
-License, Copyright notices, and links, for "Utility" scripts are included into individual script files directly.
+License, Copyright notices, and links, for "Utility" scripts are located in "Utility" folder and also included into individual script files directly.
 
 For more info see respective licences:\
 [WindowsFirewallRuleset\LICENSE](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/LICENSE)\
@@ -51,7 +59,7 @@ For more info see respective licences:\
 [VSSetup\LICENSE.txt](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Modules/VSSetup/LICENSE.txt)\
 [Utility\Licences](https://github.com/metablaster/WindowsFirewallRuleset/tree/develop/Utility/Licenses/)
 
-# Minimum system requirements
+# Minimum supported system requirements
 1. Windows 10 Pro/Enterprise, Windows Server 2019
 2. Windows Powershell 5.1 [Download Powershell](https://github.com/PowerShell/PowerShell)
 3. NET Framework 4.7 [Download Net Framework](https://dotnet.microsoft.com/download/dotnet-framework)
@@ -60,56 +68,26 @@ For more info see respective licences:\
 6. PowerShell Support for VSCode (Optional) [Download extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell)
 
 **If any of the requirements from point 1, 2 and 3 are not meet the scripts will refuse to run.**
-Anniversary Update (Version 1607)
-- All operating systems 10.0 (Major 10, Minor 0) and up are supported.
-- Powershell is built into Windows by default, you will probably need to install it or update on different systems.
-- NET Framework 4.7 is automatically installed (through Windwos update) on Windows 10 1607, in addition make sure you have [.NET 3.5 enabled](https://docs.microsoft.com/en-us/dotnet/framework/install/dotnet-35-windows-10), see control panel option.
+
+- All operating systems 10.0 (Major 10, Minor 0) and up are supported, that includes "regular" Windows, Servers etc.
+- Powershell is built into Windows by default, you will probably need to install it or update on older systems.
+- NET Framework 4.7 is automatically installed on Windows 10 - 1607 and Server 2019 - 1809, in addition make sure you have [.NET 3.5 enabled](https://docs.microsoft.com/en-us/dotnet/framework/install/dotnet-35-windows-10), see control panel option on that link.
 - You may want to have git to check out for updates, to easily switch between branches or to contribute code.
-- VS Code is preferred editor to edit the scripts for your needs or for contribution, any other editor is of course your choice.
-- If you get VSCode, you'll also need powershell extension for syntax highliting and code navigation among other cool features.
+- VS Code is preferred and recommended editor to navigate project and edit the scripts for your needs or for contribution, any other editor is of course your choice.
+- If you get VSCode, you'll also need powershell extension for code navigation and PowerShell specific features.
 
 # I don't have Windows 10 or Windows Server
-**First, note that Home versions of Windows do not have GPO (Local Group Policy), therefore not possible to make use of this project.**
 
-To be able to apply rules to older systems such as Windows 7 or Windows server 2008, you'll need to modify code.\
-At a bare minimum you should do the following 4 modifications:
-
-**Modification 1:**\
-edit the `Modules\System\System.psm1` to allow execution for older system.
-
-**Modification 2:**\
-edit the `Modules\FirewallModule\FirewallModule.psm1` and define new variable that defines your system version, following variable is defined to target Windows 10.0 editions and above by default for all rules.\
-```New-Variable -Name Platform -Option Constant -Scope Global -Value "10.0+""```
-
-For example for Windows 7, define a new variable that looks like this:\
-```New-Variable -Name PlatformWin7 -Option Constant -Scope Global -Value "6.1"```
-
-`Platfrom` variable specifies which version of Windows the associated rule applies.\
-The acceptable format for this parameter is a number in the Major.Minor format.
-
-**Modification 3:**\
-edit individual ruleset scripts, and take a look which rules you want or need to be loaded on that system,\
-then simply replace ```-Platform $Platform``` with ```-Platform $PatformWin7``` for each rule you want.
-
-In VS Code for example you can also simply (CTRL + F) for each script and replace all instances. very simple.\
-If you miss something you can delete, add or modify rules in GPO later.
-
-Note that if you define your platform globaly (ie. ```$Platform = "6.1"```) instead of making your own variable, just replacing the string, but do not exclude unrelated rules, most of the rules should work, but ie. rules for Store Apps will fail to load.\
-Also ie. rules for programs and services that do not exist on system will be most likely applied but redundant.
-
-What this means, is, just edit the GPO later to refine your imports if you go that route, or alternatively revisit your edits and re-run individual scripts again.
-
-**Modification 4:**\
-Visit `Test` folder and run all tests individually to confirm modules and their functions work as expected, any failure should be fixed.
+[This document](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/LegacySupport.md) describes how to make use of this project on older Windows systems such as Windows 7 or Server 2008
 
 # Step by step quick start
 
 **WARNING:**
-- You may loose internet conectivity for some of your programs or in rare cases even lose internet conectivity completely, if that happens, you can run `ResetFirewall.ps1` to reset firewall to previous state and clear GPO firewall.
+- You may loose internet conectivity for some of your programs or in rare cases even lose internet conectivity completely, if that happens, you can either temporarily allow outbound rules or run `ResetFirewall.ps1` script, to reset firewall to previous state and clear GPO firewall.
 - Inside the Readme folder there is a `ResetFirewall.md`, a guide on how to do it manually, by hand, if for some reason you're unable to run the script, or the script does not solve your problems.
 - Also note that your current/existing rules will not be deleted unless you have rules in GPO whose group name interfere with group names from this ruleset.
-- To be 100% sure please export your current GPO rules first, (if you don't know to do that, then you most likely don't have GPO rules)
-- The script will ask you what rules you want, to minimize internet connectivity trouble you should apply at least all generic networking and OS related rules such as BasicNetworking, ICMP, WindowsSystem, WindowsServices, Multicast etc. also do not ignore IPv6, Windows really depends on these!
+- If you want to be 100% sure please export your current GPO rules first, for more info see [ManageGPOFirewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/ManageGPOFirewall.md)
+- The scripts will ask you what rules you want, to minimize internet connectivity trouble you should apply at least all generic networking and OS related rules such as BasicNetworking, ICMP, WindowsSystem, WindowsServices, Multicast etc. also do not ignore IPv6, Windows does need IPv6!
 
 **NOTE:**
 - If you would like to modify basic behavior of execution, such as force loading rules and various default actions then visit `Modules` folder, open each module, scroll down and there you'll find global variables which are used for this.
@@ -137,9 +115,8 @@ If needed, you can find these installation variables in individual scripts insid
 12. If you encounter errors or warnings, you have several options such as, ignore the errors/warnings or update script that produced the error and re-run that script once again later.
 13. Once execution is done recall execution policy from step 5 and type: (ie. if it was "RemoteSigned" which is default)\
 ```Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force```
-14. Now that rules are applied you may need to adjust some of them in Local Group Policy, not all the rules are enabled by default and you may want to toggle default Allow/Block behavior for some rules, rules for programs which do not exist need to be made additionally.\
-See next sections for more info.
-15. If you're unable to connect to internet, you can temporarly open outbound firewall in GPO, that should work, if not, reset firewall as explained before.
+14. Now that rules are applied you may need to adjust some of them in Local Group Policy, not all the rules are enabled by default and you may want to toggle default Allow/Block behavior for some rules, rules for programs which do not exist need to be made additionally.
+15. If you're unable to connect to internet, you can temporarly open outbound firewall in GPO, that should work, if not and you're unable to troubleshoot the problem, then reset firewall as explained before and take a look into `Readme` folder.
 
 # Where are my rules?
 Rules are loaded into Local group policy, follow bellow steps to open local group policy.
@@ -161,7 +138,7 @@ into Local Group Policy.
 # Deleting rules
 At the moment the easiest way is to select all the rules you want to delete in Local Group Policy, right click and delete.\
 To revert to your old firewall state, you will need to delete all the rules from GPO, and set all properties to "Not configured" when right clicking on node `Windows Defender Firewall with Advanced Security - Local Group Policy Object`\
-Deleting all rules or reveting to previsous state can be done with `ResetFirewall.ps1` script.
+Deleting all rules or reveting to previsous state can also be done with `ResetFirewall.ps1` script.
 
 # Manage loaded rules
 There are 2 ways to manage your rules:
@@ -185,18 +162,26 @@ There are two methods to be up to date with firewall:
 - First navigate to folder where your instance of WindowsFirewallRuleset instance is, for example:
 - Type: `dir` to list directories, ```cd SomeDirectoryName``` to move to some directory or ```cd ..``` to go one directory back
 - Type: (or copy paste command(s) and hit enter) ```cd WindowsFirewallRuleset``` to move into WindowsFirewallRuleset folder
-- This command is typed only once for initial setup:\
+- This command is typed only once for initial setup:
+
+```git@github.com:metablaster/WindowsFirewallRuleset.git```
+
+Otherwise if you cloned repo via HTTPS and want HTTPS (no SSH), then:
+
 ```git remote add upstream https://github.com/metablaster/WindowsFirewallRuleset```
+
 - Following 2 sets of commands are typed each time, to tell git you want updates from master (stable) branch:
 - Type: ```git checkout master```
 - Type: ```git fetch upstream```
 - Type: ```git merge upstream/master```
+
 - Following commands are to tell git you want updates from develop (unstable/beta) branch
 - Type: ```git checkout develop```
 - Type: ```git fetch upstream```
 - Type: ```git merge upstream/develop```
 
-Of course you can switch to from one branch to another with git in powershell as many times as you want and all files will be auto updated without the need to redownload or re-setup anything.\
+Of course you can switch to from one branch to another with git in powershell as many times as you want and all files will be auto updated without the need to redownload or re-setup anything, for more info see [git documentation](https://git-scm.com/doc)
+
 That's it, your scripts are now up to date, execute them as you desire (or follow steps from "Quick start" section) to apply changes to your firewall.
 
 # Contribution or suggestions
@@ -207,7 +192,7 @@ Feel free to suggest or contribute new rules, or improvements for existing rules
 Just make sure you follow existing code style, as follows:
 1. Note that each rule uses exactly the same order or paramters split into exactly the same number of lines.\
 This is so that when you need to search for something it's easy to see what is where right away.
-2. Provide documentation and official reference for your rules so that it can be easy to verify that these rules do not contain mistakes, for example, for ICMP rules you would provide a link to [IANA](https://www.iana.org) with relevant reference document.
+2. Provide some documentation or official reference for your rules so that it can be easy to verify that these rules do not contain mistakes, for example, for ICMP rules you would provide a link to [IANA](https://www.iana.org) with relevant reference document.
 3. If you would like to suggest new rules or improving existing ones, but you can't push an update here, please open new issue here on github and provide details prefferably with documentation.
 4. To contribute rules, it is also important that each rule contains good description of it's purpose, when a user clicks on a rule in firewall GUI he wants to see what this rule is about and easily conclude whether to enable/disable the rule or allow/block the traffic.
 5. It is also important that a rule is very specific and not generic, that means specifying protocol, IP addresses, ports, system user, interface type and other relevant information.\
