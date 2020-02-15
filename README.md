@@ -109,18 +109,39 @@ By default this project is tested and designed for most recent Windows/Servers a
 4. Toggle on `Replace Command Prompt with Windows Powershell in the menu when I right click the start button`
 5. Right click on Start button in Windows system
 6. Click `Windows Powershell (Administrator)` to open Powershell as Administrator (Input Admin password if needed)
-7. Type: (or copy paste command(s) and hit enter) ```Get-ExecutionPolicy``` and remeber what the ouput is.
-6. Type: ```Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force```
-7. Type: ```cd C:\```
-8. Type: ```cd WindowsFirewallRuleset-master``` (ofcourse if extracted folder name is something else then update this command)
+7. Type or copy paste following commands and hit enter for each
+```powershell
+Get-ExecutionPolicy
+```
+remeber what the ouput of the above command is.
+
+6. Get current execution policy:
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force
+```
+7. Move to C root drive, this is where you extracted your downloaded zip file:
+```powershell
+cd C:\
+```
+8. cd into that folder, ofcourse rename the command if your extracted folder is called something else:
+```powershell
+cd WindowsFirewallRuleset-master
+```
 9. Rules for programs such as internet browser, Visual Studio etc. depend on installation variables.\
 Most paths are auto-searched and variables are updated, otherwise you get warning and description on how to fix the problem,
 If needed, you can find these installation variables in individual scripts inside `Rules` folder.
-10. Back to Powershell console and type into console: ```.\SetupFirewall.ps1``` and hit enter (You will be asked what kind of rulesets you want)
+10. Back to Powershell console and type into console:
+```powershell
+.\SetupFirewall.ps1
+```
+hit enter and you will be prompted what kind of rulesets you want.
+
 11. Follow prompt output, (ie. hit enter each time to proceed until done), it will take at least 10 minutes of your attention.
 12. If you encounter errors or warnings, you have several options such as, ignore the errors/warnings or update script that produced the error and re-run that script once again later.
-13. Once execution is done recall execution policy from step 5 and type: (ie. if it was "RemoteSigned" which is default)\
-```Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force```
+13. Once execution is done recall execution policy from step 5 and type: (ie. if it was "RemoteSigned" which is default)
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force
+```
 14. Now that rules are applied you may need to adjust some of them in Local Group Policy, not all the rules are enabled by default and you may want to toggle default Allow/Block behavior for some rules, rules for programs which do not exist need to be made additionally.
 15. If you're unable to connect to internet, you can temporarly open outbound firewall in GPO, that should work, if not and you're unable to troubleshoot the problem, then reset firewall as explained before and take a look into `Readme` folder.
 
