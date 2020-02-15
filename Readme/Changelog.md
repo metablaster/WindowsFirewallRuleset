@@ -6,6 +6,7 @@
 2. Rebalance rules for administrators, disabled where not needed, added where needed
 3. More and updated temporary rules
 4. Updated documentation, specifically main readme.md, FirewallParameters.md and more PS command samples.
+5. Add function to query SQL Instances on network
 
 # Bugfixes
 1. Executing rules for store apps would fail for new Windows accounts

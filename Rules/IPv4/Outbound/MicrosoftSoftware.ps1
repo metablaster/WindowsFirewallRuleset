@@ -58,10 +58,13 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 $VSCodeRoot = "%ProgramFiles%\Microsoft VS Code"
 $WebPlatformRoot = "%ProgramFiles%\Microsoft\Web Platform Installer"
-$SQLServerRoot = "%ProgramFiles(x86)%\Microsoft SQL Server\140"
+# $SQLServerBinnRoot = Get-SQLInstances | Select-Object -ExpandProperty SQLBinRoot
+$SQLManagementStudioRoot = Get-SQLManagementStudio | Select-Object -ExpandProperty InstallPath
+$SQLDTSRoot = Get-SQLInstances | Select-Object -ExpandProperty SQLPath
 $PowerShell64Root = "%SystemRoot%\System32\WindowsPowerShell\v1.0"
 $PowerShell86Root = "%SystemRoot%\SysWOW64\WindowsPowerShell\v1.0"
 $OneDriveRoot = "%ProgramFiles(x86)%\Microsoft OneDrive"
+# NOTE: Gets installed probably by SQL management studio or server
 $HelpViewerRoot = "%ProgramFiles(x86)%\Microsoft Help Viewer\v2.3"
 
 # Get Windows SDK root
@@ -266,6 +269,26 @@ if ($null -ne $NETFrameworkRoot)
 	it will be done with the high priority assemblies in 5 to 10 minutes and then will wait until your computer is idle to process the low priority assemblies." | Format-Output
 }
 
+# TODO: old directory, our Get-SQLManagementStudio may not work as expected for older versions
+# $Program = "$SQLServerRoot\Tools\Binn\ManagementStudio\Ssms.exe"
+$Program = "$SQLManagementStudioRoot\Common7\IDE\Ssms.exe"
+Test-File $Program
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "SQL Server Management Studio" -Service Any -Program $Program `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+-LocalUser $UserAccountsSDDL `
+-Description "" | Format-Output
+
+$Program = "$SQLDTSRoot\Binn\DTSWizard.exe"
+Test-File $Program
+New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+-DisplayName "SQL Server Import and Export Wizard" -Service Any -Program $Program `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+-LocalUser $UserAccountsSDDL `
+-Description "" | Format-Output
+
 # TODO: need installation check, and need to separate these rules
 # Assume unfinished checks for all of the above directories exist
 Write-Note "in this script confirm switch is enabled for unfinished program detection, and default is Yes, even for failures!"
@@ -279,24 +302,6 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -DisplayName "Web Platform Installer" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser $UserAccountsSDDL `
--Description "" | Format-Output
-
-$Program = "$SQLServerRoot\Tools\Binn\ManagementStudio\Ssms.exe"
-Test-File $Program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "SQL Server Management Studio" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser $UserAccountsSDDL `
--Description "" | Format-Output
-
-$Program = "$SQLServerRoot\DTS\Binn\DTSWizard.exe"
-Test-File $Program
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "SQL Server Import and Export Wizard" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 -LocalUser $UserAccountsSDDL `
 -Description "" | Format-Output
 

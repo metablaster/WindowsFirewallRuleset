@@ -17,3 +17,4 @@
 16. Limit code to 80-100 columns rule, subject to exceptoins
 17. Provide following keywords in function comments: .DESCRIPTION .LINK .COMPONENT
 18. Access is denied randomly while executing rules, need some check around this
+19. Need to see which functions/commands may throw and setup try catch blocks

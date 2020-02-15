@@ -551,6 +551,7 @@ System.Management.Automation.PSCustomObject list of programs installed for all u
 #>
 function Get-AllUserPrograms
 {
+	# TODO: this function need to be tested on server, UserData key not found
 	param (
 		[parameter(Mandatory = $true)]
 		[string] $ComputerName
@@ -1573,6 +1574,96 @@ function Get-WindowsDefender
 	}
 }
 
+<#
+.SYNOPSIS
+Microsoft SQL Server Management Studio
+.PARAMETER ComputerName
+Computer name for which to list installed installed framework
+.EXAMPLE
+Get-SQLManagementStudio COMPUTERNAME
+
+	RegKey ComputerName Version      InstallPath
+	------ ------------ -------      -----------
+	18     COMPUTERNAME   15.0.18206.0 %ProgramFiles(x86)%\Microsoft SQL Server Management Studio 18
+
+.INPUTS
+None. You cannot pipe objects to Get-SQLManagementStudio
+.OUTPUTS
+System.Management.Automation.PSCustomObject for installed Microsoft SQL Server Management Studio
+ #>
+ function Get-SQLManagementStudio
+{
+	param (
+		[parameter(Mandatory = $false)]
+		[string] $ComputerName = $env:COMPUTERNAME
+	)
+
+	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
+	{
+		if ([System.Environment]::Is64BitOperatingSystem)
+		{
+			# 64 bit system
+			# NOTE: in the far future this may need to be updated, if SSMS becomes x64 bit
+			$HKLM = "SOFTWARE\WOW6432Node\Microsoft\Microsoft SQL Server Management Studio"
+		}
+		else
+		{
+			# 32 bit system
+			$HKLM = "SOFTWARE\Microsoft\Microsoft SQL Server Management Studio"
+
+		}
+
+		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
+		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
+
+		$ManagementStudio = @()
+		$RootKey = $RemoteKey.OpenSubkey($HKLM)
+
+		if (!$RootKey)
+		{
+			Set-Warning "Failed to open RootKey: $HKLM"
+		}
+		else
+		{
+			foreach ($HKLMKey in $RootKey.GetSubKeyNames())
+			{
+				$SubKey = $RootKey.OpenSubkey($HKLMKey)
+
+				if (!$SubKey)
+				{
+					Set-Warning "Failed to open SubKey: $HKLMKey"
+					continue
+				}
+
+				$RegKey = Split-Path $SubKey.ToString() -Leaf
+				$InstallLocation = $SubKey.GetValue("SSMSInstallRoot")
+
+				if (![System.String]::IsNullOrEmpty($InstallLocation))
+				{
+					# TODO: Use InstallPath in ever function, some functions have InstallRoot property instead
+					# also try to get same set of properties for all req querries
+					$ManagementStudio += New-Object -TypeName PSObject -Property @{
+						"ComputerName" = $ComputerName
+						"RegKey" = $RegKey
+						"Version" = $SubKey.GetValue("Version")
+						"InstallPath" = Format-Path $InstallLocation }
+				}
+				else
+				{
+					Set-Warning "Failed to read registry entry $RegKey\SSMSInstallRoot"
+				}
+			}
+		}
+
+		return $ManagementStudio
+	}
+	else
+	{
+		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact '$ComputerName'"
+		return $null
+	}
+}
+
 #
 # Module variables
 #
@@ -1627,6 +1718,7 @@ Export-ModuleMember -Function Test-Installation
 Export-ModuleMember -Function Get-AppSID
 Export-ModuleMember -Function Test-Service
 Export-ModuleMember -Function Get-SQLInstances
+Export-ModuleMember -Function Get-SQLManagementStudio
 
 # Exporting for testing only
 Export-ModuleMember -Function Format-Path
@@ -1652,3 +1744,57 @@ Export-ModuleMember -Function Get-WindowsDefender
 
 # For deubgging only
 Export-ModuleMember -Variable InstallTable
+
+<# Opening keys, naming convention as you drill down the keys
+
+Object (key)/	Key Path(s)		/	Sub key names
+RemoteKey	/	RegistryHive
+Array of keys/	HKLM
+RootKey		/	HKLMRoot		/	HKLMNames
+SubKey		/	HKLMSubKey		/	HKLMSubKeyNames
+Key			/	HKLMKey			/	HKLMKeyNames
+SpecificNames...
+#>
+
+<# In order listed
+FUNCTIONS
+	1 RegistryKey.OpenSubKey
+	2 RegistryKey.GetValue
+	3 RegistryKey.OpenRemoteBaseKey
+	4 RegistryKey.GetSubKeyNames
+	5 RegistryKey.GetValueNames
+
+RETURNS
+	1 The subkey requested, or null if the operation failed.
+	2 The value associated with name, or null if name is not found.
+	3 The requested registry key.
+	4 An array of strings that contains the names of the subkeys for the current key.
+	5 An array of strings that contains the value names for the current key.
+
+EXCEPTION
+	ArgumentNullException
+	1 name is null.
+	3 machineName is null.
+
+	ArgumentException
+	3 hKey is invalid.
+
+	ObjectDisposedException
+	1, 2, 4, 5 The RegistryKey is closed (closed keys cannot be accessed).
+
+	SecurityException
+	1 The user does not have the permissions required to access the registry key in the specified mode.
+
+	SecurityException
+	2, 5 The user does not have the permissions required to read from the registry key.
+	3 The user does not have the proper permissions to perform this operation.
+	4 The user does not have the permissions required to read from the key.
+
+	IOException
+	2 The RegistryKey that contains the specified value has been marked for deletion.
+	3 machineName is not found.
+	4, 5 A system error occurred, for example the current key has been deleted.
+
+	UnauthorizedAccessException
+	2, 3, 4, 5 The user does not have the necessary registry rights.
+#>

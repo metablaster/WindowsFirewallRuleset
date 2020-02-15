@@ -24,7 +24,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-SQLInstances
+# Unit test for Get-SQLManagementStudio
 #
 . $PSScriptRoot\..\..\UnloadModules.ps1
 
@@ -44,16 +44,13 @@ if (!(Approve-Execute)) { exit }
 
 $DebugPreference = "Continue"
 
-New-Test "Get-SQLInstances"
-Get-SQLInstances -Verbose
+New-Test "SQLManagementStudio"
+$Result = Get-SQLManagementStudio
+$Result | Get-Member
 
-New-Test "Get-SQLInstances WMI"
-Get-SQLInstances -Verbose -WMI
+$Result
 
-New-Test "Get-SQLInstances binn directory"
-Get-SQLInstances | Select-Object -ExpandProperty SQLBinRoot
-
-New-Test "Get-SQLInstances DTS directory"
-Get-SQLInstances | Select-Object -ExpandProperty SQLPath
+New-Test "SQLManagementStudio - Install path"
+$Result | Select-Object -ExpandProperty InstallPath
 
 Exit-Test
