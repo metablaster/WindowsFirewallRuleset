@@ -1,4 +1,32 @@
-﻿#setup variables:
+﻿
+<#
+MIT License
+
+Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems,
+Homepage: https://github.com/metablaster/WindowsFirewallRuleset
+
+Copyright (c) 2019, 2020 metablaster zebal@protonmail.ch
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+#>
+
+#setup variables:
 $PolicyStore = "localhost" #local group policy
 $Platform = "6.1+" #Windows 7 and above
 $Group = "Core Networking - IPv4"
@@ -44,4 +72,3 @@ New-NetFirewallRule -ErrorAction Stop -Enabled True -PolicyStore $PolicyStore -G
 
 #IGMP
 New-NetFirewallRule -ErrorAction Stop -Enabled False -PolicyStore $PolicyStore -Group $Group -Platform $Platform -Protocol 2 -RemoteAddress LocalSubnet4 -Profile Private,Domain -Program System -LocalUser $NT_AUTHORITY_SYSTEM -DisplayName "Internet Group Management Protocol" -Description "IGMP messages are sent and received by nodes to create, join and depart multicast groups."
-
