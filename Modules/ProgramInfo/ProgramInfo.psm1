@@ -27,6 +27,7 @@ SOFTWARE.
 Import-Module -Name $PSScriptRoot\..\UserInfo
 Import-Module -Name $PSScriptRoot\..\ComputerInfo
 Import-Module -Name $PSScriptRoot\..\FirewallModule
+. $PSScriptRoot\..\..\Utility\Get-SQLInstances.ps1
 
 <#
 .SYNOPSIS
@@ -1625,6 +1626,7 @@ Export-ModuleMember -Function Test-File
 Export-ModuleMember -Function Test-Installation
 Export-ModuleMember -Function Get-AppSID
 Export-ModuleMember -Function Test-Service
+Export-ModuleMember -Function Get-SQLInstances
 
 # Exporting for testing only
 Export-ModuleMember -Function Format-Path

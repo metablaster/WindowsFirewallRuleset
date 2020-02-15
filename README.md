@@ -16,7 +16,7 @@
 8. 3rd party programs
 9. broadcast traffic
 10. multicast traffic
-11. and the list goes on... 
+11. and the list goes on...
 
 - in addition to rules you will find a bunch of powershell functions to gather info relevant for building a firewall such as:
 1. computers
@@ -38,15 +38,18 @@
 # Licenses
 This project **"WindowsFirewallRuleset"** is licensed under **MIT** license.\
 Subproject [Indented.Net.IP](https://github.com/indented-automation/Indented.Net.IP) (3rd party code) located in **"Modules\Indented.Net.IP"** subfolder is licensed under **ISC** license.\
-Subproject [VSSetup](https://github.com/microsoft/vssetup.powershell) (3rd party code) located in **"Modules\VSSetup"** subfolder is licensed under **MIT** license.
+Subproject [VSSetup](https://github.com/microsoft/vssetup.powershell) (3rd party code) located in **"Modules\VSSetup"** subfolder is licensed under **MIT** license.\
+Various 3rd party scripts located in **"Utility"** subfolder have their own licenses.
 
 License, Copyright notices and all material of subprojects is in their own folder.\
-License and Copyright notices for this project is in project root folder
+License and Copyright notices for this project is in project root folder.\
+License, Copyright notices, and links, for "Utility" scripts are included into individual script files directly.
 
 For more info see respective licences:\
 [WindowsFirewallRuleset\LICENSE](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/LICENSE)\
 [Indented.Net.IP\LICENSE](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Modules/Indented.Net.IP/LICENSE)\
-[VSSetup\LICENSE.txt](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Modules/VSSetup/LICENSE.txt)
+[VSSetup\LICENSE.txt](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Modules/VSSetup/LICENSE.txt)\
+[Utility\Licences](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Utility/Licences/)
 
 # Minimum system requirements
 1. Windows 10 Pro/Enterprise, Windows Server 2019
