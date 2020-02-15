@@ -9,6 +9,8 @@ or to make firewall logs clean.
 
 ## Case 1: List of Windows services failing to connect outbound
 
+This "case 1" can be easily reproduced by making a new user account and attempt to update store apps.
+
 Program: `"%SystemRoot%\System32\svchost.exe"`
 
 Cryptographic Services

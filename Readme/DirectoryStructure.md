@@ -1,8 +1,7 @@
 
 # About this document
-Explain directory structure used in repository
-Each script in addition also explains what it does and what it contains
-Each function is minimally documented too
+Explain directory structure used in repository.\
+Each directory also contains a Readme.md explaining it's purpose.
 
 ## .vscode
 Visual Studio Code configuration
@@ -17,34 +16,41 @@ Deprecated scripts no longer in use
 Contains powershell modules
 
 ## Readme
-Contains documentation
+Contains offline documentation
+
+## Rules
+Contains all firewall ruels
 
 ### IPv4
 IPv4 rules
 
-#### Outbound rules
-Rules which apply to outbound traffic
-
-#### Inbound rules
-Rules which apply to inbound traffic
-
-##### Development
-Rules which apply to development programs
-
-##### Games
-Rules which apply to games
-
-##### Software
-Rules which apply to 3rd party programs
-
 ### IPv6
 IPv6 rules
 
-## Rules
-Contains all firewall ruels
+### Outbound rules
+Rules which apply to outbound traffic
+
+### Inbound rules
+Rules which apply to inbound traffic
+
+#### Development
+Rules which apply to development programs
+
+#### Games
+Rules which apply to games
+
+#### Software
+Rules which apply to 3rd party programs
 
 ## Test
 Contains test scripts to test out individual functions and concepts
 
 ## Templates
 Contains template scripts with boilerplate code for new scripts
+
+## Logs
+Contains logs made by scripts
+
+## Utility
+Contains collection of 3rd party scripts which.\
+Unline 3rd party modules or bigger projects which are place into separate directory.

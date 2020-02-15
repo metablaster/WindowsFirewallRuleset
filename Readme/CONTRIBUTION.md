@@ -7,10 +7,10 @@ it should be enough to take a look at the existing scripts and figure it out rig
 
 Use cammel case for variables, types, symbols etc; lowercase for language keywords.
 
-For example each rule uses exactly the same order or paramters split into exactly the same number of lines.\
-This is so that when you need to search for something it's easy to see what is where right away.
+Each rule uses exactly the same order or paramters split into exactly the same number of lines.\
+This is so that when you need to change or search something it's easy to see what is where right away.
 
-Another example, the code in scripts is ordered into "sections" in following way, and may be different if needed for what ever reason:
+The code in scripts is ordered into "sections" in following way, and may be different if needed for what ever reason:
 1. License notice
 2. Inclusions (modules, scripts)
 3. User input
@@ -40,16 +40,16 @@ It is important that a rule is very specific and not generic, that means specify
 for example just saying: allow TCP outbound port 80 for any address or any user or no explanation what is this supposed to allow or block is not acceptable.
 
 ## Testing code
-Write as much tests as possible, making changes to exiting code can then be easily tested!\
-Preferrably each function should be tested, if concept expands to several functions it should be a separate test.
+Each function should have it's own test and each test should cover as much code/test cases as possible, making changes to exiting code can then be easily tested!\
+If test case/concept expands to several functions or if it completly unrelated to functions it should be a separate test.
 
-All tests reside in "Test" folder, take a look there for examples.
+All tests reside in "Test" folder which cotains subfolder for each module, take a look there for examples.
 
 ## Modules and 3rd party code
 Project contains few custom modules of various types grouped by relevance on what the module is supposed to expose.
 
 Try to limit dependency on 3rd party modules.\
-Exiting modules should be extended and new written by using Powershell only if possible.
+Existing modules should be extended and new written by using Powershell only if possible.
 
 Only if this is not enough we can try to look for 3rd party modules which could be easily customized without too much change or learning curve.
 
@@ -59,7 +59,7 @@ Only if this is not enough we can try to look for 3rd party modules which could 
 Push small commits that solve or improve single problem, to reduce merge conflicts among other things.\
 Do not wait too much to push large commits which are not clear enough in terms what issue is supposed to be resolved or improved.
 
-**Avoid making huge changes to existing code** without first discusing the matter, new code is not problem thogh.
+**Avoid making huge changes to existing code** without first discusing the matter, new code and additions is not problem thogh.
 
 ## Portability and other systems
 At the moment we focus on Windows Firewall, if you have skills to port code to other firewalls go ahead, but it's not priority.
@@ -68,7 +68,7 @@ If you decide to port code it is mandatory that these code changes are done on s
 
 ## Making new scripts
 Inside "Templates" folder there are few template scripts as a starting point.\
-Copy them to target location, update code and start implementing code.
+Copy them to target location, update code and start writing.
 
 ## Repository folder structure
 See [DirectoryStructure.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/DirectoryStructure.md)

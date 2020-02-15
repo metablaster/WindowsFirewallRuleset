@@ -65,10 +65,6 @@ In addition, explanation of other parameters which are not self explanatory or w
 3. RSOP             (example: `-PolicyStore RSOP`)
 4. ActiveStore      (example: `-PolicyStore ActiveStore`)
 
-# Argument for Programs, services and apps
-1. `"*"` Applies only to programs, services or apps
-2. `Any` Any program, service or app
-
 - Persistent Store:
 > is what you see in Windows Firewall with Advanced security, accessed trough control panel or System settings.
 - GPO Store:
@@ -80,6 +76,10 @@ In addition, explanation of other parameters which are not self explanatory or w
 > Active store is collection (sum) of Persistent store and all GPO stores (RSOP) that apply to local computer. in other words it's a master store.
 
 There are other stores not mentioned here, which are used in corporate networks, AD's or Domains, so irrelevant for home users.
+
+# APPLICATION LAYER ENFORCEMENT
+1. `"*"` Applies only to services or apps (but not programs)
+2. `Any` Any program, service or app
 
 # PARAMETER VALUES EXAMPLE
 This is how parameters are used on command line, most of them need to be enclosed in quotes if assigned to variable first.
