@@ -67,7 +67,7 @@ if ((Test-Installation "MSIAfterburner" ([ref]$MSIAfterburnerRoot)) -or $Force)
 {
 	$Program = "$MSIAfterburnerRoot\MSIAfterburner.exe"
 	Test-File $Program
-	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "MSI Afterburner" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
@@ -80,7 +80,7 @@ if ((Test-Installation "MSIAfterburner" ([ref]$MSIAfterburnerRoot)) -or $Force)
 {
 	$Program = "$MSIRoot\Live Update\Live Update.exe"
 	Test-File $Program
-	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "MSI live update" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
@@ -89,7 +89,7 @@ if ((Test-Installation "MSIAfterburner" ([ref]$MSIAfterburnerRoot)) -or $Force)
 
 	$Program = "$MSIRoot\APP Manager\AppManager.exe"
 	Test-File $Program
-	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "MSI app manager" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `

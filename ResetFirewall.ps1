@@ -26,8 +26,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+. $PSScriptRoot\Config\ProjectSettings.ps1
+
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\Modules\System
+Import-Module -Name $RepoDir\Modules\System
 Test-SystemRequirements
 
 # Includes
@@ -39,7 +41,7 @@ Write-Host "Reseting Firewall to previous state..."
 #
 # Default setup for all profiles
 #
-Set-NetFirewallProfile -All -Confirm:$Execute -Whatif:$Debug -PolicyStore $PolicyStore `
+Set-NetFirewallProfile -All -PolicyStore $PolicyStore `
 -Enabled NotConfigured -DefaultInboundAction NotConfigured -DefaultOutboundAction NotConfigured -AllowInboundRules NotConfigured `
 -AllowLocalFirewallRules NotConfigured -AllowLocalIPsecRules NotConfigured -AllowUnicastResponseToMulticast NotConfigured `
 -NotifyOnListen NotConfigured -EnableStealthModeForIPsec NotConfigured `

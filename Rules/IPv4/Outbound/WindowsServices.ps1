@@ -60,7 +60,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Rules that apply to Windows services which are not handled by predefined rules
 #
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Delivery Optimization" -Service DoSvc -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
@@ -70,7 +70,7 @@ Windows Update Delivery Optimization works by letting you get Windows updates an
 like other PCs on your local network, or PCs on the Internet that are downloading the same files.
 Delivery Optimization also sends updates and apps from your PC to other PCs on your local network or PCs on the Internet, based on your settings." | Format-Output
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Delivery Optimization" -Service DoSvc -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 7680 `
@@ -80,7 +80,7 @@ Windows Update Delivery Optimization works by letting you get Windows updates an
 like other PCs on your local network, or PCs on the Internet that are downloading the same files.
 Delivery Optimization also sends updates and apps from your PC to other PCs on your local network or PCs on the Internet, based on your settings." | Format-Output
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Delivery Optimization" -Service DoSvc -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 7680 `
@@ -90,7 +90,7 @@ Windows Update Delivery Optimization works by letting you get Windows updates an
 like other PCs on your local network, or PCs on the Internet that are downloading the same files.
 Delivery Optimization also sends updates and apps from your PC to other PCs on your local network or PCs on the Internet, based on your settings." | Format-Output
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Windows Modules Installer" -Service TrustedInstaller -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
@@ -98,7 +98,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "Enables installation, modification, and removal of Windows updates and optional components.
 If this service is disabled, install or uninstall of Windows updates might fail for this computer." | Format-Output
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Windows Time (NTP/SNTP)" -Service W32Time -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 123 `
@@ -107,7 +107,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 If this service is stopped, date and time synchronization will be unavailable.
 If this service is disabled, any services that explicitly depend on it will fail to start." | Format-Output
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Windows Time (DayTime)" -Service W32Time -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 13 `
@@ -116,7 +116,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 If this service is stopped, date and time synchronization will be unavailable.
 If this service is disabled, any services that explicitly depend on it will fail to start." | Format-Output
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Windows Time (DayTime)" -Service W32Time -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 13 `
@@ -125,7 +125,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 If this service is stopped, date and time synchronization will be unavailable.
 If this service is disabled, any services that explicitly depend on it will fail to start." | Format-Output
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Windows Time (TIME)" -Service W32Time -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 37 `
@@ -134,7 +134,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 If this service is stopped, date and time synchronization will be unavailable.
 If this service is disabled, any services that explicitly depend on it will fail to start." | Format-Output
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Windows Time (TIME)" -Service W32Time -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 37 `
@@ -143,7 +143,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 If this service is stopped, date and time synchronization will be unavailable.
 If this service is disabled, any services that explicitly depend on it will fail to start." | Format-Output
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Windows Push Notifications System Service" -Service WpnService -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
@@ -152,7 +152,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 which handles the connection between the device and WNS server." | Format-Output
 
 # TODO: this service's name most likely isn't constant
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Windows Push Notifications User Service" -Service WpnUserService_e13583 -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
@@ -160,7 +160,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "This service hosts Windows notification platform which provides support for local and push notifications.
 Supported notifications are tile, toast and raw." | Format-Output
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Windows Insider Service" -Service wisvc -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
@@ -168,7 +168,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "Provides infrastructure support for the Windows Insider Program.
 This service must remain enabled for the Windows Insider Program to work." | Format-Output
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Group Policy Client" -Service gpsvc -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
@@ -177,7 +177,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 If the service is disabled, the settings will not be applied and applications and components will not be manageable through Group Policy.
 Any components or applications that depend on the Group Policy component might not be functional if the service is disabled." | Format-Output
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Device Setup Manager" -Service DsmSvc -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
@@ -185,7 +185,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "Enables the detection, download and installation of device-related software.
 If this service is disabled, devices may be configured with outdated software, and may not work correctly." | Format-Output
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Network Location Awareness" -Service NlaSvc -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
@@ -193,7 +193,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "Collects and stores configuration information for the network and notifies programs when this information is modified.
 If this rule is disabled, configuration information might be unavailable." | Format-Output
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Network services discovery" -Service FDResPub -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 3702 `
@@ -202,7 +202,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 to locate services on a local network.
 It operates over TCP and UDP port 3702 and uses IP multicast address 239.255.255.250." | Format-Output
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Router SSDP discovery" -Service SSDPSRV -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress DefaultGateway4 -LocalPort Any -RemotePort 48300 `
@@ -218,7 +218,7 @@ If this rule is blocked, router SSDP-based services will not be discovered." | F
 
 # TODO: how do we make use of an array of user accounts for Get-SDDLFromAccounts
 # TODO: network service use for wlidsvc doesn't seem to work, BITS also fails connecting to router sometimes but receives data.
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Extension rule for complex services" -Service Any -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
@@ -231,7 +231,7 @@ Background Intelligent Transfer Service(BITS),
 BITS and CryptSvc in addition need System account and wlidsvc needs both Network Service and local service account" | Format-Output
 
 # TODO: Temporary using network service account
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Extension rule for Router capability check (BITS)" -Service Any -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress DefaultGateway4 -LocalPort Any -RemotePort 48300 `
@@ -243,7 +243,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 #
 
 # TODO: try with localuser: Any
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Background Intelligent Transfer Service" -Service BITS -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
@@ -255,7 +255,7 @@ then any applications that depend on BITS, such as Windows Update or MSN Explore
 will be unable to automatically download programs and other information." | Format-Output
 
 # BITS to Router info: https://docs.microsoft.com/en-us/windows/win32/bits/network-bandwidth
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Router capability check (BITS)" -Service BITS -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress DefaultGateway4 -LocalPort Any -RemotePort 48300 `
@@ -269,7 +269,7 @@ because BITS will compete for the full bandwidth instead of using only the avail
 To use a gateway device, the device must support byte counters (the device must respond to the GetTotalBytesSent and GetTotalBytesReceived actions)
 and Universal Plug and Play (UPnP) must be enabled." | Format-Output
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Cryptographic Services" -Service CryptSvc -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
@@ -279,7 +279,7 @@ Catalog Database Service, which confirms the signatures of Windows files and all
 Protected Root Service, which adds and removes Trusted Root Certification Authority certificates from this computer;
 and Automatic Root Certificate Update Service, which retrieves root certificates from Windows Update and enable scenarios such as SSL." | Format-Output
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Windows update service" -Service wuauserv -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
@@ -288,7 +288,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 If this service is disabled, users of this computer will not be able to use Windows Update or its automatic updating feature,
 and programs will not be able to use the Windows Update Agent (WUA) API." | Format-Output
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Microsoft Account Sign-in Assistant" -Service wlidsvc -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
@@ -301,7 +301,7 @@ If this service is stopped, users will not be able to logon to the computer with
 #
 
 # NOTE: does not exist in Windows Server 2019
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Recommended Troubleshooting Client" -Service TroubleshootingSvc -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 80, 443 `
@@ -312,7 +312,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 # @FirewallAPI.dll,-80204 predefined rule
 #
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Windows Camera Frame Server" -Service FrameServer -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 554, 8554-8558 `

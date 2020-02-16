@@ -56,14 +56,14 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # to troubleshoot firewall without shuting it down completely.
 #
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Port 443" -Service Any -Program Any `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 -LocalUser $UserAccountsSDDL `
 -Description "Temporary open port 443 to internet, and disable ASAP." | Format-Output
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Port 80" -Service Any -Program Any `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
@@ -71,7 +71,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "Temporary open port 80 to internet, and disable ASAP." | Format-Output
 
 # NOTE: to make use of this rule, it should be updated here and the script re-run
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Installer" -Service Any -Program Any `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
@@ -80,7 +80,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 required for ie. downloaded Click-to-Run which does not have persitent location.
 Add installer path in script and re-run Trmporary.ps1" | Format-Output
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Services" -Service "*" -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
@@ -88,7 +88,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "Enable only to let any service communicate to internet, useful for troubleshooting, and disable ASAP." | Format-Output
 
 # TODO: it should apply to users only, for administrators there is a block rule, there is another TODO about possible design in VS script
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Store Apps" -Service Any -Program Any `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `

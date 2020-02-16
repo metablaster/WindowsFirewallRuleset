@@ -72,14 +72,14 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $Force)
 {
 	$Program = "$EngineRoot\Binaries\Win64\CrashReportClientEditor-Win64-Development.exe"
 	Test-File $Program
-	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Unreal Engine - CrashReportClientEditor" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL `
 	-Description "" | Format-Output
 
-	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Unreal Engine - CrashReportClientEditor" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
@@ -88,14 +88,14 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $Force)
 
 	$Program = "$EngineRoot\Binaries\DotNET\SwarmAgent.exe"
 	Test-File $Program
-	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Unreal Engine - SwarmAgent" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL `
 	-Description "Swarm agent is used for build farm." | Format-Output
 
-	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Unreal Engine - SwarmAgent" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
@@ -104,14 +104,14 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $Force)
 
 	$Program = "$EngineRoot\Binaries\Win64\UnrealInsights.exe"
 	Test-File $Program
-	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Unreal Engine - UnrealInsights" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL `
 	-Description "" | Format-Output
 
-	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Unreal Engine - UnrealInsights" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `

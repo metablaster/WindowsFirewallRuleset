@@ -31,8 +31,10 @@ SOFTWARE.
 # TODO: some test will output wrong results, better run each test separately
 #
 
+. $PSScriptRoot\Config\ProjectSettings.ps1
+
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\Modules\System
+Import-Module -Name $RepoDir\Modules\System
 Test-SystemRequirements
 
 # Includes

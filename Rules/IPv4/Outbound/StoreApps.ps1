@@ -136,7 +136,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $SystemGroup -Direction 
 
 foreach ($Admin in $AdminNames)
 {
-	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Store apps for Administrators" -Service Any -Program Any `
 	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Any -InterfaceType $Interface `
 	-Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
@@ -176,7 +176,7 @@ foreach ($User in $UserNames)
 				$Enabled = "True"
 			}
 
-			New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+			New-NetFirewallRule -Platform $Platform `
 			-DisplayName $_.Name -Service Any -Program Any `
 			-PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
@@ -205,7 +205,7 @@ foreach ($User in $UserNames)
 				$Enabled = "True"
 			}
 
-			New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+			New-NetFirewallRule -Platform $Platform `
 			-DisplayName $_.Name -Service Any -Program Any `
 			-PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $SystemGroup -Profile $Profile -InterfaceType $Interface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `

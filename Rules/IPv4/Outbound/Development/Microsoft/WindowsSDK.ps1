@@ -66,7 +66,7 @@ if ((Test-Installation "WindowsKits" ([ref] $SDKDebuggers)) -or $Force)
 {
 	$Program = "$SDKDebuggers\x86\windbg.exe"
 	Test-File $Program
-	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "WinDbg Symbol Server x86" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
@@ -75,7 +75,7 @@ if ((Test-Installation "WindowsKits" ([ref] $SDKDebuggers)) -or $Force)
 
 	$Program = "$SDKDebuggers\x64\windbg.exe"
 	Test-File $Program
-	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "WinDbg Symbol Server x64" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
@@ -84,7 +84,7 @@ if ((Test-Installation "WindowsKits" ([ref] $SDKDebuggers)) -or $Force)
 
 	$Program = "$SDKDebuggers\x86\symchk.exe"
 	Test-File $Program
-	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Symchk Symbol Server x86" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
@@ -93,7 +93,7 @@ if ((Test-Installation "WindowsKits" ([ref] $SDKDebuggers)) -or $Force)
 
 	$Program = "$SDKDebuggers\x64\symchk.exe"
 	Test-File $Program
-	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Symchk Symbol Server x64" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `

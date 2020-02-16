@@ -68,7 +68,7 @@ if ((Test-Installation "HelpViewer" ([ref] $HelpViewerRoot)) -or $Force)
 {
 	$Program = "$HelpViewerRoot\HlpCtntMgr.exe"
 	Test-File $Program
-	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Help Viewer (Content manager)" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
@@ -77,7 +77,7 @@ if ((Test-Installation "HelpViewer" ([ref] $HelpViewerRoot)) -or $Force)
 
 	$Program = "$HelpViewerRoot\HlpViewer.exe"
 	Test-File $Program
-	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Help Viewer" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `

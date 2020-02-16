@@ -84,7 +84,7 @@ They should not be manually assigned or assigned using DHCP.
 #
 # ICMP type filtering for All profiles
 #
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Echo Reply (0)" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv4 -IcmpType 0 -LocalAddress Any -RemoteAddress Any `
@@ -105,7 +105,7 @@ Code:
 0
 Code 0 may be received from a gateway or a host." | Format-Output
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Destination Unreachable (3)" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv4 -IcmpType 3 -LocalAddress Any -RemoteAddress Any `
@@ -127,7 +127,7 @@ Code:
 Codes 0, 1, 4, and 5 may be received from a gateway.
 Codes 2 and 3 may be received from a host." | Format-Output
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Destination Unreachable Fragmentation Needed (3)" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv4 -IcmpType 3:4 -LocalAddress Any -RemoteAddress Any `
@@ -135,7 +135,7 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Description "Destination Unreachable Fragmentation Needed error messages are sent from any node that a packet traverses which is
 unable to forward the packet because fragmentation was needed and the don't fragment bit was set." | Format-Output
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Parameter Problem (12)" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv4 -IcmpType 12 -LocalAddress Any -RemoteAddress Any `
@@ -153,7 +153,7 @@ Code:
 0 = pointer indicates the error.
 Code 0 may be received from a gateway or a host." | Format-Output
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Timestamp Reply (14)" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv4 -IcmpType 14 -LocalAddress Any -RemoteAddress Any `
@@ -180,7 +180,7 @@ Code:
 0 = pointer indicates the error.
 Code 0 may be received from a gateway or a host." | Format-Output
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Time Exceeded (11)" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv4 -IcmpType 11 -LocalAddress Any -RemoteAddress Any `
@@ -201,7 +201,7 @@ Code:
 Code 0 may be received from a gateway.
 Code 1 may be received from a host." | Format-Output
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Router Solicitation (10)" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv4 -IcmpType 10 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
@@ -220,7 +220,7 @@ each separated by at least RTR_SOLICITATION_INTERVAL seconds." | Format-Output
 # ICMP type filtering for public profile
 #
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Echo Request (8)" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv4 -IcmpType 8 -LocalAddress Any -RemoteAddress $RemoteAddrWAN `
@@ -257,7 +257,7 @@ Due to this fact and the security risks involved in such scenario,
 it is still a recommended practice to disable ICMP redirect messages (ignore them) from all public interfaces.
 #>
 # TODO: figure out if redirects can be unsolicited, to set up EdgeTraversalPolicy (currently allowing by logic of comments)
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Redirect (5)" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv4 -IcmpType 5 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
@@ -285,7 +285,7 @@ Code:
 Codes 0, 1, 2, and 3 may be received from a gateway." | Format-Output
 
 # TODO: we should probably allow this in public profile
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Router Advertisement (9)" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv4 -IcmpType 9 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
@@ -301,7 +301,7 @@ For instance, a router might advertise prefixes for stateless address autoconfig
 Unsolicited Router Advertisements are not strictly periodic:
 the interval between subsequent transmissions is randomized to reduce the probability of synchronization with the advertisements from other routers on the same link." | Format-Output
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Timestamp (13)" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv4 -IcmpType 13 -LocalAddress Any -RemoteAddress $RemoteAddrWAN `
@@ -331,7 +331,7 @@ Code 0 may be received from a gateway or a host." | Format-Output
 #
 # ICMP type filtering for private and domain profile
 #
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Echo Request (8)" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv4 -IcmpType 8 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
@@ -368,7 +368,7 @@ Due to this fact and the security risks involved in such scenario,
 it is still a recommended practice to disable ICMP redirect messages (ignore them) from all public interfaces.
 #>
 # TODO: figure out if redirects can be unsolicited, to set up EdgeTraversalPolicy (currently allowing by logic of comments)
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Redirect (5)" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv4 -IcmpType 5 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
@@ -395,7 +395,7 @@ Code:
 3 = Redirect datagrams for the Type of Service and Host.
 Codes 0, 1, 2, and 3 may be received from a gateway." | Format-Output
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Router Advertisement (9)" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv4 -IcmpType 9 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
@@ -412,7 +412,7 @@ Unsolicited Router Advertisements are not strictly periodic:
 the interval between subsequent transmissions is randomized to reduce the probability of synchronization
 with the advertisements from other routers on the same link." | Format-Output
 
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Timestamp (13)" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction $Direction -Protocol ICMPv4 -IcmpType 13 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `

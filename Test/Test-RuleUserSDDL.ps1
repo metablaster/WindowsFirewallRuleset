@@ -73,7 +73,7 @@ $LocalUser = Get-UserSDDL($UserNames)
 $LocalUser
 
 New-Test "New-NetFirewallRule"
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Get-UserSDDL" -Program Any -Service Any `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `

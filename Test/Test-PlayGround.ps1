@@ -75,7 +75,7 @@ while ($Choice -lt 0 -or $Choice -gt $Count)
 # $OwnerSID2 = Get-UserSID "User"
 
 # # looks like not possible to combine rules
-# New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+# New-NetFirewallRule -Platform $Platform `
 # -DisplayName "All store apps" -Program Any -Service Any `
 # -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 # -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `

@@ -29,10 +29,10 @@ SOFTWARE.
 # TODO: set strict mode, use PSScriptAnalyzer from MS
 # Set-StrictMode -Version Latest
 
-. $PSScriptRoot\UnloadModules.ps1
+. $PSScriptRoot\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\Modules\System
+Import-Module -Name $RepoDir\Modules\System
 Test-SystemRequirements
 Remove-Variable -Name SystemCheck -Scope Global -Force
 New-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Value $false

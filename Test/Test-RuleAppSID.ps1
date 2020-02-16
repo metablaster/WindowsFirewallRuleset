@@ -83,7 +83,7 @@ foreach($User in $Users) {
 }
 
 New-Test "New-NetFirewallRule"
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+New-NetFirewallRule -Platform $Platform `
 -DisplayName "Get-AppSID" -Program Any -Service Any `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
@@ -99,7 +99,7 @@ Get-AppxPackage -User $User -PackageTypeFilter Bundle | ForEach-Object {
 
 	if ($PackageSID)
 	{
-		New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+		New-NetFirewallRule -Platform $Platform `
 		-DisplayName $_.Name -Program Any -Service Any `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 		-Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
@@ -114,7 +114,7 @@ Get-AppxPackage -User $User -PackageTypeFilter Main | Where-Object { $_.Signatur
 
 	if ($PackageSID)
 	{
-		New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+		New-NetFirewallRule -Platform $Platform `
 		-DisplayName $_.Name -Program Any -Service Any `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 		-Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
@@ -126,7 +126,7 @@ Get-AppxPackage -User $User -PackageTypeFilter Main | Where-Object { $_.Signatur
 # New-Test "Test all aps for Admins"
 # $OwnerSID = Get-UserSID("Admin")
 
-# New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+# New-NetFirewallRule -Platform $Platform `
 # -DisplayName "All store apps" -Program Any -Service Any `
 # -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 # -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `

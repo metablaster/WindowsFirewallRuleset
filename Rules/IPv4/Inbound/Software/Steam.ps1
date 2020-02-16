@@ -66,14 +66,14 @@ if ((Test-Installation "Steam" ([ref] $SteamRoot)) -or $Force)
 {
 	$Program = "$SteamRoot\Steam.exe"
 	Test-File $Program
-	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Steam Dedicated or Listen Servers" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort 27015 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL `
 	-Description "SRCDS Rcon port" | Format-Output
 
-	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Steam In-Home Streaming" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 27031-27036 -RemotePort Any `
@@ -81,7 +81,7 @@ if ((Test-Installation "Steam" ([ref] $SteamRoot)) -or $Force)
 	-Description "Steam In-Home streaming, one PC sends its video and audio to another PC.
 	The other PC views the video and audio like it’s watching a movie, sending back mouse, keyboard, and controller input to the other PC." | Format-Output
 
-	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Steam In-Home Streaming" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 27036, 27037 -RemotePort Any `

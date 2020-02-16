@@ -26,8 +26,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+. $PSScriptRoot\Config\ProjectSettings.ps1
+
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\Modules\System
+Import-Module -Name $RepoDir\Modules\System
 Test-SystemRequirements
 
 #
@@ -37,7 +39,7 @@ Test-SystemRequirements
 # Setting up profile seem to be slow, tell user what is going on
 Write-Host "Setting up public firewall profile..."
 
-Set-NetFirewallProfile -Profile Public -Confirm:$Execute -Whatif:$Debug -PolicyStore $PolicyStore `
+Set-NetFirewallProfile -Profile Public -PolicyStore $PolicyStore `
 -Enabled True -DefaultInboundAction Block -DefaultOutboundAction Block -AllowInboundRules True `
 -AllowLocalFirewallRules False -AllowLocalIPsecRules False -AllowUnicastResponseToMulticast False `
 -NotifyOnListen True -EnableStealthModeForIPsec True `
@@ -48,7 +50,7 @@ Set-NetFirewallProfile -Profile Public -Confirm:$Execute -Whatif:$Debug -PolicyS
 # Setting up profile seem to be slow, tell user what is going on
 Write-Host "Setting up private firewall profile..."
 
-Set-NetFirewallProfile -Profile Private -Confirm:$Execute -Whatif:$Debug -PolicyStore $PolicyStore `
+Set-NetFirewallProfile -Profile Private -PolicyStore $PolicyStore `
 -Enabled True -DefaultInboundAction Block -DefaultOutboundAction Block -AllowInboundRules True `
 -AllowLocalFirewallRules False -AllowLocalIPsecRules False -AllowUnicastResponseToMulticast True `
 -NotifyOnListen True -EnableStealthModeForIPsec True `
@@ -59,7 +61,7 @@ Set-NetFirewallProfile -Profile Private -Confirm:$Execute -Whatif:$Debug -Policy
 # Setting up profile seem to be slow, tell user what is going on
 Write-Host "Setting up domain firewall profile..."
 
-Set-NetFirewallProfile -Profile Domain -Confirm:$Execute -Whatif:$Debug -PolicyStore $PolicyStore `
+Set-NetFirewallProfile -Profile Domain -PolicyStore $PolicyStore `
 -Enabled True -DefaultInboundAction Block -DefaultOutboundAction Block -AllowInboundRules True `
 -AllowLocalFirewallRules False -AllowLocalIPsecRules False -AllowUnicastResponseToMulticast True `
 -NotifyOnListen True -EnableStealthModeForIPsec True `
