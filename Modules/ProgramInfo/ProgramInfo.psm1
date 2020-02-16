@@ -872,7 +872,7 @@ function Test-Installation
 			[int] $Choice = -1
 			while ($Choice -lt 0 -or $Choice -gt $Count)
 			{
-				Write-Host "Input number to choose which one is correct, 0 or Enter to abort"
+				Write-Host "Input number to choose which one is correct"
 				$Input = Read-Host
 
 				if($Input -notmatch '^-?\d+$')
@@ -1745,8 +1745,16 @@ System.Management.Automation.PSCustomObject for installed Microsoft SQL Server M
 
 # $DebugPreference = "Continue"
 
-# Installation table holds user and program directory pair
-New-Variable -Name InstallTable -Scope Global -Value $null
+if ((Get-Variable -Name Develop -Scope Global).Value)
+{
+	# Installation table holds user and program directory pair
+	Remove-Variable -Name InstallTable -Scope Global -ErrorAction Ignore
+	New-Variable -Name InstallTable -Scope Global -Value $null
+}
+else
+{
+	New-Variable -Name InstallTable -Scope Script -Value $null
+}
 
 # Any environment variables to user profile are not valid for firewall
 New-Variable -Name BlackListEnvironment -Scope Script -Option Constant -Value @(
@@ -1792,33 +1800,43 @@ Export-ModuleMember -Function Test-File
 Export-ModuleMember -Function Test-Installation
 Export-ModuleMember -Function Get-AppSID
 Export-ModuleMember -Function Test-Service
-Export-ModuleMember -Function Get-SQLInstances
-Export-ModuleMember -Function Get-SQLManagementStudio
-
-# Exporting for testing only
-Export-ModuleMember -Function Format-Path
-Export-ModuleMember -Function Test-UserProfile
-Export-ModuleMember -Function Find-Installation
-Export-ModuleMember -Function Test-Environment
-
-Export-ModuleMember -Function Update-Table
-Export-ModuleMember -Function Edit-Table
-Export-ModuleMember -Function Initialize-Table
-
-Export-ModuleMember -Function Get-UserPrograms
-Export-ModuleMember -Function Get-AllUserPrograms
-Export-ModuleMember -Function Get-SystemPrograms
-Export-ModuleMember -Function Get-NetFramework
-Export-ModuleMember -Function Get-WindowsKits
-Export-ModuleMember -Function Get-WindowsSDK
-Export-ModuleMember -Function Get-WindowsDefender
 
 #
 # Variable exports
 #
 
-# For deubgging only
-Export-ModuleMember -Variable InstallTable
+#
+# Exports for debugging
+#
+if ((Get-Variable -Name Develop -Scope Global).Value)
+{
+	#
+	# Exports for deubgging only
+	#
+
+	# Function exports
+	Export-ModuleMember -Function Format-Path
+	Export-ModuleMember -Function Test-UserProfile
+	Export-ModuleMember -Function Find-Installation
+	Export-ModuleMember -Function Test-Environment
+
+	Export-ModuleMember -Function Update-Table
+	Export-ModuleMember -Function Edit-Table
+	Export-ModuleMember -Function Initialize-Table
+
+	Export-ModuleMember -Function Get-UserPrograms
+	Export-ModuleMember -Function Get-AllUserPrograms
+	Export-ModuleMember -Function Get-SystemPrograms
+	Export-ModuleMember -Function Get-NetFramework
+	Export-ModuleMember -Function Get-WindowsKits
+	Export-ModuleMember -Function Get-WindowsSDK
+	Export-ModuleMember -Function Get-WindowsDefender
+	Export-ModuleMember -Function Get-SQLInstances
+	Export-ModuleMember -Function Get-SQLManagementStudio
+
+	# Variable exports
+	Export-ModuleMember -Variable InstallTable
+}
 
 <# Opening keys, naming convention as you drill down the keys
 

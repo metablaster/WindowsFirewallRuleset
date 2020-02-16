@@ -27,27 +27,27 @@ SOFTWARE.
 #>
 
 #
-# Remove loaded modules and removable variables, usefull for module debugging
+# Unit test for ProjectSettings.ps1
 #
+. $PSScriptRoot\..\Config\ProjectSettings.ps1
 
-# Set to true to indicate development phase, force unloading modules and removing variables
-$Develop = $true
+# Check requirements for this project
+Import-Module -Name $RepoDir\Modules\System
+Test-SystemRequirements
 
-if ($Develop)
-{
-	Write-Host "DEBUG: Clean up environment" -ForegroundColor Yellow -BackgroundColor Black
-	Remove-Module -Name System -ErrorAction Ignore
-	Remove-Variable -Name SystemCheck -Scope Global -Force -ErrorAction Ignore
+# Includes
+. $RepoDir\Test\ContextSetup.ps1
+Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\UserInfo
+Import-Module -Name $RepoDir\Modules\ProgramInfo
+Import-Module -Name $RepoDir\Modules\ComputerInfo
+Import-Module -Name $RepoDir\Modules\FirewallModule
 
-	Remove-Module -Name FirewallModule -ErrorAction Ignore
-	Remove-Variable -Name WarningStatus -Scope Global -ErrorAction Ignore
-	Remove-Variable -Name Debug -Scope Global -Force -ErrorAction Ignore
-	Remove-Variable -Name Execute -Scope Global -ErrorAction Ignore
+# Ask user if he wants to load these rules
+Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
+if (!(Approve-Execute)) { exit }
 
-	Remove-Module -Name Test -ErrorAction Ignore
-	Remove-Module -Name UserInfo -ErrorAction Ignore
-	Remove-Module -Name ComputerInfo -ErrorAction Ignore
+New-Test "Test-ProjectSettings"
 
-	Remove-Module -Name ProgramInfo -ErrorAction Ignore
-	Remove-Variable -Name InstallTable -Scope Global -ErrorAction Ignore
-}
+Write-Host "Preference Debug -> $DebugPreference"
+Exit-Test

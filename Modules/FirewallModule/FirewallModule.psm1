@@ -502,26 +502,9 @@ if (!(Get-Variable -Name CheckInitFirewallModule -Scope Global -ErrorAction Igno
 	# check if constants alreay initialized, used for module reloading
 	New-Variable -Name CheckInitFirewallModule -Scope Global -Option Constant -Value $null
 
-	# Windows 10 and above
-	New-Variable -Name Platform -Scope Global -Option Constant -Value "10.0+"
-	# Machine where to apply rules (default: Local Group Policy)
-	New-Variable -Name PolicyStore -Scope Global -Option Constant -Value "localhost"
-	# Stop executing commandlet if error
-	New-Variable -Name OnError -Scope Global -Option Constant -Value "Continue"
 	# Most used program
 	New-Variable -Name ServiceHost -Scope Global -Option Constant -Value "%SystemRoot%\System32\svchost.exe"
-	# Default network interface card, change this to NIC which your PC uses
-	New-Variable -Name Interface -Scope Global -Option Constant -Value "Wired, Wireless"
-	# To force loading rules regardless of presence of program set to true
-	New-Variable -Name Force -Scope Global -Option Constant -Value $false
 }
-
-# To add rules to firewall for real set to false
-New-Variable -Name Debug -Scope Global -Option ReadOnly -Value $false
-# Global variable to tell if all scripts ran clean
-New-Variable -Name WarningStatus -Scope Global -Value $false
-# To prompt for each rule set to true
-New-Variable -Name Execute -Scope Global -Value $false
 
 # Global execution context, used in Approve-Execute
 New-Variable -Name Context -Scope Script -Value "Context not set"
@@ -549,13 +532,5 @@ Export-ModuleMember -Function Set-ScreenBuffer
 # Variable exports
 #
 
-Export-ModuleMember -Variable Platform
-Export-ModuleMember -Variable PolicyStore
-Export-ModuleMember -Variable OnError
-Export-ModuleMember -Variable Debug
-Export-ModuleMember -Variable Execute
 Export-ModuleMember -Variable ServiceHost
-Export-ModuleMember -Variable Interface
-Export-ModuleMember -Variable WarningStatus
-Export-ModuleMember -Variable Force
 Export-ModuleMember -Variable CheckInitFirewallModule

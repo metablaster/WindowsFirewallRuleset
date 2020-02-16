@@ -209,18 +209,6 @@ function Test-SystemRequirements
 
 # $DebugPreference = "Continue"
 
-if (!(Get-Variable -Name CheckInitSystem -Scope Global -ErrorAction Ignore))
-{
-	# check if constants alreay initialized, used for module reloading
-	New-Variable -Name CheckInitSystem -Scope Global -Option Constant -Value $null
-
-	# Repository root directory
-	New-Variable -Name RepoDir -Scope Global -Option Constant -Value (Resolve-Path -Path "$PSScriptRoot\..\.." | Select-Object -ExpandProperty Path)
-}
-
-# Set to false to avoid checking system requirements
-New-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Value $false
-
 #
 # Function exports
 #
@@ -230,8 +218,3 @@ Export-ModuleMember -Function Test-SystemRequirements
 #
 # Variable exports
 #
-
-# Realocating scripts should be easy if root directory is constant
-Export-ModuleMember -Variable CheckInitSystem
-Export-ModuleMember -Variable RepoDir
-Export-ModuleMember -Variable SystemCheck
