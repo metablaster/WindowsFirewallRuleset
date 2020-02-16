@@ -1,8 +1,8 @@
 # List of stuff that needs to be done
 
-1. Separate variables which alter the behavior of scripts into a separate module
-2. update FirewallParamters with a list of incompatible paramters for reference
-3. apply local IP to all rules
+1. Now that common parameters are removed need to update the order of rule parameters, also not all are the same.
+2. update FirewallParamters.md with a list of incompatible paramters for reference
+3. apply local IP to all rules, as optional feature
 4. Detect if script ran manually, to be able to reset errors and warning status
 5. some rules are missing comments
 6. auto detect interfaces
@@ -20,4 +20,3 @@
 19. Need to see which functions/commands may throw and setup try catch blocks
 20. Most program query functions return multiple program instances, need to select latest or add multiple rules.
 21. Apply only rules for which executable exists, Test-File function
-22. Now that common parameters are removed need to update the order of rule parameters, also not all are the same.

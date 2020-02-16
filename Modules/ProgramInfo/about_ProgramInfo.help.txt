@@ -18,7 +18,7 @@ EXAMPLES
 	Get-WindowsSDK COMPUTERNAME
 
 	To get SID for store app:
-	Get-AppSID("User", "Microsoft.MicrosoftEdge_8wekyb3d8bbwe")
+	Get-AppSID "User" "Microsoft.MicrosoftEdge_8wekyb3d8bbwe"
 
 KEYWORDS
 	Program

@@ -5,7 +5,7 @@ MIT License
 Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems,
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (c) 2019, 2020 metablaster zebal@protonmail.ch
+Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -671,6 +671,8 @@ Update-Table "Google Chrome"
 None. You cannot pipe objects to Update-Table
 .OUTPUTS
 None, global installation table is updated
+.NOTES
+Table code needs to be updated to fill it for USERS instead of same path for each individual user
 #>
 function Update-Table
 {
@@ -770,6 +772,8 @@ Edit-Table "%ProgramFiles(x86)%\TeamViewer"
 None. You cannot pipe objects to Edit-Table
 .OUTPUTS
 None, global installation table is updated
+.NOTES
+Table code needs to be updated to fill it for USERS instead of same path for each individual user
 #>
 function Edit-Table
 {

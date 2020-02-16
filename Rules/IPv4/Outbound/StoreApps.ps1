@@ -5,7 +5,7 @@ MIT License
 Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems,
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (c) 2019, 2020 metablaster zebal@protonmail.ch
+Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -126,7 +126,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $SystemGroup -Direction 
 
 #
 # Firewall predefined rules for Microsoft store Apps
-# TODO: exclude store apps rules for servers
+# TODO: exclude store apps rules for servers, store app folders seem to exist but empty.
 # TODO: currently making rules for each user separatelly, is it possible to make rules for all users?
 #
 

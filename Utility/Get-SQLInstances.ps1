@@ -2,9 +2,9 @@
 <#
 MIT License
 
-Copyright (c) 2013, 2016 Boe Prox
-Copyright (c) 2016 Warren Frame
-Copyright (c) 2020 metablaster zebal@protonmail.ch
+Copyright (C) 2013, 2016 Boe Prox
+Copyright (C) 2016 Warren Frame
+Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -67,6 +67,7 @@ https://gallery.technet.microsoft.com/scriptcenter/Get-SQLInstance-9a3245a0
 	- Add code to return SQL DTS Path
 	- separate support for 32 bit systems
 	- Include license into file (MIT all 3), links to original sites and add appropriate Copyright for each author/contributor
+	- update reported server versions
 	TODO: format-path, set-warning etc..
 
 .FUNCTIONALITY
@@ -341,6 +342,9 @@ function Get-SQLInstances
 							Caption = {
 								switch -Regex ($Version)
 								{
+									# https://en.wikipedia.org/wiki/History_of_Microsoft_SQL_Server
+									"^15"	{'SQL Server 2019'; break}
+									"^14"	{'SQL Server 2017'; break}
 									"^13"	{'SQL Server 2016'; break}
 									"^12"	{'SQL Server 2014'; break}
 									"^11"	{'SQL Server 2012'; break}

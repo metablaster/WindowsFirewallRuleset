@@ -7,7 +7,7 @@ Each directory also contains a Readme.md explaining it's purpose.
 Visual Studio Code configuration
 
 ## Config
-Configuration for programs
+Project configuration and configuration for external programs
 
 ## Deprecated
 Deprecated scripts no longer in use
