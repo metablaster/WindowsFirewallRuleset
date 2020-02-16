@@ -37,10 +37,10 @@ Address                          CIDR / Subnet Mask               Designation
 169.254.0.0-169.254.255.255      169.254.0.0/16 (255.255.0.0)     Automatic Private IP Addressing APIPA
 #>
 
-. $PSScriptRoot\..\..\..\UnloadModules.ps1
+. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\..\..\..\Modules\System
+Import-Module -Name $RepoDir\Modules\System
 Test-SystemRequirements
 
 # Includes

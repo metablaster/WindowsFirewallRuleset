@@ -29,10 +29,10 @@ SOFTWARE.
 #
 # Unit test for UnloadModules.ps1
 #
-. $PSScriptRoot\..\UnloadModules.ps1
+. $PSScriptRoot\..\Config\ProjectSettings.ps1
 
 Write-Host "Import-Module System"
-Import-Module -Name $PSScriptRoot\..\Modules\System -Force
+Import-Module -Name $RepoDir\Modules\System -Force
 
 Write-Host "Import-Module Test"
 Import-Module -Name $RepoDir\Modules\Test -Force

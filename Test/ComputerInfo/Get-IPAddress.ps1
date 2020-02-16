@@ -29,10 +29,10 @@ SOFTWARE.
 #
 # Unit test for Get-IPAddress
 #
-. $PSScriptRoot\..\..\UnloadModules.ps1
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\..\..\Modules\System
+Import-Module -Name $RepoDir\Modules\System
 Test-SystemRequirements
 
 # Includes

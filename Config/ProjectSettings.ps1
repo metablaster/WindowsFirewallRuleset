@@ -31,7 +31,7 @@ Remove-Variable -Name Develop -Scope Global -Force -ErrorAction Ignore
 
 # Set to true to indicate development phase, forces unloading modules and removing variables.
 # In addition to this do global search (CTRL SHIFT + F) for: to export from this module in "Develop" mode
-New-Variable -Name Develop -Scope Global -Option ReadOnly -Value $false
+New-Variable -Name Develop -Scope Global -Option ReadOnly -Value $true
 
 if ($Develop)
 {
@@ -67,7 +67,6 @@ if ($Develop)
 
 	# Override these defaults here however you wish, will be globally set except in modules
 	$DebugPreference = "Continue"
-	$VerbosePreference = "Continue"
 
 	#
 	# Remove loaded modules and removable variables, usefull for module debugging

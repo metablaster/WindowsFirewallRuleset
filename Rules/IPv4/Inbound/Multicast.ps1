@@ -46,10 +46,10 @@ Address Range                 Size       Designation
 239.0.0.0 - 239.255.255.255   (/8)       Scoped Multicast Ranges (Organization-Local Scope) aka Administratively Scoped Block.
 #>
 
-. $PSScriptRoot\..\..\..\UnloadModules.ps1
+. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\..\..\..\Modules\System
+Import-Module -Name $RepoDir\Modules\System
 Test-SystemRequirements
 
 # Includes

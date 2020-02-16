@@ -171,7 +171,7 @@ function Get-SQLInstances
 		foreach ($Computer in $Computers)
 		{
 			$Computer = $Computer -replace '(.*?)\..+','$1'
-			Write-Verbose ("Checking {0}" -f $Computer)
+			Write-Debug ("Checking {0}" -f $Computer)
 
 			if (!(Test-Connection -ComputerName $Computer -Count 2 -Quiet))
 			{
@@ -392,7 +392,7 @@ function Get-SQLInstances
 					#If we pulled WMI info and it wasn't empty, correlate!
 					if($SQLServices)
 					{
-						Write-Verbose "WMI Service info:`n$($SQLServices | Format-Table -AutoSize -Property * | Out-String)"
+						Write-Debug "WMI Service info:`n$($SQLServices | Format-Table -AutoSize -Property * | Out-String)"
 						foreach($Instance in $AllInstances)
 						{
 							$MatchingService = $SQLServices |
