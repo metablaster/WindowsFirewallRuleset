@@ -832,6 +832,8 @@ Test-Installation "Office" "%ProgramFiles(x86)%\Microsoft Office\root\Office16"
 None. You cannot pipe objects to Test-Installation
 .OUTPUTS
 If test OK same path, if not try to update path, else return given path back
+.NOTES
+TODO: temporarily using ComputerName parameter
 #>
 function Test-Installation
 {
@@ -856,23 +858,36 @@ function Test-Installation
 
 		if ($Count -gt 1)
 		{
-			Write-Host "Table data"
 			$InstallTable | Format-Table -AutoSize
-
 			Write-Note "Found multiple candidate installation directories for $Program"
 
 			# Print out all candidate installation directories
+			Write-Host "0. Abort this operation"
 			for ($Index = 0; $Index -lt $Count; ++$Index)
 			{
 				Write-Host "$($Index + 1). $($InstallTable.Rows[$Index].Item("InstallRoot"))"
 			}
 
 			# Prompt user to chose one
-			[int] $Choice = 0
-			while ($Choice -lt 1 -or $Choice -gt $Count)
+			[int] $Choice = -1
+			while ($Choice -lt 0 -or $Choice -gt $Count)
 			{
-				Write-Host "Input number to choose which one is correct"
-				$Choice = Read-Host
+				Write-Host "Input number to choose which one is correct, 0 or Enter to abort"
+				$Input = Read-Host
+
+				if($Input -notmatch '^-?\d+$')
+				{
+					Write-Host "Digits only please!"
+					continue
+				}
+
+				$Choice = $Input
+			}
+
+			if ($Choice -eq 0)
+			{
+				# User doesn't know the path, skip correction message
+				return $false
 			}
 
 			$InstallRoot = $InstallTable.Rows[$Choice - 1].Item("InstallRoot")
@@ -898,6 +913,8 @@ function Test-Installation
 find installation directory for given program
 .PARAMETER Program
 predefined program name
+.PARAMETER ComputerName
+Computer name on which to look for program installation
 .EXAMPLE
 Find-Installation "Office"
 .INPUTS
@@ -909,7 +926,10 @@ function Find-Installation
 {
 	param (
 		[parameter(Mandatory = $true)]
-		[string] $Program
+		[string] $Program,
+
+		[parameter(Mandatory = $false)]
+		[string] $ComputerName = $env:COMPUTERNAME
 	)
 
 	Initialize-Table
@@ -920,6 +940,58 @@ function Find-Installation
 	# otherwise firewall GUI will show full paths which is not desired for sorting reasons
 	switch -Wildcard ($Program)
 	{
+		"NuGet"
+		{
+			# NOTE: ask user where he installed NuGet
+			break
+		}
+		"NETFramework"
+		{
+			# Get latest NET Framework installation directory
+			$NETFramework = Get-NetFramework $ComputerName
+			if ($null -ne $NETFramework)
+			{
+				$NETFrameworkRoot = $NETFramework |
+				Sort-Object -Property Version |
+				Where-Object {$_.InstallPath} |
+				Select-Object -Last 1 -ExpandProperty InstallPath
+
+				Write-Debug $NETFrameworkRoot -Debug
+				Edit-Table $NETFrameworkRoot
+			}
+			break
+		}
+		"vcpkg"
+		{
+			# NOTE: ask user where he installed vcpkg
+			break
+		}
+		"SysInternals"
+		{
+			# NOTE: ask user where he installed SysInternals
+			break
+		}
+		"WindowsKits"
+		{
+			# Get Windows SDK debuggers root (latest SDK)
+			$WindowsKits = Get-WindowsKits $ComputerName
+			if ($null -ne $WindowsKits)
+			{
+				$SDKDebuggers = $WindowsKits |
+				Where-Object {$_.Product -like "WindowsDebuggersRoot*"} |
+				Sort-Object -Property Product |
+				Select-Object -Last 1 -ExpandProperty InstallPath
+
+				Write-Debug $SDKDebuggers -Debug
+				Edit-Table $SDKDebuggers
+			}
+			break
+		}
+		"WebPlatform"
+		{
+			Edit-Table "%ProgramFiles%\Microsoft\Web Platform Installer"
+			break
+		}
 		"XTU"
 		{
 			Edit-Table "%ProgramFiles(x86)%\Intel\Intel(R) Extreme Tuning Utility\Client"

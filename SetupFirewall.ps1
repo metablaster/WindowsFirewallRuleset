@@ -59,6 +59,8 @@ Get-Content -Path $RepoDir\Rules\NetworkServices.txt | ForEach-Object {
 # Execute IPv4 rules
 #
 
+# NOTE: the order of scripts is the same as it is shown in file explorer of Visual Studio Code
+
 #
 # Load Inbound rules
 #
@@ -74,8 +76,6 @@ if(Approve-Execute "Yes" "Applying: Inbound IPv4 Rules")
 		& "$PSScriptRoot\Rules\IPv4\Inbound\BasicNetworking.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Inbound\Broadcast.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Inbound\ICMP.ps1"
-		& "$PSScriptRoot\Rules\IPv4\Inbound\InternetBrowser.ps1"
-		& "$PSScriptRoot\Rules\IPv4\Inbound\MicrosoftOffice.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Inbound\Multicast.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Inbound\NetworkDiscovery.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Inbound\NetworkSharing.ps1"
@@ -92,14 +92,29 @@ if(Approve-Execute "Yes" "Applying: Inbound IPv4 Rules")
 		& "$PSScriptRoot\Rules\IPv4\Inbound\Development\EpicGames.ps1"
 	}
 
+	# Update-Context "IPv4" "Inbound"
+	# if(Approve-Execute "Yes" "Applying: Rules for servers")
+	# {
+	# 	# Rules for developers
+	# 	& "$PSScriptRoot\Rules\IPv4\Inbound\Server\ScriptName.ps1"
+	# }
+
 	Update-Context "IPv4" "Inbound"
 	if(Approve-Execute "Yes" "Applying: Rules for 3rd party programs")
 	{
 		# rules for programs
 		& "$PSScriptRoot\Rules\IPv4\Inbound\Software\Filezilla.ps1"
+		& "$PSScriptRoot\Rules\IPv4\Inbound\Software\InternetBrowser.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Inbound\Software\Steam.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Inbound\Software\TeamViewer.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Inbound\Software\uTorrent.ps1"
+	}
+
+	Update-Context "IPv4" "Inbound"
+	if(Approve-Execute "Yes" "Applying: Rules for Microsoft programs")
+	{
+		# rules for programs
+		& "$PSScriptRoot\Rules\IPv4\Inbound\\Software\MicrosoftOffice.ps1"
 	}
 }
 
@@ -117,9 +132,6 @@ if(Approve-Execute "Yes" "Applying: Outbound IPv4 Rules")
 		& "$PSScriptRoot\Rules\IPv4\Outbound\BasicNetworking.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Broadcast.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Outbound\ICMP.ps1"
-		& "$PSScriptRoot\Rules\IPv4\Outbound\InternetBrowser.ps1"
-		& "$PSScriptRoot\Rules\IPv4\Outbound\MicrosoftOffice.ps1"
-		& "$PSScriptRoot\Rules\IPv4\Outbound\MicrosoftSoftware.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Multicast.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Outbound\NetworkDiscovery.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Outbound\NetworkSharing.ps1"
@@ -132,7 +144,7 @@ if(Approve-Execute "Yes" "Applying: Outbound IPv4 Rules")
 	}
 
 	Update-Context "IPv4" "Outbound"
-	if(Approve-Execute "Yes" "Applying: Rules for developers")
+	if(Approve-Execute "Yes" "Applying: Rules for developers 3rd party tools")
 	{
 		# Rules for developers
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Development\Chocolatey.ps1"
@@ -141,7 +153,20 @@ if(Approve-Execute "Yes" "Applying: Outbound IPv4 Rules")
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Development\Incredibuild.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Development\MSYS2.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Development\RealWorld.ps1"
-		& "$PSScriptRoot\Rules\IPv4\Outbound\Development\VisualStudio.ps1"
+	}
+
+	Update-Context "IPv4" "Outbound"
+	if(Approve-Execute "Yes" "Applying: Rules for developers Microsoft tools")
+	{
+		# Rules for developers
+		& "$PSScriptRoot\Rules\IPv4\Outbound\Development\Microsoft\HelpViewer.ps1"
+		& "$PSScriptRoot\Rules\IPv4\Outbound\Development\Microsoft\NuGet.ps1"
+		& "$PSScriptRoot\Rules\IPv4\Outbound\Development\Microsoft\PowerShell.ps1"
+		& "$PSScriptRoot\Rules\IPv4\Outbound\Development\Microsoft\vcpkg.ps1"
+		& "$PSScriptRoot\Rules\IPv4\Outbound\Development\Microsoft\VisualStudio.ps1"
+		& "$PSScriptRoot\Rules\IPv4\Outbound\Development\Microsoft\VSCode.ps1"
+		& "$PSScriptRoot\Rules\IPv4\Outbound\Development\Microsoft\WebPlatform.ps1"
+		& "$PSScriptRoot\Rules\IPv4\Outbound\Development\Microsoft\WindowsSDK.ps1"
 	}
 
 	Update-Context "IPv4" "Outbound"
@@ -159,6 +184,13 @@ if(Approve-Execute "Yes" "Applying: Outbound IPv4 Rules")
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Games\WarThunder.ps1"
 	}
 
+	# Update-Context "IPv4" "Outbound"
+	# if(Approve-Execute "Yes" "Applying: Rules for servers")
+	# {
+	# 	# Rules for developers
+	# 	& "$PSScriptRoot\Rules\IPv4\Outbound\Server\ScriptName.ps1"
+	# }
+
 	Update-Context "IPv4" "Outbound"
 	if(Approve-Execute "Yes" "Applying: Rules for 3rd party programs")
 	{
@@ -171,6 +203,7 @@ if(Approve-Execute "Yes" "Applying: Outbound IPv4 Rules")
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Software\GPG.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Software\Greenshot.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Software\Intel.ps1"
+		& "$PSScriptRoot\Rules\IPv4\Outbound\InternetBrowser.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Software\Java.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Software\Metatrader.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Software\MSI.ps1"
@@ -184,6 +217,15 @@ if(Approve-Execute "Yes" "Applying: Outbound IPv4 Rules")
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Software\TeamViewer.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Software\Thunderbird.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Software\uTorrent.ps1"
+	}
+
+	Update-Context "IPv4" "Outbound"
+	if(Approve-Execute "Yes" "Applying: Rules for Microsoft programs")
+	{
+		# rules for Microsoft programs
+		& "$PSScriptRoot\Rules\IPv4\Outbound\Software\Microsoft\MicrosoftOffice.ps1"
+		& "$PSScriptRoot\Rules\IPv4\Outbound\Software\Microsoft\OneDrive.ps1"
+		& "$PSScriptRoot\Rules\IPv4\Outbound\Software\Microsoft\SysInternals.ps1"
 	}
 }
 

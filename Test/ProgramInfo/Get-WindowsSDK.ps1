@@ -59,4 +59,14 @@ $WindowsSDK
 
 # $WindowsSDK | Sort-Object -Property Version | Where-Object { $_.InstallPath } | Select-Object -Last 1 -ExpandProperty InstallPath
 
+# Get Windows SDK root
+# $WindowsSDK = Get-WindowsSDK $ComputerName
+# if ($null -ne $WindowsKits)
+# {
+#     $SDKRoot = $WindowsSDK |
+#     Sort-Object -Property Version |
+#     Where-Object { $_.InstallPath } |
+#     Select-Object -Last 1 -ExpandProperty InstallPath
+# }
+
 Exit-Test

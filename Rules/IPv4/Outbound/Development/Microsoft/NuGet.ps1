@@ -26,56 +26,50 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Get-NetFramework
-#
-. $PSScriptRoot\..\..\UnloadModules.ps1
+. $PSScriptRoot\..\..\..\..\..\UnloadModules.ps1
 
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\..\..\Modules\System
+Import-Module -Name $PSScriptRoot\..\..\..\..\..\Modules\System
 Test-SystemRequirements
 
 # Includes
-. $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Test
+. $PSScriptRoot\..\..\DirectionSetup.ps1
+. $PSScriptRoot\..\..\..\IPSetup.ps1
+Import-Module -Name $RepoDir\Modules\UserInfo
 Import-Module -Name $RepoDir\Modules\ProgramInfo
-Import-Module -Name $RepoDir\Modules\ComputerInfo
 Import-Module -Name $RepoDir\Modules\FirewallModule
 
+#
+# Setup local variables:
+#
+$Group = "Development - Microsoft NuGet"
+$Profile = "Private, Public"
+
 # Ask user if he wants to load these rules
-Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
+Update-Context "IPv$IPVersion" $Direction $Group
 if (!(Approve-Execute)) { exit }
 
-$DebugPreference = "Continue"
+# First remove all existing rules matching group
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
-New-Test "Get-NetFramework"
+#
+# NuGet installation directories
+#
+$NuGetRoot = "%SystemDrive%\tools"
 
-$ComputerName = Get-ComputerName
+#
+# Rules for NuGet
+#
 
-# $NETFramework = Get-NetFramework $ComputerName
-# $NETFramework
-
-# New-Test "Get-NetFramework latest"
-# $NETFramework | Sort-Object -Property Version | Where-Object {$_.InstallPath} | Select-Object -Last 1 -ExpandProperty InstallPath
-
-# New-Test "Get-NetFramework latest version"
-# $Version = $NETFramework | Sort-Object -Property Version | Select-Object -Last 1 -ExpandProperty Version
-# #$Version | get-member
-# $Major, $Minor, $Build, $Revision = $Version.Split(".")
-# $Major
-# $Minor
-
-# Get latest NET Framework installation directory
-$NETFramework = Get-NetFramework $ComputerName
-if ($null -ne $NETFramework)
+# Test if installation exists on system
+if ((Test-Installation "NuGet" ([ref]$NuGetRoot)) -or $Force)
 {
-	$NETFrameworkRoot = $NETFramework |
-	Sort-Object -Property Version |
-	Where-Object {$_.InstallPath} |
-	Select-Object -Last 1 -ExpandProperty InstallPath
-
-	Write-Debug $NETFrameworkRoot -Debug
-	# Edit-Table $NETFrameworkRoot
+	$Program = "$NuGetRoot\nuget.exe"
+	Test-File $Program
+	New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+	-DisplayName "Nuget CLI" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+	-LocalUser $UserAccountsSDDL `
+	-Description "" | Format-Output
 }
-
-Exit-Test

@@ -53,16 +53,33 @@ $Profile = "Any"
 
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
-New-Test "Test all aps for Admins"
-$OwnerSID1 = Get-UserSID "Admin"
-$OwnerSID2 = Get-UserSID "User"
+[int] $Choice = -1
+$Count = 2
 
-# looks like not possible to combine rules
-New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
--DisplayName "All store apps" -Program Any -Service Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
--Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
--LocalUser Any -Owner @($OwnerSID1, $OwnerSID2) -Package "*" `
--Description "" | Format-Output
+while ($Choice -lt 0 -or $Choice -gt $Count)
+{
+	Write-Host "Input number"
+	$Input = Read-Host
+
+	if($Input -notmatch '^-?\d+$')
+	{
+		Write-Host "Digits only please!"
+		continue
+	}
+
+	$Choice = $Input
+}
+
+# New-Test "Test all aps for Admins"
+# $OwnerSID1 = Get-UserSID "Admin"
+# $OwnerSID2 = Get-UserSID "User"
+
+# # looks like not possible to combine rules
+# New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
+# -DisplayName "All store apps" -Program Any -Service Any `
+# -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
+# -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
+# -LocalUser Any -Owner @($OwnerSID1, $OwnerSID2) -Package "*" `
+# -Description "" | Format-Output
 
 Exit-Test

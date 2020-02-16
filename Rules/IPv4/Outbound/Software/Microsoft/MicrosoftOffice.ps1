@@ -26,15 +26,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-. $PSScriptRoot\..\..\..\UnloadModules.ps1
+. $PSScriptRoot\..\..\..\..\..\UnloadModules.ps1
 
 # Check requirements for this project
-Import-Module -Name $PSScriptRoot\..\..\..\Modules\System
+Import-Module -Name $PSScriptRoot\..\..\..\..\..\Modules\System
 Test-SystemRequirements
 
 # Includes
-. $PSScriptRoot\DirectionSetup.ps1
-. $PSScriptRoot\..\IPSetup.ps1
+. $PSScriptRoot\..\..\DirectionSetup.ps1
+. $PSScriptRoot\..\..\..\IPSetup.ps1
 Import-Module -Name $RepoDir\Modules\UserInfo
 Import-Module -Name $RepoDir\Modules\ProgramInfo
 Import-Module -Name $RepoDir\Modules\FirewallModule
@@ -42,7 +42,7 @@ Import-Module -Name $RepoDir\Modules\FirewallModule
 #
 # Setup local variables:
 #
-$Group = "Microsoft Office"
+$Group = "Microsoft - Office"
 $Profile = "Private, Public"
 
 # Ask user if he wants to load these rules

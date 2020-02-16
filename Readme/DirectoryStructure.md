@@ -42,6 +42,9 @@ Rules which apply to games
 #### Software
 Rules which apply to 3rd party programs
 
+#### Microsoft
+Rules which apply Microsoft programs
+
 ## Test
 Contains test scripts to test out individual functions and concepts
 

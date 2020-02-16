@@ -19,3 +19,4 @@
 18. Access is denied randomly while executing rules, need some check around this
 19. Need to see which functions/commands may throw and setup try catch blocks
 20. Most program query functions return multiple program instances, need to select latest or add multiple rules.
+21. Apply only rules for which executable exists, Test-File function

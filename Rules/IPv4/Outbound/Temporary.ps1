@@ -77,7 +77,8 @@ New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Plat
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 -LocalUser $UserAccountsSDDL `
 -Description "Enable only to let some installer update or communicate to internet such as office update, and disable ASAP.
-required for ie. downloaded Click-to-Run which does not have persitent location." | Format-Output
+required for ie. downloaded Click-to-Run which does not have persitent location.
+Add installer path in script and re-run Trmporary.ps1" | Format-Output
 
 New-NetFirewallRule -Confirm:$Execute -Whatif:$Debug -ErrorAction $OnError -Platform $Platform `
 -DisplayName "Services" -Service "*" -Program $ServiceHost `

@@ -52,11 +52,24 @@ $ComputerName = Get-ComputerName
 
 New-Test "Get-WindowsKits"
 
-$WindowsKits = Get-WindowsKits $ComputerName
-$WindowsKits
+# $WindowsKits = Get-WindowsKits $ComputerName
+# $WindowsKits
 
 # New-Test "Get-WindowsKits DebuggersRoot latest"
 
 # $WindowsKits | Where-Object {$_.Product -like "WindowsDebuggersRoot*"} | Sort-Object -Property Product | Select-Object -Last 1 -ExpandProperty InstallPath
+
+New-Test "Get-WindowsKits install path"
+
+$WindowsKits = Get-WindowsKits $ComputerName
+if ($null -ne $WindowsKits)
+{
+	$SDKDebuggers = $WindowsKits |
+	Where-Object {$_.Product -like "WindowsDebuggersRoot*"} |
+	Sort-Object -Property Product |
+	Select-Object -Last 1 -ExpandProperty InstallPath
+
+	$SDKDebuggers
+}
 
 Exit-Test
