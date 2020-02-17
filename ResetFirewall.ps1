@@ -51,6 +51,7 @@ Set-NetFirewallProfile -All -PolicyStore $PolicyStore `
 
 #
 # Remove all the rules
+# TODO: Implement removing only project rules.
 #
 Remove-NetFirewallRule -All -PolicyStore $PolicyStore -ErrorAction SilentlyContinue
 

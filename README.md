@@ -91,12 +91,13 @@ By default this project is tested and designed for most recent Windows/Servers a
 **WARNING:**
 - You may loose internet conectivity for some of your programs or in rare cases even lose internet conectivity completely, if that happens, you can either temporarily allow outbound rules or run `ResetFirewall.ps1` script, to reset firewall to previous state and clear GPO firewall.
 - Inside the Readme folder there is a `ResetFirewall.md`, a guide on how to do it manually, by hand, if for some reason you're unable to run the script, or the script does not solve your problems.
-- Also note that your current/existing rules will not be deleted unless you have rules in GPO whose group name interfere with group names from this ruleset.
+- Also note that your current/existing rules will not be deleted unless you have rules in GPO whose group name interfere with group names from this ruleset, however
+**this does not apply to** `ResetFirewall.ps1` which will clear GPO rules completly and leave only those in control panel.
 - If you want to be 100% sure please export your current GPO rules first, for more info see [ManageGPOFirewall.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/ManageGPOFirewall.md)
 - The scripts will ask you what rules you want, to minimize internet connectivity trouble you should apply at least all generic networking and OS related rules such as BasicNetworking, ICMP, WindowsSystem, WindowsServices, Multicast etc. also do not ignore IPv6, Windows does need IPv6!
 
 **NOTE:**
-- If you would like to modify basic behavior of execution, such as force loading rules and various default actions then visit `Modules` folder, open each module, scroll down and there you'll find global variables which are used for this.
+- If you would like to modify basic behavior of execution, such as force loading rules and various default actions then visit `Config\ProjectSettings.ps1` and there you'll find global variables which are used for this.
 - If you're running scripts for first time it's higly recommended to load all rules, it should be easy to delete what you do not wan't in GPO, rather than later searching scripts for what you may have missed.
 - Loading rules into an empty GPO should be very fast, however loading into GPO which already contains rules will be significally slower (depends on number of existing rules)
 - All errors and warnings will be saved to `Logs` directory, so you can review these logs if you want to fix some problem.

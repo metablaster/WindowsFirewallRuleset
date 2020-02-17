@@ -563,7 +563,7 @@ function Get-AllUserPrograms
 	# TODO: make global connection timeout
 	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
 	{
-		# TODO: this key does not exist in Windows Server 2019
+		# TODO: this key may not exist on fresh installed systems, tested in fresh installed Windows Server 2019
 		$HKLM = "SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData"
 
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
