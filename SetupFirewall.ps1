@@ -113,7 +113,7 @@ if(Approve-Execute "Yes" "Applying: Inbound IPv4 Rules")
 	if(Approve-Execute "Yes" "Applying: Rules for Microsoft programs")
 	{
 		# rules for programs
-		& "$PSScriptRoot\Rules\IPv4\Inbound\Software\MicrosoftOffice.ps1"
+		& "$PSScriptRoot\Rules\IPv4\Inbound\Software\Microsoft\MicrosoftOffice.ps1"
 	}
 }
 
