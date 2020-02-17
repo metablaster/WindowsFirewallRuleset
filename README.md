@@ -66,7 +66,7 @@ For more info see respective licences:\
 # Minimum supported system requirements
 1. Windows 10 Pro/Enterprise, Windows Server 2019
 2. Windows Powershell 5.1 [Download Powershell](https://github.com/PowerShell/PowerShell)
-3. NET Framework 4.7 [Download Net Framework](https://dotnet.microsoft.com/download/dotnet-framework)
+3. NET Framework 4.5 [Download Net Framework](https://dotnet.microsoft.com/download/dotnet-framework)
 4. Git (Optional) [Download Git](https://git-scm.com/downloads)
 5. Visual Studio Code (Optional) [Download VSCode](https://code.visualstudio.com)
 6. PowerShell Support for VSCode (Optional) [Download extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell)
@@ -75,7 +75,7 @@ For more info see respective licences:\
 
 - All operating systems 10.0 (Major 10, Minor 0) and up are supported, that includes "regular" Windows, Servers etc.
 - Powershell is built into Windows by default, you will probably need to install it or update on older systems.
-- NET Framework 4.7 is automatically installed on Windows 10 - 1607 and Server 2019 - 1809, in addition make sure you have [.NET 3.5 enabled](https://docs.microsoft.com/en-us/dotnet/framework/install/dotnet-35-windows-10), see control panel option on that link.
+- NET Framework 4.5 is automatically installed on Windows 10 and Server 2019, in addition make sure you have [.NET 3.5 enabled](https://docs.microsoft.com/en-us/dotnet/framework/install/dotnet-35-windows-10), see control panel option on that link.
 - You may want to have git to check out for updates, to easily switch between branches or to contribute code.
 - VS Code is preferred and recommended editor to navigate project and edit the scripts for your needs or for contribution, any other editor is of course your choice.
 - If you get VSCode, you'll also need powershell extension for code navigation and PowerShell specific features.

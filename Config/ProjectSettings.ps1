@@ -65,7 +65,8 @@ if ($Develop)
 {
 	# Override above defaults here however you wish, will be globally set except in modules
 	$DebugPreference = "Continue"
-
+	# $VerbosePreference = "Continue"
+	
 	# Preferences for modules
 	Set-Variable -Name ModuleDebugPreference -Scope Global -Value $DebugPreference
 

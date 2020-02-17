@@ -147,7 +147,7 @@ function Test-SystemRequirements
 			2 { $StatusGood = $false }
 			3 { $StatusGood = $false }
 			4 {
-				if ($NETMinor -lt 7)
+				if ($NETMinor -lt 5)
 				{
 					$StatusGood = $false
 				}
@@ -157,7 +157,7 @@ function Test-SystemRequirements
 		if (!$StatusGood)
 		{
 			Write-Host ""
-			Write-Host "Unable to proceed, minimum requried NET Framework version to run these scripts is 4.8" -ForegroundColor Red -BackgroundColor Black
+			Write-Host "Unable to proceed, minimum requried NET Framework version to run these scripts is 4.5" -ForegroundColor Red -BackgroundColor Black
 			Write-Host "Your NET Framework version is: $NETMajor.$NETMinor"
 			Write-Host ""
 			exit
