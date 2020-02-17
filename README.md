@@ -192,7 +192,7 @@ There are two methods to be up to date with firewall:
 - Type: (or copy paste command(s) and hit enter) ```cd WindowsFirewallRuleset``` to move into WindowsFirewallRuleset folder
 - This command is typed only once for initial setup:
 
-```git@github.com:metablaster/WindowsFirewallRuleset.git```
+```git remote add upstream git@github.com:metablaster/WindowsFirewallRuleset.git```
 
 Otherwise if you cloned repo via HTTPS and want HTTPS (no SSH), then:
 
