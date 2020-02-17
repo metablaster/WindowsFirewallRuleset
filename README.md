@@ -58,10 +58,10 @@ License and Copyright notices for this project is in project root folder.\
 License, Copyright notices, and links, for "Utility" scripts are located in "Utility" folder and also included into individual script files directly.
 
 For more info see respective licences:\
-[WindowsFirewallRuleset\LICENSE](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/LICENSE)\
-[Indented.Net.IP\LICENSE](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Modules/Indented.Net.IP/LICENSE)\
-[VSSetup\LICENSE.txt](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Modules/VSSetup/LICENSE.txt)\
-[Utility\Licences](https://github.com/metablaster/WindowsFirewallRuleset/tree/develop/Utility/Licenses/)
+[WindowsFirewallRuleset\LICENSE](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/LICENSE)\
+[Indented.Net.IP\LICENSE](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Indented.Net.IP/LICENSE)\
+[VSSetup\LICENSE.txt](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/VSSetup/LICENSE.txt)\
+[Utility\Licences](https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Utility/Licenses)
 
 # Minimum supported system requirements
 1. Windows 10 Pro/Enterprise, Windows Server 2019
@@ -104,7 +104,7 @@ By default this project is tested and designed for most recent Windows/Servers a
 - Any rule that results in "Access denied" while loading should be reloaded by executing specific script again.
 
 **STEPS:**
-1. If you don't have ssh keys and other setup required to clone then just download the zip file by clicking on green "Clone or download" button here on this site.
+1. If you don't have ssh keys and other setup required to clone then just download the release zip file by clicking on "Releases" here on this site.
 2. extract the archive somewhere, this steps assume you've extracted the zip into `C:\` root drive directly.
 3. Right click on the Task bar and select `Taskbar settings`
 4. Toggle on `Replace Command Prompt with Windows Powershell in the menu when I right click the start button`
@@ -182,7 +182,7 @@ not before all scripts are fully tested, meaning master brach is stable.
 So if you're fine to experiment with development/beta version switch to "develop" branch and try it out, otherwise stick to master if for example development version produces errors for you.
 
 There are two methods to be up to date with firewall:
-1. First method requires you to download scripts, first use the "branch" button here on this site to switch to either master or develop branch, next use "Clone or download" button and either downlaod zip file or copy clone link and make a new clone.
+1. First method requires you to download scripts, first use the "branch" button here on this site to switch to either master or develop branch, next use "Clone or download" button and downlaod zip file.
 
 2. Second method is good if you want to do it in powershell console without visiting this site, you will need git (link above), github account and [SSH key](https://help.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account) to check for new updates on daily, weekly or what ever other basis you want, follow bellow steps to check for updates once you installed git:
 - Right click on Start button in Windows system
