@@ -863,6 +863,12 @@ function Test-Installation
 	}
 	elseif (Find-Installation $Program)
 	{
+		if ($DebugPreference -eq "Continue")
+		{
+			Write-Debug "InstallTable for $Program"
+			$InstallTable | Format-Table
+		}
+
 		# NOTE: the paths in installation table are supposed to be formatted
 		$InstallRoot = "unknown install location"
 		$Count = $InstallTable.Rows.Count
@@ -897,6 +903,8 @@ function Test-Installation
 
 			if ($Choice -eq 0)
 			{
+				Write-Debug "User input is: $Choice"
+
 				# User doesn't know the path, skip correction message
 				return $false
 			}

@@ -104,7 +104,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	New-Variable -Name Force -Scope Global -Option Constant -Value $false
 }
 
-if (!(Get-Variable -Name CheckRemovableVariables -Scope Global -ErrorAction Ignore))
+if (!(Get-Variable -Name CheckRemovableVariables -Scope Global -ErrorAction Ignore) -or $Develop)
 {
 	Write-Debug "Setting -> Project variables"
 

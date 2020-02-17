@@ -280,6 +280,7 @@ if ((Test-Installation "Yandex" ([ref] $YandexRoot)) -or $Force)
 #
 
 # Test if installation exists on system
+# TODO: this will be true even if $false for both!
 if ((Test-Installation "Tor" ([ref] $TorRoot)) -or $Force)
 {
 	$TorApp = "$TorRoot\Browser\TorBrowser\Tor\tor.exe"
