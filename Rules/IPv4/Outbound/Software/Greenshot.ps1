@@ -55,7 +55,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # Greenshot installation directories
 #
-$GreenshotRoot = "%LocalAppData%\Greenshot"
+$GreenshotRoot = "C:\Users\User\AppData\Local\Greenshot"
 
 #
 # Rules for Greenshot

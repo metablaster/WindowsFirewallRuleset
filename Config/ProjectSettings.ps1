@@ -28,7 +28,7 @@ SOFTWARE.
 
 # Set to true to indicate development phase, forces unloading modules and removing variables.
 # In addition to this do (CTRL SHIFT + F) global search and uncomment symbols for: "to export from this module"
-Set-Variable -Name Develop -Scope Global -Value $true
+Set-Variable -Name Develop -Scope Global -Value $false
 
 <#
 Preference Variables default values
@@ -101,7 +101,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	# Default network interface card, change this to NIC which your target PC uses
 	New-Variable -Name Interface -Scope Global -Option Constant -Value "Wired, Wireless"
 	# To force loading rules regardless of presence of program set to true
-	New-Variable -Name Force -Scope Global -Option Constant -Value $true
+	New-Variable -Name Force -Scope Global -Option Constant -Value $false
 }
 
 if (!(Get-Variable -Name CheckRemovableVariables -Scope Global -ErrorAction Ignore))
@@ -112,7 +112,7 @@ if (!(Get-Variable -Name CheckRemovableVariables -Scope Global -ErrorAction Igno
 	Set-Variable -Name CheckRemovableVariables -Scope Global -Option ReadOnly -Force -Value $null
 
 	# Set to false to avoid checking system requirements
-	Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $false
+	Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $true
 
 	# Global variable to tell if all scripts ran clean
 	Set-Variable -Name WarningStatus -Scope Global -Value $false

@@ -52,9 +52,11 @@ function Test-SystemRequirements
 	if ($Check)
 	{
 		# print info
+		Write-Host ""
 		Write-Host "Windows Firewall Ruleset v0.1" -ForegroundColor Green -BackgroundColor Black
 		Write-Host "Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch" -ForegroundColor Green -BackgroundColor Black
 		Write-Host "https://github.com/metablaster/WindowsFirewallRuleset" -ForegroundColor Green -BackgroundColor Black
+		Write-Host ""
 
 		# Check operating system
 		$OSPlatform = [System.Environment]::OSVersion.Platform

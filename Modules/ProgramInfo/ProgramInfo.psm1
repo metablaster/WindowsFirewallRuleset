@@ -645,7 +645,14 @@ function Initialize-Table
 	)
 
 	# Create Table object
-	Set-Variable -Name InstallTable -Scope Global -Value (New-Object System.Data.DataTable $TableName)
+	if ($Develop)
+	{
+		Set-Variable -Name InstallTable -Scope Global -Value (New-Object System.Data.DataTable $TableName)
+	}
+	else
+	{
+		Set-Variable -Name InstallTable -Scope Script -Value (New-Object System.Data.DataTable $TableName)
+	}
 
 	# Define Columns
 	$UserColumn = New-Object System.Data.DataColumn User, ([string])
@@ -901,6 +908,7 @@ function Test-Installation
 			$InstallRoot = $InstallTable | Select-Object -ExpandProperty InstallRoot
 		}
 
+		# Using single quotes to make it emptiness obvious when the path is empty.
 		Write-Note "Path corrected from: '$($FilePath.Value)'", "to: '$InstallRoot'"
 		$FilePath.Value = $InstallRoot
 	}
