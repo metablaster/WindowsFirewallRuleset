@@ -42,7 +42,7 @@ Import-Module -Name $RepoDir\Modules\FirewallModule
 #
 # Setup local variables:
 #
-$Group = "Software - Riva Tuner Statistics SErver"
+$Group = "Software - Riva Tuner Statistics Server"
 $Profile = "Private, Public"
 
 # Ask user if he wants to load these rules

@@ -55,7 +55,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # Windows SDK installation directories
 #
-$SDKDebuggers = ""
+$SDKDebuggers = "Unknown Directory"
 
 #
 # Rules for Windows SDK

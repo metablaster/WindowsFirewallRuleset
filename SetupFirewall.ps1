@@ -34,8 +34,7 @@ SOFTWARE.
 # Check requirements for this project
 Import-Module -Name $RepoDir\Modules\System
 Test-SystemRequirements
-Remove-Variable -Name SystemCheck -Scope Global -Force
-New-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Value $false
+Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $false
 
 # Includes
 Import-Module -Name $RepoDir\Modules\ProgramInfo
@@ -114,7 +113,7 @@ if(Approve-Execute "Yes" "Applying: Inbound IPv4 Rules")
 	if(Approve-Execute "Yes" "Applying: Rules for Microsoft programs")
 	{
 		# rules for programs
-		& "$PSScriptRoot\Rules\IPv4\Inbound\\Software\MicrosoftOffice.ps1"
+		& "$PSScriptRoot\Rules\IPv4\Inbound\Software\MicrosoftOffice.ps1"
 	}
 }
 
@@ -203,7 +202,7 @@ if(Approve-Execute "Yes" "Applying: Outbound IPv4 Rules")
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Software\GPG.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Software\Greenshot.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Software\Intel.ps1"
-		& "$PSScriptRoot\Rules\IPv4\Outbound\InternetBrowser.ps1"
+		& "$PSScriptRoot\Rules\IPv4\Outbound\Software\InternetBrowser.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Software\Java.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Software\Metatrader.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Software\MSI.ps1"
@@ -269,6 +268,12 @@ Write-Host ""
 
 # Set up Firewall profile
 & .\FirewallProfile.ps1
+
+if ($Develop)
+{
+	# Need to re-import required module in develop mode
+	Import-Module -Name $RepoDir\Modules\FirewallModule
+}
 
 # Show status of execution
 $ErrorCount = $Error.Count -gt 0

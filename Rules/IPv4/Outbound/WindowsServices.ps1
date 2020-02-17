@@ -151,14 +151,18 @@ New-NetFirewallRule -Platform $Platform `
 -Description "This service runs in session 0 and hosts the notification platform and connection provider
 which handles the connection between the device and WNS server." | Format-Output
 
-# TODO: this service's name most likely isn't constant
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Windows Push Notifications User Service" -Service WpnUserService_e13583 -Program $ServiceHost `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser Any `
--Description "This service hosts Windows notification platform which provides support for local and push notifications.
-Supported notifications are tile, toast and raw." | Format-Output
+# NOTE: this service's name isn't constant, need to query correct name
+$Service = Get-Service | Where-Object { $_.DisplayName -like "Windows Push Notifications User Service*" } | Select-Object -expandproperty Name
+if ($Service)
+{
+	New-NetFirewallRule -Platform $Platform `
+	-DisplayName "Windows Push Notifications User Service" -Service $Service -Program $ServiceHost `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+	-LocalUser Any `
+	-Description "This service hosts Windows notification platform which provides support for local and push notifications.
+	Supported notifications are tile, toast and raw." | Format-Output
+}
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Windows Insider Service" -Service wisvc -Program $ServiceHost `

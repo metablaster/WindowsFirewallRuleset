@@ -55,7 +55,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # vcpkg installation directories
 #
-$vcpkgRoot = ""
+$vcpkgRoot = "Unknown Directory"
 
 #
 # Rules for vcpkg

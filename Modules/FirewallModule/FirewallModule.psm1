@@ -406,7 +406,7 @@ function Get-NetworkServices
 
 	# Get rid of duplicate matches and known bad values
 	$Content = $Content | Select-Object -Unique
-	$Content = $Content | Where-Object { $_ -ne '$Service' -and $_ -ne "Any" }
+	$Content = $Content | Where-Object { $_ -ne '$Service' -and $_ -ne "Any" -and $_ -ne '"*"' }
 
 	# File name where to save all matches
 	$File = "$RepoDir\Rules\NetworkServices.txt"

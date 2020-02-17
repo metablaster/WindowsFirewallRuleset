@@ -66,7 +66,7 @@ if ($Develop)
 	# Override above defaults here however you wish, will be globally set except in modules
 	$DebugPreference = "Continue"
 	# $VerbosePreference = "Continue"
-	
+
 	# Preferences for modules
 	Set-Variable -Name ModuleDebugPreference -Scope Global -Value $DebugPreference
 
@@ -101,7 +101,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	# Default network interface card, change this to NIC which your target PC uses
 	New-Variable -Name Interface -Scope Global -Option Constant -Value "Wired, Wireless"
 	# To force loading rules regardless of presence of program set to true
-	New-Variable -Name Force -Scope Global -Option Constant -Value $false
+	New-Variable -Name Force -Scope Global -Option Constant -Value $true
 }
 
 if (!(Get-Variable -Name CheckRemovableVariables -Scope Global -ErrorAction Ignore))

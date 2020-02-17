@@ -901,7 +901,7 @@ function Test-Installation
 			$InstallRoot = $InstallTable | Select-Object -ExpandProperty InstallRoot
 		}
 
-		Write-Note "Path corrected from: $($FilePath.Value)", "to: $InstallRoot"
+		Write-Note "Path corrected from: '$($FilePath.Value)'", "to: '$InstallRoot'"
 		$FilePath.Value = $InstallRoot
 	}
 	else
@@ -960,7 +960,7 @@ function Find-Installation
 				Where-Object {$_.InstallPath} |
 				Select-Object -Last 1 -ExpandProperty InstallPath
 
-				Write-Debug $NETFrameworkRoot -Debug
+				Write-Debug "[Find-Installation] $NETFrameworkRoot"
 				Edit-Table $NETFrameworkRoot
 			}
 			break
@@ -986,7 +986,7 @@ function Find-Installation
 				Sort-Object -Property Product |
 				Select-Object -Last 1 -ExpandProperty InstallPath
 
-				Write-Debug $SDKDebuggers -Debug
+				Write-Debug "[Find-Installation] $SDKDebuggers"
 				Edit-Table $SDKDebuggers
 			}
 			break

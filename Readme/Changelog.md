@@ -14,6 +14,7 @@
 2. Store apps rule for administrators did not work
 3. Update some rules which were incorrect
 4. Fixed Show-SDDL function, bug in borrowed code
+5. Reduce required .NET to 4.5, which is minimum for PowerShell 5.1
 
 # Development
 1. Make all files use tabs instead of spaces
