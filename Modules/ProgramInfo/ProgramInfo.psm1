@@ -2,7 +2,7 @@
 <#
 MIT License
 
-Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems,
+Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
 Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
@@ -1747,17 +1747,16 @@ System.Management.Automation.PSCustomObject for installed Microsoft SQL Server M
 # Module variables
 #
 
-# $DebugPreference = "Continue"
-
-if ((Get-Variable -Name Develop -Scope Global).Value)
+# Installation table holds user and program directory pair
+if ($Develop)
 {
-	# Installation table holds user and program directory pair
-	Remove-Variable -Name InstallTable -Scope Global -ErrorAction Ignore
-	New-Variable -Name InstallTable -Scope Global -Value $null
+	Remove-Variable -Name InstallTable -Scope Script -ErrorAction Ignore
+	Set-Variable -Name InstallTable -Scope Global -Value $null
 }
 else
 {
-	New-Variable -Name InstallTable -Scope Script -Value $null
+	Remove-Variable -Name InstallTable -Scope Global -ErrorAction Ignore
+	Set-Variable -Name InstallTable -Scope Script -Value $null
 }
 
 # Any environment variables to user profile are not valid for firewall
@@ -1805,41 +1804,42 @@ Export-ModuleMember -Function Test-Installation
 Export-ModuleMember -Function Get-AppSID
 Export-ModuleMember -Function Test-Service
 
-#
-# Variable exports
-#
+Export-ModuleMember -Function Format-Path
+Export-ModuleMember -Function Test-UserProfile
+Export-ModuleMember -Function Find-Installation
+Export-ModuleMember -Function Test-Environment
+
+Export-ModuleMember -Function Get-UserPrograms
+Export-ModuleMember -Function Get-AllUserPrograms
+Export-ModuleMember -Function Get-SystemPrograms
+Export-ModuleMember -Function Get-NetFramework
+Export-ModuleMember -Function Get-WindowsKits
+Export-ModuleMember -Function Get-WindowsSDK
+Export-ModuleMember -Function Get-WindowsDefender
+Export-ModuleMember -Function Get-SQLInstances
+Export-ModuleMember -Function Get-SQLManagementStudio
 
 #
 # Exports for debugging
 #
-if ((Get-Variable -Name Develop -Scope Global).Value)
+if ($Develop)
 {
-	#
-	# Exports for deubgging only
-	#
-
 	# Function exports
-	Export-ModuleMember -Function Format-Path
-	Export-ModuleMember -Function Test-UserProfile
-	Export-ModuleMember -Function Find-Installation
-	Export-ModuleMember -Function Test-Environment
-
 	Export-ModuleMember -Function Update-Table
 	Export-ModuleMember -Function Edit-Table
 	Export-ModuleMember -Function Initialize-Table
 
-	Export-ModuleMember -Function Get-UserPrograms
-	Export-ModuleMember -Function Get-AllUserPrograms
-	Export-ModuleMember -Function Get-SystemPrograms
-	Export-ModuleMember -Function Get-NetFramework
-	Export-ModuleMember -Function Get-WindowsKits
-	Export-ModuleMember -Function Get-WindowsSDK
-	Export-ModuleMember -Function Get-WindowsDefender
-	Export-ModuleMember -Function Get-SQLInstances
-	Export-ModuleMember -Function Get-SQLManagementStudio
-
 	# Variable exports
 	Export-ModuleMember -Variable InstallTable
+}
+
+#
+# Module preferences
+#
+
+if ($Develop)
+{
+	$DebugPreference = $ModuleDebugPreference
 }
 
 <# Opening keys, naming convention as you drill down the keys

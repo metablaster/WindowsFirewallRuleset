@@ -2,7 +2,7 @@
 <#
 MIT License
 
-Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems,
+Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
 Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
@@ -26,12 +26,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# Removing this variable to easily swith mode
-Remove-Variable -Name Develop -Scope Global -Force -ErrorAction Ignore
-
 # Set to true to indicate development phase, forces unloading modules and removing variables.
-# In addition to this do global search (CTRL SHIFT + F) for: to export from this module in "Develop" mode
-New-Variable -Name Develop -Scope Global -Option ReadOnly -Value $true
+# In addition to this do (CTRL SHIFT + F) global search and uncomment symbols for: "to export from this module"
+Set-Variable -Name Develop -Scope Global -Value $true
 
 <#
 Preference Variables default values
@@ -66,13 +63,16 @@ $WhatIfPreference	False
 
 if ($Develop)
 {
-	Write-Debug "Setting -> Clean up environment"
-
-	# Override these defaults here however you wish, will be globally set except in modules
+	# Override above defaults here however you wish, will be globally set except in modules
 	$DebugPreference = "Continue"
 
+	# Preferences for modules
+	Set-Variable -Name ModuleDebugPreference -Scope Global -Value $DebugPreference
+
+	Write-Debug "Setting -> Clean up environment"
+
 	#
-	# Remove loaded modules and removable variables, usefull for module debugging
+	# Remove loaded modules, usefull for module debugging
 	# and to avoid restarting powershell every time.
 	#
 
@@ -82,10 +82,6 @@ if ($Develop)
 	Remove-Module -Name UserInfo -ErrorAction Ignore
 	Remove-Module -Name ComputerInfo -ErrorAction Ignore
 	Remove-Module -Name ProgramInfo -ErrorAction Ignore
-
-	Remove-Variable -Name CheckRemovableVariables -Scope Global -Force -ErrorAction Ignore
-	Remove-Variable -Name SystemCheck -Scope Global -Force -ErrorAction Ignore
-	Remove-Variable -Name WarningStatus -Scope Global -ErrorAction Ignore
 }
 
 if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore))
@@ -112,11 +108,11 @@ if (!(Get-Variable -Name CheckRemovableVariables -Scope Global -ErrorAction Igno
 	Write-Debug "Setting -> Project variables"
 
 	# check if removable variables already initialized
-	New-Variable -Name CheckRemovableVariables -Scope Global -Option ReadOnly -Value $null
+	Set-Variable -Name CheckRemovableVariables -Scope Global -Option ReadOnly -Force -Value $null
 
 	# Set to false to avoid checking system requirements
-	New-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Value $false
+	Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $false
 
 	# Global variable to tell if all scripts ran clean
-	New-Variable -Name WarningStatus -Scope Global -Value $false
+	Set-Variable -Name WarningStatus -Scope Global -Value $false
 }

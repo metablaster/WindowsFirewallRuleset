@@ -2,7 +2,7 @@
 <#
 MIT License
 
-Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems,
+Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
 Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
@@ -73,14 +73,17 @@ function Exit-Test
 }
 
 #
-# Module variables
-#
-
-# $DebugPreference = "Continue"
-
-#
 # Function exports
 #
 
 Export-ModuleMember -Function New-Test
 Export-ModuleMember -Function Exit-Test
+
+#
+# Module preferences
+#
+
+if ($Develop)
+{
+	$DebugPreference = $ModuleDebugPreference
+}

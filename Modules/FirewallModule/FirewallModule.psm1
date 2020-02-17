@@ -2,7 +2,7 @@
 <#
 MIT License
 
-Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems,
+Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
 Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
@@ -495,8 +495,6 @@ function Set-ScreenBuffer
 # Module variables
 #
 
-# $DebugPreference = "Continue"
-
 if (!(Get-Variable -Name CheckInitFirewallModule -Scope Global -ErrorAction Ignore))
 {
 	# check if constants alreay initialized, used for module reloading
@@ -534,3 +532,12 @@ Export-ModuleMember -Function Set-ScreenBuffer
 
 Export-ModuleMember -Variable ServiceHost
 Export-ModuleMember -Variable CheckInitFirewallModule
+
+#
+# Module preferences
+#
+
+if ($Develop)
+{
+	$DebugPreference = $ModuleDebugPreference
+}

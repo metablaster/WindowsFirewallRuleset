@@ -2,7 +2,7 @@
 <#
 MIT License
 
-Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems,
+Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
 Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
@@ -44,12 +44,11 @@ Import-Module -Name $RepoDir\Modules\ComputerInfo
 Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
+Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-$DebugPreference = "Continue"
 $Group = "Test - Multiple package users"
-$Profile = "Any"
+# $Profile = "Any"
 
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
@@ -74,7 +73,7 @@ while ($Choice -lt 0 -or $Choice -gt $Count)
 # $OwnerSID1 = Get-UserSID "Admin"
 # $OwnerSID2 = Get-UserSID "User"
 
-# # looks like not possible to combine rules
+# looks like not possible to combine rules
 # New-NetFirewallRule -Platform $Platform `
 # -DisplayName "All store apps" -Program Any -Service Any `
 # -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `

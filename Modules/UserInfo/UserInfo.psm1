@@ -2,7 +2,7 @@
 <#
 MIT License
 
-Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems,
+Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
 Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
@@ -267,8 +267,6 @@ function Get-AccountSDDL
 # Module variables
 #
 
-# $DebugPreference = "Continue"
-
 # TODO: add more groups, guests, everyone etc; we should make use of groups instead of SDDL for existing users probably?
 # but then individual users can't be removed by admin, on the other side there are rules which need all users regardless such as
 # browser updater for edge-chromium and extension users for problem services.
@@ -361,3 +359,12 @@ Export-ModuleMember -Variable NT_AUTHORITY_UserModeDrivers
 
 # Other System Users
 # $NT_AUTHORITY_UserModeDrivers = "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
+
+#
+# Module preferences
+#
+
+if ($Develop)
+{
+	$DebugPreference = $ModuleDebugPreference
+}

@@ -2,7 +2,7 @@
 <#
 MIT License
 
-Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems,
+Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
 Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
@@ -41,10 +41,8 @@ Import-Module -Name $RepoDir\Modules\Test
 Import-Module -Name $RepoDir\Modules\FirewallModule
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $MyInvocation.MyCommand.Name.TrimEnd(".ps1")
+Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
-
-$DebugPreference = "Continue"
 
 New-Test "Set-ScreenBuffer"
 Set-ScreenBuffer

@@ -2,7 +2,7 @@
 <#
 MIT License
 
-Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems,
+Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
 Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
@@ -51,6 +51,11 @@ function Test-SystemRequirements
 	# disabled when runing scripts from SetupFirewall.ps1 script
 	if ($Check)
 	{
+		# print info
+		Write-Host "Windows Firewall Ruleset v0.1" -ForegroundColor Green -BackgroundColor Black
+		Write-Host "Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch" -ForegroundColor Green -BackgroundColor Black
+		Write-Host "https://github.com/metablaster/WindowsFirewallRuleset" -ForegroundColor Green -BackgroundColor Black
+
 		# Check operating system
 		$OSPlatform = [System.Environment]::OSVersion.Platform
 		$OSMajor = [System.Environment]::OSVersion.Version.Major
@@ -65,14 +70,14 @@ function Test-SystemRequirements
 			exit
 		}
 
-		# Check if in elevated powershell
+		# Check if in elevated PowerShell
 		$Principal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
 		$local:StatusGood = $Principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 
 		if (!$StatusGood)
 		{
 			Write-Host ""
-			Write-Host "Unable to proceed, please open powershell as Administrator" -ForegroundColor Red -BackgroundColor Black
+			Write-Host "Unable to proceed, please open PowerShell as Administrator" -ForegroundColor Red -BackgroundColor Black
 			Write-Host ""
 			exit
 		}
@@ -88,30 +93,30 @@ function Test-SystemRequirements
 			exit
 		}
 
-		# Check Powershell edition
-		$PowershellEdition = $PSVersionTable.PSEdition
+		# Check PowerShell edition
+		$PowerShellEdition = $PSVersionTable.PSEdition
 
-		if ($PowershellEdition -ne "Desktop")
+		if ($PowerShellEdition -ne "Desktop")
 		{
 			Write-Host ""
-			Write-Host "Unable to proceed, 'Desktop' edition of Powershell is required to run these scripts" -ForegroundColor Red -BackgroundColor Black
-			Write-Host "Your Powershell edition is: $PowershellEdition"
+			Write-Host "Unable to proceed, 'Desktop' edition of PowerShell is required to run these scripts" -ForegroundColor Red -BackgroundColor Black
+			Write-Host "Your PowerShell edition is: $PowerShellEdition"
 			Write-Host ""
 			exit
 		}
 
-		# Check Powershell version
-		$PowershellMajor = $PSVersionTable.PSVersion | Select-Object -ExpandProperty Major
-		$PowershellMinor = $PSVersionTable.PSVersion | Select-Object -ExpandProperty Minor
+		# Check PowerShell version
+		$PowerShellMajor = $PSVersionTable.PSVersion | Select-Object -ExpandProperty Major
+		$PowerShellMinor = $PSVersionTable.PSVersion | Select-Object -ExpandProperty Minor
 
-		switch ($PowershellMajor)
+		switch ($PowerShellMajor)
 		{
 			1 { $StatusGood = $false }
 			2 { $StatusGood = $false }
 			3 { $StatusGood = $false }
 			4 { $StatusGood = $false }
 			5 {
-				if ($PowershellMinor -lt 1)
+				if ($PowerShellMinor -lt 1)
 				{
 					$StatusGood = $false
 				}
@@ -121,13 +126,13 @@ function Test-SystemRequirements
 		if (!$StatusGood)
 		{
 			Write-Host ""
-			Write-Host "Unable to proceed, minimum required Powershell required to run these scripts is: Desktop 5.1" -ForegroundColor Red -BackgroundColor Black
-			Write-Host "Your Powershell version is: $PowershellEdition $PowershellMajor.$PowershellMinor"
+			Write-Host "Unable to proceed, minimum required PowerShell required to run these scripts is: Desktop 5.1" -ForegroundColor Red -BackgroundColor Black
+			Write-Host "Your PowerShell version is: $PowerShellEdition $PowerShellMajor.$PowerShellMinor"
 			Write-Host ""
 			exit
 		}
 
-		# Now that OS and Powershell is OK we can import these modules
+		# Now that OS and PowerShell is OK we can import these modules
 		Import-Module -Name $RepoDir\Modules\ProgramInfo
 		Import-Module -Name $RepoDir\Modules\ComputerInfo
 
@@ -197,17 +202,11 @@ function Test-SystemRequirements
 		# Everything OK, print environment status
 		Write-Host ""
 		Write-Host "System:`t`t $OSPlatform v$OSMajor.$OSMinor" -ForegroundColor Cyan
-		Write-Host "Powershell:`t $PowershellEdition v$PowershellMajor.$PowershellMinor" -ForegroundColor Cyan
+		Write-Host "PowerShell:`t $PowerShellEdition v$PowerShellMajor.$PowerShellMinor" -ForegroundColor Cyan
 		Write-Host "NET Framework:`t v$NETMajor.$NETMinor" -ForegroundColor Cyan
 		Write-Host ""
 	}
 }
-
-#
-# Module variables
-#
-
-# $DebugPreference = "Continue"
 
 #
 # Function exports
@@ -216,5 +215,10 @@ function Test-SystemRequirements
 Export-ModuleMember -Function Test-SystemRequirements
 
 #
-# Variable exports
+# Module preferences
 #
+
+if ($Develop)
+{
+	$DebugPreference = $ModuleDebugPreference
+}

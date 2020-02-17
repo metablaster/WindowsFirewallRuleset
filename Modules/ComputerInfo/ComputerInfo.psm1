@@ -2,7 +2,7 @@
 <#
 MIT License
 
-Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems,
+Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
 Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
@@ -127,12 +127,6 @@ function Get-Broadcast
 }
 
 #
-# Module variables
-#
-
-# $DebugPreference = "Continue"
-
-#
 # Function exports
 #
 
@@ -140,3 +134,12 @@ Export-ModuleMember -Function Get-ComputerName
 Export-ModuleMember -Function Get-IPAddress
 Export-ModuleMember -Function Get-AdapterConfig
 Export-ModuleMember -Function Get-Broadcast
+
+#
+# Module preferences
+#
+
+if ($Develop)
+{
+	$DebugPreference = $ModuleDebugPreference
+}
