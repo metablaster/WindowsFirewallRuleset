@@ -104,7 +104,7 @@ By default this project is tested and designed for most recent Windows/Servers a
 - Any rule that results in "Access denied" while loading should be reloaded by executing specific script again.
 
 **STEPS:**
-1. If you don't have ssh keys and other setup required to clone then just download the release zip file by clicking on "Releases" here on this site.
+1. If you don't have ssh keys and other setup required to clone then just download the released zip file by clicking on "Release" here on this site.
 2. extract the archive somewhere, this steps assume you've extracted the zip into `C:\` root drive directly.
 3. Right click on the Task bar and select `Taskbar settings`
 4. Toggle on `Replace Command Prompt with Windows Powershell in the menu when I right click the start button`
