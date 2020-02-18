@@ -41,6 +41,7 @@ None. You cannot pipe objects to Get-UserAccounts
 System.String[] Array of enabled user accounts in specified group, in form of COMPUTERNAME\USERNAME
 .NOTES
 TODO: implement queriying computers on network
+TODO: should be renamed into Get-GroupUsers
 #>
 function Get-UserAccounts
 {
@@ -50,29 +51,14 @@ function Get-UserAccounts
 		[string] $UserGroup
 	)
 
-	# Get all accounts from given group
-	$AllAccounts = Get-LocalGroupMember -Group $UserGroup | Where-Object {$_.PrincipalSource -eq "Local"} | Select-Object -ExpandProperty Name
+	$GroupUsers = Get-LocalGroupMember -Group $UserGroup | Where-Object { $_.PrincipalSource -eq "Local" -and $_.ObjectClass -eq "User" }
 
-	# Get disabled accounts
-	$DisabledAccounts = Get-WmiObject -Class Win32_UserAccount -Filter "Disabled=True" | Select-Object -ExpandProperty Caption
-
-	# Assemble enabled accounts into an array
-	$EnabledAccounts = @()
-	foreach ($Account in $AllAccounts)
-	{
-		# TODO: -notcontains ?
-		if (!($DisabledAccounts -contains $Account))
-		{
-			$EnabledAccounts += $Account
-		}
-	}
-
-	if([string]::IsNullOrEmpty($EnabledAccounts))
+	if([string]::IsNullOrEmpty($GroupUsers))
 	{
 		Set-Warning "Get-UserAccounts: Failed to get UserAccounts for group '$UserGroup'"
 	}
 
-	return $EnabledAccounts
+	return $GroupUsers
 }
 
 <#
@@ -248,7 +234,7 @@ function Get-AccountSDDL
 	{
 		try
 		{
-			$SID = Get-AccountSID($Account)
+			$SID = Get-AccountSID $Account
 		}
 		catch
 		{

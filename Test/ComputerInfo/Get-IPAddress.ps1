@@ -54,8 +54,4 @@ Get-IPAddress 6
 Write-Host "Get-IPAddress 3"
 Get-IPAddress 3
 
-New-Test "Failure test"
-$AdapterConfig = Get-AdapterConfig
-Write-Error -Category NotEnabled -TargetObject $AdapterConfig -Message "IPv6 not configured on adapter"
-
 Exit-Test

@@ -45,7 +45,7 @@ TODO: implement queriying computers on network by specifying IP address
 #>
 function Get-ComputerName
 {
-	return Get-WmiObject Win32_ComputerSystem | Select-Object -ExpandProperty Name
+	return [Environment]::MachineName
 }
 
 <#
@@ -89,22 +89,39 @@ function Get-IPAddress
 		[int16] $IPVersion
 	)
 
-	$AdapterConfig = Get-AdapterConfig
-
-	# IPv4 address is at index 0, if IPv6 if configured it's at index 1)
 	if ($IPVersion -eq 4)
 	{
-		return $AdapterConfig.IPAddress[0]
-	}
-	elseif ($AdapterConfig.IPAddress[1])
-	{
-		return $AdapterConfig.IPAddress[1]
+		$ConnectedAdapters = Get-NetIPConfiguration | Where-Object -Property IPv4DefaultGateway |
+		Select-Object -ExpandProperty IPv4Address
 	}
 	else
 	{
-		Write-Error -Category NotEnabled -TargetObject $AdapterConfig -Message "IPv6 not configured on adapter"
-		return $null
+		$ConnectedAdapters = Get-NetIPConfiguration | Where-Object -Property IPv6DefaultGateway |
+		Select-Object -ExpandProperty IPv6Address
 	}
+
+	$IPAddress = $ConnectedAdapters | Select-Object -ExpandProperty IPAddress
+
+	switch ($ConnectedAdapters.Count)
+	{
+		0 {
+			Write-Error -Category ObjectNotFound -TargetObject $ConnectedAdapters `
+			-Message "None of the adapters is connected to IPv$IPVersion network"
+		}
+		1 {
+			Write-Verbose -Message "[Get-IPAddress] $IPAddress"
+		}
+		default
+		{
+			# TODO: bind result to custom function
+			Write-Information -MessageData "[Get-IPAddress] Multiple adapters are connected to IPv$IPVersion network" `
+			-Tags Result 6>&1 | Select-Object * | Tee-Object -FilePath "$RepoDir\Logs\Info.log" | Select-Object -ExpandProperty MessageData
+
+			Write-Verbose -Message "[Get-IPAddress] $IPAddress"
+		}
+	}
+
+	return $IPAddress
 }
 
 <#
@@ -142,4 +159,6 @@ Export-ModuleMember -Function Get-Broadcast
 if ($Develop)
 {
 	$DebugPreference = $ModuleDebugPreference
+	$VerbosePreference = $ModuleVerbosePreference
+	$InformationPreference = $ModuleInformationPreference
 }

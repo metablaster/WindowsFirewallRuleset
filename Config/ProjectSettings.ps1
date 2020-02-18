@@ -65,10 +65,13 @@ if ($Develop)
 {
 	# Override above defaults here however you wish, will be globally set except in modules
 	$DebugPreference = "Continue"
-	# $VerbosePreference = "Continue"
+	$VerbosePreference = "Continue"
+	$InformationPreference = "Continue"
 
 	# Preferences for modules
 	Set-Variable -Name ModuleDebugPreference -Scope Global -Value $DebugPreference
+	Set-Variable -Name ModuleVerbosePreference -Scope Global -Value $VerbosePreference
+	Set-Variable -Name ModuleInformationPreference -Scope Global -Value $InformationPreference
 
 	Write-Debug "Setting -> Clean up environment"
 
@@ -104,7 +107,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	New-Variable -Name Force -Scope Global -Option Constant -Value $false
 }
 
-if (!(Get-Variable -Name CheckRemovableVariables -Scope Global -ErrorAction Ignore) -or $Develop)
+if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -ErrorAction Ignore))
 {
 	Write-Debug "Setting -> Project variables"
 
