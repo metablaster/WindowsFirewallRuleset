@@ -21,3 +21,5 @@
 20. Most program query functions return multiple program instances, need to select latest or add multiple rules.
 21. Apply only rules for which executable exists, Test-File function
 22. Implement Importing/Exporting rules.
+23. Measure execution time for each or all scripts.
+24. Test for 32bit powershell and OS.

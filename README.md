@@ -196,7 +196,7 @@ There are two methods to be up to date with firewall:
 
 Otherwise if you cloned repo via HTTPS and want HTTPS (no SSH), then:
 
-```git remote add upstream https://github.com/metablaster/WindowsFirewallRuleset```
+```git remote add upstream https://github.com/metablaster/WindowsFirewallRuleset.git```
 
 - Following 2 sets of commands are typed each time, to tell git you want updates from master (stable) branch:
 - Type: ```git checkout master```

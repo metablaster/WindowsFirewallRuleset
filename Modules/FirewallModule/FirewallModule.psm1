@@ -293,6 +293,7 @@ function Set-Warning
 	Write-Host $Warning -ForegroundColor Yellow -BackgroundColor Black
 
 	# Include time in file
+	# TODO: we need seconds
 	$Warning = "WARNING: $(Get-Date -Format "HH:mm")h $LineOne"
 	Add-Content -Path $LogFile -Value $Warning
 

@@ -28,7 +28,7 @@ SOFTWARE.
 
 # Set to true to indicate development phase, forces unloading modules and removing variables.
 # In addition to this do (CTRL SHIFT + F) global search and uncomment symbols for: "to export from this module"
-Set-Variable -Name Develop -Scope Global -Value $false
+Set-Variable -Name Develop -Scope Global -Value $true
 
 <#
 Preference Variables default values
@@ -112,7 +112,7 @@ if (!(Get-Variable -Name CheckRemovableVariables -Scope Global -ErrorAction Igno
 	Set-Variable -Name CheckRemovableVariables -Scope Global -Option ReadOnly -Force -Value $null
 
 	# Set to false to avoid checking system requirements
-	Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $true
+	Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $false
 
 	# Global variable to tell if all scripts ran clean
 	Set-Variable -Name WarningStatus -Scope Global -Value $false
