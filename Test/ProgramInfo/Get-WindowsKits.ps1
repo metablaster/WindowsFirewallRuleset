@@ -48,7 +48,7 @@ if (!(Approve-Execute)) { exit }
 
 $ComputerName = Get-ComputerName
 
-New-Test "Get-WindowsKits"
+# New-Test "Get-WindowsKits"
 
 # $WindowsKits = Get-WindowsKits $ComputerName
 # $WindowsKits

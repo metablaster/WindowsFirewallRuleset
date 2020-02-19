@@ -45,13 +45,13 @@ Import-Module -Name $RepoDir\Modules\FirewallModule
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-New-Test "Get-IPAddress 4"
-Get-IPAddress 4
+New-Test "Get-IPAddress IPv4"
+Get-IPAddress "IPv4"
 
-New-Test "Get-IPAddress 6"
-Get-IPAddress 6
+New-Test "Get-IPAddress IPv6"
+Get-IPAddress "IPv6"
 
-Write-Host "Get-IPAddress 3"
-Get-IPAddress 3
+New-Test "Get-IPAddress IPv3"
+Get-IPAddress "IPv3"
 
 Exit-Test

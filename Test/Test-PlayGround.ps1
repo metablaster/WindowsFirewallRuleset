@@ -29,45 +29,67 @@ SOFTWARE.
 #
 # Not an acctual unit test but a playground for testing stuff out
 #
-. $PSScriptRoot\..\Config\ProjectSettings.ps1
+# . $PSScriptRoot\..\Config\ProjectSettings.ps1
 
-# Check requirements for this project
-Import-Module -Name $RepoDir\Modules\System
-Test-SystemRequirements
+# # Check requirements for this project
+# Import-Module -Name $RepoDir\Modules\System
+# Test-SystemRequirements
 
-# Includes
-. $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Test
-Import-Module -Name $RepoDir\Modules\UserInfo
-Import-Module -Name $RepoDir\Modules\ProgramInfo
-Import-Module -Name $RepoDir\Modules\ComputerInfo
-Import-Module -Name $RepoDir\Modules\FirewallModule
+# # Includes
+# . $RepoDir\Test\ContextSetup.ps1
+# Import-Module -Name $RepoDir\Modules\Test
+# Import-Module -Name $RepoDir\Modules\UserInfo
+# Import-Module -Name $RepoDir\Modules\ProgramInfo
+# Import-Module -Name $RepoDir\Modules\ComputerInfo
+# Import-Module -Name $RepoDir\Modules\FirewallModule
 
-# Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
-if (!(Approve-Execute)) { exit }
+# # Ask user if he wants to load these rules
+# Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
+# if (!(Approve-Execute)) { exit }
 
-$Group = "Test - Multiple package users"
+function Get-TypeName
+{
+    param (
+		$InputObject
+	)
+
+    Write-Output (($InputObject | Get-Member).TypeName | Select-Object -Unique)
+}
+
+function superduper
+{
+	param (
+		[string] $AddressFamily,
+		[bool] $AddressFamily2
+	)
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+}
+
+$DebugPreference = "Continue"
+superduper "IPv4" $false
+
+# $Group = "Test - Multiple package users"
 # $Profile = "Any"
 
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
+# Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
-[int] $Choice = -1
-$Count = 2
+# [int] $Choice = -1
+# $Count = 2
 
-while ($Choice -lt 0 -or $Choice -gt $Count)
-{
-	Write-Host "Input number"
-	$Input = Read-Host
+# while ($Choice -lt 0 -or $Choice -gt $Count)
+# {
+# 	Write-Host "Input number"
+# 	$Input = Read-Host
 
-	if($Input -notmatch '^-?\d+$')
-	{
-		Write-Host "Digits only please!"
-		continue
-	}
+# 	if($Input -notmatch '^-?\d+$')
+# 	{
+# 		Write-Host "Digits only please!"
+# 		continue
+# 	}
 
-	$Choice = $Input
-}
+# 	$Choice = $Input
+# }
 
 # New-Test "Test all aps for Admins"
 # $OwnerSID1 = Get-UserSID "Admin"
@@ -81,4 +103,4 @@ while ($Choice -lt 0 -or $Choice -gt $Count)
 # -LocalUser Any -Owner @($OwnerSID1, $OwnerSID2) -Package "*" `
 # -Description "" | Format-Output
 
-Exit-Test
+# Exit-Test

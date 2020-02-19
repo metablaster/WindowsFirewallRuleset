@@ -29,6 +29,8 @@ SOFTWARE.
 #
 # Unit test for Format-Output
 #
+
+#Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
@@ -55,7 +57,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 New-Test "Format-Output"
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "TargetProgram" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 26002 `
 -LocalUser Any `
 -Description "" | Format-Output

@@ -29,6 +29,8 @@ SOFTWARE.
 #
 # Unit test for adding rules for store apps based on computer users
 #
+
+#Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project

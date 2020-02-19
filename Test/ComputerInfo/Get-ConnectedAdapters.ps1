@@ -45,7 +45,10 @@ Import-Module -Name $RepoDir\Modules\FirewallModule
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-New-Test "Get-AdapterConfig"
-Get-AdapterConfig
+New-Test "Get-ConnectedAdapters"
+Get-ConnectedAdapters IPv4
+
+New-Test "Get-ConnectedAdapters binding"
+Get-ConnectedAdapters IPv4 | Select-Object -ExpandProperty IPv4Address
 
 Exit-Test

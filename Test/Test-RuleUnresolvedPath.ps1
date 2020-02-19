@@ -29,6 +29,8 @@ SOFTWARE.
 #
 # Unit test for unresolved path
 #
+
+#Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project

@@ -51,7 +51,9 @@ function Get-UserAccounts
 		[string] $UserGroup
 	)
 
-	$GroupUsers = Get-LocalGroupMember -Group $UserGroup | Where-Object { $_.PrincipalSource -eq "Local" -and $_.ObjectClass -eq "User" }
+	$GroupUsers = Get-LocalGroupMember -Group $UserGroup |
+	Where-Object { $_.PrincipalSource -eq "Local" -and $_.ObjectClass -eq "User" } |
+	Select-Object -ExpandProperty Name
 
 	if([string]::IsNullOrEmpty($GroupUsers))
 	{

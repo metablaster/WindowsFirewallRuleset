@@ -39,7 +39,7 @@ Get-ComputerName
 .INPUTS
 None. You cannot pipe objects to Get-ComputerName
 .OUTPUTS
-System.String[] computer name in form of COMPUTERNAME
+System.String computer name in form of COMPUTERNAME
 .NOTES
 TODO: implement queriying computers on network by specifying IP address
 #>
@@ -50,30 +50,65 @@ function Get-ComputerName
 
 <#
 .SYNOPSIS
-helper method to get adapter configuration
+Method to get connected adapters
+.DESCRIPTION
+Return list of all adapters and their configuration connected to network
+.PARAMETER AddressFamily
+IP version for which to obtain adapters, IPv4 or IPv6
 .EXAMPLE
-Get-AdapterConfig
+Get-ConnectedAdapters "IPv4"
+.EXAMPLE
+Get-ConnectedAdapters "IPv6"
 .INPUTS
-None. You cannot pipe objects to Get-AdapterConfig
+None. You cannot pipe objects to Get-ConnectedAdapters
 .OUTPUTS
-System.Management.ManagementObject#root\cimv2\Win32_NetworkAdapterConfiguration
+NetIPConfiguration
 .NOTES
-TODO: implement queriying computers on network by specifying IP address
+TODO: implement queriying computers on network by specifying IP address or COMPUTERNAME
 #>
-function Get-AdapterConfig
+function Get-ConnectedAdapters
 {
-	return Get-WmiObject Win32_NetworkAdapterConfiguration | Where-Object { $_.DefaultIPGateway }
+	param (
+		[Parameter(Mandatory = $true)]
+		[ValidateSet("IPv4", "IPv6")]
+		[string] $AddressFamily
+	)
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+
+	if ($AddressFamily.ToString() -eq "IPv4")
+	{
+		$ConnectedAdapters = Get-NetIPConfiguration | Where-Object -Property IPv4DefaultGateway
+	}
+	else
+	{
+		$ConnectedAdapters = Get-NetIPConfiguration | Where-Object -Property IPv6DefaultGateway
+	}
+
+	if ($ConnectedAdapters.Count -eq 0)
+	{
+		Write-Error -Category ObjectNotFound -TargetObject $ConnectedAdapters `
+		-Message "None of the adapters is connected to $AddressFamily network"
+	}
+	elseif ($ConnectedAdapters.Count -gt 1)
+	{
+		Write-Verbose -MessageData "[$($MyInvocation.InvocationName)] Multiple adapters are connected to $AddressFamily network"
+	}
+
+	return $ConnectedAdapters
 }
 
 <#
 .SYNOPSIS
-helper method to get IP address of local machine
-.PARAMETER IPVersion
-IP version number, 4 or 6
+Method to get IP address of local machine
+.DESCRIPTION
+Returns list of IP addresses for all adapters connected to network
+.PARAMETER AddressFamily
+IP version for which to obtain address, IPv4 or IPv6
 .EXAMPLE
-Get-IPAddress 4
+Get-IPAddress "IPv4"
 .EXAMPLE
-Get-IPAddress 6
+Get-IPAddress "IPv6"
 .INPUTS
 None. You cannot pipe objects to Get-IPAddress
 .OUTPUTS
@@ -84,41 +119,25 @@ TODO: implement queriying computers on network by specifying COMPUTERNAME
 function Get-IPAddress
 {
 	param (
-		[parameter(Mandatory = $true)]
-		[ValidateSet(4, 6)]
-		[int16] $IPVersion
+		[Parameter(Mandatory = $true)]
+		[ValidateSet("IPv4", "IPv6")]
+		[string] $AddressFamily
 	)
 
-	if ($IPVersion -eq 4)
-	{
-		$ConnectedAdapters = Get-NetIPConfiguration | Where-Object -Property IPv4DefaultGateway |
-		Select-Object -ExpandProperty IPv4Address
-	}
-	else
-	{
-		$ConnectedAdapters = Get-NetIPConfiguration | Where-Object -Property IPv6DefaultGateway |
-		Select-Object -ExpandProperty IPv6Address
-	}
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
 
+	$ConnectedAdapters = Get-ConnectedAdapters $AddressFamily | Select-Object -ExpandProperty ($AddressFamily + "Address")
 	$IPAddress = $ConnectedAdapters | Select-Object -ExpandProperty IPAddress
 
-	switch ($ConnectedAdapters.Count)
+	if ($IPAddress.Count -gt 1)
 	{
-		0 {
-			Write-Error -Category ObjectNotFound -TargetObject $ConnectedAdapters `
-			-Message "None of the adapters is connected to IPv$IPVersion network"
-		}
-		1 {
-			Write-Verbose -Message "[Get-IPAddress] $IPAddress"
-		}
-		default
-		{
-			# TODO: bind result to custom function
-			Write-Information -MessageData "[Get-IPAddress] Multiple adapters are connected to IPv$IPVersion network" `
-			-Tags Result 6>&1 | Select-Object * | Tee-Object -FilePath "$RepoDir\Logs\Info.log" | Select-Object -ExpandProperty MessageData
-
-			Write-Verbose -Message "[Get-IPAddress] $IPAddress"
-		}
+		# TODO: bind result to custom function
+		Write-Information -MessageData "[$($MyInvocation.InvocationName)] returns multiple IP addresses: $IPAddress" `
+		-Tags Result 6>&1 | Select-Object * | Tee-Object -FilePath "$RepoDir\Logs\Info.log" | Select-Object -ExpandProperty MessageData
+	}
+	elseif ($IPAddress.Count -eq 0)
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] returns empty string"
 	}
 
 	return $IPAddress
@@ -126,21 +145,40 @@ function Get-IPAddress
 
 <#
 .SYNOPSIS
-helper method to get broadcast address
+Method to get broadcast address
 .EXAMPLE
 Get-Broadcast
 .INPUTS
 None. You cannot pipe objects to Get-Broadcast
 .OUTPUTS
 System.String Broadcast address
+.NOTES
+TODO: there can be multiple valid adapters
 #>
 function Get-Broadcast
 {
-	$AdapterConfig = Get-AdapterConfig
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
 
 	# Broadcast address makes sense only for IPv4
-	Get-NetworkSummary $AdapterConfig.IPAddress[0] $AdapterConfig.IPSubnet[0] |
-	Select-Object -ExpandProperty BroadcastAddress | Select-Object -ExpandProperty IPAddressToString
+	$ConnectedAdapters = Get-ConnectedAdapters "IPv4" | Select-Object -ExpandProperty IPv4Address
+
+	if ($ConnectedAdapters.Count -gt 0)
+	{
+		if ($ConnectedAdapters.Count -gt 1)
+		{
+			Write-Verbose "[$($MyInvocation.InvocationName)] got multiple adapters, using first one"
+			$ConnectedAdapters = $ConnectedAdapters | Select-Object -First 1
+		}
+
+		$IPAddress = $ConnectedAdapters | Select-Object -ExpandProperty IPAddress
+		$SubnetMask = ConvertTo-Mask ($ConnectedAdapters | Select-Object -ExpandProperty PrefixLength)
+
+		return Get-NetworkSummary $IPAddress $SubnetMask |
+		Select-Object -ExpandProperty BroadcastAddress |
+		Select-Object -ExpandProperty IPAddressToString
+	}
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] returns null"
 }
 
 #
@@ -149,7 +187,7 @@ function Get-Broadcast
 
 Export-ModuleMember -Function Get-ComputerName
 Export-ModuleMember -Function Get-IPAddress
-Export-ModuleMember -Function Get-AdapterConfig
+Export-ModuleMember -Function Get-ConnectedAdapters
 Export-ModuleMember -Function Get-Broadcast
 
 #

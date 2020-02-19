@@ -57,7 +57,7 @@ $global:InstallTable | Format-Table -AutoSize
 
 New-Test "Bad system path"
 Initialize-Table
-Edit-Table "%ProgramFiles(x86)%\Microsoft Help Viewer\v2.3"
+Edit-Table "%ProgramFiles(x86)%\Microsoft Help Viewer\v2.3345345"
 
 New-Test "Table data"
 $global:InstallTable | Format-Table -AutoSize
