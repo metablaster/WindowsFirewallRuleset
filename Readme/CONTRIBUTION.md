@@ -1,6 +1,24 @@
 # How to contribute
 Here is a short and most important list of things to keep in mind.
 
+## General guidelines
+Bellow 2 pages explains general/starting guidelines:\
+[How to contribute to open source](https://opensource.guide/how-to-contribute)\
+[Open Source Contribution Etiquette](https://tirania.org/blog/archive/2010/Dec-31.html)
+
+First step is to fork a project:\
+[Forking projects](https://guides.github.com/activities/forking)
+
+Next you may want to set up your SSH keys (don't actually do it yet):
+[connecting-to-github-with-ssh](https://help.github.com/en/enterprise/2.20/user/github/authenticating-to-github/connecting-to-github-with-ssh)
+
+The reason why not to set up SSH keys right away is because for PowerShell I made this tutorial:\
+[PowerShell GPG4Win, SSH, posh-git](https://github.com/metablaster/DevelopmentSetup/blob/master/git/git%2C%20powershell%2C%20gpg4win%2C%20posh-git%2C%20commit%20signing%2C%20ssh%20and%20key%20caching.md)
+
+Few additional references worth reading:\
+[Don't "Push" Your Pull Requests](https://www.igvita.com/2011/12/19/dont-push-your-pull-requests)\
+[Painless Bug Tracking](https://www.joelonsoftware.com/2000/11/08/painless-bug-tracking)
+
 ## Code style
 All of the scripts should use the same code style and order of code, without writing a long list of preffered code style\
 it should be enough to take a look at the existing scripts and figure it out right away.

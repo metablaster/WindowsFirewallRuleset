@@ -37,3 +37,5 @@ Nobody has all the knowledge in his head, here is a quick "jump" table:
 [IPv6 link-local address](https://www.cisco.com/c/en/us/support/docs/ip/ip-version-6-ipv6/113328-ipv6-lla.html)
 
 [IPv4 link-local address aka APIPA](https://wiki.wireshark.org/APIPA)
+
+[PowerShell 7 docs](https://docs.microsoft.com/en-us/powershell/scripting/overview?view=powershell-7)

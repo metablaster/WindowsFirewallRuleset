@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Set-Warning
+# Unit test for Resume-Info
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 

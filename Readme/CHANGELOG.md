@@ -21,3 +21,9 @@
 2. Expand modules to include correct comments, help and manifest files
 3. A few more TODO's, notes and relevant comments
 4. Reorganize and split scripts with rules for multiple targets
+
+# Changelog v0.3
+
+# New fetures
+1. Scripts work on PowerShell core 7
+2. Better configurable logging
