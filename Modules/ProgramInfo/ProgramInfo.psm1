@@ -1855,7 +1855,11 @@ if ($Develop)
 
 if ($Develop)
 {
+	$ErrorActionPreference = $ModuleErrorPreference
+	$WarningPreference = $ModuleWarningPreference
 	$DebugPreference = $ModuleDebugPreference
+	$VerbosePreference = $ModuleVerbosePreference
+	$InformationPreference = $ModuleInformationPreference
 }
 
 <# Opening keys, naming convention as you drill down the keys

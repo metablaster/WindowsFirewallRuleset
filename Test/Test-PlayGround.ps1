@@ -29,7 +29,7 @@ SOFTWARE.
 #
 # Not an acctual unit test but a playground for testing stuff out
 #
-# . $PSScriptRoot\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\Config\ProjectSettings.ps1
 
 # # Check requirements for this project
 # Import-Module -Name $RepoDir\Modules\System
@@ -49,11 +49,154 @@ SOFTWARE.
 
 function Get-TypeName
 {
+	[CmdletBinding()]
     param (
+		[Parameter(ValueFromPipeline = $true)]
 		$InputObject
 	)
 
     Write-Output (($InputObject | Get-Member).TypeName | Select-Object -Unique)
+}
+
+# $RepoDir = "C:\Users\haxor\GitHub\WindowsFirewallRuleset"
+New-Variable -Name LogsFolder -Scope Script -Option Constant -Value ($RepoDir + "\Logs")
+
+function Resume-Error
+{
+	[CmdletBinding()]
+    param (
+		[Parameter(Mandatory = $true, ValueFromPipeline = $true,
+		HelpMessage = "Input object must be ErrorRecord")]
+		[ValidateNotNullOrEmpty()]
+		[System.Management.Automation.ErrorRecord]
+		$Stream,
+
+		[Parameter(Position = 0)]
+		[ValidateDrive("C", "D")]
+		[string] $Folder = $LogsFolder,
+
+		[Parameter()]
+		[switch] $Log
+	)
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+
+	# Show the error and save to variable
+	$Stream | Tee-Object -Variable Message
+
+	# Update error status variable
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting error status variable"
+	Set-Variable -Name ErrorStatus -Scope Global -Value $true
+
+	if ($Log)
+	{
+		# Generate file name
+		$FileName = "Error_$(Get-Date -Format "dd.MM.yy HH")h.log"
+		$LogFile = "$Folder\$FileName"
+
+		# Create Logs directory if it doesn't exist
+		if (!(Test-Path -PathType Container -Path $Folder))
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating directory $Folder"
+			New-Item -ItemType Directory -Path $Folder -ErrorAction Stop | Out-Null
+		}
+
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending error to log file: $FileName"
+
+		# Show the error and append log to file
+		$Message | Select-Object * |
+		Out-File -Append -FilePath $LogFile
+	}
+}
+
+function Resume-Warning
+{
+	[CmdletBinding()]
+    param (
+		[Parameter(Mandatory = $true, ValueFromPipeline = $true,
+		HelpMessage = "Input object must be WarningRecord")]
+		[ValidateNotNullOrEmpty()]
+		# [System.Management.Automation.WarningRecord]
+		$Stream,
+
+		[Parameter(Position = 0)]
+		[ValidateDrive("C", "D")]
+		[string] $Folder = $LogsFolder,
+
+		[Parameter()]
+		[switch] $NoStatus,
+
+		[Parameter()]
+		[switch] $Log
+	)
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+
+	# Show the warning and save to variable
+	$Stream | Tee-Object -Variable Message
+
+	if ($NoStatus)
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Warning status stays the same: $WarningStatus"
+	}
+	else
+	{
+		# Update warning status variable
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting warning status variable"
+		Set-Variable -Name WarningStatus -Scope Global -Value $NoStatus
+	}
+
+
+	if ($Log)
+	{
+		# Generate file name
+		$FileName = "Warning_$(Get-Date -Format "dd.MM.yy HH")h.log"
+		$LogFile = "$Folder\$FileName"
+
+		# Create Logs directory if it doesn't exist
+		if (!(Test-Path -PathType Container -Path $Folder))
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating directory $Folder"
+			New-Item -ItemType Directory -Path $Folder -ErrorAction Stop | Out-Null
+		}
+
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending warning to log file: $FileName"
+		"WARNING: $(Get-Date -Format "HH:mm:ss") $Message" | Out-File -Append -FilePath $LogFile
+	}
+}
+
+function Resume-Info
+{
+	[CmdletBinding()]
+    param (
+		[Parameter(Mandatory = $true, ValueFromPipeline = $true,
+		HelpMessage = "Input object must be InformationRecord")]
+		[System.Management.Automation.InformationRecord] $Stream,
+
+		[Parameter(Position = 0)]
+		[ValidateDrive("C", "D")]
+		[string] $Folder = $LogsFolder
+	)
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+
+	# Generate file name
+	$FileName = "Info_$(Get-Date -Format "dd.MM.yy HH")h.log"
+	$LogFile = "$Folder\$FileName"
+
+	# Create Logs directory if it doesn't exist
+	if (!(Test-Path -PathType Container -Path $Folder))
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating directory $Folder"
+		New-Item -ItemType Directory -Path $Folder -ErrorAction Stop | Out-Null
+	}
+
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending information to log file: $FileName"
+
+	# Show the information and append log to file
+	"INFO:" + ($Stream | Select-Object * |
+	Tee-Object -Append -FilePath $LogFile |
+	Select-Object -ExpandProperty MessageData)
 }
 
 function superduper
@@ -63,10 +206,22 @@ function superduper
 		[bool] $AddressFamily2
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)]"
+
+	# [string] $ComputerName = "COMPUTERNAME"
+
+	# Write-Error -Message "[$($MyInvocation.InvocationName)] sample message" -Category PermissionDenied `
+	# -ErrorId SampleID -TargetObject $ComputerName 2>&1 | Resume-Error -Log
+
+	Write-Warning -Message "[$($MyInvocation.InvocationName)] warning message" 3>&1 | Resume-Warning -NoStatus -Log
+
+	# Write-Information -MessageData "[$($MyInvocation.InvocationName)] sample info" `
+	# -Tags Result 6>&1 | Resume-Info
 }
 
 $DebugPreference = "Continue"
+$WarningPreference = "Continue"
+
 superduper "IPv4" $false
 
 # $Group = "Test - Multiple package users"

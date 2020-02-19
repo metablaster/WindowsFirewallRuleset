@@ -312,6 +312,19 @@ Export-ModuleMember -Variable NT_AUTHORITY_NetworkService
 Export-ModuleMember -Variable NT_AUTHORITY_UserModeDrivers
 
 #
+# Module preferences
+#
+
+if ($Develop)
+{
+	$ErrorActionPreference = $ModuleErrorPreference
+	$WarningPreference = $ModuleWarningPreference
+	$DebugPreference = $ModuleDebugPreference
+	$VerbosePreference = $ModuleVerbosePreference
+	$InformationPreference = $ModuleInformationPreference
+}
+
+#
 # System users SDDL strings
 #
 
@@ -347,12 +360,3 @@ Export-ModuleMember -Variable NT_AUTHORITY_UserModeDrivers
 
 # Other System Users
 # $NT_AUTHORITY_UserModeDrivers = "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
-
-#
-# Module preferences
-#
-
-if ($Develop)
-{
-	$DebugPreference = $ModuleDebugPreference
-}

@@ -26,6 +26,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+. $PSScriptRoot\..\..\Utility\Get-TypeName.ps1
+
 <#
 .SYNOPSIS
 update context for Approve-Execute function
@@ -208,150 +210,223 @@ function Convert-SDDLToACL
 
 <#
 .SYNOPSIS
-Write informational note with 'NOTE:' label and green text
-.PARAMETER Notes
-string array to write
+Log generated error and set global error status
+.DESCRIPTION
+Resume-Error takes error record stream which is shown in the console
+and optionally logged into a file.
+Gobal error status variable is set to true or optionally left alone.
+.PARAMETER Stream
+[System.Management.Automation.ErrorRecord] stream
+.PARAMETER Folder
+[System.String] path to folder on either C or D drive where to save logs
+.PARAMETER Log
+[switch] to control if the error should be logged to file
 .EXAMPLE
-Write-Note "sample note"
+Write-Error -Message "sample message" 2>&1 | Resume-Error -Log
 .EXAMPLE
-Write-Note "first line", "second line"
-.EXAMPLE
-Write-Note @(
-	"first line"
-	"second line"
-	"3rd line")
+Write-Error -Message "sample message" 2>&1 | Resume-Error -Folder "C:\Logs" -Log
 .INPUTS
-None. You cannot pipe objects to Write-Note
+[System.Management.Automation.ErrorRecord] Error record stream
 .OUTPUTS
-Formatted note is shown in console on single or multiple lines in form of: NOTE: sample note
+None.
 .NOTES
-TODO: rename to Info
+TODO: Pass error variable to avoid pipeline?
+TODO: [ValidateNotNullOrEmpty()] does not work
 #>
-function Write-Note
+function Resume-Error
 {
-	param (
-		[parameter(Mandatory = $true)]
-		[string[]] $Notes
+	[CmdletBinding()]
+    param (
+		[Parameter(Mandatory = $true, ValueFromPipeline = $true,
+		HelpMessage = "Input object must be ErrorRecord")]
+		[ValidateNotNullOrEmpty()]
+		[System.Management.Automation.ErrorRecord] $Stream,
+
+		[Parameter(Position = 0)]
+		[ValidateDrive("C", "D")]
+		[string] $Folder = $LogsFolder,
+
+		[Parameter()]
+		[switch] $Log
 	)
 
-	Write-Host "NOTE: $($Notes[0])" -ForegroundColor Green -BackgroundColor Black
-
-	# Skip 'NOTE:' tag for all subsequent messages
-	for ($Index = 1; $Index -lt $Notes.Count; ++$Index)
+	process
 	{
-		Write-Host $Notes[$Index] -ForegroundColor Green -BackgroundColor Black
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+
+		# Show the error and save to variable
+		$Stream | Tee-Object -Variable Message
+
+		# Update error status variable
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting error status variable"
+		Set-Variable -Name ErrorStatus -Scope Global -Value $true
+
+		if ($Log)
+		{
+			# Generate file name
+			$FileName = "Error_$(Get-Date -Format "dd.MM.yy HH")h.log"
+			$LogFile = "$Folder\$FileName"
+
+			# Create Logs directory if it doesn't exist
+			if (!(Test-Path -PathType Container -Path $Folder))
+			{
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating directory $Folder"
+				New-Item -ItemType Directory -Path $Folder -ErrorAction Stop | Out-Null
+			}
+
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending error to log file: $FileName"
+
+			# Show the error and append log to file
+			$Message | Select-Object * |
+			Out-File -Append -FilePath $LogFile
+		}
 	}
 }
 
 <#
 .SYNOPSIS
-Custom Write-Warning which also sets global warning status
-.PARAMETER Message
-string to write to console
-.PARAMETER Status
-boolean to tell if warning status should be updated
+Log generated warnings and set global warning status
+.DESCRIPTION
+Resume-Warning takes warning record stream which is shown in the console
+and optionally logged into a file.
+Gobal warning status variable is set to true or optionally left alone.
+.PARAMETER Stream
+[System.Management.Automation.WarningRecord] stream
+.PARAMETER Folder
+[System.String] path to folder on either C or D drive where to save logs
+.PARAMETER NoStatus
+[switch] to tell if updating global warning status variable should be skipped.
+This global variable will help tell if warnings were generated.
+.PARAMETER Log
+[switch] to control if the warning should be logged to file
 .EXAMPLE
-Set-Warning "sample warning"
+Write-Warning -Message "sample message" 3>&1 | Resume-Warning -NoStatus -Log
 .EXAMPLE
-Set-Warning "sample warning" $false
+Write-Warning -Message "sample message" 3>&1 | Resume-Warning -Folder "C:\Logs" -Log
 .INPUTS
-None. You cannot pipe objects to Set-Warning
+[System.Management.Automation.WarningRecord] Warning record stream
 .OUTPUTS
-Formatted warning message is shown in console in form of: WARNING: sample warning
+None.
+.NOTES
+TODO: Pass warning variable to avoid pipeline?
+TODO: Stream parameter defines no type, otherwise warning is not colored
+TODO: [ValidateNotNullOrEmpty()] does not work
 #>
-function Set-Warning
+function Resume-Warning
 {
-	param (
-		[parameter(Mandatory = $true)]
-		[string[]] $Message,
-		[parameter(Mandatory = $false)]
-		[bool] $Status = $true
+	[CmdletBinding()]
+    param (
+		[Parameter(Mandatory = $true, ValueFromPipeline = $true,
+		HelpMessage = "Input object must be WarningRecord")]
+		[ValidateNotNullOrEmpty()]
+		# [System.Management.Automation.WarningRecord]
+		$Stream,
+
+		[Parameter(Position = 0)]
+		[ValidateDrive("C", "D")]
+		[string] $Folder = $LogsFolder,
+
+		[Parameter()]
+		[switch] $NoStatus,
+
+		[Parameter()]
+		[switch] $Log
 	)
 
-	# Update warning status variable
-	Set-Variable -Name WarningStatus -Scope Global -Value ($WarningStatus -or $Status)
-
-	# Append warning to log file
-	$FileName = "Warning_$(Get-Date -Format "dd.MM.yy HH")h.log"
-	$LogFile = "$LogsFolder\$FileName"
-
-	if (!(Test-Path -PathType Container -Path $LogsFolder))
+	process
 	{
-		New-Item -ItemType Directory -Path $LogsFolder -ErrorAction Stop | Out-Null
-	}
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
 
-	if (!(Test-Path -PathType Leaf -Path $LogFile))
-	{
-		New-Item -ItemType File -Path $LogFile -ErrorAction Stop | Out-Null
-	}
+		# Show the warning and save to variable
+		$Stream | Tee-Object -Variable Message
 
-	# First line
-	$LineOne = $Message[0]
+		if ($NoStatus)
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Warning status stays the same: $WarningStatus"
+		}
+		else
+		{
+			# Update warning status variable
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting warning status variable"
+			Set-Variable -Name WarningStatus -Scope Global -Value $true
+		}
 
-	# Show the warning and save to log file
-	$Warning = "WARNING: $LineOne"
-	Write-Host $Warning -ForegroundColor Yellow -BackgroundColor Black
 
-	# Include time in file
-	# TODO: we need seconds
-	$Warning = "WARNING: $(Get-Date -Format "HH:mm")h $LineOne"
-	Add-Content -Path $LogFile -Value $Warning
+		if ($Log)
+		{
+			# Generate file name
+			$FileName = "Warning_$(Get-Date -Format "dd.MM.yy HH")h.log"
+			$LogFile = "$Folder\$FileName"
 
-	# Skip 'WARNING:' tag for all subsequent lines (both console and log file)
-	for ($Index = 1; $Index -lt $Message.Count; ++$Index)
-	{
-		Write-Host $Message[$Index] -ForegroundColor Yellow -BackgroundColor Black
-		Add-Content -Path $LogFile -Value $Message[$Index]
+			# Create Logs directory if it doesn't exist
+			if (!(Test-Path -PathType Container -Path $Folder))
+			{
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating directory $Folder"
+				New-Item -ItemType Directory -Path $Folder -ErrorAction Stop | Out-Null
+			}
+
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending warning to log file: $FileName"
+			"WARNING: $(Get-Date -Format "HH:mm:ss") $Message" | Out-File -Append -FilePath $LogFile
+		}
 	}
 }
 
 <#
 .SYNOPSIS
-list all generated errors and clear error variable
+Log generated information
+.DESCRIPTION
+Resume-Info takes Information record stream which is shown in the console
+and logged into a file.
+.PARAMETER Stream
+[System.Management.Automation.InformationRecord] stream
+.PARAMETER Folder
+[System.String] path to folder on either C or D drive where to save logs
 .EXAMPLE
-Save-Errors
+Write-Information -MessageData "sample info" -Tags MyTag 6>&1 | Resume-Info
 .INPUTS
-None. You cannot pipe objects to Save-Errors
+[System.Management.Automation.InformationRecord] Information record stream
 .OUTPUTS
-None, list of all errors is logged into a file
+None.
+.NOTES
+TODO: Pass infomration variable to avoid pipeline?
+TODO: [ValidateNotNullOrEmpty()] does not work
 #>
-function Save-Errors
+function Resume-Info
 {
-	if ($global:Error.Count -eq 0)
+	[CmdletBinding()]
+    param (
+		[Parameter(Mandatory = $true, ValueFromPipeline = $true,
+		HelpMessage = "Input object must be InformationRecord")]
+		[ValidateNotNullOrEmpty()]
+		[System.Management.Automation.InformationRecord] $Stream,
+
+		[Parameter(Position = 0)]
+		[ValidateDrive("C", "D")]
+		[string] $Folder = $LogsFolder
+	)
+
+	process
 	{
-		Write-Note "No errors detected"
-		return
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+
+		# Generate file name
+		$FileName = "Info_$(Get-Date -Format "dd.MM.yy HH")h.log"
+		$LogFile = "$Folder\$FileName"
+
+		# Create Logs directory if it doesn't exist
+		if (!(Test-Path -PathType Container -Path $Folder))
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating directory $Folder"
+			New-Item -ItemType Directory -Path $Folder -ErrorAction Stop | Out-Null
+		}
+
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending information to log file: $FileName"
+
+		# Show the information and append log to file
+		"INFO:" + ($Stream | Select-Object * |
+		Tee-Object -Append -FilePath $LogFile |
+		Select-Object -ExpandProperty MessageData)
 	}
-
-	# Write all errors to log file
-	$FileName = "Error_$(Get-Date -Format "dd.MM.yy HH")h.log"
-	$LogFile = "$LogsFolder\$FileName"
-
-	if (!(Test-Path -PathType Container -Path $LogsFolder))
-	{
-		New-Item -ItemType Directory -Path $LogsFolder -ErrorAction Stop| Out-Null
-	}
-
-	if (!(Test-Path -PathType Leaf -Path $LogFile))
-	{
-		New-Item -ItemType File -Path $LogFile -ErrorAction Stop| Out-Null
-	}
-
-	# Include time in file
-	$Time = "$(Get-Date -Format "HH:mm")h"
-
-	$AllErrors = @()
-	foreach ($Err in $global:Error)
-	{
-		$AllErrors += "ERROR: $Time $Err`nSTACKTRACE: $($Err.ScriptStackTrace)`n"
-	}
-
-	Add-Content -Path $LogFile -Value $AllErrors
-	Write-Note @("All errors were saved to:"
-	$LogsFolder
-	"you can review these logs to see which scripts need to be fixed and where")
-
-	$global:Error.Clear()
 }
 
 <#
@@ -520,12 +595,13 @@ Export-ModuleMember -Function Approve-Execute
 Export-ModuleMember -Function Update-Context
 Export-ModuleMember -Function Convert-SDDLToACL
 Export-ModuleMember -Function Show-SDDL
-Export-ModuleMember -Function Write-Note
 Export-ModuleMember -Function Get-NetworkServices
 Export-ModuleMember -Function Format-Output
-Export-ModuleMember -Function Save-Errors
-Export-ModuleMember -Function Set-Warning
+Export-ModuleMember -Function Resume-Error
+Export-ModuleMember -Function Resume-Warning
+Export-ModuleMember -Function Resume-Info
 Export-ModuleMember -Function Set-ScreenBuffer
+Export-ModuleMember -Function Get-TypeName
 
 #
 # Variable exports
@@ -540,5 +616,9 @@ Export-ModuleMember -Variable CheckInitFirewallModule
 
 if ($Develop)
 {
+	$ErrorActionPreference = $ModuleErrorPreference
+	$WarningPreference = $ModuleWarningPreference
 	$DebugPreference = $ModuleDebugPreference
+	$VerbosePreference = $ModuleVerbosePreference
+	$InformationPreference = $ModuleInformationPreference
 }

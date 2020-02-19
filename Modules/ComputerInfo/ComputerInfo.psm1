@@ -196,6 +196,8 @@ Export-ModuleMember -Function Get-Broadcast
 
 if ($Develop)
 {
+	$ErrorActionPreference = $ModuleErrorPreference
+	$WarningPreference = $ModuleWarningPreference
 	$DebugPreference = $ModuleDebugPreference
 	$VerbosePreference = $ModuleVerbosePreference
 	$InformationPreference = $ModuleInformationPreference

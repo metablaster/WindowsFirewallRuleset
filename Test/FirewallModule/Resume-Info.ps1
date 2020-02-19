@@ -44,22 +44,25 @@ Import-Module -Name $RepoDir\Modules\FirewallModule
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-New-Test "Single line false"
-Set-Warning "Single line false" $false
-(Get-Variable -Name WarningStatus -Scope Global).Value
+function Test-Info
+{
+	Write-Information -MessageData "[$($MyInvocation.InvocationName)] sample info" `
+	-Tags Result 6>&1 | Resume-Info
+}
 
-New-Test "Single line true"
-Set-Warning "Single line"
-(Get-Variable -Name WarningStatus -Scope Global).Value
+function Test-InfoCmdLet
+{
+	[CmdletBinding()]
+	param ()
 
-Set-Variable -Name WarningStatus -Scope Global -Value $false
+	Write-Information -MessageData "Test-WarningCmdLet"
+}
 
-New-Test "Multi line false"
-Set-Warning @("line one", "line two", "line 3") $false
-(Get-Variable -Name WarningStatus -Scope Global).Value
+New-Test "Test-Info"
+Test-Info
 
-New-Test "Multi line true"
-Set-Warning @("line one", "line two", "line 3") $true
-(Get-Variable -Name WarningStatus -Scope Global).Value
+New-Test "Test-InfoCmdLet"
+Test-InfoCmdLet @CommonParams
+Resume-CommonParams @CommonParams
 
 Exit-Test

@@ -26,68 +26,38 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-<#
-.SYNOPSIS
-write output to separate test cases
-.PARAMETER InputMessage
-message to print before test
-.EXAMPLE
-New-Test "my test"
-.INPUTS
-None. You cannot pipe objects to New-Test
-.OUTPUTS
-formatted message block is shown in console
-#>
-function New-Test
+#
+# Unit test for Resume-Error
+#
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+
+# Check requirements for this project
+Import-Module -Name $RepoDir\Modules\System
+Test-SystemRequirements
+
+# Includes
+. $RepoDir\Test\ContextSetup.ps1
+Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\FirewallModule
+
+# Ask user if he wants to load these rules
+Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
+if (!(Approve-Execute)) { exit }
+
+function Test-Error
 {
-	param (
-		[Parameter(Mandatory = $true)]
-		[string] $InputMessage
-	)
-
-	$Message = "Testing: $InputMessage"
-	$Asterisks = $("*" * ($Message.Length + 4))
-
-	Write-Host ""
-	Write-Host $Asterisks
-	Write-Host "* $Message *"
-	Write-Host $Asterisks
-	Write-Host ""
+	Write-Error -Message "[$($MyInvocation.InvocationName)] sample message" -Category PermissionDenied `
+	-ErrorId SampleID -TargetObject $ComputerName 2>&1 | Resume-Error -Log
 }
 
-<#
-.SYNOPSIS
-write output to tell script scope test is done
-.EXAMPLE
-Exit-Test
-.INPUTS
-None. You cannot pipe objects to Exit-Test
-.OUTPUTS
-formatted message block is shown in console
-#>
-function Exit-Test
-{
-	# Write-Host ""
-	# Save-Errors
-	Write-Host ""
-}
+New-Test "Resume-Error"
+Test-Error
 
-#
-# Function exports
-#
+New-Test "Generate errors"
+$Folder = "C:\CrazyFolder"
+Get-ChildItem -Path $Folder @CommonParams
+Resume-CommonParams @CommonParams
 
-Export-ModuleMember -Function New-Test
-Export-ModuleMember -Function Exit-Test
-
-#
-# Module preferences
-#
-
-if ($Develop)
-{
-	$ErrorActionPreference = $ModuleErrorPreference
-	$WarningPreference = $ModuleWarningPreference
-	$DebugPreference = $ModuleDebugPreference
-	$VerbosePreference = $ModuleVerbosePreference
-	$InformationPreference = $ModuleInformationPreference
-}
+New-Test "No errors"
+Get-ChildItem -Path "C:\" -EV EV
+Resume-CommonParams @CommonParams

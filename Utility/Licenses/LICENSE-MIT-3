@@ -1,11 +1,6 @@
+The MIT License (MIT)
 
-<#
-MIT License
-
-Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems
-Homepage: https://github.com/metablaster/WindowsFirewallRuleset
-
-Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
+Copyright (c) 2016 Øyvind Kallstad
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,29 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-#>
-
-#
-# Unit test for Save-Errors
-#
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
-
-# Check requirements for this project
-Import-Module -Name $RepoDir\Modules\System
-Test-SystemRequirements
-
-# Includes
-. $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Test
-Import-Module -Name $RepoDir\Modules\FirewallModule
-
-# Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
-if (!(Approve-Execute)) { exit }
-
-New-Test "Generate errors"
-$Folder = "C:\CrazyFolder"
-Get-ChildItem -Path $Folder
-
-New-Test "Save-Errors"
-Save-Errors

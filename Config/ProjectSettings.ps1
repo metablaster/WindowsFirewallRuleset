@@ -30,6 +30,9 @@ SOFTWARE.
 # In addition to this do (CTRL SHIFT + F) global search and uncomment symbols for: "to export from this module"
 Set-Variable -Name Develop -Scope Global -Value $true
 
+# Name of this script for debugging messages, do not modify.
+Set-Variable -Name ThisScript -Scope Local -Option ReadOnly -Value $($MyInvocation.MyCommand.Name -replace ".{4}$")
+
 <#
 Preference Variables default values
 https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_preference_variables?view=powershell-7
@@ -63,17 +66,29 @@ $WhatIfPreference	False
 
 if ($Develop)
 {
-	# Override above defaults here however you wish, will be globally set except in modules
-	$DebugPreference = "Continue"
+	#
+	# Override above defaults here, will be globally set even for modules
+	# Preferences for modules can be separatelly configured bellow
+	#
+
+	# $ErrorActionPreference = "SilentlyContinue"
+	# $WarningPreference = "SilentlyContinue"
 	$VerbosePreference = "Continue"
+	$DebugPreference = "Continue"
 	$InformationPreference = "Continue"
 
-	# Preferences for modules
-	Set-Variable -Name ModuleDebugPreference -Scope Global -Value $DebugPreference
-	Set-Variable -Name ModuleVerbosePreference -Scope Global -Value $VerbosePreference
-	Set-Variable -Name ModuleInformationPreference -Scope Global -Value $InformationPreference
+	# Must be after debug preference
+	Write-Debug -Message "[$ThisScript] Setup clean environment"
 
-	Write-Debug "Setting -> Clean up environment"
+	#
+	# Preferences for modules
+	#
+
+	Set-Variable -Name ModuleErrorPreference -Scope Global -Value $ErrorActionPreference
+	Set-Variable -Name ModuleWarningPreference -Scope Global -Value $WarningPreference
+	Set-Variable -Name ModuleVerbosePreference -Scope Global -Value $VerbosePreference
+	Set-Variable -Name ModuleDebugPreference -Scope Global -Value $DebugPreference
+	Set-Variable -Name ModuleInformationPreference -Scope Global -Value $InformationPreference
 
 	#
 	# Remove loaded modules, usefull for module debugging
@@ -87,16 +102,36 @@ if ($Develop)
 	Remove-Module -Name ComputerInfo -ErrorAction Ignore
 	Remove-Module -Name ProgramInfo -ErrorAction Ignore
 }
+else
+{
+	# These are set to default values for normal use case,
+	# modify to customize your experience
+	$ErrorActionPreference = "Continue"
+	$WarningPreference = "Continue"
+	$VerbosePreference = "SilentlyContinue"
+	$DebugPreference = "SilentlyContinue"
+	$InformationPreference = "SilentlyContinue"
 
+	# Preference for modules not used, default.
+	Remove-Variable -Name ModuleErrorPreference -Scope Global -ErrorAction Ignore
+	Remove-Variable -Name ModuleWarningPreference -Scope Global -ErrorAction Ignore
+	Remove-Variable -Name ModuleVerbosePreference -Scope Global -ErrorAction Ignore
+	Remove-Variable -Name ModuleDebugPreference -Scope Global -ErrorAction Ignore
+	Remove-Variable -Name ModuleInformationPreference -Scope Global -ErrorAction Ignore
+}
+
+# These are set only once per session, changing these requires powershell restart
 if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore))
 {
-	Write-Debug "Setting -> Project constants"
+	Write-Debug -Message "[$ThisScript] Setup constant variables"
 
 	# check if constants alreay initialized, used for module reloading
 	New-Variable -Name CheckProjectConstants -Scope Global -Option Constant -Value $null
 
 	# Repository root directory, realocating scripts should be easy if root directory is constant
-	New-Variable -Name RepoDir -Scope Global -Option Constant -Value (Resolve-Path -Path "$PSScriptRoot\.." | Select-Object -ExpandProperty Path)
+	New-Variable -Name RepoDir -Scope Global -Option Constant -Value (
+		Resolve-Path -Path "$PSScriptRoot\.." | Select-Object -ExpandProperty Path)
+
 	# Windows 10, Windows Server 2019 and above
 	New-Variable -Name Platform -Scope Global -Option Constant -Value "10.0+"
 	# Machine where to apply rules (default: Local Group Policy)
@@ -107,9 +142,11 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	New-Variable -Name Force -Scope Global -Option Constant -Value $false
 }
 
+# These are set only once per session, changing these requires powershell restart
+# except if Develop = $true
 if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -ErrorAction Ignore))
 {
-	Write-Debug "Setting -> Project variables"
+	Write-Debug -Message "[$ThisScript] Setup removable variables"
 
 	# check if removable variables already initialized
 	Set-Variable -Name CheckRemovableVariables -Scope Global -Option ReadOnly -Force -Value $null
@@ -117,6 +154,61 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 	# Set to false to avoid checking system requirements
 	Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $false
 
-	# Global variable to tell if all scripts ran clean
+	# Global variable to tell if errors were generated, do not modify!
+	Set-Variable -Name ErrorStatus -Scope Global -Value $false
+
+	# Global variable to tell if all scripts ran clean, do not modify!
 	Set-Variable -Name WarningStatus -Scope Global -Value $false
+
+	# For more information see documentation of Resume-CommonParams function
+	# Modification requires default preferences to be adjusted!
+	# otherwise your terminal could be spammed with duplicate messages.
+	# For example, can be used to enable only messages and logging for external commandlets.
+	Set-Variable -Name CommonParams -Scope Global -Value @{
+		ErrorAction = "SilentlyContinue"
+		ErrorVariable = "EV"
+		WarningAction = "SilentlyContinue"
+		WarningVariable = "WV"
+		InformationAction = "SilentlyContinue"
+		InformationVariable = "IV"
+	}
+}
+
+<#
+.SYNOPSIS
+Log and format errors, warnings and infos generated by external commandlets
+.DESCRIPTION
+External commandlets are given splating for 6 common parameters, which are then filled with streams.
+Resume-CommonParams takes the result of this splating which is now filled with error,
+warning and information records generated by external commandlets.
+Resume-CommonParams forwards these records to apprpriate Resume-* handlers for formatting,
+status checking and logging into a file.
+.PARAMETER ErrorAction
+ = "SilentlyContinue"
+.PARAMETER ErrorVariable
+ = "EV"
+.PARAMETER WarningAction
+ = "SilentlyContinue"
+.PARAMETER WarningVariable
+ = "WV"
+.PARAMETER InformationAction
+ = "SilentlyContinue"
+.PARAMETER InformationVariable
+ = "IV"
+.EXAMPLE
+Resume-CommonParams @CommonParams
+.INPUTS
+None. You cannot pipe objects to Resume-CommonParams
+.OUTPUTS
+None.
+.NOTES
+This function can't be part of a module, can't be advanced function,
+and the script with this function must be dot sourced.
+Parameter names must be EV, WV and IV which are common parameter aliases.
+#>
+function Resume-CommonParams
+{
+	$EV | Resume-Error -Log
+	$WV | Resume-Warning -Log
+	$IV | Resume-Info
 }

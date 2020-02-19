@@ -222,5 +222,9 @@ Export-ModuleMember -Function Test-SystemRequirements
 
 if ($Develop)
 {
+	$ErrorActionPreference = $ModuleErrorPreference
+	$WarningPreference = $ModuleWarningPreference
 	$DebugPreference = $ModuleDebugPreference
+	$VerbosePreference = $ModuleVerbosePreference
+	$InformationPreference = $ModuleInformationPreference
 }

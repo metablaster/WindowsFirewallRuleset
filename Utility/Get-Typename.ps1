@@ -5,7 +5,7 @@ MIT License
 Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
+Copyright (c) 2016 Øyvind Kallstad
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,66 +28,23 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-write output to separate test cases
-.PARAMETER InputMessage
-message to print before test
+Returns .NET return type name for input object
+.PARAMETER InputObject
+System.Object
 .EXAMPLE
-New-Test "my test"
+Get-Process | Get-TypeName
 .INPUTS
-None. You cannot pipe objects to New-Test
+Any .NET object
 .OUTPUTS
-formatted message block is shown in console
+System.String type name
 #>
-function New-Test
+function Get-TypeName
 {
-	param (
-		[Parameter(Mandatory = $true)]
-		[string] $InputMessage
+	[CmdletBinding()]
+    param (
+		[Parameter(ValueFromPipeline = $true)]
+		$InputObject
 	)
 
-	$Message = "Testing: $InputMessage"
-	$Asterisks = $("*" * ($Message.Length + 4))
-
-	Write-Host ""
-	Write-Host $Asterisks
-	Write-Host "* $Message *"
-	Write-Host $Asterisks
-	Write-Host ""
-}
-
-<#
-.SYNOPSIS
-write output to tell script scope test is done
-.EXAMPLE
-Exit-Test
-.INPUTS
-None. You cannot pipe objects to Exit-Test
-.OUTPUTS
-formatted message block is shown in console
-#>
-function Exit-Test
-{
-	# Write-Host ""
-	# Save-Errors
-	Write-Host ""
-}
-
-#
-# Function exports
-#
-
-Export-ModuleMember -Function New-Test
-Export-ModuleMember -Function Exit-Test
-
-#
-# Module preferences
-#
-
-if ($Develop)
-{
-	$ErrorActionPreference = $ModuleErrorPreference
-	$WarningPreference = $ModuleWarningPreference
-	$DebugPreference = $ModuleDebugPreference
-	$VerbosePreference = $ModuleVerbosePreference
-	$InformationPreference = $ModuleInformationPreference
+    Write-Output (($InputObject | Get-Member).TypeName | Select-Object -Unique)
 }
