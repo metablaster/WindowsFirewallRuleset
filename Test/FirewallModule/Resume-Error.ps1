@@ -50,14 +50,27 @@ function Test-Error
 	-ErrorId SampleID -TargetObject $ComputerName 2>&1 | Resume-Error -Log
 }
 
+function Test-ErrorCmdLet
+{
+	[CmdletBinding()]
+	param ()
+
+	Write-Error -Message "cmdlet error 1" -Category PermissionDenied -ErrorId SampleID
+	Write-Error -Message "cmdlet error 2" -Category PermissionDenied -ErrorId SampleID
+}
+
 New-Test "Resume-Error"
 Test-Error
 
 New-Test "Generate errors"
 $Folder = "C:\CrazyFolder"
-Get-ChildItem -Path $Folder @CommonParams
-Resume-CommonParams @CommonParams
+Get-ChildItem -Path $Folder @Commons
+Resume-Commons @Commons
 
 New-Test "No errors"
-Get-ChildItem -Path "C:\" -EV EV
-Resume-CommonParams @CommonParams
+Get-ChildItem -Path "C:\" @Commons | Out-Null
+Resume-Commons @Commons
+
+New-Test "Test-ErrorCmdLet"
+Test-ErrorCmdLet @Commons
+Resume-Commons @Commons

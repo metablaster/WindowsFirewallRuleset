@@ -6,6 +6,7 @@ Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
 Copyright (c) 2016 Øyvind Kallstad
+Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +27,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+<# Links to original and individual version of code
+https://github.com/gravejester/Communary.PASM
+#>
+
 <#
 .SYNOPSIS
 Returns .NET return type name for input object
@@ -37,6 +42,10 @@ Get-Process | Get-TypeName
 Any .NET object
 .OUTPUTS
 System.String type name
+.NOTES
+Modifications by metablaster:
+Added process block to prevent errors when object is null
+Added comment based help
 #>
 function Get-TypeName
 {
@@ -46,5 +55,8 @@ function Get-TypeName
 		$InputObject
 	)
 
-    Write-Output (($InputObject | Get-Member).TypeName | Select-Object -Unique)
+	process
+	{
+		Write-Output (($InputObject | Get-Member).TypeName | Select-Object -Unique)
+	}
 }

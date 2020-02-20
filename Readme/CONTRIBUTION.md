@@ -9,7 +9,7 @@ Bellow 2 pages explains general/starting guidelines:\
 First step is to fork a project:\
 [Forking projects](https://guides.github.com/activities/forking)
 
-Next you may want to set up your SSH keys (don't actually do it yet):
+Next you may want to set up your SSH keys (don't actually do it yet):\
 [connecting-to-github-with-ssh](https://help.github.com/en/enterprise/2.20/user/github/authenticating-to-github/connecting-to-github-with-ssh)
 
 The reason why not to set up SSH keys right away is because for PowerShell I made this tutorial:\

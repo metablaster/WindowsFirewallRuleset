@@ -54,7 +54,8 @@ function Test-WarningCmdLet
 	[CmdletBinding()]
 	param ()
 
-	Write-Warning -Message "Test-WarningCmdLet"
+	Write-Warning -Message "Test-WarningCmdLet 1"
+	Write-Warning -Message "Test-WarningCmdLet 2"
 }
 
 function Test-NoWarningCmdLet
@@ -67,11 +68,11 @@ New-Test "Test-Warning"
 Test-Warning
 
 New-Test "Test-WarningCmdLet"
-Test-WarningCmdLet @CommonParams
-Resume-CommonParams @CommonParams
+Test-WarningCmdLet @Commons
+Resume-Commons @Commons
 
 New-Test "Test-NoWarningCmdLet"
-Test-NoWarningCmdLet @CommonParams
-Resume-CommonParams @CommonParams
+Test-NoWarningCmdLet @Commons
+Resume-Commons @Commons
 
 Exit-Test

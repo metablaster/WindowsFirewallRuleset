@@ -309,7 +309,7 @@ Write-Warning -Message "sample message" 3>&1 | Resume-Warning -Folder "C:\Logs" 
 None.
 .NOTES
 TODO: Pass warning variable to avoid pipeline?
-TODO: Stream parameter defines no type, otherwise warning is not colored
+TODO: Stream parameter defines no type, otherwise warning is not colored and label is gone
 TODO: [ValidateNotNullOrEmpty()] does not work
 #>
 function Resume-Warning
@@ -351,7 +351,6 @@ function Resume-Warning
 			Set-Variable -Name WarningStatus -Scope Global -Value $true
 		}
 
-
 		if ($Log)
 		{
 			# Generate file name
@@ -366,6 +365,8 @@ function Resume-Warning
 			}
 
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending warning to log file: $FileName"
+
+			# NOTE: we have to add the WARNING label, it's gone for some reason
 			"WARNING: $(Get-Date -Format "HH:mm:ss") $Message" | Out-File -Append -FilePath $LogFile
 		}
 	}
@@ -423,7 +424,7 @@ function Resume-Info
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending information to log file: $FileName"
 
 		# Show the information and append log to file
-		"INFO:" + ($Stream | Select-Object * |
+		"INFO: " + ($Stream | Select-Object * |
 		Tee-Object -Append -FilePath $LogFile |
 		Select-Object -ExpandProperty MessageData)
 	}

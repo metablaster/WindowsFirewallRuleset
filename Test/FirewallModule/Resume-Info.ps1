@@ -55,14 +55,26 @@ function Test-InfoCmdLet
 	[CmdletBinding()]
 	param ()
 
-	Write-Information -MessageData "Test-WarningCmdLet"
+	Write-Information -MessageData "Test-InfoCmdLet 1"
+	Write-Information -MessageData "Test-InfoCmdLet 2"
+	Write-Error -Message "Test-InfoCmdLet error" -Category PermissionDenied -ErrorId SampleID
+}
+
+function Test-NoInfoCmdLet
+{
+	[CmdletBinding()]
+	param ()
 }
 
 New-Test "Test-Info"
 Test-Info
 
 New-Test "Test-InfoCmdLet"
-Test-InfoCmdLet @CommonParams
-Resume-CommonParams @CommonParams
+Test-InfoCmdLet @Commons
+Resume-Commons @Commons
+
+New-Test "Test-NoInfoCmdLet"
+Test-NoInfoCmdLet @Commons
+Resume-Commons @Commons
 
 Exit-Test

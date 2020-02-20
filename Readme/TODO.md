@@ -1,12 +1,14 @@
 # List of stuff that needs to be done
 
-1. Now that common parameters are removed need to update the order of rule parameters, also not all are the same.
+This is a project global list which applies to several or all scripts, for smaller todo's see point 1 first!
+
+1. First do CTRL + F in VSCode and search for "TODO"
 2. update FirewallParamters.md with a list of incompatible paramters for reference
 3. apply local IP to all rules, as optional feature
 4. Detect if script ran manually, to be able to reset errors and warning status
 5. some rules are missing comments
 6. auto detect interfaces
-7. CTRL + F and search for "TODO"
+7. Now that common parameters are removed need to update the order of rule parameters, also not all are the same.
 8. Implement unique names and groups for rules, -Name and -Group paramter vs -Display*
 9. make display names and groups modular for easy search, ie. group - subgroup, Company - Program
 10. make possible to apply or enable only rules relevant for current firewall profile
