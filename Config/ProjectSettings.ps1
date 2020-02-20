@@ -164,7 +164,7 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 	# Global variable to tell if errors were generated, do not modify!
 	Set-Variable -Name ErrorStatus -Scope Global -Value $false
 
-	# Global variable to tell if all scripts ran clean, do not modify!
+	# Global variable to tell if warnings were generated, do not modify!
 	Set-Variable -Name WarningStatus -Scope Global -Value $false
 
 	# These defaults are for advanced functions to enable logging, do not edit!
@@ -187,6 +187,8 @@ Write-Log is called right afterwards and it reads error, warning and information
 Write-Log forwards these records to apprpriate Resume-* handlers for formatting, status checking and logging into a file.
 Error, Warning and info preferences and log switch can be overriden at any time and the Write-Log will pick up
 those values automatically since both these variables and Write-Log are local to script.
+.PARAMETER NoStatus
+Applies only to warning messages, if set, warning status is not updated
 .EXAMPLE
 Write-Log
 .INPUTS
@@ -200,6 +202,10 @@ Variables EV, WV and IV are script local variables defined in 'Commons' splattin
 #>
 function Write-Log
 {
+	param (
+		[switch] $NoStatus
+	)
+
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
 
 	if ($EV)
@@ -215,7 +221,7 @@ function Write-Log
 		# This is a workaround, since warning variable is missing the
 		# WARNING label and coloring, reported bellow:
 		# https://github.com/PowerShell/PowerShell/issues/11900
-		$WV | Write-Warning -WarningAction "Continue" 3>&1 | Resume-Warning -Log:$WarningLogging -Preference $WarningPreference
+		$WV | Write-Warning -WarningAction "Continue" 3>&1 | Resume-Warning -Log:$WarningLogging -Preference $WarningPreference -NoStatus:$NoStatus
 	}
 
 	if ($IV)

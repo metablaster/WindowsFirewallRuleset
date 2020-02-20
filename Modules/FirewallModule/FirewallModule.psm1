@@ -210,6 +210,54 @@ function Convert-SDDLToACL
 
 <#
 .SYNOPSIS
+Return a log file name for logging functions
+.DESCRIPTION
+Generates log file name composed of current date and time and log level label.
+.PARAMETER Folder
+[System.String] path to folder where to save logs
+.PARAMETER FileLabel
+[System.String] file label which preceeds file name
+.EXAMPLE
+Get-LogFile "C:\Logs" "Warning"
+.INPUTS
+None. You cannot pipe objects to Get-LogFile
+.OUTPUTS
+[System.String] full path to log file
+.NOTES
+TODO: Maybe a separate folder for each day?
+#>
+function Get-LogFile
+{
+	[CmdletBinding()]
+	param (
+		[Parameter(Mandatory = $true)]
+		[string] $Folder,
+
+		[Parameter(Mandatory = $true)]
+		[string] $FileLabel
+	)
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+
+	# Generate file name
+	$FileName = $FileLabel + "_$(Get-Date -Format "dd.MM.yy HH")h.log"
+	$LogFile = Join-Path -Path $Folder -ChildPath $FileName
+
+	# Create Logs directory if it doesn't exist
+	if (!(Test-Path -PathType Container -Path $Folder))
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating directory $Folder"
+		New-Item -ItemType Directory -Path $Folder -ErrorAction Stop | Out-Null
+	}
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Logs folder is: $Folder"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending $FileLabel to log file: $FileName"
+
+	return $LogFile
+}
+
+<#
+.SYNOPSIS
 Log generated error and set global error status
 .DESCRIPTION
 Resume-Error takes error record stream which is shown in the console
@@ -217,6 +265,8 @@ and optionally logged into a file.
 Gobal error status variable is set to true or optionally left alone.
 .PARAMETER Stream
 [System.Management.Automation.ErrorRecord] stream
+.PARAMETER Preference
+[System.Management.Automation.ActionPreference] ErrorActionPreference
 .PARAMETER Folder
 [System.String] path to folder on either C or D drive where to save logs
 .PARAMETER Log
@@ -266,6 +316,8 @@ function Resume-Error
 
 		if ($Log)
 		{
+			$LogFile = Get-LogFile $Folder "Error"
+
 			if ($Preference -ne "SilentlyContinue")
 			{
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Write error to terminal and log file"
@@ -276,20 +328,6 @@ function Resume-Error
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Write error to log file only"
 				$Stream | Select-Object -OutVariable Message | Out-Null
 			}
-
-			# Generate file name
-			$FileName = "Error_$(Get-Date -Format "dd.MM.yy HH")h.log"
-			$LogFile = Join-Path -Path $Folder -ChildPath $FileName
-
-			# Create Logs directory if it doesn't exist
-			if (!(Test-Path -PathType Container -Path $Folder))
-			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating directory $Folder"
-				New-Item -ItemType Directory -Path $Folder -ErrorAction Stop | Out-Null
-			}
-
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Logs folder is: $Folder"
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending error to log file: $FileName"
 
 			$Message | Select-Object * | Out-File -Append -FilePath $LogFile
 		}
@@ -314,6 +352,8 @@ and optionally logged into a file.
 Gobal warning status variable is set to true or optionally left alone.
 .PARAMETER Stream
 [System.Management.Automation.WarningRecord] stream
+.PARAMETER Preference
+[System.Management.Automation.ActionPreference] WarningPreference
 .PARAMETER Folder
 [System.String] path to folder on either C or D drive where to save logs
 .PARAMETER NoStatus
@@ -336,7 +376,7 @@ TODO: [ValidateNotNullOrEmpty()] does not work
 #>
 function Resume-Warning
 {
-	[CmdletBinding()]
+	[CmdletBinding(PositionalBinding = $false)]
     param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true,
 		HelpMessage = "Input object must be WarningRecord")]
@@ -348,7 +388,7 @@ function Resume-Warning
 		HelpMessage = "Warning action preference")]
 		[System.Management.Automation.ActionPreference] $Preference,
 
-		[Parameter(Position = 0)]
+		[Parameter()]
 		[ValidateDrive("C", "D")]
 		[string] $Folder = $LogsFolder,
 
@@ -363,35 +403,19 @@ function Resume-Warning
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
 
-		# Show the warning and save to variable
-		# $Stream | Tee-Object -Variable Message
-
 		if ($NoStatus)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Warning status stays the same: $WarningStatus"
 		}
 		else
 		{
-			# Update warning status variable
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting warning status variable"
 			Set-Variable -Name WarningStatus -Scope Global -Value $true
 		}
 
 		if ($Log)
 		{
-			# Generate file name
-			$FileName = "Warning_$(Get-Date -Format "dd.MM.yy HH")h.log"
-			$LogFile = Join-Path -Path $Folder -ChildPath $FileName
-
-			# Create Logs directory if it doesn't exist
-			if (!(Test-Path -PathType Container -Path $Folder))
-			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating directory $Folder"
-				New-Item -ItemType Directory -Path $Folder -ErrorAction Stop | Out-Null
-			}
-
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Logs folder is: $Folder"
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending warning to log file: $FileName"
+			$LogFile = Get-LogFile $Folder "Warning"
 
 			# NOTE: we have to add the WARNING label, it's gone for some reason
 			if ($Preference -ne "SilentlyContinue")
@@ -427,6 +451,8 @@ Resume-Info takes Information record stream which is shown in the console
 and logged into a file.
 .PARAMETER Stream
 [System.Management.Automation.InformationRecord] stream
+.PARAMETER Preference
+[System.Management.Automation.ActionPreference] InformationPreference
 .PARAMETER Folder
 [System.String] path to folder on either C or D drive where to save logs
 .EXAMPLE
@@ -441,7 +467,7 @@ TODO: [ValidateNotNullOrEmpty()] does not work
 #>
 function Resume-Info
 {
-	[CmdletBinding()]
+	[CmdletBinding(PositionalBinding = $false)]
     param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true,
 		HelpMessage = "Input object must be InformationRecord")]
@@ -452,7 +478,7 @@ function Resume-Info
 		HelpMessage = "Information action preference")]
 		[System.Management.Automation.ActionPreference] $Preference,
 
-		[Parameter(Position = 0)]
+		[Parameter()]
 		[ValidateDrive("C", "D")]
 		[string] $Folder = $LogsFolder,
 
@@ -466,19 +492,7 @@ function Resume-Info
 
 		if ($Log)
 		{
-			# Generate file name
-			$FileName = "Info_$(Get-Date -Format "dd.MM.yy HH")h.log"
-			$LogFile = Join-Path -Path $Folder -ChildPath $FileName
-
-			# Create Logs directory if it doesn't exist
-			if (!(Test-Path -PathType Container -Path $Folder))
-			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating directory $Folder"
-				New-Item -ItemType Directory -Path $Folder -ErrorAction Stop | Out-Null
-			}
-
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Logs folder is: $Folder"
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending information to log file: $FileName"
+			$LogFile = Get-LogFile $Folder "Info"
 
 			if ($Preference -ne "SilentlyContinue")
 			{

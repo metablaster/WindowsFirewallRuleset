@@ -72,7 +72,7 @@ Test-NonAdvancedFunction
 
 New-Test "Test-WarningCmdLet"
 Test-WarningCmdLet @Commons
-Write-Log
+Write-Log -NoStatus
 
 New-Test "Test-NoWarningCmdLet"
 Test-NoWarningCmdLet @Commons
