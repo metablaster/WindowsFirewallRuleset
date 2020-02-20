@@ -235,14 +235,18 @@ TODO: [ValidateNotNullOrEmpty()] does not work
 #>
 function Resume-Error
 {
-	[CmdletBinding()]
+	[CmdletBinding(PositionalBinding = $false)]
     param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true,
 		HelpMessage = "Input object must be ErrorRecord")]
 		[ValidateNotNullOrEmpty()]
 		[System.Management.Automation.ErrorRecord] $Stream,
 
-		[Parameter(Position = 0)]
+		[Parameter(Mandatory = $true,
+		HelpMessage = "Error action preference")]
+		[System.Management.Automation.ActionPreference] $Preference,
+
+		[Parameter()]
 		[ValidateDrive("C", "D")]
 		[string] $Folder = $LogsFolder,
 
@@ -254,18 +258,28 @@ function Resume-Error
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
 
-		# Show the error and save to variable
-		$Stream | Tee-Object -Variable Message
-
-		# Update error status variable
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting error status variable"
-		Set-Variable -Name ErrorStatus -Scope Global -Value $true
+		if ($Preference -ne "SilentlyContinue")
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Set error status variable"
+			Set-Variable -Name ErrorStatus -Scope Global -Value $true
+		}
 
 		if ($Log)
 		{
+			if ($Preference -ne "SilentlyContinue")
+			{
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Write error to terminal and log file"
+				$Stream | Tee-Object -Variable Message
+			}
+			else
+			{
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Write error to log file only"
+				$Stream | Select-Object -OutVariable Message | Out-Null
+			}
+
 			# Generate file name
 			$FileName = "Error_$(Get-Date -Format "dd.MM.yy HH")h.log"
-			$LogFile = "$Folder\$FileName"
+			$LogFile = Join-Path -Path $Folder -ChildPath $FileName
 
 			# Create Logs directory if it doesn't exist
 			if (!(Test-Path -PathType Container -Path $Folder))
@@ -274,11 +288,19 @@ function Resume-Error
 				New-Item -ItemType Directory -Path $Folder -ErrorAction Stop | Out-Null
 			}
 
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Logs folder is: $Folder"
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending error to log file: $FileName"
 
-			# Show the error and append log to file
-			$Message | Select-Object * |
-			Out-File -Append -FilePath $LogFile
+			$Message | Select-Object * | Out-File -Append -FilePath $LogFile
+		}
+		elseif ($Preference -ne "SilentlyContinue")
+		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Write error to terminal only"
+			$Stream
+		}
+		else
+		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Error message ignored"
 		}
 	}
 }
@@ -322,6 +344,10 @@ function Resume-Warning
 		# [System.Management.Automation.WarningRecord]
 		$Stream,
 
+		[Parameter(Mandatory = $true,
+		HelpMessage = "Warning action preference")]
+		[System.Management.Automation.ActionPreference] $Preference,
+
 		[Parameter(Position = 0)]
 		[ValidateDrive("C", "D")]
 		[string] $Folder = $LogsFolder,
@@ -338,7 +364,7 @@ function Resume-Warning
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
 
 		# Show the warning and save to variable
-		$Stream | Tee-Object -Variable Message
+		# $Stream | Tee-Object -Variable Message
 
 		if ($NoStatus)
 		{
@@ -355,7 +381,7 @@ function Resume-Warning
 		{
 			# Generate file name
 			$FileName = "Warning_$(Get-Date -Format "dd.MM.yy HH")h.log"
-			$LogFile = "$Folder\$FileName"
+			$LogFile = Join-Path -Path $Folder -ChildPath $FileName
 
 			# Create Logs directory if it doesn't exist
 			if (!(Test-Path -PathType Container -Path $Folder))
@@ -364,10 +390,31 @@ function Resume-Warning
 				New-Item -ItemType Directory -Path $Folder -ErrorAction Stop | Out-Null
 			}
 
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Logs folder is: $Folder"
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending warning to log file: $FileName"
 
 			# NOTE: we have to add the WARNING label, it's gone for some reason
-			"WARNING: $(Get-Date -Format "HH:mm:ss") $Message" | Out-File -Append -FilePath $LogFile
+			if ($Preference -ne "SilentlyContinue")
+			{
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Write warning to terminal and log file"
+
+				$Stream
+				"WARNING: $(Get-Date -Format "HH:mm:ss") $Stream" | Out-File -Append -FilePath $LogFile
+			}
+			else
+			{
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Write warning to log file only"
+				"WARNING: $(Get-Date -Format "HH:mm:ss") $Stream" | Out-File -Append -FilePath $LogFile
+			}
+		}
+		elseif ($Preference -ne "SilentlyContinue")
+		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Write warning to terminal only"
+			$Stream
+		}
+		else
+		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Warning message ignored"
 		}
 	}
 }
@@ -401,32 +448,61 @@ function Resume-Info
 		[ValidateNotNullOrEmpty()]
 		[System.Management.Automation.InformationRecord] $Stream,
 
+		[Parameter(Mandatory = $true,
+		HelpMessage = "Information action preference")]
+		[System.Management.Automation.ActionPreference] $Preference,
+
 		[Parameter(Position = 0)]
 		[ValidateDrive("C", "D")]
-		[string] $Folder = $LogsFolder
+		[string] $Folder = $LogsFolder,
+
+		[Parameter()]
+		[switch] $Log
 	)
 
 	process
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
 
-		# Generate file name
-		$FileName = "Info_$(Get-Date -Format "dd.MM.yy HH")h.log"
-		$LogFile = "$Folder\$FileName"
-
-		# Create Logs directory if it doesn't exist
-		if (!(Test-Path -PathType Container -Path $Folder))
+		if ($Log)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating directory $Folder"
-			New-Item -ItemType Directory -Path $Folder -ErrorAction Stop | Out-Null
+			# Generate file name
+			$FileName = "Info_$(Get-Date -Format "dd.MM.yy HH")h.log"
+			$LogFile = Join-Path -Path $Folder -ChildPath $FileName
+
+			# Create Logs directory if it doesn't exist
+			if (!(Test-Path -PathType Container -Path $Folder))
+			{
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating directory $Folder"
+				New-Item -ItemType Directory -Path $Folder -ErrorAction Stop | Out-Null
+			}
+
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Logs folder is: $Folder"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending information to log file: $FileName"
+
+			if ($Preference -ne "SilentlyContinue")
+			{
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Write information to terminal and log file"
+
+				"INFO: " + ($Stream | Select-Object * |
+				Tee-Object -Append -FilePath $LogFile |
+				Select-Object -ExpandProperty MessageData)
+			}
+			else
+			{
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Write information to log file only"
+				$Stream | Select-Object * | Out-File -Append -FilePath $LogFile
+			}
 		}
-
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending information to log file: $FileName"
-
-		# Show the information and append log to file
-		"INFO: " + ($Stream | Select-Object * |
-		Tee-Object -Append -FilePath $LogFile |
-		Select-Object -ExpandProperty MessageData)
+		elseif ($Preference -ne "SilentlyContinue")
+		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Write information to terminal only"
+			"INFO: " + $Stream
+		}
+		else
+		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Information message ignored"
+		}
 	}
 }
 

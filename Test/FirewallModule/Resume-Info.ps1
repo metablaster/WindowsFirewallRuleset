@@ -44,10 +44,10 @@ Import-Module -Name $RepoDir\Modules\FirewallModule
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-function Test-Info
+function Test-NonAdvancedFunction
 {
 	Write-Information -MessageData "[$($MyInvocation.InvocationName)] sample info" `
-	-Tags Result 6>&1 | Resume-Info
+	-Tags Result 6>&1 | Resume-Info -Log:$InformationLogging -Preference $InformationPreference
 }
 
 function Test-InfoCmdLet
@@ -57,7 +57,7 @@ function Test-InfoCmdLet
 
 	Write-Information -MessageData "Test-InfoCmdLet 1"
 	Write-Information -MessageData "Test-InfoCmdLet 2"
-	Write-Error -Message "Test-InfoCmdLet error" -Category PermissionDenied -ErrorId SampleID
+	#Write-Error -Message "Test-InfoCmdLet error" -Category PermissionDenied -ErrorId SampleID
 }
 
 function Test-NoInfoCmdLet
@@ -66,15 +66,17 @@ function Test-NoInfoCmdLet
 	param ()
 }
 
-New-Test "Test-Info"
-Test-Info
+# $InformationPreference = "SilentlyContinue"
+
+New-Test "Test-NonAdvancedFunction"
+Test-NonAdvancedFunction
 
 New-Test "Test-InfoCmdLet"
 Test-InfoCmdLet @Commons
-Resume-Commons @Commons
+Write-Log
 
 New-Test "Test-NoInfoCmdLet"
 Test-NoInfoCmdLet @Commons
-Resume-Commons @Commons
+Write-Log
 
 Exit-Test

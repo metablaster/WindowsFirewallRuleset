@@ -44,10 +44,10 @@ Import-Module -Name $RepoDir\Modules\FirewallModule
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-function Test-Error
+function Test-NonAdvancedFunction
 {
 	Write-Error -Message "[$($MyInvocation.InvocationName)] sample message" -Category PermissionDenied `
-	-ErrorId SampleID -TargetObject $ComputerName 2>&1 | Resume-Error -Log
+	-ErrorId SampleID -TargetObject $ComputerName -ErrorAction "Continue" 2>&1 | Resume-Error -Log:$ErrorLogging -Preference $ErrorActionPreference
 }
 
 function Test-ErrorCmdLet
@@ -59,18 +59,21 @@ function Test-ErrorCmdLet
 	Write-Error -Message "cmdlet error 2" -Category PermissionDenied -ErrorId SampleID
 }
 
-New-Test "Resume-Error"
-Test-Error
+# $ErrorActionPreference = "SilentlyContinue"
+
+New-Test "Test-NonAdvancedFunction"
+Test-NonAdvancedFunction
 
 New-Test "Generate errors"
 $Folder = "C:\CrazyFolder"
 Get-ChildItem -Path $Folder @Commons
-Resume-Commons @Commons
+Write-Log
 
 New-Test "No errors"
 Get-ChildItem -Path "C:\" @Commons | Out-Null
-Resume-Commons @Commons
+Write-Log
+# $ErrorActionPreference = "Continue"
 
 New-Test "Test-ErrorCmdLet"
 Test-ErrorCmdLet @Commons
-Resume-Commons @Commons
+Write-Log

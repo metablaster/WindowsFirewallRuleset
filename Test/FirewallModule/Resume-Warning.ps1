@@ -44,9 +44,10 @@ Import-Module -Name $RepoDir\Modules\FirewallModule
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-function Test-Warning
+function Test-NonAdvancedFunction
 {
-	Write-Warning -Message "[$($MyInvocation.InvocationName)] warning message" 3>&1 | Resume-Warning -NoStatus -Log
+	Write-Warning -Message "[$($MyInvocation.InvocationName)] warning message" -WarningAction "Continue" 3>&1 |
+	Resume-Warning -NoStatus -Log:$WarningLogging -Preference $WarningPreference
 }
 
 function Test-WarningCmdLet
@@ -64,15 +65,17 @@ function Test-NoWarningCmdLet
 	param ()
 }
 
-New-Test "Test-Warning"
-Test-Warning
+# $WarningPreference = "SilentlyContinue"
+
+New-Test "Test-NonAdvancedFunction"
+Test-NonAdvancedFunction
 
 New-Test "Test-WarningCmdLet"
 Test-WarningCmdLet @Commons
-Resume-Commons @Commons
+Write-Log
 
 New-Test "Test-NoWarningCmdLet"
 Test-NoWarningCmdLet @Commons
-Resume-Commons @Commons
+Write-Log
 
 Exit-Test
