@@ -59,6 +59,17 @@ function Test-ErrorCmdLet
 	Write-Error -Message "cmdlet error 2" -Category PermissionDenied -ErrorId SampleID
 }
 
+function Test-Pipeline
+{
+	[CmdletBinding()]
+	param (
+		[Parameter(ValueFromPipeline = $true)]
+		$Param
+	)
+
+	Write-Error -Message "End of pipe" -Category PermissionDenied -ErrorId SampleID
+}
+
 # $ErrorActionPreference = "SilentlyContinue"
 
 New-Test "Test-NonAdvancedFunction"
@@ -76,4 +87,12 @@ Write-Log
 
 New-Test "Test-ErrorCmdLet"
 Test-ErrorCmdLet @Commons
+Write-Log
+
+New-Test "Test pipeline"
+Get-ChildItem -Path $Folder @Commons | Test-Pipeline @Commons
+Write-Log
+
+New-Test "Test pipeline"
+Get-ChildItem -Path $Folder @Commons | Test-Pipeline @Commons
 Write-Log

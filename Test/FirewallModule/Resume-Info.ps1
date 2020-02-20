@@ -66,6 +66,17 @@ function Test-NoInfoCmdLet
 	param ()
 }
 
+function Test-Pipeline
+{
+	[CmdletBinding()]
+	param (
+		[Parameter(ValueFromPipeline = $true)]
+		$Param
+	)
+
+	Write-Information -MessageData "End of pipe"
+}
+
 # $InformationPreference = "SilentlyContinue"
 
 New-Test "Test-NonAdvancedFunction"
@@ -77,6 +88,16 @@ Write-Log
 
 New-Test "Test-NoInfoCmdLet"
 Test-NoInfoCmdLet @Commons
+Write-Log
+
+$Folder = "C:\CrazyFolder"
+
+New-Test "Test pipeline"
+Get-ChildItem -Path $Folder @Commons | Test-Pipeline @Commons
+Write-Log
+
+New-Test "Test pipeline"
+Get-ChildItem -Path $Folder @Commons | Test-Pipeline @Commons
 Write-Log
 
 Exit-Test

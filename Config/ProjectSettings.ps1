@@ -170,11 +170,11 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 	# These defaults are for advanced functions to enable logging, do not edit!
 	Set-Variable -Name Commons -Scope Local -Value @{
 		ErrorAction = "SilentlyContinue"
-		ErrorVariable = "EV"
+		ErrorVariable = "+EV"
 		WarningAction = "SilentlyContinue"
-		WarningVariable = "WV"
+		WarningVariable = "+WV"
 		InformationAction = "SilentlyContinue"
-		InformationVariable = "IV"
+		InformationVariable = "+IV"
 	}
 }
 
@@ -212,6 +212,7 @@ function Write-Log
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing ErrorVariable"
 		$EV | Resume-Error -Log:$ErrorLogging -Preference $ErrorActionPreference
+		$EV.Clear()
 	}
 
 	if ($WV)
@@ -222,11 +223,13 @@ function Write-Log
 		# WARNING label and coloring, reported bellow:
 		# https://github.com/PowerShell/PowerShell/issues/11900
 		$WV | Write-Warning -WarningAction "Continue" 3>&1 | Resume-Warning -Log:$WarningLogging -Preference $WarningPreference -NoStatus:$NoStatus
+		$WV.Clear()
 	}
 
 	if ($IV)
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing InformationVariable"
 		$IV | Resume-Info -Log:$InformationLogging -Preference $InformationPreference
+		$IV.Clear()
 	}
 }
