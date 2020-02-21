@@ -37,12 +37,12 @@ Test-SystemRequirements
 
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Test
-Import-Module -Name $RepoDir\Modules\Meta.Windows.UserInfo
-Import-Module -Name $RepoDir\Modules\Meta.Windows.ProgramInfo
-Import-Module -Name $RepoDir\Modules\Meta.Windows.ComputerInfo
-Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
-Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
+Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Test
+Import-Module -Name $RepoDir\Modules\Project.Windows.UserInfo
+Import-Module -Name $RepoDir\Modules\Project.Windows.ProgramInfo
+Import-Module -Name $RepoDir\Modules\Project.Windows.ComputerInfo
+Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Logging
+Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility
 
 # Ask user if he wants to load these rules
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")

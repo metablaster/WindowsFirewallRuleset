@@ -1,0 +1,42 @@
+TOPIC
+	about_Project.Windows.UserInfo
+
+SHORT DESCRIPTION
+	Query user information on Windows systems
+
+LONG DESCRIPTION
+	Functions in UserInfo module can be used to query information about users
+	on computer.
+	Currently only localhost is supported.
+
+VARIABLES
+	UserAccounts:       User accounts in "Users" group
+	AdminAccounts:      User accounts in "Administrators" group
+	UserNames:          User names in "Users" group
+	AdminNames:         User names in "Administrators" group
+	UserAccountsSDDL:   SDDL string for all users in "Users" group
+	AdminAccountsSDDL:  SDDL string for all users in "Administrators" group
+
+	# SDDL strings for following system users
+	NT_AUTHORITY_System
+	NT_AUTHORITY_LocalService
+	NT_AUTHORITY_NetworkService
+	NT_AUTHORITY_UserModeDrivers
+
+EXAMPLES
+	To get SDDL string for accouns:
+	Get-AccountSDDL @("NT AUTHORITY\SYSTEM", "MY_DESKTOP\MY_USERNAME")
+
+	To get user SID:
+	Get-UserSID("TestUser")
+
+	To get user accounts on syste:
+	Get-UserAccounts("Administrators")
+
+KEYWORDS
+	UserInfo
+	ComputerUsers
+	Users
+
+SEE ALSO
+	TODO: Add link for more help

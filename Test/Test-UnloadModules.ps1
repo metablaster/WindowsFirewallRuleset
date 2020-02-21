@@ -38,14 +38,14 @@ Write-Information -Tags "Test" -MessageData "Import-Module Test"
 Import-Module -Name $RepoDir\Modules\Test -Force
 
 Write-Information -Tags "Test" -MessageData "Import-Module UserInfo"
-Import-Module -Name $RepoDir\Modules\Meta.Windows.UserInfo -Force
+Import-Module -Name $RepoDir\Modules\Project.Windows.UserInfo -Force
 
 Write-Information -Tags "Test" -MessageData "Import-Module FirewallModule"
-Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
-Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility -Force
+Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Logging
+Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility -Force
 
 Write-Information -Tags "Test" -MessageData "Import-Module ProgramInfo"
-Import-Module -Name $RepoDir\Modules\Meta.Windows.ProgramInfo -Force
+Import-Module -Name $RepoDir\Modules\Project.Windows.ProgramInfo -Force
 
 Write-Information -Tags "Test" -MessageData "Import-Module ComputerInfo"
-Import-Module -Name $RepoDir\Modules\Meta.Windows.ComputerInfo -Force
+Import-Module -Name $RepoDir\Modules\Project.Windows.ComputerInfo -Force

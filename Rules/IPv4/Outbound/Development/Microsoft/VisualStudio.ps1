@@ -36,10 +36,10 @@ Test-SystemRequirements
 . $PSScriptRoot\..\..\DirectionSetup.ps1
 . $PSScriptRoot\..\..\..\IPSetup.ps1
 Import-Module -Name $RepoDir\Modules\VSSetup
-Import-Module -Name $RepoDir\Modules\Meta.Windows.UserInfo
-Import-Module -Name $RepoDir\Modules\Meta.Windows.ProgramInfo
-Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
-Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
+Import-Module -Name $RepoDir\Modules\Project.Windows.UserInfo
+Import-Module -Name $RepoDir\Modules\Project.Windows.ProgramInfo
+Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Logging
+Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility
 
 #
 # Setup local variables:

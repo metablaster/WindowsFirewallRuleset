@@ -1,0 +1,31 @@
+TOPIC
+	about_Project.AllPlatforms.Utility
+
+SHORT DESCRIPTION
+	Utility module for Windows Firewall Ruleset project
+
+LONG DESCRIPTION
+	Functions in Project.AllPlatforms.Utility module are designed to be helper for building a
+	better widnows firewall, specifically to write rules and provide better environment.
+
+VARIABLES
+	ServiceHost:		Windows service host
+	CheckInitUtility:	Purpose is to prevent double initialization of constans
+
+EXAMPLES
+	For better looking output of Net-NewFirewallRule
+	Net-NewFirewallRule ... | Format-Output
+
+	To save execution errors to file
+	Save-Errors
+
+	To prompt user to set recommended screen buffer
+	Set-ScreenBuffer
+
+KEYWORDS
+	Firewall
+	FirewallModule
+	FirewallHelper
+
+SEE ALSO
+	https://github.com/metablaster/WindowsFirewallRuleset
