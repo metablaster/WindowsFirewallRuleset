@@ -32,7 +32,7 @@ SOFTWARE.
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 
 Write-Information -Tags "Test" -MessageData "Import-Module System"
-Import-Module -Name $RepoDir\Modules\System -Force
+Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.System -Force
 
 Write-Information -Tags "Test" -MessageData "Import-Module Test"
 Import-Module -Name $RepoDir\Modules\Test -Force

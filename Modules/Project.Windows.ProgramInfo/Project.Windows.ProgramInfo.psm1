@@ -50,13 +50,12 @@ TODO: Test if path exists
 #>
 function Get-AppSID
 {
+	[CmdletBinding()]
 	param (
-		[Parameter(Mandatory = $true, Position=0)]
-		[ValidateLength(1, 100)]
+		[Parameter(Mandatory = $true)]
 		[string] $UserName,
 
-		[Parameter(Mandatory = $true, Position=1)]
-		[ValidateLength(1, 100)]
+		[Parameter(Mandatory = $true)]
 		[string] $AppName
 	)
 
@@ -95,6 +94,7 @@ warning message if file not found
 #>
 function Test-File
 {
+	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $FilePath
@@ -131,6 +131,7 @@ $true if path exists, false otherwise
 #>
 function Test-Environment
 {
+	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $false)]
 		[string] $FilePath = $null
@@ -165,6 +166,7 @@ warning and info message if service not found
 #>
 function Test-Service
 {
+	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $Service
@@ -192,6 +194,7 @@ $true or $false
 #>
 function Test-UserProfile
 {
+	[CmdletBinding()]
 	param (
 		[string] $FilePath
 	)
@@ -280,6 +283,7 @@ System.String formatted path, includes environment variables, stripped off of ju
 #>
 function Format-Path
 {
+	[CmdletBinding()]
 	param (
 		[string] $FilePath
 	)
@@ -381,6 +385,7 @@ System.Management.Automation.PSCustomObject list of programs for specified accou
 #>
 function Get-UserPrograms
 {
+	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $UserAccount
@@ -454,6 +459,7 @@ System.Management.Automation.PSCustomObject list of programs installed for all u
 #>
 function Get-SystemPrograms
 {
+	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $ComputerName
@@ -554,6 +560,7 @@ System.Management.Automation.PSCustomObject list of programs installed for all u
 function Get-AllUserPrograms
 {
 	# TODO: this function need to be tested on server, UserData key not found
+	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $ComputerName
@@ -638,6 +645,7 @@ System.Data.DataTable empty table with 2 columns, user entry and install locatio
 #>
 function Initialize-Table
 {
+	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $false)]
 		[string] $TableName = "InstallationTable"
@@ -682,6 +690,7 @@ Table code needs to be updated to fill it for USERS instead of same path for eac
 #>
 function Update-Table
 {
+	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $SearchString,
@@ -783,6 +792,7 @@ Table code needs to be updated to fill it for USERS instead of same path for eac
 #>
 function Edit-Table
 {
+	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $InstallRoot
@@ -847,6 +857,7 @@ TODO: temporarily using ComputerName parameter
 #>
 function Test-Installation
 {
+	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[string] $Program,
@@ -943,6 +954,7 @@ True or false if installation directory if found, installation table is updated
 #>
 function Find-Installation
 {
+	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $Program,
@@ -1358,6 +1370,7 @@ System.Management.Automation.PSCustomObject for installed NET Frameworks and ins
 #>
 function Get-NetFramework
 {
+	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $ComputerName
@@ -1464,6 +1477,7 @@ System.Management.Automation.PSCustomObject for installed Windows SDK versions a
 #>
 function Get-WindowsSDK
 {
+	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $ComputerName
@@ -1550,6 +1564,7 @@ System.Management.Automation.PSCustomObject for installed Windows Kits versions 
 #>
 function Get-WindowsKits
 {
+	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $ComputerName
@@ -1621,6 +1636,7 @@ System.Management.Automation.PSCustomObject for installed Windows Defender, vers
 #>
 function Get-WindowsDefender
 {
+	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $ComputerName
@@ -1686,7 +1702,8 @@ None. You cannot pipe objects to Get-SQLManagementStudio
 System.Management.Automation.PSCustomObject for installed Microsoft SQL Server Management Studio
  #>
  function Get-SQLManagementStudio
-{
+ {
+	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $false)]
 		[string] $ComputerName = $env:COMPUTERNAME

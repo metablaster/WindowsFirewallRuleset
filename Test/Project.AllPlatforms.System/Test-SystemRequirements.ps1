@@ -32,7 +32,7 @@ SOFTWARE.
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name $RepoDir\Modules\System
+Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.System
 
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
@@ -44,7 +44,9 @@ Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
+Start-Test
 New-Test "Test-SystemRequirements"
-Test-SystemRequirements $true
+Test-SystemRequirements $true @Commons
+Write-Log
 
 Exit-Test

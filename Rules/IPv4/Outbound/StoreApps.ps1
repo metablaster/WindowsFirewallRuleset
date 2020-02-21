@@ -98,7 +98,7 @@ InputApp
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name $RepoDir\Modules\System
+Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.System
 Test-SystemRequirements
 
 # Includes
