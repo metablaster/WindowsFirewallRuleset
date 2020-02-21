@@ -27,9 +27,9 @@ SOFTWARE.
 #>
 
 # Includes
-Import-Module -Name $PSScriptRoot\..\UserInfo
-Import-Module -Name $PSScriptRoot\..\ComputerInfo
-Import-Module -Name $PSScriptRoot\..\FirewallModule
+Import-Module -Name $PSScriptRoot\..\Meta.Windows.UserInfo
+Import-Module -Name $PSScriptRoot\..\Meta.Windows.ComputerInfo
+Import-Module -Name $PSScriptRoot\..\Meta.AllPlatform.Utility
 . $PSScriptRoot\..\..\Utility\Get-SQLInstances.ps1
 
 <#
@@ -75,8 +75,8 @@ function Get-AppSID
 	}
 	else
 	{
-		Set-Warning @("Store app '$AppName'", "not isnstalled by user '$UserName' or the app is missing")
-		Write-Note "To fix the problem let this user update all of it's apps in Windows store"
+		Write-Warning -Message "Store app '$AppName' is not isnstalled by user '$UserName' or the app is missing"
+		Write-Information -Tags "User" -MessageData "To fix the problem let this user update all of it's apps in Windows store"
 		return $null
 	}
 }
@@ -109,12 +109,11 @@ function Test-File
 		$SearchPath = Split-Path -Path $ExpandedPath -Parent
 		$Executable = Split-Path -Path $ExpandedPath -Leaf
 
-		Set-Warning @("Executable '$Executable' was not found"
-		"rules for '$Executable' won't have any effect"
-		"Searched path was: $SearchPath")
+		Write-Warning -Message "Executable '$Executable' was not found"
+		Write-Warning -Message "rules for '$Executable' won't have any effect"
+		Write-Information -Tags "User" -MessageData "Searched path was: $SearchPath"
 
-		Write-Note @("To fix the problem find '$Executable' then adjust the path in"
-		"$Script and re-run the script later again")
+		Write-Information -Tags "User" -MessageData "To fix the problem find '$Executable' then adjust the path in $Script and re-run the script later again"
 	}
 }
 
@@ -144,8 +143,8 @@ function Test-Environment
 
 	if ([Array]::Find($UserProfileEnvironment, [Predicate[string]]{ $FilePath -like "$($args[0])*" }))
 	{
-		Set-Warning "Bad environment variable detected, paths with environment variables that lead to user profile are not valid"
-		Write-Note "Bad path detected is: $FilePath"
+		Write-Warning -Message "Bad environment variable detected, paths with environment variables that lead to user profile are not valid"
+		Write-Information -Tags "User" -MessageData "Bad path detected is: $FilePath"
 		return $false
 	}
 
@@ -173,8 +172,8 @@ function Test-Service
 
 	if (!(Get-Service -Name $Service -ErrorAction SilentlyContinue))
 	{
-		Set-Warning "Service '$Service' not found, rule won't have any effect"
-		Write-Note "To fix the problem update or comment out all firewall rules for '$Service' service"
+		Write-Warning -Message "Service '$Service' not found, rule won't have any effect"
+		Write-Information -Tags "User" -MessageData "To fix the problem update or comment out all firewall rules for '$Service' service"
 	}
 }
 
@@ -422,14 +421,14 @@ function Get-UserPrograms
 					}
 					else
 					{
-						Set-Warning "Failed to read registry entry $Key\InstallLocation"
+						Write-Warning -Message "Failed to read registry entry $Key\InstallLocation"
 					}
 				}
 			}
 		}
 		else
 		{
-			Set-Warning "Failed to open registry key: $HKU"
+			Write-Warning -Message "Failed to open registry key: $HKU"
 		}
 
 		return $UserPrograms
@@ -527,7 +526,7 @@ function Get-SystemPrograms
 			}
 			else
 			{
-				Set-Warning "Failed to open registry key: $HKLMKey"
+				Write-Warning -Message "Failed to open registry key: $HKLMKey"
 			}
 		}
 
@@ -574,7 +573,7 @@ function Get-AllUserPrograms
 
 		if (!$RootKey)
 		{
-			Set-Warning "Failed to open RootKey: $HKLM"
+			Write-Warning -Message "Failed to open RootKey: $HKLM"
 		}
 		else
 		{
@@ -584,7 +583,7 @@ function Get-AllUserPrograms
 
 				if (!$UserProducts)
 				{
-					Set-Warning "Failed to open UserKey: $HKLMKey\Products"
+					Write-Warning -Message "Failed to open UserKey: $HKLMKey\Products"
 					continue
 				}
 
@@ -594,7 +593,7 @@ function Get-AllUserPrograms
 
 					if (!$ProductKey)
 					{
-						Set-Warning "Failed to open ProductKey: $HKLMSubKey\InstallProperties"
+						Write-Warning -Message "Failed to open ProductKey: $HKLMSubKey\InstallProperties"
 						continue
 					}
 
@@ -876,7 +875,7 @@ function Test-Installation
 		if ($Count -gt 1)
 		{
 			$InstallTable | Format-Table -AutoSize
-			Write-Note "Found multiple candidate installation directories for $Program"
+			Write-Information -Tags "User" -MessageData "Found multiple candidate installation directories for $Program"
 
 			# Print out all candidate installation directories
 			Write-Host "0. Abort this operation"
@@ -889,12 +888,12 @@ function Test-Installation
 			[int] $Choice = -1
 			while ($Choice -lt 0 -or $Choice -gt $Count)
 			{
-				Write-Host "Input number to choose which one is correct"
+				Write-Information -Tags "User" -MessageData "Input number to choose which one is correct"
 				$Input = Read-Host
 
 				if($Input -notmatch '^-?\d+$')
 				{
-					Write-Host "Digits only please!"
+					Write-Information -Tags "User" -MessageData "Digits only please!"
 					continue
 				}
 
@@ -917,7 +916,7 @@ function Test-Installation
 		}
 
 		# Using single quotes to make it emptiness obvious when the path is empty.
-		Write-Note "Path corrected from: '$($FilePath.Value)'", "to: '$InstallRoot'"
+		Write-Information -Tags "User" -MessageData "Path corrected from: '$($FilePath.Value)' to: '$InstallRoot'"
 		$FilePath.Value = $InstallRoot
 	}
 	else
@@ -1295,7 +1294,7 @@ function Find-Installation
 		}
 		default
 		{
-			Set-Warning "Parameter '$Program' not recognized" $false
+			Write-Warning -Message "Parameter '$Program' not recognized"
 		}
 	}
 
@@ -1305,15 +1304,15 @@ function Find-Installation
 	}
 	else
 	{
-		Set-Warning "Installation directory for '$Program' not found" $false
+		Write-Warning -Message "Installation directory for '$Program' not found"
 
 		# NOTE: number for Get-PSCallStack is 2, which means 3 function calls back and then get script name (call at 0 and 1 is this script)
 		$Script = (Get-PSCallStack)[2].Command
 
 		# TODO: this loops seem to be skiped, probably missing Test-File, need to check
-		Write-Note @("If you installed $Program elsewhere you can input the correct path now"
-		"or adjust the path in $Script and re-run the script later."
-		"otherwise ignore this warning if you don't have $Program installed.")
+		Write-Information -Tags "User" -MessageData "If you installed $Program elsewhere you can input the correct path now"
+		Write-Information -Tags "User" -MessageData "or adjust the path in $Script and re-run the script later."
+		Write-Information -Tags "User" -MessageData "otherwise ignore this warning if you don't have $Program installed."
 
 		if (Approve-Execute "Yes" "Rule group for $Program" "Do you want to input path now?")
 		{
@@ -1331,7 +1330,7 @@ function Find-Installation
 					}
 				}
 
-				Set-Warning "Installation directory for '$Program' not found" $false
+				Write-Warning -Message "Installation directory for '$Program' not found"
 				if (Approve-Execute "No" "Unable to locate '$InstallRoot'" "Do you want to try again?")
 				{
 					break
@@ -1376,7 +1375,7 @@ function Get-NetFramework
 
 		if (!$RootKey)
 		{
-			Set-Warning "Failed to open RootKey: $HKLM"
+			Write-Warning -Message "Failed to open RootKey: $HKLM"
 		}
 		else
 		{
@@ -1386,7 +1385,7 @@ function Get-NetFramework
 
 				if (!$KeyEntry)
 				{
-					Set-Warning "Failed to open KeyEntry: $HKLMKey"
+					Write-Warning -Message "Failed to open KeyEntry: $HKLMKey"
 					continue
 				}
 
@@ -1415,7 +1414,7 @@ function Get-NetFramework
 						$SubKeyEntry = $KeyEntry.OpenSubkey($SubKey)
 						if (!$SubKeyEntry)
 						{
-							Set-Warning "Failed to open SubKeyEntry: $SubKey"
+							Write-Warning -Message "Failed to open SubKeyEntry: $SubKey"
 							continue
 						}
 
@@ -1492,7 +1491,7 @@ function Get-WindowsSDK
 
 		if (!$RootKey)
 		{
-			Set-Warning "Failed to open RootKey: $HKLM"
+			Write-Warning -Message "Failed to open RootKey: $HKLM"
 		}
 		else
 		{
@@ -1502,7 +1501,7 @@ function Get-WindowsSDK
 
 				if (!$SubKey)
 				{
-					Set-Warning "Failed to open SubKey: $HKLMKey"
+					Write-Warning -Message "Failed to open SubKey: $HKLMKey"
 					continue
 				}
 
@@ -1515,7 +1514,7 @@ function Get-WindowsSDK
 				}
 				else
 				{
-					Set-Warning "Failed to read registry entry $RegKey\InstallationFolder"
+					Write-Warning -Message "Failed to read registry entry $RegKey\InstallationFolder"
 				}
 
 				# we add entry regarldess of presence of install path
@@ -1578,7 +1577,7 @@ function Get-WindowsKits
 
 		if (!$RootKey)
 		{
-			Set-Warning "Failed to open RootKey: $HKLM"
+			Write-Warning -Message "Failed to open RootKey: $HKLM"
 		}
 		else
 		{
@@ -1640,7 +1639,7 @@ function Get-WindowsDefender
 
 		if (!$RootKey)
 		{
-			Set-Warning "Failed to open RootKey: $HKLM"
+			Write-Warning -Message "Failed to open RootKey: $HKLM"
 		}
 		else
 		{
@@ -1656,7 +1655,7 @@ function Get-WindowsDefender
 			}
 			else
 			{
-				Set-Warning "Failed to read registry entry $RegKey\InstallLocation"
+				Write-Warning -Message "Failed to read registry entry $RegKey\InstallLocation"
 			}
 		}
 
@@ -1716,7 +1715,7 @@ System.Management.Automation.PSCustomObject for installed Microsoft SQL Server M
 
 		if (!$RootKey)
 		{
-			Set-Warning "Failed to open RootKey: $HKLM"
+			Write-Warning -Message "Failed to open RootKey: $HKLM"
 		}
 		else
 		{
@@ -1726,7 +1725,7 @@ System.Management.Automation.PSCustomObject for installed Microsoft SQL Server M
 
 				if (!$SubKey)
 				{
-					Set-Warning "Failed to open SubKey: $HKLMKey"
+					Write-Warning -Message "Failed to open SubKey: $HKLMKey"
 					continue
 				}
 
@@ -1745,7 +1744,7 @@ System.Management.Automation.PSCustomObject for installed Microsoft SQL Server M
 				}
 				else
 				{
-					Set-Warning "Failed to read registry entry $RegKey\SSMSInstallRoot"
+					Write-Warning -Message "Failed to read registry entry $RegKey\SSMSInstallRoot"
 				}
 			}
 		}

@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-WindowsSDK
+# Unit test for Get-SystemPrograms
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -37,7 +37,8 @@ Test-SystemRequirements
 
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.TestImport-Module -Name $RepoDir\Modules\ProgramInfo
+Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Test
+Import-Module -Name $RepoDir\Modules\Meta.Windows.ProgramInfo
 Import-Module -Name $RepoDir\Modules\Meta.Windows.ComputerInfo
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
@@ -46,25 +47,8 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
+New-Test "Get-AllUserPrograms"
 $ComputerName = Get-ComputerName
-
-New-Test "Get-WindowsSDK"
-
-$WindowsSDK = Get-WindowsSDK $ComputerName
-$WindowsSDK
-
-# New-Test "Get-WindowsSDK latest"
-
-# $WindowsSDK | Sort-Object -Property Version | Where-Object { $_.InstallPath } | Select-Object -Last 1 -ExpandProperty InstallPath
-
-# Get Windows SDK root
-# $WindowsSDK = Get-WindowsSDK $ComputerName
-# if ($null -ne $WindowsKits)
-# {
-#     $SDKRoot = $WindowsSDK |
-#     Sort-Object -Property Version |
-#     Where-Object { $_.InstallPath } |
-#     Select-Object -Last 1 -ExpandProperty InstallPath
-# }
+Get-AllUserPrograms $ComputerName | Sort-Object -Property Name
 
 Exit-Test

@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-SystemPrograms
+# Unit test for Get-WindowsKits
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -37,7 +37,8 @@ Test-SystemRequirements
 
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.TestImport-Module -Name $RepoDir\Modules\ProgramInfo
+Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Test
+Import-Module -Name $RepoDir\Modules\Meta.Windows.ProgramInfo
 Import-Module -Name $RepoDir\Modules\Meta.Windows.ComputerInfo
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
@@ -46,8 +47,28 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-New-Test "Get-AllUserPrograms"
 $ComputerName = Get-ComputerName
-Get-AllUserPrograms $ComputerName | Sort-Object -Property Name
+
+# New-Test "Get-WindowsKits"
+
+# $WindowsKits = Get-WindowsKits $ComputerName
+# $WindowsKits
+
+# New-Test "Get-WindowsKits DebuggersRoot latest"
+
+# $WindowsKits | Where-Object {$_.Product -like "WindowsDebuggersRoot*"} | Sort-Object -Property Product | Select-Object -Last 1 -ExpandProperty InstallPath
+
+New-Test "Get-WindowsKits install path"
+
+$WindowsKits = Get-WindowsKits $ComputerName
+if ($null -ne $WindowsKits)
+{
+	$SDKDebuggers = $WindowsKits |
+	Where-Object {$_.Product -like "WindowsDebuggersRoot*"} |
+	Sort-Object -Property Product |
+	Select-Object -Last 1 -ExpandProperty InstallPath
+
+	$SDKDebuggers
+}
 
 Exit-Test

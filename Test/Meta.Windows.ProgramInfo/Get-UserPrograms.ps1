@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Initialize-Table
+# Unit test for Get-UserPrograms
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -39,7 +39,7 @@ Test-SystemRequirements
 . $RepoDir\Test\ContextSetup.ps1
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Test
 Import-Module -Name $RepoDir\Modules\Meta.Windows.UserInfo
-Import-Module -Name $RepoDir\Modules\ProgramInfo
+Import-Module -Name $RepoDir\Modules\Meta.Windows.ProgramInfo
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
@@ -47,44 +47,11 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-New-Test "Initialize-Table"
-
-Initialize-Table
-
-if (!$global:InstallTable)
+New-Test "Get-UserPrograms"
+foreach ($Account in $UserAccounts)
 {
-	Write-Warning "Table not initialized"
-	exit
+	Write-Information -Tags "Test" -MessageData "Programs installed by $Account"
+	Get-UserPrograms $Account
 }
-
-if ($global:InstallTable.Rows.Count -ne 0)
-{
-	Write-Warning "Table not clear"
-	exit
-}
-
-New-Test "Fill table with data"
-
-foreach ($Account in $global:UserAccounts)
-{
-	Write-Host "User programs for: $Account"
-	$UserPrograms = Get-UserPrograms $Account
-
-	if ($UserPrograms.Name -like "Greenshot*")
-	{
-		# Create a row
-		$Row = $global:InstallTable.NewRow()
-
-		# Enter data in the row
-		$Row.User = $Account.Split("\")[1]
-		$Row.InstallRoot = $UserPrograms | Where-Object { $_.Name -like "Greenshot*" } | Select-Object -ExpandProperty InstallLocation
-
-		# Add row to the table
-		$global:InstallTable.Rows.Add($Row)
-	}
-}
-
-New-Test "Table data"
-$global:InstallTable | Format-Table -AutoSize
 
 Exit-Test

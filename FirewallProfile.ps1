@@ -37,7 +37,7 @@ Test-SystemRequirements
 #
 
 # Setting up profile seem to be slow, tell user what is going on
-Write-Host "Setting up public firewall profile..."
+Write-Information -Tags "User" -MessageData "Setting up public firewall profile..."
 
 Set-NetFirewallProfile -Profile Public -PolicyStore $PolicyStore `
 -Enabled True -DefaultInboundAction Block -DefaultOutboundAction Block -AllowInboundRules True `
@@ -48,7 +48,7 @@ Set-NetFirewallProfile -Profile Public -PolicyStore $PolicyStore `
 -LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log"
 
 # Setting up profile seem to be slow, tell user what is going on
-Write-Host "Setting up private firewall profile..."
+Write-Information -Tags "User" -MessageData "Setting up private firewall profile..."
 
 Set-NetFirewallProfile -Profile Private -PolicyStore $PolicyStore `
 -Enabled True -DefaultInboundAction Block -DefaultOutboundAction Block -AllowInboundRules True `
@@ -59,7 +59,7 @@ Set-NetFirewallProfile -Profile Private -PolicyStore $PolicyStore `
 -LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log"
 
 # Setting up profile seem to be slow, tell user what is going on
-Write-Host "Setting up domain firewall profile..."
+Write-Information -Tags "User" -MessageData "Setting up domain firewall profile..."
 
 Set-NetFirewallProfile -Profile Domain -PolicyStore $PolicyStore `
 -Enabled True -DefaultInboundAction Block -DefaultOutboundAction Block -AllowInboundRules True `

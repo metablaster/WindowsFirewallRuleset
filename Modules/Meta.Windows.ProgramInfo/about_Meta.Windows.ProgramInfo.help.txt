@@ -1,11 +1,11 @@
 TOPIC
-	about_ProgramInfo
+	about_Meta.Windows.ProgramInfo
 
 SHORT DESCRIPTION
 	Query software installed on Windows systems
 
 LONG DESCRIPTION
-	Functions in ProgramInfo module can be used to query information about programs
+	Functions in Meta.Windows.ProgramInfo module can be used to query information about programs
 	installed on computer, installed system wide or installed by each user separately.
 	Also possible to qurey software which is built into operating system.
 	Currently only localhost is supported.

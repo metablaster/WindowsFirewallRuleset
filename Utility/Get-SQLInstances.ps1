@@ -71,7 +71,7 @@ https://gallery.technet.microsoft.com/scriptcenter/Get-SQLInstance-9a3245a0
 	- separate support for 32 bit systems
 	- Include license into file (MIT all 3), links to original sites and add appropriate Copyright for each author/contributor
 	- update reported server versions
-	TODO: format-path, set-warning etc..
+	TODO: format-path, Write-Warning etc..
 
 .FUNCTIONALITY
 	Computers

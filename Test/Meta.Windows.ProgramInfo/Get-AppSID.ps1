@@ -27,8 +27,10 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-UserPrograms
+# Unit test for Get-AppSID
 #
+
+#Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
@@ -39,7 +41,7 @@ Test-SystemRequirements
 . $RepoDir\Test\ContextSetup.ps1
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Test
 Import-Module -Name $RepoDir\Modules\Meta.Windows.UserInfo
-Import-Module -Name $RepoDir\Modules\ProgramInfo
+Import-Module -Name $RepoDir\Modules\Meta.Windows.ProgramInfo
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
@@ -47,11 +49,49 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-New-Test "Get-UserPrograms"
-foreach ($Account in $UserAccounts)
+New-Test "Get-UserAccounts:"
+
+[string[]] $UserAccounts = Get-UserAccounts "Users"
+[string[]] $AdminAccounts = Get-UserAccounts "Administrators"
+$UserAccounts
+$AdminAccounts
+
+New-Test "Get-UserNames:"
+
+$Users = Get-UserNames $UserAccounts
+$Admins = Get-UserNames $AdminAccounts
+
+$Users
+$Admins
+
+New-Test "Get-UserSID:"
+
+foreach($User in $Users)
 {
-	Write-Host "Programs installed by $Account"
-	Get-UserPrograms $Account
+	Get-UserSID $User
+}
+
+foreach($Admin in $Admins)
+{
+	Get-UserSID $Admin
+}
+
+New-Test "Get-AppSID: foreach User"
+
+foreach($User in $Users) {
+	Write-Information -Tags "Test" -MessageData "Processing for: $User"
+	Get-AppxPackage -User $User -PackageTypeFilter Bundle | ForEach-Object {
+		Get-AppSID $User $_.PackageFamilyName
+	}
+}
+
+New-Test "Get-AppSID: foreach Admin"
+
+foreach($Admin in $Admins) {
+	Write-Information -Tags "Test" -MessageData "Processing for: $Admin"
+	Get-AppxPackage -User $Admin -PackageTypeFilter Bundle | ForEach-Object {
+		Get-AppSID $Admin $_.PackageFamilyName
+	}
 }
 
 Exit-Test

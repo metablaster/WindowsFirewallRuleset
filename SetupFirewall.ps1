@@ -37,7 +37,7 @@ Test-SystemRequirements
 Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $false
 
 # Includes
-Import-Module -Name $RepoDir\Modules\ProgramInfo
+Import-Module -Name $RepoDir\Modules\Meta.Windows.ProgramInfo
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
@@ -287,26 +287,25 @@ if ($ErrorCount)
 	Save-Errors
 
 	Write-Host ""
-	Write-Note "If module is edited don't forget to restart Powershell"
+	Write-Information -Tags "User" -MessageData "If module is edited don't forget to restart Powershell"
 }
 
 if ($WarningStatus)
 {
 	Write-Host ""
 	Write-Warning "Warnings were generated"
-	Write-Note @("All warnings were saved to:"
-	"$("$RepoDir\Logs")"
-	"you can review these logs to see if you want to resolve some of them")
+	Write-Information -Tags "User" -MessageData "All warnings were saved to: $("$RepoDir\Logs")"
+	Write-Information -Tags "User" -MessageData "you can review these logs to see if you want to resolve some of them"
 }
 
 if (!$ErrorCount -and !$WarningStatus)
 {
 	Write-Host ""
-	Write-Note "All operations completed successfuly!"
+	Write-Information -Tags "User" -MessageData "All operations completed successfuly!"
 }
 
 Write-Host ""
-Write-Note "Make sure you visit Local Group Policy and adjust your rules as needed."
+Write-Information -Tags "User" -MessageData "Make sure you visit Local Group Policy and adjust your rules as needed."
 Write-Host ""
 
 # Clear warning status

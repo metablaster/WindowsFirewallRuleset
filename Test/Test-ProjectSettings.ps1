@@ -39,7 +39,7 @@ Test-SystemRequirements
 . $RepoDir\Test\ContextSetup.ps1
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Test
 Import-Module -Name $RepoDir\Modules\Meta.Windows.UserInfo
-Import-Module -Name $RepoDir\Modules\ProgramInfo
+Import-Module -Name $RepoDir\Modules\Meta.Windows.ProgramInfo
 Import-Module -Name $RepoDir\Modules\Meta.Windows.ComputerInfo
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
@@ -50,5 +50,5 @@ if (!(Approve-Execute)) { exit }
 
 New-Test "Test-ProjectSettings"
 
-Write-Host "Preference Debug -> $DebugPreference"
+Write-Information -Tags "Test" -MessageData "Preference Debug -> $DebugPreference"
 Exit-Test

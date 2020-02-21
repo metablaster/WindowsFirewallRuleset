@@ -27,10 +27,8 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-AppSID
+# Unit test for Test-UserProfile
 #
-
-#Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
@@ -40,8 +38,7 @@ Test-SystemRequirements
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Test
-Import-Module -Name $RepoDir\Modules\Meta.Windows.UserInfo
-Import-Module -Name $RepoDir\Modules\ProgramInfo
+Import-Module -Name $RepoDir\Modules\Meta.Windows.ProgramInfo
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
@@ -49,49 +46,46 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-New-Test "Get-UserAccounts:"
+$User = "haxor"
 
-[string[]] $UserAccounts = Get-UserAccounts "Users"
-[string[]] $AdminAccounts = Get-UserAccounts "Administrators"
-$UserAccounts
-$AdminAccounts
+New-Test "User profile - full"
+$TestPath = "C:\Users\$User\source\repos\WindowsFirewallRuleset"
+$TestPath
+Test-UserProfile $TestPath
 
-New-Test "Get-UserNames:"
+New-Test "User profile - environment"
+$TestPath = "%LOCALAPPDATA%\Microsoft"
+$TestPath
+Test-UserProfile $TestPath
 
-$Users = Get-UserNames $UserAccounts
-$Admins = Get-UserNames $AdminAccounts
+New-Test "User profile - full unformatted"
+$TestPath = "C:\\Users\$User\source\\repos\WindowsFirewallRuleset\"
+$TestPath
+Test-UserProfile $TestPath
 
-$Users
-$Admins
+New-Test "User profile - environment unformatted"
+$TestPath = "%LOCALAPPDATA%\\Microsoft\"
+$TestPath
+Test-UserProfile $TestPath
 
-New-Test "Get-UserSID:"
+New-Test "System - full"
+$TestPath = "C:\Program Files\\Microsoft SQL Server\140"
+$TestPath
+Test-UserProfile $TestPath
 
-foreach($User in $Users)
-{
-	Get-UserSID $User
-}
+New-Test "System - envoronment"
+$TestPath = "%ProgramFiles(x86)%\Microsoft SQL Server\140\"
+$TestPath
+Test-UserProfile $TestPath
 
-foreach($Admin in $Admins)
-{
-	Get-UserSID $Admin
-}
+New-Test "Drive"
+$TestPath = "C:\"
+$TestPath
+Test-UserProfile $TestPath
 
-New-Test "Get-AppSID: foreach User"
-
-foreach($User in $Users) {
-	Write-Host "Processing for: $User"
-	Get-AppxPackage -User $User -PackageTypeFilter Bundle | ForEach-Object {
-		Get-AppSID $User $_.PackageFamilyName
-	}
-}
-
-New-Test "Get-AppSID: foreach Admin"
-
-foreach($Admin in $Admins) {
-	Write-Host "Processing for: $Admin"
-	Get-AppxPackage -User $Admin -PackageTypeFilter Bundle | ForEach-Object {
-		Get-AppSID $Admin $_.PackageFamilyName
-	}
-}
+New-Test "Drive"
+$TestPath = "C:\\"
+$TestPath
+Test-UserProfile $TestPath
 
 Exit-Test

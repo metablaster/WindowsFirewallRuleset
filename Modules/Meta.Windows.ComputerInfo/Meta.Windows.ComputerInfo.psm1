@@ -142,7 +142,7 @@ function Get-IPAddress
 	if ($IPAddress.Count -gt 1)
 	{
 		# TODO: bind result to custom function
-		Write-Information -MessageData "[$($MyInvocation.InvocationName)] Returning multiple IP addresses: $IPAddress" `
+		Write-Information -Tags "User" -MessageData "[$($MyInvocation.InvocationName)] Returning multiple IP addresses: $IPAddress" `
 		-Tags Result 6>&1 | Select-Object * | Tee-Object -FilePath "$RepoDir\Logs\Info.log" | Select-Object -ExpandProperty MessageData
 	}
 	elseif ($IPAddress.Count -eq 0)
@@ -190,7 +190,7 @@ function Get-Broadcast
 		Select-Object -ExpandProperty BroadcastAddress |
 		Select-Object -ExpandProperty IPAddressToString
 
-		Write-Information -MessageData "Network broadcast address is: $Broadcast"
+		Write-Information -Tags "User" -MessageData "Network broadcast address is: $Broadcast"
 		return $Broadcast
 	}
 

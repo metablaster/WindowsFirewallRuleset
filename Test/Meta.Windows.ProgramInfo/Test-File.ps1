@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-WindowsDefender
+# Unit test for Test-File
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -37,8 +37,8 @@ Test-SystemRequirements
 
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.TestImport-Module -Name $RepoDir\Modules\ProgramInfo
-Import-Module -Name $RepoDir\Modules\Meta.Windows.ComputerInfo
+Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Test
+Import-Module -Name $RepoDir\Modules\Meta.Windows.ProgramInfo
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
@@ -46,8 +46,16 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-New-Test "Get-WindowsDefender"
+$OfficeShared = "%ProgramFiles%\Common Files\microsoft shared"
+$VSInstallService = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.x86.exe"
 
-Get-WindowsDefender (Get-ComputerName) #| Select-Object -ExpandProperty InstallPath
+New-Test "Test-File '$VSInstallService'"
+Test-File "$VSInstallService"
+
+New-Test "Test-File '$OfficeShared\ClickToRun\OfficeClickToRun.exe'"
+Test-File "$OfficeShared\ClickToRun\OfficeClickToRun.exe"
+
+New-Test "Test-File '%ProgramFiles%\ClickToRun\OfficeClickToRun.exe'"
+Test-File "%ProgramFiles%\ClickToRun\OfficeClickToRun.exe"
 
 Exit-Test

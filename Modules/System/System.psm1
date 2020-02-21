@@ -135,7 +135,7 @@ function Test-SystemRequirements
 		}
 
 		# Now that OS and PowerShell is OK we can import these modules
-		Import-Module -Name $RepoDir\Modules\ProgramInfo
+		Import-Module -Name $RepoDir\Modules\Meta.Windows.ProgramInfo
 		Import-Module -Name $RepoDir\Modules\Meta.Windows.ComputerInfo
 
 		# Check NET Framework version

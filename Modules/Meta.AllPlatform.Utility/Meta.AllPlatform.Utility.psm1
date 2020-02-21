@@ -310,7 +310,7 @@ function Get-NetworkServices
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Writing filtered services to: $File"
 	Add-Content -Path $File -Value $Content
 
-	Write-Information -MessageData "[$($MyInvocation.InvocationName)] $($Content.Count) services involved in firewall rules"
+	Write-Information -Tags "Project" -MessageData "[$($MyInvocation.InvocationName)] $($Content.Count) services involved in firewall rules"
 }
 
 <#
@@ -381,7 +381,7 @@ function Set-ScreenBuffer
 		{
 			$NewSize.Height = $NewBuffer
 			$psWindow.BufferSize = $NewSize
-			Write-Information -MessageData "Screen buffer changed to $NewBuffer"
+			Write-Information -Tags "User" -MessageData "Screen buffer changed to $NewBuffer"
 			return
 		}
 

@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Test-File
+# Unit test for Get-WindowsSDK
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -37,7 +37,9 @@ Test-SystemRequirements
 
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.TestImport-Module -Name $RepoDir\Modules\ProgramInfo
+Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Test
+Import-Module -Name $RepoDir\Modules\Meta.Windows.ProgramInfo
+Import-Module -Name $RepoDir\Modules\Meta.Windows.ComputerInfo
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
@@ -45,16 +47,25 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-$OfficeShared = "%ProgramFiles%\Common Files\microsoft shared"
-$VSInstallService = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.x86.exe"
+$ComputerName = Get-ComputerName
 
-New-Test "Test-File '$VSInstallService'"
-Test-File "$VSInstallService"
+New-Test "Get-WindowsSDK"
 
-New-Test "Test-File '$OfficeShared\ClickToRun\OfficeClickToRun.exe'"
-Test-File "$OfficeShared\ClickToRun\OfficeClickToRun.exe"
+$WindowsSDK = Get-WindowsSDK $ComputerName
+$WindowsSDK
 
-New-Test "Test-File '%ProgramFiles%\ClickToRun\OfficeClickToRun.exe'"
-Test-File "%ProgramFiles%\ClickToRun\OfficeClickToRun.exe"
+# New-Test "Get-WindowsSDK latest"
+
+# $WindowsSDK | Sort-Object -Property Version | Where-Object { $_.InstallPath } | Select-Object -Last 1 -ExpandProperty InstallPath
+
+# Get Windows SDK root
+# $WindowsSDK = Get-WindowsSDK $ComputerName
+# if ($null -ne $WindowsKits)
+# {
+#     $SDKRoot = $WindowsSDK |
+#     Sort-Object -Property Version |
+#     Where-Object { $_.InstallPath } |
+#     Select-Object -Last 1 -ExpandProperty InstallPath
+# }
 
 Exit-Test

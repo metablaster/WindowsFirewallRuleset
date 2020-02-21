@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Test-UserProfile
+# Unit test for Get-SystemPrograms
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -37,7 +37,9 @@ Test-SystemRequirements
 
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.TestImport-Module -Name $RepoDir\Modules\ProgramInfo
+Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Test
+Import-Module -Name $RepoDir\Modules\Meta.Windows.ProgramInfo
+Import-Module -Name $RepoDir\Modules\Meta.Windows.ComputerInfo
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
@@ -45,46 +47,16 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-$User = "haxor"
+$ComputerName = Get-ComputerName
+$SystemPrograms = Get-SystemPrograms $ComputerName
 
-New-Test "User profile - full"
-$TestPath = "C:\Users\$User\source\repos\WindowsFirewallRuleset"
-$TestPath
-Test-UserProfile $TestPath
+New-Test "Get-SystemPrograms Name"
+$SystemPrograms | Sort-Object -Property Name | Select-Object -ExpandProperty Name
 
-New-Test "User profile - environment"
-$TestPath = "%LOCALAPPDATA%\Microsoft"
-$TestPath
-Test-UserProfile $TestPath
+New-Test "Get-SystemPrograms InstallLocation"
+$SystemPrograms | Sort-Object -Property InstallLocation | Select-Object -ExpandProperty InstallLocation
 
-New-Test "User profile - full unformatted"
-$TestPath = "C:\\Users\$User\source\\repos\WindowsFirewallRuleset\"
-$TestPath
-Test-UserProfile $TestPath
-
-New-Test "User profile - environment unformatted"
-$TestPath = "%LOCALAPPDATA%\\Microsoft\"
-$TestPath
-Test-UserProfile $TestPath
-
-New-Test "System - full"
-$TestPath = "C:\Program Files\\Microsoft SQL Server\140"
-$TestPath
-Test-UserProfile $TestPath
-
-New-Test "System - envoronment"
-$TestPath = "%ProgramFiles(x86)%\Microsoft SQL Server\140\"
-$TestPath
-Test-UserProfile $TestPath
-
-New-Test "Drive"
-$TestPath = "C:\"
-$TestPath
-Test-UserProfile $TestPath
-
-New-Test "Drive"
-$TestPath = "C:\\"
-$TestPath
-Test-UserProfile $TestPath
+New-Test "Get-SystemPrograms"
+$SystemPrograms | Sort-Object -Property Name
 
 Exit-Test

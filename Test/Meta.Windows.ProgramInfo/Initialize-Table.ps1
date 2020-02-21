@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-SQLManagementStudio
+# Unit test for Initialize-Table
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -37,7 +37,9 @@ Test-SystemRequirements
 
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.TestImport-Module -Name $RepoDir\Modules\ProgramInfo
+Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Test
+Import-Module -Name $RepoDir\Modules\Meta.Windows.UserInfo
+Import-Module -Name $RepoDir\Modules\Meta.Windows.ProgramInfo
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
@@ -45,13 +47,44 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-New-Test "SQLManagementStudio"
-$Result = Get-SQLManagementStudio
-$Result | Get-Member
+New-Test "Initialize-Table"
 
-$Result
+Initialize-Table
 
-New-Test "SQLManagementStudio - Install path"
-$Result | Select-Object -ExpandProperty InstallPath
+if (!$global:InstallTable)
+{
+	Write-Warning "Table not initialized"
+	exit
+}
+
+if ($global:InstallTable.Rows.Count -ne 0)
+{
+	Write-Warning "Table not clear"
+	exit
+}
+
+New-Test "Fill table with data"
+
+foreach ($Account in $global:UserAccounts)
+{
+	Write-Information -Tags "Test" -MessageData "User programs for: $Account"
+	$UserPrograms = Get-UserPrograms $Account
+
+	if ($UserPrograms.Name -like "Greenshot*")
+	{
+		# Create a row
+		$Row = $global:InstallTable.NewRow()
+
+		# Enter data in the row
+		$Row.User = $Account.Split("\")[1]
+		$Row.InstallRoot = $UserPrograms | Where-Object { $_.Name -like "Greenshot*" } | Select-Object -ExpandProperty InstallLocation
+
+		# Add row to the table
+		$global:InstallTable.Rows.Add($Row)
+	}
+}
+
+New-Test "Table data"
+$global:InstallTable | Format-Table -AutoSize
 
 Exit-Test

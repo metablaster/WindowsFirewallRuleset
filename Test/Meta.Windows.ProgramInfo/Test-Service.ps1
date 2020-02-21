@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Format-Path
+# Unit test for Test-Service
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -37,7 +37,8 @@ Test-SystemRequirements
 
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.TestImport-Module -Name $RepoDir\Modules\ProgramInfo
+Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Test
+Import-Module -Name $RepoDir\Modules\Meta.Windows.ProgramInfo
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
@@ -45,74 +46,10 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-New-Test "Format-Path"
+New-Test "Test-Service FailureTest"
+Test-Service "FailureTest"
 
-$Result = Format-Path "C:\"
-$Result
-Test-Environment $Result
-
-$Result = Format-Path "C:\\Windows\System32"
-$Result
-Test-Environment $Result
-
-$Result = Format-Path "C:\\Windows\"
-$Result
-Test-Environment $Result
-
-$Result = Format-Path "C:\Program Files (x86)\Windows Defender\"
-$Result
-Test-Environment $Result
-
-$Result = Format-Path "C:\Program Files\WindowsPowerShell"
-$Result
-Test-Environment $Result
-
-$Result = Format-Path '"C:\ProgramData\Git"'
-$Result
-Test-Environment $Result
-
-$Result = Format-Path "C:\PerfLogs"
-$Result
-Test-Environment $Result
-
-$Result = Format-Path "C:\Windows\Microsoft.NET\Framework64\v3.5\\"
-$Result
-Test-Environment $Result
-
-$Result = Format-Path "'C:\Windows\Microsoft.NET\Framework64\v3.5'"
-$Result
-Test-Environment $Result
-
-$Result = Format-Path "D:\\microsoft\\windows"
-$Result
-Test-Environment $Result
-
-$Result = Format-Path "D:\"
-$Result
-Test-Environment $Result
-
-$Result = Format-Path "C:\\"
-$Result
-Test-Environment $Result
-
-$Result = Format-Path "C:\Users\haxor\AppData\Local\OneDrive"
-$Result
-Test-Environment $Result
-
-$Result = Format-Path "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
-$Result
-Test-Environment $Result
-
-$Result = Format-Path "%SystemDrive%"
-$Result
-Test-Environment $Result
-
-$Result = Format-Path ""
-$Result
-Test-Environment $Result
-
-$Result = Format-Path $null
-$Result
-Test-Environment $Result
+New-Test "Test-Service dnscache"
+Test-Service dnscache
 
 Exit-Test

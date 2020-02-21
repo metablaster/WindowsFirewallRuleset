@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-SystemPrograms
+# Unit test for Find-Installation
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -37,8 +37,8 @@ Test-SystemRequirements
 
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.TestImport-Module -Name $RepoDir\Modules\ProgramInfo
-Import-Module -Name $RepoDir\Modules\Meta.Windows.ComputerInfo
+Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Test
+Import-Module -Name $RepoDir\Modules\Meta.Windows.ProgramInfo
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
@@ -46,16 +46,32 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-$ComputerName = Get-ComputerName
-$SystemPrograms = Get-SystemPrograms $ComputerName
+New-Test "Find-Installation 'EdgeChromium'"
+Find-Installation "EdgeChromium"
 
-New-Test "Get-SystemPrograms Name"
-$SystemPrograms | Sort-Object -Property Name | Select-Object -ExpandProperty Name
+New-Test "Table data"
+$global:InstallTable | Format-Table -AutoSize
 
-New-Test "Get-SystemPrograms InstallLocation"
-$SystemPrograms | Sort-Object -Property InstallLocation | Select-Object -ExpandProperty InstallLocation
+New-Test "Install Root"
+$global:InstallTable | Select-Object -ExpandProperty InstallRoot
 
-New-Test "Get-SystemPrograms"
-$SystemPrograms | Sort-Object -Property Name
+New-Test "Find-Installation 'TeamViewer'"
+Find-Installation "TeamViewer"
+# C:\Program Files (x86)\Microsoft
+
+New-Test "Table data"
+$global:InstallTable | Format-Table -AutoSize
+
+New-Test "Find-Installation 'FailureTest'"
+Find-Installation "FailureTest"
+
+New-Test "Table data"
+$global:InstallTable | Format-Table -AutoSize
+
+New-Test "Find-Installation 'VisualStudio'"
+Find-Installation "VisualStudio"
+
+New-Test "Table data"
+$global:InstallTable | Format-Table -AutoSize
 
 Exit-Test

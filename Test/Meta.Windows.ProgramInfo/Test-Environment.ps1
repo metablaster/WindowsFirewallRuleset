@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Find-Installation
+# Unit test for Test-Environment
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -37,7 +37,8 @@ Test-SystemRequirements
 
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.TestImport-Module -Name $RepoDir\Modules\ProgramInfo
+Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Test
+Import-Module -Name $RepoDir\Modules\Meta.Windows.ProgramInfo
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
@@ -45,32 +46,78 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-New-Test "Find-Installation 'EdgeChromium'"
-Find-Installation "EdgeChromium"
+New-Test "Test-Environment"
 
-New-Test "Table data"
-$global:InstallTable | Format-Table -AutoSize
+$Result = "C:\"
+$Result
+Test-Environment $Result
 
-New-Test "Install Root"
-$global:InstallTable | Select-Object -ExpandProperty InstallRoot
+$Result = "C:\\Windows\System32"
+$Result
+Test-Environment $Result
 
-New-Test "Find-Installation 'TeamViewer'"
-Find-Installation "TeamViewer"
-# C:\Program Files (x86)\Microsoft
+$Result = "C:\\Windows\"
+$Result
+Test-Environment $Result
 
-New-Test "Table data"
-$global:InstallTable | Format-Table -AutoSize
+$Result = "C:\Program Files (x86)\Windows Defender\"
+$Result
+Test-Environment $Result
 
-New-Test "Find-Installation 'FailureTest'"
-Find-Installation "FailureTest"
+$Result = "C:\Program Files\WindowsPowerShell"
+$Result
+Test-Environment $Result
 
-New-Test "Table data"
-$global:InstallTable | Format-Table -AutoSize
+$Result = '"C:\ProgramData\Git"'
+$Result
+Test-Environment $Result
 
-New-Test "Find-Installation 'VisualStudio'"
-Find-Installation "VisualStudio"
+$Result = "C:\PerfLogs"
+$Result
+Test-Environment $Result
 
-New-Test "Table data"
-$global:InstallTable | Format-Table -AutoSize
+$Result = "C:\Windows\Microsoft.NET\Framework64\v3.5\\"
+$Result
+Test-Environment $Result
+
+$Result = "'C:\Windows\Microsoft.NET\Framework64\v3.5'"
+$Result
+Test-Environment $Result
+
+$Result = "D:\\microsoft\\windows"
+$Result
+Test-Environment $Result
+
+$Result = "D:\"
+$Result
+Test-Environment $Result
+
+$Result = "C:\\"
+$Result
+Test-Environment $Result
+
+$Result = "%LOCALAPPDATA%\OneDrive"
+$Result
+Test-Environment $Result
+
+$Result = "%HOME%\AppData\Local\OneDrive"
+$Result
+Test-Environment $Result
+
+$Result = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
+$Result
+Test-Environment $Result
+
+$Result = "%SystemDrive%"
+$Result
+Test-Environment $Result
+
+$Result = ""
+$Result
+Test-Environment $Result
+
+$Result = $null
+$Result
+Test-Environment $Result
 
 Exit-Test

@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-WindowsKits
+# Unit test for Format-Path
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -37,8 +37,8 @@ Test-SystemRequirements
 
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.TestImport-Module -Name $RepoDir\Modules\ProgramInfo
-Import-Module -Name $RepoDir\Modules\Meta.Windows.ComputerInfo
+Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Test
+Import-Module -Name $RepoDir\Modules\Meta.Windows.ProgramInfo
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
@@ -46,28 +46,74 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-$ComputerName = Get-ComputerName
+New-Test "Format-Path"
 
-# New-Test "Get-WindowsKits"
+$Result = Format-Path "C:\"
+$Result
+Test-Environment $Result
 
-# $WindowsKits = Get-WindowsKits $ComputerName
-# $WindowsKits
+$Result = Format-Path "C:\\Windows\System32"
+$Result
+Test-Environment $Result
 
-# New-Test "Get-WindowsKits DebuggersRoot latest"
+$Result = Format-Path "C:\\Windows\"
+$Result
+Test-Environment $Result
 
-# $WindowsKits | Where-Object {$_.Product -like "WindowsDebuggersRoot*"} | Sort-Object -Property Product | Select-Object -Last 1 -ExpandProperty InstallPath
+$Result = Format-Path "C:\Program Files (x86)\Windows Defender\"
+$Result
+Test-Environment $Result
 
-New-Test "Get-WindowsKits install path"
+$Result = Format-Path "C:\Program Files\WindowsPowerShell"
+$Result
+Test-Environment $Result
 
-$WindowsKits = Get-WindowsKits $ComputerName
-if ($null -ne $WindowsKits)
-{
-	$SDKDebuggers = $WindowsKits |
-	Where-Object {$_.Product -like "WindowsDebuggersRoot*"} |
-	Sort-Object -Property Product |
-	Select-Object -Last 1 -ExpandProperty InstallPath
+$Result = Format-Path '"C:\ProgramData\Git"'
+$Result
+Test-Environment $Result
 
-	$SDKDebuggers
-}
+$Result = Format-Path "C:\PerfLogs"
+$Result
+Test-Environment $Result
+
+$Result = Format-Path "C:\Windows\Microsoft.NET\Framework64\v3.5\\"
+$Result
+Test-Environment $Result
+
+$Result = Format-Path "'C:\Windows\Microsoft.NET\Framework64\v3.5'"
+$Result
+Test-Environment $Result
+
+$Result = Format-Path "D:\\microsoft\\windows"
+$Result
+Test-Environment $Result
+
+$Result = Format-Path "D:\"
+$Result
+Test-Environment $Result
+
+$Result = Format-Path "C:\\"
+$Result
+Test-Environment $Result
+
+$Result = Format-Path "C:\Users\haxor\AppData\Local\OneDrive"
+$Result
+Test-Environment $Result
+
+$Result = Format-Path "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
+$Result
+Test-Environment $Result
+
+$Result = Format-Path "%SystemDrive%"
+$Result
+Test-Environment $Result
+
+$Result = Format-Path ""
+$Result
+Test-Environment $Result
+
+$Result = Format-Path $null
+$Result
+Test-Environment $Result
 
 Exit-Test

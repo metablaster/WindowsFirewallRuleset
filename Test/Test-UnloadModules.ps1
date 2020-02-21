@@ -31,21 +31,21 @@ SOFTWARE.
 #
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 
-Write-Host "Import-Module System"
+Write-Information -Tags "Test" -MessageData "Import-Module System"
 Import-Module -Name $RepoDir\Modules\System -Force
 
-Write-Host "Import-Module Test"
+Write-Information -Tags "Test" -MessageData "Import-Module Test"
 Import-Module -Name $RepoDir\Modules\Test -Force
 
-Write-Host "Import-Module UserInfo"
+Write-Information -Tags "Test" -MessageData "Import-Module UserInfo"
 Import-Module -Name $RepoDir\Modules\Meta.Windows.UserInfo -Force
 
-Write-Host "Import-Module FirewallModule"
+Write-Information -Tags "Test" -MessageData "Import-Module FirewallModule"
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility -Force
 
-Write-Host "Import-Module ProgramInfo"
-Import-Module -Name $RepoDir\Modules\ProgramInfo -Force
+Write-Information -Tags "Test" -MessageData "Import-Module ProgramInfo"
+Import-Module -Name $RepoDir\Modules\Meta.Windows.ProgramInfo -Force
 
-Write-Host "Import-Module ComputerInfo"
+Write-Information -Tags "Test" -MessageData "Import-Module ComputerInfo"
 Import-Module -Name $RepoDir\Modules\Meta.Windows.ComputerInfo -Force
