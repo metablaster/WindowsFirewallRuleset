@@ -46,7 +46,7 @@ if (!(Approve-Execute)) { exit }
 
 Start-Test
 New-Test "Test-SystemRequirements"
-Test-SystemRequirements $true @Commons
-Write-Log
+Test-SystemRequirements $true
+# Write-Log
 
 Exit-Test

@@ -75,7 +75,7 @@ New-Test "Good user profile path"
 Initialize-Table @Commons
 Write-Log
 
-Edit-Table "C:\\Users\$User\source\\repos\WindowsFirewallRuleset\" @Commons
+Edit-Table "C:\\Users\$User\\GitHub\WindowsFirewallRuleset\" @Commons
 Write-Log
 
 New-Test "Table data"

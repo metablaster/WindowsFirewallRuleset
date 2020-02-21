@@ -101,14 +101,13 @@ if ($Develop)
 	# and to avoid restarting powershell every time.
 	#
 
+	Remove-Module -Name Project.AllPlatforms.System -ErrorAction Ignore
+	Remove-Module -Name Project.AllPlatforms.Test -ErrorAction Ignore
 	Remove-Module -Name Project.AllPlatforms.Logging -ErrorAction Ignore
 	Remove-Module -Name Project.AllPlatforms.Utility -ErrorAction Ignore
-
-	Remove-Module -Name System -ErrorAction Ignore
-	Remove-Module -Name Test -ErrorAction Ignore
-	Remove-Module -Name UserInfo -ErrorAction Ignore
+	Remove-Module -Name Project.Windows.UserInfo -ErrorAction Ignore
 	Remove-Module -Name Project.Windows.ComputerInfo -ErrorAction Ignore
-	Remove-Module -Name ProgramInfo -ErrorAction Ignore
+	Remove-Module -Name Project.Windows.ProgramInfo -ErrorAction Ignore
 }
 else # Normal use case
 {

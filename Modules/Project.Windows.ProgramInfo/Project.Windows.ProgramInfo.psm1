@@ -59,13 +59,19 @@ function Get-AppSID
 		[string] $AppName
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+
 	$TargetPath = "C:\Users\$UserName\AppData\Local\Packages\$AppName\AC"
 	if (Test-Path -PathType Container -Path $TargetPath)
 	{
-		$ACL = Get-ACL "C:\Users\$UserName\AppData\Local\Packages\$AppName\AC"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Target path is $TragetPath"
+
+		$ACL = Get-ACL $TargetPath
 		$ACE = $ACL.Access.IdentityReference.Value
 
 		$ACE | ForEach-Object {
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing: $_"
+
 			# package SID starts with S-1-15-2-
 			if($_ -match "S-1-15-2-") {
 				return $_
@@ -100,7 +106,10 @@ function Test-File
 		[string] $FilePath
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+
 	$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($FilePath)
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking: $ExpandedPath"
 
 	if (!([System.IO.File]::Exists($ExpandedPath)))
 	{
@@ -111,8 +120,8 @@ function Test-File
 
 		Write-Warning -Message "Executable '$Executable' was not found"
 		Write-Warning -Message "rules for '$Executable' won't have any effect"
-		Write-Information -Tags "User" -MessageData "Searched path was: $SearchPath"
 
+		Write-Information -Tags "User" -MessageData "Searched path was: $SearchPath"
 		Write-Information -Tags "User" -MessageData "To fix the problem find '$Executable' then adjust the path in $Script and re-run the script later again"
 	}
 }
@@ -137,8 +146,11 @@ function Test-Environment
 		[string] $FilePath = $null
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+
 	if ([System.String]::IsNullOrEmpty($FilePath))
 	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Returning false, file path is null or empty"
 		return $false
 	}
 
@@ -172,6 +184,8 @@ function Test-Service
 		[string] $Service
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+
 	if (!(Get-Service -Name $Service -ErrorAction SilentlyContinue))
 	{
 		Write-Warning -Message "Service '$Service' not found, rule won't have any effect"
@@ -199,9 +213,12 @@ function Test-UserProfile
 		[string] $FilePath
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+
 	# Impssible to know what the imput may be
 	if ([System.String]::IsNullOrEmpty($FilePath))
 	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Returning false, file path is null or empty"
 		return $false
 	}
 
@@ -211,9 +228,11 @@ function Test-UserProfile
 	foreach ($Entry in @(Get-ChildItem Env:))
 	{
 		$Entry.Name = "%" + $Entry.Name + "%"
+		# Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing $($Entry.Name)"
 
 		if ($UserProfileEnvironment -contains $Entry.Name)
 		{
+			# Write-Debug -Message "[$($MyInvocation.InvocationName)] Selecting $($Entry.Name)"
 			$Variables += $Entry
 		}
 	}
@@ -239,24 +258,27 @@ function Test-UserProfile
 	# Make a copy of file path because modification can be wrong
 	$SearchString = $FilePath
 
-	# Check if file path already contains user profile environment variable
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Check if '$FilePath' already contains user profile environment variable"
 	foreach ($Variable in $Variables)
 	{
 		if ($FilePath -like "$($Variable.Name)*")
 		{
-			Write-Debug "[Format-Path] Input path already formatted"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input path already formatted"
 			return $true
 		}
 	}
 
-	# See if path is convertible to environment variable
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] See if $SearchString is convertible to environment variable"
 	while (![System.String]::IsNullOrEmpty($SearchString))
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing $SearchString"
+
 		foreach ($Entry in $Variables)
 		{
 			if ($Entry.Value -like "*$SearchString")
 			{
 				# Environment variable found, if this is first hit, trailing slash is already removed
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input path leads to user profile"
 				return $true
 			}
 		}
@@ -265,7 +287,7 @@ function Test-UserProfile
 		$SearchString = Split-Path -Path $SearchString -Parent
 	}
 
-	Write-Debug "[Format-Path] Environment variables for input path don't exist"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Environment variables for input path don't exist"
 	return $false
 }
 
@@ -291,8 +313,11 @@ function Format-Path
 	# Impssible to know what the imput may be
 	if ([System.String]::IsNullOrEmpty($FilePath))
 	{
+		# Write-Debug -Message "[$($MyInvocation.InvocationName)] Returning false, file path is null or empty"
 		return $FilePath
 	}
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
 
 	# Make an array of (environment variable/path) value pair,
 	# excluding user profile environment variables
@@ -300,9 +325,11 @@ function Format-Path
 	foreach ($Entry in @(Get-ChildItem Env:))
 	{
 		$Entry.Name = "%" + $Entry.Name + "%"
+		# Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing $($Entry.Name)"
 
 		if ($BlackListEnvironment -notcontains $Entry.Name)
 		{
+			# Write-Debug -Message "[$($MyInvocation.InvocationName)] Selecting $($Entry.Name)"
 			$Variables += $Entry
 		}
 	}
@@ -328,25 +355,29 @@ function Format-Path
 	# Make a copy of file path because modification can be wrong
 	$SearchString = $FilePath
 
-	# Check if file path already contains environment variable
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Check if '$FilePath' already contains environment variable"
 	foreach ($Variable in $Variables)
 	{
 		if ($FilePath -like "$($Variable.Name)*")
 		{
-			Write-Debug "[Format-Path] Input path already formatted"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input path already formatted"
 			return $FilePath
 		}
 	}
 
-	# See if path is convertible to environment variable
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Check if '$SearchString' is convertible to environment variable"
 	while (![System.String]::IsNullOrEmpty($SearchString))
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing $SearchString"
+
 		foreach ($Entry in $Variables)
 		{
 			if ($Entry.Value -like "*$SearchString")
 			{
 				# Environment variable found, if this is first hit, trailing slash is already removed
-				return $FilePath.Replace($SearchString, $Entry.Name)
+				$FilePath = $FilePath.Replace($SearchString, $Entry.Name)
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Formatting input path to: $FilePath"
+				return $FilePath
 			}
 		}
 
@@ -361,13 +392,14 @@ function Format-Path
 
 	if ([System.String]::IsNullOrEmpty($Replacement))
 	{
-		Write-Debug "[Format-Path] Environment variables for input path don't exist"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Environment variables for input path don't exist"
 		# There are no environment variables for this drive
 		# Just trim trailing slash
 		return $FilePath.TrimEnd('\\')
 	}
 
 	# Only root drive is converted, just trim away trailing slash
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Only root drive is converted to environment variable"
 	return $FilePath.Replace($SearchString, $Replacement).TrimEnd('\\')
 }
 
@@ -391,16 +423,21 @@ function Get-UserPrograms
 		[string] $UserAccount
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+
 	$ComputerName = ($UserAccount.Split("\"))[0]
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting $ComputerName"
 
 	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
 	{
 		$HKU = Get-AccountSID $UserAccount
 		$HKU += "\Software\Microsoft\Windows\CurrentVersion\Uninstall"
 
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing remote registry"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::Users
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening remote base key $HKU"
 		$UserKey = $RemoteKey.OpenSubkey($HKU)
 		$UserPrograms = @()
 
@@ -414,6 +451,8 @@ function Get-UserPrograms
 
 					if (![System.String]::IsNullOrEmpty($InstallLocation))
 					{
+						Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing registry key: $SubKey"
+
 						# TODO: move all instances to directly format (first call above)
 						$InstallLocation = Format-Path $InstallLocation
 
@@ -465,6 +504,9 @@ function Get-SystemPrograms
 		[string] $ComputerName
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting $ComputerName"
+
 	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
 	{
 		if ([System.Environment]::Is64BitOperatingSystem)
@@ -481,12 +523,14 @@ function Get-SystemPrograms
 			$HKLM = "Software\Microsoft\Windows\CurrentVersion\Uninstall"
 		}
 
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing remote registry"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
 		$SystemPrograms = @()
 		foreach ($HKLMKey in $HKLM)
 		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening remote base key $HKLMKey"
 			$RootKey = $RemoteKey.OpenSubkey($HKLMKey)
 
 			if ($RootKey)
@@ -520,6 +564,8 @@ function Get-SystemPrograms
 								continue
 							}
 						}
+
+						Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing registry key: $SubKey"
 
 						# Get more key entries as needed
 						$SystemPrograms += New-Object PSObject -Property @{
@@ -566,16 +612,21 @@ function Get-AllUserPrograms
 		[string] $ComputerName
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting $ComputerName"
+
 	# TODO: make global connection timeout
 	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
 	{
 		# TODO: this key may not exist on fresh installed systems, tested in fresh installed Windows Server 2019
 		$HKLM = "SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData"
 
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing remote registry"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
 		$AllUserPrograms = @()
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening remote base key $HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
 		if (!$RootKey)
@@ -608,6 +659,8 @@ function Get-AllUserPrograms
 
 					if (![System.String]::IsNullOrEmpty($InstallLocation))
 					{
+						Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing registry key: $HKLMKey"
+
 						$InstallLocation = Format-Path $InstallLocation
 
 						# Get more key entries as needed
@@ -651,13 +704,17 @@ function Initialize-Table
 		[string] $TableName = "InstallationTable"
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+
 	# Create Table object
 	if ($Develop)
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] resetting global install table"
 		Set-Variable -Name InstallTable -Scope Global -Value (New-Object System.Data.DataTable $TableName)
 	}
 	else
 	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] resetting local install table"
 		Set-Variable -Name InstallTable -Scope Script -Value (New-Object System.Data.DataTable $TableName)
 	}
 
@@ -699,7 +756,8 @@ function Update-Table
 		[bool] $UserProfile = $false
 	)
 
-	Write-Debug "Update-Table, Search string = $SearchString"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Search string = $SearchString"
 
 	# TODO: try to search also for path in addition to program name (3rd parameter)
 	# TODO: SearchString may pick up irrelevant paths (ie. unreal), or even miss
@@ -708,6 +766,7 @@ function Update-Table
 	{
 		# TODO: need better mechanism for multiple maches
 		$TargetPrograms = $SystemPrograms | Where-Object { $_.Name -like "*$SearchString*" }
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching system programs for $SearchString"
 
 		foreach ($User in $UserNames)
 		{
@@ -728,6 +787,8 @@ function Update-Table
 	#Program not found on system, attempt alternative search
 	elseif ($AllUserPrograms.Name -like "*$SearchString*")
 	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching all user programs for $SearchString"
+
 		$TargetPrograms = $AllUserPrograms | Where-Object { $_.Name -like "*$SearchString*" }
 
 		# TODO: it not known if it's for specific user in AllUserPrograms registry entry (most likely applies to all users)
@@ -754,6 +815,7 @@ function Update-Table
 		foreach ($Account in $UserAccounts)
 		{
 			$UserPrograms = Get-UserPrograms $Account
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching $Account programs for $SearchString"
 
 			if ($UserPrograms.Name -like "*$SearchString*")
 			{
@@ -798,9 +860,12 @@ function Edit-Table
 		[string] $InstallRoot
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+
 	# Nothing to do if the path does not exist
 	if (!(Test-Environment $InstallRoot))
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] $InstallRoot not found"
 		return
 	}
 
@@ -816,6 +881,8 @@ function Edit-Table
 		# Enter data into row
 		$Row.User = ($InstallRoot.Split("\"))[2]
 		$Row.InstallRoot = $InstallRoot
+
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Editing table with $InstallRoot for $($Row.User)"
 
 		# Add the row to the table
 		$InstallTable.Rows.Add($Row)
@@ -833,6 +900,8 @@ function Edit-Table
 		# Enter data into row
 		$Row.User = $User
 		$Row.InstallRoot = $InstallRoot
+
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Editing table with $InstallRoot for $User"
 
 		# Add the row to the table
 		$InstallTable.Rows.Add($Row)
@@ -866,16 +935,19 @@ function Test-Installation
 		[ref] $FilePath
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+
 	# If input path is valid just make sure it's formatted
 	if (Test-Environment $FilePath.Value)
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Formatting $FilePath"
 		$FilePath.Value = Format-Path $FilePath.Value
 	}
 	elseif (Find-Installation $Program)
 	{
-		if ($DebugPreference -eq "Continue")
+		if ($DebugPreference -ne "SilentlyContinue")
 		{
-			Write-Debug "InstallTable for $Program"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Show InstallTable for $Program"
 			$InstallTable | Format-Table
 		}
 
@@ -913,7 +985,7 @@ function Test-Installation
 
 			if ($Choice -eq 0)
 			{
-				Write-Debug "User input is: $Choice"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] User input is: $Choice, canceling operation"
 
 				# User doesn't know the path, skip correction message
 				return $false
@@ -935,6 +1007,7 @@ function Test-Installation
 		return $false # installation not found
 	}
 
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Installation for $Program found"
 	return $true # path exists
 }
 
@@ -963,12 +1036,15 @@ function Find-Installation
 		[string] $ComputerName = $env:COMPUTERNAME
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+
 	Initialize-Table
 
 	# TODO: if it's program in user profile then how do we know it that applies to admins or users in rule?
 	# TODO: need to check some of these search strings (cases), also remove hardcoded directories
 	# NOTE: we want to preserve system environment variables for firewall GUI,
 	# otherwise firewall GUI will show full paths which is not desired for sorting reasons
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Start search for $Program"
 	switch -Wildcard ($Program)
 	{
 		"NuGet"
@@ -987,7 +1063,7 @@ function Find-Installation
 				Where-Object {$_.InstallPath} |
 				Select-Object -Last 1 -ExpandProperty InstallPath
 
-				Write-Debug "[Find-Installation] $NETFrameworkRoot"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] $NETFrameworkRoot"
 				Edit-Table $NETFrameworkRoot
 			}
 			break
@@ -1013,7 +1089,7 @@ function Find-Installation
 				Sort-Object -Property Product |
 				Select-Object -Last 1 -ExpandProperty InstallPath
 
-				Write-Debug "[Find-Installation] $SDKDebuggers"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] $SDKDebuggers"
 				Edit-Table $SDKDebuggers
 			}
 			break
@@ -1312,6 +1388,7 @@ function Find-Installation
 
 	if ($InstallTable.Rows.Count -gt 0)
 	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Installation for $Program found"
 		return $true
 	}
 	else
@@ -1350,6 +1427,8 @@ function Find-Installation
 			}
 		}
 
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] User skips input for $Program"
+
 		# Finaly status is bad
 		Set-Variable -Name WarningStatus -Scope Global -Value $true
 		return $false
@@ -1376,14 +1455,19 @@ function Get-NetFramework
 		[string] $ComputerName
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting $ComputerName"
+
 	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
 	{
 		$HKLM = "SOFTWARE\Microsoft\NET Framework Setup\NDP"
 
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing remote registry"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
 		$NetFramework = @()
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening remote base key $HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
 		if (!$RootKey)
@@ -1405,6 +1489,8 @@ function Get-NetFramework
 				$Version = $KeyEntry.GetValue("Version")
 				if (![System.String]::IsNullOrEmpty($Version))
 				{
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing registry key: $HKLMKey"
+
 					$InstallLocation = $KeyEntry.GetValue("InstallPath")
 
 					# else not warning because some versions are built in
@@ -1434,6 +1520,8 @@ function Get-NetFramework
 						$Version = $SubKeyEntry.GetValue("Version")
 						if (![System.String]::IsNullOrEmpty($Version))
 						{
+							Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing registry key: $SubKey"
+
 							$InstallLocation = $SubKeyEntry.GetValue("InstallPath")
 
 							# else not warning because some versions are built in
@@ -1483,6 +1571,9 @@ function Get-WindowsSDK
 		[string] $ComputerName
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting $ComputerName"
+
 	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
 	{
 		if ([System.Environment]::Is64BitOperatingSystem)
@@ -1497,10 +1588,12 @@ function Get-WindowsSDK
 
 		}
 
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing remote registry"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
 		$WindowsSDK = @()
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening remote base key $HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
 		if (!$RootKey)
@@ -1528,8 +1621,11 @@ function Get-WindowsSDK
 				}
 				else
 				{
-					Write-Warning -Message "Failed to read registry entry $RegKey\InstallationFolder"
+					Write-Warning -Message "Failed to read registry entry $RegKey"
+					# TODO: continue ?
 				}
+
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing registry key: $RegKey"
 
 				# we add entry regarldess of presence of install path
 				$WindowsSDK += New-Object -TypeName PSObject -Property @{
@@ -1570,6 +1666,9 @@ function Get-WindowsKits
 		[string] $ComputerName
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting $ComputerName"
+
 	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
 	{
 		if ([System.Environment]::Is64BitOperatingSystem)
@@ -1584,10 +1683,12 @@ function Get-WindowsKits
 			$HKLM = "SOFTWARE\Microsoft\Windows Kits\Installed Roots"
 		}
 
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing remote registry"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
 		$WindowsKits = @()
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening remote base key $HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
 		if (!$RootKey)
@@ -1602,6 +1703,8 @@ function Get-WindowsKits
 
 				if (![System.String]::IsNullOrEmpty($InstallLocation) -and $InstallLocation -like "C:\Program Files*")
 				{
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing registry key: $HKLM"
+
 					$InstallLocation = Format-Path $InstallLocation
 
 					$WindowsKits += New-Object -TypeName PSObject -Property @{
@@ -1642,15 +1745,19 @@ function Get-WindowsDefender
 		[string] $ComputerName
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting $ComputerName"
+
 	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
 	{
-		# 32 bit system
 		$HKLM = "SOFTWARE\Microsoft\Windows Defender"
 
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing remote registry"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
 		$WindowsDefender = $null
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening remote base key $HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
 		if (!$RootKey)
@@ -1664,6 +1771,8 @@ function Get-WindowsDefender
 
 			if (![System.String]::IsNullOrEmpty($InstallLocation))
 			{
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing registry key: $RegKey"
+
 				$WindowsDefender = New-Object -TypeName PSObject -Property @{
 					"ComputerName" = $ComputerName
 					"RegKey" = $RegKey
@@ -1709,6 +1818,9 @@ System.Management.Automation.PSCustomObject for installed Microsoft SQL Server M
 		[string] $ComputerName = $env:COMPUTERNAME
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting $ComputerName"
+
 	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
 	{
 		if ([System.Environment]::Is64BitOperatingSystem)
@@ -1724,10 +1836,12 @@ System.Management.Automation.PSCustomObject for installed Microsoft SQL Server M
 
 		}
 
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing remote registry"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
 		$ManagementStudio = @()
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening remote base key $HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
 		if (!$RootKey)
@@ -1751,6 +1865,8 @@ System.Management.Automation.PSCustomObject for installed Microsoft SQL Server M
 
 				if (![System.String]::IsNullOrEmpty($InstallLocation))
 				{
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing registry key: $HKLMKey"
+
 					# TODO: Use InstallPath in ever function, some functions have InstallRoot property instead
 					# also try to get same set of properties for all req querries
 					$ManagementStudio += New-Object -TypeName PSObject -Property @{
