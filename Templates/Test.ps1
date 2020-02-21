@@ -87,7 +87,7 @@ The intended use of the function. This content appears when the Get-Help command
 function Test-Function
 {
 	param (
-		[parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true)]
 		[string] $Param
 	)
 }

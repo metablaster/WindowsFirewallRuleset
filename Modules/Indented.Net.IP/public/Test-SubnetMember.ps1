@@ -27,17 +27,17 @@ function Test-SubnetMember {
     param (
         # A representation of the subject, the network to be tested. Either a literal IP address, a network range expressed as CIDR notation, or an IP address and subnet mask in a string.
         [Parameter(Mandatory, Position = 1)]
-        [String]$SubjectIPAddress,
+        [string]$SubjectIPAddress,
 
         # A representation of the object, the network to test against. Either a literal IP address, a network range expressed as CIDR notation, or an IP address and subnet mask in a string.
         [Parameter(Mandatory, Position = 2)]
-        [String]$ObjectIPAddress,
+        [string]$ObjectIPAddress,
 
         # A subnet mask as an IP address.
-        [String]$SubjectSubnetMask,
+        [string]$SubjectSubnetMask,
 
         # A subnet mask as an IP address.
-        [String]$ObjectSubnetMask
+        [string]$ObjectSubnetMask
     )
 
     try {

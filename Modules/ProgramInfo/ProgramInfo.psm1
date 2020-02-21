@@ -51,11 +51,11 @@ TODO: Test if path exists
 function Get-AppSID
 {
 	param (
-		[parameter(Mandatory = $true, Position=0)]
+		[Parameter(Mandatory = $true, Position=0)]
 		[ValidateLength(1, 100)]
 		[string] $UserName,
 
-		[parameter(Mandatory = $true, Position=1)]
+		[Parameter(Mandatory = $true, Position=1)]
 		[ValidateLength(1, 100)]
 		[string] $AppName
 	)
@@ -96,7 +96,7 @@ warning message if file not found
 function Test-File
 {
 	param (
-		[parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true)]
 		[string] $FilePath
 	)
 
@@ -133,7 +133,7 @@ $true if path exists, false otherwise
 function Test-Environment
 {
 	param (
-		[parameter(Mandatory = $false)]
+		[Parameter(Mandatory = $false)]
 		[string] $FilePath = $null
 	)
 
@@ -167,7 +167,7 @@ warning and info message if service not found
 function Test-Service
 {
 	param (
-		[parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true)]
 		[string] $Service
 	)
 
@@ -383,7 +383,7 @@ System.Management.Automation.PSCustomObject list of programs for specified accou
 function Get-UserPrograms
 {
 	param (
-		[parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true)]
 		[string] $UserAccount
 	)
 
@@ -456,7 +456,7 @@ System.Management.Automation.PSCustomObject list of programs installed for all u
 function Get-SystemPrograms
 {
 	param (
-		[parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true)]
 		[string] $ComputerName
 	)
 
@@ -556,7 +556,7 @@ function Get-AllUserPrograms
 {
 	# TODO: this function need to be tested on server, UserData key not found
 	param (
-		[parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true)]
 		[string] $ComputerName
 	)
 
@@ -640,7 +640,7 @@ System.Data.DataTable empty table with 2 columns, user entry and install locatio
 function Initialize-Table
 {
 	param (
-		[parameter(Mandatory = $false)]
+		[Parameter(Mandatory = $false)]
 		[string] $TableName = "InstallationTable"
 	)
 
@@ -684,10 +684,10 @@ Table code needs to be updated to fill it for USERS instead of same path for eac
 function Update-Table
 {
 	param (
-		[parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true)]
 		[string] $SearchString,
 
-		[parameter(Mandatory = $false)]
+		[Parameter(Mandatory = $false)]
 		[bool] $UserProfile = $false
 	)
 
@@ -785,7 +785,7 @@ Table code needs to be updated to fill it for USERS instead of same path for eac
 function Edit-Table
 {
 	param (
-		[parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true)]
 		[string] $InstallRoot
 	)
 
@@ -849,10 +849,10 @@ TODO: temporarily using ComputerName parameter
 function Test-Installation
 {
 	param (
-		[parameter(Mandatory = $true, Position = 0)]
+		[Parameter(Mandatory = $true, Position = 0)]
 		[string] $Program,
 
-		[parameter(Mandatory = $true, Position = 1)]
+		[Parameter(Mandatory = $true, Position = 1)]
 		[ref] $FilePath
 	)
 
@@ -945,10 +945,10 @@ True or false if installation directory if found, installation table is updated
 function Find-Installation
 {
 	param (
-		[parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true)]
 		[string] $Program,
 
-		[parameter(Mandatory = $false)]
+		[Parameter(Mandatory = $false)]
 		[string] $ComputerName = $env:COMPUTERNAME
 	)
 
@@ -1360,7 +1360,7 @@ System.Management.Automation.PSCustomObject for installed NET Frameworks and ins
 function Get-NetFramework
 {
 	param (
-		[parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true)]
 		[string] $ComputerName
 	)
 
@@ -1466,7 +1466,7 @@ System.Management.Automation.PSCustomObject for installed Windows SDK versions a
 function Get-WindowsSDK
 {
 	param (
-		[parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true)]
 		[string] $ComputerName
 	)
 
@@ -1552,7 +1552,7 @@ System.Management.Automation.PSCustomObject for installed Windows Kits versions 
 function Get-WindowsKits
 {
 	param (
-		[parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true)]
 		[string] $ComputerName
 	)
 
@@ -1623,7 +1623,7 @@ System.Management.Automation.PSCustomObject for installed Windows Defender, vers
 function Get-WindowsDefender
 {
 	param (
-		[parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true)]
 		[string] $ComputerName
 	)
 
@@ -1689,7 +1689,7 @@ System.Management.Automation.PSCustomObject for installed Microsoft SQL Server M
  function Get-SQLManagementStudio
 {
 	param (
-		[parameter(Mandatory = $false)]
+		[Parameter(Mandatory = $false)]
 		[string] $ComputerName = $env:COMPUTERNAME
 	)
 

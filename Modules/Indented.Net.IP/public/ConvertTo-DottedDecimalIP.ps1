@@ -21,7 +21,7 @@ function ConvertTo-DottedDecimalIP {
     param (
         # A string representation of an IP address from either UInt32 or dotted binary.
         [Parameter(Mandatory, Position = 1, ValueFromPipeline)]
-        [String]$IPAddress
+        [string]$IPAddress
     )
 
     process {

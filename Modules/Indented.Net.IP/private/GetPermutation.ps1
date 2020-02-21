@@ -11,7 +11,7 @@ function GetPermutation {
         [PSTypeName('ExpansionGroupInfo')]
         [Object[]]$Group,
 
-        [String]$BaseAddress,
+        [string]$BaseAddress,
 
         [Int32]$Index
     )

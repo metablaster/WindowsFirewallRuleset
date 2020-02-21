@@ -49,7 +49,7 @@ if (!(Approve-Execute)) { exit }
 Start-Test
 
 New-Test "Get-UserAccounts:"
-[String[]]$UserAccounts = Get-UserAccounts "Users" @Commons
+[string[]]$UserAccounts = Get-UserAccounts "Users" @Commons
 $UserAccounts += Get-UserAccounts "Administrators" @Commons
 Write-Log
 $UserAccounts

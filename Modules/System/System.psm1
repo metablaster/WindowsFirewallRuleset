@@ -44,7 +44,7 @@ TODO: learn repo dir automaticaly (using git?)
 function Test-SystemRequirements
 {
 	param (
-		[parameter(Mandatory = $false)]
+		[Parameter(Mandatory = $false)]
 		[bool] $Check = $SystemCheck
 	)
 

@@ -19,11 +19,11 @@ function ConvertTo-Subnet {
     param (
         # Any IP address in the subnet.
         [Parameter(Mandatory, Position = 1, ParameterSetName = 'FromIPAndMask')]
-        [String]$IPAddress,
+        [string]$IPAddress,
 
         # A subnet mask.
         [Parameter(Position = 2, ParameterSetName = 'FromIPAndMask')]
-        [String]$SubnetMask,
+        [string]$SubnetMask,
 
         # The first IP address from a range.
         [Parameter(Mandatory, ParameterSetName = 'FromStartAndEnd')]

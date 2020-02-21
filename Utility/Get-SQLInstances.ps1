@@ -143,9 +143,9 @@ https://gallery.technet.microsoft.com/scriptcenter/Get-SQLInstance-9a3245a0
 #>
 function Get-SQLInstances
 {
-	[Cmdletbinding()]
+	[CmdletBinding()]
 	param (
-		[parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+		[Parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
 		[Alias('__Server','DNSHostName','IPAddress')]
 		[string[]] $Computers = $env:COMPUTERNAME,
 		[switch]$WMI

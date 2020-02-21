@@ -47,7 +47,7 @@ Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
 New-Test "Get-UserAccounts:"
-[String[]]$UserAccounts = Get-UserAccounts "Users"
+[string[]]$UserAccounts = Get-UserAccounts "Users"
 $UserAccounts += Get-UserAccounts "Administrators"
 $UserAccounts
 

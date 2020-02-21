@@ -214,7 +214,7 @@ function Convert-SDDLToACL
 {
 	[CmdletBinding()]
 	param (
-		[parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true)]
 		[string[]] $SDDL
 	)
 
@@ -249,7 +249,7 @@ function Get-NetworkServices
 {
 	[CmdletBinding()]
 	param (
-		[parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true)]
 		[string] $Folder
 	)
 
@@ -329,7 +329,7 @@ function Format-Output
 {
 	[CmdletBinding()]
 	param (
-		[parameter(Mandatory = $true,
+		[Parameter(Mandatory = $true,
 		ValueFromPipeline = $true)]
 		[Microsoft.Management.Infrastructure.CimInstance] $Rule
 	)

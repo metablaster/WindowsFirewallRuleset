@@ -15,12 +15,12 @@ function ConvertToNetwork {
     param (
         # Either a literal IP address, a network range expressed as CIDR notation, or an IP address and subnet mask in a string.
         [Parameter(Mandatory = $true, Position = 1)]
-        [String]$IPAddress,
+        [string]$IPAddress,
 
         # A subnet mask as an IP address.
         [Parameter(Position = 2)]
         [AllowNull()]
-        [String]$SubnetMask
+        [string]$SubnetMask
     )
 
     $validSubnetMaskValues =

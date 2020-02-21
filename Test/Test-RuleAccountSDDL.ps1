@@ -57,7 +57,7 @@ New-Test "Remove-NetFirewallRule"
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
 New-Test "Get-UserAccounts(Users)"
-[String[]]$UserAccounts = Get-UserAccounts("Users")
+[string[]]$UserAccounts = Get-UserAccounts("Users")
 $UserAccounts
 
 New-Test "Users + Get-UserAccounts(Administrators) + NT SYSTEM"

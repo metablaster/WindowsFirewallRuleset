@@ -15,7 +15,7 @@ function ConvertTo-HexIP {
     #>
 
     [CmdletBinding()]
-    [OutputType([String])]
+    [OutputType([string])]
     param (
         [Parameter(Mandatory, Position = 1, ValueFromPipeline)]
         [IPAddress]$IPAddress

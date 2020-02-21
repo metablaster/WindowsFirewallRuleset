@@ -112,7 +112,7 @@ TODO: implement queriying computers on network
 function Get-UserSID
 {
 	param (
-		[parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true)]
 		[ValidateLength(1, 100)]
 		[string] $UserName
 	)
@@ -145,7 +145,7 @@ TODO: implement queriying computers on network
 function Get-AccountSID
 {
 	param (
-		[parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true)]
 		[ValidateLength(1, 100)]
 		[string] $UserAccount
 	)
@@ -181,7 +181,7 @@ TODO: implement queriying computers on network
 function Get-UserSDDL
 {
 	param (
-		[parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true)]
 		[ValidateCount(1, 1000)]
 		[ValidateLength(1, 100)]
 		[string[]] $UserNames
@@ -224,7 +224,7 @@ TODO: implement queriying computers on network
 function Get-AccountSDDL
 {
 	param (
-		[parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true)]
 		[ValidateCount(1, 1000)]
 		[ValidateLength(1, 100)]
 		[string[]] $UserAccounts
