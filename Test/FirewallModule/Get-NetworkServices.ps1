@@ -45,6 +45,7 @@ Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
 New-Test "Get-NetworkServices"
-Get-NetworkServices "$RepoDir\Rules"
+Get-NetworkServices "$RepoDir\Rules" @Commons
+Write-Log
 
 Exit-Test

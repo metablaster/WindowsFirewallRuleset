@@ -44,6 +44,16 @@ Import-Module -Name $RepoDir\Modules\FirewallModule
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
+# Set to invoke prompt
+$psHost = Get-Host
+$psWindow = $psHost.UI.RawUI
+$NewSize = $psWindow.BufferSize
+$NewBuffer = 1000
+$NewSize.Height = $NewBuffer
+$psWindow.BufferSize = $NewSize
+
 New-Test "Set-ScreenBuffer"
-Set-ScreenBuffer
+Set-ScreenBuffer @Commons
+Write-Log
+
 Exit-Test
