@@ -51,10 +51,47 @@ function Test-NonAdvancedFunction
 	Resume-Warning -Log:$WarningLogging -Preference $WarningPreference
 }
 
+function Test-WarningNow
+{
+	[CmdletBinding()]
+	param ()
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Warning preference is: $WarningPreference"
+
+	Write-Warning -Message "Test-WarningNow 1" -WarningAction "Continue" 3>&1 | Resume-Warning -Preference "Continue"
+	Write-Log
+
+	Write-Warning -Message "Test-WarningNow 2"
+}
+
+function Test-WarningRecursiveInternal
+{
+	[CmdletBinding()]
+	param ()
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Warning preference is: $WarningPreference"
+
+	Write-Warning -Message "Test-WarningRecursiveInternal"
+}
+
+function Test-WarningRecursive
+{
+	[CmdletBinding()]
+	param ()
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Warning preference is: $WarningPreference"
+
+	Test-WarningRecursiveInternal
+
+	Write-Warning -Message "Test-WarningRecursive"
+}
+
 function Test-WarningCmdLet
 {
 	[CmdletBinding()]
 	param ()
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Warning preference is: $WarningPreference"
 
 	Write-Warning -Message "Test-WarningCmdLet 1"
 	Write-Warning -Message "Test-WarningCmdLet 2"
@@ -79,27 +116,37 @@ function Test-Pipeline
 
 Start-Test
 
-# $WarningPreference = "SilentlyContinue"
+#$WarningPreference = "SilentlyContinue"
 
-New-Test "Test-NonAdvancedFunction"
-Test-NonAdvancedFunction
+# New-Test "Test-NonAdvancedFunction"
+# Test-NonAdvancedFunction
 
-New-Test "Test-WarningCmdLet"
-Test-WarningCmdLet @Commons
+# New-Test "Test-WarningNow"
+# Write-Debug -Message "[$($MyInvocation.MyCommand.Name)] Warning preference is: $WarningPreference"
+# Test-WarningNow @Commons
+# Write-Log
+
+# New-Test "Test-WarningCmdLet"
+# Test-WarningCmdLet @Commons
+# Write-Log
+
+New-Test "Test-WarningRecursive"
+Write-Debug -Message "[$($MyInvocation.MyCommand.Name)] Warning preference is: $WarningPreference"
+Test-WarningRecursive @Commons
 Write-Log
 
-New-Test "Test-NoWarningCmdLet"
-Test-NoWarningCmdLet @Commons
-Write-Log
+# New-Test "Test-NoWarningCmdLet"
+# Test-NoWarningCmdLet @Commons
+# Write-Log
 
-$Folder = "C:\CrazyFolder"
+# $Folder = "C:\CrazyFolder"
 
-New-Test "Test pipeline"
-Get-ChildItem -Path $Folder @Commons | Test-Pipeline @Commons
-Write-Log
+# New-Test "Test pipeline"
+# Get-ChildItem -Path $Folder @Commons | Test-Pipeline @Commons
+# Write-Log
 
-New-Test "Test pipeline"
-Get-ChildItem -Path $Folder @Commons | Test-Pipeline @Commons
-Write-Log
+# New-Test "Test pipeline"
+# Get-ChildItem -Path $Folder @Commons | Test-Pipeline @Commons
+# Write-Log
 
 Exit-Test

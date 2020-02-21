@@ -26,15 +26,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# TODO: let Write-Log select object in piple, process it's commons and transfer down the pipe
+# TODO: let Write-Log select object in pipe, process it's commons and transfer down the pipe
 # TODO: stream logging instead of open/close file for performance
 # TODO: what if cmdlet throws? will we capture that into log?
 
 <#
 .SYNOPSIS
-Return a log file name for logging functions
+Generate a log file name for logging functions
 .DESCRIPTION
-Generates log file name composed of current date and time and log level label.
+Generates a log file name composed of current date and time and log level label.
 .PARAMETER Folder
 [System.String] path to folder where to save logs
 .PARAMETER FileLabel
@@ -59,7 +59,7 @@ function Get-LogFile
 		[string] $FileLabel
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# Generate file name
 	$FileName = $FileLabel + "_$(Get-Date -Format "dd.MM.yy HH")h.log"
@@ -84,7 +84,7 @@ Log generated error and set global error status
 .DESCRIPTION
 Resume-Error takes error record stream which is shown in the console
 and optionally logged into a file.
-Gobal error status variable is set to true or optionally left alone.
+Gobal error status variable is set to true.
 .PARAMETER Stream
 [System.Management.Automation.ErrorRecord] stream
 .PARAMETER Preference
@@ -128,7 +128,7 @@ function Resume-Error
 
 	process
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 		if ($Preference -ne "SilentlyContinue")
 		{
@@ -177,7 +177,6 @@ Write-Warning -Message "sample message" 3>&1 | Resume-Warning -Folder "C:\Logs" 
 None.
 .NOTES
 TODO: Pass warning variable to avoid pipeline?
-TODO: Stream parameter defines no type, otherwise warning is not colored and label is gone
 TODO: [ValidateNotNullOrEmpty()] does not work
 #>
 function Resume-Warning
@@ -187,7 +186,7 @@ function Resume-Warning
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true,
 		HelpMessage = "Input object must be WarningRecord")]
 		[ValidateNotNullOrEmpty()]
-		# [System.Management.Automation.WarningRecord]
+		[System.Management.Automation.WarningRecord]
 		$Stream,
 
 		[Parameter(Mandatory = $true,
@@ -202,9 +201,22 @@ function Resume-Warning
 		[switch] $Log
 	)
 
+	begin
+	{
+		if ($PSBoundParameters.ContainsKey('WarningVariable') -or $PSBoundParameters.ContainsKey('WarningAction'))
+		{
+			Write-Error -Category InvalidArgument -ErrorAction "Continue" `
+			-Message "WarningAction and WarningPreference common parameters may not be specified, removed"
+
+			$PSBoundParameters.Remove('WarningVariable') | Out-Null
+			$PSBoundParameters.Remove('WarningAction') | Out-Null
+			$WarningPreference = $Script:WarningPreference
+		}
+	}
 	process
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Warning preference is: $WarningPreference"
 
 		# NOTE: we have to add the WARNING label, it's gone for some reason
 		if ($Preference -ne "SilentlyContinue")
@@ -213,7 +225,8 @@ function Resume-Warning
 			Set-Variable -Name WarningStatus -Scope Global -Value $true
 
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Write warning to terminal"
-			$Stream
+
+			Write-Warning -Message $Stream -WarningAction $Preference
 		}
 
 		if ($Log)
@@ -271,7 +284,7 @@ function Resume-Info
 
 	process
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 		if ($Preference -ne "SilentlyContinue")
 		{
@@ -317,7 +330,7 @@ function Write-Log
 	[CmdletBinding()]
 	param ()
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading common parameters from caller space"
 	$EV = $PSCmdlet.GetVariableValue('EV')
@@ -327,6 +340,7 @@ function Write-Log
 	if ($EV)
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing ErrorVariable"
+
 		$EV | Resume-Error -Log:$ErrorLogging -Preference $ErrorActionPreference
 		$EV.Clear()
 	}
@@ -335,10 +349,13 @@ function Write-Log
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing WarningVariable"
 
-		# This is a workaround, since warning variable is missing the
-		# WARNING label and coloring, reported bellow:
+		# This is needed, since warning variable is missing the
+		# WARNING label and coloring, see issue bellow:
 		# https://github.com/PowerShell/PowerShell/issues/11900
-		$WV | Write-Warning -WarningAction "Continue" 3>&1 | Resume-Warning -Log:$WarningLogging -Preference $WarningPreference
+		$WA = $PSCmdlet.GetVariableValue('WarningPreference')
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller warning preference is: $WA"
+
+		$WV | Resume-Warning -Log:$WarningLogging -Preference $WA
 		$WV.Clear()
 	}
 
@@ -407,7 +424,7 @@ Export-ModuleMember -Variable WarningStatus
 if ($Develop)
 {
 	$ErrorActionPreference = $ModuleErrorPreference
-	$WarningPreference = $ModuleWarningPreference
+	$WarningPreference = "Stop" #$ModuleWarningPreference
 	$DebugPreference = $ModuleDebugPreference
 	$VerbosePreference = $ModuleVerbosePreference
 	$InformationPreference = $ModuleInformationPreference

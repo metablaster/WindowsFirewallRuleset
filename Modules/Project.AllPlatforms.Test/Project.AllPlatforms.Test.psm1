@@ -38,7 +38,7 @@ formatted message block is shown in console
 #>
 function Start-Test
 {
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# disable logging errors for tests
 	Set-Variable -Name ErrorLoggingCopy -Scope Script -Value $ErrorLogging
@@ -76,7 +76,7 @@ function New-Test
 		[string] $InputMessage
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	$Message = "Testing: $InputMessage"
 	$Asterisks = $("*" * ($Message.Length + 4))
@@ -100,7 +100,7 @@ formatted message block is shown in console
 #>
 function Exit-Test
 {
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# restore logging errors
 	Set-Variable -Name ErrorLogging -Scope Global -Value $ErrorLoggingCopy

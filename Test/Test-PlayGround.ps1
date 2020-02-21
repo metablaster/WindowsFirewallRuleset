@@ -80,7 +80,7 @@ function Resume-Error
 		[switch] $Log
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# Show the error and save to variable
 	$Stream | Tee-Object -Variable Message
@@ -131,7 +131,7 @@ function Resume-Warning
 		[switch] $Log
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# Show the warning and save to variable
 	$Stream | Tee-Object -Variable Message
@@ -179,7 +179,7 @@ function Resume-Info
 		[string] $Folder = $LogsFolder
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# Generate file name
 	$FileName = "Info_$(Get-Date -Format "dd.MM.yy HH")h.log"

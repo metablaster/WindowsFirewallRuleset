@@ -48,7 +48,7 @@ function Get-ComputerName
 	[CmdletBinding()]
 	param ()
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Learning computer name"
 	return [Environment]::MachineName
@@ -81,7 +81,7 @@ function Get-ConnectedAdapters
 		[string] $AddressFamily
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting connected adapters for $AddressFamily network"
 
 	if ($AddressFamily.ToString() -eq "IPv4")
@@ -133,7 +133,7 @@ function Get-IPAddress
 		[string] $AddressFamily
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting IP's of connected adapters for $AddressFamily network"
 	$ConnectedAdapters = Get-ConnectedAdapters $AddressFamily | Select-Object -ExpandProperty ($AddressFamily + "Address")
@@ -170,7 +170,7 @@ function Get-Broadcast
 	[CmdletBinding()]
 	param ()
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# Broadcast address makes sense only for IPv4
 	$ConnectedAdapters = Get-ConnectedAdapters "IPv4" | Select-Object -ExpandProperty IPv4Address

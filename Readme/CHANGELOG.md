@@ -25,5 +25,12 @@
 # Changelog v0.3
 
 # New fetures
-1. Scripts work on PowerShell core 7
-2. Better configurable logging
+1. Scripts now work on PowerShell core 7, with the goal to expand to other operating systems. (ie. linux)
+2. Better configurable logging and much more streams, this will help to see what the code does in real time.
+3. Project wide settings (ProjectSettings.ps1) are updated for changes and significally improved.
+
+# Bug fixes
+1. Modules are renamed to avoid name clashes with other modules
+
+# Development
+1. Symbols and keywords have their casing consistent

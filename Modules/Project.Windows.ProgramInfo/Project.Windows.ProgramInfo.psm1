@@ -59,7 +59,7 @@ function Get-AppSID
 		[string] $AppName
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	$TargetPath = "C:\Users\$UserName\AppData\Local\Packages\$AppName\AC"
 	if (Test-Path -PathType Container -Path $TargetPath)
@@ -106,7 +106,7 @@ function Test-File
 		[string] $FilePath
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($FilePath)
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking: $ExpandedPath"
@@ -146,7 +146,7 @@ function Test-Environment
 		[string] $FilePath = $null
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	if ([System.String]::IsNullOrEmpty($FilePath))
 	{
@@ -184,7 +184,7 @@ function Test-Service
 		[string] $Service
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	if (!(Get-Service -Name $Service -ErrorAction SilentlyContinue))
 	{
@@ -213,7 +213,7 @@ function Test-UserProfile
 		[string] $FilePath
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# Impssible to know what the imput may be
 	if ([System.String]::IsNullOrEmpty($FilePath))
@@ -317,7 +317,7 @@ function Format-Path
 		return $FilePath
 	}
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# Make an array of (environment variable/path) value pair,
 	# excluding user profile environment variables
@@ -423,7 +423,7 @@ function Get-UserPrograms
 		[string] $UserAccount
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	$ComputerName = ($UserAccount.Split("\"))[0]
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting $ComputerName"
@@ -504,7 +504,7 @@ function Get-SystemPrograms
 		[string] $ComputerName
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting $ComputerName"
 
 	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
@@ -612,7 +612,7 @@ function Get-AllUserPrograms
 		[string] $ComputerName
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting $ComputerName"
 
 	# TODO: make global connection timeout
@@ -704,7 +704,7 @@ function Initialize-Table
 		[string] $TableName = "InstallationTable"
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# Create Table object
 	if ($Develop)
@@ -756,7 +756,7 @@ function Update-Table
 		[bool] $UserProfile = $false
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Search string = $SearchString"
 
 	# TODO: try to search also for path in addition to program name (3rd parameter)
@@ -860,7 +860,7 @@ function Edit-Table
 		[string] $InstallRoot
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# Nothing to do if the path does not exist
 	if (!(Test-Environment $InstallRoot))
@@ -935,7 +935,7 @@ function Test-Installation
 		[ref] $FilePath
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# If input path is valid just make sure it's formatted
 	if (Test-Environment $FilePath.Value)
@@ -1036,7 +1036,7 @@ function Find-Installation
 		[string] $ComputerName = $env:COMPUTERNAME
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	Initialize-Table
 
@@ -1455,7 +1455,7 @@ function Get-NetFramework
 		[string] $ComputerName
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting $ComputerName"
 
 	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
@@ -1571,7 +1571,7 @@ function Get-WindowsSDK
 		[string] $ComputerName
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting $ComputerName"
 
 	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
@@ -1666,7 +1666,7 @@ function Get-WindowsKits
 		[string] $ComputerName
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting $ComputerName"
 
 	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
@@ -1745,7 +1745,7 @@ function Get-WindowsDefender
 		[string] $ComputerName
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting $ComputerName"
 
 	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
@@ -1818,7 +1818,7 @@ System.Management.Automation.PSCustomObject for installed Microsoft SQL Server M
 		[string] $ComputerName = $env:COMPUTERNAME
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting $ComputerName"
 
 	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)

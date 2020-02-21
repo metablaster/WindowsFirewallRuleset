@@ -58,7 +58,7 @@ function Update-Context
 		[string] $Subsection = $null
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting context"
 	$NewContext = $Root + "." + $Section
@@ -105,7 +105,7 @@ function Approve-Execute
 		[string] $Question = "Do you want to run this script?"
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Default action is: $DefaultAction"
 
 	$Choices  = "&Yes", "&No"
@@ -147,7 +147,7 @@ function Show-SDDL
 		$SDDL
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	$SDDLSplit = $SDDL.Split("(")
 
@@ -218,7 +218,7 @@ function Convert-SDDLToACL
 		[string[]] $SDDL
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	[string[]] $ACL = @()
 	foreach ($Entry in $SDDL)
@@ -253,7 +253,7 @@ function Get-NetworkServices
 		[string] $Folder
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	if (!(Test-Path -Path $Folder))
 	{
@@ -336,7 +336,7 @@ function Format-Output
 
 	process
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 		Write-Host "Load Rule: [$($Rule | Select-Object -ExpandProperty Group)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
 	}
 }
@@ -356,7 +356,7 @@ function Set-ScreenBuffer
 	[CmdletBinding()]
 	param ()
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	$psHost = Get-Host
 	$psWindow = $psHost.UI.RawUI

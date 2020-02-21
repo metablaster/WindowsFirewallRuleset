@@ -51,7 +51,7 @@ function Get-UserAccounts
 		[string] $UserGroup
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting user accounts for $UserGroup group"
 	$GroupUsers = Get-LocalGroupMember -Group $UserGroup |
@@ -88,7 +88,7 @@ function Get-UserNames
 		[string[]] $UserAccounts
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	[string[]] $UserNames = @()
 	foreach($Account in $UserAccounts)
@@ -121,7 +121,7 @@ function Get-UserSID
 		[string] $UserName
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	try
 	{
@@ -157,7 +157,7 @@ function Get-AccountSID
 		[string] $UserAccount
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	[string] $Domain = ($UserAccount.split("\"))[0]
 	[string] $User = ($UserAccount.split("\"))[1]
@@ -196,7 +196,7 @@ function Get-UserSDDL
 		[string[]] $UserNames
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	[string] $SDDL = "D:"
 
@@ -242,7 +242,7 @@ function Get-AccountSDDL
 		[string[]] $UserAccounts
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	[string] $SDDL = "D:"
 
