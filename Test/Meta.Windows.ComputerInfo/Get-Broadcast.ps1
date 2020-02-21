@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Update-Context
+# Unit test for Get-Broadcast
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -38,6 +38,7 @@ Test-SystemRequirements
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
 Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\Meta.Windows.ComputerInfo
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
@@ -45,14 +46,10 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-$DebugPreference = "SilentlyContinue"
+Start-Test
 
-New-Test "Update-Context IPv4.Outbound -> ICMPv4"
-Update-Context "IPv$IPVersion" "Outbound" "ICMPv4"
-Approve-Execute | Out-Null
-
-New-Test "Update-Context Test.Update-Context"
-Update-Context "Test" "Update-Context"
-Approve-Execute | Out-Null
+New-Test "Get-Broadcast"
+Get-Broadcast @Commons
+Write-Log
 
 Exit-Test

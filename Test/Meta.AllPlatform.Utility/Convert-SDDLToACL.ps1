@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Set-ScreenBuffer
+# Unit test for Convert-SDDLToACL
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -38,6 +38,7 @@ Test-SystemRequirements
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
 Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\UserInfo
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
@@ -45,16 +46,26 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-# Set to invoke prompt
-$psHost = Get-Host
-$psWindow = $psHost.UI.RawUI
-$NewSize = $psWindow.BufferSize
-$NewBuffer = 1000
-$NewSize.Height = $NewBuffer
-$psWindow.BufferSize = $NewSize
+Start-Test
 
-New-Test "Set-ScreenBuffer"
-Set-ScreenBuffer @Commons
+New-Test "Get-UserAccounts:"
+[String[]]$UserAccounts = Get-UserAccounts "Users" @Commons
+$UserAccounts += Get-UserAccounts "Administrators" @Commons
+Write-Log
+$UserAccounts
+
+New-Test "Get-AccountSDDL: (user accounts)"
+$SDDL1 = Get-AccountSDDL $UserAccounts @Commons
+Write-Log
+$SDDL1
+
+New-Test "Get-AccountSDDL: (system accounts)"
+$SDDL2 = Get-AccountSDDL @("NT AUTHORITY\SYSTEM", "NT AUTHORITY\NETWORK SERVICE") @Commons
+Write-Log
+$SDDL2
+
+New-Test "Convert-SDDLToACL"
+Convert-SDDLToACL $SDDL1, $SDDL2 @Commons
 Write-Log
 
 Exit-Test

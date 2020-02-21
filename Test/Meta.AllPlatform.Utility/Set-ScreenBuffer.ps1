@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-Broadcast
+# Unit test for Set-ScreenBuffer
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -38,7 +38,6 @@ Test-SystemRequirements
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
 Import-Module -Name $RepoDir\Modules\Test
-Import-Module -Name $RepoDir\Modules\Meta.Windows.ComputerInfo
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
@@ -46,8 +45,18 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-New-Test "Get-Broadcast"
-Get-Broadcast @Commons
+Start-Test
+
+# Set to invoke prompt
+$psHost = Get-Host
+$psWindow = $psHost.UI.RawUI
+$NewSize = $psWindow.BufferSize
+$NewBuffer = 1000
+$NewSize.Height = $NewBuffer
+$psWindow.BufferSize = $NewSize
+
+New-Test "Set-ScreenBuffer"
+Set-ScreenBuffer @Commons
 Write-Log
 
 Exit-Test

@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Resume-Warning
+# Unit test for Resume-Info
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -47,20 +47,21 @@ if (!(Approve-Execute)) { exit }
 
 function Test-NonAdvancedFunction
 {
-	Write-Warning -Message "[$($MyInvocation.InvocationName)] warning message" -WarningAction "Continue" 3>&1 |
-	Resume-Warning -Log:$WarningLogging -Preference $WarningPreference
+	Write-Information -MessageData "[$($MyInvocation.InvocationName)] sample info" `
+	-Tags Result 6>&1 | Resume-Info -Log:$InformationLogging -Preference $InformationPreference
 }
 
-function Test-WarningCmdLet
+function Test-InfoCmdLet
 {
 	[CmdletBinding()]
 	param ()
 
-	Write-Warning -Message "Test-WarningCmdLet 1"
-	Write-Warning -Message "Test-WarningCmdLet 2"
+	Write-Information -MessageData "Test-InfoCmdLet 1"
+	Write-Information -MessageData "Test-InfoCmdLet 2"
+	#Write-Error -Message "Test-InfoCmdLet error" -Category PermissionDenied -ErrorId SampleID
 }
 
-function Test-NoWarningCmdLet
+function Test-NoInfoCmdLet
 {
 	[CmdletBinding()]
 	param ()
@@ -74,20 +75,22 @@ function Test-Pipeline
 		$Param
 	)
 
-	Write-Warning -Message "End of pipe"
+	Write-Information -MessageData "End of pipe"
 }
 
-# $WarningPreference = "SilentlyContinue"
+Start-Test
+
+# $InformationPreference = "SilentlyContinue"
 
 New-Test "Test-NonAdvancedFunction"
 Test-NonAdvancedFunction
 
-New-Test "Test-WarningCmdLet"
-Test-WarningCmdLet @Commons
+New-Test "Test-InfoCmdLet"
+Test-InfoCmdLet @Commons
 Write-Log
 
-New-Test "Test-NoWarningCmdLet"
-Test-NoWarningCmdLet @Commons
+New-Test "Test-NoInfoCmdLet"
+Test-NoInfoCmdLet @Commons
 Write-Log
 
 $Folder = "C:\CrazyFolder"

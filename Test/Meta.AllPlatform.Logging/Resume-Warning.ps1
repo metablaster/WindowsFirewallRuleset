@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-IPAddress
+# Unit test for Resume-Warning
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -38,7 +38,6 @@ Test-SystemRequirements
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
 Import-Module -Name $RepoDir\Modules\Test
-Import-Module -Name $RepoDir\Modules\Meta.Windows.ComputerInfo
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
@@ -46,13 +45,61 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-New-Test "Get-IPAddress IPv4"
-Get-IPAddress "IPv4"
+function Test-NonAdvancedFunction
+{
+	Write-Warning -Message "[$($MyInvocation.InvocationName)] warning message" -WarningAction "Continue" 3>&1 |
+	Resume-Warning -Log:$WarningLogging -Preference $WarningPreference
+}
 
-New-Test "Get-IPAddress IPv6"
-Get-IPAddress "IPv6"
+function Test-WarningCmdLet
+{
+	[CmdletBinding()]
+	param ()
 
-New-Test "Get-IPAddress IPv3"
-Get-IPAddress "IPv3"
+	Write-Warning -Message "Test-WarningCmdLet 1"
+	Write-Warning -Message "Test-WarningCmdLet 2"
+}
+
+function Test-NoWarningCmdLet
+{
+	[CmdletBinding()]
+	param ()
+}
+
+function Test-Pipeline
+{
+	[CmdletBinding()]
+	param (
+		[Parameter(ValueFromPipeline = $true)]
+		$Param
+	)
+
+	Write-Warning -Message "End of pipe"
+}
+
+Start-Test
+
+# $WarningPreference = "SilentlyContinue"
+
+New-Test "Test-NonAdvancedFunction"
+Test-NonAdvancedFunction
+
+New-Test "Test-WarningCmdLet"
+Test-WarningCmdLet @Commons
+Write-Log
+
+New-Test "Test-NoWarningCmdLet"
+Test-NoWarningCmdLet @Commons
+Write-Log
+
+$Folder = "C:\CrazyFolder"
+
+New-Test "Test pipeline"
+Get-ChildItem -Path $Folder @Commons | Test-Pipeline @Commons
+Write-Log
+
+New-Test "Test pipeline"
+Get-ChildItem -Path $Folder @Commons | Test-Pipeline @Commons
+Write-Log
 
 Exit-Test

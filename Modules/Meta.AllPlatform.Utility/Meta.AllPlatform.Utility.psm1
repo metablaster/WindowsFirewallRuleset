@@ -46,17 +46,21 @@ Note, script scope variable is updated
 #>
 function Update-Context
 {
+	[CmdletBinding()]
 	param (
-		[Parameter(Mandatory = $true, Position = 0)]
+		[Parameter(Mandatory = $true)]
 		[string] $Root,
 
-		[Parameter(Mandatory = $true, Position = 1)]
+		[Parameter(Mandatory = $true)]
 		[string] $Section,
 
-		[Parameter(Mandatory = $false, Position = 2)]
+		[Parameter(Mandatory = $false)]
 		[string] $Subsection = $null
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting context"
 	$NewContext = $Root + "." + $Section
 	if (![System.String]::IsNullOrEmpty($Subsection))
 	{
@@ -64,7 +68,7 @@ function Update-Context
 	}
 
 	Set-Variable -Name Context -Scope Script -Value $NewContext
-	Write-Debug "Context set to '$NewContext'"
+	Write-Debug -Message "Context set to '$NewContext'"
 }
 
 <#
@@ -88,6 +92,7 @@ TODO: make this function more generic
 #>
 function Approve-Execute
 {
+	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $false)]
 		[ValidateSet("Yes", "No")]
@@ -100,14 +105,26 @@ function Approve-Execute
 		[string] $Question = "Do you want to run this script?"
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Default action is: $DefaultAction"
+
 	$Choices  = "&Yes", "&No"
 	$Default = 0
-	if ($DefaultAction -like "No") { $Default = 1 }
+	if ($DefaultAction -like "No")
+	{
+		$Default = 1
+	}
 
 	$Title += " [$Context]"
 	$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
 
-	return $Decision -eq $Default
+	if ($Decision -eq $Default)
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] User choose default action"
+		return $true
+	}
+
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] User refuses default action"
 }
 
 <#
@@ -123,26 +140,29 @@ Credits to: https://blogs.technet.microsoft.com/ashleymcglone/2011/08/29/powersh
 #>
 function Show-SDDL
 {
+	[CmdletBinding()]
 	param (
-		[Parameter(
-			Mandatory = $true,
-			valueFromPipelineByPropertyName=$true)] $SDDL
+		[Parameter(Mandatory = $true,
+		ValueFromPipelineByPropertyName = $true)]
+		$SDDL
 	)
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
 
 	$SDDLSplit = $SDDL.Split("(")
 
-	Write-Host ""
-	Write-Host "SDDL Split:"
-	Write-Host "****************"
+	Write-Host "" 6>&1 | Out-Host
+	Write-Host "SDDL Split:" 6>&1 | Out-Host
+	Write-Host "****************" 6>&1 | Out-Host
 
 	$SDDLSplit
 
-	Write-Host ""
-	Write-Host "SDDL SID Parsing:"
-	Write-Host "****************"
+	Write-Host "" 6>&1 | Out-Host
+	Write-Host "SDDL SID Parsing:" 6>&1 | Out-Host
+	Write-Host "****************" 6>&1 | Out-Host
 
 	# Skip index 0 where owner and/or primary group are stored
-	for ($i=1;$i -lt $SDDLSplit.Length;$i++)
+	for ($i=1; $i -lt $SDDLSplit.Length; $i++)
 	{
 		$ACLSplit = $SDDLSplit[$i].Split(";")
 
@@ -158,15 +178,17 @@ function Show-SDDL
 			$ACLEntry = $ACLSplit[5].TrimEnd(")")
 
 			# Parse out the SID using a handy RegEx
-			$ACLEntrySIDMatches = [regex]::Matches($ACLEntry,"(S(-\d+){2,8})")
+			$ACLEntrySIDMatches = [regex]::Matches($ACLEntry, "(S(-\d+){2,8})")
 			# NOTE: original changed from $ACLEntrySID = $_.value to $ACLEntrySID += $_.value
-			$ACLEntrySIDMatches | ForEach-Object { $ACLEntrySID += $_.value }
+			$ACLEntrySIDMatches | ForEach-Object {
+				$ACLEntrySID += $_.Value
+			}
 
-			If ($ACLEntrySID)
+			if ($ACLEntrySID)
 			{
 				$ACLEntrySID
 			}
-			Else
+			else
 			{
 				"Not inherited - No SID"
 			}
@@ -190,16 +212,19 @@ System.String[] array of computer accounts
 #>
 function Convert-SDDLToACL
 {
+	[CmdletBinding()]
 	param (
 		[parameter(Mandatory = $true)]
-		[ValidateCount(1, 1000)]
-		[ValidateLength(1, 1000)]
 		[string[]] $SDDL
 	)
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
 
 	[string[]] $ACL = @()
 	foreach ($Entry in $SDDL)
 	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing $Entry"
+
 		$ACLObject = New-Object -Type Security.AccessControl.DirectorySecurity
 		$ACLObject.SetSecurityDescriptorSddlForm($Entry)
 		$ACL += $ACLObject.Access | Select-Object -ExpandProperty IdentityReference | Select-Object -ExpandProperty Value
@@ -311,6 +336,7 @@ function Format-Output
 
 	process
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
 		Write-Host "Load Rule: [$($Rule | Select-Object -ExpandProperty Group)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
 	}
 }

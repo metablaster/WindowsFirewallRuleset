@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Convert-SDDLToACL
+# Unit test for Show-SDDL
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -38,7 +38,6 @@ Test-SystemRequirements
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
 Import-Module -Name $RepoDir\Modules\Test
-Import-Module -Name $RepoDir\Modules\UserInfo
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
@@ -46,20 +45,34 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-New-Test "Get-UserAccounts:"
-[String[]]$UserAccounts = Get-UserAccounts "Users"
-$UserAccounts += Get-UserAccounts "Administrators"
-$UserAccounts
+Start-Test
 
-New-Test "Get-AccountSDDL: (user accounts)"
-$SDDL1 = Get-AccountSDDL $UserAccounts
-$SDDL1
+# Experiment with different path values to see what the ACL objects do
+# $TestPath = "C:\Users\" #Not inherited
+$TestPath = "C:\users\Public\desktop\" #Inherited
+# $TestPath = "HKCU:\" #Not Inherited
+# $TestPath = "HKCU:\Software" #Inherited
+# $TestPath = "HKLM:\" #Not Inherited
 
-New-Test "Get-AccountSDDL: (system accounts)"
-$SDDL2 = Get-AccountSDDL @("NT AUTHORITY\SYSTEM", "NT AUTHORITY\NETWORK SERVICE")
-$SDDL2
+New-Test "Path:"
+$TestPath
 
-New-Test "Convert-SDDLToACL"
-Convert-SDDLToACL $SDDL1, $SDDL2
+New-Test "ACL.AccessToString:"
+$ACL = Get-ACL $TestPath
+$ACL.AccessToString
+
+New-Test "Access entry details:"
+$ACL.Access | Format-list *
+
+New-Test "SDDL:"
+$ACL.SDDL
+
+# Call with named parameter binding
+# $ACL | Show-SDDL
+
+New-Test "Show-SDDL"
+# Or call with parameter string
+Show-SDDL $ACL.SDDL @Commons
+Write-Log
 
 Exit-Test

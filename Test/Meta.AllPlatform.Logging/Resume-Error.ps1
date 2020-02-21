@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Resume-Info
+# Unit test for Resume-Error
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -47,24 +47,17 @@ if (!(Approve-Execute)) { exit }
 
 function Test-NonAdvancedFunction
 {
-	Write-Information -MessageData "[$($MyInvocation.InvocationName)] sample info" `
-	-Tags Result 6>&1 | Resume-Info -Log:$InformationLogging -Preference $InformationPreference
+	Write-Error -Message "[$($MyInvocation.InvocationName)] sample message" -Category PermissionDenied `
+	-ErrorId SampleID -TargetObject $ComputerName -ErrorAction "Continue" 2>&1 | Resume-Error -Log:$ErrorLogging -Preference $ErrorActionPreference
 }
 
-function Test-InfoCmdLet
+function Test-ErrorCmdLet
 {
 	[CmdletBinding()]
 	param ()
 
-	Write-Information -MessageData "Test-InfoCmdLet 1"
-	Write-Information -MessageData "Test-InfoCmdLet 2"
-	#Write-Error -Message "Test-InfoCmdLet error" -Category PermissionDenied -ErrorId SampleID
-}
-
-function Test-NoInfoCmdLet
-{
-	[CmdletBinding()]
-	param ()
+	Write-Error -Message "cmdlet error 1" -Category PermissionDenied -ErrorId SampleID
+	Write-Error -Message "cmdlet error 2" -Category PermissionDenied -ErrorId SampleID
 }
 
 function Test-Pipeline
@@ -75,23 +68,28 @@ function Test-Pipeline
 		$Param
 	)
 
-	Write-Information -MessageData "End of pipe"
+	Write-Error -Message "End of pipe" -Category PermissionDenied -ErrorId SampleID
 }
 
-# $InformationPreference = "SilentlyContinue"
+Start-Test
+# $ErrorActionPreference = "SilentlyContinue"
 
 New-Test "Test-NonAdvancedFunction"
 Test-NonAdvancedFunction
 
-New-Test "Test-InfoCmdLet"
-Test-InfoCmdLet @Commons
-Write-Log
-
-New-Test "Test-NoInfoCmdLet"
-Test-NoInfoCmdLet @Commons
-Write-Log
-
+New-Test "Generate errors"
 $Folder = "C:\CrazyFolder"
+Get-ChildItem -Path $Folder @Commons
+Write-Log
+
+New-Test "No errors"
+Get-ChildItem -Path "C:\" @Commons | Out-Null
+Write-Log
+# $ErrorActionPreference = "Continue"
+
+New-Test "Test-ErrorCmdLet"
+Test-ErrorCmdLet @Commons
+Write-Log
 
 New-Test "Test pipeline"
 Get-ChildItem -Path $Folder @Commons | Test-Pipeline @Commons

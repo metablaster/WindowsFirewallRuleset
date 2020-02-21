@@ -27,8 +27,10 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Write-Note
+# Unit test for Format-Output
 #
+
+#Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
@@ -45,8 +47,23 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-New-Test "Write-Note"
-Write-Note "single line"
-Write-Note "first line", "second line", "3rd line"
+#
+# Setup local variables:
+#
+$Group = "Test - Format output"
+
+Start-Test
+
+# First remove all existing rules matching group
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
+
+New-Test "Format-Output"
+New-NetFirewallRule -Platform $Platform `
+-DisplayName "TargetProgram" -Service Any -Program Any `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 26002 `
+-LocalUser Any `
+-Description "" @Commons | Format-Output @Commons
+Write-Log
 
 Exit-Test

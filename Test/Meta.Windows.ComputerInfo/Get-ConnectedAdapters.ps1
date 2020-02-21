@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-ComputerName
+# Unit test for Get-AdapterConfig
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -46,7 +46,14 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-New-Test "Get-ComputerName"
-Get-ComputerName
+Start-Test
+
+New-Test "Get-ConnectedAdapters"
+Get-ConnectedAdapters IPv4 @Commons
+Write-Log
+
+New-Test "Get-ConnectedAdapters binding"
+Get-ConnectedAdapters IPv4  @Commons | Select-Object -ExpandProperty IPv4Address @Commons
+Write-Log
 
 Exit-Test

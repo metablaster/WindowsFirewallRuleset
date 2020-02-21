@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Show-SDDL
+# Unit test Get-NetworkServices
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -45,31 +45,10 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-# Experiment with different path values to see what the ACL objects do
-# $TestPath = "C:\Users\" #Not inherited
-$TestPath = "C:\users\Public\desktop\" #Inherited
-# $TestPath = "HKCU:\" #Not Inherited
-# $TestPath = "HKCU:\Software" #Inherited
-# $TestPath = "HKLM:\" #Not Inherited
+Start-Test
 
-New-Test "Path:"
-$TestPath
-
-New-Test "ACL.AccessToString:"
-$ACL = Get-ACL $TestPath
-$ACL.AccessToString
-
-New-Test "Access entry details:"
-$ACL.Access | Format-list *
-
-New-Test "SDDL:"
-$ACL.SDDL
-
-# Call with named parameter binding
-# $ACL | Show-SDDL
-
-New-Test "Show-SDDL"
-# Or call with parameter string
-Show-SDDL $ACL.SDDL
+New-Test "Get-NetworkServices"
+Get-NetworkServices "$RepoDir\Rules" @Commons
+Write-Log
 
 Exit-Test

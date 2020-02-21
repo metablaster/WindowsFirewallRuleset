@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Approve-Execute
+# Unit test for Get-ComputerName
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -38,6 +38,7 @@ Test-SystemRequirements
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
 Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\Meta.Windows.ComputerInfo
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
@@ -45,7 +46,10 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-New-Test "Approve-Execute"
-Approve-Execute
+Start-Test
+
+New-Test "Get-ComputerName"
+Get-ComputerName @Commons
+Write-Log
 
 Exit-Test

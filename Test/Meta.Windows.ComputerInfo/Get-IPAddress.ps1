@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test Get-NetworkServices
+# Unit test for Get-IPAddress
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -38,6 +38,7 @@ Test-SystemRequirements
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
 Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\Meta.Windows.ComputerInfo
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
@@ -45,8 +46,18 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-New-Test "Get-NetworkServices"
-Get-NetworkServices "$RepoDir\Rules" @Commons
+Start-Test
+
+New-Test "Get-IPAddress IPv4"
+Get-IPAddress "IPv4" @Commons
+Write-Log
+
+New-Test "Get-IPAddress IPv6"
+Get-IPAddress "IPv6" @Commons
+Write-Log
+
+New-Test "Get-IPAddress IPv3"
+Get-IPAddress "IPv3" @Commons
 Write-Log
 
 Exit-Test

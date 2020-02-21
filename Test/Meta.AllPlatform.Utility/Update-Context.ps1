@@ -27,10 +27,8 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Format-Output
+# Unit test for Update-Context
 #
-
-#Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
@@ -47,20 +45,18 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-#
-# Setup local variables:
-#
-$Group = "Test - Format output"
+Start-Test
 
-# First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
+$DebugPreference = "SilentlyContinue"
 
-New-Test "Format-Output"
-New-NetFirewallRule -Platform $Platform `
--DisplayName "TargetProgram" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 26002 `
--LocalUser Any `
--Description "" | Format-Output
+New-Test "Update-Context IPv4.Outbound -> ICMPv4"
+Update-Context "IPv$IPVersion" "Outbound" "ICMPv4" @Commons
+Approve-Execute @Commons | Out-Null
+Write-Log
+
+New-Test "Update-Context Test.Update-Context"
+Update-Context "Test" "Update-Context" @Commons
+Approve-Execute @Commons | Out-Null
+Write-Log
 
 Exit-Test

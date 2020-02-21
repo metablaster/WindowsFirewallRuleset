@@ -28,6 +28,37 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
+Do stuff before any tests
+.EXAMPLE
+Start-Test
+.INPUTS
+None. You cannot pipe objects to New-Test
+.OUTPUTS
+formatted message block is shown in console
+#>
+function Start-Test
+{
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+
+	# disable logging errors for tests
+	Set-Variable -Name ErrorLoggingCopy -Scope Script -Value $ErrorLogging
+	Set-Variable -Name ErrorLogging -Scope Global -Value $false
+
+	# disable logging warnings for tests
+	Set-Variable -Name WarningLoggingCopy -Scope Script -Value $WarningLogging
+	Set-Variable -Name WarningLogging -Scope Global -Value $false
+
+	# disable logging information messages for tests
+	Set-Variable -Name InformationLoggingCopy -Scope Script -Value $InformationLogging
+	Set-Variable -Name InformationLogging -Scope Global -Value $false
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ErrorLogging is $ErrorLogging"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] WarningLogging is $WarningLogging"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] InformationLogging is $InformationLogging"
+}
+
+<#
+.SYNOPSIS
 write output to separate test cases
 .PARAMETER InputMessage
 message to print before test
@@ -44,6 +75,8 @@ function New-Test
 		[Parameter(Mandatory = $true)]
 		[string] $InputMessage
 	)
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
 
 	$Message = "Testing: $InputMessage"
 	$Asterisks = $("*" * ($Message.Length + 4))
@@ -67,6 +100,21 @@ formatted message block is shown in console
 #>
 function Exit-Test
 {
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+
+	# restore logging errors
+	Set-Variable -Name ErrorLogging -Scope Global -Value $ErrorLoggingCopy
+
+	# restore logging warnings
+	Set-Variable -Name WarningLogging -Scope Global -Value $WarningLoggingCopy
+
+	# restore logging information messages
+	Set-Variable -Name InformationLogging -Scope Global -Value $InformationLoggingCopy
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ErrorLogging is $ErrorLogging"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] WarningLogging is $WarningLogging"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] InformationLogging is $InformationLogging"
+
 	# Write-Host ""
 	# Save-Errors
 	Write-Host ""
@@ -76,6 +124,7 @@ function Exit-Test
 # Function exports
 #
 
+Export-ModuleMember -Function Start-Test
 Export-ModuleMember -Function New-Test
 Export-ModuleMember -Function Exit-Test
 

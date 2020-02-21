@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-AdapterConfig
+# Unit test for Approve-Execute
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -38,7 +38,6 @@ Test-SystemRequirements
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
 Import-Module -Name $RepoDir\Modules\Test
-Import-Module -Name $RepoDir\Modules\Meta.Windows.ComputerInfo
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
@@ -46,10 +45,10 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-New-Test "Get-ConnectedAdapters"
-Get-ConnectedAdapters IPv4
+Start-Test
 
-New-Test "Get-ConnectedAdapters binding"
-Get-ConnectedAdapters IPv4 | Select-Object -ExpandProperty IPv4Address
+New-Test "Approve-Execute"
+Approve-Execute @Commons
+Write-Log
 
 Exit-Test
