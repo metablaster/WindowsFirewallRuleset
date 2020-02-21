@@ -26,11 +26,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+#
+# NOTE: In this file various settings and preferences are set, there are 2 kinds of settings:
+# those which can be modified and those which must not be modified.
+#
+
 # Set to true to indicate development phase, forces unloading modules and removing variables.
 # In addition to this do (CTRL SHIFT + F) global search and uncomment symbols for: "to export from this module"
 Set-Variable -Name Develop -Scope Global -Value $true
 
-# Name of this script for debugging messages, do not modify.
+# Name of this script for debugging messages, do not modify!.
 Set-Variable -Name ThisScript -Scope Local -Option ReadOnly -Value $($MyInvocation.MyCommand.Name -replace ".{4}$")
 
 <#
@@ -64,6 +69,7 @@ $WarningPreference	Continue
 $WhatIfPreference	False
 #>
 
+# These settings apply only for development phase
 if ($Develop)
 {
 	#
@@ -101,7 +107,7 @@ if ($Develop)
 	Remove-Module -Name ComputerInfo -ErrorAction Ignore
 	Remove-Module -Name ProgramInfo -ErrorAction Ignore
 }
-else
+else # Normal use case
 {
 	# These are set to default values for normal use case,
 	# modify to customize your experience
@@ -111,7 +117,7 @@ else
 	$DebugPreference = "SilentlyContinue"
 	$InformationPreference = "SilentlyContinue"
 
-	# Preference for modules not used, default.
+	# Preferences for modules not used, do not modify!
 	Remove-Variable -Name ModuleErrorPreference -Scope Global -ErrorAction Ignore
 	Remove-Variable -Name ModuleWarningPreference -Scope Global -ErrorAction Ignore
 	Remove-Variable -Name ModuleVerbosePreference -Scope Global -ErrorAction Ignore
@@ -124,7 +130,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 {
 	Write-Debug -Message "[$ThisScript] Setup constant variables"
 
-	# check if constants alreay initialized, used for module reloading
+	# check if constants alreay initialized, used for module reloading, do not modify!
 	New-Variable -Name CheckProjectConstants -Scope Global -Option Constant -Value $null
 
 	# Repository root directory, realocating scripts should be easy if root directory is constant
@@ -133,10 +139,13 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 
 	# Windows 10, Windows Server 2019 and above
 	New-Variable -Name Platform -Scope Global -Option Constant -Value "10.0+"
+
 	# Machine where to apply rules (default: Local Group Policy)
 	New-Variable -Name PolicyStore -Scope Global -Option Constant -Value "localhost"
+
 	# Default network interface card, change this to NIC which your target PC uses
 	New-Variable -Name Interface -Scope Global -Option Constant -Value "Wired, Wireless"
+
 	# To force loading rules regardless of presence of program set to true
 	New-Variable -Name Force -Scope Global -Option Constant -Value $false
 }
@@ -146,7 +155,7 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 {
 	Write-Debug -Message "[$ThisScript] Setup removable variables"
 
-	# check if removable variables already initialized
+	# check if removable variables already initialized, do not modify!
 	Set-Variable -Name CheckRemovableVariables -Scope Global -Option ReadOnly -Force -Value $null
 
 	# Set to false to avoid checking system requirements
@@ -162,12 +171,14 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 	Set-Variable -Name InformationLogging -Scope Global -Value $true
 
 	# Global variable to tell if errors were generated, do not modify!
+	# Will not be set if preference is "SilentlyContinue"
 	Set-Variable -Name ErrorStatus -Scope Global -Value $false
 
 	# Global variable to tell if warnings were generated, do not modify!
+	# Will not be set if preference is "SilentlyContinue"
 	Set-Variable -Name WarningStatus -Scope Global -Value $false
 
-	# These defaults are for advanced functions to enable logging, do not edit!
+	# These defaults are for advanced functions to enable logging, do not modify!
 	Set-Variable -Name Commons -Scope Local -Value @{
 		ErrorAction = "SilentlyContinue"
 		ErrorVariable = "+EV"
@@ -187,8 +198,6 @@ Write-Log is called right afterwards and it reads error, warning and information
 Write-Log forwards these records to apprpriate Resume-* handlers for formatting, status checking and logging into a file.
 Error, Warning and info preferences and log switch can be overriden at any time and the Write-Log will pick up
 those values automatically since both these variables and Write-Log are local to script.
-.PARAMETER NoStatus
-Applies only to warning messages, if set, warning status is not updated
 .EXAMPLE
 Write-Log
 .INPUTS
@@ -202,10 +211,6 @@ Variables EV, WV and IV are script local variables defined in 'Commons' splattin
 #>
 function Write-Log
 {
-	param (
-		[switch] $NoStatus
-	)
-
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
 
 	if ($EV)
@@ -222,7 +227,7 @@ function Write-Log
 		# This is a workaround, since warning variable is missing the
 		# WARNING label and coloring, reported bellow:
 		# https://github.com/PowerShell/PowerShell/issues/11900
-		$WV | Write-Warning -WarningAction "Continue" 3>&1 | Resume-Warning -Log:$WarningLogging -Preference $WarningPreference -NoStatus:$NoStatus
+		$WV | Write-Warning -WarningAction "Continue" 3>&1 | Resume-Warning -Log:$WarningLogging -Preference $WarningPreference
 		$WV.Clear()
 	}
 

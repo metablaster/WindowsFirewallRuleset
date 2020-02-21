@@ -47,7 +47,7 @@ if (!(Approve-Execute)) { exit }
 function Test-NonAdvancedFunction
 {
 	Write-Warning -Message "[$($MyInvocation.InvocationName)] warning message" -WarningAction "Continue" 3>&1 |
-	Resume-Warning -NoStatus -Log:$WarningLogging -Preference $WarningPreference
+	Resume-Warning -Log:$WarningLogging -Preference $WarningPreference
 }
 
 function Test-WarningCmdLet
@@ -83,7 +83,7 @@ Test-NonAdvancedFunction
 
 New-Test "Test-WarningCmdLet"
 Test-WarningCmdLet @Commons
-Write-Log -NoStatus
+Write-Log
 
 New-Test "Test-NoWarningCmdLet"
 Test-NoWarningCmdLet @Commons

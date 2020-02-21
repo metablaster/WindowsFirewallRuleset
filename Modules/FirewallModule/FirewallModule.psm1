@@ -246,7 +246,7 @@ function Get-LogFile
 	# Create Logs directory if it doesn't exist
 	if (!(Test-Path -PathType Container -Path $Folder))
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating directory $Folder"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating log directory $Folder"
 		New-Item -ItemType Directory -Path $Folder -ErrorAction Stop | Out-Null
 	}
 
@@ -310,35 +310,19 @@ function Resume-Error
 
 		if ($Preference -ne "SilentlyContinue")
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Set error status variable"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting error status variable"
 			Set-Variable -Name ErrorStatus -Scope Global -Value $true
+
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Write error to terminal"
+			$Stream
 		}
 
 		if ($Log)
 		{
 			$LogFile = Get-LogFile $Folder "Error"
 
-			if ($Preference -ne "SilentlyContinue")
-			{
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Write error to terminal and log file"
-				$Stream | Tee-Object -Variable Message
-			}
-			else
-			{
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Write error to log file only"
-				$Stream | Select-Object -OutVariable Message | Out-Null
-			}
-
-			$Message | Select-Object * | Out-File -Append -FilePath $LogFile
-		}
-		elseif ($Preference -ne "SilentlyContinue")
-		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Write error to terminal only"
-			$Stream
-		}
-		else
-		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Error message ignored"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Write error to log file"
+			$Stream | Select-Object * | Out-File -Append -FilePath $LogFile
 		}
 	}
 }
@@ -393,9 +377,6 @@ function Resume-Warning
 		[string] $Folder = $LogsFolder,
 
 		[Parameter()]
-		[switch] $NoStatus,
-
-		[Parameter()]
 		[switch] $Log
 	)
 
@@ -403,42 +384,22 @@ function Resume-Warning
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
 
-		if ($NoStatus)
-		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Warning status stays the same: $WarningStatus"
-		}
-		else
+		# NOTE: we have to add the WARNING label, it's gone for some reason
+		if ($Preference -ne "SilentlyContinue")
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting warning status variable"
 			Set-Variable -Name WarningStatus -Scope Global -Value $true
+
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Write warning to terminal"
+			$Stream
 		}
 
 		if ($Log)
 		{
 			$LogFile = Get-LogFile $Folder "Warning"
 
-			# NOTE: we have to add the WARNING label, it's gone for some reason
-			if ($Preference -ne "SilentlyContinue")
-			{
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Write warning to terminal and log file"
-
-				$Stream
-				"WARNING: $(Get-Date -Format "HH:mm:ss") $Stream" | Out-File -Append -FilePath $LogFile
-			}
-			else
-			{
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Write warning to log file only"
-				"WARNING: $(Get-Date -Format "HH:mm:ss") $Stream" | Out-File -Append -FilePath $LogFile
-			}
-		}
-		elseif ($Preference -ne "SilentlyContinue")
-		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Write warning to terminal only"
-			$Stream
-		}
-		else
-		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Warning message ignored"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Write warning to log file"
+			"WARNING: $(Get-Date -Format "HH:mm:ss") $Stream" | Out-File -Append -FilePath $LogFile
 		}
 	}
 }
@@ -490,32 +451,18 @@ function Resume-Info
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
 
+		if ($Preference -ne "SilentlyContinue")
+		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Write information to terminal"
+			"INFO: " + $Stream
+		}
+
 		if ($Log)
 		{
 			$LogFile = Get-LogFile $Folder "Info"
 
-			if ($Preference -ne "SilentlyContinue")
-			{
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Write information to terminal and log file"
-
-				"INFO: " + ($Stream | Select-Object * |
-				Tee-Object -Append -FilePath $LogFile |
-				Select-Object -ExpandProperty MessageData)
-			}
-			else
-			{
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Write information to log file only"
-				$Stream | Select-Object * | Out-File -Append -FilePath $LogFile
-			}
-		}
-		elseif ($Preference -ne "SilentlyContinue")
-		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Write information to terminal only"
-			"INFO: " + $Stream
-		}
-		else
-		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Information message ignored"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Write information to log file"
+			$Stream | Select-Object * | Out-File -Append -FilePath $LogFile
 		}
 	}
 }
