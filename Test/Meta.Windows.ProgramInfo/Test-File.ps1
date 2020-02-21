@@ -46,16 +46,21 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
+Start-Test
+
 $OfficeShared = "%ProgramFiles%\Common Files\microsoft shared"
 $VSInstallService = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.x86.exe"
 
 New-Test "Test-File '$VSInstallService'"
-Test-File "$VSInstallService"
+Test-File "$VSInstallService" @Commons
+Write-Log
 
 New-Test "Test-File '$OfficeShared\ClickToRun\OfficeClickToRun.exe'"
-Test-File "$OfficeShared\ClickToRun\OfficeClickToRun.exe"
+Test-File "$OfficeShared\ClickToRun\OfficeClickToRun.exe" @Commons
+Write-Log
 
 New-Test "Test-File '%ProgramFiles%\ClickToRun\OfficeClickToRun.exe'"
-Test-File "%ProgramFiles%\ClickToRun\OfficeClickToRun.exe"
+Test-File "%ProgramFiles%\ClickToRun\OfficeClickToRun.exe" @Commons
+Write-Log
 
 Exit-Test

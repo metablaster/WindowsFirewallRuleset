@@ -46,32 +46,43 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
+Start-Test
+
 New-Test "Find-Installation 'EdgeChromium'"
-Find-Installation "EdgeChromium"
+Find-Installation "EdgeChromium" @Commons
+Write-Log
 
 New-Test "Table data"
-$global:InstallTable | Format-Table -AutoSize
+$global:InstallTable | Format-Table -AutoSize @Commons
+Write-Log
 
 New-Test "Install Root"
-$global:InstallTable | Select-Object -ExpandProperty InstallRoot
+$global:InstallTable | Select-Object -ExpandProperty InstallRoot @Commons
+Write-Log
 
 New-Test "Find-Installation 'TeamViewer'"
-Find-Installation "TeamViewer"
+Find-Installation "TeamViewer" @Commons
+Write-Log
 # C:\Program Files (x86)\Microsoft
 
 New-Test "Table data"
-$global:InstallTable | Format-Table -AutoSize
+$global:InstallTable | Format-Table -AutoSize @Commons
+Write-Log
 
 New-Test "Find-Installation 'FailureTest'"
-Find-Installation "FailureTest"
+Find-Installation "FailureTest" @Commons
+Write-Log
 
 New-Test "Table data"
-$global:InstallTable | Format-Table -AutoSize
+$global:InstallTable | Format-Table -AutoSize @Commons
+Write-Log
 
 New-Test "Find-Installation 'VisualStudio'"
-Find-Installation "VisualStudio"
+Find-Installation "VisualStudio" @Commons
+Write-Log
 
 New-Test "Table data"
-$global:InstallTable | Format-Table -AutoSize
+$global:InstallTable | Format-Table -AutoSize @Commons
+Write-Log
 
 Exit-Test

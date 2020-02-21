@@ -46,46 +46,56 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
+Start-Test
+
 $User = "haxor"
 
 New-Test "User profile - full"
 $TestPath = "C:\Users\$User\source\repos\WindowsFirewallRuleset"
 $TestPath
-Test-UserProfile $TestPath
+Test-UserProfile $TestPath @Commons
+Write-Log
 
 New-Test "User profile - environment"
 $TestPath = "%LOCALAPPDATA%\Microsoft"
 $TestPath
-Test-UserProfile $TestPath
+Test-UserProfile $TestPath @Commons
+Write-Log
 
 New-Test "User profile - full unformatted"
 $TestPath = "C:\\Users\$User\source\\repos\WindowsFirewallRuleset\"
 $TestPath
-Test-UserProfile $TestPath
+Test-UserProfile $TestPath @Commons
+Write-Log
 
 New-Test "User profile - environment unformatted"
 $TestPath = "%LOCALAPPDATA%\\Microsoft\"
 $TestPath
-Test-UserProfile $TestPath
+Test-UserProfile $TestPath @Commons
+Write-Log
 
 New-Test "System - full"
 $TestPath = "C:\Program Files\\Microsoft SQL Server\140"
 $TestPath
-Test-UserProfile $TestPath
+Test-UserProfile $TestPath @Commons
+Write-Log
 
 New-Test "System - envoronment"
 $TestPath = "%ProgramFiles(x86)%\Microsoft SQL Server\140\"
 $TestPath
-Test-UserProfile $TestPath
+Test-UserProfile $TestPath @Commons
+Write-Log
 
 New-Test "Drive"
 $TestPath = "C:\"
 $TestPath
-Test-UserProfile $TestPath
+Test-UserProfile $TestPath @Commons
+Write-Log
 
 New-Test "Drive"
 $TestPath = "C:\\"
 $TestPath
-Test-UserProfile $TestPath
+Test-UserProfile $TestPath @Commons
+Write-Log
 
 Exit-Test

@@ -46,10 +46,14 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
+Start-Test
+
 New-Test "Test-Service FailureTest"
-Test-Service "FailureTest"
+Test-Service "FailureTest" @Commons
+Write-Log
 
 New-Test "Test-Service dnscache"
-Test-Service dnscache
+Test-Service dnscache @Commons
+Write-Log
 
 Exit-Test

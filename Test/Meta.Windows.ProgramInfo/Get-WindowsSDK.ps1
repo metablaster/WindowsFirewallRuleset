@@ -47,25 +47,34 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-$ComputerName = Get-ComputerName
+Start-Test
+
+$ComputerName = Get-ComputerName @Commons
+Write-Log
 
 New-Test "Get-WindowsSDK"
 
-$WindowsSDK = Get-WindowsSDK $ComputerName
+$WindowsSDK = Get-WindowsSDK $ComputerName @Commons
+Write-Log
 $WindowsSDK
 
 # New-Test "Get-WindowsSDK latest"
 
-# $WindowsSDK | Sort-Object -Property Version | Where-Object { $_.InstallPath } | Select-Object -Last 1 -ExpandProperty InstallPath
+# $WindowsSDK | Sort-Object -Property Version @Commons |
+# Where-Object { $_.InstallPath } |
+# Select-Object -Last 1 -ExpandProperty InstallPath @Commons
+# Write-Log
 
 # Get Windows SDK root
-# $WindowsSDK = Get-WindowsSDK $ComputerName
+# $WindowsSDK = Get-WindowsSDK $ComputerName @Commons
+Write-Log
 # if ($null -ne $WindowsKits)
 # {
 #     $SDKRoot = $WindowsSDK |
-#     Sort-Object -Property Version |
+#     Sort-Object -Property Version @Commons |
 #     Where-Object { $_.InstallPath } |
-#     Select-Object -Last 1 -ExpandProperty InstallPath
+#     Select-Object -Last 1 -ExpandProperty InstallPath @Commons
+#	  Write-Log
 # }
 
 Exit-Test

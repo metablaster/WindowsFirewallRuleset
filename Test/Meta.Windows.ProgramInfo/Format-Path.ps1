@@ -46,74 +46,119 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
+Start-Test
+
 New-Test "Format-Path"
 
-$Result = Format-Path "C:\"
-$Result
-Test-Environment $Result
+$Result = Format-Path "C:\" @Commons
+Write-Log
 
-$Result = Format-Path "C:\\Windows\System32"
 $Result
-Test-Environment $Result
+Test-Environment $Result @Commons
+Write-Log
 
-$Result = Format-Path "C:\\Windows\"
-$Result
-Test-Environment $Result
+$Result = Format-Path "C:\\Windows\System32" @Commons
+Write-Log
 
-$Result = Format-Path "C:\Program Files (x86)\Windows Defender\"
 $Result
-Test-Environment $Result
+Test-Environment $Result @Commons
+Write-Log
 
-$Result = Format-Path "C:\Program Files\WindowsPowerShell"
-$Result
-Test-Environment $Result
+$Result = Format-Path "C:\\Windows\" @Commons
+Write-Log
 
-$Result = Format-Path '"C:\ProgramData\Git"'
 $Result
-Test-Environment $Result
+Test-Environment $Result @Commons
+Write-Log
 
-$Result = Format-Path "C:\PerfLogs"
-$Result
-Test-Environment $Result
+$Result = Format-Path "C:\Program Files (x86)\Windows Defender\" @Commons
+Write-Log
 
-$Result = Format-Path "C:\Windows\Microsoft.NET\Framework64\v3.5\\"
 $Result
-Test-Environment $Result
+Test-Environment $Result @Commons
+Write-Log
 
-$Result = Format-Path "'C:\Windows\Microsoft.NET\Framework64\v3.5'"
-$Result
-Test-Environment $Result
+$Result = Format-Path "C:\Program Files\WindowsPowerShell" @Commons
+Write-Log
 
-$Result = Format-Path "D:\\microsoft\\windows"
 $Result
-Test-Environment $Result
+Test-Environment $Result @Commons
+Write-Log
 
-$Result = Format-Path "D:\"
-$Result
-Test-Environment $Result
+$Result = Format-Path '"C:\ProgramData\Git"' @Commons
+Write-Log
 
-$Result = Format-Path "C:\\"
 $Result
-Test-Environment $Result
+Test-Environment $Result @Commons
+Write-Log
 
-$Result = Format-Path "C:\Users\haxor\AppData\Local\OneDrive"
-$Result
-Test-Environment $Result
+$Result = Format-Path "C:\PerfLogs" @Commons
+Write-Log
 
-$Result = Format-Path "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
 $Result
-Test-Environment $Result
+Test-Environment $Result @Commons
+Write-Log
 
-$Result = Format-Path "%SystemDrive%"
-$Result
-Test-Environment $Result
+$Result = Format-Path "C:\Windows\Microsoft.NET\Framework64\v3.5\\" @Commons
+Write-Log
 
-$Result = Format-Path ""
 $Result
-Test-Environment $Result
+Test-Environment $Result @Commons
+Write-Log
 
-$Result = Format-Path $null
+$Result = Format-Path "'C:\Windows\Microsoft.NET\Framework64\v3.5'" @Commons
+Write-Log
+
 $Result
-Test-Environment $Result
+Test-Environment $Result @Commons
+Write-Log
+
+$Result = Format-Path "D:\\microsoft\\windows" @Commons
+Write-Log
+$Result
+Test-Environment $Result @Commons
+Write-Log
+
+$Result = Format-Path "D:\" @Commons
+Write-Log
+$Result
+Test-Environment $Result @Commons
+Write-Log
+
+$Result = Format-Path "C:\\" @Commons
+Write-Log
+$Result
+Test-Environment $Result @Commons
+Write-Log
+
+$Result = Format-Path "C:\Users\haxor\AppData\Local\OneDrive" @Commons
+Write-Log
+$Result
+Test-Environment $Result @Commons
+Write-Log
+
+$Result = Format-Path "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer" @Commons
+Write-Log
+$Result
+Test-Environment $Result @Commons
+Write-Log
+
+$Result = Format-Path "%SystemDrive%" @Commons
+Write-Log
+$Result
+Test-Environment $Result @Commons
+Write-Log
+
+$Result = Format-Path "" @Commons
+Write-Log
+$Result
+Test-Environment $Result @Commons
+Write-Log
+
+$Result = Format-Path $null @Commons
+Write-Log
+$Result
+Test-Environment $Result @Commons
+Write-Log
 
 Exit-Test

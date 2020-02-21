@@ -46,8 +46,11 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
+Start-Test
+
 New-Test "Initialize-Table"
-Initialize-Table
+Initialize-Table @Commons
+Write-Log
 
 if (!$global:InstallTable)
 {
@@ -62,29 +65,39 @@ if ($global:InstallTable.Rows.Count -ne 0)
 }
 
 New-Test "Fill table with Greenshot"
-Update-Table "Greenshot" $true
+Update-Table "Greenshot" $true @Commons
+Write-Log
 
 New-Test "Table data"
-$global:InstallTable | Format-Table -AutoSize
+$global:InstallTable | Format-Table -AutoSize @Commons
+Write-Log
 
 New-Test "Install Path"
-$global:InstallTable | Select-Object -ExpandProperty InstallRoot
+$global:InstallTable | Select-Object -ExpandProperty InstallRoot @Commons
+Write-Log
 
 New-Test "Failure Test"
-Initialize-Table
-Update-Table "Failure" $true
+Initialize-Table @Commons
+Write-Log
+Update-Table "Failure" $true @Commons
+Write-Log
 
 New-Test "Table data"
-$global:InstallTable | Format-Table -AutoSize
+$global:InstallTable | Format-Table -AutoSize @Commons
+Write-Log
 
 New-Test "Test multiple paths"
-Initialize-Table
-Update-Table "Visual Studio" $true
+Initialize-Table @Commons
+Write-Log
+Update-Table "Visual Studio" $true @Commons
+Write-Log
 
 New-Test "Table data"
-$global:InstallTable | Format-Table -AutoSize
+$global:InstallTable | Format-Table -AutoSize @Commons
+Write-Log
 
 New-Test "Install Path"
-$global:InstallTable | Select-Object -ExpandProperty InstallRoot
+$global:InstallTable | Select-Object -ExpandProperty InstallRoot @Commons
+Write-Log
 
 Exit-Test

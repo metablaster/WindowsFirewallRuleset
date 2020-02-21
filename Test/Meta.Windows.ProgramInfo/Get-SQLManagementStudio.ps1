@@ -46,13 +46,18 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
+Start-Test
+
 New-Test "SQLManagementStudio"
-$Result = Get-SQLManagementStudio
-$Result | Get-Member
+$Result = Get-SQLManagementStudio @Commons
+Write-Log
+$Result | Get-Member @Commons
+Write-Log
 
 $Result
 
 New-Test "SQLManagementStudio - Install path"
-$Result | Select-Object -ExpandProperty InstallPath
+$Result | Select-Object -ExpandProperty InstallPath @Commons
+Write-Log
 
 Exit-Test

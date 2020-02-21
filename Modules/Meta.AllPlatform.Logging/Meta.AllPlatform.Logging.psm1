@@ -26,6 +26,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+# TODO: let Write-Log select object in piple, process it's commons and transfer down the pipe
+# TODO: stream logging instead of open/close file for performance
+# TODO: what if cmdlet throws? will we capture that into log?
+
 <#
 .SYNOPSIS
 Return a log file name for logging functions

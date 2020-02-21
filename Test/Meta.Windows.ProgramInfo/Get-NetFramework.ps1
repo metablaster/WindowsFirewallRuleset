@@ -47,9 +47,12 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
+Start-Test
+
 New-Test "Get-NetFramework"
 
-$ComputerName = Get-ComputerName
+$ComputerName = Get-ComputerName @Commons
+Write-Log
 
 # $NETFramework = Get-NetFramework $ComputerName
 # $NETFramework
@@ -65,14 +68,16 @@ $ComputerName = Get-ComputerName
 # $Minor
 
 # Get latest NET Framework installation directory
-$NETFramework = Get-NetFramework $ComputerName
+$NETFramework = Get-NetFramework $ComputerName @Commons
+Write-Log
 if ($null -ne $NETFramework)
 {
 	$NETFrameworkRoot = $NETFramework |
-	Sort-Object -Property Version |
-	Where-Object {$_.InstallPath} |
-	Select-Object -Last 1 -ExpandProperty InstallPath
-
+	Sort-Object -Property Version @Commons |
+	Where-Object { $_.InstallPath } |
+	Select-Object -Last 1 -ExpandProperty InstallPath @Commons
+	Write-Log
+	
 	Write-Information -Tags "Test" -MessageData $NETFrameworkRoot
 	# Edit-Table $NETFrameworkRoot
 }

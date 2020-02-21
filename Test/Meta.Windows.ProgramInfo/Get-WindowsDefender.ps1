@@ -47,8 +47,11 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
+Start-Test
+
 New-Test "Get-WindowsDefender"
 
-Get-WindowsDefender (Get-ComputerName) #| Select-Object -ExpandProperty InstallPath
+Get-WindowsDefender (Get-ComputerName) @Commons #| Select-Object -ExpandProperty InstallPath @Commons
+Write-Log
 
 Exit-Test

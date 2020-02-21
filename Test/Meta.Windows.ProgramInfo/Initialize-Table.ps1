@@ -47,9 +47,12 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
+Start-Test
+
 New-Test "Initialize-Table"
 
-Initialize-Table
+Initialize-Table @Commons
+Write-Log
 
 if (!$global:InstallTable)
 {
@@ -68,7 +71,8 @@ New-Test "Fill table with data"
 foreach ($Account in $global:UserAccounts)
 {
 	Write-Information -Tags "Test" -MessageData "User programs for: $Account"
-	$UserPrograms = Get-UserPrograms $Account
+	$UserPrograms = Get-UserPrograms $Account @Commons
+	Write-Log
 
 	if ($UserPrograms.Name -like "Greenshot*")
 	{
@@ -77,7 +81,9 @@ foreach ($Account in $global:UserAccounts)
 
 		# Enter data in the row
 		$Row.User = $Account.Split("\")[1]
-		$Row.InstallRoot = $UserPrograms | Where-Object { $_.Name -like "Greenshot*" } | Select-Object -ExpandProperty InstallLocation
+		$Row.InstallRoot = $UserPrograms | Where-Object { $_.Name -like "Greenshot*" } |
+		Select-Object -ExpandProperty InstallLocation @Commons
+		Write-Log
 
 		# Add row to the table
 		$global:InstallTable.Rows.Add($Row)
@@ -85,6 +91,6 @@ foreach ($Account in $global:UserAccounts)
 }
 
 New-Test "Table data"
-$global:InstallTable | Format-Table -AutoSize
+$global:InstallTable | Format-Table -AutoSize @Commons
 
 Exit-Test

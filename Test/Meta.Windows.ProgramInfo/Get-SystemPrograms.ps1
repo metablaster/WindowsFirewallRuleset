@@ -47,16 +47,23 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-$ComputerName = Get-ComputerName
-$SystemPrograms = Get-SystemPrograms $ComputerName
+Start-Test
+
+$ComputerName = Get-ComputerName @Commons
+Write-Log
+$SystemPrograms = Get-SystemPrograms $ComputerName @Commons
+Write-Log
 
 New-Test "Get-SystemPrograms Name"
-$SystemPrograms | Sort-Object -Property Name | Select-Object -ExpandProperty Name
+$SystemPrograms | Sort-Object -Property Name @Commons | Select-Object -ExpandProperty Name @Commons
+Write-Log
 
 New-Test "Get-SystemPrograms InstallLocation"
-$SystemPrograms | Sort-Object -Property InstallLocation | Select-Object -ExpandProperty InstallLocation
+$SystemPrograms | Sort-Object -Property InstallLocation @Commons | Select-Object -ExpandProperty InstallLocation @Commons
+Write-Log
 
 New-Test "Get-SystemPrograms"
-$SystemPrograms | Sort-Object -Property Name
+$SystemPrograms | Sort-Object -Property Name @Commons
+Write-Log
 
 Exit-Test

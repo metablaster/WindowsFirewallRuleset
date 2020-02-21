@@ -46,6 +46,8 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
+Start-Test
+
 #
 # Office installation directories
 #
@@ -55,15 +57,19 @@ $TestBadVariable = "%UserProfile%\crazyFolder"
 $TestBadVariable2 = "%UserProfile%\crazyFolder"
 
 New-Test "Test-Installation 'MicrosoftOffice' $OfficeRoot"
-Test-Installation "MicrosoftOffice" ([ref]$OfficeRoot)
+Test-Installation "MicrosoftOffice" ([ref]$OfficeRoot) @Commons
+Write-Log
 
 New-Test "Test-Installation 'TeamViewer' $TeamViewerRoot"
-Test-Installation "TeamViewer" ([ref]$TeamViewerRoot)
+Test-Installation "TeamViewer" ([ref]$TeamViewerRoot) @Commons
+Write-Log
 
 New-Test "Test-Installation 'VisualStudio' $TestBadVariable"
-Test-Installation "VisualStudio" ([ref]$TestBadVariable)
+Test-Installation "VisualStudio" ([ref]$TestBadVariable) @Commons
+Write-Log
 
 New-Test "Test-Installation 'BadVariable' $TestBadVariable2"
-Test-Installation "BadVariable" ([ref]$TestBadVariable2)
+Test-Installation "BadVariable" ([ref]$TestBadVariable2) @Commons
+Write-Log
 
 Exit-Test

@@ -49,17 +49,24 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
+Start-Test
+
 New-Test "Get-UserAccounts:"
 
-[string[]] $UserAccounts = Get-UserAccounts "Users"
-[string[]] $AdminAccounts = Get-UserAccounts "Administrators"
+[string[]] $UserAccounts = Get-UserAccounts "Users" @Commons
+Write-Log
+
+[string[]] $AdminAccounts = Get-UserAccounts "Administrators" @Commons
+Write-Log
 $UserAccounts
 $AdminAccounts
 
 New-Test "Get-UserNames:"
 
-$Users = Get-UserNames $UserAccounts
-$Admins = Get-UserNames $AdminAccounts
+$Users = Get-UserNames $UserAccounts @Commons
+Write-Log
+$Admins = Get-UserNames $AdminAccounts @Commons
+Write-Log
 
 $Users
 $Admins
@@ -68,20 +75,23 @@ New-Test "Get-UserSID:"
 
 foreach($User in $Users)
 {
-	Get-UserSID $User
+	Get-UserSID $User @Commons
+	Write-Log
 }
 
 foreach($Admin in $Admins)
 {
-	Get-UserSID $Admin
+	Get-UserSID $Admin @Commons
+	Write-Log
 }
 
 New-Test "Get-AppSID: foreach User"
 
 foreach($User in $Users) {
 	Write-Information -Tags "Test" -MessageData "Processing for: $User"
-	Get-AppxPackage -User $User -PackageTypeFilter Bundle | ForEach-Object {
-		Get-AppSID $User $_.PackageFamilyName
+	Get-AppxPackage -User $User -PackageTypeFilter Bundle @Commons | ForEach-Object {
+		Get-AppSID $User $_.PackageFamilyName @Commons
+		Write-Log
 	}
 }
 
@@ -89,8 +99,9 @@ New-Test "Get-AppSID: foreach Admin"
 
 foreach($Admin in $Admins) {
 	Write-Information -Tags "Test" -MessageData "Processing for: $Admin"
-	Get-AppxPackage -User $Admin -PackageTypeFilter Bundle | ForEach-Object {
-		Get-AppSID $Admin $_.PackageFamilyName
+	Get-AppxPackage -User $Admin -PackageTypeFilter Bundle @Commons | ForEach-Object {
+		Get-AppSID $Admin $_.PackageFamilyName @Commons
+		Write-Log
 	}
 }
 

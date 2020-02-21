@@ -46,35 +46,51 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
+Start-Test
+
 $User = "haxor"
 
 New-Test "Good system path"
-Initialize-Table
-Edit-Table "%SystemRoot%\System32\WindowsPowerShell\v1.0"
+Initialize-Table @Commons
+Write-Log
+Edit-Table "%SystemRoot%\System32\WindowsPowerShell\v1.0" @Commons
+Write-Log
 
 New-Test "Table data"
-$global:InstallTable | Format-Table -AutoSize
-
+$global:InstallTable | Format-Table -AutoSize @Commons
+Write-Log
 
 New-Test "Bad system path"
-Initialize-Table
-Edit-Table "%ProgramFiles(x86)%\Microsoft Help Viewer\v2.3345345"
+Initialize-Table @Commons
+Write-Log
+
+Edit-Table "%ProgramFiles(x86)%\Microsoft Help Viewer\v2.3345345" @Commons
+Write-Log
 
 New-Test "Table data"
-$global:InstallTable | Format-Table -AutoSize
+$global:InstallTable | Format-Table -AutoSize @Commons
+Write-Log
 
 New-Test "Good user profile path"
-Initialize-Table
-Edit-Table "C:\\Users\$User\source\\repos\WindowsFirewallRuleset\"
+Initialize-Table @Commons
+Write-Log
+
+Edit-Table "C:\\Users\$User\source\\repos\WindowsFirewallRuleset\" @Commons
+Write-Log
 
 New-Test "Table data"
-$global:InstallTable | Format-Table -AutoSize
+$global:InstallTable | Format-Table -AutoSize @Commons
+Write-Log
 
 New-Test "Bad user profile path"
-Initialize-Table
-Edit-Table "%HOME%\source\\repos\WindowsFirewallRuleset\"
+Initialize-Table @Commons
+Write-Log
+
+Edit-Table "%HOME%\source\\repos\WindowsFirewallRuleset\" @Commons
+Write-Log
 
 New-Test "Table data"
-$global:InstallTable | Format-Table -AutoSize
+$global:InstallTable | Format-Table -AutoSize @Commons
+Write-Log
 
 Exit-Test
