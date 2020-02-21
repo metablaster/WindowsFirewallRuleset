@@ -1,11 +1,12 @@
+
 TOPIC
-	about_ComputerInfo
+	about_Meta.Windows.ComputerInfo
 
 SHORT DESCRIPTION
 	Query information about computer configuration
 
 LONG DESCRIPTION
-	Functions in ComputerInfo module can be used to query information about computer,
+	Functions in Meta.Windows.ComputerInfo module can be used to query information about computer,
 	operating system and network configuration, currently supported only for localhost.
 
 EXAMPLES
@@ -24,4 +25,4 @@ KEYWORDS
 	Computer
 
 SEE ALSO
-	TODO: Add link for more help
+	https://github.com/metablaster/WindowsFirewallRuleset

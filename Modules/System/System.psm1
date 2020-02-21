@@ -136,7 +136,7 @@ function Test-SystemRequirements
 
 		# Now that OS and PowerShell is OK we can import these modules
 		Import-Module -Name $RepoDir\Modules\ProgramInfo
-		Import-Module -Name $RepoDir\Modules\ComputerInfo
+		Import-Module -Name $RepoDir\Modules\Meta.Windows.ComputerInfo
 
 		# Check NET Framework version
 		$NETFramework = Get-NetFramework (Get-ComputerName)
@@ -227,4 +227,12 @@ if ($Develop)
 	$DebugPreference = $ModuleDebugPreference
 	$VerbosePreference = $ModuleVerbosePreference
 	$InformationPreference = $ModuleInformationPreference
+
+	$ThisModule = $MyInvocation.MyCommand.Name -replace ".{5}$"
+
+	Write-Debug -Message "[$ThisModule] ErrorActionPreference is $ErrorActionPreference"
+	Write-Debug -Message "[$ThisModule] WarningPreference is $WarningPreference"
+	Write-Debug -Message "[$ThisModule] DebugPreference is $DebugPreference"
+	Write-Debug -Message "[$ThisModule] VerbosePreference is $VerbosePreference"
+	Write-Debug -Message "[$ThisModule] InformationPreference is $InformationPreference"
 }

@@ -107,7 +107,7 @@ if ($Develop)
 	Remove-Module -Name System -ErrorAction Ignore
 	Remove-Module -Name Test -ErrorAction Ignore
 	Remove-Module -Name UserInfo -ErrorAction Ignore
-	Remove-Module -Name ComputerInfo -ErrorAction Ignore
+	Remove-Module -Name Meta.Windows.ComputerInfo -ErrorAction Ignore
 	Remove-Module -Name ProgramInfo -ErrorAction Ignore
 }
 else # Normal use case

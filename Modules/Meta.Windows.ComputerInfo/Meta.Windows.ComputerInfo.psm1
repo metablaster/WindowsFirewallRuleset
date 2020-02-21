@@ -45,6 +45,12 @@ TODO: implement queriying computers on network by specifying IP address
 #>
 function Get-ComputerName
 {
+	[CmdletBinding()]
+	param ()
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Learning computer name"
 	return [Environment]::MachineName
 }
 
@@ -68,6 +74,7 @@ TODO: implement queriying computers on network by specifying IP address or COMPU
 #>
 function Get-ConnectedAdapters
 {
+	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
 		[ValidateSet("IPv4", "IPv6")]
@@ -75,6 +82,7 @@ function Get-ConnectedAdapters
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting connected adapters for $AddressFamily network"
 
 	if ($AddressFamily.ToString() -eq "IPv4")
 	{
@@ -92,7 +100,7 @@ function Get-ConnectedAdapters
 	}
 	elseif ($ConnectedAdapters.Count -gt 1)
 	{
-		Write-Verbose -MessageData "[$($MyInvocation.InvocationName)] Multiple adapters are connected to $AddressFamily network"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Multiple adapters are connected to $AddressFamily network"
 	}
 
 	return $ConnectedAdapters
@@ -118,6 +126,7 @@ TODO: implement queriying computers on network by specifying COMPUTERNAME
 #>
 function Get-IPAddress
 {
+	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
 		[ValidateSet("IPv4", "IPv6")]
@@ -126,18 +135,19 @@ function Get-IPAddress
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
 
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting IP's of connected adapters for $AddressFamily network"
 	$ConnectedAdapters = Get-ConnectedAdapters $AddressFamily | Select-Object -ExpandProperty ($AddressFamily + "Address")
 	$IPAddress = $ConnectedAdapters | Select-Object -ExpandProperty IPAddress
 
 	if ($IPAddress.Count -gt 1)
 	{
 		# TODO: bind result to custom function
-		Write-Information -MessageData "[$($MyInvocation.InvocationName)] returns multiple IP addresses: $IPAddress" `
+		Write-Information -MessageData "[$($MyInvocation.InvocationName)] Returning multiple IP addresses: $IPAddress" `
 		-Tags Result 6>&1 | Select-Object * | Tee-Object -FilePath "$RepoDir\Logs\Info.log" | Select-Object -ExpandProperty MessageData
 	}
 	elseif ($IPAddress.Count -eq 0)
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] returns empty string"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Returning empty string"
 	}
 
 	return $IPAddress
@@ -157,6 +167,9 @@ TODO: there can be multiple valid adapters
 #>
 function Get-Broadcast
 {
+	[CmdletBinding()]
+	param ()
+
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
 
 	# Broadcast address makes sense only for IPv4
@@ -166,16 +179,19 @@ function Get-Broadcast
 	{
 		if ($ConnectedAdapters.Count -gt 1)
 		{
-			Write-Verbose "[$($MyInvocation.InvocationName)] got multiple adapters, using first one"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] got multiple adapters, using first one"
 			$ConnectedAdapters = $ConnectedAdapters | Select-Object -First 1
 		}
 
 		$IPAddress = $ConnectedAdapters | Select-Object -ExpandProperty IPAddress
 		$SubnetMask = ConvertTo-Mask ($ConnectedAdapters | Select-Object -ExpandProperty PrefixLength)
 
-		return Get-NetworkSummary $IPAddress $SubnetMask |
+		$Broadcast = Get-NetworkSummary $IPAddress $SubnetMask |
 		Select-Object -ExpandProperty BroadcastAddress |
 		Select-Object -ExpandProperty IPAddressToString
+
+		Write-Information -MessageData "Network broadcast address is: $Broadcast"
+		return $Broadcast
 	}
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] returns null"
@@ -201,4 +217,12 @@ if ($Develop)
 	$DebugPreference = $ModuleDebugPreference
 	$VerbosePreference = $ModuleVerbosePreference
 	$InformationPreference = $ModuleInformationPreference
+
+	$ThisModule = $MyInvocation.MyCommand.Name -replace ".{5}$"
+
+	Write-Debug -Message "[$ThisModule] ErrorActionPreference is $ErrorActionPreference"
+	Write-Debug -Message "[$ThisModule] WarningPreference is $WarningPreference"
+	Write-Debug -Message "[$ThisModule] DebugPreference is $DebugPreference"
+	Write-Debug -Message "[$ThisModule] VerbosePreference is $VerbosePreference"
+	Write-Debug -Message "[$ThisModule] InformationPreference is $InformationPreference"
 }

@@ -48,4 +48,4 @@ Write-Host "Import-Module ProgramInfo"
 Import-Module -Name $RepoDir\Modules\ProgramInfo -Force
 
 Write-Host "Import-Module ComputerInfo"
-Import-Module -Name $RepoDir\Modules\ComputerInfo -Force
+Import-Module -Name $RepoDir\Modules\Meta.Windows.ComputerInfo -Force

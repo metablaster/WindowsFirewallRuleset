@@ -37,7 +37,7 @@ Test-SystemRequirements
 . $PSScriptRoot\..\IPSetup.ps1
 Import-Module -Name $RepoDir\Modules\UserInfo
 Import-Module -Name $RepoDir\Modules\ProgramInfo
-Import-Module -Name $RepoDir\Modules\ComputerInfo
+Import-Module -Name $RepoDir\Modules\Meta.Windows.ComputerInfo
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
