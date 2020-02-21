@@ -27,12 +27,13 @@ SOFTWARE.
 #>
 
 #
-# NOTE: In this file various settings and preferences are set, there are 2 kinds of settings:
-# those which can be modified and those which must not be modified.
+# NOTE: In this file various project settings and preferences are set, these are grouped into
+# 1. settings for development
+# 2. settings for end users
+# 3. settings that apply to both use cases
 #
 
 # Set to true to indicate development phase, forces unloading modules and removing variables.
-# In addition to this do (CTRL SHIFT + F) global search and uncomment symbols for: "to export from this module"
 Set-Variable -Name Develop -Scope Global -Value $true
 
 # Name of this script for debugging messages, do not modify!.
