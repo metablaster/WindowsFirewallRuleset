@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-AccountSID
+# Unit test for Get-UserNames
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -37,8 +37,8 @@ Test-SystemRequirements
 
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Test
-Import-Module -Name $RepoDir\Modules\UserInfo
+Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Test
+Import-Module -Name $RepoDir\Modules\Meta.Windows.UserInfo
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
@@ -46,15 +46,18 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
+Start-Test
+
 New-Test "Get-UserAccounts:"
-[string[]]$UserAccounts = Get-UserAccounts "Users"
-$UserAccounts += Get-UserAccounts "Administrators"
+[string[]]$UserAccounts = Get-UserAccounts "Users" @Commons
+Write-Log
+$UserAccounts += Get-UserAccounts "Administrators" @Commons
+Write-Log
 $UserAccounts
 
-New-Test "Get-AccountSID:"
-foreach($Account in $UserAccounts)
-{
-	$(Get-AccountSID $Account)
-}
+New-Test "Get-UserNames:"
+$UserNames = Get-UserNames $UserAccounts @Commons
+Write-Log
+$UserNames
 
 Exit-Test

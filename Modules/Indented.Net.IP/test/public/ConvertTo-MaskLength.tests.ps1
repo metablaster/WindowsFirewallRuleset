@@ -17,7 +17,7 @@ if (-not $UseExisting) {
 InModuleScope Indented.Net.IP {
     Describe 'ConvertTo-MaskLength' {
         It 'Returns a 32-bit integer' {
-            ConvertTo-MaskLength 255.0.0.0 | Should -BeOfType [Int32]
+            ConvertTo-MaskLength 255.0.0.0 | Should -BeOfType [int32]
         }
 
         It 'Converts 0.0.0.0 to 0' {

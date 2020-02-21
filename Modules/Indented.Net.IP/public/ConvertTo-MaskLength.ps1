@@ -13,7 +13,7 @@ function ConvertTo-MaskLength {
     #>
 
     [CmdletBinding()]
-    [OutputType([Int32])]
+    [OutputType([int32])]
     param (
         # A subnet mask to convert into length.
         [Parameter(Mandatory, Position = 1, ValueFromPipeline)]

@@ -24,7 +24,7 @@ function Resolve-IPAddress {
     )
 
     process {
-        $groups = [Regex]::Matches($IPAddress, '\[(?:(?<Range>\d+(?:-\d+))|(?<Selected>(?:\d+, *)*\d+))\]|(?<All>\*)').Groups.Captures |
+        $groups = [regex]::Matches($IPAddress, '\[(?:(?<Range>\d+(?:-\d+))|(?<Selected>(?:\d+, *)*\d+))\]|(?<All>\*)').Groups.Captures |
             Where-Object { $_ -and $_.Name -ne '0' } |
             ForEach-Object {
                 $group = $_
@@ -67,7 +67,7 @@ function Resolve-IPAddress {
 
                 [PSCustomObject]@{
                     Name        = $_.Name
-                    Position    = [Int32]$IPAddress.Substring(0, $_.Index).Split('.').Count - 1
+                    Position    = [int32]$IPAddress.Substring(0, $_.Index).Split('.').Count - 1
                     ReplaceWith = $values
                     PSTypeName  = 'ExpansionGroupInfo'
                 }

@@ -118,7 +118,7 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        ReleaseNotes = 'This initial pre-release is sufficiently stable to provide core logging functionality for Windows Firewall Ruleset project'
+        ReleaseNotes = 'This pre-release is sufficiently stable to provide core logging functionality for Windows Firewall Ruleset project'
 
     } # End of PSData hashtable
 

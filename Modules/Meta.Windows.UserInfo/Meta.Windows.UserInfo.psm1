@@ -45,19 +45,22 @@ TODO: should be renamed into Get-GroupUsers
 #>
 function Get-UserAccounts
 {
+	[CmdletBinding()]
 	param(
 		[Parameter(Mandatory = $true)]
-		[ValidateLength(1, 100)]
 		[string] $UserGroup
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting user accounts for $UserGroup group"
 	$GroupUsers = Get-LocalGroupMember -Group $UserGroup |
 	Where-Object { $_.PrincipalSource -eq "Local" -and $_.ObjectClass -eq "User" } |
 	Select-Object -ExpandProperty Name
 
 	if([string]::IsNullOrEmpty($GroupUsers))
 	{
-		Set-Warning "Get-UserAccounts: Failed to get UserAccounts for group '$UserGroup'"
+		Write-Warning -Message "Get-UserAccounts: Failed to get UserAccounts for group '$UserGroup'"
 	}
 
 	return $GroupUsers
@@ -79,12 +82,13 @@ TODO: implement queriying computers on network
 #>
 function Get-UserNames
 {
+	[CmdletBinding()]
 	param(
 		[Parameter(Mandatory = $true)]
-		[ValidateCount(1, 1000)]
-		[ValidateLength(1, 100)]
 		[string[]] $UserAccounts
 	)
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
 
 	[string[]] $UserNames = @()
 	foreach($Account in $UserAccounts)
@@ -111,20 +115,23 @@ TODO: implement queriying computers on network
 #>
 function Get-UserSID
 {
+	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
-		[ValidateLength(1, 100)]
 		[string] $UserName
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
+
 	try
 	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for $UserName"
 		$NTAccount = New-Object System.Security.Principal.NTAccount($UserName)
 		return ($NTAccount.Translate([System.Security.Principal.SecurityIdentifier])).ToString()
 	}
 	catch
 	{
-		Set-Warning "Get-UserSID: User '$UserName' cannot be resolved to a SID."
+		Write-Warning -Message "Get-UserSID: User '$UserName' cannot be resolved to a SID."
 	}
 }
 
@@ -144,23 +151,26 @@ TODO: implement queriying computers on network
 #>
 function Get-AccountSID
 {
+	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
-		[ValidateLength(1, 100)]
 		[string] $UserAccount
 	)
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
 
 	[string] $Domain = ($UserAccount.split("\"))[0]
 	[string] $User = ($UserAccount.split("\"))[1]
 
 	try
 	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for $UserAccount"
 		$NTAccount = New-Object System.Security.Principal.NTAccount($Domain, $User)
 		return ($NTAccount.Translate([System.Security.Principal.SecurityIdentifier])).ToString()
 	}
 	catch
 	{
-		Set-Warning "Get-AccountSID: Account '$UserAccount' cannot be resolved to a SID."
+		Write-Warning -Message "Get-AccountSID: Account '$UserAccount' cannot be resolved to a SID."
 	}
 }
 
@@ -180,24 +190,27 @@ TODO: implement queriying computers on network
 #>
 function Get-UserSDDL
 {
+	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
-		[ValidateCount(1, 1000)]
-		[ValidateLength(1, 100)]
 		[string[]] $UserNames
 	)
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
 
 	[string] $SDDL = "D:"
 
 	foreach($User in $UserNames)
 	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL for $User"
+
 		try
 		{
-			$SID = Get-UserSID($User)
+			$SID = Get-UserSID $User
 		}
 		catch
 		{
-			Set-Warning "Get-UserSDDL: User '$User' not found"
+			Write-Warning -Message "Get-UserSDDL: User '$User' not found"
 			continue
 		}
 
@@ -223,24 +236,27 @@ TODO: implement queriying computers on network
 #>
 function Get-AccountSDDL
 {
+	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
-		[ValidateCount(1, 1000)]
-		[ValidateLength(1, 100)]
 		[string[]] $UserAccounts
 	)
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] $($PSBoundParameters.Values)"
 
 	[string] $SDDL = "D:"
 
 	foreach ($Account in $UserAccounts)
 	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL for $Account"
+
 		try
 		{
 			$SID = Get-AccountSID $Account
 		}
 		catch
 		{
-			Set-Warning "Get-AccountSDDL: User account $UserAccount not found"
+			Write-Warning -Message "Get-AccountSDDL: User account $UserAccount not found"
 			continue
 		}
 

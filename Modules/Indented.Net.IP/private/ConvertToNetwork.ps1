@@ -75,7 +75,7 @@ function ConvertToNetwork {
         $network.MaskLength = 32
     } else {
         $maskLength = 0
-        if ([Int32]::TryParse($SubnetMask, [Ref]$maskLength)) {
+        if ([int32]::TryParse($SubnetMask, [Ref]$maskLength)) {
             if ($MaskLength -ge 0 -and $maskLength -le 32) {
                 $network.SubnetMask = [IPAddress]$validSubnetMaskValues[$maskLength]
                 $network.MaskLength = $maskLength

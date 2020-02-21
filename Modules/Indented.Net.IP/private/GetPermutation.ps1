@@ -13,7 +13,7 @@ function GetPermutation {
 
         [string]$BaseAddress,
 
-        [Int32]$Index
+        [int32]$Index
     )
 
     foreach ($value in $Group[$Index].ReplaceWith) {

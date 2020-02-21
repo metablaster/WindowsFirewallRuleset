@@ -53,8 +53,8 @@ function Get-Subnet {
         $pscmdlet.ThrowTerminatingError($errorRecord)
     }
 
-    $numberOfNets = [Math]::Pow(2, ($newNetwork.MaskLength - $network.MaskLength))
-    $numberOfAddresses = [Math]::Pow(2, (32 - $newNetwork.MaskLength))
+    $numberOfNets = [math]::Pow(2, ($newNetwork.MaskLength - $network.MaskLength))
+    $numberOfAddresses = [math]::Pow(2, (32 - $newNetwork.MaskLength))
 
     $decimalAddress = ConvertTo-DecimalIP (Get-NetworkAddress $network.ToString())
     for ($i = 0; $i -lt $numberOfNets; $i++) {

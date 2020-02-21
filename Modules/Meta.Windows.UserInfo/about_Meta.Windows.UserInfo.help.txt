@@ -1,8 +1,8 @@
 TOPIC
-	about_UserInfo
+	about_Meta.Windows.UserInfo
 
 SHORT DESCRIPTION
-	Query user information on Windows system
+	Query user information on Windows systems
 
 LONG DESCRIPTION
 	Functions in UserInfo module can be used to query information about users

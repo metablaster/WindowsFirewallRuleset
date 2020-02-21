@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-UserAccounts
+# Unit test for Get-AccountSDDL
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -37,8 +37,8 @@ Test-SystemRequirements
 
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Test
-Import-Module -Name $RepoDir\Modules\UserInfo
+Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Test
+Import-Module -Name $RepoDir\Modules\Meta.Windows.UserInfo
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
@@ -46,16 +46,28 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-New-Test "Get-UserAccounts(Users):"
-[string[]] $Users = Get-UserAccounts "Users"
-$Users
+Start-Test
 
-New-Test "Get-UserAccounts(Administrators):"
-[string[]] $Administrators = Get-UserAccounts "Administrators"
-$Administrators
-
-New-Test "Join arrays:"
-$UserAccounts = $Users + $Administrators
+New-Test "Get-UserAccounts:"
+[string[]]$UserAccounts = Get-UserAccounts "Users" @Commons
+Write-Log
+$UserAccounts += Get-UserAccounts "Administrators" @Commons
+Write-Log
 $UserAccounts
+
+New-Test "Get-AccountSDDL: (separated)"
+foreach($Account in $UserAccounts)
+{
+	$(Get-AccountSDDL $Account @Commons)
+	Write-Log
+}
+
+New-Test "Get-AccountSDDL: (combined)"
+Get-AccountSDDL $UserAccounts @Commons
+Write-Log
+
+New-Test "Get-AccountSDDL: (from array)"
+Get-AccountSDDL @("NT AUTHORITY\SYSTEM", "NT AUTHORITY\NETWORK SERVICE") @Commons
+Write-Log
 
 Exit-Test

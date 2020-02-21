@@ -67,7 +67,7 @@ function ConvertTo-Subnet {
         }
     }
 
-    $hostAddresses = [Math]::Pow(2, (32 - $network.MaskLength)) - 2
+    $hostAddresses = [math]::Pow(2, (32 - $network.MaskLength)) - 2
     if ($hostAddresses -lt 0) {
         $hostAddresses = 0
     }

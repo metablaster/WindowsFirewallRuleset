@@ -36,7 +36,7 @@ Import-Module -Name $RepoDir\Modules\System
 
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Test
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 

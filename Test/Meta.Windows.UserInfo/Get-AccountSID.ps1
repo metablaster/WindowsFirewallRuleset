@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for New-Test
+# Unit test for Get-AccountSID
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -37,7 +37,8 @@ Test-SystemRequirements
 
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Test
+Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Test
+Import-Module -Name $RepoDir\Modules\Meta.Windows.UserInfo
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
@@ -45,5 +46,20 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-New-Test "New-Test"
+Start-Test
+
+New-Test "Get-UserAccounts:"
+[string[]]$UserAccounts = Get-UserAccounts "Users" @Commons
+Write-Log
+$UserAccounts += Get-UserAccounts "Administrators" @Commons
+Write-Log
+$UserAccounts
+
+New-Test "Get-AccountSID:"
+foreach($Account in $UserAccounts)
+{
+	$(Get-AccountSID $Account @Commons)
+	Write-Log
+}
+
 Exit-Test

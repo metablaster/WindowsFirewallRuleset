@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-UserNames
+# Unit test for Get-UserSDDL
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -37,8 +37,9 @@ Test-SystemRequirements
 
 # Includes
 . $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Test
-Import-Module -Name $RepoDir\Modules\UserInfo
+Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Test
+Import-Module -Name $RepoDir\Modules\Meta.Windows.UserInfo
+Import-Module -Name $RepoDir\Modules\Meta.Windows.ComputerInfo
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
 Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
@@ -46,13 +47,34 @@ Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
+Start-Test
+
 New-Test "Get-UserAccounts:"
-[string[]]$UserAccounts = Get-UserAccounts "Users"
-$UserAccounts += Get-UserAccounts "Administrators"
+[string[]]$UserAccounts = Get-UserAccounts "Users" @Commons
+Write-Log
+$UserAccounts += Get-UserAccounts "Administrators" @Commons
+Write-Log
 $UserAccounts
 
 New-Test "Get-UserNames:"
-$UserNames = Get-UserNames $UserAccounts
+$UserNames = Get-UserNames $UserAccounts @Commons
+Write-Log
 $UserNames
+
+New-Test "Get-UserSDDL: (separated)"
+foreach($User in $UserNames)
+{
+	Get-UserSDDL $User @Commons
+	Write-Log
+}
+
+New-Test "Get-UserSDDL: (combined)"
+Get-UserSDDL $UserNames @Commons
+Write-Log
+
+New-Test "Get-UserSDDL: (from array)"
+$ComputerName = Get-ComputerName @Commons
+Get-UserSDDL @("$ComputerName\$($UserNames[0])", "$ComputerName\$($UserNames[1])") @Commons
+Write-Log
 
 Exit-Test
