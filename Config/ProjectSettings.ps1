@@ -101,8 +101,10 @@ if ($Develop)
 	# and to avoid restarting powershell every time.
 	#
 
+	Remove-Module -Name Meta.AllPlatform.Logging -ErrorAction Ignore
+	Remove-Module -Name Meta.AllPlatform.Utility -ErrorAction Ignore
+
 	Remove-Module -Name System -ErrorAction Ignore
-	Remove-Module -Name FirewallModule -ErrorAction Ignore
 	Remove-Module -Name Test -ErrorAction Ignore
 	Remove-Module -Name UserInfo -ErrorAction Ignore
 	Remove-Module -Name ComputerInfo -ErrorAction Ignore
@@ -117,6 +119,9 @@ else # Normal use case
 	$VerbosePreference = "SilentlyContinue"
 	$DebugPreference = "SilentlyContinue"
 	$InformationPreference = "Continue"
+
+	# Must be after verbose preference
+	Write-Verbose -Message "[$ThisScript] Project mode: User"
 
 	# Preferences for modules not used, do not modify!
 	Remove-Variable -Name ModuleErrorPreference -Scope Global -ErrorAction Ignore

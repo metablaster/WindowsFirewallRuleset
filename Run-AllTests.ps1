@@ -38,7 +38,8 @@ Import-Module -Name $RepoDir\Modules\System
 Test-SystemRequirements
 
 # Includes
-Import-Module -Name $RepoDir\Modules\FirewallModule
+Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
+Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
 # Ask user if he wants to load these rules
 Update-Context "Master" $($MyInvocation.MyCommand.Name -replace ".{4}$")

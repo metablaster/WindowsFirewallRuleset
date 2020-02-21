@@ -38,7 +38,8 @@ Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $fal
 
 # Includes
 Import-Module -Name $RepoDir\Modules\ProgramInfo
-Import-Module -Name $RepoDir\Modules\FirewallModule
+Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
+Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
 # Clear errors and warning status
 $Error.Clear()
@@ -272,7 +273,8 @@ Write-Host ""
 if ($Develop)
 {
 	# Need to re-import required module in develop mode
-	Import-Module -Name $RepoDir\Modules\FirewallModule
+	Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
+Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 }
 
 # Show status of execution

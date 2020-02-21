@@ -383,8 +383,6 @@ if (!(Get-Variable -Name CheckInitUtility -Scope Global -ErrorAction Ignore))
 New-Variable -Name Context -Scope Script -Value "Context not set"
 # Recommended vertical screen buffer value, to ensure user can scroll back all the output
 New-Variable -Name RecommendedBuffer -Scope Script -Option Constant -Value 1500
-# Folder where logs get saved
-New-Variable -Name LogsFolder -Scope Script -Option Constant -Value ($RepoDir + "\Logs")
 
 #
 # Function exports

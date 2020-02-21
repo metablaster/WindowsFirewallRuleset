@@ -41,7 +41,8 @@ Write-Host "Import-Module UserInfo"
 Import-Module -Name $RepoDir\Modules\UserInfo -Force
 
 Write-Host "Import-Module FirewallModule"
-Import-Module -Name $RepoDir\Modules\FirewallModule -Force
+Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
+Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility -Force
 
 Write-Host "Import-Module ProgramInfo"
 Import-Module -Name $RepoDir\Modules\ProgramInfo -Force

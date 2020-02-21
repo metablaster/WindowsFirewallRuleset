@@ -36,7 +36,8 @@ Test-SystemRequirements
 . $PSScriptRoot\DirectionSetup.ps1
 . $PSScriptRoot\..\IPSetup.ps1
 Import-Module -Name $RepoDir\Modules\UserInfo
-Import-Module -Name $RepoDir\Modules\FirewallModule
+Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
+Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
 #
 # Setup local variables:

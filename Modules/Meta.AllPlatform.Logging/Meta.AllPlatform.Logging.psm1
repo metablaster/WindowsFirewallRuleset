@@ -376,6 +376,9 @@ Set-Variable -Name ErrorStatus -Scope Global -Value $false
 # Will not be set if preference is "SilentlyContinue"
 Set-Variable -Name WarningStatus -Scope Global -Value $false
 
+# Folder where logs get saved
+New-Variable -Name LogsFolder -Scope Script -Option Constant -Value ($RepoDir + "\Logs")
+
 #
 # Function exports
 #

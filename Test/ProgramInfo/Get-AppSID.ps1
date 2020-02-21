@@ -42,7 +42,8 @@ Test-SystemRequirements
 Import-Module -Name $RepoDir\Modules\Test
 Import-Module -Name $RepoDir\Modules\UserInfo
 Import-Module -Name $RepoDir\Modules\ProgramInfo
-Import-Module -Name $RepoDir\Modules\FirewallModule
+Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
+Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
 # Ask user if he wants to load these rules
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")

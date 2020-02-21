@@ -33,7 +33,8 @@ Import-Module -Name $RepoDir\Modules\System
 Test-SystemRequirements
 
 # Includes
-Import-Module -Name $RepoDir\Modules\FirewallModule
+Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Logging
+Import-Module -Name $RepoDir\Modules\Meta.AllPlatform.Utility
 
 # Setting up profile seem to be slow, tell user what is going on
 Write-Host "Reseting Firewall to previous state..."
