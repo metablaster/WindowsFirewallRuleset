@@ -45,19 +45,19 @@ Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-function Test-NonAdvancedFunction
-{
-	Write-Information -MessageData "[$($MyInvocation.InvocationName)] sample info" `
-	-Tags Result 6>&1 | Resume-Info -Log:$InformationLogging -Preference $InformationPreference
-}
+# function Test-NonAdvancedFunction
+# {
+# 	Write-Information -Tags "Test" -MessageData "INFO: sample info" `
+# 	-Tags Result 6>&1 | Resume-Info -Log:$InformationLogging -Preference $InformationPreference
+# }
 
 function Test-InfoCmdLet
 {
 	[CmdletBinding()]
 	param ()
 
-	Write-Information -MessageData "Test-InfoCmdLet 1"
-	Write-Information -MessageData "Test-InfoCmdLet 2"
+	Write-Information -Tags "Test" -MessageData "INFO: Test-InfoCmdLet 1"
+	Write-Information -Tags "Test" -MessageData "INFO: Test-InfoCmdLet 2"
 	#Write-Error -Message "Test-InfoCmdLet error" -Category PermissionDenied -ErrorId SampleID
 }
 
@@ -75,15 +75,15 @@ function Test-Pipeline
 		$Param
 	)
 
-	Write-Information -MessageData "End of pipe"
+	Write-Information -Tags "Test" -MessageData "INFO: End of pipe"
 }
 
 Start-Test
 
 # $InformationPreference = "SilentlyContinue"
 
-New-Test "Test-NonAdvancedFunction"
-Test-NonAdvancedFunction
+# New-Test "Test-NonAdvancedFunction"
+# Test-NonAdvancedFunction
 
 New-Test "Test-InfoCmdLet"
 Test-InfoCmdLet @Commons
@@ -101,6 +101,14 @@ Write-Log
 
 New-Test "Test pipeline"
 Get-ChildItem -Path $Folder @Commons | Test-Pipeline @Commons
+Write-Log
+
+New-Test "Write-Host"
+Write-Host "Write-Host" @Commons
+Write-Log
+
+New-Test "Write-Output"
+Write-Output "Write-Output" @Commons
 Write-Log
 
 Exit-Test

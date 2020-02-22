@@ -54,13 +54,13 @@ Write-Log
 
 if (!$global:InstallTable)
 {
-	Write-Warning "Table not initialized"
+	Write-Warning -Message "Table not initialized"
 	exit
 }
 
 if ($global:InstallTable.Rows.Count -ne 0)
 {
-	Write-Warning "Table not clear"
+	Write-Warning -Message "Table not clear"
 	exit
 }
 

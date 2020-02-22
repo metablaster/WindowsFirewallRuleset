@@ -45,24 +45,24 @@ Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-function Test-NonAdvancedFunction
-{
-	Write-Warning -Message "[$($MyInvocation.InvocationName)] warning message" -WarningAction "Continue" 3>&1 |
-	Resume-Warning -Log:$WarningLogging -Preference $WarningPreference
-}
+# function Test-NonAdvancedFunction
+# {
+# 	Write-Warning -Message "[$($MyInvocation.InvocationName)] warning message" -WarningAction "Continue" 3>&1 |
+# 	Resume-Warning -Log:$WarningLogging -Preference $WarningPreference
+# }
 
-function Test-WarningNow
-{
-	[CmdletBinding()]
-	param ()
+# function Test-WarningNow
+# {
+# 	[CmdletBinding()]
+# 	param ()
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] Warning preference is: $WarningPreference"
+# 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Warning preference is: $WarningPreference"
 
-	Write-Warning -Message "Test-WarningNow 1" -WarningAction "Continue" 3>&1 | Resume-Warning -Preference "Continue"
-	Write-Log
+# 	Write-Warning -Message "Test-WarningNow 1" -WarningAction "Continue" 3>&1 | Resume-Warning -Preference "Continue"
+# 	Write-Log
 
-	Write-Warning -Message "Test-WarningNow 2"
-}
+# 	Write-Warning -Message "Test-WarningNow 2"
+# }
 
 function Test-WarningRecursiveInternal
 {
@@ -121,26 +121,23 @@ Start-Test
 # New-Test "Test-NonAdvancedFunction"
 # Test-NonAdvancedFunction
 
-New-Test "Test-WarningNow"
-Write-Debug -Message "[$($MyInvocation.MyCommand.Name)] Warning preference is: $WarningPreference"
-Test-WarningNow @Commons
+# New-Test "Test-WarningNow"
+# Write-Debug -Message "[$($MyInvocation.MyCommand.Name)] Warning preference is: $WarningPreference"
+# Test-WarningNow @Commons
+# Write-Log
+
+New-Test "Test-WarningCmdLet"
+Test-WarningCmdLet @Commons
 Write-Log
 
-# New-Test "Test-WarningCmdLet"
-# Test-WarningCmdLet @Commons
-# Write-Log
+New-Test "Test-WarningRecursive"
+Write-Debug -Message "[$($MyInvocation.MyCommand.Name)] Warning preference is: $WarningPreference"
+Test-WarningRecursive @Commons
+Write-Log
 
-# New-Test "Test-WarningRecursive"
-# Write-Debug -Message "[$($MyInvocation.MyCommand.Name)] Warning preference is: $WarningPreference"
-# Test-WarningRecursive -WV wv -WA "SilentlyContinue"
-
-# Write-Information -MessageData "Show variable contents:"
-# $wv
-
-
-# New-Test "Test-NoWarningCmdLet"
-# Test-NoWarningCmdLet @Commons
-# Write-Log
+New-Test "Test-NoWarningCmdLet"
+Test-NoWarningCmdLet @Commons
+Write-Log
 
 # $Folder = "C:\CrazyFolder"
 

@@ -50,5 +50,5 @@ if (!(Approve-Execute)) { exit }
 
 New-Test "Test-ProjectSettings"
 
-Write-Information -Tags "Test" -MessageData "Preference Debug -> $DebugPreference"
+Write-Information -Tags "Test" -MessageData "INFO: Preference Debug -> $DebugPreference"
 Exit-Test

@@ -48,17 +48,6 @@ Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility
 # Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 # if (!(Approve-Execute)) { exit }
 
-function Get-TypeName
-{
-	[CmdletBinding()]
-    param (
-		[Parameter(ValueFromPipeline = $true)]
-		$InputObject
-	)
-
-    Write-Output (($InputObject | Get-Member).TypeName | Select-Object -Unique)
-}
-
 # $RepoDir = "C:\Users\haxor\GitHub\WindowsFirewallRuleset"
 New-Variable -Name LogsFolder -Scope Script -Option Constant -Value ($RepoDir + "\Logs")
 
@@ -216,7 +205,7 @@ function superduper
 
 	Write-Warning -Message "[$($MyInvocation.InvocationName)] warning message" 3>&1 | Resume-Warning -NoStatus -Log
 
-	# Write-Information -MessageData "[$($MyInvocation.InvocationName)] sample info" `
+	# Write-Information -Tags "Test" -MessageData "INFO: sample info" `
 	# -Tags Result 6>&1 | Resume-Info
 }
 

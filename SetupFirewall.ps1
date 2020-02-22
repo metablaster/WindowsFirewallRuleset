@@ -283,29 +283,29 @@ $ErrorCount = $Error.Count -gt 0
 if ($ErrorCount)
 {
 	Write-Host ""
-	Write-Warning "Errors were generated"
+	Write-Warning -Message "Errors were generated"
 	Save-Errors
 
 	Write-Host ""
-	Write-Information -Tags "User" -MessageData "If module is edited don't forget to restart Powershell"
+	Write-Information -Tags "User" -MessageData "INFO: If module is edited don't forget to restart Powershell"
 }
 
 if ($WarningStatus)
 {
 	Write-Host ""
-	Write-Warning "Warnings were generated"
-	Write-Information -Tags "User" -MessageData "All warnings were saved to: $("$RepoDir\Logs")"
-	Write-Information -Tags "User" -MessageData "you can review these logs to see if you want to resolve some of them"
+	Write-Warning -Message "Warnings were generated"
+	Write-Information -Tags "User" -MessageData "INFO: All warnings were saved to: $("$RepoDir\Logs")"
+	Write-Information -Tags "User" -MessageData "INFO: you can review these logs to see if you want to resolve some of them"
 }
 
 if (!$ErrorCount -and !$WarningStatus)
 {
 	Write-Host ""
-	Write-Information -Tags "User" -MessageData "All operations completed successfuly!"
+	Write-Information -Tags "User" -MessageData "INFO: All operations completed successfuly!"
 }
 
 Write-Host ""
-Write-Information -Tags "User" -MessageData "Make sure you visit Local Group Policy and adjust your rules as needed."
+Write-Information -Tags "User" -MessageData "INFO: Make sure you visit Local Group Policy and adjust your rules as needed."
 Write-Host ""
 
 # Clear warning status

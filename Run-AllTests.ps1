@@ -49,7 +49,7 @@ if (!(Approve-Execute)) { exit }
 $Files = Get-ChildItem -Path $RepoDir\Test -Recurse -Filter *.ps1
 if (!$Files)
 {
-	Write-Warning "No powershell script files found"
+	Write-Warning -Message "No powershell script files found"
 	return
 }
 

@@ -148,7 +148,7 @@ function Get-IPAddress
 	if ($Count -gt 1)
 	{
 		# TODO: bind result to custom function
-		Write-Information -Tags "Result" -MessageData "Computer has multiple IP addresses: $IPAddress"
+		Write-Information -Tags "Result" -MessageData "INFO: Computer has multiple IP addresses: $IPAddress"
 	}
 	elseif ($Count -eq 0)
 	{
@@ -197,7 +197,7 @@ function Get-Broadcast
 		Select-Object -ExpandProperty BroadcastAddress |
 		Select-Object -ExpandProperty IPAddressToString
 
-		Write-Information -Tags "User" -MessageData "Network broadcast address is: $Broadcast"
+		Write-Information -Tags "Result" -MessageData "INFO: Network broadcast address is: $Broadcast"
 		return $Broadcast
 	}
 

@@ -78,7 +78,7 @@ if ($null -ne $NETFramework)
 	Select-Object -Last 1 -ExpandProperty InstallPath @Commons
 	Write-Log
 
-	Write-Information -Tags "Test" -MessageData $NETFrameworkRoot
+	Write-Information -Tags "Test" -MessageData "INFO: $NETFrameworkRoot"
 	# Edit-Table $NETFrameworkRoot
 }
 

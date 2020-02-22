@@ -28,7 +28,6 @@ SOFTWARE.
 
 Set-StrictMode -Version Latest
 
-# TODO: let Write-Log select object in pipe, process it's commons and transfer down the pipe
 # TODO: stream logging instead of open/close file for performance
 
 <#
@@ -74,257 +73,9 @@ function Get-LogFile
 	}
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Logs folder is: $Folder"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending $FileLabel to log file: $FileName"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Generate log file name: $FileName"
 
 	return $LogFile
-}
-
-<#
-.SYNOPSIS
-Log generated error and set global error status
-.DESCRIPTION
-Resume-Error takes error record stream which is shown in the console
-and optionally logged into a file.
-Gobal error status variable is set to true.
-.PARAMETER Stream
-[System.Management.Automation.ErrorRecord] stream
-.PARAMETER Preference
-[System.Management.Automation.ActionPreference] ErrorActionPreference
-.PARAMETER Folder
-[System.String] path to folder on either C or D drive where to save logs
-.PARAMETER Log
-[switch] to control if the error should be logged to file
-.EXAMPLE
-Write-Error -Message "sample message" 2>&1 | Resume-Error -Log
-.EXAMPLE
-Write-Error -Message "sample message" 2>&1 | Resume-Error -Folder "C:\Logs" -Log
-.INPUTS
-[System.Management.Automation.ErrorRecord] Error record stream
-.OUTPUTS
-None.
-.NOTES
-TODO: Pass error variable to avoid pipeline?
-TODO: [ValidateNotNullOrEmpty()] does not work
-#>
-function Resume-Error
-{
-	[CmdletBinding(PositionalBinding = $false)]
-    param (
-		[Parameter(Mandatory = $true, ValueFromPipeline = $true,
-		HelpMessage = "Input object must be ErrorRecord")]
-		[ValidateNotNullOrEmpty()]
-		[System.Management.Automation.ErrorRecord] $Stream,
-
-		[Parameter(Mandatory = $true,
-		HelpMessage = "Error action preference")]
-		[System.Management.Automation.ActionPreference] $Preference,
-
-		[Parameter()]
-		[ValidateDrive("C", "D")]
-		[string] $Folder = $LogsFolder,
-
-		[Parameter()]
-		[switch] $Log
-	)
-
-	begin
-	{
-		if ($PSBoundParameters.ContainsKey('ErrorVariable') -or $PSBoundParameters.ContainsKey('ErrorAction'))
-		{
-			Write-Error -Category InvalidArgument -ErrorAction "Continue" `
-			-Message "ErrorAction and ErrorVariable common parameters may not be specified, removed"
-
-			$PSBoundParameters.Remove('ErrorVariable') | Out-Null
-			$PSBoundParameters.Remove('ErrorAction') | Out-Null
-			$ErrorActionPreference = $Script:ErrorActionPreference
-		}
-	}
-	process
-	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
-		if ($Preference -ne "SilentlyContinue")
-		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting error status variable"
-			Set-Variable -Name ErrorStatus -Scope Global -Value $true
-
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Write error to terminal"
-			$Stream
-		}
-
-		if ($Log)
-		{
-			$LogFile = Get-LogFile $Folder "Error"
-
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Write error to log file"
-			$Stream | Select-Object * | Out-File -Append -FilePath $LogFile
-		}
-	}
-}
-
-<#
-.SYNOPSIS
-Log generated warnings and set global warning status
-.DESCRIPTION
-Resume-Warning takes warning record stream which is shown in the console
-and optionally logged into a file.
-Gobal warning status variable is set to true or optionally left alone.
-.PARAMETER Stream
-[System.Management.Automation.WarningRecord] stream
-.PARAMETER Preference
-[System.Management.Automation.ActionPreference] WarningPreference
-.PARAMETER Folder
-[System.String] path to folder on either C or D drive where to save logs
-.PARAMETER NoStatus
-[switch] to tell if updating global warning status variable should be skipped.
-This global variable will help tell if warnings were generated.
-.PARAMETER Log
-[switch] to control if the warning should be logged to file
-.EXAMPLE
-Write-Warning -Message "sample message" 3>&1 | Resume-Warning -NoStatus -Log
-.EXAMPLE
-Write-Warning -Message "sample message" 3>&1 | Resume-Warning -Folder "C:\Logs" -Log
-.INPUTS
-[System.Management.Automation.WarningRecord] Warning record stream
-.OUTPUTS
-None.
-.NOTES
-TODO: Pass warning variable to avoid pipeline?
-TODO: [ValidateNotNullOrEmpty()] does not work
-#>
-function Resume-Warning
-{
-	[CmdletBinding(PositionalBinding = $false)]
-    param (
-		[Parameter(Mandatory = $true, ValueFromPipeline = $true,
-		HelpMessage = "Input object must be WarningRecord")]
-		[ValidateNotNullOrEmpty()]
-		[System.Management.Automation.WarningRecord] $Stream,
-
-		[Parameter(Mandatory = $true,
-		HelpMessage = "Warning action preference")]
-		[System.Management.Automation.ActionPreference] $Preference,
-
-		[Parameter()]
-		[ValidateDrive("C", "D")]
-		[string] $Folder = $LogsFolder,
-
-		[Parameter()]
-		[switch] $Log
-	)
-
-	begin
-	{
-		if ($PSBoundParameters.ContainsKey('WarningVariable') -or $PSBoundParameters.ContainsKey('WarningAction'))
-		{
-			Write-Error -Category InvalidArgument -ErrorAction "Continue" `
-			-Message "WarningAction and WarningVariable common parameters may not be specified, removed"
-
-			$PSBoundParameters.Remove('WarningVariable') | Out-Null
-			$PSBoundParameters.Remove('WarningAction') | Out-Null
-			$WarningPreference = $Script:WarningPreference
-		}
-	}
-	process
-	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Warning preference is: $WarningPreference"
-
-		# NOTE: we have to add the WARNING label, it's not included in the message by design
-		if ($Preference -ne "SilentlyContinue")
-		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting warning status variable"
-			Set-Variable -Name WarningStatus -Scope Global -Value $true
-
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Write warning to terminal"
-
-			Write-Warning -Message $Stream -WarningAction $Preference
-		}
-
-		if ($Log)
-		{
-			$LogFile = Get-LogFile $Folder "Warning"
-
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Write warning to log file"
-			"WARNING: $(Get-Date -Format "HH:mm:ss") $Stream" | Out-File -Append -FilePath $LogFile
-		}
-	}
-}
-
-<#
-.SYNOPSIS
-Log generated information
-.DESCRIPTION
-Resume-Info takes Information record stream which is shown in the console
-and logged into a file.
-.PARAMETER Stream
-[System.Management.Automation.InformationRecord] stream
-.PARAMETER Preference
-[System.Management.Automation.ActionPreference] InformationPreference
-.PARAMETER Folder
-[System.String] path to folder on either C or D drive where to save logs
-.EXAMPLE
-Write-Information -MessageData "sample info" -Tags MyTag 6>&1 | Resume-Info
-.INPUTS
-[System.Management.Automation.InformationRecord] Information record stream
-.OUTPUTS
-None.
-.NOTES
-TODO: Pass infomration variable to avoid pipeline?
-TODO: [ValidateNotNullOrEmpty()] does not work
-#>
-function Resume-Info
-{
-	[CmdletBinding(PositionalBinding = $false)]
-    param (
-		[Parameter(Mandatory = $true, ValueFromPipeline = $true,
-		HelpMessage = "Input object must be InformationRecord")]
-		[ValidateNotNullOrEmpty()]
-		[System.Management.Automation.InformationRecord] $Stream,
-
-		[Parameter(Mandatory = $true,
-		HelpMessage = "Information action preference")]
-		[System.Management.Automation.ActionPreference] $Preference,
-
-		[Parameter()]
-		[ValidateDrive("C", "D")]
-		[string] $Folder = $LogsFolder,
-
-		[Parameter()]
-		[switch] $Log
-	)
-
-	begin
-	{
-		if ($PSBoundParameters.ContainsKey('InformationVariable') -or $PSBoundParameters.ContainsKey('InformationAction'))
-		{
-			Write-Error -Category InvalidArgument -ErrorAction "Continue" `
-			-Message "InformationAction and InformationVariable common parameters may not be specified, removed"
-
-			$PSBoundParameters.Remove('InformationVariable') | Out-Null
-			$PSBoundParameters.Remove('InformationAction') | Out-Null
-			$InformationPreference = $Script:InformationPreference
-		}
-	}
-	process
-	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
-		# NOTE: we have to add the INFO label, it's not included in the message by design
-		if ($Preference -ne "SilentlyContinue")
-		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Write information to terminal"
-			"INFO: " + $Stream
-		}
-
-		if ($Log)
-		{
-			$LogFile = Get-LogFile $Folder "Info"
-
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Write information to log file"
-			$Stream | Select-Object * | Out-File -Append -FilePath $LogFile
-		}
-	}
 }
 
 <#
@@ -358,41 +109,76 @@ function Write-Log
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if there is data to write logs"
-	$EV = $PSCmdlet.GetVariableValue('EV')
-	$WV = $PSCmdlet.GetVariableValue('WV')
-	$IV = $PSCmdlet.GetVariableValue('IV')
+	$ErrorBuffer = $PSCmdlet.GetVariableValue('ErrorBuffer')
+	$WarningBuffer = $PSCmdlet.GetVariableValue('WarningBuffer')
+	$InfoBuffer = $PSCmdlet.GetVariableValue('InfoBuffer')
 
-	if ($EV)
+	if ($ErrorBuffer)
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing ErrorVariable"
 
-		$EA = $PSCmdlet.GetVariableValue('ErrorActionPreference')
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller ErrorActionPreference is: $EA"
+		$Preference = $PSCmdlet.GetVariableValue('ErrorActionPreference')
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller ErrorActionPreference is: $Preference"
 
-		$EV | Resume-Error -Log:$ErrorLogging -Preference $EA
-		$EV.Clear()
+		if ($Preference -ne "SilentlyContinue")
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting error status variable"
+			Set-Variable -Name ErrorStatus -Scope Global -Value $true
+		}
+
+		if ($ErrorLogging)
+		{
+			$LogFile = Get-LogFile $LogsFolder "Error"
+
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Write error to log file"
+			$ErrorBuffer | ForEach-Object { $_ | Select-Object * | Out-File -Append -FilePath $LogFile }
+		}
+
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Clearing generated errors buffer"
+		$ErrorBuffer.Clear()
 	}
 
-	if ($WV)
+	if ($WarningBuffer)
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing WarningVariable"
 
-		$WA = $PSCmdlet.GetVariableValue('WarningPreference')
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller WarningPreference is: $WA"
+		$Preference = $PSCmdlet.GetVariableValue('WarningPreference')
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller WarningPreference is: $Preference"
 
-		$WV | Resume-Warning -Log:$WarningLogging -Preference $WA
-		$WV.Clear()
+		if ($Preference -ne "SilentlyContinue")
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting warning status variable"
+			Set-Variable -Name WarningStatus -Scope Global -Value $true
+		}
+
+		if ($WarningLogging)
+		{
+			$LogFile = Get-LogFile $LogsFolder "Warning"
+
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending warnings to log file: $LogFile"
+
+			# NOTE: we have to add the WARNING label, it's not included in the message by design
+			$WarningBuffer | ForEach-Object { "WARNING: $(Get-Date -Format "HH:mm:ss") $_" | Out-File -Append -FilePath $LogFile }
+		}
+
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Clearing generated warnings buffer"
+		$WarningBuffer.Clear()
 	}
 
-	if ($IV)
+	if ($InfoBuffer)
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing InformationVariable"
 
-		$IA = $PSCmdlet.GetVariableValue('InformationPreference')
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller InformationPreference is: $IA"
+		if ($InformationLogging)
+		{
+			$LogFile = Get-LogFile $LogsFolder "Info"
 
-		$IV | Resume-Info -Log:$InformationLogging -Preference $IA
-		$IV.Clear()
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending information to log file: $LogFile"
+			$InfoBuffer | ForEach-Object { $_ | Select-Object * | Out-File -Append -FilePath $LogFile }
+		}
+
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Clearing generated information buffer"
+		$InfoBuffer.Clear()
 	}
 }
 
@@ -407,12 +193,9 @@ if (!(Get-Variable -Name CheckInitLogging -Scope Global -ErrorAction Ignore))
 
 	# These defaults are for advanced functions to enable logging, do not modify!
 	New-Variable -Name Commons -Scope Global -Option Constant -Value @{
-		ErrorAction = "SilentlyContinue"
-		ErrorVariable = "+EV"
-		WarningAction = "SilentlyContinue"
-		WarningVariable = "+WV"
-		InformationAction = "SilentlyContinue"
-		InformationVariable = "+IV"
+		ErrorVariable = "+ErrorBuffer"
+		WarningVariable = "+WarningBuffer"
+		InformationVariable = "+InfoBuffer"
 	}
 }
 
@@ -433,9 +216,6 @@ New-Variable -Name LogsFolder -Scope Script -Option Constant -Value ($RepoDir + 
 # Function exports
 #
 
-Export-ModuleMember -Function Resume-Error
-Export-ModuleMember -Function Resume-Warning
-Export-ModuleMember -Function Resume-Info
 Export-ModuleMember -Function Write-Log
 
 #

@@ -58,7 +58,7 @@ $UserAccounts
 New-Test "Get-AccountSDDL: (separated)"
 foreach($Account in $UserAccounts)
 {
-	$(Get-AccountSDDL $UserAccounts @Commons)
+	$(Get-AccountSDDL $Account @Commons)
 	Write-Log
 }
 

@@ -117,8 +117,6 @@ function Exit-Test
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] WarningLogging restored to: $WarningLogging"
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] InformationLogging restored to: $InformationLogging"
 
-	# Write-Host ""
-	# Save-Errors
 	Write-Host ""
 }
 

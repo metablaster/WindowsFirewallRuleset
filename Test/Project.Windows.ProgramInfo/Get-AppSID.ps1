@@ -88,7 +88,7 @@ foreach($Admin in $Admins)
 New-Test "Get-AppSID: foreach User"
 
 foreach($User in $Users) {
-	Write-Information -Tags "Test" -MessageData "Processing for: $User"
+	Write-Information -Tags "Test" -MessageData "INFO: Processing for: $User"
 	Get-AppxPackage -User $User -PackageTypeFilter Bundle @Commons | ForEach-Object {
 		Get-AppSID $User $_.PackageFamilyName @Commons
 		Write-Log
@@ -98,7 +98,7 @@ foreach($User in $Users) {
 New-Test "Get-AppSID: foreach Admin"
 
 foreach($Admin in $Admins) {
-	Write-Information -Tags "Test" -MessageData "Processing for: $Admin"
+	Write-Information -Tags "Test" -MessageData "INFO: Processing for: $Admin"
 	Get-AppxPackage -User $Admin -PackageTypeFilter Bundle @Commons | ForEach-Object {
 		Get-AppSID $Admin $_.PackageFamilyName @Commons
 		Write-Log

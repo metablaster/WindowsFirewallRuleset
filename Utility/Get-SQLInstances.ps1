@@ -189,7 +189,7 @@ function Get-SQLInstances
 			}
 			catch
 			{
-				Write-Warning "[$Computer] $_"
+				Write-Warning -Message "[$Computer] $_"
                 continue
 			}
 
@@ -199,7 +199,7 @@ function Get-SQLInstances
 
 				if (!$RootKey)
 				{
-					Write-Warning "Failed to open HKLMRoot key: $HKLMRoot"
+					Write-Warning -Message "Failed to open HKLMRoot key: $HKLMRoot"
 					continue
 				}
 
@@ -230,7 +230,7 @@ function Get-SQLInstances
 
 						if (!$InstanceReg)
 						{
-							Write-Warning "Failed to open InstanceReg key: $InstanceReg"
+							Write-Warning -Message "Failed to open InstanceReg key: $InstanceReg"
 							continue
 						}
 
@@ -268,7 +268,7 @@ function Get-SQLInstances
 						}
 						else
 						{
-							Write-Warning "Failed to open instance key: $InstanceRegSetup"
+							Write-Warning -Message "Failed to open instance key: $InstanceRegSetup"
 							continue
 						}
 
@@ -464,7 +464,7 @@ function Get-SQLInstances
 				}
 				catch
 				{
-					Write-Warning "Could not retrieve WMI info for '$Computer':`n$_"
+					Write-Warning -Message "Could not retrieve WMI info for '$Computer':`n$_"
 					$AllInstances
 				}
 

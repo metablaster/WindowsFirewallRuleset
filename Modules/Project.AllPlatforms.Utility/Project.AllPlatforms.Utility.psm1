@@ -154,16 +154,15 @@ function Show-SDDL
 
 	$SDDLSplit = $SDDL.Split("(")
 
-	Write-Host "" 6>&1 | Out-Host
-	Write-Host "SDDL Split:" 6>&1 | Out-Host
-	Write-Host "****************" 6>&1 | Out-Host
+	Write-Host ""
+	Write-Host "SDDL Split:"
+	Write-Host "****************"
 
 	$SDDLSplit
 
-	# TODO: Write-Output
-	Write-Host "" 6>&1 | Out-Host
-	Write-Host "SDDL SID Parsing:" 6>&1 | Out-Host
-	Write-Host "****************" 6>&1 | Out-Host
+	Write-Host ""
+	Write-Host "SDDL SID Parsing:"
+	Write-Host "****************"
 
 	# Skip index 0 where owner and/or primary group are stored
 	for ($i=1; $i -lt $SDDLSplit.Length; $i++)
@@ -288,8 +287,7 @@ function Get-NetworkServices
 
 	if (!$Content)
 	{
-		Write-Warning -Message "No matches found in any of the bellow files:"
-		Write-Host "$($Files | Select-Object -ExpandProperty Name)"
+		Write-Warning -Message "No matches found in any of the rules"
 		return
 	}
 
@@ -316,7 +314,7 @@ function Get-NetworkServices
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Writing filtered services to: $File"
 	Add-Content -Path $File -Value $Content
 
-	Write-Information -Tags "Project" -MessageData "[$($MyInvocation.InvocationName)] $($Content.Count) services involved in firewall rules"
+	Write-Information -Tags "Project" -MessageData "INFO: $($Content.Count) services involved in firewall rules"
 }
 
 <#
@@ -386,7 +384,7 @@ function Set-ScreenBuffer
 		{
 			$NewSize.Height = $NewBuffer
 			$psWindow.BufferSize = $NewSize
-			Write-Information -Tags "User" -MessageData "Screen buffer changed to $NewBuffer"
+			Write-Information -Tags "User" -MessageData "INFO: Screen buffer changed to $NewBuffer"
 			return
 		}
 

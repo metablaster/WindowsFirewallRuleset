@@ -45,11 +45,11 @@ Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-function Test-NonAdvancedFunction
-{
-	Write-Error -Message "[$($MyInvocation.InvocationName)] sample message" -Category PermissionDenied `
-	-ErrorId SampleID -TargetObject $ComputerName -ErrorAction "Continue" 2>&1 | Resume-Error -Log:$ErrorLogging -Preference $ErrorActionPreference
-}
+# function Test-NonAdvancedFunction
+# {
+# 	Write-Error -Message "[$($MyInvocation.InvocationName)] sample message" -Category PermissionDenied `
+# 	-ErrorId SampleID -TargetObject "COMPUTERNAME" -ErrorAction "Continue" 2>&1 | Resume-Error -Log:$ErrorLogging -Preference $ErrorActionPreference
+# }
 
 function Test-ErrorCmdLet
 {
@@ -74,8 +74,8 @@ function Test-Pipeline
 Start-Test
 # $ErrorActionPreference = "SilentlyContinue"
 
-New-Test "Test-NonAdvancedFunction"
-Test-NonAdvancedFunction
+# New-Test "Test-NonAdvancedFunction"
+# Test-NonAdvancedFunction
 
 New-Test "Generate errors"
 $Folder = "C:\CrazyFolder"

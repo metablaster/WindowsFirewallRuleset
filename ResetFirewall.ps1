@@ -37,7 +37,7 @@ Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility
 
 # Setting up profile seem to be slow, tell user what is going on
-Write-Information -Tags "User" -MessageData "Reseting Firewall to previous state..."
+Write-Information -Tags "User" -MessageData "INFO: Reseting Firewall to previous state..."
 
 #
 # Default setup for all profiles
@@ -56,5 +56,5 @@ Set-NetFirewallProfile -All -PolicyStore $PolicyStore `
 #
 Remove-NetFirewallRule -All -PolicyStore $PolicyStore -ErrorAction SilentlyContinue
 
-Write-Information -Tags "User" -MessageData "Firewall reset is done!"
-Write-Information -Tags "User" -MessageData "If internet conectivity problem remains, please reboot system"
+Write-Information -Tags "User" -MessageData "INFO: Firewall reset is done!"
+Write-Information -Tags "User" -MessageData "INFO: If internet conectivity problem remains, please reboot system"

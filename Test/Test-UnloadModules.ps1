@@ -31,21 +31,21 @@ SOFTWARE.
 #
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 
-Write-Information -Tags "Test" -MessageData "Import-Module System"
+Write-Information -Tags "Test" -MessageData "INFO: Import-Module System"
 Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.System -Force
 
-Write-Information -Tags "Test" -MessageData "Import-Module Test"
+Write-Information -Tags "Test" -MessageData "INFO: Import-Module Test"
 Import-Module -Name $RepoDir\Modules\Test -Force
 
-Write-Information -Tags "Test" -MessageData "Import-Module UserInfo"
+Write-Information -Tags "Test" -MessageData "INFO: Import-Module UserInfo"
 Import-Module -Name $RepoDir\Modules\Project.Windows.UserInfo -Force
 
-Write-Information -Tags "Test" -MessageData "Import-Module FirewallModule"
+Write-Information -Tags "Test" -MessageData "INFO: Import-Module FirewallModule"
 Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility -Force
 
-Write-Information -Tags "Test" -MessageData "Import-Module ProgramInfo"
+Write-Information -Tags "Test" -MessageData "INFO: Import-Module ProgramInfo"
 Import-Module -Name $RepoDir\Modules\Project.Windows.ProgramInfo -Force
 
-Write-Information -Tags "Test" -MessageData "Import-Module ComputerInfo"
+Write-Information -Tags "Test" -MessageData "INFO: Import-Module ComputerInfo"
 Import-Module -Name $RepoDir\Modules\Project.Windows.ComputerInfo -Force

@@ -52,7 +52,7 @@ Start-Test
 New-Test "Get-UserPrograms"
 foreach ($Account in $UserAccounts)
 {
-	Write-Information -Tags "Test" -MessageData "Programs installed by $Account"
+	Write-Information -Tags "Test" -MessageData "INFO: Programs installed by $Account"
 	Get-UserPrograms $Account @Commons
 	Write-Log
 }

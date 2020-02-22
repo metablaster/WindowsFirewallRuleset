@@ -83,7 +83,7 @@ function Get-AppSID
 	else
 	{
 		Write-Warning -Message "Store app '$AppName' is not isnstalled by user '$UserName' or the app is missing"
-		Write-Information -Tags "User" -MessageData "To fix the problem let this user update all of it's apps in Windows store"
+		Write-Information -Tags "User" -MessageData "INFO: To fix the problem let this user update all of it's apps in Windows store"
 		return $null
 	}
 }
@@ -123,8 +123,8 @@ function Test-File
 		Write-Warning -Message "Executable '$Executable' was not found"
 		Write-Warning -Message "rules for '$Executable' won't have any effect"
 
-		Write-Information -Tags "User" -MessageData "Searched path was: $SearchPath"
-		Write-Information -Tags "User" -MessageData "To fix the problem find '$Executable' then adjust the path in $Script and re-run the script later again"
+		Write-Information -Tags "User" -MessageData "INFO: Searched path was: $SearchPath"
+		Write-Information -Tags "User" -MessageData "INFO: To fix the problem find '$Executable' then adjust the path in $Script and re-run the script later again"
 	}
 }
 
@@ -159,7 +159,7 @@ function Test-Environment
 	if ([Array]::Find($UserProfileEnvironment, [Predicate[string]]{ $FilePath -like "$($args[0])*" }))
 	{
 		Write-Warning -Message "Bad environment variable detected, paths with environment variables that lead to user profile are not valid"
-		Write-Information -Tags "User" -MessageData "Bad path detected is: $FilePath"
+		Write-Information -Tags "Project" -MessageData "INFO: Bad path detected is: $FilePath"
 		return $false
 	}
 
@@ -191,7 +191,7 @@ function Test-Service
 	if (!(Get-Service -Name $Service -ErrorAction SilentlyContinue))
 	{
 		Write-Warning -Message "Service '$Service' not found, rule won't have any effect"
-		Write-Information -Tags "User" -MessageData "To fix the problem update or comment out all firewall rules for '$Service' service"
+		Write-Information -Tags "User" -MessageData "INFO: To fix the problem update or comment out all firewall rules for '$Service' service"
 	}
 }
 
@@ -960,7 +960,7 @@ function Test-Installation
 		if ($Count -gt 1)
 		{
 			$InstallTable | Format-Table -AutoSize
-			Write-Information -Tags "User" -MessageData "Found multiple candidate installation directories for $Program"
+			Write-Information -Tags "User" -MessageData "INFO: Found multiple candidate installation directories for $Program"
 
 			# Print out all candidate installation directories
 			Write-Host "0. Abort this operation"
@@ -973,12 +973,12 @@ function Test-Installation
 			[int] $Choice = -1
 			while ($Choice -lt 0 -or $Choice -gt $Count)
 			{
-				Write-Information -Tags "User" -MessageData "Input number to choose which one is correct"
+				Write-Information -Tags "User" -MessageData "INFO: Input number to choose which one is correct"
 				$Input = Read-Host
 
 				if($Input -notmatch '^-?\d+$')
 				{
-					Write-Information -Tags "User" -MessageData "Digits only please!"
+					Write-Information -Tags "User" -MessageData "INFO: Digits only please!"
 					continue
 				}
 
@@ -1001,7 +1001,7 @@ function Test-Installation
 		}
 
 		# Using single quotes to make it emptiness obvious when the path is empty.
-		Write-Information -Tags "User" -MessageData "Path corrected from: '$($FilePath.Value)' to: '$InstallRoot'"
+		Write-Information -Tags "Project" -MessageData "INFO: Path corrected from: '$($FilePath.Value)' to: '$InstallRoot'"
 		$FilePath.Value = $InstallRoot
 	}
 	else
@@ -1401,9 +1401,9 @@ function Find-Installation
 		$Script = (Get-PSCallStack)[2].Command
 
 		# TODO: this loops seem to be skiped, probably missing Test-File, need to check
-		Write-Information -Tags "User" -MessageData "If you installed $Program elsewhere you can input the correct path now"
-		Write-Information -Tags "User" -MessageData "or adjust the path in $Script and re-run the script later."
-		Write-Information -Tags "User" -MessageData "otherwise ignore this warning if you don't have $Program installed."
+		Write-Information -Tags "User" -MessageData "INFO: If you installed $Program elsewhere you can input the correct path now"
+		Write-Information -Tags "User" -MessageData "INFO: or adjust the path in $Script and re-run the script later."
+		Write-Information -Tags "User" -MessageData "INFO: otherwise ignore this warning if you don't have $Program installed."
 
 		if (Approve-Execute "Yes" "Rule group for $Program" "Do you want to input path now?")
 		{
