@@ -71,7 +71,7 @@ function Test-WarningRecursiveInternal
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Warning preference is: $WarningPreference"
 
-	Write-Warning -Message "Test-WarningRecursiveInternal"
+	Write-Warning -Message "$($MyInvocation.MyCommand.Name)"
 }
 
 function Test-WarningRecursive
@@ -83,7 +83,7 @@ function Test-WarningRecursive
 
 	Test-WarningRecursiveInternal
 
-	Write-Warning -Message "Test-WarningRecursive"
+	Write-Warning -Message "$($MyInvocation.MyCommand.Name)"
 }
 
 function Test-WarningCmdLet
@@ -121,19 +121,22 @@ Start-Test
 # New-Test "Test-NonAdvancedFunction"
 # Test-NonAdvancedFunction
 
-# New-Test "Test-WarningNow"
-# Write-Debug -Message "[$($MyInvocation.MyCommand.Name)] Warning preference is: $WarningPreference"
-# Test-WarningNow @Commons
-# Write-Log
+New-Test "Test-WarningNow"
+Write-Debug -Message "[$($MyInvocation.MyCommand.Name)] Warning preference is: $WarningPreference"
+Test-WarningNow @Commons
+Write-Log
 
 # New-Test "Test-WarningCmdLet"
 # Test-WarningCmdLet @Commons
 # Write-Log
 
-New-Test "Test-WarningRecursive"
-Write-Debug -Message "[$($MyInvocation.MyCommand.Name)] Warning preference is: $WarningPreference"
-Test-WarningRecursive @Commons
-Write-Log
+# New-Test "Test-WarningRecursive"
+# Write-Debug -Message "[$($MyInvocation.MyCommand.Name)] Warning preference is: $WarningPreference"
+# Test-WarningRecursive -WV wv -WA "SilentlyContinue"
+
+# Write-Information -MessageData "Show variable contents:"
+# $wv
+
 
 # New-Test "Test-NoWarningCmdLet"
 # Test-NoWarningCmdLet @Commons

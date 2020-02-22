@@ -28,7 +28,6 @@ SOFTWARE.
 
 # TODO: let Write-Log select object in pipe, process it's commons and transfer down the pipe
 # TODO: stream logging instead of open/close file for performance
-# TODO: what if cmdlet throws? will we capture that into log?
 
 <#
 .SYNOPSIS
@@ -126,6 +125,18 @@ function Resume-Error
 		[switch] $Log
 	)
 
+	begin
+	{
+		if ($PSBoundParameters.ContainsKey('ErrorVariable') -or $PSBoundParameters.ContainsKey('ErrorAction'))
+		{
+			Write-Error -Category InvalidArgument -ErrorAction "Continue" `
+			-Message "ErrorAction and ErrorVariable common parameters may not be specified, removed"
+
+			$PSBoundParameters.Remove('ErrorVariable') | Out-Null
+			$PSBoundParameters.Remove('ErrorAction') | Out-Null
+			$ErrorActionPreference = $Script:ErrorActionPreference
+		}
+	}
 	process
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -186,8 +197,7 @@ function Resume-Warning
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true,
 		HelpMessage = "Input object must be WarningRecord")]
 		[ValidateNotNullOrEmpty()]
-		[System.Management.Automation.WarningRecord]
-		$Stream,
+		[System.Management.Automation.WarningRecord] $Stream,
 
 		[Parameter(Mandatory = $true,
 		HelpMessage = "Warning action preference")]
@@ -206,7 +216,7 @@ function Resume-Warning
 		if ($PSBoundParameters.ContainsKey('WarningVariable') -or $PSBoundParameters.ContainsKey('WarningAction'))
 		{
 			Write-Error -Category InvalidArgument -ErrorAction "Continue" `
-			-Message "WarningAction and WarningPreference common parameters may not be specified, removed"
+			-Message "WarningAction and WarningVariable common parameters may not be specified, removed"
 
 			$PSBoundParameters.Remove('WarningVariable') | Out-Null
 			$PSBoundParameters.Remove('WarningAction') | Out-Null
@@ -218,7 +228,7 @@ function Resume-Warning
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Warning preference is: $WarningPreference"
 
-		# NOTE: we have to add the WARNING label, it's gone for some reason
+		# NOTE: we have to add the WARNING label, it's not included in the message by design
 		if ($Preference -ne "SilentlyContinue")
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting warning status variable"
@@ -282,10 +292,23 @@ function Resume-Info
 		[switch] $Log
 	)
 
+	begin
+	{
+		if ($PSBoundParameters.ContainsKey('InformationVariable') -or $PSBoundParameters.ContainsKey('InformationAction'))
+		{
+			Write-Error -Category InvalidArgument -ErrorAction "Continue" `
+			-Message "InformationAction and InformationVariable common parameters may not be specified, removed"
+
+			$PSBoundParameters.Remove('InformationVariable') | Out-Null
+			$PSBoundParameters.Remove('InformationAction') | Out-Null
+			$InformationPreference = $Script:InformationPreference
+		}
+	}
 	process
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
+		# NOTE: we have to add the INFO label, it's not included in the message by design
 		if ($Preference -ne "SilentlyContinue")
 		{
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Write information to terminal"
@@ -341,7 +364,10 @@ function Write-Log
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing ErrorVariable"
 
-		$EV | Resume-Error -Log:$ErrorLogging -Preference $ErrorActionPreference
+		$EA = $PSCmdlet.GetVariableValue('ErrorActionPreference')
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller ErrorActionPreference is: $EA"
+
+		$EV | Resume-Error -Log:$ErrorLogging -Preference $EA
 		$EV.Clear()
 	}
 
@@ -349,11 +375,8 @@ function Write-Log
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing WarningVariable"
 
-		# This is needed, since warning variable is missing the
-		# WARNING label and coloring, see issue bellow:
-		# https://github.com/PowerShell/PowerShell/issues/11900
 		$WA = $PSCmdlet.GetVariableValue('WarningPreference')
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller warning preference is: $WA"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller WarningPreference is: $WA"
 
 		$WV | Resume-Warning -Log:$WarningLogging -Preference $WA
 		$WV.Clear()
@@ -362,7 +385,11 @@ function Write-Log
 	if ($IV)
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing InformationVariable"
-		$IV | Resume-Info -Log:$InformationLogging -Preference $InformationPreference
+
+		$IA = $PSCmdlet.GetVariableValue('InformationPreference')
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller InformationPreference is: $IA"
+
+		$IV | Resume-Info -Log:$InformationLogging -Preference $IA
 		$IV.Clear()
 	}
 }
@@ -424,7 +451,7 @@ Export-ModuleMember -Variable WarningStatus
 if ($Develop)
 {
 	$ErrorActionPreference = $ModuleErrorPreference
-	$WarningPreference = "Stop" #$ModuleWarningPreference
+	$WarningPreference = $ModuleWarningPreference
 	$DebugPreference = $ModuleDebugPreference
 	$VerbosePreference = $ModuleVerbosePreference
 	$InformationPreference = $ModuleInformationPreference

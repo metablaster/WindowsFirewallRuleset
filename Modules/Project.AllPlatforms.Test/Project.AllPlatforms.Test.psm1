@@ -52,9 +52,9 @@ function Start-Test
 	Set-Variable -Name InformationLoggingCopy -Scope Script -Value $InformationLogging
 	Set-Variable -Name InformationLogging -Scope Global -Value $false
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ErrorLogging is $ErrorLogging"
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] WarningLogging is $WarningLogging"
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] InformationLogging is $InformationLogging"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ErrorLogging changed to: $ErrorLogging"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] WarningLogging changed to: $WarningLogging"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] InformationLogging changed to: $InformationLogging"
 }
 
 <#
@@ -111,9 +111,9 @@ function Exit-Test
 	# restore logging information messages
 	Set-Variable -Name InformationLogging -Scope Global -Value $InformationLoggingCopy
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ErrorLogging is $ErrorLogging"
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] WarningLogging is $WarningLogging"
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] InformationLogging is $InformationLogging"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ErrorLogging restored to: $ErrorLogging"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] WarningLogging restored to: $WarningLogging"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] InformationLogging restored to: $InformationLogging"
 
 	# Write-Host ""
 	# Save-Errors
