@@ -32,15 +32,15 @@ SOFTWARE.
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.System
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
 Test-SystemRequirements
 
 # Includes
-. $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Test
-Import-Module -Name $RepoDir\Modules\Project.Windows.ProgramInfo
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility
+. $ProjectRoot\Test\ContextSetup.ps1
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
 # Ask user if he wants to load these rules
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
@@ -52,15 +52,15 @@ $OfficeShared = "%ProgramFiles%\Common Files\microsoft shared"
 $VSInstallService = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.x86.exe"
 
 New-Test "Test-File '$VSInstallService'"
-Test-File "$VSInstallService" @Commons
-Write-Log
+Test-File "$VSInstallService" @Logs
+Update-Logs
 
 New-Test "Test-File '$OfficeShared\ClickToRun\OfficeClickToRun.exe'"
-Test-File "$OfficeShared\ClickToRun\OfficeClickToRun.exe" @Commons
-Write-Log
+Test-File "$OfficeShared\ClickToRun\OfficeClickToRun.exe" @Logs
+Update-Logs
 
 New-Test "Test-File '%ProgramFiles%\ClickToRun\OfficeClickToRun.exe'"
-Test-File "%ProgramFiles%\ClickToRun\OfficeClickToRun.exe" @Commons
-Write-Log
+Test-File "%ProgramFiles%\ClickToRun\OfficeClickToRun.exe" @Logs
+Update-Logs
 
 Exit-Test

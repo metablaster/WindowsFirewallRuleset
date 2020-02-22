@@ -32,14 +32,14 @@ SOFTWARE.
 . $PSScriptRoot\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.System
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
 Test-SystemRequirements
 Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $false
 
 # Includes
-Import-Module -Name $RepoDir\Modules\Project.Windows.ProgramInfo
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
 # Clear errors and warning status
 $Error.Clear()
@@ -50,8 +50,8 @@ Set-ScreenBuffer
 
 # Check all rules that apply to windows services
 Test-File $ServiceHost
-Get-NetworkServices $RepoDir\Rules
-Get-Content -Path $RepoDir\Rules\NetworkServices.txt | ForEach-Object {
+Get-NetworkServices $ProjectRoot\Rules
+Get-Content -Path $ProjectRoot\Rules\NetworkServices.txt | ForEach-Object {
 	Test-Service $_
 }
 
@@ -273,8 +273,8 @@ Write-Host ""
 if ($Develop)
 {
 	# Need to re-import required module in develop mode
-	Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility
+	Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 }
 
 # Show status of execution
@@ -294,7 +294,7 @@ if ($WarningStatus)
 {
 	Write-Host ""
 	Write-Warning -Message "Warnings were generated"
-	Write-Information -Tags "User" -MessageData "INFO: All warnings were saved to: $("$RepoDir\Logs")"
+	Write-Information -Tags "User" -MessageData "INFO: All warnings were saved to: $("$ProjectRoot\Logs")"
 	Write-Information -Tags "User" -MessageData "INFO: you can review these logs to see if you want to resolve some of them"
 }
 

@@ -32,15 +32,15 @@ SOFTWARE.
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.System
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
 Test-SystemRequirements
 
 # Includes
-. $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Test
-Import-Module -Name $RepoDir\Modules\Project.Windows.ProgramInfo
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility
+. $ProjectRoot\Test\ContextSetup.ps1
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
 # Ask user if he wants to load these rules
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
@@ -53,49 +53,49 @@ $User = "haxor"
 New-Test "User profile - full"
 $TestPath = "C:\Users\$User\source\repos\WindowsFirewallRuleset"
 $TestPath
-Test-UserProfile $TestPath @Commons
-Write-Log
+Test-UserProfile $TestPath @Logs
+Update-Logs
 
 New-Test "User profile - environment"
 $TestPath = "%LOCALAPPDATA%\Microsoft"
 $TestPath
-Test-UserProfile $TestPath @Commons
-Write-Log
+Test-UserProfile $TestPath @Logs
+Update-Logs
 
 New-Test "User profile - full unformatted"
 $TestPath = "C:\\Users\$User\source\\repos\WindowsFirewallRuleset\"
 $TestPath
-Test-UserProfile $TestPath @Commons
-Write-Log
+Test-UserProfile $TestPath @Logs
+Update-Logs
 
 New-Test "User profile - environment unformatted"
 $TestPath = "%LOCALAPPDATA%\\Microsoft\"
 $TestPath
-Test-UserProfile $TestPath @Commons
-Write-Log
+Test-UserProfile $TestPath @Logs
+Update-Logs
 
 New-Test "System - full"
 $TestPath = "C:\Program Files\\Microsoft SQL Server\140"
 $TestPath
-Test-UserProfile $TestPath @Commons
-Write-Log
+Test-UserProfile $TestPath @Logs
+Update-Logs
 
 New-Test "System - envoronment"
 $TestPath = "%ProgramFiles(x86)%\Microsoft SQL Server\140\"
 $TestPath
-Test-UserProfile $TestPath @Commons
-Write-Log
+Test-UserProfile $TestPath @Logs
+Update-Logs
 
 New-Test "Drive"
 $TestPath = "C:\"
 $TestPath
-Test-UserProfile $TestPath @Commons
-Write-Log
+Test-UserProfile $TestPath @Logs
+Update-Logs
 
 New-Test "Drive"
 $TestPath = "C:\\"
 $TestPath
-Test-UserProfile $TestPath @Commons
-Write-Log
+Test-UserProfile $TestPath @Logs
+Update-Logs
 
 Exit-Test

@@ -32,16 +32,16 @@ SOFTWARE.
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.System
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
 Test-SystemRequirements
 
 # Includes
-. $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Test
-Import-Module -Name $RepoDir\Modules\Project.Windows.ProgramInfo
-Import-Module -Name $RepoDir\Modules\Project.Windows.ComputerInfo
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility
+. $ProjectRoot\Test\ContextSetup.ps1
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
 # Ask user if he wants to load these rules
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
@@ -51,8 +51,8 @@ Start-Test
 
 New-Test "Get-NetFramework"
 
-$ComputerName = Get-ComputerName @Commons
-Write-Log
+$ComputerName = Get-ComputerName @Logs
+Update-Logs
 
 # $NETFramework = Get-NetFramework $ComputerName
 # $NETFramework
@@ -68,15 +68,15 @@ Write-Log
 # $Minor
 
 # Get latest NET Framework installation directory
-$NETFramework = Get-NetFramework $ComputerName @Commons
-Write-Log
+$NETFramework = Get-NetFramework $ComputerName @Logs
+Update-Logs
 if ($null -ne $NETFramework)
 {
 	$NETFrameworkRoot = $NETFramework |
-	Sort-Object -Property Version @Commons |
+	Sort-Object -Property Version @Logs |
 	Where-Object { $_.InstallPath } |
-	Select-Object -Last 1 -ExpandProperty InstallPath @Commons
-	Write-Log
+	Select-Object -Last 1 -ExpandProperty InstallPath @Logs
+	Update-Logs
 
 	Write-Information -Tags "Test" -MessageData "INFO: $NETFrameworkRoot"
 	# Edit-Table $NETFrameworkRoot

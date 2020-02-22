@@ -32,15 +32,15 @@ SOFTWARE.
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.System
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
 Test-SystemRequirements
 
 # Includes
-. $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Test
-Import-Module -Name $RepoDir\Modules\Project.Windows.UserInfo
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility
+. $ProjectRoot\Test\ContextSetup.ps1
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
 # Ask user if he wants to load these rules
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
@@ -49,25 +49,25 @@ if (!(Approve-Execute)) { exit }
 Start-Test
 
 New-Test "Get-UserAccounts:"
-[string[]]$UserAccounts = Get-UserAccounts "Users" @Commons
-Write-Log
-$UserAccounts += Get-UserAccounts "Administrators" @Commons
-Write-Log
+[string[]]$UserAccounts = Get-UserAccounts "Users" @Logs
+Update-Logs
+$UserAccounts += Get-UserAccounts "Administrators" @Logs
+Update-Logs
 $UserAccounts
 
 New-Test "Get-AccountSDDL: (separated)"
 foreach($Account in $UserAccounts)
 {
-	$(Get-AccountSDDL $Account @Commons)
-	Write-Log
+	$(Get-AccountSDDL $Account @Logs)
+	Update-Logs
 }
 
 New-Test "Get-AccountSDDL: (combined)"
-Get-AccountSDDL $UserAccounts @Commons
-Write-Log
+Get-AccountSDDL $UserAccounts @Logs
+Update-Logs
 
 New-Test "Get-AccountSDDL: (from array)"
-Get-AccountSDDL @("NT AUTHORITY\SYSTEM", "NT AUTHORITY\NETWORK SERVICE") @Commons
-Write-Log
+Get-AccountSDDL @("NT AUTHORITY\SYSTEM", "NT AUTHORITY\NETWORK SERVICE") @Logs
+Update-Logs
 
 Exit-Test

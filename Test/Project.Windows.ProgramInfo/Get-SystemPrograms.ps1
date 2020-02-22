@@ -32,16 +32,16 @@ SOFTWARE.
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.System
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
 Test-SystemRequirements
 
 # Includes
-. $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Test
-Import-Module -Name $RepoDir\Modules\Project.Windows.ProgramInfo
-Import-Module -Name $RepoDir\Modules\Project.Windows.ComputerInfo
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility
+. $ProjectRoot\Test\ContextSetup.ps1
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
 # Ask user if he wants to load these rules
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
@@ -49,21 +49,21 @@ if (!(Approve-Execute)) { exit }
 
 Start-Test
 
-$ComputerName = Get-ComputerName @Commons
-Write-Log
-$SystemPrograms = Get-SystemPrograms $ComputerName @Commons
-Write-Log
+$ComputerName = Get-ComputerName @Logs
+Update-Logs
+$SystemPrograms = Get-SystemPrograms $ComputerName @Logs
+Update-Logs
 
 New-Test "Get-SystemPrograms Name"
-$SystemPrograms | Sort-Object -Property Name @Commons | Select-Object -ExpandProperty Name @Commons
-Write-Log
+$SystemPrograms | Sort-Object -Property Name @Logs | Select-Object -ExpandProperty Name @Logs
+Update-Logs
 
 New-Test "Get-SystemPrograms InstallLocation"
-$SystemPrograms | Sort-Object -Property InstallLocation @Commons | Select-Object -ExpandProperty InstallLocation @Commons
-Write-Log
+$SystemPrograms | Sort-Object -Property InstallLocation @Logs | Select-Object -ExpandProperty InstallLocation @Logs
+Update-Logs
 
 New-Test "Get-SystemPrograms"
-$SystemPrograms | Sort-Object -Property Name @Commons
-Write-Log
+$SystemPrograms | Sort-Object -Property Name @Logs
+Update-Logs
 
 Exit-Test

@@ -141,7 +141,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	New-Variable -Name CheckProjectConstants -Scope Global -Option Constant -Value $null
 
 	# Repository root directory, realocating scripts should be easy if root directory is constant
-	New-Variable -Name RepoDir -Scope Global -Option Constant -Value (
+	New-Variable -Name ProjectRoot -Scope Global -Option Constant -Value (
 		Resolve-Path -Path "$PSScriptRoot\.." | Select-Object -ExpandProperty Path)
 
 	# Windows 10, Windows Server 2019 and above

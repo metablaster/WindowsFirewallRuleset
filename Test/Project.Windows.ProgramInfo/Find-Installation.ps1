@@ -32,15 +32,15 @@ SOFTWARE.
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.System
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
 Test-SystemRequirements
 
 # Includes
-. $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Test
-Import-Module -Name $RepoDir\Modules\Project.Windows.ProgramInfo
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility
+. $ProjectRoot\Test\ContextSetup.ps1
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
 # Ask user if he wants to load these rules
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
@@ -49,40 +49,40 @@ if (!(Approve-Execute)) { exit }
 Start-Test
 
 New-Test "Find-Installation 'EdgeChromium'"
-Find-Installation "EdgeChromium" @Commons
-Write-Log
+Find-Installation "EdgeChromium" @Logs
+Update-Logs
 
 New-Test "Table data"
-$global:InstallTable | Format-Table -AutoSize @Commons
-Write-Log
+$global:InstallTable | Format-Table -AutoSize @Logs
+Update-Logs
 
 New-Test "Install Root"
-$global:InstallTable | Select-Object -ExpandProperty InstallRoot @Commons
-Write-Log
+$global:InstallTable | Select-Object -ExpandProperty InstallRoot @Logs
+Update-Logs
 
 New-Test "Find-Installation 'TeamViewer'"
-Find-Installation "TeamViewer" @Commons
-Write-Log
+Find-Installation "TeamViewer" @Logs
+Update-Logs
 # C:\Program Files (x86)\Microsoft
 
 New-Test "Table data"
-$global:InstallTable | Format-Table -AutoSize @Commons
-Write-Log
+$global:InstallTable | Format-Table -AutoSize @Logs
+Update-Logs
 
 New-Test "Find-Installation 'FailureTest'"
-Find-Installation "FailureTest" @Commons
-Write-Log
+Find-Installation "FailureTest" @Logs
+Update-Logs
 
 New-Test "Table data"
-$global:InstallTable | Format-Table -AutoSize @Commons
-Write-Log
+$global:InstallTable | Format-Table -AutoSize @Logs
+Update-Logs
 
 New-Test "Find-Installation 'VisualStudio'"
-Find-Installation "VisualStudio" @Commons
-Write-Log
+Find-Installation "VisualStudio" @Logs
+Update-Logs
 
 New-Test "Table data"
-$global:InstallTable | Format-Table -AutoSize @Commons
-Write-Log
+$global:InstallTable | Format-Table -AutoSize @Logs
+Update-Logs
 
 Exit-Test

@@ -32,16 +32,16 @@ SOFTWARE.
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.System
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
 Test-SystemRequirements
 
 # Includes
-. $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Test
-Import-Module -Name $RepoDir\Modules\Project.Windows.ProgramInfo
-Import-Module -Name $RepoDir\Modules\Project.Windows.ComputerInfo
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility
+. $ProjectRoot\Test\ContextSetup.ps1
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
 # Ask user if he wants to load these rules
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
@@ -49,32 +49,32 @@ if (!(Approve-Execute)) { exit }
 
 Start-Test
 
-$ComputerName = Get-ComputerName @Commons
-Write-Log
+$ComputerName = Get-ComputerName @Logs
+Update-Logs
 
 New-Test "Get-WindowsSDK"
 
-$WindowsSDK = Get-WindowsSDK $ComputerName @Commons
-Write-Log
+$WindowsSDK = Get-WindowsSDK $ComputerName @Logs
+Update-Logs
 $WindowsSDK
 
 # New-Test "Get-WindowsSDK latest"
 
-# $WindowsSDK | Sort-Object -Property Version @Commons |
+# $WindowsSDK | Sort-Object -Property Version @Logs |
 # Where-Object { $_.InstallPath } |
-# Select-Object -Last 1 -ExpandProperty InstallPath @Commons
-# Write-Log
+# Select-Object -Last 1 -ExpandProperty InstallPath @Logs
+# Update-Logs
 
 # Get Windows SDK root
-# $WindowsSDK = Get-WindowsSDK $ComputerName @Commons
-Write-Log
+# $WindowsSDK = Get-WindowsSDK $ComputerName @Logs
+Update-Logs
 # if ($null -ne $WindowsKits)
 # {
 #     $SDKRoot = $WindowsSDK |
-#     Sort-Object -Property Version @Commons |
+#     Sort-Object -Property Version @Logs |
 #     Where-Object { $_.InstallPath } |
-#     Select-Object -Last 1 -ExpandProperty InstallPath @Commons
-#	  Write-Log
+#     Select-Object -Last 1 -ExpandProperty InstallPath @Logs
+#	  Update-Logs
 # }
 
 Exit-Test

@@ -32,15 +32,15 @@ SOFTWARE.
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.System
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
 Test-SystemRequirements
 
 # Includes
-. $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Test
-Import-Module -Name $RepoDir\Modules\Project.Windows.ProgramInfo
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility
+. $ProjectRoot\Test\ContextSetup.ps1
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
 # Ask user if he wants to load these rules
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
@@ -50,115 +50,115 @@ Start-Test
 
 New-Test "Format-Path"
 
-$Result = Format-Path "C:\" @Commons
-Write-Log
+$Result = Format-Path "C:\" @Logs
+Update-Logs
 
 $Result
-Test-Environment $Result @Commons
-Write-Log
+Test-Environment $Result @Logs
+Update-Logs
 
-$Result = Format-Path "C:\\Windows\System32" @Commons
-Write-Log
-
-$Result
-Test-Environment $Result @Commons
-Write-Log
-
-$Result = Format-Path "C:\\Windows\" @Commons
-Write-Log
+$Result = Format-Path "C:\\Windows\System32" @Logs
+Update-Logs
 
 $Result
-Test-Environment $Result @Commons
-Write-Log
+Test-Environment $Result @Logs
+Update-Logs
 
-$Result = Format-Path "C:\Program Files (x86)\Windows Defender\" @Commons
-Write-Log
-
-$Result
-Test-Environment $Result @Commons
-Write-Log
-
-$Result = Format-Path "C:\Program Files\WindowsPowerShell" @Commons
-Write-Log
+$Result = Format-Path "C:\\Windows\" @Logs
+Update-Logs
 
 $Result
-Test-Environment $Result @Commons
-Write-Log
+Test-Environment $Result @Logs
+Update-Logs
 
-$Result = Format-Path '"C:\ProgramData\Git"' @Commons
-Write-Log
-
-$Result
-Test-Environment $Result @Commons
-Write-Log
-
-$Result = Format-Path "C:\PerfLogs" @Commons
-Write-Log
+$Result = Format-Path "C:\Program Files (x86)\Windows Defender\" @Logs
+Update-Logs
 
 $Result
-Test-Environment $Result @Commons
-Write-Log
+Test-Environment $Result @Logs
+Update-Logs
 
-$Result = Format-Path "C:\Windows\Microsoft.NET\Framework64\v3.5\\" @Commons
-Write-Log
-
-$Result
-Test-Environment $Result @Commons
-Write-Log
-
-$Result = Format-Path "'C:\Windows\Microsoft.NET\Framework64\v3.5'" @Commons
-Write-Log
+$Result = Format-Path "C:\Program Files\WindowsPowerShell" @Logs
+Update-Logs
 
 $Result
-Test-Environment $Result @Commons
-Write-Log
+Test-Environment $Result @Logs
+Update-Logs
 
-$Result = Format-Path "D:\\microsoft\\windows" @Commons
-Write-Log
-$Result
-Test-Environment $Result @Commons
-Write-Log
+$Result = Format-Path '"C:\ProgramData\Git"' @Logs
+Update-Logs
 
-$Result = Format-Path "D:\" @Commons
-Write-Log
 $Result
-Test-Environment $Result @Commons
-Write-Log
+Test-Environment $Result @Logs
+Update-Logs
 
-$Result = Format-Path "C:\\" @Commons
-Write-Log
-$Result
-Test-Environment $Result @Commons
-Write-Log
+$Result = Format-Path "C:\PerfLogs" @Logs
+Update-Logs
 
-$Result = Format-Path "C:\Users\haxor\AppData\Local\OneDrive" @Commons
-Write-Log
 $Result
-Test-Environment $Result @Commons
-Write-Log
+Test-Environment $Result @Logs
+Update-Logs
 
-$Result = Format-Path "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer" @Commons
-Write-Log
-$Result
-Test-Environment $Result @Commons
-Write-Log
+$Result = Format-Path "C:\Windows\Microsoft.NET\Framework64\v3.5\\" @Logs
+Update-Logs
 
-$Result = Format-Path "%SystemDrive%" @Commons
-Write-Log
 $Result
-Test-Environment $Result @Commons
-Write-Log
+Test-Environment $Result @Logs
+Update-Logs
 
-$Result = Format-Path "" @Commons
-Write-Log
-$Result
-Test-Environment $Result @Commons
-Write-Log
+$Result = Format-Path "'C:\Windows\Microsoft.NET\Framework64\v3.5'" @Logs
+Update-Logs
 
-$Result = Format-Path $null @Commons
-Write-Log
 $Result
-Test-Environment $Result @Commons
-Write-Log
+Test-Environment $Result @Logs
+Update-Logs
+
+$Result = Format-Path "D:\\microsoft\\windows" @Logs
+Update-Logs
+$Result
+Test-Environment $Result @Logs
+Update-Logs
+
+$Result = Format-Path "D:\" @Logs
+Update-Logs
+$Result
+Test-Environment $Result @Logs
+Update-Logs
+
+$Result = Format-Path "C:\\" @Logs
+Update-Logs
+$Result
+Test-Environment $Result @Logs
+Update-Logs
+
+$Result = Format-Path "C:\Users\haxor\AppData\Local\OneDrive" @Logs
+Update-Logs
+$Result
+Test-Environment $Result @Logs
+Update-Logs
+
+$Result = Format-Path "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer" @Logs
+Update-Logs
+$Result
+Test-Environment $Result @Logs
+Update-Logs
+
+$Result = Format-Path "%SystemDrive%" @Logs
+Update-Logs
+$Result
+Test-Environment $Result @Logs
+Update-Logs
+
+$Result = Format-Path "" @Logs
+Update-Logs
+$Result
+Test-Environment $Result @Logs
+Update-Logs
+
+$Result = Format-Path $null @Logs
+Update-Logs
+$Result
+Test-Environment $Result @Logs
+Update-Logs
 
 Exit-Test

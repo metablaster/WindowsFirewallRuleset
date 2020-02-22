@@ -32,14 +32,14 @@ SOFTWARE.
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.System
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
 Test-SystemRequirements
 
 # Includes
-. $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Test
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility
+. $ProjectRoot\Test\ContextSetup.ps1
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
 # Ask user if he wants to load these rules
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
@@ -50,13 +50,13 @@ Start-Test
 $DebugPreference = "SilentlyContinue"
 
 New-Test "Update-Context IPv4.Outbound -> ICMPv4"
-Update-Context "IPv$IPVersion" "Outbound" "ICMPv4" @Commons
-Approve-Execute @Commons | Out-Null
-Write-Log
+Update-Context "IPv$IPVersion" "Outbound" "ICMPv4" @Logs
+Approve-Execute @Logs | Out-Null
+Update-Logs
 
 New-Test "Update-Context Test.Update-Context"
-Update-Context "Test" "Update-Context" @Commons
-Approve-Execute @Commons | Out-Null
-Write-Log
+Update-Context "Test" "Update-Context" @Logs
+Approve-Execute @Logs | Out-Null
+Update-Logs
 
 Exit-Test

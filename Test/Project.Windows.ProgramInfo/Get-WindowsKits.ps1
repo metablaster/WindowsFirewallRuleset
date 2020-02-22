@@ -32,16 +32,16 @@ SOFTWARE.
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.System
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
 Test-SystemRequirements
 
 # Includes
-. $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Test
-Import-Module -Name $RepoDir\Modules\Project.Windows.ProgramInfo
-Import-Module -Name $RepoDir\Modules\Project.Windows.ComputerInfo
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility
+. $ProjectRoot\Test\ContextSetup.ps1
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
 # Ask user if he wants to load these rules
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
@@ -49,31 +49,31 @@ if (!(Approve-Execute)) { exit }
 
 Start-Test
 
-$ComputerName = Get-ComputerName @Commons
-Write-Log
+$ComputerName = Get-ComputerName @Logs
+Update-Logs
 
 # New-Test "Get-WindowsKits"
 
-# $WindowsKits = Get-WindowsKits $ComputerName @Commons
+# $WindowsKits = Get-WindowsKits $ComputerName @Logs
 # $WindowsKits
 
 # New-Test "Get-WindowsKits DebuggersRoot latest"
 
 # $WindowsKits | Where-Object {$_.Product -like "WindowsDebuggersRoot*"} |
-# Sort-Object -Property Product @Commons |
-# Select-Object -Last 1 -ExpandProperty InstallPath @Commons
+# Sort-Object -Property Product @Logs |
+# Select-Object -Last 1 -ExpandProperty InstallPath @Logs
 
 New-Test "Get-WindowsKits install path"
 
-$WindowsKits = Get-WindowsKits $ComputerName @Commons
-Write-Log
+$WindowsKits = Get-WindowsKits $ComputerName @Logs
+Update-Logs
 if ($null -ne $WindowsKits)
 {
 	$SDKDebuggers = $WindowsKits |
 	Where-Object {$_.Product -like "WindowsDebuggersRoot*"} |
-	Sort-Object -Property Product @Commons |
-	Select-Object -Last 1 -ExpandProperty InstallPath @Commons
-	Write-Log
+	Sort-Object -Property Product @Logs |
+	Select-Object -Last 1 -ExpandProperty InstallPath @Logs
+	Update-Logs
 
 	$SDKDebuggers
 }

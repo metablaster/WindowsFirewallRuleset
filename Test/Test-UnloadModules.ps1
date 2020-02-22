@@ -32,20 +32,20 @@ SOFTWARE.
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 
 Write-Information -Tags "Test" -MessageData "INFO: Import-Module System"
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.System -Force
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System -Force
 
 Write-Information -Tags "Test" -MessageData "INFO: Import-Module Test"
-Import-Module -Name $RepoDir\Modules\Test -Force
+Import-Module -Name $ProjectRoot\Modules\Test -Force
 
 Write-Information -Tags "Test" -MessageData "INFO: Import-Module UserInfo"
-Import-Module -Name $RepoDir\Modules\Project.Windows.UserInfo -Force
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo -Force
 
 Write-Information -Tags "Test" -MessageData "INFO: Import-Module FirewallModule"
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility -Force
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility -Force
 
 Write-Information -Tags "Test" -MessageData "INFO: Import-Module ProgramInfo"
-Import-Module -Name $RepoDir\Modules\Project.Windows.ProgramInfo -Force
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo -Force
 
 Write-Information -Tags "Test" -MessageData "INFO: Import-Module ComputerInfo"
-Import-Module -Name $RepoDir\Modules\Project.Windows.ComputerInfo -Force
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo -Force

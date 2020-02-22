@@ -29,10 +29,10 @@ SOFTWARE.
 # TODO: Include modules you need, update licence Copyright and start writing code
 
 # Includes
-# Import-Module -Name $RepoDir\UserInfo
-# Import-Module -Name $RepoDir\ProgramInfo
-# Import-Module -Name $RepoDir\ComputerInfo
-# Import-Module -Name $RepoDir\FirewallModule
+# Import-Module -Name $ProjectRoot\UserInfo
+# Import-Module -Name $ProjectRoot\ProgramInfo
+# Import-Module -Name $ProjectRoot\ComputerInfo
+# Import-Module -Name $ProjectRoot\FirewallModule
 
 # about: Sample function
 # input: nothing

@@ -34,19 +34,19 @@ SOFTWARE.
 . $PSScriptRoot\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.System
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
 Test-SystemRequirements
 
 # Includes
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
 # Ask user if he wants to load these rules
 Update-Context "Master" $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
 # Recusively get powershell scripts in input folder
-$Files = Get-ChildItem -Path $RepoDir\Test -Recurse -Filter *.ps1
+$Files = Get-ChildItem -Path $ProjectRoot\Test -Recurse -Filter *.ps1
 if (!$Files)
 {
 	Write-Warning -Message "No powershell script files found"

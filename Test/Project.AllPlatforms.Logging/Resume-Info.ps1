@@ -32,14 +32,14 @@ SOFTWARE.
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.System
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
 Test-SystemRequirements
 
 # Includes
-. $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Test
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility
+. $ProjectRoot\Test\ContextSetup.ps1
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
 # Ask user if he wants to load these rules
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
@@ -86,29 +86,29 @@ Start-Test
 # Test-NonAdvancedFunction
 
 New-Test "Test-InfoCmdLet"
-Test-InfoCmdLet @Commons
-Write-Log
+Test-InfoCmdLet @Logs
+Update-Logs
 
 New-Test "Test-NoInfoCmdLet"
-Test-NoInfoCmdLet @Commons
-Write-Log
+Test-NoInfoCmdLet @Logs
+Update-Logs
 
 $Folder = "C:\CrazyFolder"
 
 New-Test "Test pipeline"
-Get-ChildItem -Path $Folder @Commons | Test-Pipeline @Commons
-Write-Log
+Get-ChildItem -Path $Folder @Logs | Test-Pipeline @Logs
+Update-Logs
 
 New-Test "Test pipeline"
-Get-ChildItem -Path $Folder @Commons | Test-Pipeline @Commons
-Write-Log
+Get-ChildItem -Path $Folder @Logs | Test-Pipeline @Logs
+Update-Logs
 
 New-Test "Write-Host"
-Write-Host "Write-Host" @Commons
-Write-Log
+Write-Host "Write-Host" @Logs
+Update-Logs
 
 New-Test "Write-Output"
-Write-Output "Write-Output" @Commons
-Write-Log
+Write-Output "Write-Output" @Logs
+Update-Logs
 
 Exit-Test

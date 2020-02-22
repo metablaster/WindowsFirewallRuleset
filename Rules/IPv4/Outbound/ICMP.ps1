@@ -45,15 +45,15 @@ SOFTWARE.
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.System
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
 Test-SystemRequirements
 
 # Includes
 . $PSScriptRoot\DirectionSetup.ps1
 . $PSScriptRoot\..\IPSetup.ps1
-Import-Module -Name $RepoDir\Modules\Project.Windows.UserInfo
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
 #
 # Setup local variables:

@@ -34,16 +34,16 @@ SOFTWARE.
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.System
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
 Test-SystemRequirements
 
 # Includes
-. $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Test
-Import-Module -Name $RepoDir\Modules\Project.Windows.UserInfo
-Import-Module -Name $RepoDir\Modules\Project.Windows.ProgramInfo
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility
+. $ProjectRoot\Test\ContextSetup.ps1
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
 # Ask user if he wants to load these rules
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
@@ -53,20 +53,20 @@ Start-Test
 
 New-Test "Get-UserAccounts:"
 
-[string[]] $UserAccounts = Get-UserAccounts "Users" @Commons
-Write-Log
+[string[]] $UserAccounts = Get-UserAccounts "Users" @Logs
+Update-Logs
 
-[string[]] $AdminAccounts = Get-UserAccounts "Administrators" @Commons
-Write-Log
+[string[]] $AdminAccounts = Get-UserAccounts "Administrators" @Logs
+Update-Logs
 $UserAccounts
 $AdminAccounts
 
 New-Test "Get-UserNames:"
 
-$Users = Get-UserNames $UserAccounts @Commons
-Write-Log
-$Admins = Get-UserNames $AdminAccounts @Commons
-Write-Log
+$Users = Get-UserNames $UserAccounts @Logs
+Update-Logs
+$Admins = Get-UserNames $AdminAccounts @Logs
+Update-Logs
 
 $Users
 $Admins
@@ -75,23 +75,23 @@ New-Test "Get-UserSID:"
 
 foreach($User in $Users)
 {
-	Get-UserSID $User @Commons
-	Write-Log
+	Get-UserSID $User @Logs
+	Update-Logs
 }
 
 foreach($Admin in $Admins)
 {
-	Get-UserSID $Admin @Commons
-	Write-Log
+	Get-UserSID $Admin @Logs
+	Update-Logs
 }
 
 New-Test "Get-AppSID: foreach User"
 
 foreach($User in $Users) {
 	Write-Information -Tags "Test" -MessageData "INFO: Processing for: $User"
-	Get-AppxPackage -User $User -PackageTypeFilter Bundle @Commons | ForEach-Object {
-		Get-AppSID $User $_.PackageFamilyName @Commons
-		Write-Log
+	Get-AppxPackage -User $User -PackageTypeFilter Bundle @Logs | ForEach-Object {
+		Get-AppSID $User $_.PackageFamilyName @Logs
+		Update-Logs
 	}
 }
 
@@ -99,9 +99,9 @@ New-Test "Get-AppSID: foreach Admin"
 
 foreach($Admin in $Admins) {
 	Write-Information -Tags "Test" -MessageData "INFO: Processing for: $Admin"
-	Get-AppxPackage -User $Admin -PackageTypeFilter Bundle @Commons | ForEach-Object {
-		Get-AppSID $Admin $_.PackageFamilyName @Commons
-		Write-Log
+	Get-AppxPackage -User $Admin -PackageTypeFilter Bundle @Logs | ForEach-Object {
+		Get-AppSID $Admin $_.PackageFamilyName @Logs
+		Update-Logs
 	}
 }
 

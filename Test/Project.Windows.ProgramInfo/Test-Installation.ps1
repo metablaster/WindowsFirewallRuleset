@@ -32,15 +32,15 @@ SOFTWARE.
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.System
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
 Test-SystemRequirements
 
 # Includes
-. $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Test
-Import-Module -Name $RepoDir\Modules\Project.Windows.ProgramInfo
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility
+. $ProjectRoot\Test\ContextSetup.ps1
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
 # Ask user if he wants to load these rules
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
@@ -57,19 +57,19 @@ $TestBadVariable = "%UserProfile%\crazyFolder"
 $TestBadVariable2 = "%UserProfile%\crazyFolder"
 
 New-Test "Test-Installation 'MicrosoftOffice' $OfficeRoot"
-Test-Installation "MicrosoftOffice" ([ref]$OfficeRoot) @Commons
-Write-Log
+Test-Installation "MicrosoftOffice" ([ref]$OfficeRoot) @Logs
+Update-Logs
 
 New-Test "Test-Installation 'TeamViewer' $TeamViewerRoot"
-Test-Installation "TeamViewer" ([ref]$TeamViewerRoot) @Commons
-Write-Log
+Test-Installation "TeamViewer" ([ref]$TeamViewerRoot) @Logs
+Update-Logs
 
 New-Test "Test-Installation 'VisualStudio' $TestBadVariable"
-Test-Installation "VisualStudio" ([ref]$TestBadVariable) @Commons
-Write-Log
+Test-Installation "VisualStudio" ([ref]$TestBadVariable) @Logs
+Update-Logs
 
 New-Test "Test-Installation 'BadVariable' $TestBadVariable2"
-Test-Installation "BadVariable" ([ref]$TestBadVariable2) @Commons
-Write-Log
+Test-Installation "BadVariable" ([ref]$TestBadVariable2) @Logs
+Update-Logs
 
 Exit-Test

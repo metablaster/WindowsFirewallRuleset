@@ -32,15 +32,15 @@ SOFTWARE.
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.System
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
 Test-SystemRequirements
 
 # Includes
-. $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Test
-Import-Module -Name $RepoDir\Modules\Project.Windows.ComputerInfo
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility
+. $ProjectRoot\Test\ContextSetup.ps1
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
 # Ask user if he wants to load these rules
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
@@ -49,15 +49,15 @@ if (!(Approve-Execute)) { exit }
 Start-Test
 
 New-Test "Get-IPAddress IPv4"
-Get-IPAddress "IPv4" @Commons
-Write-Log
+Get-IPAddress "IPv4" @Logs
+Update-Logs
 
 New-Test "Get-IPAddress IPv6"
-Get-IPAddress "IPv6" @Commons
-Write-Log
+Get-IPAddress "IPv6" @Logs
+Update-Logs
 
 New-Test "Get-IPAddress IPv3"
-Get-IPAddress "IPv3" @Commons
-Write-Log
+Get-IPAddress "IPv3" @Logs
+Update-Logs
 
 Exit-Test

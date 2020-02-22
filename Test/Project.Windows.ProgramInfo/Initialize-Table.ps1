@@ -32,16 +32,16 @@ SOFTWARE.
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.System
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
 Test-SystemRequirements
 
 # Includes
-. $RepoDir\Test\ContextSetup.ps1
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Test
-Import-Module -Name $RepoDir\Modules\Project.Windows.UserInfo
-Import-Module -Name $RepoDir\Modules\Project.Windows.ProgramInfo
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $RepoDir\Modules\Project.AllPlatforms.Utility
+. $ProjectRoot\Test\ContextSetup.ps1
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
 # Ask user if he wants to load these rules
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
@@ -51,8 +51,8 @@ Start-Test
 
 New-Test "Initialize-Table"
 
-Initialize-Table @Commons
-Write-Log
+Initialize-Table @Logs
+Update-Logs
 
 if (!$global:InstallTable)
 {
@@ -71,8 +71,8 @@ New-Test "Fill table with data"
 foreach ($Account in $global:UserAccounts)
 {
 	Write-Information -Tags "Test" -MessageData "INFO: User programs for: $Account"
-	$UserPrograms = Get-UserPrograms $Account @Commons
-	Write-Log
+	$UserPrograms = Get-UserPrograms $Account @Logs
+	Update-Logs
 
 	if ($UserPrograms.Name -like "Greenshot*")
 	{
@@ -82,8 +82,8 @@ foreach ($Account in $global:UserAccounts)
 		# Enter data in the row
 		$Row.User = $Account.Split("\")[1]
 		$Row.InstallRoot = $UserPrograms | Where-Object { $_.Name -like "Greenshot*" } |
-		Select-Object -ExpandProperty InstallLocation @Commons
-		Write-Log
+		Select-Object -ExpandProperty InstallLocation @Logs
+		Update-Logs
 
 		# Add row to the table
 		$global:InstallTable.Rows.Add($Row)
@@ -91,6 +91,6 @@ foreach ($Account in $global:UserAccounts)
 }
 
 New-Test "Table data"
-$global:InstallTable | Format-Table -AutoSize @Commons
+$global:InstallTable | Format-Table -AutoSize @Logs
 
 Exit-Test

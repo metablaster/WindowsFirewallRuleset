@@ -296,8 +296,7 @@ function Get-NetworkServices
 	$Content = $Content | Where-Object { $_ -ne '$Service' -and $_ -ne "Any" -and $_ -ne '"*"' }
 
 	# File name where to save all matches
-	# TODO: rename to ProjectRoot
-	$File = "$RepoDir\Rules\NetworkServices.txt"
+	$File = "$ProjectRoot\Rules\NetworkServices.txt"
 
 	# If output file exists clear it, otherwise create a new file
 	if (Test-Path -Path $File)
@@ -370,8 +369,6 @@ function Set-ScreenBuffer
 
 	if ($NewSize.Height -lt $NewBuffer)
 	{
-		# TODO: $PSBoundParameters.Keys. check it's not @Commons
-		# NOTE: this message must go out now
 		Write-Warning -Message "Your screen buffer of $($NewSize.Height) is below recommended $NewBuffer to preserve all execution output"
 
 		$Choices  = "&Yes", "&No"
