@@ -26,6 +26,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+Set-StrictMode -Version Latest
+
 # TODO: let Write-Log select object in pipe, process it's commons and transfer down the pipe
 # TODO: stream logging instead of open/close file for performance
 
@@ -355,7 +357,7 @@ function Write-Log
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading common parameters from caller space"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if there is data to write logs"
 	$EV = $PSCmdlet.GetVariableValue('EV')
 	$WV = $PSCmdlet.GetVariableValue('WV')
 	$IV = $PSCmdlet.GetVariableValue('IV')

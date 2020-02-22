@@ -53,7 +53,7 @@ Get-ConnectedAdapters IPv4 @Commons
 Write-Log
 
 New-Test "Get-ConnectedAdapters binding"
-Get-ConnectedAdapters IPv4  @Commons | Select-Object -ExpandProperty IPv4Address @Commons
+Get-ConnectedAdapters IPv4 @Commons | Select-Object -ExpandProperty IPv4Address @Commons
 Write-Log
 
 Exit-Test

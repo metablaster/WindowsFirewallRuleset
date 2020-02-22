@@ -26,6 +26,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+Set-StrictMode -Version Latest
+
 # TODO: write function to query system users
 
 <#
@@ -52,15 +54,15 @@ function Get-UserAccounts
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting user accounts for group: $UserGroup"
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting user accounts for $UserGroup group"
 	$GroupUsers = Get-LocalGroupMember -Group $UserGroup |
 	Where-Object { $_.PrincipalSource -eq "Local" -and $_.ObjectClass -eq "User" } |
 	Select-Object -ExpandProperty Name
 
 	if([string]::IsNullOrEmpty($GroupUsers))
 	{
-		Write-Warning -Message "Get-UserAccounts: Failed to get UserAccounts for group '$UserGroup'"
+		Write-Warning -Message "Failed to get UserAccounts for group: $UserGroup"
 	}
 
 	return $GroupUsers
@@ -93,6 +95,7 @@ function Get-UserNames
 	[string[]] $UserNames = @()
 	foreach($Account in $UserAccounts)
 	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting user names for account: $Account"
 		$UserNames += $Account.split("\")[1]
 	}
 
@@ -125,13 +128,13 @@ function Get-UserSID
 
 	try
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for $UserName"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for user: $UserName"
 		$NTAccount = New-Object System.Security.Principal.NTAccount($UserName)
 		return ($NTAccount.Translate([System.Security.Principal.SecurityIdentifier])).ToString()
 	}
 	catch
 	{
-		Write-Warning -Message "Get-UserSID: User '$UserName' cannot be resolved to a SID."
+		Write-Warning -Message "User '$UserName' cannot be resolved to a SID."
 	}
 }
 
@@ -164,7 +167,7 @@ function Get-AccountSID
 
 	try
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for $UserAccount"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for account: $UserAccount"
 		$NTAccount = New-Object System.Security.Principal.NTAccount($Domain, $User)
 		return ($NTAccount.Translate([System.Security.Principal.SecurityIdentifier])).ToString()
 	}
@@ -202,7 +205,7 @@ function Get-UserSDDL
 
 	foreach($User in $UserNames)
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL for $User"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL for user: $User"
 
 		try
 		{
@@ -210,7 +213,7 @@ function Get-UserSDDL
 		}
 		catch
 		{
-			Write-Warning -Message "Get-UserSDDL: User '$User' not found"
+			Write-Warning -Message "User '$User' not found"
 			continue
 		}
 
@@ -248,7 +251,7 @@ function Get-AccountSDDL
 
 	foreach ($Account in $UserAccounts)
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL for $Account"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL for account: $Account"
 
 		try
 		{
@@ -256,7 +259,7 @@ function Get-AccountSDDL
 		}
 		catch
 		{
-			Write-Warning -Message "Get-AccountSDDL: User account $UserAccount not found"
+			Write-Warning -Message "User account '$UserAccount' not found"
 			continue
 		}
 

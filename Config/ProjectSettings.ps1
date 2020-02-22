@@ -73,6 +73,8 @@ $WhatIfPreference	False
 # These settings apply only for development phase
 if ($Develop)
 {
+	Set-StrictMode -Version Latest
+
 	#
 	# Override preference defaults for scripts here,
 	#

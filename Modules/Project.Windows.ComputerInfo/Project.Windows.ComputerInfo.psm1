@@ -26,6 +26,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+Set-StrictMode -Version Latest
+
 # Includes
 Import-Module -Name $PSScriptRoot\..\Indented.Net.IP
 
@@ -50,8 +52,10 @@ function Get-ComputerName
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Learning computer name"
-	return [Environment]::MachineName
+	$ComputerName = [Environment]::MachineName
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Learning computer name: $ComputerName"
+
+	return $ComputerName
 }
 
 <#
@@ -93,12 +97,13 @@ function Get-ConnectedAdapters
 		$ConnectedAdapters = Get-NetIPConfiguration | Where-Object -Property IPv6DefaultGateway
 	}
 
-	if ($ConnectedAdapters.Count -eq 0)
+	$Count = ($ConnectedAdapters | Measure-Object).Count
+	if ($Count -eq 0)
 	{
 		Write-Error -Category ObjectNotFound -TargetObject $ConnectedAdapters `
 		-Message "None of the adapters is connected to $AddressFamily network"
 	}
-	elseif ($ConnectedAdapters.Count -gt 1)
+	elseif ($Count -gt 1)
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Multiple adapters are connected to $AddressFamily network"
 	}
@@ -134,20 +139,20 @@ function Get-IPAddress
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting IP's of connected adapters for $AddressFamily network"
+
 	$ConnectedAdapters = Get-ConnectedAdapters $AddressFamily | Select-Object -ExpandProperty ($AddressFamily + "Address")
 	$IPAddress = $ConnectedAdapters | Select-Object -ExpandProperty IPAddress
 
-	if ($IPAddress.Count -gt 1)
+	$Count = ($IPAddress | Measure-Object).Count
+	if ($Count -gt 1)
 	{
 		# TODO: bind result to custom function
-		Write-Information -Tags "User" -MessageData "[$($MyInvocation.InvocationName)] Returning multiple IP addresses: $IPAddress" `
-		-Tags Result 6>&1 | Select-Object * | Tee-Object -FilePath "$RepoDir\Logs\Info.log" | Select-Object -ExpandProperty MessageData
+		Write-Information -Tags "Result" -MessageData "Computer has multiple IP addresses: $IPAddress"
 	}
-	elseif ($IPAddress.Count -eq 0)
+	elseif ($Count -eq 0)
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Returning empty string"
+		Write-Warning -Message "Computer not connected to $AddressFamily network, IP address will be missing"
 	}
 
 	return $IPAddress
@@ -171,16 +176,18 @@ function Get-Broadcast
 	param ()
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting broadcast address of connected adapters"
 
 	# Broadcast address makes sense only for IPv4
 	$ConnectedAdapters = Get-ConnectedAdapters "IPv4" | Select-Object -ExpandProperty IPv4Address
 
-	if ($ConnectedAdapters.Count -gt 0)
+	$Count = ($ConnectedAdapters | Measure-Object).Count
+	if ($Count -gt 0)
 	{
-		if ($ConnectedAdapters.Count -gt 1)
+		if ($Count -gt 1)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] got multiple adapters, using first one"
 			$ConnectedAdapters = $ConnectedAdapters | Select-Object -First 1
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] got multiple adapters, selecting first one: $($ConnectedAdapters.InterfaceAlias)"
 		}
 
 		$IPAddress = $ConnectedAdapters | Select-Object -ExpandProperty IPAddress

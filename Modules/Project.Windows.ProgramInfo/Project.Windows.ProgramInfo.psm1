@@ -26,11 +26,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+Set-StrictMode -Version Latest
+
 # Includes
+. $PSScriptRoot\..\..\Utility\Get-SQLInstances.ps1
 Import-Module -Name $PSScriptRoot\..\Project.Windows.UserInfo
 Import-Module -Name $PSScriptRoot\..\Project.Windows.ComputerInfo
 Import-Module -Name $PSScriptRoot\..\Project.AllPlatforms.Utility
-. $PSScriptRoot\..\..\Utility\Get-SQLInstances.ps1
 
 <#
 .SYNOPSIS

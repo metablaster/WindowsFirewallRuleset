@@ -26,6 +26,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+Set-StrictMode -Version Latest
+
+# Includes
 . $PSScriptRoot\..\..\Utility\Get-TypeName.ps1
 
 <#
@@ -59,8 +62,8 @@ function Update-Context
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting context"
+
 	$NewContext = $Root + "." + $Section
 	if (![System.String]::IsNullOrEmpty($Subsection))
 	{
@@ -157,6 +160,7 @@ function Show-SDDL
 
 	$SDDLSplit
 
+	# TODO: Write-Output
 	Write-Host "" 6>&1 | Out-Host
 	Write-Host "SDDL SID Parsing:" 6>&1 | Out-Host
 	Write-Host "****************" 6>&1 | Out-Host
@@ -254,6 +258,7 @@ function Get-NetworkServices
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Scanning rules for network services"
 
 	if (!(Test-Path -Path $Folder))
 	{
@@ -293,6 +298,7 @@ function Get-NetworkServices
 	$Content = $Content | Where-Object { $_ -ne '$Service' -and $_ -ne "Any" -and $_ -ne '"*"' }
 
 	# File name where to save all matches
+	# TODO: rename to ProjectRoot
 	$File = "$RepoDir\Rules\NetworkServices.txt"
 
 	# If output file exists clear it, otherwise create a new file
@@ -368,8 +374,7 @@ function Set-ScreenBuffer
 	{
 		# TODO: $PSBoundParameters.Keys. check it's not @Commons
 		# NOTE: this message must go out now
-		Write-Warning -Message "Your screen buffer of $($NewSize.Height) is below recommended $NewBuffer to preserve all execution output" `
-		-WarningAction "Continue" 3>&1 | Resume-Warning -Log:$WarningLogging -Preference $PSCmdlet.GetVariableValue('WarningPreference')
+		Write-Warning -Message "Your screen buffer of $($NewSize.Height) is below recommended $NewBuffer to preserve all execution output"
 
 		$Choices  = "&Yes", "&No"
 		$Default = 0
