@@ -115,7 +115,7 @@ function Update-Logs
 
 	if ($ErrorBuffer)
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing ErrorVariable"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing Error message"
 
 		$Preference = $PSCmdlet.GetVariableValue('ErrorActionPreference')
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller ErrorActionPreference is: $Preference"
@@ -130,17 +130,17 @@ function Update-Logs
 		{
 			$LogFile = Get-LogFile $LogsFolder "Error"
 
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Write error to log file"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending error to log file: $LogFile"
 			$ErrorBuffer | ForEach-Object { $_ | Select-Object * | Out-File -Append -FilePath $LogFile }
 		}
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Clearing generated errors buffer"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Clearing errors buffer"
 		$ErrorBuffer.Clear()
 	}
 
 	if ($WarningBuffer)
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing WarningVariable"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing Warning message"
 
 		$Preference = $PSCmdlet.GetVariableValue('WarningPreference')
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller WarningPreference is: $Preference"
@@ -161,13 +161,13 @@ function Update-Logs
 			$WarningBuffer | ForEach-Object { "WARNING: $(Get-Date -Format "HH:mm:ss") $_" | Out-File -Append -FilePath $LogFile }
 		}
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Clearing generated warnings buffer"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Clearing warnings buffer"
 		$WarningBuffer.Clear()
 	}
 
 	if ($InfoBuffer)
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing InformationVariable"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing Information message"
 
 		if ($InformationLogging)
 		{
@@ -177,7 +177,7 @@ function Update-Logs
 			$InfoBuffer | ForEach-Object { $_ | Select-Object * | Out-File -Append -FilePath $LogFile }
 		}
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Clearing generated information buffer"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Clearing information buffer"
 		$InfoBuffer.Clear()
 	}
 }

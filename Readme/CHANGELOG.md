@@ -31,6 +31,7 @@
 
 # Bug fixes
 1. Modules are renamed to avoid name clashes with other modules
+2. Format-Path function would index into empty array if environment variable not found
 
 # Development
 1. Symbols and keywords have their casing consistent

@@ -28,6 +28,27 @@ SOFTWARE.
 
 Set-StrictMode -Version Latest
 
+#
+# Module preferences
+#
+
+if ($Develop)
+{
+	$ErrorActionPreference = $ModuleErrorPreference
+	$WarningPreference = $ModuleWarningPreference
+	$DebugPreference = $ModuleDebugPreference
+	$VerbosePreference = $ModuleVerbosePreference
+	$InformationPreference = $ModuleInformationPreference
+
+	$ThisModule = $MyInvocation.MyCommand.Name -replace ".{5}$"
+
+	Write-Debug -Message "[$ThisModule] ErrorActionPreference is $ErrorActionPreference"
+	Write-Debug -Message "[$ThisModule] WarningPreference is $WarningPreference"
+	Write-Debug -Message "[$ThisModule] DebugPreference is $DebugPreference"
+	Write-Debug -Message "[$ThisModule] VerbosePreference is $VerbosePreference"
+	Write-Debug -Message "[$ThisModule] InformationPreference is $InformationPreference"
+}
+
 # Includes
 . $PSScriptRoot\..\..\Utility\Get-SQLInstances.ps1
 Import-Module -Name $PSScriptRoot\..\Project.Windows.UserInfo
@@ -66,7 +87,7 @@ function Get-AppSID
 	$TargetPath = "C:\Users\$UserName\AppData\Local\Packages\$AppName\AC"
 	if (Test-Path -PathType Container -Path $TargetPath)
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Target path is $TragetPath"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Target path is: $TargetPath"
 
 		$ACL = Get-ACL $TargetPath
 		$ACE = $ACL.Access.IdentityReference.Value
@@ -120,8 +141,7 @@ function Test-File
 		$SearchPath = Split-Path -Path $ExpandedPath -Parent
 		$Executable = Split-Path -Path $ExpandedPath -Leaf
 
-		Write-Warning -Message "Executable '$Executable' was not found"
-		Write-Warning -Message "rules for '$Executable' won't have any effect"
+		Write-Warning -Message "Executable '$Executable' was not found, rules for '$Executable' won't have any effect"
 
 		Write-Information -Tags "User" -MessageData "INFO: Searched path was: $SearchPath"
 		Write-Information -Tags "User" -MessageData "INFO: To fix the problem find '$Executable' then adjust the path in $Script and re-run the script later again"
@@ -149,6 +169,7 @@ function Test-Environment
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if path is valid for firewall rule"
 
 	if ([System.String]::IsNullOrEmpty($FilePath))
 	{
@@ -158,7 +179,7 @@ function Test-Environment
 
 	if ([Array]::Find($UserProfileEnvironment, [Predicate[string]]{ $FilePath -like "$($args[0])*" }))
 	{
-		Write-Warning -Message "Bad environment variable detected, paths with environment variables that lead to user profile are not valid"
+		Write-Warning -Message "Rules with environment variable paths that lead to user profile are not valid"
 		Write-Information -Tags "Project" -MessageData "INFO: Bad path detected is: $FilePath"
 		return $false
 	}
@@ -187,14 +208,14 @@ function Test-Service
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if rules point to valid system services"
 
-	if (!(Get-Service -Name $Service -ErrorAction SilentlyContinue))
+	if (!(Get-Service -Name $Service -ErrorAction Ignore))
 	{
 		Write-Warning -Message "Service '$Service' not found, rule won't have any effect"
 		Write-Information -Tags "User" -MessageData "INFO: To fix the problem update or comment out all firewall rules for '$Service' service"
 	}
 }
-
 
 <#
 .SYNOPSIS
@@ -207,6 +228,8 @@ Test-UserProfile "C:\Users\User\AppData\Local\Google\Chrome\Application\chrome.e
 None. You cannot pipe objects to Test-UserProfile
 .OUTPUTS
 $true or $false
+.NOTES
+TODO: is it possible to nest this into Test-Environment somehow?
 #>
 function Test-UserProfile
 {
@@ -260,20 +283,20 @@ function Test-UserProfile
 	# Make a copy of file path because modification can be wrong
 	$SearchString = $FilePath
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Check if '$FilePath' already contains user profile environment variable"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if '$FilePath' already contains user profile environment variable"
 	foreach ($Variable in $Variables)
 	{
 		if ($FilePath -like "$($Variable.Name)*")
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input path already formatted"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input path leads to user profile"
 			return $true
 		}
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] See if $SearchString is convertible to environment variable"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if '$SearchString' is convertible to user profile environment variable"
 	while (![System.String]::IsNullOrEmpty($SearchString))
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing $SearchString"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing: $SearchString"
 
 		foreach ($Entry in $Variables)
 		{
@@ -289,7 +312,7 @@ function Test-UserProfile
 		$SearchString = Split-Path -Path $SearchString -Parent
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Environment variables for input path don't exist"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] input path does not lead to user profile"
 	return $false
 }
 
@@ -370,7 +393,7 @@ function Format-Path
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Check if '$SearchString' is convertible to environment variable"
 	while (![System.String]::IsNullOrEmpty($SearchString))
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing $SearchString"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing: $SearchString"
 
 		foreach ($Entry in $Variables)
 		{
@@ -389,16 +412,20 @@ function Format-Path
 
 	# path has been reduced to root drive so get that
 	$SearchString = Split-Path -Path $FilePath -Qualifier
-	# Since there are duplicate entries, we grab first one
-	$Replacement = @(($Variables | Where-Object { $_.Value -eq $SearchString} ).Name)[0]
 
-	if ([System.String]::IsNullOrEmpty($Replacement))
+	# Find candidate replacements
+	$Variables = $Variables | Where-Object { $_.Value -eq $SearchString}
+
+	if ([System.String]::IsNullOrEmpty($Variables))
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Environment variables for input path don't exist"
 		# There are no environment variables for this drive
 		# Just trim trailing slash
 		return $FilePath.TrimEnd('\\')
 	}
+
+	# Since there may be duplicate entries, we grab first one
+	$Replacement = $Variables.Name[0]
 
 	# Only root drive is converted, just trim away trailing slash
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Only root drive is converted to environment variable"
@@ -456,7 +483,8 @@ function Get-UserPrograms
 						Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing registry key: $SubKey"
 
 						# TODO: move all instances to directly format (first call above)
-						$InstallLocation = Format-Path $InstallLocation
+						# NOTE: Avoid spamming debug and verbose messages
+						$InstallLocation = Format-Path $InstallLocation -Verbose:$false -Debug:$false
 
 						# Get more key entries as needed
 						$UserPrograms += New-Object PSObject -Property @{
@@ -544,7 +572,9 @@ function Get-SystemPrograms
 						# First we get InstallLocation by normal means
 						# Strip away quotations and ending backslash
 						[string] $InstallLocation = $KeyEntry.GetValue("InstallLocation")
-						$InstallLocation = Format-Path $InstallLocation
+
+						# NOTE: Avoid spamming debug and verbose messages
+						$InstallLocation = Format-Path $InstallLocation -Verbose:$false -Debug:$false
 
 						if ([System.String]::IsNullOrEmpty($InstallLocation))
 						{
@@ -552,7 +582,9 @@ function Get-SystemPrograms
 							# so let's take a look at DisplayIcon which is the path to executable
 							# then strip off all of the junk to get clean and relevant directory output
 							$InstallLocation = $KeyEntry.GetValue("DisplayIcon")
-							$InstallLocation = Format-Path $InstallLocation
+
+							# NOTE: Avoid spamming debug and verbose messages
+							$InstallLocation = Format-Path $InstallLocation -Verbose:$false -Debug:$false
 
 							# regex to remove: \whatever.exe at the end
 							$InstallLocation = $InstallLocation -Replace "\\(?:.(?!\\))+exe$", ""
@@ -663,7 +695,8 @@ function Get-AllUserPrograms
 					{
 						Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing registry key: $HKLMKey"
 
-						$InstallLocation = Format-Path $InstallLocation
+						# NOTE: Avoid spamming debug and verbose messages
+						$InstallLocation = Format-Path $InstallLocation -Verbose:$false -Debug:$false
 
 						# Get more key entries as needed
 						$AllUserPrograms += New-Object PSObject -Property @{
@@ -711,12 +744,12 @@ function Initialize-Table
 	# Create Table object
 	if ($Develop)
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] resetting global install table"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] resetting global installation table"
 		Set-Variable -Name InstallTable -Scope Global -Value (New-Object System.Data.DataTable $TableName)
 	}
 	else
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] resetting local install table"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] resetting local installation table"
 		Set-Variable -Name InstallTable -Scope Script -Value (New-Object System.Data.DataTable $TableName)
 	}
 
@@ -727,8 +760,6 @@ function Initialize-Table
 	# Add the Columns
 	$InstallTable.Columns.Add($UserColumn)
 	$InstallTable.Columns.Add($InstallColumn)
-
-	#return Write-Output -NoEnumerate $InstallTable
 }
 
 <#
@@ -819,7 +850,7 @@ function Update-Table
 			$UserPrograms = Get-UserPrograms $Account
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching $Account programs for $SearchString"
 
-			if ($UserPrograms.Name -like "*$SearchString*")
+			if ($UserPrograms -and $UserPrograms.Name -like "*$SearchString*")
 			{
 				$TargetPrograms = $UserPrograms | Where-Object { $_.Name -like "*$SearchString*" }
 
@@ -863,11 +894,13 @@ function Edit-Table
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Attempt to insert new entry into installation table"
 
 	# Nothing to do if the path does not exist
 	if (!(Test-Environment $InstallRoot))
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] $InstallRoot not found"
+		# TODO: will be true also for user profile, we should try to fix the path if it leads to user prfofile instead of doing nothing.
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] $InstallRoot not found or invalid"
 		return
 	}
 
@@ -947,19 +980,12 @@ function Test-Installation
 	}
 	elseif (Find-Installation $Program)
 	{
-		if ($DebugPreference -ne "SilentlyContinue")
-		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Show InstallTable for $Program"
-			$InstallTable | Format-Table
-		}
-
 		# NOTE: the paths in installation table are supposed to be formatted
 		$InstallRoot = "unknown install location"
 		$Count = $InstallTable.Rows.Count
 
 		if ($Count -gt 1)
 		{
-			$InstallTable | Format-Table -AutoSize
 			Write-Information -Tags "User" -MessageData "INFO: Found multiple candidate installation directories for $Program"
 
 			# Print out all candidate installation directories
@@ -1046,7 +1072,7 @@ function Find-Installation
 	# TODO: need to check some of these search strings (cases), also remove hardcoded directories
 	# NOTE: we want to preserve system environment variables for firewall GUI,
 	# otherwise firewall GUI will show full paths which is not desired for sorting reasons
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Start search for $Program"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Start searching for $Program"
 	switch -Wildcard ($Program)
 	{
 		"NuGet"
@@ -1981,27 +2007,6 @@ if ($Develop)
 
 	# Variable exports
 	Export-ModuleMember -Variable InstallTable
-}
-
-#
-# Module preferences
-#
-
-if ($Develop)
-{
-	$ErrorActionPreference = $ModuleErrorPreference
-	$WarningPreference = $ModuleWarningPreference
-	$DebugPreference = $ModuleDebugPreference
-	$VerbosePreference = $ModuleVerbosePreference
-	$InformationPreference = $ModuleInformationPreference
-
-	$ThisModule = $MyInvocation.MyCommand.Name -replace ".{5}$"
-
-	Write-Debug -Message "[$ThisModule] ErrorActionPreference is $ErrorActionPreference"
-	Write-Debug -Message "[$ThisModule] WarningPreference is $WarningPreference"
-	Write-Debug -Message "[$ThisModule] DebugPreference is $DebugPreference"
-	Write-Debug -Message "[$ThisModule] VerbosePreference is $VerbosePreference"
-	Write-Debug -Message "[$ThisModule] InformationPreference is $InformationPreference"
 }
 
 <# Opening keys, naming convention as you drill down the keys

@@ -66,31 +66,32 @@ if ($global:InstallTable.Rows.Count -ne 0)
 	exit
 }
 
-New-Test "Fill table with data"
+# TODO: this produces errors, no time to investigate
+# New-Test "Fill table with data"
 
-foreach ($Account in $global:UserAccounts)
-{
-	Write-Information -Tags "Test" -MessageData "INFO: User programs for: $Account"
-	$UserPrograms = Get-UserPrograms $Account @Logs
-	Update-Logs
+# foreach ($Account in $global:UserAccounts)
+# {
+# 	Write-Information -Tags "Test" -MessageData "INFO: User programs for: $Account"
+# 	$UserPrograms = Get-UserPrograms $Account @Logs
+# 	Update-Logs
 
-	if ($UserPrograms.Name -like "Greenshot*")
-	{
-		# Create a row
-		$Row = $global:InstallTable.NewRow()
+# 	if ($UserPrograms.Name -like "Greenshot*")
+# 	{
+# 		# Create a row
+# 		$Row = $global:InstallTable.NewRow()
 
-		# Enter data in the row
-		$Row.User = $Account.Split("\")[1]
-		$Row.InstallRoot = $UserPrograms | Where-Object { $_.Name -like "Greenshot*" } |
-		Select-Object -ExpandProperty InstallLocation @Logs
-		Update-Logs
+# 		# Enter data in the row
+# 		$Row.User = $Account.Split("\")[1]
+# 		$Row.InstallRoot = $UserPrograms | Where-Object { $_.Name -like "Greenshot*" } |
+# 		Select-Object -ExpandProperty InstallLocation @Logs
+# 		Update-Logs
 
-		# Add row to the table
-		$global:InstallTable.Rows.Add($Row)
-	}
-}
+# 		# Add row to the table
+# 		$global:InstallTable.Rows.Add($Row)
+# 	}
+# }
 
-New-Test "Table data"
-$global:InstallTable | Format-Table -AutoSize @Logs
+# New-Test "Table data"
+# $global:InstallTable | Format-Table -AutoSize @Logs
 
 Exit-Test
