@@ -366,6 +366,9 @@ function Format-Path
 	$FilePath = $FilePath.Trim('"')
 	$FilePath = $FilePath.Trim("'")
 
+	# Some paths may have semicollon (ie. command paths)
+	$FilePath = $FilePath.TrimEnd(";")
+
 	# Replace double slasses with single ones
 	$FilePath = $FilePath.Replace("\\", "\")
 
@@ -458,7 +461,7 @@ function Get-UserPrograms
 	$ComputerName = ($UserAccount.Split("\"))[0]
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
-	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
+	if (Test-Connection -TargetName $ComputerName -Count $ConnectionCount -TimeoutSeconds $ConnectionTimeout -IPv4 -Quiet)
 	{
 		$HKU = Get-AccountSID $UserAccount
 		$HKU += "\Software\Microsoft\Windows\CurrentVersion\Uninstall"
@@ -503,7 +506,7 @@ function Get-UserPrograms
 				$InstallLocation = Format-Path $InstallLocation -Verbose:$false -Debug:$false
 
 				# Get more key entries as needed
-				$UserPrograms += New-Object PSObject -Property @{
+				$UserPrograms += New-Object -TypeName PSObject -Property @{
 					"ComputerName" = $ComputerName
 					"RegKey" = $HKUSubKey
 					"Name" = $SubKey.GetValue("displayname")
@@ -517,7 +520,6 @@ function Get-UserPrograms
 	else
 	{
 		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact computer: $ComputerName"
-		return $null
 	}
 }
 
@@ -544,20 +546,20 @@ function Get-SystemPrograms
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
-	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
+	if (Test-Connection -TargetName $ComputerName -Count $ConnectionCount -TimeoutSeconds $ConnectionTimeout -IPv4 -Quiet)
 	{
 		if ([System.Environment]::Is64BitOperatingSystem)
 		{
 			# 64 bit system
 			$HKLM = @(
-				"Software\Microsoft\Windows\CurrentVersion\Uninstall"
-				"Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall"
+				"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall"
+				"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall"
 			)
 		}
 		else
 		{
 			# 32 bit system
-			$HKLM = "Software\Microsoft\Windows\CurrentVersion\Uninstall"
+			$HKLM = "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall"
 		}
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
@@ -623,7 +625,7 @@ function Get-SystemPrograms
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKLMSubKey"
 
 				# Get more key entries as needed
-				$SystemPrograms += New-Object PSObject -Property @{
+				$SystemPrograms += New-Object -TypeName PSObject -Property @{
 					"ComputerName" = $ComputerName
 					"RegKey" = $HKLMSubKey
 					"Name" = $SubKey.GetValue("DisplayName")
@@ -637,7 +639,6 @@ function Get-SystemPrograms
 	else
 	{
 		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact computer: $ComputerName"
-		return $null
 	}
 }
 
@@ -665,7 +666,7 @@ function Get-AllUserPrograms
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
 	# TODO: make global connection timeout
-	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
+	if (Test-Connection -TargetName $ComputerName -Count $ConnectionCount -TimeoutSeconds $ConnectionTimeout -IPv4 -Quiet)
 	{
 		# TODO: this key may not exist on fresh installed systems, tested in fresh installed Windows Server 2019
 		$HKLM = "SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData"
@@ -722,7 +723,7 @@ function Get-AllUserPrograms
 					$InstallLocation = Format-Path $InstallLocation -Verbose:$false -Debug:$false
 
 					# Get more key entries as needed
-					$AllUserPrograms += New-Object PSObject -Property @{
+					$AllUserPrograms += New-Object -TypeName PSObject -Property @{
 						"ComputerName" = $ComputerName
 						"RegKey" = $HKLMKey
 						"Name" = $ProductKey.GetValue("DisplayName")
@@ -734,6 +735,138 @@ function Get-AllUserPrograms
 
 			return $AllUserPrograms
 		}
+	}
+	else
+	{
+		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact computer: $ComputerName"
+	}
+}
+
+<#
+.SYNOPSIS
+Get list of install locations for executables and executable names
+.DESCRIPTION
+Returs a table of installed programs, with exectuable name, installation path,
+registry path and child registry key name for target computer
+.PARAMETER ComputerName
+Computer name which to check
+.EXAMPLE
+Get-AppPaths "COMPUTERNAME"
+.INPUTS
+None. You cannot pipe objects to Get-SystemPrograms
+.OUTPUTS
+System.Management.Automation.PSCustomObject list of executables and their installation path
+.NOTES
+TODO: we are using OUTPUTS to describe something that isn't really an output.
+#>
+function Get-ExecutablePaths
+{
+	[CmdletBinding()]
+	param (
+		[Parameter(Mandatory = $true)]
+		[string] $ComputerName
+	)
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
+
+	if (Test-Connection -TargetName $ComputerName -Count $ConnectionCount -TimeoutSeconds $ConnectionTimeout -IPv4 -Quiet)
+	{
+		if ([System.Environment]::Is64BitOperatingSystem)
+		{
+			# 64 bit system
+			$HKLM = @(
+				"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths"
+				# NOTE: It looks like this key is exact duplicate, not used
+				# even if there are both 32 and 64 bit, 32 bit applications on 64 bit system the path will point to 64 bit application
+				# "SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\App Paths"
+			)
+		}
+		else
+		{
+			# 32 bit system
+			$HKLM = "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths"
+		}
+
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
+		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
+		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
+
+		$AppPaths = @()
+		foreach ($HKLMRootKey in $HKLM)
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLMRootKey"
+			$RootKey = $RemoteKey.OpenSubkey($HKLMRootKey)
+
+			if (!$RootKey)
+			{
+				Write-Warning -Message "Failed to open registry root key: HKLM:$HKLMRootKey"
+				continue
+			}
+
+			foreach ($HKLMSubKey in $RootKey.GetSubKeyNames())
+			{
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMSubKey"
+				$SubKey = $RootKey.OpenSubkey($HKLMSubKey);
+
+				if (!$SubKey)
+				{
+					Write-Warning -Message "Failed to open registry sub Key: $HKLMSubKey"
+					continue
+				}
+
+				# Default key can be empty
+				[string] $FilePath = $SubKey.GetValue("")
+				if (![string]::IsNullOrEmpty($FilePath))
+				{
+					# Strip away quotations from path
+					$FilePath = $FilePath.Trim('"')
+					$FilePath = $FilePath.Trim("'")
+
+					# Replace double slasses with single ones
+					$FilePath = $FilePath.Replace("\\", "\")
+
+					# Get only executable name
+					$Executable = Split-Path -Path $FilePath -Leaf
+				}
+
+				# Path can be empty
+				$InstallLocation = $SubKey.GetValue("Path")
+				if (![string]::IsNullOrEmpty($InstallLocation))
+				{
+					$InstallLocation = Format-Path $InstallLocation -Verbose:$false -Debug:$false
+				}
+				elseif (![string]::IsNullOrEmpty($FilePath))
+				{
+					# Get install location from Default key
+					$InstallLocation = Split-Path -Path $FilePath -Parent
+					$InstallLocation = Format-Path $InstallLocation -Verbose:$false -Debug:$false
+				}
+
+				# Some executables may have duplicate entries (keys related to executable)
+				# Select only those which have a valid path (original executable keys)
+				if ([string]::IsNullOrEmpty($InstallLocation))
+				{
+					# NOTE: Avoid spamming
+					# Write-Debug -Message "Ignoring useless key: $HKLMSubKey"
+					continue
+				}
+
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKLMSubKey"
+
+				# Get more key entries as needed
+				# We want to separate leaf key name because some key names are holding alternative executable name
+				$AppPaths += New-Object -TypeName PSObject -Property @{
+					"ComputerName" = $ComputerName
+					"RegKey" = $HKLMSubKey
+					#"RegPath" = $SubKey.Name
+					"Name" = $Executable
+					"InstallLocation" = $InstallLocation
+				}
+			}
+		}
+
+		return $AppPaths
 	}
 	else
 	{
@@ -767,17 +900,17 @@ function Initialize-Table
 	if ($Develop)
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] resetting global installation table"
-		Set-Variable -Name InstallTable -Scope Global -Value (New-Object System.Data.DataTable $TableName)
+		Set-Variable -Name InstallTable -Scope Global -Value (New-Object -TypeName System.Data.DataTable $TableName)
 	}
 	else
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] resetting local installation table"
-		Set-Variable -Name InstallTable -Scope Script -Value (New-Object System.Data.DataTable $TableName)
+		Set-Variable -Name InstallTable -Scope Script -Value (New-Object -TypeName System.Data.DataTable $TableName)
 	}
 
 	# Define Columns
-	$UserColumn = New-Object System.Data.DataColumn User, ([string])
-	$InstallColumn = New-Object System.Data.DataColumn InstallRoot, ([string])
+	$UserColumn = New-Object -TypeName System.Data.DataColumn User, ([string])
+	$InstallColumn = New-Object -TypeName System.Data.DataColumn InstallRoot, ([string])
 
 	# Add the Columns
 	$InstallTable.Columns.Add($UserColumn)
@@ -808,11 +941,38 @@ function Update-Table
 		[string] $SearchString,
 
 		[Parameter(Mandatory = $false)]
-		[bool] $UserProfile = $false
+		[switch] $UserProfile,
+
+		[Parameter(Mandatory = $false)]
+		[switch] $Executables
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Search string = $SearchString"
+
+	if ($Executables)
+	{
+		$TargetPath = $ExecutablePaths | Where-Object -Property Name -eq $SearchString
+
+		if ($TargetPath)
+		{
+			foreach ($User in $UserNames)
+			{
+				# Create a row
+				$Row = $InstallTable.NewRow()
+
+				# Enter data into row
+				$Row.User = $User
+				$Row.InstallRoot = $TargetPath | Select-Object -ExpandProperty InstallLocation
+
+				# Add row to the table
+				$InstallTable.Rows.Add($Row)
+			}
+
+			# If the path is known there is not need to drill the registry any further
+			return
+		}
+	}
 
 	# TODO: try to search also for path in addition to program name (3rd parameter)
 	# TODO: SearchString may pick up irrelevant paths (ie. unreal), or even miss
@@ -1286,7 +1446,7 @@ function Find-Installation
 		}
 		"Greenshot"
 		{
-			Update-Table "Greenshot" $true
+			Update-Table "Greenshot" -UserProfile
 			break
 		}
 		"DnsCrypt"
@@ -1299,9 +1459,14 @@ function Find-Installation
 			Edit-Table "%ProgramFiles%\OpenSSH-Win64"
 			break
 		}
+		"PowerShellCore64"
+		{
+			Update-Table "pwsh.exe" -Executables
+			break
+		}
 		"PowerShell64"
 		{
-			Edit-Table "%SystemRoot%\System32\WindowsPowerShell\v1.0"
+			Update-Table "PowerShell.exe" -Executables
 			break
 		}
 		"PowerShell86"
@@ -1342,32 +1507,32 @@ function Find-Installation
 		}
 		"Chrome"
 		{
-			Update-Table "Google Chrome" $true
+			Update-Table "Google Chrome" -UserProfile
 			break
 		}
 		"Firefox"
 		{
-			Update-Table "Firefox" $true
+			Update-Table "Firefox" -UserProfile
 			break
 		}
 		"Yandex"
 		{
-			Update-Table "Yandex" $true
+			Update-Table "Yandex" -UserProfile
 			break
 		}
 		"Tor"
 		{
-			Update-Table "Tor" $true
+			Update-Table "Tor" -UserProfile
 			break
 		}
 		"uTorrent"
 		{
-			Update-Table "uTorrent" $true
+			Update-Table "uTorrent" -UserProfile
 			break
 		}
 		"Thuderbird"
 		{
-			Update-Table "Thuderbird" $true
+			Update-Table "Thuderbird" -UserProfile
 			break
 		}
 		"Steam"
@@ -1402,7 +1567,7 @@ function Find-Installation
 		}
 		"MSYS2"
 		{
-			Update-Table "MSYS2" $true
+			Update-Table "MSYS2" -UserProfile
 			break
 		}
 		"VisualStudioInstaller"
@@ -1417,7 +1582,7 @@ function Find-Installation
 		}
 		"GithubDesktop"
 		{
-			Update-Table "GitHubDesktop" $true
+			Update-Table "GitHubDesktop" -UserProfile
 			break
 		}
 		"EpicGames"
@@ -1508,7 +1673,7 @@ function Get-NetFramework
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
-	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
+	if (Test-Connection -TargetName $ComputerName -Count $ConnectionCount -TimeoutSeconds $ConnectionTimeout -IPv4 -Quiet)
 	{
 		$HKLM = "SOFTWARE\Microsoft\NET Framework Setup\NDP"
 
@@ -1631,7 +1796,7 @@ function Get-WindowsSDK
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
-	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
+	if (Test-Connection -TargetName $ComputerName -Count $ConnectionCount -TimeoutSeconds $ConnectionTimeout -IPv4 -Quiet)
 	{
 		if ([System.Environment]::Is64BitOperatingSystem)
 		{
@@ -1722,7 +1887,7 @@ function Get-WindowsKits
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
-	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
+	if (Test-Connection -TargetName $ComputerName -Count $ConnectionCount -TimeoutSeconds $ConnectionTimeout -IPv4 -Quiet)
 	{
 		if ([System.Environment]::Is64BitOperatingSystem)
 		{
@@ -1810,7 +1975,7 @@ function Get-WindowsDefender
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
-	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
+	if (Test-Connection -TargetName $ComputerName -Count $ConnectionCount -TimeoutSeconds $ConnectionTimeout -IPv4 -Quiet)
 	{
 		$HKLM = "SOFTWARE\Microsoft\Windows Defender"
 
@@ -1883,7 +2048,7 @@ System.Management.Automation.PSCustomObject for installed Microsoft SQL Server M
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
-	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
+	if (Test-Connection -TargetName $ComputerName -Count $ConnectionCount -TimeoutSeconds $ConnectionTimeout -IPv4 -Quiet)
 	{
 		if ([System.Environment]::Is64BitOperatingSystem)
 		{
@@ -2003,6 +2168,9 @@ New-Variable -Name ComputerName -Scope Script -Option ReadOnly -Value (Get-Compu
 New-Variable -Name SystemPrograms -Scope Script -Option ReadOnly -Value (Get-SystemPrograms $ComputerName)
 
 # Programs installed for all users
+New-Variable -Name ExecutablePaths -Scope Script -Option ReadOnly -Value (Get-ExecutablePaths $ComputerName)
+
+# Programs installed for all users
 New-Variable -Name AllUserPrograms -Scope Script -Option ReadOnly -Value (Get-AllUserPrograms $ComputerName)
 
 #
@@ -2022,6 +2190,8 @@ Export-ModuleMember -Function Test-Environment
 Export-ModuleMember -Function Get-UserPrograms
 Export-ModuleMember -Function Get-AllUserPrograms
 Export-ModuleMember -Function Get-SystemPrograms
+Export-ModuleMember -Function Get-ExecutablePaths
+
 Export-ModuleMember -Function Get-NetFramework
 Export-ModuleMember -Function Get-WindowsKits
 Export-ModuleMember -Function Get-WindowsSDK

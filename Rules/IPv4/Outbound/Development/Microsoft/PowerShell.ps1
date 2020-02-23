@@ -58,6 +58,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 $PowerShell64Root = "%SystemRoot%\System32\WindowsPowerShell\v1.0"
 $PowerShell86Root = "%SystemRoot%\SysWOW64\WindowsPowerShell\v1.0"
+$PowerShellCore64Root = ""
 
 #
 # Rules for PowerShell
@@ -79,7 +80,7 @@ if ((Test-Installation "Powershell64" ([ref] $PowerShell64Root)) -or $Force)
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $UserAccountsSDDL `
-	-Description "Rule to allow update of powershell" | Format-Output
+	-Description "Rule to allow powershell help update" | Format-Output
 
 	$Program = "$PowerShell64Root\powershell.exe"
 	Test-File $Program
@@ -88,7 +89,20 @@ if ((Test-Installation "Powershell64" ([ref] $PowerShell64Root)) -or $Force)
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $PowerShellUsers `
-	-Description "Rule to allow update of powershell" | Format-Output
+	-Description "Rule to allow powershell help update" | Format-Output
+}
+
+# Test if installation exists on system
+if ((Test-Installation "PowershellCore64" ([ref] $PowerShellCore64Root)) -or $Force)
+{
+	$Program = "$PowerShellCore64Root\pwsh.exe"
+	Test-File $Program
+	New-NetFirewallRule -Platform $Platform `
+	-DisplayName "PowerShell Core x64" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+	-LocalUser $PowerShellUsers `
+	-Description "Rule to allow powershell help update" | Format-Output
 }
 
 # Test if installation exists on system
@@ -101,7 +115,7 @@ if ((Test-Installation "Powershell86" ([ref] $PowerShell86Root)) -or $Force)
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $UserAccountsSDDL `
-	-Description "Rule to allow update of powershell" | Format-Output
+	-Description "Rule to allow powershell help update" | Format-Output
 
 	$Program = "$PowerShell86Root\powershell.exe"
 	Test-File $Program
@@ -110,5 +124,5 @@ if ((Test-Installation "Powershell86" ([ref] $PowerShell86Root)) -or $Force)
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $UserAccountsSDDL `
-	-Description "Rule to allow update of powershell" | Format-Output
+	-Description "Rule to allow powershell help update" | Format-Output
 }

@@ -41,7 +41,7 @@ Test-SystemRequirements
 . $ProjectRoot\Test\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
 # Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo
-# Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
 # Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
@@ -52,7 +52,11 @@ if (!(Approve-Execute)) { exit }
 
 Start-Test
 
-New-Test "Test-Function"
-Test-Function
+New-Test "Get-ExecutablePaths"
+$ExecutablePaths = Get-ExecutablePaths ([Environment]::MachineName) | Sort-Object -Property Name
+$ExecutablePaths
+
+New-Test "Get-ExecutablePaths pwsh.exe"
+$ExecutablePaths | Where-Object -Property Name -eq "pwsh.exe" | Select-Object -ExpandProperty InstallLocation
 
 Exit-Test

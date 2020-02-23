@@ -158,6 +158,18 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 }
 
 # These are set only once per session, changing these requires powershell restart, except if Develop = $true
+if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignore))
+{
+	Write-Debug -Message "[$ThisScript] Setup read only variables"
+
+	# check if read only variables already initialized, do not modify!
+	Set-Variable -Name CheckReadOnlyVariables -Scope Global -Option ReadOnly -Force -Value $null
+
+	# Set to false to avoid checking system requirements
+	Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $false
+}
+
+# These are set only once per session, changing these requires powershell restart, except if Develop = $true
 if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -ErrorAction Ignore))
 {
 	Write-Debug -Message "[$ThisScript] Setup removable variables"
@@ -165,8 +177,11 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 	# check if removable variables already initialized, do not modify!
 	Set-Variable -Name CheckRemovableVariables -Scope Global -Option ReadOnly -Force -Value $null
 
-	# Set to false to avoid checking system requirements
-	Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $false
+	# Amount of connections tests against remote computers
+	Set-Variable -Name ConnectionCount -Scope Global -Value 2
+
+	# Timeout in secconds to contact remote computers
+	Set-Variable -Name ConnectionTimeout -Scope Global -Value 1
 
 	# Set to false to disable logging errors
 	Set-Variable -Name ErrorLogging -Scope Global -Value $true
