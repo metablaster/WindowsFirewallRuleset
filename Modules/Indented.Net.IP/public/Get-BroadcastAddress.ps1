@@ -29,11 +29,11 @@ function Get-BroadcastAddress {
     param (
         # Either a literal IP address, a network range expressed as CIDR notation, or an IP address and subnet mask in a string.
         [Parameter(Mandatory, Position = 1, ValueFromPipeline)]
-        [string]$IPAddress,
+        [string] $IPAddress,
 
         # A subnet mask as an IP address.
         [Parameter(Position = 2)]
-        [string]$SubnetMask
+        [string] $SubnetMask
     )
 
     process {
@@ -45,7 +45,7 @@ function Get-BroadcastAddress {
             return [IPAddress](
                 $networkAddress.Address -bor
                 -bnot $network.SubnetMask.Address -band
-                -bnot ([Int64][UInt32]::MaxValue -shl 32)
+                -bnot ([int64][UInt32]::MaxValue -shl 32)
             )
         } catch {
             Write-Error -ErrorRecord $_

@@ -21,7 +21,7 @@ function ConvertTo-Mask {
         [Parameter(Mandatory, Position = 1, ValueFromPipeline)]
         [Alias('Length')]
         [ValidateRange(0, 32)]
-        [Byte]$MaskLength
+        [byte] $MaskLength
     )
 
     process {

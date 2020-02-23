@@ -18,12 +18,12 @@ function ConvertTo-HexIP {
     [OutputType([string])]
     param (
         [Parameter(Mandatory, Position = 1, ValueFromPipeline)]
-        [IPAddress]$IPAddress
+        [IPAddress] $IPAddress
     )
 
     process {
         $bytes = $IPAddress.GetAddressBytes()
-        [Array]::Reverse($bytes)
+        [array]::Reverse($bytes)
         '{0:x8}' -f [BitConverter]::ToUInt32($bytes, 0)
     }
 }

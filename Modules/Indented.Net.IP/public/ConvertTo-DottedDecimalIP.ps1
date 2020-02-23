@@ -21,14 +21,14 @@ function ConvertTo-DottedDecimalIP {
     param (
         # A string representation of an IP address from either UInt32 or dotted binary.
         [Parameter(Mandatory, Position = 1, ValueFromPipeline)]
-        [string]$IPAddress
+        [string] $IPAddress
     )
 
     process {
         try {
-            [Int64]$value = 0
-            if ([Int64]::TryParse($IPAddress, [Ref]$value)) {
-                return [IPAddress]([IPAddress]::NetworkToHostOrder([Int64]$value) -shr 32 -band [UInt32]::MaxValue)
+            [int64] $value = 0
+            if ([int64]::TryParse($IPAddress, [Ref] $value)) {
+                return [IPAddress]([IPAddress]::NetworkToHostOrder([int64] $value) -shr 32 -band [UInt32]::MaxValue)
             } else {
                 [IPAddress][UInt64][Convert]::ToUInt32($IPAddress.Replace('.', ''), 2)
             }

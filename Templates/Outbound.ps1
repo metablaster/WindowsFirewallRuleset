@@ -65,7 +65,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "TargetProgram" ([ref]$TargetProgramRoot)) -or $Force)
+if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot)) -or $Force)
 {
 	$Program = "$TargetProgramRoot\TargetProgram.exe"
 	Test-File $Program

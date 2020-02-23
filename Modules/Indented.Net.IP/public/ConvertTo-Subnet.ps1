@@ -19,19 +19,19 @@ function ConvertTo-Subnet {
     param (
         # Any IP address in the subnet.
         [Parameter(Mandatory, Position = 1, ParameterSetName = 'FromIPAndMask')]
-        [string]$IPAddress,
+        [string] $IPAddress,
 
         # A subnet mask.
         [Parameter(Position = 2, ParameterSetName = 'FromIPAndMask')]
-        [string]$SubnetMask,
+        [string] $SubnetMask,
 
         # The first IP address from a range.
         [Parameter(Mandatory, ParameterSetName = 'FromStartAndEnd')]
-        [IPAddress]$Start,
+        [IPAddress] $Start,
 
         # The last IP address from a range.
         [Parameter(Mandatory, ParameterSetName = 'FromStartAndEnd')]
-        [IPAddress]$End
+        [IPAddress] $End
     )
 
     if ($pscmdlet.ParameterSetName -eq 'FromIPAndMask') {

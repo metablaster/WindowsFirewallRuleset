@@ -63,7 +63,7 @@ $NuGetRoot = "%SystemDrive%\tools"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "NuGet" ([ref]$NuGetRoot)) -or $Force)
+if ((Test-Installation "NuGet" ([ref] $NuGetRoot)) -or $Force)
 {
 	$Program = "$NuGetRoot\nuget.exe"
 	Test-File $Program

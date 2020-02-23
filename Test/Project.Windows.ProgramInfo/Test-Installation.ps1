@@ -57,19 +57,19 @@ $TestBadVariable = "%UserProfile%\crazyFolder"
 $TestBadVariable2 = "%UserProfile%\crazyFolder"
 
 New-Test "Test-Installation 'MicrosoftOffice' $OfficeRoot"
-Test-Installation "MicrosoftOffice" ([ref]$OfficeRoot) @Logs
+Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot) @Logs
 Update-Logs
 
 New-Test "Test-Installation 'TeamViewer' $TeamViewerRoot"
-Test-Installation "TeamViewer" ([ref]$TeamViewerRoot) @Logs
+Test-Installation "TeamViewer" ([ref] $TeamViewerRoot) @Logs
 Update-Logs
 
 New-Test "Test-Installation 'VisualStudio' $TestBadVariable"
-Test-Installation "VisualStudio" ([ref]$TestBadVariable) @Logs
+Test-Installation "VisualStudio" ([ref] $TestBadVariable) @Logs
 Update-Logs
 
 New-Test "Test-Installation 'BadVariable' $TestBadVariable2"
-Test-Installation "BadVariable" ([ref]$TestBadVariable2) @Logs
+Test-Installation "BadVariable" ([ref] $TestBadVariable2) @Logs
 Update-Logs
 
 Exit-Test

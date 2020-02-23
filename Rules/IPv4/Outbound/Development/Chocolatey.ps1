@@ -66,7 +66,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Chocolatey" ([ref]$ChocolateyRoot)) -or $Force)
+if ((Test-Installation "Chocolatey" ([ref] $ChocolateyRoot)) -or $Force)
 {
 	$Program = "$ChocolateyRoot\choco.exe"
 	Test-File $Program

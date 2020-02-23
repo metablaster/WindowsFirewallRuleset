@@ -52,7 +52,7 @@ if ($Develop)
 # Includes
 . $PSScriptRoot\External\Get-SQLInstances.ps1
 Import-Module -Name $PSScriptRoot\..\Project.Windows.UserInfo
-Import-Module -Name $PSScriptRoot\..\Project.Windows.ComputerInfo
+# Import-Module -Name $PSScriptRoot\..\Project.Windows.ComputerInfo
 Import-Module -Name $PSScriptRoot\..\Project.AllPlatforms.Utility
 
 <#
@@ -163,7 +163,7 @@ function Test-Environment
 {
 	[CmdletBinding()]
 	param (
-		[Parameter(Mandatory = $false)]
+		[Parameter()]
 		[string] $FilePath = $null
 	)
 
@@ -176,7 +176,7 @@ function Test-Environment
 		return $false
 	}
 
-	if ([Array]::Find($UserProfileEnvironment, [Predicate[string]]{ $FilePath -like "$($args[0])*" }))
+	if ([array]::Find($UserProfileEnvironment, [Predicate[string]]{ $FilePath -like "$($args[0])*" }))
 	{
 		Write-Warning -Message "Rules with environment variable paths that lead to user profile are not valid"
 		Write-Information -Tags "Project" -MessageData "INFO: Bad path detected is: $FilePath"
@@ -445,20 +445,20 @@ Get-UserPrograms "COMPUTERNAME\USERNAME"
 None. You cannot pipe objects to Get-UserPrograms
 .OUTPUTS
 System.Management.Automation.PSCustomObject list of programs for specified account if form of COMPUTERNAME\USERNAME
-.NOTES
-TODO: Parameter should include computer name
 #>
 function Get-UserPrograms
 {
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
-		[string] $UserAccount
+		[string] $UserName,
+
+		[Parameter()]
+		[string] $ComputerName = [System.Environment]::MachineName
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-	$ComputerName = ($UserAccount.Split("\"))[0]
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
 	if (Test-Connection -TargetName $ComputerName -Count $ConnectionCount -TimeoutSeconds $ConnectionTimeout -IPv4 -Quiet)
@@ -539,8 +539,8 @@ function Get-SystemPrograms
 {
 	[CmdletBinding()]
 	param (
-		[Parameter(Mandatory = $true)]
-		[string] $ComputerName
+		[Parameter()]
+		[string] $ComputerName = [System.Environment]::MachineName
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -658,8 +658,8 @@ function Get-AllUserPrograms
 {
 	[CmdletBinding()]
 	param (
-		[Parameter(Mandatory = $true)]
-		[string] $ComputerName
+		[Parameter()]
+		[string] $ComputerName = [System.Environment]::MachineName
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -763,8 +763,8 @@ function Get-ExecutablePaths
 {
 	[CmdletBinding()]
 	param (
-		[Parameter(Mandatory = $true)]
-		[string] $ComputerName
+		[Parameter()]
+		[string] $ComputerName = [System.Environment]::MachineName
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -890,7 +890,7 @@ function Initialize-Table
 {
 	[CmdletBinding()]
 	param (
-		[Parameter(Mandatory = $false)]
+		[Parameter()]
 		[string] $TableName = "InstallationTable"
 	)
 
@@ -924,6 +924,8 @@ Search and add new program installation directory to the global table
 Search string which corresponds to the output of "Get programs" functions
 .PARAMETER UserProfile
 true if user profile is to be searched too, system locations only otherwise
+.PARAMETER Executables
+true if executable paths should be searched first.
 .EXAMPLE
 Update-Table "Google Chrome"
 .INPUTS
@@ -940,15 +942,15 @@ function Update-Table
 		[Parameter(Mandatory = $true)]
 		[string] $SearchString,
 
-		[Parameter(Mandatory = $false)]
+		[Parameter()]
 		[switch] $UserProfile,
 
-		[Parameter(Mandatory = $false)]
+		[Parameter()]
 		[switch] $Executables
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] Search string = $SearchString"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Search string is: $SearchString"
 
 	if ($Executables)
 	{
@@ -956,6 +958,8 @@ function Update-Table
 
 		if ($TargetPath)
 		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching executable names $SearchString"
+
 			foreach ($User in $UserNames)
 			{
 				# Create a row
@@ -969,19 +973,20 @@ function Update-Table
 				$InstallTable.Rows.Add($Row)
 			}
 
-			# If the path is known there is not need to drill the registry any further
+			# If the path is known there is not need to continue
 			return
 		}
 	}
 
-	# TODO: try to search also for path in addition to program name (3rd parameter)
+	# TODO: try to search also for path in addition to program name
 	# TODO: SearchString may pick up irrelevant paths (ie. unreal), or even miss
 	# Search system wide installed programs
 	if ($SystemPrograms.Name -like "*$SearchString*")
 	{
-		# TODO: need better mechanism for multiple maches
-		$TargetPrograms = $SystemPrograms | Where-Object { $_.Name -like "*$SearchString*" }
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching system programs for $SearchString"
+
+		# TODO: need better mechanism for multiple maches
+		$TargetPrograms = $SystemPrograms | Where-Object -Property Name -like "*$SearchString*"
 
 		foreach ($User in $UserNames)
 		{
@@ -998,13 +1003,15 @@ function Update-Table
 				$InstallTable.Rows.Add($Row)
 			}
 		}
+
+		# Since the path is known there is not need to continue
+		return
 	}
 	#Program not found on system, attempt alternative search
 	elseif ($AllUserPrograms.Name -like "*$SearchString*")
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching all user programs for $SearchString"
-
-		$TargetPrograms = $AllUserPrograms | Where-Object { $_.Name -like "*$SearchString*" }
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching program install properties for $SearchString"
+		$TargetPrograms = $AllUserPrograms | Where-Object -Property Name -like "*$SearchString*"
 
 		# TODO: it not known if it's for specific user in AllUserPrograms registry entry (most likely applies to all users)
 		foreach ($User in $UserNames)
@@ -1022,6 +1029,9 @@ function Update-Table
 				$InstallTable.Rows.Add($Row)
 			}
 		}
+
+		# Since the path is known there is not need to continue
+		return
 	}
 
 	# Search user profiles
@@ -1178,7 +1188,7 @@ function Test-Installation
 			}
 
 			# Prompt user to chose one
-			[int] $Choice = -1
+			[int32] $Choice = -1
 			while ($Choice -lt 0 -or $Choice -gt $Count)
 			{
 				Write-Information -Tags "User" -MessageData "INFO: Input number to choose which one is correct"
@@ -1242,8 +1252,8 @@ function Find-Installation
 		[Parameter(Mandatory = $true)]
 		[string] $Program,
 
-		[Parameter(Mandatory = $false)]
-		[string] $ComputerName = $env:COMPUTERNAME
+		[Parameter()]
+		[string] $ComputerName = [System.Environment]::MachineName
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -1381,6 +1391,7 @@ function Find-Installation
 		}
 		"JavaPlugin"
 		{
+			# TODO: this is wrong, requires path search type
 			Update-Table "Java\jre1.8.0_45\bin"
 			break
 		}
@@ -1391,11 +1402,13 @@ function Find-Installation
 		}
 		"JavaRuntime"
 		{
+			# TODO: this is wrong, requires path search type
 			Update-Table "Java\jre7\bin"
 			break
 		}
 		"AdobeARM"
 		{
+			# TODO: this is wrong, requires path search type
 			Update-Table "Adobe\ARM"
 			break
 		}
@@ -1481,7 +1494,7 @@ function Find-Installation
 		}
 		"HelpViewer"
 		{
-			# TODO: is version number OK?
+			# TODO: is version number OK? no.
 			Edit-Table "%ProgramFiles(x86)%\Microsoft Help Viewer\v2.3"
 			break
 		}
@@ -1572,7 +1585,7 @@ function Find-Installation
 		}
 		"VisualStudioInstaller"
 		{
-			Edit-Table "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
+			Update-Table "Visual Studio Installer"
 			break
 		}
 		"Git"
@@ -1582,6 +1595,7 @@ function Find-Installation
 		}
 		"GithubDesktop"
 		{
+			# TODO: need to test this
 			Update-Table "GitHubDesktop" -UserProfile
 			break
 		}
@@ -1666,8 +1680,8 @@ function Get-NetFramework
 {
 	[CmdletBinding()]
 	param (
-		[Parameter(Mandatory = $true)]
-		[string] $ComputerName
+		[Parameter()]
+		[string] $ComputerName = [System.Environment]::MachineName
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -1789,8 +1803,8 @@ function Get-WindowsSDK
 {
 	[CmdletBinding()]
 	param (
-		[Parameter(Mandatory = $true)]
-		[string] $ComputerName
+		[Parameter()]
+		[string] $ComputerName = [System.Environment]::MachineName
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -1880,8 +1894,8 @@ function Get-WindowsKits
 {
 	[CmdletBinding()]
 	param (
-		[Parameter(Mandatory = $true)]
-		[string] $ComputerName
+		[Parameter()]
+		[string] $ComputerName = [System.Environment]::MachineName
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -1968,8 +1982,8 @@ function Get-WindowsDefender
 {
 	[CmdletBinding()]
 	param (
-		[Parameter(Mandatory = $true)]
-		[string] $ComputerName
+		[Parameter()]
+		[string] $ComputerName = [System.Environment]::MachineName
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -2041,8 +2055,8 @@ System.Management.Automation.PSCustomObject for installed Microsoft SQL Server M
  {
 	[CmdletBinding()]
 	param (
-		[Parameter(Mandatory = $false)]
-		[string] $ComputerName = $env:COMPUTERNAME
+		[Parameter()]
+		[string] $ComputerName = [System.Environment]::MachineName
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -2161,17 +2175,14 @@ New-Variable -Name UserProfileEnvironment -Scope Script -Option Constant -Value 
 	"%USERNAME%"
 	"%USERPROFILE%")
 
-# Computer name for use use in this module
-New-Variable -Name ComputerName -Scope Script -Option ReadOnly -Value (Get-ComputerName)
+# Programs installed for all users
+New-Variable -Name SystemPrograms -Scope Script -Option ReadOnly -Value (Get-SystemPrograms)
 
 # Programs installed for all users
-New-Variable -Name SystemPrograms -Scope Script -Option ReadOnly -Value (Get-SystemPrograms $ComputerName)
+New-Variable -Name ExecutablePaths -Scope Script -Option ReadOnly -Value (Get-ExecutablePaths)
 
 # Programs installed for all users
-New-Variable -Name ExecutablePaths -Scope Script -Option ReadOnly -Value (Get-ExecutablePaths $ComputerName)
-
-# Programs installed for all users
-New-Variable -Name AllUserPrograms -Scope Script -Option ReadOnly -Value (Get-AllUserPrograms $ComputerName)
+New-Variable -Name AllUserPrograms -Scope Script -Option ReadOnly -Value (Get-AllUserPrograms)
 
 #
 # Function exports

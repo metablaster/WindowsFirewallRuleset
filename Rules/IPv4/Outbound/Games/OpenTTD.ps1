@@ -63,7 +63,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "OpenTTD" ([ref]$OpenTTDRoot)) -or $Force)
+if ((Test-Installation "OpenTTD" ([ref] $OpenTTDRoot)) -or $Force)
 {
 	$Program = "$OpenTTDRoot\openttd.exe"
 	Test-File $Program

@@ -20,7 +20,7 @@ function Resolve-IPAddress {
     param (
         # The IPAddress expression to resolve.
         [Parameter(Mandatory, Position = 1, ValueFromPipeline)]
-        [string]$IPAddress
+        [string] $IPAddress
     )
 
     process {
@@ -31,7 +31,7 @@ function Resolve-IPAddress {
 
                 $values = switch ($group.Name) {
                     'Range'    {
-                        [int]$start, [int]$end = $group.Value -split '-'
+                        [int32] $start, [int32] $end = $group.Value -split '-'
 
                         if ($start, $end -gt 255) {
                             $errorRecord = [System.Management.Automation.ErrorRecord]::new(
@@ -67,7 +67,7 @@ function Resolve-IPAddress {
 
                 [PSCustomObject]@{
                     Name        = $_.Name
-                    Position    = [int32]$IPAddress.Substring(0, $_.Index).Split('.').Count - 1
+                    Position    = [int32] $IPAddress.Substring(0, $_.Index).Split('.').Count - 1
                     ReplaceWith = $values
                     PSTypeName  = 'ExpansionGroupInfo'
                 }
@@ -75,7 +75,7 @@ function Resolve-IPAddress {
 
         if ($groups) {
             GetPermutation $groups -BaseAddress $IPAddress
-        } elseif (-not [IPAddress]::TryParse(($IPAddress -replace '/\d+$'), [Ref]$null)) {
+        } elseif (-not [IPAddress]::TryParse(($IPAddress -replace '/\d+$'), [Ref] $null)) {
             Write-Warning -Message 'The IPAddress argument is not a valid IP address and cannot be resolved'
         } else {
             Write-Debug 'No groups found to resolve'

@@ -219,7 +219,7 @@ superduper "IPv4" $false
 
 # Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
-# [int] $Choice = -1
+# [int32] $Choice = -1
 # $Count = 2
 
 # while ($Choice -lt 0 -or $Choice -gt $Count)

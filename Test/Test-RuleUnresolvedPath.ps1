@@ -69,7 +69,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 New-Test "Relative path"
 # Test if installation exists on system
-if ((Test-Installation "TargetProgram" ([ref]$TargetProgramRoot)) -or $Force)
+if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot)) -or $Force)
 {
 	$Program = "$TargetProgramRoot\PokerStars.exe"
 	Test-File $Program

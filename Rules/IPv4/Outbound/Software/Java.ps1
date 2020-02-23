@@ -65,7 +65,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "JavaRuntime" ([ref]$JavaRuntimeRoot)) -or $Force)
+if ((Test-Installation "JavaRuntime" ([ref] $JavaRuntimeRoot)) -or $Force)
 {
 	$Program = "$JavaRuntimeRoot\java.exe"
 	Test-File $Program
@@ -78,7 +78,7 @@ if ((Test-Installation "JavaRuntime" ([ref]$JavaRuntimeRoot)) -or $Force)
 }
 
 # Test if installation exists on system
-if ((Test-Installation "JavaUpdate" ([ref]$JavaUpdateRoot)) -or $Force)
+if ((Test-Installation "JavaUpdate" ([ref] $JavaUpdateRoot)) -or $Force)
 {
 	$Program = "$JavaUpdateRoot\jucheck.exe"
 	Test-File $Program
@@ -91,7 +91,7 @@ if ((Test-Installation "JavaUpdate" ([ref]$JavaUpdateRoot)) -or $Force)
 }
 
 # Test if installation exists on system
-if ((Test-Installation "JavaPlugin" ([ref]$JavaPluginRoot)) -or $Force)
+if ((Test-Installation "JavaPlugin" ([ref] $JavaPluginRoot)) -or $Force)
 {
 	$Program = "$JavaPluginRoot\jp2launcher.exe"
 	Test-File $Program

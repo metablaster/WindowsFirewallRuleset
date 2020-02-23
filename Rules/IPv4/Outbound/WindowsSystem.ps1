@@ -66,7 +66,7 @@ $NETFrameworkRoot = ""
 #
 
 # Test if installation exists on system
-if ((Test-Installation "NETFramework" ([ref]$NETFrameworkRoot)) -or $Force)
+if ((Test-Installation "NETFramework" ([ref] $NETFrameworkRoot)) -or $Force)
 {
 	$Program = "$NETFrameworkRoot\mscorsvw.exe"
 	Test-File $Program

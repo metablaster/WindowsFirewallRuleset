@@ -63,7 +63,7 @@ $GreenshotRoot = "C:\Users\User\AppData\Local\Greenshot"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Greenshot" ([ref]$GreenshotRoot)) -or $Force)
+if ((Test-Installation "Greenshot" ([ref] $GreenshotRoot)) -or $Force)
 {
 	$Program = "$GreenshotRoot\Greenshot.exe"
 	Test-File $Program

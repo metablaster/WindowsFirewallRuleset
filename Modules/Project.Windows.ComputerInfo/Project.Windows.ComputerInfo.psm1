@@ -73,7 +73,7 @@ function Get-ComputerName
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-	$ComputerName = [Environment]::MachineName
+	$ComputerName = [System.Environment]::MachineName
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Learning computer name: $ComputerName"
 
 	return $ComputerName

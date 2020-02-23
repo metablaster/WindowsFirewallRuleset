@@ -66,7 +66,7 @@ $SysInternalsRoot = "%SystemDrive%\tools"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "SysInternals" ([ref]$SysInternalsRoot)) -or $Force)
+if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $Force)
 {
 	$Program = "$SysInternalsRoot\Autoruns\Autoruns64.exe"
 	Test-File $Program

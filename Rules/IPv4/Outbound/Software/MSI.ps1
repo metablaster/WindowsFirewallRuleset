@@ -64,7 +64,7 @@ $MSIAfterburnerRoot = "%ProgramFiles(x86)%\MSI Afterburner"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "MSIAfterburner" ([ref]$MSIAfterburnerRoot)) -or $Force)
+if ((Test-Installation "MSIAfterburner" ([ref] $MSIAfterburnerRoot)) -or $Force)
 {
 	$Program = "$MSIAfterburnerRoot\MSIAfterburner.exe"
 	Test-File $Program
@@ -77,7 +77,7 @@ if ((Test-Installation "MSIAfterburner" ([ref]$MSIAfterburnerRoot)) -or $Force)
 }
 
 # Test if installation exists on system
-if ((Test-Installation "MSIAfterburner" ([ref]$MSIAfterburnerRoot)) -or $Force)
+if ((Test-Installation "MSIAfterburner" ([ref] $MSIAfterburnerRoot)) -or $Force)
 {
 	$Program = "$MSIRoot\Live Update\Live Update.exe"
 	Test-File $Program

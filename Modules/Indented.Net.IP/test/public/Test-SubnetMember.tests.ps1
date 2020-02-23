@@ -1,6 +1,6 @@
 #region:TestFileHeader
 param (
-    [Boolean]$UseExisting
+    [bool] $UseExisting
 )
 
 if (-not $UseExisting) {
@@ -17,7 +17,7 @@ if (-not $UseExisting) {
 InModuleScope Indented.Net.IP {
     Describe 'Test-SubnetMember' {
         It 'Returns a Boolean' {
-            Test-SubnetMember 10.0.0.0/24 -ObjectIPAddress 10.0.0.0/8 | Should -BeOfType [Boolean]
+            Test-SubnetMember 10.0.0.0/24 -ObjectIPAddress 10.0.0.0/8 | Should -BeOfType [bool]
         }
 
         It 'Returns true if the subject falls within the object network' {

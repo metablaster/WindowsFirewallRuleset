@@ -19,11 +19,11 @@ function Get-NetworkSummary {
     param (
         # Either a literal IP address, a network range expressed as CIDR notation, or an IP address and subnet mask in a string.
         [Parameter(Mandatory, Position = 1, ValueFromPipeline)]
-        [string]$IPAddress,
+        [string] $IPAddress,
 
         # A subnet mask as an IP address.
         [Parameter(Position = 2)]
-        [string]$SubnetMask
+        [string] $SubnetMask
     )
 
     process {

@@ -64,7 +64,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "AdobeAcrobat" ([ref]$AcrobatRoot)) -or $Force)
+if ((Test-Installation "AdobeAcrobat" ([ref] $AcrobatRoot)) -or $Force)
 {
 	$Program = "$AcrobatRoot\AcroRd32.exe"
 	Test-File $Program
@@ -77,7 +77,7 @@ if ((Test-Installation "AdobeAcrobat" ([ref]$AcrobatRoot)) -or $Force)
 }
 
 # Test if installation exists on system
-if ((Test-Installation "AdobeARM" ([ref]$AdobeARMRoot)) -or $Force)
+if ((Test-Installation "AdobeARM" ([ref] $AdobeARMRoot)) -or $Force)
 {
 	$Program = "$AdobeARMRoot\AdobeARM.exe.exe"
 	Test-File $Program

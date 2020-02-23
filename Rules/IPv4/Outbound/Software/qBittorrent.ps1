@@ -64,7 +64,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "qBittorrent" ([ref]$qBittorentRoot)) -or $Force)
+if ((Test-Installation "qBittorrent" ([ref] $qBittorentRoot)) -or $Force)
 {
 	$Program = "$qBittorentRoot\qbittorrent.exe"
 	Test-File $Program

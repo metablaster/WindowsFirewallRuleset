@@ -24,15 +24,15 @@ function Get-Subnet {
     param (
         # Any address in the super-net range. Either a literal IP address, a network range expressed as CIDR notation, or an IP address and subnet mask in a string.
         [Parameter(Mandatory = $true, Position = 1)]
-        [string]$IPAddress,
+        [string] $IPAddress,
 
         # The subnet mask of the network to split. Mandatory if the subnet mask is not included in the IPAddress parameter.
         [Parameter(Position = 2)]
-        [string]$SubnetMask,
+        [string] $SubnetMask,
 
         # Split the existing network described by the IPAddress and subnet mask using this mask.
         [Parameter(Mandatory = $true)]
-        [string]$NewSubnetMask
+        [string] $NewSubnetMask
     )
 
     $null = $psboundparameters.Remove('NewSubnetMask')

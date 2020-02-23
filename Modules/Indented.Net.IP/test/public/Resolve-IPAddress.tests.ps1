@@ -1,6 +1,6 @@
 #region:TestFileHeader
 param (
-    [Boolean]$UseExisting
+    [bool] $UseExisting
 )
 
 if (-not $UseExisting) {

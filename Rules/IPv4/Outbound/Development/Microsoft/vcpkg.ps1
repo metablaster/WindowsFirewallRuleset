@@ -63,7 +63,7 @@ $vcpkgRoot = "Unknown Directory"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "vcpkg" ([ref]$vcpkgRoot)) -or $Force)
+if ((Test-Installation "vcpkg" ([ref] $vcpkgRoot)) -or $Force)
 {
 	$Program = "$vcpkgRoot\vcpkg.exe"
 	Test-File $Program

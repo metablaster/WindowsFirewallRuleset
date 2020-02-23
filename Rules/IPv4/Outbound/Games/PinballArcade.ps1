@@ -63,7 +63,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "PinballArcade" ([ref]$PinballArcadeRoot)) -or $Force)
+if ((Test-Installation "PinballArcade" ([ref] $PinballArcadeRoot)) -or $Force)
 {
 	$Program = "$PinballArcadeRoot\PinballArcade.exe"
 	Test-File $Program

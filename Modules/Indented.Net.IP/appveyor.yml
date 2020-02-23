@@ -35,7 +35,7 @@ test_script:
 on_success:
   - ps: |
       $buildInfo = Get-BuildInfo
-      [Version]$tagVersion = (git describe --tags --abbrev=0 2>$null) -replace "^v"
+      [Version] $tagVersion = (git describe --tags --abbrev=0 2>$null) -replace "^v"
 
       if ($tagVersion -eq $buildInfo.Version) {
           $galleryVersion = [Version](Find-Module $buildInfo.ModuleName).Version

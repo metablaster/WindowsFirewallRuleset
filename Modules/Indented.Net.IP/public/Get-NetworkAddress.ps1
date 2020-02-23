@@ -28,10 +28,10 @@ function Get-NetworkAddress {
     [OutputType([IPAddress])]
     param (
         [Parameter(Mandatory, Position = 1, ValueFromPipeline)]
-        [string]$IPAddress,
+        [string] $IPAddress,
 
         [Parameter(Position = 2)]
-        [string]$SubnetMask
+        [string] $SubnetMask
     )
 
     process {

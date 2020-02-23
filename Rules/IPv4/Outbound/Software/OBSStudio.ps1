@@ -63,7 +63,7 @@ $OBSStudioRoot = "%ProgramFiles%\obs-studio\bin\64bit"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "OBSStudio" ([ref]$OBSStudioRoot)) -or $Force)
+if ((Test-Installation "OBSStudio" ([ref] $OBSStudioRoot)) -or $Force)
 {
 	$Program = "$OBSStudioRoot\obs64.exe"
 	Test-File $Program

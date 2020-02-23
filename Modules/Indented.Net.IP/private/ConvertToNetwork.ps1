@@ -15,12 +15,12 @@ function ConvertToNetwork {
     param (
         # Either a literal IP address, a network range expressed as CIDR notation, or an IP address and subnet mask in a string.
         [Parameter(Mandatory = $true, Position = 1)]
-        [string]$IPAddress,
+        [string] $IPAddress,
 
         # A subnet mask as an IP address.
         [Parameter(Position = 2)]
         [AllowNull()]
-        [string]$SubnetMask
+        [string] $SubnetMask
     )
 
     $validSubnetMaskValues =
@@ -56,8 +56,8 @@ function ConvertToNetwork {
         $IPAddress += '.0'
     }
 
-    if ([IPAddress]::TryParse($IPAddress, [Ref]$null)) {
-        $network.IPAddress = [IPAddress]$IPAddress
+    if ([IPAddress]::TryParse($IPAddress, [Ref] $null)) {
+        $network.IPAddress = [IPAddress] $IPAddress
     } else {
         $errorRecord = [System.Management.Automation.ErrorRecord]::new(
             [ArgumentException]'Invalid IP address.',
@@ -71,13 +71,13 @@ function ConvertToNetwork {
     # SubnetMask
 
     if ($null -eq $SubnetMask -or $SubnetMask -eq '') {
-        $network.SubnetMask = [IPAddress]$validSubnetMaskValues[32]
+        $network.SubnetMask = [IPAddress] $validSubnetMaskValues[32]
         $network.MaskLength = 32
     } else {
         $maskLength = 0
-        if ([int32]::TryParse($SubnetMask, [Ref]$maskLength)) {
+        if ([int32]::TryParse($SubnetMask, [Ref] $maskLength)) {
             if ($MaskLength -ge 0 -and $maskLength -le 32) {
-                $network.SubnetMask = [IPAddress]$validSubnetMaskValues[$maskLength]
+                $network.SubnetMask = [IPAddress] $validSubnetMaskValues[$maskLength]
                 $network.MaskLength = $maskLength
             } else {
                 $errorRecord = [System.Management.Automation.ErrorRecord]::new(
@@ -95,7 +95,7 @@ function ConvertToNetwork {
             $maskLength = $validSubnetMaskValues.IndexOf($SubnetMask)
 
             if ($maskLength -ge 0) {
-                $Network.SubnetMask = [IPAddress]$SubnetMask
+                $Network.SubnetMask = [IPAddress] $SubnetMask
                 $Network.MaskLength = $maskLength
             } else {
                 $errorRecord = [System.Management.Automation.ErrorRecord]::new(

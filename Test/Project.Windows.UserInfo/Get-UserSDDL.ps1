@@ -50,7 +50,7 @@ if (!(Approve-Execute)) { exit }
 Start-Test
 
 New-Test "Get-UserAccounts:"
-[string[]]$UserAccounts = Get-UserAccounts "Users" @Logs
+[string[]] $UserAccounts = Get-UserAccounts "Users" @Logs
 Update-Logs
 $UserAccounts += Get-UserAccounts "Administrators" @Logs
 Update-Logs

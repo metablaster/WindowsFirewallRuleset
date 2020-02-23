@@ -65,7 +65,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "HWMonitor" ([ref]$HWMonitorRoot)) -or $Force)
+if ((Test-Installation "HWMonitor" ([ref] $HWMonitorRoot)) -or $Force)
 {
 	$Program = "$HWMonitorRoot\HWMonitor.exe"
 	Test-File $Program
@@ -78,7 +78,7 @@ if ((Test-Installation "HWMonitor" ([ref]$HWMonitorRoot)) -or $Force)
 }
 
 # Test if installation exists on system
-if ((Test-Installation "CPU-Z" ([ref]$CPUZRoot)) -or $Force)
+if ((Test-Installation "CPU-Z" ([ref] $CPUZRoot)) -or $Force)
 {
 	$Program = "$CPUZRoot\cpuz.exe"
 	Test-File $Program
