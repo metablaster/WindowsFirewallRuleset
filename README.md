@@ -80,8 +80,9 @@ For more info see respective licences:\
 
 # I don't have Windows 10 or Windows Server
 
-By default this project is tested and designed for most recent Windows/Servers and that is known to work, making use of it on older systems requires a bit of work.\
-The plan is to expand this project to manage IPTables firewall on linux and other systems, but not anytime soon.
+By default this project is tested and designed for most recent Windows/Servers and that is known to work, making use of it on older systems requires a bit of work.
+
+The plan is to expand this project to manage [nftables](https://en.wikipedia.org/wiki/Nftables) firewall on linux and other systems, but not anytime soon.
 
 [This document](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/LegacySupport.md) describes how to make use of this project on older Windows systems such as Windows 7 or Server 2008
 
