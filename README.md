@@ -26,10 +26,11 @@
 1. computers on network
 2. installed programs
 3. users on system
-4. network configuration etc.
+4. network configuration
+5. managing firewall etc.
 
 - Meaning this project is a good base to easily extend your firewall and include more rules.
-- Currently there are some 650+ firewall rules included.
+- Currently there are some 650+ firewall rules included, 9 modules with 50+ functions, random scripts and useful documentation.
 - You can choose which rulles you want, and apply only those or apply them all with master script to your firewall.
 - All the rules are loaded into Local Group Policy (GPO), giving you full power over the default windows firewall.
 
@@ -44,45 +45,43 @@
 
 4. Changing rule attributes such as ports, adresses and similar is so much easier since the rules are in scripts, so you can use editor tools such as CTRL + F to perform bulk operations on your rules, doing this in Windows firewall GUI is beyond all pain.
 
-5. Default outbound is block unless there is a rule to explicitly allow traffic, in default windows firewall this is not possible unless you have rules for every possible windows program/service, thanks to this collection of rules setting default outbound to block requres very little additinoal work.
+5. Default outbound is block unless there is a rule to explicitly allow traffic, in default windows firewall this is not possible unless you have rules for every possible program/service, thanks to this collection of rules setting default outbound to block requres very little additinoal work.
 
 # Licenses
 
 This project **"WindowsFirewallRuleset"** is licensed under **MIT** license.\
 Subproject [Indented.Net.IP](https://github.com/indented-automation/Indented.Net.IP) (3rd party code) located in **"Modules\Indented.Net.IP"** subfolder is licensed under **ISC** license.\
 Subproject [VSSetup](https://github.com/microsoft/vssetup.powershell) (3rd party code) located in **"Modules\VSSetup"** subfolder is licensed under **MIT** license.\
-Various 3rd party scripts located in **"Utility"** subfolder have their own licenses.
+There are also various 3rd party scripts scatered around.
 
 License, Copyright notices and all material of subprojects is in their own folder.\
 License and Copyright notices for this project is in project root folder.\
-License, Copyright notices, and links, for "Utility" scripts are located in "Utility" folder and also included into individual script files directly.
+License, Copyright notices, and links, for other 3rd party scripts are usually in folders named "External" and also included into individual script files directly.
 
 For more info see respective licences:\
 [WindowsFirewallRuleset\LICENSE](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/LICENSE)\
 [Indented.Net.IP\LICENSE](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Indented.Net.IP/LICENSE)\
-[VSSetup\LICENSE.txt](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/VSSetup/LICENSE.txt)\
-[Utility\Licences](https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Utility/Licenses)
+[VSSetup\LICENSE.txt](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/VSSetup/LICENSE.txt)
 
 # Minimum supported system requirements
 1. Windows 10 Pro/Enterprise, Windows Server 2019
-2. Windows Powershell 5.1 [Download Powershell](https://github.com/PowerShell/PowerShell)
-3. NET Framework 4.5 [Download Net Framework](https://dotnet.microsoft.com/download/dotnet-framework)
+2. Powershell Core 7.0 [Download Powershell](https://github.com/PowerShell/PowerShell)
+3. NET Framework 3.5 (Windows) [Download Net Framework](https://dotnet.microsoft.com/download/dotnet-framework)
 4. Git (Optional) [Download Git](https://git-scm.com/downloads)
 5. Visual Studio Code (Optional) [Download VSCode](https://code.visualstudio.com)
 6. PowerShell Support for VSCode (Optional) [Download extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell)
 
-**If any of the requirements from point 1, 2 and 3 are not meet the scripts will refuse to run.**
-
 - All operating systems 10.0 (Major 10, Minor 0) and up are supported, that includes "regular" Windows, Servers etc.
-- Powershell is built into Windows by default, you will probably need to install it or update on older systems.
-- NET Framework 4.5 is automatically installed on Windows 10 and Server 2019, in addition make sure you have [.NET 3.5 enabled](https://docs.microsoft.com/en-us/dotnet/framework/install/dotnet-35-windows-10), see control panel option on that link.
+- PowerShell core is not built into Windows, you will need to install it separately.
+- NET Framework 3.5 is automatically installed on Windows, to make sure you have [.NET 3.5 enabled](https://docs.microsoft.com/en-us/dotnet/framework/install/dotnet-35-windows-10), see control panel option on that link.
 - You may want to have git to check out for updates, to easily switch between branches or to contribute code.
 - VS Code is preferred and recommended editor to navigate project and edit the scripts for your needs or for contribution, any other editor is of course your choice.
 - If you get VSCode, you'll also need powershell extension for code navigation and PowerShell specific features.
 
 # I don't have Windows 10 or Windows Server
 
-By default this project is tested and designed for most recent Windows/Servers and that is known to work, making use of it on older systems requires a bit of work.
+By default this project is tested and designed for most recent Windows/Servers and that is known to work, making use of it on older systems requires a bit of work.\
+The plan is to expand this project to manage IPTables firewall on linux and other systems, but not anytime soon.
 
 [This document](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/LegacySupport.md) describes how to make use of this project on older Windows systems such as Windows 7 or Server 2008
 
@@ -106,11 +105,9 @@ By default this project is tested and designed for most recent Windows/Servers a
 **STEPS:**
 1. If you don't have ssh keys and other setup required to clone then just download the released zip file by clicking on "Release" here on this site.
 2. extract the archive somewhere, this steps assume you've extracted the zip into `C:\` root drive directly.
-3. Right click on the Task bar and select `Taskbar settings`
-4. Toggle on `Replace Command Prompt with Windows Powershell in the menu when I right click the start button`
-5. Right click on Start button in Windows system
-6. Click `Windows Powershell (Administrator)` to open Powershell as Administrator (Input Admin password if needed)
-7. Type or copy paste following commands and hit enter for each
+3. Open the extracted folder, right click into an empty space and there is an option to run PowerShell core as administrator (Assumes enabled context menu during installation of PowerShell core)
+4. If you would like to use Windows PowerShell 5.1 instead see [WindowsPowerShell](https://github.com/metablaster/WindowsFirewallRuleset/blob/core/Readme/WindowsPowerShell.md) but know that this project is no longer tested nor developed with Windows PowerShell 5.1
+5. Type or copy paste following commands and hit enter for each
 ```powershell
 Get-ExecutionPolicy
 ```

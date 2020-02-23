@@ -54,6 +54,3 @@ Contains template scripts with boilerplate code for new scripts
 ## Logs
 Contains logs made by scripts
 
-## Utility
-Contains collection of 3rd party scripts which.\
-Unline 3rd party modules or bigger projects which are place into separate directory.

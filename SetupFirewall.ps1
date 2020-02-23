@@ -26,7 +26,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# TODO: use PSScriptAnalyzer from
+# TODO: use and run PSScriptAnalyzer on code
 
 . $PSScriptRoot\Config\ProjectSettings.ps1
 

@@ -1,3 +1,4 @@
+
 # Steps to reset Firewall to previous state
 
 Applies to reseting firewall by hand after runing Powershell scripts from this project.
@@ -5,6 +6,8 @@ Applies to reseting firewall by hand after runing Powershell scripts from this p
 Usefull if you encountered problems such as internet conectivity and you're unable to run\
 `ResetFirewall.ps1` script file located in project root directory, or if the script file did\
 not resolve your problems.
+
+**NOTE: these steps will not save any previous rules in GPO**
 
 **Follow bellow steps to revert firewall**
 1. Press start button

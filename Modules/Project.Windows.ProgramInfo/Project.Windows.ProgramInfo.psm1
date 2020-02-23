@@ -578,7 +578,7 @@ function Get-SystemPrograms
 
 			foreach ($HKLMSubKey in $RootKey.GetSubKeyNames())
 			{
-				# NOTE: it's too verbose
+				# NOTE: Avoid spamming
 				# Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMSubKey"
 				$SubKey = $RootKey.OpenSubkey($HKLMSubKey);
 
@@ -1857,7 +1857,7 @@ function Get-WindowsDefender
 
 <#
 .SYNOPSIS
-Microsoft SQL Server Management Studio
+Get installed Microsoft SQL Server Management Studio
 .PARAMETER ComputerName
 Computer name for which to list installed installed framework
 .EXAMPLE

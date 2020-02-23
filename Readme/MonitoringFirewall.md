@@ -1,3 +1,4 @@
+
 # About this document
 This document explains how to monitor Windows firewall activity and network activity on local system.\
 *Note: all of these programs must be run as Administrator:*
@@ -32,7 +33,7 @@ click on image to enlarge!
 ![](https://i.imgur.com/ljHcJss.png)
 
 - Default mTail does not have speial coloring, the colors you see in the screenshot are which I made myself, you can grab
-this configuration from "Config" folder in this repository, just place it next to mTail executable, restart mTail and 
+this configuration from "Config" folder in this repository, just place it next to mTail executable, restart mTail and
 open firewall log, which is by default placed in *C:\Windows\System32\LogFiles\Firewall\pfirewall.log*
 
 [Download mTail](http://ophilipp.free.fr/op_tail.htm)
@@ -113,5 +114,3 @@ TCP view is another tool that wil let you see what programs are listening on whi
 ![](https://i.imgur.com/JSf5TZk.png)
 
 [netstat reference](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/netstat)
-
-
