@@ -46,6 +46,8 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
+Start-Test
+
 New-Test "Get-SQLInstances"
 Get-SQLInstances -Verbose
 

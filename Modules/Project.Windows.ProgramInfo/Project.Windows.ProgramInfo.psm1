@@ -50,7 +50,7 @@ if ($Develop)
 }
 
 # Includes
-. $PSScriptRoot\..\..\Utility\Get-SQLInstances.ps1
+. $PSScriptRoot\External\Get-SQLInstances.ps1
 Import-Module -Name $PSScriptRoot\..\Project.Windows.UserInfo
 Import-Module -Name $PSScriptRoot\..\Project.Windows.ComputerInfo
 Import-Module -Name $PSScriptRoot\..\Project.AllPlatforms.Utility

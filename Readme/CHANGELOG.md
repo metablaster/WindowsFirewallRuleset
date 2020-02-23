@@ -33,5 +33,8 @@
 1. Modules are renamed to avoid name clashes with other modules
 2. Format-Path function would index into empty array if environment variable not found
 
+# Performance
+1. Minor improvements in searching registry
+
 # Development
 1. Symbols and keywords have their casing consistent

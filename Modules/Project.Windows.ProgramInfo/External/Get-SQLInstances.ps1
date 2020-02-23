@@ -71,7 +71,7 @@ https://gallery.technet.microsoft.com/scriptcenter/Get-SQLInstance-9a3245a0
 	- separate support for 32 bit systems
 	- Include license into file (MIT all 3), links to original sites and add appropriate Copyright for each author/contributor
 	- update reported server versions
-	TODO: format-path, Write-Warning etc..
+	- added more verbose and debug output, path formatting.
 
 .FUNCTIONALITY
 	Computers
@@ -147,8 +147,8 @@ function Get-SQLInstances
 	param (
 		[Parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
 		[Alias('__Server','DNSHostName','IPAddress')]
-		[string[]] $Computers = $env:COMPUTERNAME,
-		[switch]$WMI
+		[string[]] $Computers = [System.Environment]::MachineName,
+		[switch] $WMI
 	)
 
 	begin
@@ -171,11 +171,14 @@ function Get-SQLInstances
 
 	process
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+
 		$AllInstances = @()
 		foreach ($Computer in $Computers)
 		{
+			# TODO: what is this?
 			$Computer = $Computer -replace '(.*?)\..+','$1'
-			Write-Debug ("Checking {0}" -f $Computer)
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
 			if (!(Test-Connection -ComputerName $Computer -Count 2 -Quiet))
 			{
@@ -185,6 +188,7 @@ function Get-SQLInstances
 
 			try
 			{
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
 				$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Computer)
 			}
 			catch
@@ -193,20 +197,30 @@ function Get-SQLInstances
                 continue
 			}
 
-			foreach($HKLMRoot in $HKLM)
+			foreach($HKLMRootKey in $HKLM)
 			{
-				$RootKey = $RemoteKey.OpenSubKey($HKLMRoot)
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLMRootKey"
+				$RootKey = $RemoteKey.OpenSubKey($HKLMRootKey)
 
 				if (!$RootKey)
 				{
-					Write-Warning -Message "Failed to open HKLMRoot key: $HKLMRoot"
+					Write-Warning -Message "Failed to open registry root key: $HKLMRootKey"
 					continue
 				}
 
 				if ($RootKey.GetSubKeyNames() -contains "Instance Names")
 				{
-					$RootKey = $RemoteKey.OpenSubKey("$HKLMRoot\Instance Names\SQL" )
-					$Instances = @($RootKey.GetValueNames())
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: Instance Names\SQL"
+					$RootKey = $RemoteKey.OpenSubKey("$HKLMRootKey\Instance Names\SQL")
+
+					if ($RootKey)
+					{
+						$Instances = @($RootKey.GetValueNames())
+					}
+					else
+					{
+						Write-Warning -Message "Failed to open registry sub key: Instance Names\SQL"
+					}
 				}
 				elseif ($RootKey.GetValueNames() -contains 'InstalledInstances')
 				{
@@ -222,69 +236,100 @@ function Get-SQLInstances
 				{
 					foreach ($Instance in $Instances)
 					{
-						$Nodes = New-Object System.Collections.Arraylist
 						$ClusterName = $null
 						$isCluster = $false
 						$InstanceValue = $RootKey.GetValue($Instance)
-						$InstanceReg = $RemoteKey.OpenSubKey("$HKLMRoot\$InstanceValue")
+						$Nodes = New-Object System.Collections.Arraylist
+
+						Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening InstanceReg key: $HKLMRootKey\$InstanceValue"
+						$InstanceReg = $RemoteKey.OpenSubKey("$HKLMRootKey\$InstanceValue")
 
 						if (!$InstanceReg)
 						{
-							Write-Warning -Message "Failed to open InstanceReg key: $InstanceReg"
+							Write-Warning -Message "Failed to open InstanceReg key: $HKLMRootKey\$InstanceValue"
 							continue
 						}
 
 						if ($InstanceReg.GetSubKeyNames() -contains "Cluster")
 						{
 							$isCluster = $true
+
+							Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening InstanceRegCluster sub key: Cluster"
 							$InstanceRegCluster = $InstanceReg.OpenSubKey('Cluster')
+
 							if ($InstanceRegCluster)
 							{
 								$ClusterName = $InstanceRegCluster.GetValue('ClusterName')
 							}
 							else
 							{
-								Write-Debug "Failed to open InstanceRegCluster key: $InstanceRegCluster"
+								Write-Warning "Failed to open InstanceRegCluster sub key: Cluster"
 							}
 
+							Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening ClusterReg key: $HKLMRootKey\$InstanceValue\Cluster\Nodes"
+							# TODO: this should probably be $InstanceReg.OpenSubKey("Cluster\Nodes") ?
+							Write-Debug -Message "TODO: this doesn't look good!"
 							$ClusterReg = $RemoteKey.OpenSubKey("Cluster\Nodes")
+
 							if ($ClusterReg)
 							{
 								$ClusterReg.GetSubKeyNames() | ForEach-Object {
+									# TODO: check opening sub key
 									$Nodes.Add($ClusterReg.OpenSubKey($_).GetValue('NodeName')) | Out-Null
 								}
 							}
 							else
 							{
-								Write-Debug "Failed to open ClusterReg key: $ClusterReg"
+								Write-Warning "Failed to open ClusterReg key: $HKLMRootKey\$InstanceValue\Cluster\Nodes"
 							}
 						}
 
+						Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening InstanceRegSetup key: $HKLMRootKey\$InstanceValue\Setup"
 						$InstanceRegSetup = $InstanceReg.OpenSubKey("Setup")
+
 						if ($InstanceRegSetup)
 						{
 							$Edition = $InstanceRegSetup.GetValue('Edition')
 							$SQLBinRoot = $InstanceRegSetup.GetValue('SQLBinRoot')
+
+							if ([string]::IsNullOrEmpty($SQLBinRoot))
+							{
+								Write-Warning -Message "Failed to read registry key entry 'SQLBinRoot' for SQL Binn directory"
+							}
+							else
+							{
+								$SQLBinRoot = Format-Path $SQLBinRoot
+							}
 						}
 						else
 						{
-							Write-Warning -Message "Failed to open instance key: $InstanceRegSetup"
+							Write-Warning -Message "Failed to open InstanceRegSetup sub key: $HKLMRootKey\$InstanceValue\Setup"
 							continue
 						}
 
 						try
 						{
+							Write-Debug "Settings ErrorActionPreference to: Stop"
 							$ErrorActionPreference = "Stop"
+							Write-Debug "ModuleErrorPreference is: $ModuleErrorPreference"
 
 							# Get from filename to determine version
+							Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening ServicesReg key: HKLM:SYSTEM\CurrentControlSet\Services"
 							$ServicesReg = $RemoteKey.OpenSubKey("SYSTEM\CurrentControlSet\Services")
-							if ($ServicesReg)
+
+							if (!$ServicesReg)
+							{
+								Write-Warning "Failed to open ServiceReg key: HKLM:SYSTEM\CurrentControlSet\Services"
+							}
+							else
 							{
 								$ServiceKey = $ServicesReg.GetSubKeyNames() | Where-Object {
 									$_ -match "$Instance"
 								} | Select-Object -First 1
 
+								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening Service sub key: $ServiceKey"
 								$Service = $ServicesReg.OpenSubKey($ServiceKey).GetValue('ImagePath')
+
 								if ($Service)
 								{
 									$File = $Service -replace '^.*(\w:\\.*\\sqlservr.exe).*','$1'
@@ -292,12 +337,8 @@ function Get-SQLInstances
 								}
 								else
 								{
-									Write-Debug "Failed to open Service key: $Service"
+									Write-Warning "Failed to open Service sub key: $ServiceKey"
 								}
-							}
-							else
-							{
-								Write-Debug "Failed to open ServiceReg key: $ServicesReg"
 							}
 						}
 						catch
@@ -307,31 +348,45 @@ function Get-SQLInstances
 						}
 						finally
 						{
-							$ErrorActionPreference = "Continue"
+							Write-Debug "Settings ErrorActionPreference to: $ModuleErrorPreference"
+							$ErrorActionPreference = $ModuleErrorPreference
+							Write-Debug "ModuleErrorPreference is: $ModuleErrorPreference"
 						}
 
 						# Get SQL DTS Path
 						$Major, $Minor, $Build, $Revision = $Version.Split(".")
-						$VersionKey = $RemoteKey.OpenSubKey("$HKLMRoot\$Major$Minor")
+						Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMRootKey\$Major$Minor"
+						$VersionKey = $RemoteKey.OpenSubKey("$HKLMRootKey\$Major$Minor")
+
 						if ($VersionKey)
 						{
 							if ($VersionKey.GetSubKeyNames() -contains "DTS")
 							{
+								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening DTSKey sub key: DTS\Setup"
 								$DTSKey = $VersionKey.OpenSubKey("DTS\Setup")
+
 								if ($DTSKey)
 								{
 									$SQLPath = $DTSKey.GetValue("SQLPath")
-									Write-Debug "DTS path result: $SQLPath"
+
+									if ([string]::IsNullOrEmpty($SQLPath))
+									{
+										Write-Warning -Message "Failed to read registry key entry 'SQLPath' for SQL DTS Path"
+									}
+									else
+									{
+										$SQLPath = Format-Path $SQLPath
+									}
 								}
 								else
 								{
-									Write-Debug "Failed to open DTSKey key: $DTSKey"
+									Write-Warning "Failed to open DTSKey sub key: DTS\Setup"
 								}
 							}
 						}
 						else
 						{
-							Write-Debug "Failed to open VersionKey key: $VersionKey"
+							Write-Warning "Failed to open VersionKey sub key: $HKLMRootKey\$Major$Minor"
 						}
 
 						$AllInstances += New-Object PSObject -Property @{
@@ -378,9 +433,10 @@ function Get-SQLInstances
 						}
 					} # foreach ($Instance in $Instances)
 				} # $Instances.Count -gt 0
-			} # foreach($HKLMRoot in $HKLM)
+			} # foreach($HKLMRootKey in $HKLM)
 
-			#If the wmi param was specified, get wmi info and correlate it!
+			# If the wmi param was specified, get wmi info and correlate it!
+			# Will not work with PowerShell core.
 			if($WMI)
 			{
 				$AllInstancesWMI = @()
@@ -464,11 +520,12 @@ function Get-SQLInstances
 				}
 				catch
 				{
-					Write-Warning -Message "Could not retrieve WMI info for '$Computer':`n$_"
+					Write-Error -TargetObject $_.TargetObject -Message "Could not retrieve WMI info for computer $Computer, $_"
 					$AllInstances
 				}
 
 				return $AllInstancesWMI
+
 			} # if WMI
 			else
 			{
