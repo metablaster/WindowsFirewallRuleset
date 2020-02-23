@@ -37,7 +37,7 @@ Test-SystemRequirements
 . $PSScriptRoot\..\IPSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
+# Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
@@ -57,7 +57,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # Installation directories
 #
-$WindowsDefenderRoot = Get-WindowsDefender (Get-ComputerName) | Select-Object -ExpandProperty InstallPath
+$WindowsDefenderRoot = ""
 $NETFrameworkRoot = ""
 
 #
@@ -68,6 +68,7 @@ $NETFrameworkRoot = ""
 # Test if installation exists on system
 if ((Test-Installation "NETFramework" ([ref] $NETFrameworkRoot)) -or $Force)
 {
+	# TODO: are these really user accounts we need here
 	$Program = "$NETFrameworkRoot\mscorsvw.exe"
 	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
@@ -78,6 +79,29 @@ if ((Test-Installation "NETFramework" ([ref] $NETFrameworkRoot)) -or $Force)
 	-Description "mscorsvw.exe is precompiling .NET assemblies in the background.
 	Once it's done, it will go away. Typically, after you install the .NET Redist,
 	it will be done with the high priority assemblies in 5 to 10 minutes and then will wait until your computer is idle to process the low priority assemblies." | Format-Output
+}
+
+if ((Test-Installation "WindowsDefender" ([ref] $WindowsDefenderRoot)) -or $Force)
+{
+	$Program = "$WindowsDefenderRoot\MsMpEng.exe"
+	Test-File $Program
+
+	New-NetFirewallRule -Platform $Platform `
+	-DisplayName "Windows Defender" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+	-LocalUser $NT_AUTHORITY_System `
+	-Description "Anti malware service executable." | Format-Output
+
+	$Program = "$WindowsDefenderRoot\MpCmdRun.exe"
+	Test-File $Program
+
+	New-NetFirewallRule -Platform $Platform `
+	-DisplayName "Windows Defender CLI" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+	-LocalUser $NT_AUTHORITY_System `
+	-Description "This utility can be useful when you want to automate Windows Defender Antivirus use." | Format-Output
 }
 
 $Program = "%SystemRoot%\System32\slui.exe"
@@ -409,26 +433,6 @@ New-NetFirewallRule -Platform $Platform `
 -Description "wuauclt.exe is deprecated on Windows 10 (and Server 2016 and newer). The command line tool has been replaced by usoclient.exe.
 When the system starts an update session, it launches usoclient.exe, which in turn launches usocoreworker.exe.
 Usocoreworker is the worker process for usoclient.exe and essentially it does all the work that the USO component needs done." | Format-Output
-
-$Program = "$WindowsDefenderRoot\MsMpEng.exe"
-Test-File $Program
-
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Windows Defender" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser $NT_AUTHORITY_System `
--Description "Anti malware service executable." | Format-Output
-
-$Program = "$WindowsDefenderRoot\MpCmdRun.exe"
-Test-File $Program
-
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Windows Defender CLI" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser $NT_AUTHORITY_System `
--Description "This utility can be useful when you want to automate Windows Defender Antivirus use." | Format-Output
 
 $Program = "%SystemRoot%\System32\wbem\WmiPrvSE.exe"
 Test-File $Program

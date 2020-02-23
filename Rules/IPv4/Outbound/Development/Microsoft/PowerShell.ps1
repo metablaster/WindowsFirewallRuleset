@@ -56,8 +56,8 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # PowerShell installation directories
 #
-$PowerShell64Root = "%SystemRoot%\System32\WindowsPowerShell\v1.0"
-$PowerShell86Root = "%SystemRoot%\SysWOW64\WindowsPowerShell\v1.0"
+$PowerShell64Root = "" #"%SystemRoot%\System32\WindowsPowerShell\v1.0"
+$PowerShell86Root = "" #"%SystemRoot%\SysWOW64\WindowsPowerShell\v1.0"
 $PowerShellCore64Root = ""
 
 #

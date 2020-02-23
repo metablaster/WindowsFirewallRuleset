@@ -23,7 +23,11 @@ Few additional references worth reading:\
 All of the scripts should use the same code style and order of code, without writing a long list of preffered code style\
 it should be enough to take a look at the existing scripts and figure it out right away.
 
-Use cammel case for variables, types, symbols etc; lowercase for language keywords.
+Use cammel case for variables, types, symbols etc; lowercase for language keywords,
+for more info about casing type:\
+```powershell
+[psobject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::get
+```
 
 Each rule uses exactly the same order or paramters split into exactly the same number of lines.\
 This is so that when you need to change or search something it's easy to see what is where right away.

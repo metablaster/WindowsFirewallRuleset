@@ -51,6 +51,7 @@ if ($Develop)
 
 # Includes
 . $PSScriptRoot\External\Get-SQLInstances.ps1
+Import-Module -Name $PSScriptRoot\..\VSSetup
 Import-Module -Name $PSScriptRoot\..\Project.Windows.UserInfo
 # Import-Module -Name $PSScriptRoot\..\Project.Windows.ComputerInfo
 Import-Module -Name $PSScriptRoot\..\Project.AllPlatforms.Utility
@@ -119,6 +120,8 @@ Test-File "C:\Users\User\AppData\Local\Google\Chrome\Application\chrome.exe"
 None. You cannot pipe objects to Test-File
 .OUTPUTS
 warning message if file not found
+.NOTES
+We should attempt to fix the path if invlid here!
 #>
 function Test-File
 {
@@ -506,6 +509,7 @@ function Get-UserPrograms
 				$InstallLocation = Format-Path $InstallLocation -Verbose:$false -Debug:$false
 
 				# Get more key entries as needed
+				# TODO: PSObject to psobject?
 				$UserPrograms += New-Object -TypeName PSObject -Property @{
 					"ComputerName" = $ComputerName
 					"RegKey" = $HKUSubKey
@@ -1267,6 +1271,34 @@ function Find-Installation
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Start searching for $Program"
 	switch -Wildcard ($Program)
 	{
+		"SQLDTS"
+		{
+			# $SQLServerBinnRoot = Get-SQLInstances | Select-Object -ExpandProperty SQLBinRoot
+			$SQLDTSRoot = Get-SQLInstances | Select-Object -ExpandProperty SQLPath
+			if ($SQLDTSRoot)
+			{
+				Edit-Table $SQLDTSRoot
+			}
+			break
+		}
+		"SQLManagementStudio"
+		{
+			$SQLManagementStudioRoot = Get-SQLManagementStudio | Select-Object -ExpandProperty InstallPath
+			if ($SQLManagementStudioRoot)
+			{
+				Edit-Table $SQLManagementStudioRoot
+			}
+			break
+		}
+		"WindowsDefender"
+		{
+			$DefenderRoot = Get-WindowsDefender $ComputerName | Select-Object -ExpandProperty InstallPath
+			if ($DefenderRoot)
+			{
+				Edit-Table $DefenderRoot
+			}
+			break
+		}
 		"NuGet"
 		{
 			# NOTE: ask user where he installed NuGet
@@ -1575,17 +1607,26 @@ function Find-Installation
 		}
 		"VisualStudio"
 		{
-			Update-Table "Visual Studio"
-			break
-		}
-		"MSYS2"
-		{
-			Update-Table "MSYS2" -UserProfile
+			# TODO: should we handle multiple instances and their names, also for other programs.
+			# NOTE: VSSetup will return full path, no environment variables
+			$VSRoot = Get-VSSetupInstance |
+			Select-VSSetupInstance -Latest |
+			Select-Object -ExpandProperty InstallationPath
+
+			if ($VSRoot)
+			{
+				Edit-Table $VSRoot
+			}
 			break
 		}
 		"VisualStudioInstaller"
 		{
 			Update-Table "Visual Studio Installer"
+			break
+		}
+		"MSYS2"
+		{
+			Update-Table "MSYS2" -UserProfile
 			break
 		}
 		"Git"

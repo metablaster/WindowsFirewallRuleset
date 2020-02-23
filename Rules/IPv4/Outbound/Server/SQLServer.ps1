@@ -60,30 +60,37 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # SQLServer installation directories
 #
 
-# $SQLServerBinnRoot = Get-SQLInstances | Select-Object -ExpandProperty SQLBinRoot
-$SQLManagementStudioRoot = Get-SQLManagementStudio | Select-Object -ExpandProperty InstallPath
-$SQLDTSRoot = Get-SQLInstances | Select-Object -ExpandProperty SQLPath
+$SQLManagementStudioRoot = ""
+$SQLDTSRoot =  ""
 
 #
 # Rules for SQLServer
 #
 
-# TODO: old directory, our Get-SQLManagementStudio may not work as expected for older versions
-# $Program = "$SQLServerRoot\Tools\Binn\ManagementStudio\Ssms.exe"
-$Program = "$SQLManagementStudioRoot\Common7\IDE\Ssms.exe"
-Test-File $Program
-New-NetFirewallRule -Platform $Platform `
--DisplayName "SQL Server Management Studio" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser $SQLUsers `
--Description "" | Format-Output
+# Test if installation exists on system
+if ((Test-Installation "SQLManagementStudio" ([ref] $SQLManagementStudioRoot)) -or $Force)
+{
+	# TODO: old directory, our Get-SQLManagementStudio may not work as expected for older versions
+	# $Program = "$SQLServerRoot\Tools\Binn\ManagementStudio\Ssms.exe"
+	$Program = "$SQLManagementStudioRoot\Common7\IDE\Ssms.exe"
+	Test-File $Program
+	New-NetFirewallRule -Platform $Platform `
+	-DisplayName "SQL Server Management Studio" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+	-LocalUser $SQLUsers `
+	-Description "" | Format-Output
+}
 
-$Program = "$SQLDTSRoot\Binn\DTSWizard.exe"
-Test-File $Program
-New-NetFirewallRule -Platform $Platform `
--DisplayName "SQL Server Import and Export Wizard" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser $SQLUsers `
--Description "" | Format-Output
+# Test if installation exists on system
+if ((Test-Installation "SQLDTS" ([ref] $SQLDTSRoot)) -or $Force)
+{
+	$Program = "$SQLDTSRoot\Binn\DTSWizard.exe"
+	Test-File $Program
+	New-NetFirewallRule -Platform $Platform `
+	-DisplayName "SQL Server Import and Export Wizard" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+	-LocalUser $SQLUsers `
+	-Description "" | Format-Output
+}

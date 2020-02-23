@@ -35,7 +35,6 @@ Test-SystemRequirements
 # Includes
 . $PSScriptRoot\..\..\DirectionSetup.ps1
 . $PSScriptRoot\..\..\..\IPSetup.ps1
-Import-Module -Name $ProjectRoot\Modules\VSSetup
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
@@ -61,9 +60,9 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Visual Studio installation directories
 #
 
-# NOTE: VSSetup will return full path, no environment variables
-$VSRoot = Get-VSSetupInstance | Select-VSSetupInstance -Latest | Select-Object -ExpandProperty InstallationPath
-$VSInstallerRoot = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
+# TODO: use empty "" for all cases for testing
+$VSRoot = ""
+$VSInstallerRoot = "" # "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
 
 #
 # Visual Studio rules for executables from root directory
@@ -78,7 +77,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $Force)
 	$Program = "$VSRoot\Common7\IDE\CommonExtensions\Microsoft\TeamFoundation\Team Explorer\Git\mingw32\bin\git-remote-https.exe"
 	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "VS 2019 git HTTPS" -Service Any -Program $Program `
+	-DisplayName "VS Latest git HTTPS" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $UserAccountsSDDL `
@@ -87,7 +86,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $Force)
 	$Program = "$VSRoot\Common7\IDE\CommonExtensions\Microsoft\TeamFoundation\Team Explorer\Git\usr\bin\ssh.exe"
 	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "VS 2019 git SSH" -Service Any -Program $Program `
+	-DisplayName "VS Latest git SSH" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 22 `
 	-LocalUser $UserAccountsSDDL `
@@ -97,7 +96,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $Force)
 	$Program = "$VSRoot\Common7\IDE\devenv.exe"
 	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "VS 2019 HTTPS/S" -Service Any -Program $Program `
+	-DisplayName "VS Latest HTTPS/S" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $VSUpdateUsers `
@@ -106,7 +105,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $Force)
 	$Program = "$VSRoot\Common7\IDE\Extensions\Microsoft\LiveShare\Agent\vsls-agent.exe"
 	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "VS 2019 Liveshare" -Service Any -Program $Program `
+	-DisplayName "VS Latest Liveshare" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $UserAccountsSDDL `
@@ -115,7 +114,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $Force)
 	$Program = "$VSRoot\Common7\IDE\PerfWatson2.exe"
 	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "VS 2019 PerfWatson2" -Service Any -Program $Program `
+	-DisplayName "VS Latest PerfWatson2" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $UserAccountsSDDL `
@@ -125,7 +124,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $Force)
 	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.Host.CLR.x86.exe"
 	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "VS 2019 ServiceHub" -Service Any -Program $Program `
+	-DisplayName "VS Latest ServiceHub" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $UserAccountsSDDL `
@@ -136,7 +135,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $Force)
 	$Program = "$VSRoot\Common7\ServiceHub\controller\Microsoft.ServiceHub.Controller.exe"
 	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "VS 2019 ServiceHub" -Service Any -Program $Program `
+	-DisplayName "VS Latest ServiceHub" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $UserAccountsSDDL `
@@ -147,7 +146,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $Force)
 	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.SettingsHost.exe"
 	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "VS 2019 ServiceHub" -Service Any -Program $Program `
+	-DisplayName "VS Latest ServiceHub" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $UserAccountsSDDL `
@@ -158,7 +157,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $Force)
 	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.IdentityHost.exe"
 	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "VS 2019 ServiceHub" -Service Any -Program $Program `
+	-DisplayName "VS Latest ServiceHub" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $UserAccountsSDDL `
@@ -169,7 +168,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $Force)
 	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.RoslynCodeAnalysisService32.exe"
 	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "VS 2019 ServiceHub" -Service Any -Program $Program `
+	-DisplayName "VS Latest ServiceHub" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $UserAccountsSDDL `
@@ -178,7 +177,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $Force)
 	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.VSDetouredHost.exe"
 	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "VS 2019 ServiceHub" -Service Any -Program $Program `
+	-DisplayName "VS Latest ServiceHub" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $UserAccountsSDDL `
@@ -189,7 +188,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $Force)
 	$Program = "$VSRoot\VC\Tools\MSVC\14.24.28314\bin\Hostx86\x64\vctip.exe"
 	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "VS 2019 VCTIP telemetry" -Service Any -Program $Program `
+	-DisplayName "VS Latest VCTIP telemetry" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $UserAccountsSDDL `
@@ -207,7 +206,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $Fo
 	$Program = "$VSInstallerRoot\resources\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.exe"
 	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "VS 2019 ServiceHub Installer" -Service Any -Program $Program `
+	-DisplayName "VS Latest ServiceHub Installer" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $UserAccountsSDDL `
@@ -217,7 +216,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $Fo
 	$Program = "$VSInstallerRoot\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\BackgroundDownload.exe"
 	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "VS 2019 ServiceHub Installer" -Service Any -Program $Program `
+	-DisplayName "VS Latest ServiceHub Installer" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $NT_AUTHORITY_System `
@@ -227,7 +226,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $Fo
 	$Program = "$VSInstallerRoot\resources\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.x86.exe"
 	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "VS 2019 ServiceHub Installer" -Service Any -Program $Program `
+	-DisplayName "VS Latest ServiceHub Installer" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $UserAccountsSDDL `
@@ -236,7 +235,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $Fo
 	$Program = "$VSInstallerRoot\setup.exe"
 	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "VS 2019 Installer setup" -Service Any -Program $Program `
+	-DisplayName "VS Latest Installer setup" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $VSUpdateUsers `
@@ -245,7 +244,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $Fo
 	$Program = "$VSInstallerRoot\vs_installer.exe"
 	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "VS 2019 vs_Installer" -Service Any -Program $Program `
+	-DisplayName "VS Latest vs_Installer" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 	-LocalUser $UserAccountsSDDL `
@@ -254,7 +253,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $Fo
 	$Program = "$VSInstallerRoot\vs_installershell.exe"
 	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "VS 2019 vs_Installershell" -Service Any -Program $Program `
+	-DisplayName "VS Latest vs_Installershell" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $UserAccountsSDDL `
@@ -264,7 +263,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $Fo
 	$Program = "$VSInstallerRoot\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\VSIXInstaller.exe"
 	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "VS 2019 VSIX" -Service Any -Program $Program `
+	-DisplayName "VS Latest VSIX" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $UserAccountsSDDL `
@@ -273,7 +272,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $Fo
 	$Program = "$VSInstallerRoot\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\VSIXAutoUpdate.exe"
 	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "VS 2019 VSIXAutoUpdate" -Service Any -Program $Program `
+	-DisplayName "VS Latest VSIXAutoUpdate" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $NT_AUTHORITY_System `
@@ -282,7 +281,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $Fo
 	$Program = "$VSInstallerRoot\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\VSIXConfigurationUpdater.exe"
 	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "VS 2019 VSIXConfigurationUpdater" -Service Any -Program $Program `
+	-DisplayName "VS Latest VSIXConfigurationUpdater" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $UserAccountsSDDL `
