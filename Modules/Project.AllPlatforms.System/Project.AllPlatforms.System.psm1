@@ -28,6 +28,27 @@ SOFTWARE.
 
 Set-StrictMode -Version Latest
 
+#
+# Module preferences
+#
+
+if ($Develop)
+{
+	$ErrorActionPreference = $ModuleErrorPreference
+	$WarningPreference = $ModuleWarningPreference
+	$DebugPreference = $ModuleDebugPreference
+	$VerbosePreference = $ModuleVerbosePreference
+	$InformationPreference = $ModuleInformationPreference
+
+	$ThisModule = $MyInvocation.MyCommand.Name -replace ".{5}$"
+
+	Write-Debug -Message "[$ThisModule] ErrorActionPreference is $ErrorActionPreference"
+	Write-Debug -Message "[$ThisModule] WarningPreference is $WarningPreference"
+	Write-Debug -Message "[$ThisModule] DebugPreference is $DebugPreference"
+	Write-Debug -Message "[$ThisModule] VerbosePreference is $VerbosePreference"
+	Write-Debug -Message "[$ThisModule] InformationPreference is $InformationPreference"
+}
+
 <#
 .SYNOPSIS
 Test and print system requirements required for this project
@@ -217,24 +238,3 @@ function Test-SystemRequirements
 #
 
 Export-ModuleMember -Function Test-SystemRequirements
-
-#
-# Module preferences
-#
-
-if ($Develop)
-{
-	$ErrorActionPreference = $ModuleErrorPreference
-	$WarningPreference = $ModuleWarningPreference
-	$DebugPreference = $ModuleDebugPreference
-	$VerbosePreference = $ModuleVerbosePreference
-	$InformationPreference = $ModuleInformationPreference
-
-	$ThisModule = $MyInvocation.MyCommand.Name -replace ".{5}$"
-
-	Write-Debug -Message "[$ThisModule] ErrorActionPreference is $ErrorActionPreference"
-	Write-Debug -Message "[$ThisModule] WarningPreference is $WarningPreference"
-	Write-Debug -Message "[$ThisModule] DebugPreference is $DebugPreference"
-	Write-Debug -Message "[$ThisModule] VerbosePreference is $VerbosePreference"
-	Write-Debug -Message "[$ThisModule] InformationPreference is $InformationPreference"
-}

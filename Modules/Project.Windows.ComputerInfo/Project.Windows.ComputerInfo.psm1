@@ -28,6 +28,27 @@ SOFTWARE.
 
 Set-StrictMode -Version Latest
 
+#
+# Module preferences
+#
+
+if ($Develop)
+{
+	$ErrorActionPreference = $ModuleErrorPreference
+	$WarningPreference = $ModuleWarningPreference
+	$DebugPreference = $ModuleDebugPreference
+	$VerbosePreference = $ModuleVerbosePreference
+	$InformationPreference = $ModuleInformationPreference
+
+	$ThisModule = $MyInvocation.MyCommand.Name -replace ".{5}$"
+
+	Write-Debug -Message "[$ThisModule] ErrorActionPreference is $ErrorActionPreference"
+	Write-Debug -Message "[$ThisModule] WarningPreference is $WarningPreference"
+	Write-Debug -Message "[$ThisModule] DebugPreference is $DebugPreference"
+	Write-Debug -Message "[$ThisModule] VerbosePreference is $VerbosePreference"
+	Write-Debug -Message "[$ThisModule] InformationPreference is $InformationPreference"
+}
+
 # Includes
 Import-Module -Name $PSScriptRoot\..\Indented.Net.IP
 
@@ -212,24 +233,3 @@ Export-ModuleMember -Function Get-ComputerName
 Export-ModuleMember -Function Get-IPAddress
 Export-ModuleMember -Function Get-ConnectedAdapters
 Export-ModuleMember -Function Get-Broadcast
-
-#
-# Module preferences
-#
-
-if ($Develop)
-{
-	$ErrorActionPreference = $ModuleErrorPreference
-	$WarningPreference = $ModuleWarningPreference
-	$DebugPreference = $ModuleDebugPreference
-	$VerbosePreference = $ModuleVerbosePreference
-	$InformationPreference = $ModuleInformationPreference
-
-	$ThisModule = $MyInvocation.MyCommand.Name -replace ".{5}$"
-
-	Write-Debug -Message "[$ThisModule] ErrorActionPreference is $ErrorActionPreference"
-	Write-Debug -Message "[$ThisModule] WarningPreference is $WarningPreference"
-	Write-Debug -Message "[$ThisModule] DebugPreference is $DebugPreference"
-	Write-Debug -Message "[$ThisModule] VerbosePreference is $VerbosePreference"
-	Write-Debug -Message "[$ThisModule] InformationPreference is $InformationPreference"
-}

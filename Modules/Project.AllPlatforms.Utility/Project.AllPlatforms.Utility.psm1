@@ -28,8 +28,29 @@ SOFTWARE.
 
 Set-StrictMode -Version Latest
 
+#
+# Module preferences
+#
+
+if ($Develop)
+{
+	$ErrorActionPreference = $ModuleErrorPreference
+	$WarningPreference = $ModuleWarningPreference
+	$DebugPreference = $ModuleDebugPreference
+	$VerbosePreference = $ModuleVerbosePreference
+	$InformationPreference = $ModuleInformationPreference
+
+	$ThisModule = $MyInvocation.MyCommand.Name -replace ".{5}$"
+
+	Write-Debug -Message "[$ThisModule] ErrorActionPreference is $ErrorActionPreference"
+	Write-Debug -Message "[$ThisModule] WarningPreference is $WarningPreference"
+	Write-Debug -Message "[$ThisModule] DebugPreference is $DebugPreference"
+	Write-Debug -Message "[$ThisModule] VerbosePreference is $VerbosePreference"
+	Write-Debug -Message "[$ThisModule] InformationPreference is $InformationPreference"
+}
+
 # Includes
-. $PSScriptRoot\..\..\Utility\Get-TypeName.ps1
+. $PSScriptRoot\External\Get-TypeName.ps1
 
 <#
 .SYNOPSIS
@@ -429,24 +450,3 @@ Export-ModuleMember -Function Get-TypeName
 
 Export-ModuleMember -Variable ServiceHost
 Export-ModuleMember -Variable CheckInitFirewallModule
-
-#
-# Module preferences
-#
-
-if ($Develop)
-{
-	$ErrorActionPreference = $ModuleErrorPreference
-	$WarningPreference = $ModuleWarningPreference
-	$DebugPreference = $ModuleDebugPreference
-	$VerbosePreference = $ModuleVerbosePreference
-	$InformationPreference = $ModuleInformationPreference
-
-	$ThisModule = $MyInvocation.MyCommand.Name -replace ".{5}$"
-
-	Write-Debug -Message "[$ThisModule] ErrorActionPreference is $ErrorActionPreference"
-	Write-Debug -Message "[$ThisModule] WarningPreference is $WarningPreference"
-	Write-Debug -Message "[$ThisModule] DebugPreference is $DebugPreference"
-	Write-Debug -Message "[$ThisModule] VerbosePreference is $VerbosePreference"
-	Write-Debug -Message "[$ThisModule] InformationPreference is $InformationPreference"
-}
