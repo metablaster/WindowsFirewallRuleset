@@ -26,8 +26,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# TODO: set strict mode, use PSScriptAnalyzer from MS
-# Set-StrictMode -Version Latest
+# TODO: use PSScriptAnalyzer from
 
 . $PSScriptRoot\Config\ProjectSettings.ps1
 

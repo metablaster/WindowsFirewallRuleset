@@ -33,6 +33,8 @@ SOFTWARE.
 # 3. settings that apply to both use cases
 #
 
+Set-StrictMode -Version Latest
+
 # Set to true to indicate development phase, forces unloading modules and removing variables.
 Set-Variable -Name Develop -Scope Global -Value $true
 
@@ -73,8 +75,6 @@ $WhatIfPreference	False
 # These settings apply only for development phase
 if ($Develop)
 {
-	Set-StrictMode -Version Latest
-
 	#
 	# Override preference defaults for scripts here,
 	#

@@ -76,9 +76,9 @@ function Test-SystemRequirements
 	{
 		# print info
 		Write-Host ""
-		Write-Host "Windows Firewall Ruleset v0.2" -ForegroundColor Green -BackgroundColor Black
-		Write-Host "Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch" -ForegroundColor Green -BackgroundColor Black
-		Write-Host "https://github.com/metablaster/WindowsFirewallRuleset" -ForegroundColor Green -BackgroundColor Black
+		Write-Host "Windows Firewall Ruleset v0.3"
+		Write-Host "Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch"
+		Write-Host "https://github.com/metablaster/WindowsFirewallRuleset"
 		Write-Host ""
 
 		# Check operating system
@@ -88,10 +88,10 @@ function Test-SystemRequirements
 
 		if (!($OSPlatform -eq "Win32NT" -and $OSMajor -ge 10))
 		{
-			Write-Host ""
-			Write-Host "Unable to proceed, minimum required operating system is Win32NT 10.0 to run these scripts" -ForegroundColor Red -BackgroundColor Black
-			Write-Host "Your operating system is: $OSPlatform $OSMajor.$OSMinor"
-			Write-Host ""
+			Write-Error -Category OperationStopped -TargetObject $OSPlatform `
+			-Message "Unable to proceed, minimum required operating system is Win32NT 10.0 to run these scripts"
+
+			Write-Information -Tags "Project" -MessageData "Your operating system is: $OSPlatform $OSMajor.$OSMinor"
 			exit
 		}
 
@@ -101,9 +101,9 @@ function Test-SystemRequirements
 
 		if (!$StatusGood)
 		{
-			Write-Host ""
-			Write-Host "Unable to proceed, please open PowerShell as Administrator" -ForegroundColor Red -BackgroundColor Black
-			Write-Host ""
+			Write-Error -Category PermissionDenied -TargetObject $Principal `
+			-Message "Unable to proceed, please open PowerShell as Administrator"
+
 			exit
 		}
 
@@ -112,22 +112,19 @@ function Test-SystemRequirements
 
 		if ($OSEdition -like "*Home*")
 		{
-			Write-Host ""
-			Write-Host "Unable to proceed, home editions of Windows do not have Local Group Policy" -ForegroundColor Red -BackgroundColor Black
-			Write-Host ""
+			Write-Error -Category OperationStopped -TargetObject $OSEdition `
+			-Message "Unable to proceed, home editions of Windows do not have Local Group Policy"
+
 			exit
 		}
 
 		# Check PowerShell edition
 		$PowerShellEdition = $PSVersionTable.PSEdition
 
-		if ($PowerShellEdition -ne "Desktop")
+		if ($PowerShellEdition -eq "Desktop")
 		{
-			Write-Host ""
-			Write-Host "Unable to proceed, 'Desktop' edition of PowerShell is required to run these scripts" -ForegroundColor Red -BackgroundColor Black
-			Write-Host "Your PowerShell edition is: $PowerShellEdition"
-			Write-Host ""
-			exit
+			Write-Warning -Message "'Desktop' edition of PowerShell should work but is not longer supported"
+			Write-Information -Tags "Project" -MessageData "Your PowerShell edition is: $PowerShellEdition"
 		}
 
 		# Check PowerShell version
@@ -150,41 +147,11 @@ function Test-SystemRequirements
 
 		if (!$StatusGood)
 		{
-			Write-Host ""
-			Write-Host "Unable to proceed, minimum required PowerShell required to run these scripts is: Desktop 5.1" -ForegroundColor Red -BackgroundColor Black
-			Write-Host "Your PowerShell version is: $PowerShellEdition $PowerShellMajor.$PowerShellMinor"
-			Write-Host ""
-			exit
-		}
+			Write-Error -Category OperationStopped -TargetObject $OSEdition `
+			-Message "Unable to proceed, minimum required PowerShell required to run these scripts is: Desktop 5.1"
 
-		# Now that OS and PowerShell is OK we can import these modules
-		Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
-		Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
+			Write-Information -Tags "Project" -MessageData "Your PowerShell version is: $PowerShellEdition $PowerShellMajor.$PowerShellMinor"
 
-		# Check NET Framework version
-		$NETFramework = Get-NetFramework (Get-ComputerName)
-		$Version = $NETFramework | Sort-Object -Property Version | Select-Object -Last 1 -ExpandProperty Version
-		[int] $NETMajor, [int] $NETMinor, $NETBuild, $NETRevision = $Version.Split(".")
-
-		switch ($NETMajor)
-		{
-			1 { $StatusGood = $false }
-			2 { $StatusGood = $false }
-			3 { $StatusGood = $false }
-			4 {
-				if ($NETMinor -lt 5)
-				{
-					$StatusGood = $false
-				}
-			}
-		}
-
-		if (!$StatusGood)
-		{
-			Write-Host ""
-			Write-Host "Unable to proceed, minimum requried NET Framework version to run these scripts is 4.5" -ForegroundColor Red -BackgroundColor Black
-			Write-Host "Your NET Framework version is: $NETMajor.$NETMinor"
-			Write-Host ""
 			exit
 		}
 
@@ -218,9 +185,10 @@ function Test-SystemRequirements
 
 		if (!$StatusGood)
 		{
-			Write-Host ""
-			Write-Host "Unable to proceed, required services are not started" -ForegroundColor Red -BackgroundColor Black
-			Write-Host ""
+			Write-Error -Category OperationStopped -TargetObject $OSEdition `
+			-Message "Unable to proceed, required services are not started"
+
+			Write-Information -Tags "Project" -MessageData "TCP/IP NetBIOS Helper service is required but not started"
 			exit
 		}
 
@@ -228,7 +196,6 @@ function Test-SystemRequirements
 		Write-Host ""
 		Write-Host "System:`t`t $OSPlatform v$OSMajor.$OSMinor" -ForegroundColor Cyan
 		Write-Host "PowerShell:`t $PowerShellEdition v$PowerShellMajor.$PowerShellMinor" -ForegroundColor Cyan
-		Write-Host "NET Framework:`t v$NETMajor.$NETMinor" -ForegroundColor Cyan
 		Write-Host ""
 	}
 }
