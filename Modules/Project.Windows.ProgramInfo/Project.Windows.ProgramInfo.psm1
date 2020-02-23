@@ -83,21 +83,21 @@ function Get-AppSID
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing app: $AppName"
 
 	$TargetPath = "C:\Users\$UserName\AppData\Local\Packages\$AppName\AC"
 	if (Test-Path -PathType Container -Path $TargetPath)
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Target path is: $TargetPath"
-
 		$ACL = Get-ACL $TargetPath
 		$ACE = $ACL.Access.IdentityReference.Value
 
-		$ACE | ForEach-Object {
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing: $_"
+		foreach ($Entry in $ACE)
+		{
+			# Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing: $Entry"
 
 			# package SID starts with S-1-15-2-
-			if($_ -match "S-1-15-2-") {
-				return $_
+			if ($Entry -match "S-1-15-2-") {
+				return $Entry
 			}
 		}
 	}
@@ -105,7 +105,6 @@ function Get-AppSID
 	{
 		Write-Warning -Message "Store app '$AppName' is not isnstalled by user '$UserName' or the app is missing"
 		Write-Information -Tags "User" -MessageData "INFO: To fix the problem let this user update all of it's apps in Windows store"
-		return $null
 	}
 }
 
@@ -380,7 +379,7 @@ function Format-Path
 	# Make a copy of file path because modification can be wrong
 	$SearchString = $FilePath
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Check if '$FilePath' already contains environment variable"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if '$FilePath' already contains environment variable"
 	foreach ($Variable in $Variables)
 	{
 		if ($FilePath -like "$($Variable.Name)*")
@@ -390,7 +389,7 @@ function Format-Path
 		}
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Check if '$SearchString' is convertible to environment variable"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if '$SearchString' is convertible to environment variable"
 	while (![System.String]::IsNullOrEmpty($SearchString))
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing: $SearchString"
@@ -443,6 +442,8 @@ Get-UserPrograms "COMPUTERNAME\USERNAME"
 None. You cannot pipe objects to Get-UserPrograms
 .OUTPUTS
 System.Management.Automation.PSCustomObject list of programs for specified account if form of COMPUTERNAME\USERNAME
+.NOTES
+TODO: Parameter should include computer name
 #>
 function Get-UserPrograms
 {
@@ -455,61 +456,67 @@ function Get-UserPrograms
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	$ComputerName = ($UserAccount.Split("\"))[0]
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting $ComputerName"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
 	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
 	{
 		$HKU = Get-AccountSID $UserAccount
 		$HKU += "\Software\Microsoft\Windows\CurrentVersion\Uninstall"
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing remote registry"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::Users
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening remote base key $HKU"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key HKU:$HKU"
 		$UserKey = $RemoteKey.OpenSubkey($HKU)
+
 		$UserPrograms = @()
-
-		if ($UserKey)
+		if (!$UserKey)
 		{
-			foreach ($SubKey in $UserKey.GetSubKeyNames())
-			{
-				foreach ($Key in $UserKey.OpenSubkey($SubKey))
-				{
-					[string] $InstallLocation = $Key.GetValue("InstallLocation")
-
-					if (![System.String]::IsNullOrEmpty($InstallLocation))
-					{
-						Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing registry key: $SubKey"
-
-						# TODO: move all instances to directly format (first call above)
-						# NOTE: Avoid spamming debug and verbose messages
-						$InstallLocation = Format-Path $InstallLocation -Verbose:$false -Debug:$false
-
-						# Get more key entries as needed
-						$UserPrograms += New-Object PSObject -Property @{
-							"ComputerName" = $ComputerName
-							"RegKey" = Split-Path $SubKey.ToString() -Leaf
-							"Name" = $Key.GetValue("displayname")
-							"InstallLocation" = $InstallLocation }
-					}
-					else
-					{
-						Write-Warning -Message "Failed to read registry entry $Key\InstallLocation"
-					}
-				}
-			}
+			Write-Warning -Message "Failed to open registry root key: HKU:$HKU"
 		}
 		else
 		{
-			Write-Warning -Message "Failed to open registry key: $HKU"
+			foreach ($HKUSubKey in $UserKey.GetSubKeyNames())
+			{
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKUSubKey"
+				$SubKey = $UserKey.OpenSubkey($HKUSubKey)
+
+				if (!$SubKey)
+				{
+					Write-Warning -Message "Failed to open registry sub Key: $HKUSubKey"
+					continue
+				}
+
+				$InstallLocation = $SubKey.GetValue("InstallLocation")
+
+				if ([System.String]::IsNullOrEmpty($InstallLocation))
+				{
+					Write-Warning -Message "Failed to read registry entry $HKUSubKey\InstallLocation"
+					continue
+				}
+
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKUSubKey"
+
+				# TODO: move all instances to directly format (first call above)
+				# NOTE: Avoid spamming
+				$InstallLocation = Format-Path $InstallLocation -Verbose:$false -Debug:$false
+
+				# Get more key entries as needed
+				$UserPrograms += New-Object PSObject -Property @{
+					"ComputerName" = $ComputerName
+					"RegKey" = $HKUSubKey
+					"Name" = $SubKey.GetValue("displayname")
+					"InstallLocation" = $InstallLocation
+				}
+			}
 		}
 
 		return $UserPrograms
 	}
 	else
 	{
-		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact '$ComputerName'"
+		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact computer: $ComputerName"
 		return $null
 	}
 }
@@ -535,7 +542,7 @@ function Get-SystemPrograms
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting $ComputerName"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
 	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
 	{
@@ -553,66 +560,75 @@ function Get-SystemPrograms
 			$HKLM = "Software\Microsoft\Windows\CurrentVersion\Uninstall"
 		}
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing remote registry"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
 		$SystemPrograms = @()
-		foreach ($HKLMKey in $HKLM)
+		foreach ($HKLMRootKey in $HKLM)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening remote base key $HKLMKey"
-			$RootKey = $RemoteKey.OpenSubkey($HKLMKey)
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLMRootKey"
+			$RootKey = $RemoteKey.OpenSubkey($HKLMRootKey)
 
-			if ($RootKey)
+			if (!$RootKey)
 			{
-				foreach ($SubKey in $RootKey.GetSubKeyNames())
+				Write-Warning -Message "Failed to open registry root key: HKLM:$HKLMRootKey"
+				continue
+			}
+
+			foreach ($HKLMSubKey in $RootKey.GetSubKeyNames())
+			{
+				# NOTE: it's too verbose
+				# Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMSubKey"
+				$SubKey = $RootKey.OpenSubkey($HKLMSubKey);
+
+				if (!$SubKey)
 				{
-					foreach ($KeyEntry in $RootKey.OpenSubkey($SubKey))
+					Write-Warning -Message "Failed to open registry sub Key: $HKLMSubKey"
+					continue
+				}
+
+				# First we get InstallLocation by normal means
+				# Strip away quotations and ending backslash
+				$InstallLocation = $SubKey.GetValue("InstallLocation")
+
+				# NOTE: Avoid spamming
+				$InstallLocation = Format-Path $InstallLocation -Verbose:$false -Debug:$false
+
+				if ([System.String]::IsNullOrEmpty($InstallLocation))
+				{
+					# Some programs do not install InstallLocation entry
+					# so let's take a look at DisplayIcon which is the path to executable
+					# then strip off all of the junk to get clean and relevant directory output
+					$InstallLocation = $SubKey.GetValue("DisplayIcon")
+
+					# NOTE: Avoid spamming
+					$InstallLocation = Format-Path $InstallLocation -Verbose:$false -Debug:$false
+
+					# regex to remove: \whatever.exe at the end
+					$InstallLocation = $InstallLocation -Replace "\\(?:.(?!\\))+exe$", ""
+					# once exe is removed, remove unistall folder too if needed
+					#$InstallLocation = $InstallLocation -Replace "\\uninstall$", ""
+
+					if ([System.String]::IsNullOrEmpty($InstallLocation) -or
+					$InstallLocation -like "*{*}*" -or
+					$InstallLocation -like "*.exe*")
 					{
-						# First we get InstallLocation by normal means
-						# Strip away quotations and ending backslash
-						[string] $InstallLocation = $KeyEntry.GetValue("InstallLocation")
-
-						# NOTE: Avoid spamming debug and verbose messages
-						$InstallLocation = Format-Path $InstallLocation -Verbose:$false -Debug:$false
-
-						if ([System.String]::IsNullOrEmpty($InstallLocation))
-						{
-							# Some programs do not install InstallLocation entry
-							# so let's take a look at DisplayIcon which is the path to executable
-							# then strip off all of the junk to get clean and relevant directory output
-							$InstallLocation = $KeyEntry.GetValue("DisplayIcon")
-
-							# NOTE: Avoid spamming debug and verbose messages
-							$InstallLocation = Format-Path $InstallLocation -Verbose:$false -Debug:$false
-
-							# regex to remove: \whatever.exe at the end
-							$InstallLocation = $InstallLocation -Replace "\\(?:.(?!\\))+exe$", ""
-							# once exe is removed, remove unistall folder too if needed
-							#$InstallLocation = $InstallLocation -Replace "\\uninstall$", ""
-
-							if ([System.String]::IsNullOrEmpty($InstallLocation) -or
-							$InstallLocation -like "*{*}*" -or
-							$InstallLocation -like "*.exe*")
-							{
-								continue
-							}
-						}
-
-						Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing registry key: $SubKey"
-
-						# Get more key entries as needed
-						$SystemPrograms += New-Object PSObject -Property @{
-							"ComputerName" = $ComputerName
-							"RegKey" = Split-Path $SubKey.ToString() -Leaf
-							"Name" = $KeyEntry.GetValue("DisplayName")
-							"InstallLocation" = $InstallLocation }
+						# NOTE: Avoid spamming
+						# Write-Debug -Message "[$($MyInvocation.InvocationName)] Ignoring useless key: $HKLMSubKey"
+						continue
 					}
 				}
-			}
-			else
-			{
-				Write-Warning -Message "Failed to open registry key: $HKLMKey"
+
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKLMSubKey"
+
+				# Get more key entries as needed
+				$SystemPrograms += New-Object PSObject -Property @{
+					"ComputerName" = $ComputerName
+					"RegKey" = $HKLMSubKey
+					"Name" = $SubKey.GetValue("DisplayName")
+					"InstallLocation" = $InstallLocation
+				}
 			}
 		}
 
@@ -620,7 +636,7 @@ function Get-SystemPrograms
 	}
 	else
 	{
-		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact '$ComputerName'"
+		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact computer: $ComputerName"
 		return $null
 	}
 }
@@ -639,7 +655,6 @@ System.Management.Automation.PSCustomObject list of programs installed for all u
 #>
 function Get-AllUserPrograms
 {
-	# TODO: this function need to be tested on server, UserData key not found
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
@@ -647,7 +662,7 @@ function Get-AllUserPrograms
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting $ComputerName"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
 	# TODO: make global connection timeout
 	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
@@ -655,56 +670,64 @@ function Get-AllUserPrograms
 		# TODO: this key may not exist on fresh installed systems, tested in fresh installed Windows Server 2019
 		$HKLM = "SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData"
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing remote registry"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
-		$AllUserPrograms = @()
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening remote base key $HKLM"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
+		$AllUserPrograms = @()
 		if (!$RootKey)
 		{
-			Write-Warning -Message "Failed to open RootKey: $HKLM"
+			Write-Warning -Message "Failed to open registry root key: HKLM:$HKLM"
 		}
 		else
 		{
-			foreach ($HKLMKey in $RootKey.GetSubKeyNames())
+			foreach ($HKLSubMKey in $RootKey.GetSubKeyNames())
 			{
-				$UserProducts = $RootKey.OpenSubkey("$HKLMKey\Products")
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLSubMKey\Products"
+				$UserProducts = $RootKey.OpenSubkey("$HKLSubMKey\Products")
 
 				if (!$UserProducts)
 				{
-					Write-Warning -Message "Failed to open UserKey: $HKLMKey\Products"
+					Write-Warning -Message "Failed to open UserKey: $HKLSubMKey\Products"
 					continue
 				}
 
-				foreach ($HKLMSubKey in $UserProducts.GetSubKeyNames())
+				foreach ($HKLMKey in $UserProducts.GetSubKeyNames())
 				{
-					$ProductKey = $UserProducts.OpenSubkey("$HKLMSubKey\InstallProperties")
+					# NOTE: Avoid spamming
+					# Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMKey\InstallProperties"
+					$ProductKey = $UserProducts.OpenSubkey("$HKLMKey\InstallProperties")
 
 					if (!$ProductKey)
 					{
-						Write-Warning -Message "Failed to open ProductKey: $HKLMSubKey\InstallProperties"
+						Write-Warning -Message "Failed to open ProductKey: $HKLMKey\InstallProperties"
 						continue
 					}
 
-					[string] $InstallLocation = $ProductKey.GetValue("InstallLocation")
+					$InstallLocation = $ProductKey.GetValue("InstallLocation")
 
-					if (![System.String]::IsNullOrEmpty($InstallLocation))
+					if ([System.String]::IsNullOrEmpty($InstallLocation))
 					{
-						Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing registry key: $HKLMKey"
+						# NOTE: Avoid spamming
+						# Write-Debug -Message "[$($MyInvocation.InvocationName)] Ignoring useless key: $HKLMKey\InstallProperties"
+						continue
+					}
 
-						# NOTE: Avoid spamming debug and verbose messages
-						$InstallLocation = Format-Path $InstallLocation -Verbose:$false -Debug:$false
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKLMKey\InstallProperties"
 
-						# Get more key entries as needed
-						$AllUserPrograms += New-Object PSObject -Property @{
-							"ComputerName" = $ComputerName
-							"RegKey" = Split-Path $ProductKey.ToString() -Leaf
-							"Name" = $ProductKey.GetValue("DisplayName")
-							"Version" = $ProductKey.GetValue("DisplayVersion")
-							"InstallLocation" = $InstallLocation }
+					# NOTE: Avoid spamming
+					$InstallLocation = Format-Path $InstallLocation -Verbose:$false -Debug:$false
+
+					# Get more key entries as needed
+					$AllUserPrograms += New-Object PSObject -Property @{
+						"ComputerName" = $ComputerName
+						"RegKey" = $HKLMKey
+						"Name" = $ProductKey.GetValue("DisplayName")
+						"Version" = $ProductKey.GetValue("DisplayVersion")
+						"InstallLocation" = $InstallLocation
 					}
 				}
 			}
@@ -714,8 +737,7 @@ function Get-AllUserPrograms
 	}
 	else
 	{
-		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact '$ComputerName'"
-		return $null
+		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact computer: $ComputerName"
 	}
 }
 
@@ -1484,42 +1506,43 @@ function Get-NetFramework
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting $ComputerName"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
 	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
 	{
 		$HKLM = "SOFTWARE\Microsoft\NET Framework Setup\NDP"
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing remote registry"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
-		$NetFramework = @()
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening remote base key $HKLM"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
+		$NetFramework = @()
 		if (!$RootKey)
 		{
-			Write-Warning -Message "Failed to open RootKey: $HKLM"
+			Write-Warning -Message "Failed to open registry root key: HKLM:$HKLM"
 		}
 		else
 		{
-			foreach ($HKLMKey in $RootKey.GetSubKeyNames())
+			foreach ($HKLMSubKey in $RootKey.GetSubKeyNames())
 			{
-				$KeyEntry = $RootKey.OpenSubkey($HKLMKey)
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMSubKey"
+				$SubKey = $RootKey.OpenSubkey($HKLMSubKey)
 
-				if (!$KeyEntry)
+				if (!$SubKey)
 				{
-					Write-Warning -Message "Failed to open KeyEntry: $HKLMKey"
+					Write-Warning -Message "Failed to open registry sub key: $HKLMSubKey"
 					continue
 				}
 
-				$Version = $KeyEntry.GetValue("Version")
+				$Version = $SubKey.GetValue("Version")
 				if (![System.String]::IsNullOrEmpty($Version))
 				{
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing registry key: $HKLMKey"
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKLMSubKey"
 
-					$InstallLocation = $KeyEntry.GetValue("InstallPath")
+					$InstallLocation = $SubKey.GetValue("InstallPath")
 
 					# else not warning because some versions are built in
 					if (![System.String]::IsNullOrEmpty($InstallLocation))
@@ -1527,43 +1550,50 @@ function Get-NetFramework
 						$InstallLocation = Format-Path $InstallLocation
 					}
 
-					#  we add entry regarldess of presence of install path
+					# we add entry regarldess of presence of install path
 					$NetFramework += New-Object -TypeName PSObject -Property @{
 						"ComputerName" = $ComputerName
-						"RegKey" = Split-Path $KeyEntry.ToString() -Leaf
+						"RegKey" = $HKLMSubKey
 						"Version" = $Version
-						"InstallPath" = $InstallLocation }
+						"InstallPath" = $InstallLocation
+					}
 				}
 				else # go one key down
 				{
-					foreach ($SubKey in $KeyEntry.GetSubKeyNames())
+					foreach ($HKLMKey in $SubKey.GetSubKeyNames())
 					{
-						$SubKeyEntry = $KeyEntry.OpenSubkey($SubKey)
-						if (!$SubKeyEntry)
+						Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMKey"
+						$Key = $SubKey.OpenSubkey($HKLMKey)
+
+						if (!$Key)
 						{
-							Write-Warning -Message "Failed to open SubKeyEntry: $SubKey"
+							Write-Warning -Message "Failed to open registry sub Key: $HKLMKey"
 							continue
 						}
 
-						$Version = $SubKeyEntry.GetValue("Version")
-						if (![System.String]::IsNullOrEmpty($Version))
+						$Version = $Key.GetValue("Version")
+						if ([System.String]::IsNullOrEmpty($Version))
 						{
-							Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing registry key: $SubKey"
+							Write-Warning -Message "Failed to read registry key entry: $HKLMKey\Version"
+							continue
+						}
 
-							$InstallLocation = $SubKeyEntry.GetValue("InstallPath")
+						Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKLMKey"
 
-							# else not warning because some versions are built in
-							if (![System.String]::IsNullOrEmpty($InstallLocation))
-							{
-								$InstallLocation = Format-Path $InstallLocation
-							}
+						$InstallLocation = $Key.GetValue("InstallPath")
 
-							# we add entry regarldess of presence of install path
-							$NetFramework += New-Object -TypeName PSObject -Property @{
-								"ComputerName" = $ComputerName
-								"RegKey" = Split-Path $SubKey.ToString() -Leaf
-								"Version" = $Version
-								"InstallPath" = $InstallLocation }
+						# else not warning because some versions are built in
+						if (![System.String]::IsNullOrEmpty($InstallLocation))
+						{
+							$InstallLocation = Format-Path $InstallLocation
+						}
+
+						# we add entry regarldess of presence of install path
+						$NetFramework += New-Object -TypeName PSObject -Property @{
+							"ComputerName" = $ComputerName
+							"RegKey" = $HKLMKey
+							"Version" = $Version
+							"InstallPath" = $InstallLocation
 						}
 					}
 				}
@@ -1574,8 +1604,7 @@ function Get-NetFramework
 	}
 	else
 	{
-		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact '$ComputerName'"
-		return $null
+		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact computer: $ComputerName"
 	}
 }
 
@@ -1600,7 +1629,7 @@ function Get-WindowsSDK
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting $ComputerName"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
 	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
 	{
@@ -1616,52 +1645,49 @@ function Get-WindowsSDK
 
 		}
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing remote registry"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
 		$WindowsSDK = @()
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening remote base key $HKLM"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
 		if (!$RootKey)
 		{
-			Write-Warning -Message "Failed to open RootKey: $HKLM"
+			Write-Warning -Message "Failed to open registry root key: HKLM:$HKLM"
 		}
 		else
 		{
-			foreach ($HKLMKey in $RootKey.GetSubKeyNames())
+			foreach ($HKLMSubKey in $RootKey.GetSubKeyNames())
 			{
-				$SubKey = $RootKey.OpenSubkey($HKLMKey)
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMSubKey"
+				$SubKey = $RootKey.OpenSubkey($HKLMSubKey)
 
 				if (!$SubKey)
 				{
-					Write-Warning -Message "Failed to open SubKey: $HKLMKey"
+					Write-Warning -Message "Failed to open registry sub key: $HKLMSubKey"
 					continue
 				}
 
-				$RegKey = Split-Path $SubKey.ToString() -Leaf
 				$InstallLocation = $SubKey.GetValue("InstallationFolder")
 
-				if (![System.String]::IsNullOrEmpty($InstallLocation))
+				if ([System.String]::IsNullOrEmpty($InstallLocation))
 				{
-					$InstallLocation = Format-Path $InstallLocation
-				}
-				else
-				{
-					Write-Warning -Message "Failed to read registry entry $RegKey"
-					# TODO: continue ?
+					Write-Warning -Message "Failed to read registry key entry: $HKLMSubKey\InstallationFolder"
+					continue
 				}
 
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing registry key: $RegKey"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKLMSubKey"
+				$InstallLocation = Format-Path $InstallLocation
 
-				# we add entry regarldess of presence of install path
 				$WindowsSDK += New-Object -TypeName PSObject -Property @{
 					"ComputerName" = $ComputerName
-					"RegKey" = $RegKey
+					"RegKey" = $HKLMSubKey
 					"Product" = $SubKey.GetValue("ProductName")
 					"Version" = $SubKey.GetValue("ProductVersion")
-					"InstallPath" = $InstallLocation }
+					"InstallPath" = $InstallLocation
+				}
 			}
 		}
 
@@ -1669,8 +1695,7 @@ function Get-WindowsSDK
 	}
 	else
 	{
-		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact '$ComputerName'"
-		return $null
+		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact computer: $ComputerName"
 	}
 }
 
@@ -1695,7 +1720,7 @@ function Get-WindowsKits
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting $ComputerName"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
 	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
 	{
@@ -1711,35 +1736,45 @@ function Get-WindowsKits
 			$HKLM = "SOFTWARE\Microsoft\Windows Kits\Installed Roots"
 		}
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing remote registry"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
-		$WindowsKits = @()
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening remote base key $HKLM"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
+		$WindowsKits = @()
 		if (!$RootKey)
 		{
-			Write-Warning -Message "Failed to open RootKey: $HKLM"
+			Write-Warning -Message "Failed to open registry root key: HKLM:$HKLM"
 		}
 		else
 		{
-			foreach ($Entry in $RootKey.GetValueNames())
+			foreach ($RootKeyEntry in $RootKey.GetValueNames())
 			{
-				$InstallLocation = $RootKey.GetValue($Entry)
+				$RootKeyLeaf = Split-Path $RootKey.ToString() -Leaf
+				$InstallLocation = $RootKey.GetValue($RootKeyEntry)
 
-				if (![System.String]::IsNullOrEmpty($InstallLocation) -and $InstallLocation -like "C:\Program Files*")
+				if ([System.String]::IsNullOrEmpty($InstallLocation))
 				{
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing registry key: $HKLM"
+					Write-Warning -Message "Failed to read registry key entry: $RootKeyLeaf\$RootKeyEntry"
+					continue
+				}
+				elseif ($InstallLocation -notlike "C:\Program Files*")
+				{
+					# NOTE: Avoid spamming
+					# Write-Debug -Message "[$($MyInvocation.InvocationName)] Ignoring useless key entry: $RootKeyLeaf\$RootKeyEntry"
+					continue
+				}
 
-					$InstallLocation = Format-Path $InstallLocation
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key entry: $RootKeyLeaf\$RootKeyEntry"
+				$InstallLocation = Format-Path $InstallLocation
 
-					$WindowsKits += New-Object -TypeName PSObject -Property @{
-						"ComputerName" = $ComputerName
-						"RegKey" = Split-Path $RootKey.ToString() -Leaf
-						"Product" = $Entry
-						"InstallPath" = $InstallLocation}
+				$WindowsKits += New-Object -TypeName PSObject -Property @{
+					"ComputerName" = $ComputerName
+					"RegKey" = $RootKeyLeaf
+					"Product" = $RootKeyEntry
+					"InstallPath" = $InstallLocation
 				}
 			}
 		}
@@ -1748,8 +1783,7 @@ function Get-WindowsKits
 	}
 	else
 	{
-		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact '$ComputerName'"
-		return $null
+		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact computer: $ComputerName"
 	}
 }
 
@@ -1774,41 +1808,42 @@ function Get-WindowsDefender
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting $ComputerName"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
 	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
 	{
 		$HKLM = "SOFTWARE\Microsoft\Windows Defender"
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing remote registry"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
 		$WindowsDefender = $null
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening remote base key $HKLM"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
 		if (!$RootKey)
 		{
-			Write-Warning -Message "Failed to open RootKey: $HKLM"
+			Write-Warning -Message "Failed to open registry root key: HKLM:$HKLM"
 		}
 		else
 		{
+			$RootKeyLeaf = Split-Path $RootKey.ToString() -Leaf
 			$InstallLocation = $RootKey.GetValue("InstallLocation")
-			$RegKey = Split-Path $RootKey.ToString() -Leaf
 
-			if (![System.String]::IsNullOrEmpty($InstallLocation))
+			if ([System.String]::IsNullOrEmpty($InstallLocation))
 			{
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing registry key: $RegKey"
-
-				$WindowsDefender = New-Object -TypeName PSObject -Property @{
-					"ComputerName" = $ComputerName
-					"RegKey" = $RegKey
-					"InstallPath" = Format-Path $InstallLocation }
+				Write-Warning -Message "Failed to read registry key entry: $RootKeyLeaf\InstallLocation"
 			}
 			else
 			{
-				Write-Warning -Message "Failed to read registry entry $RegKey\InstallLocation"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $RootKeyLeaf"
+
+				$WindowsDefender = New-Object -TypeName PSObject -Property @{
+					"ComputerName" = $ComputerName
+					"RegKey" = $RootKeyLeaf
+					"InstallPath" = Format-Path $InstallLocation
+				}
 			}
 		}
 
@@ -1816,8 +1851,7 @@ function Get-WindowsDefender
 	}
 	else
 	{
-		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact '$ComputerName'"
-		return $null
+		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact computer: $ComputerName"
 	}
 }
 
@@ -1847,7 +1881,7 @@ System.Management.Automation.PSCustomObject for installed Microsoft SQL Server M
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting $ComputerName"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
 	if (Test-Connection -ComputerName $ComputerName -Count 2 -Quiet)
 	{
@@ -1864,48 +1898,49 @@ System.Management.Automation.PSCustomObject for installed Microsoft SQL Server M
 
 		}
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing remote registry"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
-		$ManagementStudio = @()
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening remote base key $HKLM"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
+		$ManagementStudio = @()
 		if (!$RootKey)
 		{
-			Write-Warning -Message "Failed to open RootKey: $HKLM"
+			Write-Warning -Message "Failed to open registry root key: $HKLM"
 		}
 		else
 		{
-			foreach ($HKLMKey in $RootKey.GetSubKeyNames())
+			foreach ($HKLMSubKey in $RootKey.GetSubKeyNames())
 			{
-				$SubKey = $RootKey.OpenSubkey($HKLMKey)
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMSubKey"
+				$SubKey = $RootKey.OpenSubkey($HKLMSubKey)
 
 				if (!$SubKey)
 				{
-					Write-Warning -Message "Failed to open SubKey: $HKLMKey"
+					Write-Warning -Message "Failed to open registry sub key: $HKLMSubKey"
 					continue
 				}
 
-				$RegKey = Split-Path $SubKey.ToString() -Leaf
 				$InstallLocation = $SubKey.GetValue("SSMSInstallRoot")
 
-				if (![System.String]::IsNullOrEmpty($InstallLocation))
+				if ([System.String]::IsNullOrEmpty($InstallLocation))
 				{
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing registry key: $HKLMKey"
-
-					# TODO: Use InstallPath in ever function, some functions have InstallRoot property instead
-					# also try to get same set of properties for all req querries
-					$ManagementStudio += New-Object -TypeName PSObject -Property @{
-						"ComputerName" = $ComputerName
-						"RegKey" = $RegKey
-						"Version" = $SubKey.GetValue("Version")
-						"InstallPath" = Format-Path $InstallLocation }
+					Write-Warning -Message "Failed to read registry key entry $HKLMSubKey\SSMSInstallRoot"
+					continue
 				}
-				else
-				{
-					Write-Warning -Message "Failed to read registry entry $RegKey\SSMSInstallRoot"
+
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing registry key: $HKLMSubKey"
+
+				# TODO: Should we return object by object to make pipeline work?
+				# TODO: Use InstallPath in ever function, some functions have InstallRoot property instead
+				# also try to get same set of properties for all req querries
+				$ManagementStudio += New-Object -TypeName PSObject -Property @{
+					"ComputerName" = $ComputerName
+					"RegKey" = $HKLMSubKey
+					"Version" = $SubKey.GetValue("Version")
+					"InstallPath" = Format-Path $InstallLocation
 				}
 			}
 		}
@@ -1914,8 +1949,7 @@ System.Management.Automation.PSCustomObject for installed Microsoft SQL Server M
 	}
 	else
 	{
-		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact '$ComputerName'"
-		return $null
+		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact computer: $ComputerName"
 	}
 }
 
@@ -2011,13 +2045,14 @@ if ($Develop)
 
 <# Opening keys, naming convention as you drill down the keys
 
-Object (key)/	Key Path(s)		/	Sub key names
+Object (key)/	Key Path(s) name/	Sub key names (multiple)
 RemoteKey	/	RegistryHive
 Array of keys/	HKLM
-RootKey		/	HKLMRoot		/	HKLMNames
+RootKey		/	HKLMRootKey		/	HKLMNames
 SubKey		/	HKLMSubKey		/	HKLMSubKeyNames
 Key			/	HKLMKey			/	HKLMKeyNames
 SpecificNames...
+*KeyName*Entry
 #>
 
 <# In order listed

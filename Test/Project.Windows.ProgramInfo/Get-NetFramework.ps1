@@ -54,11 +54,11 @@ New-Test "Get-NetFramework"
 $ComputerName = Get-ComputerName @Logs
 Update-Logs
 
-# $NETFramework = Get-NetFramework $ComputerName
-# $NETFramework
+$NETFramework = Get-NetFramework $ComputerName
+$NETFramework
 
-# New-Test "Get-NetFramework latest"
-# $NETFramework | Sort-Object -Property Version | Where-Object {$_.InstallPath} | Select-Object -Last 1 -ExpandProperty InstallPath
+New-Test "Get-NetFramework latest"
+$NETFramework | Sort-Object -Property Version | Where-Object {$_.InstallPath} | Select-Object -Last 1 -ExpandProperty InstallPath
 
 # New-Test "Get-NetFramework latest version"
 # $Version = $NETFramework | Sort-Object -Property Version | Select-Object -Last 1 -ExpandProperty Version
