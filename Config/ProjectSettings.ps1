@@ -150,6 +150,25 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	# Machine where to apply rules (default: Local Group Policy)
 	New-Variable -Name PolicyStore -Scope Global -Option Constant -Value ([System.Environment]::MachineName)
 
+	# If you changed PolicyStore variable, but the project is not yet ready for remote administration
+	if ($PolicyStore -ne [System.Environment]::MachineName)
+	{
+		# To force loading rules regardless of presence of program set to true
+		New-Variable -Name RemoteCredentials -Scope Global -Option Constant -Value (
+			Get-Credential -Message "Credential are required to access $PolicyStore")
+
+		try
+		{
+			Write-Information -Tags "Project" -MessageData "Testing Windows Remote Management to: $PolicyStore"
+			Test-WSMan -ComputerName $PolicyStore -Credential $RemoteCredentials
+		}
+		catch
+		{
+			Write-Error -TargetObject $_.TargetObject -Message "Windows Remote Management connection test to '$PolicyStore' failed: $_"
+			exit
+		}
+	}
+
 	# Default network interface card, change this to NIC which your target PC uses
 	New-Variable -Name Interface -Scope Global -Option Constant -Value "Wired, Wireless"
 

@@ -120,7 +120,7 @@ function Get-GroupUsers
 
 		[Alias("Computer", "Machine", "Machines", "Server", "Servers", "Domain", "Domains")]
 		[Parameter()]
-		[string[]] $Computers = [System.Environment]::MachineName,
+		[string[]] $ComputerNames = [System.Environment]::MachineName,
 
 		[Parameter()]
 		[switch] $CIM
@@ -135,42 +135,42 @@ function Get-GroupUsers
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-		foreach ($Computer in $Computers)
+		foreach ($ComputerName in $ComputerNames)
 		{
 			if ($CIM)
 			{
 				if ($PowerShellEdition -ne "Desktop")
 				{
-					Write-Error -Category InvalidArgument -TargetObject $Computer `
+					Write-Error -Category InvalidArgument -TargetObject $ComputerName `
 					-Message "Querying computers via CIM server with PowerShell '$PowerShellEdition' not implemented"
 					return
 				}
 
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Computer"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
-				# Core: -TimeoutSeconds $ConnectionTimeout -IPv4
-				if (Test-Connection -ComputerName $Computer -Count $ConnectionCount -Quiet)
+				# Core: -TargetName $ComputerName -TimeoutSeconds $ConnectionTimeout -IPv4
+				if (Test-TargetMachine $ComputerName)
 				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Computer"
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $ComputerName"
 
 					foreach ($Group in $Groups)
 					{
 						# Get all users that belong to requrested group,
 						# this includes non local principal source and non 'user' users
 						# it is also missing SID
-						$GroupUsers = Get-CimInstance -Class Win32_GroupUser -Namespace "root\cimv2" -ComputerName $Computer |
+						$GroupUsers = Get-CimInstance -Class Win32_GroupUser -Namespace "root\cimv2" -ComputerName $ComputerName |
 						Where-Object { $_.GroupComponent.Name -eq $Group } |
 						Select-Object -ExpandProperty PartComponent |
 						Select-Object -ExpandProperty Name
 
 						# Get only enabled users, these include SID but also non group users
-						$EnabledAccounts = Get-CimInstance -Class Win32_UserAccount -Namespace "root\cimv2" -Filter "LocalAccount = True" -ComputerName $Computer |
+						$EnabledAccounts = Get-CimInstance -Class Win32_UserAccount -Namespace "root\cimv2" -ComputerName $ComputerName -Filter "LocalAccount = True" |
 						Where-Object -Property Disabled -ne False |
 						Select-Object -Property Name, Caption, SID, Domain
 
 						if([string]::IsNullOrEmpty($EnabledAccounts))
 						{
-							Write-Warning -Message "User group '$Group' does not have any accounts on computer: $Computer"
+							Write-Warning -Message "User group '$Group' does not have any accounts on computer: $ComputerName"
 							continue
 						}
 
@@ -184,7 +184,7 @@ function Get-GroupUsers
 								$UserAccounts += New-Object -TypeName PSObject -Property @{
 									User = Split-Path -Path $Account -Leaf
 									Account = $Account
-									Computer = $Computer
+									Computer = $ComputerName
 									SID = $Account.SID
 								}
 							}
@@ -201,7 +201,7 @@ function Get-GroupUsers
 					-Message "Unable to contact computer: $ComputerName"
 				}
 			}
-			elseif ($Computer -eq [System.Environment]::MachineName)
+			elseif ($ComputerName -eq [System.Environment]::MachineName)
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying localhost"
 
@@ -214,7 +214,7 @@ function Get-GroupUsers
 
 					if([string]::IsNullOrEmpty($GroupUsers))
 					{
-						Write-Warning -Message "User group '$UserGroup' does not have any accounts on computer: $Computer"
+						Write-Warning -Message "User group '$UserGroup' does not have any accounts on computer: $ComputerName"
 						continue
 					}
 
@@ -225,7 +225,7 @@ function Get-GroupUsers
 						$UserAccounts += New-Object -TypeName PSObject -Property @{
 							User = Split-Path -Path $Account.Name -Leaf
 							Account = $Account.Name
-							Computer = $Computer
+							Computer = $ComputerName
 							SID = $Account.SID
 						}
 					}
@@ -267,7 +267,7 @@ function Get-UserGroups
 	param (
 		[Alias("Computer", "Machine", "Machines", "Server", "Servers", "Domain", "Domains")]
 		[Parameter(Position = 0)]
-		[string[]] $Computers = [System.Environment]::MachineName,
+		[string[]] $ComputerNames = [System.Environment]::MachineName,
 
 		[Parameter()]
 		[switch] $CIM
@@ -282,25 +282,25 @@ function Get-UserGroups
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-		foreach ($Computer in $Computers)
+		foreach ($ComputerName in $ComputerNames)
 		{
 			if ($CIM)
 			{
 				if ($PowerShellEdition -ne "Desktop")
 				{
-					Write-Error -Category InvalidArgument -TargetObject $Computer `
+					Write-Error -Category InvalidArgument -TargetObject $ComputerName `
 					-Message "Querying computers via CIM server with PowerShell '$PowerShellEdition' not implemented"
 					return
 				}
 
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Computer"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
 				# Core: -TimeoutSeconds $ConnectionTimeout -IPv4
-				if (Test-Connection -ComputerName $Computer -Count $ConnectionCount -Quiet)
+				if (Test-TargetMachine $ComputerName)
 				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Computer"
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $ComputerName"
 
-					$RemoteGroups = Get-CimInstance -Class Win32_Group -Namespace "root\cimv2" -ComputerName $Computer |
+					$RemoteGroups = Get-CimInstance -Class Win32_Group -Namespace "root\cimv2" -ComputerName $ComputerName |
 					Where-Object -Property LocalAccount -eq "True"
 
 					foreach ($Group in $RemoteGroups)
@@ -308,14 +308,14 @@ function Get-UserGroups
 						$UserGroups += New-Object -TypeName PSObject -Property @{
 							Group = $Group.Name
 							Caption = $Group.Caption
-							Computer = $Computer
+							Computer = $ComputerName
 							SID = $Group.SID
 						}
 					}
 
 					if([string]::IsNullOrEmpty($UserGroups))
 					{
-						Write-Warning -Message "There are no user groups on computer: $Computer"
+						Write-Warning -Message "There are no user groups on computer: $ComputerName"
 						continue
 					}
 				}
@@ -325,7 +325,7 @@ function Get-UserGroups
 					-Message "Unable to contact computer: $ComputerName"
 				}
 			} # if ($CIM)
-			elseif ($Computer -eq [System.Environment]::MachineName)
+			elseif ($ComputerName -eq [System.Environment]::MachineName)
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying localhost"
 
@@ -335,24 +335,24 @@ function Get-UserGroups
 				{
 					$UserGroups += New-Object -TypeName PSObject -Property @{
 						Group = $Group.Name
-						Caption = Join-Path -Path $Computer -ChildPath $Group.Name
-						Computer = $Computer
+						Caption = Join-Path -Path $ComputerName -ChildPath $Group.Name
+						Computer = $ComputerName
 						SID = $Group.SID
 					}
 				}
 
 				if([string]::IsNullOrEmpty($UserGroups))
 				{
-					Write-Warning -Message "There are no user groups on computer: $Computer"
+					Write-Warning -Message "There are no user groups on computer: $ComputerName"
 					continue
 				}
 			} # if ($CIM)
 			else
 			{
-				Write-Error -Category NotImplemented -TargetObject $Computer `
+				Write-Error -Category NotImplemented -TargetObject $ComputerName `
 				-Message "Querying remote computers without CIM switch not implemented"
 			} # if ($CIM)
-		} # foreach ($Computer in $Computers)
+		} # foreach ($ComputerName in $ComputerNames)
 
 		return $UserGroups
 	}
@@ -433,7 +433,7 @@ function Get-SDDL
 
 		[Alias("Domain", "Machine", "Server")]
 		[Parameter(Mandatory = $false)]
-		[string] $Computer = [System.Environment]::MachineName,
+		[string] $ComputerName = [System.Environment]::MachineName,
 
 		[Parameter()]
 		[switch] $CIM
@@ -445,9 +445,9 @@ function Get-SDDL
 
 	foreach ($User in $Users)
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL for account: $Computer\$User"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL for account: $ComputerName\$User"
 
-		$SID = Get-AccountSID $User -Domain $Computer -CIM:$CIM
+		$SID = Get-AccountSID $User -Domain $ComputerName -CIM:$CIM
 		if ($SID)
 		{
 			$SDDL += "(A;;CC;;;{0})" -f $SID
@@ -458,7 +458,7 @@ function Get-SDDL
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL for group: $Group"
 
-		$SID = Get-GroupSID $Group -Domain $Computer -CIM:$CIM
+		$SID = Get-GroupSID $Group -Domain $ComputerName -CIM:$CIM
 		if ($SID)
 		{
 			$SDDL += "(A;;CC;;;{0})" -f $SID
@@ -505,7 +505,7 @@ function Get-GroupSID
 
 		[Alias("Machine", "Domain", "Server")]
 		[Parameter()]
-		[string] $Computer = [System.Environment]::MachineName,
+		[string] $ComputerName = [System.Environment]::MachineName,
 
 		[Parameter()]
 		[switch] $CIM
@@ -527,35 +527,35 @@ function Get-GroupSID
 			{
 				if ($PowerShellEdition -ne "Desktop")
 				{
-					Write-Error -Category InvalidArgument -TargetObject $Computer `
+					Write-Error -Category InvalidArgument -TargetObject $ComputerName `
 					-Message "Querying computers via CIM server with PowerShell '$PowerShellEdition' not implemented"
 					return
 				}
 
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Computer"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
 				# Core: -TimeoutSeconds $ConnectionTimeout -IPv4
-				if (Test-Connection -ComputerName $Computer -Count $ConnectionCount -Quiet)
+				if (Test-TargetMachine $ComputerName)
 				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Computer"
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $ComputerName"
 
-					$GroupSID = Get-CimInstance -Class Win32_Group -Namespace "root\cimv2" -ComputerName $Computer |
+					$GroupSID = Get-CimInstance -Class Win32_Group -Namespace "root\cimv2" -ComputerName $ComputerName |
 					Where-Object -Property Name -eq $Group | Select-Object -ExpandProperty SID
 				}
 				else
 				{
-					Write-Error -Category ConnectionError -TargetObject $Computer `
-					-Message "Unable to contact computer: $Computer"
+					Write-Error -Category ConnectionError -TargetObject $ComputerName `
+					-Message "Unable to contact computer: $ComputerName"
 					continue
 				}
 			}
-			elseif ($Computer -eq [System.Environment]::MachineName)
+			elseif ($ComputerName -eq [System.Environment]::MachineName)
 			{
 				$GroupSID = Get-LocalGroup -Name $Group | Select-Object -ExpandProperty SID | Select-Object -ExpandProperty Value
 			}
 			else
 			{
-				Write-Error -Category NotImplemented -TargetObject $Computer `
+				Write-Error -Category NotImplemented -TargetObject $ComputerName `
 				-Message "Querying remote computers without CIM switch not implemented"
 				return
 			} # if ($CIM)
@@ -604,7 +604,7 @@ function Get-AccountSID
 
 		[Alias("Domain", "Machine", "Server")]
 		[Parameter()]
-		[string] $Computer = [System.Environment]::MachineName,
+		[string] $ComputerName = [System.Environment]::MachineName,
 
 		[Parameter()]
 		[switch] $CIM
@@ -614,7 +614,7 @@ function Get-AccountSID
 	{
 		$PowerShellEdition = $PSVersionTable.PSEdition
 		[bool] $SpecialDomain = ![System.String]::IsNullOrEmpty(
-			[array]::Find($SpecialDomains, [System.Predicate[string]]{ $Computer -eq "$($args[0])" }))
+			[array]::Find($SpecialDomains, [System.Predicate[string]]{ $ComputerName -eq "$($args[0])" }))
 	}
 	process
 	{
@@ -622,65 +622,65 @@ function Get-AccountSID
 
 		foreach ($User in $Users)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing: $Computer\$User"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing: $ComputerName\$User"
 
 			# TODO: should we query system accounts remotely?
 			if ($CIM -and !$SpecialDomain)
 			{
 				if ($PowerShellEdition -ne "Desktop")
 				{
-					Write-Error -Category InvalidArgument -TargetObject $Computer `
+					Write-Error -Category InvalidArgument -TargetObject $ComputerName `
 					-Message "Querying computers via CIM server with PowerShell '$PowerShellEdition' not implemented"
 					return
 				}
 
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Computer"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
 				# Core: -TimeoutSeconds $ConnectionTimeout -IPv4
-				if (Test-Connection -ComputerName $Computer -Count $ConnectionCount -Quiet)
+				if (Test-TargetMachine $ComputerName)
 				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying CIM server on $Computer"
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying CIM server on $ComputerName"
 
-					$AccountSID = Get-CimInstance -Class Win32_UserAccount -Namespace "root\cimv2" -ComputerName $Computer |
+					$AccountSID = Get-CimInstance -Class Win32_UserAccount -Namespace "root\cimv2" -ComputerName $ComputerName |
 					Where-Object -Property Name -eq $User | Select-Object -ExpandProperty SID
 				}
 				else
 				{
-					Write-Error -Category ConnectionError -TargetObject $Computer `
-					-Message "Unable to contact computer: $Computer"
+					Write-Error -Category ConnectionError -TargetObject $ComputerName `
+					-Message "Unable to contact computer: $ComputerName"
 					return
 				}
 			}
-			elseif ($Computer -eq [System.Environment]::MachineName -or $SpecialDomain)
+			elseif ($ComputerName -eq [System.Environment]::MachineName -or $SpecialDomain)
 			{
 				if ($CIM)
 				{
-					Write-Warning -Message "-CIM switch ignored for $Computer"
+					Write-Warning -Message "-CIM switch ignored for $ComputerName"
 				}
 
 				try
 				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for account: $Computer\$User"
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for account: $ComputerName\$User"
 
-					$NTAccount = New-Object System.Security.Principal.NTAccount($Computer, $User)
+					$NTAccount = New-Object System.Security.Principal.NTAccount($ComputerName, $User)
 					$AccountSID = $NTAccount.Translate([System.Security.Principal.SecurityIdentifier]).ToString()
 				}
 				catch
 				{
-					Write-Error -TargetObject $_.TargetObject -Message "[$($MyInvocation.InvocationName)] Account '$Computer\$User' cannot be resolved to a SID"
+					Write-Error -TargetObject $_.TargetObject -Message "[$($MyInvocation.InvocationName)] Account '$ComputerName\$User' cannot be resolved to a SID"
 					continue
 				}
 			} # if ($CIM)
 			else
 			{
-				Write-Error -Category NotImplemented -TargetObject $Computer `
+				Write-Error -Category NotImplemented -TargetObject $ComputerName `
 				-Message "Querying remote computers without CIM switch not implemented"
 				return
 			} # if ($CIM)
 
 			if([string]::IsNullOrEmpty($AccountSID))
 			{
-				Write-Error -TargetObject $AccountSID -Message "Account '$Computer\$User' cannot be resolved to a SID"
+				Write-Error -TargetObject $AccountSID -Message "Account '$ComputerName\$User' cannot be resolved to a SID"
 			}
 			else
 			{
@@ -694,6 +694,12 @@ function Get-AccountSID
 # Module variables
 #
 
+# Must be before constants
+New-Variable -Name SpecialDomains -Scope Script -Option Constant -Value @(
+	"NT AUTHORITY"
+	"APPLICATION_PACKAGE_AUTHORITY"
+	)
+
 # TODO: global configuration variables (in a separate script) should also include to set "USERS" instead of single user
 if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 {
@@ -701,12 +707,12 @@ if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 	New-Variable -Name CheckInitUserInfo -Scope Global -Option Constant -Value $null
 
 	# Get list of user account in form of COMPUTERNAME\USERNAME
-	New-Variable -Name UserAccounts -Scope Global -Option Constant -Value (Get-GroupUsers "Users")
-	New-Variable -Name AdminAccounts -Scope Global -Option Constant -Value (Get-GroupUsers "Administrators")
+	New-Variable -Name UserAccounts -Scope Global -Option Constant -Value (Get-GroupUsers "Users" -Computers $PolicyStore)
+	New-Variable -Name AdminAccounts -Scope Global -Option Constant -Value (Get-GroupUsers "Administrators" -Computers $PolicyStore)
 
 	# Generate SDDL string for accounts
-	New-Variable -Name UsersSDDL -Scope Global -Option Constant -Value (Get-SDDL -Users "Users" -Computer PolicyStore)
-	New-Variable -Name AdminsSDDL -Scope Global -Option Constant -Value (Get-SDDL -Users "Administrators" -Computer PolicyStore)
+	New-Variable -Name UsersSDDL -Scope Global -Option Constant -Value (Get-SDDL -Groups "Users" -Computer $PolicyStore)
+	New-Variable -Name AdminsSDDL -Scope Global -Option Constant -Value (Get-SDDL -Groups "Administrators" -Computer $PolicyStore)
 
 	# System users (define variables as needed)
 	# TODO: replace with function calls
@@ -715,11 +721,6 @@ if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 	New-Variable -Name NT_AUTHORITY_NetworkService -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-20)"
 	New-Variable -Name NT_AUTHORITY_UserModeDrivers -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
 }
-
-New-Variable -Name SpecialDomains -Scope Script -Option Constant -Value @(
-	"NT AUTHORITY"
-	"APPLICATION_PACKAGE_AUTHORITY"
-	)
 
 #
 # Function exports

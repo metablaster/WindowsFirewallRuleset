@@ -413,6 +413,48 @@ function Set-ScreenBuffer
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Screen buffer check OK"
 }
 
+<#
+.SYNOPSIS
+Test target computer on which to apply firewall
+.PARAMETER ComputerName
+Target computer which to test
+.PARAMETER ConnectionCount
+Specifies the number of echo requests to send. The default value is 4
+.PARAMETER ConnectionTimeout
+The test fails if a response isn't received before the timeout expires
+.EXAMPLE
+Test-TargetMachine
+.INPUTS
+None. You cannot pipe objects to Test-TargetMachine
+.OUTPUTS
+None.
+#>
+function Test-TargetMachine
+{
+	[CmdletBinding(PositionalBinding = $false)]
+	param (
+		[Parameter(Mandatory = $true,
+		Position = 0)]
+		[string] $Computer,
+
+		[Parameter()]
+		[int16] $Count = $ConnectionCount,
+
+		[Parameter()]
+		[int16] $Timeout = $ConnectionTimeout
+	)
+
+	# Test parameters depend on PowerShell edition
+	$PowerShellEdition = $PSVersionTable.PSEdition
+
+	if ($PowerShellEdition -eq "Core")
+	{
+		return Test-Connection -TargetName $Computer -Count $Count -TimeoutSeconds $Timeout -IPv4 -Quiet
+	}
+
+	return Test-Connection -ComputerName $Computer -Count $Count -Quiet
+}
+
 #
 # Module variables
 #
@@ -443,6 +485,7 @@ Export-ModuleMember -Function Get-NetworkServices
 Export-ModuleMember -Function Format-Output
 Export-ModuleMember -Function Set-ScreenBuffer
 Export-ModuleMember -Function Get-TypeName
+Export-ModuleMember -Function Test-TargetMachine
 
 #
 # Variable exports

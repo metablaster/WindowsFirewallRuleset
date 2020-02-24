@@ -130,10 +130,14 @@ OR
 Get-WMIObject -class Win32_ComputerSystem | Select-Object -ExpandProperty Name
 ```
 
-# Get CIM classes
+# Get CIM classes and commandlets
 
 ```powershell
 Get-CimClass -Namespace root/CIMV2 | Where-Object CimClassName -like Win32* | Select-Object CimClassName
+```
+
+```powershell
+Get-Command –module CimCmdlets
 ```
 
 # Get type name aliases

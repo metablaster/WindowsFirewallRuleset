@@ -123,7 +123,12 @@ function Test-SystemRequirements
 
 		if ($PowerShellEdition -eq "Desktop")
 		{
-			Write-Warning -Message "'Desktop' edition of PowerShell should work but is not longer supported"
+			Write-Warning -Message "'Desktop' edition of PowerShell should work but not quaranted"
+			Write-Information -Tags "Project" -MessageData "Your PowerShell edition is: $PowerShellEdition"
+		}
+		elseif ($PowerShellEdition -eq "Core")
+		{
+			Write-Warning -Message "Project with 'Core' edition of PowerShell does not yet support remote machines"
 			Write-Information -Tags "Project" -MessageData "Your PowerShell edition is: $PowerShellEdition"
 		}
 
@@ -155,15 +160,50 @@ function Test-SystemRequirements
 			exit
 		}
 
+		if ($PowerShellEdition -eq "Desktop")
+		{
+			# Now that OS and PowerShell is OK we can import these modules
+			Import-Module -Name $PSScriptRoot\..\Project.Windows.ProgramInfo
+			Import-Module -Name $PSScriptRoot\..\Project.Windows.ComputerInfo
+
+			# Check NET Framework version
+			# TODO: What if function fails?
+			$NETFramework = Get-NetFramework (Get-ComputerName)
+			$Version = $NETFramework | Sort-Object -Property Version | Select-Object -Last 1 -ExpandProperty Version
+			[int] $NETMajor, [int] $NETMinor, $NETBuild, $NETRevision = $Version.Split(".")
+
+			switch ($NETMajor)
+			{
+				1 { $StatusGood = $false }
+				2 { $StatusGood = $false }
+				3 {
+					if ($NETMinor -lt 5)
+					{
+						$StatusGood = $false
+					}
+				}
+			}
+
+			if (!$StatusGood)
+			{
+				Write-Error -Category OperationStopped -TargetObject $Version `
+				-Message "Unable to proceed, minimum requried NET Framework version to run these scripts is 3.5"
+				Write-Information -Tags "Project" -MessageData "Your NET Framework version is: $NETMajor.$NETMinor"
+				exit
+			}
+		}
+
 		# Check required services are started
 		$LMHosts = Get-Service -Name lmhosts | Select-Object -ExpandProperty Status
+		$WinRM = Get-Service -Name WinRM | Select-Object -ExpandProperty Status
+
+		$Choices  = "&Yes", "&No"
+		$Default = 0
+		$Question = "Do you want to start these services now?"
 
 		if ($LMHosts -ne "Running")
 		{
-			$Choices  = "&Yes", "&No"
-			$Default = 0
 			$Title = "TCP/IP NetBIOS Helper service is required but not started"
-			$Question = "Do you want to start service now?"
 			$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
 
 			if ($Decision -eq $Default)
@@ -173,8 +213,31 @@ function Test-SystemRequirements
 
 				if ($LMHosts -ne "Running")
 				{
-					Write-Host "Service can not be started, please start it manually and try again."
 					$StatusGood = $false
+					Write-Host "lmhosts service can not be started, please start it manually and try again."
+				}
+			}
+			else
+			{
+				$StatusGood = $false
+			}
+		}
+
+		# If status is not good there is no point to continue
+		if ($StatusGood -and $WinRM -ne "Running")
+		{
+			$Title = "Windows Remote Management service is required but not started"
+			$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
+
+			if ($Decision -eq $Default)
+			{
+				Start-Service -Name WinRM
+				$WinRM = Get-Service -Name WinRM | Select-Object -ExpandProperty Status
+
+				if ($WinRM -ne "Running")
+				{
+					$StatusGood = $false
+					Write-Host "WinRM service can not be started, please start it manually and try again."
 				}
 			}
 			else
