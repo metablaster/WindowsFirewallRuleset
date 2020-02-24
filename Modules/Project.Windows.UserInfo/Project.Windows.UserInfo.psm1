@@ -57,44 +57,6 @@ if ($Develop)
 
 <#
 .SYNOPSIS
-get computer accounts for a giver user group
-.PARAMETER UserGroup
-User group on local computer
-.EXAMPLE
-Get-UserAccounts("Administrators")
-.INPUTS
-None. You cannot pipe objects to Get-UserAccounts
-.OUTPUTS
-System.String[] Array of enabled user accounts in specified group, in form of COMPUTERNAME\USERNAME
-.NOTES
-TODO: implement queriying computers on network
-TODO: should be renamed into Get-GroupUsers
-#>
-function Get-UserAccounts
-{
-	[CmdletBinding()]
-	param(
-		[Parameter(Mandatory = $true)]
-		[string] $UserGroup
-	)
-
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting user accounts for group: $UserGroup"
-
-	$GroupUsers = Get-LocalGroupMember -Group $UserGroup |
-	Where-Object { $_.PrincipalSource -eq "Local" -and $_.ObjectClass -eq "User" } |
-	Select-Object -ExpandProperty Name
-
-	if([string]::IsNullOrEmpty($GroupUsers))
-	{
-		Write-Warning -Message "Failed to get UserAccounts for group: $UserGroup"
-	}
-
-	return $GroupUsers
-}
-
-<#
-.SYNOPSIS
 Strip computer names out of computer acounts
 .PARAMETER UserAccounts
 String array of user accounts in form of: COMPUTERNAME\USERNAME
@@ -151,15 +113,15 @@ function Get-GroupUsers
 {
 	[CmdletBinding(PositionalBinding = $false)]
 	param (
-		[Alias("Group", "Groups")]
+		[Alias("Group")]
 		[Parameter(Mandatory = $true,
 		Position = 0,
 		ValueFromPipeline = $true)]
-		[string[]] $UserGroups,
+		[string[]] $Groups,
 
-		[Alias("Computer", "Machine", "Computers", "Machines")]
+		[Alias("Computer", "Machine", "Machines", "Server", "Servers", "Domain", "Domains")]
 		[Parameter()]
-		[string[]] $ComputerNames = [System.Environment]::MachineName,
+		[string[]] $Computers = [System.Environment]::MachineName,
 
 		[Parameter()]
 		[switch] $CIM
@@ -174,7 +136,7 @@ function Get-GroupUsers
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-		foreach ($Computer in $ComputerNames)
+		foreach ($Computer in $Computers)
 		{
 			if ($CIM)
 			{
@@ -192,13 +154,13 @@ function Get-GroupUsers
 				{
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Computer"
 
-					foreach ($UserGroup in $UserGroups)
+					foreach ($Group in $Groups)
 					{
 						# Get all users that belong to requrested group,
 						# this includes non local principal source and non 'user' users
 						# it is also missing SID
 						$GroupUsers = Get-CimInstance -Class Win32_GroupUser -Namespace "root\cimv2" -ComputerName $Computer |
-						Where-Object { $_.GroupComponent.Name -eq $UserGroup } |
+						Where-Object { $_.GroupComponent.Name -eq $Group } |
 						Select-Object -ExpandProperty PartComponent |
 						Select-Object -ExpandProperty Name
 
@@ -209,7 +171,7 @@ function Get-GroupUsers
 
 						if([string]::IsNullOrEmpty($EnabledAccounts))
 						{
-							Write-Warning -Message "User group '$UserGroup' does not have any accounts on computer: $Computer"
+							Write-Warning -Message "User group '$Group' does not have any accounts on computer: $Computer"
 							continue
 						}
 
@@ -244,7 +206,7 @@ function Get-GroupUsers
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying localhost"
 
-				foreach ($UserGroup in $UserGroups)
+				foreach ($UserGroup in $Groups)
 				{
 					# Querying local machine
 					$GroupUsers = Get-LocalGroupMember -Group $UserGroup |
@@ -296,6 +258,8 @@ Merge-SDDL ([ref] $RefSDDL) $NewSDDL
 None. You cannot pipe objects to Get-AccountSID
 .OUTPUTS
 System.String SDDL string
+.NOTES
+Validate input using regex
 #>
 function Merge-SDDL
 {
@@ -331,7 +295,7 @@ $UsersSDDL3 = Get-SDDL -Groups $Groups
 .EXAMPLE
 $NewSDDL = Get-SDDL -Domain "NT AUTHORITY" -Users "System"
 .INPUTS
-None. You cannot pipe objects to Get-AccountSDDL
+None. You cannot pipe objects to Get-SDDL
 .OUTPUTS
 System.String SDDL string for given accounts or/and group for given domain
 .NOTES
@@ -341,17 +305,21 @@ function Get-SDDL
 {
 	[CmdletBinding(PositionalBinding = $false)]
 	param (
-		[Alias("Computer", "Machine")]
-		[Parameter(Mandatory = $false)]
-		[string] $Domain = [System.Environment]::MachineName,
-
+		[Alias("User")]
 		[Parameter(Mandatory = $true, ParameterSetName="Account")]
 		[Parameter(Mandatory = $false, ParameterSetName="Group")]
 		[string[]] $Users,
 
-		[Alias("UserGroup", "UserGroups", "Group")]
+		[Alias("Group")]
 		[Parameter(Mandatory = $true, ParameterSetName="Group")]
-		[string[]] $Groups
+		[string[]] $Groups,
+
+		[Alias("Domain", "Machine", "Server")]
+		[Parameter(Mandatory = $false)]
+		[string] $Computer = [System.Environment]::MachineName,
+
+		[Parameter()]
+		[switch] $CIM
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -360,41 +328,34 @@ function Get-SDDL
 
 	foreach ($User in $Users)
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL for account: $Domain\$User"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL for account: $Computer\$User"
 
-		try
+		$SID = Get-AccountSID $User -Domain $Computer -CIM:$CIM
+		if ($SID)
 		{
-			$SID = Get-AccountSID $Domain $User
+			$SDDL += "(A;;CC;;;{0})" -f $SID
 		}
-		catch
-		{
-			Write-Warning -Message "Failed to translate user account '$UserAccount' to SDDL"
-			continue
-		}
-
-		$SDDL += "(A;;CC;;;{0})" -f $SID
-
 	}
 
 	foreach ($Group in $Groups)
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL for group: $Group"
 
-		try
+		$SID = Get-GroupSID $Group -Domain $Computer -CIM:$CIM
+		if ($SID)
 		{
-			$SID = Get-GroupSID $Group
+			$SDDL += "(A;;CC;;;{0})" -f $SID
 		}
-		catch
-		{
-			Write-Warning -Message "Failed to translate user group '$Group' to SDDL"
-			continue
-		}
-
-		$SDDL += "(A;;CC;;;{0})" -f $SID
-
 	}
 
-	return $SDDL
+	if($SDDL.Length -lt 3)
+	{
+		Write-Error -TargetObject $SDDL -Message "Failed to assemble SDDL"
+	}
+	else
+	{
+		return $SDDL
+	}
 }
 
 <#
@@ -415,17 +376,81 @@ TODO: implement queriying computers on network
 #>
 function Get-GroupSID
 {
-	[CmdletBinding()]
+	[CmdletBinding(PositionalBinding = $false)]
 	param (
 		[Alias("Group")]
-		[Parameter(Mandatory = $true)]
-		[string] $UserGroup
+		[Parameter(Mandatory = $true,
+		Position = 0,
+		ValueFromPipeline = $true)]
+		[string[]] $Groups,
+
+		[Alias("Machine", "Domain", "Server")]
+		[Parameter()]
+		[string] $Computer = [System.Environment]::MachineName,
+
+		[Parameter()]
+		[switch] $CIM
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for user group: $UserGroup"
+	begin
+	{
+		$PowerShellEdition = $PSVersionTable.PSEdition
+	}
+	process
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-	return Get-LocalGroup -Name $UserGroup | Select-Object -ExpandProperty SID | Select-Object -ExpandProperty Value
+		foreach ($Group in $Groups)
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing: $Group"
+
+			if ($CIM)
+			{
+				if ($PowerShellEdition -ne "Desktop")
+				{
+					Write-Error -Category InvalidArgument -TargetObject $Computer `
+					-Message "Querying computers via CIM server with PowerShell '$PowerShellEdition' not implemented"
+					return
+				}
+
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Computer"
+
+				# Core: -TimeoutSeconds $ConnectionTimeout -IPv4
+				if (Test-Connection -ComputerName $Computer -Count $ConnectionCount -Quiet)
+				{
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Computer"
+
+					$GroupSID = Get-CimInstance -Class Win32_Group -Namespace "root\cimv2" -ComputerName $Computer |
+					Where-Object -Property Name -eq $Group | Select-Object -ExpandProperty SID
+				}
+				else
+				{
+					Write-Error -Category ConnectionError -TargetObject $Computer `
+					-Message "Unable to contact computer: $Computer"
+					continue
+				}
+			}
+			elseif ($Computer -eq [System.Environment]::MachineName)
+			{
+				$GroupSID = Get-LocalGroup -Name $Group | Select-Object -ExpandProperty SID | Select-Object -ExpandProperty Value
+			}
+			else
+			{
+				Write-Error -Category NotImplemented -TargetObject $Computer `
+				-Message "Querying remote computers without CIM switch not implemented"
+				return
+			} # if ($CIM)
+
+			if([string]::IsNullOrEmpty($GroupSID))
+			{
+				Write-Error -TargetObject $Group -Message "User group '$Group' cannot be resolved to a SID."
+			}
+			else
+			{
+				Write-Output -InputObject $GroupSID
+			}
+		} # foreach ($Group in $UserGroups)
+	} # process
 }
 
 <#
@@ -442,32 +467,104 @@ None. You cannot pipe objects to Get-AccountSID
 .OUTPUTS
 System.String SID (security identifier)
 .NOTES
-TODO: implement queriying computers on network
+TODO: USER MODE DRIVERS SID not found
 #>
 function Get-AccountSID
 {
-	[CmdletBinding()]
+	[CmdletBinding(PositionalBinding = $false)]
 	param (
-		[Alias("Computer", "Machine")]
-		[Parameter(Mandatory = $false)]
-		[string] $Domain = [System.Environment]::MachineName,
+		[Alias("User")]
+		[Parameter(Mandatory = $true,
+		Position = 0,
+		ValueFromPipeline = $true)]
+		[string[]] $Users,
 
-		[Parameter(Mandatory = $true)]
-		[string] $User
+		[Alias("Domain", "Machine", "Server")]
+		[Parameter()]
+		[string] $Computer = [System.Environment]::MachineName,
+
+		[Parameter()]
+		[switch] $CIM
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	begin
+	{
+		$PowerShellEdition = $PSVersionTable.PSEdition
+		[bool] $SpecialDomain = ![System.String]::IsNullOrEmpty(
+			[array]::Find($SpecialDomains, [System.Predicate[string]]{ $Computer -eq "$($args[0])" }))
+	}
+	process
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-	try
-	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for account: $Domain\$User"
-		$NTAccount = New-Object System.Security.Principal.NTAccount($Domain, $User)
-		return $NTAccount.Translate([System.Security.Principal.SecurityIdentifier]).ToString()
-	}
-	catch
-	{
-		Write-Error -TargetObject $_.TargetObject -Message "[$($MyInvocation.InvocationName)] Account '$Domain\$User' cannot be resolved to a SID."
-	}
+		foreach ($User in $Users)
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing: $Computer\$User"
+
+			# TODO: should we query system accounts remotely?
+			if ($CIM -and !$SpecialDomain)
+			{
+				if ($PowerShellEdition -ne "Desktop")
+				{
+					Write-Error -Category InvalidArgument -TargetObject $Computer `
+					-Message "Querying computers via CIM server with PowerShell '$PowerShellEdition' not implemented"
+					return
+				}
+
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Computer"
+
+				# Core: -TimeoutSeconds $ConnectionTimeout -IPv4
+				if (Test-Connection -ComputerName $Computer -Count $ConnectionCount -Quiet)
+				{
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying CIM server on $Computer"
+
+					$AccountSID = Get-CimInstance -Class Win32_UserAccount -Namespace "root\cimv2" -ComputerName $Computer |
+					Where-Object -Property Name -eq $User | Select-Object -ExpandProperty SID
+				}
+				else
+				{
+					Write-Error -Category ConnectionError -TargetObject $Computer `
+					-Message "Unable to contact computer: $Computer"
+					return
+				}
+			}
+			elseif ($Computer -eq [System.Environment]::MachineName -or $SpecialDomain)
+			{
+				if ($CIM)
+				{
+					Write-Warning -Message "-CIM switch ignored for $Computer"
+				}
+
+				try
+				{
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for account: $Computer\$User"
+
+					$NTAccount = New-Object System.Security.Principal.NTAccount($Computer, $User)
+					$AccountSID = $NTAccount.Translate([System.Security.Principal.SecurityIdentifier]).ToString()
+				}
+				catch
+				{
+					Write-Error -TargetObject $_.TargetObject -Message "[$($MyInvocation.InvocationName)] Account '$Computer\$User' cannot be resolved to a SID"
+					continue
+				}
+			} # if ($CIM)
+			else
+			{
+				Write-Error -Category NotImplemented -TargetObject $Computer `
+				-Message "Querying remote computers without CIM switch not implemented"
+				return
+			} # if ($CIM)
+
+			if([string]::IsNullOrEmpty($AccountSID))
+			{
+				Write-Error -TargetObject $AccountSID -Message "Account '$Computer\$User' cannot be resolved to a SID"
+			}
+			else
+			{
+				Write-Output -InputObject $AccountSID
+			}
+		} # foreach ($Group in $UserGroups)
+	} # process
 }
 
 #
@@ -492,8 +589,8 @@ if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 	New-Variable -Name AdminNames -Scope Global -Option Constant -Value (ConvertFrom-UserAccounts $AdminAccounts)
 
 	# Generate SDDL string for accounts
-	New-Variable -Name UserAccountsSDDL -Scope Global -Option Constant -Value (Get-AccountSDDL $UserAccounts)
-	New-Variable -Name AdminAccountsSDDL -Scope Global -Option Constant -Value (Get-AccountSDDL $AdminAccounts)
+	# New-Variable -Name UserAccountsSDDL -Scope Global -Option Constant -Value (Get-AccountSDDL $UserAccounts)
+	# New-Variable -Name AdminAccountsSDDL -Scope Global -Option Constant -Value (Get-AccountSDDL $AdminAccounts)
 
 	# System users (define variables as needed)
 	New-Variable -Name NT_AUTHORITY_System -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-18)"
@@ -502,18 +599,26 @@ if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 	New-Variable -Name NT_AUTHORITY_UserModeDrivers -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
 }
 
+Set-Variable -Name SpecialDomains -Scope Script -Option Constant -Value @(
+	"NT AUTHORITY"
+	"APPLICATION_PACKAGE_AUTHORITY"
+	)
+
 #
 # Function exports
 #
 
-Export-ModuleMember -Function Get-UserAccounts
+# Export-ModuleMember -Function Get-UserAccounts
 Export-ModuleMember -Function ConvertFrom-UserAccounts
-Export-ModuleMember -Function Get-UserSID
+# Export-ModuleMember -Function Get-UserSID
 Export-ModuleMember -Function Get-AccountSID
-Export-ModuleMember -Function Get-UserSDDL
-Export-ModuleMember -Function Get-AccountSDDL
+# Export-ModuleMember -Function Get-UserSDDL
+# Export-ModuleMember -Function Get-AccountSDDL
 Export-ModuleMember -Function ConvertFrom-SID
 Export-ModuleMember -Function Get-GroupUsers
+Export-ModuleMember -Function Get-GroupSID
+Export-ModuleMember -Function Get-SDDL
+Export-ModuleMember -Function Merge-SDDL
 
 #
 # Variable exports

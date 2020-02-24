@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-UserAccounts
+# Unit test for Get-GroupSID
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -48,18 +48,23 @@ if (!(Approve-Execute)) { exit }
 
 Start-Test
 
-New-Test "Get-UserAccounts(Users):"
-[string[]] $Users = Get-UserAccounts "Users" @Logs
+New-Test "Get-GroupSID 'Users'"
+Get-GroupSID "Users" @Logs
+
+New-Test "Get-GroupSID @('Users', 'Hyper-V Administrators')"
+Get-GroupSID @('Users', 'Hyper-V Administrators') @Logs
+
+New-Test "Get-GroupSID 'Users' -CIM"
+Get-GroupSID "Users" -CIM @Logs
+
+New-Test "Get-GroupSID @('Users', 'Hyper-V Administrators') -CIM"
+Get-GroupSID @('Users', 'Hyper-V Administrators') -CIM @Logs
+
+New-Test "FAILURE TEST NO CIM: Get-GroupSID @('Users', 'Hyper-V Administrators')"
+Get-GroupSID @('Users', 'Hyper-V Administrators') -Machine "CRAZYMACHINE" @Logs
+
+New-Test "FAILURE TEST CONTACT: Get-GroupSID @('Users', 'Hyper-V Administrators')"
+Get-GroupSID @('Users', 'Hyper-V Administrators') -Machine "CRAZYMACHINE" -CIM @Logs
+
 Update-Logs
-$Users
-
-New-Test "Get-UserAccounts(Administrators):"
-[string[]] $Administrators = Get-UserAccounts "Administrators" @Logs
-Update-Logs
-$Administrators
-
-New-Test "Join arrays:"
-$UserAccounts = $Users + $Administrators
-$UserAccounts
-
 Exit-Test

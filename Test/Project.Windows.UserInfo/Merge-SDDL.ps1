@@ -26,8 +26,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+# TODO: Include modules you need, update licence Copyright and start writing test code
+
 #
-# Unit test for Get-UserSDDL
+# Unit test for Test-Function
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -39,7 +41,8 @@ Test-SystemRequirements
 . $ProjectRoot\Test\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
+# Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
+# Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
@@ -49,32 +52,17 @@ if (!(Approve-Execute)) { exit }
 
 Start-Test
 
-New-Test "Get-UserAccounts:"
-[string[]] $UserAccounts = Get-UserAccounts "Users" @Logs
-Update-Logs
-$UserAccounts += Get-UserAccounts "Administrators" @Logs
-Update-Logs
-$UserAccounts
+[string[]] $Users = @("haxor", "test")
+[string] $Domain = [System.Environment]::MachineName
+[string[]] $Groups = @("Users", "Administrators")
 
-New-Test "ConvertFrom-UserAccounts:"
-$UserNames = ConvertFrom-UserAccounts $UserAccounts @Logs
-Update-Logs
-$UserNames
+New-Test "Get-SDDL -Users $Users -Groups $Groups -Domain $Domain"
+$UsersSDDL = Get-SDDL -Users $Users -Groups $Groups -Domain $Domain
+$UsersSDDL
 
-New-Test "Get-UserSDDL: (separated)"
-foreach($User in $UserNames)
-{
-	Get-UserSDDL $User @Logs
-	Update-Logs
-}
-
-New-Test "Get-UserSDDL: (combined)"
-Get-UserSDDL $UserNames @Logs
-Update-Logs
-
-New-Test "Get-UserSDDL: (from array)"
-$ComputerName = Get-ComputerName @Logs
-Get-UserSDDL @("$ComputerName\$($UserNames[0])", "$ComputerName\$($UserNames[1])") @Logs
-Update-Logs
+New-Test "Get-SDDL -Domain 'NT AUTHORITY' -Users @('SYSTEM', 'UserModeDrivers')"
+$NewSDDL = Get-SDDL -Domain "NT AUTHORITY" -Users @("SYSTEM", "UserModeDrivers")
+Merge-SDDL ([ref] $UsersSDDL) $NewSDDL
+$UsersSDDL
 
 Exit-Test

@@ -48,26 +48,29 @@ if (!(Approve-Execute)) { exit }
 
 Start-Test
 
-New-Test "Get-UserAccounts:"
-[string[]] $UserAccounts = Get-UserAccounts "Users" @Logs
-Update-Logs
-$UserAccounts += Get-UserAccounts "Administrators" @Logs
-Update-Logs
-$UserAccounts
+[string[]] $Users = "SYSTEM"
+[string] $Domain = "NT AUTHORITY"
+[string[]] $Groups = @("Users", "Administrators")
 
-New-Test "Get-AccountSDDL: (separated)"
-foreach($Account in $UserAccounts)
-{
-	$(Get-AccountSDDL $Account @Logs)
-	Update-Logs
-}
+New-Test "Get-SDDL -Users $Users -Domain $Domain"
+$UsersSDDL = Get-SDDL -Users $Users -Domain $Domain @Logs
+$UsersSDDL
 
-New-Test "Get-AccountSDDL: (combined)"
-Get-AccountSDDL $UserAccounts @Logs
+New-Test "Get-SDDL -Groups $Groups"
+$UsersSDDL = Get-SDDL -Groups $Groups @Logs
+$UsersSDDL
+
+New-Test "Get-SDDL -Groups $Groups -CIM"
+$UsersSDDL = Get-SDDL -Groups $Groups -CIM @Logs
+$UsersSDDL
+
+[string[]] $Users = @("Administrator", "test")
+New-Test "Get-SDDL -Users $Users"
+$UsersSDDL = Get-SDDL -Users $Users @Logs
+$UsersSDDL
+
+New-Test "$Groups | Get-GroupSID -CIM"
+$Groups | Get-GroupSID -CIM
+
 Update-Logs
-
-New-Test "Get-AccountSDDL: (from array)"
-Get-AccountSDDL @("NT AUTHORITY\SYSTEM", "NT AUTHORITY\NETWORK SERVICE") @Logs
-Update-Logs
-
 Exit-Test

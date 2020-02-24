@@ -48,16 +48,15 @@ if (!(Approve-Execute)) { exit }
 
 Start-Test
 
-New-Test "Get-UserAccounts:"
-[string[]] $UserAccounts = Get-UserAccounts "Users" @Logs
-Update-Logs
-$UserAccounts += Get-UserAccounts "Administrators" @Logs
-Update-Logs
+Start-Test
+
+New-Test "Get-GroupUsers 'Users', 'Administrators'"
+$UserAccounts = Get-GroupUsers "Users", "Administrators" @Logs
 $UserAccounts
 
 New-Test "ConvertFrom-UserAccounts:"
-$UserNames = ConvertFrom-UserAccounts $UserAccounts @Logs
-Update-Logs
+$UserNames = ConvertFrom-UserAccounts ($UserAccounts | Select-Object -ExpandProperty Account) @Logs
 $UserNames
 
+Update-Logs
 Exit-Test

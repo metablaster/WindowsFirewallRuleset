@@ -53,21 +53,15 @@ if (!(Approve-Execute)) { exit }
 
 Start-Test
 
-New-Test "Get-UserAccounts:"
-[string[]] $UserAccounts = Get-UserAccounts "Users" @Logs
-Update-Logs
-$UserAccounts += Get-UserAccounts "Administrators" @Logs
+New-Test "Get-GroupUsers 'Users', 'Administrators'"
+$UserAccounts = Get-GroupUsers "Users", "Administrators" @Logs
 $UserAccounts
 
-New-Test "ConvertFrom-UserAccounts:"
-$UserNames = ConvertFrom-UserAccounts $UserAccounts @Logs
-$UserNames
-
 New-Test "ConvertFrom-SID"
-foreach($User in $UserNames)
+foreach($Account in $UserAccounts)
 {
-	Write-Information -Tags "Test" -MessageData "INFO: Processing user: $User"
-	Get-UserSID $User @Logs | ConvertFrom-SID
+	Write-Information -Tags "Test" -MessageData "INFO: Processing account: $($Account.Account)"
+	$Account.SID | ConvertFrom-SID @Logs
 }
 
 Update-Logs

@@ -179,7 +179,7 @@ function Test-Environment
 		return $false
 	}
 
-	if ([array]::Find($UserProfileEnvironment, [Predicate[string]]{ $FilePath -like "$($args[0])*" }))
+	if ([array]::Find($UserProfileEnvironment, [System.Predicate[string]]{ $FilePath -like "$($args[0])*" }))
 	{
 		Write-Warning -Message "Rules with environment variable paths that lead to user profile are not valid"
 		Write-Information -Tags "Project" -MessageData "INFO: Bad path detected is: $FilePath"
@@ -2202,7 +2202,8 @@ New-Variable -Name BlackListEnvironment -Scope Script -Option Constant -Value @(
 	"%TEMP%"
 	"%TMP%"
 	"%USERNAME%"
-	"%USERPROFILE%")
+	"%USERPROFILE%"
+	)
 
 New-Variable -Name UserProfileEnvironment -Scope Script -Option Constant -Value @(
 	"%APPDATA%"
@@ -2214,7 +2215,8 @@ New-Variable -Name UserProfileEnvironment -Scope Script -Option Constant -Value 
 	"%TEMP%"
 	"%TMP%"
 	"%USERNAME%"
-	"%USERPROFILE%")
+	"%USERPROFILE%"
+	)
 
 # Programs installed for all users
 New-Variable -Name SystemPrograms -Scope Script -Option ReadOnly -Value (Get-SystemPrograms)

@@ -258,36 +258,22 @@ function Get-SDDL
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL for account: $Domain\$User"
 
-		try
+		$SID = Get-AccountSID $Domain $User
+		if ($SID)
 		{
-			$SID = Get-AccountSID $Domain $User
+			$SDDL += "(A;;CC;;;{0})" -f $SID
 		}
-		catch
-		{
-			Write-Warning -Message "Failed to translate user account '$UserAccount' to SDDL"
-			continue
-		}
-
-		$SDDL += "(A;;CC;;;{0})" -f $SID
-
 	}
 
 	foreach ($Group in $Groups)
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL for group: $Group"
 
-		try
+		$SID = Get-GroupSID $Group
+		if ($SID)
 		{
-			$SID = Get-GroupSID $Group
+			$SDDL += "(A;;CC;;;{0})" -f $SID
 		}
-		catch
-		{
-			Write-Warning -Message "Failed to translate user group '$Group' to SDDL"
-			continue
-		}
-
-		$SDDL += "(A;;CC;;;{0})" -f $SID
-
 	}
 
 	return $SDDL
@@ -337,23 +323,23 @@ function Get-AccountSID
 Start-Test
 New-Test "Get-SDDL"
 # "NT AUTHORITY\SYSTEM"
-[string[]] $Users = @("haxor")
+[string[]] $Users = @("")# @("haxor", "blah", "test")
 [string] $Domain = [System.Environment]::MachineName
 [string[]] $Groups = @("Users", "Administrators")
-
-$UsersSDDL = Get-SDDL -Groups $Groups
-$UsersSDDL
-
-$UsersSDDL = Get-SDDL -Users $Users
-$UsersSDDL
-
-
 $UsersSDDL = Get-SDDL -Users $Users -Groups $Groups
 $UsersSDDL
 
-$NewSDDL = Get-SDDL -Domain "NT AUTHORITY" -Users "System"
-Merge-SDDL ([ref] $UsersSDDL) $NewSDDL
-$UsersSDDL
+#
+
+# $UsersSDDL = Get-SDDL -Groups $Groups
+# $UsersSDDL
+
+# $UsersSDDL = Get-SDDL -Users $Users -Groups $Groups
+# $UsersSDDL
+
+# $NewSDDL = Get-SDDL -Domain "NT AUTHORITY" -Users "System"
+# Merge-SDDL ([ref] $UsersSDDL) $NewSDDL
+# $UsersSDDL
 
 # looks like not possible to combine rules
 # New-NetFirewallRule -Platform $Platform `

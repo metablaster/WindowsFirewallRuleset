@@ -165,3 +165,41 @@ function Get-AccountSDDL
 
 	return $SDDL
 }
+
+<#
+.SYNOPSIS
+get computer accounts for a giver user group
+.PARAMETER UserGroup
+User group on local computer
+.EXAMPLE
+Get-UserAccounts("Administrators")
+.INPUTS
+None. You cannot pipe objects to Get-UserAccounts
+.OUTPUTS
+System.String[] Array of enabled user accounts in specified group, in form of COMPUTERNAME\USERNAME
+.NOTES
+TODO: implement queriying computers on network
+TODO: should be renamed into Get-GroupUsers
+#>
+function Get-UserAccounts
+{
+	[CmdletBinding()]
+	param(
+		[Parameter(Mandatory = $true)]
+		[string] $UserGroup
+	)
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting user accounts for group: $UserGroup"
+
+	$GroupUsers = Get-LocalGroupMember -Group $UserGroup |
+	Where-Object { $_.PrincipalSource -eq "Local" -and $_.ObjectClass -eq "User" } |
+	Select-Object -ExpandProperty Name
+
+	if([string]::IsNullOrEmpty($GroupUsers))
+	{
+		Write-Warning -Message "Failed to get UserAccounts for group: $UserGroup"
+	}
+
+	return $GroupUsers
+}

@@ -48,18 +48,32 @@ if (!(Approve-Execute)) { exit }
 
 Start-Test
 
-New-Test "Get-UserAccounts:"
-[string[]] $UserAccounts = Get-UserAccounts "Users" @Logs
-Update-Logs
-$UserAccounts += Get-UserAccounts "Administrators" @Logs
-Update-Logs
-$UserAccounts
+[string[]] $Users = @("Administrator", "test", "haxor")
 
-New-Test "Get-AccountSID:"
-foreach($Account in $UserAccounts)
-{
-	$(Get-AccountSID $Account @Logs)
-	Update-Logs
-}
+New-Test "Get-AccountSID -Users $Users"
+$AccountSID = Get-AccountSID -Users $Users @Logs
+$AccountSID
 
+New-Test "Get-AccountSID -Users $Users -CIM"
+$AccountSID = Get-AccountSID -Users $Users -CIM @Logs
+$AccountSID
+
+New-Test "$Users | Get-AccountSID -CIM"
+$Users | Get-AccountSID -CIM
+
+[string[]] $Users = @("SYSTEM", "NETWORK SERVICE")
+[string] $Domain = "NT AUTHORITY"
+
+New-Test "Get-AccountSID -Users $Users"
+$AccountSID = Get-AccountSID -Users $Users -Domain $Domain @Logs
+$AccountSID
+
+New-Test "Get-AccountSID -Users $Users -CIM"
+$AccountSID = Get-AccountSID -Users $Users -Domain $Domain -CIM @Logs
+$AccountSID
+
+New-Test "$Users | Get-AccountSID -CIM"
+$Users | Get-AccountSID -CIM -Domain $Domain
+
+Update-Logs
 Exit-Test
