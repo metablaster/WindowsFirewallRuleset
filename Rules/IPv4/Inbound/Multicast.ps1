@@ -64,7 +64,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 #
 $Group = "Multicast IPv4"
 $Profile = "Private, Domain"
-$MulticastUsers = Get-AccountSDDL @("NT AUTHORITY\NETWORK SERVICE", "NT AUTHORITY\LOCAL SERVICE")
+$MulticastUsers = Get-SDDL -Domain "NT AUTHORITY" -Users @("LOCAL SERVICE", "NETWORK SERVICE")
 
 # Ask user if he wants to load these rules
 Update-Context "IPv$IPVersion" $Direction $Group

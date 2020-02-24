@@ -66,9 +66,7 @@ $PowerShellCore64Root = ""
 
 # TODO: add rules for Core
 # NOTE: administartors may need powershell, let them add them self temporary? currently adding them for PS x64
-[string[]] $AllUsers = $AdminAccounts
-$AllUsers += $UserAccounts
-$PowerShellUsers = (Get-AccountSDDL $AllUsers)
+$PowerShellUsers = Get-SDDL -Groups @("Users", "Administrators")
 
 # Test if installation exists on system
 if ((Test-Installation "Powershell64" ([ref] $PowerShell64Root)) -or $Force)

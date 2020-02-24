@@ -100,14 +100,15 @@ if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot)) -or $Force)
 	$EdgeUpdateRoot = "$(Split-Path -Path $(Split-path -Path $EdgeChromiumRoot -Parent) -Parent)\EdgeUpdate"
 	$EdgeChromiumUpdate = "$EdgeUpdateRoot\MicrosoftEdgeUpdate.exe"
 	Test-File $EdgeChromiumUpdate
-	[string[]] $UpdateAccounts = "NT AUTHORITY\SYSTEM"
-	$UpdateAccounts += $UserAccounts
+
+	$UpdateAccounts = Get-SDDL -Domain "NT AUTHORITY" -Users "SYSTEM"
+	Merge-SDDL $UpdateAccounts (Get-SDDL -Group "Users")
 
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Edge-Chromium Update" -Service Any -Program $EdgeChromiumUpdate `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-	-LocalUser (Get-AccountSDDL $UpdateAccounts) `
+	-LocalUser $UpdateAccounts `
 	-Description "Update Microsoft Edge" | Format-Output
 }
 

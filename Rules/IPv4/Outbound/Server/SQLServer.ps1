@@ -47,9 +47,7 @@ $Group = "Server - SQL"
 $Profile = "Private, Public"
 
 # TODO: this is most likely wrong
-[string[]] $AllUsers = $AdminAccounts
-$AllUsers += $UserAccounts
-$SQLUsers = (Get-AccountSDDL $AllUsers)
+$SQLUsers = Get-SDDL -Groups @("Users", "Administrators")
 
 # Ask user if he wants to load these rules
 Update-Context "IPv$IPVersion" $Direction $Group

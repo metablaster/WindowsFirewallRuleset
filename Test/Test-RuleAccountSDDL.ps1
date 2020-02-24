@@ -65,13 +65,13 @@ $UserAccounts = $UserAccounts += (Get-UserAccounts("Administrators"))
 $UserAccounts = $UserAccounts += "NT AUTHORITY\SYSTEM"
 $UserAccounts
 
-New-Test "Get-AccountSDDL:"
-$LocalUser = Get-AccountSDDL($UserAccounts)
+New-Test "Get-SDDL:"
+$LocalUser = Get-SDDL -Groups "Users"
 $LocalUser
 
 New-Test "New-NetFirewallRule"
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Get-AccountSDDL" -Program Any -Service Any `
+-DisplayName "Get-SDDL" -Program Any -Service Any `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -LocalUser $LocalUser `

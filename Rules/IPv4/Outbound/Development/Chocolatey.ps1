@@ -45,9 +45,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 #
 $Group = "Development - Chocolatey"
 $Profile = "Private, Public"
-[string[]] $AllUsers = $AdminAccounts
-$AllUsers += $UserAccounts
-$ChocolateyAccounts = (Get-AccountSDDL $AllUsers)
+$ChocolateyAccounts = Get-SDDL -Groups @("Users", "Administrators")
 
 # Ask user if he wants to load these rules
 Update-Context "IPv$IPVersion" $Direction $Group

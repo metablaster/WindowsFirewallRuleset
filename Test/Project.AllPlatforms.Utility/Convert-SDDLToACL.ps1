@@ -54,13 +54,13 @@ $UserAccounts += Get-UserAccounts "Administrators" @Logs
 Update-Logs
 $UserAccounts
 
-New-Test "Get-AccountSDDL: (user accounts)"
-$SDDL1 = Get-AccountSDDL $UserAccounts @Logs
+New-Test "Get-SDDL: (user accounts)"
+$SDDL1 = Get-SDDL -Groups "Users" @Logs
 Update-Logs
 $SDDL1
 
-New-Test "Get-AccountSDDL: (system accounts)"
-$SDDL2 = Get-AccountSDDL @("NT AUTHORITY\SYSTEM", "NT AUTHORITY\NETWORK SERVICE") @Logs
+New-Test "Get-SDDL: (system accounts)"
+$SDDL2 = Get-SDDL -Domain "NT AUTHORITY" -Users @("NETWORK SERVICE", "LOCAL SERVICE") @Logs
 Update-Logs
 $SDDL2
 

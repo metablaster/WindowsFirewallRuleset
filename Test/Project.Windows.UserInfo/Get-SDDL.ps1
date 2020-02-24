@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-AccountSDDL
+# Unit test for Get-SDDL
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 

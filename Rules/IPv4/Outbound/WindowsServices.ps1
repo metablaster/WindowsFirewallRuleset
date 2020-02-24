@@ -44,10 +44,10 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 #
 $Group = "Windows Services"
 $Profile = "Private, Public"
+
 # Extension rules are special rules for problematic services, see ProblematicTraffic.md for more info
-[string[]] $ExtensionAccounts = @("NT AUTHORITY\SYSTEM", "NT AUTHORITY\LOCAL SERVICE", "NT AUTHORITY\NETWORK SERVICE")
-$ExtensionAccounts += $UserAccounts
-$ExtensionUsers = (Get-AccountSDDL $ExtensionAccounts)
+$ExtensionAccounts = Get-SDDL -Domain "NT AUTHORITY" -Users @("SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE")
+Merge-SDDL $ExtensionAccounts (Get-SDDL -Groups "Users")
 
 # Ask user if he wants to load these rules
 Update-Context "IPv$IPVersion" $Direction $Group

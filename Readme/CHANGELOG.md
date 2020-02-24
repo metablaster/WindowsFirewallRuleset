@@ -1,15 +1,14 @@
 
 # Here is a list of changes for each of releases
 
-# Changelog v0.3
+# Changelog v0.3.0
 
 # New fetures
 1. Scripts now work on PowerShell core 7, with the goal to expand to other operating systems. (ie. linux)
 2. Better configurable logging and much more streams, this will help to see what the code does in real time.
 3. Project wide settings (ProjectSettings.ps1) are updated for changes and significally improved.
 4. Improve program installation search + more registry drilling functions
-5. Function to query users for multiple user groups on multiple computers
-6. Improved and new functions to query users and groups on multiple computers
+5. Improved and new functions to query users and groups on multiple computers
 
 # Bug fixes
 1. Modules are renamed to avoid name clashes with other modules
@@ -22,6 +21,7 @@
 # Development
 1. Symbols and keywords have their casing consistent and updated
 2. Strict mode is now on, latest level
+3. Support for both editions of PowerShell, Desktop and Core
 
 # Changelog v0.2
 

@@ -45,9 +45,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 #
 $Group = "Microsoft - SysInternals"
 $Profile = "Private, Public"
-[string[]] $AllUsers = $AdminAccounts
-$AllUsers += $UserAccounts
-$SysInternalsUsers = (Get-AccountSDDL $AllUsers)
+$SysInternalsUsers = Get-SDDL -Groups @("Users", "Administrators")
 
 # Ask user if he wants to load these rules
 Update-Context "IPv$IPVersion" $Direction $Group
