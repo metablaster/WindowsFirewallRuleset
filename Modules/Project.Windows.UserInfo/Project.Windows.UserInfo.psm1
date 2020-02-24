@@ -52,7 +52,6 @@ if ($Develop)
 # Includes
 . $PSScriptRoot\External\ConvertFrom-SID.ps1
 
-# TODO: write function to query system users
 # TODO: get a user account that is connected to a Microsoft account. see Get-LocalUser docs.
 
 <#
@@ -61,13 +60,12 @@ Strip computer names out of computer acounts
 .PARAMETER UserAccounts
 String array of user accounts in form of: COMPUTERNAME\USERNAME
 .EXAMPLE
-ConvertFrom-UserAccounts @("DESKTOP_PC\USERNAME", "LAPTOP\USERNAME")
+$UserAccounts = Get-GroupUsers "Users", "Administrators"
+$UserNames = ConvertFrom-UserAccounts ($UserAccounts | Select-Object -ExpandProperty Account)
 .INPUTS
 None. You cannot pipe objects to ConvertFrom-UserAccounts
 .OUTPUTS
 System.String[] Array of usernames in form of: USERNAME
-.NOTES
-TODO: implement queriying computers on network
 #>
 function ConvertFrom-UserAccounts
 {
@@ -91,23 +89,26 @@ function ConvertFrom-UserAccounts
 
 <#
 .SYNOPSIS
-get computer accounts for a giver user groups on given computers
-.PARAMETER UserGroup
+Get computer accounts for a given user groups on given computers
+.PARAMETER Groups
 User group on local or remote computer
-.PARAMETER ComputerNames
-One or more computers which to querry for group users, default is localhost
+.PARAMETER Computers
+One or more computers which to querry for group users
 .PARAMETER CIM
 Whether to contact CIM server (requred for remote computers)
+.PARAMETER Property
+Return only select property entries
 .EXAMPLE
-Get-GroupUsers "Users", "Administrators"
+Get-GroupUsers @("Users", "Administrators")
 .EXAMPLE
-Get-GroupUsers "Users" -Machine COMPUTERNAME -CIM
+Get-GroupUsers "Users" -Machines @(DESKTOP, LAPTOP) -CIM
 .INPUTS
-System.String User group
+System.String[] User groups
 .OUTPUTS
-System.Management.Automation.PSCustomObject of enabled user accounts in specified group
+PSCustomObject of enabled user accounts in specified group
 .NOTES
 CIM switch is not supported on PowerShell Core
+Switch to list all accounts
 #>
 function Get-GroupUsers
 {
@@ -124,7 +125,10 @@ function Get-GroupUsers
 		[string[]] $Computers = [System.Environment]::MachineName,
 
 		[Parameter()]
-		[switch] $CIM
+		[switch] $CIM,
+
+		[Parameter()]
+		[switch] $Property
 	)
 
 	begin
@@ -239,13 +243,136 @@ function Get-GroupUsers
 			}
 		}
 
-		return $UserAccounts
+		if ($Property)
+		{
+			return $UserAccounts | Select-Object -Property $Property
+		}
+		else
+		{
+			return $UserAccounts
+		}
 	}
 }
 
 <#
 .SYNOPSIS
-get SID for giver computer account
+Get user groups on target computers
+.PARAMETER Computers
+One or more computers which to querry for user groups
+.PARAMETER CIM
+Whether to contact CIM server (requred for remote computers)
+.EXAMPLE
+Get-UserGroups "ServerPC"
+.EXAMPLE
+Get-UserGroups @(DESKTOP, LAPTOP) -CIM
+.INPUTS
+System.String[] User groups
+.OUTPUTS
+PSCustomObject of enabled user accounts in specified group
+.NOTES
+CIM switch is not supported on PowerShell Core
+Switch to list all accounts
+#>
+function Get-UserGroups
+{
+	[CmdletBinding(PositionalBinding = $false)]
+	param (
+		[Alias("Computer", "Machine", "Machines", "Server", "Servers", "Domain", "Domains")]
+		[Parameter(Position = 0)]
+		[string[]] $Computers = [System.Environment]::MachineName,
+
+		[Parameter()]
+		[switch] $CIM
+	)
+
+	begin
+	{
+		$UserGroups =@()
+		$PowerShellEdition = $PSVersionTable.PSEdition
+	}
+	process
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+
+		foreach ($Computer in $Computers)
+		{
+			if ($CIM)
+			{
+				if ($PowerShellEdition -ne "Desktop")
+				{
+					Write-Error -Category InvalidArgument -TargetObject $Computer `
+					-Message "Querying computers via CIM server with PowerShell '$PowerShellEdition' not implemented"
+					return
+				}
+
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Computer"
+
+				# Core: -TimeoutSeconds $ConnectionTimeout -IPv4
+				if (Test-Connection -ComputerName $Computer -Count $ConnectionCount -Quiet)
+				{
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Computer"
+
+					$RemoteGroups = Get-CimInstance -Class Win32_Group -Namespace "root\cimv2" -ComputerName $Computer |
+					Where-Object -Property LocalAccount -eq "True"
+
+					foreach ($Group in $RemoteGroups)
+					{
+						$UserGroups += New-Object -TypeName PSObject -Property @{
+							Name = $Group.Name
+							Caption = $Group.Caption
+							Domain = $Computer
+							SID = $Group.SID
+						}
+					}
+
+					if([string]::IsNullOrEmpty($UserGroups))
+					{
+						Write-Warning -Message "There are no user groups on computer: $Computer"
+						continue
+					}
+				}
+				else
+				{
+					Write-Error -Category ConnectionError -TargetObject $ComputerName `
+					-Message "Unable to contact computer: $ComputerName"
+				}
+			} # if ($CIM)
+			elseif ($Computer -eq [System.Environment]::MachineName)
+			{
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying localhost"
+
+				# Querying local machine
+				$LocalGroups = Get-LocalGroup
+				foreach ($Group in $LocalGroups)
+				{
+					$UserGroups += New-Object -TypeName PSObject -Property @{
+						Name = $Group.Name
+						Caption = Join-Path -Path $Computer -ChildPath $Group.Name
+						Domain = $Computer
+						SID = $Group.SID
+					}
+				}
+
+				if([string]::IsNullOrEmpty($UserGroups))
+				{
+					Write-Warning -Message "There are no user groups on computer: $Computer"
+					continue
+				}
+			} # if ($CIM)
+			else
+			{
+				Write-Error -Category NotImplemented -TargetObject $Computer `
+				-Message "Querying remote computers without CIM switch not implemented"
+			} # if ($CIM)
+		} # foreach ($Computer in $Computers)
+
+		return $UserGroups
+	}
+}
+
+<#
+.SYNOPSIS
+Merge 2 SDDL strings into one
 .PARAMETER RefSDDL
 Reference to SDDL into which to merge new SDDL
 .PARAMETER NewSDDL
@@ -255,11 +382,13 @@ $RefSDDL = "D:(A;;CC;;;S-1-5-32-545)(A;;CC;;;S-1-5-32-544)
 $NewSDDL = "D:(A;;CC;;;S-1-5-32-333)(A;;CC;;;S-1-5-32-222)"
 Merge-SDDL ([ref] $RefSDDL) $NewSDDL
 .INPUTS
-None. You cannot pipe objects to Get-AccountSID
+None. You cannot pipe objects to Merge-SDDL
 .OUTPUTS
 System.String SDDL string
 .NOTES
 Validate input using regex
+Process an array of SDDL's
+Pipeline input
 #>
 function Merge-SDDL
 {
@@ -277,13 +406,15 @@ function Merge-SDDL
 
 <#
 .SYNOPSIS
-Generate SDDL string of multiple usernames or/and groups on given domain
-.PARAMETER Domain
+Generate SDDL string of multiple usernames or/and groups on a given domain
+.PARAMETER Computer
 System.String single domain such as remote computer name
 .PARAMETER Users
 System.String[] array of users for which to generate SDDL string
 .PARAMETER Groups
 System.String[] array of user groups for which to generate SDDL string
+.PARAMETER CIM
+Whether to contact CIM server (requred for remote computers)
 .EXAMPLE
 [string[]] $Users = "haxor"
 [string] $Server = COMPUTERNAME
@@ -298,8 +429,6 @@ $NewSDDL = Get-SDDL -Domain "NT AUTHORITY" -Users "System"
 None. You cannot pipe objects to Get-SDDL
 .OUTPUTS
 System.String SDDL string for given accounts or/and group for given domain
-.NOTES
-TODO: implement queriying computers on network
 #>
 function Get-SDDL
 {
@@ -360,19 +489,21 @@ function Get-SDDL
 
 <#
 .SYNOPSIS
-Get SID of user group for given computer
-.PARAMETER UserGroup
-User group string
+Get SID of user groups for given computer
+.PARAMETER Groups
+System.String[] Array of user groups
+.PARAMETER Computer
+System.String computer name which to query for group users
+.PARAMETER CIM
+Whether to contact CIM server (requred for remote computers)
 .EXAMPLE
-Get-GroupSID "COMPUTERNAME" "USERNAME"
+Get-GroupSID "USERNAME" -Machine "COMPUTERNAME"
 .EXAMPLE
-Get-GroupSID "USERNAME"
+Get-GroupSID @("USERNAME1", "USERNAME2") -CIM
 .INPUTS
-None. You cannot pipe objects to Get-AccountSID
+System.String[] array of group names
 .OUTPUTS
-System.String SID (security identifier)
-.NOTES
-TODO: implement queriying computers on network
+Multiple System.String SID's (security identifier)
 #>
 function Get-GroupSID
 {
@@ -456,16 +587,20 @@ function Get-GroupSID
 <#
 .SYNOPSIS
 Get SID for giver computer account
-.PARAMETER UserAccount
-computer account string
+.PARAMETER Users
+System.String[] array of user accounts
+.PARAMETER Computer
+Target computer on which to perform query
+.PARAMETER CIM
+Whether to contact CIM server (requred for remote computers)
 .EXAMPLE
-Get-AccountSID "COMPUTERNAME" "USERNAME"
+Get-AccountSID "USERNAME" -Server "COMPUTERNAME"
 .EXAMPLE
-Get-AccountSID "USERNAME"
+Get-AccountSID @("USERNAME1", "USERNAME2") -CIM
 .INPUTS
-None. You cannot pipe objects to Get-AccountSID
+System.String[] array of user accounts
 .OUTPUTS
-System.String SID (security identifier)
+Multiple System.String SID's (security identifier)
 .NOTES
 TODO: USER MODE DRIVERS SID not found
 #>
@@ -581,16 +716,12 @@ if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 	New-Variable -Name CheckInitUserInfo -Scope Global -Option Constant -Value $null
 
 	# Get list of user account in form of COMPUTERNAME\USERNAME
-	New-Variable -Name UserAccounts -Scope Global -Option Constant -Value (Get-UserAccounts "Users")
-	New-Variable -Name AdminAccounts -Scope Global -Option Constant -Value (Get-UserAccounts "Administrators")
-
-	# Get list of user names in form of USERNAME
-	New-Variable -Name UserNames -Scope Global -Option Constant -Value (ConvertFrom-UserAccounts $UserAccounts)
-	New-Variable -Name AdminNames -Scope Global -Option Constant -Value (ConvertFrom-UserAccounts $AdminAccounts)
+	New-Variable -Name UserAccounts -Scope Global -Option Constant -Value (Get-GroupUsers "Users")
+	New-Variable -Name AdminAccounts -Scope Global -Option Constant -Value (Get-GroupUsers "Administrators")
 
 	# Generate SDDL string for accounts
-	# New-Variable -Name UserAccountsSDDL -Scope Global -Option Constant -Value (Get-AccountSDDL $UserAccounts)
-	# New-Variable -Name AdminAccountsSDDL -Scope Global -Option Constant -Value (Get-AccountSDDL $AdminAccounts)
+	New-Variable -Name UsersSDDL -Scope Global -Option Constant -Value (Get-SDDL "Users")
+	New-Variable -Name AdminsSDDL -Scope Global -Option Constant -Value (Get-SDDL "Administrators")
 
 	# System users (define variables as needed)
 	New-Variable -Name NT_AUTHORITY_System -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-18)"
@@ -599,7 +730,7 @@ if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 	New-Variable -Name NT_AUTHORITY_UserModeDrivers -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
 }
 
-Set-Variable -Name SpecialDomains -Scope Script -Option Constant -Value @(
+New-Variable -Name SpecialDomains -Scope Script -Option Constant -Value @(
 	"NT AUTHORITY"
 	"APPLICATION_PACKAGE_AUTHORITY"
 	)
@@ -619,6 +750,7 @@ Export-ModuleMember -Function Get-GroupUsers
 Export-ModuleMember -Function Get-GroupSID
 Export-ModuleMember -Function Get-SDDL
 Export-ModuleMember -Function Merge-SDDL
+Export-ModuleMember -Function Get-UserGroups
 
 #
 # Variable exports
@@ -627,8 +759,6 @@ Export-ModuleMember -Variable CheckInitUserInfo
 
 Export-ModuleMember -Variable UserAccounts
 Export-ModuleMember -Variable AdminAccounts
-Export-ModuleMember -Variable UserNames
-Export-ModuleMember -Variable AdminNames
 Export-ModuleMember -Variable UserAccountsSDDL
 Export-ModuleMember -Variable AdminAccountsSDDL
 

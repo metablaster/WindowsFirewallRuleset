@@ -71,7 +71,7 @@ if ((Test-Installation "TeamViewer" ([ref] $TeamViewerRoot)) -or $Force)
 	-DisplayName "Teamviewer Remote Control Application" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort 80, 443, 5938 -RemotePort Any `
-	-EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL `
+	-EdgeTraversalPolicy Block -LocalUser $UsersSDDL `
 	-Description "" | Format-Output
 
 	$Program = "$TeamViewerRoot\TeamViewer_Service.exe"
@@ -80,6 +80,6 @@ if ((Test-Installation "TeamViewer" ([ref] $TeamViewerRoot)) -or $Force)
 	-DisplayName "Teamviewer Remote Control Service" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort 80, 443, 5938 -RemotePort Any `
-	-EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL `
+	-EdgeTraversalPolicy Block -LocalUser $UsersSDDL `
 	-Description "" | Format-Output
 }

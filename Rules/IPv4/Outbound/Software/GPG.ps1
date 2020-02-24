@@ -71,6 +71,6 @@ if ((Test-Installation "GPG" ([ref] $GPGRoot)) -or $Force)
 	-DisplayName "Certificate key servers" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 53, 443 `
-	-LocalUser $UserAccountsSDDL `
+	-LocalUser $UsersSDDL `
 	-Description "For Kleopatra server key lookup and key publish." | Format-Output
 }

@@ -73,6 +73,6 @@ if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot)) -or $Force)
 	-DisplayName "TargetProgram" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-	-LocalUser $UserAccountsSDDL `
+	-LocalUser $UsersSDDL `
 	-Description "" | Format-Output
 }

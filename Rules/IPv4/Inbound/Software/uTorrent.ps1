@@ -78,7 +78,7 @@ if ((Test-Installation "uTorrent" ([ref] $uTorrentRoot)) -or $Force)
 	-DisplayName "uTorrent - Listening port" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort 1161 -RemotePort 1024-65535 `
-	-EdgeTraversalPolicy DeferToApp -LocalUser $UserAccountsSDDL `
+	-EdgeTraversalPolicy DeferToApp -LocalUser $UsersSDDL `
 	-Description "BitTorrent TCP listener." | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `
@@ -92,6 +92,6 @@ if ((Test-Installation "uTorrent" ([ref] $uTorrentRoot)) -or $Force)
 	-DisplayName "uTorrent - Web UI" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort 8080, 10000 -RemotePort Any `
-	-EdgeTraversalPolicy Allow -LocalUser $UserAccountsSDDL `
+	-EdgeTraversalPolicy Allow -LocalUser $UsersSDDL `
 	-Description "BitTorrent Remote control from browser." | Format-Output
 }

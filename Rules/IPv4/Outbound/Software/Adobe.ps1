@@ -72,7 +72,7 @@ if ((Test-Installation "AdobeAcrobat" ([ref] $AcrobatRoot)) -or $Force)
 	-DisplayName "Acrobat Reader" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UserAccountsSDDL `
+	-LocalUser $UsersSDDL `
 	-Description "" | Format-Output
 }
 
@@ -85,6 +85,6 @@ if ((Test-Installation "AdobeARM" ([ref] $AdobeARMRoot)) -or $Force)
 	-DisplayName "Acrobat ARM" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-	-LocalUser $UserAccountsSDDL `
+	-LocalUser $UsersSDDL `
 	-Description "" | Format-Output
 }

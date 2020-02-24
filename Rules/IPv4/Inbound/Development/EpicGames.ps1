@@ -77,7 +77,7 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $Force)
 	-DisplayName "Unreal Engine - CrashReportClientEditor" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
-	-EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL `
+	-EdgeTraversalPolicy Block -LocalUser $UsersSDDL `
 	-Description "" | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `
@@ -93,7 +93,7 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $Force)
 	-DisplayName "Unreal Engine - SwarmAgent" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
-	-EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL `
+	-EdgeTraversalPolicy Block -LocalUser $UsersSDDL `
 	-Description "Swarm agent is used for build farm." | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `
@@ -109,7 +109,7 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $Force)
 	-DisplayName "Unreal Engine - UnrealInsights" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
-	-EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL `
+	-EdgeTraversalPolicy Block -LocalUser $UsersSDDL `
 	-Description "" | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `

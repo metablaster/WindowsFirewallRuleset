@@ -85,7 +85,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $Force)
 	-DisplayName "Skype for business" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-	-EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL `
+	-EdgeTraversalPolicy Block -LocalUser $UsersSDDL `
 	-Description "Skype for business, previously lync." | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `
@@ -101,7 +101,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $Force)
 	-DisplayName "UcMapi" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-	-EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL `
+	-EdgeTraversalPolicy Block -LocalUser $UsersSDDL `
 	-Description "Unified Communications Messaging Application Programming Interface" | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `

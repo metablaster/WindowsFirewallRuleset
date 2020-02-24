@@ -26,51 +26,43 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-. $PSScriptRoot\..\..\..\..\Config\ProjectSettings.ps1
+# TODO: Include modules you need, update licence Copyright and start writing test code
+
+#
+# Unit test for Test-Function
+#
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
 Test-SystemRequirements
 
 # Includes
-. $PSScriptRoot\..\DirectionSetup.ps1
-. $PSScriptRoot\..\..\IPSetup.ps1
+. $ProjectRoot\Test\ContextSetup.ps1
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
+# Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
+# Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
-#
-# Setup local variables:
-#
-$Group = "Development - Incredibuild"
-$Profile = "Private, Public"
-
 # Ask user if he wants to load these rules
-Update-Context "IPv$IPVersion" $Direction $Group
+Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-#
-# Incredibuild installation directories
-#
-$IncredibuildRoot = "%ProgramFiles(x86)%\IncrediBuild"
+Start-Test
 
-# First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
+New-Test "Get-UserGroups"
+Get-UserGroups
 
-#
-# Rules for Incredibuild
-#
+New-Test "Get-UserGroups CIM server"
+Get-UserGroups "localhost" -CIM
 
-# Test if installation exists on system
-if ((Test-Installation "Incredibuild" ([ref] $IncredibuildRoot)) -or $Force)
-{
-	$Program = "$IncredibuildRoot\XLicProc.exe"
-	Test-File $Program
-	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Incredibuild License" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-	-LocalUser $UsersSDDL `
-	-Description "Used to connect to license server for activation" | Format-Output
-}
+# New-Test "Typename: Get-UserGroups -CIM"
+# Get-UserGroups "localhost" -CIM | Get-TypeName
+
+New-Test "Failure test"
+Get-UserGroups "ZOMBI_PC"
+
+
+Exit-Test

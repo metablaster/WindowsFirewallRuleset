@@ -52,13 +52,18 @@ New-Test "Get-GroupSID 'Users'"
 Get-GroupSID "Users" @Logs
 
 New-Test "Get-GroupSID @('Users', 'Hyper-V Administrators')"
-Get-GroupSID @('Users', 'Hyper-V Administrators') @Logs
+$UsersTest = Get-GroupSID @('Users', 'Hyper-V Administrators') @Logs
+$UsersTest
+
+New-Test "Typename: Get-GroupUsers"
+$UsersTest | Get-TypeName
 
 New-Test "Get-GroupSID 'Users' -CIM"
 Get-GroupSID "Users" -CIM @Logs
 
 New-Test "Get-GroupSID @('Users', 'Hyper-V Administrators') -CIM"
 Get-GroupSID @('Users', 'Hyper-V Administrators') -CIM @Logs
+
 
 New-Test "FAILURE TEST NO CIM: Get-GroupSID @('Users', 'Hyper-V Administrators')"
 Get-GroupSID @('Users', 'Hyper-V Administrators') -Machine "CRAZYMACHINE" @Logs

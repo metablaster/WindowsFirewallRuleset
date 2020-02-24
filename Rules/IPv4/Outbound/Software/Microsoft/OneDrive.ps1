@@ -71,7 +71,7 @@ if ((Test-Installation "OneDrive" ([ref] $OneDriveRoot)) -or $Force)
 	-DisplayName "OneDrive Update" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UserAccountsSDDL `
+	-LocalUser $UsersSDDL `
 	-Description "Updater for OneDrive" | Format-Output
 
 	$Program = "$OneDriveRoot\OneDrive.exe"
@@ -80,6 +80,6 @@ if ((Test-Installation "OneDrive" ([ref] $OneDriveRoot)) -or $Force)
 	-DisplayName "OneDrive" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UserAccountsSDDL `
+	-LocalUser $UsersSDDL `
 	-Description "One drive for syncing user data" | Format-Output
 }

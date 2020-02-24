@@ -72,7 +72,7 @@ if ((Test-Installation "Nvidia64" ([ref] $NvidiaRoot64)) -or $Force)
 	-DisplayName "Nvidia Container x64" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UserAccountsSDDL `
+	-LocalUser $UsersSDDL `
 	-Description "" | Format-Output
 
 	$Program = "$NvidiaRoot64\NVIDIA GeForce Experience\NVIDIA GeForce Experience.exe"
@@ -81,7 +81,7 @@ if ((Test-Installation "Nvidia64" ([ref] $NvidiaRoot64)) -or $Force)
 	-DisplayName "Nvidia GeForce Experience x64" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-	-LocalUser $UserAccountsSDDL `
+	-LocalUser $UsersSDDL `
 	-Description "" | Format-Output
 
 	$Program = "$NvidiaRoot64\Display.NvContainer\NVDisplay.Container.exe"
@@ -90,7 +90,7 @@ if ((Test-Installation "Nvidia64" ([ref] $NvidiaRoot64)) -or $Force)
 	-DisplayName "Nvidia NVDisplay Container x64" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UserAccountsSDDL `
+	-LocalUser $UsersSDDL `
 	-Description "" | Format-Output
 
 	$Program = "$NvidiaRoot64\Update Core\NvProfileUpdater64.exe"
@@ -99,7 +99,7 @@ if ((Test-Installation "Nvidia64" ([ref] $NvidiaRoot64)) -or $Force)
 	-DisplayName "Nvidia Profile Updater" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UserAccountsSDDL `
+	-LocalUser $UsersSDDL `
 	-Description "" | Format-Output
 }
 
@@ -116,7 +116,7 @@ if ((Test-Installation "Nvidia86" ([ref] $NvidiaRoot86)) -or $Force)
 	-DisplayName "Nvidia Container x86" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UserAccountsSDDL `
+	-LocalUser $UsersSDDL `
 	-Description "" | Format-Output
 
 	$Program = "$NvidiaRoot86\NVIDIA GeForce Experience\NVIDIA GeForce Experience.exe"
@@ -125,7 +125,7 @@ if ((Test-Installation "Nvidia86" ([ref] $NvidiaRoot86)) -or $Force)
 	-DisplayName "Nvidia GeForce Experience x86" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UserAccountsSDDL `
+	-LocalUser $UsersSDDL `
 	-Description "" | Format-Output
 
 	$Program = "$NvidiaRoot86\NvTelemetry\NvTelemetryContainer.exe"
@@ -134,7 +134,7 @@ if ((Test-Installation "Nvidia86" ([ref] $NvidiaRoot86)) -or $Force)
 	-DisplayName "Nvidia Telemetry Container" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-	-LocalUser $UserAccountsSDDL `
+	-LocalUser $UsersSDDL `
 	-Description "" | Format-Output
 
 	$Program = "$NvidiaRoot86\NvNode\NVIDIA Web Helper.exe"
@@ -143,6 +143,6 @@ if ((Test-Installation "Nvidia86" ([ref] $NvidiaRoot86)) -or $Force)
 	-DisplayName "Nvidia WebHelper TCP" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-	-LocalUser $UserAccountsSDDL `
+	-LocalUser $UsersSDDL `
 	-Description "" | Format-Output
 }

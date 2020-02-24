@@ -135,16 +135,13 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $SystemGroup -Direction 
 # Block Administrators by defalut
 #
 
-foreach ($Admin in $AdminNames)
-{
-	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Store apps for Administrators" -Service Any -Program Any `
-	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Any -InterfaceType $Interface `
-	-Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
-	-LocalUser Any -Owner (Get-UserSID $Admin) -Package "*" `
-	-Description "Block admin activity for all store apps.
-	Administrators should have limited or no connectivity at all for maximum security." | Format-Output
-}
+New-NetFirewallRule -Platform $Platform `
+-DisplayName "Store apps for Administrators" -Service Any -Program Any `
+-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Any -InterfaceType $Interface `
+-Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
+-LocalUser Any -Owner (Get-GroupSID "Administrators") -Package "*" `
+-Description "Block admin activity for all store apps.
+Administrators should have limited or no connectivity at all for maximum security." | Format-Output
 
 #
 # Create rules for all network apps for each standard user
@@ -154,10 +151,9 @@ foreach ($Admin in $AdminNames)
 # NOTE: updating apps will not work unless also "Extension users" are updated in WindowsServices.ps1, meaning re-run the script.
 #
 
-foreach ($User in $UserNames)
+$Users = Get-GroupUsers "Users"
+foreach ($User in $Users)
 {
-	$OwnerSID = Get-UserSID($User)
-
 	#
 	# Create rules for apps installed by user
 	#
@@ -181,7 +177,7 @@ foreach ($User in $UserNames)
 			-DisplayName $_.Name -Service Any -Program Any `
 			-PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-			-LocalUser Any -Owner $OwnerSID -Package $PackageSID `
+			-LocalUser Any -Owner $User.SID -Package $PackageSID `
 			-Description "Store apps generated rule for $User" | Format-Output
 		}
 	}
@@ -210,7 +206,7 @@ foreach ($User in $UserNames)
 			-DisplayName $_.Name -Service Any -Program Any `
 			-PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $SystemGroup -Profile $Profile -InterfaceType $Interface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-			-LocalUser Any -Owner $OwnerSID -Package $PackageSID `
+			-LocalUser Any -Owner $User.SID -Package $PackageSID `
 			-Description "System store apps generated rule for $User" | Format-Output
 		}
 	}

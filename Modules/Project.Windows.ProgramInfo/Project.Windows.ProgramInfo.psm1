@@ -1046,9 +1046,9 @@ function Update-Table
 			$UserPrograms = Get-UserPrograms $Account
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching $Account programs for $SearchString"
 
-			if ($UserPrograms -and $UserPrograms.Name -like "*$SearchString*")
+			if ($UserPrograms)
 			{
-				$TargetPrograms = $UserPrograms | Where-Object { $_.Name -like "*$SearchString*" }
+				$TargetPrograms = $UserPrograms | Where-Object -Property Name -like "*$SearchString*"
 
 				foreach ($Program in $TargetPrograms)
 				{
@@ -1056,7 +1056,7 @@ function Update-Table
 					$Row = $InstallTable.NewRow()
 
 					# Enter data into row
-					$Row.User = $Account.Split("\")[1]
+					$Row.User = $Account.User
 					$Row.InstallRoot = $Program | Select-Object -ExpandProperty InstallLocation
 
 					# Add the row to the table

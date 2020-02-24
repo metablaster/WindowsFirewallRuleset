@@ -55,7 +55,9 @@ Start-Test
 New-Test "Get-GroupUsers"
 $UsersTest = Get-GroupUsers "Users", "Administrators"
 $UsersTest
-Write-Information -Tags "Test" -MessageData "Typename is: $($UsersTest | Get-TypeName)"
+
+New-Test "Typename: Get-GroupUsers"
+$UsersTest | Get-TypeName
 
 New-Test "Get-GroupUsers CIM server"
 $CIMTest = Get-GroupUsers "Users", "Administrators" -Machine "localhost" -CIM

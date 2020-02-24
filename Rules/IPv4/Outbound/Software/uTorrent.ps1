@@ -71,7 +71,7 @@ if ((Test-Installation "uTorrent" ([ref] $uTorrentRoot)) -or $Force)
 	-DisplayName "uTorrent - Client to peers" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 1024-65535 `
-	-LocalUser $UserAccountsSDDL `
+	-LocalUser $UsersSDDL `
 	-Description "Torrent client" | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `
@@ -109,7 +109,7 @@ if ((Test-Installation "uTorrent" ([ref] $uTorrentRoot)) -or $Force)
 	-DisplayName "uTorrent - HTTP/HTTPS" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UserAccountsSDDL `
+	-LocalUser $UsersSDDL `
 	-Description "HTTP/HTTPS for browsing, adds and client content" | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `
@@ -130,6 +130,6 @@ if ((Test-Installation "uTorrent" ([ref] $uTorrentRoot)) -or $Force)
 	-DisplayName "uTorrentie - WebHelper - HTTP" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-	-LocalUser $UserAccountsSDDL `
+	-LocalUser $UsersSDDL `
 	-Description "HTTP probably for adds and client content" | Format-Output
 }

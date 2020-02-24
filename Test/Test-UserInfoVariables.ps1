@@ -52,12 +52,6 @@ $UserAccounts
 New-Test "AdminAccounts:"
 $AdminAccounts
 
-New-Test "UserNames:"
-$UserNames
-
-New-Test "AdminNames:"
-$AdminNames
-
 New-Test "UserAccountsSDDL:"
 $UserAccountsSDDL
 

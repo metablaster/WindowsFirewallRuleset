@@ -73,7 +73,7 @@ if ((Test-Installation "HWMonitor" ([ref] $HWMonitorRoot)) -or $Force)
 	-DisplayName "HWMonitor" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-	-LocalUser $AdminAccountsSDDL `
+	-LocalUser $AdminsSDDL `
 	-Description "Used for manual check for update" | Format-Output
 }
 
@@ -86,6 +86,6 @@ if ((Test-Installation "CPU-Z" ([ref] $CPUZRoot)) -or $Force)
 	-DisplayName "CPU-Z" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-	-LocalUser $AdminAccountsSDDL `
+	-LocalUser $AdminsSDDL `
 	-Description "Used for manual check for update" | Format-Output
 }

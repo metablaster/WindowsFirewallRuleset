@@ -71,7 +71,7 @@ if ((Test-Installation "WindowsKits" ([ref] $SDKDebuggers)) -or $Force)
 	-DisplayName "WinDbg Symbol Server x86" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UserAccountsSDDL `
+	-LocalUser $UsersSDDL `
 	-Description "WinDbg access to Symbols Server." | Format-Output
 
 	$Program = "$SDKDebuggers\x64\windbg.exe"
@@ -80,7 +80,7 @@ if ((Test-Installation "WindowsKits" ([ref] $SDKDebuggers)) -or $Force)
 	-DisplayName "WinDbg Symbol Server x64" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UserAccountsSDDL `
+	-LocalUser $UsersSDDL `
 	-Description "WinDbg access to Symbols Server" | Format-Output
 
 	$Program = "$SDKDebuggers\x86\symchk.exe"
@@ -89,7 +89,7 @@ if ((Test-Installation "WindowsKits" ([ref] $SDKDebuggers)) -or $Force)
 	-DisplayName "Symchk Symbol Server x86" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-	-LocalUser $UserAccountsSDDL `
+	-LocalUser $UsersSDDL `
 	-Description "WinDbg Symchk access to Symbols Server." | Format-Output
 
 	$Program = "$SDKDebuggers\x64\symchk.exe"
@@ -98,6 +98,6 @@ if ((Test-Installation "WindowsKits" ([ref] $SDKDebuggers)) -or $Force)
 	-DisplayName "Symchk Symbol Server x64" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-	-LocalUser $UserAccountsSDDL `
+	-LocalUser $UsersSDDL `
 	-Description "WinDbg Symchk access to Symbols Server" | Format-Output
 }

@@ -72,6 +72,6 @@ if ((Test-Installation "XTU" ([ref] $IntelXTURoot)) -or $Force)
 	-DisplayName "Extreme tuning utility" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $AdminAccountsSDDL `
+	-LocalUser $AdminsSDDL `
 	-Description "Extreme Tuning utility check for updates" | Format-Output
 }

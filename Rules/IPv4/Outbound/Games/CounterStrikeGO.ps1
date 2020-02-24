@@ -71,7 +71,7 @@ if ((Test-Installation "CounterStrikeGO" ([ref] $CounterStrikeRoot)) -or $Force)
 	-DisplayName "Counter Strike GO (HTTP)" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-	-LocalUser $UserAccountsSDDL `
+	-LocalUser $UsersSDDL `
 	-Description "download maps" | Format-Output
 
 	$Program = "$CounterStrikeRoot\csgo.exe"
@@ -80,6 +80,6 @@ if ((Test-Installation "CounterStrikeGO" ([ref] $CounterStrikeRoot)) -or $Force)
 	-DisplayName "Counter Strike GO" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 27000-27100 `
-	-LocalUser $UserAccountsSDDL `
+	-LocalUser $UsersSDDL `
 	-Description "" | Format-Output
 }

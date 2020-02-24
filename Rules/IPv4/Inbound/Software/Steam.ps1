@@ -71,7 +71,7 @@ if ((Test-Installation "Steam" ([ref] $SteamRoot)) -or $Force)
 	-DisplayName "Steam Dedicated or Listen Servers" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort 27015 -RemotePort Any `
-	-EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL `
+	-EdgeTraversalPolicy Block -LocalUser $UsersSDDL `
 	-Description "SRCDS Rcon port" | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `
@@ -86,7 +86,7 @@ if ((Test-Installation "Steam" ([ref] $SteamRoot)) -or $Force)
 	-DisplayName "Steam In-Home Streaming" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 27036, 27037 -RemotePort Any `
-	-EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL `
+	-EdgeTraversalPolicy Block -LocalUser $UsersSDDL `
 	-Description "Steam In-Home streaming, one PC sends its video and audio to another PC.
 	The other PC views the video and audio like it’s watching a movie, sending back mouse, keyboard, and controller input to the other PC." | Format-Output
 }

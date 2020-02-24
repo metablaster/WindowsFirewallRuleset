@@ -12,8 +12,6 @@ LONG DESCRIPTION
 VARIABLES
 	UserAccounts:       User accounts in "Users" group
 	AdminAccounts:      User accounts in "Administrators" group
-	UserNames:          User names in "Users" group
-	AdminNames:         User names in "Administrators" group
 	UserAccountsSDDL:   SDDL string for all users in "Users" group
 	AdminAccountsSDDL:  SDDL string for all users in "Administrators" group
 

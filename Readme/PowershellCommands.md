@@ -114,6 +114,12 @@ $account = New-Object System.Security.Principal.NTAccount($group)
 $sid = $account.Translate([System.Security.Principal.SecurityIdentifier])
 ```
 
+OR
+
+```powershell
+[System.Security.Principal.WellKnownSidType]::NetworkSid
+```
+
 **Computer name**
 
 ```powershell
@@ -128,4 +134,10 @@ Get-WMIObject -class Win32_ComputerSystem | Select-Object -ExpandProperty Name
 
 ```powershell
 Get-CimClass -Namespace root/CIMV2 | Where-Object CimClassName -like Win32* | Select-Object CimClassName
+```
+
+# Get type name aliases
+
+```powershell
+[psobject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::get
 ```

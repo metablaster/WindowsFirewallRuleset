@@ -75,7 +75,7 @@ if ((Test-Installation "NETFramework" ([ref] $NETFrameworkRoot)) -or $Force)
 	-DisplayName "CLR Optimization Service" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-	-LocalUser $UserAccountsSDDL `
+	-LocalUser $UsersSDDL `
 	-Description "mscorsvw.exe is precompiling .NET assemblies in the background.
 	Once it's done, it will go away. Typically, after you install the .NET Redist,
 	it will be done with the high priority assemblies in 5 to 10 minutes and then will wait until your computer is idle to process the low priority assemblies." | Format-Output

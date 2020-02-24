@@ -71,7 +71,7 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $Force)
 	-DisplayName "PokerStars - Client" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 26002 `
-	-LocalUser $UserAccountsSDDL `
+	-LocalUser $UsersSDDL `
 	-Description "Main game interface." | Format-Output
 
 	# TODO: browser for some reason needs any interface and any remote address
@@ -82,7 +82,7 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $Force)
 	-DisplayName "PokerStars - Browser" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UserAccountsSDDL `
+	-LocalUser $UsersSDDL `
 	-Description "In game HTML browser" | Format-Output
 
 	$Program = "$PokerStarsRoot\PokerStarsOnlineUpdate.exe"
@@ -91,7 +91,7 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $Force)
 	-DisplayName "PokerStars - Online update" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-	-LocalUser $UserAccountsSDDL `
+	-LocalUser $UsersSDDL `
 	-Description "" | Format-Output
 
 	$Program = "$PokerStarsRoot\PokerStarsUpdate.exe"
@@ -100,6 +100,6 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $Force)
 	-DisplayName "PokerStars - Update" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-	-LocalUser $UserAccountsSDDL `
+	-LocalUser $UsersSDDL `
 	-Description "Game updater" | Format-Output
 }
