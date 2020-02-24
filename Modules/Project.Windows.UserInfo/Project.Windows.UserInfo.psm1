@@ -53,6 +53,7 @@ if ($Develop)
 . $PSScriptRoot\External\ConvertFrom-SID.ps1
 
 # TODO: write function to query system users
+# TODO: get a user account that is connected to a Microsoft account. see Get-LocalUser docs.
 
 <#
 .SYNOPSIS
@@ -128,7 +129,7 @@ function ConvertFrom-UserAccounts
 
 <#
 .SYNOPSIS
-get computer accounts for a giver user group
+get computer accounts for a giver user groups on given computers
 .PARAMETER UserGroup
 User group on local or remote computer
 .PARAMETER ComputerNames
@@ -180,7 +181,7 @@ function Get-GroupUsers
 				if ($PowerShellEdition -ne "Desktop")
 				{
 					Write-Error -Category InvalidArgument -TargetObject $Computer `
-					-Message "Querying computers with PowerShell '$PowerShellEdition' not implemented"
+					-Message "Querying computers via CIM server with PowerShell '$PowerShellEdition' not implemented"
 					return
 				}
 
@@ -208,7 +209,7 @@ function Get-GroupUsers
 
 						if([string]::IsNullOrEmpty($EnabledAccounts))
 						{
-							Write-Warning -Message "User group '$UserGroup' does not have any accounts"
+							Write-Warning -Message "User group '$UserGroup' does not have any accounts on computer: $Computer"
 							continue
 						}
 
@@ -252,7 +253,7 @@ function Get-GroupUsers
 
 					if([string]::IsNullOrEmpty($GroupUsers))
 					{
-						Write-Warning -Message "User group '$UserGroup' does not have any accounts"
+						Write-Warning -Message "User group '$UserGroup' does not have any accounts on computer: $Computer"
 						continue
 					}
 
@@ -282,47 +283,160 @@ function Get-GroupUsers
 
 <#
 .SYNOPSIS
-get SID for giver user name
-.PARAMETER UserName
-username string
+get SID for giver computer account
+.PARAMETER RefSDDL
+Reference to SDDL into which to merge new SDDL
+.PARAMETER NewSDDL
+New SDDL string which to add to reference SDDL
 .EXAMPLE
-Get-UserSID("TestUser")
+$RefSDDL = "D:(A;;CC;;;S-1-5-32-545)(A;;CC;;;S-1-5-32-544)
+$NewSDDL = "D:(A;;CC;;;S-1-5-32-333)(A;;CC;;;S-1-5-32-222)"
+Merge-SDDL ([ref] $RefSDDL) $NewSDDL
 .INPUTS
-None. You cannot pipe objects to Get-UserSID
+None. You cannot pipe objects to Get-AccountSID
+.OUTPUTS
+System.String SDDL string
+#>
+function Merge-SDDL
+{
+	[CmdletBinding()]
+	param (
+		[Parameter(Mandatory = $true)]
+		[ref] $RefSDDL,
+
+		[Parameter(Mandatory = $true)]
+		[string] $NewSDDL
+	)
+
+	$RefSDDL.Value += $NewSDDL.Substring(2)
+}
+
+<#
+.SYNOPSIS
+Generate SDDL string of multiple usernames or/and groups on given domain
+.PARAMETER Domain
+System.String single domain such as remote computer name
+.PARAMETER Users
+System.String[] array of users for which to generate SDDL string
+.PARAMETER Groups
+System.String[] array of user groups for which to generate SDDL string
+.EXAMPLE
+[string[]] $Users = "haxor"
+[string] $Server = COMPUTERNAME
+[string[]] $Groups = @("Users", "Administrators")
+
+$UsersSDDL1 = Get-SDDL -Users $Users -Groups $Groups
+$UsersSDDL2 = Get-SDDL -Users $Users -Machine $Server
+$UsersSDDL3 = Get-SDDL -Groups $Groups
+.EXAMPLE
+$NewSDDL = Get-SDDL -Domain "NT AUTHORITY" -Users "System"
+.INPUTS
+None. You cannot pipe objects to Get-AccountSDDL
+.OUTPUTS
+System.String SDDL string for given accounts or/and group for given domain
+.NOTES
+TODO: implement queriying computers on network
+#>
+function Get-SDDL
+{
+	[CmdletBinding(PositionalBinding = $false)]
+	param (
+		[Alias("Computer", "Machine")]
+		[Parameter(Mandatory = $false)]
+		[string] $Domain = [System.Environment]::MachineName,
+
+		[Parameter(Mandatory = $true, ParameterSetName="Account")]
+		[Parameter(Mandatory = $false, ParameterSetName="Group")]
+		[string[]] $Users,
+
+		[Alias("UserGroup", "UserGroups", "Group")]
+		[Parameter(Mandatory = $true, ParameterSetName="Group")]
+		[string[]] $Groups
+	)
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+
+	[string] $SDDL = "D:"
+
+	foreach ($User in $Users)
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL for account: $Domain\$User"
+
+		try
+		{
+			$SID = Get-AccountSID $Domain $User
+		}
+		catch
+		{
+			Write-Warning -Message "Failed to translate user account '$UserAccount' to SDDL"
+			continue
+		}
+
+		$SDDL += "(A;;CC;;;{0})" -f $SID
+
+	}
+
+	foreach ($Group in $Groups)
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL for group: $Group"
+
+		try
+		{
+			$SID = Get-GroupSID $Group
+		}
+		catch
+		{
+			Write-Warning -Message "Failed to translate user group '$Group' to SDDL"
+			continue
+		}
+
+		$SDDL += "(A;;CC;;;{0})" -f $SID
+
+	}
+
+	return $SDDL
+}
+
+<#
+.SYNOPSIS
+Get SID of user group for given computer
+.PARAMETER UserGroup
+User group string
+.EXAMPLE
+Get-GroupSID "COMPUTERNAME" "USERNAME"
+.EXAMPLE
+Get-GroupSID "USERNAME"
+.INPUTS
+None. You cannot pipe objects to Get-AccountSID
 .OUTPUTS
 System.String SID (security identifier)
 .NOTES
 TODO: implement queriying computers on network
 #>
-function Get-UserSID
+function Get-GroupSID
 {
 	[CmdletBinding()]
 	param (
+		[Alias("Group")]
 		[Parameter(Mandatory = $true)]
-		[string] $UserName
+		[string] $UserGroup
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for user group: $UserGroup"
 
-	try
-	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for user: $UserName"
-		$NTAccount = New-Object System.Security.Principal.NTAccount($UserName)
-		return ($NTAccount.Translate([System.Security.Principal.SecurityIdentifier])).ToString()
-	}
-	catch
-	{
-		Write-Warning -Message "User '$UserName' cannot be resolved to a SID."
-	}
+	return Get-LocalGroup -Name $UserGroup | Select-Object -ExpandProperty SID | Select-Object -ExpandProperty Value
 }
 
 <#
 .SYNOPSIS
-get SID for giver computer account
+Get SID for giver computer account
 .PARAMETER UserAccount
 computer account string
 .EXAMPLE
-Get-AccountSID("COMPUTERNAME\USERNAME")
+Get-AccountSID "COMPUTERNAME" "USERNAME"
+.EXAMPLE
+Get-AccountSID "USERNAME"
 .INPUTS
 None. You cannot pipe objects to Get-AccountSID
 .OUTPUTS
@@ -334,118 +448,26 @@ function Get-AccountSID
 {
 	[CmdletBinding()]
 	param (
+		[Alias("Computer", "Machine")]
+		[Parameter(Mandatory = $false)]
+		[string] $Domain = [System.Environment]::MachineName,
+
 		[Parameter(Mandatory = $true)]
-		[string] $UserAccount
+		[string] $User
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
-	[string] $Domain = ($UserAccount.split("\"))[0]
-	[string] $User = ($UserAccount.split("\"))[1]
 
 	try
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for account: $UserAccount"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for account: $Domain\$User"
 		$NTAccount = New-Object System.Security.Principal.NTAccount($Domain, $User)
-		return ($NTAccount.Translate([System.Security.Principal.SecurityIdentifier])).ToString()
+		return $NTAccount.Translate([System.Security.Principal.SecurityIdentifier]).ToString()
 	}
 	catch
 	{
-		Write-Warning -Message "Get-AccountSID: Account '$UserAccount' cannot be resolved to a SID."
+		Write-Error -TargetObject $_.TargetObject -Message "[$($MyInvocation.InvocationName)] Account '$Domain\$User' cannot be resolved to a SID."
 	}
-}
-
-<#
-.SYNOPSIS
-get SDDL of specified local user name or multiple users names
-.PARAMETER UserNames
-String array of user names
-.EXAMPLE
-Get-UserSDDL user1, user2
-.INPUTS
-None. You cannot pipe objects to Get-UserSDDL
-.OUTPUTS
-System.String SDDL for given usernames
-.NOTES
-TODO: implement queriying computers on network
-#>
-function Get-UserSDDL
-{
-	[CmdletBinding()]
-	param (
-		[Parameter(Mandatory = $true)]
-		[string[]] $UserNames
-	)
-
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
-	[string] $SDDL = "D:"
-
-	foreach($User in $UserNames)
-	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL for user: $User"
-
-		try
-		{
-			$SID = Get-UserSID $User
-		}
-		catch
-		{
-			Write-Warning -Message "User '$User' not found"
-			continue
-		}
-
-		$SDDL += "(A;;CC;;;{0})" -f $SID
-	}
-
-	return $SDDL
-}
-
-<#
-.SYNOPSIS
-get SDDL of multiple computer accounts, in form of: COMPUTERNAME\USERNAME
-.PARAMETER UserAccounts
-String array of computer accounts
-.EXAMPLE
-Get-AccountSDDL @("NT AUTHORITY\SYSTEM", "MY_DESKTOP\MY_USERNAME")
-.INPUTS
-None. You cannot pipe objects to Get-AccountSDDL
-.OUTPUTS
-System.String SDDL string for given accounts
-.NOTES
-TODO: implement queriying computers on network
-#>
-function Get-AccountSDDL
-{
-	[CmdletBinding()]
-	param (
-		[Parameter(Mandatory = $true)]
-		[string[]] $UserAccounts
-	)
-
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
-	[string] $SDDL = "D:"
-
-	foreach ($Account in $UserAccounts)
-	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL for account: $Account"
-
-		try
-		{
-			$SID = Get-AccountSID $Account
-		}
-		catch
-		{
-			Write-Warning -Message "User account '$UserAccount' not found"
-			continue
-		}
-
-		$SDDL += "(A;;CC;;;{0})" -f $SID
-
-	}
-
-	return $SDDL
 }
 
 #
@@ -514,6 +536,7 @@ Export-ModuleMember -Variable NT_AUTHORITY_UserModeDrivers
 # System users SDDL strings
 #
 
+# [System.Security.Principal.WellKnownSidType]::NetworkSid
 # "D:(A;;CC;;;S-1-5-0)" # Unknown
 # $NT_AUTHORITY_DialUp = "D:(A;;CC;;;S-1-5-1)"
 # $NT_AUTHORITY_Network = "D:(A;;CC;;;S-1-5-2)"

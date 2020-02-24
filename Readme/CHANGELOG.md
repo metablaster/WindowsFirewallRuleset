@@ -8,6 +8,8 @@
 2. Better configurable logging and much more streams, this will help to see what the code does in real time.
 3. Project wide settings (ProjectSettings.ps1) are updated for changes and significally improved.
 4. Improve program installation search + more registry drilling functions
+5. Function to query users for multiple user groups on multiple computers
+6. Improved and new functions to query users and groups on multiple computers
 
 # Bug fixes
 1. Modules are renamed to avoid name clashes with other modules
