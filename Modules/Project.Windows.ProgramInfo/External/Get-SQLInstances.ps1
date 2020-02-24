@@ -46,24 +46,24 @@ https://gallery.technet.microsoft.com/scriptcenter/Get-SQLInstance-9a3245a0
 .PARAMETER Computers
 	Local or remote systems to query for SQL information.
 
-.PARAMETER WMI
-	If specified, try to pull and correlate WMI information for SQL
+.PARAMETER CIM
+	If specified, try to pull and correlate CIM information for SQL
 
 	I've done limited testing in matching up the service info to registry info.
 	Suggestions would be appreciated!
 
 .NOTES
 	Name: Get-SQLInstances
-	Author: Boe Prox, edited by cookie monster (to cover wow6432node, WMI tie in)
+	Author: Boe Prox, edited by cookie monster (to cover wow6432node, CIM tie in)
 
 	Version History:
 	1.5 //Boe Prox - 31 May 2016
-		- Added WMI queries for more information
+		- Added CIM queries for more information
 		- Custom object type name
 	1.0 //Boe Prox -  07 Sept 2013
 		- Initial Version
 
-	Modified by metablaster based on both originals 15 Feb 2020:
+	Following modifications by metablaster based on both originals 15 Feb 2020:
 	- change syntax, casing, code style and function name
 	- resolve warnings, replacing aliases with full names
 	- change how function returns
@@ -72,6 +72,7 @@ https://gallery.technet.microsoft.com/scriptcenter/Get-SQLInstance-9a3245a0
 	- Include license into file (MIT all 3), links to original sites and add appropriate Copyright for each author/contributor
 	- update reported server versions
 	- added more verbose and debug output, path formatting.
+	- Replaced WMI calls with CIM calls which are more universal and cross platfrom that WMI
 
 .FUNCTIONALITY
 	Computers
@@ -106,8 +107,8 @@ https://gallery.technet.microsoft.com/scriptcenter/Get-SQLInstance-9a3245a0
 	Retrieves the SQL information from DC1
 
 .EXAMPLE
-	#Get SQL instances on servers 1 and 2, match them up with service information from WMI
-	Get-SQLInstances -Computername Server1, Server2 -WMI
+	#Get SQL instances on servers 1 and 2, match them up with service information from CIM
+	Get-SQLInstances -Computername Server1, Server2 -CIM
 
 	Computername     : Server1
 	SQLInstance      : MSSQLSERVER
@@ -146,9 +147,9 @@ function Get-SQLInstances
 	[CmdletBinding()]
 	param (
 		[Parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-		[Alias('__Server','DNSHostName','IPAddress')]
+		[Alias("Servers", "Machines")]
 		[string[]] $Computers = [System.Environment]::MachineName,
-		[switch] $WMI
+		[switch] $CIM
 	)
 
 	begin
@@ -193,7 +194,7 @@ function Get-SQLInstances
 			}
 			catch
 			{
-				Write-Warning -Message "[$Computer] $_"
+				Write-Error -TargetObject $Computer -Message $_
                 continue
 			}
 
@@ -435,27 +436,28 @@ function Get-SQLInstances
 				} # $Instances.Count -gt 0
 			} # foreach($HKLMRootKey in $HKLM)
 
-			# If the wmi param was specified, get wmi info and correlate it!
+			# If the CIM param was specified, get CIM info and correlate it!
 			# Will not work with PowerShell core.
-			if($WMI)
+			if($CIM)
 			{
-				$AllInstancesWMI = @()
+				$AllInstancesCIM = @()
 
 				try
 				{
-					#Get the WMI info we care about.
+					#Get the CIM info we care about.
 					$SQLServices = $null # TODO: what does this mean?
 					$SQLServices = @(
-						Get-WmiObject -ComputerName $Computer -query "select DisplayName, Name, PathName, StartName, StartMode, State from win32_service where Name LIKE 'MSSQL%'" -ErrorAction stop  |
-							#This regex matches MSSQLServer and MSSQL$*
-							Where-Object {$_.Name -match "^MSSQL(Server$|\$)"} |
-							Select-Object DisplayName, StartName, StartMode, State, PathName
+						Get-CimInstance -ComputerName $Computer -ErrorAction stop `
+						-Query "select DisplayName, Name, PathName, StartName, StartMode, State from win32_service where Name LIKE 'MSSQL%'" |
+						# This regex matches MSSQLServer and MSSQL$*
+						Where-Object { $_.Name -match "^MSSQL(Server$|\$)" } |
+						Select-Object -Property DisplayName, StartName, StartMode, State, PathName
 					)
 
-					#If we pulled WMI info and it wasn't empty, correlate!
+					#If we pulled CIM info and it wasn't empty, correlate!
 					if($SQLServices)
 					{
-						Write-Debug "WMI Service info:`n$($SQLServices | Format-Table -AutoSize -Property * | Out-String)"
+						Write-Debug "CIM Service info:`n$($SQLServices | Format-Table -AutoSize -Property * | Out-String)"
 						foreach($Instance in $AllInstances)
 						{
 							$MatchingService = $SQLServices |
@@ -463,7 +465,7 @@ function Get-SQLInstances
 									$_.PathName -like "$( $Instance.SQLBinRoot )*" -or $_.PathName -like "`"$( $Instance.SQLBinRoot )*"
 								} | Select-Object -First 1
 
-							$AllInstancesWMI += $Instance | Select-Object -Property Computername,
+							$AllInstancesCIM += $Instance | Select-Object -Property Computername,
 							SQLInstance,
 							SQLBinRoot,
 							SQLPath,
@@ -482,7 +484,7 @@ function Get-SQLInstances
 								}
 								else
 								{
-									"No WMI Match"
+									"No CIM Match"
 								}
 							}},
 							@{ label = "ServiceState"; expression = {
@@ -492,7 +494,7 @@ function Get-SQLInstances
 								}
 								else
 								{
-									"No WMI Match"
+									"No CIM Match"
 								}
 							}},
 							@{ label = "ServiceAccount"; expression = {
@@ -502,7 +504,7 @@ function Get-SQLInstances
 								}
 								else
 								{
-									"No WMI Match"
+									"No CIM Match"
 								}
 							}},
 							@{ label = "ServiceStartMode"; expression = {
@@ -512,7 +514,7 @@ function Get-SQLInstances
 								}
 								else
 								{
-									"No WMI Match"
+									"No CIM Match"
 								}
 							}}
 						} # foreach($Instance in $AllInstances)
@@ -520,13 +522,13 @@ function Get-SQLInstances
 				}
 				catch
 				{
-					Write-Error -TargetObject $_.TargetObject -Message "Could not retrieve WMI info for computer $Computer, $_"
-					$AllInstances
+					Write-Error -TargetObject $_.TargetObject -Message "Could not retrieve CIM info for computer $Computer, $_"
+					return $AllInstances
 				}
 
-				return $AllInstancesWMI
+				return $AllInstancesCIM
 
-			} # if WMI
+			} # if CIM
 			else
 			{
 				return $AllInstances

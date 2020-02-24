@@ -49,10 +49,10 @@ if (!(Approve-Execute)) { exit }
 Start-Test
 
 New-Test "Get-SQLInstances"
-Get-SQLInstances -Verbose
+Get-SQLInstances
 
-New-Test "Get-SQLInstances WMI"
-Get-SQLInstances -Verbose -WMI
+New-Test "Get-SQLInstances CIM"
+Get-SQLInstances -CIM
 
 New-Test "Get-SQLInstances binn directory"
 Get-SQLInstances | Select-Object -ExpandProperty SQLBinRoot

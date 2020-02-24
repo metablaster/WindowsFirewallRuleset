@@ -694,9 +694,6 @@ function Get-AccountSID
 # Module variables
 #
 
-# TODO: add more groups, guests, everyone etc; we should make use of groups instead of SDDL for existing users probably?
-# but then individual users can't be removed by admin, on the other side there are rules which need all users regardless such as
-# browser updater for edge-chromium and extension users for problem services.
 # TODO: global configuration variables (in a separate script) should also include to set "USERS" instead of single user
 if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 {
@@ -712,6 +709,7 @@ if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 	New-Variable -Name AdminsSDDL -Scope Global -Option Constant -Value (Get-SDDL -Users "Administrators" -Computer PolicyStore)
 
 	# System users (define variables as needed)
+	# TODO: replace with function calls
 	New-Variable -Name NT_AUTHORITY_System -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-18)"
 	New-Variable -Name NT_AUTHORITY_LocalService -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-19)"
 	New-Variable -Name NT_AUTHORITY_NetworkService -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-20)"
@@ -727,12 +725,8 @@ New-Variable -Name SpecialDomains -Scope Script -Option Constant -Value @(
 # Function exports
 #
 
-# Export-ModuleMember -Function Get-UserAccounts
 Export-ModuleMember -Function ConvertFrom-UserAccounts
-# Export-ModuleMember -Function Get-UserSID
 Export-ModuleMember -Function Get-AccountSID
-# Export-ModuleMember -Function Get-UserSDDL
-# Export-ModuleMember -Function Get-AccountSDDL
 Export-ModuleMember -Function ConvertFrom-SID
 Export-ModuleMember -Function Get-GroupUsers
 Export-ModuleMember -Function Get-GroupSID
