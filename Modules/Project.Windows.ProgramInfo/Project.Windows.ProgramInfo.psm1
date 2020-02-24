@@ -466,7 +466,7 @@ function Get-UserPrograms
 
 	if (Test-Connection -TargetName $ComputerName -Count $ConnectionCount -TimeoutSeconds $ConnectionTimeout -IPv4 -Quiet)
 	{
-		$HKU = Get-AccountSID $UserAccount
+		$HKU = Get-AccountSID $UserName -Machine $ComputerName
 		$HKU += "\Software\Microsoft\Windows\CurrentVersion\Uninstall"
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
@@ -669,7 +669,6 @@ function Get-AllUserPrograms
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
-	# TODO: make global connection timeout
 	if (Test-Connection -TargetName $ComputerName -Count $ConnectionCount -TimeoutSeconds $ConnectionTimeout -IPv4 -Quiet)
 	{
 		# TODO: this key may not exist on fresh installed systems, tested in fresh installed Windows Server 2019
@@ -730,6 +729,7 @@ function Get-AllUserPrograms
 					$AllUserPrograms += New-Object -TypeName PSObject -Property @{
 						"ComputerName" = $ComputerName
 						"RegKey" = $HKLMKey
+						"SIDKey" = $HKLSubMKey
 						"Name" = $ProductKey.GetValue("DisplayName")
 						"Version" = $ProductKey.GetValue("DisplayVersion")
 						"InstallLocation" = $InstallLocation
@@ -913,11 +913,11 @@ function Initialize-Table
 	}
 
 	# Define Columns
-	$UserColumn = New-Object -TypeName System.Data.DataColumn User, ([string])
-	$InstallColumn = New-Object -TypeName System.Data.DataColumn InstallRoot, ([string])
+	$PrincipalColumn = New-Object -TypeName System.Data.DataColumn Principal, ([PSObject])
+	$InstallColumn = New-Object -TypeName System.Data.DataColumn InstallLocation, ([string])
 
 	# Add the Columns
-	$InstallTable.Columns.Add($UserColumn)
+	$InstallTable.Columns.Add($PrincipalColumn)
 	$InstallTable.Columns.Add($InstallColumn)
 }
 
@@ -956,26 +956,28 @@ function Update-Table
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Search string is: $SearchString"
 
+	# To reduce typing and make code clear
+	$UserGroups = Get-UserGroups -Machine $PolicyStore
+
 	if ($Executables)
 	{
-		$TargetPath = $ExecutablePaths | Where-Object -Property Name -eq $SearchString
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching executable names for: $SearchString"
+
+		$TargetPath = $ExecutablePaths |
+		Where-Object -Property Name -eq $SearchString |
+		Select-Object -ExpandProperty InstallLocation
 
 		if ($TargetPath)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching executable names $SearchString"
+			# Create a row
+			$Row = $InstallTable.NewRow()
 
-			foreach ($User in $UserNames)
-			{
-				# Create a row
-				$Row = $InstallTable.NewRow()
+			# Enter data into row
+			$Row.Principal = $UserGroups | Where-Object -Property Group -eq "Users"
+			$Row.InstallLocation = $TargetPath
 
-				# Enter data into row
-				$Row.User = $User
-				$Row.InstallRoot = $TargetPath | Select-Object -ExpandProperty InstallLocation
-
-				# Add row to the table
-				$InstallTable.Rows.Add($Row)
-			}
+			# Add row to the table
+			$InstallTable.Rows.Add($Row)
 
 			# If the path is known there is not need to continue
 			return
@@ -992,46 +994,50 @@ function Update-Table
 		# TODO: need better mechanism for multiple maches
 		$TargetPrograms = $SystemPrograms | Where-Object -Property Name -like "*$SearchString*"
 
-		foreach ($User in $UserNames)
+		foreach ($Program in $TargetPrograms)
 		{
-			foreach ($Program in $TargetPrograms)
-			{
-				# Create a row
-				$Row = $InstallTable.NewRow()
+			# Create a row
+			$Row = $InstallTable.NewRow()
 
-				# Enter data into row
-				$Row.User = $User
-				$Row.InstallRoot = $Program | Select-Object -ExpandProperty InstallLocation
+			# Enter data into row
+			$Row.Principal = $UserGroups | Where-Object -Property Group -eq "Users"
+			$Row.InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
 
-				# Add row to the table
-				$InstallTable.Rows.Add($Row)
-			}
+			# Add row to the table
+			$InstallTable.Rows.Add($Row)
 		}
 
 		# Since the path is known there is not need to continue
 		return
 	}
-	#Program not found on system, attempt alternative search
+	# Program not found on system, attempt alternative search
 	elseif ($AllUserPrograms.Name -like "*$SearchString*")
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching program install properties for $SearchString"
 		$TargetPrograms = $AllUserPrograms | Where-Object -Property Name -like "*$SearchString*"
 
-		# TODO: it not known if it's for specific user in AllUserPrograms registry entry (most likely applies to all users)
-		foreach ($User in $UserNames)
+		foreach ($Program in $TargetPrograms)
 		{
-			foreach ($Program in $TargetPrograms)
+			# Create a row
+			$Row = $InstallTable.NewRow()
+
+			# Let see who owns the sub key which is the SID
+			$KeyOwner = ConvertFrom-SID $Program.SIDKey
+			if ($KeyOwner -eq "Users")
 			{
-				# Create a row
-				$Row = $InstallTable.NewRow()
-
 				# Enter data into row
-				$Row.User = $User
-				$Row.InstallRoot = $Program | Select-Object -ExpandProperty InstallLocation
-
-				# Add row to the table
-				$InstallTable.Rows.Add($Row)
+				$Row.Principal = $UserGroups | Where-Object -Property Group -eq "Users"
 			}
+			else
+			{
+				# TODO: we need more registry samples to determine what is right, Administrators seems logical
+				$Row.Principal = $UserGroups | Where-Object -Property Group -eq "Administrators"
+			}
+
+			$Row.InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
+
+			# Add row to the table
+			$InstallTable.Rows.Add($Row)
 		}
 
 		# Since the path is known there is not need to continue
@@ -1043,21 +1049,22 @@ function Update-Table
 	{
 		foreach ($Account in $UserAccounts)
 		{
-			$UserPrograms = Get-UserPrograms $Account
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching $Account programs for $SearchString"
+			# NOTE: the story is different here, each user may have multiple matches for search string
+			# letting one match to have same principal would be mistake.
+			$UserPrograms = Get-UserPrograms $Account.User | Where-Object -Property Name -like "*$SearchString*"
 
 			if ($UserPrograms)
 			{
-				$TargetPrograms = $UserPrograms | Where-Object -Property Name -like "*$SearchString*"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching $Account programs for $SearchString"
 
-				foreach ($Program in $TargetPrograms)
+				foreach ($Program in $UserPrograms)
 				{
 					# Create a row
 					$Row = $InstallTable.NewRow()
 
 					# Enter data into row
-					$Row.User = $Account.User
-					$Row.InstallRoot = $Program | Select-Object -ExpandProperty InstallLocation
+					$Row.Principal = $Account.User
+					$Row.InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
 
 					# Add the row to the table
 					$InstallTable.Rows.Add($Row)
@@ -1086,57 +1093,58 @@ function Edit-Table
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
-		[string] $InstallRoot
+		[string] $InstallLocation
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Attempt to insert new entry into installation table"
 
 	# Nothing to do if the path does not exist
-	if (!(Test-Environment $InstallRoot))
+	if (!(Test-Environment $InstallLocation))
 	{
 		# TODO: will be true also for user profile, we should try to fix the path if it leads to user prfofile instead of doing nothing.
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] $InstallRoot not found or invalid"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] $InstallLocation not found or invalid"
 		return
 	}
 
 	# Check if input path leads to user profile
-	if (Test-UserProfile $InstallRoot)
+	if (Test-UserProfile $InstallLocation)
 	{
 		# Make sure user profile variables are removed
-		$InstallRoot = Format-Path ([System.Environment]::ExpandEnvironmentVariables($InstallRoot))
+		$InstallLocation = Format-Path ([System.Environment]::ExpandEnvironmentVariables($InstallLocation))
 
 		# Create a row
 		$Row = $InstallTable.NewRow()
 
-		# Enter data into row
-		$Row.User = ($InstallRoot.Split("\"))[2]
-		$Row.InstallRoot = $InstallRoot
+		# Get a list of users to choose from
+		$Users = Get-GroupUsers "Users"
 
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Editing table with $InstallRoot for $($Row.User)"
+		# Enter data into row, 3rd element in the path is user name
+		$Row.Principal = $Users | Where-Object -Property User -eq ($InstallLocation.Split("\"))[2]
+		$Row.InstallLocation = $InstallLocation
+
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Editing table with $InstallLocation for $($Row.Principal)"
 
 		# Add the row to the table
 		$InstallTable.Rows.Add($Row)
 		return
 	}
 
-	$InstallRoot = Format-Path $InstallRoot
+	$InstallLocation = Format-Path $InstallLocation
 
 	# Not user profile path, so it applies to all users
-	foreach ($User in $UserNames)
-	{
-		# Create a row
-		$Row = $InstallTable.NewRow()
 
-		# Enter data into row
-		$Row.User = $User
-		$Row.InstallRoot = $InstallRoot
+	# Create a row
+	$Row = $InstallTable.NewRow()
 
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Editing table with $InstallRoot for $User"
+	# Enter data into row
+	$Row.Principal = Get-UserGroups -Machine $PolicyStore | Where-Object -Property Group -eq "Users"
+	$Row.InstallLocation = $InstallLocation
 
-		# Add the row to the table
-		$InstallTable.Rows.Add($Row)
-	}
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Editing table with $InstallLocation for 'Users' group"
+
+	# Add the row to the table
+	$InstallTable.Rows.Add($Row)
 }
 
 <#
@@ -1177,7 +1185,7 @@ function Test-Installation
 	elseif (Find-Installation $Program)
 	{
 		# NOTE: the paths in installation table are supposed to be formatted
-		$InstallRoot = "unknown install location"
+		$InstallLocation = "unknown install location"
 		$Count = $InstallTable.Rows.Count
 
 		if ($Count -gt 1)
@@ -1188,7 +1196,7 @@ function Test-Installation
 			Write-Host "0. Abort this operation"
 			for ($Index = 0; $Index -lt $Count; ++$Index)
 			{
-				Write-Host "$($Index + 1). $($InstallTable.Rows[$Index].Item("InstallRoot"))"
+				Write-Host "$($Index + 1). $($InstallTable.Rows[$Index].Item("InstallLocation"))"
 			}
 
 			# Prompt user to chose one
@@ -1215,16 +1223,16 @@ function Test-Installation
 				return $false
 			}
 
-			$InstallRoot = $InstallTable.Rows[$Choice - 1].Item("InstallRoot")
+			$InstallLocation = $InstallTable.Rows[$Choice - 1].Item("InstallLocation")
 		}
 		else
 		{
-			$InstallRoot = $InstallTable | Select-Object -ExpandProperty InstallRoot
+			$InstallLocation = $InstallTable | Select-Object -ExpandProperty InstallLocation
 		}
 
 		# Using single quotes to make it emptiness obvious when the path is empty.
-		Write-Information -Tags "Project" -MessageData "INFO: Path corrected from: '$($FilePath.Value)' to: '$InstallRoot'"
-		$FilePath.Value = $InstallRoot
+		Write-Information -Tags "Project" -MessageData "INFO: Path corrected from: '$($FilePath.Value)' to: '$InstallLocation'"
+		$FilePath.Value = $InstallLocation
 	}
 	else
 	{
@@ -1677,11 +1685,11 @@ function Find-Installation
 		{
 			while ($InstallTable.Rows.Count -eq 0)
 			{
-				[string] $InstallRoot = Read-Host "Input path to '$Program' root directory"
+				[string] $InstallLocation = Read-Host "Input path to '$Program' root directory"
 
-				if (![System.String]::IsNullOrEmpty($InstallRoot))
+				if (![System.String]::IsNullOrEmpty($InstallLocation))
 				{
-					Edit-Table $InstallRoot
+					Edit-Table $InstallLocation
 
 					if ($InstallTable.Rows.Count -gt 0)
 					{
@@ -1690,7 +1698,7 @@ function Find-Installation
 				}
 
 				Write-Warning -Message "Installation directory for '$Program' not found"
-				if (Approve-Execute "No" "Unable to locate '$InstallRoot'" "Do you want to try again?")
+				if (Approve-Execute "No" "Unable to locate '$InstallLocation'" "Do you want to try again?")
 				{
 					break
 				}

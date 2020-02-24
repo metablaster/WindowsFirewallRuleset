@@ -57,7 +57,7 @@ $global:InstallTable | Format-Table -AutoSize @Logs
 Update-Logs
 
 New-Test "Install Root"
-$global:InstallTable | Select-Object -ExpandProperty InstallRoot @Logs
+$global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
 Update-Logs
 
 New-Test "Find-Installation 'TeamViewer'"

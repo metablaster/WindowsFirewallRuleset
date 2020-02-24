@@ -178,7 +178,7 @@ function Get-SQLInstances
 		{
 			# TODO: what is this?
 			$Computer = $Computer -replace '(.*?)\..+','$1'
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Computer"
 
 			if (!(Test-Connection -ComputerName $Computer -Count 2 -Quiet))
 			{
@@ -188,7 +188,7 @@ function Get-SQLInstances
 
 			try
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Computer"
 				$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Computer)
 			}
 			catch

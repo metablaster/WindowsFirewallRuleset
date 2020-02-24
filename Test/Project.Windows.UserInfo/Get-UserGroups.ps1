@@ -52,17 +52,18 @@ if (!(Approve-Execute)) { exit }
 
 Start-Test
 
-New-Test "Get-UserGroups"
-Get-UserGroups
+# New-Test "Get-UserGroups"
+# Get-UserGroups
 
 New-Test "Get-UserGroups CIM server"
-Get-UserGroups "localhost" -CIM
+Get-UserGroups | Where-Object -Property Group -eq "Users" #| Get-TypeName
+# $UserGroups | Where-Object -Property Name -eq "Users"
 
 # New-Test "Typename: Get-UserGroups -CIM"
 # Get-UserGroups "localhost" -CIM | Get-TypeName
 
-New-Test "Failure test"
-Get-UserGroups "ZOMBI_PC"
+# New-Test "Failure test"
+# Get-UserGroups "ZOMBI_PC"
 
 
 Exit-Test

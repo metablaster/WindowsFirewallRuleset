@@ -81,9 +81,9 @@ if ($Develop)
 
 	# $ErrorActionPreference = "SilentlyContinue"
 	# $WarningPreference = "SilentlyContinue"
-	$VerbosePreference = "Continue"
-	# $DebugPreference = "Continue"
 	$InformationPreference = "Continue"
+	# $VerbosePreference = "Continue"
+	# $DebugPreference = "Continue"
 
 	# Must be after debug preference
 	Write-Debug -Message "[$ThisScript] Setup clean environment"
@@ -117,9 +117,9 @@ else # Normal use case
 	# modify to customize your experience
 	$ErrorActionPreference = "Continue"
 	$WarningPreference = "Continue"
+	$InformationPreference = "Continue"
 	$VerbosePreference = "SilentlyContinue"
 	$DebugPreference = "SilentlyContinue"
-	$InformationPreference = "Continue"
 
 	# Must be after verbose preference
 	Write-Verbose -Message "[$ThisScript] Project mode: User"
@@ -148,7 +148,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	New-Variable -Name Platform -Scope Global -Option Constant -Value "10.0+"
 
 	# Machine where to apply rules (default: Local Group Policy)
-	New-Variable -Name PolicyStore -Scope Global -Option Constant -Value "localhost"
+	New-Variable -Name PolicyStore -Scope Global -Option Constant -Value ([System.Environment]::MachineName)
 
 	# Default network interface card, change this to NIC which your target PC uses
 	New-Variable -Name Interface -Scope Global -Option Constant -Value "Wired, Wireless"

@@ -65,7 +65,7 @@ if ($global:InstallTable.Rows.Count -ne 0)
 }
 
 New-Test "Fill table with Greenshot"
-Update-Table "Greenshot" $true @Logs
+Update-Table "Greenshot" -UserProfile @Logs
 Update-Logs
 
 New-Test "Table data"
@@ -73,13 +73,13 @@ $global:InstallTable | Format-Table -AutoSize @Logs
 Update-Logs
 
 New-Test "Install Path"
-$global:InstallTable | Select-Object -ExpandProperty InstallRoot @Logs
+$global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
 Update-Logs
 
 New-Test "Failure Test"
 Initialize-Table @Logs
 Update-Logs
-Update-Table "Failure" $true @Logs
+Update-Table "Failure" -UserProfile @Logs
 Update-Logs
 
 New-Test "Table data"
@@ -89,7 +89,7 @@ Update-Logs
 New-Test "Test multiple paths"
 Initialize-Table @Logs
 Update-Logs
-Update-Table "Visual Studio" $true @Logs
+Update-Table "Visual Studio" -UserProfile @Logs
 Update-Logs
 
 New-Test "Table data"
@@ -97,7 +97,7 @@ $global:InstallTable | Format-Table -AutoSize @Logs
 Update-Logs
 
 New-Test "Install Path"
-$global:InstallTable | Select-Object -ExpandProperty InstallRoot @Logs
+$global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
 Update-Logs
 
 Exit-Test

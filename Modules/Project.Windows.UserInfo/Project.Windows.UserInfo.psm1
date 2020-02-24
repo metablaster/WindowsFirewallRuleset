@@ -96,8 +96,6 @@ User group on local or remote computer
 One or more computers which to querry for group users
 .PARAMETER CIM
 Whether to contact CIM server (requred for remote computers)
-.PARAMETER Property
-Return only select property entries
 .EXAMPLE
 Get-GroupUsers @("Users", "Administrators")
 .EXAMPLE
@@ -125,10 +123,7 @@ function Get-GroupUsers
 		[string[]] $Computers = [System.Environment]::MachineName,
 
 		[Parameter()]
-		[switch] $CIM,
-
-		[Parameter()]
-		[switch] $Property
+		[switch] $CIM
 	)
 
 	begin
@@ -243,14 +238,7 @@ function Get-GroupUsers
 			}
 		}
 
-		if ($Property)
-		{
-			return $UserAccounts | Select-Object -Property $Property
-		}
-		else
-		{
-			return $UserAccounts
-		}
+		return $UserAccounts
 	}
 }
 
@@ -318,9 +306,9 @@ function Get-UserGroups
 					foreach ($Group in $RemoteGroups)
 					{
 						$UserGroups += New-Object -TypeName PSObject -Property @{
-							Name = $Group.Name
+							Group = $Group.Name
 							Caption = $Group.Caption
-							Domain = $Computer
+							Computer = $Computer
 							SID = $Group.SID
 						}
 					}
@@ -346,9 +334,9 @@ function Get-UserGroups
 				foreach ($Group in $LocalGroups)
 				{
 					$UserGroups += New-Object -TypeName PSObject -Property @{
-						Name = $Group.Name
+						Group = $Group.Name
 						Caption = Join-Path -Path $Computer -ChildPath $Group.Name
-						Domain = $Computer
+						Computer = $Computer
 						SID = $Group.SID
 					}
 				}
@@ -720,8 +708,8 @@ if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 	New-Variable -Name AdminAccounts -Scope Global -Option Constant -Value (Get-GroupUsers "Administrators")
 
 	# Generate SDDL string for accounts
-	New-Variable -Name UsersSDDL -Scope Global -Option Constant -Value (Get-SDDL "Users")
-	New-Variable -Name AdminsSDDL -Scope Global -Option Constant -Value (Get-SDDL "Administrators")
+	New-Variable -Name UsersSDDL -Scope Global -Option Constant -Value (Get-SDDL -Users "Users" -Computer PolicyStore)
+	New-Variable -Name AdminsSDDL -Scope Global -Option Constant -Value (Get-SDDL -Users "Administrators" -Computer PolicyStore)
 
 	# System users (define variables as needed)
 	New-Variable -Name NT_AUTHORITY_System -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-18)"

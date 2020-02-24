@@ -53,21 +53,21 @@ if (!(Approve-Execute)) { exit }
 Start-Test
 
 New-Test "Get-GroupUsers"
-$UsersTest = Get-GroupUsers "Users", "Administrators"
+$UsersTest = Get-GroupUsers "Users"
 $UsersTest
 
 New-Test "Typename: Get-GroupUsers"
 $UsersTest | Get-TypeName
 
-New-Test "Get-GroupUsers CIM server"
-$CIMTest = Get-GroupUsers "Users", "Administrators" -Machine "localhost" -CIM
-$CIMTest
+# New-Test "Get-GroupUsers CIM server"
+# $CIMTest = Get-GroupUsers "Users", "Administrators" -Machine "localhost" -CIM
+# $CIMTest
 
-New-Test "Expand users"
-$UsersTest | Select-Object -ExpandProperty User
+# New-Test "Expand users"
+# $UsersTest | Select-Object -ExpandProperty User
 
-New-Test "Failure test"
-$UsersTest = Get-GroupUsers "asdf Users"
-$UsersTest
+# New-Test "Failure test"
+# $UsersTest = Get-GroupUsers "asdf Users"
+# $UsersTest
 
 Exit-Test
