@@ -123,3 +123,9 @@ $sid = $account.Translate([System.Security.Principal.SecurityIdentifier])
 ```powershell
 Get-WMIObject -class Win32_ComputerSystem | Select-Object -ExpandProperty Name
 ```
+
+# Get CIM classes
+
+```powershell
+Get-CimClass -Namespace root/CIMV2 | Where-Object CimClassName -like Win32* | Select-Object CimClassName
+```

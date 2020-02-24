@@ -45,6 +45,8 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 #
 $Group = "Server - SQL"
 $Profile = "Private, Public"
+
+# TODO: this is most likely wrong
 [string[]] $AllUsers = $AdminAccounts
 $AllUsers += $UserAccounts
 $SQLUsers = (Get-AccountSDDL $AllUsers)

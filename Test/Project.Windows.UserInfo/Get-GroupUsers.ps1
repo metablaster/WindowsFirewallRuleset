@@ -26,11 +26,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Get-AppSID
-#
+# TODO: Include modules you need, update licence Copyright and start writing test code
 
-#Requires -RunAsAdministrator
+#
+# Unit test for Test-Function
+#
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
@@ -41,7 +41,8 @@ Test-SystemRequirements
 . $ProjectRoot\Test\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
+# Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
+# Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
@@ -51,59 +52,20 @@ if (!(Approve-Execute)) { exit }
 
 Start-Test
 
-New-Test "Get-UserAccounts:"
+New-Test "Get-GroupUsers"
+$UsersTest = Get-GroupUsers "Users", "Administrators"
+$UsersTest
+Write-Information -Tags "Test" -MessageData "Typename is: $($UsersTest | Get-TypeName)"
 
-[string[]] $UserAccounts = Get-UserAccounts "Users" @Logs
-Update-Logs
+New-Test "Get-GroupUsers CIM server"
+$CIMTest = Get-GroupUsers "Users", "Administrators" -Machine "localhost" -CIM
+$CIMTest
 
-[string[]] $AdminAccounts = Get-UserAccounts "Administrators" @Logs
-Update-Logs
-$UserAccounts
-$AdminAccounts
+New-Test "Expand users"
+$UsersTest | Select-Object -ExpandProperty User
 
-New-Test "ConvertFrom-UserAccounts:"
-
-$Users = ConvertFrom-UserAccounts $UserAccounts @Logs
-Update-Logs
-$Admins = ConvertFrom-UserAccounts $AdminAccounts @Logs
-Update-Logs
-
-$Users
-$Admins
-
-New-Test "Get-UserSID:"
-
-foreach($User in $Users)
-{
-	Get-UserSID $User @Logs
-}
-Update-Logs
-
-foreach($Admin in $Admins)
-{
-	Get-UserSID $Admin @Logs
-}
-Update-Logs
-
-New-Test "Get-AppSID: foreach User"
-
-foreach($User in $Users) {
-	Write-Information -Tags "Test" -MessageData "INFO: Processing for: $User"
-	Get-AppxPackage -User $User -PackageTypeFilter Bundle @Logs | ForEach-Object {
-		Get-AppSID $User $_.PackageFamilyName @Logs
-	}
-}
-Update-Logs
-
-New-Test "Get-AppSID: foreach Admin"
-
-foreach($Admin in $Admins) {
-	Write-Information -Tags "Test" -MessageData "INFO: Processing for: $Admin"
-	Get-AppxPackage -User $Admin -PackageTypeFilter Bundle @Logs | ForEach-Object {
-		Get-AppSID $Admin $_.PackageFamilyName @Logs
-	}
-}
-
-Update-Logs
+New-Test "Failure test"
+$UsersTest = Get-GroupUsers "asdf Users"
+$UsersTest
 
 Exit-Test

@@ -1,4 +1,26 @@
 
+# Here is a list of changes for each of releases
+
+# Changelog v0.3
+
+# New fetures
+1. Scripts now work on PowerShell core 7, with the goal to expand to other operating systems. (ie. linux)
+2. Better configurable logging and much more streams, this will help to see what the code does in real time.
+3. Project wide settings (ProjectSettings.ps1) are updated for changes and significally improved.
+4. Improve program installation search + more registry drilling functions
+
+# Bug fixes
+1. Modules are renamed to avoid name clashes with other modules
+2. Format-Path function would index into empty array if environment variable not found
+3. Minor errors resolved thanks to strict mode
+
+# Performance
+1. Minor improvements in searching registry
+
+# Development
+1. Symbols and keywords have their casing consistent and updated
+2. Strict mode is now on, latest level
+
 # Changelog v0.2
 
 # New features
@@ -21,23 +43,3 @@
 2. Expand modules to include correct comments, help and manifest files
 3. A few more TODO's, notes and relevant comments
 4. Reorganize and split scripts with rules for multiple targets
-
-# Changelog v0.3
-
-# New fetures
-1. Scripts now work on PowerShell core 7, with the goal to expand to other operating systems. (ie. linux)
-2. Better configurable logging and much more streams, this will help to see what the code does in real time.
-3. Project wide settings (ProjectSettings.ps1) are updated for changes and significally improved.
-4. Improve program installation search + more registry drilling functions
-
-# Bug fixes
-1. Modules are renamed to avoid name clashes with other modules
-2. Format-Path function would index into empty array if environment variable not found
-3. Minor errors resolved thanks to strict mode
-
-# Performance
-1. Minor improvements in searching registry
-
-# Development
-1. Symbols and keywords have their casing consistent
-2. Strict mode is now on, latest level

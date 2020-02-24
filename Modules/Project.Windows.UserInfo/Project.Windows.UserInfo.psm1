@@ -49,6 +49,9 @@ if ($Develop)
 	Write-Debug -Message "[$ThisModule] InformationPreference is $InformationPreference"
 }
 
+# Includes
+. $PSScriptRoot\External\ConvertFrom-SID.ps1
+
 # TODO: write function to query system users
 
 <#
@@ -95,15 +98,15 @@ Strip computer names out of computer acounts
 .PARAMETER UserAccounts
 String array of user accounts in form of: COMPUTERNAME\USERNAME
 .EXAMPLE
-Get-UserNames(@("DESKTOP_PC\USERNAME", "LAPTOP\USERNAME"))
+ConvertFrom-UserAccounts @("DESKTOP_PC\USERNAME", "LAPTOP\USERNAME")
 .INPUTS
-None. You cannot pipe objects to Get-UserNames
+None. You cannot pipe objects to ConvertFrom-UserAccounts
 .OUTPUTS
 System.String[] Array of usernames in form of: USERNAME
 .NOTES
 TODO: implement queriying computers on network
 #>
-function Get-UserNames
+function ConvertFrom-UserAccounts
 {
 	[CmdletBinding()]
 	param(
@@ -121,6 +124,160 @@ function Get-UserNames
 	}
 
 	return $UserNames
+}
+
+<#
+.SYNOPSIS
+get computer accounts for a giver user group
+.PARAMETER UserGroup
+User group on local or remote computer
+.PARAMETER ComputerNames
+One or more computers which to querry for group users, default is localhost
+.PARAMETER CIM
+Whether to contact CIM server (requred for remote computers)
+.EXAMPLE
+Get-GroupUsers "Users", "Administrators"
+.EXAMPLE
+Get-GroupUsers "Users" -Machine COMPUTERNAME -CIM
+.INPUTS
+System.String User group
+.OUTPUTS
+System.Management.Automation.PSCustomObject of enabled user accounts in specified group
+.NOTES
+CIM switch is not supported on PowerShell Core
+#>
+function Get-GroupUsers
+{
+	[CmdletBinding(PositionalBinding = $false)]
+	param (
+		[Alias("Group", "Groups")]
+		[Parameter(Mandatory = $true,
+		Position = 0,
+		ValueFromPipeline = $true)]
+		[string[]] $UserGroups,
+
+		[Alias("Computer", "Machine", "Computers", "Machines")]
+		[Parameter()]
+		[string[]] $ComputerNames = [System.Environment]::MachineName,
+
+		[Parameter()]
+		[switch] $CIM
+	)
+
+	begin
+	{
+		$UserAccounts = @()
+		$PowerShellEdition = $PSVersionTable.PSEdition
+	}
+	process
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+
+		foreach ($Computer in $ComputerNames)
+		{
+			if ($CIM)
+			{
+				if ($PowerShellEdition -ne "Desktop")
+				{
+					Write-Error -Category InvalidArgument -TargetObject $Computer `
+					-Message "Querying computers with PowerShell '$PowerShellEdition' not implemented"
+					return
+				}
+
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Computer"
+
+				# Core: -TimeoutSeconds $ConnectionTimeout -IPv4
+				if (Test-Connection -ComputerName $Computer -Count $ConnectionCount -Quiet)
+				{
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Computer"
+
+					foreach ($UserGroup in $UserGroups)
+					{
+						# Get all users that belong to requrested group,
+						# this includes non local principal source and non 'user' users
+						# it is also missing SID
+						$GroupUsers = Get-CimInstance -Class Win32_GroupUser -Namespace "root\cimv2" -ComputerName $Computer |
+						Where-Object { $_.GroupComponent.Name -eq $UserGroup } |
+						Select-Object -ExpandProperty PartComponent |
+						Select-Object -ExpandProperty Name
+
+						# Get only enabled users, these include SID but also non group users
+						$EnabledAccounts = Get-CimInstance -Class Win32_UserAccount -Namespace "root\cimv2" -Filter "LocalAccount = True" -ComputerName $Computer |
+						Where-Object -Property Disabled -ne False |
+						Select-Object -Property Name, Caption, SID, Domain
+
+						if([string]::IsNullOrEmpty($EnabledAccounts))
+						{
+							Write-Warning -Message "User group '$UserGroup' does not have any accounts"
+							continue
+						}
+
+						# Finally compare these 2 results and assemble group users which are active, also includes SID
+						foreach ($Account in $EnabledAccounts)
+						{
+							if ($GroupUsers -contains $Account)
+							{
+								Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing account: $Account"
+
+								$UserAccounts += New-Object -TypeName PSObject -Property @{
+									User = Split-Path -Path $Account -Leaf
+									Account = $Account
+									Computer = $Computer
+									SID = $Account.SID
+								}
+							}
+							else
+							{
+								Write-Debug -Message "[$($MyInvocation.InvocationName)] Ignoring account: $Account"
+							}
+						}
+					}
+				}
+				else
+				{
+					Write-Error -Category ConnectionError -TargetObject $ComputerName `
+					-Message "Unable to contact computer: $ComputerName"
+				}
+			}
+			elseif ($Computer -eq [System.Environment]::MachineName)
+			{
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying localhost"
+
+				foreach ($UserGroup in $UserGroups)
+				{
+					# Querying local machine
+					$GroupUsers = Get-LocalGroupMember -Group $UserGroup |
+					Where-Object { $_.PrincipalSource -eq "Local" -and $_.ObjectClass -eq "User" } |
+					Select-Object -Property Name, SID
+
+					if([string]::IsNullOrEmpty($GroupUsers))
+					{
+						Write-Warning -Message "User group '$UserGroup' does not have any accounts"
+						continue
+					}
+
+					foreach ($Account in $GroupUsers)
+					{
+						Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing account: $($Account.Name)"
+
+						$UserAccounts += New-Object -TypeName PSObject -Property @{
+							User = Split-Path -Path $Account.Name -Leaf
+							Account = $Account.Name
+							Computer = $Computer
+							SID = $Account.SID
+						}
+					}
+				}
+			}
+			else
+			{
+				Write-Error -Category NotImplemented -TargetObject $ComputerName `
+				-Message "Querying remote computers without CIM switch not implemented"
+			}
+		}
+
+		return $UserAccounts
+	}
 }
 
 <#
@@ -309,8 +466,8 @@ if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 	New-Variable -Name AdminAccounts -Scope Global -Option Constant -Value (Get-UserAccounts "Administrators")
 
 	# Get list of user names in form of USERNAME
-	New-Variable -Name UserNames -Scope Global -Option Constant -Value (Get-UserNames $UserAccounts)
-	New-Variable -Name AdminNames -Scope Global -Option Constant -Value (Get-UserNames $AdminAccounts)
+	New-Variable -Name UserNames -Scope Global -Option Constant -Value (ConvertFrom-UserAccounts $UserAccounts)
+	New-Variable -Name AdminNames -Scope Global -Option Constant -Value (ConvertFrom-UserAccounts $AdminAccounts)
 
 	# Generate SDDL string for accounts
 	New-Variable -Name UserAccountsSDDL -Scope Global -Option Constant -Value (Get-AccountSDDL $UserAccounts)
@@ -328,11 +485,13 @@ if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 #
 
 Export-ModuleMember -Function Get-UserAccounts
-Export-ModuleMember -Function Get-UserNames
+Export-ModuleMember -Function ConvertFrom-UserAccounts
 Export-ModuleMember -Function Get-UserSID
 Export-ModuleMember -Function Get-AccountSID
 Export-ModuleMember -Function Get-UserSDDL
 Export-ModuleMember -Function Get-AccountSDDL
+Export-ModuleMember -Function ConvertFrom-SID
+Export-ModuleMember -Function Get-GroupUsers
 
 #
 # Variable exports

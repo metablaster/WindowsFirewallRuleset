@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-UserNames
+# Unit test for ConvertFrom-UserAccounts
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -55,8 +55,8 @@ $UserAccounts += Get-UserAccounts "Administrators" @Logs
 Update-Logs
 $UserAccounts
 
-New-Test "Get-UserNames:"
-$UserNames = Get-UserNames $UserAccounts @Logs
+New-Test "ConvertFrom-UserAccounts:"
+$UserNames = ConvertFrom-UserAccounts $UserAccounts @Logs
 Update-Logs
 $UserNames
 

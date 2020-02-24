@@ -82,7 +82,7 @@ if ($Develop)
 	# $ErrorActionPreference = "SilentlyContinue"
 	# $WarningPreference = "SilentlyContinue"
 	$VerbosePreference = "Continue"
-	# $DebugPreference = "Continue"
+	$DebugPreference = "Continue"
 	$InformationPreference = "Continue"
 
 	# Must be after debug preference

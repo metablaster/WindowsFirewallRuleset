@@ -60,8 +60,8 @@ New-Test "Get-UserAccounts:"
 [string[]] $UserAccounts = Get-UserAccounts("Users")
 $UserAccounts
 
-New-Test "Get-UserNames:"
-$Users = Get-UserNames($UserAccounts)
+New-Test "ConvertFrom-UserAccounts:"
+$Users = ConvertFrom-UserAccounts($UserAccounts)
 $Users
 
 New-Test "Get-UserSID:"

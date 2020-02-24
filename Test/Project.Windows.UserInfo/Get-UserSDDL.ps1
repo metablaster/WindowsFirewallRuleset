@@ -56,8 +56,8 @@ $UserAccounts += Get-UserAccounts "Administrators" @Logs
 Update-Logs
 $UserAccounts
 
-New-Test "Get-UserNames:"
-$UserNames = Get-UserNames $UserAccounts @Logs
+New-Test "ConvertFrom-UserAccounts:"
+$UserNames = ConvertFrom-UserAccounts $UserAccounts @Logs
 Update-Logs
 $UserNames
 

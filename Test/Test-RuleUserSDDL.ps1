@@ -65,8 +65,8 @@ $UserAccounts = $UserAccounts += (Get-UserAccounts("Administrators"))
 $UserAccounts = $UserAccounts += "NT AUTHORITY\SYSTEM"
 $UserAccounts
 
-New-Test "Get-UserNames:"
-$UserNames = Get-UserNames($UserAccounts)
+New-Test "ConvertFrom-UserAccounts:"
+$UserNames = ConvertFrom-UserAccounts($UserAccounts)
 $UserNames
 
 New-Test "Get-UserSDDL:"

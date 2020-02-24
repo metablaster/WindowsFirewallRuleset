@@ -26,11 +26,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Get-AppSID
-#
+# TODO: Include modules you need, update licence Copyright and start writing test code
 
-#Requires -RunAsAdministrator
+#
+# Unit test for Test-Function
+#
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
@@ -41,7 +41,8 @@ Test-SystemRequirements
 . $ProjectRoot\Test\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
+# Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
+# Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
@@ -49,61 +50,25 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
+
 Start-Test
 
 New-Test "Get-UserAccounts:"
-
 [string[]] $UserAccounts = Get-UserAccounts "Users" @Logs
 Update-Logs
-
-[string[]] $AdminAccounts = Get-UserAccounts "Administrators" @Logs
-Update-Logs
+$UserAccounts += Get-UserAccounts "Administrators" @Logs
 $UserAccounts
-$AdminAccounts
 
 New-Test "ConvertFrom-UserAccounts:"
+$UserNames = ConvertFrom-UserAccounts $UserAccounts @Logs
+$UserNames
 
-$Users = ConvertFrom-UserAccounts $UserAccounts @Logs
-Update-Logs
-$Admins = ConvertFrom-UserAccounts $AdminAccounts @Logs
-Update-Logs
-
-$Users
-$Admins
-
-New-Test "Get-UserSID:"
-
-foreach($User in $Users)
+New-Test "ConvertFrom-SID"
+foreach($User in $UserNames)
 {
-	Get-UserSID $User @Logs
-}
-Update-Logs
-
-foreach($Admin in $Admins)
-{
-	Get-UserSID $Admin @Logs
-}
-Update-Logs
-
-New-Test "Get-AppSID: foreach User"
-
-foreach($User in $Users) {
-	Write-Information -Tags "Test" -MessageData "INFO: Processing for: $User"
-	Get-AppxPackage -User $User -PackageTypeFilter Bundle @Logs | ForEach-Object {
-		Get-AppSID $User $_.PackageFamilyName @Logs
-	}
-}
-Update-Logs
-
-New-Test "Get-AppSID: foreach Admin"
-
-foreach($Admin in $Admins) {
-	Write-Information -Tags "Test" -MessageData "INFO: Processing for: $Admin"
-	Get-AppxPackage -User $Admin -PackageTypeFilter Bundle @Logs | ForEach-Object {
-		Get-AppSID $Admin $_.PackageFamilyName @Logs
-	}
+	Write-Information -Tags "Test" -MessageData "INFO: Processing user: $User"
+	Get-UserSID $User @Logs | ConvertFrom-SID
 }
 
 Update-Logs
-
 Exit-Test
