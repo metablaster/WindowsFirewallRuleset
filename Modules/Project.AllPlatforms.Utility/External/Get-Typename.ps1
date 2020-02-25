@@ -56,7 +56,7 @@ function Get-TypeName
 		[System.Object] $InputObject
 	)
 
-	if (!$InputObject)
+	if ($null -eq $InputObject)
 	{
 		# This is called only on pipeline
 		Write-Warning "Input object is null, aborting"

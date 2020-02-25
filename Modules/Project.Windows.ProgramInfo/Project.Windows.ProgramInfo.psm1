@@ -1087,7 +1087,7 @@ function Update-Table
 <#
 .SYNOPSIS
 Manually add new program installation directory to the global table from string for each user
-.PARAMETER InstallRoot
+.PARAMETER InstallLocation
 Program installation directory
 .EXAMPLE
 Edit-Table "%ProgramFiles(x86)%\TeamViewer"
@@ -1303,7 +1303,7 @@ function Find-Installation
 		}
 		"SQLManagementStudio"
 		{
-			$SQLManagementStudioRoot = Get-SQLManagementStudio | Select-Object -ExpandProperty InstallPath
+			$SQLManagementStudioRoot = Get-SQLManagementStudio | Select-Object -ExpandProperty InstallLocation
 			if ($SQLManagementStudioRoot)
 			{
 				Edit-Table $SQLManagementStudioRoot
@@ -1312,7 +1312,7 @@ function Find-Installation
 		}
 		"WindowsDefender"
 		{
-			$DefenderRoot = Get-WindowsDefender $ComputerName | Select-Object -ExpandProperty InstallPath
+			$DefenderRoot = Get-WindowsDefender $ComputerName | Select-Object -ExpandProperty InstallLocation
 			if ($DefenderRoot)
 			{
 				Edit-Table $DefenderRoot
@@ -1332,8 +1332,8 @@ function Find-Installation
 			{
 				$NETFrameworkRoot = $NETFramework |
 				Sort-Object -Property Version |
-				Where-Object {$_.InstallPath} |
-				Select-Object -Last 1 -ExpandProperty InstallPath
+				Where-Object { $_.InstallLocation } |
+				Select-Object -Last 1 -ExpandProperty InstallLocation
 
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] $NETFrameworkRoot"
 				Edit-Table $NETFrameworkRoot
@@ -1359,7 +1359,7 @@ function Find-Installation
 				$SDKDebuggers = $WindowsKits |
 				Where-Object {$_.Product -like "WindowsDebuggersRoot*"} |
 				Sort-Object -Property Product |
-				Select-Object -Last 1 -ExpandProperty InstallPath
+				Select-Object -Last 1 -ExpandProperty InstallLocation
 
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] $SDKDebuggers"
 				Edit-Table $SDKDebuggers
@@ -1796,7 +1796,7 @@ function Get-NetFramework
 						"ComputerName" = $ComputerName
 						"RegKey" = $HKLMSubKey
 						"Version" = $Version
-						"InstallPath" = $InstallLocation
+						"InstallLocation" = $InstallLocation
 					}
 				}
 				else # go one key down
@@ -1834,7 +1834,7 @@ function Get-NetFramework
 							"ComputerName" = $ComputerName
 							"RegKey" = $HKLMKey
 							"Version" = $Version
-							"InstallPath" = $InstallLocation
+							"InstallLocation" = $InstallLocation
 						}
 					}
 				}
@@ -1928,7 +1928,7 @@ function Get-WindowsSDK
 					"RegKey" = $HKLMSubKey
 					"Product" = $SubKey.GetValue("ProductName")
 					"Version" = $SubKey.GetValue("ProductVersion")
-					"InstallPath" = $InstallLocation
+					"InstallLocation" = $InstallLocation
 				}
 			}
 		}
@@ -2018,7 +2018,7 @@ function Get-WindowsKits
 					"ComputerName" = $ComputerName
 					"RegKey" = $RootKeyLeaf
 					"Product" = $RootKeyEntry
-					"InstallPath" = $InstallLocation
+					"InstallLocation" = $InstallLocation
 				}
 			}
 		}
@@ -2087,7 +2087,7 @@ function Get-WindowsDefender
 				$WindowsDefender = New-Object -TypeName PSObject -Property @{
 					"ComputerName" = $ComputerName
 					"RegKey" = $RootKeyLeaf
-					"InstallPath" = Format-Path $InstallLocation
+					"InstallLocation" = Format-Path $InstallLocation
 				}
 			}
 		}
@@ -2108,7 +2108,7 @@ Computer name for which to list installed installed framework
 .EXAMPLE
 Get-SQLManagementStudio COMPUTERNAME
 
-	RegKey ComputerName Version      InstallPath
+	RegKey ComputerName Version      InstallLocation
 	------ ------------ -------      -----------
 	18     COMPUTERNAME   15.0.18206.0 %ProgramFiles(x86)%\Microsoft SQL Server Management Studio 18
 
@@ -2180,13 +2180,12 @@ System.Management.Automation.PSCustomObject for installed Microsoft SQL Server M
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing registry key: $HKLMSubKey"
 
 				# TODO: Should we return object by object to make pipeline work?
-				# TODO: Use InstallPath in ever function, some functions have InstallRoot property instead
 				# also try to get same set of properties for all req querries
 				$ManagementStudio += New-Object -TypeName PSObject -Property @{
 					"ComputerName" = $ComputerName
 					"RegKey" = $HKLMSubKey
 					"Version" = $SubKey.GetValue("Version")
-					"InstallPath" = Format-Path $InstallLocation
+					"InstallLocation" = Format-Path $InstallLocation
 				}
 			}
 		}

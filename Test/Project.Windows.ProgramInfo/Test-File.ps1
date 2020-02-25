@@ -51,16 +51,14 @@ Start-Test
 $OfficeShared = "%ProgramFiles%\Common Files\microsoft shared"
 $VSInstallService = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.x86.exe"
 
-New-Test "Test-File '$VSInstallService'"
-Test-File "$VSInstallService" @Logs
-Update-Logs
+New-Test "$VSInstallService"
+Test-File $VSInstallService @Logs
 
-New-Test "Test-File '$OfficeShared\ClickToRun\OfficeClickToRun.exe'"
+New-Test "$OfficeShared\ClickToRun\OfficeClickToRun.exe"
 Test-File "$OfficeShared\ClickToRun\OfficeClickToRun.exe" @Logs
-Update-Logs
 
-New-Test "Test-File '%ProgramFiles%\ClickToRun\OfficeClickToRun.exe'"
+New-Test "%ProgramFiles%\ClickToRun\OfficeClickToRun.exe"
 Test-File "%ProgramFiles%\ClickToRun\OfficeClickToRun.exe" @Logs
-Update-Logs
 
+Update-Logs
 Exit-Test

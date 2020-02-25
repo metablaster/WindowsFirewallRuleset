@@ -39,7 +39,6 @@ Test-SystemRequirements
 . $ProjectRoot\Test\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
@@ -50,8 +49,7 @@ if (!(Approve-Execute @Logs)) { exit }
 Start-Test
 
 New-Test "Get-WindowsDefender"
+Get-WindowsDefender @Logs #| Select-Object -ExpandProperty InstallLocation @Logs
 
-Get-WindowsDefender (Get-ComputerName) @Logs #| Select-Object -ExpandProperty InstallPath @Logs
 Update-Logs
-
 Exit-Test

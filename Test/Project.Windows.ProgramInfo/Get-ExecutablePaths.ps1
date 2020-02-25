@@ -26,10 +26,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# TODO: Include modules you need, update licence Copyright and start writing test code
-
 #
-# Unit test for Test-Function
+# Unit test for Get-ExecutablePaths
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -51,10 +49,14 @@ if (!(Approve-Execute @Logs)) { exit }
 Start-Test
 
 New-Test "Get-ExecutablePaths"
-$ExecutablePaths = Get-ExecutablePaths ([System.Environment]::MachineName) | Sort-Object -Property Name
+$ExecutablePaths = Get-ExecutablePaths ([System.Environment]::MachineName) @Logs | Sort-Object -Property Name
 $ExecutablePaths
 
 New-Test "Get-ExecutablePaths pwsh.exe"
-$ExecutablePaths | Where-Object -Property Name -eq "pwsh.exe" | Select-Object -ExpandProperty InstallLocation
+$ExecutablePaths | Where-Object -Property Name -eq "pwsh.exe" @Logs | Select-Object -ExpandProperty InstallLocation
 
+New-Test "Get-TypeName"
+$ExecutablePaths | Get-TypeName @Logs
+
+Update-Logs
 Exit-Test

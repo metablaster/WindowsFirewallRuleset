@@ -61,8 +61,8 @@ $WindowsSDK
 # New-Test "Get-WindowsSDK latest"
 
 # $WindowsSDK | Sort-Object -Property Version @Logs |
-# Where-Object { $_.InstallPath } |
-# Select-Object -Last 1 -ExpandProperty InstallPath @Logs
+# Where-Object { $_.InstallLocation } |
+# Select-Object -Last 1 -ExpandProperty InstallLocation @Logs
 # Update-Logs
 
 # Get Windows SDK root
@@ -72,8 +72,8 @@ Update-Logs
 # {
 #     $SDKRoot = $WindowsSDK |
 #     Sort-Object -Property Version @Logs |
-#     Where-Object { $_.InstallPath } |
-#     Select-Object -Last 1 -ExpandProperty InstallPath @Logs
+#     Where-Object { $_.InstallLocation } |
+#     Select-Object -Last 1 -ExpandProperty InstallLocation @Logs
 #	  Update-Logs
 # }
 

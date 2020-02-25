@@ -50,10 +50,9 @@ Start-Test
 
 New-Test "Test-Service FailureTest"
 Test-Service "FailureTest" @Logs
-Update-Logs
 
 New-Test "Test-Service dnscache"
 Test-Service dnscache @Logs
-Update-Logs
 
+Update-Logs
 Exit-Test

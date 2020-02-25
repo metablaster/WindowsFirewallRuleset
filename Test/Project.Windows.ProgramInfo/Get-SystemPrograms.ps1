@@ -39,7 +39,6 @@ Test-SystemRequirements
 . $ProjectRoot\Test\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
@@ -49,21 +48,19 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-$ComputerName = Get-ComputerName @Logs
-Update-Logs
-$SystemPrograms = Get-SystemPrograms $ComputerName @Logs
-Update-Logs
+$SystemPrograms = Get-SystemPrograms @Logs
 
 New-Test "Get-SystemPrograms Name"
 $SystemPrograms | Sort-Object -Property Name @Logs | Select-Object -ExpandProperty Name @Logs
-Update-Logs
 
 New-Test "Get-SystemPrograms InstallLocation"
 $SystemPrograms | Sort-Object -Property InstallLocation @Logs | Select-Object -ExpandProperty InstallLocation @Logs
-Update-Logs
 
 New-Test "Get-SystemPrograms"
 $SystemPrograms | Sort-Object -Property Name @Logs
-Update-Logs
 
+New-Test "Get-TypeName"
+$SystemPrograms | Get-TypeName @Logs
+
+Update-Logs
 Exit-Test

@@ -49,15 +49,14 @@ if (!(Approve-Execute @Logs)) { exit }
 Start-Test
 
 New-Test "SQLManagementStudio"
-$Result = Get-SQLManagementStudio @Logs
-Update-Logs
-$Result | Get-Member @Logs
-Update-Logs
-
-$Result
+$Instances = Get-SQLManagementStudio @Logs
+$Instances
 
 New-Test "SQLManagementStudio - Install path"
-$Result | Select-Object -ExpandProperty InstallPath @Logs
-Update-Logs
+$Instances | Select-Object -ExpandProperty InstallLocation @Logs
 
+New-Test "Get-TypeName"
+$Instances | Get-TypeName @Logs
+
+Update-Logs
 Exit-Test

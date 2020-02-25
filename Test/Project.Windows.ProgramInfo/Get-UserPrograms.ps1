@@ -49,12 +49,21 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-New-Test "Get-UserPrograms"
-foreach ($Account in $UserAccounts)
+$UserGroup = "Users"
+
+New-Test "Get-GroupPrincipals $UserGroup"
+$Principals = Get-GroupPrincipals $UserGroup @Logs
+# TODO: FOR SOME ODD FUCKING REASON IF YOU REMOVE Format-Table THE TEST WILL NOT WORK!!
+$Principals | Format-Table
+
+foreach ($Principal in $Principals)
 {
-	Write-Information -Tags "Test" -MessageData "INFO: Programs installed by $($Account.Account)"
-	Get-UserPrograms $Account.User @Logs
+	New-Test "Get-UserPrograms: $($Principal.User)"
+	Get-UserPrograms $Principal.User @Logs
 }
+
+New-Test "Get-TypeName"
+Get-UserPrograms $Principals[0].User @Logs | Get-TypeName @Logs
 
 Update-Logs
 Exit-Test

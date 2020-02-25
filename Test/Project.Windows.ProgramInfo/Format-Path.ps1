@@ -48,117 +48,110 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-New-Test "Format-Path"
-
-$Result = Format-Path "C:\" @Logs
-Update-Logs
-
+$TestPath = "C:\"
+New-Test $TestPath
+$Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
-Update-Logs
 
-$Result = Format-Path "C:\\Windows\System32" @Logs
-Update-Logs
-
+$TestPath = "C:\\Windows\System32"
+New-Test $TestPath
+$Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
-Update-Logs
 
-$Result = Format-Path "C:\\Windows\" @Logs
-Update-Logs
-
+$TestPath = "C:\\Windows\"
+New-Test $TestPath
+$Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
-Update-Logs
 
-$Result = Format-Path "C:\Program Files (x86)\Windows Defender\" @Logs
-Update-Logs
-
+$TestPath = "C:\Program Files (x86)\Windows Defender\"
+New-Test $TestPath
+$Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
-Update-Logs
 
-$Result = Format-Path "C:\Program Files\WindowsPowerShell" @Logs
-Update-Logs
-
+$TestPath = "C:\Program Files\WindowsPowerShell"
+New-Test $TestPath
+$Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
-Update-Logs
 
-$Result = Format-Path '"C:\ProgramData\Git"' @Logs
-Update-Logs
-
+$TestPath = '"C:\ProgramData\Git"'
+New-Test $TestPath
+$Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
-Update-Logs
 
-$Result = Format-Path "C:\PerfLogs" @Logs
-Update-Logs
-
+$TestPath = "C:\PerfLogs"
+New-Test $TestPath
+$Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
-Update-Logs
 
-$Result = Format-Path "C:\Windows\Microsoft.NET\Framework64\v3.5\\" @Logs
-Update-Logs
-
+$TestPath = "C:\Windows\Microsoft.NET\Framework64\v3.5\\"
+New-Test $TestPath
+$Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
-Update-Logs
 
-$Result = Format-Path "'C:\Windows\Microsoft.NET\Framework64\v3.5'" @Logs
-Update-Logs
-
+$TestPath = "'C:\Windows\Microsoft.NET\Framework64\v3.5'"
+New-Test $TestPath
+$Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
-Update-Logs
 
-$Result = Format-Path "D:\\microsoft\\windows" @Logs
-Update-Logs
+$TestPath = "D:\\microsoft\\windows"
+New-Test $TestPath
+$Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
-Update-Logs
 
-$Result = Format-Path "D:\" @Logs
-Update-Logs
+$TestPath = "C:\\"
+New-Test $TestPath
+$Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
-Update-Logs
 
-$Result = Format-Path "C:\\" @Logs
-Update-Logs
+$TestPath = "D:\"
+New-Test $TestPath
+$Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
-Update-Logs
 
-$Result = Format-Path "C:\Users\haxor\AppData\Local\OneDrive" @Logs
-Update-Logs
+$TestPath = "C:\Users\haxor\AppData\Local\OneDrive"
+New-Test $TestPath
+$Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
-Update-Logs
 
-$Result = Format-Path "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer" @Logs
-Update-Logs
+$TestPath = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
+New-Test $TestPath
+$Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
-Update-Logs
 
-$Result = Format-Path "%SystemDrive%" @Logs
-Update-Logs
+$TestPath = "%SystemDrive%"
+New-Test $TestPath
+$Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
-Update-Logs
 
-$Result = Format-Path "" @Logs
-Update-Logs
+$TestPath = ""
+New-Test $TestPath
+$Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
-Update-Logs
 
-$Result = Format-Path $null @Logs
-Update-Logs
+$TestPath = $null
+New-Test $TestPath
+$Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
-Update-Logs
 
+New-Test "Get-TypeName"
+$Result | Get-TypeName @Logs
+
+Update-Logs
 Exit-Test

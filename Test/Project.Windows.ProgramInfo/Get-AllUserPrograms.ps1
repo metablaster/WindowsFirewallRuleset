@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-SystemPrograms
+# Unit test for Get-AllUserPrograms
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -39,7 +39,6 @@ Test-SystemRequirements
 . $ProjectRoot\Test\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
@@ -50,10 +49,11 @@ if (!(Approve-Execute @Logs)) { exit }
 Start-Test
 
 New-Test "Get-AllUserPrograms"
-$ComputerName = Get-ComputerName @Logs
-Update-Logs
+$Result = Get-AllUserPrograms @Logs
+$Result
 
-Get-AllUserPrograms $ComputerName @Logs | Sort-Object -Property Name @Logs
-Update-Logs
+New-Test "Get-TypeName"
+$Result | Get-TypeName @Logs
 
+Update-Logs
 Exit-Test

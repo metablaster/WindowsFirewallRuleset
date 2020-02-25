@@ -49,15 +49,20 @@ if (!(Approve-Execute @Logs)) { exit }
 Start-Test
 
 New-Test "Get-SQLInstances"
-Get-SQLInstances
+$Instances = Get-SQLInstances @Logs
+$Instances
 
 New-Test "Get-SQLInstances CIM"
-Get-SQLInstances -CIM
+Get-SQLInstances -CIM @Logs
 
 New-Test "Get-SQLInstances binn directory"
-Get-SQLInstances | Select-Object -ExpandProperty SQLBinRoot
+Get-SQLInstances @Logs | Select-Object -ExpandProperty SQLBinRoot @Logs
 
 New-Test "Get-SQLInstances DTS directory"
-Get-SQLInstances | Select-Object -ExpandProperty SQLPath
+Get-SQLInstances @Logs | Select-Object -ExpandProperty SQLPath @Logs
 
+New-Test "Get-TypeName"
+$Instances | Get-TypeName @Logs
+
+Update-Logs
 Exit-Test

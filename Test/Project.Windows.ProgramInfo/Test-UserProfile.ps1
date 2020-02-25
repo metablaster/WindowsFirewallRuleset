@@ -50,52 +50,41 @@ Start-Test
 
 $User = "haxor"
 
-New-Test "User profile - full"
 $TestPath = "C:\Users\$User\source\repos\WindowsFirewallRuleset"
-$TestPath
+New-Test "$TestPath"
 Test-UserProfile $TestPath @Logs
-Update-Logs
 
-New-Test "User profile - environment"
 $TestPath = "%LOCALAPPDATA%\Microsoft"
-$TestPath
+New-Test "$TestPath"
 Test-UserProfile $TestPath @Logs
-Update-Logs
 
-New-Test "User profile - full unformatted"
 $TestPath = "C:\\Users\$User\source\\repos\WindowsFirewallRuleset\"
-$TestPath
+New-Test "$TestPath"
 Test-UserProfile $TestPath @Logs
-Update-Logs
 
-New-Test "User profile - environment unformatted"
 $TestPath = "%LOCALAPPDATA%\\Microsoft\"
-$TestPath
+New-Test "$TestPath"
 Test-UserProfile $TestPath @Logs
-Update-Logs
 
-New-Test "System - full"
 $TestPath = "C:\Program Files\\Microsoft SQL Server\140"
-$TestPath
+New-Test "$TestPath"
 Test-UserProfile $TestPath @Logs
-Update-Logs
 
-New-Test "System - envoronment"
 $TestPath = "%ProgramFiles(x86)%\Microsoft SQL Server\140\"
-$TestPath
+New-Test "$TestPath"
 Test-UserProfile $TestPath @Logs
-Update-Logs
 
-New-Test "Drive"
 $TestPath = "C:\"
-$TestPath
+New-Test "$TestPath"
 Test-UserProfile $TestPath @Logs
-Update-Logs
 
-New-Test "Drive"
 $TestPath = "C:\\"
-$TestPath
-Test-UserProfile $TestPath @Logs
-Update-Logs
+New-Test "$TestPath"
+$Status = Test-UserProfile $TestPath @Logs
+$Status
 
+New-Test "Get-TypeName"
+$Status | Get-TypeName @Logs
+
+Update-Logs
 Exit-Test

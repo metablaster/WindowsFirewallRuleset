@@ -39,7 +39,6 @@ Test-SystemRequirements
 . $ProjectRoot\Test\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
@@ -50,36 +49,22 @@ if (!(Approve-Execute @Logs)) { exit }
 Start-Test
 
 New-Test "Get-NetFramework"
-
-$ComputerName = Get-ComputerName @Logs
-Update-Logs
-
-$NETFramework = Get-NetFramework $ComputerName
+$NETFramework = Get-NetFramework
 $NETFramework
 
 New-Test "Get-NetFramework latest"
-$NETFramework | Sort-Object -Property Version | Where-Object {$_.InstallPath} | Select-Object -Last 1 -ExpandProperty InstallPath
-
-# New-Test "Get-NetFramework latest version"
-# $Version = $NETFramework | Sort-Object -Property Version | Select-Object -Last 1 -ExpandProperty Version
-# #$Version | get-member
-# $Major, $Minor, $Build, $Revision = $Version.Split(".")
-# $Major
-# $Minor
-
-# Get latest NET Framework installation directory
-$NETFramework = Get-NetFramework $ComputerName @Logs
-Update-Logs
 if ($null -ne $NETFramework)
 {
 	$NETFrameworkRoot = $NETFramework |
 	Sort-Object -Property Version @Logs |
-	Where-Object { $_.InstallPath } |
-	Select-Object -Last 1 -ExpandProperty InstallPath @Logs
-	Update-Logs
+	Where-Object { $_.InstallLocation } |
+	Select-Object -Last 1 -ExpandProperty InstallLocation @Logs
 
-	Write-Information -Tags "Test" -MessageData "INFO: $NETFrameworkRoot"
-	# Edit-Table $NETFrameworkRoot
+	$NETFrameworkRoot
 }
 
+New-Test "Get-TypeName"
+$NETFrameworkRoot | Get-TypeName @Logs
+
+Update-Logs
 Exit-Test

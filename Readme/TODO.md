@@ -31,3 +31,4 @@ This is a project global list which applies to several or all scripts, for small
 28. We probalby don't need VSSetup module, other scripts and modules need to be checked for updates
 29. Revisit function parameters, their types, aliases etc..
 30. localhost != `[Environment]::MachineName`
+31. Revisit code and make consitent PSObject properties for all function outputs

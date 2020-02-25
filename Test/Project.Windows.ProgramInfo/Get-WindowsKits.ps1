@@ -61,7 +61,7 @@ Update-Logs
 
 # $WindowsKits | Where-Object {$_.Product -like "WindowsDebuggersRoot*"} |
 # Sort-Object -Property Product @Logs |
-# Select-Object -Last 1 -ExpandProperty InstallPath @Logs
+# Select-Object -Last 1 -ExpandProperty InstallLocation @Logs
 
 New-Test "Get-WindowsKits install path"
 
@@ -72,7 +72,7 @@ if ($null -ne $WindowsKits)
 	$SDKDebuggers = $WindowsKits |
 	Where-Object {$_.Product -like "WindowsDebuggersRoot*"} |
 	Sort-Object -Property Product @Logs |
-	Select-Object -Last 1 -ExpandProperty InstallPath @Logs
+	Select-Object -Last 1 -ExpandProperty InstallLocation @Logs
 	Update-Logs
 
 	$SDKDebuggers
