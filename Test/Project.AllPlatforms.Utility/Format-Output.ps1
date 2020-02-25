@@ -64,6 +64,6 @@ New-NetFirewallRule -Platform $Platform `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 26002 `
 -LocalUser Any `
 -Description "" @Logs | Format-Output @Logs
-Update-Logs
 
+Update-Logs
 Exit-Test

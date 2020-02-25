@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test Get-NetworkServices
+# Unit test for Get-TypeName
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -45,10 +45,32 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
+function Test-NoReturn
+{
+	[CmdletBinding()]
+	param ()
+
+	return $null
+}
+
 Start-Test
 
-New-Test "Get-NetworkServices"
-Get-NetworkServices "$ProjectRoot\Rules" @Logs
+New-Test "Get-TypeName (single input)"
+Get-TypeName ([System.Environment]::MachineName)
 
-Update-Logs
+New-Test "Get-TypeName (pipeline single input)"
+Get-TypeName ([System.Environment]::MachineName)
+
+New-Test "Get-TypeName (multiple inputs)"
+Get-TypeName (Get-Process)
+
+New-Test "Get-TypeName (pipeline multiple inputs)"
+Get-Process | Get-TypeName
+
+New-Test "Get-TypeName (no input)"
+Get-TypeName (Test-NoReturn)
+
+New-Test "Get-TypeName (no pipeline input)"
+Test-NoReturn | Get-TypeName
+
 Exit-Test

@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test Get-NetworkServices
+# Unit test for Test-TargetComputer
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -47,8 +47,7 @@ if (!(Approve-Execute)) { exit }
 
 Start-Test
 
-New-Test "Get-NetworkServices"
-Get-NetworkServices "$ProjectRoot\Rules" @Logs
+New-Test "Test-TargetComputer"
+Test-TargetComputer ([System.Environment]::MachineName)
 
-Update-Logs
 Exit-Test

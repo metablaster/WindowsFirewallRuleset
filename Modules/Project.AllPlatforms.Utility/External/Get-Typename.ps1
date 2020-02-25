@@ -44,20 +44,26 @@ Any .NET object
 System.String type name
 .NOTES
 Modifications by metablaster:
-Added process block to prevent errors when object is null
+Added check when object is null
 Added comment based help
-TODO: process block don't work as intended
+Removed unneeded parantheses
+Added input type to parameter
 #>
 function Get-TypeName
 {
 	[CmdletBinding()]
     param (
-		[Parameter(ValueFromPipeline = $true)]
-		$InputObject
+		[Parameter(Mandatory = $true,
+		ValueFromPipeline = $true)]
+		[System.Object] $InputObject
 	)
 
-	process
+	if (!$InputObject)
 	{
-		Write-Output (($InputObject | Get-Member).TypeName | Select-Object -Unique)
+		# This is called only on pipeline
+		Write-Warning "Input object is null, aborting"
+		return $null
 	}
+
+	Write-Output ($InputObject | Get-Member).TypeName | Select-Object -Unique
 }

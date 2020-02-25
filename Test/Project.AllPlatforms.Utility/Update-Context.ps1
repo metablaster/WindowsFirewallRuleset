@@ -47,6 +47,7 @@ if (!(Approve-Execute)) { exit }
 
 Start-Test
 
+# TODO: global preference for tests
 $DebugPreference = "SilentlyContinue"
 
 New-Test "Update-Context IPv4.Outbound -> ICMPv4"

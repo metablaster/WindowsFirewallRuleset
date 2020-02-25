@@ -57,22 +57,21 @@ $TestPath = "C:\users\Public\desktop\" #Inherited
 New-Test "Path:"
 $TestPath
 
-New-Test "ACL.AccessToString:"
+New-Test "ACL.AccessToString"
 $ACL = Get-ACL $TestPath
 $ACL.AccessToString
 
-New-Test "Access entry details:"
+New-Test "ACL.Access | Format-list *"
 $ACL.Access | Format-list *
 
-New-Test "SDDL:"
+New-Test "ACL.SDDL"
 $ACL.SDDL
 
-# Call with named parameter binding
-# $ACL | Show-SDDL
+New-Test "Show-SDDL (pipeline)"
+$ACL | Show-SDDL @Logs
 
-New-Test "Show-SDDL"
-# Or call with parameter string
+New-Test "Show-SDDL (parameter)"
 Show-SDDL $ACL.SDDL @Logs
-Update-Logs
 
+Update-Logs
 Exit-Test

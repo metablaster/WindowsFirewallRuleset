@@ -161,6 +161,7 @@ None. You cannot pipe objects to Show-SDDL
 .NOTES
 This function is used only for debugging and discovery of object SDDL
 Credits to: https://blogs.technet.microsoft.com/ashleymcglone/2011/08/29/powershell-sid-walker-texas-ranger-part-1
+TODO: additional work on function to make it more universal, see if we can make use of it somehow.
 #>
 function Show-SDDL
 {
@@ -203,6 +204,7 @@ function Show-SDDL
 
 			# Parse out the SID using a handy RegEx
 			$ACLEntrySIDMatches = [regex]::Matches($ACLEntry, "(S(-\d+){2,8})")
+
 			# NOTE: original changed from $ACLEntrySID = $_.value to $ACLEntrySID += $_.value
 			$ACLEntrySIDMatches | ForEach-Object {
 				$ACLEntrySID += $_.Value
@@ -429,13 +431,13 @@ None. You cannot pipe objects to Test-TargetMachine
 .OUTPUTS
 None.
 #>
-function Test-TargetMachine
+function Test-TargetComputer
 {
 	[CmdletBinding(PositionalBinding = $false)]
 	param (
 		[Parameter(Mandatory = $true,
 		Position = 0)]
-		[string] $Computer,
+		[string] $ComputerName,
 
 		[Parameter()]
 		[int16] $Count = $ConnectionCount,
@@ -445,14 +447,12 @@ function Test-TargetMachine
 	)
 
 	# Test parameters depend on PowerShell edition
-	$PowerShellEdition = $PSVersionTable.PSEdition
-
-	if ($PowerShellEdition -eq "Core")
+	if ($PSVersionTable.PSEdition -eq "Core")
 	{
-		return Test-Connection -TargetName $Computer -Count $Count -TimeoutSeconds $Timeout -IPv4 -Quiet
+		return Test-Connection -TargetName $ComputerName -Count $Count -TimeoutSeconds $Timeout -IPv4 -Quiet
 	}
 
-	return Test-Connection -ComputerName $Computer -Count $Count -Quiet
+	return Test-Connection -ComputerName $ComputerName -Count $Count -Quiet
 }
 
 #
@@ -473,6 +473,8 @@ New-Variable -Name Context -Scope Script -Value "Context not set"
 # Recommended vertical screen buffer value, to ensure user can scroll back all the output
 New-Variable -Name RecommendedBuffer -Scope Script -Option Constant -Value 1500
 
+# TODO: where to export? here or in manifest file?
+
 #
 # Function exports
 #
@@ -484,8 +486,10 @@ Export-ModuleMember -Function Show-SDDL
 Export-ModuleMember -Function Get-NetworkServices
 Export-ModuleMember -Function Format-Output
 Export-ModuleMember -Function Set-ScreenBuffer
+Export-ModuleMember -Function Test-TargetComputer
+
+# External
 Export-ModuleMember -Function Get-TypeName
-Export-ModuleMember -Function Test-TargetMachine
 
 #
 # Variable exports
