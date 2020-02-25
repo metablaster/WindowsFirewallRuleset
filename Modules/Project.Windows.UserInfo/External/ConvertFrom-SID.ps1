@@ -54,6 +54,7 @@ add verbose and debug output
 remove try and empty catch by setting better approach
 rename parameter
 format code style to project defaults and added few more comments
+removed unnecessary parantheses
 #>
 function ConvertFrom-SID
 {

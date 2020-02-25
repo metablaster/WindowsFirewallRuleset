@@ -26,10 +26,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# TODO: Include modules you need, update licence Copyright and start writing test code
-
 #
-# Unit test for Test-Function
+# Unit test for Get-GroupUsers
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 

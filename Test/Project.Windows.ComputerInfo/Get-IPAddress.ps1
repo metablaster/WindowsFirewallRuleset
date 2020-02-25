@@ -49,15 +49,17 @@ if (!(Approve-Execute @Logs)) { exit }
 Start-Test
 
 New-Test "Get-IPAddress IPv4"
-Get-IPAddress "IPv4" @Logs
-Update-Logs
+$IPAddress = Get-IPAddress "IPv4" @Logs
+$IPAddress
 
 New-Test "Get-IPAddress IPv6"
 Get-IPAddress "IPv6" @Logs
-Update-Logs
 
 New-Test "Get-IPAddress IPv3"
 Get-IPAddress "IPv3" @Logs
-Update-Logs
 
+New-Test "Typename: Get-IPAddress"
+$IPAddress | Get-TypeName @Logs
+
+Update-Logs
 Exit-Test

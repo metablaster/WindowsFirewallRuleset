@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-AdapterConfig
+# Unit test for Get-ConnectedAdapters
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -49,11 +49,17 @@ if (!(Approve-Execute @Logs)) { exit }
 Start-Test
 
 New-Test "Get-ConnectedAdapters"
-Get-ConnectedAdapters IPv4 @Logs
-Update-Logs
+$Adapters = Get-ConnectedAdapters IPv4 @Logs
+$Adapters
+
+New-Test "Get-ConnectedAdapters IPv6"
+Get-ConnectedAdapters IPv6 @Logs
 
 New-Test "Get-ConnectedAdapters binding"
 Get-ConnectedAdapters IPv4 @Logs | Select-Object -ExpandProperty IPv4Address @Logs
-Update-Logs
 
+New-Test "Typename: Get-ConnectedAdapters"
+$Adapters | Get-TypeName @Logs
+
+Update-Logs
 Exit-Test

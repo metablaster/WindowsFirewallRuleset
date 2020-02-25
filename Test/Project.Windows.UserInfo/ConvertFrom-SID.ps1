@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Test-Function
+# Unit test for ConvertFrom-SID
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 

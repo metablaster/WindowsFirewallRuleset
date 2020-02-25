@@ -49,7 +49,11 @@ if (!(Approve-Execute @Logs)) { exit }
 Start-Test
 
 New-Test "Get-Broadcast"
-Get-Broadcast @Logs
-Update-Logs
+$BroadCast = Get-Broadcast @Logs
+$BroadCast
 
+New-Test "Typename: Get-Broadcast"
+$BroadCast | Get-TypeName @Logs
+
+Update-Logs
 Exit-Test

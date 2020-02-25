@@ -49,7 +49,11 @@ if (!(Approve-Execute @Logs)) { exit }
 Start-Test
 
 New-Test "Get-ComputerName"
-Get-ComputerName @Logs
-Update-Logs
+$ComputerName = Get-ComputerName @Logs
+$ComputerName
 
+New-Test "Typename: Get-IPAddress"
+$ComputerName | Get-TypeName @Logs
+
+Update-Logs
 Exit-Test

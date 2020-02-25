@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Test-Function
+# Unit test for Get-UserGroups
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
