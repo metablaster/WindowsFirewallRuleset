@@ -27,10 +27,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-<# Links to original and individual version of code
-https://github.com/gravejester/Communary.PASM
-#>
-
 <#
 .SYNOPSIS
 Returns .NET return type name for input object
@@ -43,6 +39,8 @@ Any .NET object
 .OUTPUTS
 System.String type name
 .NOTES
+Original code link: https://github.com/gravejester/Communary.PASM
+
 Modifications by metablaster:
 Added check when object is null
 Added comment based help

@@ -51,29 +51,32 @@ Start-Test
 [string[]] $Users = @("Administrator", "test", "haxor")
 
 New-Test "Get-AccountSID -Users $Users"
-$AccountSID = Get-AccountSID -Users $Users @Logs
+$AccountSID = Get-AccountSID -User $Users @Logs
 $AccountSID
 
 New-Test "Get-AccountSID -Users $Users -CIM"
-$AccountSID = Get-AccountSID -Users $Users -CIM @Logs
+$AccountSID = Get-AccountSID -User $Users -CIM @Logs
 $AccountSID
 
 New-Test "$Users | Get-AccountSID -CIM"
-$Users | Get-AccountSID -CIM
+$Users | Get-AccountSID -CIM @Logs
 
 [string[]] $Users = @("SYSTEM", "NETWORK SERVICE")
 [string] $Domain = "NT AUTHORITY"
 
 New-Test "Get-AccountSID -Users $Users"
-$AccountSID = Get-AccountSID -Users $Users -Domain $Domain @Logs
+$AccountSID = Get-AccountSID -User $Users -Domain $Domain @Logs
 $AccountSID
 
 New-Test "Get-AccountSID -Users $Users -CIM"
-$AccountSID = Get-AccountSID -Users $Users -Domain $Domain -CIM @Logs
+$AccountSID = Get-AccountSID -User $Users -Domain $Domain -CIM @Logs
 $AccountSID
 
 New-Test "$Users | Get-AccountSID -CIM"
-$Users | Get-AccountSID -CIM -Domain $Domain
+$Users | Get-AccountSID -CIM -Domain $Domain @Logs
+
+New-Test "Typename: Get-AccountSID"
+$Users | Get-TypeName @Logs
 
 Update-Logs
 Exit-Test

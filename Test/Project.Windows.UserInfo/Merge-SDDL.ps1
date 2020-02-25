@@ -26,8 +26,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# TODO: Include modules you need, update licence Copyright and start writing test code
-
 #
 # Unit test for Test-Function
 #
@@ -41,8 +39,6 @@ Test-SystemRequirements
 . $ProjectRoot\Test\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo
-# Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
-# Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
@@ -56,13 +52,19 @@ Start-Test
 [string] $Domain = [System.Environment]::MachineName
 [string[]] $Groups = @("Users", "Administrators")
 
-New-Test "Get-SDDL -Users $Users -Groups $Groups -Domain $Domain"
-$UsersSDDL = Get-SDDL -Users $Users -Groups $Groups -Domain $Domain
-$UsersSDDL
+New-Test "Get-SDDL -User $Users -Group $Groups -Domain $Domain"
+$TestUsersSDDL = Get-SDDL -User $Users -Group $Groups -Domain $Domain @Logs
+$TestUsersSDDL
 
-New-Test "Get-SDDL -Domain 'NT AUTHORITY' -Users @('SYSTEM', 'UserModeDrivers')"
-$NewSDDL = Get-SDDL -Domain "NT AUTHORITY" -Users @("SYSTEM", "UserModeDrivers")
-Merge-SDDL ([ref] $UsersSDDL) $NewSDDL
-$UsersSDDL
+New-Test "Get-SDDL -Domain 'NT AUTHORITY' -User 'SYSTEM', 'UserModeDrivers'"
+$NewSDDL = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "UserModeDrivers" @Logs
 
+New-Test "Merge-SDDL"
+Merge-SDDL ([ref] $TestUsersSDDL) $NewSDDL @Logs
+$TestUsersSDDL
+
+New-Test "Get-TypeName"
+$TestUsersSDDL | Get-TypeName @Logs
+
+Update-Logs
 Exit-Test

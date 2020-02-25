@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for ConvertFrom-UserAccounts
+# Unit test for ConvertFrom-UserAccount
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -54,12 +54,12 @@ New-Test "Get-GroupUsers 'Users', 'Administrators'"
 $UserAccounts = Get-GroupUsers "Users", "Administrators" @Logs
 $UserAccounts
 
-New-Test "ConvertFrom-UserAccounts:"
-$UserNames = ConvertFrom-UserAccounts ($UserAccounts | Select-Object -ExpandProperty Account) @Logs
+New-Test "ConvertFrom-UserAccount:"
+$UserNames = ConvertFrom-UserAccount ($UserAccounts | Select-Object -ExpandProperty Account) @Logs
 $UserNames
 
-New-Test "Typename: UserAccounts"
-$UserNames | Get-TypeName
+New-Test "Typename: UserAccount"
+$UserNames | Get-TypeName @Logs
 
 Update-Logs
 Exit-Test

@@ -53,21 +53,22 @@ if (!(Approve-Execute @Logs)) { exit }
 Start-Test
 
 New-Test "Get-GroupUsers"
-$UsersTest = Get-GroupUsers "Users"
+$UsersTest = Get-GroupUsers "Users" @Logs
 $UsersTest
 
+New-Test "Get-GroupUsers CIM server"
+$CIMTest = Get-GroupUsers "Users", "Administrators" -Machine "localhost" -CIM @Logs
+$CIMTest
+
+New-Test "Expand users"
+$UsersTest | Select-Object -ExpandProperty User @Logs
+
+New-Test "Failure test"
+$FailedUsers = Get-GroupUsers "asdf Users" @Logs
+$FailedUsers
+
 New-Test "Typename: Get-GroupUsers"
-$UsersTest | Get-TypeName
+$UsersTest | Get-TypeName @Logs
 
-# New-Test "Get-GroupUsers CIM server"
-# $CIMTest = Get-GroupUsers "Users", "Administrators" -Machine "localhost" -CIM
-# $CIMTest
-
-# New-Test "Expand users"
-# $UsersTest | Select-Object -ExpandProperty User
-
-# New-Test "Failure test"
-# $UsersTest = Get-GroupUsers "asdf Users"
-# $UsersTest
-
+Update-Logs
 Exit-Test

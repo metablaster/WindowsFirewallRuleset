@@ -50,7 +50,7 @@ $ExtensionAccounts = Get-SDDL -Domain "NT AUTHORITY" -Users @("SYSTEM", "LOCAL S
 Merge-SDDL $ExtensionAccounts (Get-SDDL -Groups "Users")
 
 # Ask user if he wants to load these rules
-Update-Context "IPv$IPVersion" $Direction $Group
+Update-Context "IPv$IPVersion" $Direction $Group @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
 # First remove all existing rules matching group

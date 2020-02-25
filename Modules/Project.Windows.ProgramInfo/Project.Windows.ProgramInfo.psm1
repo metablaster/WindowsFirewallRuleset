@@ -467,7 +467,7 @@ function Get-UserPrograms
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
-	if (Test-TargetMachine $ComputerName)
+	if (Test-TargetComputer $ComputerName)
 	{
 		$HKU = Get-AccountSID $UserName -Machine $ComputerName
 		$HKU += "\Software\Microsoft\Windows\CurrentVersion\Uninstall"
@@ -554,7 +554,7 @@ function Get-SystemPrograms
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
-	if (Test-TargetMachine $ComputerName)
+	if (Test-TargetComputer $ComputerName)
 	{
 		if ([System.Environment]::Is64BitOperatingSystem)
 		{
@@ -675,7 +675,7 @@ function Get-AllUserPrograms
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
 	# TODO: if else here not at the end
-	if (Test-TargetMachine $ComputerName)
+	if (Test-TargetComputer $ComputerName)
 	{
 		# TODO: this key may not exist on fresh installed systems, tested in fresh installed Windows Server 2019
 		$HKLM = "SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData"
@@ -782,7 +782,7 @@ function Get-ExecutablePaths
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
-	if (Test-TargetMachine $ComputerName)
+	if (Test-TargetComputer $ComputerName)
 	{
 		if ([System.Environment]::Is64BitOperatingSystem)
 		{
@@ -1747,7 +1747,7 @@ function Get-NetFramework
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
-	if (Test-TargetMachine $ComputerName)
+	if (Test-TargetComputer $ComputerName)
 	{
 		$HKLM = "SOFTWARE\Microsoft\NET Framework Setup\NDP"
 
@@ -1871,7 +1871,7 @@ function Get-WindowsSDK
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
-	if (Test-TargetMachine $ComputerName)
+	if (Test-TargetComputer $ComputerName)
 	{
 		if ([System.Environment]::Is64BitOperatingSystem)
 		{
@@ -1963,7 +1963,7 @@ function Get-WindowsKits
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
-	if (Test-TargetMachine $ComputerName)
+	if (Test-TargetComputer $ComputerName)
 	{
 		if ([System.Environment]::Is64BitOperatingSystem)
 		{
@@ -2053,7 +2053,7 @@ function Get-WindowsDefender
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
-	if (Test-TargetMachine $ComputerName)
+	if (Test-TargetComputer $ComputerName)
 	{
 		$HKLM = "SOFTWARE\Microsoft\Windows Defender"
 
@@ -2127,7 +2127,7 @@ System.Management.Automation.PSCustomObject for installed Microsoft SQL Server M
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
-	if (Test-TargetMachine $ComputerName)
+	if (Test-TargetComputer $ComputerName)
 	{
 		if ([System.Environment]::Is64BitOperatingSystem)
 		{

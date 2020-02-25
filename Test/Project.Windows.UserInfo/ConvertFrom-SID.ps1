@@ -26,8 +26,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# TODO: Include modules you need, update licence Copyright and start writing test code
-
 #
 # Unit test for Test-Function
 #
@@ -41,8 +39,6 @@ Test-SystemRequirements
 . $ProjectRoot\Test\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo
-# Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
-# Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
@@ -50,19 +46,32 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
+$VerbosePreference = "Continue"
+$DebugPreference = "Continue"
 
 Start-Test
 
-New-Test "Get-GroupUsers 'Users', 'Administrators'"
+New-Test "Get-GroupUsers 'Users', 'Administrators', NT SYSTEM, NT LOCAL SERVICE"
 $UserAccounts = Get-GroupUsers "Users", "Administrators" @Logs
 $UserAccounts
 
-New-Test "ConvertFrom-SID"
+$NTAccounts = Get-AccountSID -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE" @Logs
+$NTAccounts
+
+New-Test "ConvertFrom-SID users and admins"
 foreach($Account in $UserAccounts)
 {
-	Write-Information -Tags "Test" -MessageData "INFO: Processing account: $($Account.Account)"
-	$Account.SID | ConvertFrom-SID @Logs
+	$Account.SID | ConvertFrom-SID @Logs | Select-Object -ExpandProperty Name
 }
+
+New-Test "ConvertFrom-SID NT AUTHORITY users"
+foreach($Account in $NTAccounts)
+{
+	$Account | ConvertFrom-SID @Logs | Select-Object -ExpandProperty Name
+}
+
+New-Test "Get-TypeName"
+$UserAccounts[0] | Get-TypeName @Logs
 
 Update-Logs
 Exit-Test

@@ -2,7 +2,11 @@
 <#
 MIT License
 
+Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems
+Homepage: https://github.com/metablaster/WindowsFirewallRuleset
+
 Copyright (C) 2016 Warren Frame
+Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,16 +32,28 @@ SOFTWARE.
 Convert SID to user or computer account name
 .DESCRIPTION
 Convert SID to user or computer account name
-.PARAMETER SID
+.PARAMETER SIDArray
 One or more SIDs to convert
 .EXAMPLE
 ConvertFrom-SID S-1-5-21-2139171146-395215898-1246945465-2359
 .EXAMPLE
 'S-1-5-32-580' | ConvertFrom-SID
-.FUNCTIONALITY
-Active Directory
+.INPUTS
+One or multiple SID's
+.OUTPUTS
+PSObject composed of SID and user or account
 .NOTES
 SID conversion for well known SIDs from http://support.microsoft.com/kb/243330
+Original code link: https://github.com/RamblingCookieMonster/PowerShell
+
+TODO: Need to handle more NT AUTHORITY users and similar
+TODO: need to improve to have consitent output ie. DOMAIN\USER, see test results
+
+Changes by metablaster:
+add verbose and debug output
+remove try and empty catch by setting better approach
+rename parameter
+format code style to project defaults and added few more comments
 #>
 function ConvertFrom-SID
 {
@@ -50,8 +66,9 @@ function ConvertFrom-SID
 
     begin
     {
-        # well known SID to name map
-        $wellKnownSIDs = @{
+        # well known SIDs name/value map
+        # TODO: script scope variable?
+        $WellKnownSIDs = @{
             'S-1-0' = 'Null Authority'
             'S-1-0-0' = 'Nobody'
             'S-1-1' = 'World Authority'
@@ -149,41 +166,58 @@ function ConvertFrom-SID
 
     process
     {
+        Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+
         $Result = @()
         # loop through provided SIDs
         foreach($SID in $SIDArray)
         {
-            $FullSID = $SID
-            # Check for domain contextual SID's
-            try
-            {
-                $IsDomain = $false
+            Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing: $SID"
 
+            # Make a copy since modified SID may not be used
+            $FullSID = $SID
+
+            # Check for domain contextual SID's
+            $IsDomain = $false
+
+            if ($SID.Length -gt 8)
+            {
                 if($SID.Remove(8) -eq "S-1-5-21")
                 {
+                    Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input SID is domain SID"
+
                     $IsDomain = $true
-                    $Suffix = $SID.Substring($SID.Length - 4)
+                    $Suffix = $SID.Substring($SID.Length - 4) # ie. 1003
                     $SID = $SID.Remove(8) + $Suffix
                 }
-            }
-            catch
-            {
-                # String size issues
+                else
+                {
+                    Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input SID is not domain SID"
+                }
             }
 
             # Map name to well known sid. If this fails, use .net to get the account
-            $Name = $wellKnownSIDs[$SID]
-            if(!$Name)
+            $Name = $WellKnownSIDs[$SID]
+
+            if($Name)
             {
+                Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input SID is well known SID"
+            }
+            else
+            {
+                Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input SID is not well known SID"
                 if($IsDomain)
                 {
                     $SID = $FullSID
                 }
+
                 # try to translate the SID to an account
                 try
                 {
+                    Write-Debug -Message "[$($MyInvocation.InvocationName)] Translating SID: $SID"
+
                     $SIDObject = New-Object System.Security.Principal.SecurityIdentifier($SID)
-                    $Name = ( $SIDObject.Translate([System.Security.Principal.NTAccount]) ).Value
+                    $Name = $SIDObject.Translate([System.Security.Principal.NTAccount]).Value
                 }
                 catch
                 {
@@ -195,7 +229,7 @@ function ConvertFrom-SID
             # Display the results
             $Result += New-Object -TypeName PSObject -Property @{
                 SID = $FullSID
-                UserAccount = $Name
+                Name = $Name
             }
         }
 

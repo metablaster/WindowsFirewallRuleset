@@ -52,25 +52,28 @@ Start-Test
 [string] $Domain = "NT AUTHORITY"
 [string[]] $Groups = @("Users", "Administrators")
 
-New-Test "Get-SDDL -Users $Users -Domain $Domain"
-$UsersSDDL = Get-SDDL -Users $Users -Domain $Domain @Logs
-$UsersSDDL
+New-Test "Get-SDDL -User $Users -Domain $Domain"
+$TestUsersSDDL = Get-SDDL -User $Users -Domain $Domain @Logs
+$TestUsersSDDL
 
-New-Test "Get-SDDL -Groups $Groups"
-$UsersSDDL = Get-SDDL -Groups $Groups @Logs
-$UsersSDDL
+New-Test "Get-SDDL -Group $Groups"
+$TestUsersSDDL = Get-SDDL -Group $Groups @Logs
+$TestUsersSDDL
 
-New-Test "Get-SDDL -Groups $Groups -CIM"
-$UsersSDDL = Get-SDDL -Groups $Groups -CIM @Logs
-$UsersSDDL
+New-Test "Get-SDDL -Group $Groups -CIM"
+$TestUsersSDDL = Get-SDDL -Group $Groups -CIM @Logs
+$TestUsersSDDL
 
-[string[]] $Users = @("Administrator", "test")
-New-Test "Get-SDDL -Users $Users"
-$UsersSDDL = Get-SDDL -Users $Users @Logs
-$UsersSDDL
+[string[]] $Users = "Administrator", "test"
+New-Test "Get-SDDL -User $Users"
+$TestUsersSDDL = Get-SDDL -User $Users @Logs
+$TestUsersSDDL
 
 New-Test "$Groups | Get-GroupSID -CIM"
 $Groups | Get-GroupSID -CIM
+
+New-Test "Typename: Get-GroupSID"
+$TestUsersSDDL | Get-TypeName @Logs
 
 Update-Logs
 Exit-Test

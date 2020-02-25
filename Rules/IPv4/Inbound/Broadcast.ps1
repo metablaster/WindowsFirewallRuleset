@@ -57,7 +57,7 @@ $Profile = "Private, Domain"
 $Group = "Broadcast"
 
 # Ask user if he wants to load these rules
-Update-Context "IPv$IPVersion" $Direction $Group
+Update-Context "IPv$IPVersion" $Direction $Group @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
 # First remove all existing rules matching group

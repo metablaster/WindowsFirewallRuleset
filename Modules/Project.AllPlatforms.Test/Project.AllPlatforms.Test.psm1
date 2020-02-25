@@ -104,11 +104,12 @@ function New-Test
 	$Message = "Testing: $InputMessage"
 	$Asterisks = $("*" * ($Message.Length + 4))
 
-	Write-Host ""
-	Write-Host $Asterisks
-	Write-Host "* $Message *"
-	Write-Host $Asterisks
-	Write-Host ""
+	# NOTE: Write-Host would mess up test cases outputs
+	Write-Output ""
+	Write-Output $Asterisks
+	Write-Output "* $Message *"
+	Write-Output $Asterisks
+	Write-Output ""
 }
 
 <#

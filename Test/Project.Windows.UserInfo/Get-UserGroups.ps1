@@ -26,8 +26,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# TODO: Include modules you need, update licence Copyright and start writing test code
-
 #
 # Unit test for Test-Function
 #
@@ -41,8 +39,6 @@ Test-SystemRequirements
 . $ProjectRoot\Test\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo
-# Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
-# Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
@@ -52,18 +48,17 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-# New-Test "Get-UserGroups"
-# Get-UserGroups
+New-Test "Get-UserGroups"
+Get-UserGroups @Logs
 
 New-Test "Get-UserGroups CIM server"
-Get-UserGroups | Where-Object -Property Group -eq "Users" #| Get-TypeName
-# $UserGroups | Where-Object -Property Name -eq "Users"
+Get-UserGroups -CIM @Logs
 
-# New-Test "Typename: Get-UserGroups -CIM"
-# Get-UserGroups "localhost" -CIM | Get-TypeName
+New-Test "Failure test"
+Get-UserGroups "ZOMBI_PC" @Logs
 
-# New-Test "Failure test"
-# Get-UserGroups "ZOMBI_PC"
+New-Test "Typename: Get-UserGroups -CIM"
+Get-UserGroups "localhost" -CIM @Logs | Get-TypeName @Logs
 
-
+Update-Logs
 Exit-Test

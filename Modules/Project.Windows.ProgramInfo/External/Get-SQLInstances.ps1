@@ -28,13 +28,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-
-<# Links to original and individual versions of code
-https://github.com/RamblingCookieMonster/PowerShell
-https://github.com/metablaster/WindowsFirewallRuleset
-https://gallery.technet.microsoft.com/scriptcenter/Get-SQLInstance-9a3245a0
-#>
-
 <#
 .SYNOPSIS
 	Retrieves SQL server information from a local or remote servers.
@@ -73,6 +66,11 @@ https://gallery.technet.microsoft.com/scriptcenter/Get-SQLInstance-9a3245a0
 	- update reported server versions
 	- added more verbose and debug output, path formatting.
 	- Replaced WMI calls with CIM calls which are more universal and cross platfrom that WMI
+
+	Links to original and individual versions of code
+	https://github.com/RamblingCookieMonster/PowerShell
+	https://github.com/metablaster/WindowsFirewallRuleset
+	https://gallery.technet.microsoft.com/scriptcenter/Get-SQLInstance-9a3245a0
 
 .FUNCTIONALITY
 	Computers

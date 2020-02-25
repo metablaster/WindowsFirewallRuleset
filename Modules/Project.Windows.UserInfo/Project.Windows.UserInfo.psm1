@@ -65,7 +65,7 @@ $UserNames = ConvertFrom-UserAccounts ($UserAccounts | Select-Object -ExpandProp
 .INPUTS
 None. You cannot pipe objects to ConvertFrom-UserAccounts
 .OUTPUTS
-System.String[] Array of usernames in form of: USERNAME
+Strings of usernames in form of: USERNAME
 #>
 function ConvertFrom-UserAccount
 {
@@ -108,6 +108,7 @@ PSCustomObject of enabled user accounts in specified group
 .NOTES
 CIM switch is not supported on PowerShell Core
 Switch to list all accounts
+TODO: should we handle NT AUTHORITY and similar?
 #>
 function Get-GroupUsers
 {
@@ -150,7 +151,7 @@ function Get-GroupUsers
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Computer"
 
 				# Core: -TargetName $Computer -TimeoutSeconds $ConnectionTimeout -IPv4
-				if (Test-TargetMachine $Computer)
+				if (Test-TargetComputer $Computer)
 				{
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Computer"
 
@@ -178,13 +179,13 @@ function Get-GroupUsers
 						# Finally compare these 2 results and assemble group users which are active, also includes SID
 						foreach ($Account in $EnabledAccounts)
 						{
-							if ($GroupUsers -contains $Account)
+							if ($GroupUsers -contains $Account.Name)
 							{
 								Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing account: $Account"
 
 								$UserAccounts += New-Object -TypeName PSObject -Property @{
-									User = Split-Path -Path $Account -Leaf
-									Account = $Account
+									User = $Account.Name
+									Account = $Account.Caption
 									Computer = $Computer
 									SID = $Account.SID
 								}
@@ -297,7 +298,7 @@ function Get-UserGroups
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Computer"
 
 				# Core: -TimeoutSeconds $ConnectionTimeout -IPv4
-				if (Test-TargetMachine $Computer)
+				if (Test-TargetComputer $Computer)
 				{
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Computer"
 
@@ -536,7 +537,7 @@ function Get-GroupSID
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
 				# Core: -TimeoutSeconds $ConnectionTimeout -IPv4
-				if (Test-TargetMachine $ComputerName)
+				if (Test-TargetComputer $ComputerName)
 				{
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $ComputerName"
 
@@ -638,7 +639,7 @@ function Get-AccountSID
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
 				# Core: -TimeoutSeconds $ConnectionTimeout -IPv4
-				if (Test-TargetMachine $ComputerName)
+				if (Test-TargetComputer $ComputerName)
 				{
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying CIM server on $ComputerName"
 
@@ -728,7 +729,7 @@ if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 # Function exports
 #
 
-Export-ModuleMember -Function ConvertFrom-UserAccounts
+Export-ModuleMember -Function ConvertFrom-UserAccount
 Export-ModuleMember -Function Get-AccountSID
 Export-ModuleMember -Function ConvertFrom-SID
 Export-ModuleMember -Function Get-GroupUsers

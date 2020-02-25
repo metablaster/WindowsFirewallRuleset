@@ -67,7 +67,7 @@ $Profile = "Private, Domain"
 $MulticastUsers = Get-SDDL -Domain "NT AUTHORITY" -Users @("LOCAL SERVICE", "NETWORK SERVICE")
 
 # Ask user if he wants to load these rules
-Update-Context "IPv$IPVersion" $Direction $Group
+Update-Context "IPv$IPVersion" $Direction $Group @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
 # First remove all existing rules matching group
