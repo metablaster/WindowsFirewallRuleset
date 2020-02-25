@@ -51,59 +51,16 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-New-Test "Get-UserAccounts:"
-
-[string[]] $UserAccounts = Get-UserAccounts "Users" @Logs
-Update-Logs
-
-[string[]] $AdminAccounts = Get-UserAccounts "Administrators" @Logs
-Update-Logs
-$UserAccounts
-$AdminAccounts
-
-New-Test "ConvertFrom-UserAccounts:"
-
-$Users = ConvertFrom-UserAccounts $UserAccounts @Logs
-Update-Logs
-$Admins = ConvertFrom-UserAccounts $AdminAccounts @Logs
-Update-Logs
-
-$Users
-$Admins
-
-New-Test "Get-UserSID:"
-
-foreach($User in $Users)
-{
-	Get-UserSID $User @Logs
-}
-Update-Logs
-
-foreach($Admin in $Admins)
-{
-	Get-UserSID $Admin @Logs
-}
-Update-Logs
+New-Test "Get-GroupPrincipals:"
+$GroupAccounts = Get-GroupPrincipals "Users", "Administrators" @Logs
+$GroupAccounts
 
 New-Test "Get-AppSID: foreach User"
-
-foreach($User in $Users) {
-	Write-Information -Tags "Test" -MessageData "INFO: Processing for: $User"
-	Get-AppxPackage -User $User -PackageTypeFilter Bundle @Logs | ForEach-Object {
-		Get-AppSID $User $_.PackageFamilyName @Logs
-	}
-}
-Update-Logs
-
-New-Test "Get-AppSID: foreach Admin"
-
-foreach($Admin in $Admins) {
-	Write-Information -Tags "Test" -MessageData "INFO: Processing for: $Admin"
-	Get-AppxPackage -User $Admin -PackageTypeFilter Bundle @Logs | ForEach-Object {
-		Get-AppSID $Admin $_.PackageFamilyName @Logs
+foreach($Account in $GroupAccounts) {
+	Get-AppxPackage -User $Account.User -PackageTypeFilter Bundle @Logs | ForEach-Object {
+		Get-AppSID $Account.User $_.PackageFamilyName @Logs
 	}
 }
 
 Update-Logs
-
 Exit-Test

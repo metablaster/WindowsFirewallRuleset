@@ -50,15 +50,15 @@ Start-Test
 
 Start-Test
 
-New-Test "Get-GroupUsers 'Users', 'Administrators'"
-$UserAccounts = Get-GroupUsers "Users", "Administrators" @Logs
+New-Test "Get-GroupPrincipals 'Users', 'Administrators'"
+$UserAccounts = Get-GroupPrincipals "Users", "Administrators" @Logs
 $UserAccounts
 
 New-Test "ConvertFrom-UserAccount:"
 $UserNames = ConvertFrom-UserAccount ($UserAccounts | Select-Object -ExpandProperty Account) @Logs
 $UserNames
 
-New-Test "Typename: UserAccount"
+New-Test "Get-TypeName"
 $UserNames | Get-TypeName @Logs
 
 Update-Logs

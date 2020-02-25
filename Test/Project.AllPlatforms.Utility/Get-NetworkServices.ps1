@@ -48,7 +48,11 @@ if (!(Approve-Execute @Logs)) { exit }
 Start-Test
 
 New-Test "Get-NetworkServices"
-Get-NetworkServices "$ProjectRoot\Rules" @Logs
+$Result = Get-NetworkServices "$ProjectRoot\Rules" @Logs
+$Result
+
+New-Test "Get-TypeName"
+$Result | Get-TypeName @Logs
 
 Update-Logs
 Exit-Test

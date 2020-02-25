@@ -48,7 +48,10 @@ if (!(Approve-Execute @Logs)) { exit }
 Start-Test
 
 New-Test "Test-TargetComputer"
-Test-TargetComputer ([System.Environment]::MachineName) @Logs
+$Result = Test-TargetComputer ([System.Environment]::MachineName) @Logs
+
+New-Test "Get-TypeName"
+$Result | Get-TypeName @Logs
 
 Update-Logs
 Exit-Test

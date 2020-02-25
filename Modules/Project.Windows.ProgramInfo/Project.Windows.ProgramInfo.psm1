@@ -71,6 +71,7 @@ None. You cannot pipe objects to Get-AppSID
 System.String store app SID (security identifier)
 .NOTES
 TODO: Test if path exists
+TODO: remote computers?
 #>
 function Get-AppSID
 {
@@ -95,6 +96,7 @@ function Get-AppSID
 
 		foreach ($Entry in $ACE)
 		{
+			# NOTE: avoid spaming
 			# Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing: $Entry"
 
 			# package SID starts with S-1-15-2-
@@ -2243,13 +2245,13 @@ New-Variable -Name UserProfileEnvironment -Scope Script -Option Constant -Value 
 	)
 
 # Programs installed for all users
-New-Variable -Name SystemPrograms -Scope Script -Option ReadOnly -Value (Get-SystemPrograms -ComputerName $PolicyStore)
+New-Variable -Name SystemPrograms -Scope Script -Option ReadOnly -Value (Get-SystemPrograms -Computer $PolicyStore)
 
 # Programs installed for all users
-New-Variable -Name ExecutablePaths -Scope Script -Option ReadOnly -Value (Get-ExecutablePaths -ComputerName $PolicyStore)
+New-Variable -Name ExecutablePaths -Scope Script -Option ReadOnly -Value (Get-ExecutablePaths -Computer $PolicyStore)
 
 # Programs installed for all users
-New-Variable -Name AllUserPrograms -Scope Script -Option ReadOnly -Value (Get-AllUserPrograms -ComputerName $PolicyStore)
+New-Variable -Name AllUserPrograms -Scope Script -Option ReadOnly -Value (Get-AllUserPrograms -Computer $PolicyStore)
 
 #
 # Function exports

@@ -52,7 +52,7 @@ New-Test "Get-Broadcast"
 $BroadCast = Get-Broadcast @Logs
 $BroadCast
 
-New-Test "Typename: Get-Broadcast"
+New-Test "Get-TypeName"
 $BroadCast | Get-TypeName @Logs
 
 Update-Logs

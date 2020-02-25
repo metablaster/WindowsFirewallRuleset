@@ -57,7 +57,11 @@ $SDDL2 = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE", "LOCAL SERVICE
 $SDDL2
 
 New-Test "Convert-SDDLToACL"
-Convert-SDDLToACL $SDDL1, $SDDL2 @Logs
+$Result = Convert-SDDLToACL $SDDL1, $SDDL2 @Logs
+$Result
+
+New-Test "Get-TypeName"
+$Result | Get-TypeName @Logs
 
 Update-Logs
 Exit-Test

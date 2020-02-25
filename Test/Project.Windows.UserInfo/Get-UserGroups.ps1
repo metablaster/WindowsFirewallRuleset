@@ -57,7 +57,7 @@ Get-UserGroups -CIM @Logs
 New-Test "Failure test"
 Get-UserGroups "ZOMBI_PC" @Logs
 
-New-Test "Typename: Get-UserGroups -CIM"
+New-Test "Get-TypeName"
 Get-UserGroups "localhost" -CIM @Logs | Get-TypeName @Logs
 
 Update-Logs

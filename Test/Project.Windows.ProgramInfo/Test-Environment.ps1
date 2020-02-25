@@ -48,96 +48,81 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-New-Test "Test-Environment"
-
 $Result = "C:\"
-$Result
+New-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
-Update-Logs
 
 $Result = "C:\\Windows\System32"
-$Result
+New-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
-Update-Logs
 
 $Result = "C:\\Windows\"
-$Result
+New-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
-Update-Logs
 
 $Result = "C:\Program Files (x86)\Windows Defender\"
-$Result
+New-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
-Update-Logs
 
 $Result = "C:\Program Files\WindowsPowerShell"
-$Result
+New-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
-Update-Logs
 
 $Result = '"C:\ProgramData\Git"'
-$Result
+New-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
-Update-Logs
 
 $Result = "C:\PerfLogs"
-$Result
+New-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
-Update-Logs
 
 $Result = "C:\Windows\Microsoft.NET\Framework64\v3.5\\"
-$Result
+New-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
-Update-Logs
 
 $Result = "'C:\Windows\Microsoft.NET\Framework64\v3.5'"
-$Result
+New-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
-Update-Logs
 
 $Result = "D:\\microsoft\\windows"
-$Result
+New-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
-Update-Logs
 
 $Result = "D:\"
-$Result
+New-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
-Update-Logs
 
 $Result = "C:\\"
-$Result
+New-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
-Update-Logs
 
 $Result = "%LOCALAPPDATA%\OneDrive"
-$Result
+New-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
-Update-Logs
 
 $Result = "%HOME%\AppData\Local\OneDrive"
-$Result
+New-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
-Update-Logs
 
 $Result = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
-$Result
+New-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
-Update-Logs
 
 $Result = "%SystemDrive%"
-$Result
-Test-Environment $Result @Logs
-Update-Logs
+New-Test "Test-Environment: $Result"
+$Status = Test-Environment $Result @Logs
+$Status
 
 $Result = ""
-$Result
+New-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
-Update-Logs
 
 $Result = $null
-$Result
+New-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
-Update-Logs
 
+New-Test "Get-TypeName"
+$Status | Get-TypeName @Logs
+
+Update-Logs
 Exit-Test

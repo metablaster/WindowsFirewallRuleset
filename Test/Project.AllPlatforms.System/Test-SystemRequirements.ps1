@@ -45,8 +45,8 @@ Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Lo
 if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
+
 New-Test "Test-SystemRequirements"
 Test-SystemRequirements $true
-# Update-Logs
 
 Exit-Test

@@ -60,7 +60,7 @@ Strip computer names out of computer acounts
 .PARAMETER UserAccounts
 String array of user accounts in form of: COMPUTERNAME\USERNAME
 .EXAMPLE
-$UserAccounts = Get-GroupUsers "Users", "Administrators"
+$UserAccounts = Get-GroupPrincipals "Users", "Administrators"
 $UserNames = ConvertFrom-UserAccounts ($UserAccounts | Select-Object -ExpandProperty Account)
 .INPUTS
 None. You cannot pipe objects to ConvertFrom-UserAccounts
@@ -98,9 +98,9 @@ One or more computers which to querry for group users
 .PARAMETER CIM
 Whether to contact CIM server (requred for remote computers)
 .EXAMPLE
-Get-GroupUsers @("Users", "Administrators")
+Get-GroupPrincipals @("Users", "Administrators")
 .EXAMPLE
-Get-GroupUsers "Users" -Machines @(DESKTOP, LAPTOP) -CIM
+Get-GroupPrincipals "Users" -Machines @(DESKTOP, LAPTOP) -CIM
 .INPUTS
 System.String[] User groups
 .OUTPUTS
@@ -110,7 +110,7 @@ CIM switch is not supported on PowerShell Core
 Switch to list all accounts
 TODO: should we handle NT AUTHORITY and similar?
 #>
-function Get-GroupUsers
+function Get-GroupPrincipals
 {
 	[CmdletBinding(PositionalBinding = $false)]
 	param (
@@ -722,8 +722,8 @@ if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 }
 
 # Get list of user accounts in form of COMPUTERNAME\USERNAME
-# New-Variable -Name UserAccounts -Scope Script -Option Constant -Value (Get-GroupUsers "Users" -Computer $PolicyStore)
-# New-Variable -Name AdminAccounts -Scope Script -Option Constant -Value (Get-GroupUsers "Administrators" -Computer $PolicyStore)
+# New-Variable -Name UserAccounts -Scope Script -Option Constant -Value (Get-GroupPrincipals "Users" -Computer $PolicyStore)
+# New-Variable -Name AdminAccounts -Scope Script -Option Constant -Value (Get-GroupPrincipals "Administrators" -Computer $PolicyStore)
 
 #
 # Function exports
@@ -732,7 +732,7 @@ if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 Export-ModuleMember -Function ConvertFrom-UserAccount
 Export-ModuleMember -Function Get-AccountSID
 Export-ModuleMember -Function ConvertFrom-SID
-Export-ModuleMember -Function Get-GroupUsers
+Export-ModuleMember -Function Get-GroupPrincipals
 Export-ModuleMember -Function Get-GroupSID
 Export-ModuleMember -Function Get-SDDL
 Export-ModuleMember -Function Merge-SDDL

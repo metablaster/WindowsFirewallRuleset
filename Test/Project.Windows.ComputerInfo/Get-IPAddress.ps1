@@ -58,7 +58,7 @@ Get-IPAddress "IPv6" @Logs
 New-Test "Get-IPAddress IPv3"
 Get-IPAddress "IPv3" @Logs
 
-New-Test "Typename: Get-IPAddress"
+New-Test "Get-TypeName"
 $IPAddress | Get-TypeName @Logs
 
 Update-Logs

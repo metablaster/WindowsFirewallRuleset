@@ -72,7 +72,7 @@ $TestUsersSDDL
 New-Test "$Groups | Get-GroupSID -CIM"
 $Groups | Get-GroupSID -CIM
 
-New-Test "Typename: Get-GroupSID"
+New-Test "Get-TypeName"
 $TestUsersSDDL | Get-TypeName @Logs
 
 Update-Logs

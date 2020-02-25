@@ -51,8 +51,8 @@ $DebugPreference = "Continue"
 
 Start-Test
 
-New-Test "Get-GroupUsers 'Users', 'Administrators', NT SYSTEM, NT LOCAL SERVICE"
-$UserAccounts = Get-GroupUsers "Users", "Administrators" @Logs
+New-Test "Get-GroupPrincipals 'Users', 'Administrators', NT SYSTEM, NT LOCAL SERVICE"
+$UserAccounts = Get-GroupPrincipals "Users", "Administrators" @Logs
 $UserAccounts
 
 $NTAccounts = Get-AccountSID -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE" @Logs

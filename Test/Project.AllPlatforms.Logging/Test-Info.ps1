@@ -102,11 +102,9 @@ function Test-Empty
 }
 
 Start-Test
-# $ErrorActionPreference = "SilentlyContinue"
 
 New-Test "No info"
 Get-ChildItem -Path "C:\" @Logs | Out-Null
-# $ErrorActionPreference = "Continue"
 
 New-Test "Test-Info"
 Test-Info @Logs

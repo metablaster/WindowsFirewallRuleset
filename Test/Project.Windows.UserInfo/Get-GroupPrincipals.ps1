@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-GroupUsers
+# Unit test for Get-GroupPrincipals
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -39,8 +39,6 @@ Test-SystemRequirements
 . $ProjectRoot\Test\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo
-# Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
-# Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
@@ -50,22 +48,22 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-New-Test "Get-GroupUsers"
-$UsersTest = Get-GroupUsers "Users" @Logs
+New-Test "Get-GroupPrincipals"
+$UsersTest = Get-GroupPrincipals "Users" @Logs
 $UsersTest
 
-New-Test "Get-GroupUsers CIM server"
-$CIMTest = Get-GroupUsers "Users", "Administrators" -Machine "localhost" -CIM @Logs
+New-Test "Get-GroupPrincipals CIM server"
+$CIMTest = Get-GroupPrincipals "Users", "Administrators" -Machine "localhost" -CIM @Logs
 $CIMTest
 
 New-Test "Expand users"
 $UsersTest | Select-Object -ExpandProperty User @Logs
 
 New-Test "Failure test"
-$FailedUsers = Get-GroupUsers "asdf Users" @Logs
+$FailedUsers = Get-GroupPrincipals "asdf Users" @Logs
 $FailedUsers
 
-New-Test "Typename: Get-GroupUsers"
+New-Test "Get-TypeName"
 $UsersTest | Get-TypeName @Logs
 
 Update-Logs

@@ -96,7 +96,6 @@ function Test-Combo
 }
 
 Start-Test
-# $ErrorActionPreference = "SilentlyContinue"
 
 New-Test "Generate errors"
 $Folder = "C:\CrazyFolder"
@@ -104,7 +103,6 @@ Get-ChildItem -Path $Folder @Logs
 
 New-Test "No errors"
 Get-ChildItem -Path "C:\" @Logs | Out-Null
-# $ErrorActionPreference = "Continue"
 
 New-Test "Test-Error"
 Test-Error @Logs

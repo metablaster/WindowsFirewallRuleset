@@ -75,7 +75,7 @@ $AccountSID
 New-Test "$Users | Get-AccountSID -CIM"
 $Users | Get-AccountSID -CIM -Domain $Domain @Logs
 
-New-Test "Typename: Get-AccountSID"
+New-Test "Get-TypeName"
 $Users | Get-TypeName @Logs
 
 Update-Logs

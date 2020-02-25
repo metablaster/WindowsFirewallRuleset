@@ -58,7 +58,7 @@ Get-ConnectedAdapters IPv6 @Logs
 New-Test "Get-ConnectedAdapters binding"
 Get-ConnectedAdapters IPv4 @Logs | Select-Object -ExpandProperty IPv4Address @Logs
 
-New-Test "Typename: Get-ConnectedAdapters"
+New-Test "Get-TypeName"
 $Adapters | Get-TypeName @Logs
 
 Update-Logs

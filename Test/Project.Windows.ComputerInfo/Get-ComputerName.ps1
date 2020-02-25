@@ -52,7 +52,7 @@ New-Test "Get-ComputerName"
 $ComputerName = Get-ComputerName @Logs
 $ComputerName
 
-New-Test "Typename: Get-IPAddress"
+New-Test "Get-TypeName"
 $ComputerName | Get-TypeName @Logs
 
 Update-Logs
