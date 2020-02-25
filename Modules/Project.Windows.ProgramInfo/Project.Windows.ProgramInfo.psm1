@@ -76,6 +76,7 @@ function Get-AppSID
 {
 	[CmdletBinding()]
 	param (
+		[Alias("User")]
 		[Parameter(Mandatory = $true)]
 		[string] $UserName,
 
@@ -453,9 +454,11 @@ function Get-UserPrograms
 {
 	[CmdletBinding()]
 	param (
+		[Alias("User")]
 		[Parameter(Mandatory = $true)]
 		[string] $UserName,
 
+		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
 		[string] $ComputerName = [System.Environment]::MachineName
 	)
@@ -543,6 +546,7 @@ function Get-SystemPrograms
 {
 	[CmdletBinding()]
 	param (
+		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
 		[string] $ComputerName = [System.Environment]::MachineName
 	)
@@ -662,6 +666,7 @@ function Get-AllUserPrograms
 {
 	[CmdletBinding()]
 	param (
+		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
 		[string] $ComputerName = [System.Environment]::MachineName
 	)
@@ -726,6 +731,7 @@ function Get-AllUserPrograms
 					# NOTE: Avoid spamming
 					$InstallLocation = Format-Path $InstallLocation -Verbose:$false -Debug:$false
 
+					# TODO: generate Principal entry in all registry functions
 					# Get more key entries as needed
 					$AllUserPrograms += New-Object -TypeName PSObject -Property @{
 						"ComputerName" = $ComputerName
@@ -768,6 +774,7 @@ function Get-ExecutablePaths
 {
 	[CmdletBinding()]
 	param (
+		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
 		[string] $ComputerName = [System.Environment]::MachineName
 	)
@@ -1087,7 +1094,7 @@ None. You cannot pipe objects to Edit-Table
 .OUTPUTS
 None, global installation table is updated
 .NOTES
-Table code needs to be updated to fill it for USERS instead of same path for each individual user
+TODO: principal parameter?
 #>
 function Edit-Table
 {
@@ -1266,6 +1273,7 @@ function Find-Installation
 		[Parameter(Mandatory = $true)]
 		[string] $Program,
 
+		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
 		[string] $ComputerName = [System.Environment]::MachineName
 	)
@@ -1731,6 +1739,7 @@ function Get-NetFramework
 {
 	[CmdletBinding()]
 	param (
+		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
 		[string] $ComputerName = [System.Environment]::MachineName
 	)
@@ -1854,6 +1863,7 @@ function Get-WindowsSDK
 {
 	[CmdletBinding()]
 	param (
+		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
 		[string] $ComputerName = [System.Environment]::MachineName
 	)
@@ -1945,6 +1955,7 @@ function Get-WindowsKits
 {
 	[CmdletBinding()]
 	param (
+		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
 		[string] $ComputerName = [System.Environment]::MachineName
 	)
@@ -2034,6 +2045,7 @@ function Get-WindowsDefender
 {
 	[CmdletBinding()]
 	param (
+		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
 		[string] $ComputerName = [System.Environment]::MachineName
 	)
@@ -2107,6 +2119,7 @@ System.Management.Automation.PSCustomObject for installed Microsoft SQL Server M
  {
 	[CmdletBinding()]
 	param (
+		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
 		[string] $ComputerName = [System.Environment]::MachineName
 	)
@@ -2230,13 +2243,13 @@ New-Variable -Name UserProfileEnvironment -Scope Script -Option Constant -Value 
 	)
 
 # Programs installed for all users
-New-Variable -Name SystemPrograms -Scope Script -Option ReadOnly -Value (Get-SystemPrograms)
+New-Variable -Name SystemPrograms -Scope Script -Option ReadOnly -Value (Get-SystemPrograms -ComputerName $PolicyStore)
 
 # Programs installed for all users
-New-Variable -Name ExecutablePaths -Scope Script -Option ReadOnly -Value (Get-ExecutablePaths)
+New-Variable -Name ExecutablePaths -Scope Script -Option ReadOnly -Value (Get-ExecutablePaths -ComputerName $PolicyStore)
 
 # Programs installed for all users
-New-Variable -Name AllUserPrograms -Scope Script -Option ReadOnly -Value (Get-AllUserPrograms)
+New-Variable -Name AllUserPrograms -Scope Script -Option ReadOnly -Value (Get-AllUserPrograms -ComputerName $PolicyStore)
 
 #
 # Function exports

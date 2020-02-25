@@ -52,11 +52,10 @@ $DebugPreference = "SilentlyContinue"
 New-Test "Update-Context IPv4.Outbound -> ICMPv4"
 Update-Context "IPv$IPVersion" "Outbound" "ICMPv4" @Logs
 Approve-Execute @Logs | Out-Null
-Update-Logs
 
 New-Test "Update-Context Test.Update-Context"
 Update-Context "Test" "Update-Context" @Logs
 Approve-Execute @Logs | Out-Null
-Update-Logs
 
+Update-Logs
 Exit-Test

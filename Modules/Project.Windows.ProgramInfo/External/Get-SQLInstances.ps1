@@ -148,12 +148,13 @@ function Get-SQLInstances
 	param (
 		[Parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
 		[Alias("Servers", "Machines")]
-		[string[]] $Computers = [System.Environment]::MachineName,
+		[string[]] $ComputerNames = [System.Environment]::MachineName,
 		[switch] $CIM
 	)
 
 	begin
 	{
+		# TODO: begin scope for all registry functions
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 
 		if ([System.Environment]::Is64BitOperatingSystem)
@@ -175,7 +176,7 @@ function Get-SQLInstances
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 		$AllInstances = @()
-		foreach ($Computer in $Computers)
+		foreach ($Computer in $ComputerNames)
 		{
 			# TODO: what is this?
 			$Computer = $Computer -replace '(.*?)\..+','$1'
@@ -200,6 +201,7 @@ function Get-SQLInstances
 
 			foreach($HKLMRootKey in $HKLM)
 			{
+				# TODO: add COMPUTERNAME for all keys in all registry functions
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLMRootKey"
 				$RootKey = $RemoteKey.OpenSubKey($HKLMRootKey)
 

@@ -67,10 +67,11 @@ None. You cannot pipe objects to ConvertFrom-UserAccounts
 .OUTPUTS
 System.String[] Array of usernames in form of: USERNAME
 #>
-function ConvertFrom-UserAccounts
+function ConvertFrom-UserAccount
 {
 	[CmdletBinding()]
 	param(
+		[Alias("Account")]
 		[Parameter(Mandatory = $true)]
 		[string[]] $UserAccounts
 	)
@@ -80,7 +81,7 @@ function ConvertFrom-UserAccounts
 	[string[]] $UserNames = @()
 	foreach($Account in $UserAccounts)
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting user names for account: $Account"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting user name for account: $Account"
 		$UserNames += $Account.split("\")[1]
 	}
 
@@ -116,9 +117,9 @@ function Get-GroupUsers
 		[Parameter(Mandatory = $true,
 		Position = 0,
 		ValueFromPipeline = $true)]
-		[string[]] $Groups,
+		[string[]] $UserGroups,
 
-		[Alias("Computer", "Machine", "Machines", "Server", "Servers", "Domain", "Domains")]
+		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
 		[string[]] $ComputerNames = [System.Environment]::MachineName,
 
@@ -135,42 +136,42 @@ function Get-GroupUsers
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-		foreach ($ComputerName in $ComputerNames)
+		foreach ($Computer in $ComputerNames)
 		{
 			if ($CIM)
 			{
 				if ($PowerShellEdition -ne "Desktop")
 				{
-					Write-Error -Category InvalidArgument -TargetObject $ComputerName `
+					Write-Error -Category InvalidArgument -TargetObject $Computer `
 					-Message "Querying computers via CIM server with PowerShell '$PowerShellEdition' not implemented"
 					return
 				}
 
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Computer"
 
-				# Core: -TargetName $ComputerName -TimeoutSeconds $ConnectionTimeout -IPv4
-				if (Test-TargetMachine $ComputerName)
+				# Core: -TargetName $Computer -TimeoutSeconds $ConnectionTimeout -IPv4
+				if (Test-TargetMachine $Computer)
 				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $ComputerName"
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Computer"
 
-					foreach ($Group in $Groups)
+					foreach ($Group in $UserGroups)
 					{
 						# Get all users that belong to requrested group,
 						# this includes non local principal source and non 'user' users
 						# it is also missing SID
-						$GroupUsers = Get-CimInstance -Class Win32_GroupUser -Namespace "root\cimv2" -ComputerName $ComputerName |
+						$GroupUsers = Get-CimInstance -Class Win32_GroupUser -Namespace "root\cimv2" -ComputerName $Computer |
 						Where-Object { $_.GroupComponent.Name -eq $Group } |
 						Select-Object -ExpandProperty PartComponent |
 						Select-Object -ExpandProperty Name
 
 						# Get only enabled users, these include SID but also non group users
-						$EnabledAccounts = Get-CimInstance -Class Win32_UserAccount -Namespace "root\cimv2" -ComputerName $ComputerName -Filter "LocalAccount = True" |
+						$EnabledAccounts = Get-CimInstance -Class Win32_UserAccount -Namespace "root\cimv2" -ComputerName $Computer -Filter "LocalAccount = True" |
 						Where-Object -Property Disabled -ne False |
 						Select-Object -Property Name, Caption, SID, Domain
 
 						if([string]::IsNullOrEmpty($EnabledAccounts))
 						{
-							Write-Warning -Message "User group '$Group' does not have any accounts on computer: $ComputerName"
+							Write-Warning -Message "User group '$Group' does not have any accounts on computer: $Computer"
 							continue
 						}
 
@@ -184,7 +185,7 @@ function Get-GroupUsers
 								$UserAccounts += New-Object -TypeName PSObject -Property @{
 									User = Split-Path -Path $Account -Leaf
 									Account = $Account
-									Computer = $ComputerName
+									Computer = $Computer
 									SID = $Account.SID
 								}
 							}
@@ -197,24 +198,24 @@ function Get-GroupUsers
 				}
 				else
 				{
-					Write-Error -Category ConnectionError -TargetObject $ComputerName `
-					-Message "Unable to contact computer: $ComputerName"
+					Write-Error -Category ConnectionError -TargetObject $Computer `
+					-Message "Unable to contact computer: $Computer"
 				}
 			}
-			elseif ($ComputerName -eq [System.Environment]::MachineName)
+			elseif ($Computer -eq [System.Environment]::MachineName)
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying localhost"
 
-				foreach ($UserGroup in $Groups)
+				foreach ($Group in $UserGroups)
 				{
 					# Querying local machine
-					$GroupUsers = Get-LocalGroupMember -Group $UserGroup |
+					$GroupUsers = Get-LocalGroupMember -Group $Group |
 					Where-Object { $_.PrincipalSource -eq "Local" -and $_.ObjectClass -eq "User" } |
 					Select-Object -Property Name, SID
 
 					if([string]::IsNullOrEmpty($GroupUsers))
 					{
-						Write-Warning -Message "User group '$UserGroup' does not have any accounts on computer: $ComputerName"
+						Write-Warning -Message "User group '$Group' does not have any accounts on computer: $Computer"
 						continue
 					}
 
@@ -225,7 +226,7 @@ function Get-GroupUsers
 						$UserAccounts += New-Object -TypeName PSObject -Property @{
 							User = Split-Path -Path $Account.Name -Leaf
 							Account = $Account.Name
-							Computer = $ComputerName
+							Computer = $Computer
 							SID = $Account.SID
 						}
 					}
@@ -233,7 +234,7 @@ function Get-GroupUsers
 			}
 			else
 			{
-				Write-Error -Category NotImplemented -TargetObject $ComputerName `
+				Write-Error -Category NotImplemented -TargetObject $Computer `
 				-Message "Querying remote computers without CIM switch not implemented"
 			}
 		}
@@ -265,7 +266,7 @@ function Get-UserGroups
 {
 	[CmdletBinding(PositionalBinding = $false)]
 	param (
-		[Alias("Computer", "Machine", "Machines", "Server", "Servers", "Domain", "Domains")]
+		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter(Position = 0)]
 		[string[]] $ComputerNames = [System.Environment]::MachineName,
 
@@ -282,25 +283,25 @@ function Get-UserGroups
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-		foreach ($ComputerName in $ComputerNames)
+		foreach ($Computer in $ComputerNames)
 		{
 			if ($CIM)
 			{
 				if ($PowerShellEdition -ne "Desktop")
 				{
-					Write-Error -Category InvalidArgument -TargetObject $ComputerName `
+					Write-Error -Category InvalidArgument -TargetObject $Computer `
 					-Message "Querying computers via CIM server with PowerShell '$PowerShellEdition' not implemented"
 					return
 				}
 
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Computer"
 
 				# Core: -TimeoutSeconds $ConnectionTimeout -IPv4
-				if (Test-TargetMachine $ComputerName)
+				if (Test-TargetMachine $Computer)
 				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $ComputerName"
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Computer"
 
-					$RemoteGroups = Get-CimInstance -Class Win32_Group -Namespace "root\cimv2" -ComputerName $ComputerName |
+					$RemoteGroups = Get-CimInstance -Class Win32_Group -Namespace "root\cimv2" -ComputerName $Computer |
 					Where-Object -Property LocalAccount -eq "True"
 
 					foreach ($Group in $RemoteGroups)
@@ -308,24 +309,24 @@ function Get-UserGroups
 						$UserGroups += New-Object -TypeName PSObject -Property @{
 							Group = $Group.Name
 							Caption = $Group.Caption
-							Computer = $ComputerName
+							Computer = $Computer
 							SID = $Group.SID
 						}
 					}
 
 					if([string]::IsNullOrEmpty($UserGroups))
 					{
-						Write-Warning -Message "There are no user groups on computer: $ComputerName"
+						Write-Warning -Message "There are no user groups on computer: $Computer"
 						continue
 					}
 				}
 				else
 				{
-					Write-Error -Category ConnectionError -TargetObject $ComputerName `
-					-Message "Unable to contact computer: $ComputerName"
+					Write-Error -Category ConnectionError -TargetObject $Computer `
+					-Message "Unable to contact computer: $Computer"
 				}
 			} # if ($CIM)
-			elseif ($ComputerName -eq [System.Environment]::MachineName)
+			elseif ($Computer -eq [System.Environment]::MachineName)
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying localhost"
 
@@ -335,24 +336,24 @@ function Get-UserGroups
 				{
 					$UserGroups += New-Object -TypeName PSObject -Property @{
 						Group = $Group.Name
-						Caption = Join-Path -Path $ComputerName -ChildPath $Group.Name
-						Computer = $ComputerName
+						Caption = Join-Path -Path $Computer -ChildPath $Group.Name
+						Computer = $Computer
 						SID = $Group.SID
 					}
 				}
 
 				if([string]::IsNullOrEmpty($UserGroups))
 				{
-					Write-Warning -Message "There are no user groups on computer: $ComputerName"
+					Write-Warning -Message "There are no user groups on computer: $Computer"
 					continue
 				}
 			} # if ($CIM)
 			else
 			{
-				Write-Error -Category NotImplemented -TargetObject $ComputerName `
+				Write-Error -Category NotImplemented -TargetObject $Computer `
 				-Message "Querying remote computers without CIM switch not implemented"
 			} # if ($CIM)
-		} # foreach ($ComputerName in $ComputerNames)
+		} # foreach ($Computer in $ComputerNames)
 
 		return $UserGroups
 	}
@@ -423,15 +424,15 @@ function Get-SDDL
 	[CmdletBinding(PositionalBinding = $false)]
 	param (
 		[Alias("User")]
-		[Parameter(Mandatory = $true, ParameterSetName="Account")]
+		[Parameter(Mandatory = $true, ParameterSetName="User")]
 		[Parameter(Mandatory = $false, ParameterSetName="Group")]
-		[string[]] $Users,
+		[string[]] $UserNames,
 
 		[Alias("Group")]
 		[Parameter(Mandatory = $true, ParameterSetName="Group")]
-		[string[]] $Groups,
+		[string[]] $UserGroups,
 
-		[Alias("Domain", "Machine", "Server")]
+		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter(Mandatory = $false)]
 		[string] $ComputerName = [System.Environment]::MachineName,
 
@@ -443,7 +444,7 @@ function Get-SDDL
 
 	[string] $SDDL = "D:"
 
-	foreach ($User in $Users)
+	foreach ($User in $UserNames)
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL for account: $ComputerName\$User"
 
@@ -454,9 +455,9 @@ function Get-SDDL
 		}
 	}
 
-	foreach ($Group in $Groups)
+	foreach ($Group in $UserGroups)
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL for group: $Group"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL for group: $ComputerName\$Group"
 
 		$SID = Get-GroupSID $Group -Domain $ComputerName -CIM:$CIM
 		if ($SID)
@@ -501,9 +502,9 @@ function Get-GroupSID
 		[Parameter(Mandatory = $true,
 		Position = 0,
 		ValueFromPipeline = $true)]
-		[string[]] $Groups,
+		[string[]] $UserGroups,
 
-		[Alias("Machine", "Domain", "Server")]
+		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
 		[string] $ComputerName = [System.Environment]::MachineName,
 
@@ -519,9 +520,9 @@ function Get-GroupSID
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-		foreach ($Group in $Groups)
+		foreach ($Group in $UserGroups)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing: $Group"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing: $ComputerName\$Group"
 
 			if ($CIM)
 			{
@@ -600,9 +601,9 @@ function Get-AccountSID
 		[Parameter(Mandatory = $true,
 		Position = 0,
 		ValueFromPipeline = $true)]
-		[string[]] $Users,
+		[string[]] $UserNames,
 
-		[Alias("Domain", "Machine", "Server")]
+		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
 		[string] $ComputerName = [System.Environment]::MachineName,
 
@@ -620,7 +621,7 @@ function Get-AccountSID
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-		foreach ($User in $Users)
+		foreach ($User in $UserNames)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing: $ComputerName\$User"
 
@@ -706,21 +707,22 @@ if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 	# check if constants alreay initialized, used for module reloading
 	New-Variable -Name CheckInitUserInfo -Scope Global -Option Constant -Value $null
 
-	# Get list of user account in form of COMPUTERNAME\USERNAME
-	New-Variable -Name UserAccounts -Scope Global -Option Constant -Value (Get-GroupUsers "Users" -Computers $PolicyStore)
-	New-Variable -Name AdminAccounts -Scope Global -Option Constant -Value (Get-GroupUsers "Administrators" -Computers $PolicyStore)
+	# TODO: should not be used
+	# Generate SDDL string for most common groups
+	New-Variable -Name UsersGroupSDDL -Scope Global -Option Constant -Value (Get-SDDL -Group "Users" -Computer $PolicyStore)
+	New-Variable -Name AdministratorsGroupSDDL -Scope Global -Option Constant -Value (Get-SDDL -Group "Administrators" -Computer $PolicyStore)
 
-	# Generate SDDL string for accounts
-	New-Variable -Name UsersSDDL -Scope Global -Option Constant -Value (Get-SDDL -Groups "Users" -Computer $PolicyStore)
-	New-Variable -Name AdminsSDDL -Scope Global -Option Constant -Value (Get-SDDL -Groups "Administrators" -Computer $PolicyStore)
-
-	# System users (define variables as needed)
 	# TODO: replace with function calls
+	# Generate SDDL string for most common system users
 	New-Variable -Name NT_AUTHORITY_System -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-18)"
 	New-Variable -Name NT_AUTHORITY_LocalService -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-19)"
 	New-Variable -Name NT_AUTHORITY_NetworkService -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-20)"
 	New-Variable -Name NT_AUTHORITY_UserModeDrivers -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
 }
+
+# Get list of user accounts in form of COMPUTERNAME\USERNAME
+# New-Variable -Name UserAccounts -Scope Script -Option Constant -Value (Get-GroupUsers "Users" -Computer $PolicyStore)
+# New-Variable -Name AdminAccounts -Scope Script -Option Constant -Value (Get-GroupUsers "Administrators" -Computer $PolicyStore)
 
 #
 # Function exports
@@ -740,10 +742,10 @@ Export-ModuleMember -Function Get-UserGroups
 #
 Export-ModuleMember -Variable CheckInitUserInfo
 
-Export-ModuleMember -Variable UserAccounts
-Export-ModuleMember -Variable AdminAccounts
-Export-ModuleMember -Variable UserAccountsSDDL
-Export-ModuleMember -Variable AdminAccountsSDDL
+# Export-ModuleMember -Variable UserAccounts
+# Export-ModuleMember -Variable AdminAccounts
+Export-ModuleMember -Variable UsersGroupSDDL
+Export-ModuleMember -Variable AdministratorsGroupSDDL
 
 Export-ModuleMember -Variable NT_AUTHORITY_System
 Export-ModuleMember -Variable NT_AUTHORITY_LocalService
@@ -787,3 +789,36 @@ Export-ModuleMember -Variable NT_AUTHORITY_UserModeDrivers
 
 # Other System Users
 # $NT_AUTHORITY_UserModeDrivers = "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
+
+
+<# naming convention for common variables, parameters and aliases
+type variable, parameter, alias - type[] ArrayVariable, ArrayParameters, alias
+
+UserName / UserNames
+UserGroup / UserGroups / Group
+UserAccount / UserAccounts / Account
+
+GroupUser / GroupUsers
+
+ComputerName / ComputerNames / Computer, Server, Machine, Host
+
+
+AccountSID / AccountsSID
+GroupSID / GroupsSID
+
+AccountSDDL/ AccountsSDDL
+GroupSDDL / GroupsSDDL
+
+
+SHOULD NOT BE USED:
+
+UserSID / UsersSID
+UserSDDL / UsersSDDL
+
+FOR GLOBAL/SCRIPT VARIABLES:
+<group_name>GroupSDDL
+<user_account>AccountSDDL
+
+SHOULD NOT BE USED IN GLOBAL/SCRIPT scopes
+<user_name>UserSID
+#>

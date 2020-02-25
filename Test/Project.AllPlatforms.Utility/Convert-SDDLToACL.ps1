@@ -48,24 +48,16 @@ if (!(Approve-Execute)) { exit }
 
 Start-Test
 
-New-Test "Get-UserAccounts:"
-[string[]] $UserAccounts = Get-UserAccounts "Users" @Logs
-$UserAccounts += Get-UserAccounts "Administrators" @Logs
-Update-Logs
-$UserAccounts
-
 New-Test "Get-SDDL: (user accounts)"
-$SDDL1 = Get-SDDL -Groups "Users" @Logs
-Update-Logs
+$SDDL1 = Get-SDDL -Group "Users" @Logs
 $SDDL1
 
 New-Test "Get-SDDL: (system accounts)"
-$SDDL2 = Get-SDDL -Domain "NT AUTHORITY" -Users @("NETWORK SERVICE", "LOCAL SERVICE") @Logs
-Update-Logs
+$SDDL2 = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE", "LOCAL SERVICE" @Logs
 $SDDL2
 
 New-Test "Convert-SDDLToACL"
 Convert-SDDLToACL $SDDL1, $SDDL2 @Logs
-Update-Logs
 
+Update-Logs
 Exit-Test

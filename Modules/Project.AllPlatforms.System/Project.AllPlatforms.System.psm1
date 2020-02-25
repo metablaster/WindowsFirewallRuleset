@@ -68,6 +68,7 @@ TODO: check required modules
 function Test-SystemRequirements
 {
 	param (
+		# TODO: change bool parameters to switch where possible
 		[Parameter(Mandatory = $false)]
 		[bool] $Check = $SystemCheck
 	)
