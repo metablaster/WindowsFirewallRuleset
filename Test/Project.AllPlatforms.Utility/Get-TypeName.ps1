@@ -42,8 +42,8 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
-if (!(Approve-Execute)) { exit }
+Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+if (!(Approve-Execute @Logs)) { exit }
 
 function Test-NoReturn
 {
@@ -56,21 +56,22 @@ function Test-NoReturn
 Start-Test
 
 New-Test "Get-TypeName (single input)"
-Get-TypeName ([System.Environment]::MachineName)
+Get-TypeName ([System.Environment]::MachineName) @Logs
 
 New-Test "Get-TypeName (pipeline single input)"
-Get-TypeName ([System.Environment]::MachineName)
+Get-TypeName ([System.Environment]::MachineName) @Logs
 
 New-Test "Get-TypeName (multiple inputs)"
-Get-TypeName (Get-Process)
+Get-TypeName (Get-Process) @Logs
 
 New-Test "Get-TypeName (pipeline multiple inputs)"
-Get-Process | Get-TypeName
+Get-Process | Get-TypeName @Logs
 
 New-Test "Get-TypeName (no input)"
-Get-TypeName (Test-NoReturn)
+Get-TypeName (Test-NoReturn) @Logs
 
 New-Test "Get-TypeName (no pipeline input)"
-Test-NoReturn | Get-TypeName
+Test-NoReturn | Get-TypeName @Logs
 
+Update-Logs
 Exit-Test

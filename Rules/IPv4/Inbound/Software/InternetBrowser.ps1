@@ -52,7 +52,7 @@ $CHROMECAST_IP = 192.168.8.50
 
 # Ask user if he wants to load these rules
 Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute)) { exit }
+if (!(Approve-Execute @Logs)) { exit }
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue

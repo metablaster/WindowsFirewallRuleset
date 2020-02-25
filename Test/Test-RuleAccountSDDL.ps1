@@ -47,7 +47,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
 # Ask user if he wants to load these rules
 Update-Context $TestContext $IPVersion $Direction
-if (!(Approve-Execute)) { exit }
+if (!(Approve-Execute @Logs)) { exit }
 
 $Group = "Test - AccountSDDL"
 $Profile = "Any"

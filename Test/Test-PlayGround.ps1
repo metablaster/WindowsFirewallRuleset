@@ -45,8 +45,8 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
-if (!(Approve-Execute)) { exit }
+Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+if (!(Approve-Execute @Logs)) { exit }
 
 # $ProjectRoot = "C:\Users\haxor\GitHub\WindowsFirewallRuleset"
 # New-Variable -Name LogsFolder -Scope Script -Option Constant -Value ($ProjectRoot + "\Logs")

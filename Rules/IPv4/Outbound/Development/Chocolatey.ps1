@@ -49,7 +49,7 @@ $ChocolateyAccounts = Get-SDDL -Groups @("Users", "Administrators")
 
 # Ask user if he wants to load these rules
 Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute)) { exit }
+if (!(Approve-Execute @Logs)) { exit }
 
 #
 # Chocolatey installation directories

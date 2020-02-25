@@ -63,7 +63,7 @@ error message and abort if check failed, system info otherwise
 .NOTES
 TODO: learn required NET version by scaning scripts (ie. adding .COMPONENT to comments)
 TODO: learn repo dir automaticaly (using git?)
-TODO: check required modules
+TODO: check required modules (pester)
 #>
 function Test-SystemRequirements
 {

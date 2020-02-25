@@ -43,7 +43,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
 # Ask user if he wants to load these rules
 Update-Context "Master" $($MyInvocation.MyCommand.Name -replace ".{4}$")
-if (!(Approve-Execute)) { exit }
+if (!(Approve-Execute @Logs)) { exit }
 
 # Recusively get powershell scripts in input folder
 $Files = Get-ChildItem -Path $ProjectRoot\Test -Recurse -Filter *.ps1

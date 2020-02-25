@@ -435,6 +435,7 @@ function Test-TargetComputer
 {
 	[CmdletBinding(PositionalBinding = $false)]
 	param (
+		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter(Mandatory = $true,
 		Position = 0)]
 		[string] $ComputerName,
