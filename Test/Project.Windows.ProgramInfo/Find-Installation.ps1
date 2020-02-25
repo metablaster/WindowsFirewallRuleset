@@ -50,39 +50,25 @@ Start-Test
 
 New-Test "Find-Installation 'EdgeChromium'"
 Find-Installation "EdgeChromium" @Logs
-Update-Logs
-
-New-Test "Table data"
 $global:InstallTable | Format-Table -AutoSize @Logs
-Update-Logs
 
 New-Test "Install Root"
 $global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
-Update-Logs
 
 New-Test "Find-Installation 'TeamViewer'"
 Find-Installation "TeamViewer" @Logs
-Update-Logs
-# C:\Program Files (x86)\Microsoft
-
-New-Test "Table data"
 $global:InstallTable | Format-Table -AutoSize @Logs
-Update-Logs
 
 New-Test "Find-Installation 'FailureTest'"
 Find-Installation "FailureTest" @Logs
-Update-Logs
-
-New-Test "Table data"
 $global:InstallTable | Format-Table -AutoSize @Logs
-Update-Logs
 
 New-Test "Find-Installation 'VisualStudio'"
 Find-Installation "VisualStudio" @Logs
-Update-Logs
-
-New-Test "Table data"
 $global:InstallTable | Format-Table -AutoSize @Logs
-Update-Logs
 
+New-Test "Get-TypeName"
+$global:InstallTable | Get-TypeName @Logs
+
+Update-Logs
 Exit-Test

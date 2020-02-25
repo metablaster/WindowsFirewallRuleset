@@ -39,7 +39,6 @@ Test-SystemRequirements
 . $ProjectRoot\Test\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
@@ -49,33 +48,21 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-$ComputerName = Get-ComputerName @Logs
-Update-Logs
+New-Test "Get-WindowsKits"
+$WindowsKits = Get-WindowsKits @Logs
+$WindowsKits
 
-# New-Test "Get-WindowsKits"
-
-# $WindowsKits = Get-WindowsKits $ComputerName @Logs
-# $WindowsKits
-
-# New-Test "Get-WindowsKits DebuggersRoot latest"
-
-# $WindowsKits | Where-Object {$_.Product -like "WindowsDebuggersRoot*"} |
-# Sort-Object -Property Product @Logs |
-# Select-Object -Last 1 -ExpandProperty InstallLocation @Logs
-
-New-Test "Get-WindowsKits install path"
-
-$WindowsKits = Get-WindowsKits $ComputerName @Logs
-Update-Logs
+New-Test "Get-WindowsKits DebuggersRoot latest"
 if ($null -ne $WindowsKits)
 {
-	$SDKDebuggers = $WindowsKits |
+	$WindowsKits |
 	Where-Object {$_.Product -like "WindowsDebuggersRoot*"} |
 	Sort-Object -Property Product @Logs |
 	Select-Object -Last 1 -ExpandProperty InstallLocation @Logs
-	Update-Logs
-
-	$SDKDebuggers
 }
 
+New-Test "Get-TypeName"
+$WindowsKits | Get-TypeName @Logs
+
+Update-Logs
 Exit-Test

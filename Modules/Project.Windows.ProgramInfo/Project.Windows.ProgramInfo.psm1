@@ -923,12 +923,20 @@ function Initialize-Table
 	}
 
 	# Define Columns
-	$PrincipalColumn = New-Object -TypeName System.Data.DataColumn Principal, ([PSObject])
-	$InstallColumn = New-Object -TypeName System.Data.DataColumn InstallLocation, ([string])
+	$ColumnSID = New-Object -TypeName System.Data.DataColumn SID, ([string])
+	$ColumnUser = New-Object -TypeName System.Data.DataColumn User, ([string])
+	$ColumnGroup = New-Object -TypeName System.Data.DataColumn Group, ([string])
+	$ColumnAccount = New-Object -TypeName System.Data.DataColumn Account, ([string])
+	$ColumnComputer = New-Object -TypeName System.Data.DataColumn Computer, ([string])
+	$ColumnInstallLocation = New-Object -TypeName System.Data.DataColumn InstallLocation, ([string])
 
 	# Add the Columns
-	$InstallTable.Columns.Add($PrincipalColumn)
-	$InstallTable.Columns.Add($InstallColumn)
+	$InstallTable.Columns.Add($ColumnSID)
+	$InstallTable.Columns.Add($ColumnUser)
+	$InstallTable.Columns.Add($ColumnGroup)
+	$InstallTable.Columns.Add($ColumnAccount)
+	$InstallTable.Columns.Add($ColumnComputer)
+	$InstallTable.Columns.Add($ColumnInstallLocation)
 }
 
 <#
@@ -973,23 +981,29 @@ function Update-Table
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching executable names for: $SearchString"
 
-		$TargetPath = $ExecutablePaths |
+		$InstallLocation = $ExecutablePaths |
 		Where-Object -Property Name -eq $SearchString |
 		Select-Object -ExpandProperty InstallLocation
 
-		if ($TargetPath)
+		if ($InstallLocation)
 		{
 			# Create a row
 			$Row = $InstallTable.NewRow()
 
+			$Principal = $UserGroups | Where-Object -Property Group -eq "Users"
+
 			# Enter data into row
-			$Row.Principal = $UserGroups | Where-Object -Property Group -eq "Users"
-			$Row.InstallLocation = $TargetPath
+			$Row.SID = $Principal.SID
+			$Row.Group = $Principal.Group
+			$Row.Computer = $Principal.Computer
+			$Row.InstallLocation = $InstallLocation
+
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($Principal.Caption) with $InstallLocation"
 
 			# Add row to the table
 			$InstallTable.Rows.Add($Row)
 
-			# If the path is known there is not need to continue
+			# TODO: If the path is known there is not need to continue?
 			return
 		}
 	}
@@ -1003,22 +1017,26 @@ function Update-Table
 
 		# TODO: need better mechanism for multiple maches
 		$TargetPrograms = $SystemPrograms | Where-Object -Property Name -like "*$SearchString*"
+		$Principal = $UserGroups | Where-Object -Property Group -eq "Users"
 
 		foreach ($Program in $TargetPrograms)
 		{
 			# Create a row
 			$Row = $InstallTable.NewRow()
 
+			$InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
+
 			# Enter data into row
-			$Row.Principal = $UserGroups | Where-Object -Property Group -eq "Users"
-			$Row.InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
+			$Row.SID = $Principal.SID
+			$Row.Group = $Principal.Group
+			$Row.Computer = $Principal.Computer
+			$Row.InstallLocation = $InstallLocation
+
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($Principal.Caption) with $InstallLocation"
 
 			# Add row to the table
 			$InstallTable.Rows.Add($Row)
 		}
-
-		# Since the path is known there is not need to continue
-		return
 	}
 	# Program not found on system, attempt alternative search
 	elseif ($AllUserPrograms.Name -like "*$SearchString*")
@@ -1035,46 +1053,63 @@ function Update-Table
 			$KeyOwner = ConvertFrom-SID $Program.SIDKey
 			if ($KeyOwner -eq "Users")
 			{
-				# Enter data into row
-				$Row.Principal = $UserGroups | Where-Object -Property Group -eq "Users"
+				$Principal = $UserGroups | Where-Object -Property Group -eq "Users"
 			}
 			else
 			{
 				# TODO: we need more registry samples to determine what is right, Administrators seems logical
-				$Row.Principal = $UserGroups | Where-Object -Property Group -eq "Administrators"
+				$Principal = $UserGroups | Where-Object -Property Group -eq "Administrators"
 			}
 
-			$Row.InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
+			$InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
+
+			# Enter data into row
+			$Row.SID = $Principal.SID
+			$Row.Group = $Principal.Group
+			$Row.Computer = $Principal.Computer
+			$Row.InstallLocation = $InstallLocation
+
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($Principal.Caption) with $InstallLocation"
 
 			# Add row to the table
 			$InstallTable.Rows.Add($Row)
 		}
-
-		# Since the path is known there is not need to continue
-		return
 	}
 
 	# Search user profiles
+	# NOTE: User profile should be searched even if there is an installation system wide
 	if ($UserProfile)
 	{
-		foreach ($Account in $UserAccounts)
+		$Principals = Get-GroupPrincipals "Users"
+
+		# TODO: What UserAccounts?
+		foreach ($Principal in $Principals)
 		{
 			# NOTE: the story is different here, each user may have multiple matches for search string
 			# letting one match to have same principal would be mistake.
-			$UserPrograms = Get-UserPrograms $Account.User | Where-Object -Property Name -like "*$SearchString*"
+			$UserPrograms = Get-UserPrograms $Principal.User | Where-Object -Property Name -like "*$SearchString*"
 
 			if ($UserPrograms)
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching $Account programs for $SearchString"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching $($Principal.Account) programs for $SearchString"
 
 				foreach ($Program in $UserPrograms)
 				{
+					$InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
+
 					# Create a row
 					$Row = $InstallTable.NewRow()
 
 					# Enter data into row
-					$Row.Principal = $Account.User
-					$Row.InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
+					$Row.SID = $Principal.SID
+					$Row.User = $Principal.User
+					# TODO: we should add group entry for users
+					# $Row.Group = $Principal.Group
+					$Row.Account = $Principal.Account
+					$Row.Computer = $Principal.Computer
+					$Row.InstallLocation = $InstallLocation
+
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($Principal.Account) with $InstallLocation"
 
 					# Add the row to the table
 					$InstallTable.Rows.Add($Row)
@@ -1126,35 +1161,43 @@ function Edit-Table
 		# Create a row
 		$Row = $InstallTable.NewRow()
 
-		# Get a list of users to choose from
-		$Users = Get-GroupUsers "Users"
+		# TODO: checking if Principal exists
+		# Get a list of users to choose from, 3rd element in the path is user name
+		$Principal = Get-GroupPrincipals "Users" | Where-Object -Property User -eq ($InstallLocation.Split("\"))[2]
 
-		# Enter data into row, 3rd element in the path is user name
-		$Row.Principal = $Users | Where-Object -Property User -eq ($InstallLocation.Split("\"))[2]
+		# Enter data into row
+		$Row.SID = $Principal.SID
+		$Row.User = $Principal.User
+		$Row.Account = $Principal.Account
+		$Row.Computer = $Principal.Computer
 		$Row.InstallLocation = $InstallLocation
 
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Editing table with $InstallLocation for $($Row.Principal)"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Editing table for $($Principal.Account) with $InstallLocation"
 
 		# Add the row to the table
 		$InstallTable.Rows.Add($Row)
-		return
 	}
+	else
+	{
+		$InstallLocation = Format-Path $InstallLocation
 
-	$InstallLocation = Format-Path $InstallLocation
+		# Not user profile path, so it applies to all users
+		$Principal = Get-UserGroups -Machine $PolicyStore | Where-Object -Property Group -eq "Users"
 
-	# Not user profile path, so it applies to all users
+		# Create a row
+		$Row = $InstallTable.NewRow()
 
-	# Create a row
-	$Row = $InstallTable.NewRow()
+		# Enter data into row
+		$Row.SID = $Principal.SID
+		$Row.Group = $Principal.Group
+		$Row.Computer = $Principal.Computer
+		$Row.InstallLocation = $InstallLocation
 
-	# Enter data into row
-	$Row.Principal = Get-UserGroups -Machine $PolicyStore | Where-Object -Property Group -eq "Users"
-	$Row.InstallLocation = $InstallLocation
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Editing table for $($Principal.Caption) with $InstallLocation"
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] Editing table with $InstallLocation for 'Users' group"
-
-	# Add the row to the table
-	$InstallTable.Rows.Add($Row)
+		# Add the row to the table
+		$InstallTable.Rows.Add($Row)
+	}
 }
 
 <#

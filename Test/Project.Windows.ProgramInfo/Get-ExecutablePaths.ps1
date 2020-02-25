@@ -49,7 +49,7 @@ if (!(Approve-Execute @Logs)) { exit }
 Start-Test
 
 New-Test "Get-ExecutablePaths"
-$ExecutablePaths = Get-ExecutablePaths ([System.Environment]::MachineName) @Logs | Sort-Object -Property Name
+$ExecutablePaths = Get-ExecutablePaths @Logs | Sort-Object -Property Name
 $ExecutablePaths
 
 New-Test "Get-ExecutablePaths pwsh.exe"

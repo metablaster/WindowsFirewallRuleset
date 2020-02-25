@@ -48,56 +48,37 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-New-Test "Initialize-Table"
+New-Test "-UserProfile switch Fill table with Greenshot"
 Initialize-Table @Logs
-Update-Logs
-
-if (!$global:InstallTable)
-{
-	Write-Warning -Message "Table not initialized"
-	exit
-}
-
-if ($global:InstallTable.Rows.Count -ne 0)
-{
-	Write-Warning -Message "Table not clear"
-	exit
-}
-
-New-Test "Fill table with Greenshot"
 Update-Table "Greenshot" -UserProfile @Logs
-Update-Logs
-
-New-Test "Table data"
 $global:InstallTable | Format-Table -AutoSize @Logs
-Update-Logs
 
 New-Test "Install Path"
 $global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
-Update-Logs
 
 New-Test "Failure Test"
 Initialize-Table @Logs
-Update-Logs
 Update-Table "Failure" -UserProfile @Logs
-Update-Logs
-
-New-Test "Table data"
 $global:InstallTable | Format-Table -AutoSize @Logs
-Update-Logs
 
 New-Test "Test multiple paths"
 Initialize-Table @Logs
-Update-Logs
 Update-Table "Visual Studio" -UserProfile @Logs
-Update-Logs
-
-New-Test "Table data"
 $global:InstallTable | Format-Table -AutoSize @Logs
-Update-Logs
 
 New-Test "Install Path"
 $global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
-Update-Logs
 
+New-Test "-Executables switch - Fill table with PowerShell"
+Initialize-Table @Logs
+Update-Table "PowerShell.exe" -Executables
+$global:InstallTable | Format-Table -AutoSize @Logs
+
+New-Test "Install Path"
+$global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
+
+New-Test "Get-TypeName"
+$global:InstallTable | Get-TypeName @Logs
+
+Update-Logs
 Exit-Test

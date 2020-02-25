@@ -52,45 +52,27 @@ $User = "haxor"
 
 New-Test "Good system path"
 Initialize-Table @Logs
-Update-Logs
 Edit-Table "%SystemRoot%\System32\WindowsPowerShell\v1.0" @Logs
-Update-Logs
-
-New-Test "Table data"
 $global:InstallTable | Format-Table -AutoSize @Logs
-Update-Logs
 
 New-Test "Bad system path"
 Initialize-Table @Logs
-Update-Logs
-
 Edit-Table "%ProgramFiles(x86)%\Microsoft Help Viewer\v2.3345345" @Logs
-Update-Logs
-
-New-Test "Table data"
 $global:InstallTable | Format-Table -AutoSize @Logs
-Update-Logs
 
 New-Test "Good user profile path"
 Initialize-Table @Logs
-Update-Logs
-
 Edit-Table "C:\\Users\$User\\GitHub\WindowsFirewallRuleset\" @Logs
-Update-Logs
-
-New-Test "Table data"
 $global:InstallTable | Format-Table -AutoSize @Logs
-Update-Logs
 
 New-Test "Bad user profile path"
 Initialize-Table @Logs
-Update-Logs
-
 Edit-Table "%HOME%\source\\repos\WindowsFirewallRuleset\" @Logs
-Update-Logs
-
-New-Test "Table data"
 $global:InstallTable | Format-Table -AutoSize @Logs
-Update-Logs
 
+New-Test "Get-TypeName"
+# TODO: why this doesn't work?
+$global:InstallTable | Get-TypeName @Logs
+
+Update-Logs
 Exit-Test

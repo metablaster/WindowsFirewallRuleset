@@ -39,7 +39,6 @@ Test-SystemRequirements
 . $ProjectRoot\Test\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
@@ -49,32 +48,21 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-$ComputerName = Get-ComputerName @Logs
-Update-Logs
-
 New-Test "Get-WindowsSDK"
-
-$WindowsSDK = Get-WindowsSDK $ComputerName @Logs
-Update-Logs
+$WindowsSDK = Get-WindowsSDK @Logs
 $WindowsSDK
 
-# New-Test "Get-WindowsSDK latest"
+New-Test "Get-WindowsSDK latest"
+if ($null -ne $WindowsSDK)
+{
+    $WindowsSDK |
+    Sort-Object -Property Version @Logs |
+    Where-Object { $_.InstallLocation } |
+    Select-Object -Last 1 -ExpandProperty InstallLocation @Logs
+}
 
-# $WindowsSDK | Sort-Object -Property Version @Logs |
-# Where-Object { $_.InstallLocation } |
-# Select-Object -Last 1 -ExpandProperty InstallLocation @Logs
-# Update-Logs
+New-Test "Get-TypeName"
+$WindowsSDK | Get-TypeName @Logs
 
-# Get Windows SDK root
-# $WindowsSDK = Get-WindowsSDK $ComputerName @Logs
 Update-Logs
-# if ($null -ne $WindowsKits)
-# {
-#     $SDKRoot = $WindowsSDK |
-#     Sort-Object -Property Version @Logs |
-#     Where-Object { $_.InstallLocation } |
-#     Select-Object -Last 1 -ExpandProperty InstallLocation @Logs
-#	  Update-Logs
-# }
-
 Exit-Test
