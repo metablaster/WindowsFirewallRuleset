@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Resume-Info
+# Unit test for Test-Error
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -45,26 +45,13 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute)) { exit }
 
-# function Test-NonAdvancedFunction
-# {
-# 	Write-Information -Tags "Test" -MessageData "INFO: sample info" `
-# 	-Tags Result 6>&1 | Resume-Info -Log:$InformationLogging -Preference $InformationPreference
-# }
-
-function Test-InfoCmdLet
+function Test-Error
 {
 	[CmdletBinding()]
 	param ()
 
-	Write-Information -Tags "Test" -MessageData "INFO: Test-InfoCmdLet 1"
-	Write-Information -Tags "Test" -MessageData "INFO: Test-InfoCmdLet 2"
-	#Write-Error -Message "Test-InfoCmdLet error" -Category PermissionDenied -ErrorId SampleID
-}
-
-function Test-NoInfoCmdLet
-{
-	[CmdletBinding()]
-	param ()
+	Write-Error -Message "[$($MyInvocation.InvocationName)] error 1" -Category PermissionDenied -ErrorId 1
+	Write-Error -Message "[$($MyInvocation.InvocationName)] error 2" -Category PermissionDenied -ErrorId 2
 }
 
 function Test-Pipeline
@@ -75,40 +62,61 @@ function Test-Pipeline
 		$Param
 	)
 
-	Write-Information -Tags "Test" -MessageData "INFO: End of pipe"
+	Write-Error -Message "[$($MyInvocation.InvocationName)] End of pipe 1" -Category PermissionDenied -ErrorId 3
+	Write-Error -Message "[$($MyInvocation.InvocationName)] End of pipe 2" -Category PermissionDenied -ErrorId 4
+}
+
+function Test-Nested
+{
+	[CmdletBinding()]
+	param ()
+
+	Write-Error -Message "[$($MyInvocation.InvocationName)] Nested 1" -Category PermissionDenied -ErrorId 5
+	Write-Error -Message "[$($MyInvocation.InvocationName)] Nested 2" -Category PermissionDenied -ErrorId 6
+}
+
+function Test-Parent
+{
+	[CmdletBinding()]
+	param ()
+
+	Write-Error -Message "[$($MyInvocation.InvocationName)] Parent 1" -Category PermissionDenied -ErrorId 7
+	Test-Nested
+	Write-Error -Message "[$($MyInvocation.InvocationName)] Parent 2" -Category PermissionDenied -ErrorId 8
+}
+
+function Test-Combo
+{
+	[CmdletBinding()]
+	param ()
+
+	Write-Error -Message "[$($MyInvocation.InvocationName)] combo" -Category PermissionDenied -ErrorId 9
+	Write-Warning -Message "[$($MyInvocation.MyCommand.Name)] combo"
+	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.MyCommand.Name)] INFO: combo"
 }
 
 Start-Test
+# $ErrorActionPreference = "SilentlyContinue"
 
-# $InformationPreference = "SilentlyContinue"
-
-# New-Test "Test-NonAdvancedFunction"
-# Test-NonAdvancedFunction
-
-New-Test "Test-InfoCmdLet"
-Test-InfoCmdLet @Logs
-Update-Logs
-
-New-Test "Test-NoInfoCmdLet"
-Test-NoInfoCmdLet @Logs
-Update-Logs
-
+New-Test "Generate errors"
 $Folder = "C:\CrazyFolder"
+Get-ChildItem -Path $Folder @Logs
 
-New-Test "Test pipeline"
+New-Test "No errors"
+Get-ChildItem -Path "C:\" @Logs | Out-Null
+# $ErrorActionPreference = "Continue"
+
+New-Test "Test-Error"
+Test-Error @Logs
+
+New-Test "Test-Pipeline"
 Get-ChildItem -Path $Folder @Logs | Test-Pipeline @Logs
-Update-Logs
 
-New-Test "Test pipeline"
-Get-ChildItem -Path $Folder @Logs | Test-Pipeline @Logs
-Update-Logs
+New-Test "Test-Parent"
+Test-Parent @Logs
 
-New-Test "Write-Host"
-Write-Host "Write-Host" @Logs
-Update-Logs
+New-Test "Test-Combo"
+Test-Combo @Logs
 
-New-Test "Write-Output"
-Write-Output "Write-Output" @Logs
 Update-Logs
-
 Exit-Test

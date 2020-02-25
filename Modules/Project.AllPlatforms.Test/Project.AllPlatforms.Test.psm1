@@ -65,15 +65,15 @@ function Start-Test
 
 	# disable logging errors for tests
 	Set-Variable -Name ErrorLoggingCopy -Scope Script -Value $ErrorLogging
-	Set-Variable -Name ErrorLogging -Scope Global -Value $false
+	Set-Variable -Name ErrorLogging -Scope Global -Value $true
 
 	# disable logging warnings for tests
 	Set-Variable -Name WarningLoggingCopy -Scope Script -Value $WarningLogging
-	Set-Variable -Name WarningLogging -Scope Global -Value $false
+	Set-Variable -Name WarningLogging -Scope Global -Value $true
 
 	# disable logging information messages for tests
 	Set-Variable -Name InformationLoggingCopy -Scope Script -Value $InformationLogging
-	Set-Variable -Name InformationLogging -Scope Global -Value $false
+	Set-Variable -Name InformationLogging -Scope Global -Value $true
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ErrorLogging changed to: $ErrorLogging"
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] WarningLogging changed to: $WarningLogging"

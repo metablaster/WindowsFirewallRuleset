@@ -46,6 +46,7 @@ System.String type name
 Modifications by metablaster:
 Added process block to prevent errors when object is null
 Added comment based help
+TODO: process block don't work as intended
 #>
 function Get-TypeName
 {

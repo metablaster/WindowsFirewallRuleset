@@ -243,6 +243,7 @@ Export-ModuleMember -Function Update-Logs
 # Variable exports
 #
 
+Export-ModuleMember -Variable CheckInitLogging
 Export-ModuleMember -Variable Logs
 Export-ModuleMember -Variable ErrorStatus
 Export-ModuleMember -Variable WarningStatus

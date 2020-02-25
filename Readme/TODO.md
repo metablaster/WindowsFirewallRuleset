@@ -28,3 +28,4 @@ This is a project global list which applies to several or all scripts, for small
 25. Convert test to use Pester
 26. Revisit parameter validation for functions, specifically acceptance of NULL or empty.
 27. Revisit how functions return and what they return, return keyword vs Write-Output, if piping is needed after all.
+28. We probalby don't need VSSetup module, other scripts and modules need to be checked for updates

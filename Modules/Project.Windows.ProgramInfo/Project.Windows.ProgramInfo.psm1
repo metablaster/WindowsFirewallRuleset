@@ -1197,6 +1197,7 @@ function Test-Installation
 			Write-Host "0. Abort this operation"
 			for ($Index = 0; $Index -lt $Count; ++$Index)
 			{
+				# TODO: show principal too!
 				Write-Host "$($Index + 1). $($InstallTable.Rows[$Index].Item("InstallLocation"))"
 			}
 
