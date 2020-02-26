@@ -35,7 +35,7 @@ SOFTWARE.
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
 
 # Includes
-. $ProjectRoot\Test\ContextSetup.ps1
+. $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility

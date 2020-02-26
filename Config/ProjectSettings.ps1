@@ -94,9 +94,9 @@ if ($Develop)
 
 	Set-Variable -Name ModuleErrorPreference -Scope Global -Value $ErrorActionPreference
 	Set-Variable -Name ModuleWarningPreference -Scope Global -Value $WarningPreference
+	Set-Variable -Name ModuleInformationPreference -Scope Global -Value $InformationPreference
 	Set-Variable -Name ModuleVerbosePreference -Scope Global -Value $VerbosePreference
 	Set-Variable -Name ModuleDebugPreference -Scope Global -Value $DebugPreference
-	Set-Variable -Name ModuleInformationPreference -Scope Global -Value $InformationPreference
 
 	#
 	# Remove loaded modules, usefull for module debugging
@@ -210,4 +210,12 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 
 	# Set to false to disable logging information messages
 	Set-Variable -Name InformationLogging -Scope Global -Value $true
+
+	# Global variable to tell if errors were generated, do not modify!
+	# Will not be set if ErrorActionPreference is "SilentlyContinue"
+	Set-Variable -Name ErrorStatus -Scope Global -Value $false
+
+	# Global variable to tell if warnings were generated, do not modify!
+	# Will not be set if WarningPreference is "SilentlyContinue"
+	Set-Variable -Name WarningStatus -Scope Global -Value $false
 }

@@ -40,7 +40,7 @@ if ($Develop)
 	$VerbosePreference = $ModuleVerbosePreference
 	$InformationPreference = $ModuleInformationPreference
 
-	$ThisModule = $MyInvocation.MyCommand.Name -replace ".{5}$"
+	Set-Variable ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
 	Write-Debug -Message "[$ThisModule] ErrorActionPreference is $ErrorActionPreference"
 	Write-Debug -Message "[$ThisModule] WarningPreference is $WarningPreference"
@@ -696,25 +696,31 @@ function Get-AccountSID
 # Module variables
 #
 
+Write-Debug -Message "[$ThisModule] Initialize module constant variable: SpecialDomains"
 # Must be before constants
 New-Variable -Name SpecialDomains -Scope Script -Option Constant -Value @(
 	"NT AUTHORITY"
 	"APPLICATION_PACKAGE_AUTHORITY"
+	"BUILTIN"
 	)
 
 # TODO: global configuration variables (in a separate script) should also include to set "USERS" instead of single user
 if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 {
+	Write-Debug -Message "[$ThisModule] Initialize global constant variable: CheckInitUserInfo"
 	# check if constants alreay initialized, used for module reloading
 	New-Variable -Name CheckInitUserInfo -Scope Global -Option Constant -Value $null
 
 	# TODO: should not be used
 	# Generate SDDL string for most common groups
+	Write-Debug -Message "[$ThisModule] Initialize global constant variable: UsersGroupSDDL"
 	New-Variable -Name UsersGroupSDDL -Scope Global -Option Constant -Value (Get-SDDL -Group "Users" -Computer $PolicyStore)
+	Write-Debug -Message "[$ThisModule] Initialize global constant variable: AdministratorsGroupSDDL"
 	New-Variable -Name AdministratorsGroupSDDL -Scope Global -Option Constant -Value (Get-SDDL -Group "Administrators" -Computer $PolicyStore)
 
 	# TODO: replace with function calls
 	# Generate SDDL string for most common system users
+	Write-Debug -Message "[$ThisModule] Initialize global constant variables: NT AUTHORITY\..."
 	New-Variable -Name NT_AUTHORITY_System -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-18)"
 	New-Variable -Name NT_AUTHORITY_LocalService -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-19)"
 	New-Variable -Name NT_AUTHORITY_NetworkService -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-20)"

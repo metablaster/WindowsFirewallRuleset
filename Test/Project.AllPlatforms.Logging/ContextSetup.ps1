@@ -27,35 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Test-UserInfoVariables
+# Context setup for Project.AllPlatforms.Logging
 #
-. $PSScriptRoot\..\Config\ProjectSettings.ps1
 
-# Check requirements for this project
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
-Test-SystemRequirements
-
-# Includes
-. $ProjectRoot\Test\ContextSetup.ps1
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
-
-# Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
-if (!(Approve-Execute @Logs)) { exit }
-
-New-Test "UserAccounts:"
-$UserAccounts
-
-New-Test "AdminAccounts:"
-$AdminAccounts
-
-New-Test "UserAccountsSDDL:"
-$UserAccountsSDDL
-
-New-Test "AdminAccountsSDDL:"
-$AdminAccountsSDDL
-
-Exit-Test
+$TestContext = "Test.Project.AllPlatforms.Logging"

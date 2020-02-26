@@ -38,7 +38,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
 Test-SystemRequirements
 
 # Includes
-. $ProjectRoot\Test\ContextSetup.ps1
+. $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
@@ -46,41 +46,34 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $IPVersion $Direction
+Update-Context $TestContext "IPv$IPVersion" $Direction
 if (!(Approve-Execute @Logs)) { exit }
 
 $Group = "Test - AppSID"
 $Profile = "Any"
 
+Start-Test
+
 New-Test "Remove-NetFirewallRule"
 # Remove previous test
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
-New-Test "Get-UserAccounts:"
-[string[]] $UserAccounts = Get-UserAccounts("Users")
-$UserAccounts
+New-Test "Get-GroupPrincipals"
+$Principals = Get-GroupPrincipals "Users" @Logs
+$Principals
 
-New-Test "ConvertFrom-UserAccounts:"
-$Users = ConvertFrom-UserAccounts($UserAccounts)
-$Users
-
-New-Test "Get-UserSID:"
-foreach($User in $Users)
-{
-	$(Get-UserSID($User))
-}
-
-New-Test "Get-AppSID: foreach User"
 [string] $PackageSID = ""
 [string] $OwnerSID = ""
-foreach($User in $Users) {
-	New-Test "Processing for: $User"
-	$OwnerSID = Get-UserSID($User)
+foreach ($Principal in $Principals)
+{
+	New-Test "Processing for: $($Principal.Account)"
+	$OwnerSID = Get-AccountSID $Principal.User -Computer $Principal.Computer @Logs
+	$OwnerSID
 
-	Get-AppxPackage -User $User -PackageTypeFilter Bundle | ForEach-Object {
-		$PackageSID = (Get-AppSID $User $_.PackageFamilyName)
+	Get-AppxPackage -User $Principal.User -PackageTypeFilter Bundle | ForEach-Object {
+		$PackageSID = Get-AppSID $Principal.User $_.PackageFamilyName
 		$PackageSID
-	}
+	} @Logs
 }
 
 New-Test "New-NetFirewallRule"
@@ -89,49 +82,7 @@ New-NetFirewallRule -Platform $Platform `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -LocalUser Any -Owner $OwnerSID -Package $PackageSID `
--Description "" | Format-Output
+-Description "" @Logs | Format-Output @Logs
 
-New-Test "Test store apps for $User"
-$User = "testuser-apps"
-$OwnerSID = Get-UserSID($User)
-
-Get-AppxPackage -User $User -PackageTypeFilter Bundle | ForEach-Object {
-	$PackageSID = (Get-AppSID $User $_.PackageFamilyName)
-
-	if ($PackageSID)
-	{
-		New-NetFirewallRule -Platform $Platform `
-		-DisplayName $_.Name -Program Any -Service Any `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
-		-Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
-		-LocalUser Any -Owner $OwnerSID -Package $PackageSID `
-		-Description "" | Format-Output
-	}
-}
-
-New-Test "Test system apps for $User"
-Get-AppxPackage -User $User -PackageTypeFilter Main | Where-Object { $_.SignatureKind -eq "System" -and $_.Name -like "Microsoft*" } | ForEach-Object {
-	$PackageSID = (Get-AppSID $User $_.PackageFamilyName)
-
-	if ($PackageSID)
-	{
-		New-NetFirewallRule -Platform $Platform `
-		-DisplayName $_.Name -Program Any -Service Any `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
-		-Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
-		-LocalUser Any -Owner $OwnerSID -Package $PackageSID `
-		-Description "" | Format-Output
-	}
-}
-
-# New-Test "Test all aps for Admins"
-# $OwnerSID = Get-UserSID("Admin")
-
-# New-NetFirewallRule -Platform $Platform `
-# -DisplayName "All store apps" -Program Any -Service Any `
-# -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
-# -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
-# -LocalUser Any -Owner $OwnerSID -Package "*" `
-# -Description "" | Format-Output
-
+Update-Logs
 Exit-Test

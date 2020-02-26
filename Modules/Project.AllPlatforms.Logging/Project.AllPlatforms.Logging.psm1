@@ -40,7 +40,7 @@ if ($Develop)
 	$VerbosePreference = $ModuleVerbosePreference
 	$InformationPreference = $ModuleInformationPreference
 
-	$ThisModule = $MyInvocation.MyCommand.Name -replace ".{5}$"
+	Set-Variable ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
 	Write-Debug -Message "[$ThisModule] ErrorActionPreference is $ErrorActionPreference"
 	Write-Debug -Message "[$ThisModule] WarningPreference is $WarningPreference"
@@ -209,9 +209,11 @@ function Update-Logs
 
 if (!(Get-Variable -Name CheckInitLogging -Scope Global -ErrorAction Ignore))
 {
+	Write-Debug -Message "[$ThisModule] Initialize global constant variable: CheckInitLogging"
 	# check if constants alreay initialized, used for module reloading
 	New-Variable -Name CheckInitLogging -Scope Global -Option Constant -Value $null
 
+	Write-Debug -Message "[$ThisModule] Initialize global constant variable: Logs"
 	# These defaults are for advanced functions to enable logging, do not modify!
 	New-Variable -Name Logs -Scope Global -Option Constant -Value @{
 		ErrorVariable = "+ErrorBuffer"
@@ -220,17 +222,8 @@ if (!(Get-Variable -Name CheckInitLogging -Scope Global -ErrorAction Ignore))
 	}
 }
 
-# TODO: set to script scope and get with functions?
-
-# Global variable to tell if errors were generated
-# Will not be set if preference is "SilentlyContinue"
-Set-Variable -Name ErrorStatus -Scope Global -Value $false
-
-# Global variable to tell if warnings were generated
-# Will not be set if preference is "SilentlyContinue"
-Set-Variable -Name WarningStatus -Scope Global -Value $false
-
 # Folder where logs get saved
+Write-Debug -Message "[$ThisModule] Initialize module constant variable: LogsFolder"
 New-Variable -Name LogsFolder -Scope Script -Option Constant -Value ($ProjectRoot + "\Logs")
 
 #

@@ -30,25 +30,68 @@ SOFTWARE.
 # Unit test for ProjectSettings.ps1
 #
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\ContextSetup.ps1
 
 # Check requirements for this project
+Write-Information -Tags "Test" -MessageData "INFO: Import-Module System"
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
 Test-SystemRequirements
 
-# Includes
-. $ProjectRoot\Test\ContextSetup.ps1
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
+Write-Information -Tags "Test" -MessageData "INFO: Import-Module Logging"
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
+
+Write-Information -Tags "Test" -MessageData "INFO: Import-Module Test"
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
+
+Write-Information -Tags "Test" -MessageData "INFO: Import-Module Utility"
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
+
+Write-Information -Tags "Test" -MessageData "INFO: Import-Module ComputerInfo"
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
+
+Write-Information -Tags "Test" -MessageData "INFO: Import-Module UserInfo"
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo
+
+Write-Information -Tags "Test" -MessageData "INFO: Import-Module ProgramInfo"
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
 
 # Ask user if he wants to load these rules
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-New-Test "Test-ProjectSettings"
+Start-Test
 
-Write-Information -Tags "Test" -MessageData "INFO: Preference Debug -> $DebugPreference"
+New-Test "Script level preferences"
+Write-Information -Tags "Test" -MessageData "INFO: ErrorActionPreference: $ErrorActionPreference"
+Write-Information -Tags "Test" -MessageData "INFO: WarningPreference: $WarningPreference"
+Write-Information -Tags "Test" -MessageData "INFO: InformationPreference: $InformationPreference"
+Write-Information -Tags "Test" -MessageData "INFO: VerbosePreference: $VerbosePreference"
+Write-Information -Tags "Test" -MessageData "INFO: DebugPreference: $DebugPreference"
+
+New-Test "Module level preferences"
+Write-Information -Tags "Test" -MessageData "INFO: ModuleErrorPreference: $ModuleErrorPreference"
+Write-Information -Tags "Test" -MessageData "INFO: ModuleWarningPreference: $ModuleWarningPreference"
+Write-Information -Tags "Test" -MessageData "INFO: ModuleInformationPreference: $ModuleInformationPreference"
+Write-Information -Tags "Test" -MessageData "INFO: ModuleVerbosePreference: $ModuleVerbosePreference"
+Write-Information -Tags "Test" -MessageData "INFO: ModuleDebugPreference: $ModuleDebugPreference"
+
+New-Test "ProjectConstants"
+Write-Information -Tags "Test" -MessageData "INFO: PolicyStore: $PolicyStore"
+Write-Information -Tags "Test" -MessageData "INFO: Platform: $Platform"
+Write-Information -Tags "Test" -MessageData "INFO: ProjectRoot: $ProjectRoot"
+Write-Information -Tags "Test" -MessageData "INFO: Force: $Force"
+Write-Information -Tags "Test" -MessageData "INFO: Interface: $Interface"
+
+New-Test "ReadOnlyVariables"
+Write-Information -Tags "Test" -MessageData "INFO: SystemCheck: $SystemCheck"
+
+New-Test "RemovableVariables"
+Write-Information -Tags "Test" -MessageData "INFO: WarningStatus: $WarningStatus"
+Write-Information -Tags "Test" -MessageData "INFO: ErrorStatus: $ErrorStatus"
+Write-Information -Tags "Test" -MessageData "INFO: InformationLogging: $InformationLogging"
+Write-Information -Tags "Test" -MessageData "INFO: WarningLogging: $WarningLogging"
+Write-Information -Tags "Test" -MessageData "INFO: ErrorLogging: $ErrorLogging"
+Write-Information -Tags "Test" -MessageData "INFO: ConnectionTimeout: $ConnectionTimeout"
+Write-Information -Tags "Test" -MessageData "INFO: ConnectionCount: $ConnectionCount"
+
 Exit-Test

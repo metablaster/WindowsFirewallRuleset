@@ -36,8 +36,9 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
 Test-SystemRequirements
 
 # Includes
-. $ProjectRoot\Test\ContextSetup.ps1
-Import-Module -Name $ProjectRoot\Modules\Meta.AllPlatforms.TestImport-Module -Name $ProjectRoot\Modules\VSSetup
+. $PSScriptRoot\ContextSetup.ps1
+Import-Module -Name $ProjectRoot\Modules\VSSetup
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility

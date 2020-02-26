@@ -31,12 +31,12 @@ SOFTWARE.
 #
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 
-# # Check requirements for this project
-# Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
-# Test-SystemRequirements
+# Check requirements for this project
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
+Test-SystemRequirements
 
 # # Includes
-. $ProjectRoot\Test\ContextSetup.ps1
+. $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
 # Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo
 # Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
@@ -50,27 +50,5 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-function Test-PSObject
-{
-	$Test = @()
-
-	for ($i = 0; $i -lt 5; $i++)
-	{
-		$Test += New-Object -TypeName PSObject -Property @{
-			Key1 = "Key1"
-			Key2 = "Key2"
-		}
-	}
-
-	return $Test
-}
-
-foreach ($Entry in 1..10)
-{
-	Write-Output ""
-	Test-PSObject $Entry
-}
-
-Test-PSObject
 
 Exit-Test

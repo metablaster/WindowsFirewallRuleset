@@ -27,10 +27,8 @@ SOFTWARE.
 #>
 
 #
-# Unit test for adding rules based on computer accounts
+# Unit test for Test-GlobalVariables
 #
-
-#Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
@@ -38,7 +36,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
 Test-SystemRequirements
 
 # Includes
-. $ProjectRoot\Test\ContextSetup.ps1
+. $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
@@ -46,35 +44,36 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $IPVersion $Direction
+Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-$Group = "Test - AccountSDDL"
-$Profile = "Any"
+Start-Test
 
-New-Test "Remove-NetFirewallRule"
-# Remove previous test
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
+New-Test "Project.AllPlatforms.Logs - Logs:"
+$Logs
 
-New-Test "Get-UserAccounts(Users)"
-[string[]] $UserAccounts = Get-UserAccounts("Users")
-$UserAccounts
+New-Test "Project.AllPlatforms.Utility - ServiceHost:"
+$ServiceHost
 
-New-Test "Users + Get-UserAccounts(Administrators) + NT SYSTEM"
-$UserAccounts = $UserAccounts += (Get-UserAccounts("Administrators"))
-$UserAccounts = $UserAccounts += "NT AUTHORITY\SYSTEM"
-$UserAccounts
+New-Test "Project.Windows.ProgramInfo - InstallTable:"
+$InstallTable
 
-New-Test "Get-SDDL:"
-$LocalUser = Get-SDDL -Groups "Users"
-$LocalUser
+New-Test "Project.Windows.UserInfo - NT_AUTHORITY_UserModeDrivers:"
+$NT_AUTHORITY_UserModeDrivers
 
-New-Test "New-NetFirewallRule"
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Get-SDDL" -Program Any -Service Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
--Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
--LocalUser $LocalUser `
--Description "" | Format-Output
+New-Test "Project.Windows.UserInfo - NT_AUTHORITY_NetworkService:"
+$NT_AUTHORITY_NetworkService
+
+New-Test "Project.Windows.UserInfo - NT_AUTHORITY_LocalService:"
+$NT_AUTHORITY_LocalService
+
+New-Test "Project.Windows.UserInfo - NT_AUTHORITY_System:"
+$NT_AUTHORITY_System
+
+New-Test "Project.Windows.UserInfo - AdministratorsGroupSDDL:"
+$AdministratorsGroupSDDL
+
+New-Test "Project.Windows.UserInfo - UsersGroupSDDL:"
+$UsersGroupSDDL
 
 Exit-Test

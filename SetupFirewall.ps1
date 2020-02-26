@@ -40,8 +40,9 @@ Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
-# Clear errors and warning status
+# Clear errors, error and warning status
 $Error.Clear()
+Set-Variable -Name ErrorStatus -Scope Global -Value $false
 Set-Variable -Name WarningStatus -Scope Global -Value $false
 
 # Prompt to set screen buffer to recommended value

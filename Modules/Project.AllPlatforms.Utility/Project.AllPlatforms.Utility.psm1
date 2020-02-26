@@ -40,7 +40,7 @@ if ($Develop)
 	$VerbosePreference = $ModuleVerbosePreference
 	$InformationPreference = $ModuleInformationPreference
 
-	$ThisModule = $MyInvocation.MyCommand.Name -replace ".{5}$"
+	Set-Variable ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
 	Write-Debug -Message "[$ThisModule] ErrorActionPreference is $ErrorActionPreference"
 	Write-Debug -Message "[$ThisModule] WarningPreference is $WarningPreference"
@@ -462,15 +462,20 @@ function Test-TargetComputer
 
 if (!(Get-Variable -Name CheckInitUtility -Scope Global -ErrorAction Ignore))
 {
+	Write-Debug -Message "[$ThisModule] Initialize global constant: CheckInitUtility"
 	# check if constants alreay initialized, used for module reloading
 	New-Variable -Name CheckInitUtility -Scope Global -Option Constant -Value $null
 
+	Write-Debug -Message "[$ThisModule] Initialize global constant: ServiceHost"
 	# Most used program
 	New-Variable -Name ServiceHost -Scope Global -Option Constant -Value "%SystemRoot%\System32\svchost.exe"
 }
 
+Write-Debug -Message "[$ThisModule] Initialize module variable: Context"
 # Global execution context, used in Approve-Execute
 New-Variable -Name Context -Scope Script -Value "Context not set"
+
+Write-Debug -Message "[$ThisModule] Initialize module variable: RecommendedBuffer"
 # Recommended vertical screen buffer value, to ensure user can scroll back all the output
 New-Variable -Name RecommendedBuffer -Scope Script -Option Constant -Value 1500
 

@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for adding rules based on computer users
+# Unit test for unresolved path
 #
 
 #Requires -RunAsAdministrator
@@ -38,47 +38,40 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
 Test-SystemRequirements
 
 # Includes
-. $ProjectRoot\Test\ContextSetup.ps1
+. $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $IPVersion $Direction
+Update-Context $TestContext "IPv$IPVersion" $Direction
 if (!(Approve-Execute @Logs)) { exit }
 
-$Group = "Test - Get-UserSDDL"
+#
+# Setup local variables:
+#
+$Group = "Test - Unresolved path"
 $Profile = "Any"
+$TargetProgramRoot = "C:\Program Files (x86)\Realtek\..\PokerStars.EU"
 
-New-Test "Remove-NetFirewallRule"
-# Remove previous test
+Start-Test
+
+# First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
-New-Test "Get-UserAccounts(Users)"
-[string[]] $UserAccounts = Get-UserAccounts("Users")
-$UserAccounts
+New-Test "Unresolved path"
 
-New-Test "Users + Get-UserAccounts(Administrators) + NT SYSTEM"
-$UserAccounts = $UserAccounts += (Get-UserAccounts("Administrators"))
-$UserAccounts = $UserAccounts += "NT AUTHORITY\SYSTEM"
-$UserAccounts
+# Test if installation exists on system
+$Program = "$TargetProgramRoot\PokerStars.exe"
+Test-File $Program @Logs
 
-New-Test "ConvertFrom-UserAccounts:"
-$UserNames = ConvertFrom-UserAccounts($UserAccounts)
-$UserNames
-
-New-Test "Get-UserSDDL:"
-$LocalUser = Get-UserSDDL($UserNames)
-$LocalUser
-
-New-Test "New-NetFirewallRule"
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Get-UserSDDL" -Program Any -Service Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
--Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
--LocalUser $LocalUser `
--Description "" | Format-Output
+-DisplayName "TargetProgram" -Service Any -Program $Program `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 26002 `
+-LocalUser Any `
+-Description "" @Logs | Format-Output @Logs
 
+Update-Logs
 Exit-Test

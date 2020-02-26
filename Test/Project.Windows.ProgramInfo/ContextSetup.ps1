@@ -27,25 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for UnloadModules.ps1
+# Context setup for Project.Windows.ProgramInfo
 #
-. $PSScriptRoot\..\Config\ProjectSettings.ps1
 
-Write-Information -Tags "Test" -MessageData "INFO: Import-Module System"
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System -Force
-
-Write-Information -Tags "Test" -MessageData "INFO: Import-Module Test"
-Import-Module -Name $ProjectRoot\Modules\Test -Force
-
-Write-Information -Tags "Test" -MessageData "INFO: Import-Module UserInfo"
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo -Force
-
-Write-Information -Tags "Test" -MessageData "INFO: Import-Module FirewallModule"
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility -Force
-
-Write-Information -Tags "Test" -MessageData "INFO: Import-Module ProgramInfo"
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo -Force
-
-Write-Information -Tags "Test" -MessageData "INFO: Import-Module ComputerInfo"
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo -Force
+$TestContext = "Test.Project.Windows.ProgramInfo"

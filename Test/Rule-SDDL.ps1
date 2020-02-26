@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for unresolved path
+# Unit test for adding rules based on computer accounts
 #
 
 #Requires -RunAsAdministrator
@@ -38,47 +38,38 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
 Test-SystemRequirements
 
 # Includes
-. $ProjectRoot\Test\ContextSetup.ps1
+. $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $IPVersion $Direction
+Update-Context $TestContext "IPv$IPVersion" $Direction
 if (!(Approve-Execute @Logs)) { exit }
 
-#
-# Setup local variables:
-#
-$Group = "Test - Relative path"
+$Group = "Test - Get-SDDL"
 $Profile = "Any"
 
-#
-# TargetProgram installation directories
-#
-$TargetProgramRoot = "C:\Program Files (x86)\Realtek\..\PokerStars.EU"
+Start-Test
 
-# First remove all existing rules matching group
+New-Test "Remove-NetFirewallRule"
+# Remove previous test
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
 
-#
-# Rules for TargetProgram
-#
+New-Test "Get-SDDL"
+$RuleUsers = Get-SDDL -Group "Users", "Administrators" -User "test" @Logs
+$RuleSystemUsers = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE" @Logs
+Merge-SDDL ([ref] $RuleUsers) $RuleSystemUsers @Logs
+$RuleUsers
 
-New-Test "Relative path"
-# Test if installation exists on system
-if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot)) -or $Force)
-{
-	$Program = "$TargetProgramRoot\PokerStars.exe"
-	Test-File $Program
-	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "TargetProgram" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 26002 `
-	-LocalUser $UsersSDDL `
-	-Description "" | Format-Output
-}
+New-Test "New-NetFirewallRule"
+New-NetFirewallRule -Platform $Platform `
+-DisplayName "Get-SDDL" -Program Any -Service Any `
+-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
+-Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
+-LocalUser $RuleUsers `
+-Description "" @Logs | Format-Output @Logs
 
+Update-Logs
 Exit-Test

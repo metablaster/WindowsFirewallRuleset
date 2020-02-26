@@ -133,6 +133,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $SystemGroup -Direction 
 
 #
 # Block Administrators by defalut
+# TODO: should group SID be supplied to local user instead of owner?
 #
 
 New-NetFirewallRule -Platform $Platform `

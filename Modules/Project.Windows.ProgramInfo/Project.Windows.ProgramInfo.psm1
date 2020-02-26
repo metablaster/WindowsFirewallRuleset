@@ -40,7 +40,7 @@ if ($Develop)
 	$VerbosePreference = $ModuleVerbosePreference
 	$InformationPreference = $ModuleInformationPreference
 
-	$ThisModule = $MyInvocation.MyCommand.Name -replace ".{5}$"
+	Set-Variable ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
 	Write-Debug -Message "[$ThisModule] ErrorActionPreference is $ErrorActionPreference"
 	Write-Debug -Message "[$ThisModule] WarningPreference is $WarningPreference"
@@ -922,7 +922,10 @@ function Initialize-Table
 		Set-Variable -Name InstallTable -Scope Script -Value (New-Object -TypeName System.Data.DataTable $TableName)
 	}
 
+	Set-Variable -Name RowIndex -Scope Script -Value 0
+
 	# Define Columns
+	$ColumnID = New-Object -TypeName System.Data.DataColumn ID, ([int32])
 	$ColumnSID = New-Object -TypeName System.Data.DataColumn SID, ([string])
 	$ColumnUser = New-Object -TypeName System.Data.DataColumn User, ([string])
 	$ColumnGroup = New-Object -TypeName System.Data.DataColumn Group, ([string])
@@ -931,6 +934,7 @@ function Initialize-Table
 	$ColumnInstallLocation = New-Object -TypeName System.Data.DataColumn InstallLocation, ([string])
 
 	# Add the Columns
+	$InstallTable.Columns.Add($ColumnID)
 	$InstallTable.Columns.Add($ColumnSID)
 	$InstallTable.Columns.Add($ColumnUser)
 	$InstallTable.Columns.Add($ColumnGroup)
@@ -993,6 +997,7 @@ function Update-Table
 			$Principal = $UserGroups | Where-Object -Property Group -eq "Users"
 
 			# Enter data into row
+			$Row.ID = ++$RowIndex
 			$Row.SID = $Principal.SID
 			$Row.Group = $Principal.Group
 			$Row.Computer = $Principal.Computer
@@ -1027,6 +1032,7 @@ function Update-Table
 			$InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
 
 			# Enter data into row
+			$Row.ID = ++$RowIndex
 			$Row.SID = $Principal.SID
 			$Row.Group = $Principal.Group
 			$Row.Computer = $Principal.Computer
@@ -1064,6 +1070,7 @@ function Update-Table
 			$InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
 
 			# Enter data into row
+			$Row.ID = ++$RowIndex
 			$Row.SID = $Principal.SID
 			$Row.Group = $Principal.Group
 			$Row.Computer = $Principal.Computer
@@ -1101,6 +1108,7 @@ function Update-Table
 					$Row = $InstallTable.NewRow()
 
 					# Enter data into row
+					$Row.ID = ++$RowIndex
 					$Row.SID = $Principal.SID
 					$Row.User = $Principal.User
 					# TODO: we should add group entry for users
@@ -1166,6 +1174,7 @@ function Edit-Table
 		$Principal = Get-GroupPrincipals "Users" | Where-Object -Property User -eq ($InstallLocation.Split("\"))[2]
 
 		# Enter data into row
+		$Row.ID = ++$RowIndex
 		$Row.SID = $Principal.SID
 		$Row.User = $Principal.User
 		$Row.Account = $Principal.Account
@@ -1188,6 +1197,7 @@ function Edit-Table
 		$Row = $InstallTable.NewRow()
 
 		# Enter data into row
+		$Row.ID = ++$RowIndex
 		$Row.SID = $Principal.SID
 		$Row.Group = $Principal.Group
 		$Row.Computer = $Principal.Computer
@@ -1245,19 +1255,20 @@ function Test-Installation
 		{
 			Write-Information -Tags "User" -MessageData "INFO: Found multiple candidate installation directories for $Program"
 
-			# Print out all candidate installation directories
+			# Sort the table by ID column in ascending order
+			# NOTE: not needed if table is not modified
+			$InstallTable.DefaultView.Sort = "ID asc"
+			$InstallTable = $InstallTable.DefaultView.ToTable()
+
+			# Print out all candidate rows
 			Write-Host "0. Abort this operation"
-			for ($Index = 0; $Index -lt $Count; ++$Index)
-			{
-				# TODO: show principal too!
-				Write-Host "$($Index + 1). $($InstallTable.Rows[$Index].Item("InstallLocation"))"
-			}
+			$InstallTable | Format-Table -AutoSize
 
 			# Prompt user to chose one
 			[int32] $Choice = -1
 			while ($Choice -lt 0 -or $Choice -gt $Count)
 			{
-				Write-Information -Tags "User" -MessageData "INFO: Input number to choose which one is correct"
+				Write-Information -Tags "User" -MessageData "INFO: Input the ID number to choose which one is correct"
 				$Input = Read-Host
 
 				if($Input -notmatch '^-?\d+$')
@@ -1277,7 +1288,7 @@ function Test-Installation
 				return $false
 			}
 
-			$InstallLocation = $InstallTable.Rows[$Choice - 1].Item("InstallLocation")
+			$InstallLocation = $InstallTable.Rows[$Choice - 1].InstallLocation
 		}
 		else
 		{
@@ -2248,16 +2259,19 @@ System.Management.Automation.PSCustomObject for installed Microsoft SQL Server M
 # Installation table holds user and program directory pair
 if ($Develop)
 {
+	Write-Debug -Message "[$ThisModule] Initialize Global variable: InstallTable"
 	Remove-Variable -Name InstallTable -Scope Script -ErrorAction Ignore
 	Set-Variable -Name InstallTable -Scope Global -Value $null
 }
 else
 {
+	Write-Debug -Message "[$ThisModule] Initialize module variable: InstallTable"
 	Remove-Variable -Name InstallTable -Scope Global -ErrorAction Ignore
 	Set-Variable -Name InstallTable -Scope Script -Value $null
 }
 
-# Any environment variables to user profile are not valid for firewall
+Write-Debug -Message "[$ThisModule] Initialize module Constant variable: BlackListEnvironment"
+# Any environment variables to user profile or multiple paths are not valid for firewall
 New-Variable -Name BlackListEnvironment -Scope Script -Option Constant -Value @(
 	"%APPDATA%"
 	"%HOME%"
@@ -2273,6 +2287,7 @@ New-Variable -Name BlackListEnvironment -Scope Script -Option Constant -Value @(
 	"%USERPROFILE%"
 	)
 
+Write-Debug -Message "[$ThisModule] Initialize module Constant variable: UserProfileEnvironment"
 New-Variable -Name UserProfileEnvironment -Scope Script -Option Constant -Value @(
 	"%APPDATA%"
 	"%HOME%"
@@ -2286,12 +2301,15 @@ New-Variable -Name UserProfileEnvironment -Scope Script -Option Constant -Value 
 	"%USERPROFILE%"
 	)
 
+Write-Debug -Message "[$ThisModule] Initialize module readonly variable: SystemPrograms"
 # Programs installed for all users
 New-Variable -Name SystemPrograms -Scope Script -Option ReadOnly -Value (Get-SystemPrograms -Computer $PolicyStore)
 
+Write-Debug -Message "[$ThisModule] Initialize module readonly variable: ExecutablePaths"
 # Programs installed for all users
 New-Variable -Name ExecutablePaths -Scope Script -Option ReadOnly -Value (Get-ExecutablePaths -Computer $PolicyStore)
 
+Write-Debug -Message "[$ThisModule] Initialize module readonly variable: AllUserPrograms"
 # Programs installed for all users
 New-Variable -Name AllUserPrograms -Scope Script -Option ReadOnly -Value (Get-AllUserPrograms -Computer $PolicyStore)
 

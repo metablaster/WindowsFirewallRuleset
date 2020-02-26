@@ -28,7 +28,7 @@ SOFTWARE.
 
 #
 # Run all tests
-# TODO: some test will output wrong results, better run each test separately
+# TODO: some tests will output empty results, better run each test separately
 #
 
 . $PSScriptRoot\Config\ProjectSettings.ps1
@@ -42,18 +42,21 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
 # Ask user if he wants to load these rules
-Update-Context "Master" $($MyInvocation.MyCommand.Name -replace ".{4}$")
+Update-Context "Test.Master" $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute @Logs)) { exit }
 
 # Recusively get powershell scripts in input folder
-$Files = Get-ChildItem -Path $ProjectRoot\Test -Recurse -Filter *.ps1
+$Files = Get-ChildItem -Path $ProjectRoot\Test -Recurse -Filter *.ps1 |
+Where-Object -Property Name -ne "ContextSetup.ps1"
+
 if (!$Files)
 {
-	Write-Warning -Message "No powershell script files found"
+	Write-Error -Category ObjectNotFound -TargetObject $Files -Message "No powershell script files found"
 	return
 }
 
 # Run them all
-$Files | ForEach-Object {
-	& $_.FullName
+foreach ($File in $Files)
+{
+	& $File.FullName
 }

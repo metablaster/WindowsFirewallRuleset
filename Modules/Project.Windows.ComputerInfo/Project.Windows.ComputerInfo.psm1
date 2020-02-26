@@ -40,7 +40,7 @@ if ($Develop)
 	$VerbosePreference = $ModuleVerbosePreference
 	$InformationPreference = $ModuleInformationPreference
 
-	$ThisModule = $MyInvocation.MyCommand.Name -replace ".{5}$"
+	Set-Variable ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
 	Write-Debug -Message "[$ThisModule] ErrorActionPreference is $ErrorActionPreference"
 	Write-Debug -Message "[$ThisModule] WarningPreference is $WarningPreference"
