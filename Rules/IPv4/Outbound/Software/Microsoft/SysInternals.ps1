@@ -45,7 +45,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 #
 $Group = "Microsoft - SysInternals"
 $Profile = "Private, Public"
-$SysInternalsUsers = Get-SDDL -Groups @("Users", "Administrators")
+$SysInternalsUsers = Get-SDDL -Group "Users", "Administrators"
 
 # Ask user if he wants to load these rules
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
@@ -64,7 +64,7 @@ $SysInternalsRoot = "%SystemDrive%\tools"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $Force)
+if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLoad)
 {
 	$Program = "$SysInternalsRoot\Autoruns\Autoruns64.exe"
 	Test-File $Program

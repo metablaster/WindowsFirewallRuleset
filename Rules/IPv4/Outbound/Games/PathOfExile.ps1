@@ -63,7 +63,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "PathOfExile" ([ref] $PathOfExileRoot)) -or $Force)
+if ((Test-Installation "PathOfExile" ([ref] $PathOfExileRoot)) -or $ForceLoad)
 {
 	$Program = "$PathOfExileRoot\PathOfExile_x64Steam.exe"
 	Test-File $Program

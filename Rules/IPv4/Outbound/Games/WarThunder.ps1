@@ -63,7 +63,7 @@ $WarThunderRoot = "%ProgramFiles(x86)%\Steam\steamapps\common\War Thunder"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "WarThunder" ([ref] $WarThunderRoot)) -or $Force)
+if ((Test-Installation "WarThunder" ([ref] $WarThunderRoot)) -or $ForceLoad)
 {
 	$Program = "$WarThunderRoot\win64\aces.exe"
 	Test-File $Program
@@ -78,7 +78,7 @@ if ((Test-Installation "WarThunder" ([ref] $WarThunderRoot)) -or $Force)
 	-DisplayName "WarThunder - aces" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 1900, 20010-20500 `
-	-LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+	-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "" | Format-Output
 
 	$Program = "$WarThunderRoot\gaijin_downloader.exe"
@@ -94,7 +94,7 @@ if ((Test-Installation "WarThunder" ([ref] $WarThunderRoot)) -or $Force)
 	-DisplayName "WarThunder - gajin_downloader" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 20010 `
-	-LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+	-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "" | Format-Output
 
 	$Program = "$WarThunderRoot\gjagent.exe"
@@ -103,7 +103,7 @@ if ((Test-Installation "WarThunder" ([ref] $WarThunderRoot)) -or $Force)
 	-DisplayName "WarThunder - gjagent" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 20010 `
-	-LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+	-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "" | Format-Output
 
 	$Program = "$WarThunderRoot\launcher.exe"
@@ -119,6 +119,6 @@ if ((Test-Installation "WarThunder" ([ref] $WarThunderRoot)) -or $Force)
 	-DisplayName "WarThunder - Launcher" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 20010 `
-	-LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+	-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "" | Format-Output
 }

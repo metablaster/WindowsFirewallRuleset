@@ -412,7 +412,7 @@ Whether to contact CIM server (requred for remote computers)
 
 $UsersSDDL1 = Get-SDDL -Users $Users -Groups $Groups
 $UsersSDDL2 = Get-SDDL -Users $Users -Machine $Server
-$UsersSDDL3 = Get-SDDL -Groups $Groups
+$UsersSDDL3 = Get-SDDL -Group $Groups
 .EXAMPLE
 $NewSDDL = Get-SDDL -Domain "NT AUTHORITY" -Users "System"
 .INPUTS
@@ -727,10 +727,6 @@ if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 	New-Variable -Name NT_AUTHORITY_UserModeDrivers -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
 }
 
-# Get list of user accounts in form of COMPUTERNAME\USERNAME
-# New-Variable -Name UserAccounts -Scope Script -Option Constant -Value (Get-GroupPrincipals "Users" -Computer $PolicyStore)
-# New-Variable -Name AdminAccounts -Scope Script -Option Constant -Value (Get-GroupPrincipals "Administrators" -Computer $PolicyStore)
-
 #
 # Function exports
 #
@@ -749,8 +745,6 @@ Export-ModuleMember -Function Get-UserGroups
 #
 Export-ModuleMember -Variable CheckInitUserInfo
 
-# Export-ModuleMember -Variable UserAccounts
-# Export-ModuleMember -Variable AdminAccounts
 Export-ModuleMember -Variable UsersGroupSDDL
 Export-ModuleMember -Variable AdministratorsGroupSDDL
 

@@ -63,7 +63,7 @@ $PokerStarsRoot = "%ProgramFiles(x86)%\PokerStars.EU"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $Force)
+if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $ForceLoad)
 {
 	$Program = "$PokerStarsRoot\PokerStars.exe"
 	Test-File $Program

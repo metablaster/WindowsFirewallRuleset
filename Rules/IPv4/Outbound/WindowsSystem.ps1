@@ -66,7 +66,7 @@ $NETFrameworkRoot = ""
 #
 
 # Test if installation exists on system
-if ((Test-Installation "NETFramework" ([ref] $NETFrameworkRoot)) -or $Force)
+if ((Test-Installation "NETFramework" ([ref] $NETFrameworkRoot)) -or $ForceLoad)
 {
 	# TODO: are these really user accounts we need here
 	$Program = "$NETFrameworkRoot\mscorsvw.exe"
@@ -81,7 +81,7 @@ if ((Test-Installation "NETFramework" ([ref] $NETFrameworkRoot)) -or $Force)
 	it will be done with the high priority assemblies in 5 to 10 minutes and then will wait until your computer is idle to process the low priority assemblies." | Format-Output
 }
 
-if ((Test-Installation "WindowsDefender" ([ref] $WindowsDefenderRoot)) -or $Force)
+if ((Test-Installation "WindowsDefender" ([ref] $WindowsDefenderRoot)) -or $ForceLoad)
 {
 	$Program = "$WindowsDefenderRoot\MsMpEng.exe"
 	Test-File $Program

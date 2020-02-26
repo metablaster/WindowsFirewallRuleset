@@ -274,13 +274,11 @@ if ($Develop)
 {
 	# Need to re-import required module in develop mode
 	Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
+	Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 }
 
 # Show status of execution
-$ErrorCount = $Error.Count -gt 0
-
-if ($ErrorCount)
+if ($ErrorStatus)
 {
 	Write-Host ""
 	Write-Warning -Message "Errors were generated"
@@ -298,7 +296,7 @@ if ($WarningStatus)
 	Write-Information -Tags "User" -MessageData "INFO: you can review these logs to see if you want to resolve some of them"
 }
 
-if (!$ErrorCount -and !$WarningStatus)
+if (!$ErrorStatus -and !$WarningStatus)
 {
 	Write-Host ""
 	Write-Information -Tags "User" -MessageData "INFO: All operations completed successfuly!"
@@ -308,5 +306,6 @@ Write-Host ""
 Write-Information -Tags "User" -MessageData "INFO: Make sure you visit Local Group Policy and adjust your rules as needed."
 Write-Host ""
 
-# Clear warning status
+# Clear warning/error status
+Set-Variable -Name ErrorStatus -Scope Global -Value $false
 Set-Variable -Name WarningStatus -Scope Global -Value $false

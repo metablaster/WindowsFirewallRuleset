@@ -63,7 +63,7 @@ $ThunderbirdRoot = "%ProgramFiles%\Mozilla Thunderbird"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Thuderbird" ([ref] $ThunderbirdRoot)) -or $Force)
+if ((Test-Installation "Thuderbird" ([ref] $ThunderbirdRoot)) -or $ForceLoad)
 {
 	$Program = "$ThunderbirdRoot\thunderbird.exe"
 	Test-File $Program

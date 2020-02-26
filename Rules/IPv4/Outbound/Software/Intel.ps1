@@ -64,7 +64,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "XTU" ([ref] $IntelXTURoot)) -or $Force)
+if ((Test-Installation "XTU" ([ref] $IntelXTURoot)) -or $ForceLoad)
 {
 	$Program = "$IntelXTURoot\PerfTune.exe"
 	Test-File $Program

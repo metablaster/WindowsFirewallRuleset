@@ -152,16 +152,16 @@ Administrators should have limited or no connectivity at all for maximum securit
 # NOTE: updating apps will not work unless also "Extension users" are updated in WindowsServices.ps1, meaning re-run the script.
 #
 
-$Users = Get-GroupUsers "Users"
-foreach ($User in $Users)
+$Principals = Get-GroupPrincipals "Users"
+foreach ($Principal in $Principals)
 {
 	#
 	# Create rules for apps installed by user
 	#
 
-	Get-AppxPackage -User $User -PackageTypeFilter Bundle | ForEach-Object {
+	Get-AppxPackage -User $Principal.User -PackageTypeFilter Bundle | ForEach-Object {
 
-		$PackageSID = (Get-AppSID $User $_.PackageFamilyName)
+		$PackageSID = Get-AppSID $Principal.User $_.PackageFamilyName
 
 		# Possible package not found
 		if ($PackageSID)
@@ -178,8 +178,8 @@ foreach ($User in $Users)
 			-DisplayName $_.Name -Service Any -Program Any `
 			-PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-			-LocalUser Any -Owner $User.SID -Package $PackageSID `
-			-Description "Store apps generated rule for $User" | Format-Output
+			-LocalUser Any -Owner $Principal.SID -Package $PackageSID `
+			-Description "Store apps generated rule for $($Principal.User)" | Format-Output
 		}
 	}
 
@@ -188,9 +188,10 @@ foreach ($User in $Users)
 	#
 
 	# NOTE: -User parameter is probably not needed here? aded while troubleshooting the hack above.
-	Get-AppxPackage -User $User -PackageTypeFilter Main | Where-Object { $_.SignatureKind -eq "System" -and $_.Name -like "Microsoft*" } | ForEach-Object {
+	Get-AppxPackage -User $Principal.User -PackageTypeFilter Main |
+	Where-Object { $_.SignatureKind -eq "System" -and $_.Name -like "Microsoft*" } | ForEach-Object {
 
-		$PackageSID = (Get-AppSID $User $_.PackageFamilyName)
+		$PackageSID = Get-AppSID $Principal.User $_.PackageFamilyName
 
 		# Possible package not found
 		if ($PackageSID)
@@ -207,8 +208,8 @@ foreach ($User in $Users)
 			-DisplayName $_.Name -Service Any -Program Any `
 			-PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $SystemGroup -Profile $Profile -InterfaceType $Interface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-			-LocalUser Any -Owner $User.SID -Package $PackageSID `
-			-Description "System store apps generated rule for $User" | Format-Output
+			-LocalUser Any -Owner $Principal.SID -Package $PackageSID `
+			-Description "System store apps generated rule for $($Principal.User)" | Format-Output
 		}
 	}
 }

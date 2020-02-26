@@ -64,7 +64,7 @@ $SteamRoot = "%ProgramFiles(x86)%\Steam"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Steam" ([ref] $SteamRoot)) -or $Force)
+if ((Test-Installation "Steam" ([ref] $SteamRoot)) -or $ForceLoad)
 {
 	$Program = "$SteamRoot\Steam.exe"
 	Test-File $Program
@@ -72,7 +72,7 @@ if ((Test-Installation "Steam" ([ref] $SteamRoot)) -or $Force)
 	-DisplayName "Steam (game client trafic)" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 27000-27015 `
-	-LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+	-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "" | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `
@@ -93,14 +93,14 @@ if ((Test-Installation "Steam" ([ref] $SteamRoot)) -or $Force)
 	-DisplayName "Steam Matchmaking and HLTV" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 27015-27030 `
-	-LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+	-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "" | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Steam P2P Networking and Steam Voice Chat" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 3478, 4379, 4380 `
-	-LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+	-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "" | Format-Output
 
 	$Program = "$SteamRoot\SteamService.exe"
@@ -109,7 +109,7 @@ if ((Test-Installation "Steam" ([ref] $SteamRoot)) -or $Force)
 	-DisplayName "SteamService" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-	-LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+	-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "" | Format-Output
 
 	$Program = "$SteamRoot\bin\cef\cef.win7\steamwebhelper.exe"

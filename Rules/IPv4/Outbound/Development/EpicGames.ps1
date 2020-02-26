@@ -64,7 +64,7 @@ $LauncherRoot = "%ProgramFiles(x86)%\Epic Games\Launcher"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $Force)
+if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
 {
 	$Program = "$EngineRoot\Binaries\Win64\CrashReportClientEditor-Win64-Development.exe"
 	Test-File $Program
@@ -99,7 +99,7 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $Force)
 	-DisplayName "Unreal Engine - Editor x64" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-	-LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+	-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "" | Format-Output
 
 	$Program = "$EngineRoot\Binaries\Win64\UE4Editor.exe"
@@ -126,7 +126,7 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $Force)
 #
 
 # Test if installation exists on system
-if ((Test-Installation "EpicGames" ([ref] $LauncherRoot)) -or $Force)
+if ((Test-Installation "EpicGames" ([ref] $LauncherRoot)) -or $ForceLoad)
 {
 	$Program = "$LauncherRoot\Portal\Binaries\Win32\EpicGamesLauncher.exe"
 	Test-File $Program
@@ -152,6 +152,6 @@ if ((Test-Installation "EpicGames" ([ref] $LauncherRoot)) -or $Force)
 	-DisplayName "Epic Games - Launcher x64" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-	-LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+	-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "" | Format-Output
 }

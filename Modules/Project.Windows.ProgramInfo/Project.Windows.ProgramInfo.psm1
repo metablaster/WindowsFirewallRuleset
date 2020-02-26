@@ -1089,7 +1089,6 @@ function Update-Table
 	{
 		$Principals = Get-GroupPrincipals "Users"
 
-		# TODO: What UserAccounts?
 		foreach ($Principal in $Principals)
 		{
 			# NOTE: the story is different here, each user may have multiple matches for search string

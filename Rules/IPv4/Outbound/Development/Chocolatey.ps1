@@ -45,7 +45,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 #
 $Group = "Development - Chocolatey"
 $Profile = "Private, Public"
-$ChocolateyAccounts = Get-SDDL -Groups @("Users", "Administrators")
+$ChocolateyAccounts = Get-SDDL -Group "Users", "Administrators"
 
 # Ask user if he wants to load these rules
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
@@ -64,7 +64,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Chocolatey" ([ref] $ChocolateyRoot)) -or $Force)
+if ((Test-Installation "Chocolatey" ([ref] $ChocolateyRoot)) -or $ForceLoad)
 {
 	$Program = "$ChocolateyRoot\choco.exe"
 	Test-File $Program

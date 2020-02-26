@@ -63,7 +63,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "VSCode" ([ref] $VSCodeRoot)) -or $Force)
+if ((Test-Installation "VSCode" ([ref] $VSCodeRoot)) -or $ForceLoad)
 {
 	$Program = "$VSCodeRoot\Code.exe"
 	Test-File $Program

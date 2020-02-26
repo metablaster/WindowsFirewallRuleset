@@ -179,7 +179,7 @@ None. You cannot pipe objects to Get-UserAccounts
 System.String[] Array of enabled user accounts in specified group, in form of COMPUTERNAME\USERNAME
 .NOTES
 TODO: implement queriying computers on network
-TODO: should be renamed into Get-GroupUsers
+TODO: should be renamed into Get-GroupPrincipals
 #>
 function Get-UserAccounts
 {

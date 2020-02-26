@@ -63,7 +63,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Incredibuild" ([ref] $IncredibuildRoot)) -or $Force)
+if ((Test-Installation "Incredibuild" ([ref] $IncredibuildRoot)) -or $ForceLoad)
 {
 	$Program = "$IncredibuildRoot\XLicProc.exe"
 	Test-File $Program

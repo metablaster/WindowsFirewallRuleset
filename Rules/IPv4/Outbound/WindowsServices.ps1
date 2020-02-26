@@ -46,8 +46,8 @@ $Group = "Windows Services"
 $Profile = "Private, Public"
 
 # Extension rules are special rules for problematic services, see ProblematicTraffic.md for more info
-$ExtensionAccounts = Get-SDDL -Domain "NT AUTHORITY" -Users @("SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE")
-Merge-SDDL $ExtensionAccounts (Get-SDDL -Groups "Users")
+$ExtensionAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE"
+Merge-SDDL $ExtensionAccounts (Get-SDDL -Group "Users")
 
 # Ask user if he wants to load these rules
 Update-Context "IPv$IPVersion" $Direction $Group @Logs

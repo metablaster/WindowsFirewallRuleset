@@ -45,7 +45,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 #
 $Group = "Development - Microsoft Visual Studio"
 $Profile = "Private, Public"
-$VSUpdateUsers = Get-SDDL -Groups @("Users", "Administrators")
+$VSUpdateUsers = Get-SDDL -Group "Users", "Administrators"
 
 # Ask user if he wants to load these rules
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
@@ -70,7 +70,7 @@ $VSInstallerRoot = "" # "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $Force)
+if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $ForceLoad)
 {
 	$Program = "$VSRoot\Common7\IDE\CommonExtensions\Microsoft\TeamFoundation\Team Explorer\Git\mingw32\bin\git-remote-https.exe"
 	Test-File $Program
@@ -199,7 +199,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $Force)
 #
 
 # Test if installation exists on system
-if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $Force)
+if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $ForceLoad)
 {
 	$Program = "$VSInstallerRoot\resources\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.exe"
 	Test-File $Program

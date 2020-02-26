@@ -64,7 +64,7 @@ $DnsCryptRoot = "%ProgramFiles%\Simple DNSCrypt x64"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "DnsCrypt" ([ref] $DnsCryptRoot)) -or $Force)
+if ((Test-Installation "DnsCrypt" ([ref] $DnsCryptRoot)) -or $ForceLoad)
 {
 	$Program = "$DnsCryptRoot\dnscrypt-proxy\dnscrypt-proxy.exe"
 	Test-File $Program

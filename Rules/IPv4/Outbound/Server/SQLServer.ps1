@@ -47,7 +47,7 @@ $Group = "Server - SQL"
 $Profile = "Private, Public"
 
 # TODO: this is most likely wrong
-$SQLUsers = Get-SDDL -Groups @("Users", "Administrators")
+$SQLUsers = Get-SDDL -Group "Users", "Administrators"
 
 # Ask user if he wants to load these rules
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
@@ -68,7 +68,7 @@ $SQLDTSRoot =  ""
 #
 
 # Test if installation exists on system
-if ((Test-Installation "SQLManagementStudio" ([ref] $SQLManagementStudioRoot)) -or $Force)
+if ((Test-Installation "SQLManagementStudio" ([ref] $SQLManagementStudioRoot)) -or $ForceLoad)
 {
 	# TODO: old directory, our Get-SQLManagementStudio may not work as expected for older versions
 	# $Program = "$SQLServerRoot\Tools\Binn\ManagementStudio\Ssms.exe"
@@ -83,7 +83,7 @@ if ((Test-Installation "SQLManagementStudio" ([ref] $SQLManagementStudioRoot)) -
 }
 
 # Test if installation exists on system
-if ((Test-Installation "SQLDTS" ([ref] $SQLDTSRoot)) -or $Force)
+if ((Test-Installation "SQLDTS" ([ref] $SQLDTSRoot)) -or $ForceLoad)
 {
 	$Program = "$SQLDTSRoot\Binn\DTSWizard.exe"
 	Test-File $Program

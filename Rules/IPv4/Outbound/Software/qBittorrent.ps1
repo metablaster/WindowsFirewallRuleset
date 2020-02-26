@@ -64,7 +64,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "qBittorrent" ([ref] $qBittorentRoot)) -or $Force)
+if ((Test-Installation "qBittorrent" ([ref] $qBittorentRoot)) -or $ForceLoad)
 {
 	$Program = "$qBittorentRoot\qbittorrent.exe"
 	Test-File $Program
@@ -90,6 +90,6 @@ if ((Test-Installation "qBittorrent" ([ref] $qBittorentRoot)) -or $Force)
 	-DisplayName "qBittorent (UDP)" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-	-LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+	-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Torrent client" | Format-Output
 }

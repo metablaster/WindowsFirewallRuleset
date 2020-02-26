@@ -63,7 +63,7 @@ $TeamViewerRoot = "%ProgramFiles(x86)%\TeamViewer"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "TeamViewer" ([ref] $TeamViewerRoot)) -or $Force)
+if ((Test-Installation "TeamViewer" ([ref] $TeamViewerRoot)) -or $ForceLoad)
 {
 	$Program = "$TeamViewerRoot\TeamViewer.exe"
 	Test-File $Program

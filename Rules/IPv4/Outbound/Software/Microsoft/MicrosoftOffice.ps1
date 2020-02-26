@@ -64,7 +64,7 @@ $OfficeShared = "%ProgramFiles%\Common Files\microsoft shared"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $Force)
+if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
 {
 	$Program = "$OfficeRoot\MSACCESS.EXE"
 	Test-File $Program

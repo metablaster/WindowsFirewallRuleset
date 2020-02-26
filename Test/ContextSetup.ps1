@@ -28,6 +28,7 @@ SOFTWARE.
 
 #
 # Context setup for tests
+# TODO: use New-Variable to avoid warnings
 #
 
 $IPVersion = 4

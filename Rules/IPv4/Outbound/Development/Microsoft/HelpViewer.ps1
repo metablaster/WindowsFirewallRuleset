@@ -65,7 +65,7 @@ $HelpViewerRoot = "%ProgramFiles(x86)%\Microsoft Help Viewer\v2.3"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "HelpViewer" ([ref] $HelpViewerRoot)) -or $Force)
+if ((Test-Installation "HelpViewer" ([ref] $HelpViewerRoot)) -or $ForceLoad)
 {
 	$Program = "$HelpViewerRoot\HlpCtntMgr.exe"
 	Test-File $Program

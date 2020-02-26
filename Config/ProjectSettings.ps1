@@ -173,7 +173,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	New-Variable -Name Interface -Scope Global -Option Constant -Value "Wired, Wireless"
 
 	# To force loading rules regardless of presence of program set to true
-	New-Variable -Name Force -Scope Global -Option Constant -Value $false
+	New-Variable -Name ForceLoad -Scope Global -Option Constant -Value $true
 }
 
 # These are set only once per session, changing these requires powershell restart, except if Develop = $true

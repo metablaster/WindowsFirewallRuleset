@@ -63,7 +63,7 @@ $MSYS2Root = "%SystemRoot%\dev\msys64"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "MSYS2" ([ref] $MSYS2Root)) -or $Force)
+if ((Test-Installation "MSYS2" ([ref] $MSYS2Root)) -or $ForceLoad)
 {
 	$Program = "$MSYS2Root\usr\bin\curl.exe"
 	Test-File $Program

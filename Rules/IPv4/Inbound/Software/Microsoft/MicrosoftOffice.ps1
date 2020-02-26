@@ -63,7 +63,7 @@ $OfficeRoot = "%ProgramFiles%\Microsoft Office\root\Office16"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $Force)
+if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
 {
 	$Program = "$OfficeRoot\OUTLOOK.EXE"
 	Test-File $Program
@@ -72,7 +72,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $Force)
 	-DisplayName "Outlook" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort 6004 -RemotePort Any `
-	-EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+	-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "" | Format-Output
 
 	# TODO: Skype for bussiness has complex port requirements, see:
@@ -92,7 +92,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $Force)
 	-DisplayName "Skype for business" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-	-EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+	-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Skype for business, previously lync." | Format-Output
 
 	$Program = "$OfficeRoot\UcMapi.exe"
@@ -108,6 +108,6 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $Force)
 	-DisplayName "UcMapi" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-	-EdgeTraversalPolicy Block -LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+	-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Unified Communications Messaging Application Programming Interface" | Format-Output
 }

@@ -63,7 +63,7 @@ $GPGRoot = "%ProgramFiles(x86)%\GnuPG"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "GPG" ([ref] $GPGRoot)) -or $Force)
+if ((Test-Installation "GPG" ([ref] $GPGRoot)) -or $ForceLoad)
 {
 	$Program = "$GPGRoot\bin\dirmngr.exe"
 	Test-File $Program

@@ -63,7 +63,7 @@ $SDKDebuggers = "Unknown Directory"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "WindowsKits" ([ref] $SDKDebuggers)) -or $Force)
+if ((Test-Installation "WindowsKits" ([ref] $SDKDebuggers)) -or $ForceLoad)
 {
 	$Program = "$SDKDebuggers\x86\windbg.exe"
 	Test-File $Program

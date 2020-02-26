@@ -63,7 +63,7 @@ $OneDriveRoot = "%ProgramFiles(x86)%\Microsoft OneDrive"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "OneDrive" ([ref] $OneDriveRoot)) -or $Force)
+if ((Test-Installation "OneDrive" ([ref] $OneDriveRoot)) -or $ForceLoad)
 {
 	$Program = "$OneDriveRoot\OneDriveStandaloneUpdater.exe"
 	Test-File $Program

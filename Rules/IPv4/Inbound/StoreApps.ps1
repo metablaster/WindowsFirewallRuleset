@@ -76,16 +76,16 @@ Administrators should have limited or no connectivity at all for maximum securit
 # Create rules for all network apps for each standard user
 #
 
-$Users = Get-GroupUsers "Users"
-foreach ($User in $Users)
+$Principals = Get-GroupPrincipals "Users"
+foreach ($Principal in $Principals)
 {
 	#
 	# Create rules for apps installed by user
 	#
 
-	Get-AppxPackage -User $User -PackageTypeFilter Bundle | ForEach-Object {
+	Get-AppxPackage -User $Principal.User -PackageTypeFilter Bundle | ForEach-Object {
 
-		$PackageSID = (Get-AppSID $User $_.PackageFamilyName)
+		$PackageSID = Get-AppSID $Principal.User $_.PackageFamilyName
 		$Enabled = "False"
 
 		# if ($NetworkApps -contains $_.Name)
@@ -97,7 +97,7 @@ foreach ($User in $Users)
 		-DisplayName $_.Name -Service Any -Program Any `
 		-PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-		-EdgeTraversalPolicy Block -LocalUser Any -Owner $User.SID -Package $PackageSID `
+		-EdgeTraversalPolicy Block -LocalUser Any -Owner $Principal.SID -Package $PackageSID `
 		-Description "Store apps generated rule." | Format-Output
 	}
 
@@ -107,7 +107,7 @@ foreach ($User in $Users)
 
 	Get-AppxPackage -PackageTypeFilter Main | Where-Object { $_.SignatureKind -eq "System" -and $_.Name -like "Microsoft*" } | ForEach-Object {
 
-		$PackageSID = (Get-AppSID $User $_.PackageFamilyName)
+		$PackageSID = Get-AppSID $Principal.User $_.PackageFamilyName
 		$Enabled = "False"
 
 		# if ($NetworkApps -contains $_.Name)
@@ -119,7 +119,7 @@ foreach ($User in $Users)
 		-DisplayName $_.Name -Service Any -Program Any `
 		-PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $SystemGroup -Profile $Profile -InterfaceType $Interface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-		-EdgeTraversalPolicy Block -LocalUser Any -Owner $User.SID -Package $PackageSID `
+		-EdgeTraversalPolicy Block -LocalUser Any -Owner $Principal.SID -Package $PackageSID `
 		-Description "System store apps generated rule." | Format-Output
 	}
 }

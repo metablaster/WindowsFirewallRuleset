@@ -63,7 +63,7 @@ $PasswordSafeRoot = "%ProgramFiles%\Password Safe"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "PasswordSafe" ([ref] $PasswordSafeRoot)) -or $Force)
+if ((Test-Installation "PasswordSafe" ([ref] $PasswordSafeRoot)) -or $ForceLoad)
 {
 	$Program = "$PasswordSafeRoot\pwsafe.exe"
 	Test-File $Program

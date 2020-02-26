@@ -64,7 +64,7 @@ $OpenSSHRoot = "%ProgramFiles%\OpenSSH-Win64"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "OpenSSH" ([ref] $OpenSSHRoot)) -or $Force)
+if ((Test-Installation "OpenSSH" ([ref] $OpenSSHRoot)) -or $ForceLoad)
 {
 	$Program = "$OpenSSHRoot\ssh.exe"
 	Test-File $Program

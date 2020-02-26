@@ -66,10 +66,10 @@ $PowerShellCore64Root = ""
 
 # TODO: add rules for Core
 # NOTE: administartors may need powershell, let them add them self temporary? currently adding them for PS x64
-$PowerShellUsers = Get-SDDL -Groups @("Users", "Administrators")
+$PowerShellUsers = Get-SDDL -Group "Users", "Administrators"
 
 # Test if installation exists on system
-if ((Test-Installation "Powershell64" ([ref] $PowerShell64Root)) -or $Force)
+if ((Test-Installation "Powershell64" ([ref] $PowerShell64Root)) -or $ForceLoad)
 {
 	$Program = "$PowerShell64Root\powershell_ise.exe"
 	Test-File $Program
@@ -91,7 +91,7 @@ if ((Test-Installation "Powershell64" ([ref] $PowerShell64Root)) -or $Force)
 }
 
 # Test if installation exists on system
-if ((Test-Installation "PowershellCore64" ([ref] $PowerShellCore64Root)) -or $Force)
+if ((Test-Installation "PowershellCore64" ([ref] $PowerShellCore64Root)) -or $ForceLoad)
 {
 	$Program = "$PowerShellCore64Root\pwsh.exe"
 	Test-File $Program
@@ -104,7 +104,7 @@ if ((Test-Installation "PowershellCore64" ([ref] $PowerShellCore64Root)) -or $Fo
 }
 
 # Test if installation exists on system
-if ((Test-Installation "Powershell86" ([ref] $PowerShell86Root)) -or $Force)
+if ((Test-Installation "Powershell86" ([ref] $PowerShell86Root)) -or $ForceLoad)
 {
 	$Program = "$PowerShell86Root\powershell_ise.exe"
 	Test-File $Program

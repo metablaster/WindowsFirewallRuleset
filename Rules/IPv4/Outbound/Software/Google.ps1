@@ -63,7 +63,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "GoogleDrive" ([ref] $GoogleDriveRoot)) -or $Force)
+if ((Test-Installation "GoogleDrive" ([ref] $GoogleDriveRoot)) -or $ForceLoad)
 {
 	$Program = "$GoogleDriveRoot\googledrivesync.exe"
 	Test-File $Program

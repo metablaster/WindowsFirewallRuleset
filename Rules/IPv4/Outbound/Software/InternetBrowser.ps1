@@ -77,7 +77,7 @@ $TorRoot = "%SystemDrive%\Users\User\AppData\Local\Tor Browser"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot)) -or $Force)
+if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot)) -or $ForceLoad)
 {
 	$EdgeChromiumApp = "$EdgeChromiumRoot\msedge.exe"
 	Test-File $EdgeChromiumApp
@@ -117,7 +117,7 @@ if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot)) -or $Force)
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Chrome" ([ref] $ChromeRoot)) -or $Force)
+if ((Test-Installation "Chrome" ([ref] $ChromeRoot)) -or $ForceLoad)
 {
 	$ChromeApp = "$ChromeRoot\Chrome\Application\chrome.exe"
 	Test-File $ChromeApp
@@ -155,7 +155,7 @@ if ((Test-Installation "Chrome" ([ref] $ChromeRoot)) -or $Force)
 	-DisplayName "Chrome QUIC" -Service Any -Program $ChromeApp `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-	-LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+	-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Quick UDP Internet Connections,
 	Experimental transport layer network protocol developed by Google and implemented in 2013." | Format-Output
 
@@ -171,21 +171,21 @@ if ((Test-Installation "Chrome" ([ref] $ChromeRoot)) -or $Force)
 	-DisplayName "Chrome mDNS IPv4" -Service Any -Program $ChromeApp `
 	-PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 224.0.0.251 -LocalPort 5353 -RemotePort 5353 `
-	-LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+	-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "The multicast Domain Name System (mDNS) resolves host names to IP addresses within small networks that do not include a local name server." | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Chrome mDNS IPv6" -Service Any -Program $ChromeApp `
 	-PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::fb -LocalPort 5353 -RemotePort 5353 `
-	-LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+	-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "The multicast Domain Name System (mDNS) resolves host names to IP addresses within small networks that do not include a local name server." | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Chrome Chromecast SSDP" -Service Any -Program $ChromeApp `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 239.255.255.250 -LocalPort Any -RemotePort 1900 `
-	-LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+	-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Network Discovery to allow use of the Simple Service Discovery Protocol." | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `
@@ -199,7 +199,7 @@ if ((Test-Installation "Chrome" ([ref] $ChromeRoot)) -or $Force)
 	-DisplayName "Chrome Chromecast" -Service Any -Program $ChromeApp `
 	-PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress $CHROMECAST_IP -LocalPort 32768-61000 -RemotePort 32768-61000 `
-	-LocalUser $UserAccountsSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+	-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Allow Chromecast outbound UDP data" | Format-Output
 
 	$ChromeUpdate = "$ChromeRoot\Update\GoogleUpdate.exe"
@@ -218,7 +218,7 @@ if ((Test-Installation "Chrome" ([ref] $ChromeRoot)) -or $Force)
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Firefox" ([ref] $FirefoxRoot)) -or $Force)
+if ((Test-Installation "Firefox" ([ref] $FirefoxRoot)) -or $ForceLoad)
 {
 	$FirefoxApp = "$FirefoxRoot\firefox.exe"
 	Test-File $FirefoxApp
@@ -250,7 +250,7 @@ if ((Test-Installation "Firefox" ([ref] $FirefoxRoot)) -or $Force)
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Yandex" ([ref] $YandexRoot)) -or $Force)
+if ((Test-Installation "Yandex" ([ref] $YandexRoot)) -or $ForceLoad)
 {
 	$YandexApp = "$YandexRoot\YandexBrowser\Application\browser.exe"
 	Test-File $YandexApp
@@ -283,7 +283,7 @@ if ((Test-Installation "Yandex" ([ref] $YandexRoot)) -or $Force)
 
 # Test if installation exists on system
 # TODO: this will be true even if $false for both!
-if ((Test-Installation "Tor" ([ref] $TorRoot)) -or $Force)
+if ((Test-Installation "Tor" ([ref] $TorRoot)) -or $ForceLoad)
 {
 	$TorApp = "$TorRoot\Browser\TorBrowser\Tor\tor.exe"
 	Test-File $TorApp

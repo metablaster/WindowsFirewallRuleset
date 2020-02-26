@@ -63,7 +63,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "CounterStrikeGO" ([ref] $CounterStrikeRoot)) -or $Force)
+if ((Test-Installation "CounterStrikeGO" ([ref] $CounterStrikeRoot)) -or $ForceLoad)
 {
 	$Program = "$CounterStrikeRoot\csgo.exe"
 	Test-File $Program

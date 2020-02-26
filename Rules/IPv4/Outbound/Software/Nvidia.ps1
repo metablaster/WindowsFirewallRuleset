@@ -64,7 +64,7 @@ $NvidiaRoot86 = "%ProgramFiles(x86)%\NVIDIA Corporation"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Nvidia64" ([ref] $NvidiaRoot64)) -or $Force)
+if ((Test-Installation "Nvidia64" ([ref] $NvidiaRoot64)) -or $ForceLoad)
 {
 	$Program = "$NvidiaRoot64\NvContainer\nvcontainer.exe"
 	Test-File $Program
@@ -108,7 +108,7 @@ if ((Test-Installation "Nvidia64" ([ref] $NvidiaRoot64)) -or $Force)
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Nvidia86" ([ref] $NvidiaRoot86)) -or $Force)
+if ((Test-Installation "Nvidia86" ([ref] $NvidiaRoot86)) -or $ForceLoad)
 {
 	$Program = "$NvidiaRoot86\NvContainer\nvcontainer.exe"
 	Test-File $Program

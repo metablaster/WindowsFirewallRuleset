@@ -63,7 +63,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "WebPlatform" ([ref] $WebPlatformRoot)) -or $Force)
+if ((Test-Installation "WebPlatform" ([ref] $WebPlatformRoot)) -or $ForceLoad)
 {
 	$Program = "$WebPlatformRoot\WebPlatformInstaller.exe"
 	Test-File $Program

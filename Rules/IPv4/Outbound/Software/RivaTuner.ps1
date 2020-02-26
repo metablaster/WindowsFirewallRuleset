@@ -63,7 +63,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "RivaTuner" ([ref] $RivaTunerRoot)) -or $Force)
+if ((Test-Installation "RivaTuner" ([ref] $RivaTunerRoot)) -or $ForceLoad)
 {
 	$Program = "$RivaTunerRoot\RTSS.exe"
 	Test-File $Program
