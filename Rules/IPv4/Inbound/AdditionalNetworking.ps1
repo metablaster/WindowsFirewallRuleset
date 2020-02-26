@@ -213,7 +213,7 @@ If this service is stopped the AllJoyn clients that do not have their own bundle
 
 # NOTE: probably does not exist in Windows Server 2019
 $Program = "%SystemRoot%\System32\ProximityUxHost.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Proximity sharing" -Service Any -Program $Program `

@@ -77,7 +77,7 @@ $TorRoot = "%SystemDrive%\Users\User\AppData\Local\Tor Browser"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot)) -or $ForceLoad)
+if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot) @Logs) -or $ForceLoad)
 {
 	$EdgeChromiumApp = "$EdgeChromiumRoot\msedge.exe"
 	Test-File $EdgeChromiumApp
@@ -101,8 +101,8 @@ if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot)) -or $ForceLoad)
 	$EdgeChromiumUpdate = "$EdgeUpdateRoot\MicrosoftEdgeUpdate.exe"
 	Test-File $EdgeChromiumUpdate
 
-	$UpdateAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM"
-	Merge-SDDL $UpdateAccounts (Get-SDDL -Group "Users")
+	$UpdateAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM" @Logs
+	Merge-SDDL $UpdateAccounts (Get-SDDL -Group "Users") @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Edge-Chromium Update" -Service Any -Program $EdgeChromiumUpdate `
@@ -117,7 +117,7 @@ if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot)) -or $ForceLoad)
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Chrome" ([ref] $ChromeRoot)) -or $ForceLoad)
+if ((Test-Installation "Chrome" ([ref] $ChromeRoot) @Logs) -or $ForceLoad)
 {
 	$ChromeApp = "$ChromeRoot\Chrome\Application\chrome.exe"
 	Test-File $ChromeApp
@@ -218,7 +218,7 @@ if ((Test-Installation "Chrome" ([ref] $ChromeRoot)) -or $ForceLoad)
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Firefox" ([ref] $FirefoxRoot)) -or $ForceLoad)
+if ((Test-Installation "Firefox" ([ref] $FirefoxRoot) @Logs) -or $ForceLoad)
 {
 	$FirefoxApp = "$FirefoxRoot\firefox.exe"
 	Test-File $FirefoxApp
@@ -250,7 +250,7 @@ if ((Test-Installation "Firefox" ([ref] $FirefoxRoot)) -or $ForceLoad)
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Yandex" ([ref] $YandexRoot)) -or $ForceLoad)
+if ((Test-Installation "Yandex" ([ref] $YandexRoot) @Logs) -or $ForceLoad)
 {
 	$YandexApp = "$YandexRoot\YandexBrowser\Application\browser.exe"
 	Test-File $YandexApp
@@ -283,7 +283,7 @@ if ((Test-Installation "Yandex" ([ref] $YandexRoot)) -or $ForceLoad)
 
 # Test if installation exists on system
 # TODO: this will be true even if $false for both!
-if ((Test-Installation "Tor" ([ref] $TorRoot)) -or $ForceLoad)
+if ((Test-Installation "Tor" ([ref] $TorRoot) @Logs) -or $ForceLoad)
 {
 	$TorApp = "$TorRoot\Browser\TorBrowser\Tor\tor.exe"
 	Test-File $TorApp

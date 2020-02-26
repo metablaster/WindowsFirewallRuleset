@@ -64,7 +64,7 @@ New-Test "Unresolved path"
 
 # Test if installation exists on system
 $Program = "$TargetProgramRoot\PokerStars.exe"
-Test-File $Program @Logs
+Test-File $Program @Logs @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "TargetProgram" -Service Any -Program $Program `

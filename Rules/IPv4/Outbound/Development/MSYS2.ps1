@@ -63,10 +63,10 @@ $MSYS2Root = "%SystemRoot%\dev\msys64"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "MSYS2" ([ref] $MSYS2Root)) -or $ForceLoad)
+if ((Test-Installation "MSYS2" ([ref] $MSYS2Root) @Logs) -or $ForceLoad)
 {
 	$Program = "$MSYS2Root\usr\bin\curl.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "MSYS2 - curl" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -75,7 +75,7 @@ if ((Test-Installation "MSYS2" ([ref] $MSYS2Root)) -or $ForceLoad)
 	-Description "download with curl in MSYS2 shell" @Logs | Format-Output @Logs
 
 	$Program = "$MSYS2Root\usr\bin\git.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "MSYS2 - git protocol" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -84,7 +84,7 @@ if ((Test-Installation "MSYS2" ([ref] $MSYS2Root)) -or $ForceLoad)
 	-Description "git access over git:// protocol" @Logs | Format-Output @Logs
 
 	$Program = "$MSYS2Root\usr\bin\git-remote-https.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "MSYS2 - git-remote-https" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -93,7 +93,7 @@ if ((Test-Installation "MSYS2" ([ref] $MSYS2Root)) -or $ForceLoad)
 	-Description "git over HTTPS in MSYS2 shell" @Logs | Format-Output @Logs
 
 	$Program = "$MSYS2Root\usr\bin\ssh.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "MSYS2 - git SSH" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -102,7 +102,7 @@ if ((Test-Installation "MSYS2" ([ref] $MSYS2Root)) -or $ForceLoad)
 	-Description "git over SSH in MSYS2 shell" @Logs | Format-Output @Logs
 
 	$Program = "$MSYS2Root\mingw64\bin\glade.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "MSYS2 - glade help" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -111,7 +111,7 @@ if ((Test-Installation "MSYS2" ([ref] $MSYS2Root)) -or $ForceLoad)
 	-Description "Get online help for glade" @Logs | Format-Output @Logs
 
 	$Program = "$MSYS2Root\usr\bin\pacman.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "MSYS2 - pacman" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -120,7 +120,7 @@ if ((Test-Installation "MSYS2" ([ref] $MSYS2Root)) -or $ForceLoad)
 	-Description "pacman package manager in MSYS2 shell" @Logs | Format-Output @Logs
 
 	$Program = "$MSYS2Root\usr\bin\pacman.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "MSYS2 - wget" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

@@ -64,10 +64,10 @@ $NvidiaRoot86 = "%ProgramFiles(x86)%\NVIDIA Corporation"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Nvidia64" ([ref] $NvidiaRoot64)) -or $ForceLoad)
+if ((Test-Installation "Nvidia64" ([ref] $NvidiaRoot64) @Logs) -or $ForceLoad)
 {
 	$Program = "$NvidiaRoot64\NvContainer\nvcontainer.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Nvidia Container x64" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -76,7 +76,7 @@ if ((Test-Installation "Nvidia64" ([ref] $NvidiaRoot64)) -or $ForceLoad)
 	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$NvidiaRoot64\NVIDIA GeForce Experience\NVIDIA GeForce Experience.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Nvidia GeForce Experience x64" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -85,7 +85,7 @@ if ((Test-Installation "Nvidia64" ([ref] $NvidiaRoot64)) -or $ForceLoad)
 	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$NvidiaRoot64\Display.NvContainer\NVDisplay.Container.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Nvidia NVDisplay Container x64" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -94,7 +94,7 @@ if ((Test-Installation "Nvidia64" ([ref] $NvidiaRoot64)) -or $ForceLoad)
 	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$NvidiaRoot64\Update Core\NvProfileUpdater64.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Nvidia Profile Updater" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -108,10 +108,10 @@ if ((Test-Installation "Nvidia64" ([ref] $NvidiaRoot64)) -or $ForceLoad)
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Nvidia86" ([ref] $NvidiaRoot86)) -or $ForceLoad)
+if ((Test-Installation "Nvidia86" ([ref] $NvidiaRoot86) @Logs) -or $ForceLoad)
 {
 	$Program = "$NvidiaRoot86\NvContainer\nvcontainer.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Nvidia Container x86" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -120,7 +120,7 @@ if ((Test-Installation "Nvidia86" ([ref] $NvidiaRoot86)) -or $ForceLoad)
 	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$NvidiaRoot86\NVIDIA GeForce Experience\NVIDIA GeForce Experience.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Nvidia GeForce Experience x86" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -129,7 +129,7 @@ if ((Test-Installation "Nvidia86" ([ref] $NvidiaRoot86)) -or $ForceLoad)
 	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$NvidiaRoot86\NvTelemetry\NvTelemetryContainer.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Nvidia Telemetry Container" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -138,7 +138,7 @@ if ((Test-Installation "Nvidia86" ([ref] $NvidiaRoot86)) -or $ForceLoad)
 	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$NvidiaRoot86\NvNode\NVIDIA Web Helper.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Nvidia WebHelper TCP" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

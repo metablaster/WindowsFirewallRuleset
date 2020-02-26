@@ -81,7 +81,7 @@ qWave enhances AV streaming performance and reliability by ensuring network qual
 It provides mechanisms for admission control, run time monitoring and enforcement, application feedback, and traffic prioritization." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\mdeserver.exe"
-Test-File $Program
+Test-File $Program @Logs
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Cast to Device streaming server (RTP)" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType $Interface `
@@ -156,7 +156,7 @@ If this service is stopped the AllJoyn clients that do not have their own bundle
 
 # TODO: probably does not exist in Windows Server 2019
 $Program = "%SystemRoot%\System32\ProximityUxHost.exe"
-Test-File $Program
+Test-File $Program @Logs
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Proximity sharing" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $Interface `

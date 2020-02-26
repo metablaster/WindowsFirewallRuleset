@@ -63,10 +63,10 @@ $NuGetRoot = "%SystemDrive%\tools"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "NuGet" ([ref] $NuGetRoot)) -or $ForceLoad)
+if ((Test-Installation "NuGet" ([ref] $NuGetRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$NuGetRoot\nuget.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Nuget CLI" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

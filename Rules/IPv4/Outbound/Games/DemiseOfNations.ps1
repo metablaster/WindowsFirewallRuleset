@@ -63,10 +63,10 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "DemiseOfNations" ([ref] $TargetProgramRoot)) -or $ForceLoad)
+if ((Test-Installation "DemiseOfNations" ([ref] $TargetProgramRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$TargetProgramRoot\app_main.exe.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Demise of Nations" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

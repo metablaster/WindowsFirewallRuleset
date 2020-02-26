@@ -44,7 +44,6 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test @Logs
 # Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo @Logs
 # Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo @Logs
 # Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo @Logs
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 
 # Ask user if he wants to load these rules
@@ -88,4 +87,5 @@ Start-Test
 New-Test "Test-Function"
 Test-Function
 
+Update-Logs
 Exit-Test

@@ -32,3 +32,4 @@ This is a project global list which applies to several or all scripts, for small
 29. Revisit function parameters, their types, aliases etc..
 30. localhost != `[Environment]::MachineName`
 31. Revisit code and make consitent PSObject properties for all function outputs
+32. Move NET.IP tests into test folder, clean up directory add streams

@@ -58,7 +58,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 $Program = "%SystemRoot%\System32\WUDFHost.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 # TODO: local user may need to be 'Any', needs testing.
 New-NetFirewallRule -Platform $Platform `
@@ -71,7 +71,7 @@ The driver host process (Wudfhost.exe) is a child process of the driver manager 
 loads one or more UMDF driver DLLs, in addition to the framework DLLs." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\CastSrv.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 # TODO: remote port unknown, rule added because predefined rule for UDP exists
 New-NetFirewallRule -Platform $Platform `
@@ -125,7 +125,7 @@ For more info see description of WLAN AutoConfig service." @Logs | Format-Output
 #
 
 $Program = "%SystemRoot%\System32\dasHost.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 # TODO: missing protocol and port for WiFi Direct Network Discovery
 New-NetFirewallRule -Platform $Platform `

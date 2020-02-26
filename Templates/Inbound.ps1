@@ -38,9 +38,10 @@ Test-SystemRequirements
 # . $PSScriptRoot\..\DirectionSetup.ps1
 # . $PSScriptRoot\..\..\IPSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test @Logs
 # Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo @Logs
 # Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo @Logs
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging @Logs
+# Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 
 #
@@ -66,10 +67,10 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot)) -or $ForceLoad)
+if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$TargetProgramRoot\Steam.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "TargetProgram" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -77,3 +78,5 @@ if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot)) -or $ForceLoa
 	-EdgeTraversalPolicy Block -LocalUser $UsersSDDL `
 	-Description "" @Logs | Format-Output @Logs
 }
+
+Update-Logs

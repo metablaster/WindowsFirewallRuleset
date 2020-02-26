@@ -64,10 +64,10 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "qBittorrent" ([ref] $qBittorentRoot)) -or $ForceLoad)
+if ((Test-Installation "qBittorrent" ([ref] $qBittorentRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$qBittorentRoot\qbittorrent.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "qBittorent (HTTP)" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -76,7 +76,7 @@ if ((Test-Installation "qBittorrent" ([ref] $qBittorentRoot)) -or $ForceLoad)
 	-Description "HTTP check for updates" @Logs | Format-Output @Logs
 
 	$Program = "$qBittorentRoot\qbittorrent.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "qBittorent (TCP)" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -85,7 +85,7 @@ if ((Test-Installation "qBittorrent" ([ref] $qBittorentRoot)) -or $ForceLoad)
 	-Description "Torrent client" @Logs | Format-Output @Logs
 
 	$Program = "$qBittorentRoot\qbittorrent.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "qBittorent (UDP)" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

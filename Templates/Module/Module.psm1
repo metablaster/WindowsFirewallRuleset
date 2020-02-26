@@ -29,16 +29,38 @@ SOFTWARE.
 # TODO: Include modules you need, update licence Copyright and start writing code
 
 # Includes
-# Import-Module -Name $ProjectRoot\UserInfo
-# Import-Module -Name $ProjectRoot\ProgramInfo
-# Import-Module -Name $ProjectRoot\ComputerInfo
-# Import-Module -Name $ProjectRoot\FirewallModule
+# Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
+# Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test @Logs
+# Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo @Logs
+# Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo @Logs
+# Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo @Logs
+# Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 
-# about: Sample function
-# input: nothing
-# output: $null
-# sample: Test-Function
-function Test-Function
+<#
+.SYNOPSIS
+A brief description of the function or script. This keyword can be used only once in each topic.
+.DESCRIPTION
+A detailed description of the function or script. This keyword can be used only once in each topic.
+.PARAMETER Param
+The description of a parameter. Add a ".PARAMETER" keyword for each parameter in the function or script syntax.
+.EXAMPLE
+A sample command that uses the function or script, optionally followed by sample output and a description. Repeat this keyword for each example.
+.INPUTS
+The Microsoft .NET Framework types of objects that can be piped to the function or script. You can also include a description of the input objects.
+.OUTPUTS
+The .NET Framework type of the objects that the cmdlet returns. You can also include a description of the returned objects.
+.NOTES
+Additional information about the function or script.
+.LINK
+The name of a related topic. The value appears on the line below the ".LINK" keyword and must be preceded by a comment symbol # or included in the comment block.
+.COMPONENT
+The technology or feature that the function or script uses, or to which it is related. This content appears when the Get-Help command includes the Component parameter of Get-Help.
+.ROLE
+The user role for the help topic. This content appears when the Get-Help command includes the Role parameter of Get-Help.
+.FUNCTIONALITY
+The intended use of the function. This content appears when the Get-Help command includes the Functionality parameter of Get-Help.
+#>
+function New-Function
 {
 	param (
 		[Parameter(Mandatory = $true)]
@@ -59,7 +81,7 @@ New-Variable -Name NewModule -Scope Global -Value $true
 # Function exports
 #
 
-Export-ModuleMember -Function Test-Function
+Export-ModuleMember -Function New-Function
 
 #
 # Variable exports

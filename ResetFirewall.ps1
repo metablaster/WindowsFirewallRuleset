@@ -37,7 +37,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 
 # Setting up profile seem to be slow, tell user what is going on
-Write-Information -Tags "User" -MessageData "INFO: Reseting Firewall to previous state..."
+Write-Information -Tags "User" -MessageData "INFO: Reseting Firewall to previous state..." @Logs
 
 #
 # Default setup for all profiles
@@ -48,7 +48,7 @@ Set-NetFirewallProfile -All -PolicyStore $PolicyStore `
 -NotifyOnListen NotConfigured -EnableStealthModeForIPsec NotConfigured `
 -LogAllowed NotConfigured -LogBlocked NotConfigured -LogIgnored NotConfigured -LogMaxSizeKilobytes 4096 `
 -AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
--LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log"
+-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" @Logs
 
 #
 # Remove all the rules
@@ -56,5 +56,7 @@ Set-NetFirewallProfile -All -PolicyStore $PolicyStore `
 #
 Remove-NetFirewallRule -All -PolicyStore $PolicyStore -ErrorAction SilentlyContinue
 
-Write-Information -Tags "User" -MessageData "INFO: Firewall reset is done!"
-Write-Information -Tags "User" -MessageData "INFO: If internet conectivity problem remains, please reboot system"
+Write-Information -Tags "User" -MessageData "INFO: Firewall reset is done!" @Logs
+Write-Information -Tags "User" -MessageData "INFO: If internet conectivity problem remains, please reboot system" @Logs
+
+Update-Logs

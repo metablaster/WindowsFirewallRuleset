@@ -63,10 +63,10 @@ $PokerStarsRoot = "%ProgramFiles(x86)%\PokerStars.EU"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $ForceLoad)
+if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$PokerStarsRoot\PokerStars.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "PokerStars - Client" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -77,7 +77,7 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $ForceLoad)
 	# TODO: browser for some reason needs any interface and any remote address
 	# need to investigate why
 	$Program = "$PokerStarsRoot\br\PokerStarsBr.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "PokerStars - Browser" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
@@ -86,7 +86,7 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $ForceLoad)
 	-Description "In game HTML browser" @Logs | Format-Output @Logs
 
 	$Program = "$PokerStarsRoot\PokerStarsOnlineUpdate.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "PokerStars - Online update" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -95,7 +95,7 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $ForceLoad)
 	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$PokerStarsRoot\PokerStarsUpdate.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "PokerStars - Update" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

@@ -65,10 +65,10 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "JavaRuntime" ([ref] $JavaRuntimeRoot)) -or $ForceLoad)
+if ((Test-Installation "JavaRuntime" ([ref] $JavaRuntimeRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$JavaRuntimeRoot\java.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Runa java applets" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -78,10 +78,10 @@ if ((Test-Installation "JavaRuntime" ([ref] $JavaRuntimeRoot)) -or $ForceLoad)
 }
 
 # Test if installation exists on system
-if ((Test-Installation "JavaUpdate" ([ref] $JavaUpdateRoot)) -or $ForceLoad)
+if ((Test-Installation "JavaUpdate" ([ref] $JavaUpdateRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$JavaUpdateRoot\jucheck.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Java update" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -91,10 +91,10 @@ if ((Test-Installation "JavaUpdate" ([ref] $JavaUpdateRoot)) -or $ForceLoad)
 }
 
 # Test if installation exists on system
-if ((Test-Installation "JavaPlugin" ([ref] $JavaPluginRoot)) -or $ForceLoad)
+if ((Test-Installation "JavaPlugin" ([ref] $JavaPluginRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$JavaPluginRoot\jp2launcher.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Java Plugin HTTP" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

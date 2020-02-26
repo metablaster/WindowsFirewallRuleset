@@ -46,13 +46,14 @@ Set-Variable -Name ErrorStatus -Scope Global -Value $false
 Set-Variable -Name WarningStatus -Scope Global -Value $false
 
 # Prompt to set screen buffer to recommended value
-Set-ScreenBuffer
+Set-ScreenBuffer @Logs
 
 # Check all rules that apply to windows services
-Test-File $ServiceHost
+Test-File $ServiceHost @Logs
 Get-NetworkServices $ProjectRoot\Rules
 Get-Content -Path $ProjectRoot\Rules\NetworkServices.txt | ForEach-Object {
-	Test-Service $_
+	Test-Service $_ @Logs
+	Update-Logs
 }
 
 #
@@ -65,11 +66,11 @@ Get-Content -Path $ProjectRoot\Rules\NetworkServices.txt | ForEach-Object {
 # Load Inbound rules
 #
 
-Update-Context "IPv4" "Inbound"
+Update-Context "IPv4" "Inbound" @Logs
 
-if(Approve-Execute "Yes" "Applying: Inbound IPv4 Rules")
+if(Approve-Execute "Yes" "Applying: Inbound IPv4 Rules" @Logs)
 {
-	if(Approve-Execute "Yes" "Applying: Common rules")
+	if(Approve-Execute "Yes" "Applying: Common rules" @Logs)
 	{
 		# Common rules
 		& "$PSScriptRoot\Rules\IPv4\Inbound\AdditionalNetworking.ps1"
@@ -85,8 +86,8 @@ if(Approve-Execute "Yes" "Applying: Inbound IPv4 Rules")
 		& "$PSScriptRoot\Rules\IPv4\Inbound\WirelessNetworking.ps1"
 	}
 
-	Update-Context "IPv4" "Inbound"
-	if(Approve-Execute "Yes" "Applying: Rules for developers")
+	Update-Context "IPv4" "Inbound" @Logs
+	if(Approve-Execute "Yes" "Applying: Rules for developers" @Logs)
 	{
 		# Rules for developers
 		& "$PSScriptRoot\Rules\IPv4\Inbound\Development\EpicGames.ps1"
@@ -99,8 +100,8 @@ if(Approve-Execute "Yes" "Applying: Inbound IPv4 Rules")
 	# 	& "$PSScriptRoot\Rules\IPv4\Inbound\Server\ScriptName.ps1"
 	# }
 
-	Update-Context "IPv4" "Inbound"
-	if(Approve-Execute "Yes" "Applying: Rules for 3rd party programs")
+	Update-Context "IPv4" "Inbound" @Logs
+	if(Approve-Execute "Yes" "Applying: Rules for 3rd party programs" @Logs)
 	{
 		# rules for programs
 		& "$PSScriptRoot\Rules\IPv4\Inbound\Software\Filezilla.ps1"
@@ -110,8 +111,8 @@ if(Approve-Execute "Yes" "Applying: Inbound IPv4 Rules")
 		& "$PSScriptRoot\Rules\IPv4\Inbound\Software\uTorrent.ps1"
 	}
 
-	Update-Context "IPv4" "Inbound"
-	if(Approve-Execute "Yes" "Applying: Rules for Microsoft programs")
+	Update-Context "IPv4" "Inbound" @Logs
+	if(Approve-Execute "Yes" "Applying: Rules for Microsoft programs" @Logs)
 	{
 		# rules for programs
 		& "$PSScriptRoot\Rules\IPv4\Inbound\Software\Microsoft\MicrosoftOffice.ps1"
@@ -121,11 +122,11 @@ if(Approve-Execute "Yes" "Applying: Inbound IPv4 Rules")
 #
 # Load Outbound rules
 #
-Update-Context "IPv4" "Outbound"
+Update-Context "IPv4" "Outbound" @Logs
 
-if(Approve-Execute "Yes" "Applying: Outbound IPv4 Rules")
+if(Approve-Execute "Yes" "Applying: Outbound IPv4 Rules" @Logs)
 {
-	if(Approve-Execute "Yes" "Applying: Common rules")
+	if(Approve-Execute "Yes" "Applying: Common rules" @Logs)
 	{
 		# Common rules
 		& "$PSScriptRoot\Rules\IPv4\Outbound\AdditionalNetworking.ps1"
@@ -143,8 +144,8 @@ if(Approve-Execute "Yes" "Applying: Outbound IPv4 Rules")
 		& "$PSScriptRoot\Rules\IPv4\Outbound\WirelessNetworking.ps1"
 	}
 
-	Update-Context "IPv4" "Outbound"
-	if(Approve-Execute "Yes" "Applying: Rules for developers 3rd party tools")
+	Update-Context "IPv4" "Outbound" @Logs
+	if(Approve-Execute "Yes" "Applying: Rules for developers 3rd party tools" @Logs)
 	{
 		# Rules for developers
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Development\Chocolatey.ps1"
@@ -155,8 +156,8 @@ if(Approve-Execute "Yes" "Applying: Outbound IPv4 Rules")
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Development\RealWorld.ps1"
 	}
 
-	Update-Context "IPv4" "Outbound"
-	if(Approve-Execute "Yes" "Applying: Rules for developers Microsoft tools")
+	Update-Context "IPv4" "Outbound" @Logs
+	if(Approve-Execute "Yes" "Applying: Rules for developers Microsoft tools" @Logs)
 	{
 		# Rules for developers
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Development\Microsoft\HelpViewer.ps1"
@@ -169,8 +170,8 @@ if(Approve-Execute "Yes" "Applying: Outbound IPv4 Rules")
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Development\Microsoft\WindowsSDK.ps1"
 	}
 
-	Update-Context "IPv4" "Outbound"
-	if(Approve-Execute "Yes" "Applying: Rules for games")
+	Update-Context "IPv4" "Outbound" @Logs
+	if(Approve-Execute "Yes" "Applying: Rules for games" @Logs)
 	{
 		# Rules for games
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Games\ArenaChess.ps1"
@@ -191,8 +192,8 @@ if(Approve-Execute "Yes" "Applying: Outbound IPv4 Rules")
 	# 	& "$PSScriptRoot\Rules\IPv4\Outbound\Server\ScriptName.ps1"
 	# }
 
-	Update-Context "IPv4" "Outbound"
-	if(Approve-Execute "Yes" "Applying: Rules for 3rd party programs")
+	Update-Context "IPv4" "Outbound" @Logs
+	if(Approve-Execute "Yes" "Applying: Rules for 3rd party programs" @Logs)
 	{
 		# rules for programs
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Software\Adobe.ps1"
@@ -219,8 +220,8 @@ if(Approve-Execute "Yes" "Applying: Outbound IPv4 Rules")
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Software\uTorrent.ps1"
 	}
 
-	Update-Context "IPv4" "Outbound"
-	if(Approve-Execute "Yes" "Applying: Rules for Microsoft programs")
+	Update-Context "IPv4" "Outbound" @Logs
+	if(Approve-Execute "Yes" "Applying: Rules for Microsoft programs" @Logs)
 	{
 		# rules for Microsoft programs
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Software\Microsoft\MicrosoftOffice.ps1"
@@ -236,11 +237,11 @@ if(Approve-Execute "Yes" "Applying: Outbound IPv4 Rules")
 #
 # Load Inbound rules
 #
-Update-Context "IPv6" "Inbound"
+Update-Context "IPv6" "Inbound" @Logs
 
-if(Approve-Execute "Yes" "Applying: Inbound IPv6 Rules")
+if(Approve-Execute "Yes" "Applying: Inbound IPv6 Rules" @Logs)
 {
-	if(Approve-Execute "Yes" "Applying: Common rules")
+	if(Approve-Execute "Yes" "Applying: Common rules" @Logs)
 	{
 		# Common rules
 		& "$PSScriptRoot\Rules\IPv6\Inbound\BasicNetworking.ps1"
@@ -252,11 +253,11 @@ if(Approve-Execute "Yes" "Applying: Inbound IPv6 Rules")
 #
 # Load Outbound rules
 #
-Update-Context "IPv6" "Outbound"
+Update-Context "IPv6" "Outbound" @Logs
 
-if(Approve-Execute "Yes" "Applying: Outbound IPv6 Rules")
+if(Approve-Execute "Yes" "Applying: Outbound IPv6 Rules" @Logs)
 {
-	if(Approve-Execute "Yes" "Applying: Common rules")
+	if(Approve-Execute "Yes" "Applying: Common rules" @Logs)
 	{
 		# Common rules
 		& "$PSScriptRoot\Rules\IPv6\Outbound\BasicNetworking.ps1"
@@ -273,7 +274,7 @@ Write-Host ""
 if ($Develop)
 {
 	# Need to re-import required module in develop mode
-	Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging @Logs
+	Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 	Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 }
 
@@ -281,31 +282,32 @@ if ($Develop)
 if ($ErrorStatus)
 {
 	Write-Host ""
-	Write-Warning -Message "Errors were generated"
-	Save-Errors
+	Write-Warning -Message "Errors were generated" @Logs
 
 	Write-Host ""
-	Write-Information -Tags "User" -MessageData "INFO: If module is edited don't forget to restart Powershell"
+	Write-Information -Tags "User" -MessageData "INFO: If module is edited don't forget to restart Powershell" @Logs
 }
 
 if ($WarningStatus)
 {
 	Write-Host ""
-	Write-Warning -Message "Warnings were generated"
-	Write-Information -Tags "User" -MessageData "INFO: All warnings were saved to: $("$ProjectRoot\Logs")"
-	Write-Information -Tags "User" -MessageData "INFO: you can review these logs to see if you want to resolve some of them"
+	Write-Warning -Message "Warnings were generated" @Logs
+	Write-Information -Tags "User" -MessageData "INFO: All warnings were saved to: $("$ProjectRoot\Logs")" @Logs
+	Write-Information -Tags "User" -MessageData "INFO: you can review these logs to see if you want to resolve some of them" @Logs
 }
 
 if (!$ErrorStatus -and !$WarningStatus)
 {
 	Write-Host ""
-	Write-Information -Tags "User" -MessageData "INFO: All operations completed successfuly!"
+	Write-Information -Tags "User" -MessageData "INFO: All operations completed successfuly!" @Logs
 }
 
 Write-Host ""
-Write-Information -Tags "User" -MessageData "INFO: Make sure you visit Local Group Policy and adjust your rules as needed."
+Write-Information -Tags "User" -MessageData "INFO: Make sure you visit Local Group Policy and adjust your rules as needed." @Logs
 Write-Host ""
 
 # Clear warning/error status
-Set-Variable -Name ErrorStatus -Scope Global -Value $false
-Set-Variable -Name WarningStatus -Scope Global -Value $false
+Set-Variable -Name ErrorStatus -Scope Global -Value $false @Logs
+Set-Variable -Name WarningStatus -Scope Global -Value $false @Logs
+
+Update-Logs

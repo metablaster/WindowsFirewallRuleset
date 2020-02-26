@@ -63,10 +63,10 @@ $TeamViewerRoot = "%ProgramFiles(x86)%\TeamViewer"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "TeamViewer" ([ref] $TeamViewerRoot)) -or $ForceLoad)
+if ((Test-Installation "TeamViewer" ([ref] $TeamViewerRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$TeamViewerRoot\TeamViewer.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Teamviewer Remote Control Application" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -75,7 +75,7 @@ if ((Test-Installation "TeamViewer" ([ref] $TeamViewerRoot)) -or $ForceLoad)
 	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$TeamViewerRoot\TeamViewer_Service.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Teamviewer Remote Control Service" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

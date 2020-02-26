@@ -64,10 +64,10 @@ $MSIAfterburnerRoot = "%ProgramFiles(x86)%\MSI Afterburner"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "MSIAfterburner" ([ref] $MSIAfterburnerRoot)) -or $ForceLoad)
+if ((Test-Installation "MSIAfterburner" ([ref] $MSIAfterburnerRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$MSIAfterburnerRoot\MSIAfterburner.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "MSI Afterburner" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -77,10 +77,10 @@ if ((Test-Installation "MSIAfterburner" ([ref] $MSIAfterburnerRoot)) -or $ForceL
 }
 
 # Test if installation exists on system
-if ((Test-Installation "MSIAfterburner" ([ref] $MSIAfterburnerRoot)) -or $ForceLoad)
+if ((Test-Installation "MSIAfterburner" ([ref] $MSIAfterburnerRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$MSIRoot\Live Update\Live Update.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "MSI live update" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -89,7 +89,7 @@ if ((Test-Installation "MSIAfterburner" ([ref] $MSIAfterburnerRoot)) -or $ForceL
 	-Description "Startup update" @Logs | Format-Output @Logs
 
 	$Program = "$MSIRoot\APP Manager\AppManager.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "MSI app manager" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

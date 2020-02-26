@@ -71,7 +71,7 @@ $ChromeRoot = "%SystemDrive%\Users\User\AppData\Local\Google"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Chrome" ([ref] $ChromeRoot)) -or $ForceLoad)
+if ((Test-Installation "Chrome" ([ref] $ChromeRoot) @Logs) -or $ForceLoad)
 {
 	$ChromeApp = "$ChromeRoot\Chrome\Application\chrome.exe"
 	Test-File $ChromeApp

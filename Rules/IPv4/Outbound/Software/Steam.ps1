@@ -64,10 +64,10 @@ $SteamRoot = "%ProgramFiles(x86)%\Steam"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Steam" ([ref] $SteamRoot)) -or $ForceLoad)
+if ((Test-Installation "Steam" ([ref] $SteamRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$SteamRoot\Steam.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Steam (game client trafic)" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -104,7 +104,7 @@ if ((Test-Installation "Steam" ([ref] $SteamRoot)) -or $ForceLoad)
 	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$SteamRoot\SteamService.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "SteamService" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -113,7 +113,7 @@ if ((Test-Installation "Steam" ([ref] $SteamRoot)) -or $ForceLoad)
 	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$SteamRoot\bin\cef\cef.win7\steamwebhelper.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Steam (webhelper x86)" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -122,7 +122,7 @@ if ((Test-Installation "Steam" ([ref] $SteamRoot)) -or $ForceLoad)
 	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$SteamRoot\bin\cef\cef.win7x64\steamwebhelper.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Steam (webhelper x64)" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

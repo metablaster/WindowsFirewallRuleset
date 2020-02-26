@@ -47,7 +47,7 @@ $Group = "Server - SQL"
 $Profile = "Private, Public"
 
 # TODO: this is most likely wrong
-$SQLUsers = Get-SDDL -Group "Users", "Administrators"
+$SQLUsers = Get-SDDL -Group "Users", "Administrators" @Logs
 
 # Ask user if he wants to load these rules
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
@@ -68,12 +68,12 @@ $SQLDTSRoot =  ""
 #
 
 # Test if installation exists on system
-if ((Test-Installation "SQLManagementStudio" ([ref] $SQLManagementStudioRoot)) -or $ForceLoad)
+if ((Test-Installation "SQLManagementStudio" ([ref] $SQLManagementStudioRoot) @Logs) -or $ForceLoad)
 {
 	# TODO: old directory, our Get-SQLManagementStudio may not work as expected for older versions
 	# $Program = "$SQLServerRoot\Tools\Binn\ManagementStudio\Ssms.exe"
 	$Program = "$SQLManagementStudioRoot\Common7\IDE\Ssms.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "SQL Server Management Studio" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -83,10 +83,10 @@ if ((Test-Installation "SQLManagementStudio" ([ref] $SQLManagementStudioRoot)) -
 }
 
 # Test if installation exists on system
-if ((Test-Installation "SQLDTS" ([ref] $SQLDTSRoot)) -or $ForceLoad)
+if ((Test-Installation "SQLDTS" ([ref] $SQLDTSRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$SQLDTSRoot\Binn\DTSWizard.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "SQL Server Import and Export Wizard" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

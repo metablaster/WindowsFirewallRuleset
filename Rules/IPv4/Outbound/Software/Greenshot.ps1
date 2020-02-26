@@ -63,10 +63,10 @@ $GreenshotRoot = "C:\Users\User\AppData\Local\Greenshot"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Greenshot" ([ref] $GreenshotRoot)) -or $ForceLoad)
+if ((Test-Installation "Greenshot" ([ref] $GreenshotRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$GreenshotRoot\Greenshot.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Greenshot" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

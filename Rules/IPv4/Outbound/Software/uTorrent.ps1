@@ -63,10 +63,10 @@ $uTorrentRoot = "%SystemDrive%\Users\User\AppData\Local\uTorrent"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "uTorrent" ([ref] $uTorrentRoot)) -or $ForceLoad)
+if ((Test-Installation "uTorrent" ([ref] $uTorrentRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$uTorrentRoot\uTorrent.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "uTorrent - Client to peers" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

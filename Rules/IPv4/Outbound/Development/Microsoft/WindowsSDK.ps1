@@ -63,10 +63,10 @@ $SDKDebuggers = "Unknown Directory"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "WindowsKits" ([ref] $SDKDebuggers)) -or $ForceLoad)
+if ((Test-Installation "WindowsKits" ([ref] $SDKDebuggers) @Logs) -or $ForceLoad)
 {
 	$Program = "$SDKDebuggers\x86\windbg.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "WinDbg Symbol Server x86" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -75,7 +75,7 @@ if ((Test-Installation "WindowsKits" ([ref] $SDKDebuggers)) -or $ForceLoad)
 	-Description "WinDbg access to Symbols Server." @Logs | Format-Output @Logs
 
 	$Program = "$SDKDebuggers\x64\windbg.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "WinDbg Symbol Server x64" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -84,7 +84,7 @@ if ((Test-Installation "WindowsKits" ([ref] $SDKDebuggers)) -or $ForceLoad)
 	-Description "WinDbg access to Symbols Server" @Logs | Format-Output @Logs
 
 	$Program = "$SDKDebuggers\x86\symchk.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Symchk Symbol Server x86" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -93,7 +93,7 @@ if ((Test-Installation "WindowsKits" ([ref] $SDKDebuggers)) -or $ForceLoad)
 	-Description "WinDbg Symchk access to Symbols Server." @Logs | Format-Output @Logs
 
 	$Program = "$SDKDebuggers\x64\symchk.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Symchk Symbol Server x64" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

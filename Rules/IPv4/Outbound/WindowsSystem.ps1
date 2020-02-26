@@ -65,11 +65,11 @@ $NETFrameworkRoot = ""
 #
 
 # Test if installation exists on system
-if ((Test-Installation "NETFramework" ([ref] $NETFrameworkRoot)) -or $ForceLoad)
+if ((Test-Installation "NETFramework" ([ref] $NETFrameworkRoot) @Logs) -or $ForceLoad)
 {
 	# TODO: are these really user accounts we need here
 	$Program = "$NETFrameworkRoot\mscorsvw.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "CLR Optimization Service" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -80,10 +80,10 @@ if ((Test-Installation "NETFramework" ([ref] $NETFrameworkRoot)) -or $ForceLoad)
 	it will be done with the high priority assemblies in 5 to 10 minutes and then will wait until your computer is idle to process the low priority assemblies." @Logs | Format-Output @Logs
 }
 
-if ((Test-Installation "WindowsDefender" ([ref] $WindowsDefenderRoot)) -or $ForceLoad)
+if ((Test-Installation "WindowsDefender" ([ref] $WindowsDefenderRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$WindowsDefenderRoot\MsMpEng.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Windows Defender" -Service Any -Program $Program `
@@ -93,7 +93,7 @@ if ((Test-Installation "WindowsDefender" ([ref] $WindowsDefenderRoot)) -or $Forc
 	-Description "Anti malware service executable." @Logs | Format-Output @Logs
 
 	$Program = "$WindowsDefenderRoot\MpCmdRun.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Windows Defender CLI" -Service Any -Program $Program `
@@ -104,7 +104,7 @@ if ((Test-Installation "WindowsDefender" ([ref] $WindowsDefenderRoot)) -or $Forc
 }
 
 $Program = "%SystemRoot%\System32\slui.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Activation Client" -Service Any -Program $Program `
@@ -114,7 +114,7 @@ New-NetFirewallRule -Platform $Platform `
 -Description "Used to activate Windows." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\SppExtComObj.Exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Activation KMS" -Service Any -Program $Program `
@@ -125,7 +125,7 @@ New-NetFirewallRule -Platform $Platform `
 
 # TODO: this app no longer exists on system, MS changed executable name?
 <# $Program = "%SystemRoot%\System32\CompatTel\QueryAppBlock.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Application Block Detector" -Service Any -Program $Program `
@@ -136,7 +136,7 @@ New-NetFirewallRule -Platform $Platform `
 with a newer Windows version by comparing them against a specific database."
  #>
 $Program = "%SystemRoot%\System32\backgroundTaskHost.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 # TODO: need to check if port 22 is OK.
 New-NetFirewallRule -Platform $Platform `
@@ -150,7 +150,7 @@ Port 22 is most likely used for installation.
 https://docs.microsoft.com/en-us/windows/uwp/launch-resume/support-your-app-with-background-tasks" @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\Speech_OneCore\common\SpeechRuntime.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 # TODO: no comment
 New-NetFirewallRule -Platform $Platform `
@@ -161,7 +161,7 @@ New-NetFirewallRule -Platform $Platform `
 -Description "" @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\Speech_OneCore\common\SpeechModelDownload.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Cortana Speach Model" -Service Any -Program $Program `
@@ -171,7 +171,7 @@ New-NetFirewallRule -Platform $Platform `
 -Description "" @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\wsqmcons.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Customer Experience Improvement Program" -Service Any -Program $Program `
@@ -181,7 +181,7 @@ New-NetFirewallRule -Platform $Platform `
 -Description "This program collects and sends usage data to Microsoft, can be disabled in GPO." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\CompatTelRunner.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Microsoft Compatibility Telemetry" -Service Any -Program $Program `
@@ -197,7 +197,7 @@ In the middle pane, you will see all the scheduled tasks, such as Microsoft Comp
 Right-click on the Microsoft Compatibility Appraiser and select Disable." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\SearchProtocolHost.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Windows Indexing Service" -Service Any -Program $Program `
@@ -208,7 +208,7 @@ New-NetFirewallRule -Platform $Platform `
 an application that indexes files on the local drive making them easier to search." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\WerFault.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Error Reporting" -Service Any -Program $Program `
@@ -218,7 +218,7 @@ New-NetFirewallRule -Platform $Platform `
 -Description "Report Windows errors back to Microsoft." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\wermgr.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Error Reporting" -Service Any -Program $Program `
@@ -228,7 +228,7 @@ New-NetFirewallRule -Platform $Platform `
 -Description "Report Windows errors back to Microsoft." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\explorer.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "File Explorer" -Service Any -Program $Program `
@@ -246,7 +246,7 @@ New-NetFirewallRule -Platform $Platform `
 -Description "Smart Screen Filter, possible no longer needed since windows 10." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\ftp.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "FTP Client" -Service Any -Program $Program `
@@ -256,7 +256,7 @@ New-NetFirewallRule -Platform $Platform `
 -Description "File transfer protocol client." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\HelpPane.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Help pane" -Service Any -Program $Program `
@@ -266,7 +266,7 @@ New-NetFirewallRule -Platform $Platform `
 -Description "Get online help, looks like windows 10+ no longer uses this, it opens edge now to show help." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\rundll32.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 # TODO: program possibly no longer uses networking since windows 10
 New-NetFirewallRule -Platform $Platform `
@@ -279,7 +279,7 @@ possibly no longer uses networking since windows 10." @Logs | Format-Output @Log
 
 # TODO: this app no longer exists on system, MS changed executable name?
 <# $Program = "%SystemRoot%\System32\CompatTel\wicainventory.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 # TODO: no comment
 New-NetFirewallRule -Platform $Platform `
@@ -291,7 +291,7 @@ New-NetFirewallRule -Platform $Platform `
  #>
 
 $Program = "%SystemRoot%\System32\msiexec.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Installer" -Service Any -Program $Program `
@@ -301,7 +301,7 @@ New-NetFirewallRule -Platform $Platform `
 -Description "msiexec automatically check for updates for the program it is installing." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\lsass.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Local Security Authority Process" -Service Any -Program $Program `
@@ -313,7 +313,7 @@ It specifically deals with local security and login policies.It verifies users l
 handles password changes, and creates access tokens." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\mmc.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "MMC Help Viewer" -Service Any -Program $Program `
@@ -323,7 +323,7 @@ New-NetFirewallRule -Platform $Platform `
 -Description "Display webpages in Microsoft MMC help view." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\nslookup.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 # TODO: no comment
 New-NetFirewallRule -Platform $Platform `
@@ -334,7 +334,7 @@ New-NetFirewallRule -Platform $Platform `
 -Description "" @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\SettingSyncHost.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Settings sync" -Service Any -Program $Program `
@@ -346,7 +346,7 @@ There are on/off switches for all the different things you can choose to sync.
 Just turn off the ones you don't want. Or you can just turn them all off at once at the top." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\smartscreen.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Smartscreen" -Service Any -Program $Program `
@@ -356,7 +356,7 @@ New-NetFirewallRule -Platform $Platform `
 -Description "" @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\ImmersiveControlPanel\SystemSettings.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "SystemSettings" -Service Any -Program $Program `
@@ -367,7 +367,7 @@ New-NetFirewallRule -Platform $Platform `
 NOTE: Configured the gpo 'Control Panel\allow online tips' to 'disabled'." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\taskhostw.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "taskhostw" -Service Any -Program $Program `
@@ -378,7 +378,7 @@ New-NetFirewallRule -Platform $Platform `
 It is a host for processes that are responsible for executing a DLL rather than an Exe." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\sihclient.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Service Initiated Healing" -Service Any -Program $Program `
@@ -392,7 +392,7 @@ The task can go online, assess the usefulness of the healing effect,
 download the necessary equipment to perform the action, and perform therapeutic actions.)" @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\DeviceCensus.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Windows Update (Devicecensus)" -Service Any -Program $Program `
@@ -410,7 +410,7 @@ In order to target builds to your machine, we need to know a few important thing
 
 # NOTE: probably not available in Windows Server
 $Program = "%SystemRoot%\System32\usocoreworker.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Update Session Orchestrator" -Service Any -Program $Program `
@@ -422,7 +422,7 @@ When the system starts an update session, it launches usoclient.exe, which in tu
 Usocoreworker is the worker process for usoclient.exe and essentially it does all the work that the USO component needs done." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\usoclient.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Update Session Orchestrator" -Service Any -Program $Program `
@@ -434,7 +434,7 @@ When the system starts an update session, it launches usoclient.exe, which in tu
 Usocoreworker is the worker process for usoclient.exe and essentially it does all the work that the USO component needs done." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\wbem\WmiPrvSE.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "WMI Provider Host" -Service Any -Program $Program `
@@ -444,7 +444,7 @@ New-NetFirewallRule -Platform $Platform `
 -Description "" @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\OpenSSH\ssh.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "OpenSSH" -Service Any -Program $Program `
@@ -455,7 +455,7 @@ New-NetFirewallRule -Platform $Platform `
 This rule applies to open source version of OpenSSH that is built into Windows." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\conhost.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Console Host" -Service Any -Program $Program `
@@ -469,7 +469,7 @@ New-NetFirewallRule -Platform $Platform `
 #
 
 $Program = "%SystemRoot%\System32\dmcertinst.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Windows Device Management Certificate Installer" -Service Any -Program $Program `
@@ -479,7 +479,7 @@ New-NetFirewallRule -Platform $Platform `
 -Description "Allow outbound TCP traffic from Windows Device Management Certificate Installer." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\deviceenroller.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Windows Device Management Device Enroller" -Service Any -Program $Program `
@@ -496,7 +496,7 @@ New-NetFirewallRule -Platform $Platform `
 -Description "Allow outbound TCP traffic from Windows Device Management Enrollment Service." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\omadmclient.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Windows Device Management Sync Client" -Service Any -Program $Program `

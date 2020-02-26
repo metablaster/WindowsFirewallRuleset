@@ -63,10 +63,10 @@ $vcpkgRoot = "Unknown Directory"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "vcpkg" ([ref] $vcpkgRoot)) -or $ForceLoad)
+if ((Test-Installation "vcpkg" ([ref] $vcpkgRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$vcpkgRoot\vcpkg.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "vcpkg" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -77,7 +77,7 @@ if ((Test-Installation "vcpkg" ([ref] $vcpkgRoot)) -or $ForceLoad)
 	# TODO: need to update for all users
 	# TODO: this bad path somehow gets into rule
 	$Program = "%LOCALAPPDATA%\Temp\vcpkg\vcpkgmetricsuploader-2019.09.12.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "vcpkg (telemetry)" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -86,7 +86,7 @@ if ((Test-Installation "vcpkg" ([ref] $vcpkgRoot)) -or $ForceLoad)
 	-Description "vcpkg sends usage data to Microsoft" @Logs | Format-Output @Logs
 
 	$Program = "$vcpkgRoot\downloads\tools\powershell-core-6.2.1-windows\powershell.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "vcpkg (powershell)" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -95,7 +95,7 @@ if ((Test-Installation "vcpkg" ([ref] $vcpkgRoot)) -or $ForceLoad)
 	-Description "vcpkg has it's own powershell" @Logs | Format-Output @Logs
 
 	$Program = "$vcpkgRoot\downloads\tools\cmake-3.14.0-windows\cmake-3.14.0-win32-x86\bin\cmake.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "vcpkg (cmake)" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

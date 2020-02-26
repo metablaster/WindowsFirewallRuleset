@@ -120,7 +120,7 @@ For more info see description of WLAN AutoConfig service." @Logs | Format-Output
 #
 
 $Program = "%SystemRoot%\System32\dasHost.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 # TODO: missing protocol and port for WiFi Direct Network Discovery
 New-NetFirewallRule -Platform $Platform `

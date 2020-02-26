@@ -59,7 +59,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 $Program = "%SystemRoot%\System32\mstsc.exe"
-Test-File $Program
+Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Remote desktop - User Mode" -Service Any -Program $Program `

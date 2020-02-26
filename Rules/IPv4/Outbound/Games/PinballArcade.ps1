@@ -63,10 +63,10 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "PinballArcade" ([ref] $PinballArcadeRoot)) -or $ForceLoad)
+if ((Test-Installation "PinballArcade" ([ref] $PinballArcadeRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$PinballArcadeRoot\PinballArcade.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Pinball Arcade" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -75,7 +75,7 @@ if ((Test-Installation "PinballArcade" ([ref] $PinballArcadeRoot)) -or $ForceLoa
 	-Description "login" @Logs | Format-Output @Logs
 
 	$Program = "$PinballArcadeRoot\PinballArcade11.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Pinball Arcade DX11" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

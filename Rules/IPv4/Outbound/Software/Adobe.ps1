@@ -64,10 +64,10 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "AdobeAcrobat" ([ref] $AcrobatRoot)) -or $ForceLoad)
+if ((Test-Installation "AdobeAcrobat" ([ref] $AcrobatRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$AcrobatRoot\AcroRd32.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Acrobat Reader" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -77,10 +77,10 @@ if ((Test-Installation "AdobeAcrobat" ([ref] $AcrobatRoot)) -or $ForceLoad)
 }
 
 # Test if installation exists on system
-if ((Test-Installation "AdobeARM" ([ref] $AdobeARMRoot)) -or $ForceLoad)
+if ((Test-Installation "AdobeARM" ([ref] $AdobeARMRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$AdobeARMRoot\AdobeARM.exe.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Acrobat ARM" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

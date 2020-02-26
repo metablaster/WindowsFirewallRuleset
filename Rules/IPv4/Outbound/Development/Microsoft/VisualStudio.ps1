@@ -45,7 +45,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 #
 $Group = "Development - Microsoft Visual Studio"
 $Profile = "Private, Public"
-$VSUpdateUsers = Get-SDDL -Group "Users", "Administrators"
+$VSUpdateUsers = Get-SDDL -Group "Users", "Administrators" @Logs
 
 # Ask user if he wants to load these rules
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
@@ -70,10 +70,10 @@ $VSInstallerRoot = "" # "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $ForceLoad)
+if ((Test-Installation "VisualStudio" ([ref] $VSRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$VSRoot\Common7\IDE\CommonExtensions\Microsoft\TeamFoundation\Team Explorer\Git\mingw32\bin\git-remote-https.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "VS Latest git HTTPS" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -82,7 +82,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $ForceLoad)
 	-Description "git bundled with Visual Studio over HTTPS." @Logs | Format-Output @Logs
 
 	$Program = "$VSRoot\Common7\IDE\CommonExtensions\Microsoft\TeamFoundation\Team Explorer\Git\usr\bin\ssh.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "VS Latest git SSH" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -92,7 +92,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $ForceLoad)
 
 	# TODO: need better approach for administrators, ie. powershell, VS, services etc. maybe separate group, or put into "temporary" group?
 	$Program = "$VSRoot\Common7\IDE\devenv.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "VS Latest HTTPS/S" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -101,7 +101,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $ForceLoad)
 	-Description "Check for updates, symbols download and built in browser." @Logs | Format-Output @Logs
 
 	$Program = "$VSRoot\Common7\IDE\Extensions\Microsoft\LiveShare\Agent\vsls-agent.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "VS Latest Liveshare" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -110,7 +110,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $ForceLoad)
 	-Description "liveshare extension." @Logs | Format-Output @Logs
 
 	$Program = "$VSRoot\Common7\IDE\PerfWatson2.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "VS Latest PerfWatson2" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -120,7 +120,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $ForceLoad)
 
 	# TODO: same comment in 4 rules
 	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.Host.CLR.x86.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "VS Latest ServiceHub" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -131,7 +131,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $ForceLoad)
 	These are not optional and are designed to be running side-by-side with devenv.exe." @Logs | Format-Output @Logs
 
 	$Program = "$VSRoot\Common7\ServiceHub\controller\Microsoft.ServiceHub.Controller.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "VS Latest ServiceHub" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -142,7 +142,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $ForceLoad)
 	These are not optional and are designed to be running side-by-side with devenv.exe." @Logs | Format-Output @Logs
 
 	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.SettingsHost.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "VS Latest ServiceHub" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -153,7 +153,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $ForceLoad)
 	These are not optional and are designed to be running side-by-side with devenv.exe." @Logs | Format-Output @Logs
 
 	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.IdentityHost.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "VS Latest ServiceHub" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -164,7 +164,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $ForceLoad)
 	These are not optional and are designed to be running side-by-side with devenv.exe." @Logs | Format-Output @Logs
 
 	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.RoslynCodeAnalysisService32.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "VS Latest ServiceHub" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -173,7 +173,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $ForceLoad)
 	-Description "Managed language service (Roslyn)." @Logs | Format-Output @Logs
 
 	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.VSDetouredHost.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "VS Latest ServiceHub" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -184,7 +184,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $ForceLoad)
 	These are not optional and are designed to be running side-by-side with devenv.exe." @Logs | Format-Output @Logs
 
 	$Program = "$VSRoot\VC\Tools\MSVC\14.24.28314\bin\Hostx86\x64\vctip.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "VS Latest VCTIP telemetry" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -199,10 +199,10 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot)) -or $ForceLoad)
 #
 
 # Test if installation exists on system
-if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $ForceLoad)
+if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$VSInstallerRoot\resources\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "VS Latest ServiceHub Installer" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -212,7 +212,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $Fo
 
 	# TODO: testing:  # (Get-SDDLFromAccounts @("NT AUTHORITY\SYSTEM", "$UserAccount")) `
 	$Program = "$VSInstallerRoot\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\BackgroundDownload.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "VS Latest ServiceHub Installer" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -222,7 +222,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $Fo
 	Tools->Options->Environment->Product Updates->Automatically download updates." @Logs | Format-Output @Logs
 
 	$Program = "$VSInstallerRoot\resources\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.x86.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "VS Latest ServiceHub Installer" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -231,7 +231,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $Fo
 	-Description "Run when Installing update or using add features to VS, also for sign in, in report problem window." @Logs | Format-Output @Logs
 
 	$Program = "$VSInstallerRoot\setup.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "VS Latest Installer setup" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -240,7 +240,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $Fo
 	-Description "Used for updates since 16.0.3." @Logs | Format-Output @Logs
 
 	$Program = "$VSInstallerRoot\vs_installer.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "VS Latest vs_Installer" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -249,7 +249,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $Fo
 	-Description "Looks like it's not used anymore, but vs_installerservice is used instead" @Logs | Format-Output @Logs
 
 	$Program = "$VSInstallerRoot\vs_installershell.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "VS Latest vs_Installershell" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -259,7 +259,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $Fo
 
 	# TODO: needs testing what users are needed for VSIX rules
 	$Program = "$VSInstallerRoot\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\VSIXInstaller.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "VS Latest VSIX" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -268,7 +268,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $Fo
 	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$VSInstallerRoot\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\VSIXAutoUpdate.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "VS Latest VSIXAutoUpdate" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -277,7 +277,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or $Fo
 	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$VSInstallerRoot\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\VSIXConfigurationUpdater.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "VS Latest VSIXConfigurationUpdater" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

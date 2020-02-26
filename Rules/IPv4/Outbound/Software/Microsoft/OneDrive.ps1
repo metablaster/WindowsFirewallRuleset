@@ -63,10 +63,10 @@ $OneDriveRoot = "%ProgramFiles(x86)%\Microsoft OneDrive"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "OneDrive" ([ref] $OneDriveRoot)) -or $ForceLoad)
+if ((Test-Installation "OneDrive" ([ref] $OneDriveRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$OneDriveRoot\OneDriveStandaloneUpdater.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "OneDrive Update" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -75,7 +75,7 @@ if ((Test-Installation "OneDrive" ([ref] $OneDriveRoot)) -or $ForceLoad)
 	-Description "Updater for OneDrive" @Logs | Format-Output @Logs
 
 	$Program = "$OneDriveRoot\OneDrive.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "OneDrive" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

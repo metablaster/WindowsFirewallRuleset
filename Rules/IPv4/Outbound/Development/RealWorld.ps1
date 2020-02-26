@@ -63,10 +63,10 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "RealWorld" ([ref] $RealWorldRoot)) -or $ForceLoad)
+if ((Test-Installation "RealWorld" ([ref] $RealWorldRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$RealWorldRoot\RWCursorEditor.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Real World Cursor Editor" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

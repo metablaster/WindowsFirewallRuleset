@@ -45,7 +45,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 #
 $Group = "Microsoft - SysInternals"
 $Profile = "Private, Public"
-$SysInternalsUsers = Get-SDDL -Group "Users", "Administrators"
+$SysInternalsUsers = Get-SDDL -Group "Users", "Administrators" @Logs
 
 # Ask user if he wants to load these rules
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
@@ -64,10 +64,10 @@ $SysInternalsRoot = "%SystemDrive%\tools"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLoad)
+if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$SysInternalsRoot\Autoruns\Autoruns64.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Sysinternals Autoruns" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -76,7 +76,7 @@ if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLoad)
 	-Description "Access to VirusTotal" @Logs | Format-Output @Logs
 
 	$Program = "$SysInternalsRoot\ProcessExplorer\procexp64.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Sysinternals ProcessExplorer" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -85,7 +85,7 @@ if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLoad)
 	-Description "Access to VirusTotal" @Logs | Format-Output @Logs
 
 	$Program = "$SysInternalsRoot\ProcessMonitor\Procmon.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Sysinternals ProcessMonitor" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -94,7 +94,7 @@ if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLoad)
 	-Description "Access to symbols server" @Logs | Format-Output @Logs
 
 	$Program = "$SysInternalsRoot\TCPView\Tcpview.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Sysinternals TcpView" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -103,7 +103,7 @@ if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLoad)
 	-Description "WhoIs access" @Logs | Format-Output @Logs
 
 	$Program = "$SysInternalsRoot\WhoIs\whois64.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Sysinternals WhoIs" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

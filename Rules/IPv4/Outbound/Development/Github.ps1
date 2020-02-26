@@ -65,10 +65,10 @@ $GithubRoot = "%SystemDrive%\Users\User\AppData\Local\GitHubDesktop\app-2.2.3"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Git" ([ref] $GitRoot)) -or $ForceLoad)
+if ((Test-Installation "Git" ([ref] $GitRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$GitRoot\mingw64\bin\curl.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Git - curl" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -78,7 +78,7 @@ if ((Test-Installation "Git" ([ref] $GitRoot)) -or $ForceLoad)
 
 	# TODO: unsure if it's 443 or 80
 	$Program = "$GitRoot\mingw64\bin\git.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Git - git" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -87,7 +87,7 @@ if ((Test-Installation "Git" ([ref] $GitRoot)) -or $ForceLoad)
 	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$GitRoot\mingw64\libexec\git-core\git-remote-https.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Git - remote-https" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -96,7 +96,7 @@ if ((Test-Installation "Git" ([ref] $GitRoot)) -or $ForceLoad)
 	-Description "git HTTPS acces (https cloning)" @Logs | Format-Output @Logs
 
 	$Program = "$GitRoot\usr\bin\ssh.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Git - ssh" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -110,10 +110,10 @@ if ((Test-Installation "Git" ([ref] $GitRoot)) -or $ForceLoad)
 #
 
 # Test if installation exists on system
-if ((Test-Installation "GithubDesktop" ([ref] $GithubRoot)) -or $ForceLoad)
+if ((Test-Installation "GithubDesktop" ([ref] $GithubRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$GithubRoot\GitHubDesktop.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "GitHub Desktop - App" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -122,7 +122,7 @@ if ((Test-Installation "GithubDesktop" ([ref] $GithubRoot)) -or $ForceLoad)
 	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$GithubRoot\resources\app\git\mingw64\bin\git-remote-https.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "GitHub Desktop - remote-https" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

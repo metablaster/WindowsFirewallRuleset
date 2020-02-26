@@ -70,7 +70,7 @@ $TestUsersSDDL = Get-SDDL -User $Users @Logs
 $TestUsersSDDL
 
 New-Test "$Groups | Get-GroupSID -CIM"
-$Groups | Get-GroupSID -CIM
+$Groups | Get-GroupSID -CIM @Logs
 
 New-Test "Get-TypeName"
 $TestUsersSDDL | Get-TypeName @Logs

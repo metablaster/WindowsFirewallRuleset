@@ -66,13 +66,13 @@ $PowerShellCore64Root = ""
 
 # TODO: add rules for Core
 # NOTE: administartors may need powershell, let them add them self temporary? currently adding them for PS x64
-$PowerShellUsers = Get-SDDL -Group "Users", "Administrators"
+$PowerShellUsers = Get-SDDL -Group "Users", "Administrators" @Logs
 
 # Test if installation exists on system
-if ((Test-Installation "Powershell64" ([ref] $PowerShell64Root)) -or $ForceLoad)
+if ((Test-Installation "Powershell64" ([ref] $PowerShell64Root) @Logs) -or $ForceLoad)
 {
 	$Program = "$PowerShell64Root\powershell_ise.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "PowerShell ISE x64" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -81,7 +81,7 @@ if ((Test-Installation "Powershell64" ([ref] $PowerShell64Root)) -or $ForceLoad)
 	-Description "Rule to allow powershell help update" @Logs | Format-Output @Logs
 
 	$Program = "$PowerShell64Root\powershell.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "PowerShell x64" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -91,10 +91,10 @@ if ((Test-Installation "Powershell64" ([ref] $PowerShell64Root)) -or $ForceLoad)
 }
 
 # Test if installation exists on system
-if ((Test-Installation "PowershellCore64" ([ref] $PowerShellCore64Root)) -or $ForceLoad)
+if ((Test-Installation "PowershellCore64" ([ref] $PowerShellCore64Root) @Logs) -or $ForceLoad)
 {
 	$Program = "$PowerShellCore64Root\pwsh.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "PowerShell Core x64" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -104,10 +104,10 @@ if ((Test-Installation "PowershellCore64" ([ref] $PowerShellCore64Root)) -or $Fo
 }
 
 # Test if installation exists on system
-if ((Test-Installation "Powershell86" ([ref] $PowerShell86Root)) -or $ForceLoad)
+if ((Test-Installation "Powershell86" ([ref] $PowerShell86Root) @Logs) -or $ForceLoad)
 {
 	$Program = "$PowerShell86Root\powershell_ise.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "PowerShell ISE x86" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -116,7 +116,7 @@ if ((Test-Installation "Powershell86" ([ref] $PowerShell86Root)) -or $ForceLoad)
 	-Description "Rule to allow powershell help update" @Logs | Format-Output @Logs
 
 	$Program = "$PowerShell86Root\powershell.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "PowerShell x86" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

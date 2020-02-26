@@ -64,10 +64,10 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Metatrader" ([ref] $MetatraderRoot)) -or $ForceLoad)
+if ((Test-Installation "Metatrader" ([ref] $MetatraderRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$MetatraderRoot\terminal.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Metatrader 4" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

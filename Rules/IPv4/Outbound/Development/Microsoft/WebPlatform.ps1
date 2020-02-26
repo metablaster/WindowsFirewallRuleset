@@ -63,10 +63,10 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "WebPlatform" ([ref] $WebPlatformRoot)) -or $ForceLoad)
+if ((Test-Installation "WebPlatform" ([ref] $WebPlatformRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$WebPlatformRoot\WebPlatformInstaller.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Web Platform Installer" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

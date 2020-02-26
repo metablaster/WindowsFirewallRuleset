@@ -50,7 +50,7 @@ if ($Develop)
 }
 
 # Includes
-Import-Module -Name $PSScriptRoot\..\Indented.Net.IP @Logs
+Import-Module -Name $PSScriptRoot\..\Indented.Net.IP
 
 # TODO: what happens in Get-AdapterConfig and other functions that call it if there are multiple configured adapters?
 

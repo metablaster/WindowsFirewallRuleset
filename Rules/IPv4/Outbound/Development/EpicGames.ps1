@@ -64,10 +64,10 @@ $LauncherRoot = "%ProgramFiles(x86)%\Epic Games\Launcher"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
+if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$EngineRoot\Binaries\Win64\CrashReportClientEditor-Win64-Development.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Unreal Engine - CrashReportClientEditor" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -76,7 +76,7 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
 	-Description "Used to send crash report to epic games." @Logs | Format-Output @Logs
 
 	$Program = "$EngineRoot\Binaries\DotNET\GitDependencies.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Unreal Engine - GitDependencies" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -85,7 +85,7 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
 	-Description "Engine repo source tool to dowload binaries." @Logs | Format-Output @Logs
 
 	$Program = "$EngineRoot\Binaries\DotNET\SwarmAgent.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Unreal Engine - SwarmAgent" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -94,7 +94,7 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
 	-Description "Swarm agent is used for build farm." @Logs | Format-Output @Logs
 
 	$Program = "$EngineRoot\Binaries\Win64\UE4Editor.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Unreal Engine - Editor x64" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -103,7 +103,7 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
 	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$EngineRoot\Binaries\Win64\UE4Editor.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Unreal Engine - Editor x64" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -112,7 +112,7 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
 	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$EngineRoot\Binaries\DotNET\UnrealBuildTool.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Unreal Engine - UnrealBuildTool" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -126,10 +126,10 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
 #
 
 # Test if installation exists on system
-if ((Test-Installation "EpicGames" ([ref] $LauncherRoot)) -or $ForceLoad)
+if ((Test-Installation "EpicGames" ([ref] $LauncherRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$LauncherRoot\Portal\Binaries\Win32\EpicGamesLauncher.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Epic Games - Launcher x32" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -138,7 +138,7 @@ if ((Test-Installation "EpicGames" ([ref] $LauncherRoot)) -or $ForceLoad)
 	-Description "Used for initial setup only" @Logs | Format-Output @Logs
 
 	$Program = "$LauncherRoot\Portal\Binaries\Win64\EpicGamesLauncher.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Epic Games - Launcher x64" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -147,7 +147,7 @@ if ((Test-Installation "EpicGames" ([ref] $LauncherRoot)) -or $ForceLoad)
 	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$LauncherRoot\Portal\Binaries\Win64\EpicGamesLauncher.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Epic Games - Launcher x64" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

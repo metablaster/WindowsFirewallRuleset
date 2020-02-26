@@ -46,12 +46,12 @@ Update-Context "Test.Master" $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute @Logs)) { exit }
 
 # Recusively get powershell scripts in input folder
-$Files = Get-ChildItem -Path $ProjectRoot\Test -Recurse -Filter *.ps1 |
-Where-Object -Property Name -ne "ContextSetup.ps1"
+$Files = Get-ChildItem -Path $ProjectRoot\Test -Recurse -Filter *.ps1 @Logs |
+Where-Object -Property Name -ne "ContextSetup.ps1" @Logs
 
 if (!$Files)
 {
-	Write-Error -Category ObjectNotFound -TargetObject $Files -Message "No powershell script files found"
+	Write-Error -Category ObjectNotFound -TargetObject $Files -Message "No powershell script files found" @Logs
 	return
 }
 
@@ -60,3 +60,5 @@ foreach ($File in $Files)
 {
 	& $File.FullName
 }
+
+Update-Logs

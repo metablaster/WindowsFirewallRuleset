@@ -47,19 +47,24 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
+Start-Test
+
 $NullVariable = $null
-$EmptryVariable = Get-VSSetupInstance -All |
-Select-VSSetupInstance -Require 'FailureTest' -Latest |
-Select-Object -ExpandProperty InstallationPath
+$EmptryVariable = Get-VSSetupInstance -All @Logs |
+Select-VSSetupInstance -Require 'FailureTest' -Latest @Logs |
+Select-Object -ExpandProperty InstallationPath @Logs
 
 New-Test "Get-VSSetupInstance"
-Get-VSSetupInstance
-Get-VSSetupInstance | Select-VSSetupInstance -Latest | Select-Object -ExpandProperty InstallationPath
+Get-VSSetupInstance @Logs
+
+New-Test "Get-VSSetupInstance path"
+Get-VSSetupInstance @Logs | Select-VSSetupInstance -Latest @Logs | Select-Object -ExpandProperty InstallationPath @Logs
 
 New-Test "Test-Installation 'NullVariable' $NullVariable"
-Test-Installation "MicrosoftOffice" ([ref] $NullVariable)
+Test-Installation "MicrosoftOffice" ([ref] $NullVariable) @Logs
 
 New-Test "Test-Installation 'EmptryVariable' $EmptryVariable"
-Test-Installation "MicrosoftOffice" ([ref] $EmptryVariable)
+Test-Installation "MicrosoftOffice" ([ref] $EmptryVariable) @Logs
 
+Update-Logs
 Exit-Test

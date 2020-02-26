@@ -63,10 +63,10 @@ $PasswordSafeRoot = "%ProgramFiles%\Password Safe"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "PasswordSafe" ([ref] $PasswordSafeRoot)) -or $ForceLoad)
+if ((Test-Installation "PasswordSafe" ([ref] $PasswordSafeRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$PasswordSafeRoot\pwsafe.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "PasswordSafe" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

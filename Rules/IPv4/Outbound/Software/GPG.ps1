@@ -63,10 +63,10 @@ $GPGRoot = "%ProgramFiles(x86)%\GnuPG"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "GPG" ([ref] $GPGRoot)) -or $ForceLoad)
+if ((Test-Installation "GPG" ([ref] $GPGRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$GPGRoot\bin\dirmngr.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Certificate key servers" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

@@ -63,10 +63,10 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "EveOnline" ([ref] $EveOnlineRoot)) -or $ForceLoad)
+if ((Test-Installation "EveOnline" ([ref] $EveOnlineRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$EveOnlineRoot\evelauncher.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Eve Online" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

@@ -64,10 +64,10 @@ $DnsCryptRoot = "%ProgramFiles%\Simple DNSCrypt x64"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "DnsCrypt" ([ref] $DnsCryptRoot)) -or $ForceLoad)
+if ((Test-Installation "DnsCrypt" ([ref] $DnsCryptRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$DnsCryptRoot\dnscrypt-proxy\dnscrypt-proxy.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "dnscrypt-proxy" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -88,7 +88,7 @@ if ((Test-Installation "DnsCrypt" ([ref] $DnsCryptRoot)) -or $ForceLoad)
 	This rule applies to Simple DnsCrypt which uses dnscrypt-proxy for DnsCrypt Protocol" @Logs | Format-Output @Logs
 
 	$Program = "$DnsCryptRoot\SimpleDnsCrypt.exe"
-	Test-File $Program
+	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Symple DNS Crypt" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

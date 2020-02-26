@@ -51,10 +51,10 @@ if ($Develop)
 
 # Includes
 . $PSScriptRoot\External\Get-SQLInstances.ps1
-Import-Module -Name $PSScriptRoot\..\VSSetup @Logs
-Import-Module -Name $PSScriptRoot\..\Project.Windows.UserInfo @Logs
-# Import-Module -Name $PSScriptRoot\..\Project.Windows.ComputerInfo @Logs
-Import-Module -Name $PSScriptRoot\..\Project.AllPlatforms.Utility @Logs
+Import-Module -Name $PSScriptRoot\..\VSSetup
+Import-Module -Name $PSScriptRoot\..\Project.Windows.UserInfo
+# Import-Module -Name $PSScriptRoot\..\Project.Windows.ComputerInfo
+Import-Module -Name $PSScriptRoot\..\Project.AllPlatforms.Utility
 
 <#
 .SYNOPSIS
