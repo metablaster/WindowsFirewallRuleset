@@ -39,9 +39,9 @@ Test-SystemRequirements
 
 # Includes
 . $PSScriptRoot\ContextSetup.ps1
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test @Logs
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 
 # Ask user if he wants to load these rules
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
@@ -55,7 +55,7 @@ $Group = "Test - Format output"
 Start-Test
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction SilentlyContinue
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
 New-Test "Format-Output"
 New-NetFirewallRule -Platform $Platform `

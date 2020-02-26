@@ -36,9 +36,9 @@ Test-SystemRequirements
 Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $false
 
 # Includes
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo @Logs
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 
 # Clear errors, error and warning status
 $Error.Clear()
@@ -273,8 +273,8 @@ Write-Host ""
 if ($Develop)
 {
 	# Need to re-import required module in develop mode
-	Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
-	Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
+	Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging @Logs
+	Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 }
 
 # Show status of execution

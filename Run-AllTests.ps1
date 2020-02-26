@@ -39,7 +39,7 @@ Test-SystemRequirements
 
 # Includes
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 
 # Ask user if he wants to load these rules
 Update-Context "Test.Master" $($MyInvocation.MyCommand.Name -replace ".{4}$")

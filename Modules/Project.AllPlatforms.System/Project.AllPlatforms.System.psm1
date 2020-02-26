@@ -166,7 +166,8 @@ function Test-SystemRequirements
 		{
 			# Now that OS and PowerShell is OK we can import these modules
 			Import-Module -Name $PSScriptRoot\..\Project.Windows.ProgramInfo
-			Import-Module -Name $PSScriptRoot\..\Project.Windows.ComputerInfo
+			Import-Module -Name $PSScriptRoot\..\Project.Windows.ProgramInfo @Logs
+			Import-Module -Name $PSScriptRoot\..\Project.Windows.ComputerInfo @Logs
 
 			# Check NET Framework version
 			# TODO: What if function fails?

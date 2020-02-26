@@ -32,28 +32,28 @@ SOFTWARE.
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 . $PSScriptRoot\ContextSetup.ps1
 
+Write-Information -Tags "Test" -MessageData "INFO: Import-Module Logging"
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
+
 # Check requirements for this project
 Write-Information -Tags "Test" -MessageData "INFO: Import-Module System"
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
 Test-SystemRequirements
 
-Write-Information -Tags "Test" -MessageData "INFO: Import-Module Logging"
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
-
 Write-Information -Tags "Test" -MessageData "INFO: Import-Module Test"
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test @Logs
 
 Write-Information -Tags "Test" -MessageData "INFO: Import-Module Utility"
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 
 Write-Information -Tags "Test" -MessageData "INFO: Import-Module ComputerInfo"
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo @Logs
 
 Write-Information -Tags "Test" -MessageData "INFO: Import-Module UserInfo"
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo @Logs
 
 Write-Information -Tags "Test" -MessageData "INFO: Import-Module ProgramInfo"
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo @Logs
 
 # Ask user if he wants to load these rules
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
