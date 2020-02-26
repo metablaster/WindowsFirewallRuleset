@@ -72,5 +72,7 @@ if ((Test-Installation "OBSStudio" ([ref] $OBSStudioRoot)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $UsersSDDL `
-	-Description "OBS Studio check for updates" | Format-Output
+	-Description "OBS Studio check for updates" @Logs | Format-Output @Logs
 }
+
+Update-Logs

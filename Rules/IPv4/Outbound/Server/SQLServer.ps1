@@ -79,7 +79,7 @@ if ((Test-Installation "SQLManagementStudio" ([ref] $SQLManagementStudioRoot)) -
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $SQLUsers `
-	-Description "" | Format-Output
+	-Description "" @Logs | Format-Output @Logs
 }
 
 # Test if installation exists on system
@@ -92,5 +92,7 @@ if ((Test-Installation "SQLDTS" ([ref] $SQLDTSRoot)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $SQLUsers `
-	-Description "" | Format-Output
+	-Description "" @Logs | Format-Output @Logs
 }
+
+Update-Logs

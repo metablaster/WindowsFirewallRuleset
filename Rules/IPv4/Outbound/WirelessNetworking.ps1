@@ -69,7 +69,7 @@ New-NetFirewallRule -Platform $Platform `
 -LocalUser $NT_AUTHORITY_UserModeDrivers `
 -Description "Driver Foundation - User-mode Driver Framework Host Process.
 The driver host process (Wudfhost.exe) is a child process of the driver manager service.
-loads one or more UMDF driver DLLs, in addition to the framework DLLs." | Format-Output
+loads one or more UMDF driver DLLs, in addition to the framework DLLs." @Logs | Format-Output @Logs
 
 # TODO: remote port unknown, rule added because predefined rule for UDP exists
 New-NetFirewallRule -Platform $Platform `
@@ -79,7 +79,7 @@ New-NetFirewallRule -Platform $Platform `
 -LocalUser $NT_AUTHORITY_UserModeDrivers -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "Driver Foundation - User-mode Driver Framework Host Process.
 The driver host process (Wudfhost.exe) is a child process of the driver manager service.
-loads one or more UMDF driver DLLs, in addition to the framework DLLs." | Format-Output
+loads one or more UMDF driver DLLs, in addition to the framework DLLs." @Logs | Format-Output @Logs
 
 #
 # Windows system predefined rules for WiFi Direct
@@ -93,7 +93,7 @@ New-NetFirewallRule -Platform $Platform `
 -Description "WLAN Service to allow coordination protocol for WFD Service sessions.
 Wi-Fi Direct (WFD) Protocol Specifies: Proximity Extensions, which enable two or more devices that are running the same application
 to establish a direct connection without requiring an intermediary, such as an infrastructure wireless access point (WAP).
-For more info see description of WLAN AutoConfig service." | Format-Output
+For more info see description of WLAN AutoConfig service." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "WLAN Service WFD Driver-only" -Service Any -Program System `
@@ -103,7 +103,7 @@ New-NetFirewallRule -Platform $Platform `
 -Description "Rule for drivers to communicate over WFD, WFD Services kernel mode driver rule.
 Wi-Fi Direct (WFD) Protocol Specifies: Proximity Extensions, which enable two or more devices that are running the same application
 to establish a direct connection without requiring an intermediary, such as an infrastructure wireless access point (WAP).
-For more info see description of WLAN AutoConfig service." | Format-Output
+For more info see description of WLAN AutoConfig service." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "WLAN Service WFD Driver-only" -Service Any -Program System `
@@ -113,7 +113,7 @@ New-NetFirewallRule -Platform $Platform `
 -Description "Rule for drivers to communicate over WFD, WFD Services kernel mode driver rule.
 Wi-Fi Direct (WFD) Protocol Specifies: Proximity Extensions, which enable two or more devices that are running the same application
 to establish a direct connection without requiring an intermediary, such as an infrastructure wireless access point (WAP).
-For more info see description of WLAN AutoConfig service." | Format-Output
+For more info see description of WLAN AutoConfig service." @Logs | Format-Output @Logs
 
 #
 # Windows system predefined rules for WiFi Direct Network Discovery
@@ -130,7 +130,7 @@ New-NetFirewallRule -Platform $Platform `
 -LocalUser $NT_AUTHORITY_LocalService `
 -Description "Rule to discover WSD devices on Wi-Fi Direct networks.
 Host enables pairing between the system and wired or wireless devices. This service is new since Windows 8.
-Executable also known as Device Association Framework Provider Host." | Format-Output
+Executable also known as Device Association Framework Provider Host." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Wi-Fi Direct Scan Service" -Service stisvc -Program $ServiceHost `
@@ -138,7 +138,7 @@ New-NetFirewallRule -Platform $Platform `
 -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 -LocalUser Any `
 -Description "Rule to use WSD scanners on Wi-Fi Direct networks.
-Windows Image Acquisition (WIA) service provides image acquisition services for scanners and cameras." | Format-Output
+Windows Image Acquisition (WIA) service provides image acquisition services for scanners and cameras." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Wi-Fi Direct Spooler Use" -Service Spooler -Program $ServiceHost `
@@ -147,7 +147,7 @@ New-NetFirewallRule -Platform $Platform `
 -LocalUser Any `
 -Description "Rule to use WSD printers on Wi-Fi Direct networks.
 Print Spooler service spools print jobs and handles interaction with the printer.
-If you turn off this service, you won’t be able to print or see your printers." | Format-Output
+If you turn off this service, you won’t be able to print or see your printers." @Logs | Format-Output @Logs
 
 #
 # Windows system predefined rules for Wireless portable devices
@@ -158,28 +158,28 @@ New-NetFirewallRule -Platform $Platform `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $WNInterface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 1900 `
 -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description "Wireless Portable Devices to allow use of the Simple Service Discovery Protocol." | Format-Output
+-Description "Wireless Portable Devices to allow use of the Simple Service Discovery Protocol." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Wireless portable devices" -Service Any -Program $WUDFHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $WNInterface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 15740 `
 -LocalUser Any `
--Description "Wireless Portable Devices to allow use of the Usermode Driver Framework." | Format-Output
+-Description "Wireless Portable Devices to allow use of the Usermode Driver Framework." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Wireless portable devices" -Service Any -Program $WUDFHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $WNInterface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Intranet4 -LocalPort Any -RemotePort 15740 `
 -LocalUser Any `
--Description "Wireless Portable Devices to allow use of the Usermode Driver Framework." | Format-Output
+-Description "Wireless Portable Devices to allow use of the Usermode Driver Framework." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Wireless portable devices (UPnPHost)" -Service upnphost -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $WNInterface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 2869 `
 -LocalUser Any `
--Description "Wireless Portable Devices to allow use of Universal Plug and Play." | Format-Output
+-Description "Wireless Portable Devices to allow use of Universal Plug and Play." @Logs | Format-Output @Logs
 
 #TODO: possible bug in predefined rule, description is not consistent with service paramter
 New-NetFirewallRule -Platform $Platform `
@@ -187,4 +187,6 @@ New-NetFirewallRule -Platform $Platform `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $WNInterface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 2869 `
 -LocalUser Any `
--Description "Wireless Portable Devices to allow use of Function discovery provider host." | Format-Output
+-Description "Wireless Portable Devices to allow use of Function discovery provider host." @Logs | Format-Output @Logs
+
+Update-Logs

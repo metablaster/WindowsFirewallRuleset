@@ -72,7 +72,7 @@ if ((Test-Installation "CounterStrikeGO" ([ref] $CounterStrikeRoot)) -or $ForceL
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 	-LocalUser $UsersSDDL `
-	-Description "download maps" | Format-Output
+	-Description "download maps" @Logs | Format-Output @Logs
 
 	$Program = "$CounterStrikeRoot\csgo.exe"
 	Test-File $Program
@@ -81,5 +81,7 @@ if ((Test-Installation "CounterStrikeGO" ([ref] $CounterStrikeRoot)) -or $ForceL
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 27000-27100 `
 	-LocalUser $UsersSDDL `
-	-Description "" | Format-Output
+	-Description "" @Logs | Format-Output @Logs
 }
+
+Update-Logs

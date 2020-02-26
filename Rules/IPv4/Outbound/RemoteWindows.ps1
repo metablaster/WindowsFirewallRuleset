@@ -68,7 +68,7 @@ New-NetFirewallRule -Platform $Platform `
 -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "Remote desktop connection.
 Allows users to connect interactively to a remote computer.
-To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System properties control panel item." | Format-Output
+To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System properties control panel item." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Remote desktop - User Mode" -Service Any -Program $Program `
@@ -77,4 +77,6 @@ New-NetFirewallRule -Platform $Platform `
 -LocalUser $UsersSDDL `
 -Description "Remote desktop connection.
 Allows users to connect interactively to a remote computer.
-To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System properties control panel item." | Format-Output
+To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System properties control panel item." @Logs | Format-Output @Logs
+
+Update-Logs

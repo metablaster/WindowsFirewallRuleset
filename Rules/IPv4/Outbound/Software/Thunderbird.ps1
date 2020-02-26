@@ -72,40 +72,42 @@ if ((Test-Installation "Thuderbird" ([ref] $ThunderbirdRoot)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $UsersSDDL `
-	-Description "" | Format-Output
+	-Description "" @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Mozilla thunderbird - IMAP SSL" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 993 `
 	-LocalUser $UsersSDDL `
-	-Description "Incoming mail server over SSL" | Format-Output
+	-Description "Incoming mail server over SSL" @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Mozilla thunderbird - IMAP" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 143 `
 	-LocalUser $UsersSDDL `
-	-Description "Incoming mail server" | Format-Output
+	-Description "Incoming mail server" @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Mozilla thunderbird - POP3 SSL" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 110 `
 	-LocalUser $UsersSDDL `
-	-Description "Incoming mail server over SSL" | Format-Output
+	-Description "Incoming mail server over SSL" @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Mozilla thunderbird - POP3" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 995 `
 	-LocalUser $UsersSDDL `
-	-Description "Incomming mail server" | Format-Output
+	-Description "Incomming mail server" @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Mozilla thunderbird - SMTP" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 465 `
 	-LocalUser $UsersSDDL `
-	-Description "Outgoing mail server" | Format-Output
+	-Description "Outgoing mail server" @Logs | Format-Output @Logs
 }
+
+Update-Logs

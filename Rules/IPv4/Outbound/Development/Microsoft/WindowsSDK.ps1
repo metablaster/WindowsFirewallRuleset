@@ -72,7 +72,7 @@ if ((Test-Installation "WindowsKits" ([ref] $SDKDebuggers)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $UsersSDDL `
-	-Description "WinDbg access to Symbols Server." | Format-Output
+	-Description "WinDbg access to Symbols Server." @Logs | Format-Output @Logs
 
 	$Program = "$SDKDebuggers\x64\windbg.exe"
 	Test-File $Program
@@ -81,7 +81,7 @@ if ((Test-Installation "WindowsKits" ([ref] $SDKDebuggers)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $UsersSDDL `
-	-Description "WinDbg access to Symbols Server" | Format-Output
+	-Description "WinDbg access to Symbols Server" @Logs | Format-Output @Logs
 
 	$Program = "$SDKDebuggers\x86\symchk.exe"
 	Test-File $Program
@@ -90,7 +90,7 @@ if ((Test-Installation "WindowsKits" ([ref] $SDKDebuggers)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $UsersSDDL `
-	-Description "WinDbg Symchk access to Symbols Server." | Format-Output
+	-Description "WinDbg Symchk access to Symbols Server." @Logs | Format-Output @Logs
 
 	$Program = "$SDKDebuggers\x64\symchk.exe"
 	Test-File $Program
@@ -99,5 +99,7 @@ if ((Test-Installation "WindowsKits" ([ref] $SDKDebuggers)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $UsersSDDL `
-	-Description "WinDbg Symchk access to Symbols Server" | Format-Output
+	-Description "WinDbg Symchk access to Symbols Server" @Logs | Format-Output @Logs
 }
+
+Update-Logs

@@ -142,7 +142,7 @@ New-NetFirewallRule -Platform $Platform `
 -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 -LocalUser Any -Owner (Get-GroupSID "Administrators") -Package "*" `
 -Description "Block admin activity for all store apps.
-Administrators should have limited or no connectivity at all for maximum security." | Format-Output
+Administrators should have limited or no connectivity at all for maximum security." @Logs | Format-Output @Logs
 
 #
 # Create rules for all network apps for each standard user
@@ -179,7 +179,9 @@ foreach ($Principal in $Principals)
 			-PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser Any -Owner $Principal.SID -Package $PackageSID `
-			-Description "Store apps generated rule for $($Principal.User)" | Format-Output
+			-Description "Store apps generated rule for $($Principal.User)" @Logs | Format-Output @Logs
+
+			Update-Logs
 		}
 	}
 
@@ -209,7 +211,11 @@ foreach ($Principal in $Principals)
 			-PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $SystemGroup -Profile $Profile -InterfaceType $Interface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser Any -Owner $Principal.SID -Package $PackageSID `
-			-Description "System store apps generated rule for $($Principal.User)" | Format-Output
+			-Description "System store apps generated rule for $($Principal.User)" @Logs | Format-Output @Logs
+
+			Update-Logs
 		}
 	}
 }
+
+Update-Logs

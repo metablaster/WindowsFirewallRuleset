@@ -72,7 +72,7 @@ if ((Test-Installation "TeamViewer" ([ref] $TeamViewerRoot)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 80, 443, 5938 `
 	-LocalUser $UsersSDDL `
-	-Description "" | Format-Output
+	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$TeamViewerRoot\TeamViewer_Service.exe"
 	Test-File $Program
@@ -81,5 +81,7 @@ if ((Test-Installation "TeamViewer" ([ref] $TeamViewerRoot)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 80, 443, 5938 `
 	-LocalUser $UsersSDDL `
-	-Description "" | Format-Output
+	-Description "" @Logs | Format-Output @Logs
 }
+
+Update-Logs

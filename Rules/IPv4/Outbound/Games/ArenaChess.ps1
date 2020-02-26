@@ -72,5 +72,7 @@ if ((Test-Installation "ArenaChess" ([ref] $ArenaChessRoot)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 5000 `
 	-LocalUser $UsersSDDL `
-	-Description "Chess client program" | Format-Output
+	-Description "Chess client program" @Logs | Format-Output @Logs
 }
+
+Update-Logs

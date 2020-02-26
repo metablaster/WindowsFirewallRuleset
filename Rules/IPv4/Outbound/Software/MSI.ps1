@@ -73,7 +73,7 @@ if ((Test-Installation "MSIAfterburner" ([ref] $MSIAfterburnerRoot)) -or $ForceL
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $UsersSDDL `
-	-Description "Startup update" | Format-Output
+	-Description "Startup update" @Logs | Format-Output @Logs
 }
 
 # Test if installation exists on system
@@ -86,7 +86,7 @@ if ((Test-Installation "MSIAfterburner" ([ref] $MSIAfterburnerRoot)) -or $ForceL
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 	-LocalUser $UsersSDDL `
-	-Description "Startup update" | Format-Output
+	-Description "Startup update" @Logs | Format-Output @Logs
 
 	$Program = "$MSIRoot\APP Manager\AppManager.exe"
 	Test-File $Program
@@ -95,5 +95,7 @@ if ((Test-Installation "MSIAfterburner" ([ref] $MSIAfterburnerRoot)) -or $ForceL
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 	-LocalUser $UsersSDDL `
-	-Description "Startup update" | Format-Output
+	-Description "Startup update" @Logs | Format-Output @Logs
 }
+
+Update-Logs

@@ -73,7 +73,7 @@ if ((Test-Installation "Nvidia64" ([ref] $NvidiaRoot64)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $UsersSDDL `
-	-Description "" | Format-Output
+	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$NvidiaRoot64\NVIDIA GeForce Experience\NVIDIA GeForce Experience.exe"
 	Test-File $Program
@@ -82,7 +82,7 @@ if ((Test-Installation "Nvidia64" ([ref] $NvidiaRoot64)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $UsersSDDL `
-	-Description "" | Format-Output
+	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$NvidiaRoot64\Display.NvContainer\NVDisplay.Container.exe"
 	Test-File $Program
@@ -91,7 +91,7 @@ if ((Test-Installation "Nvidia64" ([ref] $NvidiaRoot64)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $UsersSDDL `
-	-Description "" | Format-Output
+	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$NvidiaRoot64\Update Core\NvProfileUpdater64.exe"
 	Test-File $Program
@@ -100,7 +100,7 @@ if ((Test-Installation "Nvidia64" ([ref] $NvidiaRoot64)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $UsersSDDL `
-	-Description "" | Format-Output
+	-Description "" @Logs | Format-Output @Logs
 }
 
 #
@@ -117,7 +117,7 @@ if ((Test-Installation "Nvidia86" ([ref] $NvidiaRoot86)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $UsersSDDL `
-	-Description "" | Format-Output
+	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$NvidiaRoot86\NVIDIA GeForce Experience\NVIDIA GeForce Experience.exe"
 	Test-File $Program
@@ -126,7 +126,7 @@ if ((Test-Installation "Nvidia86" ([ref] $NvidiaRoot86)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $UsersSDDL `
-	-Description "" | Format-Output
+	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$NvidiaRoot86\NvTelemetry\NvTelemetryContainer.exe"
 	Test-File $Program
@@ -135,7 +135,7 @@ if ((Test-Installation "Nvidia86" ([ref] $NvidiaRoot86)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $UsersSDDL `
-	-Description "" | Format-Output
+	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$NvidiaRoot86\NvNode\NVIDIA Web Helper.exe"
 	Test-File $Program
@@ -144,5 +144,7 @@ if ((Test-Installation "Nvidia86" ([ref] $NvidiaRoot86)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $UsersSDDL `
-	-Description "" | Format-Output
+	-Description "" @Logs | Format-Output @Logs
 }
+
+Update-Logs

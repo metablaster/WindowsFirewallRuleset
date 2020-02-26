@@ -23,7 +23,7 @@ VARIABLES
 
 EXAMPLES
 	To get SDDL string for accouns:
-	Get-SDDL -Domain "NT AUTHORITY" -Users @("NETWORK SERVICE", "LOCAL SERVICE")
+	Get-SDDL -Domain "NT AUTHORITY" -User @("NETWORK SERVICE", "LOCAL SERVICE")
 
 	To get user SID:
 	Get-UserSID("TestUser")

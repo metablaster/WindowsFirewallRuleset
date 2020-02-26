@@ -72,14 +72,14 @@ New-NetFirewallRule -Platform $Platform `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress 255.255.255.255 -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description "" | Format-Output
+-Description "" @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "LAN Broadcast" -Service Any -Program System `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress $Broadcast -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description "" | Format-Output
+-Description "" @Logs | Format-Output @Logs
 
 # TODO: check if virtual adapter exists and apply rule
 
@@ -88,5 +88,7 @@ New-NetFirewallRule -Platform $Platform `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 192.168.137.255 -LocalPort Any -RemotePort Any `
 -LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description "" | Format-Output
+-Description "" @Logs | Format-Output @Logs
  #>
+
+ Update-Logs

@@ -90,7 +90,7 @@ New-NetFirewallRule -Platform $Platform `
 -Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
 within small networks that do not include a local name server.
 It is a zero-configuration service, using essentially the same programming interfaces,
-packet formats and operating semantics as the unicast Domain Name System (DNS)." | Format-Output
+packet formats and operating semantics as the unicast Domain Name System (DNS)." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Multicast Domain Name System" -Service Dnscache -Program $ServiceHost `
@@ -100,7 +100,7 @@ New-NetFirewallRule -Platform $Platform `
 -Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
 within small networks that do not include a local name server.
 It is a zero-configuration service, using essentially the same programming interfaces,
-packet formats and operating semantics as the unicast Domain Name System (DNS)." | Format-Output
+packet formats and operating semantics as the unicast Domain Name System (DNS)." @Logs | Format-Output @Logs
 
 #
 # DHCP (Dynamic Host Configuration Protocol)
@@ -111,7 +111,7 @@ New-NetFirewallRule -Platform $Platform `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress DHCP6 -LocalPort 546 -RemotePort 547 `
 -EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description "Allows DHCPv6 messages for stateful auto-configuration." | Format-Output
+-Description "Allows DHCPv6 messages for stateful auto-configuration." @Logs | Format-Output @Logs
 
 #
 # IGMP (Internet Group Management Protocol)
@@ -130,7 +130,7 @@ New-NetFirewallRule -Platform $Platform `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet6 -LocalPort IPHTTPSIn -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
--Description "Allow IPv6 IPHTTPS tunneling technology to provide connectivity across HTTP proxies and firewalls." | Format-Output
+-Description "Allow IPv6 IPHTTPS tunneling technology to provide connectivity across HTTP proxies and firewalls." @Logs | Format-Output @Logs
 
 #
 # IPv6 Encapsulation
@@ -141,4 +141,6 @@ New-NetFirewallRule -Platform $Platform `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol 41 -LocalAddress Any -RemoteAddress $ISATAP_Remotes -LocalPort Any -RemotePort Any `
 -LocalUser $NT_AUTHORITY_System `
--Description "Rule required to permit IPv6 traffic for ISATAP (Intra-Site Automatic Tunnel Addressing Protocol) and 6to4 tunneling services." | Format-Output
+-Description "Rule required to permit IPv6 traffic for ISATAP (Intra-Site Automatic Tunnel Addressing Protocol) and 6to4 tunneling services." @Logs | Format-Output @Logs
+
+Update-Logs

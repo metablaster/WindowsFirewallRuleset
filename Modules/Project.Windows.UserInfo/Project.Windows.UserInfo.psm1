@@ -100,7 +100,7 @@ Whether to contact CIM server (requred for remote computers)
 .EXAMPLE
 Get-GroupPrincipals @("Users", "Administrators")
 .EXAMPLE
-Get-GroupPrincipals "Users" -Machines @(DESKTOP, LAPTOP) -CIM
+Get-GroupPrincipals "Users" -Machine @(DESKTOP, LAPTOP) -CIM
 .INPUTS
 System.String[] User groups
 .OUTPUTS
@@ -410,11 +410,11 @@ Whether to contact CIM server (requred for remote computers)
 [string] $Server = COMPUTERNAME
 [string[]] $Groups = @("Users", "Administrators")
 
-$UsersSDDL1 = Get-SDDL -Users $Users -Groups $Groups
-$UsersSDDL2 = Get-SDDL -Users $Users -Machine $Server
+$UsersSDDL1 = Get-SDDL -User $Users -Group $Groups
+$UsersSDDL2 = Get-SDDL -User $Users -Machine $Server
 $UsersSDDL3 = Get-SDDL -Group $Groups
 .EXAMPLE
-$NewSDDL = Get-SDDL -Domain "NT AUTHORITY" -Users "System"
+$NewSDDL = Get-SDDL -Domain "NT AUTHORITY" -User "System"
 .INPUTS
 None. You cannot pipe objects to Get-SDDL
 .OUTPUTS

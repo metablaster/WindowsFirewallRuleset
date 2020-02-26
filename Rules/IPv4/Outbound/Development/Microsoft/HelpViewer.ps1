@@ -74,7 +74,7 @@ if ((Test-Installation "HelpViewer" ([ref] $HelpViewerRoot)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $UsersSDDL `
-	-Description "" | Format-Output
+	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$HelpViewerRoot\HlpViewer.exe"
 	Test-File $Program
@@ -83,5 +83,7 @@ if ((Test-Installation "HelpViewer" ([ref] $HelpViewerRoot)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $UsersSDDL `
-	-Description "Review downloadable content." | Format-Output
+	-Description "Review downloadable content." @Logs | Format-Output @Logs
 }
+
+Update-Logs

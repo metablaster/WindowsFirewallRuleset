@@ -72,5 +72,7 @@ if ((Test-Installation "GoogleDrive" ([ref] $GoogleDriveRoot)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $UsersSDDL `
-	-Description "Google drive syncronization service" | Format-Output
+	-Description "Google drive syncronization service" @Logs | Format-Output @Logs
 }
+
+Update-Logs

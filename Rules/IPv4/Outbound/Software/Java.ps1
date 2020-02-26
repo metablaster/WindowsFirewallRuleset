@@ -74,7 +74,7 @@ if ((Test-Installation "JavaRuntime" ([ref] $JavaRuntimeRoot)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $UsersSDDL `
-	-Description "Runa java applets" | Format-Output
+	-Description "Runa java applets" @Logs | Format-Output @Logs
 }
 
 # Test if installation exists on system
@@ -87,7 +87,7 @@ if ((Test-Installation "JavaUpdate" ([ref] $JavaUpdateRoot)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $UsersSDDL `
-	-Description "Update java software" | Format-Output
+	-Description "Update java software" @Logs | Format-Output @Logs
 }
 
 # Test if installation exists on system
@@ -100,5 +100,7 @@ if ((Test-Installation "JavaPlugin" ([ref] $JavaPluginRoot)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 	-LocalUser $UsersSDDL `
-	-Description "Runa java applets" | Format-Output
+	-Description "Runa java applets" @Logs | Format-Output @Logs
 }
+
+Update-Logs

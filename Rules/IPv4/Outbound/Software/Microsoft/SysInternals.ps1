@@ -73,7 +73,7 @@ if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $SysInternalsUsers `
-	-Description "Access to VirusTotal" | Format-Output
+	-Description "Access to VirusTotal" @Logs | Format-Output @Logs
 
 	$Program = "$SysInternalsRoot\ProcessExplorer\procexp64.exe"
 	Test-File $Program
@@ -82,7 +82,7 @@ if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $SysInternalsUsers `
-	-Description "Access to VirusTotal" | Format-Output
+	-Description "Access to VirusTotal" @Logs | Format-Output @Logs
 
 	$Program = "$SysInternalsRoot\ProcessMonitor\Procmon.exe"
 	Test-File $Program
@@ -91,7 +91,7 @@ if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $SysInternalsUsers `
-	-Description "Access to symbols server" | Format-Output
+	-Description "Access to symbols server" @Logs | Format-Output @Logs
 
 	$Program = "$SysInternalsRoot\TCPView\Tcpview.exe"
 	Test-File $Program
@@ -100,7 +100,7 @@ if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 43 `
 	-LocalUser $SysInternalsUsers `
-	-Description "WhoIs access" | Format-Output
+	-Description "WhoIs access" @Logs | Format-Output @Logs
 
 	$Program = "$SysInternalsRoot\WhoIs\whois64.exe"
 	Test-File $Program
@@ -109,5 +109,7 @@ if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 43 `
 	-LocalUser $SysInternalsUsers `
-	-Description "" | Format-Output
+	-Description "" @Logs | Format-Output @Logs
 }
+
+Update-Logs

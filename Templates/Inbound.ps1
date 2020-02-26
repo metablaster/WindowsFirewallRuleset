@@ -74,5 +74,5 @@ if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot)) -or $ForceLoa
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort 27015 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $UsersSDDL `
-	-Description "" | Format-Output
+	-Description "" @Logs | Format-Output @Logs
 }

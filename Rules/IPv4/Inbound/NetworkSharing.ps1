@@ -61,28 +61,28 @@ New-NetFirewallRule -Platform $Platform `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 139 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." | Format-Output
+-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "NetBIOS Session" -Service Any -Program System `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Intranet4 -LocalPort 139 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." | Format-Output
+-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "SMB" -Service Any -Program System `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 445 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
--Description "Rule for File and Printer Sharing to allow Server Message Block transmission and reception via Named Pipes." | Format-Output
+-Description "Rule for File and Printer Sharing to allow Server Message Block transmission and reception via Named Pipes." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "SMB" -Service Any -Program System `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Intranet4 -LocalPort 445 -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
--Description "Rule for File and Printer Sharing to allow Server Message Block transmission and reception via Named Pipes." | Format-Output
+-Description "Rule for File and Printer Sharing to allow Server Message Block transmission and reception via Named Pipes." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Spooler Service (RPC)" -Service Spooler -Program $ServiceHost `
@@ -91,7 +91,7 @@ New-NetFirewallRule -Platform $Platform `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "Rule for File and Printer Sharing to allow the Print Spooler Service to communicate via TCP/RPC.
 Spooler service spools print jobs and handles interaction with the printer.
-If you disable this rule, you won’t be able to print or see your printers." | Format-Output
+If you disable this rule, you won’t be able to print or see your printers." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Spooler Service (RPC)" -Service Spooler -Program $ServiceHost `
@@ -100,7 +100,7 @@ New-NetFirewallRule -Platform $Platform `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "Rule for File and Printer Sharing to allow the Print Spooler Service to communicate via TCP/RPC.
 Spooler service spools print jobs and handles interaction with the printer.
-If you disable this rule, you won’t be able to print or see your printers." | Format-Output
+If you disable this rule, you won’t be able to print or see your printers." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Spooler Service (RPC-EPMAP)" -Service RpcSs -Program $ServiceHost `
@@ -109,7 +109,7 @@ New-NetFirewallRule -Platform $Platform `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "Rule for the RPCSS service to allow RPC/TCP traffic for the Spooler Service.
 The RPCSS service is the Service Control Manager for COM and DCOM servers.
-It performs object activations requests, object exporter resolutions and distributed garbage collection for COM and DCOM servers." | Format-Output
+It performs object activations requests, object exporter resolutions and distributed garbage collection for COM and DCOM servers." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Spooler Service (RPC-EPMAP)" -Service RpcSs -Program $ServiceHost `
@@ -118,7 +118,7 @@ New-NetFirewallRule -Platform $Platform `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "Rule for the RPCSS service to allow RPC/TCP traffic for the Spooler Service.
 The RPCSS service is the Service Control Manager for COM and DCOM servers.
-It performs object activations requests, object exporter resolutions and distributed garbage collection for COM and DCOM servers." | Format-Output
+It performs object activations requests, object exporter resolutions and distributed garbage collection for COM and DCOM servers." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "SMBDirect (iWARP)" -Service Any -Program System `
@@ -127,7 +127,7 @@ New-NetFirewallRule -Platform $Platform `
 -EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 -Description "Rule for File and Printer Sharing over SMBDirect to allow iWARP.
 The RPCSS service is the Service Control Manager for COM and DCOM servers.
-It performs object activations requests, object exporter resolutions and distributed garbage collection for COM and DCOM servers." | Format-Output
+It performs object activations requests, object exporter resolutions and distributed garbage collection for COM and DCOM servers." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "SMBDirect (iWARP)" -Service Any -Program System `
@@ -136,4 +136,6 @@ New-NetFirewallRule -Platform $Platform `
 -EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 -Description "Rule for File and Printer Sharing over SMBDirect to allow iWARP.
 The RPCSS service is the Service Control Manager for COM and DCOM servers.
-It performs object activations requests, object exporter resolutions and distributed garbage collection for COM and DCOM servers." | Format-Output
+It performs object activations requests, object exporter resolutions and distributed garbage collection for COM and DCOM servers." @Logs | Format-Output @Logs
+
+Update-Logs

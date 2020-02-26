@@ -72,7 +72,7 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 26002 `
 	-LocalUser $UsersSDDL `
-	-Description "Main game interface." | Format-Output
+	-Description "Main game interface." @Logs | Format-Output @Logs
 
 	# TODO: browser for some reason needs any interface and any remote address
 	# need to investigate why
@@ -83,7 +83,7 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $UsersSDDL `
-	-Description "In game HTML browser" | Format-Output
+	-Description "In game HTML browser" @Logs | Format-Output @Logs
 
 	$Program = "$PokerStarsRoot\PokerStarsOnlineUpdate.exe"
 	Test-File $Program
@@ -92,7 +92,7 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 	-LocalUser $UsersSDDL `
-	-Description "" | Format-Output
+	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$PokerStarsRoot\PokerStarsUpdate.exe"
 	Test-File $Program
@@ -101,5 +101,7 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 	-LocalUser $UsersSDDL `
-	-Description "Game updater" | Format-Output
+	-Description "Game updater" @Logs | Format-Output @Logs
 }
+
+Update-Logs

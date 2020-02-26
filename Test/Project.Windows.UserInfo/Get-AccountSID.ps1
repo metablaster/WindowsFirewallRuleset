@@ -50,11 +50,11 @@ Start-Test
 
 [string[]] $Users = @("Administrator", "test", "haxor")
 
-New-Test "Get-AccountSID -Users $Users"
+New-Test "Get-AccountSID -User $Users"
 $AccountSID = Get-AccountSID -User $Users @Logs
 $AccountSID
 
-New-Test "Get-AccountSID -Users $Users -CIM"
+New-Test "Get-AccountSID -User $Users -CIM"
 $AccountSID = Get-AccountSID -User $Users -CIM @Logs
 $AccountSID
 
@@ -64,11 +64,11 @@ $Users | Get-AccountSID -CIM @Logs
 [string[]] $Users = @("SYSTEM", "NETWORK SERVICE")
 [string] $Domain = "NT AUTHORITY"
 
-New-Test "Get-AccountSID -Users $Users"
+New-Test "Get-AccountSID -User $Users"
 $AccountSID = Get-AccountSID -User $Users -Domain $Domain @Logs
 $AccountSID
 
-New-Test "Get-AccountSID -Users $Users -CIM"
+New-Test "Get-AccountSID -User $Users -CIM"
 $AccountSID = Get-AccountSID -User $Users -Domain $Domain -CIM @Logs
 $AccountSID
 

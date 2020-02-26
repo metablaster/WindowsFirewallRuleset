@@ -471,7 +471,7 @@ function Get-UserPrograms
 
 	if (Test-TargetComputer $ComputerName)
 	{
-		$HKU = Get-AccountSID $UserName -Machine $ComputerName
+		$HKU = Get-AccountSID $UserName -Computer $ComputerName
 		$HKU += "\Software\Microsoft\Windows\CurrentVersion\Uninstall"
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
@@ -979,7 +979,7 @@ function Update-Table
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Search string is: $SearchString"
 
 	# To reduce typing and make code clear
-	$UserGroups = Get-UserGroups -Machine $PolicyStore
+	$UserGroups = Get-UserGroups -Computer $PolicyStore
 
 	if ($Executables)
 	{
@@ -1190,7 +1190,7 @@ function Edit-Table
 		$InstallLocation = Format-Path $InstallLocation
 
 		# Not user profile path, so it applies to all users
-		$Principal = Get-UserGroups -Machine $PolicyStore | Where-Object -Property Group -eq "Users"
+		$Principal = Get-UserGroups -Computer $PolicyStore | Where-Object -Property Group -eq "Users"
 
 		# Create a row
 		$Row = $InstallTable.NewRow()

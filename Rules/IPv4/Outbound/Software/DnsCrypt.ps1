@@ -75,7 +75,7 @@ if ((Test-Installation "DnsCrypt" ([ref] $DnsCryptRoot)) -or $ForceLoad)
 	-LocalUser $NT_AUTHORITY_System `
 	-Description "DNSCrypt is a protocol that authenticates communications between a DNS client and a DNS resolver.
 	It prevents DNS spoofing. It uses cryptographic signatures to verify that responses originate from the chosen DNS resolver and haven’t been tampered with.
-	This rule applies to Simple DnsCrypt which uses dnscrypt-proxy for DOH protocol" | Format-Output
+	This rule applies to Simple DnsCrypt which uses dnscrypt-proxy for DOH protocol" @Logs | Format-Output @Logs
 
 	# TODO: see if LooseSourceMapping is needed
 	New-NetFirewallRule -Platform $Platform `
@@ -85,7 +85,7 @@ if ((Test-Installation "DnsCrypt" ([ref] $DnsCryptRoot)) -or $ForceLoad)
 	-LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "DNSCrypt is a protocol that authenticates communications between a DNS client and a DNS resolver.
 	It prevents DNS spoofing. It uses cryptographic signatures to verify that responses originate from the chosen DNS resolver and haven’t been tampered with.
-	This rule applies to Simple DnsCrypt which uses dnscrypt-proxy for DnsCrypt Protocol" | Format-Output
+	This rule applies to Simple DnsCrypt which uses dnscrypt-proxy for DnsCrypt Protocol" @Logs | Format-Output @Logs
 
 	$Program = "$DnsCryptRoot\SimpleDnsCrypt.exe"
 	Test-File $Program
@@ -94,5 +94,7 @@ if ((Test-Installation "DnsCrypt" ([ref] $DnsCryptRoot)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $AdminsSDDL `
-	-Description "Symple DNS Crypt update check on startup" | Format-Output
+	-Description "Symple DNS Crypt update check on startup" @Logs | Format-Output @Logs
 }
+
+Update-Logs

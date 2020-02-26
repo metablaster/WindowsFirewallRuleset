@@ -72,5 +72,7 @@ if ((Test-Installation "VSCode" ([ref] $VSCodeRoot)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $UsersSDDL `
-	-Description "Visual Studio Code check for updates, extensions download." | Format-Output
+	-Description "Visual Studio Code check for updates, extensions download." @Logs | Format-Output @Logs
 }
+
+Update-Logs

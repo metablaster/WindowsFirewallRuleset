@@ -78,14 +78,14 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $UsersSDDL `
-	-Description "" | Format-Output
+	-Description "" @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Unreal Engine - CrashReportClientEditor" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "" | Format-Output
+	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$EngineRoot\Binaries\DotNET\SwarmAgent.exe"
 	Test-File $Program
@@ -94,14 +94,14 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $UsersSDDL `
-	-Description "Swarm agent is used for build farm." | Format-Output
+	-Description "Swarm agent is used for build farm." @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Unreal Engine - SwarmAgent" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Swarm agent is used for build farm." | Format-Output
+	-Description "Swarm agent is used for build farm." @Logs | Format-Output @Logs
 
 	$Program = "$EngineRoot\Binaries\Win64\UnrealInsights.exe"
 	Test-File $Program
@@ -110,12 +110,14 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $UsersSDDL `
-	-Description "" | Format-Output
+	-Description "" @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Unreal Engine - UnrealInsights" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "" | Format-Output
+	-Description "" @Logs | Format-Output @Logs
 }
+
+Update-Logs

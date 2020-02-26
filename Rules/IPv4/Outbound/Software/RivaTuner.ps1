@@ -72,5 +72,7 @@ if ((Test-Installation "RivaTuner" ([ref] $RivaTunerRoot)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $UsersSDDL `
-	-Description "Comes with MSI afterburner, used for game screen overlay" | Format-Output
+	-Description "Comes with MSI afterburner, used for game screen overlay" @Logs | Format-Output @Logs
 }
+
+Update-Logs

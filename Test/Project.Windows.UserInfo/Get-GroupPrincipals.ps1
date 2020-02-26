@@ -53,7 +53,7 @@ $UsersTest = Get-GroupPrincipals "Users" @Logs
 $UsersTest
 
 New-Test "Get-GroupPrincipals CIM server"
-$CIMTest = Get-GroupPrincipals "Users", "Administrators" -Machine "localhost" -CIM @Logs
+$CIMTest = Get-GroupPrincipals "Users", "Administrators" -Computer "localhost" -CIM @Logs
 $CIMTest
 
 New-Test "Expand users"

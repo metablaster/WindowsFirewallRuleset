@@ -72,7 +72,7 @@ if ((Test-Installation "OneDrive" ([ref] $OneDriveRoot)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $UsersSDDL `
-	-Description "Updater for OneDrive" | Format-Output
+	-Description "Updater for OneDrive" @Logs | Format-Output @Logs
 
 	$Program = "$OneDriveRoot\OneDrive.exe"
 	Test-File $Program
@@ -81,5 +81,7 @@ if ((Test-Installation "OneDrive" ([ref] $OneDriveRoot)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $UsersSDDL `
-	-Description "One drive for syncing user data" | Format-Output
+	-Description "One drive for syncing user data" @Logs | Format-Output @Logs
 }
+
+Update-Logs

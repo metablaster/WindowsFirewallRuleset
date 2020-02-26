@@ -78,7 +78,7 @@ if ((Test-Installation "Powershell64" ([ref] $PowerShell64Root)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $UsersSDDL `
-	-Description "Rule to allow powershell help update" | Format-Output
+	-Description "Rule to allow powershell help update" @Logs | Format-Output @Logs
 
 	$Program = "$PowerShell64Root\powershell.exe"
 	Test-File $Program
@@ -87,7 +87,7 @@ if ((Test-Installation "Powershell64" ([ref] $PowerShell64Root)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $PowerShellUsers `
-	-Description "Rule to allow powershell help update" | Format-Output
+	-Description "Rule to allow powershell help update" @Logs | Format-Output @Logs
 }
 
 # Test if installation exists on system
@@ -100,7 +100,7 @@ if ((Test-Installation "PowershellCore64" ([ref] $PowerShellCore64Root)) -or $Fo
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $PowerShellUsers `
-	-Description "Rule to allow powershell help update" | Format-Output
+	-Description "Rule to allow powershell help update" @Logs | Format-Output @Logs
 }
 
 # Test if installation exists on system
@@ -113,7 +113,7 @@ if ((Test-Installation "Powershell86" ([ref] $PowerShell86Root)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $UsersSDDL `
-	-Description "Rule to allow powershell help update" | Format-Output
+	-Description "Rule to allow powershell help update" @Logs | Format-Output @Logs
 
 	$Program = "$PowerShell86Root\powershell.exe"
 	Test-File $Program
@@ -122,5 +122,7 @@ if ((Test-Installation "Powershell86" ([ref] $PowerShell86Root)) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $UsersSDDL `
-	-Description "Rule to allow powershell help update" | Format-Output
+	-Description "Rule to allow powershell help update" @Logs | Format-Output @Logs
 }
+
+Update-Logs

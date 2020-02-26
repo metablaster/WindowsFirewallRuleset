@@ -104,7 +104,7 @@ the type code changed to 0, and the checksum recomputed.
 
 Code:
 0
-Code 0 may be received from a gateway or a host." | Format-Output
+Code 0 may be received from a gateway or a host." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Destination Unreachable (3)" -Service Any -Program $Program `
@@ -126,7 +126,7 @@ Code:
 4 = fragmentation needed and DF set;
 5 = source route failed.
 Codes 0, 1, 4, and 5 may be received from a gateway.
-Codes 2 and 3 may be received from a host." | Format-Output
+Codes 2 and 3 may be received from a host." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Destination Unreachable Fragmentation Needed (3)" -Service Any -Program $Program `
@@ -134,7 +134,7 @@ New-NetFirewallRule -Platform $Platform `
 -Direction $Direction -Protocol ICMPv4 -IcmpType 3:4 -LocalAddress Any -RemoteAddress Any `
 -EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 -Description "Destination Unreachable Fragmentation Needed error messages are sent from any node that a packet traverses which is
-unable to forward the packet because fragmentation was needed and the don't fragment bit was set." | Format-Output
+unable to forward the packet because fragmentation was needed and the don't fragment bit was set." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Parameter Problem (12)" -Service Any -Program $Program `
@@ -152,7 +152,7 @@ The source network and address from the original datagram's data.
 
 Code:
 0 = pointer indicates the error.
-Code 0 may be received from a gateway or a host." | Format-Output
+Code 0 may be received from a gateway or a host." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Timestamp Reply (14)" -Service Any -Program $Program `
@@ -179,7 +179,7 @@ reversed, the type code changed to 14, and the checksum recomputed.
 
 Code:
 0 = pointer indicates the error.
-Code 0 may be received from a gateway or a host." | Format-Output
+Code 0 may be received from a gateway or a host." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Time Exceeded (11)" -Service Any -Program $Program `
@@ -200,7 +200,7 @@ Code:
 0 = time to live exceeded in transit;
 1 = fragment reassembly time exceeded.
 Code 0 may be received from a gateway.
-Code 1 may be received from a host." | Format-Output
+Code 1 may be received from a host." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Router Solicitation (10)" -Service Any -Program $Program `
@@ -215,7 +215,7 @@ Sending Router Solicitations:
 When an interface becomes enabled, a host may be unwilling to wait for the next unsolicited Router Advertisement
 to locate default routers or learn prefixes.
 To obtain Router Advertisements quickly, a host SHOULD transmit up to MAX_RTR_SOLICITATIONS Router Solicitation messages,
-each separated by at least RTR_SOLICITATION_INTERVAL seconds." | Format-Output
+each separated by at least RTR_SOLICITATION_INTERVAL seconds." @Logs | Format-Output @Logs
 
 #
 # ICMP type filtering for public profile
@@ -240,7 +240,7 @@ the type code changed to 0, and the checksum recomputed.
 
 Code:
 0
-Code 0 may be received from a gateway or a host." | Format-Output
+Code 0 may be received from a gateway or a host." @Logs | Format-Output @Logs
 
 <# Edge Traversal comment for redirect:
 There are certain cases where ICMP packets can be used to attack a network. Although this type of problem is not common today,
@@ -283,7 +283,7 @@ Code:
 1 = Redirect datagrams for the Host.
 2 = Redirect datagrams for the Type of Service and Network.
 3 = Redirect datagrams for the Type of Service and Host.
-Codes 0, 1, 2, and 3 may be received from a gateway." | Format-Output
+Codes 0, 1, 2, and 3 may be received from a gateway." @Logs | Format-Output @Logs
 
 # TODO: we should probably allow this in public profile
 New-NetFirewallRule -Platform $Platform `
@@ -300,7 +300,7 @@ A router sends periodic as well as solicited Router Advertisements out its adver
 A router might want to send Router Advertisements without advertising itself as a default router.
 For instance, a router might advertise prefixes for stateless address autoconfiguration while not wishing to forward p ackets.
 Unsolicited Router Advertisements are not strictly periodic:
-the interval between subsequent transmissions is randomized to reduce the probability of synchronization with the advertisements from other routers on the same link." | Format-Output
+the interval between subsequent transmissions is randomized to reduce the probability of synchronization with the advertisements from other routers on the same link." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Timestamp (13)" -Service Any -Program $Program `
@@ -327,7 +327,7 @@ reversed, the type code changed to 14, and the checksum recomputed.
 
 Code:
 0 = pointer indicates the error.
-Code 0 may be received from a gateway or a host." | Format-Output
+Code 0 may be received from a gateway or a host." @Logs | Format-Output @Logs
 
 #
 # ICMP type filtering for private and domain profile
@@ -351,7 +351,7 @@ the type code changed to 0, and the checksum recomputed.
 
 Code:
 0
-Code 0 may be received from a gateway or a host." | Format-Output
+Code 0 may be received from a gateway or a host." @Logs | Format-Output @Logs
 
 <# Edge Traversal comment for redirect:
 There are certain cases where ICMP packets can be used to attack a network. Although this type of problem is not common today,
@@ -394,7 +394,7 @@ Code:
 1 = Redirect datagrams for the Host.
 2 = Redirect datagrams for the Type of Service and Network.
 3 = Redirect datagrams for the Type of Service and Host.
-Codes 0, 1, 2, and 3 may be received from a gateway." | Format-Output
+Codes 0, 1, 2, and 3 may be received from a gateway." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Router Advertisement (9)" -Service Any -Program $Program `
@@ -411,7 +411,7 @@ A router might want to send Router Advertisements without advertising itself as 
 For instance, a router might advertise prefixes for stateless address autoconfiguration while not wishing to forward p ackets.
 Unsolicited Router Advertisements are not strictly periodic:
 the interval between subsequent transmissions is randomized to reduce the probability of synchronization
-with the advertisements from other routers on the same link." | Format-Output
+with the advertisements from other routers on the same link." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Timestamp (13)" -Service Any -Program $Program `
@@ -438,4 +438,6 @@ reversed, the type code changed to 14, and the checksum recomputed.
 
 Code:
 0 = pointer indicates the error.
-Code 0 may be received from a gateway or a host." | Format-Output
+Code 0 may be received from a gateway or a host." @Logs | Format-Output @Logs
+
+Update-Logs
