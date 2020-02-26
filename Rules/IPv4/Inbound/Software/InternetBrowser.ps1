@@ -48,7 +48,7 @@ $Profile = "Private, Public"
 
 # Chromecast IP
 # Adjust to the Chromecast IP in your local network
-$CHROMECAST_IP = 192.168.8.50
+[IPAddress] $CHROMECAST_IP = "192.168.8.50"
 
 # Ask user if he wants to load these rules
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
@@ -93,7 +93,7 @@ if ((Test-Installation "Chrome" ([ref] $ChromeRoot) @Logs) -or $ForceLoad)
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Google Chrome Chromecast" -Service Any -Program $ChromeApp `
 	-PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress $CHROMECAST_IP -LocalPort 32768-61000 -RemotePort 32768-61000 `
+	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress $CHROMECAST_IP.IPAddressToString -LocalPort 32768-61000 -RemotePort 32768-61000 `
 	-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Allow Chromecast Inbound UDP data" @Logs | Format-Output @Logs
 

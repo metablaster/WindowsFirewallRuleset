@@ -47,7 +47,7 @@ $Profile = "Private, Public"
 
 # Extension rules are special rules for problematic services, see ProblematicTraffic.md for more info
 $ExtensionAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE" @Logs
-Merge-SDDL $ExtensionAccounts (Get-SDDL -Group "Users") @Logs
+Merge-SDDL ([ref] $ExtensionAccounts) (Get-SDDL -Group "Users") @Logs
 
 # Ask user if he wants to load these rules
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
@@ -227,7 +227,7 @@ New-NetFirewallRule -Platform $Platform `
 -DisplayName "Extension rule for complex services" -Service Any -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser $ExtensionUsers `
+-LocalUser $ExtensionAccounts `
 -Description "Extension rule for active users and NT localsystem, following services need access based on loged on user:
 Cryptographic Services(CryptSvc),
 Microsoft Account Sign-in Assistant(wlidsvc),
@@ -240,7 +240,7 @@ New-NetFirewallRule -Platform $Platform `
 -DisplayName "Extension rule for Router capability check (BITS)" -Service Any -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress DefaultGateway4 -LocalPort Any -RemotePort 48300 `
--LocalUser $ExtensionUsers `
+-LocalUser $ExtensionAccounts `
 -Description "Extension rule for active users to allow BITS to Internet gateway device (IGD)" @Logs | Format-Output @Logs
 
 #

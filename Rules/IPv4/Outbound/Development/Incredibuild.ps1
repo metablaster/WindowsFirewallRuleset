@@ -71,7 +71,7 @@ if ((Test-Installation "Incredibuild" ([ref] $IncredibuildRoot) @Logs) -or $Forc
 	-DisplayName "Incredibuild License" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "Used to connect to license server for activation" @Logs | Format-Output @Logs
 }
 

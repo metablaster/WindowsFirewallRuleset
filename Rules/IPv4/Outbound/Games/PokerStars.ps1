@@ -71,7 +71,7 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot) @Logs) -or $ForceLoa
 	-DisplayName "PokerStars - Client" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 26002 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "Main game interface." @Logs | Format-Output @Logs
 
 	# TODO: browser for some reason needs any interface and any remote address
@@ -82,7 +82,7 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot) @Logs) -or $ForceLoa
 	-DisplayName "PokerStars - Browser" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "In game HTML browser" @Logs | Format-Output @Logs
 
 	$Program = "$PokerStarsRoot\PokerStarsOnlineUpdate.exe"
@@ -91,7 +91,7 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot) @Logs) -or $ForceLoa
 	-DisplayName "PokerStars - Online update" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$PokerStarsRoot\PokerStarsUpdate.exe"
@@ -100,7 +100,7 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot) @Logs) -or $ForceLoa
 	-DisplayName "PokerStars - Update" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "Game updater" @Logs | Format-Output @Logs
 }
 

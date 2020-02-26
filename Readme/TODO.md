@@ -33,3 +33,4 @@ This is a project global list which applies to several or all scripts, for small
 30. localhost != `[Environment]::MachineName`
 31. Revisit code and make consitent PSObject properties for all function outputs
 32. Move NET.IP tests into test folder, clean up directory add streams
+33. Paths to fix: nvidia, onedrive, visio, project rules to fix: qbittorrent, steam, vcpkg, msys2

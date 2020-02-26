@@ -52,7 +52,7 @@ New-Test "Find-Installation 'EdgeChromium'"
 Find-Installation "EdgeChromium" @Logs
 $global:InstallTable | Format-Table -AutoSize @Logs
 
-New-Test "Install Root"
+New-Test "Install Root EdgeChromium"
 $global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
 
 New-Test "Find-Installation 'TeamViewer'"
@@ -66,6 +66,13 @@ $global:InstallTable | Format-Table -AutoSize @Logs
 New-Test "Find-Installation 'VisualStudio'"
 Find-Installation "VisualStudio" @Logs
 $global:InstallTable | Format-Table -AutoSize @Logs
+
+New-Test "Find-Installation 'Greenshot'"
+Find-Installation "Greenshot" @Logs
+$global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
+
+New-Test "Install Root Greenshot"
+$global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
 
 New-Test "Get-TypeName"
 $global:InstallTable | Get-TypeName @Logs

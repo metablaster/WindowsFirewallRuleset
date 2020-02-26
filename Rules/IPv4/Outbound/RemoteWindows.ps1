@@ -74,7 +74,7 @@ New-NetFirewallRule -Platform $Platform `
 -DisplayName "Remote desktop - User Mode" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 3389 `
--LocalUser $UsersSDDL `
+-LocalUser $UsersGroupSDDL `
 -Description "Remote desktop connection.
 Allows users to connect interactively to a remote computer.
 To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System properties control panel item." @Logs | Format-Output @Logs

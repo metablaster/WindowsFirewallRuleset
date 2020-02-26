@@ -79,14 +79,14 @@ if ((Test-Installation "Steam" ([ref] $SteamRoot) @Logs) -or $ForceLoad)
 	-DisplayName "Steam (HTTP/HTTPS)" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "" @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Steam downloads" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 27015-27030 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "" @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
@@ -118,7 +118,7 @@ if ((Test-Installation "Steam" ([ref] $SteamRoot) @Logs) -or $ForceLoad)
 	-DisplayName "Steam (webhelper x86)" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$SteamRoot\bin\cef\cef.win7x64\steamwebhelper.exe"
@@ -127,7 +127,7 @@ if ((Test-Installation "Steam" ([ref] $SteamRoot) @Logs) -or $ForceLoad)
 	-DisplayName "Steam (webhelper x64)" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "" @Logs | Format-Output @Logs
 }
 

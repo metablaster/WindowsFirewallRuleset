@@ -71,7 +71,7 @@ if ((Test-Installation "vcpkg" ([ref] $vcpkgRoot) @Logs) -or $ForceLoad)
 	-DisplayName "vcpkg" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "install package source code" @Logs | Format-Output @Logs
 
 	# TODO: need to update for all users
@@ -82,7 +82,7 @@ if ((Test-Installation "vcpkg" ([ref] $vcpkgRoot) @Logs) -or $ForceLoad)
 	-DisplayName "vcpkg (telemetry)" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "vcpkg sends usage data to Microsoft" @Logs | Format-Output @Logs
 
 	$Program = "$vcpkgRoot\downloads\tools\powershell-core-6.2.1-windows\powershell.exe"
@@ -91,7 +91,7 @@ if ((Test-Installation "vcpkg" ([ref] $vcpkgRoot) @Logs) -or $ForceLoad)
 	-DisplayName "vcpkg (powershell)" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "vcpkg has it's own powershell" @Logs | Format-Output @Logs
 
 	$Program = "$vcpkgRoot\downloads\tools\cmake-3.14.0-windows\cmake-3.14.0-win32-x86\bin\cmake.exe"
@@ -100,7 +100,7 @@ if ((Test-Installation "vcpkg" ([ref] $vcpkgRoot) @Logs) -or $ForceLoad)
 	-DisplayName "vcpkg (cmake)" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "vcpkg has it's own cmake" @Logs | Format-Output @Logs
 }
 

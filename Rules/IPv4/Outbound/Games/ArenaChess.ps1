@@ -71,7 +71,7 @@ if ((Test-Installation "ArenaChess" ([ref] $ArenaChessRoot) @Logs) -or $ForceLoa
 	-DisplayName "Arena Chess" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 5000 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "Chess client program" @Logs | Format-Output @Logs
 }
 

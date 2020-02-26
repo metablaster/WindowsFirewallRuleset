@@ -149,7 +149,7 @@ function Test-File
 		Write-Warning -Message "Executable '$Executable' was not found, rules for '$Executable' won't have any effect"
 
 		Write-Information -Tags "User" -MessageData "INFO: Searched path was: $SearchPath"
-		Write-Information -Tags "User" -MessageData "INFO: To fix the problem find '$Executable' then adjust the path in $Script and re-run the script later again"
+		Write-Information -Tags "User" -MessageData "INFO: To fix the problem find '$Executable' and adjust the path in $Script and re-run the script"
 	}
 }
 
@@ -258,10 +258,12 @@ function Test-UserProfile
 	foreach ($Entry in @(Get-ChildItem Env:))
 	{
 		$Entry.Name = "%" + $Entry.Name + "%"
+		# NOTE: Avoid spaming
 		# Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing $($Entry.Name)"
 
 		if ($UserProfileEnvironment -contains $Entry.Name)
 		{
+			# NOTE: Avoid spaming
 			# Write-Debug -Message "[$($MyInvocation.InvocationName)] Selecting $($Entry.Name)"
 			$Variables += $Entry
 		}
@@ -298,10 +300,9 @@ function Test-UserProfile
 		}
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if '$SearchString' is convertible to user profile environment variable"
 	while (![System.String]::IsNullOrEmpty($SearchString))
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing: $SearchString"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if '$SearchString' is convertible to user profile environment variable"
 
 		foreach ($Entry in $Variables)
 		{
@@ -343,6 +344,8 @@ function Format-Path
 	# Impssible to know what the imput may be
 	if ([System.String]::IsNullOrEmpty($FilePath))
 	{
+		# TODO: why allowing empty path?
+		# NOTE: Avoid spaming
 		# Write-Debug -Message "[$($MyInvocation.InvocationName)] Returning false, file path is null or empty"
 		return $FilePath
 	}
@@ -355,11 +358,11 @@ function Format-Path
 	foreach ($Entry in @(Get-ChildItem Env:))
 	{
 		$Entry.Name = "%" + $Entry.Name + "%"
-		# Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing $($Entry.Name)"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing $($Entry.Name)"
 
 		if ($BlackListEnvironment -notcontains $Entry.Name)
 		{
-			# Write-Debug -Message "[$($MyInvocation.InvocationName)] Selecting $($Entry.Name)"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Selecting $($Entry.Name)"
 			$Variables += $Entry
 		}
 	}
@@ -393,7 +396,7 @@ function Format-Path
 	{
 		if ($FilePath -like "$($Variable.Name)*")
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input path already formatted"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input path already formatted: $FilePath"
 			return $FilePath
 		}
 	}
@@ -401,8 +404,6 @@ function Format-Path
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if '$SearchString' is convertible to environment variable"
 	while (![System.String]::IsNullOrEmpty($SearchString))
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing: $SearchString"
-
 		foreach ($Entry in $Variables)
 		{
 			if ($Entry.Value -like "*$SearchString")
@@ -416,13 +417,15 @@ function Format-Path
 
 		# Strip away file or last folder in path then try again (also trims trailing slash)
 		$SearchString = Split-Path -Path $SearchString -Parent
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if '$SearchString' is convertible to environment variable"
 	}
 
 	# path has been reduced to root drive so get that
 	$SearchString = Split-Path -Path $FilePath -Qualifier
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] path has been reduced to root drive, now searching for: $SearchString"
 
 	# Find candidate replacements
-	$Variables = $Variables | Where-Object { $_.Value -eq $SearchString}
+	$Variables = $Variables | Where-Object { $_.Value -eq $SearchString }
 
 	if ([System.String]::IsNullOrEmpty($Variables))
 	{
@@ -431,13 +434,24 @@ function Format-Path
 		# Just trim trailing slash
 		return $FilePath.TrimEnd('\\')
 	}
+	elseif (($Variables | Measure-Object).Count -gt 1)
+	{
+		# Since there may be duplicate entries, we grab first one
+		$Replacement = $Variables.Name[0]
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Multiple matches exist for '$SearchString', selecting first one: $Replacement"
+	}
+	else
+	{
+		# If there is single match selecting [0] would result in selecting a single letter not env. variable!
+		$Replacement = $Variables.Name
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Found exact match for '$SearchString' -> $Replacement"
+	}
 
-	# Since there may be duplicate entries, we grab first one
-	$Replacement = $Variables.Name[0]
+	$FilePath = $FilePath.Replace($SearchString, $Replacement).TrimEnd('\\')
 
 	# Only root drive is converted, just trim away trailing slash
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Only root drive is converted to environment variable"
-	return $FilePath.Replace($SearchString, $Replacement).TrimEnd('\\')
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Only root drive is formatted: $FilePath"
+	return $FilePath
 }
 
 <#
@@ -511,7 +525,7 @@ function Get-UserPrograms
 
 				# TODO: move all instances to directly format (first call above)
 				# NOTE: Avoid spamming
-				$InstallLocation = Format-Path $InstallLocation -Verbose:$false -Debug:$false
+				$InstallLocation = Format-Path $InstallLocation #-Verbose:$false -Debug:$false
 
 				# Get more key entries as needed
 				# TODO: PSObject to psobject?
@@ -1098,9 +1112,12 @@ function Update-Table
 			if ($UserPrograms)
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching $($Principal.Account) programs for $SearchString"
+				$UserPrograms | Format-Table | Out-File -FilePath "D:\programs.txt"
 
 				foreach ($Program in $UserPrograms)
 				{
+					# Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing program: $Program"
+
 					$InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
 
 					# Create a row

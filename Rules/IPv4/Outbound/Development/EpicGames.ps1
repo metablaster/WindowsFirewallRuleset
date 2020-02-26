@@ -72,7 +72,7 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot) @Logs) -or $ForceLoad)
 	-DisplayName "Unreal Engine - CrashReportClientEditor" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "Used to send crash report to epic games." @Logs | Format-Output @Logs
 
 	$Program = "$EngineRoot\Binaries\DotNET\GitDependencies.exe"
@@ -81,7 +81,7 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot) @Logs) -or $ForceLoad)
 	-DisplayName "Unreal Engine - GitDependencies" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "Engine repo source tool to dowload binaries." @Logs | Format-Output @Logs
 
 	$Program = "$EngineRoot\Binaries\DotNET\SwarmAgent.exe"
@@ -90,7 +90,7 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot) @Logs) -or $ForceLoad)
 	-DisplayName "Unreal Engine - SwarmAgent" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 80 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "Swarm agent is used for build farm." @Logs | Format-Output @Logs
 
 	$Program = "$EngineRoot\Binaries\Win64\UE4Editor.exe"
@@ -108,7 +108,7 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot) @Logs) -or $ForceLoad)
 	-DisplayName "Unreal Engine - Editor x64" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$EngineRoot\Binaries\DotNET\UnrealBuildTool.exe"
@@ -117,7 +117,7 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot) @Logs) -or $ForceLoad)
 	-DisplayName "Unreal Engine - UnrealBuildTool" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "" @Logs | Format-Output @Logs
 }
 
@@ -134,7 +134,7 @@ if ((Test-Installation "EpicGames" ([ref] $LauncherRoot) @Logs) -or $ForceLoad)
 	-DisplayName "Epic Games - Launcher x32" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "Used for initial setup only" @Logs | Format-Output @Logs
 
 	$Program = "$LauncherRoot\Portal\Binaries\Win64\EpicGamesLauncher.exe"
@@ -143,7 +143,7 @@ if ((Test-Installation "EpicGames" ([ref] $LauncherRoot) @Logs) -or $ForceLoad)
 	-DisplayName "Epic Games - Launcher x64" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 5222 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$LauncherRoot\Portal\Binaries\Win64\EpicGamesLauncher.exe"

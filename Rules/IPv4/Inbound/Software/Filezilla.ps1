@@ -71,7 +71,7 @@ if ((Test-Installation "Filezilla" ([ref] $FilezillaRoot) @Logs) -or $ForceLoad)
 	-DisplayName "Filezilla" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-	-EdgeTraversalPolicy Block -LocalUser $UsersSDDL `
+	-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
 	-Description "" @Logs | Format-Output @Logs
 }
 

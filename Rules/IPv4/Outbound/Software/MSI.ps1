@@ -72,7 +72,7 @@ if ((Test-Installation "MSIAfterburner" ([ref] $MSIAfterburnerRoot) @Logs) -or $
 	-DisplayName "MSI Afterburner" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "Startup update" @Logs | Format-Output @Logs
 }
 
@@ -85,7 +85,7 @@ if ((Test-Installation "MSIAfterburner" ([ref] $MSIAfterburnerRoot) @Logs) -or $
 	-DisplayName "MSI live update" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "Startup update" @Logs | Format-Output @Logs
 
 	$Program = "$MSIRoot\APP Manager\AppManager.exe"
@@ -94,7 +94,7 @@ if ((Test-Installation "MSIAfterburner" ([ref] $MSIAfterburnerRoot) @Logs) -or $
 	-DisplayName "MSI app manager" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "Startup update" @Logs | Format-Output @Logs
 }
 

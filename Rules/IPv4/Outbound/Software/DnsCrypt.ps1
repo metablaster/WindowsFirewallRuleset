@@ -93,7 +93,7 @@ if ((Test-Installation "DnsCrypt" ([ref] $DnsCryptRoot) @Logs) -or $ForceLoad)
 	-DisplayName "Symple DNS Crypt" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $AdminsSDDL `
+	-LocalUser $AdministratorsGroupSDDL `
 	-Description "Symple DNS Crypt update check on startup" @Logs | Format-Output @Logs
 }
 

@@ -49,12 +49,14 @@ Test-SystemRequirements
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo @Logs
 
 #
 # Setup local variables:
 #
 $Profile = "Private, Domain"
 $Group = "Broadcast"
+$BroadcastAddress = Get-Broadcast
 
 # Ask user if he wants to load these rules
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
@@ -77,7 +79,7 @@ New-NetFirewallRule -Platform $Platform `
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "LAN Broadcast" -Service Any -Program System `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol UDP -LocalAddress $Broadcast -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
+-Direction $Direction -Protocol UDP -LocalAddress $BroadcastAddress -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 -EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "" @Logs | Format-Output @Logs
 

@@ -72,7 +72,7 @@ if ((Test-Installation "Filezilla" ([ref] $FilezillaRoot) @Logs) -or $ForceLoad)
 	-DisplayName "Filezilla client (FTP)" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "FileZilla FTP protocol" @Logs | Format-Output @Logs
 
 	$Program = "$FilezillaRoot\fzsftp.exe"
@@ -81,7 +81,7 @@ if ((Test-Installation "Filezilla" ([ref] $FilezillaRoot) @Logs) -or $ForceLoad)
 	-DisplayName "Filezilla client (SFTP)" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21098 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "FileZilla SSH FTP protocol" @Logs | Format-Output @Logs
 }
 

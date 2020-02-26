@@ -72,7 +72,7 @@ if ((Test-Installation "qBittorrent" ([ref] $qBittorentRoot) @Logs) -or $ForceLo
 	-DisplayName "qBittorent (HTTP)" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "HTTP check for updates" @Logs | Format-Output @Logs
 
 	$Program = "$qBittorentRoot\qbittorrent.exe"
@@ -81,7 +81,7 @@ if ((Test-Installation "qBittorrent" ([ref] $qBittorentRoot) @Logs) -or $ForceLo
 	-DisplayName "qBittorent (TCP)" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "Torrent client" @Logs | Format-Output @Logs
 
 	$Program = "$qBittorentRoot\qbittorrent.exe"

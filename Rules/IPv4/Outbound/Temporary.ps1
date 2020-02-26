@@ -61,14 +61,14 @@ New-NetFirewallRule -Platform $Platform `
 -DisplayName "Port 443" -Service Any -Program Any `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser $UsersSDDL `
+-LocalUser $UsersGroupSDDL `
 -Description "Temporary open port 443 to internet, and disable ASAP." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Port 80" -Service Any -Program Any `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
--LocalUser $UsersSDDL `
+-LocalUser $UsersGroupSDDL `
 -Description "Temporary open port 80 to internet, and disable ASAP." @Logs | Format-Output @Logs
 
 # NOTE: to make use of this rule, it should be updated here and the script re-run
@@ -76,7 +76,7 @@ New-NetFirewallRule -Platform $Platform `
 -DisplayName "Installer" -Service Any -Program Any `
 -PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser $UsersSDDL `
+-LocalUser $UsersGroupSDDL `
 -Description "Enable only to let some installer update or communicate to internet such as office update, and disable ASAP.
 required for ie. downloaded Click-to-Run which does not have persitent location.
 Add installer path in script and re-run Trmporary.ps1" @Logs | Format-Output @Logs

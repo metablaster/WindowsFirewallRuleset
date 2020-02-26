@@ -54,7 +54,7 @@ Set-NetFirewallProfile -All -PolicyStore $PolicyStore `
 # Remove all the rules
 # TODO: Implement removing only project rules.
 #
-Remove-NetFirewallRule -All -PolicyStore $PolicyStore -ErrorAction SilentlyContinue
+Remove-NetFirewallRule -All -PolicyStore $PolicyStore -ErrorAction Ignore @Logs
 
 Write-Information -Tags "User" -MessageData "INFO: Firewall reset is done!" @Logs
 Write-Information -Tags "User" -MessageData "INFO: If internet conectivity problem remains, please reboot system" @Logs

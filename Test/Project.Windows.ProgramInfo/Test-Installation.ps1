@@ -52,6 +52,10 @@ $OfficeRoot = "%ProgramFiles(x866666)%\Microsoft Office\root\Office16"
 $TeamViewerRoot = "%ProgramFiles(x86)%\TeamViewer"
 $TestBadVariable = "%UserProfile%\crazyFolder"
 $TestBadVariable2 = "%UserProfile%\crazyFolder"
+$Greenshot = "unknown"
+
+New-Test "Test-Installation 'Greenshot' $Greenshot"
+Test-Installation "Greenshot" ([ref] $Greenshot) @Logs
 
 New-Test "Test-Installation 'MicrosoftOffice' $OfficeRoot"
 Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot) @Logs

@@ -73,7 +73,7 @@ if ((Test-Installation "Git" ([ref] $GitRoot) @Logs) -or $ForceLoad)
 	-DisplayName "Git - curl" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "curl download tool" @Logs | Format-Output @Logs
 
 	# TODO: unsure if it's 443 or 80
@@ -83,7 +83,7 @@ if ((Test-Installation "Git" ([ref] $GitRoot) @Logs) -or $ForceLoad)
 	-DisplayName "Git - git" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$GitRoot\mingw64\libexec\git-core\git-remote-https.exe"
@@ -92,7 +92,7 @@ if ((Test-Installation "Git" ([ref] $GitRoot) @Logs) -or $ForceLoad)
 	-DisplayName "Git - remote-https" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "git HTTPS acces (https cloning)" @Logs | Format-Output @Logs
 
 	$Program = "$GitRoot\usr\bin\ssh.exe"
@@ -101,7 +101,7 @@ if ((Test-Installation "Git" ([ref] $GitRoot) @Logs) -or $ForceLoad)
 	-DisplayName "Git - ssh" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 22 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "git SSH acces" @Logs | Format-Output @Logs
 }
 
@@ -118,7 +118,7 @@ if ((Test-Installation "GithubDesktop" ([ref] $GithubRoot) @Logs) -or $ForceLoad
 	-DisplayName "GitHub Desktop - App" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$GithubRoot\resources\app\git\mingw64\bin\git-remote-https.exe"
@@ -127,7 +127,7 @@ if ((Test-Installation "GithubDesktop" ([ref] $GithubRoot) @Logs) -or $ForceLoad
 	-DisplayName "GitHub Desktop - remote-https" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-	-LocalUser $UsersSDDL `
+	-LocalUser $UsersGroupSDDL `
 	-Description "cloning repos" @Logs | Format-Output @Logs
 }
 
