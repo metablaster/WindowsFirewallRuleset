@@ -25,6 +25,7 @@
 2. Strict mode is now on, latest level
 3. Support for both editions of PowerShell, Desktop and Core
 4. Modules, comments, TODO list, help and readme files are updated
+5. All files converted to UTF-8 and Tabs-4 (CRLF), gitattributes updated few new file types
 
 # Changelog v0.2
 
