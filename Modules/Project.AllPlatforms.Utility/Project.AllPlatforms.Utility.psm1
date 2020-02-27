@@ -167,7 +167,7 @@ function Approve-Execute
 .SYNOPSIS
 Show-SDDL returns SDDL based on "object" such as path, or registry entry
 .DESCRIPTION
-TODO: add descriptions
+TODO: add description
 .EXAMPLE
 see Test\Show-SDDL.ps1 for example
 .INPUTS
@@ -244,7 +244,7 @@ function Show-SDDL
 .SYNOPSIS
 Convert SDDL entries to computer accounts
 .DESCRIPTION
-TODO: add descriptions
+TODO: add description
 .PARAMETER SDDL
 String array of one or more strings of SDDL syntax
 .EXAMPLE

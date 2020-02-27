@@ -1,3 +1,4 @@
+
 # List of stuff that needs to be done
 
 This is a project global list which applies to several or all scripts, for smaller todo's see point 1 first!
@@ -20,21 +21,24 @@ This is a project global list which applies to several or all scripts, for small
 17. Provide following keywords in function comments: .DESCRIPTION .LINK .COMPONENT
 18. Access is denied randomly while executing rules, need some check around this
 19. Need to see which functions/commands may throw and setup try catch blocks
-20. Most program query functions return multiple program instances, need to select latest or add multiple rules.
+20. DefaultParameterSetName for functions with parameter sets is missing
 21. Apply only rules for which executable exists, Test-File function
 22. Implement Importing/Exporting rules.
 23. Measure execution time for each or all scripts.
 24. Test for 32bit powershell and OS.
-25. Convert test to use Pester
+25. Convert tests to use Pester if possible
 26. Revisit parameter validation for functions, specifically acceptance of NULL or empty.
 27. Revisit how functions return and what they return, return keyword vs Write-Output, if piping is needed after all.
 28. We probalby don't need VSSetup module, other scripts and modules need to be checked for updates
 29. Revisit function parameters, their types, aliases etc..
 30. localhost != `[Environment]::MachineName`
-31. Revisit code and make consitent PSObject properties for all function outputs
+31. Revisit code and make consitent PSCustomObject properties for all function outputs
 32. Move NET.IP tests into test folder, clean up directory add streams
 33. Paths to fix: nvidia, onedrive, visio, project rules to fix: qbittorrent, steam, vcpkg, msys2, store apps for admins, internet browser (auto loads)
 34. Change bool parameters to switch where possible
-35. Revisit naming convention for ConvertFrom/ConvertTo it's not clear what is being converted
+35. Revisit naming convention for ConvertFrom/ConvertTo it's not clear what is being converted, some other functions also have odd names
 36. Line numbers for verbose and debug messages
-37. DefaultParameterSetName for functions with parameter sets is missing
+
+# Partially fixed, need testing
+
+- Most program query functions return multiple program instances, need to select latest or add multiple rules.

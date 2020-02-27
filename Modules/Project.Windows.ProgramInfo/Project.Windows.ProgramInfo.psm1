@@ -583,7 +583,7 @@ function Get-UserPrograms
 .SYNOPSIS
 Search installed programs for all users, system wide
 .DESCRIPTION
-TODO: add descriptions
+TODO: add description
 .PARAMETER ComputerName
 Computer name which to check
 .EXAMPLE
@@ -709,7 +709,7 @@ function Get-SystemPrograms
 .SYNOPSIS
 Search program install properties for all users, system wide
 .DESCRIPTION
-TODO: add descriptions
+TODO: add description
 .PARAMETER ComputerName
 Computer name which to check
 .EXAMPLE
@@ -1089,7 +1089,7 @@ function Update-Table
 	}
 
 	# TODO: try to search also for path in addition to program name
-	# TODO: SearchString may pick up irrelevant paths (ie. unreal), or even miss
+	# TODO: SearchString may pick up irrelevant paths (ie. unreal engine), or even miss
 	# Search system wide installed programs
 	if ($SystemPrograms -and $SystemPrograms.Name -like "*$SearchString*")
 	{
@@ -1834,7 +1834,7 @@ function Find-Installation
 		# NOTE: number for Get-PSCallStack is 2, which means 3 function calls back and then get script name (call at 0 and 1 is this script)
 		$Script = (Get-PSCallStack)[2].Command
 
-		# TODO: this loops seem to be skiped, probably missing Test-File, need to check
+		# TODO: these loops seem to be skiped, probably missing Test-File, need to check
 		Write-Information -Tags "User" -MessageData "INFO: If you installed $Program elsewhere you can input the correct path now"
 		Write-Information -Tags "User" -MessageData "INFO: or adjust the path in $Script and re-run the script later."
 		Write-Information -Tags "User" -MessageData "INFO: otherwise ignore this warning if you don't have $Program installed."
@@ -2005,7 +2005,7 @@ function Get-NetFramework
 .SYNOPSIS
 Get installed Windows SDK
 .DESCRIPTION
-TODO: add descriptions
+TODO: add description
 .PARAMETER ComputerName
 Computer name for which to list installed installed framework
 .EXAMPLE
@@ -2102,7 +2102,7 @@ function Get-WindowsSDK
 .SYNOPSIS
 Get installed Windows Kits
 .DESCRIPTION
-TODO: add descriptions
+TODO: add description
 .PARAMETER ComputerName
 Computer name for which to list installed installed windows kits
 .EXAMPLE
@@ -2197,7 +2197,7 @@ function Get-WindowsKits
 .SYNOPSIS
 Get installed Windows Defender
 .DESCRIPTION
-TODO: add descriptions
+TODO: add description
 .PARAMETER ComputerName
 Computer name for which to list installed Windows Defender
 .EXAMPLE
@@ -2271,7 +2271,7 @@ function Get-WindowsDefender
 .SYNOPSIS
 Get installed Microsoft SQL Server Management Studios
 .DESCRIPTION
-TODO: add descriptions
+TODO: add description
 .PARAMETER ComputerName
 Computer name for which to list installed installed framework
 .EXAMPLE

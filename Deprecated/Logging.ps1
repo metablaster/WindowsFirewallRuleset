@@ -1,3 +1,4 @@
+
 <#
 .SYNOPSIS
 Log generated error and set global error status

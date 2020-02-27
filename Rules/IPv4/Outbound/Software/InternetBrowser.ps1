@@ -96,7 +96,7 @@ if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot) @Logs) -or $Forc
 	-LocalUser $UsersGroupSDDL `
 	-Description "Hyper text transfer protocol over SSL." @Logs | Format-Output @Logs
 
-	# TODO: we should probably have a function for this?
+	# TODO: we should probably have a function for this and similar cases?
 	$EdgeUpdateRoot = "$(Split-Path -Path $(Split-path -Path $EdgeChromiumRoot -Parent) -Parent)\EdgeUpdate"
 	$EdgeChromiumUpdate = "$EdgeUpdateRoot\MicrosoftEdgeUpdate.exe"
 	Test-File $EdgeChromiumUpdate

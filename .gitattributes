@@ -6,7 +6,7 @@
 ###############################################################################
 # This attribute sets a specific line-ending style to be used in the working
 # directory. It enables end-of-line conversion without any content checks,
-# effectively setting the text attribute. 
+# effectively setting the text attribute.
 # This setting forces Git to normalize line endings for this file on checkin
 # and convert them to CRLF when the file is checked out.
 ###############################################################################
@@ -14,6 +14,13 @@
 *.filters   text eol=crlf
 *.user      text eol=crlf
 *.ps1       text eol=crlf
+*.psd1		text eol=crlf
+*.psm1		text eol=crlf
+*.txt		text eol=crlf
+*.xml		text eol=crlf
+*.ini		text eol=crlf
+*.json		text eol=crlf
+*.md		text eol=crlf
 
 ###############################################################################
 # Set the merge driver for project and solution files

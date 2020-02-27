@@ -731,7 +731,7 @@ New-Variable -Name SpecialDomains -Scope Script -Option Constant -Value @(
 	"BUILTIN"
 	)
 
-# TODO: global configuration variables (in a separate script) should also include to set "USERS" instead of single user
+# TODO: global configuration variables (in a separate script)?
 if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 {
 	Write-Debug -Message "[$ThisModule] Initialize global constant variable: CheckInitUserInfo"

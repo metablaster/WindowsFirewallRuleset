@@ -52,7 +52,7 @@ if ($Develop)
 .SYNOPSIS
 Used to initialize test units, ie. to disable logging.
 .DESCRIPTION
-TODO: add descriptions
+TODO: add description
 .EXAMPLE
 Start-Test
 .INPUTS

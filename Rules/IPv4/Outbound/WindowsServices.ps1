@@ -247,7 +247,7 @@ New-NetFirewallRule -Platform $Platform `
 # Following rules are in "ProblematicTraffic" pseudo group, these need extension rules (above)
 #
 
-# TODO: try with localuser: Any
+# TODO: trying with localuser: Any
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Background Intelligent Transfer Service" -Service BITS -Program $ServiceHost `
 -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `

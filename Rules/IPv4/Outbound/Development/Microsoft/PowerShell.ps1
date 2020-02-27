@@ -64,7 +64,7 @@ $PowerShellCore64Root = ""
 # Rules for PowerShell
 #
 
-# TODO: add rules for Core
+# TODO: add rule for Core x86
 # NOTE: administartors may need powershell, let them add them self temporary? currently adding them for PS x64
 $PowerShellUsers = Get-SDDL -Group "Users", "Administrators" @Logs
 

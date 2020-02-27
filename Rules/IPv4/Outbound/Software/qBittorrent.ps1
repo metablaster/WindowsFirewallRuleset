@@ -60,7 +60,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 #
 # Rules for qBittorent
-# TODO: ports need to updated
+# TODO: ports need to be updated
 #
 
 # Test if installation exists on system

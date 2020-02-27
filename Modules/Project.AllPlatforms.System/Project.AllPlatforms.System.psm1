@@ -66,8 +66,7 @@ None. Error message is shown if check failed, system info otherwise.
 .NOTES
 TODO: learn required NET version by scaning scripts (ie. adding .COMPONENT to comments)
 TODO: learn repo dir automaticaly (using git?)
-TODO: check required modules (pester)
-# TODO: we don't use logs in this module
+TODO: we don't use logs in this module
 #>
 function Test-SystemRequirements
 {

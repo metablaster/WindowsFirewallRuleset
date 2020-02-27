@@ -57,7 +57,7 @@ Import-Module -Name $PSScriptRoot\..\Indented.Net.IP
 .SYNOPSIS
 Get localhost name
 .DESCRIPTION
-TODO: add descriptions
+TODO: add description
 .EXAMPLE
 Get-ComputerName
 .INPUTS
@@ -186,7 +186,7 @@ function Get-IPAddress
 .SYNOPSIS
 Method to get broadcast address
 .DESCRIPTION
-TODO: add descriptions
+TODO: add description
 .EXAMPLE
 Get-Broadcast
 .INPUTS
