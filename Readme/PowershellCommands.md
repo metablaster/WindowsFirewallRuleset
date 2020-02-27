@@ -110,7 +110,7 @@ user name, prefixed by its domain\
 **Well known SID's**
 ```powershell
 $group = 'Administrators'
-$account = New-Object System.Security.Principal.NTAccount($group)
+$account = New-Object -TypeName System.Security.Principal.NTAccount($group)
 $sid = $account.Translate([System.Security.Principal.SecurityIdentifier])
 ```
 
@@ -143,5 +143,5 @@ Get-Command –module CimCmdlets
 # Get type name aliases
 
 ```powershell
-[PSObject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::get
+[PSCustomObject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::get
 ```

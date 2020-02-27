@@ -25,7 +25,7 @@ function Get-UserSID
 	try
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for user: $UserName"
-		$NTAccount = New-Object System.Security.Principal.NTAccount($UserName)
+		$NTAccount = New-Object -TypeName System.Security.Principal.NTAccount($UserName)
 		return ($NTAccount.Translate([System.Security.Principal.SecurityIdentifier])).ToString()
 	}
 	catch
@@ -64,7 +64,7 @@ function Get-AccountSID
 	try
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for account: $UserAccount"
-		$NTAccount = New-Object System.Security.Principal.NTAccount($Domain, $User)
+		$NTAccount = New-Object -TypeName System.Security.Principal.NTAccount($Domain, $User)
 		return ($NTAccount.Translate([System.Security.Principal.SecurityIdentifier])).ToString()
 	}
 	catch

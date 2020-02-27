@@ -169,7 +169,7 @@ function ConvertFrom-SID
     {
         Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-        $Result = @()
+        [PSCustomObject[]] $Result = @()
         # loop through provided SIDs
         foreach($SID in $SIDArray)
         {
@@ -217,7 +217,7 @@ function ConvertFrom-SID
                 {
                     Write-Debug -Message "[$($MyInvocation.InvocationName)] Translating SID: $SID"
 
-                    $SIDObject = New-Object System.Security.Principal.SecurityIdentifier($SID)
+                    $SIDObject = New-Object -TypeName System.Security.Principal.SecurityIdentifier($SID)
                     $Name = $SIDObject.Translate([System.Security.Principal.NTAccount]).Value
                 }
                 catch
@@ -228,7 +228,7 @@ function ConvertFrom-SID
             }
 
             # Display the results
-            $Result += New-Object -TypeName PSObject -Property @{
+            $Result += [PSCustomObject]@{
                 SID = $FullSID
                 Name = $Name
             }

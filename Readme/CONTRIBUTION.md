@@ -26,7 +26,7 @@ it should be enough to take a look at the existing scripts and figure it out rig
 Use cammel case for variables, types, symbols etc; lowercase for language keywords,
 for more info about casing type:\
 ```powershell
-[PSObject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::get
+[PSCustomObject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::get
 ```
 
 Each rule uses exactly the same order or paramters split into exactly the same number of lines.\

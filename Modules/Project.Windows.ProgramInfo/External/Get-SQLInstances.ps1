@@ -168,7 +168,7 @@ function Get-SQLInstances
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-		$AllInstances = @()
+		[PSCustomObject[]] $AllInstances = @()
 		foreach ($Computer in $ComputerNames)
 		{
 			# TODO: what is this?
@@ -235,7 +235,7 @@ function Get-SQLInstances
 						$ClusterName = $null
 						$isCluster = $false
 						$InstanceValue = $RootKey.GetValue($Instance)
-						$Nodes = New-Object System.Collections.Arraylist
+						$Nodes = New-Object -TypeName System.Collections.Arraylist
 
 						Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening InstanceReg key: $HKLMRootKey\$InstanceValue"
 						$InstanceReg = $RemoteKey.OpenSubKey("$HKLMRootKey\$InstanceValue")
@@ -307,7 +307,6 @@ function Get-SQLInstances
 						{
 							Write-Debug "Settings ErrorActionPreference to: Stop"
 							$ErrorActionPreference = "Stop"
-							Write-Debug "ModuleErrorPreference is: $ModuleErrorPreference"
 
 							# Get from filename to determine version
 							Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening ServicesReg key: HKLM:SYSTEM\CurrentControlSet\Services"
@@ -344,9 +343,8 @@ function Get-SQLInstances
 						}
 						finally
 						{
-							Write-Debug "Settings ErrorActionPreference to: $ModuleErrorPreference"
-							$ErrorActionPreference = $ModuleErrorPreference
-							Write-Debug "ModuleErrorPreference is: $ModuleErrorPreference"
+							Write-Debug "Restoring ErrorActionPreference to Continue"
+							$ErrorActionPreference = "Continue"
 						}
 
 						# Get SQL DTS Path
@@ -385,7 +383,7 @@ function Get-SQLInstances
 							Write-Warning "Failed to open VersionKey sub key: $HKLMRootKey\$Major$Minor"
 						}
 
-						$AllInstances += New-Object PSObject -Property @{
+						$AllInstances += [PSCustomObject]@{
 							"Computername" = $Computer
 							"SQLInstance" = $Instance
 							"SQLBinRoot" = $SQLBinRoot
@@ -435,12 +433,13 @@ function Get-SQLInstances
 			# Will not work with PowerShell core.
 			if($CIM)
 			{
-				$AllInstancesCIM = @()
+				[PSCustomObject[]] $AllInstancesCIM = @()
 
 				try
 				{
 					#Get the CIM info we care about.
 					$SQLServices = $null # TODO: what does this mean?
+					# TODO: no CIM match after changin this from WMI call
 					$SQLServices = @(
 						Get-CimInstance -ComputerName $Computer -ErrorAction stop `
 						-Query "select DisplayName, Name, PathName, StartName, StartMode, State from win32_service where Name LIKE 'MSSQL%'" |

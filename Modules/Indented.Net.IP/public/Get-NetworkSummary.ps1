@@ -103,7 +103,7 @@ function Get-NetworkSummary
         $decimalNetwork =  $decimalIP -band $decimalMask
         $decimalBroadcast = $decimalIP -bor (-bnot $decimalMask -band [UInt32]::MaxValue)
 
-        $networkSummary = [PSObject]@{
+        $networkSummary = [PSCustomObject]@{
             NetworkAddress    = $networkAddress = ConvertTo-DottedDecimalIP $decimalNetwork
             NetworkDecimal    = $decimalNetwork
             BroadcastAddress  = ConvertTo-DottedDecimalIP $decimalBroadcast

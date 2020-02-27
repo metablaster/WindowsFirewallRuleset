@@ -110,7 +110,7 @@ Get-GroupPrincipals "Users" -Machine @(DESKTOP, LAPTOP) -CIM
 .INPUTS
 [string[]] User groups
 .OUTPUTS
-[PSObject[]] Array of enabled user accounts in specified group
+[PSCustomObject[]] Array of enabled user accounts in specified group
 .NOTES
 CIM switch is not supported on PowerShell Core, meaning contacting remote computers
 is supported only on Windows PowerShell
@@ -119,7 +119,7 @@ TODO: should we handle NT AUTHORITY, BUILTIN and similar?
 #>
 function Get-GroupPrincipals
 {
-	[OutputType([PSObject[]])]
+	[OutputType([PSCustomObject[]])]
 	[CmdletBinding(PositionalBinding = $false)]
 	param (
 		[Alias("Group")]
@@ -138,7 +138,7 @@ function Get-GroupPrincipals
 
 	begin
 	{
-		[PSObject[]] $UserAccounts = @()
+		[PSCustomObject[]] $UserAccounts = @()
 		$PowerShellEdition = $PSVersionTable.PSEdition
 	}
 	process
@@ -191,7 +191,7 @@ function Get-GroupPrincipals
 							{
 								Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing account: $Account"
 
-								$UserAccounts += New-Object -TypeName PSObject -Property @{
+								$UserAccounts += [PSCustomObject]@{
 									User = $Account.Name
 									Account = $Account.Caption
 									Computer = $Computer
@@ -232,7 +232,7 @@ function Get-GroupPrincipals
 					{
 						Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing account: $($Account.Name)"
 
-						$UserAccounts += New-Object -TypeName PSObject -Property @{
+						$UserAccounts += [PSCustomObject]@{
 							User = Split-Path -Path $Account.Name -Leaf
 							Account = $Account.Name
 							Computer = $Computer
@@ -268,14 +268,14 @@ Get-UserGroups @(DESKTOP, LAPTOP) -CIM
 .INPUTS
 [string[]] array of computer names
 .OUTPUTS
-[PSObject[]] array of user groups on target computers
+[PSCustomObject[]] array of user groups on target computers
 .NOTES
 CIM switch is not supported on PowerShell Core, meaning contacting remote computers
 is supported only on Windows PowerShell
 #>
 function Get-UserGroups
 {
-	[OutputType([PSObject[]])]
+	[OutputType([PSCustomObject[]])]
 	[CmdletBinding(PositionalBinding = $false)]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
@@ -288,7 +288,7 @@ function Get-UserGroups
 
 	begin
 	{
-		[PSObject[]] $UserGroups =@()
+		[PSCustomObject[]] $UserGroups =@()
 		$PowerShellEdition = $PSVersionTable.PSEdition
 	}
 	process
@@ -318,7 +318,7 @@ function Get-UserGroups
 
 					foreach ($Group in $RemoteGroups)
 					{
-						$UserGroups += New-Object -TypeName PSObject -Property @{
+						$UserGroups += [PSCustomObject]@{
 							Group = $Group.Name
 							Caption = $Group.Caption
 							Computer = $Computer
@@ -346,7 +346,7 @@ function Get-UserGroups
 				$LocalGroups = Get-LocalGroup
 				foreach ($Group in $LocalGroups)
 				{
-					$UserGroups += New-Object -TypeName PSObject -Property @{
+					$UserGroups += [PSCustomObject]@{
 						Group = $Group.Name
 						Caption = Join-Path -Path $Computer -ChildPath $Group.Name
 						Computer = $Computer
@@ -690,7 +690,7 @@ function Get-AccountSID
 				{
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for account: $ComputerName\$User"
 
-					$NTAccount = New-Object System.Security.Principal.NTAccount($ComputerName, $User)
+					$NTAccount = New-Object -TypeName System.Security.Principal.NTAccount($ComputerName, $User)
 					$AccountSID = $NTAccount.Translate([System.Security.Principal.SecurityIdentifier]).ToString()
 				}
 				catch

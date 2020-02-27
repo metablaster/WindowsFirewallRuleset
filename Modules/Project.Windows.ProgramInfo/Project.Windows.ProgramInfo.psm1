@@ -495,7 +495,7 @@ Get-UserPrograms "USERNAME"
 .INPUTS
 None. You cannot pipe objects to Get-UserPrograms
 .OUTPUTS
-[PSObject[]] list of programs for specified user on a target computer
+[PSCustomObject[]] list of programs for specified user on a target computer
 .NOTES
 We should make a query for an array of users, will help to save into variable
 #>
@@ -529,7 +529,7 @@ function Get-UserPrograms
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key HKU:$HKU"
 		$UserKey = $RemoteKey.OpenSubkey($HKU)
 
-		[PSObject[]] $UserPrograms = @()
+		[PSCustomObject[]] $UserPrograms = @()
 		if (!$UserKey)
 		{
 			Write-Warning -Message "Failed to open registry root key: HKU:$HKU"
@@ -562,8 +562,7 @@ function Get-UserPrograms
 				$InstallLocation = Format-Path $InstallLocation #-Verbose:$false -Debug:$false
 
 				# Get more key entries as needed
-				# TODO: PSObject to psobject?
-				$UserPrograms += New-Object -TypeName PSObject -Property @{
+				$UserPrograms += [PSCustomObject]@{
 					"ComputerName" = $ComputerName
 					"RegKey" = $HKUSubKey
 					"Name" = $SubKey.GetValue("displayname")
@@ -592,9 +591,9 @@ Get-SystemPrograms "COMPUTERNAME"
 .INPUTS
 None. You cannot pipe objects to Get-SystemPrograms
 .OUTPUTS
-[PSObject[]] list of programs installed for all users
+[PSCustomObject[]] list of programs installed for all users
 .NOTES
-We should return empty psobject if test computer fails
+We should return empty PSCustomObject if test computer fails
 #>
 function Get-SystemPrograms
 {
@@ -630,7 +629,7 @@ function Get-SystemPrograms
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
-		[PSObject[]] $SystemPrograms = @()
+		[PSCustomObject[]] $SystemPrograms = @()
 		foreach ($HKLMRootKey in $HKLM)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLMRootKey"
@@ -689,7 +688,7 @@ function Get-SystemPrograms
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKLMSubKey"
 
 				# Get more key entries as needed
-				$SystemPrograms += New-Object -TypeName PSObject -Property @{
+				$SystemPrograms += [PSCustomObject]@{
 					"ComputerName" = $ComputerName
 					"RegKey" = $HKLMSubKey
 					"Name" = $SubKey.GetValue("DisplayName")
@@ -718,7 +717,7 @@ Get-AllUserPrograms "COMPUTERNAME"
 .INPUTS
 None. You cannot pipe objects to Get-AllUserPrograms
 .OUTPUTS
-[PSObject[]] list of programs installed for all users
+[PSCustomObject[]] list of programs installed for all users
 .NOTES
 TODO: should be renamed into Get-InstallProperties
 #>
@@ -748,7 +747,7 @@ function Get-AllUserPrograms
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
-		[PSObject[]] $AllUserPrograms = @()
+		[PSCustomObject[]] $AllUserPrograms = @()
 		if (!$RootKey)
 		{
 			Write-Warning -Message "Failed to open registry root key: HKLM:$HKLM"
@@ -794,7 +793,7 @@ function Get-AllUserPrograms
 
 					# TODO: generate Principal entry in all registry functions
 					# Get more key entries as needed
-					$AllUserPrograms += New-Object -TypeName PSObject -Property @{
+					$AllUserPrograms += [PSCustomObject]@{
 						"ComputerName" = $ComputerName
 						"RegKey" = $HKLMKey
 						"SIDKey" = $HKLSubMKey
@@ -827,7 +826,7 @@ Get-ExecutablePaths "COMPUTERNAME"
 .INPUTS
 None. You cannot pipe objects to Get-ExecutablePaths
 .OUTPUTS
-[PSObject[]] list of executables, their installation path and additional information
+[PSCustomObject[]] list of executables, their installation path and additional information
 .NOTES
 None.
 #>
@@ -866,7 +865,7 @@ function Get-ExecutablePaths
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
-		[PSObject[]] $AppPaths = @()
+		[PSCustomObject[]] $AppPaths = @()
 		foreach ($HKLMRootKey in $HKLM)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLMRootKey"
@@ -932,7 +931,7 @@ function Get-ExecutablePaths
 
 				# Get more key entries as needed
 				# We want to separate leaf key name because some key names are holding alternative executable name
-				$AppPaths += New-Object -TypeName PSObject -Property @{
+				$AppPaths += [PSCustomObject]@{
 					"ComputerName" = $ComputerName
 					"RegKey" = $HKLMSubKey
 					#"RegPath" = $SubKey.Name
@@ -1885,7 +1884,7 @@ Get-NetFramework COMPUTERNAME
 .INPUTS
 None. You cannot pipe objects to Get-NetFramework
 .OUTPUTS
-[PSObject[]] for installed NET Frameworks and install paths
+[PSCustomObject[]] for installed NET Frameworks and install paths
 .NOTES
 None.
 #>
@@ -1913,7 +1912,7 @@ function Get-NetFramework
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
-		[PSObject[]] $NetFramework = @()
+		[PSCustomObject[]] $NetFramework = @()
 		if (!$RootKey)
 		{
 			Write-Warning -Message "Failed to open registry root key: HKLM:$HKLM"
@@ -1945,7 +1944,7 @@ function Get-NetFramework
 					}
 
 					# we add entry regarldess of presence of install path
-					$NetFramework += New-Object -TypeName PSObject -Property @{
+					$NetFramework += [PSCustomObject]@{
 						"ComputerName" = $ComputerName
 						"RegKey" = $HKLMSubKey
 						"Version" = $Version
@@ -1983,7 +1982,7 @@ function Get-NetFramework
 						}
 
 						# we add entry regarldess of presence of install path
-						$NetFramework += New-Object -TypeName PSObject -Property @{
+						$NetFramework += [PSCustomObject]@{
 							"ComputerName" = $ComputerName
 							"RegKey" = $HKLMKey
 							"Version" = $Version
@@ -2014,7 +2013,7 @@ Get-WindowsSDK COMPUTERNAME
 .INPUTS
 None. You cannot pipe objects to Get-WindowsSDK
 .OUTPUTS
-[PSObject[]] for installed Windows SDK versions and install paths
+[PSCustomObject[]] for installed Windows SDK versions and install paths
 .NOTES
 None.
 #>
@@ -2049,7 +2048,7 @@ function Get-WindowsSDK
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
-		[PSObject[]] $WindowsSDK = @()
+		[PSCustomObject[]] $WindowsSDK = @()
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
@@ -2081,7 +2080,7 @@ function Get-WindowsSDK
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKLMSubKey"
 				$InstallLocation = Format-Path $InstallLocation
 
-				$WindowsSDK += New-Object -TypeName PSObject -Property @{
+				$WindowsSDK += [PSCustomObject]@{
 					"ComputerName" = $ComputerName
 					"RegKey" = $HKLMSubKey
 					"Product" = $SubKey.GetValue("ProductName")
@@ -2111,7 +2110,7 @@ Get-WindowsKits COMPUTERNAME
 .INPUTS
 None. You cannot pipe objects to Get-WindowsKits
 .OUTPUTS
-[PSObject[]] for installed Windows Kits versions and install paths
+[PSCustomObject[]] for installed Windows Kits versions and install paths
 .NOTES
 None.
 #>
@@ -2150,7 +2149,7 @@ function Get-WindowsKits
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
-		[PSObject[]] $WindowsKits = @()
+		[PSCustomObject[]] $WindowsKits = @()
 		if (!$RootKey)
 		{
 			Write-Warning -Message "Failed to open registry root key: HKLM:$HKLM"
@@ -2177,7 +2176,7 @@ function Get-WindowsKits
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key entry: $RootKeyLeaf\$RootKeyEntry"
 				$InstallLocation = Format-Path $InstallLocation
 
-				$WindowsKits += New-Object -TypeName PSObject -Property @{
+				$WindowsKits += [PSCustomObject]@{
 					"ComputerName" = $ComputerName
 					"RegKey" = $RootKeyLeaf
 					"Product" = $RootKeyEntry
@@ -2206,7 +2205,7 @@ Get-WindowsDefender COMPUTERNAME
 .INPUTS
 None. You cannot pipe objects to Get-WindowsDefender
 .OUTPUTS
-[PSObject] for installed Windows Defender, version and install paths
+[PSCustomObject] for installed Windows Defender, version and install paths
 .NOTES
 None.
 #>
@@ -2231,7 +2230,7 @@ function Get-WindowsDefender
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
-		[PSObject] $WindowsDefender = $null
+		[PSCustomObject] $WindowsDefender = $null
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
@@ -2252,7 +2251,7 @@ function Get-WindowsDefender
 			{
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $RootKeyLeaf"
 
-				$WindowsDefender = New-Object -TypeName PSObject -Property @{
+				$WindowsDefender = [PSCustomObject]@{
 					"ComputerName" = $ComputerName
 					"RegKey" = $RootKeyLeaf
 					"InstallLocation" = Format-Path $InstallLocation
@@ -2285,7 +2284,7 @@ Get-SQLManagementStudio COMPUTERNAME
 .INPUTS
 None. You cannot pipe objects to Get-SQLManagementStudio
 .OUTPUTS
-[PSObject[]] for installed Microsoft SQL Server Management Studio's
+[PSCustomObject[]] for installed Microsoft SQL Server Management Studio's
 .NOTES
 None.
  #>
@@ -2324,7 +2323,7 @@ None.
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
-		[PSObject[]] $ManagementStudio = @()
+		[PSCustomObject[]] $ManagementStudio = @()
 		if (!$RootKey)
 		{
 			Write-Warning -Message "Failed to open registry root key: $HKLM"
@@ -2354,7 +2353,7 @@ None.
 
 				# TODO: Should we return object by object to make pipeline work?
 				# also try to get same set of properties for all req querries
-				$ManagementStudio += New-Object -TypeName PSObject -Property @{
+				$ManagementStudio += [PSCustomObject]@{
 					"ComputerName" = $ComputerName
 					"RegKey" = $HKLMSubKey
 					"Version" = $SubKey.GetValue("Version")

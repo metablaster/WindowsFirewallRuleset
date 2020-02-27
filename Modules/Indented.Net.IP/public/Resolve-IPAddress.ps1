@@ -129,7 +129,7 @@ function Resolve-IPAddress
                     }
                 }
 
-                [PSObject]@{
+                [PSCustomObject]@{
                     Name        = $_.Name
                     Position    = [int32] $IPAddress.Substring(0, $_.Index).Split('.').Count - 1
                     ReplaceWith = $values

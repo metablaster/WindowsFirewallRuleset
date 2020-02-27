@@ -155,7 +155,7 @@ function ConvertTo-Subnet
         $hostAddresses = 0
     }
 
-    $subnet = [PSObject]@{
+    $subnet = [PSCustomObject]@{
         NetworkAddress   = Get-NetworkAddress $network.ToString()
         BroadcastAddress = Get-BroadcastAddress $network.ToString()
         SubnetMask       = $network.SubnetMask

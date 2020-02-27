@@ -36,14 +36,12 @@ Test-SystemRequirements
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 
-# Setting up profile seem to be slow, tell user what is going on
-Write-Information -Tags "User" -MessageData "INFO: Reseting Firewall to previous state..." @Logs
-
 #
 # Default setup for each profile is the same,
 # Separated only for Write-Information output
 #
 
+# Setting up profile seem to be slow, tell user what is going on
 Write-Information -Tags "User" -MessageData "INFO: Reseting Domain firewall profile..." @Logs
 
 Set-NetFirewallProfile -Name Domain -PolicyStore $PolicyStore `

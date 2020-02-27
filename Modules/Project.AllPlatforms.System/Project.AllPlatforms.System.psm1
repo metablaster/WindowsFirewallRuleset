@@ -102,7 +102,7 @@ function Test-SystemRequirements
 		}
 
 		# Check if in elevated PowerShell
-		$Principal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+		$Principal = New-Object -TypeName Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
 		$local:StatusGood = $Principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 
 		if (!$StatusGood)
@@ -271,7 +271,7 @@ function Test-SystemRequirements
 		{
 			$StatusGood = $Pester.Major -ge 4
 		}
-		
+
 		if (!$StatusGood)
 		{
 			Write-Warning -Message "Pester module version 4.x is required to run some of the tests"

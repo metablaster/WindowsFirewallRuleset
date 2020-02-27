@@ -272,7 +272,7 @@ function Convert-SDDLToACL
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing $Entry"
 
-		$ACLObject = New-Object -Type Security.AccessControl.DirectorySecurity
+		$ACLObject = New-Object -TypeName Security.AccessControl.DirectorySecurity
 		$ACLObject.SetSecurityDescriptorSddlForm($Entry)
 		$ACL += $ACLObject.Access | Select-Object -ExpandProperty IdentityReference | Select-Object -ExpandProperty Value
 	}

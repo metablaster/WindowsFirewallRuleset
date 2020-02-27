@@ -96,7 +96,7 @@ function ConvertTo-Network
         "255.255.255.224", "255.255.255.240", "255.255.255.248", "255.255.255.252",
         "255.255.255.254", "255.255.255.255"
 
-    $network = [PSObject]@{
+    $network = [PSCustomObject]@{
         IPAddress  = $null
         SubnetMask = $null
         MaskLength = 0
