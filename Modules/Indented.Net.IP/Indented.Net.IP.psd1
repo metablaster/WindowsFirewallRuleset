@@ -43,10 +43,10 @@ PowerShellVersion = '5.1'
 # PowerShellHostVersion = ''
 
 # Minimum version of Microsoft .NET Framework required by this module
-# DotNetFrameworkVersion = ''
+DotNetFrameworkVersion = '3.5'
 
 # Minimum version of the common language runtime (CLR) required by this module
-# CLRVersion = ''
+CLRVersion = '2.0'
 
 # Processor architecture (None, X86, Amd64) required by this module
 # ProcessorArchitecture = ''
@@ -70,13 +70,29 @@ FormatsToProcess = 'Indented.Net.IP.Format.ps1xml'
 # NestedModules = @()
 
 # Functions to export from this module
-FunctionsToExport = '*'
+FunctionsToExport = @(
+    "ConvertFrom-HexIP"
+    "ConvertTo-BinaryIP"
+    "ConvertTo-DecimalIP"
+    "ConvertTo-DottedDecimalIP"
+    "ConvertTo-HexIP"
+    "ConvertTo-Mask"
+    "ConvertTo-MaskLength"
+    "ConvertTo-Subnet"
+    "Get-BroadcastAddress"
+    "Get-NetworkAddress"
+    "Get-NetworkRange"
+    "Get-NetworkSummary"
+    "Get-Subnet"
+    "Resolve-IPAddress"
+    "Test-SubnetMember"
+)
 
 # Cmdlets to export from this module
 # CmdletsToExport = '*'
 
 # Variables to export from this module
-# VariablesToExport = '*'
+VariablesToExport = @()
 
 # Aliases to export from this module
 # AliasesToExport = '*'
@@ -99,10 +115,10 @@ PrivateData = @{
         Tags = @('IPMaths', 'IPCalculator', 'SubnetMaths')
 
         # A URL to the license for this module.
-        # LicenseUri = ''
+        LicenseUri = 'https://github.com/metablaster/WindowsFirewallRuleset/blob/core/Modules/Indented.Net.IP/LICENSE'
 
         # A URL to the main website for this project.
-        # ProjectUri = ''
+        ProjectUri = 'https://github.com/indented-automation/Indented.Net.IP'
 
         # A URL to an icon representing this module.
         # IconUri = ''
@@ -115,7 +131,7 @@ PrivateData = @{
 } # End of PrivateData hashtable
 
 # HelpInfo URI of this module
-# HelpInfoURI = ''
+HelpInfoURI = 'https://github.com/metablaster/WindowsFirewallRuleset/tree/core/Modules/Indented.Net.IP/help'
 
 # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
 # DefaultCommandPrefix = ''

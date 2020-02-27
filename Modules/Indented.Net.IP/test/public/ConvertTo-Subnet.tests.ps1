@@ -18,7 +18,7 @@ InModuleScope Indented.Net.IP {
     Describe 'ConvertTo-Subnet' {
         BeforeAll {
             Mock Get-NetworkSummary {
-                return [PSCustomObject]@{} | Add-Member -TypeName 'Indented.Net.IP.NetworkSummary' -PassThru
+                return [PSObject]@{} | Add-Member -TypeName 'Indented.Net.IP.NetworkSummary' -PassThru
             }
 
             $FromIPAndMask = @{

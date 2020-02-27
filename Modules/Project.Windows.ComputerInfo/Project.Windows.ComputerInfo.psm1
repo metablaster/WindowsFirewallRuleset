@@ -149,7 +149,7 @@ Get-IPAddress "IPv6"
 .INPUTS
 None. You cannot pipe objects to Get-IPAddress
 .OUTPUTS
-[ipaddress] and warning message if no adapter connected
+[IPAddress] and warning message if no adapter connected
 .NOTES
 None.
 #>
@@ -167,7 +167,7 @@ function Get-IPAddress
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting IP's of connected adapters for $AddressFamily network"
 
 	$ConnectedAdapters = Get-ConnectedAdapters $AddressFamily | Select-Object -ExpandProperty ($AddressFamily + "Address")
-	[ipaddress] $IPAddress = $ConnectedAdapters | Select-Object -ExpandProperty IPAddress
+	[IPAddress] $IPAddress = $ConnectedAdapters | Select-Object -ExpandProperty IPAddress
 
 	$Count = ($IPAddress | Measure-Object).Count
 	if ($Count -gt 1)

@@ -69,13 +69,14 @@ TODO: describe outputs
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
 - For code to be consisten with project: code formatting and symbol casing.
+- Removed unecessary position arguments, added default argument values explicitly.
 #>
 function Resolve-IPAddress
 {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true,
-        Position = 1, ValueFromPipeline = $true)]
+        ValueFromPipeline = $true)]
         [string] $IPAddress
     )
 
@@ -128,7 +129,7 @@ function Resolve-IPAddress
                     }
                 }
 
-                [PSCustomObject]@{
+                [PSObject]@{
                     Name        = $_.Name
                     Position    = [int32] $IPAddress.Substring(0, $_.Index).Split('.').Count - 1
                     ReplaceWith = $values
@@ -138,9 +139,9 @@ function Resolve-IPAddress
 
         if ($groups)
         {
-            GetPermutation $groups -BaseAddress $IPAddress
+            Get-Permutation $groups -BaseAddress $IPAddress
         }
-        elseif (-not [IPAddress]::TryParse(($IPAddress -replace '/\d+$'), [Ref] $null))
+        elseif (-not [IPAddress]::TryParse(($IPAddress -replace '/\d+$'), [ref] $null))
         {
             Write-Warning -Message 'The IPAddress argument is not a valid IP address and cannot be resolved'
         }

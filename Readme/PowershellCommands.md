@@ -143,5 +143,5 @@ Get-Command –module CimCmdlets
 # Get type name aliases
 
 ```powershell
-[psobject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::get
+[PSObject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::get
 ```

@@ -82,6 +82,7 @@ TODO: describe outputs
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
 - For code to be consisten with project: code formatting and symbol casing.
+- Removed unecessary position arguments, added default argument values explicitly.
 #>
 function Get-BroadcastAddress
 {
@@ -89,10 +90,10 @@ function Get-BroadcastAddress
     [OutputType([IPAddress])]
     param (
         [Parameter(Mandatory = $true,
-        Position = 1, ValueFromPipeline = $true)]
+        ValueFromPipeline = $true)]
         [string] $IPAddress,
 
-        [Parameter(Position = 2)]
+        [Parameter()]
         [string] $SubnetMask
     )
 
@@ -100,7 +101,7 @@ function Get-BroadcastAddress
     {
         try
         {
-            $network = ConvertToNetwork @psboundparameters
+            $network = ConvertTo-Network @psboundparameters
 
             $networkAddress = [IPAddress]($network.IPAddress.Address -band $network.SubnetMask.Address)
 

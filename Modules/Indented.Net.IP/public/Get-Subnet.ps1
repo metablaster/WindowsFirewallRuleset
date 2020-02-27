@@ -81,16 +81,17 @@ Change log:
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
 - For code to be consisten with project: code formatting and symbol casing.
+- Removed unecessary position arguments, added default argument values explicitly.
 #>
 function Get-Subnet
 {
     [CmdletBinding()]
     [OutputType('Indented.Net.IP.Subnet')]
     param (
-        [Parameter(Mandatory = $true, Position = 1)]
+        [Parameter(Mandatory = $true, Position = 0)]
         [string] $IPAddress,
 
-        [Parameter(Position = 2)]
+        [Parameter(Position = 1)]
         [string] $SubnetMask,
 
         [Parameter(Mandatory = $true)]
@@ -102,8 +103,8 @@ function Get-Subnet
 
     try
     {
-        $network = ConvertToNetwork @psboundparameters
-        $newNetwork = ConvertToNetwork 0 $NewSubnetMask
+        $network = ConvertTo-Network @psboundparameters
+        $newNetwork = ConvertTo-Network 0 $NewSubnetMask
     }
     catch
     {

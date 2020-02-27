@@ -73,6 +73,7 @@ TODO: describe outputs
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
 - For code to be consisten with project: code formatting and symbol casing.
+- Removed unecessary position arguments, added default argument values explicitly.
 #>
 function ConvertTo-DottedDecimalIP
 {
@@ -80,7 +81,7 @@ function ConvertTo-DottedDecimalIP
     [OutputType([IPAddress])]
     param (
         [Parameter(Mandatory = $true,
-        Position = 1, ValueFromPipeline = $true)]
+        ValueFromPipeline = $true)]
         [string] $IPAddress
     )
 
@@ -90,13 +91,13 @@ function ConvertTo-DottedDecimalIP
         {
             [int64] $value = 0
 
-            if ([int64]::TryParse($IPAddress, [Ref] $value))
+            if ([int64]::TryParse($IPAddress, [ref] $value))
             {
                 return [IPAddress]([IPAddress]::NetworkToHostOrder([int64] $value) -shr 32 -band [UInt32]::MaxValue)
             }
             else
             {
-                [IPAddress][UInt64][Convert]::ToUInt32($IPAddress.Replace('.', ''), 2)
+                [IPAddress][UInt64][convert]::ToUInt32($IPAddress.Replace('.', ''), 2)
             }
         }
         catch

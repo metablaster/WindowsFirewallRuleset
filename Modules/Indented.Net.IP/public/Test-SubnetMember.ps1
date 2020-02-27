@@ -88,16 +88,17 @@ TODO: describe outputs
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
 - For code to be consisten with project: code formatting and symbol casing.
+- Removed unecessary position arguments, added default argument values explicitly.
 #>
 function Test-SubnetMember
 {
     [CmdletBinding()]
     [OutputType([bool])]
     param (
-        [Parameter(Mandatory = $true, Position = 1)]
+        [Parameter(Mandatory = $true, Position = 0)]
         [string] $SubjectIPAddress,
 
-        [Parameter(Mandatory = $true, Position = 2)]
+        [Parameter(Mandatory = $true, Position = 1)]
         [string] $ObjectIPAddress,
 
         [Parameter()]
@@ -109,8 +110,8 @@ function Test-SubnetMember
 
     try
     {
-        $subjectNetwork = ConvertToNetwork $SubjectIPAddress $SubjectSubnetMask
-        $objectNetwork = ConvertToNetwork $ObjectIPAddress $ObjectSubnetMask
+        $subjectNetwork = ConvertTo-Network $SubjectIPAddress $SubjectSubnetMask
+        $objectNetwork = ConvertTo-Network $ObjectIPAddress $ObjectSubnetMask
     }
     catch
     {

@@ -535,7 +535,10 @@ Export-ModuleMember -Function Format-Output
 Export-ModuleMember -Function Set-ScreenBuffer
 Export-ModuleMember -Function Test-TargetComputer
 
-# External
+#
+# External function exports
+#
+
 Export-ModuleMember -Function Get-TypeName
 
 #

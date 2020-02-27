@@ -76,6 +76,7 @@ TODO: describe outputs
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
 - For code to be consisten with project: code formatting and symbol casing.
+- Removed unecessary position arguments, added default argument values explicitly.
 #>
 function ConvertTo-Subnet
 {
@@ -83,10 +84,10 @@ function ConvertTo-Subnet
     [OutputType('Indented.Net.IP.Subnet')]
     param (
         [Parameter(Mandatory = $true,
-        Position = 1, ParameterSetName = 'FromIPAndMask')]
+        Position = 0, ParameterSetName = 'FromIPAndMask')]
         [string] $IPAddress,
 
-        [Parameter(Position = 2,
+        [Parameter(Position = 1,
         ParameterSetName = 'FromIPAndMask')]
         [string] $SubnetMask,
 
@@ -103,7 +104,7 @@ function ConvertTo-Subnet
     {
         try
         {
-            $network = ConvertToNetwork @psboundparameters
+            $network = ConvertTo-Network @psboundparameters
         }
         catch
         {
@@ -139,7 +140,7 @@ function ConvertTo-Subnet
 
         try
         {
-            $network = ConvertToNetwork $Start $MaskLength
+            $network = ConvertTo-Network $Start $MaskLength
         }
         catch
         {
@@ -154,7 +155,7 @@ function ConvertTo-Subnet
         $hostAddresses = 0
     }
 
-    $subnet = [PSCustomObject]@{
+    $subnet = [PSObject]@{
         NetworkAddress   = Get-NetworkAddress $network.ToString()
         BroadcastAddress = Get-BroadcastAddress $network.ToString()
         SubnetMask       = $network.SubnetMask

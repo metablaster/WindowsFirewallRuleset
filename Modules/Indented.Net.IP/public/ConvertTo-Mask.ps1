@@ -68,6 +68,7 @@ TODO: describe outputs
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
 - For code to be consisten with project: code formatting and symbol casing.
+- Removed unecessary position arguments, added default argument values explicitly.
 #>
 function ConvertTo-Mask
 {
@@ -75,7 +76,7 @@ function ConvertTo-Mask
     [OutputType([IPAddress])]
     param (
         [Parameter(Mandatory = $true,
-        Position = 1, ValueFromPipeline = $true)]
+        ValueFromPipeline = $true)]
         [Alias('Length')]
         [ValidateRange(0, 32)]
         [byte] $MaskLength
@@ -83,6 +84,6 @@ function ConvertTo-Mask
 
     process
     {
-        [IPAddress][UInt64][Convert]::ToUInt32(('1' * $MaskLength).PadRight(32, '0'), 2)
+        [IPAddress][UInt64][convert]::ToUInt32(('1' * $MaskLength).PadRight(32, '0'), 2)
     }
 }

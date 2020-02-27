@@ -72,6 +72,7 @@ TODO: describe outputs
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
 - For code to be consisten with project: code formatting and symbol casing.
+- Removed unecessary position arguments, added default argument values explicitly.
 #>
 function Get-NetworkSummary
 {
@@ -79,10 +80,10 @@ function Get-NetworkSummary
     [OutputType('Indented.Net.IP.NetworkSummary')]
     param (
         [Parameter(Mandatory = $true,
-        Position = 1, ValueFromPipeline = $true)]
+        ValueFromPipeline = $true)]
         [string] $IPAddress,
 
-        [Parameter(Position = 2)]
+        [Parameter()]
         [string] $SubnetMask
     )
 
@@ -90,7 +91,7 @@ function Get-NetworkSummary
     {
         try
         {
-            $network = ConvertToNetwork @psboundparameters
+            $network = ConvertTo-Network @psboundparameters
         }
         catch
         {
@@ -102,7 +103,7 @@ function Get-NetworkSummary
         $decimalNetwork =  $decimalIP -band $decimalMask
         $decimalBroadcast = $decimalIP -bor (-bnot $decimalMask -band [UInt32]::MaxValue)
 
-        $networkSummary = [PSCustomObject]@{
+        $networkSummary = [PSObject]@{
             NetworkAddress    = $networkAddress = ConvertTo-DottedDecimalIP $decimalNetwork
             NetworkDecimal    = $decimalNetwork
             BroadcastAddress  = ConvertTo-DottedDecimalIP $decimalBroadcast

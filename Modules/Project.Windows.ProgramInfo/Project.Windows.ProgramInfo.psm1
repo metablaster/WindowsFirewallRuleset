@@ -496,7 +496,7 @@ Get-UserPrograms "USERNAME"
 .INPUTS
 None. You cannot pipe objects to Get-UserPrograms
 .OUTPUTS
-[psobject[]] list of programs for specified user on a target computer
+[PSObject[]] list of programs for specified user on a target computer
 .NOTES
 We should make a query for an array of users, will help to save into variable
 #>
@@ -530,7 +530,7 @@ function Get-UserPrograms
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key HKU:$HKU"
 		$UserKey = $RemoteKey.OpenSubkey($HKU)
 
-		[psobject[]] $UserPrograms = @()
+		[PSObject[]] $UserPrograms = @()
 		if (!$UserKey)
 		{
 			Write-Warning -Message "Failed to open registry root key: HKU:$HKU"
@@ -593,7 +593,7 @@ Get-SystemPrograms "COMPUTERNAME"
 .INPUTS
 None. You cannot pipe objects to Get-SystemPrograms
 .OUTPUTS
-[psobject[]] list of programs installed for all users
+[PSObject[]] list of programs installed for all users
 .NOTES
 We should return empty psobject if test computer fails
 #>
@@ -631,7 +631,7 @@ function Get-SystemPrograms
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
-		[psobject[]] $SystemPrograms = @()
+		[PSObject[]] $SystemPrograms = @()
 		foreach ($HKLMRootKey in $HKLM)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLMRootKey"
@@ -719,7 +719,7 @@ Get-AllUserPrograms "COMPUTERNAME"
 .INPUTS
 None. You cannot pipe objects to Get-AllUserPrograms
 .OUTPUTS
-[psobject[]] list of programs installed for all users
+[PSObject[]] list of programs installed for all users
 .NOTES
 TODO: should be renamed into Get-InstallProperties
 #>
@@ -749,7 +749,7 @@ function Get-AllUserPrograms
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
-		[psobject[]] $AllUserPrograms = @()
+		[PSObject[]] $AllUserPrograms = @()
 		if (!$RootKey)
 		{
 			Write-Warning -Message "Failed to open registry root key: HKLM:$HKLM"
@@ -828,7 +828,7 @@ Get-ExecutablePaths "COMPUTERNAME"
 .INPUTS
 None. You cannot pipe objects to Get-ExecutablePaths
 .OUTPUTS
-[psobject[]] list of executables, their installation path and additional information
+[PSObject[]] list of executables, their installation path and additional information
 .NOTES
 None.
 #>
@@ -867,7 +867,7 @@ function Get-ExecutablePaths
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
-		[psobject[]] $AppPaths = @()
+		[PSObject[]] $AppPaths = @()
 		foreach ($HKLMRootKey in $HKLM)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLMRootKey"
@@ -1887,7 +1887,7 @@ Get-NetFramework COMPUTERNAME
 .INPUTS
 None. You cannot pipe objects to Get-NetFramework
 .OUTPUTS
-[psobject[]] for installed NET Frameworks and install paths
+[PSObject[]] for installed NET Frameworks and install paths
 .NOTES
 None.
 #>
@@ -1915,7 +1915,7 @@ function Get-NetFramework
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
-		[psobject[]] $NetFramework = @()
+		[PSObject[]] $NetFramework = @()
 		if (!$RootKey)
 		{
 			Write-Warning -Message "Failed to open registry root key: HKLM:$HKLM"
@@ -2016,7 +2016,7 @@ Get-WindowsSDK COMPUTERNAME
 .INPUTS
 None. You cannot pipe objects to Get-WindowsSDK
 .OUTPUTS
-[psobject[]] for installed Windows SDK versions and install paths
+[PSObject[]] for installed Windows SDK versions and install paths
 .NOTES
 None.
 #>
@@ -2051,7 +2051,7 @@ function Get-WindowsSDK
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
-		[psobject[]] $WindowsSDK = @()
+		[PSObject[]] $WindowsSDK = @()
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
@@ -2113,7 +2113,7 @@ Get-WindowsKits COMPUTERNAME
 .INPUTS
 None. You cannot pipe objects to Get-WindowsKits
 .OUTPUTS
-[psobject[]] for installed Windows Kits versions and install paths
+[PSObject[]] for installed Windows Kits versions and install paths
 .NOTES
 None.
 #>
@@ -2152,7 +2152,7 @@ function Get-WindowsKits
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
-		[psobject[]] $WindowsKits = @()
+		[PSObject[]] $WindowsKits = @()
 		if (!$RootKey)
 		{
 			Write-Warning -Message "Failed to open registry root key: HKLM:$HKLM"
@@ -2208,7 +2208,7 @@ Get-WindowsDefender COMPUTERNAME
 .INPUTS
 None. You cannot pipe objects to Get-WindowsDefender
 .OUTPUTS
-[psobject] for installed Windows Defender, version and install paths
+[PSObject] for installed Windows Defender, version and install paths
 .NOTES
 None.
 #>
@@ -2233,7 +2233,7 @@ function Get-WindowsDefender
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
-		[psobject] $WindowsDefender = $null
+		[PSObject] $WindowsDefender = $null
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
@@ -2287,7 +2287,7 @@ Get-SQLManagementStudio COMPUTERNAME
 .INPUTS
 None. You cannot pipe objects to Get-SQLManagementStudio
 .OUTPUTS
-[psobject[]] for installed Microsoft SQL Server Management Studio's
+[PSObject[]] for installed Microsoft SQL Server Management Studio's
 .NOTES
 None.
  #>
@@ -2326,7 +2326,7 @@ None.
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
-		[psobject[]] $ManagementStudio = @()
+		[PSObject[]] $ManagementStudio = @()
 		if (!$RootKey)
 		{
 			Write-Warning -Message "Failed to open registry root key: $HKLM"
@@ -2457,8 +2457,13 @@ Export-ModuleMember -Function Get-NetFramework
 Export-ModuleMember -Function Get-WindowsKits
 Export-ModuleMember -Function Get-WindowsSDK
 Export-ModuleMember -Function Get-WindowsDefender
-Export-ModuleMember -Function Get-SQLInstances
 Export-ModuleMember -Function Get-SQLManagementStudio
+
+#
+# External function exports
+#
+
+Export-ModuleMember -Function Get-SQLInstances
 
 #
 # Exports for debugging

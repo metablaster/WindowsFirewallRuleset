@@ -18,8 +18,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #>
 
 $private = @(
-    'ConvertToNetwork'
-    'GetPermutation'
+    'ConvertTo-Network'
+    'Get-Permutation'
 )
 
 foreach ($file in $private) {

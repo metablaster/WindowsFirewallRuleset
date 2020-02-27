@@ -80,17 +80,18 @@ TODO: describe outputs
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
 - For code to be consisten with project: code formatting and symbol casing.
+- Removed unecessary position arguments, added default argument values explicitly.
 #>
 function Get-NetworkRange
 {
     [CmdletBinding(DefaultParameterSetName = 'FromIPAndMask')]
     [OutputType([IPAddress])]
     param (
-        [Parameter(Mandatory = $true, Position = 1,
+        [Parameter(Mandatory = $true, Position = 0,
         ValueFromPipeline = $true, ParameterSetName = 'FromIPAndMask')]
         [string] $IPAddress,
 
-        [Parameter(Position = 2,
+        [Parameter(Position = 1,
         ParameterSetName = 'FromIPAndMask')]
         [string] $SubnetMask,
 
@@ -113,7 +114,7 @@ function Get-NetworkRange
             try
             {
                 $null = $psboundparameters.Remove('IncludeNetworkAndBroadcast')
-                $network = ConvertToNetwork @psboundparameters
+                $network = ConvertTo-Network @psboundparameters
             }
             catch
             {

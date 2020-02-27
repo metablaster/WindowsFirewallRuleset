@@ -111,7 +111,7 @@ Get-GroupPrincipals "Users" -Machine @(DESKTOP, LAPTOP) -CIM
 .INPUTS
 [string[]] User groups
 .OUTPUTS
-[psobject[]] Array of enabled user accounts in specified group
+[PSObject[]] Array of enabled user accounts in specified group
 .NOTES
 CIM switch is not supported on PowerShell Core, meaning contacting remote computers
 is supported only on Windows PowerShell
@@ -120,7 +120,7 @@ TODO: should we handle NT AUTHORITY, BUILTIN and similar?
 #>
 function Get-GroupPrincipals
 {
-	[OutputType([psobject[]])]
+	[OutputType([PSObject[]])]
 	[CmdletBinding(PositionalBinding = $false)]
 	param (
 		[Alias("Group")]
@@ -139,7 +139,7 @@ function Get-GroupPrincipals
 
 	begin
 	{
-		[psobject[]] $UserAccounts = @()
+		[PSObject[]] $UserAccounts = @()
 		$PowerShellEdition = $PSVersionTable.PSEdition
 	}
 	process
@@ -269,14 +269,14 @@ Get-UserGroups @(DESKTOP, LAPTOP) -CIM
 .INPUTS
 [string[]] array of computer names
 .OUTPUTS
-[psobject[]] array of user groups on target computers
+[PSObject[]] array of user groups on target computers
 .NOTES
 CIM switch is not supported on PowerShell Core, meaning contacting remote computers
 is supported only on Windows PowerShell
 #>
 function Get-UserGroups
 {
-	[OutputType([psobject[]])]
+	[OutputType([PSObject[]])]
 	[CmdletBinding(PositionalBinding = $false)]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
@@ -289,7 +289,7 @@ function Get-UserGroups
 
 	begin
 	{
-		[psobject[]] $UserGroups =@()
+		[PSObject[]] $UserGroups =@()
 		$PowerShellEdition = $PSVersionTable.PSEdition
 	}
 	process
@@ -761,7 +761,6 @@ if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 
 Export-ModuleMember -Function ConvertFrom-UserAccount
 Export-ModuleMember -Function Get-AccountSID
-Export-ModuleMember -Function ConvertFrom-SID
 Export-ModuleMember -Function Get-GroupPrincipals
 Export-ModuleMember -Function Get-GroupSID
 Export-ModuleMember -Function Get-SDDL
@@ -769,8 +768,15 @@ Export-ModuleMember -Function Merge-SDDL
 Export-ModuleMember -Function Get-UserGroups
 
 #
+# External function exports
+#
+
+Export-ModuleMember -Function ConvertFrom-SID
+
+#
 # Variable exports
 #
+
 Export-ModuleMember -Variable CheckInitUserInfo
 
 Export-ModuleMember -Variable UsersGroupSDDL
