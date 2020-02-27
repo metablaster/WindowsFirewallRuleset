@@ -1,11 +1,12 @@
+
 TOPIC
 	about_Project.AllPlatforms.Test
 
 SHORT DESCRIPTION
-	Helper functions to write powershell unit tests
+	Functions to write powershell unit tests
 
 LONG DESCRIPTION
-	TODO: add description
+	These simple function are designed for Windows Firewall Ruleset
 
 EXAMPLES
 	To start unit test:

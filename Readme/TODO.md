@@ -33,4 +33,7 @@ This is a project global list which applies to several or all scripts, for small
 30. localhost != `[Environment]::MachineName`
 31. Revisit code and make consitent PSObject properties for all function outputs
 32. Move NET.IP tests into test folder, clean up directory add streams
-33. Paths to fix: nvidia, onedrive, visio, project rules to fix: qbittorrent, steam, vcpkg, msys2
+33. Paths to fix: nvidia, onedrive, visio, project rules to fix: qbittorrent, steam, vcpkg, msys2, store apps for admins
+34. Change bool parameters to switch where possible
+35. Revisit naming convention for ConvertFrom/ConvertTo it's not clear what is being converted
+36. Line numbers for verbose and debug messages

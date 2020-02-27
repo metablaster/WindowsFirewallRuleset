@@ -10,10 +10,8 @@ LONG DESCRIPTION
 	Currently only localhost is supported.
 
 VARIABLES
-	UserAccounts:       User accounts in "Users" group
-	AdminAccounts:      User accounts in "Administrators" group
-	UserAccountsSDDL:   SDDL string for all users in "Users" group
-	AdminAccountsSDDL:  SDDL string for all users in "Administrators" group
+	UsersGroupSDDL:   			SDDL string for "Users" group
+	AdministratorsGroupSDDL:	SDDL string for "Administrators" group
 
 	# SDDL strings for following system users
 	NT_AUTHORITY_System
@@ -21,15 +19,17 @@ VARIABLES
 	NT_AUTHORITY_NetworkService
 	NT_AUTHORITY_UserModeDrivers
 
+	CheckInitUserInfo	Variable to prevent double initialization of constants
+
 EXAMPLES
 	To get SDDL string for accouns:
 	Get-SDDL -Domain "NT AUTHORITY" -User @("NETWORK SERVICE", "LOCAL SERVICE")
 
 	To get user SID:
-	Get-UserSID("TestUser")
+	Get-AccountSID -User "TestUser" -Computer "localhost"
 
 	To get user accounts on syste:
-	Get-UserAccounts("Administrators")
+	Get-GroupPrincipals "Administrators" "Users"
 
 KEYWORDS
 	UserInfo
@@ -37,4 +37,4 @@ KEYWORDS
 	Users
 
 SEE ALSO
-	TODO: Add link for more help
+	https://github.com/metablaster/WindowsFirewallRuleset

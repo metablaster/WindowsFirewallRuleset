@@ -58,7 +58,9 @@ Import-Module -Name $PSScriptRoot\..\Project.AllPlatforms.Utility
 
 <#
 .SYNOPSIS
-get store app SID
+Get store app SID
+.DESCRIPTION
+Get SID for single store app if the app exists
 .PARAMETER UserName
 Username for which to query app SID
 .PARAMETER AppName
@@ -68,7 +70,7 @@ sample: Get-AppSID "User" "Microsoft.MicrosoftEdge_8wekyb3d8bbwe"
 .INPUTS
 None. You cannot pipe objects to Get-AppSID
 .OUTPUTS
-System.String store app SID (security identifier)
+[string] store app SID (security identifier) if app found
 .NOTES
 TODO: Test if path exists
 TODO: remote computers?
@@ -114,7 +116,9 @@ function Get-AppSID
 
 <#
 .SYNOPSIS
-check if file such as an *.exe exists
+Check if file such as an *.exe exists
+.DESCRIPTION
+In addition to Test-Path of file, message and stack trace is shown
 .PARAMETER FilePath
 path to file
 .EXAMPLE
@@ -122,12 +126,14 @@ Test-File "C:\Users\User\AppData\Local\Google\Chrome\Application\chrome.exe"
 .INPUTS
 None. You cannot pipe objects to Test-File
 .OUTPUTS
-warning message if file not found
+None. Warning message if file not found
 .NOTES
-We should attempt to fix the path if invlid here!
+TODO: We should attempt to fix the path if invlid here!
+TODO: We should return true or false and conditionally load rule
 #>
 function Test-File
 {
+	[OutputType([System.Void])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
@@ -139,6 +145,7 @@ function Test-File
 	$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($FilePath)
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking: $ExpandedPath"
 
+	# NOTE: or Test-Path -PathType Leaf ?
 	if (!([System.IO.File]::Exists($ExpandedPath)))
 	{
 		# NOTE: number for Get-PSCallStack is 1, which means 2 function calls back and then get script name (call at 0 is this script)
@@ -155,18 +162,22 @@ function Test-File
 
 <#
 .SYNOPSIS
-Same as Test-Path but expands system environment variables, and checks if compatible path
+Test if path is valid for firewall rule
+.DESCRIPTION
+Same as Test-Path but expands system environment variables, and checks if path is compatible
+for firewall rules
 .PARAMETER FilePath
-Path to folder, Allow null or empty since input may come from other commandlets which can return empty or null
+Path to folder, Allows null or empty since input may come from other commandlets which can return empty or null
 .EXAMPLE
 Test-Evnironment %SystemDrive%
 .INPUTS
 None. You cannot pipe objects to Test-Environment
 .OUTPUTS
-$true if path exists, false otherwise
+[bool] true if path exists, false otherwise
 #>
 function Test-Environment
 {
+	[OutputType([System.Boolean])]
 	[CmdletBinding()]
 	param (
 		[Parameter()]
@@ -189,23 +200,26 @@ function Test-Environment
 		return $false
 	}
 
-	return (Test-Path -Path ([System.Environment]::ExpandEnvironmentVariables($FilePath)))
+	return (Test-Path -Path ([System.Environment]::ExpandEnvironmentVariables($FilePath)) -PathType Container)
 }
 
 <#
 .SYNOPSIS
-check if service exists on system
+Check if service exists on system
+.DESCRIPTION
+Check if service exists on system, if not show warning message
 .PARAMETER Service
-service name (not display name)
+Service name (not display name)
 .EXAMPLE
 Test-Service dnscache
 .INPUTS
 None. You cannot pipe objects to Test-Service
 .OUTPUTS
-warning and info message if service not found
+None. Warning and info message if service not found
 #>
 function Test-Service
 {
+	[OutputType([System.Void])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
@@ -225,6 +239,9 @@ function Test-Service
 <#
 .SYNOPSIS
 Check if input path leads to user profile
+.DESCRIPTION
+User profile paths are not valid for firewall rules, this method help make a check
+if this is true
 .PARAMETER FilePath
 File path to check, can be unformatted or have environment variables
 .EXAMPLE
@@ -232,12 +249,13 @@ Test-UserProfile "C:\Users\User\AppData\Local\Google\Chrome\Application\chrome.e
 .INPUTS
 None. You cannot pipe objects to Test-UserProfile
 .OUTPUTS
-$true or $false
+[bool] true if userprofile path or false otherwise
 .NOTES
 TODO: is it possible to nest this into Test-Environment somehow?
 #>
 function Test-UserProfile
 {
+	[OutputType([System.Boolean])]
 	[CmdletBinding()]
 	param (
 		[string] $FilePath
@@ -324,15 +342,19 @@ function Test-UserProfile
 
 <#
 .SYNOPSIS
-format path into firewall compatible path
+Format path into firewall compatible path
+.DESCRIPTION
+Various paths drilled out of registry, and those specified by the user must be
+checked and properly formatted.
+Formatted paths will also help sorting rules in firewall GUI based on path.
 .PARAMETER FilePath
-File path to check, can be unformatted or have environment variables
+File path to format, can have environment variables, or consits of trailing slashes.
 .EXAMPLE
 Format-Path "C:\Program Files\\Dir\"
 .INPUTS
 None. You cannot pipe objects to Format-Path
 .OUTPUTS
-System.String formatted path, includes environment variables, stripped off of junk
+[string] formatted path, includes environment variables, stripped off of junk
 #>
 function Format-Path
 {
@@ -456,18 +478,25 @@ function Format-Path
 
 <#
 .SYNOPSIS
-search installed programs in userprofile for specifit user account
-.PARAMETER UserAccount
-User account in form of "COMPUTERNAME\USERNAME"
+Get a list installed by specific user
+.DESCRIPTION
+Search installed programs in userprofile for specifit user account
+.PARAMETER UserName
+User name in form of "USERNAME"
+.PARAMETER ComputerName
+NETBios Computer name in form of "COMPUTERNAME"
 .EXAMPLE
-Get-UserPrograms "COMPUTERNAME\USERNAME"
+Get-UserPrograms "USERNAME"
 .INPUTS
 None. You cannot pipe objects to Get-UserPrograms
 .OUTPUTS
-System.Management.Automation.PSCustomObject list of programs for specified account if form of COMPUTERNAME\USERNAME
+[psobject[]] list of programs for specified user on a target computer
+.NOTES
+We should make a query for an array of users, will help to save into variable
 #>
 function Get-UserPrograms
 {
+	[OutputType([System.Management.Automation.PSCustomObject[]])]
 	[CmdletBinding()]
 	param (
 		[Alias("User")]
@@ -495,7 +524,7 @@ function Get-UserPrograms
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key HKU:$HKU"
 		$UserKey = $RemoteKey.OpenSubkey($HKU)
 
-		$UserPrograms = @()
+		[psobject[]] $UserPrograms = @()
 		if (!$UserKey)
 		{
 			Write-Warning -Message "Failed to open registry root key: HKU:$HKU"
@@ -548,7 +577,7 @@ function Get-UserPrograms
 
 <#
 .SYNOPSIS
-search installed programs for all users, system wide
+Search installed programs for all users, system wide
 .PARAMETER ComputerName
 Computer name which to check
 .EXAMPLE
@@ -556,10 +585,13 @@ Get-SystemPrograms "COMPUTERNAME"
 .INPUTS
 None. You cannot pipe objects to Get-SystemPrograms
 .OUTPUTS
-System.Management.Automation.PSCustomObject list of programs installed for all users
+[psobject[]] list of programs installed for all users
+.NOTES
+We should return empty psobject if test computer fails
 #>
 function Get-SystemPrograms
 {
+	[OutputType([System.Management.Automation.PSCustomObject[]])]
 	[CmdletBinding()]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
@@ -572,6 +604,7 @@ function Get-SystemPrograms
 
 	if (Test-TargetComputer $ComputerName)
 	{
+		# TODO: Test-Path those keys first?
 		if ([System.Environment]::Is64BitOperatingSystem)
 		{
 			# 64 bit system
@@ -590,7 +623,7 @@ function Get-SystemPrograms
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
-		$SystemPrograms = @()
+		[psobject[]] $SystemPrograms = @()
 		foreach ($HKLMRootKey in $HKLM)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLMRootKey"
@@ -668,7 +701,7 @@ function Get-SystemPrograms
 
 <#
 .SYNOPSIS
-search program install properties for all users
+Search program install properties for all users, system wide
 .PARAMETER ComputerName
 Computer name which to check
 .EXAMPLE
@@ -676,10 +709,13 @@ Get-AllUserPrograms "COMPUTERNAME"
 .INPUTS
 None. You cannot pipe objects to Get-AllUserPrograms
 .OUTPUTS
-System.Management.Automation.PSCustomObject list of programs installed for all users
+[psobject[]] list of programs installed for all users
+.NOTES
+TODO: should be renamed into Get-InstallProperties
 #>
 function Get-AllUserPrograms
 {
+	[OutputType([System.Management.Automation.PSCustomObject[]])]
 	[CmdletBinding()]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
@@ -703,7 +739,7 @@ function Get-AllUserPrograms
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
-		$AllUserPrograms = @()
+		[psobject[]] $AllUserPrograms = @()
 		if (!$RootKey)
 		{
 			Write-Warning -Message "Failed to open registry root key: HKLM:$HKLM"
@@ -778,16 +814,15 @@ registry path and child registry key name for target computer
 .PARAMETER ComputerName
 Computer name which to check
 .EXAMPLE
-Get-AppPaths "COMPUTERNAME"
+Get-ExecutablePaths "COMPUTERNAME"
 .INPUTS
-None. You cannot pipe objects to Get-SystemPrograms
+None. You cannot pipe objects to Get-ExecutablePaths
 .OUTPUTS
-System.Management.Automation.PSCustomObject list of executables and their installation path
-.NOTES
-TODO: we are using OUTPUTS to describe something that isn't really an output.
+[psobject[]] list of executables, their installation path and additional information
 #>
 function Get-ExecutablePaths
 {
+	[OutputType([System.Management.Automation.PSCustomObject[]])]
 	[CmdletBinding()]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
@@ -820,7 +855,7 @@ function Get-ExecutablePaths
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
-		$AppPaths = @()
+		[psobject[]] $AppPaths = @()
 		foreach ($HKLMRootKey in $HKLM)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLMRootKey"
@@ -862,12 +897,14 @@ function Get-ExecutablePaths
 				$InstallLocation = $SubKey.GetValue("Path")
 				if (![string]::IsNullOrEmpty($InstallLocation))
 				{
+					# NOTE: Avoid spamming
 					$InstallLocation = Format-Path $InstallLocation -Verbose:$false -Debug:$false
 				}
 				elseif (![string]::IsNullOrEmpty($FilePath))
 				{
 					# Get install location from Default key
 					$InstallLocation = Split-Path -Path $FilePath -Parent
+					# NOTE: Avoid spamming
 					$InstallLocation = Format-Path $InstallLocation -Verbose:$false -Debug:$false
 				}
 
@@ -904,18 +941,28 @@ function Get-ExecutablePaths
 
 <#
 .SYNOPSIS
-Create data table used to hold information for specific program for each user
+Create data table used to hold information for a list of programs
+.DESCRIPTION
+Create data table which is filled with data about programs and principals such
+as users or groups and their SID for which given firewall rule applies
+This method is primarly used to reset the table
+Each entry in the table also has an ID to help choosing entries by ID
 .PARAMETER TableName
 Table name
 .EXAMPLE
-$MyTable = Initialize-Table
+Initialize-Table
 .INPUTS
 None. You cannot pipe objects to Initialize-Table
 .OUTPUTS
-System.Data.DataTable empty table with 2 columns, user entry and install location
+None. Module scope installation table with initial columns is created
+.NOTES
+TODO: There should be a better way to drop the table instead of recreating it
+TODO: We should initialize table with complete list of programs and principals and
+return the table by reference
 #>
 function Initialize-Table
 {
+	[OutputType([System.Void])]
 	[CmdletBinding()]
 	param (
 		[Parameter()]
@@ -959,7 +1006,10 @@ function Initialize-Table
 
 <#
 .SYNOPSIS
-Search and add new program installation directory to the global table
+Fill data table with principal and program location
+.DESCRIPTION
+Search system for programs with input search string, and add new program installation directory
+to the table, as well as other information needed to make a firewall rule
 .PARAMETER SearchString
 Search string which corresponds to the output of "Get programs" functions
 .PARAMETER UserProfile
@@ -967,16 +1017,15 @@ true if user profile is to be searched too, system locations only otherwise
 .PARAMETER Executables
 true if executable paths should be searched first.
 .EXAMPLE
-Update-Table "Google Chrome"
+Update-Table "GoogleChrome"
 .INPUTS
 None. You cannot pipe objects to Update-Table
 .OUTPUTS
-None, global installation table is updated
-.NOTES
-Table code needs to be updated to fill it for USERS instead of same path for each individual user
+None. Module scope installation table is updated
 #>
 function Update-Table
 {
+	[OutputType([System.Void])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
@@ -1116,6 +1165,7 @@ function Update-Table
 
 				foreach ($Program in $UserPrograms)
 				{
+					# NOTE: Avoid spamming
 					# Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing program: $Program"
 
 					$InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
@@ -1145,7 +1195,9 @@ function Update-Table
 
 <#
 .SYNOPSIS
-Manually add new program installation directory to the global table from string for each user
+Manually add new program installation directory to the table
+.DESCRIPTION
+Based on path and if it's valid path fill the table with it and add principals and other information
 .PARAMETER InstallLocation
 Program installation directory
 .EXAMPLE
@@ -1153,12 +1205,13 @@ Edit-Table "%ProgramFiles(x86)%\TeamViewer"
 .INPUTS
 None. You cannot pipe objects to Edit-Table
 .OUTPUTS
-None, global installation table is updated
+None. Module scope installation table is updated
 .NOTES
 TODO: principal parameter?
 #>
 function Edit-Table
 {
+	[OutputType([System.Void])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
@@ -1229,21 +1282,27 @@ function Edit-Table
 <#
 .SYNOPSIS
 Test if given installation directory is valid
+.DESCRIPTION
+Test if given installation directory is valid and if not this method will search the
+system for valid path and return it via reference parameter
 .PARAMETER Program
-predefined program name
+Predefined program name for which to search
 .PARAMETER FilePath
-Path to program (excluding executable)
+Reference to variable whic holds a path to program (excluding executable)
 .EXAMPLE
-Test-Installation "Office" "%ProgramFiles(x86)%\Microsoft Office\root\Office16"
+$MyProgram = "%ProgramFiles(x86)%\Microsoft Office\root\Office16"
+Test-Installation "Office" ([ref] $MyProgram)
 .INPUTS
 None. You cannot pipe objects to Test-Installation
 .OUTPUTS
-If test OK same path, if not try to update path, else return given path back
+[bool] true if path is ok or found false otherwise,
+via reference, if test OK same path, if not try to update path, else given path back is not modified
 .NOTES
 TODO: temporarily using ComputerName parameter
 #>
 function Test-Installation
 {
+	[OutputType([System.Boolean])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
@@ -1326,9 +1385,12 @@ function Test-Installation
 
 <#
 .SYNOPSIS
-find installation directory for given program
+Find installation directory for given predefined program name
+.DESCRIPTION
+Find-Installation is called by Test-Installation, ie. only if test for existing path
+fails the this method kicks
 .PARAMETER Program
-predefined program name
+Predefined program name
 .PARAMETER ComputerName
 Computer name on which to look for program installation
 .EXAMPLE
@@ -1336,10 +1398,11 @@ Find-Installation "Office"
 .INPUTS
 None. You cannot pipe objects to Find-Installation
 .OUTPUTS
-True or false if installation directory if found, installation table is updated
+[bool] true or false if installation directory if found, installation table is updated
 #>
 function Find-Installation
 {
+	[OutputType([System.Boolean])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
@@ -1797,7 +1860,10 @@ function Find-Installation
 
 <#
 .SYNOPSIS
-Return installed NET Frameworks
+Get installed NET Frameworks
+.DESCRIPTION
+Get-NetFramework will return all NET frameworks installed regardless if
+installation directory exists or not, since some versions are built in
 .PARAMETER ComputerName
 Computer name for which to list installed installed framework
 .EXAMPLE
@@ -1805,10 +1871,11 @@ Get-NetFramework COMPUTERNAME
 .INPUTS
 None. You cannot pipe objects to Get-NetFramework
 .OUTPUTS
-System.Management.Automation.PSCustomObject for installed NET Frameworks and install paths
+[psobject[]] for installed NET Frameworks and install paths
 #>
 function Get-NetFramework
 {
+	[OutputType([System.Management.Automation.PSCustomObject[]])]
 	[CmdletBinding()]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
@@ -1830,7 +1897,7 @@ function Get-NetFramework
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
-		$NetFramework = @()
+		[psobject[]] $NetFramework = @()
 		if (!$RootKey)
 		{
 			Write-Warning -Message "Failed to open registry root key: HKLM:$HKLM"
@@ -1921,7 +1988,7 @@ function Get-NetFramework
 
 <#
 .SYNOPSIS
-Return installed Windows SDK
+Get installed Windows SDK
 .PARAMETER ComputerName
 Computer name for which to list installed installed framework
 .EXAMPLE
@@ -1929,10 +1996,11 @@ Get-WindowsSDK COMPUTERNAME
 .INPUTS
 None. You cannot pipe objects to Get-WindowsSDK
 .OUTPUTS
-System.Management.Automation.PSCustomObject for installed Windows SDK versions and install paths
+[psobject[]] for installed Windows SDK versions and install paths
 #>
 function Get-WindowsSDK
 {
+	[OutputType([System.Management.Automation.PSCustomObject[]])]
 	[CmdletBinding()]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
@@ -1961,7 +2029,7 @@ function Get-WindowsSDK
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
-		$WindowsSDK = @()
+		[psobject[]] $WindowsSDK = @()
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
@@ -2013,7 +2081,7 @@ function Get-WindowsSDK
 
 <#
 .SYNOPSIS
-Return installed Windows Kits
+Get installed Windows Kits
 .PARAMETER ComputerName
 Computer name for which to list installed installed windows kits
 .EXAMPLE
@@ -2021,10 +2089,11 @@ Get-WindowsKits COMPUTERNAME
 .INPUTS
 None. You cannot pipe objects to Get-WindowsKits
 .OUTPUTS
-System.Management.Automation.PSCustomObject for installed Windows Kits versions and install paths
+[psobject[]] for installed Windows Kits versions and install paths
 #>
 function Get-WindowsKits
 {
+	[OutputType([System.Management.Automation.PSCustomObject[]])]
 	[CmdletBinding()]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
@@ -2057,7 +2126,7 @@ function Get-WindowsKits
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
-		$WindowsKits = @()
+		[psobject[]] $WindowsKits = @()
 		if (!$RootKey)
 		{
 			Write-Warning -Message "Failed to open registry root key: HKLM:$HKLM"
@@ -2103,7 +2172,7 @@ function Get-WindowsKits
 
 <#
 .SYNOPSIS
-Return installed Windows Defender
+Get installed Windows Defender
 .PARAMETER ComputerName
 Computer name for which to list installed Windows Defender
 .EXAMPLE
@@ -2111,10 +2180,11 @@ Get-WindowsDefender COMPUTERNAME
 .INPUTS
 None. You cannot pipe objects to Get-WindowsDefender
 .OUTPUTS
-System.Management.Automation.PSCustomObject for installed Windows Defender, version and install paths
+[psobject] for installed Windows Defender, version and install paths
 #>
 function Get-WindowsDefender
 {
+	[OutputType([System.Management.Automation.PSCustomObject])]
 	[CmdletBinding()]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
@@ -2133,7 +2203,7 @@ function Get-WindowsDefender
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
-		$WindowsDefender = $null
+		[psobject] $WindowsDefender = $null
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
@@ -2172,7 +2242,7 @@ function Get-WindowsDefender
 
 <#
 .SYNOPSIS
-Get installed Microsoft SQL Server Management Studio
+Get installed Microsoft SQL Server Management Studios
 .PARAMETER ComputerName
 Computer name for which to list installed installed framework
 .EXAMPLE
@@ -2185,10 +2255,11 @@ Get-SQLManagementStudio COMPUTERNAME
 .INPUTS
 None. You cannot pipe objects to Get-SQLManagementStudio
 .OUTPUTS
-System.Management.Automation.PSCustomObject for installed Microsoft SQL Server Management Studio
+[psobject[]] for installed Microsoft SQL Server Management Studio's
  #>
  function Get-SQLManagementStudio
  {
+	[OutputType([System.Management.Automation.PSCustomObject[]])]
 	[CmdletBinding()]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
@@ -2221,7 +2292,7 @@ System.Management.Automation.PSCustomObject for installed Microsoft SQL Server M
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
-		$ManagementStudio = @()
+		[psobject[]] $ManagementStudio = @()
 		if (!$RootKey)
 		{
 			Write-Warning -Message "Failed to open registry root key: $HKLM"

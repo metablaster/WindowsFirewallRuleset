@@ -30,115 +30,110 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-	Retrieves SQL server information from a local or remote servers.
-
+Retrieves SQL server information from a local or remote servers.
 .DESCRIPTION
-	Retrieves SQL server information from a local or remote servers. Pulls all
-	instances from a SQL server and detects if in a cluster or not.
-
-.PARAMETER Computers
-	Local or remote systems to query for SQL information.
-
+Retrieves SQL server information from a local or remote servers. Pulls all
+instances from a SQL server and detects if in a cluster or not.
+.PARAMETER ComputerNames
+Local or remote systems to query for SQL information.
 .PARAMETER CIM
-	If specified, try to pull and correlate CIM information for SQL
+If specified, try to pull and correlate CIM information for SQL
 
-	I've done limited testing in matching up the service info to registry info.
-	Suggestions would be appreciated!
+I've done limited testing in matching up the service info to registry info.
+Suggestions would be appreciated!
+.EXAMPLE
+Get-SQLInstances -Computername DC1
 
-.NOTES
-	Name: Get-SQLInstances
-	Author: Boe Prox, edited by cookie monster (to cover wow6432node, CIM tie in)
+SQLInstance   : MSSQLSERVER
+Version       : 10.0.1600.22
+isCluster     : False
+Computername  : DC1
+FullName      : DC1
+isClusterNode : False
+Edition       : Enterprise Edition
+ClusterName   :
+ClusterNodes  : {}
+Caption       : SQL Server 2008
 
-	Version History:
-	1.5 //Boe Prox - 31 May 2016
-		- Added CIM queries for more information
-		- Custom object type name
-	1.0 //Boe Prox -  07 Sept 2013
-		- Initial Version
+SQLInstance   : MINASTIRITH
+Version       : 10.0.1600.22
+isCluster     : False
+Computername  : DC1
+FullName      : DC1\MINASTIRITH
+isClusterNode : False
+Edition       : Enterprise Edition
+ClusterName   :
+ClusterNodes  : {}
+Caption       : SQL Server 2008
 
-	Following modifications by metablaster based on both originals 15 Feb 2020:
-	- change syntax, casing, code style and function name
-	- resolve warnings, replacing aliases with full names
-	- change how function returns
-	- Add code to return SQL DTS Path
-	- separate support for 32 bit systems
-	- Include license into file (MIT all 3), links to original sites and add appropriate Copyright for each author/contributor
-	- update reported server versions
-	- added more verbose and debug output, path formatting.
-	- Replaced WMI calls with CIM calls which are more universal and cross platfrom that WMI
+Description
+-----------
+Retrieves the SQL information from DC1
+.EXAMPLE
+#Get SQL instances on servers 1 and 2, match them up with service information from CIM
+Get-SQLInstances -Computername Server1, Server2 -CIM
 
-	Links to original and individual versions of code
-	https://github.com/RamblingCookieMonster/PowerShell
-	https://github.com/metablaster/WindowsFirewallRuleset
-	https://gallery.technet.microsoft.com/scriptcenter/Get-SQLInstance-9a3245a0
+Computername     : Server1
+SQLInstance      : MSSQLSERVER
+SQLBinRoot       : D:\MSSQL11.MSSQLSERVER\MSSQL\Binn
+Edition          : Enterprise Edition: Core-based Licensing
+Version          : 11.0.3128.0
+Caption          : SQL Server 2012
+isCluster        : False
+isClusterNode    : False
+ClusterName      :
+ClusterNodes     : {}
+FullName         : Server1
+ServiceName      : SQL Server (MSSQLSERVER)
+ServiceState     : Running
+ServiceAccount   : domain\Server1SQL
+ServiceStartMode : Auto
 
+Computername     : Server2
+SQLInstance      : MSSQLSERVER
+SQLBinRoot       : D:\Program Files\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQL\Binn
+Edition          : Enterprise Edition
+Version          : 10.50.4000.0
+Caption          : SQL Server 2008 R2
+isCluster        : False
+isClusterNode    : False
+ClusterName      :
+ClusterNodes     : {}
+FullName         : Server2
+ServiceName      : SQL Server (MSSQLSERVER)
+ServiceState     : Running
+ServiceAccount   : domain\Server2SQL
+ServiceStartMode : Auto
 .FUNCTIONALITY
 	Computers
+.NOTES
+Name: Get-SQLInstances
+Author: Boe Prox, edited by cookie monster (to cover wow6432node, CIM tie in)
 
-.EXAMPLE
-	Get-SQLInstances -Computername DC1
+Version History:
+1.5 //Boe Prox - 31 May 2016
+	- Added CIM queries for more information
+	- Custom object type name
+1.0 //Boe Prox -  07 Sept 2013
+	- Initial Version
 
-	SQLInstance   : MSSQLSERVER
-	Version       : 10.0.1600.22
-	isCluster     : False
-	Computername  : DC1
-	FullName      : DC1
-	isClusterNode : False
-	Edition       : Enterprise Edition
-	ClusterName   :
-	ClusterNodes  : {}
-	Caption       : SQL Server 2008
+Following modifications by metablaster based on both originals 15 Feb 2020:
+- change syntax, casing, code style and function name
+- resolve warnings, replacing aliases with full names
+- change how function returns
+- Add code to return SQL DTS Path
+- separate support for 32 bit systems
+- Include license into file (MIT all 3), links to original sites and add appropriate Copyright for each author/contributor
+- update reported server versions
+- added more verbose and debug output, path formatting.
+- Replaced WMI calls with CIM calls which are more universal and cross platfrom that WMI
 
-	SQLInstance   : MINASTIRITH
-	Version       : 10.0.1600.22
-	isCluster     : False
-	Computername  : DC1
-	FullName      : DC1\MINASTIRITH
-	isClusterNode : False
-	Edition       : Enterprise Edition
-	ClusterName   :
-	ClusterNodes  : {}
-	Caption       : SQL Server 2008
+Links to original and individual versions of code
+https://github.com/RamblingCookieMonster/PowerShell
+https://github.com/metablaster/WindowsFirewallRuleset
+https://gallery.technet.microsoft.com/scriptcenter/Get-SQLInstance-9a3245a0
 
-	Description
-	-----------
-	Retrieves the SQL information from DC1
-
-.EXAMPLE
-	#Get SQL instances on servers 1 and 2, match them up with service information from CIM
-	Get-SQLInstances -Computername Server1, Server2 -CIM
-
-	Computername     : Server1
-	SQLInstance      : MSSQLSERVER
-	SQLBinRoot       : D:\MSSQL11.MSSQLSERVER\MSSQL\Binn
-	Edition          : Enterprise Edition: Core-based Licensing
-	Version          : 11.0.3128.0
-	Caption          : SQL Server 2012
-	isCluster        : False
-	isClusterNode    : False
-	ClusterName      :
-	ClusterNodes     : {}
-	FullName         : Server1
-	ServiceName      : SQL Server (MSSQLSERVER)
-	ServiceState     : Running
-	ServiceAccount   : domain\Server1SQL
-	ServiceStartMode : Auto
-
-	Computername     : Server2
-	SQLInstance      : MSSQLSERVER
-	SQLBinRoot       : D:\Program Files\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQL\Binn
-	Edition          : Enterprise Edition
-	Version          : 10.50.4000.0
-	Caption          : SQL Server 2008 R2
-	isCluster        : False
-	isClusterNode    : False
-	ClusterName      :
-	ClusterNodes     : {}
-	FullName         : Server2
-	ServiceName      : SQL Server (MSSQLSERVER)
-	ServiceState     : Running
-	ServiceAccount   : domain\Server2SQL
-	ServiceStartMode : Auto
+TODO: update examples to include DTS directory
 #>
 function Get-SQLInstances
 {

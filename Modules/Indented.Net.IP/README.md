@@ -1,7 +1,5 @@
 # Indented.Net.IP
 
-[![Build status](https://ci.appveyor.com/api/projects/status/u09nudqyvm1nbp6k?svg=true)](https://ci.appveyor.com/project/indented-automation/indented-net-ip)
-
 A collection of commands written to perform IPv4 subnet math.
 
 ## Installation

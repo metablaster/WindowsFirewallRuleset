@@ -14,6 +14,7 @@
 1. Modules are renamed to avoid name clashes with other modules
 2. Format-Path function would index into empty array if environment variable not found
 3. Minor errors resolved thanks to strict mode
+4. Format-Path would return bad result if there is only a single environment variable
 
 # Performance
 1. Minor improvements in searching registry

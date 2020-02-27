@@ -52,22 +52,23 @@ if ($Develop)
 # Includes
 Import-Module -Name $PSScriptRoot\..\Indented.Net.IP
 
-# TODO: what happens in Get-AdapterConfig and other functions that call it if there are multiple configured adapters?
+# TODO: what happens in Get-ConnectedAdapters and other functions that call it if there are multiple configured adapters?
 
 <#
 .SYNOPSIS
-get localhost name
+Get localhost name
 .EXAMPLE
 Get-ComputerName
 .INPUTS
 None. You cannot pipe objects to Get-ComputerName
 .OUTPUTS
-System.String computer name in form of COMPUTERNAME
+[string] computer name in form of COMPUTERNAME
 .NOTES
 TODO: implement queriying computers on network by specifying IP address
 #>
 function Get-ComputerName
 {
+	[OutputType([System.String])]
 	[CmdletBinding()]
 	param ()
 
@@ -93,9 +94,7 @@ Get-ConnectedAdapters "IPv6"
 .INPUTS
 None. You cannot pipe objects to Get-ConnectedAdapters
 .OUTPUTS
-NetIPConfiguration
-.NOTES
-TODO: implement queriying computers on network by specifying IP address or COMPUTERNAME
+[NetIPConfiguration] or error message if no adapter connected
 #>
 function Get-ConnectedAdapters
 {
@@ -146,12 +145,11 @@ Get-IPAddress "IPv6"
 .INPUTS
 None. You cannot pipe objects to Get-IPAddress
 .OUTPUTS
-System.String IP Address
-.NOTES
-TODO: implement queriying computers on network by specifying COMPUTERNAME
+[ipaddress] and warning message if no adapter connected
 #>
 function Get-IPAddress
 {
+	[OutputType([System.Net.IPAddress])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
@@ -163,7 +161,7 @@ function Get-IPAddress
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting IP's of connected adapters for $AddressFamily network"
 
 	$ConnectedAdapters = Get-ConnectedAdapters $AddressFamily | Select-Object -ExpandProperty ($AddressFamily + "Address")
-	$IPAddress = $ConnectedAdapters | Select-Object -ExpandProperty IPAddress
+	[ipaddress] $IPAddress = $ConnectedAdapters | Select-Object -ExpandProperty IPAddress
 
 	$Count = ($IPAddress | Measure-Object).Count
 	if ($Count -gt 1)
@@ -187,9 +185,9 @@ Get-Broadcast
 .INPUTS
 None. You cannot pipe objects to Get-Broadcast
 .OUTPUTS
-System.String Broadcast address
+[string] Broadcast address
 .NOTES
-TODO: there can be multiple valid adapters
+TODO: there can be multiple valid adapters, we should probably take parameter for single adapter
 #>
 function Get-Broadcast
 {

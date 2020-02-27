@@ -52,6 +52,10 @@ if ($Develop)
 <#
 .SYNOPSIS
 Test and print system requirements required for this project
+.DESCRIPTION
+Test-SystemRequirements is designed for WindowsFirewallRuleset, it first prints a short watermark,
+tests for OS, PowerShell version and edition, Administrator mode, NET Framework version and it
+check if required system services are started. If not the function will exit executing scripts.
 .PARAMETER Check
 true or false to check or not to check
 .EXAMPLE
@@ -59,7 +63,7 @@ Test-SystemRequirements $true
 .INPUTS
 None. You cannot pipe objects to Test-SystemRequirements
 .OUTPUTS
-error message and abort if check failed, system info otherwise
+None. Error message is shown if check failed, system info otherwise.
 .NOTES
 TODO: learn required NET version by scaning scripts (ie. adding .COMPONENT to comments)
 TODO: learn repo dir automaticaly (using git?)
@@ -67,8 +71,8 @@ TODO: check required modules (pester)
 #>
 function Test-SystemRequirements
 {
+	[OutputType([System.Void])]
 	param (
-		# TODO: change bool parameters to switch where possible
 		[Parameter(Mandatory = $false)]
 		[bool] $Check = $SystemCheck
 	)

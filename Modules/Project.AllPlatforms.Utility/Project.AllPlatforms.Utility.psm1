@@ -54,7 +54,10 @@ if ($Develop)
 
 <#
 .SYNOPSIS
-update context for Approve-Execute function
+Update context for Approve-Execute function
+.DESCRIPTION
+Execution context is shown in the console every time Approve-Execute is called.
+It helps to know the state and progress of execution.
 .PARAMETER Root
 First context string before . (dot)
 .PARAMETER Section
@@ -63,13 +66,16 @@ Second context string after . (dot)
 Additional string after -> (arrow)
 .EXAMPLE
 Update-Context "IPv4" "Outbound" "RuleGroup"
+
+[IPv4.Outbout -> RuleGroup]
 .INPUTS
 None. You cannot pipe objects to Update-Context
 .OUTPUTS
-Note, script scope variable is updated
+None. Script scope context variable is updated.
 #>
 function Update-Context
 {
+	[OutputType([System.Void])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
@@ -98,6 +104,10 @@ function Update-Context
 <#
 .SYNOPSIS
 Used to ask user if he wants to run script
+.DESCRIPTION
+In addition to prompt, execution context is shown.
+Asking for approval helps to let run master script and only execute specific
+scripts, thus loading only needed rules.
 .PARAMETER DefaultAction
 Default prompt action, either 'YES' or 'NO'
 .PARAMETER Title
@@ -109,13 +119,14 @@ Approve-Execute "No" "Sample title" "Sample question"
 .INPUTS
 None. You cannot pipe objects to Approve-Execute
 .OUTPUTS
-true if user wants to continue, false otherwise
+None. true if user wants to continue, false otherwise
 .NOTES
 TODO: implement help [?]
 TODO: make this function more generic
 #>
 function Approve-Execute
 {
+	[OutputType([System.Void])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $false)]
@@ -161,7 +172,7 @@ None. You cannot pipe objects to Show-SDDL
 .NOTES
 This function is used only for debugging and discovery of object SDDL
 Credits to: https://blogs.technet.microsoft.com/ashleymcglone/2011/08/29/powershell-sid-walker-texas-ranger-part-1
-TODO: additional work on function to make it more universal, see if we can make use of it somehow.
+TODO: additional work on function to make it more universal, see if we can make use of it somehow, better help comment.
 #>
 function Show-SDDL
 {
@@ -230,14 +241,15 @@ Convert SDDL entries to computer accounts
 .PARAMETER SDDL
 String array of one or more strings of SDDL syntax
 .EXAMPLE
-Convert-SDDLToACL $SDDL1, $SDDL2
+Convert-SDDLToACL $SomeSDDL, $SDDL2, "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
 .INPUTS
 None. You cannot pipe objects to Convert-SDDLToACL
 .OUTPUTS
-System.String[] array of computer accounts
+[string[]] Array of computer accounts
 #>
 function Convert-SDDLToACL
 {
+	[OutputType([string[]])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
@@ -263,13 +275,13 @@ function Convert-SDDLToACL
 .SYNOPSIS
 Scan all scripts in this repository and get windows service names involved in rules
 .PARAMETER Folder
-Root folder name which to scan
+Root folder name which to scan recursively
 .EXAMPLE
-Get-NetworkServices C:\PathToRepo
+Get-NetworkServices "C:\PathToRepo"
 .INPUTS
 None. You cannot pipe objects to Get-NetworkServices
 .OUTPUTS
-None, file with the list of services is made
+None, File with the list of services is made
 #>
 function Get-NetworkServices
 {
@@ -341,7 +353,10 @@ function Get-NetworkServices
 
 <#
 .SYNOPSIS
-format firewall rule output for display
+Format firewall rule output for display
+.DESCRIPTION
+Output of Net-NewFirewallRule is large, loading a lot of rules would spam the console
+very fast, this function helps to output only relevant content.
 .PARAMETER Rule
 Firewall rule to format
 .EXAMPLE
@@ -349,10 +364,11 @@ Net-NewFirewallRule ... | Format-Output
 .INPUTS
 Microsoft.Management.Infrastructure.CimInstance Firewall rule to format
 .OUTPUTS
-Formatted text
+None. Formatted and colored output
 #>
 function Format-Output
 {
+	[OutputType([System.Void])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true,
@@ -360,22 +376,22 @@ function Format-Output
 		[Microsoft.Management.Infrastructure.CimInstance] $Rule
 	)
 
-	process
-	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-		Write-Host "Load Rule: [$($Rule | Select-Object -ExpandProperty Group)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
-	}
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Host "Load Rule: [$($Rule | Select-Object -ExpandProperty Group)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
 }
 
 <#
 .SYNOPSIS
-set vertical screen buffer to recommended value
+Set vertical screen buffer to recommended value
+.DESCRIPTION
+In some cases, depending on project settings a user may need larger buffer
+to preserve all the output in the console for review and scroll back.
 .EXAMPLE
 Set-ScreenBuffer
 .INPUTS
 None. You cannot pipe objects to Set-ScreenBuffer
 .OUTPUTS
-None, screen buffer is set for current powershell session
+None, Screen buffer is set for current powershell session
 #>
 function Set-ScreenBuffer
 {
@@ -417,22 +433,29 @@ function Set-ScreenBuffer
 
 <#
 .SYNOPSIS
-Test target computer on which to apply firewall
+Test target computer (policy store) on which to apply firewall
+.DESCRIPTION
+The purpose of this function is to reduce typing checks depending on whether PowerShell
+core or desktop edition is used, since parameters for Test-Connection are not the same
+for both PowerShell editions.
 .PARAMETER ComputerName
 Target computer which to test
 .PARAMETER ConnectionCount
-Specifies the number of echo requests to send. The default value is 4
+Valid only for PowerShell Core. Specifies the number of echo requests to send. The default value is 4
 .PARAMETER ConnectionTimeout
-The test fails if a response isn't received before the timeout expires
+Valid only for PowerShell Core. The test fails if a response isn't received before the timeout expires
 .EXAMPLE
-Test-TargetMachine
+Test-TargetComputer "COMPUTERNAME" 2 1
+.EXAMPLE
+Test-TargetComputer "COMPUTERNAME"
 .INPUTS
 None. You cannot pipe objects to Test-TargetMachine
 .OUTPUTS
-None.
+[bool] false or true if target host is reponsive
 #>
 function Test-TargetComputer
 {
+	[OutputType([System.Boolean])]
 	[CmdletBinding(PositionalBinding = $false)]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
@@ -502,4 +525,4 @@ Export-ModuleMember -Function Get-TypeName
 #
 
 Export-ModuleMember -Variable ServiceHost
-Export-ModuleMember -Variable CheckInitFirewallModule
+Export-ModuleMember -Variable CheckInitUtility

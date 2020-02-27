@@ -1,3 +1,4 @@
+
 TOPIC
 	about_Project.AllPlatforms.Utility
 
@@ -16,8 +17,8 @@ EXAMPLES
 	For better looking output of Net-NewFirewallRule
 	Net-NewFirewallRule ... | Format-Output
 
-	To save execution errors to file
-	Save-Errors
+	To system services involved in firewall rules
+	Get-NetworkServices
 
 	To prompt user to set recommended screen buffer
 	Set-ScreenBuffer

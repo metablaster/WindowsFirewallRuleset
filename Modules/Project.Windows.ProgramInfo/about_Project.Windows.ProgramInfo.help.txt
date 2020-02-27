@@ -1,3 +1,4 @@
+
 TOPIC
 	about_Project.Windows.ProgramInfo
 
@@ -8,7 +9,7 @@ LONG DESCRIPTION
 	Functions in Project.Windows.ProgramInfo module can be used to query information about programs
 	installed on computer, installed system wide or installed by each user separately.
 	Also possible to qurey software which is built into operating system.
-	Currently only localhost is supported.
+	Querying remote computers is currently only partialy supported.
 
 EXAMPLES
 	To get Widnows defender instance:
@@ -28,4 +29,4 @@ KEYWORDS
 	ComputerSoftware
 
 SEE ALSO
-	TODO: Add link for more help
+	https://github.com/metablaster/WindowsFirewallRuleset

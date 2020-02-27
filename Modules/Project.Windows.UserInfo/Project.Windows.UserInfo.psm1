@@ -57,18 +57,23 @@ if ($Develop)
 <#
 .SYNOPSIS
 Strip computer names out of computer acounts
+.DESCRIPTION
+ConvertFrom-UserAccount is a helper method to reduce typing comming code
+related to splitting up user accounts
 .PARAMETER UserAccounts
-String array of user accounts in form of: COMPUTERNAME\USERNAME
+Array of user accounts in form of: COMPUTERNAME\USERNAME
 .EXAMPLE
-$UserAccounts = Get-GroupPrincipals "Users", "Administrators"
-$UserNames = ConvertFrom-UserAccounts ($UserAccounts | Select-Object -ExpandProperty Account)
+onvertFrom-UserAccounts COMPUTERNAME\USERNAME
+.EXAMPLE
+onvertFrom-UserAccounts SERVER\USER, COMPUTER\USER, SERVER2\USER2
 .INPUTS
 None. You cannot pipe objects to ConvertFrom-UserAccounts
 .OUTPUTS
-Strings of usernames in form of: USERNAME
+[string[]] array of usernames in form of: USERNAME
 #>
 function ConvertFrom-UserAccount
 {
+	[OutputType([System.String[]])]
 	[CmdletBinding()]
 	param(
 		[Alias("Account")]
@@ -91,27 +96,29 @@ function ConvertFrom-UserAccount
 <#
 .SYNOPSIS
 Get computer accounts for a given user groups on given computers
-.PARAMETER Groups
+.PARAMETER UserGroups
 User group on local or remote computer
-.PARAMETER Computers
+.PARAMETER ComputerNames
 One or more computers which to querry for group users
 .PARAMETER CIM
 Whether to contact CIM server (requred for remote computers)
 .EXAMPLE
-Get-GroupPrincipals @("Users", "Administrators")
+Get-GroupPrincipals "Users", "Administrators"
 .EXAMPLE
 Get-GroupPrincipals "Users" -Machine @(DESKTOP, LAPTOP) -CIM
 .INPUTS
-System.String[] User groups
+[string[]] User groups
 .OUTPUTS
-PSCustomObject of enabled user accounts in specified group
+[psobject[]] Array of enabled user accounts in specified group
 .NOTES
-CIM switch is not supported on PowerShell Core
-Switch to list all accounts
-TODO: should we handle NT AUTHORITY and similar?
+CIM switch is not supported on PowerShell Core, meaning contacting remote computers
+is supported only on Windows PowerShell
+TODO: Switch is needed to list all accounts instead of only enabled
+TODO: should we handle NT AUTHORITY, BUILTIN and similar?
 #>
 function Get-GroupPrincipals
 {
+	[OutputType([psobject[]])]
 	[CmdletBinding(PositionalBinding = $false)]
 	param (
 		[Alias("Group")]
@@ -130,7 +137,7 @@ function Get-GroupPrincipals
 
 	begin
 	{
-		$UserAccounts = @()
+		[psobject[]] $UserAccounts = @()
 		$PowerShellEdition = $PSVersionTable.PSEdition
 	}
 	process
@@ -202,7 +209,7 @@ function Get-GroupPrincipals
 					Write-Error -Category ConnectionError -TargetObject $Computer `
 					-Message "Unable to contact computer: $Computer"
 				}
-			}
+			} # if ($CIM)
 			elseif ($Computer -eq [System.Environment]::MachineName)
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying localhost"
@@ -231,23 +238,25 @@ function Get-GroupPrincipals
 							SID = $Account.SID
 						}
 					}
-				}
-			}
+				} # foreach ($Group in $UserGroups)
+			} # if ($CIM)
 			else
 			{
 				Write-Error -Category NotImplemented -TargetObject $Computer `
 				-Message "Querying remote computers without CIM switch not implemented"
 			}
-		}
+		} # foreach ($Computer in $ComputerNames)
 
 		return $UserAccounts
-	}
+	} # process
 }
 
 <#
 .SYNOPSIS
 Get user groups on target computers
-.PARAMETER Computers
+.DESCRIPTION
+Get a list of all availabe user groups on target computers
+.PARAMETER ComputerNames
 One or more computers which to querry for user groups
 .PARAMETER CIM
 Whether to contact CIM server (requred for remote computers)
@@ -256,15 +265,16 @@ Get-UserGroups "ServerPC"
 .EXAMPLE
 Get-UserGroups @(DESKTOP, LAPTOP) -CIM
 .INPUTS
-System.String[] User groups
+[string[]] array of computer names
 .OUTPUTS
-PSCustomObject of enabled user accounts in specified group
+[psobject[]] array of user groups on target computers
 .NOTES
-CIM switch is not supported on PowerShell Core
-Switch to list all accounts
+CIM switch is not supported on PowerShell Core, meaning contacting remote computers
+is supported only on Windows PowerShell
 #>
 function Get-UserGroups
 {
+	[OutputType([psobject[]])]
 	[CmdletBinding(PositionalBinding = $false)]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
@@ -277,7 +287,7 @@ function Get-UserGroups
 
 	begin
 	{
-		$UserGroups =@()
+		[psobject[]] $UserGroups =@()
 		$PowerShellEdition = $PSVersionTable.PSEdition
 	}
 	process
@@ -357,16 +367,18 @@ function Get-UserGroups
 		} # foreach ($Computer in $ComputerNames)
 
 		return $UserGroups
-	}
+	} # process
 }
 
 <#
 .SYNOPSIS
 Merge 2 SDDL strings into one
+.DESCRIPTION
+This function helps to merge 2 SDDL strings into one
 .PARAMETER RefSDDL
 Reference to SDDL into which to merge new SDDL
 .PARAMETER NewSDDL
-New SDDL string which to add to reference SDDL
+New SDDL string which to merge with reference SDDL
 .EXAMPLE
 $RefSDDL = "D:(A;;CC;;;S-1-5-32-545)(A;;CC;;;S-1-5-32-544)
 $NewSDDL = "D:(A;;CC;;;S-1-5-32-333)(A;;CC;;;S-1-5-32-222)"
@@ -374,14 +386,15 @@ Merge-SDDL ([ref] $RefSDDL) $NewSDDL
 .INPUTS
 None. You cannot pipe objects to Merge-SDDL
 .OUTPUTS
-System.String SDDL string
+None. Referenced SDDL is expanded with new one
 .NOTES
-Validate input using regex
-Process an array of SDDL's
-Pipeline input
+TODO: Validate input using regex
+TODO: Process an array of SDDL's
+TODO: Pipeline input
 #>
 function Merge-SDDL
 {
+	[OutputType([System.Void])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
@@ -397,18 +410,20 @@ function Merge-SDDL
 <#
 .SYNOPSIS
 Generate SDDL string of multiple usernames or/and groups on a given domain
-.PARAMETER Computer
-System.String single domain such as remote computer name
-.PARAMETER Users
-System.String[] array of users for which to generate SDDL string
-.PARAMETER Groups
-System.String[] array of user groups for which to generate SDDL string
+.DESCRIPTION
+Get SDDL string single or multiple user names and/or user groups on a single target computer
+.PARAMETER ComputerName
+Single domain or computer such as remote computer name or builtin computer domain
+.PARAMETER UserNames
+Array of users for which to generate SDDL string
+.PARAMETER UserGroups
+Array of user groups for which to generate SDDL string
 .PARAMETER CIM
 Whether to contact CIM server (requred for remote computers)
 .EXAMPLE
 [string[]] $Users = "haxor"
 [string] $Server = COMPUTERNAME
-[string[]] $Groups = @("Users", "Administrators")
+[string[]] $Groups = "Users", "Administrators"
 
 $UsersSDDL1 = Get-SDDL -User $Users -Group $Groups
 $UsersSDDL2 = Get-SDDL -User $Users -Machine $Server
@@ -418,7 +433,10 @@ $NewSDDL = Get-SDDL -Domain "NT AUTHORITY" -User "System"
 .INPUTS
 None. You cannot pipe objects to Get-SDDL
 .OUTPUTS
-System.String SDDL string for given accounts or/and group for given domain
+[string] SDDL for given accounts or/and group for given domain
+.NOTES
+CIM switch is not supported on PowerShell Core, meaning contacting remote computers
+is supported only on Windows PowerShell
 #>
 function Get-SDDL
 {
@@ -480,10 +498,12 @@ function Get-SDDL
 <#
 .SYNOPSIS
 Get SID of user groups for given computer
-.PARAMETER Groups
-System.String[] Array of user groups
-.PARAMETER Computer
-System.String computer name which to query for group users
+.DESCRIPTION
+Get SID's for single or multiple user groups on a target computer
+.PARAMETER UserGroups
+Array of user groups or single group name
+.PARAMETER ComputerName
+Computer name which to query for group users
 .PARAMETER CIM
 Whether to contact CIM server (requred for remote computers)
 .EXAMPLE
@@ -491,9 +511,12 @@ Get-GroupSID "USERNAME" -Machine "COMPUTERNAME"
 .EXAMPLE
 Get-GroupSID @("USERNAME1", "USERNAME2") -CIM
 .INPUTS
-System.String[] array of group names
+[string[]] array of group names
 .OUTPUTS
-Multiple System.String SID's (security identifier)
+[string] SID's (security identifiers)
+.NOTES
+CIM switch is not supported on PowerShell Core, meaning contacting remote computers
+is supported only on Windows PowerShell
 #>
 function Get-GroupSID
 {
@@ -536,7 +559,6 @@ function Get-GroupSID
 
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
-				# Core: -TimeoutSeconds $ConnectionTimeout -IPv4
 				if (Test-TargetComputer $ComputerName)
 				{
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $ComputerName"
@@ -576,10 +598,12 @@ function Get-GroupSID
 
 <#
 .SYNOPSIS
-Get SID for giver computer account
-.PARAMETER Users
-System.String[] array of user accounts
-.PARAMETER Computer
+Get SID for giver user account
+.DESCRIPTION
+Get SID's for single or multiple user names on a target computer
+.PARAMETER UserNames
+Array of user names
+.PARAMETER ComputerName
 Target computer on which to perform query
 .PARAMETER CIM
 Whether to contact CIM server (requred for remote computers)
@@ -588,11 +612,13 @@ Get-AccountSID "USERNAME" -Server "COMPUTERNAME"
 .EXAMPLE
 Get-AccountSID @("USERNAME1", "USERNAME2") -CIM
 .INPUTS
-System.String[] array of user accounts
+[string[]] array of user names
 .OUTPUTS
-Multiple System.String SID's (security identifier)
+[string] SID's (security identifiers)
 .NOTES
 TODO: USER MODE DRIVERS SID not found
+CIM switch is not supported on PowerShell Core, meaning contacting remote computers
+is supported only on Windows PowerShell
 #>
 function Get-AccountSID
 {
@@ -638,7 +664,6 @@ function Get-AccountSID
 
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
-				# Core: -TimeoutSeconds $ConnectionTimeout -IPv4
 				if (Test-TargetComputer $ComputerName)
 				{
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying CIM server on $ComputerName"
@@ -698,6 +723,7 @@ function Get-AccountSID
 
 Write-Debug -Message "[$ThisModule] Initialize module constant variable: SpecialDomains"
 # Must be before constants
+# TODO: there must be a better more conventional name for this
 New-Variable -Name SpecialDomains -Scope Script -Option Constant -Value @(
 	"NT AUTHORITY"
 	"APPLICATION_PACKAGE_AUTHORITY"

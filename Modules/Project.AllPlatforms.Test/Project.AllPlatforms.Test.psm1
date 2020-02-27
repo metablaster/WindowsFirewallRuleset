@@ -51,16 +51,19 @@ if ($Develop)
 
 <#
 .SYNOPSIS
-Do stuff before any tests
+Used to initialize test units, ie. to disable logging.
 .EXAMPLE
 Start-Test
 .INPUTS
 None. You cannot pipe objects to New-Test
 .OUTPUTS
-formatted message block is shown in console
+None.
 #>
 function Start-Test
 {
+	[OutputType([System.Void])]
+	param ()
+
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# disable logging errors for tests
@@ -82,18 +85,23 @@ function Start-Test
 
 <#
 .SYNOPSIS
-write output to separate test cases
+Write output to console to separate test cases
 .PARAMETER InputMessage
-message to print before test
+Message to format and print before test
 .EXAMPLE
-New-Test "my test"
+New-Test "My-Function"
+
+***********************
+*Testing: My-Function *
+***********************
 .INPUTS
 None. You cannot pipe objects to New-Test
 .OUTPUTS
-formatted message block is shown in console
+None. Formatted message block is shown in console.
 #>
 function New-Test
 {
+	[OutputType([System.Void])]
 	param (
 		[AllowEmptyString()]
 		[Parameter(Mandatory = $true)]
@@ -105,7 +113,7 @@ function New-Test
 	$Message = "Testing: $InputMessage"
 	$Asterisks = $("*" * ($Message.Length + 4))
 
-	# NOTE: Write-Host would mess up test cases outputs
+	# NOTE: Write-Host would mess up test case outputs
 	Write-Output ""
 	Write-Output $Asterisks
 	Write-Output "* $Message *"
@@ -115,16 +123,19 @@ function New-Test
 
 <#
 .SYNOPSIS
-write output to tell script scope test is done
+Used to tell script scope test is done, ie. to restore previous state
 .EXAMPLE
 Exit-Test
 .INPUTS
 None. You cannot pipe objects to Exit-Test
 .OUTPUTS
-formatted message block is shown in console
+None.
 #>
 function Exit-Test
 {
+	[OutputType([System.Void])]
+	param()
+
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# restore logging errors
@@ -140,7 +151,7 @@ function Exit-Test
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] WarningLogging restored to: $WarningLogging"
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] InformationLogging restored to: $InformationLogging"
 
-	Write-Host ""
+	Write-Output ""
 }
 
 #

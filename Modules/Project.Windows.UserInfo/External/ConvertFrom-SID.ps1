@@ -30,8 +30,6 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Convert SID to user or computer account name
-.DESCRIPTION
-Convert SID to user or computer account name
 .PARAMETER SIDArray
 One or more SIDs to convert
 .EXAMPLE
@@ -39,7 +37,7 @@ ConvertFrom-SID S-1-5-21-2139171146-395215898-1246945465-2359
 .EXAMPLE
 'S-1-5-32-580' | ConvertFrom-SID
 .INPUTS
-One or multiple SID's
+[string[]] One or multiple SID's
 .OUTPUTS
 PSObject composed of SID and user or account
 .NOTES
@@ -47,7 +45,7 @@ SID conversion for well known SIDs from http://support.microsoft.com/kb/243330
 Original code link: https://github.com/RamblingCookieMonster/PowerShell
 
 TODO: Need to handle more NT AUTHORITY users and similar
-TODO: need to improve to have consitent output ie. DOMAIN\USER, see test results
+TODO: need to improve to have consitent output ie. exactly DOMAIN\USER, see test results
 
 Changes by metablaster:
 add verbose and debug output
