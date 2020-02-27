@@ -205,7 +205,7 @@ That's it, your scripts are now up to date, execute them as you desire (or follo
 
 # Contribution or suggestions
 Bellow are general notes for requesting to add your rules or ideas about rules to project.\
-If you would like to contribute by writing scripts you should read [CONTRIBUTION.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/CONTRIBUTION.md) instead.
+If you would like to contribute by writing scripts you should read [CONTRIBUTING.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/CONTRIBUTING.md) instead.
 
 Feel free to suggest or contribute new rules, or improvements for existing rules or scripts.\
 Just make sure you follow bellow notices:
