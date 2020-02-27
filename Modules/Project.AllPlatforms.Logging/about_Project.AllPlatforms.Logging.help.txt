@@ -1,35 +1,35 @@
 
 TOPIC
-    about_Project.AllPlatforms.Logging
+	about_Project.AllPlatforms.Logging
 
 SHORT DESCRIPTION
-    Module for logging native PowerShell Write-* commandlets
+	Module for logging native PowerShell Write-* commandlets
 
 LONG DESCRIPTION
-    A function which produces an error, warning and info streams must be advanced
-    function and must take @Logs splatting which is defined in this module.
+	A function which produces an error, warning and info streams must be advanced
+	function and must take @Logs splatting which is defined in this module.
 
-    Once in a while Update-Logs is called, which writes generated data into log files.
+	Once in a while Update-Logs is called, which writes generated data into log files.
 
-    Behavior of logging can be customized in ProjectSettings.ps1 (WindowsFirewallRuleset project)
+	Behavior of logging can be customized in ProjectSettings.ps1 (WindowsFirewallRuleset project)
 
 VARIABLES
-    Logs                Splatting which defines common parameters where streams are capured
-    ErrorStatus         Global variable which holds true if errors were generated
-    WarningStatus       Global variable which holds true if warning were generated
-    CheckInitLogging    Purpose is to prevent double initialization of constans
+	Logs                Splatting which defines common parameters where streams are capured
+	ErrorStatus         Global variable which holds true if errors were generated
+	WarningStatus       Global variable which holds true if warning were generated
+	CheckInitLogging    Purpose is to prevent double initialization of constans
 
 EXAMPLES
-    Some-Function @Logs
+	Some-Function @Logs
 
-    Another-Function @Logs
+	Another-Function @Logs
 
-    Some-Function @Logs | Another-Function @Logs
-    Update-Logs
+	Some-Function @Logs | Another-Function @Logs
+	Update-Logs
 
 KEYWORDS
-    Logging
-    Log
+	Logging
+	Log
 
 SEE ALSO
 	https://github.com/metablaster/WindowsFirewallRuleset

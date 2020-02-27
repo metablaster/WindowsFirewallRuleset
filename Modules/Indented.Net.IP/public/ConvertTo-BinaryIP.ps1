@@ -75,21 +75,21 @@ Following changes by metablaster:
 #>
 function ConvertTo-BinaryIP
 {
-    [CmdletBinding()]
-    [OutputType([string])]
-    param (
-        [Parameter(Mandatory = $true,
-        ValueFromPipeline = $true)]
-        [IPAddress] $IPAddress
-    )
+	[CmdletBinding()]
+	[OutputType([string])]
+	param (
+		[Parameter(Mandatory = $true,
+		ValueFromPipeline = $true)]
+		[IPAddress] $IPAddress
+	)
 
-    process
-    {
-        $binary = foreach ($byte in $IPAddress.GetAddressBytes())
-        {
-            [convert]::ToString($byte, 2).PadLeft(8, '0')
-        }
+	process
+	{
+		$binary = foreach ($byte in $IPAddress.GetAddressBytes())
+		{
+			[convert]::ToString($byte, 2).PadLeft(8, '0')
+		}
 
-        $binary -join '.'
-    }
+		$binary -join '.'
+	}
 }

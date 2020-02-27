@@ -84,64 +84,64 @@ Following changes by metablaster:
 #>
 function Get-NetworkRange
 {
-    [CmdletBinding(DefaultParameterSetName = 'FromIPAndMask')]
-    [OutputType([IPAddress])]
-    param (
-        [Parameter(Mandatory = $true, Position = 0,
-        ValueFromPipeline = $true, ParameterSetName = 'FromIPAndMask')]
-        [string] $IPAddress,
+	[CmdletBinding(DefaultParameterSetName = 'FromIPAndMask')]
+	[OutputType([IPAddress])]
+	param (
+		[Parameter(Mandatory = $true, Position = 0,
+		ValueFromPipeline = $true, ParameterSetName = 'FromIPAndMask')]
+		[string] $IPAddress,
 
-        [Parameter(Position = 1,
-        ParameterSetName = 'FromIPAndMask')]
-        [string] $SubnetMask,
+		[Parameter(Position = 1,
+		ParameterSetName = 'FromIPAndMask')]
+		[string] $SubnetMask,
 
-        [Parameter(ParameterSetName = 'FromIPAndMask')]
-        [switch] $IncludeNetworkAndBroadcast,
+		[Parameter(ParameterSetName = 'FromIPAndMask')]
+		[switch] $IncludeNetworkAndBroadcast,
 
-        [Parameter(Mandatory = $true,
-        ParameterSetName = 'FromStartAndEnd')]
-        [IPAddress] $Start,
+		[Parameter(Mandatory = $true,
+		ParameterSetName = 'FromStartAndEnd')]
+		[IPAddress] $Start,
 
-        [Parameter(Mandatory = $true,
-        ParameterSetName = 'FromStartAndEnd')]
-        [IPAddress] $End
-    )
+		[Parameter(Mandatory = $true,
+		ParameterSetName = 'FromStartAndEnd')]
+		[IPAddress] $End
+	)
 
-    process
-    {
-        if ($pscmdlet.ParameterSetName -eq 'FromIPAndMask')
-        {
-            try
-            {
-                $null = $psboundparameters.Remove('IncludeNetworkAndBroadcast')
-                $network = ConvertTo-Network @psboundparameters
-            }
-            catch
-            {
-                $pscmdlet.ThrowTerminatingError($_)
-            }
+	process
+	{
+		if ($pscmdlet.ParameterSetName -eq 'FromIPAndMask')
+		{
+			try
+			{
+				$null = $psboundparameters.Remove('IncludeNetworkAndBroadcast')
+				$network = ConvertTo-Network @psboundparameters
+			}
+			catch
+			{
+				$pscmdlet.ThrowTerminatingError($_)
+			}
 
-            $decimalIP = ConvertTo-DecimalIP $network.IPAddress
-            $decimalMask = ConvertTo-DecimalIP $network.SubnetMask
+			$decimalIP = ConvertTo-DecimalIP $network.IPAddress
+			$decimalMask = ConvertTo-DecimalIP $network.SubnetMask
 
-            $startDecimal = $decimalIP -band $decimalMask
-            $endDecimal = $decimalIP -bor (-bnot $decimalMask -band [UInt32]::MaxValue)
+			$startDecimal = $decimalIP -band $decimalMask
+			$endDecimal = $decimalIP -bor (-bnot $decimalMask -band [UInt32]::MaxValue)
 
-            if (-not $IncludeNetworkAndBroadcast)
-            {
-                $startDecimal++
-                $endDecimal--
-            }
-        }
-        else
-        {
-            $startDecimal = ConvertTo-DecimalIP $Start
-            $endDecimal = ConvertTo-DecimalIP $End
-        }
+			if (-not $IncludeNetworkAndBroadcast)
+			{
+				$startDecimal++
+				$endDecimal--
+			}
+		}
+		else
+		{
+			$startDecimal = ConvertTo-DecimalIP $Start
+			$endDecimal = ConvertTo-DecimalIP $End
+		}
 
-        for ($i = $startDecimal; $i -le $endDecimal; $i++)
-        {
-            [IPAddress]([IPAddress]::NetworkToHostOrder([int64] $i) -shr 32 -band [UInt32]::MaxValue)
-        }
-    }
+		for ($i = $startDecimal; $i -le $endDecimal; $i++)
+		{
+			[IPAddress]([IPAddress]::NetworkToHostOrder([int64] $i) -shr 32 -band [UInt32]::MaxValue)
+		}
+	}
 }

@@ -76,73 +76,73 @@ Following changes by metablaster:
 #>
 function Get-NetworkSummary
 {
-    [CmdletBinding()]
-    [OutputType('Indented.Net.IP.NetworkSummary')]
-    param (
-        [Parameter(Mandatory = $true,
-        ValueFromPipeline = $true)]
-        [string] $IPAddress,
+	[CmdletBinding()]
+	[OutputType('Indented.Net.IP.NetworkSummary')]
+	param (
+		[Parameter(Mandatory = $true,
+		ValueFromPipeline = $true)]
+		[string] $IPAddress,
 
-        [Parameter()]
-        [string] $SubnetMask
-    )
+		[Parameter()]
+		[string] $SubnetMask
+	)
 
-    process
-    {
-        try
-        {
-            $network = ConvertTo-Network @psboundparameters
-        }
-        catch
-        {
-            throw $_
-        }
+	process
+	{
+		try
+		{
+			$network = ConvertTo-Network @psboundparameters
+		}
+		catch
+		{
+			throw $_
+		}
 
-        $decimalIP = ConvertTo-DecimalIP $Network.IPAddress
-        $decimalMask = ConvertTo-DecimalIP $Network.SubnetMask
-        $decimalNetwork =  $decimalIP -band $decimalMask
-        $decimalBroadcast = $decimalIP -bor (-bnot $decimalMask -band [UInt32]::MaxValue)
+		$decimalIP = ConvertTo-DecimalIP $Network.IPAddress
+		$decimalMask = ConvertTo-DecimalIP $Network.SubnetMask
+		$decimalNetwork =  $decimalIP -band $decimalMask
+		$decimalBroadcast = $decimalIP -bor (-bnot $decimalMask -band [UInt32]::MaxValue)
 
-        $networkSummary = [PSCustomObject]@{
-            NetworkAddress    = $networkAddress = ConvertTo-DottedDecimalIP $decimalNetwork
-            NetworkDecimal    = $decimalNetwork
-            BroadcastAddress  = ConvertTo-DottedDecimalIP $decimalBroadcast
-            BroadcastDecimal  = $decimalBroadcast
-            Mask              = $network.SubnetMask
-            MaskLength        = $maskLength = ConvertTo-MaskLength $network.SubnetMask
-            MaskHexadecimal   = ConvertTo-HexIP $network.SubnetMask
-            CIDRNotation      = '{0}/{1}' -f $networkAddress, $maskLength
-            HostRange         = ''
-            NumberOfAddresses = $decimalBroadcast - $decimalNetwork + 1
-            NumberOfHosts     = $decimalBroadcast - $decimalNetwork - 1
-            Class             = ''
-            IsPrivate         = $false
-            PSTypeName        = 'Indented.Net.IP.NetworkSummary'
-        }
+		$networkSummary = [PSCustomObject]@{
+			NetworkAddress    = $networkAddress = ConvertTo-DottedDecimalIP $decimalNetwork
+			NetworkDecimal    = $decimalNetwork
+			BroadcastAddress  = ConvertTo-DottedDecimalIP $decimalBroadcast
+			BroadcastDecimal  = $decimalBroadcast
+			Mask              = $network.SubnetMask
+			MaskLength        = $maskLength = ConvertTo-MaskLength $network.SubnetMask
+			MaskHexadecimal   = ConvertTo-HexIP $network.SubnetMask
+			CIDRNotation      = '{0}/{1}' -f $networkAddress, $maskLength
+			HostRange         = ''
+			NumberOfAddresses = $decimalBroadcast - $decimalNetwork + 1
+			NumberOfHosts     = $decimalBroadcast - $decimalNetwork - 1
+			Class             = ''
+			IsPrivate         = $false
+			PSTypeName        = 'Indented.Net.IP.NetworkSummary'
+		}
 
-        if ($networkSummary.NumberOfHosts -lt 0)
-        {
-            $networkSummary.NumberOfHosts = 0
-        }
-        if ($networkSummary.MaskLength -lt 31)
-        {
-            $networkSummary.HostRange = '{0} - {1}' -f @(
-                (ConvertTo-DottedDecimalIP ($decimalNetwork + 1))
-                (ConvertTo-DottedDecimalIP ($decimalBroadcast - 1))
-            )
-        }
+		if ($networkSummary.NumberOfHosts -lt 0)
+		{
+			$networkSummary.NumberOfHosts = 0
+		}
+		if ($networkSummary.MaskLength -lt 31)
+		{
+			$networkSummary.HostRange = '{0} - {1}' -f @(
+				(ConvertTo-DottedDecimalIP ($decimalNetwork + 1))
+				(ConvertTo-DottedDecimalIP ($decimalBroadcast - 1))
+			)
+		}
 
-        $networkSummary.Class = switch -regex (ConvertTo-BinaryIP $network.IPAddress) {
-            '^1111'               { 'E'; break }
-            '^1110'               { 'D'; break }
-            '^11000000\.10101000' { if ($networkSummary.MaskLength -ge 16) { $networkSummary.IsPrivate = $true } }
-            '^110'                { 'C'; break }
-            '^10101100\.0001'     { if ($networkSummary.MaskLength -ge 12) { $networkSummary.IsPrivate = $true } }
-            '^10'                 { 'B'; break }
-            '^00001010'           { if ($networkSummary.MaskLength -ge 8) { $networkSummary.IsPrivate = $true} }
-            '^0'                  { 'A'; break }
-        }
+		$networkSummary.Class = switch -regex (ConvertTo-BinaryIP $network.IPAddress) {
+			'^1111'               { 'E'; break }
+			'^1110'               { 'D'; break }
+			'^11000000\.10101000' { if ($networkSummary.MaskLength -ge 16) { $networkSummary.IsPrivate = $true } }
+			'^110'                { 'C'; break }
+			'^10101100\.0001'     { if ($networkSummary.MaskLength -ge 12) { $networkSummary.IsPrivate = $true } }
+			'^10'                 { 'B'; break }
+			'^00001010'           { if ($networkSummary.MaskLength -ge 8) { $networkSummary.IsPrivate = $true} }
+			'^0'                  { 'A'; break }
+		}
 
-        $networkSummary
-    }
+		$networkSummary
+	}
 }

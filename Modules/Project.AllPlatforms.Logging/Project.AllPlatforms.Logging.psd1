@@ -71,19 +71,19 @@ CLRVersion = '2.0'
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
 FunctionsToExport = @(
-    "Update-Logs"
-    )
+	"Update-Logs"
+	)
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = @()
 
 # Variables to export from this module
 VariablesToExport = @(
-    "CheckInitLogging"
-    "Logs"
-    "ErrorStatus"
+	"CheckInitLogging"
+	"Logs"
+	"ErrorStatus"
 	"WarningStatus"
-    )
+	)
 
 # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
 AliasesToExport = @()
@@ -100,24 +100,24 @@ AliasesToExport = @()
 # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
 PrivateData = @{
 
-    PSData = @{
+	PSData = @{
 
-        # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = @("Logging")
+		# Tags applied to this module. These help with module discovery in online galleries.
+		Tags = @("Logging")
 
-        # A URL to the license for this module.
-        LicenseUri = 'https://github.com/metablaster/WindowsFirewallRuleset/blob/master/LICENSE'
+		# A URL to the license for this module.
+		LicenseUri = 'https://github.com/metablaster/WindowsFirewallRuleset/blob/master/LICENSE'
 
-        # A URL to the main website for this project.
-        ProjectUri = 'https://github.com/metablaster/WindowsFirewallRuleset'
+		# A URL to the main website for this project.
+		ProjectUri = 'https://github.com/metablaster/WindowsFirewallRuleset'
 
-        # A URL to an icon representing this module.
-        # IconUri = ''
+		# A URL to an icon representing this module.
+		# IconUri = ''
 
-        # ReleaseNotes of this module
-        ReleaseNotes = 'This pre-release is sufficiently stable to provide core logging functionality for Windows Firewall Ruleset project'
+		# ReleaseNotes of this module
+		ReleaseNotes = 'This pre-release is sufficiently stable to provide core logging functionality for Windows Firewall Ruleset project'
 
-    } # End of PSData hashtable
+	} # End of PSData hashtable
 
 } # End of PrivateData hashtable
 

@@ -73,81 +73,81 @@ Following changes by metablaster:
 #>
 function Resolve-IPAddress
 {
-    [CmdletBinding()]
-    param (
-        [Parameter(Mandatory = $true,
-        ValueFromPipeline = $true)]
-        [string] $IPAddress
-    )
+	[CmdletBinding()]
+	param (
+		[Parameter(Mandatory = $true,
+		ValueFromPipeline = $true)]
+		[string] $IPAddress
+	)
 
-    process
-    {
-        $groups = [regex]::Matches($IPAddress, '\[(?:(?<Range>\d+(?:-\d+))|(?<Selected>(?:\d+, *)*\d+))\]|(?<All>\*)').Groups.Captures |
-            Where-Object { $_ -and $_.Name -ne '0' } |
-            ForEach-Object {
-                $group = $_
+	process
+	{
+		$groups = [regex]::Matches($IPAddress, '\[(?:(?<Range>\d+(?:-\d+))|(?<Selected>(?:\d+, *)*\d+))\]|(?<All>\*)').Groups.Captures |
+			Where-Object { $_ -and $_.Name -ne '0' } |
+			ForEach-Object {
+				$group = $_
 
-                $values = switch ($group.Name)
-                {
-                    'Range'
-                    {
-                        [int32] $start, [int32] $end = $group.Value -split '-'
+				$values = switch ($group.Name)
+				{
+					'Range'
+					{
+						[int32] $start, [int32] $end = $group.Value -split '-'
 
-                        if ($start, $end -gt 255)
-                        {
-                            $errorRecord = [System.Management.Automation.ErrorRecord]::new(
-                                [ArgumentException]::new('Value ranges to resolve must use a start and end values between 0 and 255'),
-                                'RangeExpressionOutOfRange',
-                                'InvalidArgument',
-                                $group.Value
-                            )
-                            $pscmdlet.ThrowTerminatingError($errorRecord)
-                        }
+						if ($start, $end -gt 255)
+						{
+							$errorRecord = [System.Management.Automation.ErrorRecord]::new(
+								[ArgumentException]::new('Value ranges to resolve must use a start and end values between 0 and 255'),
+								'RangeExpressionOutOfRange',
+								'InvalidArgument',
+								$group.Value
+							)
+							$pscmdlet.ThrowTerminatingError($errorRecord)
+						}
 
-                        $start..$end
-                    }
-                    'Selected'
-                    {
-                        $values = [int[]]($group.Value -split ', *')
+						$start..$end
+					}
+					'Selected'
+					{
+						$values = [int[]]($group.Value -split ', *')
 
-                        if ($values -gt 255)
-                        {
-                            $errorRecord = [System.Management.Automation.ErrorRecord]::new(
-                                [ArgumentException]::new('All selected values must be between 0 and 255'),
-                                'SelectionExpressionOutOfRange',
-                                'InvalidArgument',
-                                $group.Value
-                            )
-                            $pscmdlet.ThrowTerminatingError($errorRecord)
-                        }
+						if ($values -gt 255)
+						{
+							$errorRecord = [System.Management.Automation.ErrorRecord]::new(
+								[ArgumentException]::new('All selected values must be between 0 and 255'),
+								'SelectionExpressionOutOfRange',
+								'InvalidArgument',
+								$group.Value
+							)
+							$pscmdlet.ThrowTerminatingError($errorRecord)
+						}
 
-                        $values
-                    }
-                    'All'
-                    {
-                        0..255
-                    }
-                }
+						$values
+					}
+					'All'
+					{
+						0..255
+					}
+				}
 
-                [PSCustomObject]@{
-                    Name        = $_.Name
-                    Position    = [int32] $IPAddress.Substring(0, $_.Index).Split('.').Count - 1
-                    ReplaceWith = $values
-                    PSTypeName  = 'ExpansionGroupInfo'
-                }
-            }
+				[PSCustomObject]@{
+					Name        = $_.Name
+					Position    = [int32] $IPAddress.Substring(0, $_.Index).Split('.').Count - 1
+					ReplaceWith = $values
+					PSTypeName  = 'ExpansionGroupInfo'
+				}
+			}
 
-        if ($groups)
-        {
-            Get-Permutation $groups -BaseAddress $IPAddress
-        }
-        elseif (-not [IPAddress]::TryParse(($IPAddress -replace '/\d+$'), [ref] $null))
-        {
-            Write-Warning -Message 'The IPAddress argument is not a valid IP address and cannot be resolved'
-        }
-        else
-        {
-            Write-Debug 'No groups found to resolve'
-        }
-    }
+		if ($groups)
+		{
+			Get-Permutation $groups -BaseAddress $IPAddress
+		}
+		elseif (-not [IPAddress]::TryParse(($IPAddress -replace '/\d+$'), [ref] $null))
+		{
+			Write-Warning -Message 'The IPAddress argument is not a valid IP address and cannot be resolved'
+		}
+		else
+		{
+			Write-Debug 'No groups found to resolve'
+		}
+	}
 }

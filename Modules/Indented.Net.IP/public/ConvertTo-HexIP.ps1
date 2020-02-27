@@ -70,18 +70,18 @@ Following changes by metablaster:
 #>
 function ConvertTo-HexIP
 {
-    [CmdletBinding()]
-    [OutputType([string])]
-    param (
-        [Parameter(Mandatory = $true,
-        ValueFromPipeline = $true)]
-        [IPAddress] $IPAddress
-    )
+	[CmdletBinding()]
+	[OutputType([string])]
+	param (
+		[Parameter(Mandatory = $true,
+		ValueFromPipeline = $true)]
+		[IPAddress] $IPAddress
+	)
 
-    process
-    {
-        $bytes = $IPAddress.GetAddressBytes()
-        [array]::Reverse($bytes)
-        '{0:x8}' -f [BitConverter]::ToUInt32($bytes, 0)
-    }
+	process
+	{
+		$bytes = $IPAddress.GetAddressBytes()
+		[array]::Reverse($bytes)
+		'{0:x8}' -f [BitConverter]::ToUInt32($bytes, 0)
+	}
 }

@@ -80,93 +80,93 @@ Following changes by metablaster:
 #>
 function ConvertTo-Subnet
 {
-    [CmdletBinding(DefaultParameterSetName = 'FromIPAndMask')]
-    [OutputType('Indented.Net.IP.Subnet')]
-    param (
-        [Parameter(Mandatory = $true,
-        Position = 0, ParameterSetName = 'FromIPAndMask')]
-        [string] $IPAddress,
+	[CmdletBinding(DefaultParameterSetName = 'FromIPAndMask')]
+	[OutputType('Indented.Net.IP.Subnet')]
+	param (
+		[Parameter(Mandatory = $true,
+		Position = 0, ParameterSetName = 'FromIPAndMask')]
+		[string] $IPAddress,
 
-        [Parameter(Position = 1,
-        ParameterSetName = 'FromIPAndMask')]
-        [string] $SubnetMask,
+		[Parameter(Position = 1,
+		ParameterSetName = 'FromIPAndMask')]
+		[string] $SubnetMask,
 
-        [Parameter(Mandatory = $true,
-        ParameterSetName = 'FromStartAndEnd')]
-        [IPAddress] $Start,
+		[Parameter(Mandatory = $true,
+		ParameterSetName = 'FromStartAndEnd')]
+		[IPAddress] $Start,
 
-        [Parameter(Mandatory = $true,
-        ParameterSetName = 'FromStartAndEnd')]
-        [IPAddress] $End
-    )
+		[Parameter(Mandatory = $true,
+		ParameterSetName = 'FromStartAndEnd')]
+		[IPAddress] $End
+	)
 
-    if ($pscmdlet.ParameterSetName -eq 'FromIPAndMask')
-    {
-        try
-        {
-            $network = ConvertTo-Network @psboundparameters
-        }
-        catch
-        {
-            $pscmdlet.ThrowTerminatingError($_)
-        }
-    }
-    elseif ($pscmdlet.ParameterSetName -eq 'FromStartAndEnd')
-    {
-        if ($Start -eq $End)
-        {
-            $MaskLength = 32
-        }
-        else
-        {
-            $DecimalStart = ConvertTo-DecimalIP $Start
-            $DecimalEnd = ConvertTo-DecimalIP $End
+	if ($pscmdlet.ParameterSetName -eq 'FromIPAndMask')
+	{
+		try
+		{
+			$network = ConvertTo-Network @psboundparameters
+		}
+		catch
+		{
+			$pscmdlet.ThrowTerminatingError($_)
+		}
+	}
+	elseif ($pscmdlet.ParameterSetName -eq 'FromStartAndEnd')
+	{
+		if ($Start -eq $End)
+		{
+			$MaskLength = 32
+		}
+		else
+		{
+			$DecimalStart = ConvertTo-DecimalIP $Start
+			$DecimalEnd = ConvertTo-DecimalIP $End
 
-            if ($DecimalEnd -lt $DecimalStart)
-            {
-                $Start = $End
-            }
+			if ($DecimalEnd -lt $DecimalStart)
+			{
+				$Start = $End
+			}
 
-            # Find the point the binary representation of each IP address diverges
-            $i = 32
-            do
-            {
-                $i--
-            }
-            until (($DecimalStart -band ([UInt32]1 -shl $i)) -ne ($DecimalEnd -band ([UInt32]1 -shl $i)))
+			# Find the point the binary representation of each IP address diverges
+			$i = 32
+			do
+			{
+				$i--
+			}
+			until (($DecimalStart -band ([UInt32]1 -shl $i)) -ne ($DecimalEnd -band ([UInt32]1 -shl $i)))
 
-            $MaskLength = 32 - $i - 1
-        }
+			$MaskLength = 32 - $i - 1
+		}
 
-        try
-        {
-            $network = ConvertTo-Network $Start $MaskLength
-        }
-        catch
-        {
-            $pscmdlet.ThrowTerminatingError($_)
-        }
-    }
+		try
+		{
+			$network = ConvertTo-Network $Start $MaskLength
+		}
+		catch
+		{
+			$pscmdlet.ThrowTerminatingError($_)
+		}
+	}
 
-    $hostAddresses = [math]::Pow(2, (32 - $network.MaskLength)) - 2
+	$hostAddresses = [math]::Pow(2, (32 - $network.MaskLength)) - 2
 
-    if ($hostAddresses -lt 0)
-    {
-        $hostAddresses = 0
-    }
+	if ($hostAddresses -lt 0)
+	{
+		$hostAddresses = 0
+	}
 
-    $subnet = [PSCustomObject]@{
-        NetworkAddress   = Get-NetworkAddress $network.ToString()
-        BroadcastAddress = Get-BroadcastAddress $network.ToString()
-        SubnetMask       = $network.SubnetMask
-        MaskLength       = $network.MaskLength
-        HostAddresses    = $hostAddresses
-        PSTypeName       = 'Indented.Net.IP.Subnet'
-    }
+	$subnet = [PSCustomObject]@{
+		NetworkAddress   = Get-NetworkAddress $network.ToString()
+		BroadcastAddress = Get-BroadcastAddress $network.ToString()
+		SubnetMask       = $network.SubnetMask
+		MaskLength       = $network.MaskLength
+		HostAddresses    = $hostAddresses
+		PSTypeName       = 'Indented.Net.IP.Subnet'
+	}
 
-    $subnet | Add-Member ToString -MemberType ScriptMethod -Force -Value {
-        return '{0}/{1}' -f $this.NetworkAddress, $this.MaskLength
-    }
+	$subnet | Add-Member ToString -MemberType ScriptMethod -Force -Value {
+		return '{0}/{1}' -f $this.NetworkAddress, $this.MaskLength
+	}
 
-    $subnet
+	$subnet
 }

@@ -70,21 +70,21 @@ FormatsToProcess = 'Indented.Net.IP.Format.ps1xml'
 
 # Functions to export from this module
 FunctionsToExport = @(
-    "ConvertFrom-HexIP"
-    "ConvertTo-BinaryIP"
-    "ConvertTo-DecimalIP"
-    "ConvertTo-DottedDecimalIP"
-    "ConvertTo-HexIP"
-    "ConvertTo-Mask"
-    "ConvertTo-MaskLength"
-    "ConvertTo-Subnet"
-    "Get-BroadcastAddress"
-    "Get-NetworkAddress"
-    "Get-NetworkRange"
-    "Get-NetworkSummary"
-    "Get-Subnet"
-    "Resolve-IPAddress"
-    "Test-SubnetMember"
+	"ConvertFrom-HexIP"
+	"ConvertTo-BinaryIP"
+	"ConvertTo-DecimalIP"
+	"ConvertTo-DottedDecimalIP"
+	"ConvertTo-HexIP"
+	"ConvertTo-Mask"
+	"ConvertTo-MaskLength"
+	"ConvertTo-Subnet"
+	"Get-BroadcastAddress"
+	"Get-NetworkAddress"
+	"Get-NetworkRange"
+	"Get-NetworkSummary"
+	"Get-Subnet"
+	"Resolve-IPAddress"
+	"Test-SubnetMember"
 )
 
 # Cmdlets to export from this module
@@ -108,24 +108,24 @@ VariablesToExport = @()
 # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
 PrivateData = @{
 
-    PSData = @{
+	PSData = @{
 
-        # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = @('IPMaths', 'IPCalculator', 'SubnetMaths')
+		# Tags applied to this module. These help with module discovery in online galleries.
+		Tags = @('IPMaths', 'IPCalculator', 'SubnetMaths')
 
-        # A URL to the license for this module.
-        LicenseUri = 'https://github.com/metablaster/WindowsFirewallRuleset/blob/core/Modules/Indented.Net.IP/LICENSE'
+		# A URL to the license for this module.
+		LicenseUri = 'https://github.com/metablaster/WindowsFirewallRuleset/blob/core/Modules/Indented.Net.IP/LICENSE'
 
-        # A URL to the main website for this project.
-        ProjectUri = 'https://github.com/indented-automation/Indented.Net.IP'
+		# A URL to the main website for this project.
+		ProjectUri = 'https://github.com/indented-automation/Indented.Net.IP'
 
-        # A URL to an icon representing this module.
-        # IconUri = ''
+		# A URL to an icon representing this module.
+		# IconUri = ''
 
-        # ReleaseNotes of this module
-        # ReleaseNotes = ''
+		# ReleaseNotes of this module
+		# ReleaseNotes = ''
 
-    } # End of PSData hashtable
+	} # End of PSData hashtable
 
 } # End of PrivateData hashtable
 

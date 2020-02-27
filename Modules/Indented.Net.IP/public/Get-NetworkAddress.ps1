@@ -82,27 +82,27 @@ Following changes by metablaster:
 #>
 function Get-NetworkAddress
 {
-    [CmdletBinding()]
-    [OutputType([IPAddress])]
-    param (
-        [Parameter(Mandatory = $true,
-        ValueFromPipeline = $true)]
-        [string] $IPAddress,
+	[CmdletBinding()]
+	[OutputType([IPAddress])]
+	param (
+		[Parameter(Mandatory = $true,
+		ValueFromPipeline = $true)]
+		[string] $IPAddress,
 
-        [Parameter()]
-        [string] $SubnetMask
-    )
+		[Parameter()]
+		[string] $SubnetMask
+	)
 
-    process
-    {
-        try
-        {
-            $network = ConvertTo-Network @psboundparameters
-            return [IPAddress]($network.IPAddress.Address -band $network.SubnetMask.Address)
-        }
-        catch
-        {
-            Write-Error -ErrorRecord $_
-        }
-    }
+	process
+	{
+		try
+		{
+			$network = ConvertTo-Network @psboundparameters
+			return [IPAddress]($network.IPAddress.Address -band $network.SubnetMask.Address)
+		}
+		catch
+		{
+			Write-Error -ErrorRecord $_
+		}
+	}
 }

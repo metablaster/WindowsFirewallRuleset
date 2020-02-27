@@ -74,9 +74,9 @@ None. You cannot pipe objects to Get-Subnet
 TODO: describe outputs
 .NOTES
 Change log:
-    07/03/2016 - Chris Dent - Cleaned up code, added tests.
-    12/12/2015 - Chris Dent - Redesigned.
-    13/10/2011 - Chris Dent - Created.
+	07/03/2016 - Chris Dent - Cleaned up code, added tests.
+	12/12/2015 - Chris Dent - Redesigned.
+	13/10/2011 - Chris Dent - Created.
 
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
@@ -85,54 +85,54 @@ Following changes by metablaster:
 #>
 function Get-Subnet
 {
-    [CmdletBinding()]
-    [OutputType('Indented.Net.IP.Subnet')]
-    param (
-        [Parameter(Mandatory = $true, Position = 0)]
-        [string] $IPAddress,
+	[CmdletBinding()]
+	[OutputType('Indented.Net.IP.Subnet')]
+	param (
+		[Parameter(Mandatory = $true, Position = 0)]
+		[string] $IPAddress,
 
-        [Parameter(Position = 1)]
-        [string] $SubnetMask,
+		[Parameter(Position = 1)]
+		[string] $SubnetMask,
 
-        [Parameter(Mandatory = $true)]
-        [string] $NewSubnetMask
-    )
+		[Parameter(Mandatory = $true)]
+		[string] $NewSubnetMask
+	)
 
-    # TODO: replace all instances with Out-Null
-    $null = $psboundparameters.Remove('NewSubnetMask')
+	# TODO: replace all instances with Out-Null
+	$null = $psboundparameters.Remove('NewSubnetMask')
 
-    try
-    {
-        $network = ConvertTo-Network @psboundparameters
-        $newNetwork = ConvertTo-Network 0 $NewSubnetMask
-    }
-    catch
-    {
-        $pscmdlet.ThrowTerminatingError($_)
-    }
+	try
+	{
+		$network = ConvertTo-Network @psboundparameters
+		$newNetwork = ConvertTo-Network 0 $NewSubnetMask
+	}
+	catch
+	{
+		$pscmdlet.ThrowTerminatingError($_)
+	}
 
-    if ($network.MaskLength -gt $newNetwork.MaskLength)
-    {
-        $errorRecord = [System.Management.Automation.ErrorRecord]::new(
-            [ArgumentException]'The subnet mask of the new network is shorter (masks fewer addresses) than the subnet mask of the existing network.',
-            'NewSubnetMaskTooShort',
-            'InvalidArgument',
-            $NewNetwork.MaskLength
-        )
+	if ($network.MaskLength -gt $newNetwork.MaskLength)
+	{
+		$errorRecord = [System.Management.Automation.ErrorRecord]::new(
+			[ArgumentException]'The subnet mask of the new network is shorter (masks fewer addresses) than the subnet mask of the existing network.',
+			'NewSubnetMaskTooShort',
+			'InvalidArgument',
+			$NewNetwork.MaskLength
+		)
 
-        $pscmdlet.ThrowTerminatingError($errorRecord)
-    }
+		$pscmdlet.ThrowTerminatingError($errorRecord)
+	}
 
-    $numberOfNets = [math]::Pow(2, ($newNetwork.MaskLength - $network.MaskLength))
-    $numberOfAddresses = [math]::Pow(2, (32 - $newNetwork.MaskLength))
+	$numberOfNets = [math]::Pow(2, ($newNetwork.MaskLength - $network.MaskLength))
+	$numberOfAddresses = [math]::Pow(2, (32 - $newNetwork.MaskLength))
 
-    $decimalAddress = ConvertTo-DecimalIP (Get-NetworkAddress $network.ToString())
-    for ($i = 0; $i -lt $numberOfNets; $i++)
-    {
-        $networkAddress = ConvertTo-DottedDecimalIP $decimalAddress
+	$decimalAddress = ConvertTo-DecimalIP (Get-NetworkAddress $network.ToString())
+	for ($i = 0; $i -lt $numberOfNets; $i++)
+	{
+		$networkAddress = ConvertTo-DottedDecimalIP $decimalAddress
 
-        ConvertTo-Subnet -IPAddress $networkAddress -SubnetMask $newNetwork.MaskLength
+		ConvertTo-Subnet -IPAddress $networkAddress -SubnetMask $newNetwork.MaskLength
 
-        $decimalAddress += $numberOfAddresses
-    }
+		$decimalAddress += $numberOfAddresses
+	}
 }

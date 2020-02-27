@@ -74,17 +74,17 @@ Following changes by metablaster:
 #>
 function ConvertFrom-HexIP
 {
-    [CmdletBinding()]
-    [OutputType([IPAddress])]
-    param (
-        [Parameter(Mandatory = $true,
-        ValueFromPipeline = $true)]
-        [ValidatePattern('^(0x)?[0-9a-f]{8}$')]
-        [string] $IPAddress
-    )
+	[CmdletBinding()]
+	[OutputType([IPAddress])]
+	param (
+		[Parameter(Mandatory = $true,
+		ValueFromPipeline = $true)]
+		[ValidatePattern('^(0x)?[0-9a-f]{8}$')]
+		[string] $IPAddress
+	)
 
-    process
-    {
-        [IPAddress][UInt64][convert]::ToUInt32($IPAddress, 16)
-    }
+	process
+	{
+		[IPAddress][UInt64][convert]::ToUInt32($IPAddress, 16)
+	}
 }

@@ -92,50 +92,50 @@ Following changes by metablaster:
 #>
 function Test-SubnetMember
 {
-    [CmdletBinding()]
-    [OutputType([bool])]
-    param (
-        [Parameter(Mandatory = $true, Position = 0)]
-        [string] $SubjectIPAddress,
+	[CmdletBinding()]
+	[OutputType([bool])]
+	param (
+		[Parameter(Mandatory = $true, Position = 0)]
+		[string] $SubjectIPAddress,
 
-        [Parameter(Mandatory = $true, Position = 1)]
-        [string] $ObjectIPAddress,
+		[Parameter(Mandatory = $true, Position = 1)]
+		[string] $ObjectIPAddress,
 
-        [Parameter()]
-        [string] $SubjectSubnetMask,
+		[Parameter()]
+		[string] $SubjectSubnetMask,
 
-        [Parameter()]
-        [string] $ObjectSubnetMask
-    )
+		[Parameter()]
+		[string] $ObjectSubnetMask
+	)
 
-    try
-    {
-        $subjectNetwork = ConvertTo-Network $SubjectIPAddress $SubjectSubnetMask
-        $objectNetwork = ConvertTo-Network $ObjectIPAddress $ObjectSubnetMask
-    }
-    catch
-    {
-        throw $_
-    }
+	try
+	{
+		$subjectNetwork = ConvertTo-Network $SubjectIPAddress $SubjectSubnetMask
+		$objectNetwork = ConvertTo-Network $ObjectIPAddress $ObjectSubnetMask
+	}
+	catch
+	{
+		throw $_
+	}
 
-    # A simple check, if the mask is shorter (larger network) then it won't be a subnet of the object anyway.
-    if ($subjectNetwork.MaskLength -lt $objectNetwork.MaskLength)
-    {
-        return $false
-    }
+	# A simple check, if the mask is shorter (larger network) then it won't be a subnet of the object anyway.
+	if ($subjectNetwork.MaskLength -lt $objectNetwork.MaskLength)
+	{
+		return $false
+	}
 
-    $subjectDecimalIP = ConvertTo-DecimalIP $subjectNetwork.IPAddress
-    $objectDecimalNetwork = ConvertTo-DecimalIP (Get-NetworkAddress $objectNetwork)
-    $objectDecimalBroadcast = ConvertTo-DecimalIP (Get-BroadcastAddress $objectNetwork)
+	$subjectDecimalIP = ConvertTo-DecimalIP $subjectNetwork.IPAddress
+	$objectDecimalNetwork = ConvertTo-DecimalIP (Get-NetworkAddress $objectNetwork)
+	$objectDecimalBroadcast = ConvertTo-DecimalIP (Get-BroadcastAddress $objectNetwork)
 
-    # If the mask is longer (smaller network), then the decimal form of the address must be between the
-    # network and broadcast address of the object (the network we test against).
-    if ($subjectDecimalIP -ge $objectDecimalNetwork -and $subjectDecimalIP -le $objectDecimalBroadcast)
-    {
-        return $true
-    }
-    else
-    {
-        return $false
-    }
+	# If the mask is longer (smaller network), then the decimal form of the address must be between the
+	# network and broadcast address of the object (the network we test against).
+	if ($subjectDecimalIP -ge $objectDecimalNetwork -and $subjectDecimalIP -le $objectDecimalBroadcast)
+	{
+		return $true
+	}
+	else
+	{
+		return $false
+	}
 }

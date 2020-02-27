@@ -75,16 +75,16 @@ Following changes by metablaster:
 #>
 function ConvertTo-DecimalIP
 {
-    [CmdletBinding()]
-    [OutputType([UInt32])]
-    param (
-        [Parameter(Mandatory = $true,
-        ValueFromPipeline = $true)]
-        [IPAddress] $IPAddress
-    )
+	[CmdletBinding()]
+	[OutputType([UInt32])]
+	param (
+		[Parameter(Mandatory = $true,
+		ValueFromPipeline = $true)]
+		[IPAddress] $IPAddress
+	)
 
-    process
-    {
-        [UInt32]([IPAddress]::HostToNetworkOrder($IPAddress.Address) -shr 32 -band [UInt32]::MaxValue)
-    }
+	process
+	{
+		[UInt32]([IPAddress]::HostToNetworkOrder($IPAddress.Address) -shr 32 -band [UInt32]::MaxValue)
+	}
 }

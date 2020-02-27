@@ -86,34 +86,34 @@ Following changes by metablaster:
 #>
 function Get-BroadcastAddress
 {
-    [CmdletBinding()]
-    [OutputType([IPAddress])]
-    param (
-        [Parameter(Mandatory = $true,
-        ValueFromPipeline = $true)]
-        [string] $IPAddress,
+	[CmdletBinding()]
+	[OutputType([IPAddress])]
+	param (
+		[Parameter(Mandatory = $true,
+		ValueFromPipeline = $true)]
+		[string] $IPAddress,
 
-        [Parameter()]
-        [string] $SubnetMask
-    )
+		[Parameter()]
+		[string] $SubnetMask
+	)
 
-    process
-    {
-        try
-        {
-            $network = ConvertTo-Network @psboundparameters
+	process
+	{
+		try
+		{
+			$network = ConvertTo-Network @psboundparameters
 
-            $networkAddress = [IPAddress]($network.IPAddress.Address -band $network.SubnetMask.Address)
+			$networkAddress = [IPAddress]($network.IPAddress.Address -band $network.SubnetMask.Address)
 
-            return [IPAddress](
-                $networkAddress.Address -bor
-                -bnot $network.SubnetMask.Address -band
-                -bnot ([int64][UInt32]::MaxValue -shl 32)
-            )
-        }
-        catch
-        {
-            Write-Error -ErrorRecord $_
-        }
-    }
+			return [IPAddress](
+				$networkAddress.Address -bor
+				-bnot $network.SubnetMask.Address -band
+				-bnot ([int64][UInt32]::MaxValue -shl 32)
+			)
+		}
+		catch
+		{
+			Write-Error -ErrorRecord $_
+		}
+	}
 }

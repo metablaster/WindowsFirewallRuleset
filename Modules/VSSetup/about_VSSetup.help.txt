@@ -1,4 +1,4 @@
-﻿TOPIC
+TOPIC
     about_vssetup
 
 SHORT DESCRIPTION
@@ -18,7 +18,7 @@ VARIABLES
     from the `$VSSetupVersionTable` variable.
 
     PS> $VSSetupVersionTable
-    
+
     Name                           Value
     ----                           -----
     QueryVersion                   1.15.23.19330
@@ -43,4 +43,3 @@ EXAMPLES
 
 SEE ALSO
     https://github.com/Microsoft/vssetup.powershell
-

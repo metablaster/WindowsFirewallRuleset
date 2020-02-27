@@ -77,38 +77,38 @@ Following changes by metablaster:
 #>
 function ConvertTo-DottedDecimalIP
 {
-    [CmdletBinding()]
-    [OutputType([IPAddress])]
-    param (
-        [Parameter(Mandatory = $true,
-        ValueFromPipeline = $true)]
-        [string] $IPAddress
-    )
+	[CmdletBinding()]
+	[OutputType([IPAddress])]
+	param (
+		[Parameter(Mandatory = $true,
+		ValueFromPipeline = $true)]
+		[string] $IPAddress
+	)
 
-    process
-    {
-        try
-        {
-            [int64] $value = 0
+	process
+	{
+		try
+		{
+			[int64] $value = 0
 
-            if ([int64]::TryParse($IPAddress, [ref] $value))
-            {
-                return [IPAddress]([IPAddress]::NetworkToHostOrder([int64] $value) -shr 32 -band [UInt32]::MaxValue)
-            }
-            else
-            {
-                [IPAddress][UInt64][convert]::ToUInt32($IPAddress.Replace('.', ''), 2)
-            }
-        }
-        catch
-        {
-            $errorRecord = [System.Management.Automation.ErrorRecord]::new(
-                [ArgumentException]'Cannot convert this format.',
-                'UnrecognisedFormat',
-                'InvalidArgument',
-                $IPAddress
-            )
-            Write-Error -ErrorRecord $errorRecord
-        }
-    }
+			if ([int64]::TryParse($IPAddress, [ref] $value))
+			{
+				return [IPAddress]([IPAddress]::NetworkToHostOrder([int64] $value) -shr 32 -band [UInt32]::MaxValue)
+			}
+			else
+			{
+				[IPAddress][UInt64][convert]::ToUInt32($IPAddress.Replace('.', ''), 2)
+			}
+		}
+		catch
+		{
+			$errorRecord = [System.Management.Automation.ErrorRecord]::new(
+				[ArgumentException]'Cannot convert this format.',
+				'UnrecognisedFormat',
+				'InvalidArgument',
+				$IPAddress
+			)
+			Write-Error -ErrorRecord $errorRecord
+		}
+	}
 }

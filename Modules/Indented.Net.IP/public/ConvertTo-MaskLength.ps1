@@ -70,17 +70,17 @@ Following changes by metablaster:
 #>
 function ConvertTo-MaskLength
 {
-    [CmdletBinding()]
-    [OutputType([int32])]
-    param (
-        [Parameter(Mandatory = $true,
-        ValueFromPipeline = $true)]
-        [Alias("Mask")]
-        [IPAddress] $SubnetMask
-    )
+	[CmdletBinding()]
+	[OutputType([int32])]
+	param (
+		[Parameter(Mandatory = $true,
+		ValueFromPipeline = $true)]
+		[Alias("Mask")]
+		[IPAddress] $SubnetMask
+	)
 
-    process
-    {
-        [convert]::ToString([IPAddress]::HostToNetworkOrder($SubnetMask.Address), 2).Replace('0', '').Length
-    }
+	process
+	{
+		[convert]::ToString([IPAddress]::HostToNetworkOrder($SubnetMask.Address), 2).Replace('0', '').Length
+	}
 }

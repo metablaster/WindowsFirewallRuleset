@@ -94,8 +94,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### Indented.Net.IP.Subnet
 ## NOTES
 Change log:
-    07/03/2016 - Chris Dent - Cleaned up code, added tests.
-    12/12/2015 - Chris Dent - Redesigned.
-    13/10/2011 - Chris Dent - Created.
+	07/03/2016 - Chris Dent - Cleaned up code, added tests.
+	12/12/2015 - Chris Dent - Redesigned.
+	13/10/2011 - Chris Dent - Created.
 
 ## RELATED LINKS

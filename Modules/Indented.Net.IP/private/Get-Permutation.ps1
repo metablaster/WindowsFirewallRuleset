@@ -73,30 +73,30 @@ Following changes by metablaster:
 #>
 function Get-Permutation
 {
-    [CmdletBinding()]
-    param (
-        [Parameter()]
-        [PSTypeName('ExpansionGroupInfo')]
-        [Object[]] $Group,
+	[CmdletBinding()]
+	param (
+		[Parameter()]
+		[PSTypeName('ExpansionGroupInfo')]
+		[Object[]] $Group,
 
-        [Parameter()]
-        [string] $BaseAddress,
+		[Parameter()]
+		[string] $BaseAddress,
 
-        [Parameter()]
-        [int32] $Index
-    )
+		[Parameter()]
+		[int32] $Index
+	)
 
-    foreach ($value in $Group[$Index].ReplaceWith)
-    {
-        $octets = $BaseAddress -split '\.'
-        $octets[$Group[$Index].Position] = $value
-        $address = $octets -join '.'
+	foreach ($value in $Group[$Index].ReplaceWith)
+	{
+		$octets = $BaseAddress -split '\.'
+		$octets[$Group[$Index].Position] = $value
+		$address = $octets -join '.'
 
-        if ($Index -lt $Group.Count - 1)
-        {
-            $address = Get-Permutation $Group -Index ($Index + 1) -BaseAddress $address
-        }
+		if ($Index -lt $Group.Count - 1)
+		{
+			$address = Get-Permutation $Group -Index ($Index + 1) -BaseAddress $address
+		}
 
-        $address
-    }
+		$address
+	}
 }

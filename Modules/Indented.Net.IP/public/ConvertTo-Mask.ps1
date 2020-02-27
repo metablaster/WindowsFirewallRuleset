@@ -72,18 +72,18 @@ Following changes by metablaster:
 #>
 function ConvertTo-Mask
 {
-    [CmdletBinding()]
-    [OutputType([IPAddress])]
-    param (
-        [Parameter(Mandatory = $true,
-        ValueFromPipeline = $true)]
-        [Alias('Length')]
-        [ValidateRange(0, 32)]
-        [byte] $MaskLength
-    )
+	[CmdletBinding()]
+	[OutputType([IPAddress])]
+	param (
+		[Parameter(Mandatory = $true,
+		ValueFromPipeline = $true)]
+		[Alias('Length')]
+		[ValidateRange(0, 32)]
+		[byte] $MaskLength
+	)
 
-    process
-    {
-        [IPAddress][UInt64][convert]::ToUInt32(('1' * $MaskLength).PadRight(32, '0'), 2)
-    }
+	process
+	{
+		[IPAddress][UInt64][convert]::ToUInt32(('1' * $MaskLength).PadRight(32, '0'), 2)
+	}
 }
