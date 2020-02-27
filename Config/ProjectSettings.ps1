@@ -132,6 +132,7 @@ else # Normal use case
 	Remove-Variable -Name ModuleInformationPreference -Scope Global -ErrorAction Ignore
 }
 
+# Constant variables, not possible to change in any case.
 # These are set only once per session, changing these requires powershell restart
 if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore))
 {
@@ -176,7 +177,8 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	New-Variable -Name ForceLoad -Scope Global -Option Constant -Value $true
 }
 
-# These are set only once per session, changing these requires powershell restart, except if Develop = $true
+# Read only variables, meaning these can be modifed by code at any time, and, only once per session by users,
+# Changing these requires powershell restart, except if Develop = $true
 if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignore))
 {
 	Write-Debug -Message "[$ThisScript] Setup read only variables"
@@ -185,10 +187,11 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -Erro
 	Set-Variable -Name CheckReadOnlyVariables -Scope Global -Option ReadOnly -Force -Value $null
 
 	# Set to false to avoid checking system requirements
-	Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $true
+	Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $false
 }
 
-# These are set only once per session, changing these requires powershell restart, except if Develop = $true
+# Removable variables, meaning these can be modifed by code at any time, and, only once per session by users
+# Changing these requires powershell restart, except if Develop = $true
 if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -ErrorAction Ignore))
 {
 	Write-Debug -Message "[$ThisScript] Setup removable variables"
@@ -210,6 +213,16 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 
 	# Set to false to disable logging information messages
 	Set-Variable -Name InformationLogging -Scope Global -Value $true
+}
+
+# Protected variables, meaning these can be modifed but only by code (excluded from Develop mode)
+# These are initialy set only once per session, changing these requires powershell restart.
+if (!(Get-Variable -Name CheckProtectedVariables -Scope Global -ErrorAction Ignore))
+{
+	Write-Debug -Message "[$ThisScript] Setup protected variables"
+
+	# check if removable variables already initialized, do not modify!
+	Set-Variable -Name CheckProtectedVariables -Scope Global -Option Constant -Force -Value $null
 
 	# Global variable to tell if errors were generated, do not modify!
 	# Will not be set if ErrorActionPreference is "SilentlyContinue"

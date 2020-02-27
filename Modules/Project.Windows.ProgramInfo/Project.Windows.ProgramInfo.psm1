@@ -769,8 +769,8 @@ function Get-AllUserPrograms
 
 				foreach ($HKLMKey in $UserProducts.GetSubKeyNames())
 				{
-					# NOTE: Avoid spamming
-					# Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMKey\InstallProperties"
+					# NOTE: Avoid spamming (set to debug from verbose)
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMKey\InstallProperties"
 					$ProductKey = $UserProducts.OpenSubkey("$HKLMKey\InstallProperties")
 
 					if (!$ProductKey)
@@ -1093,7 +1093,7 @@ function Update-Table
 	# TODO: try to search also for path in addition to program name
 	# TODO: SearchString may pick up irrelevant paths (ie. unreal), or even miss
 	# Search system wide installed programs
-	if ($SystemPrograms.Name -like "*$SearchString*")
+	if ($SystemPrograms -and $SystemPrograms.Name -like "*$SearchString*")
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching system programs for $SearchString"
 
@@ -1122,7 +1122,7 @@ function Update-Table
 		}
 	}
 	# Program not found on system, attempt alternative search
-	elseif ($AllUserPrograms.Name -like "*$SearchString*")
+	elseif ($AllUserPrograms -and $AllUserPrograms.Name -like "*$SearchString*")
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching program install properties for $SearchString"
 		$TargetPrograms = $AllUserPrograms | Where-Object -Property Name -like "*$SearchString*"
@@ -1175,7 +1175,6 @@ function Update-Table
 			if ($UserPrograms)
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching $($Principal.Account) programs for $SearchString"
-				$UserPrograms | Format-Table | Out-File -FilePath "D:\programs.txt"
 
 				foreach ($Program in $UserPrograms)
 				{
