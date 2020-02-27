@@ -6,8 +6,8 @@
 # New fetures
 1. Scripts now work on PowerShell core 7, with the goal to expand to other operating systems. (ie. linux)
 2. Better configurable logging and much more streams, this will help to see what the code does in real time.
-3. Project wide settings (ProjectSettings.ps1) are updated for changes and significally improved.
-4. Improve program installation search + more registry drilling functions
+3. Project wide settings `Config\ProjectSettings.ps1` are updated for changes and significally improved.
+4. Improved program installation search + more registry drilling functions
 5. Improved and new functions to query users and groups on multiple computers
 
 # Bug fixes

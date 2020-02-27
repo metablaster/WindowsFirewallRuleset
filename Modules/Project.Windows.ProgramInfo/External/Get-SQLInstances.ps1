@@ -437,9 +437,8 @@ function Get-SQLInstances
 
 				try
 				{
-					#Get the CIM info we care about.
+					# Get the CIM info we care about.
 					$SQLServices = $null # TODO: what does this mean?
-					# TODO: no CIM match after changin this from WMI call
 					$SQLServices = @(
 						Get-CimInstance -ComputerName $Computer -ErrorAction stop `
 						-Query "select DisplayName, Name, PathName, StartName, StartMode, State from win32_service where Name LIKE 'MSSQL%'" |
@@ -448,16 +447,21 @@ function Get-SQLInstances
 						Select-Object -Property DisplayName, StartName, StartMode, State, PathName
 					)
 
-					#If we pulled CIM info and it wasn't empty, correlate!
+					# If we pulled CIM info and it wasn't empty, correlate!
 					if($SQLServices)
 					{
-						Write-Debug "CIM Service info:`n$($SQLServices | Format-Table -AutoSize -Property * | Out-String)"
+						Write-Debug "CIM service info:`n$($SQLServices | Format-List -Property * | Out-String)"
+
 						foreach($Instance in $AllInstances)
 						{
 							$MatchingService = $SQLServices |
 								Where-Object {
-									$_.PathName -like "$( $Instance.SQLBinRoot )*" -or $_.PathName -like "`"$( $Instance.SQLBinRoot )*"
+									# We need to format here because Instance path is formated, while the path from CIM query isn't
+									# TODO: can be improved by formatting when all is done, ie. at the end before returning.
+									(Format-Path $_.PathName) -like "$( $Instance.SQLBinRoot )*" -or $_.PathName -like "`"$( $Instance.SQLBinRoot )*"
 								} | Select-Object -First 1
+
+							Write-Debug "Matching service info:`n$($MatchingService | Format-List -Property * | Out-String)"
 
 							$AllInstancesCIM += $Instance | Select-Object -Property Computername,
 							SQLInstance,

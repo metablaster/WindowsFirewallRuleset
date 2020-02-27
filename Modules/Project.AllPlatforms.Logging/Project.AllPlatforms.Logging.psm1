@@ -185,7 +185,8 @@ function Update-Logs
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending warnings to log file: $LogFile"
 
 			# NOTE: we have to add the WARNING label, it's not included in the message by design
-			$WarningBuffer | ForEach-Object { "WARNING: $(Get-Date -Format "HH:mm:ss") $_" | Out-File -Append -FilePath $LogFile }
+			# NOTE: we need consistent encoding for cases where Core and Desktop editions write to same file (not same encoding)
+			$WarningBuffer | ForEach-Object { "WARNING: $(Get-Date -Format "HH:mm:ss") $_" | Out-File -Append -Encoding UTF8 -FilePath $LogFile }
 		}
 
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Clearing warnings buffer"

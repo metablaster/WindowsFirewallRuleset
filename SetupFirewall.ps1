@@ -285,6 +285,7 @@ if ($ErrorStatus)
 	Write-Warning -Message "Errors were generated" @Logs
 
 	Write-Host ""
+	Write-Information -Tags "User" -MessageData "INFO: All errors were saved to: $("$ProjectRoot\Logs")" @Logs
 	Write-Information -Tags "User" -MessageData "INFO: If module is edited don't forget to restart Powershell" @Logs
 }
 

@@ -24,7 +24,7 @@ All of the scripts should use the same code style and order of code, without wri
 it should be enough to take a look at the existing scripts and figure it out right away.
 
 Use cammel case for variables, types, symbols etc; lowercase for language keywords,
-for more info about casing type:\
+for more info about casing type:
 ```powershell
 [PSCustomObject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::get
 ```
@@ -68,7 +68,7 @@ If test case/concept expands to several functions or if it completly unrelated t
 All tests reside in "Test" folder which cotains subfolder for each module, take a look there for examples.
 
 ## Modules and 3rd party code
-Project contains few custom modules of various types grouped by relevance on what the module is supposed to expose.
+The project contains few custom modules of various types grouped by relevance on what the module is supposed to expose.
 
 Try to limit dependency on 3rd party modules.\
 Existing modules should be extended and new written by using Powershell only if possible.
@@ -84,7 +84,7 @@ Do not wait too much to push large commits which are not clear enough in terms w
 **Avoid making huge changes to existing code** without first discusing the matter, new code and additions is not problem thogh.
 
 ## Portability and other systems
-At the moment we focus on Windows Firewall, if you have skills to port code to other firewalls go ahead, but it's not priority.
+At the moment the focus on Windows Firewall, if you want to port code to other firewalls go ahead.
 
 If you decide to port code it is mandatory that these code changes are done on separate branch.
 

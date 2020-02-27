@@ -49,24 +49,16 @@
 
 # Licenses
 
-This project **"WindowsFirewallRuleset"** is licensed under **MIT** license.\
-Subproject [Indented.Net.IP](https://github.com/indented-automation/Indented.Net.IP) (3rd party code) located in **"Modules\Indented.Net.IP"** subfolder is licensed under **ISC** license.\
-Subproject [VSSetup](https://github.com/microsoft/vssetup.powershell) (3rd party code) located in **"Modules\VSSetup"** subfolder is licensed under **MIT** license.\
-There are also various 3rd party scripts scatered around.
+This project **"Windows Firewall Ruleset"** is licensed under **MIT** license.\
+3rd party and sublicenced code is located inside their own folders for organizational purposes, usually called "External".
 
-License, Copyright notices and all material of subprojects is in their own folder.\
-License and Copyright notices for this project is in project root folder.\
-License, Copyright notices, and links, for other 3rd party scripts are usually in folders named "External" and also included into individual script files directly.
-
-For more info see respective licences:\
-[WindowsFirewallRuleset\LICENSE](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/LICENSE)\
-[Indented.Net.IP\LICENSE](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Indented.Net.IP/LICENSE)\
-[VSSetup\LICENSE.txt](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/VSSetup/LICENSE.txt)
+The project maintains "per file" licenses and Copyright notices.
 
 # Minimum supported system requirements
+
 1. Windows 10 Pro/Enterprise, Windows Server 2019
-2. Powershell Core 7.0 [Download Powershell](https://github.com/PowerShell/PowerShell)
-3. NET Framework 3.5 (Windows) [Download Net Framework](https://dotnet.microsoft.com/download/dotnet-framework)
+2. Powershell Core 7.0 and Windows PowerShell 5.1 [Download Powershell](https://github.com/PowerShell/PowerShell)
+3. NET Framework 3.5 (for Windows PowerShell) [Download Net Framework](https://dotnet.microsoft.com/download/dotnet-framework)
 4. Git (Optional) [Download Git](https://git-scm.com/downloads)
 5. Visual Studio Code (Optional) [Download VSCode](https://code.visualstudio.com)
 6. PowerShell Support for VSCode (Optional) [Download extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell)
@@ -80,7 +72,7 @@ For more info see respective licences:\
 
 # I don't have Windows 10 or Windows Server
 
-By default this project is tested and designed for most recent Windows/Servers and that is known to work, making use of it on older systems requires a bit of work.
+By default this project is tested and designed for most recent Windows/Servers and that is known to work, making use of it on older systems requires additional work.
 
 The plan is to expand this project to manage [nftables](https://en.wikipedia.org/wiki/Nftables) firewall on linux and other systems, but not anytime soon.
 
@@ -98,7 +90,8 @@ The plan is to expand this project to manage [nftables](https://en.wikipedia.org
 
 **NOTE:**
 - If you would like to modify basic behavior of execution, such as force loading rules and various default actions then visit `Config\ProjectSettings.ps1` and there you'll find global variables which are used for this.
-- If you're running scripts for first time it's higly recommended to load all rules, it should be easy to delete what you do not wan't in GPO, rather than later searching scripts for what you may have missed.
+- If you're running scripts for first time it's higly recommended to load all rules for which you have programs installed on system,
+it should be easy to delete what you do not wan't in GPO, rather than later searching scripts for what you may have missed.
 - Loading rules into an empty GPO should be very fast, however loading into GPO which already contains rules will be significally slower (depends on number of existing rules)
 - All errors and warnings will be saved to `Logs` directory, so you can review these logs if you want to fix some problem.
 - Any rule that results in "Access denied" while loading should be reloaded by executing specific script again.
@@ -107,7 +100,7 @@ The plan is to expand this project to manage [nftables](https://en.wikipedia.org
 1. If you don't have ssh keys and other setup required to clone then just download the released zip file by clicking on "Release" here on this site.
 2. extract the archive somewhere, this steps assume you've extracted the zip into `C:\` root drive directly.
 3. Open the extracted folder, right click into an empty space and there is an option to run PowerShell core as administrator (Assumes enabled context menu during installation of PowerShell core)
-4. If you would like to use Windows PowerShell 5.1 instead see [WindowsPowerShell](https://github.com/metablaster/WindowsFirewallRuleset/blob/core/Readme/WindowsPowerShell.md) but know that this project is no longer tested nor developed with Windows PowerShell 5.1
+4. If you would like to use Windows PowerShell 5.1 instead see [WindowsPowerShell](https://github.com/metablaster/WindowsFirewallRuleset/blob/core/Readme/WindowsPowerShell.md)
 5. Type or copy paste following commands and hit enter for each
 ```powershell
 Get-ExecutionPolicy
@@ -211,21 +204,19 @@ Of course you can switch to from one branch to another with git in powershell as
 That's it, your scripts are now up to date, execute them as you desire (or follow steps from "Quick start" section) to apply changes to your firewall.
 
 # Contribution or suggestions
-Bellow are general notes regarldess if you're developer or just a user.\
-If you would like to contribute by writing scripts you should also read [CONTRIBUTION.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/CONTRIBUTION.md)
+Bellow are general notes for requesting to add your rules or ideas about rules to project.\
+If you would like to contribute by writing scripts you should read [CONTRIBUTION.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/CONTRIBUTION.md) instead.
 
 Feel free to suggest or contribute new rules, or improvements for existing rules or scripts.\
-Just make sure you follow existing code style, as follows:
-1. Note that each rule uses exactly the same order or paramters split into exactly the same number of lines.\
-This is so that when you need to search for something it's easy to see what is where right away.
-2. Provide some documentation or official reference for your rules so that it can be easy to verify that these rules do not contain mistakes, for example, for ICMP rules you would provide a link to [IANA](https://www.iana.org) with relevant reference document.
-3. If you would like to suggest new rules or improving existing ones, but you can't push an update here, please open new issue here on github and provide details prefferably with documentation.
-4. To contribute rules, it is also important that each rule contains good description of it's purpose, when a user clicks on a rule in firewall GUI he wants to see what this rule is about and easily conclude whether to enable/disable the rule or allow/block the traffic.
-5. It is also important that a rule is very specific and not generic, that means specifying protocol, IP addresses, ports, system user, interface type and other relevant information.\
+Just make sure you follow bellow notices:
+1. Provide some documentation or official reference for your rules so that it can be easy to verify that these rules do not contain mistakes, for example, for ICMP rules you would provide a link to [IANA](https://www.iana.org) with relevant reference document.
+2. If you would like to suggest new rules or improving existing ones, but you can't push an update here, please open new issue here on github and provide details prefferably with documentation.
+3. To contribute rules, it is also important that each rule contains good description of it's purpose, when a user clicks on a rule in firewall GUI he wants to see what this rule is about and easily conclude whether to enable/disable the rule or allow/block the traffic.
+4. It is also important that a rule is very specific and not generic, that means specifying protocol, IP addresses, ports, system user, interface type and other relevant information.\
 for example just saying: allow TCP outbound port 80 for any address or any user or no explanation what is this supposed to allow or block is not acceptable.
 
 # More information and help
 Inside the [Readme](https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Readme) folder you will find usefull information not only about this project but also general information on how to troubleshoot firewall and network problems, or gather more relevant information.
 
 It may answer some of your questions, for example [MonitoringFirewall.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/MonitoringFirewall.md) explains how to monitor firewall you should go ahead and read it!\
-btw. It's recommended you read those papers here on github because of formatting and screenshots.
+It's recommended you read those papers here on github because of formatting and screenshots.

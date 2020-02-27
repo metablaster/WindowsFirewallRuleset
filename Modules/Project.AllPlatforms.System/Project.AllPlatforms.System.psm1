@@ -82,7 +82,7 @@ function Test-SystemRequirements
 	{
 		# print info
 		Write-Host ""
-		Write-Host "Windows Firewall Ruleset v0.3"
+		Write-Host "Windows Firewall Ruleset v0.3.0"
 		Write-Host "Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch"
 		Write-Host "https://github.com/metablaster/WindowsFirewallRuleset"
 		Write-Host ""
