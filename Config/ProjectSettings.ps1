@@ -185,7 +185,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -Erro
 	Set-Variable -Name CheckReadOnlyVariables -Scope Global -Option ReadOnly -Force -Value $null
 
 	# Set to false to avoid checking system requirements
-	Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $false
+	Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $true
 }
 
 # These are set only once per session, changing these requires powershell restart, except if Develop = $true
