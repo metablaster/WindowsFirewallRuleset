@@ -187,7 +187,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -Erro
 	Set-Variable -Name CheckReadOnlyVariables -Scope Global -Option ReadOnly -Force -Value $null
 
 	# Set to false to avoid checking system requirements
-	Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $true
+	Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $false
 }
 
 # Removable variables, meaning these can be modifed by code at any time, and, only once per session by users

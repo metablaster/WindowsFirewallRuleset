@@ -1,0 +1,29 @@
+{
+	"files.encoding": "utf8",
+	"files.trimTrailingWhitespace": true,
+	"files.trimFinalNewlines": true,
+	"files.insertFinalNewline": true,
+
+	"editor.tabSize": 4,
+	"editor.detectIndentation": false,
+	"editor.insertSpaces": false,
+	"editor.trimAutoWhitespace": true,
+	"editor.formatOnPaste": true,
+	"editor.formatOnSave": true,
+	"editor.formatOnType": true,
+	"editor.useTabStops": true,
+
+	"diffEditor.ignoreTrimWhitespace": false,
+
+	"powershell.codeFormatting.openBraceOnSameLine": false,
+	"powershell.scriptAnalysis.enable": true,
+	"powershell.codeFormatting.preset": "Allman",
+	"powershell.codeFormatting.ignoreOneLineBlock": false,
+	"powershell.codeFormatting.useCorrectCasing": true,
+	"powershell.codeFormatting.whitespaceAfterSeparator": true,
+	"powershell.codeFormatting.whitespaceAroundOperator": true,
+	"powershell.codeFormatting.WhitespaceAroundPipe": true,
+	"powershell.codeFormatting.whitespaceBeforeOpenParen": true,
+	"powershell.codeFormatting.whitespaceBeforeOpenBrace": true,
+	"powershell.codeFormatting.WhitespaceInsideBrace": true
+}
