@@ -15,6 +15,7 @@
 2. Format-Path function would index into empty array if environment variable not found
 3. Minor errors resolved thanks to strict mode
 4. Format-Path would return bad result if there is only a single environment variable
+5. Update-Table would produce an error if Get-AllUserPrograms fails to get a list of programs from registry
 
 # Performance
 1. Minor improvements in searching registry
@@ -23,6 +24,7 @@
 1. Symbols and keywords have their casing consistent and updated
 2. Strict mode is now on, latest level
 3. Support for both editions of PowerShell, Desktop and Core
+4. Modules, comments, TODO list, help and readme files are updated
 
 # Changelog v0.2
 

@@ -27,6 +27,7 @@ SOFTWARE.
 #>
 
 Set-StrictMode -Version Latest
+Set-Variable ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
 #
 # Module preferences
@@ -39,8 +40,6 @@ if ($Develop)
 	$DebugPreference = $ModuleDebugPreference
 	$VerbosePreference = $ModuleVerbosePreference
 	$InformationPreference = $ModuleInformationPreference
-
-	Set-Variable ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
 	Write-Debug -Message "[$ThisModule] ErrorActionPreference is $ErrorActionPreference"
 	Write-Debug -Message "[$ThisModule] WarningPreference is $WarningPreference"
@@ -68,6 +67,7 @@ None. Error message is shown if check failed, system info otherwise.
 TODO: learn required NET version by scaning scripts (ie. adding .COMPONENT to comments)
 TODO: learn repo dir automaticaly (using git?)
 TODO: check required modules (pester)
+# TODO: we don't use logs in this module
 #>
 function Test-SystemRequirements
 {
@@ -127,12 +127,7 @@ function Test-SystemRequirements
 		# Check PowerShell edition
 		$PowerShellEdition = $PSVersionTable.PSEdition
 
-		if ($PowerShellEdition -eq "Desktop")
-		{
-			Write-Warning -Message "'Desktop' edition of PowerShell should work but not quaranted"
-			Write-Information -Tags "Project" -MessageData "Your PowerShell edition is: $PowerShellEdition"
-		}
-		elseif ($PowerShellEdition -eq "Core")
+		if ($PowerShellEdition -eq "Core")
 		{
 			Write-Warning -Message "Project with 'Core' edition of PowerShell does not yet support remote machines"
 			Write-Information -Tags "Project" -MessageData "Your PowerShell edition is: $PowerShellEdition"
@@ -166,12 +161,11 @@ function Test-SystemRequirements
 			exit
 		}
 
-		if ($PowerShellEdition -eq "Desktop")
+		if ($Develop -and $PowerShellEdition -eq "Desktop")
 		{
 			# Now that OS and PowerShell is OK we can import these modules
 			Import-Module -Name $PSScriptRoot\..\Project.Windows.ProgramInfo
-			Import-Module -Name $PSScriptRoot\..\Project.Windows.ProgramInfo @Logs
-			Import-Module -Name $PSScriptRoot\..\Project.Windows.ComputerInfo @Logs
+			Import-Module -Name $PSScriptRoot\..\Project.Windows.ComputerInfo
 
 			# Check NET Framework version
 			# TODO: What if function fails?
@@ -231,7 +225,7 @@ function Test-SystemRequirements
 		}
 
 		# If status is not good there is no point to continue
-		if ($StatusGood -and $WinRM -ne "Running")
+		if ($Develop -and $StatusGood -and ($WinRM -ne "Running"))
 		{
 			$Title = "Windows Remote Management service is required but not started"
 			$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
@@ -260,6 +254,27 @@ function Test-SystemRequirements
 
 			Write-Information -Tags "Project" -MessageData "TCP/IP NetBIOS Helper service is required but not started"
 			exit
+		}
+
+		# Check requried modules are loaded or present in modules directory
+		$Pester = Get-Module -Name Pester -ListAvailable | Select-Object -ExpandProperty Version
+		if (!$Pester)
+		{
+			$StatusGood = $false
+		}
+		elseif (($Pester | Measure-Object).Count -gt 1)
+		{
+			$Version = ($Pester | Sort-Object -Descending)[0]
+			$StatusGood = $Version.Major -ge 4
+		}
+		else
+		{
+			$StatusGood = $Pester.Major -ge 4
+		}
+		
+		if (!$StatusGood)
+		{
+			Write-Warning -Message "Pester module version 4.x is required to run some of the tests"
 		}
 
 		# Everything OK, print environment status

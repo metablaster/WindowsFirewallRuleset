@@ -36,7 +36,7 @@ SOFTWARE.
 Set-StrictMode -Version Latest
 
 # Set to true to indicate development phase, forces unloading modules and removing variables.
-Set-Variable -Name Develop -Scope Global -Value $true
+Set-Variable -Name Develop -Scope Global -Value $false
 
 # Name of this script for debugging messages, do not modify!.
 Set-Variable -Name ThisScript -Scope Local -Option ReadOnly -Value $($MyInvocation.MyCommand.Name -replace ".{4}$")
@@ -152,7 +152,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	New-Variable -Name PolicyStore -Scope Global -Option Constant -Value ([System.Environment]::MachineName)
 
 	# If you changed PolicyStore variable, but the project is not yet ready for remote administration
-	if ($PolicyStore -ne [System.Environment]::MachineName)
+	if ($Develop -and $PolicyStore -ne [System.Environment]::MachineName)
 	{
 		# To force loading rules regardless of presence of program set to true
 		New-Variable -Name RemoteCredentials -Scope Global -Option Constant -Value (
@@ -174,7 +174,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	New-Variable -Name Interface -Scope Global -Option Constant -Value "Wired, Wireless"
 
 	# To force loading rules regardless of presence of program set to true
-	New-Variable -Name ForceLoad -Scope Global -Option Constant -Value $true
+	New-Variable -Name ForceLoad -Scope Global -Option Constant -Value $false
 }
 
 # Read only variables, meaning these can be modifed by code at any time, and, only once per session by users,
@@ -187,7 +187,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -Erro
 	Set-Variable -Name CheckReadOnlyVariables -Scope Global -Option ReadOnly -Force -Value $null
 
 	# Set to false to avoid checking system requirements
-	Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $false
+	Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $true
 }
 
 # Removable variables, meaning these can be modifed by code at any time, and, only once per session by users

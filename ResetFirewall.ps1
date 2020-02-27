@@ -40,9 +40,33 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 Write-Information -Tags "User" -MessageData "INFO: Reseting Firewall to previous state..." @Logs
 
 #
-# Default setup for all profiles
+# Default setup for each profile is the same,
+# Separated only for Write-Information output
 #
-Set-NetFirewallProfile -All -PolicyStore $PolicyStore `
+
+Write-Information -Tags "User" -MessageData "INFO: Reseting Domain firewall profile..." @Logs
+
+Set-NetFirewallProfile -Name Domain -PolicyStore $PolicyStore `
+-Enabled NotConfigured -DefaultInboundAction NotConfigured -DefaultOutboundAction NotConfigured -AllowInboundRules NotConfigured `
+-AllowLocalFirewallRules NotConfigured -AllowLocalIPsecRules NotConfigured -AllowUnicastResponseToMulticast NotConfigured `
+-NotifyOnListen NotConfigured -EnableStealthModeForIPsec NotConfigured `
+-LogAllowed NotConfigured -LogBlocked NotConfigured -LogIgnored NotConfigured -LogMaxSizeKilobytes 4096 `
+-AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
+-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" @Logs
+
+Write-Information -Tags "User" -MessageData "INFO: Reseting Private firewall profile..." @Logs
+
+Set-NetFirewallProfile -Name Private -PolicyStore $PolicyStore `
+-Enabled NotConfigured -DefaultInboundAction NotConfigured -DefaultOutboundAction NotConfigured -AllowInboundRules NotConfigured `
+-AllowLocalFirewallRules NotConfigured -AllowLocalIPsecRules NotConfigured -AllowUnicastResponseToMulticast NotConfigured `
+-NotifyOnListen NotConfigured -EnableStealthModeForIPsec NotConfigured `
+-LogAllowed NotConfigured -LogBlocked NotConfigured -LogIgnored NotConfigured -LogMaxSizeKilobytes 4096 `
+-AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
+-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" @Logs
+
+Write-Information -Tags "User" -MessageData "INFO: Reseting public firewall profile..." @Logs
+
+Set-NetFirewallProfile -Name Public -PolicyStore $PolicyStore `
 -Enabled NotConfigured -DefaultInboundAction NotConfigured -DefaultOutboundAction NotConfigured -AllowInboundRules NotConfigured `
 -AllowLocalFirewallRules NotConfigured -AllowLocalIPsecRules NotConfigured -AllowUnicastResponseToMulticast NotConfigured `
 -NotifyOnListen NotConfigured -EnableStealthModeForIPsec NotConfigured `
@@ -54,7 +78,12 @@ Set-NetFirewallProfile -All -PolicyStore $PolicyStore `
 # Remove all the rules
 # TODO: Implement removing only project rules.
 #
-Remove-NetFirewallRule -All -PolicyStore $PolicyStore -ErrorAction Ignore @Logs
+
+Write-Information -Tags "User" -MessageData "INFO: Removing outbound rules..." @Logs
+Remove-NetFirewallRule -Direction Outbound -PolicyStore $PolicyStore -ErrorAction Ignore @Logs
+
+Write-Information -Tags "User" -MessageData "INFO: Removing inbound rules..." @Logs
+Remove-NetFirewallRule -Direction Inbound -PolicyStore $PolicyStore -ErrorAction Ignore @Logs
 
 Write-Information -Tags "User" -MessageData "INFO: Firewall reset is done!" @Logs
 Write-Information -Tags "User" -MessageData "INFO: If internet conectivity problem remains, please reboot system" @Logs

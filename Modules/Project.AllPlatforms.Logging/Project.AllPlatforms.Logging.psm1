@@ -27,6 +27,7 @@ SOFTWARE.
 #>
 
 Set-StrictMode -Version Latest
+Set-Variable ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
 #
 # Module preferences
@@ -39,8 +40,6 @@ if ($Develop)
 	$DebugPreference = $ModuleDebugPreference
 	$VerbosePreference = $ModuleVerbosePreference
 	$InformationPreference = $ModuleInformationPreference
-
-	Set-Variable ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
 	Write-Debug -Message "[$ThisModule] ErrorActionPreference is $ErrorActionPreference"
 	Write-Debug -Message "[$ThisModule] WarningPreference is $WarningPreference"
@@ -126,7 +125,7 @@ None. You cannot pipe objects to Update-Logs
 .OUTPUTS
 None. Log files are writen to log directory.
 .NOTES
-None.
+TODO: when strict mode is on, errors captured by strict mode are not captured into log buffers
 #>
 function Update-Logs
 {
