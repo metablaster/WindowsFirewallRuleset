@@ -54,28 +54,36 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 .SYNOPSIS
 Converts a Decimal IP address into a 32-bit unsigned integer.
 .DESCRIPTION
-ConvertTo-DecimalIP takes a decimal IP, uses a shift operation on each octet and returns a single UInt32 value.
-.INPUTS
-System.Net.IPAddress
+ConvertTo-DecimalIP takes a decimal IP,
+uses a shift operation on each octet and returns a single UInt32 value.
+.PARAMETER IPAddress
+An IP Address to convert.
+
 .EXAMPLE
 ConvertTo-DecimalIP 1.2.3.4
 
 Converts an IP address to an unsigned 32-bit integer value.
+.INPUTS
+System.Net.IPAddress
+.OUTPUTS
+TODO: describe outputs
 .NOTES
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
 - For code to be consisten with project: code formatting and symbol casing.
 #>
-function ConvertTo-DecimalIP {
+function ConvertTo-DecimalIP
+{
     [CmdletBinding()]
     [OutputType([UInt32])]
     param (
-        # An IP Address to convert.
-        [Parameter(Mandatory, Position = 1, ValueFromPipeline )]
+        [Parameter(Mandatory = $true,
+        Position = 1, ValueFromPipeline = $true)]
         [IPAddress] $IPAddress
     )
 
-    process {
+    process
+    {
         [UInt32]([IPAddress]::HostToNetworkOrder($IPAddress.Address) -shr 32 -band [UInt32]::MaxValue)
     }
 }

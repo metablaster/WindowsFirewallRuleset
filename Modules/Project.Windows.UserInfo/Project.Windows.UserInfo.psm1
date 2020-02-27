@@ -70,6 +70,8 @@ onvertFrom-UserAccounts SERVER\USER, COMPUTER\USER, SERVER2\USER2
 None. You cannot pipe objects to ConvertFrom-UserAccounts
 .OUTPUTS
 [string[]] array of usernames in form of: USERNAME
+.NOTES
+None.
 #>
 function ConvertFrom-UserAccount
 {

@@ -52,40 +52,48 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 Resolves an IP address expression using wildcard expressions to individual IP addresses.
 .DESCRIPTION
 Resolves an IP address expression using wildcard expressions to individual IP addresses.
-
 Resolve-IPAddress expands groups and values in square brackets to generate a list of IP addresses or networks using CIDR-notation.
-
 Ranges of values may be specied using a start and end value using "-" to separate the values.
-
 Specific values may be listed as a comma separated list.
+.PARAMETER IPAddress
+The IPAddress expression to resolve.
 .EXAMPLE
 Resolve-IPAddress "10.[1,2].[0-2].0/24"
 
 Returns the addresses 10.1.0.0/24, 10.1.1.0/24, 10.1.2.0/24, 10.2.0.0/24, and so on.
+.INPUTS
+System.String
+.OUTPUTS
+TODO: describe outputs
 .NOTES
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
 - For code to be consisten with project: code formatting and symbol casing.
 #>
-function Resolve-IPAddress {
+function Resolve-IPAddress
+{
     [CmdletBinding()]
     param (
-        # The IPAddress expression to resolve.
-        [Parameter(Mandatory, Position = 1, ValueFromPipeline)]
+        [Parameter(Mandatory = $true,
+        Position = 1, ValueFromPipeline = $true)]
         [string] $IPAddress
     )
 
-    process {
+    process
+    {
         $groups = [regex]::Matches($IPAddress, '\[(?:(?<Range>\d+(?:-\d+))|(?<Selected>(?:\d+, *)*\d+))\]|(?<All>\*)').Groups.Captures |
             Where-Object { $_ -and $_.Name -ne '0' } |
             ForEach-Object {
                 $group = $_
 
-                $values = switch ($group.Name) {
-                    'Range'    {
+                $values = switch ($group.Name)
+                {
+                    'Range'
+                    {
                         [int32] $start, [int32] $end = $group.Value -split '-'
 
-                        if ($start, $end -gt 255) {
+                        if ($start, $end -gt 255)
+                        {
                             $errorRecord = [System.Management.Automation.ErrorRecord]::new(
                                 [ArgumentException]::new('Value ranges to resolve must use a start and end values between 0 and 255'),
                                 'RangeExpressionOutOfRange',
@@ -97,10 +105,12 @@ function Resolve-IPAddress {
 
                         $start..$end
                     }
-                    'Selected' {
+                    'Selected'
+                    {
                         $values = [int[]]($group.Value -split ', *')
 
-                        if ($values -gt 255) {
+                        if ($values -gt 255)
+                        {
                             $errorRecord = [System.Management.Automation.ErrorRecord]::new(
                                 [ArgumentException]::new('All selected values must be between 0 and 255'),
                                 'SelectionExpressionOutOfRange',
@@ -112,7 +122,8 @@ function Resolve-IPAddress {
 
                         $values
                     }
-                    'All' {
+                    'All'
+                    {
                         0..255
                     }
                 }
@@ -125,11 +136,16 @@ function Resolve-IPAddress {
                 }
             }
 
-        if ($groups) {
+        if ($groups)
+        {
             GetPermutation $groups -BaseAddress $IPAddress
-        } elseif (-not [IPAddress]::TryParse(($IPAddress -replace '/\d+$'), [Ref] $null)) {
+        }
+        elseif (-not [IPAddress]::TryParse(($IPAddress -replace '/\d+$'), [Ref] $null))
+        {
             Write-Warning -Message 'The IPAddress argument is not a valid IP address and cannot be resolved'
-        } else {
+        }
+        else
+        {
             Write-Debug 'No groups found to resolve'
         }
     }

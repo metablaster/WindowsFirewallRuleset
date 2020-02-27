@@ -174,6 +174,8 @@ Test-Evnironment %SystemDrive%
 None. You cannot pipe objects to Test-Environment
 .OUTPUTS
 [bool] true if path exists, false otherwise
+.NOTES
+None.
 #>
 function Test-Environment
 {
@@ -216,6 +218,8 @@ Test-Service dnscache
 None. You cannot pipe objects to Test-Service
 .OUTPUTS
 None. Warning and info message if service not found
+.NOTES
+None.
 #>
 function Test-Service
 {
@@ -355,6 +359,8 @@ Format-Path "C:\Program Files\\Dir\"
 None. You cannot pipe objects to Format-Path
 .OUTPUTS
 [string] formatted path, includes environment variables, stripped off of junk
+.NOTES
+None.
 #>
 function Format-Path
 {
@@ -578,6 +584,8 @@ function Get-UserPrograms
 <#
 .SYNOPSIS
 Search installed programs for all users, system wide
+.DESCRIPTION
+TODO: add descriptions
 .PARAMETER ComputerName
 Computer name which to check
 .EXAMPLE
@@ -702,6 +710,8 @@ function Get-SystemPrograms
 <#
 .SYNOPSIS
 Search program install properties for all users, system wide
+.DESCRIPTION
+TODO: add descriptions
 .PARAMETER ComputerName
 Computer name which to check
 .EXAMPLE
@@ -819,6 +829,8 @@ Get-ExecutablePaths "COMPUTERNAME"
 None. You cannot pipe objects to Get-ExecutablePaths
 .OUTPUTS
 [psobject[]] list of executables, their installation path and additional information
+.NOTES
+None.
 #>
 function Get-ExecutablePaths
 {
@@ -1022,6 +1034,8 @@ Update-Table "GoogleChrome"
 None. You cannot pipe objects to Update-Table
 .OUTPUTS
 None. Module scope installation table is updated
+.NOTES
+None.
 #>
 function Update-Table
 {
@@ -1399,6 +1413,8 @@ Find-Installation "Office"
 None. You cannot pipe objects to Find-Installation
 .OUTPUTS
 [bool] true or false if installation directory if found, installation table is updated
+.NOTES
+None.
 #>
 function Find-Installation
 {
@@ -1872,6 +1888,8 @@ Get-NetFramework COMPUTERNAME
 None. You cannot pipe objects to Get-NetFramework
 .OUTPUTS
 [psobject[]] for installed NET Frameworks and install paths
+.NOTES
+None.
 #>
 function Get-NetFramework
 {
@@ -1989,6 +2007,8 @@ function Get-NetFramework
 <#
 .SYNOPSIS
 Get installed Windows SDK
+.DESCRIPTION
+TODO: add descriptions
 .PARAMETER ComputerName
 Computer name for which to list installed installed framework
 .EXAMPLE
@@ -1997,6 +2017,8 @@ Get-WindowsSDK COMPUTERNAME
 None. You cannot pipe objects to Get-WindowsSDK
 .OUTPUTS
 [psobject[]] for installed Windows SDK versions and install paths
+.NOTES
+None.
 #>
 function Get-WindowsSDK
 {
@@ -2082,6 +2104,8 @@ function Get-WindowsSDK
 <#
 .SYNOPSIS
 Get installed Windows Kits
+.DESCRIPTION
+TODO: add descriptions
 .PARAMETER ComputerName
 Computer name for which to list installed installed windows kits
 .EXAMPLE
@@ -2090,6 +2114,8 @@ Get-WindowsKits COMPUTERNAME
 None. You cannot pipe objects to Get-WindowsKits
 .OUTPUTS
 [psobject[]] for installed Windows Kits versions and install paths
+.NOTES
+None.
 #>
 function Get-WindowsKits
 {
@@ -2173,6 +2199,8 @@ function Get-WindowsKits
 <#
 .SYNOPSIS
 Get installed Windows Defender
+.DESCRIPTION
+TODO: add descriptions
 .PARAMETER ComputerName
 Computer name for which to list installed Windows Defender
 .EXAMPLE
@@ -2181,6 +2209,8 @@ Get-WindowsDefender COMPUTERNAME
 None. You cannot pipe objects to Get-WindowsDefender
 .OUTPUTS
 [psobject] for installed Windows Defender, version and install paths
+.NOTES
+None.
 #>
 function Get-WindowsDefender
 {
@@ -2243,6 +2273,8 @@ function Get-WindowsDefender
 <#
 .SYNOPSIS
 Get installed Microsoft SQL Server Management Studios
+.DESCRIPTION
+TODO: add descriptions
 .PARAMETER ComputerName
 Computer name for which to list installed installed framework
 .EXAMPLE
@@ -2256,6 +2288,8 @@ Get-SQLManagementStudio COMPUTERNAME
 None. You cannot pipe objects to Get-SQLManagementStudio
 .OUTPUTS
 [psobject[]] for installed Microsoft SQL Server Management Studio's
+.NOTES
+None.
  #>
  function Get-SQLManagementStudio
  {

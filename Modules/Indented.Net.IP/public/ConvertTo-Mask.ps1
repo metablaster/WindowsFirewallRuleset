@@ -52,32 +52,37 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 Convert a mask length to a dotted-decimal subnet mask.
 .DESCRIPTION
 ConvertTo-Mask returns a subnet mask in dotted decimal format from an integer value ranging between 0 and 32.
-
 ConvertTo-Mask creates a binary string from the length,
 converts the string to an unsigned 32-bit integer then calls ConvertTo-DottedDecimalIP to complete the operation.
-.INPUTS
-System.Int32
+.PARAMETER MaskLength
+The number of bits which must be masked.
 .EXAMPLE
 ConvertTo-Mask 24
 
 Returns the dotted-decimal form of the mask, 255.255.255.0.
+.INPUTS
+System.Int32
+.OUTPUTS
+TODO: describe outputs
 .NOTES
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
 - For code to be consisten with project: code formatting and symbol casing.
 #>
-function ConvertTo-Mask {
+function ConvertTo-Mask
+{
     [CmdletBinding()]
     [OutputType([IPAddress])]
     param (
-        # The number of bits which must be masked.
-        [Parameter(Mandatory, Position = 1, ValueFromPipeline)]
+        [Parameter(Mandatory = $true,
+        Position = 1, ValueFromPipeline = $true)]
         [Alias('Length')]
         [ValidateRange(0, 32)]
         [byte] $MaskLength
     )
 
-    process {
+    process
+    {
         [IPAddress][UInt64][Convert]::ToUInt32(('1' * $MaskLength).PadRight(32, '0'), 2)
     }
 }

@@ -52,28 +52,34 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 Convert a dotted-decimal subnet mask to a mask length.
 .DESCRIPTION
 A count of the number of 1's in a binary string.
-.INPUTS
-System.Net.IPAddress
+.PARAMETER SubnetMask
+A subnet mask to convert into length.
 .EXAMPLE
 ConvertTo-MaskLength 255.255.255.0
 
 Returns 24, the length of the mask in bits.
+.INPUTS
+System.Net.IPAddress
+.OUTPUTS
+TODO: describe outputs
 .NOTES
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
 - For code to be consisten with project: code formatting and symbol casing.
 #>
-function ConvertTo-MaskLength {
+function ConvertTo-MaskLength
+{
     [CmdletBinding()]
     [OutputType([int32])]
     param (
-        # A subnet mask to convert into length.
-        [Parameter(Mandatory, Position = 1, ValueFromPipeline)]
+        [Parameter(Mandatory = $true,
+        Position = 1, ValueFromPipeline = $true)]
         [Alias("Mask")]
         [IPAddress] $SubnetMask
     )
 
-    process {
+    process
+    {
         [Convert]::ToString([IPAddress]::HostToNetworkOrder($SubnetMask.Address), 2).Replace('0', '').Length
     }
 }

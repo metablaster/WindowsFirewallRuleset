@@ -30,6 +30,8 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Convert SID to user or computer account name
+.DESCRIPTION
+TODO: add descriptions
 .PARAMETER SIDArray
 One or more SIDs to convert
 .EXAMPLE

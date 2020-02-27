@@ -54,29 +54,36 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 .SYNOPSIS
 Converts a hexadecimal IP address into a dotted decimal string.
 .DESCRIPTION
-ConvertFrom-HexIP takes a hexadecimal string and returns a dotted decimal IP address. An intermediate call is made to ConvertTo-DottedDecimalIP.
-.INPUTS
-System.String
+ConvertFrom-HexIP takes a hexadecimal string and returns a dotted decimal IP address.
+An intermediate call is made to ConvertTo-DottedDecimalIP.
+.PARAMETER IPAddress
+An IP Address to convert.
 .EXAMPLE
 ConvertFrom-HexIP c0a80001
 
 Returns the IP address 192.168.0.1.
+.INPUTS
+System.String
+.OUTPUTS
+TODO: describe outputs
 .NOTES
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
 - For code to be consisten with project: code formatting and symbol casing.
 #>
-function ConvertFrom-HexIP {
+function ConvertFrom-HexIP
+{
     [CmdletBinding()]
     [OutputType([IPAddress])]
     param (
-        # An IP Address to convert.
-        [Parameter(Mandatory, Position = 1, ValueFromPipeline)]
+        [Parameter(Mandatory = $true,
+        Position = 1, ValueFromPipeline = $true)]
         [ValidatePattern('^(0x)?[0-9a-f]{8}$')]
         [string] $IPAddress
     )
 
-    process {
+    process
+    {
         [IPAddress][UInt64][Convert]::ToUInt32($IPAddress, 16)
     }
 }

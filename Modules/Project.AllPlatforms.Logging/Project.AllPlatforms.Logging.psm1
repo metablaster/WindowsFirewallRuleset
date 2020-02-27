@@ -125,6 +125,8 @@ Update-Logs
 None. You cannot pipe objects to Update-Logs
 .OUTPUTS
 None. Log files are writen to log directory.
+.NOTES
+None.
 #>
 function Update-Logs
 {

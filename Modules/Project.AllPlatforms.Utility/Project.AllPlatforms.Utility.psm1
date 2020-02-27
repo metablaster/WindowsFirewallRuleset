@@ -72,6 +72,8 @@ Update-Context "IPv4" "Outbound" "RuleGroup"
 None. You cannot pipe objects to Update-Context
 .OUTPUTS
 None. Script scope context variable is updated.
+.NOTES
+None.
 #>
 function Update-Context
 {
@@ -165,10 +167,14 @@ function Approve-Execute
 <#
 .SYNOPSIS
 Show-SDDL returns SDDL based on "object" such as path, or registry entry
+.DESCRIPTION
+TODO: add descriptions
 .EXAMPLE
 see Test\Show-SDDL.ps1 for example
 .INPUTS
 None. You cannot pipe objects to Show-SDDL
+.OUTPUTS
+TODO: describe outputs
 .NOTES
 This function is used only for debugging and discovery of object SDDL
 Credits to: https://blogs.technet.microsoft.com/ashleymcglone/2011/08/29/powershell-sid-walker-texas-ranger-part-1
@@ -238,6 +244,8 @@ function Show-SDDL
 <#
 .SYNOPSIS
 Convert SDDL entries to computer accounts
+.DESCRIPTION
+TODO: add descriptions
 .PARAMETER SDDL
 String array of one or more strings of SDDL syntax
 .EXAMPLE
@@ -246,6 +254,8 @@ Convert-SDDLToACL $SomeSDDL, $SDDL2, "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
 None. You cannot pipe objects to Convert-SDDLToACL
 .OUTPUTS
 [string[]] Array of computer accounts
+.NOTES
+None.
 #>
 function Convert-SDDLToACL
 {
@@ -282,6 +292,8 @@ Get-NetworkServices "C:\PathToRepo"
 None. You cannot pipe objects to Get-NetworkServices
 .OUTPUTS
 None, File with the list of services is made
+.NOTES
+None.
 #>
 function Get-NetworkServices
 {
@@ -365,6 +377,8 @@ Net-NewFirewallRule ... | Format-Output
 Microsoft.Management.Infrastructure.CimInstance Firewall rule to format
 .OUTPUTS
 None. Formatted and colored output
+.NOTES
+None.
 #>
 function Format-Output
 {
@@ -392,6 +406,8 @@ Set-ScreenBuffer
 None. You cannot pipe objects to Set-ScreenBuffer
 .OUTPUTS
 None, Screen buffer is set for current powershell session
+.NOTES
+None.
 #>
 function Set-ScreenBuffer
 {
@@ -452,6 +468,8 @@ Test-TargetComputer "COMPUTERNAME"
 None. You cannot pipe objects to Test-TargetMachine
 .OUTPUTS
 [bool] false or true if target host is reponsive
+.NOTES
+None.
 #>
 function Test-TargetComputer
 {

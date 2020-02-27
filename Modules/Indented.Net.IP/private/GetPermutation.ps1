@@ -52,30 +52,49 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 Gets permutations of an IP address expansion expression.
 .DESCRIPTION
 Gets permutations of an IP address expansion expression.
+.PARAMETER Group
+TODO: describe parameter
+.PARAMETER BaseAddress
+TODO: describe parameter
+.PARAMETER Index
+TODO: describe parameter
+.EXAMPLE
+TODO: add example
+.INPUTS
+None. You cannot pipe objects to Get-Permutation
+.OUTPUTS
+TODO: describe outputs
 .NOTES
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
 - For code to be consisten with project: code formatting and symbol casing.
 #>
-function GetPermutation {
+function GetPermutation
+{
     [CmdletBinding()]
     param (
+        [Parameter()]
         [PSTypeName('ExpansionGroupInfo')]
         [Object[]] $Group,
 
+        [Parameter()]
         [string] $BaseAddress,
 
+        [Parameter()]
         [int32] $Index
     )
 
-    foreach ($value in $Group[$Index].ReplaceWith) {
+    foreach ($value in $Group[$Index].ReplaceWith)
+    {
         $octets = $BaseAddress -split '\.'
         $octets[$Group[$Index].Position] = $value
         $address = $octets -join '.'
 
-        if ($Index -lt $Group.Count - 1) {
+        if ($Index -lt $Group.Count - 1)
+        {
             $address = GetPermutation $Group -Index ($Index + 1) -BaseAddress $address
         }
+
         $address
     }
 }

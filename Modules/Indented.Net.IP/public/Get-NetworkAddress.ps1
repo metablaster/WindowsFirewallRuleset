@@ -58,8 +58,6 @@ Either a literal IP address, a network range expressed as CIDR notation,
 or an IP address and subnet mask in a string.
 .PARAMETER SubnetMask
 A subnet mask as an IP address.
-.INPUTS
-System.String
 .EXAMPLE
 Get-NetworkAddress 192.168.0.243 255.255.255.0
 
@@ -72,28 +70,37 @@ Returns the address 10.0.8.0.
 Get-NetworkAddress "10.0.23.21 255.255.255.224"
 
 Input values are automatically split into IP address and subnet mask. Returns the address 10.0.23.0.
+.INPUTS
+System.String
+.OUTPUTS
+TODO: describe outputs
 .NOTES
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
 - For code to be consisten with project: code formatting and symbol casing.
 #>
-function Get-NetworkAddress {
+function Get-NetworkAddress
+{
     [CmdletBinding()]
     [OutputType([IPAddress])]
     param (
-        [Parameter(Mandatory, Position = 1, ValueFromPipeline)]
+        [Parameter(Mandatory = $true,
+        Position = 1, ValueFromPipeline = $true)]
         [string] $IPAddress,
 
         [Parameter(Position = 2)]
         [string] $SubnetMask
     )
 
-    process {
-        try {
+    process
+    {
+        try
+        {
             $network = ConvertToNetwork @psboundparameters
-
             return [IPAddress]($network.IPAddress.Address -band $network.SubnetMask.Address)
-        } catch {
+        }
+        catch
+        {
             Write-Error -ErrorRecord $_
         }
     }

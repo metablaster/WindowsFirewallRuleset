@@ -53,6 +53,15 @@ Converts IP address formats to a set a known styles.
 .DESCRIPTION
 ConvertToNetwork ensures consistent values are recorded from parameters which must handle differing addressing formats.
 This Cmdlet allows all other the other functions in this module to offload parameter handling.
+.PARAMETER IPAddress
+Either a literal IP address, a network range expressed as CIDR notation,
+or an IP address and subnet mask in a string.
+.PARAMETER SubnetMask
+A subnet mask as an IP address.
+.INPUTS
+None. You cannot pipe objects to ConvertTo-Network
+.OUTPUTS
+TODO: describe outputs
 .NOTES
 Change log:
     05/03/2016 - Chris Dent - Refactored and simplified.
@@ -61,15 +70,14 @@ Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
 - For code to be consisten with project: code formatting and symbol casing.
 #>
-function ConvertToNetwork {
+function ConvertToNetwork
+{
     [CmdletBinding()]
     [OutputType('Indented.Net.IP.Network')]
     param (
-        # Either a literal IP address, a network range expressed as CIDR notation, or an IP address and subnet mask in a string.
         [Parameter(Mandatory = $true, Position = 1)]
         [string] $IPAddress,
 
-        # A subnet mask as an IP address.
         [Parameter(Position = 2)]
         [AllowNull()]
         [string] $SubnetMask
@@ -98,40 +106,51 @@ function ConvertToNetwork {
         '{0}/{1}' -f $this.IPAddress, $this.MaskLength
     }
 
-    if (-not $psboundparameters.ContainsKey('SubnetMask') -or $SubnetMask -eq '') {
+    if (-not $psboundparameters.ContainsKey('SubnetMask') -or $SubnetMask -eq '')
+    {
         $IPAddress, $SubnetMask = $IPAddress.Split([Char[]]'\/ ', [StringSplitOptions]::RemoveEmptyEntries)
     }
 
     # IPAddress
-
-    while ($IPAddress.Split('.').Count -lt 4) {
+    while ($IPAddress.Split('.').Count -lt 4)
+    {
         $IPAddress += '.0'
     }
 
-    if ([IPAddress]::TryParse($IPAddress, [Ref] $null)) {
+    if ([IPAddress]::TryParse($IPAddress, [Ref] $null))
+    {
         $network.IPAddress = [IPAddress] $IPAddress
-    } else {
+    }
+    else
+    {
         $errorRecord = [System.Management.Automation.ErrorRecord]::new(
             [ArgumentException]'Invalid IP address.',
             'InvalidIPAddress',
             'InvalidArgument',
             $IPAddress
         )
+
         $pscmdlet.ThrowTerminatingError($errorRecord)
     }
 
     # SubnetMask
-
-    if ($null -eq $SubnetMask -or $SubnetMask -eq '') {
+    if ($null -eq $SubnetMask -or $SubnetMask -eq '')
+    {
         $network.SubnetMask = [IPAddress] $validSubnetMaskValues[32]
         $network.MaskLength = 32
-    } else {
+    }
+    else
+    {
         $maskLength = 0
-        if ([int32]::TryParse($SubnetMask, [Ref] $maskLength)) {
-            if ($MaskLength -ge 0 -and $maskLength -le 32) {
+        if ([int32]::TryParse($SubnetMask, [Ref] $maskLength))
+        {
+            if ($MaskLength -ge 0 -and $maskLength -le 32)
+            {
                 $network.SubnetMask = [IPAddress] $validSubnetMaskValues[$maskLength]
                 $network.MaskLength = $maskLength
-            } else {
+            }
+            else
+            {
                 $errorRecord = [System.Management.Automation.ErrorRecord]::new(
                     [ArgumentException]'Mask length out of range (expecting 0 to 32).',
                     'InvalidMaskLength',
@@ -140,22 +159,30 @@ function ConvertToNetwork {
                 )
                 $pscmdlet.ThrowTerminatingError($errorRecord)
             }
-        } else {
-            while ($SubnetMask.Split('.').Count -lt 4) {
+        }
+        else
+        {
+            while ($SubnetMask.Split('.').Count -lt 4)
+            {
                 $SubnetMask += '.0'
             }
+
             $maskLength = $validSubnetMaskValues.IndexOf($SubnetMask)
 
-            if ($maskLength -ge 0) {
+            if ($maskLength -ge 0)
+            {
                 $Network.SubnetMask = [IPAddress] $SubnetMask
                 $Network.MaskLength = $maskLength
-            } else {
+            }
+            else
+            {
                 $errorRecord = [System.Management.Automation.ErrorRecord]::new(
                     [ArgumentException]'Invalid subnet mask.',
                     'InvalidSubnetMask',
                     'InvalidArgument',
                     $SubnetMask
                 )
+
                 $pscmdlet.ThrowTerminatingError($errorRecord)
             }
         }

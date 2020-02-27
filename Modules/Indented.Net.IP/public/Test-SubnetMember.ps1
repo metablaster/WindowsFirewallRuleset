@@ -54,6 +54,16 @@ Tests an IP address to determine if it falls within IP address range.
 Test-SubnetMember attempts to determine whether or not an address or range falls within another range.
 The network and broadcast address are calculated the converted to decimal then
 compared to the decimal form of the submitted address.
+.PARAMETER SubjectIPAddress
+A representation of the subject, the network to be tested. Either a literal IP address,
+a network range expressed as CIDR notation, or an IP address and subnet mask in a string.
+.PARAMETER ObjectIPAddress
+A representation of the object, the network to test against. Either a literal IP address,
+a network range expressed as CIDR notation, or an IP address and subnet mask in a string.
+.PARAMETER SubjectSubnetMask
+A subnet mask as an IP address.
+.PARAMETER ObjectSubnetMask
+A subnet mask as an IP address.
 .EXAMPLE
 Test-SubnetMember -SubjectIPAddress 10.0.0.0/24 -ObjectIPAddress 10.0.0.0/16
 
@@ -70,41 +80,46 @@ Returns true as the subject IP address is within the object network.
 Test-SubnetMember -SubjectIPAddress 255.255.255.255 -ObjectIPAddress 0/0
 
 Returns true as the subject IP address is the last in the object network range.
+.INPUTS
+None. You cannot pipe objects to Test-SubnetMember
+.OUTPUTS
+TODO: describe outputs
 .NOTES
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
 - For code to be consisten with project: code formatting and symbol casing.
 #>
-function Test-SubnetMember {
+function Test-SubnetMember
+{
     [CmdletBinding()]
     [OutputType([bool])]
     param (
-        # A representation of the subject, the network to be tested. Either a literal IP address,
-        # a network range expressed as CIDR notation, or an IP address and subnet mask in a string.
-        [Parameter(Mandatory, Position = 1)]
+        [Parameter(Mandatory = $true, Position = 1)]
         [string] $SubjectIPAddress,
 
-        # A representation of the object, the network to test against. Either a literal IP address,
-        # a network range expressed as CIDR notation, or an IP address and subnet mask in a string.
-        [Parameter(Mandatory, Position = 2)]
+        [Parameter(Mandatory = $true, Position = 2)]
         [string] $ObjectIPAddress,
 
-        # A subnet mask as an IP address.
+        [Parameter()]
         [string] $SubjectSubnetMask,
 
-        # A subnet mask as an IP address.
+        [Parameter()]
         [string] $ObjectSubnetMask
     )
 
-    try {
+    try
+    {
         $subjectNetwork = ConvertToNetwork $SubjectIPAddress $SubjectSubnetMask
         $objectNetwork = ConvertToNetwork $ObjectIPAddress $ObjectSubnetMask
-    } catch {
+    }
+    catch
+    {
         throw $_
     }
 
     # A simple check, if the mask is shorter (larger network) then it won't be a subnet of the object anyway.
-    if ($subjectNetwork.MaskLength -lt $objectNetwork.MaskLength) {
+    if ($subjectNetwork.MaskLength -lt $objectNetwork.MaskLength)
+    {
         return $false
     }
 
@@ -114,9 +129,12 @@ function Test-SubnetMember {
 
     # If the mask is longer (smaller network), then the decimal form of the address must be between the
     # network and broadcast address of the object (the network we test against).
-    if ($subjectDecimalIP -ge $objectDecimalNetwork -and $subjectDecimalIP -le $objectDecimalBroadcast) {
+    if ($subjectDecimalIP -ge $objectDecimalNetwork -and $subjectDecimalIP -le $objectDecimalBroadcast)
+    {
         return $true
-    } else {
+    }
+    else
+    {
         return $false
     }
 }

@@ -53,8 +53,17 @@ Get a list of IP addresses within the specified network.
 .DESCRIPTION
 Get-NetworkRange finds the network and broadcast address as decimal values
 then starts a counter between the two, returning IPAddress for each.
-.INPUTS
-System.String
+.PARAMETER IPAddress
+Either a literal IP address, a network range expressed as CIDR notation,
+or an IP address and subnet mask in a string.
+.PARAMETER SubnetMask
+A subnet mask as an IP address.
+.PARAMETER IncludeNetworkAndBroadcast
+Include the network and broadcast addresses when generating a network address range.
+.PARAMETER Start
+The start address of a range.
+.PARAMETER End
+The end address of a range.
 .EXAMPLE
 Get-NetworkRange 192.168.0.0 255.255.255.0
 
@@ -63,42 +72,51 @@ Returns all IP addresses in the range 192.168.0.0/24.
 Get-NetworkRange 10.0.8.0/22
 
 Returns all IP addresses in the range 192.168.0.0 255.255.252.0.
+.INPUTS
+System.String
+.OUTPUTS
+TODO: describe outputs
 .NOTES
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
 - For code to be consisten with project: code formatting and symbol casing.
 #>
-function Get-NetworkRange {
+function Get-NetworkRange
+{
     [CmdletBinding(DefaultParameterSetName = 'FromIPAndMask')]
     [OutputType([IPAddress])]
     param (
-        # Either a literal IP address, a network range expressed as CIDR notation, or an IP address and subnet mask in a string.
-        [Parameter(Mandatory, Position = 1, ValueFromPipeline, ParameterSetName = 'FromIPAndMask')]
+        [Parameter(Mandatory = $true, Position = 1,
+        ValueFromPipeline = $true, ParameterSetName = 'FromIPAndMask')]
         [string] $IPAddress,
 
-        # A subnet mask as an IP address.
-        [Parameter(Position = 2, ParameterSetName = 'FromIPAndMask')]
+        [Parameter(Position = 2,
+        ParameterSetName = 'FromIPAndMask')]
         [string] $SubnetMask,
 
-        # Include the network and broadcast addresses when generating a network address range.
         [Parameter(ParameterSetName = 'FromIPAndMask')]
         [switch] $IncludeNetworkAndBroadcast,
 
-        # The start address of a range.
-        [Parameter(Mandatory, ParameterSetName = 'FromStartAndEnd')]
+        [Parameter(Mandatory = $true,
+        ParameterSetName = 'FromStartAndEnd')]
         [IPAddress] $Start,
 
-        # The end address of a range.
-        [Parameter(Mandatory, ParameterSetName = 'FromStartAndEnd')]
+        [Parameter(Mandatory = $true,
+        ParameterSetName = 'FromStartAndEnd')]
         [IPAddress] $End
     )
 
-    process {
-        if ($pscmdlet.ParameterSetName -eq 'FromIPAndMask') {
-            try {
+    process
+    {
+        if ($pscmdlet.ParameterSetName -eq 'FromIPAndMask')
+        {
+            try
+            {
                 $null = $psboundparameters.Remove('IncludeNetworkAndBroadcast')
                 $network = ConvertToNetwork @psboundparameters
-            } catch {
+            }
+            catch
+            {
                 $pscmdlet.ThrowTerminatingError($_)
             }
 
@@ -108,16 +126,20 @@ function Get-NetworkRange {
             $startDecimal = $decimalIP -band $decimalMask
             $endDecimal = $decimalIP -bor (-bnot $decimalMask -band [UInt32]::MaxValue)
 
-            if (-not $IncludeNetworkAndBroadcast) {
+            if (-not $IncludeNetworkAndBroadcast)
+            {
                 $startDecimal++
                 $endDecimal--
             }
-        } else {
+        }
+        else
+        {
             $startDecimal = ConvertTo-DecimalIP $Start
             $endDecimal = ConvertTo-DecimalIP $End
         }
 
-        for ($i = $startDecimal; $i -le $endDecimal; $i++) {
+        for ($i = $startDecimal; $i -le $endDecimal; $i++)
+        {
             [IPAddress]([IPAddress]::NetworkToHostOrder([int64] $i) -shr 32 -band [UInt32]::MaxValue)
         }
     }

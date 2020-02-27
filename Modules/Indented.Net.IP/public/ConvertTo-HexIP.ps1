@@ -54,26 +54,31 @@ Convert a dotted decimal IP address into a hexadecimal string.
 ConvertTo-HexIP takes a dotted decimal IP and returns a single hexadecimal string value.
 .PARAMETER IPAddress
 An IP Address to convert.
-.INPUTS
-System.Net.IPAddress
 .EXAMPLE
 ConvertTo-HexIP 192.168.0.1
 
 Returns the hexadecimal string c0a80001.
+.INPUTS
+System.Net.IPAddress
+.OUTPUTS
+TODO: describe outputs
 .NOTES
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
 - For code to be consisten with project: code formatting and symbol casing.
 #>
-function ConvertTo-HexIP {
+function ConvertTo-HexIP
+{
     [CmdletBinding()]
     [OutputType([string])]
     param (
-        [Parameter(Mandatory, Position = 1, ValueFromPipeline)]
+        [Parameter(Mandatory = $true,
+        Position = 1, ValueFromPipeline = $true)]
         [IPAddress] $IPAddress
     )
 
-    process {
+    process
+    {
         $bytes = $IPAddress.GetAddressBytes()
         [array]::Reverse($bytes)
         '{0:x8}' -f [BitConverter]::ToUInt32($bytes, 0)

@@ -57,6 +57,8 @@ Import-Module -Name $PSScriptRoot\..\Indented.Net.IP
 <#
 .SYNOPSIS
 Get localhost name
+.DESCRIPTION
+TODO: add descriptions
 .EXAMPLE
 Get-ComputerName
 .INPUTS
@@ -95,6 +97,8 @@ Get-ConnectedAdapters "IPv6"
 None. You cannot pipe objects to Get-ConnectedAdapters
 .OUTPUTS
 [NetIPConfiguration] or error message if no adapter connected
+.NOTES
+None.
 #>
 function Get-ConnectedAdapters
 {
@@ -146,6 +150,8 @@ Get-IPAddress "IPv6"
 None. You cannot pipe objects to Get-IPAddress
 .OUTPUTS
 [ipaddress] and warning message if no adapter connected
+.NOTES
+None.
 #>
 function Get-IPAddress
 {
@@ -180,6 +186,8 @@ function Get-IPAddress
 <#
 .SYNOPSIS
 Method to get broadcast address
+.DESCRIPTION
+TODO: add descriptions
 .EXAMPLE
 Get-Broadcast
 .INPUTS

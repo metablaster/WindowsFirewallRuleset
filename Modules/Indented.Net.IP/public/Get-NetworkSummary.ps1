@@ -53,36 +53,47 @@ Generates a summary describing several properties of a network range
 .DESCRIPTION
 Get-NetworkSummary uses many of the IP conversion commands to provide a summary of a
 network range from any IP address in the range and a subnet mask.
-.INPUTS
-System.String
+.PARAMETER IPAddress
+Either a literal IP address, a network range expressed as CIDR notation,
+or an IP address and subnet mask in a string.
+.PARAMETER SubnetMask
+A subnet mask as an IP address.
 .EXAMPLE
 Get-NetworkSummary 192.168.0.1 255.255.255.0
 .EXAMPLE
 Get-NetworkSummary 10.0.9.43/22
 .EXAMPLE
 Get-NetworkSummary 0/0
+.INPUTS
+System.String
+.OUTPUTS
+TODO: describe outputs
 .NOTES
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
 - For code to be consisten with project: code formatting and symbol casing.
 #>
-function Get-NetworkSummary {
+function Get-NetworkSummary
+{
     [CmdletBinding()]
     [OutputType('Indented.Net.IP.NetworkSummary')]
     param (
-        # Either a literal IP address, a network range expressed as CIDR notation, or an IP address and subnet mask in a string.
-        [Parameter(Mandatory, Position = 1, ValueFromPipeline)]
+        [Parameter(Mandatory = $true,
+        Position = 1, ValueFromPipeline = $true)]
         [string] $IPAddress,
 
-        # A subnet mask as an IP address.
         [Parameter(Position = 2)]
         [string] $SubnetMask
     )
 
-    process {
-        try {
+    process
+    {
+        try
+        {
             $network = ConvertToNetwork @psboundparameters
-        } catch {
+        }
+        catch
+        {
             throw $_
         }
 
@@ -108,10 +119,12 @@ function Get-NetworkSummary {
             PSTypeName        = 'Indented.Net.IP.NetworkSummary'
         }
 
-        if ($networkSummary.NumberOfHosts -lt 0) {
+        if ($networkSummary.NumberOfHosts -lt 0)
+        {
             $networkSummary.NumberOfHosts = 0
         }
-        if ($networkSummary.MaskLength -lt 31) {
+        if ($networkSummary.MaskLength -lt 31)
+        {
             $networkSummary.HostRange = '{0} - {1}' -f @(
                 (ConvertTo-DottedDecimalIP ($decimalNetwork + 1))
                 (ConvertTo-DottedDecimalIP ($decimalBroadcast - 1))

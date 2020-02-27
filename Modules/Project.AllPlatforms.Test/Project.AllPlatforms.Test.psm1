@@ -52,11 +52,15 @@ if ($Develop)
 <#
 .SYNOPSIS
 Used to initialize test units, ie. to disable logging.
+.DESCRIPTION
+TODO: add descriptions
 .EXAMPLE
 Start-Test
 .INPUTS
 None. You cannot pipe objects to New-Test
 .OUTPUTS
+None.
+.NOTES
 None.
 #>
 function Start-Test

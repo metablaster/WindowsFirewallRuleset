@@ -56,30 +56,39 @@ Converts a Decimal IP address into a binary format.
 .DESCRIPTION
 ConvertTo-BinaryIP uses System.Convert to switch between decimal and binary format.
 The output from this function is dotted binary.
-.INPUTS
-System.Net.IPAddress
+.PARAMETER IPAddress
+An IP Address to convert.
+
 .EXAMPLE
 ConvertTo-BinaryIP 1.2.3.4
 
 Convert an IP address to a binary format.
+.INPUTS
+System.Net.IPAddress
+.OUTPUTS
+TODO: describe outputs
 .NOTES
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
 - For code to be consisten with project: code formatting and symbol casing.
 #>
-function ConvertTo-BinaryIP {
+function ConvertTo-BinaryIP
+{
     [CmdletBinding()]
     [OutputType([string])]
     param (
-        # An IP Address to convert.
-        [Parameter(Mandatory, Position = 1, ValueFromPipeline)]
+        [Parameter(Mandatory = $true,
+        Position = 1, ValueFromPipeline = $true)]
         [IPAddress] $IPAddress
     )
 
-    process {
-        $binary = foreach ($byte in $IPAddress.GetAddressBytes()) {
+    process
+    {
+        $binary = foreach ($byte in $IPAddress.GetAddressBytes())
+        {
             [Convert]::ToString($byte, 2).PadLeft(8, '0')
         }
+
         $binary -join '.'
     }
 }
