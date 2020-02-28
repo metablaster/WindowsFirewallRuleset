@@ -1,3 +1,6 @@
+
+// https://code.visualstudio.com/docs/getstarted/settings#_default-settings
+
 {
 	"files.encoding": "utf8",
 	"files.trimTrailingWhitespace": true,
