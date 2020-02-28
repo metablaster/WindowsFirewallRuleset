@@ -145,3 +145,44 @@ Get-Command –module CimCmdlets
 ```powershell
 [PSCustomObject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::get
 ```
+
+# Package provider management
+
+## List of package providers that are loaded or installed but not loaded
+
+```powershell
+Get-PackageProvider
+Get-PackageProvider -ListAvailable
+```
+
+## List of package sources that are registered for a package provider
+```powershell
+Get-PackageSource
+```
+
+## List of Package providers available for installation
+```powershell
+Find-PackageProvider -Name Nuget -AllVersions
+Find-PackageProvider -Name PowerShellGet -AllVersions -Source "https://www.powershellgallery.com/api/v2"
+```
+
+## Install package provider
+
+-Scope AllUsers (Install location for all users)
+```powershell
+"$env:ProgramFiles\PackageManagement\ProviderAssemblies"
+```
+-Scope CurrentUser (Install location for current user)
+```powershell
+"$env:LOCALAPPDATA\PackageManagement\ProviderAssemblies"
+```
+
+```powershell
+Install-PackageProvider -Name Nuget -Verbose -Scope CurrentUser
+# Install-PackageProvider -Name PowerShellGet -Verbose -Scope CurrentUser
+```
+
+# Module management
+
+```powershell
+```

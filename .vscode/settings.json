@@ -3,7 +3,6 @@
 	"files.trimTrailingWhitespace": true,
 	"files.trimFinalNewlines": true,
 	"files.insertFinalNewline": true,
-
 	"editor.tabSize": 4,
 	"editor.detectIndentation": false,
 	"editor.insertSpaces": false,
@@ -12,11 +11,10 @@
 	"editor.formatOnSave": true,
 	"editor.formatOnType": true,
 	"editor.useTabStops": true,
-
 	"diffEditor.ignoreTrimWhitespace": false,
-
-	"powershell.codeFormatting.openBraceOnSameLine": false,
 	"powershell.scriptAnalysis.enable": true,
+	"powershell.scriptAnalysis.settingsPath": "PSScriptAnalyzerSettings.psd1",
+	"powershell.codeFormatting.openBraceOnSameLine": false,
 	"powershell.codeFormatting.preset": "Allman",
 	"powershell.codeFormatting.ignoreOneLineBlock": false,
 	"powershell.codeFormatting.useCorrectCasing": true,
@@ -25,5 +23,6 @@
 	"powershell.codeFormatting.WhitespaceAroundPipe": true,
 	"powershell.codeFormatting.whitespaceBeforeOpenParen": true,
 	"powershell.codeFormatting.whitespaceBeforeOpenBrace": true,
-	"powershell.codeFormatting.WhitespaceInsideBrace": true
+	"powershell.codeFormatting.WhitespaceInsideBrace": true,
+	"powershell.codeFormatting.alignPropertyValuePairs": false
 }
