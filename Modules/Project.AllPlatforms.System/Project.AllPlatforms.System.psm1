@@ -224,6 +224,7 @@ function Test-SystemRequirements
 		}
 
 		# If status is not good there is no point to continue
+		# NOTE: remote machines need this service, see Enable-PSRemoting cmdlet
 		if ($Develop -and $StatusGood -and ($WinRM -ne "Running"))
 		{
 			$Title = "Windows Remote Management service is required but not started"

@@ -38,6 +38,7 @@ This is a project global list which applies to several or all scripts, for small
 34. Change bool parameters to switch where possible
 35. Revisit naming convention for ConvertFrom/ConvertTo it's not clear what is being converted, some other functions also have odd names
 36. Line numbers for verbose and debug messages
+37. Write-Error streams should be extened to include exception record etc.
 
 # Partially fixed, need testing
 

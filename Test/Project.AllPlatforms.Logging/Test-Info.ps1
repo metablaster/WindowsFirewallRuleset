@@ -50,8 +50,8 @@ function Test-Info
 	[CmdletBinding()]
 	param ()
 
-	Write-Information -Tags "Test" -Message "[$($MyInvocation.InvocationName)] info 1"
-	Write-Information -Tags "Test" -Message "[$($MyInvocation.InvocationName)] info 2"
+	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] info 1"
+	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] info 2"
 }
 
 function Test-Pipeline
@@ -62,8 +62,8 @@ function Test-Pipeline
 		$Param
 	)
 
-	Write-Information -Tags "Test" -Message "[$($MyInvocation.InvocationName)] End of pipe 1"
-	Write-Information -Tags "Test" -Message "[$($MyInvocation.InvocationName)] End of pipe 2"
+	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] End of pipe 1"
+	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] End of pipe 2"
 }
 
 function Test-Nested
@@ -71,8 +71,8 @@ function Test-Nested
 	[CmdletBinding()]
 	param ()
 
-	Write-Information -Tags "Test" -Message "[$($MyInvocation.InvocationName)] Nested 1"
-	Write-Information -Tags "Test" -Message "[$($MyInvocation.InvocationName)] Nested 2"
+	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] Nested 1"
+	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] Nested 2"
 }
 
 function Test-Parent
@@ -80,9 +80,9 @@ function Test-Parent
 	[CmdletBinding()]
 	param ()
 
-	Write-Information -Tags "Test" -Message "[$($MyInvocation.InvocationName)] Parent 1"
+	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] Parent 1"
 	Test-Nested
-	Write-Information -Tags "Test" -Message "[$($MyInvocation.InvocationName)] Parent 2"
+	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] Parent 2"
 }
 
 function Test-Combo
