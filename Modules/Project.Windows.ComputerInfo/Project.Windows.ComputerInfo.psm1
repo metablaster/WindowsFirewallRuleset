@@ -124,7 +124,7 @@ function Get-ConnectedAdapters
 	if ($Count -eq 0)
 	{
 		Write-Error -Category ObjectNotFound -TargetObject $ConnectedAdapters `
-		-Message "None of the adapters is connected to $AddressFamily network"
+			-Message "None of the adapters is connected to $AddressFamily network"
 	}
 	elseif ($Count -gt 1)
 	{

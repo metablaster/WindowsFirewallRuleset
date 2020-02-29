@@ -74,7 +74,7 @@ function ConvertTo-MaskLength
 	[OutputType([int32])]
 	param (
 		[Parameter(Mandatory = $true,
-		ValueFromPipeline = $true)]
+			ValueFromPipeline = $true)]
 		[Alias("Mask")]
 		[IPAddress] $SubnetMask
 	)

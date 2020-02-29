@@ -24,7 +24,7 @@
 	Author = 'Chris Dent'
 
 	# Company or vendor of this module
-	CompanyName = 'Chris Dent'
+	# CompanyName = 'Unknown'
 
 	# Copyright statement for this module
 	Copyright = 'Copyright (c) 2016 Chris Dent'

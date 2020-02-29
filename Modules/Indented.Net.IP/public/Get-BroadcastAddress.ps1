@@ -90,7 +90,7 @@ function Get-BroadcastAddress
 	[OutputType([IPAddress])]
 	param (
 		[Parameter(Mandatory = $true,
-		ValueFromPipeline = $true)]
+			ValueFromPipeline = $true)]
 		[string] $IPAddress,
 
 		[Parameter()]

@@ -84,19 +84,19 @@ function ConvertTo-Subnet
 	[OutputType('Indented.Net.IP.Subnet')]
 	param (
 		[Parameter(Mandatory = $true,
-		Position = 0, ParameterSetName = 'FromIPAndMask')]
+			Position = 0, ParameterSetName = 'FromIPAndMask')]
 		[string] $IPAddress,
 
 		[Parameter(Position = 1,
-		ParameterSetName = 'FromIPAndMask')]
+			ParameterSetName = 'FromIPAndMask')]
 		[string] $SubnetMask,
 
 		[Parameter(Mandatory = $true,
-		ParameterSetName = 'FromStartAndEnd')]
+			ParameterSetName = 'FromStartAndEnd')]
 		[IPAddress] $Start,
 
 		[Parameter(Mandatory = $true,
-		ParameterSetName = 'FromStartAndEnd')]
+			ParameterSetName = 'FromStartAndEnd')]
 		[IPAddress] $End
 	)
 

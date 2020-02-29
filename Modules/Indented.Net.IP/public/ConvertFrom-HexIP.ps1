@@ -78,7 +78,7 @@ function ConvertFrom-HexIP
 	[OutputType([IPAddress])]
 	param (
 		[Parameter(Mandatory = $true,
-		ValueFromPipeline = $true)]
+			ValueFromPipeline = $true)]
 		[ValidatePattern('^(0x)?[0-9a-f]{8}$')]
 		[string] $IPAddress
 	)

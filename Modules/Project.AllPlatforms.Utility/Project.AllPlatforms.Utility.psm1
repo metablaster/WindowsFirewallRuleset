@@ -478,7 +478,7 @@ function Test-TargetComputer
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter(Mandatory = $true,
-		Position = 0)]
+			Position = 0)]
 		[string] $ComputerName,
 
 		[Parameter()]

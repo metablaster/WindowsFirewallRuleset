@@ -79,7 +79,7 @@ function ConvertTo-DecimalIP
 	[OutputType([UInt32])]
 	param (
 		[Parameter(Mandatory = $true,
-		ValueFromPipeline = $true)]
+			ValueFromPipeline = $true)]
 		[IPAddress] $IPAddress
 	)
 

@@ -80,7 +80,7 @@ function Get-NetworkSummary
 	[OutputType('Indented.Net.IP.NetworkSummary')]
 	param (
 		[Parameter(Mandatory = $true,
-		ValueFromPipeline = $true)]
+			ValueFromPipeline = $true)]
 		[string] $IPAddress,
 
 		[Parameter()]
@@ -134,14 +134,14 @@ function Get-NetworkSummary
 
 		$networkSummary.Class = switch -regex (ConvertTo-BinaryIP $network.IPAddress)
 		{
-			'^1111'               { 'E'; break }
-			'^1110'               { 'D'; break }
+			'^1111' { 'E'; break }
+			'^1110' { 'D'; break }
 			'^11000000\.10101000' { if ($networkSummary.MaskLength -ge 16) { $networkSummary.IsPrivate = $true } }
-			'^110'                { 'C'; break }
-			'^10101100\.0001'     { if ($networkSummary.MaskLength -ge 12) { $networkSummary.IsPrivate = $true } }
-			'^10'                 { 'B'; break }
-			'^00001010'           { if ($networkSummary.MaskLength -ge 8) { $networkSummary.IsPrivate = $true } }
-			'^0'                  { 'A'; break }
+			'^110' { 'C'; break }
+			'^10101100\.0001' { if ($networkSummary.MaskLength -ge 12) { $networkSummary.IsPrivate = $true } }
+			'^10' { 'B'; break }
+			'^00001010' { if ($networkSummary.MaskLength -ge 8) { $networkSummary.IsPrivate = $true } }
+			'^0' { 'A'; break }
 		}
 
 		$networkSummary

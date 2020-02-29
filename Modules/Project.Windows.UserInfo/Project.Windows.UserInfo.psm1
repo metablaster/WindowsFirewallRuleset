@@ -124,8 +124,8 @@ function Get-GroupPrincipals
 	param (
 		[Alias("Group")]
 		[Parameter(Mandatory = $true,
-		Position = 0,
-		ValueFromPipeline = $true)]
+			Position = 0,
+			ValueFromPipeline = $true)]
 		[string[]] $UserGroups,
 
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
@@ -152,7 +152,7 @@ function Get-GroupPrincipals
 				if ($PowerShellEdition -ne "Desktop")
 				{
 					Write-Error -Category InvalidArgument -TargetObject $Computer `
-					-Message "Querying computers via CIM server with PowerShell '$PowerShellEdition' not implemented"
+						-Message "Querying computers via CIM server with PowerShell '$PowerShellEdition' not implemented"
 					return
 				}
 
@@ -208,7 +208,7 @@ function Get-GroupPrincipals
 				else
 				{
 					Write-Error -Category ConnectionError -TargetObject $Computer `
-					-Message "Unable to contact computer: $Computer"
+						-Message "Unable to contact computer: $Computer"
 				}
 			} # if ($CIM)
 			elseif ($Computer -eq [System.Environment]::MachineName)
@@ -244,7 +244,7 @@ function Get-GroupPrincipals
 			else
 			{
 				Write-Error -Category NotImplemented -TargetObject $Computer `
-				-Message "Querying remote computers without CIM switch not implemented"
+					-Message "Querying remote computers without CIM switch not implemented"
 			}
 		} # foreach ($Computer in $ComputerNames)
 
@@ -303,7 +303,7 @@ function Get-UserGroups
 				if ($PowerShellEdition -ne "Desktop")
 				{
 					Write-Error -Category InvalidArgument -TargetObject $Computer `
-					-Message "Querying computers via CIM server with PowerShell '$PowerShellEdition' not implemented"
+						-Message "Querying computers via CIM server with PowerShell '$PowerShellEdition' not implemented"
 					return
 				}
 
@@ -336,7 +336,7 @@ function Get-UserGroups
 				else
 				{
 					Write-Error -Category ConnectionError -TargetObject $Computer `
-					-Message "Unable to contact computer: $Computer"
+						-Message "Unable to contact computer: $Computer"
 				}
 			} # if ($CIM)
 			elseif ($Computer -eq [System.Environment]::MachineName)
@@ -364,7 +364,7 @@ function Get-UserGroups
 			else
 			{
 				Write-Error -Category NotImplemented -TargetObject $Computer `
-				-Message "Querying remote computers without CIM switch not implemented"
+					-Message "Querying remote computers without CIM switch not implemented"
 			} # if ($CIM)
 		} # foreach ($Computer in $ComputerNames)
 
@@ -526,8 +526,8 @@ function Get-GroupSID
 	param (
 		[Alias("Group")]
 		[Parameter(Mandatory = $true,
-		Position = 0,
-		ValueFromPipeline = $true)]
+			Position = 0,
+			ValueFromPipeline = $true)]
 		[string[]] $UserGroups,
 
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
@@ -555,7 +555,7 @@ function Get-GroupSID
 				if ($PowerShellEdition -ne "Desktop")
 				{
 					Write-Error -Category InvalidArgument -TargetObject $ComputerName `
-					-Message "Querying computers via CIM server with PowerShell '$PowerShellEdition' not implemented"
+						-Message "Querying computers via CIM server with PowerShell '$PowerShellEdition' not implemented"
 					return
 				}
 
@@ -571,7 +571,7 @@ function Get-GroupSID
 				else
 				{
 					Write-Error -Category ConnectionError -TargetObject $ComputerName `
-					-Message "Unable to contact computer: $ComputerName"
+						-Message "Unable to contact computer: $ComputerName"
 					continue
 				}
 			}
@@ -582,7 +582,7 @@ function Get-GroupSID
 			else
 			{
 				Write-Error -Category NotImplemented -TargetObject $ComputerName `
-				-Message "Querying remote computers without CIM switch not implemented"
+					-Message "Querying remote computers without CIM switch not implemented"
 				return
 			} # if ($CIM)
 
@@ -628,8 +628,8 @@ function Get-AccountSID
 	param (
 		[Alias("User")]
 		[Parameter(Mandatory = $true,
-		Position = 0,
-		ValueFromPipeline = $true)]
+			Position = 0,
+			ValueFromPipeline = $true)]
 		[string[]] $UserNames,
 
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
@@ -644,7 +644,7 @@ function Get-AccountSID
 	{
 		$PowerShellEdition = $PSVersionTable.PSEdition
 		[bool] $SpecialDomain = ![System.String]::IsNullOrEmpty(
-			[array]::Find($SpecialDomains, [System.Predicate[string]]{ $ComputerName -eq "$($args[0])" }))
+			[array]::Find($SpecialDomains, [System.Predicate[string]] { $ComputerName -eq "$($args[0])" }))
 	}
 	process
 	{
@@ -660,7 +660,7 @@ function Get-AccountSID
 				if ($PowerShellEdition -ne "Desktop")
 				{
 					Write-Error -Category InvalidArgument -TargetObject $ComputerName `
-					-Message "Querying computers via CIM server with PowerShell '$PowerShellEdition' not implemented"
+						-Message "Querying computers via CIM server with PowerShell '$PowerShellEdition' not implemented"
 					return
 				}
 
@@ -676,7 +676,7 @@ function Get-AccountSID
 				else
 				{
 					Write-Error -Category ConnectionError -TargetObject $ComputerName `
-					-Message "Unable to contact computer: $ComputerName"
+						-Message "Unable to contact computer: $ComputerName"
 					return
 				}
 			}
@@ -703,7 +703,7 @@ function Get-AccountSID
 			else
 			{
 				Write-Error -Category NotImplemented -TargetObject $ComputerName `
-				-Message "Querying remote computers without CIM switch not implemented"
+					-Message "Querying remote computers without CIM switch not implemented"
 				return
 			} # if ($CIM)
 
@@ -730,7 +730,7 @@ New-Variable -Name SpecialDomains -Scope Script -Option Constant -Value @(
 	"NT AUTHORITY"
 	"APPLICATION_PACKAGE_AUTHORITY"
 	"BUILTIN"
-	)
+)
 
 # TODO: global configuration variables (in a separate script)?
 if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))

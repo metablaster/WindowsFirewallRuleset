@@ -189,7 +189,7 @@ function Get-SQLInstances
 			catch
 			{
 				Write-Error -TargetObject $Computer -Message $_
-                continue
+				continue
 			}
 
 			foreach ($HKLMRootKey in $HKLM)
@@ -400,7 +400,7 @@ function Get-SQLInstances
 									"^13"	{ 'SQL Server 2016'; break }
 									"^12"	{ 'SQL Server 2014'; break }
 									"^11"	{ 'SQL Server 2012'; break }
-									"^10\.5"{ 'SQL Server 2008 R2'; break }
+									"^10\.5" { 'SQL Server 2008 R2'; break }
 									"^10"	{ 'SQL Server 2008'; break }
 									"^9"	{ 'SQL Server 2005'; break }
 									"^8"	{ 'SQL Server 2000'; break }
@@ -441,7 +441,7 @@ function Get-SQLInstances
 					$SQLServices = $null # TODO: what does this mean?
 					$SQLServices = @(
 						Get-CimInstance -ComputerName $Computer -ErrorAction stop `
-						-Query "select DisplayName, Name, PathName, StartName, StartMode, State from win32_service where Name LIKE 'MSSQL%'" |
+							-Query "select DisplayName, Name, PathName, StartName, StartMode, State from win32_service where Name LIKE 'MSSQL%'" |
 						# This regex matches MSSQLServer and MSSQL$*
 						Where-Object { $_.Name -match "^MSSQL(Server$|\$)" } |
 						Select-Object -Property DisplayName, StartName, StartMode, State, PathName
@@ -455,11 +455,11 @@ function Get-SQLInstances
 						foreach ($Instance in $AllInstances)
 						{
 							$MatchingService = $SQLServices |
-								Where-Object {
-									# We need to format here because Instance path is formated, while the path from CIM query isn't
-									# TODO: can be improved by formatting when all is done, ie. at the end before returning.
-									(Format-Path $_.PathName) -like "$( $Instance.SQLBinRoot )*" -or $_.PathName -like "`"$( $Instance.SQLBinRoot )*"
-								} | Select-Object -First 1
+							Where-Object {
+								# We need to format here because Instance path is formated, while the path from CIM query isn't
+								# TODO: can be improved by formatting when all is done, ie. at the end before returning.
+								(Format-Path $_.PathName) -like "$( $Instance.SQLBinRoot )*" -or $_.PathName -like "`"$( $Instance.SQLBinRoot )*"
+							} | Select-Object -First 1
 
 							Write-Debug "Matching service info:`n$($MatchingService | Format-List -Property * | Out-String)"
 

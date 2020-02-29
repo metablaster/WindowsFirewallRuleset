@@ -88,22 +88,22 @@ function Get-NetworkRange
 	[OutputType([IPAddress])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0,
-		ValueFromPipeline = $true, ParameterSetName = 'FromIPAndMask')]
+			ValueFromPipeline = $true, ParameterSetName = 'FromIPAndMask')]
 		[string] $IPAddress,
 
 		[Parameter(Position = 1,
-		ParameterSetName = 'FromIPAndMask')]
+			ParameterSetName = 'FromIPAndMask')]
 		[string] $SubnetMask,
 
 		[Parameter(ParameterSetName = 'FromIPAndMask')]
 		[switch] $IncludeNetworkAndBroadcast,
 
 		[Parameter(Mandatory = $true,
-		ParameterSetName = 'FromStartAndEnd')]
+			ParameterSetName = 'FromStartAndEnd')]
 		[IPAddress] $Start,
 
 		[Parameter(Mandatory = $true,
-		ParameterSetName = 'FromStartAndEnd')]
+			ParameterSetName = 'FromStartAndEnd')]
 		[IPAddress] $End
 	)
 

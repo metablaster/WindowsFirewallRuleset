@@ -195,7 +195,7 @@ function Test-Environment
 		return $false
 	}
 
-	if ([array]::Find($UserProfileEnvironment, [System.Predicate[string]]{ $FilePath -like "$($args[0])*" }))
+	if ([array]::Find($UserProfileEnvironment, [System.Predicate[string]] { $FilePath -like "$($args[0])*" }))
 	{
 		Write-Warning -Message "Rules with environment variable paths that lead to user profile are not valid"
 		Write-Information -Tags "Project" -MessageData "INFO: Bad path detected is: $FilePath"
@@ -678,8 +678,8 @@ function Get-SystemPrograms
 					#$InstallLocation = $InstallLocation -Replace "\\uninstall$", ""
 
 					if ([System.String]::IsNullOrEmpty($InstallLocation) -or
-					$InstallLocation -like "*{*}*" -or
-					$InstallLocation -like "*.exe*")
+						$InstallLocation -like "*{*}*" -or
+						$InstallLocation -like "*.exe*")
 					{
 						# NOTE: Avoid spamming
 						# Write-Debug -Message "[$($MyInvocation.InvocationName)] Ignoring useless key: $HKLMSubKey"
@@ -2288,8 +2288,8 @@ None. You cannot pipe objects to Get-SQLManagementStudio
 .NOTES
 None.
  #>
- function Get-SQLManagementStudio
- {
+function Get-SQLManagementStudio
+{
 	[OutputType([System.Management.Automation.PSCustomObject[]])]
 	[CmdletBinding()]
 	param (
@@ -2402,7 +2402,7 @@ New-Variable -Name BlackListEnvironment -Scope Script -Option Constant -Value @(
 	"%TMP%"
 	"%USERNAME%"
 	"%USERPROFILE%"
-	)
+)
 
 Write-Debug -Message "[$ThisModule] Initialize module Constant variable: UserProfileEnvironment"
 New-Variable -Name UserProfileEnvironment -Scope Script -Option Constant -Value @(
@@ -2416,7 +2416,7 @@ New-Variable -Name UserProfileEnvironment -Scope Script -Option Constant -Value 
 	"%TMP%"
 	"%USERNAME%"
 	"%USERPROFILE%"
-	)
+)
 
 Write-Debug -Message "[$ThisModule] Initialize module readonly variable: SystemPrograms"
 # Programs installed for all users

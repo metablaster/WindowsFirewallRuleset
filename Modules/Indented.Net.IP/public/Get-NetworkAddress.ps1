@@ -86,7 +86,7 @@ function Get-NetworkAddress
 	[OutputType([IPAddress])]
 	param (
 		[Parameter(Mandatory = $true,
-		ValueFromPipeline = $true)]
+			ValueFromPipeline = $true)]
 		[string] $IPAddress,
 
 		[Parameter()]

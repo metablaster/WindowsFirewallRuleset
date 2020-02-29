@@ -6,25 +6,54 @@
 	"files.trimTrailingWhitespace": true,
 	"files.trimFinalNewlines": true,
 	"files.insertFinalNewline": true,
-	"editor.tabSize": 4,
-	"editor.detectIndentation": false,
-	"editor.insertSpaces": false,
+
+	"editor.quickSuggestions": {
+		"other": true,
+		"comments": false,
+		"strings": false
+	},
+
 	"editor.trimAutoWhitespace": true,
+	"editor.insertSpaces": false,
 	"editor.formatOnPaste": true,
 	"editor.formatOnSave": true,
 	"editor.formatOnType": true,
-	"editor.useTabStops": true,
+
+	// PSUseConsistentIndentation
+	"editor.detectIndentation": false,
+	"editor.tabSize": 4,
+
 	"diffEditor.ignoreTrimWhitespace": false,
 	"powershell.scriptAnalysis.enable": true,
 	"powershell.scriptAnalysis.settingsPath": "Config\\PSScriptAnalyzerSettings.psd1",
-	"powershell.codeFormatting.openBraceOnSameLine": false,
+
 	"powershell.codeFormatting.preset": "Allman",
-	"powershell.codeFormatting.useCorrectCasing": true,
-	"powershell.codeFormatting.whitespaceAfterSeparator": true,
+
+	// PSPlaceOpenBrace
+	"powershell.codeFormatting.openBraceOnSameLine": false,
+	"powershell.codeFormatting.newLineAfterOpenBrace": true,
+	"powershell.codeFormatting.ignoreOneLineBlock": true,
+
+	// PSPlaceCloseBrace
+	"powershell.codeFormatting.newLineAfterCloseBrace": true,
+
+	// PSUseConsistentWhitespace
+	"powershell.codeFormatting.WhitespaceInsideBrace": true,
+	"powershell.codeFormatting.whitespaceBeforeOpenBrace": true,
+	"powershell.codeFormatting.whitespaceBeforeOpenParen": true,
 	"powershell.codeFormatting.whitespaceAroundOperator": true,
 	"powershell.codeFormatting.WhitespaceAroundPipe": true,
-	"powershell.codeFormatting.whitespaceBeforeOpenParen": true,
-	"powershell.codeFormatting.whitespaceBeforeOpenBrace": true,
-	"powershell.codeFormatting.WhitespaceInsideBrace": true,
-	"powershell.codeFormatting.alignPropertyValuePairs": false
+	"powershell.codeFormatting.whitespaceAfterSeparator": true,
+
+	// PSUseConsistentIndentation
+	"powershell.codeFormatting.pipelineIndentationStyle": "NoIndentation",
+
+	// PSAlignAssignmentStatement
+	"powershell.codeFormatting.alignPropertyValuePairs": false,
+
+	// PSUseCorrectCasing
+	"powershell.codeFormatting.useCorrectCasing": true,
+
+	// PSProvideCommentHelp
+	"powershell.helpCompletion": "BlockComment",
 }

@@ -61,7 +61,7 @@ function ConvertFrom-SID
 	[CmdletBinding()]
 	param(
 		[Parameter(Mandatory = $true,
-		ValueFromPipeline = $true)]
+			ValueFromPipeline = $true)]
 		[string[]] $SIDArray
 	)
 

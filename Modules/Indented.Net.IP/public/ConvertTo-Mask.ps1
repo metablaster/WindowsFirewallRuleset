@@ -76,7 +76,7 @@ function ConvertTo-Mask
 	[OutputType([IPAddress])]
 	param (
 		[Parameter(Mandatory = $true,
-		ValueFromPipeline = $true)]
+			ValueFromPipeline = $true)]
 		[Alias('Length')]
 		[ValidateRange(0, 32)]
 		[byte] $MaskLength
