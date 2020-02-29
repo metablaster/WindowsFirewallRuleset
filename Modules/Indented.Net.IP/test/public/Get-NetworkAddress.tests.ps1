@@ -1,12 +1,16 @@
+
 #region:TestFileHeader
 param (
 	[bool] $UseExisting
 )
 
-if (-not $UseExisting) {
+if (-not $UseExisting)
+{
 	$moduleBase = $psscriptroot.Substring(0, $psscriptroot.IndexOf("\test"))
 	$stubBase = Resolve-Path (Join-Path $moduleBase "test*\stub\*")
-	if ($null -ne $stubBase) {
+
+	if ($null -ne $stubBase)
+	{
 		$stubBase | Import-Module -Force
 	}
 
@@ -26,7 +30,7 @@ InModuleScope Indented.Net.IP {
 		}
 
 		It 'Returns 1.0.0.15 when passwed 1.0.0.0/28' {
-			Get-NetworkAddress 1.0.0.18/28| Should -Be '1.0.0.16'
+			Get-NetworkAddress 1.0.0.18/28 | Should -Be '1.0.0.16'
 			Get-NetworkAddress 1.0.0.18 255.255.255.240 | Should -Be '1.0.0.16'
 		}
 

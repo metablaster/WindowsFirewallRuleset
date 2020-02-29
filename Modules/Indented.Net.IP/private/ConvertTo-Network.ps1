@@ -97,7 +97,7 @@ function ConvertTo-Network
 		"255.255.255.254", "255.255.255.255"
 
 	$network = [PSCustomObject]@{
-		IPAddress  = $null
+		IPAddress = $null
 		SubnetMask = $null
 		MaskLength = 0
 		PSTypeName = 'Indented.Net.IP.Network'

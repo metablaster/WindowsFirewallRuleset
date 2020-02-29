@@ -171,7 +171,7 @@ function ConvertFrom-SID
 
 		[PSCustomObject[]] $Result = @()
 		# loop through provided SIDs
-		foreach($SID in $SIDArray)
+		foreach ($SID in $SIDArray)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing: $SID"
 
@@ -183,7 +183,7 @@ function ConvertFrom-SID
 
 			if ($SID.Length -gt 8)
 			{
-				if($SID.Remove(8) -eq "S-1-5-21")
+				if ($SID.Remove(8) -eq "S-1-5-21")
 				{
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input SID is domain SID"
 
@@ -200,14 +200,14 @@ function ConvertFrom-SID
 			# Map name to well known sid. If this fails, use .net to get the account
 			$Name = $WellKnownSIDs[$SID]
 
-			if($Name)
+			if ($Name)
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input SID is well known SID"
 			}
 			else
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input SID is not well known SID"
-				if($IsDomain)
+				if ($IsDomain)
 				{
 					$SID = $FullSID
 				}

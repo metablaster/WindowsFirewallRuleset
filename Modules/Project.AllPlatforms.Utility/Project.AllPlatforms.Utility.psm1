@@ -127,7 +127,7 @@ TODO: make this function more generic
 #>
 function Approve-Execute
 {
-	[OutputType([System.Void])]
+	[OutputType([System.Boolean])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $false)]
@@ -144,7 +144,7 @@ function Approve-Execute
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Default action is: $DefaultAction"
 
-	$Choices  = "&Yes", "&No"
+	$Choices = "&Yes", "&No"
 	$Default = 0
 	if ($DefaultAction -like "No")
 	{
@@ -161,6 +161,7 @@ function Approve-Execute
 	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] User refuses default action"
+	return $false
 }
 
 <#
@@ -192,18 +193,18 @@ function Show-SDDL
 
 	$SDDLSplit = $SDDL.Split("(")
 
-	Write-Host ""
-	Write-Host "SDDL Split:"
-	Write-Host "****************"
+	Write-Output ""
+	Write-Output "SDDL Split:"
+	Write-Output "****************"
 
 	$SDDLSplit
 
-	Write-Host ""
-	Write-Host "SDDL SID Parsing:"
-	Write-Host "****************"
+	Write-Output ""
+	Write-Output "SDDL SID Parsing:"
+	Write-Output "****************"
 
 	# Skip index 0 where owner and/or primary group are stored
-	for ($i=1; $i -lt $SDDLSplit.Length; $i++)
+	for ($i = 1; $i -lt $SDDLSplit.Length; ++$i)
 	{
 		$ACLSplit = $SDDLSplit[$i].Split(";")
 
@@ -321,7 +322,7 @@ function Get-NetworkServices
 
 	$Content = @()
 	# Filter out service names from each powershell file in input folder
-	$Files | Foreach-Object {
+	$Files | ForEach-Object {
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading file: $($_.FullName)"
 		Get-Content $_.FullName | Where-Object {
 			if ($_ -match "(?<= -Service )(.*)(?= -Program)")
@@ -425,7 +426,7 @@ function Set-ScreenBuffer
 	{
 		Write-Warning -Message "Your screen buffer of $($NewSize.Height) is below recommended $NewBuffer to preserve all execution output"
 
-		$Choices  = "&Yes", "&No"
+		$Choices = "&Yes", "&No"
 		$Default = 0
 		$Title = "Increase Screen Buffer"
 		$Question = "Would you like to increase screen buffer to $($NewBuffer)?"

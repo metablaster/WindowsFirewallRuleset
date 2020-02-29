@@ -92,7 +92,7 @@ function Get-AppSID
 	$TargetPath = "C:\Users\$UserName\AppData\Local\Packages\$AppName\AC"
 	if (Test-Path -PathType Container -Path $TargetPath)
 	{
-		$ACL = Get-ACL $TargetPath
+		$ACL = Get-Acl $TargetPath
 		$ACE = $ACL.Access.IdentityReference.Value
 
 		foreach ($Entry in $ACE)
@@ -101,7 +101,8 @@ function Get-AppSID
 			# Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing: $Entry"
 
 			# package SID starts with S-1-15-2-
-			if ($Entry -match "S-1-15-2-") {
+			if ($Entry -match "S-1-15-2-")
+			{
 				return $Entry
 			}
 		}
@@ -363,6 +364,7 @@ None.
 #>
 function Format-Path
 {
+	[OutputType([System.String])]
 	[CmdletBinding()]
 	param (
 		[string] $FilePath
@@ -1347,7 +1349,7 @@ function Test-Installation
 			$InstallTable = $InstallTable.DefaultView.ToTable()
 
 			# Print out all candidate rows
-			Write-Host "0. Abort this operation"
+			Write-Output "0. Abort this operation"
 			$InstallTable | Format-Table -AutoSize
 
 			# Prompt user to chose one
@@ -1357,7 +1359,7 @@ function Test-Installation
 				Write-Information -Tags "User" -MessageData "INFO: Input the ID number to choose which one is correct"
 				$Input = Read-Host
 
-				if($Input -notmatch '^-?\d+$')
+				if ($Input -notmatch '^-?\d+$')
 				{
 					Write-Information -Tags "User" -MessageData "INFO: Digits only please!"
 					continue
@@ -1503,7 +1505,7 @@ function Find-Installation
 			if ($null -ne $WindowsKits)
 			{
 				$SDKDebuggers = $WindowsKits |
-				Where-Object {$_.Product -like "WindowsDebuggersRoot*"} |
+				Where-Object { $_.Product -like "WindowsDebuggersRoot*" } |
 				Sort-Object -Property Product |
 				Select-Object -Last 1 -ExpandProperty InstallLocation
 
@@ -2041,7 +2043,6 @@ function Get-WindowsSDK
 		{
 			# 32 bit system
 			$HKLM = "SOFTWARE\Microsoft\Microsoft SDKs\Windows"
-
 		}
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
@@ -2133,7 +2134,6 @@ function Get-WindowsKits
 		{
 			# 64 bit system
 			$HKLM = "SOFTWARE\WOW6432Node\Microsoft\Windows Kits\Installed Roots"
-
 		}
 		else
 		{
@@ -2313,7 +2313,6 @@ None.
 		{
 			# 32 bit system
 			$HKLM = "SOFTWARE\Microsoft\Microsoft SQL Server Management Studio"
-
 		}
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"

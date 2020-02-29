@@ -31,7 +31,7 @@
 		'PSAvoidUsingWMICmdlet',
 		'PSAvoidUsingEmptyCatchBlock',
 		'PSUseCmdletCorrectly',
-		'PSUseShouldProcessForStateChangingFunctions',
+		# 'PSUseShouldProcessForStateChangingFunctions',
 		'PSAvoidUsingPositionalParameters',
 		'PSAvoidGlobalVars',
 		'PSUseDeclaredVarsMoreThanAssignments',
@@ -69,7 +69,7 @@
 		'PSPossibleIncorrectUsageOfRedirectionOperator'
 		'PSReviewUnusedParameter'
 		'PSUseLiteralInitializerForHashtable'
-		'PSUseOutputTypeCorrectly'
+		# 'PSUseOutputTypeCorrectly'
 		'PSUseProcessBlockForPipelineCommand'
 		'PSUseSupportsShouldProcess'
 		'PSUseToExportFieldsInManifest'
@@ -93,18 +93,27 @@
 	# These are related to Allman above
 	Rules = @{
 		PSPlaceOpenBrace = @{
-			# TODO: disabled for Approve-Execute function
-			Enable = $false
-			OnSameLine = $true
+			Enable = $true
+			# Enforce open brace to be on the same line as that of its preceding keyword.
+			OnSameLine = $false
+			# Enforce a new line character after an open brace.
 			NewLineAfter = $true
-			IgnoreOneLineBlock = $false
+			# Indicates if open braces in a one line block should be ignored or not.
+			# E.g. $x = if ($true) { "blah" } else { "blah blah" } In the above example,
+			# if the property is set to true then the rule will not fire a violation.
+			IgnoreOneLineBlock = $true
 		}
 
 		PSPlaceCloseBrace = @{
-			# TODO: disabled for Approve-Execute function
-			Enable = $false
+			Enable = $true
+			# Indicates if a new line should follow a close brace.
+			# If set to true a close brace should be followed by a new line.
 			NewLineAfter = $true
-			IgnoreOneLineBlock = $false
+			# Indicates if close braces in a one line block should be ignored or not.
+			# E.g. $x = if ($true) { "blah" } else { "blah blah" } In the above example,
+			# if the property is set to true then the rule will not fire a violation
+			IgnoreOneLineBlock = $true
+			# Create violation if there is an empty line before a close brace.
 			NoEmptyLineBefore = $true
 		}
 

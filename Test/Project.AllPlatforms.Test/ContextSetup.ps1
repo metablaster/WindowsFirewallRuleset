@@ -30,4 +30,4 @@ SOFTWARE.
 # Context setup for Test.Project.AllPlatforms.Test
 #
 
-$TestContext = "Test.Project.AllPlatforms.Test"
+New-Variable -Name TestContext -Scope Local -Option Constant -Value "Test.Project.AllPlatforms.Test"

@@ -130,10 +130,10 @@ function Resolve-IPAddress
 				}
 
 				[PSCustomObject]@{
-					Name        = $_.Name
-					Position    = [int32] $IPAddress.Substring(0, $_.Index).Split('.').Count - 1
+					Name = $_.Name
+					Position = [int32] $IPAddress.Substring(0, $_.Index).Split('.').Count - 1
 					ReplaceWith = $values
-					PSTypeName  = 'ExpansionGroupInfo'
+					PSTypeName = 'ExpansionGroupInfo'
 				}
 			}
 

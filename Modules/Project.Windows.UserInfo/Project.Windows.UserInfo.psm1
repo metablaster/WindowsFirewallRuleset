@@ -85,7 +85,7 @@ function ConvertFrom-UserAccount
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	[string[]] $UserNames = @()
-	foreach($Account in $UserAccounts)
+	foreach ($Account in $UserAccounts)
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting user name for account: $Account"
 		$UserNames += $Account.split("\")[1]
@@ -178,7 +178,7 @@ function Get-GroupPrincipals
 						Where-Object -Property Disabled -ne False |
 						Select-Object -Property Name, Caption, SID, Domain
 
-						if([string]::IsNullOrEmpty($EnabledAccounts))
+						if ([string]::IsNullOrEmpty($EnabledAccounts))
 						{
 							Write-Warning -Message "User group '$Group' does not have any accounts on computer: $Computer"
 							continue
@@ -222,7 +222,7 @@ function Get-GroupPrincipals
 					Where-Object { $_.PrincipalSource -eq "Local" -and $_.ObjectClass -eq "User" } |
 					Select-Object -Property Name, SID
 
-					if([string]::IsNullOrEmpty($GroupUsers))
+					if ([string]::IsNullOrEmpty($GroupUsers))
 					{
 						Write-Warning -Message "User group '$Group' does not have any accounts on computer: $Computer"
 						continue
@@ -288,7 +288,7 @@ function Get-UserGroups
 
 	begin
 	{
-		[PSCustomObject[]] $UserGroups =@()
+		[PSCustomObject[]] $UserGroups = @()
 		$PowerShellEdition = $PSVersionTable.PSEdition
 	}
 	process
@@ -326,7 +326,7 @@ function Get-UserGroups
 						}
 					}
 
-					if([string]::IsNullOrEmpty($UserGroups))
+					if ([string]::IsNullOrEmpty($UserGroups))
 					{
 						Write-Warning -Message "There are no user groups on computer: $Computer"
 						continue
@@ -354,7 +354,7 @@ function Get-UserGroups
 					}
 				}
 
-				if([string]::IsNullOrEmpty($UserGroups))
+				if ([string]::IsNullOrEmpty($UserGroups))
 				{
 					Write-Warning -Message "There are no user groups on computer: $Computer"
 					continue
@@ -444,12 +444,12 @@ function Get-SDDL
 	[CmdletBinding(PositionalBinding = $false)]
 	param (
 		[Alias("User")]
-		[Parameter(Mandatory = $true, ParameterSetName="User")]
-		[Parameter(Mandatory = $false, ParameterSetName="Group")]
+		[Parameter(Mandatory = $true, ParameterSetName = "User")]
+		[Parameter(Mandatory = $false, ParameterSetName = "Group")]
 		[string[]] $UserNames,
 
 		[Alias("Group")]
-		[Parameter(Mandatory = $true, ParameterSetName="Group")]
+		[Parameter(Mandatory = $true, ParameterSetName = "Group")]
 		[string[]] $UserGroups,
 
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
@@ -486,7 +486,7 @@ function Get-SDDL
 		}
 	}
 
-	if($SDDL.Length -lt 3)
+	if ($SDDL.Length -lt 3)
 	{
 		Write-Error -TargetObject $SDDL -Message "Failed to assemble SDDL"
 	}
@@ -585,7 +585,7 @@ function Get-GroupSID
 				return
 			} # if ($CIM)
 
-			if([string]::IsNullOrEmpty($GroupSID))
+			if ([string]::IsNullOrEmpty($GroupSID))
 			{
 				Write-Error -TargetObject $Group -Message "User group '$Group' cannot be resolved to a SID."
 			}
@@ -706,7 +706,7 @@ function Get-AccountSID
 				return
 			} # if ($CIM)
 
-			if([string]::IsNullOrEmpty($AccountSID))
+			if ([string]::IsNullOrEmpty($AccountSID))
 			{
 				Write-Error -TargetObject $AccountSID -Message "Account '$ComputerName\$User' cannot be resolved to a SID"
 			}

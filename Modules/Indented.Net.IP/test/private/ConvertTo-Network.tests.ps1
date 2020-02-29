@@ -1,12 +1,16 @@
+
 #region:TestFileHeader
 param (
 	[bool] $UseExisting
 )
 
-if (-not $UseExisting) {
+if (-not $UseExisting)
+{
 	$moduleBase = $psscriptroot.Substring(0, $psscriptroot.IndexOf("\test"))
 	$stubBase = Resolve-Path (Join-Path $moduleBase "test*\stub\*")
-	if ($null -ne $stubBase) {
+
+	if ($null -ne $stubBase)
+	{
 		$stubBase | Import-Module -Force
 	}
 
@@ -18,16 +22,16 @@ InModuleScope Indented.Net.IP {
 	Describe 'ConvertTo-Network' {
 		BeforeAll {
 			$maskTable = @(
-				@{ MaskLength = 0;  Mask = '0.0.0.0' }
-				@{ MaskLength = 1;  Mask = '128.0.0.0' }
-				@{ MaskLength = 2;  Mask = '192.0.0.0' }
-				@{ MaskLength = 3;  Mask = '224.0.0.0' }
-				@{ MaskLength = 4;  Mask = '240.0.0.0' }
-				@{ MaskLength = 5;  Mask = '248.0.0.0' }
-				@{ MaskLength = 6;  Mask = '252.0.0.0' }
-				@{ MaskLength = 7;  Mask = '254.0.0.0' }
-				@{ MaskLength = 8;  Mask = '255.0.0.0' }
-				@{ MaskLength = 9;  Mask = '255.128.0.0' }
+				@{ MaskLength = 0; Mask = '0.0.0.0' }
+				@{ MaskLength = 1; Mask = '128.0.0.0' }
+				@{ MaskLength = 2; Mask = '192.0.0.0' }
+				@{ MaskLength = 3; Mask = '224.0.0.0' }
+				@{ MaskLength = 4; Mask = '240.0.0.0' }
+				@{ MaskLength = 5; Mask = '248.0.0.0' }
+				@{ MaskLength = 6; Mask = '252.0.0.0' }
+				@{ MaskLength = 7; Mask = '254.0.0.0' }
+				@{ MaskLength = 8; Mask = '255.0.0.0' }
+				@{ MaskLength = 9; Mask = '255.128.0.0' }
 				@{ MaskLength = 10; Mask = '255.192.0.0' }
 				@{ MaskLength = 11; Mask = '255.224.0.0' }
 				@{ MaskLength = 12; Mask = '255.240.0.0' }
@@ -104,9 +108,12 @@ InModuleScope Indented.Net.IP {
 			)
 
 			$errorRecord = $null
-			try {
+			try
+			{
 				$network = ConvertTo-Network "10.0.0.0/$MaskLength"
-			} catch {
+			}
+			catch
+			{
 				$errorRecord = $_
 			}
 
@@ -122,9 +129,12 @@ InModuleScope Indented.Net.IP {
 			)
 
 			$errorRecord = $null
-			try {
+			try
+			{
 				$network = ConvertTo-Network 10.0.0.0 $Mask
-			} catch {
+			}
+			catch
+			{
 				$errorRecord = $_
 			}
 

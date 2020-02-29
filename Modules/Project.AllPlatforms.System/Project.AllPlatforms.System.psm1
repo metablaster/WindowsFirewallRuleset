@@ -80,11 +80,11 @@ function Test-SystemRequirements
 	if ($Check)
 	{
 		# print info
-		Write-Host ""
-		Write-Host "Windows Firewall Ruleset v0.3.0"
-		Write-Host "Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch"
-		Write-Host "https://github.com/metablaster/WindowsFirewallRuleset"
-		Write-Host ""
+		Write-Output ""
+		Write-Output "Windows Firewall Ruleset v0.3.0"
+		Write-Output "Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch"
+		Write-Output "https://github.com/metablaster/WindowsFirewallRuleset"
+		Write-Output ""
 
 		# Check operating system
 		$OSPlatform = [System.Environment]::OSVersion.Platform
@@ -214,7 +214,7 @@ function Test-SystemRequirements
 				if ($LMHosts -ne "Running")
 				{
 					$StatusGood = $false
-					Write-Host "lmhosts service can not be started, please start it manually and try again."
+					Write-Output "lmhosts service can not be started, please start it manually and try again."
 				}
 			}
 			else
@@ -238,7 +238,7 @@ function Test-SystemRequirements
 				if ($WinRM -ne "Running")
 				{
 					$StatusGood = $false
-					Write-Host "WinRM service can not be started, please start it manually and try again."
+					Write-Output "WinRM service can not be started, please start it manually and try again."
 				}
 			}
 			else
@@ -278,10 +278,10 @@ function Test-SystemRequirements
 		}
 
 		# Everything OK, print environment status
-		Write-Host ""
-		Write-Host "System:`t`t $OSPlatform v$OSMajor.$OSMinor" -ForegroundColor Cyan
-		Write-Host "PowerShell:`t $PowerShellEdition v$PowerShellMajor.$PowerShellMinor" -ForegroundColor Cyan
-		Write-Host ""
+		Write-Output ""
+		Write-Output "System:`t`t $OSPlatform v$OSMajor.$OSMinor" -ForegroundColor Cyan
+		Write-Output "PowerShell:`t $PowerShellEdition v$PowerShellMajor.$PowerShellMinor" -ForegroundColor Cyan
+		Write-Output ""
 	}
 }
 

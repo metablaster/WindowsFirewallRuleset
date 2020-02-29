@@ -100,24 +100,24 @@ function Get-NetworkSummary
 
 		$decimalIP = ConvertTo-DecimalIP $Network.IPAddress
 		$decimalMask = ConvertTo-DecimalIP $Network.SubnetMask
-		$decimalNetwork =  $decimalIP -band $decimalMask
+		$decimalNetwork = $decimalIP -band $decimalMask
 		$decimalBroadcast = $decimalIP -bor (-bnot $decimalMask -band [UInt32]::MaxValue)
 
 		$networkSummary = [PSCustomObject]@{
-			NetworkAddress    = $networkAddress = ConvertTo-DottedDecimalIP $decimalNetwork
-			NetworkDecimal    = $decimalNetwork
-			BroadcastAddress  = ConvertTo-DottedDecimalIP $decimalBroadcast
-			BroadcastDecimal  = $decimalBroadcast
-			Mask              = $network.SubnetMask
-			MaskLength        = $maskLength = ConvertTo-MaskLength $network.SubnetMask
-			MaskHexadecimal   = ConvertTo-HexIP $network.SubnetMask
-			CIDRNotation      = '{0}/{1}' -f $networkAddress, $maskLength
-			HostRange         = ''
+			NetworkAddress = $networkAddress = ConvertTo-DottedDecimalIP $decimalNetwork
+			NetworkDecimal = $decimalNetwork
+			BroadcastAddress = ConvertTo-DottedDecimalIP $decimalBroadcast
+			BroadcastDecimal = $decimalBroadcast
+			Mask = $network.SubnetMask
+			MaskLength = $maskLength = ConvertTo-MaskLength $network.SubnetMask
+			MaskHexadecimal = ConvertTo-HexIP $network.SubnetMask
+			CIDRNotation = '{0}/{1}' -f $networkAddress, $maskLength
+			HostRange = ''
 			NumberOfAddresses = $decimalBroadcast - $decimalNetwork + 1
-			NumberOfHosts     = $decimalBroadcast - $decimalNetwork - 1
-			Class             = ''
-			IsPrivate         = $false
-			PSTypeName        = 'Indented.Net.IP.NetworkSummary'
+			NumberOfHosts = $decimalBroadcast - $decimalNetwork - 1
+			Class = ''
+			IsPrivate = $false
+			PSTypeName = 'Indented.Net.IP.NetworkSummary'
 		}
 
 		if ($networkSummary.NumberOfHosts -lt 0)
@@ -132,14 +132,15 @@ function Get-NetworkSummary
 			)
 		}
 
-		$networkSummary.Class = switch -regex (ConvertTo-BinaryIP $network.IPAddress) {
+		$networkSummary.Class = switch -regex (ConvertTo-BinaryIP $network.IPAddress)
+		{
 			'^1111'               { 'E'; break }
 			'^1110'               { 'D'; break }
 			'^11000000\.10101000' { if ($networkSummary.MaskLength -ge 16) { $networkSummary.IsPrivate = $true } }
 			'^110'                { 'C'; break }
 			'^10101100\.0001'     { if ($networkSummary.MaskLength -ge 12) { $networkSummary.IsPrivate = $true } }
 			'^10'                 { 'B'; break }
-			'^00001010'           { if ($networkSummary.MaskLength -ge 8) { $networkSummary.IsPrivate = $true} }
+			'^00001010'           { if ($networkSummary.MaskLength -ge 8) { $networkSummary.IsPrivate = $true } }
 			'^0'                  { 'A'; break }
 		}
 

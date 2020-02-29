@@ -156,12 +156,12 @@ function ConvertTo-Subnet
 	}
 
 	$subnet = [PSCustomObject]@{
-		NetworkAddress   = Get-NetworkAddress $network.ToString()
+		NetworkAddress = Get-NetworkAddress $network.ToString()
 		BroadcastAddress = Get-BroadcastAddress $network.ToString()
-		SubnetMask       = $network.SubnetMask
-		MaskLength       = $network.MaskLength
-		HostAddresses    = $hostAddresses
-		PSTypeName       = 'Indented.Net.IP.Subnet'
+		SubnetMask = $network.SubnetMask
+		MaskLength = $network.MaskLength
+		HostAddresses = $hostAddresses
+		PSTypeName = 'Indented.Net.IP.Subnet'
 	}
 
 	$subnet | Add-Member ToString -MemberType ScriptMethod -Force -Value {

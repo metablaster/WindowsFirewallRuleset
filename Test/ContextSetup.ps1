@@ -28,9 +28,8 @@ SOFTWARE.
 
 #
 # Context setup for tests
-# TODO: use New-Variable to avoid warnings
 #
 
-$IPVersion = 4
-$TestContext = "Test"
-$Direction = "Outbound"
+New-Variable -Name IPVersion -Scope Local -Option Constant -Value = 4
+New-Variable -Name TestContext -Scope Local -Option Constant -Value "Test"
+New-Variable -Name Direction -Scope Local -Option Constant -Value "Outbound"

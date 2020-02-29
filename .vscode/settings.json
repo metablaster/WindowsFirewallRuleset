@@ -19,7 +19,6 @@
 	"powershell.scriptAnalysis.settingsPath": "PSScriptAnalyzerSettings.psd1",
 	"powershell.codeFormatting.openBraceOnSameLine": false,
 	"powershell.codeFormatting.preset": "Allman",
-	"powershell.codeFormatting.ignoreOneLineBlock": false,
 	"powershell.codeFormatting.useCorrectCasing": true,
 	"powershell.codeFormatting.whitespaceAfterSeparator": true,
 	"powershell.codeFormatting.whitespaceAroundOperator": true,
