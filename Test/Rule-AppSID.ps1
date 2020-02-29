@@ -78,11 +78,11 @@ foreach ($Principal in $Principals)
 
 New-Test "New-NetFirewallRule"
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Get-AppSID" -Program Any -Service Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
--Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
--LocalUser Any -Owner $OwnerSID -Package $PackageSID `
--Description "" @Logs | Format-Output @Logs
+	-DisplayName "Get-AppSID" -Program Any -Service Any `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
+	-Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
+	-LocalUser Any -Owner $OwnerSID -Package $PackageSID `
+	-Description "" @Logs | Format-Output @Logs
 
 Update-Logs
 Exit-Test

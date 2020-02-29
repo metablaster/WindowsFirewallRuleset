@@ -1,42 +1,37 @@
-
 // https://code.visualstudio.com/docs/getstarted/settings#_default-settings
-
 {
+	// other: files
 	"files.encoding": "utf8",
 	"files.trimTrailingWhitespace": true,
 	"files.trimFinalNewlines": true,
 	"files.insertFinalNewline": true,
-
+	// other: editor
 	"editor.quickSuggestions": {
 		"other": true,
 		"comments": false,
 		"strings": false
 	},
-
 	"editor.trimAutoWhitespace": true,
 	"editor.insertSpaces": false,
 	"editor.formatOnPaste": true,
 	"editor.formatOnSave": true,
 	"editor.formatOnType": true,
-
 	// PSUseConsistentIndentation
 	"editor.detectIndentation": false,
 	"editor.tabSize": 4,
-
+	// other: diffeditor
 	"diffEditor.ignoreTrimWhitespace": false,
+	// other: script analysis
 	"powershell.scriptAnalysis.enable": true,
 	"powershell.scriptAnalysis.settingsPath": "Config\\PSScriptAnalyzerSettings.psd1",
-
+	// other: code formatting
 	"powershell.codeFormatting.preset": "Allman",
-
 	// PSPlaceOpenBrace
 	"powershell.codeFormatting.openBraceOnSameLine": false,
 	"powershell.codeFormatting.newLineAfterOpenBrace": true,
 	"powershell.codeFormatting.ignoreOneLineBlock": true,
-
 	// PSPlaceCloseBrace
 	"powershell.codeFormatting.newLineAfterCloseBrace": true,
-
 	// PSUseConsistentWhitespace
 	"powershell.codeFormatting.WhitespaceInsideBrace": true,
 	"powershell.codeFormatting.whitespaceBeforeOpenBrace": true,
@@ -44,16 +39,12 @@
 	"powershell.codeFormatting.whitespaceAroundOperator": true,
 	"powershell.codeFormatting.WhitespaceAroundPipe": true,
 	"powershell.codeFormatting.whitespaceAfterSeparator": true,
-
 	// PSUseConsistentIndentation
 	"powershell.codeFormatting.pipelineIndentationStyle": "NoIndentation",
-
 	// PSAlignAssignmentStatement
 	"powershell.codeFormatting.alignPropertyValuePairs": false,
-
 	// PSUseCorrectCasing
 	"powershell.codeFormatting.useCorrectCasing": true,
-
 	// PSProvideCommentHelp
 	"powershell.helpCompletion": "BlockComment",
 }

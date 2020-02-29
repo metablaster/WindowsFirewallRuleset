@@ -45,32 +45,32 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 Write-Information -Tags "User" -MessageData "INFO: Reseting Domain firewall profile..." @Logs
 
 Set-NetFirewallProfile -Name Domain -PolicyStore $PolicyStore `
--Enabled NotConfigured -DefaultInboundAction NotConfigured -DefaultOutboundAction NotConfigured -AllowInboundRules NotConfigured `
--AllowLocalFirewallRules NotConfigured -AllowLocalIPsecRules NotConfigured -AllowUnicastResponseToMulticast NotConfigured `
--NotifyOnListen NotConfigured -EnableStealthModeForIPsec NotConfigured `
--LogAllowed NotConfigured -LogBlocked NotConfigured -LogIgnored NotConfigured -LogMaxSizeKilobytes 4096 `
--AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
--LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" @Logs
+	-Enabled NotConfigured -DefaultInboundAction NotConfigured -DefaultOutboundAction NotConfigured -AllowInboundRules NotConfigured `
+	-AllowLocalFirewallRules NotConfigured -AllowLocalIPsecRules NotConfigured -AllowUnicastResponseToMulticast NotConfigured `
+	-NotifyOnListen NotConfigured -EnableStealthModeForIPsec NotConfigured `
+	-LogAllowed NotConfigured -LogBlocked NotConfigured -LogIgnored NotConfigured -LogMaxSizeKilobytes 4096 `
+	-AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
+	-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" @Logs
 
 Write-Information -Tags "User" -MessageData "INFO: Reseting Private firewall profile..." @Logs
 
 Set-NetFirewallProfile -Name Private -PolicyStore $PolicyStore `
--Enabled NotConfigured -DefaultInboundAction NotConfigured -DefaultOutboundAction NotConfigured -AllowInboundRules NotConfigured `
--AllowLocalFirewallRules NotConfigured -AllowLocalIPsecRules NotConfigured -AllowUnicastResponseToMulticast NotConfigured `
--NotifyOnListen NotConfigured -EnableStealthModeForIPsec NotConfigured `
--LogAllowed NotConfigured -LogBlocked NotConfigured -LogIgnored NotConfigured -LogMaxSizeKilobytes 4096 `
--AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
--LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" @Logs
+	-Enabled NotConfigured -DefaultInboundAction NotConfigured -DefaultOutboundAction NotConfigured -AllowInboundRules NotConfigured `
+	-AllowLocalFirewallRules NotConfigured -AllowLocalIPsecRules NotConfigured -AllowUnicastResponseToMulticast NotConfigured `
+	-NotifyOnListen NotConfigured -EnableStealthModeForIPsec NotConfigured `
+	-LogAllowed NotConfigured -LogBlocked NotConfigured -LogIgnored NotConfigured -LogMaxSizeKilobytes 4096 `
+	-AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
+	-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" @Logs
 
 Write-Information -Tags "User" -MessageData "INFO: Reseting public firewall profile..." @Logs
 
 Set-NetFirewallProfile -Name Public -PolicyStore $PolicyStore `
--Enabled NotConfigured -DefaultInboundAction NotConfigured -DefaultOutboundAction NotConfigured -AllowInboundRules NotConfigured `
--AllowLocalFirewallRules NotConfigured -AllowLocalIPsecRules NotConfigured -AllowUnicastResponseToMulticast NotConfigured `
--NotifyOnListen NotConfigured -EnableStealthModeForIPsec NotConfigured `
--LogAllowed NotConfigured -LogBlocked NotConfigured -LogIgnored NotConfigured -LogMaxSizeKilobytes 4096 `
--AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
--LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" @Logs
+	-Enabled NotConfigured -DefaultInboundAction NotConfigured -DefaultOutboundAction NotConfigured -AllowInboundRules NotConfigured `
+	-AllowLocalFirewallRules NotConfigured -AllowLocalIPsecRules NotConfigured -AllowUnicastResponseToMulticast NotConfigured `
+	-NotifyOnListen NotConfigured -EnableStealthModeForIPsec NotConfigured `
+	-LogAllowed NotConfigured -LogBlocked NotConfigured -LogIgnored NotConfigured -LogMaxSizeKilobytes 4096 `
+	-AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
+	-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" @Logs
 
 #
 # Remove all the rules

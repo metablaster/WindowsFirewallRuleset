@@ -59,11 +59,11 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 New-Test "Format-Output"
 New-NetFirewallRule -Platform $Platform `
--DisplayName "TargetProgram" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 26002 `
--LocalUser Any `
--Description "" @Logs | Format-Output @Logs
+	-DisplayName "TargetProgram" -Service Any -Program Any `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 26002 `
+	-LocalUser Any `
+	-Description "" @Logs | Format-Output @Logs
 
 Update-Logs
 Exit-Test
