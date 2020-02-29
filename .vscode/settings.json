@@ -16,7 +16,7 @@
 	"editor.useTabStops": true,
 	"diffEditor.ignoreTrimWhitespace": false,
 	"powershell.scriptAnalysis.enable": true,
-	"powershell.scriptAnalysis.settingsPath": "PSScriptAnalyzerSettings.psd1",
+	"powershell.scriptAnalysis.settingsPath": "Config\\PSScriptAnalyzerSettings.psd1",
 	"powershell.codeFormatting.openBraceOnSameLine": false,
 	"powershell.codeFormatting.preset": "Allman",
 	"powershell.codeFormatting.useCorrectCasing": true,

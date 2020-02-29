@@ -61,7 +61,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 $SQLManagementStudioRoot = ""
-$SQLDTSRoot =  ""
+$SQLDTSRoot = ""
 
 #
 # Rules for SQLServer

@@ -30,4 +30,4 @@ SOFTWARE.
 # Variables related to outbound rules
 #
 
-$Direction = "Outbound"
+New-Variable -Name Direction -Scope Local -Option Constant -Value = "Outbound"
