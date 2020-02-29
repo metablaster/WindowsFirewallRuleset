@@ -152,7 +152,7 @@ New-NetFirewallRule -Platform $Platform `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "Rule to use WSD printers on Wi-Fi Direct networks.
 Print Spooler service spools print jobs and handles interaction with the printer.
-If you turn off this service, you won’t be able to print or see your printers." @Logs | Format-Output @Logs
+If you turn off this service, you won't be able to print or see your printers." @Logs | Format-Output @Logs
 
 #
 # Windows system predefined rules for Wireless portable devices

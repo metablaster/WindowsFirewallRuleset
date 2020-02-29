@@ -116,7 +116,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot) @Logs) -or $ForceLoad)
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	-LocalUser $UsersGroupSDDL `
-	-Description "PerfWatson monitors delays on the UI thread, and submits error reports on these delays with the user’s consent." @Logs | Format-Output @Logs
+	-Description "PerfWatson monitors delays on the UI thread, and submits error reports on these delays with the user's consent." @Logs | Format-Output @Logs
 
 	# TODO: same comment in 4 rules
 	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.Host.CLR.x86.exe"

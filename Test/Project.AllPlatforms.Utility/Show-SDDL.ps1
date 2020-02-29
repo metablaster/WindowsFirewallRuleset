@@ -58,11 +58,11 @@ New-Test "Path:"
 $TestPath
 
 New-Test "ACL.AccessToString"
-$ACL = Get-ACL $TestPath
+$ACL = Get-Acl $TestPath
 $ACL.AccessToString
 
 New-Test "ACL.Access | Format-list *"
-$ACL.Access | Format-list *
+$ACL.Access | Format-List *
 
 New-Test "ACL.SDDL"
 $ACL.SDDL

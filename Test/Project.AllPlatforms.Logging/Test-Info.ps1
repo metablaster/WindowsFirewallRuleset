@@ -45,6 +45,10 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
+<#
+.SYNOPSIS
+	Info logging with advanced function
+#>
 function Test-Info
 {
 	[CmdletBinding()]
@@ -54,6 +58,10 @@ function Test-Info
 	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] info 2"
 }
 
+<#
+.SYNOPSIS
+	Info logging on pipeline
+#>
 function Test-Pipeline
 {
 	[CmdletBinding()]
@@ -66,6 +74,10 @@ function Test-Pipeline
 	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] End of pipe 2"
 }
 
+<#
+.SYNOPSIS
+	Info logging with nested function
+#>
 function Test-Nested
 {
 	[CmdletBinding()]
@@ -75,6 +87,10 @@ function Test-Nested
 	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] Nested 2"
 }
 
+<#
+.SYNOPSIS
+	Info logging with nested function
+#>
 function Test-Parent
 {
 	[CmdletBinding()]
@@ -85,6 +101,10 @@ function Test-Parent
 	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] Parent 2"
 }
 
+<#
+.SYNOPSIS
+	Info logging with a combination of other streams
+#>
 function Test-Combo
 {
 	[CmdletBinding()]
@@ -95,6 +115,12 @@ function Test-Combo
 	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.MyCommand.Name)] INFO: combo"
 }
 
+<#
+.SYNOPSIS
+	No info log
+.NOTES
+	Is this function called?
+#>
 function Test-Empty
 {
 	[CmdletBinding()]

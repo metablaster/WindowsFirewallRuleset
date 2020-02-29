@@ -142,7 +142,8 @@ function Test-SystemRequirements
 			2 { $StatusGood = $false }
 			3 { $StatusGood = $false }
 			4 { $StatusGood = $false }
-			5 {
+			5
+			{
 				if ($PowerShellMinor -lt 1)
 				{
 					$StatusGood = $false
@@ -176,7 +177,8 @@ function Test-SystemRequirements
 			{
 				1 { $StatusGood = $false }
 				2 { $StatusGood = $false }
-				3 {
+				3
+				{
 					if ($NETMinor -lt 5)
 					{
 						$StatusGood = $false
@@ -197,7 +199,7 @@ function Test-SystemRequirements
 		$LMHosts = Get-Service -Name lmhosts | Select-Object -ExpandProperty Status
 		$WinRM = Get-Service -Name WinRM | Select-Object -ExpandProperty Status
 
-		$Choices  = "&Yes", "&No"
+		$Choices = "&Yes", "&No"
 		$Default = 0
 		$Question = "Do you want to start these services now?"
 

@@ -80,7 +80,7 @@ if ((Test-Installation "Steam" ([ref] $SteamRoot) @Logs) -or $ForceLoad)
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 27031-27036 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Steam In-Home streaming, one PC sends its video and audio to another PC.
-	The other PC views the video and audio like it’s watching a movie, sending back mouse, keyboard, and controller input to the other PC." @Logs | Format-Output @Logs
+	The other PC views the video and audio like it's watching a movie, sending back mouse, keyboard, and controller input to the other PC." @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Steam In-Home Streaming" -Service Any -Program $Program `
@@ -88,7 +88,7 @@ if ((Test-Installation "Steam" ([ref] $SteamRoot) @Logs) -or $ForceLoad)
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 27036, 27037 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
 	-Description "Steam In-Home streaming, one PC sends its video and audio to another PC.
-	The other PC views the video and audio like it’s watching a movie, sending back mouse, keyboard, and controller input to the other PC." @Logs | Format-Output @Logs
+	The other PC views the video and audio like it's watching a movie, sending back mouse, keyboard, and controller input to the other PC." @Logs | Format-Output @Logs
 }
 
 Update-Logs

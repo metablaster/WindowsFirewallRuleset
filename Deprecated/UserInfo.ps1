@@ -99,7 +99,7 @@ function Get-UserSDDL
 
 	[string] $SDDL = "D:"
 
-	foreach($User in $UserNames)
+	foreach ($User in $UserNames)
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL for user: $User"
 
@@ -160,7 +160,6 @@ function Get-AccountSDDL
 		}
 
 		$SDDL += "(A;;CC;;;{0})" -f $SID
-
 	}
 
 	return $SDDL
@@ -196,7 +195,7 @@ function Get-UserAccounts
 	Where-Object { $_.PrincipalSource -eq "Local" -and $_.ObjectClass -eq "User" } |
 	Select-Object -ExpandProperty Name
 
-	if([string]::IsNullOrEmpty($GroupUsers))
+	if ([string]::IsNullOrEmpty($GroupUsers))
 	{
 		Write-Warning -Message "Failed to get UserAccounts for group: $UserGroup"
 	}

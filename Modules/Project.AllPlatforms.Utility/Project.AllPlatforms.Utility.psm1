@@ -382,11 +382,12 @@ None.
 #>
 function Format-Output
 {
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'There is no way to replace Write-Host here')]
 	[OutputType([System.Void])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true,
-		ValueFromPipeline = $true)]
+			ValueFromPipeline = $true)]
 		[Microsoft.Management.Infrastructure.CimInstance] $Rule
 	)
 

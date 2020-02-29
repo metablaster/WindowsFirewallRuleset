@@ -91,7 +91,7 @@ New-NetFirewallRule -Platform $Platform `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "Rule for File and Printer Sharing to allow the Print Spooler Service to communicate via TCP/RPC.
 Spooler service spools print jobs and handles interaction with the printer.
-If you disable this rule, you won’t be able to print or see your printers." @Logs | Format-Output @Logs
+If you disable this rule, you won't be able to print or see your printers." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Spooler Service (RPC)" -Service Spooler -Program $ServiceHost `
@@ -100,7 +100,7 @@ New-NetFirewallRule -Platform $Platform `
 -EdgeTraversalPolicy Block -LocalUser Any `
 -Description "Rule for File and Printer Sharing to allow the Print Spooler Service to communicate via TCP/RPC.
 Spooler service spools print jobs and handles interaction with the printer.
-If you disable this rule, you won’t be able to print or see your printers." @Logs | Format-Output @Logs
+If you disable this rule, you won't be able to print or see your printers." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 -DisplayName "Spooler Service (RPC-EPMAP)" -Service RpcSs -Program $ServiceHost `

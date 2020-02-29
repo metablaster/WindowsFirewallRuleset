@@ -45,6 +45,10 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
+<#
+.SYNOPSIS
+	Error logging with advanced function
+#>
 function Test-Error
 {
 	[CmdletBinding()]
@@ -54,6 +58,10 @@ function Test-Error
 	Write-Error -Message "[$($MyInvocation.InvocationName)] error 2" -Category PermissionDenied -ErrorId 2
 }
 
+<#
+.SYNOPSIS
+	Error logging on pipeline
+#>
 function Test-Pipeline
 {
 	[CmdletBinding()]
@@ -66,6 +74,10 @@ function Test-Pipeline
 	Write-Error -Message "[$($MyInvocation.InvocationName)] End of pipe 2" -Category PermissionDenied -ErrorId 4
 }
 
+<#
+.SYNOPSIS
+	Error logging with nested function
+#>
 function Test-Nested
 {
 	[CmdletBinding()]
@@ -75,6 +87,10 @@ function Test-Nested
 	Write-Error -Message "[$($MyInvocation.InvocationName)] Nested 2" -Category PermissionDenied -ErrorId 6
 }
 
+<#
+.SYNOPSIS
+	Error logging with nested function
+#>
 function Test-Parent
 {
 	[CmdletBinding()]
@@ -85,6 +101,10 @@ function Test-Parent
 	Write-Error -Message "[$($MyInvocation.InvocationName)] Parent 2" -Category PermissionDenied -ErrorId 8
 }
 
+<#
+.SYNOPSIS
+	Error logging with a combination of other streams
+#>
 function Test-Combo
 {
 	[CmdletBinding()]

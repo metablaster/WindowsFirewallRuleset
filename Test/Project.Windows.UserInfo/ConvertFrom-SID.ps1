@@ -59,13 +59,13 @@ $NTAccounts = Get-AccountSID -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVI
 $NTAccounts
 
 New-Test "ConvertFrom-SID users and admins"
-foreach($Account in $UserAccounts)
+foreach ($Account in $UserAccounts)
 {
 	$Account.SID | ConvertFrom-SID @Logs | Select-Object -ExpandProperty Name
 }
 
 New-Test "ConvertFrom-SID NT AUTHORITY users"
-foreach($Account in $NTAccounts)
+foreach ($Account in $NTAccounts)
 {
 	$Account | ConvertFrom-SID @Logs | Select-Object -ExpandProperty Name
 }

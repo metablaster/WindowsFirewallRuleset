@@ -1,4 +1,4 @@
-
+﻿
 <#
 MIT License
 
@@ -44,6 +44,7 @@ System.Object Any .NET object
 .NOTES
 Original code link: https://github.com/gravejester/Communary.PASM
 TODO: need better checking for input, on pipeline.
+NOTE: File must be UTF-8 with BOM to preserve unicode character
 
 Modifications by metablaster:
 Added check when object is null
@@ -54,9 +55,9 @@ Added input type to parameter
 function Get-TypeName
 {
 	[CmdletBinding()]
-    param (
+	param (
 		[Parameter(Mandatory = $true,
-		ValueFromPipeline = $true)]
+			ValueFromPipeline = $true)]
 		[System.Object] $InputObject
 	)
 

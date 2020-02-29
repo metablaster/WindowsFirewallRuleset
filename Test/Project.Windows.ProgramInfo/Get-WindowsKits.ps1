@@ -56,7 +56,7 @@ New-Test "Get-WindowsKits DebuggersRoot latest"
 if ($null -ne $WindowsKits)
 {
 	$WindowsKits |
-	Where-Object {$_.Product -like "WindowsDebuggersRoot*"} |
+	Where-Object { $_.Product -like "WindowsDebuggersRoot*" } |
 	Sort-Object -Property Product @Logs |
 	Select-Object -Last 1 -ExpandProperty InstallLocation @Logs
 }
