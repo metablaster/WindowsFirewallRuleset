@@ -70,6 +70,7 @@ InModuleScope 'Indented.Net.IP' {
 
 		It 'Example <Number> is valid' -TestCases (
 			(Get-Help Resolve-IPAddress).Examples.Example.Code | ForEach-Object -Begin {
+				[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignment', '', Justification = 'FalsePositive')]
 				$Number = 1
 			} -Process {
 				@{ Number = $Number++; Code = $_ }

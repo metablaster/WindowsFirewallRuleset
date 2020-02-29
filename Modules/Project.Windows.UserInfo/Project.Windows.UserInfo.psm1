@@ -248,7 +248,7 @@ function Get-GroupPrincipals
 			}
 		} # foreach ($Computer in $ComputerNames)
 
-		return $UserAccounts
+		Write-Output $UserAccounts
 	} # process
 }
 
@@ -299,6 +299,7 @@ function Get-UserGroups
 		{
 			if ($CIM)
 			{
+				# TODO: should work on windows, see Get-SQLInstances
 				if ($PowerShellEdition -ne "Desktop")
 				{
 					Write-Error -Category InvalidArgument -TargetObject $Computer `
@@ -367,7 +368,7 @@ function Get-UserGroups
 			} # if ($CIM)
 		} # foreach ($Computer in $ComputerNames)
 
-		return $UserGroups
+		Write-Output $UserGroups
 	} # process
 }
 

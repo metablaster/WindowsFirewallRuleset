@@ -573,7 +573,7 @@ function Get-UserPrograms
 			}
 		}
 
-		return $UserPrograms
+		Write-Output $UserPrograms
 	}
 	else
 	{
@@ -699,7 +699,7 @@ function Get-SystemPrograms
 			}
 		}
 
-		return $SystemPrograms
+		Write-Output $SystemPrograms
 	}
 	else
 	{
@@ -806,7 +806,7 @@ function Get-AllUserPrograms
 				}
 			}
 
-			return $AllUserPrograms
+			Write-Output $AllUserPrograms
 		}
 	}
 	else
@@ -943,7 +943,7 @@ function Get-ExecutablePaths
 			}
 		}
 
-		return $AppPaths
+		Write-Output $AppPaths
 	}
 	else
 	{
@@ -1995,7 +1995,7 @@ function Get-NetFramework
 			}
 		}
 
-		return $NetFramework
+		Write-Output $NetFramework
 	}
 	else
 	{
@@ -2091,7 +2091,7 @@ function Get-WindowsSDK
 			}
 		}
 
-		return $WindowsSDK
+		Write-Output $WindowsSDK
 	}
 	else
 	{
@@ -2185,7 +2185,7 @@ function Get-WindowsKits
 			}
 		}
 
-		return $WindowsKits
+		Write-Output $WindowsKits
 	}
 	else
 	{
@@ -2361,7 +2361,7 @@ None.
 			}
 		}
 
-		return $ManagementStudio
+		Write-Output $ManagementStudio
 	}
 	else
 	{

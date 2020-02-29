@@ -529,14 +529,15 @@ function Get-SQLInstances
 				catch
 				{
 					Write-Error -TargetObject $_.TargetObject -Message "Could not retrieve CIM info for computer $Computer, $_"
-					return $AllInstances
+					Write-Output $AllInstances
+					return
 				}
 
-				return $AllInstancesCIM
+				Write-Output $AllInstancesCIM
 			} # if CIM
 			else
 			{
-				return $AllInstances
+				Write-Output $AllInstances
 			}
 		}
 	}

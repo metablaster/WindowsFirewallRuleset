@@ -69,7 +69,7 @@
 		'PSPossibleIncorrectUsageOfRedirectionOperator'
 		'PSReviewUnusedParameter'
 		'PSUseLiteralInitializerForHashtable'
-		# 'PSUseOutputTypeCorrectly'
+		'PSUseOutputTypeCorrectly'
 		'PSUseProcessBlockForPipelineCommand'
 		'PSUseSupportsShouldProcess'
 		'PSUseToExportFieldsInManifest'

@@ -29,6 +29,9 @@ SOFTWARE.
 #
 # Unit test for Update-Table
 #
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '', Justification = 'Global variable used for testing only')]
+param()
+
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project

@@ -42,6 +42,7 @@ InModuleScope Indented.Net.IP {
 
 		It 'Example <Number> is valid' -TestCases (
 			(Get-Help ConvertTo-DecimalIP).Examples.Example.Code | ForEach-Object -Begin {
+				[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignment', '', Justification = 'FalsePositive')]
 				$Number = 1
 			} -Process {
 				@{ Number = $Number++; Code = $_ }

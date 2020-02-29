@@ -182,10 +182,11 @@ TODO: additional work on function to make it more universal, see if we can make 
 #>
 function Show-SDDL
 {
+	[OutputType([System.String])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true,
-		ValueFromPipelineByPropertyName = $true)]
+			ValueFromPipelineByPropertyName = $true)]
 		$SDDL
 	)
 
@@ -210,7 +211,7 @@ function Show-SDDL
 
 		if ($ACLSplit[1].Contains("ID"))
 		{
-			"Inherited"
+			Write-Output "Inherited"
 		}
 		else
 		{
@@ -229,16 +230,14 @@ function Show-SDDL
 
 			if ($ACLEntrySID)
 			{
-				$ACLEntrySID
+				Write-Output $ACLEntrySID
 			}
 			else
 			{
-				"Not inherited - No SID"
+				Write-Output "Not inherited - No SID"
 			}
 		}
 	}
-
-	return $null
 }
 
 <#
