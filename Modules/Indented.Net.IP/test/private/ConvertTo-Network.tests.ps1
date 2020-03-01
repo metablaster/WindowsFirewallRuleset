@@ -94,7 +94,7 @@ InModuleScope Indented.Net.IP {
 			$network.MaskLength | Should -Be 17
 		}
 
-		It 'Translates IPAddres argument 1.0.0.0 with no SubnetMask argument to 1.0.0.0/32 (mask 255.255.255.255)' {
+		It 'Translates IPAddress argument 1.0.0.0 with no SubnetMask argument to 1.0.0.0/32 (mask 255.255.255.255)' {
 			$network = ConvertTo-Network 1.0.0.0
 			$network.IPAddress | Should -Be '1.0.0.0'
 			$network.SubnetMask | Should -Be '255.255.255.255'

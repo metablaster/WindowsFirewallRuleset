@@ -40,7 +40,7 @@ InModuleScope Indented.Net.IP {
 			'1.2.3.4' | ConvertTo-HexIP | Should -Be '01020304'
 		}
 
-		It 'Throws an error if passed an unrecognised format' {
+		It 'Throws an error if passed an unrecognized format' {
 			{ ConvertTo-HexIP abcd -ErrorAction Stop } | Should -Throw
 		}
 

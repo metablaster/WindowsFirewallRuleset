@@ -50,7 +50,7 @@ TODO: need better checking for input, on pipeline.
 Modifications by metablaster:
 Added check when object is null
 Added comment based help
-Removed unneeded parantheses
+Removed unneeded parentheses
 Added input type to parameter
 #>
 function Get-TypeName

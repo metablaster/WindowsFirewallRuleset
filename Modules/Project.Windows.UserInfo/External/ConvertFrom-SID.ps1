@@ -47,14 +47,14 @@ SID conversion for well known SIDs from http://support.microsoft.com/kb/243330
 Original code link: https://github.com/RamblingCookieMonster/PowerShell
 
 TODO: Need to handle more NT AUTHORITY users and similar
-TODO: need to improve to have consitent output ie. exactly DOMAIN\USER, see test results
+TODO: need to improve to have consistent output ie. exactly DOMAIN\USER, see test results
 
 Changes by metablaster:
 add verbose and debug output
 remove try and empty catch by setting better approach
 rename parameter
 format code style to project defaults and added few more comments
-removed unnecessary parantheses
+removed unnecessary parentheses
 #>
 function ConvertFrom-SID
 {

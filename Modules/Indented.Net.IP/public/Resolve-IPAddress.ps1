@@ -53,7 +53,7 @@ Resolves an IP address expression using wildcard expressions to individual IP ad
 .DESCRIPTION
 Resolves an IP address expression using wildcard expressions to individual IP addresses.
 Resolve-IPAddress expands groups and values in square brackets to generate a list of IP addresses or networks using CIDR-notation.
-Ranges of values may be specied using a start and end value using "-" to separate the values.
+Ranges of values may be specified using a start and end value using "-" to separate the values.
 Specific values may be listed as a comma separated list.
 .PARAMETER IPAddress
 The IPAddress expression to resolve.
@@ -68,8 +68,8 @@ TODO: describe outputs
 .NOTES
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
-- For code to be consisten with project: code formatting and symbol casing.
-- Removed unecessary position arguments, added default argument values explicitly.
+- For code to be consistent with project: code formatting and symbol casing.
+- Removed unnecessary position arguments, added default argument values explicitly.
 #>
 function Resolve-IPAddress
 {

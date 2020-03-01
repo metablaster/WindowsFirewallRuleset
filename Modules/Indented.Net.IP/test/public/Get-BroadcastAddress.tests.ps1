@@ -30,7 +30,7 @@ InModuleScope Indented.Net.IP {
 			Get-BroadcastAddress 0.0.0.0 255.255.255.255 | Should -Be '0.0.0.0'
 		}
 
-		It 'Returns 1.0.0.15 when passwed 1.0.0.0/28' {
+		It 'Returns 1.0.0.15 when passed 1.0.0.0/28' {
 			Get-BroadcastAddress 1.0.0.0/28 | Should -Be '1.0.0.15'
 			Get-BroadcastAddress 1/28 | Should -Be '1.0.0.15'
 			Get-BroadcastAddress 1.0.0.0 255.255.255.240 | Should -Be '1.0.0.15'

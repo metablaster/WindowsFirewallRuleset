@@ -7,11 +7,11 @@ SHORT DESCRIPTION
 
 LONG DESCRIPTION
 	Functions in Project.AllPlatforms.Utility module are designed to be helper for building a
-	better widnows firewall, specifically to write rules and provide better environment.
+	better windows firewall, specifically to write rules and provide better environment.
 
 VARIABLES
 	ServiceHost:		Windows service host
-	CheckInitUtility:	Purpose is to prevent double initialization of constans
+	CheckInitUtility:	Purpose is to prevent double initialization of constants
 
 EXAMPLES
 	For better looking output of Net-NewFirewallRule

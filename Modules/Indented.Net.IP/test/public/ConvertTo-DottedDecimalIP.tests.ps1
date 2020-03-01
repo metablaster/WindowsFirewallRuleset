@@ -32,7 +32,7 @@ InModuleScope Indented.Net.IP {
 			16909060 | ConvertTo-DottedDecimalIP | Should -Be 1.2.3.4
 		}
 
-		It 'Throws an error if passed an unrecognised format' {
+		It 'Throws an error if passed an unrecognized format' {
 			{ ConvertTo-DottedDecimalIP abcd -ErrorAction Stop } | Should -Throw
 		}
 

@@ -22,13 +22,13 @@ VARIABLES
 	CheckInitUserInfo	Variable to prevent double initialization of constants
 
 EXAMPLES
-	To get SDDL string for accouns:
+	To get SDDL string for accounts:
 	Get-SDDL -Domain "NT AUTHORITY" -User @("NETWORK SERVICE", "LOCAL SERVICE")
 
 	To get user SID:
 	Get-AccountSID -User "TestUser" -Computer "localhost"
 
-	To get user accounts on syste:
+	To get user accounts on system:
 	Get-GroupPrincipals "Administrators" "Users"
 
 KEYWORDS

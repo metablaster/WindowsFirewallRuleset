@@ -29,7 +29,7 @@ InModuleScope Indented.Net.IP {
 			Get-NetworkAddress 255.255.255.255 255.255.255.255 | Should -Be '255.255.255.255'
 		}
 
-		It 'Returns 1.0.0.15 when passwed 1.0.0.0/28' {
+		It 'Returns 1.0.0.15 when passed 1.0.0.0/28' {
 			Get-NetworkAddress 1.0.0.18/28 | Should -Be '1.0.0.16'
 			Get-NetworkAddress 1.0.0.18 255.255.255.240 | Should -Be '1.0.0.16'
 		}

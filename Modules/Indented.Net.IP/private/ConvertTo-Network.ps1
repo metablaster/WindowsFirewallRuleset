@@ -68,9 +68,9 @@ Change log:
 	14/01/2014 - Chris Dent - Created.
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
-- For code to be consisten with project: code formatting and symbol casing.
+- For code to be consistent with project: code formatting and symbol casing.
 - Rename function to approved verb
-- Removed unecessary position arguments, added default argument values explicitly.
+- Removed unnecessary position arguments, added default argument values explicitly.
 #>
 function ConvertTo-Network
 {
