@@ -167,8 +167,7 @@
 		}
 
 		PSUseConsistentIndentation = @{
-			# TODO: temporarily disabled
-			Enable = $false
+			Enable = $true
 			# Represents the kind of indentation to be used. Possible values are: space, tab (default = space)
 			Kind = 'tab' # editor.insertSpaces, editor.detectIndentation
 			# Whether to increase indentation after a pipeline for multi-line statements

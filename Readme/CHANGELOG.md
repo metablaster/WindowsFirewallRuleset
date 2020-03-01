@@ -11,6 +11,7 @@
 4. Added initial launch configurations for debugger
 5. Code formatted and updated according to PSScriptAnalyzer rules
 6. TODO list categorized according to area and priority
+7. Setup and run spell checker against codebase and project files
 
 # Changelog v0.3.0
 
@@ -21,7 +22,7 @@ operating systems. (ie. linux)
 2. Better configurable logging and much more streams, this will help to see what
 the code does in real time.
 3. Project wide settings `Config\ProjectSettings.ps1` are updated for changes
-and significally improved.
+and significantly improved.
 4. Improved program installation search + more registry drilling functions
 5. Improved and new functions to query users and groups on multiple computers
 
@@ -53,7 +54,7 @@ file types
 ## New features
 
 1. Support for Windows Server in addition to Windows 10
-2. Rebalance rules for administrators, disabled where not needed, added where needed
+2. Rebalanced rules for administrators, disabled where not needed, added where needed
 3. More and updated temporary rules
 4. Updated documentation, specifically main readme.md, FirewallParameters.md and
 more PS command samples.

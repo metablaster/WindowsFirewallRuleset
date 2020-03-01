@@ -70,19 +70,19 @@ if ((Test-Installation "FileZilla" ([ref] $FileZillaRoot) @Logs) -or $ForceLoad)
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "FileZilla client (FTP)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "FileZilla FTP protocol" @Logs | Format-Output @Logs
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "FileZilla FTP protocol" @Logs | Format-Output @Logs
 
 	$Program = "$FileZillaRoot\fzsftp.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "FileZilla client (SFTP)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21098 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "FileZilla SSH FTP protocol" @Logs | Format-Output @Logs
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21098 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "FileZilla SSH FTP protocol" @Logs | Format-Output @Logs
 }
 
 Update-Logs

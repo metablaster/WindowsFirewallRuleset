@@ -63,6 +63,7 @@ need to select latest or add multiple rules.
 return keyword vs Write-Output, if piping is needed after all
 - We probably don't need VSSetup module
 - Line numbers for verbose and debug messages
+- Modules should be imported into global scope
 
 ## Medium priority (Project scripts)
 

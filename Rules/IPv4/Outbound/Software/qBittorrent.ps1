@@ -51,47 +51,47 @@ Update-Context "IPv$IPVersion" $Direction $Group @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
 #
-# qBittorent installation directories
+# qBittorrent installation directories
 #
-$qBittorentRoot = "%ProgramFiles%\qBittorrent"
+$qBittorrentRoot = "%ProgramFiles%\qBittorrent"
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
 #
-# Rules for qBittorent
+# Rules for qBittorrent
 # TODO: ports need to be updated
 #
 
 # Test if installation exists on system
-if ((Test-Installation "qBittorrent" ([ref] $qBittorentRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot) @Logs) -or $ForceLoad)
 {
-	$Program = "$qBittorentRoot\qbittorrent.exe"
+	$Program = "$qBittorrentRoot\qbittorrent.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "qBittorent (HTTP)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "HTTP check for updates" @Logs | Format-Output @Logs
+		-DisplayName "qBittorrent (HTTP)" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "HTTP check for updates" @Logs | Format-Output @Logs
 
-	$Program = "$qBittorentRoot\qbittorrent.exe"
+	$Program = "$qBittorrentRoot\qbittorrent.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "qBittorent (TCP)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-	-LocalUser $UsersGroupSDDL `
-	-Description "Torrent client" @Logs | Format-Output @Logs
+		-DisplayName "qBittorrent (TCP)" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
+		-LocalUser $UsersGroupSDDL `
+		-Description "Torrent client" @Logs | Format-Output @Logs
 
-	$Program = "$qBittorentRoot\qbittorrent.exe"
+	$Program = "$qBittorrentRoot\qbittorrent.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "qBittorent (UDP)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-	-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Torrent client" @Logs | Format-Output @Logs
+		-DisplayName "qBittorrent (UDP)" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
+		-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+		-Description "Torrent client" @Logs | Format-Output @Logs
 }
 
 Update-Logs

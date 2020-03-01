@@ -70,11 +70,11 @@ if ((Test-Installation "JavaRuntime" ([ref] $JavaRuntimeRoot) @Logs) -or $ForceL
 	$Program = "$JavaRuntimeRoot\java.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Runa java applets" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "Runa java applets" @Logs | Format-Output @Logs
+		-DisplayName "Run java applets" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "Run java applets" @Logs | Format-Output @Logs
 }
 
 # Test if installation exists on system
@@ -83,11 +83,11 @@ if ((Test-Installation "JavaUpdate" ([ref] $JavaUpdateRoot) @Logs) -or $ForceLoa
 	$Program = "$JavaUpdateRoot\jucheck.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Java update" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "Update java software" @Logs | Format-Output @Logs
+		-DisplayName "Java update" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "Update java software" @Logs | Format-Output @Logs
 }
 
 # Test if installation exists on system
@@ -96,11 +96,11 @@ if ((Test-Installation "JavaPlugin" ([ref] $JavaPluginRoot) @Logs) -or $ForceLoa
 	$Program = "$JavaPluginRoot\jp2launcher.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Java Plugin HTTP" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "Runa java applets" @Logs | Format-Output @Logs
+		-DisplayName "Java Plugin HTTP" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "Run java applets" @Logs | Format-Output @Logs
 }
 
 Update-Logs

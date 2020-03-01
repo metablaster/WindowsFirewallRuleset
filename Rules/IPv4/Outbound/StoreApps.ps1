@@ -90,7 +90,7 @@ Microsoft.PPIProjection
 Microsoft.Windows.OOBENetworkCaptivePortal
 
 
-predefined system apps not catched by our command:
+predefined system apps not cached by our command:
 
 InputApp
 #>
@@ -128,20 +128,20 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $SystemGroup -Direction 
 #
 # Firewall predefined rules for Microsoft store Apps
 # TODO: exclude store apps rules for servers, store app folders seem to exist but empty.
-# TODO: currently making rules for each user separatelly, is it possible to make rules for all users?
+# TODO: currently making rules for each user separately, is it possible to make rules for all users?
 #
 
 #
-# Block Administrators by defalut
+# Block Administrators by default
 # TODO: should group SID be supplied to local user instead of owner?
 #
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Store apps for Administrators" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Any -InterfaceType $Interface `
--Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
--LocalUser Any -Owner (Get-GroupSID "Administrators") -Package "*" `
--Description "Block admin activity for all store apps.
+	-DisplayName "Store apps for Administrators" -Service Any -Program Any `
+	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Any -InterfaceType $Interface `
+	-Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
+	-LocalUser Any -Owner (Get-GroupSID "Administrators") -Package "*" `
+	-Description "Block admin activity for all store apps.
 Administrators should have limited or no connectivity at all for maximum security." @Logs | Format-Output @Logs
 
 #
@@ -175,11 +175,11 @@ foreach ($Principal in $Principals)
 			}
 
 			New-NetFirewallRule -Platform $Platform `
-			-DisplayName $_.Name -Service Any -Program Any `
-			-PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-			-LocalUser Any -Owner $Principal.SID -Package $PackageSID `
-			-Description "Store apps generated rule for $($Principal.User)" @Logs | Format-Output @Logs
+				-DisplayName $_.Name -Service Any -Program Any `
+				-PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+				-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+				-LocalUser Any -Owner $Principal.SID -Package $PackageSID `
+				-Description "Store apps generated rule for $($Principal.User)" @Logs | Format-Output @Logs
 
 			Update-Logs
 		}
@@ -207,11 +207,11 @@ foreach ($Principal in $Principals)
 			}
 
 			New-NetFirewallRule -Platform $Platform `
-			-DisplayName $_.Name -Service Any -Program Any `
-			-PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $SystemGroup -Profile $Profile -InterfaceType $Interface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-			-LocalUser Any -Owner $Principal.SID -Package $PackageSID `
-			-Description "System store apps generated rule for $($Principal.User)" @Logs | Format-Output @Logs
+				-DisplayName $_.Name -Service Any -Program Any `
+				-PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $SystemGroup -Profile $Profile -InterfaceType $Interface `
+				-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+				-LocalUser Any -Owner $Principal.SID -Package $PackageSID `
+				-Description "System store apps generated rule for $($Principal.User)" @Logs | Format-Output @Logs
 
 			Update-Logs
 		}

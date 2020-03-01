@@ -75,11 +75,11 @@ if ((Test-Installation "SQLManagementStudio" ([ref] $SQLManagementStudioRoot) @L
 	$Program = "$SQLManagementStudioRoot\Common7\IDE\Ssms.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "SQL Server Management Studio" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-	-LocalUser $SQLUsers `
-	-Description "" @Logs | Format-Output @Logs
+		-DisplayName "SQL Server Management Studio" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+		-LocalUser $SQLUsers `
+		-Description "" @Logs | Format-Output @Logs
 }
 
 # Test if installation exists on system
@@ -88,11 +88,11 @@ if ((Test-Installation "SQLDTS" ([ref] $SQLDTSRoot) @Logs) -or $ForceLoad)
 	$Program = "$SQLDTSRoot\Binn\DTSWizard.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "SQL Server Import and Export Wizard" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-	-LocalUser $SQLUsers `
-	-Description "" @Logs | Format-Output @Logs
+		-DisplayName "SQL Server Import and Export Wizard" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+		-LocalUser $SQLUsers `
+		-Description "" @Logs | Format-Output @Logs
 }
 
 Update-Logs

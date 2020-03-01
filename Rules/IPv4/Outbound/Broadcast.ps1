@@ -65,22 +65,22 @@ if (!(Approve-Execute @Logs)) { exit }
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
 #
-# TODO: curently handling only UDP, also broadcast falls into multicast space
+# TODO: currently handling only UDP, also broadcast falls into multicast space
 #
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Limited Broadcast" -Service Any -Program System `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 255.255.255.255 -LocalPort Any -RemotePort Any `
--LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description "" @Logs | Format-Output @Logs
+	-DisplayName "Limited Broadcast" -Service Any -Program System `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 255.255.255.255 -LocalPort Any -RemotePort Any `
+	-LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description "" @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "LAN Broadcast" -Service Any -Program System `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress $BroadcastAddress -LocalPort Any -RemotePort Any `
--LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description "" @Logs | Format-Output @Logs
+	-DisplayName "LAN Broadcast" -Service Any -Program System `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress $BroadcastAddress -LocalPort Any -RemotePort Any `
+	-LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description "" @Logs | Format-Output @Logs
 
 # TODO: check if virtual adapter exists and apply rule
 
@@ -92,4 +92,4 @@ New-NetFirewallRule -Platform $Platform `
 -Description ""
  #>
 
- Update-Logs
+Update-Logs

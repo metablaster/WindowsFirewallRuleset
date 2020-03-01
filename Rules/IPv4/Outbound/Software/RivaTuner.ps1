@@ -68,11 +68,11 @@ if ((Test-Installation "RivaTuner" ([ref] $RivaTunerRoot) @Logs) -or $ForceLoad)
 	$Program = "$RivaTunerRoot\RTSS.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Riva Tuner Statistics SErver" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "Comes with MSI afterburner, used for game screen overlay" @Logs | Format-Output @Logs
+		-DisplayName "Riva Tuner Statistics SErver" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "Comes with MSI afterburner, used for game screen overlay" @Logs | Format-Output @Logs
 }
 
 Update-Logs

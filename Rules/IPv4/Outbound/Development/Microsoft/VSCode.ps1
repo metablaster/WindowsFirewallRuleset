@@ -68,11 +68,11 @@ if ((Test-Installation "VSCode" ([ref] $VSCodeRoot) @Logs) -or $ForceLoad)
 	$Program = "$VSCodeRoot\Code.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Visual Studio Code" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "Visual Studio Code check for updates, extensions download." @Logs | Format-Output @Logs
+		-DisplayName "Visual Studio Code" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "Visual Studio Code check for updates, extensions download." @Logs | Format-Output @Logs
 }
 
 Update-Logs

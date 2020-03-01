@@ -71,11 +71,11 @@ if ((Test-Installation "NETFramework" ([ref] $NETFrameworkRoot) @Logs) -or $Forc
 	$Program = "$NETFrameworkRoot\mscorsvw.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "CLR Optimization Service" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-	-LocalUser $UsersGroupSDDL `
-	-Description "mscorsvw.exe is precompiling .NET assemblies in the background.
+		-DisplayName "CLR Optimization Service" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
+		-LocalUser $UsersGroupSDDL `
+		-Description "mscorsvw.exe is precompiling .NET assemblies in the background.
 	Once it's done, it will go away. Typically, after you install the .NET Redist,
 	it will be done with the high priority assemblies in 5 to 10 minutes and then will wait until your computer is idle to process the low priority assemblies." @Logs | Format-Output @Logs
 }
@@ -86,42 +86,42 @@ if ((Test-Installation "WindowsDefender" ([ref] $WindowsDefenderRoot) @Logs) -or
 	Test-File $Program @Logs
 
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Windows Defender" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-	-LocalUser $NT_AUTHORITY_System `
-	-Description "Anti malware service executable." @Logs | Format-Output @Logs
+		-DisplayName "Windows Defender" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+		-LocalUser $NT_AUTHORITY_System `
+		-Description "Anti malware service executable." @Logs | Format-Output @Logs
 
 	$Program = "$WindowsDefenderRoot\MpCmdRun.exe"
 	Test-File $Program @Logs
 
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Windows Defender CLI" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-	-LocalUser $NT_AUTHORITY_System `
-	-Description "This utility can be useful when you want to automate Windows Defender Antivirus use." @Logs | Format-Output @Logs
+		-DisplayName "Windows Defender CLI" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+		-LocalUser $NT_AUTHORITY_System `
+		-Description "This utility can be useful when you want to automate Windows Defender Antivirus use." @Logs | Format-Output @Logs
 }
 
 $Program = "%SystemRoot%\System32\slui.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Activation Client" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser Any `
--Description "Used to activate Windows." @Logs | Format-Output @Logs
+	-DisplayName "Activation Client" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+	-LocalUser Any `
+	-Description "Used to activate Windows." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\SppExtComObj.Exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Activation KMS" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 1688 `
--LocalUser Any `
--Description "Activate Office and KMS based software." @Logs | Format-Output @Logs
+	-DisplayName "Activation KMS" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 1688 `
+	-LocalUser Any `
+	-Description "Activate Office and KMS based software." @Logs | Format-Output @Logs
 
 # TODO: this app no longer exists on system, MS changed executable name?
 <# $Program = "%SystemRoot%\System32\CompatTel\QueryAppBlock.exe"
@@ -140,11 +140,11 @@ Test-File $Program @Logs
 
 # TODO: need to check if port 22 is OK.
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Background task host" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 22, 80 `
--LocalUser Any `
--Description "backgroundTaskHost.exe is the process that starts background tasks.
+	-DisplayName "Background task host" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 22, 80 `
+	-LocalUser Any `
+	-Description "backgroundTaskHost.exe is the process that starts background tasks.
 So Cortana and the other Microsoft app registered a background task which is now started by Windows.
 Port 22 is most likely used for installation.
 https://docs.microsoft.com/en-us/windows/uwp/launch-resume/support-your-app-with-background-tasks" @Logs | Format-Output @Logs
@@ -154,127 +154,127 @@ Test-File $Program @Logs
 
 # TODO: no comment
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Cortana Speach Runtime" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser Any `
--Description "" @Logs | Format-Output @Logs
+	-DisplayName "Cortana Speech Runtime" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+	-LocalUser Any `
+	-Description "" @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\Speech_OneCore\common\SpeechModelDownload.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Cortana Speach Model" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser $NT_AUTHORITY_NetworkService `
--Description "" @Logs | Format-Output @Logs
+	-DisplayName "Cortana Speech Model" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+	-LocalUser $NT_AUTHORITY_NetworkService `
+	-Description "" @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\wsqmcons.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Customer Experience Improvement Program" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser Any `
--Description "This program collects and sends usage data to Microsoft, can be disabled in GPO." @Logs | Format-Output @Logs
+	-DisplayName "Customer Experience Improvement Program" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+	-LocalUser Any `
+	-Description "This program collects and sends usage data to Microsoft, can be disabled in GPO." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\CompatTelRunner.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Microsoft Compatibility Telemetry" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser $NT_AUTHORITY_System `
--Description "The CompatTelRunnere.exe process is used by Windows to perform system diagnostics to determine if there are any compatibility issues.
+	-DisplayName "Microsoft Compatibility Telemetry" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+	-LocalUser $NT_AUTHORITY_System `
+	-Description "The CompatTelRunnere.exe process is used by Windows to perform system diagnostics to determine if there are any compatibility issues.
 It also collects program telemetry information (if that option is selected) for the Microsoft Customer Experience Improvement Program.
 This allows Microsoft to ensure compatibility when installing the latest version of the Windows operating system.
 This process also takes place when upgrading the operating system.
 To disable this program: Task Scheduler Library > Microsoft > Windows > Application Experience
-In the middle pane, you will see all the scheduled tasks, such as Microsoft Compatibility Appraiser, ProgramDataUpdater and SartupAppTask.
+In the middle pane, you will see all the scheduled tasks, such as Microsoft Compatibility Appraiser, ProgramDataUpdater and StartupAppTask.
 Right-click on the Microsoft Compatibility Appraiser and select Disable." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\SearchProtocolHost.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Windows Indexing Service" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser Any `
--Description "SearchProtocolHost.exe is part of the Windows Indexing Service,
+	-DisplayName "Windows Indexing Service" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+	-LocalUser Any `
+	-Description "SearchProtocolHost.exe is part of the Windows Indexing Service,
 an application that indexes files on the local drive making them easier to search." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\WerFault.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Error Reporting" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser Any `
--Description "Report Windows errors back to Microsoft." @Logs | Format-Output @Logs
+	-DisplayName "Error Reporting" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+	-LocalUser Any `
+	-Description "Report Windows errors back to Microsoft." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\wermgr.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Error Reporting" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser Any `
--Description "Report Windows errors back to Microsoft." @Logs | Format-Output @Logs
+	-DisplayName "Error Reporting" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+	-LocalUser Any `
+	-Description "Report Windows errors back to Microsoft." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\explorer.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "File Explorer" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
--LocalUser Any `
--Description "File explorer checks for digital signatures verification, windows update." @Logs | Format-Output @Logs
+	-DisplayName "File Explorer" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
+	-LocalUser Any `
+	-Description "File explorer checks for digital signatures verification, windows update." @Logs | Format-Output @Logs
 
 # TODO: possible deprecate
 New-NetFirewallRule -Platform $Platform `
--DisplayName "File Explorer" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser Any `
--Description "Smart Screen Filter, possible no longer needed since windows 10." @Logs | Format-Output @Logs
+	-DisplayName "File Explorer" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+	-LocalUser Any `
+	-Description "Smart Screen Filter, possible no longer needed since windows 10." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\ftp.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "FTP Client" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4, LocalSubnet4 -LocalPort Any -RemotePort 21 `
--LocalUser Any `
--Description "File transfer protocol client." @Logs | Format-Output @Logs
+	-DisplayName "FTP Client" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4, LocalSubnet4 -LocalPort Any -RemotePort 21 `
+	-LocalUser Any `
+	-Description "File transfer protocol client." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\HelpPane.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Help pane" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
--LocalUser Any `
--Description "Get online help, looks like windows 10+ no longer uses this, it opens edge now to show help." @Logs | Format-Output @Logs
+	-DisplayName "Help pane" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
+	-LocalUser Any `
+	-Description "Get online help, looks like windows 10+ no longer uses this, it opens edge now to show help." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\rundll32.exe"
 Test-File $Program @Logs
 
 # TODO: program possibly no longer uses networking since windows 10
 New-NetFirewallRule -Platform $Platform `
--DisplayName "DLL host process" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser Any `
--Description "Loads and runs 32-bit dynamic-link libraries (DLLs), There are no configurable settings for Rundll32.
+	-DisplayName "DLL host process" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+	-LocalUser Any `
+	-Description "Loads and runs 32-bit dynamic-link libraries (DLLs), There are no configurable settings for Rundll32.
 possibly no longer uses networking since windows 10." @Logs | Format-Output @Logs
 
 # TODO: this app no longer exists on system, MS changed executable name?
@@ -294,21 +294,21 @@ $Program = "%SystemRoot%\System32\msiexec.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Installer" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
--LocalUser Any `
--Description "msiexec automatically check for updates for the program it is installing." @Logs | Format-Output @Logs
+	-DisplayName "Installer" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
+	-LocalUser Any `
+	-Description "msiexec automatically check for updates for the program it is installing." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\lsass.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Local Security Authority Process" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
--LocalUser Any `
--Description "Lsas.exe a process in Microsoft Windows operating systems that is responsible for enforcing the security policy on the system.
+	-DisplayName "Local Security Authority Process" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
+	-LocalUser Any `
+	-Description "Lsas.exe a process in Microsoft Windows operating systems that is responsible for enforcing the security policy on the system.
 It specifically deals with local security and login policies.It verifies users logging on to a Windows computer or server,
 handles password changes, and creates access tokens." @Logs | Format-Output @Logs
 
@@ -316,32 +316,32 @@ $Program = "%SystemRoot%\System32\mmc.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "MMC Help Viewer" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser Any `
--Description "Display webpages in Microsoft MMC help view." @Logs | Format-Output @Logs
+	-DisplayName "MMC Help Viewer" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+	-LocalUser Any `
+	-Description "Display webpages in Microsoft MMC help view." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\nslookup.exe"
 Test-File $Program @Logs
 
 # TODO: no comment
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Name server lookup" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4, DefaultGateway4 -LocalPort Any -RemotePort 53 `
--LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description "" @Logs | Format-Output @Logs
+	-DisplayName "Name server lookup" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4, DefaultGateway4 -LocalPort Any -RemotePort 53 `
+	-LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description "" @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\SettingSyncHost.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Settings sync" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser Any `
--Description "Host process for setting synchronization. Open your PC Settings and go to the 'Sync your Settings' section.
+	-DisplayName "Settings sync" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+	-LocalUser Any `
+	-Description "Host process for setting synchronization. Open your PC Settings and go to the 'Sync your Settings' section.
 There are on/off switches for all the different things you can choose to sync.
 Just turn off the ones you don't want. Or you can just turn them all off at once at the top." @Logs | Format-Output @Logs
 
@@ -349,43 +349,43 @@ $Program = "%SystemRoot%\System32\smartscreen.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Smartscreen" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser Any `
--Description "" @Logs | Format-Output @Logs
+	-DisplayName "Smartscreen" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+	-LocalUser Any `
+	-Description "" @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\ImmersiveControlPanel\SystemSettings.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "SystemSettings" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser Any `
--Description "Seems like it's connecting to display some 'useful tips' on the right hand side of the settings menu,
+	-DisplayName "SystemSettings" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+	-LocalUser Any `
+	-Description "Seems like it's connecting to display some 'useful tips' on the right hand side of the settings menu,
 NOTE: Configured the gpo 'Control Panel\allow online tips' to 'disabled'." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\taskhostw.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "taskhostw" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser Any `
--Description "The main function of taskhostw.exe is to start the Windows Services based on DLLs whenever the computer boots up.
+	-DisplayName "taskhostw" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+	-LocalUser Any `
+	-Description "The main function of taskhostw.exe is to start the Windows Services based on DLLs whenever the computer boots up.
 It is a host for processes that are responsible for executing a DLL rather than an Exe." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\sihclient.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Service Initiated Healing" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser Any `
--Description "sihclient.exe SIH Client is the client for fixing system components that are important for automatic Windows updates.
+	-DisplayName "Service Initiated Healing" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+	-LocalUser Any `
+	-Description "sihclient.exe SIH Client is the client for fixing system components that are important for automatic Windows updates.
 This daily task runs the SIHC client (initiated by the healing server) to detect and repair system components that are vital to
 automatically update Windows and the Microsoft software installed on the computer.
 The task can go online, assess the usefulness of the healing effect,
@@ -395,11 +395,11 @@ $Program = "%SystemRoot%\System32\DeviceCensus.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Windows Update (Devicecensus)" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser Any `
--Description "Devicecensus is used to gather information about your PC to target builds through Windows Update,
+	-DisplayName "Windows Update (Devicecensus)" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+	-LocalUser Any `
+	-Description "Devicecensus is used to gather information about your PC to target builds through Windows Update,
 In order to target builds to your machine, we need to know a few important things:
 - OS type (home, pro, enterprise, etc.)
 - region
@@ -413,11 +413,11 @@ $Program = "%SystemRoot%\System32\usocoreworker.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Update Session Orchestrator" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser Any `
--Description "wuauclt.exe is deprecated on Windows 10 (and Server 2016 and newer). The command line tool has been replaced by usoclient.exe.
+	-DisplayName "Update Session Orchestrator" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+	-LocalUser Any `
+	-Description "wuauclt.exe is deprecated on Windows 10 (and Server 2016 and newer). The command line tool has been replaced by usoclient.exe.
 When the system starts an update session, it launches usoclient.exe, which in turn launches usocoreworker.exe.
 Usocoreworker is the worker process for usoclient.exe and essentially it does all the work that the USO component needs done." @Logs | Format-Output @Logs
 
@@ -425,11 +425,11 @@ $Program = "%SystemRoot%\System32\usoclient.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Update Session Orchestrator" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser $NT_AUTHORITY_System `
--Description "wuauclt.exe is deprecated on Windows 10 (and Server 2016 and newer). The command line tool has been replaced by usoclient.exe.
+	-DisplayName "Update Session Orchestrator" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+	-LocalUser $NT_AUTHORITY_System `
+	-Description "wuauclt.exe is deprecated on Windows 10 (and Server 2016 and newer). The command line tool has been replaced by usoclient.exe.
 When the system starts an update session, it launches usoclient.exe, which in turn launches usocoreworker.exe.
 Usocoreworker is the worker process for usoclient.exe and essentially it does all the work that the USO component needs done." @Logs | Format-Output @Logs
 
@@ -437,32 +437,32 @@ $Program = "%SystemRoot%\System32\wbem\WmiPrvSE.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "WMI Provider Host" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 22 `
--LocalUser Any `
--Description "" @Logs | Format-Output @Logs
+	-DisplayName "WMI Provider Host" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 22 `
+	-LocalUser Any `
+	-Description "" @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\OpenSSH\ssh.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "OpenSSH" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 22 `
--LocalUser Any `
--Description "OpenSSH is connectivity tool for remote login with the SSH protocol,
+	-DisplayName "OpenSSH" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 22 `
+	-LocalUser Any `
+	-Description "OpenSSH is connectivity tool for remote login with the SSH protocol,
 This rule applies to open source version of OpenSSH that is built into Windows." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\conhost.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Console Host" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser Any `
--Description "" @Logs | Format-Output @Logs
+	-DisplayName "Console Host" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+	-LocalUser Any `
+	-Description "" @Logs | Format-Output @Logs
 
 #
 # Windows Device Management (predefined rules)
@@ -472,37 +472,37 @@ $Program = "%SystemRoot%\System32\dmcertinst.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Windows Device Management Certificate Installer" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
--LocalUser Any `
--Description "Allow outbound TCP traffic from Windows Device Management Certificate Installer." @Logs | Format-Output @Logs
+	-DisplayName "Windows Device Management Certificate Installer" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
+	-LocalUser Any `
+	-Description "Allow outbound TCP traffic from Windows Device Management Certificate Installer." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\deviceenroller.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Windows Device Management Device Enroller" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser Any `
--Description "Allow outbound TCP traffic from Windows Device Management Device Enroller" @Logs | Format-Output @Logs
+	-DisplayName "Windows Device Management Device Enroller" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+	-LocalUser Any `
+	-Description "Allow outbound TCP traffic from Windows Device Management Device Enroller" @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Windows Device Management Enrollment Service" -Service DmEnrollmentSvc -Program $ServiceHost `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
--LocalUser Any `
--Description "Allow outbound TCP traffic from Windows Device Management Enrollment Service." @Logs | Format-Output @Logs
+	-DisplayName "Windows Device Management Enrollment Service" -Service DmEnrollmentSvc -Program $ServiceHost `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
+	-LocalUser Any `
+	-Description "Allow outbound TCP traffic from Windows Device Management Enrollment Service." @Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\omadmclient.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Windows Device Management Sync Client" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
--LocalUser Any `
--Description "Allow outbound TCP traffic from Windows Device Management Sync Client." @Logs | Format-Output @Logs
+	-DisplayName "Windows Device Management Sync Client" -Service Any -Program $Program `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
+	-LocalUser Any `
+	-Description "Allow outbound TCP traffic from Windows Device Management Sync Client." @Logs | Format-Output @Logs
 
 Update-Logs
