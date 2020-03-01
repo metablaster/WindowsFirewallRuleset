@@ -127,7 +127,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot) @Logs) -or $ForceLoad)
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "ServiceHub services provide identity (sign-in for VS),
-	and support for internal services (like extension managenent, compiler support, etc).
+	and support for internal services (like extension management, compiler support, etc).
 	These are not optional and are designed to be running side-by-side with devenv.exe." @Logs | Format-Output @Logs
 
 	$Program = "$VSRoot\Common7\ServiceHub\controller\Microsoft.ServiceHub.Controller.exe"
@@ -138,7 +138,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot) @Logs) -or $ForceLoad)
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "ServiceHub services provide identity (sign-in for VS),
-	and support for internal services (like extension managenent, compiler support, etc).
+	and support for internal services (like extension management, compiler support, etc).
 	These are not optional and are designed to be running side-by-side with devenv.exe." @Logs | Format-Output @Logs
 
 	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.SettingsHost.exe"
@@ -149,7 +149,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot) @Logs) -or $ForceLoad)
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "ServiceHub programs  provide identity (sign-in for VS),
-	and support for internal services (like extension managenent, compiler support, etc).
+	and support for internal services (like extension management, compiler support, etc).
 	These are not optional and are designed to be running side-by-side with devenv.exe." @Logs | Format-Output @Logs
 
 	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.IdentityHost.exe"
@@ -160,7 +160,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot) @Logs) -or $ForceLoad)
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "ServiceHub services provide identity (sign-in for VS),
-	and support for internal services (like extension managenent, compiler support, etc).
+	and support for internal services (like extension management, compiler support, etc).
 	These are not optional and are designed to be running side-by-side with devenv.exe." @Logs | Format-Output @Logs
 
 	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.RoslynCodeAnalysisService32.exe"
@@ -180,7 +180,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot) @Logs) -or $ForceLoad)
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "ServiceHub services  provide identity (sign-in for VS),
-	and support for internal services (like extension managenent, compiler support, etc).
+	and support for internal services (like extension management, compiler support, etc).
 	These are not optional and are designed to be running side-by-side with devenv.exe." @Logs | Format-Output @Logs
 
 	$Program = "$VSRoot\VC\Tools\MSVC\14.24.28314\bin\Hostx86\x64\vctip.exe"

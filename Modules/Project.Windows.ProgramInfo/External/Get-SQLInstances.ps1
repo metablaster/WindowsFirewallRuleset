@@ -70,7 +70,7 @@ Description
 -----------
 Retrieves the SQL information from DC1
 .EXAMPLE
-#Get SQL instances on servers 1 and 2, match them up with service information from CIM
+# Get SQL instances on servers 1 and 2, match them up with service information from CIM
 Get-SQLInstances -Computername Server1, Server2 -CIM
 
 Computername     : Server1

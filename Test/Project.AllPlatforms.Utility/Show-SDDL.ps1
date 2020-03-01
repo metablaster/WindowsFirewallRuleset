@@ -48,11 +48,11 @@ if (!(Approve-Execute @Logs)) { exit }
 Start-Test
 
 # Experiment with different path values to see what the ACL objects do
-# $TestPath = "C:\Users\" #Not inherited
-$TestPath = "C:\users\Public\desktop\" #Inherited
-# $TestPath = "HKCU:\" #Not Inherited
-# $TestPath = "HKCU:\Software" #Inherited
-# $TestPath = "HKLM:\" #Not Inherited
+# $TestPath = "C:\Users\" # Not inherited
+$TestPath = "C:\users\Public\desktop\" # Inherited
+# $TestPath = "HKCU:\" # Not Inherited
+# $TestPath = "HKCU:\Software" # Inherited
+# $TestPath = "HKLM:\" # Not Inherited
 
 New-Test "Path:"
 $TestPath

@@ -820,7 +820,7 @@ Export-ModuleMember -Variable NT_AUTHORITY_UserModeDrivers
 # Application packages
 # $APPLICATION_PACKAGE_AUTHORITY_AllApplicationPackages = "D:(A;;CC;;;S-1-15-2-1)"
 # $APPLICATION_PACKAGE_AUTHORITY_AllRestrictedApplicationPackages = "D:(A;;CC;;;S-1-15-2-2)"
-# "D:(A;;CC;;;S-1-15-2-3)" #Unknown
+# "D:(A;;CC;;;S-1-15-2-3)" # Unknown
 
 # Other System Users
 # $NT_AUTHORITY_UserModeDrivers = "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"

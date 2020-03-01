@@ -72,7 +72,7 @@ if ((Test-Installation "uTorrent" ([ref] $uTorrentRoot) @Logs) -or $ForceLoad)
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort 1161 -RemotePort 1024-65535 `
 		-EdgeTraversalPolicy DeferToApp -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "BitTorrent UDP listener, usualy for DHT." @Logs | Format-Output @Logs
+		-Description "BitTorrent UDP listener, usually for DHT." @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "uTorrent - Listening port" -Service Any -Program $Program `

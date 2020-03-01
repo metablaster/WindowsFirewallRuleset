@@ -181,7 +181,7 @@ New-NetFirewallRule -Platform $Platform `
 	-LocalUser Any `
 	-Description "Wireless Portable Devices to allow use of Universal Plug and Play." @Logs | Format-Output @Logs
 
-#TODO: possible bug in predefined rule, description is not consistent with service paramter
+# TODO: possible bug in predefined rule, description is not consistent with service parameter
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Wireless portable devices (FDPHost)" -Service fdphost -Program $ServiceHost `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $WNInterface `

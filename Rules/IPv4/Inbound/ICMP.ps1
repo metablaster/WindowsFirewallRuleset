@@ -298,7 +298,7 @@ Router discovery is useful for accessing computer systems on other nonlocal area
 A host MUST NOT send Router Advertisement messages at any time.
 A router sends periodic as well as solicited Router Advertisements out its advertising interfaces.
 A router might want to send Router Advertisements without advertising itself as a default router.
-For instance, a router might advertise prefixes for stateless address autoconfiguration while not wishing to forward p ackets.
+For instance, a router might advertise prefixes for stateless address autoconfiguration while not wishing to forward packets.
 Unsolicited Router Advertisements are not strictly periodic:
 the interval between subsequent transmissions is randomized to reduce the probability of synchronization with the advertisements from other routers on the same link." @Logs | Format-Output @Logs
 
@@ -362,7 +362,7 @@ based on the host choice, so basically it affects the way packets are routed and
 Through ICMP redirects, a host can find out which networks can be accessed from within the local network,
 and which are the routers to be used for each such network. The security problem comes from the fact that ICMP packets,
 including ICMP redirect, are extremely easy to fake and basically it would be rather easy for an attacker to forge ICMP redirect packets.
-The atacker can then on basically alter your host's routing tables and diver traffic towards external hosts on a path of his/her choice;
+The attacker can then on basically alter your host's routing tables and diver traffic towards external hosts on a path of his/her choice;
 
 the new path is kept active by the router for 10 minutes.
 Due to this fact and the security risks involved in such scenario,

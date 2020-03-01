@@ -65,7 +65,7 @@ $PowerShellCore64Root = ""
 #
 
 # TODO: add rule for Core x86
-# NOTE: administartors may need powershell, let them add them self temporary? currently adding them for PS x64
+# NOTE: administrators may need powershell, let them add them self temporary? currently adding them for PS x64
 $PowerShellUsers = Get-SDDL -Group "Users", "Administrators" @Logs
 
 # Test if installation exists on system

@@ -100,7 +100,7 @@ if ((Test-Installation "Thuderbird" ([ref] $ThunderbirdRoot) @Logs) -or $ForceLo
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 995 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "Incomming mail server" @Logs | Format-Output @Logs
+		-Description "Incoming mail server" @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Mozilla thunderbird - SMTP" -Service Any -Program $Program `
