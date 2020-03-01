@@ -41,10 +41,6 @@ TODO's in this file are categorized into following sections:
 
     - Take out of deprecated scripts what can be used, remove the rest
 
-4. Other
-
-    - Check spelling for entry project
-
 ## High priority
 
 1. Modules
@@ -150,3 +146,4 @@ TODO's in this file are categorized into following sections:
 ## Done
 
 - Move duplicate and global TODO's from scripts here into global TODO list
+- Check spelling for entry project

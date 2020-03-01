@@ -12,7 +12,7 @@
 		"strings": false
 	},
 	"editor.rulers": [
-		100
+		100, 120
 	],
 	"workbench.colorCustomizations": {
 		"editorRuler.foreground": "#4063ff"

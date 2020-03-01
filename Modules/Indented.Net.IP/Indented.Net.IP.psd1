@@ -144,7 +144,8 @@
 		"Test-SubnetMember.md"
 	)
 
-	# Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
+	# Private data to pass to the module specified in RootModule/ModuleToProcess.
+	# This may also contain a PSData hashtable with additional module metadata used by PowerShell.
 	PrivateData = @{
 
 		PSData = @{
@@ -169,6 +170,7 @@
 	# HelpInfo URI of this module
 	HelpInfoURI = 'https://github.com/metablaster/WindowsFirewallRuleset/tree/core/Modules/Indented.Net.IP/help'
 
-	# Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
+	# Default prefix for commands exported from this module.
+	# Override the default prefix using Import-Module -Prefix.
 	# DefaultCommandPrefix = ''
 }

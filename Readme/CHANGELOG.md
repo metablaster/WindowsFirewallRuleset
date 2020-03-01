@@ -12,6 +12,7 @@
 - Code formatted and updated according to PSScriptAnalyzer rules
 - TODO list categorized according to area and priority, duplicates removed
 - Markdown formatted according to markdownlint rules
+- Entry project spellchecked
 
 # Changelog v0.3.0
 
