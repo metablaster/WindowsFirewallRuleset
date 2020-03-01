@@ -12,7 +12,7 @@ Install-Module Indented.Net.IP
 
 | Name | Synopsis |
 | --- | --- |
-| ConvertFrom-HexIP | Converts a hexadecimal IP address into a dotted decimal string. |
+| ConvertFrom-HexIP | Converts a hexadecimal IP address into adotted decimal string. |
 | ConvertTo-BinaryIP | Converts a Decimal IP address into a binary format. |
 | ConvertTo-DecimalIP | Converts a Decimal IP address into a 32-bit unsigned integer. |
 | ConvertTo-DottedDecimalIP | Converts either an unsigned 32-bit integer or a dotted binary string to an IP Address. |
