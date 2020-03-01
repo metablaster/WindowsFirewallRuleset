@@ -63,7 +63,7 @@ New-NetFirewallRule -ErrorAction Stop -Enabled True -Description $Description -D
 #New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Direction Outbound -Profile $Profile -Program $Program -Platform $Platform -PolicyStore $PolicyStore -Localuser $LocalUser -Group $Group -Protocol ICMPv4 -RemoteAddress $RemoteAddr  -IcmpType 40 -DisplayName "Photuris (40)"
 
 
-#Destination filtering ( Inboud )
+#Destination filtering ( Inbound )
 New-NetFirewallRule -ErrorAction Stop -Enabled True -Description $Description -Profile Private, Domain -Program $Program -Platform $Platform -PolicyStore $PolicyStore -Localuser $LocalUser -Group $Group -Protocol ICMPv4 -RemoteAddress LocalSubnet4 -DisplayName "Local Subnet"
 #New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Profile Private,Domain -Program $Program -Platform $Platform -PolicyStore $PolicyStore -Localuser $LocalUser -Group $Group -Protocol ICMPv4 -RemoteAddress 169.254.1.0-169.254.254.255 -DisplayName "Subnet APIPA"
 

@@ -8,48 +8,57 @@ schema: 2.0.0
 # ConvertTo-Subnet
 
 ## SYNOPSIS
+
 Convert a start and end IP address to the closest matching subnet.
 
 ## SYNTAX
 
 ### FromIPAndMask (Default)
-```
+
+```powershell
 ConvertTo-Subnet [-IPAddress] <String> [[-SubnetMask] <String>] [<CommonParameters>]
 ```
 
 ### FromStartAndEnd
-```
+
+```powershell
 ConvertTo-Subnet -Start <IPAddress> -End <IPAddress> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 ConvertTo-Subnet attempts to convert a starting and ending IP address from a range to the closest subnet.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```powershell
 ConvertTo-Subnet -Start 0.0.0.0 -End 255.255.255.255
 ```
 
 ### EXAMPLE 2
-```
+
+```powershell
 ConvertTo-Subnet -Start 192.168.0.1 -End 192.168.0.129
 ```
 
 ### EXAMPLE 3
-```
+
+```powershell
 ConvertTo-Subnet 10.0.0.23/24
 ```
 
 ### EXAMPLE 4
-```
+
+```powershell
 ConvertTo-Subnet 10.0.0.23 255.255.255.0
 ```
 
 ## PARAMETERS
 
 ### -IPAddress
+
 Any IP address in the subnet.
 
 ```yaml
@@ -65,6 +74,7 @@ Accept wildcard characters: False
 ```
 
 ### -SubnetMask
+
 A subnet mask.
 
 ```yaml
@@ -80,6 +90,7 @@ Accept wildcard characters: False
 ```
 
 ### -Start
+
 The first IP address from a range.
 
 ```yaml
@@ -95,6 +106,7 @@ Accept wildcard characters: False
 ```
 
 ### -End
+
 The last IP address from a range.
 
 ```yaml
@@ -110,13 +122,18 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable,
+-InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable,
+-Verbose, -WarningAction, and -WarningVariable. For more information, see
+[about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ## OUTPUTS
 
 ### Indented.Net.IP.Subnet
+
 ## NOTES
 
 ## RELATED LINKS

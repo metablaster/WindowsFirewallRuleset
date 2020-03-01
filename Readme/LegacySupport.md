@@ -8,10 +8,12 @@ To be able to apply rules to older systems such as Windows 7 or Windows server 2
 you'll need to modify code.\
 At a bare minimum you should do the following 4 modifications:
 
-**Modification 1:**\
+## Modification 1
+
 edit the `Modules\Project.AllPlatforms.System` to allow execution for older system.
 
-**Modification 2:**\
+## Modification 2
+
 edit the `Config\ProjectSettings.ps1` and define new variable that defines your system version,
 following variable is defined to target Windows 10.0 editions and above by default for all rules.\
 ```New-Variable -Name Platform -Option Constant -Scope Global -Value "10.0+""```
@@ -22,7 +24,8 @@ For example for Windows 7, define a new variable that looks like this:\
 `Platform` variable specifies which version of Windows the associated rule applies.\
 The acceptable format for this parameter is a number in the Major.Minor format.
 
-**Modification 3:**\
+## Modification 3
+
 edit individual ruleset scripts, and take a look which rules you want or need to be loaded on
 that system,\
 then simply replace ```-Platform $Platform``` with ie. ```-Platform $PlatformWin7```
@@ -41,6 +44,7 @@ but redundant.
 What this means, is, just edit the GPO later to refine your imports if you go that route,
 or alternatively revisit your edits and re-run individual scripts again.
 
-**Modification 4:**\
+## Modification 4
+
 Visit `Test` folder and run all tests individually to confirm modules and their functions work as
 expected, any failure should be fixed.
