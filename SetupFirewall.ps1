@@ -26,8 +26,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# TODO: use and run PSScriptAnalyzer on code
-
 . $PSScriptRoot\Config\ProjectSettings.ps1
 
 # Check requirements for this project

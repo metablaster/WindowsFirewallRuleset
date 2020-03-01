@@ -1085,7 +1085,7 @@ function Update-Table
 			# Add row to the table
 			$InstallTable.Rows.Add($Row)
 
-			# TODO: If the path is known there is not need to continue?
+			# TODO: If the path is known there is no need to continue?
 			return
 		}
 	}

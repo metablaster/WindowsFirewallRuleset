@@ -10,32 +10,40 @@ If you installed "TODO Tree" extension as discussed in
 [CONTRIBUTING.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/CONTRIBUTING.md)
 then then this process should be much easier.
 
+Note that some TODO's listed here are are duplicate of TODO's inside individual scripts, this is
+intentionally to make is easier to tell where to look at while resolving this list.
+
 TODO's in this file are categorized into following sections:
 
 1. Selected
 2. High priority
 3. Medium priority
 4. Low priority
+5. Done
 
 "Selected" means it's currently being worked on.
+"Done" obviously means it's done, it's kept here for reference.
 
 ## Selected
 
 1. Modules
 
-    - Revisit function parameters, their types, aliases etc..
+    - Revisit function parameters, their output types, aliases etc..
     - Change bool parameters to switch where possible
     - Revisit naming convention for ConvertFrom/ConvertTo it's not clear what is being converted,
     some other functions also have odd names
 
 2. Code style
 
-    - Limit code to 100 columns rule.
-    - Move duplicate and global TODO's from scripts here into global TODO list
+    - Limit code to 100 column rule.
 
 3. Project scripts
 
     - Take out of deprecated scripts what can be used, remove the rest
+
+4. Other
+
+    - Check spelling for entry project
 
 ## High priority
 
@@ -61,9 +69,8 @@ TODO's in this file are categorized into following sections:
 
 4. Test and debugging
 
-    - Convert tests to use Pester if possible or separate them into:
-    pester tests and experiment tests
     - Some test fail to run in "develop" mode due to missing variables
+    - Need to test rules without "ProgramRoot" variable to see if searching works
 
 5. Partially fixed, need testing
 
@@ -82,6 +89,7 @@ TODO's in this file are categorized into following sections:
     - We probably don't need VSSetup module
     - Line numbers for verbose and debug messages
     - Modules should be imported into global scope
+    - Use begin/process/end to make functions work on pipeline
 
 2. Project scripts
 
@@ -97,10 +105,15 @@ TODO's in this file are categorized into following sections:
 4. Test and debugging
 
     - Move NET.IP tests into test folder, clean up directory add streams
+    - Convert tests to use Pester if possible or separate them into:
+    pester tests and experiment tests
+    - What should be initial values for ProgramRoot variables in rule scripts? we should remove
+    known non existent paths and handle empty strings to prevent INFO messages for conversion.
 
 5. Documentation
 
     - update FirewallParameters.md with a list of incompatible parameters for reference
+    - a lot of comment based documentation is missing comments
 
 6. Never ending
 
@@ -133,3 +146,7 @@ TODO's in this file are categorized into following sections:
 5. Other
 
     - Test for 32bit powershell and OS.
+
+## Done
+
+- Move duplicate and global TODO's from scripts here into global TODO list

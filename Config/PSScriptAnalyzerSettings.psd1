@@ -33,8 +33,7 @@
 		'PSAvoidUsingWMICmdlet',
 		'PSAvoidUsingEmptyCatchBlock',
 		'PSUseCmdletCorrectly',
-		# TODO: temporary disabled
-		# 'PSUseShouldProcessForStateChangingFunctions',
+		'PSUseShouldProcessForStateChangingFunctions',
 		'PSAvoidUsingPositionalParameters',
 		'PSAvoidGlobalVars',
 		'PSUseDeclaredVarsMoreThanAssignments',

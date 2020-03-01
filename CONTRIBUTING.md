@@ -58,7 +58,7 @@ around for your code editor.
 As told above, workspace includes code formatting settings, which means you don't have to learn anything,
 it is enough to right click into VSCode and select "Format document" to miraculously convert code.
 
-Keeps your lines withing 100 colum, workspace settings are configured to show a blue ruler inside
+Keep your lines withing 100 colum, workspace settings are configured to show a blue ruler inside
 code editor, so there is no way to miss.
 
 If you use some other code editor you should configure it according to these rules which are found
