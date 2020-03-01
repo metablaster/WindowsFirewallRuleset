@@ -15,8 +15,7 @@ First step is to fork a project:\
 Next you may want to set up your SSH keys (don't actually do it yet):\
 [connecting-to-github-with-ssh](https://help.github.com/en/enterprise/2.20/user/github/authenticating-to-github/connecting-to-github-with-ssh)
 
-The reason why not to set up SSH keys right away is because
-for PowerShell I made this tutorial:\
+The reason why not to set up SSH keys right away is because for PowerShell I made this tutorial:\
 [PowerShell GPG4Win, SSH, posh-git](https://github.com/metablaster/DevelopmentSetup/blob/master/git/git%2C%20powershell%2C%20gpg4win%2C%20posh-git%2C%20commit%20signing%2C%20ssh%20and%20key%20caching.md)
 
 Few additional references worth reading:\
@@ -27,20 +26,18 @@ Few additional references worth reading:\
 
 All of the scripts should use the same code style and order of code,
 without writing a long list of preferred code style\
-it should be enough to take a look at the existing scripts and
-figure it out right away.
+it should be enough to take a look at the existing scripts and figure it out right away.
 
-Use camel case for variables, types, symbols etc; lowercase for language keywords,
+Use cammel case for variables, types, symbols etc; lowercase for language keywords,
 for more info about casing type:
 
 ```powershell
 [PSCustomObject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::get
 ```
 
-Each rule uses exactly the same order or parameters split into
-exactly the same number of lines.\
-This is so that when you need to change or search something
-it's easy to see what is where right away.
+Each rule uses exactly the same order or parameters split into exactly the same number of lines.\
+This is so that when you need to change or search something it's easy to see
+what is where right away.
 
 The code in scripts is ordered into "sections" in following way,
 and may be different if needed for what ever reason:
@@ -57,18 +54,18 @@ and may be different if needed for what ever reason:
 Sections of code should be documented as shown in existing scripts.\
 To comment on things that need to be done add "TODO:" + comment,
 similarly for notes add "NOTE:" + comment.\
-For any generic comments you may want to add use line comments
-(preferred) and block comments only if comment is big.
+For any generic comments you may want to add/use line comments (preferred) and
+block comments only if comment is big.
 
-Provide documentation and official reference for your rules so that it
-can be easy to verify that these rules do not contain mistakes,
-for example, for ICMP rules you would provide a link to
-[IANA](https://www.iana.org) with relevant reference document.
+Provide documentation and official reference for your rules so that it can be easy to verify that
+these rules do not contain mistakes,  for example,
+for ICMP rules you would provide a link to [IANA](https://www.iana.org)
+with relevant reference document.
 
 it is important that each rule contains good description of it's purpose,
 when a user clicks on a rule in firewall GUI he wants to see
-what this rule is about and easily conclude whether to enable/disable the rule
-or allow/block the traffic.
+what this rule is about and easily conclude whether to enable/disable the rule or
+allow/block the traffic.
 
 Documentation and comments reside in 3 places:
 
@@ -80,33 +77,31 @@ Commenting code is as important as writing it!
 
 ## Writing rules
 
-It is important that a rule is very specific and not generic,
-that means specifying protocol, IP addresses, ports, system user,
-interface type and other relevant information.
-for example just saying: allow TCP outbound port 80 for any address or
-any user or no explanation what is this supposed to allow or block is not acceptable.
+It is important that a rule is very specific and not generic, that means specifying protocol,
+IP addresses, ports, system user, interface type and other relevant information.
+for example just saying: allow TCP outbound port 80 for any address or any user or
+no explanation what is this supposed to allow or block is not acceptable.
 
 ## Testing code
 
-Each function should have it's own test and each test should cover
-as much code/test cases as possible,
-making changes to exiting code can then be easily tested!\
-If test case/concept expands to several functions or
-if it completely unrelated to functions it should be a separate test.
+Each function should have it's own test and each test should cover as much code/test
+cases as possible, making changes to exiting code can then be easily tested!\
+If test case/concept expands to several functions or if it completely
+unrelated to functions it should be a separate test.
 
 All tests reside in "Test" folder which contains subfolder for each module,
 take a look there for examples.
 
 ## Modules and 3rd party code
 
-The project contains few custom modules of various types grouped by
-relevance on what the module is supposed to expose.
+The project contains few custom modules of various types grouped by relevance on
+what the module is supposed to expose.
 
 Try to limit dependency on 3rd party modules.\
 Existing modules should be extended and new written by using Powershell only if possible.
 
-Only if this is not enough we can try to look for 3rd party modules which
-could be easily customized without too much change or learning curve.
+Only if this is not enough we can try to look for 3rd party modules which could be
+easily customized without too much change or learning curve.
 
 3rd party code/module license should of course be compatible with existing licenses.
 
@@ -122,11 +117,9 @@ new code and additions is not problem though.
 
 ## Portability and other systems
 
-At the moment the focus on Windows Firewall,
-if you want to port code to other firewalls go ahead.
+At the moment the focus on Windows Firewall, if you want to port code to other firewalls go ahead.
 
-If you decide to port code it is mandatory that these code
-changes are done on separate branch.
+If you decide to port code it is mandatory that these code changes are done on separate branch.
 
 ## Making new scripts
 

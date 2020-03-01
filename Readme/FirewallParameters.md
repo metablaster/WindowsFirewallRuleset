@@ -1,14 +1,14 @@
 
 # About this document
 
-Parameters and their values are not the same as they are displaied in Firewall
-GUI such as GPO or Adv Windows firewall.
+Parameters and their values are not the same as they are displayed in Firewall GUI such as
+GPO or Adv Windows firewall.
 
-This documents helps understand what is what by mapping powershell parameters to
-GUI display equivalents.
+This documents helps understand what is what by mapping powershell parameters to GUI
+display equivalents.
 
-In addition, explanation of other parameters which are not self explanatory or
-well documented and usually need googling out what they do.
+In addition, explanation of other parameters which are not self explanatory or well documented
+and usually need googling out what they do.
 
 # PORT
 
@@ -79,28 +79,27 @@ well documented and usually need googling out what they do.
 
 - Persistent Store:
 
-> is what you see in Windows Firewall with Advanced security, accessed trough
-control panel or System settings.
+> is what you see in Windows Firewall with Advanced security, accessed trough control panel or
+System settings.
 
 - GPO Store:
 
-> is specified as computer name, and it is what you see in Local group policy,
-accessed trough secpol.msc or gpedit.msc
+> is specified as computer name, and it is what you see in Local group policy, accessed trough
+secpol.msc or gpedit.msc
 
 - RSOP:
 
-> stands for "resultant set of policy" and is collection of all GPO stores that
-apply to local computer.
+> stands for "resultant set of policy" and is collection of all GPO stores that apply to local computer.
 > this applies to domain computers, on your home computer RSOP consists of only single
 local GPO (group policy object)
 
 - Active Store:
 
-> Active store is collection (sum) of Persistent store and all GPO stores (RSOP)
-that apply to local computer. in other words it's a master store.
+> Active store is collection (sum) of Persistent store and all GPO stores (RSOP) that apply to
+local computer. in other words it's a master store.
 
-There are other stores not mentioned here, which are used in corporate networks,
-AD's or Domains, so irrelevant for home users.
+There are other stores not mentioned here, which are used in corporate networks, AD's or Domains,
+so irrelevant for home users.
 
 # APPLICATION LAYER ENFORCEMENT
 
@@ -109,8 +108,8 @@ AD's or Domains, so irrelevant for home users.
 
 # PARAMETER VALUES EXAMPLE
 
-This is how parameters are used on command line, most of them need to be enclosed
-in quotes if assigned to variable first.
+This is how parameters are used on command line, most of them need to be enclosed in quotes if
+assigned to variable first.
 
 ```Name                  = "NotePadFirewallRule"
 DisplayName           = "Firewall Rule for program.exe"
@@ -148,9 +147,9 @@ Owner                 = "S-1-5-21-3337988176-3917481366-464002247-500"
 
 # LOG FILE FIELDS
 
-Depending on settings, firewall log can contain dropped and alloweded packets,
-setting in powershell allow us to log ignored packets too however this does not
-happen probably due to a bug.\
+Depending on settings, firewall log can contain dropped and allowed packets,
+setting in powershell allow us to log ignored packets too however this does not happen
+probably due to a bug.\
 Sample values and their meaning in order how they appear in firewall log file:
 
 ```date        = 2019-12-21

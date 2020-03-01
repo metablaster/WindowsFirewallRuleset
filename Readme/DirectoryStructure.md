@@ -26,7 +26,7 @@ Contains offline documentation
 
 ## Rules
 
-Contains all firewall ruels
+Contains all firewall rules
 
 ### IPv4
 

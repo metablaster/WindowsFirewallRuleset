@@ -8,14 +8,14 @@ for smaller todo's see individual files
 
 - Revisit function parameters, their types, aliases etc..
 - Change bool parameters to switch where possible
-- Revisit naming convention for ConvertFrom/ConvertTo it's not clear
-what is being converted, some other functions also have odd names
+- Revisit naming convention for ConvertFrom/ConvertTo it's not clear what is being converted,
+some other functions also have odd names
 
 ## Selected (Rules)
 
 - Paths to fix: nvidia, onedrive, visio, project
-- rules to fix: qbittorrent, steam, vcpkg, msys2,
-store apps for admins, internet browser (auto loads)
+- rules to fix: qbittorrent, steam, vcpkg, msys2, store apps for admins,
+internet browser (auto loads)
 
 ## Selected (Other)
 
@@ -25,8 +25,7 @@ store apps for admins, internet browser (auto loads)
 
 - Revisit code and make consistent PSCustomObject properties for all function outputs
 - Need to see which functions/commands may throw and setup try catch blocks
-- Revisit parameter validation for functions,
-specifically acceptance of NULL or empty
+- Revisit parameter validation for functions, specifically acceptance of NULL or empty
 
 ## High priority (Project scripts)
 
@@ -36,8 +35,8 @@ specifically acceptance of NULL or empty
 
 ## High priority (Rules)
 
-- Now that common parameters are removed need to update the order of
-rule parameters, also not all are the same.
+- Now that common parameters are removed need to update the order of rule parameters,
+also not all are the same.
 
 ## High priority (Code style)
 
@@ -59,8 +58,8 @@ need to select latest or add multiple rules.
 - make possible to apply rules to remote machine, currently partially supported
 - Provide following keywords in function comments: .DESCRIPTION .LINK .COMPONENT
 - DefaultParameterSetName for functions with parameter sets is missing
-- Revisit how functions return and what they return,
-return keyword vs Write-Output, if piping is needed after all
+- Revisit how functions return and what they return, return keyword vs Write-Output,
+if piping is needed after all
 - We probably don't need VSSetup module
 - Line numbers for verbose and debug messages
 - Modules should be imported into global scope
@@ -73,8 +72,7 @@ return keyword vs Write-Output, if piping is needed after all
 ## Medium priority (Rules)
 
 - some rules are missing comments
-- make display names and groups modular for easy search,
-ie. group - subgroup, Company - Program
+- make display names and groups modular for easy search, ie. group - subgroup, Company - Program
 
 ## Medium priority (Documentation)
 
@@ -101,8 +99,7 @@ ie. group - subgroup, Company - Program
 ## Low priority (Project scripts)
 
 - Detect if script ran manually, to be able to reset errors and warning status
-- Test already loaded rules if pointing to valid program or service,
-also test for weakness
+- Test already loaded rules if pointing to valid program or service, also test for weakness
 - Count invalid paths in each script
 - Measure execution time for each or all scripts.
 
