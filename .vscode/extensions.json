@@ -3,7 +3,10 @@
 	// Extension identifier format: ${publisher}.${name}. Example: vscode.csharp
 	// List of extensions which should be recommended for users of this workspace.
 	"recommendations": [
-		"ms-vscode.powershell"
+		"ms-vscode.powershell",
+		"davidanson.vscode-markdownlint",
+		"gruntfuggly.todo-tree",
+		"nachocab.highlight-dodgy-characters"
 	],
 	// List of extensions recommended by VS Code that should not be recommended for users of this workspace.
 	"unwantedRecommendations": []

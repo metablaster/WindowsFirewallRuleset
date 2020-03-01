@@ -1,55 +1,70 @@
 
 # About this document
+
 Usefull Powershell commands to help gather information needed for Windows firewall.
 
 # Store Apps
 
 There are two categories:
 
-1. Apps - All other apps, installed in C:\Program Files\WindowsApps. There are two classes of apps:
-- Provisioned: Installed in user account the first time you sign in with a new user account.
-- Installed: Installed as part of the OS.
-2. System apps - Apps that are installed in the C:\Windows* directory. These apps are integral to the OS.
+1. Apps - All other apps, installed in C:\Program Files\WindowsApps.
+There are two classes of apps:
+    1. Provisioned: Installed in user account the first time you sign in with
+       a new user account.
+    1. Installed: Installed as part of the OS.
+2. System apps - Apps that are installed in the C:\Windows* directory.
+   These apps are integral to the OS.
 
-**List all system apps beginning with word "Microsoft"**
+## List all system apps beginning with word "Microsoft"
 
 We use word "Microsoft" to filter out junk
 
 ```powershell
-Get-AppxPackage -PackageTypeFilter Main | Where-Object { $_.SignatureKind -eq "System" -and $_.Name -like "Microsoft*" } | Sort-Object Name | ForEach-Object {$_.Name}
+Get-AppxPackage -PackageTypeFilter Main |
+Where-Object { $_.SignatureKind -eq
+"System" -and $_.Name -like "Microsoft*" } |
+Sort-Object Name | ForEach-Object {$_.Name}
 ```
 
-**List all provisioned Windows apps**
+## List all provisioned Windows apps
 
-Not directly useful, but returns a few more packages than `Get-AppxPackage -PackageTypeFilter Bundle`
+Not directly useful, but returns a few more packages than
+`Get-AppxPackage -PackageTypeFilter Bundle`
 
 ```powershell
-Get-AppxProvisionedPackage -Online | Sort-Object DisplayName | Format-Table DisplayName, PackageName
+Get-AppxProvisionedPackage -Online |
+Sort-Object DisplayName |
+Format-Table DisplayName, PackageName
 ```
 
-**Lists the app packages that are installed for specific user account on the computer**
+## Lists the app packages that are installed for specific user account on the computer
 
 ```powershell
-Get-AppxPackage -User User -PackageTypeFilter Bundle | Sort-Object Name | ForEach-Object {$_.Name}
+Get-AppxPackage -User User -PackageTypeFilter Bundle |
+Sort-Object Name |
+ForEach-Object {$_.Name}
 ```
 
-**Get specific package**
+## Get specific package
 
 ```powershell
-Get-AppxPackage -User User | Where-Object {$_.PackageFamilyName -like "*skype*"} | Select-Object -ExpandProperty Name
+Get-AppxPackage -User User |
+Where-Object {$_.PackageFamilyName -like "*skype*"} |
+Select-Object -ExpandProperty Name
 ```
 
 [Reference App Management](https://docs.microsoft.com/en-us/windows/application-management/apps-in-windows-10)
 
 [Reference Get-AppxPackage](https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage?view=win10-ps)
 
-**Get app details**
+## Get app details
 
 ```powershell
 (Get-AppxPackage -Name "*Yourphone*" | Get-AppxPackageManifest).Package.Capabilities
 ```
 
-**Update store apps**
+## Update store apps
+
 ```powershell
 $namespaceName = "root\cimv2\mdm\dmmap"
 $className = "MDM_EnterpriseModernAppManagement_AppManagement01"
@@ -60,19 +75,21 @@ $result = $wmiObj.UpdateScanMethod()
 OR
 
 ```powershell
-Get-CimInstance -Namespace "Root\cimv2\mdm\dmmap" -ClassName "MDM_EnterpriseModernAppManagement_AppManagement01" | Invoke-CimMethod -MethodName UpdateScanMethod
+Get-CimInstance -Namespace "Root\cimv2\mdm\dmmap" `
+-ClassName "MDM_EnterpriseModernAppManagement_AppManagement01" |
+Invoke-CimMethod -MethodName UpdateScanMethod
 ```
 
 # Get users and computer name
 
-**List all users**
+## List all users
 
 ```powershell
 Get-WmiObject -Class Win32_UserAccount
 [Enum]::GetValues([System.Security.Principal.WellKnownSidType])
 ```
 
-**List only users**
+## List only users
 
 ```powershell
 Get-LocalGroupMember -name users
@@ -82,32 +99,34 @@ Get-LocalGroupMember -name users
 Get-LocalGroupMember -Group "Users"
 ```
 
-**Only Administrators**
+## Only Administrators
 
 ```powershell
 Get-LocalGroupMember -Group "Administrators"
 ```
 
-**Prompt user for info**
+## Prompt user for info
 
 ```powershell
 Get-Credential
 ```
 
-**Computer information**
+## Computer information
 
 ```powershell
 Get-WMIObject -class Win32_ComputerSystem
 ```
 
-**Curently loged in user**
+## Curently loged in user
 
-user name, prefixed by its domain\
+user name, prefixed by its domain
+
 ```powershell
 [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
 ```
 
-**Well known SID's**
+## Well known SID's
+
 ```powershell
 $group = 'Administrators'
 $account = New-Object -TypeName System.Security.Principal.NTAccount($group)
@@ -120,24 +139,27 @@ OR
 [System.Security.Principal.WellKnownSidType]::NetworkSid
 ```
 
-**Computer name**
+## Computer name
 
 ```powershell
 [System.Net.Dns]::GetHostName()
 ```
 
 ```powershell
-Get-WMIObject -class Win32_ComputerSystem | Select-Object -ExpandProperty Name
+Get-WMIObject -class Win32_ComputerSystem |
+Select-Object -ExpandProperty Name
 ```
 
 # Get CIM classes and commandlets
 
 ```powershell
-Get-CimClass -Namespace root/CIMV2 | Where-Object CimClassName -like Win32* | Select-Object CimClassName
+Get-CimClass -Namespace root/CIMV2 |
+Where-Object CimClassName -like Win32* |
+Select-Object CimClassName
 ```
 
 ```powershell
-Get-Command –module CimCmdlets
+Get-Command -Module CimCmdlets
 ```
 
 # Get type name aliases
@@ -156,11 +178,13 @@ Get-PackageProvider -ListAvailable
 ```
 
 ## List of package sources that are registered for a package provider
+
 ```powershell
 Get-PackageSource
 ```
 
 ## List of Package providers available for installation
+
 ```powershell
 Find-PackageProvider -Name Nuget -AllVersions
 Find-PackageProvider -Name PowerShellGet -AllVersions -Source "https://www.powershellgallery.com/api/v2"
@@ -169,10 +193,13 @@ Find-PackageProvider -Name PowerShellGet -AllVersions -Source "https://www.power
 ## Install package provider
 
 -Scope AllUsers (Install location for all users)
+
 ```powershell
 "$env:ProgramFiles\PackageManagement\ProviderAssemblies"
 ```
+
 -Scope CurrentUser (Install location for current user)
+
 ```powershell
 "$env:LOCALAPPDATA\PackageManagement\ProviderAssemblies"
 ```
