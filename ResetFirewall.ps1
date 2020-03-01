@@ -42,7 +42,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 #
 
 # Setting up profile seem to be slow, tell user what is going on
-Write-Information -Tags "User" -MessageData "INFO: Reseting Domain firewall profile..." @Logs
+Write-Information -Tags "User" -MessageData "INFO: Resetting Domain firewall profile..." @Logs
 
 Set-NetFirewallProfile -Name Domain -PolicyStore $PolicyStore `
 	-Enabled NotConfigured -DefaultInboundAction NotConfigured -DefaultOutboundAction NotConfigured -AllowInboundRules NotConfigured `
@@ -52,7 +52,7 @@ Set-NetFirewallProfile -Name Domain -PolicyStore $PolicyStore `
 	-AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
 	-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" @Logs
 
-Write-Information -Tags "User" -MessageData "INFO: Reseting Private firewall profile..." @Logs
+Write-Information -Tags "User" -MessageData "INFO: Resetting Private firewall profile..." @Logs
 
 Set-NetFirewallProfile -Name Private -PolicyStore $PolicyStore `
 	-Enabled NotConfigured -DefaultInboundAction NotConfigured -DefaultOutboundAction NotConfigured -AllowInboundRules NotConfigured `
@@ -62,7 +62,7 @@ Set-NetFirewallProfile -Name Private -PolicyStore $PolicyStore `
 	-AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
 	-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" @Logs
 
-Write-Information -Tags "User" -MessageData "INFO: Reseting public firewall profile..." @Logs
+Write-Information -Tags "User" -MessageData "INFO: Resetting public firewall profile..." @Logs
 
 Set-NetFirewallProfile -Name Public -PolicyStore $PolicyStore `
 	-Enabled NotConfigured -DefaultInboundAction NotConfigured -DefaultOutboundAction NotConfigured -AllowInboundRules NotConfigured `
@@ -84,6 +84,6 @@ Write-Information -Tags "User" -MessageData "INFO: Removing inbound rules..." @L
 Remove-NetFirewallRule -Direction Inbound -PolicyStore $PolicyStore -ErrorAction Ignore @Logs
 
 Write-Information -Tags "User" -MessageData "INFO: Firewall reset is done!" @Logs
-Write-Information -Tags "User" -MessageData "INFO: If internet conectivity problem remains, please reboot system" @Logs
+Write-Information -Tags "User" -MessageData "INFO: If internet connectivity problem remains, please reboot system" @Logs
 
 Update-Logs

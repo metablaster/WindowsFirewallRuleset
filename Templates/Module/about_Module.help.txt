@@ -17,4 +17,5 @@ KEYWORDS
 	Terms or titles on which you might expect your users to search for the information in this topic.
 
 SEE ALSO
-	Text-only references for further reading. Hyperlinks cannot work in the Windows PowerShell console.
+	Text-only references for further reading.
+	Hyperlinks cannot work in the Windows PowerShell console.

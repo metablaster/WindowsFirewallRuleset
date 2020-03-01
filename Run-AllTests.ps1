@@ -45,7 +45,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 Update-Context "Test.Master" $($MyInvocation.MyCommand.Name -replace ".{4}$")
 if (!(Approve-Execute @Logs)) { exit }
 
-# Recusively get powershell scripts in input folder
+# Recursively get powershell scripts in input folder
 $Files = Get-ChildItem -Path $ProjectRoot\Test -Recurse -Filter *.ps1 @Logs |
 Where-Object -Property Name -ne "ContextSetup.ps1" @Logs
 

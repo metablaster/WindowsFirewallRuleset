@@ -60,7 +60,8 @@ if (!(Approve-Execute @Logs)) { exit }
 $TargetProgramRoot = "%ProgramFiles%\TargetProgram"
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore `
+	-Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
 #
 # Rules for TargetProgram
@@ -71,12 +72,66 @@ if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot) @Logs) -or $Fo
 {
 	$Program = "$TargetProgramRoot\Steam.exe"
 	Test-File $Program @Logs
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "TargetProgram" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort 27015 -RemotePort Any `
-		-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
-		-Description "" @Logs | Format-Output @Logs
+
+	# Following lines/options are not used:
+	# -Name (if used then on first line, DisplayName should be adjusted for 100 col. line)
+	# -RemoteUser $RemoteUser -RemoteMachine $RemoteMachine
+	# -Authentication NotRequired -Encryption NotRequired -OverrideBlockRules False
+	# -InterfaceAlias "loopback" (if used, goes on line with InterfaceType)
+
+	# Following lines/options are used only where appropriate:
+	# LocalOnlyMapping $false -LooseSourceMapping $false
+	# -Owner $PrincipalSID -Package $PackageSID
+
+	# Inbound TCP template
+	New-NetFirewallRule -DisplayName "Inverse Neighbor Discovery Advertisement Message (142)" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+		-Service TroubleshootingSvc -Program $EdgeChromiumApp -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress 224.2.0.0-224.2.255.255 -RemoteAddress 224.3.0.0-224.4.255.255 `
+		-LocalPort 80, 443 554, 8554-8558 -RemotePort 80, 443 554, 8554-8558 `
+		-LocalUser $NT_AUTHORITY_LocalService -EdgeTraversalPolicy Block `
+		-InterfaceType $Interface `
+		-Description "TargetProgram TCP description" `
+		@Logs | Format-Output @Logs
+
+	# Inbound UDP template
+	New-NetFirewallRule -DisplayName "Inverse Neighbor Discovery Advertisement Message (142)" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+		-Service TroubleshootingSvc -Program $EdgeChromiumApp -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+		-LocalAddress 224.2.0.0-224.2.255.255 -RemoteAddress 224.3.0.0-224.4.255.255 `
+		-LocalPort 554, 8554-8558 -RemotePort 554, 8554-8558 `
+		-LocalUser $NT_AUTHORITY_LocalService -EdgeTraversalPolicy Block `
+		-InterfaceType $Interface `
+		-LocalOnlyMapping $false -LooseSourceMapping $false `
+		-Description "TargetProgram UDP description" `
+		@Logs | Format-Output @Logs
+
+	# Inbound ICMP template
+	New-NetFirewallRule -DisplayName "Inverse Neighbor Discovery Advertisement Message (142)" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+		-Service TroubleshootingSvc -Program $EdgeChromiumApp -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 0 `
+		-LocalAddress 224.2.0.0-224.2.255.255 -RemoteAddress 224.3.0.0-224.4.255.255 `
+		-LocalPort 80, 443 554, 8554-8558 -RemotePort 80, 443 554, 8554-8558 `
+		-LocalUser $NT_AUTHORITY_LocalService -EdgeTraversalPolicy Block `
+		-InterfaceType $Interface `
+		-Description "TargetProgram TCP description" `
+		@Logs | Format-Output @Logs
+
+	# Inbound StoreApp TCP template
+	New-NetFirewallRule -DisplayName "StoreApp description" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+		-Service Any -Program $EdgeChromiumApp -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress 224.2.0.0-224.2.255.255 -RemoteAddress 224.3.0.0-224.4.255.255 `
+		-LocalPort 554, 8554-8558 -RemotePort 554, 8554-8558 `
+		-LocalUser Any -EdgeTraversalPolicy Block `
+		-InterfaceType $Interface `
+		-Owner $PrincipalSID -Package $PackageSID `
+		-Description "StoreApp template description" `
+		@Logs | Format-Output @Logs
 }
 
 Update-Logs

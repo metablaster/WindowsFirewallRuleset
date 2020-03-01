@@ -169,6 +169,7 @@
 		"lmhosts",
 		"localsystem",
 		"loopback",
+		"markdownlint",
 		"metablaster",
 		"mtail",
 		"multicast",

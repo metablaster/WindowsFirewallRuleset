@@ -16,8 +16,15 @@ some other functions also have odd names
 - Paths to fix: nvidia, onedrive, visio, project
 - rules to fix: qbittorrent, steam, vcpkg, msys2, store apps for admins,
 internet browser (auto loads)
+- Now that common parameters are removed need to update the order of rule parameters,
+also not all are the same.
 
-## Selected (Other)
+## Selected (Code style)
+
+- Limit code to 100 columns rule, subject to exceptions
+- Move duplicate and global TODO's from scripts here into global TODO list
+
+## Selected (Project scripts)
 
 - Take out of deprecated scripts what can be used, remove the rest
 
@@ -32,15 +39,6 @@ internet browser (auto loads)
 - Apply only rules for which executable exists, Test-File function
 - Implement Importing/Exporting rules
 - auto detect interfaces
-
-## High priority (Rules)
-
-- Now that common parameters are removed need to update the order of rule parameters,
-also not all are the same.
-
-## High priority (Code style)
-
-- Limit code to 80-100 columns rule, subject to exceptions
 
 ## High priority (Test and debugging)
 
@@ -68,6 +66,7 @@ if piping is needed after all
 
 - Access is denied randomly while executing rules, need some check around this
 - make possible to apply or enable only rules relevant for current firewall profile
+- Add #Requires -Modules to scripts, possibly removing module inclusions
 
 ## Medium priority (Rules)
 
@@ -107,6 +106,10 @@ if piping is needed after all
 
 - apply local IP to all rules, as optional feature because it depends if IP is static
 - Implement unique names and groups for rules, -Name and -Group parameter vs -Display*
+
+## Low priority (Code style)
+
+- Separate comment based keywords so that there is one line between a comment and next keyword
 
 ## Low priority (Other)
 

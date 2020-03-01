@@ -104,7 +104,7 @@ if (Approve-Execute "Yes" "Applying: Inbound IPv4 Rules" @Logs)
 	if (Approve-Execute "Yes" "Applying: Rules for 3rd party programs" @Logs)
 	{
 		# rules for programs
-		& "$PSScriptRoot\Rules\IPv4\Inbound\Software\Filezilla.ps1"
+		& "$PSScriptRoot\Rules\IPv4\Inbound\Software\FileZilla.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Inbound\Software\InternetBrowser.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Inbound\Software\Steam.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Inbound\Software\TeamViewer.ps1"
@@ -300,7 +300,7 @@ if ($WarningStatus)
 if (!$ErrorStatus -and !$WarningStatus)
 {
 	Write-Output ""
-	Write-Information -Tags "User" -MessageData "INFO: All operations completed successfuly!" @Logs
+	Write-Information -Tags "User" -MessageData "INFO: All operations completed successfully!" @Logs
 }
 
 Write-Output ""

@@ -10,7 +10,9 @@
 3. Added JSON settings for recommended extensions
 4. Added initial launch configurations for debugger
 5. Code formatted and updated according to PSScriptAnalyzer rules
-6. TODO list categorized according to area and priority
+6. TODO list categorized according to area and priority, duplicates removed
+7. Markdown formatted according to markdownlint rules
+8. Code formatted according to 100 columns rule
 
 # Changelog v0.3.0
 

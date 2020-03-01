@@ -27,6 +27,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+# NOTE: File must be UTF-8 with BOM to preserve unicode character
+
 <#
 .SYNOPSIS
 Returns .NET return type name for input object
@@ -44,7 +46,6 @@ System.Object Any .NET object
 .NOTES
 Original code link: https://github.com/gravejester/Communary.PASM
 TODO: need better checking for input, on pipeline.
-NOTE: File must be UTF-8 with BOM to preserve unicode character
 
 Modifications by metablaster:
 Added check when object is null
