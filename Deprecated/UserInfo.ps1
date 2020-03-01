@@ -10,7 +10,7 @@ None. You cannot pipe objects to Get-UserSID
 .OUTPUTS
 System.String SID (security identifier)
 .NOTES
-TODO: implement queriying computers on network
+TODO: implement querying computers on network
 #>
 function Get-UserSID
 {
@@ -46,7 +46,7 @@ None. You cannot pipe objects to Get-AccountSID
 .OUTPUTS
 System.String SID (security identifier)
 .NOTES
-TODO: implement queriying computers on network
+TODO: implement querying computers on network
 #>
 function Get-AccountSID
 {
@@ -85,7 +85,7 @@ None. You cannot pipe objects to Get-UserSDDL
 .OUTPUTS
 System.String SDDL for given usernames
 .NOTES
-TODO: implement queriying computers on network
+TODO: implement querying computers on network
 #>
 function Get-UserSDDL
 {
@@ -131,7 +131,7 @@ None. You cannot pipe objects to Get-AccountSDDL
 .OUTPUTS
 System.String SDDL string for given accounts
 .NOTES
-TODO: implement queriying computers on network
+TODO: implement querying computers on network
 #>
 function Get-AccountSDDL
 {
@@ -177,7 +177,7 @@ None. You cannot pipe objects to Get-UserAccounts
 .OUTPUTS
 System.String[] Array of enabled user accounts in specified group, in form of COMPUTERNAME\USERNAME
 .NOTES
-TODO: implement queriying computers on network
+TODO: implement querying computers on network
 TODO: should be renamed into Get-GroupPrincipals
 #>
 function Get-UserAccounts

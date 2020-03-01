@@ -51,7 +51,7 @@ Interface-local scope:
 IPv6 addresses of interface-local scope are mainly used for loopback tests.
 
 Link-local scope:
-IPv6 addresses of link-local scope have the same scope as link-lokal unicast addresses
+IPv6 addresses of link-local scope have the same scope as link-local unicast addresses
 (limited to one link, one physical network and one layer 2 broadcast domain).
 
 Realm-local scope:

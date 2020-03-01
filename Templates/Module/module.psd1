@@ -30,7 +30,7 @@
 	Copyright = 'Copyright (C) 2020 haxor'
 
 	# Description of the functionality provided by this module
-	Description = 'Module manifest tamplate'
+	Description = 'Module manifest template'
 
 	# Minimum version of the PowerShell engine required by this module
 	PowerShellVersion = '5.1'

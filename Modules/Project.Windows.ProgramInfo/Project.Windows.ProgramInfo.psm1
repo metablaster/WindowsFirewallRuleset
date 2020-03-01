@@ -97,7 +97,7 @@ function Get-AppSID
 
 		foreach ($Entry in $ACE)
 		{
-			# NOTE: avoid spaming
+			# NOTE: avoid spamming
 			# Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing: $Entry"
 
 			# package SID starts with S-1-15-2-
@@ -109,7 +109,7 @@ function Get-AppSID
 	}
 	else
 	{
-		Write-Warning -Message "Store app '$AppName' is not isnstalled by user '$UserName' or the app is missing"
+		Write-Warning -Message "Store app '$AppName' is not installed by user '$UserName' or the app is missing"
 		Write-Information -Tags "User" -MessageData "INFO: To fix the problem let this user update all of it's apps in Windows store"
 	}
 }
@@ -128,7 +128,7 @@ None. You cannot pipe objects to Test-File
 .OUTPUTS
 None. Warning message if file not found
 .NOTES
-TODO: We should attempt to fix the path if invlid here!
+TODO: We should attempt to fix the path if invalid here!
 TODO: We should return true or false and conditionally load rule
 #>
 function Test-File
@@ -169,7 +169,7 @@ for firewall rules
 .PARAMETER FilePath
 Path to folder, Allows null or empty since input may come from other commandlets which can return empty or null
 .EXAMPLE
-Test-Evnironment %SystemDrive%
+Test-Environment %SystemDrive%
 .INPUTS
 None. You cannot pipe objects to Test-Environment
 .OUTPUTS
@@ -267,7 +267,7 @@ function Test-UserProfile
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-	# Impssible to know what the imput may be
+	# Impossible to know what the input may be
 	if ([System.String]::IsNullOrEmpty($FilePath))
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Returning false, file path is null or empty"
@@ -280,12 +280,12 @@ function Test-UserProfile
 	foreach ($Entry in @(Get-ChildItem Env:))
 	{
 		$Entry.Name = "%" + $Entry.Name + "%"
-		# NOTE: Avoid spaming
+		# NOTE: Avoid spamming
 		# Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing $($Entry.Name)"
 
 		if ($UserProfileEnvironment -contains $Entry.Name)
 		{
-			# NOTE: Avoid spaming
+			# NOTE: Avoid spamming
 			# Write-Debug -Message "[$($MyInvocation.InvocationName)] Selecting $($Entry.Name)"
 			$Variables += $Entry
 		}
@@ -299,11 +299,11 @@ function Test-UserProfile
 	$FilePath = $FilePath.Trim('"')
 	$FilePath = $FilePath.Trim("'")
 
-	# Replace double slasses with single ones
+	# Replace double slashes with single ones
 	$FilePath = $FilePath.Replace("\\", "\")
 
 	# If input path is root drive, removing a slash would produce bad path
-	# Otherwise remove trailing slahs for cases where entry path is convertible to variable
+	# Otherwise remove trailing slash for cases where entry path is convertible to variable
 	if ($FilePath.Length -gt 3)
 	{
 		$FilePath = $FilePath.TrimEnd('\\')
@@ -352,7 +352,7 @@ Various paths drilled out of registry, and those specified by the user must be
 checked and properly formatted.
 Formatted paths will also help sorting rules in firewall GUI based on path.
 .PARAMETER FilePath
-File path to format, can have environment variables, or consits of trailing slashes.
+File path to format, can have environment variables, or consists of trailing slashes.
 .EXAMPLE
 Format-Path "C:\Program Files\\Dir\"
 .INPUTS
@@ -370,11 +370,11 @@ function Format-Path
 		[string] $FilePath
 	)
 
-	# Impssible to know what the imput may be
+	# Impossible to know what the input may be
 	if ([System.String]::IsNullOrEmpty($FilePath))
 	{
 		# TODO: why allowing empty path?
-		# NOTE: Avoid spaming
+		# NOTE: Avoid spamming
 		# Write-Debug -Message "[$($MyInvocation.InvocationName)] Returning false, file path is null or empty"
 		return $FilePath
 	}
@@ -404,14 +404,14 @@ function Format-Path
 	$FilePath = $FilePath.Trim('"')
 	$FilePath = $FilePath.Trim("'")
 
-	# Some paths may have semicollon (ie. command paths)
+	# Some paths may have semicolon (ie. command paths)
 	$FilePath = $FilePath.TrimEnd(";")
 
-	# Replace double slasses with single ones
+	# Replace double slashes with single ones
 	$FilePath = $FilePath.Replace("\\", "\")
 
 	# If input path is root drive, removing a slash would produce bad path
-	# Otherwise remove trailing slahs for cases where entry path is convertible to variable
+	# Otherwise remove trailing slash for cases where entry path is convertible to variable
 	if ($FilePath.Length -gt 3)
 	{
 		$FilePath = $FilePath.TrimEnd('\\')
@@ -487,7 +487,7 @@ function Format-Path
 .SYNOPSIS
 Get a list installed by specific user
 .DESCRIPTION
-Search installed programs in userprofile for specifit user account
+Search installed programs in userprofile for specific user account
 .PARAMETER UserName
 User name in form of "USERNAME"
 .PARAMETER ComputerName
@@ -674,7 +674,7 @@ function Get-SystemPrograms
 
 					# regex to remove: \whatever.exe at the end
 					$InstallLocation = $InstallLocation -Replace "\\(?:.(?!\\))+exe$", ""
-					# once exe is removed, remove unistall folder too if needed
+					# once exe is removed, remove uninstall folder too if needed
 					#$InstallLocation = $InstallLocation -Replace "\\uninstall$", ""
 
 					if ([System.String]::IsNullOrEmpty($InstallLocation) -or
@@ -819,7 +819,7 @@ function Get-AllUserPrograms
 .SYNOPSIS
 Get list of install locations for executables and executable names
 .DESCRIPTION
-Returs a table of installed programs, with exectuable name, installation path,
+Returns a table of installed programs, with executable name, installation path,
 registry path and child registry key name for target computer
 .PARAMETER ComputerName
 Computer name which to check
@@ -898,7 +898,7 @@ function Get-ExecutablePaths
 					$FilePath = $FilePath.Trim('"')
 					$FilePath = $FilePath.Trim("'")
 
-					# Replace double slasses with single ones
+					# Replace double slashes with single ones
 					$FilePath = $FilePath.Replace("\\", "\")
 
 					# Get only executable name
@@ -957,7 +957,7 @@ Create data table used to hold information for a list of programs
 .DESCRIPTION
 Create data table which is filled with data about programs and principals such
 as users or groups and their SID for which given firewall rule applies
-This method is primarly used to reset the table
+This method is primarily used to reset the table
 Each entry in the table also has an ID to help choosing entries by ID
 .PARAMETER TableName
 Table name
@@ -1097,7 +1097,7 @@ function Update-Table
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching system programs for $SearchString"
 
-		# TODO: need better mechanism for multiple maches
+		# TODO: need better mechanism for multiple matches
 		$TargetPrograms = $SystemPrograms | Where-Object -Property Name -like "*$SearchString*"
 		$Principal = $UserGroups | Where-Object -Property Group -eq "Users"
 
@@ -1237,7 +1237,7 @@ function Edit-Table
 	# Nothing to do if the path does not exist
 	if (!(Test-Environment $InstallLocation))
 	{
-		# TODO: will be true also for user profile, we should try to fix the path if it leads to user prfofile instead of doing nothing.
+		# TODO: will be true also for user profile, we should try to fix the path if it leads to user profile instead of doing nothing.
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] $InstallLocation not found or invalid"
 		return
 	}
@@ -1301,7 +1301,7 @@ system for valid path and return it via reference parameter
 .PARAMETER Program
 Predefined program name for which to search
 .PARAMETER FilePath
-Reference to variable whic holds a path to program (excluding executable)
+Reference to variable which holds a path to program (excluding executable)
 .EXAMPLE
 $MyProgram = "%ProgramFiles(x86)%\Microsoft Office\root\Office16"
 Test-Installation "Office" ([ref] $MyProgram)
@@ -1617,7 +1617,7 @@ function Find-Installation
 			Update-Table "Acrobat Reader DC"
 			break
 		}
-		"Filezilla"
+		"FileZilla"
 		{
 			Update-Table "FileZilla FTP Client"
 			break
@@ -1836,7 +1836,7 @@ function Find-Installation
 		# NOTE: number for Get-PSCallStack is 2, which means 3 function calls back and then get script name (call at 0 and 1 is this script)
 		$Script = (Get-PSCallStack)[2].Command
 
-		# TODO: these loops seem to be skiped, probably missing Test-File, need to check
+		# TODO: these loops seem to be skipped, probably missing Test-File, need to check
 		Write-Information -Tags "User" -MessageData "INFO: If you installed $Program elsewhere you can input the correct path now"
 		Write-Information -Tags "User" -MessageData "INFO: or adjust the path in $Script and re-run the script later."
 		Write-Information -Tags "User" -MessageData "INFO: otherwise ignore this warning if you don't have $Program installed."
@@ -1867,7 +1867,7 @@ function Find-Installation
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] User skips input for $Program"
 
-		# Finaly status is bad
+		# Finally status is bad
 		Set-Variable -Name WarningStatus -Scope Global -Value $true
 		return $false
 	}
@@ -1945,7 +1945,7 @@ function Get-NetFramework
 						$InstallLocation = Format-Path $InstallLocation
 					}
 
-					# we add entry regarldess of presence of install path
+					# we add entry regardless of presence of install path
 					$NetFramework += [PSCustomObject]@{
 						"ComputerName" = $ComputerName
 						"RegKey" = $HKLMSubKey
@@ -1983,7 +1983,7 @@ function Get-NetFramework
 							$InstallLocation = Format-Path $InstallLocation
 						}
 
-						# we add entry regarldess of presence of install path
+						# we add entry regardless of presence of install path
 						$NetFramework += [PSCustomObject]@{
 							"ComputerName" = $ComputerName
 							"RegKey" = $HKLMKey
@@ -2351,7 +2351,7 @@ function Get-SQLManagementStudio
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing registry key: $HKLMSubKey"
 
 				# TODO: Should we return object by object to make pipeline work?
-				# also try to get same set of properties for all req querries
+				# also try to get same set of properties for all req queries
 				$ManagementStudio += [PSCustomObject]@{
 					"ComputerName" = $ComputerName
 					"RegKey" = $HKLMSubKey

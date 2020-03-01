@@ -55,16 +55,16 @@ if ($Develop)
 
 <#
 .SYNOPSIS
-Strip computer names out of computer acounts
+Strip computer names out of computer accounts
 .DESCRIPTION
-ConvertFrom-UserAccount is a helper method to reduce typing comming code
+ConvertFrom-UserAccount is a helper method to reduce typing common code
 related to splitting up user accounts
 .PARAMETER UserAccounts
 Array of user accounts in form of: COMPUTERNAME\USERNAME
 .EXAMPLE
-onvertFrom-UserAccounts COMPUTERNAME\USERNAME
+ConvertFrom-UserAccounts COMPUTERNAME\USERNAME
 .EXAMPLE
-onvertFrom-UserAccounts SERVER\USER, COMPUTER\USER, SERVER2\USER2
+ConvertFrom-UserAccounts SERVER\USER, COMPUTER\USER, SERVER2\USER2
 .INPUTS
 None. You cannot pipe objects to ConvertFrom-UserAccounts
 .OUTPUTS
@@ -100,9 +100,9 @@ Get computer accounts for a given user groups on given computers
 .PARAMETER UserGroups
 User group on local or remote computer
 .PARAMETER ComputerNames
-One or more computers which to querry for group users
+One or more computers which to query for group users
 .PARAMETER CIM
-Whether to contact CIM server (requred for remote computers)
+Whether to contact CIM server (required for remote computers)
 .EXAMPLE
 Get-GroupPrincipals "Users", "Administrators"
 .EXAMPLE
@@ -165,7 +165,7 @@ function Get-GroupPrincipals
 
 					foreach ($Group in $UserGroups)
 					{
-						# Get all users that belong to requrested group,
+						# Get all users that belong to requested group,
 						# this includes non local principal source and non 'user' users
 						# it is also missing SID
 						$GroupUsers = Get-CimInstance -Class Win32_GroupUser -Namespace "root\cimv2" -ComputerName $Computer |
@@ -256,11 +256,11 @@ function Get-GroupPrincipals
 .SYNOPSIS
 Get user groups on target computers
 .DESCRIPTION
-Get a list of all availabe user groups on target computers
+Get a list of all available user groups on target computers
 .PARAMETER ComputerNames
-One or more computers which to querry for user groups
+One or more computers which to query for user groups
 .PARAMETER CIM
-Whether to contact CIM server (requred for remote computers)
+Whether to contact CIM server (required for remote computers)
 .EXAMPLE
 Get-UserGroups "ServerPC"
 .EXAMPLE
@@ -421,7 +421,7 @@ Array of users for which to generate SDDL string
 .PARAMETER UserGroups
 Array of user groups for which to generate SDDL string
 .PARAMETER CIM
-Whether to contact CIM server (requred for remote computers)
+Whether to contact CIM server (required for remote computers)
 .EXAMPLE
 [string[]] $Users = "haxor"
 [string] $Server = COMPUTERNAME
@@ -507,7 +507,7 @@ Array of user groups or single group name
 .PARAMETER ComputerName
 Computer name which to query for group users
 .PARAMETER CIM
-Whether to contact CIM server (requred for remote computers)
+Whether to contact CIM server (required for remote computers)
 .EXAMPLE
 Get-GroupSID "USERNAME" -Machine "COMPUTERNAME"
 .EXAMPLE
@@ -608,7 +608,7 @@ Array of user names
 .PARAMETER ComputerName
 Target computer on which to perform query
 .PARAMETER CIM
-Whether to contact CIM server (requred for remote computers)
+Whether to contact CIM server (required for remote computers)
 .EXAMPLE
 Get-AccountSID "USERNAME" -Server "COMPUTERNAME"
 .EXAMPLE
@@ -736,7 +736,7 @@ New-Variable -Name SpecialDomains -Scope Script -Option Constant -Value @(
 if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 {
 	Write-Debug -Message "[$ThisModule] Initialize global constant variable: CheckInitUserInfo"
-	# check if constants alreay initialized, used for module reloading
+	# check if constants already initialized, used for module reloading
 	New-Variable -Name CheckInitUserInfo -Scope Global -Option Constant -Value $null
 
 	# TODO: should not be used
@@ -801,7 +801,7 @@ Export-ModuleMember -Variable NT_AUTHORITY_UserModeDrivers
 # $NT_AUTHORITY_Service = "D:(A;;CC;;;S-1-5-6)"
 # $NT_AUTHORITY_AnonymousLogon = "D:(A;;CC;;;S-1-5-7)"
 # $NT_AUTHORITY_Proxy = "D:(A;;CC;;;S-1-5-8)"
-# $NT_AUTHORITY_EnterpriseDomainControlers = "D:(A;;CC;;;S-1-5-9)"
+# $NT_AUTHORITY_EnterpriseDomainControllers = "D:(A;;CC;;;S-1-5-9)"
 # $NT_AUTHORITY_Self = "D:(A;;CC;;;S-1-5-10)"
 # $NT_AUTHORITY_AuthenticatedUsers = "D:(A;;CC;;;S-1-5-11)"
 # $NT_AUTHORITY_Restricted = "D:(A;;CC;;;S-1-5-12)"
@@ -814,7 +814,7 @@ Export-ModuleMember -Variable NT_AUTHORITY_UserModeDrivers
 # $NT_AUTHORITY_LocalService = "D:(A;;CC;;;S-1-5-19)"
 # $NT_AUTHORITY_NetworkService = "D:(A;;CC;;;S-1-5-20)"
 # "D:(A;;CC;;;S-1-5-21)" ENTERPRISE_READONLY_DOMAIN_CONTROLLERS (S-1-5-21-<root domain>-498)
-# $NT_AUTHORITY_EnterpriseReadOnlyDomainControlersBeta = "D:(A;;CC;;;S-1-5-22)"
+# $NT_AUTHORITY_EnterpriseReadOnlyDomainControllersBeta = "D:(A;;CC;;;S-1-5-22)"
 # "D:(A;;CC;;;S-1-5-23)" # Unknown
 
 # Application packages

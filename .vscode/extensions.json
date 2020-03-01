@@ -6,6 +6,7 @@
 		"ms-vscode.powershell",
 		"davidanson.vscode-markdownlint",
 		"gruntfuggly.todo-tree",
+		"streetsidesoftware.code-spell-checker",
 		"nachocab.highlight-dodgy-characters"
 	],
 	// List of extensions recommended by VS Code that should not be recommended for users of this workspace.

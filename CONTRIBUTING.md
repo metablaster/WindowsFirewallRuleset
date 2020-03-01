@@ -26,18 +26,18 @@ Few additional references worth reading:\
 ## Code style
 
 All of the scripts should use the same code style and order of code,
-without writing a long list of preffered code style\
+without writing a long list of preferred code style\
 it should be enough to take a look at the existing scripts and
 figure it out right away.
 
-Use cammel case for variables, types, symbols etc; lowercase for language keywords,
+Use camel case for variables, types, symbols etc; lowercase for language keywords,
 for more info about casing type:
 
 ```powershell
 [PSCustomObject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::get
 ```
 
-Each rule uses exactly the same order or paramters split into
+Each rule uses exactly the same order or parameters split into
 exactly the same number of lines.\
 This is so that when you need to change or search something
 it's easy to see what is where right away.
@@ -48,7 +48,7 @@ and may be different if needed for what ever reason:
 1. License notice
 2. Inclusions (modules, scripts)
 3. User input
-4. Installation directores
+4. Installation directories
 5. Removal of exiting rules
 6. Rules
 
@@ -56,7 +56,7 @@ and may be different if needed for what ever reason:
 
 Sections of code should be documented as shown in existing scripts.\
 To comment on things that need to be done add "TODO:" + comment,
-similary for notes add "NOTE:" + comment.\
+similarly for notes add "NOTE:" + comment.\
 For any generic comments you may want to add use line comments
 (preferred) and block comments only if comment is big.
 
@@ -92,9 +92,9 @@ Each function should have it's own test and each test should cover
 as much code/test cases as possible,
 making changes to exiting code can then be easily tested!\
 If test case/concept expands to several functions or
-if it completly unrelated to functions it should be a separate test.
+if it completely unrelated to functions it should be a separate test.
 
-All tests reside in "Test" folder which cotains subfolder for each module,
+All tests reside in "Test" folder which contains subfolder for each module,
 take a look there for examples.
 
 ## Modules and 3rd party code
@@ -117,8 +117,8 @@ to reduce merge conflicts among other things.\
 Do not wait too much to push large commits which are not clear enough in terms
 what issue is supposed to be resolved or improved.
 
-**Avoid making huge changes to existing code** without first discusing the matter,
-new code and additions is not problem thogh.
+**Avoid making huge changes to existing code** without first discussing the matter,
+new code and additions is not problem though.
 
 ## Portability and other systems
 

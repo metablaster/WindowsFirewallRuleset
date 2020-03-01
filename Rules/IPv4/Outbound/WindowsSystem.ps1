@@ -283,7 +283,7 @@ Test-File $Program @Logs
 
 # TODO: no comment
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Install Compability Advisor Inventory Tool" -Service Any -Program $Program `
+-DisplayName "Install Compatibility Advisor Inventory Tool" -Service Any -Program $Program `
 -PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
 -Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 -LocalUser Any `

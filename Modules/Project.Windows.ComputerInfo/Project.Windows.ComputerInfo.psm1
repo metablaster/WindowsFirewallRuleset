@@ -65,7 +65,7 @@ None. You cannot pipe objects to Get-ComputerName
 .OUTPUTS
 [string] computer name in form of COMPUTERNAME
 .NOTES
-TODO: implement queriying computers on network by specifying IP address
+TODO: implement querying computers on network by specifying IP address
 #>
 function Get-ComputerName
 {

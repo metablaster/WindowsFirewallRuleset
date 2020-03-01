@@ -64,8 +64,8 @@ None. You cannot pipe objects to Test-SystemRequirements
 .OUTPUTS
 None. Error message is shown if check failed, system info otherwise.
 .NOTES
-TODO: learn required NET version by scaning scripts (ie. adding .COMPONENT to comments)
-TODO: learn repo dir automaticaly (using git?)
+TODO: learn required NET version by scanning scripts (ie. adding .COMPONENT to comments)
+TODO: learn repo dir automatically (using git?)
 TODO: we don't use logs in this module
 #>
 function Test-SystemRequirements
@@ -76,7 +76,7 @@ function Test-SystemRequirements
 		[bool] $Check = $SystemCheck
 	)
 
-	# disabled when runing scripts from SetupFirewall.ps1 script
+	# disabled when running scripts from SetupFirewall.ps1 script
 	if ($Check)
 	{
 		# print info
@@ -189,7 +189,7 @@ function Test-SystemRequirements
 			if (!$StatusGood)
 			{
 				Write-Error -Category OperationStopped -TargetObject $Version `
-					-Message "Unable to proceed, minimum requried NET Framework version to run these scripts is 3.5"
+					-Message "Unable to proceed, minimum required NET Framework version to run these scripts is 3.5"
 				Write-Information -Tags "Project" -MessageData "Your NET Framework version is: $NETMajor.$NETMinor"
 				exit
 			}
@@ -258,7 +258,7 @@ function Test-SystemRequirements
 			exit
 		}
 
-		# Check requried modules are loaded or present in modules directory
+		# Check required modules are loaded or present in modules directory
 		$Pester = Get-Module -Name Pester -ListAvailable | Select-Object -ExpandProperty Version
 		if (!$Pester)
 		{

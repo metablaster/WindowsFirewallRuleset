@@ -1,6 +1,6 @@
 
 # https://github.com/PowerShell/PSScriptAnalyzer/tree/master/RuleDocumentation
-# NOTE: PSGalery ruleset is a duplicate of these
+# NOTE: PSGallery ruleset is a duplicate of these
 
 @{
 	IncludeRules = @(
@@ -45,7 +45,7 @@
 		'PSProvideCommentHelp',
 		'PSAvoidUsingWriteHost',
 		#
-		# ScriptSecutiry
+		# ScriptSecurity
 		#
 		'PSAvoidUsingPlainTextForPassword',
 		'PSAvoidUsingComputerNameHardcoded',
@@ -167,7 +167,7 @@
 		}
 
 		PSUseConsistentIndentation = @{
-			# TODO: temporarly disabled
+			# TODO: temporarily disabled
 			Enable = $false
 			# Represents the kind of indentation to be used. Possible values are: space, tab (default = space)
 			Kind = 'tab' # editor.insertSpaces, editor.detectIndentation
@@ -230,7 +230,7 @@
 		}
 
 		#
-		# TODO: temporarly disabled
+		# TODO: temporarily disabled
 		#
 
 		PSUseCompatibleCmdlets = @{

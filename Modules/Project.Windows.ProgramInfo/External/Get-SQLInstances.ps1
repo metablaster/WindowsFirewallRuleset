@@ -126,7 +126,7 @@ Following modifications by metablaster based on both originals 15 Feb 2020:
 - Include license into file (MIT all 3), links to original sites and add appropriate Copyright for each author/contributor
 - update reported server versions
 - added more verbose and debug output, path formatting.
-- Replaced WMI calls with CIM calls which are more universal and cross platfrom that WMI
+- Replaced WMI calls with CIM calls which are more universal and cross platform that WMI
 
 Links to original and individual versions of code
 https://github.com/RamblingCookieMonster/PowerShell
@@ -456,7 +456,7 @@ function Get-SQLInstances
 						{
 							$MatchingService = $SQLServices |
 							Where-Object {
-								# We need to format here because Instance path is formated, while the path from CIM query isn't
+								# We need to format here because Instance path is formatted, while the path from CIM query isn't
 								# TODO: can be improved by formatting when all is done, ie. at the end before returning.
 								(Format-Path $_.PathName) -like "$( $Instance.SQLBinRoot )*" -or $_.PathName -like "`"$( $Instance.SQLBinRoot )*"
 							} | Select-Object -First 1

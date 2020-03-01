@@ -23,7 +23,7 @@ store apps for admins, internet browser (auto loads)
 
 ## High priority (Modules)
 
-- Revisit code and make consitent PSCustomObject properties for all function outputs
+- Revisit code and make consistent PSCustomObject properties for all function outputs
 - Need to see which functions/commands may throw and setup try catch blocks
 - Revisit parameter validation for functions,
 specifically acceptance of NULL or empty
@@ -41,12 +41,13 @@ rule parameters, also not all are the same.
 
 ## High priority (Code style)
 
-- Limit code to 80-100 columns rule, subject to exceptoins
+- Limit code to 80-100 columns rule, subject to exceptions
 
 ## High priority (Test and debugging)
 
 - Convert tests to use Pester if possible or separate them into:
 pester tests and experiment tests
+- Some test fail to run in "develop" mode due to missing variables
 
 ## High priority (Partially fixed, need testing)
 
@@ -60,7 +61,7 @@ need to select latest or add multiple rules.
 - DefaultParameterSetName for functions with parameter sets is missing
 - Revisit how functions return and what they return,
 return keyword vs Write-Output, if piping is needed after all
-- We probalby don't need VSSetup module
+- We probably don't need VSSetup module
 - Line numbers for verbose and debug messages
 
 ## Medium priority (Project scripts)
@@ -76,7 +77,7 @@ ie. group - subgroup, Company - Program
 
 ## Medium priority (Documentation)
 
-- update FirewallParamters.md with a list of incompatible paramters for reference
+- update FirewallParameters.md with a list of incompatible parameters for reference
 
 ## Medium priority (Test and debugging)
 
@@ -94,7 +95,7 @@ ie. group - subgroup, Company - Program
 
 - Function to check executables for signature and virus total hash
 - localhost != `[Environment]::MachineName` because strings are not the same
-- Write-Error streams should be extened to include exception record etc.
+- Write-Error streams should be extended to include exception record etc.
 
 ## Low priority (Project scripts)
 
@@ -107,7 +108,7 @@ also test for weakness
 ## Low priority (Rules)
 
 - apply local IP to all rules, as optional feature because it depends if IP is static
-- Implement unique names and groups for rules, -Name and -Group paramter vs -Display*
+- Implement unique names and groups for rules, -Name and -Group parameter vs -Display*
 
 ## Low priority (Other)
 

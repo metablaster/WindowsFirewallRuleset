@@ -66,7 +66,7 @@ Additional string after -> (arrow)
 .EXAMPLE
 Update-Context "IPv4" "Outbound" "RuleGroup"
 
-[IPv4.Outbout -> RuleGroup]
+[IPv4.Outbound -> RuleGroup]
 .INPUTS
 None. You cannot pipe objects to Update-Context
 .OUTPUTS
@@ -311,7 +311,7 @@ function Get-NetworkServices
 		return
 	}
 
-	# Recusively get powershell scripts in input folder
+	# Recursively get powershell scripts in input folder
 	$Files = Get-ChildItem -Path $Folder -Recurse -Filter *.ps1
 	if (!$Files)
 	{
@@ -467,7 +467,7 @@ Test-TargetComputer "COMPUTERNAME"
 .INPUTS
 None. You cannot pipe objects to Test-TargetMachine
 .OUTPUTS
-[bool] false or true if target host is reponsive
+[bool] false or true if target host is responsive
 .NOTES
 None.
 #>
@@ -504,7 +504,7 @@ function Test-TargetComputer
 if (!(Get-Variable -Name CheckInitUtility -Scope Global -ErrorAction Ignore))
 {
 	Write-Debug -Message "[$ThisModule] Initialize global constant: CheckInitUtility"
-	# check if constants alreay initialized, used for module reloading
+	# check if constants already initialized, used for module reloading
 	New-Variable -Name CheckInitUtility -Scope Global -Option Constant -Value $null
 
 	Write-Debug -Message "[$ThisModule] Initialize global constant: ServiceHost"

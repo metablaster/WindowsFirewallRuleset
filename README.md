@@ -34,7 +34,7 @@ scripts and functions used to gather info relevant for building a firewall such 
 include more rules.
 - Currently there are some 650+ firewall rules included,
 9 modules with 50+ functions, random scripts and useful documentation.
-- You can choose which rulles you want, and apply only those or
+- You can choose which rules you want, and apply only those or
 apply them all with master script to your firewall.
 - All the rules are loaded into Local Group Policy (GPO),
 giving you full power over the default windows firewall.
@@ -54,7 +54,7 @@ network interfaces, specific programs, services etc.
 or are redundant due to ie. uninstalled program or a missing windows service
 which no longer exists or are redundant/invalid for what ever other reason.
 
-4. Changing rule attributes such as ports, adresses and similar is much easier
+4. Changing rule attributes such as ports, addresses and similar is much easier
 since the rules are in scripts, so you can use editor tools such as CTRL + F
 to perform bulk operations on your rules,
 doing this in Windows firewall GUI is beyond all pain.
@@ -62,12 +62,12 @@ doing this in Windows firewall GUI is beyond all pain.
 5. Default outbound is block unless there is a rule to explicitly allow traffic,
 in default windows firewall this is not possible unless you have rules for
 every possible program/service, thanks to this collection of rules
-setting default outbound to block requres very little additinoal work.
+setting default outbound to block requires very little additional work.
 
 # Licenses
 
 This project **"Windows Firewall Ruleset"** is licensed under **MIT** license.\
-3rd party and sublicenced code is located inside their own folders for
+3rd party and sublicensed code is located inside their own folders for
 organizational purposes, usually called "External".
 
 The project maintains "per file" licenses and Copyright notices.
@@ -112,8 +112,8 @@ Windows 7 or Server 2008
 
 **WARNING:**
 
-- You may loose internet conectivity for some of your programs or in rare cases
-even lose internet conectivity completely, if that happens,
+- You may loose internet connectivity for some of your programs or in rare cases
+even lose internet connectivity completely, if that happens,
 you can either temporarily allow outbound rules or
 run `ResetFirewall.ps1` script, to reset firewall to previous state and
 clear GPO firewall.
@@ -125,7 +125,7 @@ or the script does not solve your problems.
 you have rules in GPO whose group name interfere with group names
 from this ruleset, however
 **this does not apply to** `ResetFirewall.ps1` which will clear GPO rules
-completly and leave only those in control panel.
+completely and leave only those in control panel.
 - If you want to be 100% sure please export your current GPO rules first,
 for more info see [ManageGPOFirewall.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/ManageGPOFirewall.md)
 - The scripts will ask you what rules you want,
@@ -140,12 +140,12 @@ Windows does need IPv6!
 such as force loading rules and various default actions then visit
 `Config\ProjectSettings.ps1` and there you'll find global variables which
 are used for this.
-- If you're running scripts for first time it's higly recommended to load all
+- If you're running scripts for first time it's highly recommended to load all
 rules for which you have programs installed on system,
-it should be easy to delete what you do not wan't in GPO,
+it should be easy to delete what you do not want in GPO,
 rather than later searching scripts for what you may have missed.
 - Loading rules into an empty GPO should be very fast,
-however loading into GPO which already contains rules will be significally slower
+however loading into GPO which already contains rules will be significantly slower
 (depends on number of existing rules)
 - All errors and warnings will be saved to `Logs` directory, so you can review
 these logs if you want to fix some problem.
@@ -168,7 +168,7 @@ an option to run PowerShell core as administrator
 Get-ExecutionPolicy
 ```
 
-remeber what the ouput of the above command is.
+remember what the output of the above command is.
 6. Get current execution policy:
 
 ```powershell
@@ -181,7 +181,7 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force
 cd C:\
 ```
 
-8. cd into that folder, ofcourse rename the command if your extracted folder is
+8. cd into that folder, of course rename the command if your extracted folder is
 called something else:
 
 ```powershell
@@ -219,7 +219,7 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force
 Local Group Policy, not all the rules are enabled by default and you may want to
 toggle default Allow/Block behavior for some rules,
 rules for programs which do not exist need to be made additionally.
-15. If you're unable to connect to internet, you can temporarly open
+15. If you're unable to connect to internet, you can temporarily open
 outbound firewall in GPO, that should work,
 if not and you're unable to troubleshoot the problem,
 then reset firewall as explained before and take a look into `Readme` folder.
@@ -230,18 +230,18 @@ Rules are loaded into Local group policy,
 follow bellow steps to open local group policy.
 
 1. Press Windows key and type: `secpol.msc`
-2. Righ click on `secpol.msc` and click `Run as administrator`
+2. Right click on `secpol.msc` and click `Run as administrator`
 3. Expand node: `Windows Defender Firewall with Advanced Security`
 4. Expand node:
 `Windows Defender Firewall with Advanced Security - Local Group Policy Object`
-5. Click on either `Inbound` or `Outbound` node to view and manage the rulles
+5. Click on either `Inbound` or `Outbound` node to view and manage the rules
 you applied with Powershell script.
 
 # Applying individual rulesets
 
 If you want to apply only specific rules there are 2 ways to do this:
 
-1. Execute `SetupFirewall.ps1` and hit enter only for rullesets you want,
+1. Execute `SetupFirewall.ps1` and hit enter only for rulesets you want,
 otherwise type `n` and hit enter to skip current ruleset.
 2. Inside powershell navigate to folder containing the ruleset script you want,
 and execute individual Powershell script.
@@ -259,7 +259,7 @@ Local Group Policy, right click and delete.\
 To revert to your old firewall state, you will need to delete all the rules
 from GPO, and set all properties to "Not configured" when right clicking on
 node `Windows Defender Firewall with Advanced Security - Local Group Policy Object`\
-Deleting all rules or reveting to previsous state can also be done with
+Deleting all rules or reverting to previous state can also be done with
 `ResetFirewall.ps1` script.
 
 # Manage loaded rules
@@ -267,12 +267,12 @@ Deleting all rules or reveting to previsous state can also be done with
 There are 2 ways to manage your rules:
 
 1. Using Local Group Policy, this method gives you basic freedom on what
-you can do whith the rules, such as disabling them or changing some attributes.
+you can do with the rules, such as disabling them or changing some attributes.
 For more information see [ManageGPOFirewall.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/ManageGPOFirewall.md)
-2. Editting Powershell scripts, this method gives you full control,
+2. Editing Powershell scripts, this method gives you full control,
 you can improve the rules, add new ones or screw them up.
 
-What ever your setup is, you will surelly need to perform additinal work such as
+What ever your setup is, you will surely need to perform additional work such as
 adding more rules in GPO to allow programs for which rules do not exist,
 or to reconfigure existing rules.
 
@@ -292,7 +292,7 @@ There are two methods to be up to date with firewall:
 
 1. First method requires you to download scripts, first use the "branch" button
 here on this site to switch to either master or develop branch,
-next use "Clone or download" button and downlaod zip file.
+next use "Clone or download" button and download zip file.
 
 2. Second method is good if you want to do it in powershell console without
 visiting this site, you will need git (link above), github account and
@@ -330,7 +330,7 @@ from master (stable) branch:
 
 Of course you can switch to from one branch to another with git in powershell
 as many times as you want and all files will be auto updated without the need to
-redownload or re-setup anything, for more info see [git documentation](https://git-scm.com/doc)
+re-download or re-setup anything, for more info see [git documentation](https://git-scm.com/doc)
 
 That's it, your scripts are now up to date, execute them as you desire
 (or follow steps from "Quick start" section) to apply changes to your firewall.
@@ -352,7 +352,7 @@ for example, for ICMP rules you would provide a link to [IANA](https://www.iana.
 with relevant reference document.
 2. If you would like to suggest new rules or improving existing ones,
 but you can't push an update here, please open new issue here on github and
-provide details prefferably with documentation.
+provide details preferably with documentation.
 3. To contribute rules, it is also important that each rule contains good description
 of it's purpose, when a user clicks on a rule in firewall GUI he wants to see
 what this rule is about and easily conclude whether to enable/disable the rule
@@ -366,7 +366,7 @@ any user or no explanation what is this supposed to allow or block is not accept
 # More information and help
 
 Inside the [Readme](https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Readme)
-folder you will find usefull information not only about this project but also
+folder you will find useful information not only about this project but also
 general information on how to troubleshoot firewall and network problems,
 or gather more relevant information.
 
