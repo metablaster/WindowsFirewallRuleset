@@ -11,6 +11,12 @@
 		"comments": false,
 		"strings": false
 	},
+	"editor.rulers": [
+		100
+	],
+	"workbench.colorCustomizations": {
+		"editorRuler.foreground": "#4063ff"
+	},
 	"editor.trimAutoWhitespace": true,
 	"editor.insertSpaces": false,
 	"editor.formatOnPaste": true,
