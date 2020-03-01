@@ -1,116 +1,135 @@
 
 # List of stuff that needs to be done
 
-This is a project global list which applies to several or all scripts,
-for smaller todo's see individual files
+This is a project global list which applies to several or all scripts.
 
-## Selected (Modules)
+For smaller TODO's local to specific scripts and files see individual files, for example with
+CTRL + F in VSCode and search for "TODO".
 
-- Revisit function parameters, their types, aliases etc..
-- Change bool parameters to switch where possible
-- Revisit naming convention for ConvertFrom/ConvertTo it's not clear what is being converted,
-some other functions also have odd names
+If you installed "TODO Tree" extension as discussed in
+[CONTRIBUTING.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/CONTRIBUTING.md)
+then then this process should be much easier.
 
-## Selected (Rules)
+TODO's in this file are categorized into following sections:
 
-- Paths to fix: nvidia, onedrive, visio, project
-- rules to fix: qbittorrent, steam, vcpkg, msys2, store apps for admins,
-internet browser (auto loads)
-- Now that common parameters are removed need to update the order of rule parameters,
-also not all are the same.
+1. Selected
+2. High priority
+3. Medium priority
+4. Low priority
 
-## Selected (Code style)
+"Selected" means it's currently being worked on.
 
-- Limit code to 100 columns rule, subject to exceptions
-- Move duplicate and global TODO's from scripts here into global TODO list
+## Selected
 
-## Selected (Project scripts)
+1. Modules
 
-- Take out of deprecated scripts what can be used, remove the rest
+    - Revisit function parameters, their types, aliases etc..
+    - Change bool parameters to switch where possible
+    - Revisit naming convention for ConvertFrom/ConvertTo it's not clear what is being converted,
+    some other functions also have odd names
 
-## High priority (Modules)
+2. Code style
 
-- Revisit code and make consistent PSCustomObject properties for all function outputs
-- Need to see which functions/commands may throw and setup try catch blocks
-- Revisit parameter validation for functions, specifically acceptance of NULL or empty
+    - Limit code to 100 columns rule.
+    - Move duplicate and global TODO's from scripts here into global TODO list
 
-## High priority (Project scripts)
+3. Project scripts
 
-- Apply only rules for which executable exists, Test-File function
-- Implement Importing/Exporting rules
-- auto detect interfaces
+    - Take out of deprecated scripts what can be used, remove the rest
 
-## High priority (Test and debugging)
+## High priority
 
-- Convert tests to use Pester if possible or separate them into:
-pester tests and experiment tests
-- Some test fail to run in "develop" mode due to missing variables
+1. Modules
 
-## High priority (Partially fixed, need testing)
+    - Revisit code and make consistent PSCustomObject properties for all function outputs
+    - Need to see which functions/commands may throw and setup try catch blocks
+    - Revisit parameter validation for functions, specifically acceptance of NULL or empty
 
-- Most program query functions return multiple program instances,
-need to select latest or add multiple rules.
+2. Project scripts
 
-## Medium priority (Modules)
+    - Apply only rules for which executable exists, Test-File function
+    - Implement Importing/Exporting rules
+    - auto detect interfaces
 
-- make possible to apply rules to remote machine, currently partially supported
-- Provide following keywords in function comments: .DESCRIPTION .LINK .COMPONENT
-- DefaultParameterSetName for functions with parameter sets is missing
-- Revisit how functions return and what they return, return keyword vs Write-Output,
-if piping is needed after all
-- We probably don't need VSSetup module
-- Line numbers for verbose and debug messages
-- Modules should be imported into global scope
+3. Rules
 
-## Medium priority (Project scripts)
+    - Paths to fix: nvidia, onedrive, visio, project
+    - rules to fix: qbittorrent, steam, vcpkg, msys2, store apps for admins,
+    internet browser (auto loads)
+    - Now that common parameters are removed need to update the order of rule parameters,
+    also not all are the same.
 
-- Access is denied randomly while executing rules, need some check around this
-- make possible to apply or enable only rules relevant for current firewall profile
-- Add #Requires -Modules to scripts, possibly removing module inclusions
+4. Test and debugging
 
-## Medium priority (Rules)
+    - Convert tests to use Pester if possible or separate them into:
+    pester tests and experiment tests
+    - Some test fail to run in "develop" mode due to missing variables
 
-- some rules are missing comments
-- make display names and groups modular for easy search, ie. group - subgroup, Company - Program
+5. Partially fixed, need testing
 
-## Medium priority (Documentation)
+    - Most program query functions return multiple program instances,
+    need to select latest or add multiple rules.
 
-- update FirewallParameters.md with a list of incompatible parameters for reference
+## Medium priority
 
-## Medium priority (Test and debugging)
+1. Modules
 
-- Move NET.IP tests into test folder, clean up directory add streams
+    - make possible to apply rules to remote machine, currently partially supported
+    - Provide following keywords in function comments: .DESCRIPTION .LINK .COMPONENT
+    - DefaultParameterSetName for functions with parameter sets is missing
+    - Revisit how functions return and what they return, return keyword vs Write-Output,
+    if piping is needed after all
+    - We probably don't need VSSetup module
+    - Line numbers for verbose and debug messages
+    - Modules should be imported into global scope
 
-## Medium priority (Other)
+2. Project scripts
 
-- Do CTRL + F in VSCode and search for "TODO"
+    - Access is denied randomly while executing rules, need some check around this
+    - make possible to apply or enable only rules relevant for current firewall profile
+    - Add #Requires -Modules to scripts, possibly removing module inclusions
 
-## Medium priority (Never ending)
+3. Rules
 
-- 3rd party scripts and modules need to be checked for updates
+    - some rules are missing comments
+    - make display names and groups modular for easy search, ie. group - subgroup, Company - Program
 
-## Low priority (Modules)
+4. Test and debugging
 
-- Function to check executables for signature and virus total hash
-- localhost != `[Environment]::MachineName` because strings are not the same
-- Write-Error streams should be extended to include exception record etc.
+    - Move NET.IP tests into test folder, clean up directory add streams
 
-## Low priority (Project scripts)
+5. Documentation
 
-- Detect if script ran manually, to be able to reset errors and warning status
-- Test already loaded rules if pointing to valid program or service, also test for weakness
-- Count invalid paths in each script
-- Measure execution time for each or all scripts.
+    - update FirewallParameters.md with a list of incompatible parameters for reference
 
-## Low priority (Rules)
+6. Never ending
 
-- apply local IP to all rules, as optional feature because it depends if IP is static
-- Implement unique names and groups for rules, -Name and -Group parameter vs -Display*
+    - 3rd party scripts and modules need to be checked for updates
 
-## Low priority (Code style)
+## Low priority
 
-- Separate comment based keywords so that there is one line between a comment and next keyword
+1. Modules
 
-## Low priority (Other)
+    - Function to check executables for signature and virus total hash
+    - localhost != `[Environment]::MachineName` because strings are not the same
+    - Write-Error streams should be extended to include exception record etc.
 
-- Test for 32bit powershell and OS.
+2. Project scripts
+
+    - Detect if script ran manually, to be able to reset errors and warning status
+    - Test already loaded rules if pointing to valid program or service, also test for weakness
+    - Count invalid paths in each script
+    - Measure execution time for each or all scripts.
+
+3. Rules
+
+    - apply local IP to all rules, as optional feature because it depends if IP is static
+    - Implement unique names and groups for rules, -Name and -Group parameter vs -Display*
+
+4. Code style
+
+    - Separate comment based keywords so that there is one line between a comment and next keyword
+
+5. Other
+
+    - Test for 32bit powershell and OS.
