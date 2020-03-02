@@ -43,8 +43,8 @@ Write-Information -Tags "User" -MessageData "INFO: Setting up public firewall pr
 
 Set-NetFirewallProfile -Profile Public -PolicyStore $PolicyStore `
 	-Enabled True -DefaultInboundAction Block -DefaultOutboundAction Block -AllowInboundRules True `
-	-AllowLocalFirewallRules False -AllowLocalIPsecRules False -AllowUnicastResponseToMulticast False `
-	-NotifyOnListen True -EnableStealthModeForIPsec True `
+	-AllowLocalFirewallRules False -AllowLocalIPsecRules False `
+	-NotifyOnListen True -EnableStealthModeForIPsec True -AllowUnicastResponseToMulticast False `
 	-LogAllowed False -LogBlocked True -LogIgnored True -LogMaxSizeKilobytes 1024 `
 	-AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
 	-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" @Logs
@@ -54,8 +54,8 @@ Write-Information -Tags "User" -MessageData "INFO: Setting up private firewall p
 
 Set-NetFirewallProfile -Profile Private -PolicyStore $PolicyStore `
 	-Enabled True -DefaultInboundAction Block -DefaultOutboundAction Block -AllowInboundRules True `
-	-AllowLocalFirewallRules False -AllowLocalIPsecRules False -AllowUnicastResponseToMulticast True `
-	-NotifyOnListen True -EnableStealthModeForIPsec True `
+	-AllowLocalFirewallRules False -AllowLocalIPsecRules False `
+	-NotifyOnListen True -EnableStealthModeForIPsec True -AllowUnicastResponseToMulticast True `
 	-LogAllowed False -LogBlocked True -LogIgnored True -LogMaxSizeKilobytes 1024 `
 	-AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
 	-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" @Logs
@@ -65,8 +65,8 @@ Write-Information -Tags "User" -MessageData "INFO: Setting up domain firewall pr
 
 Set-NetFirewallProfile -Profile Domain -PolicyStore $PolicyStore `
 	-Enabled True -DefaultInboundAction Block -DefaultOutboundAction Block -AllowInboundRules True `
-	-AllowLocalFirewallRules False -AllowLocalIPsecRules False -AllowUnicastResponseToMulticast True `
-	-NotifyOnListen True -EnableStealthModeForIPsec True `
+	-AllowLocalFirewallRules False -AllowLocalIPsecRules False `
+	-NotifyOnListen True -EnableStealthModeForIPsec True -AllowUnicastResponseToMulticast True `
 	-LogAllowed False -LogBlocked True -LogIgnored True -LogMaxSizeKilobytes 1024 `
 	-AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
 	-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" @Logs

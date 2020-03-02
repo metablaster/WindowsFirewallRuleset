@@ -130,7 +130,8 @@
 
 		PSUseConsistentWhitespace = @{
 			Enable = $true
-			# Checks if there is a space after the opening brace and a space before the closing brace.
+			# Checks if there is a space after the opening brace and a space
+			# before the closing brace.
 			# E.g. if ($true) { foo } instead of if ($true) {bar}
 			# default = true (powershell.codeFormatting.WhitespaceInsideBrace)
 			CheckInnerBrace = $true
@@ -147,7 +148,8 @@
 			# E.g. $x = 1 instead of $x=1
 			# default = true (powershell.codeFormatting.whitespaceAroundOperator)
 			CheckOperator = $true
-			# Checks if a pipe is surrounded on both sides by a space but ignores redundant whitespace.
+			# Checks if a pipe is surrounded on both sides by a space but
+			# ignores redundant whitespace.
 			# E.g. foo | bar instead of foo|bar
 			# default = true (powershell.codeFormatting.WhitespaceAroundPipe)
 			CheckPipe = $true
@@ -167,11 +169,14 @@
 
 		PSUseConsistentIndentation = @{
 			Enable = $true
-			# Represents the kind of indentation to be used. Possible values are: space, tab (default = space)
+			# Represents the kind of indentation to be used.
+			# Possible values are: space, tab (default = space)
 			Kind = 'tab' # editor.insertSpaces, editor.detectIndentation
 			# Whether to increase indentation after a pipeline for multi-line statements
-			# IncreaseIndentationForFirstPipeline (default), IncreaseIndentationAfterEveryPipeline, NoIndentation
-			PipelineIndentation = 'IncreaseIndentationAfterEveryPipeline' # powershell.codeFormatting.pipelineIndentationStyle
+			# IncreaseIndentationForFirstPipeline (default),
+			# IncreaseIndentationAfterEveryPipeline, NoIndentation
+			# powershell.codeFormatting.pipelineIndentationStyle
+			PipelineIndentation = 'IncreaseIndentationAfterEveryPipeline'
 			# Indentation size in the number of space characters (default = 4)
 			IndentationSize = 4 # editor.tabSize
 		}

@@ -166,7 +166,8 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 		}
 		catch
 		{
-			Write-Error -TargetObject $_.TargetObject -Message "Windows Remote Management connection test to '$PolicyStore' failed: $_"
+			Write-Error -TargetObject $_.TargetObject `
+				-Message "Windows Remote Management connection test to '$PolicyStore' failed: $_"
 			exit
 		}
 	}
@@ -178,7 +179,8 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	New-Variable -Name ForceLoad -Scope Global -Option Constant -Value $false
 }
 
-# Read only variables, meaning these can be modified by code at any time, and, only once per session by users,
+# Read only variables, meaning these can be modified by code at any time,
+# and, only once per session by users.
 # Changing these requires powershell restart, except if Develop = $true
 if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignore))
 {
@@ -191,7 +193,8 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -Erro
 	Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $false
 }
 
-# Removable variables, meaning these can be modified by code at any time, and, only once per session by users
+# Removable variables, meaning these can be modified by code at any time,
+# And, only once per session by users.
 # Changing these requires powershell restart, except if Develop = $true
 if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -ErrorAction Ignore))
 {
