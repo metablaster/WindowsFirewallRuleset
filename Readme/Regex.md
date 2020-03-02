@@ -36,3 +36,26 @@ New-NetFirewallRule -LocalPort 546 -RemotePort IPHTTPSout
 ```regex
 -LocalPort (\w+) -RemotePort (\w+) ?
 ```
+
+# Get Profile property if value also contains variable names
+
+```powershell
+New-NetFirewallRule -Profile Any
+New-NetFirewallRule -Profile $Profile
+New-NetFirewallRule -Profile Private, Domain
+```
+
+```regex
+-Profile [\$|\w]\w+,? ?\w+
+```
+
+# Get local and remote IPv6 address in any notation
+
+```powershell
+New-NetFirewallRule -LocalAddress ff01::/16 -RemoteAddress Any
+New-NetFirewallRule -LocalAddress Any -RemoteAddress ff01::2
+```
+
+```regex
+-LocalAddress [\w&&:&&/]+ -RemoteAddress [\w&&:&&/]+
+```

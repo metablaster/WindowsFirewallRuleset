@@ -225,7 +225,7 @@ New-NetFirewallRule -DisplayName "Multicast Listener Done (132)" `
 New-NetFirewallRule -DisplayName "Router Solicitation (133)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
 	-Service Any -Program System -Group $Group `
-	-Enabled True -Action Allow --Direction $Direction -Protocol ICMPv6 -IcmpType 133 `
+	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 133 `
 	-LocalAddress Any -RemoteAddress $RouterSpace `
 	-LocalPort Any -RemotePort Any `
 	-Localuser $NT_AUTHORITY_System `
@@ -247,7 +247,7 @@ New-NetFirewallRule -DisplayName "Router Advertisement (134)" `
 New-NetFirewallRule -DisplayName "Neighbor Solicitation (135)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
 	-Service Any -Program System -Group $Group `
-	-Enabled True -Action Allow --Direction $Direction -Protocol ICMPv6 -IcmpType 135 `
+	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 135 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
 	-LocalPort Any -RemotePort Any `
 	-Localuser $NT_AUTHORITY_System `
@@ -258,7 +258,7 @@ New-NetFirewallRule -DisplayName "Neighbor Solicitation (135)" `
 New-NetFirewallRule -DisplayName "Neighbor Advertisement (136)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
 	-Service Any -Program System -Group $Group `
-	-Enabled True -Action Allow --Direction $Direction -Protocol ICMPv6 -IcmpType 136 `
+	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 136 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
 	-LocalPort Any -RemotePort Any `
 	-Localuser $NT_AUTHORITY_System `
@@ -343,7 +343,7 @@ New-NetFirewallRule -DisplayName "Inverse Neighbor Discovery Advertisement Messa
 New-NetFirewallRule -DisplayName "Multicast Listener Report Version 2 (143)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
 	-Service Any -Program System -Group $Group `
-	-Enabled True -Action Allow --Direction $Direction -Protocol ICMPv6 -IcmpType 143 `
+	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 143 `
 	-LocalAddress Any -RemoteAddress LocalSubnet6, ff02::16 `
 	-LocalPort Any -RemotePort Any `
 	-Localuser $NT_AUTHORITY_System `
