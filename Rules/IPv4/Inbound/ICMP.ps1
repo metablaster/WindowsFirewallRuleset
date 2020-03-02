@@ -142,7 +142,7 @@ New-NetFirewallRule -Platform $Platform `
 	-Direction $Direction -Protocol ICMPv4 -IcmpType 12 -LocalAddress Any -RemoteAddress Any `
 	-EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_System `
 	-Description "If the gateway or host processing a datagram finds a problem with the header parameters such that it cannot complete processing the
-datagram it must discard the datagram.  One potential source of such a problem is with incorrect arguments in an option.
+datagram it must discard the datagram. One potential source of such a problem is with incorrect arguments in an option.
 The gateway or host may also notify the source host via the parameter problem message.
 This message is only sent if the error caused the datagram to be discarded.
 

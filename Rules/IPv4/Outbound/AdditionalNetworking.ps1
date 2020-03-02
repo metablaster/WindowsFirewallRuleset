@@ -123,7 +123,7 @@ New-NetFirewallRule -Platform $Platform `
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Connected Devices Platform" -Service CDPSvc -Program $ServiceHost `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile  Private, Domain -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 	-LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Outbound rule for Connected Devices Platform traffic." @Logs | Format-Output @Logs

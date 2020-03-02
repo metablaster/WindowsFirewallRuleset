@@ -46,7 +46,7 @@
 	"powershell.codeFormatting.WhitespaceAroundPipe": true,
 	"powershell.codeFormatting.whitespaceAfterSeparator": true,
 	// PSUseConsistentIndentation
-	"powershell.codeFormatting.pipelineIndentationStyle": "NoIndentation",
+	"powershell.codeFormatting.pipelineIndentationStyle": "IncreaseIndentationAfterEveryPipeline",
 	// PSAlignAssignmentStatement
 	"powershell.codeFormatting.alignPropertyValuePairs": false,
 	// PSUseCorrectCasing

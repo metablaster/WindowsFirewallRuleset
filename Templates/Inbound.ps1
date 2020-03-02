@@ -60,8 +60,7 @@ if (!(Approve-Execute @Logs)) { exit }
 $TargetProgramRoot = "%ProgramFiles%\TargetProgram"
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore `
-	-Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
 #
 # Rules for TargetProgram

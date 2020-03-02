@@ -93,7 +93,7 @@ New-NetFirewallRule -Platform $Platform `
 	-Direction $Direction -Protocol UDP -LocalAddress 224.0.1.0-224.0.1.255 -RemoteAddress Any `
 	-EdgeTraversalPolicy Block -LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Addresses in the Internetwork Control Block are used for protocol
-control traffic that MAY be forwarded through the Internet.  Examples
+control traffic that MAY be forwarded through the Internet. Examples
 include 224.0.1.1 (Network Time Protocol (NTP)) and 224.0.1.68 (mdhcpdiscover)." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `

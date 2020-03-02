@@ -148,7 +148,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot) @Logs) -or $ForceLoad)
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "ServiceHub programs  provide identity (sign-in for VS),
+		-Description "ServiceHub programs provide identity (sign-in for VS),
 	and support for internal services (like extension management, compiler support, etc).
 	These are not optional and are designed to be running side-by-side with devenv.exe." @Logs | Format-Output @Logs
 
@@ -179,7 +179,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot) @Logs) -or $ForceLoad)
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "ServiceHub services  provide identity (sign-in for VS),
+		-Description "ServiceHub services provide identity (sign-in for VS),
 	and support for internal services (like extension management, compiler support, etc).
 	These are not optional and are designed to be running side-by-side with devenv.exe." @Logs | Format-Output @Logs
 
@@ -210,7 +210,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot) @Logs) -
 		-LocalUser $UsersGroupSDDL `
 		-Description "Run when updating or using add features to VS in installer." @Logs | Format-Output @Logs
 
-	# TODO: testing:  # (Get-SDDLFromAccounts @("NT AUTHORITY\SYSTEM", "$UserAccount")) `
+	# TODO: testing: # (Get-SDDLFromAccounts @("NT AUTHORITY\SYSTEM", "$UserAccount")) `
 	$Program = "$VSInstallerRoot\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\BackgroundDownload.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `

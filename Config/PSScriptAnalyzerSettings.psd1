@@ -171,7 +171,7 @@
 			Kind = 'tab' # editor.insertSpaces, editor.detectIndentation
 			# Whether to increase indentation after a pipeline for multi-line statements
 			# IncreaseIndentationForFirstPipeline (default), IncreaseIndentationAfterEveryPipeline, NoIndentation
-			PipelineIndentation = 'NoIndentation' # powershell.codeFormatting.pipelineIndentationStyle
+			PipelineIndentation = 'IncreaseIndentationAfterEveryPipeline' # powershell.codeFormatting.pipelineIndentationStyle
 			# Indentation size in the number of space characters (default = 4)
 			IndentationSize = 4 # editor.tabSize
 		}

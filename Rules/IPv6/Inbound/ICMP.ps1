@@ -231,7 +231,7 @@ New-NetFirewallRule -Platform $Platform `
 	-Direction $Direction -Protocol ICMPv6 -IcmpType 137 -LocalAddress Any -RemoteAddress $RemoteAddr -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -Localuser $NT_AUTHORITY_System `
 	-Description "Routers send Redirect packets to inform a host of a better first-hop
-node on the path to a destination.  Hosts can be redirected to a
+node on the path to a destination. Hosts can be redirected to a
 better first-hop router but can also be informed by a redirect that
 the destination is in fact a neighbor." @Logs | Format-Output @Logs
 
@@ -341,7 +341,7 @@ response to a Certification Path Solicitation.
 
 Source Address:
 A link-local unicast address assigned to the interface from
-which this message is sent.  Note that routers may use multiple
+which this message is sent. Note that routers may use multiple
 addresses, and therefore this address is not sufficient for the
 unique identification of routers.
 

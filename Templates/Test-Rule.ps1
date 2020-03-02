@@ -26,8 +26,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+# TODO: Include modules you need, update licence Copyright and start writing test code
+
 #
-# Unit test for Get-ExecutablePaths
+# Unit test for Test-Rule
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -39,7 +41,9 @@ Test-SystemRequirements
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test @Logs
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo @Logs
+# Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo @Logs
+# Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo @Logs
+# Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 
 # Ask user if he wants to load these rules
@@ -48,16 +52,19 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-New-Test "Get-ExecutablePaths"
-$ExecutablePaths = Get-ExecutablePaths @Logs | Sort-Object -Property Name
-$ExecutablePaths
+New-Test "Test-Rule"
 
-New-Test "Get-ExecutablePaths pwsh.exe"
-$ExecutablePaths | Where-Object -Property Name -eq "pwsh.exe" @Logs |
-	Select-Object -ExpandProperty InstallLocation
-
-New-Test "Get-TypeName"
-$ExecutablePaths | Get-TypeName @Logs
+# Outbound TCP test rule template
+New-NetFirewallRule -DisplayName "TargetProgram" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Any `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser Any `
+	-InterfaceType $Interface `
+	-Description "TargetProgram test rule description" `
+	@Logs | Format-Output @Logs
 
 Update-Logs
 Exit-Test
