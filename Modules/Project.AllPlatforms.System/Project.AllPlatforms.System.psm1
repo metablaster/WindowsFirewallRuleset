@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 Set-StrictMode -Version Latest
-Set-Variable ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
+Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
 #
 # Module preferences
@@ -170,7 +170,9 @@ function Test-SystemRequirements
 			# Check NET Framework version
 			# TODO: What if function fails?
 			$NETFramework = Get-NetFramework (Get-ComputerName)
-			$Version = $NETFramework | Sort-Object -Property Version | Select-Object -Last 1 -ExpandProperty Version
+			$Version = $NETFramework |
+			Sort-Object -Property Version | Select-Object -Last 1 -ExpandProperty Version
+
 			[int] $NETMajor, [int] $NETMinor, $NETBuild, $NETRevision = $Version.Split(".")
 
 			switch ($NETMajor)
@@ -281,8 +283,8 @@ function Test-SystemRequirements
 
 		# Everything OK, print environment status
 		Write-Output ""
-		Write-Output "System:`t`t $OSPlatform v$OSMajor.$OSMinor" -ForegroundColor Cyan
-		Write-Output "PowerShell:`t $PowerShellEdition v$PowerShellMajor.$PowerShellMinor" -ForegroundColor Cyan
+		Write-Output "System:`t`t $OSPlatform v$OSMajor.$OSMinor"
+		Write-Output "PowerShell:`t $PowerShellEdition v$PowerShellMajor.$PowerShellMinor"
 		Write-Output ""
 	}
 }

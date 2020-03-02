@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 Set-StrictMode -Version Latest
-Set-Variable ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
+Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
 #
 # Module preferences
@@ -165,7 +165,9 @@ function Get-IPAddress
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting IP's of connected adapters for $AddressFamily network"
 
-	$ConnectedAdapters = Get-ConnectedAdapters $AddressFamily | Select-Object -ExpandProperty ($AddressFamily + "Address")
+	$ConnectedAdapters = Get-ConnectedAdapters $AddressFamily |
+	Select-Object -ExpandProperty ($AddressFamily + "Address")
+
 	[IPAddress] $IPAddress = $ConnectedAdapters | Select-Object -ExpandProperty IPAddress
 
 	$Count = ($IPAddress | Measure-Object).Count

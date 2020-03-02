@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 Set-StrictMode -Version Latest
-Set-Variable ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
+Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
 #
 # Module preferences
@@ -577,7 +577,9 @@ function Get-GroupSID
 			}
 			elseif ($ComputerName -eq [System.Environment]::MachineName)
 			{
-				$GroupSID = Get-LocalGroup -Name $Group | Select-Object -ExpandProperty SID | Select-Object -ExpandProperty Value
+				$GroupSID = Get-LocalGroup -Name $Group |
+				Select-Object -ExpandProperty SID |
+				Select-Object -ExpandProperty Value
 			}
 			else
 			{

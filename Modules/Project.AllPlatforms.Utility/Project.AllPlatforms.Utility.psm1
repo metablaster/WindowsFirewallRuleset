@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 Set-StrictMode -Version Latest
-Set-Variable ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
+Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
 #
 # Module preferences
@@ -274,7 +274,9 @@ function Convert-SDDLToACL
 
 		$ACLObject = New-Object -TypeName Security.AccessControl.DirectorySecurity
 		$ACLObject.SetSecurityDescriptorSddlForm($Entry)
-		$ACL += $ACLObject.Access | Select-Object -ExpandProperty IdentityReference | Select-Object -ExpandProperty Value
+		$ACL += $ACLObject.Access |
+		Select-Object -ExpandProperty IdentityReference |
+		Select-Object -ExpandProperty Value
 	}
 
 	return $ACL

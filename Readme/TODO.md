@@ -35,7 +35,7 @@ TODO's in this file are categorized into following sections:
 
 2. Code style
 
-    - Limit code to 100 column rule.
+    - Limit code to 100-120 column rule.
 
 3. Project scripts
 
