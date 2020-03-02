@@ -30,4 +30,4 @@ SOFTWARE.
 # Variables related to inbound rules
 #
 
-New-Variable -Name Direction -Scope Local -Option Constant -Value = "Inbound"
+New-Variable -Name Direction -Scope Local -Option Constant -Value "Inbound"

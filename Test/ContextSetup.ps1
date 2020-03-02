@@ -30,6 +30,6 @@ SOFTWARE.
 # Context setup for tests
 #
 
-New-Variable -Name IPVersion -Scope Local -Option Constant -Value = 4
+New-Variable -Name IPVersion -Scope Local -Option Constant -Value 4
 New-Variable -Name TestContext -Scope Local -Option Constant -Value "Test"
 New-Variable -Name Direction -Scope Local -Option Constant -Value "Outbound"

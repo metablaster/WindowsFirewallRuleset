@@ -93,6 +93,7 @@ TODO's in this file are categorized into following sections:
     - make possible to apply or enable only rules relevant for current firewall profile
     - Add #Requires -Modules to scripts, possibly removing module inclusions, if not
     another possibility is to add module path to our modules for current session.
+    - Make $WhatIfPreference for rules, we should skip everything except rules.
 
 3. Rules
 
