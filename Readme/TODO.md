@@ -99,6 +99,8 @@ TODO's in this file are categorized into following sections:
 
     - some rules are missing comments
     - make display names and groups modular for easy search, ie. group - subgroup, Company - Program
+    - We need some better and unified approach to write rule descriptions, because it looks ugly
+    now, since comments must not be formatted, formatting would be visible in GUI.
 
 4. Test and debugging
 
@@ -144,6 +146,7 @@ TODO's in this file are categorized into following sections:
 5. Other
 
     - Test for 32bit powershell and OS.
+    - mTail coloring configuration contains gremlins (bad chars), need to test and deal with them.
 
 ## Done
 

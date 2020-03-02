@@ -8,9 +8,9 @@ For example once your regex hits, you would use CTRL + SHIFT + L to enter multi 
 and manipulate all regex matches however you like.
 
 NOTE: firewall rule examples here are shortened.\
-NOTE: regex examples may have space in the beginning or at the end, make sure to copy/paste right.
+NOTE: each regex includes a space at the end
 
-# Get -DisplayName parameter + initial space and it's value
+# Get -DisplayName parameter and it's value
 
 In bellow example multi cursor-ing all the matches in a script would allow to cut and paste all
 regex matches onto a second line by using CTRL + X, Down Arrow to move and CTRL + V.
@@ -21,21 +21,36 @@ New-NetFirewallRule -DisplayName "Interface-Local Multicast" -Service Any `
 ```
 
 ```regex
- -DisplayName "(.*)"(?= -Service)
+-DisplayName "(.*)"(?= -Service) ?
 ```
 
-# Get local and remote port parameters and values
+[//]: # (Platform)
 
-Here for example we want `-LocalPort Any -RemotePort 547`
+# Get group
 
 ```powershell
-New-NetFirewallRule -LocalPort Any -RemotePort 547
-New-NetFirewallRule -LocalPort 546 -RemotePort IPHTTPSout
+New-NetFirewallRule -Group $Group
+New-NetFirewallRule -Group "Some rule group"
 ```
 
 ```regex
--LocalPort (\w+) -RemotePort (\w+) ?
+-Group (([\$|\w]\w+)|(".*")) ?
 ```
+
+# Get Interface
+
+```powershell
+New-NetFirewallRule -InterfaceType $Interface
+New-NetFirewallRule -InterfaceType "Wired, Wireless"
+# TODO: is this valid? if yes regex needs update
+New-NetFirewallRule -InterfaceType Wired, Wireless
+```
+
+```regex
+-InterfaceType (([\$|\w]\w+)|(".*")) ?
+```
+
+[//]: # (PolicyStore)
 
 # Get Profile property if value also contains variable names
 
@@ -46,10 +61,46 @@ New-NetFirewallRule -Profile Private, Domain
 ```
 
 ```regex
--Profile [\$|\w]\w+,? ?\w+
+-Profile [\$|\w]\w+,? ?\w+ ?
 ```
 
-# Get local and remote IPv6 address in any notation
+# Direction protocol pairs
+
+```powershell
+New-NetFirewallRule -Direction $Direction -Protocol UDP
+New-NetFirewallRule -Direction Inbound -Protocol 41
+```
+
+```regex
+-Direction [\$|\w]\w+ -Protocol [\$|\w]\w+ ?
+ ```
+
+# Get local and remote port parameters and values
+
+```powershell
+New-NetFirewallRule -LocalPort Any -RemotePort 547, 53
+New-NetFirewallRule -LocalPort 546 -RemotePort IPHTTPSout
+New-NetFirewallRule -LocalPort 22, 546-55, 54 -RemotePort Any
+```
+
+```regex
+-LocalPort [\w&&,&&\-&& ]+ -RemotePort [\w&&,&&\-&& ]+ ?
+```
+
+# Get mapping pairs and their values
+
+```powershell
+New-NetFirewallRule -LocalOnlyMapping $false -LooseSourceMapping $false
+New-NetFirewallRule -LocalOnlyMapping $true -LooseSourceMapping $false
+```
+
+```regex
+-LocalOnlyMapping \$(false|true) -LooseSourceMapping \$(false|true) ?
+ ```
+
+[//]: # (If needed)
+
+# Get local and remote IPv6 address only in any notation
 
 ```powershell
 New-NetFirewallRule -LocalAddress ff01::/16 -RemoteAddress Any
@@ -57,5 +108,17 @@ New-NetFirewallRule -LocalAddress Any -RemoteAddress ff01::2
 ```
 
 ```regex
--LocalAddress [\w&&:&&/]+ -RemoteAddress [\w&&:&&/]+
+-LocalAddress (?!.*\.)[\w&&:&&/]+ -RemoteAddress (?!.*\.)[\w&&:&&/]+ ?
+```
+
+# Get local and remote IPv4 address only in any notation
+
+```powershell
+New-NetFirewallRule -LocalAddress 224.3.0.44, 224.0.0.0-224.0.0.255, 224.3.0.44 -RemoteAddress Any
+New-NetFirewallRule -LocalAddress LocalSubnet4 -RemoteAddress 224.3.0.44, 224.0.0.0-224.0.0.255
+New-NetFirewallRule -LocalAddress LocalSubnet4 -RemoteAddress 224.3.0/24, 224.0/16-224.0.0.255
+```
+
+```regex
+-LocalAddress (?!.*:)[,\.\w \-/]+ -RemoteAddress (?!.*:)[,\.\w \-/]+ ?
 ```
