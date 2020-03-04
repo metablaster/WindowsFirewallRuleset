@@ -13,6 +13,7 @@
 - TODO list categorized according to area and priority, duplicates removed
 - Markdown formatted according to markdownlint rules
 - Entry project spellchecked
+- Added regex samples to query rules inside scripts for bulk operations
 
 # Changelog v0.3.0
 

@@ -138,6 +138,7 @@ TODO's in this file are categorized into following sections:
 
     - apply local IP to all rules, as optional feature because it depends if IP is static
     - Implement unique names and groups for rules, -Name and -Group parameter vs -Display*
+    - Many rules are compatible and can be configured to specify platform for Windows 7 or 8
 
 4. Code style
 

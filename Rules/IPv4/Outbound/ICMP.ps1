@@ -71,13 +71,18 @@ if (!(Approve-Execute @Logs)) { exit }
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
 <#
-If a network client fails to get an IP address using DHCP, it can discover an address on its own using APIPA.
-To get an IPv4 address, the client will select an address at random in the range 169.254.1.0 to 169.254.254.255 (inclusive), with a netmask of 255.255.0.0.
-The client will then send an ARP packet asking for the MAC address that corresponds to the randomly-generated IPv4 address.
+If a network client fails to get an IP address using DHCP, it can discover an address on its own
+using APIPA.
+To get an IPv4 address, the client will select an address at random in the range
+169.254.1.0 to 169.254.254.255 (inclusive), with a netmask of 255.255.0.0.
+The client will then send an ARP packet asking for the MAC address that corresponds to the
+randomly-generated IPv4 address.
 
-If any other machine is using that address, the client will generate another random address and try again.
+If any other machine is using that address, the client will generate another random address and
+try again.
 
-The entire address range 169.254.0.0/16 has been set aside for "link local" addresses (the first and last 256 addresses have been reserved for future use).
+The entire address range 169.254.0.0/16 has been set aside for "link local" addresses
+(the first and last 256 addresses have been reserved for future use).
 They should not be manually assigned or assigned using DHCP.
 #>
 # $APIPA = "169.254.1.0-169.254.254.255"
@@ -86,13 +91,16 @@ They should not be manually assigned or assigned using DHCP.
 # ICMP type filtering for All profiles
 #
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Echo Request (8)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
-	-Direction $Direction -Protocol ICMPv4 -IcmpType 8 -LocalAddress Any -RemoteAddress Any `
+New-NetFirewallRule -DisplayName "Echo Request (8)" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 8 `
+	-LocalAddress Any -RemoteAddress Any `
 	-LocalUser $NT_AUTHORITY_System `
+	-InterfaceType $Interface `
 	-Description "The data received in the echo message must be returned in the echo reply message.
-The identifier and sequence number may be used by the echo sender to aid in matching the replies with the echo requests.
+The identifier and sequence number may be used by the echo sender to aid in matching the replies
+with the echo requests.
 For example, the identifier might be used like a port in TCP or UDP to identify a session,
 and the sequence number might be incremented on each echo request sent.
 The echoer returns these same values in the echo reply.
@@ -106,23 +114,28 @@ the type code changed to 0, and the checksum recomputed.
 
 Code:
 0
-Code 0 may be received from a gateway or a host." @Logs | Format-Output @Logs
+Code 0 may be received from a gateway or a host." `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Timestamp (13)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
-	-Direction $Direction -Protocol ICMPv4 -IcmpType 13 -LocalAddress Any -RemoteAddress Any `
+New-NetFirewallRule -DisplayName "Timestamp (13)" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 13 `
+	-LocalAddress Any -RemoteAddress Any `
 	-LocalUser $NT_AUTHORITY_System `
-	-Description "The data received (a timestamp) in the message is returned in the reply together with an additional timestamp.
+	-InterfaceType $Interface `
+	-Description "The data received (a timestamp) in the message is returned in the reply together
+with an additional timestamp.
 The timestamp is 32 bits of milliseconds since midnight UT.
 One use of these timestamps is described by Mills.
 
 The Originate Timestamp is the time the sender last touched the message before sending it,
-the Receive Timestamp is the time the echoer first touched it on receipt, and the Transmit Timestamp is
-the time the echoer last touched the message on sending it.
+the Receive Timestamp is the time the echoer first touched it on receipt,
+and the Transmit Timestamp is the time the echoer last touched the message on sending it.
 
-If the time is not available in milliseconds or cannot be provided with respect to midnight UT then any time can be inserted in a
-timestamp provided the high order bit of the timestamp is also set to indicate this non-standard value.
+If the time is not available in milliseconds or cannot be provided with respect to midnight UT then
+any time can be inserted in a timestamp provided the high order bit of the timestamp is also set to
+indicate this non-standard value.
 
 IP Fields:
 Addresses
@@ -133,38 +146,49 @@ reversed, the type code changed to 14, and the checksum recomputed.
 
 Code:
 0 = pointer indicates the error.
-Code 0 may be received from a gateway or a host." @Logs | Format-Output @Logs
+Code 0 may be received from a gateway or a host." `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Router Advertisement (9)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
-	-Direction $Direction -Protocol ICMPv4 -IcmpType 9 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
+New-NetFirewallRule -DisplayName "Router Advertisement (9)" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 9 `
+	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-LocalUser $NT_AUTHORITY_System `
-	-Description "the ICMP Internet Router Discovery Protocol (IRDP), also called the Internet Router Discovery Protocol,
-is a protocol for computer hosts to discover the presence and location of routers on their IPv4 local area network.
+	-InterfaceType $Interface `
+	-Description "the ICMP Internet Router Discovery Protocol (IRDP), also called the
+Internet Router Discovery Protocol, is a protocol for computer hosts to discover the presence and
+location of routers on their IPv4 local area network.
 Router discovery is useful for accessing computer systems on other nonlocal area networks.
 
 A host MUST NOT send Router Advertisement messages at any time.
 A router sends periodic as well as solicited Router Advertisements out its advertising interfaces.
 A router might want to send Router Advertisements without advertising itself as a default router.
-For instance, a router might advertise prefixes for stateless address autoconfiguration while not wishing to forward packets.
+For instance, a router might advertise prefixes for stateless address autoconfiguration while not
+wishing to forward packets.
 Unsolicited Router Advertisements are not strictly periodic:
 the interval between subsequent transmissions is randomized to reduce the probability of
-synchronization with the advertisements from other routers on the same link." @Logs | Format-Output @Logs
+synchronization with the advertisements from other routers on the same link." `
+	@Logs | Format-Output @Logs
 
-# TODO: figure out if redirects can be unsolicited, to set up EdgeTraversalPolicy (currently allowing by logic of comments)
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Redirect (5)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
-	-Direction $Direction -Protocol ICMPv4 -IcmpType 5 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
+# TODO: figure out if redirects can be unsolicited, to set up EdgeTraversalPolicy
+# (currently allowing by logic of comments)
+New-NetFirewallRule -DisplayName "Redirect (5)" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 5 `
+	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-LocalUser $NT_AUTHORITY_System `
-	-Description "ICMP redirect messages are used by routers to notify the hosts on the data link that a better route is available for a particular destination.
+	-InterfaceType $Interface `
+	-Description "ICMP redirect messages are used by routers to notify the hosts on the data link
+that a better route is available for a particular destination.
 The gateway sends a redirect message to a host in the following situation.
-A gateway, G1, receives an internet datagram from a host on a network to which the gateway is attached.
+A gateway, G1, receives an internet datagram from a host on a network to which the gateway is
+attached.
 The gateway, G1, checks its routing table and obtains the address of the next gateway, G2,
 on the route to the datagram's internet destination network, X.
-If G2 and the host identified by the internet source address of the datagram are on the same network,
-a redirect message is sent to the host.
+If G2 and the host identified by the internet source address of the datagram are on the same
+network, a redirect message is sent to the host.
 The redirect message advises the host to send its traffic for network X directly to gateway G2 as
 this is a shorter path to the destination.
 The gateway forwards the original datagram's data to its internet destination.
@@ -178,19 +202,23 @@ Code:
 1 = Redirect datagrams for the Host.
 2 = Redirect datagrams for the Type of Service and Network.
 3 = Redirect datagrams for the Type of Service and Host.
-Codes 0, 1, 2, and 3 may be received from a gateway." @Logs | Format-Output @Logs
+Codes 0, 1, 2, and 3 may be received from a gateway." `
+	@Logs | Format-Output @Logs
 
 #
 # ICMP type filtering for public profile
 #
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Echo Reply (0)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
-	-Direction $Direction -Protocol ICMPv4 -IcmpType 0 -LocalAddress Any -RemoteAddress $RemoteAddrWAN `
+New-NetFirewallRule -DisplayName "Echo Reply (0)" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv4 -IcmpType 0 `
+	-LocalAddress Any -RemoteAddress $RemoteAddrWAN `
 	-LocalUser $NT_AUTHORITY_System `
+	-InterfaceType $Interface `
 	-Description "The data received in the echo message must be returned in the echo reply message.
-The identifier and sequence number may be used by the echo sender to aid in matching the replies with the echo requests.
+The identifier and sequence number may be used by the echo sender to aid in matching the replies
+with the echo requests.
 For example, the identifier might be used like a port in TCP or UDP to identify a session,
 and the sequence number might be incremented on each echo request sent.
 The echoer returns these same values in the echo reply.
@@ -204,15 +232,19 @@ the type code changed to 0, and the checksum recomputed.
 
 Code:
 0
-Code 0 may be received from a gateway or a host." @Logs | Format-Output @Logs
+Code 0 may be received from a gateway or a host." `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Destination Unreachable (3)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
-	-Direction $Direction -Protocol ICMPv4 -IcmpType 3 -LocalAddress Any -RemoteAddress $RemoteAddrWAN `
+New-NetFirewallRule -DisplayName "Destination Unreachable (3)" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv4 -IcmpType 3 `
+	-LocalAddress Any -RemoteAddress $RemoteAddrWAN `
 	-LocalUser $NT_AUTHORITY_System `
+	-InterfaceType $Interface `
 	-Description "network specified in the RemoteAddress is unreachable, ie,
-the distance to the network is infinity, the gateway may send a destination unreachable message to the internet source host of the datagram.
+the distance to the network is infinity, the gateway may send a destination unreachable message
+to the internet source host of the datagram.
 
 IP Fields:
 Destination Address
@@ -226,32 +258,40 @@ Code:
 4 = fragmentation needed and DF set;
 5 = source route failed.
 Codes 0, 1, 4, and 5 may be received from a gateway.
-Codes 2 and 3 may be received from a host." @Logs | Format-Output @Logs
+Codes 2 and 3 may be received from a host." `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Router Solicitation (10)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
-	-Direction $Direction -Protocol ICMPv4 -IcmpType 10 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
+New-NetFirewallRule -DisplayName "Router Solicitation (10)" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv4 -IcmpType 10 `
+	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-LocalUser $NT_AUTHORITY_System `
-	-Description "the ICMP Internet Router Discovery Protocol (IRDP), also called the Internet Router Discovery Protocol,
-is a protocol for computer hosts to discover the presence and location of routers on their IPv4 local area network.
+	-InterfaceType $Interface `
+	-Description "the ICMP Internet Router Discovery Protocol (IRDP), also called the
+Internet Router Discovery Protocol, is a protocol for computer hosts to discover the presence and
+location of routers on their IPv4 local area network.
 Router discovery is useful for accessing computer systems on other nonlocal area networks.
 
 Sending Router Solicitations:
-When an interface becomes enabled, a host may be unwilling to wait for the next unsolicited Router Advertisement
-to locate default routers or learn prefixes.
-To obtain Router Advertisements quickly, a host SHOULD transmit up to MAX_RTR_SOLICITATIONS Router Solicitation messages,
-each separated by at least RTR_SOLICITATION_INTERVAL seconds." @Logs | Format-Output @Logs
+When an interface becomes enabled, a host may be unwilling to wait for the next unsolicited Router
+Advertisement to locate default routers or learn prefixes.
+To obtain Router Advertisements quickly, a host SHOULD transmit up to MAX_RTR_SOLICITATIONS
+Router Solicitation messages, each separated by at least RTR_SOLICITATION_INTERVAL seconds." `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Time Exceeded (11)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
-	-Direction $Direction -Protocol ICMPv4 -IcmpType 11 -LocalAddress Any -RemoteAddress $RemoteAddrWAN `
+New-NetFirewallRule -DisplayName "Time Exceeded (11)" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv4 -IcmpType 11 `
+	-LocalAddress Any -RemoteAddress $RemoteAddrWAN `
 	-LocalUser $NT_AUTHORITY_System `
-	-Description "If the gateway processing a datagram finds the time to live field is zero it must discard the datagram.
+	-InterfaceType $Interface `
+	-Description "If the gateway processing a datagram finds the time to live field is zero it must
+discard the datagram.
 The gateway may also notify the source host via the time exceeded message.
-If a host reassembling a fragmented datagram cannot complete the reassembly due to missing fragments within its time limit it discards the datagram,
-and it may send a time exceeded message.
+If a host reassembling a fragmented datagram cannot complete the reassembly due to missing
+fragments within its time limit it discards the datagram, and it may send a time exceeded message.
 If fragment zero is not available then no time exceeded need be sent at all.
 
 IP Fields:
@@ -262,15 +302,19 @@ Code:
 0 = time to live exceeded in transit;
 1 = fragment reassembly time exceeded.
 Code 0 may be received from a gateway.
-Code 1 may be received from a host." @Logs | Format-Output @Logs
+Code 1 may be received from a host." `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Parameter Problem (12)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
-	-Direction $Direction -Protocol ICMPv4 -IcmpType 12 -LocalAddress Any -RemoteAddress $RemoteAddrWAN `
+New-NetFirewallRule -DisplayName "Parameter Problem (12)" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv4 -IcmpType 12 `
+	-LocalAddress Any -RemoteAddress $RemoteAddrWAN `
 	-LocalUser $NT_AUTHORITY_System `
-	-Description "If the gateway or host processing a datagram finds a problem with the header parameters such that it cannot complete processing the
-datagram it must discard the datagram. One potential source of such a problem is with incorrect arguments in an option.
+	-InterfaceType $Interface `
+	-Description "If the gateway or host processing a datagram finds a problem with the header
+parameters such that it cannot complete processing the datagram it must discard the datagram.
+One potential source of such a problem is with incorrect arguments in an option.
 The gateway or host may also notify the source host via the parameter problem message.
 This message is only sent if the error caused the datagram to be discarded.
 
@@ -280,23 +324,28 @@ The source network and address from the original datagram's data.
 
 Code:
 0 = pointer indicates the error.
-Code 0 may be received from a gateway or a host." @Logs | Format-Output @Logs
+Code 0 may be received from a gateway or a host." `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Timestamp Reply (14)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
-	-Direction $Direction -Protocol ICMPv4 -IcmpType 14 -LocalAddress Any -RemoteAddress $RemoteAddrWAN `
+New-NetFirewallRule -DisplayName "Timestamp Reply (14)" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv4 -IcmpType 14 `
+	-LocalAddress Any -RemoteAddress $RemoteAddrWAN `
 	-LocalUser $NT_AUTHORITY_System `
-	-Description "The data received (a timestamp) in the message is returned in the reply together with an additional timestamp.
+	-InterfaceType $Interface `
+	-Description "The data received (a timestamp) in the message is returned in the reply together
+with an additional timestamp.
 The timestamp is 32 bits of milliseconds since midnight UT.
 One use of these timestamps is described by Mills.
 
 The Originate Timestamp is the time the sender last touched the message before sending it,
-the Receive Timestamp is the time the echoer first touched it on receipt, and the Transmit Timestamp is
-the time the echoer last touched the message on sending it.
+the Receive Timestamp is the time the echoer first touched it on receipt,
+and the Transmit Timestamp is the time the echoer last touched the message on sending it.
 
-If the time is not available in milliseconds or cannot be provided with respect to midnight UT then any time can be inserted in a
-timestamp provided the high order bit of the timestamp is also set to indicate this non-standard value.
+If the time is not available in milliseconds or cannot be provided with respect to midnight UT
+then any time can be inserted in a timestamp provided the high order bit of the timestamp is also
+set to indicate this non-standard value.
 
 IP Fields:
 Addresses
@@ -307,19 +356,23 @@ reversed, the type code changed to 14, and the checksum recomputed.
 
 Code:
 0 = pointer indicates the error.
-Code 0 may be received from a gateway or a host." @Logs | Format-Output @Logs
+Code 0 may be received from a gateway or a host." `
+	@Logs | Format-Output @Logs
 
 #
 # ICMP type filtering for private and domain profile
 #
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Echo Reply (0)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
-	-Direction $Direction -Protocol ICMPv4 -IcmpType 0 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
+New-NetFirewallRule -DisplayName "Echo Reply (0)" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 0 `
+	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-LocalUser $NT_AUTHORITY_System `
+	-InterfaceType $Interface `
 	-Description "The data received in the echo message must be returned in the echo reply message.
-The identifier and sequence number may be used by the echo sender to aid in matching the replies with the echo requests.
+The identifier and sequence number may be used by the echo sender to aid in matching the replies
+with the echo requests.
 For example, the identifier might be used like a port in TCP or UDP to identify a session,
 and the sequence number might be incremented on each echo request sent.
 The echoer returns these same values in the echo reply.
@@ -333,15 +386,19 @@ the type code changed to 0, and the checksum recomputed.
 
 Code:
 0
-Code 0 may be received from a gateway or a host." @Logs | Format-Output @Logs
+Code 0 may be received from a gateway or a host." `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Destination Unreachable (3)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
-	-Direction $Direction -Protocol ICMPv4 -IcmpType 3 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
+New-NetFirewallRule -DisplayName "Destination Unreachable (3)" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 3 `
+	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-LocalUser $NT_AUTHORITY_System `
+	-InterfaceType $Interface `
 	-Description "network specified in the RemoteAddress is unreachable, ie,
-the distance to the network is infinity, the gateway may send a destination unreachable message to the internet source host of the datagram.
+the distance to the network is infinity, the gateway may send a destination unreachable message to
+the internet source host of the datagram.
 
 IP Fields:
 Destination Address
@@ -355,31 +412,40 @@ Code:
 4 = fragmentation needed and DF set;
 5 = source route failed.
 Codes 0, 1, 4, and 5 may be received from a gateway.
-Codes 2 and 3 may be received from a host." @Logs | Format-Output @Logs
+Codes 2 and 3 may be received from a host." `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Router Solicitation (10)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
-	-Direction $Direction -Protocol ICMPv4 -IcmpType 10 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
+New-NetFirewallRule -DisplayName "Router Solicitation (10)" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 10 `
+	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-LocalUser $NT_AUTHORITY_System `
-	-Description "the ICMP Internet Router Discovery Protocol (IRDP), also called the Internet Router Discovery Protocol,
-is a protocol for computer hosts to discover the presence and location of routers on their IPv4 local area network.
+	-InterfaceType $Interface `
+	-Description "the ICMP Internet Router Discovery Protocol (IRDP), also called the
+Internet Router Discovery Protocol, is a protocol for computer hosts to discover the presence and
+location of routers on their IPv4 local area network.
 Router discovery is useful for accessing computer systems on other nonlocal area networks.
 
 Sending Router Solicitations:
-When an interface becomes enabled, a host may be unwilling to wait for the next unsolicited Router Advertisement
-to locate default routers or learn prefixes.
-To obtain Router Advertisements quickly, a host SHOULD transmit up to MAX_RTR_SOLICITATIONS Router Solicitation messages,
-each separated by at least RTR_SOLICITATION_INTERVAL seconds." @Logs | Format-Output @Logs
+When an interface becomes enabled, a host may be unwilling to wait for the next unsolicited Router
+Advertisement to locate default routers or learn prefixes.
+To obtain Router Advertisements quickly, a host SHOULD transmit up to MAX_RTR_SOLICITATIONS
+Router Solicitation messages, each separated by at least RTR_SOLICITATION_INTERVAL seconds." `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Time Exceeded (11)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
-	-Direction $Direction -Protocol ICMPv4 -IcmpType 11 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
+New-NetFirewallRule -DisplayName "Time Exceeded (11)" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 11 `
+	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-LocalUser $NT_AUTHORITY_System `
-	-Description "If the gateway processing a datagram finds the time to live field is zero it must discard the datagram.
+	-InterfaceType $Interface `
+	-Description "If the gateway processing a datagram finds the time to live field is zero it
+must discard the datagram.
 The gateway may also notify the source host via the time exceeded message.
-If a host reassembling a fragmented datagram cannot complete the reassembly due to missing fragments within its time limit it discards the datagram,
+If a host reassembling a fragmented datagram cannot complete the reassembly due to missing
+fragments within its time limit it discards the datagram,
 and it may send a time exceeded message.
 If fragment zero is not available then no time exceeded need be sent at all.
 
@@ -391,15 +457,20 @@ Code:
 0 = time to live exceeded in transit;
 1 = fragment reassembly time exceeded.
 Code 0 may be received from a gateway.
-Code 1 may be received from a host." @Logs | Format-Output @Logs
+Code 1 may be received from a host." `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Parameter Problem (12)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
-	-Direction $Direction -Protocol ICMPv4 -IcmpType 12 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
+New-NetFirewallRule -DisplayName "Parameter Problem (12)" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 12 `
+	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-LocalUser $NT_AUTHORITY_System `
-	-Description "If the gateway or host processing a datagram finds a problem with the header parameters such that it cannot complete processing the
-datagram it must discard the datagram. One potential source of such a problem is with incorrect arguments in an option.
+	-InterfaceType $Interface `
+	-Description "If the gateway or host processing a datagram finds a problem with the header
+parameters such that it cannot complete processing the
+datagram it must discard the datagram. One potential source of such a problem is with incorrect
+arguments in an option.
 The gateway or host may also notify the source host via the parameter problem message.
 This message is only sent if the error caused the datagram to be discarded.
 
@@ -409,23 +480,28 @@ The source network and address from the original datagram's data.
 
 Code:
 0 = pointer indicates the error.
-Code 0 may be received from a gateway or a host." @Logs | Format-Output @Logs
+Code 0 may be received from a gateway or a host." `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Timestamp Reply (14)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
-	-Direction $Direction -Protocol ICMPv4 -IcmpType 14 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
+New-NetFirewallRule -DisplayName "Timestamp Reply (14)" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 14 `
+	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-LocalUser $NT_AUTHORITY_System `
-	-Description "The data received (a timestamp) in the message is returned in the reply together with an additional timestamp.
+	-InterfaceType $Interface `
+	-Description "The data received (a timestamp) in the message is returned in the reply together
+with an additional timestamp.
 The timestamp is 32 bits of milliseconds since midnight UT.
 One use of these timestamps is described by Mills.
 
 The Originate Timestamp is the time the sender last touched the message before sending it,
-the Receive Timestamp is the time the echoer first touched it on receipt, and the Transmit Timestamp is
-the time the echoer last touched the message on sending it.
+the Receive Timestamp is the time the echoer first touched it on receipt,
+and the Transmit Timestamp is the time the echoer last touched the message on sending it.
 
-If the time is not available in milliseconds or cannot be provided with respect to midnight UT then any time can be inserted in a
-timestamp provided the high order bit of the timestamp is also set to indicate this non-standard value.
+If the time is not available in milliseconds or cannot be provided with respect to midnight UT
+then any time can be inserted in a timestamp provided the high order bit of the timestamp is also
+set to indicate this non-standard value.
 
 IP Fields:
 Addresses
@@ -436,6 +512,7 @@ reversed, the type code changed to 14, and the checksum recomputed.
 
 Code:
 0 = pointer indicates the error.
-Code 0 may be received from a gateway or a host." @Logs | Format-Output @Logs
+Code 0 may be received from a gateway or a host." `
+	@Logs | Format-Output @Logs
 
 Update-Logs

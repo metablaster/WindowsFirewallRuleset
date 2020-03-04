@@ -4,11 +4,12 @@
 A list of regex expressions which are used to perform bulk operations against the rules inside the
 project.
 
-For example once your regex hits, you would use CTRL + SHIFT + L to enter multi cursor mode
-and manipulate all regex matches however you like.
+For example once your regex hits, you would use CTRL + SHIFT + L to enter
+[Multi cursor](https://code.visualstudio.com/docs/getstarted/tips-and-tricks#_multi-cursor-selection)
+mode and manipulate all regex matches however you like.
 
 NOTE: firewall rule examples here are shortened.\
-NOTE: each regex includes a space at the end
+NOTE: each regex includes an optional space at the end
 
 # Get -DisplayName parameter and it's value
 
@@ -69,10 +70,12 @@ New-NetFirewallRule -Profile Private, Domain
 ```powershell
 New-NetFirewallRule -Direction $Direction -Protocol UDP
 New-NetFirewallRule -Direction Inbound -Protocol 41
+-Direction $Direction -Protocol ICMPv4 -IcmpType 12
 ```
 
 ```regex
 -Direction [\$|\w]\w+ -Protocol [\$|\w]\w+ ?
+-Direction [\$|\w]\w+ -Protocol [\$|\w]\w+ -IcmpType \d+ ?
  ```
 
 # Get local and remote port parameters and values

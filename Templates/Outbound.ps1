@@ -113,7 +113,6 @@ if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot) @Logs) -or $Fo
 		-Service TroubleshootingSvc -Program $EdgeChromiumApp -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 0 `
 		-LocalAddress 224.2.0.0-224.2.255.255 -RemoteAddress 224.3.0.0-224.4.255.255 `
-		-LocalPort 80, 443 554, 8554-8558 -RemotePort 80, 443 554, 8554-8558 `
 		-LocalUser $NT_AUTHORITY_LocalService `
 		-InterfaceType $Interface `
 		-Description "TargetProgram TCP description" `
