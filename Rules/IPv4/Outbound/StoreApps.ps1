@@ -136,20 +136,28 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $SystemGroup -Direction 
 # TODO: should group SID be supplied to local user instead of owner?
 #
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Store apps for Administrators" -Service Any -Program Any `
-	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Any -InterfaceType $Interface `
-	-Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
-	-LocalUser Any -Owner (Get-GroupSID "Administrators") -Package "*" `
+New-NetFirewallRule -DisplayName "Store apps for Administrators" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
+	-Service Any -Program Any -Group $Group `
+	-Enabled True -Action Block -Direction $Direction -Protocol Any `
+	-LocalAddress Any -RemoteAddress Any `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser Any `
+	-InterfaceType $Interface `
+	-Owner (Get-GroupSID "Administrators") -Package "*" `
 	-Description "Block admin activity for all store apps.
-Administrators should have limited or no connectivity at all for maximum security." @Logs | Format-Output @Logs
+Administrators should have limited or no connectivity at all for maximum security." `
+	@Logs | Format-Output @Logs
 
 #
 # Create rules for all network apps for each standard user
-# HACK: in Firewall GUI the rule may state wrong user in "Application packages" window, but the SID is the same for all users anyway, so OK,
+# HACK: in Firewall GUI the rule may state wrong user in "Application packages" window,
+# but the SID is the same for all users anyway, so OK,
 # also it doesn't matter because in the GUI, SID radio button is checked, not the package name.
-# TODO: rules for *some* apps which have not been updated by user will not work, example solitaire app; need to either update them or detect this case.
-# NOTE: updating apps will not work unless also "Extension users" are updated in WindowsServices.ps1, meaning re-run the script.
+# TODO: rules for *some* apps which have not been updated by user will not work,
+# example solitaire app; need to either update them or detect this case.
+# NOTE: updating apps will not work unless also "Extension users" are updated in
+# WindowsServices.ps1, meaning re-run the script.
 #
 
 $Principals = Get-GroupPrincipals "Users"
@@ -174,12 +182,17 @@ foreach ($Principal in $Principals)
 				$Enabled = "True"
 			}
 
-			New-NetFirewallRule -Platform $Platform `
-				-DisplayName $_.Name -Service Any -Program Any `
-				-PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-				-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-				-LocalUser Any -Owner $Principal.SID -Package $PackageSID `
-				-Description "Store apps generated rule for $($Principal.User)" @Logs | Format-Output @Logs
+			New-NetFirewallRule -DisplayName $_.Name `
+				-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+				-Service Any -Program Any -Group $Group `
+				-Enabled $Enabled -Action Allow -Direction $Direction -Protocol TCP `
+				-LocalAddress Any -RemoteAddress Internet4 `
+				-LocalPort Any -RemotePort 80, 443 `
+				-LocalUser Any `
+				-InterfaceType $Interface `
+				-Owner $Principal.SID -Package $PackageSID `
+				-Description "Store apps generated rule for $($Principal.User)" `
+				@Logs | Format-Output @Logs
 
 			Update-Logs
 		}
@@ -190,8 +203,8 @@ foreach ($Principal in $Principals)
 	#
 
 	# NOTE: -User parameter is probably not needed here? aded while troubleshooting the hack above.
-	Get-AppxPackage -User $Principal.User -PackageTypeFilter Main |
-	Where-Object { $_.SignatureKind -eq "System" -and $_.Name -like "Microsoft*" } | ForEach-Object {
+	Get-AppxPackage -User $Principal.User -PackageTypeFilter Main | Where-Object {
+		$_.SignatureKind -eq "System" -and $_.Name -like "Microsoft*" } | ForEach-Object {
 
 		$PackageSID = Get-AppSID $Principal.User $_.PackageFamilyName
 
@@ -206,12 +219,17 @@ foreach ($Principal in $Principals)
 				$Enabled = "True"
 			}
 
-			New-NetFirewallRule -Platform $Platform `
-				-DisplayName $_.Name -Service Any -Program Any `
-				-PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $SystemGroup -Profile $Profile -InterfaceType $Interface `
-				-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-				-LocalUser Any -Owner $Principal.SID -Package $PackageSID `
-				-Description "System store apps generated rule for $($Principal.User)" @Logs | Format-Output @Logs
+			New-NetFirewallRule -DisplayName $_.Name `
+				-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+				-Service Any -Program Any -Group $SystemGroup `
+				-Enabled $Enabled -Action Allow -Direction $Direction -Protocol TCP `
+				-LocalAddress Any -RemoteAddress Internet4 `
+				-LocalPort Any -RemotePort 80, 443 `
+				-LocalUser Any `
+				-InterfaceType $Interface `
+				-Owner $Principal.SID -Package $PackageSID `
+				-Description "System store apps generated rule for $($Principal.User)" `
+				@Logs | Format-Output @Logs
 
 			Update-Logs
 		}

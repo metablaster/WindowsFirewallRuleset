@@ -39,11 +39,11 @@
 	// PSPlaceCloseBrace
 	"powershell.codeFormatting.newLineAfterCloseBrace": true,
 	// PSUseConsistentWhitespace
-	"powershell.codeFormatting.WhitespaceInsideBrace": true,
+	"powershell.codeFormatting.whitespaceInsideBrace": true,
 	"powershell.codeFormatting.whitespaceBeforeOpenBrace": true,
 	"powershell.codeFormatting.whitespaceBeforeOpenParen": true,
 	"powershell.codeFormatting.whitespaceAroundOperator": true,
-	"powershell.codeFormatting.WhitespaceAroundPipe": true,
+	"powershell.codeFormatting.whitespaceAroundPipe": true,
 	"powershell.codeFormatting.whitespaceAfterSeparator": true,
 	// PSUseConsistentIndentation
 	"powershell.codeFormatting.pipelineIndentationStyle": "IncreaseIndentationAfterEveryPipeline",

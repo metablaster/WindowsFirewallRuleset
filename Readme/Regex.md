@@ -19,10 +19,13 @@ regex matches onto a second line by using CTRL + X, Down Arrow to move and CTRL 
 ```powershell
 New-NetFirewallRule -DisplayName "Interface-Local Multicast" -Service Any `
 -Platform $Platform -Program Any
+New-NetFirewallRule -DisplayName $_.Name -Service Any `
+-Platform $Platform -Program Any
 ```
 
 ```regex
 -DisplayName "(.*)"(?= -Service) ?
+-DisplayName ("(.*)"|\$_\.\w+)(?= -Service) ?
 ```
 
 [//]: # (Platform)
@@ -124,4 +127,16 @@ New-NetFirewallRule -LocalAddress LocalSubnet4 -RemoteAddress 224.3.0/24, 224.0/
 
 ```regex
 -LocalAddress (?!.*:)[,\.\w \-/]+ -RemoteAddress (?!.*:)[,\.\w \-/]+ ?
+```
+
+# Get owner and package for store app
+
+```powershell
+New-NetFirewallRule -Owner (Get-GroupSID "Administrators") -Package "*"
+New-NetFirewallRule -Owner $Principal.SID -Package $PackageSID
+```
+
+```regex
+-Owner [\$|\w](\w|\.)+(?= -Package) -Package [\$|\w](\w|\.)+ ?
+-Owner (([\$|\w](\w|\.)+)|(\(.*\))) -Package ([\$|\w](\w|\.)+|".*") ?
 ```
