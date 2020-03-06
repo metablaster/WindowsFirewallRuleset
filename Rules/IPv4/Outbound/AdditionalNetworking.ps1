@@ -60,108 +60,169 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Cast to device predefined rules
 #
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Cast to Device functionality (qWave)" -Service QWAVE -Program $ServiceHost `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress PlayToDevice4 -LocalPort Any -RemotePort 2177 `
+New-NetFirewallRule -DisplayName "Cast to Device functionality (qWave)" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Public `
+	-Service QWAVE -Program $ServiceHost -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress PlayToDevice4 `
+	-LocalPort Any -RemotePort 2177 `
 	-LocalUser Any `
-	-Description "Outbound rule for the Cast to Device functionality to allow use of the Quality Windows Audio Video Experience Service.
-Quality Windows Audio Video Experience (qWave) is a networking platform for Audio Video (AV) streaming applications on IP home networks.
-qWave enhances AV streaming performance and reliability by ensuring network quality-of-service (QoS) for AV applications.
-It provides mechanisms for admission control, run time monitoring and enforcement, application feedback, and traffic prioritization." @Logs | Format-Output @Logs
+	-InterfaceType $Interface `
+	-Description "Outbound rule for the Cast to Device functionality to allow use of the
+Quality Windows Audio Video Experience Service.
+Quality Windows Audio Video Experience (qWave) is a networking platform for Audio Video (AV)
+streaming applications on IP home networks.
+qWave enhances AV streaming performance and reliability by ensuring network quality-of-service (QoS)
+for AV applications.
+It provides mechanisms for admission control, run time monitoring and enforcement,
+application feedback, and traffic prioritization." `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Cast to Device functionality (qWave)" -Service QWAVE -Program $ServiceHost `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $Interface `
-	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress PlayToDevice4 -LocalPort Any -RemotePort 2177 `
-	-LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Outbound rule for the Cast to Device functionality to allow use of the Quality Windows Audio Video Experience Service.
-Quality Windows Audio Video Experience (qWave) is a networking platform for Audio Video (AV) streaming applications on IP home networks.
-qWave enhances AV streaming performance and reliability by ensuring network quality-of-service (QoS) for AV applications.
-It provides mechanisms for admission control, run time monitoring and enforcement, application feedback, and traffic prioritization." @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Cast to Device functionality (qWave)" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Public `
+	-Service QWAVE -Program $ServiceHost -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress PlayToDevice4 `
+	-LocalPort Any -RemotePort 2177 `
+	-LocalUser Any `
+	-InterfaceType $Interface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description "Outbound rule for the Cast to Device functionality to allow use of the
+	Quality Windows Audio Video Experience Service.
+Quality Windows Audio Video Experience (qWave) is a networking platform for Audio Video (AV)
+streaming applications on IP home networks.
+qWave enhances AV streaming performance and reliability by ensuring network quality-of-service (QoS)
+for AV applications.
+It provides mechanisms for admission control, run time monitoring and enforcement,
+application feedback, and traffic prioritization." `
+	@Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\mdeserver.exe"
 Test-File $Program @Logs
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Cast to Device streaming server (RTP)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType $Interface `
-	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress PlayToDevice4 -LocalPort Any -RemotePort Any `
-	-LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Rule for the Cast to Device server to allow streaming using RTSP and RTP." @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTP)" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress PlayToDevice4 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser Any `
+	-InterfaceType $Interface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description "Rule for the Cast to Device server to allow streaming using RTSP and RTP." `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Cast to Device streaming server (RTP)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
-	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
-	-LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Rule for the Cast to Device server to allow streaming using RTSP and RTP." @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTP)" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser Any `
+	-InterfaceType $Interface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description "Rule for the Cast to Device server to allow streaming using RTSP and RTP." `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Cast to Device streaming server (RTP)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $Interface `
-	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
-	-LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Rule for the Cast to Device server to allow streaming using RTSP and RTP." @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTP)" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress Any `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser Any `
+	-InterfaceType $Interface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description "Rule for the Cast to Device server to allow streaming using RTSP and RTP." `
+	@Logs | Format-Output @Logs
 
 #
 # Connected devices platform predefined rules
 #
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Connected Devices Platform - Wi-Fi Direct Transport" -Service CDPSvc -Program $ServiceHost `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
+New-NetFirewallRule -DisplayName "Connected Devices Platform - Wi-Fi Direct Transport" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
+	-Service CDPSvc -Program $ServiceHost -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Any `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
-	-Description "Outbound rule to use Wi-Fi Direct traffic in the Connected Devices Platform." @Logs | Format-Output @Logs
+	-InterfaceType $Interface `
+	-Description "Outbound rule to use Wi-Fi Direct traffic in the Connected Devices Platform." `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Connected Devices Platform" -Service CDPSvc -Program $ServiceHost `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
+New-NetFirewallRule -DisplayName "Connected Devices Platform" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
+	-Service CDPSvc -Program $ServiceHost -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Any `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
-	-Description "Outbound rule for Connected Devices Platform traffic." @Logs | Format-Output @Logs
+	-InterfaceType $Interface `
+	-Description "Outbound rule for Connected Devices Platform traffic." `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Connected Devices Platform" -Service CDPSvc -Program $ServiceHost `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
-	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
-	-LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Outbound rule for Connected Devices Platform traffic." @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Connected Devices Platform" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
+	-Service CDPSvc -Program $ServiceHost -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress Any `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser Any `
+	-InterfaceType $Interface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description "Outbound rule for Connected Devices Platform traffic." `
+	@Logs | Format-Output @Logs
 
 #
 # AllJoyn Router predefined rules
 #
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "AllJoyn Router" -Service AJRouter -Program $ServiceHost `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
+New-NetFirewallRule -DisplayName "AllJoyn Router" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
+	-Service AJRouter -Program $ServiceHost -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Any `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
+	-InterfaceType $Interface `
 	-Description "Outbound rule for AllJoyn Router traffic.
 AllJoyn Router service routes AllJoyn messages for the local AllJoyn clients.
-If this service is stopped the AllJoyn clients that do not have their own bundled routers will be unable to run." @Logs | Format-Output @Logs
+If this service is stopped the AllJoyn clients that do not have their own bundled routers will be
+unable to run." `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "AllJoyn Router" -Service AJRouter -Program $ServiceHost `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
-	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
-	-LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
+New-NetFirewallRule -DisplayName "AllJoyn Router" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
+	-Service AJRouter -Program $ServiceHost -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress Any `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser Any `
+	-InterfaceType $Interface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Outbound rule for AllJoyn Router traffic.
 AllJoyn Router service routes AllJoyn messages for the local AllJoyn clients.
-If this service is stopped the AllJoyn clients that do not have their own bundled routers will be unable to run." @Logs | Format-Output @Logs
+If this service is stopped the AllJoyn clients that do not have their own bundled routers will be
+unable to run." `
+	@Logs | Format-Output @Logs
 
 #
 # Proximity sharing predefined rule
 #
 
 # TODO: probably does not exist in Windows Server 2019
+# TODO: description missing data
 $Program = "%SystemRoot%\System32\ProximityUxHost.exe"
 Test-File $Program @Logs
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Proximity sharing" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
+New-NetFirewallRule -DisplayName "Proximity sharing" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Public `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Any `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
-	-Description "Outbound rule for Proximity sharing over." @Logs | Format-Output @Logs
+	-InterfaceType $Interface `
+	-Description "Outbound rule for Proximity sharing over." `
+	@Logs | Format-Output @Logs
 
 Update-Logs

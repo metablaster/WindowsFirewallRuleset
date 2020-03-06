@@ -56,32 +56,52 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Rules apply to network sharing on LAN
 #
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "NetBIOS Session" -Service Any -Program System `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
-	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 139 `
-	-LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." @Logs | Format-Output @Logs
-
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "NetBIOS Session" -Service Any -Program System `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $Interface `
-	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Intranet4 -LocalPort Any -RemotePort 139 `
-	-LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." @Logs | Format-Output @Logs
-
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "SMB" -Service Any -Program System `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 445 `
+New-NetFirewallRule -DisplayName "NetBIOS Session" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
+	-Service Any -Program System -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalPort Any -RemotePort 139 `
 	-LocalUser $NT_AUTHORITY_System `
-	-Description "Rule for File and Printer Sharing to allow Server Message Block transmission and reception via Named Pipes." @Logs | Format-Output @Logs
+	-InterfaceType $Interface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "SMB" -Service Any -Program System `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Intranet4 -LocalPort Any -RemotePort 445 `
+New-NetFirewallRule -DisplayName "NetBIOS Session" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
+	-Service Any -Program System -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress Intranet4 `
+	-LocalPort Any -RemotePort 139 `
 	-LocalUser $NT_AUTHORITY_System `
-	-Description "Rule for File and Printer Sharing to allow Server Message Block transmission and reception via Named Pipes." @Logs | Format-Output @Logs
+	-InterfaceType $Interface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." `
+	@Logs | Format-Output @Logs
+
+New-NetFirewallRule -DisplayName "SMB" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
+	-Service Any -Program System -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalPort Any -RemotePort 445 `
+	-LocalUser $NT_AUTHORITY_System `
+	-InterfaceType $Interface `
+	-Description "Rule for File and Printer Sharing to allow Server Message Block transmission and
+reception via Named Pipes." `
+	@Logs | Format-Output @Logs
+
+New-NetFirewallRule -DisplayName "SMB" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
+	-Service Any -Program System -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Intranet4 `
+	-LocalPort Any -RemotePort 445 `
+	-LocalUser $NT_AUTHORITY_System `
+	-InterfaceType $Interface `
+	-Description "Rule for File and Printer Sharing to allow Server Message Block transmission and
+reception via Named Pipes." `
+	@Logs | Format-Output @Logs
 
 Update-Logs
