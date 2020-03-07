@@ -83,8 +83,7 @@ function Resolve-IPAddress
 	process
 	{
 		$groups = [regex]::Matches($IPAddress, '\[(?:(?<Range>\d+(?:-\d+))|(?<Selected>(?:\d+, *)*\d+))\]|(?<All>\*)').Groups.Captures |
-		Where-Object { $_ -and $_.Name -ne '0' } |
-		ForEach-Object {
+		Where-Object { $_ -and $_.Name -ne '0' } | ForEach-Object {
 			$group = $_
 
 			$values = switch ($group.Name)

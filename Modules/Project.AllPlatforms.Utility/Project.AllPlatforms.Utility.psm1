@@ -274,8 +274,7 @@ function Convert-SDDLToACL
 
 		$ACLObject = New-Object -TypeName Security.AccessControl.DirectorySecurity
 		$ACLObject.SetSecurityDescriptorSddlForm($Entry)
-		$ACL += $ACLObject.Access |
-		Select-Object -ExpandProperty IdentityReference |
+		$ACL += $ACLObject.Access | Select-Object -ExpandProperty IdentityReference |
 		Select-Object -ExpandProperty Value
 	}
 

@@ -16,12 +16,14 @@ intentionally to make is easier to tell where to look at while resolving this li
 TODO's in this file are categorized into following sections:
 
 1. Selected
-2. High priority
-3. Medium priority
-4. Low priority
-5. Done
+2. Ongoing
+3. High priority
+4. Medium priority
+5. Low priority
+6. Done
 
 "Selected" means it's currently being worked on.
+"Ongoing" means never ending or continuous work
 "Done" obviously means it's done, it's kept here for reference.
 
 ## Selected
@@ -33,13 +35,19 @@ TODO's in this file are categorized into following sections:
     - Revisit naming convention for ConvertFrom/ConvertTo it's not clear what is being converted,
     some other functions also have odd names
 
-2. Code style
+2. Project scripts
+
+    - Take out of deprecated scripts what can be used, remove the rest
+
+## Ongoing
+
+1. Code style
 
     - Limit code to 100-120 column rule.
 
-3. Project scripts
+2. Modules
 
-    - Take out of deprecated scripts what can be used, remove the rest
+    - 3rd party scripts and modules need to be checked for updates
 
 ## High priority
 
@@ -110,14 +118,15 @@ TODO's in this file are categorized into following sections:
     - What should be initial values for ProgramRoot variables in rule scripts? we should remove
     known non existent paths and handle empty strings to prevent INFO messages for conversion.
 
-5. Documentation
+5. Code style
+
+    - Indentation doesn't work as expected for pipelines, currently using "NoIndentation", and
+    there is no indentation for back ticks
+
+6. Documentation
 
     - update FirewallParameters.md with a list of incompatible parameters for reference
     - a lot of comment based documentation is missing comments
-
-6. Never ending
-
-    - 3rd party scripts and modules need to be checked for updates
 
 ## Low priority
 

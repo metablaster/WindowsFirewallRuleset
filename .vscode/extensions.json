@@ -7,8 +7,11 @@
 		"davidanson.vscode-markdownlint",
 		"gruntfuggly.todo-tree",
 		"streetsidesoftware.code-spell-checker",
-		"nachocab.highlight-dodgy-characters"
+		"nachocab.highlight-dodgy-characters",
+		"eamodio.gitlens"
 	],
 	// List of extensions recommended by VS Code that should not be recommended for users of this workspace.
-	"unwantedRecommendations": []
+	"unwantedRecommendations": [
+		"donjayamanne.githistory"
+	]
 }

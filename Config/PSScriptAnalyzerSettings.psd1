@@ -176,7 +176,7 @@
 			# IncreaseIndentationForFirstPipeline (default),
 			# IncreaseIndentationAfterEveryPipeline, NoIndentation
 			# powershell.codeFormatting.pipelineIndentationStyle
-			PipelineIndentation = 'IncreaseIndentationAfterEveryPipeline'
+			PipelineIndentation = 'NoIndentation'
 			# Indentation size in the number of space characters (default = 4)
 			IndentationSize = 4 # editor.tabSize
 		}

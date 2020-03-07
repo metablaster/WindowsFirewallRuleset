@@ -79,7 +79,7 @@ function ConvertTo-BinaryIP
 	[OutputType([string])]
 	param (
 		[Parameter(Mandatory = $true,
-		ValueFromPipeline = $true)]
+			ValueFromPipeline = $true)]
 		[IPAddress] $IPAddress
 	)
 
