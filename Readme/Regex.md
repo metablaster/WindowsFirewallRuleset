@@ -106,6 +106,18 @@ New-NetFirewallRule -LocalOnlyMapping $true -LooseSourceMapping $false
 
 [//]: # (If needed)
 
+# Get LocalUser and EdgeTraversalPolicy
+
+```powershell
+# TODO: can also be function call for SDDL
+New-NetFirewallRule -LocalUser $UsersGroupSDDL -EdgeTraversalPolicy DeferToApp
+New-NetFirewallRule -LocalUser Any -EdgeTraversalPolicy DeferToApp
+```
+
+```regex
+-LocalUser [\$|\w]\w+ -EdgeTraversalPolicy \w+ ?
+```
+
 # Get local and remote IPv6 address only in any notation
 
 ```powershell

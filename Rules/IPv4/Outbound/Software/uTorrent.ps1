@@ -67,6 +67,8 @@ if ((Test-Installation "uTorrent" ([ref] $uTorrentRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$uTorrentRoot\uTorrent.exe"
 	Test-File $Program @Logs
+
+	# NOTE: We start from port 1024 which is most widely used, but some peers may set it to lower
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "uTorrent - Client to peers" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -96,6 +98,8 @@ if ((Test-Installation "uTorrent" ([ref] $uTorrentRoot) @Logs) -or $ForceLoad)
 		-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "BitTorrent part of full range of ports used most often (Trackers)	" @Logs | Format-Output @Logs
 
+	# TODO: description doesn't seem ok? "All interface types for IPv6 to teredo"
+	# NOTE: We start from port 1024 which is most widely used, but some peers may set it to lower
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "uTorrent - DHT" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
@@ -114,14 +118,14 @@ if ((Test-Installation "uTorrent" ([ref] $uTorrentRoot) @Logs) -or $ForceLoad)
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "uTorrent - Local Peer Discovery" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
 		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 224.0.0.0-239.255.255.255 -LocalPort 6771 -RemotePort 6771 `
 		-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "UDP multicast search to identify other peers in your subnet that are also on torrents you are on." @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "uTorrent - SSDP" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
 		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 239.255.255.250 -LocalPort Any -RemotePort 1900 `
 		-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "" @Logs | Format-Output @Logs

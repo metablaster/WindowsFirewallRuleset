@@ -109,6 +109,8 @@ TODO's in this file are categorized into following sections:
     - make display names and groups modular for easy search, ie. group - subgroup, Company - Program
     - We need some better and unified approach to write rule descriptions, because it looks ugly
     now, since comments must not be formatted, formatting would be visible in GUI.
+    - Some rules apply to both IPv4 and IPv6 such as qBittorrent.ps1, for these we should group them
+    into "hybrid" folder instead of IPv4 or IPv6 folder which should be IP version specific rules.
 
 4. Test and debugging
 

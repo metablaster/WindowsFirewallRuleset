@@ -3,6 +3,10 @@
 
 # Changelog v0.3.x
 
+## Rules
+
+- Updated rules for qBittorrent to be more restrictive
+
 ## Development
 
 - Added PSScriptAnalyzer rules and settings
