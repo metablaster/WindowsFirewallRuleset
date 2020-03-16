@@ -62,7 +62,24 @@ $NETFrameworkRoot = ""
 #
 # Windows system rules
 # Rules that apply to Windows programs and utilities, which are not handled by predefined rules
+# TODO: LocalUser for most rules is missing?
 #
+
+# TODO: remote port unknown, protocol assumed
+# NOTE: user can by any local human user
+$Program = "%SystemRoot%\System32\DataUsageLiveTileTask.exe"
+Test-File $Program @Logs
+
+New-NetFirewallRule -DisplayName "DataSenseLiveTileTask" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Internet4 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser Any `
+	-InterfaceType $Interface `
+	-Description "Probably related to keeping bandwidth usage information up-to-date." `
+	@Logs | Format-Output @Logs
 
 # Test if installation exists on system
 if ((Test-Installation "NETFramework" ([ref] $NETFrameworkRoot) @Logs) -or $ForceLoad)

@@ -6,6 +6,8 @@
 ## Rules
 
 - Updated rules for qBittorrent to be more restrictive
+- Added new rules for intel
+- Update updater rule for OneDrive and git according to task scheduler
 
 ## Development
 

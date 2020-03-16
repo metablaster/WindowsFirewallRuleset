@@ -67,11 +67,13 @@ if ((Test-Installation "OneDrive" ([ref] $OneDriveRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$OneDriveRoot\OneDriveStandaloneUpdater.exe"
 	Test-File $Program @Logs
+
+	# According to scheduled task the updating user is SYSTEM
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "OneDrive Update" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-		-LocalUser $UsersGroupSDDL `
+		-LocalUser $NT_AUTHORITY_System `
 		-Description "Updater for OneDrive" @Logs | Format-Output @Logs
 
 	$Program = "$OneDriveRoot\OneDrive.exe"
