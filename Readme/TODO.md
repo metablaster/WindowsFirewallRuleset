@@ -56,6 +56,9 @@ TODO's in this file are categorized into following sections:
     - Revisit code and make consistent PSCustomObject properties for all function outputs
     - Need to see which functions/commands may throw and setup try catch blocks
     - Revisit parameter validation for functions, specifically acceptance of NULL or empty
+    - Registry drilling for some rules are complex and specific, such as for NVIDIA,
+    in these and probably most other similar cases we should return installation table which
+    would be used inside rule script to get individual paths for individual programs.
 
 2. Project scripts
 
@@ -65,8 +68,8 @@ TODO's in this file are categorized into following sections:
 
 3. Rules
 
-    - Paths to fix: nvidia, onedrive, visio, project
-    - rules to fix: qbittorrent, steam, vcpkg, msys2, store apps for admins,
+    - Paths to fix: onedrive, visio, project
+    - rules to fix: nvidia, steam, vcpkg, msys2, store apps for admins,
     internet browser (auto loads)
     - Now that common parameters are removed need to update the order of rule parameters,
     also not all are the same.
@@ -164,3 +167,4 @@ TODO's in this file are categorized into following sections:
 
 - Move duplicate and global TODO's from scripts here into global TODO list
 - Check spelling for entry project
+- rules to fix: qbittorrent
