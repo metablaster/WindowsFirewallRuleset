@@ -79,6 +79,7 @@ $TorRoot = "%SystemDrive%\Users\User\AppData\Local\Tor Browser"
 # Test if installation exists on system
 if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot) @Logs) -or $ForceLoad)
 {
+	# TODO: no FTP rule
 	$EdgeChromiumApp = "$EdgeChromiumRoot\msedge.exe"
 	Test-File $EdgeChromiumApp
 
@@ -95,6 +96,13 @@ if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot) @Logs) -or $Forc
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "Hyper text transfer protocol over SSL." @Logs | Format-Output @Logs
+
+	New-NetFirewallRule -Platform $Platform `
+		-DisplayName "Edge-Chromium FTP" -Service Any -Program $EdgeChromiumApp `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "File transfer protocol." @Logs | Format-Output @Logs
 
 	# TODO: we should probably have a function for this and similar cases?
 	$EdgeUpdateRoot = "$(Split-Path -Path $(Split-Path -Path $EdgeChromiumRoot -Parent) -Parent)\EdgeUpdate"
@@ -225,21 +233,21 @@ if ((Test-Installation "Firefox" ([ref] $FirefoxRoot) @Logs) -or $ForceLoad)
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Firefox HTTP" -Service Any -Program $FirefoxApp `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "Hyper text transfer protocol." @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Firefox HTTPS" -Service Any -Program $FirefoxApp `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "Hyper text transfer protocol over SSL." @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Firefox FTP" -Service Any -Program $FirefoxApp `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "File transfer protocol." @Logs | Format-Output @Logs
@@ -290,14 +298,14 @@ if ((Test-Installation "Tor" ([ref] $TorRoot) @Logs) -or $ForceLoad)
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Tor HTTP" -Service Any -Program $TorApp `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "Hyper text transfer protocol." @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Tor HTTPS" -Service Any -Program $TorApp `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "Hyper text transfer protocol over SSL." @Logs | Format-Output @Logs
@@ -309,10 +317,11 @@ if ((Test-Installation "Tor" ([ref] $TorRoot) @Logs) -or $ForceLoad)
 		-LocalUser $UsersGroupSDDL `
 		-Description "DNS requests to exit relay over Tor network." @Logs | Format-Output @Logs
 
+	# OLD: -RemotePort 9001, 9030, 9050, 9051, 9101, 9150
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Tor Network" -Service Any -Program $TorApp `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 9001, 9030, 9050, 9051, 9101, 9150 `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 8080, 8443, 9001-9003, 9010, 9101 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "Tor network specific ports" @Logs | Format-Output @Logs
 

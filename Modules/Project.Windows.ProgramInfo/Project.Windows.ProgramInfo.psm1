@@ -1772,7 +1772,7 @@ function Find-Installation
 		}
 		"Tor"
 		{
-			Update-Table "Tor" -UserProfile
+			# NOTE: ask user where he installed Tor because it doesn't include an installer
 			break
 		}
 		"uTorrent"

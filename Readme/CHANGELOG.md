@@ -9,6 +9,7 @@
 - Added new rules for intel
 - Update updater rule for OneDrive and git according to task scheduler
 - Update rules for NVIDIA, still needs improvements
+- Update rules for Tor browser, add rule for Edge-chromium FTP
 
 ## Bugfixes
 
