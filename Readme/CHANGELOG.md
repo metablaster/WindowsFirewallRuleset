@@ -10,6 +10,11 @@
 - Update updater rule for OneDrive and git according to task scheduler
 - Update rules for NVIDIA, still needs improvements
 
+## Bugfixes
+
+- Informational messages from modules would be hidden in non "Develop" mode
+- User prompt for multiple installation directory would be skipped causing script hang
+
 ## Development
 
 - Added PSScriptAnalyzer rules and settings

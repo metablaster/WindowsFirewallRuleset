@@ -47,6 +47,11 @@ if ($Develop)
 	Write-Debug -Message "[$ThisModule] VerbosePreference is $VerbosePreference"
 	Write-Debug -Message "[$ThisModule] InformationPreference is $InformationPreference"
 }
+else
+{
+	# Everything is default except InformationPreference should be enabled
+	$InformationPreference = "Continue"
+}
 
 # Includes
 . $PSScriptRoot\External\Get-SQLInstances.ps1
@@ -1018,6 +1023,39 @@ function Initialize-Table
 
 <#
 .SYNOPSIS
+Print installation directories to console
+.DESCRIPTION
+Prints found program data which includes program name, program ID, install location etc.
+.PARAMETER Caption
+Single line string to print before printing the table
+.EXAMPLE
+Show-Table "Table data"
+.INPUTS
+None. You cannot pipe objects to Test-Installation
+.OUTPUTS
+None. Table data is printed to console
+.NOTES
+This function is needed to avoid warning of write-host inside non "Show" function
+#>
+function Show-Table
+{
+	[OutputType([System.Void])]
+	[CmdletBinding()]
+	param (
+		[Parameter()]
+		[string] $Caption
+	)
+
+	if (![String]::IsNullOrEmpty($Caption))
+	{
+		Write-Host $Caption
+	}
+
+	$InstallTable | Format-Table -AutoSize | Out-Host
+}
+
+<#
+.SYNOPSIS
 Fill data table with principal and program location
 .DESCRIPTION
 Search system for programs with input search string, and add new program installation directory
@@ -1168,14 +1206,14 @@ function Update-Table
 
 		foreach ($Principal in $Principals)
 		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching $($Principal.Account) programs for $SearchString"
+
 			# NOTE: the story is different here, each user may have multiple matches for search string
 			# letting one match to have same principal would be mistake.
 			$UserPrograms = Get-UserPrograms $Principal.User | Where-Object -Property Name -like "*$SearchString*"
 
 			if ($UserPrograms)
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching $($Principal.Account) programs for $SearchString"
-
 				foreach ($Program in $UserPrograms)
 				{
 					# NOTE: Avoid spamming
@@ -1349,8 +1387,7 @@ function Test-Installation
 			$InstallTable = $InstallTable.DefaultView.ToTable()
 
 			# Print out all candidate rows
-			Write-Output "0. Abort this operation"
-			$InstallTable | Format-Table -AutoSize
+			Show-Table "0. Abort this operation"
 
 			# Prompt user to chose one
 			[int32] $Choice = -1
@@ -2470,6 +2507,7 @@ if ($Develop)
 	Export-ModuleMember -Function Update-Table
 	Export-ModuleMember -Function Edit-Table
 	Export-ModuleMember -Function Initialize-Table
+	Export-ModuleMember -Function Show-Table
 
 	# Variable exports
 	Export-ModuleMember -Variable InstallTable

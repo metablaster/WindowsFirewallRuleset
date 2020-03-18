@@ -94,6 +94,7 @@
 		"Update-Table"
 		"Edit-Table"
 		"Initialize-Table"
+		"Show-Table"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not

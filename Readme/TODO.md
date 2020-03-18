@@ -76,7 +76,7 @@ TODO's in this file are categorized into following sections:
 
 4. Test and debugging
 
-    - Some test fail to run in "develop" mode due to missing variables
+    - Some test fail to run in non "develop" mode due to missing variables
     - Need to test rules without "ProgramRoot" variable to see if searching works
 
 5. Partially fixed, need testing
@@ -122,6 +122,7 @@ TODO's in this file are categorized into following sections:
     pester tests and experiment tests
     - What should be initial values for ProgramRoot variables in rule scripts? we should remove
     known non existent paths and handle empty strings to prevent INFO messages for conversion.
+    - Many test cases are local to our environment, other people may get different results
 
 5. Code style
 
@@ -165,6 +166,15 @@ TODO's in this file are categorized into following sections:
 
 ## Done
 
-- Move duplicate and global TODO's from scripts here into global TODO list
-- Check spelling for entry project
-- rules to fix: qbittorrent
+1. Project scripts
+
+    - Information output is not enabled for modules and probably other code
+
+2. Rules
+
+    - rules to fix: qbittorrent
+
+3. Other
+
+    - Move duplicate and global TODO's from scripts here into global TODO list
+    - Check spelling for entry project

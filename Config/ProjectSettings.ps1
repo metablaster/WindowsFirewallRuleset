@@ -115,7 +115,7 @@ if ($Develop)
 else # Normal use case
 {
 	# These are set to default values for normal use case,
-	# modify to customize your experience
+	# modify to customize your experience, note that this has no effect on modules!
 	$ErrorActionPreference = "Continue"
 	$WarningPreference = "Continue"
 	$InformationPreference = "Continue"
