@@ -73,7 +73,7 @@ if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot) @Logs) -or $ForceL
 	New-NetFirewallRule -DisplayName "qBittorrent - DHT" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
 		-Service Any -Program $Program -Group $Group `
-		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort 1161 -RemotePort 1024-65535 `
 		-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy DeferToApp `
@@ -85,12 +85,23 @@ if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot) @Logs) -or $ForceL
 	New-NetFirewallRule -DisplayName "qBittorrent - Listening port" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
 		-Service Any -Program $Program -Group $Group `
-		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort 1161 -RemotePort 1024-65535 `
 		-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy DeferToApp `
 		-InterfaceType $Interface `
 		-Description "qBittorrent TCP listener." `
+		@Logs | Format-Output @Logs
+
+	New-NetFirewallRule -DisplayName "qBittorrent - Embedded tracker port" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Any `
+		-LocalPort 9000 -RemotePort 1024-65535 `
+		-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy DeferToApp `
+		-InterfaceType $Interface `
+		-Description "qBittorrent Embedded tracker port." `
 		@Logs | Format-Output @Logs
 
 	# NOTE: remote port can be other than 6771, remote client will fall back to 6771

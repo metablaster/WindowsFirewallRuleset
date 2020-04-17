@@ -47,6 +47,9 @@ $Group = "Development - Microsoft Visual Studio"
 $Profile = "Private, Public"
 $VSUpdateUsers = Get-SDDL -Group "Users", "Administrators" @Logs
 
+$ExtensionAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM" @Logs
+Merge-SDDL ([ref] $ExtensionAccounts) (Get-SDDL -Group "Users") @Logs
+
 # Ask user if he wants to load these rules
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
 if (!(Approve-Execute @Logs)) { exit }
@@ -146,7 +149,7 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot) @Logs) -or $ForceLoad)
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "VS Latest ServiceHub" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443, 9354 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "ServiceHub programs provide identity (sign-in for VS),
 	and support for internal services (like extension management, compiler support, etc).
@@ -210,14 +213,14 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot) @Logs) -
 		-LocalUser $UsersGroupSDDL `
 		-Description "Run when updating or using add features to VS in installer." @Logs | Format-Output @Logs
 
-	# TODO: testing: # (Get-SDDLFromAccounts @("NT AUTHORITY\SYSTEM", "$UserAccount")) `
+	# TODO: testing: $ExtensionAccounts `
 	$Program = "$VSInstallerRoot\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\BackgroundDownload.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "VS Latest ServiceHub Installer" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-		-LocalUser $NT_AUTHORITY_System `
+		-LocalUser $ExtensionAccounts `
 		-Description "Used when 'Automatically download updates' in VS2019?
 	Tools->Options->Environment->Product Updates->Automatically download updates." @Logs | Format-Output @Logs
 

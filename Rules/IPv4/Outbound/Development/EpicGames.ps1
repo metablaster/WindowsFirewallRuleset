@@ -56,7 +56,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # Epic games installation directories
 #
-$EngineRoot = "%SystemDrive%\Users\User\source\repos\UnrealEngine\Engine"
+$EngineRoot = "%SystemDrive%\Users\haxor\GitHub\UnrealEngine\Engine"
 $LauncherRoot = "%ProgramFiles(x86)%\Epic Games\Launcher"
 
 #
@@ -74,6 +74,13 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot) @Logs) -or $ForceLoad)
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "Used to send crash report to epic games." @Logs | Format-Output @Logs
+
+	New-NetFirewallRule -Platform $Platform `
+		-DisplayName "Unreal Engine - CrashReportClientEditor" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 230.0.0.1 -LocalPort Any -RemotePort 6666 `
+		-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+		-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$EngineRoot\Binaries\DotNET\GitDependencies.exe"
 	Test-File $Program @Logs
