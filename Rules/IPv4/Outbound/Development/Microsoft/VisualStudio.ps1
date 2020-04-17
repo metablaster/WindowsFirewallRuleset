@@ -144,13 +144,14 @@ if ((Test-Installation "VisualStudio" ([ref] $VSRoot) @Logs) -or $ForceLoad)
 	and support for internal services (like extension management, compiler support, etc).
 	These are not optional and are designed to be running side-by-side with devenv.exe." @Logs | Format-Output @Logs
 
+	# NOTE: System account is needed for port 9354
 	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.SettingsHost.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "VS Latest ServiceHub" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443, 9354 `
-		-LocalUser $UsersGroupSDDL `
+		-LocalUser $ExtensionAccounts `
 		-Description "ServiceHub programs provide identity (sign-in for VS),
 	and support for internal services (like extension management, compiler support, etc).
 	These are not optional and are designed to be running side-by-side with devenv.exe." @Logs | Format-Output @Logs

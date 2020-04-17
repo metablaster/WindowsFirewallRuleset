@@ -91,6 +91,14 @@ if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot) @Logs) -or $Forc
 		-Description "Hyper text transfer protocol." @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
+		-DisplayName "Edge-Chromium QUIC" -Service Any -Program $EdgeChromiumApp `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+		-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+		-Description "Quick UDP Internet Connections,
+	Experimental transport layer network protocol developed by Google and implemented in 2013." @Logs | Format-Output @Logs
+
+	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Edge-Chromium HTTPS" -Service Any -Program $EdgeChromiumApp `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
@@ -251,6 +259,16 @@ if ((Test-Installation "Firefox" ([ref] $FirefoxRoot) @Logs) -or $ForceLoad)
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "File transfer protocol." @Logs | Format-Output @Logs
+
+	$PingSender = "$FirefoxRoot\pingsender.exe"
+	Test-File $PingSender
+	New-NetFirewallRule -Platform $Platform `
+		-DisplayName "Firefox Telemetry" -Service Any -Program $PingSender `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "Pingsender ensures shutdown telemetry data is sent to mozilla after shutdown,
+		instead of waiting next firefox start which could take hours, days or even more." @Logs | Format-Output @Logs
 }
 
 #
