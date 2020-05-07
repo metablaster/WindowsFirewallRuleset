@@ -1,7 +1,7 @@
 
 # Here is a list of changes for each of releases
 
-# Changelog v0.3.x
+# Changelog v0.4.0
 
 ## Rules
 
@@ -30,6 +30,7 @@
 - Markdown formatted according to markdownlint rules
 - Entry project spellchecked
 - Added regex samples to query rules inside scripts for bulk operations
+- Updated various documentation and notices about project
 
 # Changelog v0.3.0
 
