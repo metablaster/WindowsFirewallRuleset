@@ -5,7 +5,7 @@ Here is a short and most important list of things to keep in mind.
 
 ## General guidelines
 
-Bellow 2 pages explains general/starting guidelines regarding open source:\
+Bellow 2 pages explain general/starting guidelines regarding open source:\
 [How to contribute to open source](https://opensource.guide/how-to-contribute)\
 [Open Source Contribution Etiquette](https://tirania.org/blog/archive/2010/Dec-31.html)
 
