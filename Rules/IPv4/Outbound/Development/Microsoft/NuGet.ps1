@@ -68,11 +68,11 @@ if ((Test-Installation "NuGet" ([ref] $NuGetRoot) @Logs) -or $ForceLoad)
 	$Program = "$NuGetRoot\nuget.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Nuget CLI" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "" @Logs | Format-Output @Logs
+		-DisplayName "Nuget CLI" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "" @Logs | Format-Output @Logs
 }
 
 Update-Logs

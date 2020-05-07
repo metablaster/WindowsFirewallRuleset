@@ -10,7 +10,7 @@ None. You cannot pipe objects to Get-UserSID
 .OUTPUTS
 System.String SID (security identifier)
 .NOTES
-TODO: implement queriying computers on network
+TODO: implement querying computers on network
 #>
 function Get-UserSID
 {
@@ -46,7 +46,7 @@ None. You cannot pipe objects to Get-AccountSID
 .OUTPUTS
 System.String SID (security identifier)
 .NOTES
-TODO: implement queriying computers on network
+TODO: implement querying computers on network
 #>
 function Get-AccountSID
 {
@@ -85,7 +85,7 @@ None. You cannot pipe objects to Get-UserSDDL
 .OUTPUTS
 System.String SDDL for given usernames
 .NOTES
-TODO: implement queriying computers on network
+TODO: implement querying computers on network
 #>
 function Get-UserSDDL
 {
@@ -99,7 +99,7 @@ function Get-UserSDDL
 
 	[string] $SDDL = "D:"
 
-	foreach($User in $UserNames)
+	foreach ($User in $UserNames)
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL for user: $User"
 
@@ -131,7 +131,7 @@ None. You cannot pipe objects to Get-AccountSDDL
 .OUTPUTS
 System.String SDDL string for given accounts
 .NOTES
-TODO: implement queriying computers on network
+TODO: implement querying computers on network
 #>
 function Get-AccountSDDL
 {
@@ -160,7 +160,6 @@ function Get-AccountSDDL
 		}
 
 		$SDDL += "(A;;CC;;;{0})" -f $SID
-
 	}
 
 	return $SDDL
@@ -178,7 +177,7 @@ None. You cannot pipe objects to Get-UserAccounts
 .OUTPUTS
 System.String[] Array of enabled user accounts in specified group, in form of COMPUTERNAME\USERNAME
 .NOTES
-TODO: implement queriying computers on network
+TODO: implement querying computers on network
 TODO: should be renamed into Get-GroupPrincipals
 #>
 function Get-UserAccounts
@@ -196,7 +195,7 @@ function Get-UserAccounts
 	Where-Object { $_.PrincipalSource -eq "Local" -and $_.ObjectClass -eq "User" } |
 	Select-Object -ExpandProperty Name
 
-	if([string]::IsNullOrEmpty($GroupUsers))
+	if ([string]::IsNullOrEmpty($GroupUsers))
 	{
 		Write-Warning -Message "Failed to get UserAccounts for group: $UserGroup"
 	}

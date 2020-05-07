@@ -57,43 +57,67 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # to troubleshoot firewall without shuting it down completely.
 #
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Port 443" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
--LocalUser $UsersGroupSDDL `
--Description "Temporary open port 443 to internet, and disable ASAP." @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Port 443" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Internet4 `
+	-LocalPort Any -RemotePort 443 `
+	-LocalUser $UsersGroupSDDL `
+	-InterfaceType $Interface `
+	-Description "Temporary open port 443 to internet, and disable ASAP." `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Port 80" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
--LocalUser $UsersGroupSDDL `
--Description "Temporary open port 80 to internet, and disable ASAP." @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Port 80" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Internet4 `
+	-LocalPort Any -RemotePort 80 `
+	-LocalUser $UsersGroupSDDL `
+	-InterfaceType $Interface `
+	-Description "Temporary open port 80 to internet, and disable ASAP." `
+	@Logs | Format-Output @Logs
 
 # NOTE: to make use of this rule, it should be updated here and the script re-run
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Installer" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser $UsersGroupSDDL `
--Description "Enable only to let some installer update or communicate to internet such as office update, and disable ASAP.
-required for ie. downloaded Click-to-Run which does not have persitent location.
-Add installer path in script and re-run Trmporary.ps1" @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Installer" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Internet4 `
+	-LocalPort Any -RemotePort 80, 443 `
+	-LocalUser $UsersGroupSDDL `
+	-InterfaceType $Interface `
+	-Description "Enable only to let some installer update or communicate to internet such as
+office update, and disable ASAP.
+required for ie. downloaded Click-to-Run which does not have persistent location.
+Add installer path in script and re-run Temporary.ps1" `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Services" -Service "*" -Program $ServiceHost `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
--LocalUser Any `
--Description "Enable only to let any service communicate to internet, useful for troubleshooting, and disable ASAP." @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Services" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service "*" -Program $ServiceHost -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol Any `
+	-LocalAddress Any -RemoteAddress Internet4 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser Any `
+	-InterfaceType $Interface `
+	-Description "Enable only to let any service communicate to internet,
+useful for troubleshooting, and disable ASAP." `
+	@Logs | Format-Output @Logs
 
-# TODO: it should apply to users only, for administrators there is a block rule, there is another TODO about possible design in VS script
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Store Apps" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
--LocalUser Any -Owner Any -Package "*" `
--Description "Enable only to let any store app communicate to internet, useful for troubleshooting, and disable ASAP." @Logs | Format-Output @Logs
+# TODO: it should apply to users only, for administrators there is a block rule, there is another
+# TODO about possible design in VS script
+New-NetFirewallRule -DisplayName "Store Apps" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Internet4 `
+	-LocalPort Any -RemotePort 80, 443 `
+	-LocalUser Any -Owner Any -Package "*" `
+	-InterfaceType $Interface `
+	-Description "Enable only to let any store app communicate to internet,
+useful for troubleshooting, and disable ASAP." `
+	@Logs | Format-Output @Logs
 
 Update-Logs

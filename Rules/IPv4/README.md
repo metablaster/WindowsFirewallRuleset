@@ -1,4 +1,4 @@
 
 # About this directory
 
-Root directory for all IPv6 rules
+Root directory for all IPv4 rules

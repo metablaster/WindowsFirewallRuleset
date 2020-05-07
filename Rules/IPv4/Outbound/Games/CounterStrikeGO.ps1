@@ -68,20 +68,20 @@ if ((Test-Installation "CounterStrikeGO" ([ref] $CounterStrikeRoot) @Logs) -or $
 	$Program = "$CounterStrikeRoot\csgo.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Counter Strike GO (HTTP)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "download maps" @Logs | Format-Output @Logs
+		-DisplayName "Counter Strike GO (HTTP)" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "download maps" @Logs | Format-Output @Logs
 
 	$Program = "$CounterStrikeRoot\csgo.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Counter Strike GO" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 27000-27100 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "" @Logs | Format-Output @Logs
+		-DisplayName "Counter Strike GO" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 27000-27100 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "" @Logs | Format-Output @Logs
 }
 
 Update-Logs

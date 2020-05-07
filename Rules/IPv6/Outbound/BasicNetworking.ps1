@@ -61,76 +61,109 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Loop back
 # TODO: why specifying loopback address ::1/128 doesn't work?
 # NOTE: IPv6 loopback rule does not work
-# NOTE: even thogh we specify "IPv6 the loopback interface alias is the same for for IPv4 and IPv6, meaning there is only one loopback interface!"
-# $Loopback = Get-NetIPInterface | Where-Object {$_.InterfaceAlias -like "*Loopback*" -and $_.AddressFamily -eq "IPv6"} | Select-Object -ExpandProperty InterfaceAlias
-#
+# NOTE: even though we specify "IPv6 the loopback interface alias is the same for for IPv4 and IPv6,
+# meaning there is only one loopback interface!"
+# $Loopback = Get-NetIPInterface | Where-Object {
+# 	$_.InterfaceAlias -like "*Loopback*" -and $_.AddressFamily -eq "IPv6"
+# } | Select-Object -ExpandProperty InterfaceAlias
 
-# New-NetFirewallRule -Platform $Platform `
-# -DisplayName "Loopback IP" -Service Any -Program Any `
-# -PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any -InterfaceAlias $Loopback `
-# -Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
-# -LocalUser Any `
-# -Description "This rule covers both IPv4 and IPv6 loopback interface.
-# Network software and utilities use loopback address to access a local computer's TCP/IP network resources."
+
+# New-NetFirewallRule -DisplayName "Loopback IP" `
+# 	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+# 	-Service Any -Program Any -Group $Group `
+# 	-Enabled True -Action Allow -Direction $Direction -Protocol Any `
+# 	-LocalAddress Any -RemoteAddress Any `
+# 	-LocalPort Any -RemotePort Any `
+# 	-LocalUser Any `
+#	-InterfaceType Any -InterfaceAlias $Loopback `
+# 	-Description "This rule covers both IPv4 and IPv6 loopback interface.
+# Network software and utilities use loopback address to access a local computer's TCP/IP network
+# resources." `
+# 	@Logs | Format-Output @Logs
 
 #
 # DNS (Domain Name System)
 #
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Domain Name System" -Service Dnscache -Program $ServiceHost `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress DNS6 -LocalPort Any -RemotePort 53 `
--LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description "Rule to allow IPv6 DNS requests." @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Domain Name System" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Dnscache -Program $ServiceHost -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress DNS6 `
+	-LocalPort Any -RemotePort 53 `
+	-LocalUser Any `
+	-InterfaceType $Interface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description "Rule to allow IPv6 DNS requests." `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Domain Name System" -Service Any -Program System `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress DefaultGateway6 -LocalPort Any -RemotePort 53 `
--LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description "Rule to allow IPv6 DNS requests by System to default gateway." @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Domain Name System" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program System -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress DefaultGateway6 `
+	-LocalPort Any -RemotePort 53 `
+	-LocalUser $NT_AUTHORITY_System `
+	-InterfaceType $Interface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description "Rule to allow IPv6 DNS requests by System to default gateway." `
+	@Logs | Format-Output @Logs
 
 #
 # mDNS (Multicast Domain Name System)
-# NOTE: this should be placed in Multicast.ps1 like it is for IPv6, but it's here because of specific address,
-# which is part of "Local Network Control Block" (224.0.0.0 - 224.0.0.255)
+# NOTE: this should be placed in Multicast.ps1 like it is for IPv6, but it's here because of
+# specific address, which is part of "Local Network Control Block" (224.0.0.0 - 224.0.0.255)
 # An mDNS message is a multicast UDP packet sent using the following addressing:
 # IPv4 address 224.0.0.251 or IPv6 address ff02::fb
 # UDP port 5353
 # https://en.wikipedia.org/wiki/Multicast_DNS
 #
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Multicast Domain Name System" -Service Dnscache -Program $ServiceHost `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::fb -LocalPort 5353 -RemotePort 5353 `
--LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
-within small networks that do not include a local name server.
+New-NetFirewallRule -DisplayName "Multicast Domain Name System" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
+	-Service Dnscache -Program $ServiceHost -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::fb `
+	-LocalPort 5353 -RemotePort 5353 `
+	-LocalUser Any `
+	-InterfaceType $Interface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP
+addresses within small networks that do not include a local name server.
 It is a zero-configuration service, using essentially the same programming interfaces,
-packet formats and operating semantics as the unicast Domain Name System (DNS)." @Logs | Format-Output @Logs
+packet formats and operating semantics as the unicast Domain Name System (DNS)." `
+ @Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Multicast Domain Name System" -Service Dnscache -Program $ServiceHost `
--PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::fb -LocalPort 5353 -RemotePort 5353 `
--LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
-within small networks that do not include a local name server.
+New-NetFirewallRule -DisplayName "Multicast Domain Name System" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
+	-Service Dnscache -Program $ServiceHost -Group $Group `
+	-Enabled True -Action Block -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::fb `
+	-LocalPort 5353 -RemotePort 5353 `
+	-LocalUser Any `
+	-InterfaceType $Interface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP
+addresses within small networks that do not include a local name server.
 It is a zero-configuration service, using essentially the same programming interfaces,
-packet formats and operating semantics as the unicast Domain Name System (DNS)." @Logs | Format-Output @Logs
+packet formats and operating semantics as the unicast Domain Name System (DNS)." `
+ @Logs | Format-Output @Logs
 
 #
 # DHCP (Dynamic Host Configuration Protocol)
 #
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Dynamic Host Configuration Protocol" -Service Dhcp -Program $ServiceHost `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress DHCP6 -LocalPort 546 -RemotePort 547 `
--LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description "Allows DHCPv6 messages for stateful auto-configuration." @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Dynamic Host Configuration Protocol" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Dhcp -Program $ServiceHost -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress DHCP6 `
+	-LocalPort 546 -RemotePort 547 `
+	-LocalUser Any `
+	-InterfaceType $Interface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description "Allows DHCPv6 messages for stateful auto-configuration." `
+	@Logs | Format-Output @Logs
 
 #
 # IGMP (Internet Group Management Protocol)
@@ -144,22 +177,32 @@ New-NetFirewallRule -Platform $Platform `
 # IPHTTPS (IPv6 over HTTPS)
 #
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "IPv6 over HTTPS" -Service Any -Program System `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet6 -LocalPort Any -RemotePort IPHTTPSout `
--LocalUser $NT_AUTHORITY_System `
--Description "Allow IPv6 IPHTTPS tunneling technology to provide connectivity across HTTP proxies and firewalls." @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "IPv6 over HTTPS" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program System -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Internet6 `
+	-LocalPort Any -RemotePort IPHTTPSout `
+	-LocalUser $NT_AUTHORITY_System `
+	-InterfaceType $Interface `
+	-Description "Allow IPv6 IPHTTPS tunneling technology to provide connectivity across HTTP
+proxies and firewalls." `
+	@Logs | Format-Output @Logs
 
 #
 # IPv6 Encapsulation
 #
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "IPv6 Encapsulation" -Service Any -Program System `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol 41 -LocalAddress Any -RemoteAddress $ISATAP_Remotes -LocalPort Any -RemotePort Any `
--LocalUser $NT_AUTHORITY_System `
--Description "Rule required to permit IPv6 traffic for ISATAP (Intra-Site Automatic Tunnel Addressing Protocol) and 6to4 tunneling services." @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "IPv6 Encapsulation" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program System -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol 41 `
+	-LocalAddress Any -RemoteAddress $ISATAP_Remotes `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $NT_AUTHORITY_System `
+	-InterfaceType $Interface `
+	-Description "Rule required to permit IPv6 traffic for
+ISATAP (Intra-Site Automatic Tunnel Addressing Protocol) and 6to4 tunneling services." `
+	@Logs | Format-Output @Logs
 
 Update-Logs

@@ -1,12 +1,16 @@
+
 #region:TestFileHeader
 param (
 	[bool] $UseExisting
 )
 
-if (-not $UseExisting) {
+if (-not $UseExisting)
+{
 	$moduleBase = $psscriptroot.Substring(0, $psscriptroot.IndexOf("\test"))
 	$stubBase = Resolve-Path (Join-Path $moduleBase "test*\stub\*")
-	if ($null -ne $stubBase) {
+
+	if ($null -ne $stubBase)
+	{
 		$stubBase | Import-Module -Force
 	}
 
@@ -36,12 +40,13 @@ InModuleScope Indented.Net.IP {
 			'1.2.3.4' | ConvertTo-HexIP | Should -Be '01020304'
 		}
 
-		It 'Throws an error if passed an unrecognised format' {
+		It 'Throws an error if passed an unrecognized format' {
 			{ ConvertTo-HexIP abcd -ErrorAction Stop } | Should -Throw
 		}
 
 		It 'Example <Number> is valid' -TestCases (
 			(Get-Help ConvertTo-HexIP).Examples.Example.Code | ForEach-Object -Begin {
+				[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignment', '', Justification = 'FalsePositive')]
 				$Number = 1
 			} -Process {
 				@{ Number = $Number++; Code = $_ }

@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 Set-StrictMode -Version Latest
-Set-Variable ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
+Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
 #
 # Module preferences
@@ -46,6 +46,11 @@ if ($Develop)
 	Write-Debug -Message "[$ThisModule] DebugPreference is $DebugPreference"
 	Write-Debug -Message "[$ThisModule] VerbosePreference is $VerbosePreference"
 	Write-Debug -Message "[$ThisModule] InformationPreference is $InformationPreference"
+}
+else
+{
+	# Everything is default except InformationPreference should be enabled
+	$InformationPreference = "Continue"
 }
 
 # Includes
@@ -92,23 +97,24 @@ function Get-AppSID
 	$TargetPath = "C:\Users\$UserName\AppData\Local\Packages\$AppName\AC"
 	if (Test-Path -PathType Container -Path $TargetPath)
 	{
-		$ACL = Get-ACL $TargetPath
+		$ACL = Get-Acl $TargetPath
 		$ACE = $ACL.Access.IdentityReference.Value
 
 		foreach ($Entry in $ACE)
 		{
-			# NOTE: avoid spaming
+			# NOTE: avoid spamming
 			# Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing: $Entry"
 
 			# package SID starts with S-1-15-2-
-			if ($Entry -match "S-1-15-2-") {
+			if ($Entry -match "S-1-15-2-")
+			{
 				return $Entry
 			}
 		}
 	}
 	else
 	{
-		Write-Warning -Message "Store app '$AppName' is not isnstalled by user '$UserName' or the app is missing"
+		Write-Warning -Message "Store app '$AppName' is not installed by user '$UserName' or the app is missing"
 		Write-Information -Tags "User" -MessageData "INFO: To fix the problem let this user update all of it's apps in Windows store"
 	}
 }
@@ -127,7 +133,7 @@ None. You cannot pipe objects to Test-File
 .OUTPUTS
 None. Warning message if file not found
 .NOTES
-TODO: We should attempt to fix the path if invlid here!
+TODO: We should attempt to fix the path if invalid here!
 TODO: We should return true or false and conditionally load rule
 #>
 function Test-File
@@ -168,7 +174,7 @@ for firewall rules
 .PARAMETER FilePath
 Path to folder, Allows null or empty since input may come from other commandlets which can return empty or null
 .EXAMPLE
-Test-Evnironment %SystemDrive%
+Test-Environment %SystemDrive%
 .INPUTS
 None. You cannot pipe objects to Test-Environment
 .OUTPUTS
@@ -194,7 +200,7 @@ function Test-Environment
 		return $false
 	}
 
-	if ([array]::Find($UserProfileEnvironment, [System.Predicate[string]]{ $FilePath -like "$($args[0])*" }))
+	if ([array]::Find($UserProfileEnvironment, [System.Predicate[string]] { $FilePath -like "$($args[0])*" }))
 	{
 		Write-Warning -Message "Rules with environment variable paths that lead to user profile are not valid"
 		Write-Information -Tags "Project" -MessageData "INFO: Bad path detected is: $FilePath"
@@ -266,7 +272,7 @@ function Test-UserProfile
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-	# Impssible to know what the imput may be
+	# Impossible to know what the input may be
 	if ([System.String]::IsNullOrEmpty($FilePath))
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Returning false, file path is null or empty"
@@ -279,12 +285,12 @@ function Test-UserProfile
 	foreach ($Entry in @(Get-ChildItem Env:))
 	{
 		$Entry.Name = "%" + $Entry.Name + "%"
-		# NOTE: Avoid spaming
+		# NOTE: Avoid spamming
 		# Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing $($Entry.Name)"
 
 		if ($UserProfileEnvironment -contains $Entry.Name)
 		{
-			# NOTE: Avoid spaming
+			# NOTE: Avoid spamming
 			# Write-Debug -Message "[$($MyInvocation.InvocationName)] Selecting $($Entry.Name)"
 			$Variables += $Entry
 		}
@@ -298,11 +304,11 @@ function Test-UserProfile
 	$FilePath = $FilePath.Trim('"')
 	$FilePath = $FilePath.Trim("'")
 
-	# Replace double slasses with single ones
+	# Replace double slashes with single ones
 	$FilePath = $FilePath.Replace("\\", "\")
 
 	# If input path is root drive, removing a slash would produce bad path
-	# Otherwise remove trailing slahs for cases where entry path is convertible to variable
+	# Otherwise remove trailing slash for cases where entry path is convertible to variable
 	if ($FilePath.Length -gt 3)
 	{
 		$FilePath = $FilePath.TrimEnd('\\')
@@ -351,7 +357,7 @@ Various paths drilled out of registry, and those specified by the user must be
 checked and properly formatted.
 Formatted paths will also help sorting rules in firewall GUI based on path.
 .PARAMETER FilePath
-File path to format, can have environment variables, or consits of trailing slashes.
+File path to format, can have environment variables, or consists of trailing slashes.
 .EXAMPLE
 Format-Path "C:\Program Files\\Dir\"
 .INPUTS
@@ -363,16 +369,17 @@ None.
 #>
 function Format-Path
 {
+	[OutputType([System.String])]
 	[CmdletBinding()]
 	param (
 		[string] $FilePath
 	)
 
-	# Impssible to know what the imput may be
+	# Impossible to know what the input may be
 	if ([System.String]::IsNullOrEmpty($FilePath))
 	{
 		# TODO: why allowing empty path?
-		# NOTE: Avoid spaming
+		# NOTE: Avoid spamming
 		# Write-Debug -Message "[$($MyInvocation.InvocationName)] Returning false, file path is null or empty"
 		return $FilePath
 	}
@@ -402,14 +409,14 @@ function Format-Path
 	$FilePath = $FilePath.Trim('"')
 	$FilePath = $FilePath.Trim("'")
 
-	# Some paths may have semicollon (ie. command paths)
+	# Some paths may have semicolon (ie. command paths)
 	$FilePath = $FilePath.TrimEnd(";")
 
-	# Replace double slasses with single ones
+	# Replace double slashes with single ones
 	$FilePath = $FilePath.Replace("\\", "\")
 
 	# If input path is root drive, removing a slash would produce bad path
-	# Otherwise remove trailing slahs for cases where entry path is convertible to variable
+	# Otherwise remove trailing slash for cases where entry path is convertible to variable
 	if ($FilePath.Length -gt 3)
 	{
 		$FilePath = $FilePath.TrimEnd('\\')
@@ -485,7 +492,7 @@ function Format-Path
 .SYNOPSIS
 Get a list installed by specific user
 .DESCRIPTION
-Search installed programs in userprofile for specifit user account
+Search installed programs in userprofile for specific user account
 .PARAMETER UserName
 User name in form of "USERNAME"
 .PARAMETER ComputerName
@@ -571,7 +578,7 @@ function Get-UserPrograms
 			}
 		}
 
-		return $UserPrograms
+		Write-Output $UserPrograms
 	}
 	else
 	{
@@ -672,12 +679,12 @@ function Get-SystemPrograms
 
 					# regex to remove: \whatever.exe at the end
 					$InstallLocation = $InstallLocation -Replace "\\(?:.(?!\\))+exe$", ""
-					# once exe is removed, remove unistall folder too if needed
+					# once exe is removed, remove uninstall folder too if needed
 					#$InstallLocation = $InstallLocation -Replace "\\uninstall$", ""
 
 					if ([System.String]::IsNullOrEmpty($InstallLocation) -or
-					$InstallLocation -like "*{*}*" -or
-					$InstallLocation -like "*.exe*")
+						$InstallLocation -like "*{*}*" -or
+						$InstallLocation -like "*.exe*")
 					{
 						# NOTE: Avoid spamming
 						# Write-Debug -Message "[$($MyInvocation.InvocationName)] Ignoring useless key: $HKLMSubKey"
@@ -697,7 +704,7 @@ function Get-SystemPrograms
 			}
 		}
 
-		return $SystemPrograms
+		Write-Output $SystemPrograms
 	}
 	else
 	{
@@ -804,7 +811,7 @@ function Get-AllUserPrograms
 				}
 			}
 
-			return $AllUserPrograms
+			Write-Output $AllUserPrograms
 		}
 	}
 	else
@@ -817,7 +824,7 @@ function Get-AllUserPrograms
 .SYNOPSIS
 Get list of install locations for executables and executable names
 .DESCRIPTION
-Returs a table of installed programs, with exectuable name, installation path,
+Returns a table of installed programs, with executable name, installation path,
 registry path and child registry key name for target computer
 .PARAMETER ComputerName
 Computer name which to check
@@ -896,7 +903,7 @@ function Get-ExecutablePaths
 					$FilePath = $FilePath.Trim('"')
 					$FilePath = $FilePath.Trim("'")
 
-					# Replace double slasses with single ones
+					# Replace double slashes with single ones
 					$FilePath = $FilePath.Replace("\\", "\")
 
 					# Get only executable name
@@ -941,7 +948,7 @@ function Get-ExecutablePaths
 			}
 		}
 
-		return $AppPaths
+		Write-Output $AppPaths
 	}
 	else
 	{
@@ -955,7 +962,7 @@ Create data table used to hold information for a list of programs
 .DESCRIPTION
 Create data table which is filled with data about programs and principals such
 as users or groups and their SID for which given firewall rule applies
-This method is primarly used to reset the table
+This method is primarily used to reset the table
 Each entry in the table also has an ID to help choosing entries by ID
 .PARAMETER TableName
 Table name
@@ -1012,6 +1019,39 @@ function Initialize-Table
 	$InstallTable.Columns.Add($ColumnAccount)
 	$InstallTable.Columns.Add($ColumnComputer)
 	$InstallTable.Columns.Add($ColumnInstallLocation)
+}
+
+<#
+.SYNOPSIS
+Print installation directories to console
+.DESCRIPTION
+Prints found program data which includes program name, program ID, install location etc.
+.PARAMETER Caption
+Single line string to print before printing the table
+.EXAMPLE
+Show-Table "Table data"
+.INPUTS
+None. You cannot pipe objects to Test-Installation
+.OUTPUTS
+None. Table data is printed to console
+.NOTES
+This function is needed to avoid warning of write-host inside non "Show" function
+#>
+function Show-Table
+{
+	[OutputType([System.Void])]
+	[CmdletBinding()]
+	param (
+		[Parameter()]
+		[string] $Caption
+	)
+
+	if (![String]::IsNullOrEmpty($Caption))
+	{
+		Write-Host $Caption
+	}
+
+	$InstallTable | Format-Table -AutoSize | Out-Host
 }
 
 <#
@@ -1083,7 +1123,7 @@ function Update-Table
 			# Add row to the table
 			$InstallTable.Rows.Add($Row)
 
-			# TODO: If the path is known there is not need to continue?
+			# TODO: If the path is known there is no need to continue?
 			return
 		}
 	}
@@ -1095,7 +1135,7 @@ function Update-Table
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching system programs for $SearchString"
 
-		# TODO: need better mechanism for multiple maches
+		# TODO: need better mechanism for multiple matches
 		$TargetPrograms = $SystemPrograms | Where-Object -Property Name -like "*$SearchString*"
 		$Principal = $UserGroups | Where-Object -Property Group -eq "Users"
 
@@ -1166,14 +1206,14 @@ function Update-Table
 
 		foreach ($Principal in $Principals)
 		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching $($Principal.Account) programs for $SearchString"
+
 			# NOTE: the story is different here, each user may have multiple matches for search string
 			# letting one match to have same principal would be mistake.
 			$UserPrograms = Get-UserPrograms $Principal.User | Where-Object -Property Name -like "*$SearchString*"
 
 			if ($UserPrograms)
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching $($Principal.Account) programs for $SearchString"
-
 				foreach ($Program in $UserPrograms)
 				{
 					# NOTE: Avoid spamming
@@ -1235,7 +1275,7 @@ function Edit-Table
 	# Nothing to do if the path does not exist
 	if (!(Test-Environment $InstallLocation))
 	{
-		# TODO: will be true also for user profile, we should try to fix the path if it leads to user prfofile instead of doing nothing.
+		# TODO: will be true also for user profile, we should try to fix the path if it leads to user profile instead of doing nothing.
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] $InstallLocation not found or invalid"
 		return
 	}
@@ -1299,7 +1339,7 @@ system for valid path and return it via reference parameter
 .PARAMETER Program
 Predefined program name for which to search
 .PARAMETER FilePath
-Reference to variable whic holds a path to program (excluding executable)
+Reference to variable which holds a path to program (excluding executable)
 .EXAMPLE
 $MyProgram = "%ProgramFiles(x86)%\Microsoft Office\root\Office16"
 Test-Installation "Office" ([ref] $MyProgram)
@@ -1347,8 +1387,7 @@ function Test-Installation
 			$InstallTable = $InstallTable.DefaultView.ToTable()
 
 			# Print out all candidate rows
-			Write-Host "0. Abort this operation"
-			$InstallTable | Format-Table -AutoSize
+			Show-Table "0. Abort this operation"
 
 			# Prompt user to chose one
 			[int32] $Choice = -1
@@ -1357,7 +1396,7 @@ function Test-Installation
 				Write-Information -Tags "User" -MessageData "INFO: Input the ID number to choose which one is correct"
 				$Input = Read-Host
 
-				if($Input -notmatch '^-?\d+$')
+				if ($Input -notmatch '^-?\d+$')
 				{
 					Write-Information -Tags "User" -MessageData "INFO: Digits only please!"
 					continue
@@ -1503,12 +1542,17 @@ function Find-Installation
 			if ($null -ne $WindowsKits)
 			{
 				$SDKDebuggers = $WindowsKits |
-				Where-Object {$_.Product -like "WindowsDebuggersRoot*"} |
+				Where-Object { $_.Product -like "WindowsDebuggersRoot*" } |
 				Sort-Object -Property Product |
 				Select-Object -Last 1 -ExpandProperty InstallLocation
 
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] $SDKDebuggers"
-				Edit-Table $SDKDebuggers
+				# TODO: Check other such cases where using the variable without knowing if
+				# installation is available, this case here is fixed with if($SDKDebuggers)...
+				if ($SDKDebuggers)
+				{
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] $SDKDebuggers"
+					Edit-Table $SDKDebuggers
+				}
 			}
 			break
 		}
@@ -1615,7 +1659,7 @@ function Find-Installation
 			Update-Table "Acrobat Reader DC"
 			break
 		}
-		"Filezilla"
+		"FileZilla"
 		{
 			Update-Table "FileZilla FTP Client"
 			break
@@ -1687,6 +1731,7 @@ function Find-Installation
 		}
 		"OneDrive"
 		{
+			# TODO: this path didn't exist on fresh installed windows, but one drive was installed
 			Edit-Table "%ProgramFiles(x86)%\Microsoft OneDrive"
 			break
 		}
@@ -1733,7 +1778,7 @@ function Find-Installation
 		}
 		"Tor"
 		{
-			Update-Table "Tor" -UserProfile
+			# NOTE: ask user where he installed Tor because it doesn't include an installer
 			break
 		}
 		"uTorrent"
@@ -1834,7 +1879,7 @@ function Find-Installation
 		# NOTE: number for Get-PSCallStack is 2, which means 3 function calls back and then get script name (call at 0 and 1 is this script)
 		$Script = (Get-PSCallStack)[2].Command
 
-		# TODO: these loops seem to be skiped, probably missing Test-File, need to check
+		# TODO: these loops seem to be skipped, probably missing Test-File, need to check
 		Write-Information -Tags "User" -MessageData "INFO: If you installed $Program elsewhere you can input the correct path now"
 		Write-Information -Tags "User" -MessageData "INFO: or adjust the path in $Script and re-run the script later."
 		Write-Information -Tags "User" -MessageData "INFO: otherwise ignore this warning if you don't have $Program installed."
@@ -1865,7 +1910,7 @@ function Find-Installation
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] User skips input for $Program"
 
-		# Finaly status is bad
+		# Finally status is bad
 		Set-Variable -Name WarningStatus -Scope Global -Value $true
 		return $false
 	}
@@ -1943,7 +1988,7 @@ function Get-NetFramework
 						$InstallLocation = Format-Path $InstallLocation
 					}
 
-					# we add entry regarldess of presence of install path
+					# we add entry regardless of presence of install path
 					$NetFramework += [PSCustomObject]@{
 						"ComputerName" = $ComputerName
 						"RegKey" = $HKLMSubKey
@@ -1981,7 +2026,7 @@ function Get-NetFramework
 							$InstallLocation = Format-Path $InstallLocation
 						}
 
-						# we add entry regarldess of presence of install path
+						# we add entry regardless of presence of install path
 						$NetFramework += [PSCustomObject]@{
 							"ComputerName" = $ComputerName
 							"RegKey" = $HKLMKey
@@ -1993,7 +2038,7 @@ function Get-NetFramework
 			}
 		}
 
-		return $NetFramework
+		Write-Output $NetFramework
 	}
 	else
 	{
@@ -2041,7 +2086,6 @@ function Get-WindowsSDK
 		{
 			# 32 bit system
 			$HKLM = "SOFTWARE\Microsoft\Microsoft SDKs\Windows"
-
 		}
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
@@ -2090,7 +2134,7 @@ function Get-WindowsSDK
 			}
 		}
 
-		return $WindowsSDK
+		Write-Output $WindowsSDK
 	}
 	else
 	{
@@ -2133,7 +2177,6 @@ function Get-WindowsKits
 		{
 			# 64 bit system
 			$HKLM = "SOFTWARE\WOW6432Node\Microsoft\Windows Kits\Installed Roots"
-
 		}
 		else
 		{
@@ -2185,7 +2228,7 @@ function Get-WindowsKits
 			}
 		}
 
-		return $WindowsKits
+		Write-Output $WindowsKits
 	}
 	else
 	{
@@ -2288,8 +2331,8 @@ None. You cannot pipe objects to Get-SQLManagementStudio
 .NOTES
 None.
  #>
- function Get-SQLManagementStudio
- {
+function Get-SQLManagementStudio
+{
 	[OutputType([System.Management.Automation.PSCustomObject[]])]
 	[CmdletBinding()]
 	param (
@@ -2313,7 +2356,6 @@ None.
 		{
 			# 32 bit system
 			$HKLM = "SOFTWARE\Microsoft\Microsoft SQL Server Management Studio"
-
 		}
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
@@ -2352,7 +2394,7 @@ None.
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing registry key: $HKLMSubKey"
 
 				# TODO: Should we return object by object to make pipeline work?
-				# also try to get same set of properties for all req querries
+				# also try to get same set of properties for all req queries
 				$ManagementStudio += [PSCustomObject]@{
 					"ComputerName" = $ComputerName
 					"RegKey" = $HKLMSubKey
@@ -2362,7 +2404,7 @@ None.
 			}
 		}
 
-		return $ManagementStudio
+		Write-Output $ManagementStudio
 	}
 	else
 	{
@@ -2403,7 +2445,7 @@ New-Variable -Name BlackListEnvironment -Scope Script -Option Constant -Value @(
 	"%TMP%"
 	"%USERNAME%"
 	"%USERPROFILE%"
-	)
+)
 
 Write-Debug -Message "[$ThisModule] Initialize module Constant variable: UserProfileEnvironment"
 New-Variable -Name UserProfileEnvironment -Scope Script -Option Constant -Value @(
@@ -2417,7 +2459,7 @@ New-Variable -Name UserProfileEnvironment -Scope Script -Option Constant -Value 
 	"%TMP%"
 	"%USERNAME%"
 	"%USERPROFILE%"
-	)
+)
 
 Write-Debug -Message "[$ThisModule] Initialize module readonly variable: SystemPrograms"
 # Programs installed for all users
@@ -2471,6 +2513,7 @@ if ($Develop)
 	Export-ModuleMember -Function Update-Table
 	Export-ModuleMember -Function Edit-Table
 	Export-ModuleMember -Function Initialize-Table
+	Export-ModuleMember -Function Show-Table
 
 	# Variable exports
 	Export-ModuleMember -Variable InstallTable

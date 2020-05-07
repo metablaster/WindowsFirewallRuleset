@@ -66,22 +66,22 @@ if (!(Approve-Execute @Logs)) { exit }
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
 #
-# TODO: curently handling only UDP, also broadcast falls into multicast space
+# TODO: currently handling only UDP, also broadcast falls into multicast space
 #
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "Limited Broadcast" -Service Any -Program System `
--PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol UDP -LocalAddress 255.255.255.255 -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
--EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description "" @Logs | Format-Output @Logs
+	-DisplayName "Limited Broadcast" -Service Any -Program System `
+	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol UDP -LocalAddress 255.255.255.255 -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
+	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description "" @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
--DisplayName "LAN Broadcast" -Service Any -Program System `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol UDP -LocalAddress $BroadcastAddress -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
--EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description "" @Logs | Format-Output @Logs
+	-DisplayName "LAN Broadcast" -Service Any -Program System `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Direction $Direction -Protocol UDP -LocalAddress $BroadcastAddress -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
+	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description "" @Logs | Format-Output @Logs
 
 # TODO: check if virtual adapter exists and apply rule
 
@@ -93,4 +93,4 @@ New-NetFirewallRule -Platform $Platform `
 -Description "" @Logs | Format-Output @Logs
  #>
 
- Update-Logs
+Update-Logs

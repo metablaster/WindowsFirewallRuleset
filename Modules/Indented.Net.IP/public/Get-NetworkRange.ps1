@@ -79,8 +79,8 @@ TODO: describe outputs
 .NOTES
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
-- For code to be consisten with project: code formatting and symbol casing.
-- Removed unecessary position arguments, added default argument values explicitly.
+- For code to be consistent with project: code formatting and symbol casing.
+- Removed unnecessary position arguments, added default argument values explicitly.
 #>
 function Get-NetworkRange
 {
@@ -88,22 +88,22 @@ function Get-NetworkRange
 	[OutputType([IPAddress])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0,
-		ValueFromPipeline = $true, ParameterSetName = 'FromIPAndMask')]
+			ValueFromPipeline = $true, ParameterSetName = 'FromIPAndMask')]
 		[string] $IPAddress,
 
 		[Parameter(Position = 1,
-		ParameterSetName = 'FromIPAndMask')]
+			ParameterSetName = 'FromIPAndMask')]
 		[string] $SubnetMask,
 
 		[Parameter(ParameterSetName = 'FromIPAndMask')]
 		[switch] $IncludeNetworkAndBroadcast,
 
 		[Parameter(Mandatory = $true,
-		ParameterSetName = 'FromStartAndEnd')]
+			ParameterSetName = 'FromStartAndEnd')]
 		[IPAddress] $Start,
 
 		[Parameter(Mandatory = $true,
-		ParameterSetName = 'FromStartAndEnd')]
+			ParameterSetName = 'FromStartAndEnd')]
 		[IPAddress] $End
 	)
 

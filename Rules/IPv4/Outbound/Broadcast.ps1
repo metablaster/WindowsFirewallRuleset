@@ -65,31 +65,47 @@ if (!(Approve-Execute @Logs)) { exit }
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
 #
-# TODO: curently handling only UDP, also broadcast falls into multicast space
+# TODO: currently handling only UDP, also broadcast falls into multicast space
 #
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Limited Broadcast" -Service Any -Program System `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 255.255.255.255 -LocalPort Any -RemotePort Any `
--LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description "" @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Limited Broadcast" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program System -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress 255.255.255.255 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $NT_AUTHORITY_System `
+	-InterfaceType $Interface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description "" `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "LAN Broadcast" -Service Any -Program System `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress $BroadcastAddress -LocalPort Any -RemotePort Any `
--LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description "" @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "LAN Broadcast" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program System -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress $BroadcastAddress `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $NT_AUTHORITY_System `
+	-InterfaceType $Interface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description "" `
+	@Logs | Format-Output @Logs
 
 # TODO: check if virtual adapter exists and apply rule
 
-<# New-NetFirewallRule -Platform $Platform `
--DisplayName "Microsoft Wireless WiFi adapter" -Service Any -Program System `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 192.168.137.255 -LocalPort Any -RemotePort Any `
--LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description ""
+<#
+New-NetFirewallRule -DisplayName "Microsoft Wireless WiFi adapter" `
+-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+-Service Any -Program System -Group $Group `
+-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+-LocalAddress Any -RemoteAddress 192.168.137.255 `
+-LocalPort Any -RemotePort Any `
+-LocalUser $NT_AUTHORITY_System `
+-InterfaceType $Interface `
+-LocalOnlyMapping $false -LooseSourceMapping $false `
+-Description "" `
+ @Logs | Format-Output @Logs
  #>
 
- Update-Logs
+Update-Logs

@@ -45,6 +45,10 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
+<#
+.SYNOPSIS
+	Warning logging with advanced function
+#>
 function Test-Warning
 {
 	[CmdletBinding()]
@@ -54,6 +58,10 @@ function Test-Warning
 	Write-Warning -Message "[$($MyInvocation.InvocationName)] warning 2"
 }
 
+<#
+.SYNOPSIS
+	Warning logging on pipeline
+#>
 function Test-Pipeline
 {
 	[CmdletBinding()]
@@ -66,6 +74,10 @@ function Test-Pipeline
 	Write-Warning -Message "[$($MyInvocation.InvocationName)] End of pipe 2"
 }
 
+<#
+.SYNOPSIS
+	Warning logging with nested function
+#>
 function Test-Nested
 {
 	[CmdletBinding()]
@@ -75,6 +87,10 @@ function Test-Nested
 	Write-Warning -Message "[$($MyInvocation.InvocationName)] Nested 2"
 }
 
+<#
+.SYNOPSIS
+	Warning logging with nested function
+#>
 function Test-Parent
 {
 	[CmdletBinding()]
@@ -85,16 +101,26 @@ function Test-Parent
 	Write-Warning -Message "[$($MyInvocation.InvocationName)] Parent 2"
 }
 
+<#
+.SYNOPSIS
+	Warning logging with a combination of other streams
+#>
 function Test-Combo
 {
 	[CmdletBinding()]
 	param ()
 
-	Write-Error -Message "[$($MyInvocation.MyCommand.Name)] combo"  -Category PermissionDenied -ErrorId 10
+	Write-Error -Message "[$($MyInvocation.MyCommand.Name)] combo" -Category PermissionDenied -ErrorId 10
 	Write-Warning -Message "[$($MyInvocation.InvocationName)] combo"
 	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.MyCommand.Name)] INFO: combo"
 }
 
+<#
+.SYNOPSIS
+	No warning log
+.NOTES
+Is this function called?
+#>
 function Test-Empty
 {
 	[CmdletBinding()]

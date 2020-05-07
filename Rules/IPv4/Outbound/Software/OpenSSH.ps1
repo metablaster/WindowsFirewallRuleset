@@ -69,11 +69,11 @@ if ((Test-Installation "OpenSSH" ([ref] $OpenSSHRoot) @Logs) -or $ForceLoad)
 	$Program = "$OpenSSHRoot\ssh.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "OpenSSH" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 22 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "OpenSSH is connectivity tool for remote login with the SSH protocol,
+		-DisplayName "OpenSSH" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 22 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "OpenSSH is connectivity tool for remote login with the SSH protocol,
 	This rule applies to open source version of OpenSSH." @Logs | Format-Output @Logs
 }
 

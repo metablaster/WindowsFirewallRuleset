@@ -1,12 +1,16 @@
+
 #region:TestFileHeader
 param (
 	[bool] $UseExisting
 )
 
-if (-not $UseExisting) {
+if (-not $UseExisting)
+{
 	$moduleBase = $psscriptroot.Substring(0, $psscriptroot.IndexOf("\test"))
 	$stubBase = Resolve-Path (Join-Path $moduleBase "test*\stub\*")
-	if ($null -ne $stubBase) {
+
+	if ($null -ne $stubBase)
+	{
 		$stubBase | Import-Module -Force
 	}
 
@@ -30,11 +34,12 @@ InModuleScope Indented.Net.IP {
 
 		It 'Throws an error if passed something other than an IPAddress for Subject or Object' {
 			{ Test-SubnetMember -SubjectIPAddress 'abcd' -ObjectIPAddress 10.0.0.0/8 } | Should -Throw
-			{ Test-SubnetMember -SubjectIPAddress 10.0.0.0/8  -ObjectIPAddress 'abcd' } | Should -Throw
+			{ Test-SubnetMember -SubjectIPAddress 10.0.0.0/8 -ObjectIPAddress 'abcd' } | Should -Throw
 		}
 
 		It 'Example <Number> is valid' -TestCases (
 			(Get-Help Test-SubnetMember).Examples.Example.Code | ForEach-Object -Begin {
+				[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignment', '', Justification = 'FalsePositive')]
 				$Number = 1
 			} -Process {
 				@{ Number = $Number++; Code = $_ }

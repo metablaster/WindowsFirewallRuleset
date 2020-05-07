@@ -56,7 +56,8 @@ $GroupAccounts = Get-GroupPrincipals "Users", "Administrators" @Logs
 $GroupAccounts
 
 New-Test "Get-AppSID: foreach User"
-foreach($Account in $GroupAccounts) {
+foreach ($Account in $GroupAccounts)
+{
 	Get-AppxPackage -User $Account.User -PackageTypeFilter Bundle @Logs | ForEach-Object {
 		Get-AppSID $Account.User $_.PackageFamilyName @Logs
 	}

@@ -61,22 +61,33 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 $Program = "%SystemRoot%\System32\mstsc.exe"
 Test-File $Program @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Remote desktop - User Mode" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 3389 `
--LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description "Remote desktop connection.
+New-NetFirewallRule -DisplayName "Remote desktop - User Mode" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress Any `
+	-LocalPort Any -RemotePort 3389 `
+	-LocalUser $UsersGroupSDDL `
+	-InterfaceType $Interface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description "Remote desktop connection.
 Allows users to connect interactively to a remote computer.
-To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System properties control panel item." @Logs | Format-Output @Logs
+To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System
+properties control panel item." `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Remote desktop - User Mode" -Service Any -Program $Program `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 3389 `
--LocalUser $UsersGroupSDDL `
--Description "Remote desktop connection.
+New-NetFirewallRule -DisplayName "Remote desktop - User Mode" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Any `
+	-LocalPort Any -RemotePort 3389 `
+	-LocalUser $UsersGroupSDDL `
+	-InterfaceType $Interface `
+	-Description "Remote desktop connection.
 Allows users to connect interactively to a remote computer.
-To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System properties control panel item." @Logs | Format-Output @Logs
+To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System
+properties control panel item." `
+	@Logs | Format-Output @Logs
 
 Update-Logs

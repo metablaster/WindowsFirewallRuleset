@@ -70,11 +70,11 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot) @Logs) -or $ForceLo
 	Test-File $Program @Logs
 
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Access" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "" @Logs | Format-Output @Logs
+		-DisplayName "Access" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "" @Logs | Format-Output @Logs
 
 	# Clicktorun.exe starts downloading the most recent version of itself.
 	# After finishing the download Clicktorun.exe starts THE DOWNLOADED Version which then downloads the new office version.
@@ -85,11 +85,11 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot) @Logs) -or $ForceLo
 	Test-File $Program @Logs
 
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Click to Run" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $NT_AUTHORITY_System `
-	-Description "Required for updates to work. Click-to-Run is an alternative to the traditional Windows Installer-based (MSI) method
+		-DisplayName "Click to Run" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $NT_AUTHORITY_System `
+		-Description "Required for updates to work. Click-to-Run is an alternative to the traditional Windows Installer-based (MSI) method
 	of installing and updating Office, that utilizes streaming and virtualization technology
 	to reduce the time required to install Office and help run multiple versions of Office on the same computer." @Logs | Format-Output @Logs
 
@@ -97,157 +97,157 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot) @Logs) -or $ForceLo
 	Test-File $Program @Logs
 
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "ClickC2RClient" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-	-LocalUser $NT_AUTHORITY_System `
-	-Description "Allows users to check for and install updates for Office on demand." @Logs | Format-Output @Logs
+		-DisplayName "ClickC2RClient" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+		-LocalUser $NT_AUTHORITY_System `
+		-Description "Allows users to check for and install updates for Office on demand." @Logs | Format-Output @Logs
 
 	$Program = "$OfficeRoot\MSOSYNC.EXE"
 	Test-File $Program @Logs
 
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Document Cache" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "The Office Document Cache is a concept used in Microsoft Office Upload Center
+		-DisplayName "Document Cache" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "The Office Document Cache is a concept used in Microsoft Office Upload Center
 	to give you a way to see the state of files you are uploading to a SharePoint server. " @Logs | Format-Output @Logs
 
 	$Program = "$OfficeRoot\EXCEL.EXE"
 	Test-File $Program @Logs
 
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Excel" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "" @Logs | Format-Output @Logs
+		-DisplayName "Excel" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$OfficeRoot\ADDINS\Microsoft Power Query for Excel Integrated\bin\Microsoft.Mashup.Container.NetFX40.exe"
 	Test-File $Program @Logs
 
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Excel (Mashup Container)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "Used to query data from web in excel." @Logs | Format-Output @Logs
+		-DisplayName "Excel (Mashup Container)" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "Used to query data from web in excel." @Logs | Format-Output @Logs
 
 	$Program = "$OfficeRoot\CLVIEW.EXE"
 	Test-File $Program @Logs
 
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Help" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "" @Logs | Format-Output @Logs
+		-DisplayName "Help" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$OfficeRoot\OUTLOOK.EXE"
 	Test-File $Program @Logs
 
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Outlook (HTTP/S)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "" @Logs | Format-Output @Logs
+		-DisplayName "Outlook (HTTP/S)" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "" @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Outlook (IMAP SSL)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 993 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "Incoming mail server over SSL." @Logs | Format-Output @Logs
+		-DisplayName "Outlook (IMAP SSL)" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 993 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "Incoming mail server over SSL." @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Outlook (IMAP)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 143 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "Incoming mail server." @Logs | Format-Output @Logs
+		-DisplayName "Outlook (IMAP)" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 143 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "Incoming mail server." @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Outlook (POP3 SSL)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 110 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "Incoming mail server over SSL." @Logs | Format-Output @Logs
+		-DisplayName "Outlook (POP3 SSL)" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 110 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "Incoming mail server over SSL." @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Outlook (POP3)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 995 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "Incoming mail server." @Logs | Format-Output @Logs
+		-DisplayName "Outlook (POP3)" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 995 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "Incoming mail server." @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Outlook (SMTP)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 25 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "Outgoing mail server." @Logs | Format-Output @Logs
+		-DisplayName "Outlook (SMTP)" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 25 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "Outgoing mail server." @Logs | Format-Output @Logs
 
 	$Program = "$OfficeRoot\POWERPNT.EXE"
 	Test-File $Program @Logs
 
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "PowerPoint" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "" @Logs | Format-Output @Logs
+		-DisplayName "PowerPoint" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$OfficeRoot\WINPROJ.EXE"
 	Test-File $Program @Logs
 
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Project" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "" @Logs | Format-Output @Logs
+		-DisplayName "Project" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$OfficeRoot\MSPUB.EXE"
 	Test-File $Program @Logs
 
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Publisher" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "" @Logs | Format-Output @Logs
+		-DisplayName "Publisher" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$OfficeRoot\SDXHelper.exe"
 	Test-File $Program @Logs
 
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "sdxhelper" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "this executable is used when later Office versions are installed in parallel with an earlier version so that they can peacefully coexist." @Logs | Format-Output @Logs
+		-DisplayName "sdxhelper" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "this executable is used when later Office versions are installed in parallel with an earlier version so that they can peacefully coexist." @Logs | Format-Output @Logs
 
 	$Program = "$OfficeRoot\lync.exe"
 	Test-File $Program @Logs
 
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Skype for business" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 33033 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "Skype for business, previously lync." @Logs | Format-Output @Logs
+		-DisplayName "Skype for business" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 33033 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "Skype for business, previously lync." @Logs | Format-Output @Logs
 
 	$Program = "$OfficeRoot\msoia.exe"
 	Test-File $Program @Logs
 
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Telemetry Agent" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "The telemetry agent collects several types of telemetry data for Office.
+		-DisplayName "Telemetry Agent" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "The telemetry agent collects several types of telemetry data for Office.
 	https://docs.microsoft.com/en-us/deployoffice/compat/data-that-the-telemetry-agent-collects-in-office" @Logs | Format-Output @Logs
 
 	# TODO: Visio and Project are not part of office by default
@@ -255,21 +255,21 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot) @Logs) -or $ForceLo
 	Test-File $Program @Logs
 
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Visio" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "" @Logs | Format-Output @Logs
+		-DisplayName "Visio" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "" @Logs | Format-Output @Logs
 
 	$Program = "$OfficeRoot\WINWORD.EXE"
 	Test-File $Program @Logs
 
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Word" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "" @Logs | Format-Output @Logs
+		-DisplayName "Word" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "" @Logs | Format-Output @Logs
 }
 
 Update-Logs

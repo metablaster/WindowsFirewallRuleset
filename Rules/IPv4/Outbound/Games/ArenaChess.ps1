@@ -68,11 +68,11 @@ if ((Test-Installation "ArenaChess" ([ref] $ArenaChessRoot) @Logs) -or $ForceLoa
 	$Program = "$ArenaChessRoot\Timeseal.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Arena Chess" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 5000 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "Chess client program" @Logs | Format-Output @Logs
+		-DisplayName "Arena Chess" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 5000 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "Chess client program" @Logs | Format-Output @Logs
 }
 
 Update-Logs

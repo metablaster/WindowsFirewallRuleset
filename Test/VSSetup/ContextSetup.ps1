@@ -30,4 +30,4 @@ SOFTWARE.
 # Context setup for Test.VSSetup
 #
 
-$TestContext = "Test.VSSetup"
+New-Variable -Name TestContext -Scope Local -Option Constant -Value "Test.VSSetup"

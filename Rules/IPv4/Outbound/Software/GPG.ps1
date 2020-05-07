@@ -68,11 +68,11 @@ if ((Test-Installation "GPG" ([ref] $GPGRoot) @Logs) -or $ForceLoad)
 	$Program = "$GPGRoot\bin\dirmngr.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Certificate key servers" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 53, 443 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "For Kleopatra server key lookup and key publish." @Logs | Format-Output @Logs
+		-DisplayName "Certificate key servers" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 53, 443 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "For Kleopatra server key lookup and key publish." @Logs | Format-Output @Logs
 }
 
 Update-Logs

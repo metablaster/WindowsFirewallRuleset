@@ -30,4 +30,4 @@ SOFTWARE.
 # Variables related to IPv4
 #
 
-$IPVersion = 4
+New-Variable -Name IPVersion -Scope Local -Option Constant -Value 4

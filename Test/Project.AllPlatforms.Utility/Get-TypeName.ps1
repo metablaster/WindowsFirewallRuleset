@@ -45,6 +45,10 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
+<#
+.SYNOPSIS
+	Testing case when there is no return
+#>
 function Test-NoReturn
 {
 	[CmdletBinding()]

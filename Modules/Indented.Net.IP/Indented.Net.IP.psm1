@@ -17,12 +17,41 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #>
 
+# TODO: does StrictMode apply to this script only or also all dot sourced scripts?
+Set-StrictMode -Version Latest
+Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
+
+#
+# Module preferences
+#
+
+if ($Develop)
+{
+	$ErrorActionPreference = $ModuleErrorPreference
+	$WarningPreference = $ModuleWarningPreference
+	$DebugPreference = $ModuleDebugPreference
+	$VerbosePreference = $ModuleVerbosePreference
+	$InformationPreference = $ModuleInformationPreference
+
+	Write-Debug -Message "[$ThisModule] ErrorActionPreference is $ErrorActionPreference"
+	Write-Debug -Message "[$ThisModule] WarningPreference is $WarningPreference"
+	Write-Debug -Message "[$ThisModule] DebugPreference is $DebugPreference"
+	Write-Debug -Message "[$ThisModule] VerbosePreference is $VerbosePreference"
+	Write-Debug -Message "[$ThisModule] InformationPreference is $InformationPreference"
+}
+else
+{
+	# Everything is default except InformationPreference should be enabled
+	$InformationPreference = "Continue"
+}
+
 $private = @(
 	'ConvertTo-Network'
 	'Get-Permutation'
 )
 
-foreach ($file in $private) {
+foreach ($file in $private)
+{
 	. ("{0}\private\{1}.ps1" -f $psscriptroot, $file)
 }
 
@@ -44,7 +73,8 @@ $public = @(
 	'Test-SubnetMember'
 )
 
-foreach ($file in $public) {
+foreach ($file in $public)
+{
 	. ("{0}\public\{1}.ps1" -f $psscriptroot, $file)
 }
 

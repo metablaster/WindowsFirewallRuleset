@@ -68,11 +68,11 @@ if ((Test-Installation "PathOfExile" ([ref] $PathOfExileRoot) @Logs) -or $ForceL
 	$Program = "$PathOfExileRoot\PathOfExile_x64Steam.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Path of exile" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 6112, 20481 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "Needed for online gaming" @Logs | Format-Output @Logs
+		-DisplayName "Path of exile" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 6112, 20481 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "Needed for online gaming" @Logs | Format-Output @Logs
 }
 
 Update-Logs

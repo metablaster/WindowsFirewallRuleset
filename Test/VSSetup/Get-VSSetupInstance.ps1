@@ -50,7 +50,7 @@ if (!(Approve-Execute @Logs)) { exit }
 Start-Test
 
 $NullVariable = $null
-$EmptryVariable = Get-VSSetupInstance -All @Logs |
+$EmptyVariable = Get-VSSetupInstance -All @Logs |
 Select-VSSetupInstance -Require 'FailureTest' -Latest @Logs |
 Select-Object -ExpandProperty InstallationPath @Logs
 
@@ -58,13 +58,15 @@ New-Test "Get-VSSetupInstance"
 Get-VSSetupInstance @Logs
 
 New-Test "Get-VSSetupInstance path"
-Get-VSSetupInstance @Logs | Select-VSSetupInstance -Latest @Logs | Select-Object -ExpandProperty InstallationPath @Logs
+Get-VSSetupInstance @Logs |
+Select-VSSetupInstance -Latest @Logs |
+Select-Object -ExpandProperty InstallationPath @Logs
 
 New-Test "Test-Installation 'NullVariable' $NullVariable"
 Test-Installation "MicrosoftOffice" ([ref] $NullVariable) @Logs
 
-New-Test "Test-Installation 'EmptryVariable' $EmptryVariable"
-Test-Installation "MicrosoftOffice" ([ref] $EmptryVariable) @Logs
+New-Test "Test-Installation 'EmptyVariable' $EmptyVariable"
+Test-Installation "MicrosoftOffice" ([ref] $EmptyVariable) @Logs
 
 Update-Logs
 Exit-Test

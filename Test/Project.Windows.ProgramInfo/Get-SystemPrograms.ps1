@@ -54,7 +54,8 @@ New-Test "Get-SystemPrograms Name"
 $SystemPrograms | Sort-Object -Property Name @Logs | Select-Object -ExpandProperty Name @Logs
 
 New-Test "Get-SystemPrograms InstallLocation"
-$SystemPrograms | Sort-Object -Property InstallLocation @Logs | Select-Object -ExpandProperty InstallLocation @Logs
+$SystemPrograms | Sort-Object -Property InstallLocation @Logs |
+Select-Object -ExpandProperty InstallLocation @Logs
 
 New-Test "Get-SystemPrograms"
 $SystemPrograms | Sort-Object -Property Name @Logs

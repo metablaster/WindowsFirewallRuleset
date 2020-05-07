@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 Set-StrictMode -Version Latest
-Set-Variable ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
+Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
 #
 # Module preferences
@@ -46,6 +46,11 @@ if ($Develop)
 	Write-Debug -Message "[$ThisModule] DebugPreference is $DebugPreference"
 	Write-Debug -Message "[$ThisModule] VerbosePreference is $VerbosePreference"
 	Write-Debug -Message "[$ThisModule] InformationPreference is $InformationPreference"
+}
+else
+{
+	# Everything is default except InformationPreference should be enabled
+	$InformationPreference = "Continue"
 }
 
 <#

@@ -30,7 +30,8 @@ SOFTWARE.
 http://www.iana.org/assignments/ipv6-multicast-addresses/ipv6-multicast-addresses.xhtml
 https://www.ronaldschlager.com/2014/ipv6-addresses-scopes-zones/
 
-IPv6 multicast addresses are distinguished from unicast addresses by the value of the high-order octet of the addresses:
+IPv6 multicast addresses are distinguished from unicast addresses by the value of the high-order
+octet of the addresses:
 a value of 0xFF (binary 11111111) identifies an address as a multicast address;
 any other value identifies an address as a unicast address.
 
@@ -51,7 +52,7 @@ Interface-local scope:
 IPv6 addresses of interface-local scope are mainly used for loopback tests.
 
 Link-local scope:
-IPv6 addresses of link-local scope have the same scope as link-lokal unicast addresses
+IPv6 addresses of link-local scope have the same scope as link-local unicast addresses
 (limited to one link, one physical network and one layer 2 broadcast domain).
 
 Realm-local scope:
@@ -65,7 +66,8 @@ Site-local scope:
 an IPv6 address of site-local scope span the same topological region as its communicating partners.
 
 Organization-local scope:
-an IPv6 address of organization-local scope is valid at all locations of the same organization or corporation.
+an IPv6 address of organization-local scope is valid at all locations of the same organization
+or corporation.
 
 Global scope:
 these IPv6 addresses are valid globally and are globally routable.
@@ -94,7 +96,8 @@ $Profile = "Private, Domain"
 $Description = "http://www.iana.org/assignments/ipv6-multicast-addresses/ipv6-multicast-addresses.xhtml"
 $MulticastUsers = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE", "LOCAL SERVICE" @Logs
 
-# NOTE: we need Any to include IPv6 loopback interface because IPv6 loopback rule does not work on boot, (neither ::1 address nor interface alias)
+# NOTE: we need Any to include IPv6 loopback interface because IPv6 loopback rule does not work
+# on boot, (neither ::1 address nor interface alias)
 $MulticastInterface = "Any"
 
 # Ask user if he wants to load these rules
@@ -108,370 +111,604 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Interface-Local Multicast filtering (All destinations)
 #
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Interface-Local Multicast" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff01::/16 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Interface-Local Multicast" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
+	-Service Any -Program Any -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff01::/16 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
 #
 # Interface-Local Multicast filtering (Individual destinations)
 #
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Interface-Local Multicast - All Nodes" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff01::1 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Interface-Local Multicast - All Nodes" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff01::1 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Interface-Local Multicast - All Routers" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff01::2 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Interface-Local Multicast - All Routers" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff01::2 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Interface-Local Multicast - mDNSv6" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff01::fb -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
-
+New-NetFirewallRule -DisplayName "Interface-Local Multicast - mDNSv6" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff01::fb `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
 #
 # Link-Local Multicast filtering (All destinations)
 #
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::/16 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Block -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::/16 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
 #
 # Link-Local Multicast filtering (Individual destinations)
 #
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - All Nodes" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::1 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - All Nodes" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::1 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - All Routers" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::2 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - All Routers" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::2 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - DVMRP Routers" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::4 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - DVMRP Routers" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::4 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - OSPFIGP" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::5 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - OSPFIGP" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::5 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - OSPFIGP Designated Routers" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::6 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - OSPFIGP Designated Routers" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::6 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - ST Routers" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::7 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - ST Routers" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::7 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - ST Hosts" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::8 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - ST Hosts" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::8 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - RIP Routers" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::9 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - RIP Routers" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::9 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - EIGRP Routers" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::a -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - EIGRP Routers" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::a `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - Mobile-Agents" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::b -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - Mobile-Agents" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::b `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - SSDP" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::c -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - SSDP" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::c `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - All PIM Routers" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::d -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - All PIM Routers" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::d `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - RSVP-ENCAPSULATION" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::e -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - RSVP-ENCAPSULATION" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::e `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - UPnP" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::f -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - UPnP" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::f `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - All-BBF-Access-Nodes" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::10 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - All-BBF-Access-Nodes" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::10 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - VRRP" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::12 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - VRRP" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::12 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - All MLDv2-capable routers" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::16 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - All MLDv2-capable routers" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::16 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - all-RPL-nodes" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::1a -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - all-RPL-nodes" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::1a `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - All-Snoopers" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::6a -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - All-Snoopers" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::6a `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - PTP-pdelay" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::6b -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - PTP-pdelay" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::6b `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - Saratoga" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::6c -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - Saratoga" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::6c `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - LL-MANET-Routers" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::6d -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - LL-MANET-Routers" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::6d `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - IGRS" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::6e -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - IGRS" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::6e `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - iADT Discovery" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::6f -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - iADT Discovery" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::6f `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - mDNSv6" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::fb -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - mDNSv6" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::fb `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - Link Name" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::1:1 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - Link Name" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::1:1 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - All-dhcp-agents" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::1:2 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - All-dhcp-agents" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::1:2 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - Link-local Multicast Name Resolution" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::1:3 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - Link-local Multicast Name Resolution" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::1:3 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - DTCP Announcement" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::1:4 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - DTCP Announcement" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::1:4 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - afore_vdp" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::1:5 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - afore_vdp" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::1:5 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - Babel" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::1:6 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - Babel" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::1:6 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - Solicited-Node Address" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::1:ff00:0000/104 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - Solicited-Node Address" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff02::1:ff00:0000/104 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Link-Local Multicast - Node Information Queries" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress FF02:0:0:0:0:2:FF00::/104 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Link-Local Multicast - Node Information Queries" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress FF02:0:0:0:0:2:FF00::/104 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
 #
 # Site-Local Multicast filtering (All destinations)
 #
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Site-Local Multicast - All Routers" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff05::/16 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Site-Local Multicast - All Routers" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Block -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff05::/16 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
 #
 # Site-Local Multicast filtering (Individual destinations)
 #
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Site-Local Multicast - All Routers" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff05::2 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Site-Local Multicast - All Routers" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff05::2 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Site-Local Multicast - mDNSv6" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff05::fb -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Site-Local Multicast - mDNSv6" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff05::fb `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Site-Local Multicast - All-dhcp-servers" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff05::1:3 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Site-Local Multicast - All-dhcp-servers" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff05::1:3 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Site-Local Multicast - SL-MANET-ROUTERS" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff05::1:5 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Site-Local Multicast - SL-MANET-ROUTERS" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff05::1:5 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
 #
 # Realm-Local Multicast filtering (All destinations)
 #
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Realm-Local Multicast" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff03::/16 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Realm-Local Multicast" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Block -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff03::/16 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
 #
 # Admin-Local Multicast filtering (All destinations)
 #
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Admin-Local Multicast" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff04::/16 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Admin-Local Multicast" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Block -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff04::/16 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
 #
 # Organization-Local Multicast filtering (All destinations)
 #
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Organization-Local Multicast" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff08::/16 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Organization-Local Multicast" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Block -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff08::/16 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
 #
 # Global scope Multicast filtering (All destinations)
 #
 
-New-NetFirewallRule -Platform $Platform `
--DisplayName "Global scope Multicast" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile $Profile -InterfaceType $MulticastInterface `
--Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff0e::/16 -LocalPort Any -RemotePort Any `
--LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
--Description $Description @Logs | Format-Output @Logs
+New-NetFirewallRule -DisplayName "Global scope Multicast" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Block -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress ff0e::/16 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $MulticastUsers `
+	-InterfaceType $MulticastInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description $Description `
+	@Logs | Format-Output @Logs
 
 Update-Logs

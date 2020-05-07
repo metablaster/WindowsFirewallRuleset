@@ -1,12 +1,16 @@
+
 #region:TestFileHeader
 param (
 	[bool] $UseExisting
 )
 
-if (-not $UseExisting) {
+if (-not $UseExisting)
+{
 	$moduleBase = $psscriptroot.Substring(0, $psscriptroot.IndexOf("\test"))
 	$stubBase = Resolve-Path (Join-Path $moduleBase "test*\stub\*")
-	if ($null -ne $stubBase) {
+
+	if ($null -ne $stubBase)
+	{
 		$stubBase | Import-Module -Force
 	}
 
@@ -18,15 +22,18 @@ InModuleScope Indented.Net.IP {
 	Describe 'ConvertTo-Subnet' {
 		BeforeAll {
 			Mock Get-NetworkSummary {
-				return [PSCustomObject]@{} | Add-Member -TypeName 'Indented.Net.IP.NetworkSummary' -PassThru
+				return [PSCustomObject]@{ } | Add-Member -TypeName 'Indented.Net.IP.NetworkSummary' -PassThru
 			}
 
+			[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignment', '', Justification = 'FalsePositive')]
 			$FromIPAndMask = @{
-			IPAddress = '0.0.0.0/32'
+				IPAddress = '0.0.0.0/32'
 			}
+
+			[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignment', '', Justification = 'FalsePositive')]
 			$FromStartAndEnd = @{
 				Start = '0.0.0.0'
-				End   = '255.255.255.255'
+				End = '255.255.255.255'
 			}
 		}
 
@@ -70,6 +77,7 @@ InModuleScope Indented.Net.IP {
 
 		It 'Example <Number> is valid' -TestCases (
 			(Get-Help ConvertTo-Subnet).Examples.Example.Code | ForEach-Object -Begin {
+				[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignment', '', Justification = 'FalsePositive')]
 				$Number = 1
 			} -Process {
 				@{ Number = $Number++; Code = $_ }

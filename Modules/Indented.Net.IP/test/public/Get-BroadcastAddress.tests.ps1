@@ -1,12 +1,16 @@
+
 #region:TestFileHeader
 param (
 	[bool] $UseExisting
 )
 
-if (-not $UseExisting) {
+if (-not $UseExisting)
+{
 	$moduleBase = $psscriptroot.Substring(0, $psscriptroot.IndexOf("\test"))
 	$stubBase = Resolve-Path (Join-Path $moduleBase "test*\stub\*")
-	if ($null -ne $stubBase) {
+
+	if ($null -ne $stubBase)
+	{
 		$stubBase | Import-Module -Force
 	}
 
@@ -26,8 +30,8 @@ InModuleScope Indented.Net.IP {
 			Get-BroadcastAddress 0.0.0.0 255.255.255.255 | Should -Be '0.0.0.0'
 		}
 
-		It 'Returns 1.0.0.15 when passwed 1.0.0.0/28' {
-			Get-BroadcastAddress 1.0.0.0/28| Should -Be '1.0.0.15'
+		It 'Returns 1.0.0.15 when passed 1.0.0.0/28' {
+			Get-BroadcastAddress 1.0.0.0/28 | Should -Be '1.0.0.15'
 			Get-BroadcastAddress 1/28 | Should -Be '1.0.0.15'
 			Get-BroadcastAddress 1.0.0.0 255.255.255.240 | Should -Be '1.0.0.15'
 		}
@@ -48,6 +52,7 @@ InModuleScope Indented.Net.IP {
 
 		It 'Example <Number> is valid' -TestCases (
 			(Get-Help Get-BroadcastAddress).Examples.Example.Code | ForEach-Object -Begin {
+				[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignment', '', Justification = 'FalsePositive')]
 				$Number = 1
 			} -Process {
 				@{ Number = $Number++; Code = $_ }

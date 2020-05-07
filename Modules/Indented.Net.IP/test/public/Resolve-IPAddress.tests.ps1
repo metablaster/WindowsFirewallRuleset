@@ -1,12 +1,16 @@
+
 #region:TestFileHeader
 param (
 	[bool] $UseExisting
 )
 
-if (-not $UseExisting) {
+if (-not $UseExisting)
+{
 	$moduleBase = $psscriptroot.Substring(0, $psscriptroot.IndexOf("\test"))
 	$stubBase = Resolve-Path (Join-Path $moduleBase "test*\stub\*")
-	if ($null -ne $stubBase) {
+
+	if ($null -ne $stubBase)
+	{
 		$stubBase | Import-Module -Force
 	}
 
@@ -17,10 +21,10 @@ if (-not $UseExisting) {
 InModuleScope 'Indented.Net.IP' {
 	Describe 'Resolve-IPAddress' {
 		It 'Resolves an IPAddress <IPAddress> describing a range' -TestCases @(
-			@{ IPAddress = '[1-2].0.0.0';     Expect = @('1.0.0.0', '2.0.0.0') }
-			@{ IPAddress = '0.[1-2].0.0';     Expect = @('0.1.0.0', '0.2.0.0') }
-			@{ IPAddress = '0.0.[1-2].0';     Expect = @('0.0.1.0', '0.0.2.0') }
-			@{ IPAddress = '0.0.0.[1-2]';     Expect = @('0.0.0.1', '0.0.0.2') }
+			@{ IPAddress = '[1-2].0.0.0'; Expect = @('1.0.0.0', '2.0.0.0') }
+			@{ IPAddress = '0.[1-2].0.0'; Expect = @('0.1.0.0', '0.2.0.0') }
+			@{ IPAddress = '0.0.[1-2].0'; Expect = @('0.0.1.0', '0.0.2.0') }
+			@{ IPAddress = '0.0.0.[1-2]'; Expect = @('0.0.0.1', '0.0.0.2') }
 			@{ IPAddress = '[1-2].0.0.[1-2]'; Expect = @('1.0.0.1', '1.0.0.2', '2.0.0.1', '2.0.0.2') }
 		) {
 			param (
@@ -32,10 +36,10 @@ InModuleScope 'Indented.Net.IP' {
 		}
 
 		It 'Resolves an IPAddress <IPAddress> describing selected values' -TestCases @(
-			@{ IPAddress = '[1,2].0.0.0';     Expect = @('1.0.0.0', '2.0.0.0') }
-			@{ IPAddress = '0.[1,2].0.0';     Expect = @('0.1.0.0', '0.2.0.0') }
-			@{ IPAddress = '0.0.[1,2].0';     Expect = @('0.0.1.0', '0.0.2.0') }
-			@{ IPAddress = '0.0.0.[1,2]';     Expect = @('0.0.0.1', '0.0.0.2') }
+			@{ IPAddress = '[1,2].0.0.0'; Expect = @('1.0.0.0', '2.0.0.0') }
+			@{ IPAddress = '0.[1,2].0.0'; Expect = @('0.1.0.0', '0.2.0.0') }
+			@{ IPAddress = '0.0.[1,2].0'; Expect = @('0.0.1.0', '0.0.2.0') }
+			@{ IPAddress = '0.0.0.[1,2]'; Expect = @('0.0.0.1', '0.0.0.2') }
 			@{ IPAddress = '[1,2].0.0.[1,2]'; Expect = @('1.0.0.1', '1.0.0.2', '2.0.0.1', '2.0.0.2') }
 		) {
 			param (
@@ -66,6 +70,7 @@ InModuleScope 'Indented.Net.IP' {
 
 		It 'Example <Number> is valid' -TestCases (
 			(Get-Help Resolve-IPAddress).Examples.Example.Code | ForEach-Object -Begin {
+				[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignment', '', Justification = 'FalsePositive')]
 				$Number = 1
 			} -Process {
 				@{ Number = $Number++; Code = $_ }

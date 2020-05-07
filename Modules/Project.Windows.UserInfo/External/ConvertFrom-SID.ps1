@@ -47,21 +47,21 @@ SID conversion for well known SIDs from http://support.microsoft.com/kb/243330
 Original code link: https://github.com/RamblingCookieMonster/PowerShell
 
 TODO: Need to handle more NT AUTHORITY users and similar
-TODO: need to improve to have consitent output ie. exactly DOMAIN\USER, see test results
+TODO: need to improve to have consistent output ie. exactly DOMAIN\USER, see test results
 
 Changes by metablaster:
 add verbose and debug output
 remove try and empty catch by setting better approach
 rename parameter
 format code style to project defaults and added few more comments
-removed unnecessary parantheses
+removed unnecessary parentheses
 #>
 function ConvertFrom-SID
 {
 	[CmdletBinding()]
 	param(
 		[Parameter(Mandatory = $true,
-		ValueFromPipeline = $true)]
+			ValueFromPipeline = $true)]
 		[string[]] $SIDArray
 	)
 
@@ -171,7 +171,7 @@ function ConvertFrom-SID
 
 		[PSCustomObject[]] $Result = @()
 		# loop through provided SIDs
-		foreach($SID in $SIDArray)
+		foreach ($SID in $SIDArray)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing: $SID"
 
@@ -183,7 +183,7 @@ function ConvertFrom-SID
 
 			if ($SID.Length -gt 8)
 			{
-				if($SID.Remove(8) -eq "S-1-5-21")
+				if ($SID.Remove(8) -eq "S-1-5-21")
 				{
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input SID is domain SID"
 
@@ -200,14 +200,14 @@ function ConvertFrom-SID
 			# Map name to well known sid. If this fails, use .net to get the account
 			$Name = $WellKnownSIDs[$SID]
 
-			if($Name)
+			if ($Name)
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input SID is well known SID"
 			}
 			else
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input SID is not well known SID"
-				if($IsDomain)
+				if ($IsDomain)
 				{
 					$SID = $FullSID
 				}

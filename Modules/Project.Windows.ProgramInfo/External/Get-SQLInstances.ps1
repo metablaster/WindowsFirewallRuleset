@@ -70,7 +70,7 @@ Description
 -----------
 Retrieves the SQL information from DC1
 .EXAMPLE
-#Get SQL instances on servers 1 and 2, match them up with service information from CIM
+# Get SQL instances on servers 1 and 2, match them up with service information from CIM
 Get-SQLInstances -Computername Server1, Server2 -CIM
 
 Computername     : Server1
@@ -126,7 +126,7 @@ Following modifications by metablaster based on both originals 15 Feb 2020:
 - Include license into file (MIT all 3), links to original sites and add appropriate Copyright for each author/contributor
 - update reported server versions
 - added more verbose and debug output, path formatting.
-- Replaced WMI calls with CIM calls which are more universal and cross platfrom that WMI
+- Replaced WMI calls with CIM calls which are more universal and cross platform that WMI
 
 Links to original and individual versions of code
 https://github.com/RamblingCookieMonster/PowerShell
@@ -172,7 +172,7 @@ function Get-SQLInstances
 		foreach ($Computer in $ComputerNames)
 		{
 			# TODO: what is this?
-			$Computer = $Computer -replace '(.*?)\..+','$1'
+			$Computer = $Computer -replace '(.*?)\..+', '$1'
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Computer"
 
 			if (!(Test-Connection -ComputerName $Computer -Count 2 -Quiet))
@@ -189,10 +189,10 @@ function Get-SQLInstances
 			catch
 			{
 				Write-Error -TargetObject $Computer -Message $_
-                continue
+				continue
 			}
 
-			foreach($HKLMRootKey in $HKLM)
+			foreach ($HKLMRootKey in $HKLM)
 			{
 				# TODO: add COMPUTERNAME for all keys in all registry functions
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLMRootKey"
@@ -327,8 +327,8 @@ function Get-SQLInstances
 
 								if ($Service)
 								{
-									$File = $Service -replace '^.*(\w:\\.*\\sqlservr.exe).*','$1'
-									$Version = (Get-Item ("\\$Computer\$($File -replace ":","$")")).VersionInfo.ProductVersion
+									$File = $Service -replace '^.*(\w:\\.*\\sqlservr.exe).*', '$1'
+									$Version = (Get-Item ("\\$Computer\$($File -replace ":", "$")")).VersionInfo.ProductVersion
 								}
 								else
 								{
@@ -395,17 +395,17 @@ function Get-SQLInstances
 								switch -Regex ($Version)
 								{
 									# https://en.wikipedia.org/wiki/History_of_Microsoft_SQL_Server
-									"^15"	{'SQL Server 2019'; break}
-									"^14"	{'SQL Server 2017'; break}
-									"^13"	{'SQL Server 2016'; break}
-									"^12"	{'SQL Server 2014'; break}
-									"^11"	{'SQL Server 2012'; break}
-									"^10\.5"{'SQL Server 2008 R2'; break}
-									"^10"	{'SQL Server 2008'; break}
-									"^9"	{'SQL Server 2005'; break}
-									"^8"	{'SQL Server 2000'; break}
-									"^7"	{'SQL Server 7.0'; break}
-									default {'Unknown'}
+									"^15"	{ 'SQL Server 2019'; break }
+									"^14"	{ 'SQL Server 2017'; break }
+									"^13"	{ 'SQL Server 2016'; break }
+									"^12"	{ 'SQL Server 2014'; break }
+									"^11"	{ 'SQL Server 2012'; break }
+									"^10\.5" { 'SQL Server 2008 R2'; break }
+									"^10"	{ 'SQL Server 2008'; break }
+									"^9"	{ 'SQL Server 2005'; break }
+									"^8"	{ 'SQL Server 2000'; break }
+									"^7"	{ 'SQL Server 7.0'; break }
+									default { 'Unknown' }
 								}
 							}.InvokeReturnAsIs()
 
@@ -431,7 +431,7 @@ function Get-SQLInstances
 
 			# If the CIM param was specified, get CIM info and correlate it!
 			# Will not work with PowerShell core.
-			if($CIM)
+			if ($CIM)
 			{
 				[PSCustomObject[]] $AllInstancesCIM = @()
 
@@ -441,25 +441,25 @@ function Get-SQLInstances
 					$SQLServices = $null # TODO: what does this mean?
 					$SQLServices = @(
 						Get-CimInstance -ComputerName $Computer -ErrorAction stop `
-						-Query "select DisplayName, Name, PathName, StartName, StartMode, State from win32_service where Name LIKE 'MSSQL%'" |
+							-Query "select DisplayName, Name, PathName, StartName, StartMode, State from win32_service where Name LIKE 'MSSQL%'" |
 						# This regex matches MSSQLServer and MSSQL$*
 						Where-Object { $_.Name -match "^MSSQL(Server$|\$)" } |
 						Select-Object -Property DisplayName, StartName, StartMode, State, PathName
 					)
 
 					# If we pulled CIM info and it wasn't empty, correlate!
-					if($SQLServices)
+					if ($SQLServices)
 					{
 						Write-Debug "CIM service info:`n$($SQLServices | Format-List -Property * | Out-String)"
 
-						foreach($Instance in $AllInstances)
+						foreach ($Instance in $AllInstances)
 						{
 							$MatchingService = $SQLServices |
-								Where-Object {
-									# We need to format here because Instance path is formated, while the path from CIM query isn't
-									# TODO: can be improved by formatting when all is done, ie. at the end before returning.
-									(Format-Path $_.PathName) -like "$( $Instance.SQLBinRoot )*" -or $_.PathName -like "`"$( $Instance.SQLBinRoot )*"
-								} | Select-Object -First 1
+							Where-Object {
+								# We need to format here because Instance path is formatted, while the path from CIM query isn't
+								# TODO: can be improved by formatting when all is done, ie. at the end before returning.
+								(Format-Path $_.PathName) -like "$( $Instance.SQLBinRoot )*" -or $_.PathName -like "`"$( $Instance.SQLBinRoot )*"
+							} | Select-Object -First 1
 
 							Write-Debug "Matching service info:`n$($MatchingService | Format-List -Property * | Out-String)"
 
@@ -475,61 +475,69 @@ function Get-SQLInstances
 							ClusterName,
 							ClusterNodes,
 							FullName,
-							@{ label = "ServiceName"; expression = {
-								if($MatchingService)
-								{
-									$MatchingService.DisplayName
+							@{
+								label = "ServiceName"; expression = {
+									if ($MatchingService)
+									{
+										$MatchingService.DisplayName
+									}
+									else
+									{
+										"No CIM Match"
+									}
 								}
-								else
-								{
-									"No CIM Match"
+							},
+							@{
+								label = "ServiceState"; expression = {
+									if ($MatchingService)
+									{
+										$MatchingService.State
+									}
+									else
+									{
+										"No CIM Match"
+									}
 								}
-							}},
-							@{ label = "ServiceState"; expression = {
-								if($MatchingService)
-								{
-									$MatchingService.State
+							},
+							@{
+								label = "ServiceAccount"; expression = {
+									if ($MatchingService)
+									{
+										$MatchingService.StartName
+									}
+									else
+									{
+										"No CIM Match"
+									}
 								}
-								else
-								{
-									"No CIM Match"
+							},
+							@{
+								label = "ServiceStartMode"; expression = {
+									if ($MatchingService)
+									{
+										$MatchingService.StartMode
+									}
+									else
+									{
+										"No CIM Match"
+									}
 								}
-							}},
-							@{ label = "ServiceAccount"; expression = {
-								if($MatchingService)
-								{
-									$MatchingService.StartName
-								}
-								else
-								{
-									"No CIM Match"
-								}
-							}},
-							@{ label = "ServiceStartMode"; expression = {
-								if($MatchingService)
-								{
-									$MatchingService.StartMode
-								}
-								else
-								{
-									"No CIM Match"
-								}
-							}}
+							}
 						} # foreach($Instance in $AllInstances)
 					} # if($SQLServices)
 				}
 				catch
 				{
 					Write-Error -TargetObject $_.TargetObject -Message "Could not retrieve CIM info for computer $Computer, $_"
-					return $AllInstances
+					Write-Output $AllInstances
+					return
 				}
 
-				return $AllInstancesCIM
-
+				Write-Output $AllInstancesCIM
 			} # if CIM
 			else
 			{
-				return $AllInstances
+				Write-Output $AllInstances
 			}
 		}
 	}

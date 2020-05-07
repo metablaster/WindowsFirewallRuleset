@@ -58,12 +58,17 @@ Start-Test
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
 New-Test "Format-Output"
-New-NetFirewallRule -Platform $Platform `
--DisplayName "TargetProgram" -Service Any -Program Any `
--PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $Interface `
--Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 26002 `
--LocalUser Any `
--Description "" @Logs | Format-Output @Logs
+
+New-NetFirewallRule -DisplayName "TargetProgram" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Any `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser Any `
+	-InterfaceType $Interface `
+	-Description "TargetProgram test rule description" `
+	@Logs | Format-Output @Logs
 
 Update-Logs
 Exit-Test

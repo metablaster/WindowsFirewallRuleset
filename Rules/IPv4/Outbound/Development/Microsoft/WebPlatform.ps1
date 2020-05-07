@@ -68,11 +68,11 @@ if ((Test-Installation "WebPlatform" ([ref] $WebPlatformRoot) @Logs) -or $ForceL
 	$Program = "$WebPlatformRoot\WebPlatformInstaller.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Web Platform Installer" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "" @Logs | Format-Output @Logs
+		-DisplayName "Web Platform Installer" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "" @Logs | Format-Output @Logs
 }
 
 Update-Logs

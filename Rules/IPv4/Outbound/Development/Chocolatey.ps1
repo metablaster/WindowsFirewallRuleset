@@ -69,11 +69,11 @@ if ((Test-Installation "Chocolatey" ([ref] $ChocolateyRoot) @Logs) -or $ForceLoa
 	$Program = "$ChocolateyRoot\choco.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Chocolatey" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-	-LocalUser $ChocolateyAccounts `
-	-Description "Chocolatey package manager" @Logs | Format-Output @Logs
+		-DisplayName "Chocolatey" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+		-LocalUser $ChocolateyAccounts `
+		-Description "Chocolatey package manager" @Logs | Format-Output @Logs
 }
 
 Update-Logs

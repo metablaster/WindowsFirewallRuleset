@@ -42,33 +42,33 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Write-Information -Tags "User" -MessageData "INFO: Setting up public firewall profile..." @Logs
 
 Set-NetFirewallProfile -Profile Public -PolicyStore $PolicyStore `
--Enabled True -DefaultInboundAction Block -DefaultOutboundAction Block -AllowInboundRules True `
--AllowLocalFirewallRules False -AllowLocalIPsecRules False -AllowUnicastResponseToMulticast False `
--NotifyOnListen True -EnableStealthModeForIPsec True `
--LogAllowed False -LogBlocked True -LogIgnored True -LogMaxSizeKilobytes 1024 `
--AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
--LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" @Logs
+	-Enabled True -DefaultInboundAction Block -DefaultOutboundAction Block -AllowInboundRules True `
+	-AllowLocalFirewallRules False -AllowLocalIPsecRules False `
+	-NotifyOnListen True -EnableStealthModeForIPsec True -AllowUnicastResponseToMulticast False `
+	-LogAllowed False -LogBlocked True -LogIgnored True -LogMaxSizeKilobytes 1024 `
+	-AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
+	-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" @Logs
 
 # Setting up profile seem to be slow, tell user what is going on
 Write-Information -Tags "User" -MessageData "INFO: Setting up private firewall profile..." @Logs
 
 Set-NetFirewallProfile -Profile Private -PolicyStore $PolicyStore `
--Enabled True -DefaultInboundAction Block -DefaultOutboundAction Block -AllowInboundRules True `
--AllowLocalFirewallRules False -AllowLocalIPsecRules False -AllowUnicastResponseToMulticast True `
--NotifyOnListen True -EnableStealthModeForIPsec True `
--LogAllowed False -LogBlocked True -LogIgnored True -LogMaxSizeKilobytes 1024 `
--AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
--LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" @Logs
+	-Enabled True -DefaultInboundAction Block -DefaultOutboundAction Block -AllowInboundRules True `
+	-AllowLocalFirewallRules False -AllowLocalIPsecRules False `
+	-NotifyOnListen True -EnableStealthModeForIPsec True -AllowUnicastResponseToMulticast True `
+	-LogAllowed False -LogBlocked True -LogIgnored True -LogMaxSizeKilobytes 1024 `
+	-AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
+	-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" @Logs
 
 # Setting up profile seem to be slow, tell user what is going on
 Write-Information -Tags "User" -MessageData "INFO: Setting up domain firewall profile..." @Logs
 
 Set-NetFirewallProfile -Profile Domain -PolicyStore $PolicyStore `
--Enabled True -DefaultInboundAction Block -DefaultOutboundAction Block -AllowInboundRules True `
--AllowLocalFirewallRules False -AllowLocalIPsecRules False -AllowUnicastResponseToMulticast True `
--NotifyOnListen True -EnableStealthModeForIPsec True `
--LogAllowed False -LogBlocked True -LogIgnored True -LogMaxSizeKilobytes 1024 `
--AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
--LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" @Logs
+	-Enabled True -DefaultInboundAction Block -DefaultOutboundAction Block -AllowInboundRules True `
+	-AllowLocalFirewallRules False -AllowLocalIPsecRules False `
+	-NotifyOnListen True -EnableStealthModeForIPsec True -AllowUnicastResponseToMulticast True `
+	-LogAllowed False -LogBlocked True -LogIgnored True -LogMaxSizeKilobytes 1024 `
+	-AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
+	-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" @Logs
 
 Update-Logs

@@ -69,8 +69,8 @@ TODO: describe outputs
 .NOTES
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
-- For code to be consisten with project: code formatting and symbol casing.
-- Removed unecessary position arguments, added default argument values explicitly.
+- For code to be consistent with project: code formatting and symbol casing.
+- Removed unnecessary position arguments, added default argument values explicitly.
 #>
 function ConvertFrom-HexIP
 {
@@ -78,7 +78,7 @@ function ConvertFrom-HexIP
 	[OutputType([IPAddress])]
 	param (
 		[Parameter(Mandatory = $true,
-		ValueFromPipeline = $true)]
+			ValueFromPipeline = $true)]
 		[ValidatePattern('^(0x)?[0-9a-f]{8}$')]
 		[string] $IPAddress
 	)

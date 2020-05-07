@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 Set-StrictMode -Version Latest
-Set-Variable ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
+Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
 #
 # Module preferences
@@ -46,6 +46,11 @@ if ($Develop)
 	Write-Debug -Message "[$ThisModule] DebugPreference is $DebugPreference"
 	Write-Debug -Message "[$ThisModule] VerbosePreference is $VerbosePreference"
 	Write-Debug -Message "[$ThisModule] InformationPreference is $InformationPreference"
+}
+else
+{
+	# Everything is default except InformationPreference should be enabled
+	$InformationPreference = "Continue"
 }
 
 # Includes
@@ -66,7 +71,7 @@ Additional string after -> (arrow)
 .EXAMPLE
 Update-Context "IPv4" "Outbound" "RuleGroup"
 
-[IPv4.Outbout -> RuleGroup]
+[IPv4.Outbound -> RuleGroup]
 .INPUTS
 None. You cannot pipe objects to Update-Context
 .OUTPUTS
@@ -127,7 +132,7 @@ TODO: make this function more generic
 #>
 function Approve-Execute
 {
-	[OutputType([System.Void])]
+	[OutputType([System.Boolean])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $false)]
@@ -144,7 +149,7 @@ function Approve-Execute
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Default action is: $DefaultAction"
 
-	$Choices  = "&Yes", "&No"
+	$Choices = "&Yes", "&No"
 	$Default = 0
 	if ($DefaultAction -like "No")
 	{
@@ -161,6 +166,7 @@ function Approve-Execute
 	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] User refuses default action"
+	return $false
 }
 
 <#
@@ -181,10 +187,11 @@ TODO: additional work on function to make it more universal, see if we can make 
 #>
 function Show-SDDL
 {
+	[OutputType([System.String])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true,
-		ValueFromPipelineByPropertyName = $true)]
+			ValueFromPipelineByPropertyName = $true)]
 		$SDDL
 	)
 
@@ -192,24 +199,24 @@ function Show-SDDL
 
 	$SDDLSplit = $SDDL.Split("(")
 
-	Write-Host ""
-	Write-Host "SDDL Split:"
-	Write-Host "****************"
+	Write-Output ""
+	Write-Output "SDDL Split:"
+	Write-Output "****************"
 
 	$SDDLSplit
 
-	Write-Host ""
-	Write-Host "SDDL SID Parsing:"
-	Write-Host "****************"
+	Write-Output ""
+	Write-Output "SDDL SID Parsing:"
+	Write-Output "****************"
 
 	# Skip index 0 where owner and/or primary group are stored
-	for ($i=1; $i -lt $SDDLSplit.Length; $i++)
+	for ($i = 1; $i -lt $SDDLSplit.Length; ++$i)
 	{
 		$ACLSplit = $SDDLSplit[$i].Split(";")
 
 		if ($ACLSplit[1].Contains("ID"))
 		{
-			"Inherited"
+			Write-Output "Inherited"
 		}
 		else
 		{
@@ -228,16 +235,14 @@ function Show-SDDL
 
 			if ($ACLEntrySID)
 			{
-				$ACLEntrySID
+				Write-Output $ACLEntrySID
 			}
 			else
 			{
-				"Not inherited - No SID"
+				Write-Output "Not inherited - No SID"
 			}
 		}
 	}
-
-	return $null
 }
 
 <#
@@ -274,7 +279,8 @@ function Convert-SDDLToACL
 
 		$ACLObject = New-Object -TypeName Security.AccessControl.DirectorySecurity
 		$ACLObject.SetSecurityDescriptorSddlForm($Entry)
-		$ACL += $ACLObject.Access | Select-Object -ExpandProperty IdentityReference | Select-Object -ExpandProperty Value
+		$ACL += $ACLObject.Access | Select-Object -ExpandProperty IdentityReference |
+		Select-Object -ExpandProperty Value
 	}
 
 	return $ACL
@@ -311,7 +317,7 @@ function Get-NetworkServices
 		return
 	}
 
-	# Recusively get powershell scripts in input folder
+	# Recursively get powershell scripts in input folder
 	$Files = Get-ChildItem -Path $Folder -Recurse -Filter *.ps1
 	if (!$Files)
 	{
@@ -321,7 +327,7 @@ function Get-NetworkServices
 
 	$Content = @()
 	# Filter out service names from each powershell file in input folder
-	$Files | Foreach-Object {
+	$Files | ForEach-Object {
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading file: $($_.FullName)"
 		Get-Content $_.FullName | Where-Object {
 			if ($_ -match "(?<= -Service )(.*)(?= -Program)")
@@ -381,11 +387,12 @@ None.
 #>
 function Format-Output
 {
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'There is no way to replace Write-Host here')]
 	[OutputType([System.Void])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true,
-		ValueFromPipeline = $true)]
+			ValueFromPipeline = $true)]
 		[Microsoft.Management.Infrastructure.CimInstance] $Rule
 	)
 
@@ -425,7 +432,7 @@ function Set-ScreenBuffer
 	{
 		Write-Warning -Message "Your screen buffer of $($NewSize.Height) is below recommended $NewBuffer to preserve all execution output"
 
-		$Choices  = "&Yes", "&No"
+		$Choices = "&Yes", "&No"
 		$Default = 0
 		$Title = "Increase Screen Buffer"
 		$Question = "Would you like to increase screen buffer to $($NewBuffer)?"
@@ -466,7 +473,7 @@ Test-TargetComputer "COMPUTERNAME"
 .INPUTS
 None. You cannot pipe objects to Test-TargetMachine
 .OUTPUTS
-[bool] false or true if target host is reponsive
+[bool] false or true if target host is responsive
 .NOTES
 None.
 #>
@@ -477,7 +484,7 @@ function Test-TargetComputer
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter(Mandatory = $true,
-		Position = 0)]
+			Position = 0)]
 		[string] $ComputerName,
 
 		[Parameter()]
@@ -503,7 +510,7 @@ function Test-TargetComputer
 if (!(Get-Variable -Name CheckInitUtility -Scope Global -ErrorAction Ignore))
 {
 	Write-Debug -Message "[$ThisModule] Initialize global constant: CheckInitUtility"
-	# check if constants alreay initialized, used for module reloading
+	# check if constants already initialized, used for module reloading
 	New-Variable -Name CheckInitUtility -Scope Global -Option Constant -Value $null
 
 	Write-Debug -Message "[$ThisModule] Initialize global constant: ServiceHost"

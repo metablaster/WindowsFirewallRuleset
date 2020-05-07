@@ -43,7 +43,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 #
 # Setup local variables:
 #
-$Group = "Software - Filezilla"
+$Group = "Software - FileZilla"
 $Profile = "Private, Public"
 
 # Ask user if he wants to load these rules
@@ -51,38 +51,38 @@ Update-Context "IPv$IPVersion" $Direction $Group @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
 #
-# Filezilla installation directories
+# FileZilla installation directories
 #
-$FilezillaRoot = "%ProgramFiles%\FileZilla FTP Client"
+$FileZillaRoot = "%ProgramFiles%\FileZilla FTP Client"
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
 #
-# Rules for Filezilla
-# TODO: Update ProgramInfo module for Filezilla
+# Rules for FileZilla
+# TODO: Update ProgramInfo module for FileZilla
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Filezilla" ([ref] $FilezillaRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "FileZilla" ([ref] $FileZillaRoot) @Logs) -or $ForceLoad)
 {
-	$Program = "$FilezillaRoot\filezilla.exe"
+	$Program = "$FileZillaRoot\filezilla.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Filezilla client (FTP)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "FileZilla FTP protocol" @Logs | Format-Output @Logs
+		-DisplayName "FileZilla client (FTP)" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "FileZilla FTP protocol" @Logs | Format-Output @Logs
 
-	$Program = "$FilezillaRoot\fzsftp.exe"
+	$Program = "$FileZillaRoot\fzsftp.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Filezilla client (SFTP)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21098 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "FileZilla SSH FTP protocol" @Logs | Format-Output @Logs
+		-DisplayName "FileZilla client (SFTP)" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21098 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "FileZilla SSH FTP protocol" @Logs | Format-Output @Logs
 }
 
 Update-Logs

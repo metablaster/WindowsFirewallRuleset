@@ -69,11 +69,11 @@ if ((Test-Installation "MSIAfterburner" ([ref] $MSIAfterburnerRoot) @Logs) -or $
 	$Program = "$MSIAfterburnerRoot\MSIAfterburner.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "MSI Afterburner" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "Startup update" @Logs | Format-Output @Logs
+		-DisplayName "MSI Afterburner" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "Startup update" @Logs | Format-Output @Logs
 }
 
 # Test if installation exists on system
@@ -82,20 +82,20 @@ if ((Test-Installation "MSIAfterburner" ([ref] $MSIAfterburnerRoot) @Logs) -or $
 	$Program = "$MSIRoot\Live Update\Live Update.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "MSI live update" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "Startup update" @Logs | Format-Output @Logs
+		-DisplayName "MSI live update" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "Startup update" @Logs | Format-Output @Logs
 
 	$Program = "$MSIRoot\APP Manager\AppManager.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "MSI app manager" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-	-LocalUser $UsersGroupSDDL `
-	-Description "Startup update" @Logs | Format-Output @Logs
+		-DisplayName "MSI app manager" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "Startup update" @Logs | Format-Output @Logs
 }
 
 Update-Logs

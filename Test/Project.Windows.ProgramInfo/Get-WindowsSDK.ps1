@@ -55,10 +55,9 @@ $WindowsSDK
 New-Test "Get-WindowsSDK latest"
 if ($null -ne $WindowsSDK)
 {
-    $WindowsSDK |
-    Sort-Object -Property Version @Logs |
-    Where-Object { $_.InstallLocation } |
-    Select-Object -Last 1 -ExpandProperty InstallLocation @Logs
+	$WindowsSDK | Sort-Object -Property Version @Logs |
+		Where-Object { $_.InstallLocation } |
+			Select-Object -Last 1 -ExpandProperty InstallLocation @Logs
 }
 
 New-Test "Get-TypeName"

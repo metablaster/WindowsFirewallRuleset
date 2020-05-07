@@ -50,7 +50,7 @@ New-NetFirewallRule -ErrorAction Stop -Enabled True -PolicyStore $PolicyStore -G
 New-NetFirewallRule -ErrorAction Stop -Enabled True -PolicyStore $PolicyStore -Group $Group -Platform $Platform -Direction Outbound -Protocol UDP -RemoteAddress DHCP4 -Service Dhcp -LocalPort 68 -RemotePort 67 -DisplayName "Domain Host Configuration Protocol" -Description "Allows DHCPv4 messages for stateful auto-configuration."
 
 #IGMP
-New-NetFirewallRule -ErrorAction Stop -Enabled True -PolicyStore $PolicyStore -Group $Group -Platform $Platform -Direction Outbound -Protocol 2 -RemoteAddress LocalSubnet4 -Profile Private,Domain -Program System -LocalUser $NT_AUTHORITY_SYSTEM -DisplayName "Internet Group Management Protocol" -Description "IGMP messages are sent and received by nodes to create, join and depart multicast groups."
+New-NetFirewallRule -ErrorAction Stop -Enabled True -PolicyStore $PolicyStore -Group $Group -Platform $Platform -Direction Outbound -Protocol 2 -RemoteAddress LocalSubnet4 -Profile Private, Domain -Program System -LocalUser $NT_AUTHORITY_SYSTEM -DisplayName "Internet Group Management Protocol" -Description "IGMP messages are sent and received by nodes to create, join and depart multicast groups."
 
 #IPHTTPS
 New-NetFirewallRule -ErrorAction Stop -Enabled True -PolicyStore $PolicyStore -Group $Group -Platform $Platform -Direction Outbound -Protocol TCP -RemoteAddress Internet4 -Service iphlpsvc -RemotePort IPHTTPSout -DisplayName "IPv4 over HTTPS" -Description "Rule to allow IPv4 IPHTTPS tunneling technology to provide connectivity across HTTP proxies and firewalls."
@@ -71,4 +71,4 @@ New-NetFirewallRule -ErrorAction Stop -Enabled True -PolicyStore $PolicyStore -G
 New-NetFirewallRule -ErrorAction Stop -Enabled True -PolicyStore $PolicyStore -Group $Group -Platform $Platform -Protocol UDP -Service iphlpsvc -LocalPort 3544 -RemoteAddress Internet4 -EdgeTraversalPolicy Allow -DisplayName "Teredo" -Description "Rule to allow Teredo edge traversal, a technology that provides address assignment and automatic tunneling for unicast IPv6 traffic when an IPv6/IPv4 host is located behind an IPv4 network address translator."
 
 #IGMP
-New-NetFirewallRule -ErrorAction Stop -Enabled False -PolicyStore $PolicyStore -Group $Group -Platform $Platform -Protocol 2 -RemoteAddress LocalSubnet4 -Profile Private,Domain -Program System -LocalUser $NT_AUTHORITY_SYSTEM -DisplayName "Internet Group Management Protocol" -Description "IGMP messages are sent and received by nodes to create, join and depart multicast groups."
+New-NetFirewallRule -ErrorAction Stop -Enabled False -PolicyStore $PolicyStore -Group $Group -Platform $Platform -Protocol 2 -RemoteAddress LocalSubnet4 -Profile Private, Domain -Program System -LocalUser $NT_AUTHORITY_SYSTEM -DisplayName "Internet Group Management Protocol" -Description "IGMP messages are sent and received by nodes to create, join and depart multicast groups."

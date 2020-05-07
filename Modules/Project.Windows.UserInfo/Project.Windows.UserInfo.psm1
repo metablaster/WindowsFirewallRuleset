@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 Set-StrictMode -Version Latest
-Set-Variable ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
+Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
 #
 # Module preferences
@@ -47,6 +47,11 @@ if ($Develop)
 	Write-Debug -Message "[$ThisModule] VerbosePreference is $VerbosePreference"
 	Write-Debug -Message "[$ThisModule] InformationPreference is $InformationPreference"
 }
+else
+{
+	# Everything is default except InformationPreference should be enabled
+	$InformationPreference = "Continue"
+}
 
 # Includes
 . $PSScriptRoot\External\ConvertFrom-SID.ps1
@@ -55,16 +60,16 @@ if ($Develop)
 
 <#
 .SYNOPSIS
-Strip computer names out of computer acounts
+Strip computer names out of computer accounts
 .DESCRIPTION
-ConvertFrom-UserAccount is a helper method to reduce typing comming code
+ConvertFrom-UserAccount is a helper method to reduce typing common code
 related to splitting up user accounts
 .PARAMETER UserAccounts
 Array of user accounts in form of: COMPUTERNAME\USERNAME
 .EXAMPLE
-onvertFrom-UserAccounts COMPUTERNAME\USERNAME
+ConvertFrom-UserAccounts COMPUTERNAME\USERNAME
 .EXAMPLE
-onvertFrom-UserAccounts SERVER\USER, COMPUTER\USER, SERVER2\USER2
+ConvertFrom-UserAccounts SERVER\USER, COMPUTER\USER, SERVER2\USER2
 .INPUTS
 None. You cannot pipe objects to ConvertFrom-UserAccounts
 .OUTPUTS
@@ -85,7 +90,7 @@ function ConvertFrom-UserAccount
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	[string[]] $UserNames = @()
-	foreach($Account in $UserAccounts)
+	foreach ($Account in $UserAccounts)
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting user name for account: $Account"
 		$UserNames += $Account.split("\")[1]
@@ -100,9 +105,9 @@ Get computer accounts for a given user groups on given computers
 .PARAMETER UserGroups
 User group on local or remote computer
 .PARAMETER ComputerNames
-One or more computers which to querry for group users
+One or more computers which to query for group users
 .PARAMETER CIM
-Whether to contact CIM server (requred for remote computers)
+Whether to contact CIM server (required for remote computers)
 .EXAMPLE
 Get-GroupPrincipals "Users", "Administrators"
 .EXAMPLE
@@ -124,8 +129,8 @@ function Get-GroupPrincipals
 	param (
 		[Alias("Group")]
 		[Parameter(Mandatory = $true,
-		Position = 0,
-		ValueFromPipeline = $true)]
+			Position = 0,
+			ValueFromPipeline = $true)]
 		[string[]] $UserGroups,
 
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
@@ -152,7 +157,7 @@ function Get-GroupPrincipals
 				if ($PowerShellEdition -ne "Desktop")
 				{
 					Write-Error -Category InvalidArgument -TargetObject $Computer `
-					-Message "Querying computers via CIM server with PowerShell '$PowerShellEdition' not implemented"
+						-Message "Querying computers via CIM server with PowerShell '$PowerShellEdition' not implemented"
 					return
 				}
 
@@ -165,7 +170,7 @@ function Get-GroupPrincipals
 
 					foreach ($Group in $UserGroups)
 					{
-						# Get all users that belong to requrested group,
+						# Get all users that belong to requested group,
 						# this includes non local principal source and non 'user' users
 						# it is also missing SID
 						$GroupUsers = Get-CimInstance -Class Win32_GroupUser -Namespace "root\cimv2" -ComputerName $Computer |
@@ -178,7 +183,7 @@ function Get-GroupPrincipals
 						Where-Object -Property Disabled -ne False |
 						Select-Object -Property Name, Caption, SID, Domain
 
-						if([string]::IsNullOrEmpty($EnabledAccounts))
+						if ([string]::IsNullOrEmpty($EnabledAccounts))
 						{
 							Write-Warning -Message "User group '$Group' does not have any accounts on computer: $Computer"
 							continue
@@ -208,7 +213,7 @@ function Get-GroupPrincipals
 				else
 				{
 					Write-Error -Category ConnectionError -TargetObject $Computer `
-					-Message "Unable to contact computer: $Computer"
+						-Message "Unable to contact computer: $Computer"
 				}
 			} # if ($CIM)
 			elseif ($Computer -eq [System.Environment]::MachineName)
@@ -222,7 +227,7 @@ function Get-GroupPrincipals
 					Where-Object { $_.PrincipalSource -eq "Local" -and $_.ObjectClass -eq "User" } |
 					Select-Object -Property Name, SID
 
-					if([string]::IsNullOrEmpty($GroupUsers))
+					if ([string]::IsNullOrEmpty($GroupUsers))
 					{
 						Write-Warning -Message "User group '$Group' does not have any accounts on computer: $Computer"
 						continue
@@ -244,11 +249,11 @@ function Get-GroupPrincipals
 			else
 			{
 				Write-Error -Category NotImplemented -TargetObject $Computer `
-				-Message "Querying remote computers without CIM switch not implemented"
+					-Message "Querying remote computers without CIM switch not implemented"
 			}
 		} # foreach ($Computer in $ComputerNames)
 
-		return $UserAccounts
+		Write-Output $UserAccounts
 	} # process
 }
 
@@ -256,11 +261,11 @@ function Get-GroupPrincipals
 .SYNOPSIS
 Get user groups on target computers
 .DESCRIPTION
-Get a list of all availabe user groups on target computers
+Get a list of all available user groups on target computers
 .PARAMETER ComputerNames
-One or more computers which to querry for user groups
+One or more computers which to query for user groups
 .PARAMETER CIM
-Whether to contact CIM server (requred for remote computers)
+Whether to contact CIM server (required for remote computers)
 .EXAMPLE
 Get-UserGroups "ServerPC"
 .EXAMPLE
@@ -288,7 +293,7 @@ function Get-UserGroups
 
 	begin
 	{
-		[PSCustomObject[]] $UserGroups =@()
+		[PSCustomObject[]] $UserGroups = @()
 		$PowerShellEdition = $PSVersionTable.PSEdition
 	}
 	process
@@ -299,10 +304,11 @@ function Get-UserGroups
 		{
 			if ($CIM)
 			{
+				# TODO: should work on windows, see Get-SQLInstances
 				if ($PowerShellEdition -ne "Desktop")
 				{
 					Write-Error -Category InvalidArgument -TargetObject $Computer `
-					-Message "Querying computers via CIM server with PowerShell '$PowerShellEdition' not implemented"
+						-Message "Querying computers via CIM server with PowerShell '$PowerShellEdition' not implemented"
 					return
 				}
 
@@ -326,7 +332,7 @@ function Get-UserGroups
 						}
 					}
 
-					if([string]::IsNullOrEmpty($UserGroups))
+					if ([string]::IsNullOrEmpty($UserGroups))
 					{
 						Write-Warning -Message "There are no user groups on computer: $Computer"
 						continue
@@ -335,7 +341,7 @@ function Get-UserGroups
 				else
 				{
 					Write-Error -Category ConnectionError -TargetObject $Computer `
-					-Message "Unable to contact computer: $Computer"
+						-Message "Unable to contact computer: $Computer"
 				}
 			} # if ($CIM)
 			elseif ($Computer -eq [System.Environment]::MachineName)
@@ -354,7 +360,7 @@ function Get-UserGroups
 					}
 				}
 
-				if([string]::IsNullOrEmpty($UserGroups))
+				if ([string]::IsNullOrEmpty($UserGroups))
 				{
 					Write-Warning -Message "There are no user groups on computer: $Computer"
 					continue
@@ -363,11 +369,11 @@ function Get-UserGroups
 			else
 			{
 				Write-Error -Category NotImplemented -TargetObject $Computer `
-				-Message "Querying remote computers without CIM switch not implemented"
+					-Message "Querying remote computers without CIM switch not implemented"
 			} # if ($CIM)
 		} # foreach ($Computer in $ComputerNames)
 
-		return $UserGroups
+		Write-Output $UserGroups
 	} # process
 }
 
@@ -420,7 +426,7 @@ Array of users for which to generate SDDL string
 .PARAMETER UserGroups
 Array of user groups for which to generate SDDL string
 .PARAMETER CIM
-Whether to contact CIM server (requred for remote computers)
+Whether to contact CIM server (required for remote computers)
 .EXAMPLE
 [string[]] $Users = "haxor"
 [string] $Server = COMPUTERNAME
@@ -444,12 +450,12 @@ function Get-SDDL
 	[CmdletBinding(PositionalBinding = $false)]
 	param (
 		[Alias("User")]
-		[Parameter(Mandatory = $true, ParameterSetName="User")]
-		[Parameter(Mandatory = $false, ParameterSetName="Group")]
+		[Parameter(Mandatory = $true, ParameterSetName = "User")]
+		[Parameter(Mandatory = $false, ParameterSetName = "Group")]
 		[string[]] $UserNames,
 
 		[Alias("Group")]
-		[Parameter(Mandatory = $true, ParameterSetName="Group")]
+		[Parameter(Mandatory = $true, ParameterSetName = "Group")]
 		[string[]] $UserGroups,
 
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
@@ -486,7 +492,7 @@ function Get-SDDL
 		}
 	}
 
-	if($SDDL.Length -lt 3)
+	if ($SDDL.Length -lt 3)
 	{
 		Write-Error -TargetObject $SDDL -Message "Failed to assemble SDDL"
 	}
@@ -506,7 +512,7 @@ Array of user groups or single group name
 .PARAMETER ComputerName
 Computer name which to query for group users
 .PARAMETER CIM
-Whether to contact CIM server (requred for remote computers)
+Whether to contact CIM server (required for remote computers)
 .EXAMPLE
 Get-GroupSID "USERNAME" -Machine "COMPUTERNAME"
 .EXAMPLE
@@ -525,8 +531,8 @@ function Get-GroupSID
 	param (
 		[Alias("Group")]
 		[Parameter(Mandatory = $true,
-		Position = 0,
-		ValueFromPipeline = $true)]
+			Position = 0,
+			ValueFromPipeline = $true)]
 		[string[]] $UserGroups,
 
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
@@ -554,7 +560,7 @@ function Get-GroupSID
 				if ($PowerShellEdition -ne "Desktop")
 				{
 					Write-Error -Category InvalidArgument -TargetObject $ComputerName `
-					-Message "Querying computers via CIM server with PowerShell '$PowerShellEdition' not implemented"
+						-Message "Querying computers via CIM server with PowerShell '$PowerShellEdition' not implemented"
 					return
 				}
 
@@ -570,22 +576,24 @@ function Get-GroupSID
 				else
 				{
 					Write-Error -Category ConnectionError -TargetObject $ComputerName `
-					-Message "Unable to contact computer: $ComputerName"
+						-Message "Unable to contact computer: $ComputerName"
 					continue
 				}
 			}
 			elseif ($ComputerName -eq [System.Environment]::MachineName)
 			{
-				$GroupSID = Get-LocalGroup -Name $Group | Select-Object -ExpandProperty SID | Select-Object -ExpandProperty Value
+				$GroupSID = Get-LocalGroup -Name $Group |
+				Select-Object -ExpandProperty SID |
+				Select-Object -ExpandProperty Value
 			}
 			else
 			{
 				Write-Error -Category NotImplemented -TargetObject $ComputerName `
-				-Message "Querying remote computers without CIM switch not implemented"
+					-Message "Querying remote computers without CIM switch not implemented"
 				return
 			} # if ($CIM)
 
-			if([string]::IsNullOrEmpty($GroupSID))
+			if ([string]::IsNullOrEmpty($GroupSID))
 			{
 				Write-Error -TargetObject $Group -Message "User group '$Group' cannot be resolved to a SID."
 			}
@@ -607,7 +615,7 @@ Array of user names
 .PARAMETER ComputerName
 Target computer on which to perform query
 .PARAMETER CIM
-Whether to contact CIM server (requred for remote computers)
+Whether to contact CIM server (required for remote computers)
 .EXAMPLE
 Get-AccountSID "USERNAME" -Server "COMPUTERNAME"
 .EXAMPLE
@@ -627,8 +635,8 @@ function Get-AccountSID
 	param (
 		[Alias("User")]
 		[Parameter(Mandatory = $true,
-		Position = 0,
-		ValueFromPipeline = $true)]
+			Position = 0,
+			ValueFromPipeline = $true)]
 		[string[]] $UserNames,
 
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
@@ -643,7 +651,7 @@ function Get-AccountSID
 	{
 		$PowerShellEdition = $PSVersionTable.PSEdition
 		[bool] $SpecialDomain = ![System.String]::IsNullOrEmpty(
-			[array]::Find($SpecialDomains, [System.Predicate[string]]{ $ComputerName -eq "$($args[0])" }))
+			[array]::Find($SpecialDomains, [System.Predicate[string]] { $ComputerName -eq "$($args[0])" }))
 	}
 	process
 	{
@@ -659,7 +667,7 @@ function Get-AccountSID
 				if ($PowerShellEdition -ne "Desktop")
 				{
 					Write-Error -Category InvalidArgument -TargetObject $ComputerName `
-					-Message "Querying computers via CIM server with PowerShell '$PowerShellEdition' not implemented"
+						-Message "Querying computers via CIM server with PowerShell '$PowerShellEdition' not implemented"
 					return
 				}
 
@@ -675,7 +683,7 @@ function Get-AccountSID
 				else
 				{
 					Write-Error -Category ConnectionError -TargetObject $ComputerName `
-					-Message "Unable to contact computer: $ComputerName"
+						-Message "Unable to contact computer: $ComputerName"
 					return
 				}
 			}
@@ -702,11 +710,11 @@ function Get-AccountSID
 			else
 			{
 				Write-Error -Category NotImplemented -TargetObject $ComputerName `
-				-Message "Querying remote computers without CIM switch not implemented"
+					-Message "Querying remote computers without CIM switch not implemented"
 				return
 			} # if ($CIM)
 
-			if([string]::IsNullOrEmpty($AccountSID))
+			if ([string]::IsNullOrEmpty($AccountSID))
 			{
 				Write-Error -TargetObject $AccountSID -Message "Account '$ComputerName\$User' cannot be resolved to a SID"
 			}
@@ -729,13 +737,13 @@ New-Variable -Name SpecialDomains -Scope Script -Option Constant -Value @(
 	"NT AUTHORITY"
 	"APPLICATION_PACKAGE_AUTHORITY"
 	"BUILTIN"
-	)
+)
 
 # TODO: global configuration variables (in a separate script)?
 if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 {
 	Write-Debug -Message "[$ThisModule] Initialize global constant variable: CheckInitUserInfo"
-	# check if constants alreay initialized, used for module reloading
+	# check if constants already initialized, used for module reloading
 	New-Variable -Name CheckInitUserInfo -Scope Global -Option Constant -Value $null
 
 	# TODO: should not be used
@@ -800,7 +808,7 @@ Export-ModuleMember -Variable NT_AUTHORITY_UserModeDrivers
 # $NT_AUTHORITY_Service = "D:(A;;CC;;;S-1-5-6)"
 # $NT_AUTHORITY_AnonymousLogon = "D:(A;;CC;;;S-1-5-7)"
 # $NT_AUTHORITY_Proxy = "D:(A;;CC;;;S-1-5-8)"
-# $NT_AUTHORITY_EnterpriseDomainControlers = "D:(A;;CC;;;S-1-5-9)"
+# $NT_AUTHORITY_EnterpriseDomainControllers = "D:(A;;CC;;;S-1-5-9)"
 # $NT_AUTHORITY_Self = "D:(A;;CC;;;S-1-5-10)"
 # $NT_AUTHORITY_AuthenticatedUsers = "D:(A;;CC;;;S-1-5-11)"
 # $NT_AUTHORITY_Restricted = "D:(A;;CC;;;S-1-5-12)"
@@ -813,13 +821,13 @@ Export-ModuleMember -Variable NT_AUTHORITY_UserModeDrivers
 # $NT_AUTHORITY_LocalService = "D:(A;;CC;;;S-1-5-19)"
 # $NT_AUTHORITY_NetworkService = "D:(A;;CC;;;S-1-5-20)"
 # "D:(A;;CC;;;S-1-5-21)" ENTERPRISE_READONLY_DOMAIN_CONTROLLERS (S-1-5-21-<root domain>-498)
-# $NT_AUTHORITY_EnterpriseReadOnlyDomainControlersBeta = "D:(A;;CC;;;S-1-5-22)"
+# $NT_AUTHORITY_EnterpriseReadOnlyDomainControllersBeta = "D:(A;;CC;;;S-1-5-22)"
 # "D:(A;;CC;;;S-1-5-23)" # Unknown
 
 # Application packages
 # $APPLICATION_PACKAGE_AUTHORITY_AllApplicationPackages = "D:(A;;CC;;;S-1-15-2-1)"
 # $APPLICATION_PACKAGE_AUTHORITY_AllRestrictedApplicationPackages = "D:(A;;CC;;;S-1-15-2-2)"
-# "D:(A;;CC;;;S-1-15-2-3)" #Unknown
+# "D:(A;;CC;;;S-1-15-2-3)" # Unknown
 
 # Other System Users
 # $NT_AUTHORITY_UserModeDrivers = "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"

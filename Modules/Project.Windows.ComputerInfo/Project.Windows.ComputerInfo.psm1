@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 Set-StrictMode -Version Latest
-Set-Variable ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
+Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
 #
 # Module preferences
@@ -47,6 +47,11 @@ if ($Develop)
 	Write-Debug -Message "[$ThisModule] VerbosePreference is $VerbosePreference"
 	Write-Debug -Message "[$ThisModule] InformationPreference is $InformationPreference"
 }
+else
+{
+	# Everything is default except InformationPreference should be enabled
+	$InformationPreference = "Continue"
+}
 
 # Includes
 Import-Module -Name $PSScriptRoot\..\Indented.Net.IP
@@ -65,7 +70,7 @@ None. You cannot pipe objects to Get-ComputerName
 .OUTPUTS
 [string] computer name in form of COMPUTERNAME
 .NOTES
-TODO: implement queriying computers on network by specifying IP address
+TODO: implement querying computers on network by specifying IP address
 #>
 function Get-ComputerName
 {
@@ -124,7 +129,7 @@ function Get-ConnectedAdapters
 	if ($Count -eq 0)
 	{
 		Write-Error -Category ObjectNotFound -TargetObject $ConnectedAdapters `
-		-Message "None of the adapters is connected to $AddressFamily network"
+			-Message "None of the adapters is connected to $AddressFamily network"
 	}
 	elseif ($Count -gt 1)
 	{
@@ -165,7 +170,9 @@ function Get-IPAddress
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting IP's of connected adapters for $AddressFamily network"
 
-	$ConnectedAdapters = Get-ConnectedAdapters $AddressFamily | Select-Object -ExpandProperty ($AddressFamily + "Address")
+	$ConnectedAdapters = Get-ConnectedAdapters $AddressFamily |
+	Select-Object -ExpandProperty ($AddressFamily + "Address")
+
 	[IPAddress] $IPAddress = $ConnectedAdapters | Select-Object -ExpandProperty IPAddress
 
 	$Count = ($IPAddress | Measure-Object).Count

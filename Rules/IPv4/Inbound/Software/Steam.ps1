@@ -68,27 +68,29 @@ if ((Test-Installation "Steam" ([ref] $SteamRoot) @Logs) -or $ForceLoad)
 	$Program = "$SteamRoot\Steam.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Steam Dedicated or Listen Servers" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort 27015 -RemotePort Any `
-	-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
-	-Description "SRCDS Rcon port" @Logs | Format-Output @Logs
+		-DisplayName "Steam Dedicated or Listen Servers" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort 27015 -RemotePort Any `
+		-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
+		-Description "SRCDS Rcon port" @Logs | Format-Output @Logs
+
+	# TODO: Inbound In-Home streaming ports are not tested, but surely needed as outbound, see also:
+	# https://support.steampowered.com/kb_article.php?ref=8571-GLVN-8711
+	New-NetFirewallRule -Platform $Platform `
+		-DisplayName "Steam In-Home Streaming" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
+		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 27031, 27036 -RemotePort 27031, 27036 `
+		-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+		-Description "Steam In-Home streaming, one PC sends its video and audio to another PC.
+	The other PC views the video and audio like it's watching a movie, sending back mouse, keyboard, and controller input to the other PC." @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Steam In-Home Streaming" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
-	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 27031-27036 -RemotePort Any `
-	-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Steam In-Home streaming, one PC sends its video and audio to another PC.
-	The other PC views the video and audio like it’s watching a movie, sending back mouse, keyboard, and controller input to the other PC." @Logs | Format-Output @Logs
-
-	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Steam In-Home Streaming" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 27036, 27037 -RemotePort Any `
-	-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
-	-Description "Steam In-Home streaming, one PC sends its video and audio to another PC.
-	The other PC views the video and audio like it’s watching a movie, sending back mouse, keyboard, and controller input to the other PC." @Logs | Format-Output @Logs
+		-DisplayName "Steam In-Home Streaming" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 27036, 27037 -RemotePort 27036, 27037 `
+		-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
+		-Description "Steam In-Home streaming, one PC sends its video and audio to another PC.
+	The other PC views the video and audio like it's watching a movie, sending back mouse, keyboard, and controller input to the other PC." @Logs | Format-Output @Logs
 }
 
 Update-Logs

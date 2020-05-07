@@ -8,14 +8,14 @@ SHORT DESCRIPTION
 LONG DESCRIPTION
 	Functions in Project.Windows.ProgramInfo module can be used to query information about programs
 	installed on computer, installed system wide or installed by each user separately.
-	Also possible to qurey software which is built into operating system.
-	Querying remote computers is currently only partialy supported.
+	Also possible to query software which is built into operating system.
+	Querying remote computers is currently only partially supported.
 
 EXAMPLES
-	To get Widnows defender instance:
+	To get Windows defender instance:
 	Get-WindowsDefender COMPUTERNAME
 
-	To get installed WidnowsSDK:
+	To get installed WindowsSDK:
 	Get-WindowsSDK COMPUTERNAME
 
 	To get SID for store app:

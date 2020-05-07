@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Not an acctual unit test but a playground for testing stuff out
+# Not an actual unit test but a playground for testing stuff out
 #
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 

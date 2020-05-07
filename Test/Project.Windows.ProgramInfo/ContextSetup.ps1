@@ -30,4 +30,4 @@ SOFTWARE.
 # Context setup for Project.Windows.ProgramInfo
 #
 
-$TestContext = "Test.Project.Windows.ProgramInfo"
+New-Variable -Name TestContext -Scope Local -Option Constant -Value "Test.Project.Windows.ProgramInfo"

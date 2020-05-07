@@ -68,9 +68,9 @@ Change log:
 	14/01/2014 - Chris Dent - Created.
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
-- For code to be consisten with project: code formatting and symbol casing.
+- For code to be consistent with project: code formatting and symbol casing.
 - Rename function to approved verb
-- Removed unecessary position arguments, added default argument values explicitly.
+- Removed unnecessary position arguments, added default argument values explicitly.
 #>
 function ConvertTo-Network
 {
@@ -86,18 +86,18 @@ function ConvertTo-Network
 	)
 
 	$validSubnetMaskValues =
-		"0.0.0.0", "128.0.0.0", "192.0.0.0",
-		"224.0.0.0", "240.0.0.0", "248.0.0.0", "252.0.0.0",
-		"254.0.0.0", "255.0.0.0", "255.128.0.0", "255.192.0.0",
-		"255.224.0.0", "255.240.0.0", "255.248.0.0", "255.252.0.0",
-		"255.254.0.0", "255.255.0.0", "255.255.128.0", "255.255.192.0",
-		"255.255.224.0", "255.255.240.0", "255.255.248.0", "255.255.252.0",
-		"255.255.254.0", "255.255.255.0", "255.255.255.128", "255.255.255.192",
-		"255.255.255.224", "255.255.255.240", "255.255.255.248", "255.255.255.252",
-		"255.255.255.254", "255.255.255.255"
+	"0.0.0.0", "128.0.0.0", "192.0.0.0",
+	"224.0.0.0", "240.0.0.0", "248.0.0.0", "252.0.0.0",
+	"254.0.0.0", "255.0.0.0", "255.128.0.0", "255.192.0.0",
+	"255.224.0.0", "255.240.0.0", "255.248.0.0", "255.252.0.0",
+	"255.254.0.0", "255.255.0.0", "255.255.128.0", "255.255.192.0",
+	"255.255.224.0", "255.255.240.0", "255.255.248.0", "255.255.252.0",
+	"255.255.254.0", "255.255.255.0", "255.255.255.128", "255.255.255.192",
+	"255.255.255.224", "255.255.255.240", "255.255.255.248", "255.255.255.252",
+	"255.255.255.254", "255.255.255.255"
 
 	$network = [PSCustomObject]@{
-		IPAddress  = $null
+		IPAddress = $null
 		SubnetMask = $null
 		MaskLength = 0
 		PSTypeName = 'Indented.Net.IP.Network'

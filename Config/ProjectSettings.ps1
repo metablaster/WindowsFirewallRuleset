@@ -27,6 +27,7 @@ SOFTWARE.
 #>
 
 #
+# TODO: we could auto include this file with module manifests
 # NOTE: In this file various project settings and preferences are set, these are grouped into
 # 1. settings for development
 # 2. settings for end users
@@ -99,7 +100,7 @@ if ($Develop)
 	Set-Variable -Name ModuleDebugPreference -Scope Global -Value $DebugPreference
 
 	#
-	# Remove loaded modules, usefull for module debugging
+	# Remove loaded modules, useful for module debugging
 	# and to avoid restarting powershell every time.
 	#
 
@@ -114,7 +115,7 @@ if ($Develop)
 else # Normal use case
 {
 	# These are set to default values for normal use case,
-	# modify to customize your experience
+	# modify to customize your experience, note that this has no effect on modules!
 	$ErrorActionPreference = "Continue"
 	$WarningPreference = "Continue"
 	$InformationPreference = "Continue"
@@ -138,10 +139,10 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 {
 	Write-Debug -Message "[$ThisScript] Setup constant variables"
 
-	# check if constants alreay initialized, used for module reloading, do not modify!
+	# check if constants already initialized, used for module reloading, do not modify!
 	New-Variable -Name CheckProjectConstants -Scope Global -Option Constant -Value $null
 
-	# Repository root directory, realocating scripts should be easy if root directory is constant
+	# Repository root directory, reallocating scripts should be easy if root directory is constant
 	New-Variable -Name ProjectRoot -Scope Global -Option Constant -Value (
 		Resolve-Path -Path "$PSScriptRoot\.." | Select-Object -ExpandProperty Path)
 
@@ -156,7 +157,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	{
 		# To force loading rules regardless of presence of program set to true
 		New-Variable -Name RemoteCredentials -Scope Global -Option Constant -Value (
-			Get-Credential -Message "Credential are required to access $PolicyStore")
+			Get-Credential -Message "Credentials are required to access $PolicyStore")
 
 		try
 		{
@@ -165,7 +166,8 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 		}
 		catch
 		{
-			Write-Error -TargetObject $_.TargetObject -Message "Windows Remote Management connection test to '$PolicyStore' failed: $_"
+			Write-Error -TargetObject $_.TargetObject `
+				-Message "Windows Remote Management connection test to '$PolicyStore' failed: $_"
 			exit
 		}
 	}
@@ -177,7 +179,8 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	New-Variable -Name ForceLoad -Scope Global -Option Constant -Value $false
 }
 
-# Read only variables, meaning these can be modifed by code at any time, and, only once per session by users,
+# Read only variables, meaning these can be modified by code at any time,
+# and, only once per session by users.
 # Changing these requires powershell restart, except if Develop = $true
 if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignore))
 {
@@ -190,7 +193,8 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -Erro
 	Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $true
 }
 
-# Removable variables, meaning these can be modifed by code at any time, and, only once per session by users
+# Removable variables, meaning these can be modified by code at any time,
+# And, only once per session by users.
 # Changing these requires powershell restart, except if Develop = $true
 if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -ErrorAction Ignore))
 {
@@ -202,7 +206,7 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 	# Amount of connections tests against remote computers
 	Set-Variable -Name ConnectionCount -Scope Global -Value 2
 
-	# Timeout in secconds to contact remote computers
+	# Timeout in seconds to contact remote computers
 	Set-Variable -Name ConnectionTimeout -Scope Global -Value 1
 
 	# Set to false to disable logging errors
@@ -215,8 +219,8 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 	Set-Variable -Name InformationLogging -Scope Global -Value $true
 }
 
-# Protected variables, meaning these can be modifed but only by code (excluded from Develop mode)
-# These are initialy set only once per session, changing these requires powershell restart.
+# Protected variables, meaning these can be modified but only by code (excluded from Develop mode)
+# These are initially set only once per session, changing these requires powershell restart.
 if (!(Get-Variable -Name CheckProtectedVariables -Scope Global -ErrorAction Ignore))
 {
 	Write-Debug -Message "[$ThisScript] Setup protected variables"

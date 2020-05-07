@@ -45,15 +45,23 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
+<#
+.SYNOPSIS
+	Info logging with advanced function
+#>
 function Test-Info
 {
 	[CmdletBinding()]
 	param ()
 
-	Write-Information -Tags "Test" -Message "[$($MyInvocation.InvocationName)] info 1"
-	Write-Information -Tags "Test" -Message "[$($MyInvocation.InvocationName)] info 2"
+	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] info 1"
+	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] info 2"
 }
 
+<#
+.SYNOPSIS
+	Info logging on pipeline
+#>
 function Test-Pipeline
 {
 	[CmdletBinding()]
@@ -62,39 +70,57 @@ function Test-Pipeline
 		$Param
 	)
 
-	Write-Information -Tags "Test" -Message "[$($MyInvocation.InvocationName)] End of pipe 1"
-	Write-Information -Tags "Test" -Message "[$($MyInvocation.InvocationName)] End of pipe 2"
+	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] End of pipe 1"
+	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] End of pipe 2"
 }
 
+<#
+.SYNOPSIS
+	Info logging with nested function
+#>
 function Test-Nested
 {
 	[CmdletBinding()]
 	param ()
 
-	Write-Information -Tags "Test" -Message "[$($MyInvocation.InvocationName)] Nested 1"
-	Write-Information -Tags "Test" -Message "[$($MyInvocation.InvocationName)] Nested 2"
+	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] Nested 1"
+	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] Nested 2"
 }
 
+<#
+.SYNOPSIS
+	Info logging with nested function
+#>
 function Test-Parent
 {
 	[CmdletBinding()]
 	param ()
 
-	Write-Information -Tags "Test" -Message "[$($MyInvocation.InvocationName)] Parent 1"
+	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] Parent 1"
 	Test-Nested
-	Write-Information -Tags "Test" -Message "[$($MyInvocation.InvocationName)] Parent 2"
+	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] Parent 2"
 }
 
+<#
+.SYNOPSIS
+	Info logging with a combination of other streams
+#>
 function Test-Combo
 {
 	[CmdletBinding()]
 	param ()
 
-	Write-Error -Message "[$($MyInvocation.MyCommand.Name)] combo"  -Category PermissionDenied -ErrorId 11
+	Write-Error -Message "[$($MyInvocation.MyCommand.Name)] combo" -Category PermissionDenied -ErrorId 11
 	Write-Warning -Message "[$($MyInvocation.InvocationName)] combo"
 	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.MyCommand.Name)] INFO: combo"
 }
 
+<#
+.SYNOPSIS
+	No info log
+.NOTES
+	Is this function called?
+#>
 function Test-Empty
 {
 	[CmdletBinding()]

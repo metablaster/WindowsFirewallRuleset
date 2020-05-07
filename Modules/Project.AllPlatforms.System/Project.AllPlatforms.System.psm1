@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 Set-StrictMode -Version Latest
-Set-Variable ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
+Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
 #
 # Module preferences
@@ -47,6 +47,11 @@ if ($Develop)
 	Write-Debug -Message "[$ThisModule] VerbosePreference is $VerbosePreference"
 	Write-Debug -Message "[$ThisModule] InformationPreference is $InformationPreference"
 }
+else
+{
+	# Everything is default except InformationPreference should be enabled
+	$InformationPreference = "Continue"
+}
 
 <#
 .SYNOPSIS
@@ -64,8 +69,8 @@ None. You cannot pipe objects to Test-SystemRequirements
 .OUTPUTS
 None. Error message is shown if check failed, system info otherwise.
 .NOTES
-TODO: learn required NET version by scaning scripts (ie. adding .COMPONENT to comments)
-TODO: learn repo dir automaticaly (using git?)
+TODO: learn required NET version by scanning scripts (ie. adding .COMPONENT to comments)
+TODO: learn repo dir automatically (using git?)
 TODO: we don't use logs in this module
 #>
 function Test-SystemRequirements
@@ -76,15 +81,15 @@ function Test-SystemRequirements
 		[bool] $Check = $SystemCheck
 	)
 
-	# disabled when runing scripts from SetupFirewall.ps1 script
+	# disabled when running scripts from SetupFirewall.ps1 script
 	if ($Check)
 	{
 		# print info
-		Write-Host ""
-		Write-Host "Windows Firewall Ruleset v0.3.0"
-		Write-Host "Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch"
-		Write-Host "https://github.com/metablaster/WindowsFirewallRuleset"
-		Write-Host ""
+		Write-Output ""
+		Write-Output "Windows Firewall Ruleset v0.3.0"
+		Write-Output "Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch"
+		Write-Output "https://github.com/metablaster/WindowsFirewallRuleset"
+		Write-Output ""
 
 		# Check operating system
 		$OSPlatform = [System.Environment]::OSVersion.Platform
@@ -94,7 +99,7 @@ function Test-SystemRequirements
 		if (!($OSPlatform -eq "Win32NT" -and $OSMajor -ge 10))
 		{
 			Write-Error -Category OperationStopped -TargetObject $OSPlatform `
-			-Message "Unable to proceed, minimum required operating system is Win32NT 10.0 to run these scripts"
+				-Message "Unable to proceed, minimum required operating system is Win32NT 10.0 to run these scripts"
 
 			Write-Information -Tags "Project" -MessageData "Your operating system is: $OSPlatform $OSMajor.$OSMinor"
 			exit
@@ -107,7 +112,7 @@ function Test-SystemRequirements
 		if (!$StatusGood)
 		{
 			Write-Error -Category PermissionDenied -TargetObject $Principal `
-			-Message "Unable to proceed, please open PowerShell as Administrator"
+				-Message "Unable to proceed, please open PowerShell as Administrator"
 
 			exit
 		}
@@ -118,7 +123,7 @@ function Test-SystemRequirements
 		if ($OSEdition -like "*Home*")
 		{
 			Write-Error -Category OperationStopped -TargetObject $OSEdition `
-			-Message "Unable to proceed, home editions of Windows do not have Local Group Policy"
+				-Message "Unable to proceed, home editions of Windows do not have Local Group Policy"
 
 			exit
 		}
@@ -142,7 +147,8 @@ function Test-SystemRequirements
 			2 { $StatusGood = $false }
 			3 { $StatusGood = $false }
 			4 { $StatusGood = $false }
-			5 {
+			5
+			{
 				if ($PowerShellMinor -lt 1)
 				{
 					$StatusGood = $false
@@ -153,7 +159,7 @@ function Test-SystemRequirements
 		if (!$StatusGood)
 		{
 			Write-Error -Category OperationStopped -TargetObject $OSEdition `
-			-Message "Unable to proceed, minimum required PowerShell required to run these scripts is: Desktop 5.1"
+				-Message "Unable to proceed, minimum required PowerShell required to run these scripts is: Desktop 5.1"
 
 			Write-Information -Tags "Project" -MessageData "Your PowerShell version is: $PowerShellEdition $PowerShellMajor.$PowerShellMinor"
 
@@ -169,14 +175,17 @@ function Test-SystemRequirements
 			# Check NET Framework version
 			# TODO: What if function fails?
 			$NETFramework = Get-NetFramework (Get-ComputerName)
-			$Version = $NETFramework | Sort-Object -Property Version | Select-Object -Last 1 -ExpandProperty Version
+			$Version = $NETFramework |
+			Sort-Object -Property Version | Select-Object -Last 1 -ExpandProperty Version
+
 			[int] $NETMajor, [int] $NETMinor, $NETBuild, $NETRevision = $Version.Split(".")
 
 			switch ($NETMajor)
 			{
 				1 { $StatusGood = $false }
 				2 { $StatusGood = $false }
-				3 {
+				3
+				{
 					if ($NETMinor -lt 5)
 					{
 						$StatusGood = $false
@@ -187,7 +196,7 @@ function Test-SystemRequirements
 			if (!$StatusGood)
 			{
 				Write-Error -Category OperationStopped -TargetObject $Version `
-				-Message "Unable to proceed, minimum requried NET Framework version to run these scripts is 3.5"
+					-Message "Unable to proceed, minimum required NET Framework version to run these scripts is 3.5"
 				Write-Information -Tags "Project" -MessageData "Your NET Framework version is: $NETMajor.$NETMinor"
 				exit
 			}
@@ -196,8 +205,10 @@ function Test-SystemRequirements
 		# Check required services are started
 		$LMHosts = Get-Service -Name lmhosts | Select-Object -ExpandProperty Status
 		$WinRM = Get-Service -Name WinRM | Select-Object -ExpandProperty Status
+		$Workstation = Get-Service -Name LanmanWorkstation | Select-Object -ExpandProperty Status
+		$Server = Get-Service -Name LanmanServer | Select-Object -ExpandProperty Status
 
-		$Choices  = "&Yes", "&No"
+		$Choices = "&Yes", "&No"
 		$Default = 0
 		$Question = "Do you want to start these services now?"
 
@@ -214,7 +225,51 @@ function Test-SystemRequirements
 				if ($LMHosts -ne "Running")
 				{
 					$StatusGood = $false
-					Write-Host "lmhosts service can not be started, please start it manually and try again."
+					Write-Output "lmhosts service can not be started, please start it manually and try again."
+				}
+			}
+			else
+			{
+				$StatusGood = $false
+			}
+		}
+
+		if ($StatusGood -and ($Workstation -ne "Running"))
+		{
+			$Title = "LanmanWorkstation service is required but not started"
+			$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
+
+			if ($Decision -eq $Default)
+			{
+				Start-Service -Name LanmanWorkstation
+				$Workstation = Get-Service -Name LanmanWorkstation | Select-Object -ExpandProperty Status
+
+				if ($Workstation -ne "Running")
+				{
+					$StatusGood = $false
+					Write-Output "LanmanWorkstation service can not be started, please start it manually and try again."
+				}
+			}
+			else
+			{
+				$StatusGood = $false
+			}
+		}
+
+		if ($StatusGood -and ($Server -ne "Running"))
+		{
+			$Title = "LanmanServer service is required but not started"
+			$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
+
+			if ($Decision -eq $Default)
+			{
+				Start-Service -Name LanmanServer
+				$Server = Get-Service -Name LanmanServer | Select-Object -ExpandProperty Status
+
+				if ($Server -ne "Running")
+				{
+					$StatusGood = $false
+					Write-Output "LanmanServer service can not be started, please start it manually and try again."
 				}
 			}
 			else
@@ -224,6 +279,7 @@ function Test-SystemRequirements
 		}
 
 		# If status is not good there is no point to continue
+		# NOTE: remote machines need this service, see Enable-PSRemoting cmdlet
 		if ($Develop -and $StatusGood -and ($WinRM -ne "Running"))
 		{
 			$Title = "Windows Remote Management service is required but not started"
@@ -237,7 +293,7 @@ function Test-SystemRequirements
 				if ($WinRM -ne "Running")
 				{
 					$StatusGood = $false
-					Write-Host "WinRM service can not be started, please start it manually and try again."
+					Write-Output "WinRM service can not be started, please start it manually and try again."
 				}
 			}
 			else
@@ -249,13 +305,13 @@ function Test-SystemRequirements
 		if (!$StatusGood)
 		{
 			Write-Error -Category OperationStopped -TargetObject $OSEdition `
-			-Message "Unable to proceed, required services are not started"
+				-Message "Unable to proceed, required services are not started"
 
 			Write-Information -Tags "Project" -MessageData "TCP/IP NetBIOS Helper service is required but not started"
 			exit
 		}
 
-		# Check requried modules are loaded or present in modules directory
+		# Check required modules are loaded or present in modules directory
 		$Pester = Get-Module -Name Pester -ListAvailable | Select-Object -ExpandProperty Version
 		if (!$Pester)
 		{
@@ -277,10 +333,10 @@ function Test-SystemRequirements
 		}
 
 		# Everything OK, print environment status
-		Write-Host ""
-		Write-Host "System:`t`t $OSPlatform v$OSMajor.$OSMinor" -ForegroundColor Cyan
-		Write-Host "PowerShell:`t $PowerShellEdition v$PowerShellMajor.$PowerShellMinor" -ForegroundColor Cyan
-		Write-Host ""
+		Write-Output ""
+		Write-Output "System:`t`t $OSPlatform v$OSMajor.$OSMinor"
+		Write-Output "PowerShell:`t $PowerShellEdition v$PowerShellMajor.$PowerShellMinor"
+		Write-Output ""
 	}
 }
 

@@ -69,47 +69,47 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot) @Logs) -or $ForceLo
 	Test-File $Program @Logs
 
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Outlook" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort 6004 -RemotePort Any `
-	-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "" @Logs | Format-Output @Logs
+		-DisplayName "Outlook" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort 6004 -RemotePort Any `
+		-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+		-Description "" @Logs | Format-Output @Logs
 
-	# TODO: Skype for bussiness has complex port requirements, see:
+	# TODO: Skype for business has complex port requirements, see:
 	# https://docs.pexip.com/sfb/ports.htm
 	# https://docs.microsoft.com/en-us/skypeforbusiness/plan-your-deployment/network-requirements/ports-and-protocols
 	$Program = "$OfficeRoot\lync.exe"
 	Test-File $Program @Logs
 
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Skype for business" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-	-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
-	-Description "Skype for business, previously lync." @Logs | Format-Output @Logs
+		-DisplayName "Skype for business" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
+		-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
+		-Description "Skype for business, previously lync." @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Skype for business" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-	-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Skype for business, previously lync." @Logs | Format-Output @Logs
+		-DisplayName "Skype for business" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
+		-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+		-Description "Skype for business, previously lync." @Logs | Format-Output @Logs
 
 	$Program = "$OfficeRoot\UcMapi.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "UcMapi" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-	-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
-	-Description "Unified Communications Messaging Application Programming Interface" @Logs | Format-Output @Logs
+		-DisplayName "UcMapi" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
+		-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
+		-Description "Unified Communications Messaging Application Programming Interface" @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
-	-DisplayName "UcMapi" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
-	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-	-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Unified Communications Messaging Application Programming Interface" @Logs | Format-Output @Logs
+		-DisplayName "UcMapi" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
+		-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+		-Description "Unified Communications Messaging Application Programming Interface" @Logs | Format-Output @Logs
 }
 
 Update-Logs

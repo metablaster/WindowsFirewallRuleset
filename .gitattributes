@@ -9,32 +9,13 @@
 # effectively setting the text attribute.
 # This setting forces Git to normalize line endings for this file on checkin
 # and convert them to CRLF when the file is checked out.
+# whitespace attribute will help detect surplus spaces when using git diff
 ###############################################################################
-*.sln       text eol=crlf
-*.filters   text eol=crlf
-*.user      text eol=crlf
-*.ps1       text eol=crlf
-*.psd1		text eol=crlf
-*.psm1		text eol=crlf
-*.txt		text eol=crlf
-*.xml		text eol=crlf
-*.ini		text eol=crlf
-*.json		text eol=crlf
-*.md		text eol=crlf
-
-###############################################################################
-# Set the merge driver for project and solution files
-#
-# Merging from the command prompt will add diff markers to the files if there
-# are conflicts (Merging from VS is not affected by the settings below, in VS
-# the diff markers are never inserted). Diff markers may cause the following
-# file extensions to fail to load in VS. An alternative would be to treat
-# these files as binary and thus will always conflict and require user
-# intervention with every merge. To do so, just comment the entries below and
-# uncomment the group further below
-###############################################################################
-
-#*.sln       merge=binary
-#*.filters   merge=binary
-#*.user      merge=binary
-#*.ps1       merge=binary
+*.ps1       text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+*.psd1		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+*.psm1		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+*.txt		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+*.xml		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+*.ini		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+*.json		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+*.md		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1

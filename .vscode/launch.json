@@ -1,15 +1,30 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "PowerShell",
-            "type": "PowerShell",
-            "request": "launch",
-            "script": "${file}",
-            "cwd": "${file}"
-        }
-    ]
+	// Use IntelliSense to learn about possible attributes.
+	// Hover to view descriptions of existing attributes.
+	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Debug module",
+			"type": "PowerShell",
+			"request": "launch",
+			"cwd": "${workspaceFolder}\\Modules",
+			"createTemporaryIntegratedConsole": true,
+		},
+		{
+			"name": "Debug file",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${file}",
+			"cwd": "${file}"
+		},
+		// TODO: add test cases here
+		{
+			"name": "Test: Get-IPAddress",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Project.Windows.ComputerInfo\\Get-IPAddress.ps1",
+			"cwd": "${workspaceFolder}"
+		}
+	]
 }

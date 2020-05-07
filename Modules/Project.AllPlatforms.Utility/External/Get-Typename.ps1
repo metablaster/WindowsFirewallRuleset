@@ -1,4 +1,4 @@
-
+﻿
 <#
 MIT License
 
@@ -27,6 +27,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+# NOTE: File must be UTF-8 with BOM to preserve unicode character
+
 <#
 .SYNOPSIS
 Returns .NET return type name for input object
@@ -48,15 +50,15 @@ TODO: need better checking for input, on pipeline.
 Modifications by metablaster:
 Added check when object is null
 Added comment based help
-Removed unneeded parantheses
+Removed unneeded parentheses
 Added input type to parameter
 #>
 function Get-TypeName
 {
 	[CmdletBinding()]
-    param (
+	param (
 		[Parameter(Mandatory = $true,
-		ValueFromPipeline = $true)]
+			ValueFromPipeline = $true)]
 		[System.Object] $InputObject
 	)
 

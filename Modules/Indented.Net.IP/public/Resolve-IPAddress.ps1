@@ -53,7 +53,7 @@ Resolves an IP address expression using wildcard expressions to individual IP ad
 .DESCRIPTION
 Resolves an IP address expression using wildcard expressions to individual IP addresses.
 Resolve-IPAddress expands groups and values in square brackets to generate a list of IP addresses or networks using CIDR-notation.
-Ranges of values may be specied using a start and end value using "-" to separate the values.
+Ranges of values may be specified using a start and end value using "-" to separate the values.
 Specific values may be listed as a comma separated list.
 .PARAMETER IPAddress
 The IPAddress expression to resolve.
@@ -68,74 +68,73 @@ TODO: describe outputs
 .NOTES
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
-- For code to be consisten with project: code formatting and symbol casing.
-- Removed unecessary position arguments, added default argument values explicitly.
+- For code to be consistent with project: code formatting and symbol casing.
+- Removed unnecessary position arguments, added default argument values explicitly.
 #>
 function Resolve-IPAddress
 {
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true,
-		ValueFromPipeline = $true)]
+			ValueFromPipeline = $true)]
 		[string] $IPAddress
 	)
 
 	process
 	{
 		$groups = [regex]::Matches($IPAddress, '\[(?:(?<Range>\d+(?:-\d+))|(?<Selected>(?:\d+, *)*\d+))\]|(?<All>\*)').Groups.Captures |
-			Where-Object { $_ -and $_.Name -ne '0' } |
-			ForEach-Object {
-				$group = $_
+		Where-Object { $_ -and $_.Name -ne '0' } | ForEach-Object {
+			$group = $_
 
-				$values = switch ($group.Name)
+			$values = switch ($group.Name)
+			{
+				'Range'
 				{
-					'Range'
+					[int32] $start, [int32] $end = $group.Value -split '-'
+
+					if ($start, $end -gt 255)
 					{
-						[int32] $start, [int32] $end = $group.Value -split '-'
-
-						if ($start, $end -gt 255)
-						{
-							$errorRecord = [System.Management.Automation.ErrorRecord]::new(
-								[ArgumentException]::new('Value ranges to resolve must use a start and end values between 0 and 255'),
-								'RangeExpressionOutOfRange',
-								'InvalidArgument',
-								$group.Value
-							)
-							$pscmdlet.ThrowTerminatingError($errorRecord)
-						}
-
-						$start..$end
+						$errorRecord = [System.Management.Automation.ErrorRecord]::new(
+							[ArgumentException]::new('Value ranges to resolve must use a start and end values between 0 and 255'),
+							'RangeExpressionOutOfRange',
+							'InvalidArgument',
+							$group.Value
+						)
+						$pscmdlet.ThrowTerminatingError($errorRecord)
 					}
-					'Selected'
-					{
-						$values = [int[]]($group.Value -split ', *')
 
-						if ($values -gt 255)
-						{
-							$errorRecord = [System.Management.Automation.ErrorRecord]::new(
-								[ArgumentException]::new('All selected values must be between 0 and 255'),
-								'SelectionExpressionOutOfRange',
-								'InvalidArgument',
-								$group.Value
-							)
-							$pscmdlet.ThrowTerminatingError($errorRecord)
-						}
-
-						$values
-					}
-					'All'
-					{
-						0..255
-					}
+					$start..$end
 				}
+				'Selected'
+				{
+					$values = [int[]]($group.Value -split ', *')
 
-				[PSCustomObject]@{
-					Name        = $_.Name
-					Position    = [int32] $IPAddress.Substring(0, $_.Index).Split('.').Count - 1
-					ReplaceWith = $values
-					PSTypeName  = 'ExpansionGroupInfo'
+					if ($values -gt 255)
+					{
+						$errorRecord = [System.Management.Automation.ErrorRecord]::new(
+							[ArgumentException]::new('All selected values must be between 0 and 255'),
+							'SelectionExpressionOutOfRange',
+							'InvalidArgument',
+							$group.Value
+						)
+						$pscmdlet.ThrowTerminatingError($errorRecord)
+					}
+
+					$values
+				}
+				'All'
+				{
+					0..255
 				}
 			}
+
+			[PSCustomObject]@{
+				Name = $_.Name
+				Position = [int32] $IPAddress.Substring(0, $_.Index).Split('.').Count - 1
+				ReplaceWith = $values
+				PSTypeName = 'ExpansionGroupInfo'
+			}
+		}
 
 		if ($groups)
 		{

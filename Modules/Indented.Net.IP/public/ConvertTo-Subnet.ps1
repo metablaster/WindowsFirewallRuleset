@@ -75,8 +75,8 @@ TODO: describe outputs
 .NOTES
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
-- For code to be consisten with project: code formatting and symbol casing.
-- Removed unecessary position arguments, added default argument values explicitly.
+- For code to be consistent with project: code formatting and symbol casing.
+- Removed unnecessary position arguments, added default argument values explicitly.
 #>
 function ConvertTo-Subnet
 {
@@ -84,19 +84,19 @@ function ConvertTo-Subnet
 	[OutputType('Indented.Net.IP.Subnet')]
 	param (
 		[Parameter(Mandatory = $true,
-		Position = 0, ParameterSetName = 'FromIPAndMask')]
+			Position = 0, ParameterSetName = 'FromIPAndMask')]
 		[string] $IPAddress,
 
 		[Parameter(Position = 1,
-		ParameterSetName = 'FromIPAndMask')]
+			ParameterSetName = 'FromIPAndMask')]
 		[string] $SubnetMask,
 
 		[Parameter(Mandatory = $true,
-		ParameterSetName = 'FromStartAndEnd')]
+			ParameterSetName = 'FromStartAndEnd')]
 		[IPAddress] $Start,
 
 		[Parameter(Mandatory = $true,
-		ParameterSetName = 'FromStartAndEnd')]
+			ParameterSetName = 'FromStartAndEnd')]
 		[IPAddress] $End
 	)
 
@@ -156,12 +156,12 @@ function ConvertTo-Subnet
 	}
 
 	$subnet = [PSCustomObject]@{
-		NetworkAddress   = Get-NetworkAddress $network.ToString()
+		NetworkAddress = Get-NetworkAddress $network.ToString()
 		BroadcastAddress = Get-BroadcastAddress $network.ToString()
-		SubnetMask       = $network.SubnetMask
-		MaskLength       = $network.MaskLength
-		HostAddresses    = $hostAddresses
-		PSTypeName       = 'Indented.Net.IP.Subnet'
+		SubnetMask = $network.SubnetMask
+		MaskLength = $network.MaskLength
+		HostAddresses = $hostAddresses
+		PSTypeName = 'Indented.Net.IP.Subnet'
 	}
 
 	$subnet | Add-Member ToString -MemberType ScriptMethod -Force -Value {
