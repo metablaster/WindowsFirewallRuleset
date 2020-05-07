@@ -205,6 +205,8 @@ function Test-SystemRequirements
 		# Check required services are started
 		$LMHosts = Get-Service -Name lmhosts | Select-Object -ExpandProperty Status
 		$WinRM = Get-Service -Name WinRM | Select-Object -ExpandProperty Status
+		$Workstation = Get-Service -Name LanmanWorkstation | Select-Object -ExpandProperty Status
+		$Server = Get-Service -Name LanmanServer | Select-Object -ExpandProperty Status
 
 		$Choices = "&Yes", "&No"
 		$Default = 0
@@ -224,6 +226,50 @@ function Test-SystemRequirements
 				{
 					$StatusGood = $false
 					Write-Output "lmhosts service can not be started, please start it manually and try again."
+				}
+			}
+			else
+			{
+				$StatusGood = $false
+			}
+		}
+
+		if ($StatusGood -and ($Workstation -ne "Running"))
+		{
+			$Title = "LanmanWorkstation service is required but not started"
+			$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
+
+			if ($Decision -eq $Default)
+			{
+				Start-Service -Name LanmanWorkstation
+				$Workstation = Get-Service -Name LanmanWorkstation | Select-Object -ExpandProperty Status
+
+				if ($Workstation -ne "Running")
+				{
+					$StatusGood = $false
+					Write-Output "LanmanWorkstation service can not be started, please start it manually and try again."
+				}
+			}
+			else
+			{
+				$StatusGood = $false
+			}
+		}
+
+		if ($StatusGood -and ($Server -ne "Running"))
+		{
+			$Title = "LanmanServer service is required but not started"
+			$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
+
+			if ($Decision -eq $Default)
+			{
+				Start-Service -Name LanmanServer
+				$Server = Get-Service -Name LanmanServer | Select-Object -ExpandProperty Status
+
+				if ($Server -ne "Running")
+				{
+					$StatusGood = $false
+					Write-Output "LanmanServer service can not be started, please start it manually and try again."
 				}
 			}
 			else

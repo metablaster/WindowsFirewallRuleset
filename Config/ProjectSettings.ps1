@@ -157,7 +157,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	{
 		# To force loading rules regardless of presence of program set to true
 		New-Variable -Name RemoteCredentials -Scope Global -Option Constant -Value (
-			Get-Credential -Message "Credential are required to access $PolicyStore")
+			Get-Credential -Message "Credentials are required to access $PolicyStore")
 
 		try
 		{
@@ -190,7 +190,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -Erro
 	Set-Variable -Name CheckReadOnlyVariables -Scope Global -Option ReadOnly -Force -Value $null
 
 	# Set to false to avoid checking system requirements
-	Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $false
+	Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $true
 }
 
 # Removable variables, meaning these can be modified by code at any time,

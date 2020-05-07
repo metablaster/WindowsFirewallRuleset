@@ -1546,8 +1546,13 @@ function Find-Installation
 				Sort-Object -Property Product |
 				Select-Object -Last 1 -ExpandProperty InstallLocation
 
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] $SDKDebuggers"
-				Edit-Table $SDKDebuggers
+				# TODO: Check other such cases where using the variable without knowing if
+				# installation is available, this case here is fixed with if($SDKDebuggers)...
+				if ($SDKDebuggers)
+				{
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] $SDKDebuggers"
+					Edit-Table $SDKDebuggers
+				}
 			}
 			break
 		}
@@ -1726,6 +1731,7 @@ function Find-Installation
 		}
 		"OneDrive"
 		{
+			# TODO: this path didn't exist on fresh installed windows, but one drive was installed
 			Edit-Table "%ProgramFiles(x86)%\Microsoft OneDrive"
 			break
 		}

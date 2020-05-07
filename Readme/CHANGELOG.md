@@ -10,11 +10,14 @@
 - Update updater rule for OneDrive and git according to task scheduler
 - Update rules for NVIDIA, still needs improvements
 - Update rules for Tor browser, add rule for Edge-chromium FTP
+- Updated rules for, VS, steam, Epic games, qbittorrent
 
 ## Bugfixes
 
 - Informational messages from modules would be hidden in non "Develop" mode
 - User prompt for multiple installation directory would be skipped causing script hang
+- System requirements check was disabled, also added checks for additional required services,
+  which were causing errors.
 
 ## Development
 
