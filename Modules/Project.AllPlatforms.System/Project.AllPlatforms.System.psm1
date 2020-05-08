@@ -166,6 +166,7 @@ function Test-SystemRequirements
 			exit
 		}
 
+		# NOTE: this check is not required unless in some special cases
 		if ($Develop -and $PowerShellEdition -eq "Desktop")
 		{
 			# Now that OS and PowerShell is OK we can import these modules
@@ -234,7 +235,16 @@ function Test-SystemRequirements
 			}
 		}
 
-		if ($StatusGood -and ($Workstation -ne "Running"))
+		if (!$StatusGood)
+		{
+			Write-Error -Category OperationStopped -TargetObject $OSEdition `
+				-Message "Unable to proceed, required services are not started"
+
+			Write-Information -Tags "Project" -MessageData "TCP/IP NetBIOS Helper service is required but not started"
+			exit
+		}
+
+		if ($Workstation -ne "Running")
 		{
 			$Title = "LanmanWorkstation service is required but not started"
 			$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
@@ -256,7 +266,16 @@ function Test-SystemRequirements
 			}
 		}
 
-		if ($StatusGood -and ($Server -ne "Running"))
+		if (!$StatusGood)
+		{
+			Write-Error -Category OperationStopped -TargetObject $OSEdition `
+				-Message "Unable to proceed, required services are not started"
+
+			Write-Information -Tags "Project" -MessageData "Workstation service is required but not started"
+			exit
+		}
+
+		if ($Server -ne "Running")
 		{
 			$Title = "LanmanServer service is required but not started"
 			$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
@@ -278,37 +297,48 @@ function Test-SystemRequirements
 			}
 		}
 
-		# If status is not good there is no point to continue
-		# NOTE: remote machines need this service, see Enable-PSRemoting cmdlet
-		if ($Develop -and $StatusGood -and ($WinRM -ne "Running"))
-		{
-			$Title = "Windows Remote Management service is required but not started"
-			$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
-
-			if ($Decision -eq $Default)
-			{
-				Start-Service -Name WinRM
-				$WinRM = Get-Service -Name WinRM | Select-Object -ExpandProperty Status
-
-				if ($WinRM -ne "Running")
-				{
-					$StatusGood = $false
-					Write-Output "WinRM service can not be started, please start it manually and try again."
-				}
-			}
-			else
-			{
-				$StatusGood = $false
-			}
-		}
-
 		if (!$StatusGood)
 		{
 			Write-Error -Category OperationStopped -TargetObject $OSEdition `
 				-Message "Unable to proceed, required services are not started"
 
-			Write-Information -Tags "Project" -MessageData "TCP/IP NetBIOS Helper service is required but not started"
+			Write-Information -Tags "Project" -MessageData "Server service is required but not started"
 			exit
+		}
+
+		if ($Develop)
+		{
+			# NOTE: remote machines need this service, see Enable-PSRemoting cmdlet
+			if ($WinRM -ne "Running")
+			{
+				$Title = "Windows Remote Management service is required but not started"
+				$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
+
+				if ($Decision -eq $Default)
+				{
+					Start-Service -Name WinRM
+					$WinRM = Get-Service -Name WinRM | Select-Object -ExpandProperty Status
+
+					if ($WinRM -ne "Running")
+					{
+						$StatusGood = $false
+						Write-Output "WinRM service can not be started, please start it manually and try again."
+					}
+				}
+				else
+				{
+					$StatusGood = $false
+				}
+			}
+
+			if (!$StatusGood)
+			{
+				Write-Error -Category OperationStopped -TargetObject $OSEdition `
+					-Message "Unable to proceed, required services are not started"
+
+				Write-Information -Tags "Project" -MessageData "Windows Remote Management service is required but not started"
+				exit
+			}
 		}
 
 		# Check required modules are loaded or present in modules directory

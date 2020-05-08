@@ -1732,6 +1732,7 @@ function Find-Installation
 		"OneDrive"
 		{
 			# TODO: this path didn't exist on fresh installed windows, but one drive was installed
+			# It was in appdata user folder
 			Edit-Table "%ProgramFiles(x86)%\Microsoft OneDrive"
 			break
 		}
