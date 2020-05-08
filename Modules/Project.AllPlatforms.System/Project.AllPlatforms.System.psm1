@@ -360,6 +360,34 @@ function Test-SystemRequirements
 		if (!$StatusGood)
 		{
 			Write-Warning -Message "Pester module version 4.x is required to run some of the tests"
+			Write-Information -Tags "Project" -MessageData "Ignore if you have Pester module in user module directory"
+			$StatusGood = $true;
+		}
+
+		# PSScriptAnalyzer is recommended to avoid hang on fresh installation of VSCode and extensions
+		$Analyzer = Get-Module -Name PSScriptAnalyzer -ListAvailable |
+		Select-Object -ExpandProperty Version
+
+		if (!$Analyzer)
+		{
+			$StatusGood = $false
+		}
+		else
+		{
+			if (($Analyzer | Measure-Object).Count -gt 1)
+			{
+				$Analyzer = ($Analyzer | Sort-Object -Descending)[0]
+			}
+
+			$StatusGood = ($Analyzer.Major -gt 1) -or
+			(($Analyzer.Major -eq 1) -and ($Analyzer.Minor -ge 19))
+		}
+
+		if (!$StatusGood)
+		{
+			Write-Warning -Message "PSScriptAnalyzer module version 1.19.x is recommended for best editing experience"
+			Write-Information -Tags "Project" -MessageData "Ignore if you have PSScriptAnalyzer module in user module directory"
+			$StatusGood = $true;
 		}
 
 		# Everything OK, print environment status
