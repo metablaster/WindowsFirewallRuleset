@@ -73,7 +73,7 @@ The project maintains "per file" licenses and Copyright notices.
 # Minimum supported system requirements
 
 1. Windows 10 Pro/Enterprise, Windows Server 2019
-2. Powershell Core 7.0 and Windows PowerShell 5.1
+2. Powershell Core 7.0 or Windows PowerShell 5.1
 [Download Powershell](https://github.com/PowerShell/PowerShell)
 3. NET Framework 3.5 (for Windows PowerShell)
 [Download Net Framework](https://dotnet.microsoft.com/download/dotnet-framework)
