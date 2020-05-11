@@ -86,7 +86,7 @@ function Test-SystemRequirements
 	{
 		# print info
 		Write-Output ""
-		Write-Output "Windows Firewall Ruleset v0.3.0"
+		Write-Output "Windows Firewall Ruleset v0.4.1"
 		Write-Output "Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch"
 		Write-Output "https://github.com/metablaster/WindowsFirewallRuleset"
 		Write-Output ""
