@@ -159,7 +159,7 @@ Get-ExecutionPolicy
 
 remember what the output of the above command is.
 
-6. Set current execution policy: (Note that `RemoteSigned` should work too)
+6. Set new execution policy: (Note that `RemoteSigned` should work too)
 
 ```powershell
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force
@@ -262,7 +262,7 @@ in GPO to allow programs for which rules do not exist, or to reconfigure existin
 
 # Checking for updates
 
-This repository consists of 2 branches, `"master"` and `"develop"`, develop (unstable) branch is
+This repository consists of 2 branches, `master` and `develop`, develop (unstable) branch is
 the most recent one and is the one where all commits (updates) directly go so it's beta product,
 unlike master branch which is updated from develop branch once in a while and
 not before all scripts are fully tested, meaning master brach is stable.
