@@ -16,6 +16,10 @@
 ## Development
 
 - Disabled false positive PSScriptAnalyzer warning
+
+## Documentation
+
+- Added `FAQ.md`
 - Updated main page `README.md`
 
 # Changelog v0.4.0
@@ -47,6 +51,9 @@
 - Markdown formatted according to markdownlint rules
 - Entry project spellchecked
 - Added regex samples to query rules inside scripts for bulk operations
+
+## Documentation
+
 - Updated various documentation and notices about project
 
 # Changelog v0.3.0

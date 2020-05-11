@@ -70,7 +70,6 @@ $VSInstallerRoot = "" # "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
 # Visual Studio rules for executables from root directory
 # Rules that apply to Microsoft Visual Studio
 # TODO: Take Display name partially from Get-VSSetupInstance
-# TODO: run rules for each instance
 #
 
 # TODO: This is temporary hack, overriding the switch case in ProgramInfo module
