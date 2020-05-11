@@ -7,6 +7,7 @@
 
 - Updated version numbers
 - Updated informational messages to include label for "System" module
+- Added more system requirements checks required for clean run
 
 ## Rules
 
