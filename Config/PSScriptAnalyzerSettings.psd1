@@ -164,7 +164,8 @@
 			# Checks if there is more than one space between parameters and values.
 			# E.g. foo -bar $baz -bat instead of foo  -bar $baz  -bat
 			# default = false
-			CheckParameter = $true
+			# TODO: this was disabled from true to false because of too many false positives
+			CheckParameter = $false
 		}
 
 		PSUseConsistentIndentation = @{

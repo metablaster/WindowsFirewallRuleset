@@ -1,7 +1,7 @@
 
 # About Windows Firewall Ruleset
 
-- Windows firewall rules organized into individual powershell scripts according to:
+- Windows firewall rules sorted into individual powershell scripts according to:
 
 1. Rule group
 2. Traffic direction
@@ -112,8 +112,8 @@ describes how to make use of this project on older Windows systems such as Windo
 
 - You may loose internet connectivity for some of your programs or in rare cases even lose internet
 connectivity completely, if that happens, you can either temporarily allow outbound rules or run
-`ResetFirewall.ps1` script, to reset firewall to previous state and clear GPO firewall.
-- Inside the Readme folder there is a `ResetFirewall.md`, a guide on how to do it manually, by hand,
+`ResetFirewall.ps1` script, to reset GPO firewall to system defaults and remove all rules.
+- Inside `Readme` folder there is a `ResetFirewall.md`, a guide on how to do it manually, by hand,
 if for some reason you're unable to run the script, or the script does not solve your problems.
 - Also note that your current/existing rules will not be deleted unless you have rules in GPO whose
 group name interfere with group names from this ruleset, however
@@ -130,7 +130,7 @@ WindowsSystem, WindowsServices, Multicast etc. also do not ignore IPv6, Windows 
 - If you would like to modify basic behavior of execution, such as force loading rules and various
 default actions then visit `Config\ProjectSettings.ps1` and there you'll find global variables
 which are used for this.
-- If you're running scripts for first time it's highly recommended to load all rules for which you
+- If you're running scripts for the first time it's highly recommended to load all rules for which you
 have programs installed on system,
 it should be easy to delete what you do not want in GPO, rather than later searching scripts for
 what you may have missed.
@@ -159,7 +159,7 @@ Get-ExecutionPolicy
 
 remember what the output of the above command is.
 
-6. Get current execution policy:
+6. Set current execution policy: (Note that `RemoteSigned` should work too)
 
 ```powershell
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force
@@ -222,12 +222,12 @@ you applied with Powershell script.
 
 If you want to apply only specific rules there are 2 ways to do this:
 
-1. Execute `SetupFirewall.ps1` and hit enter only for rulesets you want, otherwise type `n`
+1. Execute `SetupFirewall.ps1` and hit enter only for rulesets you want, otherwise type `N`
 and hit enter to skip current ruleset.
 2. Inside powershell navigate to folder containing the ruleset script you want,
 and execute individual Powershell script.
-3. You may want to run `FirewallProfile.ps1` to apply default firewall behavior,
-or you can do it manually in GPO.
+3. You may want to run `FirewallProfile.ps1` to apply default firewall behavior if it's not set
+already, or you can do it manually in GPO.
 
 In both cases the script will delete all of the existing rules that match the rule group (if any),
 and load the rules from script
@@ -236,11 +236,16 @@ into Local Group Policy.
 # Deleting rules
 
 At the moment the easiest way is to select all the rules you want to delete in Local Group Policy,
-right click and delete.\
-To revert to your old firewall state, you will need to delete all the rules from GPO,
-and set all properties to "Not configured" when right clicking on node
-`Windows Defender Firewall with Advanced Security - Local Group Policy Object`\
+right click and delete.
+
+To revert to your old firewall state (the one in control panel), you will need to delete all the
+rules from GPO,\
+and set all properties to `"Not configured"` when right clicking on node:\
+`Windows Defender Firewall with Advanced Security - Local Group Policy Object`
+
 Deleting all rules or revetting to previous state can also be done with `ResetFirewall.ps1` script.
+
+Note that you will also need to re-import your exported GPO rules if you had them.
 
 # Manage loaded rules
 
@@ -257,7 +262,7 @@ in GPO to allow programs for which rules do not exist, or to reconfigure existin
 
 # Checking for updates
 
-This repository consists of 2 branches, "master" and "develop", develop (unstable) branch is
+This repository consists of 2 branches, `"master"` and `"develop"`, develop (unstable) branch is
 the most recent one and is the one where all commits (updates) directly go so it's beta product,
 unlike master branch which is updated from develop branch once in a while and
 not before all scripts are fully tested, meaning master brach is stable.
@@ -271,7 +276,7 @@ There are two methods to be up to date with firewall:
 switch to either master or develop branch, next use "Clone or download" button and download zip file.
 
 2. Second method is good if you want to do it in powershell console without visiting this site,
-you will need git (link above), github account and
+you will need git (link above), github account and optionally
 [SSH key](https://help.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account)
 to check for new updates on daily, weekly or what ever other basis you want,
 follow bellow steps to check for updates once you installed git:
@@ -309,7 +314,7 @@ for more info see [git documentation](https://git-scm.com/doc)
 That's it, your scripts are now up to date, execute them as you desire (or follow steps from
 "Quick start" section) to apply changes to your firewall.
 
-# Contribution or suggestions
+# Contributing or suggestions
 
 Bellow are general notes for requesting to add your rules or ideas about rules to project.\
 If you would like to contribute by writing scripts you should read
@@ -341,5 +346,5 @@ how to troubleshoot firewall and network problems, or gather more relevant infor
 
 It may answer some of your questions, for example
 [MonitoringFirewall.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/MonitoringFirewall.md)
-explains how to monitor firewall you should go ahead and read it!\
+explains how to monitor firewall in real time, you should go ahead and read it!\
 It's recommended you read those papers here on github because of formatting and screenshots.

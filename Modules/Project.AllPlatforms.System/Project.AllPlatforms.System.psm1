@@ -101,7 +101,7 @@ function Test-SystemRequirements
 			Write-Error -Category OperationStopped -TargetObject $OSPlatform `
 				-Message "Unable to proceed, minimum required operating system is Win32NT 10.0 to run these scripts"
 
-			Write-Information -Tags "Project" -MessageData "Your operating system is: $OSPlatform $OSMajor.$OSMinor"
+			Write-Information -Tags "Project" -MessageData "INFO: Your operating system is: $OSPlatform $OSMajor.$OSMinor"
 			exit
 		}
 
@@ -134,7 +134,7 @@ function Test-SystemRequirements
 		if ($PowerShellEdition -eq "Core")
 		{
 			Write-Warning -Message "Project with 'Core' edition of PowerShell does not yet support remote machines"
-			Write-Information -Tags "Project" -MessageData "Your PowerShell edition is: $PowerShellEdition"
+			Write-Information -Tags "Project" -MessageData "INFO: Your PowerShell edition is: $PowerShellEdition"
 		}
 
 		# Check PowerShell version
@@ -161,7 +161,7 @@ function Test-SystemRequirements
 			Write-Error -Category OperationStopped -TargetObject $OSEdition `
 				-Message "Unable to proceed, minimum required PowerShell required to run these scripts is: Desktop 5.1"
 
-			Write-Information -Tags "Project" -MessageData "Your PowerShell version is: $PowerShellEdition $PowerShellMajor.$PowerShellMinor"
+			Write-Information -Tags "Project" -MessageData "INFO: Your PowerShell version is: $PowerShellEdition $PowerShellMajor.$PowerShellMinor"
 
 			exit
 		}
@@ -198,7 +198,7 @@ function Test-SystemRequirements
 			{
 				Write-Error -Category OperationStopped -TargetObject $Version `
 					-Message "Unable to proceed, minimum required NET Framework version to run these scripts is 3.5"
-				Write-Information -Tags "Project" -MessageData "Your NET Framework version is: $NETMajor.$NETMinor"
+				Write-Information -Tags "Project" -MessageData "INFO: Your NET Framework version is: $NETMajor.$NETMinor"
 				exit
 			}
 		}
@@ -240,7 +240,7 @@ function Test-SystemRequirements
 			Write-Error -Category OperationStopped -TargetObject $OSEdition `
 				-Message "Unable to proceed, required services are not started"
 
-			Write-Information -Tags "Project" -MessageData "TCP/IP NetBIOS Helper service is required but not started"
+			Write-Information -Tags "Project" -MessageData "INFO: TCP/IP NetBIOS Helper service is required but not started"
 			exit
 		}
 
@@ -271,7 +271,7 @@ function Test-SystemRequirements
 			Write-Error -Category OperationStopped -TargetObject $OSEdition `
 				-Message "Unable to proceed, required services are not started"
 
-			Write-Information -Tags "Project" -MessageData "Workstation service is required but not started"
+			Write-Information -Tags "Project" -MessageData "INFO: Workstation service is required but not started"
 			exit
 		}
 
@@ -302,7 +302,7 @@ function Test-SystemRequirements
 			Write-Error -Category OperationStopped -TargetObject $OSEdition `
 				-Message "Unable to proceed, required services are not started"
 
-			Write-Information -Tags "Project" -MessageData "Server service is required but not started"
+			Write-Information -Tags "Project" -MessageData "INFO: Server service is required but not started"
 			exit
 		}
 
@@ -336,7 +336,7 @@ function Test-SystemRequirements
 				Write-Error -Category OperationStopped -TargetObject $OSEdition `
 					-Message "Unable to proceed, required services are not started"
 
-				Write-Information -Tags "Project" -MessageData "Windows Remote Management service is required but not started"
+				Write-Information -Tags "Project" -MessageData "INFO: Windows Remote Management service is required but not started"
 				exit
 			}
 		}
@@ -360,7 +360,7 @@ function Test-SystemRequirements
 		if (!$StatusGood)
 		{
 			Write-Warning -Message "Pester module version 4.x is required to run some of the tests"
-			Write-Information -Tags "Project" -MessageData "Ignore if you have Pester module in user module directory"
+			Write-Information -Tags "Project" -MessageData "INFO: Ignore if you have Pester module in user module directory"
 			$StatusGood = $true;
 		}
 
@@ -386,7 +386,7 @@ function Test-SystemRequirements
 		if (!$StatusGood)
 		{
 			Write-Warning -Message "PSScriptAnalyzer module version 1.19.x is recommended for best editing experience"
-			Write-Information -Tags "Project" -MessageData "Ignore if you have PSScriptAnalyzer module in user module directory"
+			Write-Information -Tags "Project" -MessageData "INFO: Ignore if you have PSScriptAnalyzer module in user module directory"
 			$StatusGood = $true;
 		}
 

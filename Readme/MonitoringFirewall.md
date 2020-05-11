@@ -31,7 +31,7 @@ process monitor if you're suspicious.
 - Process monitor will let you monitor process network activity, in addition of IP address and port
 you will also know which process and which user (either system or human user) initiated connection,
 and several other stuff which you can enable as needed in options.
-- Process monitor is must have program, here is a screenshot as we monitor process network activity
+- Process monitor is must have program, here is a screenshot while monitoring process network activity
 right now:\
 click on image to enlarge!
 ![Alternate text](https://i.imgur.com/wNtDw8D.png)
@@ -45,7 +45,7 @@ click on filter options to disable specific filters and add new ones.
 ## mTail
 
 - mTail is another must have program, it will let you monitor firewall logs in real time.
-- Here is a screenshot as we monitor the logs right now, click on image to enlarge:
+- Here is a screenshot while monitoring the logs right now, click on image to enlarge:
 
 ![Alternate text](https://i.imgur.com/ljHcJss.png)
 

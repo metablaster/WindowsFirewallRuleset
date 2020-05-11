@@ -1,6 +1,23 @@
 
 # Here is a list of changes for each of releases
 
+# Changelog v0.4.1
+
+## Modules
+
+- Updated version numbers
+- Updated informational messages to include label for "System" module
+
+## Rules
+
+- Make possible to load rules for multiple valid Visual Studio instances, including VS Preview
+- Hardcoded path for Visual Studio rule replaced with dynamic path
+
+## Development
+
+- Disabled false positive PSScriptAnalyzer warning
+- Updated main page `README.md`
+
 # Changelog v0.4.0
 
 ## Rules
