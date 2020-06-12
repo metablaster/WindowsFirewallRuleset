@@ -48,13 +48,11 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-[string[]] $Users = "SYSTEM"
-[string] $Domain = "NT AUTHORITY"
-[string[]] $Groups = @("Users", "Administrators")
+#
+# Test groups
+#
 
-New-Test "Get-SDDL -User $Users -Domain $Domain"
-$TestUsersSDDL = Get-SDDL -User $Users -Domain $Domain @Logs
-$TestUsersSDDL
+[string[]] $Groups = @("Users", "Administrators")
 
 New-Test "Get-SDDL -Group $Groups"
 $TestUsersSDDL = Get-SDDL -Group $Groups @Logs
@@ -64,13 +62,40 @@ New-Test "Get-SDDL -Group $Groups -CIM"
 $TestUsersSDDL = Get-SDDL -Group $Groups -CIM @Logs
 $TestUsersSDDL
 
-[string[]] $Users = "Administrator", "test"
+#
+# Test users
+#
+
+[string[]] $Users = "Administrator", "Admin", "User"
 New-Test "Get-SDDL -User $Users"
 $TestUsersSDDL = Get-SDDL -User $Users @Logs
 $TestUsersSDDL
 
-New-Test "$Groups | Get-GroupSID -CIM"
-$Groups | Get-GroupSID -CIM @Logs
+New-Test "Get-SDDL -User $Users -CIM"
+$TestUsersSDDL = Get-SDDL -User $Users -CIM @Logs
+$TestUsersSDDL
+
+#
+# Test NT AUTHORITY
+#
+
+[string] $NTDomain = "NT AUTHORITY"
+[string[]] $NTUsers = "SYSTEM", "LOCAL SERVICE"
+
+New-Test "Get-SDDL -Domain $NTDomain -User $NTUsers"
+$TestUsersSDDL = Get-SDDL -Domain $NTDomain -User $NTUsers @Logs
+$TestUsersSDDL
+
+#
+# Test APPLICATION PACKAGE AUTHORITY
+#
+
+[string] $AppDomain = "APPLICATION PACKAGE AUTHORITY"
+[string[]] $AppUser = "Your Internet connection", "Your pictures library"
+
+New-Test "Get-SDDL -Domain $AppDomain -User $AppUser"
+$TestUsersSDDL = Get-SDDL -Domain $AppDomain -User $AppUser @Logs
+$TestUsersSDDL
 
 New-Test "Get-TypeName"
 $TestUsersSDDL | Get-TypeName @Logs

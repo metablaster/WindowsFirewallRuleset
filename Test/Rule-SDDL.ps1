@@ -41,8 +41,8 @@ Test-SystemRequirements
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test @Logs
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo @Logs
 
 # Ask user if he wants to load these rules
 Update-Context $TestContext "IPv$IPVersion" $Direction
@@ -52,20 +52,25 @@ $Group = "Test - Get-SDDL"
 $Profile = "Any"
 
 Start-Test
+# TODO: Need separate test cases for users, groups and built in domains
 
 New-Test "Remove-NetFirewallRule"
 # Remove previous test
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
-New-Test "Get-SDDL"
-$RuleUsers = Get-SDDL -Group "Users", "Administrators" -User "test" @Logs
+#
+# Test Groups, Users and NT AUTHORITY
+#
+
+New-Test "Get-SDDL + Merge-SDDL"
+$RuleUsers = Get-SDDL -Group "Users", "Administrators" -User "User", "Admin" @Logs
 $RuleSystemUsers = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE" @Logs
 Merge-SDDL ([ref] $RuleUsers) $RuleSystemUsers @Logs
 $RuleUsers
 
 New-Test "New-NetFirewallRule"
 
-New-NetFirewallRule -DisplayName "Get-SDDL" `
+New-NetFirewallRule -DisplayName "Get-SDDL mix" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
@@ -73,7 +78,29 @@ New-NetFirewallRule -DisplayName "Get-SDDL" `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $RuleUsers `
 	-InterfaceType $Interface `
-	-Description "Get-SDDL test rule description" `
+	-Description "Get-SDDL test rule for mixture of NT AUTHORITY and users groups" `
+	@Logs | Format-Output @Logs
+
+#
+# Test APPLICATION PACKAGE AUTHORITY
+#
+
+New-Test "Get-SDDL + Merge-SDDL for APPLICATION PACKAGE AUTHORITY"
+$RuleAppUsers = Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -User "Your Internet connection" @Logs
+Merge-SDDL ([ref] $RuleAppUsers) (Get-SDDL -Group "Users") @Logs
+$RuleAppUsers
+
+New-Test "Get-SDDL APPLICATION PACKAGE AUTHORITY"
+
+New-NetFirewallRule -DisplayName "Get-SDDL APPLICATION PACKAGE AUTHORITY" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Internet4 `
+	-LocalPort Any -RemotePort 80, 443 `
+	-LocalUser $RuleAppUsers `
+	-InterfaceType $Interface `
+	-Description "Get-SDDL test rule for APPLICATION PACKAGE AUTHORITY" `
 	@Logs | Format-Output @Logs
 
 Update-Logs

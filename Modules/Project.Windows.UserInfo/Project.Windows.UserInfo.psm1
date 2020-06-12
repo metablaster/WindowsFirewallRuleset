@@ -180,7 +180,7 @@ function Get-GroupPrincipals
 
 						# Get only enabled users, these include SID but also non group users
 						$EnabledAccounts = Get-CimInstance -Class Win32_UserAccount -Namespace "root\cimv2" -ComputerName $Computer -Filter "LocalAccount = True" |
-						Where-Object -Property Disabled -ne False |
+						Where-Object -Property Disabled -NE False |
 						Select-Object -Property Name, Caption, SID, Domain
 
 						if ([string]::IsNullOrEmpty($EnabledAccounts))
@@ -320,7 +320,7 @@ function Get-UserGroups
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Computer"
 
 					$RemoteGroups = Get-CimInstance -Class Win32_Group -Namespace "root\cimv2" -ComputerName $Computer |
-					Where-Object -Property LocalAccount -eq "True"
+					Where-Object -Property LocalAccount -EQ "True"
 
 					foreach ($Group in $RemoteGroups)
 					{
@@ -571,7 +571,7 @@ function Get-GroupSID
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $ComputerName"
 
 					$GroupSID = Get-CimInstance -Class Win32_Group -Namespace "root\cimv2" -ComputerName $ComputerName |
-					Where-Object -Property Name -eq $Group | Select-Object -ExpandProperty SID
+					Where-Object -Property Name -EQ $Group | Select-Object -ExpandProperty SID
 				}
 				else
 				{
@@ -678,7 +678,7 @@ function Get-AccountSID
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying CIM server on $ComputerName"
 
 					$AccountSID = Get-CimInstance -Class Win32_UserAccount -Namespace "root\cimv2" -ComputerName $ComputerName |
-					Where-Object -Property Name -eq $User | Select-Object -ExpandProperty SID
+					Where-Object -Property Name -EQ $User | Select-Object -ExpandProperty SID
 				}
 				else
 				{
@@ -694,16 +694,25 @@ function Get-AccountSID
 					Write-Warning -Message "-CIM switch ignored for $ComputerName"
 				}
 
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for account: $ComputerName\$User"
+
 				try
 				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for account: $ComputerName\$User"
-
-					$NTAccount = New-Object -TypeName System.Security.Principal.NTAccount($ComputerName, $User)
-					$AccountSID = $NTAccount.Translate([System.Security.Principal.SecurityIdentifier]).ToString()
+					# For APPLICATION PACKAGE AUTHORITY we need to omit domain name
+					if ($SpecialDomain -and [array]::Find($SpecialDomains, [System.Predicate[string]] { "APPLICATION PACKAGE AUTHORITY" -eq "$($args[0])" }))
+					{
+						$NTAccount = New-Object -TypeName System.Security.Principal.NTAccount($User)
+						$AccountSID = $NTAccount.Translate([System.Security.Principal.SecurityIdentifier]).ToString()
+					}
+					else
+					{
+						$NTAccount = New-Object -TypeName System.Security.Principal.NTAccount($ComputerName, $User)
+						$AccountSID = $NTAccount.Translate([System.Security.Principal.SecurityIdentifier]).ToString()
+					}
 				}
 				catch
 				{
-					Write-Error -TargetObject $_.TargetObject -Message "[$($MyInvocation.InvocationName)] Account '$ComputerName\$User' cannot be resolved to a SID"
+					Write-Error -TargetObject $_.TargetObject -Message "[$($MyInvocation.InvocationName)] Account '$ComputerName\$User' cannot be resolved to a SID`n $_.Exception"
 					continue
 				}
 			} # if ($CIM)
@@ -733,9 +742,10 @@ function Get-AccountSID
 Write-Debug -Message "[$ThisModule] Initialize module constant variable: SpecialDomains"
 # Must be before constants
 # TODO: there must be a better more conventional name for this
+# TODO: We need to handle more cases, these 3 are known to work for now
 New-Variable -Name SpecialDomains -Scope Script -Option Constant -Value @(
 	"NT AUTHORITY"
-	"APPLICATION_PACKAGE_AUTHORITY"
+	"APPLICATION PACKAGE AUTHORITY"
 	"BUILTIN"
 )
 

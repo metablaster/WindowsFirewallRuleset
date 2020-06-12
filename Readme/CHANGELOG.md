@@ -1,6 +1,16 @@
 
 # Here is a list of changes for each of releases
 
+# Changelog v0.4.2
+
+## Modules
+
+-Updated user query functions and tests to make possible querying store app identities
+
+## Rules
+
+-Added rules for store apps to allow web authentication
+
 # Changelog v0.4.1
 
 ## Modules

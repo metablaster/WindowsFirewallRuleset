@@ -48,27 +48,60 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-New-Test "Get-GroupSID 'Users'"
-Get-GroupSID "Users" @Logs
+#
+# Test single group
+#
 
-New-Test "Get-GroupSID @('Users', 'Hyper-V Administrators')"
-$UsersTest = Get-GroupSID 'Users', 'Hyper-V Administrators' @Logs
-$UsersTest
+[string] $SingleGroup = "Users"
+New-Test "Get-GroupSID $SingleGroup"
+$GroupsTest = Get-GroupSID $SingleGroup @Logs
+$GroupsTest
 
 New-Test "Get-GroupSID 'Users' -CIM"
-Get-GroupSID "Users" -CIM @Logs
+$GroupsTest = Get-GroupSID $SingleGroup -CIM @Logs
+$GroupsTest
 
-New-Test "Get-GroupSID @('Users', 'Hyper-V Administrators') -CIM"
-Get-GroupSID 'Users', 'Hyper-V Administrators' -CIM @Logs
+New-Test "Get-TypeName"
+$GroupsTest | Get-TypeName @Logs
+
+#
+# Test array of groups
+#
+
+[string[]] $GroupArray = @('Users', 'Hyper-V Administrators')
+
+New-Test "Get-GroupSID $GroupArray"
+$GroupsTest = Get-GroupSID $GroupArray @Logs
+$GroupsTest
+
+New-Test "Get-GroupSID $GroupArray -CIM"
+$GroupsTest = Get-GroupSID $GroupArray -CIM @Logs
+$GroupsTest
+
+New-Test "Get-TypeName"
+$GroupsTest | Get-TypeName @Logs
+
+#
+# Test pipeline
+#
+
+$GroupArray = @("Users", "Administrators")
+
+New-Test "$GroupArray | Get-GroupSID"
+$GroupArray | Get-GroupSID @Logs
+
+New-Test "$GroupArray | Get-GroupSID -CIM"
+$GroupArray | Get-GroupSID -CIM @Logs
+
+#
+# Test failure
+#
 
 New-Test "FAILURE TEST NO CIM: Get-GroupSID @('Users', 'Hyper-V Administrators')"
 Get-GroupSID 'Users', 'Hyper-V Administrators' -Machine "CRAZYMACHINE" @Logs
 
 New-Test "FAILURE TEST CONTACT: Get-GroupSID @('Users', 'Hyper-V Administrators')"
 Get-GroupSID 'Users', 'Hyper-V Administrators' -Machine "CRAZYMACHINE" -CIM @Logs
-
-New-Test "Get-TypeName"
-$UsersTest | Get-TypeName @Logs
 
 Update-Logs
 Exit-Test

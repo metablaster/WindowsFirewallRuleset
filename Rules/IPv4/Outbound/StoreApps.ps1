@@ -113,6 +113,8 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 # Setup local variables:
 #
 $Group = "Store Apps"
+$ProgramsGroup = "Store Apps - Programs"
+$ServicesGroup = "Store Apps - Services"
 $SystemGroup = "Store Apps - System"
 $Profile = "Private, Public"
 $NetworkApps = Get-Content -Path "$PSScriptRoot\..\NetworkApps.txt"
@@ -124,6 +126,8 @@ if (!(Approve-Execute @Logs)) { exit }
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $SystemGroup -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $ProgramsGroup -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $ServicesGroup -Direction $Direction -ErrorAction Ignore @Logs
 
 #
 # Firewall predefined rules for Microsoft store Apps
@@ -235,5 +239,54 @@ foreach ($Principal in $Principals)
 		}
 	}
 }
+
+#
+# Following are executables and service rules needed by apps for web authentication
+#
+
+$Program = "%SystemRoot%\System32\RuntimeBroker.exe"
+Test-File $Program @Logs
+
+New-NetFirewallRule -DisplayName "Runtime Broker" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program $Program -Group $ProgramsGroup `
+	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Internet4 `
+	-LocalPort Any -RemotePort 443 `
+	-LocalUser $UsersGroupSDDL `
+	-InterfaceType $Interface `
+	-Description "The Runtime Broker is responsible for checking if a store app is declaring all of
+its permissions and informing the user whether or not its being allowed" `
+	@Logs | Format-Output @Logs
+
+$Program = "%SystemRoot%\System32\AuthHost.exe"
+Test-File $Program @Logs
+
+# Accounts needed for store app web authentication
+$AppAccounts = Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -User "Your Internet connection" @Logs
+Merge-SDDL ([ref] $AppAccounts) (Get-SDDL -Group "Users") @Logs
+
+New-NetFirewallRule -DisplayName "Authentication Host" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service Any -Program $Program -Group $ProgramsGroup `
+	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Internet4 `
+	-LocalPort Any -RemotePort 80, 443 `
+	-LocalUser $AppAccounts `
+	-InterfaceType $Interface `
+	-Description "Connects Universal Windows Platform (UWP) app to an online identity provider
+that uses authentication protocols like OpenID or OAuth, such as Facebook, Twitter, Instagram, etc." `
+	@Logs | Format-Output @Logs
+
+New-NetFirewallRule -DisplayName "Windows License Manager Service" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Service LicenseManager -Program $ServiceHost -Group $ServicesGroup `
+	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Internet4 `
+	-LocalPort Any -RemotePort 443 `
+	-LocalUser Any `
+	-InterfaceType $Interface `
+	-Description "Provides infrastructure support for the Microsoft Store." `
+	@Logs | Format-Output @Logs
 
 Update-Logs

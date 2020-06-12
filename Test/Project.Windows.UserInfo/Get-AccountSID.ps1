@@ -48,35 +48,63 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-[string[]] $Users = @("Administrator", "test", "haxor")
+#
+# Test users
+#
+
+[string[]] $Users = @("Administrator", "User", "Admin")
 
 New-Test "Get-AccountSID -User $Users"
-$AccountSID = Get-AccountSID -User $Users @Logs
-$AccountSID
+$AccountSID1 = Get-AccountSID -User $Users @Logs
+$AccountSID1
 
 New-Test "Get-AccountSID -User $Users -CIM"
-$AccountSID = Get-AccountSID -User $Users -CIM @Logs
-$AccountSID
+$AccountSID1 = Get-AccountSID -User $Users -CIM @Logs
+$AccountSID1
 
 New-Test "$Users | Get-AccountSID -CIM"
 $Users | Get-AccountSID -CIM @Logs
 
-[string[]] $Users = @("SYSTEM", "NETWORK SERVICE")
-[string] $Domain = "NT AUTHORITY"
+New-Test "Get-TypeName"
+$AccountSID1 | Get-TypeName @Logs
 
-New-Test "Get-AccountSID -User $Users"
-$AccountSID = Get-AccountSID -User $Users -Domain $Domain @Logs
-$AccountSID
+#
+# Test NT AUTHORITY
+#
 
-New-Test "Get-AccountSID -User $Users -CIM"
-$AccountSID = Get-AccountSID -User $Users -Domain $Domain -CIM @Logs
-$AccountSID
+[string[]] $NTUsers = @("SYSTEM", "LOCAL SERVICE")
+[string] $NTDomain = "NT AUTHORITY"
 
-New-Test "$Users | Get-AccountSID -CIM"
-$Users | Get-AccountSID -CIM -Domain $Domain @Logs
+New-Test "Get-AccountSID -Domain $NTDomain -User $NTUsers"
+$AccountSID2 = Get-AccountSID -Domain $NTDomain -User $NTUsers # @Logs
+$AccountSID2
+
+# NOTE: not valid
+# New-Test "Get-AccountSID -Domain $NTDomain -User $NTUsers -CIM"
+# $AccountSID2 = Get-AccountSID -Domain $NTDomain -User $NTUsers -CIM @Logs
+# $AccountSID2
 
 New-Test "Get-TypeName"
-$Users | Get-TypeName @Logs
+$AccountSID2 | Get-TypeName @Logs
+
+#
+# Test APPLICATION PACKAGE AUTHORITY
+#
+
+[string] $AppDomain = "APPLICATION PACKAGE AUTHORITY"
+[string] $AppUser = "Your Internet connection"
+
+New-Test "Get-AccountSID -Domain $AppDomain -User $AppUser"
+$AccountSID3 = Get-AccountSID -Domain $AppDomain -User $AppUser # @Logs
+$AccountSID3
+
+# NOTE: not valid
+# New-Test "Get-AccountSID -Domain $AppDomain -User $AppUser -CIM"
+# $AccountSID3 = Get-AccountSID -Domain $AppDomain -User $AppUser -CIM @Logs
+# $AccountSID3
+
+New-Test "Get-TypeName"
+$AccountSID3 | Get-TypeName @Logs
 
 Update-Logs
 Exit-Test
