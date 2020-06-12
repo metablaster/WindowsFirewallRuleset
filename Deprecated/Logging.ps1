@@ -28,14 +28,14 @@ TODO: [ValidateNotNullOrEmpty()] does not work
 function Resume-Error
 {
 	[CmdletBinding(PositionalBinding = $false)]
-    param (
+	param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true,
-		HelpMessage = "Input object must be ErrorRecord")]
+			HelpMessage = "Input object must be ErrorRecord")]
 		[ValidateNotNullOrEmpty()]
 		[System.Management.Automation.ErrorRecord] $Stream,
 
 		[Parameter(Mandatory = $true,
-		HelpMessage = "Error action preference")]
+			HelpMessage = "Error action preference")]
 		[System.Management.Automation.ActionPreference] $Preference,
 
 		[Parameter()]
@@ -98,14 +98,14 @@ TODO: [ValidateNotNullOrEmpty()] does not work
 function Resume-Warning
 {
 	[CmdletBinding(PositionalBinding = $false)]
-    param (
+	param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true,
-		HelpMessage = "Input object must be WarningRecord")]
+			HelpMessage = "Input object must be WarningRecord")]
 		[ValidateNotNullOrEmpty()]
 		[System.Management.Automation.WarningRecord] $Stream,
 
 		[Parameter(Mandatory = $true,
-		HelpMessage = "Warning action preference")]
+			HelpMessage = "Warning action preference")]
 		[System.Management.Automation.ActionPreference] $Preference,
 
 		[Parameter()]
@@ -161,9 +161,9 @@ TODO: [ValidateNotNullOrEmpty()] does not work
 function Resume-Info
 {
 	[CmdletBinding(PositionalBinding = $false)]
-    param (
+	param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true,
-		HelpMessage = "Input object must be InformationRecord")]
+			HelpMessage = "Input object must be InformationRecord")]
 		[ValidateNotNullOrEmpty()]
 		[System.Management.Automation.InformationRecord] $Stream,
 

@@ -140,6 +140,8 @@ TODO's in this file are categorized into following sections:
 
     - update FirewallParameters.md with a list of incompatible parameters for reference
     - a lot of comment based documentation is missing comments
+    - FirewallParameters.md contains missing mapping
+    - FirewallParameters.md contains no info about compartments and IPSec setup
 
 ## Low priority
 

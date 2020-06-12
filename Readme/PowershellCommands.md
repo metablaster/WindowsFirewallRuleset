@@ -3,7 +3,7 @@
 
 Useful Powershell commands to help gather information needed for Windows firewall.
 
-# Store Apps
+## Store Apps
 
 There are two categories:
 
@@ -13,7 +13,7 @@ There are two categories:
 2. System apps - Apps that are installed in the C:\Windows* directory.
 These apps are integral to the OS.
 
-## List all system apps beginning with word "Microsoft"
+### List all system apps beginning with word "Microsoft"
 
 We use word "Microsoft" to filter out junk
 
@@ -23,7 +23,7 @@ Where-Object { $_.SignatureKind -eq "System" -and $_.Name -like "Microsoft*" } |
 Sort-Object Name | ForEach-Object {$_.Name}
 ```
 
-## List all provisioned Windows apps
+### List all provisioned Windows apps
 
 Not directly useful, but returns a few more packages than `Get-AppxPackage -PackageTypeFilter Bundle`
 
@@ -31,13 +31,13 @@ Not directly useful, but returns a few more packages than `Get-AppxPackage -Pack
 Get-AppxProvisionedPackage -Online | Sort-Object DisplayName | Format-Table DisplayName, PackageName
 ```
 
-## Lists the app packages that are installed for specific user account on the computer
+### Lists the app packages that are installed for specific user account on the computer
 
 ```powershell
 Get-AppxPackage -User User -PackageTypeFilter Bundle | Sort-Object Name | ForEach-Object {$_.Name}
 ```
 
-## Get specific package
+### Get specific package
 
 ```powershell
 Get-AppxPackage -User User | Where-Object {$_.PackageFamilyName -like "*skype*"} |
@@ -48,13 +48,13 @@ Select-Object -ExpandProperty Name
 
 [Reference Get-AppxPackage](https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage?view=win10-ps)
 
-## Get app details
+### Get app details
 
 ```powershell
 (Get-AppxPackage -Name "*Yourphone*" | Get-AppxPackageManifest).Package.Capabilities
 ```
 
-## Update store apps
+### Update store apps
 
 ```powershell
 $namespaceName = "root\cimv2\mdm\dmmap"
@@ -71,16 +71,16 @@ Get-CimInstance -Namespace "Root\cimv2\mdm\dmmap" `
 Invoke-CimMethod -MethodName UpdateScanMethod
 ```
 
-# Get users and computer name
+## Get users and computers
 
-## List all users
+### List all users
 
 ```powershell
 Get-WmiObject -Class Win32_UserAccount
 [Enum]::GetValues([System.Security.Principal.WellKnownSidType])
 ```
 
-## List only users
+### List only users
 
 ```powershell
 Get-LocalGroupMember -name users
@@ -90,25 +90,25 @@ Get-LocalGroupMember -name users
 Get-LocalGroupMember -Group "Users"
 ```
 
-## Only Administrators
+### Only Administrators
 
 ```powershell
 Get-LocalGroupMember -Group "Administrators"
 ```
 
-## Prompt user for info
+### Prompt user for info
 
 ```powershell
 Get-Credential
 ```
 
-## Computer information
+### Computer information
 
 ```powershell
 Get-WMIObject -class Win32_ComputerSystem
 ```
 
-## Currently logged in user
+### Currently logged in user
 
 user name, prefixed by its domain
 
@@ -116,7 +116,7 @@ user name, prefixed by its domain
 [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
 ```
 
-## Well known SID's
+### Well known SID's
 
 ```powershell
 $group = 'Administrators'
@@ -130,7 +130,7 @@ OR
 [System.Security.Principal.WellKnownSidType]::NetworkSid
 ```
 
-## Computer name
+### Computer name
 
 ```powershell
 [System.Net.Dns]::GetHostName()
@@ -140,7 +140,7 @@ OR
 Get-WMIObject -class Win32_ComputerSystem | Select-Object -ExpandProperty Name
 ```
 
-# Get CIM classes and commandlets
+## Get CIM classes and commandlets
 
 ```powershell
 Get-CimClass -Namespace root/CIMV2 |
@@ -152,35 +152,35 @@ Select-Object CimClassName
 Get-Command -Module CimCmdlets
 ```
 
-# Get type name aliases
+## Get type name aliases
 
 ```powershell
 [PSCustomObject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::get
 ```
 
-# Package provider management
+## Package provider management
 
-## List of package providers that are loaded or installed but not loaded
+### List of package providers that are loaded or installed but not loaded
 
 ```powershell
 Get-PackageProvider
 Get-PackageProvider -ListAvailable
 ```
 
-## List of package sources that are registered for a package provider
+### List of package sources that are registered for a package provider
 
 ```powershell
 Get-PackageSource
 ```
 
-## List of Package providers available for installation
+### List of Package providers available for installation
 
 ```powershell
 Find-PackageProvider -Name Nuget -AllVersions
 Find-PackageProvider -Name PowerShellGet -AllVersions -Source "https://www.powershellgallery.com/api/v2"
 ```
 
-## Install package provider
+### Install package provider
 
 -Scope AllUsers (Install location for all users)
 
@@ -199,7 +199,23 @@ Install-PackageProvider -Name Nuget -Verbose -Scope CurrentUser
 # Install-PackageProvider -Name PowerShellGet -Verbose -Scope CurrentUser
 ```
 
-# Module management
+## Module management
 
 ```powershell
+```
+
+## Get network interfaces
+
+### All possible adapters and their relevant info
+
+```powershell
+Get-NetadApter -IncludeHidden | Select-Object -Property Name, InterfaceIndex, InterfaceAlias, `
+InterfaceDescription, MediaConnectionState, Status, HardwareInterface, Hidden, Virtual
+```
+
+### Physical, virtual and loopback IP interfaces
+
+```powershell
+Get-NetIPInterface -IncludeAllCompartments | Select-Object -Property InterfaceIndex, `
+InterfaceAlias, AddressFamily, ConnectionState, Store
 ```

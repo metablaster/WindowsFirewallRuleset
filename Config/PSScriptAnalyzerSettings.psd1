@@ -138,7 +138,7 @@
 			# Checks if there is a space between a keyword and its corresponding open brace.
 			# E.g. foo { } instead of foo{ }
 			# default = true (powershell.codeFormatting.whitespaceBeforeOpenBrace)
-			# TODO: doesn't work as expected
+			# TODO: doesn't work as expected https://github.com/PowerShell/PSScriptAnalyzer/issues/1522
 			CheckOpenBrace = $false
 			# Checks if there is space between a keyword and its corresponding open parenthesis.
 			#  E.g. if (true) instead of if(true)
@@ -163,7 +163,7 @@
 			CheckPipeForRedundantWhitespace = $true
 			# Checks if there is more than one space between parameters and values.
 			# E.g. foo -bar $baz -bat instead of foo  -bar $baz  -bat
-			# default = false
+			# default = false (NOTE: Default value is $false at the moment due to the setting being new)
 			# TODO: this was disabled from true to false because of too many false positives
 			CheckParameter = $false
 		}

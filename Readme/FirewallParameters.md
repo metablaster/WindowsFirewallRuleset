@@ -103,8 +103,10 @@ so irrelevant for home users.
 
 # APPLICATION LAYER ENFORCEMENT
 
-1. `"*"` Applies only to services or apps (but not programs)
-2. `Any` Any program, service or app
+The meaning of this parameter value depends on which parameter it is used:
+
+1. `"*"` Apply to services only / Apply to application packages only
+2. `Any` Apply to all programs + and services / and application packages / that meet the specified condition
 
 # PARAMETER VALUES EXAMPLE
 

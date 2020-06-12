@@ -40,3 +40,5 @@ Nobody has all the knowledge in his head, here is a quick "jump" table:
 [IPv4 link-local address aka APIPA](https://wiki.wireshark.org/APIPA)
 
 [PowerShell 7 docs](https://docs.microsoft.com/en-us/powershell/scripting/overview?view=powershell-7)
+
+[What is the Hyper-V Virtual Switch and How Does it Work?](https://www.altaro.com/hyper-v/the-hyper-v-virtual-switch-explained-part-1/)

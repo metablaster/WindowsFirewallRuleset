@@ -175,6 +175,14 @@ so you end up in Cat and Mouse game.
 
 - TODO: Investigation needed.
 
+### Case 5: Troubleshooting
+
+- TODO: Investigation needed.
+
+### Case 5 Audit result
+
+- TODO: Investigation needed.
+
 ## Case 6: Dropped inbound UDP from LAN
 
 1. Firewall log may report inbound UDP drop, ie. from router to local 1900
@@ -190,7 +198,7 @@ so you end up in Cat and Mouse game.
 
 1. Packets are received just fine but small portion is dropped.
 
-- additional investigation needed to figure out why.
+- TODO: additional investigation needed to figure out why.
 
 ## Case 7: IPv6 loopback rule
 
@@ -214,3 +222,19 @@ have exactly the same alias.
 restarts, however shuting down system and turning back on will reproduce the problem regardless of rules.
 - Another possible cause could be that some other hidden interface is generating this traffic.
 - Additional investigation need by allowing all packets explicitly.
+
+## Case 8: Connection dropped when specific network interface is assigned to rule
+
+- In addition to interfaces shown in GPO which can be configured with InterfaceType parameter
+there are some hidden network interfaces which need access to network, but not possible to
+configure rules for these interfaces, except allowing all interfaces.
+
+### Case 8: Troubleshooting
+
+- `Use Get-NetadApter` and `Get-NetIPInterface` to gather hidden adapter info
+- Use `-InterfaceAlias` instead of `-InterfaceType` when defining firewall rule
+- See PowerShellCommands.md and Links.md for details
+
+### Case 8: Audit result
+
+- TODO: additional investigation needed.
