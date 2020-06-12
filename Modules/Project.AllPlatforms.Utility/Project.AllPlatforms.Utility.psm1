@@ -82,7 +82,7 @@ None.
 function Update-Context
 {
 	[OutputType([System.Void])]
-	[CmdletBinding()]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Low')]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $Root,
@@ -95,16 +95,20 @@ function Update-Context
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting context"
 
-	$NewContext = $Root + "." + $Section
-	if (![System.String]::IsNullOrEmpty($Subsection))
+	if ($PSCmdlet.ShouldProcess("PowerShell host", "Update execution context"))
 	{
-		$NewContext += " -> " + $Subsection
-	}
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting context"
 
-	Set-Variable -Name Context -Scope Script -Value $NewContext
-	Write-Debug -Message "Context set to '$NewContext'"
+		$NewContext = $Root + "." + $Section
+		if (![System.String]::IsNullOrEmpty($Subsection))
+		{
+			$NewContext += " -> " + $Subsection
+		}
+
+		Set-Variable -Name Context -Scope Script -Value $NewContext
+		Write-Debug -Message "Context set to '$NewContext'"
+	}
 }
 
 <#
@@ -195,51 +199,54 @@ function Show-SDDL
 		$SDDL
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
-	$SDDLSplit = $SDDL.Split("(")
-
-	Write-Output ""
-	Write-Output "SDDL Split:"
-	Write-Output "****************"
-
-	$SDDLSplit
-
-	Write-Output ""
-	Write-Output "SDDL SID Parsing:"
-	Write-Output "****************"
-
-	# Skip index 0 where owner and/or primary group are stored
-	for ($i = 1; $i -lt $SDDLSplit.Length; ++$i)
+	process
 	{
-		$ACLSplit = $SDDLSplit[$i].Split(";")
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-		if ($ACLSplit[1].Contains("ID"))
+		$SDDLSplit = $SDDL.Split("(")
+
+		Write-Output ""
+		Write-Output "SDDL Split:"
+		Write-Output "****************"
+
+		$SDDLSplit
+
+		Write-Output ""
+		Write-Output "SDDL SID Parsing:"
+		Write-Output "****************"
+
+		# Skip index 0 where owner and/or primary group are stored
+		for ($i = 1; $i -lt $SDDLSplit.Length; ++$i)
 		{
-			Write-Output "Inherited"
-		}
-		else
-		{
-			$ACLEntrySID = $null
+			$ACLSplit = $SDDLSplit[$i].Split(";")
 
-			# Remove the trailing ")"
-			$ACLEntry = $ACLSplit[5].TrimEnd(")")
-
-			# Parse out the SID using a handy RegEx
-			$ACLEntrySIDMatches = [regex]::Matches($ACLEntry, "(S(-\d+){2,8})")
-
-			# NOTE: original changed from $ACLEntrySID = $_.value to $ACLEntrySID += $_.value
-			$ACLEntrySIDMatches | ForEach-Object {
-				$ACLEntrySID += $_.Value
-			}
-
-			if ($ACLEntrySID)
+			if ($ACLSplit[1].Contains("ID"))
 			{
-				Write-Output $ACLEntrySID
+				Write-Output "Inherited"
 			}
 			else
 			{
-				Write-Output "Not inherited - No SID"
+				$ACLEntrySID = $null
+
+				# Remove the trailing ")"
+				$ACLEntry = $ACLSplit[5].TrimEnd(")")
+
+				# Parse out the SID using a handy RegEx
+				$ACLEntrySIDMatches = [regex]::Matches($ACLEntry, "(S(-\d+){2,8})")
+
+				# NOTE: original changed from $ACLEntrySID = $_.value to $ACLEntrySID += $_.value
+				$ACLEntrySIDMatches | ForEach-Object {
+					$ACLEntrySID += $_.Value
+				}
+
+				if ($ACLEntrySID)
+				{
+					Write-Output $ACLEntrySID
+				}
+				else
+				{
+					Write-Output "Not inherited - No SID"
+				}
 			}
 		}
 	}
@@ -396,8 +403,11 @@ function Format-Output
 		[Microsoft.Management.Infrastructure.CimInstance] $Rule
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Host "Load Rule: [$($Rule | Select-Object -ExpandProperty Group)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
+	process
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+		Write-Host "Load Rule: [$($Rule | Select-Object -ExpandProperty Group)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
+	}
 }
 
 <#
@@ -417,7 +427,7 @@ None.
 #>
 function Set-ScreenBuffer
 {
-	[CmdletBinding()]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
 	param ()
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -432,13 +442,7 @@ function Set-ScreenBuffer
 	{
 		Write-Warning -Message "Your screen buffer of $($NewSize.Height) is below recommended $NewBuffer to preserve all execution output"
 
-		$Choices = "&Yes", "&No"
-		$Default = 0
-		$Title = "Increase Screen Buffer"
-		$Question = "Would you like to increase screen buffer to $($NewBuffer)?"
-		$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
-
-		if ($Decision -eq $Default)
+		if ($PSCmdlet.ShouldProcess("Powershell host", "Increase Screen Buffer"))
 		{
 			$NewSize.Height = $NewBuffer
 			$psWindow.BufferSize = $NewSize

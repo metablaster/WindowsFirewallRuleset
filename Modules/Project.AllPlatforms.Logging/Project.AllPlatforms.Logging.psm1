@@ -136,7 +136,7 @@ TODO: when strict mode is on, errors captured by strict mode are not captured in
 function Update-Logs
 {
 	[OutputType([System.Void])]
-	[CmdletBinding()]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Low')]
 	param ()
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -146,81 +146,84 @@ function Update-Logs
 	$WarningBuffer = $PSCmdlet.GetVariableValue('WarningBuffer')
 	$InfoBuffer = $PSCmdlet.GetVariableValue('InfoBuffer')
 
-	if ($ErrorBuffer)
+	if ($PSCmdlet.ShouldProcess("Log files", "write to log files"))
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing Error message"
-
-		$Preference = $PSCmdlet.GetVariableValue('ErrorActionPreference')
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller ErrorActionPreference is: $Preference"
-
-		if ($Preference -ne "SilentlyContinue")
+		if ($ErrorBuffer)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting error status variable"
-			Set-Variable -Name ErrorStatus -Scope Global -Value $true
-		}
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing Error message"
 
-		if ($ErrorLogging)
-		{
-			$LogFile = Get-LogFile $LogsFolder "Error"
+			$Preference = $PSCmdlet.GetVariableValue('ErrorActionPreference')
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller ErrorActionPreference is: $Preference"
 
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending error to log file: $LogFile"
-			$ErrorBuffer | ForEach-Object {
-				$_ | Select-Object * | Out-File -Append -FilePath $LogFile
+			if ($Preference -ne "SilentlyContinue")
+			{
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting error status variable"
+				Set-Variable -Name ErrorStatus -Scope Global -Value $true
 			}
-		}
 
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Clearing errors buffer"
-		$ErrorBuffer.Clear()
-	}
+			if ($ErrorLogging)
+			{
+				$LogFile = Get-LogFile $LogsFolder "Error"
 
-	if ($WarningBuffer)
-	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing Warning message"
-
-		$Preference = $PSCmdlet.GetVariableValue('WarningPreference')
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller WarningPreference is: $Preference"
-
-		if ($Preference -ne "SilentlyContinue")
-		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting warning status variable"
-			Set-Variable -Name WarningStatus -Scope Global -Value $true
-		}
-
-		if ($WarningLogging)
-		{
-			$LogFile = Get-LogFile $LogsFolder "Warning"
-
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending warnings to log file: $LogFile"
-
-			# NOTE: we have to add the WARNING label, it's not included in the message by design
-			# NOTE: we need consistent encoding for cases where Core and Desktop editions
-			# write to same file (not same encoding)
-			$WarningBuffer | ForEach-Object {
-				"WARNING: $(Get-Date -Format "HH:mm:ss") $_" |
-				Out-File -Append -Encoding UTF8 -FilePath $LogFile
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending error to log file: $LogFile"
+				$ErrorBuffer | ForEach-Object {
+					$_ | Select-Object * | Out-File -Append -FilePath $LogFile
+				}
 			}
+
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Clearing errors buffer"
+			$ErrorBuffer.Clear()
 		}
 
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Clearing warnings buffer"
-		$WarningBuffer.Clear()
-	}
-
-	if ($InfoBuffer)
-	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing Information message"
-
-		if ($InformationLogging)
+		if ($WarningBuffer)
 		{
-			$LogFile = Get-LogFile $LogsFolder "Info"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing Warning message"
 
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending information to log file: $LogFile"
-			$InfoBuffer | ForEach-Object {
-				$_ | Select-Object * | Out-File -Append -FilePath $LogFile
+			$Preference = $PSCmdlet.GetVariableValue('WarningPreference')
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller WarningPreference is: $Preference"
+
+			if ($Preference -ne "SilentlyContinue")
+			{
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting warning status variable"
+				Set-Variable -Name WarningStatus -Scope Global -Value $true
 			}
+
+			if ($WarningLogging)
+			{
+				$LogFile = Get-LogFile $LogsFolder "Warning"
+
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending warnings to log file: $LogFile"
+
+				# NOTE: we have to add the WARNING label, it's not included in the message by design
+				# NOTE: we need consistent encoding for cases where Core and Desktop editions
+				# write to same file (not same encoding)
+				$WarningBuffer | ForEach-Object {
+					"WARNING: $(Get-Date -Format "HH:mm:ss") $_" |
+					Out-File -Append -Encoding UTF8 -FilePath $LogFile
+				}
+			}
+
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Clearing warnings buffer"
+			$WarningBuffer.Clear()
 		}
 
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Clearing information buffer"
-		$InfoBuffer.Clear()
+		if ($InfoBuffer)
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing Information message"
+
+			if ($InformationLogging)
+			{
+				$LogFile = Get-LogFile $LogsFolder "Info"
+
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending information to log file: $LogFile"
+				$InfoBuffer | ForEach-Object {
+					$_ | Select-Object * | Out-File -Append -FilePath $LogFile
+				}
+			}
+
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Clearing information buffer"
+			$InfoBuffer.Clear()
+		}
 	}
 }
 

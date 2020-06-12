@@ -71,8 +71,11 @@ function Test-Pipeline
 		$Param
 	)
 
-	Write-Error -Message "[$($MyInvocation.InvocationName)] End of pipe 1" -Category PermissionDenied -ErrorId 3
-	Write-Error -Message "[$($MyInvocation.InvocationName)] End of pipe 2" -Category PermissionDenied -ErrorId 4
+	process
+	{
+		Write-Error -Message "[$($MyInvocation.InvocationName)] End of pipe 1" -Category PermissionDenied -ErrorId 3
+		Write-Error -Message "[$($MyInvocation.InvocationName)] End of pipe 2" -Category PermissionDenied -ErrorId 4
+	}
 }
 
 <#

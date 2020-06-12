@@ -71,8 +71,11 @@ function Test-Pipeline
 		$Param
 	)
 
-	Write-Warning -Message "[$($MyInvocation.InvocationName)] End of pipe 1"
-	Write-Warning -Message "[$($MyInvocation.InvocationName)] End of pipe 2"
+	process
+	{
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] End of pipe 1"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] End of pipe 2"
+	}
 }
 
 <#

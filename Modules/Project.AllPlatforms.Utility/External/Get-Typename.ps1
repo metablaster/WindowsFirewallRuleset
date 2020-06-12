@@ -55,6 +55,7 @@ Added input type to parameter
 #>
 function Get-TypeName
 {
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseProcessBlockForPipelineCommand', '', Justification = 'Must not be used here')]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true,

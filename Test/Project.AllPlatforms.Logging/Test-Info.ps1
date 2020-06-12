@@ -71,8 +71,11 @@ function Test-Pipeline
 		$Param
 	)
 
-	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] End of pipe 1"
-	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] End of pipe 2"
+	process
+	{
+		Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] End of pipe 1"
+		Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] End of pipe 2"
+	}
 }
 
 <#

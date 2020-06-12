@@ -73,12 +73,17 @@ the Functionality parameter of Get-Help.
 function New-Function
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'This is template function')]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Medium')]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $Param
 	)
 
-	return $null
+	# TODO: Update confirm description
+	if ($PSCmdlet.ShouldProcess("Template target", "Template action"))
+	{
+		return $null
+	}
 }
 
 #

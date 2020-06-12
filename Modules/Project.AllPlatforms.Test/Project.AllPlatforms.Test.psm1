@@ -70,25 +70,29 @@ None.
 function Start-Test
 {
 	[OutputType([System.Void])]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Low')]
 	param ()
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-	# disable logging errors for tests
-	Set-Variable -Name ErrorLoggingCopy -Scope Script -Value $ErrorLogging
-	Set-Variable -Name ErrorLogging -Scope Global -Value $true
+	if ($PSCmdlet.ShouldProcess("Unit test script", "Initialize test unit"))
+	{
+		# disable logging errors for tests
+		Set-Variable -Name ErrorLoggingCopy -Scope Script -Value $ErrorLogging
+		Set-Variable -Name ErrorLogging -Scope Global -Value $true
 
-	# disable logging warnings for tests
-	Set-Variable -Name WarningLoggingCopy -Scope Script -Value $WarningLogging
-	Set-Variable -Name WarningLogging -Scope Global -Value $true
+		# disable logging warnings for tests
+		Set-Variable -Name WarningLoggingCopy -Scope Script -Value $WarningLogging
+		Set-Variable -Name WarningLogging -Scope Global -Value $true
 
-	# disable logging information messages for tests
-	Set-Variable -Name InformationLoggingCopy -Scope Script -Value $InformationLogging
-	Set-Variable -Name InformationLogging -Scope Global -Value $true
+		# disable logging information messages for tests
+		Set-Variable -Name InformationLoggingCopy -Scope Script -Value $InformationLogging
+		Set-Variable -Name InformationLogging -Scope Global -Value $true
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ErrorLogging changed to: $ErrorLogging"
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] WarningLogging changed to: $WarningLogging"
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] InformationLogging changed to: $InformationLogging"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ErrorLogging changed to: $ErrorLogging"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] WarningLogging changed to: $WarningLogging"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] InformationLogging changed to: $InformationLogging"
+	}
 }
 
 <#
@@ -110,6 +114,7 @@ None. Formatted message block is shown in console.
 function New-Test
 {
 	[OutputType([System.Void])]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'None')]
 	param (
 		[AllowEmptyString()]
 		[Parameter(Mandatory = $true)]
@@ -118,15 +123,18 @@ function New-Test
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-	$Message = "Testing: $InputMessage"
-	$Asterisks = $("*" * ($Message.Length + 4))
+	if ($PSCmdlet.ShouldProcess("PowerShell host", "Print new test header"))
+	{
+		$Message = "Testing: $InputMessage"
+		$Asterisks = $("*" * ($Message.Length + 4))
 
-	# NOTE: Write-Host would mess up test case outputs
-	Write-Output ""
-	Write-Output $Asterisks
-	Write-Output "* $Message *"
-	Write-Output $Asterisks
-	Write-Output ""
+		# NOTE: Write-Host would mess up test case outputs
+		Write-Output ""
+		Write-Output $Asterisks
+		Write-Output "* $Message *"
+		Write-Output $Asterisks
+		Write-Output ""
+	}
 }
 
 <#

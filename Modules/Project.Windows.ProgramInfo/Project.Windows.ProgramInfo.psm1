@@ -1078,7 +1078,7 @@ None.
 function Update-Table
 {
 	[OutputType([System.Void])]
-	[CmdletBinding()]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'None')]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $SearchString,
@@ -1091,153 +1091,157 @@ function Update-Table
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] Search string is: $SearchString"
 
-	# To reduce typing and make code clear
-	$UserGroups = Get-UserGroups -Computer $PolicyStore
-
-	if ($Executables)
+	if ($PSCmdlet.ShouldProcess("InstallTable", "Insert data into table"))
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching executable names for: $SearchString"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Search string is: $SearchString"
 
-		$InstallLocation = $ExecutablePaths |
-		Where-Object -Property Name -eq $SearchString |
-		Select-Object -ExpandProperty InstallLocation
+		# To reduce typing and make code clear
+		$UserGroups = Get-UserGroups -Computer $PolicyStore
 
-		if ($InstallLocation)
+		if ($Executables)
 		{
-			# Create a row
-			$Row = $InstallTable.NewRow()
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching executable names for: $SearchString"
 
-			$Principal = $UserGroups | Where-Object -Property Group -eq "Users"
+			$InstallLocation = $ExecutablePaths |
+			Where-Object -Property Name -EQ $SearchString |
+			Select-Object -ExpandProperty InstallLocation
 
-			# Enter data into row
-			$Row.ID = ++$RowIndex
-			$Row.SID = $Principal.SID
-			$Row.Group = $Principal.Group
-			$Row.Computer = $Principal.Computer
-			$Row.InstallLocation = $InstallLocation
-
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($Principal.Caption) with $InstallLocation"
-
-			# Add row to the table
-			$InstallTable.Rows.Add($Row)
-
-			# TODO: If the path is known there is no need to continue?
-			return
-		}
-	}
-
-	# TODO: try to search also for path in addition to program name
-	# TODO: SearchString may pick up irrelevant paths (ie. unreal engine), or even miss
-	# Search system wide installed programs
-	if ($SystemPrograms -and $SystemPrograms.Name -like "*$SearchString*")
-	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching system programs for $SearchString"
-
-		# TODO: need better mechanism for multiple matches
-		$TargetPrograms = $SystemPrograms | Where-Object -Property Name -like "*$SearchString*"
-		$Principal = $UserGroups | Where-Object -Property Group -eq "Users"
-
-		foreach ($Program in $TargetPrograms)
-		{
-			# Create a row
-			$Row = $InstallTable.NewRow()
-
-			$InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
-
-			# Enter data into row
-			$Row.ID = ++$RowIndex
-			$Row.SID = $Principal.SID
-			$Row.Group = $Principal.Group
-			$Row.Computer = $Principal.Computer
-			$Row.InstallLocation = $InstallLocation
-
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($Principal.Caption) with $InstallLocation"
-
-			# Add row to the table
-			$InstallTable.Rows.Add($Row)
-		}
-	}
-	# Program not found on system, attempt alternative search
-	elseif ($AllUserPrograms -and $AllUserPrograms.Name -like "*$SearchString*")
-	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching program install properties for $SearchString"
-		$TargetPrograms = $AllUserPrograms | Where-Object -Property Name -like "*$SearchString*"
-
-		foreach ($Program in $TargetPrograms)
-		{
-			# Create a row
-			$Row = $InstallTable.NewRow()
-
-			# Let see who owns the sub key which is the SID
-			$KeyOwner = ConvertFrom-SID $Program.SIDKey
-			if ($KeyOwner -eq "Users")
+			if ($InstallLocation)
 			{
-				$Principal = $UserGroups | Where-Object -Property Group -eq "Users"
+				# Create a row
+				$Row = $InstallTable.NewRow()
+
+				$Principal = $UserGroups | Where-Object -Property Group -EQ "Users"
+
+				# Enter data into row
+				$Row.ID = ++$RowIndex
+				$Row.SID = $Principal.SID
+				$Row.Group = $Principal.Group
+				$Row.Computer = $Principal.Computer
+				$Row.InstallLocation = $InstallLocation
+
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($Principal.Caption) with $InstallLocation"
+
+				# Add row to the table
+				$InstallTable.Rows.Add($Row)
+
+				# TODO: If the path is known there is no need to continue?
+				return
 			}
-			else
-			{
-				# TODO: we need more registry samples to determine what is right, Administrators seems logical
-				$Principal = $UserGroups | Where-Object -Property Group -eq "Administrators"
-			}
-
-			$InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
-
-			# Enter data into row
-			$Row.ID = ++$RowIndex
-			$Row.SID = $Principal.SID
-			$Row.Group = $Principal.Group
-			$Row.Computer = $Principal.Computer
-			$Row.InstallLocation = $InstallLocation
-
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($Principal.Caption) with $InstallLocation"
-
-			# Add row to the table
-			$InstallTable.Rows.Add($Row)
 		}
-	}
 
-	# Search user profiles
-	# NOTE: User profile should be searched even if there is an installation system wide
-	if ($UserProfile)
-	{
-		$Principals = Get-GroupPrincipals "Users"
-
-		foreach ($Principal in $Principals)
+		# TODO: try to search also for path in addition to program name
+		# TODO: SearchString may pick up irrelevant paths (ie. unreal engine), or even miss
+		# Search system wide installed programs
+		if ($SystemPrograms -and $SystemPrograms.Name -like "*$SearchString*")
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching $($Principal.Account) programs for $SearchString"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching system programs for $SearchString"
 
-			# NOTE: the story is different here, each user may have multiple matches for search string
-			# letting one match to have same principal would be mistake.
-			$UserPrograms = Get-UserPrograms $Principal.User | Where-Object -Property Name -like "*$SearchString*"
+			# TODO: need better mechanism for multiple matches
+			$TargetPrograms = $SystemPrograms | Where-Object -Property Name -Like "*$SearchString*"
+			$Principal = $UserGroups | Where-Object -Property Group -EQ "Users"
 
-			if ($UserPrograms)
+			foreach ($Program in $TargetPrograms)
 			{
-				foreach ($Program in $UserPrograms)
+				# Create a row
+				$Row = $InstallTable.NewRow()
+
+				$InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
+
+				# Enter data into row
+				$Row.ID = ++$RowIndex
+				$Row.SID = $Principal.SID
+				$Row.Group = $Principal.Group
+				$Row.Computer = $Principal.Computer
+				$Row.InstallLocation = $InstallLocation
+
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($Principal.Caption) with $InstallLocation"
+
+				# Add row to the table
+				$InstallTable.Rows.Add($Row)
+			}
+		}
+		# Program not found on system, attempt alternative search
+		elseif ($AllUserPrograms -and $AllUserPrograms.Name -like "*$SearchString*")
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching program install properties for $SearchString"
+			$TargetPrograms = $AllUserPrograms | Where-Object -Property Name -Like "*$SearchString*"
+
+			foreach ($Program in $TargetPrograms)
+			{
+				# Create a row
+				$Row = $InstallTable.NewRow()
+
+				# Let see who owns the sub key which is the SID
+				$KeyOwner = ConvertFrom-SID $Program.SIDKey
+				if ($KeyOwner -eq "Users")
 				{
-					# NOTE: Avoid spamming
-					# Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing program: $Program"
+					$Principal = $UserGroups | Where-Object -Property Group -EQ "Users"
+				}
+				else
+				{
+					# TODO: we need more registry samples to determine what is right, Administrators seems logical
+					$Principal = $UserGroups | Where-Object -Property Group -EQ "Administrators"
+				}
 
-					$InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
+				$InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
 
-					# Create a row
-					$Row = $InstallTable.NewRow()
+				# Enter data into row
+				$Row.ID = ++$RowIndex
+				$Row.SID = $Principal.SID
+				$Row.Group = $Principal.Group
+				$Row.Computer = $Principal.Computer
+				$Row.InstallLocation = $InstallLocation
 
-					# Enter data into row
-					$Row.ID = ++$RowIndex
-					$Row.SID = $Principal.SID
-					$Row.User = $Principal.User
-					# TODO: we should add group entry for users
-					# $Row.Group = $Principal.Group
-					$Row.Account = $Principal.Account
-					$Row.Computer = $Principal.Computer
-					$Row.InstallLocation = $InstallLocation
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($Principal.Caption) with $InstallLocation"
 
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($Principal.Account) with $InstallLocation"
+				# Add row to the table
+				$InstallTable.Rows.Add($Row)
+			}
+		}
 
-					# Add the row to the table
-					$InstallTable.Rows.Add($Row)
+		# Search user profiles
+		# NOTE: User profile should be searched even if there is an installation system wide
+		if ($UserProfile)
+		{
+			$Principals = Get-GroupPrincipals "Users"
+
+			foreach ($Principal in $Principals)
+			{
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching $($Principal.Account) programs for $SearchString"
+
+				# NOTE: the story is different here, each user may have multiple matches for search string
+				# letting one match to have same principal would be mistake.
+				$UserPrograms = Get-UserPrograms $Principal.User | Where-Object -Property Name -Like "*$SearchString*"
+
+				if ($UserPrograms)
+				{
+					foreach ($Program in $UserPrograms)
+					{
+						# NOTE: Avoid spamming
+						# Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing program: $Program"
+
+						$InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
+
+						# Create a row
+						$Row = $InstallTable.NewRow()
+
+						# Enter data into row
+						$Row.ID = ++$RowIndex
+						$Row.SID = $Principal.SID
+						$Row.User = $Principal.User
+						# TODO: we should add group entry for users
+						# $Row.Group = $Principal.Group
+						$Row.Account = $Principal.Account
+						$Row.Computer = $Principal.Computer
+						$Row.InstallLocation = $InstallLocation
+
+						Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($Principal.Account) with $InstallLocation"
+
+						# Add the row to the table
+						$InstallTable.Rows.Add($Row)
+					}
 				}
 			}
 		}
@@ -1291,7 +1295,7 @@ function Edit-Table
 
 		# TODO: checking if Principal exists
 		# Get a list of users to choose from, 3rd element in the path is user name
-		$Principal = Get-GroupPrincipals "Users" | Where-Object -Property User -eq ($InstallLocation.Split("\"))[2]
+		$Principal = Get-GroupPrincipals "Users" | Where-Object -Property User -EQ ($InstallLocation.Split("\"))[2]
 
 		# Enter data into row
 		$Row.ID = ++$RowIndex
@@ -1311,7 +1315,7 @@ function Edit-Table
 		$InstallLocation = Format-Path $InstallLocation
 
 		# Not user profile path, so it applies to all users
-		$Principal = Get-UserGroups -Computer $PolicyStore | Where-Object -Property Group -eq "Users"
+		$Principal = Get-UserGroups -Computer $PolicyStore | Where-Object -Property Group -EQ "Users"
 
 		# Create a row
 		$Row = $InstallTable.NewRow()
@@ -1394,15 +1398,15 @@ function Test-Installation
 			while ($Choice -lt 0 -or $Choice -gt $Count)
 			{
 				Write-Information -Tags "User" -MessageData "INFO: Input the ID number to choose which one is correct"
-				$Input = Read-Host
+				$UserInput = Read-Host
 
-				if ($Input -notmatch '^-?\d+$')
+				if ($UserInput -notmatch '^-?\d+$')
 				{
 					Write-Information -Tags "User" -MessageData "INFO: Digits only please!"
 					continue
 				}
 
-				$Choice = $Input
+				$Choice = $UserInput
 			}
 
 			if ($Choice -eq 0)
