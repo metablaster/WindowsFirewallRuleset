@@ -60,7 +60,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 New-Test "Format-Output"
 
 New-NetFirewallRule -DisplayName "TargetProgram" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Any `

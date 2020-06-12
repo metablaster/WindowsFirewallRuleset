@@ -43,7 +43,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 # Setup local variables:
 #
 $Group = "Temporary"
-$Profile = "Private, Public"
+$FirewallProfile = "Private, Public"
 
 # Ask user if he wants to load these rules
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
@@ -58,7 +58,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 New-NetFirewallRule -DisplayName "Port 443" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -69,7 +69,7 @@ New-NetFirewallRule -DisplayName "Port 443" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Port 80" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -81,7 +81,7 @@ New-NetFirewallRule -DisplayName "Port 80" `
 
 # NOTE: to make use of this rule, it should be updated here and the script re-run
 New-NetFirewallRule -DisplayName "Installer" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -95,7 +95,7 @@ Add installer path in script and re-run Temporary.ps1" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Services" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service "*" -Program $ServiceHost -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol Any `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -109,7 +109,7 @@ useful for troubleshooting, and disable ASAP." `
 # TODO: it should apply to users only, for administrators there is a block rule, there is another
 # TODO about possible design in VS script
 New-NetFirewallRule -DisplayName "Store Apps" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `

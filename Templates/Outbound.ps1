@@ -48,7 +48,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 # Setup local variables:
 #
 $Group = "Template - TargetProgram"
-$Profile = "Private, Public"
+$FirewallProfile = "Private, Public"
 
 # Ask user if he wants to load these rules
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
@@ -84,7 +84,7 @@ if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot) @Logs) -or $Fo
 
 	# Outbound TCP template
 	New-NetFirewallRule -DisplayName "Inverse Neighbor Discovery Advertisement Message (142)" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service TroubleshootingSvc -Program $EdgeChromiumApp -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress 224.2.0.0-224.2.255.255 -RemoteAddress 224.3.0.0-224.4.255.255 `
@@ -96,7 +96,7 @@ if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot) @Logs) -or $Fo
 
 	# Outbound UDP template
 	New-NetFirewallRule -DisplayName "Inverse Neighbor Discovery Advertisement Message (142)" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service TroubleshootingSvc -Program $EdgeChromiumApp -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress 224.2.0.0-224.2.255.255 -RemoteAddress 224.3.0.0-224.4.255.255 `
@@ -109,7 +109,7 @@ if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot) @Logs) -or $Fo
 
 	# Outbound ICMP template
 	New-NetFirewallRule -DisplayName "Inverse Neighbor Discovery Advertisement Message (142)" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service TroubleshootingSvc -Program $EdgeChromiumApp -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 0 `
 		-LocalAddress 224.2.0.0-224.2.255.255 -RemoteAddress 224.3.0.0-224.4.255.255 `
@@ -120,7 +120,7 @@ if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot) @Logs) -or $Fo
 
 	# Outbound StoreApp TCP template
 	New-NetFirewallRule -DisplayName "StoreApp description" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service Any -Program $EdgeChromiumApp -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress 224.2.0.0-224.2.255.255 -RemoteAddress 224.3.0.0-224.4.255.255 `

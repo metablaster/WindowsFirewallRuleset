@@ -54,7 +54,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo @Logs
 #
 # Setup local variables:
 #
-$Profile = "Private, Domain"
+$FirewallProfile = "Private, Domain"
 $Group = "Broadcast"
 $BroadcastAddress = Get-Broadcast
 
@@ -71,14 +71,14 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Limited Broadcast" -Service Any -Program System `
-	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress 255.255.255.255 -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "" @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "LAN Broadcast" -Service Any -Program System `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress $BroadcastAddress -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "" @Logs | Format-Output @Logs
@@ -87,7 +87,7 @@ New-NetFirewallRule -Platform $Platform `
 
 <# New-NetFirewallRule -Platform $Platform `
 -DisplayName "Microsoft Wireless WiFi adapter" -Service Any -Program System `
--PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
 -Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 192.168.137.255 -LocalPort Any -RemotePort Any `
 -LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
 -Description "" @Logs | Format-Output @Logs

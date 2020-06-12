@@ -49,7 +49,7 @@ Update-Context $TestContext "IPv$IPVersion" $Direction
 if (!(Approve-Execute @Logs)) { exit }
 
 $Group = "Test - Get-SDDL"
-$Profile = "Any"
+$FirewallProfile = "Any"
 
 Start-Test
 # TODO: Need separate test cases for users, groups and built in domains
@@ -71,7 +71,7 @@ $RuleUsers
 New-Test "New-NetFirewallRule"
 
 New-NetFirewallRule -DisplayName "Get-SDDL mix" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Any `
@@ -93,7 +93,7 @@ $RuleAppUsers
 New-Test "Get-SDDL APPLICATION PACKAGE AUTHORITY"
 
 New-NetFirewallRule -DisplayName "Get-SDDL APPLICATION PACKAGE AUTHORITY" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `

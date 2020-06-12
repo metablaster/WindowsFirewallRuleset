@@ -43,7 +43,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 # Setup local variables:
 #
 $Group = "Basic Networking - IPv4"
-$Profile = "Any"
+$FirewallProfile = "Any"
 
 # Ask user if he wants to load these rules
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
@@ -68,14 +68,14 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # TODO: should we use -InterfaceAlias set to Loopback pseudo interface?
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Loopback" -Service Any -Program Any `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType Any `
 	-Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress 127.0.0.1 -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any `
 	-Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Loopback" -Service Any -Program Any `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType Any `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType Any `
 	-Direction $Direction -Protocol Any -LocalAddress 127.0.0.1 -RemoteAddress Any -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any `
 	-Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources." @Logs | Format-Output @Logs
@@ -116,7 +116,7 @@ packet formats and operating semantics as the unicast Domain Name System (DNS)."
 
 New-NetFirewallRule -Platform $Platform -PolicyStore $PolicyStore `
 	-DisplayName "Dynamic Host Configuration Protocol" -Service Dhcp -Program $ServiceHost `
-	-Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress DHCP4 -LocalPort 68 -RemotePort 67 `
 	-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Allow DHCPv4 messages for stateful auto-configuration." @Logs | Format-Output @Logs
@@ -127,7 +127,7 @@ New-NetFirewallRule -Platform $Platform -PolicyStore $PolicyStore `
 
 New-NetFirewallRule -Platform $Platform -PolicyStore $PolicyStore `
 	-DisplayName "Internet Group Management Protocol" -Service Any -Program System `
-	-Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
 	-Direction $Direction -Protocol 2 -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 	-Description "IGMP messages are sent and received by nodes to create, join and depart multicast groups." @Logs | Format-Output @Logs
@@ -138,7 +138,7 @@ New-NetFirewallRule -Platform $Platform -PolicyStore $PolicyStore `
 
 New-NetFirewallRule -Platform $Platform -PolicyStore $PolicyStore `
 	-DisplayName "IPv4 over HTTPS" -Service Any -Program System `
-	-Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort IPHTTPSIn -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 	-Description "Allow IPv4 IPHTTPS tunneling technology to provide connectivity across HTTP proxies and firewalls." @Logs | Format-Output @Logs
@@ -149,7 +149,7 @@ New-NetFirewallRule -Platform $Platform -PolicyStore $PolicyStore `
 
 New-NetFirewallRule -Platform $Platform -PolicyStore $PolicyStore `
 	-DisplayName "Teredo" -Service iphlpsvc -Program $ServiceHost `
-	-Enabled False -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+	-Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Teredo -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Allow Teredo edge traversal, a technology that provides address assignment and automatic tunneling

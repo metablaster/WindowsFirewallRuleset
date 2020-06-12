@@ -51,7 +51,7 @@ $PolicyStore = "localhost" #local group policy
 $Platform = "6.1+" #Windows 7 and above
 $Protocol = "UDP"
 $Group = "Core Networking - Multicast IPv4"
-$Profile = "Private, Domain" #Boot time multicast dropped due to WFP Operation (The transition from boot-time to persistent filters could be several seconds, or even longer on a slow machine.)
+$FirewallProfile = "Private, Domain" #Boot time multicast dropped due to WFP Operation (The transition from boot-time to persistent filters could be several seconds, or even longer on a slow machine.)
 $Description = "Multicast IPv4"
 
 
@@ -60,33 +60,33 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction "Outbo
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction "Inbound" -ErrorAction SilentlyContinue
 
 #Outbound
-New-NetFirewallRule -ErrorAction Stop -Enabled True -Description $Description -Direction Outbound -Profile $Profile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -RemoteAddress 224.0.0.0/24 -DisplayName "Local Network Control Block"
+New-NetFirewallRule -ErrorAction Stop -Enabled True -Description $Description -Direction Outbound -Profile $FirewallProfile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -RemoteAddress 224.0.0.0/24 -DisplayName "Local Network Control Block"
 <#
-New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Direction Outbound -Profile $Profile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -RemoteAddress 224.0.1.0/24 -DisplayName "Internetwork Control Block"
-New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Direction Outbound -Profile $Profile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -RemoteAddress 224.0.2.0-224.0.255.255 -DisplayName "AD-HOC Block I"
-New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Direction Outbound -Profile $Profile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -RemoteAddress 224.2.0.0/16 -DisplayName "SDP/SAP Block"
-New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Direction Outbound -Profile $Profile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -RemoteAddress 224.4.0.0/16 -DisplayName "AD-HOC Block II"
-New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Direction Outbound -Profile $Profile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -RemoteAddress 224.252.0.0/14 -DisplayName "DIS Transient Groups"
-New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Direction Outbound -Profile $Profile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -RemoteAddress 232.0.0.0/8 -DisplayName "Source-Specific Multicast Block"
-New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Direction Outbound -Profile $Profile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -RemoteAddress 233.252.0.0/14 -DisplayName "AD-HOC Block III"
-New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Direction Outbound -Profile $Profile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -RemoteAddress 234.0.0.0-234.255.255.255 -DisplayName "Unicast-Prefix-based IPv4 Multicast Addresses"
+New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Direction Outbound -Profile $FirewallProfile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -RemoteAddress 224.0.1.0/24 -DisplayName "Internetwork Control Block"
+New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Direction Outbound -Profile $FirewallProfile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -RemoteAddress 224.0.2.0-224.0.255.255 -DisplayName "AD-HOC Block I"
+New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Direction Outbound -Profile $FirewallProfile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -RemoteAddress 224.2.0.0/16 -DisplayName "SDP/SAP Block"
+New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Direction Outbound -Profile $FirewallProfile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -RemoteAddress 224.4.0.0/16 -DisplayName "AD-HOC Block II"
+New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Direction Outbound -Profile $FirewallProfile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -RemoteAddress 224.252.0.0/14 -DisplayName "DIS Transient Groups"
+New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Direction Outbound -Profile $FirewallProfile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -RemoteAddress 232.0.0.0/8 -DisplayName "Source-Specific Multicast Block"
+New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Direction Outbound -Profile $FirewallProfile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -RemoteAddress 233.252.0.0/14 -DisplayName "AD-HOC Block III"
+New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Direction Outbound -Profile $FirewallProfile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -RemoteAddress 234.0.0.0-234.255.255.255 -DisplayName "Unicast-Prefix-based IPv4 Multicast Addresses"
 #>
-New-NetFirewallRule -ErrorAction Stop -Enabled True -Description $Description -Direction Outbound -Profile $Profile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -RemoteAddress 239.0.0.0-239.255.255.255	 -DisplayName "Organization-Local Scope Multicast"
+New-NetFirewallRule -ErrorAction Stop -Enabled True -Description $Description -Direction Outbound -Profile $FirewallProfile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -RemoteAddress 239.0.0.0-239.255.255.255	 -DisplayName "Organization-Local Scope Multicast"
 
 
 #Inbound
-New-NetFirewallRule -ErrorAction Stop -Enabled True -Description $Description -Profile $Profile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -LocalAddress 224.0.0.0/24 -DisplayName "Local Network Control Block"
+New-NetFirewallRule -ErrorAction Stop -Enabled True -Description $Description -Profile $FirewallProfile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -LocalAddress 224.0.0.0/24 -DisplayName "Local Network Control Block"
 <#
-New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Profile $Profile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -LocalAddress 224.0.1.0/24 -DisplayName "Internetwork Control Block"
-New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Profile $Profile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -LocalAddress 224.0.2.0-224.0.255.255 -DisplayName "AD-HOC Block I"
-New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Profile $Profile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -LocalAddress 224.2.0.0/16 -DisplayName "SDP/SAP Block"
-New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Profile $Profile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -LocalAddress 224.4.0.0/16 -DisplayName "AD-HOC Block II"
-New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Profile $Profile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -LocalAddress 224.252.0.0/14 -DisplayName "DIS Transient Groups"
-New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Profile $Profile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -LocalAddress 232.0.0.0/8 -DisplayName "Source-Specific Multicast Block"
-New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Profile $Profile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -LocalAddress 233.252.0.0/14 -DisplayName "AD-HOC Block III"
-New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Profile $Profile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -LocalAddress 234.0.0.0-234.255.255.255 -DisplayName "Unicast-Prefix-based IPv4 Multicast Addresses"
+New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Profile $FirewallProfile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -LocalAddress 224.0.1.0/24 -DisplayName "Internetwork Control Block"
+New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Profile $FirewallProfile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -LocalAddress 224.0.2.0-224.0.255.255 -DisplayName "AD-HOC Block I"
+New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Profile $FirewallProfile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -LocalAddress 224.2.0.0/16 -DisplayName "SDP/SAP Block"
+New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Profile $FirewallProfile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -LocalAddress 224.4.0.0/16 -DisplayName "AD-HOC Block II"
+New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Profile $FirewallProfile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -LocalAddress 224.252.0.0/14 -DisplayName "DIS Transient Groups"
+New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Profile $FirewallProfile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -LocalAddress 232.0.0.0/8 -DisplayName "Source-Specific Multicast Block"
+New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Profile $FirewallProfile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -LocalAddress 233.252.0.0/14 -DisplayName "AD-HOC Block III"
+New-NetFirewallRule -ErrorAction Stop -Enabled False -Description $Description -Profile $FirewallProfile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -LocalAddress 234.0.0.0-234.255.255.255 -DisplayName "Unicast-Prefix-based IPv4 Multicast Addresses"
 #>
-New-NetFirewallRule -ErrorAction Stop -Enabled True -Description $Description -Profile $Profile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -LocalAddress 239.0.0.0-239.255.255.255	 -DisplayName "Organization-Local Scope Multicast"
+New-NetFirewallRule -ErrorAction Stop -Enabled True -Description $Description -Profile $FirewallProfile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -LocalAddress 239.0.0.0-239.255.255.255	 -DisplayName "Organization-Local Scope Multicast"
 
 #Sepcialized
-New-NetFirewallRule -ErrorAction Stop -Enabled True -Description $Description -Direction Outbound -Profile $Profile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol 2 -RemoteAddress 224.0.0.22 -DisplayName "Local Network Control Block IGMP"
+New-NetFirewallRule -ErrorAction Stop -Enabled True -Description $Description -Direction Outbound -Profile $FirewallProfile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol 2 -RemoteAddress 224.0.0.22 -DisplayName "Local Network Control Block IGMP"

@@ -44,7 +44,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 # Setup local variables:
 #
 $Group = "Software - qBittorrent"
-$Profile = "Private, Public"
+$FirewallProfile = "Private, Public"
 
 # Ask user if he wants to load these rules
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
@@ -71,7 +71,7 @@ if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot) @Logs) -or $ForceL
 
 	# TODO: requires uTP protocol?
 	New-NetFirewallRule -DisplayName "qBittorrent - DHT" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress Any -RemoteAddress Any `
@@ -83,7 +83,7 @@ if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot) @Logs) -or $ForceL
 		@Logs | Format-Output @Logs
 
 	New-NetFirewallRule -DisplayName "qBittorrent - Listening port" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Any `
@@ -94,7 +94,7 @@ if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot) @Logs) -or $ForceL
 		@Logs | Format-Output @Logs
 
 	New-NetFirewallRule -DisplayName "qBittorrent - Embedded tracker port" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Any `
@@ -119,7 +119,7 @@ torrents you are on." `
 		@Logs | Format-Output @Logs
 
 	New-NetFirewallRule -DisplayName "qBittorrent - Web UI" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Any `

@@ -44,7 +44,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 # Setup local variables:
 #
 $Group = "Development - Chocolatey"
-$Profile = "Private, Public"
+$FirewallProfile = "Private, Public"
 $ChocolateyAccounts = Get-SDDL -Group "Users", "Administrators" @Logs
 
 # Ask user if he wants to load these rules
@@ -70,7 +70,7 @@ if ((Test-Installation "Chocolatey" ([ref] $ChocolateyRoot) @Logs) -or $ForceLoa
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Chocolatey" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $ChocolateyAccounts `
 		-Description "Chocolatey package manager" @Logs | Format-Output @Logs

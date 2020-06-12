@@ -92,7 +92,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 # Setup local variables:
 #
 $Group = "Multicast IPv6"
-$Profile = "Private, Domain"
+$FirewallProfile = "Private, Domain"
 $Description = "http://www.iana.org/assignments/ipv6-multicast-addresses/ipv6-multicast-addresses.xhtml"
 $MulticastUsers = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE", "LOCAL SERVICE" @Logs
 # NOTE: we need Any to include IPv6 loopback interface because IPv6 loopback rule does not work on
@@ -167,7 +167,7 @@ New-NetFirewallRule -DisplayName "Interface-Local Multicast - mDNSv6" `
 #
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Block -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::/16 -RemoteAddress Any `
@@ -183,7 +183,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast" `
 #
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - All Nodes" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::1 -RemoteAddress Any `
@@ -195,7 +195,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - All Nodes" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - All Routers" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::2 -RemoteAddress Any `
@@ -207,7 +207,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - All Routers" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - DVMRP Routers" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::4 -RemoteAddress Any `
@@ -219,7 +219,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - DVMRP Routers" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - OSPFIGP" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::5 -RemoteAddress Any `
@@ -231,7 +231,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - OSPFIGP" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - OSPFIGP Designated Routers" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::6 -RemoteAddress Any `
@@ -243,7 +243,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - OSPFIGP Designated Rout
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - ST Routers" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::7 -RemoteAddress Any `
@@ -255,7 +255,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - ST Routers" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - ST Hosts" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::8 -RemoteAddress Any `
@@ -267,7 +267,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - ST Hosts" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - RIP Routers" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::9 -RemoteAddress Any `
@@ -279,7 +279,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - RIP Routers" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - EIGRP Routers" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::a -RemoteAddress Any `
@@ -291,7 +291,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - EIGRP Routers" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - Mobile-Agents" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::b -RemoteAddress Any `
@@ -303,7 +303,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - Mobile-Agents" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - SSDP" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::c -RemoteAddress Any `
@@ -315,7 +315,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - SSDP" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - All PIM Routers" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::d -RemoteAddress Any `
@@ -327,7 +327,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - All PIM Routers" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - RSVP-ENCAPSULATION" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::e -RemoteAddress Any `
@@ -339,7 +339,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - RSVP-ENCAPSULATION" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - UPnP" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::f -RemoteAddress Any `
@@ -351,7 +351,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - UPnP" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - All-BBF-Access-Nodes" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::10 -RemoteAddress Any `
@@ -363,7 +363,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - All-BBF-Access-Nodes" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - VRRP" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::12 -RemoteAddress Any `
@@ -375,7 +375,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - VRRP" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - All MLDv2-capable routers" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::16 -RemoteAddress Any `
@@ -387,7 +387,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - All MLDv2-capable route
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - all-RPL-nodes" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::1a -RemoteAddress Any `
@@ -399,7 +399,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - all-RPL-nodes" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - All-Snoopers" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::6a -RemoteAddress Any `
@@ -411,7 +411,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - All-Snoopers" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - PTP-pdelay" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::6b -RemoteAddress Any `
@@ -423,7 +423,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - PTP-pdelay" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - Saratoga" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::6c -RemoteAddress Any `
@@ -435,7 +435,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - Saratoga" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - LL-MANET-Routers" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::6d -RemoteAddress Any `
@@ -447,7 +447,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - LL-MANET-Routers" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - IGRS" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::6e -RemoteAddress Any `
@@ -459,7 +459,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - IGRS" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - iADT Discovery" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::6f -RemoteAddress Any `
@@ -471,7 +471,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - iADT Discovery" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - mDNSv6" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::fb -RemoteAddress Any `
@@ -483,7 +483,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - mDNSv6" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - Link Name" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::1:1 -RemoteAddress Any `
@@ -495,7 +495,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - Link Name" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - All-dhcp-agents" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::1:2 -RemoteAddress Any `
@@ -507,7 +507,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - All-dhcp-agents" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - Link-local Multicast Name Resolution" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::1:3 -RemoteAddress Any `
@@ -519,7 +519,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - Link-local Multicast Na
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - DTCP Announcement" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::1:4 -RemoteAddress Any `
@@ -531,7 +531,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - DTCP Announcement" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - afore_vdp" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::1:5 -RemoteAddress Any `
@@ -543,7 +543,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - afore_vdp" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - Babel" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::1:6 -RemoteAddress Any `
@@ -555,7 +555,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - Babel" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - Solicited-Node Address" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::1:ff00:0000/104 -RemoteAddress Any `
@@ -567,7 +567,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - Solicited-Node Address"
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - Node Information Queries" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress FF02:0:0:0:0:2:FF00::/104 -RemoteAddress Any `
@@ -583,7 +583,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - Node Information Querie
 #
 
 New-NetFirewallRule -DisplayName "Site-Local Multicast - All Routers" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Block -Direction $Direction -Protocol UDP `
 	-LocalAddress ff05::/16 -RemoteAddress Any `
@@ -599,7 +599,7 @@ New-NetFirewallRule -DisplayName "Site-Local Multicast - All Routers" `
 #
 
 New-NetFirewallRule -DisplayName "Site-Local Multicast - All Routers" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff05::2 -RemoteAddress Any `
@@ -611,7 +611,7 @@ New-NetFirewallRule -DisplayName "Site-Local Multicast - All Routers" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Site-Local Multicast - mDNSv6" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff05::fb -RemoteAddress Any `
@@ -623,7 +623,7 @@ New-NetFirewallRule -DisplayName "Site-Local Multicast - mDNSv6" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Site-Local Multicast - All-dhcp-servers" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff05::1:3 -RemoteAddress Any `
@@ -635,7 +635,7 @@ New-NetFirewallRule -DisplayName "Site-Local Multicast - All-dhcp-servers" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Site-Local Multicast - SL-MANET-ROUTERS" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff05::1:5 -RemoteAddress Any `
@@ -651,7 +651,7 @@ New-NetFirewallRule -DisplayName "Site-Local Multicast - SL-MANET-ROUTERS" `
 #
 
 New-NetFirewallRule -DisplayName "Realm-Local Multicast" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Block -Direction $Direction -Protocol UDP `
 	-LocalAddress ff03::/16 -RemoteAddress Any `
@@ -667,7 +667,7 @@ New-NetFirewallRule -DisplayName "Realm-Local Multicast" `
 #
 
 New-NetFirewallRule -DisplayName "Admin-Local Multicast" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Block -Direction $Direction -Protocol UDP `
 	-LocalAddress ff04::/16 -RemoteAddress Any `
@@ -683,7 +683,7 @@ New-NetFirewallRule -DisplayName "Admin-Local Multicast" `
 #
 
 New-NetFirewallRule -DisplayName "Organization-Local Multicast" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Block -Direction $Direction -Protocol UDP `
 	-LocalAddress ff08::/16 -RemoteAddress Any `
@@ -699,7 +699,7 @@ New-NetFirewallRule -DisplayName "Organization-Local Multicast" `
 #
 
 New-NetFirewallRule -DisplayName "Global scope Multicast" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Block -Direction $Direction -Protocol UDP `
 	-LocalAddress ff0e::/16 -RemoteAddress Any `

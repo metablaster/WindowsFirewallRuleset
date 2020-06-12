@@ -43,7 +43,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 # Setup local variables:
 #
 $Group = "Basic Networking - IPv6"
-$Profile = "Any"
+$FirewallProfile = "Any"
 $ISATAP_Remotes = @("Internet6", "LocalSubnet6")
 
 # Ask user if he wants to load these rules
@@ -69,7 +69,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 
 # New-NetFirewallRule -DisplayName "Loopback IP" `
-# 	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+# 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 # 	-Service Any -Program Any -Group $Group `
 # 	-Enabled True -Action Allow -Direction $Direction -Protocol Any `
 # 	-LocalAddress Any -RemoteAddress Any `
@@ -86,7 +86,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 New-NetFirewallRule -DisplayName "Domain Name System" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Dnscache -Program $ServiceHost -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress DNS6 `
@@ -98,7 +98,7 @@ New-NetFirewallRule -DisplayName "Domain Name System" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Domain Name System" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress DefaultGateway6 `
@@ -154,7 +154,7 @@ packet formats and operating semantics as the unicast Domain Name System (DNS)."
 #
 
 New-NetFirewallRule -DisplayName "Dynamic Host Configuration Protocol" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Dhcp -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress DHCP6 `
@@ -178,7 +178,7 @@ New-NetFirewallRule -DisplayName "Dynamic Host Configuration Protocol" `
 #
 
 New-NetFirewallRule -DisplayName "IPv6 over HTTPS" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet6 `
@@ -194,7 +194,7 @@ proxies and firewalls." `
 #
 
 New-NetFirewallRule -DisplayName "IPv6 Encapsulation" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol 41 `
 	-LocalAddress Any -RemoteAddress $ISATAP_Remotes `

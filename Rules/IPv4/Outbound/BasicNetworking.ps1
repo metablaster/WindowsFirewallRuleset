@@ -43,7 +43,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 # Setup local variables:
 #
 $Group = "Basic Networking - IPv4"
-$Profile = "Any"
+$FirewallProfile = "Any"
 
 # Ask user if he wants to load these rules
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
@@ -69,7 +69,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 New-NetFirewallRule -DisplayName "Loopback" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol Any `
 	-LocalAddress Any -RemoteAddress 127.0.0.1 `
@@ -81,7 +81,7 @@ TCP/IP network resources." `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Loopback" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol Any `
 	-LocalAddress 127.0.0.1 -RemoteAddress Any `
@@ -98,7 +98,7 @@ TCP/IP network resources." `
 
 # TODO: official rule uses loose source mapping
 New-NetFirewallRule -DisplayName "Domain Name System" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Dnscache -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress DNS4 `
@@ -113,7 +113,7 @@ This behavior is classified as loose source mapping." `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Domain Name System" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress DefaultGateway4 `
@@ -171,7 +171,7 @@ packet formats and operating semantics as the unicast Domain Name System (DNS)."
 #
 
 New-NetFirewallRule -DisplayName "Dynamic Host Configuration Protocol" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Dhcp -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress DHCP4 `
@@ -187,7 +187,7 @@ New-NetFirewallRule -DisplayName "Dynamic Host Configuration Protocol" `
 #
 
 New-NetFirewallRule -DisplayName "Internet Group Management Protocol" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Allow `
 	-Direction $Direction -Protocol 2 -LocalAddress Any -RemoteAddress LocalSubnet4, 224.0.0.0/24 `
@@ -203,7 +203,7 @@ join and depart multicast groups." `
 #
 
 New-NetFirewallRule -DisplayName "IPv4 over HTTPS" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -219,7 +219,7 @@ proxies and firewalls." `
 #
 
 New-NetFirewallRule -DisplayName "Teredo" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service iphlpsvc -Program $ServiceHost -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress Internet4 `

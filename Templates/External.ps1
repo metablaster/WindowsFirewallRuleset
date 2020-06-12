@@ -62,6 +62,7 @@ the Functionality parameter of Get-Help.
 #>
 function Test-Function
 {
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'This is template function')]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $Param

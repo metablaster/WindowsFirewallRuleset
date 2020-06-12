@@ -53,7 +53,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo @Logs
 
 # Setup local variables:
 #
-$Profile = "Private, Domain"
+$FirewallProfile = "Private, Domain"
 $Group = "Broadcast"
 $BroadcastAddress = Get-Broadcast
 
@@ -69,7 +69,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 New-NetFirewallRule -DisplayName "Limited Broadcast" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 255.255.255.255 `
@@ -81,7 +81,7 @@ New-NetFirewallRule -DisplayName "Limited Broadcast" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "LAN Broadcast" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress $BroadcastAddress `
@@ -96,7 +96,7 @@ New-NetFirewallRule -DisplayName "LAN Broadcast" `
 
 <#
 New-NetFirewallRule -DisplayName "Microsoft Wireless WiFi adapter" `
--Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 -Service Any -Program System -Group $Group `
 -Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 -LocalAddress Any -RemoteAddress 192.168.137.255 `

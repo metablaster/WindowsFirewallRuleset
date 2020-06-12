@@ -44,7 +44,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 # Setup local variables:
 #
 $Group = "Software - qBittorrent"
-$Profile = "Private, Public"
+$FirewallProfile = "Private, Public"
 
 # Ask user if he wants to load these rules
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
@@ -73,7 +73,7 @@ if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot) @Logs) -or $ForceL
 	$Program = "$qBittorrentRoot\qbittorrent.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -DisplayName "qBittorrent - HTTP/S" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
@@ -111,7 +111,7 @@ torrents you are on." `
 
 	# NOTE: We start from port 1024 which is most widely used, but some peers may set it to lower
 	New-NetFirewallRule -DisplayName "qbittorrent - DHT" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress Any -RemoteAddress Internet4 `
@@ -130,7 +130,7 @@ from various sources." `
 	# NOTE: We use any local port instead of LocalPort 1161,
 	# but otherwise the rule overlaps with DHT rule
 	New-NetFirewallRule -DisplayName "qbittorrent - part of full range of ports used most often" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress Any -RemoteAddress Internet4 `
@@ -142,7 +142,7 @@ from various sources." `
 		@Logs | Format-Output @Logs
 
 	New-NetFirewallRule -DisplayName "qbittorrent - NAT Port mapping protocol" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress Any -RemoteAddress DefaultGateway4 `
@@ -157,7 +157,7 @@ user effort." `
 
 	# NOTE: We start from port 1024 which is most widely used, but some peers may set it to lower
 	New-NetFirewallRule -DisplayName "qBittorrent - Client to peers" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `

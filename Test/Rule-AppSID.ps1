@@ -50,7 +50,7 @@ Update-Context $TestContext "IPv$IPVersion" $Direction
 if (!(Approve-Execute @Logs)) { exit }
 
 $Group = "Test - AppSID"
-$Profile = "Any"
+$FirewallProfile = "Any"
 
 Start-Test
 
@@ -79,7 +79,7 @@ foreach ($Principal in $Principals)
 New-Test "New-NetFirewallRule"
 
 New-NetFirewallRule -DisplayName "Get-AppSID" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Any `

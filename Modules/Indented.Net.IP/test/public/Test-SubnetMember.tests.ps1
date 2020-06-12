@@ -1,5 +1,6 @@
 
 #region:TestFileHeader
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'Number', Justification = 'Likely false positive')]
 param (
 	[bool] $UseExisting
 )
@@ -47,7 +48,6 @@ InModuleScope Indented.Net.IP {
 		) {
 			param (
 				$Number,
-
 				$Code
 			)
 

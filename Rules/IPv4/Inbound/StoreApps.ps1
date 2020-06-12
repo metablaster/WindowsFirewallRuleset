@@ -45,7 +45,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 #
 $Group = "Store Apps"
 $SystemGroup = "Store Apps - System"
-$Profile = "Private, Public"
+$FirewallProfile = "Private, Public"
 # $NetworkApps = Get-Content -Path "$PSScriptRoot\..\NetworkApps.txt"
 
 # Ask user if he wants to load these rules
@@ -95,7 +95,7 @@ foreach ($Principal in $Principals)
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName $_.Name -Service Any -Program Any `
-			-PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $Group -Profile $Profile -InterfaceType $Interface `
+			-PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
 			-EdgeTraversalPolicy Block -LocalUser Any -Owner $Principal.SID -Package $PackageSID `
 			-Description "Store apps generated rule." @Logs | Format-Output @Logs
@@ -119,7 +119,7 @@ foreach ($Principal in $Principals)
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName $_.Name -Service Any -Program Any `
-			-PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $SystemGroup -Profile $Profile -InterfaceType $Interface `
+			-PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $SystemGroup -Profile $FirewallProfile -InterfaceType $Interface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
 			-EdgeTraversalPolicy Block -LocalUser Any -Owner $Principal.SID -Package $PackageSID `
 			-Description "System store apps generated rule." @Logs | Format-Output @Logs

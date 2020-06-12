@@ -43,7 +43,7 @@ $PolicyStore = "localhost" #local group policy
 $Platform = "6.1+" #Windows 7 and above
 $Protocol = "UDP"
 $Group = "Core Networking - Broadcast TEST"
-$Profile = "Private,Domain"
+$FirewallProfile = "Private,Domain"
 $Description = "Broadcast"
 
 #First remove all existing rules matching setup
@@ -51,11 +51,11 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Outbou
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Inbound -ErrorAction SilentlyContinue
 
 #Destination address needs to be adjusted
-New-NetFirewallRule -WhatIf -Description $Description -Direction Outbound -Profile $Profile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -ErrorAction Stop -RemoteAddress 255.255.255.255 -DisplayName "Limited Broadcast"
-New-NetFirewallRule -WhatIf -Description $Description -Direction Outbound -Profile $Profile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -ErrorAction Stop -RemoteAddress 192.168.137.255 -InterfaceAlias "Local Area Connection* 4" -DisplayName "Microsoft Wireless WiFi adapter"
-New-NetFirewallRule -WhatIf -Description $Description -Direction Outbound -Profile $Profile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -ErrorAction Stop -RemoteAddress 192.168.1.255 -DisplayName "Class C Broadcast"
+New-NetFirewallRule -WhatIf -Description $Description -Direction Outbound -Profile $FirewallProfile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -ErrorAction Stop -RemoteAddress 255.255.255.255 -DisplayName "Limited Broadcast"
+New-NetFirewallRule -WhatIf -Description $Description -Direction Outbound -Profile $FirewallProfile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -ErrorAction Stop -RemoteAddress 192.168.137.255 -InterfaceAlias "Local Area Connection* 4" -DisplayName "Microsoft Wireless WiFi adapter"
+New-NetFirewallRule -WhatIf -Description $Description -Direction Outbound -Profile $FirewallProfile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -ErrorAction Stop -RemoteAddress 192.168.1.255 -DisplayName "Class C Broadcast"
 
 #Inbound
-New-NetFirewallRule -WhatIf -Description $Description -Profile $Profile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -ErrorAction Stop -LocalAddress 255.255.255.255 -DisplayName "Limited Broadcast"
-New-NetFirewallRule -WhatIf -Description $Description -Profile $Profile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -ErrorAction Stop -LocalAddress 192.168.137.255 -InterfaceAlias "Local Area Connection* 4" -DisplayName "Microsoft Wireless WiFi adapter"
-New-NetFirewallRule -WhatIf -Description $Description -Profile $Profile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -ErrorAction Stop -LocalAddress 192.168.1.255 -DisplayName "Class C Broadcast"
+New-NetFirewallRule -WhatIf -Description $Description -Profile $FirewallProfile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -ErrorAction Stop -LocalAddress 255.255.255.255 -DisplayName "Limited Broadcast"
+New-NetFirewallRule -WhatIf -Description $Description -Profile $FirewallProfile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -ErrorAction Stop -LocalAddress 192.168.137.255 -InterfaceAlias "Local Area Connection* 4" -DisplayName "Microsoft Wireless WiFi adapter"
+New-NetFirewallRule -WhatIf -Description $Description -Profile $FirewallProfile -Platform $Platform -PolicyStore $PolicyStore -Group $Group -Protocol $Protocol -ErrorAction Stop -LocalAddress 192.168.1.255 -DisplayName "Class C Broadcast"

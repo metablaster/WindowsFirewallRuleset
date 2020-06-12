@@ -116,7 +116,7 @@ $Group = "Store Apps"
 $ProgramsGroup = "Store Apps - Programs"
 $ServicesGroup = "Store Apps - Services"
 $SystemGroup = "Store Apps - System"
-$Profile = "Private, Public"
+$FirewallProfile = "Private, Public"
 $NetworkApps = Get-Content -Path "$PSScriptRoot\..\NetworkApps.txt"
 
 # Ask user if he wants to load these rules
@@ -187,7 +187,7 @@ foreach ($Principal in $Principals)
 			}
 
 			New-NetFirewallRule -DisplayName $_.Name `
-				-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+				-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 				-Service Any -Program Any -Group $Group `
 				-Enabled $Enabled -Action Allow -Direction $Direction -Protocol TCP `
 				-LocalAddress Any -RemoteAddress Internet4 `
@@ -224,7 +224,7 @@ foreach ($Principal in $Principals)
 			}
 
 			New-NetFirewallRule -DisplayName $_.Name `
-				-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+				-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 				-Service Any -Program Any -Group $SystemGroup `
 				-Enabled $Enabled -Action Allow -Direction $Direction -Protocol TCP `
 				-LocalAddress Any -RemoteAddress Internet4 `
@@ -248,7 +248,7 @@ $Program = "%SystemRoot%\System32\RuntimeBroker.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "Runtime Broker" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program $Program -Group $ProgramsGroup `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -267,7 +267,7 @@ $AppAccounts = Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -User "Your Inte
 Merge-SDDL ([ref] $AppAccounts) (Get-SDDL -Group "Users") @Logs
 
 New-NetFirewallRule -DisplayName "Authentication Host" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program $Program -Group $ProgramsGroup `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -279,7 +279,7 @@ that uses authentication protocols like OpenID or OAuth, such as Facebook, Twitt
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Windows License Manager Service" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $Profile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service LicenseManager -Program $ServiceHost -Group $ServicesGroup `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `

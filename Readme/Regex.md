@@ -60,7 +60,7 @@ New-NetFirewallRule -InterfaceType Wired, Wireless
 
 ```powershell
 New-NetFirewallRule -Profile Any
-New-NetFirewallRule -Profile $Profile
+New-NetFirewallRule -Profile $FirewallProfile
 New-NetFirewallRule -Profile Private, Domain
 ```
 
