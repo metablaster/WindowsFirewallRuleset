@@ -12,7 +12,8 @@
 		"strings": false
 	},
 	"editor.rulers": [
-		100, 120
+		100,
+		120
 	],
 	"workbench.colorCustomizations": {
 		"editorRuler.foreground": "#4063ff"
@@ -43,7 +44,7 @@
 	"powershell.codeFormatting.whitespaceBeforeOpenBrace": true,
 	"powershell.codeFormatting.whitespaceBeforeOpenParen": true,
 	"powershell.codeFormatting.whitespaceAroundOperator": true,
-	"powershell.codeFormatting.whitespaceAroundPipe": true,
+	"powershell.codeFormatting.addWhitespaceAroundPipe": true,
 	"powershell.codeFormatting.whitespaceAfterSeparator": true,
 	// PSUseConsistentIndentation
 	"powershell.codeFormatting.pipelineIndentationStyle": "NoIndentation",

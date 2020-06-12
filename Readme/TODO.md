@@ -101,6 +101,9 @@ TODO's in this file are categorized into following sections:
     - Line numbers for verbose and debug messages
     - Modules should be imported into global scope
     - Use begin/process/end to make functions work on pipeline
+    - Need to add default error description into catch blocks in addition to our own
+    for better description
+    - Need to check if WinRM service is started when contacting computers via CIM
 
 2. Project scripts
 

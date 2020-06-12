@@ -56,9 +56,9 @@ New-Test "Get-NetFramework latest"
 if ($null -ne $NETFramework)
 {
 	$NETFrameworkRoot = $NETFramework |
-		Sort-Object -Property Version @Logs |
-			Where-Object { $_.InstallLocation } |
-				Select-Object -Last 1 -ExpandProperty InstallLocation @Logs
+	Sort-Object -Property Version @Logs |
+	Where-Object { $_.InstallLocation } |
+	Select-Object -Last 1 -ExpandProperty InstallLocation @Logs
 
 	$NETFrameworkRoot
 }

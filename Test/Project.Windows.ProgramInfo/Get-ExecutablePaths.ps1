@@ -53,8 +53,8 @@ $ExecutablePaths = Get-ExecutablePaths @Logs | Sort-Object -Property Name
 $ExecutablePaths
 
 New-Test "Get-ExecutablePaths pwsh.exe"
-$ExecutablePaths | Where-Object -Property Name -eq "pwsh.exe" @Logs |
-	Select-Object -ExpandProperty InstallLocation
+$ExecutablePaths | Where-Object -Property Name -EQ "pwsh.exe" @Logs |
+Select-Object -ExpandProperty InstallLocation
 
 New-Test "Get-TypeName"
 $ExecutablePaths | Get-TypeName @Logs

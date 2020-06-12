@@ -47,7 +47,7 @@ if (!(Approve-Execute @Logs)) { exit }
 
 # Recursively get powershell scripts in input folder
 $Files = Get-ChildItem -Path $ProjectRoot\Test -Recurse -Filter *.ps1 @Logs |
-Where-Object -Property Name -ne "ContextSetup.ps1" @Logs
+Where-Object -Property Name -NE "ContextSetup.ps1" @Logs
 
 if (!$Files)
 {
