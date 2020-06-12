@@ -154,7 +154,7 @@
 			Tags = @('IPMaths', 'IPCalculator', 'SubnetMaths')
 
 			# A URL to the license for this module.
-			LicenseUri = 'https://github.com/metablaster/WindowsFirewallRuleset/blob/core/Modules/Indented.Net.IP/LICENSE'
+			LicenseUri = 'https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Indented.Net.IP/LICENSE'
 
 			# A URL to the main website for this project.
 			ProjectUri = 'https://github.com/indented-automation/Indented.Net.IP'
@@ -168,7 +168,7 @@
 	} # End of PrivateData hashtable
 
 	# HelpInfo URI of this module
-	HelpInfoURI = 'https://github.com/metablaster/WindowsFirewallRuleset/tree/core/Modules/Indented.Net.IP/help'
+	HelpInfoURI = 'https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Modules/Indented.Net.IP/help'
 
 	# Default prefix for commands exported from this module.
 	# Override the default prefix using Import-Module -Prefix.

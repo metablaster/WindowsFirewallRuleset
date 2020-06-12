@@ -13,7 +13,8 @@ Here are the most common problems running powershell scripts in this project and
 all users or both, however allowing all interfaces or users should be only a temporary measure.
 
 INFO: In addition to interfaces shown in GPO there are some hidden network interfaces,
-until I figure out how to make rules based on those allow them all if this resolves the problem.
+until I figure out how to make rules based on those allow them all if this resolves the problem.\
+To troubleshoot hidden adapters see [ProblematicTraffic.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/ProblematicTraffic.md)
 
 ## I got an error "Network path not found"
 

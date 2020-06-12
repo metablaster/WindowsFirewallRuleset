@@ -150,7 +150,7 @@ file by clicking on "Release" here on this site.
 3. Open the extracted folder, right click into an empty space and there is an option to run
 PowerShell core as administrator (Assumes enabled context menu during installation of PowerShell core)
 4. If you would like to use Windows PowerShell 5.1 instead see
-[WindowsPowerShell](https://github.com/metablaster/WindowsFirewallRuleset/blob/core/Readme/WindowsPowerShell.md)
+[WindowsPowerShell](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/WindowsPowerShell.md)
 5. Type or copy paste following commands and hit enter for each
 
 ```powershell

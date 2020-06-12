@@ -233,7 +233,9 @@ configure rules for these interfaces, except allowing all interfaces.
 
 - `Use Get-NetadApter` and `Get-NetIPInterface` to gather hidden adapter info
 - Use `-InterfaceAlias` instead of `-InterfaceType` when defining firewall rule
-- See PowerShellCommands.md and Links.md for details
+- See [PowerShellCommands.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/PowerShellCommands.md)
+and [Links.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/Links.md)
+for details
 
 ### Case 8: Audit result
 
