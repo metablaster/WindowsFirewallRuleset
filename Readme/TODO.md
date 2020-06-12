@@ -49,6 +49,10 @@ TODO's in this file are categorized into following sections:
 
     - 3rd party scripts and modules need to be checked for updates
 
+3. Project scripts
+
+    - Resolving existing and enabling new/disabled analyzer warnings
+
 ## High priority
 
 1. Modules

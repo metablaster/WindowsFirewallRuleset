@@ -11,6 +11,10 @@
 
 -Added rules for store apps to allow web authentication
 
+## Development
+
+- Resolve most analyzer warnings
+
 # Changelog v0.4.1
 
 ## Modules
