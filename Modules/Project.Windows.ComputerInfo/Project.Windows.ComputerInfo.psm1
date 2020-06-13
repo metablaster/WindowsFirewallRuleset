@@ -93,6 +93,8 @@ Applies to adapters which have an IP assigned regardless if connected to network
 This conditionally includes virtual and hidden adapters such as Hyper-V adapters on all compartments.
 .PARAMETER AddressFamily
 IP version for which to obtain adapters, IPv4 or IPv6
+.PARAMETER ExcludeHardware
+Exclude hardware/physical network adapters
 .PARAMETER IncludeAll
 Include all possible adapter types present on target computer
 .PARAMETER IncludeVirtual
@@ -122,6 +124,10 @@ function Get-ConfiguredAdapters
 		[Parameter(ParameterSetName = "All")]
 		[Parameter(ParameterSetName = "Individual")]
 		[string] $AddressFamily,
+
+		[Parameter(ParameterSetName = "All")]
+		[Parameter(ParameterSetName = "Individual")]
+		[switch] $ExcludeHardware,
 
 		[Parameter(ParameterSetName = "All")]
 		[switch] $IncludeAll,
@@ -156,7 +162,7 @@ function Get-ConfiguredAdapters
 	{
 		if ($IncludeDisconnected -or $IncludeAll)
 		{
-			$AllConfiguredAdapters = Get-NetIPConfiguration -AllCompartments | Where-Object -Property IPv4Address
+			$AllConfiguredAdapters = Get-NetIPConfiguration -AllCompartments | Where-Object -Property IPv6Address
 		}
 		else
 		{
@@ -166,23 +172,27 @@ function Get-ConfiguredAdapters
 		}
 	}
 
-	# Get-NetIPConfiguration does not tell us if adapter is hidden or virtual
-	[Uint32[]] $ValidAdapters = $ValidAdapters = Get-NetAdapter |
-	Where-Object { $_.HardwareInterface -eq "True" } |
-	Select-Object -ExpandProperty ifIndex
+	# Get-NetIPConfiguration does not tell us adapter type (hardware, hidden or virtual)
+	[PSCustomObject[]] $RequestedAdapters = @()
+	if (!$ExcludeHardware)
+	{
+		$RequestedAdapters = Get-NetAdapter |
+		Where-Object { $_.HardwareInterface -eq "True" }
+	}
 
+	# Include virtual or hidden to hardware interfaces
 	if ($IncludeVirtual -or $IncludeAll)
 	{
-		$ValidAdapters += Get-NetAdapter |
-		Where-Object { $_.Virtual -eq "True" } |
-		Select-Object -ExpandProperty ifIndex
+		$RequestedAdapters += Get-NetAdapter |
+		Where-Object { $_.Virtual -eq "True" }
 	}
 	if ($IncludeHidden -or $IncludeAll)
 	{
-		$ValidAdapters += Get-NetAdapter -IncludeHidden |
-		Where-Object { $_.Hidden -eq "True" } |
-		Select-Object -ExpandProperty ifIndex
+		$RequestedAdapters += Get-NetAdapter -IncludeHidden |
+		Where-Object { $_.Hidden -eq "True" }
 	}
+
+	[Uint32[]] $ValidAdapters = $RequestedAdapters | Select-Object -ExpandProperty ifIndex
 
 	$ConfiguredAdapters = @()
 	if (![string]::IsNullOrEmpty($ValidAdapters))
@@ -230,13 +240,13 @@ Get-InterfaceAliases "IPv6"
 .INPUTS
 None. You cannot pipe objects to Get-InterfaceAliases
 .OUTPUTS
-[string[]]  Array of interface aliases
+WildcardPattern[] Array of interface aliases
 .NOTES
 None.
 #>
 function Get-InterfaceAliases
 {
-	[OutputType([System.String[]])]
+	[OutputType([System.Management.Automation.WildcardPattern[]])]
 	[CmdletBinding(DefaultParameterSetName = "Individual")]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
@@ -244,6 +254,16 @@ function Get-InterfaceAliases
 		[Parameter(ParameterSetName = "All")]
 		[Parameter(ParameterSetName = "Individual")]
 		[string] $AddressFamily,
+
+		[Parameter(Mandatory = $false)]
+		[Parameter(ParameterSetName = "All")]
+		[Parameter(ParameterSetName = "Individual")]
+		[System.Management.Automation.WildcardOptions]
+		$WildCardOption = [System.Management.Automation.WildcardOptions]::None,
+
+		[Parameter(ParameterSetName = "All")]
+		[Parameter(ParameterSetName = "Individual")]
+		[switch] $ExcludeHardware,
 
 		[Parameter(ParameterSetName = "All")]
 		[switch] $IncludeAll,
@@ -263,20 +283,37 @@ function Get-InterfaceAliases
 
 	if ($IncludeAll)
 	{
-		$InterfaceAliases = Get-ConfiguredAdapters $AddressFamily -IncludeAll:$IncludeAll
+		$ConfiguredInterfaces = Get-ConfiguredAdapters $AddressFamily `
+			-IncludeAll:$IncludeAll -ExcludeHardware:$ExcludeHardware
 	}
 	else
 	{
-		$InterfaceAliases = Get-ConfiguredAdapters $AddressFamily -IncludeVirtual:$IncludeVirtual `
+		$ConfiguredInterfaces = Get-ConfiguredAdapters $AddressFamily `
+			-IncludeVirtual:$IncludeVirtual -ExcludeHardware:$ExcludeHardware `
 			-IncludeHidden:$IncludeHidden -IncludeDisconnected:$IncludeDisconnected
 	}
 
-	[string[]] $InterfaceAliases = $InterfaceAliases | Select-Object -ExpandProperty InterfaceAlias
-	$Count = ($InterfaceAliases | Measure-Object).Count
+	[string[]] $InterfaceAliases = $ConfiguredInterfaces | Select-Object -ExpandProperty InterfaceAlias
 
+	[WildcardPattern[]] $InterfaceAliasPattern = @()
+	foreach ($Alias in $InterfaceAliases)
+	{
+		if ([WildcardPattern]::ContainsWildcardCharacters($Alias))
+		{
+			Write-Warning -Message "$Alias Interface alias contains wildcard pattern"
+		}
+		else
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Interface alias '$Alias' does not contain wildcard pattern"
+		}
+
+		$InterfaceAliasPattern += [WildcardPattern]::new($Alias, $WildCardOption)
+	}
+
+	$Count = ($InterfaceAliasPattern | Measure-Object).Count
 	if ($Count -eq 0)
 	{
-		Write-Error -Category ObjectNotFound -TargetObject $InterfaceAliases `
+		Write-Error -Category ObjectNotFound -TargetObject $InterfaceAliasPattern `
 			-Message "None of the adapters is configured for $AddressFamily to get interface aliases from"
 	}
 	elseif ($Count -gt 1)
@@ -284,7 +321,7 @@ function Get-InterfaceAliases
 		Write-Information -Tags "User" -MessageData "INFO: Got multiple adapter aliases for $AddressFamily"
 	}
 
-	return $InterfaceAliases
+	return $InterfaceAliasPattern
 }
 
 <#
@@ -327,6 +364,10 @@ function Get-IPAddress
 		[string] $AddressFamily,
 
 		[Parameter(ParameterSetName = "All")]
+		[Parameter(ParameterSetName = "Individual")]
+		[switch] $ExcludeHardware,
+
+		[Parameter(ParameterSetName = "All")]
 		[switch] $IncludeAll,
 
 		[Parameter(ParameterSetName = "Individual")]
@@ -344,11 +385,13 @@ function Get-IPAddress
 
 	if ($IncludeAll)
 	{
-		$ConfiguredAdapters = Get-ConfiguredAdapters $AddressFamily -IncludeAll:$IncludeAll
+		$ConfiguredAdapters = Get-ConfiguredAdapters $AddressFamily `
+			-IncludeAll:$IncludeAll -ExcludeHardware:$ExcludeHardware
 	}
 	else
 	{
-		$ConfiguredAdapters = Get-ConfiguredAdapters $AddressFamily -IncludeVirtual:$IncludeVirtual `
+		$ConfiguredAdapters = Get-ConfiguredAdapters $AddressFamily `
+			-IncludeVirtual:$IncludeVirtual -ExcludeHardware:$ExcludeHardware `
 			-IncludeHidden:$IncludeHidden -IncludeDisconnected:$IncludeDisconnected
 	}
 
@@ -400,6 +443,10 @@ function Get-Broadcast
 		[Parameter(ParameterSetName = "All")]
 		[switch] $IncludeAll,
 
+		[Parameter(ParameterSetName = "All")]
+		[Parameter(ParameterSetName = "Individual")]
+		[switch] $ExcludeHardware,
+
 		[Parameter(ParameterSetName = "Individual")]
 		[switch] $IncludeVirtual,
 
@@ -416,11 +463,13 @@ function Get-Broadcast
 	# Broadcast address makes sense only for IPv4
 	if ($IncludeAll)
 	{
-		$ConfiguredAdapters = Get-ConfiguredAdapters IPv4 -IncludeAll:$IncludeAll
+		$ConfiguredAdapters = Get-ConfiguredAdapters IPv4 `
+			-IncludeAll:$IncludeAll -ExcludeHardware:$ExcludeHardware
 	}
 	else
 	{
-		$ConfiguredAdapters = Get-ConfiguredAdapters IPv4 -IncludeVirtual:$IncludeVirtual `
+		$ConfiguredAdapters = Get-ConfiguredAdapters IPv4 `
+			-IncludeVirtual:$IncludeVirtual -ExcludeHardware:$ExcludeHardware `
 			-IncludeHidden:$IncludeHidden -IncludeDisconnected:$IncludeDisconnected
 	}
 

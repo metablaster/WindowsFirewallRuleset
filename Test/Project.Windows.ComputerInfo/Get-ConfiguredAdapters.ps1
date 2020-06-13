@@ -60,12 +60,21 @@ Get-ConfiguredAdapters IPv4 -IncludeDisconnected @Logs
 New-Test "Get-ConfiguredAdapters IPv4 -IncludeVirtual"
 Get-ConfiguredAdapters IPv4 -IncludeVirtual @Logs
 
+New-Test "Get-ConfiguredAdapters IPv4 -IncludeVirtual -IncludeDisconnected"
+Get-ConfiguredAdapters IPv4 -IncludeVirtual -IncludeDisconnected @Logs
+
+New-Test "Get-ConfiguredAdapters IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware"
+Get-ConfiguredAdapters IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware @Logs
+
 New-Test "Get-ConfiguredAdapters IPv4 -IncludeHidden"
 Get-ConfiguredAdapters IPv4 -IncludeHidden @Logs
 
 New-Test "Get-ConfiguredAdapters IPv4 -IncludeAll"
 $Adapters = Get-ConfiguredAdapters IPv4 -IncludeAll @Logs
 $Adapters
+
+New-Test "Get-ConfiguredAdapters IPv4 -IncludeAll -ExcludeHardware"
+Get-ConfiguredAdapters IPv4 -IncludeAll -ExcludeHardware @Logs
 
 New-Test "Get-ConfiguredAdapters binding"
 Get-ConfiguredAdapters IPv4 @Logs | Select-Object -ExpandProperty IPv4Address @Logs

@@ -59,20 +59,125 @@ New-Test "Remove-NetFirewallRule"
 # Remove previous test
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
-New-Test "Virtual rule"
+New-Test "WildCard pattern check"
+$VirtualAdapter = Get-InterfaceAliases IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware
 
-$InterfaceAliases = Get-InterfaceAliases IPv4 -IncludeAll
-
-# Outbound TCP test rule template
-New-NetFirewallRule -DisplayName "Virtual rule" `
+# Outbound rule to test virtual adapter rule
+New-NetFirewallRule -DisplayName "Virtual adapter rule no wildcard" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-Enabled False -Action Allow -Direction $Direction -Protocol Any `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
-	-InterfaceAlias $InterfaceAliases `
-	-Description "Virtual test rule description" `
+	-InterfaceAlias $VirtualAdapter.ToWql() `
+	-Description "Virtual rule without WildcardPattern" `
+	@Logs | Format-Output @Logs
+
+New-Test "Virtual adapter rule CultureInvariant"
+$VirtualAdapterCultureInvariant = Get-InterfaceAliases IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware -WildCardOption CultureInvariant
+
+# Outbound rule to test virtual adapter rule
+New-NetFirewallRule -DisplayName "Virtual adapter rule CultureInvariant" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol Any `
+	-LocalAddress Any -RemoteAddress Any `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser Any `
+	-InterfaceAlias $VirtualAdapterCultureInvariant `
+	-Description "Virtual adapter rule using WildcardPattern" `
+	@Logs | Format-Output @Logs
+
+New-Test "Virtual adapter rule IgnoreCase"
+$VirtualAdapterIgnoreCase = Get-InterfaceAliases IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware -WildCardOption IgnoreCase
+
+# Outbound rule to test virtual adapter rule
+New-NetFirewallRule -DisplayName "Virtual adapter rule IgnoreCase" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol Any `
+	-LocalAddress Any -RemoteAddress Any `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser Any `
+	-InterfaceAlias $VirtualAdapterIgnoreCase `
+	-Description "Virtual adapter rule using WildcardPattern" `
+	@Logs | Format-Output @Logs
+
+New-Test "Virtual adapter rule None"
+$VirtualAdapterNone = Get-InterfaceAliases IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware -WildCardOption None
+
+# Outbound rule to test virtual adapter rule
+New-NetFirewallRule -DisplayName "Virtual adapter rule None" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol Any `
+	-LocalAddress Any -RemoteAddress Any `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser Any `
+	-InterfaceAlias $VirtualAdapterNone `
+	-Description "Virtual adapter rule using WildcardPattern" `
+	@Logs | Format-Output @Logs
+
+New-Test "Virtual adapter rule Compiled"
+$VirtualAdapterCompiled = Get-InterfaceAliases IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware -WildCardOption Compiled
+
+# Outbound rule to test virtual adapter rule
+New-NetFirewallRule -DisplayName "Virtual adapter rule Compiled" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol Any `
+	-LocalAddress Any -RemoteAddress Any `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser Any `
+	-InterfaceAlias $VirtualAdapterCompiled `
+	-Description "Virtual adapter rule using WildcardPattern" `
+	@Logs | Format-Output @Logs
+
+New-Test "Hardware adapter rule"
+$HardwareAdapter = Get-InterfaceAliases IPv4
+
+# Outbound rule to test hardware adapter rule
+New-NetFirewallRule -DisplayName "Hardware adapter rule" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol Any `
+	-LocalAddress Any -RemoteAddress Any `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser Any `
+	-InterfaceAlias $HardwareAdapter `
+	-Description "Hardware test rule description" `
+	@Logs | Format-Output @Logs
+
+New-Test "Multiple adapters rule"
+$MultipleAdapters = Get-InterfaceAliases IPv4 -IncludeAll
+
+# Outbound rule to test hardware adapter rule
+New-NetFirewallRule -DisplayName "Multiple adapters rule" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol Any `
+	-LocalAddress Any -RemoteAddress Any `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser Any `
+	-InterfaceAlias $MultipleAdapters `
+	-Description "Multiple test rule description" `
+	@Logs | Format-Output @Logs
+
+New-Test "Bad adapter rule"
+$BadAdapters = Get-InterfaceAliases IPv4 -IncludeAll
+$BadAdapters += [WildcardPattern]("NONEXISTENT_ADAPTER")
+
+# Outbound rule to test nonexistent adapter rule
+New-NetFirewallRule -DisplayName "Bad adapter rule" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol Any `
+	-LocalAddress Any -RemoteAddress Any `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser Any `
+	-InterfaceAlias $BadAdapters `
+	-Description "Bad adapter test rule description" `
 	@Logs | Format-Output @Logs
 
 Update-Logs

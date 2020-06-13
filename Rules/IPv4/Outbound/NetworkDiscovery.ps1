@@ -100,6 +100,8 @@ New-NetFirewallRule -DisplayName "NetBIOS Datagram" `
 reception." `
 	@Logs | Format-Output @Logs
 
+# TODO: wont work to send to other subnets, applies to all traffic that sends to other
+# local subnets such as Hyper-V subnets
 New-NetFirewallRule -DisplayName "NetBIOS Name" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
 	-Service Any -Program System -Group $Group `

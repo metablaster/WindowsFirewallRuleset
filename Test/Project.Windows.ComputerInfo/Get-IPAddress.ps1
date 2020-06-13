@@ -60,12 +60,21 @@ Get-IPAddress IPv4 -IncludeDisconnected @Logs
 New-Test "Get-IPAddress IPv4 -IncludeVirtual"
 Get-IPAddress IPv4 -IncludeVirtual @Logs
 
+New-Test "Get-IPAddress IPv4 -IncludeVirtual -IncludeDisconnected"
+Get-IPAddress IPv4 -IncludeVirtual -IncludeDisconnected @Logs
+
+New-Test "Get-IPAddress IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware"
+Get-IPAddress IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware @Logs
+
 New-Test "Get-IPAddress IPv4 -IncludeHidden"
 Get-IPAddress IPv4 -IncludeHidden @Logs
 
 New-Test "Get-IPAddress IPv4 -IncludeAll"
 $IPAddress = Get-IPAddress IPv4 -IncludeAll @Logs
 $IPAddress
+
+New-Test "Get-IPAddress IPv4 -IncludeAll -ExcludeHardware"
+Get-IPAddress IPv4 -IncludeAll -ExcludeHardware @Logs
 
 New-Test "Get-TypeName"
 $IPAddress | Get-TypeName @Logs

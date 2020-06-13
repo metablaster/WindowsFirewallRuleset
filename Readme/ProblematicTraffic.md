@@ -76,6 +76,8 @@ except adding all the accounts needed to separate rule as follows:
 3. NT AUTHORITY\LOCAL SERVICE
 4. NT AUTHORITY\NETWORK SERVICE
 
+TODO: doesn't work for CryptSvc, see why
+
 ## Case 2: List of dropped outbound packets during system boot
 
 1. svchost.exe sending DNS request to configured DNS server (service unknown)

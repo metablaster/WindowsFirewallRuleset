@@ -494,13 +494,14 @@ Test-File $Program @Logs
 New-NetFirewallRule -DisplayName "SystemSettings" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
+	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser Any `
 	-InterfaceType $Interface `
 	-Description "Seems like it's connecting to display some 'useful tips' on the right hand side
- of the settings menu, NOTE: Configured the gpo 'Control Panel\allow online tips' to 'disabled'." `
+ of the settings menu, NOTE: Configure the gpo 'Control Panel\allow online tips' to 'disabled'
+ to stop generating this traffic." `
 	@Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\taskhostw.exe"

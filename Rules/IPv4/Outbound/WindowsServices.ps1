@@ -256,6 +256,7 @@ Any components or applications that depend on the Group Policy component might n
 if the service is disabled." `
 	@Logs | Format-Output @Logs
 
+# NOTE: Account detected is: SECURITY_LOCAL_SYSTEM_RID S-1-5-18 A special account used by the operating system.
 New-NetFirewallRule -DisplayName "Device Setup Manager" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service DsmSvc -Program $ServiceHost -Group $Group `
@@ -391,6 +392,7 @@ To use a gateway device, the device must support byte counters
 and Universal Plug and Play (UPnP) must be enabled." `
 	@Logs | Format-Output @Logs
 
+# TODO: fails on port 80 regardless of extension rule
 New-NetFirewallRule -DisplayName "Cryptographic Services" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service CryptSvc -Program $ServiceHost -Group $Group `

@@ -49,23 +49,40 @@ if (!(Approve-Execute @Logs)) { exit }
 Start-Test
 
 New-Test "Get-InterfaceAliases IPv4"
-Get-InterfaceAliases IPv4 @Logs
+$Aliases = Get-InterfaceAliases IPv4 @Logs
+$Aliases.ToWql()
 
 New-Test "Get-InterfaceAliases IPv6"
-Get-InterfaceAliases IPv6 @Logs
+$Aliases = Get-InterfaceAliases IPv6 @Logs
+$Aliases.ToWql()
 
-New-Test "Get-InterfaceAliases IPv4 -IncludeDisconnected"
-Get-InterfaceAliases IPv4 -IncludeDisconnected @Logs
+New-Test "Get-InterfaceAliases IPv4 -IncludeDisconnected -WildCardOption"
+$Aliases = Get-InterfaceAliases IPv4 -IncludeDisconnected -WildCardOption IgnoreCase @Logs
+$Aliases.ToWql()
 
 New-Test "Get-InterfaceAliases IPv4 -IncludeVirtual"
-Get-InterfaceAliases IPv4 -IncludeVirtual @Logs
+$Aliases = Get-InterfaceAliases IPv4 -IncludeVirtual @Logs
+$Aliases.ToWql()
+
+New-Test "Get-InterfaceAliases IPv4 -IncludeVirtual -IncludeDisconnected"
+$Aliases = Get-InterfaceAliases IPv4 -IncludeVirtual -IncludeDisconnected @Logs
+$Aliases.ToWql()
+
+New-Test "Get-InterfaceAliases IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware"
+$Aliases = Get-InterfaceAliases IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware @Logs
+$Aliases.ToWql()
 
 New-Test "Get-InterfaceAliases IPv4 -IncludeHidden"
-Get-InterfaceAliases IPv4 -IncludeHidden @Logs
+$Aliases = Get-InterfaceAliases IPv4 -IncludeHidden @Logs
+$Aliases.ToWql()
 
 New-Test "Get-InterfaceAliases IPv4 -IncludeAll"
 $Aliases = Get-InterfaceAliases IPv4 -IncludeAll @Logs
-$Aliases
+$Aliases.ToWql()
+
+New-Test "Get-InterfaceAliases IPv4 -IncludeAll -ExcludeHardware"
+$Aliases = Get-InterfaceAliases IPv4 -IncludeAll -ExcludeHardware @Logs
+$Aliases.ToWql()
 
 New-Test "Get-TypeName"
 $Aliases | Get-TypeName @Logs

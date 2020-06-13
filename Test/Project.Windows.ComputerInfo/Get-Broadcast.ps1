@@ -57,12 +57,21 @@ Get-Broadcast -IncludeDisconnected @Logs
 New-Test "Get-Broadcast -IncludeVirtual"
 Get-Broadcast -IncludeVirtual @Logs
 
+New-Test "Get-Broadcast -IncludeVirtual -IncludeDisconnected"
+Get-Broadcast -IncludeVirtual -IncludeDisconnected @Logs
+
+New-Test "Get-Broadcast -IncludeVirtual -IncludeDisconnected -ExcludeHardware"
+Get-Broadcast -IncludeVirtual -IncludeDisconnected -ExcludeHardware @Logs
+
 New-Test "Get-Broadcast -IncludeHidden"
 Get-Broadcast -IncludeHidden @Logs
 
 New-Test "Get-Broadcast -IncludeAll"
 $Broadcast = Get-Broadcast -IncludeAll @Logs
 $Broadcast
+
+New-Test "Get-Broadcast -IncludeAll -ExcludeHardware"
+Get-Broadcast -IncludeAll -ExcludeHardware @Logs
 
 New-Test "Get-TypeName"
 $Broadcast | Get-TypeName @Logs
