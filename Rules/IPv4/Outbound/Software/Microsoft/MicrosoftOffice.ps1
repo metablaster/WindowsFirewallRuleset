@@ -219,6 +219,8 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot) @Logs) -or $ForceLo
 		-LocalUser $UsersGroupSDDL `
 		-Description "" @Logs | Format-Output @Logs
 
+	# NOTE: If you load office rules soon after it has been installed sdxhelper may be missing
+	# reload again later when it appears
 	$Program = "$OfficeRoot\SDXHelper.exe"
 	Test-File $Program @Logs
 

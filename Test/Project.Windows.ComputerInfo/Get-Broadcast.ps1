@@ -49,11 +49,23 @@ if (!(Approve-Execute @Logs)) { exit }
 Start-Test
 
 New-Test "Get-Broadcast"
-$BroadCast = Get-Broadcast @Logs
-$BroadCast
+Get-Broadcast @Logs
+
+New-Test "Get-Broadcast -IncludeDisconnected"
+Get-Broadcast -IncludeDisconnected @Logs
+
+New-Test "Get-Broadcast -IncludeVirtual"
+Get-Broadcast -IncludeVirtual @Logs
+
+New-Test "Get-Broadcast -IncludeHidden"
+Get-Broadcast -IncludeHidden @Logs
+
+New-Test "Get-Broadcast -IncludeAll"
+$Broadcast = Get-Broadcast -IncludeAll @Logs
+$Broadcast
 
 New-Test "Get-TypeName"
-$BroadCast | Get-TypeName @Logs
+$Broadcast | Get-TypeName @Logs
 
 Update-Logs
 Exit-Test

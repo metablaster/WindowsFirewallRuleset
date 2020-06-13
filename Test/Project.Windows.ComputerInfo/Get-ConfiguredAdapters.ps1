@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-ConnectedAdapters
+# Unit test for Get-ConfiguredAdapters
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -48,15 +48,27 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-New-Test "Get-ConnectedAdapters"
-$Adapters = Get-ConnectedAdapters IPv4 @Logs
+New-Test "Get-ConfiguredAdapters IPv4"
+Get-ConfiguredAdapters IPv4 @Logs
+
+New-Test "Get-ConfiguredAdapters IPv6"
+Get-ConfiguredAdapters IPv6 @Logs
+
+New-Test "Get-ConfiguredAdapters IPv4 -IncludeDisconnected"
+Get-ConfiguredAdapters IPv4 -IncludeDisconnected @Logs
+
+New-Test "Get-ConfiguredAdapters IPv4 -IncludeVirtual"
+Get-ConfiguredAdapters IPv4 -IncludeVirtual @Logs
+
+New-Test "Get-ConfiguredAdapters IPv4 -IncludeHidden"
+Get-ConfiguredAdapters IPv4 -IncludeHidden @Logs
+
+New-Test "Get-ConfiguredAdapters IPv4 -IncludeAll"
+$Adapters = Get-ConfiguredAdapters IPv4 -IncludeAll @Logs
 $Adapters
 
-New-Test "Get-ConnectedAdapters IPv6"
-Get-ConnectedAdapters IPv6 @Logs
-
-New-Test "Get-ConnectedAdapters binding"
-Get-ConnectedAdapters IPv4 @Logs | Select-Object -ExpandProperty IPv4Address @Logs
+New-Test "Get-ConfiguredAdapters binding"
+Get-ConfiguredAdapters IPv4 @Logs | Select-Object -ExpandProperty IPv4Address @Logs
 
 New-Test "Get-TypeName"
 $Adapters | Get-TypeName @Logs

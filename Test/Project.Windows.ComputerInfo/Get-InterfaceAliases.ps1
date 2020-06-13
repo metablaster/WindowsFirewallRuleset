@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-IPAddress
+# Unit test for Get-InterfaceAliases
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -48,27 +48,27 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-New-Test "Get-IPAddress IPv4"
-Get-IPAddress IPv4 @Logs
+New-Test "Get-InterfaceAliases IPv4"
+Get-InterfaceAliases IPv4 @Logs
 
-New-Test "Get-IPAddress IPv6"
-Get-IPAddress IPv6 @Logs
+New-Test "Get-InterfaceAliases IPv6"
+Get-InterfaceAliases IPv6 @Logs
 
-New-Test "Get-IPAddress IPv4 -IncludeDisconnected"
-Get-IPAddress IPv4 -IncludeDisconnected @Logs
+New-Test "Get-InterfaceAliases IPv4 -IncludeDisconnected"
+Get-InterfaceAliases IPv4 -IncludeDisconnected @Logs
 
-New-Test "Get-IPAddress IPv4 -IncludeVirtual"
-Get-IPAddress IPv4 -IncludeVirtual @Logs
+New-Test "Get-InterfaceAliases IPv4 -IncludeVirtual"
+Get-InterfaceAliases IPv4 -IncludeVirtual @Logs
 
-New-Test "Get-IPAddress IPv4 -IncludeHidden"
-Get-IPAddress IPv4 -IncludeHidden @Logs
+New-Test "Get-InterfaceAliases IPv4 -IncludeHidden"
+Get-InterfaceAliases IPv4 -IncludeHidden @Logs
 
-New-Test "Get-IPAddress IPv4 -IncludeAll"
-$IPAddress = Get-IPAddress IPv4 -IncludeAll @Logs
-$IPAddress
+New-Test "Get-InterfaceAliases IPv4 -IncludeAll"
+$Aliases = Get-InterfaceAliases IPv4 -IncludeAll @Logs
+$Aliases
 
 New-Test "Get-TypeName"
-$IPAddress | Get-TypeName @Logs
+$Aliases | Get-TypeName @Logs
 
 Update-Logs
 Exit-Test

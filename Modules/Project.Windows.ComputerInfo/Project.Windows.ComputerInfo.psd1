@@ -74,8 +74,9 @@
 	# delete the entry, use an empty array if there are no functions to export.
 	FunctionsToExport = @(
 		"Get-ComputerName"
+		"Get-ConfiguredAdapters"
+		"Get-InterfaceAliases"
 		"Get-IPAddress"
-		"Get-ConnectedAdapters"
 		"Get-Broadcast"
 	)
 
@@ -110,7 +111,7 @@
 		PSData = @{
 
 			# Tags applied to this module. These help with module discovery in online galleries.
-			Tags = @("ComputerInfo", "WindowsInfo", "Computer")
+			Tags = @("ComputerInfo", "WindowsInfo", "Computer", "NetworkInfo")
 
 			# A URL to the license for this module.
 			LicenseUri = 'https://github.com/metablaster/WindowsFirewallRuleset/blob/master/LICENSE'

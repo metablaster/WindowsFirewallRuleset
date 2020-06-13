@@ -219,3 +219,11 @@ InterfaceDescription, MediaConnectionState, Status, HardwareInterface, Hidden, V
 Get-NetIPInterface -IncludeAllCompartments | Select-Object -Property InterfaceIndex, `
 InterfaceAlias, AddressFamily, ConnectionState, Store
 ```
+
+### All adapters configured with an IP regardless of connection state
+
+Loopback and probably hidden adapters are not shown
+
+```powershell
+Get-NetIPConfiguration -AllCompartments -Detailed
+```

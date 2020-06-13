@@ -37,7 +37,7 @@ SOFTWARE.
 Set-StrictMode -Version Latest
 
 # Set to true to indicate development phase, forces unloading modules and removing variables.
-Set-Variable -Name Develop -Scope Global -Value $false
+Set-Variable -Name Develop -Scope Global -Value $true
 
 # Name of this script for debugging messages, do not modify!.
 Set-Variable -Name ThisScript -Scope Local -Option ReadOnly -Value $($MyInvocation.MyCommand.Name -replace ".{4}$")
@@ -190,7 +190,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -Erro
 	Set-Variable -Name CheckReadOnlyVariables -Scope Global -Option ReadOnly -Force -Value $null
 
 	# Set to false to avoid checking system requirements
-	Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $true
+	Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $false
 }
 
 # Removable variables, meaning these can be modified by code at any time,

@@ -86,6 +86,7 @@ the Functionality parameter of Get-Help.
 #>
 function Test-Function
 {
+	[CmdletBinding()]
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'This is template function')]
 	param (
 		[Parameter(Mandatory = $true)]
@@ -96,7 +97,10 @@ function Test-Function
 Start-Test
 
 New-Test "Test-Function"
-Test-Function
+$Result = Test-Function @Logs
+
+New-Test "Get-TypeName"
+$Result | Get-TypeName @Logs
 
 Update-Logs
 Exit-Test

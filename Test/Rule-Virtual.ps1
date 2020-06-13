@@ -27,9 +27,10 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-IPAddress
+# Unit test for Virtual rule
 #
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+#Requires -RunAsAdministrator
+. $PSScriptRoot\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
@@ -46,29 +47,33 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
+#
+# Setup local variables:
+#
+$Group = "Test - Interface aliases"
+$FirewallProfile = "Any"
+
 Start-Test
 
-New-Test "Get-IPAddress IPv4"
-Get-IPAddress IPv4 @Logs
+New-Test "Remove-NetFirewallRule"
+# Remove previous test
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
-New-Test "Get-IPAddress IPv6"
-Get-IPAddress IPv6 @Logs
+New-Test "Virtual rule"
 
-New-Test "Get-IPAddress IPv4 -IncludeDisconnected"
-Get-IPAddress IPv4 -IncludeDisconnected @Logs
+$InterfaceAliases = Get-InterfaceAliases IPv4 -IncludeAll
 
-New-Test "Get-IPAddress IPv4 -IncludeVirtual"
-Get-IPAddress IPv4 -IncludeVirtual @Logs
-
-New-Test "Get-IPAddress IPv4 -IncludeHidden"
-Get-IPAddress IPv4 -IncludeHidden @Logs
-
-New-Test "Get-IPAddress IPv4 -IncludeAll"
-$IPAddress = Get-IPAddress IPv4 -IncludeAll @Logs
-$IPAddress
-
-New-Test "Get-TypeName"
-$IPAddress | Get-TypeName @Logs
+# Outbound TCP test rule template
+New-NetFirewallRule -DisplayName "Virtual rule" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Any `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser Any `
+	-InterfaceAlias $InterfaceAliases `
+	-Description "Virtual test rule description" `
+	@Logs | Format-Output @Logs
 
 Update-Logs
 Exit-Test

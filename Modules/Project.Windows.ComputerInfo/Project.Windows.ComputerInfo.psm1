@@ -56,8 +56,6 @@ else
 # Includes
 Import-Module -Name $PSScriptRoot\..\Indented.Net.IP
 
-# TODO: what happens in Get-ConnectedAdapters and other functions that call it if there are multiple configured adapters?
-
 <#
 .SYNOPSIS
 Get localhost name
@@ -88,29 +86,54 @@ function Get-ComputerName
 
 <#
 .SYNOPSIS
-Method to get connected adapters
+Method to get configured adapters
 .DESCRIPTION
-Return list of all adapters and their configuration connected to network
+Return list of all configured adapters and their configuration.
+Applies to adapters which have an IP assigned regardless if connected to network.
+This conditionally includes virtual and hidden adapters such as Hyper-V adapters on all compartments.
 .PARAMETER AddressFamily
 IP version for which to obtain adapters, IPv4 or IPv6
+.PARAMETER IncludeAll
+Include all possible adapter types present on target computer
+.PARAMETER IncludeVirtual
+Whether to include virtual adapters
+.PARAMETER IncludeHidden
+Whether to include hidden adapters
+.PARAMETER IncludeDisconnected
+Whether to include disconnected
 .EXAMPLE
-Get-ConnectedAdapters "IPv4"
+Get-ConfiguredAdapters "IPv4"
 .EXAMPLE
-Get-ConnectedAdapters "IPv6"
+Get-ConfiguredAdapters "IPv6"
 .INPUTS
-None. You cannot pipe objects to Get-ConnectedAdapters
+None. You cannot pipe objects to Get-ConfiguredAdapters
 .OUTPUTS
-[NetIPConfiguration] or error message if no adapter connected
+[NetIPConfiguration] or error message if no adapter configured
 .NOTES
 None.
 #>
-function Get-ConnectedAdapters
+function Get-ConfiguredAdapters
 {
-	[CmdletBinding()]
+	# TODO: doesn't work [OutputType([System.Net.NetIPConfiguration])]
+	[CmdletBinding(DefaultParameterSetName = "Individual")]
 	param (
-		[Parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true, Position = 0)]
 		[ValidateSet("IPv4", "IPv6")]
-		[string] $AddressFamily
+		[Parameter(ParameterSetName = "All")]
+		[Parameter(ParameterSetName = "Individual")]
+		[string] $AddressFamily,
+
+		[Parameter(ParameterSetName = "All")]
+		[switch] $IncludeAll,
+
+		[Parameter(ParameterSetName = "Individual")]
+		[switch] $IncludeVirtual,
+
+		[Parameter(ParameterSetName = "Individual")]
+		[switch] $IncludeHidden,
+
+		[Parameter(ParameterSetName = "Individual")]
+		[switch] $IncludeDisconnected
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -118,34 +141,169 @@ function Get-ConnectedAdapters
 
 	if ($AddressFamily.ToString() -eq "IPv4")
 	{
-		$ConnectedAdapters = Get-NetIPConfiguration | Where-Object -Property IPv4DefaultGateway
+		if ($IncludeDisconnected -or $IncludeAll)
+		{
+			$AllConfiguredAdapters = Get-NetIPConfiguration -AllCompartments | Where-Object -Property IPv4Address
+		}
+		else
+		{
+			$AllConfiguredAdapters = Get-NetIPConfiguration -AllCompartments | Where-Object {
+				$_.IPv4Address -and $_.IPv4DefaultGateway
+			}
+		}
 	}
 	else
 	{
-		$ConnectedAdapters = Get-NetIPConfiguration | Where-Object -Property IPv6DefaultGateway
+		if ($IncludeDisconnected -or $IncludeAll)
+		{
+			$AllConfiguredAdapters = Get-NetIPConfiguration -AllCompartments | Where-Object -Property IPv4Address
+		}
+		else
+		{
+			$AllConfiguredAdapters = Get-NetIPConfiguration -AllCompartments | Where-Object {
+				$_.IPv6Address -and $_.IPv6DefaultGateway
+			}
+		}
 	}
 
-	$Count = ($ConnectedAdapters | Measure-Object).Count
+	# Get-NetIPConfiguration does not tell us if adapter is hidden or virtual
+	[Uint32[]] $ValidAdapters = $ValidAdapters = Get-NetAdapter |
+	Where-Object { $_.HardwareInterface -eq "True" } |
+	Select-Object -ExpandProperty ifIndex
+
+	if ($IncludeVirtual -or $IncludeAll)
+	{
+		$ValidAdapters += Get-NetAdapter |
+		Where-Object { $_.Virtual -eq "True" } |
+		Select-Object -ExpandProperty ifIndex
+	}
+	if ($IncludeHidden -or $IncludeAll)
+	{
+		$ValidAdapters += Get-NetAdapter -IncludeHidden |
+		Where-Object { $_.Hidden -eq "True" } |
+		Select-Object -ExpandProperty ifIndex
+	}
+
+	$ConfiguredAdapters = @()
+	if (![string]::IsNullOrEmpty($ValidAdapters))
+	{
+		$ConfiguredAdapters = $AllConfiguredAdapters | Where-Object {
+			[array]::Find($ValidAdapters, [System.Predicate[Uint32]] { $_.InterfaceIndex -eq $args[0] })
+		}
+	}
+
+	$Count = ($ConfiguredAdapters | Measure-Object).Count
 	if ($Count -eq 0)
 	{
-		Write-Error -Category ObjectNotFound -TargetObject $ConnectedAdapters `
-			-Message "None of the adapters is connected to $AddressFamily network"
+		Write-Error -Category ObjectNotFound -TargetObject $ConfiguredAdapters `
+			-Message "None of the adapters is configured for $AddressFamily"
 	}
 	elseif ($Count -gt 1)
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Multiple adapters are connected to $AddressFamily network"
+		Write-Information -Tags "User" -MessageData "INFO: Multiple adapters are configured for $AddressFamily"
 	}
 
-	return $ConnectedAdapters
+	return $ConfiguredAdapters
 }
 
 <#
 .SYNOPSIS
-Method to get IP address of local machine
+Method to get aliases of configured adapters
+.DESCRIPTION
+Return list of interface aliases of all configured adapters.
+Applies to adapters which have an IP assigned regardless if connected to network.
+This may include virtual adapters as well such as Hyper-V adapters on all compartments.
+.PARAMETER AddressFamily
+IP version for which to obtain adapters, IPv4 or IPv6
+.PARAMETER IncludeAll
+Include all possible adapter types present on target computer
+.PARAMETER IncludeVirtual
+Whether to include virtual adapters
+.PARAMETER IncludeHidden
+Whether to include hidden adapters
+.PARAMETER IncludeDisconnected
+Whether to include disconnected
+.EXAMPLE
+Get-InterfaceAliases "IPv4"
+.EXAMPLE
+Get-InterfaceAliases "IPv6"
+.INPUTS
+None. You cannot pipe objects to Get-InterfaceAliases
+.OUTPUTS
+[string[]]  Array of interface aliases
+.NOTES
+None.
+#>
+function Get-InterfaceAliases
+{
+	[OutputType([System.String[]])]
+	[CmdletBinding(DefaultParameterSetName = "Individual")]
+	param (
+		[Parameter(Mandatory = $true, Position = 0)]
+		[ValidateSet("IPv4", "IPv6")]
+		[Parameter(ParameterSetName = "All")]
+		[Parameter(ParameterSetName = "Individual")]
+		[string] $AddressFamily,
+
+		[Parameter(ParameterSetName = "All")]
+		[switch] $IncludeAll,
+
+		[Parameter(ParameterSetName = "Individual")]
+		[switch] $IncludeVirtual,
+
+		[Parameter(ParameterSetName = "Individual")]
+		[switch] $IncludeHidden,
+
+		[Parameter(ParameterSetName = "Individual")]
+		[switch] $IncludeDisconnected
+	)
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting connected adapters for $AddressFamily network"
+
+	if ($IncludeAll)
+	{
+		$InterfaceAliases = Get-ConfiguredAdapters $AddressFamily -IncludeAll:$IncludeAll
+	}
+	else
+	{
+		$InterfaceAliases = Get-ConfiguredAdapters $AddressFamily -IncludeVirtual:$IncludeVirtual `
+			-IncludeHidden:$IncludeHidden -IncludeDisconnected:$IncludeDisconnected
+	}
+
+	[string[]] $InterfaceAliases = $InterfaceAliases | Select-Object -ExpandProperty InterfaceAlias
+	$Count = ($InterfaceAliases | Measure-Object).Count
+
+	if ($Count -eq 0)
+	{
+		Write-Error -Category ObjectNotFound -TargetObject $InterfaceAliases `
+			-Message "None of the adapters is configured for $AddressFamily to get interface aliases from"
+	}
+	elseif ($Count -gt 1)
+	{
+		Write-Information -Tags "User" -MessageData "INFO: Got multiple adapter aliases for $AddressFamily"
+	}
+
+	return $InterfaceAliases
+}
+
+<#
+.SYNOPSIS
+Method to get list of IP addresses on local machine
 .DESCRIPTION
 Returns list of IP addresses for all adapters connected to network
+Return list of IP addresses for all configured adapter.
+This includes both physical and virtual adapters.
 .PARAMETER AddressFamily
 IP version for which to obtain address, IPv4 or IPv6
+.PARAMETER IncludeAll
+Include all possible adapter types present on target computer
+.PARAMETER IncludeVirtual
+Whether to include virtual adapters
+.PARAMETER IncludeHidden
+Whether to include hidden adapters
+.PARAMETER IncludeDisconnected
+Whether to include disconnected
 .EXAMPLE
 Get-IPAddress "IPv4"
 .EXAMPLE
@@ -153,27 +311,50 @@ Get-IPAddress "IPv6"
 .INPUTS
 None. You cannot pipe objects to Get-IPAddress
 .OUTPUTS
-[IPAddress] and warning message if no adapter connected
+[IPAddress[]] Array of IP addresses  and warning message if no adapter connected
 .NOTES
 None.
 #>
 function Get-IPAddress
 {
-	[OutputType([System.Net.IPAddress])]
-	[CmdletBinding()]
+	[OutputType([System.Net.IPAddress[]])]
+	[CmdletBinding(DefaultParameterSetName = "Individual")]
 	param (
-		[Parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true, Position = 0)]
 		[ValidateSet("IPv4", "IPv6")]
-		[string] $AddressFamily
+		[Parameter(ParameterSetName = "All")]
+		[Parameter(ParameterSetName = "Individual")]
+		[string] $AddressFamily,
+
+		[Parameter(ParameterSetName = "All")]
+		[switch] $IncludeAll,
+
+		[Parameter(ParameterSetName = "Individual")]
+		[switch] $IncludeVirtual,
+
+		[Parameter(ParameterSetName = "Individual")]
+		[switch] $IncludeHidden,
+
+		[Parameter(ParameterSetName = "Individual")]
+		[switch] $IncludeDisconnected
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting IP's of connected adapters for $AddressFamily network"
 
-	$ConnectedAdapters = Get-ConnectedAdapters $AddressFamily |
-	Select-Object -ExpandProperty ($AddressFamily + "Address")
+	if ($IncludeAll)
+	{
+		$ConfiguredAdapters = Get-ConfiguredAdapters $AddressFamily -IncludeAll:$IncludeAll
+	}
+	else
+	{
+		$ConfiguredAdapters = Get-ConfiguredAdapters $AddressFamily -IncludeVirtual:$IncludeVirtual `
+			-IncludeHidden:$IncludeHidden -IncludeDisconnected:$IncludeDisconnected
+	}
 
-	[IPAddress] $IPAddress = $ConnectedAdapters | Select-Object -ExpandProperty IPAddress
+	[IPAddress[]] $IPAddress = $ConfiguredAdapters |
+	Select-Object -ExpandProperty ($AddressFamily + "Address") |
+	Select-Object -ExpandProperty IPAddress
 
 	$Count = ($IPAddress | Measure-Object).Count
 	if ($Count -gt 1)
@@ -191,46 +372,75 @@ function Get-IPAddress
 
 <#
 .SYNOPSIS
-Method to get broadcast address
+Method to get broadcast addresses on local machine
 .DESCRIPTION
-TODO: add description
+Return multiple broadcast addresses, for each configured adapter.
+This includes both physical and virtual adapters.
+Returned broadcast addresses are only for IPv4
+.PARAMETER IncludeAll
+Include all possible adapter types present on target computer
+.PARAMETER IncludeVirtual
+Whether to include virtual adapters
+.PARAMETER IncludeHidden
+Whether to include hidden adapters
+.PARAMETER IncludeDisconnected
+Whether to include disconnected
 .EXAMPLE
 Get-Broadcast
 .INPUTS
 None. You cannot pipe objects to Get-Broadcast
 .OUTPUTS
-[string] Broadcast address
-.NOTES
-TODO: there can be multiple valid adapters, we should probably take parameter for single adapter
+[IPAddress[]] Array of broadcast addresses
 #>
 function Get-Broadcast
 {
-	[CmdletBinding()]
-	param ()
+	[OutputType([System.Net.IPAddress[]])]
+	[CmdletBinding(DefaultParameterSetName = "Individual")]
+	param (
+		[Parameter(ParameterSetName = "All")]
+		[switch] $IncludeAll,
+
+		[Parameter(ParameterSetName = "Individual")]
+		[switch] $IncludeVirtual,
+
+		[Parameter(ParameterSetName = "Individual")]
+		[switch] $IncludeHidden,
+
+		[Parameter(ParameterSetName = "Individual")]
+		[switch] $IncludeDisconnected
+	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting broadcast address of connected adapters"
 
 	# Broadcast address makes sense only for IPv4
-	$ConnectedAdapters = Get-ConnectedAdapters "IPv4" | Select-Object -ExpandProperty IPv4Address
+	if ($IncludeAll)
+	{
+		$ConfiguredAdapters = Get-ConfiguredAdapters IPv4 -IncludeAll:$IncludeAll
+	}
+	else
+	{
+		$ConfiguredAdapters = Get-ConfiguredAdapters IPv4 -IncludeVirtual:$IncludeVirtual `
+			-IncludeHidden:$IncludeHidden -IncludeDisconnected:$IncludeDisconnected
+	}
 
-	$Count = ($ConnectedAdapters | Measure-Object).Count
+	$ConfiguredAdapters = $ConfiguredAdapters | Select-Object -ExpandProperty IPv4Address
+	$Count = ($ConfiguredAdapters | Measure-Object).Count
+
 	if ($Count -gt 0)
 	{
-		if ($Count -gt 1)
+		[IPAddress[]] $Broadcast = @()
+		foreach ($Adapter in $ConfiguredAdapters)
 		{
-			$ConnectedAdapters = $ConnectedAdapters | Select-Object -First 1
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] got multiple adapters, selecting first one: $($ConnectedAdapters.InterfaceAlias)"
+			[IPAddress] $IPAddress = $Adapter | Select-Object -ExpandProperty IPAddress
+			$SubnetMask = ConvertTo-Mask ($Adapter | Select-Object -ExpandProperty PrefixLength)
+
+			$Broadcast += Get-NetworkSummary $IPAddress $SubnetMask |
+			Select-Object -ExpandProperty BroadcastAddress |
+			Select-Object -ExpandProperty IPAddressToString
 		}
 
-		$IPAddress = $ConnectedAdapters | Select-Object -ExpandProperty IPAddress
-		$SubnetMask = ConvertTo-Mask ($ConnectedAdapters | Select-Object -ExpandProperty PrefixLength)
-
-		$Broadcast = Get-NetworkSummary $IPAddress $SubnetMask |
-		Select-Object -ExpandProperty BroadcastAddress |
-		Select-Object -ExpandProperty IPAddressToString
-
-		Write-Information -Tags "Result" -MessageData "INFO: Network broadcast address is: $Broadcast"
+		Write-Information -Tags "Result" -MessageData "INFO: Network broadcast addresses are: $Broadcast"
 		return $Broadcast
 	}
 
@@ -242,6 +452,7 @@ function Get-Broadcast
 #
 
 Export-ModuleMember -Function Get-ComputerName
+Export-ModuleMember -Function Get-ConfiguredAdapters
+Export-ModuleMember -Function Get-InterfaceAliases
 Export-ModuleMember -Function Get-IPAddress
-Export-ModuleMember -Function Get-ConnectedAdapters
 Export-ModuleMember -Function Get-Broadcast

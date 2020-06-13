@@ -5,15 +5,18 @@
 
 ## Modules
 
--Updated user query functions and tests to make possible querying store app identities
+- Updated user query functions and tests to make possible querying store app identities
+- Improved network adapter query to optionally query disconnected, hidden and virtual interfaces
 
 ## Rules
 
--Added rules for store apps to allow web authentication
+- Added rules for store apps to allow web authentication
+- Minor updates to some rules
 
 ## Development
 
 - Resolve most analyzer warnings
+- Updated test scripts for ComputerInfo and UserInfo modules
 
 ## Documentation
 

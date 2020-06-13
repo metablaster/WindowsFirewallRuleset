@@ -98,6 +98,7 @@ function Get-NetworkSummary
 			throw $_
 		}
 
+		# TODO: variables casing not consistent with project
 		$decimalIP = ConvertTo-DecimalIP $Network.IPAddress
 		$decimalMask = ConvertTo-DecimalIP $Network.SubnetMask
 		$decimalNetwork = $decimalIP -band $decimalMask

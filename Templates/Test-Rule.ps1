@@ -31,6 +31,7 @@ SOFTWARE.
 #
 # Unit test for Test-Rule
 #
+#Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
@@ -50,12 +51,22 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
+#
+# Setup local variables:
+#
+$Group = "Test - Template rule"
+$FirewallProfile = "Any"
+
 Start-Test
 
-New-Test "Test-Rule"
+New-Test "Remove-NetFirewallRule"
+# Remove previous test
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+
+New-Test "Test rule"
 
 # Outbound TCP test rule template
-New-NetFirewallRule -DisplayName "TargetProgram" `
+New-NetFirewallRule -DisplayName "Test rule" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
@@ -63,7 +74,7 @@ New-NetFirewallRule -DisplayName "TargetProgram" `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
 	-InterfaceType $Interface `
-	-Description "TargetProgram test rule description" `
+	-Description "Test rule description" `
 	@Logs | Format-Output @Logs
 
 Update-Logs
