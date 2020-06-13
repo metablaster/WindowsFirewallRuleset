@@ -15,6 +15,11 @@
 
 - Resolve most analyzer warnings
 
+## Documentation
+
+- Add instructions for LAN setup
+- Random updates to docs, fixed dead link.
+
 # Changelog v0.4.1
 
 ## Modules

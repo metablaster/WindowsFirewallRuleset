@@ -69,6 +69,7 @@ TODO's in this file are categorized into following sections:
     - Apply only rules for which executable exists, Test-File function
     - Implement Importing/Exporting rules
     - auto detect interfaces
+    - Query rules which are missing Local user owner, InterfaceType and similar for improvement
 
 3. Rules
 

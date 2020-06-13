@@ -398,8 +398,42 @@ function Test-SystemRequirements
 	}
 }
 
+<#
+.SYNOPSIS
+Get all rules which are missing LocalUser value
+.DESCRIPTION
+Get all rules which are missing LocalUser value
+Rules which are missing LocalUser are considered weak and need to be updated
+This operation is slow, intended for debugging.
+.EXAMPLE
+Get-NoPrincipalRules
+.INPUTS
+None. You cannot pipe objects to Test-SystemRequirements
+.OUTPUTS
+None. Error message is shown if check failed, system info otherwise.
+.NOTES
+TODO: Not tested from this module
+#>
+function Get-NoPrincipalRules
+{
+	$GPORules = Get-NetFirewallProfile -All -PolicyStore $PolicyStore |
+	Get-NetFirewallRule | Where-Object -Property Owner -EQ $null
+
+	$UserFilter = $GPORules | Get-NetFirewallSecurityFilter |
+	Where-Object -Property LocalUser -EQ Any
+
+	$ServiceFilter = $UserFilter | Get-NetFirewallRule |
+	Get-NetFirewallServiceFilter | Where-Object -Property Service -EQ Any
+
+	$TargetRules = $ServiceFilter | Get-NetFirewallRule |
+	Select-Object -Property DisplayName, DisplayGroup, Direction
+
+	$TargetRules | Format-List
+}
+
 #
 # Function exports
 #
 
+Export-ModuleMember -Function Get-NoPrincipalRules
 Export-ModuleMember -Function Test-SystemRequirements

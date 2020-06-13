@@ -3,6 +3,7 @@ TOPIC
 	about_Project.AllPlatforms.System
 
 SHORT DESCRIPTION
+	Functionality for firewall rule auditing
 	Test if environment is compatible for Windows Firewall Ruleset project
 
 LONG DESCRIPTION
@@ -15,13 +16,19 @@ LONG DESCRIPTION
 	5. TCP IP NetBios helper service is started
 	6. Windows Remote Management service is started
 
+	In addition a set of functions to query weak firewall rules
+
 EXAMPLES
-	To make a test:
+	To make a requirements test:
 	Test-SystemRequirements $true
+
+	To query weak rules with no LocalUser value
+	Get-NoPrincipalRules
 
 KEYWORDS
 	SystemRequirements
 	Requirements
+	Audit
 
 SEE ALSO
 	https://github.com/metablaster/WindowsFirewallRuleset

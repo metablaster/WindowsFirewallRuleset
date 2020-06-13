@@ -230,7 +230,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot) @Logs) -
 	$Program = "$VSInstallerRoot\resources\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "VS Latest ServiceHub Installer" -Service Any -Program $Program `
+		-DisplayName "VS Installer - ServiceHub" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
@@ -240,7 +240,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot) @Logs) -
 	$Program = "$VSInstallerRoot\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\BackgroundDownload.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "VS Latest ServiceHub Installer" -Service Any -Program $Program `
+		-DisplayName "VS Installer - ServiceHub" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $ExtensionAccounts `
@@ -250,7 +250,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot) @Logs) -
 	$Program = "$VSInstallerRoot\resources\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.x86.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "VS Latest ServiceHub Installer" -Service Any -Program $Program `
+		-DisplayName "VS Installer - ServiceHub" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
@@ -259,7 +259,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot) @Logs) -
 	$Program = "$VSInstallerRoot\setup.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "VS Latest Installer setup" -Service Any -Program $Program `
+		-DisplayName "VS Installer - Setup" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $VSUpdateUsers `
@@ -268,7 +268,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot) @Logs) -
 	$Program = "$VSInstallerRoot\vs_installer.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "VS Latest vs_Installer" -Service Any -Program $Program `
+		-DisplayName "VS Installer - vs_Installer" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 		-LocalUser $UsersGroupSDDL `
@@ -277,7 +277,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot) @Logs) -
 	$Program = "$VSInstallerRoot\vs_installershell.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "VS Latest vs_Installershell" -Service Any -Program $Program `
+		-DisplayName "VS Installer - vs_Installershell" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
@@ -287,7 +287,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot) @Logs) -
 	$Program = "$VSInstallerRoot\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\VSIXInstaller.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "VS Latest VSIX" -Service Any -Program $Program `
+		-DisplayName "VS Installer - VSIX" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
@@ -296,7 +296,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot) @Logs) -
 	$Program = "$VSInstallerRoot\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\VSIXAutoUpdate.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "VS Latest VSIXAutoUpdate" -Service Any -Program $Program `
+		-DisplayName "VS Installer - VSIXAutoUpdate" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $NT_AUTHORITY_System `
@@ -305,7 +305,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot) @Logs) -
 	$Program = "$VSInstallerRoot\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\VSIXConfigurationUpdater.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "VS Latest VSIXConfigurationUpdater" -Service Any -Program $Program `
+		-DisplayName "VS Installer - VSIXConfigurationUpdater" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
