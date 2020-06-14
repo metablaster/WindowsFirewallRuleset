@@ -143,7 +143,7 @@ if ($Develop)
 		-Description "Temporary allow troublesome IGMP traffic." `
 		@Logs | Format-Output @Logs
 
-	New-NetFirewallRule -DisplayName "Troubleshoot UDP ports" `
+	New-NetFirewallRule -DisplayName "Troubleshoot UDP - LLMNR" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service Any -Program Any -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
@@ -169,7 +169,7 @@ if ($Develop)
 	Merge-SDDL ([ref] $mDnsUsers) (Get-SDDL -Group "Users") @Logs
 
 	# NOTE: should be network service
-	New-NetFirewallRule -DisplayName "Troubleshoot UDP ports" `
+	New-NetFirewallRule -DisplayName "Troubleshoot UDP - mDNS" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service Any -Program Any -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
@@ -181,7 +181,7 @@ if ($Develop)
 		@Logs | Format-Output @Logs
 
 	# NOTE: should be local service
-	New-NetFirewallRule -DisplayName "Troubleshoot UDP ports" `
+	New-NetFirewallRule -DisplayName "Troubleshoot UDP - DHCP" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service Any -Program Any -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
@@ -192,7 +192,7 @@ if ($Develop)
 		-Description "Temporary allow troublesome UDP traffic." `
 		@Logs | Format-Output @Logs
 
-	New-NetFirewallRule -DisplayName "Troubleshoot UDP ports" `
+	New-NetFirewallRule -DisplayName "Troubleshoot UDP - NetBIOS" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service Any -Program Any -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
@@ -201,6 +201,22 @@ if ($Develop)
 		-LocalUser $NT_AUTHORITY_System `
 		-InterfaceType Any `
 		-Description "Temporary allow troublesome UDP traffic." `
+		@Logs | Format-Output @Logs
+
+	# Moved from WindowsServices.ps1, used for extension rule bellow
+	$ExtensionAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE" @Logs
+	Merge-SDDL ([ref] $ExtensionAccounts) (Get-SDDL -Group "Users") @Logs
+
+	# HACK: Temporary using network service account
+	New-NetFirewallRule -DisplayName "Troubleshoot BITS" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Service Any -Program $ServiceHost -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress DefaultGateway4 `
+		-LocalPort Any -RemotePort 48300 `
+		-LocalUser $ExtensionAccounts `
+		-InterfaceType $Interface `
+		-Description "Extension rule for active users to allow BITS to Internet gateway device (IGD)" `
 		@Logs | Format-Output @Logs
 
 	Update-Logs

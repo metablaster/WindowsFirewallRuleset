@@ -51,10 +51,21 @@ and usually need googling out what they do.
 
 # INTERFACE
 
+## InterfaceType
+
 - `Any` All interface types
 - `Wired` Wired
 - `Wireless` Wireless
 - `RemoteAccess` Remote access
+
+## InterfaceAlias
+
+**NOTE:** Not fully compatible with interfaceType because interfaceType parameter has higher
+precedence over InterfaceAlias, Mixing interfaceType with InterfaceAlias doesn't make sense,
+except if InterfaceType is "Any", use just one of these two parameters.
+
+- [WildCardPattern] ([string])
+- [WildCardPattern] ([string], [WildCardOptions])
 
 # USERS
 
@@ -150,7 +161,7 @@ Owner                 = "S-1-5-21-3337988176-3917481366-464002247-500"
 # LOG FILE FIELDS
 
 Depending on settings, firewall log can contain dropped and allowed packets,
-setting in powershell allow us to log ignored packets too however this does not happen
+setting in powershell allow us to log **ignored** packets too however this does not happen
 probably due to a bug.\
 Sample values and their meaning in order how they appear in firewall log file:
 
@@ -171,4 +182,26 @@ icmptype    = 134
 icmpcode    = 1
 info        = -
 path        = RECEIVE
+```
+
+Following are mappings between log file, Firewall GUI and PowerShell parameters
+
+## Outbound
+
+```none
+Log         GUI               PowerShell
+src-ip      Local Address     LocalAddress
+dst-ip      Remote Address    RemoteAddress
+src-port    Local Port        LocalPort
+dst-port    Remote Port       RemotePort
+```
+
+## Inbound
+
+```none
+Log         GUI               PowerShell
+src-ip      Remote Address    RemoteAddress
+dst-ip      Local Address     LocalAddress
+src-port    Remote Port       RemotePort
+dst-port    Local Port        LocalPort
 ```

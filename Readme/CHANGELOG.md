@@ -27,6 +27,11 @@
 - Add instructions for LAN setup
 - Random updates to docs, fixed dead link.
 
+## New features
+
+- Added mTail configuration and sound alert files
+- Firewall log files are not separated for each profile (public, private, domain)
+
 # Changelog v0.4.1
 
 ## Modules

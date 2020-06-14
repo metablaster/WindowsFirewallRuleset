@@ -70,6 +70,7 @@ TODO's in this file are categorized into following sections:
     - Implement Importing/Exporting rules
     - auto detect interfaces
     - Query rules which are missing Local user owner, InterfaceType and similar for improvement
+    - Use `Get-NetConnectionProfile` to aks user / set default network profile
 
 3. Rules
 

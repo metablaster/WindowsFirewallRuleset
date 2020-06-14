@@ -340,18 +340,6 @@ BITS and CryptSvc in addition need System account and wlidsvc needs both Network
 local service account" `
 	@Logs | Format-Output @Logs
 
-# TODO: Temporary using network service account
-New-NetFirewallRule -DisplayName "Extension rule for Router capability check (BITS)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
-	-Service Any -Program $ServiceHost -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress DefaultGateway4 `
-	-LocalPort Any -RemotePort 48300 `
-	-LocalUser $ExtensionAccounts `
-	-InterfaceType $Interface `
-	-Description "Extension rule for active users to allow BITS to Internet gateway device (IGD)" `
-	@Logs | Format-Output @Logs
-
 #
 # Following rules are in "ProblematicTraffic" pseudo group, these need extension rules (above)
 #
@@ -373,12 +361,13 @@ will be unable to automatically download programs and other information." `
 	@Logs | Format-Output @Logs
 
 # BITS to Router info: https://docs.microsoft.com/en-us/windows/win32/bits/network-bandwidth
+# NOTE: Port was 48300, but other random ports can be used too
 New-NetFirewallRule -DisplayName "Router capability check (BITS)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service BITS -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress DefaultGateway4 `
-	-LocalPort Any -RemotePort 48300 `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
 	-InterfaceType $Interface `
 	-Description "BITS (Background Intelligent Transfer Service) monitors the network traffic

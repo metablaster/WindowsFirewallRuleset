@@ -98,7 +98,7 @@ useful for troubleshooting, and disable ASAP." `
 	Merge-SDDL ([ref] $mDnsUsers) (Get-SDDL -Group "Users") @Logs
 
 	# NOTE: should be network service
-	New-NetFirewallRule -DisplayName "Troubleshoot UDP ports" `
+	New-NetFirewallRule -DisplayName "Troubleshoot UDP - mDNS" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service Any -Program Any -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `

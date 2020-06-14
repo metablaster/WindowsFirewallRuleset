@@ -38,6 +38,7 @@ Test-SystemRequirements
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
+# Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo @Logs
 
 #
 # Setup local variables:
@@ -150,6 +151,8 @@ It is a zero-configuration service, using essentially the same programming inter
 packet formats and operating semantics as the unicast Domain Name System (DNS)." `
 	@Logs | Format-Output @Logs
 
+# TODO: $PhysicalAdapters = Get-InterfaceAliases IPv4
+# -InterfaceAlias $PhysicalAdapters
 New-NetFirewallRule -DisplayName "Multicast Domain Name System" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
 	-Service Dnscache -Program $ServiceHost -Group $Group `

@@ -67,11 +67,13 @@ if ($Develop)
 	# Accounts used for troubleshooting rules
 	# $TroubleshootingAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE" @Logs
 
+	# NOTE: local address should include multicast
+	# NOTE: traffic can come from router
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP ports" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service Any -Program Any -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
-		-LocalAddress $ClassB, $ClassC -RemoteAddress Any `
+		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort 1900, 3702 -RemotePort Any `
 		-LocalUser $NT_AUTHORITY_LocalService -EdgeTraversalPolicy Block `
 		-InterfaceType Any `
@@ -83,7 +85,7 @@ if ($Develop)
 	Merge-SDDL ([ref] $mDnsUsers) (Get-SDDL -Group "Users") @Logs
 
 	# NOTE: should be network service
-	New-NetFirewallRule -DisplayName "Troubleshoot UDP ports" `
+	New-NetFirewallRule -DisplayName "Troubleshoot UDP - mDNS" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service Any -Program Any -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `

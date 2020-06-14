@@ -233,14 +233,17 @@ configure rules for these interfaces, except allowing all interfaces.
 
 ### Case 8: Troubleshooting
 
-- It is absolute must to reboot system once for changes (twice to get log clear)
+- It is absolute must to reboot system once for changes to be visible (sometimes twice to get log clear)
 - `Use Get-NetadApter`, `Get-NetIPConfiguration` and `Get-NetIPInterface` to gather hidden adapter info
 - Use `-InterfaceAlias` instead of `-InterfaceType` when defining firewall rule
 - See [PowerShellCommands.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/PowerShellCommands.md)
 and [Links.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/Links.md)
 for details.
-- Module ComputerInfo now implements functions for this purpose, see also Test-Virtual.ps1
+- Module ComputerInfo now implements functions for this purpose, see also Rule-InterfaceAlias.ps1
 - See networking options in Hyper-V powershell module for additional troubleshooting
+- Interfaces for different IP version share same interface alias, which could be the cause of failure
+- Hyper-V virtual adapter is reconfigured on every computer restart which could be the cause of
+our rule being no longer valid.
 - Adding explicit allow rules for troublesome traffic seems to resolve the problem, which
 means it's worth spending time to invent the rules, ie:
 
@@ -248,16 +251,16 @@ means it's worth spending time to invent the rules, ie:
 2. Outbound UDP RemotePort 67, 68, 137, 547, 1900, 3702, 5353, 5355
 3. Outbound IGMP
 
-Possible reason why rules won't work see: [LINK](https://aidanfinn.com/?p=15222)
+- Possible reason why rules won't work see: [LINK](https://aidanfinn.com/?p=15222)
+- Another consideration is type of Hyper-V virtual switch, see [LINK](https://www.nakivo.com/blog/hyper-v-networking-virtual-switches/)
 
 ### Case 8: Audit result
 
 - Even after creating sample test rules based on InterfaceAlias some packets are dropped
-- Interfaces for different IP version share same interface alias,
-which could be the cause of failure
 - It's not possible to create rules based on adapters which are not configured for IP,
 hidden, virtual or what ever doesn't matter, adapter must have IP address but doesn't have
 to be connected to network.
-- Hyper-V virtual adapter is reconfigured on every computer restart which could be the cause of
-our rule being no longer valid.
+- Regardless of host OS network profile virtual switch will operate on separate network profile,
+most likely public profile, this means block rules for InterfaceType parameter will override
+allow rules with InterfaceType Any.
 - Additional investigation is needed.
