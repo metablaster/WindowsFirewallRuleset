@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Virtual rule
+# Unit test for interface alias rules
 #
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
@@ -71,7 +71,7 @@ New-NetFirewallRule -DisplayName "Virtual adapter rule no wildcard" `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
 	-InterfaceAlias $VirtualAdapter.ToWql() `
-	-Description "Virtual rule without WildcardPattern" `
+	-Description "Virtual adapter rule without WildcardPattern" `
 	@Logs | Format-Output @Logs
 
 New-Test "Virtual adapter rule CultureInvariant"

@@ -42,7 +42,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 #
 # Setup local variables:
 #
-$Group = "Temporary"
+$Group = "Temporary - IPv4"
 $FirewallProfile = "Private, Public"
 
 # Ask user if he wants to load these rules
@@ -118,6 +118,28 @@ New-NetFirewallRule -DisplayName "Store Apps" `
 	-InterfaceType $Interface `
 	-Description "Enable only to let any store app communicate to internet,
 useful for troubleshooting, and disable ASAP." `
+	@Logs | Format-Output @Logs
+
+New-NetFirewallRule -DisplayName "Troubleshoot UDP ports" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress Any `
+	-LocalPort Any -RemotePort 67, 68, 137, 547, 1900, 3702, 5353, 5355 `
+	-LocalUser Any `
+	-InterfaceType Any `
+	-Description "Temporary allow troublesome UDP traffic." `
+	@Logs | Format-Output @Logs
+
+New-NetFirewallRule -DisplayName "Troubleshoot IGMP" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol 2 `
+	-LocalAddress Any -RemoteAddress Any `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser Any `
+	-InterfaceType Any `
+	-Description "Temporary allow troublesome IGMP traffic." `
 	@Logs | Format-Output @Logs
 
 Update-Logs
