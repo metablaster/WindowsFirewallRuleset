@@ -26,17 +26,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-<# http://en.wikipedia.org/wiki/Private_network
-Address                          CIDR / Subnet Mask               Designation
--------------                    --------                         -----------
-10.0.0.0 - 10.255.255.255        10.0.0.0/8 (255.0.0.0)           Class A
-172.16.0.0 - 172.31.255.255      172.16.0.0/12 (255.240.0.0)      Class B
-192.168.0.0 - 192.168.255.255    192.168.0.0/16 (255.255.0.0)     Class C
-255.255.255.255                             ---                   Limited broadcast (Applies to All classes)
-192.168.137.255                  192.168.137.0/24 (255.255.255.0) Microsoft Virtual Wifi (Part of Class C, if on C subnet)
-169.254.0.0-169.254.255.255      169.254.0.0/16 (255.255.0.0)     Automatic Private IP Addressing APIPA
-#>
-
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
@@ -72,7 +61,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Limited Broadcast" -Service Any -Program System `
 	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
-	-Direction $Direction -Protocol UDP -LocalAddress 255.255.255.255 -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
+	-Direction $Direction -Protocol UDP -LocalAddress $LimitedBroadcast -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "" @Logs | Format-Output @Logs
 

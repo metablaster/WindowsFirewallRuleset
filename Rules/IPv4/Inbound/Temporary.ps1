@@ -57,17 +57,43 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # to troubleshoot firewall without shuting it down completely.
 #
 
-New-NetFirewallRule -DisplayName "Troubleshoot UDP ports" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
-	-Service Any -Program Any -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress Any `
-	-LocalPort 1900, 3702, 5353 -RemotePort Any `
-	-LocalUser Any -EdgeTraversalPolicy Block `
-	-InterfaceType Any `
-	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Temporary allow troublesome UDP traffic." `
-	@Logs | Format-Output @Logs
+if ($Develop)
+{
+	#
+	# Troubleshooting rules
+	# This traffic fails mostly with virtual adapters, it's not covered by regular rules
+	#
 
+	# Accounts used for troubleshooting rules
+	# $TroubleshootingAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE" @Logs
 
-Update-Logs
+	New-NetFirewallRule -DisplayName "Troubleshoot UDP ports" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Service Any -Program Any -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+		-LocalAddress $ClassB, $ClassC -RemoteAddress Any `
+		-LocalPort 1900, 3702 -RemotePort Any `
+		-LocalUser $NT_AUTHORITY_LocalService -EdgeTraversalPolicy Block `
+		-InterfaceType Any `
+		-LocalOnlyMapping $false -LooseSourceMapping $false `
+		-Description "Temporary allow troublesome UDP traffic." `
+		@Logs | Format-Output @Logs
+
+	$mDnsUsers = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE" @Logs
+	Merge-SDDL ([ref] $mDnsUsers) (Get-SDDL -Group "Users") @Logs
+
+	# NOTE: should be network service
+	New-NetFirewallRule -DisplayName "Troubleshoot UDP ports" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Service Any -Program Any -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+		-LocalAddress $ClassB, $ClassC -RemoteAddress Any `
+		-LocalPort 5353 -RemotePort 5353 `
+		-LocalUser $mDnsUsers -EdgeTraversalPolicy Block `
+		-InterfaceType Any `
+		-LocalOnlyMapping $false -LooseSourceMapping $false `
+		-Description "Temporary allow troublesome UDP traffic." `
+		@Logs | Format-Output @Logs
+
+	Update-Logs
+}

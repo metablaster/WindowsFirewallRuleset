@@ -205,11 +205,13 @@ provider which handles the connection between the device and WNS server." `
 
 # NOTE: this service's name isn't constant, need to query correct name
 $Service = Get-Service | Where-Object {
+	$_.ServiceName -like "WpnUserService*" -or
 	$_.DisplayName -like "Windows Push Notifications User Service*"
 } | Select-Object -ExpandProperty Name
 
 if ($Service)
 {
+	# TODO: Service may change it's name randomly, which makes this rule useless
 	New-NetFirewallRule -DisplayName "Windows Push Notifications User Service" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service $Service -Program $ServiceHost -Group $Group `

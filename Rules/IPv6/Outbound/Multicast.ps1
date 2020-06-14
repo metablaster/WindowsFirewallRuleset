@@ -35,7 +35,7 @@ octet of the addresses:
 a value of 0xFF (binary 11111111) identifies an address as a multicast address;
 any other value identifies an address as a unicast address.
 
-ff00::/16 	Reserved
+ff00::/16	Reserved
 ff01::/16	Interface-Local scope
 ff02::/16	Link-Local scope
 ff03::/16	Realm-Local scope
@@ -44,7 +44,7 @@ ff05::/16   Site-Local scope
 ff06::/16	Unassigned
 ff07::/16	Unassigned
 ff08::/16	Organization-Local scope
-ff09::/16 - ff0D/16	Unassigned
+ff09::/16 - ff0D/16 Unassigned
 ff0e::/16	Global scope
 ff0f::/16  	Reserved
 

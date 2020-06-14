@@ -27,23 +27,23 @@ SOFTWARE.
 #>
 
 <# http://www.iana.org/assignments/multicast-addresses/multicast-addresses.xhtml
-Address Range                 Size       Designation
--------------                 ----       -----------
-224.0.0.0 - 224.0.0.255       (/24)      Local Network Control Block
-224.0.1.0 - 224.0.1.255       (/24)      Internetwork Control Block
-224.0.2.0 - 224.0.255.255     (65024)    AD-HOC Block I
-224.1.0.0 - 224.1.255.255     (/16)      RESERVED
-224.2.0.0 - 224.2.255.255     (/16)      SDP/SAP Block
-224.3.0.0 - 224.4.255.255     (2 /16s)   AD-HOC Block II
-224.5.0.0 - 224.255.255.255   (251 /16s) RESERVED
-224.252.0.0 - 224.255.255.255 (/14)      DIS Transient Groups
-225.0.0.0 - 231.255.255.255   (7 /8s)    RESERVED
-232.0.0.0 - 232.255.255.255   (/8)       Source-Specific Multicast Block
-233.0.0.0 - 233.251.255.255   (16515072) GLOP Block
-233.252.0.0 - 233.255.255.255 (/14)      AD-HOC Block III
-234.0.0.0 - 234.255.255.255     ()       Unicast-Prefix-based IPv4 Multicast Addresses
-235.0.0.0 - 238.255.255.255   ()         Scoped Multicast Ranges (RESERVED)
-239.0.0.0 - 239.255.255.255   (/8)       Scoped Multicast Ranges (Organization-Local Scope) aka Administratively Scoped Block.
+Address Range					Size		CIDR				Designation
+-------------					----		-----------			-----------
+224.0.0.0 - 224.0.0.255			(/24)		224.0.0/24			Local Network Control Block
+224.0.1.0 - 224.0.1.255			(/24)		224.0.1/24			Internetwork Control Block
+224.0.2.0 - 224.0.255.255		(65024)							AD-HOC Block I
+224.1.0.0 - 224.1.255.255		(/16)		224.1/16			RESERVED
+224.2.0.0 - 224.2.255.255		(/16)		224.2/16			SDP/SAP Block
+224.3.0.0 - 224.4.255.255		(2 /16s)	224.3/16, 224.4/16	AD-HOC Block II
+224.5.0.0 - 224.255.255.255		(251 /16s)	251 /16s			RESERVED
+224.252.0.0 - 224.255.255.255	(/14)		224.252/14			DIS Transient Groups
+225.0.0.0 - 231.255.255.255		(7 /8s)		7 /8s				RESERVED
+232.0.0.0 - 232.255.255.255		(/8)		232/8				Source-Specific Multicast Block
+233.0.0.0 - 233.251.255.255		(16515072)						GLOP Block
+233.252.0.0 - 233.255.255.255	(/14)		233.252/14			AD-HOC Block III
+234.0.0.0 - 234.255.255.255		()								Unicast-Prefix-based IPv4 Multicast Addresses
+235.0.0.0 - 238.255.255.255		()								Scoped Multicast Ranges (RESERVED)
+239.0.0.0 - 239.255.255.255		(/8)							Scoped Multicast Ranges (Organization-Local Scope) aka Administratively Scoped Block.
 #>
 
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1

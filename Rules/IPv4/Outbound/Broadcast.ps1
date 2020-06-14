@@ -26,17 +26,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-<# http://en.wikipedia.org/wiki/Private_network
-Address                          CIDR / Subnet Mask               Designation
--------------                    --------                         -----------
-10.0.0.0 - 10.255.255.255        10.0.0.0/8 (255.0.0.0)           Class A
-172.16.0.0 - 172.31.255.255      172.16.0.0/12 (255.240.0.0)      Class B
-192.168.0.0 - 192.168.255.255    192.168.0.0/16 (255.255.0.0)     Class C
-255.255.255.255                             ---                   Limited broadcast (Applies to All classes)
-192.168.137.255                  192.168.137.0/24 (255.255.255.0) Microsoft Virtual Wifi (Part of Class C, if on C subnet)
-169.254.0.0-169.254.255.255      169.254.0.0/16 (255.255.0.0)     Automatic Private IP Addressing APIPA
-#>
-
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
@@ -51,6 +40,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo @Logs
 
+#
 # Setup local variables:
 #
 $FirewallProfile = "Private, Domain"
@@ -72,7 +62,7 @@ New-NetFirewallRule -DisplayName "Limited Broadcast" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress 255.255.255.255 `
+	-LocalAddress Any -RemoteAddress $LimitedBroadcast `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $Interface `

@@ -59,27 +59,75 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 # TODO: Assign IPv6 addresses to rules
 
-New-NetFirewallRule -DisplayName "Services" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
-	-Service "*" -Program $ServiceHost -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress Any `
-	-LocalPort Any -RemotePort Any `
-	-LocalUser Any `
-	-InterfaceType Any `
-	-Description "Enable only to let any service communicate on link local,
+if ($Develop)
+{
+	#
+	# Troubleshooting rules
+	# This traffic fails mostly with virtual adapters, it's not covered by regular rules
+	#
+
+	# Accounts used for troubleshooting rules
+	# $TroubleshootingAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE" @Logs
+
+	New-NetFirewallRule -DisplayName "Services" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Service "*" -Program $ServiceHost -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+		-LocalAddress $LinkScopedUnicast -RemoteAddress Any `
+		-LocalPort Any -RemotePort Any `
+		-LocalUser Any `
+		-InterfaceType Any `
+		-Description "Enable only to let any service communicate on link local,
 useful for troubleshooting, and disable ASAP." `
-	@Logs | Format-Output @Logs
+		@Logs | Format-Output @Logs
 
-New-NetFirewallRule -DisplayName "Troubleshoot UDP ports" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
-	-Service Any -Program Any -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress Any `
-	-LocalPort Any -RemotePort 547, 1900, 3702, 5353, 5355 `
-	-LocalUser Any `
-	-InterfaceType Any `
-	-Description "Temporary allow troublesome UDP traffic." `
-	@Logs | Format-Output @Logs
+	New-NetFirewallRule -DisplayName "Troubleshoot UDP ports" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Service Any -Program Any -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+		-LocalAddress $LinkScopedUnicast -RemoteAddress Any `
+		-LocalPort Any -RemotePort 5355 `
+		-LocalUser $NT_AUTHORITY_NetworkService `
+		-InterfaceType Any `
+		-Description "Temporary allow troublesome UDP traffic." `
+		@Logs | Format-Output @Logs
 
-Update-Logs
+	New-NetFirewallRule -DisplayName "Troubleshoot UDP ports" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Service Any -Program Any -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+		-LocalAddress $LinkScopedUnicast -RemoteAddress Any `
+		-LocalPort Any -RemotePort 1900, 3702 `
+		-LocalUser $NT_AUTHORITY_LocalService `
+		-InterfaceType Any `
+		-Description "Temporary allow troublesome UDP traffic." `
+		@Logs | Format-Output @Logs
+
+	$mDnsUsers = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE" @Logs
+	Merge-SDDL ([ref] $mDnsUsers) (Get-SDDL -Group "Users") @Logs
+
+	# NOTE: should be network service
+	New-NetFirewallRule -DisplayName "Troubleshoot UDP ports" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Service Any -Program Any -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+		-LocalAddress $LinkScopedUnicast -RemoteAddress Any `
+		-LocalPort 5353 -RemotePort 5353 `
+		-LocalUser $mDnsUsers `
+		-InterfaceType Any `
+		-Description "Temporary allow troublesome UDP traffic." `
+		@Logs | Format-Output @Logs
+
+	New-NetFirewallRule -DisplayName "Troubleshoot UDP ports" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Service Any -Program Any -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+		-LocalAddress $LinkScopedUnicast -RemoteAddress Any `
+		-LocalPort 546 -RemotePort 547 `
+		-LocalUser $NT_AUTHORITY_LocalService `
+		-InterfaceType Any `
+		-Description "Temporary allow troublesome UDP traffic." `
+		@Logs | Format-Output @Logs
+
+	Update-Logs
+}

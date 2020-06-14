@@ -27,7 +27,39 @@ SOFTWARE.
 #>
 
 #
-# Variables related to IPv4
+# Variables related to IPv6
 #
 
 New-Variable -Name IPVersion -Scope Local -Option Constant -Value 6
+
+<# https://www.iana.org/assignments/ipv6-address-space/ipv6-address-space.xhtml
+0000::/8	Reserved by IETF
+0100::/8	Reserved by IETF
+0200::/7	Reserved by IETF
+0400::/6	Reserved by IETF
+0800::/5	Reserved by IETF
+1000::/4	Reserved by IETF
+
+The IPv6 Unicast space encompasses the entire IPv6 address range with the exception of ff00::/8, per [RFC4291]
+IANA unicast address assignments are currently limited to the IPv6 unicast address range of 2000::/3.
+2000::/3	Global Unicast
+
+4000::/3	Reserved by IETF
+6000::/3	Reserved by IETF
+8000::/3	Reserved by IETF
+a000::/3	Reserved by IETF
+c000::/3	Reserved by IETF
+e000::/4	Reserved by IETF
+f000::/5	Reserved by IETF
+f800::/6	Reserved by IETF
+fc00::/7	Unique Local Unicast	For complete registration details, see [IANA registry iana-ipv6-special-registry]
+fe00::/9	Reserved by IETF
+fe80::/10	Link-Scoped Unicast		Reserved by protocol.
+fec0::/10	Reserved by IETF		Deprecated in September 2004. Formerly a Site-Local scoped address prefix.
+ff00::/8	Multicast
+#>
+
+New-Variable -Name GlobalUnicast -Scope Local -Option Constant -Value 2000::/3
+New-Variable -Name UniqueLocalUnicast -Scope Local -Option Constant -Value fc00::/7
+New-Variable -Name LinkScopedUnicast -Scope Local -Option Constant -Value fe80::/10
+New-Variable -Name Multicast -Scope Local -Option Constant -Value ff00::/8
