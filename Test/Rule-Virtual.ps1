@@ -59,7 +59,7 @@ New-Test "Remove-NetFirewallRule"
 # Remove previous test
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
-New-Test "WildCard pattern check"
+New-Test "Virtual adapter rule no wildcard"
 $VirtualAdapter = Get-InterfaceAliases IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware
 
 # Outbound rule to test virtual adapter rule
@@ -166,7 +166,7 @@ New-NetFirewallRule -DisplayName "Multiple adapters rule" `
 
 New-Test "Bad adapter rule"
 $BadAdapters = Get-InterfaceAliases IPv4 -IncludeAll
-$BadAdapters += [WildcardPattern]("NONEXISTENT_ADAPTER")
+$BadAdapters += [WildcardPattern]("Local Area Connection* 6")
 
 # Outbound rule to test nonexistent adapter rule
 New-NetFirewallRule -DisplayName "Bad adapter rule" `

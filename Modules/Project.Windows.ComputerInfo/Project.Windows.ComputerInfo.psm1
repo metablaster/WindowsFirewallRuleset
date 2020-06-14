@@ -112,7 +112,7 @@ None. You cannot pipe objects to Get-ConfiguredAdapters
 .OUTPUTS
 [NetIPConfiguration] or error message if no adapter configured
 .NOTES
-None.
+TODO: Loopback interface is missing in the output
 #>
 function Get-ConfiguredAdapters
 {
@@ -294,6 +294,12 @@ function Get-InterfaceAliases
 	}
 
 	[string[]] $InterfaceAliases = $ConfiguredInterfaces | Select-Object -ExpandProperty InterfaceAlias
+	if ($InterfaceAliases.Length -eq 0)
+	{
+		Write-Error -Category ObjectNotFound -TargetObject $InterfaceAliases `
+			-Message "None of the adapters matches search criteria to get interface aliases from"
+		return
+	}
 
 	[WildcardPattern[]] $InterfaceAliasPattern = @()
 	foreach ($Alias in $InterfaceAliases)
@@ -310,15 +316,14 @@ function Get-InterfaceAliases
 		$InterfaceAliasPattern += [WildcardPattern]::new($Alias, $WildCardOption)
 	}
 
-	$Count = ($InterfaceAliasPattern | Measure-Object).Count
-	if ($Count -eq 0)
+	if ($InterfaceAliasPattern.Length -eq 0)
 	{
 		Write-Error -Category ObjectNotFound -TargetObject $InterfaceAliasPattern `
-			-Message "None of the adapters is configured for $AddressFamily to get interface aliases from"
+			-Message "Creating interface alias patterns failed"
 	}
-	elseif ($Count -gt 1)
+	elseif ($InterfaceAliasPattern.Length -gt 1)
 	{
-		Write-Information -Tags "User" -MessageData "INFO: Got multiple adapter aliases for $AddressFamily"
+		Write-Information -Tags "User" -MessageData "INFO: Got multiple adapter aliases"
 	}
 
 	return $InterfaceAliasPattern

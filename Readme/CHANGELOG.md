@@ -17,6 +17,7 @@
 
 - Resolve most analyzer warnings
 - Updated test scripts for ComputerInfo and UserInfo modules
+- Added test rules based on interface alias for all network interface types
 
 ## Documentation
 

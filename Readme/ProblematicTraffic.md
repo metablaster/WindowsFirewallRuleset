@@ -233,12 +233,19 @@ configure rules for these interfaces, except allowing all interfaces.
 
 ### Case 8: Troubleshooting
 
-- `Use Get-NetadApter` and `Get-NetIPInterface` to gather hidden adapter info
+- `Use Get-NetadApter`, `Get-NetIPConfiguration` and `Get-NetIPInterface` to gather hidden adapter info
 - Use `-InterfaceAlias` instead of `-InterfaceType` when defining firewall rule
 - See [PowerShellCommands.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/PowerShellCommands.md)
 and [Links.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/Links.md)
-for details
+for details.
+- Module ComputerInfo now implements functions for this purpose, see also Test-Virtual.ps1
 
 ### Case 8: Audit result
 
-- TODO: additional investigation needed.
+- Even after creating sample test rules based on InterfaceAlias some packets are dropped
+- Interfaces for different IP version share same interface alias,
+which could be the cause of failure
+- It's not possible to create rules based on adapters which are not configured for IP,
+hidden, virtual or what ever doesn't matter, adapter must have IP address but doesn't have
+to be connected to network.
+- Additional investigation is needed.

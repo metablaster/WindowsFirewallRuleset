@@ -210,7 +210,8 @@ Install-PackageProvider -Name Nuget -Verbose -Scope CurrentUser
 
 ```powershell
 Get-NetadApter -IncludeHidden | Select-Object -Property Name, InterfaceIndex, InterfaceAlias, `
-InterfaceDescription, MediaConnectionState, Status, HardwareInterface, Hidden, Virtual
+InterfaceDescription, MediaConnectionState, Status, HardwareInterface, Hidden, Virtual, `
+AdminStatus, ifOperStatus, ConnectionState
 ```
 
 ### Physical, virtual and loopback IP interfaces
