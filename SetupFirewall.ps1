@@ -80,6 +80,7 @@ if (Approve-Execute "Yes" "Applying: Inbound IPv4 Rules" @Logs)
 		& "$PSScriptRoot\Rules\IPv4\Inbound\NetworkSharing.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Inbound\RemoteWindows.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Inbound\StoreApps.ps1"
+		& "$PSScriptRoot\Rules\IPv4\Inbound\Temporary.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Inbound\WindowsServices.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Inbound\WirelessNetworking.ps1"
 	}
@@ -245,6 +246,7 @@ if (Approve-Execute "Yes" "Applying: Inbound IPv6 Rules" @Logs)
 		& "$PSScriptRoot\Rules\IPv6\Inbound\BasicNetworking.ps1"
 		& "$PSScriptRoot\Rules\IPv6\Inbound\ICMP.ps1"
 		& "$PSScriptRoot\Rules\IPv6\Inbound\Multicast.ps1"
+		& "$PSScriptRoot\Rules\IPv6\Inbound\Temporary.ps1"
 	}
 }
 
@@ -261,6 +263,7 @@ if (Approve-Execute "Yes" "Applying: Outbound IPv6 Rules" @Logs)
 		& "$PSScriptRoot\Rules\IPv6\Outbound\BasicNetworking.ps1"
 		& "$PSScriptRoot\Rules\IPv6\Outbound\ICMP.ps1"
 		& "$PSScriptRoot\Rules\IPv6\Outbound\Multicast.ps1"
+		& "$PSScriptRoot\Rules\IPv6\Outbound\Temporary.ps1"
 	}
 }
 

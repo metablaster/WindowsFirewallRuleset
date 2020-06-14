@@ -1,7 +1,7 @@
 
 # Here is a list of changes for each of releases
 
-# Changelog v0.4.2
+# Changelog v0.5.0
 
 ## Modules
 
@@ -12,10 +12,13 @@
 
 - Added rules for store apps to allow web authentication
 - Minor updates to some rules
+- Added temporary troubleshooting rules (purpose to make log file clean)
+- Added address space variables
 
 ## Development
 
 - Resolve most analyzer warnings
+- Updated template scripts
 - Updated test scripts for ComputerInfo and UserInfo modules
 - Added test rules based on interface alias for all network interface types
 
