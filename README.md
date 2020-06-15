@@ -143,21 +143,23 @@ script again.
 
 **STEPS:**
 
-1. If you don't have ssh keys and other setup required to clone then just download the released zip
-file by clicking on "Release" here on this site.
-2. extract the archive somewhere, this steps assume you've extracted the zip into
+1. If you don't have ssh keys and other setup required to clone via SSH then either clone with HTTPS
+or just download the released zip file by clicking on "Release" here on this site.\
+These steps assume you have downloaded a zip file.
+2. Extract the archive somewhere, this steps assume you've extracted the zip into
 `C:\` root drive directly.
 3. Open the extracted folder, right click into an empty space and there is an option to run
 PowerShell core as administrator (Assumes enabled context menu during installation of PowerShell core)
 4. If you would like to use Windows PowerShell 5.1 instead see
 [WindowsPowerShell](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/WindowsPowerShell.md)
-5. Type or copy paste following commands and hit enter for each
+5. Type or copy/paste following commands and hit enter for each
 
 ```powershell
 Get-ExecutionPolicy
 ```
 
-remember what the output of the above command is.
+remember what the output of the above command is, PowerShell Core defaults to `RemoteSigned` while
+Windows PowerShell defaults to `Restricted`
 
 6. Set new execution policy: (Note that `RemoteSigned` should work too)
 
@@ -276,10 +278,10 @@ There are two methods to be up to date with firewall:
 switch to either master or develop branch, next use "Clone or download" button and download zip file.
 
 2. Second method is good if you want to do it in powershell console without visiting this site,
-you will need git (link above), github account and optionally
+you will need git (link above), github account, a fork of this repository in your account and optionally
 [SSH key](https://help.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account)
 to check for new updates on daily, weekly or what ever other basis you want,
-follow bellow steps to check for updates once you installed git:
+follow bellow steps to check for updates once you installed git and cloned your own fork:
 
 - Right click on Start button in Windows system
 - Click `Windows Powershell` to open Powershell
@@ -288,11 +290,11 @@ follow bellow steps to check for updates once you installed git:
 ```cd ..``` to go one directory back
 - Type: (or copy paste command(s) and hit enter) ```cd WindowsFirewallRuleset```
 to move into WindowsFirewallRuleset folder
-- This command is typed only once for initial setup:
+- Following command (SSH) is typed only once for initial setup:
 
 ```git remote add upstream git@github.com:metablaster/WindowsFirewallRuleset.git```
 
-Otherwise if you cloned repo via HTTPS and want HTTPS (no SSH), then:
+Otherwise if you cloned your fork via HTTPS and want HTTPS (no SSH), then:
 
 ```git remote add upstream https://github.com/metablaster/WindowsFirewallRuleset.git```
 

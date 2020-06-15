@@ -68,21 +68,19 @@ TODO's in this file are categorized into following sections:
 
     - Apply only rules for which executable exists, Test-File function
     - Implement Importing/Exporting rules
-    - auto detect interfaces
-    - Query rules which are missing Local user owner, InterfaceType and similar for improvement
-    - Use `Get-NetConnectionProfile` to aks user / set default network profile
+    - auto detect interfaces, ie. to be used with InterfaceAlias parameter
 
 3. Rules
 
     - Paths to fix: onedrive, visio, project
-    - rules to fix: nvidia, steam, vcpkg, msys2, store apps for admins,
+    - Rules to fix: nvidia, steam, vcpkg, msys2, store apps for admins,
     internet browser (auto loads)
     - Now that common parameters are removed need to update the order of rule parameters,
     also not all are the same.
 
 4. Test and debugging
 
-    - Some test fail to run in non "develop" mode due to missing variables
+    - Some tests fail to run in non "develop" mode due to missing variables
     - Need to test rules without "ProgramRoot" variable to see if searching works
 
 5. Partially fixed, need testing
@@ -138,6 +136,7 @@ TODO's in this file are categorized into following sections:
 
     - Indentation doesn't work as expected for pipelines, currently using "NoIndentation", and
     there is no indentation for back ticks
+    - We need a script to recursively invoke PSScriptAnalyzer formatter for entry project
 
 6. Documentation
 
@@ -157,7 +156,8 @@ TODO's in this file are categorized into following sections:
 2. Project scripts
 
     - Detect if script ran manually, to be able to reset errors and warning status
-    - Test already loaded rules if pointing to valid program or service, also test for weakness
+    - Test already loaded rules if pointing to valid program or service, also query rules which are
+    missing Local user owner, InterfaceType and similar for improvement
     - Count invalid paths in each script
     - Measure execution time for each or all scripts.
 
@@ -181,6 +181,7 @@ TODO's in this file are categorized into following sections:
 1. Project scripts
 
     - Information output is not enabled for modules and probably other code
+    - Use `Get-NetConnectionProfile` to aks user / set default network profile
 
 2. Rules
 

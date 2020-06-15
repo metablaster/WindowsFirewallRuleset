@@ -37,7 +37,7 @@ click on image to enlarge!
 - Inside the "Config" folder you will find process monitor configuration specialized for firewall
 monitoring which you can import into your copy of process monitor.
 - Note that configuration filters some network traffic which you may want to be able to see,
-click on filter options to disable specific filters and add new ones.
+click on filter options to disable specific filters or add new ones.
 
 - [Download process monitor](https://docs.microsoft.com/en-us/sysinternals/downloads/procmon)
 
@@ -49,10 +49,15 @@ click on filter options to disable specific filters and add new ones.
 ![Alternate text](https://i.imgur.com/ljHcJss.png)
 
 - Default mTail does not have special coloring, the colors you see in the screenshot are which
-I made myself, you can grab
-this configuration from "Config" folder in this repository, just place it next to mTail executable,
-restart mTail and
-open firewall log, which is by default placed in *C:\Windows\System32\LogFiles\Firewall\pfirewall.log*
+I made myself, you can grab this configuration from "Config" folder in this repository,
+the config file is named `mtail_CC.ini`,
+just place it next to mTail executable, restart mTail and open firewall log,
+which is by default placed in *C:\Windows\System32\LogFiles\Firewall\pfirewall.log*
+- There is another config file called `mtail.ini` which needs to be (re)placed into:
+`C:\Users\AdminAccountName\Roaming\mtail\`, this config file contains configuration to monitor
+firewall activity for individual firewall profiles as well as number of personalized settings.\
+- Please keep in mind that settings configuration for mTail is highly buggy, and requires hacking
+configuration files.
 
 [Download mTail](http://ophilipp.free.fr/op_tail.htm)
 

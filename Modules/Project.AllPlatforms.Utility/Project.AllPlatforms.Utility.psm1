@@ -531,7 +531,13 @@ function Set-NetworkProfile
 
 	if ($PSCmdlet.ShouldProcess("Configure network profile"))
 	{
-		[string[]] $HardwareInterfaces = Get-NetConnectionProfile | Select-Object -ExpandProperty InterfaceAlias
+		[string[]] $HardwareInterfaces = Get-NetConnectionProfile |
+		Select-Object -ExpandProperty InterfaceAlias
+
+		if ($HardwareInterfaces.Length -eq 0)
+		{
+			Write-Warning -Message "Unable to set network profile, machine not connected to network"
+		}
 
 		foreach ($Interface in $HardwareInterfaces)
 		{
