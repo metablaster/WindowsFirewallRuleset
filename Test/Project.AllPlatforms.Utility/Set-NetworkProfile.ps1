@@ -27,9 +27,9 @@ SOFTWARE.
 #>
 
 #
-# Not an actual unit test but a playground for testing stuff out
+# Unit test for Set-NetworkProfile
 #
-. $PSScriptRoot\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
@@ -39,9 +39,6 @@ Test-SystemRequirements
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test @Logs
-# Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo @Logs
-# Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo @Logs
-# Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 
 # Ask user if he wants to load these rules
@@ -49,5 +46,8 @@ Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Lo
 if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
+
+New-Test "Set-NetworkProfile"
+Set-NetworkProfile
 
 Exit-Test

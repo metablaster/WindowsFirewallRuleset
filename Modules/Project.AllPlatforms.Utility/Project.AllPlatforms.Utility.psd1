@@ -81,6 +81,7 @@
 		"Format-Output"
 		"Set-ScreenBuffer"
 		"Test-TargetComputer"
+		"Set-NetworkProfile"
 		"Get-TypeName"
 	)
 

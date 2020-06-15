@@ -33,6 +33,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
 Test-SystemRequirements
 
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 
 #
 # Firewall profile setup
@@ -70,5 +71,9 @@ Set-NetFirewallProfile -Profile Domain -PolicyStore $PolicyStore `
 	-LogAllowed False -LogBlocked True -LogIgnored True -LogMaxSizeKilobytes 1024 `
 	-AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
 	-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\DomainFirewall.log" @Logs
+
+Write-Warning -MessageData "For maximum security choose 'Public' network profile" @Logs
+
+Set-NetworkProfile @Logs
 
 Update-Logs

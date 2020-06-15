@@ -106,6 +106,7 @@ TODO's in this file are categorized into following sections:
     - Need to add default error description into catch blocks in addition to our own
     for better description
     - Need to check if WinRM service is started when contacting computers via CIM
+    - Some functions return multiple return types, how to use [OutputType()]?
 
 2. Project scripts
 

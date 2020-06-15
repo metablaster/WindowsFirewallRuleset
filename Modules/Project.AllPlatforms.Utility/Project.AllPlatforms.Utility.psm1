@@ -507,6 +507,65 @@ function Test-TargetComputer
 	return Test-Connection -ComputerName $ComputerName -Count $Count -Quiet
 }
 
+<#
+.SYNOPSIS
+Set network profile for physical network interfaces
+.DESCRIPTION
+Set network profile for each physical/hardware network interfaces
+Recommended is 'Public' profile for maximum security, unless 'Private' is needed
+.EXAMPLE
+Set-NetworkProfile
+.INPUTS
+None. You cannot pipe objects to Set-NetworkProfile
+.OUTPUTS
+None.
+.NOTES
+None.
+#>
+function Set-NetworkProfile
+{
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
+	param ()
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+
+	if ($PSCmdlet.ShouldProcess("Configure network profile"))
+	{
+		[string[]] $HardwareInterfaces = Get-NetConnectionProfile | Select-Object -ExpandProperty InterfaceAlias
+
+		foreach ($Interface in $HardwareInterfaces)
+		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing $Interface"
+
+			$Choices = "&Public", "P&rivate", "&Abort"
+			$Default = 0
+			$Title = "Choose network profile"
+			$Question = "Which network profile to set for '$Interface' interface?"
+			$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
+
+			if ($Decision -eq 0)
+			{
+				$NetworkCategory = "Public"
+			}
+			elseif ($Decision -eq 1)
+			{
+				$NetworkCategory = "Private"
+			}
+			else
+			{
+				return
+			}
+
+			Set-NetConnectionProfile -InterfaceAlias $HardwareInterfaces -NetworkCategory $NetworkCategory
+			Write-Information -Tags "User" -MessageData "INFO: Network profile set to '$NetworkCategory' for '$Interface' interface"
+		}
+	}
+	else
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] User refused setting network profile"
+	}
+}
+
 #
 # Module variables
 #
@@ -544,6 +603,7 @@ Export-ModuleMember -Function Get-NetworkServices
 Export-ModuleMember -Function Format-Output
 Export-ModuleMember -Function Set-ScreenBuffer
 Export-ModuleMember -Function Test-TargetComputer
+Export-ModuleMember -Function Set-NetworkProfile
 
 #
 # External function exports
