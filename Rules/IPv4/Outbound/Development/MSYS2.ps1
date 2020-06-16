@@ -129,4 +129,4 @@ if ((Test-Installation "MSYS2" ([ref] $MSYS2Root) @Logs) -or $ForceLoad)
 		-Description "HTTP download manager" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

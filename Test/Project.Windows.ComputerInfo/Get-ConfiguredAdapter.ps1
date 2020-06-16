@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Test-Installation
+# Unit test for Get-ConfiguredAdapter
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -39,7 +39,7 @@ Test-SystemRequirements
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test @Logs
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo @Logs
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 
 # Ask user if he wants to load these rules
@@ -48,29 +48,39 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-$OfficeRoot = "%ProgramFiles(x866666)%\Microsoft Office\root\Office16"
-$TeamViewerRoot = "%ProgramFiles(x86)%\TeamViewer"
-$TestBadVariable = "%UserProfile%\crazyFolder"
-$TestBadVariable2 = "%UserProfile%\crazyFolder"
-$Greenshot = "unknown"
+New-Test "Get-ConfiguredAdapter IPv4"
+Get-ConfiguredAdapter IPv4 @Logs
 
-New-Test "Test-Installation 'Greenshot' $Greenshot"
-Test-Installation "Greenshot" ([ref] $Greenshot) @Logs
+New-Test "Get-ConfiguredAdapter IPv6"
+Get-ConfiguredAdapter IPv6 @Logs
 
-New-Test "Test-Installation 'MicrosoftOffice' $OfficeRoot"
-Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot) @Logs
+New-Test "Get-ConfiguredAdapter IPv4 -IncludeDisconnected"
+Get-ConfiguredAdapter IPv4 -IncludeDisconnected @Logs
 
-New-Test "Test-Installation 'TeamViewer' $TeamViewerRoot"
-Test-Installation "TeamViewer" ([ref] $TeamViewerRoot) @Logs
+New-Test "Get-ConfiguredAdapter IPv4 -IncludeVirtual"
+Get-ConfiguredAdapter IPv4 -IncludeVirtual @Logs
 
-New-Test "Test-Installation 'VisualStudio' $TestBadVariable"
-Test-Installation "VisualStudio" ([ref] $TestBadVariable) @Logs
+New-Test "Get-ConfiguredAdapter IPv4 -IncludeVirtual -IncludeDisconnected"
+Get-ConfiguredAdapter IPv4 -IncludeVirtual -IncludeDisconnected @Logs
 
-New-Test "Test-Installation 'BadVariable' $TestBadVariable2"
-$Status = Test-Installation "BadVariable" ([ref] $TestBadVariable2) @Logs
+New-Test "Get-ConfiguredAdapter IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware"
+Get-ConfiguredAdapter IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware @Logs
+
+New-Test "Get-ConfiguredAdapter IPv4 -IncludeHidden"
+Get-ConfiguredAdapter IPv4 -IncludeHidden @Logs
+
+New-Test "Get-ConfiguredAdapter IPv4 -IncludeAll"
+$Adapters = Get-ConfiguredAdapter IPv4 -IncludeAll @Logs
+$Adapters
+
+New-Test "Get-ConfiguredAdapter IPv4 -IncludeAll -ExcludeHardware"
+Get-ConfiguredAdapter IPv4 -IncludeAll -ExcludeHardware @Logs
+
+New-Test "Get-ConfiguredAdapter binding"
+Get-ConfiguredAdapter IPv4 @Logs | Select-Object -ExpandProperty IPv4Address @Logs
 
 New-Test "Get-TypeName"
-$Status | Get-TypeName @Logs
+$Adapters | Get-TypeName @Logs
 
 Update-Log
 Exit-Test

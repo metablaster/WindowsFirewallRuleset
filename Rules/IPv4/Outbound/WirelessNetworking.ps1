@@ -251,4 +251,4 @@ New-NetFirewallRule -DisplayName "Wireless portable devices (FDPHost)" `
 	-Description "Wireless Portable Devices to allow use of Function discovery provider host." `
 	@Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log

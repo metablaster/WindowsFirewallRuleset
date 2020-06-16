@@ -75,4 +75,4 @@ if ((Test-Installation "OpenTTD" ([ref] $OpenTTDRoot) @Logs) -or $ForceLoad)
 		-Description "" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

@@ -152,4 +152,4 @@ another PC on the same local network." @Logs | Format-Output @Logs
 		-Description "" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

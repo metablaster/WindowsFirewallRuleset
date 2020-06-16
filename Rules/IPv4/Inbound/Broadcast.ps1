@@ -111,4 +111,4 @@ New-NetFirewallRule -DisplayName "LAN Broadcast" `
 @Logs | Format-Output @Logs
  #>
 
-Update-Logs
+Update-Log

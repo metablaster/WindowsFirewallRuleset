@@ -86,4 +86,4 @@ if ((Test-Installation "HelpViewer" ([ref] $HelpViewerRoot) @Logs) -or $ForceLoa
 		-Description "Review downloadable content." @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

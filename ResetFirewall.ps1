@@ -104,4 +104,4 @@ Remove-NetIPsecRule -All -PolicyStore $PolicyStore @Logs
 Write-Information -Tags "User" -MessageData "INFO: Firewall reset is done!" @Logs
 Write-Information -Tags "User" -MessageData "INFO: If internet connectivity problem remains, please reboot system" @Logs
 
-Update-Logs
+Update-Log

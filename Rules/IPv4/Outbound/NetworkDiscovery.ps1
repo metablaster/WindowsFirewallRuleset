@@ -287,4 +287,4 @@ These FD providers supply network discovery services for the Simple Services Dis
 (SSDP) and Web Services." `
 	@Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log

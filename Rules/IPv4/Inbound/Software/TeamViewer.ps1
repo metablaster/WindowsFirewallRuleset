@@ -84,4 +84,4 @@ if ((Test-Installation "TeamViewer" ([ref] $TeamViewerRoot) @Logs) -or $ForceLoa
 		-Description "" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

@@ -97,4 +97,4 @@ if ((Test-Installation "DnsCrypt" ([ref] $DnsCryptRoot) @Logs) -or $ForceLoad)
 		-Description "Simple DNS Crypt update check on startup" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

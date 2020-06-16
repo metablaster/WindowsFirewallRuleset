@@ -104,4 +104,4 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot) @Logs) -or $ForceLoa
 		-Description "Game updater" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

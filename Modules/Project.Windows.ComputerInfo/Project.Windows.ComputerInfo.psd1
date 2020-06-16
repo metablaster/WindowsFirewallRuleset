@@ -74,8 +74,8 @@
 	# delete the entry, use an empty array if there are no functions to export.
 	FunctionsToExport = @(
 		"Get-ComputerName"
-		"Get-ConfiguredAdapters"
-		"Get-InterfaceAliases"
+		"Get-ConfiguredAdapter"
+		"Get-InterfaceAlias"
 		"Get-IPAddress"
 		"Get-Broadcast"
 	)

@@ -84,4 +84,4 @@ if ((Test-Installation "PinballArcade" ([ref] $PinballArcadeRoot) @Logs) -or $Fo
 		-Description "" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

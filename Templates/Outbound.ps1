@@ -133,4 +133,4 @@ if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot) @Logs) -or $Fo
 		@Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

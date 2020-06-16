@@ -86,4 +86,4 @@ if ((Test-Installation "OneDrive" ([ref] $OneDriveRoot) @Logs) -or $ForceLoad)
 		-Description "One drive for syncing user data" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

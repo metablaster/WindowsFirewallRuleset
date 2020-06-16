@@ -106,4 +106,4 @@ if ((Test-Installation "Chrome" ([ref] $ChromeRoot) @Logs) -or $ForceLoad)
 	Experimental transport layer network protocol developed by Google and implemented in 2013." @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

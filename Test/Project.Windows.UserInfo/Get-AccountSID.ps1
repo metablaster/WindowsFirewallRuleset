@@ -106,5 +106,5 @@ $AccountSID3
 New-Test "Get-TypeName"
 $AccountSID3 | Get-TypeName @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

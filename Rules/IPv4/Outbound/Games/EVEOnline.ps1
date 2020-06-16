@@ -75,4 +75,4 @@ if ((Test-Installation "EveOnline" ([ref] $EveOnlineRoot) @Logs) -or $ForceLoad)
 		-Description "" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

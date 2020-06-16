@@ -96,4 +96,4 @@ if ((Test-Installation "uTorrent" ([ref] $uTorrentRoot) @Logs) -or $ForceLoad)
 		-Description "BitTorrent Remote control from browser." @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

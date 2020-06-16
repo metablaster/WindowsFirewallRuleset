@@ -75,4 +75,4 @@ if ((Test-Installation "Incredibuild" ([ref] $IncredibuildRoot) @Logs) -or $Forc
 		-Description "Used to connect to license server for activation" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

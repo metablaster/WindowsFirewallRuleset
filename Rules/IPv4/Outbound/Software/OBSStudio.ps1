@@ -75,4 +75,4 @@ if ((Test-Installation "OBSStudio" ([ref] $OBSStudioRoot) @Logs) -or $ForceLoad)
 		-Description "OBS Studio check for updates" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

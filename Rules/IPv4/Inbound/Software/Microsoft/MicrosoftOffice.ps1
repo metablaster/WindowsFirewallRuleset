@@ -112,4 +112,4 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot) @Logs) -or $ForceLo
 		-Description "Unified Communications Messaging Application Programming Interface" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

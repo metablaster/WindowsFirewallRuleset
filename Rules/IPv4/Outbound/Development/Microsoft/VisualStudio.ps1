@@ -312,4 +312,4 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot) @Logs) -
 		-Description "" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

@@ -103,4 +103,4 @@ if ((Test-Installation "JavaPlugin" ([ref] $JavaPluginRoot) @Logs) -or $ForceLoa
 		-Description "Run java applets" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

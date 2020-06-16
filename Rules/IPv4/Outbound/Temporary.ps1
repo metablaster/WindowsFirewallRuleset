@@ -120,7 +120,7 @@ New-NetFirewallRule -DisplayName "Store Apps" `
 useful for troubleshooting, and disable ASAP." `
 	@Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log
 
 if ($Develop)
 {
@@ -219,5 +219,5 @@ if ($Develop)
 		-Description "Extension rule for active users to allow BITS to Internet gateway device (IGD)" `
 		@Logs | Format-Output @Logs
 
-	Update-Logs
+	Update-Log
 }

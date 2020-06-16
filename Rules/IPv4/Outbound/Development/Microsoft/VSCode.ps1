@@ -75,4 +75,4 @@ if ((Test-Installation "VSCode" ([ref] $VSCodeRoot) @Logs) -or $ForceLoad)
 		-Description "Visual Studio Code check for updates, extensions download." @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-ConfiguredAdapters
+# Unit test for Get-GroupPrincipal
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -39,7 +39,7 @@ Test-SystemRequirements
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test @Logs
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo @Logs
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 
 # Ask user if he wants to load these rules
@@ -48,39 +48,23 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-New-Test "Get-ConfiguredAdapters IPv4"
-Get-ConfiguredAdapters IPv4 @Logs
+New-Test "Get-GroupPrincipal"
+$UsersTest = Get-GroupPrincipal "Users" @Logs
+$UsersTest
 
-New-Test "Get-ConfiguredAdapters IPv6"
-Get-ConfiguredAdapters IPv6 @Logs
+New-Test "Get-GroupPrincipal CIM server"
+$CIMTest = Get-GroupPrincipal "Users", "Administrators" -Computer "localhost" -CIM @Logs
+$CIMTest
 
-New-Test "Get-ConfiguredAdapters IPv4 -IncludeDisconnected"
-Get-ConfiguredAdapters IPv4 -IncludeDisconnected @Logs
+New-Test "Expand users"
+$UsersTest | Select-Object -ExpandProperty User @Logs
 
-New-Test "Get-ConfiguredAdapters IPv4 -IncludeVirtual"
-Get-ConfiguredAdapters IPv4 -IncludeVirtual @Logs
-
-New-Test "Get-ConfiguredAdapters IPv4 -IncludeVirtual -IncludeDisconnected"
-Get-ConfiguredAdapters IPv4 -IncludeVirtual -IncludeDisconnected @Logs
-
-New-Test "Get-ConfiguredAdapters IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware"
-Get-ConfiguredAdapters IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware @Logs
-
-New-Test "Get-ConfiguredAdapters IPv4 -IncludeHidden"
-Get-ConfiguredAdapters IPv4 -IncludeHidden @Logs
-
-New-Test "Get-ConfiguredAdapters IPv4 -IncludeAll"
-$Adapters = Get-ConfiguredAdapters IPv4 -IncludeAll @Logs
-$Adapters
-
-New-Test "Get-ConfiguredAdapters IPv4 -IncludeAll -ExcludeHardware"
-Get-ConfiguredAdapters IPv4 -IncludeAll -ExcludeHardware @Logs
-
-New-Test "Get-ConfiguredAdapters binding"
-Get-ConfiguredAdapters IPv4 @Logs | Select-Object -ExpandProperty IPv4Address @Logs
+New-Test "Failure test"
+$FailedUsers = Get-GroupPrincipal "asdf Users" @Logs
+$FailedUsers
 
 New-Test "Get-TypeName"
-$Adapters | Get-TypeName @Logs
+$UsersTest | Get-TypeName @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

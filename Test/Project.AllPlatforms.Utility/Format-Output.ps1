@@ -70,5 +70,5 @@ New-NetFirewallRule -DisplayName "TargetProgram" `
 	-Description "TargetProgram test rule description" `
 	@Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

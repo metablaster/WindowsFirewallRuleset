@@ -81,5 +81,5 @@ $global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
 New-Test "Get-TypeName"
 $global:InstallTable | Get-TypeName @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

@@ -75,4 +75,4 @@ if ((Test-Installation "Greenshot" ([ref] $GreenshotRoot) @Logs) -or $ForceLoad)
 		-Description "Screen capture tool, needs rules to upload screenshots to imgur" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

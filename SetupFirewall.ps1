@@ -48,10 +48,10 @@ Set-ScreenBuffer @Logs
 
 # Check all rules that apply to windows services
 Test-File $ServiceHost @Logs
-Get-NetworkServices $ProjectRoot\Rules
+Get-NetworkService $ProjectRoot\Rules
 Get-Content -Path $ProjectRoot\Rules\NetworkServices.txt | ForEach-Object {
 	Test-Service $_ @Logs
-	Update-Logs
+	Update-Log
 }
 
 #
@@ -312,4 +312,4 @@ Write-Output ""
 Set-Variable -Name ErrorStatus -Scope Global -Value $false @Logs
 Set-Variable -Name WarningStatus -Scope Global -Value $false @Logs
 
-Update-Logs
+Update-Log

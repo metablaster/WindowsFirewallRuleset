@@ -440,4 +440,4 @@ Code:
 0 = pointer indicates the error.
 Code 0 may be received from a gateway or a host." @Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log

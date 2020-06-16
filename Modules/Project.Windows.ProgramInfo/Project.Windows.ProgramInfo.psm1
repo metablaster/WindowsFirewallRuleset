@@ -54,7 +54,7 @@ else
 }
 
 # Includes
-. $PSScriptRoot\External\Get-SQLInstances.ps1
+. $PSScriptRoot\External\Get-SQLInstance.ps1
 Import-Module -Name $PSScriptRoot\..\VSSetup
 Import-Module -Name $PSScriptRoot\..\Project.Windows.UserInfo
 # Import-Module -Name $PSScriptRoot\..\Project.Windows.ComputerInfo
@@ -498,15 +498,15 @@ User name in form of "USERNAME"
 .PARAMETER ComputerName
 NETBios Computer name in form of "COMPUTERNAME"
 .EXAMPLE
-Get-UserPrograms "USERNAME"
+Get-UserSoftware "USERNAME"
 .INPUTS
-None. You cannot pipe objects to Get-UserPrograms
+None. You cannot pipe objects to Get-UserSoftware
 .OUTPUTS
 [PSCustomObject[]] list of programs for specified user on a target computer
 .NOTES
 We should make a query for an array of users, will help to save into variable
 #>
-function Get-UserPrograms
+function Get-UserSoftware
 {
 	[OutputType([System.Management.Automation.PSCustomObject[]])]
 	[CmdletBinding()]
@@ -594,15 +594,15 @@ TODO: add description
 .PARAMETER ComputerName
 Computer name which to check
 .EXAMPLE
-Get-SystemPrograms "COMPUTERNAME"
+Get-SystemSoftware "COMPUTERNAME"
 .INPUTS
-None. You cannot pipe objects to Get-SystemPrograms
+None. You cannot pipe objects to Get-SystemSoftware
 .OUTPUTS
 [PSCustomObject[]] list of programs installed for all users
 .NOTES
 We should return empty PSCustomObject if test computer fails
 #>
-function Get-SystemPrograms
+function Get-SystemSoftware
 {
 	[OutputType([System.Management.Automation.PSCustomObject[]])]
 	[CmdletBinding()]
@@ -720,15 +720,15 @@ TODO: add description
 .PARAMETER ComputerName
 Computer name which to check
 .EXAMPLE
-Get-AllUserPrograms "COMPUTERNAME"
+Get-AllUserSoftware "COMPUTERNAME"
 .INPUTS
-None. You cannot pipe objects to Get-AllUserPrograms
+None. You cannot pipe objects to Get-AllUserSoftware
 .OUTPUTS
 [PSCustomObject[]] list of programs installed for all users
 .NOTES
 TODO: should be renamed into Get-InstallProperties
 #>
-function Get-AllUserPrograms
+function Get-AllUserSoftware
 {
 	[OutputType([System.Management.Automation.PSCustomObject[]])]
 	[CmdletBinding()]
@@ -829,15 +829,15 @@ registry path and child registry key name for target computer
 .PARAMETER ComputerName
 Computer name which to check
 .EXAMPLE
-Get-ExecutablePaths "COMPUTERNAME"
+Get-ExecutablePath "COMPUTERNAME"
 .INPUTS
-None. You cannot pipe objects to Get-ExecutablePaths
+None. You cannot pipe objects to Get-ExecutablePath
 .OUTPUTS
 [PSCustomObject[]] list of executables, their installation path and additional information
 .NOTES
 None.
 #>
-function Get-ExecutablePaths
+function Get-ExecutablePath
 {
 	[OutputType([System.Management.Automation.PSCustomObject[]])]
 	[CmdletBinding()]
@@ -1097,7 +1097,7 @@ function Update-Table
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Search string is: $SearchString"
 
 		# To reduce typing and make code clear
-		$UserGroups = Get-UserGroups -Computer $PolicyStore
+		$UserGroups = Get-UserGroup -Computer $PolicyStore
 
 		if ($Executables)
 		{
@@ -1205,7 +1205,7 @@ function Update-Table
 		# NOTE: User profile should be searched even if there is an installation system wide
 		if ($UserProfile)
 		{
-			$Principals = Get-GroupPrincipals "Users"
+			$Principals = Get-GroupPrincipal "Users"
 
 			foreach ($Principal in $Principals)
 			{
@@ -1213,7 +1213,7 @@ function Update-Table
 
 				# NOTE: the story is different here, each user may have multiple matches for search string
 				# letting one match to have same principal would be mistake.
-				$UserPrograms = Get-UserPrograms $Principal.User | Where-Object -Property Name -Like "*$SearchString*"
+				$UserPrograms = Get-UserSoftware $Principal.User | Where-Object -Property Name -Like "*$SearchString*"
 
 				if ($UserPrograms)
 				{
@@ -1295,7 +1295,7 @@ function Edit-Table
 
 		# TODO: checking if Principal exists
 		# Get a list of users to choose from, 3rd element in the path is user name
-		$Principal = Get-GroupPrincipals "Users" | Where-Object -Property User -EQ ($InstallLocation.Split("\"))[2]
+		$Principal = Get-GroupPrincipal "Users" | Where-Object -Property User -EQ ($InstallLocation.Split("\"))[2]
 
 		# Enter data into row
 		$Row.ID = ++$RowIndex
@@ -1315,7 +1315,7 @@ function Edit-Table
 		$InstallLocation = Format-Path $InstallLocation
 
 		# Not user profile path, so it applies to all users
-		$Principal = Get-UserGroups -Computer $PolicyStore | Where-Object -Property Group -EQ "Users"
+		$Principal = Get-UserGroup -Computer $PolicyStore | Where-Object -Property Group -EQ "Users"
 
 		# Create a row
 		$Row = $InstallTable.NewRow()
@@ -1482,8 +1482,8 @@ function Find-Installation
 	{
 		"SQLDTS"
 		{
-			# $SQLServerBinnRoot = Get-SQLInstances | Select-Object -ExpandProperty SQLBinRoot
-			$SQLDTSRoot = Get-SQLInstances | Select-Object -ExpandProperty SQLPath
+			# $SQLServerBinnRoot = Get-SQLInstance | Select-Object -ExpandProperty SQLBinRoot
+			$SQLDTSRoot = Get-SQLInstance | Select-Object -ExpandProperty SQLPath
 			if ($SQLDTSRoot)
 			{
 				Edit-Table $SQLDTSRoot
@@ -1542,7 +1542,7 @@ function Find-Installation
 		"WindowsKits"
 		{
 			# Get Windows SDK debuggers root (latest SDK)
-			$WindowsKits = Get-WindowsKits $ComputerName
+			$WindowsKits = Get-WindowsKit $ComputerName
 			if ($null -ne $WindowsKits)
 			{
 				$SDKDebuggers = $WindowsKits |
@@ -2155,15 +2155,15 @@ TODO: add description
 .PARAMETER ComputerName
 Computer name for which to list installed installed windows kits
 .EXAMPLE
-Get-WindowsKits COMPUTERNAME
+Get-WindowsKit COMPUTERNAME
 .INPUTS
-None. You cannot pipe objects to Get-WindowsKits
+None. You cannot pipe objects to Get-WindowsKit
 .OUTPUTS
 [PSCustomObject[]] for installed Windows Kits versions and install paths
 .NOTES
 None.
 #>
-function Get-WindowsKits
+function Get-WindowsKit
 {
 	[OutputType([System.Management.Automation.PSCustomObject[]])]
 	[CmdletBinding()]
@@ -2468,15 +2468,15 @@ New-Variable -Name UserProfileEnvironment -Scope Script -Option Constant -Value 
 
 Write-Debug -Message "[$ThisModule] Initialize module readonly variable: SystemPrograms"
 # Programs installed for all users
-New-Variable -Name SystemPrograms -Scope Script -Option ReadOnly -Value (Get-SystemPrograms -Computer $PolicyStore)
+New-Variable -Name SystemPrograms -Scope Script -Option ReadOnly -Value (Get-SystemSoftware -Computer $PolicyStore)
 
 Write-Debug -Message "[$ThisModule] Initialize module readonly variable: ExecutablePaths"
 # Programs installed for all users
-New-Variable -Name ExecutablePaths -Scope Script -Option ReadOnly -Value (Get-ExecutablePaths -Computer $PolicyStore)
+New-Variable -Name ExecutablePaths -Scope Script -Option ReadOnly -Value (Get-ExecutablePath -Computer $PolicyStore)
 
 Write-Debug -Message "[$ThisModule] Initialize module readonly variable: AllUserPrograms"
 # Programs installed for all users
-New-Variable -Name AllUserPrograms -Scope Script -Option ReadOnly -Value (Get-AllUserPrograms -Computer $PolicyStore)
+New-Variable -Name AllUserPrograms -Scope Script -Option ReadOnly -Value (Get-AllUserSoftware -Computer $PolicyStore)
 
 #
 # Function exports
@@ -2492,13 +2492,13 @@ Export-ModuleMember -Function Test-UserProfile
 Export-ModuleMember -Function Find-Installation
 Export-ModuleMember -Function Test-Environment
 
-Export-ModuleMember -Function Get-UserPrograms
-Export-ModuleMember -Function Get-AllUserPrograms
-Export-ModuleMember -Function Get-SystemPrograms
-Export-ModuleMember -Function Get-ExecutablePaths
+Export-ModuleMember -Function Get-UserSoftware
+Export-ModuleMember -Function Get-AllUserSoftware
+Export-ModuleMember -Function Get-SystemSoftware
+Export-ModuleMember -Function Get-ExecutablePath
 
 Export-ModuleMember -Function Get-NetFramework
-Export-ModuleMember -Function Get-WindowsKits
+Export-ModuleMember -Function Get-WindowsKit
 Export-ModuleMember -Function Get-WindowsSDK
 Export-ModuleMember -Function Get-WindowsDefender
 Export-ModuleMember -Function Get-SQLManagementStudio
@@ -2507,7 +2507,7 @@ Export-ModuleMember -Function Get-SQLManagementStudio
 # External function exports
 #
 
-Export-ModuleMember -Function Get-SQLInstances
+Export-ModuleMember -Function Get-SQLInstance
 
 #
 # Exports for debugging

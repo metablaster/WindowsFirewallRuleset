@@ -168,4 +168,4 @@ user effort." `
 		@Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

@@ -177,4 +177,4 @@ New-NetFirewallRule -DisplayName "IPv6 Encapsulation" `
 Addressing Protocol) and 6to4 tunneling services." `
 	@Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log

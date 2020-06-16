@@ -67,5 +67,5 @@ if ($global:InstallTable.Rows.Count -ne 0)
 	exit
 }
 
-Update-Logs
+Update-Log
 Exit-Test

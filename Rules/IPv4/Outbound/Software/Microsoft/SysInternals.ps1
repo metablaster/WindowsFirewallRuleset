@@ -112,4 +112,4 @@ if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot) @Logs) -or $Forc
 		-Description "" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

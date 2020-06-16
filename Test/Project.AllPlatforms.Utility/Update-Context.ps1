@@ -58,5 +58,5 @@ New-Test "Update-Context Test.Update-Context"
 Update-Context "Test" "Update-Context" @Logs
 Approve-Execute @Logs | Out-Null
 
-Update-Logs
+Update-Log
 Exit-Test

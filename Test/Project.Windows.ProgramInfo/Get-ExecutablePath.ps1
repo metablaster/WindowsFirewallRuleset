@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-GroupPrincipals
+# Unit test for Get-ExecutablePath
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -39,7 +39,7 @@ Test-SystemRequirements
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test @Logs
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo @Logs
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 
 # Ask user if he wants to load these rules
@@ -48,23 +48,16 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-New-Test "Get-GroupPrincipals"
-$UsersTest = Get-GroupPrincipals "Users" @Logs
-$UsersTest
+New-Test "Get-ExecutablePath"
+$ExecutablePaths = Get-ExecutablePath @Logs | Sort-Object -Property Name
+$ExecutablePaths
 
-New-Test "Get-GroupPrincipals CIM server"
-$CIMTest = Get-GroupPrincipals "Users", "Administrators" -Computer "localhost" -CIM @Logs
-$CIMTest
-
-New-Test "Expand users"
-$UsersTest | Select-Object -ExpandProperty User @Logs
-
-New-Test "Failure test"
-$FailedUsers = Get-GroupPrincipals "asdf Users" @Logs
-$FailedUsers
+New-Test "Get-ExecutablePath pwsh.exe"
+$ExecutablePaths | Where-Object -Property Name -EQ "pwsh.exe" @Logs |
+Select-Object -ExpandProperty InstallLocation
 
 New-Test "Get-TypeName"
-$UsersTest | Get-TypeName @Logs
+$ExecutablePaths | Get-TypeName @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

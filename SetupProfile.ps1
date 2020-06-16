@@ -88,4 +88,4 @@ Set-NetFirewallSetting -PolicyStore $PolicyStore `
 
 Set-NetworkProfile @Logs
 
-Update-Logs
+Update-Log

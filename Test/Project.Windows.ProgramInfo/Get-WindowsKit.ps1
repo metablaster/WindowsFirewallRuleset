@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-AllUserPrograms
+# Unit test for Get-WindowsKit
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -48,12 +48,20 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-New-Test "Get-AllUserPrograms"
-$Result = Get-AllUserPrograms @Logs
-$Result
+New-Test "Get-WindowsKit"
+$WindowsKits = Get-WindowsKit @Logs
+$WindowsKits
+
+New-Test "Get-WindowsKit DebuggersRoot latest"
+if ($null -ne $WindowsKits)
+{
+	$WindowsKits | Where-Object { $_.Product -like "WindowsDebuggersRoot*" } |
+	Sort-Object -Property Product @Logs |
+	Select-Object -Last 1 -ExpandProperty InstallLocation @Logs
+}
 
 New-Test "Get-TypeName"
-$Result | Get-TypeName @Logs
+$WindowsKits | Get-TypeName @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

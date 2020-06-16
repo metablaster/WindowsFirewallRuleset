@@ -90,4 +90,4 @@ if ((Test-Installation "CPU-Z" ([ref] $CPUZRoot) @Logs) -or $ForceLoad)
 		-Description "Used for manual check for update" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

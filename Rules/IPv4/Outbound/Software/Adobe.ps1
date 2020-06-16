@@ -89,4 +89,4 @@ if ((Test-Installation "AdobeARM" ([ref] $AdobeARMRoot) @Logs) -or $ForceLoad)
 		-Description "" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

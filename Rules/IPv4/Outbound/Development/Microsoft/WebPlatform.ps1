@@ -75,4 +75,4 @@ if ((Test-Installation "WebPlatform" ([ref] $WebPlatformRoot) @Logs) -or $ForceL
 		-Description "" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

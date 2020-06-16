@@ -151,7 +151,7 @@ It is a zero-configuration service, using essentially the same programming inter
 packet formats and operating semantics as the unicast Domain Name System (DNS)." `
 	@Logs | Format-Output @Logs
 
-# TODO: $PhysicalAdapters = Get-InterfaceAliases IPv4
+# TODO: $PhysicalAdapters = Get-InterfaceAlias IPv4
 # -InterfaceAlias $PhysicalAdapters
 New-NetFirewallRule -DisplayName "Multicast Domain Name System" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -236,4 +236,4 @@ automatic tunneling for unicast IPv6 traffic when an IPv6/IPv4 host is located b
 network address translator." `
 	@Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log

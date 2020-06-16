@@ -75,4 +75,4 @@ if ((Test-Installation "GoogleDrive" ([ref] $GoogleDriveRoot) @Logs) -or $ForceL
 		-Description "Google drive synchronization service" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

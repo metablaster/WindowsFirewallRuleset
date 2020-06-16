@@ -75,4 +75,4 @@ if ((Test-Installation "RealWorld" ([ref] $RealWorldRoot) @Logs) -or $ForceLoad)
 		-Description "To get online resources and template projects" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

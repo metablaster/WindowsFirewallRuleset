@@ -164,7 +164,7 @@ Administrators should have limited or no connectivity at all for maximum securit
 # WindowsServices.ps1, meaning re-run the script.
 #
 
-$Principals = Get-GroupPrincipals "Users"
+$Principals = Get-GroupPrincipal "Users"
 foreach ($Principal in $Principals)
 {
 	#
@@ -198,7 +198,7 @@ foreach ($Principal in $Principals)
 				-Description "Store apps generated rule for $($Principal.User)" `
 				@Logs | Format-Output @Logs
 
-			Update-Logs
+			Update-Log
 		}
 	}
 
@@ -235,7 +235,7 @@ foreach ($Principal in $Principals)
 				-Description "System store apps generated rule for $($Principal.User)" `
 				@Logs | Format-Output @Logs
 
-			Update-Logs
+			Update-Log
 		}
 	}
 }
@@ -289,4 +289,4 @@ New-NetFirewallRule -DisplayName "Windows License Manager Service" `
 	-Description "Provides infrastructure support for the Microsoft Store." `
 	@Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log

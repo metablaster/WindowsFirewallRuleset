@@ -75,11 +75,14 @@ TODO: we don't use logs in this module
 #>
 function Test-SystemRequirements
 {
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = "There is no better name")]
 	[OutputType([System.Void])]
 	param (
 		[Parameter(Mandatory = $false)]
 		[bool] $Check = $SystemCheck
 	)
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# disabled when running scripts from SetupFirewall.ps1 script
 	if ($Check)
@@ -406,25 +409,32 @@ Get all rules which are missing LocalUser value
 Rules which are missing LocalUser are considered weak and need to be updated
 This operation is slow, intended for debugging.
 .EXAMPLE
-Get-NoPrincipalRules
+Get-NoPrincipalRule
 .INPUTS
 None. You cannot pipe objects to Test-SystemRequirements
 .OUTPUTS
 None. Error message is shown if check failed, system info otherwise.
 .NOTES
 TODO: Not tested from this module
+TODO: should be put into utility module
 #>
-function Get-NoPrincipalRules
+function Get-NoPrincipalRule
 {
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+
+	Write-Information -Tags "User" -MessageData "INFO: Getting rules from GPO"
 	$GPORules = Get-NetFirewallProfile -All -PolicyStore $PolicyStore |
 	Get-NetFirewallRule | Where-Object -Property Owner -EQ $null
 
+	Write-Information -Tags "User" -MessageData "INFO: Applying security filter"
 	$UserFilter = $GPORules | Get-NetFirewallSecurityFilter |
 	Where-Object -Property LocalUser -EQ Any
 
+	Write-Information -Tags "User" -MessageData "INFO: Applying service filter"
 	$ServiceFilter = $UserFilter | Get-NetFirewallRule |
 	Get-NetFirewallServiceFilter | Where-Object -Property Service -EQ Any
 
+	Write-Information -Tags "User" -MessageData "INFO: Selecting properties"
 	$TargetRules = $ServiceFilter | Get-NetFirewallRule |
 	Select-Object -Property DisplayName, DisplayGroup, Direction
 
@@ -435,5 +445,5 @@ function Get-NoPrincipalRules
 # Function exports
 #
 
-Export-ModuleMember -Function Get-NoPrincipalRules
+Export-ModuleMember -Function Get-NoPrincipalRule
 Export-ModuleMember -Function Test-SystemRequirements

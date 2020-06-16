@@ -58,8 +58,8 @@ New-Test "Remove-NetFirewallRule"
 # Remove previous test
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
-New-Test "Get-GroupPrincipals"
-$Principals = Get-GroupPrincipals "Users" @Logs
+New-Test "Get-GroupPrincipal"
+$Principals = Get-GroupPrincipal "Users" @Logs
 $Principals
 
 [string] $PackageSID = ""
@@ -90,5 +90,5 @@ New-NetFirewallRule -DisplayName "Get-AppSID" `
 	-Description "TargetProgram test rule description" `
 	@Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

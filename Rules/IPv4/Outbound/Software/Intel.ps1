@@ -97,4 +97,4 @@ New-NetFirewallRule -Platform $Platform `
 	-LocalUser $NT_AUTHORITY_System `
 	-Description "" @Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log

@@ -75,4 +75,4 @@ if ((Test-Installation "ArenaChess" ([ref] $ArenaChessRoot) @Logs) -or $ForceLoa
 		-Description "Chess client program" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

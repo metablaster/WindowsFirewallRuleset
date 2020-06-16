@@ -51,8 +51,8 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-New-Test "Get-GroupPrincipals:"
-$GroupAccounts = Get-GroupPrincipals "Users", "Administrators" @Logs
+New-Test "Get-GroupPrincipal:"
+$GroupAccounts = Get-GroupPrincipal "Users", "Administrators" @Logs
 $GroupAccounts
 
 New-Test "Get-AppSID: foreach User"
@@ -63,5 +63,5 @@ foreach ($Account in $GroupAccounts)
 	}
 }
 
-Update-Logs
+Update-Log
 Exit-Test

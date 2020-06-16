@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-UserPrograms
+# Unit test for Get-SQLInstance
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -39,7 +39,6 @@ Test-SystemRequirements
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test @Logs
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 
@@ -49,21 +48,21 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-$UserGroup = "Users"
+New-Test "Get-SQLInstance"
+$Instances = Get-SQLInstance @Logs
+$Instances
 
-New-Test "Get-GroupPrincipals $UserGroup"
-$Principals = Get-GroupPrincipals $UserGroup @Logs
-# TODO: FOR SOME ODD FUCKING REASON IF YOU REMOVE Format-Table THE TEST WILL NOT WORK!!
-$Principals | Format-Table
+New-Test "Get-SQLInstance CIM"
+Get-SQLInstance -CIM @Logs
 
-foreach ($Principal in $Principals)
-{
-	New-Test "Get-UserPrograms: $($Principal.User)"
-	Get-UserPrograms $Principal.User @Logs
-}
+New-Test "Get-SQLInstance binn directory"
+Get-SQLInstance @Logs | Select-Object -ExpandProperty SQLBinRoot @Logs
+
+New-Test "Get-SQLInstance DTS directory"
+Get-SQLInstance @Logs | Select-Object -ExpandProperty SQLPath @Logs
 
 New-Test "Get-TypeName"
-Get-UserPrograms $Principals[0].User @Logs | Get-TypeName @Logs
+$Instances | Get-TypeName @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

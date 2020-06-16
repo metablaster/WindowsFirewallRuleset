@@ -246,4 +246,4 @@ Discovery and Launch (DIAL) is a protocol co-developed by Netflix and YouTube wi
 It is a mechanism for discovering and launching applications on a single subnet, typically a home network.
 It relies on Universal Plug and Play (UPnP), Simple Service Discovery Protocol (SSDP), and HTTP protocols." @Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log

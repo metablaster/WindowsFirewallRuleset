@@ -99,4 +99,4 @@ New-NetFirewallRule -Platform $Platform `
 	-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Service enables multiple clients to access video frames from camera devices." @Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log

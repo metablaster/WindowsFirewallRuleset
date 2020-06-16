@@ -42,7 +42,7 @@ If specified, try to pull and correlate CIM information for SQL
 I've done limited testing in matching up the service info to registry info.
 Suggestions would be appreciated!
 .EXAMPLE
-Get-SQLInstances -Computername DC1
+Get-SQLInstance -Computername DC1
 
 SQLInstance   : MSSQLSERVER
 Version       : 10.0.1600.22
@@ -71,7 +71,7 @@ Description
 Retrieves the SQL information from DC1
 .EXAMPLE
 # Get SQL instances on servers 1 and 2, match them up with service information from CIM
-Get-SQLInstances -Computername Server1, Server2 -CIM
+Get-SQLInstance -Computername Server1, Server2 -CIM
 
 Computername     : Server1
 SQLInstance      : MSSQLSERVER
@@ -107,7 +107,7 @@ ServiceStartMode : Auto
 .FUNCTIONALITY
 	Computers
 .NOTES
-Name: Get-SQLInstances
+Name: Get-SQLInstance
 Author: Boe Prox, edited by cookie monster (to cover wow6432node, CIM tie in)
 
 Version History:
@@ -135,7 +135,7 @@ https://gallery.technet.microsoft.com/scriptcenter/Get-SQLInstance-9a3245a0
 
 TODO: update examples to include DTS directory
 #>
-function Get-SQLInstances
+function Get-SQLInstance
 {
 	[CmdletBinding()]
 	param (

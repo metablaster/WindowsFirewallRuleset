@@ -637,4 +637,4 @@ New-NetFirewallRule -DisplayName "Extended Echo Reply (161)" `
 	-Description $Description `
 	@Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log

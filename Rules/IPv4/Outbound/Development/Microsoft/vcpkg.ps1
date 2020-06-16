@@ -104,4 +104,4 @@ if ((Test-Installation "vcpkg" ([ref] $vcpkgRoot) @Logs) -or $ForceLoad)
 		-Description "vcpkg has it's own cmake" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

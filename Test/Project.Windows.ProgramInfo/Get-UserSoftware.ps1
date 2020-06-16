@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test Get-NetworkServices
+# Unit test for Get-UserSoftware
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -39,6 +39,8 @@ Test-SystemRequirements
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test @Logs
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo @Logs
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 
 # Ask user if he wants to load these rules
@@ -47,12 +49,21 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-New-Test "Get-NetworkServices"
-$Result = Get-NetworkServices "$ProjectRoot\Rules" @Logs
-$Result
+$UserGroup = "Users"
+
+New-Test "Get-GroupPrincipal $UserGroup"
+$Principals = Get-GroupPrincipal $UserGroup @Logs
+# TODO: FOR SOME ODD FUCKING REASON IF YOU REMOVE Format-Table THE TEST WILL NOT WORK!!
+$Principals | Format-Table
+
+foreach ($Principal in $Principals)
+{
+	New-Test "Get-UserSoftware: $($Principal.User)"
+	Get-UserSoftware $Principal.User @Logs
+}
 
 New-Test "Get-TypeName"
-$Result | Get-TypeName @Logs
+Get-UserSoftware $Principals[0].User @Logs | Get-TypeName @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

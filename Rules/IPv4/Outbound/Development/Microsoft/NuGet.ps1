@@ -75,4 +75,4 @@ if ((Test-Installation "NuGet" ([ref] $NuGetRoot) @Logs) -or $ForceLoad)
 		-Description "" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

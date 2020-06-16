@@ -299,15 +299,15 @@ Scan all scripts in this repository and get windows service names involved in ru
 .PARAMETER Folder
 Root folder name which to scan recursively
 .EXAMPLE
-Get-NetworkServices "C:\PathToRepo"
+Get-NetworkService "C:\PathToRepo"
 .INPUTS
-None. You cannot pipe objects to Get-NetworkServices
+None. You cannot pipe objects to Get-NetworkService
 .OUTPUTS
 None, File with the list of services is made
 .NOTES
 None.
 #>
-function Get-NetworkServices
+function Get-NetworkService
 {
 	[CmdletBinding()]
 	param (
@@ -610,7 +610,7 @@ Export-ModuleMember -Function Approve-Execute
 Export-ModuleMember -Function Update-Context
 Export-ModuleMember -Function Convert-SDDLToACL
 Export-ModuleMember -Function Show-SDDL
-Export-ModuleMember -Function Get-NetworkServices
+Export-ModuleMember -Function Get-NetworkService
 Export-ModuleMember -Function Format-Output
 Export-ModuleMember -Function Set-ScreenBuffer
 Export-ModuleMember -Function Test-TargetComputer

@@ -98,4 +98,4 @@ if ((Test-Installation "MSIAfterburner" ([ref] $MSIAfterburnerRoot) @Logs) -or $
 		-Description "Startup update" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

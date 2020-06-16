@@ -9,7 +9,7 @@ LONG DESCRIPTION
 	A function which produces an error, warning and info streams must be advanced
 	function and must take @Logs splatting which is defined in this module.
 
-	Once in a while Update-Logs is called, which writes generated data into log files.
+	Once in a while Update-Log is called, which writes generated data into log files.
 
 	Behavior of logging can be customized in ProjectSettings.ps1 (WindowsFirewallRuleset project)
 
@@ -25,7 +25,7 @@ EXAMPLES
 	Another-Function @Logs
 
 	Some-Function @Logs | Another-Function @Logs
-	Update-Logs
+	Update-Log
 
 KEYWORDS
 	Logging

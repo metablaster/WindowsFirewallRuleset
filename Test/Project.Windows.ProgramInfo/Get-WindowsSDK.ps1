@@ -63,5 +63,5 @@ if ($null -ne $WindowsSDK)
 New-Test "Get-TypeName"
 $WindowsSDK | Get-TypeName @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

@@ -159,4 +159,4 @@ if ((Test-Installation "Nvidia86" ([ref] $NvidiaRoot86) @Logs) -or $ForceLoad)
 		-Description "" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

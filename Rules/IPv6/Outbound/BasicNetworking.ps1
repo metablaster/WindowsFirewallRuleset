@@ -205,4 +205,4 @@ New-NetFirewallRule -DisplayName "IPv6 Encapsulation" `
 ISATAP (Intra-Site Automatic Tunnel Addressing Protocol) and 6to4 tunneling services." `
 	@Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log

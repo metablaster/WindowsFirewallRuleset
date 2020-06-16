@@ -76,7 +76,7 @@ Administrators should have limited or no connectivity at all for maximum securit
 # Create rules for all network apps for each standard user
 #
 
-$Principals = Get-GroupPrincipals "Users"
+$Principals = Get-GroupPrincipal "Users"
 foreach ($Principal in $Principals)
 {
 	#
@@ -100,7 +100,7 @@ foreach ($Principal in $Principals)
 			-EdgeTraversalPolicy Block -LocalUser Any -Owner $Principal.SID -Package $PackageSID `
 			-Description "Store apps generated rule." @Logs | Format-Output @Logs
 
-		Update-Logs
+		Update-Log
 	}
 
 	#
@@ -124,8 +124,8 @@ foreach ($Principal in $Principals)
 			-EdgeTraversalPolicy Block -LocalUser Any -Owner $Principal.SID -Package $PackageSID `
 			-Description "System store apps generated rule." @Logs | Format-Output @Logs
 
-		Update-Logs
+		Update-Log
 	}
 }
 
-Update-Logs
+Update-Log

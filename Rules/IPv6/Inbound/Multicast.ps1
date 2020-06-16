@@ -710,4 +710,4 @@ New-NetFirewallRule -DisplayName "Global scope Multicast" `
 	-Description $Description `
 	@Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log

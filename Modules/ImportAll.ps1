@@ -26,39 +26,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Get-UserGroups
-#
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\Config\ProjectSettings.ps1
 
-# Check requirements for this project
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
-Test-SystemRequirements
+#
+# Import all modules into current session, useful for debugging, ie. running individual functions
+#
 
-# Includes
-. $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
+Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo @Logs
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo @Logs
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
-
-# Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
-if (!(Approve-Execute @Logs)) { exit }
-
-Start-Test
-
-New-Test "Get-UserGroups"
-Get-UserGroups @Logs
-
-New-Test "Get-UserGroups CIM server"
-Get-UserGroups -CIM @Logs
-
-New-Test "Failure test"
-Get-UserGroups "ZOMBI_PC" @Logs
-
-New-Test "Get-TypeName"
-Get-UserGroups "localhost" -CIM @Logs | Get-TypeName @Logs
-
-Update-Logs
-Exit-Test
+Import-Module -Name $ProjectRoot\Modules\Indented.Net.IP @Logs
+Import-Module -Name $ProjectRoot\Modules\VSSetup @Logs

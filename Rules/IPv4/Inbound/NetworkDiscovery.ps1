@@ -190,4 +190,4 @@ New-NetFirewallRule -Platform $Platform `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_LocalService `
 	-Description "Rule for Network Discovery to allow use of the Simple Service Discovery Protocol." @Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log

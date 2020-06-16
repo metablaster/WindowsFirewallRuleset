@@ -84,4 +84,4 @@ if ((Test-Installation "CounterStrikeGO" ([ref] $CounterStrikeRoot) @Logs) -or $
 		-Description "" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

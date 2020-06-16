@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-SQLInstances
+# Unit test for Get-UserGroup
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -39,7 +39,7 @@ Test-SystemRequirements
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test @Logs
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo @Logs
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 
 # Ask user if he wants to load these rules
@@ -48,21 +48,17 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-New-Test "Get-SQLInstances"
-$Instances = Get-SQLInstances @Logs
-$Instances
+New-Test "Get-UserGroup"
+Get-UserGroup @Logs
 
-New-Test "Get-SQLInstances CIM"
-Get-SQLInstances -CIM @Logs
+New-Test "Get-UserGroup CIM server"
+Get-UserGroup -CIM @Logs
 
-New-Test "Get-SQLInstances binn directory"
-Get-SQLInstances @Logs | Select-Object -ExpandProperty SQLBinRoot @Logs
-
-New-Test "Get-SQLInstances DTS directory"
-Get-SQLInstances @Logs | Select-Object -ExpandProperty SQLPath @Logs
+New-Test "Failure test"
+Get-UserGroup "ZOMBI_PC" @Logs
 
 New-Test "Get-TypeName"
-$Instances | Get-TypeName @Logs
+Get-UserGroup "localhost" -CIM @Logs | Get-TypeName @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

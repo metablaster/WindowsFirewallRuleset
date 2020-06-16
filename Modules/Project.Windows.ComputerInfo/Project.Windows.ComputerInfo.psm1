@@ -104,17 +104,17 @@ Whether to include hidden adapters
 .PARAMETER IncludeDisconnected
 Whether to include disconnected
 .EXAMPLE
-Get-ConfiguredAdapters "IPv4"
+Get-ConfiguredAdapter "IPv4"
 .EXAMPLE
-Get-ConfiguredAdapters "IPv6"
+Get-ConfiguredAdapter "IPv6"
 .INPUTS
-None. You cannot pipe objects to Get-ConfiguredAdapters
+None. You cannot pipe objects to Get-ConfiguredAdapter
 .OUTPUTS
 [NetIPConfiguration] or error message if no adapter configured
 .NOTES
 TODO: Loopback interface is missing in the output
 #>
-function Get-ConfiguredAdapters
+function Get-ConfiguredAdapter
 {
 	# TODO: doesn't work [OutputType([System.Net.NetIPConfiguration])]
 	[CmdletBinding(DefaultParameterSetName = "Individual")]
@@ -234,17 +234,17 @@ Whether to include hidden adapters
 .PARAMETER IncludeDisconnected
 Whether to include disconnected
 .EXAMPLE
-Get-InterfaceAliases "IPv4"
+Get-InterfaceAlias "IPv4"
 .EXAMPLE
-Get-InterfaceAliases "IPv6"
+Get-InterfaceAlias "IPv6"
 .INPUTS
-None. You cannot pipe objects to Get-InterfaceAliases
+None. You cannot pipe objects to Get-InterfaceAlias
 .OUTPUTS
 WildcardPattern[] Array of interface aliases
 .NOTES
 None.
 #>
-function Get-InterfaceAliases
+function Get-InterfaceAlias
 {
 	[OutputType([System.Management.Automation.WildcardPattern[]])]
 	[CmdletBinding(DefaultParameterSetName = "Individual")]
@@ -283,12 +283,12 @@ function Get-InterfaceAliases
 
 	if ($IncludeAll)
 	{
-		$ConfiguredInterfaces = Get-ConfiguredAdapters $AddressFamily `
+		$ConfiguredInterfaces = Get-ConfiguredAdapter $AddressFamily `
 			-IncludeAll:$IncludeAll -ExcludeHardware:$ExcludeHardware
 	}
 	else
 	{
-		$ConfiguredInterfaces = Get-ConfiguredAdapters $AddressFamily `
+		$ConfiguredInterfaces = Get-ConfiguredAdapter $AddressFamily `
 			-IncludeVirtual:$IncludeVirtual -ExcludeHardware:$ExcludeHardware `
 			-IncludeHidden:$IncludeHidden -IncludeDisconnected:$IncludeDisconnected
 	}
@@ -390,12 +390,12 @@ function Get-IPAddress
 
 	if ($IncludeAll)
 	{
-		$ConfiguredAdapters = Get-ConfiguredAdapters $AddressFamily `
+		$ConfiguredAdapters = Get-ConfiguredAdapter $AddressFamily `
 			-IncludeAll:$IncludeAll -ExcludeHardware:$ExcludeHardware
 	}
 	else
 	{
-		$ConfiguredAdapters = Get-ConfiguredAdapters $AddressFamily `
+		$ConfiguredAdapters = Get-ConfiguredAdapter $AddressFamily `
 			-IncludeVirtual:$IncludeVirtual -ExcludeHardware:$ExcludeHardware `
 			-IncludeHidden:$IncludeHidden -IncludeDisconnected:$IncludeDisconnected
 	}
@@ -468,12 +468,12 @@ function Get-Broadcast
 	# Broadcast address makes sense only for IPv4
 	if ($IncludeAll)
 	{
-		$ConfiguredAdapters = Get-ConfiguredAdapters IPv4 `
+		$ConfiguredAdapters = Get-ConfiguredAdapter IPv4 `
 			-IncludeAll:$IncludeAll -ExcludeHardware:$ExcludeHardware
 	}
 	else
 	{
-		$ConfiguredAdapters = Get-ConfiguredAdapters IPv4 `
+		$ConfiguredAdapters = Get-ConfiguredAdapter IPv4 `
 			-IncludeVirtual:$IncludeVirtual -ExcludeHardware:$ExcludeHardware `
 			-IncludeHidden:$IncludeHidden -IncludeDisconnected:$IncludeDisconnected
 	}
@@ -506,7 +506,7 @@ function Get-Broadcast
 #
 
 Export-ModuleMember -Function Get-ComputerName
-Export-ModuleMember -Function Get-ConfiguredAdapters
-Export-ModuleMember -Function Get-InterfaceAliases
+Export-ModuleMember -Function Get-ConfiguredAdapter
+Export-ModuleMember -Function Get-InterfaceAlias
 Export-ModuleMember -Function Get-IPAddress
 Export-ModuleMember -Function Get-Broadcast

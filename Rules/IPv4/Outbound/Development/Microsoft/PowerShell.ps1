@@ -125,4 +125,4 @@ if ((Test-Installation "Powershell86" ([ref] $PowerShell86Root) @Logs) -or $Forc
 		-Description "Rule to allow powershell help update" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

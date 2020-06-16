@@ -85,4 +85,4 @@ if ((Test-Installation "FileZilla" ([ref] $FileZillaRoot) @Logs) -or $ForceLoad)
 		-Description "FileZilla SSH FTP protocol" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

@@ -76,5 +76,5 @@ Get-Broadcast -IncludeAll -ExcludeHardware @Logs
 New-Test "Get-TypeName"
 $Broadcast | Get-TypeName @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

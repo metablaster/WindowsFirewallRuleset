@@ -103,5 +103,5 @@ New-NetFirewallRule -DisplayName "Get-SDDL APPLICATION PACKAGE AUTHORITY" `
 	-Description "Get-SDDL test rule for APPLICATION PACKAGE AUTHORITY" `
 	@Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

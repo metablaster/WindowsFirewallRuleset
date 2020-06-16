@@ -50,8 +50,8 @@ Start-Test
 
 Start-Test
 
-New-Test "Get-GroupPrincipals 'Users', 'Administrators'"
-$UserAccounts = Get-GroupPrincipals "Users", "Administrators" @Logs
+New-Test "Get-GroupPrincipal 'Users', 'Administrators'"
+$UserAccounts = Get-GroupPrincipal "Users", "Administrators" @Logs
 $UserAccounts
 
 New-Test "ConvertFrom-UserAccount:"
@@ -61,5 +61,5 @@ $UserNames
 New-Test "Get-TypeName"
 $UserNames | Get-TypeName @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

@@ -58,5 +58,5 @@ $psWindow.BufferSize = $NewSize
 New-Test "Set-ScreenBuffer"
 Set-ScreenBuffer @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

@@ -163,4 +163,4 @@ if ((Test-Installation "EpicGames" ([ref] $LauncherRoot) @Logs) -or $ForceLoad)
 		-Description "" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

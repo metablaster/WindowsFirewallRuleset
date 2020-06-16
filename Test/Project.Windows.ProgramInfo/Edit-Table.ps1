@@ -78,5 +78,5 @@ New-Test "Get-TypeName"
 # TODO: why this doesn't work?
 $global:InstallTable | Get-TypeName @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

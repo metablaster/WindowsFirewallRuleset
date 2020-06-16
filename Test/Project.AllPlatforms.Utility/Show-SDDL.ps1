@@ -73,5 +73,5 @@ $ACL | Show-SDDL @Logs
 New-Test "Show-SDDL (parameter)"
 Show-SDDL $ACL.SDDL @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

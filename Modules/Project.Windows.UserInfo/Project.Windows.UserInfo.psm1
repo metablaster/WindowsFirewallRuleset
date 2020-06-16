@@ -109,9 +109,9 @@ One or more computers which to query for group users
 .PARAMETER CIM
 Whether to contact CIM server (required for remote computers)
 .EXAMPLE
-Get-GroupPrincipals "Users", "Administrators"
+Get-GroupPrincipal "Users", "Administrators"
 .EXAMPLE
-Get-GroupPrincipals "Users" -Machine @(DESKTOP, LAPTOP) -CIM
+Get-GroupPrincipal "Users" -Machine @(DESKTOP, LAPTOP) -CIM
 .INPUTS
 [string[]] User groups
 .OUTPUTS
@@ -122,7 +122,7 @@ is supported only on Windows PowerShell
 TODO: Switch is needed to list all accounts instead of only enabled
 TODO: should we handle NT AUTHORITY, BUILTIN and similar?
 #>
-function Get-GroupPrincipals
+function Get-GroupPrincipal
 {
 	[OutputType([PSCustomObject[]])]
 	[CmdletBinding(PositionalBinding = $false)]
@@ -267,9 +267,9 @@ One or more computers which to query for user groups
 .PARAMETER CIM
 Whether to contact CIM server (required for remote computers)
 .EXAMPLE
-Get-UserGroups "ServerPC"
+Get-UserGroup "ServerPC"
 .EXAMPLE
-Get-UserGroups @(DESKTOP, LAPTOP) -CIM
+Get-UserGroup @(DESKTOP, LAPTOP) -CIM
 .INPUTS
 [string[]] array of computer names
 .OUTPUTS
@@ -278,7 +278,7 @@ Get-UserGroups @(DESKTOP, LAPTOP) -CIM
 CIM switch is not supported on PowerShell Core, meaning contacting remote computers
 is supported only on Windows PowerShell
 #>
-function Get-UserGroups
+function Get-UserGroup
 {
 	[OutputType([PSCustomObject[]])]
 	[CmdletBinding(PositionalBinding = $false)]
@@ -304,7 +304,7 @@ function Get-UserGroups
 		{
 			if ($CIM)
 			{
-				# TODO: should work on windows, see Get-SQLInstances
+				# TODO: should work on windows, see Get-SQLInstance
 				if ($PowerShellEdition -ne "Desktop")
 				{
 					Write-Error -Category InvalidArgument -TargetObject $Computer `
@@ -778,11 +778,11 @@ if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 
 Export-ModuleMember -Function ConvertFrom-UserAccount
 Export-ModuleMember -Function Get-AccountSID
-Export-ModuleMember -Function Get-GroupPrincipals
+Export-ModuleMember -Function Get-GroupPrincipal
 Export-ModuleMember -Function Get-GroupSID
 Export-ModuleMember -Function Get-SDDL
 Export-ModuleMember -Function Merge-SDDL
-Export-ModuleMember -Function Get-UserGroups
+Export-ModuleMember -Function Get-UserGroup
 
 #
 # External function exports

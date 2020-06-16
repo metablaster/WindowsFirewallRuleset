@@ -75,4 +75,4 @@ if ((Test-Installation "PasswordSafe" ([ref] $PasswordSafeRoot) @Logs) -or $Forc
 		-Description "Password safe check for updates." @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

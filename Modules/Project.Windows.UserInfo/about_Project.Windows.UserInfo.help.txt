@@ -29,7 +29,7 @@ EXAMPLES
 	Get-AccountSID -User "TestUser" -Computer "localhost"
 
 	To get user accounts on system:
-	Get-GroupPrincipals "Administrators" "Users"
+	Get-GroupPrincipal "Administrators" "Users"
 
 KEYWORDS
 	UserInfo

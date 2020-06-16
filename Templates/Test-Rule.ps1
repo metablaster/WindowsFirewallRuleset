@@ -77,5 +77,5 @@ New-NetFirewallRule -DisplayName "Test rule" `
 	-Description "Test rule description" `
 	@Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

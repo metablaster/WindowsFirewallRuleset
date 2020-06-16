@@ -20,10 +20,10 @@ EXAMPLES
 	Get-Broadcast
 
 	To get list of configured adapters
-	Get-ConfiguredAdapters IPv6
+	Get-ConfiguredAdapter IPv6
 
 	To get list of interface aliases
-	Get-InterfaceAliases IPV4
+	Get-InterfaceAlias IPV4
 
 KEYWORDS
 	ComputerInfo

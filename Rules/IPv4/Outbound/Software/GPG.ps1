@@ -75,4 +75,4 @@ if ((Test-Installation "GPG" ([ref] $GPGRoot) @Logs) -or $ForceLoad)
 		-Description "For Kleopatra server key lookup and key publish." @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

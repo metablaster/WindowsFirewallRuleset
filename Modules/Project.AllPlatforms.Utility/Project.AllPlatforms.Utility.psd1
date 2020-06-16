@@ -77,7 +77,7 @@
 		"Update-Context"
 		"Convert-SDDLToACL"
 		"Show-SDDL"
-		"Get-NetworkServices"
+		"Get-NetworkService"
 		"Format-Output"
 		"Set-ScreenBuffer"
 		"Test-TargetComputer"

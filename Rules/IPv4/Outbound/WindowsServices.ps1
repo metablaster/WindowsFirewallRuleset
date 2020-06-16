@@ -460,4 +460,4 @@ New-NetFirewallRule -DisplayName "Windows Camera Frame Server" `
 	-Description "Service enables multiple clients to access video frames from camera devices." `
 	@Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log

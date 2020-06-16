@@ -90,4 +90,4 @@ To prevent remote use of this computer, clear the checkboxes on the Remote tab o
 properties control panel item." `
 	@Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log

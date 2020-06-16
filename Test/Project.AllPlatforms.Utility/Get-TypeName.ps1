@@ -77,5 +77,5 @@ Get-TypeName (Test-NoReturn) @Logs
 New-Test "Get-TypeName (no pipeline input)"
 Test-NoReturn | Get-TypeName @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

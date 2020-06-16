@@ -103,5 +103,5 @@ Get-GroupSID 'Users', 'Hyper-V Administrators' -Machine "CRAZYMACHINE" @Logs
 New-Test "FAILURE TEST CONTACT: Get-GroupSID @('Users', 'Hyper-V Administrators')"
 Get-GroupSID 'Users', 'Hyper-V Administrators' -Machine "CRAZYMACHINE" -CIM @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

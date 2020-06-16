@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Test-Installation
+# Unit test for Get-AllUserSoftware
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -48,29 +48,12 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-$OfficeRoot = "%ProgramFiles(x866666)%\Microsoft Office\root\Office16"
-$TeamViewerRoot = "%ProgramFiles(x86)%\TeamViewer"
-$TestBadVariable = "%UserProfile%\crazyFolder"
-$TestBadVariable2 = "%UserProfile%\crazyFolder"
-$Greenshot = "unknown"
-
-New-Test "Test-Installation 'Greenshot' $Greenshot"
-Test-Installation "Greenshot" ([ref] $Greenshot) @Logs
-
-New-Test "Test-Installation 'MicrosoftOffice' $OfficeRoot"
-Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot) @Logs
-
-New-Test "Test-Installation 'TeamViewer' $TeamViewerRoot"
-Test-Installation "TeamViewer" ([ref] $TeamViewerRoot) @Logs
-
-New-Test "Test-Installation 'VisualStudio' $TestBadVariable"
-Test-Installation "VisualStudio" ([ref] $TestBadVariable) @Logs
-
-New-Test "Test-Installation 'BadVariable' $TestBadVariable2"
-$Status = Test-Installation "BadVariable" ([ref] $TestBadVariable2) @Logs
+New-Test "Get-AllUserSoftware"
+$Result = Get-AllUserSoftware @Logs
+$Result
 
 New-Test "Get-TypeName"
-$Status | Get-TypeName @Logs
+$Result | Get-TypeName @Logs
 
 Update-Log
 Exit-Test

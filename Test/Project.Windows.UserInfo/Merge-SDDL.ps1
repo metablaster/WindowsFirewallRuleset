@@ -66,5 +66,5 @@ $TestUsersSDDL
 New-Test "Get-TypeName"
 $TestUsersSDDL | Get-TypeName @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

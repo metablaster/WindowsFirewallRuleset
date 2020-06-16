@@ -60,7 +60,7 @@ New-Test "Remove-NetFirewallRule"
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
 New-Test "Virtual adapter rule no wildcard"
-$VirtualAdapter = Get-InterfaceAliases IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware
+$VirtualAdapter = Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware
 
 # Outbound rule to test virtual adapter rule
 New-NetFirewallRule -DisplayName "Virtual adapter rule no wildcard" `
@@ -75,7 +75,7 @@ New-NetFirewallRule -DisplayName "Virtual adapter rule no wildcard" `
 	@Logs | Format-Output @Logs
 
 New-Test "Virtual adapter rule CultureInvariant"
-$VirtualAdapterCultureInvariant = Get-InterfaceAliases IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware -WildCardOption CultureInvariant
+$VirtualAdapterCultureInvariant = Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware -WildCardOption CultureInvariant
 
 # Outbound rule to test virtual adapter rule
 New-NetFirewallRule -DisplayName "Virtual adapter rule CultureInvariant" `
@@ -90,7 +90,7 @@ New-NetFirewallRule -DisplayName "Virtual adapter rule CultureInvariant" `
 	@Logs | Format-Output @Logs
 
 New-Test "Virtual adapter rule IgnoreCase"
-$VirtualAdapterIgnoreCase = Get-InterfaceAliases IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware -WildCardOption IgnoreCase
+$VirtualAdapterIgnoreCase = Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware -WildCardOption IgnoreCase
 
 # Outbound rule to test virtual adapter rule
 New-NetFirewallRule -DisplayName "Virtual adapter rule IgnoreCase" `
@@ -105,7 +105,7 @@ New-NetFirewallRule -DisplayName "Virtual adapter rule IgnoreCase" `
 	@Logs | Format-Output @Logs
 
 New-Test "Virtual adapter rule None"
-$VirtualAdapterNone = Get-InterfaceAliases IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware -WildCardOption None
+$VirtualAdapterNone = Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware -WildCardOption None
 
 # Outbound rule to test virtual adapter rule
 New-NetFirewallRule -DisplayName "Virtual adapter rule None" `
@@ -120,7 +120,7 @@ New-NetFirewallRule -DisplayName "Virtual adapter rule None" `
 	@Logs | Format-Output @Logs
 
 New-Test "Virtual adapter rule Compiled"
-$VirtualAdapterCompiled = Get-InterfaceAliases IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware -WildCardOption Compiled
+$VirtualAdapterCompiled = Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware -WildCardOption Compiled
 
 # Outbound rule to test virtual adapter rule
 New-NetFirewallRule -DisplayName "Virtual adapter rule Compiled" `
@@ -135,7 +135,7 @@ New-NetFirewallRule -DisplayName "Virtual adapter rule Compiled" `
 	@Logs | Format-Output @Logs
 
 New-Test "Hardware adapter rule"
-$HardwareAdapter = Get-InterfaceAliases IPv4
+$HardwareAdapter = Get-InterfaceAlias IPv4
 
 # Outbound rule to test hardware adapter rule
 New-NetFirewallRule -DisplayName "Hardware adapter rule" `
@@ -150,7 +150,7 @@ New-NetFirewallRule -DisplayName "Hardware adapter rule" `
 	@Logs | Format-Output @Logs
 
 New-Test "Multiple adapters rule"
-$MultipleAdapters = Get-InterfaceAliases IPv4 -IncludeAll
+$MultipleAdapters = Get-InterfaceAlias IPv4 -IncludeAll
 
 # Outbound rule to test hardware adapter rule
 New-NetFirewallRule -DisplayName "Multiple adapters rule" `
@@ -165,7 +165,7 @@ New-NetFirewallRule -DisplayName "Multiple adapters rule" `
 	@Logs | Format-Output @Logs
 
 New-Test "Bad adapter rule"
-$BadAdapters = Get-InterfaceAliases IPv4 -IncludeAll
+$BadAdapters = Get-InterfaceAlias IPv4 -IncludeAll
 $BadAdapters += [WildcardPattern]("Local Area Connection* 6")
 
 # Outbound rule to test nonexistent adapter rule
@@ -180,5 +180,5 @@ New-NetFirewallRule -DisplayName "Bad adapter rule" `
 	-Description "Bad adapter test rule description" `
 	@Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

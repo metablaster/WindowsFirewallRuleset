@@ -77,5 +77,5 @@ New-NetFirewallRule -DisplayName "TargetProgram" `
 	-Description "Unresolved path test" `
 	@Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

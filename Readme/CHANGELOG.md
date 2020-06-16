@@ -111,7 +111,7 @@
 - Format-Path function would index into empty array if environment variable not found
 - Minor errors resolved thanks to strict mode
 - Format-Path would return bad result if there is only a single environment variable
-- Update-Table would produce an error if Get-AllUserPrograms fails to get a list of programs from
+- Update-Table would produce an error if Get-AllUserSoftware fails to get a list of programs from
   registry
 
 ## Performance

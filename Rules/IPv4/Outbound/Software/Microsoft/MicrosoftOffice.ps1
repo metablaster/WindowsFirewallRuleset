@@ -274,4 +274,4 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot) @Logs) -or $ForceLo
 		-Description "" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

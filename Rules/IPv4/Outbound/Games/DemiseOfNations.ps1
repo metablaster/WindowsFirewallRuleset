@@ -75,4 +75,4 @@ if ((Test-Installation "DemiseOfNations" ([ref] $TargetProgramRoot) @Logs) -or $
 		-Description "" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

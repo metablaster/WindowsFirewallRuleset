@@ -68,5 +68,5 @@ Test-Installation "MicrosoftOffice" ([ref] $NullVariable) @Logs
 New-Test "Test-Installation 'EmptyVariable' $EmptyVariable"
 Test-Installation "MicrosoftOffice" ([ref] $EmptyVariable) @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

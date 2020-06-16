@@ -394,4 +394,4 @@ if ((Test-Installation "Tor" ([ref] $TorRoot) @Logs) -or $ForceLoad)
 		-Description "" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

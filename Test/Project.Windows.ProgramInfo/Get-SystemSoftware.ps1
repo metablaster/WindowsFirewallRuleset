@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-InterfaceAliases
+# Unit test for Get-SystemSoftware
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -39,7 +39,7 @@ Test-SystemRequirements
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test @Logs
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo @Logs
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 
 # Ask user if he wants to load these rules
@@ -48,44 +48,20 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-New-Test "Get-InterfaceAliases IPv4"
-$Aliases = Get-InterfaceAliases IPv4 @Logs
-$Aliases.ToWql()
+$SystemPrograms = Get-SystemSoftware @Logs
 
-New-Test "Get-InterfaceAliases IPv6"
-$Aliases = Get-InterfaceAliases IPv6 @Logs
-$Aliases.ToWql()
+New-Test "Get-SystemSoftware Name"
+$SystemPrograms | Sort-Object -Property Name @Logs | Select-Object -ExpandProperty Name @Logs
 
-New-Test "Get-InterfaceAliases IPv4 -IncludeDisconnected -WildCardOption"
-$Aliases = Get-InterfaceAliases IPv4 -IncludeDisconnected -WildCardOption IgnoreCase @Logs
-$Aliases.ToWql()
+New-Test "Get-SystemSoftware InstallLocation"
+$SystemPrograms | Sort-Object -Property InstallLocation @Logs |
+Select-Object -ExpandProperty InstallLocation @Logs
 
-New-Test "Get-InterfaceAliases IPv4 -IncludeVirtual"
-$Aliases = Get-InterfaceAliases IPv4 -IncludeVirtual @Logs
-$Aliases.ToWql()
-
-New-Test "Get-InterfaceAliases IPv4 -IncludeVirtual -IncludeDisconnected"
-$Aliases = Get-InterfaceAliases IPv4 -IncludeVirtual -IncludeDisconnected @Logs
-$Aliases.ToWql()
-
-New-Test "Get-InterfaceAliases IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware"
-$Aliases = Get-InterfaceAliases IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware @Logs
-$Aliases.ToWql()
-
-New-Test "Get-InterfaceAliases IPv4 -IncludeHidden"
-$Aliases = Get-InterfaceAliases IPv4 -IncludeHidden @Logs
-$Aliases.ToWql()
-
-New-Test "Get-InterfaceAliases IPv4 -IncludeAll"
-$Aliases = Get-InterfaceAliases IPv4 -IncludeAll @Logs
-$Aliases.ToWql()
-
-New-Test "Get-InterfaceAliases IPv4 -IncludeAll -ExcludeHardware"
-$Aliases = Get-InterfaceAliases IPv4 -IncludeAll -ExcludeHardware @Logs
-$Aliases.ToWql()
+New-Test "Get-SystemSoftware"
+$SystemPrograms | Sort-Object -Property Name @Logs
 
 New-Test "Get-TypeName"
-$Aliases | Get-TypeName @Logs
+$SystemPrograms | Get-TypeName @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

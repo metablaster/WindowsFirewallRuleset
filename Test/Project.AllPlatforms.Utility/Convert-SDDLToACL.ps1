@@ -63,5 +63,5 @@ $Result
 New-Test "Get-TypeName"
 $Result | Get-TypeName @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

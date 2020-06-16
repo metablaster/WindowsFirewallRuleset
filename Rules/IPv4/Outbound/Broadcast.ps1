@@ -98,4 +98,4 @@ New-NetFirewallRule -DisplayName "Microsoft Wireless WiFi adapter" `
  @Logs | Format-Output @Logs
  #>
 
-Update-Logs
+Update-Log

@@ -23,7 +23,7 @@ EXAMPLES
 	Test-SystemRequirements $true
 
 	To query weak rules with no LocalUser value
-	Get-NoPrincipalRules
+	Get-NoPrincipalRule
 
 KEYWORDS
 	SystemRequirements

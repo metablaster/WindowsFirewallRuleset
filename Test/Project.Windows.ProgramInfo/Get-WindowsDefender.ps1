@@ -51,5 +51,5 @@ Start-Test
 New-Test "Get-WindowsDefender"
 Get-WindowsDefender @Logs #| Select-Object -ExpandProperty InstallLocation @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

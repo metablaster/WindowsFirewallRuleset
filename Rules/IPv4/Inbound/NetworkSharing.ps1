@@ -138,4 +138,4 @@ New-NetFirewallRule -Platform $Platform `
 The RPCSS service is the Service Control Manager for COM and DCOM servers.
 It performs object activations requests, object exporter resolutions and distributed garbage collection for COM and DCOM servers." @Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log

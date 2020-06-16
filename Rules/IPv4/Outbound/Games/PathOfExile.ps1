@@ -75,4 +75,4 @@ if ((Test-Installation "PathOfExile" ([ref] $PathOfExileRoot) @Logs) -or $ForceL
 		-Description "Needed for online gaming" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

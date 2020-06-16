@@ -110,4 +110,4 @@ if ((Test-Installation "Thuderbird" ([ref] $ThunderbirdRoot) @Logs) -or $ForceLo
 		-Description "Outgoing mail server" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-SystemPrograms
+# Unit test Get-NetworkService
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -39,7 +39,6 @@ Test-SystemRequirements
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test @Logs
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 
 # Ask user if he wants to load these rules
@@ -48,20 +47,12 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-$SystemPrograms = Get-SystemPrograms @Logs
-
-New-Test "Get-SystemPrograms Name"
-$SystemPrograms | Sort-Object -Property Name @Logs | Select-Object -ExpandProperty Name @Logs
-
-New-Test "Get-SystemPrograms InstallLocation"
-$SystemPrograms | Sort-Object -Property InstallLocation @Logs |
-Select-Object -ExpandProperty InstallLocation @Logs
-
-New-Test "Get-SystemPrograms"
-$SystemPrograms | Sort-Object -Property Name @Logs
+New-Test "Get-NetworkService"
+$Result = Get-NetworkService "$ProjectRoot\Rules" @Logs
+$Result
 
 New-Test "Get-TypeName"
-$SystemPrograms | Get-TypeName @Logs
+$Result | Get-TypeName @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

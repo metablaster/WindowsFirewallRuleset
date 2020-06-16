@@ -140,5 +140,5 @@ Test-Parent @Logs
 New-Test "Test-Combo"
 Test-Combo @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

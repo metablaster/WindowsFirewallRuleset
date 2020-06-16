@@ -93,4 +93,4 @@ if ((Test-Installation "Steam" ([ref] $SteamRoot) @Logs) -or $ForceLoad)
 	The other PC views the video and audio like it's watching a movie, sending back mouse, keyboard, and controller input to the other PC." @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

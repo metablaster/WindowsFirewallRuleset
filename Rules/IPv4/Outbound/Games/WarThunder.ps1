@@ -123,4 +123,4 @@ if ((Test-Installation "WarThunder" ([ref] $WarThunderRoot) @Logs) -or $ForceLoa
 		-Description "" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

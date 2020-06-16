@@ -158,4 +158,4 @@ New-NetFirewallRule -Platform $Platform -PolicyStore $PolicyStore `
 	-Description "Allow Teredo edge traversal, a technology that provides address assignment and automatic tunneling
 for unicast IPv6 traffic when an IPv6/IPv4 host is located behind an IPv4 network address translator." @Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log

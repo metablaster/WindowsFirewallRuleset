@@ -55,5 +55,5 @@ $ComputerName
 New-Test "Get-TypeName"
 $ComputerName | Get-TypeName @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

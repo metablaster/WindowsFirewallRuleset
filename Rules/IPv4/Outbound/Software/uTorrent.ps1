@@ -138,4 +138,4 @@ if ((Test-Installation "uTorrent" ([ref] $uTorrentRoot) @Logs) -or $ForceLoad)
 		-Description "HTTP probably for adds and client content" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-WindowsKits
+# Unit test for Get-InterfaceAlias
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -39,7 +39,7 @@ Test-SystemRequirements
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test @Logs
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo @Logs
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 
 # Ask user if he wants to load these rules
@@ -48,20 +48,44 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-New-Test "Get-WindowsKits"
-$WindowsKits = Get-WindowsKits @Logs
-$WindowsKits
+New-Test "Get-InterfaceAlias IPv4"
+$Aliases = Get-InterfaceAlias IPv4 @Logs
+$Aliases.ToWql()
 
-New-Test "Get-WindowsKits DebuggersRoot latest"
-if ($null -ne $WindowsKits)
-{
-	$WindowsKits | Where-Object { $_.Product -like "WindowsDebuggersRoot*" } |
-	Sort-Object -Property Product @Logs |
-	Select-Object -Last 1 -ExpandProperty InstallLocation @Logs
-}
+New-Test "Get-InterfaceAlias IPv6"
+$Aliases = Get-InterfaceAlias IPv6 @Logs
+$Aliases.ToWql()
+
+New-Test "Get-InterfaceAlias IPv4 -IncludeDisconnected -WildCardOption"
+$Aliases = Get-InterfaceAlias IPv4 -IncludeDisconnected -WildCardOption IgnoreCase @Logs
+$Aliases.ToWql()
+
+New-Test "Get-InterfaceAlias IPv4 -IncludeVirtual"
+$Aliases = Get-InterfaceAlias IPv4 -IncludeVirtual @Logs
+$Aliases.ToWql()
+
+New-Test "Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected"
+$Aliases = Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected @Logs
+$Aliases.ToWql()
+
+New-Test "Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware"
+$Aliases = Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware @Logs
+$Aliases.ToWql()
+
+New-Test "Get-InterfaceAlias IPv4 -IncludeHidden"
+$Aliases = Get-InterfaceAlias IPv4 -IncludeHidden @Logs
+$Aliases.ToWql()
+
+New-Test "Get-InterfaceAlias IPv4 -IncludeAll"
+$Aliases = Get-InterfaceAlias IPv4 -IncludeAll @Logs
+$Aliases.ToWql()
+
+New-Test "Get-InterfaceAlias IPv4 -IncludeAll -ExcludeHardware"
+$Aliases = Get-InterfaceAlias IPv4 -IncludeAll -ExcludeHardware @Logs
+$Aliases.ToWql()
 
 New-Test "Get-TypeName"
-$WindowsKits | Get-TypeName @Logs
+$Aliases | Get-TypeName @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

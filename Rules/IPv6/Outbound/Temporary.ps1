@@ -129,5 +129,5 @@ useful for troubleshooting, and disable ASAP." `
 		-Description "Temporary allow troublesome UDP traffic." `
 		@Logs | Format-Output @Logs
 
-	Update-Logs
+	Update-Log
 }

@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-ExecutablePaths
+# Unit test for Get-NoPrincipalRule
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -39,7 +39,6 @@ Test-SystemRequirements
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test @Logs
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 
 # Ask user if he wants to load these rules
@@ -48,16 +47,11 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-New-Test "Get-ExecutablePaths"
-$ExecutablePaths = Get-ExecutablePaths @Logs | Sort-Object -Property Name
-$ExecutablePaths
+New-Test "Get-NoPrincipalRule"
+$Result = Get-NoPrincipalRule @Logs
 
-New-Test "Get-ExecutablePaths pwsh.exe"
-$ExecutablePaths | Where-Object -Property Name -EQ "pwsh.exe" @Logs |
-Select-Object -ExpandProperty InstallLocation
+New-Test "Get-NoPrincipalRule | Get-TypeName"
+$Result | Get-NoPrincipalRule @Logs
 
-New-Test "Get-TypeName"
-$ExecutablePaths | Get-TypeName @Logs
-
-Update-Logs
+Update-Log
 Exit-Test

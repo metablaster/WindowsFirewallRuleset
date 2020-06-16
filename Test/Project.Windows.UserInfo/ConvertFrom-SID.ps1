@@ -51,8 +51,8 @@ $DebugPreference = "Continue"
 
 Start-Test
 
-New-Test "Get-GroupPrincipals 'Users', 'Administrators', NT SYSTEM, NT LOCAL SERVICE"
-$UserAccounts = Get-GroupPrincipals "Users", "Administrators" @Logs
+New-Test "Get-GroupPrincipal 'Users', 'Administrators', NT SYSTEM, NT LOCAL SERVICE"
+$UserAccounts = Get-GroupPrincipal "Users", "Administrators" @Logs
 $UserAccounts
 
 $NTAccounts = Get-AccountSID -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE" @Logs
@@ -73,5 +73,5 @@ foreach ($Account in $NTAccounts)
 New-Test "Get-TypeName"
 $UserAccounts[0] | Get-TypeName @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

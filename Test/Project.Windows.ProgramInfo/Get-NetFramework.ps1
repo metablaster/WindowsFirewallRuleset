@@ -66,5 +66,5 @@ if ($null -ne $NETFramework)
 New-Test "Get-TypeName"
 $NETFrameworkRoot | Get-TypeName @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

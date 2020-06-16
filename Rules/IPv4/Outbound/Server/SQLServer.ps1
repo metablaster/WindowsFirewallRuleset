@@ -95,4 +95,4 @@ if ((Test-Installation "SQLDTS" ([ref] $SQLDTSRoot) @Logs) -or $ForceLoad)
 		-Description "" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

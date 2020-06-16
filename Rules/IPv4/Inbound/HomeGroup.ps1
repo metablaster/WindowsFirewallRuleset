@@ -55,6 +55,8 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # Rules for home group
 # NOTE: these rules are not used in project, needs additional tweaking and testing
+# NOTE: HomeGroup has been removed from Windows 10 (Version 1803), for more info see:
+# https://support.microsoft.com/en-us/help/4091368/windows-10-homegroup-removed
 #
 
 New-NetFirewallRule -DisplayName "HomeGroup (Peer Networking Grouping)" `
@@ -80,4 +82,4 @@ New-NetFirewallRule -DisplayName "HomeGroup (PNRP)" `
 	-Description "HomeGroup (Pear Name Resolution Protocol)" `
 	@Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log

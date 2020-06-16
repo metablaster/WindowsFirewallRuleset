@@ -76,4 +76,4 @@ if ((Test-Installation "Chocolatey" ([ref] $ChocolateyRoot) @Logs) -or $ForceLoa
 		-Description "Chocolatey package manager" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

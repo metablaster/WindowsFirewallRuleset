@@ -76,4 +76,4 @@ if ((Test-Installation "Metatrader" ([ref] $MetatraderRoot) @Logs) -or $ForceLoa
 		-Description "" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

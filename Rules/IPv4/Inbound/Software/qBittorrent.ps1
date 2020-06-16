@@ -130,4 +130,4 @@ torrents you are on." `
 		@Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

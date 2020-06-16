@@ -134,4 +134,4 @@ if ((Test-Installation "GithubDesktop" ([ref] $GithubRoot) @Logs) -or $ForceLoad
 		-Description "cloning repos" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

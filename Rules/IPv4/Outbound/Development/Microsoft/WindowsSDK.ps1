@@ -102,4 +102,4 @@ if ((Test-Installation "WindowsKits" ([ref] $SDKDebuggers) @Logs) -or $ForceLoad
 		-Description "WinDbg Symchk access to Symbols Server" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

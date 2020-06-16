@@ -60,5 +60,5 @@ Test-File "$OfficeShared\ClickToRun\OfficeClickToRun.exe" @Logs
 New-Test "%ProgramFiles%\ClickToRun\OfficeClickToRun.exe"
 Test-File "%ProgramFiles%\ClickToRun\OfficeClickToRun.exe" @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

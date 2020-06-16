@@ -75,4 +75,4 @@ if ((Test-Installation "RivaTuner" ([ref] $RivaTunerRoot) @Logs) -or $ForceLoad)
 		-Description "Comes with MSI afterburner, used for game screen overlay" @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

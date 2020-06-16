@@ -58,5 +58,5 @@ $Instances | Select-Object -ExpandProperty InstallLocation @Logs
 New-Test "Get-TypeName"
 $Instances | Get-TypeName @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

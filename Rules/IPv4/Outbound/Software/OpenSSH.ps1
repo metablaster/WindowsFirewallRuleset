@@ -77,4 +77,4 @@ if ((Test-Installation "OpenSSH" ([ref] $OpenSSHRoot) @Logs) -or $ForceLoad)
 	This rule applies to open source version of OpenSSH." @Logs | Format-Output @Logs
 }
 
-Update-Logs
+Update-Log

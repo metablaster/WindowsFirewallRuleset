@@ -79,5 +79,5 @@ Get-IPAddress IPv4 -IncludeAll -ExcludeHardware @Logs
 New-Test "Get-TypeName"
 $IPAddress | Get-TypeName @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

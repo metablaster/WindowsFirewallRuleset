@@ -702,4 +702,4 @@ New-NetFirewallRule -DisplayName "Windows Device Management Sync Client" `
 	-Description "Allow outbound TCP traffic from Windows Device Management Sync Client." `
 	@Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log

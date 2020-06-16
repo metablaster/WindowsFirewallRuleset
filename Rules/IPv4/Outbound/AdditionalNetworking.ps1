@@ -225,4 +225,4 @@ New-NetFirewallRule -DisplayName "Proximity sharing" `
 	-Description "Outbound rule for Proximity sharing over." `
 	@Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log

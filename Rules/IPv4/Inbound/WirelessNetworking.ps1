@@ -172,4 +172,4 @@ New-NetFirewallRule -Platform $Platform `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 	-Description "Wireless Portable Devices to allow use of Universal Plug and Play." @Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log

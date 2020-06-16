@@ -68,5 +68,5 @@ Initialize-Table @Logs
 Update-Table "PowerShell.exe" -Executables
 Show-Table
 
-Update-Logs
+Update-Log
 Exit-Test

@@ -61,4 +61,4 @@ foreach ($File in $Files)
 	& $File.FullName
 }
 
-Update-Logs
+Update-Log

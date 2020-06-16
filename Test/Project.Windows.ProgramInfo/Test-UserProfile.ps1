@@ -86,5 +86,5 @@ $Status
 New-Test "Get-TypeName"
 $Status | Get-TypeName @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

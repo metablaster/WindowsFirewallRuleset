@@ -104,4 +104,4 @@ New-NetFirewallRule -DisplayName "SMB" `
 reception via Named Pipes." `
 	@Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log

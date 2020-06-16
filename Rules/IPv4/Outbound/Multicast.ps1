@@ -243,4 +243,4 @@ New-NetFirewallRule -DisplayName "Administratively Scoped Block" `
 domain." `
 	@Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log

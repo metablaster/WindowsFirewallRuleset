@@ -50,5 +50,5 @@ Start-Test
 New-Test "Approve-Execute"
 Approve-Execute @Logs
 
-Update-Logs
+Update-Log
 Exit-Test

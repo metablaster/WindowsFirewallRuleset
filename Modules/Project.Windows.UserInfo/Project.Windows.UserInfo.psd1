@@ -75,11 +75,11 @@
 	FunctionsToExport = @(
 		"ConvertFrom-UserAccount"
 		"Get-AccountSID"
-		"Get-GroupPrincipals"
+		"Get-GroupPrincipal"
 		"Get-GroupSID"
 		"Get-SDDL"
 		"Merge-SDDL"
-		"Get-UserGroups"
+		"Get-UserGroup"
 		"ConvertFrom-SID"
 	)
 

@@ -139,4 +139,4 @@ New-NetFirewallRule -Platform $Platform `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 	-Description "rule for the Remote Desktop service to allow RDP over WebSocket traffic." @Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log

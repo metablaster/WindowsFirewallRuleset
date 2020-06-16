@@ -182,4 +182,4 @@ New-NetFirewallRule -Platform $Platform `
 	-EdgeTraversalPolicy Block -LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Addresses in the Administratively Scoped Block are for local use within a domain." @Logs | Format-Output @Logs
 
-Update-Logs
+Update-Log
