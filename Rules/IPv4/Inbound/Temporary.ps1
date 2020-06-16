@@ -81,6 +81,20 @@ if ($Develop)
 		-Description "Temporary allow troublesome UDP traffic." `
 		@Logs | Format-Output @Logs
 
+	# NOTE: should be local service
+	# NOTE: both client and server traffic
+	New-NetFirewallRule -DisplayName "Troubleshoot UDP - DHCP" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Service Any -Program Any -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+		-LocalAddress Any -RemoteAddress Any `
+		-LocalPort 67, 68 -RemotePort 67, 68 `
+		-LocalUser $NT_AUTHORITY_System `
+		-InterfaceType Any -EdgeTraversalPolicy Block `
+		-LocalOnlyMapping $false -LooseSourceMapping $false `
+		-Description "Temporary allow troublesome UDP traffic." `
+		@Logs | Format-Output @Logs
+
 	$mDnsUsers = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE" @Logs
 	Merge-SDDL ([ref] $mDnsUsers) (Get-SDDL -Group "Users") @Logs
 

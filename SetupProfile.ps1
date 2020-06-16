@@ -36,7 +36,8 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 
 #
-# Firewall profile setup
+# This script sets firewall profile, network profile and global firewall behavior
+# TODO: how to set and reset settings found in IPSec tab?
 #
 
 # Setting up profile seem to be slow, tell user what is going on

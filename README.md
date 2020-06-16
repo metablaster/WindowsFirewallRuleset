@@ -124,6 +124,10 @@ and leave only those in control panel.
 - The scripts will ask you what rules you want, to minimize internet connectivity trouble you should
 apply at least all generic networking and OS related rules such as BasicNetworking, ICMP,
 WindowsSystem, WindowsServices, Multicast etc. also do not ignore IPv6, Windows does need IPv6!
+- Default configuration will set global firewall behavior which is not configurable in GPO GUI,
+such as stateful ftp and pptp or global IPSec settings, if you need specific setup please visit
+`SetupProfile.ps1` and take a look at `Set-NetFirewallSetting`.\
+Note that `SetupProfile.ps1` is automatically called by `SetupFirewall.ps1` script
 
 **NOTE:**
 
@@ -228,7 +232,7 @@ If you want to apply only specific rules there are 2 ways to do this:
 and hit enter to skip current ruleset.
 2. Inside powershell navigate to folder containing the ruleset script you want,
 and execute individual Powershell script.
-3. You may want to run `FirewallProfile.ps1` to apply default firewall behavior if it's not set
+3. You may want to run `SetupProfile.ps1` to apply default firewall behavior if it's not set
 already, or you can do it manually in GPO.
 
 In both cases the script will delete all of the existing rules that match the rule group (if any),

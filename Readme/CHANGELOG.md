@@ -32,6 +32,8 @@
 - Added mTail configuration and sound alert files
 - Firewall log files are not separated for each profile (public, private, domain)
 - Set network profile for each connected hardware interface
+- Set/reset global firewall settings
+- ResetFirewall script also deletes IPSec rules
 
 # Changelog v0.4.1
 

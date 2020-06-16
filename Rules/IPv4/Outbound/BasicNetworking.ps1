@@ -182,7 +182,8 @@ New-NetFirewallRule -DisplayName "Dynamic Host Configuration Protocol" `
 	-LocalUser Any `
 	-InterfaceType $Interface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Allow DHCPv4 messages for stateful auto-configuration." `
+	-Description "Allow DHCPv4 messages for stateful auto-configuration.
+UDP port number 67 is the destination port of a server, and UDP port number 68 is used by the client." `
 	@Logs | Format-Output @Logs
 
 #

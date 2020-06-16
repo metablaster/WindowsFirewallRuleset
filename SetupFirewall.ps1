@@ -269,8 +269,8 @@ if (Approve-Execute "Yes" "Applying: Outbound IPv6 Rules" @Logs)
 
 Write-Output ""
 
-# Set up Firewall profile
-& .\FirewallProfile.ps1
+# Set up global firewall setting, network and firewall profile
+& .\SetupProfile.ps1
 
 if ($Develop)
 {

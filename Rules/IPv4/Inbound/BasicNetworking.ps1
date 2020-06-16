@@ -65,6 +65,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Used on TCP, UDP, IGMP
 #
 
+# TODO: is there a need or valid reason to make rules for "this machine"? (0.0.0.0)
 # TODO: should we use -InterfaceAlias set to Loopback pseudo interface?
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Loopback" -Service Any -Program Any `
@@ -119,7 +120,9 @@ New-NetFirewallRule -Platform $Platform -PolicyStore $PolicyStore `
 	-Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress DHCP4 -LocalPort 68 -RemotePort 67 `
 	-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Allow DHCPv4 messages for stateful auto-configuration." @Logs | Format-Output @Logs
+	-Description "Allow DHCPv4 messages for stateful auto-configuration.
+UDP port number 67 is the destination port of a server, and UDP port number 68 is used by the client." `
+	@Logs | Format-Output @Logs
 
 #
 # IGMP (Internet Group Management Protocol)

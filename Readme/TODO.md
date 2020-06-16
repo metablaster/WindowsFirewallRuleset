@@ -67,7 +67,7 @@ TODO's in this file are categorized into following sections:
 2. Project scripts
 
     - Apply only rules for which executable exists, Test-File function
-    - Implement Importing/Exporting rules
+    - Implement Importing/Exporting rules, including rules with no group
     - auto detect interfaces, ie. to be used with InterfaceAlias parameter
 
 3. Rules
@@ -121,11 +121,15 @@ TODO's in this file are categorized into following sections:
 3. Rules
 
     - some rules are missing comments
-    - make display names and groups modular for easy search, ie. group - subgroup, Company - Program
+    - make display names and groups modular for easy search, ie. group - subgroup, Company - Program,
+    This can also prove useful for wfp state logs to determine blocking rule
     - We need some better and unified approach to write rule descriptions, because it looks ugly
     now, since comments must not be formatted, formatting would be visible in GUI.
     - Some rules apply to both IPv4 and IPv6 such as qBittorrent.ps1, for these we should group them
     into "hybrid" folder instead of IPv4 or IPv6 folder which should be IP version specific rules.
+    - We handle almost mostly client rules and no server rules, same case as with IPv4 vs IPv6
+    grouping model, we should define a model for server rules (not necessarily Windows Server,
+    workstation PC cal also act as server)
 
 4. Test and debugging
 
