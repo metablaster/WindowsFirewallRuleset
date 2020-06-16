@@ -86,7 +86,7 @@ if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot) @Logs) -or $Fo
 	# Inbound TCP template
 	New-NetFirewallRule -DisplayName "Inbound TCP template" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
-		-Service Any -Program Any -Group $Group `
+		-Service Any -Program $Program -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort Any -RemotePort Any `
@@ -98,7 +98,7 @@ if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot) @Logs) -or $Fo
 	# Inbound UDP template
 	New-NetFirewallRule -DisplayName "Inbound UDP template" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
-		-Service Any -Program Any -Group $Group `
+		-Service Any -Program $Program -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort Any -RemotePort Any `
@@ -111,7 +111,7 @@ if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot) @Logs) -or $Fo
 	# Inbound ICMP template
 	New-NetFirewallRule -DisplayName "Inbound ICMP template" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
-		-Service Any -Program Any -Group $Group `
+		-Service Any -Program $Program -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 0 `
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalUser Any -EdgeTraversalPolicy Block `

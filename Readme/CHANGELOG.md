@@ -21,6 +21,7 @@
 - Updated template scripts
 - Updated test scripts for ComputerInfo and UserInfo modules
 - Added test rules based on interface alias for all network interface types
+- Removed deprecated scripts, home group rules were retained but are not used
 
 ## Documentation
 

@@ -86,7 +86,7 @@ if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot) @Logs) -or $Fo
 	# Outbound TCP template
 	New-NetFirewallRule -DisplayName "Outbound TCP template" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
-		-Service Any -Program $EdgeChromiumApp -Group $Group `
+		-Service Any -Program $Program -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort Any -RemotePort Any `
@@ -98,7 +98,7 @@ if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot) @Logs) -or $Fo
 	# Outbound UDP template
 	New-NetFirewallRule -DisplayName "Outbound UDP template" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
-		-Service Any -Program $EdgeChromiumApp -Group $Group `
+		-Service Any -Program $Program -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort Any -RemotePort Any `
@@ -111,7 +111,7 @@ if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot) @Logs) -or $Fo
 	# Outbound ICMP template
 	New-NetFirewallRule -DisplayName "Outbound ICMP template" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
-		-Service Any -Program $EdgeChromiumApp -Group $Group `
+		-Service Any -Program $Program -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 0 `
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalUser Any `
@@ -122,7 +122,7 @@ if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot) @Logs) -or $Fo
 	# Outbound StoreApp TCP template
 	New-NetFirewallRule -DisplayName "Outbound StoreApp TCP template" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
-		-Service Any -Program $EdgeChromiumApp -Group $Group `
+		-Service Any -Program Any -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort Any -RemotePort Any `

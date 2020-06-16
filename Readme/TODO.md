@@ -35,10 +35,6 @@ TODO's in this file are categorized into following sections:
     - Revisit naming convention for ConvertFrom/ConvertTo it's not clear what is being converted,
     some other functions also have odd names
 
-2. Project scripts
-
-    - Take out of deprecated scripts what can be used, remove the rest
-
 ## Ongoing
 
 1. Code style
@@ -192,6 +188,7 @@ TODO's in this file are categorized into following sections:
 
     - Information output is not enabled for modules and probably other code
     - Use `Get-NetConnectionProfile` to aks user / set default network profile
+    - Take out of deprecated scripts what can be used, remove the rest
 
 2. Rules
 
