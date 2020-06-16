@@ -36,8 +36,12 @@ SOFTWARE.
 
 Set-StrictMode -Version Latest
 
-# Set to true to indicate development phase, forces unloading modules and removing variables.
-Set-Variable -Name Develop -Scope Global -Value $false
+# Set to true to indicate development phase, it does following at a minimum:
+# 1. Forces unloading modules and removing variables.
+# 2. Loads troubleshooting rules defined in Temporary.ps1
+# 3. Performs some additional checks
+# 4. Enables some unit tests
+Set-Variable -Name Develop -Scope Global -Value $true
 
 # Name of this script for debugging messages, do not modify!.
 Set-Variable -Name ThisScript -Scope Local -Option ReadOnly -Value $($MyInvocation.MyCommand.Name -replace ".{4}$")
