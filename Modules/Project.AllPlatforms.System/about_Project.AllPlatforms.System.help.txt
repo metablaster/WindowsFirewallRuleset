@@ -3,7 +3,6 @@ TOPIC
 	about_Project.AllPlatforms.System
 
 SHORT DESCRIPTION
-	Functionality for firewall rule auditing
 	Test if environment is compatible for Windows Firewall Ruleset project
 
 LONG DESCRIPTION
@@ -22,13 +21,9 @@ EXAMPLES
 	To make a requirements test:
 	Test-SystemRequirements $true
 
-	To query weak rules with no LocalUser value
-	Get-NoPrincipalRule
-
 KEYWORDS
 	SystemRequirements
 	Requirements
-	Audit
 
 SEE ALSO
 	https://github.com/metablaster/WindowsFirewallRuleset

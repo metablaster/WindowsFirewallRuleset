@@ -4,6 +4,7 @@ TOPIC
 
 SHORT DESCRIPTION
 	Functions to write powershell unit tests
+	Functionality for firewall rule auditing
 
 LONG DESCRIPTION
 	These simple function are designed for Windows Firewall Ruleset
@@ -18,10 +19,14 @@ EXAMPLES
 	To end test:
 	Exit-Test
 
+	To query weak rules with no LocalUser value
+	Test-PrincipalRule
+
 KEYWORDS
 	PowerShellTest
 	UnitTest
 	Test
+	Audit
 
 SEE ALSO
 	https://github.com/metablaster/WindowsFirewallRuleset

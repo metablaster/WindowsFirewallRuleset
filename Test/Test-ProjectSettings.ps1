@@ -32,6 +32,13 @@ SOFTWARE.
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 . $PSScriptRoot\ContextSetup.ps1
 
+if ((Get-Variable -Name Develop -Scope Global).Value -eq $false)
+{
+	Write-Error -Category NotEnabled -TargetObject "Variable 'Develop'" `
+		-Message "This unit test is enabled only when 'Develop' is set to $true"
+	return
+}
+
 Write-Information -Tags "Test" -MessageData "INFO: Import-Module Logging"
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 

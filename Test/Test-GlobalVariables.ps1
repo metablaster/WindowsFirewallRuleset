@@ -55,8 +55,11 @@ $Logs
 New-Test "Project.AllPlatforms.Utility - ServiceHost:"
 $ServiceHost
 
-New-Test "Project.Windows.ProgramInfo - InstallTable:"
-$InstallTable
+if ($Develop)
+{
+	New-Test "Project.Windows.ProgramInfo - InstallTable:"
+	$InstallTable
+}
 
 New-Test "Project.Windows.UserInfo - NT_AUTHORITY_UserModeDrivers:"
 $NT_AUTHORITY_UserModeDrivers

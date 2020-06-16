@@ -309,38 +309,43 @@ function Test-SystemRequirements
 			exit
 		}
 
-		if ($Develop)
+		# NOTE: remote machines need this service, see Enable-PSRemoting cmdlet
+		# NOTE: some tests depend on this service
+		if ($WinRM -ne "Running")
 		{
-			# NOTE: remote machines need this service, see Enable-PSRemoting cmdlet
-			if ($WinRM -ne "Running")
+			$Title = "Windows Remote Management service is required by some test scripts and for remote management, but not started"
+			$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
+
+			if ($Decision -eq $Default)
 			{
-				$Title = "Windows Remote Management service is required but not started"
-				$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
+				Start-Service -Name WinRM
+				$WinRM = Get-Service -Name WinRM | Select-Object -ExpandProperty Status
 
-				if ($Decision -eq $Default)
-				{
-					Start-Service -Name WinRM
-					$WinRM = Get-Service -Name WinRM | Select-Object -ExpandProperty Status
-
-					if ($WinRM -ne "Running")
-					{
-						$StatusGood = $false
-						Write-Output "WinRM service can not be started, please start it manually and try again."
-					}
-				}
-				else
+				if ($WinRM -ne "Running")
 				{
 					$StatusGood = $false
+					Write-Output "WinRM service can not be started, please start it manually and try again."
 				}
 			}
+			else
+			{
+				$StatusGood = $false
+			}
+		}
 
-			if (!$StatusGood)
+		if (!$StatusGood)
+		{
+			if ($Develop)
 			{
 				Write-Error -Category OperationStopped -TargetObject $OSEdition `
 					-Message "Unable to proceed, required services are not started"
 
 				Write-Information -Tags "Project" -MessageData "INFO: Windows Remote Management service is required but not started"
-				exit
+			}
+			else
+			{
+				Write-Warning -Message "Windows Remote Management service is recommended but not started"
+				$StatusGood = $true;
 			}
 		}
 
@@ -401,49 +406,8 @@ function Test-SystemRequirements
 	}
 }
 
-<#
-.SYNOPSIS
-Get all rules which are missing LocalUser value
-.DESCRIPTION
-Get all rules which are missing LocalUser value
-Rules which are missing LocalUser are considered weak and need to be updated
-This operation is slow, intended for debugging.
-.EXAMPLE
-Get-NoPrincipalRule
-.INPUTS
-None. You cannot pipe objects to Test-SystemRequirements
-.OUTPUTS
-None. Error message is shown if check failed, system info otherwise.
-.NOTES
-TODO: Not tested from this module
-TODO: should be put into utility module
-#>
-function Get-NoPrincipalRule
-{
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
-	Write-Information -Tags "User" -MessageData "INFO: Getting rules from GPO"
-	$GPORules = Get-NetFirewallProfile -All -PolicyStore $PolicyStore |
-	Get-NetFirewallRule | Where-Object -Property Owner -EQ $null
-
-	Write-Information -Tags "User" -MessageData "INFO: Applying security filter"
-	$UserFilter = $GPORules | Get-NetFirewallSecurityFilter |
-	Where-Object -Property LocalUser -EQ Any
-
-	Write-Information -Tags "User" -MessageData "INFO: Applying service filter"
-	$ServiceFilter = $UserFilter | Get-NetFirewallRule |
-	Get-NetFirewallServiceFilter | Where-Object -Property Service -EQ Any
-
-	Write-Information -Tags "User" -MessageData "INFO: Selecting properties"
-	$TargetRules = $ServiceFilter | Get-NetFirewallRule |
-	Select-Object -Property DisplayName, DisplayGroup, Direction
-
-	$TargetRules | Format-List
-}
-
 #
 # Function exports
 #
 
-Export-ModuleMember -Function Get-NoPrincipalRule
 Export-ModuleMember -Function Test-SystemRequirements

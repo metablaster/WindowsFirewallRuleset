@@ -48,7 +48,7 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-[string[]] $Users = @("haxor", "test")
+[string[]] $Users = @("user")
 [string] $Domain = [System.Environment]::MachineName
 [string[]] $Groups = @("Users", "Administrators")
 

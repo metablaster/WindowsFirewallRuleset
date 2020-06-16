@@ -699,6 +699,7 @@ function Get-AccountSID
 				try
 				{
 					# For APPLICATION PACKAGE AUTHORITY we need to omit domain name
+					# TODO: this should be inside second try/catch to make omission of domain generic
 					if ($SpecialDomain -and [array]::Find($SpecialDomains, [System.Predicate[string]] { "APPLICATION PACKAGE AUTHORITY" -eq "$($args[0])" }))
 					{
 						$NTAccount = New-Object -TypeName System.Security.Principal.NTAccount($User)

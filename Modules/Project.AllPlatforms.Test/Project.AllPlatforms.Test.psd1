@@ -76,6 +76,7 @@
 		"Start-Test"
 		"New-Test"
 		"Exit-Test"
+		"Test-PrincipalRule"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not
@@ -109,7 +110,7 @@
 		PSData = @{
 
 			# Tags applied to this module. These help with module discovery in online galleries.
-			Tags = @("PowerShellTest", "UnitTest", "Test")
+			Tags = @("PowerShellTest", "UnitTest", "Test", "Audit")
 
 			# A URL to the license for this module.
 			LicenseUri = 'https://github.com/metablaster/WindowsFirewallRuleset/blob/master/LICENSE'

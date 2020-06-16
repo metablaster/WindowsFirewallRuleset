@@ -73,7 +73,6 @@
 	# Functions to export from this module, for best performance, do not use wildcards and do not
 	# delete the entry, use an empty array if there are no functions to export.
 	FunctionsToExport = @(
-		"Get-NoPrincipalRule"
 		"Test-SystemRequirements"
 	)
 
@@ -108,7 +107,7 @@
 		PSData = @{
 
 			# Tags applied to this module. These help with module discovery in online galleries.
-			Tags = @("SystemRequirements", "Requirements", "Audit")
+			Tags = @("SystemRequirements", "Requirements")
 
 			# A URL to the license for this module.
 			LicenseUri = 'https://github.com/metablaster/WindowsFirewallRuleset/blob/master/LICENSE'

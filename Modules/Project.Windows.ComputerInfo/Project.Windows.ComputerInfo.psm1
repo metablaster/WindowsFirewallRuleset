@@ -172,6 +172,13 @@ function Get-ConfiguredAdapter
 		}
 	}
 
+	if (!$AllConfiguredAdapters)
+	{
+		Write-Error -Category ObjectNotFound -TargetObject "AllConfiguredAdapters" `
+			-Message "None of the adapters is configured for $AddressFamily"
+		return $null
+	}
+
 	# Get-NetIPConfiguration does not tell us adapter type (hardware, hidden or virtual)
 	[PSCustomObject[]] $RequestedAdapters = @()
 	if (!$ExcludeHardware)
@@ -192,6 +199,13 @@ function Get-ConfiguredAdapter
 		Where-Object { $_.Hidden -eq "True" }
 	}
 
+	if (!$RequestedAdapters)
+	{
+		Write-Error -Category ObjectNotFound -TargetObject "RequestedAdapters" `
+			-Message "None of the adapters matches search criteria for $AddressFamily"
+		return $null
+	}
+
 	[Uint32[]] $ValidAdapters = $RequestedAdapters | Select-Object -ExpandProperty ifIndex
 
 	$ConfiguredAdapters = @()
@@ -205,8 +219,8 @@ function Get-ConfiguredAdapter
 	$Count = ($ConfiguredAdapters | Measure-Object).Count
 	if ($Count -eq 0)
 	{
-		Write-Error -Category ObjectNotFound -TargetObject $ConfiguredAdapters `
-			-Message "None of the adapters is configured for $AddressFamily"
+		Write-Error -Category ObjectNotFound -TargetObject "ConfiguredAdapters" `
+			-Message "None of the adapters is configured for $AddressFamily with given criteria"
 	}
 	elseif ($Count -gt 1)
 	{
@@ -291,6 +305,12 @@ function Get-InterfaceAlias
 		$ConfiguredInterfaces = Get-ConfiguredAdapter $AddressFamily `
 			-IncludeVirtual:$IncludeVirtual -ExcludeHardware:$ExcludeHardware `
 			-IncludeHidden:$IncludeHidden -IncludeDisconnected:$IncludeDisconnected
+	}
+
+	if (!$ConfiguredInterfaces)
+	{
+		# NOTE: Error should be generated and shown by Get-ConfiguredAdapter
+		return $null
 	}
 
 	[string[]] $InterfaceAliases = $ConfiguredInterfaces | Select-Object -ExpandProperty InterfaceAlias

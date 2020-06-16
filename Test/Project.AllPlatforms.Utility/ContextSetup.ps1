@@ -30,4 +30,5 @@ SOFTWARE.
 # Context setup for Test.Project.AllPlatforms.Utility
 #
 
+New-Variable -Name IPVersion -Scope Local -Option Constant -Value 4
 New-Variable -Name TestContext -Scope Local -Option Constant -Value "Test.Project.AllPlatforms.Utility"

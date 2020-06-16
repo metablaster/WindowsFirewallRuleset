@@ -7,6 +7,7 @@
 
 - Updated user query functions and tests to make possible querying store app identities
 - Improved network adapter query to optionally query disconnected, hidden and virtual interfaces
+- State changing functions will ask for confirmation if impact high enough
 
 ## Rules
 
@@ -17,7 +18,7 @@
 
 ## Development
 
-- Resolve most analyzer warnings
+- Resolve all analyzer warnings (some functions were renamed)
 - Updated template scripts
 - Updated test scripts for ComputerInfo and UserInfo modules
 - Added test rules based on interface alias for all network interface types

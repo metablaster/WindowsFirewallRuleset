@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-NoPrincipalRule
+# Unit test for Test-PrincipalRule
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -47,11 +47,11 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-New-Test "Get-NoPrincipalRule"
-$Result = Get-NoPrincipalRule @Logs
+New-Test "Test-PrincipalRule"
+$Result = Test-PrincipalRule @Logs
 
-New-Test "Get-NoPrincipalRule | Get-TypeName"
-$Result | Get-NoPrincipalRule @Logs
+New-Test "Test-PrincipalRule | Get-TypeName"
+$Result | Test-PrincipalRule @Logs
 
 Update-Log
 Exit-Test

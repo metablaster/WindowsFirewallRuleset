@@ -29,6 +29,7 @@ SOFTWARE.
 #
 # Unit test for Set-NetworkProfile
 #
+#Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project

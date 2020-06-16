@@ -51,6 +51,8 @@ if (!(Approve-Execute @Logs)) { exit }
 # Setup local variables:
 #
 $Group = "Test - Format output"
+$FirewallProfile = "Any"
+$Direction = "Outbound"
 
 Start-Test
 

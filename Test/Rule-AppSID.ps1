@@ -86,7 +86,7 @@ New-NetFirewallRule -DisplayName "Get-AppSID" `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
 	-InterfaceType $Interface `
-	-LocalUser Any -Owner $OwnerSID -Package $PackageSID `
+	-Owner $OwnerSID -Package $PackageSID `
 	-Description "TargetProgram test rule description" `
 	@Logs | Format-Output @Logs
 

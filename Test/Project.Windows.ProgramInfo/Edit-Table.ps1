@@ -28,12 +28,20 @@ SOFTWARE.
 
 #
 # Unit test for Edit-Table
+# TODO: can we use Requires -PSSnapin here for Initialize-Table?
 #
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 	'PSAvoidGlobalVars', '', Justification = 'Global variable used for testing only')]
 param()
 
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+
+if ((Get-Variable -Name Develop -Scope Global).Value -eq $false)
+{
+	Write-Error -Category NotEnabled -TargetObject "Variable 'Develop'" `
+		-Message "This unit test is enabled only when 'Develop' is set to $true"
+	return
+}
 
 # Check requirements for this project
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System

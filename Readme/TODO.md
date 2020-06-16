@@ -15,25 +15,14 @@ intentionally to make is easier to tell where to look at while resolving this li
 
 TODO's in this file are categorized into following sections:
 
-1. Selected
-2. Ongoing
-3. High priority
-4. Medium priority
-5. Low priority
-6. Done
+1. Ongoing
+2. High priority
+3. Medium priority
+4. Low priority
+5. Done
 
-"Selected" means it's currently being worked on.
 "Ongoing" means never ending or continuous work
 "Done" obviously means it's done, it's kept here for reference.
-
-## Selected
-
-1. Modules
-
-    - Revisit function parameters, their output types, aliases etc..
-    - Change bool parameters to switch where possible
-    - Revisit naming convention for ConvertFrom/ConvertTo it's not clear what is being converted,
-    some other functions also have odd names
 
 ## Ongoing
 
@@ -59,6 +48,10 @@ TODO's in this file are categorized into following sections:
     - Registry drilling for some rules are complex and specific, such as for NVIDIA,
     in these and probably most other similar cases we should return installation table which
     would be used inside rule script to get individual paths for individual programs.
+    - Revisit function parameters, their output types, aliases etc..
+    - Change bool parameters to switch where possible
+    - Revisit naming convention for ConvertFrom/ConvertTo it's not clear what is being converted,
+    some other functions also have odd names
 
 2. Project scripts
 
@@ -103,6 +96,10 @@ TODO's in this file are categorized into following sections:
     - Some functions return multiple return types, how to use [OutputType()]?
     - Modules are named "AllPlatforms" or "Windows" however they contain platform specific or
     non platform specific functions, need to revisit naming convention
+    - Functions which use ShouldProcess must not ask for additional input
+    - Write-Error will fail is -TargetObject is not set, in cases where this is possible we should
+    supply string instead.
+    See ComputerInfo\Get-ConfiguredAdapter for example
 
 2. Project scripts
 
@@ -177,9 +174,15 @@ TODO's in this file are categorized into following sections:
 
     - Separate comment based keywords so that there is one line between a comment and next keyword
 
-5. Other
+5. Test and debugging
+    - We should use try/catch in test scripts to avoid writing errors and write information instead,
+    So that `Run-AllTests.ps1` gets clean output, not very useful if testing with PS Core since
+    -CIM call will fail.
 
-    - Test for 32bit powershell and OS.
+6. Other
+
+    - Test for 32bit powershell and OS, some rules are 64bit OS specific, 32bit specifics may be
+    missing
     - mTail coloring configuration contains gremlins (bad chars), need to test and deal with them.
 
 ## Done
