@@ -537,7 +537,10 @@ function Set-NetworkProfile
 		if ($HardwareInterfaces.Length -eq 0)
 		{
 			Write-Warning -Message "Unable to set network profile, machine not connected to network"
+			return
 		}
+
+		Write-Warning -Message "For maximum security choose 'Public' network profile" @Logs
 
 		foreach ($Interface in $HardwareInterfaces)
 		{

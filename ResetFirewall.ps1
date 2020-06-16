@@ -75,16 +75,31 @@ Set-NetFirewallProfile -Name Public -PolicyStore $PolicyStore -Enabled NotConfig
 	-LogMaxSizeKilobytes 4096 -AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
 	-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" @Logs
 
+Write-Information -Tags "User" -MessageData "INFO: Resetting global firewall settings..." @Logs
+
+Set-NetFirewallSetting -PolicyStore $PolicyStore -EnablePacketQueuing NotConfigured `
+	-EnableStatefulFtp NotConfigured -EnableStatefulPptp NotConfigured `
+	-Exemptions NotConfigured -CertValidationLevel NotConfigured `
+	-KeyEncoding NotConfigured -RequireFullAuthSupport NotConfigured `
+	-MaxSAIdleTimeSeconds NotConfigured -AllowIPsecThroughNAT NotConfigured `
+	-RemoteUserTransportAuthorizationList NotConfigured `
+	-RemoteUserTunnelAuthorizationList NotConfigured `
+	-RemoteMachineTransportAuthorizationList NotConfigured `
+	-RemoteMachineTunnelAuthorizationList NotConfigured @Logs `
+
 #
 # Remove all the rules
 # TODO: Implement removing only project rules.
 #
 
 Write-Information -Tags "User" -MessageData "INFO: Removing outbound rules..." @Logs
-Remove-NetFirewallRule -Direction Outbound -PolicyStore $PolicyStore -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -Direction Outbound -PolicyStore $PolicyStore @Logs
 
 Write-Information -Tags "User" -MessageData "INFO: Removing inbound rules..." @Logs
-Remove-NetFirewallRule -Direction Inbound -PolicyStore $PolicyStore -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -Direction Inbound -PolicyStore $PolicyStore @Logs
+
+Write-Information -Tags "User" -MessageData "INFO: Removing IPSec rules..." @Logs
+Remove-NetIPsecRule -All -PolicyStore $PolicyStore @Logs
 
 Write-Information -Tags "User" -MessageData "INFO: Firewall reset is done!" @Logs
 Write-Information -Tags "User" -MessageData "INFO: If internet connectivity problem remains, please reboot system" @Logs

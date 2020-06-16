@@ -158,8 +158,8 @@ PowerShell core as administrator (Assumes enabled context menu during installati
 Get-ExecutionPolicy
 ```
 
-remember what the output of the above command is, PowerShell Core defaults to `RemoteSigned` while
-Windows PowerShell defaults to `Restricted`
+Remember what the output of the above command is, note that PowerShell Core defaults to `RemoteSigned`
+while Windows PowerShell defaults to `Restricted`
 
 6. Set new execution policy: (Note that `RemoteSigned` should work too)
 

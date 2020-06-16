@@ -237,12 +237,12 @@ configure rules for these interfaces, except allowing all interfaces.
 - `Use Get-NetadApter`, `Get-NetIPConfiguration` and `Get-NetIPInterface` to gather hidden adapter info
 - Use `-InterfaceAlias` instead of `-InterfaceType` when defining firewall rule
 - See [PowerShellCommands.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/PowerShellCommands.md)
-and [Links.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/Links.md)
+and [What is the Hyper-V Virtual Switch](https://www.altaro.com/hyper-v/the-hyper-v-virtual-switch-explained-part-1/)
 for details.
-- Module ComputerInfo now implements functions for this purpose, see also Rule-InterfaceAlias.ps1
+- Module ComputerInfo now implements functions for this purpose, see also Test\Rule-InterfaceAlias.ps1
 - See networking options in Hyper-V powershell module for additional troubleshooting
 - Interfaces for different IP version share same interface alias, which could be the cause of failure
-- Hyper-V virtual adapter is reconfigured on every computer restart which could be the cause of
+- Hyper-V virtual adapter/switch is reconfigured on every computer restart which could be the cause of
 our rule being no longer valid.
 - Adding explicit allow rules for troublesome traffic seems to resolve the problem, which
 means it's worth spending time to invent the rules, ie:
@@ -256,11 +256,23 @@ means it's worth spending time to invent the rules, ie:
 
 ### Case 8: Audit result
 
-- Even after creating sample test rules based on InterfaceAlias some packets are dropped
+- Even after creating sample test rules based on InterfaceAlias some packets are dropped, this
+can happen for two reasons:
+
+1. When you're on non public firewall profile, however virtual switch operates on public profile,
+and it feels like private profile packets are dropped which is false.
+2. When there is block rule for public traffic but you expect this not to be valid for active on
+your currently active private profile firewall.
+
+To check this is indeed so, separately log network traffic for each firewall profile!
+
 - It's not possible to create rules based on adapters which are not configured for IP,
 hidden, virtual or what ever doesn't matter, adapter must have IP address but doesn't have
 to be connected to network.
 - Regardless of host OS network profile virtual switch will operate on separate network profile,
 most likely public profile, this means block rules for InterfaceType parameter will override
 allow rules with InterfaceType Any.
-- Additional investigation is needed.
+- This traffic should be ignored if dropped due to block rules.
+- Implementing rules for this traffic requires all network traffic to be bound to specific interface
+alias, this includes **ALL** rules to make sure rules loaded with `InterfaceType` parameter don't
+override those with `InterfaceAlias` parameter.

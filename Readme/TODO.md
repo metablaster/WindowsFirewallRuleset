@@ -105,6 +105,8 @@ TODO's in this file are categorized into following sections:
     for better description
     - Need to check if WinRM service is started when contacting computers via CIM
     - Some functions return multiple return types, how to use [OutputType()]?
+    - Modules are named "AllPlatforms" or "Windows" however they contain platform specific or
+    non platform specific functions, need to revisit naming convention
 
 2. Project scripts
 
@@ -113,6 +115,8 @@ TODO's in this file are categorized into following sections:
     - Add #Requires -Modules to scripts, possibly removing module inclusions, if not
     another possibility is to add module path to our modules for current session.
     - Make $WhatIfPreference for rules, we should skip everything except rules.
+    - For remote computers we ComputerName variables/parameters but this could also be
+    learned/specified with PolicyStore parameter
 
 3. Rules
 
@@ -160,6 +164,8 @@ TODO's in this file are categorized into following sections:
     missing Local user owner, InterfaceType and similar for improvement
     - Count invalid paths in each script
     - Measure execution time for each or all scripts.
+    - We use `Set-NetFirewallSetting` but use only a subset of parameters, other parameters are
+    meaningful only with IPSec
 
 3. Rules
 

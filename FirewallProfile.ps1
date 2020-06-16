@@ -72,7 +72,18 @@ Set-NetFirewallProfile -Profile Domain -PolicyStore $PolicyStore `
 	-AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
 	-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\DomainFirewall.log" @Logs
 
-Write-Warning -MessageData "For maximum security choose 'Public' network profile" @Logs
+Write-Information -Tags "User" -MessageData "INFO: Setting up global firewall settings..." @Logs
+
+# Modify the global firewall settings of the target computer.
+# Configures properties that apply to the firewall and IPsec settings,
+# regardless of which network profile is currently in use.
+Set-NetFirewallSetting -PolicyStore $PolicyStore `
+	-EnableStatefulFtp True -EnableStatefulPptp False -EnablePacketQueuing NotConfigured `
+	-Exemptions None -CertValidationLevel RequireCrlCheck `
+	-KeyEncoding UTF8 -RequireFullAuthSupport NotConfigured `
+	-MaxSAIdleTimeSeconds 300 -AllowIPsecThroughNAT NotConfigured `
+	-RemoteUserTransportAuthorizationList None -RemoteUserTunnelAuthorizationList None `
+	-RemoteMachineTransportAuthorizationList None -RemoteMachineTunnelAuthorizationList None @Logs `
 
 Set-NetworkProfile @Logs
 
