@@ -88,6 +88,11 @@ $global:InstallTable | Format-Table -AutoSize @Logs
 New-Test "Install Path"
 $global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
 
+New-Test "-UserProfile switch Fill table with OneDrive"
+Initialize-Table @Logs
+Update-Table "OneDrive" -UserProfile @Logs
+$global:InstallTable | Format-Table -AutoSize @Logs
+
 New-Test "Get-TypeName"
 $global:InstallTable | Get-TypeName @Logs
 

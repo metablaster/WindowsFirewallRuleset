@@ -76,6 +76,8 @@ if ((Test-Installation "OneDrive" ([ref] $OneDriveRoot) @Logs) -or $ForceLoad)
 		-LocalUser $NT_AUTHORITY_System `
 		-Description "Updater for OneDrive" @Logs | Format-Output @Logs
 
+	# TODO: LocalUser should be explicit user because each user runs it's own instance
+	# and if there are multiple instances returned we need multiple rules for each user
 	$Program = "$OneDriveRoot\OneDrive.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `

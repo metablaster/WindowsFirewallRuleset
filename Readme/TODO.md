@@ -61,9 +61,8 @@ TODO's in this file are categorized into following sections:
 
 3. Rules
 
-    - Paths to fix: onedrive, visio, project
-    - Rules to fix: steam, vcpkg, msys2, store apps for admins,
-    internet browser (auto loads)
+    - Paths to fix: visio, project
+    - Rules to fix: steam, vcpkg, msys2, store apps for admins, internet browser (auto loads)
     - Now that common parameters are removed need to update the order of rule parameters,
     also not all are the same.
 
@@ -76,6 +75,7 @@ TODO's in this file are categorized into following sections:
 
     - Most program query functions return multiple program instances,
     need to select latest or add multiple rules.
+    - Module functions and rules for OneDrive and NVIDIA have partial fix, needs design improvements
 
 ## Medium priority
 

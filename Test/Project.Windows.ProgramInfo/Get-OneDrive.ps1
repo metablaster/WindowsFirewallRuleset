@@ -27,20 +27,9 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Find-Installation
+# Unit test for Get-OneDrive
 #
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-	'PSAvoidGlobalVars', '', Justification = 'Global variable used for testing only')]
-param()
-
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
-
-if ((Get-Variable -Name Develop -Scope Global).Value -eq $false)
-{
-	Write-Error -Category NotEnabled -TargetObject "Variable 'Develop'" `
-		-Message "This unit test is enabled only when 'Develop' is set to $true"
-	return
-}
 
 # Check requirements for this project
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
@@ -50,7 +39,9 @@ Test-SystemRequirements
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test @Logs
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo @Logs
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 
 # Ask user if he wants to load these rules
@@ -59,41 +50,21 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-New-Test "Find-Installation 'EdgeChromium'"
-Find-Installation "EdgeChromium" @Logs
-$global:InstallTable | Format-Table -AutoSize @Logs
+$UserGroup = "Users"
 
-New-Test "Install Root EdgeChromium"
-$global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
+New-Test "Get-GroupPrincipal $UserGroup"
+$Principals = Get-GroupPrincipal $UserGroup @Logs
+# TODO: see also @Get-UserSoftware IF YOU REMOVE Format-Table THE TEST WILL NOT WORK!!
+$Principals | Format-Table
 
-New-Test "Find-Installation 'TeamViewer'"
-Find-Installation "TeamViewer" @Logs
-$global:InstallTable | Format-Table -AutoSize @Logs
-
-New-Test "Find-Installation 'FailureTest'"
-Find-Installation "FailureTest" @Logs
-$global:InstallTable | Format-Table -AutoSize @Logs
-
-New-Test "Find-Installation 'VisualStudio'"
-Find-Installation "VisualStudio" @Logs
-$global:InstallTable | Format-Table -AutoSize @Logs
-
-New-Test "Find-Installation 'Greenshot'"
-Find-Installation "Greenshot" @Logs
-$global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
-
-New-Test "Install Root Greenshot"
-$global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
-
-New-Test "Find-Installation 'OneDrive'"
-Find-Installation "OneDrive" @Logs
-$global:InstallTable | Format-Table -AutoSize @Logs
-
-New-Test "Install Root OneDrive"
-$global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
+foreach ($Principal in $Principals)
+{
+	New-Test "Get-OneDrive $($Principal.User)"
+	Get-OneDrive $Principal.User @Logs
+}
 
 New-Test "Get-TypeName"
-$global:InstallTable | Get-TypeName @Logs
+Get-OneDrive $Principals[0].User @Logs | Get-TypeName @Logs
 
 Update-Log
 Exit-Test

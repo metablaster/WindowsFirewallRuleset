@@ -8,6 +8,7 @@
 - Updated user query functions and tests to make possible querying store app identities
 - Improved network adapter query to optionally query disconnected, hidden and virtual interfaces
 - State changing functions will ask for confirmation if impact high enough
+- Added function to query for OneDrive instances installation search
 
 ## Rules
 
@@ -15,7 +16,7 @@
 - Minor updates to some rules
 - Added temporary troubleshooting rules (purpose to make log file clean)
 - Added address space variables
-- Rules for NVIDIA now correctly load and do not need manual adjustment
+- Rules for NVIDIA and OneDrive now correctly load and do not need manual adjustment
 
 ## Development
 

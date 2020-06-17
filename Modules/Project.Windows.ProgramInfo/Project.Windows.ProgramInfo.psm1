@@ -494,7 +494,7 @@ function Format-Path
 
 <#
 .SYNOPSIS
-Get a list installed by specific user
+Get a list of programs installed by specific user
 .DESCRIPTION
 Search installed programs in userprofile for specific user account
 .PARAMETER UserName
@@ -508,7 +508,7 @@ None. You cannot pipe objects to Get-UserSoftware
 .OUTPUTS
 [PSCustomObject[]] list of programs for specified user on a target computer
 .NOTES
-We should make a query for an array of users, will help to save into variable
+TODO: We should make a query for an array of users, will help to save into variable
 #>
 function Get-UserSoftware
 {
@@ -525,7 +525,6 @@ function Get-UserSoftware
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
 	if (Test-TargetComputer $ComputerName)
@@ -1215,18 +1214,51 @@ function Update-Table
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching $($Principal.Account) programs for $SearchString"
 
-				# NOTE: the story is different here, each user may have multiple matches for search string
-				# letting one match to have same principal would be mistake.
-				$UserPrograms = Get-UserSoftware $Principal.User | Where-Object -Property Name -Like "*$SearchString*"
-
-				if ($UserPrograms)
+				# TODO: We handle OneDrive case here but there may more such programs in the future
+				# so this obviously means we need better approach to handle this
+				if ($SearchString -ne "OneDrive")
 				{
-					foreach ($Program in $UserPrograms)
-					{
-						# NOTE: Avoid spamming
-						# Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing program: $Program"
+					# NOTE: the story is different here, each user may have multiple matches for search string
+					# letting one match to have same principal would be mistake.
+					$UserPrograms = Get-UserSoftware $Principal.User | Where-Object -Property Name -Like "*$SearchString*"
 
-						$InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
+					if ($UserPrograms)
+					{
+						foreach ($Program in $UserPrograms)
+						{
+							# NOTE: Avoid spamming
+							# Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing program: $Program"
+
+							$InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
+
+							# Create a row
+							$Row = $InstallTable.NewRow()
+
+							# Enter data into row
+							$Row.ID = ++$RowIndex
+							$Row.SID = $Principal.SID
+							$Row.User = $Principal.User
+							# TODO: we should add group entry for users
+							# $Row.Group = $Principal.Group
+							$Row.Account = $Principal.Account
+							$Row.Computer = $Principal.Computer
+							$Row.InstallLocation = $InstallLocation
+
+							Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($Principal.Account) with $InstallLocation"
+
+							# Add the row to the table
+							$InstallTable.Rows.Add($Row)
+						}
+					}
+				}
+				else
+				{
+					# NOTE: For one drive there is different registry drilling procedure
+					$OneDriveInfo = Get-OneDrive $Principal.User
+
+					if ($OneDriveInfo)
+					{
+						$InstallLocation = $OneDriveInfo | Select-Object -ExpandProperty InstallLocation
 
 						# Create a row
 						$Row = $InstallTable.NewRow()
@@ -1739,9 +1771,11 @@ function Find-Installation
 		}
 		"OneDrive"
 		{
-			# TODO: this path didn't exist on fresh installed windows, but one drive was installed
+			# NOTE: this path didn't exist on fresh installed windows, but one drive was installed
 			# It was in appdata user folder
-			Edit-Table "%ProgramFiles(x86)%\Microsoft OneDrive"
+			# Edit-Table "%ProgramFiles(x86)%\Microsoft OneDrive"
+
+			Update-Table "OneDrive" -UserProfile
 			break
 		}
 		"HelpViewer"
@@ -2421,6 +2455,94 @@ function Get-SQLManagementStudio
 	}
 }
 
+<#
+.SYNOPSIS
+Get One Drive information for specific user
+.DESCRIPTION
+Search installed One Drive instance in userprofile for specific user account
+.PARAMETER UserName
+User name in form of "USERNAME"
+.PARAMETER ComputerName
+NETBios Computer name in form of "COMPUTERNAME"
+.EXAMPLE
+Get-OneDrive "USERNAME"
+.INPUTS
+None. You cannot pipe objects to Get-UserSoftware
+.OUTPUTS
+[PSCustomObject[]] One Drive program info for specified user on a target computer
+.NOTES
+TODO: We should make a query for an array of users, will help to save into variable,
+this is duplicate comment of Get-UserSoftware
+#>
+function Get-OneDrive
+{
+	[OutputType([System.Management.Automation.PSCustomObject[]])]
+	[CmdletBinding()]
+	param (
+		[Alias("User")]
+		[Parameter(Mandatory = $true)]
+		[string] $UserName,
+
+		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
+		[Parameter()]
+		[string] $ComputerName = [System.Environment]::MachineName
+	)
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
+
+	if (Test-TargetComputer $ComputerName)
+	{
+		$HKU = Get-AccountSID $UserName -Computer $ComputerName
+		$HKU += "\Software\Microsoft\OneDrive"
+
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
+		$RegistryHive = [Microsoft.Win32.RegistryHive]::Users
+		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
+
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key HKU:$HKU"
+		$OneDriveKey = $RemoteKey.OpenSubkey($HKU)
+
+		[PSCustomObject[]] $OneDriveInfo = @()
+		if (!$OneDriveKey)
+		{
+			Write-Warning -Message "Failed to open registry root key: HKU:$HKU"
+		}
+		else
+		{
+			# NOTE: remove executable file name
+			$InstallLocation = Split-Path -Path $OneDriveKey.GetValue("OneDriveTrigger") -Parent
+
+			if ([System.String]::IsNullOrEmpty($InstallLocation))
+			{
+				Write-Warning -Message "Failed to read registry entry $HKU\OneDriveTrigger"
+			}
+			else
+			{
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $OneDriveKey"
+
+				# NOTE: Avoid spamming
+				$InstallLocation = Format-Path $InstallLocation #-Verbose:$false -Debug:$false
+
+				# Get more key entries as needed
+				$OneDriveInfo += [PSCustomObject]@{
+					"ComputerName" = $ComputerName
+					"RegKey" = Split-Path -Path $OneDriveKey.ToString() -Leaf
+					"Name" = "OneDrive"
+					"InstallLocation" = $InstallLocation
+					"UserFolder" = $OneDriveKey.GetValue("UserFolder")
+				}
+			}
+		}
+
+		Write-Output $OneDriveInfo
+	}
+	else
+	{
+		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact computer: $ComputerName"
+	}
+}
+
 #
 # Module variables
 #
@@ -2506,6 +2628,7 @@ Export-ModuleMember -Function Get-WindowsKit
 Export-ModuleMember -Function Get-WindowsSDK
 Export-ModuleMember -Function Get-WindowsDefender
 Export-ModuleMember -Function Get-SQLManagementStudio
+Export-ModuleMember -Function Get-OneDrive
 
 #
 # External function exports

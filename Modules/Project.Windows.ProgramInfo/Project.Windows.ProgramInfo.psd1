@@ -90,6 +90,7 @@
 		"Get-WindowsSDK"
 		"Get-WindowsDefender"
 		"Get-SQLManagementStudio"
+		"Get-OneDrive"
 		"Get-SQLInstance"
 		"Update-Table"
 		"Edit-Table"
