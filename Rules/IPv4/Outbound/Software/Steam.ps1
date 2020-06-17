@@ -133,6 +133,8 @@ another PC on the same local network." @Logs | Format-Output @Logs
 		-Description "" @Logs | Format-Output @Logs
 
 	# TODO: For all x86 rules we need checks, since those don't exist on x86 systems
+	# This path is sometimes cef.win7 sometimes cef.win7x64, need solution for this
+
 	# $Program = "$SteamRoot\bin\cef\cef.win7\steamwebhelper.exe"
 	# Test-File $Program @Logs
 	# New-NetFirewallRule -Platform $Platform `
@@ -142,7 +144,7 @@ another PC on the same local network." @Logs | Format-Output @Logs
 	# 	-LocalUser $UsersGroupSDDL `
 	# 	-Description "" @Logs | Format-Output @Logs
 
-	$Program = "$SteamRoot\bin\cef\cef.win7x64\steamwebhelper.exe"
+	$Program = "$SteamRoot\bin\cef\cef.win7\steamwebhelper.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Steam (webhelper x64)" -Service Any -Program $Program `

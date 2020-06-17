@@ -33,6 +33,7 @@ TODO's in this file are categorized into following sections:
 2. Modules
 
     - 3rd party scripts and modules need to be checked for updates
+    - Find-Installation function is hungry for constant updates and improvements
 
 3. Project scripts
 
@@ -62,7 +63,7 @@ TODO's in this file are categorized into following sections:
 3. Rules
 
     - Paths to fix: visio, project
-    - Rules to fix: steam, vcpkg, msys2, store apps for admins, internet browser (auto loads)
+    - Rules to fix: vcpkg, msys2, store apps for admins, internet browser (auto loads)
     - Now that common parameters are removed need to update the order of rule parameters,
     also not all are the same.
 
@@ -123,6 +124,9 @@ TODO's in this file are categorized into following sections:
     - We handle almost mostly client rules and no server rules, same case as with IPv4 vs IPv6
     grouping model, we should define a model for server rules (not necessarily Windows Server,
     workstation PC cal also act as server)
+    - Rules for programs (ex. userprofile) which apply to multiple users should assign specific
+    user to LocalUser instead of assigning user group, there are duplicate todo's in code about this,
+    This also implies to todo's about returning installation table to rule scripts!
 
 4. Test and debugging
 
@@ -153,6 +157,9 @@ TODO's in this file are categorized into following sections:
     - Function to check executables for signature and virus total hash
     - localhost != `[Environment]::MachineName` because strings are not the same
     - Write-Error streams should be extended to include exception record etc.
+    - Some executables won't be found in cases where installed program didn't finish installing
+    it self but is otherwise present on system, examples such as steam, or built in store apps.
+    We can show additional information about the failure into the console when this is the case
 
 2. Project scripts
 

@@ -1076,7 +1076,8 @@ None. You cannot pipe objects to Update-Table
 .OUTPUTS
 None. Module scope installation table is updated
 .NOTES
-None.
+TODO: For programs in user profile rules should update LocalUser parameter accordingly,
+currently it looks like we assign entry user group for program that applies to user only
 #>
 function Update-Table
 {
@@ -2473,6 +2474,8 @@ None. You cannot pipe objects to Get-UserSoftware
 .NOTES
 TODO: We should make a query for an array of users, will help to save into variable,
 this is duplicate comment of Get-UserSoftware
+TODO: The logic of this function should probably be part of Get-UserSoftware, it is unknown
+if OneDrive can be installed for all users too.
 #>
 function Get-OneDrive
 {
