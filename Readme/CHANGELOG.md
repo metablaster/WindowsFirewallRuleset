@@ -15,6 +15,7 @@
 - Minor updates to some rules
 - Added temporary troubleshooting rules (purpose to make log file clean)
 - Added address space variables
+- Rules for NVIDIA now correctly load and do not need manual adjustment
 
 ## Development
 

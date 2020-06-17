@@ -94,15 +94,37 @@ if ((Test-Installation "Nvidia64" ([ref] $NvidiaRoot64) @Logs) -or $ForceLoad)
 	# NOTE: this program no longer exists in recent installations
 	# $Program = "$NvidiaRoot64\Display.NvContainer\NVDisplay.Container.exe"
 
-	# TODO: we need to query registry for all such programs in DriverStore
-	$Program = "%SystemRoot%\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_87086da927dcdf63\Display.NvContainer\NVDisplay.Container.exe"
-	Test-File $Program @Logs
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Nvidia NVDisplay Container x64" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-		-LocalUser $NT_AUTHORITY_System `
-		-Description "" @Logs | Format-Output @Logs
+	# NOTE: this is hardcoded and not universal path
+	# $Program = "%SystemRoot%\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_90685a092bcf58c7\Display.NvContainer\NVDisplay.Container.exe"
+
+	# This may take several seconds, tell user what is going on
+	Write-Information -Tags "User" -MessageData "INFO: Querying driver store for NVDisplay Container..."
+
+	# TODO: we need to query drivers for all such programs in DriverStore, ex Get-DriverPath function
+	[string] $Program = Get-WindowsDriver -Online -All |
+	Where-Object -Property OriginalFileName -Like "*nv_dispi.inf" |
+	Sort-Object -Property Version -Descending |
+	Select-Object -First 1 -ExpandProperty OriginalFilename | Format-Path
+
+	if ([System.String]::IsNullOrEmpty($Program))
+	{
+		# TODO: This is from Test-File, Test-File should handle this, see also todo in Test-File
+		$NVDisplayExe = "NVDisplay.Container.exe"
+		Write-Warning -Message "Executable '$NVDisplayExe' was not found, rules for '$NVDisplayExe' won't have any effect"
+
+		Write-Information -Tags "User" -MessageData "INFO: Searched path was: %SystemRoot%\System32\DriverStore\FileRepository"
+		Write-Information -Tags "User" -MessageData "INFO: To fix the problem find '$NVDisplayExe' and adjust the path in $Script and re-run the script"
+	}
+	else
+	{
+		Test-File $Program @Logs
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Nvidia NVDisplay Container x64" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+			-LocalUser $NT_AUTHORITY_System `
+			-Description "" @Logs | Format-Output @Logs
+	}
 
 	$Program = "$NvidiaRoot64\Update Core\NvProfileUpdater64.exe"
 	Test-File $Program @Logs
@@ -130,14 +152,17 @@ if ((Test-Installation "Nvidia86" ([ref] $NvidiaRoot86) @Logs) -or $ForceLoad)
 		-LocalUser $ContainerAccounts `
 		-Description "" @Logs | Format-Output @Logs
 
-	$Program = "$NvidiaRoot86\NVIDIA GeForce Experience\NVIDIA GeForce Experience.exe"
-	Test-File $Program @Logs
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Nvidia GeForce Experience x86" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "" @Logs | Format-Output @Logs
+	if (![System.Environment]::Is64BitOperatingSystem)
+	{
+		$Program = "$NvidiaRoot86\NVIDIA GeForce Experience\NVIDIA GeForce Experience.exe"
+		Test-File $Program @Logs
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Nvidia GeForce Experience x86" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+			-LocalUser $UsersGroupSDDL `
+			-Description "" @Logs | Format-Output @Logs
+	}
 
 	# NOTE: this program no longer exists in recent installations, most likely changed!
 	# $Program = "$NvidiaRoot86\NvTelemetry\NvTelemetryContainer.exe"

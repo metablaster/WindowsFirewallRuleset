@@ -496,8 +496,8 @@ New-NetFirewallRule -DisplayName "SystemSettings" `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 443 `
-	-LocalUser Any `
+	-LocalPort Any -RemotePort 80, 443 `
+	-LocalUser $UsersGroupSDDL `
 	-InterfaceType $Interface `
 	-Description "Seems like it's connecting to display some 'useful tips' on the right hand side
  of the settings menu, NOTE: Configure the gpo 'Control Panel\allow online tips' to 'disabled'

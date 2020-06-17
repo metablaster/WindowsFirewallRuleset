@@ -45,7 +45,7 @@ TODO's in this file are categorized into following sections:
     - Revisit code and make consistent PSCustomObject properties for all function outputs
     - Need to see which functions/commands may throw and setup try catch blocks
     - Revisit parameter validation for functions, specifically acceptance of NULL or empty
-    - Registry drilling for some rules are complex and specific, such as for NVIDIA,
+    - Registry drilling for some rules are complex and specific, such as for NVIDIA or OneDrive,
     in these and probably most other similar cases we should return installation table which
     would be used inside rule script to get individual paths for individual programs.
     - Revisit function parameters, their output types, aliases etc..
@@ -62,7 +62,7 @@ TODO's in this file are categorized into following sections:
 3. Rules
 
     - Paths to fix: onedrive, visio, project
-    - Rules to fix: nvidia, steam, vcpkg, msys2, store apps for admins,
+    - Rules to fix: steam, vcpkg, msys2, store apps for admins,
     internet browser (auto loads)
     - Now that common parameters are removed need to update the order of rule parameters,
     also not all are the same.

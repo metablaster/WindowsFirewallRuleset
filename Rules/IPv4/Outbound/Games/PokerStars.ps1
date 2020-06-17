@@ -67,6 +67,7 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot) @Logs) -or $ForceLoa
 {
 	$Program = "$PokerStarsRoot\PokerStars.exe"
 	Test-File $Program @Logs
+
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "PokerStars - Client" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
@@ -74,19 +75,20 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot) @Logs) -or $ForceLoa
 		-LocalUser $UsersGroupSDDL `
 		-Description "Main game interface." @Logs | Format-Output @Logs
 
-	# TODO: browser for some reason needs any interface and any remote address
-	# need to investigate why
+	# NOTE: It looks like browser no longer needs any interface and any remote address
 	$Program = "$PokerStarsRoot\br\PokerStarsBr.exe"
 	Test-File $Program @Logs
+
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "PokerStars - Browser" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType Any `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 80, 443 `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "In game HTML browser" @Logs | Format-Output @Logs
 
 	$Program = "$PokerStarsRoot\PokerStarsOnlineUpdate.exe"
 	Test-File $Program @Logs
+
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "PokerStars - Online update" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
@@ -96,6 +98,7 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot) @Logs) -or $ForceLoa
 
 	$Program = "$PokerStarsRoot\PokerStarsUpdate.exe"
 	Test-File $Program @Logs
+
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "PokerStars - Update" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `

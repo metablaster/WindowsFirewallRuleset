@@ -72,7 +72,7 @@ The project maintains "per file" licenses and Copyright notices.
 
 # Minimum supported system requirements
 
-1. Windows 10 Pro/Enterprise, Windows Server 2019
+1. Windows 10 Pro/Enterprise, Windows Server 2019 (64 bit)
 2. Powershell Core 7.0 or Windows PowerShell 5.1
 [Download Powershell](https://github.com/PowerShell/PowerShell)
 3. NET Framework 3.5 (for Windows PowerShell)
@@ -95,10 +95,15 @@ needs or for contribution, any other editor is of course your choice.
 - If you get VSCode, you'll also need powershell extension for code navigation and
 PowerShell specific features.
 
-# I don't have Windows 10 or Windows Server
+# I don't have Windows 10 or Windows Server (64 bit)
 
 By default this project is tested and designed for most recent Windows/Servers and that is known
 to work, making use of it on older systems requires additional work.
+
+Testing is done on 64 bit windows, a small fraction of rules won't work for 32 bit system and
+need adjustment, full functionality for 32 bit system is work in progress.\
+For now you can load rules on 32 bit system just fine with the exception of few rules probably not
+relevant at all for your configuration. (It's hard to tell since it wasn't tested)
 
 The plan is to expand this project to manage [nftables](https://en.wikipedia.org/wiki/Nftables)
 firewall on linux and other systems, but not anytime soon.

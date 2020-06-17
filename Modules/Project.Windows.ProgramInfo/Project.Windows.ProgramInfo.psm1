@@ -361,7 +361,7 @@ File path to format, can have environment variables, or consists of trailing sla
 .EXAMPLE
 Format-Path "C:\Program Files\\Dir\"
 .INPUTS
-None. You cannot pipe objects to Format-Path
+[System.String] File path to format
 .OUTPUTS
 [string] formatted path, includes environment variables, stripped off of junk
 .NOTES
@@ -372,120 +372,124 @@ function Format-Path
 	[OutputType([System.String])]
 	[CmdletBinding()]
 	param (
+		[Parameter(ValueFromPipeline = $true)]
 		[string] $FilePath
 	)
 
-	# Impossible to know what the input may be
-	if ([System.String]::IsNullOrEmpty($FilePath))
+	process
 	{
-		# TODO: why allowing empty path?
-		# NOTE: Avoid spamming
-		# Write-Debug -Message "[$($MyInvocation.InvocationName)] Returning false, file path is null or empty"
-		return $FilePath
-	}
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
-	# Make an array of (environment variable/path) value pair,
-	# excluding user profile environment variables
-	$Variables = @()
-	foreach ($Entry in @(Get-ChildItem Env:))
-	{
-		$Entry.Name = "%" + $Entry.Name + "%"
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing $($Entry.Name)"
-
-		if ($BlackListEnvironment -notcontains $Entry.Name)
+		# Impossible to know what the input may be
+		if ([System.String]::IsNullOrEmpty($FilePath))
 		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Selecting $($Entry.Name)"
-			$Variables += $Entry
-		}
-	}
-
-	# TODO: sorted result will have multiple same variables,
-	# Sorting from longest paths which should be checked first
-	$Variables = $Variables | Sort-Object -Descending { $_.Value.Length }
-
-	# Strip away quotations from path
-	$FilePath = $FilePath.Trim('"')
-	$FilePath = $FilePath.Trim("'")
-
-	# Some paths may have semicolon (ie. command paths)
-	$FilePath = $FilePath.TrimEnd(";")
-
-	# Replace double slashes with single ones
-	$FilePath = $FilePath.Replace("\\", "\")
-
-	# If input path is root drive, removing a slash would produce bad path
-	# Otherwise remove trailing slash for cases where entry path is convertible to variable
-	if ($FilePath.Length -gt 3)
-	{
-		$FilePath = $FilePath.TrimEnd('\\')
-	}
-
-	# Make a copy of file path because modification can be wrong
-	$SearchString = $FilePath
-
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if '$FilePath' already contains environment variable"
-	foreach ($Variable in $Variables)
-	{
-		if ($FilePath -like "$($Variable.Name)*")
-		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input path already formatted: $FilePath"
+			# TODO: why allowing empty path?
+			# NOTE: Avoid spamming
+			# Write-Debug -Message "[$($MyInvocation.InvocationName)] Returning false, file path is null or empty"
 			return $FilePath
 		}
-	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if '$SearchString' is convertible to environment variable"
-	while (![System.String]::IsNullOrEmpty($SearchString))
-	{
-		foreach ($Entry in $Variables)
+		# Make an array of (environment variable/path) value pair,
+		# excluding user profile environment variables
+		$Variables = @()
+		foreach ($Entry in @(Get-ChildItem Env:))
 		{
-			if ($Entry.Value -like "*$SearchString")
+			$Entry.Name = "%" + $Entry.Name + "%"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing $($Entry.Name)"
+
+			if ($BlackListEnvironment -notcontains $Entry.Name)
 			{
-				# Environment variable found, if this is first hit, trailing slash is already removed
-				$FilePath = $FilePath.Replace($SearchString, $Entry.Name)
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Formatting input path to: $FilePath"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Selecting $($Entry.Name)"
+				$Variables += $Entry
+			}
+		}
+
+		# TODO: sorted result will have multiple same variables,
+		# Sorting from longest paths which should be checked first
+		$Variables = $Variables | Sort-Object -Descending { $_.Value.Length }
+
+		# Strip away quotations from path
+		$FilePath = $FilePath.Trim('"')
+		$FilePath = $FilePath.Trim("'")
+
+		# Some paths may have semicolon (ie. command paths)
+		$FilePath = $FilePath.TrimEnd(";")
+
+		# Replace double slashes with single ones
+		$FilePath = $FilePath.Replace("\\", "\")
+
+		# If input path is root drive, removing a slash would produce bad path
+		# Otherwise remove trailing slash for cases where entry path is convertible to variable
+		if ($FilePath.Length -gt 3)
+		{
+			$FilePath = $FilePath.TrimEnd('\\')
+		}
+
+		# Make a copy of file path because modification can be wrong
+		$SearchString = $FilePath
+
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if '$FilePath' already contains environment variable"
+		foreach ($Variable in $Variables)
+		{
+			if ($FilePath -like "$($Variable.Name)*")
+			{
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input path already formatted: $FilePath"
 				return $FilePath
 			}
 		}
 
-		# Strip away file or last folder in path then try again (also trims trailing slash)
-		$SearchString = Split-Path -Path $SearchString -Parent
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if '$SearchString' is convertible to environment variable"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if '$SearchString' is convertible to environment variable"
+		while (![System.String]::IsNullOrEmpty($SearchString))
+		{
+			foreach ($Entry in $Variables)
+			{
+				if ($Entry.Value -like "*$SearchString")
+				{
+					# Environment variable found, if this is first hit, trailing slash is already removed
+					$FilePath = $FilePath.Replace($SearchString, $Entry.Name)
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Formatting input path to: $FilePath"
+					return $FilePath
+				}
+			}
+
+			# Strip away file or last folder in path then try again (also trims trailing slash)
+			$SearchString = Split-Path -Path $SearchString -Parent
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if '$SearchString' is convertible to environment variable"
+		}
+
+		# path has been reduced to root drive so get that
+		$SearchString = Split-Path -Path $FilePath -Qualifier
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] path has been reduced to root drive, now searching for: $SearchString"
+
+		# Find candidate replacements
+		$Variables = $Variables | Where-Object { $_.Value -eq $SearchString }
+
+		if ([System.String]::IsNullOrEmpty($Variables))
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Environment variables for input path don't exist"
+			# There are no environment variables for this drive
+			# Just trim trailing slash
+			return $FilePath.TrimEnd('\\')
+		}
+		elseif (($Variables | Measure-Object).Count -gt 1)
+		{
+			# Since there may be duplicate entries, we grab first one
+			$Replacement = $Variables.Name[0]
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Multiple matches exist for '$SearchString', selecting first one: $Replacement"
+		}
+		else
+		{
+			# If there is single match selecting [0] would result in selecting a single letter not env. variable!
+			$Replacement = $Variables.Name
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Found exact match for '$SearchString' -> $Replacement"
+		}
+
+		$FilePath = $FilePath.Replace($SearchString, $Replacement).TrimEnd('\\')
+
+		# Only root drive is converted, just trim away trailing slash
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Only root drive is formatted: $FilePath"
+		return $FilePath
 	}
-
-	# path has been reduced to root drive so get that
-	$SearchString = Split-Path -Path $FilePath -Qualifier
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] path has been reduced to root drive, now searching for: $SearchString"
-
-	# Find candidate replacements
-	$Variables = $Variables | Where-Object { $_.Value -eq $SearchString }
-
-	if ([System.String]::IsNullOrEmpty($Variables))
-	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Environment variables for input path don't exist"
-		# There are no environment variables for this drive
-		# Just trim trailing slash
-		return $FilePath.TrimEnd('\\')
-	}
-	elseif (($Variables | Measure-Object).Count -gt 1)
-	{
-		# Since there may be duplicate entries, we grab first one
-		$Replacement = $Variables.Name[0]
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Multiple matches exist for '$SearchString', selecting first one: $Replacement"
-	}
-	else
-	{
-		# If there is single match selecting [0] would result in selecting a single letter not env. variable!
-		$Replacement = $Variables.Name
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Found exact match for '$SearchString' -> $Replacement"
-	}
-
-	$FilePath = $FilePath.Replace($SearchString, $Replacement).TrimEnd('\\')
-
-	# Only root drive is converted, just trim away trailing slash
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Only root drive is formatted: $FilePath"
-	return $FilePath
 }
 
 <#
