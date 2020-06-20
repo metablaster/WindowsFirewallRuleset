@@ -101,10 +101,13 @@ if ((Test-Installation "Nvidia64" ([ref] $NvidiaRoot64) @Logs) -or $ForceLoad)
 	Write-Information -Tags "User" -MessageData "INFO: Querying driver store for NVDisplay Container..."
 
 	# TODO: we need to query drivers for all such programs in DriverStore, ex Get-DriverPath function
-	[string] $Program = Get-WindowsDriver -Online -All |
+	[string] $Driver = Get-WindowsDriver -Online -All |
 	Where-Object -Property OriginalFileName -Like "*nv_dispi.inf" |
 	Sort-Object -Property Version -Descending |
-	Select-Object -First 1 -ExpandProperty OriginalFilename | Format-Path
+	Select-Object -First 1 -ExpandProperty OriginalFilename
+
+	$Program = Split-Path $Driver -Parent | Format-Path
+	$Program += "\Display.NvContainer\NVDisplay.Container.exe"
 
 	if ([System.String]::IsNullOrEmpty($Program))
 	{

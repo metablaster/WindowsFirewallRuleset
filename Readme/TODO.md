@@ -150,6 +150,9 @@ TODO's in this file are categorized into following sections:
     - FirewallParameters.md contains missing mapping
     - FirewallParameters.md contains no info about compartments and IPSec setup
 
+7. Other
+    - Some cmdlets take encoding parameter, we should probably have a variable to specify encoding
+
 ## Low priority
 
 1. Modules
@@ -170,6 +173,7 @@ TODO's in this file are categorized into following sections:
     - Measure execution time for each or all scripts.
     - We use `Set-NetFirewallSetting` but use only a subset of parameters, other parameters are
     meaningful only with IPSec
+    - Write a set of scripts for network troubleshooting, such as WORKGROUP troubleshooting
 
 3. Rules
 
@@ -202,7 +206,7 @@ TODO's in this file are categorized into following sections:
 
 2. Rules
 
-    - rules to fix: qbittorrent
+    - rules to fix: qbittorrent, Steam
 
 3. Other
 

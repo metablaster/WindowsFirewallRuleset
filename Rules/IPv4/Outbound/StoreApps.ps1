@@ -55,6 +55,7 @@ Microsoft.MicrosoftStickyNotes
 Microsoft.WindowsStore
 Microsoft.MicrosoftSolitaireCollection
 Microsoft.Messaging
+Microsoft.Todos
 Microsoft.Wallet
 Microsoft.People
 Microsoft.Windows.Photos
@@ -80,6 +81,7 @@ Microsoft.Windows.Apprep.ChxApp (smartscreen)
 Microsoft.LockApp
 Microsoft.Windows.SecureAssessmentBrowser
 Microsoft.Windows.StartMenuExperienceHost
+Microsoft.Windows.Search
 Microsoft.Windows.NarratorQuickStart
 Microsoft.Windows.ParentalControls
 Microsoft.MicrosoftEdge
@@ -93,6 +95,11 @@ Microsoft.Windows.OOBENetworkCaptivePortal
 predefined system apps not cached by our command:
 
 InputApp
+
+3rd party apps
+
+Maxence.Imgur4Windows
+
 #>
 
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
@@ -117,7 +124,9 @@ $ProgramsGroup = "Store Apps - Programs"
 $ServicesGroup = "Store Apps - Services"
 $SystemGroup = "Store Apps - System"
 $FirewallProfile = "Private, Public"
-$NetworkApps = Get-Content -Path "$PSScriptRoot\..\NetworkApps.txt"
+
+# Skip blank lines which would always evaluate as true later in wildcard matches
+$NetworkApps = Get-Content -Path "$PSScriptRoot\..\NetworkApps.txt" | Where-Object { $_ -ne "" }
 
 # Ask user if he wants to load these rules
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
@@ -181,9 +190,14 @@ foreach ($Principal in $Principals)
 			$Enabled = "False"
 
 			# Enable only networking apps
-			if ($NetworkApps -contains $_.Name)
+			# NOTE: not easy to simplify, ex: using Select-String
+			foreach ($item in $NetworkApps)
 			{
-				$Enabled = "True"
+				if ($_.Name -like "*$item*")
+				{
+					$Enabled = "True"
+					break
+				}
 			}
 
 			New-NetFirewallRule -DisplayName $_.Name `

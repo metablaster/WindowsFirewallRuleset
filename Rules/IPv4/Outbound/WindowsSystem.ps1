@@ -562,6 +562,10 @@ In order to target builds to your machine, we need to know a few important thing
 - etc." `
 	@Logs | Format-Output @Logs
 
+# TODO: USOAccounts testing with users, should be SYSTEM
+$USOAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM" @Logs
+Merge-SDDL ([ref] $USOAccounts) (Get-SDDL -Group "Users") @Logs
+
 # NOTE: probably not available in Windows Server
 $Program = "%SystemRoot%\System32\usocoreworker.exe"
 Test-File $Program @Logs
@@ -572,7 +576,7 @@ New-NetFirewallRule -DisplayName "Update Session Orchestrator" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
-	-LocalUser Any `
+	-LocalUser $USOAccounts `
 	-InterfaceType $Interface `
 	-Description "wuauclt.exe is deprecated on Windows 10 (and Server 2016 and newer).
 The command line tool has been replaced by usoclient.exe.
@@ -580,6 +584,21 @@ When the system starts an update session, it launches usoclient.exe,
 which in turn launches usocoreworker.exe.
 Usocoreworker is the worker process for usoclient.exe and essentially it does all the work that
 the USO component needs done." `
+	@Logs | Format-Output @Logs
+
+# TODO: This one is present since Windows 10 v2004, needs description
+$Program = "%SystemRoot%\System32\MoUsoCoreWorker.exe"
+Test-File $Program @Logs
+
+New-NetFirewallRule -DisplayName "Mo Update Session Orchestrator" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Internet4 `
+	-LocalPort Any -RemotePort 443 `
+	-LocalUser $USOAccounts `
+	-InterfaceType $Interface `
+	-Description "" `
 	@Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\usoclient.exe"

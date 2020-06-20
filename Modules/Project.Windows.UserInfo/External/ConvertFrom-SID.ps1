@@ -46,7 +46,8 @@ PSObject composed of SID and user or account
 SID conversion for well known SIDs from http://support.microsoft.com/kb/243330
 Original code link: https://github.com/RamblingCookieMonster/PowerShell
 
-TODO: Need to handle more NT AUTHORITY users and similar
+TODO: Need to handle more NT AUTHORITY, PACKAGE AUTHORITY, USER MODE DRIVERS users,
+probably defined as a separate variable in addition to WellKnownSIDs
 TODO: need to improve to have consistent output ie. exactly DOMAIN\USER, see test results
 
 Changes by metablaster:

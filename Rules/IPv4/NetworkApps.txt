@@ -22,6 +22,7 @@ Microsoft.MicrosoftStickyNotes
 Microsoft.WindowsStore
 Microsoft.MicrosoftSolitaireCollection
 Microsoft.Messaging
+Microsoft.Todos
 Microsoft.Wallet
 Microsoft.People
 Microsoft.Windows.Photos
@@ -44,6 +45,7 @@ Microsoft.Windows.Apprep.ChxApp (smartscreen)
 Microsoft.LockApp
 Microsoft.Windows.SecureAssessmentBrowser
 Microsoft.Windows.StartMenuExperienceHost
+Microsoft.Windows.Search
 Microsoft.Windows.NarratorQuickStart
 Microsoft.Windows.ParentalControls
 Microsoft.MicrosoftEdge
@@ -54,3 +56,5 @@ Microsoft.PPIProjection
 Microsoft.Windows.OOBENetworkCaptivePortal
 
 InputApp
+
+Maxence.Imgur4Windows
