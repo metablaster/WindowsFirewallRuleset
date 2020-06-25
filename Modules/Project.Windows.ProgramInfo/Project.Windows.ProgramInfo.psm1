@@ -1517,6 +1517,11 @@ function Find-Installation
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Start searching for $Program"
 	switch -Wildcard ($Program)
 	{
+		"CMake"
+		{
+			Update-Table "CMake"
+			break
+		}
 		"SQLDTS"
 		{
 			# $SQLServerBinnRoot = Get-SQLInstance | Select-Object -ExpandProperty SQLBinRoot

@@ -38,7 +38,7 @@ Test-SystemRequirements
 # . $PSScriptRoot\..\DirectionSetup.ps1
 # . $PSScriptRoot\..\..\IPSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test @Logs
+# Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test @Logs
 # Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo @Logs
 # Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo @Logs
 # Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo @Logs

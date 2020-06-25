@@ -76,7 +76,7 @@ if ((Test-Installation "vcpkg" ([ref] $vcpkgRoot) @Logs) -or $ForceLoad)
 
 	# TODO: need to update for all users
 	# TODO: this bad path somehow gets into rule
-	$Program = "%LOCALAPPDATA%\Temp\vcpkg\vcpkgmetricsuploader-2019.09.12.exe"
+	$Program = "%SystemDrive%\Users\USERNAME\AppData\Local\Temp\vcpkg\vcpkgmetricsuploader-2020.02.04.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "vcpkg (telemetry)" -Service Any -Program $Program `
@@ -94,14 +94,26 @@ if ((Test-Installation "vcpkg" ([ref] $vcpkgRoot) @Logs) -or $ForceLoad)
 		-LocalUser $UsersGroupSDDL `
 		-Description "vcpkg has it's own powershell" @Logs | Format-Output @Logs
 
-	$Program = "$vcpkgRoot\downloads\tools\cmake-3.14.0-windows\cmake-3.14.0-win32-x86\bin\cmake.exe"
+	# TODO: if cmake in root and of required version it's used, needs conditional rule
+	# $Program = "$vcpkgRoot\downloads\tools\cmake-3.14.0-windows\cmake-3.14.0-win32-x86\bin\cmake.exe"
+	# Test-File $Program @Logs
+	# New-NetFirewallRule -Platform $Platform `
+	# 	-DisplayName "vcpkg (cmake)" -Service Any -Program $Program `
+	# 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+	# 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+	# 	-LocalUser $UsersGroupSDDL `
+	# 	-Description "vcpkg has it's own cmake" @Logs | Format-Output @Logs
+
+	# TODO: Why cmd needs network to download packages, is it just temporary?
+	$Program = Format-Path "C:\Windows\SysWOW64"
+	$Program += "\cmd.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "vcpkg (cmake)" -Service Any -Program $Program `
+		-DisplayName "cmd" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "vcpkg has it's own cmake" @Logs | Format-Output @Logs
+		-Description "" @Logs | Format-Output @Logs
 }
 
 Update-Log
