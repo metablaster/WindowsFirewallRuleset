@@ -106,6 +106,13 @@ if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot) @Logs) -or $Forc
 		-Description "Hyper text transfer protocol over SSL." @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
+		-DisplayName "Edge-Chromium speedtest" -Service Any -Program $EdgeChromiumApp `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 5060, 8080 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "Ports needed for https://speedtest.net" @Logs | Format-Output @Logs
+
+	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Edge-Chromium FTP" -Service Any -Program $EdgeChromiumApp `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21 `

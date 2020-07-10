@@ -89,6 +89,15 @@ foreach ($Instance in $VSInstances)
 		$DisplayName += " Preview"
 	}
 
+	$Program = "$VSRoot\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe"
+	Test-File $Program @Logs
+	New-NetFirewallRule -Platform $Platform `
+		-DisplayName "$($DisplayName) CMake" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "CMake bundled with Visual Studio" @Logs | Format-Output @Logs
+
 	$Program = "$VSRoot\Common7\IDE\CommonExtensions\Microsoft\TeamFoundation\Team Explorer\Git\mingw32\bin\git-remote-https.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
