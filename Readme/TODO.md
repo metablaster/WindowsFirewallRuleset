@@ -40,7 +40,7 @@ TODO's in this file are categorized into following sections:
     - Resolving existing and enabling new/disabled analyzer warnings
 
 4. Rules
-    - Rules for NVIDIA need constant updates, software changes are braking
+    - Rules for NVIDIA need constant updates, software changes are breaking
 
 ## High priority
 

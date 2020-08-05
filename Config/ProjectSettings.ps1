@@ -41,7 +41,7 @@ Set-StrictMode -Version Latest
 # 2. Loads troubleshooting rules defined in Temporary.ps1
 # 3. Performs some additional checks
 # 4. Enables some unit tests
-Set-Variable -Name Develop -Scope Global -Value $true
+Set-Variable -Name Develop -Scope Global -Value $false
 
 # Name of this script for debugging messages, do not modify!.
 Set-Variable -Name ThisScript -Scope Local -Option ReadOnly -Value $($MyInvocation.MyCommand.Name -replace ".{4}$")
@@ -194,7 +194,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -Erro
 	Set-Variable -Name CheckReadOnlyVariables -Scope Global -Option ReadOnly -Force -Value $null
 
 	# Set to false to avoid checking system requirements
-	Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $false
+	Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $true
 }
 
 # Removable variables, meaning these can be modified by code at any time,
@@ -207,7 +207,7 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 	# check if removable variables already initialized, do not modify!
 	Set-Variable -Name CheckRemovableVariables -Scope Global -Option ReadOnly -Force -Value $null
 
-	# Amount of connections tests against remote computers
+	# Amount of connection tests against remote computers
 	Set-Variable -Name ConnectionCount -Scope Global -Value 2
 
 	# Timeout in seconds to contact remote computers

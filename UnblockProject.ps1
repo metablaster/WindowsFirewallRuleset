@@ -30,9 +30,9 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unblock files that were downloaded from the Internet.
+Unblock project files that were downloaded from the Internet.
 .DESCRIPTION
-Unblock files that were downloaded from the Internet, this is needed to
+Unblock project files that were downloaded from the Internet, this is needed to
 unblock project that were downloaded from GitHub to prevent spamming YES/NO questions.
 .EXAMPLE
 Unblock-Project
@@ -40,6 +40,10 @@ Unblock-Project
 None.
 .OUTPUTS
 None.
+.NOTES
+If executing scripts after manual download from internet or transfer from
+another computer or media, you should "unblock" scripts by using this code.
+TODO: We should probably unblock only scripts, not all files.
 #>
 function Unblock-Project
 {
