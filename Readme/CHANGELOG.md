@@ -16,7 +16,7 @@
 - Minor updates to some rules
 - Added temporary troubleshooting rules (purpose to make log file clean)
 - Added address space variables
-- Rules for NVIDIA and OneDrive now correctly load and do not need manual adjustment
+- Rules for OneDrive now correctly load and do not need manual adjustment
 
 ## Development
 
@@ -38,6 +38,8 @@
 - Set network profile for each connected hardware interface
 - Set/reset global firewall settings
 - ResetFirewall script also deletes IPSec rules
+- Script to unblock all files in project, for scripts that were downloaded from GitHub
+to prevent spamming YES/NO questions while executing them.
 
 # Changelog v0.4.1
 

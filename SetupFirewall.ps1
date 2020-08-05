@@ -28,6 +28,9 @@ SOFTWARE.
 
 . $PSScriptRoot\Config\ProjectSettings.ps1
 
+# First unblock all files
+& "$ProjectRoot\UnblockProject.ps1"
+
 # Check requirements for this project
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
 Test-SystemRequirements

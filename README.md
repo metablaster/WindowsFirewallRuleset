@@ -149,6 +149,10 @@ contains rules will be significantly slower (depends on number of existing rules
 want to fix some problem.
 - Any rule that results in "Access denied" while loading should be reloaded by executing specific
 script again.
+- Master script `SetupFirewall.ps1` will [unblock all files](https://devblogs.microsoft.com/scripting/easily-unblock-all-files-in-a-directory-using-powershell/)
+in project first to avoid YES/NO questions spam for every executing script, you should "unblock"
+files manually only if executing individual scripts after manual download or transfer from
+another computer by using `UnblockProject.ps1` script.
 
 **STEPS:**
 

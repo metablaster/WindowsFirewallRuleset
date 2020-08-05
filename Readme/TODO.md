@@ -39,6 +39,9 @@ TODO's in this file are categorized into following sections:
 
     - Resolving existing and enabling new/disabled analyzer warnings
 
+4. Rules
+    - Rules for NVIDIA need constant updates, software changes are braking
+
 ## High priority
 
 1. Modules
@@ -76,7 +79,7 @@ TODO's in this file are categorized into following sections:
 
     - Most program query functions return multiple program instances,
     need to select latest or add multiple rules.
-    - Module functions and rules for OneDrive and NVIDIA have partial fix, needs design improvements
+    - Module functions and rules for OneDrive have partial fix, needs design improvements
 
 ## Medium priority
 
