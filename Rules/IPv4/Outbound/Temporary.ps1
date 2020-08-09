@@ -203,7 +203,7 @@ if ($Develop)
 		-Description "Temporary allow troublesome UDP traffic." `
 		@Logs | Format-Output @Logs
 
-	# Moved from WindowsServices.ps1, used for extension rule bellow
+	# Moved from WindowsServices.ps1, used for extension rule below
 	$ExtensionAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE" @Logs
 	Merge-SDDL ([ref] $ExtensionAccounts) (Get-SDDL -Group "Users") @Logs
 

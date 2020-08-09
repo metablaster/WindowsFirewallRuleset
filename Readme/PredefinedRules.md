@@ -16,7 +16,7 @@ Custom rule groups do not interfere with predefined groups to be able to disting
 from predefined rules.
 
 Some of the rules retain grouping while other are grouped into existing groups, grouping exceptions
-are listed bellow.
+are listed below.
 
 # Grouping predefined rules
 

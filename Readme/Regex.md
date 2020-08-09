@@ -13,7 +13,7 @@ NOTE: each regex includes an optional space at the end
 
 ## Get -DisplayName parameter and it's value
 
-In bellow example multi cursor-ing all the matches in a script would allow to cut and paste all
+In below example multi cursor-ing all the matches in a script would allow to cut and paste all
 regex matches onto a second line by using CTRL + X, Down Arrow to move and CTRL + V.
 
 ```powershell

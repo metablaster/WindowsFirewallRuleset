@@ -8,7 +8,7 @@ Useful if you encountered problems such as internet connectivity and you're unab
 not resolve your problems.\
 **NOTE: these steps will not save any previous rules in GPO**
 
-## Follow bellow steps to revert firewall
+## Follow below steps to revert firewall
 
 1. Press start button
 2. type: `secpol.msc`
@@ -24,7 +24,7 @@ not resolve your problems.\
 ## Problem still not resolved
 
 This should not be the case, but can happen if you modified firewall in control panel.\
-Follow bellow steps to reset default windows firewall:
+Follow below steps to reset default windows firewall:
 
 1. Open control panel and click on "Windows defender firewall"
 2. Click on "Restore defaults" to restore firewall to defaults
@@ -40,7 +40,7 @@ Follow bellow steps to reset default windows firewall:
 5. If problem is not fixed right away you may need to reboot system
 6. if still problems verify your router and connectivity with other devices on same router.
 
-## Follow bellow steps to reset network
+## Follow below steps to reset network
 
 Type each command into elevated powershell:
 

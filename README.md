@@ -236,7 +236,7 @@ then reset firewall as explained before and take a look into `Readme` folder.
 
 ## Where are my rules?
 
-Rules are loaded into Local group policy, follow bellow steps to open local group policy.
+Rules are loaded into Local group policy, follow below steps to open local group policy.
 
 1. Press Windows key and type: `secpol.msc`
 2. Right click on `secpol.msc` and click `Run as administrator`
@@ -310,7 +310,7 @@ switch to either master or develop branch, next use "Clone or download" button a
 you will need git (link above), github account, a fork of this repository in your account and optionally
 [SSH key](https://help.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account)
 to check for new updates on daily, weekly or what ever other basis you want,
-follow bellow steps to check for updates once you installed git and cloned your own fork:
+follow below steps to check for updates once you installed git and cloned your own fork:
 
 - Right click on Start button in Windows system
 - Click `Windows Powershell` to open Powershell
@@ -347,13 +347,13 @@ That's it, your scripts are now up to date, execute them as you desire (or follo
 
 ## Contributing or suggestions
 
-Bellow are general notes for requesting to add your rules or ideas about rules to project.\
+Below are general notes for requesting to add your rules or ideas about rules to project.\
 If you would like to contribute by writing scripts you should read
 [CONTRIBUTING.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/CONTRIBUTING.md)
 instead.
 
 Feel free to suggest or contribute new rules, or improvements for existing rules or scripts.\
-Just make sure you follow bellow notices:
+Just make sure you follow below notices:
 
 1. Provide some documentation or official reference for your rules so that it can be easy to verify
 that these rules do not contain mistakes, for example, for ICMP rules you would provide a link to
