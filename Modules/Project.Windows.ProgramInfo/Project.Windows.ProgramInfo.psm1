@@ -418,6 +418,13 @@ function Format-Path
 		# Replace double slashes with single ones
 		$FilePath = $FilePath.Replace("\\", "\")
 
+		# NOTE: forward slashes while valid for firewall rule are not valid to format path into
+		# environment variable.
+		$FilePath = $FilePath.Replace("//", "\")
+
+		# Replace forward slashes with backward ones
+		$FilePath = $FilePath.Replace("/", "\")
+
 		# If input path is root drive, removing a slash would produce bad path
 		# Otherwise remove trailing slash for cases where entry path is convertible to variable
 		if ($FilePath.Length -gt 3)
@@ -1703,6 +1710,11 @@ function Find-Installation
 		"AdobeAcrobat"
 		{
 			Update-Table "Acrobat Reader DC"
+			break
+		}
+		"LoLGame"
+		{
+			Update-Table "League of Legends" -UserProfile
 			break
 		}
 		"FileZilla"

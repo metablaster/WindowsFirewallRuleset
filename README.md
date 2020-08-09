@@ -38,7 +38,7 @@ master script to your firewall.
 - All the rules are loaded into Local Group Policy (GPO),
 giving you full power over the default windows firewall.
 
-# What are the core benefits of this firewall/project?
+## What are the core benefits of this firewall/project?
 
 1. Unlike windows firewall in control panel, these rules are loaded into GPO firewall
 (Local group policy), meaning random programs which install rules as part of their installation
@@ -57,12 +57,12 @@ redundant/invalid for what ever other reason.
 are in scripts, so you can use editor tools such as CTRL + F to perform bulk operations on
 your rules, doing this in Windows firewall GUI is beyond all pain.
 
-5. Default outbound is block unless there is a rule to explicitly allow traffic,
+5. Default outbound is "block" unless there is a rule to explicitly allow traffic,
 in default windows firewall this is not possible unless you have rules for every possible
 program/service, thanks to this collection of rules setting default outbound to block
 requires very little additional work.
 
-# Licenses
+## Licenses
 
 This project **"Windows Firewall Ruleset"** is licensed under **MIT** license.\
 3rd party and sublicensed code is located inside their own folders for organizational purposes,
@@ -70,7 +70,7 @@ usually called "External".
 
 The project maintains "per file" licenses and Copyright notices.
 
-# Minimum supported system requirements
+## Minimum supported system requirements
 
 1. Windows 10 Pro/Enterprise, Windows Server 2019 (64 bit)
 2. Powershell Core 7.0 or Windows PowerShell 5.1
@@ -95,7 +95,7 @@ needs or for contribution, any other editor is of course your choice.
 - If you get VSCode, you'll also need powershell extension for code navigation and
 PowerShell specific features.
 
-# I don't have Windows 10 or Windows Server (64 bit)
+## I don't have Windows 10 or Windows Server (64 bit)
 
 By default this project is tested and designed for most recent Windows/Servers and that is known
 to work, making use of it on older systems requires additional work.
@@ -111,7 +111,7 @@ firewall on linux and other systems, but not anytime soon.
 [This document](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/LegacySupport.md)
 describes how to make use of this project on older Windows systems such as Windows 7 or Server 2008
 
-# Step by step quick start
+## Step by step quick start
 
 **WARNING:**
 
@@ -159,7 +159,7 @@ another computer or media by using `UnblockProject.ps1` script.
 1. If you don't have ssh keys and other setup required to clone via SSH then either clone with HTTPS
 or just download the released zip file by clicking on "Release" here on this site.\
 These steps assume you have downloaded a zip file.
-2. Extract the archive somewhere, this steps assume you've extracted the zip into
+2. Extract the archive somewhere, these steps assume you've extracted the zip into
 `C:\` root drive directly.
 3. Open the extracted folder, right click into an empty space and there is an option to run
 PowerShell core as administrator (Assumes enabled context menu during installation of PowerShell core)
@@ -192,10 +192,19 @@ cd C:\
 cd WindowsFirewallRuleset-master
 ```
 
+9. At this point you should "unblock" all project files first by executing the script called
+`UnblockProject.ps1`, btw. project files were blocked by Windows to prevent users from running
+untrusted script code downloaded from internet:
+
+```powershell
+.\UnblockProject.ps1
+```
+
 9. Rules for programs such as internet browser, Visual Studio etc. depend on installation variables.\
 Most paths are auto-searched and variables are updated, otherwise you get warning and description
 on how to fix the problem,
 If needed, you can find these installation variables in individual scripts inside `Rules` folder.
+
 10. Back to Powershell console and type into console:
 
 ```powershell
@@ -206,10 +215,12 @@ hit enter and you will be prompted what kind of rulesets you want.
 
 11. Follow prompt output, (ie. hit enter each time to proceed until done),
 it will take at least 10 minutes of your attention.
+
 12. If you encounter errors or warnings, you have several options such as, ignore the errors/warnings
 or update script that produced the error and re-run that script once again later.
+
 13. Once execution is done recall execution policy from step 5 and type:
-(ie. if it was "RemoteSigned" which is default)
+(ie. if it was "RemoteSigned" which is default for PowerShell Core)
 
 ```powershell
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force
@@ -218,11 +229,12 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force
 14. Now that rules are applied you may need to adjust some of them in Local Group Policy,
 not all the rules are enabled by default and you may want to toggle default Allow/Block behavior for
 some rules, rules for programs which do not exist need to be made additionally.
+
 15. If you're unable to connect to internet, you can temporarily open outbound firewall in GPO,
 that should work, if not and you're unable to troubleshoot the problem,
 then reset firewall as explained before and take a look into `Readme` folder.
 
-# Where are my rules?
+## Where are my rules?
 
 Rules are loaded into Local group policy, follow bellow steps to open local group policy.
 
@@ -233,22 +245,26 @@ Rules are loaded into Local group policy, follow bellow steps to open local grou
 5. Click on either `Inbound` or `Outbound` node to view and manage the rules
 you applied with Powershell script.
 
-# Applying individual rulesets
+## Applying individual rulesets
 
 If you want to apply only specific rules there are 2 ways to do this:
 
 1. Execute `SetupFirewall.ps1` and hit enter only for rulesets you want, otherwise type `N`
 and hit enter to skip current ruleset.
+
 2. Inside powershell navigate to folder containing the ruleset script you want,
 and execute individual Powershell script.
+
 3. You may want to run `SetupProfile.ps1` to apply default firewall behavior if it's not set
-already, or you can do it manually in GPO.
+already, or you can do it manually in GPO but with limited power.
+"limited power" means `SetupProfile.ps1` configures some firewall parameters which can't be
+adjusted in firewall GUI.
 
 In both cases the script will delete all of the existing rules that match the rule group (if any),
 and load the rules from script
 into Local Group Policy.
 
-# Deleting rules
+## Deleting rules
 
 At the moment the easiest way is to select all the rules you want to delete in Local Group Policy,
 right click and delete.
@@ -262,7 +278,7 @@ Deleting all rules or revetting to previous state can also be done with `ResetFi
 
 Note that you will also need to re-import your exported GPO rules if you had them.
 
-# Manage loaded rules
+## Manage loaded rules
 
 There are 2 ways to manage your rules:
 
@@ -275,7 +291,7 @@ add new ones or screw them up.
 What ever your setup is, you will surely need to perform additional work such as adding more rules
 in GPO to allow programs for which rules do not exist, or to reconfigure existing rules.
 
-# Checking for updates
+## Checking for updates
 
 This repository consists of 2 branches, `master` and `develop`, develop (unstable) branch is
 the most recent one and is the one where all commits (updates) directly go so it's beta product,
@@ -329,7 +345,7 @@ for more info see [git documentation](https://git-scm.com/doc)
 That's it, your scripts are now up to date, execute them as you desire (or follow steps from
 "Quick start" section) to apply changes to your firewall.
 
-# Contributing or suggestions
+## Contributing or suggestions
 
 Bellow are general notes for requesting to add your rules or ideas about rules to project.\
 If you would like to contribute by writing scripts you should read
@@ -353,7 +369,7 @@ IP addresses, ports, system user, interface type and other relevant information.
 for example just saying: allow TCP outbound port 80 for any address or any user or no explanation
 what is this supposed to allow or block is not acceptable.
 
-# More information and help
+## More information and help
 
 Inside the [Readme](https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Readme)
 folder you will find useful information not only about this project but also general information on
@@ -362,4 +378,4 @@ how to troubleshoot firewall and network problems, or gather more relevant infor
 It may answer some of your questions, for example
 [MonitoringFirewall.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/MonitoringFirewall.md)
 explains how to monitor firewall in real time, you should go ahead and read it!\
-It's recommended you read those papers here on github because of formatting and screenshots.
+It's recommended you read those documents here on github because of formatting and screenshots.
