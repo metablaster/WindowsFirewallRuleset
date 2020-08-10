@@ -146,15 +146,18 @@ another PC on the same local network." @Logs | Format-Output @Logs
 		-LocalUser $UsersGroupSDDL `
 		-Description "" @Logs | Format-Output @Logs
 
-	$Program = "$SteamRoot\bin\cef\cef.win7x64\steamwebhelper.exe"
-	Test-File $Program @Logs
+	if ([System.Environment]::Is64BitOperatingSystem)
+	{
+		$Program = "$SteamRoot\bin\cef\cef.win7x64\steamwebhelper.exe"
+		Test-File $Program @Logs
 
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Steam (webhelper x64)" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "" @Logs | Format-Output @Logs
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Steam (webhelper x64)" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+			-LocalUser $UsersGroupSDDL `
+			-Description "" @Logs | Format-Output @Logs
+	}
 }
 
 Update-Log

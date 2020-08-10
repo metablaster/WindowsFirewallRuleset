@@ -39,9 +39,6 @@ TODO's in this file are categorized into following sections:
 
     - Resolving existing and enabling new/disabled analyzer warnings
 
-4. Rules
-    - Rules for NVIDIA need constant updates, software changes are breaking
-
 ## High priority
 
 1. Modules
@@ -169,6 +166,8 @@ TODO's in this file are categorized into following sections:
     it self but is otherwise present on system, examples such as steam, games with launcher,
     or built in store apps.
     We can show additional information about the failure into the console when this is the case
+    - Since the scripts are run as Administrator, we need a way to check who is the actual standard
+    user, to be able to check for required modules in user directory if not installed system wide.
 
 2. Project scripts
 
@@ -213,6 +212,7 @@ TODO's in this file are categorized into following sections:
 2. Rules
 
     - rules to fix: qbittorrent, Steam
+    - Rules for NVIDIA need constant updates, software changes are breaking
 
 3. Other
 

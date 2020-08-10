@@ -68,28 +68,50 @@ Merge-SDDL ([ref] $ContainerAccounts) $UsersGroupSDDL @Logs
 # Rules for Nvidia 64bit executables
 # TODO: need universal handling of x64 and x86 rules, ie. on 64 bit systems both apply, while
 # on x86 system this is not true, also some x64, x86 rules here are duplicate, ie. GFExperience
+# Also some rules are not implemented for x86
 #
 
 # Test if installation exists on system
 if ((Test-Installation "Nvidia64" ([ref] $NvidiaRoot64) @Logs) -or $ForceLoad)
 {
-	$Program = "$NvidiaRoot64\NvContainer\nvcontainer.exe"
-	Test-File $Program @Logs
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Nvidia Container x64" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-		-LocalUser $ContainerAccounts `
-		-Description "" @Logs | Format-Output @Logs
+	# Dummy variable, needs to be known because Test-Installation will return same path as nvidia root
+	$GeForceXProot = "$NvidiaRoot64\NVIDIA GeForce Experience"
 
-	$Program = "$NvidiaRoot64\NVIDIA GeForce Experience\NVIDIA GeForce Experience.exe"
-	Test-File $Program @Logs
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Nvidia GeForce Experience x64" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "" @Logs | Format-Output @Logs
+	# Test if GeForce experience exists on system, the path is same
+	# TODO: this is temporary measure, it should be checked with Test-File function
+	if ((Test-Installation "GeForceExperience" ([ref] $GeForceXProot) @Logs) -or $ForceLoad)
+	{
+		$Program = "$NvidiaRoot64\NvContainer\nvcontainer.exe"
+		Test-File $Program @Logs
+
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Nvidia Container x64" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+			-LocalUser $ContainerAccounts `
+			-Description "" @Logs | Format-Output @Logs
+
+		$Program = "$NvidiaRoot64\NVIDIA GeForce Experience\NVIDIA GeForce Experience.exe"
+		Test-File $Program @Logs
+
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Nvidia GeForce Experience x64" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+			-LocalUser $UsersGroupSDDL `
+			-Description "" @Logs | Format-Output @Logs
+
+		# TODO: this rule is not implemented for x86 system
+		$Program = "$NvidiaRoot64\Update Core\NvProfileUpdater64.exe"
+		Test-File $Program @Logs
+
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Nvidia Profile Updater" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+			-LocalUser $UsersGroupSDDL `
+			-Description "" @Logs | Format-Output @Logs
+	}
 
 	# NOTE: this program no longer exists in recent installations
 	# $Program = "$NvidiaRoot64\Display.NvContainer\NVDisplay.Container.exe"
@@ -128,15 +150,6 @@ if ((Test-Installation "Nvidia64" ([ref] $NvidiaRoot64) @Logs) -or $ForceLoad)
 			-LocalUser $NT_AUTHORITY_System `
 			-Description "" @Logs | Format-Output @Logs
 	}
-
-	$Program = "$NvidiaRoot64\Update Core\NvProfileUpdater64.exe"
-	Test-File $Program @Logs
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Nvidia Profile Updater" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "" @Logs | Format-Output @Logs
 }
 
 #
@@ -146,45 +159,58 @@ if ((Test-Installation "Nvidia64" ([ref] $NvidiaRoot64) @Logs) -or $ForceLoad)
 # Test if installation exists on system
 if ((Test-Installation "Nvidia86" ([ref] $NvidiaRoot86) @Logs) -or $ForceLoad)
 {
-	$Program = "$NvidiaRoot86\NvContainer\nvcontainer.exe"
-	Test-File $Program @Logs
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Nvidia Container x86" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-		-LocalUser $ContainerAccounts `
-		-Description "" @Logs | Format-Output @Logs
+	# Dummy variable, needs to be known because Test-Installation will return same path as nvidia root
+	$GeForceXProot = "$NvidiaRoot86\NVIDIA GeForce Experience"
 
-	if (![System.Environment]::Is64BitOperatingSystem)
+	# Test if GeForce experience exists on system, the path is same
+	# TODO: this is temporary measure, it should be checked with Test-File function
+	if ((Test-Installation "GeForceExperience" ([ref] $GeForceXProot) @Logs) -or $ForceLoad)
 	{
-		$Program = "$NvidiaRoot86\NVIDIA GeForce Experience\NVIDIA GeForce Experience.exe"
+		# TODO: not present
+		$Program = "$NvidiaRoot86\NvContainer\nvcontainer.exe"
 		Test-File $Program @Logs
+
 		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "Nvidia GeForce Experience x86" -Service Any -Program $Program `
+			-DisplayName "Nvidia Container x86" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+			-LocalUser $ContainerAccounts `
+			-Description "" @Logs | Format-Output @Logs
+
+		# NOTE: it's duplicate of x64 rule, should be fixed after testing x86 rules
+		if (![System.Environment]::Is64BitOperatingSystem)
+		{
+			$Program = "$NvidiaRoot86\NVIDIA GeForce Experience\NVIDIA GeForce Experience.exe"
+			Test-File $Program @Logs
+			New-NetFirewallRule -Platform $Platform `
+				-DisplayName "Nvidia GeForce Experience x86" -Service Any -Program $Program `
+				-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+				-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+				-LocalUser $UsersGroupSDDL `
+				-Description "" @Logs | Format-Output @Logs
+		}
+
+		# NOTE: this program no longer exists in recent installations, most likely changed!
+		# $Program = "$NvidiaRoot86\NvTelemetry\NvTelemetryContainer.exe"
+		# Test-File $Program @Logs
+		# New-NetFirewallRule -Platform $Platform `
+		# 	-DisplayName "Nvidia Telemetry Container" -Service Any -Program $Program `
+		# 	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+		# 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+		# 	-LocalUser $UsersGroupSDDL `
+		# 	-Description "" @Logs | Format-Output @Logs
+
+		# TODO: not present
+		$Program = "$NvidiaRoot86\NvNode\NVIDIA Web Helper.exe"
+		Test-File $Program @Logs
+
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Nvidia WebHelper TCP" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
 			-Description "" @Logs | Format-Output @Logs
 	}
-
-	# NOTE: this program no longer exists in recent installations, most likely changed!
-	# $Program = "$NvidiaRoot86\NvTelemetry\NvTelemetryContainer.exe"
-	# Test-File $Program @Logs
-	# New-NetFirewallRule -Platform $Platform `
-	# 	-DisplayName "Nvidia Telemetry Container" -Service Any -Program $Program `
-	# 	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
-	# 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-	# 	-LocalUser $UsersGroupSDDL `
-	# 	-Description "" @Logs | Format-Output @Logs
-
-	$Program = "$NvidiaRoot86\NvNode\NVIDIA Web Helper.exe"
-	Test-File $Program @Logs
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Nvidia WebHelper TCP" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "" @Logs | Format-Output @Logs
 }
 
 Update-Log

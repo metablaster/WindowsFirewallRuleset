@@ -18,6 +18,7 @@
 - Added address space variables
 - Rules for OneDrive now correctly load and do not need manual adjustment
 - Added rules for League of Legends game
+- Rules for Nvidia now load conditionally based on presence of GeForce experience (needs improvements)
 
 ## Development
 

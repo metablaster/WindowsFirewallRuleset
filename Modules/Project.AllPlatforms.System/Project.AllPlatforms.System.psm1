@@ -57,9 +57,9 @@ else
 .SYNOPSIS
 Test and print system requirements required for this project
 .DESCRIPTION
-Test-SystemRequirements is designed for WindowsFirewallRuleset, it first prints a short watermark,
+Test-SystemRequirements is designed for "Windows Firewall Ruleset", it first prints a short watermark,
 tests for OS, PowerShell version and edition, Administrator mode, NET Framework version and it
-check if required system services are started. If not the function will exit executing scripts.
+check if required system services are started. If not the function will exit and stop executing scripts.
 .PARAMETER Check
 true or false to check or not to check
 .EXAMPLE
@@ -357,6 +357,7 @@ function Test-SystemRequirements
 		}
 		elseif (($Pester | Measure-Object).Count -gt 1)
 		{
+			# TODO: pester 5.x is current major version
 			$Version = ($Pester | Sort-Object -Descending)[0]
 			$StatusGood = $Version.Major -ge 4
 		}
@@ -367,7 +368,7 @@ function Test-SystemRequirements
 
 		if (!$StatusGood)
 		{
-			Write-Warning -Message "Pester module version 4.x is required to run some of the tests"
+			Write-Warning -Message "Pester module minimum version 4.x is required to run some of the tests"
 			Write-Information -Tags "Project" -MessageData "INFO: Ignore if you have Pester module in user module directory"
 			$StatusGood = $true;
 		}

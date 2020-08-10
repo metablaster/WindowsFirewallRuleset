@@ -234,7 +234,7 @@ configure rules for these interfaces, except allowing all interfaces.
 ### Case 8: Troubleshooting
 
 - It is absolute must to reboot system once for changes to be visible (sometimes twice to get log clear)
-- `Use Get-NetadApter`, `Get-NetIPConfiguration` and `Get-NetIPInterface` to gather hidden adapter info
+- Use `Get-NetadApter`, `Get-NetIPConfiguration` and `Get-NetIPInterface` to gather hidden adapter info
 - Use `-InterfaceAlias` instead of `-InterfaceType` when defining firewall rule
 - See [PowerShellCommands.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/PowerShellCommands.md)
 and [What is the Hyper-V Virtual Switch](https://www.altaro.com/hyper-v/the-hyper-v-virtual-switch-explained-part-1/)
@@ -252,7 +252,7 @@ means it's worth spending time to invent the rules, ie:
 3. Outbound IGMP
 
 - Possible reason why rules won't work see: [LINK](https://aidanfinn.com/?p=15222)
-- Another consideration is type of Hyper-V virtual switch, see [LINK](https://www.nakivo.com/blog/hyper-v-networking-virtual-switches/)
+- Another consideration is the type of Hyper-V virtual switch, see [LINK](https://www.nakivo.com/blog/hyper-v-networking-virtual-switches/)
 
 ### Case 8: Audit result
 
@@ -261,8 +261,8 @@ can happen for two reasons:
 
 1. When you're on non public firewall profile, however virtual switch operates on public profile,
 and it feels like private profile packets are dropped which is false.
-2. When there is block rule for public traffic but you expect this not to be valid for active on
-your currently active private profile firewall.
+2. When there is block rule for public traffic but you expect this not to be valid on your currently
+active private profile firewall.
 
 To check this is indeed so, separately log network traffic for each firewall profile!
 

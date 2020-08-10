@@ -153,6 +153,11 @@ script again.
 in project first to avoid YES/NO questions spam for every executing script, you should "unblock"
 files manually if executing individual scripts after manual download or transfer from
 another computer or media by using `UnblockProject.ps1` script.
+- It's important to understand these rules are designed to be used as "Standard" user, not as
+Administrative user, if you're Administrator on your computer you'll have to create standard user
+account and use that for your everyday life.
+See [FAQ](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/FAQ.md) for more
+information why using Administrative account is dangerous security wise.
 
 **STEPS:**
 

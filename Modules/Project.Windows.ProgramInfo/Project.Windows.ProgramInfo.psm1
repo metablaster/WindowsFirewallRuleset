@@ -1486,7 +1486,7 @@ function Test-Installation
 Find installation directory for given predefined program name
 .DESCRIPTION
 Find-Installation is called by Test-Installation, ie. only if test for existing path
-fails the this method kicks
+fails then this method kicks in
 .PARAMETER Program
 Predefined program name
 .PARAMETER ComputerName
@@ -1867,6 +1867,28 @@ function Find-Installation
 			Edit-Table "%ProgramFiles(x86)%\NVIDIA Corporation"
 			break
 		}
+		"GeForceExperience"
+		{
+			# TODO: this is temporary measure, it should be handled with Test-File function
+			# see also related todo in Nvidia.ps1
+			if ([System.Environment]::Is64BitOperatingSystem)
+			{
+				$NvidiaXPRoot = "%ProgramFiles%\NVIDIA Corporation"
+				if (Test-Environment "$NvidiaXPRoot\NVIDIA GeForce Experience")
+				{
+					Edit-Table $NvidiaXPRoot
+				}
+			}
+			else
+			{
+				$NvidiaXPRoot = "%ProgramFiles(x86)%\NVIDIA Corporation"
+				if (Test-Environment "$NvidiaXPRoot\NVIDIA GeForce Experience")
+				{
+					Edit-Table $NvidiaXPRoot
+				}
+			}
+			break
+		}
 		"WarThunder"
 		{
 			Edit-Table "%ProgramFiles(x86)%\Steam\steamapps\common\War Thunder"
@@ -1943,7 +1965,7 @@ function Find-Installation
 		# TODO: these loops seem to be skipped, probably missing Test-File, need to check
 		Write-Information -Tags "User" -MessageData "INFO: If you installed $Program elsewhere you can input the correct path now"
 		Write-Information -Tags "User" -MessageData "INFO: or adjust the path in $Script and re-run the script later."
-		Write-Information -Tags "User" -MessageData "INFO: otherwise ignore this warning if you don't have $Program installed."
+		Write-Information -Tags "User" -MessageData "INFO: otherwise ignore this warning if $Program is not installed."
 
 		if (Approve-Execute "Yes" "Rule group for $Program" "Do you want to input path now?")
 		{
