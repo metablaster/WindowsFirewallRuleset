@@ -17,6 +17,7 @@
 - Added temporary troubleshooting rules (purpose to make log file clean)
 - Added address space variables
 - Rules for OneDrive now correctly load and do not need manual adjustment
+- Added rules for League of Legends game
 
 ## Development
 
@@ -29,7 +30,7 @@
 ## Documentation
 
 - Add instructions for LAN setup
-- Random updates to docs, fixed dead link.
+- Random updates to docs, fixed dead links and formatting
 
 ## New features
 

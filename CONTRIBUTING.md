@@ -16,7 +16,7 @@ Next if needed, you may want to set up your SSH keys (don't actually do it yet):
 [Connecting to GitHub with SSH](https://help.github.com/en/enterprise/2.20/user/github/authenticating-to-github/connecting-to-github-with-ssh)
 
 The reason why not to set up SSH keys right away is because for PowerShell I made this tutorial:\
-[PowerShell GPG4Win, SSH, posh-git](https://github.com/metablaster/DevelopmentSetup/blob/master/git/git%2C%20powershell%2C%20gpg4win%2C%20posh-git%2C%20commit%20signing%2C%20ssh%20and%20key%20caching.md)
+[PowerShell GPG4Win, SSH, posh-git](https://gist.github.com/metablaster/52b1baac5be44e2f1e6d16800813f42f)
 
 Few additional references worth reading:\
 [Don't "Push" Your Pull Requests](https://www.igvita.com/2011/12/19/dont-push-your-pull-requests)\
