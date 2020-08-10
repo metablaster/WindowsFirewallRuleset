@@ -203,7 +203,7 @@ These templates are fully aligned to rule design, code and formatting style of t
 
 ## Repository folder structure
 
-See [DirectoryStructure.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/DirectoryStructure.md)
+See [DirectoryStructure.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/DirectoryStructure.md)
 
 ## Final notes and where to start
 
