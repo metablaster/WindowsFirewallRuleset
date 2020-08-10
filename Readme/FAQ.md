@@ -52,7 +52,7 @@ If you really need to visit odd sites and freely click around, then please do it
 4. If you don't use password manager with virtual keyboard only, then your accounts and passwords
 are not safe.
 
-As you can see, no mention anti-virus, anti-spyware, firewall, VPN or any kind of similar
+As you can see, no mention of anti-virus, anti-spyware, firewall, VPN or any kind of similar
 "security software", because, if you strictly follow these 4 rules then most likely you don't need
 anything else.
 

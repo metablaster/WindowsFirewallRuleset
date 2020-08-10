@@ -134,18 +134,21 @@ another PC on the same local network." @Logs | Format-Output @Logs
 
 	# TODO: For all x86 rules we need checks, since those don't exist on x86 systems
 	# This path is sometimes cef.win7 sometimes cef.win7x64, need solution for this
-
-	# $Program = "$SteamRoot\bin\cef\cef.win7\steamwebhelper.exe"
-	# Test-File $Program @Logs
-	# New-NetFirewallRule -Platform $Platform `
-	# 	-DisplayName "Steam (webhelper x86)" -Service Any -Program $Program `
-	# 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
-	# 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	# 	-LocalUser $UsersGroupSDDL `
-	# 	-Description "" @Logs | Format-Output @Logs
-
+	# NOTE: It looks like cef.win7 is used during installation of steam on x64 system, and,
+	# cef.win7x64 after installation is done, could be cef.win7 is used on x86 in both cases.
 	$Program = "$SteamRoot\bin\cef\cef.win7\steamwebhelper.exe"
 	Test-File $Program @Logs
+
+	New-NetFirewallRule -Platform $Platform `
+		-DisplayName "Steam (webhelper x86)" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "" @Logs | Format-Output @Logs
+
+	$Program = "$SteamRoot\bin\cef\cef.win7x64\steamwebhelper.exe"
+	Test-File $Program @Logs
+
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Steam (webhelper x64)" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `

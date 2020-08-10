@@ -192,9 +192,10 @@ cd C:\
 cd WindowsFirewallRuleset-master
 ```
 
-9. At this point you should "unblock" all project files first by executing the script called
-`UnblockProject.ps1`, btw. project files were blocked by Windows to prevent users from running
-untrusted script code downloaded from internet:
+9. At this point if you want to execute only specific scripts then you should "unblock" all project
+files first by executing the script called `UnblockProject.ps1`,
+btw. project files were blocked by Windows to prevent users from running untrusted script code
+downloaded from internet:
 
 ```powershell
 .\UnblockProject.ps1

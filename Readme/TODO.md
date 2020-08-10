@@ -69,6 +69,8 @@ TODO's in this file are categorized into following sections:
     - Rules to fix: vcpkg, msys2, store apps for admins, internet browser (auto loads)
     - Now that common parameters are removed need to update the order of rule parameters,
     also not all are the same.
+    - Installation variables must be empty in development mode only to be able to test program
+    search functions, for release providing a path is needed to prevent "fix" info messages
 
 4. Test and debugging
 
@@ -164,7 +166,8 @@ TODO's in this file are categorized into following sections:
     - localhost != `[Environment]::MachineName` because strings are not the same
     - Write-Error streams should be extended to include exception record etc.
     - Some executables won't be found in cases where installed program didn't finish installing
-    it self but is otherwise present on system, examples such as steam, or built in store apps.
+    it self but is otherwise present on system, examples such as steam, games with launcher,
+    or built in store apps.
     We can show additional information about the failure into the console when this is the case
 
 2. Project scripts
