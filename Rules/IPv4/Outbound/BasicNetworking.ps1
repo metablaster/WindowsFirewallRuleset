@@ -133,6 +133,8 @@ New-NetFirewallRule -DisplayName "Domain Name System" `
 # IPv4 address 224.0.0.251 or IPv6 address ff02::fb
 # UDP port 5353
 # https://en.wikipedia.org/wiki/Multicast_DNS
+# TODO: both IPv4 and IPv6 have some dropped packets, need to test if LooseSourceMapping or
+# would make any difference LocalOnlyMapping
 #
 
 New-NetFirewallRule -DisplayName "Multicast Domain Name System" `

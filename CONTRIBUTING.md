@@ -47,6 +47,7 @@ helps to spell words correctly, you get a list of misspelled words in VSCode and
 5. [Highlight Dodgy Characters](https://marketplace.visualstudio.com/items?itemName=nachocab.highlight-dodgy-characters)
 helps to detect bad chars which would violate some project guidelines, such as unable to save file
 in UTF-8 format without having a warning from static analyzer.
+6. [Bookmarks](https://marketplace.visualstudio.com/items?itemName=alefragnani.Bookmarks)
 
 If you do not have this environment setup, you'll have to implement these settings some other way
 around for your code editor.

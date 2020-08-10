@@ -1871,22 +1871,9 @@ function Find-Installation
 		{
 			# TODO: this is temporary measure, it should be handled with Test-File function
 			# see also related todo in Nvidia.ps1
-			if ([System.Environment]::Is64BitOperatingSystem)
-			{
-				$NvidiaXPRoot = "%ProgramFiles%\NVIDIA Corporation"
-				if (Test-Environment "$NvidiaXPRoot\NVIDIA GeForce Experience")
-				{
-					Edit-Table $NvidiaXPRoot
-				}
-			}
-			else
-			{
-				$NvidiaXPRoot = "%ProgramFiles(x86)%\NVIDIA Corporation"
-				if (Test-Environment "$NvidiaXPRoot\NVIDIA GeForce Experience")
-				{
-					Edit-Table $NvidiaXPRoot
-				}
-			}
+			# NOTE: calling script must not use this path, it is used only to check if installation
+			# exists, the real path is obtained with "Nvidia" switch case
+			Update-Table "GeForce Experience"
 			break
 		}
 		"WarThunder"
