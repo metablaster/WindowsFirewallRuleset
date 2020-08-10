@@ -66,6 +66,7 @@ $NETFrameworkRoot = ""
 #
 
 # TODO: remote port unknown, protocol assumed
+# TODO: does not exist in Windows Server 2019
 # NOTE: user can by any local human user
 $Program = "%SystemRoot%\System32\DataUsageLiveTileTask.exe"
 Test-File $Program @Logs
@@ -566,7 +567,7 @@ In order to target builds to your machine, we need to know a few important thing
 $USOAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM" @Logs
 Merge-SDDL ([ref] $USOAccounts) (Get-SDDL -Group "Users") @Logs
 
-# NOTE: probably not available in Windows Server
+# TODO: probably not available in Windows Server
 $Program = "%SystemRoot%\System32\usocoreworker.exe"
 Test-File $Program @Logs
 
@@ -586,7 +587,7 @@ Usocoreworker is the worker process for usoclient.exe and essentially it does al
 the USO component needs done." `
 	@Logs | Format-Output @Logs
 
-# TODO: This one is present since Windows 10 v2004, needs description
+# TODO: This one is present since Windows 10 v2004, needs description, not available in Server 2019
 $Program = "%SystemRoot%\System32\MoUsoCoreWorker.exe"
 Test-File $Program @Logs
 

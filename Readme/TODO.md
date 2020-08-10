@@ -123,9 +123,9 @@ TODO's in this file are categorized into following sections:
     now, since comments must not be formatted, formatting would be visible in GUI.
     - Some rules apply to both IPv4 and IPv6 such as qBittorrent.ps1, for these we should group them
     into "hybrid" folder instead of IPv4 or IPv6 folder which should be IP version specific rules.
-    - We handle almost mostly client rules and no server rules, same case as with IPv4 vs IPv6
+    - We handle mostly client rules and no server rules, same case as with IPv4 vs IPv6
     grouping model, we should define a model for server rules (not necessarily Windows Server,
-    workstation PC cal also act as server)
+    workstation PC can also act as server)
     - Rules for programs (ex. userprofile) which apply to multiple users should assign specific
     user to LocalUser instead of assigning user group, there are duplicate todo's in code about this,
     This also implies to todo's about returning installation table to rule scripts!
@@ -185,6 +185,8 @@ TODO's in this file are categorized into following sections:
     - apply local IP to all rules, as optional feature because it depends if IP is static
     - Implement unique names and groups for rules, -Name and -Group parameter vs -Display*
     - Many rules are compatible and can be configured to specify platform for Windows 7 or 8
+    - Not for some executables are not exclusive to all editions of Windows, also some rules such as
+    Nvidia drivers won't work in virtual machine since driver was not installed
 
 4. Code style
 

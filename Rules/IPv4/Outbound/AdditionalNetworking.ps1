@@ -210,7 +210,7 @@ unable to run." `
 # Proximity sharing predefined rule
 #
 
-# TODO: probably does not exist in Windows Server 2019
+# TODO: does not exist in Windows Server 2019
 # TODO: description missing data
 $Program = "%SystemRoot%\System32\ProximityUxHost.exe"
 Test-File $Program @Logs
