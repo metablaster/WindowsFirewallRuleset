@@ -149,10 +149,12 @@ contains rules will be significantly slower (depends on number of existing rules
 want to fix some problem.
 - Any rule that results in "Access denied" while loading should be reloaded by executing specific
 script again.
-- Master script `SetupFirewall.ps1` will [unblock all files](https://devblogs.microsoft.com/scripting/easily-unblock-all-files-in-a-directory-using-powershell/)
-in project first to avoid YES/NO questions spam for every executing script, you should "unblock"
-files manually if executing individual scripts after manual download or transfer from
-another computer or media by using `UnblockProject.ps1` script.
+- You should [unblock all files](https://devblogs.microsoft.com/scripting/easily-unblock-all-files-in-a-directory-using-powershell/)
+in project first to avoid YES/NO questions spam for every executing script, before executing any
+scripts after manual download or transfer from another computer or media by using
+`UnblockProject.ps1` script.
+Master script `SetupFirewall.ps1` does this in case if you forget, but initial YES/NO spam questions
+will still be visible in that case.
 - It's important to understand these rules are designed to be used as "Standard" user, not as
 Administrative user, if you're Administrator on your computer you'll have to create standard user
 account and use that for your everyday life.
@@ -179,7 +181,7 @@ Get-ExecutionPolicy
 Remember what the output of the above command is, note that PowerShell Core defaults to `RemoteSigned`
 while Windows PowerShell defaults to `Restricted`
 
-6. Set new execution policy: (Note that `RemoteSigned` should work too)
+6. Set new execution policy: (Note that `RemoteSigned` will work only if scripts are unblocked)
 
 ```powershell
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force
@@ -197,8 +199,7 @@ cd C:\
 cd WindowsFirewallRuleset-master
 ```
 
-9. At this point if you want to execute only specific scripts then you should "unblock" all project
-files first by executing the script called `UnblockProject.ps1`,
+9. At this point you should "unblock" all project files first by executing the script called `UnblockProject.ps1`,
 btw. project files were blocked by Windows to prevent users from running untrusted script code
 downloaded from internet:
 

@@ -20,6 +20,11 @@
 - Added rules for League of Legends game
 - Rules for Nvidia now load conditionally based on presence of GeForce experience (needs improvements)
 
+## Bugfixes
+
+- Prevent generating errors is removing rules from empty firewall
+- Fix error resetting global firewall settings
+
 ## Development
 
 - Resolve all analyzer warnings (some functions were renamed)
@@ -32,6 +37,7 @@
 
 - Add instructions for LAN setup
 - Random updates to docs, fixed dead links and formatting
+- Done some spell checking
 
 ## New features
 
@@ -42,6 +48,7 @@
 - ResetFirewall script also deletes IPSec rules
 - Script to unblock all files in project, for scripts that were downloaded from GitHub
 to prevent spamming YES/NO questions while executing them.
+- Updated some informational messages to be more descriptive and less annoying.
 
 # Changelog v0.4.1
 

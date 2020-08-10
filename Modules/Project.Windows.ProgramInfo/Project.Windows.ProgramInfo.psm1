@@ -1435,7 +1435,7 @@ function Test-Installation
 			$InstallTable = $InstallTable.DefaultView.ToTable()
 
 			# Print out all candidate rows
-			Show-Table "0. Abort this operation"
+			Show-Table "Input '0' to abort this operation"
 
 			# Prompt user to chose one
 			[int32] $Choice = -1

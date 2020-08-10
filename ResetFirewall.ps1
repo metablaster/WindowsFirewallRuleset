@@ -77,11 +77,14 @@ Set-NetFirewallProfile -Name Public -PolicyStore $PolicyStore -Enabled NotConfig
 
 Write-Information -Tags "User" -MessageData "INFO: Resetting global firewall settings..." @Logs
 
+# NOTE: MaxSAIdleTimeSeconds NotConfigured
+# This parameter value is case-sensitive and NotConfigured can only be specified using dot-notation
+# Otherwise default value is 300
 Set-NetFirewallSetting -PolicyStore $PolicyStore -EnablePacketQueuing NotConfigured `
 	-EnableStatefulFtp NotConfigured -EnableStatefulPptp NotConfigured `
 	-Exemptions NotConfigured -CertValidationLevel NotConfigured `
 	-KeyEncoding NotConfigured -RequireFullAuthSupport NotConfigured `
-	-MaxSAIdleTimeSeconds NotConfigured -AllowIPsecThroughNAT NotConfigured `
+	-MaxSAIdleTimeSeconds 300 -AllowIPsecThroughNAT NotConfigured `
 	-RemoteUserTransportAuthorizationList NotConfigured `
 	-RemoteUserTunnelAuthorizationList NotConfigured `
 	-RemoteMachineTransportAuthorizationList NotConfigured `
@@ -92,11 +95,23 @@ Set-NetFirewallSetting -PolicyStore $PolicyStore -EnablePacketQueuing NotConfigu
 # TODO: Implement removing only project rules.
 #
 
+# NOTE: we need to check if there are rules present to avoid errors about "no object found"
+# Needed also to log actual rule removal errors
 Write-Information -Tags "User" -MessageData "INFO: Removing outbound rules..." @Logs
-Remove-NetFirewallRule -Direction Outbound -PolicyStore $PolicyStore @Logs
+$OutboundCount = $(Get-NetFirewallRule -PolicyStore $PolicyStore -Direction Outbound -EA Ignore | Measure-Object).Count
+
+if ($OutboundCount -gt 0)
+{
+	Remove-NetFirewallRule -Direction Outbound -PolicyStore $PolicyStore @Logs
+}
 
 Write-Information -Tags "User" -MessageData "INFO: Removing inbound rules..." @Logs
-Remove-NetFirewallRule -Direction Inbound -PolicyStore $PolicyStore @Logs
+$InboundCount = $(Get-NetFirewallRule -PolicyStore $PolicyStore -Direction Inbound -EA Ignore | Measure-Object).Count
+
+if ($InboundCount -gt 0)
+{
+	Remove-NetFirewallRule -Direction Inbound -PolicyStore $PolicyStore @Logs
+}
 
 Write-Information -Tags "User" -MessageData "INFO: Removing IPSec rules..." @Logs
 Remove-NetIPsecRule -All -PolicyStore $PolicyStore @Logs
