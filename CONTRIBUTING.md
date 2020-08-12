@@ -1,6 +1,9 @@
 
 # How to contribute
 
+You can use this document not only to see how to contribute code but also to prepare yourself to
+extend this firewall for your own needs.
+
 Here is a short and most important list of things to keep in mind.
 
 ## General guidelines
@@ -48,8 +51,10 @@ helps to spell words correctly, you get a list of misspelled words in VSCode and
 helps to detect bad chars which would violate some project guidelines, such as unable to save file
 in UTF-8 format without having a warning from static analyzer.
 6. [Bookmarks](https://marketplace.visualstudio.com/items?itemName=alefragnani.Bookmarks)
+Helps you to bookmark various places in project to easily navigate back and forth and to "keep" less
+in your head.
 
-If you do not have this environment setup, you'll have to implement these settings some other way
+If you don't have this environment setup, you'll have to implement these settings some other way
 around for your code editor.
 
 ## Code style
@@ -63,7 +68,7 @@ Lines should be kept within 100-120 columns, however it is not always practical,
 rule, workspace settings are configured to show rulers inside code editor.
 
 If you use some other code editor you should configure it according to these rules which are found
-in `.vscode`, `Config` and project root directories.
+in `.vscode`, `Config` and project root directory.
 
 ### Rationale
 
@@ -86,8 +91,8 @@ however keep in mind, it is not in line of this project practices:\
 ### Rule design
 
 Each firewall rule uses exactly the same order or parameters split into exactly the same number of lines.\
-This is so that when you need to change or search for something it's easy to see
-what is where right away.
+This is so that when you need to change or search for something or do some regex magic then it's
+easy to see what is where right away.
 
 Performing regex operations against the firewall rules can be done in a matter of seconds, without
 this strict rule design it would take an entry day!
@@ -115,6 +120,10 @@ Invoke-ScriptAnalyzer .\ -Recurse -Settings Config\PSScriptAnalyzerSettings.psd1
 ```
 
 `PSScriptAnalyzerSettings.psd1` settings file includes all rules, including code formatting rules.
+
+If you get an error such as:\
+`Invoke-ScriptAnalyzer: Object reference not set to an instance of an object.`\
+then try again and keep repeating until OK.
 
 ## Documentation and comments
 
@@ -153,8 +162,8 @@ no explanation what is this supposed to allow or block is not acceptable.
 ## Testing code
 
 Each function should have it's own test and each test should cover as much code/test
-cases as possible, making changes to exiting code can then be easily tested!\
-If test case/concept expands to several functions or if it completely
+cases as possible, making changes to exiting code can then be easily tested.\
+If test case/concept expands to several functions or if it's completely
 unrelated to functions it should be a separate test.
 
 All tests reside in "Test" folder which contains subfolder for each module,
@@ -176,7 +185,7 @@ easily customized without too much change or learning curve.
 
 3rd party code/scripts are dot sourced into existing modules instead of copy pasted into module
 directly.\
-3rd party code/module license should of course be compatible with existing licenses.
+3rd party code/module license/copyright must of course be retained and compatible with existing licenses.
 
 ## Commits and pull requests
 
@@ -207,10 +216,11 @@ See [DirectoryStructure.md](https://github.com/metablaster/WindowsFirewallRulese
 
 ## Final notes and where to start
 
-Please keep in mind that large amount of code is not in line with all the guidelines described
-here, significant portion of code was written before this "CONTRIBUTING" file even existed.
+Please keep in mind that large amount of existing code is not in line with all the guidelines
+described here, significant portion of code was written before this "CONTRIBUTING" file even existed.
 
 So it's an ongoing effort that by no means gets fulfilled.
 
 I recommend you start at looking into [TODO](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/TODO.md)
-list, unless you have specific ideas or recommendations.
+list and also use "TODO tree" extension to see more todo's, unless you have specific ideas or
+recommendations.

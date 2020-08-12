@@ -92,6 +92,8 @@
 		'PSUseCorrectCasing'
 	)
 
+	# NOTE: powershell.codeFormatting strings are settings for PowerShell VSCode extension
+	# TODO: not all options have defaults mentioned in comments
 	Rules = @{
 		#
 		# Following settings are related to Allman above
@@ -138,7 +140,6 @@
 			# Checks if there is a space between a keyword and its corresponding open brace.
 			# E.g. foo { } instead of foo{ }
 			# default = true (powershell.codeFormatting.whitespaceBeforeOpenBrace)
-			# NOTE: works as expected https://github.com/PowerShell/PSScriptAnalyzer/issues/1522
 			CheckOpenBrace = $true
 			# Checks if there is space between a keyword and its corresponding open parenthesis.
 			#  E.g. if (true) instead of if(true)
@@ -151,7 +152,7 @@
 			# Checks if a pipe is surrounded on both sides by a space but
 			# ignores redundant whitespace.
 			# E.g. foo | bar instead of foo|bar
-			# default = true (powershell.codeFormatting.WhitespaceAroundPipe)
+			# default = true (powershell.codeFormatting.addWhitespaceAroundPipe)
 			CheckPipe = $true
 			# Checks if a comma or a semicolon is followed by a space.
 			# E.g. @(1, 2, 3) or @{a = 1; b = 2} instead of @(1,2,3) or @{a = 1;b = 2}
@@ -159,13 +160,11 @@
 			CheckSeparator = $true
 			# Checks if a pipe is surrounded by redundant whitespace (i.e. more than 1 whitespace).
 			# E.g. foo | bar instead of foo  |  bar
-			# default = false
+			# default = false (powershell.codeFormatting.trimWhitespaceAroundPipe)
 			CheckPipeForRedundantWhitespace = $true
 			# Checks if there is more than one space between parameters and values.
 			# E.g. foo -bar $baz -bat instead of foo  -bar $baz  -bat
-			# default = false (NOTE: Default value is $false at the moment due to the setting being new)
-			# NOTE: this was disabled from true to false because of too many false positives,
-			# it looks like it's working now
+			# default = false (powershell.codeFormatting.whitespaceBetweenParameters)
 			CheckParameter = $true
 		}
 
@@ -239,26 +238,44 @@
 		#
 
 		PSUseCompatibleCmdlets = @{
+			# This rule flags cmdlets that are not available in a given Edition/Version of
+			# PowerShell on a given Operating System.
+			# These strings are of the form, PSEDITION-PSVERSION-OS where:
+			# PSEDITION can be either Core or Desktop
+			# OS can be either Windows, Linux or MacOS
+			# PSVERSION is the PowerShell version.
 			compatibility = @(
 				"core-6.1.0-windows"
 				"desktop-5.1.14393.206-windows"
 			)
 		}
 
-		#
-		# TODO: used but settings not configured
-		#
+		PSUseCompatibleTypes = @{
+			# Activates the rule
+			# default = $false
+			Enable = $true
 
-		# PSUseCompatibleTypes = @{
-		#     Enable = $true
-		#     TargetProfiles = @(
-		# 		'win-48_x64_10.0.18363.0_5.1.18362.628_x64_4.0.30319.42000_framework'
-		# 		'win-48_x64_10.0.18363.0_7.0.0_x64_3.1.1_core'
-		#     )
+			# The location to search for profiles by name and use for union profile generation
+			# default = compatibility_profiles directory in PSScriptAnalyzer module
+			# ProfileDirPath = @()
 
-		# 	IgnoreTypes = @(
-		#         'System.IO.Compression.ZipFile'
-		#     )
-		# }
+			# The list of PowerShell profiles to target in the form of:
+			# <os-name>_<os-arch>_<os-version>_<ps-version>_<ps-arch>_<dotnet-version>_<dotnet-edition>
+			# default = @()
+			TargetProfiles = @(
+				# Windows 10 1903 (PowerShell 7.0)
+				'win-4_x64_10.0.18362.0_7.0.0_x64_3.1.2_core'
+				# Windows 10 1809 (PowerShell 5.1)
+				'win-48_x64_10.0.17763.0_5.1.17763.316_x64_4.0.30319.42000_framework'
+				# Windows Server 2019 (PowerShell 7.0)
+				'win-8_x64_10.0.17763.0_7.0.0_x64_3.1.2_core'
+				# Windows Server 2019 (PowerShell 5.1)
+				'win-8_x64_10.0.17763.0_5.1.17763.316_x64_4.0.30319.42000_framework'
+			)
+
+			# Full names of types or type accelerators to ignore compatibility of in scripts
+			# default = @()
+			IgnoreTypes = @()
+		}
 	}
 }

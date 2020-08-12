@@ -1,6 +1,12 @@
 
 # Here is a list of changes for each of releases
 
+# Changelog v0.5.1
+
+## Development
+
+- Updated analyzer settings for newest version and fixes
+
 # Changelog v0.5.0
 
 ## Modules
