@@ -135,7 +135,7 @@ if ($Develop)
 	New-NetFirewallRule -DisplayName "Troubleshoot IGMP" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
 		-Service Any -Program Any -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol 2 `
+		-Enabled False -Action Allow -Direction $Direction -Protocol 2 `
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort Any -RemotePort Any `
 		-LocalUser Any `
@@ -146,7 +146,7 @@ if ($Develop)
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP - LLMNR" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service Any -Program Any -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort Any -RemotePort 5355 `
 		-LocalUser $NT_AUTHORITY_NetworkService `
@@ -157,7 +157,7 @@ if ($Develop)
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP ports" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service Any -Program Any -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort Any -RemotePort 1900, 3702 `
 		-LocalUser $NT_AUTHORITY_LocalService `
@@ -172,7 +172,7 @@ if ($Develop)
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP - mDNS" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service Any -Program Any -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort 5353 -RemotePort 5353 `
 		-LocalUser $mDnsUsers `
@@ -184,7 +184,7 @@ if ($Develop)
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP - DHCP" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service Any -Program Any -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort 67, 68 -RemotePort 67, 68 `
 		-LocalUser $NT_AUTHORITY_System `
@@ -195,7 +195,7 @@ if ($Develop)
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP - NetBIOS" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service Any -Program Any -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort 137 -RemotePort 137 `
 		-LocalUser $NT_AUTHORITY_System `
@@ -208,6 +208,8 @@ if ($Develop)
 	Merge-SDDL ([ref] $ExtensionAccounts) (Get-SDDL -Group "Users") @Logs
 
 	# HACK: Temporary using network service account
+	# All troubleshooting rules except this one were set to "Enabled",
+	# they are now disabled because not not needed for everyday life
 	New-NetFirewallRule -DisplayName "Troubleshoot BITS" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service Any -Program $ServiceHost -Group $Group `

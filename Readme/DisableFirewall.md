@@ -2,12 +2,16 @@
 # How to disable Windows firewall
 
 This document explains how to disable Windows firewall in both Control Panel and in Local group policy.
+It is not recommended to disable firewall for security reasons except to troubleshoot problems.
 
 Keep in mind that GPO firewall and control panel firewall are 2 distinct firewalls that manage same
 filtering platform behind the scene.
 
 And, GPO firewall has higher priority which makes control panel firewall not active except if
 explicitly merged into GPO firewall in either GUI settings or via PowerShell.
+
+**NOTE:** disabling firewall does not delete rules, you can enable firewall back again by following
+same steps.
 
 ## Disable GPO firewall
 
@@ -44,6 +48,9 @@ To disable control panel firewall so that only GPO firewall works follow below s
 7. There are 3 tabs: "Domain", "Private" and "Public"
 8. on each tab click under "settings" click on "Customize..." button
 9. under "rule merging" set "Apply local firewall rules" to "NO"
+
+**NOTE:** rule merging means rules from both firewalls will be active as if it's one firewall,
+This is not recommended for security reasons except to troubleshoot problems.
 
 - Disabling it in control panel
 Which means it will not be active only if GPO firewall is not active too.

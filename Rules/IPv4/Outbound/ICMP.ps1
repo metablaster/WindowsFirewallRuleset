@@ -85,6 +85,8 @@ The entire address range 169.254.0.0/16 has been set aside for "link local" addr
 (the first and last 256 addresses have been reserved for future use).
 They should not be manually assigned or assigned using DHCP.
 #>
+
+# TODO: we don't use rules for APIPA or local subnet ranges
 # $APIPA = "169.254.1.0-169.254.254.255"
 
 #
