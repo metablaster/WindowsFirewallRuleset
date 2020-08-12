@@ -28,7 +28,7 @@ To do this follow below steps:
 
 ## Disable firewall in control panel
 
-Disabling control panel firewall can be done in 2 ways with difference results:
+Disabling control panel firewall can be done in 2 ways with different results:
 
 - Making it not active by configuring GPO firewall.
 Which means GPO firewall will be active while control panel firewall will have no effect.
@@ -48,7 +48,7 @@ To disable control panel firewall so that only GPO firewall works follow below s
 - Disabling it in control panel
 Which means it will not be active only if GPO firewall is not active too.
 
-To disable control panel firewall so that it's disabled only if GPO firewall is disabled the
+To disable control panel firewall so that it's disabled only if GPO firewall is disabled then
 follow below steps:
 
 1. Press start button
@@ -64,7 +64,7 @@ follow below steps:
 ## Disable firewall completely
 
 If you want to make sure both GPO and control panel firewalls are disabled follow both of the above
-steps but under section "Disable firewall in control panel" chose second steps that say
-"Disabling it in control panel"
+steps but under section\
+"Disable firewall in control panel" chose second steps that says "Disabling it in control panel"
 
 You may need to reboot system if effect is not immediate.
