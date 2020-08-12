@@ -38,6 +38,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 #
 # This script sets firewall profile, network profile and global firewall behavior
 # TODO: how to set and reset settings found in IPSec tab?
+# TODO: it looks like private profile traffic is logged into public log and vice versa
 #
 
 # Setting up profile seem to be slow, tell user what is going on

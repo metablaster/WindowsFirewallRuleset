@@ -1917,18 +1917,30 @@ function Find-Installation
 		}
 		"GithubDesktop"
 		{
-			# TODO: need to test this
-			Update-Table "GitHubDesktop" -UserProfile
+			Update-Table "GitHub Desktop" -UserProfile
 			break
 		}
 		"EpicGames"
 		{
-			Edit-Table "%ProgramFiles(x86)%\Epic Games\Launcher"
+			Update-Table "Epic Games Launcher"
 			break
 		}
 		"UnrealEngine"
 		{
-			Update-Table "UnrealEngine"
+			# NOTE: game engine does not have installer, it is managed by launcher, and if it's
+			# built from source user must enter path to engine manually
+			$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables("%ProgramFiles%\Epic Games")
+
+			if (Test-Path $ExpandedPath)
+			{
+				$VersionFolders = Get-ChildItem -Directory -Path $ExpandedPath -Name
+
+				foreach ($VersionFolder in $VersionFolders)
+				{
+					Edit-Table "$ExpandedPath\$VersionFolder\Engine"
+				}
+			}
+
 			break
 		}
 		default

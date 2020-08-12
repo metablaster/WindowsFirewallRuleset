@@ -417,7 +417,7 @@ Test-File $Program @Logs
 New-NetFirewallRule -DisplayName "Local Security Authority Process" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
+	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 80 `
 	-LocalUser Any `
@@ -425,7 +425,8 @@ New-NetFirewallRule -DisplayName "Local Security Authority Process" `
 	-Description "Lsas.exe a process in Microsoft Windows operating systems that is responsible
 for enforcing the security policy on the system.
 It specifically deals with local security and login policies.It verifies users logging on to a
-Windows computer or server, handles password changes, and creates access tokens." `
+Windows computer or server, handles password changes, and creates access tokens.
+It is also used for certificate revocation checks" `
 	@Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\mmc.exe"

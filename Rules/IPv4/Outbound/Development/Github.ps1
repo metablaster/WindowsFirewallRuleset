@@ -58,7 +58,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # TODO: Username?
 #
 $GitRoot = "%ProgramFiles%\Git"
-$GithubRoot = "%SystemDrive%\Users\User\AppData\Local\GitHubDesktop\app-2.2.3"
+$GithubRoot = "" # Could be user profile
 
 #
 # Rules for git
@@ -115,8 +115,23 @@ if ((Test-Installation "Git" ([ref] $GitRoot) @Logs) -or $ForceLoad)
 # Test if installation exists on system
 if ((Test-Installation "GithubDesktop" ([ref] $GithubRoot) @Logs) -or $ForceLoad)
 {
-	$Program = "$GithubRoot\GitHubDesktop.exe"
+	$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($GithubRoot)
+	$VersionFolders = Get-ChildItem -Directory -Path $ExpandedPath -Filter app-* -Name
+	$VersionFoldersCount = $($VersionFolders | Measure-Object).Count
+
+	if ($VersionFoldersCount -gt 0)
+	{
+		$VersionFolder = $VersionFolders | Select-Object -Last 1
+		$Program = "$GithubRoot\$VersionFolder\GitHubDesktop.exe"
+	}
+	else
+	{
+		# Let user know what is the likely path
+		$Program = "$GithubRoot\GitHubDesktop.exe"
+	}
+
 	Test-File $Program @Logs
+
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "GitHub Desktop - App" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
@@ -124,8 +139,29 @@ if ((Test-Installation "GithubDesktop" ([ref] $GithubRoot) @Logs) -or $ForceLoad
 		-LocalUser $UsersGroupSDDL `
 		-Description "" @Logs | Format-Output @Logs
 
-	$Program = "$GithubRoot\resources\app\git\mingw64\bin\git-remote-https.exe"
+	$Program = "$GithubRoot\Update.exe"
 	Test-File $Program @Logs
+
+	New-NetFirewallRule -Platform $Platform `
+		-DisplayName "GitHub Desktop - Update" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "cloning repos" @Logs | Format-Output @Logs
+
+	if ($VersionFoldersCount -gt 0)
+	{
+		# $VersionDirectory = $VersionFolders.Name
+		$Program = "$GithubRoot\$VersionFolder\resources\app\git\mingw64\bin\git-remote-https.exe"
+	}
+	else
+	{
+		# Let user know what is the likely path
+		$Program = "$GithubRoot\resources\app\git\mingw64\bin\git-remote-https.exe"
+	}
+
+	Test-File $Program @Logs
+
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "GitHub Desktop - remote-https" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `

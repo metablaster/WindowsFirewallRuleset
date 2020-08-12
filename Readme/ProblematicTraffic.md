@@ -276,3 +276,10 @@ allow rules with InterfaceType Any.
 - Implementing rules for this traffic requires all network traffic to be bound to specific interface
 alias, this includes **ALL** rules to make sure rules loaded with `InterfaceType` parameter don't
 override those with `InterfaceAlias` parameter.
+
+## Case 9: Epic games UDP traffic to 230.0.0.1 is blocked
+
+There is no need to troubleshoot this since Epic software is violating IANA rules,
+they have been notified about the problem which is present for already over 5 years.
+
+For more info see: [Please stop violating IANA rules](https://forums.unrealengine.com/unreal-engine/feedback-for-epic/1800085-please-stop-violating-iana-rules)
