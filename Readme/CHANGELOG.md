@@ -15,6 +15,10 @@
 
 - Updated analyzer settings for newest version and fixes
 
+## Documentation
+
+- Added steps to disable firewall
+
 # Changelog v0.5.0
 
 ## Modules
