@@ -33,13 +33,13 @@ String array which to convert
 .EXAMPLE
 TODO: provide example and description
 .INPUTS
-None. You cannot pipe objects to StringArrayToList
+None. You cannot pipe objects to Convert-ArrayToList
 .OUTPUTS
 [string] comma separated list
 .NOTES
 None.
 #>
-function StringArrayToList
+function Convert-ArrayToList
 {
 	[OutputType([System.String])]
 	param(
@@ -49,7 +49,7 @@ function StringArrayToList
 
 	if ($StringArray)
 	{
-		$Result = ""
+		[string] $Result = ""
 		foreach ($Value In $StringArray)
 		{
 			if ($Result -ne "")
@@ -69,16 +69,70 @@ function StringArrayToList
 
 <#
 .SYNOPSIS
+Convert multi line string array to single line string
+.DESCRIPTION
+Convert multi line string array to single line string
+`r is encoded as %% and `n as ||
+.PARAMETER MultiLine
+String array which to convert
+.PARAMETER JSON
+Input string will go to JSON file, meaning no need to encode
+.EXAMPLE
+Convert-MultiLineToList "Some`rnString"
+Produces: Some||String
+.INPUTS
+None. You cannot pipe objects to Convert-ArrayToList
+.OUTPUTS
+[string] comma separated list
+.NOTES
+None.
+#>
+function Convert-MultiLineToList
+{
+	[OutputType([System.String])]
+	param(
+		[Parameter()]
+		[string] $MultiLine,
+
+		[Parameter()]
+		[switch] $JSON
+	)
+
+	if ([System.String]::IsNullOrEmpty($MultiLine))
+	{
+		return ""
+	}
+
+	# replace new line with encoded string
+	# For CSV files need to encode multi line rule description into single line
+	if ($JSON)
+	{
+		return $MultiLine
+	}
+	else
+	{
+		return $MultiLine.Replace("`r", "%%").Replace("`n", "||")
+	}
+
+}
+
+<#
+.SYNOPSIS
 Exports firewall rules to a CSV or JSON file.
 .DESCRIPTION
-Exports firewall rules to a CSV or JSON file. Local and policy based rules will be given out.
+Exports firewall rules to a CSV or JSON file. Only local GPO rules are exported by default.
 CSV files are semicolon separated (Beware! Excel is not friendly to CSV files).
 All rules are exported by default, you can filter with parameter -Name, -Inbound, -Outbound,
 -Enabled, -Disabled, -Allow and -Block.
+If the export file already exists it's content will be replaced by default.
+.PARAMETER PolicyStore
+Policy store from which to export rules, default is local GPO.
+For more information about stores see:
+https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md
 .PARAMETER Name
 Display name of the rules to be processed. Wildcard character * is allowed.
-.PARAMETER CSVFile
-Output file
+.PARAMETER FileName
+Output file, default is JSON format
 .PARAMETER JSON
 Output in JSON instead of CSV format
 .PARAMETER Inbound
@@ -93,10 +147,20 @@ Export disabled rules
 Export allowing rules
 .PARAMETER Block
 Export blocking rules
+.PARAMETER Append
+Append exported rules to existing file instead of replacing
 .NOTES
 Author: Markus Scholtes
 Version: 1.02
 Build date: 2020/02/15
+
+Changes by metablaster:
+1. Applied formatting and code style according to project rules
+2. Added switch to optionally append instead of replacing output file
+3. Separated functions into their own scope
+4. Added function to decode string into multi line
+5. Added parameter to target specific policy store
+TODO: need to have colored output as when loading rules with Format-Output
 .EXAMPLE
 Export-FirewallRules
 Exports all firewall rules to the CSV file FirewallRules.csv in the current directory.
@@ -113,32 +177,41 @@ function Export-FirewallRules
 	[CmdletBinding()]
 	param(
 		[Parameter()]
+		[string] $PolicyStore = [System.Environment]::MachineName,
+
+		[Parameter()]
 		[string] $Name = "*",
 
 		[Parameter()]
-		[string] $CSVFile = ".\FirewallRules.csv",
+		[string] $FileName = ".\FirewallRules",
 
 		[Parameter()]
-		[switch]$JSON,
+		[switch] $JSON,
 
 		[Parameter()]
-		[switch]$Inbound,
+		[switch] $Inbound,
 
 		[Parameter()]
-		[switch]$Outbound,
+		[switch] $Outbound,
 
 		[Parameter()]
-		[switch]$Enabled,
+		[switch] $Enabled,
 
 		[Parameter()]
-		[switch]$Disabled,
+		[switch] $Disabled,
 
 		[Parameter()]
-		[switch]$Block,
+		[switch] $Block,
 
 		[Parameter()]
-		[switch]$Allow
+		[switch] $Allow,
+
+		[Parameter()]
+		[switch] $Append
 	)
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting up variables"
 
 	# Filter rules?
 	# Filter by direction
@@ -156,9 +229,11 @@ function Export-FirewallRules
 	if ($Allow -And !$Block) { $Action = "Allow" }
 	if (!$Allow -And $Block) { $Action = "Block" }
 
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading firewall rules"
 
 	# read firewall rules
-	$FirewallRules = Get-NetFirewallRule -DisplayName $Name -PolicyStore "ActiveStore" |
+	# TODO: this will fail if rule name not found, need pretty info output
+	$FirewallRules = Get-NetFirewallRule -DisplayName $Name -PolicyStore $PolicyStore |
 	Where-Object {
 		$_.Direction -like $Direction -and $_.Enabled -like $RuleState -And $_.Action -like $Action
 	}
@@ -189,28 +264,29 @@ function Export-FirewallRules
 		$HashProps = [PSCustomObject]@{
 			Name = $Rule.Name
 			DisplayName = $Rule.DisplayName
-			Description = $Rule.Description
-			Group = $Rule.Group
+			Description = Convert-MultiLineToList $Rule.Description -JSON:$JSON
+			group = $Rule.Group
 			Enabled = $Rule.Enabled
 			Profile = $Rule.Profile
-			Platform = StringArrayToList $Rule.Platform
+			Platform = Convert-ArrayToList $Rule.Platform
 			Direction = $Rule.Direction
 			Action = $Rule.Action
 			EdgeTraversalPolicy = $Rule.EdgeTraversalPolicy
 			LooseSourceMapping = $Rule.LooseSourceMapping
 			LocalOnlyMapping = $Rule.LocalOnlyMapping
 			Owner = $Rule.Owner
-			LocalAddress = StringArrayToList $AddressFilter.LocalAddress
-			RemoteAddress = StringArrayToList $AddressFilter.RemoteAddress
+			LocalAddress = Convert-ArrayToList $AddressFilter.LocalAddress
+			RemoteAddress = Convert-ArrayToList $AddressFilter.RemoteAddress
 			Protocol = $PortFilter.Protocol
-			LocalPort = StringArrayToList $PortFilter.LocalPort
-			RemotePort = StringArrayToList $PortFilter.RemotePort
-			IcmpType = StringArrayToList $PortFilter.IcmpType
+			LocalPort = Convert-ArrayToList $PortFilter.LocalPort
+			RemotePort = Convert-ArrayToList $PortFilter.RemotePort
+			IcmpType = Convert-ArrayToList $PortFilter.IcmpType
 			DynamicTarget = $PortFilter.DynamicTarget
+			# TODO: need to see why is this needed
 			Program = $ApplicationFilter.Program -Replace "$($ENV:SystemRoot.Replace("\","\\"))\\", "%SystemRoot%\" -Replace "$(${ENV:ProgramFiles(x86)}.Replace("\","\\").Replace("(","\(").Replace(")","\)"))\\", "%ProgramFiles(x86)%\" -Replace "$($ENV:ProgramFiles.Replace("\","\\"))\\", "%ProgramFiles%\"
 			Package = $ApplicationFilter.Package
 			Service = $ServiceFilter.Service
-			InterfaceAlias = StringArrayToList $InterfaceFilter.InterfaceAlias
+			InterfaceAlias = Convert-ArrayToList $InterfaceFilter.InterfaceAlias
 			InterfaceType = $InterfaceTypeFilter.InterfaceType
 			LocalUser = $SecurityFilter.LocalUser
 			RemoteUser = $SecurityFilter.RemoteUser
@@ -224,14 +300,41 @@ function Export-FirewallRules
 		$FirewallRuleSet += $HashProps
 	}
 
-	if (!$JSON)
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Writing rules to file"
+
+	if ($JSON)
 	{
-		# output rules in CSV format
-		$FirewallRuleSet | ConvertTo-Csv -NoTypeInformation -Delimiter ";" | Set-Content $CSVFile
+		# output rules in JSON format
+		$FileName += ".json"
+
+		if ($Append)
+		{
+			# TODO: need to implement appending to JSON
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Appending to JSON not implemented"
+			$FirewallRuleSet | ConvertTo-Json | Set-Content $FileName -Encoding utf8
+		}
+		else
+		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Replacing content in JSON file"
+			$FirewallRuleSet | ConvertTo-Json | Set-Content $FileName -Encoding utf8
+		}
 	}
 	else
 	{
-		# output rules in JSON format
-		$FirewallRuleSet | ConvertTo-Json | Set-Content $CSVFile
+		# output rules in CSV format
+		$FileName += ".csv"
+
+		if ($Append)
+		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Appending to CSV file"
+			$FirewallRuleSet | ConvertTo-Csv -NoTypeInformation -Delimiter ";" |
+			Select-Object -Skip 1 | Add-Content $FileName -Encoding utf8
+		}
+		else
+		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Replacing content in CSV file"
+			$FirewallRuleSet | ConvertTo-Csv -NoTypeInformation -Delimiter ";" |
+			Set-Content $FileName -Encoding utf8
+		}
 	}
 }

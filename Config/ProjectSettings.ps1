@@ -87,8 +87,8 @@ if ($Develop)
 	# $ErrorActionPreference = "SilentlyContinue"
 	# $WarningPreference = "SilentlyContinue"
 	$InformationPreference = "Continue"
-	# $VerbosePreference = "Continue"
-	# $DebugPreference = "Continue"
+	$VerbosePreference = "Continue"
+	$DebugPreference = "Continue"
 
 	# Must be after debug preference
 	Write-Debug -Message "[$ThisScript] Setup clean environment"
@@ -115,6 +115,8 @@ if ($Develop)
 	Remove-Module -Name Project.Windows.UserInfo -ErrorAction Ignore
 	Remove-Module -Name Project.Windows.ComputerInfo -ErrorAction Ignore
 	Remove-Module -Name Project.Windows.ProgramInfo -ErrorAction Ignore
+	Remove-Module -Name Firewall-Manager -ErrorAction Ignore
+	Remove-Module -Name Indented.Net.IP -ErrorAction Ignore
 }
 else # Normal use case
 {
