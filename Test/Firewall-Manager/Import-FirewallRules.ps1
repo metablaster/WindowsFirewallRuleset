@@ -27,8 +27,9 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Export-FirewallRules
+# Unit test for Import-FirewallRules
 #
+#Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
@@ -48,17 +49,11 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-New-Test "Export-FirewallRules -Name"
-Export-FirewallRules -Name "Domain Name System" -FileName "$ProjectRoot\NamedExport1" @Logs
+New-Test "Import-FirewallRules"
+Import-FirewallRules -FileName "$ProjectRoot\NamedExport1.csv" @Logs
 
-New-Test "Export-FirewallRules -Name -JSON"
-Export-FirewallRules -Name "Domain Name System" -JSON -Append -FileName "$ProjectRoot\NamedExport2" @Logs
-
-New-Test "Export-FirewallRules -Outbound -Disabled -Allow"
-Export-FirewallRules -Outbound -Disabled -Allow -FileName "$ProjectRoot\OutboundExport" @Logs
-
-New-Test "Export-FirewallRules -Inbound -Enabled -Block -JSON"
-Export-FirewallRules -Inbound -Enabled -Block -JSON -FileName "$ProjectRoot\InboundExport" @Logs
+New-Test "Import-FirewallRules -JSON"
+Import-FirewallRules -JSON -FileName "$ProjectRoot\NamedExport2.json" @Logs
 
 Update-Log
 Exit-Test

@@ -49,7 +49,7 @@ function Convert-ArrayToList
 
 	if ($StringArray)
 	{
-		$Result = ""
+		[string] $Result = ""
 		foreach ($Value In $StringArray)
 		{
 			if ($Result -ne "")
@@ -69,6 +69,55 @@ function Convert-ArrayToList
 
 <#
 .SYNOPSIS
+Convert multi line string array to single line string
+.DESCRIPTION
+Convert multi line string array to single line string
+`r is encoded as %% and `n as ||
+.PARAMETER MultiLine
+String array which to convert
+.PARAMETER JSON
+Input string will go to JSON file, meaning no need to encode
+.EXAMPLE
+Convert-MultiLineToList "Some`rnString"
+Produces: Some||String
+.INPUTS
+None. You cannot pipe objects to Convert-ArrayToList
+.OUTPUTS
+[string] comma separated list
+.NOTES
+None.
+#>
+function Convert-MultiLineToList
+{
+	[OutputType([System.String])]
+	param(
+		[Parameter()]
+		[string] $MultiLine,
+
+		[Parameter()]
+		[switch] $JSON
+	)
+
+	if ([System.String]::IsNullOrEmpty($MultiLine))
+	{
+		return ""
+	}
+
+	# replace new line with encoded string
+	# For CSV files need to encode multi line rule description into single line
+	if ($JSON)
+	{
+		return $MultiLine
+	}
+	else
+	{
+		return $MultiLine.Replace("`r", "%%").Replace("`n", "||")
+	}
+
+}
+
+<#
+.SYNOPSIS
 Exports firewall rules to a CSV or JSON file.
 .DESCRIPTION
 Exports firewall rules to a CSV or JSON file. Only local GPO rules are exported by default.
@@ -84,7 +133,7 @@ https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Firewa
 Display name of the rules to be processed. Wildcard character * is allowed.
 .PARAMETER FileName
 Output file, default is JSON format
-.PARAMETER CSV
+.PARAMETER JSON
 Output in JSON instead of CSV format
 .PARAMETER Inbound
 Export inbound rules
@@ -109,7 +158,8 @@ Changes by metablaster:
 1. Applied formatting and code style according to project rules
 2. Added switch to optionally append instead of replacing output file
 3. Separated functions into their own scope
-4. Changed default export to be JSON
+4. Added function to decode string into multi line
+5. Added parameter to target specific policy store
 TODO: need to have colored output as when loading rules with Format-Output
 .EXAMPLE
 Export-FirewallRules
@@ -136,28 +186,28 @@ function Export-FirewallRules
 		[string] $FileName = ".\FirewallRules",
 
 		[Parameter()]
-		[switch]$CSV,
+		[switch] $JSON,
 
 		[Parameter()]
-		[switch]$Inbound,
+		[switch] $Inbound,
 
 		[Parameter()]
-		[switch]$Outbound,
+		[switch] $Outbound,
 
 		[Parameter()]
-		[switch]$Enabled,
+		[switch] $Enabled,
 
 		[Parameter()]
-		[switch]$Disabled,
+		[switch] $Disabled,
 
 		[Parameter()]
-		[switch]$Block,
+		[switch] $Block,
 
 		[Parameter()]
-		[switch]$Allow,
+		[switch] $Allow,
 
 		[Parameter()]
-		[switch]$Append
+		[switch] $Append
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -182,6 +232,7 @@ function Export-FirewallRules
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading firewall rules"
 
 	# read firewall rules
+	# TODO: this will fail if rule name not found, need pretty info output
 	$FirewallRules = Get-NetFirewallRule -DisplayName $Name -PolicyStore $PolicyStore |
 	Where-Object {
 		$_.Direction -like $Direction -and $_.Enabled -like $RuleState -And $_.Action -like $Action
@@ -213,8 +264,8 @@ function Export-FirewallRules
 		$HashProps = [PSCustomObject]@{
 			Name = $Rule.Name
 			DisplayName = $Rule.DisplayName
-			Description = $Rule.Description
-			Group = $Rule.Group
+			Description = Convert-MultiLineToList $Rule.Description -JSON:$JSON
+			group = $Rule.Group
 			Enabled = $Rule.Enabled
 			Profile = $Rule.Profile
 			Platform = Convert-ArrayToList $Rule.Platform
@@ -251,32 +302,39 @@ function Export-FirewallRules
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Writing rules to file"
 
-	if ($CSV)
-	{
-		# output rules in CSV format
-		$FileName += ".csv"
-
-		if ($Append)
-		{
-			$FirewallRuleSet | ConvertTo-Csv -NoTypeInformation -Delimiter ";" | Add-Content $FileName
-		}
-		else
-		{
-			$FirewallRuleSet | ConvertTo-Csv -NoTypeInformation -Delimiter ";" | Set-Content $FileName
-		}
-	}
-	else
+	if ($JSON)
 	{
 		# output rules in JSON format
 		$FileName += ".json"
 
 		if ($Append)
 		{
-			$FirewallRuleSet | ConvertTo-Json | Add-Content $FileName
+			# TODO: need to implement appending to JSON
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Appending to JSON not implemented"
+			$FirewallRuleSet | ConvertTo-Json | Set-Content $FileName -Encoding utf8
 		}
 		else
 		{
-			$FirewallRuleSet | ConvertTo-Json | Set-Content $FileName
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Replacing content in JSON file"
+			$FirewallRuleSet | ConvertTo-Json | Set-Content $FileName -Encoding utf8
+		}
+	}
+	else
+	{
+		# output rules in CSV format
+		$FileName += ".csv"
+
+		if ($Append)
+		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Appending to CSV file"
+			$FirewallRuleSet | ConvertTo-Csv -NoTypeInformation -Delimiter ";" |
+			Select-Object -Skip 1 | Add-Content $FileName -Encoding utf8
+		}
+		else
+		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Replacing content in CSV file"
+			$FirewallRuleSet | ConvertTo-Csv -NoTypeInformation -Delimiter ";" |
+			Set-Content $FileName -Encoding utf8
 		}
 	}
 }

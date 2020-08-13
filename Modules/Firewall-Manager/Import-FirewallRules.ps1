@@ -40,6 +40,7 @@ None. You cannot pipe objects to Convert-ListToArray
 [string[]] array from comma separated list
 .NOTES
 TODO: output type
+TODO: DefaultValue can't be string, try string[]
 #>
 function Convert-ListToArray
 {
@@ -48,7 +49,7 @@ function Convert-ListToArray
 		[string] $List,
 
 		[Parameter()]
-		[string] $DefaultValue = "Any"
+		$DefaultValue = "Any"
 	)
 
 	if (![string]::IsNullOrEmpty($List))
@@ -109,24 +110,88 @@ function Convert-ValueToBoolean
 
 <#
 .SYNOPSIS
+Convert encoded single line string to multi line string array
+.DESCRIPTION
+Convert encoded single line string to multi line CRLF string array
+Input string `r is encoded as %% and `n as ||
+.PARAMETER MultiLine
+String which to convert
+.PARAMETER JSON
+Input string is from JSON file, meaning no need to decode
+.EXAMPLE
+Convert-ListToMultiLine "Some%%||String"
+Produces:
+Some
+String
+.INPUTS
+None. You cannot pipe objects to Convert-ArrayToList
+.OUTPUTS
+[string] multi line string
+.NOTES
+None.
+#>
+function Convert-ListToMultiLine
+{
+	[OutputType([System.String])]
+	param(
+		[Parameter()]
+		[string] $MultiLine,
+
+		[Parameter()]
+		[switch] $JSON
+	)
+
+	if ([System.String]::IsNullOrEmpty($MultiLine))
+	{
+		return ""
+	}
+
+	# replace encoded string with new line
+	if ($JSON)
+	{
+		return $MultiLine
+	}
+	else
+	{
+
+		# For CSV files need to encode multi line rule description into single line
+		return $MultiLine.Replace("%%", "`r").Replace("||", "`n")
+	}
+}
+
+<#
+.SYNOPSIS
 Imports firewall rules from a CSV or JSON file.
 .DESCRIPTION
-Imports firewall rules from with Export-FirewallRules generated CSV or JSON files. CSV files have to
-be separated with semicolons. Existing rules with same display name will be overwritten.
-.PARAMETER CSVFile
+Imports firewall rules from with Export-FirewallRules generated CSV or JSON files.
+CSV files have to be separated with semicolons.
+Existing rules with same name will be overwritten.
+.PARAMETER PolicyStore
+Policy store into which to import rules, default is local GPO.
+For more information about stores see:
+https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md
+.PARAMETER FileName
 Input file
-.PARAMETER JSON
-Input in JSON instead of CSV format
+.PARAMETER CSV
+Input in CSV instead of JSON format
 .NOTES
 Author: Markus Scholtes
 Version: 1.02
 Build date: 2020/02/15
+
+Changes by metablaster:
+1. Applied formatting and code style according to project rules
+2. Added parameter to target specific policy store
+3. Separated functions into their own scope
+4. Added function to decode string into multi line
+TODO: need to have colored output as when loading rules with Format-Output
 .EXAMPLE
 Import-FirewallRules
-Imports all firewall rules in the CSV file FirewallRules.csv in the current directory.
+Imports all firewall rules in the CSV file FirewallRules.csv
+If no file is specified, FirewallRules.json in the current directory is searched.
 .EXAMPLE
-Import-FirewallRules WmiRules.json -json
-Imports all firewall rules in the JSON file WmiRules.json.
+Import-FirewallRules WmiRules.csv CSV
+Imports all firewall rules in the SCV file WmiRules.csv
 #>
 function Import-FirewallRules
 {
@@ -134,22 +199,30 @@ function Import-FirewallRules
 	[CmdletBinding()]
 	param(
 		[Parameter()]
-		[string] $FileName = ".\FirewallRules.json",
+		[string] $PolicyStore = [System.Environment]::MachineName,
 
 		[Parameter()]
-		[switch] $CSV
+		[string] $FileName = ".\FirewallRules",
+
+		[Parameter()]
+		[switch] $JSON
 	)
 
-	if ($CSV)
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading rules file"
+
+	if ($JSON)
 	{
-		# read CSV file
-		$FirewallRules = Get-Content $FileName | ConvertFrom-Csv -Delimiter ";"
+		# read JSON file
+		$FirewallRules = Get-Content $FileName -Encoding utf8 | ConvertFrom-Json
 	}
 	else
 	{
-		# read JSON file
-		$FirewallRules = Get-Content $FileName | ConvertFrom-Json
+		# read CSV file
+		$FirewallRules = Get-Content $FileName -Encoding utf8 | ConvertFrom-Csv -Delimiter ";"
 	}
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Iterating rules"
 
 	# iterate rules
 	foreach ($Rule In $FirewallRules)
@@ -158,8 +231,8 @@ function Import-FirewallRules
 		$RuleSplatHash = @{
 			Name = $Rule.Name
 			Displayname = $Rule.Displayname
-			Description = $Rule.Description
-			Group = $Rule.Group
+			Description = Convert-ListToMultiLine $Rule.Description -JSON:$JSON
+			group = $Rule.Group
 			Enabled = $Rule.Enabled
 			Profile = $Rule.Profile
 			Platform = Convert-ListToArray $Rule.Platform @()
@@ -173,7 +246,7 @@ function Import-FirewallRules
 			Protocol = $Rule.Protocol
 			LocalPort = Convert-ListToArray $Rule.LocalPort
 			RemotePort = Convert-ListToArray $Rule.RemotePort
-			IcmpType = Convert-ListToArray $Rule.IcmpType
+			IcmpType = $Rule.IcmpType
 			DynamicTarget = if ([string]::IsNullOrEmpty($Rule.DynamicTarget)) { "Any" } else { $Rule.DynamicTarget }
 			Program = $Rule.Program
 			Service = $Rule.Service
@@ -192,10 +265,11 @@ function Import-FirewallRules
 		if (![string]::IsNullOrEmpty($Rule.Package)) { $RuleSplatHash.Package = $Rule.Package }
 
 		Write-Output "Generating firewall rule `"$($Rule.DisplayName)`" ($($Rule.Name))"
-		# remove rule if present
-		Get-NetFirewallRule -EA SilentlyContinue -Name $Rule.Name | Remove-NetFirewallRule
 
-		# generate new firewall rule, parameter are assigned with splatting
-		New-NetFirewallRule -EA Continue @RuleSplatHash
+		# remove rule if present
+		Get-NetFirewallRule -EA SilentlyContinue -Name $Rule.Name -PolicyStore $PolicyStore | Remove-NetFirewallRule
+
+		# generate new firewall rule, parameters are assigned with splatting
+		New-NetFirewallRule -EA Continue -PolicyStore $PolicyStore @RuleSplatHash
 	}
 }
