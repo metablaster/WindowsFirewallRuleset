@@ -35,13 +35,13 @@ Convert comma separated list to String array
 .EXAMPLE
 TODO: provide example and description
 .INPUTS
-None. You cannot pipe objects to ListToStringArray
+None. You cannot pipe objects to Convert-ListToArray
 .OUTPUTS
 [string[]] array from comma separated list
 .NOTES
 TODO: output type
 #>
-function ListToStringArray
+function Convert-ListToArray
 {
 	param(
 		[Parameter()]
@@ -73,13 +73,13 @@ Convert value to boolean
 .EXAMPLE
 TODO: provide example and description
 .INPUTS
-None. You cannot pipe objects to ValueToBoolean
+None. You cannot pipe objects to Convert-ValueToBoolean
 .OUTPUTS
 [bool] of the input value
 .NOTES
 None.
 #>
-function ValueToBoolean
+function Convert-ValueToBoolean
 {
 	[OutputType([System.Boolean])]
 	param(
@@ -134,21 +134,21 @@ function Import-FirewallRules
 	[CmdletBinding()]
 	param(
 		[Parameter()]
-		[string] $CSVFile = ".\FirewallRules.csv",
+		[string] $FileName = ".\FirewallRules.json",
 
 		[Parameter()]
-		[switch] $JSON
+		[switch] $CSV
 	)
 
-	if (!$JSON)
+	if ($CSV)
 	{
 		# read CSV file
-		$FirewallRules = Get-Content $CSVFile | ConvertFrom-Csv -Delimiter ";"
+		$FirewallRules = Get-Content $FileName | ConvertFrom-Csv -Delimiter ";"
 	}
 	else
 	{
 		# read JSON file
-		$FirewallRules = Get-Content $CSVFile | ConvertFrom-Json
+		$FirewallRules = Get-Content $FileName | ConvertFrom-Json
 	}
 
 	# iterate rules
@@ -162,29 +162,29 @@ function Import-FirewallRules
 			Group = $Rule.Group
 			Enabled = $Rule.Enabled
 			Profile = $Rule.Profile
-			Platform = ListToStringArray $Rule.Platform @()
+			Platform = Convert-ListToArray $Rule.Platform @()
 			Direction = $Rule.Direction
 			Action = $Rule.Action
 			EdgeTraversalPolicy = $Rule.EdgeTraversalPolicy
-			LooseSourceMapping = ValueToBoolean $Rule.LooseSourceMapping
-			LocalOnlyMapping = ValueToBoolean $Rule.LocalOnlyMapping
-			LocalAddress = ListToStringArray $Rule.LocalAddress
-			RemoteAddress = ListToStringArray $Rule.RemoteAddress
+			LooseSourceMapping = Convert-ValueToBoolean $Rule.LooseSourceMapping
+			LocalOnlyMapping = Convert-ValueToBoolean $Rule.LocalOnlyMapping
+			LocalAddress = Convert-ListToArray $Rule.LocalAddress
+			RemoteAddress = Convert-ListToArray $Rule.RemoteAddress
 			Protocol = $Rule.Protocol
-			LocalPort = ListToStringArray $Rule.LocalPort
-			RemotePort = ListToStringArray $Rule.RemotePort
-			IcmpType = ListToStringArray $Rule.IcmpType
+			LocalPort = Convert-ListToArray $Rule.LocalPort
+			RemotePort = Convert-ListToArray $Rule.RemotePort
+			IcmpType = Convert-ListToArray $Rule.IcmpType
 			DynamicTarget = if ([string]::IsNullOrEmpty($Rule.DynamicTarget)) { "Any" } else { $Rule.DynamicTarget }
 			Program = $Rule.Program
 			Service = $Rule.Service
-			InterfaceAlias = ListToStringArray $Rule.InterfaceAlias
+			InterfaceAlias = Convert-ListToArray $Rule.InterfaceAlias
 			InterfaceType = $Rule.InterfaceType
 			LocalUser = $Rule.LocalUser
 			RemoteUser = $Rule.RemoteUser
 			RemoteMachine = $Rule.RemoteMachine
 			Authentication = $Rule.Authentication
 			Encryption = $Rule.Encryption
-			OverrideBlockRules = ValueToBoolean $Rule.OverrideBlockRules
+			OverrideBlockRules = Convert-ValueToBoolean $Rule.OverrideBlockRules
 		}
 
 		# for SID types no empty value is defined, so omit if not present

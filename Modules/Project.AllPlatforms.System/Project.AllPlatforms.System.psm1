@@ -388,13 +388,20 @@ function Test-SystemRequirements
 				$Analyzer = ($Analyzer | Sort-Object -Descending)[0]
 			}
 
-			$StatusGood = ($Analyzer.Major -gt 1) -or
-			(($Analyzer.Major -eq 1) -and ($Analyzer.Minor -ge 19))
+			if ($Analyzer.Major -eq 1)
+			{
+				$StatusGood = ($Analyzer.Minor -gt 19) -or
+				(($Analyzer.Minor -eq 19) -and ($Analyzer.Build -ge 1))
+			}
+			else
+			{
+				$StatusGood = ($Analyzer.Major -gt 1)
+			}
 		}
 
 		if (!$StatusGood)
 		{
-			Write-Warning -Message "PSScriptAnalyzer module version 1.19.x is recommended for best editing experience"
+			Write-Warning -Message "PSScriptAnalyzer module minimum version 1.19.1 is recommended for best editing experience"
 			Write-Information -Tags "Project" -MessageData "INFO: Ignore if you have PSScriptAnalyzer module in user module directory"
 			$StatusGood = $true;
 		}
