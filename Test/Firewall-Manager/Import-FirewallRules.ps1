@@ -49,11 +49,16 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-New-Test "Import-FirewallRules"
-Import-FirewallRules -FileName "$ProjectRoot\NamedExport1.csv" @Logs
+$Exports = "$ProjectRoot\Exports"
 
-New-Test "Import-FirewallRules -JSON"
-Import-FirewallRules -JSON -FileName "$ProjectRoot\NamedExport2.json" @Logs
+New-Test "Import-FirewallRules"
+Import-FirewallRules -Folder $Exports -FileName "GroupExport.csv" @Logs
+
+# New-Test "Import-FirewallRules"
+# Import-FirewallRules -Folder $Exports -FileName "$Exports\NamedExport1.csv" @Logs
+
+# New-Test "Import-FirewallRules -JSON"
+# Import-FirewallRules -JSON -Folder $Exports -FileName "$Exports\NamedExport2.json" @Logs
 
 Update-Log
 Exit-Test

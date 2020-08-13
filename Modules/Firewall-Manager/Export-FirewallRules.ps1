@@ -113,7 +113,6 @@ function Convert-MultiLineToList
 	{
 		return $MultiLine.Replace("`r", "%%").Replace("`n", "||")
 	}
-
 }
 
 <#
@@ -160,6 +159,7 @@ Changes by metablaster:
 3. Separated functions into their own scope
 4. Added function to decode string into multi line
 5. Added parameter to target specific policy store
+6. Added parameter to let specify directory, and crate it if it doesn't exist
 TODO: need to have colored output as when loading rules with Format-Output
 .EXAMPLE
 Export-FirewallRules
@@ -180,10 +180,16 @@ function Export-FirewallRules
 		[string] $PolicyStore = [System.Environment]::MachineName,
 
 		[Parameter()]
-		[string] $Name = "*",
+		[string] $DisplayName = "*",
 
 		[Parameter()]
-		[string] $FileName = ".\FirewallRules",
+		[string] $Folder = ".",
+
+		[Parameter()]
+		[string] $FileName = "FirewallRules",
+
+		[Parameter()]
+		[string] $DisplayGroup = "*",
 
 		[Parameter()]
 		[switch] $JSON,
@@ -216,30 +222,44 @@ function Export-FirewallRules
 	# Filter rules?
 	# Filter by direction
 	$Direction = "*"
-	if ($Inbound -And !$Outbound) { $Direction = "Inbound" }
-	if (!$Inbound -And $Outbound) { $Direction = "Outbound" }
+	if ($Inbound -and !$Outbound) { $Direction = "Inbound" }
+	if (!$Inbound -and $Outbound) { $Direction = "Outbound" }
 
 	# Filter by state
 	$RuleState = "*"
-	if ($Enabled -And !$Disabled) { $RuleState = "True" }
-	if (!$Enabled -And $Disabled) { $RuleState = "False" }
+	if ($Enabled -and !$Disabled) { $RuleState = "True" }
+	if (!$Enabled -and $Disabled) { $RuleState = "False" }
 
 	# Filter by action
 	$Action = "*"
-	if ($Allow -And !$Block) { $Action = "Allow" }
-	if (!$Allow -And $Block) { $Action = "Block" }
-
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading firewall rules"
+	if ($Allow -and !$Block) { $Action = "Allow" }
+	if (!$Allow -and $Block) { $Action = "Block" }
 
 	# read firewall rules
 	# TODO: this will fail if rule name not found, need pretty info output
-	$FirewallRules = Get-NetFirewallRule -DisplayName $Name -PolicyStore $PolicyStore |
-	Where-Object {
-		$_.Direction -like $Direction -and $_.Enabled -like $RuleState -And $_.Action -like $Action
+	if ($DisplayGroup -eq "*")
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting by DisplayName"
+
+		$FirewallRules = Get-NetFirewallRule -DisplayName $DisplayName -PolicyStore $PolicyStore |
+		Where-Object {
+			$_.Direction -like $Direction -and $_.Enabled -like $RuleState -and $_.Action -like $Action
+		}
+	}
+	else
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting by DisplayGroup"
+
+		$FirewallRules = Get-NetFirewallRule -DisplayGroup $DisplayGroup -PolicyStore $PolicyStore |
+		Where-Object {
+			$_.Direction -like $Direction -and $_.Enabled -like $RuleState -and $_.Action -like $Action
+		}
 	}
 
 	# start array of rules
 	$FirewallRuleSet = @()
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Iterating rules"
+
 	foreach ($Rule In $FirewallRules)
 	{
 		# iterate through rules
@@ -265,7 +285,7 @@ function Export-FirewallRules
 			Name = $Rule.Name
 			DisplayName = $Rule.DisplayName
 			Description = Convert-MultiLineToList $Rule.Description -JSON:$JSON
-			group = $Rule.Group
+			Group = $Rule.Group
 			Enabled = $Rule.Enabled
 			Profile = $Rule.Profile
 			Platform = Convert-ArrayToList $Rule.Platform
@@ -302,39 +322,62 @@ function Export-FirewallRules
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Writing rules to file"
 
+	# Create target folder directory if it doesn't exist
+	if (!(Test-Path -PathType Container -Path $Folder))
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating exports directory $Folder"
+		New-Item -ItemType Directory -Path $Folder -ErrorAction Stop | Out-Null
+	}
+
 	if ($JSON)
 	{
 		# output rules in JSON format
-		$FileName += ".json"
+		if ((Split-Path -Extension $FileName) -ne ".json")
+		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Adding extension to input file"
+			$FileName += ".json"
+		}
 
 		if ($Append)
 		{
 			# TODO: need to implement appending to JSON
 			Write-Warning -Message "[$($MyInvocation.InvocationName)] Appending to JSON not implemented"
-			$FirewallRuleSet | ConvertTo-Json | Set-Content $FileName -Encoding utf8
+			$FirewallRuleSet | ConvertTo-Json | Set-Content "$Folder\$FileName" -Encoding utf8
 		}
 		else
 		{
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Replacing content in JSON file"
-			$FirewallRuleSet | ConvertTo-Json | Set-Content $FileName -Encoding utf8
+			$FirewallRuleSet | ConvertTo-Json | Set-Content "$Folder\$FileName" -Encoding utf8
 		}
 	}
 	else
 	{
 		# output rules in CSV format
-		$FileName += ".csv"
+		if ((Split-Path -Extension $FileName) -ne ".csv")
+		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Adding extension to input file"
+			$FileName += ".csv"
+		}
+
+		$FileExists = Test-Path -PathType Leaf -Path "$Folder\$FileName"
 
 		if ($Append)
 		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Appending to CSV file"
-			$FirewallRuleSet | ConvertTo-Csv -NoTypeInformation -Delimiter ";" |
-			Select-Object -Skip 1 | Add-Content $FileName -Encoding utf8
+			if ($FileExists)
+			{
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Appending to CSV file"
+				$FirewallRuleSet | ConvertTo-Csv -NoTypeInformation -Delimiter ";" |
+				Select-Object -Skip 1 | Add-Content "$Folder\$FileName" -Encoding utf8
+				return
+			}
+			else
+			{
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Not appending because no existing file"
+			}
 		}
-		else
-		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Replacing content in CSV file"
-			$FirewallRuleSet | ConvertTo-Csv -NoTypeInformation -Delimiter ";" |
-			Set-Content $FileName -Encoding utf8
-		}
+
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Replacing content in CSV file"
+		$FirewallRuleSet | ConvertTo-Csv -NoTypeInformation -Delimiter ";" |
+		Set-Content "$Folder\$FileName" -Encoding utf8
 	}
 }

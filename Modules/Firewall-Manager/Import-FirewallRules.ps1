@@ -184,7 +184,10 @@ Changes by metablaster:
 2. Added parameter to target specific policy store
 3. Separated functions into their own scope
 4. Added function to decode string into multi line
+5. Added parameter to let specify directory
 TODO: need to have colored output as when loading rules with Format-Output
+TODO: maybe importing only specific rules from file?
+TODO: maybe skip importing rules that already exist?
 .EXAMPLE
 Import-FirewallRules
 Imports all firewall rules in the CSV file FirewallRules.csv
@@ -202,24 +205,40 @@ function Import-FirewallRules
 		[string] $PolicyStore = [System.Environment]::MachineName,
 
 		[Parameter()]
-		[string] $FileName = ".\FirewallRules",
+		[string] $Folder = ".",
+
+		[Parameter()]
+		[string] $FileName = "FirewallRules",
 
 		[Parameter()]
 		[switch] $JSON
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading rules file"
 
 	if ($JSON)
 	{
 		# read JSON file
-		$FirewallRules = Get-Content $FileName -Encoding utf8 | ConvertFrom-Json
+		if ((Split-Path -Extension $FileName) -ne ".json")
+		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Adding extension to input file"
+			$FileName += ".json"
+		}
+
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading JSON file"
+		$FirewallRules = Get-Content "$Folder\$FileName" -Encoding utf8 | ConvertFrom-Json
 	}
 	else
 	{
 		# read CSV file
-		$FirewallRules = Get-Content $FileName -Encoding utf8 | ConvertFrom-Csv -Delimiter ";"
+		if ((Split-Path -Extension $FileName) -ne ".csv")
+		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Adding extension to input file"
+			$FileName += ".csv"
+		}
+
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading CSV file"
+		$FirewallRules = Get-Content "$Folder\$FileName" -Encoding utf8 | ConvertFrom-Csv -Delimiter ";"
 	}
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Iterating rules"
@@ -267,9 +286,10 @@ function Import-FirewallRules
 		Write-Output "Generating firewall rule `"$($Rule.DisplayName)`" ($($Rule.Name))"
 
 		# remove rule if present
-		Get-NetFirewallRule -EA SilentlyContinue -Name $Rule.Name -PolicyStore $PolicyStore | Remove-NetFirewallRule
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if rule exists"
+		Remove-NetFirewallRule -Name $Rule.Name -PolicyStore $PolicyStore -ErrorAction SilentlyContinue
 
 		# generate new firewall rule, parameters are assigned with splatting
-		New-NetFirewallRule -EA Continue -PolicyStore $PolicyStore @RuleSplatHash
+		New-NetFirewallRule -PolicyStore $PolicyStore @RuleSplatHash
 	}
 }

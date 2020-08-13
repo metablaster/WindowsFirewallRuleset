@@ -27,8 +27,9 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Export-FirewallRules
+# Unit test for Remove-FirewallRules
 #
+#Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
@@ -50,20 +51,14 @@ Start-Test
 
 $Exports = "$ProjectRoot\Exports"
 
-New-Test "Export-FirewallRules -DisplayGroup"
-Export-FirewallRules -DisplayGroup "Broadcast" -Outbound -Folder $Exports -FileName "GroupExport" @Logs
+New-Test "Remove-FirewallRules"
+Remove-FirewallRules -Folder $Exports -FileName "GroupExport" @Logs
 
-# New-Test "Export-FirewallRules -DisplayName"
-# Export-FirewallRules -DisplayName "Domain Name System" -Folder $Exports -FileName "NamedExport1" @Logs
+# New-Test "Remove-FirewallRules"
+# Remove-FirewallRules -Folder $Exports -FileName "$Exports\NamedExport1.csv" @Logs
 
-# New-Test "Export-FirewallRules -DisplayName -JSON"
-# Export-FirewallRules -DisplayName "Domain Name System" -Folder $Exports -JSON -Append -FileName "NamedExport2" @Logs
-
-# New-Test "Export-FirewallRules -Outbound -Disabled -Allow"
-# Export-FirewallRules -Outbound -Disabled -Allow -Folder $Exports -FileName "OutboundExport" @Logs
-
-# New-Test "Export-FirewallRules -Inbound -Enabled -Block -JSON"
-# Export-FirewallRules -Inbound -Enabled -Block -Folder $Exports -JSON -FileName "InboundExport" @Logs
+# New-Test "Remove-FirewallRules -JSON"
+# Remove-FirewallRules -JSON -Folder $Exports -FileName "$Exports\NamedExport2.json" @Logs
 
 Update-Log
 Exit-Test

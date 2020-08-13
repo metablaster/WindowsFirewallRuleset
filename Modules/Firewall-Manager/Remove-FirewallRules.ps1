@@ -38,6 +38,13 @@ Input in JSON instead of CSV format
 Author: Markus Scholtes
 Version: 1.02
 Build date: 2020/02/15
+
+Changes by metablaster:
+1. Applied formatting and code style according to project rules
+2. Added parameter to target specific policy store
+3. Added parameter to let specify directory
+TODO: need to have colored output as when removing rules with Format-Output
+TODO: maybe removing only specific rules from file?
 .EXAMPLE
 Remove-FirewallRules
 Removes all firewall rules according to a list in the CSV file FirewallRules.csv in the current directory.
@@ -51,35 +58,63 @@ function Remove-FirewallRules
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
 	param(
 		[Parameter()]
-		[string] $CSVFile = ".\FirewallRules.csv",
+		[string] $PolicyStore = [System.Environment]::MachineName,
+
+		[Parameter()]
+		[string] $Folder = ".",
+
+		[Parameter()]
+		[string] $FileName = "FirewallRules",
 
 		[Parameter()]
 		[switch] $JSON
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+
 	if ($PSCmdlet.ShouldProcess("Remove firewall rules according to file"))
 	{
-		if (!$JSON)
+		if ($JSON)
 		{
-			# read CSV file
-			$FirewallRules = Get-Content $CSVFile | ConvertFrom-Csv -Delimiter ";"
+			# read JSON file
+			if ((Split-Path -Extension $FileName) -ne ".json")
+			{
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Adding extension to input file"
+				$FileName += ".json"
+			}
+
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading JSON file"
+			$FirewallRules = Get-Content "$Folder\$FileName" -Encoding utf8 | ConvertFrom-Json
 		}
 		else
 		{
-			# read JSON file
-			$FirewallRules = Get-Content $CSVFile | ConvertFrom-Json
+			# read CSV file
+			if ((Split-Path -Extension $FileName) -ne ".csv")
+			{
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Adding extension to input file"
+				$FileName += ".csv"
+			}
+
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading CSV file"
+			$FirewallRules = Get-Content "$Folder\$FileName" -Encoding utf8 | ConvertFrom-Csv -Delimiter ";"
 		}
 
 		# iterate rules
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Iterating rules"
+
 		foreach ($Rule In $FirewallRules)
 		{
 			$CurrentRule = $null
+
 			if (![string]::IsNullOrEmpty($Rule.Name))
 			{
-				$CurrentRule = Get-NetFirewallRule -EA SilentlyContinue -Name $Rule.Name
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Get rule according to Name"
+				$CurrentRule = Get-NetFirewallRule -PolicyStore $PolicyStore -Name $Rule.Name -ErrorAction SilentlyContinue
+
 				if (!$CurrentRule)
 				{
-					Write-Error "Firewall rule `"$($Rule.Name)`" does not exist"
+					Write-Error -Category ObjectNotFound -TargetObject $Rule `
+						-Message "Firewall rule `"$($Rule.Name)`" does not exist"
 					continue
 				}
 			}
@@ -87,22 +122,26 @@ function Remove-FirewallRules
 			{
 				if (![string]::IsNullOrEmpty($Rule.DisplayName))
 				{
-					$CurrentRule = Get-NetFirewallRule -EA SilentlyContinue -DisplayName $Rule.DisplayName
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] Get rule according to DisplayName"
+					$CurrentRule = Get-NetFirewallRule -PolicyStore $PolicyStore -DisplayName $Rule.DisplayName -ErrorAction SilentlyContinue
+
 					if (!$CurrentRule)
 					{
-						Write-Error "Firewall rule `"$($Rule.DisplayName)`" does not exist"
+						Write-Error -Category ObjectNotFound -TargetObject $Rule `
+							-Message "Firewall rule `"$($Rule.DisplayName)`" does not exist"
 						continue
 					}
 				}
 				else
 				{
-					Write-Error "Failure in data record"
+					Write-Error -Category ReadError -TargetObject $Rule `
+						-Message "Failure in data record"
 					continue
 				}
 			}
 
 			Write-Output "Removing firewall rule `"$($CurrentRule.DisplayName)`" ($($CurrentRule.Name))"
-			Get-NetFirewallRule -EA SilentlyContinue -Name $CurrentRule.Name | Remove-NetFirewallRule
+			Remove-NetFirewallRule -PolicyStore $PolicyStore -Name $CurrentRule.Name
 		}
 	}
 }
