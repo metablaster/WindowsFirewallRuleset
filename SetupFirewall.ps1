@@ -180,6 +180,7 @@ if (Approve-Execute "Yes" "Applying: Outbound IPv4 Rules" @Logs)
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Games\CounterStrikeGO.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Games\DemiseOfNations.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Games\EVEOnline.ps1"
+		& "$PSScriptRoot\Rules\IPv4\Outbound\Games\LeagueOfLegends.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Games\OpenTTD.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Games\PathOfExile.ps1"
 		& "$PSScriptRoot\Rules\IPv4\Outbound\Games\PinballArcade.ps1"

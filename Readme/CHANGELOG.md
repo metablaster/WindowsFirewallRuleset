@@ -3,6 +3,14 @@
 
 # Changelog v0.5.1
 
+## New features
+
+- Added functionality to import/export rules into CSV/JSON file
+
+## Rules
+
+- Updated rules for GitHub Desktop and Epic games
+
 ## Development
 
 - Updated analyzer settings for newest version and fixes

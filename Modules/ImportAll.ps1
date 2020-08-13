@@ -41,3 +41,4 @@ Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 Import-Module -Name $ProjectRoot\Modules\Indented.Net.IP @Logs
 Import-Module -Name $ProjectRoot\Modules\VSSetup @Logs
+Import-Module -Name $ProjectRoot\Modules\Firewall-Manager @Logs
