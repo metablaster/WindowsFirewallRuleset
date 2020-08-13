@@ -30,10 +30,16 @@ Removes firewall rules according to a list in a CSV or JSON file.
 Removes firewall rules according to a with Export-FirewallRules generated list in a CSV or JSON file.
 CSV files have to be separated with semicolons. Only the field Name or - if Name is missing - DisplayName
 is used, all other fields can be omitted
-.PARAMETER CSVFile
-Input file
+.PARAMETER PolicyStore
+Policy store from which remove rules, default is local GPO.
+For more information about stores see:
+https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md
+.PARAMETER Folder
+Folder in which file is located
+.PARAMETER FileName
+File name according to which to delete rules
 .PARAMETER JSON
-Input in JSON instead of CSV format
+Input file in JSON instead of CSV format
 .NOTES
 Author: Markus Scholtes
 Version: 1.02
@@ -43,7 +49,6 @@ Changes by metablaster:
 1. Applied formatting and code style according to project rules
 2. Added parameter to target specific policy store
 3. Added parameter to let specify directory
-TODO: need to have colored output as when removing rules with Format-Output
 TODO: maybe removing only specific rules from file?
 .EXAMPLE
 Remove-FirewallRules
@@ -54,6 +59,7 @@ Removes all firewall rules according to the list in the JSON file WmiRules.json.
 #>
 function Remove-FirewallRules
 {
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'There is no way to replace Write-Host here')]
 	[OutputType([System.Void])]
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
 	param(
@@ -140,8 +146,10 @@ function Remove-FirewallRules
 				}
 			}
 
-			Write-Output "Removing firewall rule `"$($CurrentRule.DisplayName)`" ($($CurrentRule.Name))"
+			Write-Host "Remove Rule: [$($Rule | Select-Object -ExpandProperty Group)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
 			Remove-NetFirewallRule -PolicyStore $PolicyStore -Name $CurrentRule.Name
 		}
+
+		Write-Information -Tags "User" -MessageData "INFO: Removing firewall rules done"
 	}
 }

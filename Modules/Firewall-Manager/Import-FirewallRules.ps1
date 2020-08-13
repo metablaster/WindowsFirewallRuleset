@@ -170,10 +170,12 @@ Existing rules with same name will be overwritten.
 Policy store into which to import rules, default is local GPO.
 For more information about stores see:
 https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md
+.PARAMETER Folder
+Path into which to save file
 .PARAMETER FileName
 Input file
-.PARAMETER CSV
-Input in CSV instead of JSON format
+.PARAMETER JSON
+Input from JSON instead of CSV format
 .NOTES
 Author: Markus Scholtes
 Version: 1.02
@@ -185,7 +187,6 @@ Changes by metablaster:
 3. Separated functions into their own scope
 4. Added function to decode string into multi line
 5. Added parameter to let specify directory
-TODO: need to have colored output as when loading rules with Format-Output
 TODO: maybe importing only specific rules from file?
 TODO: maybe skip importing rules that already exist?
 .EXAMPLE
@@ -283,13 +284,13 @@ function Import-FirewallRules
 		if (![string]::IsNullOrEmpty($Rule.Owner)) { $RuleSplatHash.Owner = $Rule.Owner }
 		if (![string]::IsNullOrEmpty($Rule.Package)) { $RuleSplatHash.Package = $Rule.Package }
 
-		Write-Output "Generating firewall rule `"$($Rule.DisplayName)`" ($($Rule.Name))"
-
 		# remove rule if present
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if rule exists"
 		Remove-NetFirewallRule -Name $Rule.Name -PolicyStore $PolicyStore -ErrorAction SilentlyContinue
 
 		# generate new firewall rule, parameters are assigned with splatting
-		New-NetFirewallRule -PolicyStore $PolicyStore @RuleSplatHash
+		New-NetFirewallRule -PolicyStore $PolicyStore @RuleSplatHash | Format-Output -Label "Import Rule"
 	}
+
+	Write-Information -Tags "User" -MessageData "INFO: Importing firewall rules done"
 }

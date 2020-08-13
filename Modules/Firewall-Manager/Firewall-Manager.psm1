@@ -50,6 +50,9 @@ else
 	$InformationPreference = "Continue"
 }
 
+# Includes
+Import-Module -Name $PSScriptRoot\..\Project.AllPlatforms.Utility
+
 <#
 .SYNOPSIS
 Firewall-Manager is a module to manage firewall rules.

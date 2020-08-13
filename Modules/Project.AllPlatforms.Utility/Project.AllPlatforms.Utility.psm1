@@ -383,6 +383,8 @@ Output of Net-NewFirewallRule is large, loading a lot of rules would spam the co
 very fast, this function helps to output only relevant content.
 .PARAMETER Rule
 Firewall rule to format
+.PARAMETER Label
+Optional new label to replace default one
 .EXAMPLE
 Net-NewFirewallRule ... | Format-Output
 .INPUTS
@@ -400,13 +402,16 @@ function Format-Output
 	param (
 		[Parameter(Mandatory = $true,
 			ValueFromPipeline = $true)]
-		[Microsoft.Management.Infrastructure.CimInstance] $Rule
+		[Microsoft.Management.Infrastructure.CimInstance] $Rule,
+
+		[Parameter()]
+		[string] $Label = "Load Rule"
 	)
 
 	process
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-		Write-Host "Load Rule: [$($Rule | Select-Object -ExpandProperty Group)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
+		Write-Host "$($Label): [$($Rule | Select-Object -ExpandProperty Group)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
 	}
 }
 

@@ -128,8 +128,12 @@ If the export file already exists it's content will be replaced by default.
 Policy store from which to export rules, default is local GPO.
 For more information about stores see:
 https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md
-.PARAMETER Name
+.PARAMETER DisplayName
 Display name of the rules to be processed. Wildcard character * is allowed.
+.PARAMETER DisplayGroup
+Display group of the rules to be processed. Wildcard character * is allowed.
+.PARAMETER Folder
+Path into which to save file
 .PARAMETER FileName
 Output file, default is JSON format
 .PARAMETER JSON
@@ -160,7 +164,6 @@ Changes by metablaster:
 4. Added function to decode string into multi line
 5. Added parameter to target specific policy store
 6. Added parameter to let specify directory, and crate it if it doesn't exist
-TODO: need to have colored output as when loading rules with Format-Output
 .EXAMPLE
 Export-FirewallRules
 Exports all firewall rules to the CSV file FirewallRules.csv in the current directory.
@@ -173,6 +176,7 @@ Exports all SNMP firewall rules to the JSON file SNMPRules.json.
 #>
 function Export-FirewallRules
 {
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'There is no way to replace Write-Host here')]
 	[OutputType([System.Void])]
 	[CmdletBinding()]
 	param(
@@ -180,13 +184,13 @@ function Export-FirewallRules
 		[string] $PolicyStore = [System.Environment]::MachineName,
 
 		[Parameter()]
-		[string] $DisplayName = "*",
-
-		[Parameter()]
 		[string] $Folder = ".",
 
 		[Parameter()]
 		[string] $FileName = "FirewallRules",
+
+		[Parameter()]
+		[string] $DisplayName = "*",
 
 		[Parameter()]
 		[string] $DisplayGroup = "*",
@@ -263,7 +267,7 @@ function Export-FirewallRules
 	foreach ($Rule In $FirewallRules)
 	{
 		# iterate through rules
-		Write-Output "Processing rule `"$($Rule.DisplayName)`" ($($Rule.Name))"
+		Write-Host "Export Rule: [$($Rule | Select-Object -ExpandProperty Group)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
 
 		# Retrieve addresses,
 		$AddressFilter = $Rule | Get-NetFirewallAddressFilter
@@ -380,4 +384,6 @@ function Export-FirewallRules
 		$FirewallRuleSet | ConvertTo-Csv -NoTypeInformation -Delimiter ";" |
 		Set-Content "$Folder\$FileName" -Encoding utf8
 	}
+
+	Write-Information -Tags "User" -MessageData "INFO: Exporting firewall rules done"
 }

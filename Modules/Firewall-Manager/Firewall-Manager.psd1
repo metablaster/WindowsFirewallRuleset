@@ -115,7 +115,7 @@ Firewall-Manager is a module to manage firewall rules.
 
 		PSData = @{
 			# Tags applied to this module. These help with module discovery in online galleries.
-			Tags = @('Firewall', 'Export', 'Import', 'Firewallrule')
+			Tags = @('Firewall', 'Export', 'Import', 'FirewallRule')
 
 			# A URL to the license for this module.
 			LicenseUri = 'https://github.com/MScholtes/Firewall-Manager/blob/master/LICENSE'

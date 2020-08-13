@@ -87,8 +87,8 @@ if ($Develop)
 	# $ErrorActionPreference = "SilentlyContinue"
 	# $WarningPreference = "SilentlyContinue"
 	$InformationPreference = "Continue"
-	$VerbosePreference = "Continue"
-	$DebugPreference = "Continue"
+	# $VerbosePreference = "Continue"
+	# $DebugPreference = "Continue"
 
 	# Must be after debug preference
 	Write-Debug -Message "[$ThisScript] Setup clean environment"
