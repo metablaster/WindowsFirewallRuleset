@@ -47,10 +47,10 @@ ping 8.8.8.8 > $home\Desktop\ping.txt
 ping google.com >> $home\Desktop\ping.txt
 ```
 
-`ipconfig /all` command (above) will telly you IP address of your router, you should definitely
-ping it, here is example entry from `ipconfig /all`
+`ipconfig /all` command (above) will telly you IP address of your router,\
+you should definitely ping it, here is example entry from `ipconfig /all`
 
-Default Gateway . . . . . . . . . : 192.168.8.1
+Default Gateway . . . . . . . . . : 192.168.4.1
 
 Now see if route to router is working by pinging address from your output:
 
@@ -58,8 +58,9 @@ Now see if route to router is working by pinging address from your output:
 ping 192.168.8.1 >> $home\Desktop\ping.txt
 ```
 
-You may also want to ping other computer on your local network, to find out their IP, login to
-computer in question and run `ipconfig /all` on that computer, then look at field that say:
+You may also want to ping other computer on your local network, to find out their IP,\
+login to computer in question and run `ipconfig /all` on that computer, then look for
+address at field that say:
 
 `IPv4 Address. . . . . . . . . . . :`
 
@@ -156,6 +157,12 @@ or run:
 Get-NetAdapter
 ```
 
+Alternative way to disable/enable adapter is in control panel at:\
+
+`Control Panel\All Control Panel Items\Network and Sharing Center`\
+Click on `Change Adapter Settings`, right click your adapter that is having problem,
+then disable and enable back.
+
 ## Change DNS server
 
 google DNS servers are fast and reliable, see below link to change your DNS settings to use
@@ -186,20 +193,61 @@ call your ISP and ask them what's the problem.
 
 ## Perform speed test
 
-Visit below link to perform network speed test:
+If you're having problem with slow connection, visit below link to perform network speed test:
 
 https://www.speedtest.net
 
-Try different servers to see if there is a difference
+Try different servers to see if there is a difference, you may need to contact your ISP and
+ask them how much it will cost to get faster internet. (more pay = faster)
+
+See if your ISP can install you optic cable into your house, and for what price.
 
 ## Try another adapter
 
-If you got to this point you should really try out another adapter, but before doing so, make sure
+If you got to this point you should really try out another network adapter, but before doing so, make sure
 to verify other devices on your network work properly (ex. no internet issues)
 
 Which means something is wrong with your operating system or adapter.
 
 You may want to boot linux live ISO to make sure your adapter or operating system is not faulty.
+
+## Change adapter properties
+
+There are many different network adapters, most of them have settings which you can access via device manager.
+
+Make sure to open device manager as Administrator:\
+https://support.microsoft.com/en-us/help/4026149/windows-open-device-manager
+
+Open your adapter properties and you'll find settings somewhere under "Advanced" tab or something like that.
+Depending on your adapter, here are links that help explain the meaning of adapter settings options:
+
+**NOTE:** This settings are universall, not always limited to specific hardware vendor:
+* [Advanced Intel® Wireless Adapter Settings](https://www.intel.com/content/www/us/en/support/articles/000005585/network-and-i-o/wireless.html)
+* [ADVANCED NETWORK ADAPTER DRIVER SETTINGS](http://techgenix.com/advanced-network-adapter-driver-settings/)
+* [Resolving Issues with Energy Efficient Ethernet (EEE) or Green Ethernet](https://www.dell.com/support/article/en-hr/sln79684/resolving-issues-with-energy-efficient-ethernet-eee-or-green-ethernet?lang=en)
+* [Optimal setting for advanced parameters for Realtek PCI-e GBE family network card](https://superuser.com/questions/853500/optimal-setting-for-advanced-parameters-for-realtek-pci-e-gbe-family-network-car)
+
+## Configure your router
+
+Read documentation about yor router, learn what different options do and adjust your router
+setting for optimal performance.
+
+Restarting router is recommended to check if new configuration makes any difference.
+
+## I have game multiplayer issues
+
+If your problem is MMO gaming (online multiplayer), LAN multiplayer, hotseat and similar you must make sure
+your router NAT translation is properly configured.
+
+Log in to your router and find "NAT" settings, possible options are:
+
+* Full Cone NAT (Static NAT)
+* Restricted Cone NAT (Dynamic NAT)
+* Port Restricted Cone NAT (Dynamic NAT)
+* Symmetric NAT (Dynamic NAT)
+
+For gaming your want "Full Cone NAT (Static NAT)"\
+remember, "Symmetric NAT (Dynamic NAT)" will cause you a lot of multiplayer troubles.
 
 ## Reinstall Windows
 
