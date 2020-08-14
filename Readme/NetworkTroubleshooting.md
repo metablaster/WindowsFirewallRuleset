@@ -1,9 +1,11 @@
 
 # Network troubleshooting detailed guide
 
-There are many ways to get stuck with networking, other documentation here mostly focuses on how to
-work with or troubleshoot firewall, but here the aim is to make troubleshooting other network
-related problems more easy.
+There are many ways to get stuck with networking, other documentation in this project mostly focuses
+on how to work with or troubleshoot firewall, but here the aim is to make troubleshooting other
+network related problems in detail.
+
+It covers wide area of network problems.
 
 This are the most basic troubleshooting procedures one should always perform when stuck.
 
@@ -93,7 +95,7 @@ Alternative way to reset network is by using "Settings" app in Windows 10 as fol
 Make sure your system and drivers are fully up to date:
 
 * See below link on how to update system:
-https://support.microsoft.com/en-us/help/4027667/windows-10-update
+[Update Windows 10](https://support.microsoft.com/en-us/help/4027667/windows-10-update)
 
 It's good to continue checking for updates after they are installed, until there is no new updates,
 it's not bad to reboot system after update even if not asked to do so.
@@ -116,7 +118,7 @@ Do it manually in this order:
 
 Below link explains how to troubleshoot WI-FI problems, some of the steps are already covered here:
 
-https://support.microsoft.com/en-us/help/10741/windows-fix-network-connection-issues
+[Fix WI-FI issues](https://support.microsoft.com/en-us/help/10741/windows-fix-network-connection-issues)
 
 ## Trace route to random hosts on internet
 
@@ -136,7 +138,7 @@ If nothing so far worked disable firewall and try all over again.\
 If things start to work it's likely misconfigured firewall.
 
 See below link on how to disable both GPO and Control Panel firewall:
-https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/DisableFirewall.md
+[Disable Firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/DisableFirewall.md)
 
 **NOTE:** If you experience this problem only while having firewall enabled from this project,
 feel free to open new issue and provide as much details (results) as possible from this document.
@@ -168,7 +170,7 @@ then disable and enable back.
 google DNS servers are fast and reliable, see below link to change your DNS settings to use
 google DNS:
 
-https://developers.google.com/speed/public-dns/docs/using
+[google DNS servers](https://developers.google.com/speed/public-dns/docs/using)
 
 ## Restart or reset router
 
@@ -191,16 +193,23 @@ Check your LAN cable, verify it is properly connected and functioning.
 If other computers are not working on your LAN, or if you have no other computers to test with,
 call your ISP and ask them what's the problem.
 
-## Perform speed test
+## Perform internet speed test
 
 If you're having problem with slow connection, visit below link to perform network speed test:
 
-https://www.speedtest.net
+[Internet speed test](https://www.speedtest.net)
 
 Try different servers to see if there is a difference, you may need to contact your ISP and
 ask them how much it will cost to get faster internet. (more pay = faster)
 
 See if your ISP can install you optic cable into your house, and for what price.
+
+## Perform LAN speed test
+
+If your network speed is slow and related only to local network (ex. between computer behind router),
+you can test LAN speed with tool called NetIO:
+
+[NetIO-GUI](https://sourceforge.net/projects/netiogui)
 
 ## Try another adapter
 
@@ -217,7 +226,7 @@ There are many different network adapters, most of them have settings which you 
 device manager.
 
 Make sure to open device manager as Administrator:\
-https://support.microsoft.com/en-us/help/4026149/windows-open-device-manager
+[Open device manager](https://support.microsoft.com/en-us/help/4026149/windows-open-device-manager)
 
 Open your adapter properties and you'll find settings somewhere under "Advanced" tab or something
 like that.
@@ -252,13 +261,83 @@ Log in to your router and find "NAT" settings, possible options are:
 For gaming your want "Full Cone NAT (Static NAT)"\
 remember, "Symmetric NAT (Dynamic NAT)" will cause you a lot of multiplayer troubles.
 
-## Reinstall Windows
+## Issues with LAN, Workgroup, Home group, Remote desktop or sharing
 
-This is last resort, if operating system is bad reinstall it:
+Below link contains detailed guidelines:
 
-https://www.microsoft.com/en-us/software-download/windows10
+[LAN Setup](https://github.com/metablaster/WindowsFirewallRuleset/tree/develop/Readme/LAN%20Setup)
 
-## If nothing so far worked
+## Reset firewall
+
+Below link explains how to reset both GPO firewall and firewall in control panel:
+
+[Reset Firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/ResetFirewall.md)
+
+## Run network troubleshooter
+
+Usually network troubleshooter in Windows should be able to resolve the problem, or at least
+tell you what is going on:
+
+1. On Windows 10 press `Windows key + I` to open settings app
+2. type into search box `troubleshoot` and select `troubleshoot settings`
+3. click on `additional troubleshooters`
+4. here you'll find several network troubleshooters, run them all.
+5. If problem is not fixed right away you may need to reboot system
+
+On another systems, alternative way is:
+
+1. Open control panel and click on "Network and sharing center"
+2. Click on "Troubleshoot problems"
+3. depending on your system choose different options to troubleshoot problems.
+4. what you are looking for is "Network reset" and "Diagnose problems"
+5. If problem is not fixed right away you may need to reboot system
+
+## Look at IP route information
+
+```powershell
+Get-NetRoute
+```
+
+More information about this command is [HERE](https://docs.microsoft.com/en-us/powershell/module/nettcpip/get-netroute?view=win10-ps)
+
+More information about routing table is [HERE](https://en.wikipedia.org/wiki/Routing_table)
+
+## Look at your hosts file
+
+You want to make sure your younger brother or sister doesn't have fun with you!
+
+Visit this folder: `C:\Windows\System32\drivers\etc`
+
+Open `hosts` file with notepad or some other text editor and make sure all lines begin with hash "#"
+If any lines doesn't begin with hash, then either add hash to those lines or delete entry.
+
+## Firewall issue
+
+To troubleshoot firewall take a look at:
+
+* [Monitoring firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/MonitoringFirewall.md)
+* [Problematic traffic](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/ProblematicTraffic.md)
+* [Rest of documentation](https://github.com/metablaster/WindowsFirewallRuleset/tree/develop/Readme)
+
+## Troubleshoot or reinstall Windows
+
+First see recovery options in Windows 10:
+
+[Recovery options in Windows 10](https://support.microsoft.com/en-us/help/12415/windows-10-recovery-options)
+
+reinstalling is is last resort, if operating system is bad reinstall it:
+
+[Download Windows 10](https://www.microsoft.com/en-us/software-download/windows10)
+
+## If nothing works
 
 Try search for help on computer forums, there are many experts out there,
 or visit computer shop and let them fix your issue.
+
+To get good support in forums make sure you provide as much details as you can, this includes:
+
+1. Your network information by sharing outputs from commands discussed so far here
+2. Your operating system version, detailed hardware and driver info
+3. hardware information on your network such as routers, modems, cables etc.
+4. Description of things you did prior to your problem.
+5. Make it short and to the point, nobody likes to read long posts.
