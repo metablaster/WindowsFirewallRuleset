@@ -1,7 +1,7 @@
 
-# About this document
+# Network troubleshooting detailed guide
 
-There are many ways to get stuck with networking, other documentation mostly focuses on how to
+There are many ways to get stuck with networking, other documentation here mostly focuses on how to
 work with or troubleshoot firewall, but here the aim is to make troubleshooting other network
 related problems more easy.
 
@@ -204,8 +204,8 @@ See if your ISP can install you optic cable into your house, and for what price.
 
 ## Try another adapter
 
-If you got to this point you should really try out another network adapter, but before doing so, make sure
-to verify other devices on your network work properly (ex. no internet issues)
+If you got to this point you should really try out another network adapter, but before doing so,
+make sure to verify other devices on your network work properly (ex. no internet issues)
 
 Which means something is wrong with your operating system or adapter.
 
@@ -213,16 +213,19 @@ You may want to boot linux live ISO to make sure your adapter or operating syste
 
 ## Change adapter properties
 
-There are many different network adapters, most of them have settings which you can access via device manager.
+There are many different network adapters, most of them have settings which you can access via
+device manager.
 
 Make sure to open device manager as Administrator:\
 https://support.microsoft.com/en-us/help/4026149/windows-open-device-manager
 
-Open your adapter properties and you'll find settings somewhere under "Advanced" tab or something like that.
+Open your adapter properties and you'll find settings somewhere under "Advanced" tab or something
+like that.
 Depending on your adapter, here are links that help explain the meaning of adapter settings options:
 
-**NOTE:** This settings are universall, not always limited to specific hardware vendor:
-* [Advanced Intel® Wireless Adapter Settings](https://www.intel.com/content/www/us/en/support/articles/000005585/network-and-i-o/wireless.html)
+**NOTE:** This settings are universal, not always limited to specific hardware vendor:
+
+* [Advanced Intel Wireless Adapter Settings](https://www.intel.com/content/www/us/en/support/articles/000005585/network-and-i-o/wireless.html)
 * [ADVANCED NETWORK ADAPTER DRIVER SETTINGS](http://techgenix.com/advanced-network-adapter-driver-settings/)
 * [Resolving Issues with Energy Efficient Ethernet (EEE) or Green Ethernet](https://www.dell.com/support/article/en-hr/sln79684/resolving-issues-with-energy-efficient-ethernet-eee-or-green-ethernet?lang=en)
 * [Optimal setting for advanced parameters for Realtek PCI-e GBE family network card](https://superuser.com/questions/853500/optimal-setting-for-advanced-parameters-for-realtek-pci-e-gbe-family-network-car)
@@ -236,8 +239,8 @@ Restarting router is recommended to check if new configuration makes any differe
 
 ## I have game multiplayer issues
 
-If your problem is MMO gaming (online multiplayer), LAN multiplayer, hotseat and similar you must make sure
-your router NAT translation is properly configured.
+If your problem is MMO gaming (online multiplayer), LAN multiplayer, [Hotseat](https://en.wikipedia.org/wiki/Hotseat_(multiplayer_mode))
+and similar then you must make sure your router NAT translation is properly configured.
 
 Log in to your router and find "NAT" settings, possible options are:
 
