@@ -5,13 +5,14 @@ There are many ways to get stuck with networking, other documentation in this pr
 on how to work with or troubleshoot firewall, but here the aim is to make troubleshooting other
 network related problems in detail.
 
-It covers wide area of network problems.
+It covers wide area of network problems and is based on [Process of elimination](https://en.wikipedia.org/wiki/Process_of_elimination)
+meaning you go step by step and isolating each area making it less probable to be the cause of an issue.
 
-This are the most basic troubleshooting procedures one should always perform when stuck.
+This are the most basic troubleshooting procedures one should always perform when facing network issues.
 
 ## Open up PowerShell
 
-Press `Windows key + X` then click on Windows PowerShell (Admin)
+Press `Windows key + X` then click on "Windows PowerShell (Admin)"
 
 ## First clear DNS cache to isolate that problem
 
@@ -60,7 +61,7 @@ Now see if route to router is working by pinging address from your output:
 ping 192.168.8.1 >> $home\Desktop\ping.txt
 ```
 
-You may also want to ping other computer on your local network, to find out their IP,\
+You may also want to ping other computers on your local network, to find out their IP,\
 login to computer in question and run `ipconfig /all` on that computer, then look for
 address at field that say:
 
@@ -132,12 +133,21 @@ Test-NetConnection google.com -traceroute
 Test-NetConnection microsoft.com -traceroute
 ```
 
+Alternative way to run trace route is:
+
+```powershell
+tracert google.com
+tracert microsoft.com
+```
+
+**NOTE:** Some sites (such as microsoft) drop ICMP packets, so make sure to test multiple sites.
+
 ## Disable firewall
 
 If nothing so far worked disable firewall and try all over again.\
 If things start to work it's likely misconfigured firewall.
 
-See below link on how to disable both GPO and Control Panel firewall:
+See below link on how to disable both GPO and Control Panel firewall:\
 [Disable Firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/DisableFirewall.md)
 
 **NOTE:** If you experience this problem only while having firewall enabled from this project,
@@ -159,7 +169,7 @@ or run:
 Get-NetAdapter
 ```
 
-Alternative way to disable/enable adapter is in control panel at:\
+Alternative way to disable/enable adapter is in control panel at:
 
 `Control Panel\All Control Panel Items\Network and Sharing Center`\
 Click on `Change Adapter Settings`, right click your adapter that is having problem,
@@ -177,7 +187,7 @@ google DNS:
 Usually some routers if not restarted often will stuck and cause slow internet or loss of network
 completely.
 
-Restart your router, and if that doesn't work you can also try reset it to factory defaults.
+Restart your router, and if that doesn't work you can also try reset it to factory defaults.\
 Resetting to factory defaults is done by pushing a toothpick or something like that into a tinny
 hole in the router.
 
@@ -206,7 +216,7 @@ See if your ISP can install you optic cable into your house, and for what price.
 
 ## Perform LAN speed test
 
-If your network speed is slow and related only to local network (ex. between computer behind router),
+If your network speed is slow and related only to local network (ex. between computers behind router),
 you can test LAN speed with tool called NetIO:
 
 [NetIO-GUI](https://sourceforge.net/projects/netiogui)
@@ -249,7 +259,7 @@ Restarting router is recommended to check if new configuration makes any differe
 ## I have game multiplayer issues
 
 If your problem is MMO gaming (online multiplayer), LAN multiplayer, [Hotseat](https://en.wikipedia.org/wiki/Hotseat_(multiplayer_mode))
-and similar then you must make sure your router NAT translation is properly configured.
+and similar then you must make sure your router NAT settings are properly configured.
 
 Log in to your router and find "NAT" settings, possible options are:
 
@@ -308,7 +318,7 @@ You want to make sure your younger brother or sister doesn't have fun with you!
 
 Visit this folder: `C:\Windows\System32\drivers\etc`
 
-Open `hosts` file with notepad or some other text editor and make sure all lines begin with hash "#"
+Open `hosts` file with notepad or some other text editor and make sure all lines begin with hash "#"\
 If any lines doesn't begin with hash, then either add hash to those lines or delete entry.
 
 ## Firewall issue
@@ -321,7 +331,7 @@ To troubleshoot firewall take a look at:
 
 ## Troubleshoot or reinstall Windows
 
-First see recovery options in Windows 10:
+First see recovery options in Windows 10, you may be able to recover your system to previous good state.
 
 [Recovery options in Windows 10](https://support.microsoft.com/en-us/help/12415/windows-10-recovery-options)
 
@@ -340,4 +350,4 @@ To get good support in forums make sure you provide as much details as you can, 
 2. Your operating system version, detailed hardware and driver info
 3. hardware information on your network such as routers, modems, cables etc.
 4. Description of things you did prior to your problem.
-5. Make it short and to the point, nobody likes to read long posts.
+5. Make it short and to the point, nobody likes to read long posts!
