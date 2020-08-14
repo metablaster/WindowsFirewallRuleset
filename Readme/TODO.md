@@ -53,6 +53,7 @@ TODO's in this file are categorized into following sections:
     - Change bool parameters to switch where possible
     - Revisit naming convention for ConvertFrom/ConvertTo it's not clear what is being converted,
     some other functions also have odd names
+    - Versioning of module should be separate from project versioning
 
 2. Project scripts
 
@@ -103,6 +104,8 @@ TODO's in this file are categorized into following sections:
     - Write-Error will fail is -TargetObject is not set, in cases where this is possible we should
     supply string instead.
     See ComputerInfo\Get-ConfiguredAdapter for example
+    - 3rd party modules are not consistent with our own modules regarding folder and structure and
+    high level implementation
 
 2. Project scripts
 

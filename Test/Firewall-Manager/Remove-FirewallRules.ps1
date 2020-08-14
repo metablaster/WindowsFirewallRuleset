@@ -51,6 +51,8 @@ Start-Test
 
 $Exports = "$ProjectRoot\Exports"
 
+# TODO: need to test failure cases, see also module todo's for more info
+
 New-Test "Remove-FirewallRules"
 Remove-FirewallRules -Folder $Exports -FileName "GroupExport" @Logs
 

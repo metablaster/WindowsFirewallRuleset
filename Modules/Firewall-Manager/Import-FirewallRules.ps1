@@ -187,6 +187,7 @@ Changes by metablaster:
 3. Separated functions into their own scope
 4. Added function to decode string into multi line
 5. Added parameter to let specify directory
+6. Added more output streams for debug, verbose and info
 TODO: maybe importing only specific rules from file?
 TODO: maybe skip importing rules that already exist?
 .EXAMPLE

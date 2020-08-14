@@ -49,7 +49,9 @@ Changes by metablaster:
 1. Applied formatting and code style according to project rules
 2. Added parameter to target specific policy store
 3. Added parameter to let specify directory
+4. Added more output streams for debug, verbose and info
 TODO: maybe removing only specific rules from file?
+TODO: implement removing rule not according to file
 .EXAMPLE
 Remove-FirewallRules
 Removes all firewall rules according to a list in the CSV file FirewallRules.csv in the current directory.

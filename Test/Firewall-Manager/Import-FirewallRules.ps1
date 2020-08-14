@@ -51,6 +51,8 @@ Start-Test
 
 $Exports = "$ProjectRoot\Exports"
 
+# TODO: need to test failure cases, see also module todo's for more info
+
 New-Test "Import-FirewallRules"
 Import-FirewallRules -Folder $Exports -FileName "GroupExport.csv" @Logs
 

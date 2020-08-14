@@ -164,6 +164,7 @@ Changes by metablaster:
 4. Added function to decode string into multi line
 5. Added parameter to target specific policy store
 6. Added parameter to let specify directory, and crate it if it doesn't exist
+7. Added more output streams for debug, verbose and info
 .EXAMPLE
 Export-FirewallRules
 Exports all firewall rules to the CSV file FirewallRules.csv in the current directory.

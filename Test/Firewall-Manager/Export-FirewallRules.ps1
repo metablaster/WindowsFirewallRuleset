@@ -50,6 +50,8 @@ Start-Test
 
 $Exports = "$ProjectRoot\Exports"
 
+# TODO: need to test failure cases, see also module todo's for more info
+
 New-Test "Export-FirewallRules -DisplayGroup"
 Export-FirewallRules -DisplayGroup "Broadcast" -Outbound -Folder $Exports -FileName "GroupExport" @Logs
 
