@@ -26,6 +26,19 @@ make sure they are running:
 2. Server (LanmanServer)
 3. TCP/IP NetBIOS Helper service (lmhosts)
 
+If this doesn't work verify the command you are using, for example following command tries to get
+firewall rules from GPO and will produce this problem:
+
+```powershell
+Get-NetFirewallRule -PolicyStore [system.environment]::MachineName
+```
+
+To fix the problem modify this sample command to this and it should work just fine:
+
+```powershell
+Get-NetFirewallRule -PolicyStore $([system.environment]::MachineName)
+```
+
 ## There is no output, the script hangs and stays blank until "Enter" is pressed
 
 This is for sure a bug, the script is waiting for input but it's not known for what exactly,

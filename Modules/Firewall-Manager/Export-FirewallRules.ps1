@@ -2,7 +2,11 @@
 <#
 MIT License
 
+Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems
+Homepage: https://github.com/metablaster/WindowsFirewallRuleset
+
 Copyright (C) 2020 Markus Scholtes
+Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -165,6 +169,9 @@ Changes by metablaster:
 5. Added parameter to target specific policy store
 6. Added parameter to let specify directory, and crate it if it doesn't exist
 7. Added more output streams for debug, verbose and info
+8. Added parameter to export according to rule group
+9. Changed minor flow and logic of execution
+10. Make output formatted and colored
 .EXAMPLE
 Export-FirewallRules
 Exports all firewall rules to the CSV file FirewallRules.csv in the current directory.
@@ -225,6 +232,7 @@ function Export-FirewallRules
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting up variables"
 
 	# Filter rules?
+	# NOTE: because there are 3 possibilities for each of below switches we use -like operator
 	# Filter by direction
 	$Direction = "*"
 	if ($Inbound -and !$Outbound) { $Direction = "Inbound" }
@@ -241,10 +249,20 @@ function Export-FirewallRules
 	if (!$Allow -and $Block) { $Action = "Block" }
 
 	# read firewall rules
-	# TODO: this will fail if rule name not found, need pretty info output
-	if ($DisplayGroup -eq "*")
+	# NOTE: getting rules may fail for multiple reasons, there is no point to handle errors here
+	if ($DisplayGroup -eq "")
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting by DisplayName"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting rules - skip grouped rules"
+
+		$FirewallRules = Get-NetFirewallRule -DisplayName $DisplayName -PolicyStore $PolicyStore |
+		Where-Object {
+			$_.DisplayGroup -Like $DisplayGroup -and $_.Direction -like $Direction `
+				-and $_.Enabled -like $RuleState -and $_.Action -like $Action
+		}
+	}
+	elseif ($DisplayGroup -eq "*")
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting rules"
 
 		$FirewallRules = Get-NetFirewallRule -DisplayName $DisplayName -PolicyStore $PolicyStore |
 		Where-Object {
@@ -253,12 +271,20 @@ function Export-FirewallRules
 	}
 	else
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting by DisplayGroup"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting rules - skip ungrouped rules"
 
-		$FirewallRules = Get-NetFirewallRule -DisplayGroup $DisplayGroup -PolicyStore $PolicyStore |
+		$FirewallRules = Get-NetFirewallRule -DisplayName $DisplayName `
+			-DisplayGroup $DisplayGroup -PolicyStore $PolicyStore |
 		Where-Object {
 			$_.Direction -like $Direction -and $_.Enabled -like $RuleState -and $_.Action -like $Action
 		}
+	}
+
+	if (!$FirewallRules)
+	{
+		Write-Warning -Message "No rules were retrieved from firewall to export"
+		Write-Information -Tags "User" -MessageData "INFO: possible cause is either no match or an error ocurred"
+		return
 	}
 
 	# start array of rules
@@ -268,7 +294,14 @@ function Export-FirewallRules
 	foreach ($Rule In $FirewallRules)
 	{
 		# iterate through rules
-		Write-Host "Export Rule: [$($Rule | Select-Object -ExpandProperty Group)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
+		if ($Rule.Group -like "")
+		{
+			Write-Host "Export Rule: [Ungrouped Rule] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
+		}
+		else
+		{
+			Write-Host "Export Rule: [$($Rule | Select-Object -ExpandProperty Group)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
+		}
 
 		# Retrieve addresses,
 		$AddressFilter = $Rule | Get-NetFirewallAddressFilter

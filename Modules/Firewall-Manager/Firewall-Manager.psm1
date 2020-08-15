@@ -2,7 +2,11 @@
 <#
 MIT License
 
+Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems
+Homepage: https://github.com/metablaster/WindowsFirewallRuleset
+
 Copyright (C) 2020 Markus Scholtes
+Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -60,6 +64,10 @@ Firewall-Manager is a module to manage firewall rules.
 Version: 1.0.2
 Date: 2020-02-17
 Author: Markus Scholtes
+
+Changes by metablaster:
+1. Added preference variables to be in line with the rest of project
+2. Included module which is used in imported scripts
 #>
 
 # Load modules manually for security reasons

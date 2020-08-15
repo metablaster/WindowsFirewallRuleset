@@ -2,7 +2,11 @@
 <#
 MIT License
 
+Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems
+Homepage: https://github.com/metablaster/WindowsFirewallRuleset
+
 Copyright (C) 2020 Markus Scholtes
+Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -50,8 +54,9 @@ Changes by metablaster:
 2. Added parameter to target specific policy store
 3. Added parameter to let specify directory
 4. Added more output streams for debug, verbose and info
-TODO: maybe removing only specific rules from file?
-TODO: implement removing rule not according to file
+5. Make output formatted and colored
+6. Changed minor flow of execution
+TODO: implement removing rules not according to file
 .EXAMPLE
 Remove-FirewallRules
 Removes all firewall rules according to a list in the CSV file FirewallRules.csv in the current directory.

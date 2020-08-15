@@ -53,7 +53,13 @@ $Exports = "$ProjectRoot\Exports"
 # TODO: need to test failure cases, see also module todo's for more info
 
 New-Test "Export-FirewallRules -DisplayGroup"
-Export-FirewallRules -DisplayGroup "Broadcast" -Outbound -Folder $Exports -FileName "GroupExport" @Logs
+Export-FirewallRules -DisplayGroup "" -Outbound -Folder $Exports -FileName "GroupExport" @Logs # -DisplayName "Gwent"
+
+# New-Test "Export-FirewallRules -DisplayGroup"
+# Export-FirewallRules -DisplayGroup "Broadcast" -Outbound -Folder $Exports -FileName "GroupExport" @Logs
+
+# New-Test "Export-FirewallRules -DisplayName NONEXISTENT"
+# Export-FirewallRules -DisplayName "NONEXISTENT" -Folder $Exports -FileName "NamedExport1" @Logs
 
 # New-Test "Export-FirewallRules -DisplayName"
 # Export-FirewallRules -DisplayName "Domain Name System" -Folder $Exports -FileName "NamedExport1" @Logs

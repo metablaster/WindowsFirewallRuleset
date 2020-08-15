@@ -2,7 +2,11 @@
 <#
 MIT License
 
+Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems
+Homepage: https://github.com/metablaster/WindowsFirewallRuleset
+
 Copyright (C) 2020 Markus Scholtes
+Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -188,8 +192,8 @@ Changes by metablaster:
 4. Added function to decode string into multi line
 5. Added parameter to let specify directory
 6. Added more output streams for debug, verbose and info
-TODO: maybe importing only specific rules from file?
-TODO: maybe skip importing rules that already exist?
+7. Changed minor flow and logic of execution
+8. Make output formatted and colored
 .EXAMPLE
 Import-FirewallRules
 Imports all firewall rules in the CSV file FirewallRules.csv
@@ -286,8 +290,17 @@ function Import-FirewallRules
 		if (![string]::IsNullOrEmpty($Rule.Package)) { $RuleSplatHash.Package = $Rule.Package }
 
 		# remove rule if present
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if rule exists"
-		Remove-NetFirewallRule -Name $Rule.Name -PolicyStore $PolicyStore -ErrorAction SilentlyContinue
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if rule exists"
+
+		try
+		{
+			Remove-NetFirewallRule -Name $Rule.Name -PolicyStore $PolicyStore
+			Write-Information -MessageData "INFO: Replacing existing rule"
+		}
+		catch
+		{
+			Write-Debug -Tags "User" -Message "[$($MyInvocation.InvocationName)] Not replacing rule"
+		}
 
 		# generate new firewall rule, parameters are assigned with splatting
 		New-NetFirewallRule -PolicyStore $PolicyStore @RuleSplatHash | Format-Output -Label "Import Rule"

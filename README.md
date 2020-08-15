@@ -242,10 +242,10 @@ some rules, rules for programs which do not exist need to be made additionally.
 
 15. If you're unable to connect to internet after applying these rules you have several options:
 
-* you can temporarily open outbound firewall in GPO or [disable firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/DisableFirewall.md)
-* you can troubleshoot problems as explained [HERE](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/NetworkTroubleshooting.md)
-* reset firewall as explained [HERE](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/ResetFirewall.md)
-* take a look into `Readme` folder for more troubleshooting options
+- you can temporarily open outbound firewall in GPO or [Disable firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/DisableFirewall.md)
+- you can troubleshoot problems: [Network troubleshooting detailed guide](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/NetworkTroubleshooting.md)
+- you can [Reset Firewall to previous state](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/ResetFirewall.md)
+- take a look into `Readme` folder for more troubleshooting options
 
 ## Where are my rules?
 
@@ -296,7 +296,7 @@ Note that you will also need to re-import your exported GPO rules if you had the
 There are 2 ways to manage your rules:
 
 1. Using Local Group Policy, this method gives you basic freedom on what you can do with the rules,
-such as disabling them or changing some attributes. For more information see
+such as disabling them or changing some attributes and adding new rules. For more information see
 [ManageGPOFirewall.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/ManageGPOFirewall.md)
 2. Editing Powershell scripts, this method gives you full control, you can improve the rules,
 add new ones or screw them up.
@@ -306,18 +306,19 @@ in GPO to allow programs for which rules do not exist, or to reconfigure existin
 
 ## Checking for updates
 
-This repository consists of 2 branches, `master` and `develop`, develop (unstable) branch is
-the most recent one and is the one where all commits (updates) directly go so it's beta product,
+This repository consists of 2 branches, `master` and `develop`, develop (possibly unstable) branch is
+the most recent one and is the one where all commits (updates) directly go so it's work in progress,
 unlike master branch which is updated from develop branch once in a while and
 not before all scripts are fully tested, meaning master brach is stable.
 
-So if you're fine to experiment with development/beta version switch to "develop" branch and try
-it out, otherwise stick to master if for example development version produces errors for you.
+So if you're fine to experiment with development version switch to "develop" branch and try
+it out, otherwise stick to master for example if development version produces errors for you.
 
 There are two methods to be up to date with firewall:
 
 1. First method requires you to download scripts, first use the "branch" button here on this site to
-switch to either master or develop branch, next use "Clone or download" button and download zip file.
+switch to either master or develop branch, next use "Clone or download" button and either clone or
+download project.
 
 2. Second method is good if you want to do it in powershell console without visiting this site,
 you will need git (link above), github account, a fork of this repository in your account and optionally
@@ -346,14 +347,15 @@ to tell git you want updates from master (stable) branch:
 - Type: ```git fetch upstream```
 - Type: ```git merge upstream/master```
 
-- Following commands are to tell git you want updates from develop (unstable/beta) branch
+- Following commands are to tell git you want updates from develop (possibly unstable) branch
 - Type: ```git checkout develop```
 - Type: ```git fetch upstream```
 - Type: ```git merge upstream/develop```
 
-Of course you can switch to from one branch to another with git in powershell as many times as you
-want and all files will be auto updated without the need to re-download or re-setup anything,
-for more info see [git documentation](https://git-scm.com/doc)
+Of course you can switch from one branch to another with git in powershell as many times as you
+want and all files will be auto updated without the need to re-download or re-setup anything.
+
+Keep in mind that you need to save and upload your modification yourself, for more info see [git documentation](https://git-scm.com/doc)
 
 That's it, your scripts are now up to date, execute them as you desire (or follow steps from
 "Quick start" section) to apply changes to your firewall.

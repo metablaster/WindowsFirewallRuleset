@@ -28,7 +28,10 @@
 	# CompanyName = 'Unknown'
 
 	# Copyright statement for this module
-	Copyright = '(C) Markus Scholtes 2020'
+	Copyright = @'
+Copyright (C) Markus Scholtes 2020
+Copyright (C) 2020 metablaster zebal@protonmail.ch
+'@
 
 	# Description of the functionality provided by this module
 	Description = @'
