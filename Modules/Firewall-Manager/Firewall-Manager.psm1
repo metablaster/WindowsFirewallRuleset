@@ -30,6 +30,9 @@ SOFTWARE.
 Set-StrictMode -Version Latest
 Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
+# Includes
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+
 #
 # Module preferences
 #
@@ -65,7 +68,7 @@ Version: 1.0.2
 Date: 2020-02-17
 Author: Markus Scholtes
 
-Changes by metablaster:
+Changes by metablaster - August 2020:
 1. Added preference variables to be in line with the rest of project
 2. Included module which is used in imported scripts
 #>

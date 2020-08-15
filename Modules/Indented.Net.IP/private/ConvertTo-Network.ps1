@@ -1,14 +1,14 @@
 
 <#
-Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems
-Homepage: https://github.com/metablaster/WindowsFirewallRuleset
-
 NOTE: This file has been sublicensed by metablaster zebal@protonmail.ch
 under a dual license of the MIT license AND the ISC license, see both licenses below
 #>
 
 <#
 MIT License
+
+Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems
+Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

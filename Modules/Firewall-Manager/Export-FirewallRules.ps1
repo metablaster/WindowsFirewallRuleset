@@ -161,7 +161,7 @@ Author: Markus Scholtes
 Version: 1.02
 Build date: 2020/02/15
 
-Changes by metablaster:
+Changes by metablaster - August 2020:
 1. Applied formatting and code style according to project rules
 2. Added switch to optionally append instead of replacing output file
 3. Separated functions into their own scope

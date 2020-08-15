@@ -6,7 +6,7 @@ Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
 Copyright (C) 2016 Warren Frame
-Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
+Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -50,7 +50,7 @@ TODO: Need to handle more NT AUTHORITY, PACKAGE AUTHORITY, USER MODE DRIVERS use
 probably defined as a separate variable in addition to WellKnownSIDs
 TODO: need to improve to have consistent output ie. exactly DOMAIN\USER, see test results
 
-Changes by metablaster:
+Changes by metablaster year 2020:
 add verbose and debug output
 remove try and empty catch by setting better approach
 rename parameter
