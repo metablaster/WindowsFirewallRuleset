@@ -21,7 +21,7 @@ By Markus Scholtes, 2020
 PS C:\> Install-Module Firewall-Manager
 ```
 
-(on Powershell V4 you may have to install PowershellGet before) or download from here:
+(on Powershell V4 you might have to install PowershellGet before) or download from here:
 https://www.powershellgallery.com/packages/Firewall-Manager
 
 See the script version web page too:

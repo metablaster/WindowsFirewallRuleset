@@ -88,7 +88,7 @@ that includes "regular" Windows, Servers etc.
 - NET Framework 3.5 is automatically installed on Windows, to make sure you have
 [.NET 3.5 enabled](https://docs.microsoft.com/en-us/dotnet/framework/install/dotnet-35-windows-10),
 see control panel option on that link.
-- You may want to have git to check out for updates,
+- You might want to have git to check out for updates,
 to easily switch between branches or to contribute code.
 - VS Code is preferred and recommended editor to navigate project and edit the scripts for your
 needs or for contribution, any other editor is of course your choice.
@@ -115,7 +115,7 @@ describes how to make use of this project on older Windows systems such as Windo
 
 **WARNING:**
 
-- You may loose internet connectivity for some of your programs or in rare cases even lose internet
+- You might loose internet connectivity for some of your programs or in rare cases even lose internet
 connectivity completely, if that happens, you can either temporarily allow outbound rules or run
 `ResetFirewall.ps1` script, to reset GPO firewall to system defaults and remove all rules.
 - Inside `Readme` folder there is a `ResetFirewall.md`, a guide on how to do it manually, by hand,
@@ -142,7 +142,7 @@ which are used for this.
 - If you're running scripts for the first time it's highly recommended to load all rules for which you
 have programs installed on system,
 it should be easy to delete what you do not want in GPO, rather than later searching scripts for
-what you may have missed.
+what you might have missed.
 - Loading rules into an empty GPO should be very fast, however loading into GPO which already
 contains rules will be significantly slower (depends on number of existing rules)
 - All errors and warnings will be saved to `Logs` directory, so you can review these logs if you
@@ -158,8 +158,11 @@ will still be visible in that case.
 - It's important to understand these rules are designed to be used as "Standard" user, not as
 Administrative user, if you're Administrator on your computer you'll have to create standard user
 account and use that for your everyday life.
-See [FAQ](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/FAQ.md) for more
-information why using Administrative account is dangerous security wise.
+See [FAQ](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/FAQ.md#does-this-firewall-give-me-the-right-protection)
+for more information why using Administrative account is dangerous security wise.
+- Windows or software updates may rename executables, also user accounts may be renamed by Administrator
+therefore it's important to reload rules from time to time as needed to update firewall for system
+changes that may happen at any time.
 
 **STEPS:**
 
@@ -220,7 +223,7 @@ If needed, you can find these installation variables in individual scripts insid
 
 hit enter and you will be prompted what kind of rulesets you want.
 
-11. Follow prompt output, (ie. hit enter each time to proceed until done),
+11. Follow prompt output, (ex. hit enter to accept default action),
 it will take at least 10 minutes of your attention.
 
 12. If you encounter errors or warnings, you have several options such as, ignore the errors/warnings
@@ -233,13 +236,16 @@ or update script that produced the error and re-run that script once again later
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force
 ```
 
-14. Now that rules are applied you may need to adjust some of them in Local Group Policy,
-not all the rules are enabled by default and you may want to toggle default Allow/Block behavior for
+14. Now that rules are applied you might need to adjust some of them in Local Group Policy,
+not all the rules are enabled by default and you might want to toggle default Allow/Block behavior for
 some rules, rules for programs which do not exist need to be made additionally.
 
-15. If you're unable to connect to internet, you can temporarily open outbound firewall in GPO,
-that should work, if not and you're unable to troubleshoot the problem,
-then reset firewall as explained before and take a look into `Readme` folder.
+15. If you're unable to connect to internet after applying these rules you have several options:
+
+* you can temporarily open outbound firewall in GPO or [disable firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/DisableFirewall.md)
+* you can troubleshoot problems as explained [HERE](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/NetworkTroubleshooting.md)
+* reset firewall as explained [HERE](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/ResetFirewall.md)
+* take a look into `Readme` folder for more troubleshooting options
 
 ## Where are my rules?
 
@@ -249,20 +255,20 @@ Rules are loaded into Local group policy, follow below steps to open local group
 2. Right click on `secpol.msc` and click `Run as administrator`
 3. Expand node: `Windows Defender Firewall with Advanced Security`
 4. Expand node: `Windows Defender Firewall with Advanced Security - Local Group Policy Object`
-5. Click on either `Inbound` or `Outbound` node to view and manage the rules
-you applied with Powershell script.
+5. Click on either `Inbound` or `Outbound` node to view and manage rules you applied with Powershell
+script.
 
 ## Applying individual rulesets
 
 If you want to apply only specific rules there are 2 ways to do this:
 
-1. Execute `SetupFirewall.ps1` and hit enter only for rulesets you want, otherwise type `N`
+1. Execute `SetupFirewall.ps1` and chose `Yes` only for rulesets you want, otherwise chose `No`
 and hit enter to skip current ruleset.
 
 2. Inside powershell navigate to folder containing the ruleset script you want,
 and execute individual Powershell script.
 
-3. You may want to run `SetupProfile.ps1` to apply default firewall behavior if it's not set
+3. You might want to run `SetupProfile.ps1` to apply default firewall behavior if it's not set
 already, or you can do it manually in GPO but with limited power.
 "limited power" means `SetupProfile.ps1` configures some firewall parameters which can't be
 adjusted in firewall GUI.
@@ -382,7 +388,7 @@ Inside the [Readme](https://github.com/metablaster/WindowsFirewallRuleset/tree/m
 folder you will find useful information not only about this project but also general information on
 how to troubleshoot firewall and network problems, or gather more relevant information.
 
-It may answer some of your questions, for example
+It might answer some of your questions, for example
 [MonitoringFirewall.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/MonitoringFirewall.md)
 explains how to monitor firewall in real time, you should go ahead and read it!\
 It's recommended you read those documents here on github because of formatting and screenshots.

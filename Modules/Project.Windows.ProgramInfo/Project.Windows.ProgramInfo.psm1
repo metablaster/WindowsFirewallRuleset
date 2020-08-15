@@ -1222,11 +1222,11 @@ function Update-Table
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching $($Principal.Account) programs for $SearchString"
 
-				# TODO: We handle OneDrive case here but there may more such programs in the future
+				# TODO: We handle OneDrive case here but there may be more such programs in the future
 				# so this obviously means we need better approach to handle this
 				if ($SearchString -ne "OneDrive")
 				{
-					# NOTE: the story is different here, each user may have multiple matches for search string
+					# NOTE: the story is different here, each user might have multiple matches for search string
 					# letting one match to have same principal would be mistake.
 					$UserPrograms = Get-UserSoftware $Principal.User | Where-Object -Property Name -Like "*$SearchString*"
 
@@ -2431,7 +2431,7 @@ function Get-SQLManagementStudio
 		if ([System.Environment]::Is64BitOperatingSystem)
 		{
 			# 64 bit system
-			# NOTE: in the far future this may need to be updated, if SSMS becomes x64 bit
+			# NOTE: in the far future this might need to be updated, if SSMS becomes x64 bit
 			$HKLM = "SOFTWARE\WOW6432Node\Microsoft\Microsoft SQL Server Management Studio"
 		}
 		else

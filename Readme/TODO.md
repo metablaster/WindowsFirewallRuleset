@@ -141,7 +141,7 @@ TODO's in this file are categorized into following sections:
     pester tests and experiment tests
     - What should be initial values for ProgramRoot variables in rule scripts? we should remove
     known non existent paths and handle empty strings to prevent INFO messages for conversion.
-    - Many test cases are local to our environment, other people may get different results
+    - Many test cases are local to our environment, other people might get different results
 
 5. Code style
 
@@ -155,6 +155,7 @@ TODO's in this file are categorized into following sections:
     - a lot of comment based documentation is missing comments
     - FirewallParameters.md contains missing mapping
     - FirewallParameters.md contains no info about compartments and IPSec setup
+    - Universal and quick setup to install all required modules for all shells and users.
 
 7. Other
     - Some cmdlets take encoding parameter, we should probably have a variable to specify encoding

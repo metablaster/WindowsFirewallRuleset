@@ -6,7 +6,7 @@ This document explains how to monitor Windows firewall activity and network acti
 
 ## Monitor your firewall like a pro
 
-As you may already know, Windows firewall does not give us any easy to use tools to monitor
+As you might already know, Windows firewall does not give us any easy to use tools to monitor
 what the firewall is doing.\
 However there are few programs and techniques available to monitor firewall activity in live.
 
@@ -36,7 +36,7 @@ click on image to enlarge!
 ![Alternate text](https://i.imgur.com/wNtDw8D.png)
 - Inside the "Config" folder you will find process monitor configuration specialized for firewall
 monitoring which you can import into your copy of process monitor.
-- Note that configuration filters some network traffic which you may want to be able to see,
+- Note that configuration filters some network traffic which you might want to be able to see,
 click on filter options to disable specific filters or add new ones.
 
 - [Download process monitor](https://docs.microsoft.com/en-us/sysinternals/downloads/procmon)

@@ -61,7 +61,7 @@ Now see if route to router is working by pinging address from your output:
 ping 192.168.8.1 >> $home\Desktop\ping.txt
 ```
 
-You may also want to ping other computers on your local network, to find out their IP,\
+You might also want to ping other computers on your local network, to find out their IP,\
 login to computer in question and run `ipconfig /all` on that computer, then look for
 address at field that say:
 
@@ -209,7 +209,7 @@ If you're having problem with slow connection, visit below link to perform netwo
 
 [Internet speed test](https://www.speedtest.net)
 
-Try different servers to see if there is a difference, you may need to contact your ISP and
+Try different servers to see if there is a difference, you might need to contact your ISP and
 ask them how much it will cost to get faster internet. (more pay = faster)
 
 See if your ISP can install you optic cable into your house, and for what price.
@@ -228,7 +228,7 @@ make sure to verify other devices on your network work properly (ex. no internet
 
 Which means something is wrong with your operating system or adapter.
 
-You may want to boot linux live ISO to make sure your adapter or operating system is not faulty.
+You might want to boot linux live ISO to make sure your adapter or operating system is not faulty.
 
 ## Change adapter properties
 
@@ -292,7 +292,7 @@ tell you what is going on:
 2. type into search box `troubleshoot` and select `troubleshoot settings`
 3. click on `additional troubleshooters`
 4. here you'll find several network troubleshooters, run them all.
-5. If problem is not fixed right away you may need to reboot system
+5. If problem is not fixed right away you might need to reboot system
 
 On another systems, alternative way is:
 
@@ -300,7 +300,7 @@ On another systems, alternative way is:
 2. Click on "Troubleshoot problems"
 3. depending on your system choose different options to troubleshoot problems.
 4. what you are looking for is "Network reset" and "Diagnose problems"
-5. If problem is not fixed right away you may need to reboot system
+5. If problem is not fixed right away you might need to reboot system
 
 ## Look at IP route information
 
@@ -329,9 +329,35 @@ To troubleshoot firewall take a look at:
 * [Problematic traffic](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/ProblematicTraffic.md)
 * [Rest of documentation](https://github.com/metablaster/WindowsFirewallRuleset/tree/develop/Readme)
 
+## Check for Windows Auto-Tuning
+
+Windows Auto-Tuning was designed to automatically improve the performance for programs that receive
+TCP data over a network.
+
+To see current setting run:
+
+```powershell
+netsh interface tcp show global
+```
+
+Windows Auto-Tuning should be enabled and left alone unless you have a router, WI-Fi, network card,
+or a firewall that does not support this feature.
+
+To disable setting run:
+
+```powershell
+netsh int tcp set global autotuninglevel=disabled
+```
+
+To enable setting run:
+
+```powershell
+netsh int tcp set global autotuninglevel=normal
+```
+
 ## Troubleshoot or reinstall Windows
 
-First see recovery options in Windows 10, you may be able to recover your system to previous good state.
+First see recovery options in Windows 10, you might be able to recover your system to previous good state.
 
 [Recovery options in Windows 10](https://support.microsoft.com/en-us/help/12415/windows-10-recovery-options)
 

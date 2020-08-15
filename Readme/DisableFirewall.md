@@ -28,7 +28,7 @@ To do this follow below steps:
 6. Select properties
 7. There are 3 tabs: "Domain", "Private" and "Public"
 8. Set "Firewall state" to "Off" for all 3 profiles and click "Apply" for each
-9. You may need to reboot system if the effect is not immediate.
+9. You might need to reboot system if the effect is not immediate.
 
 ## Disable firewall in control panel
 
@@ -74,4 +74,4 @@ If you want to make sure both GPO and control panel firewalls are disabled follo
 steps but under section\
 "Disable firewall in control panel" chose second steps that says "Disabling it in control panel"
 
-You may need to reboot system if effect is not immediate.
+You might need to reboot system if effect is not immediate.

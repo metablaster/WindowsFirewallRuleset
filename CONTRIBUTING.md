@@ -15,7 +15,7 @@ Below 2 pages explain general/starting guidelines regarding open source:\
 First step is to fork a project:\
 [Forking projects](https://guides.github.com/activities/forking)
 
-Next if needed, you may want to set up your SSH keys (don't actually do it yet):\
+Next if needed, you might want to set up your SSH keys (don't actually do it yet):\
 [Connecting to GitHub with SSH](https://help.github.com/en/enterprise/2.20/user/github/authenticating-to-github/connecting-to-github-with-ssh)
 
 The reason why not to set up SSH keys right away is because for PowerShell I made this tutorial:\
@@ -130,7 +130,7 @@ then try again and keep repeating until OK.
 Sections of code should be documented as shown in existing scripts.\
 To comment on things that need to be done add "TODO:" + comment,
 similarly for notes add "NOTE:" + comment.\
-For any generic comments you may want to add/use line comments (preferred) and
+For any generic comments you might want to add/use line comments (preferred) and
 block comments only if comment is big.
 
 Provide documentation and official reference for your rules so that it can be easy to verify that

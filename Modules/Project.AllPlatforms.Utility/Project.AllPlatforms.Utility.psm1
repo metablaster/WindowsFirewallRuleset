@@ -419,7 +419,7 @@ function Format-Output
 .SYNOPSIS
 Set vertical screen buffer to recommended value
 .DESCRIPTION
-In some cases, depending on project settings a user may need larger buffer
+In some cases, depending on project settings a user might need larger buffer
 to preserve all the output in the console for review and scroll back.
 .EXAMPLE
 Set-ScreenBuffer
