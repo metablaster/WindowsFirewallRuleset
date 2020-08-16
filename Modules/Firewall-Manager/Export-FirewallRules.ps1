@@ -379,7 +379,7 @@ function Export-FirewallRules
 		if ($Append)
 		{
 			# TODO: need to implement appending to JSON
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] Appending to JSON not implemented"
+			Write-Warning -Message "Appending to JSON not implemented"
 			$FirewallRuleSet | ConvertTo-Json | Set-Content "$Folder\$FileName" -Encoding utf8
 		}
 		else
@@ -410,7 +410,7 @@ function Export-FirewallRules
 			}
 			else
 			{
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] Not appending because no existing file"
+				Write-Warning -Message "Not appending rule to file because no existing file"
 			}
 		}
 
@@ -419,5 +419,5 @@ function Export-FirewallRules
 		Set-Content "$Folder\$FileName" -Encoding utf8
 	}
 
-	Write-Information -Tags "User" -MessageData "INFO: Exporting firewall rules done"
+	Write-Information -Tags "User" -MessageData "INFO: Exporting firewall rules into: '$FileName' done"
 }

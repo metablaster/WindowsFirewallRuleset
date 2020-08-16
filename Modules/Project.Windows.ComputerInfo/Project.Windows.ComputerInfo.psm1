@@ -30,7 +30,7 @@ Set-StrictMode -Version Latest
 Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
 # Includes
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule $true
 
 #
 # Module preferences
@@ -57,7 +57,7 @@ else
 }
 
 # Includes
-Import-Module -Name $PSScriptRoot\..\Indented.Net.IP
+Import-Module -Scope Global -Name $ProjectRoot\Modules\Indented.Net.IP
 
 <#
 .SYNOPSIS

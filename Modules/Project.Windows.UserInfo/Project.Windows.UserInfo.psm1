@@ -30,7 +30,7 @@ Set-StrictMode -Version Latest
 Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
 # Includes
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule $true
 
 #
 # Module preferences
@@ -225,6 +225,8 @@ function Get-GroupPrincipal
 
 				foreach ($Group in $UserGroups)
 				{
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing group: '$Group'"
+
 					# Querying local machine
 					$GroupUsers = Get-LocalGroupMember -Group $Group |
 					Where-Object { $_.PrincipalSource -eq "Local" -and $_.ObjectClass -eq "User" } |
@@ -232,7 +234,7 @@ function Get-GroupPrincipal
 
 					if ([string]::IsNullOrEmpty($GroupUsers))
 					{
-						Write-Warning -Message "User group '$Group' does not have any accounts on computer: $Computer"
+						Write-Warning -Message "User group: '$Group' does not have any accounts on computer: $Computer"
 						continue
 					}
 

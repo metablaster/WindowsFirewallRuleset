@@ -18,6 +18,8 @@
 ## Documentation
 
 - Added steps to disable firewall
+- Added steps for general network troubleshooting
+- Random spellchecks and minor updates
 
 # Changelog v0.5.0
 

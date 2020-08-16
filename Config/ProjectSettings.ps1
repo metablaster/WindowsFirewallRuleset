@@ -34,6 +34,12 @@ SOFTWARE.
 # 3. settings that apply to both use cases
 #
 
+# Must be the first statement in script
+param(
+	# modules must call this script with value of True
+	[bool] $InsideModule = $false
+)
+
 Set-StrictMode -Version Latest
 
 # Set to true to indicate development phase, it does following at a minimum:
@@ -104,19 +110,23 @@ if ($Develop)
 	Set-Variable -Name ModuleDebugPreference -Scope Global -Value $DebugPreference
 
 	#
-	# Remove loaded modules, useful for module debugging
-	# and to avoid restarting powershell every time.
+	# Remove loaded modules, useful for module debugging and to avoid restarting powershell every time.
 	#
 
-	Remove-Module -Name Project.AllPlatforms.System -ErrorAction Ignore
-	Remove-Module -Name Project.AllPlatforms.Test -ErrorAction Ignore
-	Remove-Module -Name Project.AllPlatforms.Logging -ErrorAction Ignore
-	Remove-Module -Name Project.AllPlatforms.Utility -ErrorAction Ignore
-	Remove-Module -Name Project.Windows.UserInfo -ErrorAction Ignore
-	Remove-Module -Name Project.Windows.ComputerInfo -ErrorAction Ignore
-	Remove-Module -Name Project.Windows.ProgramInfo -ErrorAction Ignore
-	Remove-Module -Name Firewall-Manager -ErrorAction Ignore
-	Remove-Module -Name Indented.Net.IP -ErrorAction Ignore
+	if (!$InsideModule)
+	{
+		# Skip removing modules if this script is called inside module which would
+		# cause removing modules prematurely
+		Remove-Module -Name Project.AllPlatforms.System -ErrorAction Ignore
+		Remove-Module -Name Project.AllPlatforms.Test -ErrorAction Ignore
+		Remove-Module -Name Project.AllPlatforms.Logging -ErrorAction Ignore
+		Remove-Module -Name Project.AllPlatforms.Utility -ErrorAction Ignore
+		Remove-Module -Name Project.Windows.UserInfo -ErrorAction Ignore
+		Remove-Module -Name Project.Windows.ComputerInfo -ErrorAction Ignore
+		Remove-Module -Name Project.Windows.ProgramInfo -ErrorAction Ignore
+		Remove-Module -Name Firewall-Manager -ErrorAction Ignore
+		Remove-Module -Name Indented.Net.IP -ErrorAction Ignore
+	}
 }
 else # Normal use case
 {

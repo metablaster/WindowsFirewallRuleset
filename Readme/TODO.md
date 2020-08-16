@@ -74,12 +74,26 @@ TODO's in this file are categorized into following sections:
 
     - Some tests fail to run in non "develop" mode due to missing variables
     - Need to test rules without "ProgramRoot" variable to see if searching works
+    - Need global test variable to set up valid Windows username which is performing tests
 
-5. Partially fixed, need testing
+5. Code style
+
+    - Need convention for variable naming, such as Group, Groups or User vs Principal, difference is
+    that one is expanded property while other can be custom object. Many similar cases for naming.
+
+6. Partially fixed, need testing
 
     - Most program query functions return multiple program instances,
     need to select latest or add multiple rules.
     - Module functions and rules for OneDrive have partial fix, needs design improvements
+
+7. Other
+
+    - Need convention for output streams, when to use which one, and also common format for quoting
+    and pointing out local variables, some place are missing streams while others have too many of them,
+    Also somewhere same (ie. debug stream) can be put in 2 places in call stack, which one to chose?
+    - Need global setting to allow "advanced" warnings, which will show at a minimum function name
+    where the warning was generated, or just save this info to logs.
 
 ## Medium priority
 
@@ -92,7 +106,6 @@ TODO's in this file are categorized into following sections:
     if piping is needed after all
     - We probably don't need VSSetup module
     - Line numbers for verbose and debug messages
-    - Modules should be imported into global scope
     - Use begin/process/end to make functions work on pipeline
     - Need to add default error description into catch blocks in addition to our own
     for better description
@@ -158,6 +171,7 @@ TODO's in this file are categorized into following sections:
     - Universal and quick setup to install all required modules for all shells and users.
 
 7. Other
+
     - Some cmdlets take encoding parameter, we should probably have a variable to specify encoding
 
 ## Low priority
@@ -225,3 +239,6 @@ TODO's in this file are categorized into following sections:
 
     - Move duplicate and global TODO's from scripts here into global TODO list
     - Check spelling for entry project
+
+4. Modules
+    - Importing modules from withing modules should be imported into global scope

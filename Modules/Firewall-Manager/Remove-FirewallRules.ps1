@@ -157,6 +157,6 @@ function Remove-FirewallRules
 			Remove-NetFirewallRule -PolicyStore $PolicyStore -Name $CurrentRule.Name
 		}
 
-		Write-Information -Tags "User" -MessageData "INFO: Removing firewall rules done"
+		Write-Information -Tags "User" -MessageData "INFO: Removing firewall rules according to '$FileName' done"
 	}
 }

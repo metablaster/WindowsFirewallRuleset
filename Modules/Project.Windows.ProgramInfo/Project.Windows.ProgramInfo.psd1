@@ -91,6 +91,8 @@
 		"Get-WindowsDefender"
 		"Get-SQLManagementStudio"
 		"Get-OneDrive"
+		"Get-UserApps"
+		"Get-SystemApps"
 		"Get-SQLInstance"
 		"Update-Table"
 		"Edit-Table"

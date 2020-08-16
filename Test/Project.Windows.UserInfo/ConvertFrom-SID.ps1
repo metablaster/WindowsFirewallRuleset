@@ -41,6 +41,7 @@ Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo @Logs
 
 # Ask user if he wants to load these rules
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
@@ -70,7 +71,15 @@ foreach ($Account in $NTAccounts)
 	$Account | ConvertFrom-SID @Logs | Select-Object -ExpandProperty Name
 }
 
-New-Test "Get-TypeName"
+New-Test "ConvertFrom-SID App SID"
+$AppSID = "S-1-15-2-2967553933-3217682302-2494645345-2077017737-3805576244-585965800-1797614741"
+$Result = ConvertFrom-SID $AppSID @Logs # | Select-Object -ExpandProperty Name
+$Result | Format-Table
+
+New-Test "Get-TypeName AppSID"
+$Result | Get-TypeName @Logs
+
+New-Test "Get-TypeName UserAccounts"
 $UserAccounts[0] | Get-TypeName @Logs
 
 Update-Log

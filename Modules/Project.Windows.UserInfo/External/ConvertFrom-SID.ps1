@@ -31,7 +31,9 @@ SOFTWARE.
 .SYNOPSIS
 Convert SID to user or computer account name
 .DESCRIPTION
-TODO: add description
+Convert SID to user or computer account name, in case of pseudo and built in accounts
+only relevant login name is returned, not full reference name.
+In all other cases result if full account name in form of COMPUTERNAME\USERNAME
 .PARAMETER SIDArray
 One or more SIDs to convert
 .EXAMPLE
@@ -45,17 +47,23 @@ PSObject composed of SID and user or account
 .NOTES
 SID conversion for well known SIDs from http://support.microsoft.com/kb/243330
 Original code link: https://github.com/RamblingCookieMonster/PowerShell
+Partial addition of SID's from https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/81d92bba-d22b-4a8c-908a-554ab29148ab
 
 TODO: Need to handle more NT AUTHORITY, PACKAGE AUTHORITY, USER MODE DRIVERS users,
 probably defined as a separate variable in addition to WellKnownSIDs
-TODO: need to improve to have consistent output ie. exactly DOMAIN\USER, see test results
+TODO: do we need to have consistent output ie. exactly DOMAIN\USER?, see test results,
+probably not for pseudo accounts but for built in accounts it makes sense
+TODO: reference link seems to contain much more well known SIDs, need to update
+TODO: Need to implement switch for UPN name format in addition to NETBIOS, see:
+https://docs.microsoft.com/en-us/windows/win32/secauthn/user-name-formats
 
 Changes by metablaster year 2020:
-add verbose and debug output
-remove try and empty catch by setting better approach
-rename parameter
-format code style to project defaults and added few more comments
-removed unnecessary parentheses
+1. add verbose and debug output
+2. remove try and empty catch by setting better approach
+3. rename parameter
+4. format code style to project defaults and added few more comments
+5. removed unnecessary parentheses
+6. renamed some well known SID names and added comment why
 #>
 function ConvertFrom-SID
 {
@@ -63,12 +71,44 @@ function ConvertFrom-SID
 	param(
 		[Parameter(Mandatory = $true,
 			ValueFromPipeline = $true)]
-		[string[]] $SIDArray
+		[string[]] $SIDArray,
+
+		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
+		[Parameter()]
+		[string[]] $ComputerNames = [System.Environment]::MachineName
 	)
 
 	begin
 	{
-		# well known SIDs name/value map
+		# Well known SIDs value/name map
+		# NOTE: To avoid confusion pseudo accounts ("Local Service" in below example) can be represented as:
+		#
+		# 1. SID (S-1-5-19)
+		# 2. Name (NT AUTHORITY)
+		# 3. Reference Name (NT AUTHORITY\Local Service)
+		# 4. Display Name (Local Service)
+		#
+		# NOTE: On the other side built in accounts ("Administrator" in below example) can be represented as:
+		#
+		# 1. SID (S-1-5-21-500)
+		# 2. Name (Administrator)
+		# 3. Reference Name (BUILTIN\Administrator)
+		# 4. Display Name (Administrator)
+		#
+		# This is important to understand because MSDN site (link in comment) just says "Name",
+		# but we can't just use given "Name" value to refer to user when defining rules because it's
+		# not valid for multiple reasons such as:
+		# 1. there are duplicate names with different SID value, which one do you want if "Name" is same?
+		# 2. Some "names" are not login usernames or accounts, but we need either username or account
+		#
+		# To solve the problem "Name" must be replaced with "Display Name", most "Name" values are OK,
+		# but those which are not are replaced with "Display Name" in below 'WellKnownSIDs' variable.
+		#
+		# Therefore if you go check online to see if this are valid entries don't be surprised!
+		# Problem is fixed or better to say adjusted for this project, changes and details are
+		# commented below, but not completely, so if you encounter issues (likely on AD and server
+		# platforms) then you know what's the problem and it shouldn't be hard to fix it.
+		#
 		# TODO: script scope variable?
 		$WellKnownSIDs = @{
 			'S-1-0' = 'Null Authority'
@@ -86,11 +126,13 @@ function ConvertFrom-SID
 			'S-1-3-4' = 'Owner Rights'
 			'S-1-5-80-0' = 'All Services'
 			'S-1-4' = 'Non-unique Authority'
-			'S-1-5' = 'NT Authority'
+			'S-1-5' = 'NT Authority' # NOTE: An identifier authority.
 			'S-1-5-1' = 'Dialup'
 			'S-1-5-2' = 'Network'
 			'S-1-5-3' = 'Batch'
 			'S-1-5-4' = 'Interactive'
+			# A group that includes all security principals that have logged on as a service.
+			# Membership is controlled by the operating system.
 			'S-1-5-6' = 'Service'
 			'S-1-5-7' = 'Anonymous'
 			'S-1-5-8' = 'Proxy'
@@ -100,11 +142,14 @@ function ConvertFrom-SID
 			'S-1-5-12' = 'Restricted Code'
 			'S-1-5-13' = 'Terminal Server Users'
 			'S-1-5-14' = 'Remote Interactive Logon'
+			# TODO: A group that includes all users from the same organization.
+			# Only included with AD accounts and only added by a Windows Server 2003 or later domain controller.
 			'S-1-5-15' = 'This Organization'
+			# TODO: An account that is used by the default Internet Information Services (IIS) user.
 			'S-1-5-17' = 'This Organization'
-			'S-1-5-18' = 'Local System'
-			'S-1-5-19' = 'NT Authority'
-			'S-1-5-20' = 'NT Authority'
+			'S-1-5-18' = 'System' # Changed from "Local System"
+			'S-1-5-19' = 'Local Service' # Changed from "NT Authority"
+			'S-1-5-20' = 'Network Service' # Changed from "NT Authority"
 			'S-1-5-21-500' = 'Administrator'
 			'S-1-5-21-501' = 'Guest'
 			'S-1-5-21-502' = 'KRBTGT'
@@ -136,7 +181,7 @@ function ConvertFrom-SID
 			'S-1-5-64-14' = 'SChannel Authentication'
 			'S-1-5-64-21' = 'Digest Authority'
 			'S-1-5-80' = 'NT Service'
-			'S-1-5-83-0' = 'NT VIRTUAL MACHINE\Virtual Machines'
+			'S-1-5-83-0' = 'Virtual Machines' # Changed from "NT VIRTUAL MACHINE\Virtual Machines"
 			'S-1-16-0' = 'Untrusted Mandatory Level'
 			'S-1-16-4096' = 'Low Mandatory Level'
 			'S-1-16-8192' = 'Medium Mandatory Level'
@@ -145,24 +190,29 @@ function ConvertFrom-SID
 			'S-1-16-16384' = 'System Mandatory Level'
 			'S-1-16-20480' = 'Protected Process Mandatory Level'
 			'S-1-16-28672' = 'Secure Process Mandatory Level'
-			'S-1-5-32-554' = 'BUILTIN\Pre-Windows 2000 Compatible Access'
-			'S-1-5-32-555' = 'BUILTIN\Remote Desktop Users'
-			'S-1-5-32-556' = 'BUILTIN\Network Configuration Operators'
-			'S-1-5-32-557' = 'BUILTIN\Incoming Forest Trust Builders'
-			'S-1-5-32-558' = 'BUILTIN\Performance Monitor Users'
-			'S-1-5-32-559' = 'BUILTIN\Performance Log Users'
-			'S-1-5-32-560' = 'BUILTIN\Windows Authorization Access Group'
-			'S-1-5-32-561' = 'BUILTIN\Terminal Server License Servers'
-			'S-1-5-32-562' = 'BUILTIN\Distributed COM Users'
-			'S-1-5-32-569' = 'BUILTIN\Cryptographic Operators'
-			'S-1-5-32-573' = 'BUILTIN\Event Log Readers'
-			'S-1-5-32-574' = 'BUILTIN\Certificate Service DCOM Access'
-			'S-1-5-32-575' = 'BUILTIN\RDS Remote Access Servers'
-			'S-1-5-32-576' = 'BUILTIN\RDS Endpoint Servers'
-			'S-1-5-32-577' = 'BUILTIN\RDS Management Servers'
-			'S-1-5-32-578' = 'BUILTIN\Hyper-V Administrators'
-			'S-1-5-32-579' = 'BUILTIN\Access Control Assistance Operators'
-			'S-1-5-32-580' = 'BUILTIN\Remote Management Users'
+			# From all of the below accounts the "BUILTIN\" was removed
+			# ex. "BUILTIN\Remote Desktop Users" become just "Remote Desktop Users"
+			'S-1-5-32-554' = 'Pre-Windows 2000 Compatible Access'
+			'S-1-5-32-555' = 'Remote Desktop Users'
+			'S-1-5-32-556' = 'Network Configuration Operators'
+			'S-1-5-32-557' = 'Incoming Forest Trust Builders'
+			'S-1-5-32-558' = 'Performance Monitor Users'
+			'S-1-5-32-559' = 'Performance Log Users'
+			'S-1-5-32-560' = 'Windows Authorization Access Group'
+			'S-1-5-32-561' = 'Terminal Server License Servers'
+			'S-1-5-32-562' = 'Distributed COM Users'
+			'S-1-5-32-569' = 'Cryptographic Operators'
+			'S-1-5-32-573' = 'Event Log Readers'
+			'S-1-5-32-574' = 'Certificate Service DCOM Access'
+			'S-1-5-32-575' = 'RDS Remote Access Servers'
+			'S-1-5-32-576' = 'RDS Endpoint Servers'
+			'S-1-5-32-577' = 'RDS Management Servers'
+			'S-1-5-32-578' = 'Hyper-V Administrators'
+			'S-1-5-32-579' = 'Access Control Assistance Operators'
+			'S-1-5-32-580' = 'Remote Management Users'
+			# Following SID's are additions from second link and google friend for store apps
+			'S-1-15-2-1' = 'All Application Packages' # APPLICATION PACKAGE AUTHORITY\ALL APPLICATION PACKAGES
+			'S-1-15-2-2' = 'All Restricted Application Packages' # APPLICATION PACKAGE AUTHORITY\ALL RESTRICTED APPLICATION PACKAGE
 		}
 	}
 
@@ -182,23 +232,51 @@ function ConvertFrom-SID
 			# Check for domain contextual SID's
 			$IsDomain = $false
 
+			# Check if SID represents well known store app authority SID
+			$APPLICATION_PACKAGE_AUTHORITY = $false
+
+			# Check if SID represent store app
+			$IsStoreApp = $false
+
+			# The count of characters
 			if ($SID.Length -gt 8)
 			{
+				# New string keeping only first 8 characters
 				if ($SID.Remove(8) -eq "S-1-5-21")
 				{
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input SID is domain SID"
 
 					$IsDomain = $true
+					# The substring starts at a specified character position and continues to the end of the string.
 					$Suffix = $SID.Substring($SID.Length - 4) # ie. 1003
+
+					# Get rid of 'domain' number, keep only SID value and suffix, this is done
+					# to search WellKnownSIDs variable with array[] operator
 					$SID = $SID.Remove(8) + $Suffix
+				}
+				elseif ($SID.Length -eq 10 -and (($SID.Remove(10) -eq "S-1-15-2-1") -or ($SID.Remove(10) -eq "S-1-15-2-2")))
+				{
+					# NOTE: S-1-15-2-3 is Unknown, and probably other higher numbers are unknown
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input SID is APPLICATION PACKAGE AUTHORITY"
+
+					$APPLICATION_PACKAGE_AUTHORITY = $true
+				}
+				elseif (($SID.Length -gt 20) -and ($SID.Remove(9) -eq "S-1-15-2-"))
+				{
+					# TODO: need exact length of store app SID's
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input SID is store app SID"
+
+					$IsStoreApp = $true
 				}
 				else
 				{
+					# In all other cases the FullSID is either on the list of well known SID's
+					# Otherwise it's capability SID or just plain wrong which will fail
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input SID is not domain SID"
 				}
 			}
 
-			# Map name to well known sid. If this fails, use .net to get the account
+			# Map name to well known sid. If this fails, use .NET to get the account
 			$Name = $WellKnownSIDs[$SID]
 
 			if ($Name)
@@ -208,30 +286,68 @@ function ConvertFrom-SID
 			else
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input SID is not well known SID"
-				if ($IsDomain)
-				{
-					$SID = $FullSID
-				}
 
-				# try to translate the SID to an account
-				try
+				if ($IsStoreApp)
 				{
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] Translating SID: $SID"
+					# Find to which store app this SID belongs
+					$UserGroups = Get-UserGroup -ComputerNames $ComputerNames | Select-Object -ExpandProperty Group
+					$Principals = Get-GroupPrincipal -ComputerNames $ComputerNames -UserGroups $UserGroups
 
-					$SIDObject = New-Object -TypeName System.Security.Principal.SecurityIdentifier($SID)
-					$Name = $SIDObject.Translate([System.Security.Principal.NTAccount]).Value
+					$Name = "INVALID_NAME" # TODO: $null
+
+					:found foreach ($Principal in $Principals)
+					{
+						$User = $Principal.User
+						Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing username: '$User'"
+
+						$UserApps = Get-UserApps -UserName $User
+
+						foreach ($UserApp in $UserApps)
+						{
+							Write-Debug -Message "Checking SID match for store app: '$UserApp'"
+
+							if ($(Get-AppSID $User $UserApp.PackageFamilyName) -eq $SID)
+							{
+								Write-Verbose -Message "SID found for username '$User' and store app: '$($UserApp.Name)'"
+								$Name = $UserApp.Name
+								break found
+							}
+						}
+					}
+
+					if ($Name -eq "INVALID_NAME")
+					{
+						Write-Warning -Message "$SID is not a valid SID or could not be identified"
+					}
 				}
-				catch
+				else
 				{
-					$Name = "Not a valid SID or could not be identified"
-					Write-Warning -Message "$SID is not a valid SID or could not be identified"
+					if ($IsDomain)
+					{
+						# else it's already FullSID
+						$SID = $FullSID
+					}
+
+					# try to translate the SID to an account
+					try
+					{
+						Write-Debug -Message "[$($MyInvocation.InvocationName)] Translating SID: $SID"
+
+						$SIDObject = New-Object -TypeName System.Security.Principal.SecurityIdentifier($SID)
+						$Name = $SIDObject.Translate([System.Security.Principal.NTAccount]).Value
+					}
+					catch
+					{
+						$Name = "INVALID_NAME" # TODO: $null
+						Write-Warning -Message "$SID is not a valid SID or could not be identified"
+					}
 				}
 			}
 
-			# Display the results
+			# Add to results
 			$Result += [PSCustomObject]@{
-				SID = $FullSID
 				Name = $Name
+				SID = $FullSID
 			}
 		}
 

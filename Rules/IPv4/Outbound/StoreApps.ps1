@@ -142,11 +142,12 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $ServicesGroup -Directio
 # Firewall predefined rules for Microsoft store Apps
 # TODO: exclude store apps rules for servers, store app folders seem to exist but empty.
 # TODO: currently making rules for each user separately, is it possible to make rules for all users?
+# It looks like not, instead write warning that this may result is rule bloat and abort operation
 #
 
 #
 # Block Administrators by default
-# TODO: should group SID be supplied to local user instead of owner?
+# TODO: should group SID be supplied to local user instead of owner? this might not work needs testing
 #
 
 New-NetFirewallRule -DisplayName "Store apps for Administrators" `
@@ -220,7 +221,7 @@ foreach ($Principal in $Principals)
 	# Create rules for system apps
 	#
 
-	# NOTE: -User parameter is probably not needed here? aded while troubleshooting the hack above.
+	# TODO: -User parameter is probably not needed here? aded while troubleshooting the hack above.
 	Get-AppxPackage -User $Principal.User -PackageTypeFilter Main | Where-Object {
 		$_.SignatureKind -eq "System" -and $_.Name -like "Microsoft*" } | ForEach-Object {
 

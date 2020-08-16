@@ -31,7 +31,7 @@ Set-StrictMode -Version Latest
 Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
 # Includes
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule $true
 
 #
 # Module preferences
@@ -57,8 +57,9 @@ else
 	$InformationPreference = "Continue"
 }
 
-# Includes
-Import-Module -Name $PSScriptRoot\..\Project.AllPlatforms.Utility
+# Includes (Format-Output, ConvertFrom-SID)
+Import-Module -Scope Global -Name $ProjectRoot\Modules\Project.Windows.UserInfo
+Import-Module -Scope Global -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
 <#
 .SYNOPSIS
@@ -70,7 +71,7 @@ Author: Markus Scholtes
 
 Changes by metablaster - August 2020:
 1. Added preference variables to be in line with the rest of project
-2. Included module which is used in imported scripts
+2. Included modules which are used in imported scripts
 #>
 
 # Load modules manually for security reasons

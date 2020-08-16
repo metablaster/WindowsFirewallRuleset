@@ -30,7 +30,7 @@ Set-StrictMode -Version Latest
 Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
 # Includes
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule $true
 
 #
 # Module preferences
@@ -58,10 +58,10 @@ else
 
 # Includes
 . $PSScriptRoot\External\Get-SQLInstance.ps1
-Import-Module -Name $PSScriptRoot\..\VSSetup
-Import-Module -Name $PSScriptRoot\..\Project.Windows.UserInfo
-# Import-Module -Name $PSScriptRoot\..\Project.Windows.ComputerInfo
-Import-Module -Name $PSScriptRoot\..\Project.AllPlatforms.Utility
+Import-Module -Scope Global -Name $ProjectRoot\Modules\VSSetup
+Import-Module -Scope Global -Name $ProjectRoot\Modules\Project.Windows.UserInfo
+# Import-Module -Scope Global -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
+Import-Module -Scope Global -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 
 <#
 .SYNOPSIS
@@ -510,7 +510,7 @@ Search installed programs in userprofile for specific user account
 .PARAMETER UserName
 User name in form of "USERNAME"
 .PARAMETER ComputerName
-NETBios Computer name in form of "COMPUTERNAME"
+NETBIOS Computer name in form of "COMPUTERNAME"
 .EXAMPLE
 Get-UserSoftware "USERNAME"
 .INPUTS
@@ -2505,7 +2505,7 @@ Search installed One Drive instance in userprofile for specific user account
 .PARAMETER UserName
 User name in form of "USERNAME"
 .PARAMETER ComputerName
-NETBios Computer name in form of "COMPUTERNAME"
+NETBIOS Computer name in form of "COMPUTERNAME"
 .EXAMPLE
 Get-OneDrive "USERNAME"
 .INPUTS
@@ -2584,6 +2584,84 @@ function Get-OneDrive
 	else
 	{
 		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact computer: $ComputerName"
+	}
+}
+
+<#
+.SYNOPSIS
+Get store apps for specific user
+.DESCRIPTION
+Search installed store apps in userprofile for specific user account
+.PARAMETER UserName
+User name in form of "USERNAME"
+.PARAMETER ComputerName
+NETBIOS Computer name in form of "COMPUTERNAME"
+.EXAMPLE
+Get-UserApps "USERNAME"
+.INPUTS
+None. You cannot pipe objects to Get-UserApps
+.OUTPUTS
+[Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage] store app information object
+.NOTES
+TODO: query remote computer not implemented
+#>
+function Get-UserApps
+{
+	[CmdletBinding()]
+	param (
+		[Alias("User")]
+		[Parameter(Mandatory = $true)]
+		[string] $UserName,
+
+		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
+		[Parameter()]
+		[string] $ComputerName = [System.Environment]::MachineName
+	)
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
+
+	if (Test-TargetComputer $ComputerName)
+	{
+		# TODO: show warning instead of error when fail (ex. in non elevated run)
+		Get-AppxPackage -User $UserName -PackageTypeFilter Bundle
+	}
+}
+
+<#
+.SYNOPSIS
+Get store apps installed system wide
+.DESCRIPTION
+Search system wide installed store apps
+.PARAMETER ComputerName
+NETBIOS Computer name in form of "COMPUTERNAME"
+.EXAMPLE
+Get-SystemApps "USERNAME"
+.INPUTS
+None. You cannot pipe objects to Get-SystemApps
+.OUTPUTS
+[Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage] store app information object
+.NOTES
+TODO: query remote computer not implemented
+#>
+function Get-SystemApps
+{
+	[CmdletBinding()]
+	param (
+		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
+		[Parameter()]
+		[string] $ComputerName = [System.Environment]::MachineName
+	)
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
+
+	if (Test-TargetComputer $ComputerName)
+	{
+		# TODO: show warning instead of error when fail (ex. in non elevated run)
+		Get-AppxPackage -PackageTypeFilter Main | Where-Object {
+			$_.SignatureKind -eq "System" -and $_.Name -like "Microsoft*"
+		}
 	}
 }
 
@@ -2673,6 +2751,9 @@ Export-ModuleMember -Function Get-WindowsSDK
 Export-ModuleMember -Function Get-WindowsDefender
 Export-ModuleMember -Function Get-SQLManagementStudio
 Export-ModuleMember -Function Get-OneDrive
+
+Export-ModuleMember -Function Get-UserApps
+Export-ModuleMember -Function Get-SystemApps
 
 #
 # External function exports

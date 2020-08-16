@@ -286,25 +286,48 @@ function Import-FirewallRules
 		}
 
 		# for SID types no empty value is defined, so omit if not present
-		if (![string]::IsNullOrEmpty($Rule.Owner)) { $RuleSplatHash.Owner = $Rule.Owner }
-		if (![string]::IsNullOrEmpty($Rule.Package)) { $RuleSplatHash.Package = $Rule.Package }
+		if (![string]::IsNullOrEmpty($Rule.Owner))
+		{
+			if ($(ConvertFrom-SID $Rule.Owner).Name -ne "INVALID_NAME")
+			{
+				$RuleSplatHash.Owner = $Rule.Owner
+			}
+			else
+			{
+				Write-Warning -Message "Rule may be invalid, store app owner does not exist"
+			}
+		}
+
+		if (![string]::IsNullOrEmpty($Rule.Package))
+		{
+			if ($(ConvertFrom-SID $Rule.Package).Name -ne "INVALID_NAME")
+			{
+				$RuleSplatHash.Package = $Rule.Package
+			}
+			else
+			{
+				Write-Warning -Message "Rule may be invalid, store app package does not exist"
+			}
+		}
 
 		# remove rule if present
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if rule exists"
 
-		try
+		$IsRemoved = @()
+		Remove-NetFirewallRule -Name $Rule.Name -PolicyStore $PolicyStore -ErrorAction SilentlyContinue -ErrorVariable IsRemoved
+
+		if ($IsRemoved.Count -gt 0)
 		{
-			Remove-NetFirewallRule -Name $Rule.Name -PolicyStore $PolicyStore
-			Write-Information -MessageData "INFO: Replacing existing rule"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Not replacing rule"
 		}
-		catch
+		else
 		{
-			Write-Debug -Tags "User" -Message "[$($MyInvocation.InvocationName)] Not replacing rule"
+			Write-Information -MessageData "INFO: Replacing existing rule"
 		}
 
 		# generate new firewall rule, parameters are assigned with splatting
 		New-NetFirewallRule -PolicyStore $PolicyStore @RuleSplatHash | Format-Output -Label "Import Rule"
 	}
 
-	Write-Information -Tags "User" -MessageData "INFO: Importing firewall rules done"
+	Write-Information -Tags "User" -MessageData "INFO: Importing firewall rules from '$FileName' done"
 }

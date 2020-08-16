@@ -52,8 +52,8 @@ $Exports = "$ProjectRoot\Exports"
 
 # TODO: need to test failure cases, see also module todo's for more info
 
-New-Test "Export-FirewallRules -DisplayGroup"
-Export-FirewallRules -DisplayGroup "" -Outbound -Folder $Exports -FileName "GroupExport" @Logs # -DisplayName "Gwent"
+# New-Test "Export-FirewallRules -DisplayGroup"
+# Export-FirewallRules -DisplayGroup "" -Outbound -Folder $Exports -FileName "GroupExport" @Logs # -DisplayName "Gwent"
 
 # New-Test "Export-FirewallRules -DisplayGroup"
 # Export-FirewallRules -DisplayGroup "Broadcast" -Outbound -Folder $Exports -FileName "GroupExport" @Logs
@@ -72,6 +72,9 @@ Export-FirewallRules -DisplayGroup "" -Outbound -Folder $Exports -FileName "Grou
 
 # New-Test "Export-FirewallRules -Inbound -Enabled -Block -JSON"
 # Export-FirewallRules -Inbound -Enabled -Block -Folder $Exports -JSON -FileName "InboundExport" @Logs
+
+New-Test "Export-FirewallRules -DisplayGroup"
+Export-FirewallRules -DisplayName "Microsoft.BingWeather" -Outbound -Folder $Exports -FileName "StoreAppExport" @Logs # -DisplayName "Gwent"
 
 Update-Log
 Exit-Test
