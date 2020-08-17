@@ -100,6 +100,7 @@ function Get-AppSID
 	$TargetPath = "C:\Users\$UserName\AppData\Local\Packages\$AppName\AC"
 	if (Test-Path -PathType Container -Path $TargetPath)
 	{
+		# TODO: what if nothing is returned?
 		$ACL = Get-Acl $TargetPath
 		$ACE = $ACL.Access.IdentityReference.Value
 

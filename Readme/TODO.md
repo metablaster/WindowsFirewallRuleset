@@ -173,6 +173,7 @@ TODO's in this file are categorized into following sections:
 7. Other
 
     - Some cmdlets take encoding parameter, we should probably have a variable to specify encoding
+    - There are many places where Write-Progress could be useful
 
 ## Low priority
 

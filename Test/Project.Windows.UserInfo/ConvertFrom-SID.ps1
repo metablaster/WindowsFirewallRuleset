@@ -56,6 +56,7 @@ New-Test "Get-GroupPrincipal 'Users', 'Administrators', NT SYSTEM, NT LOCAL SERV
 $UserAccounts = Get-GroupPrincipal "Users", "Administrators" @Logs
 $UserAccounts
 
+New-Test "Get-AccountSID NT SYSTEM, NT LOCAL SERVICE"
 $NTAccounts = Get-AccountSID -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE" @Logs
 $NTAccounts
 
@@ -73,7 +74,22 @@ foreach ($Account in $NTAccounts)
 
 New-Test "ConvertFrom-SID App SID"
 $AppSID = "S-1-15-2-2967553933-3217682302-2494645345-2077017737-3805576244-585965800-1797614741"
-$Result = ConvertFrom-SID $AppSID @Logs # | Select-Object -ExpandProperty Name
+$Result = ConvertFrom-SID $AppSID @Logs
+$Result | Format-Table
+
+New-Test "ConvertFrom-SID nonexistent App SID"
+$AppSID = "S-1-15-2-2967553933-3217682302-INVALID-2077017737-3805576244-585965800-1797614741"
+$Result = ConvertFrom-SID $AppSID @Logs
+$Result | Format-Table
+
+New-Test "ConvertFrom-SID APPLICATION PACKAGE AUTHORITY"
+$AppSID = "S-1-15-2-2"
+$Result = ConvertFrom-SID $AppSID @Logs
+$Result | Format-Table
+
+New-Test "ConvertFrom-SID Capability"
+$AppSID = "S-1-15-3-RANDOM"
+$Result = ConvertFrom-SID $AppSID @Logs
 $Result | Format-Table
 
 New-Test "Get-TypeName AppSID"
