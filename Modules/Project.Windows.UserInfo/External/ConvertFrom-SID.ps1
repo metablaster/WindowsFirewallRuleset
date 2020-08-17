@@ -154,7 +154,7 @@ function ConvertFrom-SID
 			'S-1-5-15' = 'This Organization'
 			# All versions of Windows
 			# NOTE: An account that is used by the default Internet Information Services (IIS) user.
-			'S-1-5-17' = 'This Organization'
+			'S-1-5-17' = 'This Organization' # TODO: IUSR passes
 			'S-1-5-18' = 'System' # Changed from "Local System"
 			'S-1-5-19' = 'Local Service' # Changed from "NT Authority"
 			'S-1-5-20' = 'Network Service' # Changed from "NT Authority"
@@ -260,13 +260,11 @@ function ConvertFrom-SID
 			# TODO: Unknown system and name
 			'S-1-5-21-0-0-0-496' = 'COMPOUNDED_AUTHENTICATION'
 			'S-1-5-21-0-0-0-497' = 'CLAIMS_VALID'
-			# Following SID's is for application packages from second link
+			# Following SID is for application packages from second link
 			'S-1-15-2-1' = 'All Application Packages' # APPLICATION PACKAGE AUTHORITY\ALL APPLICATION PACKAGES
-			# Following SID's is for application packages that is not listed on well known SID's
+			# Following SID is for application packages that is not listed on well known SID's
 			'S-1-15-2-2' = 'All Restricted Application Packages' # APPLICATION PACKAGE AUTHORITY\ALL RESTRICTED APPLICATION PACKAGES
-			# TODO: More categories must exist (not listed on well known SID's list), see also:
-			# HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SecurityManager\CapabilityClasses\AllCachedCapabilities\capabilityClass_*
-			# Following is a list from firewall GUI
+			# TODO: Following is a list for store apps from firewall GUI
 			# APPLICATION PACKAGE AUTHORITY\Your Internet connection
 			# APPLICATION PACKAGE AUTHORITY\Your Internet connection, including incoming connections
 			# APPLICATION PACKAGE AUTHORITY\Your home or work networks
@@ -277,6 +275,11 @@ function ConvertFrom-SID
 			# APPLICATION PACKAGE AUTHORITY\Your Windows credentials
 			# APPLICATION PACKAGE AUTHORITY\Software and hardware certificates or a smart card
 			# APPLICATION PACKAGE AUTHORITY\Removable storage
+			# TODO: More capability categories must exist (not listed on well known SID's list), see also:
+			# HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SecurityManager\CapabilityClasses\AllCachedCapabilities\capabilityClass_*
+			# TODO: following SID's are not listed on well known SID list, verification needed:
+			# TrustedInstaller
+			# 'S-1-5-22' = "Enterprise Read-Only Domain Controllers Beta"
 		}
 	}
 

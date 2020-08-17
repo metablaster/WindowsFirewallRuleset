@@ -77,6 +77,7 @@ Delivery Optimization also sends updates and apps from your PC to other PCs on y
 or PCs on the Internet, based on your settings." `
 	@Logs | Format-Output @Logs
 
+# TODO: duplicate description
 New-NetFirewallRule -DisplayName "Delivery Optimization" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
 	-Service DoSvc -Program $ServiceHost -Group $Group `

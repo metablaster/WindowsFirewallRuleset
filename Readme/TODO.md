@@ -69,6 +69,7 @@ TODO's in this file are categorized into following sections:
     also not all are the same.
     - Installation variables must be empty in development mode only to be able to test program
     search functions, for release providing a path is needed to prevent "fix" info messages
+    - Variable to conditionally apply rules for Administrators
 
 4. Test and debugging
 
@@ -155,6 +156,7 @@ TODO's in this file are categorized into following sections:
     - What should be initial values for ProgramRoot variables in rule scripts? we should remove
     known non existent paths and handle empty strings to prevent INFO messages for conversion.
     - Many test cases are local to our environment, other people might get different results
+    - Test everything on preview Windows
 
 5. Code style
 
