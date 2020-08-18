@@ -29,11 +29,11 @@ SOFTWARE.
 . $PSScriptRoot\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
+Import-Module -Name Project.AllPlatforms.System
 Test-SystemRequirements
 
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
+Import-Module -Name Project.AllPlatforms.Logging
+Import-Module -Name Project.AllPlatforms.Utility @Logs
 
 #
 # This script sets firewall profile, network profile and global firewall behavior

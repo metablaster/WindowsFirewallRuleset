@@ -34,15 +34,15 @@ SOFTWARE.
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
+Import-Module -Name Project.AllPlatforms.System
 Test-SystemRequirements
 
-# Includes
+# Imports
 . $PSScriptRoot\ContextSetup.ps1
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test @Logs
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo @Logs
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
+Import-Module -Name Project.AllPlatforms.Logging
+Import-Module -Name Project.AllPlatforms.Test @Logs
+Import-Module -Name Project.Windows.ProgramInfo @Logs
+Import-Module -Name Project.AllPlatforms.Utility @Logs
 
 # Ask user if he wants to load these rules
 Update-Context $TestContext "IPv$IPVersion" $Direction

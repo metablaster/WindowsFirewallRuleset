@@ -29,7 +29,7 @@ SOFTWARE.
 Set-StrictMode -Version Latest
 Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
-# Includes
+# Imports
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule $true
 
 #
@@ -176,8 +176,8 @@ function Test-SystemRequirements
 		if ($Develop -and $PowerShellEdition -eq "Desktop")
 		{
 			# Now that OS and PowerShell is OK we can import these modules
-			Import-Module -Scope Global -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
-			Import-Module -Scope Global -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
+			Import-Module -Scope Global -Name Project.Windows.ProgramInfo
+			Import-Module -Scope Global -Name Project.Windows.ComputerInfo
 
 			# Check NET Framework version
 			# TODO: What if function fails?

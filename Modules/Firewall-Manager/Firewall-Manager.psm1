@@ -30,7 +30,7 @@ SOFTWARE.
 Set-StrictMode -Version Latest
 Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
-# Includes
+# Imports
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule $true
 
 #
@@ -57,9 +57,9 @@ else
 	$InformationPreference = "Continue"
 }
 
-# Includes (Format-Output, ConvertFrom-SID)
-Import-Module -Scope Global -Name $ProjectRoot\Modules\Project.Windows.UserInfo
-Import-Module -Scope Global -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
+# Imports (Format-Output, ConvertFrom-SID)
+Import-Module -Scope Global -Name Project.Windows.UserInfo
+Import-Module -Scope Global -Name Project.AllPlatforms.Utility
 
 <#
 .SYNOPSIS

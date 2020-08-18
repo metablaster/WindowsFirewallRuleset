@@ -32,14 +32,14 @@ SOFTWARE.
 & "$ProjectRoot\UnblockProject.ps1"
 
 # Check requirements for this project
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
+Import-Module -Name Project.AllPlatforms.System
 Test-SystemRequirements
 Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $false
 
-# Includes
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo @Logs
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
+# Imports
+Import-Module -Name Project.AllPlatforms.Logging
+Import-Module -Name Project.Windows.ProgramInfo @Logs
+Import-Module -Name Project.AllPlatforms.Utility @Logs
 
 # Clear errors, error and warning status
 $Error.Clear()
@@ -279,8 +279,8 @@ Write-Output ""
 if ($Develop)
 {
 	# Need to re-import required module in develop mode
-	Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
-	Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
+	Import-Module -Name Project.AllPlatforms.Logging
+	Import-Module -Name Project.AllPlatforms.Utility @Logs
 }
 
 # Show status of execution

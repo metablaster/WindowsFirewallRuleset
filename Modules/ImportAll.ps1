@@ -26,20 +26,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# Includes
+# Imports
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 
 #
 # Import all modules into current session, useful for debugging, ie. running individual functions
 #
 
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System @Logs
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test @Logs
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo @Logs
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo @Logs
-Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo @Logs
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
-Import-Module -Name $ProjectRoot\Modules\Indented.Net.IP @Logs
-Import-Module -Name $ProjectRoot\Modules\VSSetup @Logs
-Import-Module -Name $ProjectRoot\Modules\Firewall-Manager @Logs
+Import-Module -Name Project.AllPlatforms.Logging
+Import-Module -Name Project.AllPlatforms.System @Logs
+Import-Module -Name Project.AllPlatforms.Test @Logs
+Import-Module -Name Project.Windows.UserInfo @Logs
+Import-Module -Name Project.Windows.ProgramInfo @Logs
+Import-Module -Name Project.Windows.ComputerInfo @Logs
+Import-Module -Name Project.AllPlatforms.Utility @Logs
+Import-Module -Name Indented.Net.IP @Logs
+Import-Module -Name VSSetup @Logs
+Import-Module -Name Firewall-Manager @Logs

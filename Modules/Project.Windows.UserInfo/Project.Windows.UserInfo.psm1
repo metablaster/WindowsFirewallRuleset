@@ -36,7 +36,7 @@ param (
 Set-StrictMode -Version Latest
 Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
-# Includes
+# Imports
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule $true
 
 #
@@ -66,7 +66,7 @@ else
 # Imports (Get-UserApps, Get-SystemApps)
 if (!$BreakDependency -and !(Get-Module Project.Windows.ProgramInfo))
 {
-	Import-Module -Scope Global -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
+	Import-Module -Scope Global -Name Project.Windows.ProgramInfo
 }
 
 # TODO: get a user account that is connected to a Microsoft account. see Get-LocalUser docs.

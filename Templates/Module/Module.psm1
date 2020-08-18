@@ -28,13 +28,13 @@ SOFTWARE.
 
 # TODO: Include modules you need, update licence Copyright and start writing code
 
-# Includes
-# Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
-# Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test @Logs
-# Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo @Logs
-# Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo @Logs
-# Import-Module -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo @Logs
-# Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
+# Imports
+# Import-Module -Name Project.AllPlatforms.Logging
+# Import-Module -Name Project.AllPlatforms.Test @Logs
+# Import-Module -Name Project.Windows.UserInfo @Logs
+# Import-Module -Name Project.Windows.ProgramInfo @Logs
+# Import-Module -Name Project.Windows.ComputerInfo @Logs
+# Import-Module -Name Project.AllPlatforms.Utility @Logs
 
 <#
 .SYNOPSIS

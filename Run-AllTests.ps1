@@ -34,12 +34,12 @@ SOFTWARE.
 . $PSScriptRoot\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.System
+Import-Module -Name Project.AllPlatforms.System
 Test-SystemRequirements
 
-# Includes
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
-Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
+# Imports
+Import-Module -Name Project.AllPlatforms.Logging
+Import-Module -Name Project.AllPlatforms.Utility @Logs
 
 # Ask user if he wants to load these rules
 Update-Context "Test.Master" $($MyInvocation.MyCommand.Name -replace ".{4}$")
