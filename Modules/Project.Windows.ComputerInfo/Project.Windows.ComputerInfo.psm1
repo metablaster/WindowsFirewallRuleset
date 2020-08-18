@@ -56,9 +56,6 @@ else
 	$InformationPreference = "Continue"
 }
 
-# Imports
-Import-Module -Scope Global -Name Indented.Net.IP
-
 <#
 .SYNOPSIS
 Get localhost name

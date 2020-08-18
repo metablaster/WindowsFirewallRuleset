@@ -131,8 +131,7 @@ TODO's in this file are categorized into following sections:
     - Access is denied randomly while executing rules, need some check around this, ex. catching the
     error and ask to re-run the script.
     - make possible to apply or enable only rules relevant for current firewall profile
-    - Add #Requires -Modules to scripts, possibly removing module inclusions, if not
-    another possibility is to add module path to our modules for current session.
+    - Add #Requires -Modules to scripts to remove module inclusions and load variables
     - Make $WhatIfPreference for rules, we should skip everything except rules.
     - For remote computers we ComputerName variables/parameters but this could also be
     learned/specified with PolicyStore parameter

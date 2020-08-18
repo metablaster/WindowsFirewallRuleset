@@ -56,13 +56,6 @@ else
 	$InformationPreference = "Continue"
 }
 
-# Imports
-. $PSScriptRoot\External\Get-SQLInstance.ps1
-Import-Module -Scope Global -Name VSSetup
-Import-Module -Scope Global -Name Project.Windows.UserInfo -ArgumentList $true
-# Import-Module -Scope Global -Name Project.Windows.ComputerInfo
-Import-Module -Scope Global -Name Project.AllPlatforms.Utility
-
 <#
 .SYNOPSIS
 Get store app SID

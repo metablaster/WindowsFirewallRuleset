@@ -57,10 +57,6 @@ else
 	$InformationPreference = "Continue"
 }
 
-# Imports (Format-Output, ConvertFrom-SID)
-Import-Module -Scope Global -Name Project.Windows.UserInfo
-Import-Module -Scope Global -Name Project.AllPlatforms.Utility
-
 <#
 .SYNOPSIS
 Firewall-Manager is a module to manage firewall rules.
