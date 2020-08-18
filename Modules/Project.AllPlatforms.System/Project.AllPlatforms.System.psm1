@@ -32,6 +32,8 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 # Imports
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule $true
 
+# TODO: repository paths whitelist check
+
 #
 # Module preferences
 #
@@ -54,6 +56,432 @@ else
 {
 	# Everything is default except InformationPreference should be enabled
 	$InformationPreference = "Continue"
+}
+
+<#
+.SYNOPSIS
+Test if required system services are started
+.DESCRIPTION
+Test if required system services are started, some services are essential for
+correct firewall and network functioning, without essential services project code
+may result in errors hard to debug
+.PARAMETER Services
+An array of services to start
+.EXAMPLE
+A sample command that uses the function or script,
+optionally followed by sample output and a description. Repeat this keyword for each example.
+.INPUTS
+[string[]] One or more service short names to check
+.OUTPUTS
+None.
+.NOTES
+[System.ServiceProcess.ServiceController[]]
+#>
+function Test-ServiceRequirements
+{
+	[OutputType([System.Boolean])]
+	[CmdletBinding()]
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'This name cant be singular')]
+	param (
+		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+		[string[]] $Services
+	)
+
+	begin
+	{
+		[string] $Title = "Required service not running"
+		[string[]] $Choices = "&Yes", "&No"
+		[int32] $Default = 0
+		[bool] $StatusGood = $true
+	}
+	process
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+
+		foreach ($InputService in $Services)
+		{
+			$StatusGood = $true
+			$Service = Get-Service -Name $InputService
+
+			if ($Service.Status -ne "Running")
+			{
+				[string] $Question = "Do you want to start $($Service.DisplayName) service now?"
+				$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
+
+				if ($Decision -eq $Default)
+				{
+					$RequiredServices = Get-Service -Name $Service.Name -RequiredServices
+
+					foreach ($Required in $RequiredServices)
+					{
+						# For dependent services print only failures
+						if ($Required.StartType -ne "Automatic")
+						{
+							Set-Service -Name $Required.Name -StartupType Automatic
+							$Startup = Get-Service -Name $Required.Name | Select-Object -ExpandProperty StartupType
+
+							if ($Startup -ne "Automatic")
+							{
+								Write-Warning -Message "Dependent service $($Required.DisplayName) set to automatic failed"
+							}
+							else
+							{
+								Write-Verbose -Message "Setting dependent $($Required.DisplayName) service to autostart succeeded"
+							}
+						}
+
+						if ($Required.Status -ne "Running")
+						{
+							Start-Service -Name $Required.Name
+							$Status = Get-Service -Name $Required.Name | Select-Object -ExpandProperty Status
+
+							if ($Status -ne "Running")
+							{
+								Write-Error -Category OperationStopped -TargetObject $Required `
+									-Message "Unable to proceed, Dependent services can't be started"
+								Write-Information -Tags "User" -MessageData "INFO: Starting dependent service '$($Required.DisplayName)' failed, please start manually and try again"
+								return $false
+							}
+							else
+							{
+								Write-Verbose -Message "Starting dependent $($Required.DisplayName) service succeeded"
+							}
+						}
+					} # Required Services
+
+					# If decision is no, or if service is running there is no need to modify startup type
+					# Otherwise set startup type after requirements are met
+					if ($Service.StartType -ne "Automatic")
+					{
+						Set-Service -Name $Service.Name -StartupType Automatic
+						$Startup = Get-Service -Name $Service.Name | Select-Object -ExpandProperty StartupType
+
+						if ($Startup -ne "Automatic")
+						{
+							Write-Warning -Message "Set service $($Service.DisplayName) to automatic failed"
+						}
+						else
+						{
+							Write-Verbose -Message "Setting $($Service.DisplayName) service to autostart succeeded"
+						}
+					}
+
+					# Required services and startup is checked, start input service
+					# Status was already checked
+					Start-Service -Name $Service.Name
+					$Status = Get-Service -Name $Service.Name | Select-Object -ExpandProperty Status
+
+					if ($Status -eq "Running")
+					{
+						Write-Information -Tags "User" -MessageData "INFO: Starting $($Service.DisplayName) service succeeded"
+					}
+					else
+					{
+						$StatusGood = $false
+						Write-Information -Tags "User" -MessageData "INFO: Starting $($Service.DisplayName) service failed, please start manually and try again"
+					}
+				}
+				else
+				{
+					# User refused default action
+					$StatusGood = $false
+				}
+
+				if (!$StatusGood)
+				{
+					Write-Error -Category OperationStopped -TargetObject $Service `
+						-Message "Unable to proceed, required services are not started"
+					return $false
+				}
+			} # if service not running
+		} # foreach InputService
+
+		return $true
+	}
+}
+
+<#
+.SYNOPSIS
+Test if recommended modules are installed
+.DESCRIPTION
+Test if recommended and up to date modules are installed, if not user is
+prompted to install them.
+Outdated modules can cause strange issues, this function ensures latest modules are
+installed and in correct order, taking into account failures that can happen while
+installing or updating modules
+.PARAMETER ModuleFullName
+Hash table ModuleName, Version representing minimum required module
+.PARAMETER Repository
+Repository from which to download module such as PSGallery
+.PARAMETER InfoMessage
+Optional information displayable to user for choice help message
+.PARAMETER AllowPrerelease
+whether to allow installing beta modules
+.EXAMPLE
+Test-ModuleRecommendation @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Repository "powershellgallery.com"
+.INPUTS
+[System.Collections.Hashtable] consisting of module name and minimum required version
+.OUTPUTS
+None.
+.NOTES
+TODO: for posh-git check git in PATH
+#>
+function Test-ModuleRecommendation
+{
+	[OutputType([System.Boolean])]
+	[CmdletBinding(PositionalBinding = $false)]
+	param (
+		[Parameter(Mandatory = $true, Position = 0)]
+		[System.Collections.Hashtable] $ModuleFullName,
+
+		[Parameter()]
+		[string] $Repository = "powershellgallery.com",
+
+		[Parameter()]
+		[string] $InfoMessage = "Accept operation",
+
+		[Parameter()]
+		[switch] $AllowPrerelease
+	)
+
+	begin
+	{
+		[int32] $Default = 0
+
+		# Importing module to learn version could result in error
+		[System.Version] $PowerShellGetVersion = Get-Module -Name PowerShellGet -ListAvailable |
+		Sort-Object -Property Version | Select-Object -First 1 -ExpandProperty Version
+	}
+	process
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+
+		[string] $ConnectionStatus = ""
+		if (!(Test-NetConnection $Repository -CommonTCPPort HTTP -ErrorAction Ignore))
+		{
+			$ConnectionStatus = " but no connection to $Repository"
+		}
+
+		if (!(Get-Module -FullyQualifiedName $ModuleFullName -ListAvailable))
+		{
+			[System.Management.Automation.Host.ChoiceDescription[]] $Choices = @()
+
+			$YesChoice = [System.Management.Automation.Host.ChoiceDescription]::new("&Yes")
+			$YesChoice.HelpMessage = $InfoMessage
+			$Choices += $YesChoice
+
+			$NoChoice = [System.Management.Automation.Host.ChoiceDescription]::new("&No")
+			$NoChoice.HelpMessage = "Skip operation"
+			$Choices += $NoChoice
+
+			# Get required module from input
+			[string] $ModuleName = $ModuleFullName.ModuleName
+			[System.Version] $RequiredVersion = $ModuleFullName.ModuleVersion
+
+			# Highest version present on system if any
+			[System.Version] $TargetVersion = Get-Module -Name $ModuleName -ListAvailable |
+			Sort-Object -Property Version | Select-Object -First 1 -ExpandProperty Version
+
+			if ($TargetVersion)
+			{
+				Write-Warning -Message "$ModuleName module version $($TargetVersion.ToString()) is out of date, recommended version is $RequiredVersion"
+
+				$Title = "Recommended module out of date$ConnectionStatus"
+				$Question = "Update $ModuleName module now?"
+				$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
+
+				if ($Decision -eq $Default)
+				{
+					# In PowerShellGet versions 2.0.0 and above, the default is CurrentUser, which does not require elevation for install.
+					# In PowerShellGet 1.x versions, the default is AllUsers, which requires elevation for install.
+					# NOTE: for version 1.0.1 -Scope parameter is not recognized, we'll skip it for very old version
+					if (Get-InstalledModule -Name $ModuleName -ErrorAction Ignore)
+					{
+						if ($PowerShellGetVersion -gt "2.0.0")
+						{
+							PowerShellGet\Update-Module -Name $ModuleName -Scope AllUsers
+						}
+						else
+						{
+							PowerShellGet\Update-Module -Name $ModuleName
+						}
+					}
+					else
+					{
+						# Need force to install side by side, update not possible
+						if ($PowerShellGetVersion -gt "2.0.0")
+						{
+							PowerShellGet\Install-Module -Name $ModuleName -Scope AllUsers -Force
+						}
+						else
+						{
+							PowerShellGet\Install-Module -Name $ModuleName -Force
+						}
+					}
+				}
+			}
+			else # Module not present
+			{
+				Write-Warning -Message "$ModuleName module minimum version $RequiredVersion is recommended but not installed"
+
+				$Title = "Recommended module not installed$ConnectionStatus"
+				$Question = "Install $ModuleName module now?"
+				$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
+
+				if ($Decision -eq $Default)
+				{
+					if ($PowerShellGetVersion -gt "2.0.0")
+					{
+						PowerShellGet\Install-Module -Name $ModuleName -Scope AllUsers -MinimumVersion $RequiredVersion -AllowPrerelease:$AllowPrerelease
+					}
+					else
+					{
+						# TODO: AllowPrerelease may not work here
+						PowerShellGet\Install-Module -Name $ModuleName -MinimumVersion $RequiredVersion
+					}
+				}
+			}
+
+			# If user choose default action, check if installation was success
+			if ($Decision -eq $Default)
+			{
+				[PSModuleInfo] $ModuleStatus = Get-Module -FullyQualifiedName $ModuleFullName -ListAvailable
+				if ($ModuleStatus)
+				{
+					Write-Information -Tags "User" -MessageData "INFO: $ModuleName status changed, PowerShell must be restarted"
+					return $true
+				}
+				{
+					Write-Error -Category OperationStopped -TargetObject $ModuleStatus `
+						-Message "$ModuleName module not installed"
+				}
+			}
+
+			return $false
+		}
+	}
+}
+
+<#
+.SYNOPSIS
+Test if recommended packages are installed
+.DESCRIPTION
+Test if recommended and up to date packages are installed, if not user is
+prompted to install them.
+Outdated packages can cause issues, this function ensures latest packages are
+installed and in correct order, taking into account failures that can happen while
+installing or updating modules
+.PARAMETER ProviderFullName
+Hash table ProviderName, Version representing minimum required module
+.PARAMETER Repository
+Repository from which to download module such as PSGallery
+.PARAMETER InfoMessage
+Optional information displayable to user for choice help message
+.EXAMPLE
+Test-ModuleRecommendation @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Repository "powershellgallery.com"
+.INPUTS
+[System.Collections.Hashtable] consisting of module name and minimum required version
+.OUTPUTS
+None.
+.NOTES
+Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider
+Updating PackageManagement and PowerShellGet requires restarting PowerShell to switch to the latest version
+#>
+function Test-ProviderRecommendation
+{
+	[OutputType([System.Boolean])]
+	[CmdletBinding(PositionalBinding = $false)]
+	param (
+		[Parameter(Mandatory = $true, Position = 0)]
+		[System.Collections.Hashtable] $ProviderFullName,
+
+		[Parameter()]
+		[string] $Repository = "nuget.org",
+
+		[Parameter()]
+		[string] $InfoMessage = "Accept operation"
+	)
+
+	begin
+	{
+		[int32] $Default = 0
+	}
+	process
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+
+		[string] $ConnectionStatus = ""
+		if (!(Test-NetConnection $Repository -CommonTCPPort HTTP -ErrorAction Ignore))
+		{
+			$ConnectionStatus = " but no connection to $Repository"
+		}
+
+		# Get required module from input
+		[string] $PackageName = $ProviderFullName.ModuleName
+		[System.Version] $RequiredVersion = $ProviderFullName.ModuleVersion
+
+		# Highest version present on system if any
+		[System.Version] $TargetVersion = Get-PackageProvider -Name $PackageName |
+		Sort-Object -Property Version | Select-Object -First 1 -ExpandProperty Version
+
+		if (!$TargetVersion)
+		{
+			# TODO: need better program logic
+			$TargetVersion = "0.0.0"
+			Write-Warning -Message "Package provider $PackageName not installed"
+		}
+
+		if ($TargetVersion -lt $RequiredVersion)
+		{
+			Write-Warning -Message "$ProviderName provider version '$($TargetVersion.ToString())' is out of date, recommended version is: $RequiredVersion"
+
+			[System.Management.Automation.Host.ChoiceDescription[]] $Choices = @()
+
+			$YesChoice = [System.Management.Automation.Host.ChoiceDescription]::new("&Yes")
+			$YesChoice.HelpMessage = $InfoMessage
+			$Choices += $YesChoice
+
+			$NoChoice = [System.Management.Automation.Host.ChoiceDescription]::new("&No")
+			$NoChoice.HelpMessage = "Skip operation"
+			$Choices += $NoChoice
+
+			$Title = "Recommended package provider is out of date$ConnectionStatus"
+			$Question = "Update $ProviderName provider now?"
+			$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
+
+			if ($Decision -eq $Default)
+			{
+				$SoftwareIdentity = Find-PackageProvider -Name $PackageName -Source $Repository `
+					-MinimumVersion $RequiredVersion -IncludeDependencies
+
+				if ($SoftwareIdentity)
+				{
+					Install-PackageProvider $SoftwareIdentity.Name -Source $Repository -MinimumVersion $RequiredVersion
+
+					[System.Version] $NewVersion = Get-PackageProvider -Name $SoftwareIdentity.Name |
+					Sort-Object -Property Version | Select-Object -First 1 -ExpandProperty Version
+
+					if ($NewVersion -gt $TargetVersion)
+					{
+						Write-Information -Tags "User" -MessageData "INFO: $ProviderName provider status changed, PowerShell must be restarted"
+						return $true
+					}
+					# else error should be shown
+				}
+				else
+				{
+					Write-Warning -Message "$ProviderName provider not found to update"
+				}
+			}
+			else
+			{
+				# User refused default action
+				Write-Warning -Message "$ProviderName provider not installed"
+			}
+		}
+
+		return $false
+	}
 }
 
 <#
@@ -181,116 +609,14 @@ function Test-SystemRequirements
 		}
 	}
 
-	[string] $Title = "Required service not running"
-	[string[]] $Choices = "&Yes", "&No"
-	[int32] $Default = 0
-	[bool] $StatusGood = $true
-	$RequiredServices = Get-Service -Name lmhosts, LanmanWorkstation, LanmanServer
-
-	foreach ($Service in $RequiredServices)
-	{
-		if ($Service.Status -ne "Running")
-		{
-			[string] $Question = "Do you want to start '$($Service.DisplayName)' now?"
-			$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
-
-			if ($Decision -eq $Default)
-			{
-				$Dependencies = Get-Service -Name $Service.Name -DependentServices
-				foreach ($DependentService in $Dependencies)
-				{
-					if ($DependentService.Status -ne "Running")
-					{
-						Start-Service -Name $DependentService.Name
-						$Status = Get-Service -Name $DependentService.Name | Select-Object -ExpandProperty Status
-
-						if ($Status -ne "Running")
-						{
-							Write-Error -Category OperationStopped -TargetObject $DependentService `
-								-Message "Unable to proceed, Dependent services can't be started"
-							Write-Information -Tags "User" -MessageData "INFO: Starting dependent service '$($DependentService.DisplayName)' failed, please start manually and try again"
-							exit
-						}
-					}
-				}
-
-				# Dependencies are meet, start required service
-				Start-Service -Name $Service.Name
-				$Status = Get-Service -Name $Service.Name | Select-Object -ExpandProperty Status
-
-				if ($Status -ne "Running")
-				{
-					$StatusGood = $false
-					Write-Information -Tags "User" -MessageData "INFO: Starting $($Service.DisplayName) failed, please start manually and try again"
-				}
-			}
-			else
-			{
-				# User refused default action
-				$StatusGood = $false
-			}
-
-			if (!$StatusGood)
-			{
-				Write-Error -Category OperationStopped -TargetObject $Service `
-					-Message "Unable to proceed, required services are not started"
-				exit
-			}
-		}
-	}
+	# These services are minimum required
+	Test-ServiceRequirements @("lmhosts", "LanmanWorkstation", "LanmanServer")
 
 	# NOTE: remote administration needs this service, see Enable-PSRemoting cmdlet
-	$WinRM = Get-Service -Name WinRM
-
 	# NOTE: some tests depend on this service, project not ready for remoting
-	if ($develop -and ($PolicyStore -ne [System.Environment]::MachineName) -and ($WinRM.Status -ne "Running"))
+	if ($develop -and ($PolicyStore -ne [System.Environment]::MachineName))
 	{
-		$Question = "$($WinRM.DisplayName) service is required for remote administration and testing but not started"
-		$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
-
-		if ($Decision -eq $Default)
-		{
-			$Dependencies = Get-Service -Name $WinRM.Name -DependentServices
-			foreach ($DependentService in $Dependencies)
-			{
-				if ($DependentService.Status -ne "Running")
-				{
-					Start-Service -Name $DependentService.Name
-					$Status = Get-Service -Name $DependentService.Name | Select-Object -ExpandProperty Status
-
-					if ($Status -ne "Running")
-					{
-						Write-Error -Category OperationStopped -TargetObject $DependentService `
-							-Message "Unable to proceed, Dependent services can't be started"
-						Write-Information -Tags "User" -MessageData "INFO: Starting dependent service '$($DependentService.DisplayName)' failed, please start manually and try again"
-						exit
-					}
-				}
-			}
-
-			# Dependencies are meet, start required service
-			Start-Service -Name WinRM
-			$WinRM = Get-Service -Name WinRM
-
-			if ($WinRM.Status -ne "Running")
-			{
-				$StatusGood = $false
-				Write-Output "$($WinRM.DisplayName) service can not be started, please start it manually and try again"
-			}
-		}
-		else
-		{
-			$StatusGood = $false
-		}
-
-		if (!$StatusGood)
-		{
-			Write-Error -Category OperationStopped -TargetObject $OSEdition `
-				-Message "Unable to proceed, required service is not started"
-
-			Write-Information -Tags "Project" -MessageData "INFO: $($WinRM.DisplayName) service is required but not started"
-			exit
-		}
+		Test-ServiceRequirements "WinRM"
 	}
 
 	# Git is recommended for version control
@@ -313,349 +639,38 @@ function Test-SystemRequirements
 		Write-Information -Tags "User" -MessageData "INFO: Please verify PATH or visit https://git-scm.com to download and install"
 	}
 
-	[string] $TitleSuffix = ""
-
-	if (!(Test-NetConnection "nuget.org" -CommonTCPPort HTTP -ErrorAction Ignore))
-	{
-		$TitleSuffix = " but no connection to nuget.org"
-	}
+	[string] $Repository = "nuget.org"
 
 	# NOTE: Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider
 	# NOTE: Updating PackageManagement and PowerShellGet requires restarting PowerShell to switch to the latest version.
-	[string] $RequiredVersion = "3.0.0"
-	$ProviderName = "NuGet"
-	[System.Version] $TargetVersion = Get-PackageProvider -Name NuGet |
-	Sort-Object -Property Version | Select-Object -First 1 -ExpandProperty Version
+	if (!Test-PackageRecommendation @{ ModuleName = "NuGet"; ModuleVersion = "3.0.0" } $Repository `
+			-InfoMessage "Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider") { exit }
 
-	if (!$TargetVersion)
-	{
-		Write-Warning -Message "Package provider '$ProviderName' not installed"
-	}
-	elseif ($TargetVersion -lt $RequiredVersion)
-	{
-		Write-Warning -Message "$ProviderName provider version '$($TargetVersion.ToString())' is out of date, recommended version is: $RequiredVersion"
-
-		$Title = "Recommended package provider is out of date$TitleSuffix"
-		$Question = "Update '$ProviderName' provider now?"
-		$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
-
-		if ($Decision -eq $Default)
-		{
-			$SoftwareIdentity = Find-PackageProvider -Name "Nuget" -IncludeDependencies
-
-			if ($SoftwareIdentity)
-			{
-				Install-PackageProvider $SoftwareIdentity
-
-				[System.Version] $NewVersion = Get-PackageProvider -Name NuGet |
-				Sort-Object -Property Version | Select-Object -First 1 -ExpandProperty Version
-
-				if ($NewVersion -gt $TargetVersion)
-				{
-					Write-Information -Tags "User" -MessageData "INFO: $ProviderName status changed, PowerShell must be restarted"
-					exit
-				}
-				# else error should be shown
-			}
-			else
-			{
-				Write-Warning -Message "$ProviderName not found to update"
-			}
-		}
-		else
-		{
-			Write-Warning -Message "$ProviderName not installed"
-		}
-	}
-
-	$TitleSuffix = ""
-	if (!(Test-NetConnection "powershellgallery.com" -CommonTCPPort HTTP -ErrorAction Ignore))
-	{
-		$TitleSuffix = " but no connection to powershellgallery.com"
-	}
+	$Repository = "powershellgallery.com"
 
 	# PowerShellGet >= 2.2.4 is required otherwise updating modules might fail
 	# NOTE: PowerShellGet has a dependency on PackageManagement, it will install it if needed
-	$RequiredVersion = "2.2.4"
-	$ModuleName = "PowerShellGet"
-	[System.Collections.Hashtable] $ModuleFullName = @{ ModuleName = "$ModuleName"; ModuleVersion = "$RequiredVersion" }
-	if (!(Get-Module -FullyQualifiedName $ModuleFullName -ListAvailable))
-	{
-		[System.Version] $TargetVersion = Get-Module -Name $ModuleName -ListAvailable |
-		Sort-Object -Property Version | Select-Object -First 1 -ExpandProperty Version
-
-		if ($TargetVersion)
-		{
-			Write-Warning -Message "$ModuleName module version '$($TargetVersion.ToString())' is out of date, recommended version is: $RequiredVersion"
-
-			$Title = "Recommended module out of date$TitleSuffix"
-			$Question = "Update '$ModuleName' module now?"
-			$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
-
-			if ($Decision -eq $Default)
-			{
-				# In PowerShellGet versions 2.0.0 and above, the default is CurrentUser, which does not require elevation for install.
-				# In PowerShellGet 1.x versions, the default is AllUsers, which requires elevation for install.
-				# NOTE: for version 1.0.1 -Scope parameter is not recognized, we'll skip it for very old version
-				if (Get-InstalledModule -Name $ModuleName -ErrorAction Ignore)
-				{
-					if ($TargetVersion -gt "2.0.0")
-					{
-						PowerShellGet\Update-Module -Name $ModuleName -Scope AllUsers
-					}
-					else
-					{
-						PowerShellGet\Update-Module -Name $ModuleName
-					}
-				}
-				else
-				{
-					# Need force to install side by side, update not possible
-					if ($TargetVersion -gt "2.0.0")
-					{
-						PowerShellGet\Install-Module -Name $ModuleName -Scope AllUsers -Force
-					}
-					else
-					{
-						PowerShellGet\Install-Module -Name $ModuleName -Force
-					}
-				}
-			}
-		}
-		else
-		{
-			Write-Warning -Message "$ModuleName module minimum version $RequiredVersion is required for best editing experience but not installed"
-
-			$Title = "Recommended module not installed$TitleSuffix"
-			$Question = "Install '$ModuleName' module now?"
-			$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
-
-			if ($Decision -eq $Default)
-			{
-				if ($TargetVersion -gt "2.0.0")
-				{
-					PowerShellGet\Install-Module -Name $ModuleName -Scope AllUsers -MinimumVersion $RequiredVersion
-				}
-				else
-				{
-					PowerShellGet\Install-Module -Name $ModuleName -MinimumVersion $RequiredVersion
-				}
-			}
-		}
-
-		# Check if installation was success
-		[PSModuleInfo] $ModuleStatus = Get-Module -FullyQualifiedName $AnalyzerModule -ListAvailable
-		if ($ModuleStatus)
-		{
-			Write-Information -Tags "User" -MessageData "INFO: $ModuleName status changed, PowerShell must be restarted"
-			exit
-		}
-		{
-			Write-Error -Category OperationStopped -TargetObject $ModuleStatus `
-				-Message "$ModuleName module not installed"
-			exit
-		}
-	}
+	# For systems with PowerShell 5.0 (or greater) PowerShellGet and PackageManagement can be installed together.
+	if (!Test-ModuleRecommendation @{ ModuleName = "PowerShellGet"; ModuleVersion = "2.2.4" } $Repository `
+			-InfoMessage "PowerShellGet >= 2.2.4 is required otherwise updating modules might fail") { exit }
 
 	# PackageManagement >= 1.4.7 is required otherwise updating modules might fail
-	[string] $RequiredVersion = "1.4.7"
-	$ModuleName = "PackageManagement"
-	[System.Collections.Hashtable] $ModuleFullName = @{ ModuleName = "$ModuleName"; ModuleVersion = "$RequiredVersion" }
-	if (!(Get-Module -FullyQualifiedName $ModuleFullName -ListAvailable))
+	if (!Test-ModuleRecommendation @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } $Repository) { exit }
+
+	# posh-git >= 1.0.0-beta4 is recommended for better git experience in PowerShell
+	if (Test-ModuleRecommendation @{ ModuleName = "posh-git"; ModuleVersion = "0.7.3" } $Repository -AllowPrerelease `
+			-InfoMessage "posh-git is recommended for better git experience in PowerShell" )
 	{
-		[System.Version] $TargetVersion = Get-Module -Name $ModuleName -ListAvailable |
-		Sort-Object -Property Version | Select-Object -First 1 -ExpandProperty Version
-
-		if ($TargetVersion)
-		{
-			Write-Warning -Message "$ModuleName module version '$($TargetVersion.ToString())' is out of date, recommended version is: $RequiredVersion"
-
-			$Title = "Recommended module out of date$TitleSuffix"
-			$Question = "Update '$ModuleName' module now?"
-			$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
-
-			if ($Decision -eq $Default)
-			{
-				Update-Module -Name $ModuleName -Scope AllUsers
-			}
-		}
-		else
-		{
-			Write-Warning -Message "$ModuleName module minimum version $RequiredVersion is required for best editing experience but not installed"
-
-			$Title = "Recommended module not installed$TitleSuffix"
-			$Question = "Install '$ModuleName' module now?"
-			$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
-
-			if ($Decision -eq $Default)
-			{
-				PowerShellGet\Install-Module -Name $ModuleName -Scope AllUsers -MinimumVersion $RequiredVersion
-			}
-		}
-
-		# Check if installation was success
-		[PSModuleInfo] $ModuleStatus = Get-Module -FullyQualifiedName $ModuleFullName -ListAvailable
-		if ($ModuleStatus)
-		{
-			Write-Information -Tags "User" -MessageData "INFO: $ModuleName status changed, PowerShell must be restarted"
-			exit
-		}
-		{
-			Write-Error -Category OperationStopped -TargetObject $ModuleStatus `
-				-Message "$ModuleName module not installed"
-			exit
-		}
-	}
-
-	# posh-git is recommended for better git experience in PowerShell
-	[string] $StablePoshGit = "0.7.3"
-	[string] $RequiredPoshGit = "1.0.0"
-	[string] $ModuleName = "posh-git"
-	[System.Collections.Hashtable] $ModuleFullName = @{ ModuleName = $ModuleName; ModuleVersion = "$RequiredPoshGit" }
-	if (!(Get-Module -FullyQualifiedName $ModuleFullName -ListAvailable))
-	{
-		if (!$GitInstance)
-		{
-			Write-Information -Tags "User" -MessageData "$ModuleName module can not function without git in PATH"
-		}
-		else
-		{
-			[string] $InstallStatus = ""
-			[System.Version] $TargetPoshGit = Get-Module -Name $ModuleName -ListAvailable |
-			Sort-Object -Property Version | Select-Object -First 1 -ExpandProperty Version
-
-			if ($TargetPoshGit)
-			{
-				Write-Warning -Message "$ModuleName module version '$($TargetPoshGit.ToString())' is out of date, recommended version is: $RequiredPoshGit"
-
-				$Title = "Recommended module out of date$TitleSuffix"
-				$Question = "Update '$ModuleName' module now?"
-				$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
-
-				if ($Decision -eq $Default)
-				{
-					PowerShellGet\Update-Module -Name $ModuleName -Scope AllUsers -ErrorAction Stop
-				}
-			}
-			else
-			{
-				Write-Warning -Message "$ModuleName module minimum version $RequiredPoshGit is recommended to work with git in PowerShell"
-
-				$Title = "Recommended module not installed$TitleSuffix"
-				$Question = "Install '$ModuleName' module now?"
-				$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
-
-				if ($Decision -eq $Default)
-				{
-					PowerShellGet\Install-Module -Name $ModuleName -Scope AllUsers -AllowPrerelease -MinimumVersion $StablePoshGit -ErrorAction Stop
-					$InstallStatus = "OK"
-				}
-			}
-
-			[PSModuleInfo] $ModuleStatus = Get-Module -FullyQualifiedName $ModuleFullName -ListAvailable
-			if ($ModuleStatus)
-			{
-				if (![System.String]::IsNullOrEmpty($InstallStatus))
-				{
-					Add-PoshGitToProfile -AllHosts
-				}
-
-				Write-Information -Tags "User" -MessageData "INFO: $ModuleName status changed, PowerShell should be later restarted"
-			}
-		}
+		Add-PoshGitToProfile -AllHosts
 	}
 
 	# PSScriptAnalyzer >= 1.19.1 is required otherwise code will start missing while editing
-	[string] $RequiredAnalyzer = "1.19.1"
-	$ModuleName = "PSScriptAnalyzer"
-	[System.Collections.Hashtable] $ModuleFullName = @{ ModuleName = "$ModuleName"; ModuleVersion = "$RequiredAnalyzer" }
-	if (!(Get-Module -FullyQualifiedName $ModuleFullName -ListAvailable))
-	{
-		[System.Version] $TargetAnalyzer = Get-Module -Name $ModuleName -ListAvailable |
-		Sort-Object -Property Version | Select-Object -First 1 -ExpandProperty Version
+	if (!Test-ModuleRecommendation @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = "1.19.1" } $Repository `
+			-InfoMessage "PSScriptAnalyzer >= 1.19.1 is required otherwise code will start missing while editing" ) { exit }
 
-		if ($TargetAnalyzer)
-		{
-			Write-Warning -Message "$ModuleName module version '$($TargetAnalyzer.ToString())' is out of date, recommended version is: $RequiredAnalyzer"
-
-			$Title = "Recommended module out of date$TitleSuffix"
-			$Question = "Update '$ModuleName' module now?"
-			$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
-
-			if ($Decision -eq $Default)
-			{
-				Update-Module -Name $ModuleName -Scope AllUsers
-			}
-		}
-		else
-		{
-			Write-Warning -Message "$ModuleName module minimum version $RequiredAnalyzer is required for best editing experience but not installed"
-
-			$Title = "Recommended module not installed$TitleSuffix"
-			$Question = "Install '$ModuleName' module now?"
-			$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
-
-			if ($Decision -eq $Default)
-			{
-				PowerShellGet\Install-Module -Name $ModuleName -Scope AllUsers -MinimumVersion $RequiredAnalyzer
-			}
-		}
-
-		[PSModuleInfo] $ModuleStatus = Get-Module -FullyQualifiedName $ModuleFullName -ListAvailable
-		if ($ModuleStatus)
-		{
-			Write-Information -Tags "User" -MessageData "INFO: $ModuleName status changed, PowerShell should be later restarted"
-		}
-		else
-		{
-			Write-Error -Category OperationStopped -TargetObject $ModuleStatus `
-				-Message "$ModuleName module not installed"
-			exit
-		}
-	}
-
-	# Pester is recommended to run pester tests
-	[string] $RequiredPester = "5.0.3"
-	$ModuleName = "Pester"
-	[System.Collections.Hashtable] $ModuleFullName = @{ ModuleName = $ModuleName; ModuleVersion = "$RequiredPester" }
-	if (!(Get-Module -FullyQualifiedName $ModuleFullName -ListAvailable))
-	{
-		[System.Version] $TargetPester = Get-Module -Name $ModuleName -ListAvailable |
-		Sort-Object -Property Version | Select-Object -First 1 -ExpandProperty Version
-
-		if ($TargetPester)
-		{
-			Write-Warning -Message "$ModuleName module version '$($TargetPester.ToString())' is out of date, recommended version is: $RequiredPester"
-
-			$Title = "Recommended module out of date$TitleSuffix"
-			$Question = "Update '$ModuleName' module now?"
-			$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
-
-			if ($Decision -eq $Default)
-			{
-				Update-Module -Name $ModuleName -Scope AllUsers
-			}
-		}
-		else
-		{
-			Write-Warning -Message "$ModuleName module minimum version $RequiredPester is recommended to run some of the tests but not installed"
-
-			$Title = "Recommended module not installed$TitleSuffix"
-			$Question = "Install '$ModuleName' module now?"
-			$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
-
-			if ($Decision -eq $Default)
-			{
-				PowerShellGet\Install-Module -Name $ModuleName -Scope AllUsers -MinimumVersion $RequiredPester
-			}
-		}
-
-		[PSModuleInfo] $ModuleStatus = Get-Module -FullyQualifiedName $ModuleFullName -ListAvailable
-		if ($ModuleStatus)
-		{
-			Write-Information -Tags "User" -MessageData "INFO: $ModuleName status changed, PowerShell should be later restarted"
-		}
-	}
+	# Pester is required to run pester tests
+	if (!Test-ModuleRecommendation @{ ModuleName = "Pester"; ModuleVersion = "5.0.3" } $Repository `
+			-InfoMessage "Pester is required to run pester tests" ) { }
 
 	# Everything OK, print environment status
 	Write-Output ""
@@ -669,3 +684,6 @@ function Test-SystemRequirements
 #
 
 Export-ModuleMember -Function Test-SystemRequirements
+Export-ModuleMember -Function Test-ServiceRequirements
+Export-ModuleMember -Function Test-ModuleRecommendation
+Export-ModuleMember -Function Test-ProviderRecommendation

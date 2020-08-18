@@ -24,6 +24,7 @@
 ## Modules
 
 - Improved SID conversion function
+- Improved requirements check
 
 # Changelog v0.5.0
 
