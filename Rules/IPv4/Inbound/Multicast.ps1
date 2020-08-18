@@ -49,15 +49,13 @@ Address Range					Size		CIDR				Designation
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name Project.AllPlatforms.System
 Test-SystemRequirements
 
 # Imports
 . $PSScriptRoot\DirectionSetup.ps1
 . $PSScriptRoot\..\IPSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
-Import-Module -Name Project.Windows.UserInfo @Logs
-Import-Module -Name Project.AllPlatforms.Utility @Logs
+Import-Module -Name Project.Windows.UserInfo
 
 #
 # Setup local variables:

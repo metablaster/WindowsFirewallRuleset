@@ -32,16 +32,12 @@ SOFTWARE.
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name Project.AllPlatforms.System
 Test-SystemRequirements
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
-Import-Module -Name Project.AllPlatforms.Test @Logs
-Import-Module -Name Project.Windows.UserInfo @Logs
-Import-Module -Name Project.Windows.ProgramInfo @Logs
-Import-Module -Name Project.AllPlatforms.Utility @Logs
+Import-Module -Name Project.Windows.UserInfo
 
 # Ask user if he wants to load these rules
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs

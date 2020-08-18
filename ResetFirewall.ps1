@@ -29,12 +29,10 @@ SOFTWARE.
 . $PSScriptRoot\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Import-Module -Name Project.AllPlatforms.System
 Test-SystemRequirements
 
 # Imports
 Import-Module -Name Project.AllPlatforms.Logging
-Import-Module -Name Project.AllPlatforms.Utility @Logs
 
 #
 # Default setup for each profile is the same,

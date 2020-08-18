@@ -44,23 +44,18 @@ Import-Module -Name Project.AllPlatforms.Logging
 
 # Check requirements for this project
 Write-Information -Tags "Test" -MessageData "INFO: Import-Module System"
-Import-Module -Name Project.AllPlatforms.System
 Test-SystemRequirements
 
 Write-Information -Tags "Test" -MessageData "INFO: Import-Module Test"
-Import-Module -Name Project.AllPlatforms.Test @Logs
 
 Write-Information -Tags "Test" -MessageData "INFO: Import-Module Utility"
-Import-Module -Name Project.AllPlatforms.Utility @Logs
 
 Write-Information -Tags "Test" -MessageData "INFO: Import-Module ComputerInfo"
-Import-Module -Name Project.Windows.ComputerInfo @Logs
 
 Write-Information -Tags "Test" -MessageData "INFO: Import-Module UserInfo"
-Import-Module -Name Project.Windows.UserInfo @Logs
+Import-Module -Name Project.Windows.UserInfo
 
 Write-Information -Tags "Test" -MessageData "INFO: Import-Module ProgramInfo"
-Import-Module -Name Project.Windows.ProgramInfo @Logs
 
 # Ask user if he wants to load these rules
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs

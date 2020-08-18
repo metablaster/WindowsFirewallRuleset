@@ -30,12 +30,8 @@ SOFTWARE.
 
 # Imports
 # Import-Module -Name Project.AllPlatforms.Logging
-# Import-Module -Name Project.AllPlatforms.Test @Logs
-# Import-Module -Name Project.Windows.UserInfo @Logs
-# Import-Module -Name Project.Windows.ProgramInfo @Logs
-# Import-Module -Name Project.Windows.ComputerInfo @Logs
-# Import-Module -Name Project.AllPlatforms.Utility @Logs
-
+# # Import-Module -Name Project.Windows.UserInfo
+# # #
 <#
 .SYNOPSIS
 A brief description of the function or script.
