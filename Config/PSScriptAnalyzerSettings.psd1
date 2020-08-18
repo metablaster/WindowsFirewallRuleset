@@ -1,6 +1,7 @@
 
 # https://github.com/PowerShell/PSScriptAnalyzer/tree/master/RuleDocumentation
 # NOTE: PSGallery ruleset is a duplicate of these
+# TODO: check for new or updated settings
 
 @{
 	IncludeRules = @(
@@ -168,6 +169,7 @@
 			CheckParameter = $true
 		}
 
+		# TODO: some variables here are not enabled
 		PSUseConsistentIndentation = @{
 			Enable = $true
 			# Represents the kind of indentation to be used.
