@@ -113,6 +113,8 @@ New-Test "My-Function"
 None. You cannot pipe objects to New-Test
 .OUTPUTS
 None. Formatted message block is shown in console.
+.NOTES
+TODO: switch for no new line, some tests will produce redundant new lines, ex. Format-Table in pipeline
 #>
 function New-Test
 {

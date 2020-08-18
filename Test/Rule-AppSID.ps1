@@ -70,7 +70,7 @@ foreach ($Principal in $Principals)
 	$OwnerSID = Get-AccountSID $Principal.User -Computer $Principal.Computer @Logs
 	$OwnerSID
 
-	Get-AppxPackage -User $Principal.User -PackageTypeFilter Bundle | ForEach-Object {
+	Get-UserApps -User $Principal.User | ForEach-Object {
 		$PackageSID = Get-AppSID $Principal.User $_.PackageFamilyName
 		$PackageSID
 	} @Logs

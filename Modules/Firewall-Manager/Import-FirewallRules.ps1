@@ -288,25 +288,29 @@ function Import-FirewallRules
 		# for SID types no empty value is defined, so omit if not present
 		if (![string]::IsNullOrEmpty($Rule.Owner))
 		{
-			if ($(ConvertFrom-SID $Rule.Owner).Name -ne "INVALID_NAME")
+			$LoginName = $(ConvertFrom-SID $Rule.Owner).Name
+
+			if ([System.String]::IsNullOrEmpty($LoginName))
 			{
-				$RuleSplatHash.Owner = $Rule.Owner
+				Write-Warning -Message "Rule may be invalid, store app owner does not exist"
 			}
 			else
 			{
-				Write-Warning -Message "Rule may be invalid, store app owner does not exist"
+				$RuleSplatHash.Owner = $Rule.Owner
 			}
 		}
 
 		if (![string]::IsNullOrEmpty($Rule.Package))
 		{
-			if ($(ConvertFrom-SID $Rule.Package).Name -ne "INVALID_NAME")
+			$LoginName = $(ConvertFrom-SID $Rule.Package).Name
+
+			if ([System.String]::IsNullOrEmpty($LoginName))
 			{
-				$RuleSplatHash.Package = $Rule.Package
+				Write-Warning -Message "Rule may be invalid, store app package does not exist"
 			}
 			else
 			{
-				Write-Warning -Message "Rule may be invalid, store app package does not exist"
+				$RuleSplatHash.Package = $Rule.Package
 			}
 		}
 

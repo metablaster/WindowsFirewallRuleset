@@ -2595,7 +2595,11 @@ Get store apps for specific user
 .DESCRIPTION
 Search installed store apps in userprofile for specific user account
 .PARAMETER UserName
-User name in form of "USERNAME"
+User name in form of:
+- domain\user_name
+- user_name@fqn.domain.tld
+- user_name
+- SID-string
 .PARAMETER ComputerName
 NETBIOS Computer name in form of "COMPUTERNAME"
 .EXAMPLE
@@ -2607,6 +2611,9 @@ None. You cannot pipe objects to Get-UserApps
 .NOTES
 TODO: query remote computer not implemented
 TODO: multiple computers
+TODO: we should probably return custom object to be able to pipe to functions such as Get-AppSID
+TODO: see also -AllUsers and other parameters
+https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage?view=win10-ps
 #>
 function Get-UserApps
 {
@@ -2639,7 +2646,7 @@ Search system wide installed store apps
 .PARAMETER ComputerName
 NETBIOS Computer name in form of "COMPUTERNAME"
 .EXAMPLE
-Get-SystemApps "USERNAME"
+Get-SystemApps "COMPUTERNAME"
 .INPUTS
 None. You cannot pipe objects to Get-SystemApps
 .OUTPUTS
@@ -2647,6 +2654,8 @@ None. You cannot pipe objects to Get-SystemApps
 .NOTES
 TODO: query remote computer not implemented
 TODO: multiple computers
+TODO: we should probably return custom object to be able to pipe to functions such as Get-AppSID
+TODO: it is possible to add -User parameter, what's the purpose? see also StoreApps.ps1
 #>
 function Get-SystemApps
 {

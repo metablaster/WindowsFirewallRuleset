@@ -56,6 +56,9 @@ else
 	$InformationPreference = "Continue"
 }
 
+# Imports (Get-UserApps)
+# Import-Module -Scope Global -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
+
 # TODO: get a user account that is connected to a Microsoft account. see Get-LocalUser docs.
 
 <#
@@ -756,7 +759,7 @@ ConvertFrom-SID S-1-5-21-2139171146-395215898-1246945465-2359
 .INPUTS
 [string[]] One or multiple SID's
 .OUTPUTS
-PSObject composed of SID and user or account
+[PSCustomObject[]] composed of SID information
 .NOTES
 SID conversion for well known SIDs and display names from following links:
 1. http://support.microsoft.com/kb/243330
@@ -795,7 +798,7 @@ probably not for pseudo accounts but for built in accounts it makes sense
 function ConvertFrom-SID
 {
 	# TODO: test pipeline with multiple computers and SID's
-	[OutputType([PSCustomObject])]
+	[OutputType([PSCustomObject[]])]
 	[CmdletBinding(PositionalBinding = $false)]
 	param(
 		[Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]

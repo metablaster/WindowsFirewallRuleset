@@ -83,7 +83,7 @@ foreach ($Principal in $Principals)
 	# Create rules for apps installed by user
 	#
 
-	Get-AppxPackage -User $Principal.User -PackageTypeFilter Bundle | ForEach-Object {
+	Get-UserApps -User $Principal.User | ForEach-Object {
 
 		$PackageSID = Get-AppSID $Principal.User $_.PackageFamilyName
 		$Enabled = "False"
@@ -107,7 +107,7 @@ foreach ($Principal in $Principals)
 	# Create rules for system apps
 	#
 
-	Get-AppxPackage -PackageTypeFilter Main | Where-Object { $_.SignatureKind -eq "System" -and $_.Name -like "Microsoft*" } | ForEach-Object {
+	Get-SystemApps | ForEach-Object {
 
 		$PackageSID = Get-AppSID $Principal.User $_.PackageFamilyName
 		$Enabled = "False"

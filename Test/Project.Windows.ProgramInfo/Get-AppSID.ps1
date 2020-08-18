@@ -58,10 +58,19 @@ $GroupAccounts
 New-Test "Get-AppSID: foreach User"
 foreach ($Account in $GroupAccounts)
 {
-	Get-AppxPackage -User $Account.User -PackageTypeFilter Bundle @Logs | ForEach-Object {
+	Get-UserApps -User $Account.User @Logs | ForEach-Object {
 		Get-AppSID $Account.User $_.PackageFamilyName @Logs
 	}
 }
+
+New-Test "Get-AppSID: system apps"
+$Result = Get-SystemApps @Logs | ForEach-Object {
+	Get-AppSID $Account.User $_.PackageFamilyName @Logs
+}
+$Result
+
+New-Test "Get-TypeName"
+$Result | Get-TypeName @Logs
 
 Update-Log
 Exit-Test

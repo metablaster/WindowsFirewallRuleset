@@ -39,6 +39,7 @@ Test-SystemRequirements
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Logging
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Test @Logs
+Import-Module -Name $ProjectRoot\Modules\Project.Windows.UserInfo @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo @Logs
 Import-Module -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility @Logs
 
@@ -49,8 +50,13 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
+New-Test "Get-GroupPrincipal -Group Users"
+[string[]] $Users = Get-GroupPrincipal -Group "Users" | Select-Object -ExpandProperty User
+$User = $Users[0]
+$User
+
 New-Test "Get-UserApps"
-$Result = Get-UserApps -User "User" @Logs
+$Result = Get-UserApps -User $User @Logs
 $Result
 
 New-Test "Get-TypeName"
