@@ -95,11 +95,12 @@ function Get-AppSID
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing app: $AppName"
 
 	$TargetPath = "C:\Users\$UserName\AppData\Local\Packages\$AppName\AC"
 	if (Test-Path -PathType Container -Path $TargetPath)
 	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for app: $AppName"
+
 		# TODO: what if nothing is returned?
 		$ACL = Get-Acl $TargetPath
 		$ACE = $ACL.Access.IdentityReference.Value
@@ -2605,6 +2606,7 @@ None. You cannot pipe objects to Get-UserApps
 [Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage] store app information object
 .NOTES
 TODO: query remote computer not implemented
+TODO: multiple computers
 #>
 function Get-UserApps
 {
@@ -2624,7 +2626,7 @@ function Get-UserApps
 
 	if (Test-TargetComputer $ComputerName)
 	{
-		# TODO: show warning instead of error when fail (ex. in non elevated run)
+		# TODO: show warning instead of error when fail (ex. in non elevated run check is Admin)
 		Get-AppxPackage -User $UserName -PackageTypeFilter Bundle
 	}
 }
@@ -2644,6 +2646,7 @@ None. You cannot pipe objects to Get-SystemApps
 [Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage] store app information object
 .NOTES
 TODO: query remote computer not implemented
+TODO: multiple computers
 #>
 function Get-SystemApps
 {

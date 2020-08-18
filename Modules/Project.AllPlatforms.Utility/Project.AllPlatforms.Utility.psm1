@@ -474,9 +474,9 @@ core or desktop edition is used, since parameters for Test-Connection are not th
 for both PowerShell editions.
 .PARAMETER ComputerName
 Target computer which to test
-.PARAMETER ConnectionCount
+.PARAMETER Count
 Valid only for PowerShell Core. Specifies the number of echo requests to send. The default value is 4
-.PARAMETER ConnectionTimeout
+.PARAMETER Timeout
 Valid only for PowerShell Core. The test fails if a response isn't received before the timeout expires
 .EXAMPLE
 Test-TargetComputer "COMPUTERNAME" 2 1
@@ -487,7 +487,7 @@ None. You cannot pipe objects to Test-TargetMachine
 .OUTPUTS
 [bool] false or true if target host is responsive
 .NOTES
-None.
+TODO: avoid error message, check all references which handle errors (code bloat)
 #>
 function Test-TargetComputer
 {

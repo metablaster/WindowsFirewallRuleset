@@ -21,6 +21,10 @@
 - Added steps for general network troubleshooting
 - Random spellchecks and minor updates
 
+## Modules
+
+- Improved SID conversion function
+
 # Changelog v0.5.0
 
 ## Modules

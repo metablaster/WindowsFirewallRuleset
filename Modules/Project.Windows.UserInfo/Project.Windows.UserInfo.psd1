@@ -113,7 +113,6 @@
 		"Project.Windows.UserInfo.psd1"
 		"Project.Windows.UserInfo.psm1"
 		"about_Project.Windows.UserInfo.help.txt"
-		"ConvertFrom-SID.ps1"
 	)
 
 	# Private data to pass to the module specified in RootModule/ModuleToProcess.

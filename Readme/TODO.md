@@ -76,6 +76,8 @@ TODO's in this file are categorized into following sections:
     - Some tests fail to run in non "develop" mode due to missing variables
     - Need to test rules without "ProgramRoot" variable to see if searching works
     - Need global test variable to set up valid Windows username which is performing tests
+    - For Write-Debug $PSBoundParameters.Values check if it's in process block or begin block,
+    make sure wanted parameters are shown, make sure values are visible instead of object name
 
 5. Code style
 
@@ -120,6 +122,8 @@ TODO's in this file are categorized into following sections:
     See ComputerInfo\Get-ConfiguredAdapter for example
     - 3rd party modules are not consistent with our own modules regarding folder and structure and
     high level implementation
+    - Some function variables such as "ComputerNames" take array or values, make sure this functionality
+    actually makes sense, and also for naming consistency for ValueFromPipelineByPropertyName
 
 2. Project scripts
 

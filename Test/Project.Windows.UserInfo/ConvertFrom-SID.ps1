@@ -61,39 +61,44 @@ $NTAccounts = Get-AccountSID -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVI
 $NTAccounts
 
 New-Test "ConvertFrom-SID users and admins"
+$AccountSIDs = @()
 foreach ($Account in $UserAccounts)
 {
-	$Account.SID | ConvertFrom-SID @Logs | Select-Object -ExpandProperty Name
+	$AccountSIDs += $Account.SID
 }
+$AccountSIDs | ConvertFrom-SID @Logs | Format-Table
 
 New-Test "ConvertFrom-SID NT AUTHORITY users"
 foreach ($Account in $NTAccounts)
 {
-	$Account | ConvertFrom-SID @Logs | Select-Object -ExpandProperty Name
+	ConvertFrom-SID $Account @Logs | Format-Table
 }
+
+New-Test "ConvertFrom-SID Unknown domain"
+ConvertFrom-SID "S-1-5-21-0000-0000-1111-1111" -ErrorAction Ignore | Format-Table
 
 New-Test "ConvertFrom-SID App SID"
 $AppSID = "S-1-15-2-2967553933-3217682302-2494645345-2077017737-3805576244-585965800-1797614741"
-$Result = ConvertFrom-SID $AppSID @Logs
-$Result | Format-Table
+$AppResult = ConvertFrom-SID $AppSID @Logs
+$AppResult | Format-Table
 
 New-Test "ConvertFrom-SID nonexistent App SID"
-$AppSID = "S-1-15-2-2967553933-3217682302-INVALID-2077017737-3805576244-585965800-1797614741"
-$Result = ConvertFrom-SID $AppSID @Logs
-$Result | Format-Table
+$AppSID = "S-1-15-2-2967553933-3217682302-0000000000000000000-2077017737-3805576244-585965800-1797614741"
+$AppResult = ConvertFrom-SID $AppSID -ErrorAction Ignore @Logs
+$AppResult | Format-Table
 
 New-Test "ConvertFrom-SID APPLICATION PACKAGE AUTHORITY"
 $AppSID = "S-1-15-2-2"
-$Result = ConvertFrom-SID $AppSID @Logs
-$Result | Format-Table
+$PackageResult = ConvertFrom-SID $AppSID @Logs
+$PackageResult | Format-Table
 
 New-Test "ConvertFrom-SID Capability"
-$AppSID = "S-1-15-3-RANDOM"
-$Result = ConvertFrom-SID $AppSID @Logs
-$Result | Format-Table
+$AppSID = "S-1-15-3-12345"
+$PackageResult = ConvertFrom-SID $AppSID @Logs
+$PackageResult | Format-Table
 
 New-Test "Get-TypeName AppSID"
-$Result | Get-TypeName @Logs
+$AppResult | Get-TypeName @Logs
 
 New-Test "Get-TypeName UserAccounts"
 $UserAccounts[0] | Get-TypeName @Logs
