@@ -43,7 +43,8 @@ TODO's in this file are categorized into following sections:
 
 1. Modules
 
-    - Revisit code and make consistent PSCustomObject properties for all function outputs
+    - Revisit code and make consistent PSCustomObject properties for all function outputs, consider
+    using formats for custom objects
     - Need to see which functions/commands may throw and setup try catch blocks
     - Revisit parameter validation for functions, specifically acceptance of NULL or empty
     - Registry drilling for some rules are complex and specific, such as for NVIDIA or OneDrive,
@@ -194,6 +195,7 @@ TODO's in this file are categorized into following sections:
     We can show additional information about the failure into the console when this is the case
     - Since the scripts are run as Administrator, we need a way to check who is the actual standard
     user, to be able to check for required modules in user directory if not installed system wide.
+    - Checking local or remote computers will be performed multiple in call stack slowing down execution
 
 2. Project scripts
 

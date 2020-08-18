@@ -162,6 +162,11 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	New-Variable -Name ProjectRoot -Scope Global -Option Constant -Value (
 		Resolve-Path -Path "$PSScriptRoot\.." | Select-Object -ExpandProperty Path)
 
+	# Add project module directory to session module path
+	$ModulePath = [System.Environment]::GetEnvironmentVariable("PSModulePath")
+	$ModulePath += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Modules"
+	[System.Environment]::SetEnvironmentVariable("PSModulePath", $ModulePath)
+
 	# Windows 10, Windows Server 2019 and above
 	New-Variable -Name Platform -Scope Global -Option Constant -Value "10.0+"
 

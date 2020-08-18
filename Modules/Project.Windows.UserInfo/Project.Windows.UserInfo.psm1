@@ -26,6 +26,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+param (
+	# Temporary hack to break circular module load
+	# TODO: change design so we don't need this
+	[Parameter()]
+	[bool] $BreakDependency = $false
+)
+
 Set-StrictMode -Version Latest
 Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
@@ -56,8 +63,11 @@ else
 	$InformationPreference = "Continue"
 }
 
-# Imports (Get-UserApps)
-# Import-Module -Scope Global -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
+# Imports (Get-UserApps, Get-SystemApps)
+if (!$BreakDependency -and !(Get-Module Project.Windows.ProgramInfo))
+{
+	Import-Module -Scope Global -Name $ProjectRoot\Modules\Project.Windows.ProgramInfo
+}
 
 # TODO: get a user account that is connected to a Microsoft account. see Get-LocalUser docs.
 

@@ -86,7 +86,9 @@ New-Test "ProjectConstants"
 Write-Information -Tags "Test" -MessageData "INFO: PolicyStore: $PolicyStore"
 Write-Information -Tags "Test" -MessageData "INFO: Platform: $Platform"
 Write-Information -Tags "Test" -MessageData "INFO: ProjectRoot: $ProjectRoot"
-Write-Information -Tags "Test" -MessageData "INFO: Force: $Force"
+Write-Information -Tags "Test" -MessageData "INFO: PSModulePath:"
+Split-Path -Path $env:PSModulePath.Split(";")
+Write-Information -Tags "Test" -MessageData "INFO: Force: $ForceLoad"
 Write-Information -Tags "Test" -MessageData "INFO: Interface: $Interface"
 
 New-Test "ReadOnlyVariables"

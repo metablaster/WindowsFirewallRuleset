@@ -59,7 +59,7 @@ else
 # Includes
 . $PSScriptRoot\External\Get-SQLInstance.ps1
 Import-Module -Scope Global -Name $ProjectRoot\Modules\VSSetup
-Import-Module -Scope Global -Name $ProjectRoot\Modules\Project.Windows.UserInfo
+Import-Module -Scope Global -Name $ProjectRoot\Modules\Project.Windows.UserInfo -ArgumentList $true
 # Import-Module -Scope Global -Name $ProjectRoot\Modules\Project.Windows.ComputerInfo
 Import-Module -Scope Global -Name $ProjectRoot\Modules\Project.AllPlatforms.Utility
 

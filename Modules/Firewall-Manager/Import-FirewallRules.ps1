@@ -292,7 +292,8 @@ function Import-FirewallRules
 
 			if ([System.String]::IsNullOrEmpty($LoginName))
 			{
-				Write-Warning -Message "Rule may be invalid, store app owner does not exist"
+				Write-Warning -Message "Importing rule '$($Rule.Displayname)' skipped, store app owner does not exist"
+				continue
 			}
 			else
 			{
@@ -306,7 +307,8 @@ function Import-FirewallRules
 
 			if ([System.String]::IsNullOrEmpty($LoginName))
 			{
-				Write-Warning -Message "Rule may be invalid, store app package does not exist"
+				Write-Warning -Message "Importing rule '$($Rule.Displayname)' skipped, store app package does not exist"
+				continue
 			}
 			else
 			{

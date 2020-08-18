@@ -1,36 +1,86 @@
 
-# Precompiled Headers
+
+# Compiled Object files (VS 2019)
+*.obj
+*.iobj
+
+# Precompiled headers (VS 2019)
 *.pch
 *.ipch
+*.pchast
 
-# Visual Studio Files
+# Compiled dynamic libraries (VS 2019)
+*.dll
+
+# Compiled static libraries (VS 2019)
+*.lib
+*.exp
+
+# Compiled executables (VS 2019)
+*.exe
+*.app
+*.dll
+!VSSetup/Microsoft.VisualStudio.Setup.Configuration.Interop.dll
+!VSSetup/Microsoft.VisualStudio.Setup.PowerShell.dll
+
+# Visual Studio solution and project files (VS 2019)
 *.suo
 *.user
 
-# Visual Studio database files
+# Visual Studio code analysis files
+*.lastcodeanalysissucceeded
+*.nativecodeanalysis.sarif
+*.nativecodeanalysis.xml
+
+# Visual Studio database files (VS 2019)
 *.db
 *.db-shm
 *.db-wal
-*.opendb
 *.idb
 *.pdb
 *.ipdb
+
+# Visual Studio database files (probably older VS)
 *.opensdf
 *.sdf
+*.opendb
 
-# Visual Studio log files
+# Visual Studio log files (VS 2019)
 *.log
 *.tlog
 *.lastbuildstate
+#*.txt
+
+# Visual Studio linker files (VS 2019)
+*.ilk
+
+# Compiled Resource files (VS 2019)
+*.res
+
+# Compiled Resource files (probably older VS)
+*.aps
 
 # Visual Studio browse files
 *.sbr
 *.bsc
 
-# Visual studio settings
+# Visual Studio upgrade files
+*.htm
+*.html
+
+# Visual Studio manifest files
+*.manifest
+
+# Visual studio hidden solution folder (VS 2019)
 .vs/
 
-# Add your private stuff here
-Logs/
-Exports/
+# Build Directories
+Build/
+Intermediate/
+
+# Project specific
+Logs/**
+!Logs/README.md
+Exports/**
+!Exports/README.md
 Rules/NetworkServices.txt
