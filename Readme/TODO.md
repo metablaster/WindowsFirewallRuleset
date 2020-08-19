@@ -79,6 +79,7 @@ TODO's in this file are categorized into following sections:
     - Need global test variable to set up valid Windows username which is performing tests
     - For Write-Debug $PSBoundParameters.Values check if it's in process block or begin block,
     make sure wanted parameters are shown, make sure values are visible instead of object name
+    - Failure tests must use try/catch and write to information stream, see Get-SystemSKU test
 
 5. Code style
 
@@ -196,6 +197,9 @@ TODO's in this file are categorized into following sections:
     - Since the scripts are run as Administrator, we need a way to check who is the actual standard
     user, to be able to check for required modules in user directory if not installed system wide.
     - Checking local or remote computers will be performed multiple in call stack slowing down execution
+    - EXAMPLE comments should be in the form of:
+    PS> Get-Something
+    Something output
 
 2. Project scripts
 

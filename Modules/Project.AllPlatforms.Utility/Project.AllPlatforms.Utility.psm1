@@ -488,6 +488,7 @@ None. You cannot pipe objects to Test-TargetMachine
 [bool] false or true if target host is responsive
 .NOTES
 TODO: avoid error message, check all references which handle errors (code bloat)
+TODO: this should probably be part of ComputerInfo module
 #>
 function Test-TargetComputer
 {
@@ -506,7 +507,12 @@ function Test-TargetComputer
 		[int16] $Timeout = $ConnectionTimeout
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Information -Tags "User" -MessageData "INFO: Contacting computer $ComputerName"
+
 	# Test parameters depend on PowerShell edition
+	# TODO: changes not reflected in calling code
+	# NOTE: Don't suppress error, error details can be of more use than just "unable to contact computer"
 	if ($PSVersionTable.PSEdition -eq "Core")
 	{
 		return Test-Connection -TargetName $ComputerName -Count $Count -TimeoutSeconds $Timeout -IPv4 -Quiet

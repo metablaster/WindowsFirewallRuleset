@@ -56,6 +56,9 @@ else
 	$InformationPreference = "Continue"
 }
 
+# Imports
+. $PSScriptRoot\External\Get-SQLInstance.ps1
+
 <#
 .SYNOPSIS
 Get store app SID

@@ -215,6 +215,12 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -Erro
 
 	# Set to false to avoid checking system requirements
 	Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $false
+
+	# Set to false to avoid checking if modules are up to date
+	Set-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Force -Value $true
+
+	# Set to false to avoid checking if required system services are started
+	Set-Variable -Name ServicesCheck -Scope Global -Option ReadOnly -Force -Value $true
 }
 
 # Removable variables, meaning these can be modified by code at any time,

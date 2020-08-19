@@ -35,6 +35,7 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 # TODO: repository paths whitelist check
 # TODO: should process must be implemented for system changes
 # if (!$PSCmdlet.ShouldProcess("ModuleName", "Update or install module if needed"))
+# SupportsShouldProcess = $true, ConfirmImpact = 'High'
 
 #
 # Module preferences
@@ -79,11 +80,10 @@ None.
 .NOTES
 [System.ServiceProcess.ServiceController[]]
 #>
-function Test-ServiceRequirements
+function Test-ServicesRequirement
 {
 	[OutputType([System.Boolean])]
 	[CmdletBinding()]
-	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'This name cant be singular')]
 	param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
 		[string[]] $Services
@@ -204,14 +204,14 @@ function Test-ServiceRequirements
 
 <#
 .SYNOPSIS
-Check recommended modules are installed
+Check if recommended modules are installed
 .DESCRIPTION
 Test if recommended and up to date modules are installed, if not user is
 prompted to install or update them.
 Outdated or missing modules can cause strange issues, this function ensures latest modules are
 installed and in correct order, taking into account failures that can happen while
 installing or updating modules
-.PARAMETER ModuleSpecification
+.PARAMETER ModuleFullName
 Hash table with a minimum ModuleName and ModuleVersion keys, in the form of ModuleSpecification
 .PARAMETER Repository
 Repository name from which to download module such as PSGallery,
@@ -234,15 +234,16 @@ None. You cannot pipe objects to Initialize-ModuleRequirement
 .OUTPUTS
 None.
 .NOTES
-None.
+Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider
+Updating PackageManagement and PowerShellGet requires restarting PowerShell to switch to the latest version
 #>
 function Initialize-ModuleRequirement
 {
 	[OutputType([System.Boolean])]
-	[CmdletBinding(PositionalBinding = $false, SupportsShouldProcess = $true, ConfirmImpact = 'High')]
+	[CmdletBinding(PositionalBinding = $false)]
 	param (
 		[Parameter(Mandatory = $true, Position = 0,
-			HelpMessage = "Specify name of module in the form of ModuleSpecification object")]
+			HelpMessage = "Specify module to check in the form of ModuleSpecification object")]
 		[ValidateNotNullOrEmpty()]
 		[System.Collections.Hashtable] $ModuleFullName,
 
@@ -276,24 +277,43 @@ function Initialize-ModuleRequirement
 		return $false
 	}
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if module $($ModuleFullName.ModuleName) is installed and what version"
-
 	# Get required module from input
 	[string] $ModuleName = $ModuleFullName.ModuleName
 	[System.Version] $RequiredVersion = $ModuleFullName.ModuleVersion
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if module $ModuleName is installed and what version"
 
 	# Highest version present on system if any
 	[System.Version] $TargetVersion = Get-Module -Name $ModuleName -ListAvailable |
 	Sort-Object -Property Version | Select-Object -Last 1 -ExpandProperty Version
 
-	if ($TargetVersion -and ($TargetVersion -ge $RequiredVersion))
+	if ($TargetVersion)
 	{
-		# Up to date
-		Write-Information -Tags "User" -MessageData "INFO: Installed module $ModuleName v$TargetVersion meets >= v$RequiredVersion"
-		return $true
+		if ($TargetVersion -ge $RequiredVersion)
+		{
+			# Up to date
+			Write-Information -Tags "User" -MessageData "INFO: Installed module $ModuleName v$TargetVersion meets >= v$RequiredVersion"
+			return $true
+		}
+
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Module $ModuleName v$TargetVersion found"
 	}
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] Module $($ModuleFullName.ModuleName) v$TargetVersion found"
+	if (($ModuleName -eq "posh-git") -and !$script:GitInstance)
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if git.exe is in PATH required by module $ModuleName"
+
+		if ($TargetVersion)
+		{
+			Write-Warning -Message "$ModuleName requires git in PATH but git.exe is not present"
+		}
+		else
+		{
+			Write-Error -Category NotInstalled -TargetObject $script:GitInstance `
+				-Message "$ModuleName requires git.exe in PATH"
+			return $false
+		}
+	}
 
 	# User prompt default values
 	[int32] $Default = 0
@@ -546,25 +566,32 @@ function Initialize-ModuleRequirement
 Test if recommended packages are installed
 .DESCRIPTION
 Test if recommended and up to date packages are installed, if not user is
-prompted to install them.
-Outdated packages can cause issues, this function ensures latest packages are
+prompted to install or update them.
+Outdated or missing packages can cause strange issues, this function ensures latest packages are
 installed and in correct order, taking into account failures that can happen while
-installing or updating modules
+installing or updating packages
 .PARAMETER ProviderFullName
 Hash table ProviderName, Version representing minimum required module
 .PARAMETER Repository
-Repository from which to download module such as PSGallery
+Repository name from which to download packages such as NuGet,
+if repository is not registered user is prompted to register it
+.PARAMETER RepositoryLocation
+Repository location associated with repository name,
+this parameter is used only if repository is not registered
+.PARAMETER InstallationPolicy
+If the supplied repository needs to be registered InstallationPolicy specifies
+whether repository is trusted or not.
+this parameter is used only if repository is not registered
 .PARAMETER InfoMessage
 Optional information displayable to user for choice help message
 .EXAMPLE
-Initialize-ModuleRequirement @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Repository "powershellgallery.com"
+Initialize-ProviderRequirement @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Repository "powershellgallery.com"
 .INPUTS
-[System.Collections.Hashtable] consisting of module name and minimum required version
+None. You cannot pipe objects to Initialize-ProviderRequirement
 .OUTPUTS
 None.
 .NOTES
 Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider
-Updating PackageManagement and PowerShellGet requires restarting PowerShell to switch to the latest version
 #>
 function Initialize-ProviderRequirement
 {
@@ -575,10 +602,22 @@ function Initialize-ProviderRequirement
 		[System.Collections.Hashtable] $ProviderFullName,
 
 		[Parameter()]
-		[string] $Repository = "nuget.org",
+		[ValidatePattern("^[a-zA-Z]+$")]
+		[string] $Repository = "NuGet",
 
 		[Parameter()]
-		[string] $InfoMessage = "Accept operation"
+		[ValidatePattern("[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)")]
+		[uri] $RepositoryLocation = "nuget.org",
+
+		[Parameter()]
+		[ValidateSet("Trusted", "UnTrusted")]
+		[string] $InstallationPolicy = "UnTrusted",
+
+		[Parameter()]
+		[string] $InfoMessage = "Accept operation",
+
+		[Parameter()]
+		[switch] $AllowPrerelease
 	)
 
 	begin
@@ -692,7 +731,13 @@ function Test-SystemRequirements
 	[OutputType([System.Void])]
 	param (
 		[Parameter(Mandatory = $false)]
-		[bool] $Check = $SystemCheck
+		[bool] $Check = $SystemCheck,
+
+		[Parameter()]
+		[switch] $NoModulesCheck = $ModulesCheck,
+
+		[Parameter()]
+		[switch] $NoServicesCheck = $ServicesCheck
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -737,11 +782,10 @@ function Test-SystemRequirements
 	# Check OS is not Home edition
 	$OSEdition = Get-WindowsEdition -Online | Select-Object -ExpandProperty Edition
 
-	# TODO: We need SKU function here
 	if ($OSEdition -like "*Home*")
 	{
 		Write-Error -Category OperationStopped -TargetObject $OSEdition `
-			-Message "Unable to proceed, home editions of Windows do not have Local Group Policy"
+			-Message "Unable to proceed, home editions of Windows don't have Local Group Policy"
 		exit
 	}
 
@@ -792,19 +836,23 @@ function Test-SystemRequirements
 		}
 	}
 
-	# These services are minimum required
-	if (!(Test-ServiceRequirements @("lmhosts", "LanmanWorkstation", "LanmanServer"))) { exit }
-
-	# NOTE: remote administration needs this service, see Enable-PSRemoting cmdlet
-	# NOTE: some tests depend on this service, project not ready for remoting
-	if ($develop -and ($PolicyStore -ne [System.Environment]::MachineName))
+	if (!$NoServicesCheck)
 	{
-		if (Test-ServiceRequirements "WinRM") { exit }
+		# These services are minimum required
+		if (!(Test-ServiceRequirements @("lmhosts", "LanmanWorkstation", "LanmanServer"))) { exit }
+
+		# NOTE: remote administration needs this service, see Enable-PSRemoting cmdlet
+		# NOTE: some tests depend on this service, project not ready for remoting
+		if ($develop -and ($PolicyStore -ne [System.Environment]::MachineName))
+		{
+			if (Test-ServiceRequirements "WinRM") { exit }
+		}
 	}
 
-	# Git is recommended for version control
+	# Git is recommended for version control and by posh-git module
 	[string] $RequiredGit = "2.28.0"
-	$GitInstance = Get-Command git.exe -CommandType Application -ErrorAction Ignore
+	Set-Variable -Name GitInstance -Scope Script -Option Constant -Value `
+	$(Get-Command git.exe -CommandType Application -ErrorAction SilentlyContinue)
 
 	if ($GitInstance)
 	{
@@ -822,38 +870,45 @@ function Test-SystemRequirements
 		Write-Information -Tags "User" -MessageData "INFO: Please verify PATH or visit https://git-scm.com to download and install"
 	}
 
-	[string] $Repository = "NuGet"
+	if (!$NoModulesCheck)
+	{
+		[string] $Repository = "NuGet"
 
-	# NOTE: Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider
-	# NOTE: Updating PackageManagement and PowerShellGet requires restarting PowerShell to switch to the latest version.
-	if (!(Initialize-ProviderRequirement @{ ModuleName = "NuGet"; ModuleVersion = "3.0.0" } -Repository $Repository `
-				-InfoMessage "Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider")) { exit }
+		# NOTE: Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider
+		# NOTE: Updating PackageManagement and PowerShellGet requires restarting PowerShell to switch to the latest version.
+		if (!(Initialize-ProviderRequirement @{ ModuleName = "NuGet"; ModuleVersion = "3.0.0" } -Repository $Repository `
+					-InfoMessage "Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider")) { exit }
 
-	# PowerShellGet >= 2.2.4 is required otherwise updating modules might fail
-	# NOTE: PowerShellGet has a dependency on PackageManagement, it will install it if needed
-	# For systems with PowerShell 5.0 (or greater) PowerShellGet and PackageManagement can be installed together.
-	if (!(Initialize-ModuleRequirement @{ ModuleName = "PowerShellGet"; ModuleVersion = "2.2.4" } -Repository $Repository `
-				-InfoMessage "PowerShellGet >= 2.2.4 is required otherwise updating modules might fail")) { exit }
+		# PowerShellGet >= 2.2.4 is required otherwise updating modules might fail
+		# NOTE: PowerShellGet has a dependency on PackageManagement, it will install it if needed
+		# For systems with PowerShell 5.0 (or greater) PowerShellGet and PackageManagement can be installed together.
+		if (!(Initialize-ModuleRequirement @{ ModuleName = "PowerShellGet"; ModuleVersion = "2.2.4" } -Repository $Repository `
+					-InfoMessage "PowerShellGet >= 2.2.4 is required otherwise updating modules might fail")) { exit }
 
-	# PackageManagement >= 1.4.7 is required otherwise updating modules might fail
-	if (!(Initialize-ModuleRequirement @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Repository $Repository)) { exit }
+		# PackageManagement >= 1.4.7 is required otherwise updating modules might fail
+		if (!(Initialize-ModuleRequirement @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Repository $Repository)) { exit }
 
-	# posh-git >= 1.0.0-beta4 is recommended for better git experience in PowerShell
-	if (Initialize-ModuleRequirement @{ ModuleName = "posh-git"; ModuleVersion = "0.7.3" } -Repository $Repository -AllowPrerelease `
-			-InfoMessage "posh-git is recommended for better git experience in PowerShell" ) { }
+		# posh-git >= 1.0.0-beta4 is recommended for better git experience in PowerShell
+		if (Initialize-ModuleRequirement @{ ModuleName = "posh-git"; ModuleVersion = "0.7.3" } -Repository $Repository -AllowPrerelease `
+				-InfoMessage "posh-git is recommended for better git experience in PowerShell" ) { }
 
-	# PSScriptAnalyzer >= 1.19.1 is required otherwise code will start missing while editing
-	if (!(Initialize-ModuleRequirement @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = "1.19.1" } -Repository $Repository `
-				-InfoMessage "PSScriptAnalyzer >= 1.19.1 is required otherwise code will start missing while editing" )) { exit }
+		# PSScriptAnalyzer >= 1.19.1 is required otherwise code will start missing while editing
+		if (!(Initialize-ModuleRequirement @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = "1.19.1" } -Repository $Repository `
+					-InfoMessage "PSScriptAnalyzer >= 1.19.1 is required otherwise code will start missing while editing" )) { exit }
 
-	# Pester is required to run pester tests
-	if (!(Initialize-ModuleRequirement @{ ModuleName = "Pester"; ModuleVersion = "5.0.3" } -Repository $Repository `
-				-InfoMessage "Pester is required to run pester tests" )) { }
+		# Pester is required to run pester tests
+		if (!(Initialize-ModuleRequirement @{ ModuleName = "Pester"; ModuleVersion = "5.0.3" } -Repository $Repository `
+					-InfoMessage "Pester is required to run pester tests" )) { }
+	}
 
 	# Everything OK, print environment status
+	$OSCaption = Get-CimInstance -Class Win32_OperatingSystem |
+	Select-Object -ExpandProperty Caption
+
 	Write-Output ""
-	Write-Output "System:`t`t $OSPlatform $($TargetOSVersion.ToString())"
-	Write-Output "PowerShell:`t $PowerShellEdition $($TargetPSVersion)"
+	Write-Information -Tags "User" -MessageData "INFO: Checking project requirements successful"
+	Write-Output "System:`t`t $OSCaption $($TargetOSVersion.ToString())"
+	Write-Output "Environment:`t PowerShell $PowerShellEdition $($TargetPSVersion)"
 	Write-Output ""
 }
 

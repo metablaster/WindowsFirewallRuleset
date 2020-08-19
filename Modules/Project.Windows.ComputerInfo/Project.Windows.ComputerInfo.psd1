@@ -78,6 +78,7 @@
 		"Get-InterfaceAlias"
 		"Get-IPAddress"
 		"Get-Broadcast"
+		"Get-SystemSKU"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not
