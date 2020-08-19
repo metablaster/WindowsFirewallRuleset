@@ -159,7 +159,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	New-Variable -Name CheckProjectConstants -Scope Global -Option Constant -Value $null
 
 	# Project version, does not apply to 3rd party modules which follow their own version increment
-	New-Variable -Name ProjectVersion -Scope Global -Option Constant -Value $([System.Version]::new(5, 0, 1))
+	New-Variable -Name ProjectVersion -Scope Global -Option Constant -Value $([System.Version]::new(0, 5, 1))
 
 	# Repository root directory, reallocating scripts should be easy if root directory is constant
 	New-Variable -Name ProjectRoot -Scope Global -Option Constant -Value (

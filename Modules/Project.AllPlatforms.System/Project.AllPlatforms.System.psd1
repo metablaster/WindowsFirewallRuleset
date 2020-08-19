@@ -75,8 +75,8 @@
 	FunctionsToExport = @(
 		"Test-SystemRequirements"
 		"Test-ServiceRequirements"
-		"Test-ModuleRecommendation"
-		"Test-ProviderRecommendation"
+		"Initialize-ModuleRequirement"
+		"Initialize-ProviderRequirement"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not

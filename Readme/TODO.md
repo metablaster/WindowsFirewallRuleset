@@ -118,7 +118,7 @@ TODO's in this file are categorized into following sections:
     - Modules are named "AllPlatforms" or "Windows" however they contain platform specific or
     non platform specific functions, need to revisit naming convention
     - Functions which use ShouldProcess must not ask for additional input
-    - Write-Error will fail is -TargetObject is not set, in cases where this is possible we should
+    - Write-Error will fail if -TargetObject is not set, in cases where this is possible we should
     supply string instead.
     See ComputerInfo\Get-ConfiguredAdapter for example
     - 3rd party modules are not consistent with our own modules regarding folder and structure and
@@ -188,6 +188,7 @@ TODO's in this file are categorized into following sections:
     - Function to check executables for signature and virus total hash
     - localhost != `[Environment]::MachineName` because strings are not the same
     - Write-Error streams should be extended to include exception record etc.
+    - Write-Error categories should be checked, some are inconsistent with error
     - Some executables won't be found in cases where installed program didn't finish installing
     it self but is otherwise present on system, examples such as steam, games with launcher,
     or built in store apps.
@@ -206,6 +207,10 @@ TODO's in this file are categorized into following sections:
     - We use `Set-NetFirewallSetting` but use only a subset of parameters, other parameters are
     meaningful only with IPSec
     - Write a set of scripts for network troubleshooting, such as WORKGROUP troubleshooting
+    - Replace -Tags "tag_name" with global variable
+    - All streams same convention:
+    (ex. doing something $Variable v$Version instead of doing $Variable $Version),
+    also same convention regarding variable value quoting with '' single quotes
 
 3. Rules
 
