@@ -13,7 +13,7 @@
 	RootModule = "Project.Windows.Firewall.psm1"
 
 	# Version number of this module.
-	ModuleVersion = "1.2.0"
+	ModuleVersion = "0.5.1"
 
 	# Supported PSEditions
 	CompatiblePSEditions = "Core, Desktop"
@@ -85,6 +85,7 @@ Project.Windows.Firewall is a module to manage firewall rules.
 		"Export-FirewallRules"
 		"Import-FirewallRules"
 		"Remove-FirewallRules"
+		"Format-Output"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not

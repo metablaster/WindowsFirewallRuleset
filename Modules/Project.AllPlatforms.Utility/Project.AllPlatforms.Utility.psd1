@@ -78,9 +78,7 @@
 		"Convert-SDDLToACL"
 		"Show-SDDL"
 		"Get-NetworkService"
-		"Format-Output"
 		"Set-ScreenBuffer"
-		"Test-TargetComputer"
 		"Set-NetworkProfile"
 		"Get-TypeName"
 	)

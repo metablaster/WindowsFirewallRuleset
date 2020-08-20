@@ -79,6 +79,7 @@
 		"Get-IPAddress"
 		"Get-Broadcast"
 		"Get-SystemSKU"
+		"Test-TargetComputer"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not

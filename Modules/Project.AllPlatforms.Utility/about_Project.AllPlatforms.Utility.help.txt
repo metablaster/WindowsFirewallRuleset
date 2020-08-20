@@ -14,9 +14,6 @@ VARIABLES
 	CheckInitUtility:	Purpose is to prevent double initialization of constants
 
 EXAMPLES
-	For better looking output of Net-NewFirewallRule
-	Net-NewFirewallRule ... | Format-Output
-
 	To system services involved in firewall rules
 	Get-NetworkService
 

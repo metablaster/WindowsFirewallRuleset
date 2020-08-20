@@ -4,6 +4,7 @@ TOPIC
 
 SHORT DESCRIPTION
 	Export, import and remove rules from Windows firewall
+    Format output when loading, importing and exporting rules
 
 LONG DESCRIPTION
 	The three commandlets Export-FirewallRule, Import-FirewallRule and Remove-FirewallRule export,
@@ -19,6 +20,9 @@ EXAMPLES
 
 	Remove-FirewallRules
 	Removes specified firewall rules according to a list in the CSV or JSON file in the specified path.
+
+	Net-NewFirewallRule ... | Format-Output
+	Format output of the Net-NewFirewallRule commandlet
 
 KEYWORDS
 	Firewall

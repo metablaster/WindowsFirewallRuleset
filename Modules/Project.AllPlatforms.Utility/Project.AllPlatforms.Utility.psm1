@@ -355,46 +355,6 @@ function Get-NetworkService
 
 <#
 .SYNOPSIS
-Format firewall rule output for display
-.DESCRIPTION
-Output of Net-NewFirewallRule is large, loading a lot of rules would spam the console
-very fast, this function helps to output only relevant content.
-.PARAMETER Rule
-Firewall rule to format
-.PARAMETER Label
-Optional new label to replace default one
-.EXAMPLE
-Net-NewFirewallRule ... | Format-Output
-.INPUTS
-Microsoft.Management.Infrastructure.CimInstance Firewall rule to format
-.OUTPUTS
-None. Formatted and colored output
-.NOTES
-None.
-#>
-function Format-Output
-{
-	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'There is no way to replace Write-Host here')]
-	[OutputType([void])]
-	[CmdletBinding()]
-	param (
-		[Parameter(Mandatory = $true,
-			ValueFromPipeline = $true)]
-		[Microsoft.Management.Infrastructure.CimInstance] $Rule,
-
-		[Parameter()]
-		[string] $Label = "Load Rule"
-	)
-
-	process
-	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-		Write-Host "$($Label): [$($Rule | Select-Object -ExpandProperty Group)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
-	}
-}
-
-<#
-.SYNOPSIS
 Set vertical screen buffer to recommended value
 .DESCRIPTION
 In some cases, depending on project settings a user might need larger buffer
@@ -438,62 +398,6 @@ function Set-ScreenBuffer
 	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Screen buffer check OK"
-}
-
-<#
-.SYNOPSIS
-Test target computer (policy store) on which to apply firewall
-.DESCRIPTION
-The purpose of this function is to reduce typing checks depending on whether PowerShell
-core or desktop edition is used, since parameters for Test-Connection are not the same
-for both PowerShell editions.
-.PARAMETER ComputerName
-Target computer which to test
-.PARAMETER Count
-Valid only for PowerShell Core. Specifies the number of echo requests to send. The default value is 4
-.PARAMETER Timeout
-Valid only for PowerShell Core. The test fails if a response isn't received before the timeout expires
-.EXAMPLE
-Test-TargetComputer "COMPUTERNAME" 2 1
-.EXAMPLE
-Test-TargetComputer "COMPUTERNAME"
-.INPUTS
-None. You cannot pipe objects to Test-TargetMachine
-.OUTPUTS
-[bool] false or true if target host is responsive
-.NOTES
-TODO: avoid error message, check all references which handle errors (code bloat)
-TODO: this should probably be part of ComputerInfo module
-#>
-function Test-TargetComputer
-{
-	[OutputType([bool])]
-	[CmdletBinding(PositionalBinding = $false)]
-	param (
-		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
-		[Parameter(Mandatory = $true,
-			Position = 0)]
-		[string] $ComputerName,
-
-		[Parameter()]
-		[int16] $Count = $ConnectionCount,
-
-		[Parameter()]
-		[int16] $Timeout = $ConnectionTimeout
-	)
-
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Information -Tags "User" -MessageData "INFO: Contacting computer $ComputerName"
-
-	# Test parameters depend on PowerShell edition
-	# TODO: changes not reflected in calling code
-	# NOTE: Don't suppress error, error details can be of more use than just "unable to contact computer"
-	if ($PSVersionTable.PSEdition -eq "Core")
-	{
-		return Test-Connection -TargetName $ComputerName -Count $Count -TimeoutSeconds $Timeout -IPv4 -Quiet
-	}
-
-	return Test-Connection -ComputerName $ComputerName -Count $Count -Quiet
 }
 
 <#
@@ -600,9 +504,7 @@ Export-ModuleMember -Function Update-Context
 Export-ModuleMember -Function Convert-SDDLToACL
 Export-ModuleMember -Function Show-SDDL
 Export-ModuleMember -Function Get-NetworkService
-Export-ModuleMember -Function Format-Output
 Export-ModuleMember -Function Set-ScreenBuffer
-Export-ModuleMember -Function Test-TargetComputer
 Export-ModuleMember -Function Set-NetworkProfile
 
 #

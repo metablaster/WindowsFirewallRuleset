@@ -54,6 +54,7 @@ $PublicScripts = @(
 	"Export-FirewallRules"
 	"Import-FirewallRules"
 	"Remove-FirewallRules"
+	"Format-Output"
 )
 
 foreach ($Script in $PrivateScripts)
