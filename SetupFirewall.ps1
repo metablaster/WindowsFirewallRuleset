@@ -32,8 +32,8 @@ SOFTWARE.
 & "$ProjectRoot\UnblockProject.ps1"
 
 # Check requirements for this project
-Test-SystemRequirements
-Set-Variable -Name SystemCheck -Scope Global -Option ReadOnly -Force -Value $false
+Initialize-Project
+Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $false
 
 # Imports
 Import-Module -Name Project.AllPlatforms.Logging

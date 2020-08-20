@@ -447,7 +447,7 @@ function Initialize-Module
 
 	# Check if module could be downloaded
 	[PSCustomObject] $FoundModule = $null
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if module $ModuleName version >= $RequiredVersion could be downloaded"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if module $ModuleName version >= v$RequiredVersion could be downloaded"
 
 	foreach ($RepositoryItem in $Repositories)
 	{
@@ -489,7 +489,7 @@ function Initialize-Module
 
 	if ($TargetVersion)
 	{
-		Write-Warning -Message "$ModuleName module version $($TargetVersion.ToString()) is out of date, recommended version is $RequiredVersion"
+		Write-Warning -Message "$ModuleName module version v$($TargetVersion.ToString()) is out of date, recommended version is v$RequiredVersion"
 
 		$Title = "Recommended module out of date"
 		$Question = "Update $ModuleName module now?"
@@ -775,7 +775,7 @@ function Initialize-Provider
 		# Check if module could be downloaded
 		# [Microsoft.PackageManagement.Packaging.SoftwareIdentity]
 		[PSCustomObject] $FoundProvider = $null
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if $ProviderName provider version >= $RequiredVersion could be downloaded"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if $ProviderName provider version >= v$RequiredVersion could be downloaded"
 
 		foreach ($SourceItem in $PackageSources)
 		{
@@ -868,7 +868,7 @@ function Initialize-Provider
 .SYNOPSIS
 Test and print system requirements required for this project
 .DESCRIPTION
-Test-SystemRequirements is designed for "Windows Firewall Ruleset", it first prints a short watermark,
+Initialize-Project is designed for "Windows Firewall Ruleset", it first prints a short watermark,
 tests for OS, PowerShell version and edition, Administrator mode, NET Framework version, checks if
 required system services are started and recommended modules installed.
 If not the function may exit and stop executing scripts.
@@ -876,9 +876,9 @@ If not the function may exit and stop executing scripts.
 true or false to check or not to check
 note that this parameter is managed by project settings
 .EXAMPLE
-Test-SystemRequirements $true
+Initialize-Project
 .INPUTS
-None. You cannot pipe objects to Test-SystemRequirements
+None. You cannot pipe objects to Initialize-Project
 .OUTPUTS
 None. Error or warning message is shown if check failed, system info otherwise.
 .NOTES
@@ -887,35 +887,37 @@ TODO: learn repo dir automatically (using git?)
 TODO: we don't use logs in this module
 TODO: remote check not implemented
 #>
-function Test-SystemRequirements
+function Initialize-Project
 {
-	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = "There is no better name")]
 	[OutputType([void])]
 	param (
-		[Parameter(Mandatory = $false)]
-		[bool] $Check = $SystemCheck,
+		[Parameter()]
+		[switch] $NoProjectCheck = !$ProjectCheck,
 
 		[Parameter()]
-		[switch] $NoModulesCheck = $ModulesCheck,
+		[switch] $NoModulesCheck = !$ModulesCheck,
 
 		[Parameter()]
-		[switch] $NoServicesCheck = $ServicesCheck
+		[switch] $NoServicesCheck = !$ServicesCheck
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# disabled when running scripts from SetupFirewall.ps1 script
-	if (!$Check)
+	if ($NoProjectCheck)
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Project initialization skipped"
 		return
 	}
 
-	# print info
+	# Print watermark
 	Write-Output ""
 	Write-Output "Windows Firewall Ruleset v$($ProjectVersion.ToString())"
 	Write-Output "Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch"
 	Write-Output "https://github.com/metablaster/WindowsFirewallRuleset"
 	Write-Output ""
+
+	Write-Information -Tags "User" -MessageData "INFO: Checking operating system"
 
 	# Check operating system
 	$OSPlatform = [System.Environment]::OSVersion.Platform
@@ -925,11 +927,11 @@ function Test-SystemRequirements
 	if (!(($OSPlatform -eq "Win32NT") -and ($TargetOSVersion -ge $RequiredOSVersion)))
 	{
 		Write-Error -Category OperationStopped -TargetObject $TargetOSVersion `
-			-Message "Unable to proceed, minimum required operating system is 'Win32NT $($RequiredOSVersion.ToString())' to run these scripts"
-
-		Write-Information -Tags "Project" -MessageData "INFO: Current operating system is: '$OSPlatform $($TargetOSVersion.ToString())'"
+			-Message "Minimum required operating system is 'Win32NT $($RequiredOSVersion.ToString())' but '$OSPlatform $($TargetOSVersion.ToString()) present"
 		exit
 	}
+
+	Write-Information -Tags "User" -MessageData "INFO: Checking elevation"
 
 	# Check if in elevated PowerShell
 	$Principal = New-Object -TypeName Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
@@ -937,9 +939,11 @@ function Test-SystemRequirements
 	if (!$Principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))
 	{
 		Write-Error -Category PermissionDenied -TargetObject $Principal `
-			-Message "Unable to proceed, please open PowerShell as Administrator"
+			-Message "Elevation required, please open PowerShell as Administrator and try again"
 		exit
 	}
+
+	Write-Information -Tags "User" -MessageData "INFO: Checking OS edition"
 
 	# Check OS is not Home edition
 	$OSEdition = Get-WindowsEdition -Online | Select-Object -ExpandProperty Edition
@@ -947,59 +951,71 @@ function Test-SystemRequirements
 	if ($OSEdition -like "*Home*")
 	{
 		Write-Error -Category OperationStopped -TargetObject $OSEdition `
-			-Message "Unable to proceed, home editions of Windows don't have Local Group Policy"
+			-Message "Home editions of Windows don't have Local Group Policy"
 		exit
 	}
 
+	Write-Information -Tags "User" -MessageData "INFO: Checking PowerShell edition"
+
 	# Check PowerShell edition
 	$PowerShellEdition = $PSVersionTable.PSEdition
-
-	if ($PowerShellEdition -eq "Core")
-	{
-		Write-Warning -Message "Remote firewall administration with PowerShell Core is not implemented"
-		Write-Information -Tags "Project" -MessageData "INFO: Current PowerShell edition is: $PowerShellEdition"
-	}
-	else
-	{
-		Write-Warning -Message "Remote firewall administration with PowerShell Desktop is partially implemented"
-	}
-
 	# Check PowerShell version
 	[version] $RequiredPSVersion = "5.1.0"
 	[version] $TargetPSVersion = $PSVersionTable.PSVersion
 
+	if ($PowerShellEdition -eq "Core")
+	{
+		$RequiredPSVersion = "7.0.3"
+		Write-Warning -Message "Remote firewall administration with PowerShell Core is not implemented"
+	}
+	else
+	{
+		Write-Warning -Message "Remote firewall administration with PowerShell Desktop is partially implemented"
+
+	}
+
+	Write-Information -Tags "User" -MessageData "INFO: Checking PowerShell version"
 	if ($TargetPSVersion -lt $RequiredPSVersion)
 	{
-		Write-Error -Category OperationStopped -TargetObject $TargetPSVersion `
-			-Message "Unable to proceed, minimum required PowerShell required to run these scripts is: Desktop $($RequiredPSVersion.ToString())"
+		if ($TargetPSVersion.Major -lt $RequiredPSVersion.Major)
+		{
+			# Core 6 is fine
+			if (($PowerShellEdition -eq "Desktop") -or (($RequiredPSVersion.Major - $TargetPSVersion.Major) -gt 1))
+			{
+				Write-Error -Category OperationStopped -TargetObject $TargetPSVersion `
+					-Message "Required PowerShell $PowerShellEdition is v$($RequiredPSVersion.ToString()) but v$($TargetPSVersion.ToString()) present"
+				exit
+			}
+		}
 
-		Write-Information -Tags "Project" -MessageData "INFO: Current PowerShell version is: $($TargetPSVersion.ToString())"
-		exit
+		Write-Warning -Message "Recommended PowerShell $PowerShellEdition is v$($RequiredPSVersion.ToString()) but v$($TargetPSVersion.ToString()) present"
 	}
 
 	# Check NET Framework version
-	# NOTE: this check is not required unless in some special cases
+	# NOTE: this check is not required except for updating requirements as needed
 	if ($Develop -and ($PowerShellEdition -eq "Desktop"))
 	{
+		Write-Information -Tags "User" -MessageData "INFO: Checking .NET version"
+
 		# Now that OS and PowerShell is OK we can use these functions
-		# TODO: What if function fails?
 		$NETFramework = Get-NetFramework
 		[version] $TargetNETVersion = $NETFramework |
 		Sort-Object -Property Version | Select-Object -Last 1 -ExpandProperty Version
 
 		[version] $RequiredNETVersion = "3.5.0"
 
-		if ($TargetNETVersion -lt $RequiredNETVersion)
+		if (!$TargetNETVersion -or ($TargetNETVersion -lt $RequiredNETVersion))
 		{
 			Write-Error -Category OperationStopped -TargetObject $TargetNETVersion `
-				-Message "Unable to proceed, minimum required NET Framework version to run these scripts is: $($RequiredNETVersion.ToString())"
-			Write-Information -Tags "Project" -MessageData "INFO: Installed NET Framework version is: $($TargetNETVersion.ToString())"
+				-Message "Minimum required .NET Framework version is v$($RequiredNETVersion.ToString()) but v$($TargetNETVersion.ToString()) present"
 			exit
 		}
 	}
 
 	if (!$NoServicesCheck)
 	{
+		Write-Information -Tags "User" -MessageData "INFO: Checking system services"
+
 		# These services are minimum required
 		if (!(Initialize-Service @("lmhosts", "LanmanWorkstation", "LanmanServer"))) { exit }
 
@@ -1010,6 +1026,8 @@ function Test-SystemRequirements
 			if (Initialize-Service "WinRM") { exit }
 		}
 	}
+
+	Write-Information -Tags "User" -MessageData "INFO: Checking git"
 
 	# Git is recommended for version control and by posh-git module
 	[string] $RequiredGit = "2.28.0"
@@ -1022,24 +1040,28 @@ function Test-SystemRequirements
 
 		if ($TargetGit -lt $RequiredGit)
 		{
-			Write-Warning -Message "Git version $($TargetGit.ToString()) is out of date, recommended version is: $RequiredGit"
+			Write-Warning -Message "Git version v$($TargetGit.ToString()) is out of date, recommended version is v$RequiredGit"
 			Write-Information -Tags "Project" -MessageData "INFO: Please visit https://git-scm.com to download and update"
 		}
 	}
 	else
 	{
-		Write-Warning -Message "Git in the PATH minimum version $($RequiredGit.ToString()) is recommended but missing"
+		Write-Warning -Message "Git in the PATH minimum version v$($RequiredGit.ToString()) is recommended but missing"
 		Write-Information -Tags "User" -MessageData "INFO: Please verify PATH or visit https://git-scm.com to download and install"
 	}
 
 	if (!$NoModulesCheck)
 	{
+		Write-Information -Tags "User" -MessageData "INFO: Checking providers"
+
 		[string] $Repository = "NuGet"
 
 		# NOTE: Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider
 		# NOTE: Updating PackageManagement and PowerShellGet requires restarting PowerShell to switch to the latest version.
-		if (!(Initialize-Provider @{ ModuleName = "NuGet"; ModuleVersion = "3.0.0" } -Repository $Repository `
+		if (!(Initialize-Provider @{ ModuleName = "NuGet"; ModuleVersion = "3.0.0" } `
 					-InfoMessage "Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider")) { exit }
+
+		Write-Information -Tags "User" -MessageData "INFO: Checking modules"
 
 		# PowerShellGet >= 2.2.4 is required otherwise updating modules might fail
 		# NOTE: PowerShellGet has a dependency on PackageManagement, it will install it if needed
@@ -1068,10 +1090,11 @@ function Test-SystemRequirements
 	$OSCaption = Get-CimInstance -Class Win32_OperatingSystem |
 	Select-Object -ExpandProperty Caption
 
-	Write-Output ""
 	Write-Information -Tags "User" -MessageData "INFO: Checking project requirements successful"
-	Write-Output "System:`t`t $OSCaption $($TargetOSVersion.ToString())"
-	Write-Output "Environment:`t PowerShell $PowerShellEdition $($TargetPSVersion)"
+
+	Write-Output ""
+	Write-Output "System:`t`t $OSCaption v$($TargetOSVersion.ToString())"
+	Write-Output "Environment:`t PowerShell $PowerShellEdition v$($TargetPSVersion)"
 	Write-Output ""
 }
 
@@ -1079,7 +1102,7 @@ function Test-SystemRequirements
 # Function exports
 #
 
-Export-ModuleMember -Function Test-SystemRequirements
+Export-ModuleMember -Function Initialize-Project
 Export-ModuleMember -Function Initialize-Service
 Export-ModuleMember -Function Initialize-Module
 Export-ModuleMember -Function Initialize-Provider

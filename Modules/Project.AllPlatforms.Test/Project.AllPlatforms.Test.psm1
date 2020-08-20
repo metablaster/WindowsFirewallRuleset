@@ -185,7 +185,7 @@ This operation is slow, intended for debugging.
 .EXAMPLE
 Test-PrincipalRule
 .INPUTS
-None. You cannot pipe objects to Test-SystemRequirements
+None. You cannot pipe objects to Initialize-Project
 .OUTPUTS
 None. Error message is shown if check failed, system info otherwise.
 .NOTES

@@ -45,7 +45,7 @@ SOFTWARE.
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
-Test-SystemRequirements
+Initialize-Project
 
 # Imports
 . $PSScriptRoot\DirectionSetup.ps1

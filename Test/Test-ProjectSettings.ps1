@@ -44,7 +44,7 @@ Import-Module -Name Project.AllPlatforms.Logging
 
 # Check requirements for this project
 Write-Information -Tags "Test" -MessageData "INFO: Import-Module System"
-Test-SystemRequirements
+Initialize-Project
 
 Write-Information -Tags "Test" -MessageData "INFO: Import-Module Test"
 
@@ -87,7 +87,7 @@ Write-Information -Tags "Test" -MessageData "INFO: Force: $ForceLoad"
 Write-Information -Tags "Test" -MessageData "INFO: Interface: $Interface"
 
 New-Test "ReadOnlyVariables"
-Write-Information -Tags "Test" -MessageData "INFO: SystemCheck: $SystemCheck"
+Write-Information -Tags "Test" -MessageData "INFO: ProjectCheck: $ProjectCheck"
 
 New-Test "RemovableVariables"
 Write-Information -Tags "Test" -MessageData "INFO: WarningStatus: $WarningStatus"

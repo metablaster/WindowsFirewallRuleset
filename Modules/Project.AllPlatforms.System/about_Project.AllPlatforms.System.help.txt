@@ -19,7 +19,7 @@ LONG DESCRIPTION
 
 EXAMPLES
 	To make a requirements test:
-	Test-SystemRequirements $true
+	Initialize-Project
 
 KEYWORDS
 	SystemRequirements

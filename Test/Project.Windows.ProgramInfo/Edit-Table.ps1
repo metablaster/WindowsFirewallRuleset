@@ -44,7 +44,7 @@ if ((Get-Variable -Name Develop -Scope Global).Value -eq $false)
 }
 
 # Check requirements for this project
-Test-SystemRequirements
+Initialize-Project
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1

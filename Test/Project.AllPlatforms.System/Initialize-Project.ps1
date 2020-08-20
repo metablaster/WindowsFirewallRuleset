@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Test-SystemRequirements
+# Unit test for Initialize-Project
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -43,7 +43,7 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-New-Test "Test-SystemRequirements"
-Test-SystemRequirements $true
+New-Test "Initialize-Project"
+Initialize-Project -NoProjectCheck:$false
 
 Exit-Test
