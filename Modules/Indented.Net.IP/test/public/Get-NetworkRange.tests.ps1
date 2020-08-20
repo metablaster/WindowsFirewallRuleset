@@ -96,8 +96,8 @@ InModuleScope Indented.Net.IP {
 		}
 
 		It 'Returns correct values when used with Start and End parameters' {
-			$StartIP = [System.Net.IPAddress]'192.168.1.1'
-			$EndIP = [System.Net.IPAddress]'192.168.2.10'
+			$StartIP = [ipaddress]'192.168.1.1'
+			$EndIP = [ipaddress]'192.168.2.10'
 			$Assertion = Get-NetworkRange -Start $StartIP -End $EndIP
 
 			$Assertion.Count | Should BeExactly 266

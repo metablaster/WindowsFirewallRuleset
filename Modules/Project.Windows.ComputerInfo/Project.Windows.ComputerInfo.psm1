@@ -72,7 +72,7 @@ TODO: implement querying computers on network by specifying IP address
 #>
 function Get-ComputerName
 {
-	[OutputType([System.String])]
+	[OutputType([string])]
 	[CmdletBinding()]
 	param ()
 

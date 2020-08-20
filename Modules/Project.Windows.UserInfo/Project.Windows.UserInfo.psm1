@@ -403,7 +403,7 @@ TODO: Pipeline input
 #>
 function Merge-SDDL
 {
-	[OutputType([System.Void])]
+	[OutputType([void])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
@@ -652,7 +652,7 @@ function Get-AccountSID
 	begin
 	{
 		$PowerShellEdition = $PSVersionTable.PSEdition
-		[bool] $SpecialDomain = ![System.String]::IsNullOrEmpty(
+		[bool] $SpecialDomain = ![string]::IsNullOrEmpty(
 			[array]::Find($SpecialDomains, [System.Predicate[string]] { $ComputerName -eq "$($args[0])" }))
 	}
 	process
@@ -1052,7 +1052,7 @@ function ConvertFrom-SID
 								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input SID is unknown store app SID for computer: '$Computer'"
 							} # foreach computer
 
-							if ([System.String]::IsNullOrEmpty($ResultName))
+							if ([string]::IsNullOrEmpty($ResultName))
 							{
 								Write-Warning -Message "Input SID is unknown store app SID"
 							}
@@ -1097,7 +1097,7 @@ function ConvertFrom-SID
 								}
 							} # foreach computer
 
-							if ([System.String]::IsNullOrEmpty($ResultName))
+							if ([string]::IsNullOrEmpty($ResultName))
 							{
 								if ($InputSID -match '^S-1-5-21-\d+-\d+-\d+-\d+$')
 								{
@@ -1122,7 +1122,7 @@ function ConvertFrom-SID
 
 			# Finally figure out the type of a SID for well known SID, done here to avoid code bloat
 			# TODO: there are more categorizations
-			if ((![System.String]::IsNullOrEmpty($LoginName)) -and ($SidType -eq "Unknown"))
+			if ((![string]::IsNullOrEmpty($LoginName)) -and ($SidType -eq "Unknown"))
 			{
 				# Check if well known SID is domain SID
 				if ($InputSID -match '^S-1-5-21')

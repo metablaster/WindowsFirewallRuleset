@@ -44,8 +44,8 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-New-Test "Get-SystemSKU -ComputerName $([environment]::MachineName)"
-Get-SystemSKU -ComputerName $([environment]::MachineName) @Logs | Format-Table
+New-Test "Get-SystemSKU -ComputerName $([System.Environment]::MachineName)"
+Get-SystemSKU -ComputerName $([System.Environment]::MachineName) @Logs | Format-Table
 
 New-Test "Get-SystemSKU -SKU 4"
 $Result = Get-SystemSKU -SKU 48 @Logs
@@ -54,20 +54,20 @@ $Result | Format-Table
 New-Test "34 | Get-SystemSKU"
 34 | Get-SystemSKU @Logs | Format-Table
 
-New-Test '@($([environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU'
-@($([environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU @Logs | Format-Table
+New-Test '@($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU'
+@($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU @Logs | Format-Table
 
-New-Test '$Result = @($([environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU'
-$Result = @($([environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU @Logs | Format-Table
+New-Test '$Result = @($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU'
+$Result = @($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU @Logs | Format-Table
 $Result
 
-New-Test 'Get-SystemSKU -ComputerName @($([environment]::MachineName), "INVALID_COMPUTER")'
-Get-SystemSKU -ComputerName @($([environment]::MachineName), "INVALID_COMPUTER") @Logs | Format-Table
+New-Test 'Get-SystemSKU -ComputerName @($([System.Environment]::MachineName), "INVALID_COMPUTER")'
+Get-SystemSKU -ComputerName @($([System.Environment]::MachineName), "INVALID_COMPUTER") @Logs | Format-Table
 
 try
 {
-	New-Test "Get-SystemSKU -SKU 4 -ComputerName $([environment]::MachineName)"
-	Get-SystemSKU -SKU 4 -ComputerName $([environment]::MachineName) -ErrorAction Stop
+	New-Test "Get-SystemSKU -SKU 4 -ComputerName $([System.Environment]::MachineName)"
+	Get-SystemSKU -SKU 4 -ComputerName $([System.Environment]::MachineName) -ErrorAction Stop
 }
 catch
 {

@@ -132,7 +132,7 @@ if ([System.Environment]::Is64BitOperatingSystem)
 		$Program = Split-Path $Driver -Parent | Format-Path
 		$Program += "\Display.NvContainer\NVDisplay.Container.exe"
 
-		if ([System.String]::IsNullOrEmpty($Program))
+		if ([string]::IsNullOrEmpty($Program))
 		{
 			# TODO: This is from Test-File, Test-File should handle this, see also todo in Test-File
 			$NVDisplayExe = "NVDisplay.Container.exe"

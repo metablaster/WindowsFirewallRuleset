@@ -187,7 +187,7 @@ TODO's in this file are categorized into following sections:
 1. Modules
 
     - Function to check executables for signature and virus total hash
-    - localhost != `[Environment]::MachineName` because strings are not the same
+    - localhost != `[System.Environment]::MachineName` because strings are not the same
     - Write-Error streams should be extended to include exception record etc.
     - Write-Error categories should be checked, some are inconsistent with error
     - Some executables won't be found in cases where installed program didn't finish installing

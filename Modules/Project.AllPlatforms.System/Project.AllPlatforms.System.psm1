@@ -82,7 +82,7 @@ None.
 #>
 function Test-ServicesRequirement
 {
-	[OutputType([System.Boolean])]
+	[OutputType([bool])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
@@ -239,13 +239,13 @@ Updating PackageManagement and PowerShellGet requires restarting PowerShell to s
 #>
 function Initialize-ModuleRequirement
 {
-	[OutputType([System.Boolean])]
+	[OutputType([bool])]
 	[CmdletBinding(PositionalBinding = $false)]
 	param (
 		[Parameter(Mandatory = $true, Position = 0,
 			HelpMessage = "Specify module to check in the form of ModuleSpecification object")]
 		[ValidateNotNullOrEmpty()]
-		[System.Collections.Hashtable] $ModuleFullName,
+		[hashtable] $ModuleFullName,
 
 		[Parameter()]
 		[ValidatePattern("^[a-zA-Z]+$")]
@@ -279,12 +279,12 @@ function Initialize-ModuleRequirement
 
 	# Get required module from input
 	[string] $ModuleName = $ModuleFullName.ModuleName
-	[System.Version] $RequiredVersion = $ModuleFullName.ModuleVersion
+	[version] $RequiredVersion = $ModuleFullName.ModuleVersion
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if module $ModuleName is installed and what version"
 
 	# Highest version present on system if any
-	[System.Version] $TargetVersion = Get-Module -Name $ModuleName -ListAvailable |
+	[version] $TargetVersion = Get-Module -Name $ModuleName -ListAvailable |
 	Sort-Object -Property Version | Select-Object -Last 1 -ExpandProperty Version
 
 	if ($TargetVersion)
@@ -329,7 +329,7 @@ function Initialize-ModuleRequirement
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if module PowerShellGet v$RequiredPowerShellGet is installed"
 
 		# NOTE: Importing module to learn version could result in error
-		[System.Version] $TargetPowerShellGet = Get-Module -Name PowerShellGet -ListAvailable |
+		[version] $TargetPowerShellGet = Get-Module -Name PowerShellGet -ListAvailable |
 		Sort-Object -Property Version | Select-Object -Last 1 -ExpandProperty Version
 
 		if (!$TargetPowerShellGet -or ($TargetPowerShellGet -lt $RequiredPowerShellGet))
@@ -595,11 +595,11 @@ Before updating PowerShellGet or PackageManagement, you should always install th
 #>
 function Initialize-ProviderRequirement
 {
-	[OutputType([System.Boolean])]
+	[OutputType([bool])]
 	[CmdletBinding(PositionalBinding = $false)]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
-		[System.Collections.Hashtable] $ProviderFullName,
+		[hashtable] $ProviderFullName,
 
 		[Parameter()]
 		[ValidatePattern("^[a-zA-Z]+$")]
@@ -636,10 +636,10 @@ function Initialize-ProviderRequirement
 
 		# Get required module from input
 		[string] $PackageName = $ProviderFullName.ModuleName
-		[System.Version] $RequiredVersion = $ProviderFullName.ModuleVersion
+		[version] $RequiredVersion = $ProviderFullName.ModuleVersion
 
 		# Highest version present on system if any
-		[System.Version] $TargetVersion = Get-PackageProvider -Name $PackageName |
+		[version] $TargetVersion = Get-PackageProvider -Name $PackageName |
 		Sort-Object -Property Version | Select-Object -First 1 -ExpandProperty Version
 
 		if (!$TargetVersion)
@@ -676,7 +676,7 @@ function Initialize-ProviderRequirement
 				{
 					Install-PackageProvider $SoftwareIdentity.Name -Source $Repository -MinimumVersion $RequiredVersion
 
-					[System.Version] $NewVersion = Get-PackageProvider -Name $SoftwareIdentity.Name |
+					[version] $NewVersion = Get-PackageProvider -Name $SoftwareIdentity.Name |
 					Sort-Object -Property Version | Select-Object -First 1 -ExpandProperty Version
 
 					if ($NewVersion -gt $TargetVersion)
@@ -728,7 +728,7 @@ TODO: remote check not implemented
 function Test-SystemRequirements
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = "There is no better name")]
-	[OutputType([System.Void])]
+	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $false)]
 		[bool] $Check = $SystemCheck,
@@ -757,8 +757,8 @@ function Test-SystemRequirements
 
 	# Check operating system
 	$OSPlatform = [System.Environment]::OSVersion.Platform
-	[System.Version] $TargetOSVersion = [System.Environment]::OSVersion.Version
-	[System.Version] $RequiredOSVersion = "10.0"
+	[version] $TargetOSVersion = [System.Environment]::OSVersion.Version
+	[version] $RequiredOSVersion = "10.0"
 
 	if (!(($OSPlatform -eq "Win32NT") -and ($TargetOSVersion -ge $RequiredOSVersion)))
 	{
@@ -803,8 +803,8 @@ function Test-SystemRequirements
 	}
 
 	# Check PowerShell version
-	[System.Version] $RequiredPSVersion = "5.1.0"
-	[System.Version] $TargetPSVersion = $PSVersionTable.PSVersion
+	[version] $RequiredPSVersion = "5.1.0"
+	[version] $TargetPSVersion = $PSVersionTable.PSVersion
 
 	if ($TargetPSVersion -lt $RequiredPSVersion)
 	{
@@ -822,10 +822,10 @@ function Test-SystemRequirements
 		# Now that OS and PowerShell is OK we can use these functions
 		# TODO: What if function fails?
 		$NETFramework = Get-NetFramework
-		[System.Version] $TargetNETVersion = $NETFramework |
+		[version] $TargetNETVersion = $NETFramework |
 		Sort-Object -Property Version | Select-Object -Last 1 -ExpandProperty Version
 
-		[System.Version] $RequiredNETVersion = "3.5.0"
+		[version] $RequiredNETVersion = "3.5.0"
 
 		if ($TargetNETVersion -lt $RequiredNETVersion)
 		{
@@ -856,7 +856,7 @@ function Test-SystemRequirements
 
 	if ($GitInstance)
 	{
-		[System.Version] $TargetGit = $GitInstance.Version
+		[version] $TargetGit = $GitInstance.Version
 
 		if ($TargetGit -lt $RequiredGit)
 		{

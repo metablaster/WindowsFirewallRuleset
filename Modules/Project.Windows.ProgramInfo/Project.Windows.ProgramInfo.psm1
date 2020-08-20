@@ -139,7 +139,7 @@ TODO: We should return true or false and conditionally load rule
 #>
 function Test-File
 {
-	[OutputType([System.Void])]
+	[OutputType([void])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
@@ -185,7 +185,7 @@ None.
 #>
 function Test-Environment
 {
-	[OutputType([System.Boolean])]
+	[OutputType([bool])]
 	[CmdletBinding()]
 	param (
 		[Parameter()]
@@ -195,7 +195,7 @@ function Test-Environment
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if path is valid for firewall rule"
 
-	if ([System.String]::IsNullOrEmpty($FilePath))
+	if ([string]::IsNullOrEmpty($FilePath))
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Returning false, file path is null or empty"
 		return $false
@@ -229,7 +229,7 @@ None.
 #>
 function Test-Service
 {
-	[OutputType([System.Void])]
+	[OutputType([void])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
@@ -265,7 +265,7 @@ TODO: is it possible to nest this into Test-Environment somehow?
 #>
 function Test-UserProfile
 {
-	[OutputType([System.Boolean])]
+	[OutputType([bool])]
 	[CmdletBinding()]
 	param (
 		[string] $FilePath
@@ -274,7 +274,7 @@ function Test-UserProfile
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# Impossible to know what the input may be
-	if ([System.String]::IsNullOrEmpty($FilePath))
+	if ([string]::IsNullOrEmpty($FilePath))
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Returning false, file path is null or empty"
 		return $false
@@ -328,7 +328,7 @@ function Test-UserProfile
 		}
 	}
 
-	while (![System.String]::IsNullOrEmpty($SearchString))
+	while (![string]::IsNullOrEmpty($SearchString))
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if '$SearchString' is convertible to user profile environment variable"
 
@@ -362,7 +362,7 @@ File path to format, can have environment variables, or consists of trailing sla
 .EXAMPLE
 Format-Path "C:\Program Files\\Dir\"
 .INPUTS
-[System.String] File path to format
+[string] File path to format
 .OUTPUTS
 [string] formatted path, includes environment variables, stripped off of junk
 .NOTES
@@ -370,7 +370,7 @@ None.
 #>
 function Format-Path
 {
-	[OutputType([System.String])]
+	[OutputType([string])]
 	[CmdletBinding()]
 	param (
 		[Parameter(ValueFromPipeline = $true)]
@@ -382,7 +382,7 @@ function Format-Path
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 		# Impossible to know what the input may be
-		if ([System.String]::IsNullOrEmpty($FilePath))
+		if ([string]::IsNullOrEmpty($FilePath))
 		{
 			# TODO: why allowing empty path?
 			# NOTE: Avoid spamming
@@ -447,7 +447,7 @@ function Format-Path
 		}
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if '$SearchString' is convertible to environment variable"
-		while (![System.String]::IsNullOrEmpty($SearchString))
+		while (![string]::IsNullOrEmpty($SearchString))
 		{
 			foreach ($Entry in $Variables)
 			{
@@ -472,7 +472,7 @@ function Format-Path
 		# Find candidate replacements
 		$Variables = $Variables | Where-Object { $_.Value -eq $SearchString }
 
-		if ([System.String]::IsNullOrEmpty($Variables))
+		if ([string]::IsNullOrEmpty($Variables))
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Environment variables for input path don't exist"
 			# There are no environment variables for this drive
@@ -567,7 +567,7 @@ function Get-UserSoftware
 
 				$InstallLocation = $SubKey.GetValue("InstallLocation")
 
-				if ([System.String]::IsNullOrEmpty($InstallLocation))
+				if ([string]::IsNullOrEmpty($InstallLocation))
 				{
 					Write-Warning -Message "Failed to read registry entry $HKUSubKey\InstallLocation"
 					continue
@@ -678,7 +678,7 @@ function Get-SystemSoftware
 				# NOTE: Avoid spamming
 				$InstallLocation = Format-Path $InstallLocation -Verbose:$false -Debug:$false
 
-				if ([System.String]::IsNullOrEmpty($InstallLocation))
+				if ([string]::IsNullOrEmpty($InstallLocation))
 				{
 					# Some programs do not install InstallLocation entry
 					# so let's take a look at DisplayIcon which is the path to executable
@@ -693,7 +693,7 @@ function Get-SystemSoftware
 					# once exe is removed, remove uninstall folder too if needed
 					#$InstallLocation = $InstallLocation -Replace "\\uninstall$", ""
 
-					if ([System.String]::IsNullOrEmpty($InstallLocation) -or
+					if ([string]::IsNullOrEmpty($InstallLocation) -or
 						$InstallLocation -like "*{*}*" -or
 						$InstallLocation -like "*.exe*")
 					{
@@ -797,7 +797,7 @@ function Get-AllUserSoftware
 
 					$InstallLocation = $ProductKey.GetValue("InstallLocation")
 
-					if ([System.String]::IsNullOrEmpty($InstallLocation))
+					if ([string]::IsNullOrEmpty($InstallLocation))
 					{
 						# NOTE: Avoid spamming
 						# Write-Debug -Message "[$($MyInvocation.InvocationName)] Ignoring useless key: $HKLMKey\InstallProperties"
@@ -990,7 +990,7 @@ return the table by reference
 #>
 function Initialize-Table
 {
-	[OutputType([System.Void])]
+	[OutputType([void])]
 	[CmdletBinding()]
 	param (
 		[Parameter()]
@@ -1050,7 +1050,7 @@ This function is needed to avoid warning of write-host inside non "Show" functio
 #>
 function Show-Table
 {
-	[OutputType([System.Void])]
+	[OutputType([void])]
 	[CmdletBinding()]
 	param (
 		[Parameter()]
@@ -1089,7 +1089,7 @@ currently it looks like we assign entry user group for program that applies to u
 #>
 function Update-Table
 {
-	[OutputType([System.Void])]
+	[OutputType([void])]
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'None')]
 	param (
 		[Parameter(Mandatory = $true)]
@@ -1311,7 +1311,7 @@ TODO: principal parameter?
 #>
 function Edit-Table
 {
-	[OutputType([System.Void])]
+	[OutputType([void])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
@@ -1402,7 +1402,7 @@ TODO: temporarily using ComputerName parameter
 #>
 function Test-Installation
 {
-	[OutputType([System.Boolean])]
+	[OutputType([bool])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
@@ -1503,7 +1503,7 @@ None.
 #>
 function Find-Installation
 {
-	[OutputType([System.Boolean])]
+	[OutputType([bool])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
@@ -1973,7 +1973,7 @@ function Find-Installation
 			{
 				[string] $InstallLocation = Read-Host "Input path to '$Program' root directory"
 
-				if (![System.String]::IsNullOrEmpty($InstallLocation))
+				if (![string]::IsNullOrEmpty($InstallLocation))
 				{
 					Edit-Table $InstallLocation
 
@@ -2059,14 +2059,14 @@ function Get-NetFramework
 				}
 
 				$Version = $SubKey.GetValue("Version")
-				if (![System.String]::IsNullOrEmpty($Version))
+				if (![string]::IsNullOrEmpty($Version))
 				{
 					Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKLMSubKey"
 
 					$InstallLocation = $SubKey.GetValue("InstallPath")
 
 					# else not warning because some versions are built in
-					if (![System.String]::IsNullOrEmpty($InstallLocation))
+					if (![string]::IsNullOrEmpty($InstallLocation))
 					{
 						$InstallLocation = Format-Path $InstallLocation
 					}
@@ -2093,7 +2093,7 @@ function Get-NetFramework
 						}
 
 						$Version = $Key.GetValue("Version")
-						if ([System.String]::IsNullOrEmpty($Version))
+						if ([string]::IsNullOrEmpty($Version))
 						{
 							Write-Warning -Message "Failed to read registry key entry: $HKLMKey\Version"
 							continue
@@ -2104,7 +2104,7 @@ function Get-NetFramework
 						$InstallLocation = $Key.GetValue("InstallPath")
 
 						# else not warning because some versions are built in
-						if (![System.String]::IsNullOrEmpty($InstallLocation))
+						if (![string]::IsNullOrEmpty($InstallLocation))
 						{
 							$InstallLocation = Format-Path $InstallLocation
 						}
@@ -2198,7 +2198,7 @@ function Get-WindowsSDK
 
 				$InstallLocation = $SubKey.GetValue("InstallationFolder")
 
-				if ([System.String]::IsNullOrEmpty($InstallLocation))
+				if ([string]::IsNullOrEmpty($InstallLocation))
 				{
 					Write-Warning -Message "Failed to read registry key entry: $HKLMSubKey\InstallationFolder"
 					continue
@@ -2287,7 +2287,7 @@ function Get-WindowsKit
 				$RootKeyLeaf = Split-Path $RootKey.ToString() -Leaf
 				$InstallLocation = $RootKey.GetValue($RootKeyEntry)
 
-				if ([System.String]::IsNullOrEmpty($InstallLocation))
+				if ([string]::IsNullOrEmpty($InstallLocation))
 				{
 					Write-Warning -Message "Failed to read registry key entry: $RootKeyLeaf\$RootKeyEntry"
 					continue
@@ -2369,7 +2369,7 @@ function Get-WindowsDefender
 			$RootKeyLeaf = Split-Path $RootKey.ToString() -Leaf
 			$InstallLocation = $RootKey.GetValue("InstallLocation")
 
-			if ([System.String]::IsNullOrEmpty($InstallLocation))
+			if ([string]::IsNullOrEmpty($InstallLocation))
 			{
 				Write-Warning -Message "Failed to read registry key entry: $RootKeyLeaf\InstallLocation"
 			}
@@ -2468,7 +2468,7 @@ function Get-SQLManagementStudio
 
 				$InstallLocation = $SubKey.GetValue("SSMSInstallRoot")
 
-				if ([System.String]::IsNullOrEmpty($InstallLocation))
+				if ([string]::IsNullOrEmpty($InstallLocation))
 				{
 					Write-Warning -Message "Failed to read registry key entry $HKLMSubKey\SSMSInstallRoot"
 					continue
@@ -2555,7 +2555,7 @@ function Get-OneDrive
 			# NOTE: remove executable file name
 			$InstallLocation = Split-Path -Path $OneDriveKey.GetValue("OneDriveTrigger") -Parent
 
-			if ([System.String]::IsNullOrEmpty($InstallLocation))
+			if ([string]::IsNullOrEmpty($InstallLocation))
 			{
 				Write-Warning -Message "Failed to read registry entry $HKU\OneDriveTrigger"
 			}

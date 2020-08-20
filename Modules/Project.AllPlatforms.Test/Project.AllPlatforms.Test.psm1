@@ -72,7 +72,7 @@ None.
 #>
 function Start-Test
 {
-	[OutputType([System.Void])]
+	[OutputType([void])]
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Low')]
 	param ()
 
@@ -118,7 +118,7 @@ TODO: switch for no new line, some tests will produce redundant new lines, ex. F
 #>
 function New-Test
 {
-	[OutputType([System.Void])]
+	[OutputType([void])]
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'None')]
 	param (
 		[AllowEmptyString()]
@@ -154,7 +154,7 @@ None.
 #>
 function Exit-Test
 {
-	[OutputType([System.Void])]
+	[OutputType([void])]
 	param()
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"

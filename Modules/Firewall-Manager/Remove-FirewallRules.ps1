@@ -67,7 +67,7 @@ Removes all firewall rules according to the list in the JSON file WmiRules.json.
 function Remove-FirewallRules
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'There is no way to replace Write-Host here')]
-	[OutputType([System.Void])]
+	[OutputType([void])]
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
 	param(
 		[Parameter()]

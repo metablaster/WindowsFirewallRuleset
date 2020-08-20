@@ -45,7 +45,7 @@ None.
 #>
 function Convert-ArrayToList
 {
-	[OutputType([System.String])]
+	[OutputType([string])]
 	param(
 		[Parameter()]
 		[string[]] $StringArray
@@ -93,7 +93,7 @@ None.
 #>
 function Convert-MultiLineToList
 {
-	[OutputType([System.String])]
+	[OutputType([string])]
 	param(
 		[Parameter()]
 		[string] $MultiLine,
@@ -102,7 +102,7 @@ function Convert-MultiLineToList
 		[switch] $JSON
 	)
 
-	if ([System.String]::IsNullOrEmpty($MultiLine))
+	if ([string]::IsNullOrEmpty($MultiLine))
 	{
 		return ""
 	}
@@ -185,7 +185,7 @@ Exports all SNMP firewall rules to the JSON file SNMPRules.json.
 function Export-FirewallRules
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'There is no way to replace Write-Host here')]
-	[OutputType([System.Void])]
+	[OutputType([void])]
 	[CmdletBinding()]
 	param(
 		[Parameter()]

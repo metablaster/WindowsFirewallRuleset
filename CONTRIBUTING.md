@@ -81,7 +81,7 @@ Use **PascalCase** for variables, types, symbols etc; **lowercase** for language
 for more info about casing type:
 
 ```powershell
-[PSCustomObject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::get
+[PSCustomObject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::get.GetEnumerator() | Sort-Object Key
 ```
 
 Following link describes general rules about PowerShell code style if you like reading,

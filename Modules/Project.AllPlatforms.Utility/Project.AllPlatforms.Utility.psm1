@@ -84,7 +84,7 @@ None.
 #>
 function Update-Context
 {
-	[OutputType([System.Void])]
+	[OutputType([void])]
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Low')]
 	param (
 		[Parameter(Mandatory = $true)]
@@ -104,7 +104,7 @@ function Update-Context
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting context"
 
 		$NewContext = $Root + "." + $Section
-		if (![System.String]::IsNullOrEmpty($Subsection))
+		if (![string]::IsNullOrEmpty($Subsection))
 		{
 			$NewContext += " -> " + $Subsection
 		}
@@ -139,7 +139,7 @@ TODO: make this function more generic
 #>
 function Approve-Execute
 {
-	[OutputType([System.Boolean])]
+	[OutputType([bool])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $false)]
@@ -194,7 +194,7 @@ TODO: additional work on function to make it more universal, see if we can make 
 #>
 function Show-SDDL
 {
-	[OutputType([System.String])]
+	[OutputType([string])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true,
@@ -400,7 +400,7 @@ None.
 function Format-Output
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'There is no way to replace Write-Host here')]
-	[OutputType([System.Void])]
+	[OutputType([void])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true,
@@ -492,7 +492,7 @@ TODO: this should probably be part of ComputerInfo module
 #>
 function Test-TargetComputer
 {
-	[OutputType([System.Boolean])]
+	[OutputType([bool])]
 	[CmdletBinding(PositionalBinding = $false)]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]

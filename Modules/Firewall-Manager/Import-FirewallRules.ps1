@@ -86,7 +86,7 @@ None.
 #>
 function Convert-ValueToBoolean
 {
-	[OutputType([System.Boolean])]
+	[OutputType([bool])]
 	param(
 		[Parameter()]
 		[string] $Value,
@@ -136,7 +136,7 @@ None.
 #>
 function Convert-ListToMultiLine
 {
-	[OutputType([System.String])]
+	[OutputType([string])]
 	param(
 		[Parameter()]
 		[string] $MultiLine,
@@ -145,7 +145,7 @@ function Convert-ListToMultiLine
 		[switch] $JSON
 	)
 
-	if ([System.String]::IsNullOrEmpty($MultiLine))
+	if ([string]::IsNullOrEmpty($MultiLine))
 	{
 		return ""
 	}
@@ -204,7 +204,7 @@ Imports all firewall rules in the SCV file WmiRules.csv
 #>
 function Import-FirewallRules
 {
-	[OutputType([System.Void])]
+	[OutputType([void])]
 	[CmdletBinding()]
 	param(
 		[Parameter()]
@@ -290,7 +290,7 @@ function Import-FirewallRules
 		{
 			$LoginName = $(ConvertFrom-SID $Rule.Owner).Name
 
-			if ([System.String]::IsNullOrEmpty($LoginName))
+			if ([string]::IsNullOrEmpty($LoginName))
 			{
 				Write-Warning -Message "Importing rule '$($Rule.Displayname)' skipped, store app owner does not exist"
 				continue
@@ -305,7 +305,7 @@ function Import-FirewallRules
 		{
 			$LoginName = $(ConvertFrom-SID $Rule.Package).Name
 
-			if ([System.String]::IsNullOrEmpty($LoginName))
+			if ([string]::IsNullOrEmpty($LoginName))
 			{
 				Write-Warning -Message "Importing rule '$($Rule.Displayname)' skipped, store app package does not exist"
 				continue

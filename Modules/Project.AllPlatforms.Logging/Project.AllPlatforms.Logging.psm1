@@ -82,7 +82,7 @@ TODO: need to check if drive exists
 #>
 function Get-LogFile
 {
-	[OutputType([System.String])]
+	[OutputType([string])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
@@ -138,7 +138,7 @@ TODO: when strict mode is on, errors captured by strict mode are not captured in
 #>
 function Update-Log
 {
-	[OutputType([System.Void])]
+	[OutputType([void])]
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Low')]
 	param ()
 
