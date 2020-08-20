@@ -67,6 +67,7 @@ None.
 .NOTES
 Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider
 Updating PackageManagement and PowerShellGet requires restarting PowerShell to switch to the latest version
+TODO: Implement initializing for non Administrator users
 #>
 function Initialize-Module
 {
@@ -87,10 +88,10 @@ function Initialize-Module
 		[uri] $RepositoryLocation = "https://www.powershellgallery.com/api/v2",
 
 		[Parameter()]
-		[switch] $Trusted,
+		[string] $InfoMessage = "Accept operation",
 
 		[Parameter()]
-		[string] $InfoMessage = "Accept operation",
+		[switch] $Trusted,
 
 		[Parameter()]
 		[switch] $AllowPrerelease
@@ -111,7 +112,7 @@ function Initialize-Module
 	[string] $ModuleName = $ModuleFullName.ModuleName
 	[version] $RequireVersion = $ModuleFullName.ModuleVersion
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if module $ModuleName is installed and what version"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if module $ModuleName is installed and which version"
 
 	# Highest version present on system if any
 	[version] $TargetVersion = Get-Module -Name $ModuleName -ListAvailable |
@@ -128,20 +129,31 @@ function Initialize-Module
 
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Module $ModuleName v$TargetVersion found"
 	}
+	else
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Module $ModuleName not installed"
+	}
 
-	if (($ModuleName -eq "posh-git") -and !$script:GitInstance)
+	if ($ModuleName -eq "posh-git")
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if git.exe is in PATH required by module $ModuleName"
 
-		if ($TargetVersion)
+		if ($script:GitInstance)
 		{
-			Write-Warning -Message "$ModuleName requires git in PATH but git.exe is not present"
+			Write-Information -Tags "Project" -MessageData "INFO: Check git.exe in PATH, required by $ModuleName was success"
 		}
 		else
 		{
-			Write-Error -Category NotInstalled -TargetObject $script:GitInstance `
-				-Message "$ModuleName requires git.exe in PATH"
-			return $false
+			if ($TargetVersion)
+			{
+				Write-Warning -Message "$ModuleName requires git in PATH, but git.exe not present"
+			}
+			else
+			{
+				Write-Error -Category NotInstalled -TargetObject $script:GitInstance `
+					-Message "$ModuleName requires git.exe in PATH"
+				return $false
+			}
 		}
 	}
 
@@ -156,17 +168,16 @@ function Initialize-Module
 	# Check for PowerShellGet only if not processing PowerShellGet
 	if ($ModuleName -ne "PowerShellGet")
 	{
-		[version] $RequiredPowerShellGet = "2.2.4"
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if module PowerShellGet v$RequiredPowerShellGet is installed"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if module PowerShellGet v$RequirePowerShellGetVersion is installed"
 
 		# NOTE: Importing module to learn version could result in error
 		[version] $TargetPowerShellGet = Get-Module -Name PowerShellGet -ListAvailable |
 		Sort-Object -Property Version | Select-Object -Last 1 -ExpandProperty Version
 
-		if (!$TargetPowerShellGet -or ($TargetPowerShellGet -lt $RequiredPowerShellGet))
+		if (!$TargetPowerShellGet -or ($TargetPowerShellGet -lt $RequirePowerShellGetVersion))
 		{
 			Write-Error -Category NotInstalled -TargetObject $TargetPowerShellGet `
-				-Message "Module PowerShellGet v$RequiredPowerShellGet must be installed before other modules, v$TargetPowerShellGet is installed"
+				-Message "Module PowerShellGet v$RequirePowerShellGetVersion must be installed before other modules, installed version is v$TargetPowerShellGet"
 			return $false
 		}
 
@@ -184,10 +195,15 @@ function Initialize-Module
 
 	if ($Repositories)
 	{
+		# TODO: could there be multiple repositories with same name in $Repositories variable?
 		$RepositoryList = $Repository
+		# TODO: Prompt to set it as trusted
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Repository $Repository is registered"
 	}
 	else
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Repository $Repository is not registered"
+
 		# Setup choices
 		$Accept.HelpMessage = "Registered repositories are user-specific, they are not registered in a system-wide context"
 		$Choices += $Accept
@@ -206,7 +222,7 @@ function Initialize-Module
 			# Register repository to be able to use it
 			Register-PSRepository -Name $Repository -SourceLocation $RepositoryLocation -InstallationPolicy $IsTrusted
 
-			$RepositoryObject = Get-PSRepository -Name $Repository -ErrorAction SilentlyContinue
+			$RepositoryObject = Get-PSRepository -Name $Repository # -ErrorAction SilentlyContinue
 
 			if ($RepositoryObject)
 			{
@@ -248,24 +264,42 @@ function Initialize-Module
 
 	# Check if module could be downloaded
 	[PSCustomObject] $FoundModule = $null
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if module $ModuleName version >= v$RequireVersion could be downloaded"
+
+	# In PowerShellGet versions 2.0.0 and above, the default is CurrentUser, which does not require elevation for install.
+	# In PowerShellGet 1.x versions, the default is AllUsers, which requires elevation for install.
+	# NOTE: for version 1.0.1 -Scope parameter is not recognized, we'll skip it for very old version
+	# TODO: need to test compatible parameters for outdated Windows PowerShell
+	[version] $Version2 = "2.0.0"
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if module $ModuleName version >= v$RequireVersion is available for download"
 
 	foreach ($RepositoryItem in $Repositories)
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking repository $RepositoryItem for updates"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking repository $($RepositoryItem.Name) for updates"
 
 		[uri] $RepositoryURI = $RepositoryItem.SourceLocation
-		if (!(Test-NetConnection -ComputerName $RepositoryURI.Host -Port 443 -InformationLevel Quiet -ErrorAction SilentlyContinue))
+		if (!(Test-NetConnection -ComputerName $RepositoryURI.Host -Port 443 -InformationLevel Quiet)) # -ErrorAction SilentlyContinue
 		{
 			Write-Warning -Message "Repository $($RepositoryItem.Name) could not be contacted"
 		}
 
+		# TODO: verify -AllowPrerelease will work in all cases
+		# if ($TargetPowerShellGet -ge $Version2) do not use -AllowPrerelease
+		# However then stable posh-git and similar modules will be installed because of $FoundModule variable
+		# Meaning we must not reuse $FoundModule in that case,
+		# for project this is not urgent since we install modules in correct order
+		# NOTE: -AllowPrerelease will not work if PackageManagement or PowerShellGet is out of date (probably version < 2.0.0)
+		# see: https://github.com/MicrosoftDocs/azure-docs/issues/29999
+		# TODO: for some reason updated dependencies were not loaded, probably because error stopped execution
+
 		# Try anyway, maybe port is wrong, only first match is considered
-		$FoundModule = Find-Module -Name $ModuleName -Repository $RepositoryItem -MinimumVersion $RequireVersion -ErrorAction SilentlyContinue
+		# NOTE: -InputObject can't be used with -AllowPrerelease, we'll use -AllowPrerelease here to be able to install what is found
+		$FoundModule = Find-Module -Name $ModuleName -Repository $RepositoryItem.Name `
+			-MinimumVersion $RequireVersion -AllowPrerelease:$AllowPrerelease # -ErrorAction SilentlyContinue
 
 		if ($FoundModule)
 		{
-			Write-Information -Tags "User" -MessageData "INFO: Module $ModuleName v$($ModuleStatus.Version.ToString()) is selected for download"
+			Write-Information -Tags "User" -MessageData "INFO: Module $ModuleName v$($FoundModule.Version.ToString()) is selected for download"
 			break
 		}
 		# TODO: check for older version and ask for confirmation
@@ -285,19 +319,11 @@ function Initialize-Module
 	$Choices += $Accept
 	$Choices += $Deny
 
-	# Either 'Update' or "Install" needed for additional work
-	[string] $InstallType = ""
-
-	# In PowerShellGet versions 2.0.0 and above, the default is CurrentUser, which does not require elevation for install.
-	# In PowerShellGet 1.x versions, the default is AllUsers, which requires elevation for install.
-	# NOTE: for version 1.0.1 -Scope parameter is not recognized, we'll skip it for very old version
-	# TODO: need to test compatible parameters for outdated Windows PowerShell
-	[version] $Version2 = "2.0.0"
-
 	if ($TargetVersion)
 	{
-		Write-Warning -Message "$ModuleName module version v$($TargetVersion.ToString()) is out of date, recommended version is v$RequireVersion"
+		Write-Warning -Message "Current module $ModuleName v$($TargetVersion.ToString()) is out of date, recommended version is v$RequireVersion"
 
+		# TODO: maybe recommended maybe required
 		$Title = "Recommended module out of date"
 		$Question = "Update $ModuleName module now?"
 		$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
@@ -307,10 +333,9 @@ function Initialize-Module
 			# Check if older version is user installed
 			if (Get-InstalledModule -Name $ModuleName -ErrorAction Ignore)
 			{
-				$InstallType = "Update"
 				Write-Information -Tags "User" -MessageData "INFO: Updating module $($FoundModule.Name) to v$($FoundModule.Version)"
 
-				if ($PowerShellGetVersion -ge $Version2)
+				if ($TargetPowerShellGet -ge $Version2)
 				{
 					Update-Module -InputObject $FoundModule -Scope AllUsers
 				}
@@ -321,13 +346,13 @@ function Initialize-Module
 			}
 			else # Shipped with system
 			{
-				$InstallType = "Install"
 				Write-Information -Tags "User" -MessageData "INFO: Installing module $($FoundModule.Name) v$($FoundModule.Version)"
 
 				# Need force to install side by side, update not possible
-				if ($PowerShellGetVersion -ge $Version2)
+				if ($TargetPowerShellGet -ge $Version2)
 				{
-					Install-Module -InputObject $FoundModule -AllowPrerelease:$AllowPrerelease -Scope AllUsers -Force
+					# NOTE: -InputObject can't be used with -AllowPrerelease
+					Install-Module -InputObject $FoundModule -Scope AllUsers -Force
 				}
 				else
 				{
@@ -340,18 +365,18 @@ function Initialize-Module
 	{
 		Write-Warning -Message "$ModuleName module minimum version v$RequireVersion is recommended but not installed"
 
-		$Title = "Recommended module not installed$ConnectionStatus"
+		$Title = "Recommended module not installed"
 		$Question = "Install $ModuleName module now?"
 		$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
 
 		if ($Decision -eq $Default)
 		{
-			$InstallType = "Install"
 			Write-Information -Tags "User" -MessageData "INFO: Installing module $($FoundModule.Name) v$($FoundModule.Version)"
 
-			if ($PowerShellGetVersion -ge $Version2)
+			if ($TargetPowerShellGet -ge $Version2)
 			{
-				Install-Module -InputObject $FoundModule -Scope AllUsers -AllowPrerelease:$AllowPrerelease
+				# NOTE: -InputObject can't be used with -AllowPrerelease
+				Install-Module -InputObject $FoundModule -Scope AllUsers
 			}
 			else
 			{
@@ -365,23 +390,24 @@ function Initialize-Module
 	if ($Decision -eq $Default)
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if $ModuleName install or update was successful"
-		[PSModuleInfo] $ModuleStatus = Get-Module -FullyQualifiedName $ModuleFullName -ListAvailable
+		[PSModuleInfo] $ModuleInfo = Get-Module -FullyQualifiedName $ModuleFullName -ListAvailable
 
-		if ($ModuleStatus)
+		if ($ModuleInfo)
 		{
-			Write-Information -Tags "User" -MessageData "INFO: Module $ModuleName v$($ModuleStatus.Version.ToString()) is installed"
+			Write-Information -Tags "User" -MessageData "INFO: Module $ModuleName v$($ModuleInfo.Version.ToString()) was installed/updated"
+			Write-Information -Tags "User" -MessageData "INFO: Loading module $ModuleName v$($ModuleInfo.Version.ToString()) into session"
 
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Loading module $ModuleName v$($ModuleStatus.Version.ToString()) into session"
-			# Replace old module with module in current session
-			Remove-Module -Name $ModuleName
-			Import-Module -Name $ModuleName
+			# Remove old module if it exists and is loaded
+			Remove-Module -Name $ModuleName -ErrorAction Ignore
+			# Load new module in current session
+			Import-Module -ModuleInfo $ModuleInfo
 
 			# Finishing work, update as needed
 			switch ($ModuleName)
 			{
 				"posh-git"
 				{
-					Write-Information -Tags "User" -MessageData "INFO: Adding $ModuleName $($ModuleStatus.Version.ToString()) to profile"
+					Write-Information -Tags "User" -MessageData "INFO: Adding $ModuleName $($ModuleInfo.Version.ToString()) to profile"
 					Add-PoshGitToProfile -AllHosts
 				}
 			}
@@ -391,8 +417,8 @@ function Initialize-Module
 	}
 
 	# Installation/update failed or user refused to do so
-	Write-Error -Category NotInstalled -TargetObject $ModuleStatus `
-		-Message "Module $ModuleName v$RequireVersion not installed"
+	Write-Error -Category NotInstalled -TargetObject $ModuleFullName `
+		-Message "Module $ModuleName v$RequireVersion was not installed/updated"
 
 	return $false
 }

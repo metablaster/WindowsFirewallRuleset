@@ -219,6 +219,10 @@ function Initialize-Project
 			Write-Warning -Message "Git version v$($TargetGit.ToString()) is out of date, recommended version is v$($RequireGitVersion.ToString())"
 			Write-Information -Tags "Project" -MessageData "INFO: Please visit https://git-scm.com to download and update"
 		}
+		else
+		{
+			Write-Information -Tags "Project" -MessageData "INFO: git.exe v$($TargetGit.ToString()) meets >= v$RequireGitVersion "
+		}
 	}
 	else
 	{
@@ -230,7 +234,8 @@ function Initialize-Project
 	{
 		Write-Information -Tags "User" -MessageData "INFO: Checking providers"
 
-		[string] $Repository = "NuGet"
+		# TODO: "ModuleName" for Nuget here is actually "ProviderName" This is used in Initialize-Provider in
+		# same manner as "Repository" with Initialize-Module, needs to be renamed to avoid confusion
 
 		# NOTE: Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider
 		# NOTE: Updating PackageManagement and PowerShellGet requires restarting PowerShell to switch to the latest version.
@@ -239,25 +244,28 @@ function Initialize-Project
 
 		Write-Information -Tags "User" -MessageData "INFO: Checking modules"
 
+		# NOTE: This is default for Initialize-Module -Repository
+		# [string] $Repository = "PSGallery"
+
 		# PowerShellGet >= 2.2.4 is required otherwise updating modules might fail
 		# NOTE: PowerShellGet has a dependency on PackageManagement, it will install it if needed
 		# For systems with PowerShell 5.0 (or greater) PowerShellGet and PackageManagement can be installed together.
-		if (!(Initialize-Module @{ ModuleName = "PowerShellGet"; ModuleVersion = $RequirePowerShellGetVersion } -Repository $Repository `
-					-InfoMessage "PowerShellGet >= $($RequirePowerShellGetVersion.ToString()) is required otherwise updating modules might fail")) { exit }
+		if (!(Initialize-Module @{ ModuleName = "PowerShellGet"; ModuleVersion = $RequirePowerShellGetVersion } `
+					-InfoMessage "PowerShellGet >= $($RequirePowerShellGetVersion.ToString()) is required otherwise updating other modules might fail")) { exit }
 
 		# PackageManagement >= 1.4.7 is required otherwise updating modules might fail
-		if (!(Initialize-Module @{ ModuleName = "PackageManagement"; ModuleVersion = $RequirePackageManagementVersion } -Repository $Repository)) { exit }
+		if (!(Initialize-Module @{ ModuleName = "PackageManagement"; ModuleVersion = $RequirePackageManagementVersion } )) { exit }
 
 		# posh-git >= 1.0.0-beta4 is recommended for better git experience in PowerShell
-		if (Initialize-Module @{ ModuleName = "posh-git"; ModuleVersion = $RequirePoshGitVersion } -Repository $Repository -AllowPrerelease `
+		if (Initialize-Module @{ ModuleName = "posh-git"; ModuleVersion = $RequirePoshGitVersion } -AllowPrerelease `
 				-InfoMessage "posh-git >= $($RequirePoshGitVersion.ToString()) is recommended for better git experience in PowerShell" ) { }
 
 		# PSScriptAnalyzer >= 1.19.1 is required otherwise code will start missing while editing
-		if (!(Initialize-Module @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = $RequireAnalyzerVersion } -Repository $Repository `
+		if (!(Initialize-Module @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = $RequireAnalyzerVersion } `
 					-InfoMessage "PSScriptAnalyzer >= $($RequireAnalyzerVersion.ToString()) is required otherwise code will start missing while editing" )) { exit }
 
 		# Pester is required to run pester tests
-		if (!(Initialize-Module @{ ModuleName = "Pester"; ModuleVersion = $RequirePesterVersion } -Repository $Repository `
+		if (!(Initialize-Module @{ ModuleName = "Pester"; ModuleVersion = $RequirePesterVersion } `
 					-InfoMessage "Pester >= $($RequirePesterVersion.ToString()) is required to run pester tests" )) { }
 	}
 

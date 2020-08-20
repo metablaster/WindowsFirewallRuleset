@@ -38,9 +38,7 @@ installing or updating packages
 .PARAMETER ProviderFullName
 Hash table ProviderName, Version representing minimum required module
 .PARAMETER Name
-Hash table ProviderName, Version representing minimum required module
-.PARAMETER ProviderName
-Hash table ProviderName, Version representing minimum required module
+Package source name which to assign to registered provider if registration is needed
 .PARAMETER Location
 Repository name from which to download packages such as NuGet,
 if repository is not registered user is prompted to register it
@@ -57,6 +55,8 @@ None. You cannot pipe objects to Initialize-Provider
 .OUTPUTS
 None.
 .NOTES
+There is no "Repository" parameter here like in Initialize-Module, instead it's called ProviderName
+which is supplied in parameter ProviderFullName
 Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider
 #>
 function Initialize-Provider
@@ -72,8 +72,9 @@ function Initialize-Provider
 
 		[Parameter()]
 		[ValidatePattern("[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)")]
-		[uri] $Location = "https://api.nuget.org/v3/index.json", # TODO: array https://www.nuget.org/api/v2 (used by PSGallery?)
-
+		[uri] $Location = "https://api.nuget.org/v3/index.json",
+		# TODO: array https://www.nuget.org/api/v2 (used by PSGallery?)
+		# TODO: suggested in Windows PowerShell: https://onegetcdn.azureedge.net/providers/Microsoft.PackageManagement.NuGetProvider-2.8.5.208.dll
 		[Parameter()]
 		[switch] $Trusted,
 
@@ -107,10 +108,10 @@ function Initialize-Provider
 		[string] $ProviderName = $ProviderFullName.ModuleName
 		[version] $RequireVersion = $ProviderFullName.ModuleVersion
 
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if provider $ProviderName is installed and what version"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if provider $ProviderName is installed and which version"
 
 		# Highest version present on system if any
-		[version] $TargetVersion = Get-PackageProvider -Name $ProviderName -ListAvailable |
+		[version] $TargetVersion = Get-PackageProvider -Name $ProviderName -ListAvailable -ErrorAction SilentlyContinue |
 		Sort-Object -Property Version | Select-Object -Last 1 -ExpandProperty Version
 
 		if ($TargetVersion)
@@ -124,22 +125,38 @@ function Initialize-Provider
 
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Provider $ProviderName v$TargetVersion found"
 		}
+		else
+		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Provider $ProviderName not installed"
+		}
 
 		# Check requested package source is registered
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if package source $ProviderName is registered"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if package source $ProviderName is registered"
 
 		# Package source name only list
 		[string] $SourcesList = ""
 
-		# Available package sources
-		[PSCustomObject[]] $PackageSources = Get-PackageSource -Name $Name -ProviderName $ProviderName -ErrorAction SilentlyContinue
+		# Available package sources if found have these sample properties:
+		# Name     : nuget.org
+		# Location : https://api.nuget.org/v3/index.json
+		# Source   : nuget.org
+		# ProviderName : NuGet
+		# Provider  : Microsoft.PackageManagement.Implementation.PackageProvider
+		# IsTrusted : False
+		# IsRegistered : True
+		# TODO: If not found "PowerShell" may ask to install, and if that fails it may return package source anyway (seen in: Windows PowerShell)
+		[PSCustomObject[]] $PackageSources = Get-PackageSource -ProviderName $ProviderName # -ErrorAction SilentlyContinue # -Name $Name
 
 		if ($PackageSources)
 		{
 			$SourcesList = $ProviderName
+			# TODO: Prompt to set it as trusted
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Package source $ProviderName is registered"
 		}
 		else
 		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Package source $ProviderName is not registered"
+
 			# Setup choices
 			$Accept.HelpMessage = "Add a package source for a specified package provider"
 			$Choices += $Accept
@@ -152,6 +169,7 @@ function Initialize-Provider
 			if ($Decision -eq $Default)
 			{
 				Write-Information -Tags "User" -MessageData "INFO: Registering package source $ProviderName"
+
 				# Register package source to be able to use it
 				Register-PackageSource -Name $Name -ProviderName $ProviderName -Location $Location -Trusted:$Trusted
 
@@ -175,6 +193,7 @@ function Initialize-Provider
 			{
 				# Use default registered package sources
 				$PackageSources = Get-PackageSource
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] User refused to register $ProviderName, using system default package sources"
 			}
 
 			if (!$PackageSources)
@@ -205,8 +224,14 @@ function Initialize-Provider
 		# Check if module could be downloaded
 		# [Microsoft.PackageManagement.Packaging.SoftwareIdentity]
 		[PSCustomObject] $FoundProvider = $null
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if $ProviderName provider version >= v$RequireVersion could be downloaded"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if $ProviderName provider version >= v$RequireVersion is available for download"
 
+		# NOTE: $PackageSources may contains following 3 package sources in following order of possibility:
+		# 1. explicit source requested by user, there could be multiple that match and are registered
+		# 2. source offered during offer by PowerShell to install, (TODO: which may not be registered?)
+		# 3. source was not found on system, but it was manually registered
+		# 4. all available package sources registered on system
+		# Which means we need to handle all 4 possible cases
 		foreach ($SourceItem in $PackageSources)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking repository $SourceItem for updates"
@@ -217,24 +242,25 @@ function Initialize-Provider
 				Write-Warning -Message "Package source $($SourceItem.Name) could not be contacted"
 			}
 
-			# Try anyway, maybe port is wrong, only first match is considered
-			$FoundProvider = Find-PackageProvider -Name $ProviderName -Source $Location `
+			# This (handles all 4 cases) is handled in case when first call to Get-PackageSource offers installation,
+			# fails installing and returns source for download
+			$FoundProvider = Find-PackageProvider -Name $SourceItem.Name -Source $SourceItem.Location `
 				-MinimumVersion $RequireVersion -IncludeDependencies -ErrorAction SilentlyContinue
 
 			if (!$FoundProvider)
 			{
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Finding provider $ProviderName for download failed, trying alternative solution"
 				# Try with Find-Package
-				$FoundProvider = Find-Package -Name $ProviderName -Source $SourceItem.Name -IncludeDependencies `
+				$FoundProvider = Find-Package -Name $SourceItem.Name -Source $SourceItem.Location -IncludeDependencies `
 					-MinimumVersion $RequireVersion -AllowPrereleaseVersions -ErrorAction SilentlyContinue
 			}
 
 			if ($FoundProvider)
 			{
-				Write-Information -Tags "User" -MessageData "INFO: $FoundProvider provider v$($FoundProvider.Version.ToString()) is selected for download"
+				Write-Information -Tags "User" -MessageData "INFO: $($FoundProvider.Name) provider v$($FoundProvider.Version.ToString()) is selected for download"
 				break
 			}
-
-			# TODO: else check for older version and ask for confirmation
+			# else error should be displayed, TODO: Check for older version and ask for confirmation
 		}
 
 		if (!$FoundProvider)
@@ -253,17 +279,17 @@ function Initialize-Provider
 		}
 
 		# Setup prompt
-		if (!$TargetVersion)
-		{
-			$Title = "Required package provider is not installed"
-			$Question = "Update $ProviderName provider now?"
-			Write-Warning -Message "$ProviderName provider minimum version v$RequireVersion is required but not installed"
-		}
-		else
+		if ($TargetVersion)
 		{
 			$Title = "Required package provider is out of date"
 			$Question = "Install $ProviderName provider now?"
 			Write-Warning -Message "$ProviderName provider version v$($TargetVersion.ToString()) is out of date, required version is v$RequireVersion"
+		}
+		else
+		{
+			$Title = "Required package provider is not installed"
+			$Question = "Update $ProviderName provider now?"
+			Write-Warning -Message "$ProviderName provider minimum version v$RequireVersion is required but not installed"
 		}
 
 		$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
@@ -271,23 +297,24 @@ function Initialize-Provider
 		if ($Decision -eq $Default)
 		{
 			Write-Information -Tags "User" -MessageData "INFO: Installing $($FoundProvider.Name) provider v$($FoundProvider.Version.ToString())"
-			Install-PackageProvider $FoundProvider.Name -Source $FoundProvider.Source
+			Install-PackageProvider -Name $FoundProvider.Name -Source $FoundProvider.Source
 
 			[version] $NewVersion = Get-PackageProvider -Name $FoundProvider.Name |
 			Sort-Object -Property Version | Select-Object -Last 1 -ExpandProperty Version
 
-			if ($NewVersion -gt $TargetVersion)
+			if ($TargetVersion -and ($NewVersion -gt $TargetVersion))
 			{
 				Write-Information -Tags "User" -MessageData "INFO: $ProviderName provider v$NewVersion is installed"
 				return $true
 			}
 			# else error should be shown
+			# TODO: was not installed or updated
 		}
 		else
 		{
 			# User refused default action
 			# TODO: should this be error? maybe switch
-			Write-Warning -Message "$ProviderName provider not installed"
+			Write-Warning -Message "Installing provider $ProviderName aborted by user"
 		}
 
 		return $false

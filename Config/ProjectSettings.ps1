@@ -190,7 +190,8 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	New-Variable -Name RequirePowerShellGetVersion -Scope Global -Option Constant -Value $([version]::new(2, 2, 4))
 
 	# Required minimum NuGet version prior to installing other modules
-	New-Variable -Name RequireNuGetVersion -Scope Global -Option Constant -Value $([version]::new(3, 0, 0))
+	# TODO: Core >= 3.0.0, Desktop >= 2.8.5
+	New-Variable -Name RequireNuGetVersion -Scope Global -Option Constant -Value $([version]::new(2, 8, 5))
 
 	# Recommended minimum Git version needed for contributing and required by posh-git
 	New-Variable -Name RequireGitVersion -Scope Global -Option Constant -Value $([version]::new(2, 28, 0))
