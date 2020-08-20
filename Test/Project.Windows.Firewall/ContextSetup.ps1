@@ -26,27 +26,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-Set-StrictMode -Version Latest
-Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
+#
+# Context setup for Project.Windows.Firewall
+#
 
-# Imports
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule $true
-. $PSScriptRoot\..\ModulePreferences.ps1
-
-# TODO: repository paths whitelist check
-# TODO: should process must be implemented for system changes
-# if (!$PSCmdlet.ShouldProcess("ModuleName", "Update or install module if needed"))
-# SupportsShouldProcess = $true, ConfirmImpact = 'High'
-
-$PublicScripts = @(
-	"Initialize-Project"
-	"Initialize-Service"
-	"Initialize-Module"
-	"Initialize-Provider"
-)
-
-foreach ($Script in $PublicScripts)
-{
-	Write-Debug -Message "[$ThisModule] Importing script: $Script.ps1"
-	. ("{0}\Public\{1}.ps1" -f $PSScriptRoot, $Script)
-}
+New-Variable -Name TestContext -Scope Local -Option Constant -Value "Project.Windows.Firewall"

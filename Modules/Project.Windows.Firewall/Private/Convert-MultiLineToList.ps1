@@ -5,7 +5,8 @@ MIT License
 Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
+Copyright (C) 2020 Markus Scholtes
+Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,8 +27,50 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Context setup for Firewall-Manager
-#
+<#
+.SYNOPSIS
+Convert multi line string array to single line string
+.DESCRIPTION
+Convert multi line string array to single line string
+`r is encoded as %% and `n as ||
+.PARAMETER MultiLine
+String array which to convert
+.PARAMETER JSON
+Input string will go to JSON file, meaning no need to encode
+.EXAMPLE
+Convert-MultiLineToList "Some`rnString"
+Produces: Some||String
+.INPUTS
+None. You cannot pipe objects to Convert-ArrayToList
+.OUTPUTS
+[string] comma separated list
+.NOTES
+None.
+#>
+function Convert-MultiLineToList
+{
+	[OutputType([string])]
+	param(
+		[Parameter()]
+		[string] $MultiLine,
 
-New-Variable -Name TestContext -Scope Local -Option Constant -Value "Firewall-Manager"
+		[Parameter()]
+		[switch] $JSON
+	)
+
+	if ([string]::IsNullOrEmpty($MultiLine))
+	{
+		return ""
+	}
+
+	# replace new line with encoded string
+	# For CSV files need to encode multi line rule description into single line
+	if ($JSON)
+	{
+		return $MultiLine
+	}
+	else
+	{
+		return $MultiLine.Replace("`r", "%%").Replace("`n", "||")
+	}
+}

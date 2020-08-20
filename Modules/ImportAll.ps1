@@ -42,6 +42,6 @@ Import-Module -Name Project.Windows.UserInfo @Logs
 Import-Module -Name Project.Windows.ComputerInfo @Logs
 Import-Module -Name Project.Windows.ProgramInfo @Logs
 
-Import-Module -Name Firewall-Manager @Logs
+Import-Module -Name Project.Windows.Firewall @Logs
 Import-Module -Name Indented.Net.IP @Logs
 Import-Module -Name VSSetup @Logs

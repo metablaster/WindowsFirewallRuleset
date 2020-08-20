@@ -124,7 +124,7 @@ if ($Develop)
 		Remove-Module -Name Project.Windows.UserInfo -ErrorAction Ignore
 		Remove-Module -Name Project.Windows.ComputerInfo -ErrorAction Ignore
 		Remove-Module -Name Project.Windows.ProgramInfo -ErrorAction Ignore
-		Remove-Module -Name Firewall-Manager -ErrorAction Ignore
+		Remove-Module -Name Project.Windows.Firewall -ErrorAction Ignore
 		Remove-Module -Name Indented.Net.IP -ErrorAction Ignore
 	}
 }

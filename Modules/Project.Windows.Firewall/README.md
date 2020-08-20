@@ -1,5 +1,5 @@
 
-# Firewall-Manager
+# Project.Windows.Firewall
 
 There is only one possibility to export and import firewall rules: as a blob (wfw file) in the
 firewall console or with a script.
@@ -18,11 +18,11 @@ By Markus Scholtes, 2020
 ## Installation
 
 ```powershell
-PS C:\> Install-Module Firewall-Manager
+PS C:\> Install-Module Project.Windows.Firewall
 ```
 
 (on Powershell V4 you might have to install PowershellGet before) or download from here:
-https://www.powershellgallery.com/packages/Firewall-Manager
+https://www.powershellgallery.com/packages/Project.Windows.Firewall
 
 See the script version web page too:
 [Powershell scripts to export and import firewall rules](https://gallery.technet.microsoft.com/Powershell-to-export-and-23287694).

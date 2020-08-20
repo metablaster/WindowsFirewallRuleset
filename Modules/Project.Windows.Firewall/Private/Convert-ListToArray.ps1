@@ -27,34 +27,41 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-Set-StrictMode -Version Latest
-Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
-
-# Imports
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule $true
-. $PSScriptRoot\..\ModulePreferences.ps1
-
 <#
 .SYNOPSIS
-Firewall-Manager is a module to manage firewall rules.
+Convert comma separated list to String array
+.DESCRIPTION
+Convert comma separated list to String array
+.PARAMETER List
+
+.PARAMETER DefaultValue
+
+.EXAMPLE
+TODO: provide example and description
+.INPUTS
+None. You cannot pipe objects to Convert-ListToArray
+.OUTPUTS
+[string[]] array from comma separated list
 .NOTES
-Version: 1.0.2
-Date: 2020-02-17
-Author: Markus Scholtes
-
-Changes by metablaster - August 2020:
-1. Added preference variables to be in line with the rest of project
-2. Included modules which are used in imported scripts
+TODO: output type
+TODO: DefaultValue can't be string, try string[]
 #>
+function Convert-ListToArray
+{
+	param(
+		[Parameter()]
+		[string] $List,
 
-# Load modules manually for security reasons
-. "$PSScriptRoot/Export-FirewallRules.ps1"
-. "$PSScriptRoot/Import-FirewallRules.ps1"
-. "$PSScriptRoot/Remove-FirewallRules.ps1"
+		[Parameter()]
+		$DefaultValue = "Any"
+	)
 
-# Export functions
-Export-ModuleMember -Function @(
-	'Export-FirewallRules',
-	'Import-FirewallRules',
-	'Remove-FirewallRules'
-)
+	if (![string]::IsNullOrEmpty($List))
+	{
+		return ($List -split ",")
+	}
+	else
+	{
+		return $DefaultValue
+	}
+}

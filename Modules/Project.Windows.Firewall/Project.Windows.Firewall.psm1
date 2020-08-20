@@ -5,7 +5,8 @@ MIT License
 Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
+Copyright (C) 2020 Markus Scholtes
+Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,20 +34,36 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule $true
 . $PSScriptRoot\..\ModulePreferences.ps1
 
-# TODO: repository paths whitelist check
-# TODO: should process must be implemented for system changes
-# if (!$PSCmdlet.ShouldProcess("ModuleName", "Update or install module if needed"))
-# SupportsShouldProcess = $true, ConfirmImpact = 'High'
+<#
+Changes by metablaster - August 2020:
+1. Included variables needed by of project
+2. Included modules which are used in imported scripts
+3. Separated scripts into Public and Private folder
+4. Other significant changes and updates documented inside individual scripts
+#>
+
+$PrivateScripts = @(
+	"Convert-ArrayToList"
+	"Convert-ListToArray"
+	"Convert-ListToMultiLine"
+	"Convert-MultiLineToList"
+	"Convert-ValueToBoolean"
+)
 
 $PublicScripts = @(
-	"Initialize-Project"
-	"Initialize-Service"
-	"Initialize-Module"
-	"Initialize-Provider"
+	"Export-FirewallRules"
+	"Import-FirewallRules"
+	"Remove-FirewallRules"
 )
+
+foreach ($Script in $PrivateScripts)
+{
+	Write-Debug -Message "[$ThisModule] Importing private script: $Script.ps1"
+	. ("{0}\Private\{1}.ps1" -f $PSScriptRoot, $Script)
+}
 
 foreach ($Script in $PublicScripts)
 {
-	Write-Debug -Message "[$ThisModule] Importing script: $Script.ps1"
+	Write-Debug -Message "[$ThisModule] Importing public script: $Script.ps1"
 	. ("{0}\Public\{1}.ps1" -f $PSScriptRoot, $Script)
 }

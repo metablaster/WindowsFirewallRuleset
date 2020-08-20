@@ -5,7 +5,8 @@ MIT License
 Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
+Copyright (C) 2020 Markus Scholtes
+Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,27 +27,48 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-Set-StrictMode -Version Latest
-Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
+<#
+.SYNOPSIS
+Convert value to boolean
+.DESCRIPTION
+Convert value to boolean
+.PARAMETER Value
 
-# Imports
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule $true
-. $PSScriptRoot\..\ModulePreferences.ps1
+.PARAMETER DefaultValue
 
-# TODO: repository paths whitelist check
-# TODO: should process must be implemented for system changes
-# if (!$PSCmdlet.ShouldProcess("ModuleName", "Update or install module if needed"))
-# SupportsShouldProcess = $true, ConfirmImpact = 'High'
-
-$PublicScripts = @(
-	"Initialize-Project"
-	"Initialize-Service"
-	"Initialize-Module"
-	"Initialize-Provider"
-)
-
-foreach ($Script in $PublicScripts)
+.EXAMPLE
+TODO: provide example and description
+.INPUTS
+None. You cannot pipe objects to Convert-ValueToBoolean
+.OUTPUTS
+[bool] of the input value
+.NOTES
+None.
+#>
+function Convert-ValueToBoolean
 {
-	Write-Debug -Message "[$ThisModule] Importing script: $Script.ps1"
-	. ("{0}\Public\{1}.ps1" -f $PSScriptRoot, $Script)
+	[OutputType([bool])]
+	param(
+		[Parameter()]
+		[string] $Value,
+
+		[Parameter()]
+		[bool] $DefaultValue = $false
+	)
+
+	if (![string]::IsNullOrEmpty($Value))
+	{
+		if (($Value -eq "True") -or ($Value -eq "1"))
+		{
+			return $true
+		}
+		else
+		{
+			return $false
+		}
+	}
+	else
+	{
+		return $DefaultValue
+	}
 }

@@ -1,0 +1,31 @@
+
+TOPIC
+	about_Project.Windows.Firewall
+
+SHORT DESCRIPTION
+	Export, import and remove rules from Windows firewall
+
+LONG DESCRIPTION
+	The three commandlets Export-FirewallRule, Import-FirewallRule and Remove-FirewallRule export,
+	import and remove specified firewall rule sets into CSV or JSON file format.
+	When importing existing rules with the same name will be overwritten.
+
+EXAMPLES
+	Export-FirewallRules
+	Exports specified firewall rules to the CSV or JSON file in the specified path.
+
+	Import-FirewallRules
+	Imports specified firewall rules from CSV or JSON file from specified path
+
+	Remove-FirewallRules
+	Removes specified firewall rules according to a list in the CSV or JSON file in the specified path.
+
+KEYWORDS
+	Firewall
+	Export
+	Import
+	FirewallRule
+
+SEE ALSO
+	https://github.com/MScholtes/Project.Windows.Firewall
+	https://github.com/metablaster/WindowsFirewallRuleset
