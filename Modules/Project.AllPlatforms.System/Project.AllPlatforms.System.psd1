@@ -74,9 +74,9 @@
 	# delete the entry, use an empty array if there are no functions to export.
 	FunctionsToExport = @(
 		"Test-SystemRequirements"
-		"Test-ServiceRequirements"
-		"Initialize-ModuleRequirement"
-		"Initialize-ProviderRequirement"
+		"Initialize-Service"
+		"Initialize-Module"
+		"Initialize-Provider"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not

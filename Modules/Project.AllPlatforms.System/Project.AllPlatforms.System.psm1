@@ -80,7 +80,7 @@ None.
 .NOTES
 [System.ServiceProcess.ServiceController[]]
 #>
-function Test-ServicesRequirement
+function Initialize-Service
 {
 	[OutputType([bool])]
 	[CmdletBinding()]
@@ -91,9 +91,13 @@ function Test-ServicesRequirement
 
 	begin
 	{
-		[string] $Title = "Required service not running"
-		[string[]] $Choices = "&Yes", "&No"
+		# User prompt default values
 		[int32] $Default = 0
+		[System.Management.Automation.Host.ChoiceDescription[]] $Choices = @()
+		$Accept = [System.Management.Automation.Host.ChoiceDescription]::new("&Yes")
+		$Deny = [System.Management.Automation.Host.ChoiceDescription]::new("&No")
+		$Deny.HelpMessage = "Skip operation"
+		[string] $Title = "Required service not running"
 		[bool] $StatusGood = $true
 	}
 	process
@@ -108,6 +112,34 @@ function Test-ServicesRequirement
 			if ($Service.Status -ne "Running")
 			{
 				[string] $Question = "Do you want to start $($Service.DisplayName) service now?"
+				$Accept.HelpMessage = switch ($Service.Name)
+				{
+					"lmhosts"
+					{
+						"Required to manage GPO and contact computers on network using NETBIOS name resolution"
+					}
+					"LanmanWorkstation"
+					{
+						"Required to manage GPO and contact computers on network using SMB protocol"
+					}
+					"LanmanServer"
+					{
+						"Required to manage GPO firewall"
+					}
+					"WinRM"
+					{
+						"Required for remote firewall administration"
+					}
+					default
+					{
+						"Start service and set to automatic start"
+					}
+				}
+
+				$Choices.Clear()
+				$Choices += $Accept
+				$Choices += $Deny
+
 				$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
 
 				if ($Decision -eq $Default)
@@ -230,14 +262,14 @@ whether to allow installing beta modules
 .EXAMPLE
 Initialize-ModulesRequirement @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Repository "PSGallery"
 .INPUTS
-None. You cannot pipe objects to Initialize-ModuleRequirement
+None. You cannot pipe objects to Initialize-Module
 .OUTPUTS
 None.
 .NOTES
 Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider
 Updating PackageManagement and PowerShellGet requires restarting PowerShell to switch to the latest version
 #>
-function Initialize-ModuleRequirement
+function Initialize-Module
 {
 	[OutputType([bool])]
 	[CmdletBinding(PositionalBinding = $false)]
@@ -322,6 +354,7 @@ function Initialize-ModuleRequirement
 	$Deny = [System.Management.Automation.Host.ChoiceDescription]::new("&No")
 	$Deny.HelpMessage = "Skip operation"
 
+	# TODO: check for NuGet
 	# Check for PowerShellGet only if not processing PowerShellGet
 	if ($ModuleName -ne "PowerShellGet")
 	{
@@ -421,12 +454,12 @@ function Initialize-ModuleRequirement
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking repository $RepositoryItem for updates"
 
 		[uri] $RepositoryURI = $RepositoryItem.SourceLocation
-		if (Test-NetConnection $RepositoryURI.Host -CommonTCPPort HTTP -ErrorAction SilentlyContinue)
+		if (!(Test-NetConnection -ComputerName $RepositoryURI.Host -Port 443 -InformationLevel Quiet -ErrorAction SilentlyContinue))
 		{
 			Write-Warning -Message "Repository $($RepositoryItem.Name) could not be contacted"
 		}
 
-		# Try anyway, only first match is considered
+		# Try anyway, maybe port is wrong, only first match is considered
 		$FoundModule = Find-Module -Name $ModuleName -Repository $RepositoryItem -MinimumVersion $RequiredVersion -ErrorAction SilentlyContinue
 
 		if ($FoundModule)
@@ -434,13 +467,14 @@ function Initialize-ModuleRequirement
 			Write-Information -Tags "User" -MessageData "INFO: Module $ModuleName v$($ModuleStatus.Version.ToString()) is selected for download"
 			break
 		}
+		# TODO: check for older version and ask for confirmation
 	}
 
 	if (!$FoundModule)
 	{
 		# Registering repository failed or no valid repository exists
 		Write-Error -Category ObjectNotFound -TargetObject $Repositories `
-			-Message "Module $ModuleName was no found in any of the following repositories: $RepositoryList"
+			-Message "Module $ModuleName version >= v$RequiredVersion was not found in any of the following repositories: $RepositoryList"
 		return $false
 	}
 
@@ -502,7 +536,7 @@ function Initialize-ModuleRequirement
 	}
 	else # Module not present
 	{
-		Write-Warning -Message "$ModuleName module minimum version $RequiredVersion is recommended but not installed"
+		Write-Warning -Message "$ModuleName module minimum version v$RequiredVersion is recommended but not installed"
 
 		$Title = "Recommended module not installed$ConnectionStatus"
 		$Question = "Install $ModuleName module now?"
@@ -572,28 +606,29 @@ installed and in correct order, taking into account failures that can happen whi
 installing or updating packages
 .PARAMETER ProviderFullName
 Hash table ProviderName, Version representing minimum required module
-.PARAMETER Repository
+.PARAMETER Name
+Hash table ProviderName, Version representing minimum required module
+.PARAMETER ProviderName
+Hash table ProviderName, Version representing minimum required module
+.PARAMETER Location
 Repository name from which to download packages such as NuGet,
 if repository is not registered user is prompted to register it
-.PARAMETER RepositoryLocation
-Repository location associated with repository name,
-this parameter is used only if repository is not registered
-.PARAMETER InstallationPolicy
+.PARAMETER Trusted
 If the supplied repository needs to be registered InstallationPolicy specifies
 whether repository is trusted or not.
 this parameter is used only if repository is not registered
 .PARAMETER InfoMessage
 Optional information displayable to user for choice help message
 .EXAMPLE
-Initialize-ProviderRequirement @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Repository "powershellgallery.com"
+Initialize-Provider @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Repository "powershellgallery.com"
 .INPUTS
-None. You cannot pipe objects to Initialize-ProviderRequirement
+None. You cannot pipe objects to Initialize-Provider
 .OUTPUTS
 None.
 .NOTES
 Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider
 #>
-function Initialize-ProviderRequirement
+function Initialize-Provider
 {
 	[OutputType([bool])]
 	[CmdletBinding(PositionalBinding = $false)]
@@ -602,104 +637,231 @@ function Initialize-ProviderRequirement
 		[hashtable] $ProviderFullName,
 
 		[Parameter()]
-		[ValidatePattern("^[a-zA-Z]+$")]
-		[string] $Repository = "NuGet",
+		[string] $Name = "nuget.org",
 
 		[Parameter()]
 		[ValidatePattern("[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)")]
-		[uri] $RepositoryLocation = "nuget.org",
+		[uri] $Location = "https://api.nuget.org/v3/index.json", # TODO: array https://www.nuget.org/api/v2 (used by PSGallery?)
+
+		[Parameter()] # TODO: switch also for modules
+		[switch] $Trusted,
 
 		[Parameter()]
-		[ValidateSet("Trusted", "UnTrusted")]
-		[string] $InstallationPolicy = "UnTrusted",
-
-		[Parameter()]
-		[string] $InfoMessage = "Accept operation",
-
-		[Parameter()]
-		[switch] $AllowPrerelease
+		[string] $InfoMessage = "Accept operation"
 	)
 
 	begin
 	{
+		# User prompt default values
 		[int32] $Default = 0
+		[System.Management.Automation.Host.ChoiceDescription[]] $Choices = @()
+		$Accept = [System.Management.Automation.Host.ChoiceDescription]::new("&Yes")
+		$Deny = [System.Management.Automation.Host.ChoiceDescription]::new("&No")
+		$Deny.HelpMessage = "Skip operation"
 	}
 	process
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-		[string] $ConnectionStatus = ""
-		if (!(Test-NetConnection $Repository -CommonTCPPort HTTP -ErrorAction Ignore))
+		# Validate module specification
+		if (!($ProviderFullName.Count -ge 2 -and
+				($ProviderFullName.ContainsKey("ModuleName") -and $ProviderFullName.ContainsKey("ModuleVersion"))))
 		{
-			$ConnectionStatus = " but no connection to $Repository"
+			Write-Error -Category InvalidArgument -TargetObject $ProviderFullName `
+				-Message "ModuleSpecification parameter for: $($ProviderFullName.ModuleName) is not valid"
+			return $false
 		}
 
-		# Get required module from input
-		[string] $PackageName = $ProviderFullName.ModuleName
+		# Get required provider package from input
+		[string] $ProviderName = $ProviderFullName.ModuleName
 		[version] $RequiredVersion = $ProviderFullName.ModuleVersion
 
-		# Highest version present on system if any
-		[version] $TargetVersion = Get-PackageProvider -Name $PackageName |
-		Sort-Object -Property Version | Select-Object -First 1 -ExpandProperty Version
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if provider $ProviderName is installed and what version"
 
-		if (!$TargetVersion)
+		# Highest version present on system if any
+		[version] $TargetVersion = Get-PackageProvider -Name $ProviderName -ListAvailable |
+		Sort-Object -Property Version | Select-Object -Last 1 -ExpandProperty Version
+
+		if ($TargetVersion)
 		{
-			# TODO: need better program logic
-			$TargetVersion = "0.0.0"
-			Write-Warning -Message "Package provider $PackageName not installed"
+			if ($TargetVersion -ge $RequiredVersion)
+			{
+				# Up to date
+				Write-Information -Tags "User" -MessageData "INFO: Installed provider $ProviderName v$TargetVersion meets >= v$RequiredVersion"
+				return $true
+			}
+
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Provider $ProviderName v$TargetVersion found"
 		}
 
-		if ($TargetVersion -lt $RequiredVersion)
+		# Check requested package source is registered
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if package source $ProviderName is registered"
+
+		# Package source name only list
+		[string] $SourcesList = ""
+
+		# Available package sources
+		[PSCustomObject[]] $PackageSources = Get-PackageSource -Name $Name -ProviderName $ProviderName -ErrorAction SilentlyContinue
+
+		if ($PackageSources)
 		{
-			Write-Warning -Message "$ProviderName provider version '$($TargetVersion.ToString())' is out of date, recommended version is: $RequiredVersion"
+			$SourcesList = $ProviderName
+		}
+		else
+		{
+			# Setup choices
+			$Accept.HelpMessage = "Add a package source for a specified package provider"
+			$Choices += $Accept
+			$Choices += $Deny
 
-			[System.Management.Automation.Host.ChoiceDescription[]] $Choices = @()
-
-			$YesChoice = [System.Management.Automation.Host.ChoiceDescription]::new("&Yes")
-			$YesChoice.HelpMessage = $InfoMessage
-			$Choices += $YesChoice
-
-			$NoChoice = [System.Management.Automation.Host.ChoiceDescription]::new("&No")
-			$NoChoice.HelpMessage = "Skip operation"
-			$Choices += $NoChoice
-
-			$Title = "Recommended package provider is out of date$ConnectionStatus"
-			$Question = "Update $ProviderName provider now?"
+			$Title = "Package source $ProviderName not registered"
+			$Question = "Register $ProviderName package source now?"
 			$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
 
 			if ($Decision -eq $Default)
 			{
-				$SoftwareIdentity = Find-PackageProvider -Name $PackageName -Source $Repository `
-					-MinimumVersion $RequiredVersion -IncludeDependencies
+				Write-Information -Tags "User" -MessageData "INFO: Registering package source $ProviderName"
+				# Register package source to be able to use it
+				Register-PackageSource -Name $Name -ProviderName $ProviderName -Location $Location -Trusted:$Trusted
 
-				if ($SoftwareIdentity)
+				$SourceObject = Get-PackageSource -Name $Name -ProviderName $ProviderName -ErrorAction SilentlyContinue
+
+				if ($SourceObject)
 				{
-					Install-PackageProvider $SoftwareIdentity.Name -Source $Repository -MinimumVersion $RequiredVersion
+					$PackageSources += $SourceObject
+					$IsTrusted = "UnTrusted"
 
-					[version] $NewVersion = Get-PackageProvider -Name $SoftwareIdentity.Name |
-					Sort-Object -Property Version | Select-Object -First 1 -ExpandProperty Version
-
-					if ($NewVersion -gt $TargetVersion)
+					if ($PackageSources[0].IsTrusted)
 					{
-						Write-Information -Tags "User" -MessageData "INFO: $ProviderName provider status changed, PowerShell must be restarted"
-						return $true
+						$IsTrusted = "Trusted"
 					}
-					# else error should be shown
+
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Package source $ProviderName is registered and $IsTrusted"
 				}
-				else
-				{
-					Write-Warning -Message "$ProviderName provider not found to update"
-				}
+				# else error should be displayed
 			}
 			else
 			{
-				# User refused default action
-				Write-Warning -Message "$ProviderName provider not installed"
+				# Use default registered package sources
+				$PackageSources = Get-PackageSource
+			}
+
+			if (!$PackageSources)
+			{
+				# Registering repository failed or no valid package source exists
+				Write-Error -Category ObjectNotFound -TargetObject $PackageSources `
+					-Message "No registered package source exist"
+				return $false
+			}
+			else
+			{
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Constructing list of package sources for display"
+
+				# Construct list for display on single line
+				foreach ($SourceItem in $PackageSources)
+				{
+					$SourcesList += $SourceItem.Name
+					$SourcesList += ", "
+				}
+
+				# TODO: use $foreach, anyway it doesn't work
+				$SourcesList.TrimEnd(", ")
 			}
 		}
 
+		# No need to specify type of repository, it's explained by user action
+		Write-Information -Tags "User" -MessageData "INFO: Using following package sources: $SourcesList"
+
+		# Check if module could be downloaded
+		# [Microsoft.PackageManagement.Packaging.SoftwareIdentity]
+		[PSCustomObject] $FoundProvider = $null
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if $ProviderName provider version >= $RequiredVersion could be downloaded"
+
+		foreach ($SourceItem in $PackageSources)
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking repository $SourceItem for updates"
+
+			[uri] $SourceURI = $SourceItem.Location
+			if (!(Test-NetConnection -ComputerName $SourceURI.Host -Port 443 -InformationLevel Quiet -ErrorAction SilentlyContinue))
+			{
+				Write-Warning -Message "Package source $($SourceItem.Name) could not be contacted"
+			}
+
+			# Try anyway, maybe port is wrong, only first match is considered
+			$FoundProvider = Find-PackageProvider -Name $ProviderName -Source $Location `
+				-MinimumVersion $RequiredVersion -IncludeDependencies -ErrorAction SilentlyContinue
+
+			if (!$FoundProvider)
+			{
+				# Try with Find-Package
+				$FoundProvider = Find-Package -Name $ProviderName -Source $SourceItem.Name -IncludeDependencies `
+					-MinimumVersion $RequiredVersion -AllowPrereleaseVersions -ErrorAction SilentlyContinue
+			}
+
+			if ($FoundProvider)
+			{
+				Write-Information -Tags "User" -MessageData "INFO: $FoundProvider provider v$($FoundProvider.Version.ToString()) is selected for download"
+				break
+			}
+
+			# TODO: else check for older version and ask for confirmation
+		}
+
+		if (!$FoundProvider)
+		{
+			if ($PSVersionTable.PSEdition -eq "Core")
+			{
+				Write-Warning -Message "$ProviderName was not found because of a known issue with PowerShell Core"
+				Write-Information -Tags "User" -MessageData "INFO: https://github.com/OneGet/oneget/issues/360"
+				return $false
+			}
+
+			# Registering repository failed or no valid repository exists
+			Write-Error -Category ObjectNotFound -TargetObject $PackageSources `
+				-Message "$ProviderName provider version >= v$RequiredVersion was not found in any of the following package sources: $SourcesList"
+			return $false
+		}
+
+		# Setup prompt
+		if (!$TargetVersion)
+		{
+			$Title = "Required package provider is not installed"
+			$Question = "Update $ProviderName provider now?"
+			Write-Warning -Message "$ProviderName provider minimum version v$RequiredVersion is required but not installed"
+		}
+		else
+		{
+			$Title = "Required package provider is out of date"
+			$Question = "Install $ProviderName provider now?"
+			Write-Warning -Message "$ProviderName provider version v$($TargetVersion.ToString()) is out of date, required version is v$RequiredVersion"
+		}
+
+		$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
+
+		if ($Decision -eq $Default)
+		{
+			Write-Information -Tags "User" -MessageData "INFO: Installing $($FoundProvider.Name) provider v$($FoundProvider.Version.ToString())"
+			Install-PackageProvider $FoundProvider.Name -Source $FoundProvider.Source
+
+			[version] $NewVersion = Get-PackageProvider -Name $FoundProvider.Name |
+			Sort-Object -Property Version | Select-Object -Last 1 -ExpandProperty Version
+
+			if ($NewVersion -gt $TargetVersion)
+			{
+				Write-Information -Tags "User" -MessageData "INFO: $ProviderName provider v$NewVersion is installed"
+				return $true
+			}
+			# else error should be shown
+		}
+		else
+		{
+			# User refused default action
+			# TODO: should this be error?
+			Write-Warning -Message "$ProviderName provider not installed"
+		}
+
 		return $false
-	}
+	} # process
 }
 
 <#
@@ -839,13 +1001,13 @@ function Test-SystemRequirements
 	if (!$NoServicesCheck)
 	{
 		# These services are minimum required
-		if (!(Test-ServiceRequirements @("lmhosts", "LanmanWorkstation", "LanmanServer"))) { exit }
+		if (!(Initialize-Service @("lmhosts", "LanmanWorkstation", "LanmanServer"))) { exit }
 
 		# NOTE: remote administration needs this service, see Enable-PSRemoting cmdlet
 		# NOTE: some tests depend on this service, project not ready for remoting
 		if ($develop -and ($PolicyStore -ne [System.Environment]::MachineName))
 		{
-			if (Test-ServiceRequirements "WinRM") { exit }
+			if (Initialize-Service "WinRM") { exit }
 		}
 	}
 
@@ -876,32 +1038,33 @@ function Test-SystemRequirements
 
 		# NOTE: Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider
 		# NOTE: Updating PackageManagement and PowerShellGet requires restarting PowerShell to switch to the latest version.
-		if (!(Initialize-ProviderRequirement @{ ModuleName = "NuGet"; ModuleVersion = "3.0.0" } -Repository $Repository `
+		if (!(Initialize-Provider @{ ModuleName = "NuGet"; ModuleVersion = "3.0.0" } -Repository $Repository `
 					-InfoMessage "Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider")) { exit }
 
 		# PowerShellGet >= 2.2.4 is required otherwise updating modules might fail
 		# NOTE: PowerShellGet has a dependency on PackageManagement, it will install it if needed
 		# For systems with PowerShell 5.0 (or greater) PowerShellGet and PackageManagement can be installed together.
-		if (!(Initialize-ModuleRequirement @{ ModuleName = "PowerShellGet"; ModuleVersion = "2.2.4" } -Repository $Repository `
+		if (!(Initialize-Module @{ ModuleName = "PowerShellGet"; ModuleVersion = "2.2.4" } -Repository $Repository `
 					-InfoMessage "PowerShellGet >= 2.2.4 is required otherwise updating modules might fail")) { exit }
 
 		# PackageManagement >= 1.4.7 is required otherwise updating modules might fail
-		if (!(Initialize-ModuleRequirement @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Repository $Repository)) { exit }
+		if (!(Initialize-Module @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Repository $Repository)) { exit }
 
 		# posh-git >= 1.0.0-beta4 is recommended for better git experience in PowerShell
-		if (Initialize-ModuleRequirement @{ ModuleName = "posh-git"; ModuleVersion = "0.7.3" } -Repository $Repository -AllowPrerelease `
+		if (Initialize-Module @{ ModuleName = "posh-git"; ModuleVersion = "0.7.3" } -Repository $Repository -AllowPrerelease `
 				-InfoMessage "posh-git is recommended for better git experience in PowerShell" ) { }
 
 		# PSScriptAnalyzer >= 1.19.1 is required otherwise code will start missing while editing
-		if (!(Initialize-ModuleRequirement @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = "1.19.1" } -Repository $Repository `
+		if (!(Initialize-Module @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = "1.19.1" } -Repository $Repository `
 					-InfoMessage "PSScriptAnalyzer >= 1.19.1 is required otherwise code will start missing while editing" )) { exit }
 
 		# Pester is required to run pester tests
-		if (!(Initialize-ModuleRequirement @{ ModuleName = "Pester"; ModuleVersion = "5.0.3" } -Repository $Repository `
+		if (!(Initialize-Module @{ ModuleName = "Pester"; ModuleVersion = "5.0.3" } -Repository $Repository `
 					-InfoMessage "Pester is required to run pester tests" )) { }
 	}
 
 	# Everything OK, print environment status
+	# TODO: CIM may not always work
 	$OSCaption = Get-CimInstance -Class Win32_OperatingSystem |
 	Select-Object -ExpandProperty Caption
 
@@ -917,6 +1080,6 @@ function Test-SystemRequirements
 #
 
 Export-ModuleMember -Function Test-SystemRequirements
-Export-ModuleMember -Function Test-ServiceRequirements
-Export-ModuleMember -Function Initialize-ModuleRequirement
-Export-ModuleMember -Function Initialize-ProviderRequirement
+Export-ModuleMember -Function Initialize-Service
+Export-ModuleMember -Function Initialize-Module
+Export-ModuleMember -Function Initialize-Provider

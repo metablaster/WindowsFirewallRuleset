@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Initialize-ModuleRequirement
+# Unit test for Initialize-Service
 #
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
@@ -41,32 +41,11 @@ Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Lo
 if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
-[string] $Repository = "PSGallery"
-[string] $InstallationPolicy = "Trusted"
 
-New-Test "Initialize-ModuleRequirement PackageManagement"
-Initialize-ModuleRequirement @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } `
-	-Repository $Repository -InstallationPolicy:$InstallationPolicy @Logs
+New-Test "Initialize-Service"
+$Result = @("lmhosts", "LanmanWorkstation", "LanmanServer") | Initialize-Service @Logs
 
-New-Test "Initialize-ModuleRequirement PowerShellGet"
-Initialize-ModuleRequirement @{ ModuleName = "PowerShellGet"; ModuleVersion = "2.2.4" } `
-	-Repository $Repository -InstallationPolicy:$InstallationPolicy `
-	-InfoMessage "PowerShellGet >= 2.2.4 is required otherwise updating modules might fail" @Logs
-
-New-Test "Initialize-ModuleRequirement posh-git"
-Initialize-ModuleRequirement @{ ModuleName = "posh-git"; ModuleVersion = "0.7.3" }  `
-	-Repository $Repository -InstallationPolicy:$InstallationPolicy -AllowPrerelease `
-	-InfoMessage "posh-git is recommended for better git experience in PowerShell" @Logs
-
-New-Test "Initialize-ModuleRequirement PSScriptAnalyzer"
-Initialize-ModuleRequirement @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = "1.19.2" } `
-	-Repository $Repository -InstallationPolicy:$InstallationPolicy `
-	-InfoMessage "PSScriptAnalyzer >= 1.19.1 is required otherwise code will start missing while editing" @Logs
-
-New-Test "Initialize-ModuleRequirement Pester"
-$Result = Initialize-ModuleRequirement @{ ModuleName = "Pester"; ModuleVersion = "5.0.3" } `
-	-Repository $Repository -InstallationPolicy:$InstallationPolicy `
-	-InfoMessage "Pester is required to run pester tests" @Logs
+Initialize-Service "WinRM" @Logs
 
 New-Test "Get-TypeName"
 $Result | Get-TypeName @Logs

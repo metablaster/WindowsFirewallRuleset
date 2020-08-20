@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Test-ProviderRecommendation
+# Unit test for Initialize-Provider
 #
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
@@ -41,10 +41,10 @@ Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Lo
 if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
-[string] $Repository = "nuget.org"
+[string] $Name = "nuget.org"
 
-New-Test "Test-ProviderRecommendation NuGet"
-$Result = Test-ProviderRecommendation @{ ModuleName = "NuGet"; ModuleVersion = "3.0.0" } -Repository $Repository `
+New-Test "Initialize-ProviderNuGet"
+$Result = Initialize-Provider @{ ModuleName = "NuGet"; ModuleVersion = "3.0.0" } -Name $Name `
 	-InfoMessage "Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider" @Logs
 
 New-Test "Get-TypeName"
