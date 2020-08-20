@@ -31,35 +31,12 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 
 # Imports
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule $true
+. $PSScriptRoot\..\ModulePreferences.ps1
 
 # TODO: repository paths whitelist check
 # TODO: should process must be implemented for system changes
 # if (!$PSCmdlet.ShouldProcess("ModuleName", "Update or install module if needed"))
 # SupportsShouldProcess = $true, ConfirmImpact = 'High'
-
-#
-# Module preferences
-#
-
-if ($Develop)
-{
-	$ErrorActionPreference = $ModuleErrorPreference
-	$WarningPreference = $ModuleWarningPreference
-	$DebugPreference = $ModuleDebugPreference
-	$VerbosePreference = $ModuleVerbosePreference
-	$InformationPreference = $ModuleInformationPreference
-
-	Write-Debug -Message "[$ThisModule] ErrorActionPreference is $ErrorActionPreference"
-	Write-Debug -Message "[$ThisModule] WarningPreference is $WarningPreference"
-	Write-Debug -Message "[$ThisModule] DebugPreference is $DebugPreference"
-	Write-Debug -Message "[$ThisModule] VerbosePreference is $VerbosePreference"
-	Write-Debug -Message "[$ThisModule] InformationPreference is $InformationPreference"
-}
-else
-{
-	# Everything is default except InformationPreference should be enabled
-	$InformationPreference = "Continue"
-}
 
 <#
 .SYNOPSIS
