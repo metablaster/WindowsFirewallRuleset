@@ -177,7 +177,6 @@ function Get-SQLInstance
 
 			if (!(Test-Connection -ComputerName $Computer -Count 2 -Quiet))
 			{
-				Write-Error -Category ConnectionError -TargetObject $Computer -Message "Unable to contact '$Computer'"
 				continue
 			}
 

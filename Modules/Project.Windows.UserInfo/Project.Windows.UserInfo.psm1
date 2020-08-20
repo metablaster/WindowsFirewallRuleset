@@ -210,11 +210,6 @@ function Get-GroupPrincipal
 						}
 					}
 				}
-				else
-				{
-					Write-Error -Category ConnectionError -TargetObject $Computer `
-						-Message "Unable to contact computer: $Computer"
-				}
 			} # if ($CIM)
 			elseif ($Computer -eq [System.Environment]::MachineName)
 			{
@@ -339,11 +334,6 @@ function Get-UserGroup
 						Write-Warning -Message "There are no user groups on computer: $Computer"
 						continue
 					}
-				}
-				else
-				{
-					Write-Error -Category ConnectionError -TargetObject $Computer `
-						-Message "Unable to contact computer: $Computer"
 				}
 			} # if ($CIM)
 			elseif ($Computer -eq [System.Environment]::MachineName)
@@ -577,8 +567,6 @@ function Get-GroupSID
 				}
 				else
 				{
-					Write-Error -Category ConnectionError -TargetObject $ComputerName `
-						-Message "Unable to contact computer: $ComputerName"
 					continue
 				}
 			}
@@ -684,8 +672,6 @@ function Get-AccountSID
 				}
 				else
 				{
-					Write-Error -Category ConnectionError -TargetObject $ComputerName `
-						-Message "Unable to contact computer: $ComputerName"
 					return
 				}
 			}
@@ -1013,7 +999,6 @@ function ConvertFrom-SID
 							{
 								if (!(Test-TargetComputer $Computer))
 								{
-									Write-Error -Category ConnectionError -TargetObject $Computer -Message "Unable to contact computer: '$Computer'"
 									continue
 								}
 
@@ -1074,7 +1059,6 @@ function ConvertFrom-SID
 							{
 								if (!(Test-TargetComputer $Computer))
 								{
-									Write-Error -Category ConnectionError -TargetObject $Computer -Message "Unable to contact computer: '$Computer'"
 									continue
 								}
 

@@ -591,10 +591,6 @@ function Get-UserSoftware
 
 		Write-Output $UserPrograms
 	}
-	else
-	{
-		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact computer: $ComputerName"
-	}
 }
 
 <#
@@ -717,10 +713,6 @@ function Get-SystemSoftware
 
 		Write-Output $SystemPrograms
 	}
-	else
-	{
-		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact computer: $ComputerName"
-	}
 }
 
 <#
@@ -752,7 +744,6 @@ function Get-AllUserSoftware
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
 
-	# TODO: if else here not at the end
 	if (Test-TargetComputer $ComputerName)
 	{
 		# TODO: this key may not exist on fresh installed systems, tested in fresh installed Windows Server 2019
@@ -824,10 +815,6 @@ function Get-AllUserSoftware
 
 			Write-Output $AllUserPrograms
 		}
-	}
-	else
-	{
-		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact computer: $ComputerName"
 	}
 }
 
@@ -960,10 +947,6 @@ function Get-ExecutablePath
 		}
 
 		Write-Output $AppPaths
-	}
-	else
-	{
-		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact computer: $ComputerName"
 	}
 }
 
@@ -2123,10 +2106,6 @@ function Get-NetFramework
 
 		Write-Output $NetFramework
 	}
-	else
-	{
-		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact computer: $ComputerName"
-	}
 }
 
 <#
@@ -2219,10 +2198,6 @@ function Get-WindowsSDK
 
 		Write-Output $WindowsSDK
 	}
-	else
-	{
-		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact computer: $ComputerName"
-	}
 }
 
 <#
@@ -2313,10 +2288,6 @@ function Get-WindowsKit
 
 		Write-Output $WindowsKits
 	}
-	else
-	{
-		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact computer: $ComputerName"
-	}
 }
 
 <#
@@ -2386,10 +2357,6 @@ function Get-WindowsDefender
 		}
 
 		return $WindowsDefender
-	}
-	else
-	{
-		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact computer: $ComputerName"
 	}
 }
 
@@ -2489,10 +2456,6 @@ function Get-SQLManagementStudio
 
 		Write-Output $ManagementStudio
 	}
-	else
-	{
-		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact computer: $ComputerName"
-	}
 }
 
 <#
@@ -2578,10 +2541,6 @@ function Get-OneDrive
 		}
 
 		Write-Output $OneDriveInfo
-	}
-	else
-	{
-		Write-Error -Category ConnectionError -TargetObject $ComputerName -Message "Unable to contact computer: $ComputerName"
 	}
 }
 
