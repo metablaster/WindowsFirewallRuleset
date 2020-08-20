@@ -34,6 +34,14 @@ SOFTWARE.
 #
 
 Import-Module -Name Project.AllPlatforms.Logging
-Import-Module -Name Project.AllPlatforms.System @Logs
-Import-Module -Name Project.Windows.UserInfo
+Import-Module -Name Project.AllPlatforms.Initialize @Logs
+Import-Module -Name Project.AllPlatforms.Test @Logs
+Import-Module -Name Project.AllPlatforms.Utility @Logs
+
+Import-Module -Name Project.Windows.UserInfo @Logs
+Import-Module -Name Project.Windows.ComputerInfo @Logs
+Import-Module -Name Project.Windows.ProgramInfo @Logs
+
+Import-Module -Name Firewall-Manager @Logs
 Import-Module -Name Indented.Net.IP @Logs
+Import-Module -Name VSSetup @Logs

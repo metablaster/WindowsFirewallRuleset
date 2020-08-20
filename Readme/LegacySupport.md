@@ -10,7 +10,7 @@ At a bare minimum you should do the following 4 modifications:
 
 ## Modification 1
 
-edit the `Modules\Project.AllPlatforms.System` to allow execution for older system.
+edit the `Modules\Project.AllPlatforms.Initialize` to allow execution for older system.
 
 ## Modification 2
 

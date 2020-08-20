@@ -1,6 +1,6 @@
 
 TOPIC
-	about_Project.AllPlatforms.System
+	about_Project.AllPlatforms.Initialize
 
 SHORT DESCRIPTION
 	Test if environment is compatible for Windows Firewall Ruleset project

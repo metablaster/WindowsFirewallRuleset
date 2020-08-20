@@ -117,7 +117,7 @@ if ($Develop)
 	{
 		# Skip removing modules if this script is called inside module which would
 		# cause removing modules prematurely
-		Remove-Module -Name Project.AllPlatforms.System -ErrorAction Ignore
+		Remove-Module -Name Project.AllPlatforms.Initialize -ErrorAction Ignore
 		Remove-Module -Name Project.AllPlatforms.Test -ErrorAction Ignore
 		Remove-Module -Name Project.AllPlatforms.Logging -ErrorAction Ignore
 		Remove-Module -Name Project.AllPlatforms.Utility -ErrorAction Ignore

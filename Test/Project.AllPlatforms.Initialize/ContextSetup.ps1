@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Context setup for Project.AllPlatforms.System
+# Context setup for Project.AllPlatforms.Initialize
 #
 
-New-Variable -Name TestContext -Scope Local -Option Constant -Value "Test.Project.AllPlatforms.System"
+New-Variable -Name TestContext -Scope Local -Option Constant -Value "Test.Project.AllPlatforms.Initialize"
