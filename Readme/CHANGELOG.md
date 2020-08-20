@@ -6,6 +6,9 @@
 ## New features
 
 - Added functionality to import/export rules into CSV/JSON file
+- Module for requirements and recommendations renamed to "Initialize" and significantly improved
+for services, modules, providers and core project checks
+- Added new variables to control requirements checks, and to reduce module imports code bloat
 
 ## Rules
 
@@ -25,6 +28,11 @@
 
 - Improved SID conversion function
 - Improved requirements check
+- Renamed modules to better fit with project naming convention
+- Moved few functions to different modules
+- Reorganized module structure
+- Added function to convert to or query system SKU
+- Several minor module code changes
 
 # Changelog v0.5.0
 
