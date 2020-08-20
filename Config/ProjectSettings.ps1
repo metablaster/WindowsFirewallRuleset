@@ -131,17 +131,30 @@ if ($Develop)
 else # Normal use case
 {
 	# These are set to default values for normal use case,
-	# modify to customize your experience, note that this has no effect on modules!
+	# modify to customize your experience, note that this has no effect on modules
+
+	# To control how and if errors are displayed, do not modify
 	$ErrorActionPreference = "Continue"
+
+	# To control how and if warnings are displayed, do not modify
 	$WarningPreference = "Continue"
+
+	# To control how and if informational messages are displayed
+	# WARNING: If you change this bad things will happen!
 	$InformationPreference = "Continue"
+
+	# To show verbose output in the console set to "Continue"
+	# If you want to see a bit more
 	$VerbosePreference = "SilentlyContinue"
+
+	# To show debugging messages in the console set to "Continue"
+	# Not recommended except to troubleshoot problems with project
 	$DebugPreference = "SilentlyContinue"
 
 	# Must be after verbose preference
 	Write-Verbose -Message "[$ThisScript] Project mode: User"
 
-	# Preferences for modules not used, do not modify!
+	# Preferences for modules not used in this context, do not modify
 	Remove-Variable -Name ModuleErrorPreference -Scope Global -ErrorAction Ignore
 	Remove-Variable -Name ModuleWarningPreference -Scope Global -ErrorAction Ignore
 	Remove-Variable -Name ModuleVerbosePreference -Scope Global -ErrorAction Ignore
@@ -158,8 +171,38 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	# check if constants already initialized, used for module reloading, do not modify!
 	New-Variable -Name CheckProjectConstants -Scope Global -Option Constant -Value $null
 
-	# Project version, does not apply to 3rd party modules which follow their own version increment
+	# Project version, does not apply to 3rd party modules which follow their own version increment, do not modify
 	New-Variable -Name ProjectVersion -Scope Global -Option Constant -Value $([version]::new(0, 5, 1))
+
+	# Required minimum PSScriptAnalyzer version for code editing
+	New-Variable -Name RequireAnalyzerVersion -Scope Global -Option Constant -Value $([version]::new(1, 19, 1))
+
+	# Recommended minimum posh-git version for git in PowerShell
+	New-Variable -Name RequirePoshGitVersion -Scope Global -Option Constant -Value $([version]::new(0, 7, 3))
+
+	# Recommended minimum Pester version for code testing
+	New-Variable -Name RequirePesterVersion -Scope Global -Option Constant -Value $([version]::new(5, 0, 3))
+
+	# Required minimum PackageManagement version prior to installing other modules
+	New-Variable -Name RequirePackageManagementVersion -Scope Global -Option Constant -Value $([version]::new(1, 4, 7))
+
+	# Required minimum PowerShellGet version prior to installing other modules
+	New-Variable -Name RequirePowerShellGetVersion -Scope Global -Option Constant -Value $([version]::new(2, 2, 4))
+
+	# Required minimum NuGet version prior to installing other modules
+	New-Variable -Name RequireNuGetVersion -Scope Global -Option Constant -Value $([version]::new(3, 0, 0))
+
+	# Recommended minimum Git version needed for contributing and required by posh-git
+	New-Variable -Name RequireGitVersion -Scope Global -Option Constant -Value $([version]::new(2, 28, 0))
+
+	# Recommended minimum PowerShell Core
+	New-Variable -Name RequireCoreVersion -Scope Global -Option Constant -Value $([version]::new(7, 0, 3))
+
+	# Required minimum Windows PowerShell
+	New-Variable -Name RequirePowerShellVersion -Scope Global -Option Constant -Value $([version]::new(5, 1, 0))
+
+	# Required minimum operating system version
+	New-Variable -Name RequireWindowsVersion -Scope Global -Option Constant -Value $([version]::new(10, 0, 0))
 
 	# Repository root directory, reallocating scripts should be easy if root directory is constant
 	New-Variable -Name ProjectRoot -Scope Global -Option Constant -Value (
@@ -185,6 +228,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 
 		try
 		{
+			# TODO: should be part of Initialize-Project script
 			Write-Information -Tags "Project" -MessageData "Testing Windows Remote Management to: $PolicyStore"
 			Test-WSMan -ComputerName $PolicyStore -Credential $RemoteCredentials
 		}

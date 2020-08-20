@@ -28,9 +28,9 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Check if recommended modules are installed
+Check if module is installed or needs update
 .DESCRIPTION
-Test if recommended and up to date modules are installed, if not user is
+Test if recommended and up to date module is installed, if not user is
 prompted to install or update them.
 Outdated or missing modules can cause strange issues, this function ensures latest modules are
 installed and in correct order, taking into account failures that can happen while
@@ -43,8 +43,8 @@ if repository is not registered user is prompted to register it
 .PARAMETER RepositoryLocation
 Repository location associated with repository name,
 this parameter is used only if repository is not registered
-.PARAMETER InstallationPolicy
-If the supplied repository needs to be registered InstallationPolicy specifies
+.PARAMETER Trusted
+If the supplied repository needs to be registered Trusted specifies
 whether repository is trusted or not.
 this parameter is used only if repository is not registered
 .PARAMETER InfoMessage
@@ -52,7 +52,14 @@ Help message used for default choice in host prompt
 .PARAMETER AllowPrerelease
 whether to allow installing beta modules
 .EXAMPLE
-Initialize-ModulesRequirement @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Repository "PSGallery"
+PS> Initialize-ModulesRequirement @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = "1.19.1" }
+Checks if PSScriptAnalyzer is up to date, if not user is prompted to update, and if repository
+specified by default is not registered user is prompted to do that too.
+.EXAMPLE
+PS> Initialize-ModulesRequirement @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Repository `
+> "PSGallery" -RepositoryLocation "https://www.powershellgallery.com/api/v2"
+Checks if PackageManagement is up to date, if not user is prompted to update, and if repository
+is not registered user is prompted to do that too.
 .INPUTS
 None. You cannot pipe objects to Initialize-Module
 .OUTPUTS
@@ -80,8 +87,7 @@ function Initialize-Module
 		[uri] $RepositoryLocation = "https://www.powershellgallery.com/api/v2",
 
 		[Parameter()]
-		[ValidateSet("Trusted", "UnTrusted")]
-		[string] $InstallationPolicy = "UnTrusted",
+		[switch] $Trusted,
 
 		[Parameter()]
 		[string] $InfoMessage = "Accept operation",
@@ -103,7 +109,7 @@ function Initialize-Module
 
 	# Get required module from input
 	[string] $ModuleName = $ModuleFullName.ModuleName
-	[version] $RequiredVersion = $ModuleFullName.ModuleVersion
+	[version] $RequireVersion = $ModuleFullName.ModuleVersion
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if module $ModuleName is installed and what version"
 
@@ -113,10 +119,10 @@ function Initialize-Module
 
 	if ($TargetVersion)
 	{
-		if ($TargetVersion -ge $RequiredVersion)
+		if ($TargetVersion -ge $RequireVersion)
 		{
 			# Up to date
-			Write-Information -Tags "User" -MessageData "INFO: Installed module $ModuleName v$TargetVersion meets >= v$RequiredVersion"
+			Write-Information -Tags "User" -MessageData "INFO: Installed module $ModuleName v$TargetVersion meets >= v$RequireVersion"
 			return $true
 		}
 
@@ -194,15 +200,18 @@ function Initialize-Module
 		if ($Decision -eq $Default)
 		{
 			Write-Information -Tags "User" -MessageData "INFO: Registering repository $Repository"
+
+			$IsTrusted = $Repositories[0].InstallationPolicy
+
 			# Register repository to be able to use it
-			Register-PSRepository -Name $Repository -SourceLocation $RepositoryLocation -InstallationPolicy $InstallationPolicy
+			Register-PSRepository -Name $Repository -SourceLocation $RepositoryLocation -InstallationPolicy $IsTrusted
 
 			$RepositoryObject = Get-PSRepository -Name $Repository -ErrorAction SilentlyContinue
 
 			if ($RepositoryObject)
 			{
 				$Repositories += $RepositoryObject
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Repository $Repository is registered and $($Repositories[0].InstallationPolicy)"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Repository $Repository is registered and $IsTrusted)"
 			}
 			# else error should be displayed
 		}
@@ -239,7 +248,7 @@ function Initialize-Module
 
 	# Check if module could be downloaded
 	[PSCustomObject] $FoundModule = $null
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if module $ModuleName version >= v$RequiredVersion could be downloaded"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if module $ModuleName version >= v$RequireVersion could be downloaded"
 
 	foreach ($RepositoryItem in $Repositories)
 	{
@@ -252,7 +261,7 @@ function Initialize-Module
 		}
 
 		# Try anyway, maybe port is wrong, only first match is considered
-		$FoundModule = Find-Module -Name $ModuleName -Repository $RepositoryItem -MinimumVersion $RequiredVersion -ErrorAction SilentlyContinue
+		$FoundModule = Find-Module -Name $ModuleName -Repository $RepositoryItem -MinimumVersion $RequireVersion -ErrorAction SilentlyContinue
 
 		if ($FoundModule)
 		{
@@ -266,7 +275,7 @@ function Initialize-Module
 	{
 		# Registering repository failed or no valid repository exists
 		Write-Error -Category ObjectNotFound -TargetObject $Repositories `
-			-Message "Module $ModuleName version >= v$RequiredVersion was not found in any of the following repositories: $RepositoryList"
+			-Message "Module $ModuleName version >= v$RequireVersion was not found in any of the following repositories: $RepositoryList"
 		return $false
 	}
 
@@ -279,9 +288,15 @@ function Initialize-Module
 	# Either 'Update' or "Install" needed for additional work
 	[string] $InstallType = ""
 
+	# In PowerShellGet versions 2.0.0 and above, the default is CurrentUser, which does not require elevation for install.
+	# In PowerShellGet 1.x versions, the default is AllUsers, which requires elevation for install.
+	# NOTE: for version 1.0.1 -Scope parameter is not recognized, we'll skip it for very old version
+	# TODO: need to test compatible parameters for outdated Windows PowerShell
+	[version] $Version2 = "2.0.0"
+
 	if ($TargetVersion)
 	{
-		Write-Warning -Message "$ModuleName module version v$($TargetVersion.ToString()) is out of date, recommended version is v$RequiredVersion"
+		Write-Warning -Message "$ModuleName module version v$($TargetVersion.ToString()) is out of date, recommended version is v$RequireVersion"
 
 		$Title = "Recommended module out of date"
 		$Question = "Update $ModuleName module now?"
@@ -289,18 +304,13 @@ function Initialize-Module
 
 		if ($Decision -eq $Default)
 		{
-			# TODO: splatting for parameters
 			# Check if older version is user installed
 			if (Get-InstalledModule -Name $ModuleName -ErrorAction Ignore)
 			{
 				$InstallType = "Update"
 				Write-Information -Tags "User" -MessageData "INFO: Updating module $($FoundModule.Name) to v$($FoundModule.Version)"
 
-				# In PowerShellGet versions 2.0.0 and above, the default is CurrentUser, which does not require elevation for install.
-				# In PowerShellGet 1.x versions, the default is AllUsers, which requires elevation for install.
-				# NOTE: for version 1.0.1 -Scope parameter is not recognized, we'll skip it for very old version
-				# TODO: need to test compatible parameters for outdated Windows PowerShell
-				if ($PowerShellGetVersion -gt "2.0.0")
+				if ($PowerShellGetVersion -ge $Version2)
 				{
 					Update-Module -InputObject $FoundModule -Scope AllUsers
 				}
@@ -315,7 +325,7 @@ function Initialize-Module
 				Write-Information -Tags "User" -MessageData "INFO: Installing module $($FoundModule.Name) v$($FoundModule.Version)"
 
 				# Need force to install side by side, update not possible
-				if ($PowerShellGetVersion -gt "2.0.0")
+				if ($PowerShellGetVersion -ge $Version2)
 				{
 					Install-Module -InputObject $FoundModule -AllowPrerelease:$AllowPrerelease -Scope AllUsers -Force
 				}
@@ -328,7 +338,7 @@ function Initialize-Module
 	}
 	else # Module not present
 	{
-		Write-Warning -Message "$ModuleName module minimum version v$RequiredVersion is recommended but not installed"
+		Write-Warning -Message "$ModuleName module minimum version v$RequireVersion is recommended but not installed"
 
 		$Title = "Recommended module not installed$ConnectionStatus"
 		$Question = "Install $ModuleName module now?"
@@ -339,7 +349,7 @@ function Initialize-Module
 			$InstallType = "Install"
 			Write-Information -Tags "User" -MessageData "INFO: Installing module $($FoundModule.Name) v$($FoundModule.Version)"
 
-			if ($PowerShellGetVersion -gt "2.0.0")
+			if ($PowerShellGetVersion -ge $Version2)
 			{
 				Install-Module -InputObject $FoundModule -Scope AllUsers -AllowPrerelease:$AllowPrerelease
 			}
@@ -382,7 +392,7 @@ function Initialize-Module
 
 	# Installation/update failed or user refused to do so
 	Write-Error -Category NotInstalled -TargetObject $ModuleStatus `
-		-Message "Module $ModuleName v$RequiredVersion not installed"
+		-Message "Module $ModuleName v$RequireVersion not installed"
 
 	return $false
 }

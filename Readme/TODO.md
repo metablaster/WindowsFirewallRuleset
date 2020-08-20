@@ -136,6 +136,7 @@ TODO's in this file are categorized into following sections:
     - Make $WhatIfPreference for rules, we should skip everything except rules.
     - For remote computers we ComputerName variables/parameters but this could also be
     learned/specified with PolicyStore parameter
+    - Select-Object -Last 1 instead of -First 1 to get highest value, need to verify
 
 3. Rules
 

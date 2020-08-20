@@ -28,16 +28,20 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Test if required system services are started
+Check if required system services are started
 .DESCRIPTION
-Test if required system services are started, some services are essential for
-correct firewall and network functioning, without essential services project code
-may result in errors hard to debug
+Test if required system services are started, if not all services on which target service depends
+are started before starting requested service and setting it to automatic startup.
+Some services are essential for correct firewall and network functioning,
+without essential services project code may result in errors hard to debug
 .PARAMETER Services
 An array of services to start
 .EXAMPLE
-A sample command that uses the function or script,
-optionally followed by sample output and a description. Repeat this keyword for each example.
+PS> Initialize-Service @("lmhosts", "LanmanWorkstation", "LanmanServer")
+$true if all input services are started successfully $false otherwise
+.EXAMPLE
+PS> Initialize-Service "WinRM"
+$true if WinRM service was started $false otherwise
 .INPUTS
 [string[]] One or more service short names to check
 .OUTPUTS

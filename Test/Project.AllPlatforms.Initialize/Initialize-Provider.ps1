@@ -44,7 +44,7 @@ Start-Test
 [string] $Name = "nuget.org"
 
 New-Test "Initialize-ProviderNuGet"
-$Result = Initialize-Provider @{ ModuleName = "NuGet"; ModuleVersion = "3.0.0" } -Name $Name `
+$Result = Initialize-Provider @{ ModuleName = "NuGet"; ModuleVersion = $RequireNuGetVersion } -Name $Name `
 	-InfoMessage "Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider" @Logs
 
 New-Test "Get-TypeName"

@@ -34,15 +34,28 @@ Initialize-Project is designed for "Windows Firewall Ruleset", it first prints a
 tests for OS, PowerShell version and edition, Administrator mode, NET Framework version, checks if
 required system services are started and recommended modules installed.
 If not the function may exit and stop executing scripts.
-.PARAMETER Check
-true or false to check or not to check
-note that this parameter is managed by project settings
+.PARAMETER NoProjectCheck
+If supplied checking for project requirements and recommendations will not be performed.
+Note that this parameter is managed by project settings
+.PARAMETER NoModulesCheck
+If supplied checking for required and recommended module updates will not be performed.
+Note that this parameter is managed by project settings
+.PARAMETER NoServicesCheck
+If supplied checking if required system services are running will not be performed.
+Note that this parameter is managed by project settings
 .EXAMPLE
-Initialize-Project
+PS> Initialize-Project
+Performs default requirements and recommendations checks managed by global settings,
+Error or warning message is shown if check failed, system info otherwise.
+.EXAMPLE
+PS> Initialize-Project -NoModulesCheck
+Performs default requirements and recommendations checks managed by global settings,
+except installed modules are not validated.
+Error or warning message is shown if check failed, system info otherwise.
 .INPUTS
 None. You cannot pipe objects to Initialize-Project
 .OUTPUTS
-None. Error or warning message is shown if check failed, system info otherwise.
+None.
 .NOTES
 TODO: learn required NET version by scanning scripts (ie. adding .COMPONENT to comments)
 TODO: learn repo dir automatically (using git?)
@@ -52,14 +65,15 @@ TODO: remote check not implemented
 function Initialize-Project
 {
 	[OutputType([void])]
+	[CmdletBinding()]
 	param (
-		[Parameter()]
+		[Parameter(ParameterSetName = "Project")]
 		[switch] $NoProjectCheck = !$ProjectCheck,
 
-		[Parameter()]
+		[Parameter(ParameterSetName = "NotProject")]
 		[switch] $NoModulesCheck = !$ModulesCheck,
 
-		[Parameter()]
+		[Parameter(ParameterSetName = "NotProject")]
 		[switch] $NoServicesCheck = !$ServicesCheck
 	)
 
@@ -84,12 +98,12 @@ function Initialize-Project
 	# Check operating system
 	$OSPlatform = [System.Environment]::OSVersion.Platform
 	[version] $TargetOSVersion = [System.Environment]::OSVersion.Version
-	[version] $RequiredOSVersion = "10.0"
 
-	if (!(($OSPlatform -eq "Win32NT") -and ($TargetOSVersion -ge $RequiredOSVersion)))
+	# TODO: Get rid of "Win32NT"
+	if (!(($OSPlatform -eq "Win32NT") -and ($TargetOSVersion -ge $RequireWindowsVersion)))
 	{
 		Write-Error -Category OperationStopped -TargetObject $TargetOSVersion `
-			-Message "Minimum required operating system is 'Win32NT $($RequiredOSVersion.ToString())' but '$OSPlatform $($TargetOSVersion.ToString()) present"
+			-Message "Minimum required operating system is 'Win32NT $($RequireWindowsVersion.ToString())' but '$OSPlatform $($TargetOSVersion.ToString()) present"
 		exit
 	}
 
@@ -122,12 +136,12 @@ function Initialize-Project
 	# Check PowerShell edition
 	$PowerShellEdition = $PSVersionTable.PSEdition
 	# Check PowerShell version
-	[version] $RequiredPSVersion = "5.1.0"
+	[version] $RequirePSVersion = $RequirePowerShellVersion
 	[version] $TargetPSVersion = $PSVersionTable.PSVersion
 
 	if ($PowerShellEdition -eq "Core")
 	{
-		$RequiredPSVersion = "7.0.3"
+		$RequirePSVersion = $RequireCoreVersion
 		Write-Warning -Message "Remote firewall administration with PowerShell Core is not implemented"
 	}
 	else
@@ -137,23 +151,24 @@ function Initialize-Project
 	}
 
 	Write-Information -Tags "User" -MessageData "INFO: Checking PowerShell version"
-	if ($TargetPSVersion -lt $RequiredPSVersion)
+	if ($TargetPSVersion -lt $RequirePSVersion)
 	{
-		if ($TargetPSVersion.Major -lt $RequiredPSVersion.Major)
+		if ($TargetPSVersion.Major -lt $RequirePSVersion.Major)
 		{
 			# Core 6 is fine
-			if (($PowerShellEdition -eq "Desktop") -or (($RequiredPSVersion.Major - $TargetPSVersion.Major) -gt 1))
+			if (($PowerShellEdition -eq "Desktop") -or (($RequirePSVersion.Major - $TargetPSVersion.Major) -gt 1))
 			{
 				Write-Error -Category OperationStopped -TargetObject $TargetPSVersion `
-					-Message "Required PowerShell $PowerShellEdition is v$($RequiredPSVersion.ToString()) but v$($TargetPSVersion.ToString()) present"
+					-Message "Required PowerShell $PowerShellEdition is v$($RequirePSVersion.ToString()) but v$($TargetPSVersion.ToString()) present"
 				exit
 			}
 		}
 
-		Write-Warning -Message "Recommended PowerShell $PowerShellEdition is v$($RequiredPSVersion.ToString()) but v$($TargetPSVersion.ToString()) present"
+		Write-Warning -Message "Recommended PowerShell $PowerShellEdition is v$($RequirePSVersion.ToString()) but v$($TargetPSVersion.ToString()) present"
 	}
 
 	# Check NET Framework version
+	# TODO: modules won't load anyway if version bad, remove
 	# NOTE: this check is not required except for updating requirements as needed
 	if ($Develop -and ($PowerShellEdition -eq "Desktop"))
 	{
@@ -192,7 +207,6 @@ function Initialize-Project
 	Write-Information -Tags "User" -MessageData "INFO: Checking git"
 
 	# Git is recommended for version control and by posh-git module
-	[string] $RequiredGit = "2.28.0"
 	Set-Variable -Name GitInstance -Scope Script -Option Constant -Value `
 	$(Get-Command git.exe -CommandType Application -ErrorAction SilentlyContinue)
 
@@ -200,15 +214,15 @@ function Initialize-Project
 	{
 		[version] $TargetGit = $GitInstance.Version
 
-		if ($TargetGit -lt $RequiredGit)
+		if ($TargetGit -lt $RequireGitVersion)
 		{
-			Write-Warning -Message "Git version v$($TargetGit.ToString()) is out of date, recommended version is v$RequiredGit"
+			Write-Warning -Message "Git version v$($TargetGit.ToString()) is out of date, recommended version is v$($RequireGitVersion.ToString())"
 			Write-Information -Tags "Project" -MessageData "INFO: Please visit https://git-scm.com to download and update"
 		}
 	}
 	else
 	{
-		Write-Warning -Message "Git in the PATH minimum version v$($RequiredGit.ToString()) is recommended but missing"
+		Write-Warning -Message "Git in the PATH minimum version v$($RequireGitVersion.ToString()) is recommended but missing"
 		Write-Information -Tags "User" -MessageData "INFO: Please verify PATH or visit https://git-scm.com to download and install"
 	}
 
@@ -220,7 +234,7 @@ function Initialize-Project
 
 		# NOTE: Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider
 		# NOTE: Updating PackageManagement and PowerShellGet requires restarting PowerShell to switch to the latest version.
-		if (!(Initialize-Provider @{ ModuleName = "NuGet"; ModuleVersion = "3.0.0" } `
+		if (!(Initialize-Provider @{ ModuleName = "NuGet"; ModuleVersion = $RequireNuGetVersion } `
 					-InfoMessage "Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider")) { exit }
 
 		Write-Information -Tags "User" -MessageData "INFO: Checking modules"
@@ -228,23 +242,23 @@ function Initialize-Project
 		# PowerShellGet >= 2.2.4 is required otherwise updating modules might fail
 		# NOTE: PowerShellGet has a dependency on PackageManagement, it will install it if needed
 		# For systems with PowerShell 5.0 (or greater) PowerShellGet and PackageManagement can be installed together.
-		if (!(Initialize-Module @{ ModuleName = "PowerShellGet"; ModuleVersion = "2.2.4" } -Repository $Repository `
-					-InfoMessage "PowerShellGet >= 2.2.4 is required otherwise updating modules might fail")) { exit }
+		if (!(Initialize-Module @{ ModuleName = "PowerShellGet"; ModuleVersion = $RequirePowerShellGetVersion } -Repository $Repository `
+					-InfoMessage "PowerShellGet >= $($RequirePowerShellGetVersion.ToString()) is required otherwise updating modules might fail")) { exit }
 
 		# PackageManagement >= 1.4.7 is required otherwise updating modules might fail
-		if (!(Initialize-Module @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Repository $Repository)) { exit }
+		if (!(Initialize-Module @{ ModuleName = "PackageManagement"; ModuleVersion = $RequirePackageManagementVersion } -Repository $Repository)) { exit }
 
 		# posh-git >= 1.0.0-beta4 is recommended for better git experience in PowerShell
-		if (Initialize-Module @{ ModuleName = "posh-git"; ModuleVersion = "0.7.3" } -Repository $Repository -AllowPrerelease `
-				-InfoMessage "posh-git is recommended for better git experience in PowerShell" ) { }
+		if (Initialize-Module @{ ModuleName = "posh-git"; ModuleVersion = $RequirePoshGitVersion } -Repository $Repository -AllowPrerelease `
+				-InfoMessage "posh-git >= $($RequirePoshGitVersion.ToString()) is recommended for better git experience in PowerShell" ) { }
 
 		# PSScriptAnalyzer >= 1.19.1 is required otherwise code will start missing while editing
-		if (!(Initialize-Module @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = "1.19.1" } -Repository $Repository `
-					-InfoMessage "PSScriptAnalyzer >= 1.19.1 is required otherwise code will start missing while editing" )) { exit }
+		if (!(Initialize-Module @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = $RequireAnalyzerVersion } -Repository $Repository `
+					-InfoMessage "PSScriptAnalyzer >= $($RequireAnalyzerVersion.ToString()) is required otherwise code will start missing while editing" )) { exit }
 
 		# Pester is required to run pester tests
-		if (!(Initialize-Module @{ ModuleName = "Pester"; ModuleVersion = "5.0.3" } -Repository $Repository `
-					-InfoMessage "Pester is required to run pester tests" )) { }
+		if (!(Initialize-Module @{ ModuleName = "Pester"; ModuleVersion = $RequirePesterVersion } -Repository $Repository `
+					-InfoMessage "Pester >= $($RequirePesterVersion.ToString()) is required to run pester tests" )) { }
 	}
 
 	# Everything OK, print environment status

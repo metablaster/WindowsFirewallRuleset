@@ -169,7 +169,6 @@
 			CheckParameter = $true
 		}
 
-		# TODO: some variables here are not enabled
 		PSUseConsistentIndentation = @{
 			Enable = $true
 			# Represents the kind of indentation to be used.

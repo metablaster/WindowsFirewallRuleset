@@ -45,7 +45,7 @@ Hash table ProviderName, Version representing minimum required module
 Repository name from which to download packages such as NuGet,
 if repository is not registered user is prompted to register it
 .PARAMETER Trusted
-If the supplied repository needs to be registered InstallationPolicy specifies
+If the supplied repository needs to be registered Trusted specifies
 whether repository is trusted or not.
 this parameter is used only if repository is not registered
 .PARAMETER InfoMessage
@@ -74,7 +74,7 @@ function Initialize-Provider
 		[ValidatePattern("[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)")]
 		[uri] $Location = "https://api.nuget.org/v3/index.json", # TODO: array https://www.nuget.org/api/v2 (used by PSGallery?)
 
-		[Parameter()] # TODO: switch also for modules
+		[Parameter()]
 		[switch] $Trusted,
 
 		[Parameter()]
@@ -105,7 +105,7 @@ function Initialize-Provider
 
 		# Get required provider package from input
 		[string] $ProviderName = $ProviderFullName.ModuleName
-		[version] $RequiredVersion = $ProviderFullName.ModuleVersion
+		[version] $RequireVersion = $ProviderFullName.ModuleVersion
 
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if provider $ProviderName is installed and what version"
 
@@ -115,10 +115,10 @@ function Initialize-Provider
 
 		if ($TargetVersion)
 		{
-			if ($TargetVersion -ge $RequiredVersion)
+			if ($TargetVersion -ge $RequireVersion)
 			{
 				# Up to date
-				Write-Information -Tags "User" -MessageData "INFO: Installed provider $ProviderName v$TargetVersion meets >= v$RequiredVersion"
+				Write-Information -Tags "User" -MessageData "INFO: Installed provider $ProviderName v$TargetVersion meets >= v$RequireVersion"
 				return $true
 			}
 
@@ -195,8 +195,7 @@ function Initialize-Provider
 					$SourcesList += ", "
 				}
 
-				# TODO: use $foreach, anyway it doesn't work
-				$SourcesList.TrimEnd(", ")
+				$SourcesList = $SourcesList.TrimEnd(", ")
 			}
 		}
 
@@ -206,7 +205,7 @@ function Initialize-Provider
 		# Check if module could be downloaded
 		# [Microsoft.PackageManagement.Packaging.SoftwareIdentity]
 		[PSCustomObject] $FoundProvider = $null
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if $ProviderName provider version >= v$RequiredVersion could be downloaded"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if $ProviderName provider version >= v$RequireVersion could be downloaded"
 
 		foreach ($SourceItem in $PackageSources)
 		{
@@ -220,13 +219,13 @@ function Initialize-Provider
 
 			# Try anyway, maybe port is wrong, only first match is considered
 			$FoundProvider = Find-PackageProvider -Name $ProviderName -Source $Location `
-				-MinimumVersion $RequiredVersion -IncludeDependencies -ErrorAction SilentlyContinue
+				-MinimumVersion $RequireVersion -IncludeDependencies -ErrorAction SilentlyContinue
 
 			if (!$FoundProvider)
 			{
 				# Try with Find-Package
 				$FoundProvider = Find-Package -Name $ProviderName -Source $SourceItem.Name -IncludeDependencies `
-					-MinimumVersion $RequiredVersion -AllowPrereleaseVersions -ErrorAction SilentlyContinue
+					-MinimumVersion $RequireVersion -AllowPrereleaseVersions -ErrorAction SilentlyContinue
 			}
 
 			if ($FoundProvider)
@@ -249,7 +248,7 @@ function Initialize-Provider
 
 			# Registering repository failed or no valid repository exists
 			Write-Error -Category ObjectNotFound -TargetObject $PackageSources `
-				-Message "$ProviderName provider version >= v$RequiredVersion was not found in any of the following package sources: $SourcesList"
+				-Message "$ProviderName provider version >= v$RequireVersion was not found in any of the following package sources: $SourcesList"
 			return $false
 		}
 
@@ -258,13 +257,13 @@ function Initialize-Provider
 		{
 			$Title = "Required package provider is not installed"
 			$Question = "Update $ProviderName provider now?"
-			Write-Warning -Message "$ProviderName provider minimum version v$RequiredVersion is required but not installed"
+			Write-Warning -Message "$ProviderName provider minimum version v$RequireVersion is required but not installed"
 		}
 		else
 		{
 			$Title = "Required package provider is out of date"
 			$Question = "Install $ProviderName provider now?"
-			Write-Warning -Message "$ProviderName provider version v$($TargetVersion.ToString()) is out of date, required version is v$RequiredVersion"
+			Write-Warning -Message "$ProviderName provider version v$($TargetVersion.ToString()) is out of date, required version is v$RequireVersion"
 		}
 
 		$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
@@ -287,7 +286,7 @@ function Initialize-Provider
 		else
 		{
 			# User refused default action
-			# TODO: should this be error?
+			# TODO: should this be error? maybe switch
 			Write-Warning -Message "$ProviderName provider not installed"
 		}
 

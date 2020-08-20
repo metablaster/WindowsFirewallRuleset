@@ -43,7 +43,7 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-New-Test "Initialize-Project"
+New-Test "Initialize-Project -NoProjectCheck:$false"
 Initialize-Project -NoProjectCheck:$false
 
 Exit-Test
