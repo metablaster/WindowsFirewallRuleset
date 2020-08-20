@@ -30,7 +30,7 @@
 	Copyright = 'Copyright (C) 2019, 2020 metablaster'
 
 	# Description of the functionality provided by this module
-	Description = 'Check requirements for Windows Firewall Ruleset project'
+	Description = 'Initialize environment for Windows Firewall Ruleset project'
 
 	# Minimum version of the Windows PowerShell engine required by this module
 	PowerShellVersion = '5.1'
@@ -58,7 +58,7 @@
 	# Assemblies that must be loaded prior to importing this module
 	# RequiredAssemblies = @()
 
-	# Script files (.ps1) that are run in the caller's environment prior to importing this module.
+	# TODO: Script files (.ps1) that are run in the caller's environment prior to importing this module.
 	# ScriptsToProcess = @()
 
 	# Type files (.ps1xml) to be loaded when importing this module
@@ -110,7 +110,7 @@
 		PSData = @{
 
 			# Tags applied to this module. These help with module discovery in online galleries.
-			Tags = @("SystemRequirements", "Requirements")
+			Tags = @("Initialization", "Environment")
 
 			# A URL to the license for this module.
 			LicenseUri = 'https://github.com/metablaster/WindowsFirewallRuleset/blob/master/LICENSE'
@@ -122,7 +122,7 @@
 			# IconUri = ''
 
 			# ReleaseNotes of this module
-			ReleaseNotes = 'This pre-release is sufficiently stable to perform requirements test for Windows Firewall Ruleset'
+			ReleaseNotes = 'Pre-release module to perform environment checks for Windows Firewall Ruleset'
 		} # End of PSData hashtable
 	} # End of PrivateData hashtable
 
