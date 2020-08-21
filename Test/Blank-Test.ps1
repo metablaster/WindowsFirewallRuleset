@@ -38,7 +38,7 @@ Initialize-Project
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
 # Import-Module -Name Project.Windows.UserInfo
-# #
+#
 # Ask user if he wants to load these rules
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
 if (!(Approve-Execute @Logs)) { exit }

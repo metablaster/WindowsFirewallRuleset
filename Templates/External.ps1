@@ -26,6 +26,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+# TODO: Include modules you need, update Copyright and start writing code
+
 <#
 .SYNOPSIS
 A brief description of the function or script.
@@ -60,11 +62,18 @@ the Role parameter of Get-Help.
 The intended use of the function. This content appears when the Get-Help command includes
 the Functionality parameter of Get-Help.
 #>
-function Test-Function
+function New-Function
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'This is template function')]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Medium')]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $Param
 	)
+
+	# TODO: Update confirm description
+	if ($PSCmdlet.ShouldProcess("Template target", "Template action"))
+	{
+		return $null
+	}
 }

@@ -26,19 +26,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+# TODO: Include modules you need, update Copyright and start writing code
 . $PSScriptRoot\..\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
 Initialize-Project
 
-# TODO: Include modules you need, update licence Copyright and start writing code
-
 # Imports
 # . $PSScriptRoot\..\DirectionSetup.ps1
 # . $PSScriptRoot\..\..\IPSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
-# # Import-Module -Name Project.Windows.UserInfo
-# #
+# Import-Module -Name Project.Windows.UserInfo
+
 #
 # Setup local variables:
 #

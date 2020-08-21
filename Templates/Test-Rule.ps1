@@ -26,7 +26,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# TODO: Include modules you need, update licence Copyright and start writing test code
+# TODO: Include modules you need, update Copyright and start writing test code
 
 #
 # Unit test for Test-Rule
@@ -41,7 +41,7 @@ Initialize-Project
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
 # Import-Module -Name Project.Windows.UserInfo
-# #
+#
 # Ask user if he wants to load these rules
 Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
 if (!(Approve-Execute @Logs)) { exit }

@@ -26,21 +26,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# TODO: Include modules you need, update Copyright and start writing test code
+# TODO: Update Copyright and start writing code
 
-#
-# Blank template
-#
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
-
-# Check requirements for this project
-Initialize-Project
+Set-StrictMode -Version Latest
+Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
 # Imports
-. $PSScriptRoot\ContextSetup.ps1
-Import-Module -Name Project.AllPlatforms.Logging
-# Import-Module -Name Project.Windows.UserInfo @Logs
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule $true
+. $PSScriptRoot\..\ModulePreferences.ps1
 
-# Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
-if (!(Approve-Execute @Logs)) { exit }
+$PrivateScripts = @(
+)
+
+foreach ($Script in $PrivateScripts)
+{
+	Write-Debug -Message "[$ThisModule] Importing script: $Script.ps1"
+	. ("{0}\Private\{1}.ps1" -f $PSScriptRoot, $Script)
+}
+
+$PublicScripts = @(
+	"New-Function"
+)
+
+foreach ($Script in $PublicScripts)
+{
+	Write-Debug -Message "[$ThisModule] Importing script: $Script.ps1"
+	. ("{0}\Public\{1}.ps1" -f $PSScriptRoot, $Script)
+}

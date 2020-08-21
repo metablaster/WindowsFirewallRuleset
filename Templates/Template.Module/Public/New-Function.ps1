@@ -5,7 +5,7 @@ MIT License
 Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
+Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,12 +26,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# TODO: Include modules you need, update licence Copyright and start writing code
+# TODO: Update Copyright and start writing test code
 
-# Imports
-# Import-Module -Name Project.AllPlatforms.Logging
-# # Import-Module -Name Project.Windows.UserInfo
-# # #
 <#
 .SYNOPSIS
 A brief description of the function or script.
@@ -83,20 +79,8 @@ function New-Function
 }
 
 #
-# Module variables
+# TODO: Module variables
 #
 
 # Set to false to avoid checking powershell version
 New-Variable -Name NewModule -Scope Global -Value $true
-
-#
-# Function exports
-#
-
-Export-ModuleMember -Function New-Function
-
-#
-# Variable exports
-#
-
-Export-ModuleMember -Variable NewModule

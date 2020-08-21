@@ -26,7 +26,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# TODO: Include modules you need, update licence Copyright and start writing test code
+# TODO: Include modules you need, update Copyright and start writing test code
 
 #
 # Unit test for ConvertFrom-OSBuild
