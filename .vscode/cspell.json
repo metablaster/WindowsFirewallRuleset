@@ -1,3 +1,4 @@
+
 {
     "version": "0.1",
     "language": "en-US",
@@ -7,7 +8,8 @@
     "enabledLanguageIds": [
         "markdown",
         "plaintext",
-        "powershell"
+        "powershell",
+		"xml"
     ],
     "enabled": true,
     "showStatus": true,

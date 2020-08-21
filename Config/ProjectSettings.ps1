@@ -162,6 +162,7 @@ else # Normal use case
 	Remove-Variable -Name ModuleInformationPreference -Scope Global -ErrorAction Ignore
 }
 
+# TODO: encoding variable
 # Constant variables, not possible to change in any case.
 # These are set only once per session, changing these requires powershell restart
 if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore))

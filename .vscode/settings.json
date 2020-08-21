@@ -1,12 +1,12 @@
 // https://code.visualstudio.com/docs/getstarted/settings#_default-settings
 // https://devblogs.microsoft.com/powershell/psscriptanalyzer-pssa-1-19-0-has-been-released/
 {
-	// other: files
+	// files
 	"files.encoding": "utf8",
 	"files.trimTrailingWhitespace": true,
 	"files.trimFinalNewlines": true,
 	"files.insertFinalNewline": true,
-	// other: editor
+	// editor
 	"editor.quickSuggestions": {
 		"other": true,
 		"comments": false,
@@ -27,12 +27,17 @@
 	// PSUseConsistentIndentation
 	"editor.detectIndentation": false,
 	"editor.tabSize": 4,
-	// other: diffeditor
+	// diffeditor
 	"diffEditor.ignoreTrimWhitespace": false,
-	// other: script analysis
+	// PowerShell updates
+	"powershell.pester.useLegacyCodeLens": false,
+	// NOTE: disabled for testing Initialize-Project function
+	"powershell.promptToUpdatePackageManagement": false,
+	"powershell.promptToUpdatePowerShell": true,
+	// PowerShell: script analysis
 	"powershell.scriptAnalysis.enable": true,
 	"powershell.scriptAnalysis.settingsPath": "Config\\PSScriptAnalyzerSettings.psd1",
-	// other: code formatting
+	// PowerShell: code formatting
 	"powershell.codeFormatting.preset": "Allman",
 	// PSPlaceOpenBrace
 	"powershell.codeFormatting.openBraceOnSameLine": false,
@@ -58,13 +63,85 @@
 	// PSProvideCommentHelp
 	"powershell.helpCompletion": "BlockComment",
 	// NOTE: This config isn't recognized in cspell.json
+	// File types for language ID's are defined in cspell.json
 	"cSpell.enableFiletypes": [
 		"ignore",
 		"jsonc",
-		"markdown",
-		"plaintext",
-		"powershell",
 		"json",
-		"xml"
-	]
+		"properties", // gitattributes
+		"log",
+		"csv (semicolon)", // exported rules
+		"ini" // mTail configuration
+	],
+	// extension Todo Tree
+	"todo-tree.tree.showScanModeButton": true,
+	"todo-tree.general.tags": [
+		"TODO",
+		"NOTE",
+		"HACK",
+		"BUG",
+		"INFO",
+		"FIX"
+	],
+	"todo-tree.highlights.customHighlight": {
+		// Very important and hard to resolve
+		"HACK": {
+			// used to set a different icon in the tree view
+			// icons and names: https://primer.style/octicons/
+			"icon": "alert",
+			// used to control how much is highlighted in the editor. Valid values are:
+			// tag - highlights just the tag
+			// text - highlights the tag and any text after the tag
+			// tag-and-comment - highlights the comment characters (or the start of the match) and the tag
+			// text-and-comment - highlights the comment characters (or the start of the match), the tag and the text after the tag
+			// line - highlights the entire line containing the tag
+			// whole-line - highlights the entire line containing the tag to the full width of the editor
+			"type": "tag",
+			// used to set the foreground colour of the highlight in the editor and the marker in the ruler
+			// Foreground and background can be: "red", "green", "blue", "yellow", "magenta", "cyan", "grey", "white" or "black"
+			"foreground": "white",
+			// used to set the background colour of the highlight in the editor.
+			"background": "red",
+			// 100% will produce an opaque background
+			"opacity": 70,
+			// used to set the colour of the icon in the tree
+			"iconColour": "red",
+			// used to hide tags from the tree, but still highlight in files
+			// "hideFromTree ": false,
+			// set to true to show the icon in the editor gutter
+			// "gutterIcon": true,
+			// prevents the tag from being included in the status bar counts
+			// "hideFromStatusBar": false
+		},
+		// Needs additional work
+		"TODO": {
+			"foreground": "black",
+			"background": "white",
+			"iconColour": "green",
+			"opacity": 90
+		},
+		// Important comment(s)
+		"NOTE": {
+			"icon": "checklist",
+			"foreground": "white",
+			"background": "green",
+			"opacity": 40,
+			// TODO: setting not working
+			"hideFromTree ": true
+		}
+	},
+	"todo-tree.general.tagGroups": {
+		"HACK": [
+			"HACK",
+			"BUG"
+		],
+		"NOTE": [
+			"NOTE",
+			"INFO"
+		],
+		"TODO": [
+			"TODO",
+			"FIX"
+		]
+	}
 }
