@@ -147,7 +147,6 @@ function Initialize-Project
 	else
 	{
 		Write-Warning -Message "Remote firewall administration with PowerShell Desktop is partially implemented"
-
 	}
 
 	Write-Information -Tags "User" -MessageData "INFO: Checking PowerShell version"
@@ -274,6 +273,7 @@ function Initialize-Project
 	$OSCaption = Get-CimInstance -Class Win32_OperatingSystem |
 	Select-Object -ExpandProperty Caption
 
+	# TODO: Update-Help
 	Write-Information -Tags "User" -MessageData "INFO: Checking project requirements successful"
 
 	Write-Output ""

@@ -495,7 +495,7 @@ TODO: We should make a query for an array of users, will help to save into varia
 #>
 function Get-UserSoftware
 {
-	[OutputType([System.Management.Automation.PSCustomObject[]])]
+	[OutputType([PSCustomObject[]])]
 	[CmdletBinding()]
 	param (
 		[Alias("User")]
@@ -586,7 +586,7 @@ We should return empty PSCustomObject if test computer fails
 #>
 function Get-SystemSoftware
 {
-	[OutputType([System.Management.Automation.PSCustomObject[]])]
+	[OutputType([PSCustomObject[]])]
 	[CmdletBinding()]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
@@ -708,7 +708,7 @@ TODO: should be renamed into Get-InstallProperties
 #>
 function Get-AllUserSoftware
 {
-	[OutputType([System.Management.Automation.PSCustomObject[]])]
+	[OutputType([PSCustomObject[]])]
 	[CmdletBinding()]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
@@ -812,7 +812,7 @@ None.
 #>
 function Get-ExecutablePath
 {
-	[OutputType([System.Management.Automation.PSCustomObject[]])]
+	[OutputType([PSCustomObject[]])]
 	[CmdletBinding()]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
@@ -1976,7 +1976,7 @@ None.
 #>
 function Get-NetFramework
 {
-	[OutputType([System.Management.Automation.PSCustomObject[]])]
+	[OutputType([PSCustomObject[]])]
 	[CmdletBinding()]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
@@ -2101,7 +2101,7 @@ None.
 #>
 function Get-WindowsSDK
 {
-	[OutputType([System.Management.Automation.PSCustomObject[]])]
+	[OutputType([PSCustomObject[]])]
 	[CmdletBinding()]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
@@ -2193,7 +2193,7 @@ None.
 #>
 function Get-WindowsKit
 {
-	[OutputType([System.Management.Automation.PSCustomObject[]])]
+	[OutputType([PSCustomObject[]])]
 	[CmdletBinding()]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
@@ -2358,7 +2358,7 @@ None.
  #>
 function Get-SQLManagementStudio
 {
-	[OutputType([System.Management.Automation.PSCustomObject[]])]
+	[OutputType([PSCustomObject[]])]
 	[CmdletBinding()]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
@@ -2456,7 +2456,7 @@ if OneDrive can be installed for all users too.
 #>
 function Get-OneDrive
 {
-	[OutputType([System.Management.Automation.PSCustomObject[]])]
+	[OutputType([PSCustomObject[]])]
 	[CmdletBinding()]
 	param (
 		[Alias("User")]
