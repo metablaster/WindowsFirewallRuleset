@@ -322,13 +322,15 @@ function Initialize-Project
 			{
 				Write-Information -Tags "User" -MessageData "INFO: Checking online for help updates"
 
-				[string[]] $UpdatableModules = Find-UpdatableModule
+				$CultureNames = "en-US"
+				[string[]] $UpdatableModules = Find-UpdatableModule -UICulture $CultureNames |
+				Select-Object -ExpandProperty Name
 
 				# NOTE: using UICulture en-US, otherwise errors may occur
 				$UpdateParams = @{
 					ErrorVariable = "UpdateError"
 					ErrorAction = "SilentlyContinue"
-					UICulture = "en-US"
+					UICulture = $CultureNames
 					Module = $UpdatableModules
 				}
 
@@ -346,10 +348,6 @@ function Initialize-Project
 				if ($UpdateError.Count -gt 10)
 				{
 					$UpdateError
-				}
-				else
-				{
-					Write-Information -Tags "User" -MessageData "INFO: Updating help was successful"
 				}
 			}
 		}

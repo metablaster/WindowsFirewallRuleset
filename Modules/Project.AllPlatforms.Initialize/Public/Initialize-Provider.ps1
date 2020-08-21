@@ -119,7 +119,7 @@ function Initialize-Provider
 			if ($TargetVersion -ge $RequireVersion)
 			{
 				# Up to date
-				Write-Information -Tags "User" -MessageData "INFO: Installed provider $ProviderName v$TargetVersion meets >= v$RequireVersion"
+				Write-Information -Tags "User" -MessageData "INFO: Provider $ProviderName v$TargetVersion meets >= v$RequireVersion"
 				return $true
 			}
 

@@ -41,15 +41,41 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-New-Test 'Find-UpdatableModule @("PowerShellGet", "PackageManagement", "PSScriptAnalyzer")'
-$Result = @("PowerShellGet", "PackageManagement", "PSScriptAnalyzer") | Find-UpdatableModule @Logs
+New-Test "Find-UpdatableModule"
+$Result = Find-UpdatableModule @Logs
 $Result
-
-New-Test "Find-UpdatableModule 'PowerShellGet'"
-Find-UpdatableModule "PowerShellGet" @Logs
 
 New-Test "Get-TypeName"
 $Result | Get-TypeName @Logs
+
+New-Test "'PowerShellGet' | Find-UpdatableModule"
+"PowerShellGet" | Find-UpdatableModule @Logs
+
+New-Test "Find-UpdatableModule -Module 'PowerShellGet'"
+Find-UpdatableModule -Module "PowerShellGet" @Logs
+
+New-Test 'Find-UpdatableModule "PowerShellGet" -UICulture ja-JP, en-US'
+Find-UpdatableModule "PowerShellGet" -UICulture ja-JP, en-US @Logs
+
+New-Test '@{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" } | Find-UpdatableModule'
+$Result = @{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" } | Find-UpdatableModule @Logs
+$Result
+
+New-Test "Get-TypeName"
+$Result | Get-TypeName @Logs
+
+New-Test 'Find-UpdatableModule -FullyQualifiedName @{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" }'
+Find-UpdatableModule -FullyQualifiedName @{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" } @Logs
+
+New-Test 'Find-UpdatableModule @("PowerShellGet", "PackageManagement", "PSScriptAnalyzer")'
+$Result = Find-UpdatableModule @("PowerShellGet", "PackageManagement", "PSScriptAnalyzer") @Logs
+$Result
+
+New-Test "Get-TypeName"
+$Result | Get-TypeName @Logs
+
+New-Test '@("PowerShellGet", "PackageManagement", "PSScriptAnalyzer") | Find-UpdatableModule'
+@("PowerShellGet", "PackageManagement", "PSScriptAnalyzer") | Find-UpdatableModule @Logs
 
 Update-Log
 Exit-Test
