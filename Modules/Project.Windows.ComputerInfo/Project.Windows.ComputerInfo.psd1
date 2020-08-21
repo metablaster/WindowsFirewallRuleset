@@ -80,6 +80,7 @@
 		"Get-Broadcast"
 		"Get-SystemSKU"
 		"Test-TargetComputer"
+		"ConvertFrom-OSBuild"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not

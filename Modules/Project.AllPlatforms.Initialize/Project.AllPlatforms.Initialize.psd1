@@ -77,6 +77,7 @@
 		"Initialize-Service"
 		"Initialize-Module"
 		"Initialize-Provider"
+		"Find-UpdatableModule"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not

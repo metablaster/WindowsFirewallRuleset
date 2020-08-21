@@ -190,10 +190,6 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	# Required minimum PowerShellGet version prior to installing other modules
 	New-Variable -Name RequirePowerShellGetVersion -Scope Global -Option Constant -Value $([version]::new(2, 2, 4))
 
-	# Required minimum NuGet version prior to installing other modules
-	# TODO: Core >= 3.0.0, Desktop >= 2.8.5
-	New-Variable -Name RequireNuGetVersion -Scope Global -Option Constant -Value $([version]::new(2, 8, 5))
-
 	# Recommended minimum Git version needed for contributing and required by posh-git
 	New-Variable -Name RequireGitVersion -Scope Global -Option Constant -Value $([version]::new(2, 28, 0))
 
@@ -205,6 +201,9 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 
 	# Required minimum operating system version
 	New-Variable -Name RequireWindowsVersion -Scope Global -Option Constant -Value $([version]::new(10, 0, 0))
+
+	# Required minimum .NET version, valid for the PowerShell Desktop edition only
+	New-Variable -Name RequireNETVersion -Scope Global -Option Constant -Value $([version]::new(3, 5, 0))
 
 	# Repository root directory, reallocating scripts should be easy if root directory is constant
 	New-Variable -Name ProjectRoot -Scope Global -Option Constant -Value (
@@ -267,6 +266,10 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -Erro
 
 	# Set to false to avoid checking if required system services are started
 	Set-Variable -Name ServicesCheck -Scope Global -Option ReadOnly -Force -Value $true
+
+	# Required minimum NuGet version prior to installing other modules
+	# NOTE: Core >= 3.0.0, Desktop >= 2.8.5
+	New-Variable -Name RequireNuGetVersion -Scope Global -Option ReadOnly -Force -Value $([version]::new(3, 0, 0))
 }
 
 # Removable variables, meaning these can be modified by code at any time,

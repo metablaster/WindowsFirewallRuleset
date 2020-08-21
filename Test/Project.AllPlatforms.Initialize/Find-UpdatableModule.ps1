@@ -26,37 +26,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-Set-StrictMode -Version Latest
-Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
+#
+# Unit test for Find-UpdatableModule
+#
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Imports
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule $true
-. $PSScriptRoot\..\ModulePreferences.ps1
+. $PSScriptRoot\ContextSetup.ps1
+Import-Module -Name Project.AllPlatforms.Logging
 
-# TODO: repository paths whitelist check
-# TODO: should process must be implemented for system changes
-# if (!$PSCmdlet.ShouldProcess("ModuleName", "Update or install module if needed"))
-# SupportsShouldProcess = $true, ConfirmImpact = 'High'
+# Ask user if he wants to load these rules
+Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+if (!(Approve-Execute @Logs)) { exit }
 
-$PrivateScripts = @(
-	"Find-UpdatableModule"
-)
+Start-Test
 
-foreach ($Script in $PrivateScripts)
-{
-	Write-Debug -Message "[$ThisModule] Importing script: $Script.ps1"
-	. ("{0}\Private\{1}.ps1" -f $PSScriptRoot, $Script)
-}
+New-Test 'Find-UpdatableModule @("PowerShellGet", "PackageManagement", "PSScriptAnalyzer")'
+$Result = @("PowerShellGet", "PackageManagement", "PSScriptAnalyzer") | Find-UpdatableModule @Logs
+$Result
 
-$PublicScripts = @(
-	"Initialize-Project"
-	"Initialize-Service"
-	"Initialize-Module"
-	"Initialize-Provider"
-)
+New-Test "Find-UpdatableModule 'PowerShellGet'"
+Find-UpdatableModule "PowerShellGet" @Logs
 
-foreach ($Script in $PublicScripts)
-{
-	Write-Debug -Message "[$ThisModule] Importing script: $Script.ps1"
-	. ("{0}\Public\{1}.ps1" -f $PSScriptRoot, $Script)
-}
+New-Test "Get-TypeName"
+$Result | Get-TypeName @Logs
+
+Update-Log
+Exit-Test

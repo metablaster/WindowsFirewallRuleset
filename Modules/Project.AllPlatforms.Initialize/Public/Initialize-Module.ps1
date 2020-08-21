@@ -123,7 +123,7 @@ function Initialize-Module
 		if ($TargetVersion -ge $RequireVersion)
 		{
 			# Up to date
-			Write-Information -Tags "User" -MessageData "INFO: Installed module $ModuleName v$TargetVersion meets >= v$RequireVersion"
+			Write-Information -Tags "User" -MessageData "INFO: Module $ModuleName v$TargetVersion meets >= v$RequireVersion"
 			return $true
 		}
 
