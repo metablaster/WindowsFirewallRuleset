@@ -2,7 +2,7 @@
 <#
 MIT License
 
-Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems
+This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
 Copyright (C) 2020 metablaster zebal@protonmail.ch
@@ -52,6 +52,7 @@ None. You cannot pipe objects to Get-FileEncoding
 Encoding type of a file
 .NOTES
 TODO: utf-16LE detected as utf-16 with BOM
+NOTE: This function is based on (but is not) sample from "Windows PowerShell Cookbook"
 #>
 function Get-FileEncoding
 {

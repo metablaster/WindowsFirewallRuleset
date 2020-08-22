@@ -2,7 +2,7 @@
 <#
 MIT License
 
-Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems
+This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
 Copyright (C) 2020 Markus Scholtes

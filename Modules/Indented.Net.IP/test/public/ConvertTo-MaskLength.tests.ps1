@@ -7,7 +7,7 @@ under a dual license of the MIT license AND the ISC license, see both licenses b
 <#
 MIT License
 
-Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems
+This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

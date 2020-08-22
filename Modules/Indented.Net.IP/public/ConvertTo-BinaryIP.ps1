@@ -7,7 +7,7 @@ under a dual license of the MIT license AND the ISC license, see both licenses b
 <#
 MIT License
 
-Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems
+This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -67,7 +67,7 @@ TODO: describe outputs
 .NOTES
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
-- For code to be consistent with project: code formatting and symbol casing.
+- For code to be consistent with project code formatting and symbol casing.
 - Removed unnecessary position arguments, added default argument values explicitly.
 #>
 function ConvertTo-BinaryIP
