@@ -33,6 +33,7 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule $true
 . $PSScriptRoot\..\ModulePreferences.ps1
 . $PSScriptRoot\External\Get-TypeName.ps1
+. $PSScriptRoot\External\Get-FileEncoding.ps1
 
 <#
 .SYNOPSIS
@@ -348,7 +349,7 @@ function Get-NetworkService
 	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Writing filtered services to: $File"
-	Add-Content -Path $File -Value $Content
+	Add-Content -Encoding utf8 -Path $File -Value $Content
 
 	Write-Information -Tags "Project" -MessageData "INFO: $($Content.Count) services involved in firewall rules"
 }
@@ -495,6 +496,16 @@ New-Variable -Name RecommendedBuffer -Scope Script -Option Constant -Value 1500
 
 # TODO: where to export? here or in manifest file?
 
+$PublicScripts = @(
+	"Get-FileEncoding"
+)
+
+foreach ($Script in $PublicScripts)
+{
+	Write-Debug -Message "[$ThisModule] Importing script: $Script.ps1"
+	. ("{0}\Public\{1}.ps1" -f $PSScriptRoot, $Script)
+}
+
 #
 # Function exports
 #
@@ -512,6 +523,7 @@ Export-ModuleMember -Function Set-NetworkProfile
 #
 
 Export-ModuleMember -Function Get-TypeName
+Export-ModuleMember -Function Get-FileEncoding
 
 #
 # Variable exports

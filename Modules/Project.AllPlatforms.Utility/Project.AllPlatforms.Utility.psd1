@@ -81,6 +81,7 @@
 		"Set-ScreenBuffer"
 		"Set-NetworkProfile"
 		"Get-TypeName"
+		"Get-FileEncoding"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not

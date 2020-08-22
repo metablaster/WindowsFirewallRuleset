@@ -1,4 +1,3 @@
-
 {
     "version": "0.1",
     "language": "en-US",
@@ -9,7 +8,7 @@
         "markdown",
         "plaintext",
         "powershell",
-		"xml"
+        "xml"
     ],
     "enabled": true,
     "showStatus": true,
@@ -42,6 +41,7 @@
         "cimv",
         "Clicktorun",
         "Cloneable",
+        "cmatch",
         "cmdlet",
         "cmdlets",
         "commandlet",

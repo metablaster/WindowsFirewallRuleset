@@ -43,6 +43,7 @@ Import-Module -Name Project.Windows.UserInfo
 $Group = "Store Apps"
 $SystemGroup = "Store Apps - System"
 $FirewallProfile = "Private, Public"
+# TODO: what is this commented code in entry script
 # $NetworkApps = Get-Content -Path "$PSScriptRoot\..\NetworkApps.txt"
 
 # Ask user if he wants to load these rules

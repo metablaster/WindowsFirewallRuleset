@@ -28,26 +28,43 @@ SOFTWARE.
 
 #
 # TODO: we could auto include this file with module manifests
-# NOTE: In this file various project settings and preferences are set, these are grouped into
+# NOTE: In this file project settings and preferences are set, these are grouped into
 # 1. settings for development
-# 2. settings for end users
+# 2. settings for release
 # 3. settings that apply to both use cases
 #
 
-# Must be the first statement in script
 param(
 	# modules must call this script with value of True
 	[bool] $InsideModule = $false
 )
 
-Set-StrictMode -Version Latest
-
 # Set to true to indicate development phase, it does following at a minimum:
-# 1. Forces unloading modules and removing variables.
+# 1. Forces reloading modules and removable variables.
 # 2. Loads troubleshooting rules defined in Temporary.ps1
-# 3. Performs some additional checks
-# 4. Enables some unit tests
+# 3. Performs additional requirements checks needed or recommended for development
+# 4. Enables some disabled unit tests and disables logging
+# 5. Enables setting preference variables for modules
 Set-Variable -Name Develop -Scope Global -Value $true
+
+if ($Develop)
+{
+	# The Set-PSDebug cmdlet turns script debugging features on and off, sets the trace level, and toggles strict mode.
+	# Strict: Turns on strict mode for the global scope, this is equivalent to Set-StrictMode -Version 1
+	# Trace 1: each line of script is traced as it runs.
+	# Trace 2: variable assignments, function calls, and script calls are also traced.
+	# Step: You're prompted before each line of the script runs.
+	Set-PSDebug -Strict # -Trace 1
+
+	# Override version set by et-PSDebug
+	Set-StrictMode -Version Latest
+}
+else
+{
+	# The Set-StrictMode configures strict mode for the current scope and all child scopes
+	# Use it in a script or function to override the setting inherited from the global scope.
+	Set-StrictMode -Version Latest
+}
 
 # Name of this script for debugging messages, do not modify!.
 Set-Variable -Name ThisScript -Scope Local -Option ReadOnly -Value $($MyInvocation.MyCommand.Name -replace ".{4}$")
@@ -56,31 +73,35 @@ Set-Variable -Name ThisScript -Scope Local -Option ReadOnly -Value $($MyInvocati
 Preference Variables default values
 https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_preference_variables?view=powershell-7
 
-$ConfirmPreference	High
-$DebugPreference	SilentlyContinue
-$ErrorActionPreference	Continue
-$ErrorView	ConciseView
-$FormatEnumerationLimit	4
-$InformationPreference	SilentlyContinue
-$LogCommandHealthEvent	False (not logged)
+$ConfirmPreference			High
+$DebugPreference			SilentlyContinue
+$ErrorActionPreference		Continue
+$ErrorView					ConciseView
+$FormatEnumerationLimit		4
+$InformationPreference		SilentlyContinue
+$LogCommandHealthEvent		False (not logged)
 $LogCommandLifecycleEvent	False (not logged)
-$LogEngineHealthEvent	True (logged)
+$LogEngineHealthEvent		True (logged)
 $LogEngineLifecycleEvent	True (logged)
 $LogProviderLifecycleEvent	True (logged)
-$LogProviderHealthEvent	True (logged)
-$MaximumHistoryCount	4096
-$OFS	(Space character (" "))
-$OutputEncoding	UTF8Encoding object
+$LogProviderHealthEvent		True (logged)
+$MaximumHistoryCount		4096
+$OFS						(Space character (" "))
+
+Applies to how PowerShell communicates with external programs (what encoding PowerShell uses when sending strings to them)
+it has nothing to do with the encoding that the output redirection operators and PowerShell cmdlets use to save to files.
+$OutputEncoding				UTF8Encoding object
+
 $ProgressPreference	Continue
 $PSDefaultParameterValues	(None - empty hash table)
-$PSEmailServer	(None)
+$PSEmailServer				(None)
 $PSModuleAutoLoadingPreference	All
 $PSSessionApplicationName	wsman
 $PSSessionConfigurationName	https://schemas.microsoft.com/powershell/Microsoft.PowerShell
-$PSSessionOption	See $PSSessionOption
-$VerbosePreference	SilentlyContinue
-$WarningPreference	Continue
-$WhatIfPreference	False
+$PSSessionOption			See $PSSessionOption
+$VerbosePreference			SilentlyContinue
+$WarningPreference			Continue
+$WhatIfPreference			False
 #>
 
 # These settings apply only for development phase
@@ -259,7 +280,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -Erro
 	Set-Variable -Name CheckReadOnlyVariables -Scope Global -Option ReadOnly -Force -Value $null
 
 	# Set to false to avoid checking system requirements
-	Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $false
+	Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $(!$Develop)
 
 	# Set to false to avoid checking if modules are up to date
 	Set-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Force -Value $Develop
@@ -289,13 +310,13 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 	Set-Variable -Name ConnectionTimeout -Scope Global -Value 1
 
 	# Set to false to disable logging errors
-	Set-Variable -Name ErrorLogging -Scope Global -Value $true
+	Set-Variable -Name ErrorLogging -Scope Global -Value $(!$Develop)
 
 	# Set to false to disable logging warnings
-	Set-Variable -Name WarningLogging -Scope Global -Value $true
+	Set-Variable -Name WarningLogging -Scope Global -Value $(!$Develop)
 
 	# Set to false to disable logging information messages
-	Set-Variable -Name InformationLogging -Scope Global -Value $true
+	Set-Variable -Name InformationLogging -Scope Global -Value $(!$Develop)
 }
 
 # Protected variables, meaning these can be modified but only by code (excluded from Develop mode)

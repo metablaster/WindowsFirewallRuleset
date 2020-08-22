@@ -71,15 +71,15 @@ TODO: checking remote systems not implemented
 function Initialize-Project
 {
 	[OutputType([void])]
-	[CmdletBinding()]
+	[CmdletBinding(DefaultParameterSetName = "NoProject")]
 	param (
-		[Parameter(ParameterSetName = "Project")]
+		[Parameter(ParameterSetName = "NoProject")]
 		[switch] $NoProjectCheck = !$ProjectCheck,
 
-		[Parameter(ParameterSetName = "NotProject")]
+		[Parameter(ParameterSetName = "Project")]
 		[switch] $NoModulesCheck = !$ModulesCheck,
 
-		[Parameter(ParameterSetName = "NotProject")]
+		[Parameter(ParameterSetName = "Project")]
 		[switch] $NoServicesCheck = !$ServicesCheck
 	)
 

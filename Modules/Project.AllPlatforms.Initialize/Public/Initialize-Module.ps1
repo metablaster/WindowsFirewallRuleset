@@ -386,7 +386,8 @@ function Initialize-Module
 	}
 
 	# Setup new choices
-	# HACK: using choices seem to failed later, need try/catch
+	# HACK: resetting choices seem to failed later during module update, need test or try/catch
+	# Title, Question and Default is OK
 	$Accept.HelpMessage = $InfoMessage
 	$Choices.Clear()
 	$Choices += $Accept

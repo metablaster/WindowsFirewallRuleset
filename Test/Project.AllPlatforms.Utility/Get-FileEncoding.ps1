@@ -5,7 +5,7 @@ MIT License
 Project: "Windows Firewall Ruleset" serves to manage firewall on Windows systems
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
+Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,11 +27,12 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Initialize-Project
+# Unit test for Get-FileEncoding
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
 # Check requirements for this project
+Initialize-Project
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
@@ -43,17 +44,17 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Start-Test
 
-New-Test "Initialize-Project"
-Initialize-Project
+$TestFiles = Get-ChildItem -Path "$PSScriptRoot\Encoding\*" -Filter "*.txt"
 
-New-Test "Initialize-Project -NoModules"
-Initialize-Project -NoModulesCheck
+foreach ($File in $TestFiles)
+{
+	New-Test "Get-FileEncoding $File"
+	$Result = Get-FileEncoding $File @Logs
+	$Result
+}
 
-# FAIL
-# New-Test "Initialize-Project -NoModulesCheck -NoProjectCheck"
-# Initialize-Project -NoModulesCheck -NoProjectCheck:$false
+New-Test "Get-TypeName"
+$Result | Get-TypeName @Logs
 
-New-Test "Initialize-Project -NoProjectCheck:$false"
-Initialize-Project -NoProjectCheck:$false
-
+Update-Log
 Exit-Test
