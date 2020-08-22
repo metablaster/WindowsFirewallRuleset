@@ -1,5 +1,5 @@
 
-# About this directory
+# Modules directory
 
 Root directory for all project modules
 

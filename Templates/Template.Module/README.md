@@ -1,4 +1,4 @@
 
-# About this Template.Module
+# Template.Module directory
 
 Template.Module description

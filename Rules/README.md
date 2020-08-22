@@ -1,4 +1,4 @@
 
-# About this directory
+# Rules directory
 
 Root directory for all firewall rules

@@ -1,4 +1,4 @@
 
-# About this directory
+# Games directory
 
 Root directory for all inbound IPv4 rules for games

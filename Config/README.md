@@ -1,5 +1,5 @@
 
-# About this directory
+# Config directory
 
 Directory for configuration files for this project and external programs.
 

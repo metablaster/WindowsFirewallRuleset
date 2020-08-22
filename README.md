@@ -21,7 +21,7 @@
 9. multicast traffic
 10. and the list goes on...
 
-- In addition to firewall rules you will find a number of powershell modules,
+- In addition to firewall rules you will find a number of PowerShell modules,
 scripts and functions used to gather info relevant for building a firewall such as:
 
 1. computers on network
@@ -30,77 +30,75 @@ scripts and functions used to gather info relevant for building a firewall such 
 4. network configuration
 5. managing firewall etc.
 
-- Meaning this project is a good base to easily extend your firewall and include more rules.
+- Meaning this project is a good base to easily extend your firewall and include more rules and
+functionalities.
 - Currently there are some 650+ firewall rules included, 9 modules with 50+ functions,
 random scripts and useful documentation.
 - You can choose which rules you want, and apply only those or apply them all with
 master script to your firewall.
 - All the rules are loaded into Local Group Policy (GPO),
-giving you full power over the default windows firewall.
+giving you full power over the default Windows firewall.
 
 ## What are the core benefits of this firewall/project?
 
-1. Unlike windows firewall in control panel, these rules are loaded into GPO firewall
+1. Unlike Windows firewall in control panel, these rules are loaded into GPO firewall
 (Local group policy), meaning random programs which install rules as part of their installation
 process or system settings changes will have no effect on firewall unless you
 explicitly make an exception.
 
-2. Unlike default windows firewall rules, these rules are more restrictive such as,
+2. Unlike default (built in) Windows firewall rules, these rules are more restrictive such as,
 tied to explicit user accounts, rules apply to specific ports,
 network interfaces, specific programs, services etc.
 
 3. Unlike default (or your own) rules you will know which rules have no effect or are redundant
-due to ie. uninstalled program or a missing windows service which no longer exists or are
+due to ie. uninstalled program or a missing Windows service which no longer exists or are
 redundant/invalid for what ever other reason.
 
 4. Changing rule attributes such as ports, addresses and similar is much easier since the rules
-are in scripts, so you can use editor tools such as CTRL + F to perform bulk operations on
+are in scripts, so you can use editor tools such as CTRL + F or regex to perform bulk operations on
 your rules, doing this in Windows firewall GUI is beyond all pain.
 
 5. Default outbound is "block" unless there is a rule to explicitly allow traffic,
-in default windows firewall this is not possible unless you have rules for every possible
+in default Windows firewall this is not possible unless you have rules for every possible
 program/service, thanks to this collection of rules setting default outbound to block
 requires very little additional work.
 
 ## Licenses
 
 This project **"Windows Firewall Ruleset"** is licensed under **MIT** license.\
-3rd party and sublicensed code is located inside their own folders for organizational purposes,
-usually called "External".
+3rd party and sublicensed code is located either inside their own folders or inside folders called
+"External", this is for organizational purposes.
 
-The project maintains "per file" licenses and Copyright notices.
+The project maintains "per file" license and Copyright notices.
 
 ## Minimum supported system requirements
 
-1. Windows 10 Pro/Enterprise, Windows Server 2019 (64 bit)
-2. Powershell Core 7.0 or Windows PowerShell 5.1
-[Download Powershell](https://github.com/PowerShell/PowerShell)
-3. NET Framework 3.5 (for Windows PowerShell)
-[Download Net Framework](https://dotnet.microsoft.com/download/dotnet-framework)
-4. Git (Optional) [Download Git](https://git-scm.com/downloads)
-5. Visual Studio Code (Optional) [Download VSCode](https://code.visualstudio.com)
-6. PowerShell Support for VSCode (Optional)
+1. Windows 10 Pro/Enterprise, Windows Server 2019 (both x64 bit)
+2. PowerShell Core 7.0 or Windows PowerShell 5.1
+[Download PowerShell](https://github.com/PowerShell/PowerShell)
+3. Git (Optional) [Download Git](https://git-scm.com/downloads)
+4. Visual Studio Code (Optional) [Download VSCode](https://code.visualstudio.com)
+5. PowerShell Support for VSCode (Optional)
 [Download extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell)
 
 - All operating systems 10.0 (Major 10, Minor 0) and up are supported,
-that includes "regular" Windows, Servers etc.
-- PowerShell core is not built into Windows, you will need to install it separately.
-- NET Framework 3.5 is automatically installed on Windows, to make sure you have
-[.NET 3.5 enabled](https://docs.microsoft.com/en-us/dotnet/framework/install/dotnet-35-windows-10),
-see control panel option on that link.
+but only those editions listed in point 1 are actively tested.
+- PowerShell "Core" is not built into Windows, you will need to install it separately (recommended)
+or use [Windows PowerShell](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/WindowsPowerShell.md)
+which is built into system.
 - You might want to have git to check out for updates,
 to easily switch between branches or to contribute code.
-- VS Code is preferred and recommended editor to navigate project and edit the scripts for your
+- VS Code is preferred and recommended editor to navigate project and edit scripts for your
 needs or for contribution, any other editor is of course your choice.
 - If you get VSCode, you'll also need powershell extension for code navigation and
 PowerShell specific features.
 
-## I don't have Windows 10 or Windows Server (64 bit)
+## I don't have Windows 10 x64 or Windows Server x64
 
-By default this project is tested and designed for most recent Windows/Servers and that is known
-to work, making use of it on older systems requires additional work.
+At the moment this project is tested and designed for most recent Windows Desktop/Servers and that
+is known to work, making use of it on older systems requires additional work.
 
-Testing is done on 64 bit windows, a small fraction of rules won't work for 32 bit system and
+Testing is done on 64 bit Windows, a small fraction of rules won't work for 32 bit system and
 need adjustment, full functionality for 32 bit system is work in progress.\
 For now you can load rules on 32 bit system just fine with the exception of few rules probably not
 relevant at all for your configuration. (It's hard to tell since it wasn't tested)
@@ -108,15 +106,15 @@ relevant at all for your configuration. (It's hard to tell since it wasn't teste
 [This document](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/LegacySupport.md)
 describes how to make use of this project on older Windows systems such as Windows 7 or Server 2008
 
-## Step by step quick start
+## Quick start
 
 **WARNING:**
 
 - You might loose internet connectivity for some of your programs or in rare cases even lose internet
-connectivity completely, if that happens, you can either temporarily allow outbound rules or run
-`ResetFirewall.ps1` script, to reset GPO firewall to system defaults and remove all rules.
+connectivity completely, if that happens, you can either temporarily allow outbound network traffic
+or run `ResetFirewall.ps1` script, to reset GPO firewall to system defaults and remove all rules.
 - Inside `Readme` folder there is a `ResetFirewall.md`, a guide on how to do it manually, by hand,
-if for some reason you're unable to run the script, or the script does not solve your problems.
+if for some reason you're unable to run the script, or the script doesn't solve your problems.
 - Also note that your current/existing rules will not be deleted unless you have rules in GPO whose
 group name interfere with group names from this ruleset, however
 **this does not apply to** `ResetFirewall.ps1` which will clear GPO rules completely
@@ -127,7 +125,7 @@ and leave only those in control panel.
 apply at least all generic networking and OS related rules such as BasicNetworking, ICMP,
 WindowsSystem, WindowsServices, Multicast etc. also do not ignore IPv6, Windows does need IPv6!
 - Default configuration will set global firewall behavior which is not configurable in GPO GUI,
-such as stateful ftp and pptp or global IPSec settings, if you need specific setup please visit
+such as `stateful ftp` and `pptp` or global `IPSec` settings, if you need specific setup please visit
 `SetupProfile.ps1` and take a look at `Set-NetFirewallSetting`.\
 Note that `SetupProfile.ps1` is automatically called by `SetupFirewall.ps1` script
 
@@ -142,24 +140,24 @@ it should be easy to delete what you don't want in GPO, rather than later search
 what you might have missed.
 - Loading rules into an empty GPO should be very fast, however loading into GPO which already
 contains rules will be significantly slower (depends on number of existing rules)
-- All errors and warnings will be saved to `Logs` directory, so you can review these logs if you
-want to fix some problem.
+- All errors and warnings will be saved to `Logs` directory, so you can review these logs later
+if you want to fix some problem.
 - Any rule that results in "Access denied" while loading should be reloaded by executing specific
 script again.
-- You should [unblock all files](https://devblogs.microsoft.com/scripting/easily-unblock-all-files-in-a-directory-using-powershell/)
-in project first to avoid YES/NO questions spam for every executing script, before executing any
-scripts after manual download or transfer from another computer or media by using
-`UnblockProject.ps1` script.
+- If project was manually downloaded, transferred from another computer or media then you should
+[unblock all files](https://devblogs.microsoft.com/scripting/easily-unblock-all-files-in-a-directory-using-powershell/)
+in project first to avoid YES/NO spam questions for every executing script, by using
+`UnblockProject.ps1` script.\
 Master script `SetupFirewall.ps1` does this in case if you forget, but initial YES/NO spam questions
 will still be visible in that case.
 - It's important to understand these rules are designed to be used as "Standard" user, not as
-Administrative user, if you're Administrator on your computer you'll have to create standard user
-account and use that for your everyday life.
+Administrative user, if you're Administrator on your computer you'll have to either create standard
+user account and use that for your everyday life or modify rules to allow Administrator online access.
 See [FAQ](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/FAQ.md#does-this-firewall-give-me-the-right-protection)
 for more information why using Administrative account is dangerous security wise.
-- Windows or software updates may rename executables, also user accounts may be renamed by Administrator
-therefore it's important to reload rules from time to time as needed to update firewall for system
-changes that may happen at any time.
+- Windows or software updates may rename executables or their locations, also user accounts may be
+renamed by Administrator, therefore it's important to reload specific rules from time to time as
+needed to update firewall for system changes that may happen at any time.
 
 **STEPS:**
 
@@ -169,9 +167,10 @@ These steps assume you have downloaded a zip file.
 2. Extract the archive somewhere, these steps assume you've extracted the zip into
 `C:\` root drive directly.
 3. Open the extracted folder, right click into an empty space and there is an option to run
-PowerShell core as administrator (Assumes enabled context menu during installation of PowerShell core)
+PowerShell Core as Administrator
+(Assumes you enabled context menu during installation of PowerShell Core)
 4. If you would like to use Windows PowerShell 5.1 instead see
-[WindowsPowerShell](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/WindowsPowerShell.md)
+[How to open Windows PowerShell](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/WindowsPowerShell.md)
 5. Type or copy/paste following commands and hit enter for each
 
 ```powershell
@@ -184,7 +183,7 @@ while Windows PowerShell defaults to `Restricted`
 6. Set new execution policy: (Note that `RemoteSigned` will work only if scripts are unblocked)
 
 ```powershell
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
 ```
 
 7. Move to C root drive, this is where you extracted your downloaded zip file:
@@ -212,7 +211,7 @@ Most paths are auto-searched and variables are updated, otherwise you get warnin
 on how to fix the problem,
 If needed, you can find these installation variables in individual scripts inside `Rules` folder.
 
-10. Back to Powershell console and type into console:
+10. Back to PowerShell console and type into console:
 
 ```powershell
 .\SetupFirewall.ps1
@@ -223,14 +222,14 @@ hit enter and you will be prompted what kind of rulesets you want.
 11. Follow prompt output, (ex. hit enter to accept default action),
 it will take at least 10 minutes of your attention.
 
-12. If you encounter errors or warnings, you have several options such as, ignore the errors/warnings
+12. If you encounter errors or warnings, you have options such as, ignore the errors/warnings
 or update script that produced the error and re-run that script once again later.
 
 13. Once execution is done recall execution policy from step 5 and type:
 (ie. if it was "RemoteSigned" which is default for PowerShell Core)
 
 ```powershell
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 ```
 
 14. Now that rules are applied you might need to adjust some of them in Local Group Policy,
@@ -239,10 +238,11 @@ some rules, rules for programs which don't exist need to be made additionally.
 
 15. If you're unable to connect to internet after applying these rules you have several options:
 
+- It is recommended that you reboot system first because some rules might not be active yet
 - you can temporarily open outbound firewall in GPO or [Disable firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/DisableFirewall.md)
 - you can troubleshoot problems: [Network troubleshooting detailed guide](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/NetworkTroubleshooting.md)
 - you can [Reset Firewall to previous state](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/ResetFirewall.md)
-- take a look into `Readme` folder for more troubleshooting options
+- take a look into `Readme` folder for more troubleshooting options and documentation
 
 ## Where are my rules?
 
@@ -252,8 +252,7 @@ Rules are loaded into Local group policy, follow below steps to open local group
 2. Right click on `secpol.msc` and click `Run as administrator`
 3. Expand node: `Windows Defender Firewall with Advanced Security`
 4. Expand node: `Windows Defender Firewall with Advanced Security - Local Group Policy Object`
-5. Click on either `Inbound` or `Outbound` node to view and manage rules you applied with Powershell
-script.
+5. Click on either `Inbound` or `Outbound` node to view and manage rules you applied with PowerShell.
 
 ## Applying individual rulesets
 
@@ -263,10 +262,10 @@ If you want to apply only specific rules there are 2 ways to do this:
 and hit enter to skip current ruleset.
 
 2. Inside powershell navigate to folder containing the ruleset script you want,
-and execute individual Powershell script.
+and execute individual PowerShell script.
 
-3. You might want to run `SetupProfile.ps1` to apply default firewall behavior if it's not set
-already, or you can do it manually in GPO but with limited power.
+3. You might want to run `SetupProfile.ps1` afterwards to apply default firewall behavior if it's
+not set already, or you can do it manually in GPO but with limited power.
 "limited power" means `SetupProfile.ps1` configures some firewall parameters which can't be
 adjusted in firewall GUI.
 
@@ -292,10 +291,10 @@ Note that you will also need to re-import your exported GPO rules if you had the
 
 There are 2 ways to manage your rules:
 
-1. Using Local Group Policy, this method gives you basic freedom on what you can do with the rules,
+1. Using Local Group Policy, this method gives you basic freedom on what you can do with project rules,
 such as disabling them or changing some attributes and adding new rules. For more information see
 [ManageGPOFirewall.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/ManageGPOFirewall.md)
-2. Editing Powershell scripts, this method gives you full control, you can improve the rules,
+2. Editing PowerShell scripts, this method gives you full control, you can improve the rules,
 add new ones or screw them up.
 
 What ever your setup is, you will surely need to perform additional work such as adding more rules
@@ -309,7 +308,7 @@ unlike master branch which is updated from develop branch once in a while and
 not before all scripts are fully tested, meaning master brach is stable.
 
 So if you're fine to experiment with development version switch to "develop" branch and try
-it out, otherwise stick to master for example if development version produces errors for you.
+it out, otherwise if development version produces errors for you switch back to "master".
 
 There are two methods to be up to date with firewall:
 
@@ -318,13 +317,14 @@ switch to either master or develop branch, next use "Clone or download" button a
 download project.
 
 2. Second method is good if you want to do it in powershell console without visiting this site,
-you will need git (link above), github account, a fork of this repository in your account and optionally
+you will need [git](https://git-scm.com/downloads), [github account](https://github.com/join),
+a [fork](https://guides.github.com/activities/forking) of this repository in your account and
 [SSH key](https://help.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account)
 to check for new updates on daily, weekly or what ever other basis you want,
 follow below steps to check for updates once you installed git and cloned your own fork:
 
-- Right click on Start button in Windows system
-- Click `Windows Powershell` to open Powershell
+- Right click on Start button in Windows
+- Click `Windows PowerShell` to open PowerShell
 - First navigate to folder where your instance of WindowsFirewallRuleset instance is, for example:
 - Type: `dir` to list directories, ```cd SomeDirectoryName``` to move to some directory or
 ```cd ..``` to go one directory back
@@ -352,7 +352,8 @@ to tell git you want updates from master (stable) branch:
 Of course you can switch from one branch to another with git in powershell as many times as you
 want and all files will be auto updated without the need to re-download or re-setup anything.
 
-Keep in mind that you need to save and upload your modification yourself, for more info see [git documentation](https://git-scm.com/doc)
+Keep in mind that you need to save and upload your modification to your fork,
+for more info on how to use git see [git documentation](https://git-scm.com/doc)
 
 That's it, your scripts are now up to date, execute them as you desire (or follow steps from
 "Quick start" section) to apply changes to your firewall.
@@ -385,9 +386,9 @@ what is this supposed to allow or block is not acceptable.
 
 Inside the [Readme](https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Readme)
 folder you will find useful information not only about this project but also general information on
-how to troubleshoot firewall and network problems, or gather more relevant information.
+how to troubleshoot firewall and network problems, or gather other relevant information.
 
 It might answer some of your questions, for example
 [MonitoringFirewall.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/MonitoringFirewall.md)
-explains how to monitor firewall in real time, you should go ahead and read it!\
+explains how to monitor firewall in real time.\
 It's recommended you read those documents here on github because of formatting and screenshots.

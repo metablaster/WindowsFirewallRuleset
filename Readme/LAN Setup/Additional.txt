@@ -15,7 +15,7 @@ IP Translation configuration (to auto)
 Troubleshooting discovery:
 again Settings -> System -> System info -> Advanced system settings -> Computer name -> Network ID -> this is home computer
 Function Discovery Resource Publication to delayed start (or just restart for quick effect)
-disable IPv6 (may cause unresponsivness if router does not support IPv6)
+disable IPv6 (may cause unresponsiveness if router does not support IPv6)
 Internet Protocol Version 4 (TCP/IPv4) -> WINS -> Enable LMHOSTS lookup
 Remove/uninstall unneeded virtual adapters.
 

@@ -1,5 +1,5 @@
 
-# About this directory
+# Readme directory
 
 Here you will find offline documentation and reference for things such as
 

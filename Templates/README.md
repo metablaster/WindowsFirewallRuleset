@@ -1,5 +1,5 @@
 
-# About this directory
+# Templates directory
 
 Contains template scripts and modules for this project
 

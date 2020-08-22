@@ -1,5 +1,5 @@
 
-# About this directory
+# Test directory
 
 Root directory for all unit tests
 
