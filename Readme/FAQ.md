@@ -45,7 +45,7 @@ Otherwise if you're trying to administer firewall on remote machines, make sure 
 1. "Windows Remote Administration" service is running.
 2. "PowerShell remoting" is configured and enabled on remote machine
 
-## Does this firewall give me the right protection?
+## Does this firewall give me the right protection
 
 Good firewall setup is essential for computer security, and, if not misused then the answer is yes
 but only for the firewall (network) part of protection.

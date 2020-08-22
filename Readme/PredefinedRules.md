@@ -20,7 +20,7 @@ are listed below.
 
 # Grouping predefined rules
 
-TODO: following information is not up to date
+TODO: following information is out of date
 
 Predefined group or comment / new group
 

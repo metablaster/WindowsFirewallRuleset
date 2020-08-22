@@ -48,23 +48,46 @@ project root folder
 Recommended extensions in workspace are as follows:
 
 1. [TODO tree](https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree)
-required to easily navigate TODO, HACK and NOTE comments located in source files.
+
+    Required to easily navigate TODO, HACK and NOTE comments located in source files.
+
 2. [PowerShell](https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell)
-Should be obvious, syntax highlighting, intellisense, formatting etc.
+
+    Should be obvious, syntax highlighting, intellisense, formatting etc.
+
 3. [Markdownlint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint)
-helps to format and write better markdown, you get a list of problems in VSCode and fix them.
+
+    Helps to format and write better markdown, you get a list of problems in VSCode and fix them.
+
 4. [Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker)
-helps to spell words correctly, you get a list of misspelled words in VSCode and fix them
+
+    Helps to spell words correctly, you get a list of misspelled words in VSCode and fix them
+
 5. [Highlight Dodgy Characters](https://marketplace.visualstudio.com/items?itemName=nachocab.highlight-dodgy-characters)
-helps to detect bad chars aka. gremlins, which cause issues such as unable to save file
-in UTF-8 format
+
+    Helps to detect bad chars aka. gremlins, which cause issues such as unable to save file
+    in UTF-8 format
+
 6. [Bookmarks](https://marketplace.visualstudio.com/items?itemName=alefragnani.Bookmarks)
-Helps you to bookmark various places in project to easily navigate back and forth and to keep less
-in your head.
+
+    Helps you to bookmark various places in project to easily navigate back and forth.
+
 7. [Rainbow CSV](https://marketplace.visualstudio.com/items?itemName=mechatroner.rainbow-csv)
-Firewall rules can be exported into CSV file, this extension provides syntax highlighting for CSV files
+
+    Firewall rules can be exported into CSV file, this extension provides syntax highlighting for
+    CSV files
+
 8. [GitLens](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens)
-It provides so many great features for git inside VSCode it can't be explained in one line
+
+    It provides so many great features for git inside VSCode it can't be explained in one line
+
+9. [Markdown All in One](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one)
+
+    Provides markdown language features
+
+10. [XML Tools](https://marketplace.visualstudio.com/items?itemName=DotJoshJohnson.xml)
+
+    Useful module xml files navigation
 
 The continuation of before mentioned link for PowerShell, gpg, ssh etc. is to visit `Config\ProjectSettings.ps1`
 located in project root directory, at a minimum you should set following variables to `$true`
@@ -215,6 +238,7 @@ what this rule is about and easily conclude whether to enable/disable rule or
 allow/block network traffic.
 
 For comment based help see:
+
 1. [About Comment-based Help](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_comment_based_help?view=powershell-7)
 2. [Examples of Comment-Based Help](https://docs.microsoft.com/en-us/powershell/scripting/developer/help/examples-of-comment-based-help?view=powershell-7)
 
@@ -295,7 +319,3 @@ So it's an ongoing effort that by no means gets fulfilled.
 I recommend you start at looking into [TODO](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/TODO.md)
 list and also use "TODO tree" extension to see even more todo's, unless you have specific ideas or
 recommendations.
-
-This all together may seem like a lot, but I preffer to put these things in front of you right away
-so that you can decide in peace, rather than bothering you with best practiced **AFTER** you decided
-to become part of this project.

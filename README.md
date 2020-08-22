@@ -39,7 +39,24 @@ master script to your firewall.
 - All the rules are loaded into Local Group Policy (GPO),
 giving you full power over the default Windows firewall.
 
-## What are the core benefits of this firewall/project?
+## Table of Contents
+
+- [About Windows Firewall Ruleset](#about-windows-firewall-ruleset)
+  - [Table of Contents](#table-of-contents)
+  - [What are the core benefits of this firewall/project](#what-are-the-core-benefits-of-this-firewallproject)
+  - [License](#license)
+  - [Minimum supported system requirements](#minimum-supported-system-requirements)
+  - [I don't have Windows 10 x64 or Windows Server x64](#i-dont-have-windows-10-x64-or-windows-server-x64)
+  - [Quick start](#quick-start)
+  - [Where are my rules](#where-are-my-rules)
+  - [Applying individual rulesets](#applying-individual-rulesets)
+  - [Deleting rules](#deleting-rules)
+  - [Manage loaded rules](#manage-loaded-rules)
+  - [Checking for updates](#checking-for-updates)
+  - [Contributing or suggestions](#contributing-or-suggestions)
+  - [More information and help](#more-information-and-help)
+
+## What are the core benefits of this firewall/project
 
 1. Unlike Windows firewall in control panel, these rules are loaded into GPO firewall
 (Local group policy), meaning random programs which install rules as part of their installation
@@ -63,7 +80,7 @@ in default Windows firewall this is not possible unless you have rules for every
 program/service, thanks to this collection of rules setting default outbound to block
 requires very little additional work.
 
-## Licenses
+## License
 
 This project **"Windows Firewall Ruleset"** is licensed under **MIT** license.\
 3rd party and sublicensed code is located either inside their own folders or inside folders called
@@ -173,70 +190,70 @@ PowerShell Core as Administrator
 [How to open Windows PowerShell](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/WindowsPowerShell.md)
 5. Type or copy/paste following commands and hit enter for each
 
-```powershell
-Get-ExecutionPolicy
-```
+    ```powershell
+    Get-ExecutionPolicy
+    ```
 
-Remember what the output of the above command is, note that PowerShell Core defaults to `RemoteSigned`
-while Windows PowerShell defaults to `Restricted`
+    Remember what the output of the above command is, note that PowerShell Core defaults to `RemoteSigned`
+    while Windows PowerShell defaults to `Restricted`
 
 6. Set new execution policy: (Note that `RemoteSigned` will work only if scripts are unblocked)
 
-```powershell
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
-```
+    ```powershell
+    Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
+    ```
 
 7. Move to C root drive, this is where you extracted your downloaded zip file:
 
-```powershell
-cd C:\
-```
+    ```powershell
+    cd C:\
+    ```
 
 8. cd into that folder, of course rename the command if your extracted folder is called something else:
 
-```powershell
-cd WindowsFirewallRuleset-master
-```
+    ```powershell
+    cd WindowsFirewallRuleset-master
+    ```
 
 9. At this point you should "unblock" all project files first by executing the script called `UnblockProject.ps1`,
 btw. project files were blocked by Windows to prevent users from running untrusted script code
 downloaded from internet:
 
-```powershell
-.\UnblockProject.ps1
-```
+    ```powershell
+    .\UnblockProject.ps1
+    ```
 
-9. Rules for programs such as internet browser, Visual Studio etc. depend on installation variables.\
+10. Rules for programs such as internet browser, Visual Studio etc. depend on installation variables.\
 Most paths are auto-searched and variables are updated, otherwise you get warning and description
 on how to fix the problem,
 If needed, you can find these installation variables in individual scripts inside `Rules` folder.
 
-10. Back to PowerShell console and type into console:
+11. Back to PowerShell console and type into console:
 
-```powershell
-.\SetupFirewall.ps1
-```
+    ```powershell
+    .\SetupFirewall.ps1
+    ```
 
-hit enter and you will be prompted what kind of rulesets you want.
+    hit enter and you will be prompted what kind of rulesets you want.
 
-11. Follow prompt output, (ex. hit enter to accept default action),
+12. Follow prompt output, (ex. hit enter to accept default action),
 it will take at least 10 minutes of your attention.
 
-12. If you encounter errors or warnings, you have options such as, ignore the errors/warnings
+13. If you encounter errors or warnings, you have options such as, ignore the errors/warnings
 or update script that produced the error and re-run that script once again later.
 
-13. Once execution is done recall execution policy from step 5 and type:
+14. Once execution is done recall execution policy from step 5 and type:
 (ie. if it was "RemoteSigned" which is default for PowerShell Core)
 
-```powershell
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
-```
+    ```powershell
+    Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+    ```
 
-14. Now that rules are applied you might need to adjust some of them in Local Group Policy,
+15. Now that rules are applied you might need to adjust some of them in Local Group Policy,
 not all the rules are enabled by default and you might want to toggle default Allow/Block behavior for
 some rules, rules for programs which don't exist need to be made additionally.
 
-15. If you're unable to connect to internet after applying these rules you have several options:
+16. If you're unable to connect to internet after applying these rules you have several options:
 
 - It is recommended that you reboot system first because some rules might not be active yet
 - you can temporarily open outbound firewall in GPO or [Disable firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/DisableFirewall.md)
@@ -244,7 +261,7 @@ some rules, rules for programs which don't exist need to be made additionally.
 - you can [Reset Firewall to previous state](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/ResetFirewall.md)
 - take a look into `Readme` folder for more troubleshooting options and documentation
 
-## Where are my rules?
+## Where are my rules
 
 Rules are loaded into Local group policy, follow below steps to open local group policy.
 
@@ -313,7 +330,7 @@ it out, otherwise if development version produces errors for you switch back to 
 There are two methods to be up to date with firewall:
 
 1. First method requires you to download scripts, first use the "branch" button here on this site to
-switch to either master or develop branch, next use "Clone or download" button and either clone or
+switch to either master or develop branch, next use "Code" button and either clone or
 download project.
 
 2. Second method is good if you want to do it in powershell console without visiting this site,
@@ -330,7 +347,8 @@ follow below steps to check for updates once you installed git and cloned your o
 ```cd ..``` to go one directory back
 - Type: (or copy paste command(s) and hit enter) ```cd WindowsFirewallRuleset```
 to move into WindowsFirewallRuleset folder
-- Following command (SSH) is typed only once for initial setup:
+
+Following command (SSH) is typed only once for initial setup:
 
 ```git remote add upstream git@github.com:metablaster/WindowsFirewallRuleset.git```
 

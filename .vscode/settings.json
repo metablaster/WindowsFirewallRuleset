@@ -19,11 +19,13 @@
 	"workbench.colorCustomizations": {
 		"editorRuler.foreground": "#4063ff"
 	},
-	"editor.trimAutoWhitespace": true,
-	"editor.insertSpaces": false,
 	"editor.formatOnPaste": true,
 	"editor.formatOnSave": true,
 	"editor.formatOnType": true,
+	"editor.autoIndent": "full",
+	"editor.wordWrap": "off",
+	"editor.trimAutoWhitespace": true,
+	"editor.insertSpaces": false,
 	// PSUseConsistentIndentation
 	"editor.detectIndentation": false,
 	"editor.tabSize": 4,
@@ -143,5 +145,10 @@
 			"TODO",
 			"FIX"
 		]
+	},
+	"[markdown]": {
+		"editor.wordWrap": "off",
+		"editor.detectIndentation": true,
+		"editor.insertSpaces": true,
 	}
 }
