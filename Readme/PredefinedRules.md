@@ -20,8 +20,6 @@ are listed below.
 
 # Grouping predefined rules
 
-TODO: following information is out of date
-
 Predefined group or comment / new group
 
 1. mDNS -> Basic Networking - IPv4

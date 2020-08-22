@@ -29,7 +29,8 @@
 - Modules
 
   - Improved SID conversion function
-  - Added function to detect file encoding, needed to verify rules before importing them
+  - Added function to detect file encoding, needed to verify rules before importing them, and also
+  to be able to share logs and other project files between Windows PowerShell and Core edition.
   - Renamed modules to better fit with project naming convention
   - Moved few functions to different modules
   - Reorganized module structure according to community best practices
@@ -132,7 +133,7 @@
   - Added JSON settings for recommended extensions
   - Added initial launch configurations for debugger
   - Code formatted and updated according to PSScriptAnalyzer rules
-  - TODO list categorized according to area and priority, duplicates removed
+  - todo list categorized according to area and priority, duplicates removed
   - Markdown formatted according to markdownlint rules
   - Entry project spellchecked
   - Added regex samples to query rules inside scripts for bulk operations
@@ -172,7 +173,7 @@
   - Symbols and keywords have their casing consistent and updated
   - Strict mode is now on, latest level
   - Support for both editions of PowerShell, Desktop and Core
-  - Modules, comments, TODO list, help and readme files are updated
+  - Modules, comments, todo list, help and readme files are updated
   - All files converted to UTF-8 and Tabs-4 (CRLF), gitattributes updated few new file types
 
 # Changelog v0.2
@@ -200,5 +201,5 @@
 
   - Make all files use tabs instead of spaces
   - Expand modules to include correct comments, help and manifest files
-  - A few more TODO's, notes and relevant comments
+  - A few more todo's, notes and relevant comments
   - Reorganize and split scripts with rules for multiple targets

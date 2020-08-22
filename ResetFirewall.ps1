@@ -93,7 +93,7 @@ Set-NetFirewallSetting -PolicyStore $PolicyStore -EnablePacketQueuing NotConfigu
 # TODO: Implement removing only project rules.
 #
 
-# NOTE: we need to check if there are rules present to avoid errors about "no object found"
+# TODO: we need to check if there are rules present to avoid errors about "no object found"
 # Needed also to log actual rule removal errors
 Write-Information -Tags "User" -MessageData "INFO: Removing outbound rules..." @Logs
 $OutboundCount = $(Get-NetFirewallRule -PolicyStore $PolicyStore -Direction Outbound -ErrorAction Ignore | Measure-Object).Count

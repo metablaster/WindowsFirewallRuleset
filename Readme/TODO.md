@@ -3,41 +3,36 @@
 
 This is a project global list which applies to several or all scripts.
 
-For smaller TODO's local to specific scripts and files see individual files, for example with
-CTRL + F in VSCode and search for "TODO".
+For smaller todo's local to specific scripts and files see individual files, you can use workspace
+recommended extension todo-tree to navigate todo, HACK and NOTE tags.
 
-If you installed "TODO Tree" extension as discussed in
-[CONTRIBUTING.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/CONTRIBUTING.md)
-then then this process should be much easier.
+Note that some todo's listed here are are duplicate of todo's inside individual scripts, this is
+intentionally for important todo's to make is easier to tell where to look at while resolving this list.
 
-Note that some TODO's listed here are are duplicate of TODO's inside individual scripts, this is
-intentionally to make is easier to tell where to look at while resolving this list.
+todo's in this file are categorized into following sections:
 
-TODO's in this file are categorized into following sections:
-
-1. Ongoing
-2. High priority
-3. Medium priority
-4. Low priority
-5. Done
-
-"Ongoing" means never ending or continuous work
-"Done" obviously means it's done, it's kept here for reference.
+1. Ongoing              Never ending or continuous work
+2. High priority        Must be resolved ASAP
+3. Medium priority      Important
+4. Low priority         Not very important
+5. Done                 It's done and kept here for reference.
 
 ## Ongoing
 
-1. Code style
-
-    - Limit code to 100-120 column rule.
-
-2. Modules
+1. Modules
 
     - 3rd party scripts and modules need to be checked for updates
     - Find-Installation function is hungry for constant updates and improvements
 
-3. Project scripts
+2. Project scripts
 
     - Resolving existing and enabling new/disabled analyzer warnings
+    - Spellchecking files
+    - Move duplicate and global todo's from scripts here into global todo list
+
+3. Code style
+
+    - Limit code to 100-120 column rule.
 
 ## High priority
 
@@ -54,7 +49,6 @@ TODO's in this file are categorized into following sections:
     - Change bool parameters to switch where possible
     - Revisit naming convention for ConvertFrom/ConvertTo it's not clear what is being converted,
     some other functions also have odd names
-    - Versioning of module should be separate from project versioning
 
 2. Project scripts
 
@@ -68,18 +62,19 @@ TODO's in this file are categorized into following sections:
     - Rules to fix: vcpkg, msys2, store apps for admins, internet browser (auto loads)
     - Now that common parameters are removed need to update the order of rule parameters,
     also not all are the same.
-    - Installation variables must be empty in development mode only to be able to test program
-    search functions, for release providing a path is needed to prevent "fix" info messages
     - Variable to conditionally apply rules for Administrators
 
 4. Test and debugging
 
     - Some tests fail to run in non "develop" mode due to missing variables
-    - Need to test rules without "ProgramRoot" variable to see if searching works
+    - Installation variables must be empty in development mode only to be able to test program
+    search functions, for release providing a path is needed to prevent "fix" info messages
     - Need global test variable to set up valid Windows username which is performing tests
     - For Write-Debug $PSBoundParameters.Values check if it's in process block or begin block,
     make sure wanted parameters are shown, make sure values are visible instead of object name
-    - Failure tests must use try/catch and write to information stream, see Get-SystemSKU test
+    - We should use try/catch in test scripts to avoid writing errors and write information instead,
+    So that `Run-AllTests.ps1` gets clean output, not very useful if testing with PS Core since
+    -CIM call will fail, see Get-SystemSKU test
 
 5. Code style
 
@@ -108,7 +103,7 @@ TODO's in this file are categorized into following sections:
     - Provide following keywords in function comments: .DESCRIPTION .LINK .COMPONENT
     - DefaultParameterSetName for functions with parameter sets is missing
     - Revisit how functions return and what they return, return keyword vs Write-Output,
-    if piping is needed after all
+    if pipeline support is needed for that function
     - We probably don't need VSSetup module
     - Line numbers for verbose and debug messages
     - Use begin/process/end to make functions work on pipeline
@@ -118,10 +113,10 @@ TODO's in this file are categorized into following sections:
     - Some functions return multiple return types, how to use [OutputType()]?
     - Modules are named "AllPlatforms" or "Windows" however they contain platform specific or
     non platform specific functions, need to revisit naming convention
-    - Functions which use ShouldProcess must not ask for additional input
+    - Functions which use ShouldProcess must not ask for additional input, but use additional
+    ShouldProcess instead.
     - Write-Error will fail if -TargetObject is not set, in cases where this is possible we should
-    supply string instead.
-    See ComputerInfo\Get-ConfiguredAdapter for example
+    supply string instead. See ComputerInfo\Get-ConfiguredAdapter for example
     - 3rd party modules are not consistent with our own modules regarding folder and structure and
     high level implementation
     - Some function variables such as "ComputerNames" take array or values, make sure this functionality
@@ -134,7 +129,7 @@ TODO's in this file are categorized into following sections:
     - make possible to apply or enable only rules relevant for current firewall profile
     - Add #Requires -Modules to scripts to remove module inclusions and load variables
     - Make $WhatIfPreference for rules, we should skip everything except rules.
-    - For remote computers we ComputerName variables/parameters but this could also be
+    - For remote computers need ComputerName variables/parameters, note this could also be
     learned/specified with PolicyStore parameter
     - Select-Object -Last 1 instead of -First 1 to get highest value, need to verify
 
@@ -157,10 +152,7 @@ TODO's in this file are categorized into following sections:
 4. Test and debugging
 
     - Move NET.IP tests into test folder, clean up directory add streams
-    - Convert tests to use Pester if possible or separate them into:
-    pester tests and experiment tests
-    - What should be initial values for ProgramRoot variables in rule scripts? we should remove
-    known non existent paths and handle empty strings to prevent INFO messages for conversion.
+    - Convert tests to use Pester if possible or separate them into pester tests and experiment tests
     - Many test cases are local to our environment, other people might get different results
     - Test everything on preview Windows
 
@@ -194,11 +186,12 @@ TODO's in this file are categorized into following sections:
     - Some executables won't be found in cases where installed program didn't finish installing
     it self but is otherwise present on system, examples such as steam, games with launcher,
     or built in store apps.
-    We can show additional information about the failure into the console when this is the case
+    We can show additional information about the failure in the console when this is the case
     - Since the scripts are run as Administrator, we need a way to check who is the actual standard
     user, to be able to check for required modules in user directory if not installed system wide.
-    - Checking local or remote computers will be performed multiple in call stack slowing down execution
-    - EXAMPLE comments should be in the form of:
+    - Checking local or remote computers will be performed multiple times in call stack
+    slowing down execution.
+    - EXAMPLE comments, at least 3 examples and should be in the form of:
     PS> Get-Something
     Something output
 
@@ -207,6 +200,8 @@ TODO's in this file are categorized into following sections:
     - Detect if script ran manually, to be able to reset errors and warning status
     - Test already loaded rules if pointing to valid program or service, also query rules which are
     missing Local user owner, InterfaceType and similar for improvement
+    - Script to scan registry for rules installed by malware or hackers,
+    ex. those not consistent with project rules.
     - Count invalid paths in each script
     - Measure execution time for each or all scripts.
     - We use `Set-NetFirewallSetting` but use only a subset of parameters, other parameters are
@@ -222,19 +217,21 @@ TODO's in this file are categorized into following sections:
     - apply local IP to all rules, as optional feature because it depends if IP is static
     - Implement unique names and groups for rules, -Name and -Group parameter vs -Display*
     - Many rules are compatible and can be configured to specify platform for Windows 7 or 8
-    - Not for some executables are not exclusive to all editions of Windows, also some rules such as
-    Nvidia drivers won't work in virtual machine since driver was not installed
+    - Some executables are not exclusive to all editions of Windows, also some rules such as
+    Nvidia drivers won't work in virtual machine since driver was not installed or no hardware access
 
-4. Code style
+4. Test and debugging
+
+5. Code style
 
     - Separate comment based keywords so that there is one line between a comment and next keyword
 
-5. Test and debugging
-    - We should use try/catch in test scripts to avoid writing errors and write information instead,
-    So that `Run-AllTests.ps1` gets clean output, not very useful if testing with PS Core since
-    -CIM call will fail.
+6. Documentation
 
-6. Other
+   - ManageGPOFirwall.md contains no documentation
+   - Predefined rule list in PredefinedRules.md is out of date
+
+7. Other
 
     - Test for 32bit powershell and OS, some rules are 64bit OS specific, 32bit specifics may be
     missing
@@ -242,21 +239,17 @@ TODO's in this file are categorized into following sections:
 
 ## Done
 
-1. Project scripts
+1. Modules
+    - Importing modules from withing modules should be imported into global scope
+    - Versioning of module should be separate from project versioning
+
+2. Project scripts
 
     - Information output is not enabled for modules and probably other code
     - Use `Get-NetConnectionProfile` to aks user / set default network profile
     - Take out of deprecated scripts what can be used, remove the rest
 
-2. Rules
+3. Rules
 
     - rules to fix: qbittorrent, Steam
     - Rules for NVIDIA need constant updates, software changes are breaking
-
-3. Other
-
-    - Move duplicate and global TODO's from scripts here into global TODO list
-    - Check spelling for entry project
-
-4. Modules
-    - Importing modules from withing modules should be imported into global scope
