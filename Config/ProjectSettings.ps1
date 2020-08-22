@@ -194,7 +194,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	New-Variable -Name CheckProjectConstants -Scope Global -Option Constant -Value $null
 
 	# Project version, does not apply to 3rd party modules which follow their own version increment, do not modify
-	New-Variable -Name ProjectVersion -Scope Global -Option Constant -Value $([version]::new(0, 5, 1))
+	New-Variable -Name ProjectVersion -Scope Global -Option Constant -Value $([version]::new(0, 6, 0))
 
 	# Required minimum PSScriptAnalyzer version for code editing
 	New-Variable -Name RequireAnalyzerVersion -Scope Global -Option Constant -Value $([version]::new(1, 19, 1))

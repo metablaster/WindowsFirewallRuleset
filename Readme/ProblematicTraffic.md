@@ -1,8 +1,6 @@
 
 # Problematic network traffic
 
-## About this document
-
 List of dropped packets, blocked programs, how to troubleshoot the problem and possible resolutions.
 
 Note that all of these resolutions here are "forced",

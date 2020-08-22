@@ -1,5 +1,5 @@
 
-# This document describes how to make use of this project on older Windows systems
+# How to make use of this project on older Windows systems
 
 **First, note that Home versions of Windows do not have GPO (Local Group Policy),
 therefore not possible to make use of this project.**

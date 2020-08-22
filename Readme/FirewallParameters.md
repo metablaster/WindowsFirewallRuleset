@@ -4,8 +4,7 @@
 Parameters and their values are not the same as they are displayed in Firewall GUI such as
 GPO or Adv Windows firewall.
 
-This documents helps understand what is what by mapping powershell parameters to GUI
-display equivalents.
+Explain what is what by mapping powershell parameters to GUI display equivalents.
 
 In addition, explanation of other parameters which are not self explanatory or well documented
 and usually need googling out what they do.
@@ -124,7 +123,8 @@ The meaning of this parameter value depends on which parameter it is used:
 This is how parameters are used on command line, most of them need to be enclosed in quotes if
 assigned to variable first.
 
-```Name                  = "NotePadFirewallRule"
+```none
+Name                  = "NotePadFirewallRule"
 DisplayName           = "Firewall Rule for program.exe"
 Group                 = "Program Firewall Rule Group"
 Ensure                = "Present"
@@ -165,7 +165,8 @@ setting in powershell allow us to log **ignored** packets too however this does 
 probably due to a bug.\
 Sample values and their meaning in order how they appear in firewall log file:
 
-```date        = 2019-12-21
+```none
+date        = 2019-12-21
 time        = 13:35:31
 action      = DROP
 protocol    = UDP
