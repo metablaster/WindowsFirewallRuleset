@@ -150,11 +150,11 @@ function Find-UpdatableModule
 		foreach ($TargetModule in $Modules)
 		{
 			# Each module has separate xml help info files for each culture
-			$InfoXMLFiles = "$($TargetModule.ModuleBase)\*helpinfo.xml"
+			$InfoXMLFiles = "$($TargetModule.ModuleBase)\*"
 
 			if (Test-Path -PathType Leaf $InfoXMLFiles)
 			{
-				$Nodes = Get-ChildItem $InfoXMLFiles -ErrorAction SilentlyContinue |
+				$Nodes = Get-ChildItem -Path $InfoXMLFiles -Filter *helpinfo.xml -ErrorAction SilentlyContinue |
 				Select-Xml -Namespace $HelpInfoNamespace -XPath "//helpInfo:UICulture"
 
 				if ($UICulture)

@@ -64,6 +64,15 @@ Export allowing rules
 Export blocking rules
 .PARAMETER Append
 Append exported rules to existing file instead of replacing
+.EXAMPLE
+Export-FirewallRules
+Exports all firewall rules to the CSV file FirewallRules.csv in the current directory.
+.EXAMPLE
+Export-FirewallRules -Inbound -Allow
+Exports all inbound and allowing firewall rules to the CSV file FirewallRules.csv in the current directory.
+.EXAMPLE
+Export-FirewallRules snmp* SNMPRules.json -json
+Exports all SNMP firewall rules to the JSON file SNMPRules.json.
 .NOTES
 Author: Markus Scholtes
 Version: 1.02
@@ -80,15 +89,7 @@ Changes by metablaster - August 2020:
 8. Added parameter to export according to rule group
 9. Changed minor flow and logic of execution
 10. Make output formatted and colored
-.EXAMPLE
-Export-FirewallRules
-Exports all firewall rules to the CSV file FirewallRules.csv in the current directory.
-.EXAMPLE
-Export-FirewallRules -Inbound -Allow
-Exports all inbound and allowing firewall rules to the CSV file FirewallRules.csv in the current directory.
-.EXAMPLE
-Export-FirewallRules snmp* SNMPRules.json -json
-Exports all SNMP firewall rules to the JSON file SNMPRules.json.
+TODO: export to excel
 #>
 function Export-FirewallRules
 {

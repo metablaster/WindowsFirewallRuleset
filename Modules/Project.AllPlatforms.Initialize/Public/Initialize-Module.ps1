@@ -35,7 +35,7 @@ prompted to install or update them.
 Outdated or missing modules can cause strange issues, this function ensures latest modules are
 installed and in correct order, taking into account failures that can happen while
 installing or updating modules
-.PARAMETER ModuleFullName
+.PARAMETER FullyQualifiedName
 Hash table with a minimum ModuleName and ModuleVersion keys, in the form of ModuleSpecification
 .PARAMETER Repository
 Repository name from which to download module such as PSGallery,
@@ -85,7 +85,7 @@ function Initialize-Module
 		[Parameter(Mandatory = $true, Position = 0,
 			HelpMessage = "Specify module to check in the form of ModuleSpecification object")]
 		[ValidateNotNullOrEmpty()]
-		[hashtable] $ModuleFullName,
+		[hashtable] $FullyQualifiedName,
 
 		[Parameter()]
 		[ValidatePattern("^[a-zA-Z]+$")]
@@ -111,13 +111,13 @@ function Initialize-Module
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# Validate module specification
-	if (!($ModuleFullName.Count -ge 2 -and
-			($ModuleFullName.ContainsKey("ModuleName") -and $ModuleFullName.ContainsKey("ModuleVersion"))))
+	if (!($FullyQualifiedName.Count -ge 2 -and
+			($FullyQualifiedName.ContainsKey("ModuleName") -and $FullyQualifiedName.ContainsKey("ModuleVersion"))))
 	{
-		$Message = "ModuleSpecification parameter for: $($ModuleFullName.ModuleName) is not valid"
+		$Message = "ModuleSpecification parameter for: $($FullyQualifiedName.ModuleName) is not valid"
 		if ($Required)
 		{
-			Write-Error -Category InvalidArgument -TargetObject $ModuleFullName -Message $Message
+			Write-Error -Category InvalidArgument -TargetObject $FullyQualifiedName -Message $Message
 			return $false
 		}
 
@@ -126,8 +126,8 @@ function Initialize-Module
 	}
 
 	# Get required module from input
-	[string] $ModuleName = $ModuleFullName.ModuleName
-	[version] $RequireVersion = $ModuleFullName.ModuleVersion
+	[string] $ModuleName = $FullyQualifiedName.ModuleName
+	[version] $RequireVersion = $FullyQualifiedName.ModuleVersion
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if module $ModuleName is installed and which version"
 
@@ -139,7 +139,7 @@ function Initialize-Module
 	{
 		if ($TargetVersion -ge $RequireVersion)
 		{
-			if ($ProviderName -eq "PowerShellGet")
+			if ($ModuleName -eq "PowerShellGet")
 			{
 				# Let other parts of a module know PowerShellGet is up to date
 				Set-Variable -Name HasPowerShellGet -Scope Script -Option ReadOnly -Force -Value $true
@@ -193,6 +193,7 @@ function Initialize-Module
 	$Deny = [System.Management.Automation.Host.ChoiceDescription]::new("&No")
 	$Deny.HelpMessage = "Skip operation"
 
+	# TODO: remove
 	# Check for PowerShellGet only if not processing PowerShellGet
 	if ($ModuleName -ne "PowerShellGet")
 	{
@@ -385,6 +386,7 @@ function Initialize-Module
 	}
 
 	# Setup new choices
+	# HACK: using choices seem to failed later, need try/catch
 	$Accept.HelpMessage = $InfoMessage
 	$Choices.Clear()
 	$Choices += $Accept
@@ -465,7 +467,7 @@ function Initialize-Module
 	if ($Decision -eq $Default)
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if $ModuleName install or update was successful"
-		[PSModuleInfo] $ModuleInfo = Get-Module -FullyQualifiedName $ModuleFullName -ListAvailable
+		[PSModuleInfo] $ModuleInfo = Get-Module -FullyQualifiedName $FullyQualifiedName -ListAvailable
 
 		if ($ModuleInfo)
 		{
@@ -487,7 +489,7 @@ function Initialize-Module
 				}
 			}
 
-			if ($ProviderName -eq "PowerShellGet")
+			if ($ModuleName -eq "PowerShellGet")
 			{
 				# Let other parts of a module know PowerShellGet is up to date
 				Set-Variable -Name HasPowerShellGet -Scope Script -Option ReadOnly -Force -Value $true
@@ -501,7 +503,7 @@ function Initialize-Module
 	if ($Required)
 	{
 		# Installation/update failed or user refused to do so
-		Write-Error -Category NotInstalled -TargetObject $ModuleFullName -Message $Message
+		Write-Error -Category NotInstalled -TargetObject $FullyQualifiedName -Message $Message
 		return $false
 	}
 

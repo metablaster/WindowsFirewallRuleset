@@ -305,6 +305,8 @@ function Initialize-Project
 		if (Initialize-Module @{ ModuleName = "posh-git"; ModuleVersion = $RequirePoshGitVersion } -AllowPrerelease `
 				-InfoMessage "posh-git >= $($RequirePoshGitVersion.ToString()) is recommended for better git experience in PowerShell" ) { }
 
+		# TODO: plaster, psreadline
+
 		# Update help regardless of module updates
 		if ($Develop)
 		{
@@ -328,31 +330,41 @@ function Initialize-Project
 				Write-Information -Tags "User" -MessageData "INFO: Checking online for help updates"
 
 				$CultureNames = "en-US"
+
 				[string[]] $UpdatableModules = Find-UpdatableModule -UICulture $CultureNames |
 				Select-Object -ExpandProperty Name
 
-				# NOTE: using UICulture en-US, otherwise errors may occur
-				$UpdateParams = @{
-					ErrorVariable = "UpdateError"
-					ErrorAction = "SilentlyContinue"
-					UICulture = $CultureNames
-					Module = $UpdatableModules
-				}
-
-				if ($PowerShellEdition -eq "Core")
+				if (!$UpdatableModules)
 				{
-					# The -Scope parameter was introduced in PowerShell Core version 6.1
-					Update-Help @UpdateParams -Scope AllUsers
+					# HACK: may be null, failed on Enterprise edition with 0 found helpinfo files,
+					# even after updating modules and manually running Update-Help which btw. succeeded!
+					Write-Warning -Message "No modules contain HelpInfo files required to update help"
 				}
 				else
 				{
-					Update-Help @UpdateParams
-				}
+					# NOTE: using UICulture en-US, otherwise errors may occur
+					$UpdateParams = @{
+						ErrorVariable = "UpdateError"
+						ErrorAction = "SilentlyContinue"
+						UICulture = $CultureNames
+						Module = $UpdatableModules
+					}
 
-				# In almost all cases there will be some errors, ignore up to 10 errors
-				if ($UpdateError.Count -gt 10)
-				{
-					$UpdateError
+					if ($PowerShellEdition -eq "Core")
+					{
+						# The -Scope parameter was introduced in PowerShell Core version 6.1
+						Update-Help @UpdateParams -Scope AllUsers
+					}
+					else
+					{
+						Update-Help @UpdateParams
+					}
+
+					# In almost all cases there will be some errors, ignore up to 10 errors
+					if ($UpdateError.Count -gt 10)
+					{
+						$UpdateError
+					}
 				}
 			}
 		}

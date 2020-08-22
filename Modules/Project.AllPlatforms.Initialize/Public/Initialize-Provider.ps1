@@ -35,7 +35,7 @@ prompted to install or update them.
 Outdated or missing packages can cause strange issues, this function ensures latest packages are
 installed and in correct order, taking into account failures that can happen while
 installing or updating packages
-.PARAMETER ProviderFullName
+.PARAMETER FullyQualifiedName
 Hash table ProviderName, Version representing minimum required module
 .PARAMETER Name
 Package source name which to assign to registered provider if registration is needed
@@ -64,7 +64,7 @@ for the purpose of testing project code for many environment scenarios that end 
 It should be used in conjunction with the rest of a module "Project.AllPlatforms.Initialize"
 
 There is no "Repository" parameter here like in Initialize-Module, instead it's called ProviderName
-which is supplied in parameter ProviderFullName
+which is supplied in parameter FullyQualifiedName
 Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider
 #>
 function Initialize-Provider
@@ -73,7 +73,7 @@ function Initialize-Provider
 	[CmdletBinding(PositionalBinding = $false)]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
-		[hashtable] $ProviderFullName,
+		[hashtable] $FullyQualifiedName,
 
 		[Parameter()]
 		[string] $Name = "nuget.org",
@@ -107,13 +107,13 @@ function Initialize-Provider
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 		# Validate module specification
-		if (!($ProviderFullName.Count -ge 2 -and
-				($ProviderFullName.ContainsKey("ModuleName") -and $ProviderFullName.ContainsKey("ModuleVersion"))))
+		if (!($FullyQualifiedName.Count -ge 2 -and
+				($FullyQualifiedName.ContainsKey("ModuleName") -and $FullyQualifiedName.ContainsKey("ModuleVersion"))))
 		{
-			$Message = "ModuleSpecification parameter for: $($ProviderFullName.ModuleName) is not valid"
+			$Message = "ModuleSpecification parameter for: $($FullyQualifiedName.ModuleName) is not valid"
 			if ($Required)
 			{
-				Write-Error -Category InvalidArgument -TargetObject $ProviderFullName -Message $Message
+				Write-Error -Category InvalidArgument -TargetObject $FullyQualifiedName -Message $Message
 				return $false
 			}
 
@@ -122,8 +122,8 @@ function Initialize-Provider
 		}
 
 		# Get required provider package from input
-		[string] $ProviderName = $ProviderFullName.ModuleName
-		[version] $RequireVersion = $ProviderFullName.ModuleVersion
+		[string] $ProviderName = $FullyQualifiedName.ModuleName
+		[version] $RequireVersion = $FullyQualifiedName.ModuleVersion
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if provider $ProviderName is installed and which version"
 
