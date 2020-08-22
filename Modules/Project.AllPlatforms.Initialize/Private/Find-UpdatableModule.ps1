@@ -79,6 +79,11 @@ Name                           PowerShellGet
 .OUTPUTS
 [PSCustomObject] module name ready for update
 .NOTES
+This function main purpose is automated development environment setup to be able to perform quick
+setup on multiple computers and virtual operating systems, in cases such as frequent system restores
+for the purpose of testing project code for many environment scenarios that end users may have.
+It should be used in conjunction with the rest of a module "Project.AllPlatforms.Initialize"
+
 TODO: test UICulture from pipeline
 #>
 function Find-UpdatableModule
@@ -95,6 +100,7 @@ function Find-UpdatableModule
 
 		[Parameter(ValueFromPipelineByPropertyName = $true, ParameterSetName = "Name")]
 		[Parameter(ValueFromPipelineByPropertyName = $true, ParameterSetName = "Full")]
+		[ValidatePattern("^[a-z]{2}-[A-Z]{2}$")]
 		[System.Globalization.CultureInfo[]] $UICulture
 	)
 

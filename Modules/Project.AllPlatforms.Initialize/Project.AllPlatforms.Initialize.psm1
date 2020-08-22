@@ -33,6 +33,10 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule $true
 . $PSScriptRoot\..\ModulePreferences.ps1
 
+# This module main purpose is automated development environment setup to be able to perform quick
+# setup on multiple computers and virtual operating systems, in cases such as frequent system restores
+# for the purpose of testing project code for many environment scenarios that end users may have.
+
 # TODO: repository paths whitelist check
 # TODO: should process must be implemented for system changes
 # if (!$PSCmdlet.ShouldProcess("ModuleName", "Update or install module if needed"))

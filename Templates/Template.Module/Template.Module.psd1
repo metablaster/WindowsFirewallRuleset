@@ -22,13 +22,14 @@
 	GUID = "66e38822-834d-4a90-b9c6-9e600a472a0a"
 
 	# Author of this module
-	Author = "your name"
+	# TODO: Update author and Copyright
+	Author = "metablaster zebal@protonmail.ch"
 
 	# Company or vendor of this module
 	# CompanyName = "Unknown"
 
 	# Copyright statement for this module
-	Copyright = "Copyright (C) 2020 your name"
+	Copyright = "Copyright (C) 2020 metablaster zebal@protonmail.ch"
 
 	# Description of the functionality provided by this module
 	Description = "Module manifest template"

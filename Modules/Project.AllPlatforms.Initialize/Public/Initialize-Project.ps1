@@ -58,6 +58,11 @@ None. You cannot pipe objects to Initialize-Project
 .OUTPUTS
 None.
 .NOTES
+This function main purpose is automated development environment setup to be able to perform quick
+setup on multiple computers and virtual operating systems, in cases such as frequent system restores
+for the purpose of testing project code for many environment scenarios that end users may have.
+It should be used in conjunction with the rest of a module "Project.AllPlatforms.Initialize"
+
 TODO: learn required NET version by scanning scripts (ie. adding .COMPONENT to comments)
 TODO: learn repo dir automatically (using git?)
 TODO: we don't use logs in this module
@@ -245,7 +250,7 @@ function Initialize-Project
 
 			if ($TargetGit -lt $RequireGitVersion)
 			{
-				Write-Warning -Message "Git version v$($TargetGit.ToString()) is out of date, recommended version is v$($RequireGitVersion.ToString())"
+				Write-Warning -Message "Git v$($TargetGit.ToString()) is out of date, recommended is git v$($RequireGitVersion.ToString())"
 				Write-Information -Tags "Project" -MessageData "INFO: Please visit https://git-scm.com to download and update"
 			}
 			else
@@ -270,7 +275,7 @@ function Initialize-Project
 
 		# NOTE: Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider
 		# NOTE: Updating PackageManagement and PowerShellGet requires restarting PowerShell to switch to the latest version.
-		if (!(Initialize-Provider @{ ModuleName = "NuGet"; ModuleVersion = $RequireNuGetVersion } `
+		if (!(Initialize-Provider -Required @{ ModuleName = "NuGet"; ModuleVersion = $RequireNuGetVersion } `
 					-InfoMessage "Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider")) { exit }
 
 		Write-Information -Tags "User" -MessageData "INFO: Checking modules"
@@ -281,24 +286,24 @@ function Initialize-Project
 		# PowerShellGet >= 2.2.4 is required otherwise updating modules might fail
 		# NOTE: PowerShellGet has a dependency on PackageManagement, it will install it if needed
 		# For systems with PowerShell 5.0 (or greater) PowerShellGet and PackageManagement can be installed together.
-		if (!(Initialize-Module @{ ModuleName = "PowerShellGet"; ModuleVersion = $RequirePowerShellGetVersion } `
+		if (!(Initialize-Module -Required @{ ModuleName = "PowerShellGet"; ModuleVersion = $RequirePowerShellGetVersion } `
 					-InfoMessage "PowerShellGet >= $($RequirePowerShellGetVersion.ToString()) is required otherwise updating other modules might fail")) { exit }
 
 		# PackageManagement >= 1.4.7 is required otherwise updating modules might fail
-		if (!(Initialize-Module @{ ModuleName = "PackageManagement"; ModuleVersion = $RequirePackageManagementVersion } )) { exit }
-
-		# posh-git >= 1.0.0-beta4 is recommended for better git experience in PowerShell
-		if (Initialize-Module @{ ModuleName = "posh-git"; ModuleVersion = $RequirePoshGitVersion } -AllowPrerelease `
-				-InfoMessage "posh-git >= $($RequirePoshGitVersion.ToString()) is recommended for better git experience in PowerShell" ) { }
+		if (!(Initialize-Module -Required @{ ModuleName = "PackageManagement"; ModuleVersion = $RequirePackageManagementVersion } )) { exit }
 
 		# PSScriptAnalyzer >= 1.19.1 is required otherwise code will start missing while editing
-		if (!(Initialize-Module @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = $RequireAnalyzerVersion } `
+		if (!(Initialize-Module -Required @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = $RequireAnalyzerVersion } `
 					-InfoMessage "PSScriptAnalyzer >= $($RequireAnalyzerVersion.ToString()) is required otherwise code will start missing while editing" )) { exit }
 
 		# Pester is required to run pester tests
 		# TODO: see also on how to get rid of duplicate modules https://pester.dev/docs/introduction/installation
 		if (!(Initialize-Module @{ ModuleName = "Pester"; ModuleVersion = $RequirePesterVersion } `
 					-InfoMessage "Pester >= $($RequirePesterVersion.ToString()) is required to run pester tests" )) { }
+
+		# posh-git >= 1.0.0-beta4 is recommended for better git experience in PowerShell
+		if (Initialize-Module @{ ModuleName = "posh-git"; ModuleVersion = $RequirePoshGitVersion } -AllowPrerelease `
+				-InfoMessage "posh-git >= $($RequirePoshGitVersion.ToString()) is recommended for better git experience in PowerShell" ) { }
 
 		# Update help regardless of module updates
 		if ($Develop)

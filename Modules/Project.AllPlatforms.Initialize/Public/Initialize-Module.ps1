@@ -51,6 +51,9 @@ this parameter is used only if repository is not registered
 Help message used for default choice in host prompt
 .PARAMETER AllowPrerelease
 whether to allow installing beta modules
+.PARAMETER Required
+Controls whether module initialization must succeed, if initialization fails execution stops,
+otherwise only warning is generated
 .EXAMPLE
 PS> Initialize-ModulesRequirement @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = "1.19.1" }
 Checks if PSScriptAnalyzer is up to date, if not user is prompted to update, and if repository
@@ -65,6 +68,11 @@ None. You cannot pipe objects to Initialize-Module
 .OUTPUTS
 None.
 .NOTES
+This function main purpose is automated development environment setup to be able to perform quick
+setup on multiple computers and virtual operating systems, in cases such as frequent system restores
+for the purpose of testing project code for many environment scenarios that end users may have.
+It should be used in conjunction with the rest of a module "Project.AllPlatforms.Initialize"
+
 Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider
 Updating PackageManagement and PowerShellGet requires restarting PowerShell to switch to the latest version
 TODO: Implement initializing for non Administrator users
@@ -94,7 +102,10 @@ function Initialize-Module
 		[switch] $Trusted,
 
 		[Parameter()]
-		[switch] $AllowPrerelease
+		[switch] $AllowPrerelease,
+
+		[Parameter()]
+		[switch] $Required
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -103,9 +114,15 @@ function Initialize-Module
 	if (!($ModuleFullName.Count -ge 2 -and
 			($ModuleFullName.ContainsKey("ModuleName") -and $ModuleFullName.ContainsKey("ModuleVersion"))))
 	{
-		Write-Error -Category InvalidArgument -TargetObject $ModuleFullName `
-			-Message "ModuleSpecification parameter for: $($ModuleFullName.ModuleName) is not valid"
-		return $false
+		$Message = "ModuleSpecification parameter for: $($ModuleFullName.ModuleName) is not valid"
+		if ($Required)
+		{
+			Write-Error -Category InvalidArgument -TargetObject $ModuleFullName -Message $Message
+			return $false
+		}
+
+		Write-Warning -Message $Message
+		return $true
 	}
 
 	# Get required module from input
@@ -122,6 +139,12 @@ function Initialize-Module
 	{
 		if ($TargetVersion -ge $RequireVersion)
 		{
+			if ($ProviderName -eq "PowerShellGet")
+			{
+				# Let other parts of a module know PowerShellGet is up to date
+				Set-Variable -Name HasPowerShellGet -Scope Script -Option ReadOnly -Force -Value $true
+			}
+
 			# Up to date
 			Write-Information -Tags "User" -MessageData "INFO: Module $ModuleName v$TargetVersion meets >= v$RequireVersion"
 			return $true
@@ -150,9 +173,15 @@ function Initialize-Module
 			}
 			else
 			{
-				Write-Error -Category NotInstalled -TargetObject $script:GitInstance `
-					-Message "$ModuleName requires git.exe in PATH"
-				return $false
+				$Message = "$ModuleName requires git.exe in PATH"
+				if ($Required)
+				{
+					Write-Error -Category NotInstalled -TargetObject $script:GitInstance -Message $Message
+					return $false
+				}
+
+				Write-Warning -Message $Message
+				return $true
 			}
 		}
 	}
@@ -164,7 +193,6 @@ function Initialize-Module
 	$Deny = [System.Management.Automation.Host.ChoiceDescription]::new("&No")
 	$Deny.HelpMessage = "Skip operation"
 
-	# TODO: check for NuGet
 	# Check for PowerShellGet only if not processing PowerShellGet
 	if ($ModuleName -ne "PowerShellGet")
 	{
@@ -176,9 +204,15 @@ function Initialize-Module
 
 		if (!$TargetPowerShellGet -or ($TargetPowerShellGet -lt $RequirePowerShellGetVersion))
 		{
-			Write-Error -Category NotInstalled -TargetObject $TargetPowerShellGet `
-				-Message "Module PowerShellGet v$RequirePowerShellGetVersion must be installed before other modules, installed version is v$TargetPowerShellGet"
-			return $false
+			$Message = "Module PowerShellGet v$RequirePowerShellGetVersion must be installed before other modules, installed version is v$TargetPowerShellGet"
+			if ($Required)
+			{
+				Write-Error -Category NotInstalled -TargetObject $TargetPowerShellGet -Message $Message
+				return $false
+			}
+
+			Write-Warning -Message $Message
+			return $true
 		}
 
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Module PowerShellGet v$TargetPowerShellGet found"
@@ -197,7 +231,30 @@ function Initialize-Module
 	{
 		# TODO: could there be multiple repositories with same name in $Repositories variable?
 		$RepositoryList = $Repository
-		# TODO: Prompt to set it as trusted
+
+		if ($Repositories.InstallationPolicy -ne "Trusted")
+		{
+			# Setup choices
+			$Accept.HelpMessage = "Setting to trusted won't ask you in the future for confirmation"
+			$Choices += $Accept
+			$Choices += $Deny
+
+			$Title = "Repository $Repository is not trusted"
+			$Question = "Set $Repository as trusted now?"
+			$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
+
+			if ($Decision -eq $Default)
+			{
+				Set-PSRepository -Name $Repository -InstallationPolicy Trusted
+				$Repositories = Get-PSRepository -Name $Repository
+
+				if ($Repositories.InstallationPolicy -eq "Trusted")
+				{
+					Write-Debug -Message "Repository $Repository set to trusted"
+				}
+			}
+		}
+
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Repository $Repository is registered"
 	}
 	else
@@ -240,9 +297,16 @@ function Initialize-Module
 		if (!$Repositories)
 		{
 			# Registering repository failed or no valid repository exists
-			Write-Error -Category ObjectNotFound -TargetObject $Repositories `
-				-Message "No registered repositories exist"
-			return $false
+			$Message = "No registered repositories exist"
+
+			if ($Required)
+			{
+				Write-Error -Category ObjectNotFound -TargetObject $Repositories -Message $Message
+				return $false
+			}
+
+			Write-Warning -Message $Message
+			return $true
 		}
 		else
 		{
@@ -268,7 +332,7 @@ function Initialize-Module
 	# In PowerShellGet versions 2.0.0 and above, the default is CurrentUser, which does not require elevation for install.
 	# In PowerShellGet 1.x versions, the default is AllUsers, which requires elevation for install.
 	# NOTE: for version 1.0.1 -Scope parameter is not recognized, we'll skip it for very old version
-	# TODO: need to test compatible parameters for outdated Windows PowerShell
+	# HACK: need to test compatible parameters for outdated Windows PowerShell
 	[version] $Version2 = "2.0.0"
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if module $ModuleName version >= v$RequireVersion is available for download"
@@ -288,9 +352,9 @@ function Initialize-Module
 		# However then stable posh-git and similar modules will be installed because of $FoundModule variable
 		# Meaning we must not reuse $FoundModule in that case,
 		# for project this is not urgent since we install modules in correct order
-		# NOTE: -AllowPrerelease will not work if PackageManagement or PowerShellGet is out of date (probably version < 2.0.0)
+		# HACK: -AllowPrerelease will not work if PackageManagement or PowerShellGet is out of date (probably version < 2.0.0)
 		# see: https://github.com/MicrosoftDocs/azure-docs/issues/29999
-		# TODO: for some reason updated dependencies were not loaded, probably because error stopped execution
+		# TODO: for some reason updated module wes not loaded, probably because error stopped execution
 
 		# Try anyway, maybe port is wrong, only first match is considered
 		# NOTE: -InputObject can't be used with -AllowPrerelease, we'll use -AllowPrerelease here to be able to install what is found
@@ -302,15 +366,22 @@ function Initialize-Module
 			Write-Information -Tags "User" -MessageData "INFO: Module $ModuleName v$($FoundModule.Version.ToString()) is selected for download"
 			break
 		}
+		# else error should be displayed
 		# TODO: check for older version and ask for confirmation
 	}
 
 	if (!$FoundModule)
 	{
-		# Registering repository failed or no valid repository exists
-		Write-Error -Category ObjectNotFound -TargetObject $Repositories `
-			-Message "Module $ModuleName version >= v$RequireVersion was not found in any of the following repositories: $RepositoryList"
-		return $false
+		$Message = "Module $ModuleName version >= v$RequireVersion was not found in any of the following repositories: $RepositoryList"
+		if ($Required)
+		{
+			# Registering repository failed or no valid repository exists
+			Write-Error -Category ObjectNotFound -TargetObject $Repositories -Message $Message
+			return $false
+		}
+
+		Write-Warning -Message $Message
+		return $true
 	}
 
 	# Setup new choices
@@ -319,12 +390,17 @@ function Initialize-Module
 	$Choices += $Accept
 	$Choices += $Deny
 
+	$Title = "Recommended"
+	if ($Required)
+	{
+		$Title = "Required"
+	}
+
 	if ($TargetVersion)
 	{
 		Write-Warning -Message "Current module $ModuleName v$($TargetVersion.ToString()) is out of date, recommended version is v$RequireVersion"
 
-		# TODO: maybe recommended maybe required
-		$Title = "Recommended module out of date"
+		$Title += " module out of date"
 		$Question = "Update $ModuleName module now?"
 		$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
 
@@ -365,7 +441,7 @@ function Initialize-Module
 	{
 		Write-Warning -Message "$ModuleName module minimum version v$RequireVersion is recommended but not installed"
 
-		$Title = "Recommended module not installed"
+		$Title += " module not installed"
 		$Question = "Install $ModuleName module now?"
 		$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
 
@@ -380,7 +456,6 @@ function Initialize-Module
 			}
 			else
 			{
-				# TODO: AllowPrerelease may not work here
 				Install-Module -InputObject $FoundModule
 			}
 		}
@@ -412,13 +487,31 @@ function Initialize-Module
 				}
 			}
 
+			if ($ProviderName -eq "PowerShellGet")
+			{
+				# Let other parts of a module know PowerShellGet is up to date
+				Set-Variable -Name HasPowerShellGet -Scope Script -Option ReadOnly -Force -Value $true
+			}
+
 			return $true
 		}
 	}
 
-	# Installation/update failed or user refused to do so
-	Write-Error -Category NotInstalled -TargetObject $ModuleFullName `
-		-Message "Module $ModuleName v$RequireVersion was not installed/updated"
+	$Message = "Module $ModuleName v$RequireVersion was not installed/updated"
+	if ($Required)
+	{
+		# Installation/update failed or user refused to do so
+		Write-Error -Category NotInstalled -TargetObject $ModuleFullName -Message $Message
+		return $false
+	}
 
-	return $false
+	Write-Warning -Message $Message
+	return $true
 }
+
+#
+# Module variables
+#
+
+# Let other parts of a module know status about PowerShellGet
+Set-Variable -Name HasPowerShellGet -Scope Script -Option ReadOnly -Force -Value $false

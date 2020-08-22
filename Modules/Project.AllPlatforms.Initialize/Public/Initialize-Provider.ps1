@@ -48,6 +48,9 @@ whether repository is trusted or not.
 this parameter is used only if repository is not registered
 .PARAMETER InfoMessage
 Optional information displayable to user for choice help message
+.PARAMETER Required
+Controls whether the provider initialization must succeed, if initialization fails execution stops,
+otherwise only warning is generated
 .EXAMPLE
 Initialize-Provider @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Repository "powershellgallery.com"
 .INPUTS
@@ -55,6 +58,11 @@ None. You cannot pipe objects to Initialize-Provider
 .OUTPUTS
 None.
 .NOTES
+This function main purpose is automated development environment setup to be able to perform quick
+setup on multiple computers and virtual operating systems, in cases such as frequent system restores
+for the purpose of testing project code for many environment scenarios that end users may have.
+It should be used in conjunction with the rest of a module "Project.AllPlatforms.Initialize"
+
 There is no "Repository" parameter here like in Initialize-Module, instead it's called ProviderName
 which is supplied in parameter ProviderFullName
 Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider
@@ -73,13 +81,16 @@ function Initialize-Provider
 		[Parameter()]
 		[ValidatePattern("[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)")]
 		[uri] $Location = "https://api.nuget.org/v3/index.json",
-		# TODO: array https://www.nuget.org/api/v2 (used by PSGallery?)
-		# TODO: suggested in Windows PowerShell: https://onegetcdn.azureedge.net/providers/Microsoft.PackageManagement.NuGetProvider-2.8.5.208.dll
+		# HACK: array https://www.nuget.org/api/v2 (used by PSGallery?)
+		# NOTE: suggested in Windows PowerShell: https://onegetcdn.azureedge.net/providers/Microsoft.PackageManagement.NuGetProvider-2.8.5.208.dll
 		[Parameter()]
 		[switch] $Trusted,
 
 		[Parameter()]
-		[string] $InfoMessage = "Accept operation"
+		[string] $InfoMessage = "Accept operation",
+
+		[Parameter()]
+		[switch] $Required
 	)
 
 	begin
@@ -99,9 +110,15 @@ function Initialize-Provider
 		if (!($ProviderFullName.Count -ge 2 -and
 				($ProviderFullName.ContainsKey("ModuleName") -and $ProviderFullName.ContainsKey("ModuleVersion"))))
 		{
-			Write-Error -Category InvalidArgument -TargetObject $ProviderFullName `
-				-Message "ModuleSpecification parameter for: $($ProviderFullName.ModuleName) is not valid"
-			return $false
+			$Message = "ModuleSpecification parameter for: $($ProviderFullName.ModuleName) is not valid"
+			if ($Required)
+			{
+				Write-Error -Category InvalidArgument -TargetObject $ProviderFullName -Message $Message
+				return $false
+			}
+
+			Write-Warning -Message $Message
+			return $true
 		}
 
 		# Get required provider package from input
@@ -118,7 +135,12 @@ function Initialize-Provider
 		{
 			if ($TargetVersion -ge $RequireVersion)
 			{
-				# Up to date
+				if ($ProviderName -eq "NuGet")
+				{
+					# Let other parts of a module know NuGet is up to date
+					Set-Variable -Name HasNuGet -Scope Script -Option ReadOnly -Force -Value $true
+				}
+
 				Write-Information -Tags "User" -MessageData "INFO: Provider $ProviderName v$TargetVersion meets >= v$RequireVersion"
 				return $true
 			}
@@ -145,15 +167,39 @@ function Initialize-Provider
 		# IsTrusted : False
 		# IsRegistered : True
 		# TODO: If not found "PowerShell" may ask to install, and if that fails it may return package source anyway (seen in: Windows PowerShell)
-		[PSCustomObject[]] $PackageSources = Get-PackageSource -ProviderName $ProviderName # -ErrorAction SilentlyContinue # -Name $Name
+		# NOTE: This is controlled with powershell.promptToUpdatePackageManagement
+		[PSCustomObject[]] $PackageSources = Get-PackageSource -ProviderName $ProviderName -ErrorAction SilentlyContinue # -Name $Name
 
 		if ($PackageSources)
 		{
 			$SourcesList = $ProviderName
-			# TODO: Prompt to set it as trusted
+
+			if (!$PackageSources.IsTrusted)
+			{
+				# Setup choices
+				$Accept.HelpMessage = "Setting to trusted won't ask you in the future for confirmation"
+				$Choices += $Accept
+				$Choices += $Deny
+
+				$Title = "Package source $ProviderName is not trusted"
+				$Question = "Set $ProviderName as trusted now?"
+				$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
+
+				if ($Decision -eq $Default)
+				{
+					Set-PackageSource -Name $ProviderName -Trusted
+					$PackageSources = Get-PackageSource -ProviderName $ProviderName
+
+					if ($PackageSources.IsTrusted)
+					{
+						Write-Debug -Message "Package source $ProviderName set to trusted"
+					}
+				}
+			}
+
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Package source $ProviderName is registered"
 		}
-		else
+		else # Register provided package source
 		{
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Package source $ProviderName is not registered"
 
@@ -173,7 +219,7 @@ function Initialize-Provider
 				# Register package source to be able to use it
 				Register-PackageSource -Name $Name -ProviderName $ProviderName -Location $Location -Trusted:$Trusted
 
-				$SourceObject = Get-PackageSource -Name $Name -ProviderName $ProviderName -ErrorAction SilentlyContinue
+				$SourceObject = Get-PackageSource -Name $Name -ProviderName $ProviderName # -ErrorAction SilentlyContinue
 
 				if ($SourceObject)
 				{
@@ -198,10 +244,16 @@ function Initialize-Provider
 
 			if (!$PackageSources)
 			{
-				# Registering repository failed or no valid package source exists
-				Write-Error -Category ObjectNotFound -TargetObject $PackageSources `
-					-Message "No registered package source exist"
-				return $false
+				$Message = "No registered package source exist"
+				if ($Required)
+				{
+					# Registering repository failed or no valid package source exists
+					Write-Error -Category ObjectNotFound -TargetObject $PackageSources -Message $Message
+					return $false
+				}
+
+				Write-Warning -Message $Message
+				return $true
 			}
 			else
 			{
@@ -237,7 +289,7 @@ function Initialize-Provider
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking repository $SourceItem for updates"
 
 			[uri] $SourceURI = $SourceItem.Location
-			if (!(Test-NetConnection -ComputerName $SourceURI.Host -Port 443 -InformationLevel Quiet -ErrorAction SilentlyContinue))
+			if (!(Test-NetConnection -ComputerName $SourceURI.Host -Port 443 -InformationLevel Quiet)) # -ErrorAction SilentlyContinue
 			{
 				Write-Warning -Message "Package source $($SourceItem.Name) could not be contacted"
 			}
@@ -252,42 +304,56 @@ function Initialize-Provider
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Finding provider $ProviderName for download failed, trying alternative solution"
 				# Try with Find-Package
 				$FoundProvider = Find-Package -Name $SourceItem.Name -Source $SourceItem.Location -IncludeDependencies `
-					-MinimumVersion $RequireVersion -AllowPrereleaseVersions -ErrorAction SilentlyContinue
+					-MinimumVersion $RequireVersion -AllowPrereleaseVersions # -ErrorAction SilentlyContinue
 			}
 
 			if ($FoundProvider)
 			{
-				Write-Information -Tags "User" -MessageData "INFO: $($FoundProvider.Name) provider v$($FoundProvider.Version.ToString()) is selected for download"
+				Write-Information -Tags "User" -MessageData "INFO: Provider $($FoundProvider.Name) v$($FoundProvider.Version.ToString()) is selected for download"
 				break
 			}
-			# else error should be displayed, TODO: Check for older version and ask for confirmation
+			# else error should be displayed
+			# TODO: Check for older version and ask for confirmation
 		}
 
 		if (!$FoundProvider)
 		{
 			if ($PSVersionTable.PSEdition -eq "Core")
 			{
-				Write-Warning -Message "$ProviderName was not found because of a known issue with PowerShell Core"
+				Write-Warning -Message "Provider $ProviderName was not found because of a known issue with PowerShell Core"
 				Write-Information -Tags "User" -MessageData "INFO: https://github.com/OneGet/oneget/issues/360"
+
+				return !$Required
+			}
+
+			$Message = "$ProviderName provider version >= v$RequireVersion was not found in any of the following package sources: $SourcesList"
+			if ($Required)
+			{
+				# Registering repository failed or no valid repository exists
+				Write-Error -Category ObjectNotFound -TargetObject $PackageSources -Message $Message
 				return $false
 			}
 
-			# Registering repository failed or no valid repository exists
-			Write-Error -Category ObjectNotFound -TargetObject $PackageSources `
-				-Message "$ProviderName provider version >= v$RequireVersion was not found in any of the following package sources: $SourcesList"
-			return $false
+			Write-Warning -Message $Message
+			return $true
 		}
 
 		# Setup prompt
+		$Title = "Recommended"
+		if ($Required)
+		{
+			$Title = "Required"
+		}
+
 		if ($TargetVersion)
 		{
-			$Title = "Required package provider is out of date"
+			$Title += " package provider is out of date"
 			$Question = "Install $ProviderName provider now?"
-			Write-Warning -Message "$ProviderName provider version v$($TargetVersion.ToString()) is out of date, required version is v$RequireVersion"
+			Write-Warning -Message "Provider $ProviderName v$($TargetVersion.ToString()) is out of date, required version is v$RequireVersion"
 		}
 		else
 		{
-			$Title = "Required package provider is not installed"
+			$Title += " package provider is not installed"
 			$Question = "Update $ProviderName provider now?"
 			Write-Warning -Message "$ProviderName provider minimum version v$RequireVersion is required but not installed"
 		}
@@ -296,7 +362,7 @@ function Initialize-Provider
 
 		if ($Decision -eq $Default)
 		{
-			Write-Information -Tags "User" -MessageData "INFO: Installing $($FoundProvider.Name) provider v$($FoundProvider.Version.ToString())"
+			Write-Information -Tags "User" -MessageData "INFO: Installing provider $($FoundProvider.Name) v$($FoundProvider.Version.ToString())"
 			Install-PackageProvider -Name $FoundProvider.Name -Source $FoundProvider.Source
 
 			[version] $NewVersion = Get-PackageProvider -Name $FoundProvider.Name |
@@ -304,6 +370,12 @@ function Initialize-Provider
 
 			if ($TargetVersion -and ($NewVersion -gt $TargetVersion))
 			{
+				if ($ProviderName -eq "NuGet")
+				{
+					# Let other parts of a module know NuGet is up to date
+					Set-Variable -Name HasNuGet -Scope Script -Option ReadOnly -Force -Value $true
+				}
+
 				Write-Information -Tags "User" -MessageData "INFO: $ProviderName provider v$NewVersion is installed"
 				return $true
 			}
@@ -317,6 +389,13 @@ function Initialize-Provider
 			Write-Warning -Message "Installing provider $ProviderName aborted by user"
 		}
 
-		return $false
+		return !$Required
 	} # process
 }
+
+#
+# Module variables
+#
+
+# Let other parts of a module know status about Nuget
+Set-Variable -Name HasNuGet -Scope Script -Option ReadOnly -Force -Value $false
