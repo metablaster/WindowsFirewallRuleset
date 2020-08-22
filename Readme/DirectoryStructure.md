@@ -1,7 +1,7 @@
 
-# About this document
+# Directory Structure
 
-Explain directory structure used in repository.\
+Explains directory structure used in repository.\
 Each directory also contains a Readme.md explaining it's purpose.
 
 ## .vscode
@@ -18,11 +18,15 @@ Deprecated scripts no longer in use
 
 ## Modules
 
-Contains powershell modules
+Contains PowerShell modules
 
 ## Readme
 
-Contains offline documentation
+Contains detailed project documentation
+
+### LAN
+
+Contains notices for home network setup
 
 ## Rules
 
@@ -60,6 +64,10 @@ Rules which apply to 3rd party programs
 
 Rules which apply Microsoft programs
 
+#### Server
+
+Rules which specific to server platforms
+
 ## Test
 
 Contains test scripts to test out individual functions and concepts
@@ -71,3 +79,7 @@ Contains template scripts with boilerplate code for new scripts
 ## Logs
 
 Contains logs made by scripts
+
+## Exports
+
+Contains exported firewall rules ready to be reimported

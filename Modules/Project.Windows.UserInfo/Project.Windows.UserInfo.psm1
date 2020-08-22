@@ -1069,7 +1069,7 @@ function ConvertFrom-SID
 								{
 									$SidType = "Unknown"
 									# TODO: check if invalid format or just not found
-									# NOTE: regex matches do not check length of a SID which could help identify problem
+									# NOTE: regex matches don't check length of a SID which could help identify problem
 									Write-Warning -Message "$InputSID is not a valid SID or could not be identified"
 								}
 							}

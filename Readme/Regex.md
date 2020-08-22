@@ -1,5 +1,5 @@
 
-# About this document
+# Regex expressions for quick project wide actions
 
 A list of regex expressions which are used to perform bulk operations against the rules inside the
 project.

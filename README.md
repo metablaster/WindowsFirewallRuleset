@@ -105,9 +105,6 @@ need adjustment, full functionality for 32 bit system is work in progress.\
 For now you can load rules on 32 bit system just fine with the exception of few rules probably not
 relevant at all for your configuration. (It's hard to tell since it wasn't tested)
 
-The plan is to expand this project to manage [nftables](https://en.wikipedia.org/wiki/Nftables)
-firewall on linux and other systems, but not anytime soon.
-
 [This document](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/LegacySupport.md)
 describes how to make use of this project on older Windows systems such as Windows 7 or Server 2008
 
@@ -141,7 +138,7 @@ default actions then visit `Config\ProjectSettings.ps1` and there you'll find gl
 which are used for this.
 - If you're running scripts for the first time it's highly recommended to load all rules for which you
 have programs installed on system,
-it should be easy to delete what you do not want in GPO, rather than later searching scripts for
+it should be easy to delete what you don't want in GPO, rather than later searching scripts for
 what you might have missed.
 - Loading rules into an empty GPO should be very fast, however loading into GPO which already
 contains rules will be significantly slower (depends on number of existing rules)
@@ -238,7 +235,7 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force
 
 14. Now that rules are applied you might need to adjust some of them in Local Group Policy,
 not all the rules are enabled by default and you might want to toggle default Allow/Block behavior for
-some rules, rules for programs which do not exist need to be made additionally.
+some rules, rules for programs which don't exist need to be made additionally.
 
 15. If you're unable to connect to internet after applying these rules you have several options:
 
@@ -302,7 +299,7 @@ such as disabling them or changing some attributes and adding new rules. For mor
 add new ones or screw them up.
 
 What ever your setup is, you will surely need to perform additional work such as adding more rules
-in GPO to allow programs for which rules do not exist, or to reconfigure existing rules.
+in GPO to allow programs for which rules don't exist, or to reconfigure existing rules.
 
 ## Checking for updates
 
@@ -371,7 +368,7 @@ Feel free to suggest or contribute new rules, or improvements for existing rules
 Just make sure you follow below notices:
 
 1. Provide some documentation or official reference for your rules so that it can be easy to verify
-that these rules do not contain mistakes, for example, for ICMP rules you would provide a link to
+that these rules don't contain mistakes, for example, for ICMP rules you would provide a link to
 [IANA](https://www.iana.org) with relevant reference document.
 2. If you would like to suggest new rules or improving existing ones,
 but you can't push an update here, please open new issue here on github and provide details

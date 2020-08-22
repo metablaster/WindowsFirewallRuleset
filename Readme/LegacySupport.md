@@ -38,7 +38,7 @@ If you miss something you can delete, add or modify rules in GPO later.
 Note that if you define your platform globally (ie. ```$Platform = "6.1"```) instead of making your
 own variable, just replacing the string, but do not exclude unrelated rules,
 most of the rules should work, but ie. rules for Store Apps will fail to load.\
-Also ie. rules for programs and services that do not exist on system will be most likely applied
+Also ie. rules for programs and services that don't exist on system will be most likely applied
 but redundant.
 
 What this means, is, just edit the GPO later to refine your imports if you go that route,

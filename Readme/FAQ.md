@@ -1,15 +1,16 @@
-# About this document
+
+# Frequently Asked Questions
 
 Here are the most common problems running powershell scripts in this project and how to resolve them.
 Also general questions and answers regarding firewall.
 
-## I applied the rule(s) but it doesn't work, program xyz.exe doesn't connect to internet
+## I applied the rule(s) but it doesn't work, program foobar.exe doesn't connect to internet
 
 1. Close down the program which is unable to connect to network completely
 2. In GPO select each rule that applies to this program, right click and disable,
-   then enable again.
+   wait 2 seconds then enable again.
 3. Open program in question and try again, in most cases this should work.
-4. If not try rebooting system, Windows firewall sometimes just doesn't instantly respect the rules.
+4. If not try rebooting system, Windows firewall sometimes just doesn't instantly respect rules.
 5. If still no luck, open rule properties in GPO and under advanced tab allow all interface types,
 all users or both, however allowing all interfaces or users should be only a temporary measure.
 
@@ -39,10 +40,10 @@ To fix the problem modify this sample command to this and it should work just fi
 Get-NetFirewallRule -PolicyStore $([system.environment]::MachineName)
 ```
 
-## There is no output, the script hangs and stays blank until "Enter" is pressed
+Otherwise if you're trying to administer firewall on remote machines, make sure at a minimum following:
 
-This is for sure a bug, the script is waiting for input but it's not known for what exactly,
-a lot of these have been fixed already, please report them if possible!
+1. "Windows Remote Administration" service is running.
+2. "PowerShell remoting" is configured and enabled on remote machine
 
 ## Does this firewall give me the right protection?
 
@@ -52,8 +53,8 @@ but only for the firewall (network) part of protection.
 For maximum security you need much more than just good firewall, here is a minimum list:
 
 1. Using non Administrative Windows account for almost all use, if you already are Administrator then
-your system can no longer be trusted even if you're expert. (anyway,
-experts don't use Administrator accounts)
+your system can no longer be trusted even if you're expert.\
+Administrative account should be used only for administration.
 
 2. Installing and running only digitally signed software, and only those publishers you trust,
 if you really need to install warez and similar then it's already game over (uninstalling won't help).
@@ -62,8 +63,9 @@ if you really need to install warez and similar then it's already game over (uni
 If you really need to visit odd sites and freely click around, then please do it in virtual machine
 (isolated browsing is OK too)
 
-4. If you don't use password manager with virtual keyboard only, then your accounts and passwords
-are not safe.
+4. If you don't use password manager capable of auto typing passwords and with the support of
+virtual keyboard, then your accounts and passwords are not safe.\
+Never use hardware keyboard instead of virtual keyboard for passwords.
 
 As you can see, no mention of anti-virus, anti-spyware, firewall, VPN or any kind of similar
 "security software", because, if you strictly follow these 4 rules then most likely you don't need
@@ -77,9 +79,9 @@ the real purpose of firewall or anti virus is to protect yourself from the follo
 2. You are target of hackers. (not your fault)
 
 In any case if any of the above 4 rules are broken, your system is not safe and usually that means
-it can not be trusted, only hard drive reformat and clean system reinstall can return trust.
+it can no longer be trusted, only hard drive reformat and clean system reinstall can regain trust.
 
-By not trusted it means, not trusted for:
+By "not trusted" I mean, not trusted for:
 
 1. online payments, cash transfer, online banking etc.
 

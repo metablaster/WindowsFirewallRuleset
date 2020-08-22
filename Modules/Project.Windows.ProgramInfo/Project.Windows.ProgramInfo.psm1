@@ -651,7 +651,7 @@ function Get-SystemSoftware
 
 				if ([string]::IsNullOrEmpty($InstallLocation))
 				{
-					# Some programs do not install InstallLocation entry
+					# Some programs don't install InstallLocation entry
 					# so let's take a look at DisplayIcon which is the path to executable
 					# then strip off all of the junk to get clean and relevant directory output
 					$InstallLocation = $SubKey.GetValue("DisplayIcon")

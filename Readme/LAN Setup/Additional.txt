@@ -4,7 +4,7 @@
 ---No Active Directory domain exists (commonly referred to as "workgroup" or "peer-to-peer")
 
 1. Windows Internet Name Service (WINS) is a legacy computer name registration and resolution service that maps computer NetBIOS names to IP addresses.
-2. If you do not already have WINS deployed on your network, do not deploy WINS
+2. If you don't already have WINS deployed on your network, do not deploy WINS
 
 Services:
 Link-layer topology discovery mapper (to auto)

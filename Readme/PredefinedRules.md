@@ -1,18 +1,18 @@
 
-# About this document
+# Windows firewall predefined (built in) rules
 
 Default Windows firewall has bunch of predefined rules,
 however this project will not make use of these rules,
-because they do not comply with project policy which is that a rule must be
+because they don't comply with project policy which is that a rule must be
 restrictive and contain a good comment.
 
-For example most predefined rules do not specify remote port or address,
+For example most predefined rules don't specify remote port or address,
 or are missing other information which
 could be easily provided for custom built firewall, also comments are not very informative.
 In other words predefined rules are neither restrictive nor informative.
 
 Thus this project reinvents the wheel, and groups those predefined rules into custom groups.
-Custom rule groups do not interfere with predefined groups to be able to distinguish project rules
+Custom rule groups don't interfere with predefined groups to be able to distinguish project rules
 from predefined rules.
 
 Some of the rules retain grouping while other are grouped into existing groups, grouping exceptions

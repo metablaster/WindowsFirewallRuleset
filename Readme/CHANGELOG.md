@@ -49,7 +49,7 @@ for services, modules, providers and core project checks
 - Minor updates to some rules
 - Added temporary troubleshooting rules (purpose to make log file clean)
 - Added address space variables
-- Rules for OneDrive now correctly load and do not need manual adjustment
+- Rules for OneDrive now correctly load and don't need manual adjustment
 - Added rules for League of Legends game
 - Rules for Nvidia now load conditionally based on presence of GeForce experience (needs improvements)
 

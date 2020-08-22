@@ -1,3 +1,7 @@
+
+https://www.w3.org/2001/06/utf-8-test/UTF-8-demo.html
+Original by Markus Kuhn, adapted for HTML by Martin Dürst.
+
 UTF-8 encoded sample plain-text file
 ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 

@@ -1,5 +1,5 @@
 
-# About this document
+# Monitoring Firewall
 
 This document explains how to monitor Windows firewall activity and network activity on local system.\
 *Note: all of these programs must be run as Administrator:*
@@ -82,7 +82,7 @@ firewall information.
 4. Object Access
 5. Audit Filtering Platform Packet drop (Audit failure)
 6. Audit Filtering Platform Connection (Audit failure) (this is optional,
-I do not recommend enabling this to reduce amount of data,
+I don't recommend enabling this to reduce amount of data,
 and to focus on relevant, which is monitoring dropped packets)
 
 [Event logging reference](https://docs.microsoft.com/en-us/windows/win32/eventlog/event-logging)

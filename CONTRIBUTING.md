@@ -21,6 +21,13 @@ Next if needed, you might want to set up your SSH keys (don't actually do it yet
 The reason why not to set up SSH keys right away is because for PowerShell I made this tutorial:\
 [PowerShell GPG4Win, SSH, posh-git](https://gist.github.com/metablaster/52b1baac5be44e2f1e6d16800813f42f)
 
+Regarding license and Copyright practices adopted by this project see:\
+[Maintaining file-scope copyright notices](https://softwarefreedom.org/resources/2012/ManagingCopyrightInformation.html#maintaining-file-scope-copyright-notices)\
+[Requirements under U.S. and E.U. Copyright Law](http://softwarefreedom.org/resources/2007/originality-requirements.html)
+
+Regarding versioning adopted see:\
+[Semantic Versioning 2.0.0](https://semver.org)
+
 Few additional references worth reading:\
 [Don't "Push" Your Pull Requests](https://www.igvita.com/2011/12/19/dont-push-your-pull-requests)\
 [Painless Bug Tracking](https://www.joelonsoftware.com/2000/11/08/painless-bug-tracking)
@@ -33,35 +40,59 @@ specific to Visual Studio Code, aka. "Workspace", these settings include:
 1. Code formatting settings which are automatically enforced, and can also be manually applied
 2. List of recommended extensions which are automatically listed for installation when you open
 project root folder
-3. Debugging settings which you can use to debug code
-4. Settings for markdown formatting
-5. Spelling settings such as random words which would be detected as misspelled.
+3. Debugging and code analysis settings which you can use to debug code
+4. Settings for recommended extensions, ex. markdown and script formatting
+5. Spelling settings such as random good words which would be detected as misspelled.
+6. Many other minor workspace settings to improve coding experience
 
 Recommended extensions in workspace are as follows:
 
 1. [TODO tree](https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree)
-required to easily navigate TODO comments located inside project.
+required to easily navigate TODO, HACK and NOTE comments located in source files.
 2. [PowerShell](https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell)
-Should be obvious, syntax highlighting, intellisense etc.
+Should be obvious, syntax highlighting, intellisense, formatting etc.
 3. [Markdownlint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint)
 helps to format and write better markdown, you get a list of problems in VSCode and fix them.
 4. [Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker)
 helps to spell words correctly, you get a list of misspelled words in VSCode and fix them
 5. [Highlight Dodgy Characters](https://marketplace.visualstudio.com/items?itemName=nachocab.highlight-dodgy-characters)
-helps to detect bad chars which would violate some project guidelines, such as unable to save file
-in UTF-8 format without having a warning from static analyzer.
+helps to detect bad chars aka. gremlins, which cause issues such as unable to save file
+in UTF-8 format
 6. [Bookmarks](https://marketplace.visualstudio.com/items?itemName=alefragnani.Bookmarks)
-Helps you to bookmark various places in project to easily navigate back and forth and to "keep" less
+Helps you to bookmark various places in project to easily navigate back and forth and to keep less
 in your head.
+7. [Rainbow CSV](https://marketplace.visualstudio.com/items?itemName=mechatroner.rainbow-csv)
+Firewall rules can be exported into CSV file, this extension provides syntax highlighting for CSV files
+8. [GitLens](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens)
+It provides so many great features for git inside VSCode it can't be explained in one line
 
-If you don't have this environment setup, you'll have to implement these settings some other way
-around for your code editor.
+The continuation of before mentioned link for PowerShell, gpg, ssh etc. is to visit `Config\ProjectSettings.ps1`
+located in project root directory, at a minimum you should set following variables to `$true`
+before doing anything else:
+
+1. Develop
+2. ProjectCheck
+3. ModulesCheck
+4. ServicesCheck
+5. ErrorLogging
+6. WarningLogging
+
+Then restart PowerShell and run `.\SetupFirewall.ps1` to apply firewall, or at least run
+`Initialize-Project` function which will prompt you to perform recommended and required checks.
+
+Detailed description of variables is located in `Config\ProjectSettings.ps1`
+
+After project was intialized `ProjectCheck` variable should be disabled, logging variables can be
+disabled too.
+
+If you don't have this environment setup, you'll have to do this some other way around for your
+code editor and the rest of environment.
 
 ## Code style
 
 ### Automatic formatting
 
-As told above, workspace includes code formatting settings, which means you don't have to learn anything,
+As told before, workspace includes code formatting settings, which means you don't have to learn anything,
 it is enough to right click into VSCode and select "Format document" to miraculously convert code.
 
 Lines should be kept within 100-120 columns, however it is not always practical, so it's not a hard
@@ -78,7 +109,7 @@ it should be enough to take a look at the existing scripts and figure it out rig
 
 Not everything is automatically formatted, in short:\
 Use **PascalCase** for variables, types, symbols etc; **lowercase** for language keywords,
-for more info about casing type:
+for more info about type casing run:
 
 ```powershell
 [PSCustomObject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::get.GetEnumerator() | Sort-Object Key
@@ -94,10 +125,11 @@ Each firewall rule uses exactly the same order or parameters split into exactly 
 This is so that when you need to change or search for something or do some regex magic then it's
 easy to see what is where right away.
 
-Performing regex operations against the firewall rules can be done in a matter of seconds, without
-this strict rule design it would take an entry day!
+Performing regex operations against firewall rules in combination with multicursor feature can be
+done in a matter of minutes, without this strict rule design it would take an entry day and might
+result in serious bugs or security issues!
 
-The code in rule scripts is ordered into "sections" in following way,
+The code in rule scripts is ordered into "sections" in the following way,
 and may be different if needed for what ever reason:
 
 1. License notice
@@ -107,10 +139,46 @@ and may be different if needed for what ever reason:
 5. Removal of exiting rules
 6. Rules
 
+## Modules and 3rd party code
+
+The project contains few custom modules of various type grouped by relevance on
+what the module is supposed to expose.
+
+Try to limit dependency on 3rd party modules.\
+Existing modules should be extended and new written by using Powershell only if possible.
+
+Only if this is not enough we can try to look for 3rd party modules which could be
+easily customized without too much change or learning curve.
+
+3rd party code/scripts are dot sourced into existing modules instead of copy pasted into module
+directly, this must be so, to easily see to which file does license/Copyright apply in full.
+
+3rd party code/module license/Copyright must of course be retained and compatible with existing licenses.
+
+## Module design
+
+Rules for code in modules is different, most important is to keep each function in it's own script,
+separated into Public/Private folders, this is required for 2 valid reasons:
+
+1. To perform tests on private functions without exporting them from module
+2. For organizational purposes, to make it easy to maintain and navigate modules.
+
+Module naming convention consists of 3 words like this:
+
+`Origin.Platform.Purpose`
+
+For example:
+
+1. `Project.Windows.ComputerInfo`
+2. `Project.AllPlatforms.Utility`
+
+3rd party modules must not follow this naming convention, that's what word "Project" means here,
+to distinguish project modules from 3rd party code.
+
 ## Static analysis
 
 [PSStaticAnalyzer](https://github.com/PowerShell/PSScriptAnalyzer)
-is used to perform basic quality analysis.
+is used to perform basic code quality analysis.
 
 The workspace includes static analysis settings file, so all you have to do is cd into project
 root directory and invoke analyzer as follows:
@@ -129,8 +197,8 @@ then try again and keep repeating until OK.
 
 Sections of code should be documented as shown in existing scripts.\
 To comment on things that need to be done add "TODO:" + comment,
-similarly for notes add "NOTE:" + comment.\
-For any generic comments you might want to add/use line comments (preferred) and
+similarly for important notes add "NOTE:" + comment.\
+For any generic comments you might want to add, use line comments (preferred) and
 block comments only if comment is big.
 
 Provide documentation and official reference for your rules so that it can be easy to verify that
@@ -138,18 +206,26 @@ these rules do not contain mistakes,  for example,
 for ICMP rules you would provide a link to [IANA](https://www.iana.org)
 with relevant reference document.
 
+For things which are hard to resolve add "HACK:" + comment, and optionally some links such as github
+issues that may help to resolve problem in the future.
+
 it is important that each rule contains good description of it's purpose,
 when a user clicks on a rule in firewall GUI he wants to see
-what this rule is about and easily conclude whether to enable/disable the rule or
-allow/block the traffic.
+what this rule is about and easily conclude whether to enable/disable rule or
+allow/block network traffic.
 
-Documentation and comments reside in 3 places:
+For comment based help see:
+1. [About Comment-based Help](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_comment_based_help?view=powershell-7)
+2. [Examples of Comment-Based Help](https://docs.microsoft.com/en-us/powershell/scripting/developer/help/examples-of-comment-based-help?view=powershell-7)
+
+Documentation and comments reside in 4 places:
 
 1. In scripts (for developers)
 2. In rules (for users)
-3. In Readme folder (for general public)
+3. In comment based help (for module users)
+4. In Readme folder (for detailed project documentation)
 
-Commenting code is as important as writing it!
+Remember, commenting code is as important as writing it!
 
 ## Writing rules
 
@@ -161,7 +237,7 @@ no explanation what is this supposed to allow or block is not acceptable.
 
 ## Testing code
 
-Each function should have it's own test and each test should cover as much code/test
+Each function should have it's own test script and each test should cover as much code/test
 cases as possible, making changes to exiting code can then be easily tested.\
 If test case/concept expands to several functions or if it's completely
 unrelated to functions it should be a separate test.
@@ -172,27 +248,19 @@ take a look there for examples.
 Pester is preferred method to write tests, however some testings needs other way around, or
 more specialized setup.
 
-## Modules and 3rd party code
-
-The project contains few custom modules of various types grouped by relevance on
-what the module is supposed to expose.
-
-Try to limit dependency on 3rd party modules.\
-Existing modules should be extended and new written by using Powershell only if possible.
-
-Only if this is not enough we can try to look for 3rd party modules which could be
-easily customized without too much change or learning curve.
-
-3rd party code/scripts are dot sourced into existing modules instead of copy pasted into module
-directly.\
-3rd party code/module license/copyright must of course be retained and compatible with existing licenses.
+There is a module called "Project.AllPlatforms.Test", which is customized for this project.\
+Tests must pass both Desktop and Core editions of PowerShell to be successful
 
 ## Commits and pull requests
 
-Push small commits that solve or improve single problem,
-to reduce merge conflicts and to be able to do `git revert` for specific stuff.\
+Push small commits that solve or improve single or specific problem,
+to reduce merge conflicts and to be able to do `git revert` for specific stuff.
+
 Do not wait too much to push large commits which are not clear enough in terms
 what issue is supposed to be resolved or improved.
+
+If you see something unrelated that could be resolved, put TODO commont, don't fix it.\
+Then once you commit open todo-tree to review what to do next.
 
 **Avoid making huge changes to existing code** without first discussing the matter,
 new code and additions is not problem though.
@@ -202,6 +270,9 @@ new code and additions is not problem though.
 At the moment the focus is on Windows Firewall, if you want to port code to other firewalls go ahead.
 
 If you decide to port code it is mandatory that these code changes are done on separate branch.
+
+The plan is to expand this project to manage [nftables](https://en.wikipedia.org/wiki/Nftables)
+firewall on linux and other systems.
 
 ## Making new scripts or modules
 
@@ -222,5 +293,9 @@ described here, significant portion of code was written before this "CONTRIBUTIN
 So it's an ongoing effort that by no means gets fulfilled.
 
 I recommend you start at looking into [TODO](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/TODO.md)
-list and also use "TODO tree" extension to see more todo's, unless you have specific ideas or
+list and also use "TODO tree" extension to see even more todo's, unless you have specific ideas or
 recommendations.
+
+This all together may seem like a lot, but I preffer to put these things in front of you right away
+so that you can decide in peace, rather than bothering you with best practiced **AFTER** you decided
+to become part of this project.

@@ -15,7 +15,8 @@
     "allowCompoundWords": true,
     "ignoreWords": [],
     "ignorePaths": [
-        "extensions.json",
+		"extensions.json",
+		"Encoding",
         ".git",
         "*.dll"
     ],
