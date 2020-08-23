@@ -32,14 +32,15 @@ SOFTWARE.
 # 1. settings for development
 # 2. settings for release
 # 3. settings that apply to both use cases
+# NOTE: Make sure not to modify variables commend as "do not modify" or "do not decrement"
 #
 
 param(
-	# modules must call this script with value of True
+	# modules must call this script with the value of $true
 	[bool] $InsideModule = $false
 )
 
-# Set to true to indicate development phase, it does following at a minimum:
+# Set to true to enable development features, it does following at a minimum:
 # 1. Forces reloading modules and removable variables.
 # 2. Loads troubleshooting rules defined in Temporary.ps1
 # 3. Performs additional requirements checks needed or recommended for development
@@ -108,7 +109,8 @@ $WhatIfPreference			False
 if ($Develop)
 {
 	#
-	# Override preference defaults for scripts here,
+	# Override preference defaults for scripts here
+	# NOTE: do not modify warning and information preference
 	#
 
 	# $ErrorActionPreference = "SilentlyContinue"
@@ -154,14 +156,13 @@ else # Normal use case
 	# These are set to default values for normal use case,
 	# modify to customize your experience, note that this has no effect on modules
 
-	# To control how and if errors are displayed, do not modify
+	# To control how and if errors are displayed
 	$ErrorActionPreference = "Continue"
 
-	# To control how and if warnings are displayed, do not modify
+	# To control how and if warnings are displayed, do not modify!
 	$WarningPreference = "Continue"
 
-	# To control how and if informational messages are displayed
-	# WARNING: If you change this bad things will happen!
+	# To control how and if informational messages are displayed, do not modify!
 	$InformationPreference = "Continue"
 
 	# To show verbose output in the console set to "Continue"
@@ -193,38 +194,45 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	# check if constants already initialized, used for module reloading, do not modify!
 	New-Variable -Name CheckProjectConstants -Scope Global -Option Constant -Value $null
 
-	# Project version, does not apply to 3rd party modules which follow their own version increment, do not modify
-	New-Variable -Name ProjectVersion -Scope Global -Option Constant -Value $([version]::new(0, 6, 0))
+	# Project version, does not apply to non migrated 3rd party modules which follow their own version increment, do not modify!
+	New-Variable -Name ProjectVersion -Scope Global -Option Constant -Value ([version]::new(0, 6, 0))
 
-	# Required minimum PSScriptAnalyzer version for code editing
-	New-Variable -Name RequireAnalyzerVersion -Scope Global -Option Constant -Value $([version]::new(1, 19, 1))
+	# Required minimum PSScriptAnalyzer version for code editing, do not decrement!
+	New-Variable -Name RequireAnalyzerVersion -Scope Global -Option Constant -Value ([version]::new(1, 19, 1))
 
 	# Recommended minimum posh-git version for git in PowerShell
-	New-Variable -Name RequirePoshGitVersion -Scope Global -Option Constant -Value $([version]::new(0, 7, 3))
+	# NOTE: minimum 1.0.0-beta4 will be installed
+	New-Variable -Name RequirePoshGitVersion -Scope Global -Option Constant -Value ([version]::new(0, 7, 3))
 
 	# Recommended minimum Pester version for code testing
-	New-Variable -Name RequirePesterVersion -Scope Global -Option Constant -Value $([version]::new(5, 0, 3))
+	New-Variable -Name RequirePesterVersion -Scope Global -Option Constant -Value ([version]::new(5, 0, 3))
 
 	# Required minimum PackageManagement version prior to installing other modules
-	New-Variable -Name RequirePackageManagementVersion -Scope Global -Option Constant -Value $([version]::new(1, 4, 7))
+	New-Variable -Name RequirePackageManagementVersion -Scope Global -Option Constant -Value ([version]::new(1, 4, 7))
 
 	# Required minimum PowerShellGet version prior to installing other modules
-	New-Variable -Name RequirePowerShellGetVersion -Scope Global -Option Constant -Value $([version]::new(2, 2, 4))
+	New-Variable -Name RequirePowerShellGetVersion -Scope Global -Option Constant -Value ([version]::new(2, 2, 4))
 
 	# Recommended minimum Git version needed for contributing and required by posh-git
-	New-Variable -Name RequireGitVersion -Scope Global -Option Constant -Value $([version]::new(2, 28, 0))
+	New-Variable -Name RequireGitVersion -Scope Global -Option Constant -Value ([version]::new(2, 28, 0))
 
 	# Recommended minimum PowerShell Core
-	New-Variable -Name RequireCoreVersion -Scope Global -Option Constant -Value $([version]::new(7, 0, 3))
+	# NOTE: 6.1.0 will not work, but 7.0.3 works, verify with PSUseCompatibleCmdlets
+	New-Variable -Name RequireCoreVersion -Scope Global -Option Constant -Value ([version]::new(7, 0, 3))
 
-	# Required minimum Windows PowerShell
-	New-Variable -Name RequirePowerShellVersion -Scope Global -Option Constant -Value $([version]::new(5, 1, 0))
+	# Required minimum Windows PowerShell, do not decrement!
+	# NOTE: 5.1.14393.206 (system v1607) will not work, but 5.1.19041.1 (system v2004) works, verify with PSUseCompatibleCmdlets
+	# NOTE: replacing build 19041 (system v2004) with 18363 (system v1909) which is minimum required for rules
+	New-Variable -Name RequirePowerShellVersion -Scope Global -Option Constant -Value ([version]::new(5, 1, 18363))
 
-	# Required minimum operating system version
-	New-Variable -Name RequireWindowsVersion -Scope Global -Option Constant -Value $([version]::new(10, 0, 0))
+	# Required minimum operating system version (v1909)
+	# https://docs.microsoft.com/en-us/windows/release-information
+	New-Variable -Name RequireWindowsVersion -Scope Global -Option Constant -Value ([version]::new(10, 0, 18363))
 
-	# Required minimum .NET version, valid for the PowerShell Desktop edition only
-	New-Variable -Name RequireNETVersion -Scope Global -Option Constant -Value $([version]::new(3, 5, 0))
+	# Required minimum .NET version, valid for the PowerShell Desktop edition only, do not decrement!
+	# https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/versions-and-dependencies
+	# https://docs.microsoft.com/en-us/powershell/scripting/windows-powershell/install/windows-powershell-system-requirements?view=powershell-7.1
+	New-Variable -Name RequireNETVersion -Scope Global -Option Constant -Value ([version]::new(4, 5, 0))
 
 	# Repository root directory, reallocating scripts should be easy if root directory is constant
 	New-Variable -Name ProjectRoot -Scope Global -Option Constant -Value (
@@ -280,7 +288,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -Erro
 	Set-Variable -Name CheckReadOnlyVariables -Scope Global -Option ReadOnly -Force -Value $null
 
 	# Set to false to avoid checking system requirements
-	Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $(!$Develop)
+	Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value (!$Develop)
 
 	# Set to false to avoid checking if modules are up to date
 	Set-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Force -Value $Develop
@@ -289,8 +297,8 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -Erro
 	Set-Variable -Name ServicesCheck -Scope Global -Option ReadOnly -Force -Value $true
 
 	# Required minimum NuGet version prior to installing other modules
-	# NOTE: Core >= 3.0.0, Desktop >= 2.8.5
-	New-Variable -Name RequireNuGetVersion -Scope Global -Option ReadOnly -Force -Value $([version]::new(3, 0, 0))
+	# NOTE: Core >= 3.0.0, Desktop >= 2.8.5, Desktop will be set in Initialize-Project
+	New-Variable -Name RequireNuGetVersion -Scope Global -Option ReadOnly -Force -Value ([version]::new(3, 0, 0))
 }
 
 # Removable variables, meaning these can be modified by code at any time,
@@ -310,13 +318,13 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 	Set-Variable -Name ConnectionTimeout -Scope Global -Value 1
 
 	# Set to false to disable logging errors
-	Set-Variable -Name ErrorLogging -Scope Global -Value $(!$Develop)
+	Set-Variable -Name ErrorLogging -Scope Global -Value (!$Develop)
 
 	# Set to false to disable logging warnings
-	Set-Variable -Name WarningLogging -Scope Global -Value $(!$Develop)
+	Set-Variable -Name WarningLogging -Scope Global -Value (!$Develop)
 
 	# Set to false to disable logging information messages
-	Set-Variable -Name InformationLogging -Scope Global -Value $(!$Develop)
+	Set-Variable -Name InformationLogging -Scope Global -Value (!$Develop)
 }
 
 # Protected variables, meaning these can be modified but only by code (excluded from Develop mode)

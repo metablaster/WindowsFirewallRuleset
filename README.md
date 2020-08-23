@@ -1,5 +1,28 @@
 
-# About Windows Firewall Ruleset
+# Windows Firewall Ruleset
+
+![Alt Text](Readme/corporate.jpg)
+
+## Table of Contents
+
+- [Windows Firewall Ruleset](#windows-firewall-ruleset)
+  - [Table of Contents](#table-of-contents)
+  - [About Windows Firewall Ruleset](#about-windows-firewall-ruleset)
+  - [Core benefits of this firewall project](#core-benefits-of-this-firewall-project)
+  - [License](#license)
+  - [Requirements](#requirements)
+  - [I don't meet requirements](#i-dont-meet-requirements)
+  - [Quick start](#quick-start)
+  - [Where are my rules](#where-are-my-rules)
+  - [Applying individual rulesets](#applying-individual-rulesets)
+  - [Deleting rules](#deleting-rules)
+  - [Manage loaded rules](#manage-loaded-rules)
+  - [Checking for updates](#checking-for-updates)
+  - [Contributing or suggestions](#contributing-or-suggestions)
+  - [More information and help](#more-information-and-help)
+  - [The future](#the-future)
+
+## About Windows Firewall Ruleset
 
 - Windows firewall rules sorted into individual powershell scripts according to:
 
@@ -39,24 +62,7 @@ master script to your firewall.
 - All the rules are loaded into Local Group Policy (GPO),
 giving you full power over the default Windows firewall.
 
-## Table of Contents
-
-- [About Windows Firewall Ruleset](#about-windows-firewall-ruleset)
-  - [Table of Contents](#table-of-contents)
-  - [What are the core benefits of this firewall/project](#what-are-the-core-benefits-of-this-firewallproject)
-  - [License](#license)
-  - [Minimum supported system requirements](#minimum-supported-system-requirements)
-  - [I don't have Windows 10 x64 or Windows Server x64](#i-dont-have-windows-10-x64-or-windows-server-x64)
-  - [Quick start](#quick-start)
-  - [Where are my rules](#where-are-my-rules)
-  - [Applying individual rulesets](#applying-individual-rulesets)
-  - [Deleting rules](#deleting-rules)
-  - [Manage loaded rules](#manage-loaded-rules)
-  - [Checking for updates](#checking-for-updates)
-  - [Contributing or suggestions](#contributing-or-suggestions)
-  - [More information and help](#more-information-and-help)
-
-## What are the core benefits of this firewall/project
+## Core benefits of this firewall project
 
 1. Unlike Windows firewall in control panel, these rules are loaded into GPO firewall
 (Local group policy), meaning random programs which install rules as part of their installation
@@ -75,7 +81,7 @@ redundant/invalid for what ever other reason.
 are in scripts, so you can use editor tools such as CTRL + F or regex to perform bulk operations on
 your rules, doing this in Windows firewall GUI is beyond all pain.
 
-5. Default outbound is "block" unless there is a rule to explicitly allow traffic,
+5. Default outbound is "block" unless there is a rule to explicitly allow network traffic,
 in default Windows firewall this is not possible unless you have rules for every possible
 program/service, thanks to this collection of rules setting default outbound to block
 requires very little additional work.
@@ -89,16 +95,17 @@ The project maintains **"per file"** license and Copyright notices.
 3rd party and sublicensed code is located either inside their own folders or inside folders called
 "External" for organizational purposes, each of these folders contains individual licenses.
 
-
-## Minimum supported system requirements
+## Requirements
 
 1. Windows 10 Pro/Enterprise, Windows Server 2019 (both x64 bit)
 2. PowerShell Core 7.0 or Windows PowerShell 5.1
 [Download PowerShell](https://github.com/PowerShell/PowerShell)
-3. Git (Optional) [Download Git](https://git-scm.com/downloads)
-4. Visual Studio Code (Optional) [Download VSCode](https://code.visualstudio.com)
-5. PowerShell Support for VSCode (Optional)
+3. .NET Framework 4.5 (Windows PowerShell only) [Download Net Framework](https://dotnet.microsoft.com/download/dotnet-framework)
+4. Git (Optional) [Download Git](https://git-scm.com/downloads)
+5. Visual Studio Code (Recommended) [Download VSCode](https://code.visualstudio.com)
+6. PowerShell Support for VSCode (Recommended)
 [Download extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell)
+7. PSScriptAnalyzer (Recommended) [Download PSScriptAnalyzer](https://github.com/PowerShell/PSScriptAnalyzer)
 
 - All operating systems 10.0 (Major 10, Minor 0) and up are supported,
 but only those editions listed in point 1 are actively tested.
@@ -108,11 +115,11 @@ which is built into system.
 - You might want to have git to check out for updates,
 to easily switch between branches or to contribute code.
 - VS Code is preferred and recommended editor to navigate project and edit scripts for your
-needs or for contribution, any other editor is of course your choice.
+needs or for contribution.
 - If you get VSCode, you'll also need powershell extension for code navigation and
 PowerShell specific features.
 
-## I don't have Windows 10 x64 or Windows Server x64
+## I don't meet requirements
 
 At the moment this project is tested and designed for most recent Windows Desktop/Servers and that
 is known to work, making use of it on older systems requires additional work.
@@ -120,7 +127,7 @@ is known to work, making use of it on older systems requires additional work.
 Testing is done on 64 bit Windows, a small fraction of rules won't work for 32 bit system and
 need adjustment, full functionality for 32 bit system is work in progress.\
 For now you can load rules on 32 bit system just fine with the exception of few rules probably not
-relevant at all for your configuration. (It's hard to tell since it wasn't tested)
+relevant at all for your configuration.
 
 [This document](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/LegacySupport.md)
 describes how to make use of this project on older Windows systems such as Windows 7 or Server 2008
@@ -410,5 +417,17 @@ how to troubleshoot firewall and network problems, or gather other relevant info
 
 It might answer some of your questions, for example
 [MonitoringFirewall.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/MonitoringFirewall.md)
-explains how to monitor firewall in real time.\
-It's recommended you read those documents here on github because of formatting and screenshots.
+explains how to monitor firewall in real time.
+
+## The future
+
+Following features are desired and might be available at some point in the future:
+
+1. Remote firewall administration
+   - Applying firewall configuration to remote computers on domain or home networks
+
+2. Support for all editions of Windows NT 10.0+
+
+3. On demand registry scan to validate integrity of active firewall filtering policy
+
+4. Firewall rulesets for server platforms

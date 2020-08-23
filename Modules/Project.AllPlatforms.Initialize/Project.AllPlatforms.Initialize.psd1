@@ -43,11 +43,11 @@
 
 	# Minimum version of Microsoft .NET Framework required by this module.
 	# This prerequisite is valid for the PowerShell Desktop edition only.
-	DotNetFrameworkVersion = "3.5"
+	DotNetFrameworkVersion = "4.5"
 
 	# Minimum version of the common language runtime (CLR) required by this module.
 	# This prerequisite is valid for the PowerShell Desktop edition only.
-	CLRVersion = "2.0"
+	CLRVersion = "4.0"
 
 	# Processor architecture (None, X86, Amd64) required by this module
 	ProcessorArchitecture = "None"
@@ -126,13 +126,16 @@
 			# A URL to an icon representing this module.
 			# IconUri = ""
 
+			# Prerelease string of this module
+			Prerelease = "Pre-release module to initialize environment for 'Windows Firewall Ruleset' project"
+
 			# ReleaseNotes of this module
-			ReleaseNotes = "Pre-release module to initialize environment for 'Windows Firewall Ruleset' project"
+			# ReleaseNotes = ""
 		} # End of PSData hashtable
 	} # End of PrivateData hashtable
 
 	# HelpInfo URI of this module
-	HelpInfoURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/README.md"
+	# HelpInfoURI = ""
 
 	# Default prefix for commands exported from this module.
 	# Override the default prefix using Import-Module -Prefix.

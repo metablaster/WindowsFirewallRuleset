@@ -38,18 +38,18 @@
 	PowerShellVersion = "5.1"
 
 	# Name of the Windows PowerShell host required by this module
-	PowerShellHostName = "ConsoleHost"
+	# PowerShellHostName = "ConsoleHost"
 
 	# Minimum version of the PowerShell host required by this module
 	# PowerShellHostVersion = ""
 
 	# Minimum version of Microsoft .NET Framework required by this module.
 	# This prerequisite is valid for the PowerShell Desktop edition only.
-	DotNetFrameworkVersion = "3.5"
+	DotNetFrameworkVersion = "4.5"
 
 	# Minimum version of the common language runtime (CLR) required by this module.
 	# This prerequisite is valid for the PowerShell Desktop edition only.
-	CLRVersion = "2.0"
+	CLRVersion = "4.0"
 
 	# Processor architecture (None, X86, Amd64) required by this module
 	ProcessorArchitecture = "None"
@@ -81,7 +81,7 @@
 	CmdletsToExport = @()
 
 	# Variables to export from this module
-	VariablesToExport = "*"
+	VariablesToExport = @()
 
 	# Aliases to export from this module, for best performance, do not use wildcards and do not
 	# delete the entry, use an empty array if there are no aliases to export.
@@ -129,8 +129,8 @@
 		} # End of PSData hashtable
 	} # End of PrivateData hashtable
 
-	# HelpInfo URI of this module
-	# TODO: should be empty in all modules if no help for Update-Help
+	# Updatable Help uses the HelpInfoURI key in the module manifest to find the Help information
+	# (HelpInfo XML) file that contains the location of the updated help files for the module.
 	# HelpInfoURI = ""
 
 	# Default prefix for commands exported from this module.

@@ -42,10 +42,12 @@
 	# PowerShellHostVersion = ''
 
 	# Minimum version of Microsoft .NET Framework required by this module
-	DotNetFrameworkVersion = '3.5'
+	# This prerequisite is valid for the PowerShell Desktop edition only.
+	DotNetFrameworkVersion = '4.5'
 
 	# Minimum version of the common language runtime (CLR) required by this module
-	CLRVersion = '2.0'
+	# This prerequisite is valid for the PowerShell Desktop edition only.
+	CLRVersion = '4.0'
 
 	# Processor architecture (None, X86, Amd64) required by this module
 	ProcessorArchitecture = 'None'
@@ -168,7 +170,7 @@
 	} # End of PrivateData hashtable
 
 	# HelpInfo URI of this module
-	HelpInfoURI = 'https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Modules/Indented.Net.IP/help'
+	# HelpInfoURI = ''
 
 	# Default prefix for commands exported from this module.
 	# Override the default prefix using Import-Module -Prefix.

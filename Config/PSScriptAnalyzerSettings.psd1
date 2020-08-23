@@ -2,6 +2,7 @@
 # https://github.com/PowerShell/PSScriptAnalyzer/tree/master/RuleDocumentation
 # NOTE: PSGallery ruleset is a duplicate of these
 # TODO: check for new or updated settings
+# NOTE: last checked 23.8.2020. v1.19.1
 
 @{
 	IncludeRules = @(
@@ -44,6 +45,9 @@
 		#
 		'PSProvideCommentHelp',
 		'PSAvoidUsingWriteHost',
+		# New settings v1.19.1
+		'AvoidUsingDoubleQuotesForConstantString',
+		'UseUsingScopeModifierInNewRunspaces'
 		#
 		# ScriptSecurity
 		#
@@ -76,6 +80,7 @@
 		'PSUseProcessBlockForPipelineCommand'
 		'PSUseSupportsShouldProcess'
 		'PSUseToExportFieldsInManifest'
+		# NOTE: Use this option for version requirements
 		# 'PSUseCompatibleCmdlets'
 		'PSUseCompatibleCommands'
 		'PSUseCompatibleSyntax'
@@ -102,6 +107,7 @@
 
 		PSPlaceOpenBrace = @{
 			Enable = $true
+			# NOTE: Allman style (not on same line)
 			# Enforce open brace to be on the same line as that of its preceding keyword.
 			# default = true (powershell.codeFormatting.openBraceOnSameLine)
 			OnSameLine = $false
@@ -165,6 +171,7 @@
 			CheckPipeForRedundantWhitespace = $true
 			# Checks if there is more than one space between parameters and values.
 			# E.g. foo -bar $baz -bat instead of foo  -bar $baz  -bat
+			# NOTE: disabled
 			# default = false (powershell.codeFormatting.whitespaceBetweenParameters)
 			CheckParameter = $true
 		}
@@ -186,14 +193,15 @@
 		PSAlignAssignmentStatement = @{
 			# default = false
 			Enable = $false
+			# NOTE: unwanted
 			# Enforce alignment of assignment statements in a hashtable and in a DSC Configuration
 			# default = false (powershell.codeFormatting.alignPropertyValuePairs)
-			CheckHashtable = $true
+			CheckHashtable = $false
 		}
 
 		PSUseCorrectCasing = @{
 			# Use exact casing of the cmdlet and its parameters
-			# default = ? (powershell.codeFormatting.useCorrectCasing)
+			# TODO: default = ? (powershell.codeFormatting.useCorrectCasing)
 			Enable = $true
 		}
 
@@ -203,6 +211,7 @@
 
 		PSProvideCommentHelp = @{
 			Enable = $true
+			# NOTE: unwanted
 			# If enabled, throw violation only on functions/cmdlets that are exported
 			# using the 'Export-ModuleMember' cmdlet
 			# default = true
@@ -213,6 +222,7 @@
 			BlockComment = $true
 			# If enabled, returns comment help in vscode snippet format.
 			# default = false
+			# TODO: snippets
 			VSCodeSnippetCorrection = $false
 			# Represents the position of comment help with respect to the function definition
 			# default = before

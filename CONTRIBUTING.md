@@ -119,8 +119,8 @@ code editor and the rest of environment.
 
 ### Automatic formatting
 
-As told before, workspace includes code formatting settings, which means you don't have to learn anything,
-it is enough to right click into VSCode and select "Format document" to miraculously convert code.
+This workspace includes code formatting settings, which means you don't have to spend time formatting
+source files manually, otherwise it's enough to right click into VSCode and select "Format document".
 
 Lines should be kept within 100-120 columns, however it is not always practical, so it's not a hard
 rule, workspace settings are configured to show rulers inside code editor.

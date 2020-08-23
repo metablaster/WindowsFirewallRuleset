@@ -63,7 +63,6 @@ setup on multiple computers and virtual operating systems, in cases such as freq
 for the purpose of testing project code for many environment scenarios that end users may have.
 It should be used in conjunction with the rest of a module "Project.AllPlatforms.Initialize"
 
-TODO: learn required NET version by scanning scripts (ie. adding .COMPONENT to comments)
 TODO: learn repo dir automatically (using git?)
 TODO: we don't use logs in this module
 TODO: checking remote systems not implemented
@@ -164,11 +163,11 @@ function Initialize-Project
 	if ($PowerShellEdition -eq "Core")
 	{
 		$RequirePSVersion = $RequireCoreVersion
-		Write-Warning -Message "Remote firewall administration with PowerShell Core is not implemented"
+		Write-Warning -Message "Remote firewall administration with PowerShell $PowerShellEdition is not implemented"
 	}
 	else
 	{
-		# Default is set to 3.0.0 for Core editions
+		# Default is set to 3.0.0 for Core editions in ProjectSettings
 		Set-Variable -Name RequireNuGetVersion -Scope Global -Force -Value $([version]::new(2, 8, 5))
 		Write-Warning -Message "Remote firewall administration with PowerShell $PowerShellEdition is partially implemented"
 	}
@@ -176,15 +175,9 @@ function Initialize-Project
 	Write-Information -Tags "User" -MessageData "INFO: Checking PowerShell version"
 	if ($TargetPSVersion -lt $RequirePSVersion)
 	{
-		# TODO: Core 6.1 should be fine, skipping
-		if (($PowerShellEdition -eq "Desktop") -or ($TargetPSVersion -lt "6.1"))
-		{
-			Write-Error -Category OperationStopped -TargetObject $TargetPSVersion `
-				-Message "Required PowerShell $PowerShellEdition is v$($RequirePSVersion.ToString()) but v$($TargetPSVersion.ToString()) present"
-			exit
-		}
-
-		Write-Warning -Message "Recommended PowerShell $PowerShellEdition is v$($RequirePSVersion.ToString()) but v$($TargetPSVersion.ToString()) present"
+		Write-Error -Category OperationStopped -TargetObject $TargetPSVersion `
+			-Message "Required PowerShell $PowerShellEdition is v$($RequirePSVersion.ToString()) but v$($TargetPSVersion.ToString()) present"
+		exit
 	}
 
 	if (!$NoServicesCheck)
@@ -297,7 +290,7 @@ function Initialize-Project
 					-InfoMessage "PSScriptAnalyzer >= $($RequireAnalyzerVersion.ToString()) is required otherwise code will start missing while editing" )) { exit }
 
 		# Pester is required to run pester tests
-		# TODO: see also on how to get rid of duplicate modules https://pester.dev/docs/introduction/installation
+		# TODO: see also on how to get rid of duplicate system modules https://pester.dev/docs/introduction/installation
 		if (!(Initialize-Module @{ ModuleName = "Pester"; ModuleVersion = $RequirePesterVersion } `
 					-InfoMessage "Pester >= $($RequirePesterVersion.ToString()) is required to run pester tests" )) { }
 
@@ -374,11 +367,13 @@ function Initialize-Project
 	$OSCaption = Get-CimInstance -Class Win32_OperatingSystem |
 	Select-Object -ExpandProperty Caption
 
+	$OSBuildVersion = ConvertFrom-OSBuild $TargetOSVersion.Build
+
 	# Everything OK, print environment status
 	Write-Information -Tags "User" -MessageData "INFO: Checking project minimum requirements was successful"
 
 	Write-Output ""
-	Write-Output "System:`t`t $OSCaption v$($TargetOSVersion.ToString())"
-	Write-Output "Environment:`t PowerShell $PowerShellEdition v$($TargetPSVersion)"
+	Write-Output "System:`t`t $OSCaption v$OSBuildVersion"
+	Write-Output "Environment:`t PowerShell $PowerShellEdition $TargetPSVersion"
 	Write-Output ""
 }
