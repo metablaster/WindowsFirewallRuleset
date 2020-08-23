@@ -8,13 +8,13 @@ assignees: ''
 ---
 
 **Question**
-Input your question here...
+Insert your question here...
 
 **Screenshots**
 If applicable, add screenshots to help explain your question.
 
 **Environment information:**
-Please provide detailed information about your system as needed:
+Please provide detailed information about your system if needed:
 
 - OS: [ex. Windows 10 Pro v1903] (run: Winver.exe)
 - PowerShell: [ex. PowerShell core 7.0.3] (run: $PSVersionTable)

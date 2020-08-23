@@ -82,11 +82,13 @@ requires very little additional work.
 
 ## License
 
-This project **"Windows Firewall Ruleset"** is licensed under **MIT** license.\
-3rd party and sublicensed code is located either inside their own folders or inside folders called
-"External", this is for organizational purposes.
+This project **"Windows Firewall Ruleset"** is licensed under **MIT** license.
 
-The project maintains "per file" license and Copyright notices.
+The project maintains **"per file"** license and Copyright notices.
+
+3rd party and sublicensed code is located either inside their own folders or inside folders called
+"External" for organizational purposes, each of these folders contains individual licenses.
+
 
 ## Minimum supported system requirements
 

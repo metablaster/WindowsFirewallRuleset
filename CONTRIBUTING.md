@@ -2,9 +2,9 @@
 # How to contribute
 
 You can use this document not only to see how to contribute code but also to prepare yourself to
-extend this firewall for your own needs.
+extend this firewall project for your own personal or corporate needs.
 
-Here is a short and most important list of things to keep in mind.
+Here is a list of most important things to keep in mind.
 
 ## General guidelines
 
@@ -28,9 +28,13 @@ Regarding license and Copyright practices adopted by this project see:\
 Regarding versioning adopted see:\
 [Semantic Versioning 2.0.0](https://semver.org)
 
-Few additional references worth reading:\
+Few additional references regarding open source worth reading:\
 [Don't "Push" Your Pull Requests](https://www.igvita.com/2011/12/19/dont-push-your-pull-requests)\
 [Painless Bug Tracking](https://www.joelonsoftware.com/2000/11/08/painless-bug-tracking)
+
+And references for tools used by this project:\
+[PowerShell documentation](https://docs.microsoft.com/en-us/powershell/scripting/how-to-use-docs?view=powershell-7.1)
+[Visual Studio Code](https://code.visualstudio.com/docs)
 
 ## Environment setup
 

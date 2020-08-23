@@ -4,7 +4,7 @@
 Here are the most common problems running powershell scripts in this project and how to resolve them.
 Also general questions and answers regarding firewall.
 
-## I applied the rule(s) but it doesn't work, program foobar.exe doesn't connect to internet
+## I applied the rule(s) but it doesn't work, program "foobar.exe" doesn't connect to internet
 
 1. Close down the program which is unable to connect to network completely
 2. In GPO select each rule that applies to this program, right click and disable,

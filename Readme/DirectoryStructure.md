@@ -12,10 +12,6 @@ Visual Studio Code configuration
 
 Project configuration and configuration for external programs
 
-## Deprecated
-
-Deprecated scripts no longer in use
-
 ## Modules
 
 Contains PowerShell modules

@@ -43,7 +43,6 @@ INFO: probably point 3 does that implicitly
 ## Troubleshoot name resolution (discovery)
 
 ```powershell
-powershell:
 nbtstat -c
 nbtstat -r
 netview
