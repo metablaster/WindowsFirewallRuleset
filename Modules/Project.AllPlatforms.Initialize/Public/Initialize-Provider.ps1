@@ -368,15 +368,22 @@ function Initialize-Provider
 			[version] $NewVersion = Get-PackageProvider -Name $FoundProvider.Name |
 			Sort-Object -Property Version | Select-Object -Last 1 -ExpandProperty Version
 
-			if ($TargetVersion -and ($NewVersion -gt $TargetVersion))
+			if ($NewVersion -and ($NewVersion -gt $TargetVersion))
 			{
-				if ($ProviderName -eq "NuGet")
+				Write-Information -Tags "User" -MessageData "INFO: $ProviderName provider v$NewVersion is installed"
+
+				# Force, don't ask for confirmation
+				Import-PackageProvider -Name $ProviderName -RequiredVersion $NewVersion -Force
+
+				# If not imported into current session restart is required
+				if (!(Get-PackageProvider -Name $ProviderName))
 				{
-					# Let other parts of a module know NuGet is up to date
-					Set-Variable -Name HasNuGet -Scope Script -Option ReadOnly -Force -Value $true
+					Write-Warning -Message "$ProviderName provider v$NewVersion could not be imported, please restart PowerShell and try again"
+					return $false
 				}
 
-				Write-Information -Tags "User" -MessageData "INFO: $ProviderName provider v$NewVersion is installed"
+				# Let other parts of a module know NuGet is up to date
+				Set-Variable -Name HasNuGet -Scope Script -Option ReadOnly -Force -Value $true
 				return $true
 			}
 			# else error should be shown

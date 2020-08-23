@@ -115,9 +115,9 @@ function Initialize-Project
 
 	if ($TargetOSVersion -lt $RequireWindowsVersion)
 	{
-		[string] $OSMajorMinor = "$($TargetOSVersion.Major).$($TargetOSVersion.Minor)"
+		[string] $OSMajorMinorBuild = "$($TargetOSVersion.Major).$($TargetOSVersion.Minor).$($TargetOSVersion.Build)"
 		Write-Error -Category NotImplemented -TargetObject $TargetOSVersion `
-			-Message "Minimum supported operating system is 'Windows v$($RequireWindowsVersion.ToString())' but 'Windows v$OSMajorMinor present"
+			-Message "Minimum supported operating system is 'Windows v$($RequireWindowsVersion.ToString())' but 'Windows v$OSMajorMinorBuild present"
 		exit
 	}
 
@@ -144,12 +144,14 @@ function Initialize-Project
 		exit
 	}
 
-	# Check OS build version
+	# Check OS build version, the sole purpose is to write warning for out of date systems,
+	# because of firewall rule updates that reflect lastest OS build
 	[Int32] $TargetOSBuildVersion = ConvertFrom-OSBuild $TargetOSVersion.Build
 
-	if ($TargetOSBuildVersion -lt 1909)
+	if ($TargetOSBuildVersion -lt $RequireWindowsVersion.Build)
 	{
-		Write-Warning -Message "Target system version is v$TargetOSBuildVersion, few rules might not work, please upgrade to at least v1909"
+		$RequireOSBuildVersion = ConvertFrom-OSBuild $RequireWindowsVersion.Build
+		Write-Warning -Message "Target system version is v$TargetOSBuildVersion, to reduce issues with firewall rules please upgrade to at least v$RequireOSBuildVersion"
 	}
 
 	# Check PowerShell edition
@@ -276,25 +278,25 @@ function Initialize-Project
 		# NOTE: This is default for Initialize-Module -Repository
 		# [string] $Repository = "PSGallery"
 
-		# PowerShellGet >= 2.2.4 is required otherwise updating modules might fail
+		# PowerShellGet is required otherwise updating modules might fail
 		# NOTE: PowerShellGet has a dependency on PackageManagement, it will install it if needed
 		# For systems with PowerShell 5.0 (or greater) PowerShellGet and PackageManagement can be installed together.
 		if (!(Initialize-Module -Required @{ ModuleName = "PowerShellGet"; ModuleVersion = $RequirePowerShellGetVersion } `
 					-InfoMessage "PowerShellGet >= $($RequirePowerShellGetVersion.ToString()) is required otherwise updating other modules might fail")) { exit }
 
-		# PackageManagement >= 1.4.7 is required otherwise updating modules might fail
+		# PackageManagement is required otherwise updating modules might fail, will be installed by PowerShellGet
 		if (!(Initialize-Module -Required @{ ModuleName = "PackageManagement"; ModuleVersion = $RequirePackageManagementVersion } )) { exit }
 
-		# PSScriptAnalyzer >= 1.19.1 is required otherwise code will start missing while editing
-		if (!(Initialize-Module -Required @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = $RequireAnalyzerVersion } `
-					-InfoMessage "PSScriptAnalyzer >= $($RequireAnalyzerVersion.ToString()) is required otherwise code will start missing while editing" )) { exit }
-
-		# Pester is required to run pester tests
+		# Pester is required to run pester tests, required by PSScriptAnalyzer
 		# TODO: see also on how to get rid of duplicate system modules https://pester.dev/docs/introduction/installation
 		if (!(Initialize-Module @{ ModuleName = "Pester"; ModuleVersion = $RequirePesterVersion } `
 					-InfoMessage "Pester >= $($RequirePesterVersion.ToString()) is required to run pester tests" )) { }
 
-		# posh-git >= 1.0.0-beta4 is recommended for better git experience in PowerShell
+		# PSScriptAnalyzer is required for code formattings and analysis
+		if (!(Initialize-Module -Required @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = $RequireAnalyzerVersion } `
+					-InfoMessage "PSScriptAnalyzer >= $($RequireAnalyzerVersion.ToString()) is required otherwise code will start missing while editing" )) { exit }
+
+		# posh-git is recommended for better git experience in PowerShell
 		if (Initialize-Module @{ ModuleName = "posh-git"; ModuleVersion = $RequirePoshGitVersion } -AllowPrerelease `
 				-InfoMessage "posh-git >= $($RequirePoshGitVersion.ToString()) is recommended for better git experience in PowerShell" ) { }
 

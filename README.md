@@ -111,7 +111,7 @@ The project maintains **"per file"** license and Copyright notices.
 but only those editions listed in point 1 are actively tested.
 - PowerShell "Core" is not built into Windows, you will need to install it separately (recommended)
 or use [Windows PowerShell](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/WindowsPowerShell.md)
-which is built into system.
+which is already installed.
 - You might want to have git to check out for updates,
 to easily switch between branches or to contribute code.
 - VS Code is preferred and recommended editor to navigate project and edit scripts for your

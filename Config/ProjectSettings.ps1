@@ -198,22 +198,27 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	New-Variable -Name ProjectVersion -Scope Global -Option Constant -Value ([version]::new(0, 6, 0))
 
 	# Required minimum PSScriptAnalyzer version for code editing, do not decrement!
+	# PSScriptAnalyzer >= 1.19.1 is required otherwise code will start missing while editing probably due to analyzer settings
+	# https://github.com/PowerShell/PSScriptAnalyzer#requirements
 	New-Variable -Name RequireAnalyzerVersion -Scope Global -Option Constant -Value ([version]::new(1, 19, 1))
 
 	# Recommended minimum posh-git version for git in PowerShell
-	# NOTE: minimum 1.0.0-beta4 will be installed
+	# NOTE: pre-release minimum 1.0.0-beta4 will be installed
 	New-Variable -Name RequirePoshGitVersion -Scope Global -Option Constant -Value ([version]::new(0, 7, 3))
 
 	# Recommended minimum Pester version for code testing
+	# NOTE: Analyzer 1.19.1 requires pester v5
+	# TODO: we need pester v4 for tests, but why does analyzer require pester?
 	New-Variable -Name RequirePesterVersion -Scope Global -Option Constant -Value ([version]::new(5, 0, 3))
 
-	# Required minimum PackageManagement version prior to installing other modules
+	# Required minimum PackageManagement version prior to installing other modules, do not decrement!
 	New-Variable -Name RequirePackageManagementVersion -Scope Global -Option Constant -Value ([version]::new(1, 4, 7))
 
-	# Required minimum PowerShellGet version prior to installing other modules
+	# Required minimum PowerShellGet version prior to installing other modules, do not decrement!
 	New-Variable -Name RequirePowerShellGetVersion -Scope Global -Option Constant -Value ([version]::new(2, 2, 4))
 
 	# Recommended minimum Git version needed for contributing and required by posh-git
+	# https://github.com/dahlbyk/posh-git#prerequisites
 	New-Variable -Name RequireGitVersion -Scope Global -Option Constant -Value ([version]::new(2, 28, 0))
 
 	# Recommended minimum PowerShell Core
@@ -222,17 +227,23 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 
 	# Required minimum Windows PowerShell, do not decrement!
 	# NOTE: 5.1.14393.206 (system v1607) will not work, but 5.1.19041.1 (system v2004) works, verify with PSUseCompatibleCmdlets
-	# NOTE: replacing build 19041 (system v2004) with 18363 (system v1909) which is minimum required for rules
-	New-Variable -Name RequirePowerShellVersion -Scope Global -Option Constant -Value ([version]::new(5, 1, 18363))
+	# NOTE: replacing build 19041 (system v2004) with 18362 (system v1903) which is minimum required for rules and .NET
+	New-Variable -Name RequirePowerShellVersion -Scope Global -Option Constant -Value ([version]::new(5, 1, 18362))
 
-	# Required minimum operating system version (v1909)
+	# Required minimum operating system version (v1903)
 	# https://docs.microsoft.com/en-us/windows/release-information
-	New-Variable -Name RequireWindowsVersion -Scope Global -Option Constant -Value ([version]::new(10, 0, 18363))
+	# https://docs.microsoft.com/en-us/windows-server/get-started/windows-server-release-info
+	New-Variable -Name RequireWindowsVersion -Scope Global -Option Constant -Value ([version]::new(10, 0, 18362))
 
 	# Required minimum .NET version, valid for the PowerShell Desktop edition only, do not decrement!
 	# https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/versions-and-dependencies
+	# https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/how-to-determine-which-versions-are-installed
+	# https://docs.microsoft.com/en-us/dotnet/framework/get-started/system-requirements
+	# https://stackoverflow.com/questions/63520845/determine-net-and-clr-requirements-for-your-powershell-modules/63547710
 	# https://docs.microsoft.com/en-us/powershell/scripting/windows-powershell/install/windows-powershell-system-requirements?view=powershell-7.1
-	New-Variable -Name RequireNETVersion -Scope Global -Option Constant -Value ([version]::new(4, 5, 0))
+	# NOTE: v1703 includes .NET 4.7
+	# NOTE: v1903-v2004 includes .NET 4.8
+	New-Variable -Name RequireNETVersion -Scope Global -Option Constant -Value ([version]::new(4, 8, 0))
 
 	# Repository root directory, reallocating scripts should be easy if root directory is constant
 	New-Variable -Name ProjectRoot -Scope Global -Option Constant -Value (

@@ -211,6 +211,7 @@ todo's in this file are categorized into following sections:
     - All streams same convention:
     (ex. doing something $Variable v$Version instead of doing $Variable $Version),
     also same convention regarding variable value quoting with '' single quotes
+    - Write a script to add context menus for Windows PowerShell
 
 3. Rules
 

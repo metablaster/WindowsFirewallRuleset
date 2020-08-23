@@ -43,7 +43,7 @@
 
 	# Minimum version of Microsoft .NET Framework required by this module
 	# This prerequisite is valid for the PowerShell Desktop edition only.
-	DotNetFrameworkVersion = '4.5'
+	DotNetFrameworkVersion = '4.8'
 
 	# Minimum version of the common language runtime (CLR) required by this module
 	# This prerequisite is valid for the PowerShell Desktop edition only.

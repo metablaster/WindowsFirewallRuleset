@@ -7,3 +7,13 @@
 3. Right click on start button in Windows
 4. Click `Windows Powershell (Admin)` to open Powershell as Administrator
 (Enter Admin password if asked)
+
+# Right click "Open PowerShell here" context cenu
+
+1. To add context menu on right click for "Windows PowerShell" for standard user see:
+
+    [Open PowerShell window here](https://www.tenforums.com/tutorials/60175-open-powershell-window-here-context-menu-add-windows-10-a.html)
+
+2. To add context menu on right click for "Windows PowerShell as Administrator" see:
+
+    [Open PowerShell window here as Administrator](https://www.tenforums.com/tutorials/60177-add-open-powershell-window-here-administrator-windows-10-a.html)

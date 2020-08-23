@@ -49,8 +49,8 @@ or alternatively revisit your edits and re-run individual scripts again.
 
 ## Modification 4
 
-It is unknown what system software dependencies are required, but you might need to install latest
-.NET framework for Windows PowerShell.
+It is unknown what system software dependencies are required, but you need to install minimum
+.NET framework version 4.5 for Windows PowerShell.
 
 ## Modification 5
 
