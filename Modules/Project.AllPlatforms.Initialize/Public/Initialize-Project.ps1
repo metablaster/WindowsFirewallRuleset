@@ -69,6 +69,8 @@ TODO: checking remote systems not implemented
 #>
 function Initialize-Project
 {
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '',
+		Justification = 'There is no way to replace Write-Host here')]
 	[OutputType([void])]
 	[CmdletBinding(DefaultParameterSetName = "NoProject")]
 	param (
@@ -137,6 +139,7 @@ function Initialize-Project
 	Write-Information -Tags "User" -MessageData "INFO: Checking OS edition"
 	$OSEdition = Get-WindowsEdition -Online | Select-Object -ExpandProperty Edition
 
+	# TODO: instead of comparing string we should probably compare numbers
 	if ($OSEdition -like "*Home*")
 	{
 		Write-Error -Category OperationStopped -TargetObject $OSEdition `
@@ -146,11 +149,11 @@ function Initialize-Project
 
 	# Check OS build version, the sole purpose is to write warning for out of date systems,
 	# because of firewall rule updates that reflect lastest OS build
-	[Int32] $TargetOSBuildVersion = ConvertFrom-OSBuild $TargetOSVersion.Build
-
-	if ($TargetOSBuildVersion -lt $RequireWindowsVersion.Build)
+	if ($TargetOSVersion.Build -lt $RequireWindowsVersion.Build)
 	{
+		$TargetOSBuildVersion = ConvertFrom-OSBuild $TargetOSVersion.Build
 		$RequireOSBuildVersion = ConvertFrom-OSBuild $RequireWindowsVersion.Build
+
 		Write-Warning -Message "Target system version is v$TargetOSBuildVersion, to reduce issues with firewall rules please upgrade to at least v$RequireOSBuildVersion"
 	}
 
@@ -372,7 +375,8 @@ function Initialize-Project
 	$OSBuildVersion = ConvertFrom-OSBuild $TargetOSVersion.Build
 
 	# Everything OK, print environment status
-	Write-Information -Tags "User" -MessageData "INFO: Checking project minimum requirements was successful"
+	Write-Host ""
+	Write-Host "INFO: Checking project minimum requirements was successful!" -ForegroundColor Cyan
 
 	Write-Output ""
 	Write-Output "System:`t`t $OSCaption v$OSBuildVersion"

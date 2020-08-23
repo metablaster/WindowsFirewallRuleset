@@ -49,6 +49,9 @@ project root folder
 5. Spelling settings such as random good words which would be detected as misspelled.
 6. Many other minor workspace settings to improve coding experience
 
+To be able to open Windows PowerShell quickly in any folder see
+[Right click "Open PowerShell here" context menu](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/WindowsPowerShell.md)
+
 Recommended extensions in workspace are as follows:
 
 1. [TODO tree](https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree)
@@ -211,7 +214,7 @@ The workspace includes static analysis settings file, so all you have to do is c
 root directory and invoke analyzer as follows:
 
 ```powershell
-Invoke-ScriptAnalyzer .\ -Recurse -Settings Config\PSScriptAnalyzerSettings.psd1
+Invoke-ScriptAnalyzer -Path .\ -Recurse -Settings Config\PSScriptAnalyzerSettings.psd1
 ```
 
 `PSScriptAnalyzerSettings.psd1` settings file includes all rules, including code formatting rules.

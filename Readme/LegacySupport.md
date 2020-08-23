@@ -49,10 +49,19 @@ or alternatively revisit your edits and re-run individual scripts again.
 
 ## Modification 4
 
-It is unknown what system software dependencies are required, but you need to install minimum
-.NET framework version 4.5 for Windows PowerShell.
+It's hard to tell what software or module dependencies might be required for your target environment,
+and once you learn that you should modify version requirements in `Config\ProjectSettings.ps1`
+
+For example .NET framework version 4.5 for Windows PowerShell may be absolute minimum to be able to
+use commandlets from modules provided by Microsoft.
 
 ## Modification 5
 
 Visit `Test` folder and run all tests individually to confirm modules and their functions work as
 expected, any failure should be fixed before loading rules to save yourself from frustration.
+
+To save you some time debugging you should also run code analysis with [PSScriptAnalyzer](https://github.com/PowerShell/PSScriptAnalyzer)
+with following rules enabled:
+
+1. PSUseCompatibleCmdlets
+2. PSUseCompatibleSyntax

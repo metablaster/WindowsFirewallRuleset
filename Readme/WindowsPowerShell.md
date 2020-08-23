@@ -8,7 +8,7 @@
 4. Click `Windows Powershell (Admin)` to open Powershell as Administrator
 (Enter Admin password if asked)
 
-# Right click "Open PowerShell here" context cenu
+# Right click "Open PowerShell here" context menu
 
 1. To add context menu on right click for "Windows PowerShell" for standard user see:
 
