@@ -28,7 +28,7 @@ SOFTWARE.
 
 . $PSScriptRoot\Config\ProjectSettings.ps1
 
-# Check requirements for this project
+# Check requirements
 Initialize-Project
 
 # Imports

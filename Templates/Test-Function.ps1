@@ -33,7 +33,7 @@ SOFTWARE.
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
-# Check requirements for this project
+# Check requirements
 Initialize-Project
 
 # Imports
@@ -41,7 +41,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 # Import-Module -Name Project.Windows.UserInfo
 
-# Ask user if he wants to load these rules
+# User prompt
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 

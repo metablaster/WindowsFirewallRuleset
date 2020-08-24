@@ -28,7 +28,7 @@ SOFTWARE.
 
 . $PSScriptRoot\..\..\..\..\..\Config\ProjectSettings.ps1
 
-# Check requirements for this project
+# Check requirements
 Initialize-Project
 
 # Imports
@@ -38,7 +38,7 @@ Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
 #
-# Setup local variables:
+# Setup local variables
 #
 $Group = "Development - Microsoft Visual Studio"
 $FirewallProfile = "Private, Public"
@@ -47,7 +47,7 @@ $VSUpdateUsers = Get-SDDL -Group "Users", "Administrators" @Logs
 $ExtensionAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM" @Logs
 Merge-SDDL ([ref] $ExtensionAccounts) (Get-SDDL -Group "Users") @Logs
 
-# Ask user if he wants to load these rules
+# User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
 if (!(Approve-Execute @Logs)) { exit }
 

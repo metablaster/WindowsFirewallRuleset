@@ -119,7 +119,11 @@
 		PSData = @{
 
 			# Tags applied to this module. These help with module discovery in online galleries.
-			Tags = @("Utility", "FirewallUtility", "Helper")
+			Tags = @(
+				"Utility"
+				"FirewallUtility"
+				"Helper"
+			)
 
 			# A URL to the license for this module.
 			LicenseUri = 'https://github.com/metablaster/WindowsFirewallRuleset/blob/master/LICENSE'
@@ -131,7 +135,7 @@
 			# IconUri = ''
 
 			# Prerelease string of this module
-			Prerelease = "This pre-release is sufficiently stable to provide utility functions for Windows Firewall Ruleset project"
+			Prerelease = "Pre-release module with utility functions for 'Windows Firewall Ruleset' project"
 
 			# ReleaseNotes of this module
 			# ReleaseNotes = ''

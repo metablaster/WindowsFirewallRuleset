@@ -32,14 +32,14 @@ SOFTWARE.
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
-# Check requirements for this project
+# Check requirements
 Initialize-Project
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
 
-# Ask user if he wants to load these rules
+# User prompt
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 

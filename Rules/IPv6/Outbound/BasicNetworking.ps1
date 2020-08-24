@@ -28,7 +28,7 @@ SOFTWARE.
 
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
 
-# Check requirements for this project
+# Check requirements
 Initialize-Project
 
 # Imports
@@ -38,13 +38,13 @@ Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
 #
-# Setup local variables:
+# Setup local variables
 #
 $Group = "Basic Networking - IPv6"
 $FirewallProfile = "Any"
 $ISATAP_Remotes = @("Internet6", "LocalSubnet6")
 
-# Ask user if he wants to load these rules
+# User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
 if (!(Approve-Execute @Logs)) { exit }
 

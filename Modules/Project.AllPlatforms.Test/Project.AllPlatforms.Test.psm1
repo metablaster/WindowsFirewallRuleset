@@ -33,6 +33,10 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule $true
 . $PSScriptRoot\..\ModulePreferences.ps1
 
+#
+# Script imports
+#
+
 $PublicScripts = @(
 	"Enter-Test"
 	"Exit-Test"

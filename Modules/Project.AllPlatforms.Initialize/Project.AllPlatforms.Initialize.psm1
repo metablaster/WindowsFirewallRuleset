@@ -42,6 +42,10 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 # if (!$PSCmdlet.ShouldProcess("ModuleName", "Update or install module if needed"))
 # SupportsShouldProcess = $true, ConfirmImpact = 'High'
 
+#
+# Script imports
+#
+
 $PrivateScripts = @(
 	"Find-UpdatableModule"
 )

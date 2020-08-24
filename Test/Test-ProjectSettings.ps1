@@ -42,7 +42,7 @@ if ((Get-Variable -Name Develop -Scope Global).Value -eq $false)
 Write-Information -Tags "Test" -MessageData "INFO: Import-Module Logging"
 Import-Module -Name Project.AllPlatforms.Logging
 
-# Check requirements for this project
+# Check requirements
 Write-Information -Tags "Test" -MessageData "INFO: Import-Module System"
 Initialize-Project
 
@@ -57,7 +57,7 @@ Import-Module -Name Project.Windows.UserInfo
 
 Write-Information -Tags "Test" -MessageData "INFO: Import-Module ProgramInfo"
 
-# Ask user if he wants to load these rules
+# User prompt
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 

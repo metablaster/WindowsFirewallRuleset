@@ -77,7 +77,7 @@ these IPv6 addresses are valid globally and are globally routable.
 
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
 
-# Check requirements for this project
+# Check requirements
 Initialize-Project
 
 # Imports
@@ -87,7 +87,7 @@ Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
 #
-# Setup local variables:
+# Setup local variables
 #
 $Group = "Multicast IPv6"
 $FirewallProfile = "Private, Domain"
@@ -98,7 +98,7 @@ $MulticastUsers = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE", "LOCA
 # on boot, (neither ::1 address nor interface alias)
 $MulticastInterface = "Any"
 
-# Ask user if he wants to load these rules
+# User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
 if (!(Approve-Execute @Logs)) { exit }
 

@@ -3,7 +3,7 @@ TOPIC
 	about_Project.AllPlatforms.Logging
 
 SHORT DESCRIPTION
-	Module for logging native PowerShell Write-* commandlets
+	Module for logging PowerShell Write-* commandlets
 
 LONG DESCRIPTION
 	A function which produces an error, warning and info streams must be advanced
@@ -11,12 +11,10 @@ LONG DESCRIPTION
 
 	Once in a while Update-Log is called, which writes generated data into log files.
 
-	Behavior of logging can be customized in ProjectSettings.ps1 (WindowsFirewallRuleset project)
+	Behavior of logging can be customized in Config\ProjectSettings.ps1
 
 VARIABLES
-	Logs                Splatting which defines common parameters where streams are captured
-	ErrorStatus         Global variable which holds true if errors were generated
-	WarningStatus       Global variable which holds true if warning were generated
+	Logs                Splatting which defines common parameters to capture streams
 	CheckInitLogging    Purpose is to prevent double initialization of constants
 
 EXAMPLES

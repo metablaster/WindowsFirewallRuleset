@@ -85,7 +85,7 @@ Type    Name
 
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
 
-# Check requirements for this project
+# Check requirements
 Initialize-Project
 
 # Imports
@@ -95,7 +95,7 @@ Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
 #
-# Setup local variables:
+# Setup local variables
 #
 $Group = "ICMPv6"
 $FirewallProfile = "Any"
@@ -106,7 +106,7 @@ $Description = "https://www.iana.org/assignments/icmpv6-parameters/icmpv6-parame
 # boot, (neither ::1 address nor interface alias)
 $ICMPInterface = "Any"
 
-# Ask user if he wants to load these rules
+# User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
 if (!(Approve-Execute @Logs)) { exit }
 

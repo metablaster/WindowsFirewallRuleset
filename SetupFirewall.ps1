@@ -31,7 +31,7 @@ SOFTWARE.
 # First unblock all files
 & "$ProjectRoot\UnblockProject.ps1"
 
-# Check requirements for this project
+# Check requirements
 Initialize-Project
 Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $false
 

@@ -30,15 +30,17 @@ SOFTWARE.
 # Unit test Get-NetworkService
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
+	$MyInvocation.MyCommand.Name -replace ".{4}$" )
 
-# Check requirements for this project
+# Check requirements
 Initialize-Project
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
 
-# Ask user if he wants to load these rules
+# User prompt
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 

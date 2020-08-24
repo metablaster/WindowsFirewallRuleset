@@ -30,7 +30,7 @@
 	Copyright = 'Copyright (C) 2020 metablaster'
 
 	# Description of the functionality provided by this module
-	Description = 'Module for logging native PowerShell Write-* commandlets'
+	Description = 'Module for logging PowerShell Write-* commandlets'
 
 	# Minimum version of the Windows PowerShell engine required by this module
 	PowerShellVersion = '5.1'
@@ -103,6 +103,8 @@
 		"Project.AllPlatforms.Logging.psd1"
 		"Project.AllPlatforms.Logging.psm1"
 		"about_Project.AllPlatforms.Logging.help.txt"
+		"Update-Log.ps1"
+		"Get-LogFile.ps1"
 	)
 
 	# Private data to pass to the module specified in RootModule/ModuleToProcess.
@@ -112,7 +114,10 @@
 		PSData = @{
 
 			# Tags applied to this module. These help with module discovery in online galleries.
-			Tags = @("Logging")
+			Tags = @(
+				"Log"
+				"Logging"
+			)
 
 			# A URL to the license for this module.
 			LicenseUri = 'https://github.com/metablaster/WindowsFirewallRuleset/blob/master/LICENSE'
@@ -124,7 +129,7 @@
 			# IconUri = ''
 
 			# Prerelease string of this module
-			Prerelease = "This pre-release is sufficiently stable to provide core logging functionality for Windows Firewall Ruleset project"
+			Prerelease = "Pre-release module for logging functionality in 'Windows Firewall Ruleset' project"
 
 			# ReleaseNotes of this module
 			# ReleaseNotes = ''
