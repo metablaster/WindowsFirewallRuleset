@@ -1,15 +1,42 @@
 
 # Links and references
 
-A collection of links relevant for quick reference and building a firewall
+For anything that isn't covered by documentation in this repository you can perform additional
+research by using this collection of links for quick reference.
 
-## PowerShell reference
+You might find these links relevant to extend project code base and to develop firewall for
+customized scenarios.
+
+## Table of contents
+
+- [Links and references](#links-and-references)
+  - [Table of contents](#table-of-contents)
+  - [Visual Studio Code](#visual-studio-code)
+  - [PowerShell](#powershell)
+  - [Git and GitHub](#git-and-github)
+  - [IPv6](#ipv6)
+  - [IPv4](#ipv4)
+  - [IP general](#ip-general)
+  - [Firewall](#firewall)
+  - [Virtualization](#virtualization)
+  - [OS and software](#os-and-software)
+  - [Unclassified links](#unclassified-links)
+
+## Visual Studio Code
+
+[VSCode documentation](https://code.visualstudio.com/docs)
+
+[Using VSCode for PowerShell Development](https://docs.microsoft.com/en-us/powershell/scripting/dev-cross-plat/vscode/using-vscode?view=powershell-7)
+
+[What is a workspace in Visual Studio Code](https://stackoverflow.com/questions/44629890/what-is-a-workspace-in-visual-studio-code)
+
+## PowerShell
 
 [PowerShell Core Reference](https://docs.microsoft.com/en-us/powershell/scripting/how-to-use-docs?view=powershell-7.1)
 
 [Windows PowerShell Reference](https://docs.microsoft.com/en-us/powershell/windows/get-started?view=win10-ps)
 
-Outlined modules, all that begin with "net*" such as:
+In the outline on the above 2 links search for modules that begin with "net*" such as:
 
 1. netsecurity
 2. nettcpip
@@ -22,15 +49,21 @@ Also few commandlets from these modules:
 2. iscsi
 3. iscsitarget
 
-## IPv6
+[PowerShell Scripting Blog](https://devblogs.microsoft.com/scripting)
 
-**2 Links you should read right now!**
+[PowerShell Explained](https://powershellexplained.com)
+
+## Git and GitHub
+
+[Git documentation](https://git-scm.com/doc)
+
+[GitHub Documentation](https://docs.github.com/en/github)
+
+## IPv6
 
 [Do not disable IPv6](https://www.anexinet.com/blog/two-common-mistakes-windows-firewall-and-ipv6)
 
 [IPv6 in Windows](https://support.microsoft.com/en-us/help/929852/guidance-for-configuring-ipv6-in-windows-for-advanced-users)
-
-Other IPv6 links
 
 [IPv6 address space](https://www.iana.org/assignments/ipv6-address-space/ipv6-address-space.xml)
 
@@ -58,7 +91,7 @@ Other IPv6 links
 
 [WFP Operation](https://docs.microsoft.com/en-us/windows/win32/fwp/basic-operation)
 
-[Types of NAT](https://www.think-like-a-computer.com/2011/09/16/types-of-nat)
+[Types of NAT](https://doc-kurento.readthedocs.io/en/6.9.0/knowledge/nat.html)
 
 [Windows Firewall](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-firewall/windows-firewall-with-advanced-security)
 
@@ -70,7 +103,17 @@ Other IPv6 links
 
 [Windows Firewall On Hyper-V Host Has Nothing To Do With Virtual Machines](https://aidanfinn.com/?p=15222)
 
-## Random unclassified links
+## OS and software
+
+[.NET Framework versions and dependencies](https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/versions-and-dependencies)
+
+[Windows 10 release information](https://docs.microsoft.com/en-us/windows/release-information)
+
+[Windows Server release information](https://docs.microsoft.com/en-us/windows-server/get-started/windows-server-release-info)
+
+[Security identifiers (SID)](https://docs.microsoft.com/en-us/windows/security/identity-protection/access-control/security-identifiers)
+
+## Unclassified links
 
 [Check IP](https://whatismyipaddress.com/ip-lookup)
 

@@ -3,6 +3,39 @@
 
 Useful Powershell commands to help gather information needed for Windows firewall.
 
+## Table of contents
+
+- [PowerShell commands(lets)](#powershell-commandslets)
+  - [Table of contents](#table-of-contents)
+  - [Store Apps](#store-apps)
+    - [List all system apps beginning with word "Microsoft"](#list-all-system-apps-beginning-with-word-microsoft)
+    - [List all provisioned Windows apps](#list-all-provisioned-windows-apps)
+    - [Lists the app packages that are installed for specific user account on the computer](#lists-the-app-packages-that-are-installed-for-specific-user-account-on-the-computer)
+    - [Get specific package](#get-specific-package)
+    - [Get app details](#get-app-details)
+    - [Update store apps](#update-store-apps)
+  - [Get users and computers](#get-users-and-computers)
+    - [List all users](#list-all-users)
+    - [List only users](#list-only-users)
+    - [Only Administrators](#only-administrators)
+    - [Prompt user for credentials](#prompt-user-for-credentials)
+    - [Computer information](#computer-information)
+    - [Currently logged in user](#currently-logged-in-user)
+    - [Well known SID's](#well-known-sids)
+    - [Computer name](#computer-name)
+  - [Get CIM classes and commandlets](#get-cim-classes-and-commandlets)
+  - [Get type name aliases](#get-type-name-aliases)
+  - [Package provider management](#package-provider-management)
+    - [List of package providers that are loaded or installed but not loaded](#list-of-package-providers-that-are-loaded-or-installed-but-not-loaded)
+    - [List of package sources that are registered for a package provider](#list-of-package-sources-that-are-registered-for-a-package-provider)
+    - [List of Package providers available for installation](#list-of-package-providers-available-for-installation)
+    - [Install package provider](#install-package-provider)
+  - [Module management](#module-management)
+  - [Get network interfaces](#get-network-interfaces)
+    - [All possible adapters and their relevant info](#all-possible-adapters-and-their-relevant-info)
+    - [Physical, virtual and loopback IP interfaces](#physical-virtual-and-loopback-ip-interfaces)
+    - [All adapters configured with an IP regardless of connection state](#all-adapters-configured-with-an-ip-regardless-of-connection-state)
+
 ## Store Apps
 
 There are two categories:
@@ -96,7 +129,7 @@ Get-LocalGroupMember -Group "Users"
 Get-LocalGroupMember -Group "Administrators"
 ```
 
-### Prompt user for info
+### Prompt user for credentials
 
 ```powershell
 Get-Credential

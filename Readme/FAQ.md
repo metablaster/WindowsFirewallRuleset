@@ -4,6 +4,14 @@
 Here are the most common problems running powershell scripts in this project and how to resolve them.
 Also general questions and answers regarding firewall.
 
+## Table of contents
+
+- [Frequently Asked Questions](#frequently-asked-questions)
+  - [Table of contents](#table-of-contents)
+  - [I applied the rule(s) but it doesn't work, program "foobar.exe" doesn't connect to internet](#i-applied-the-rules-but-it-doesnt-work-program-foobarexe-doesnt-connect-to-internet)
+  - [I got an error "Network path not found"](#i-got-an-error-network-path-not-found)
+  - [Does this firewall give me the right protection](#does-this-firewall-give-me-the-right-protection)
+
 ## I applied the rule(s) but it doesn't work, program "foobar.exe" doesn't connect to internet
 
 1. Close down the program which is unable to connect to network completely

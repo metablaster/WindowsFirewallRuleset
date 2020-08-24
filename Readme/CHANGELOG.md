@@ -1,7 +1,20 @@
 
-# Here is a list of changes for each of releases
+# Changelog
 
-# Changelog v0.6.0
+Here is a list of changes for each of the releases
+
+## Table of contents
+
+- [Changelog](#changelog)
+  - [Table of contents](#table-of-contents)
+  - [v0.6.0 (develop branch)](#v060-develop-branch)
+  - [v0.5.0 (current release)](#v050-current-release)
+  - [v0.4.1](#v041)
+  - [v0.4.0](#v040)
+  - [v0.3.0](#v030)
+  - [v0.2](#v02)
+
+## v0.6.0 (develop branch)
 
 - New features
 
@@ -37,7 +50,7 @@
   - Added function to convert to or query system SKU
   - Several minor module code changes
 
-# Changelog v0.5.0
+## v0.5.0 (current release)
 
 - Modules
 
@@ -86,7 +99,7 @@
     to prevent spamming YES/NO questions while executing them.
   - Updated some informational messages to be more descriptive and less annoying.
 
-# Changelog v0.4.1
+## v0.4.1
 
 - Modules
 
@@ -108,7 +121,7 @@
   - Added `FAQ.md`
   - Updated main page `README.md`
 
-# Changelog v0.4.0
+## v0.4.0
 
 - Rules
 
@@ -142,7 +155,7 @@
 
   - Updated various documentation and notices about project
 
-# Changelog v0.3.0
+## v0.3.0
 
 - New features
 
@@ -176,7 +189,7 @@
   - Modules, comments, todo list, help and readme files are updated
   - All files converted to UTF-8 and Tabs-4 (CRLF), gitattributes updated few new file types
 
-# Changelog v0.2
+## v0.2
 
 - New features
 

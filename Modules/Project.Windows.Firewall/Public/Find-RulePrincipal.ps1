@@ -34,14 +34,14 @@ Get all rules which are either missing or not missing LocalUser value
 Rules which are missing LocalUser are considered weak and need to be updated
 This operation is slow, intended for debugging.
 .PARAMETER Empty
-Is specified returns rules with no local user value
+If specified returns rules with no local user value
 Otherwise only rules with local user are returned
 .EXAMPLE
 PS> Find-RulePrincipal -Empty
 .INPUTS
 None. You cannot pipe objects to Find-RulePrincipal
 .OUTPUTS
-None. Error message is shown if check failed, system info otherwise.
+None.
 .NOTES
 TODO: This needs improvement to export matching rules to JSON
 #>

@@ -4,6 +4,19 @@
 This document explains how to monitor Windows firewall activity and network activity on local system.\
 *Note: all of these programs must be run as Administrator:*
 
+## Table of contents
+
+- [Monitoring Firewall](#monitoring-firewall)
+  - [Table of contents](#table-of-contents)
+  - [Monitor your firewall like a pro](#monitor-your-firewall-like-a-pro)
+  - [Process Monitor](#process-monitor)
+  - [mTail](#mtail)
+  - [Event log](#event-log)
+  - [WFP state and filter logs](#wfp-state-and-filter-logs)
+  - [Windows Firewall](#windows-firewall)
+  - [TCP View](#tcp-view)
+  - [netstat](#netstat)
+
 ## Monitor your firewall like a pro
 
 As you might already know, Windows firewall does not give us any easy to use tools to monitor

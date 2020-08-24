@@ -17,6 +17,16 @@ todo's in this file are categorized into following sections:
 4. Low priority         Not very important
 5. Done                 It's done and kept here for reference.
 
+## Table of contents
+
+- [List of stuff that needs to be done](#list-of-stuff-that-needs-to-be-done)
+  - [Table of contents](#table-of-contents)
+  - [Ongoing](#ongoing)
+  - [High priority](#high-priority)
+  - [Medium priority](#medium-priority)
+  - [Low priority](#low-priority)
+  - [Done](#done)
+
 ## Ongoing
 
 1. Modules

@@ -47,7 +47,8 @@ None.
 #>
 function Format-Output
 {
-	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'There is no way to replace Write-Host here')]
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '',
+		Justification = 'There is no way to replace Write-Host here')]
 	[OutputType([void])]
 	[CmdletBinding()]
 	param (

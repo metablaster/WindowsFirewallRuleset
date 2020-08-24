@@ -12,6 +12,9 @@
   - [License](#license)
   - [Requirements](#requirements)
   - [I don't meet requirements](#i-dont-meet-requirements)
+  - [First time user](#first-time-user)
+    - [Warning](#warning)
+    - [Note](#note)
   - [Quick start](#quick-start)
   - [Where are my rules](#where-are-my-rules)
   - [Applying individual rulesets](#applying-individual-rulesets)
@@ -97,7 +100,10 @@ The project maintains **"per file"** license and Copyright notices.
 
 ## Requirements
 
-1. Windows 10 Pro/Enterprise, Windows Server 2019 (both x64 bit)
+1. Following x64 operating systems are currently actively tested:
+   - Windows 10 Professional
+   - Windows 10 Enterprise
+   - Windows Server 2019 Standard
 2. PowerShell Core 7.0 or Windows PowerShell 5.1
 [Download PowerShell](https://github.com/PowerShell/PowerShell)
 3. .NET Framework 4.5 (Windows PowerShell only) [Download Net Framework](https://dotnet.microsoft.com/download/dotnet-framework)
@@ -106,6 +112,8 @@ The project maintains **"per file"** license and Copyright notices.
 6. PowerShell Support for VSCode (Recommended)
 [Download extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell)
 7. PSScriptAnalyzer (Recommended) [Download PSScriptAnalyzer](https://github.com/PowerShell/PSScriptAnalyzer)
+
+Requirements details:
 
 - All operating systems 10.0 (Major 10, Minor 0) and up are supported,
 but only those editions listed in point 1 are actively tested.\
@@ -116,7 +124,7 @@ which is already installed.
 - You might want to have git to check out for updates,
 to easily switch between branches or to contribute code.
 - VS Code is preferred and recommended editor to navigate project and edit scripts for your
-needs or for contribution.
+needs or contribution.
 - If you get VSCode, you'll also need powershell extension for code navigation and
 PowerShell specific features.
 
@@ -131,11 +139,12 @@ For now you can load rules on 32 bit system just fine with the exception of few 
 relevant at all for your configuration.
 
 [This document](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/LegacySupport.md)
-describes how to make use of this project on older Windows systems such as Windows 7 or Server 2008
+describes how to make use of this project on older Windows systems such as Windows 7 or Windows Server
+2008
 
-## Quick start
+## First time user
 
-**WARNING:**
+### Warning
 
 - You might loose internet connectivity for some of your programs or in rare cases even lose internet
 connectivity completely, if that happens, you can either temporarily allow outbound network traffic
@@ -156,7 +165,7 @@ such as `stateful ftp` and `pptp` or global `IPSec` settings, if you need specif
 `SetupProfile.ps1` and take a look at `Set-NetFirewallSetting`.\
 Note that `SetupProfile.ps1` is automatically called by `SetupFirewall.ps1` script
 
-**NOTE:**
+### Note
 
 - If you would like to modify basic behavior of execution, such as force loading rules and various
 default actions then visit `Config\ProjectSettings.ps1` and there you'll find global variables
@@ -186,7 +195,7 @@ for more information why using Administrative account is dangerous security wise
 renamed by Administrator, therefore it's important to reload specific rules from time to time as
 needed to update firewall for system changes that may happen at any time.
 
-**STEPS:**
+## Quick start
 
 1. If you don't have ssh keys and other setup required to clone via SSH then either clone with HTTPS
 or just download the released zip file by clicking on "Release" here on this site.\
@@ -280,6 +289,8 @@ Rules are loaded into Local group policy, follow below steps to open local group
 3. Expand node: `Windows Defender Firewall with Advanced Security`
 4. Expand node: `Windows Defender Firewall with Advanced Security - Local Group Policy Object`
 5. Click on either `Inbound` or `Outbound` node to view and manage rules you applied with PowerShell.
+
+For more information about GPO see: [Configure security policy settings](https://docs.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/how-to-configure-security-policy-settings)
 
 ## Applying individual rulesets
 
@@ -428,7 +439,14 @@ Following features are desired and might be available at some point in the futur
 
    - Applying firewall configuration to remote computers on domain or home networks
 
-2. Full functionality for the following editions of Windows 10.0+
+2. Comprehensive firewall rulesets for server platforms
+
+3. On demand registry scan to validate integrity of active firewall filtering policy
+
+   - Any firewall rule in the registry that is not part of this repository is reported for review
+   - Because, malware, hackers and even trusted software might attempt to bypass firewall at any time
+
+4. Full functionality for the following editions of Windows 10.0+
    - Windows 10 Pro for Workstations
    - Windows 10 Pro Education
    - Windows 10 Enterprise
@@ -436,13 +454,5 @@ Following features are desired and might be available at some point in the futur
    - Windows 10 IoT Core Blast
    - Windows 10 IoT Enterprise
    - Windows 10 S
-   - Windows Server Essentials
-   - Windows Server Standard
-   - Windows Server Datacenter
-
-3. On demand registry scan to validate integrity of active firewall filtering policy
-
-   - Any active firewall rule in the registry that is not part of this project is reported
-   - Malware, hackers and even trusted software might attempt to bypass firewall at any time
-
-4. Firewall rulesets for server platforms
+   - Windows Server 2019 Essentials
+   - Windows Server 2019 Datacenter

@@ -6,6 +6,36 @@ List of dropped packets, blocked programs, how to troubleshoot the problem and p
 Note that all of these resolutions here are "forced",
 meaning weakening the firewall just to fix the problem or to make firewall logs clean.
 
+## Table of contents
+
+- [Problematic network traffic](#problematic-network-traffic)
+  - [Table of contents](#table-of-contents)
+  - [Case 1: List of Windows services failing to connect outbound](#case-1-list-of-windows-services-failing-to-connect-outbound)
+    - [Case 1: Troubleshooting](#case-1-troubleshooting)
+    - [Case 1: Audit result](#case-1-audit-result)
+  - [Case 2: List of dropped outbound packets during system boot](#case-2-list-of-dropped-outbound-packets-during-system-boot)
+    - [Case 2: Troubleshooting](#case-2-troubleshooting)
+    - [Case 2: Audit result](#case-2-audit-result)
+  - [Case 3: Event log shows packet drops, firewall log does not show these drops](#case-3-event-log-shows-packet-drops-firewall-log-does-not-show-these-drops)
+    - [Case 3: Troubleshooting](#case-3-troubleshooting)
+    - [Case 3: Audit result](#case-3-audit-result)
+  - [Case 4: Updating Microsoft Office fails](#case-4-updating-microsoft-office-fails)
+    - [Case 4: Troubleshooting](#case-4-troubleshooting)
+    - [Case 4: Audit result](#case-4-audit-result)
+  - [Case 5: Outbound protocol 0 port 0](#case-5-outbound-protocol-0-port-0)
+    - [Case 5: Troubleshooting](#case-5-troubleshooting)
+    - [Case 5 Audit result](#case-5-audit-result)
+  - [Case 6: Dropped inbound UDP from LAN](#case-6-dropped-inbound-udp-from-lan)
+    - [Case 6: Troubleshooting](#case-6-troubleshooting)
+    - [Case 6: Audit result](#case-6-audit-result)
+  - [Case 7: IPv6 loopback rule](#case-7-ipv6-loopback-rule)
+    - [Case 7: Troubleshoot](#case-7-troubleshoot)
+    - [Case 7: Audit result](#case-7-audit-result)
+  - [Case 8: Connection dropped when specific network interface is assigned to rule](#case-8-connection-dropped-when-specific-network-interface-is-assigned-to-rule)
+    - [Case 8: Troubleshooting](#case-8-troubleshooting)
+    - [Case 8: Audit result](#case-8-audit-result)
+  - [Case 9: Epic games UDP traffic to 230.0.0.1 is blocked](#case-9-epic-games-udp-traffic-to-230001-is-blocked)
+
 ## Case 1: List of Windows services failing to connect outbound
 
 This "case 1" can be easily reproduced by making a new user account and attempt to update store apps.

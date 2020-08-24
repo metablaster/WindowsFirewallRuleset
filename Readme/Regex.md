@@ -8,8 +8,27 @@ For example once your regex hits, you would use CTRL + SHIFT + L to enter
 [Multi cursor](https://code.visualstudio.com/docs/getstarted/tips-and-tricks#_multi-cursor-selection)
 mode and manipulate all regex matches however you like.
 
-NOTE: firewall rule examples here are shortened.\
-NOTE: each regex includes an optional space at the end
+NOTE:
+
+- firewall rule examples here are shortened.
+- each regex includes an optional space at the end
+
+## Table of contents
+
+- [Regex expressions for quick project wide actions](#regex-expressions-for-quick-project-wide-actions)
+  - [Table of contents](#table-of-contents)
+  - [Get -DisplayName parameter and it's value](#get--displayname-parameter-and-its-value)
+  - [Get platform](#get-platform)
+  - [Get group](#get-group)
+  - [Get Interface](#get-interface)
+  - [Get Profile property if value also contains variable names](#get-profile-property-if-value-also-contains-variable-names)
+  - [Direction protocol pairs](#direction-protocol-pairs)
+  - [Get local and remote port parameters and values](#get-local-and-remote-port-parameters-and-values)
+  - [Get mapping pairs and their values](#get-mapping-pairs-and-their-values)
+  - [Get LocalUser and EdgeTraversalPolicy](#get-localuser-and-edgetraversalpolicy)
+  - [Get local and remote IPv6 address only in any notation](#get-local-and-remote-ipv6-address-only-in-any-notation)
+  - [Get local and remote IPv4 address only in any notation](#get-local-and-remote-ipv4-address-only-in-any-notation)
+  - [Get owner and package for store app](#get-owner-and-package-for-store-app)
 
 ## Get -DisplayName parameter and it's value
 

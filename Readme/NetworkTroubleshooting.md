@@ -10,6 +10,41 @@ meaning you go step by step and isolating each area making it less probable to b
 
 This are the most basic troubleshooting procedures one should always perform when facing network issues.
 
+## Table of contents
+
+- [Network troubleshooting detailed guide](#network-troubleshooting-detailed-guide)
+  - [Table of contents](#table-of-contents)
+  - [Open up PowerShell](#open-up-powershell)
+  - [First clear DNS cache to isolate that problem](#first-clear-dns-cache-to-isolate-that-problem)
+  - [Perform DNS query](#perform-dns-query)
+  - [Take a look at your network information](#take-a-look-at-your-network-information)
+  - [Ping hosts](#ping-hosts)
+  - [Reset network](#reset-network)
+  - [Check for updates](#check-for-updates)
+  - [Troubleshoot WI-FI](#troubleshoot-wi-fi)
+  - [Trace route to random hosts on internet](#trace-route-to-random-hosts-on-internet)
+  - [Disable firewall](#disable-firewall)
+  - [Disable and enable network adapter](#disable-and-enable-network-adapter)
+  - [Change DNS server](#change-dns-server)
+  - [Restart or reset router](#restart-or-reset-router)
+  - [Check your LAN connection](#check-your-lan-connection)
+  - [Contact your ISP](#contact-your-isp)
+  - [Perform internet speed test](#perform-internet-speed-test)
+  - [Perform LAN speed test](#perform-lan-speed-test)
+  - [Try another adapter](#try-another-adapter)
+  - [Change adapter properties](#change-adapter-properties)
+  - [Configure your router](#configure-your-router)
+  - [I have game multiplayer issues](#i-have-game-multiplayer-issues)
+  - [Issues with LAN, Workgroup, Home group, Remote desktop or sharing](#issues-with-lan-workgroup-home-group-remote-desktop-or-sharing)
+  - [Reset firewall](#reset-firewall)
+  - [Run network troubleshooter](#run-network-troubleshooter)
+  - [Look at IP route information](#look-at-ip-route-information)
+  - [Look at your hosts file](#look-at-your-hosts-file)
+  - [Firewall issue](#firewall-issue)
+  - [Check for Windows Auto-Tuning](#check-for-windows-auto-tuning)
+  - [Troubleshoot or reinstall Windows](#troubleshoot-or-reinstall-windows)
+  - [If nothing works](#if-nothing-works)
+
 ## Open up PowerShell
 
 Press `Windows key + X` then click on "Windows PowerShell (Admin)"

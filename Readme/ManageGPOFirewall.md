@@ -1,4 +1,6 @@
 
-# How to manage Local Group Policy (GPO) firewall
+# Manage Windows Firewall trough Local Group Policy (GPO)
 
-Until this document is updated take a look [here](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-firewall/windows-firewall-with-advanced-security)
+Until this document is updated take a look at link below:
+
+[Windows Defender Firewall with Advanced Security](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-firewall/windows-firewall-with-advanced-security)

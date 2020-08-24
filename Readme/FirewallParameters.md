@@ -9,32 +9,55 @@ Explain what is what by mapping powershell parameters to GUI display equivalents
 In addition, explanation of other parameters which are not self explanatory or well documented
 and usually need googling out what they do.
 
-# PORT
+## Table of contents
 
-## LocalPort/RemotePort
+- [Firewall Parameters](#firewall-parameters)
+  - [Table of contents](#table-of-contents)
+  - [PORT](#port)
+    - [LocalPort/RemotePort](#localportremoteport)
+    - [LocalPort TCP Inbound](#localport-tcp-inbound)
+    - [LocalPort UDP Inbound](#localport-udp-inbound)
+    - [LocalPort TCP Outbound](#localport-tcp-outbound)
+  - [ADDRESS](#address)
+    - [RemoteAddress](#remoteaddress)
+  - [INTERFACE](#interface)
+    - [InterfaceType](#interfacetype)
+    - [InterfaceAlias](#interfacealias)
+  - [USERS](#users)
+  - [EDGE TRAVERSAL](#edge-traversal)
+  - [POLICY STORE](#policy-store)
+  - [APPLICATION LAYER ENFORCEMENT](#application-layer-enforcement)
+  - [PARAMETER VALUES EXAMPLE](#parameter-values-example)
+  - [Log file fields](#log-file-fields)
+  - [Outbound](#outbound)
+  - [Inbound](#inbound)
+
+## PORT
+
+### LocalPort/RemotePort
 
 - `Any` All Ports
 
-## LocalPort TCP Inbound
+### LocalPort TCP Inbound
 
 - `RPCEPMap` RPC Endpoint Mapper
 - `RPC` RPC Dynamic Ports
 - `IPHTTPSIn` IPHTTPS
 
-## LocalPort UDP Inbound
+### LocalPort UDP Inbound
 
 - `PlayToDiscovery` PlayTo Discovery
 - `Teredo` Edge Traversal
 
-## LocalPort TCP Outbound
+### LocalPort TCP Outbound
 
 - `IPHTTPSOut` IPHTTPS
 
-# ADDRESS
+## ADDRESS
 
 - *Keywords can be restricted to IPv4 or IPv6 by appending a 4 or 6*
 
-## RemoteAddress
+### RemoteAddress
 
 - `Any` Any IP Address
 - `LocalSubnet` Local Subnet
@@ -48,16 +71,16 @@ and usually need googling out what they do.
 - `PlayToDevice` PlayTo Renderers
 - `?` Captive Portal Addresses
 
-# INTERFACE
+## INTERFACE
 
-## InterfaceType
+### InterfaceType
 
 - `Any` All interface types
 - `Wired` Wired
 - `Wireless` Wireless
 - `RemoteAccess` Remote access
 
-## InterfaceAlias
+### InterfaceAlias
 
 **NOTE:** Not fully compatible with interfaceType because interfaceType parameter has higher
 precedence over InterfaceAlias, Mixing interfaceType with InterfaceAlias doesn't make sense,
@@ -66,21 +89,21 @@ except if InterfaceType is "Any", use just one of these two parameters.
 - [WildCardPattern] ([string])
 - [WildCardPattern] ([string], [WildCardOptions])
 
-# USERS
+## USERS
 
 - `Localuser` Authorized local Principals
 - `?` Excepted local Principals
 - `Owner` Local User Owner
 - `RemoteUser` Authorized Users
 
-# EDGE TRAVERSAL
+## EDGE TRAVERSAL
 
 - `Block` Allow edge traversal
 - `Allow` Block edge traversal
 - `DeferToUser` Defer to user / Defer allow to user
 - `DeferToApp` Defer to application / Defer allow to application
 
-# POLICY STORE
+## POLICY STORE
 
 1. Persistent Store (example: `-PolicyStore PersistentStore`)
 2. GPO              (example: `-PolicyStore localhost`)
@@ -111,14 +134,14 @@ local computer. in other words it's a master store.
 There are other stores not mentioned here, which are used in corporate networks, AD's or Domains,
 so irrelevant for home users.
 
-# APPLICATION LAYER ENFORCEMENT
+## APPLICATION LAYER ENFORCEMENT
 
 The meaning of this parameter value depends on which parameter it is used:
 
 1. `"*"` Apply to services only / Apply to application packages only
 2. `Any` Apply to all programs + and services / and application packages / that meet the specified condition
 
-# PARAMETER VALUES EXAMPLE
+## PARAMETER VALUES EXAMPLE
 
 This is how parameters are used on command line, most of them need to be enclosed in quotes if
 assigned to variable first.
@@ -158,7 +181,7 @@ OverrideBlockRules    = $true
 Owner                 = "S-1-5-21-3337988176-3917481366-464002247-500"
 ```
 
-# LOG FILE FIELDS
+## Log file fields
 
 Depending on settings, firewall log can contain dropped and allowed packets,
 setting in powershell allow us to log **ignored** packets too however this does not happen
