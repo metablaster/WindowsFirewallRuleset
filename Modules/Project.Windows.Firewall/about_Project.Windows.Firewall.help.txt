@@ -3,10 +3,13 @@ TOPIC
 	about_Project.Windows.Firewall
 
 SHORT DESCRIPTION
-	Export, import and remove rules from Windows firewall
-    Format output when loading, importing and exporting rules
+	Windows firewall management
 
 LONG DESCRIPTION
+	Export, import and remove rules from Windows firewall
+    Format output when loading, importing and exporting rules
+	Functionality for firewall rule and policy auditing
+
 	The three commandlets Export-FirewallRule, Import-FirewallRule and Remove-FirewallRule export,
 	import and remove specified firewall rule sets into CSV or JSON file format.
 	When importing existing rules with the same name will be overwritten.
@@ -24,12 +27,15 @@ EXAMPLES
 	Net-NewFirewallRule ... | Format-Output
 	Format output of the Net-NewFirewallRule commandlet
 
+	To query weak rules with no LocalUser value
+	Test-PrincipalRule -Empty
+
 KEYWORDS
+    Audit
 	Firewall
 	Export
 	Import
 	FirewallRule
 
 SEE ALSO
-	https://github.com/MScholtes/Project.Windows.Firewall
 	https://github.com/metablaster/WindowsFirewallRuleset

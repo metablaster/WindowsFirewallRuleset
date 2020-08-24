@@ -27,28 +27,29 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Test-PrincipalRule
+# Unit test for:
+#
+# 1. Enter-Test
+# 2. Start-Test
+# 3. Stop-Test
+# 4. Exit-Test
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
+	$MyInvocation.MyCommand.Name -replace ".{4}$" )
 
-# Check requirements for this project
+# Check requirements
 Initialize-Project
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
 
-# Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+# User prompt
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
-
-New-Test "Test-PrincipalRule"
-$Result = Test-PrincipalRule @Logs
-
-New-Test "Test-PrincipalRule | Get-TypeName"
-$Result | Test-PrincipalRule @Logs
-
-Update-Log
+Enter-Test $ThisScript
+Start-Test "Start-Test -Param input"
+Stop-Test
 Exit-Test

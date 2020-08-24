@@ -39,16 +39,16 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
-New-Test "Get-NetFramework"
+Start-Test "Get-NetFramework"
 $NETFramework = Get-NetFramework
 $NETFramework
 
-New-Test "Get-NetFramework latest"
+Start-Test "Get-NetFramework latest"
 if ($null -ne $NETFramework)
 {
 	$NETFrameworkRoot = $NETFramework |
@@ -59,7 +59,7 @@ if ($null -ne $NETFramework)
 	$NETFrameworkRoot
 }
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $NETFrameworkRoot | Get-TypeName @Logs
 
 Update-Log

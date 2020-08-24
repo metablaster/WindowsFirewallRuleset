@@ -39,16 +39,16 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
-New-Test "Get-ComputerName"
+Start-Test "Get-ComputerName"
 $ComputerName = Get-ComputerName @Logs
 $ComputerName
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $ComputerName | Get-TypeName @Logs
 
 Update-Log

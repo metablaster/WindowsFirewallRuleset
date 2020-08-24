@@ -39,10 +39,10 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
 # Set to invoke prompt
 $psHost = Get-Host
@@ -52,7 +52,7 @@ $NewBuffer = 1000
 $NewSize.Height = $NewBuffer
 $psWindow.BufferSize = $NewSize
 
-New-Test "Set-ScreenBuffer"
+Start-Test "Set-ScreenBuffer"
 Set-ScreenBuffer @Logs
 
 Update-Log

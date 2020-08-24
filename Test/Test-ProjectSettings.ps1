@@ -58,26 +58,26 @@ Import-Module -Name Project.Windows.UserInfo
 Write-Information -Tags "Test" -MessageData "INFO: Import-Module ProgramInfo"
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
-New-Test "Script level preferences"
+Start-Test "Script level preferences"
 Write-Information -Tags "Test" -MessageData "INFO: ErrorActionPreference: $ErrorActionPreference"
 Write-Information -Tags "Test" -MessageData "INFO: WarningPreference: $WarningPreference"
 Write-Information -Tags "Test" -MessageData "INFO: InformationPreference: $InformationPreference"
 Write-Information -Tags "Test" -MessageData "INFO: VerbosePreference: $VerbosePreference"
 Write-Information -Tags "Test" -MessageData "INFO: DebugPreference: $DebugPreference"
 
-New-Test "Module level preferences"
+Start-Test "Module level preferences"
 Write-Information -Tags "Test" -MessageData "INFO: ModuleErrorPreference: $ModuleErrorPreference"
 Write-Information -Tags "Test" -MessageData "INFO: ModuleWarningPreference: $ModuleWarningPreference"
 Write-Information -Tags "Test" -MessageData "INFO: ModuleInformationPreference: $ModuleInformationPreference"
 Write-Information -Tags "Test" -MessageData "INFO: ModuleVerbosePreference: $ModuleVerbosePreference"
 Write-Information -Tags "Test" -MessageData "INFO: ModuleDebugPreference: $ModuleDebugPreference"
 
-New-Test "ProjectConstants"
+Start-Test "ProjectConstants"
 Write-Information -Tags "Test" -MessageData "INFO: PolicyStore: $PolicyStore"
 Write-Information -Tags "Test" -MessageData "INFO: Platform: $Platform"
 Write-Information -Tags "Test" -MessageData "INFO: ProjectRoot: $ProjectRoot"
@@ -86,10 +86,10 @@ Split-Path -Path $env:PSModulePath.Split(";")
 Write-Information -Tags "Test" -MessageData "INFO: Force: $ForceLoad"
 Write-Information -Tags "Test" -MessageData "INFO: Interface: $Interface"
 
-New-Test "ReadOnlyVariables"
+Start-Test "ReadOnlyVariables"
 Write-Information -Tags "Test" -MessageData "INFO: ProjectCheck: $ProjectCheck"
 
-New-Test "RemovableVariables"
+Start-Test "RemovableVariables"
 Write-Information -Tags "Test" -MessageData "INFO: WarningStatus: $WarningStatus"
 Write-Information -Tags "Test" -MessageData "INFO: ErrorStatus: $ErrorStatus"
 Write-Information -Tags "Test" -MessageData "INFO: InformationLogging: $InformationLogging"

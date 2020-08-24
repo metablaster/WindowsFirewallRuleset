@@ -39,37 +39,37 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
-New-Test "Get-Broadcast"
+Start-Test "Get-Broadcast"
 Get-Broadcast @Logs
 
-New-Test "Get-Broadcast -IncludeDisconnected"
+Start-Test "Get-Broadcast -IncludeDisconnected"
 Get-Broadcast -IncludeDisconnected @Logs
 
-New-Test "Get-Broadcast -IncludeVirtual"
+Start-Test "Get-Broadcast -IncludeVirtual"
 Get-Broadcast -IncludeVirtual @Logs
 
-New-Test "Get-Broadcast -IncludeVirtual -IncludeDisconnected"
+Start-Test "Get-Broadcast -IncludeVirtual -IncludeDisconnected"
 Get-Broadcast -IncludeVirtual -IncludeDisconnected @Logs
 
-New-Test "Get-Broadcast -IncludeVirtual -IncludeDisconnected -ExcludeHardware"
+Start-Test "Get-Broadcast -IncludeVirtual -IncludeDisconnected -ExcludeHardware"
 Get-Broadcast -IncludeVirtual -IncludeDisconnected -ExcludeHardware @Logs
 
-New-Test "Get-Broadcast -IncludeHidden"
+Start-Test "Get-Broadcast -IncludeHidden"
 Get-Broadcast -IncludeHidden @Logs
 
-New-Test "Get-Broadcast -IncludeAll"
+Start-Test "Get-Broadcast -IncludeAll"
 $Broadcast = Get-Broadcast -IncludeAll @Logs
 $Broadcast
 
-New-Test "Get-Broadcast -IncludeAll -ExcludeHardware"
+Start-Test "Get-Broadcast -IncludeAll -ExcludeHardware"
 Get-Broadcast -IncludeAll -ExcludeHardware @Logs
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $Broadcast | Get-TypeName @Logs
 
 Update-Log

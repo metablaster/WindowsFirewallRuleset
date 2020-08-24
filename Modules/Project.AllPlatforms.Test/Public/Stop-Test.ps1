@@ -26,22 +26,31 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for New-Test
-#
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+<#
+.SYNOPSIS
+Stop test case
+.DESCRIPTION
+Stop-Test writes output to console after test case is done
+This function must be called after single test case is done executing
+.EXAMPLE
+PS> Stop-Test
+.INPUTS
+None. You cannot pipe objects to Stop-Test
+.OUTPUTS
+None.
+.NOTES
+None.
+#>
+function Stop-Test
+{
+	[OutputType([void])]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'None')]
+	param ()
 
-# Check requirements for this project
-Initialize-Project
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-# Imports
-. $PSScriptRoot\ContextSetup.ps1
-Import-Module -Name Project.AllPlatforms.Logging
-
-# Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
-if (!(Approve-Execute @Logs)) { exit }
-
-Start-Test
-New-Test "New-Test"
-Exit-Test
+	if ($PSCmdlet.ShouldProcess("Stop test case", $script:TestCase))
+	{
+		Write-Information -Tags "Test" -MessageData "INFO: Test case '$script:TestCase' done"
+	}
+}

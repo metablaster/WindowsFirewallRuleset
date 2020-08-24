@@ -39,10 +39,10 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
 # Experiment with different path values to see what the ACL objects do
 # $TestPath = "C:\Users\" # Not inherited
@@ -51,23 +51,23 @@ $TestPath = "C:\users\Public\desktop\" # Inherited
 # $TestPath = "HKCU:\Software" # Inherited
 # $TestPath = "HKLM:\" # Not Inherited
 
-New-Test "Path:"
+Start-Test "Path:"
 $TestPath
 
-New-Test "ACL.AccessToString"
+Start-Test "ACL.AccessToString"
 $ACL = Get-Acl $TestPath
 $ACL.AccessToString
 
-New-Test "ACL.Access | Format-list *"
+Start-Test "ACL.Access | Format-list *"
 $ACL.Access | Format-List *
 
-New-Test "ACL.SDDL"
+Start-Test "ACL.SDDL"
 $ACL.SDDL
 
-New-Test "Show-SDDL (pipeline)"
+Start-Test "Show-SDDL (pipeline)"
 $ACL | Show-SDDL @Logs
 
-New-Test "Show-SDDL (parameter)"
+Start-Test "Show-SDDL (parameter)"
 Show-SDDL $ACL.SDDL @Logs
 
 Update-Log

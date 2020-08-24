@@ -31,23 +31,25 @@ SOFTWARE.
 #
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
+	$MyInvocation.MyCommand.Name -replace ".{4}$" )
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
 
-# Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+# User prompt
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
-New-Test "Initialize-Service"
+Start-Test "Initialize-Service"
 $Result = @("lmhosts", "LanmanWorkstation", "LanmanServer") | Initialize-Service @Logs
 
 Initialize-Service "WinRM" @Logs
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $Result | Get-TypeName @Logs
 
 Update-Log

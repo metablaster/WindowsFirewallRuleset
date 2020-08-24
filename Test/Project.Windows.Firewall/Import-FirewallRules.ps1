@@ -40,25 +40,25 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
 $Exports = "$ProjectRoot\Exports"
 
 # TODO: need to test failure cases, see also module todo's for more info
 
-# New-Test "Import-FirewallRules -FileName GroupExport.csv"
+# Start-Test "Import-FirewallRules -FileName GroupExport.csv"
 # Import-FirewallRules -Folder $Exports -FileName "GroupExport.csv" @Logs
 
-# New-Test "Import-FirewallRules -FileName NamedExport1.csv"
+# Start-Test "Import-FirewallRules -FileName NamedExport1.csv"
 # Import-FirewallRules -Folder $Exports -FileName "$Exports\NamedExport1.csv" @Logs
 
-# New-Test "Import-FirewallRules -JSON -FileName NamedExport2.json"
+# Start-Test "Import-FirewallRules -JSON -FileName NamedExport2.json"
 # Import-FirewallRules -JSON -Folder $Exports -FileName "$Exports\NamedExport2.json" @Logs
 
-New-Test "Import-FirewallRules -FileName StoreAppExport.csv"
+Start-Test "Import-FirewallRules -FileName StoreAppExport.csv"
 Import-FirewallRules -Folder $Exports -FileName "StoreAppExport.csv" @Logs
 
 Update-Log

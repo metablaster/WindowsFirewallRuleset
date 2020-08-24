@@ -40,27 +40,27 @@ Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
 [string[]] $Users = @("user")
 [string] $Domain = [System.Environment]::MachineName
 [string[]] $Groups = @("Users", "Administrators")
 
-New-Test "Get-SDDL -User $Users -Group $Groups -Domain $Domain"
+Start-Test "Get-SDDL -User $Users -Group $Groups -Domain $Domain"
 $TestUsersSDDL = Get-SDDL -User $Users -Group $Groups -Domain $Domain @Logs
 $TestUsersSDDL
 
-New-Test "Get-SDDL -Domain 'NT AUTHORITY' -User 'SYSTEM', 'UserModeDrivers'"
+Start-Test "Get-SDDL -Domain 'NT AUTHORITY' -User 'SYSTEM', 'UserModeDrivers'"
 $NewSDDL = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "UserModeDrivers" @Logs
 
-New-Test "Merge-SDDL"
+Start-Test "Merge-SDDL"
 Merge-SDDL ([ref] $TestUsersSDDL) $NewSDDL @Logs
 $TestUsersSDDL
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $TestUsersSDDL | Get-TypeName @Logs
 
 Update-Log

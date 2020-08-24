@@ -40,25 +40,25 @@ Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
 #
 # Test single group
 #
 
 [string] $SingleGroup = "Users"
-New-Test "Get-GroupSID $SingleGroup"
+Start-Test "Get-GroupSID $SingleGroup"
 $GroupsTest = Get-GroupSID $SingleGroup @Logs
 $GroupsTest
 
-New-Test "Get-GroupSID 'Users' -CIM"
+Start-Test "Get-GroupSID 'Users' -CIM"
 $GroupsTest = Get-GroupSID $SingleGroup -CIM @Logs
 $GroupsTest
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $GroupsTest | Get-TypeName @Logs
 
 #
@@ -67,15 +67,15 @@ $GroupsTest | Get-TypeName @Logs
 
 [string[]] $GroupArray = @('Users', 'Hyper-V Administrators')
 
-New-Test "Get-GroupSID $GroupArray"
+Start-Test "Get-GroupSID $GroupArray"
 $GroupsTest = Get-GroupSID $GroupArray @Logs
 $GroupsTest
 
-New-Test "Get-GroupSID $GroupArray -CIM"
+Start-Test "Get-GroupSID $GroupArray -CIM"
 $GroupsTest = Get-GroupSID $GroupArray -CIM @Logs
 $GroupsTest
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $GroupsTest | Get-TypeName @Logs
 
 #
@@ -84,20 +84,20 @@ $GroupsTest | Get-TypeName @Logs
 
 $GroupArray = @("Users", "Administrators")
 
-New-Test "$GroupArray | Get-GroupSID"
+Start-Test "$GroupArray | Get-GroupSID"
 $GroupArray | Get-GroupSID @Logs
 
-New-Test "$GroupArray | Get-GroupSID -CIM"
+Start-Test "$GroupArray | Get-GroupSID -CIM"
 $GroupArray | Get-GroupSID -CIM @Logs
 
 #
 # Test failure
 #
 
-New-Test "FAILURE TEST NO CIM: Get-GroupSID @('Users', 'Hyper-V Administrators')"
+Start-Test "FAILURE TEST NO CIM: Get-GroupSID @('Users', 'Hyper-V Administrators')"
 Get-GroupSID 'Users', 'Hyper-V Administrators' -Machine "CRAZYMACHINE" @Logs
 
-New-Test "FAILURE TEST CONTACT: Get-GroupSID @('Users', 'Hyper-V Administrators')"
+Start-Test "FAILURE TEST CONTACT: Get-GroupSID @('Users', 'Hyper-V Administrators')"
 Get-GroupSID 'Users', 'Hyper-V Administrators' -Machine "CRAZYMACHINE" -CIM @Logs
 
 Update-Log

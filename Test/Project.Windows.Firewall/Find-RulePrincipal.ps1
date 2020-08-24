@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Get-FileEncoding
+# Unit test for Find-RulePrincipal
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 
@@ -44,17 +44,11 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Enter-Test $ThisScript
 
-$TestFiles = Get-ChildItem -Path "$PSScriptRoot\Encoding\*" -Filter "*.txt"
+Start-Test "Find-RulePrincipal"
+$Result = Find-RulePrincipal @Logs
 
-foreach ($File in $TestFiles)
-{
-	Start-Test "Get-FileEncoding $File"
-	$Result = Get-FileEncoding $File @Logs
-	$Result
-}
-
-Start-Test "Get-TypeName"
-$Result | Get-TypeName @Logs
+Start-Test "Find-RulePrincipal | Get-TypeName"
+$Result | Find-RulePrincipal @Logs
 
 Update-Log
 Exit-Test

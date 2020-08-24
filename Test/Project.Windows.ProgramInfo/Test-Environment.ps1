@@ -39,85 +39,85 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
 $Result = "C:\"
-New-Test "Test-Environment: $Result"
+Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
 
 $Result = "C:\\Windows\System32"
-New-Test "Test-Environment: $Result"
+Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
 
 $Result = "C:\\Windows\"
-New-Test "Test-Environment: $Result"
+Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
 
 $Result = "C:\Program Files (x86)\Windows Defender\"
-New-Test "Test-Environment: $Result"
+Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
 
 $Result = "C:\Program Files\WindowsPowerShell"
-New-Test "Test-Environment: $Result"
+Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
 
 $Result = '"C:\ProgramData\Git"'
-New-Test "Test-Environment: $Result"
+Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
 
 $Result = "C:\PerfLogs"
-New-Test "Test-Environment: $Result"
+Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
 
 $Result = "C:\Windows\Microsoft.NET\Framework64\v3.5\\"
-New-Test "Test-Environment: $Result"
+Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
 
 $Result = "'C:\Windows\Microsoft.NET\Framework64\v3.5'"
-New-Test "Test-Environment: $Result"
+Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
 
 $Result = "D:\\microsoft\\windows"
-New-Test "Test-Environment: $Result"
+Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
 
 $Result = "D:\"
-New-Test "Test-Environment: $Result"
+Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
 
 $Result = "C:\\"
-New-Test "Test-Environment: $Result"
+Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
 
 $Result = "%LOCALAPPDATA%\OneDrive"
-New-Test "Test-Environment: $Result"
+Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
 
 $Result = "%HOME%\AppData\Local\OneDrive"
-New-Test "Test-Environment: $Result"
+Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
 
 $Result = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
-New-Test "Test-Environment: $Result"
+Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
 
 $Result = "%SystemDrive%"
-New-Test "Test-Environment: $Result"
+Start-Test "Test-Environment: $Result"
 $Status = Test-Environment $Result @Logs
 $Status
 
 $Result = ""
-New-Test "Test-Environment: $Result"
+Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
 
 $Result = $null
-New-Test "Test-Environment: $Result"
+Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $Status | Get-TypeName @Logs
 
 Update-Log

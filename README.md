@@ -1,7 +1,7 @@
 
 # Windows Firewall Ruleset
 
-![Alt Text](Readme/corporate.jpg)
+![Alt Text](https://bitbucket.org/SuperAAAAA/shack/raw/60508e0e23d73aeb8f9a4fdc75b13ea94e56e62b/corporate.jpg)
 
 ## Table of Contents
 
@@ -64,7 +64,7 @@ giving you full power over the default Windows firewall.
 
 ## Core benefits of this firewall project
 
-1. Unlike Windows firewall in control panel, these rules are loaded into GPO firewall
+1. Unlike firewall rules in control panel, these rules are loaded into GPO firewall
 (Local group policy), meaning random programs which install rules as part of their installation
 process or system settings changes will have no effect on firewall unless you
 explicitly make an exception.
@@ -108,7 +108,8 @@ The project maintains **"per file"** license and Copyright notices.
 7. PSScriptAnalyzer (Recommended) [Download PSScriptAnalyzer](https://github.com/PowerShell/PSScriptAnalyzer)
 
 - All operating systems 10.0 (Major 10, Minor 0) and up are supported,
-but only those editions listed in point 1 are actively tested.
+but only those editions listed in point 1 are actively tested.\
+The list of other untested but supported systems is in [The future](#the-future)
 - PowerShell "Core" is not built into Windows, you will need to install it separately (recommended)
 or use [Windows PowerShell](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/WindowsPowerShell.md)
 which is already installed.
@@ -424,10 +425,24 @@ explains how to monitor firewall in real time.
 Following features are desired and might be available at some point in the future:
 
 1. Remote firewall administration
+
    - Applying firewall configuration to remote computers on domain or home networks
 
-2. Support for all editions of Windows NT 10.0+
+2. Full functionality for the following editions of Windows 10.0+
+   - Windows 10 Pro for Workstations
+   - Windows 10 Pro Education
+   - Windows 10 Enterprise
+   - Windows 10 Education
+   - Windows 10 IoT Core Blast
+   - Windows 10 IoT Enterprise
+   - Windows 10 S
+   - Windows Server Essentials
+   - Windows Server Standard
+   - Windows Server Datacenter
 
 3. On demand registry scan to validate integrity of active firewall filtering policy
+
+   - Any active firewall rule in the registry that is not part of this project is reported
+   - Malware, hackers and even trusted software might attempt to bypass firewall at any time
 
 4. Firewall rulesets for server platforms

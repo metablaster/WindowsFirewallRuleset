@@ -40,6 +40,9 @@ param(
 	[bool] $InsideModule = $false
 )
 
+# Name of this script for debugging messages, do not modify!.
+Set-Variable -Name SettingsScript -Scope Local -Option ReadOnly -Value ($MyInvocation.MyCommand.Name -replace ".{4}$")
+
 # Set to true to enable development features, it does following at a minimum:
 # 1. Forces reloading modules and removable variables.
 # 2. Loads troubleshooting rules defined in Temporary.ps1
@@ -66,9 +69,6 @@ else
 	# Use it in a script or function to override the setting inherited from the global scope.
 	Set-StrictMode -Version Latest
 }
-
-# Name of this script for debugging messages, do not modify!.
-Set-Variable -Name ThisScript -Scope Local -Option ReadOnly -Value $($MyInvocation.MyCommand.Name -replace ".{4}$")
 
 <#
 Preference Variables default values
@@ -118,9 +118,10 @@ if ($Develop)
 	$InformationPreference = "Continue"
 	# $VerbosePreference = "Continue"
 	# $DebugPreference = "Continue"
+	# $ConfirmPreference = "Medium"
 
 	# Must be after debug preference
-	Write-Debug -Message "[$ThisScript] Setup clean environment"
+	Write-Debug -Message "[$SettingsScript] Setup clean environment"
 
 	#
 	# Preferences for modules
@@ -174,7 +175,7 @@ else # Normal use case
 	$DebugPreference = "SilentlyContinue"
 
 	# Must be after verbose preference
-	Write-Verbose -Message "[$ThisScript] Project mode: User"
+	Write-Verbose -Message "[$SettingsScript] Project mode: User"
 
 	# Preferences for modules not used in this context, do not modify
 	Remove-Variable -Name ModuleErrorPreference -Scope Global -ErrorAction Ignore
@@ -189,7 +190,7 @@ else # Normal use case
 # These are set only once per session, changing these requires powershell restart
 if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore))
 {
-	Write-Debug -Message "[$ThisScript] Setup constant variables"
+	Write-Debug -Message "[$SettingsScript] Setup constant variables"
 
 	# check if constants already initialized, used for module reloading, do not modify!
 	New-Variable -Name CheckProjectConstants -Scope Global -Option Constant -Value $null
@@ -293,7 +294,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 # Changing these requires powershell restart, except if Develop = $true
 if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignore))
 {
-	Write-Debug -Message "[$ThisScript] Setup read only variables"
+	Write-Debug -Message "[$SettingsScript] Setup read only variables"
 
 	# check if read only variables already initialized, do not modify!
 	Set-Variable -Name CheckReadOnlyVariables -Scope Global -Option ReadOnly -Force -Value $null
@@ -317,7 +318,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -Erro
 # Changing these requires powershell restart, except if Develop = $true
 if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -ErrorAction Ignore))
 {
-	Write-Debug -Message "[$ThisScript] Setup removable variables"
+	Write-Debug -Message "[$SettingsScript] Setup removable variables"
 
 	# check if removable variables already initialized, do not modify!
 	Set-Variable -Name CheckRemovableVariables -Scope Global -Option ReadOnly -Force -Value $null
@@ -342,7 +343,7 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 # These are initially set only once per session, changing these requires powershell restart.
 if (!(Get-Variable -Name CheckProtectedVariables -Scope Global -ErrorAction Ignore))
 {
-	Write-Debug -Message "[$ThisScript] Setup protected variables"
+	Write-Debug -Message "[$SettingsScript] Setup protected variables"
 
 	# check if removable variables already initialized, do not modify!
 	Set-Variable -Name CheckProtectedVariables -Scope Global -Option Constant -Force -Value $null

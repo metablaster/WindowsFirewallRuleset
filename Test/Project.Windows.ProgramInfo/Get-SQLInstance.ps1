@@ -39,25 +39,25 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
-New-Test "Get-SQLInstance"
+Start-Test "Get-SQLInstance"
 $Instances = Get-SQLInstance @Logs
 $Instances
 
-New-Test "Get-SQLInstance CIM"
+Start-Test "Get-SQLInstance CIM"
 Get-SQLInstance -CIM @Logs
 
-New-Test "Get-SQLInstance binn directory"
+Start-Test "Get-SQLInstance binn directory"
 Get-SQLInstance @Logs | Select-Object -ExpandProperty SQLBinRoot @Logs
 
-New-Test "Get-SQLInstance DTS directory"
+Start-Test "Get-SQLInstance DTS directory"
 Get-SQLInstance @Logs | Select-Object -ExpandProperty SQLPath @Logs
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $Instances | Get-TypeName @Logs
 
 Update-Log

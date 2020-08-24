@@ -76,7 +76,7 @@ if ([System.Environment]::Is64BitOperatingSystem)
 	{
 		# Dummy variable, needs to be known because Test-Installation will return same path as nvidia root
 		$GeForceRoot = "$NvidiaRoot64\NVIDIA GeForce Experience"
-		Set-Variable -Name GeForce -Scope Script -Value $(Test-Installation "GeForceExperience" ([ref] $GeForceRoot) @Logs)
+		Set-Variable -Name GeForce -Scope Script -Value (Test-Installation "GeForceExperience" ([ref] $GeForceRoot) @Logs)
 
 		# Test if GeForce experience exists on system, the path is same
 		# TODO: this is temporary measure, it should be checked with Test-File function
@@ -168,7 +168,7 @@ if ((Test-Installation "Nvidia86" ([ref] $NvidiaRoot86) @Logs) -or $ForceLoad)
 	# NOTE: This check is needed for current x64 bit setup to avoid double prompt
 	if ($null -eq $script:GeForce)
 	{
-		$script:GeForce = $(Test-Installation "GeForceExperience" ([ref] $GeForceXProot) @Logs)
+		$script:GeForce = (Test-Installation "GeForceExperience" ([ref] $GeForceXProot) @Logs)
 	}
 
 	# TODO: this is temporary measure, it should be checked with Test-File function

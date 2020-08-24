@@ -801,7 +801,7 @@ Version		Servicing option					Availability OS build	Latest revision date	Mainstr
 1507 (RTM)	Long-Term Servicing Branch (LTSB)	2015-07-29	10240.18666	2020-08-11	2020-10-13	2025-10-14
 #>
 
-Set-Variable -Name OSBuildInfo -Scope Script -Option Constant -Value $([PSCustomObject[]]@(
+Set-Variable -Name OSBuildInfo -Scope Script -Option Constant -Value ([PSCustomObject[]]@(
 		[hashtable]@{
 			Version = 2004
 			Build = 19041

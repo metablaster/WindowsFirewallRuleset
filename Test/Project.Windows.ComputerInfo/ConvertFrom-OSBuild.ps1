@@ -41,25 +41,25 @@ SOFTWARE.
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
-New-Test "ConvertFrom-OSBuild 17763 = 1809"
+Start-Test "ConvertFrom-OSBuild 17763 = 1809"
 ConvertFrom-OSBuild 17763 @Logs
 
-New-Test "ConvertFrom-OSBuild 19041.450 = 2004"
+Start-Test "ConvertFrom-OSBuild 19041.450 = 2004"
 ConvertFrom-OSBuild 19041.450 @Logs
 
-New-Test "ConvertFrom-OSBuild 11111.1 = unknown"
+Start-Test "ConvertFrom-OSBuild 11111.1 = unknown"
 ConvertFrom-OSBuild 11111.133 -ErrorAction Ignore @Logs
 
-New-Test "ConvertFrom-OSBuild 16299.2045 = 1079"
+Start-Test "ConvertFrom-OSBuild 16299.2045 = 1079"
 $Result = ConvertFrom-OSBuild 16299.2045 @Logs
 $Result
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $Result | Get-TypeName @Logs
 
 Update-Log

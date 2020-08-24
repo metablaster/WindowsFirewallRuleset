@@ -40,24 +40,24 @@ Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
-New-Test "Get-SDDL: (user accounts)"
+Start-Test "Get-SDDL: (user accounts)"
 $SDDL1 = Get-SDDL -Group "Users" @Logs
 $SDDL1
 
-New-Test "Get-SDDL: (system accounts)"
+Start-Test "Get-SDDL: (system accounts)"
 $SDDL2 = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE", "LOCAL SERVICE" @Logs
 $SDDL2
 
-New-Test "Convert-SDDLToACL"
+Start-Test "Convert-SDDLToACL"
 $Result = Convert-SDDLToACL $SDDL1, $SDDL2 @Logs
 $Result
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $Result | Get-TypeName @Logs
 
 Update-Log

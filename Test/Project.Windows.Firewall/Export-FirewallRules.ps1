@@ -39,37 +39,37 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
 $Exports = "$ProjectRoot\Exports"
 
 # TODO: need to test failure cases, see also module todo's for more info
 
-# New-Test "Export-FirewallRules -DisplayGroup"
+# Start-Test "Export-FirewallRules -DisplayGroup"
 # Export-FirewallRules -DisplayGroup "" -Outbound -Folder $Exports -FileName "GroupExport" @Logs # -DisplayName "Gwent"
 
-# New-Test "Export-FirewallRules -DisplayGroup"
+# Start-Test "Export-FirewallRules -DisplayGroup"
 # Export-FirewallRules -DisplayGroup "Broadcast" -Outbound -Folder $Exports -FileName "GroupExport" @Logs
 
-# New-Test "Export-FirewallRules -DisplayName NONEXISTENT"
+# Start-Test "Export-FirewallRules -DisplayName NONEXISTENT"
 # Export-FirewallRules -DisplayName "NONEXISTENT" -Folder $Exports -FileName "NamedExport1" @Logs
 
-# New-Test "Export-FirewallRules -DisplayName"
+# Start-Test "Export-FirewallRules -DisplayName"
 # Export-FirewallRules -DisplayName "Domain Name System" -Folder $Exports -FileName "NamedExport1" @Logs
 
-# New-Test "Export-FirewallRules -DisplayName -JSON"
+# Start-Test "Export-FirewallRules -DisplayName -JSON"
 # Export-FirewallRules -DisplayName "Domain Name System" -Folder $Exports -JSON -Append -FileName "NamedExport2" @Logs
 
-# New-Test "Export-FirewallRules -Outbound -Disabled -Allow"
+# Start-Test "Export-FirewallRules -Outbound -Disabled -Allow"
 # Export-FirewallRules -Outbound -Disabled -Allow -Folder $Exports -FileName "OutboundExport" @Logs
 
-# New-Test "Export-FirewallRules -Inbound -Enabled -Block -JSON"
+# Start-Test "Export-FirewallRules -Inbound -Enabled -Block -JSON"
 # Export-FirewallRules -Inbound -Enabled -Block -Folder $Exports -JSON -FileName "InboundExport" @Logs
 
-New-Test "Export-FirewallRules -DisplayGroup"
+Start-Test "Export-FirewallRules -DisplayGroup"
 Export-FirewallRules -DisplayName "Microsoft.BingWeather" -Outbound -Folder $Exports -FileName "StoreAppExport" @Logs # -DisplayName "Gwent"
 
 Update-Log

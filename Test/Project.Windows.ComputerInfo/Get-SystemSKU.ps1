@@ -39,34 +39,34 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
-New-Test "Get-SystemSKU -ComputerName $([System.Environment]::MachineName)"
+Start-Test "Get-SystemSKU -ComputerName $([System.Environment]::MachineName)"
 Get-SystemSKU -ComputerName $([System.Environment]::MachineName) @Logs | Format-Table
 
-New-Test "Get-SystemSKU -SKU 4"
+Start-Test "Get-SystemSKU -SKU 4"
 $Result = Get-SystemSKU -SKU 48 @Logs
 $Result | Format-Table
 
-New-Test "34 | Get-SystemSKU"
+Start-Test "34 | Get-SystemSKU"
 34 | Get-SystemSKU @Logs | Format-Table
 
-New-Test '@($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU'
+Start-Test '@($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU'
 @($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU @Logs | Format-Table
 
-New-Test '$Result = @($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU'
+Start-Test '$Result = @($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU'
 $Result = @($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU @Logs | Format-Table
 $Result
 
-New-Test 'Get-SystemSKU -ComputerName @($([System.Environment]::MachineName), "INVALID_COMPUTER")'
+Start-Test 'Get-SystemSKU -ComputerName @($([System.Environment]::MachineName), "INVALID_COMPUTER")'
 Get-SystemSKU -ComputerName @($([System.Environment]::MachineName), "INVALID_COMPUTER") @Logs | Format-Table
 
 try
 {
-	New-Test "Get-SystemSKU -SKU 4 -ComputerName $([System.Environment]::MachineName)"
+	Start-Test "Get-SystemSKU -SKU 4 -ComputerName $([System.Environment]::MachineName)"
 	Get-SystemSKU -SKU 4 -ComputerName $([System.Environment]::MachineName) -ErrorAction Stop
 }
 catch
@@ -74,7 +74,7 @@ catch
 	Write-Information -Tags "Test" -MessageData "Failure test success"
 }
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $Result | Get-TypeName @Logs
 
 Update-Log

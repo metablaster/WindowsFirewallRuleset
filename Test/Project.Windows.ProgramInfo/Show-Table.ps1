@@ -46,27 +46,27 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
-New-Test "-UserProfile switch Fill table with Greenshot"
+Start-Test "-UserProfile switch Fill table with Greenshot"
 Initialize-Table @Logs
 Update-Table "Greenshot" -UserProfile @Logs
 Show-Table
 
-New-Test "Failure Test"
+Start-Test "Failure Test"
 Initialize-Table @Logs
 Update-Table "Failure" -UserProfile @Logs
 Show-Table
 
-New-Test "Test multiple paths"
+Start-Test "Test multiple paths"
 Initialize-Table @Logs
 Update-Table "Visual Studio" -UserProfile @Logs
 Show-Table
 
-New-Test "-Executables switch - Fill table with PowerShell"
+Start-Test "-Executables switch - Fill table with PowerShell"
 Initialize-Table @Logs
 Update-Table "PowerShell.exe" -Executables
 Show-Table

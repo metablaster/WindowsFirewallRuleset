@@ -40,27 +40,27 @@ Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
-New-Test "Get-GroupPrincipal"
+Start-Test "Get-GroupPrincipal"
 $UsersTest = Get-GroupPrincipal "Users" @Logs
 $UsersTest
 
-New-Test "Get-GroupPrincipal CIM server"
+Start-Test "Get-GroupPrincipal CIM server"
 $CIMTest = Get-GroupPrincipal "Users", "Administrators" -Computer "localhost" -CIM @Logs
 $CIMTest
 
-New-Test "Expand users"
+Start-Test "Expand users"
 $UsersTest | Select-Object -ExpandProperty User @Logs
 
-New-Test "Failure test"
+Start-Test "Failure test"
 $FailedUsers = Get-GroupPrincipal "asdf Users" @Logs
 $FailedUsers
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $UsersTest | Get-TypeName @Logs
 
 Update-Log

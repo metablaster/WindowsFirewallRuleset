@@ -39,28 +39,28 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
 $NullVariable = $null
 $EmptyVariable = Get-VSSetupInstance -All @Logs |
 Select-VSSetupInstance -Require 'FailureTest' -Latest @Logs |
 Select-Object -ExpandProperty InstallationPath @Logs
 
-New-Test "Get-VSSetupInstance"
+Start-Test "Get-VSSetupInstance"
 Get-VSSetupInstance @Logs
 
-New-Test "Get-VSSetupInstance path"
+Start-Test "Get-VSSetupInstance path"
 Get-VSSetupInstance @Logs |
 Select-VSSetupInstance -Latest @Logs |
 Select-Object -ExpandProperty InstallationPath @Logs
 
-New-Test "Test-Installation 'NullVariable' $NullVariable"
+Start-Test "Test-Installation 'NullVariable' $NullVariable"
 Test-Installation "MicrosoftOffice" ([ref] $NullVariable) @Logs
 
-New-Test "Test-Installation 'EmptyVariable' $EmptyVariable"
+Start-Test "Test-Installation 'EmptyVariable' $EmptyVariable"
 Test-Installation "MicrosoftOffice" ([ref] $EmptyVariable) @Logs
 
 Update-Log

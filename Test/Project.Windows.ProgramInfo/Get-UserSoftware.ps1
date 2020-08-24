@@ -40,25 +40,25 @@ Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
 $UserGroup = "Users"
 
-New-Test "Get-GroupPrincipal $UserGroup"
+Start-Test "Get-GroupPrincipal $UserGroup"
 $Principals = Get-GroupPrincipal $UserGroup @Logs
 # TODO: FOR SOME ODD FUCKING REASON IF YOU REMOVE Format-Table THE TEST WILL NOT WORK!!
 $Principals | Format-Table
 
 foreach ($Principal in $Principals)
 {
-	New-Test "Get-UserSoftware: $($Principal.User)"
+	Start-Test "Get-UserSoftware: $($Principal.User)"
 	Get-UserSoftware $Principal.User @Logs
 }
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 Get-UserSoftware $Principals[0].User @Logs | Get-TypeName @Logs
 
 Update-Log

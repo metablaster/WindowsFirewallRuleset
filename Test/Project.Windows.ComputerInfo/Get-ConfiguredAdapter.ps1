@@ -39,43 +39,43 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
-New-Test "Get-ConfiguredAdapter IPv4"
+Start-Test "Get-ConfiguredAdapter IPv4"
 Get-ConfiguredAdapter IPv4 @Logs
 
-New-Test "Get-ConfiguredAdapter IPv6"
+Start-Test "Get-ConfiguredAdapter IPv6"
 Get-ConfiguredAdapter IPv6 @Logs
 
-New-Test "Get-ConfiguredAdapter IPv4 -IncludeDisconnected"
+Start-Test "Get-ConfiguredAdapter IPv4 -IncludeDisconnected"
 Get-ConfiguredAdapter IPv4 -IncludeDisconnected @Logs
 
-New-Test "Get-ConfiguredAdapter IPv4 -IncludeVirtual"
+Start-Test "Get-ConfiguredAdapter IPv4 -IncludeVirtual"
 Get-ConfiguredAdapter IPv4 -IncludeVirtual @Logs
 
-New-Test "Get-ConfiguredAdapter IPv4 -IncludeVirtual -IncludeDisconnected"
+Start-Test "Get-ConfiguredAdapter IPv4 -IncludeVirtual -IncludeDisconnected"
 Get-ConfiguredAdapter IPv4 -IncludeVirtual -IncludeDisconnected @Logs
 
-New-Test "Get-ConfiguredAdapter IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware"
+Start-Test "Get-ConfiguredAdapter IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware"
 Get-ConfiguredAdapter IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware @Logs
 
-New-Test "Get-ConfiguredAdapter IPv4 -IncludeHidden"
+Start-Test "Get-ConfiguredAdapter IPv4 -IncludeHidden"
 Get-ConfiguredAdapter IPv4 -IncludeHidden @Logs
 
-New-Test "Get-ConfiguredAdapter IPv4 -IncludeAll"
+Start-Test "Get-ConfiguredAdapter IPv4 -IncludeAll"
 $Adapters = Get-ConfiguredAdapter IPv4 -IncludeAll @Logs
 $Adapters
 
-New-Test "Get-ConfiguredAdapter IPv4 -IncludeAll -ExcludeHardware"
+Start-Test "Get-ConfiguredAdapter IPv4 -IncludeAll -ExcludeHardware"
 Get-ConfiguredAdapter IPv4 -IncludeAll -ExcludeHardware @Logs
 
-New-Test "Get-ConfiguredAdapter binding"
+Start-Test "Get-ConfiguredAdapter binding"
 Get-ConfiguredAdapter IPv4 @Logs | Select-Object -ExpandProperty IPv4Address @Logs
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $Adapters | Get-TypeName @Logs
 
 Update-Log

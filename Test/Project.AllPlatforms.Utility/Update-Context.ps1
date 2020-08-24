@@ -39,19 +39,19 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
 # TODO: global preference for tests
 $DebugPreference = "SilentlyContinue"
 
-New-Test "Update-Context IPv4.Outbound -> ICMPv4"
+Start-Test "Update-Context IPv4.Outbound -> ICMPv4"
 Update-Context "IPv$IPVersion" "Outbound" "ICMPv4" @Logs
 Approve-Execute @Logs | Out-Null
 
-New-Test "Update-Context Test.Update-Context"
+Start-Test "Update-Context Test.Update-Context"
 Update-Context "Test" "Update-Context" @Logs
 Approve-Execute @Logs | Out-Null
 

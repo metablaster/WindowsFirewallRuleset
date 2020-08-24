@@ -51,34 +51,34 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
 $User = "haxor"
 
-New-Test "Good system path"
+Start-Test "Good system path"
 Initialize-Table @Logs
 Edit-Table "%SystemRoot%\System32\WindowsPowerShell\v1.0" @Logs
 $global:InstallTable | Format-Table -AutoSize @Logs
 
-New-Test "Bad system path"
+Start-Test "Bad system path"
 Initialize-Table @Logs
 Edit-Table "%ProgramFiles(x86)%\Microsoft Help Viewer\v2.3345345" @Logs
 $global:InstallTable | Format-Table -AutoSize @Logs
 
-New-Test "Good user profile path"
+Start-Test "Good user profile path"
 Initialize-Table @Logs
 Edit-Table "C:\\Users\$User\\GitHub\WindowsFirewallRuleset\" @Logs
 $global:InstallTable | Format-Table -AutoSize @Logs
 
-New-Test "Bad user profile path"
+Start-Test "Bad user profile path"
 Initialize-Table @Logs
 Edit-Table "%HOME%\source\\repos\WindowsFirewallRuleset\" @Logs
 $global:InstallTable | Format-Table -AutoSize @Logs
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 # TODO: why this doesn't work?
 $global:InstallTable | Get-TypeName @Logs
 

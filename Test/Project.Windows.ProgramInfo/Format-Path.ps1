@@ -39,114 +39,114 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
 $TestPath = "C:\"
-New-Test $TestPath
+Start-Test $TestPath
 $Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
 
 $TestPath = "C:\\Windows\System32"
-New-Test $TestPath
+Start-Test $TestPath
 $Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
 
 $TestPath = "C:\\Windows\"
-New-Test $TestPath
+Start-Test $TestPath
 $Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
 
 $TestPath = "C:\Program Files (x86)\Windows Defender\"
-New-Test $TestPath
+Start-Test $TestPath
 $Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
 
 $TestPath = "C:\Program Files\WindowsPowerShell"
-New-Test $TestPath
+Start-Test $TestPath
 $Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
 
 $TestPath = '"C:\ProgramData\Git"'
-New-Test $TestPath
+Start-Test $TestPath
 $Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
 
 $TestPath = "C:\PerfLogs"
-New-Test $TestPath
+Start-Test $TestPath
 $Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
 
 $TestPath = "C:\Windows\Microsoft.NET\Framework64\v3.5\\"
-New-Test $TestPath
+Start-Test $TestPath
 $Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
 
 $TestPath = "'C:\Windows\Microsoft.NET\Framework64\v3.5'"
-New-Test $TestPath
+Start-Test $TestPath
 $Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
 
 $TestPath = "D:\\microsoft\\windows"
-New-Test $TestPath
+Start-Test $TestPath
 $Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
 
 $TestPath = "C:\\"
-New-Test $TestPath
+Start-Test $TestPath
 $Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
 
 $TestPath = "D:\"
-New-Test $TestPath
+Start-Test $TestPath
 $Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
 
 $TestPath = "C:\Users\haxor\AppData\Local\OneDrive"
-New-Test $TestPath
+Start-Test $TestPath
 $Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
 
 $TestPath = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
-New-Test $TestPath
+Start-Test $TestPath
 $Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
 
 $TestPath = "%SystemDrive%"
-New-Test $TestPath
+Start-Test $TestPath
 $Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
 
 $TestPath = ""
-New-Test $TestPath
+Start-Test $TestPath
 $Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
 
 $TestPath = $null
-New-Test $TestPath
+Start-Test $TestPath
 $Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $Result | Get-TypeName @Logs
 
 Update-Log

@@ -39,19 +39,19 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
-New-Test "SQLManagementStudio"
+Start-Test "SQLManagementStudio"
 $Instances = Get-SQLManagementStudio @Logs
 $Instances
 
-New-Test "SQLManagementStudio - Install path"
+Start-Test "SQLManagementStudio - Install path"
 $Instances | Select-Object -ExpandProperty InstallLocation @Logs
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $Instances | Get-TypeName @Logs
 
 Update-Log

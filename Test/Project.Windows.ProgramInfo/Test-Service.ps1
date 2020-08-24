@@ -39,15 +39,15 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
-New-Test "Test-Service FailureTest"
+Start-Test "Test-Service FailureTest"
 Test-Service "FailureTest" @Logs
 
-New-Test "Test-Service dnscache"
+Start-Test "Test-Service dnscache"
 Test-Service dnscache @Logs
 
 Update-Log

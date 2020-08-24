@@ -50,45 +50,45 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
-New-Test "Find-Installation 'EdgeChromium'"
+Start-Test "Find-Installation 'EdgeChromium'"
 Find-Installation "EdgeChromium" @Logs
 $global:InstallTable | Format-Table -AutoSize @Logs
 
-New-Test "Install Root EdgeChromium"
+Start-Test "Install Root EdgeChromium"
 $global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
 
-New-Test "Find-Installation 'TeamViewer'"
+Start-Test "Find-Installation 'TeamViewer'"
 Find-Installation "TeamViewer" @Logs
 $global:InstallTable | Format-Table -AutoSize @Logs
 
-New-Test "Find-Installation 'FailureTest'"
+Start-Test "Find-Installation 'FailureTest'"
 Find-Installation "FailureTest" @Logs
 $global:InstallTable | Format-Table -AutoSize @Logs
 
-New-Test "Find-Installation 'VisualStudio'"
+Start-Test "Find-Installation 'VisualStudio'"
 Find-Installation "VisualStudio" @Logs
 $global:InstallTable | Format-Table -AutoSize @Logs
 
-New-Test "Find-Installation 'Greenshot'"
+Start-Test "Find-Installation 'Greenshot'"
 Find-Installation "Greenshot" @Logs
 $global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
 
-New-Test "Install Root Greenshot"
+Start-Test "Install Root Greenshot"
 $global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
 
-New-Test "Find-Installation 'OneDrive'"
+Start-Test "Find-Installation 'OneDrive'"
 Find-Installation "OneDrive" @Logs
 $global:InstallTable | Format-Table -AutoSize @Logs
 
-New-Test "Install Root OneDrive"
+Start-Test "Install Root OneDrive"
 $global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $global:InstallTable | Get-TypeName @Logs
 
 Update-Log

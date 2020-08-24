@@ -1,5 +1,11 @@
 
-# How to open Windows PowerShell 5.1
+# WindowsPowerShell
+
+Note that Windows PowerShell is not the same thing as PowerShell Core, for more information see:
+
+[About PowerShell Editions](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_powershell_editions?view=powershell-7)
+
+## How to open Windows PowerShell
 
 1. Right click on the Task bar and select `Taskbar settings`
 2. Toggle **ON**
@@ -8,7 +14,7 @@
 4. Click `Windows Powershell (Admin)` to open Powershell as Administrator
 (Enter Admin password if asked)
 
-# Right click "Open PowerShell here" context menu
+## Right click "Open Windows PowerShell here" context menu
 
 1. To add context menu on right click for "Windows PowerShell" for standard user see:
 

@@ -42,16 +42,16 @@ Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
-New-Test "Get-GroupPrincipal:"
+Start-Test "Get-GroupPrincipal:"
 $GroupAccounts = Get-GroupPrincipal "Users", "Administrators" @Logs
 $GroupAccounts
 
-New-Test "Get-AppSID: foreach User"
+Start-Test "Get-AppSID: foreach User"
 foreach ($Account in $GroupAccounts)
 {
 	Get-UserApps -User $Account.User @Logs | ForEach-Object {
@@ -59,13 +59,13 @@ foreach ($Account in $GroupAccounts)
 	}
 }
 
-New-Test "Get-AppSID: system apps"
+Start-Test "Get-AppSID: system apps"
 $Result = Get-SystemApps @Logs | ForEach-Object {
 	Get-AppSID $Account.User $_.PackageFamilyName @Logs
 }
 $Result
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $Result | Get-TypeName @Logs
 
 Update-Log

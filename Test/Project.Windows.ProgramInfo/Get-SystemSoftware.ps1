@@ -39,24 +39,24 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
 $SystemPrograms = Get-SystemSoftware @Logs
 
-New-Test "Get-SystemSoftware Name"
+Start-Test "Get-SystemSoftware Name"
 $SystemPrograms | Sort-Object -Property Name @Logs | Select-Object -ExpandProperty Name @Logs
 
-New-Test "Get-SystemSoftware InstallLocation"
+Start-Test "Get-SystemSoftware InstallLocation"
 $SystemPrograms | Sort-Object -Property InstallLocation @Logs |
 Select-Object -ExpandProperty InstallLocation @Logs
 
-New-Test "Get-SystemSoftware"
+Start-Test "Get-SystemSoftware"
 $SystemPrograms | Sort-Object -Property Name @Logs
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $SystemPrograms | Get-TypeName @Logs
 
 Update-Log

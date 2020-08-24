@@ -39,16 +39,16 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
-New-Test "Get-WindowsKit"
+Start-Test "Get-WindowsKit"
 $WindowsKits = Get-WindowsKit @Logs
 $WindowsKits
 
-New-Test "Get-WindowsKit DebuggersRoot latest"
+Start-Test "Get-WindowsKit DebuggersRoot latest"
 if ($null -ne $WindowsKits)
 {
 	$WindowsKits | Where-Object { $_.Product -like "WindowsDebuggersRoot*" } |
@@ -56,7 +56,7 @@ if ($null -ne $WindowsKits)
 	Select-Object -Last 1 -ExpandProperty InstallLocation @Logs
 }
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $WindowsKits | Get-TypeName @Logs
 
 Update-Log

@@ -29,31 +29,32 @@ SOFTWARE.
 #
 # Unit test for Initialize-Project
 #
+#Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
-
-# Check requirements for this project
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
+	$MyInvocation.MyCommand.Name -replace ".{4}$" )
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
 
-# Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+# User prompt
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
-New-Test "Initialize-Project"
+Start-Test "Initialize-Project"
 Initialize-Project
 
-New-Test "Initialize-Project -NoModules"
+Start-Test "Initialize-Project -NoModules"
 Initialize-Project -NoModulesCheck
 
 # FAIL
-# New-Test "Initialize-Project -NoModulesCheck -NoProjectCheck"
+# Start-Test "Initialize-Project -NoModulesCheck -NoProjectCheck"
 # Initialize-Project -NoModulesCheck -NoProjectCheck:$false
 
-New-Test "Initialize-Project -NoProjectCheck:$false"
+Start-Test "Initialize-Project -NoProjectCheck:$false"
 Initialize-Project -NoProjectCheck:$false
 
 Exit-Test

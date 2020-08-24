@@ -40,10 +40,10 @@ Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
 #
 # Test users
@@ -51,18 +51,18 @@ Start-Test
 
 [string[]] $Users = @("Administrator", "User", "Admin")
 
-New-Test "Get-AccountSID -User $Users"
+Start-Test "Get-AccountSID -User $Users"
 $AccountSID1 = Get-AccountSID -User $Users @Logs
 $AccountSID1
 
-New-Test "Get-AccountSID -User $Users -CIM"
+Start-Test "Get-AccountSID -User $Users -CIM"
 $AccountSID1 = Get-AccountSID -User $Users -CIM @Logs
 $AccountSID1
 
-New-Test "$Users | Get-AccountSID -CIM"
+Start-Test "$Users | Get-AccountSID -CIM"
 $Users | Get-AccountSID -CIM @Logs
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $AccountSID1 | Get-TypeName @Logs
 
 #
@@ -72,16 +72,16 @@ $AccountSID1 | Get-TypeName @Logs
 [string[]] $NTUsers = @("SYSTEM", "LOCAL SERVICE")
 [string] $NTDomain = "NT AUTHORITY"
 
-New-Test "Get-AccountSID -Domain $NTDomain -User $NTUsers"
+Start-Test "Get-AccountSID -Domain $NTDomain -User $NTUsers"
 $AccountSID2 = Get-AccountSID -Domain $NTDomain -User $NTUsers # @Logs
 $AccountSID2
 
 # NOTE: not valid
-# New-Test "Get-AccountSID -Domain $NTDomain -User $NTUsers -CIM"
+# Start-Test "Get-AccountSID -Domain $NTDomain -User $NTUsers -CIM"
 # $AccountSID2 = Get-AccountSID -Domain $NTDomain -User $NTUsers -CIM @Logs
 # $AccountSID2
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $AccountSID2 | Get-TypeName @Logs
 
 #
@@ -91,16 +91,16 @@ $AccountSID2 | Get-TypeName @Logs
 [string] $AppDomain = "APPLICATION PACKAGE AUTHORITY"
 [string] $AppUser = "Your Internet connection"
 
-New-Test "Get-AccountSID -Domain $AppDomain -User $AppUser"
+Start-Test "Get-AccountSID -Domain $AppDomain -User $AppUser"
 $AccountSID3 = Get-AccountSID -Domain $AppDomain -User $AppUser # @Logs
 $AccountSID3
 
 # NOTE: not valid
-# New-Test "Get-AccountSID -Domain $AppDomain -User $AppUser -CIM"
+# Start-Test "Get-AccountSID -Domain $AppDomain -User $AppUser -CIM"
 # $AccountSID3 = Get-AccountSID -Domain $AppDomain -User $AppUser -CIM @Logs
 # $AccountSID3
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $AccountSID3 | Get-TypeName @Logs
 
 Update-Log

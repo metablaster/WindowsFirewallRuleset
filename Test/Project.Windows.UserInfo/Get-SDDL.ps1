@@ -40,10 +40,10 @@ Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
 #
 # Test groups
@@ -51,11 +51,11 @@ Start-Test
 
 [string[]] $Groups = @("Users", "Administrators")
 
-New-Test "Get-SDDL -Group $Groups"
+Start-Test "Get-SDDL -Group $Groups"
 $TestUsersSDDL = Get-SDDL -Group $Groups @Logs
 $TestUsersSDDL
 
-New-Test "Get-SDDL -Group $Groups -CIM"
+Start-Test "Get-SDDL -Group $Groups -CIM"
 $TestUsersSDDL = Get-SDDL -Group $Groups -CIM @Logs
 $TestUsersSDDL
 
@@ -64,11 +64,11 @@ $TestUsersSDDL
 #
 
 [string[]] $Users = "Administrator", "Admin", "User"
-New-Test "Get-SDDL -User $Users"
+Start-Test "Get-SDDL -User $Users"
 $TestUsersSDDL = Get-SDDL -User $Users @Logs
 $TestUsersSDDL
 
-New-Test "Get-SDDL -User $Users -CIM"
+Start-Test "Get-SDDL -User $Users -CIM"
 $TestUsersSDDL = Get-SDDL -User $Users -CIM @Logs
 $TestUsersSDDL
 
@@ -79,7 +79,7 @@ $TestUsersSDDL
 [string] $NTDomain = "NT AUTHORITY"
 [string[]] $NTUsers = "SYSTEM", "LOCAL SERVICE"
 
-New-Test "Get-SDDL -Domain $NTDomain -User $NTUsers"
+Start-Test "Get-SDDL -Domain $NTDomain -User $NTUsers"
 $TestUsersSDDL = Get-SDDL -Domain $NTDomain -User $NTUsers @Logs
 $TestUsersSDDL
 
@@ -90,11 +90,11 @@ $TestUsersSDDL
 [string] $AppDomain = "APPLICATION PACKAGE AUTHORITY"
 [string[]] $AppUser = "Your Internet connection", "Your pictures library"
 
-New-Test "Get-SDDL -Domain $AppDomain -User $AppUser"
+Start-Test "Get-SDDL -Domain $AppDomain -User $AppUser"
 $TestUsersSDDL = Get-SDDL -Domain $AppDomain -User $AppUser @Logs
 $TestUsersSDDL
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $TestUsersSDDL | Get-TypeName @Logs
 
 Update-Log

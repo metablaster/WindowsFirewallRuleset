@@ -517,13 +517,13 @@ Export-ModuleMember -Function Show-SDDL
 Export-ModuleMember -Function Get-NetworkService
 Export-ModuleMember -Function Set-ScreenBuffer
 Export-ModuleMember -Function Set-NetworkProfile
+Export-ModuleMember -Function Get-FileEncoding
 
 #
 # External function exports
 #
 
 Export-ModuleMember -Function Get-TypeName
-Export-ModuleMember -Function Get-FileEncoding
 
 #
 # Variable exports

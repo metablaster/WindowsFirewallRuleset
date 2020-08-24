@@ -40,22 +40,22 @@ Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
 
-Start-Test
+Enter-Test $ThisScript
 
-New-Test "Get-GroupPrincipal -Group Users"
+Start-Test "Get-GroupPrincipal -Group Users"
 [string[]] $Users = Get-GroupPrincipal -Group "Users" | Select-Object -ExpandProperty User
 $User = $Users[0]
 $User
 
-New-Test "Get-UserApps"
+Start-Test "Get-UserApps"
 $Result = Get-UserApps -User $User @Logs
 $Result
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $Result[0] | Get-TypeName @Logs
 
 Update-Log

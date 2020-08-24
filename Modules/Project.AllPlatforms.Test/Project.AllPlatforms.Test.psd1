@@ -73,10 +73,10 @@
 	# Functions to export from this module, for best performance, do not use wildcards and do not
 	# delete the entry, use an empty array if there are no functions to export.
 	FunctionsToExport = @(
-		"Start-Test"
-		"New-Test"
+		"Enter-Test"
 		"Exit-Test"
-		"Test-PrincipalRule"
+		"Start-Test"
+		"Stop-Test"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not
@@ -101,6 +101,10 @@
 		"Project.AllPlatforms.Test.psd1"
 		"Project.AllPlatforms.Test.psm1"
 		"about_Project.AllPlatforms.Test.help.txt"
+		"Enter-Test.ps1"
+		"Exit-Test.ps1"
+		"Start-Test.ps1"
+		"Stop-Test.ps1"
 	)
 
 	# Private data to pass to the module specified in RootModule/ModuleToProcess.
@@ -110,7 +114,7 @@
 		PSData = @{
 
 			# Tags applied to this module. These help with module discovery in online galleries.
-			Tags = @("PowerShellTest", "UnitTest", "Test", "Audit")
+			Tags = @("PowerShellTest", "UnitTest", "Test")
 
 			# A URL to the license for this module.
 			LicenseUri = 'https://github.com/metablaster/WindowsFirewallRuleset/blob/master/LICENSE'
@@ -122,7 +126,7 @@
 			# IconUri = ''
 
 			# Prerelease string of this module
-			Prerelease = "This pre-release is sufficiently stable to write powershell test scripts for Windows Firewall Ruleset"
+			Prerelease = "Pre-release module for unit testing 'Windows Firewall Ruleset' project"
 
 			# ReleaseNotes of this module
 			# ReleaseNotes = ''

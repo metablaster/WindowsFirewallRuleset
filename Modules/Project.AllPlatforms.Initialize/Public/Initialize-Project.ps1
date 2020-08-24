@@ -173,7 +173,7 @@ function Initialize-Project
 	else
 	{
 		# Default is set to 3.0.0 for Core editions in ProjectSettings
-		Set-Variable -Name RequireNuGetVersion -Scope Global -Force -Value $([version]::new(2, 8, 5))
+		Set-Variable -Name RequireNuGetVersion -Scope Global -Force -Value ([version]::new(2, 8, 5))
 		Write-Warning -Message "Remote firewall administration with PowerShell $PowerShellEdition is partially implemented"
 	}
 

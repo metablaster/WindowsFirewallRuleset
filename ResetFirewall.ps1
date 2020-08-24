@@ -96,7 +96,7 @@ Set-NetFirewallSetting -PolicyStore $PolicyStore -EnablePacketQueuing NotConfigu
 # TODO: we need to check if there are rules present to avoid errors about "no object found"
 # Needed also to log actual rule removal errors
 Write-Information -Tags "User" -MessageData "INFO: Removing outbound rules..." @Logs
-$OutboundCount = $(Get-NetFirewallRule -PolicyStore $PolicyStore -Direction Outbound -ErrorAction Ignore | Measure-Object).Count
+$OutboundCount = (Get-NetFirewallRule -PolicyStore $PolicyStore -Direction Outbound -ErrorAction Ignore | Measure-Object).Count
 
 if ($OutboundCount -gt 0)
 {
@@ -104,7 +104,7 @@ if ($OutboundCount -gt 0)
 }
 
 Write-Information -Tags "User" -MessageData "INFO: Removing inbound rules..." @Logs
-$InboundCount = $(Get-NetFirewallRule -PolicyStore $PolicyStore -Direction Inbound -ErrorAction Ignore | Measure-Object).Count
+$InboundCount = (Get-NetFirewallRule -PolicyStore $PolicyStore -Direction Inbound -ErrorAction Ignore | Measure-Object).Count
 
 if ($InboundCount -gt 0)
 {

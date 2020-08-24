@@ -39,40 +39,40 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
-New-Test "Get-IPAddress IPv4"
+Start-Test "Get-IPAddress IPv4"
 Get-IPAddress IPv4 @Logs
 
-New-Test "Get-IPAddress IPv6"
+Start-Test "Get-IPAddress IPv6"
 Get-IPAddress IPv6 @Logs
 
-New-Test "Get-IPAddress IPv4 -IncludeDisconnected"
+Start-Test "Get-IPAddress IPv4 -IncludeDisconnected"
 Get-IPAddress IPv4 -IncludeDisconnected @Logs
 
-New-Test "Get-IPAddress IPv4 -IncludeVirtual"
+Start-Test "Get-IPAddress IPv4 -IncludeVirtual"
 Get-IPAddress IPv4 -IncludeVirtual @Logs
 
-New-Test "Get-IPAddress IPv4 -IncludeVirtual -IncludeDisconnected"
+Start-Test "Get-IPAddress IPv4 -IncludeVirtual -IncludeDisconnected"
 Get-IPAddress IPv4 -IncludeVirtual -IncludeDisconnected @Logs
 
-New-Test "Get-IPAddress IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware"
+Start-Test "Get-IPAddress IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware"
 Get-IPAddress IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware @Logs
 
-New-Test "Get-IPAddress IPv4 -IncludeHidden"
+Start-Test "Get-IPAddress IPv4 -IncludeHidden"
 Get-IPAddress IPv4 -IncludeHidden @Logs
 
-New-Test "Get-IPAddress IPv4 -IncludeAll"
+Start-Test "Get-IPAddress IPv4 -IncludeAll"
 $IPAddress = Get-IPAddress IPv4 -IncludeAll @Logs
 $IPAddress
 
-New-Test "Get-IPAddress IPv4 -IncludeAll -ExcludeHardware"
+Start-Test "Get-IPAddress IPv4 -IncludeAll -ExcludeHardware"
 Get-IPAddress IPv4 -IncludeAll -ExcludeHardware @Logs
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $IPAddress | Get-TypeName @Logs
 
 Update-Log

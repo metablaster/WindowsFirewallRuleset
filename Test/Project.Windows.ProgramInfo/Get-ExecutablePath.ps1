@@ -39,20 +39,20 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
-New-Test "Get-ExecutablePath"
+Start-Test "Get-ExecutablePath"
 $ExecutablePaths = Get-ExecutablePath @Logs | Sort-Object -Property Name
 $ExecutablePaths
 
-New-Test "Get-ExecutablePath pwsh.exe"
+Start-Test "Get-ExecutablePath pwsh.exe"
 $ExecutablePaths | Where-Object -Property Name -EQ "pwsh.exe" @Logs |
 Select-Object -ExpandProperty InstallLocation
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $ExecutablePaths | Get-TypeName @Logs
 
 Update-Log

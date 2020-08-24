@@ -39,47 +39,47 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
 $User = "haxor"
 
 $TestPath = "C:\Users\$User\source\repos\WindowsFirewallRuleset"
-New-Test "$TestPath"
+Start-Test "$TestPath"
 Test-UserProfile $TestPath @Logs
 
 $TestPath = "%LOCALAPPDATA%\Microsoft"
-New-Test "$TestPath"
+Start-Test "$TestPath"
 Test-UserProfile $TestPath @Logs
 
 $TestPath = "C:\\Users\$User\source\\repos\WindowsFirewallRuleset\"
-New-Test "$TestPath"
+Start-Test "$TestPath"
 Test-UserProfile $TestPath @Logs
 
 $TestPath = "%LOCALAPPDATA%\\Microsoft\"
-New-Test "$TestPath"
+Start-Test "$TestPath"
 Test-UserProfile $TestPath @Logs
 
 $TestPath = "C:\Program Files\\Microsoft SQL Server\140"
-New-Test "$TestPath"
+Start-Test "$TestPath"
 Test-UserProfile $TestPath @Logs
 
 $TestPath = "%ProgramFiles(x86)%\Microsoft SQL Server\140\"
-New-Test "$TestPath"
+Start-Test "$TestPath"
 Test-UserProfile $TestPath @Logs
 
 $TestPath = "C:\"
-New-Test "$TestPath"
+Start-Test "$TestPath"
 Test-UserProfile $TestPath @Logs
 
 $TestPath = "C:\\"
-New-Test "$TestPath"
+Start-Test "$TestPath"
 $Status = Test-UserProfile $TestPath @Logs
 $Status
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $Status | Get-TypeName @Logs
 
 Update-Log

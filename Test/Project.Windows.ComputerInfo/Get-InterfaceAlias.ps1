@@ -39,48 +39,48 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
-New-Test "Get-InterfaceAlias IPv4"
+Start-Test "Get-InterfaceAlias IPv4"
 $Aliases = Get-InterfaceAlias IPv4 @Logs
 $Aliases.ToWql()
 
-New-Test "Get-InterfaceAlias IPv6"
+Start-Test "Get-InterfaceAlias IPv6"
 $Aliases = Get-InterfaceAlias IPv6 @Logs
 $Aliases.ToWql()
 
-New-Test "Get-InterfaceAlias IPv4 -IncludeDisconnected -WildCardOption"
+Start-Test "Get-InterfaceAlias IPv4 -IncludeDisconnected -WildCardOption"
 $Aliases = Get-InterfaceAlias IPv4 -IncludeDisconnected -WildCardOption IgnoreCase @Logs
 $Aliases.ToWql()
 
-New-Test "Get-InterfaceAlias IPv4 -IncludeVirtual"
+Start-Test "Get-InterfaceAlias IPv4 -IncludeVirtual"
 $Aliases = Get-InterfaceAlias IPv4 -IncludeVirtual @Logs
 $Aliases.ToWql()
 
-New-Test "Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected"
+Start-Test "Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected"
 $Aliases = Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected @Logs
 $Aliases.ToWql()
 
-New-Test "Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware"
+Start-Test "Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware"
 $Aliases = Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware @Logs
 $Aliases.ToWql()
 
-New-Test "Get-InterfaceAlias IPv4 -IncludeHidden"
+Start-Test "Get-InterfaceAlias IPv4 -IncludeHidden"
 $Aliases = Get-InterfaceAlias IPv4 -IncludeHidden @Logs
 $Aliases.ToWql()
 
-New-Test "Get-InterfaceAlias IPv4 -IncludeAll"
+Start-Test "Get-InterfaceAlias IPv4 -IncludeAll"
 $Aliases = Get-InterfaceAlias IPv4 -IncludeAll @Logs
 $Aliases.ToWql()
 
-New-Test "Get-InterfaceAlias IPv4 -IncludeAll -ExcludeHardware"
+Start-Test "Get-InterfaceAlias IPv4 -IncludeAll -ExcludeHardware"
 $Aliases = Get-InterfaceAlias IPv4 -IncludeAll -ExcludeHardware @Logs
 $Aliases.ToWql()
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $Aliases | Get-TypeName @Logs
 
 Update-Log

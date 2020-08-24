@@ -50,46 +50,46 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
-New-Test "-UserProfile switch Fill table with Greenshot"
+Start-Test "-UserProfile switch Fill table with Greenshot"
 Initialize-Table @Logs
 Update-Table "Greenshot" -UserProfile @Logs
 $global:InstallTable | Format-Table -AutoSize @Logs
 
-New-Test "Install Path"
+Start-Test "Install Path"
 $global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
 
-New-Test "Failure Test"
+Start-Test "Failure Test"
 Initialize-Table @Logs
 Update-Table "Failure" -UserProfile @Logs
 $global:InstallTable | Format-Table -AutoSize @Logs
 
-New-Test "Test multiple paths"
+Start-Test "Test multiple paths"
 Initialize-Table @Logs
 Update-Table "Visual Studio" -UserProfile @Logs
 $global:InstallTable | Format-Table -AutoSize @Logs
 
-New-Test "Install Path"
+Start-Test "Install Path"
 $global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
 
-New-Test "-Executables switch - Fill table with PowerShell"
+Start-Test "-Executables switch - Fill table with PowerShell"
 Initialize-Table @Logs
 Update-Table "PowerShell.exe" -Executables
 $global:InstallTable | Format-Table -AutoSize @Logs
 
-New-Test "Install Path"
+Start-Test "Install Path"
 $global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
 
-New-Test "-UserProfile switch Fill table with OneDrive"
+Start-Test "-UserProfile switch Fill table with OneDrive"
 Initialize-Table @Logs
 Update-Table "OneDrive" -UserProfile @Logs
 $global:InstallTable | Format-Table -AutoSize @Logs
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $global:InstallTable | Get-TypeName @Logs
 
 Update-Log

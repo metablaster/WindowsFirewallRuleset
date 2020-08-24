@@ -48,13 +48,13 @@ if (!(Approve-Execute @Logs)) { exit }
 $Group = "Test - AppSID"
 $FirewallProfile = "Any"
 
-Start-Test
+Enter-Test $ThisScript
 
-New-Test "Remove-NetFirewallRule"
+Start-Test "Remove-NetFirewallRule"
 # Remove previous test
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
-New-Test "Get-GroupPrincipal"
+Start-Test "Get-GroupPrincipal"
 $Principals = Get-GroupPrincipal "Users" @Logs
 $Principals
 
@@ -62,7 +62,7 @@ $Principals
 [string] $OwnerSID = ""
 foreach ($Principal in $Principals)
 {
-	New-Test "Processing for: $($Principal.Account)"
+	Start-Test "Processing for: $($Principal.Account)"
 	$OwnerSID = Get-AccountSID $Principal.User -Computer $Principal.Computer @Logs
 	$OwnerSID
 
@@ -72,7 +72,7 @@ foreach ($Principal in $Principals)
 	} @Logs
 }
 
-New-Test "New-NetFirewallRule"
+Start-Test "New-NetFirewallRule"
 
 New-NetFirewallRule -DisplayName "Get-AppSID" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `

@@ -51,12 +51,12 @@ $Group = "Test - Unresolved path"
 $FirewallProfile = "Any"
 $TargetProgramRoot = "C:\Program Files (x86)\Realtek\..\PokerStars.EU"
 
-Start-Test
+Enter-Test $ThisScript
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
-New-Test "Unresolved path"
+Start-Test "Unresolved path"
 
 # Test if installation exists on system
 $Program = "$TargetProgramRoot\PokerStars.exe"

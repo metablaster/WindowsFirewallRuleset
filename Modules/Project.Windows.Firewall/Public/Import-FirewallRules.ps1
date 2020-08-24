@@ -152,7 +152,7 @@ function Import-FirewallRules
 		# for SID types no empty value is defined, so omit if not present
 		if (![string]::IsNullOrEmpty($Rule.Owner))
 		{
-			$LoginName = $(ConvertFrom-SID $Rule.Owner).Name
+			$LoginName = (ConvertFrom-SID $Rule.Owner).Name
 
 			if ([string]::IsNullOrEmpty($LoginName))
 			{
@@ -167,7 +167,7 @@ function Import-FirewallRules
 
 		if (![string]::IsNullOrEmpty($Rule.Package))
 		{
-			$LoginName = $(ConvertFrom-SID $Rule.Package).Name
+			$LoginName = (ConvertFrom-SID $Rule.Package).Name
 
 			if ([string]::IsNullOrEmpty($LoginName))
 			{

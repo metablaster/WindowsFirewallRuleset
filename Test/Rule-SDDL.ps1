@@ -48,10 +48,10 @@ if (!(Approve-Execute @Logs)) { exit }
 $Group = "Test - Get-SDDL"
 $FirewallProfile = "Any"
 
-Start-Test
+Enter-Test $ThisScript
 # TODO: Need separate test cases for users, groups and built in domains
 
-New-Test "Remove-NetFirewallRule"
+Start-Test "Remove-NetFirewallRule"
 # Remove previous test
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
@@ -59,13 +59,13 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Test Groups, Users and NT AUTHORITY
 #
 
-New-Test "Get-SDDL + Merge-SDDL"
+Start-Test "Get-SDDL + Merge-SDDL"
 $RuleUsers = Get-SDDL -Group "Users", "Administrators" -User "User", "Admin" @Logs
 $RuleSystemUsers = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE" @Logs
 Merge-SDDL ([ref] $RuleUsers) $RuleSystemUsers @Logs
 $RuleUsers
 
-New-Test "New-NetFirewallRule"
+Start-Test "New-NetFirewallRule"
 
 New-NetFirewallRule -DisplayName "Get-SDDL mix" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
@@ -82,12 +82,12 @@ New-NetFirewallRule -DisplayName "Get-SDDL mix" `
 # Test APPLICATION PACKAGE AUTHORITY
 #
 
-New-Test "Get-SDDL + Merge-SDDL for APPLICATION PACKAGE AUTHORITY"
+Start-Test "Get-SDDL + Merge-SDDL for APPLICATION PACKAGE AUTHORITY"
 $RuleAppUsers = Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -User "Your Internet connection" @Logs
 Merge-SDDL ([ref] $RuleAppUsers) (Get-SDDL -Group "Users") @Logs
 $RuleAppUsers
 
-New-Test "Get-SDDL APPLICATION PACKAGE AUTHORITY"
+Start-Test "Get-SDDL APPLICATION PACKAGE AUTHORITY"
 
 New-NetFirewallRule -DisplayName "Get-SDDL APPLICATION PACKAGE AUTHORITY" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `

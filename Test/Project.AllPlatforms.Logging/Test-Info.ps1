@@ -27,19 +27,21 @@ SOFTWARE.
 #>
 
 #
-# Unit test for Test-Info
+# Unit test for info logging
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
+	$MyInvocation.MyCommand.Name -replace ".{4}$" )
 
-# Check requirements for this project
+# Check requirements
 Initialize-Project
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
 
-# Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+# User prompt
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
 <#
@@ -128,21 +130,27 @@ function Test-Empty
 	param ()
 }
 
-Start-Test
+Enter-Test $ThisScript
 
-New-Test "No info"
+# NOTE: we test generating logs not what is shown in the console
+# disabling this for "RunAllTests"
+$ErrorActionPreference = "SilentlyContinue"
+$WarningPreference = "SilentlyContinue"
+$InformationPreference = "SilentlyContinue"
+
+Start-Test "No info"
 Get-ChildItem -Path "C:\" @Logs | Out-Null
 
-New-Test "Test-Info"
+Start-Test "Test-Info"
 Test-Info @Logs
 
-New-Test "Test-Pipeline"
+Start-Test "Test-Pipeline"
 Test-Empty @Logs | Test-Pipeline @Logs
 
-New-Test "Test-Parent"
+Start-Test "Test-Parent"
 Test-Parent @Logs
 
-New-Test "Test-Combo"
+Start-Test "Test-Combo"
 Test-Combo @Logs
 
 Update-Log

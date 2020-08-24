@@ -86,6 +86,7 @@ Project.Windows.Firewall is a module to manage firewall rules.
 		"Import-FirewallRules"
 		"Remove-FirewallRules"
 		"Format-Output"
+		"Find-RulePrincipal"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not

@@ -114,7 +114,7 @@ if ((Test-Installation "GithubDesktop" ([ref] $GithubRoot) @Logs) -or $ForceLoad
 {
 	$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($GithubRoot)
 	$VersionFolders = Get-ChildItem -Directory -Path $ExpandedPath -Filter app-* -Name
-	$VersionFoldersCount = $($VersionFolders | Measure-Object).Count
+	$VersionFoldersCount = ($VersionFolders | Measure-Object).Count
 
 	if ($VersionFoldersCount -gt 0)
 	{

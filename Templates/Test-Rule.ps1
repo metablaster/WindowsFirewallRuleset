@@ -43,7 +43,7 @@ Import-Module -Name Project.AllPlatforms.Logging
 # Import-Module -Name Project.Windows.UserInfo
 #
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
 #
@@ -52,13 +52,13 @@ if (!(Approve-Execute @Logs)) { exit }
 $Group = "Test - Template rule"
 $FirewallProfile = "Any"
 
-Start-Test
+Enter-Test $ThisScript
 
-New-Test "Remove-NetFirewallRule"
+Start-Test "Remove-NetFirewallRule"
 # Remove previous test
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
-New-Test "Test rule"
+Start-Test "Test rule"
 
 # Outbound TCP test rule template
 New-NetFirewallRule -DisplayName "Test rule" `

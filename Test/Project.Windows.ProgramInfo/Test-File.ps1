@@ -39,21 +39,21 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
 $OfficeShared = "%ProgramFiles%\Common Files\microsoft shared"
 $VSInstallService = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.x86.exe"
 
-New-Test "$VSInstallService"
+Start-Test "$VSInstallService"
 Test-File $VSInstallService @Logs
 
-New-Test "$OfficeShared\ClickToRun\OfficeClickToRun.exe"
+Start-Test "$OfficeShared\ClickToRun\OfficeClickToRun.exe"
 Test-File "$OfficeShared\ClickToRun\OfficeClickToRun.exe" @Logs
 
-New-Test "%ProgramFiles%\ClickToRun\OfficeClickToRun.exe"
+Start-Test "%ProgramFiles%\ClickToRun\OfficeClickToRun.exe"
 Test-File "%ProgramFiles%\ClickToRun\OfficeClickToRun.exe" @Logs
 
 Update-Log

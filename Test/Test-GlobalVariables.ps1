@@ -40,39 +40,39 @@ Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
-New-Test "Project.AllPlatforms.Logs - Logs:"
+Start-Test "Project.AllPlatforms.Logs - Logs:"
 $Logs
 
-New-Test "Project.AllPlatforms.Utility - ServiceHost:"
+Start-Test "Project.AllPlatforms.Utility - ServiceHost:"
 $ServiceHost
 
 if ($Develop)
 {
-	New-Test "Project.Windows.ProgramInfo - InstallTable:"
+	Start-Test "Project.Windows.ProgramInfo - InstallTable:"
 	$InstallTable
 }
 
-New-Test "Project.Windows.UserInfo - NT_AUTHORITY_UserModeDrivers:"
+Start-Test "Project.Windows.UserInfo - NT_AUTHORITY_UserModeDrivers:"
 $NT_AUTHORITY_UserModeDrivers
 
-New-Test "Project.Windows.UserInfo - NT_AUTHORITY_NetworkService:"
+Start-Test "Project.Windows.UserInfo - NT_AUTHORITY_NetworkService:"
 $NT_AUTHORITY_NetworkService
 
-New-Test "Project.Windows.UserInfo - NT_AUTHORITY_LocalService:"
+Start-Test "Project.Windows.UserInfo - NT_AUTHORITY_LocalService:"
 $NT_AUTHORITY_LocalService
 
-New-Test "Project.Windows.UserInfo - NT_AUTHORITY_System:"
+Start-Test "Project.Windows.UserInfo - NT_AUTHORITY_System:"
 $NT_AUTHORITY_System
 
-New-Test "Project.Windows.UserInfo - AdministratorsGroupSDDL:"
+Start-Test "Project.Windows.UserInfo - AdministratorsGroupSDDL:"
 $AdministratorsGroupSDDL
 
-New-Test "Project.Windows.UserInfo - UsersGroupSDDL:"
+Start-Test "Project.Windows.UserInfo - UsersGroupSDDL:"
 $UsersGroupSDDL
 
 Exit-Test

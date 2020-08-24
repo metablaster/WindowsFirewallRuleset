@@ -39,10 +39,10 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
 $OfficeRoot = "%ProgramFiles(x866666)%\Microsoft Office\root\Office16"
 $TeamViewerRoot = "%ProgramFiles(x86)%\TeamViewer"
@@ -50,22 +50,22 @@ $TestBadVariable = "%UserProfile%\crazyFolder"
 $TestBadVariable2 = "%UserProfile%\crazyFolder"
 $Greenshot = "unknown"
 
-New-Test "Test-Installation 'Greenshot' $Greenshot"
+Start-Test "Test-Installation 'Greenshot' $Greenshot"
 Test-Installation "Greenshot" ([ref] $Greenshot) @Logs
 
-New-Test "Test-Installation 'MicrosoftOffice' $OfficeRoot"
+Start-Test "Test-Installation 'MicrosoftOffice' $OfficeRoot"
 Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot) @Logs
 
-New-Test "Test-Installation 'TeamViewer' $TeamViewerRoot"
+Start-Test "Test-Installation 'TeamViewer' $TeamViewerRoot"
 Test-Installation "TeamViewer" ([ref] $TeamViewerRoot) @Logs
 
-New-Test "Test-Installation 'VisualStudio' $TestBadVariable"
+Start-Test "Test-Installation 'VisualStudio' $TestBadVariable"
 Test-Installation "VisualStudio" ([ref] $TestBadVariable) @Logs
 
-New-Test "Test-Installation 'BadVariable' $TestBadVariable2"
+Start-Test "Test-Installation 'BadVariable' $TestBadVariable2"
 $Status = Test-Installation "BadVariable" ([ref] $TestBadVariable2) @Logs
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $Status | Get-TypeName @Logs
 
 Update-Log

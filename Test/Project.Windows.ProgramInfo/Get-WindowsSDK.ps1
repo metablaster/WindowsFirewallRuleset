@@ -39,16 +39,16 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Start-Test
+Enter-Test $ThisScript
 
-New-Test "Get-WindowsSDK"
+Start-Test "Get-WindowsSDK"
 $WindowsSDK = Get-WindowsSDK @Logs
 $WindowsSDK
 
-New-Test "Get-WindowsSDK latest"
+Start-Test "Get-WindowsSDK latest"
 if ($null -ne $WindowsSDK)
 {
 	$WindowsSDK | Sort-Object -Property Version @Logs |
@@ -56,7 +56,7 @@ if ($null -ne $WindowsSDK)
 	Select-Object -Last 1 -ExpandProperty InstallLocation @Logs
 }
 
-New-Test "Get-TypeName"
+Start-Test "Get-TypeName"
 $WindowsSDK | Get-TypeName @Logs
 
 Update-Log

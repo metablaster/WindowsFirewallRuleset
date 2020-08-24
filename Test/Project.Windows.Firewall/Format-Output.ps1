@@ -41,7 +41,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Ask user if he wants to load these rules
-Update-Context $TestContext $($MyInvocation.MyCommand.Name -replace ".{4}$") @Logs
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
 #
@@ -51,12 +51,12 @@ $Group = "Test - Format output"
 $FirewallProfile = "Any"
 $Direction = "Outbound"
 
-Start-Test
+Enter-Test $ThisScript
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
-New-Test "Format-Output"
+Start-Test "Format-Output"
 
 New-NetFirewallRule -DisplayName "TargetProgram" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
