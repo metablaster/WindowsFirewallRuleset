@@ -1,25 +1,25 @@
 
-# List of stuff that needs to be done
+# List of tasks that needs to be done
 
 This is a project global list which applies to several or all scripts.
 
-For smaller todo's local to specific scripts and files see individual files, you can use workspace
-recommended extension todo-tree to navigate todo, HACK and NOTE tags.
+For smaller todo's local to specific scripts and files see individual files, you can use workspace\
+recommended extension `todo-tree` to navigate TODO, HACK and NOTE tags.
 
-Note that some todo's listed here are are duplicate of todo's inside individual scripts, this is
+Note that some todo's listed here are are duplicate of todo's inside individual scripts, this is\
 intentionally for important todo's to make is easier to tell where to look at while resolving this list.
 
 todo's in this file are categorized into following sections:
 
-1. Ongoing              Never ending or continuous work
-2. High priority        Must be resolved ASAP
-3. Medium priority      Important
-4. Low priority         Not very important
-5. Done                 It's done and kept here for reference.
+1. **Ongoing**              Never ending or continuous work
+2. **High priority**        Must be resolved ASAP
+3. **Medium priority**      Important
+4. **Low priority**         Not very important
+5. **Done**                 It's done and kept here for reference.
 
 ## Table of contents
 
-- [List of stuff that needs to be done](#list-of-stuff-that-needs-to-be-done)
+- [List of tasks that needs to be done](#list-of-tasks-that-needs-to-be-done)
   - [Table of contents](#table-of-contents)
   - [Ongoing](#ongoing)
   - [High priority](#high-priority)

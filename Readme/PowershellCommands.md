@@ -1,7 +1,7 @@
 
 # PowerShell commands(lets)
 
-Useful Powershell commands to help gather information needed for Windows firewall.
+Powershell commands to help gather information useful for Windows firewall development
 
 ## Table of contents
 

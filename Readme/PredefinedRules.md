@@ -18,7 +18,7 @@ from predefined rules.
 Some of the rules retain grouping while other are grouped into existing groups, grouping exceptions
 are listed below.
 
-# Grouping predefined rules
+## Grouping predefined rules
 
 Predefined group or comment / new group
 

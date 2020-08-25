@@ -6,9 +6,10 @@ project.
 
 For example once your regex hits, you would use CTRL + SHIFT + L to enter
 [Multi cursor](https://code.visualstudio.com/docs/getstarted/tips-and-tricks#_multi-cursor-selection)
-mode and manipulate all regex matches however you like.
+mode\
+and manipulate all regex matches however you like.
 
-NOTE:
+Note:
 
 - firewall rule examples here are shortened.
 - each regex includes an optional space at the end

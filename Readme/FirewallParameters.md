@@ -13,26 +13,26 @@ and usually need googling out what they do.
 
 - [Firewall Parameters](#firewall-parameters)
   - [Table of contents](#table-of-contents)
-  - [PORT](#port)
+  - [Port](#port)
     - [LocalPort/RemotePort](#localportremoteport)
     - [LocalPort TCP Inbound](#localport-tcp-inbound)
     - [LocalPort UDP Inbound](#localport-udp-inbound)
     - [LocalPort TCP Outbound](#localport-tcp-outbound)
-  - [ADDRESS](#address)
+  - [Address](#address)
     - [RemoteAddress](#remoteaddress)
-  - [INTERFACE](#interface)
+  - [Interface](#interface)
     - [InterfaceType](#interfacetype)
     - [InterfaceAlias](#interfacealias)
-  - [USERS](#users)
-  - [EDGE TRAVERSAL](#edge-traversal)
-  - [POLICY STORE](#policy-store)
-  - [APPLICATION LAYER ENFORCEMENT](#application-layer-enforcement)
-  - [PARAMETER VALUES EXAMPLE](#parameter-values-example)
+  - [Users](#users)
+  - [Edge traversal](#edge-traversal)
+  - [Policy store](#policy-store)
+  - [Application layer enforcement](#application-layer-enforcement)
+  - [Parameter value example](#parameter-value-example)
   - [Log file fields](#log-file-fields)
   - [Outbound](#outbound)
   - [Inbound](#inbound)
 
-## PORT
+## Port
 
 ### LocalPort/RemotePort
 
@@ -53,7 +53,7 @@ and usually need googling out what they do.
 
 - `IPHTTPSOut` IPHTTPS
 
-## ADDRESS
+## Address
 
 - *Keywords can be restricted to IPv4 or IPv6 by appending a 4 or 6*
 
@@ -71,7 +71,7 @@ and usually need googling out what they do.
 - `PlayToDevice` PlayTo Renderers
 - `?` Captive Portal Addresses
 
-## INTERFACE
+## Interface
 
 ### InterfaceType
 
@@ -89,21 +89,21 @@ except if InterfaceType is "Any", use just one of these two parameters.
 - [WildCardPattern] ([string])
 - [WildCardPattern] ([string], [WildCardOptions])
 
-## USERS
+## Users
 
 - `Localuser` Authorized local Principals
 - `?` Excepted local Principals
 - `Owner` Local User Owner
 - `RemoteUser` Authorized Users
 
-## EDGE TRAVERSAL
+## Edge traversal
 
 - `Block` Allow edge traversal
 - `Allow` Block edge traversal
 - `DeferToUser` Defer to user / Defer allow to user
 - `DeferToApp` Defer to application / Defer allow to application
 
-## POLICY STORE
+## Policy store
 
 1. Persistent Store (example: `-PolicyStore PersistentStore`)
 2. GPO              (example: `-PolicyStore localhost`)
@@ -134,14 +134,14 @@ local computer. in other words it's a master store.
 There are other stores not mentioned here, which are used in corporate networks, AD's or Domains,
 so irrelevant for home users.
 
-## APPLICATION LAYER ENFORCEMENT
+## Application layer enforcement
 
 The meaning of this parameter value depends on which parameter it is used:
 
 1. `"*"` Apply to services only / Apply to application packages only
 2. `Any` Apply to all programs + and services / and application packages / that meet the specified condition
 
-## PARAMETER VALUES EXAMPLE
+## Parameter value example
 
 This is how parameters are used on command line, most of them need to be enclosed in quotes if
 assigned to variable first.
