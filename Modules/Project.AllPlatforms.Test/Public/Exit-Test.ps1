@@ -65,6 +65,6 @@ function Exit-Test
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] InformationLogging restored to: $InformationLogging"
 
 		Write-Output ""
-		Write-Information -Tags "Test" -MessageData "INFO: Exiting unit test: '$script:UnitTest'"
+		Write-Information -Tags "Test" -MessageData "INFO: Exiting unit test '$script:UnitTest'"
 	}
 }

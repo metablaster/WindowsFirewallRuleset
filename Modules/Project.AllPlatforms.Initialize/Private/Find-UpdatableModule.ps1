@@ -113,6 +113,8 @@ function Find-UpdatableModule
 	}
 	process
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+
 		if ($Module)
 		{
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Get-Module -Name"
@@ -144,8 +146,6 @@ function Find-UpdatableModule
 		{
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] No modules found, aborting"
 		}
-
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 		foreach ($TargetModule in $Modules)
 		{

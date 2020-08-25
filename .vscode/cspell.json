@@ -86,6 +86,7 @@
         "HOMEPATH",
         "hostnames",
         "IANA",
+        "icacls",
         "ICMP",
         "icmpcode",
         "icmptype",
