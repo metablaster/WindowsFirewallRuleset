@@ -66,6 +66,7 @@ It should be used in conjunction with the rest of a module "Project.AllPlatforms
 TODO: learn repo dir automatically (using git?)
 TODO: we don't use logs in this module
 TODO: checking remote systems not implemented
+TODO: Any modules in standard user paths will override system wide modules
 #>
 function Initialize-Project
 {
@@ -375,6 +376,7 @@ function Initialize-Project
 	$OSBuildVersion = ConvertFrom-OSBuild $TargetOSVersion.Build
 
 	# Everything OK, print environment status
+	# TODO: finally show loaded modules, providers and services stataus
 	Write-Host ""
 	Write-Host "INFO: Checking project minimum requirements was successful!" -ForegroundColor Cyan
 

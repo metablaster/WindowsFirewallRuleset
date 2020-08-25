@@ -26,10 +26,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# TODO: Include modules you need, update Copyright and start writing test code
-
 #
-# Unit test for Test-Function
+# Unit test for Uninstall-DuplicateModule
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
@@ -40,8 +38,8 @@ Initialize-Project
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
+. $ProjectRoot\Modules\Project.AllPlatforms.Initialize\Private\Uninstall-DuplicateModule.ps1
 Import-Module -Name Project.AllPlatforms.Logging
-# Import-Module -Name Project.Windows.UserInfo
 
 # User prompt
 Update-Context $TestContext $ThisScript @Logs
@@ -49,12 +47,26 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Enter-Test $ThisScript
 
-Start-Test "Test-Function"
-$Result = Test-Function @Logs
-$Result
+# NOTE: Install these outdated modules as standard user for testing,
+# make sure to to test Get-Module returns single module
+# Install-Module -Name PackageManagement -RequiredVersion "1.4.0.0" -Scope CurrentUser
+# Install-Module -Name Pester -RequiredVersion "5.0.2.0" -Scope CurrentUser
+# Install-Module -Name PowerShellGet -RequiredVersion "1.1.0.0" -Scope CurrentUser
 
-Start-Test "Get-TypeName"
-$Result | Get-TypeName @Logs
+Start-Test "Get-Module"
+[PSModuleInfo[]] $TargetModule = Get-Module -ListAvailable -FullyQualifiedName @{modulename = "Pester"; moduleversion = "5.0.2.0" }
+$TargetModule += Get-Module -ListAvailable -FullyQualifiedName @{modulename = "PackageManagement"; moduleversion = "1.4.0.0" }
+
+if ($TargetModule)
+{
+	Start-Test "Uninstall-DuplicateModule Pipeline"
+	$TargetModule | Uninstall-DuplicateModule @Logs
+}
+
+$ModulePath = "C:\Users\User\Documents\PowerShell\Modules\PowerShellGet"
+
+Start-Test "Uninstall-DuplicateModule"
+Uninstall-DuplicateModule $ModulePath @Logs
 
 Update-Log
 Exit-Test

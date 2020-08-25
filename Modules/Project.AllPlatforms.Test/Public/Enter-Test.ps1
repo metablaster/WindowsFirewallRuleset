@@ -60,7 +60,7 @@ function Enter-Test
 	if ($PSCmdlet.ShouldProcess("Enter unit test", $script:UnitTest))
 	{
 		Write-Output ""
-		Write-Information -Tags "Test" -MessageData "INFO: Entering unit test: '$script:UnitTest'"
+		Write-Information -Tags "Test" -MessageData "INFO: Entering unit test '$script:UnitTest'"
 
 		# disable logging errors for tests
 		# TODO: variable name can be same

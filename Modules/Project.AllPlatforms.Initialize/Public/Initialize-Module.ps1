@@ -163,7 +163,7 @@ function Initialize-Module
 
 		if ($script:GitInstance)
 		{
-			Write-Information -Tags "Project" -MessageData "INFO: Check git.exe in PATH, required by $ModuleName was success"
+			Write-Information -Tags "Project" -MessageData "INFO: Checking if git.exe is in PATH, required by $ModuleName was success"
 		}
 		else
 		{
@@ -236,7 +236,7 @@ function Initialize-Module
 		if ($Repositories.InstallationPolicy -ne "Trusted")
 		{
 			# Setup choices
-			$Accept.HelpMessage = "Setting to trusted won't ask you in the future for confirmation"
+			$Accept.HelpMessage = "Setting to trusted won't ask you for confirmation in the future"
 			$Choices += $Accept
 			$Choices += $Deny
 
@@ -320,7 +320,7 @@ function Initialize-Module
 				$RepositoryList += ", "
 			}
 
-			$RepositoryList.TrimEnd(", ")
+			$RepositoryList = $RepositoryList.TrimEnd(", ")
 		}
 	}
 
@@ -355,7 +355,7 @@ function Initialize-Module
 		# for project this is not urgent since we install modules in correct order
 		# HACK: -AllowPrerelease will not work if PackageManagement or PowerShellGet is out of date (probably version < 2.0.0)
 		# see: https://github.com/MicrosoftDocs/azure-docs/issues/29999
-		# TODO: for some reason updated module wes not loaded, probably because error stopped execution
+		# TODO: for some reason updated module was not loaded, probably because error stopped execution
 
 		# Try anyway, maybe port is wrong, only first match is considered
 		# NOTE: -InputObject can't be used with -AllowPrerelease, we'll use -AllowPrerelease here to be able to install what is found
@@ -386,10 +386,10 @@ function Initialize-Module
 	}
 
 	# Setup new choices
-	# HACK: resetting choices seem to failed later during module update, need test or try/catch
+	# BUG: resetting choices will fail later during module update, need test or try/catch
 	# Title, Question and Default is OK
 	$Accept.HelpMessage = $InfoMessage
-	$Choices.Clear()
+	$Choices.Clear() # here the accept/deny objects most likely will no longer be valid
 	$Choices += $Accept
 	$Choices += $Deny
 
@@ -405,6 +405,13 @@ function Initialize-Module
 
 		$Title += " module out of date"
 		$Question = "Update $ModuleName module now?"
+
+		# TODO: testing if choices are valid
+		if (!$Choices)
+		{
+			Write-Warning -Message "BUG - choices are destroyed for update prompt"
+		}
+
 		$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
 
 		if ($Decision -eq $Default)
@@ -446,6 +453,13 @@ function Initialize-Module
 
 		$Title += " module not installed"
 		$Question = "Install $ModuleName module now?"
+
+		# TODO: testing if choices are valid
+		if (!$Choices)
+		{
+			Write-Warning -Message "BUG - choices are destroyed for install prompt"
+		}
+
 		$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
 
 		if ($Decision -eq $Default)
@@ -475,6 +489,7 @@ function Initialize-Module
 			Write-Information -Tags "User" -MessageData "INFO: Module $ModuleName v$($ModuleInfo.Version.ToString()) was installed/updated"
 			Write-Information -Tags "User" -MessageData "INFO: Loading module $ModuleName v$($ModuleInfo.Version.ToString()) into session"
 
+			# TODO: last test didn't load fresh installed modules: pester, posh-git, psscriptanalyzer
 			# Remove old module if it exists and is loaded
 			Remove-Module -Name $ModuleName -ErrorAction Ignore
 			# Load new module in current session
@@ -485,6 +500,7 @@ function Initialize-Module
 			{
 				"posh-git"
 				{
+					# TODO: shortened prompt
 					Write-Information -Tags "User" -MessageData "INFO: Adding $ModuleName $($ModuleInfo.Version.ToString()) to profile"
 					Add-PoshGitToProfile -AllHosts
 				}
