@@ -63,7 +63,7 @@ $TestUsersSDDL
 # Test users
 #
 
-[string[]] $Users = "Administrator", "Admin", "User"
+[string[]] $Users = "Administrator", "Admin", $UnitTester
 Start-Test "Get-SDDL -User $Users"
 $TestUsersSDDL = Get-SDDL -User $Users @Logs
 $TestUsersSDDL

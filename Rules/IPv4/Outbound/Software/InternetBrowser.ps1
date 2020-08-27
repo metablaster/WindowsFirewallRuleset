@@ -60,10 +60,10 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # TODO: returned path will miss browser updaters
 #
 $EdgeChromiumRoot = "%ProgramFiles(x86)%\Microsoft\Edge\Application"
-$ChromeRoot = "%SystemDrive%\Users\User\AppData\Local\Google"
-$FirefoxRoot = "%SystemDrive%\Users\User\AppData\Local\Mozilla Firefox"
-$YandexRoot = "%SystemDrive%\Users\User\AppData\Local\Yandex"
-$TorRoot = "%SystemDrive%\Users\User\AppData\Local\Tor Browser"
+$ChromeRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Google"
+$FirefoxRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Mozilla Firefox"
+$YandexRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Yandex"
+$TorRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Tor Browser"
 
 #
 # Internet browser rules

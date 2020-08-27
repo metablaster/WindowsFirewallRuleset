@@ -72,9 +72,9 @@ else
 }
 
 Start-Test "Get-Module"
-[PSModuleInfo[]] $TargetModule = Get-Module -ListAvailable -FullyQualifiedName @{ModuleName = "PackageManagement"; RequiredVersion = "1.4.7" } |
+[PSModuleInfo[]] $TargetModule = Get-Module -ListAvailable -FullyQualifiedName @{ModuleName = "PackageManagement"; RequiredVersion = "1.0.0.1" } |
 Where-Object -Property ModuleBase -Like $HomePath*
-$TargetModule += Get-Module -ListAvailable -FullyQualifiedName @{ModuleName = "PowerShellGet"; RequiredVersion = "2.2.4.1" } |
+$TargetModule += Get-Module -ListAvailable -FullyQualifiedName @{ModuleName = "PowerShellGet"; RequiredVersion = "1.0.0.1" } |
 Where-Object -Property ModuleBase -Like $HomePath*
 
 if ($TargetModule)
@@ -83,7 +83,7 @@ if ($TargetModule)
 	$TargetModule | Uninstall-DuplicateModule @Logs
 }
 
-$ModulePath = "C:\Users\User\Documents\PowerShell\Modules\Pester"
+$ModulePath = "C:\Users\$UnitTester\Documents\PowerShell\Modules\Pester"
 
 Start-Test "Uninstall-DuplicateModule Path"
 Uninstall-DuplicateModule $ModulePath @Logs

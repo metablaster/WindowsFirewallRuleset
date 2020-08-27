@@ -56,8 +56,6 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Enter-Test $ThisScript
 
-$User = "haxor"
-
 Start-Test "Good system path"
 Initialize-Table @Logs
 Edit-Table "%SystemRoot%\System32\WindowsPowerShell\v1.0" @Logs
@@ -70,7 +68,7 @@ $global:InstallTable | Format-Table -AutoSize @Logs
 
 Start-Test "Good user profile path"
 Initialize-Table @Logs
-Edit-Table "C:\\Users\$User\\GitHub\WindowsFirewallRuleset\" @Logs
+Edit-Table "C:\\Users\$UnitTester\\GitHub\WindowsFirewallRuleset\" @Logs
 $global:InstallTable | Format-Table -AutoSize @Logs
 
 Start-Test "Bad user profile path"

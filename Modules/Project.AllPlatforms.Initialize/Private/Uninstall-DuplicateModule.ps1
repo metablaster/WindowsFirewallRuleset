@@ -61,6 +61,7 @@ Target module must not be in use by:
 Current session prompt must not point to anywhere in target module path
 TODO: array input and implement foreach
 TODO: we make no automated use of this function except for manual module removal
+TODO: Remove-Module if used prior uninstall
 #>
 function Uninstall-DuplicateModule
 {

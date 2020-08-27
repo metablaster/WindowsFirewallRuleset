@@ -57,7 +57,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # Browser installation directories
 #
-$ChromeRoot = "%SystemDrive%\Users\User\AppData\Local\Google"
+$ChromeRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Google"
 
 #
 # Internet browser rules

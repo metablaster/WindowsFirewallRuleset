@@ -60,7 +60,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 Start-Test "Get-SDDL + Merge-SDDL"
-$RuleUsers = Get-SDDL -Group "Users", "Administrators" -User "User", "Admin" @Logs
+$RuleUsers = Get-SDDL -Group "Users", "Administrators" -User $UnitTester, "Admin" @Logs
 $RuleSystemUsers = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE" @Logs
 Merge-SDDL ([ref] $RuleUsers) $RuleSystemUsers @Logs
 $RuleUsers

@@ -44,9 +44,7 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Enter-Test $ThisScript
 
-$User = "haxor"
-
-$TestPath = "C:\Users\$User\source\repos\WindowsFirewallRuleset"
+$TestPath = "C:\Users\$UnitTester\source\repos\WindowsFirewallRuleset"
 Start-Test "$TestPath"
 Test-UserProfile $TestPath @Logs
 
@@ -54,7 +52,7 @@ $TestPath = "%LOCALAPPDATA%\Microsoft"
 Start-Test "$TestPath"
 Test-UserProfile $TestPath @Logs
 
-$TestPath = "C:\\Users\$User\source\\repos\WindowsFirewallRuleset\"
+$TestPath = "C:\\Users\$UnitTester\source\\repos\WindowsFirewallRuleset\"
 Start-Test "$TestPath"
 Test-UserProfile $TestPath @Logs
 

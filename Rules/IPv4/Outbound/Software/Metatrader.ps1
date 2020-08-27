@@ -51,7 +51,7 @@ if (!(Approve-Execute @Logs)) { exit }
 # Metatrader installation directories
 # TODO: path unknown
 #
-$MetatraderRoot = "%SystemDrive%\Users\User\AppData\Roaming\InstaTrader"
+$MetatraderRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Roaming\InstaTrader"
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs

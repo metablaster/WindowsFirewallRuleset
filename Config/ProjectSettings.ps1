@@ -310,7 +310,15 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -Erro
 
 	# Required minimum NuGet version prior to installing other modules
 	# NOTE: Core >= 3.0.0, Desktop >= 2.8.5, Desktop will be set in Initialize-Project
-	New-Variable -Name RequireNuGetVersion -Scope Global -Option ReadOnly -Force -Value ([version]::new(3, 0, 0))
+	Set-Variable -Name RequireNuGetVersion -Scope Global -Option ReadOnly -Force -Value ([version]::new(3, 0, 0))
+
+	# User account name which will perform unit testing
+	Set-Variable -Name UnitTester -Scope Global -Option ReadOnly -Force -Value "Unknown User"
+
+	# User account name for which to search executables in user profile and non standard paths by default
+	# NOTE: Set this value as "UnknownUser", it's used only as initial value
+	# TODO: needs testing info messages for this value
+	Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value "Default User"
 }
 
 # Removable variables, meaning these can be modified by code at any time,

@@ -397,7 +397,7 @@ Array of user groups for which to generate SDDL string
 .PARAMETER CIM
 Whether to contact CIM server (required for remote computers)
 .EXAMPLE
-[string[]] $Users = "haxor"
+[string[]] $Users = "User"
 [string] $Server = COMPUTERNAME
 [string[]] $Groups = "Users", "Administrators"
 

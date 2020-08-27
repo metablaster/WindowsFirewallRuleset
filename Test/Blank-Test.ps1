@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# Not an actual unit test but a playground for testing stuff out
+# Not an actual unit test but a playground for testing random stuff
 #
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 
@@ -38,7 +38,7 @@ Initialize-Project
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
 # Import-Module -Name Project.Windows.UserInfo
-#
+
 # User prompt
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }

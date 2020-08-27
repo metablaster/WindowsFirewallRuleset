@@ -53,7 +53,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # Epic games installation directories
 #
-$EngineRoot = "%SystemDrive%\Users\haxor\GitHub\UnrealEngine\Engine"
+$EngineRoot = "%SystemDrive%\Users\$DefaultUser\GitHub\UnrealEngine\Engine"
 $LauncherRoot = "" # "%ProgramFiles(x86)%\Epic Games"
 
 #

@@ -73,7 +73,7 @@ if ((Test-Installation "vcpkg" ([ref] $vcpkgRoot) @Logs) -or $ForceLoad)
 
 	# TODO: need to update for all users
 	# TODO: this bad path somehow gets into rule
-	$Program = "%SystemDrive%\Users\USERNAME\AppData\Local\Temp\vcpkg\vcpkgmetricsuploader-2020.02.04.exe"
+	$Program = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Temp\vcpkg\vcpkgmetricsuploader-2020.02.04.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "vcpkg (telemetry)" -Service Any -Program $Program `

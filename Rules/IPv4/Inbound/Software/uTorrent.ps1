@@ -53,7 +53,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # Steam installation directories
 #
-$uTorrentRoot = "%SystemDrive%\Users\User\AppData\Local\uTorrent"
+$uTorrentRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\uTorrent"
 
 #
 # Rules for uTorrent client

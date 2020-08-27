@@ -45,7 +45,7 @@ if (!(Approve-Execute @Logs)) { exit }
 
 Enter-Test $ThisScript
 
-[string[]] $Users = @("user")
+[string[]] $Users = @($UnitTester)
 [string] $Domain = [System.Environment]::MachineName
 [string[]] $Groups = @("Users", "Administrators")
 

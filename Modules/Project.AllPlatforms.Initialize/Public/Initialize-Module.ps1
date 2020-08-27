@@ -146,6 +146,7 @@ function Initialize-Module
 			}
 
 			# Up to date
+			# TODO: for AllowPrerelease we should check for prerelease, example required posh-git 0.7.3 if met, no prerelease will be  installed
 			Write-Information -Tags "User" -MessageData "INFO: Module $ModuleName v$TargetVersion meets >= v$RequireVersion"
 			return $true
 		}

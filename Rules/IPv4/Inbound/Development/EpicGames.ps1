@@ -53,7 +53,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # Epic games installation directories
 #
-$EngineRoot = "%SystemDrive%\Users\User\source\repos\UnrealEngine\Engine"
+$EngineRoot = "%SystemDrive%\Users\$DefaultUser\source\repos\UnrealEngine\Engine"
 
 # TODO: need to see listening ports
 
