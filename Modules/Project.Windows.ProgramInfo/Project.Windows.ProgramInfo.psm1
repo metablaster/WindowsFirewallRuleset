@@ -1373,10 +1373,15 @@ function Test-Installation
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# If input path is valid just make sure it's formatted
-	if (Test-Environment $FilePath.Value)
+	# NOTE: for debugging purposes we want to ignore default installation variables
+	# and force searching programs
+	if (!$Develop -and (Test-Environment $FilePath.Value))
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Formatting $FilePath"
 		$FilePath.Value = Format-Path $FilePath.Value
+
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Installation path for $Program well known"
+		return $true # input path is correct
 	}
 	elseif (Find-Installation $Program)
 	{
@@ -1427,17 +1432,17 @@ function Test-Installation
 			$InstallLocation = $InstallTable | Select-Object -ExpandProperty InstallLocation
 		}
 
-		# Using single quotes to make it emptiness obvious when the path is empty.
+		# Using single quotes to make emptiness obvious when the path is empty.
 		Write-Information -Tags "Project" -MessageData "INFO: Path corrected from: '$($FilePath.Value)' to: '$InstallLocation'"
 		$FilePath.Value = $InstallLocation
+
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Installation for $Program found"
+		return $true # installation path found
 	}
 	else
 	{
 		return $false # installation not found
 	}
-
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Installation for $Program found"
-	return $true # path exists
 }
 
 <#

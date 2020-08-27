@@ -316,7 +316,8 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -Erro
 	Set-Variable -Name UnitTester -Scope Global -Option ReadOnly -Force -Value "Unknown User"
 
 	# User account name for which to search executables in user profile and non standard paths by default
-	# NOTE: Set this value as "UnknownUser", it's used only as initial value
+	# NOTE: Set this value to username for which to create rules by default, if there are multiple
+	# users and to affect them all set this value to non existent user
 	# TODO: needs testing info messages for this value
 	Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value "Default User"
 }

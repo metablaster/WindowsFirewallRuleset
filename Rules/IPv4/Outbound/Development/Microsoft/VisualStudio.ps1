@@ -58,9 +58,8 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Visual Studio installation directories
 #
 
-# TODO: use empty "" for all cases for testing
-$VSRoot = ""
-$VSInstallerRoot = "" # "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
+$VSRoot = "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community"
+$VSInstallerRoot = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
 
 #
 # Visual Studio rules for executables from root directory

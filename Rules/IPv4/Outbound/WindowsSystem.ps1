@@ -53,8 +53,10 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # Installation directories
 #
-$WindowsDefenderRoot = ""
-$NETFrameworkRoot = ""
+# NOTE: for windows defender and .NET we must omit exact folder to prevent creating rule for outdated executable
+# TODO: Unknown default installation directory
+$WindowsDefenderRoot = "" # "%ALLUSERSPROFILE%\Microsoft\Windows Defender\Platform"
+$NETFrameworkRoot = "" # "%SystemRoot%\Microsoft.NET\Framework64"
 
 #
 # Windows system rules

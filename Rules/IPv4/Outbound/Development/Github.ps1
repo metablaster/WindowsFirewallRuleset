@@ -55,7 +55,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # TODO: Username?
 #
 $GitRoot = "%ProgramFiles%\Git"
-$GithubRoot = "" # Could be user profile
+$GithubRoot = "C:\Users\$DefaultUser\AppData\Local\Apps\2.0"
 
 #
 # Rules for git

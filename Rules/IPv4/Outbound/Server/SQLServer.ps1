@@ -56,7 +56,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # SQLServer installation directories
 #
-
+# TODO: Unknown default installation directory
 $SQLManagementStudioRoot = ""
 $SQLDTSRoot = ""
 

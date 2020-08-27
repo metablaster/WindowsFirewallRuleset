@@ -204,6 +204,7 @@ todo's in this file are categorized into following sections:
     - EXAMPLE comments, at least 3 examples and should be in the form of:
     PS> Get-Something
     Something output
+    - User canceling operation should be displayed with warning instead of debug stream
 
 2. Project scripts
 
