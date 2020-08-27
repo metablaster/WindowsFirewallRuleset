@@ -26,42 +26,43 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Import-FirewallRules
-#
-#Requires -RunAsAdministrator
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
-New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
-	$MyInvocation.MyCommand.Name -replace ".{4}$" )
+<#
+.SYNOPSIS
+Strip computer names out of computer accounts
+.DESCRIPTION
+ConvertFrom-UserAccount is a helper method to reduce typing common code
+related to splitting up user accounts
+.PARAMETER UserAccounts
+Array of user accounts in form of: COMPUTERNAME\USERNAME
+.EXAMPLE
+ConvertFrom-UserAccounts COMPUTERNAME\USERNAME
+.EXAMPLE
+ConvertFrom-UserAccounts SERVER\USER, COMPUTER\USER, SERVER2\USER2
+.INPUTS
+None. You cannot pipe objects to ConvertFrom-UserAccounts
+.OUTPUTS
+[string[]] array of usernames in form of: USERNAME
+.NOTES
+None.
+#>
+function ConvertFrom-UserAccount
+{
+	[OutputType([System.String[]])]
+	[CmdletBinding()]
+	param(
+		[Alias("Account")]
+		[Parameter(Mandatory = $true)]
+		[string[]] $UserAccounts
+	)
 
-# Check requirements
-Initialize-Project
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-# Imports
-. $PSScriptRoot\ContextSetup.ps1
-Import-Module -Name Project.AllPlatforms.Logging
+	[string[]] $UserNames = @()
+	foreach ($Account in $UserAccounts)
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting user name for account: $Account"
+		$UserNames += $Account.split("\")[1]
+	}
 
-# User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute @Logs)) { exit }
-
-Enter-Test $ThisScript
-
-$Exports = "$ProjectRoot\Exports"
-
-# TODO: need to test failure cases, see also module todo's for more info
-
-# Start-Test "Import-FirewallRules -FileName GroupExport.csv"
-# Import-FirewallRules -Folder $Exports -FileName "GroupExport.csv" @Logs
-
-# Start-Test "Import-FirewallRules -FileName NamedExport1.csv"
-# Import-FirewallRules -Folder $Exports -FileName "$Exports\NamedExport1.csv" @Logs
-
-# Start-Test "Import-FirewallRules -JSON -FileName NamedExport2.json"
-# Import-FirewallRules -JSON -Folder $Exports -FileName "$Exports\NamedExport2.json" @Logs
-
-Start-Test "Import-FirewallRules -FileName StoreAppExport.csv"
-Import-FirewallRules -Folder $Exports -FileName "StoreAppExport.csv" @Logs
-
-Update-Log
-Exit-Test
+	return $UserNames
+}

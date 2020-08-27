@@ -35,46 +35,6 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 
 # TODO: get a user account that is connected to a Microsoft account. see Get-LocalUser docs.
 
-<#
-.SYNOPSIS
-Strip computer names out of computer accounts
-.DESCRIPTION
-ConvertFrom-UserAccount is a helper method to reduce typing common code
-related to splitting up user accounts
-.PARAMETER UserAccounts
-Array of user accounts in form of: COMPUTERNAME\USERNAME
-.EXAMPLE
-ConvertFrom-UserAccounts COMPUTERNAME\USERNAME
-.EXAMPLE
-ConvertFrom-UserAccounts SERVER\USER, COMPUTER\USER, SERVER2\USER2
-.INPUTS
-None. You cannot pipe objects to ConvertFrom-UserAccounts
-.OUTPUTS
-[string[]] array of usernames in form of: USERNAME
-.NOTES
-None.
-#>
-function ConvertFrom-UserAccount
-{
-	[OutputType([System.String[]])]
-	[CmdletBinding()]
-	param(
-		[Alias("Account")]
-		[Parameter(Mandatory = $true)]
-		[string[]] $UserAccounts
-	)
-
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
-	[string[]] $UserNames = @()
-	foreach ($Account in $UserAccounts)
-	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting user name for account: $Account"
-		$UserNames += $Account.split("\")[1]
-	}
-
-	return $UserNames
-}
 
 <#
 .SYNOPSIS

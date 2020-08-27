@@ -32,9 +32,11 @@ SOFTWARE.
 # Unit test for ConvertFrom-OSBuild
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
+	$MyInvocation.MyCommand.Name -replace ".{4}$" )
 
 # Check requirements
-# Initialize-Project
+Initialize-Project
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1

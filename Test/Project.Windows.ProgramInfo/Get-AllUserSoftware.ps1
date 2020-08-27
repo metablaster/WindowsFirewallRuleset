@@ -30,6 +30,8 @@ SOFTWARE.
 # Unit test for Get-AllUserSoftware
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
+	$MyInvocation.MyCommand.Name -replace ".{4}$" )
 
 # Check requirements
 Initialize-Project

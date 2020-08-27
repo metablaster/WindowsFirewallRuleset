@@ -30,6 +30,8 @@ SOFTWARE.
 # Unit test for Get-InterfaceAlias
 #
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
+	$MyInvocation.MyCommand.Name -replace ".{4}$" )
 
 # Check requirements
 Initialize-Project
@@ -50,7 +52,10 @@ $Aliases.ToWql()
 
 Start-Test "Get-InterfaceAlias IPv6"
 $Aliases = Get-InterfaceAlias IPv6 @Logs
-$Aliases.ToWql()
+if ($Aliases)
+{
+	$Aliases.ToWql()
+}
 
 Start-Test "Get-InterfaceAlias IPv4 -IncludeDisconnected -WildCardOption"
 $Aliases = Get-InterfaceAlias IPv4 -IncludeDisconnected -WildCardOption IgnoreCase @Logs

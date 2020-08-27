@@ -34,6 +34,8 @@ SOFTWARE.
 param()
 
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
+	$MyInvocation.MyCommand.Name -replace ".{4}$" )
 
 if ((Get-Variable -Name Develop -Scope Global).Value -eq $false)
 {
