@@ -77,7 +77,6 @@
 		"Initialize-Service"
 		"Initialize-Module"
 		"Initialize-Provider"
-		"Find-UpdatableModule"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not
@@ -103,6 +102,8 @@
 		"Initialize-Project.ps1"
 		"Initialize-Provider.ps1"
 		"Initialize-Service.ps1"
+		"Find-UpdatableModule.ps1"
+		"Uninstall-DuplicateModule.ps1"
 		"Project.AllPlatforms.Initialize.psd1"
 		"Project.AllPlatforms.Initialize.psm1"
 		"about_Project.AllPlatforms.Initialize.help.txt"

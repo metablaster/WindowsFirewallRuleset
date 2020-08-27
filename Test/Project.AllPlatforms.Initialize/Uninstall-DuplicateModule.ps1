@@ -49,13 +49,33 @@ Enter-Test $ThisScript
 
 # NOTE: Install these outdated modules as standard user for testing,
 # make sure to to test Get-Module returns single module
-# Install-Module -Name PackageManagement -RequiredVersion "1.4.0.0" -Scope CurrentUser
+# Install-Module -Name PackageManagement -RequiredVersion "1.3.0.0" -Scope CurrentUser
 # Install-Module -Name Pester -RequiredVersion "5.0.2.0" -Scope CurrentUser
 # Install-Module -Name PowerShellGet -RequiredVersion "1.1.0.0" -Scope CurrentUser
 
+if ($PSVersionTable.PSEdition -eq "Desktop")
+{
+	# This location is reserved for modules that ship with Windows.
+	$ShippingPath = "$PSHome\Modules"
+
+	# This location is for system wide modules install
+	$SystemPath = "$Env:ProgramFiles\WindowsPowerShell\Modules"
+
+	# This location is for per user modules install
+	$HomePath = "$Home\Documents\WindowsPowerShell\Modules"
+}
+else
+{
+	$ShippingPath = "$PSHome\Modules"
+	$SystemPath = "$Env:ProgramFiles\PowerShell\Modules"
+	$HomePath = "$Home\Documents\PowerShell\Modules"
+}
+
 Start-Test "Get-Module"
-[PSModuleInfo[]] $TargetModule = Get-Module -ListAvailable -FullyQualifiedName @{modulename = "Pester"; moduleversion = "5.0.2.0" }
-$TargetModule += Get-Module -ListAvailable -FullyQualifiedName @{modulename = "PackageManagement"; moduleversion = "1.4.0.0" }
+[PSModuleInfo[]] $TargetModule = Get-Module -ListAvailable -FullyQualifiedName @{ModuleName = "PackageManagement"; RequiredVersion = "1.4.7" } |
+Where-Object -Property ModuleBase -Like $HomePath*
+$TargetModule += Get-Module -ListAvailable -FullyQualifiedName @{ModuleName = "PowerShellGet"; RequiredVersion = "2.2.4.1" } |
+Where-Object -Property ModuleBase -Like $HomePath*
 
 if ($TargetModule)
 {
@@ -63,9 +83,9 @@ if ($TargetModule)
 	$TargetModule | Uninstall-DuplicateModule @Logs
 }
 
-$ModulePath = "C:\Users\User\Documents\PowerShell\Modules\PowerShellGet"
+$ModulePath = "C:\Users\User\Documents\PowerShell\Modules\Pester"
 
-Start-Test "Uninstall-DuplicateModule"
+Start-Test "Uninstall-DuplicateModule Path"
 Uninstall-DuplicateModule $ModulePath @Logs
 
 Update-Log

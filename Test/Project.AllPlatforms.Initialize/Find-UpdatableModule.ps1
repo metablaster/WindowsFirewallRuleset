@@ -35,6 +35,7 @@ New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
+. $ProjectRoot\Modules\Project.AllPlatforms.Initialize\Private\Find-UpdatableModule.ps1
 Import-Module -Name Project.AllPlatforms.Logging
 
 # User prompt

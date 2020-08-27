@@ -48,6 +48,7 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 
 $PrivateScripts = @(
 	"Find-UpdatableModule"
+	"Uninstall-DuplicateModule"
 )
 
 foreach ($Script in $PrivateScripts)

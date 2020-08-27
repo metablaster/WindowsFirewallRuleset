@@ -246,7 +246,8 @@ todo's in this file are categorized into following sections:
 
     - Test for 32bit powershell and OS, some rules are 64bit OS specific, 32bit specifics may be
     missing
-    - mTail coloring configuration contains gremlins (bad chars), need to test and deal with them.
+    - mTail coloring configuration contains gremlins (bad chars), need to test and deal with them
+    - Important Promt's should probably not depend on $InformationPreference
 
 ## Done
 

@@ -30,27 +30,37 @@ SOFTWARE.
 .SYNOPSIS
 Force remove module
 .DESCRIPTION
-Force remove module removes modules which are otherwise not removable,
-Example cases are:
-1. modules that ship with PowerShell
-2. modules locked by PowerShell session
+Uninstall-DuplicateModule removes modules which are otherwise not removable, example cases are:
+1. modules that ship with system
+2. modules locked by other modules
 Case from point 2 is recommended only when there are 2 exactly same modules installed,
 but the duplicate you are trying to remove is used (locked) instead of first one
 .PARAMETER Module
 Explicit module object which to uninstall
 .PARAMETER ModulePath
 Full path to the module root installation directory,
-Warning, if the root directory contains multiple module versions all of the will be uninstalled
+Warning, if the root directory contains multiple module versions all of them will be uninstalled
 .EXAMPLE
 PS> Uninstall-DuplicateModule "C:\Users\User\Documents\PowerShell\Modules\PackageManagement"
 
-INFO: Module PackageManagement was removed
+Module PackageManagement was removed
+.EXAMPLE
+PS> Get-Module SomeDupeModule | Uninstall-DuplicateModule
+
+Module SomeDupeModule was removed
 .INPUTS
+[string] path to module base
 [PSModuleInfo] module object
 .OUTPUTS
 None.
 .NOTES
-None.
+Target module must not be in use by:
+1. Other PowerShell session
+2. Some system process
+3. Session in VSCode
+Current session prompt must not point to anywhere in target module path
+TODO: array input and implement foreach
+TODO: we make no automated use of this function except for manual module removal
 #>
 function Uninstall-DuplicateModule
 {
@@ -71,6 +81,8 @@ function Uninstall-DuplicateModule
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 		# Check if in elevated PowerShell
+		# NOTE: can't be part of begin block
+		# TODO: not tested if replacing with "Requires RunAs Administrator"
 		Write-Information -Tags "User" -MessageData "INFO: Checking user account elevation"
 		$Principal = New-Object -TypeName Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
 
@@ -84,24 +96,28 @@ function Uninstall-DuplicateModule
 		if ($Module)
 		{
 			$ModuleName = $Module.Name
+			$ModuleRoot = $Module.ModuleBase
 		}
 		else
 		{
 			$ModuleName = Split-Path -Path $ModulePath -Leaf
+			$ModuleRoot = $ModulePath
 		}
 
 		if ($PSCmdlet.ShouldProcess($ModuleName, "Forced module removal"))
 		{
-			if (Test-Path -Path $ModulePath)
+			if (Test-Path -Path $ModuleRoot)
 			{
-				Write-Information -Tags "User" -MessageData "INFO: Taking ownership of $ModulePath"
+				Write-Information -Tags "User" -MessageData "INFO: Taking ownership of $ModuleRoot"
 				# /a - Gives ownership to the Administrators group instead of the current user.
 				# /r - Performs a recursive operation on all files in the specified directory and subdirectories.
-				takeown /F $ModulePath /A /R
+				takeown /F $ModuleRoot /A /R
 
-				Write-Information -MessageData "INFO: Taking ownership of $ModulePath"
+				Write-Information -MessageData "INFO: Replacing ACL's with default ACL's for $ModuleRoot"
 				# Replaces ACLs with default inherited ACLs for all matching files
-				icacls $ModulePath /reset
+				icacls $ModuleRoot /reset
+
+				Write-Information -MessageData "INFO: Adding Administrator permissions for $ModuleRoot"
 				# /grant - Grants specified user access rights.
 				# Permissions replace previously granted explicit permissions.
 				# Not adding the :r, means that permissions are added to any previously granted explicit permissions.
@@ -109,19 +125,19 @@ function Uninstall-DuplicateModule
 				# e - Enables inheritance
 				# d - Disables inheritance and copies the ACEs
 				# r - Removes all inherited ACEs
-				icacls $ModulePath /grant "*S-1-5-32-544:F" /inheritance:d /T
+				icacls $ModuleRoot /grant "*S-1-5-32-544:F" /inheritance:d /T
 
 				try
 				{
 					# Remove all folders and files of target module
-					Write-Information -Tags "User" -MessageData "INFO: Removing recursively $ModulePath"
-					Remove-Item -Path $ModulePath -Recurse -Force -Confirm:$false -ErrorAction Stop
+					Write-Information -Tags "User" -MessageData "INFO: Removing recursively $ModuleRoot"
+					Remove-Item -Path $ModuleRoot -Recurse -Force -Confirm:$false -ErrorAction Stop
 				}
 				catch
 				{
 					Write-Error -Message $_
 					Write-Warning -Message "Please close down all other PowerShell sessions including VSCode, then try again"
-					Write-Information -Tags "User" -MessageData "If this session is inside module path, the session must be restarted"
+					Write-Information -Tags "User" -MessageData "INFO: If this session is inside module path, the session must be restarted"
 					return
 				}
 
@@ -129,8 +145,8 @@ function Uninstall-DuplicateModule
 			}
 			else
 			{
-				Write-Error -Category ObjectNotFound -TargetObject $ModulePath `
-					-Message "Following module path was not found: $ModulePath"
+				Write-Error -Category ObjectNotFound -TargetObject $ModuleRoot `
+					-Message "Following module path was not found: $ModuleRoot"
 			} # Test-Path
 		}
 		else
