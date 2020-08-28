@@ -49,8 +49,8 @@ Enter-Test $ThisScript
 Start-Test "Get-IPAddress IPv4"
 Get-IPAddress IPv4 @Logs
 
-Start-Test "Get-IPAddress IPv6"
-Get-IPAddress IPv6 @Logs
+Start-Test "Get-IPAddress IPv6 FAILURE TEST"
+Get-IPAddress IPv6 -ErrorAction Ignore @Logs
 
 Start-Test "Get-IPAddress IPv4 -IncludeDisconnected"
 Get-IPAddress IPv4 -IncludeDisconnected @Logs

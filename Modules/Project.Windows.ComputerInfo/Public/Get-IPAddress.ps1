@@ -30,9 +30,8 @@ SOFTWARE.
 .SYNOPSIS
 Method to get list of IP addresses on local machine
 .DESCRIPTION
-Returns list of IP addresses for all adapters connected to network
-Return list of IP addresses for all configured adapter.
-This includes both physical and virtual adapters.
+Returns list of IPAddress objects for all configured adapters.
+This could include both physical and virtual adapters.
 .PARAMETER AddressFamily
 IP version for which to obtain address, IPv4 or IPv6
 .PARAMETER IncludeAll
@@ -50,7 +49,7 @@ Get-IPAddress "IPv6"
 .INPUTS
 None. You cannot pipe objects to Get-IPAddress
 .OUTPUTS
-[IPAddress[]] Array of IP addresses  and warning message if no adapter connected
+[IPAddress[]] Array of IP addresses and warning message if no adapter connected
 .NOTES
 None.
 #>

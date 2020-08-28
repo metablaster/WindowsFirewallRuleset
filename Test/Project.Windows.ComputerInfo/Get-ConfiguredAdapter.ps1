@@ -49,8 +49,8 @@ Enter-Test $ThisScript
 Start-Test "Get-ConfiguredAdapter IPv4"
 Get-ConfiguredAdapter IPv4 @Logs
 
-Start-Test "Get-ConfiguredAdapter IPv6"
-Get-ConfiguredAdapter IPv6 @Logs
+Start-Test "Get-ConfiguredAdapter IPv6 FAILURE TEST"
+Get-ConfiguredAdapter IPv6 -ErrorAction Ignore @Logs
 
 Start-Test "Get-ConfiguredAdapter IPv4 -IncludeDisconnected"
 Get-ConfiguredAdapter IPv4 -IncludeDisconnected @Logs

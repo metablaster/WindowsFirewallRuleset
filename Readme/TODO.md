@@ -79,7 +79,6 @@ todo's in this file are categorized into following sections:
     - Some tests fail to run in non "develop" mode due to missing variables
     - Installation variables must be empty in development mode only to be able to test program
     search functions, for release providing a path is needed to prevent "fix" info messages
-    - Need global test variable to set up valid Windows username which is performing tests
     - For Write-Debug $PSBoundParameters.Values check if it's in process block or begin block,
     make sure wanted parameters are shown, make sure values are visible instead of object name
     - We should use try/catch in test scripts to avoid writing errors and write information instead,
@@ -162,9 +161,10 @@ todo's in this file are categorized into following sections:
 4. Test and debugging
 
     - Move NET.IP tests into test folder, clean up directory add streams
-    - Convert tests to use Pester if possible or separate them into pester tests and experiment tests
     - Many test cases are local to our environment, other people might get different results
     - Test everything on preview Windows
+    - Some test outputs will be messed up, ex. some output might be shown prematurely,
+    see get-usergroup test for example
 
 5. Code style
 
@@ -234,6 +234,8 @@ todo's in this file are categorized into following sections:
 
 4. Test and debugging
 
+    - Convert tests to use Pester if possible or separate them into pester tests and experiment tests
+
 5. Code style
 
     - Separate comment based keywords so that there is one line between a comment and next keyword
@@ -266,3 +268,7 @@ todo's in this file are categorized into following sections:
 
     - rules to fix: qbittorrent, Steam
     - Rules for NVIDIA need constant updates, software changes are breaking
+
+4. Testing and debugging
+
+    - Need global test variable to set up valid Windows username which is performing tests

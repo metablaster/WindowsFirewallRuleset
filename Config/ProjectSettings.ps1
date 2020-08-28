@@ -312,7 +312,10 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -Erro
 	# NOTE: Core >= 3.0.0, Desktop >= 2.8.5, Desktop will be set in Initialize-Project
 	Set-Variable -Name RequireNuGetVersion -Scope Global -Option ReadOnly -Force -Value ([version]::new(3, 0, 0))
 
-	# User account name which will perform unit testing
+	# Administrative user account name which will perform unit testing
+	Set-Variable -Name UnitTesterAdmin -Scope Global -Option ReadOnly -Force -Value "Unknown Admin"
+
+	# Standard user account name which will perform unit testing
 	Set-Variable -Name UnitTester -Scope Global -Option ReadOnly -Force -Value "Unknown User"
 
 	# User account name for which to search executables in user profile and non standard paths by default

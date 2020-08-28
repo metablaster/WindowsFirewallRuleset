@@ -26,38 +26,39 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Get-UserGroup
-#
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
-New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
-	$MyInvocation.MyCommand.Name -replace ".{4}$" )
+<#
+.SYNOPSIS
+Merge 2 SDDL strings into one
+.DESCRIPTION
+This function helps to merge 2 SDDL strings into one
+.PARAMETER RefSDDL
+Reference to SDDL into which to merge new SDDL
+.PARAMETER NewSDDL
+New SDDL string which to merge with reference SDDL
+.EXAMPLE
+$RefSDDL = "D:(A;;CC;;;S-1-5-32-545)(A;;CC;;;S-1-5-32-544)
+$NewSDDL = "D:(A;;CC;;;S-1-5-32-333)(A;;CC;;;S-1-5-32-222)"
+Merge-SDDL ([ref] $RefSDDL) $NewSDDL
+.INPUTS
+None. You cannot pipe objects to Merge-SDDL
+.OUTPUTS
+None. Referenced SDDL is expanded with new one
+.NOTES
+TODO: Validate input using regex
+TODO: Process an array of SDDL's
+TODO: Pipeline input
+#>
+function Merge-SDDL
+{
+	[OutputType([void])]
+	[CmdletBinding()]
+	param (
+		[Parameter(Mandatory = $true)]
+		[ref] $RefSDDL,
 
-# Check requirements
-Initialize-Project
+		[Parameter(Mandatory = $true)]
+		[string] $NewSDDL
+	)
 
-# Imports
-. $PSScriptRoot\ContextSetup.ps1
-Import-Module -Name Project.AllPlatforms.Logging
-Import-Module -Name Project.Windows.UserInfo
-
-# User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute @Logs)) { exit }
-
-Enter-Test $ThisScript
-
-Start-Test "Get-UserGroup"
-Get-UserGroup @Logs
-
-Start-Test "Get-UserGroup CIM server"
-Get-UserGroup -CIM @Logs
-
-Start-Test "Failure test"
-Get-UserGroup "ZOMBI_PC" -ErrorAction Ignore @Logs
-
-Start-Test "Get-TypeName"
-Get-UserGroup "localhost" -CIM @Logs | Get-TypeName @Logs
-
-Update-Log
-Exit-Test
+	$RefSDDL.Value += $NewSDDL.Substring(2)
+}

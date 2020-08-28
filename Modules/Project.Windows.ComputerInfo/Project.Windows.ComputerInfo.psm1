@@ -37,7 +37,6 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 # Script imports
 #
 
-
 $PublicScripts = @(
 	"Get-ComputerName"
 	"Get-ConfiguredAdapter"

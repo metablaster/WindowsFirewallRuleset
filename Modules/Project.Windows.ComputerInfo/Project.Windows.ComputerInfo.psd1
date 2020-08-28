@@ -134,7 +134,7 @@
 			# IconUri = ''
 
 			# Prerelease string of this module
-			Prerelease = "This pre-release is sufficiently stable to query computer info on Windows systems"
+			Prerelease = "Pre-release module to query computer information for 'Windows Firewall Ruleset' project"
 
 			# ReleaseNotes of this module
 			# ReleaseNotes = ''

@@ -113,6 +113,14 @@
 		"Project.Windows.UserInfo.psd1"
 		"Project.Windows.UserInfo.psm1"
 		"about_Project.Windows.UserInfo.help.txt"
+		"ConvertFrom-UserAccount.ps1"
+		"Get-AccountSID.ps1"
+		"Get-GroupPrincipal.ps1"
+		"Get-GroupSID.ps1"
+		"Get-SDDL.ps1"
+		"Merge-SDDL.ps1"
+		"Get-UserGroup.ps1"
+		"ConvertFrom-SID.ps1"
 	)
 
 	# Private data to pass to the module specified in RootModule/ModuleToProcess.
@@ -134,7 +142,7 @@
 			# IconUri = ''
 
 			# Prerelease string of this module
-			Prerelease = "This pre-release is sufficiently stable to query users on Windows systems"
+			Prerelease = "Pre-release module to query user and group information for 'Windows Firewall Ruleset' project"
 
 			# ReleaseNotes of this module
 			# ReleaseNotes = ''

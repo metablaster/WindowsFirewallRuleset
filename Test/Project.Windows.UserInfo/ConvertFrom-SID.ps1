@@ -29,6 +29,7 @@ SOFTWARE.
 #
 # Unit test for ConvertFrom-SID
 #
+#Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )

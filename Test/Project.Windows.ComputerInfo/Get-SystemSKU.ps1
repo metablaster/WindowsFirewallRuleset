@@ -56,15 +56,15 @@ $Result | Format-Table
 Start-Test "34 | Get-SystemSKU"
 34 | Get-SystemSKU @Logs | Format-Table
 
-Start-Test '@($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU'
-@($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU @Logs | Format-Table
+Start-Test '@($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU FAILURE TEST'
+@($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU @Logs -ErrorAction Ignore | Format-Table
 
-Start-Test '$Result = @($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU'
-$Result = @($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU @Logs | Format-Table
+Start-Test '$Result = @($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU FAILURE TEST'
+$Result = @($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU @Logs -ErrorAction Ignore | Format-Table
 $Result
 
-Start-Test 'Get-SystemSKU -ComputerName @($([System.Environment]::MachineName), "INVALID_COMPUTER")'
-Get-SystemSKU -ComputerName @($([System.Environment]::MachineName), "INVALID_COMPUTER") @Logs | Format-Table
+Start-Test 'Get-SystemSKU -ComputerName @($([System.Environment]::MachineName), "INVALID_COMPUTER") FAILURE TEST'
+Get-SystemSKU -ComputerName @($([System.Environment]::MachineName), "INVALID_COMPUTER") @Logs -ErrorAction Ignore | Format-Table
 
 try
 {
