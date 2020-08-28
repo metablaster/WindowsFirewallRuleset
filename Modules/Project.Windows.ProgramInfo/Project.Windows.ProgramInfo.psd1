@@ -94,10 +94,6 @@
 		"Get-UserApps"
 		"Get-SystemApps"
 		"Get-SQLInstance"
-		"Update-Table"
-		"Edit-Table"
-		"Initialize-Table"
-		"Show-Table"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not
@@ -127,7 +123,31 @@
 		"Project.Windows.ProgramInfo.psd1"
 		"Project.Windows.ProgramInfo.psm1"
 		"about_Project.Windows.ProgramInfo.help.txt"
+		"Test-File.ps1"
+		"Test-Installation.ps1"
+		"Get-AppSID.ps1"
+		"Test-Service.ps1"
+		"Format-Path.ps1"
+		"Test-UserProfile.ps1"
+		"Find-Installation.ps1"
+		"Test-Environment.ps1"
+		"Get-UserSoftware.ps1"
+		"Get-AllUserSoftware.ps1"
+		"Get-SystemSoftware.ps1"
+		"Get-ExecutablePath.ps1"
+		"Get-NetFramework.ps1"
+		"Get-WindowsKit.ps1"
+		"Get-WindowsSDK.ps1"
+		"Get-WindowsDefender.ps1"
+		"Get-SQLManagementStudio.ps1"
+		"Get-OneDrive.ps1"
+		"Get-UserApps.ps1"
+		"Get-SystemApps.ps1"
 		"Get-SQLInstance.ps1"
+		"Update-Table.ps1"
+		"Edit-Table.ps1"
+		"Initialize-Table.ps1"
+		"Show-Table.ps1"
 	)
 
 	# Private data to pass to the module specified in RootModule/ModuleToProcess.
@@ -149,7 +169,7 @@
 			# IconUri = ''
 
 			# Prerelease string of this module
-			Prerelease = "This pre-release is sufficiently stable to query software on Windows systems"
+			Prerelease = "Pre-release module to query software information on Windows systems for 'Windows Firewall Ruleset' project"
 
 			# ReleaseNotes of this module
 			# ReleaseNotes = ''
