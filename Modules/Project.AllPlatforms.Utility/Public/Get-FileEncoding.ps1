@@ -70,6 +70,7 @@ function Get-FileEncoding
 
 	# First, check if the file is binary. That is, if the first
 	# 5 lines contain any non-printable characters.
+	# TODO: encoding parameter needed?
 	$NonPrintable = [char[]] (0..8 + 10..31 + 127 + 129 + 141 + 143 + 144 + 157)
 	$Lines = Get-Content -Path $FilePath -ErrorAction Ignore -TotalCount 5
 
@@ -107,7 +108,7 @@ function Get-FileEncoding
 		($_ -split "-").Count
 	}
 
-	# To read file as bytes, that depend on PowerShell edition
+	# To read file as bytes, that depends on PowerShell edition
 	if ($PSVersionTable.PSEdition -eq "Core")
 	{
 		$Params = @{

@@ -74,6 +74,7 @@
 	# delete the entry, use an empty array if there are no functions to export.
 	FunctionsToExport = @(
 		"Approve-Execute"
+		"Confirm-FileEncoding"
 		"Update-Context"
 		"Convert-SDDLToACL"
 		"Show-SDDL"
@@ -113,6 +114,7 @@
 		"External\LICENSE"
 		"External\README.md"
 		"Public\Approve-Execute.ps1"
+		"Public\Confirm-FileEncoding"
 		"Public\Update-Context.ps1"
 		"Public\Convert-SDDLToACL.ps1"
 		"Public\Show-SDDL.ps1"

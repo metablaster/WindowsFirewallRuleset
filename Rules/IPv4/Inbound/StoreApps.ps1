@@ -44,7 +44,8 @@ $Group = "Store Apps"
 $SystemGroup = "Store Apps - System"
 $FirewallProfile = "Private, Public"
 # TODO: what is this commented code in entry script
-# $NetworkApps = Get-Content -Path "$PSScriptRoot\..\NetworkApps.txt"
+# Confirm-FileEncoding "$PSScriptRoot\..\NetworkApps.txt"
+# $NetworkApps = Get-Content -Path "$PSScriptRoot\..\NetworkApps.txt" -Encoding utf8
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs

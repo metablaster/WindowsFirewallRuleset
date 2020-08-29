@@ -65,6 +65,7 @@ the Functionality parameter of Get-Help.
 function New-Function
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'This is template function')]
+	[OutputType([void])]
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Medium')]
 	param (
 		[Parameter(Mandatory = $true)]

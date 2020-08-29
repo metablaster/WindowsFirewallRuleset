@@ -72,6 +72,7 @@ foreach ($Script in $ExternalExports)
 
 $PublicScripts = @(
 	"Approve-Execute"
+	"Confirm-FileEncoding"
 	"Update-Context"
 	"Convert-SDDLToACL"
 	"Show-SDDL"

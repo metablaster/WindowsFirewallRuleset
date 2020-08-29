@@ -123,7 +123,8 @@ $SystemGroup = "Store Apps - System"
 $FirewallProfile = "Private, Public"
 
 # Skip blank lines which would always evaluate as true later in wildcard matches
-$NetworkApps = Get-Content -Path "$PSScriptRoot\..\NetworkApps.txt" | Where-Object { $_ -ne "" }
+Confirm-FileEncoding "$PSScriptRoot\..\NetworkApps.txt"
+$NetworkApps = Get-Content -Path "$PSScriptRoot\..\NetworkApps.txt" -Encoding utf8 | Where-Object { $_ -ne "" }
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs

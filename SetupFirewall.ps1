@@ -49,7 +49,8 @@ Set-ScreenBuffer @Logs
 # Check all rules that apply to windows services
 Test-File $ServiceHost @Logs
 Get-NetworkService $ProjectRoot\Rules
-Get-Content -Path $ProjectRoot\Rules\NetworkServices.txt | ForEach-Object {
+Confirm-FileEncoding $ProjectRoot\Rules\NetworkServices.txt
+Get-Content -Path $ProjectRoot\Rules\NetworkServices.txt -Encoding utf8 | ForEach-Object {
 	Test-Service $_ @Logs
 	Update-Log
 }

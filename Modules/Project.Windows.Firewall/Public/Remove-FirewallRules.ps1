@@ -97,6 +97,7 @@ function Remove-FirewallRules
 			}
 
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading JSON file"
+			Confirm-FileEncoding "$Folder\$FileName"
 			$FirewallRules = Get-Content "$Folder\$FileName" -Encoding utf8 | ConvertFrom-Json
 		}
 		else
@@ -109,6 +110,7 @@ function Remove-FirewallRules
 			}
 
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading CSV file"
+			Confirm-FileEncoding "$Folder\$FileName"
 			$FirewallRules = Get-Content "$Folder\$FileName" -Encoding utf8 | ConvertFrom-Csv -Delimiter ";"
 		}
 

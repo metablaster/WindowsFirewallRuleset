@@ -69,7 +69,8 @@ function Get-NetworkService
 	# Filter out service names from each powershell file in input folder
 	$Files | ForEach-Object {
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading file: $($_.FullName)"
-		Get-Content $_.FullName | Where-Object {
+		Confirm-FileEncoding $_.FullName
+		Get-Content $_.FullName -Encoding utf8 | Where-Object {
 			if ($_ -match "(?<= -Service )(.*)(?= -Program)")
 			{
 				$Content += $Matches[0]
