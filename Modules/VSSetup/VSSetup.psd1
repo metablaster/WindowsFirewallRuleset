@@ -19,6 +19,17 @@
   'Get-VSSetupInstance'
   'Select-VSSetupInstance'
 	)
+	# List of all files packaged with this module
+	FileList = @(
+		"VSSetup.psd1"
+		"VSSetup.psm1"
+		"about_VSSetup.help.txt"
+		"LICENSE"
+		"Microsoft.VisualStudio.Setup.PowerShell.dll"
+		"Microsoft.VisualStudio.Setup.Configuration.Interop.dll"
+		"Microsoft.VisualStudio.Setup.PowerShell.dll-Help.xml"
+		"VSSetup.types.ps1xml"
+	)
 	TypesToProcess = 'VSSetup.types.ps1xml'
 	PrivateData = @{
   PSData = @{

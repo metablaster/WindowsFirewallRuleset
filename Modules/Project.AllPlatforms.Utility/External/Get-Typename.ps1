@@ -27,7 +27,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# NOTE: File must be UTF-8 with BOM to preserve unicode character
+# NOTE: File must be UTF-8 with BOM to preserve unicode character from Copyright
 
 <#
 .SYNOPSIS

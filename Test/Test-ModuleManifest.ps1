@@ -28,6 +28,7 @@ SOFTWARE.
 
 #
 # Verifies that a module manifest files accurately describe the contents of project modules
+# For binary files also verify digital signature is valid
 #
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
@@ -50,3 +51,10 @@ foreach ($Manifest in $Manifests)
 {
 	Test-ModuleManifest -Path $ProjectRoot\Modules\$Manifest
 }
+
+$VSSetupDLL = @(
+	"$ProjectRoot\Modules\VSSetup\Microsoft.VisualStudio.Setup.Configuration.Interop.dll"
+	"$ProjectRoot\Modules\VSSetup\Microsoft.VisualStudio.Setup.PowerShell.dll"
+)
+
+Get-AuthenticodeSignature -FilePath $VSSetupDLL | Select-Object -Property StatusMessage, Path
