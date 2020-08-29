@@ -50,7 +50,7 @@ Start-Test "Find-RulePrincipal"
 $Result = Find-RulePrincipal @Logs
 
 Start-Test "Find-RulePrincipal | Get-TypeName"
-$Result | Find-RulePrincipal @Logs
+$Result | Get-Typename @Logs
 
 Update-Log
 Exit-Test

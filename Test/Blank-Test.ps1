@@ -30,6 +30,8 @@ SOFTWARE.
 # Not an actual unit test but a playground for testing random stuff
 #
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
+	$MyInvocation.MyCommand.Name -replace ".{4}$" )
 
 # Check requirements
 Initialize-Project
@@ -37,7 +39,6 @@ Initialize-Project
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
-# Import-Module -Name Project.Windows.UserInfo
 
 # User prompt
 Update-Context $TestContext $ThisScript @Logs

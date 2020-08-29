@@ -49,7 +49,7 @@ function Find-RulePrincipal
 {
 	[CmdletBinding()]
 	param (
-		[Parameter(Mandatory = $true)]
+		[Parameter()]
 		[switch] $Empty
 	)
 

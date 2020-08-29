@@ -96,6 +96,8 @@ todo's in this file are categorized into following sections:
     - We should use try/catch in test scripts to avoid writing errors and write information instead,
     So that `Run-AllTests.ps1` gets clean output, not very useful if testing with PS Core since
     -CIM call will fail, see Get-SystemSKU test
+    - Unit tests for private functions in "Project.Windows.Firewall" module are missing
+    - Unit tests for "Project.AllPlatforms.Logging" include scripts are missing
 
 5. Code style
 

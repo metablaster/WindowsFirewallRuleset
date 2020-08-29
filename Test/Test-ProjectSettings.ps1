@@ -30,7 +30,8 @@ SOFTWARE.
 # Unit test for ProjectSettings.ps1
 #
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
-. $PSScriptRoot\ContextSetup.ps1
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
+	$MyInvocation.MyCommand.Name -replace ".{4}$" )
 
 if ((Get-Variable -Name Develop -Scope Global).Value -eq $false)
 {
@@ -39,23 +40,12 @@ if ((Get-Variable -Name Develop -Scope Global).Value -eq $false)
 	return
 }
 
-Write-Information -Tags "Test" -MessageData "INFO: Import-Module Logging"
+# Imports
+. $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Check requirements
-Write-Information -Tags "Test" -MessageData "INFO: Import-Module System"
 Initialize-Project
-
-Write-Information -Tags "Test" -MessageData "INFO: Import-Module Test"
-
-Write-Information -Tags "Test" -MessageData "INFO: Import-Module Utility"
-
-Write-Information -Tags "Test" -MessageData "INFO: Import-Module ComputerInfo"
-
-Write-Information -Tags "Test" -MessageData "INFO: Import-Module UserInfo"
-Import-Module -Name Project.Windows.UserInfo
-
-Write-Information -Tags "Test" -MessageData "INFO: Import-Module ProgramInfo"
 
 # User prompt
 Update-Context $TestContext $ThisScript @Logs

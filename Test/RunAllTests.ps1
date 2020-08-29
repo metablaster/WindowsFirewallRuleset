@@ -31,25 +31,28 @@ SOFTWARE.
 # TODO: some tests will output empty results, better run each test separately
 #
 
-. $PSScriptRoot\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\Config\ProjectSettings.ps1
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
+	$MyInvocation.MyCommand.Name -replace ".{4}$" )
 
 # Check requirements
 Initialize-Project
 
 # Imports
+. $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
 
 # User prompt
-Update-Context "Test.Master" $($MyInvocation.MyCommand.Name -replace ".{4}$")
+Update-Context $TestContext $ThisScript
 if (!(Approve-Execute @Logs)) { exit }
 
 # Recursively get powershell scripts in input folder
-$Files = Get-ChildItem -Path $ProjectRoot\Test -Recurse -Filter *.ps1 @Logs |
-Where-Object -Property Name -NE "ContextSetup.ps1" @Logs
+$Files = Get-ChildItem -Path $ProjectRoot\Test -Recurse -Filter *.ps1 -Exclude "ContextSetup.ps1", "$ThisScript.ps1" @Logs
 
 if (!$Files)
 {
 	Write-Error -Category ObjectNotFound -TargetObject $Files -Message "No powershell script files found" @Logs
+	Update-Log
 	return
 }
 

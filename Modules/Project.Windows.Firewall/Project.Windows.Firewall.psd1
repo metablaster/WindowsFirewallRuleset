@@ -29,17 +29,12 @@
 
 	# Copyright statement for this module
 	Copyright = @"
-Copyright (C) Markus Scholtes 2020
+Copyright (C) 2020 Markus Scholtes
 Copyright (C) 2020 metablaster zebal@protonmail.ch
 "@
 
 	# Description of the functionality provided by this module
-	Description = @"
-Project.Windows.Firewall is a module to manage firewall rules.
-* Export-FirewallRules to export firewall rules to a CSV or JSON file
-* Import-FirewallRules to import firewall rules from a CSV or JSON file
-* Remove-FirewallRules to remove firewall rules according to a CSV or JSON file
-"@
+	Description = "Module to manage firewall for 'Windows Firewall Ruleset' project"
 
 	# Minimum version of the Windows PowerShell engine required by this module
 	PowerShellVersion = "5.1"
