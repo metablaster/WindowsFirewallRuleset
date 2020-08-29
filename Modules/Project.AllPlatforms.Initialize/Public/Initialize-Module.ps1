@@ -194,7 +194,7 @@ function Initialize-Module
 	$Deny = [System.Management.Automation.Host.ChoiceDescription]::new("&No")
 	$Deny.HelpMessage = "Skip operation"
 
-	# TODO: remove
+	# TODO: remove?
 	# Check for PowerShellGet only if not processing PowerShellGet
 	if ($ModuleName -ne "PowerShellGet")
 	{
@@ -387,10 +387,8 @@ function Initialize-Module
 	}
 
 	# Setup new choices
-	# BUG: resetting choices will fail later during module update, need test or try/catch
-	# Title, Question and Default is OK
 	$Accept.HelpMessage = $InfoMessage
-	$Choices.Clear() # here the accept/deny objects most likely will no longer be valid
+	$Choices = @()
 	$Choices += $Accept
 	$Choices += $Deny
 
@@ -406,13 +404,6 @@ function Initialize-Module
 
 		$Title += " module out of date"
 		$Question = "Update $ModuleName module now?"
-
-		# TODO: testing if choices are valid
-		if (!$Choices)
-		{
-			Write-Warning -Message "BUG - choices are destroyed for update prompt"
-		}
-
 		$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
 
 		if ($Decision -eq $Default)
@@ -455,12 +446,6 @@ function Initialize-Module
 		$Title += " module not installed"
 		$Question = "Install $ModuleName module now?"
 
-		# TODO: testing if choices are valid
-		if (!$Choices)
-		{
-			Write-Warning -Message "BUG - choices are destroyed for install prompt"
-		}
-
 		$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
 
 		if ($Decision -eq $Default)
@@ -490,7 +475,7 @@ function Initialize-Module
 			Write-Information -Tags "User" -MessageData "INFO: Module $ModuleName v$($ModuleInfo.Version.ToString()) was installed/updated"
 			Write-Information -Tags "User" -MessageData "INFO: Loading module $ModuleName v$($ModuleInfo.Version.ToString()) into session"
 
-			# TODO: last test didn't load fresh installed modules: pester, posh-git, psscriptanalyzer
+			# TODO: last test didn't load fresh installed modules: pester, posh-git, PSScriptAnalyzer
 			# Remove old module if it exists and is loaded
 			Remove-Module -Name $ModuleName -ErrorAction Ignore
 			# Load new module in current session
@@ -501,7 +486,7 @@ function Initialize-Module
 			{
 				"posh-git"
 				{
-					# TODO: shortened prompt
+					# TODO: shortened prompt, is valid only for user home path
 					Write-Information -Tags "User" -MessageData "INFO: Adding $ModuleName $($ModuleInfo.Version.ToString()) to profile"
 					Add-PoshGitToProfile -AllHosts
 				}

@@ -265,6 +265,7 @@ todo's in this file are categorized into following sections:
     missing
     - mTail coloring configuration contains gremlins (bad chars), need to test and deal with them
     - Important Promt's should probably not depend on $InformationPreference
+    - See how, could we make use of Plaster for template generation
 
 ## Done
 

@@ -292,7 +292,6 @@ function Initialize-Project
 		if (!(Initialize-Module -Required @{ ModuleName = "PackageManagement"; ModuleVersion = $RequirePackageManagementVersion } )) { exit }
 
 		# Pester is required to run pester tests, required by PSScriptAnalyzer
-		# TODO: see also on how to get rid of duplicate system modules https://pester.dev/docs/introduction/installation
 		if (!(Initialize-Module @{ ModuleName = "Pester"; ModuleVersion = $RequirePesterVersion } `
 					-InfoMessage "Pester >= $($RequirePesterVersion.ToString()) is required to run pester tests" )) { }
 
@@ -304,7 +303,8 @@ function Initialize-Project
 		if (Initialize-Module @{ ModuleName = "posh-git"; ModuleVersion = $RequirePoshGitVersion } -AllowPrerelease `
 				-InfoMessage "posh-git >= $($RequirePoshGitVersion.ToString()) is recommended for better git experience in PowerShell" ) { }
 
-		# TODO: plaster, psreadline
+		if (Initialize-Module @{ ModuleName = "PSReadLine"; ModuleVersion = $RequirePSReadlineVersion } `
+				-InfoMessage "PSReadLine >= $($RequirePSReadlineVersion.ToString()) is recommended for command line editing experience of PowerShell" ) { }
 
 		# Update help regardless of module updates
 		if ($Develop)
