@@ -46,7 +46,7 @@ todo's in this file are categorized into following sections:
 
 4. Project release checklist
 
-    - ProgramInfo module manifest, comment out unit test exports
+    - ProgramInfo and NET.IP module manifest, comment out unit test exports
     - ProjectSettings.ps1 disable variables: Develop, ForceLoad,
     - ProjectSettings.ps1 restore variables: UnitTester, UnitTesterAdmin, DefaultUser
     - ProjectSettings.ps1 verify auto updated variables: ProjectCheck, ModulesCheck, ServicesCheck

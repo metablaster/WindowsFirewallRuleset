@@ -55,17 +55,22 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule $true
 . $PSScriptRoot\..\ModulePreferences.ps1
 
-$private = @(
+#
+# Script imports
+#
+
+$PrivateScripts = @(
 	'ConvertTo-Network'
 	'Get-Permutation'
 )
 
-foreach ($file in $private)
+foreach ($Script in $PrivateScripts)
 {
-	. ("{0}\private\{1}.ps1" -f $psscriptroot, $file)
+	Write-Debug -Message "[$ThisModule] Importing script: 'Private\$Script.ps1'"
+	. ("{0}\Private\{1}.ps1" -f $PSScriptRoot, $Script)
 }
 
-$public = @(
+$PublicScripts = @(
 	'ConvertFrom-HexIP'
 	'ConvertTo-BinaryIP'
 	'ConvertTo-DecimalIP'
@@ -83,27 +88,8 @@ $public = @(
 	'Test-SubnetMember'
 )
 
-foreach ($file in $public)
+foreach ($Script in $PublicScripts)
 {
-	. ("{0}\public\{1}.ps1" -f $psscriptroot, $file)
+	Write-Debug -Message "[$ThisModule] Importing script: 'Public\$Script.ps1'"
+	. ("{0}\Public\{1}.ps1" -f $PSScriptRoot, $Script)
 }
-
-$functionsToExport = @(
-	'ConvertFrom-HexIP'
-	'ConvertTo-BinaryIP'
-	'ConvertTo-DecimalIP'
-	'ConvertTo-DottedDecimalIP'
-	'ConvertTo-HexIP'
-	'ConvertTo-Mask'
-	'ConvertTo-MaskLength'
-	'ConvertTo-Subnet'
-	'Get-BroadcastAddress'
-	'Get-NetworkAddress'
-	'Get-NetworkRange'
-	'Get-NetworkSummary'
-	'Get-Subnet'
-	'Resolve-IPAddress'
-	'Test-SubnetMember'
-)
-
-Export-ModuleMember -Function $functionsToExport

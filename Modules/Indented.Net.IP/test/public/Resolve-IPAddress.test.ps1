@@ -55,8 +55,8 @@ param (
 
 if (-not $UseExisting)
 {
-	$moduleBase = $psscriptroot.Substring(0, $psscriptroot.IndexOf("\test"))
-	$stubBase = Resolve-Path (Join-Path $moduleBase "test*\stub\*")
+	$moduleBase = $psscriptroot.Substring(0, $psscriptroot.IndexOf("\Test"))
+	$stubBase = Resolve-Path (Join-Path $moduleBase "Test*\Stub\*")
 
 	if ($null -ne $stubBase)
 	{
@@ -100,11 +100,11 @@ InModuleScope 'Indented.Net.IP' {
 		}
 
 		It 'Throws RangeExpressionOutOfRange if a value is greater than 255' {
-			{ Resolve-IPAddress '[1-260].0.0.0' } | Should -Throw -ErrorId 'RangeExpressionOutOfRange'
+			{ Resolve-IPAddress '[1-260].0.0.0' } | Should -Throw -ErrorId 'RangeExpressionOutOfRange,Resolve-IPAddress'
 		}
 
 		It 'Throws SelectionExpressionOutOfRange if a value is greater than 255' {
-			{ Resolve-IPAddress '[0,260].0.0.0' } | Should -Throw -ErrorId 'SelectionExpressionOutOfRange'
+			{ Resolve-IPAddress '[0,260].0.0.0' } | Should -Throw -ErrorId 'SelectionExpressionOutOfRange,Resolve-IPAddress'
 		}
 
 		It 'Supports * as a wildcard for 0 to 255' {

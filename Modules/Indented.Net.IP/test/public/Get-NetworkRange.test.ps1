@@ -55,8 +55,8 @@ param (
 
 if (-not $UseExisting)
 {
-	$moduleBase = $psscriptroot.Substring(0, $psscriptroot.IndexOf("\test"))
-	$stubBase = Resolve-Path (Join-Path $moduleBase "test*\stub\*")
+	$moduleBase = $psscriptroot.Substring(0, $psscriptroot.IndexOf("\Test"))
+	$stubBase = Resolve-Path (Join-Path $moduleBase "Test*\Stub\*")
 
 	if ($null -ne $stubBase)
 	{
@@ -96,11 +96,11 @@ InModuleScope Indented.Net.IP {
 		}
 
 		It 'Returns correct values when used with Start and End parameters' {
-			$StartIP = [ipaddress]'192.168.1.1'
-			$EndIP = [ipaddress]'192.168.2.10'
+			$StartIP = [IPAddress] '192.168.1.1'
+			$EndIP = [IPAddress] '192.168.2.10'
 			$Assertion = Get-NetworkRange -Start $StartIP -End $EndIP
 
-			$Assertion.Count | Should BeExactly 266
+			$Assertion.Count | Should -BeExactly 266
 			$Assertion[0].IPAddressToString | Should -Be '192.168.1.1'
 			$Assertion[-1].IPAddressToString | Should -Be '192.168.2.10'
 		}

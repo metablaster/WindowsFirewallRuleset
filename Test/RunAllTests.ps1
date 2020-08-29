@@ -27,8 +27,9 @@ SOFTWARE.
 #>
 
 #
-# Run all tests
-# TODO: some tests will output empty results, better run each test separately
+# Run all unit tests located inside "Test" folder one by one
+# TODO: This script might yield odd and unexpected results
+# TODO: Test should be run in order of module or function (or both) inter dependency
 #
 
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
@@ -46,20 +47,36 @@ Import-Module -Name Project.AllPlatforms.Logging
 Update-Context $TestContext $ThisScript
 if (!(Approve-Execute @Logs)) { exit }
 
-# Recursively get powershell scripts in input folder
-$Files = Get-ChildItem -Path $ProjectRoot\Test -Recurse -Filter *.ps1 -Exclude "ContextSetup.ps1", "$ThisScript.ps1" @Logs
+# Recursively get list of powershell scripts (unit tests)
+$UnitTests = Get-ChildItem -Path $ProjectRoot\Test -Recurse -Filter *.ps1 -Exclude "ContextSetup.ps1", "$ThisScript.ps1" @Logs
 
-if (!$Files)
+if ($UnitTests)
+{
+	# Run them all
+	foreach ($Test in $UnitTests)
+	{
+		& $Test.FullName
+	}
+}
+else
 {
 	Write-Error -Category ObjectNotFound -TargetObject $Files -Message "No powershell script files found" @Logs
-	Update-Log
-	return
 }
 
-# Run them all
-foreach ($File in $Files)
+# Recursively get list of pester tests
+$PesterTests = Get-ChildItem -Path $ProjectRoot\Modules\Indented.Net.IP\Test\Public -Recurse -Filter *.ps1 @Logs
+
+if ($PesterTests)
 {
-	& $File.FullName
+	# Run all pester tests
+	foreach ($Test in $PesterTests)
+	{
+		& $Test.FullName
+	}
+}
+else
+{
+	Write-Error -Category ObjectNotFound -TargetObject $Files -Message "No powershell script files found" @Logs
 }
 
 Update-Log

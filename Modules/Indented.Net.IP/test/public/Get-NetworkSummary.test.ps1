@@ -55,8 +55,8 @@ param (
 
 if (-not $UseExisting)
 {
-	$moduleBase = $psscriptroot.Substring(0, $psscriptroot.IndexOf("\test"))
-	$stubBase = Resolve-Path (Join-Path $moduleBase "test*\stub\*")
+	$moduleBase = $psscriptroot.Substring(0, $psscriptroot.IndexOf("\Test"))
+	$stubBase = Resolve-Path (Join-Path $moduleBase "Test*\Stub\*")
 
 	if ($null -ne $stubBase)
 	{
@@ -71,7 +71,7 @@ InModuleScope Indented.Net.IP {
 	Describe 'Get-NetworkSummary' {
 		It 'Returns an object tagged with the type Indented.Net.IP.NetworkSummary' {
 			$NetworkSummary = Get-NetworkSummary 0/24
-			$NetworkSummary.PSTypeNames -contains 'Indented.Net.IP.NetworkSummary' | Should Be $true
+			$NetworkSummary.PSTypeNames -contains 'Indented.Net.IP.NetworkSummary' | Should -Be $true
 		}
 
 		It 'Identifies ranges with a first octet from 0 to 127 as class A' {

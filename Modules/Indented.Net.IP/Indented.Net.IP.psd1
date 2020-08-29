@@ -87,6 +87,9 @@
 		"Get-Subnet"
 		"Resolve-IPAddress"
 		"Test-SubnetMember"
+		# Following exports only for unit testing
+		"ConvertTo-Network"
+		"Get-Permutation"
 	)
 
 	# Cmdlets to export from this module

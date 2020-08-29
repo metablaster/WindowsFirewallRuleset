@@ -54,8 +54,8 @@ param (
 
 if (-not $UseExisting)
 {
-	$moduleBase = $psscriptroot.Substring(0, $psscriptroot.IndexOf("\test"))
-	$stubBase = Resolve-Path (Join-Path $moduleBase "test*\stub\*")
+	$moduleBase = $psscriptroot.Substring(0, $psscriptroot.IndexOf("\Test"))
+	$stubBase = Resolve-Path (Join-Path $moduleBase "Test*\Stub\*")
 
 	if ($null -ne $stubBase)
 	{
