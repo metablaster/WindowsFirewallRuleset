@@ -364,6 +364,8 @@ function Find-Installation
 		}
 		"EdgeChromium"
 		{
+			# TODO: msedge.exe is found in executable paths, need to update
+			# search algorithm
 			Update-Table "Microsoft Edge"
 			break
 		}

@@ -76,6 +76,7 @@ function Update-Table
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching executable names for: $SearchString"
 
+			# TODO: executable paths search is too weak, need to handle more properties here
 			$InstallLocation = $ExecutablePaths |
 			Where-Object -Property Name -EQ $SearchString |
 			Select-Object -ExpandProperty InstallLocation

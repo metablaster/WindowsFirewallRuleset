@@ -32,17 +32,16 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 # Imports
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule $true
 . $PSScriptRoot\..\ModulePreferences.ps1
-. $PSScriptRoot\External\Get-SQLInstance.ps1
 
 #
 # Script imports
 #
 
-$ExternalExports = @(
+$ExternalScripts = @(
 	"Get-SQLInstance"
 )
 
-foreach ($Script in $ExternalExports)
+foreach ($Script in $ExternalScripts)
 {
 	Write-Debug -Message "[$ThisModule] Importing script: $Script.ps1"
 	. ("{0}\External\{1}.ps1" -f $PSScriptRoot, $Script)
@@ -151,20 +150,6 @@ Write-Debug -Message "[$ThisModule] Initialize module readonly variable: AllUser
 # Programs installed for all users
 New-Variable -Name AllUserPrograms -Scope Script -Option ReadOnly -Value (Get-AllUserSoftware -Computer $PolicyStore)
 
-#
-# Exports for debugging
-#
-if ($Develop)
-{
-	# Function exports
-	# Export-ModuleMember -Function Update-Table
-	# Export-ModuleMember -Function Edit-Table
-	# Export-ModuleMember -Function Initialize-Table
-	# Export-ModuleMember -Function Show-Table
-
-	# Variable exports
-	Export-ModuleMember -Variable InstallTable
-}
 
 <# Opening keys, naming convention as you drill down the keys
 

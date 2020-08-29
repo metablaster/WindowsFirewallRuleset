@@ -68,18 +68,17 @@ Initialize-Table @Logs
 Edit-Table "%ProgramFiles(x86)%\Microsoft Help Viewer\v2.3345345" @Logs
 $global:InstallTable | Format-Table -AutoSize @Logs
 
-Start-Test "Good user profile path"
-Initialize-Table @Logs
-Edit-Table "C:\\Users\$UnitTester\\GitHub\WindowsFirewallRuleset\" @Logs
-$global:InstallTable | Format-Table -AutoSize @Logs
-
 Start-Test "Bad user profile path"
 Initialize-Table @Logs
 Edit-Table "%HOME%\source\\repos\WindowsFirewallRuleset\" @Logs
 $global:InstallTable | Format-Table -AutoSize @Logs
 
+Start-Test "Good user profile path"
+Initialize-Table @Logs
+Edit-Table "C:\\Users\$UnitTester\\AppData\\Roaming\\Adobe\" @Logs
+$global:InstallTable | Format-Table -AutoSize @Logs
+
 Start-Test "Get-TypeName"
-# TODO: why this doesn't work?
 $global:InstallTable | Get-TypeName @Logs
 
 Update-Log

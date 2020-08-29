@@ -44,6 +44,18 @@ todo's in this file are categorized into following sections:
 
     - Limit code to 100-120 column rule.
 
+4. Project release checklist
+
+    - ProgramInfo module manifest, comment out unit test exports
+    - ProjectSettings.ps1 disable variables: Develop, ForceLoad,
+    - ProjectSettings.ps1 restore variables: UnitTester, UnitTesterAdmin, DefaultUser
+    - ProjectSettings.ps1 verify auto updated variables: ProjectCheck, ModulesCheck, ServicesCheck
+    - Increment project version in all places mentioning version
+    - Run all tests in both release and develop mode, both Desktop and Core editions
+    - Load rules on all target OS editions
+    - Verify links to repository are pointing to master branch except if develop branch is wanted
+    - Run script analyzer
+
 ## High priority
 
 1. Modules

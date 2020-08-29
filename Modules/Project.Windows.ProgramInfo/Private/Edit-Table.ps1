@@ -41,6 +41,7 @@ None. You cannot pipe objects to Edit-Table
 None. Module scope installation table is updated
 .NOTES
 TODO: principal parameter?
+TODO: search executable paths
 #>
 function Edit-Table
 {
