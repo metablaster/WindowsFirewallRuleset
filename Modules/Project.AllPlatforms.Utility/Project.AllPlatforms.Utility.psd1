@@ -109,7 +109,17 @@
 		"Project.AllPlatforms.Utility.psd1"
 		"Project.AllPlatforms.Utility.psm1"
 		"about_Project.AllPlatforms.Utility.help.txt"
-		"Get-TypeName.ps1"
+		"External\Get-TypeName.ps1"
+		"External\LICENSE"
+		"External\README.md"
+		"Public\Approve-Execute.ps1"
+		"Public\Update-Context.ps1"
+		"Public\Convert-SDDLToACL.ps1"
+		"Public\Show-SDDL.ps1"
+		"Public\Get-NetworkService.ps1"
+		"Public\Set-ScreenBuffer.ps1"
+		"Public\Set-NetworkProfile.ps1"
+		"Public\Get-FileEncoding.ps1"
 	)
 
 	# Private data to pass to the module specified in RootModule/ModuleToProcess.

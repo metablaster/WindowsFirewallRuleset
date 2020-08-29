@@ -98,15 +98,15 @@
 
 	# List of all files packaged with this module
 	FileList = @(
-		"Initialize-Module.ps1"
-		"Initialize-Project.ps1"
-		"Initialize-Provider.ps1"
-		"Initialize-Service.ps1"
-		"Find-UpdatableModule.ps1"
-		"Uninstall-DuplicateModule.ps1"
 		"Project.AllPlatforms.Initialize.psd1"
 		"Project.AllPlatforms.Initialize.psm1"
 		"about_Project.AllPlatforms.Initialize.help.txt"
+		"Private\Find-UpdatableModule.ps1"
+		"Private\Uninstall-DuplicateModule.ps1"
+		"Public\Initialize-Module.ps1"
+		"Public\Initialize-Project.ps1"
+		"Public\Initialize-Provider.ps1"
+		"Public\Initialize-Service.ps1"
 	)
 
 	# Private data to pass to the module specified in RootModule/ModuleToProcess.

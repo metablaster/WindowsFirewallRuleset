@@ -26,12 +26,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# TODO: Include modules you need, update Copyright and start writing test code
-
 #
-# Blank template
+# Verifies that a module manifest files accurately describe the contents of project modules
 #
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )
 
@@ -41,8 +39,14 @@ Initialize-Project
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
-# Import-Module -Name Project.Windows.UserInfo @Logs
 
 # User prompt
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
+
+$Manifests = Get-ChildItem -Name -Depth 1 -Recurse -Path "$ProjectRoot\Modules" -Filter "*.psd1"
+
+foreach ($Manifest in $Manifests)
+{
+	Test-ModuleManifest -Path $ProjectRoot\Modules\$Manifest
+}

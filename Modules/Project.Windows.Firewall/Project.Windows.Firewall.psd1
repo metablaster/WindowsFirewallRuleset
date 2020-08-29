@@ -108,17 +108,21 @@ Project.Windows.Firewall is a module to manage firewall rules.
 
 	# List of all files packaged with this module
 	FileList = @(
-		"Convert-ArrayToList.ps1"
-		"Convert-ListToArray.ps1"
-		"Convert-ListToMultiLine.ps1"
-		"Convert-MultiLineToList.ps1"
-		"Convert-ValueToBoolean.ps1"
-		"Export-FirewallRules.ps1"
-		"Import-FirewallRules.ps1"
-		"Remove-FirewallRules.ps1"
 		"Project.Windows.Firewall.psd1"
 		"Project.Windows.Firewall.psm1"
 		"about_Project.Windows.Firewall.help.txt"
+		"LICENSE"
+		"README.md"
+		"Private\Convert-ArrayToList.ps1"
+		"Private\Convert-ListToArray.ps1"
+		"Private\Convert-ListToMultiLine.ps1"
+		"Private\Convert-MultiLineToList.ps1"
+		"Private\Convert-ValueToBoolean.ps1"
+		"Public\Export-FirewallRules.ps1"
+		"Public\Import-FirewallRules.ps1"
+		"Public\Remove-FirewallRules.ps1"
+		"Public\Find-RulePrincipal.ps1"
+		"Public\Format-Output.ps1"
 	)
 
 	# Private data to pass to the module specified in RootModule/ModuleToProcess.

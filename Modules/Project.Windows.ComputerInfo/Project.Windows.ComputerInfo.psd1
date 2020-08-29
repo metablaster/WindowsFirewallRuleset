@@ -105,14 +105,14 @@
 		"Project.Windows.ComputerInfo.psd1"
 		"Project.Windows.ComputerInfo.psm1"
 		"about_Project.Windows.ComputerInfo.help.txt"
-		"Get-ComputerName.ps1"
-		"Get-ConfiguredAdapter.ps1"
-		"Get-InterfaceAlias.ps1"
-		"Get-IPAddress.ps1"
-		"Get-Broadcast.ps1"
-		"Get-SystemSKU.ps1"
-		"Test-TargetComputer.ps1"
-		"ConvertFrom-OSBuild.ps1"
+		"Public\Get-ComputerName.ps1"
+		"Public\Get-ConfiguredAdapter.ps1"
+		"Public\Get-InterfaceAlias.ps1"
+		"Public\Get-IPAddress.ps1"
+		"Public\Get-Broadcast.ps1"
+		"Public\Get-SystemSKU.ps1"
+		"Public\Test-TargetComputer.ps1"
+		"Public\ConvertFrom-OSBuild.ps1"
 	)
 
 	# Private data to pass to the module specified in RootModule/ModuleToProcess.

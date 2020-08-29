@@ -103,8 +103,8 @@
 		"Project.AllPlatforms.Logging.psd1"
 		"Project.AllPlatforms.Logging.psm1"
 		"about_Project.AllPlatforms.Logging.help.txt"
-		"Update-Log.ps1"
-		"Get-LogFile.ps1"
+		"Private\Get-LogFile.ps1"
+		"Public\Update-Log.ps1"
 	)
 
 	# Private data to pass to the module specified in RootModule/ModuleToProcess.

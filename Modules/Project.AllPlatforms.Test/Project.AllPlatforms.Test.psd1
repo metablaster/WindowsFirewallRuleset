@@ -101,10 +101,10 @@
 		"Project.AllPlatforms.Test.psd1"
 		"Project.AllPlatforms.Test.psm1"
 		"about_Project.AllPlatforms.Test.help.txt"
-		"Enter-Test.ps1"
-		"Exit-Test.ps1"
-		"Start-Test.ps1"
-		"Stop-Test.ps1"
+		"Public\Enter-Test.ps1"
+		"Public\Exit-Test.ps1"
+		"Public\Start-Test.ps1"
+		"Public\Stop-Test.ps1"
 	)
 
 	# Private data to pass to the module specified in RootModule/ModuleToProcess.

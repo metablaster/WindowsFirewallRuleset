@@ -113,14 +113,14 @@
 		"Project.Windows.UserInfo.psd1"
 		"Project.Windows.UserInfo.psm1"
 		"about_Project.Windows.UserInfo.help.txt"
-		"ConvertFrom-UserAccount.ps1"
-		"Get-AccountSID.ps1"
-		"Get-GroupPrincipal.ps1"
-		"Get-GroupSID.ps1"
-		"Get-SDDL.ps1"
-		"Merge-SDDL.ps1"
-		"Get-UserGroup.ps1"
-		"ConvertFrom-SID.ps1"
+		"Public\ConvertFrom-UserAccount.ps1"
+		"Public\Get-AccountSID.ps1"
+		"Public\Get-GroupPrincipal.ps1"
+		"Public\Get-GroupSID.ps1"
+		"Public\Get-SDDL.ps1"
+		"Public\Merge-SDDL.ps1"
+		"Public\Get-UserGroup.ps1"
+		"Public\ConvertFrom-SID.ps1"
 	)
 
 	# Private data to pass to the module specified in RootModule/ModuleToProcess.

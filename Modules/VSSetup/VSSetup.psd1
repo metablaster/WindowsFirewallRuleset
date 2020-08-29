@@ -9,7 +9,7 @@
 	ModuleVersion = '2.2.16'
 	PowerShellVersion = '2.0'
 	CLRVersion = '2.0'
-	ModuleToProcess = 'VSSetup.psm1'
+	RootModule = 'VSSetup.psm1'
 	NestedModules = 'Microsoft.VisualStudio.Setup.PowerShell.dll'
 	RequiredAssemblies = @(
   'Microsoft.VisualStudio.Setup.PowerShell.dll',
