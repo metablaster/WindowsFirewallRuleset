@@ -93,7 +93,8 @@ TODO: export to excel
 #>
 function Export-FirewallRules
 {
-	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'There is no way to replace Write-Host here')]
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '',
+		Justification = 'There is no way to replace Write-Host here')]
 	[OutputType([void])]
 	[CmdletBinding()]
 	param(

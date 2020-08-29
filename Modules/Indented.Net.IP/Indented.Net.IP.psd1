@@ -185,6 +185,12 @@
 
 			# ReleaseNotes of this module
 			# ReleaseNotes = ''
+
+			# Flag to indicate whether the module requires explicit user acceptance for install, update, or save.
+			RequireLicenseAcceptance = $false
+
+			# A list of external modules that this module is dependent upon.
+			# ExternalModuleDependencies = @()
 		} # End of PSData hashtable
 	} # End of PrivateData hashtable
 

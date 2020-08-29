@@ -129,7 +129,7 @@ Copyright (C) 2020 metablaster zebal@protonmail.ch
 			Tags = @("Firewall", "Export", "Import", "FirewallRule")
 
 			# A URL to the license for this module.
-			LicenseUri = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.Firewall/LICENSE"
+			LicenseUri = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Modules/Project.Windows.Firewall/LICENSE"
 
 			# A URL to the main website for this project.
 			ProjectUri = "https://github.com/metablaster/WindowsFirewallRuleset"
@@ -142,6 +142,12 @@ Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 			# ReleaseNotes of this module
 			# ReleaseNotes = ""
+
+			# Flag to indicate whether the module requires explicit user acceptance for install, update, or save.
+			RequireLicenseAcceptance = $false
+
+			# A list of external modules that this module is dependent upon.
+			# ExternalModuleDependencies = @()
 		} # End of PSData hashtable
 	} # End of PrivateData hashtable
 

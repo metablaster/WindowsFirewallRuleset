@@ -23,6 +23,7 @@ Here is a list of changes for each of the releases
     system services, check module updates, package providers and core project requirement checks
     Note that some of this functionality must be manually enabled.
   - Added new variables to control requirements checks, and to reduce module imports and code bloat
+  - All file input/output uses same encoding and file read operation is checked for encoding before read
 
 - Rules
 
@@ -32,6 +33,8 @@ Here is a list of changes for each of the releases
 
   - Updated analyzer settings for newest version and latest fixes
   - Added new extensions to recommended list and improved workspace settings
+  - All tests were updated for clean run
+  - revisited todo list and removed duplicates, both global and per file
 
 - Documentation
 
@@ -46,7 +49,7 @@ Here is a list of changes for each of the releases
   to be able to share logs and other project files between Windows PowerShell and Core edition.
   - Renamed modules to better fit with project naming convention
   - Moved few functions to different modules
-  - Reorganized module structure according to community best practices
+  - Reorganized module file and folder structure according to community best practices
   - Added function to convert to or query system SKU
   - Several minor module code changes
 
