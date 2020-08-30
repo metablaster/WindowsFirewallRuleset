@@ -26,12 +26,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# TODO: Include modules you need, update Copyright and start writing test code
-
 #
-# Unit test for Test-Function
+# Export all firewall rules
 #
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )
 
@@ -43,17 +41,33 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
+Update-Context $Context $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
 
-Enter-Test $ThisScript
+# NOTE: export speed is 10 rules per minute
+# 450 rules in 46 minutes on 3,6 Ghz quad core CPU with 16GB single channel RAM @2400 Mhz
+# NOTE: to speed up a little add following to defender exclusions:
+# C:\Windows\System32\wbem\WmiPrvSE.exe
+# TODO: function to export firewall settings needed
+# TODO: need to speed up rule export by at least 700%
+$StopWatch = [System.Diagnostics.Stopwatch]::new()
 
-Start-Test "Test-Function"
-$Result = Test-Function @Logs
-$Result
+$StopWatch.Start()
+# Export all outbound rules from GPO
+Export-FirewallRules -Outbound -Folder "$ProjectRoot\Exports" -FileName "OutboundGPO" -PolicyStore $PolicyStore @Logs
+$StopWatch.Stop()
 
-Start-Test "Get-TypeName"
-$Result | Get-TypeName @Logs
+$OutboundMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
+Write-Information -Tags "User" -MessageData "INFO: Time needed to export outbound rules was: $OutboundMinutes minutes"
 
-Update-Log
-Exit-Test
+$StopWatch.Reset()
+$StopWatch.Start()
+# Export all inbound rules from GPO
+Export-FirewallRules -Inbound -Folder "$ProjectRoot\Exports" -FileName "InboundGPO" -PolicyStore $PolicyStore @Logs
+$StopWatch.Stop()
+
+$InboundMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
+Write-Information -Tags "User" -MessageData "INFO: Time needed to export inbound rules was: $InboundMinutes minutes"
+
+$TotalMinutes = $OutboundMinutes + $InboundMinutes
+Write-Information -Tags "User" -MessageData "INFO: Total time needed to export entry firewall was: $TotalMinutes minutes"

@@ -26,34 +26,29 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# TODO: Include modules you need, update Copyright and start writing test code
+. $PSScriptRoot\..\Config\ProjectSettings.ps1
 
-#
-# Unit test for Test-Function
-#
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
-New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
-	$MyInvocation.MyCommand.Name -replace ".{4}$" )
+<#
+.SYNOPSIS
+Unblock project files that were downloaded from the Internet.
+.DESCRIPTION
+Unblock project files that were downloaded from the Internet, this is needed to
+unblock project that were downloaded from GitHub to prevent spamming YES/NO questions.
+.EXAMPLE
+Unblock-Project
+.INPUTS
+None.
+.OUTPUTS
+None.
+.NOTES
+If executing scripts after manual download from internet or transfer from
+another computer or media, you should "unblock" scripts by using this code.
+TODO: We should probably unblock only scripts, not all files.
+#>
+function Unblock-Project
+{
+	Write-Information -Tags "User" -MessageData "INFO: Unblocking project scripts"
+	Get-ChildItem $ProjectRoot -Recurse | Unblock-File
+}
 
-# Check requirements
-Initialize-Project
-
-# Imports
-. $PSScriptRoot\ContextSetup.ps1
-Import-Module -Name Project.AllPlatforms.Logging
-
-# User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute @Logs)) { exit }
-
-Enter-Test $ThisScript
-
-Start-Test "Test-Function"
-$Result = Test-Function @Logs
-$Result
-
-Start-Test "Get-TypeName"
-$Result | Get-TypeName @Logs
-
-Update-Log
-Exit-Test
+Unblock-Project

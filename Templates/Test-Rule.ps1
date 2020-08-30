@@ -42,8 +42,7 @@ Initialize-Project
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
-# Import-Module -Name Project.Windows.UserInfo
-#
+
 # User prompt
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute @Logs)) { exit }
@@ -56,8 +55,8 @@ $FirewallProfile = "Any"
 
 Enter-Test $ThisScript
 
-Start-Test "Remove-NetFirewallRule"
 # Remove previous test
+Start-Test "Remove-NetFirewallRule"
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
 Start-Test "Test rule"

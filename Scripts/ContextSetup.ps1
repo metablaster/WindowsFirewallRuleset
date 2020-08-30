@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2020 metablaster zebal@protonmail.ch
+Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,29 +26,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-. $PSScriptRoot\Config\ProjectSettings.ps1
+#
+# Context setup for scripts
+#
 
-<#
-.SYNOPSIS
-Unblock project files that were downloaded from the Internet.
-.DESCRIPTION
-Unblock project files that were downloaded from the Internet, this is needed to
-unblock project that were downloaded from GitHub to prevent spamming YES/NO questions.
-.EXAMPLE
-Unblock-Project
-.INPUTS
-None.
-.OUTPUTS
-None.
-.NOTES
-If executing scripts after manual download from internet or transfer from
-another computer or media, you should "unblock" scripts by using this code.
-TODO: We should probably unblock only scripts, not all files.
-#>
-function Unblock-Project
-{
-	Write-Information -Tags "User" -MessageData "INFO: Unblocking project scripts"
-	Get-ChildItem $ProjectRoot -Recurse | Unblock-File
-}
-
-Unblock-Project
+New-Variable -Name Context -Scope Local -Option Constant -Value "Scripts"

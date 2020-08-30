@@ -68,6 +68,13 @@ function Get-FileEncoding
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
+	if (!Test-Path -Path $FilePath -PathType Leaf)
+	{
+		Write-Error -Category ObjectNotFound -TargetObject $FilePath `
+			-Message "Cannot find path '$FilePath' because it does not exist"
+		return
+	}
+
 	# First, check if the file is binary. That is, if the first
 	# 5 lines contain any non-printable characters.
 	# TODO: encoding parameter needed?

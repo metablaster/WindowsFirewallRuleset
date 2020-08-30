@@ -26,15 +26,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-. $PSScriptRoot\Config\ProjectSettings.ps1
+#
+# Setup firewall profile, network profile and global firewall behavior
+#
+#Requires -RunAsAdministrator
+. $PSScriptRoot\..\Config\ProjectSettings.ps1
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
+	$MyInvocation.MyCommand.Name -replace ".{4}$" )
 
 # Check requirements
 Initialize-Project
 
+# Imports
+. $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
 
+# User prompt
+Update-Context $Context $ThisScript @Logs
+if (!(Approve-Execute @Logs)) { exit }
+
 #
-# This script sets firewall profile, network profile and global firewall behavior
 # TODO: how to set and reset settings found in IPSec tab?
 # TODO: it looks like private profile traffic is logged into public log and vice versa
 #
@@ -85,6 +96,7 @@ Set-NetFirewallSetting -PolicyStore $PolicyStore `
 	-RemoteUserTransportAuthorizationList None -RemoteUserTunnelAuthorizationList None `
 	-RemoteMachineTransportAuthorizationList None -RemoteMachineTunnelAuthorizationList None @Logs `
 
+# Set default firewall profile for network adapter
 Set-NetworkProfile @Logs
 
 Update-Log

@@ -26,13 +26,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-. $PSScriptRoot\Config\ProjectSettings.ps1
+#
+# Reset GPO firewall to factory defaults
+#
+#Requires -RunAsAdministrator
+. $PSScriptRoot\..\Config\ProjectSettings.ps1
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
+	$MyInvocation.MyCommand.Name -replace ".{4}$" )
 
 # Check requirements
 Initialize-Project
 
 # Imports
+. $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
+
+# User prompt
+Update-Context $Context $ThisScript @Logs
+if (!(Approve-Execute @Logs)) { exit }
 
 #
 # Default setup for each profile is the same,

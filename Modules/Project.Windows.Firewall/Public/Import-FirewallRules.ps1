@@ -31,7 +31,7 @@ SOFTWARE.
 .SYNOPSIS
 Imports firewall rules from a CSV or JSON file.
 .DESCRIPTION
-Imports firewall rules from with Export-FirewallRules generated CSV or JSON files.
+Imports firewall rules generated with Export-FirewallRules, CSV or JSON file.
 CSV files have to be separated with semicolons.
 Existing rules with same name will be overwritten.
 .PARAMETER PolicyStore
@@ -39,7 +39,7 @@ Policy store into which to import rules, default is local GPO.
 For more information about stores see:
 https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md
 .PARAMETER Folder
-Path into which to save file
+Path to directory where exported rules file is located
 .PARAMETER FileName
 Input file
 .PARAMETER JSON
@@ -61,7 +61,7 @@ Changes by metablaster - August 2020:
 .EXAMPLE
 Import-FirewallRules
 Imports all firewall rules in the CSV file FirewallRules.csv
-If no file is specified, FirewallRules.json in the current directory is searched.
+If no file is specified, FirewallRules .csv or .json in the current directory is searched.
 .EXAMPLE
 Import-FirewallRules WmiRules.csv CSV
 Imports all firewall rules in the SCV file WmiRules.csv
@@ -156,7 +156,9 @@ function Import-FirewallRules
 		{
 			$LoginName = (ConvertFrom-SID $Rule.Owner).Name
 
-			if ([string]::IsNullOrEmpty($LoginName))
+			# For rule owner "Any" refers to any owner
+			# TODO: for store apps owner must be explicit? see specific rules that apply to all store appps
+			if ([string]::IsNullOrEmpty($LoginName) -or ($Rule.Package -ne "Any"))
 			{
 				Write-Warning -Message "Importing rule '$($Rule.Displayname)' skipped, store app owner does not exist"
 				continue
@@ -171,7 +173,8 @@ function Import-FirewallRules
 		{
 			$LoginName = (ConvertFrom-SID $Rule.Package).Name
 
-			if ([string]::IsNullOrEmpty($LoginName))
+			# For rule package "*" refers to store apps only, and, "Any" refers to any programs, apps or services
+			if ([string]::IsNullOrEmpty($LoginName) -or (($Rule.Package -ne "*") -or ($Rule.Package -ne "Any")))
 			{
 				Write-Warning -Message "Importing rule '$($Rule.Displayname)' skipped, store app package does not exist"
 				continue
@@ -198,6 +201,7 @@ function Import-FirewallRules
 		}
 
 		# generate new firewall rule, parameters are assigned with splatting
+		# NOTE: If the script is not run as Administrator, the error says "Cannot create a file when that file already exists"
 		New-NetFirewallRule -PolicyStore $PolicyStore @RuleSplatHash | Format-Output -Label "Import Rule"
 	}
 
