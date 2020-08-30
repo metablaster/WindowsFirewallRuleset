@@ -130,7 +130,7 @@
 			# IconUri = ''
 
 			# Prerelease string of this module
-			Prerelease = "Pre-release module for unit testing in 'Windows Firewall Ruleset' project"
+			Prerelease = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGELOG.md"
 
 			# ReleaseNotes of this module
 			# ReleaseNotes = ''

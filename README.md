@@ -148,12 +148,12 @@ describes how to make use of this project on older Windows systems such as Windo
 
 - You might loose internet connectivity for some of your programs or in rare cases even lose internet
 connectivity completely, if that happens, you can either temporarily allow outbound network traffic
-or run `ResetFirewall.ps1` script, to reset GPO firewall to system defaults and remove all rules.
+or run `Scripts\ResetFirewall.ps1` script, to reset GPO firewall to system defaults and remove all rules.
 - Inside `Readme` folder there is a `ResetFirewall.md`, a guide on how to do it manually, by hand,
 if for some reason you're unable to run the script, or the script doesn't solve your problems.
 - Also note that your current/existing rules will not be deleted unless you have rules in GPO whose
 group name interfere with group names from this ruleset, however
-**this does not apply to** `ResetFirewall.ps1` which will clear GPO rules completely
+**this does not apply to** `Scripts\ResetFirewall.ps1` which will clear GPO rules completely
 and leave only those in control panel.
 - If you want to be 100% sure please export your current GPO rules first, for more info see
 [ManageGPOFirewall.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/ManageGPOFirewall.md)
@@ -162,8 +162,8 @@ apply at least all generic networking and OS related rules such as BasicNetworki
 WindowsSystem, WindowsServices, Multicast etc. also do not ignore IPv6, Windows does need IPv6!
 - Default configuration will set global firewall behavior which is not configurable in GPO GUI,
 such as `stateful ftp` and `pptp` or global `IPSec` settings, if you need specific setup please visit
-`SetupProfile.ps1` and take a look at `Set-NetFirewallSetting`.\
-Note that `SetupProfile.ps1` is automatically called by `SetupFirewall.ps1` script
+`Scripts\SetupProfile.ps1` and take a look at `Set-NetFirewallSetting`.\
+Note that `Scripts\SetupProfile.ps1` is automatically called by `Scripts\SetupFirewall.ps1` script
 
 ### Note
 
@@ -183,8 +183,8 @@ script again.
 - If project was manually downloaded, transferred from another computer or media then you should
 [unblock all files](https://devblogs.microsoft.com/scripting/easily-unblock-all-files-in-a-directory-using-powershell/)
 in project first to avoid YES/NO spam questions for every executing script, by using
-`UnblockProject.ps1` script.\
-Master script `SetupFirewall.ps1` does this in case if you forget, but initial YES/NO spam questions
+`Scripts\UnblockProject.ps1` script.\
+Master script `Scripts\SetupFirewall.ps1` does this in case if you forget, but initial YES/NO spam questions
 will still be visible in that case.
 - It's important to understand these rules are designed to be used as "Standard" user, not as
 Administrative user, if you're Administrator on your computer you'll have to either create standard
@@ -234,12 +234,12 @@ PowerShell Core as Administrator
     cd WindowsFirewallRuleset-master
     ```
 
-9. At this point you should "unblock" all project files first by executing the script called `UnblockProject.ps1`,
+9. At this point you should "unblock" all project files first by executing the script called `Scripts\UnblockProject.ps1`,
 btw. project files were blocked by Windows to prevent users from running untrusted script code
 downloaded from internet:
 
     ```powershell
-    .\UnblockProject.ps1
+    .\Scripts\UnblockProject.ps1
     ```
 
 10. Rules for programs such as internet browser, Visual Studio etc. depend on installation variables.\
@@ -250,7 +250,7 @@ If needed, you can find these installation variables in individual scripts insid
 11. Back to PowerShell console and type into console:
 
     ```powershell
-    .\SetupFirewall.ps1
+    .\Scripts\SetupFirewall.ps1
     ```
 
     hit enter and you will be prompted what kind of rulesets you want.
@@ -296,15 +296,15 @@ For more information about GPO see: [Configure security policy settings](https:/
 
 If you want to apply only specific rules there are 2 ways to do this:
 
-1. Execute `SetupFirewall.ps1` and chose `Yes` only for rulesets you want, otherwise chose `No`
+1. Execute `Scripts\SetupFirewall.ps1` and chose `Yes` only for rulesets you want, otherwise chose `No`
 and hit enter to skip current ruleset.
 
 2. Inside powershell navigate to folder containing the ruleset script you want,
 and execute individual PowerShell script.
 
-3. You might want to run `SetupProfile.ps1` afterwards to apply default firewall behavior if it's
+3. You might want to run `Scripts\SetupProfile.ps1` afterwards to apply default firewall behavior if it's
 not set already, or you can do it manually in GPO but with limited power.
-"limited power" means `SetupProfile.ps1` configures some firewall parameters which can't be
+"limited power" means `Scripts\SetupProfile.ps1` configures some firewall parameters which can't be
 adjusted in firewall GUI.
 
 In both cases the script will delete all of the existing rules that match the rule group (if any),
@@ -321,7 +321,7 @@ rules from GPO,\
 and set all properties to `"Not configured"` when right clicking on node:\
 `Windows Defender Firewall with Advanced Security - Local Group Policy Object`
 
-Deleting all rules or revetting to previous state can also be done with `ResetFirewall.ps1` script.
+Deleting all rules or revetting to previous state can also be done with `Scripts\ResetFirewall.ps1` script.
 
 Note that you will also need to re-import your exported GPO rules if you had them.
 

@@ -35,6 +35,7 @@ Here is a list of changes for each of the releases
   - Added new extensions to recommended list and improved workspace settings
   - All tests were updated for clean run
   - revisited todo list and removed duplicates, both global and per file
+  - Non module scripts are separated into "Scripts" folder
 
 - Documentation
 

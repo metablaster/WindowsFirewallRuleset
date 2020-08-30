@@ -50,6 +50,7 @@ Enter-Test $ThisScript
 $Exports = "$ProjectRoot\Exports"
 
 # TODO: need to test failure cases, see also module todo's for more info
+# TODO: need to test store apps import for "Any" and "*" owner/package
 
 # Start-Test "Import-FirewallRules -FileName GroupExport.csv"
 # Import-FirewallRules -Folder $Exports -FileName "GroupExport.csv" @Logs

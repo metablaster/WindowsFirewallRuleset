@@ -68,7 +68,7 @@ function Get-FileEncoding
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-	if (!Test-Path -Path $FilePath -PathType Leaf)
+	if (!(Test-Path -Path $FilePath -PathType Leaf))
 	{
 		Write-Error -Category ObjectNotFound -TargetObject $FilePath `
 			-Message "Cannot find path '$FilePath' because it does not exist"
@@ -164,7 +164,15 @@ function Get-FileEncoding
 	if (!$Result)
 	{
 		# If there is no BOM present in file, parse file for non ASCII characters
-		$FileData = Get-Content -Path $FilePath -Encoding utf8NoBOM
+		# TODO: not sure what encoding should be default for this
+		if ($PSVersionTable.PSEdition -eq "Core")
+		{
+			$FileData = Get-Content -Path $FilePath -Encoding utf8NoBOM
+		}
+		else
+		{
+			$FileData = Get-Content -Path $FilePath -Encoding Ascii
+		}
 
 		foreach ($Line in $FileData)
 		{

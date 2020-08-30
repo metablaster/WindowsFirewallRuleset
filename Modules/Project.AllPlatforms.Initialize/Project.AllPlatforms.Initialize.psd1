@@ -30,7 +30,7 @@
 	Copyright = "Copyright (C) 2019, 2020 metablaster"
 
 	# Description of the functionality provided by this module
-	Description = "Initialize environment for 'Windows Firewall Ruleset' project"
+	Description = "Module to initialize environment for 'Windows Firewall Ruleset' project"
 
 	# Minimum version of the Windows PowerShell engine required by this module
 	PowerShellVersion = "5.1"
@@ -131,7 +131,7 @@
 			# IconUri = ""
 
 			# Prerelease string of this module
-			Prerelease = "Pre-release module to initialize environment for 'Windows Firewall Ruleset' project"
+			Prerelease = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGELOG.md"
 
 			# ReleaseNotes of this module
 			# ReleaseNotes = ""

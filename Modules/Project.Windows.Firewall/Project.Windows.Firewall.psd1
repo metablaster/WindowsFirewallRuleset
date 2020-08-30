@@ -138,7 +138,7 @@ Copyright (C) 2020 metablaster zebal@protonmail.ch
 			# IconUri = ""
 
 			# Prerelease string of this module
-			Prerelease = "Pre-release module to manage Windows firewall with 'Windows Firewall Ruleset' project"
+			Prerelease = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGELOG.md"
 
 			# ReleaseNotes of this module
 			# ReleaseNotes = ""

@@ -74,7 +74,7 @@ foreach ($Account in $NTAccounts)
 }
 
 Start-Test "ConvertFrom-SID Unknown domain"
-ConvertFrom-SID "S-1-5-21-0000-0000-1111-1111" -ErrorAction Ignore | Format-Table
+ConvertFrom-SID "S-1-5-21-0000-0000-1111-1111" -ErrorAction SilentlyContinue | Format-Table
 
 Start-Test "ConvertFrom-SID App SID"
 $AppSID = "S-1-15-2-2967553933-3217682302-2494645345-2077017737-3805576244-585965800-1797614741"
@@ -83,7 +83,7 @@ $AppResult | Format-Table
 
 Start-Test "ConvertFrom-SID nonexistent App SID"
 $AppSID = "S-1-15-2-2967553933-3217682302-0000000000000000000-2077017737-3805576244-585965800-1797614741"
-$AppResult = ConvertFrom-SID $AppSID -ErrorAction Ignore @Logs
+$AppResult = ConvertFrom-SID $AppSID -ErrorAction SilentlyContinue @Logs
 $AppResult | Format-Table
 
 Start-Test "ConvertFrom-SID APPLICATION PACKAGE AUTHORITY"

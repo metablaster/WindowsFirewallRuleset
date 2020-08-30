@@ -50,7 +50,7 @@ Start-Test "Get-ConfiguredAdapter IPv4"
 Get-ConfiguredAdapter IPv4 @Logs
 
 Start-Test "Get-ConfiguredAdapter IPv6 FAILURE TEST"
-Get-ConfiguredAdapter IPv6 -ErrorAction Ignore @Logs
+Get-ConfiguredAdapter IPv6 -ErrorAction SilentlyContinue @Logs
 
 Start-Test "Get-ConfiguredAdapter IPv4 -IncludeDisconnected"
 Get-ConfiguredAdapter IPv4 -IncludeDisconnected @Logs

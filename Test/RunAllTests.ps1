@@ -29,6 +29,7 @@ SOFTWARE.
 #
 # Run all unit tests located inside "Test" folder one by one
 # TODO: This script might yield odd and unexpected results
+# TODO: Output of some unit tests is either delayed or not displayed at all
 # TODO: Test should be run in order of module or function (or both) inter dependency
 #
 
@@ -63,6 +64,8 @@ else
 	Write-Error -Category ObjectNotFound -TargetObject $Files -Message "No powershell script files found" @Logs
 }
 
+Write-Information -Tags "Project" -MessageData "INFO: Starting pester tests"
+
 # Recursively get list of pester tests
 $PesterTests = Get-ChildItem -Path $ProjectRoot\Modules\Indented.Net.IP\Test\Public -Recurse -Filter *.ps1 @Logs
 
@@ -78,5 +81,7 @@ else
 {
 	Write-Error -Category ObjectNotFound -TargetObject $Files -Message "No powershell script files found" @Logs
 }
+
+Write-Information -Tags "Project" -MessageData "INFO: Running all tests done"
 
 Update-Log

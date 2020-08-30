@@ -114,7 +114,7 @@
 		"External\LICENSE"
 		"External\README.md"
 		"Public\Approve-Execute.ps1"
-		"Public\Confirm-FileEncoding"
+		"Public\Confirm-FileEncoding.ps1"
 		"Public\Update-Context.ps1"
 		"Public\Convert-SDDLToACL.ps1"
 		"Public\Show-SDDL.ps1"
@@ -147,7 +147,7 @@
 			# IconUri = ''
 
 			# Prerelease string of this module
-			Prerelease = "Pre-release module with utility functions for 'Windows Firewall Ruleset' project"
+			Prerelease = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGELOG.md"
 
 			# ReleaseNotes of this module
 			# ReleaseNotes = ''

@@ -86,13 +86,20 @@ function Import-FirewallRules
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
+	# NOTE: (Split-Path -Extension $FileName) does not work in Windows PowerShell
+	$FileExtension = [System.IO.Path]::GetExtension($FileName)
+
 	if ($JSON)
 	{
 		# read JSON file
-		if ((Split-Path -Extension $FileName) -ne ".json")
+		if (!$FileExtension)
 		{
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Adding extension to input file"
 			$FileName += ".json"
+		}
+		elseif ($FileExtension -ne ".json")
+		{
+			Write-Warning -Message "Unexpected file extension '$FileExtension'"
 		}
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading JSON file"
@@ -102,10 +109,14 @@ function Import-FirewallRules
 	else
 	{
 		# read CSV file
-		if ((Split-Path -Extension $FileName) -ne ".csv")
+		if (!$FileExtension)
 		{
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Adding extension to input file"
 			$FileName += ".csv"
+		}
+		elseif ($FileExtension -ne ".csv")
+		{
+			Write-Warning -Message "Unexpected file extension '$FileExtension'"
 		}
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading CSV file"

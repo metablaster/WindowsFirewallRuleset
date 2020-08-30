@@ -59,7 +59,7 @@ Start-Test "Expand users"
 $UsersTest | Select-Object -ExpandProperty User @Logs
 
 Start-Test "Failure test"
-$FailedUsers = Get-GroupPrincipal "asdf Users" @Logs -ErrorAction Ignore
+$FailedUsers = Get-GroupPrincipal "Nonexistent Users" @Logs -ErrorAction SilentlyContinue
 $FailedUsers
 
 Start-Test "Get-TypeName"

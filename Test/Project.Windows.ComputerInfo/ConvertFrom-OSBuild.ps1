@@ -54,8 +54,9 @@ ConvertFrom-OSBuild 17763 @Logs
 Start-Test "ConvertFrom-OSBuild 19041.450 = 2004"
 ConvertFrom-OSBuild 19041.450 @Logs
 
+# TODO: -ErrorAction Ignore doesn't work in Windows PowerShell (all tests)
 Start-Test "ConvertFrom-OSBuild 11111.1 = unknown"
-ConvertFrom-OSBuild 11111.133 -ErrorAction Ignore @Logs
+ConvertFrom-OSBuild 11111.133 -ErrorAction SilentlyContinue @Logs
 
 Start-Test "ConvertFrom-OSBuild 16299.2045 = 1079"
 $Result = ConvertFrom-OSBuild 16299.2045 @Logs

@@ -277,10 +277,13 @@ function Export-FirewallRules
 		New-Item -ItemType Directory -Path $Folder -ErrorAction Stop | Out-Null
 	}
 
+	# NOTE: (Split-Path -Extension $FileName) does not work in Windows PowerShell
+	$FileExtension = [System.IO.Path]::GetExtension($FileName)
+
 	if ($JSON)
 	{
 		# output rules in JSON format
-		if ((Split-Path -Extension $FileName) -ne ".json")
+		if (!$FileExtension -or ($FileExtension -ne ".json"))
 		{
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Adding extension to input file"
 			$FileName += ".json"
@@ -301,7 +304,7 @@ function Export-FirewallRules
 	else
 	{
 		# output rules in CSV format
-		if ((Split-Path -Extension $FileName) -ne ".csv")
+		if (!$FileExtension -or ($FileExtension -ne ".csv"))
 		{
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Adding extension to input file"
 			$FileName += ".csv"

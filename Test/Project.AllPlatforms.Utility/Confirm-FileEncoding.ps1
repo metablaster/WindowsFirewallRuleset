@@ -54,7 +54,8 @@ Start-Test "Confirm-FileEncoding"
 $ProjectFiles | Confirm-FileEncoding @Logs
 
 Start-Test "Confirm-FileEncoding file"
-Confirm-FileEncoding .\Encoding\utf8.txt @Logs
+$TestFile = Resolve-Path -Path $PSScriptRoot\Encoding\utf8.txt
+Confirm-FileEncoding $TestFile @Logs
 
 Update-Log
 Exit-Test

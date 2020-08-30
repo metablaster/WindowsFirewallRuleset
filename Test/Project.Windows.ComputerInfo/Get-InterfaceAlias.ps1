@@ -51,7 +51,7 @@ $Aliases = Get-InterfaceAlias IPv4 @Logs
 $Aliases.ToWql()
 
 Start-Test "Get-InterfaceAlias IPv6 FAILURE TEST"
-$Aliases = Get-InterfaceAlias -ErrorAction Ignore IPv6 @Logs
+$Aliases = Get-InterfaceAlias -ErrorAction SilentlyContinue IPv6 @Logs
 if ($Aliases)
 {
 	$Aliases.ToWql()

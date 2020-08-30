@@ -53,6 +53,7 @@ function Confirm-FileEncoding
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
 		[string[]] $FilePath,
 
+		# TODO: Windows PowerShell outputs as utf8 with BOM
 		[Parameter()]
 		[string[]] $Encoding = @("utf-8", "us-ascii")
 	)

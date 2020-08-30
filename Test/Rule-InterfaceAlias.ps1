@@ -162,9 +162,9 @@ New-NetFirewallRule -DisplayName "Multiple adapters rule" `
 	-Description "Multiple test rule description" `
 	@Logs | Format-Output @Logs
 
-Start-Test "Bad adapter rule"
+Start-Test "Bad adapter rule FAILURE TEST"
 $BadAdapters = Get-InterfaceAlias IPv4 -IncludeAll
-$BadAdapters += [WildcardPattern]("Local Area Connection* 6")
+$BadAdapters += [WildcardPattern]("Local Area Connection* 644")
 
 # Outbound rule to test nonexistent adapter rule
 New-NetFirewallRule -DisplayName "Bad adapter rule" `
@@ -176,7 +176,7 @@ New-NetFirewallRule -DisplayName "Bad adapter rule" `
 	-LocalUser Any `
 	-InterfaceAlias $BadAdapters `
 	-Description "Bad adapter test rule description" `
-	@Logs | Format-Output @Logs
+	@Logs -ErrorAction SilentlyContinue | Format-Output @Logs
 
 Update-Log
 Exit-Test

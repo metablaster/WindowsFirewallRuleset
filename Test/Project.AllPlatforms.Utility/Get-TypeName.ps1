@@ -72,10 +72,10 @@ Get-Process | Get-TypeName @Logs
 
 Start-Test "Get-TypeName (no input)"
 # TODO: ErrorAction not working
-Get-TypeName (Test-NoReturn) @Logs # -ErrorAction Ignore
+Get-TypeName (Test-NoReturn) @Logs # -ErrorAction SilentlyContinue
 
 Start-Test "Get-TypeName (no pipeline input)"
-Test-NoReturn | Get-TypeName -ErrorAction Ignore @Logs
+Test-NoReturn | Get-TypeName -ErrorAction SilentlyContinue @Logs
 
 Update-Log
 Exit-Test

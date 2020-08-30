@@ -54,7 +54,7 @@ Start-Test "Get-UserGroup CIM server"
 Get-UserGroup -CIM @Logs
 
 Start-Test "Failure test"
-Get-UserGroup "ZOMBI_PC" -ErrorAction Ignore @Logs
+Get-UserGroup "ZOMBI_PC" -ErrorAction SilentlyContinue @Logs
 
 Start-Test "Get-TypeName"
 Get-UserGroup "localhost" -CIM @Logs | Get-TypeName @Logs
