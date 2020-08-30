@@ -201,8 +201,16 @@ function Export-FirewallRules
 	$FirewallRuleSet = @()
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Iterating rules"
 
+	# Counter for progress
+	[int32] $RuleCount = 0
+
 	foreach ($Rule In $FirewallRules)
 	{
+		# TODO: -Status to be consistent (to not repeat multiple times) we need to sort rules
+		Write-Progress -Activity "Exporting firewall rules" -PercentComplete (++$RuleCount / $FirewallRules.Length * 100) `
+			-CurrentOperation $Rule.DisplayName -Status $Rule.Group `
+			-SecondsRemaining (($FirewallRules.Length - $RuleCount + 1) / 10 * 60)
+
 		# iterate through rules
 		if ($Rule.Group -like "")
 		{

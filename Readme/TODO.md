@@ -88,9 +88,6 @@ todo's in this file are categorized into following sections:
 
 4. Test and debugging
 
-    - Some tests fail to run in non "develop" mode due to missing variables
-    - Installation variables must be empty in development mode only to be able to test program
-    search functions, for release providing a path is needed to prevent "fix" info messages
     - For Write-Debug $PSBoundParameters.Values check if it's in process block or begin block,
     make sure wanted parameters are shown, make sure values are visible instead of object name
     - We should use try/catch in test scripts to avoid writing errors and write information instead,
@@ -109,6 +106,8 @@ todo's in this file are categorized into following sections:
     - Most program query functions return multiple program instances,
     need to select latest or add multiple rules.
     - Module functions and rules for OneDrive have partial fix, needs design improvements
+    - Installation variables must be empty in development mode only to be able to test program
+    search functions, for release providing a path is needed to prevent "fix" info messages
 
 7. Other
 
@@ -181,6 +180,7 @@ todo's in this file are categorized into following sections:
     see get-usergroup test for example
     - A lot of pester tests from NET.IP module require private function export, make sure the rest
     of a module works fine without these private exports
+    - there is no test for Get-Permutation in Indented.NET.IP
 
 5. Code style
 
@@ -289,3 +289,4 @@ todo's in this file are categorized into following sections:
 4. Testing and debugging
 
     - Need global test variable to set up valid Windows username which is performing tests
+    - Some tests fail to run in non "develop" mode due to missing variables

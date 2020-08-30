@@ -126,9 +126,17 @@ function Import-FirewallRules
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Iterating rules"
 
+	# Counter for progress
+	[int32] $RuleCount = 0
+
 	# iterate rules
 	foreach ($Rule In $FirewallRules)
 	{
+		# TODO: -SecondsRemaining needs to be updated after precise speed test
+		Write-Progress -Activity "Importing firewall rules" -PercentComplete (++$RuleCount / $FirewallRules.Length * 100) `
+			-CurrentOperation $Rule.DisplayName -Status $Rule.Group `
+			-SecondsRemaining (($FirewallRules.Length - $RuleCount + 1) / 26 * 60)
+
 		# generate Hashtable for New-NetFirewallRule parameters
 		$RuleSplatHash = @{
 			Name = $Rule.Name
