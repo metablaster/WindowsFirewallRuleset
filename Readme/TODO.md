@@ -179,6 +179,8 @@ todo's in this file are categorized into following sections:
     - Test everything on preview Windows
     - Some test outputs will be messed up, ex. some output might be shown prematurely,
     see get-usergroup test for example
+    - A lot of pester tests from NET.IP module require private function export, make sure the rest
+    of a module works fine without these private exports
 
 5. Code style
 

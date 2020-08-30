@@ -53,6 +53,13 @@ param (
 	[bool] $UseExisting
 )
 
+if ((Get-Variable -Name Develop -Scope Global).Value -eq $false)
+{
+	Write-Error -Category NotEnabled -TargetObject "Variable 'Develop'" `
+		-Message "This unit test is enabled only when 'Develop' is set to $true"
+	return
+}
+
 if (-not $UseExisting)
 {
 	$moduleBase = $psscriptroot.Substring(0, $psscriptroot.IndexOf("\Test"))

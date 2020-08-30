@@ -168,7 +168,7 @@ function Import-FirewallRules
 			$LoginName = (ConvertFrom-SID $Rule.Owner).Name
 
 			# For rule owner "Any" refers to any owner
-			# TODO: for store apps owner must be explicit? see specific rules that apply to all store appps
+			# TODO: for store apps owner must be explicit? see specific rules that apply to all store apps
 			if ([string]::IsNullOrEmpty($LoginName) -or ($Rule.Package -ne "Any"))
 			{
 				Write-Warning -Message "Importing rule '$($Rule.Displayname)' skipped, store app owner does not exist"

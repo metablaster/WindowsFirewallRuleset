@@ -37,7 +37,6 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 # setup on multiple computers and virtual operating systems, in cases such as frequent system restores
 # for the purpose of testing project code for many environment scenarios that end users may have.
 
-# TODO: repository paths whitelist check, using foreach not safe
 # TODO: should process must be implemented for system changes
 # if (!$PSCmdlet.ShouldProcess("ModuleName", "Update or install module if needed"))
 # SupportsShouldProcess = $true, ConfirmImpact = 'High'
@@ -56,8 +55,6 @@ foreach ($Script in $PrivateScripts)
 	Write-Debug -Message "[$ThisModule] Importing script: $Script.ps1"
 	. ("{0}\Private\{1}.ps1" -f $PSScriptRoot, $Script)
 }
-
-# TODO: more code separation needed in most scripts
 
 $PublicScripts = @(
 	"Initialize-Project"
