@@ -53,7 +53,9 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # League of Legends installation directories
 #
-$LoLRoot = "%ProgramFiles(x86)%\Riot Games"
+# NOTE: The path should be ""%ProgramFiles(x86)%\Riot Games" but root to game is added,
+# for consistency with Find-Installation, see todo below for info
+$LoLRoot = "%ProgramFiles(x86)%\Riot Games\League of Legends"
 
 #
 # Rules for League of Legends
