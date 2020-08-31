@@ -130,13 +130,13 @@ Alternative way to reset network is by using "Settings" app in Windows 10 as fol
 
 Make sure your system and drivers are fully up to date:
 
-* See below link on how to update system:
+- See below link on how to update system:
 [Update Windows 10](https://support.microsoft.com/en-us/help/4027667/windows-10-update)
 
 It's good to continue checking for updates after they are installed, until there is no new updates,
 it's not bad to reboot system after update even if not asked to do so.
 
-* To update drivers make sure you download them from either Microsoft or official manufacturer for
+- To update drivers make sure you download them from either Microsoft or official manufacturer for
 your hardware.
 
 Never user driver updater tools or similar automated solutions.
@@ -183,7 +183,7 @@ If nothing so far worked disable firewall and try all over again.\
 If things start to work it's likely misconfigured firewall.
 
 See below link on how to disable both GPO and Control Panel firewall:\
-[Disable Firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/DisableFirewall.md)
+[Disable Firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/DisableFirewall.md)
 
 **NOTE:** If you experience this problem only while having firewall enabled from this project,
 feel free to open new issue and provide as much details (results) as possible from this document.
@@ -279,10 +279,10 @@ Depending on your adapter, here are links that help explain the meaning of adapt
 
 **NOTE:** This settings are universal, not always limited to specific hardware vendor:
 
-* [Advanced Intel Wireless Adapter Settings](https://www.intel.com/content/www/us/en/support/articles/000005585/network-and-i-o/wireless.html)
-* [ADVANCED NETWORK ADAPTER DRIVER SETTINGS](http://techgenix.com/advanced-network-adapter-driver-settings/)
-* [Resolving Issues with Energy Efficient Ethernet (EEE) or Green Ethernet](https://www.dell.com/support/article/en-hr/sln79684/resolving-issues-with-energy-efficient-ethernet-eee-or-green-ethernet?lang=en)
-* [Optimal setting for advanced parameters for Realtek PCI-e GBE family network card](https://superuser.com/questions/853500/optimal-setting-for-advanced-parameters-for-realtek-pci-e-gbe-family-network-car)
+- [Advanced Intel Wireless Adapter Settings](https://www.intel.com/content/www/us/en/support/articles/000005585/network-and-i-o/wireless.html)
+- [ADVANCED NETWORK ADAPTER DRIVER SETTINGS](http://techgenix.com/advanced-network-adapter-driver-settings/)
+- [Resolving Issues with Energy Efficient Ethernet (EEE) or Green Ethernet](https://www.dell.com/support/article/en-hr/sln79684/resolving-issues-with-energy-efficient-ethernet-eee-or-green-ethernet?lang=en)
+- [Optimal setting for advanced parameters for Realtek PCI-e GBE family network card](https://superuser.com/questions/853500/optimal-setting-for-advanced-parameters-for-realtek-pci-e-gbe-family-network-car)
 
 ## Configure your router
 
@@ -298,10 +298,10 @@ and similar then you must make sure your router NAT settings are properly config
 
 Log in to your router and find "NAT" settings, possible options are:
 
-* Full Cone NAT (Static NAT)
-* Restricted Cone NAT (Dynamic NAT)
-* Port Restricted Cone NAT (Dynamic NAT)
-* Symmetric NAT (Dynamic NAT)
+- Full Cone NAT (Static NAT)
+- Restricted Cone NAT (Dynamic NAT)
+- Port Restricted Cone NAT (Dynamic NAT)
+- Symmetric NAT (Dynamic NAT)
 
 For gaming your want "Full Cone NAT (Static NAT)"\
 remember, "Symmetric NAT (Dynamic NAT)" will cause you a lot of multiplayer troubles.
@@ -310,13 +310,13 @@ remember, "Symmetric NAT (Dynamic NAT)" will cause you a lot of multiplayer trou
 
 Below link contains detailed guidelines:
 
-[LAN Setup](https://github.com/metablaster/WindowsFirewallRuleset/tree/develop/Readme/LAN%20Setup)
+[LAN Setup](https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Readme/LAN%20Setup)
 
 ## Reset firewall
 
 Below link explains how to reset both GPO firewall and firewall in control panel:
 
-[Reset Firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/ResetFirewall.md)
+[Reset Firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/ResetFirewall.md)
 
 ## Run network troubleshooter
 
@@ -360,9 +360,9 @@ If any lines doesn't begin with hash, then either add hash to those lines or del
 
 To troubleshoot firewall take a look at:
 
-* [Monitoring firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/MonitoringFirewall.md)
-* [Problematic traffic](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/ProblematicTraffic.md)
-* [Rest of documentation](https://github.com/metablaster/WindowsFirewallRuleset/tree/develop/Readme)
+- [Monitoring firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/MonitoringFirewall.md)
+- [Problematic traffic](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/ProblematicTraffic.md)
+- [Rest of documentation](https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Readme)
 
 ## Check for Windows Auto-Tuning
 

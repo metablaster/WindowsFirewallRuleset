@@ -129,7 +129,7 @@ Copyright (C) 2020 metablaster zebal@protonmail.ch
 			Tags = @("Firewall", "Export", "Import", "FirewallRule")
 
 			# A URL to the license for this module.
-			LicenseUri = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Modules/Project.Windows.Firewall/LICENSE"
+			LicenseUri = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Modules/Project.Windows.Firewall/LICENSE"
 
 			# A URL to the main website for this project.
 			ProjectUri = "https://github.com/metablaster/WindowsFirewallRuleset"

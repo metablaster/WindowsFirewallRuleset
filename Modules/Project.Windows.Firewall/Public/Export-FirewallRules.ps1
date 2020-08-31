@@ -39,7 +39,7 @@ If the export file already exists it's content will be replaced by default.
 .PARAMETER PolicyStore
 Policy store from which to export rules, default is local GPO.
 For more information about stores see:
-https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/FirewallParameters.md
 .PARAMETER DisplayName
 Display name of the rules to be processed. Wildcard character * is allowed.
 .PARAMETER DisplayGroup
@@ -89,6 +89,7 @@ Changes by metablaster - August 2020:
 8. Added parameter to export according to rule group
 9. Changed minor flow and logic of execution
 10. Make output formatted and colored
+11. Added progress bar
 TODO: export to excel
 #>
 function Export-FirewallRules

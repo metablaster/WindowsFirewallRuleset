@@ -11,7 +11,7 @@
   - [Core benefits of this firewall project](#core-benefits-of-this-firewall-project)
   - [License](#license)
   - [Requirements](#requirements)
-  - [I don't meet requirements](#i-dont-meet-requirements)
+  - [I don't meet the requirements](#i-dont-meet-the-requirements)
   - [First time user](#first-time-user)
     - [Warning](#warning)
     - [Note](#note)
@@ -19,6 +19,7 @@
   - [Where are my rules](#where-are-my-rules)
   - [Applying individual rulesets](#applying-individual-rulesets)
   - [Deleting rules](#deleting-rules)
+  - [Export/Import rules](#exportimport-rules)
   - [Manage loaded rules](#manage-loaded-rules)
   - [Checking for updates](#checking-for-updates)
   - [Contributing or suggestions](#contributing-or-suggestions)
@@ -121,7 +122,7 @@ The list of other untested but supported systems is in [The future](#the-future)
 - PowerShell "Core" is not built into Windows, you will need to install it separately (recommended)
 or use [Windows PowerShell](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/WindowsPowerShell.md)
 which is already installed.
-- .NET Framework version 4.8 is required if you'll be using Windows PowerShell (Desktop edition)
+- .NET Framework version 4.8 is required if using Windows PowerShell (Desktop edition)
 instead of PowerShell Core
 - You might want to have git to check out for updates,
 to easily switch between branches or to contribute code.
@@ -130,7 +131,7 @@ needs or contribution.
 - If you get VSCode, you'll also need powershell extension for code navigation and
 PowerShell specific features.
 
-## I don't meet requirements
+## I don't meet the requirements
 
 At the moment this project is tested and designed for most recent Windows Desktop/Servers and that
 is known to work, making use of it on older systems requires additional work.
@@ -160,7 +161,7 @@ group name interfere with group names from this ruleset, however
 **this does not apply to** `Scripts\ResetFirewall.ps1` which will clear GPO rules completely
 and leave only those in control panel.
 - If you want to be 100% sure please export your current GPO rules first, to do so either run
-`Scripts\ExportFirewall.ps1` which may take some time or do it manually.
+`Scripts\ExportFirewall.ps1` which may take some time or do it manually.\
 For manual export see [ManageGPOFirewall.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/ManageGPOFirewall.md)
 - The scripts will ask you what rules you want, to minimize internet connectivity trouble you should
 apply at least all generic networking and OS related rules such as BasicNetworking, ICMP,
@@ -284,14 +285,14 @@ some rules, rules for programs which don't exist need to be made additionally.
 16. If you're unable to connect to internet after applying these rules you have several options:
 
 - It is recommended that you reboot system first because some rules might not be active yet
-- you can temporarily open outbound firewall in GPO or [Disable firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/DisableFirewall.md)
-- you can troubleshoot problems: [Network troubleshooting detailed guide](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/NetworkTroubleshooting.md)
-- you can [Reset Firewall to previous state](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/ResetFirewall.md)
+- you can temporarily open outbound firewall in GPO or [Disable firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/DisableFirewall.md)
+- you can troubleshoot problems: [Network troubleshooting detailed guide](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/NetworkTroubleshooting.md)
+- you can [Reset Firewall to previous state](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/ResetFirewall.md)
 - take a look into `Readme` folder for more troubleshooting options and documentation
 
 ## Where are my rules
 
-Rules are loaded into Local group policy, follow below steps to open local group policy.
+Rules are loaded into local group policy, follow below steps to open local group policy.
 
 1. Press Windows key and type: `secpol.msc`
 2. Right click on `secpol.msc` and click `Run as administrator`
@@ -311,8 +312,8 @@ and hit enter to skip current ruleset.
 2. Inside powershell navigate to folder containing the ruleset script you want,
 and execute individual PowerShell script.
 
-3. You might want to run `Scripts\SetupProfile.ps1` afterwards to apply default firewall behavior if it's
-not set already, or you can do it manually in GPO but with limited power.
+3. You might want to run `Scripts\SetupProfile.ps1` afterwards to apply default firewall behavior if
+it's not set already, or you can do it manually in GPO but with limited power.
 "limited power" means `Scripts\SetupProfile.ps1` configures some firewall parameters which can't be
 adjusted in firewall GUI.
 
@@ -322,17 +323,41 @@ into Local Group Policy.
 
 ## Deleting rules
 
-At the moment the easiest way is to select all the rules you want to delete in Local Group Policy,
+At the moment there are 3 options to delete firewall rules:
+
+1. The easiest way is to select all the rules you want to delete in Local Group Policy,
 right click and delete.
 
-To revert to your old firewall state (the one in control panel), you will need to delete all the
+2. To delete rules according to file there is a function for this purpose, located in:\
+`Modules\Project.Windows.Firewall\Public\Remove-FirewallRules.ps1`\
+however you're advised to perform some tests before using it due to it's
+experimental state.
+
+1. To revert to your old firewall state (the one in control panel), you will need to delete all the
 rules from GPO,\
 and set all properties to `"Not configured"` when right clicking on node:\
 `Windows Defender Firewall with Advanced Security - Local Group Policy Object`
 
-Deleting all rules or revetting to previous state can also be done with `Scripts\ResetFirewall.ps1` script.
+    Deleting all rules or revetting to previous state can also be done with
+    `Scripts\ResetFirewall.ps1` script.
 
-Note that you will also need to re-import your exported GPO rules if you had them.
+    Note that you will also need to re-import your exported GPO rules if you had them.
+
+## Export/Import rules
+
+If you want to export rules from GPO there are 2 methods available:
+
+1. Export in local group policy by clicking on `Export Policy...` menu, after right clicking on node:\
+`Windows Defender Firewall with Advanced Security - Local Group Policy Object`
+
+2. To export using PowerShell run `Scripts\ExportFirewall.ps1` which is much slower process but
+unlike method from point 1 you can customize your export in almost any way you want.
+
+If you want to import rules, importing by using GPO is same as for export, and to import with
+PowerShell just run `Scripts\ImportFirewall.ps1`
+
+To customize your export/import please take a look into `Modules\Project.Windows.Firewall\Public`,
+which is where you'll find description on how to use export\import PowerShell functions.
 
 ## Manage loaded rules
 

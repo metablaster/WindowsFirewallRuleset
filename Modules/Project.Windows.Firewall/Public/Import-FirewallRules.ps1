@@ -37,7 +37,7 @@ Existing rules with same name will be overwritten.
 .PARAMETER PolicyStore
 Policy store into which to import rules, default is local GPO.
 For more information about stores see:
-https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/FirewallParameters.md
 .PARAMETER Folder
 Path to directory where exported rules file is located
 .PARAMETER FileName
@@ -58,6 +58,7 @@ Changes by metablaster - August 2020:
 6. Added more output streams for debug, verbose and info
 7. Changed minor flow and logic of execution
 8. Make output formatted and colored
+9. Added progress bar
 .EXAMPLE
 Import-FirewallRules
 Imports all firewall rules in the CSV file FirewallRules.csv

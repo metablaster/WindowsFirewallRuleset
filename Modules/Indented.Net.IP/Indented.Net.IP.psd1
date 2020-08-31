@@ -184,7 +184,7 @@
 			# IconUri = ''
 
 			# ReleaseNotes of this module
-			# ReleaseNotes = ''
+			ReleaseNotes = 'https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Modules/Indented.Net.IP'
 
 			# Flag to indicate whether the module requires explicit user acceptance for install, update, or save.
 			RequireLicenseAcceptance = $false

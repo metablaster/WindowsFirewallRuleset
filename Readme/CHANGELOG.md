@@ -7,14 +7,14 @@ Here is a list of changes for each of the releases
 
 - [Changelog](#changelog)
   - [Table of contents](#table-of-contents)
-  - [v0.6.0 (develop branch)](#v060-develop-branch)
-  - [v0.5.0 (current release)](#v050-current-release)
+  - [v0.6.0 (current release)](#v060-current-release)
+  - [v0.5.0](#v050)
   - [v0.4.1](#v041)
   - [v0.4.0](#v040)
   - [v0.3.0](#v030)
   - [v0.2](#v02)
 
-## v0.6.0 (develop branch)
+## v0.6.0 (current release)
 
 - New features
 
@@ -39,8 +39,8 @@ Here is a list of changes for each of the releases
 
 - Documentation
 
-  - Added steps to [disable firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/DisableFirewall.md)
-  - Added steps for [general network troubleshooting](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/NetworkTroubleshooting.md)
+  - Added steps to [disable firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/DisableFirewall.md)
+  - Added steps for [general network troubleshooting](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/NetworkTroubleshooting.md)
   - Documentation updated, spellchecked and formatted in full
 
 - Modules
@@ -54,7 +54,7 @@ Here is a list of changes for each of the releases
   - Added function to convert to or query system SKU
   - Several minor module code changes
 
-## v0.5.0 (current release)
+## v0.5.0
 
 - Modules
 
