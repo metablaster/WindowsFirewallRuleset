@@ -106,7 +106,7 @@ The project maintains **"per file"** license and Copyright notices.
    - Windows Server 2019 Standard
 2. PowerShell Core 7.0 or Windows PowerShell 5.1
 [Download PowerShell](https://github.com/PowerShell/PowerShell)
-3. .NET Framework 4.5 (Windows PowerShell only) [Download Net Framework](https://dotnet.microsoft.com/download/dotnet-framework)
+3. .NET Framework 4.8 (Windows PowerShell only) [Download Net Framework](https://dotnet.microsoft.com/download/dotnet-framework)
 4. Git (Optional) [Download Git](https://git-scm.com/downloads)
 5. Visual Studio Code (Recommended) [Download VSCode](https://code.visualstudio.com)
 6. PowerShell Support for VSCode (Recommended)
@@ -121,6 +121,8 @@ The list of other untested but supported systems is in [The future](#the-future)
 - PowerShell "Core" is not built into Windows, you will need to install it separately (recommended)
 or use [Windows PowerShell](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/WindowsPowerShell.md)
 which is already installed.
+- .NET Framework version 4.8 is required if you'll be using Windows PowerShell (Desktop edition)
+instead of PowerShell Core
 - You might want to have git to check out for updates,
 to easily switch between branches or to contribute code.
 - VS Code is preferred and recommended editor to navigate project and edit scripts for your
@@ -144,6 +146,8 @@ describes how to make use of this project on older Windows systems such as Windo
 
 ## First time user
 
+Following are short warnings and notices first time user should be aware of
+
 ### Warning
 
 - You might loose internet connectivity for some of your programs or in rare cases even lose internet
@@ -155,8 +159,9 @@ if for some reason you're unable to run the script, or the script doesn't solve 
 group name interfere with group names from this ruleset, however
 **this does not apply to** `Scripts\ResetFirewall.ps1` which will clear GPO rules completely
 and leave only those in control panel.
-- If you want to be 100% sure please export your current GPO rules first, for more info see
-[ManageGPOFirewall.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/ManageGPOFirewall.md)
+- If you want to be 100% sure please export your current GPO rules first, to do so either run
+`Scripts\ExportFirewall.ps1` which may take some time or do it manually.
+For manual export see [ManageGPOFirewall.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/ManageGPOFirewall.md)
 - The scripts will ask you what rules you want, to minimize internet connectivity trouble you should
 apply at least all generic networking and OS related rules such as BasicNetworking, ICMP,
 WindowsSystem, WindowsServices, Multicast etc. also do not ignore IPv6, Windows does need IPv6!
@@ -180,9 +185,9 @@ contains rules will be significantly slower (depends on number of existing rules
 if you want to fix some problem.
 - Any rule that results in "Access denied" while loading should be reloaded by executing specific
 script again.
-- If project was manually downloaded, transferred from another computer or media then you should
+- If the project was manually downloaded, transferred from another computer or media then you should\
 [unblock all files](https://devblogs.microsoft.com/scripting/easily-unblock-all-files-in-a-directory-using-powershell/)
-in project first to avoid YES/NO spam questions for every executing script, by using
+in project first to avoid YES/NO spam questions for every executing script, by running
 `Scripts\UnblockProject.ps1` script.\
 Master script `Scripts\SetupFirewall.ps1` does this in case if you forget, but initial YES/NO spam questions
 will still be visible in that case.
@@ -200,12 +205,12 @@ needed to update firewall for system changes that may happen at any time.
 1. If you don't have ssh keys and other setup required to clone via SSH then either clone with HTTPS
 or just download the released zip file by clicking on "Release" here on this site.\
 These steps assume you have downloaded a zip file.
-2. Extract the archive somewhere, these steps assume you've extracted the zip into
-`C:\` root drive directly.
+2. Extract the archive somewhere, these steps assume you've extracted the zip (project root directory)
+into `C:\` root drive directly.
 3. Open the extracted folder, right click into an empty space and there is an option to run
 PowerShell Core as Administrator
-(Assumes you enabled context menu during installation of PowerShell Core)
-4. If you would like to use Windows PowerShell 5.1 instead see
+(Assumes you enabled context menu during installation of PowerShell Core) if not open it manually.
+4. If you would like to use Windows PowerShell 5.1 instead of PowerShell Core see
 [How to open Windows PowerShell](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/WindowsPowerShell.md)
 5. Type or copy/paste following commands and hit enter for each
 
@@ -222,13 +227,15 @@ PowerShell Core as Administrator
     Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
     ```
 
-7. Move to C root drive, this is where you extracted your downloaded zip file:
+7. Now if you don't have PowerShell context menu then move to C root drive,
+this is where you extracted your downloaded zip file:
 
     ```powershell
     cd C:\
     ```
 
-8. cd into that folder, of course rename the command if your extracted folder is called something else:
+8. cd into downloaded folder, of course rename the command if your extracted folder is called something
+else:
 
     ```powershell
     cd WindowsFirewallRuleset-master
@@ -241,6 +248,8 @@ downloaded from internet:
     ```powershell
     .\Scripts\UnblockProject.ps1
     ```
+
+    Make sure your answer is `R` `[R] Run once` to run the script
 
 10. Rules for programs such as internet browser, Visual Studio etc. depend on installation variables.\
 Most paths are auto-searched and variables are updated, otherwise you get warning and description
@@ -356,7 +365,7 @@ download project.
 
 2. Second method is good if you want to do it in powershell console without visiting this site,
 you will need [git](https://git-scm.com/downloads), [github account](https://github.com/join),
-a [fork](https://guides.github.com/activities/forking) of this repository in your account and
+a [fork](https://guides.github.com/activities/forking) of this repository in your github account and
 [SSH key](https://help.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account)
 to check for new updates on daily, weekly or what ever other basis you want,
 follow below steps to check for updates once you installed git and cloned your own fork:
@@ -414,7 +423,7 @@ that these rules don't contain mistakes, for example, for ICMP rules you would p
 but you can't push an update here, please open new issue here on github and provide details
 preferably with documentation.
 3. To contribute rules, it is also important that each rule contains good description of it's
-purpose, when a user clicks on a rule in firewall GUI he wants to see what this rule is about and
+purpose, when a user clicks on a rule in firewall GUI he/she wants to see what this rule is about and
 easily conclude whether to enable/disable the rule or allow/block the traffic.
 4. It is also important that a rule is very specific and not generic, that means specifying protocol,
 IP addresses, ports, system user, interface type and other relevant information.\
@@ -449,7 +458,6 @@ Following features are desired and might be available at some point in the futur
 4. Full functionality for the following editions of Windows 10.0+
    - Windows 10 Pro for Workstations
    - Windows 10 Pro Education
-   - Windows 10 Enterprise
    - Windows 10 Education
    - Windows 10 IoT Core Blast
    - Windows 10 IoT Enterprise

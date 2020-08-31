@@ -47,8 +47,9 @@ TODO: We should probably unblock only scripts, not all files.
 #>
 function Unblock-Project
 {
-	Write-Information -Tags "User" -MessageData "INFO: Unblocking project scripts"
+	Write-Information -Tags "User" -MessageData "INFO: Unblocking project files"
 	Get-ChildItem $ProjectRoot -Recurse | Unblock-File
+	Write-Information -Tags "User" -MessageData "INFO: Project files have been unblocked"
 }
 
 Unblock-Project

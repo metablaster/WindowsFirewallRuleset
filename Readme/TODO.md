@@ -51,10 +51,11 @@ todo's in this file are categorized into following sections:
     - ProjectSettings.ps1 restore variables: UnitTester, UnitTesterAdmin, DefaultUser
     - ProjectSettings.ps1 verify auto updated variables: ProjectCheck, ModulesCheck, ServicesCheck
     - Increment project version in all places mentioning version
+    - Run script analyzer
     - Run all tests in both release and develop mode, both Desktop and Core editions
     - Load rules on all target OS editions
-    - Verify links to repository are pointing to master branch except if develop branch is wanted
-    - Run script analyzer
+    - Verify links to repository are pointing to master branch except if develop branch is wanted,
+    this should be done after merge to master, and links should be then tested on master branch
 
 ## High priority
 
@@ -239,6 +240,7 @@ todo's in this file are categorized into following sections:
     (ex. doing something $Variable v$Version instead of doing $Variable $Version),
     also same convention regarding variable value quoting with '' single quotes
     - Write a script to add context menus for Windows PowerShell
+    - Need variables that would avoid prompts and set up firewall with minimum user intervention
 
 3. Rules
 
