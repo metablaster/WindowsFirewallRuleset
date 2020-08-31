@@ -33,7 +33,7 @@ Few additional references regarding open source worth reading:\
 [Painless Bug Tracking](https://www.joelonsoftware.com/2000/11/08/painless-bug-tracking)
 
 And references for tools used by this project:\
-[PowerShell documentation](https://docs.microsoft.com/en-us/powershell/scripting/how-to-use-docs?view=powershell-7.1)
+[PowerShell documentation](https://docs.microsoft.com/en-us/powershell/scripting/how-to-use-docs?view=powershell-7.1)\
 [Visual Studio Code](https://code.visualstudio.com/docs)
 
 ## Environment setup
@@ -50,7 +50,7 @@ project root folder
 6. Many other minor workspace settings to improve coding experience
 
 To be able to open Windows PowerShell quickly in any folder see
-[Right click "Open PowerShell here" context menu](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/WindowsPowerShell.md)
+[Right click "Open PowerShell here" context menu](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/WindowsPowerShell.md#right-click-open-windows-powershell-here-context-menu)
 
 Recommended extensions in workspace are as follows:
 
@@ -107,6 +107,7 @@ before doing anything else:
 5. ErrorLogging
 6. WarningLogging
 
+Note that some of these may be auto adjusted after setting `Develop` to `$true`\
 Then restart PowerShell and run `.\SetupFirewall.ps1` to apply firewall, or at least run
 `Initialize-Project` function which will prompt you to perform recommended and required checks.
 
@@ -324,5 +325,5 @@ described here, significant portion of code was written before this "CONTRIBUTIN
 So it's an ongoing effort that by no means gets fulfilled.
 
 I recommend you start at looking into [TODO](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/TODO.md)
-list and also use "TODO tree" extension to see even more todo's, unless you have specific ideas or
+list and also use "todo-tree" extension to see even more todo's, unless you have specific ideas or
 recommendations.

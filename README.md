@@ -23,6 +23,7 @@
   - [Manage loaded rules](#manage-loaded-rules)
   - [Checking for updates](#checking-for-updates)
   - [Contributing or suggestions](#contributing-or-suggestions)
+  - [Customization](#customization)
   - [More information and help](#more-information-and-help)
   - [The future](#the-future)
 
@@ -211,7 +212,7 @@ into `C:\` root drive directly.
 3. Open the extracted folder, right click into an empty space and there is an option to run
 PowerShell Core as Administrator
 (Assumes you enabled context menu during installation of PowerShell Core) if not open it manually.
-4. If you would like to use Windows PowerShell 5.1 instead of PowerShell Core see
+4. If you would like to use Windows PowerShell 5.1 instead of PowerShell Core see:\
 [How to open Windows PowerShell](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/WindowsPowerShell.md)
 5. Type or copy/paste following commands and hit enter for each
 
@@ -228,10 +229,11 @@ PowerShell Core as Administrator
     Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
     ```
 
-7. Now if you don't have PowerShell context menu then move to C root drive,
-this is where you extracted your downloaded zip file:
+7. Now if you don't have PowerShell context menu then move to C root drive by executing following 2
+lines, this is where you extracted your downloaded zip file:
 
     ```powershell
+    c:
     cd C:\
     ```
 
@@ -250,7 +252,7 @@ downloaded from internet:
     .\Scripts\UnblockProject.ps1
     ```
 
-    Make sure your answer is `R` `[R] Run once` to run the script
+    Make sure your answer is `R` that is `[R] Run once` as many time as needed to run the script
 
 10. Rules for programs such as internet browser, Visual Studio etc. depend on installation variables.\
 Most paths are auto-searched and variables are updated, otherwise you get warning and description
@@ -282,7 +284,8 @@ or update script that produced the error and re-run that script once again later
 not all the rules are enabled by default and you might want to toggle default Allow/Block behavior for
 some rules, rules for programs which don't exist need to be made additionally.
 
-16. If you're unable to connect to internet after applying these rules you have several options:
+16. Now go ahead and test your internet connection (ex. with browser or some other program),
+If you're unable to connect to internet after applying these rules you have several options:
 
 - It is recommended that you reboot system first because some rules might not be active yet
 - you can temporarily open outbound firewall in GPO or [Disable firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/DisableFirewall.md)
@@ -317,7 +320,7 @@ it's not set already, or you can do it manually in GPO but with limited power.
 "limited power" means `Scripts\SetupProfile.ps1` configures some firewall parameters which can't be
 adjusted in firewall GUI.
 
-In both cases the script will delete all of the existing rules that match the rule group (if any),
+In all 3 cases the script will delete all of the existing rules that match the rule group (if any),
 and load the rules from script
 into Local Group Policy.
 
@@ -435,7 +438,7 @@ That's it, your scripts are now up to date, execute them as you desire (or follo
 
 Below are general notes for requesting to add your rules or ideas about rules to project.\
 If you would like to contribute by writing scripts you should read
-[CONTRIBUTING.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/CONTRIBUTING.md)
+[CONTRIBUTING.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/CONTRIBUTING.md)
 instead.
 
 Feel free to suggest or contribute new rules, or improvements for existing rules or scripts.\
@@ -454,6 +457,17 @@ easily conclude whether to enable/disable the rule or allow/block the traffic.
 IP addresses, ports, system user, interface type and other relevant information.\
 for example just saying: allow TCP outbound port 80 for any address or any user or no explanation
 what is this supposed to allow or block is not acceptable.
+
+## Customization
+
+If you would like to customize project code or add more firewall rules to suit your private or corporate
+interests then first step is to set up development environment and learn about project best practices
+all of which is explained in [CONTRIBUTING.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/CONTRIBUTING.md)
+
+Depending on your situation and target platform you might also want to read [Legacy Support](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/LegacySupport.md)
+
+These 2 documents are bare minimum to get you started customizing this repository, the rest can be
+found in `Readme` folder and by doing your own research.
 
 ## More information and help
 
