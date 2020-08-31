@@ -567,7 +567,7 @@ In order to target builds to your machine, we need to know a few important thing
 $USOAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM" @Logs
 Merge-SDDL ([ref] $USOAccounts) (Get-SDDL -Group "Users") @Logs
 
-# TODO: probably not available in Windows Server
+# TODO: Not available in Windows Server 2019
 $Program = "%SystemRoot%\System32\usocoreworker.exe"
 Test-File $Program @Logs
 

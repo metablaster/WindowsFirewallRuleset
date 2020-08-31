@@ -57,6 +57,6 @@ function Test-Service
 	if (!(Get-Service -Name $Service -ErrorAction Ignore))
 	{
 		Write-Warning -Message "Service '$Service' not found, rule won't have any effect"
-		Write-Information -Tags "User" -MessageData "INFO: To fix the problem update or comment out all firewall rules for '$Service' service"
+		Write-Information -Tags "User" -MessageData "INFO: To fix the problem, update or comment out all firewall rules for '$Service' service"
 	}
 }

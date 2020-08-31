@@ -125,6 +125,9 @@ if ($InboundCount -gt 0)
 Write-Information -Tags "User" -MessageData "INFO: Removing IPSec rules..." @Logs
 Remove-NetIPsecRule -All -PolicyStore $PolicyStore @Logs
 
+# Update Local Group Policy for changes to take effect
+gpupdate.exe
+
 Write-Information -Tags "User" -MessageData "INFO: Firewall reset is done!" @Logs
 Write-Information -Tags "User" -MessageData "INFO: If internet connectivity problem remains, please reboot system" @Logs
 

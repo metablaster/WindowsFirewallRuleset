@@ -32,7 +32,7 @@ SOFTWARE.
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 
 # First unblock all files
-& "$ProjectRoot\UnblockProject.ps1"
+& "$ProjectRoot\Scripts\UnblockProject.ps1"
 
 # Check requirements
 Initialize-Project
@@ -272,12 +272,11 @@ if (Approve-Execute "Yes" "Applying: Outbound IPv6 Rules" @Logs)
 	}
 }
 
-Write-Output ""
-
 # Set up global firewall setting, network and firewall profile
-& .\SetupProfile.ps1
+& "$ProjectRoot\Scripts\SetupProfile.ps1"
 
 # Update Local Group Policy for changes to take effect
+Write-Output ""
 gpupdate.exe
 
 if ($Develop)

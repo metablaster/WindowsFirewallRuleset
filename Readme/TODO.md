@@ -221,6 +221,8 @@ todo's in this file are categorized into following sections:
     PS> Get-Something
     Something output
     - User canceling operation should be displayed with warning instead of debug stream
+    - Function/Table with list of executables that don't exist on specific editions of Windows is
+    needed to prevent loading rules for such programs
 
 2. Project scripts
 
