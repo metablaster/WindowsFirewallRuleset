@@ -53,25 +53,59 @@ if (!(Approve-Execute @Logs)) { exit }
 # TODO: need to speed up rule import by at least 300%
 $StopWatch = [System.Diagnostics.Stopwatch]::new()
 
-$StopWatch.Start()
-# Import all outbound rules to GPO
-Import-FirewallRules -Folder "$ProjectRoot\Exports" -FileName "OutboundGPO" -PolicyStore $PolicyStore @Logs
-$StopWatch.Stop()
+$FilePath = "$ProjectRoot\Exports\OutboundGPO.csv"
+# TODO: file existence checks such as this one, there should be utility function for this
+if (!(Test-Path -Path $FilePath -PathType Leaf))
+{
+	Write-Error -Category ObjectNotFound -TargetObject $FilePath `
+		-Message "Cannot find path '$FilePath' because it does not exist"
+}
+else
+{
+	$StopWatch.Start()
+	# Import all outbound rules to GPO
+	Import-FirewallRules -Folder "$ProjectRoot\Exports" -FileName "OutboundGPO.csv" -PolicyStore $PolicyStore @Logs
+	$StopWatch.Stop()
 
-$OutboundMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
-Write-Information -Tags "User" -MessageData "INFO: Time needed to import outbound rules was: $OutboundMinutes minutes"
+	$OutboundMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
+	Write-Information -Tags "User" -MessageData "INFO: Time needed to import outbound rules was: $OutboundMinutes minutes"
+}
 
 $StopWatch.Reset()
-$StopWatch.Start()
-# Import all inbound rules from GPO
-Import-FirewallRules -Folder "$ProjectRoot\Exports" -FileName "InboundGPO" -PolicyStore $PolicyStore @Logs
-$StopWatch.Stop()
 
-$InboundMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
-Write-Information -Tags "User" -MessageData "INFO: Time needed to import inbound rules was: $InboundMinutes minutes"
+$FilePath = "$ProjectRoot\Exports\InboundGPO.csv"
+if (!(Test-Path -Path $FilePath -PathType Leaf))
+{
+	Write-Error -Category ObjectNotFound -TargetObject $FilePath `
+		-Message "Cannot find path '$FilePath' because it does not exist"
+}
+else
+{
+	$StopWatch.Start()
+	# Import all inbound rules from GPO
+	Import-FirewallRules -Folder "$ProjectRoot\Exports" -FileName "InboundGPO" -PolicyStore $PolicyStore @Logs
+	$StopWatch.Stop()
 
-# Update Local Group Policy for changes to take effect
-gpupdate.exe
+	$InboundMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
+	Write-Information -Tags "User" -MessageData "INFO: Time needed to import inbound rules was: $InboundMinutes minutes"
+}
 
-$TotalMinutes = $OutboundMinutes + $InboundMinutes
-Write-Information -Tags "User" -MessageData "INFO: Total time needed to import entry firewall was: $TotalMinutes minutes"
+if ((Get-Variable -Name OutboundMinutes -EA Ignore) -or (Get-Variable -Name InboundMinutes -EA Ignore))
+{
+	# Update Local Group Policy for changes to take effect
+	gpupdate.exe
+
+	$TotalMinutes = 0
+
+	if ($OutboundMinutes)
+	{
+		$TotalMinutes += $OutboundMinutes
+	}
+
+	if ($InboundMinutes)
+	{
+		$TotalMinutes += $InboundMinutes
+	}
+
+	Write-Information -Tags "User" -MessageData "INFO: Total time needed to import entry firewall was: $TotalMinutes minutes"
+}

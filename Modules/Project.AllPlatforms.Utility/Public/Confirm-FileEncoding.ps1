@@ -53,15 +53,30 @@ function Confirm-FileEncoding
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
 		[string[]] $FilePath,
 
-		# TODO: Windows PowerShell outputs as utf8 with BOM
 		[Parameter()]
 		[string[]] $Encoding = @("utf-8", "us-ascii")
 	)
 
+	begin
+	{
+		# TODO: Windows PowerShell outputs as utf8 with BOM
+		if ($PSVersionTable.PSEdition -eq "Desktop")
+		{
+			# NOTE: Until this issue is resolved adding "utf-8 with BOM" to whitelist
+			$Encoding += "utf-8 with BOM"
+		}
+	}
 	process
 	{
 		foreach ($File in $FilePath)
 		{
+			if (!(Test-Path -Path $File -PathType Leaf))
+			{
+				Write-Error -Category ObjectNotFound -TargetObject $FilePath `
+					-Message "Cannot find path '$File' because it does not exist"
+				return
+			}
+
 			$TargetEncoding = Get-FileEncoding $File
 			$FileName = Split-Path -Path $File -Leaf
 

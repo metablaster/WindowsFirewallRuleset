@@ -232,13 +232,14 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 
 	# Required minimum Windows PowerShell, do not decrement!
 	# NOTE: 5.1.14393.206 (system v1607) will not work, but 5.1.19041.1 (system v2004) works, verify with PSUseCompatibleCmdlets
-	# NOTE: replacing build 19041 (system v2004) with 18362 (system v1903) which is minimum required for rules and .NET
-	New-Variable -Name RequirePowerShellVersion -Scope Global -Option Constant -Value ([version]::new(5, 1, 18362))
+	# NOTE: replacing build 19041 (system v2004) with 17763 (system v1809) which is minimum required for rules and .NET
+	New-Variable -Name RequirePowerShellVersion -Scope Global -Option Constant -Value ([version]::new(5, 1, 17763))
 
-	# Required minimum operating system version (v1903)
+	# Required minimum operating system version (v1809)
+	# TODO: v1809 needs to be replaced with minimum v1903, downgraded here because of Server 2019
 	# https://docs.microsoft.com/en-us/windows/release-information
 	# https://docs.microsoft.com/en-us/windows-server/get-started/windows-server-release-info
-	New-Variable -Name RequireWindowsVersion -Scope Global -Option Constant -Value ([version]::new(10, 0, 18362))
+	New-Variable -Name RequireWindowsVersion -Scope Global -Option Constant -Value ([version]::new(10, 0, 17763))
 
 	# Required minimum .NET version, valid for the PowerShell Desktop edition only, do not decrement!
 	# https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/versions-and-dependencies
