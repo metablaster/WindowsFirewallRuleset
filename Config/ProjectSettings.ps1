@@ -49,7 +49,7 @@ Set-Variable -Name SettingsScript -Scope Local -Option ReadOnly -Value ($MyInvoc
 # 3. Performs additional requirements checks needed or recommended for development
 # 4. Enables some disabled unit tests and disables logging
 # 5. Enables setting preference variables for modules
-Set-Variable -Name Develop -Scope Global -Value $false
+Set-Variable -Name Develop -Scope Global -Value $true
 
 if ($Develop)
 {

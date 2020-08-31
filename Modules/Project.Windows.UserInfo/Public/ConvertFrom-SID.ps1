@@ -139,8 +139,10 @@ function ConvertFrom-SID
 				'^S-1-5-2$' { "Network" }
 				'^S-1-5-3$' { "Batch" }
 				'^S-1-5-4$' { "Interactive" }
-				# TODO: A logon session. The X and Y values for these SIDs are different for each session.
-				# S-1-5-5-X-Y
+				# NOTE: A logon session. The X and Y values for these SIDs are different for each session.
+				# NOTE: X-Y omitted (S-1-5-5-X-Y)
+				# TODO: Name not valid, only approximate info given
+				'^S-1-5-5-\d+-\d+$' { "UNKNOWN-LOGON-SESSION" }
 				'^S-1-5-6$' { "Service" }
 				'^S-1-5-7$' { "Anonymous" }
 				# Windows Server 2003 and later
@@ -153,23 +155,22 @@ function ConvertFrom-SID
 				'^S-1-5-13$' { "Terminal Server Users" }
 				'^S-1-5-14$' { "Remote Interactive Logon" }
 				# Windows Server 2003 and later
-				# TODO: "This Organization" duplicate
 				# NOTE: A group that includes all users from the same organization.
 				'^S-1-5-15$' { "This Organization" }
 				# All versions of Windows
 				# NOTE: An account that is used by the default Internet Information Services (IIS) user.
-				'^S-1-5-17$' { "This Organization" } # TODO: IUSR passes
+				'^S-1-5-17$' { "IUSR" } # NT AUTHORITY\IUSR (Name learned with PsGetsid64)
 				'^S-1-5-18$' { "System" } # Changed from "Local System"
 				'^S-1-5-19$' { "Local Service" } # Changed from "NT Authority"
 				'^S-1-5-20$' { "Network Service" } # Changed from "NT Authority"
-				# TODO: Unknown system and name
-				'^S-1-5-33$' { "WRITE_RESTRICTED_CODE" }
-				'^S-1-18-1$' { "AUTHENTICATION_AUTHORITY_ASSERTED_IDENTITY" }
-				'^S-1-18-2$' { "SERVICE_ASSERTED_IDENTITY" }
-				'^S-1-18-3$' { "FRESH_PUBLIC_KEY_IDENTITY" }
-				'^S-1-18-4$' { "KEY_TRUST_IDENTITY" }
-				'^S-1-18-5$' { "KEY_PROPERTY_MFA" }
-				'^S-1-18-6$' { "KEY_PROPERTY_ATTESTATION" }
+				# TODO: Unknown system (Names learned with PsGetsid64)
+				'^S-1-5-33$' { "WRITE RESTRICTED" } # NT AUTHORITY\WRITE RESTRICTED (WRITE_RESTRICTED_CODE)
+				'^S-1-18-1$' { "Authentication authority asserted identity" } # AUTHENTICATION_AUTHORITY_ASSERTED_IDENTITY
+				'^S-1-18-2$' { "Service asserted identity" } # SERVICE_ASSERTED_IDENTITY
+				'^S-1-18-3$' { "Fresh public key identity" } # FRESH_PUBLIC_KEY_IDENTITY
+				'^S-1-18-4$' { "Key trust identity" } # KEY_TRUST_IDENTITY
+				'^S-1-18-5$' { "Key property multi-factor authentication" } # KEY_PROPERTY_MFA
+				'^S-1-18-6$' { "Key property attestation" } # KEY_PROPERTY_ATTESTATION
 				# All versions of Windows
 				# NOTE: SID's in form of S-1-5-21-domain-xxx are "Domain" accounts/groups
 				# The <root-domain>, <domain> and <machine> identifiers all represent the three sub-authority values
@@ -231,8 +232,8 @@ function ConvertFrom-SID
 				'^S-1-5-32-578$' { "Hyper-V Administrators" }
 				'^S-1-5-32-579$' { "Access Control Assistance Operators" }
 				'^S-1-5-32-580$' { "Remote Management Users" }
-				# TODO: Unknown system and name
-				'^S-1-5-32-568$' { "IIS_IUSRS" }
+				# TODO: Unknown system
+				'^S-1-5-32-568$' { "IIS_IUSRS" } # Name confirmed with PsGetsid64
 				# All versions of Windows
 				'^S-1-5-64-10$' { "NTLM Authentication" }
 				'^S-1-5-64-14$' { "SChannel Authentication" }
@@ -245,14 +246,18 @@ function ConvertFrom-SID
 				# Windows Server 2008, Windows Vista and later
 				# NOTE: Added in Windows Vista and Windows Server 2008
 				'^S-1-5-80-0$' { "All Services" }
+				# TODO: unknown system for NT SERVICE\TrustedInstaller
+				# NOTE: following SID is not listed on well known SID list: (SID confirmed with PsGetsid64)
+				# NOTE: for NT SERVICE reference name is required, just display name won't be found
+				'^S-1-5-80-956008885-3418522649-1831038044-1853292631-2271478464$' { "NT SERVICE\TrustedInstaller" }
 				# Windows Server 2008 and later
 				'^S-1-5-83-0$' { "Virtual Machines" } # Removed "NT VIRTUAL MACHINE\"
 				'^S-1-5-90-0$' { "Windows Manager Group" } # Removed "Windows Manager\""
-				# TODO: Unknown system and name
-				'^S-1-5-84-0-0-0-0-0$' { "USER_MODE_DRIVERS" }
-				'^S-1-5-113$' { "Local account" }
-				'^S-1-5-114$' { "Local account and member of Administrators group" }
-				'^S-1-5-1000$' { "OTHER_ORGANIZATION" }
+				# TODO: Unknown system (Name confirmed with PsGetsid64)
+				'^S-1-5-84-0-0-0-0-0$' { "USER MODE DRIVERS" } # NT AUTHORITY\USER MODE DRIVERS (USER_MODE_DRIVERS)
+				'^S-1-5-113$' { "Local account" } # NT AUTHORITY\Local account
+				'^S-1-5-114$' { "Local account and member of Administrators group" } # NT AUTHORITY\Local account and member of Administrators group
+				'^S-1-5-1000$' { "Other Organization" } # NT AUTHORITY\Other Organization (OTHER_ORGANIZATION)
 				# Windows Server 2008 and later
 				'^S-1-16-0$' { "Untrusted Mandatory Level" }
 				'^S-1-16-4096$' { "Low Mandatory Level" }
@@ -262,29 +267,31 @@ function ConvertFrom-SID
 				'^S-1-16-16384$' { "System Mandatory Level" }
 				'^S-1-16-20480$' { "Protected Process Mandatory Level" }
 				'^S-1-16-28672$' { "Secure Process Mandatory Level" }
-				# TODO: Unknown system and name
-				'^S-1-5-21-0-0-0-496$' { "COMPOUNDED_AUTHENTICATION" }
-				'^S-1-5-21-0-0-0-497$' { "CLAIMS_VALID" }
+				# TODO: Unknown system (Name confirmed with PsGetsid64)
+				'^S-1-5-21-0-0-0-496$' { "Compound Identity Present" } # NT AUTHORITY\Compound Identity Present (COMPOUNDED_AUTHENTICATION)
+				'^S-1-5-21-0-0-0-497$' { "Claims Valid" } # NT AUTHORITY\Claims Valid (CLAIMS_VALID)
 				# Following SID is for application packages from second link
 				'^S-1-15-2-1$' { "All Application Packages" } # APPLICATION PACKAGE AUTHORITY\ALL APPLICATION PACKAGES
 				# Following SID is for application packages that is not listed on well known SID's
 				'^S-1-15-2-2$' { "All Restricted Application Packages" } # APPLICATION PACKAGE AUTHORITY\ALL RESTRICTED APPLICATION PACKAGES
-				# TODO: Following is a list for store apps from firewall GUI
-				# APPLICATION PACKAGE AUTHORITY\Your Internet connection
-				# APPLICATION PACKAGE AUTHORITY\Your Internet connection, including incoming connections
-				# APPLICATION PACKAGE AUTHORITY\Your home or work networks
-				# APPLICATION PACKAGE AUTHORITY\Your pictures library
-				# APPLICATION PACKAGE AUTHORITY\Your music library
-				# APPLICATION PACKAGE AUTHORITY\Your videos library
-				# APPLICATION PACKAGE AUTHORITY\Your documents library
-				# APPLICATION PACKAGE AUTHORITY\Your Windows credentials
-				# APPLICATION PACKAGE AUTHORITY\Software and hardware certificates or a smart card
-				# APPLICATION PACKAGE AUTHORITY\Removable storage
+				# Following list is mentioned in firewall GUI (SID's learned with PsGetsid64)
+				# From all of the below S-1-15-3- accounts the "APPLICATION PACKAGE AUTHORITY\" was removed
+				'^S-1-15-3-1$' { "Your Internet connection" }
+				'^S-1-15-3-2$' { "Your Internet connection, including incoming connections from the Internet" }
+				'^S-1-15-3-3$' { "Your home or work networks" }
+				'^S-1-15-3-4$' { "Your pictures library" }
+				'^S-1-15-3-5$' { "Your videos library" }
+				'^S-1-15-3-6$' { "Your music library" }
+				'^S-1-15-3-7$' { "Your documents library" }
+				'^S-1-15-3-8$' { "Your Windows credentials" }
+				'^S-1-15-3-9$' { "Software and hardware certificates or a smart card" }
+				'^S-1-15-3-10$' { "Removable storage" }
+				'^S-1-15-3-11$' { "Your Appointments" }
+				'^S-1-15-3-12$' { "Your Contacts" }
 				# TODO: More capability categories must exist (not listed on well known SID's list), see also:
 				# HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SecurityManager\CapabilityClasses\AllCachedCapabilities\capabilityClass_*
-				# TODO: following SID's are not listed on well known SID list, verification needed:
-				# TrustedInstaller
-				# '^S-1-5-22' = "Enterprise Read-Only Domain Controllers Beta"
+				# NOTE: following SID is not listed on well known SID list: (Name confirmed with PsGetsid64)
+				'^S-1-5-22' { "Enterprise Read-Only Domain Controllers Beta" } # NT AUTHORITY\ENTERPRISE READ-ONLY DOMAIN CONTROLLERS BETA
 				default
 				{
 					[string] $ResultName = ""

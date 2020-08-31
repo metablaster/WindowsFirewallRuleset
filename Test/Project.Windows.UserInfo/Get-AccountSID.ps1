@@ -71,7 +71,7 @@ $AccountSID1 | Get-TypeName @Logs
 # Test NT AUTHORITY
 #
 
-[string[]] $NTUsers = @("SYSTEM", "LOCAL SERVICE")
+[string[]] $NTUsers = @("SYSTEM", "LOCAL SERVICE", "USER MODE DRIVERS")
 [string] $NTDomain = "NT AUTHORITY"
 
 Start-Test "Get-AccountSID -Domain $NTDomain -User $NTUsers"
@@ -94,7 +94,7 @@ $AccountSID2 | Get-TypeName @Logs
 [string] $AppUser = "Your Internet connection"
 
 Start-Test "Get-AccountSID -Domain $AppDomain -User $AppUser"
-$AccountSID3 = Get-AccountSID -Domain $AppDomain -User $AppUser # @Logs
+$AccountSID3 = Get-AccountSID -Domain $AppDomain -User $AppUser @Logs
 $AccountSID3
 
 # NOTE: not valid

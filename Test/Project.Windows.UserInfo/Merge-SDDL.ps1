@@ -55,8 +55,8 @@ Start-Test "Get-SDDL -User $Users -Group $Groups -Domain $Domain"
 $TestUsersSDDL = Get-SDDL -User $Users -Group $Groups -Domain $Domain @Logs
 $TestUsersSDDL
 
-Start-Test "Get-SDDL -Domain 'NT AUTHORITY' -User 'SYSTEM', 'UserModeDrivers'"
-$NewSDDL = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "UserModeDrivers" @Logs
+Start-Test "Get-SDDL -Domain 'NT AUTHORITY' -User 'SYSTEM', 'USER MODE DRIVERS'"
+$NewSDDL = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "USER MODE DRIVERS" @Logs
 
 Start-Test "Merge-SDDL"
 Merge-SDDL ([ref] $TestUsersSDDL) $NewSDDL @Logs

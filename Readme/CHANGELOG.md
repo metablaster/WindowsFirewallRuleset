@@ -7,12 +7,17 @@ Here is a list of changes for each of the releases
 
 - [Changelog](#changelog)
   - [Table of contents](#table-of-contents)
+  - [v0.x.x (develop branch)](#v0xx-develop-branch)
   - [v0.6.0 (current release)](#v060-current-release)
   - [v0.5.0](#v050)
   - [v0.4.1](#v041)
   - [v0.4.0](#v040)
   - [v0.3.0](#v030)
   - [v0.2](#v02)
+
+## v0.x.x (develop branch)
+
+- No published changes
 
 ## v0.6.0 (current release)
 

@@ -46,8 +46,7 @@ Get-AccountSID @("USERNAME1", "USERNAME2") -CIM
 .OUTPUTS
 [string] SID's (security identifiers)
 .NOTES
-TODO: USER MODE DRIVERS SID not found
-CIM switch is not supported on PowerShell Core, meaning contacting remote computers
+TODO: CIM switch is not supported on PowerShell Core, meaning contacting remote computers
 is supported only on Windows PowerShell
 #>
 function Get-AccountSID
