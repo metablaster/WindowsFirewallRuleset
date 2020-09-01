@@ -93,7 +93,7 @@ useful for troubleshooting, and disable ASAP." `
 		@Logs | Format-Output @Logs
 
 	$mDnsUsers = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE" @Logs
-	Merge-SDDL ([ref] $mDnsUsers) (Get-SDDL -Group "Users") @Logs
+	Merge-SDDL ([ref] $mDnsUsers) $UsersGroupSDDL @Logs
 
 	# NOTE: should be network service
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP - mDNS" `

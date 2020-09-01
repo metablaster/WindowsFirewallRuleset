@@ -78,7 +78,7 @@ TODO: Need to implement switch parameters for UPN and NETBIOS name format in add
 https://docs.microsoft.com/en-us/windows/win32/secauthn/user-name-formats
 TODO: do we need to have consistent output ie. exactly DOMAIN\USER?, see test results,
 probably not for pseudo accounts but for built in accounts it makes sense
-# TODO: need to implement CIM switch
+TODO: need to implement CIM switch
 #>
 function ConvertFrom-SID
 {

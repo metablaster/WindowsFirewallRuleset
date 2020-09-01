@@ -104,17 +104,23 @@ New-NetFirewallRule -DisplayName "Services" `
 useful for troubleshooting, and disable ASAP." `
 	@Logs | Format-Output @Logs
 
-# TODO: it should apply to users only, for administrators there is a block rule, there is another
-# TODO about possible design in VS script
+# NOTE: This applies to users only, for administrators there is a block rule which must be enabled,
+# if the blocking rule for administrators is not enabled this rule will also allow administrators
+# there is another todo about possible design in VisualStudio script
+$UsersStoreAppsSDDL = Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -UserNames "Your Internet connection, including incoming connections from the Internet"
+Merge-SDDL ([ref] $UsersStoreAppsSDDL) (Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -UserNames "Your Internet connection")
+Merge-SDDL ([ref] $UsersStoreAppsSDDL) (Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -UserNames "Your home or work networks")
+Merge-SDDL ([ref] $UsersStoreAppsSDDL) $UsersGroupSDDL
+
 New-NetFirewallRule -DisplayName "Store Apps" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 80, 443 `
-	-LocalUser Any -Owner Any -Package "*" `
+	-LocalUser $UsersStoreAppsSDDL -Owner Any -Package * `
 	-InterfaceType $Interface `
-	-Description "Enable only to let any store app communicate to internet,
+	-Description "Enable only to let store apps for standard users communicate to internet,
 useful for troubleshooting, and disable ASAP." `
 	@Logs | Format-Output @Logs
 
@@ -164,7 +170,7 @@ if ($Develop)
 		@Logs | Format-Output @Logs
 
 	$mDnsUsers = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE" @Logs
-	Merge-SDDL ([ref] $mDnsUsers) (Get-SDDL -Group "Users") @Logs
+	Merge-SDDL ([ref] $mDnsUsers) $UsersGroupSDDL @Logs
 
 	# NOTE: should be network service
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP - mDNS" `
@@ -203,7 +209,7 @@ if ($Develop)
 
 	# Moved from WindowsServices.ps1, used for extension rule below
 	$ExtensionAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE" @Logs
-	Merge-SDDL ([ref] $ExtensionAccounts) (Get-SDDL -Group "Users") @Logs
+	Merge-SDDL ([ref] $ExtensionAccounts) $UsersGroupSDDL @Logs
 
 	# HACK: Temporary using network service account
 	# All troubleshooting rules except this one were set to "Enabled",

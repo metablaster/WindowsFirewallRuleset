@@ -140,26 +140,38 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $ServicesGroup -Directio
 # Firewall predefined rules for Microsoft store Apps
 # TODO: exclude store apps rules for servers, store app folders seem to exist but empty.
 # TODO: currently making rules for each user separately, is it possible to make rules for all users?
-# It looks like not, instead write warning that this may result is rule bloat and abort operation
+# NOTE: Following "rules" apply for store apps for blocking/allowing users
+# 1. -Owner - Only one explicit user account can be specified (not group, not capability etc...)
+# 2. -LocalUser - Anything can be specified
+# 3. Either -Owner or -LocalUser can be specified, not both which would make the rule not working and useless
+# 4. If the LocalUser is specified and rule is blocking, then another allow rule (with? or without owner) may take precedence over blocking rule
+# 5. If the owner is specified, the rule is well formed and normal "rules" apply as with all other rules
+# 6. Conclusion is, the -LocalUser parameter can be specified instead of -Owner only to allow traffic that was not already
+#    blocked by rules with owner parameter specified
+# 7. All of this applies only to "Any" and "*" packages, for specific package only -Owner must be
+#    specified and -LocalUser is not valid for specific packages
 #
 
 #
 # Block Administrators by default
-# TODO: should group SID be supplied to local user instead of owner? this might not work needs testing
 #
+$Principals = Get-GroupPrincipal "Administrators"
 
-New-NetFirewallRule -DisplayName "Store apps for Administrators" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
-	-Service Any -Program Any -Group $Group `
-	-Enabled True -Action Block -Direction $Direction -Protocol Any `
-	-LocalAddress Any -RemoteAddress Any `
-	-LocalPort Any -RemotePort Any `
-	-LocalUser Any `
-	-InterfaceType $Interface `
-	-Owner (Get-GroupSID "Administrators") -Package "*" `
-	-Description "Block admin activity for all store apps.
+foreach ($Principal in $Principals)
+{
+	New-NetFirewallRule -DisplayName "Store apps for Administrators" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
+		-Service Any -Program Any -Group $Group `
+		-Enabled True -Action Block -Direction $Direction -Protocol Any `
+		-LocalAddress Any -RemoteAddress Any `
+		-LocalPort Any -RemotePort Any `
+		-LocalUser Any `
+		-InterfaceType $Interface `
+		-Owner (Get-AccountSID $Principal.User) -Package * `
+		-Description "Block admin activity for all store apps.
 Administrators should have limited or no connectivity at all for maximum security." `
-	@Logs | Format-Output @Logs
+		@Logs | Format-Output @Logs
+}
 
 #
 # Create rules for all network apps for each standard user
@@ -276,7 +288,7 @@ Test-File $Program @Logs
 
 # Accounts needed for store app web authentication
 $AppAccounts = Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -User "Your Internet connection" @Logs
-Merge-SDDL ([ref] $AppAccounts) (Get-SDDL -Group "Users") @Logs
+Merge-SDDL ([ref] $AppAccounts) $UsersGroupSDDL @Logs
 
 New-NetFirewallRule -DisplayName "Authentication Host" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `

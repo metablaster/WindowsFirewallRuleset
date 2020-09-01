@@ -17,7 +17,13 @@ Here is a list of changes for each of the releases
 
 ## v0.x.x (develop branch)
 
-- No published changes
+- Modules
+
+  - Improved SID conversion function
+
+- Rules
+
+  - Fix "universal" rules for store apps with (Administrators and temporary rule)
 
 ## v0.6.0 (current release)
 

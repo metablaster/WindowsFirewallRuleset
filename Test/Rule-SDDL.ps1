@@ -86,7 +86,7 @@ New-NetFirewallRule -DisplayName "Get-SDDL mix" `
 
 Start-Test "Get-SDDL + Merge-SDDL for APPLICATION PACKAGE AUTHORITY"
 $RuleAppUsers = Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -User "Your Internet connection" @Logs
-Merge-SDDL ([ref] $RuleAppUsers) (Get-SDDL -Group "Users") @Logs
+Merge-SDDL ([ref] $RuleAppUsers) $UsersGroupSDDL @Logs
 $RuleAppUsers
 
 Start-Test "Get-SDDL APPLICATION PACKAGE AUTHORITY"

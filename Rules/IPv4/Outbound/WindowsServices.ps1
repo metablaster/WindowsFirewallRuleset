@@ -45,7 +45,7 @@ $FirewallProfile = "Private, Public"
 
 # Extension rules are special rules for problematic services, see ProblematicTraffic.md for more info
 $ExtensionAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE" @Logs
-Merge-SDDL ([ref] $ExtensionAccounts) (Get-SDDL -Group "Users") @Logs
+Merge-SDDL ([ref] $ExtensionAccounts) $UsersGroupSDDL @Logs
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs

@@ -45,7 +45,7 @@ $FirewallProfile = "Private, Public"
 $VSUpdateUsers = Get-SDDL -Group "Users", "Administrators" @Logs
 
 $ExtensionAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM" @Logs
-Merge-SDDL ([ref] $ExtensionAccounts) (Get-SDDL -Group "Users") @Logs
+Merge-SDDL ([ref] $ExtensionAccounts) $UsersGroupSDDL @Logs
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
