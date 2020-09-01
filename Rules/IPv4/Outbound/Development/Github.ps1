@@ -74,7 +74,12 @@ if ((Test-Installation "Git" ([ref] $GitRoot) @Logs) -or $ForceLoad)
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $CurlUsers `
-		-Description "curl download tool, also used by Git for Windows Updater" @Logs | Format-Output @Logs
+		-Description "curl download tool, also used by Git for Windows Updater
+curl is a commandline tool to transfer data from or to a server,
+using one of the supported protocols:
+(DICT, FILE, FTP, FTPS, GOPHER, HTTP, HTTPS, IMAP, IMAPS, LDAP, LDAPS, MQTT, POP3, POP3S, RTMP,
+RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" `
+		@Logs | Format-Output @Logs
 
 	# TODO: unsure if it's 443 or 80
 	$Program = "$GitRoot\mingw64\bin\git.exe"

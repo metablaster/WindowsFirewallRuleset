@@ -337,6 +337,8 @@ New-NetFirewallRule -DisplayName "File Explorer" `
 $Program = "%SystemRoot%\System32\ftp.exe"
 Test-File $Program @Logs
 
+# TODO: need to test and adjust for passive vs active and various types of protocol:
+# FTP, SFPT, FTPS etc... All this have to be updated also for other FTP programs
 New-NetFirewallRule -DisplayName "FTP Client" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program $Program -Group $Group `
@@ -445,8 +447,7 @@ New-NetFirewallRule -DisplayName "MMC Help Viewer" `
 $Program = "%SystemRoot%\System32\nslookup.exe"
 Test-File $Program @Logs
 
-# TODO: no comment
-New-NetFirewallRule -DisplayName "Name server lookup" `
+New-NetFirewallRule -DisplayName "nslookup (Name server lookup)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
@@ -455,7 +456,26 @@ New-NetFirewallRule -DisplayName "Name server lookup" `
 	-LocalUser Any `
 	-InterfaceType $Interface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "" `
+	-Description "Displays information that you can use to diagnose Domain Name System (DNS) infrastructure.
+The nslookup command-line tool is available only if you have installed the TCP/IP protocol." `
+	@Logs | Format-Output @Logs
+
+$Program = "%SystemRoot%\System32\curl.exe"
+Test-File $Program @Logs
+
+# NOTE: Ports are specified only for some protocols
+New-NetFirewallRule -DisplayName "curl" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Internet4, LocalSubnet4 `
+	-LocalPort Any -RemotePort 80, 110, 143, 443, 993, 995 `
+	-LocalUser $UsersGroupSDDL `
+	-InterfaceType $Interface `
+	-Description "curl is a commandline tool to transfer data from or to a server,
+using one of the supported protocols:
+(DICT, FILE, FTP, FTPS, GOPHER, HTTP, HTTPS, IMAP, IMAPS, LDAP, LDAPS, MQTT, POP3, POP3S, RTMP,
+RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" `
 	@Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\SettingSyncHost.exe"

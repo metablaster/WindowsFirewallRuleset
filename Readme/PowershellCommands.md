@@ -35,6 +35,7 @@ Powershell commands to help gather information useful for Windows firewall devel
     - [All possible adapters and their relevant info](#all-possible-adapters-and-their-relevant-info)
     - [Physical, virtual and loopback IP interfaces](#physical-virtual-and-loopback-ip-interfaces)
     - [All adapters configured with an IP regardless of connection state](#all-adapters-configured-with-an-ip-regardless-of-connection-state)
+  - [Repository creation date](#repository-creation-date)
 
 ## Store Apps
 
@@ -260,4 +261,17 @@ Loopback and probably hidden adapters are not shown
 
 ```powershell
 Get-NetIPConfiguration -AllCompartments -Detailed
+```
+
+## Repository creation date
+
+To figure out the date and time some repository was created run curl again following URL format:
+
+`https://api.github.com/repos/<REPO_OWNER>/<REPO_NAME>`
+
+For example to see creation date and time of this repository run:
+
+```powershell
+curl https://api.github.com/repos/metablaster/WindowsFirewallRuleset |
+ConvertFrom-Json | Select-Object -ExpandProperty "created_at"
 ```

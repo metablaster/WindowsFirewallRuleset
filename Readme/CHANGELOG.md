@@ -24,6 +24,7 @@ Here is a list of changes for each of the releases
 - Rules
 
   - Fix "universal" rules for store apps with (Administrators and temporary rule)
+  - Added rule for curl shipped with system
 
 ## v0.6.0 (current release)
 

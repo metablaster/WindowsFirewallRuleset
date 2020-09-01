@@ -69,7 +69,12 @@ if ((Test-Installation "MSYS2" ([ref] $MSYS2Root) @Logs) -or $ForceLoad)
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21, 80 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "download with curl in MSYS2 shell" @Logs | Format-Output @Logs
+		-Description "download with curl in MSYS2 shell.
+curl is a commandline tool to transfer data from or to a server,
+using one of the supported protocols:
+(DICT, FILE, FTP, FTPS, GOPHER, HTTP, HTTPS, IMAP, IMAPS, LDAP, LDAPS, MQTT, POP3, POP3S, RTMP,
+RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" `
+		@Logs | Format-Output @Logs
 
 	$Program = "$MSYS2Root\usr\bin\git.exe"
 	Test-File $Program @Logs
