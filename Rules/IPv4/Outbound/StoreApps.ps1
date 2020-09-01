@@ -26,82 +26,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-<#
-Make sure to update this list from time to time!
-This list is obtained from default windows firewall.
-
-Predefined user apps rule list:
-
-Microsoft.GetHelp
-Microsoft.Xbox.TCUI
-Microsoft.XboxIdentityProvider
-Microsoft.XboxGameOverlay
-Microsoft.XboxGamingOverlay
-Microsoft.WindowsMaps
-Microsoft.WindowsCamera
-Microsoft.WindowsCalculator
-Microsoft.YourPhone
-Microsoft.SkypeApp
-Microsoft.Print3D
-microsoft.windowscommunicationsapps
-Microsoft.XboxApp
-Microsoft.Office.OneNote
-Microsoft.MicrosoftOfficeHub
-Microsoft.BingWeather
-Microsoft.OneConnect
-Microsoft.MixedReality.Portal
-Microsoft.Getstarted
-Microsoft.MicrosoftStickyNotes
-Microsoft.WindowsStore
-Microsoft.MicrosoftSolitaireCollection
-Microsoft.Messaging
-Microsoft.Todos
-Microsoft.Wallet
-Microsoft.People
-Microsoft.Windows.Photos
-Microsoft.ZuneMusic
-Microsoft.StorePurchaseApp
-Microsoft.ZuneVideo
-Microsoft.WindowsFeedbackHub
-Microsoft.MSPaint
-Microsoft.DesktopAppInstaller
-Microsoft.Microsoft3DViewer
-
-
-predefined system apps rule list:
-
-Microsoft.Windows.CloudExperienceHost
-Microsoft.XboxGameCallableUI
-Microsoft.AAD.BrokerPlugin
-Microsoft.Windows.ShellExperienceHost
-Microsoft.Windows.PeopleExperienceHost
-Microsoft.Windows.SecHealthUI
-Microsoft.Windows.Cortana
-Microsoft.Windows.Apprep.ChxApp (smartscreen)
-Microsoft.LockApp
-Microsoft.Windows.SecureAssessmentBrowser
-Microsoft.Windows.StartMenuExperienceHost
-Microsoft.Windows.Search
-Microsoft.Windows.NarratorQuickStart
-Microsoft.Windows.ParentalControls
-Microsoft.MicrosoftEdge
-Microsoft.Windows.ContentDeliveryManager
-Microsoft.AccountsControl
-Microsoft.Win32WebViewHost
-Microsoft.PPIProjection
-Microsoft.Windows.OOBENetworkCaptivePortal
-
-
-predefined system apps not cached by our command:
-
-InputApp
-
-3rd party apps
-
-Maxence.Imgur4Windows
-
-#>
-
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements
@@ -121,10 +45,6 @@ $ProgramsGroup = "Store Apps - Programs"
 $ServicesGroup = "Store Apps - Services"
 $SystemGroup = "Store Apps - System"
 $FirewallProfile = "Private, Public"
-
-# Skip blank lines which would always evaluate as true later in wildcard matches
-Confirm-FileEncoding "$PSScriptRoot\..\NetworkApps.txt"
-$NetworkApps = Get-Content -Path "$PSScriptRoot\..\NetworkApps.txt" -Encoding utf8 | Where-Object { $_ -ne "" }
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
@@ -159,7 +79,7 @@ $Principals = Get-GroupPrincipal "Administrators"
 
 foreach ($Principal in $Principals)
 {
-	New-NetFirewallRule -DisplayName "Store apps for Administrators" `
+	New-NetFirewallRule -DisplayName "Store apps for $($Principal.User)" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
 		-Service Any -Program Any -Group $Group `
 		-Enabled True -Action Block -Direction $Direction -Protocol Any `
@@ -168,7 +88,8 @@ foreach ($Principal in $Principals)
 		-LocalUser Any `
 		-InterfaceType $Interface `
 		-Owner (Get-AccountSID $Principal.User) -Package * `
-		-Description "Block admin activity for all store apps.
+		-Description "$($Principal.User) is administrative account,
+block $($Principal.User) from network activity for all store apps.
 Administrators should have limited or no connectivity at all for maximum security." `
 		@Logs | Format-Output @Logs
 }
@@ -191,36 +112,27 @@ foreach ($Principal in $Principals)
 	# Create rules for apps installed by user
 	#
 
-	Get-UserApps -User $Principal.User | ForEach-Object {
+	$NetworkApps = Get-UserApps -User $Principal.User | Where-Object {
+		$_ | Get-AppCapability -User $Principal.User -Networking
+	}
 
-		$PackageSID = Get-AppSID $Principal.User $_.PackageFamilyName
+	foreach ($App in $NetworkApps)
+	{
+		$PackageSID = Get-AppSID $Principal.User $App.PackageFamilyName
 
 		# Possible package not found
 		if ($PackageSID)
 		{
-			$Enabled = "False"
-
-			# Enable only networking apps
-			# NOTE: not easy to simplify, ex: using Select-String
-			foreach ($item in $NetworkApps)
-			{
-				if ($_.Name -like "*$item*")
-				{
-					$Enabled = "True"
-					break
-				}
-			}
-
-			New-NetFirewallRule -DisplayName $_.Name `
+			New-NetFirewallRule -DisplayName $App.Name `
 				-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 				-Service Any -Program Any -Group $Group `
-				-Enabled $Enabled -Action Allow -Direction $Direction -Protocol TCP `
+				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 				-LocalAddress Any -RemoteAddress Internet4 `
 				-LocalPort Any -RemotePort 80, 443 `
 				-LocalUser Any `
 				-InterfaceType $Interface `
 				-Owner $Principal.SID -Package $PackageSID `
-				-Description "Store apps generated rule for $($Principal.User)" `
+				-Description "Auto generated rule for $($App.Name) used by $($Principal.User)" `
 				@Logs | Format-Output @Logs
 
 			Update-Log
@@ -231,32 +143,27 @@ foreach ($Principal in $Principals)
 	# Create rules for system apps
 	#
 
-	# TODO: -User parameter is probably not needed here? aded while troubleshooting the hack above.
-	Get-SystemApps | ForEach-Object {
+	$NetworkApps = Get-SystemApps | Where-Object {
+		$_ | Get-AppCapability -Networking
+	}
 
-		$PackageSID = Get-AppSID $Principal.User $_.PackageFamilyName
+	foreach ($App in $NetworkApps)
+	{
+		$PackageSID = Get-AppSID $Principal.User $App.PackageFamilyName
 
 		# Possible package not found
 		if ($PackageSID)
 		{
-			$Enabled = "False"
-
-			# Enable only networking apps
-			if ($NetworkApps -contains $_.Name)
-			{
-				$Enabled = "True"
-			}
-
-			New-NetFirewallRule -DisplayName $_.Name `
+			New-NetFirewallRule -DisplayName $App.Name `
 				-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 				-Service Any -Program Any -Group $SystemGroup `
-				-Enabled $Enabled -Action Allow -Direction $Direction -Protocol TCP `
+				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 				-LocalAddress Any -RemoteAddress Internet4 `
 				-LocalPort Any -RemotePort 80, 443 `
 				-LocalUser Any `
 				-InterfaceType $Interface `
 				-Owner $Principal.SID -Package $PackageSID `
-				-Description "System store apps generated rule for $($Principal.User)" `
+				-Description "Auto generated rule for $($App.Name) installed system wide and used by $($Principal.User)" `
 				@Logs | Format-Output @Logs
 
 			Update-Log

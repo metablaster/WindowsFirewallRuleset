@@ -65,6 +65,7 @@ APPLICATION PACKAGE AUTHORITY\Your home or work networks
 None.
 .LINK
 https://docs.microsoft.com/en-us/windows/uwp/packaging/app-capability-declarations
+https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/generate-package-manifest
 #>
 function Get-AppCapability
 {
@@ -94,7 +95,7 @@ function Get-AppCapability
 			# Need a copy because of possible modification
 			$App = $StoreApp
 
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing store app: '$($App.PackageFamilyName)'"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing store app: '$($App.Name)'"
 
 			[string[]] $OutputObject = @()
 
@@ -109,7 +110,7 @@ function Get-AppCapability
 
 				# If input app was not obtained from main store, get it from main store to be able to query package manifest
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Input app is not from main store, querying main store"
-				$App = Get-AppxPackage -User $User -PackageTypeFilter Main -Name $StoreApp.Name -EA Stop
+				$App = Get-AppxPackage -User $User -PackageTypeFilter Main -Name $StoreApp.Name
 
 				if (!$App)
 				{
@@ -117,18 +118,22 @@ function Get-AppCapability
 						-Message "The app $($StoreApp.Name) not found in main store, unable to query package manifest"
 					continue
 				}
-			}
 
-			$PackageManifest = ($App | Get-AppxPackageManifest).Package
+				$PackageManifest = ($App | Get-AppxPackageManifest -User $User).Package
+			}
+			else
+			{
+				$PackageManifest = ($App | Get-AppxPackageManifest).Package
+			}
 
 			if (!$PackageManifest.PSObject.Properties.Name.Contains("Capabilities"))
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Store app '$($App.PackageFamilyName) has no capabilities"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Store app '$($App.Name) has no capabilities"
 				continue
 			}
 			elseif (!$PackageManifest.Capabilities.PSObject.Properties.Name.Contains("Capability"))
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Store app '$($App.PackageFamilyName) is missing capabilities"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Store app '$($App.Name) is missing capabilities"
 				continue
 			}
 

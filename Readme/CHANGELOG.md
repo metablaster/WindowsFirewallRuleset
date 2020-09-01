@@ -20,10 +20,12 @@ Here is a list of changes for each of the releases
 - Modules
 
   - Improved SID conversion function
+  - Added function to learn store app capabilities (ex. to see which store apps have networking capability)
 
 - Rules
 
-  - Fix "universal" rules for store apps with (Administrators and temporary rule)
+  - Fix rules for store apps that apply to multiple apps (ex. Administrators and temporary rule)
+  - Rules for store apps are now created only for apps that have networking capabilities
   - Added rule for curl shipped with system
 
 ## v0.6.0 (current release)
