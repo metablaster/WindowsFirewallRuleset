@@ -20,6 +20,7 @@ customized scenarios.
   - [Firewall](#firewall)
   - [Virtualization](#virtualization)
   - [OS and software](#os-and-software)
+  - [Protocols](#protocols)
   - [Unclassified links](#unclassified-links)
 
 ## Visual Studio Code
@@ -112,6 +113,14 @@ Also few commandlets from these modules:
 [Windows Server release information](https://docs.microsoft.com/en-us/windows-server/get-started/windows-server-release-info)
 
 [Security identifiers (SID)](https://docs.microsoft.com/en-us/windows/security/identity-protection/access-control/security-identifiers)
+
+[App capability declarations](https://docs.microsoft.com/en-us/windows/uwp/packaging/app-capability-declarations#device-capabilities)
+
+[How Visual Studio generates an app package manifest](https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/generate-package-manifest)
+
+## Protocols
+
+[Active FTP vs. Passive FTP](http://slacksite.com/other/ftp.html)
 
 ## Unclassified links
 

@@ -283,6 +283,15 @@ more specialized setup.
 There is a module called "Project.AllPlatforms.Test", which is customized for this project.\
 Tests must pass both Desktop and Core editions of PowerShell to be successful
 
+A hint to quickly run any function from any project module is to run following command in ex.
+integrated terminal in VSCode (assuming PowerShell prompt is at project root):
+
+```powershell
+Config\ProjectSettings
+```
+
+This will add `Modules` to current session module path
+
 ## Commits and pull requests
 
 Push small commits that solve or improve single or specific problem,

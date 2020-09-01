@@ -71,6 +71,7 @@ $PublicScripts = @(
 	"Test-Environment"
 	"Get-UserSoftware"
 	"Get-AllUserSoftware"
+	"Get-AppCapability"
 	"Get-SystemSoftware"
 	"Get-ExecutablePath"
 	"Get-NetFramework"
