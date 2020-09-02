@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Development - Microsoft Visual Studio"
 $FirewallProfile = "Private, Public"
 $VSUpdateUsers = Get-SDDL -Group "Users", "Administrators" @Logs

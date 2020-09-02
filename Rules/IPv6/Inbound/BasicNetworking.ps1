@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Basic Networking - IPv6"
 $FirewallProfile = "Any"
 $ISATAP_Remotes = @("Internet6", "LocalSubnet6")

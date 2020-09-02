@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Development - Microsoft PowerShell"
 $FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for PowerShell will be loaded, recommended if PowerShell is installed to let it access to network"

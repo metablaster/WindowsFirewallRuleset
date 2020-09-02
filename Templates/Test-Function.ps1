@@ -26,11 +26,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# TODO: Include modules you need, update Copyright and start writing test code
+<#
+.SYNOPSIS
+Unit test for Test-Function
+.DESCRIPTION
+Use Test-Function.ps1 as a template to test out module functions
+.INPUTS
+None. You cannot pipe objects to Test-Function.ps1.
+.OUTPUTS
+None. Test-Function.ps1 does not generate any output.
+.NOTES
+None.
+TODO: Update Copyright and start writing test code
+.LINK
+None.
+#>
 
-#
-# Unit test for Test-Function
-#
+# Initialization
+# TODO: Adjust path to project settings
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )
@@ -39,10 +52,14 @@ New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 Initialize-Project
 
 # Imports
+# TODO: Include modules and scripts as needed
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
 
 # User prompt
+# TODO: Update command line help messages
+$Accept = "Template accept help message"
+$Deny = "Skip operation, template deny help message"
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 

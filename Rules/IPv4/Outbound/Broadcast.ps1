@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $FirewallProfile = "Private, Domain"
 $Group = "Broadcast"
 $BroadcastAddress = Get-Broadcast

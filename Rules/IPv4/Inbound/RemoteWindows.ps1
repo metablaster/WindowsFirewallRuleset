@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Remote Windows"
 # $FirewallProfile = "Private, Public"
 $Accept = "Inbound rules for remote Windows will be loaded, required for services such as remote desktop or remote registry"

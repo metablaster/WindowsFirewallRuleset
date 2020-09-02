@@ -28,6 +28,7 @@ SOFTWARE.
 
 # TODO: Update Copyright and start writing code
 
+# Initialization
 Set-StrictMode -Version Latest
 Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
@@ -37,6 +38,7 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 
 #
 # Script imports
+# TODO: remove unneeded imports
 #
 
 $PrivateScripts = @(
@@ -48,6 +50,15 @@ foreach ($Script in $PrivateScripts)
 	. ("{0}\Private\{1}.ps1" -f $PSScriptRoot, $Script)
 }
 
+$ExternalExports = @(
+)
+
+foreach ($Script in $ExternalExports)
+{
+	Write-Debug -Message "[$ThisModule] Importing script: $Script.ps1"
+	. ("{0}\External\{1}.ps1" -f $PSScriptRoot, $Script)
+}
+
 $PublicScripts = @(
 	"New-Function"
 )
@@ -57,3 +68,10 @@ foreach ($Script in $PublicScripts)
 	Write-Debug -Message "[$ThisModule] Importing script: $Script.ps1"
 	. ("{0}\Public\{1}.ps1" -f $PSScriptRoot, $Script)
 }
+
+#
+# TODO: Module variables
+#
+
+# Template variable
+New-Variable -Name TemplateModuleVariable -Scope Global -Value $null

@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Development - Microsoft help viewer"
 $FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for Microsoft help viewer will be loaded, recommended if Microsoft help viewer is installed to let it access to network"

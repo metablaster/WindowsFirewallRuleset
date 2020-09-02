@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Software - TeamViewer"
 $FirewallProfile = "Any"
 $Accept = "Outbound rules for Team Viewer software will be loaded, recommended if Team Viewer software is installed to let it access to network"

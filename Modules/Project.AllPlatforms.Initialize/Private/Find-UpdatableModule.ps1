@@ -30,8 +30,8 @@ SOFTWARE.
 .SYNOPSIS
 Get modules that can be updated with no error
 .DESCRIPTION
-Get modules that can be updated with no error, the list of modules can then be used for
-Update-Help to minimize Update-Help errors
+Find-UpdatableModule retrieves modules that can be updated without error,
+the list of modules can then be used for Update-Help to minimize Update-Help errors
 Without any parameters all available modules on system are checked
 .PARAMETER Module
 Optional list of module names for which to check if they can be updated
@@ -63,7 +63,7 @@ Culture                        en-US
 CultureVersion                 5.2.0.0
 Name                           PackageManagement
 .EXAMPLE
-PS> Find-UpdatableModule "PowerShellGet" -UICulture ja-JP, en-US @Logs
+PS> Find-UpdatableModule "PowerShellGet" -UICulture ja-JP, en-US
 
 Name                           Value
 ----                           -----
@@ -75,9 +75,9 @@ CultureVersion                 5.2.0.0
 Name                           PowerShellGet
 .INPUTS
 [string[]] one or multiple module names to check
-[hashtable] module fully qualified name in the form of ModuleSpecification object
+[hashtable] fully qualified module name in the form of ModuleSpecification object
 .OUTPUTS
-[PSCustomObject] module name ready for update
+[PSCustomObject] module name ready for help files update
 .NOTES
 This function main purpose is automated development environment setup to be able to perform quick
 setup on multiple computers and virtual operating systems, in cases such as frequent system restores

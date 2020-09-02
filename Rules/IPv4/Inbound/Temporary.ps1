@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Temporary - IPv4"
 $FirewallProfile = "Private, Public"
 $Accept = "Temporary inbound IPv4 rules will be loaded, recommended to temporarily enable specific IPv4 traffic"

@@ -46,9 +46,7 @@ Import-Module -Name Project.AllPlatforms.Logging
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
-#
 # Setup local variables
-#
 $Group = "Test - Format output"
 $FirewallProfile = "Any"
 $Direction = "Outbound"

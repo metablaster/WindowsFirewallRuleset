@@ -250,12 +250,13 @@ For comment based help see:
 1. [About Comment-based Help](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_comment_based_help?view=powershell-7)
 2. [Examples of Comment-Based Help](https://docs.microsoft.com/en-us/powershell/scripting/developer/help/examples-of-comment-based-help?view=powershell-7)
 
-Documentation and comments reside in 4 places:
+Documentation and comments reside in 5 places:
 
 1. In scripts (for developers)
 2. In rules (for users)
-3. In comment based help (for module users)
-4. In Readme folder (for detailed project documentation)
+3. In command line prompts (for users)
+4. In comment based help (for module users and developers)
+5. In Readme folder (for detailed project documentation)
 
 Remember, commenting code is as important as writing it!
 

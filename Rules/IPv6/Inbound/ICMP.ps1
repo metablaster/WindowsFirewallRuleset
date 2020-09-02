@@ -98,9 +98,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "ICMPv6"
 $FirewallProfile = "Any"
 $RemoteAddr = @("Internet6", "LocalSubnet6")

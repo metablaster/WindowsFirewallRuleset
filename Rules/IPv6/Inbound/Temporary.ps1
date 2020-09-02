@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Temporary - IPv6"
 $FirewallProfile = "Private, Public"
 $Accept = "Temporary inbound IPv6 rules will be loaded, recommended to temporarily enable specific IPv6 traffic"

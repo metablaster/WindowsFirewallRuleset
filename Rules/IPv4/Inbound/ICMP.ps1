@@ -53,9 +53,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "ICMPv4"
 $Program = "System"
 $RemoteAddrWAN = "Any"

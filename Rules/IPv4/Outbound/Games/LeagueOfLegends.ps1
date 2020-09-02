@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Games - League of Legends"
 $FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for League of Legends game will be loaded, recommended if League of Legends game is installed to let it access to network"

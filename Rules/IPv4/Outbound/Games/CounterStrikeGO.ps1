@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Games - Counter Strike GO"
 $FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for CS:GO game will be loaded, recommended if CS:GO game is installed to let it access to network"

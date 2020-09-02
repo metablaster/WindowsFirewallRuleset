@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Microsoft - One Drive"
 $FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for One Drive will be loaded, recommended if One Drive is installed to let it access to network"

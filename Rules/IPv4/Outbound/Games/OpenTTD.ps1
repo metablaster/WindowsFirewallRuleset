@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Games - Open TTD"
 $FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for Open TTD game will be loaded, recommended if Open TTD game is installed to let it access to network"

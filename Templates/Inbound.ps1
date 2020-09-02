@@ -26,8 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# TODO: Include modules you need, update Copyright and start writing code
+<#
+.SYNOPSIS
+Script for inbound rule set
+.DESCRIPTION
+Use Inbound.ps1 as a template for inbound firewall rule set
+.INPUTS
+None. You cannot pipe objects to Inbound.ps1.
+.OUTPUTS
+None. Inbound.ps1 does not generate any output.
+.NOTES
+None.
+TODO: Update Copyright and start writing test code
+.LINK
+None.
+#>
+
+# Initialization
+# TODO: Adjust path to project settings
 . $PSScriptRoot\..\..\..\..\Config\ProjectSettings.ps1
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
+	$MyInvocation.MyCommand.Name -replace ".{4}$" )
 
 # Check requirements
 Initialize-Project
@@ -38,23 +57,22 @@ Initialize-Project
 . $PSScriptRoot\..\..\IPSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
 
-#
 # Setup local variables
-#
 $Group = "Template - TargetProgram"
 $FirewallProfile = "Private, Public"
 $PackageSID = "*"
 
 # User prompt
+# TODO: Update command line help messages
+$Accept = "Template accept help message"
+$Deny = "Skip operation, template deny help message"
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
-#
 # TargetProgram installation directories
-#
 $TargetProgramRoot = "%ProgramFiles%\TargetProgram"
 
 #

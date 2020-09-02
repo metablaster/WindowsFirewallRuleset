@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Software - Adobe"
 $FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for Adobe software will be loaded, recommended if Adobe software is installed to let it access to network"

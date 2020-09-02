@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Wireless Networking"
 $WNInterface = "Wireless"
 $Accept = "Inbound rules for wireless networking will be loaded, recommended in specific scenarios for wireless networks"

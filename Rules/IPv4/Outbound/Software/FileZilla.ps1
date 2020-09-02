@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Software - FileZilla"
 $FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for FileZilla software will be loaded, recommended if FileZilla software is installed to let it access to network"

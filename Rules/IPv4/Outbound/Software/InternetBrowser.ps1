@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Internet Browser"
 $FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for internet browsers will be loaded, recommended if internet browser is installed to let it access to network"

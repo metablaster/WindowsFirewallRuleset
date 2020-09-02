@@ -26,12 +26,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# TODO: Include modules you need, update Copyright and start writing test code
+<#
+.SYNOPSIS
+Unit test template to test firewall rules
+.DESCRIPTION
+Use TestRule.ps1 as a template to test out firewall rules
+.INPUTS
+None. You cannot pipe objects to TestRule.ps1.
+.OUTPUTS
+None. TestRule.ps1 does not generate any output.
+.NOTES
+None.
+TODO: Update Copyright and start writing test code
+.LINK
+None.
+#>
 
-#
-# Unit test for Test-Rule
-#
+# Initialization
 #Requires -RunAsAdministrator
+# TODO: adjust path to project settings
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )
@@ -40,28 +53,31 @@ New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 Initialize-Project
 
 # Imports
+# TODO: Include modules and scripts as needed
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
 
 # User prompt
+# TODO: Update command line help messages
+$Accept = "Template accept help message"
+$Deny = "Skip operation, template deny help message"
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
-#
 # Setup local variables
-#
 $Group = "Test - Template rule"
 $FirewallProfile = "Any"
 
 Enter-Test $ThisScript
 
-# Remove previous test
+# Remove previous test rule
 Start-Test "Remove-NetFirewallRule"
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
 Start-Test "Test rule"
 
 # Outbound TCP test rule template
+# NOTE: for more rule templates see Inbound.ps1 and Outbound.ps1
 New-NetFirewallRule -DisplayName "Test rule" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `

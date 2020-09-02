@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Software - OpenSSH"
 $FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for OpenSSH software will be loaded, recommended if OpenSSH software is installed to let it access to network"

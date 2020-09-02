@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Development - Microsoft vcpkg"
 $FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for vcpkg repository will be loaded, recommended if vcpkg repository is installed to let it access to network"

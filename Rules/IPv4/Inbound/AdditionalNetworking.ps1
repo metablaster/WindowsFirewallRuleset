@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Additional Networking"
 $Accept = "Inbound rules for additional networking will be loaded, recommended for specific scenarios"
 $Deny = "Skip operation, inbound additional networking rules will not be loaded into firewall"

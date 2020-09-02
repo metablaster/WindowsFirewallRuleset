@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Basic Networking - IPv4"
 $FirewallProfile = "Any"
 $Accept = "Inbound rules for basic networking will be loaded, required for proper network funcioning"

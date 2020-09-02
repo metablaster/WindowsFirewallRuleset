@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Games - Eve Online"
 $FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for Eve Online game will be loaded, recommended if Eve Online game is installed to let it access to network"

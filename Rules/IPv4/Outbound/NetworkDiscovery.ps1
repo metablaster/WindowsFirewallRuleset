@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Network Discovery"
 $FirewallProfile = "Private, Domain"
 $Accept = "Outbound rules for network discovery will be loaded, required for host discovery in local networks"

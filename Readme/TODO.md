@@ -72,6 +72,8 @@ todo's in this file are categorized into following sections:
     - Change bool parameters to switch where possible
     - Revisit naming convention for ConvertFrom/ConvertTo it's not clear what is being converted,
     some other functions also have odd names
+    - 3rd party modules should be integrated by separating 3rd party code and generating new GUID
+    to avoid confusion due to different versioning and new code
 
 2. Project scripts
 
@@ -244,6 +246,7 @@ todo's in this file are categorized into following sections:
     also same convention regarding variable value quoting with '' single quotes
     - Write a script to add context menus for Windows PowerShell
     - Need variables that would avoid prompts and set up firewall with minimum user intervention
+    - Adjust all scripts according to templates
 
 3. Rules
 

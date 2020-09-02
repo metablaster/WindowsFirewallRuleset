@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Games - Demise of Nations"
 $FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for Demise of Nations game will be loaded, recommended if Demise of Nations game is installed to let it access to network"

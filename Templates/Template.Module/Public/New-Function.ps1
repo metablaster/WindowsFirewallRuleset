@@ -26,34 +26,33 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# TODO: Update Copyright and start writing test code
-
 <#
 .SYNOPSIS
-A brief description of the function or script.
+A brief description of the  function.
 This keyword can be used only once in each topic.
 .DESCRIPTION
-A detailed description of the function or script.
+A detailed description of the  function.
 This keyword can be used only once in each topic.
 .PARAMETER Param
 The description of a parameter. Add a ".PARAMETER" keyword for each parameter
-in the function or script syntax.
+in the  function syntax.
 .EXAMPLE
-A sample command that uses the function or script,
+A sample command that uses the  function,
 optionally followed by sample output and a description. Repeat this keyword for each example.
 .INPUTS
-The Microsoft .NET Framework types of objects that can be piped to the function or script.
+The Microsoft .NET Framework types of objects that can be piped to the  function.
 You can also include a description of the input objects.
 .OUTPUTS
 The .NET Framework type of the objects that the cmdlet returns.
 You can also include a description of the returned objects.
 .NOTES
-Additional information about the function or script.
+Additional information about the  function.
+TODO: Update Copyright and start implementing module function
 .LINK
 The name of a related topic. The value appears on the line below the ".LINK" keyword and must
 be preceded by a comment symbol # or included in the comment block.
 .COMPONENT
-The technology or feature that the function or script uses, or to which it is related.
+The technology or feature that the  function uses, or to which it is related.
 This content appears when the Get-Help command includes the Component parameter of Get-Help.
 .ROLE
 The user role for the help topic. This content appears when the Get-Help command includes
@@ -83,8 +82,8 @@ function New-Function
 }
 
 #
-# TODO: Module variables
+# TODO: Module variables from this script
 #
 
-# Set to false to avoid checking powershell version
-New-Variable -Name NewModule -Scope Global -Value $true
+# Template variable
+New-Variable -Name TemplateVariable -Scope Global -Value $null

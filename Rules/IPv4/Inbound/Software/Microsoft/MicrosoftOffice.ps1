@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Microsoft Office"
 $FirewallProfile = "Private, Public"
 $Accept = "Inbound rules for Microsoft Office will be loaded, recommended if Microsoft Office is installed to let it access to network"

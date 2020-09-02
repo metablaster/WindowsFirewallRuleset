@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Development - Microsoft web platform"
 $FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for Microsoft web platform will be loaded, recommended if Microsoft web platform is installed to let it access to network"

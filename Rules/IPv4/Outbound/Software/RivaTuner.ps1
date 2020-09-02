@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Software - Riva Tuner Statistics Server"
 $FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for Riva Tuner software will be loaded, recommended if Riva Tuner software is installed to let it access to network"

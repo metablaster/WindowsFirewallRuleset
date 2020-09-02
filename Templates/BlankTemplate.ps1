@@ -26,11 +26,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# TODO: Include modules you need, update Copyright and start writing test code
+<#
+.SYNOPSIS
+Blank template
+.DESCRIPTION
+Use BlankTemplate.ps1 as a starting point to write generic tests or templates
+.INPUTS
+None. You cannot pipe objects to BlankTemplate.ps1.
+.OUTPUTS
+None. BlankTemplate.ps1 does not generate any output.
+.NOTES
+None.
+TODO: Update Copyright and start writing code
+.LINK
+None.
+#>
 
-#
-# Blank template
-#
+# Initialization
+# TODO: adjust path to project settings
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )
@@ -39,10 +52,13 @@ New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 Initialize-Project
 
 # Imports
+# TODO: Include modules and scripts as needed
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
-# Import-Module -Name Project.Windows.UserInfo @Logs
 
 # User prompt
+# TODO: Update command line help messages
+$Accept = "Template accept help message"
+$Deny = "Skip operation, template deny help message"
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }

@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Software - qBittorrent"
 $FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for qBittorrent software will be loaded, recommended if qBittorrent software is installed to let it access to network"

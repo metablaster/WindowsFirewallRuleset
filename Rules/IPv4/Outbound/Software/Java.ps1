@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Software - Java"
 $FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for Java software will be loaded, recommended if Java software is installed to let it access to network"

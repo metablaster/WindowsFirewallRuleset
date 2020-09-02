@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Games - War Thunder"
 $FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for War Thunder game will be loaded, recommended if War Thunder game is installed to let it access to network"

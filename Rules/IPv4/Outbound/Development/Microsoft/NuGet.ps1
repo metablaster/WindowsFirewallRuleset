@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Development - Microsoft NuGet"
 $FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for NuGet will be loaded, recommended if NuGet is installed to let it access to network"

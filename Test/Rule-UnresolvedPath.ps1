@@ -47,9 +47,7 @@ Set-Variable -Name Accept -Scope Local -Option ReadOnly -Force -Value "Load test
 Update-Context $TestContext "IPv$IPVersion" $Direction
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
-#
 # Setup local variables
-#
 $Group = "Test - Unresolved path"
 $FirewallProfile = "Any"
 $TargetProgramRoot = "C:\Program Files (x86)\Realtek\..\PokerStars.EU"

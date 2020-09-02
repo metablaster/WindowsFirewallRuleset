@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Software - uTorrent"
 $FirewallProfile = "Private, Public"
 $Accept = "Inbound rules for uTorrent software will be loaded, recommended if uTorrent software is installed to let it access to network"

@@ -1,4 +1,4 @@
 
 # Template.Module directory
 
-Template.Module description
+Template.Module directory description

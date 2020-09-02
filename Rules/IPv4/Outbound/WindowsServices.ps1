@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Windows Services"
 $FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for system services will be loaded, required for proper functioning of operating system"

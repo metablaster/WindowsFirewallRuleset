@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Software - Greenshot"
 $FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for Greenshot software will be loaded, recommended if Greenshot software is installed to let it access to network"

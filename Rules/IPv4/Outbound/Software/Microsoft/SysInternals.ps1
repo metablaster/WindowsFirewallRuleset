@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Microsoft - SysInternals"
 $FirewallProfile = "Private, Public"
 $SysInternalsUsers = Get-SDDL -Group "Users", "Administrators" @Logs

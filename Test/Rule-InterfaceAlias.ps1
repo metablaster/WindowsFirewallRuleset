@@ -46,9 +46,7 @@ Set-Variable -Name Accept -Scope Local -Option ReadOnly -Force -Value "Load test
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
-#
 # Setup local variables
-#
 $Group = "Test - Interface aliases"
 $FirewallProfile = "Any"
 

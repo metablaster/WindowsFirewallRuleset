@@ -33,6 +33,10 @@ Here is a list of changes for each of the releases
 
   - Command line help is now fully functional, for each prompt you can type `?` to get more information
 
+- Development
+
+  - Updated templates and small portion of scripts according to templates
+
 ## v0.6.0 (current release)
 
 - New features

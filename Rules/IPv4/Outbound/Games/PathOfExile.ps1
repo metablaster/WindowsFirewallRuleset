@@ -37,9 +37,7 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
-#
 # Setup local variables
-#
 $Group = "Games - Path of Exile"
 $FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for Path of Exile game will be loaded, recommended if Path of Exile game is installed to let it access to network"
