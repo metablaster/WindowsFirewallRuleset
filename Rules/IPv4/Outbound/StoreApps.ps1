@@ -57,7 +57,6 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $ProgramsGroup -Directio
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $ServicesGroup -Direction $Direction -ErrorAction Ignore @Logs
 
 #
-# Firewall predefined rules for Microsoft store Apps
 # TODO: exclude store apps rules for servers, store app folders seem to exist but empty.
 # TODO: currently making rules for each user separately, is it possible to make rules for all users?
 # NOTE: Following "rules" apply for store apps for blocking/allowing users
@@ -75,7 +74,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $ServicesGroup -Directio
 #
 # Block Administrators by default
 #
-$Principals = Get-GroupPrincipal "Administrators"
+$Principals = Get-GroupPrincipal "Administrators" @Logs
 
 foreach ($Principal in $Principals)
 {
@@ -103,36 +102,64 @@ Administrators should have limited or no connectivity at all for maximum securit
 # example solitaire app; need to either update them or detect this case.
 # NOTE: updating apps will not work unless also "Extension users" are updated in
 # WindowsServices.ps1, meaning re-run the script.
+# TODO: We can learn app display name from manifest
 #
 
-$Principals = Get-GroupPrincipal "Users"
+$Principals = Get-GroupPrincipal "Users" @Logs
 foreach ($Principal in $Principals)
 {
 	#
 	# Create rules for apps installed by user
 	#
 
-	$NetworkApps = Get-UserApps -User $Principal.User | Where-Object {
-		$_ | Get-AppCapability -User $Principal.User -Networking
-	}
+	Get-UserApps -User $Principal.User | ForEach-Object -Process {
+		$NetworkCapabilities = $_ | Get-AppCapability -User $Principal.User -Networking
 
-	foreach ($App in $NetworkApps)
-	{
-		$PackageSID = Get-AppSID $Principal.User $App.PackageFamilyName
+		if (!$NetworkCapabilities)
+		{
+			return
+		}
+
+		[string[]] $RemoteAddress = @()
+
+		foreach ($Capability in $NetworkCapabilities)
+		{
+			switch -Wildcard ($Capability)
+			{
+				"Your Internet connection*"
+				{
+					$RemoteAddress += "Internet4"
+					break
+				}
+				"Your home or work networks"
+				{
+					$RemoteAddress += "LocalSubnet4"
+					break
+				}
+			}
+		}
+
+		if ($RemoteAddress.Count -eq 0)
+		{
+			return
+		}
+
+		$RemoteAddress = $RemoteAddress | Select-Object -Unique
+		$PackageSID = Get-AppSID $Principal.User $_.PackageFamilyName
 
 		# Possible package not found
 		if ($PackageSID)
 		{
-			New-NetFirewallRule -DisplayName $App.Name `
+			New-NetFirewallRule -DisplayName $_.Name `
 				-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 				-Service Any -Program Any -Group $Group `
 				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-				-LocalAddress Any -RemoteAddress Internet4 `
+				-LocalAddress Any -RemoteAddress $RemoteAddress `
 				-LocalPort Any -RemotePort 80, 443 `
 				-LocalUser Any `
 				-InterfaceType $Interface `
 				-Owner $Principal.SID -Package $PackageSID `
-				-Description "Auto generated rule for $($App.Name) used by $($Principal.User)" `
+				-Description "Auto generated rule for $($_.Name) used by $($Principal.User)" `
 				@Logs | Format-Output @Logs
 
 			Update-Log
@@ -143,27 +170,54 @@ foreach ($Principal in $Principals)
 	# Create rules for system apps
 	#
 
-	$NetworkApps = Get-SystemApps | Where-Object {
-		$_ | Get-AppCapability -Networking
-	}
+	Get-SystemApps | ForEach-Object -Process {
+		$NetworkCapabilities = $_ | Get-AppCapability -Networking
 
-	foreach ($App in $NetworkApps)
-	{
-		$PackageSID = Get-AppSID $Principal.User $App.PackageFamilyName
+		if (!$NetworkCapabilities)
+		{
+			return
+		}
+
+		[string[]] $RemoteAddress = @()
+
+		foreach ($Capability in $NetworkCapabilities)
+		{
+			switch -Wildcard ($Capability)
+			{
+				"Your Internet connection*"
+				{
+					$RemoteAddress += "Internet4"
+					break
+				}
+				"Your home or work networks"
+				{
+					$RemoteAddress += "LocalSubnet4"
+					break
+				}
+			}
+		}
+
+		if ($RemoteAddress.Count -eq 0)
+		{
+			return
+		}
+
+		$RemoteAddress = $RemoteAddress | Select-Object -Unique
+		$PackageSID = Get-AppSID $Principal.User $_.PackageFamilyName
 
 		# Possible package not found
 		if ($PackageSID)
 		{
-			New-NetFirewallRule -DisplayName $App.Name `
+			New-NetFirewallRule -DisplayName $_.Name `
 				-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 				-Service Any -Program Any -Group $SystemGroup `
 				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-				-LocalAddress Any -RemoteAddress Internet4 `
+				-LocalAddress Any -RemoteAddress $RemoteAddress `
 				-LocalPort Any -RemotePort 80, 443 `
 				-LocalUser Any `
 				-InterfaceType $Interface `
 				-Owner $Principal.SID -Package $PackageSID `
-				-Description "Auto generated rule for $($App.Name) installed system wide and used by $($Principal.User)" `
+				-Description "Auto generated rule for $($_.Name) installed system wide and used by $($Principal.User)" `
 				@Logs | Format-Output @Logs
 
 			Update-Log

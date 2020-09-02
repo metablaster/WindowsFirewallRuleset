@@ -25,7 +25,8 @@ Here is a list of changes for each of the releases
 - Rules
 
   - Fix rules for store apps that apply to multiple apps (ex. Administrators and temporary rule)
-  - Rules for store apps are now created only for apps that have networking capabilities
+  - Rules for store apps are now created only for apps that have networking capabilities and
+  remote address is adjusted according to app capabilities.
   - Added rule for curl shipped with system
 
 ## v0.6.0 (current release)

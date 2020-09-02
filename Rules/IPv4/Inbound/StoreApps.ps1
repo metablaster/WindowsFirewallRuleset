@@ -43,9 +43,6 @@ Import-Module -Name Project.Windows.UserInfo
 $Group = "Store Apps"
 $SystemGroup = "Store Apps - System"
 $FirewallProfile = "Private, Public"
-# TODO: what is this commented code in entry script
-# Confirm-FileEncoding "$PSScriptRoot\..\NetworkApps.txt"
-# $NetworkApps = Get-Content -Path "$PSScriptRoot\..\NetworkApps.txt" -Encoding utf8
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
@@ -56,74 +53,154 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $SystemGroup -Direction $Direction -ErrorAction Ignore @Logs
 
 #
-# Firewall predefined rules for Microsoft store Apps
-#
-
-#
 # Block Administrators by default
 #
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Store apps for Administrators" -Service Any -Program Any `
-	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Any -InterfaceType $Interface `
-	-Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
-	-EdgeTraversalPolicy Block -LocalUser Any -Owner (Get-GroupSID "Administrators") -Package "*" `
-	-Description "Block admin activity for all store apps.
-Administrators should have limited or no connectivity at all for maximum security." @Logs | Format-Output @Logs
+$Principals = Get-GroupPrincipal "Administrators" @Logs
+foreach ($Principal in $Principals)
+{
+	New-NetFirewallRule -DisplayName "Store apps for $($Principal.User)" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
+		-Service Any -Program Any -Group $Group `
+		-Enabled True -Action Block -Direction $Direction -Protocol Any `
+		-LocalAddress Any -RemoteAddress Any `
+		-LocalPort Any -RemotePort Any `
+		-LocalUser Any -EdgeTraversalPolicy Block `
+		-InterfaceType $Interface `
+		-Owner (Get-AccountSID $Principal.User) -Package * `
+		-Description "$($Principal.User) is administrative account,
+block $($Principal.User) from network activity for all store apps.
+Administrators should have limited or no connectivity at all for maximum security." `
+		@Logs | Format-Output @Logs
+}
 
 #
 # Create rules for all network apps for each standard user
 #
 
-$Principals = Get-GroupPrincipal "Users"
+$Principals = Get-GroupPrincipal "Users" @Logs
 foreach ($Principal in $Principals)
 {
 	#
 	# Create rules for apps installed by user
 	#
 
-	Get-UserApps -User $Principal.User | ForEach-Object {
+	Get-UserApps -User $Principal.User | ForEach-Object -Process {
+		$NetworkCapabilities = $_ | Get-AppCapability -User $Principal.User -Networking
+
+		if (!$NetworkCapabilities)
+		{
+			return
+		}
+
+		[string[]] $RemoteAddress = @()
+
+		foreach ($Capability in $NetworkCapabilities)
+		{
+			switch ($Capability)
+			{
+				"Your Internet connection, including incoming connections from the Internet"
+				{
+					$RemoteAddress += "Internet4"
+					break
+				}
+				"Your home or work networks"
+				{
+					$RemoteAddress += "LocalSubnet4"
+					break
+				}
+				default
+				{
+					break
+				}
+			}
+		}
+
+		if ($RemoteAddress.Count -eq 0)
+		{
+			return
+		}
 
 		$PackageSID = Get-AppSID $Principal.User $_.PackageFamilyName
-		$Enabled = "False"
 
-		# if ($NetworkApps -contains $_.Name)
-		# {
-		#     $Enabled = "True"
-		# }
+		# Possible package not found
+		if ($PackageSID)
+		{
+			New-NetFirewallRule -DisplayName $_.Name `
+				-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+				-Service Any -Program Any -Group $Group `
+				-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+				-LocalAddress Any -RemoteAddress $RemoteAddress `
+				-LocalPort 80, 443 -RemotePort Any `
+				-LocalUser Any -EdgeTraversalPolicy Block `
+				-InterfaceType $Interface `
+				-Owner $Principal.SID -Package $PackageSID `
+				-Description "Auto generated rule for $($_.Name) used by $($Principal.User)" `
+				@Logs | Format-Output @Logs
 
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName $_.Name -Service Any -Program Any `
-			-PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-			-EdgeTraversalPolicy Block -LocalUser Any -Owner $Principal.SID -Package $PackageSID `
-			-Description "Store apps generated rule." @Logs | Format-Output @Logs
-
-		Update-Log
+			Update-Log
+		}
 	}
 
 	#
 	# Create rules for system apps
 	#
 
-	Get-SystemApps | ForEach-Object {
+	Get-SystemApps | ForEach-Object -Process {
+		$NetworkCapabilities = $_ | Get-AppCapability -Networking
+
+		if (!$NetworkCapabilities)
+		{
+			return
+		}
+
+		[string[]] $RemoteAddress = @()
+
+		foreach ($Capability in $NetworkCapabilities)
+		{
+			switch ($Capability)
+			{
+				"Your Internet connection, including incoming connections from the Internet"
+				{
+					$RemoteAddress += "Internet4"
+					break
+				}
+				"Your home or work networks"
+				{
+					$RemoteAddress += "LocalSubnet4"
+					break
+				}
+				default
+				{
+					break
+				}
+			}
+		}
+
+		if ($RemoteAddress.Count -eq 0)
+		{
+			return
+		}
 
 		$PackageSID = Get-AppSID $Principal.User $_.PackageFamilyName
-		$Enabled = "False"
 
-		# if ($NetworkApps -contains $_.Name)
-		# {
-		#     $Enabled = "True"
-		# }
+		# Possible package not found
+		if ($PackageSID)
+		{
+			New-NetFirewallRule -DisplayName $_.Name `
+				-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+				-Service Any -Program Any -Group $SystemGroup `
+				-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+				-LocalAddress Any -RemoteAddress $RemoteAddress `
+				-LocalPort 80, 443 -RemotePort Any `
+				-LocalUser Any -EdgeTraversalPolicy Block `
+				-InterfaceType $Interface `
+				-Owner $Principal.SID -Package $PackageSID `
+				-Description "Auto generated rule for $($_.Name) installed system wide and used by $($Principal.User)" `
+				@Logs | Format-Output @Logs
 
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName $_.Name -Service Any -Program Any `
-			-PolicyStore $PolicyStore -Enabled $Enabled -Action Allow -Group $SystemGroup -Profile $FirewallProfile -InterfaceType $Interface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-			-EdgeTraversalPolicy Block -LocalUser Any -Owner $Principal.SID -Package $PackageSID `
-			-Description "System store apps generated rule." @Logs | Format-Output @Logs
-
-		Update-Log
+			Update-Log
+		}
 	}
 }
 
