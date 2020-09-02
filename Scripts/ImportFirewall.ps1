@@ -41,9 +41,13 @@ Initialize-Project
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
 
+# Setup local variables
+$Accept = "Accpet importing firewall rules and settings from file"
+$Deny = "Skip operation, no firewall rules or settings will be imported"
+
 # User prompt
 Update-Context $Context $ThisScript @Logs
-if (!(Approve-Execute @Logs)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 # NOTE: import speed is 26 rules per minute, slowed down by "Test-TargetComputer" for store app rules
 # 450 rules in 17 minutes on 3,6 Ghz quad core CPU with 16GB single channel RAM @2400 Mhz

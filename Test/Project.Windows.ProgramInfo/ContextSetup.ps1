@@ -27,7 +27,9 @@ SOFTWARE.
 #>
 
 #
-# Context setup for Project.Windows.ProgramInfo
+# Context and prompt setup for Project.Windows.ProgramInfo unit tests
 #
 
 New-Variable -Name TestContext -Scope Local -Option Constant -Value "Test.Project.Windows.ProgramInfo"
+New-Variable -Name Accept -Scope Local -Option Constant -Value "Run this unit test"
+New-Variable -Name Deny -Scope Local -Option Constant -Value "Skip operation, this unit test will not run"

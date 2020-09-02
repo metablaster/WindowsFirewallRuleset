@@ -42,10 +42,12 @@ Import-Module -Name Project.Windows.UserInfo
 #
 $Group = "Wireless Networking"
 $WNInterface = "Wireless"
+$Accept = "Outbound rules for wireless networking will be loaded, recommended in specific scenarios for wireless networks"
+$Deny = "Skip operation, outbound rules for wireless networking will not be loaded into firewall"
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute @Logs)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs

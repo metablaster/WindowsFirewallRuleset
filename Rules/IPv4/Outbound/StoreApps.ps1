@@ -45,10 +45,12 @@ $ProgramsGroup = "Store Apps - Programs"
 $ServicesGroup = "Store Apps - Services"
 $SystemGroup = "Store Apps - System"
 $FirewallProfile = "Private, Public"
+$Accept = "Outbound rules for store apps will be loaded, required for Windows store apps network access"
+$Deny = "Skip operation, outbound rules for store apps will not be loaded into firewall"
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute @Logs)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs

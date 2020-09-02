@@ -58,7 +58,7 @@ function Set-ScreenBuffer
 	{
 		Write-Warning -Message "Your screen buffer of $($NewSize.Height) is below recommended $NewBuffer to preserve all execution output"
 
-		if ($PSCmdlet.ShouldProcess("Powershell host", "Increase Screen Buffer"))
+		if ($PSCmdlet.ShouldProcess((Get-Host).Name, "Increase Screen Buffer"))
 		{
 			$NewSize.Height = $NewBuffer
 			$psWindow.BufferSize = $NewSize

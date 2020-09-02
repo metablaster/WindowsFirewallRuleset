@@ -53,8 +53,8 @@ Write-Debug -Message "[$ThisModule] Initialize module variable: Context"
 New-Variable -Name Context -Scope Script -Value "Context not set"
 
 Write-Debug -Message "[$ThisModule] Initialize module variable: RecommendedBuffer"
-# Recommended vertical screen buffer value, to ensure user can scroll back all the output
-New-Variable -Name RecommendedBuffer -Scope Script -Option Constant -Value 1500
+# Recommended vertical host screen buffer value, to ensure user can scroll back all the output
+New-Variable -Name RecommendedBuffer -Scope Script -Option Constant -Value 5000
 
 #
 # Script imports

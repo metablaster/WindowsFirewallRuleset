@@ -68,169 +68,244 @@ Get-Content -Path $ProjectRoot\Rules\NetworkServices.txt -Encoding utf8 | ForEac
 # Load Inbound rules
 #
 
-Update-Context "IPv4" "Inbound" @Logs
+# User prompt strings
+$IPVersion = "IPv4"
+$Direction = "Inbound"
+$RuleGroup = "inbound $IPVersion rules"
+$Accept = "Continue selecting which $RuleGroup to load"
+$Deny = "Skip operation, no rules from '$RuleGroup' group will be loaded"
+Update-Context $IPVersion $Direction @Logs
 
-if (Approve-Execute "Yes" "Applying: Inbound IPv4 Rules" @Logs)
+if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny @Logs)
 {
-	if (Approve-Execute "Yes" "Applying: Common rules" @Logs)
+	# Update user prompt strings
+	$Ruleset = "common rules"
+	$Accept = "Start executing scripts from '$Ruleset' ruleset, some of these rules are recommended for proper OS network functioning"
+	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
+
+	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
 	{
 		# Common rules
-		& "$ProjectRoot\Rules\IPv4\Inbound\AdditionalNetworking.ps1"
-		& "$ProjectRoot\Rules\IPv4\Inbound\BasicNetworking.ps1"
-		& "$ProjectRoot\Rules\IPv4\Inbound\Broadcast.ps1"
-		& "$ProjectRoot\Rules\IPv4\Inbound\ICMP.ps1"
-		& "$ProjectRoot\Rules\IPv4\Inbound\Multicast.ps1"
-		& "$ProjectRoot\Rules\IPv4\Inbound\NetworkDiscovery.ps1"
-		& "$ProjectRoot\Rules\IPv4\Inbound\NetworkSharing.ps1"
-		& "$ProjectRoot\Rules\IPv4\Inbound\RemoteWindows.ps1"
-		& "$ProjectRoot\Rules\IPv4\Inbound\StoreApps.ps1"
-		& "$ProjectRoot\Rules\IPv4\Inbound\Temporary.ps1"
-		& "$ProjectRoot\Rules\IPv4\Inbound\WindowsServices.ps1"
-		& "$ProjectRoot\Rules\IPv4\Inbound\WirelessNetworking.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\AdditionalNetworking.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\BasicNetworking.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Broadcast.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\ICMP.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Multicast.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\NetworkDiscovery.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\NetworkSharing.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\RemoteWindows.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\StoreApps.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Temporary.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\WindowsServices.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\WirelessNetworking.ps1"
 	}
 
-	Update-Context "IPv4" "Inbound" @Logs
-	if (Approve-Execute "Yes" "Applying: Rules for developers" @Logs)
+	# Update user prompt strings
+	$Ruleset = "rules for developers"
+	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules if various 3rd party development software is installed"
+	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
+	Update-Context $IPVersion $Direction @Logs
+
+	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
 	{
 		# Rules for developers
-		& "$ProjectRoot\Rules\IPv4\Inbound\Development\EpicGames.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\EpicGames.ps1"
 	}
 
-	# Update-Context "IPv4" "Inbound"
-	# if (Approve-Execute "Yes" "Applying: Rules for servers")
-	# {
-	# 	# Rules for developers
-	# 	& "$ProjectRoot\Rules\IPv4\Inbound\Server\ScriptName.ps1"
-	# }
+	# Update user prompt strings
+	$Ruleset = "rules for servers"
+	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules for server platforms and software"
+	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
+	Update-Context $IPVersion $Direction @Logs
 
-	Update-Context "IPv4" "Inbound" @Logs
-	if (Approve-Execute "Yes" "Applying: Rules for 3rd party programs" @Logs)
+	if (Approve-Execute -Default "No" -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
 	{
-		# rules for programs
-		& "$ProjectRoot\Rules\IPv4\Inbound\Software\FileZilla.ps1"
-		& "$ProjectRoot\Rules\IPv4\Inbound\Software\InternetBrowser.ps1"
-		& "$ProjectRoot\Rules\IPv4\Inbound\Software\Steam.ps1"
-		& "$ProjectRoot\Rules\IPv4\Inbound\Software\TeamViewer.ps1"
-		& "$ProjectRoot\Rules\IPv4\Inbound\Software\uTorrent.ps1"
+		# Rules for servers
+		# & "$ProjectRoot\Rules\$IPVersion\$Direction\Server\ScriptName.ps1"
+
+		Write-Warning -Message "No inbound rules for server platforms or software exist"
 	}
 
-	Update-Context "IPv4" "Inbound" @Logs
-	if (Approve-Execute "Yes" "Applying: Rules for Microsoft programs" @Logs)
+	# Update user prompt strings
+	$Ruleset = "rules for 3rd party programs"
+	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules for 3rd party software"
+	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
+	Update-Context $IPVersion $Direction @Logs
+
+	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
 	{
 		# rules for programs
-		& "$ProjectRoot\Rules\IPv4\Inbound\Software\Microsoft\MicrosoftOffice.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\FileZilla.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\InternetBrowser.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Steam.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\TeamViewer.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\uTorrent.ps1"
+	}
+
+	# Update user prompt strings
+	$Ruleset = "rules for Microsoft programs"
+	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules for software published by Microsoft"
+	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
+	Update-Context $IPVersion $Direction @Logs
+
+	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
+	{
+		# rules for programs
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\MicrosoftOffice.ps1"
 	}
 }
 
 #
 # Load Outbound rules
 #
-Update-Context "IPv4" "Outbound" @Logs
 
-if (Approve-Execute "Yes" "Applying: Outbound IPv4 Rules" @Logs)
+# Update user prompt strings
+$IPVersion = "IPv4"
+$Direction = "Outbound"
+$RuleGroup = "outbound $IPVersion rules"
+$Accept = "Continue selecting which $RuleGroup to load"
+$Deny = "Skip operation, no rules from '$RuleGroup' group will be loaded"
+Update-Context $IPVersion $Direction @Logs
+
+if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny @Logs)
 {
-	if (Approve-Execute "Yes" "Applying: Common rules" @Logs)
+	# Update user prompt strings
+	$Ruleset = "common rules"
+	$Accept = "Start executing scripts from '$Ruleset' ruleset, most of these rules are required for proper OS network functioning"
+	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
+
+	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
 	{
 		# Common rules
-		& "$ProjectRoot\Rules\IPv4\Outbound\AdditionalNetworking.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\BasicNetworking.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Broadcast.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\ICMP.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Multicast.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\NetworkDiscovery.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\NetworkSharing.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\RemoteWindows.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\StoreApps.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Temporary.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\WindowsServices.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\WindowsSystem.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\WirelessNetworking.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\AdditionalNetworking.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\BasicNetworking.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Broadcast.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\ICMP.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Multicast.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\NetworkDiscovery.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\NetworkSharing.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\RemoteWindows.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\StoreApps.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Temporary.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\WindowsServices.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\WindowsSystem.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\WirelessNetworking.ps1"
 	}
 
-	Update-Context "IPv4" "Outbound" @Logs
-	if (Approve-Execute "Yes" "Applying: Rules for developers 3rd party tools" @Logs)
+	# Update user prompt strings
+	$Ruleset = "rules for developers, 3rd party tools"
+	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules if various 3rd party development software is installed"
+	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
+	Update-Context $IPVersion $Direction @Logs
+
+	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
 	{
 		# Rules for developers
-		& "$ProjectRoot\Rules\IPv4\Outbound\Development\Chocolatey.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Development\EpicGames.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Development\Github.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Development\Incredibuild.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Development\MSYS2.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Development\RealWorld.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Chocolatey.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\EpicGames.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Github.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Incredibuild.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\MSYS2.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\RealWorld.ps1"
 	}
 
-	Update-Context "IPv4" "Outbound" @Logs
-	if (Approve-Execute "Yes" "Applying: Rules for developers Microsoft tools" @Logs)
+	# Update user prompt strings
+	$Ruleset = "rules for developers, Microsoft tools"
+	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules if various Microsoft development software is installed"
+	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
+	Update-Context $IPVersion $Direction @Logs
+
+	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
 	{
 		# Rules for developers
-		& "$ProjectRoot\Rules\IPv4\Outbound\Development\Microsoft\HelpViewer.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Development\Microsoft\NuGet.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Development\Microsoft\PowerShell.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Development\Microsoft\vcpkg.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Development\Microsoft\VisualStudio.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Development\Microsoft\VSCode.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Development\Microsoft\WebPlatform.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Development\Microsoft\WindowsSDK.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\HelpViewer.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\NuGet.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\PowerShell.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\vcpkg.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\VisualStudio.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\VSCode.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\WebPlatform.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\WindowsSDK.ps1"
 	}
 
-	Update-Context "IPv4" "Outbound" @Logs
-	if (Approve-Execute "Yes" "Applying: Rules for games" @Logs)
+	# Update user prompt strings
+	$Ruleset = "rules for games"
+	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules if multiplayer games are installed"
+	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
+	Update-Context $IPVersion $Direction @Logs
+
+	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
 	{
 		# Rules for games
-		& "$ProjectRoot\Rules\IPv4\Outbound\Games\ArenaChess.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Games\CounterStrikeGO.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Games\DemiseOfNations.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Games\EVEOnline.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Games\LeagueOfLegends.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Games\OpenTTD.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Games\PathOfExile.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Games\PinballArcade.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Games\PokerStars.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Games\WarThunder.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\ArenaChess.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\CounterStrikeGO.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\DemiseOfNations.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\EVEOnline.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\LeagueOfLegends.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\OpenTTD.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\PathOfExile.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\PinballArcade.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\PokerStars.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\WarThunder.ps1"
 	}
 
-	# Update-Context "IPv4" "Outbound"
-	# if (Approve-Execute "Yes" "Applying: Rules for servers")
-	# {
-	# 	# Rules for developers
-	# 	& "$ProjectRoot\Rules\IPv4\Outbound\Server\ScriptName.ps1"
-	# }
+	# Update user prompt strings
+	$Ruleset = "rules for servers"
+	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules for server platforms and software"
+	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
+	Update-Context $IPVersion $Direction @Logs
 
-	Update-Context "IPv4" "Outbound" @Logs
-	if (Approve-Execute "Yes" "Applying: Rules for 3rd party programs" @Logs)
+	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
 	{
-		# rules for programs
-		& "$ProjectRoot\Rules\IPv4\Outbound\Software\Adobe.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Software\CPUID.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Software\DnsCrypt.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Software\FileZilla.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Software\Google.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Software\GPG.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Software\Greenshot.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Software\Intel.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Software\InternetBrowser.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Software\Java.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Software\Metatrader.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Software\MSI.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Software\Nvidia.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Software\OBSStudio.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Software\OpenSSH.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Software\PasswordSafe.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Software\qBittorrent.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Software\RivaTuner.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Software\Steam.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Software\TeamViewer.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Software\Thunderbird.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Software\uTorrent.ps1"
+		# Rules for servers
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Server\SQLServer.ps1"
 	}
 
-	Update-Context "IPv4" "Outbound" @Logs
-	if (Approve-Execute "Yes" "Applying: Rules for Microsoft programs" @Logs)
+	# Update user prompt strings
+	$Ruleset = "rules for 3rd party programs"
+	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules for 3rd party software"
+	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
+	Update-Context $IPVersion $Direction @Logs
+
+	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
+	{
+		# rules for 3rd party programs
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Adobe.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\CPUID.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\DnsCrypt.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\FileZilla.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Google.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\GPG.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Greenshot.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Intel.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\InternetBrowser.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Java.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Metatrader.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\MSI.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Nvidia.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\OBSStudio.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\OpenSSH.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\PasswordSafe.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\qBittorrent.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\RivaTuner.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Steam.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\TeamViewer.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Thunderbird.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\uTorrent.ps1"
+	}
+
+	# Update user prompt strings
+	$Ruleset = "rules for Microsoft programs"
+	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules for software published by Microsoft"
+	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
+	Update-Context $IPVersion $Direction @Logs
+
+	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
 	{
 		# rules for Microsoft programs
-		& "$ProjectRoot\Rules\IPv4\Outbound\Software\Microsoft\MicrosoftOffice.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Software\Microsoft\OneDrive.ps1"
-		& "$ProjectRoot\Rules\IPv4\Outbound\Software\Microsoft\SysInternals.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\MicrosoftOffice.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\OneDrive.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\SysInternals.ps1"
 	}
 }
 
@@ -241,36 +316,62 @@ if (Approve-Execute "Yes" "Applying: Outbound IPv4 Rules" @Logs)
 #
 # Load Inbound rules
 #
-Update-Context "IPv6" "Inbound" @Logs
 
-if (Approve-Execute "Yes" "Applying: Inbound IPv6 Rules" @Logs)
+# Update user prompt strings
+$IPVersion = "IPv6"
+$Direction = "Inbound"
+$RuleGroup = "inbound $IPVersion Rules"
+$Accept = "Continue selecting which $RuleGroup to load"
+$Deny = "Skip operation, no rules from '$RuleGroup' group will be loaded"
+Update-Context $IPVersion $Direction @Logs
+
+if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny @Logs)
 {
-	if (Approve-Execute "Yes" "Applying: Common rules" @Logs)
+	# Update user prompt strings
+	$Ruleset = "common rules"
+	$Accept = "Start executing scripts from '$Ruleset' ruleset, some of these rules are required for proper OS network functioning even if there is no IPv6 connectivity"
+	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
+
+	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
 	{
 		# Common rules
-		& "$ProjectRoot\Rules\IPv6\Inbound\BasicNetworking.ps1"
-		& "$ProjectRoot\Rules\IPv6\Inbound\ICMP.ps1"
-		& "$ProjectRoot\Rules\IPv6\Inbound\Multicast.ps1"
-		& "$ProjectRoot\Rules\IPv6\Inbound\Temporary.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\BasicNetworking.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\ICMP.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Multicast.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Temporary.ps1"
 	}
 }
 
 #
 # Load Outbound rules
 #
-Update-Context "IPv6" "Outbound" @Logs
 
-if (Approve-Execute "Yes" "Applying: Outbound IPv6 Rules" @Logs)
+# Update user prompt strings
+$IPVersion = "IPv6"
+$Direction = "Outbound"
+$RuleGroup = "outbound $IPVersion Rules"
+$Accept = "Continue selecting which $RuleGroup to load"
+$Deny = "Skip operation, no rules from '$RuleGroup' group will be loaded"
+Update-Context $IPVersion $Direction @Logs
+
+if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny @Logs)
 {
-	if (Approve-Execute "Yes" "Applying: Common rules" @Logs)
+	# Update user prompt strings
+	$Ruleset = "common rules"
+	$Accept = "Start executing scripts from '$Ruleset' ruleset, most of these rules are required for proper OS network functioning even if there is no IPv6 connectivity"
+	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
+
+	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
 	{
 		# Common rules
-		& "$ProjectRoot\Rules\IPv6\Outbound\BasicNetworking.ps1"
-		& "$ProjectRoot\Rules\IPv6\Outbound\ICMP.ps1"
-		& "$ProjectRoot\Rules\IPv6\Outbound\Multicast.ps1"
-		& "$ProjectRoot\Rules\IPv6\Outbound\Temporary.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\BasicNetworking.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\ICMP.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Multicast.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Temporary.ps1"
 	}
 }
+
+Write-Information -Tags "User" -MessageData "INFO: Loading rules was completed" @Logs
 
 # Set up global firewall setting, network and firewall profile
 & "$ProjectRoot\Scripts\SetupProfile.ps1"
@@ -281,6 +382,7 @@ gpupdate.exe
 
 if ($Develop)
 {
+	# TODO: why? probably no longer needed
 	# Need to re-import required module in develop mode
 	Import-Module -Name Project.AllPlatforms.Logging
 }

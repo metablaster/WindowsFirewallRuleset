@@ -42,6 +42,8 @@ Import-Module -Name Project.Windows.UserInfo
 #
 $Group = "Internet Browser"
 $FirewallProfile = "Private, Public"
+$Accept = "Outbound rules for internet browsers will be loaded, recommended if internet browser is installed to let it access to network"
+$Deny = "Skip operation, outbound rules for internet browsers will not be loaded into firewall"
 
 # Chromecast IP
 # Adjust to Chromecast IP in your local network
@@ -49,7 +51,7 @@ $FirewallProfile = "Private, Public"
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute @Logs)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs

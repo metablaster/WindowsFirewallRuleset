@@ -45,8 +45,10 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # User prompt
+Set-Variable -Name Accept -Scope Local -Option ReadOnly -Force -Value "Run all unit tests one by one"
+Set-Variable -Name Deny -Scope Local -Option ReadOnly -Force -Value "Abort operation, no unit tests will run"
 Update-Context $TestContext $ThisScript
-if (!(Approve-Execute @Logs)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 # Recursively get list of powershell scripts (unit tests)
 $UnitTests = Get-ChildItem -Path $ProjectRoot\Test -Recurse -Filter *.ps1 -Exclude "ContextSetup.ps1", "$ThisScript.ps1" @Logs

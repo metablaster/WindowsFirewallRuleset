@@ -29,6 +29,10 @@ Here is a list of changes for each of the releases
   remote address is adjusted according to app capabilities.
   - Added rule for curl shipped with system
 
+- New features
+
+  - Command line help is now fully functional, for each prompt you can type `?` to get more information
+
 ## v0.6.0 (current release)
 
 - New features

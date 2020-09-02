@@ -40,9 +40,13 @@ Initialize-Project
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
 
+# Setup local variables
+$Accept = "Accpet exporting firewall rules and settings to file"
+$Deny = "Skip operation, no firewall rules or settings will be exported"
+
 # User prompt
 Update-Context $Context $ThisScript @Logs
-if (!(Approve-Execute @Logs)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 # NOTE: export speed is 10 rules per minute
 # 450 rules in 46 minutes on 3,6 Ghz quad core CPU with 16GB single channel RAM @2400 Mhz

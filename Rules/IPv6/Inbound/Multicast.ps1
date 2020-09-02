@@ -96,10 +96,12 @@ $MulticastUsers = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE", "LOCA
 # NOTE: we need Any to include IPv6 loopback interface because IPv6 loopback rule does not work on
 # boot, (neither ::1 address nor interface alias)
 $MulticastInterface = "Any"
+$Accept = "Inbound rules for IPv6 multicast will be loaded, recommended for proper network functioning"
+$Deny = "Skip operation, inbound IPv6 multicast rules will not be loaded into firewall"
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute @Logs)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs

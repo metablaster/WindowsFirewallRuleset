@@ -41,9 +41,13 @@ Initialize-Project
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
 
+# Setup local variables
+$Accept = "Set global firewall behavior, adjust firewall settings and set up firewall and network profile"
+$Deny = "Skip operation, no change will be done to firewall or network profile"
+
 # User prompt
 Update-Context $Context $ThisScript @Logs
-if (!(Approve-Execute @Logs)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 #
 # TODO: how to set and reset settings found in IPSec tab?

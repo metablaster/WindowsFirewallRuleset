@@ -42,10 +42,12 @@ Import-Module -Name Project.Windows.UserInfo
 #
 $Group = "Windows Services"
 # $FirewallProfile = "Private, Public"
+$Accept = "Inbound rules for system services will be loaded, required for proper functioning of operating system"
+$Deny = "Skip operation, inbound rules for system services will not be loaded into firewall"
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute @Logs)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs

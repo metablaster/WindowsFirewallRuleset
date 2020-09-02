@@ -42,10 +42,12 @@ Import-Module -Name Project.Windows.UserInfo
 #
 $Group = "Microsoft - Office"
 $FirewallProfile = "Private, Public"
+$Accept = "Outbound rules for Microsoft Office will be loaded, recommended if Microsoft Office is installed to let it access to network"
+$Deny = "Skip operation, outbound rules for Microsoft Office will not be loaded into firewall"
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute @Logs)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs

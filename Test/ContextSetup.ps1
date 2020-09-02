@@ -27,9 +27,11 @@ SOFTWARE.
 #>
 
 #
-# Context setup for tests
+# Context and prompt setup for non module unit tests
 #
 
 New-Variable -Name IPVersion -Scope Local -Option Constant -Value 4
 New-Variable -Name TestContext -Scope Local -Option Constant -Value "Test"
 New-Variable -Name Direction -Scope Local -Option Constant -Value "Outbound"
+New-Variable -Name Accept -Scope Local -Option ReadOnly -Value "Run this unit test"
+New-Variable -Name Deny -Scope Local -Option ReadOnly -Value "Skip operation, this unit test will not run"

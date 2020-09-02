@@ -42,10 +42,12 @@ Import-Module -Name Project.Windows.UserInfo
 #
 $Group = "Development - Incredibuild"
 $FirewallProfile = "Private, Public"
+$Accept = "Outbound rules for Incredibuild software will be loaded, recommended if Incredibuild software is installed to let it access to network"
+$Deny = "Skip operation, outbound rules for Incredibuild software will not be loaded into firewall"
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute @Logs)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 #
 # Incredibuild installation directories

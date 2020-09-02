@@ -43,10 +43,12 @@ Import-Module -Name Project.Windows.UserInfo
 $Group = "Store Apps"
 $SystemGroup = "Store Apps - System"
 $FirewallProfile = "Private, Public"
+$Accept = "Inbound rules for store apps will be loaded, required for Windows store apps network access"
+$Deny = "Skip operation, inbound rules for store apps will not be loaded into firewall"
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute @Logs)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
@@ -109,10 +111,6 @@ foreach ($Principal in $Principals)
 					$RemoteAddress += "LocalSubnet4"
 					break
 				}
-				default
-				{
-					break
-				}
 			}
 		}
 
@@ -168,10 +166,6 @@ foreach ($Principal in $Principals)
 				"Your home or work networks"
 				{
 					$RemoteAddress += "LocalSubnet4"
-					break
-				}
-				default
-				{
 					break
 				}
 			}

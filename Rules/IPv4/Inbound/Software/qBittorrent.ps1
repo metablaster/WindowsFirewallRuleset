@@ -42,10 +42,12 @@ Import-Module -Name Project.Windows.UserInfo
 #
 $Group = "Software - qBittorrent"
 $FirewallProfile = "Private, Public"
+$Accept = "Inbound rules for qBittorrent software will be loaded, recommended if qBittorrent software is installed to let it access to network"
+$Deny = "Skip operation, inbound rules for qBittorrent software will not be loaded into firewall"
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute @Logs)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 #
 # qBittorrent installation directories

@@ -42,10 +42,12 @@ Import-Module -Name Project.Windows.UserInfo
 #
 $Group = "Games - Eve Online"
 $FirewallProfile = "Private, Public"
+$Accept = "Outbound rules for Eve Online game will be loaded, recommended if Eve Online game is installed to let it access to network"
+$Deny = "Skip operation, outbound rules for Eve Online game will not be loaded into firewall"
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute @Logs)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 #
 # EveOnline installation directories

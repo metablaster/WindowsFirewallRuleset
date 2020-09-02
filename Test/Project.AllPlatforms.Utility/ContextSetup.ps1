@@ -27,8 +27,10 @@ SOFTWARE.
 #>
 
 #
-# Context setup for Test.Project.AllPlatforms.Utility
+# Context and prompt setup for Test.Project.AllPlatforms.Utility unit tests
 #
 
 New-Variable -Name IPVersion -Scope Local -Option Constant -Value 4
 New-Variable -Name TestContext -Scope Local -Option Constant -Value "Test.Project.AllPlatforms.Utility"
+New-Variable -Name Accept -Scope Local -Option Constant -Value "Run this unit test"
+New-Variable -Name Deny -Scope Local -Option Constant -Value "Skip operation, this unit test will not run"

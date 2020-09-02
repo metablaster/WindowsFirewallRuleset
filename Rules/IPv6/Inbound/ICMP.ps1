@@ -109,10 +109,12 @@ $Description = "https://www.iana.org/assignments/icmpv6-parameters/icmpv6-parame
 # NOTE: we need Any to include IPv6 loopback interface because IPv6 loopback rule does not work on
 # boot, (neither ::1 address nor interface alias)
 $ICMPInterface = "Any"
+$Accept = "Inbound rules for ICMPv6 will be loaded, recommended for proper network functioning"
+$Deny = "Skip operation, inbound ICMPv6 rules will not be loaded into firewall"
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute @Logs)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs

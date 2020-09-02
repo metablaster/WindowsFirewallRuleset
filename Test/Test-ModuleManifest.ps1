@@ -43,7 +43,7 @@ Import-Module -Name Project.AllPlatforms.Logging
 
 # User prompt
 Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute @Logs)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 $Manifests = Get-ChildItem -Name -Depth 1 -Recurse -Path "$ProjectRoot\Modules" -Filter "*.psd1"
 

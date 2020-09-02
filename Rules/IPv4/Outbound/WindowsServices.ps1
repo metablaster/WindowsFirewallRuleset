@@ -42,6 +42,8 @@ Import-Module -Name Project.Windows.UserInfo
 #
 $Group = "Windows Services"
 $FirewallProfile = "Private, Public"
+$Accept = "Outbound rules for system services will be loaded, required for proper functioning of operating system"
+$Deny = "Skip operation, outbound rules for system services will not be loaded into firewall"
 
 # Extension rules are special rules for problematic services, see ProblematicTraffic.md for more info
 $ExtensionAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE" @Logs
@@ -49,7 +51,7 @@ Merge-SDDL ([ref] $ExtensionAccounts) $UsersGroupSDDL @Logs
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute @Logs)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs

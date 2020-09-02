@@ -40,7 +40,7 @@ Import-Module -Name Project.AllPlatforms.Logging
 
 # User prompt
 Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute @Logs)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 Enter-Test $ThisScript
 

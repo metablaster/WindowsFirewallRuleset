@@ -27,7 +27,9 @@ SOFTWARE.
 #>
 
 #
-# Context setup for Project.AllPlatforms.Initialize
+# Context and prompt setup for Project.AllPlatforms.Initialize unit tests
 #
 
 New-Variable -Name TestContext -Scope Local -Option Constant -Value "Test.Project.AllPlatforms.Initialize"
+New-Variable -Name Accept -Scope Local -Option Constant -Value "Run this unit test"
+New-Variable -Name Deny -Scope Local -Option Constant -Value "Skip operation, this unit test will not run"

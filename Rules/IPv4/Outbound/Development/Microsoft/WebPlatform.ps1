@@ -40,12 +40,14 @@ Import-Module -Name Project.Windows.UserInfo
 #
 # Setup local variables
 #
-$Group = "Development - Microsoft WebPlatform"
+$Group = "Development - Microsoft web platform"
 $FirewallProfile = "Private, Public"
+$Accept = "Outbound rules for Microsoft web platform will be loaded, recommended if Microsoft web platform is installed to let it access to network"
+$Deny = "Skip operation, outbound rules for Microsoft web platform will not be loaded into firewall"
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute @Logs)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 #
 # Web Platform installation directories

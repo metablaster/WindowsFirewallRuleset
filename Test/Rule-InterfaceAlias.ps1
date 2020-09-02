@@ -42,8 +42,9 @@ Initialize-Project
 Import-Module -Name Project.AllPlatforms.Logging
 
 # User prompt
+Set-Variable -Name Accept -Scope Local -Option ReadOnly -Force -Value "Load test rule into firewall"
 Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute @Logs)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 #
 # Setup local variables

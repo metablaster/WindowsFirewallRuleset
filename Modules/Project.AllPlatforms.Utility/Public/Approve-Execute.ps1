@@ -46,44 +46,79 @@ None. You cannot pipe objects to Approve-Execute
 .OUTPUTS
 None. true if user wants to continue, false otherwise
 .NOTES
-TODO: implement help [?]
-TODO: make this function more generic
+None.
 #>
 function Approve-Execute
 {
 	[OutputType([bool])]
 	[CmdletBinding()]
 	param (
-		[Parameter(Mandatory = $false)]
+		[Parameter()]
 		[ValidateSet("Yes", "No")]
-		[string] $DefaultAction = "Yes",
+		[string] $Default = "Yes",
 
-		[Parameter(Mandatory = $false)]
+		[Parameter()]
 		[string] $Title = "Executing: " + (Split-Path -Leaf $MyInvocation.ScriptName),
 
-		[Parameter(Mandatory = $false)]
-		[string] $Question = "Do you want to run this script?"
+		[Parameter()]
+		[string] $Question = "Do you want to run this script?",
+
+		[Parameter()]
+		[string] $Accept = "Continue with only the next step of the operation",
+
+		[Parameter()]
+		[string] $Deny = "Skip this operation and proceed with the next operation"
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Default action is: $DefaultAction"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Default is: $Default"
 
-	$Choices = "&Yes", "&No"
-	$Default = 0
-	if ($DefaultAction -like "No")
+	# User prompt default values
+	[int32] $DefaultAction = switch ($Default)
 	{
-		$Default = 1
+		"Yes" { 0 }
+		"No" { 1 }
 	}
+
+	[System.Management.Automation.Host.ChoiceDescription[]] $Choices = @()
+	$AcceptChoice = [System.Management.Automation.Host.ChoiceDescription]::new("&Yes")
+	$DenyChoice = [System.Management.Automation.Host.ChoiceDescription]::new("&No")
+
+	# Setup choices
+	$AcceptChoice.HelpMessage = $Accept
+	$DenyChoice.HelpMessage = $Deny
+	$Choices += $AcceptChoice # Decision 0
+	$Choices += $DenyChoice # Decision 1
 
 	$Title += " [$Context]"
-	$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
 
-	if ($Decision -eq $Default)
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Default action is: $DefaultAction"
+
+	$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $DefaultAction)
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Decision is: $Decision"
+
+	if ($Decision -eq $DefaultAction)
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] User choose default action"
-		return $true
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] The user accepted default action"
+	}
+	else
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] The user refused default action"
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] User refuses default action"
+	if ($Decision -eq 0)
+	{
+		return $true
+	}
+	elseif ($Default -eq "Yes")
+	{
+		Write-Warning -Message "The operation has been canceled by the user"
+	}
+	else
+	{
+		Write-Warning -Message "The operation has been canceled by default"
+	}
+
 	return $false
 }

@@ -73,6 +73,9 @@ function New-Function
 	)
 
 	# TODO: Update confirm description
+	# 'MESSAGE','TARGET','OPERATION',[ref]$reason
+	# https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.shouldprocessreason?view=powershellsdk-7.0.0
+	# https://docs.microsoft.com/en-us/powershell/scripting/learn/deep-dives/everything-about-shouldprocess?view=powershell-7#quick-parameter-reference
 	if ($PSCmdlet.ShouldProcess("Template target", "Template action"))
 	{
 		return $null

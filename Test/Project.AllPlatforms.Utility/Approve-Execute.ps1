@@ -42,12 +42,18 @@ Import-Module -Name Project.AllPlatforms.Logging
 
 # User prompt
 Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute @Logs)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 Enter-Test $ThisScript
 
 Start-Test "Approve-Execute"
 Approve-Execute @Logs
+
+Start-Test "Approve-Execute -Default Yes"
+Approve-Execute -Default "Yes" @Logs
+
+Start-Test "Approve-Execute -Default No"
+Approve-Execute -Default "No" @Logs
 
 Update-Log
 Exit-Test

@@ -41,9 +41,13 @@ Initialize-Project
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
 
+# Setup local variables
+$Accept = "All firewall rules and settings will be restored to factory defaults"
+$Deny = "Skip operation, no change will be done to firewall"
+
 # User prompt
 Update-Context $Context $ThisScript @Logs
-if (!(Approve-Execute @Logs)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 #
 # Default setup for each profile is the same,

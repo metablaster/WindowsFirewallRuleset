@@ -40,12 +40,14 @@ Import-Module -Name Project.Windows.UserInfo
 #
 # Setup local variables
 #
-$Group = "Games - PathOfExile"
+$Group = "Games - Path of Exile"
 $FirewallProfile = "Private, Public"
+$Accept = "Outbound rules for Path of Exile game will be loaded, recommended if Path of Exile game is installed to let it access to network"
+$Deny = "Skip operation, outbound rules for Path of Exile game will not be loaded into firewall"
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute @Logs)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 #
 # PathOfExile installation directories

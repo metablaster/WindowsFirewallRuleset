@@ -42,10 +42,12 @@ Import-Module -Name Project.Windows.UserInfo
 #
 $Group = "Software - CPUID"
 $FirewallProfile = "Private, Public"
+$Accept = "Outbound rules for CPUID software will be loaded, recommended if CPUID software is installed to let it access to network"
+$Deny = "Skip operation, outbound rules for CPUID software will not be loaded into firewall"
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute @Logs)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 #
 # HWMonitor installation directories

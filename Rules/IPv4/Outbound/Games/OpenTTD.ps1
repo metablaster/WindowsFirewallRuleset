@@ -40,12 +40,14 @@ Import-Module -Name Project.Windows.UserInfo
 #
 # Setup local variables
 #
-$Group = "Games - OpenTTD"
+$Group = "Games - Open TTD"
 $FirewallProfile = "Private, Public"
+$Accept = "Outbound rules for Open TTD game will be loaded, recommended if Open TTD game is installed to let it access to network"
+$Deny = "Skip operation, outbound rules for Open TTD game will not be loaded into firewall"
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute @Logs)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 #
 # OpenTTD installation directories
