@@ -103,7 +103,8 @@
 	FileList = @(
 		"Project.AllPlatforms.Initialize.psd1"
 		"Project.AllPlatforms.Initialize.psm1"
-		"about_Project.AllPlatforms.Initialize.help.txt"
+		"Project.AllPlatforms.Initialize_41585bd3-3f4d-4669-9919-2d19c0451b73_HelpInfo.xml"
+		"en-US\about_Project.AllPlatforms.Initialize.help.txt"
 		"Private\Find-UpdatableModule.ps1"
 		"Private\Uninstall-DuplicateModule.ps1"
 		"Public\Initialize-Module.ps1"
@@ -148,7 +149,7 @@
 	} # End of PrivateData hashtable
 
 	# HelpInfo URI of this module
-	# HelpInfoURI = ""
+	# HelpInfoURI = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Modules/Project.AllPlatforms.Initialize/Project.AllPlatforms.Initialize_41585bd3-3f4d-4669-9919-2d19c0451b73_HelpInfo.xml"
 
 	# Default prefix for commands exported from this module.
 	# Override the default prefix using Import-Module -Prefix.

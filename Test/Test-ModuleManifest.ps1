@@ -50,9 +50,21 @@ $Manifests = Get-ChildItem -Name -Depth 1 -Recurse -Path "$ProjectRoot\Modules" 
 
 foreach ($Manifest in $Manifests)
 {
+	# Check minefest file is OK
 	Test-ModuleManifest -Path $ProjectRoot\Modules\$Manifest
-	[string] $ThisGUID = Get-Module -ListAvailable -Name $ProjectRoot\Modules\$Manifest | Select-Object -ExpandProperty GUID
 
+	[PSModuleInfo] $Module = Get-Module -ListAvailable -Name $ProjectRoot\Modules\$Manifest
+	[string] $ThisGUID = $Module | Select-Object -ExpandProperty GUID
+	[string] $HelpInfo = "$($Module.ModuleBase)\$($Module.Name)_$($ThisGUID)_HelpInfo.xml"
+
+	# Check HelpInfo file exists and is properly named
+	if (!(Test-Path -Path $HelpInfo))
+	{
+		Write-Error -Category InvalidResult -TargetObject $HelpInfo `
+			-Message "HelpInfo file doesn't exist for module $($Module.Name) with GUID: $ThisGUID"
+	}
+
+	# Check no duplicate GUID exists among modules
 	if ([array]::Find($GUID, [System.Predicate[string]] { $ThisGUID -eq $args[0] }))
 	{
 		Write-Error -Category InvalidData -TargetObject $ThisGUID -Message "Duplicate GUID: $ThisGUID"
@@ -61,6 +73,7 @@ foreach ($Manifest in $Manifests)
 	$GUID += $ThisGUID
 }
 
+# Check digital signature of binary files
 $VSSetupDLL = @(
 	"$ProjectRoot\Modules\VSSetup\Microsoft.VisualStudio.Setup.Configuration.Interop.dll"
 	"$ProjectRoot\Modules\VSSetup\Microsoft.VisualStudio.Setup.PowerShell.dll"

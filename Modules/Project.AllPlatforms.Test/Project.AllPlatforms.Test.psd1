@@ -103,7 +103,8 @@
 	FileList = @(
 		"Project.AllPlatforms.Test.psd1"
 		"Project.AllPlatforms.Test.psm1"
-		"about_Project.AllPlatforms.Test.help.txt"
+		"Project.AllPlatforms.Test_e40d3133-e3f2-47f3-9f81-572732cc7c91_HelpInfo.xml"
+		"en-US\about_Project.AllPlatforms.Test.help.txt"
 		"Public\Enter-Test.ps1"
 		"Public\Exit-Test.ps1"
 		"Public\Start-Test.ps1"
@@ -147,7 +148,7 @@
 	} # End of PrivateData hashtable
 
 	# HelpInfo URI of this module
-	# HelpInfoURI = ""
+	# HelpInfoURI = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Modules/Project.AllPlatforms.Test/Project.AllPlatforms.Test_e40d3133-e3f2-47f3-9f81-572732cc7c91_HelpInfo.xml"
 
 	# Default prefix for commands exported from this module.
 	# Override the default prefix using Import-Module -Prefix.

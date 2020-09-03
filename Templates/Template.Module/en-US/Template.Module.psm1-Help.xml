@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<helpItems xmlns="http://msh" schema="maml">
+	<command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10"
+		xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10"
+		xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10">
+		<command:details>
+			<!-- .NAME Add name an synopsis here -->
+			<command:name>Add-Content</command:name>
+			<command:verb>Add</command:verb>
+			<command:noun>Content</command:noun>
+			<!-- .SYNOPSIS Add an synopsis here -->
+			<maml:description>
+				<!-- The first description is a short description that is referred to as the synopsis -->
+				<maml:para>Adds content to the specified items, such as adding words to a file.</maml:para>
+			</maml:description>
+		</command:details>
+		<maml:description>
+			<!-- .DESCRIPTION Add detailed description here -->
+			<maml:para></maml:para>
+			<maml:para></maml:para>
+			<!-- The second description is a more detailed description -->
+			<maml:para>Add detailed description...</maml:para>
+		</maml:description>
+		<command:syntax>
+			<!-- .SYNTAX Add syntax information here -->
+			<command:syntaxItem></command:syntaxItem>
+			<command:syntaxItem></command:syntaxItem>
+			<!-- Parameter Set 1 (default parameter set) parameters go here -->
+			<command:syntaxItem>
+				<!-- TODO: stopped working here -->
+				<maml:name>Cmdlet-Name</maml:name>
+				<command:parameter required="true" globbing="true" pipelineInput="true (ByValue)" position="1">
+					<command:parameterValue required="true">
+      					string[]
+					</command:parameterValue>
+				</command:parameter>
+			</command:syntaxItem>
+			<!-- Parameter Set 2 parameters go here -->
+			<command:syntaxItem>
+				<maml:name>Cmdlet-Name</maml:name>
+			</command:syntaxItem>
+		</command:syntax>
+		<command:parameters>
+			<!-- .PARAMETER Add parameter information here -->
+			<command:parameter></command:parameter>
+			<command:parameter></command:parameter>
+			<!-- Parameter attribute values -->
+			<!-- TODO: Make a list of valid attributes here -->
+			<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+				<!-- Parameter name -->
+				<maml:name>Add parameter name...</maml:name>
+				<!-- Parameter description -->
+				<maml:Description>
+					<maml:para>Add parameter description1...</maml:para>
+					<maml:para>Add parameter description2...</maml:para>
+				</maml:Description>
+				<!-- TODO: parameterValue -->
+				<command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+				<!-- Parameter .NET Framework type... -->
+				<dev:type>
+					<maml:name>Add .NET Framework type...</maml:name>
+					<maml:uri />
+				</dev:type>
+				<!-- Parameter default value... -->
+				<dev:defaultvalue>Add default value...</dev:defaultvalue>
+				<!-- Parameter that has multiple values, add a possible values -->
+				<dev:possiblevalues>
+					<dev:possibleValue>
+						<dev:value>Value 1</dev:value>
+						<maml:description>
+							<maml:para>Description 1</maml:para>
+						</maml:description>
+					</dev:possibleValue>
+					<!-- TODO: second item XML tool error -->
+					<!-- <dev:possiblevalue>
+						<dev:value>String</dev:value>
+						<maml:description>
+							<maml:para>Description 2</maml:para>
+						</maml:description>
+					</dev:possibleValue> -->
+				</dev:possiblevalues>
+			</command:parameter>
+		</command:parameters>
+		<command:inputTypes>
+			<!-- Add input type information here -->
+		</command:inputTypes>
+		<command:returnValues>
+			<!-- Add return value information here -->
+		</command:returnValues>
+		<maml:alertSet>
+			<!-- Add Note information here -->
+		</maml:alertSet>
+		<command:examples>
+			<!-- Add cmdlet examples here -->
+		</command:examples>
+		<maml:relatedLinks>
+			<!-- Add links to related content here -->
+		</maml:relatedLinks>
+	</command:command>
+</helpItems>

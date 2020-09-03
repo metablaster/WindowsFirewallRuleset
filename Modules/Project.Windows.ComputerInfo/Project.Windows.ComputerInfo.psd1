@@ -107,7 +107,8 @@
 	FileList = @(
 		"Project.Windows.ComputerInfo.psd1"
 		"Project.Windows.ComputerInfo.psm1"
-		"about_Project.Windows.ComputerInfo.help.txt"
+		"Project.Windows.ComputerInfo_c68a812d-076d-47bd-a73d-8d4600bd3c51_HelpInfo.xml"
+		"en-US\about_Project.Windows.ComputerInfo.help.txt"
 		"Public\ConvertFrom-OSBuild.ps1"
 		"Public\Get-Broadcast.ps1"
 		"Public\Get-ComputerName.ps1"
@@ -156,7 +157,7 @@
 	} # End of PrivateData hashtable
 
 	# HelpInfo URI of this module
-	# HelpInfoURI = ""
+	# HelpInfoURI = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Modules/Project.Windows.ComputerInfo/Project.Windows.ComputerInfo_c68a812d-076d-47bd-a73d-8d4600bd3c51_HelpInfo.xml"
 
 	# Default prefix for commands exported from this module.
 	# Override the default prefix using Import-Module -Prefix.

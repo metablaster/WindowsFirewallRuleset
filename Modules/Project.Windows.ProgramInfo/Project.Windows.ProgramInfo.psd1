@@ -130,7 +130,8 @@
 	FileList = @(
 		"Project.Windows.ProgramInfo.psd1"
 		"Project.Windows.ProgramInfo.psm1"
-		"about_Project.Windows.ProgramInfo.help.txt"
+		"Project.Windows.ProgramInfo_49f11777-b8b6-4fed-bd82-32c8f48db81e_HelpInfo.xml"
+		"en-US\about_Project.Windows.ProgramInfo.help.txt"
 		"Private\Edit-Table.ps1"
 		"Private\Initialize-Table.ps1"
 		"Private\Show-Table.ps1"
@@ -199,7 +200,7 @@
 	} # End of PrivateData hashtable
 
 	# HelpInfo URI of this module
-	# HelpInfoURI = ""
+	# HelpInfoURI = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Modules/Project.Windows.ProgramInfo/Project.Windows.ProgramInfo_49f11777-b8b6-4fed-bd82-32c8f48db81e_HelpInfo.xml"
 
 	# Default prefix for commands exported from this module.
 	# Override the default prefix using Import-Module -Prefix.

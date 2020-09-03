@@ -46,6 +46,10 @@ todo's in this file are categorized into following sections:
 
 4. Project release checklist
 
+    - Cleanup repository:
+        - `git clean -d -x --dry-run` `git clean -d -x -f`
+        - `git prune --dry-run` `git prune`
+        - `git repack -d -F`
     - ProgramInfo and NET.IP module manifest, comment out unit test exports
     - ProjectSettings.ps1 disable variables: Develop, ForceLoad,
     - ProjectSettings.ps1 restore variables: UnitTester, UnitTesterAdmin, DefaultUser

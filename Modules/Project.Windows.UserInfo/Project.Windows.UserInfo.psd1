@@ -115,7 +115,8 @@
 	FileList = @(
 		"Project.Windows.UserInfo.psd1"
 		"Project.Windows.UserInfo.psm1"
-		"about_Project.Windows.UserInfo.help.txt"
+		"Project.Windows.UserInfo_136254f4-4730-4ed1-b9e9-1ccecfe09ee9_HelpInfo.xml"
+		"en-US\about_Project.Windows.UserInfo.help.txt"
 		"Public\ConvertFrom-SID.ps1"
 		"Public\ConvertFrom-UserAccount.ps1"
 		"Public\Get-AccountSID.ps1"
@@ -163,7 +164,7 @@
 	} # End of PrivateData hashtable
 
 	# HelpInfo URI of this module
-	# HelpInfoURI = ""
+	# HelpInfoURI = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Modules/Project.Windows.UserInfo/Project.Windows.UserInfo_136254f4-4730-4ed1-b9e9-1ccecfe09ee9_HelpInfo.xml"
 
 	# Default prefix for commands exported from this module.
 	# Override the default prefix using Import-Module -Prefix.

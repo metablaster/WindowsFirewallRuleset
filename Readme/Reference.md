@@ -13,6 +13,7 @@ customized scenarios.
   - [Table of contents](#table-of-contents)
   - [Visual Studio Code](#visual-studio-code)
   - [PowerShell](#powershell)
+  - [Module help and help files](#module-help-and-help-files)
   - [Git and GitHub](#git-and-github)
   - [IPv6](#ipv6)
   - [IPv4](#ipv4)
@@ -53,6 +54,22 @@ Also few commandlets from these modules:
 [PowerShell Scripting Blog](https://devblogs.microsoft.com/scripting)
 
 [PowerShell Explained](https://powershellexplained.com)
+
+## Module help and help files
+
+[Supporting Online Help](https://docs.microsoft.com/en-us/powershell/scripting/developer/help/supporting-online-help?view=powershell-7)
+
+[Writing Help for PowerShell Modules](https://docs.microsoft.com/en-us/powershell/scripting/developer/help/writing-help-for-windows-powershell-modules?view=powershell-7)
+
+[About Comment-based Help](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_comment_based_help?view=powershell-7)
+
+[Examples of Comment-Based Help](https://docs.microsoft.com/en-us/powershell/scripting/developer/help/examples-of-comment-based-help?view=powershell-7)
+
+[Writing Help for PowerShell Cmdlets](https://docs.microsoft.com/en-us/powershell/scripting/developer/help/writing-help-for-windows-powershell-cmdlets?view=powershell-7)
+
+[How to Create a HelpInfo XML File](https://docs.microsoft.com/en-us/powershell/scripting/developer/help/how-to-create-a-helpinfo-xml-file?view=powershell-7)
+
+[How to Prepare Updatable Help CAB Files](https://docs.microsoft.com/en-us/powershell/scripting/developer/help/how-to-prepare-updatable-help-cab-files?view=powershell-7)
 
 ## Git and GitHub
 
@@ -127,3 +144,7 @@ Also few commandlets from these modules:
 [Check IP](https://whatismyipaddress.com/ip-lookup)
 
 [Check Domain](https://lookup.icann.org)
+
+[makecab](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/makecab)
+
+[Command-line syntax key](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/command-line-syntax-key)

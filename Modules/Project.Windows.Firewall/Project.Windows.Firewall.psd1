@@ -105,7 +105,8 @@
 	FileList = @(
 		"Project.Windows.Firewall.psd1"
 		"Project.Windows.Firewall.psm1"
-		"about_Project.Windows.Firewall.help.txt"
+		"Project.Windows.Firewall_3ee23849-8adf-46ee-95f9-7a02417e1f4b_HelpInfo.xml"
+		"en-US\about_Project.Windows.Firewall.help.txt"
 		"Private\External\Convert-ArrayToList.ps1"
 		"Private\External\Convert-ListToArray.ps1"
 		"Private\External\Convert-ValueToBoolean.ps1"
@@ -157,7 +158,7 @@
 	} # End of PrivateData hashtable
 
 	# HelpInfo URI of this module
-	# HelpInfoURI = ""
+	# HelpInfoURI = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Modules/Project.Windows.Firewall/Project.Windows.Firewall_3ee23849-8adf-46ee-95f9-7a02417e1f4b_HelpInfo.xml"
 
 	# Default prefix for commands exported from this module.
 	# Override the default prefix using Import-Module -Prefix.
