@@ -26,9 +26,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# NOTE: need to add types from assembly to avoid "type not found" errors
-Add-Type -AssemblyName Microsoft.Windows.Appx.PackageManager.Commands
-
 <#
 .SYNOPSIS
 Get capabilities of Windows store app

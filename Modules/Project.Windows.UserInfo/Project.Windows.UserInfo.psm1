@@ -82,11 +82,11 @@ if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 	# TODO: should not be used
 	# Generate SDDL string for most common groups
 	Write-Debug -Message "[$ThisModule] Initialize global constant variable: UsersGroupSDDL"
-	New-Variable -Name UsersGroupSDDL -Scope Global -Option Constant -Value (Get-SDDL -Group "Users" -Computer $PolicyStore)
+	New-Variable -Name UsersGroupSDDL -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-32-545)"
 	Write-Debug -Message "[$ThisModule] Initialize global constant variable: AdministratorsGroupSDDL"
-	New-Variable -Name AdministratorsGroupSDDL -Scope Global -Option Constant -Value (Get-SDDL -Group "Administrators" -Computer $PolicyStore)
+	New-Variable -Name AdministratorsGroupSDDL -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-32-544)"
 
-	# TODO: replace with function calls
+	# TODO: shorter names
 	# Generate SDDL string for most common system users
 	Write-Debug -Message "[$ThisModule] Initialize global constant variables: NT AUTHORITY\..."
 	New-Variable -Name NT_AUTHORITY_System -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-18)"
@@ -98,41 +98,6 @@ if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 #
 # System users SDDL strings
 #
-
-# [System.Security.Principal.WellKnownSidType]::NetworkSid
-# "D:(A;;CC;;;S-1-5-0)" # Unknown
-# $NT_AUTHORITY_DialUp = "D:(A;;CC;;;S-1-5-1)"
-# $NT_AUTHORITY_Network = "D:(A;;CC;;;S-1-5-2)"
-# $NT_AUTHORITY_Batch = "D:(A;;CC;;;S-1-5-3)"
-# $NT_AUTHORITY_Interactive = "D:(A;;CC;;;S-1-5-4)"
-# "D:(A;;CC;;;S-1-5-5)" # Unknown
-# $NT_AUTHORITY_Service = "D:(A;;CC;;;S-1-5-6)"
-# $NT_AUTHORITY_AnonymousLogon = "D:(A;;CC;;;S-1-5-7)"
-# $NT_AUTHORITY_Proxy = "D:(A;;CC;;;S-1-5-8)"
-# $NT_AUTHORITY_EnterpriseDomainControllers = "D:(A;;CC;;;S-1-5-9)"
-# $NT_AUTHORITY_Self = "D:(A;;CC;;;S-1-5-10)"
-# $NT_AUTHORITY_AuthenticatedUsers = "D:(A;;CC;;;S-1-5-11)"
-# $NT_AUTHORITY_Restricted = "D:(A;;CC;;;S-1-5-12)"
-# $NT_AUTHORITY_TerminalServerUser = "D:(A;;CC;;;S-1-5-13)"
-# $NT_AUTHORITY_RemoteInteractiveLogon = "D:(A;;CC;;;S-1-5-14)"
-# $NT_AUTHORITY_ThisOrganization = "D:(A;;CC;;;S-1-5-15)"
-# "D:(A;;CC;;;S-1-5-16)" # Unknown
-# $NT_AUTHORITY_Iusr = "D:(A;;CC;;;S-1-5-17)"
-# $NT_AUTHORITY_System = "D:(A;;CC;;;S-1-5-18)"
-# $NT_AUTHORITY_LocalService = "D:(A;;CC;;;S-1-5-19)"
-# $NT_AUTHORITY_NetworkService = "D:(A;;CC;;;S-1-5-20)"
-# "D:(A;;CC;;;S-1-5-21)" ENTERPRISE_READONLY_DOMAIN_CONTROLLERS (S-1-5-21-<root domain>-498)
-# $NT_AUTHORITY_EnterpriseReadOnlyDomainControllersBeta = "D:(A;;CC;;;S-1-5-22)"
-# "D:(A;;CC;;;S-1-5-23)" # Unknown
-
-# Application packages
-# $APPLICATION_PACKAGE_AUTHORITY_AllApplicationPackages = "D:(A;;CC;;;S-1-15-2-1)"
-# $APPLICATION_PACKAGE_AUTHORITY_AllRestrictedApplicationPackages = "D:(A;;CC;;;S-1-15-2-2)"
-# "D:(A;;CC;;;S-1-15-2-3)" # Unknown
-
-# Other System Users
-# $NT_AUTHORITY_UserModeDrivers = "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
-
 
 <# naming convention for common variables, parameters and aliases
 type variable, parameter, alias - type[] ArrayVariable, ArrayParameters, alias

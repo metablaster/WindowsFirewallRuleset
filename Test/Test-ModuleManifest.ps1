@@ -46,10 +46,19 @@ Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 $Manifests = Get-ChildItem -Name -Depth 1 -Recurse -Path "$ProjectRoot\Modules" -Filter "*.psd1"
+[string[]] $GUID = @()
 
 foreach ($Manifest in $Manifests)
 {
 	Test-ModuleManifest -Path $ProjectRoot\Modules\$Manifest
+	[string] $ThisGUID = Get-Module -ListAvailable -Name $ProjectRoot\Modules\$Manifest | Select-Object -ExpandProperty GUID
+
+	if ([array]::Find($GUID, [System.Predicate[string]] { $ThisGUID -eq $args[0] }))
+	{
+		Write-Error -Category InvalidData -TargetObject $ThisGUID -Message "Duplicate GUID: $ThisGUID"
+	}
+
+	$GUID += $ThisGUID
 }
 
 $VSSetupDLL = @(

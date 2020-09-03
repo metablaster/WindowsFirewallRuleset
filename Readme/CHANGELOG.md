@@ -21,6 +21,9 @@ Here is a list of changes for each of the releases
 
   - Improved SID conversion function
   - Added function to learn store app capabilities (ex. to see which store apps have networking capability)
+  - Module manifests: replaced 1 duplicate and 1 wrong GUID, added required assembly entry,
+  replaced single with double quotes, reordered file list alphabetically, uncomment required entries
+  - Reordered external module code and removed non file licenses
 
 - Rules
 

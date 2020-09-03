@@ -158,6 +158,8 @@ todo's in this file are categorized into following sections:
     - For remote computers need ComputerName variables/parameters, note this could also be
     learned/specified with PolicyStore parameter
     - Select-Object -Last 1 instead of -First 1 to get highest value, need to verify
+    - Rules for services, need to check services are networking services, if not write warning,
+    could be implemented in Test-Service function
 
 3. Rules
 
@@ -227,6 +229,7 @@ todo's in this file are categorized into following sections:
     - User canceling operation should be displayed with warning instead of debug stream
     - Function/Table with list of executables that don't exist on specific editions of Windows is
     needed to prevent loading rules for such programs
+    - Modules should have online and updatable help
 
 2. Project scripts
 
@@ -259,6 +262,7 @@ todo's in this file are categorized into following sections:
 4. Test and debugging
 
     - Convert tests to use Pester if possible or separate them into pester tests and experiment tests
+    - Testing with ISE, different PS hosts and environments
 
 5. Code style
 

@@ -15,7 +15,10 @@
 	ModuleVersion = "0.6.0"
 
 	# Supported PSEditions
-	CompatiblePSEditions = "Core, Desktop"
+	CompatiblePSEditions = @(
+		"Core"
+		"Desktop"
+	)
 
 	# ID used to uniquely identify this module
 	GUID = "41585bd3-3f4d-4669-9919-2d19c0451b73"
@@ -27,7 +30,7 @@
 	# CompanyName = "Unknown"
 
 	# Copyright statement for this module
-	Copyright = "Copyright (C) 2019, 2020 metablaster"
+	Copyright = "Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch"
 
 	# Description of the functionality provided by this module
 	Description = "Module to initialize environment for 'Windows Firewall Ruleset' project"

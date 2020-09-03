@@ -36,29 +36,6 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 # TODO: stream logging instead of open/close file for performance
 
 #
-# Module variables
-#
-
-if (!(Get-Variable -Name CheckInitLogging -Scope Global -ErrorAction Ignore))
-{
-	Write-Debug -Message "[$ThisModule] Initialize global constant variable: CheckInitLogging"
-	# check if constants already initialized, used for module reloading
-	New-Variable -Name CheckInitLogging -Scope Global -Option Constant -Value $null
-
-	Write-Debug -Message "[$ThisModule] Initialize global constant variable: Logs"
-	# These defaults are for advanced functions to enable logging, do not modify!
-	New-Variable -Name Logs -Scope Global -Option Constant -Value @{
-		ErrorVariable = "+ErrorBuffer"
-		WarningVariable = "+WarningBuffer"
-		InformationVariable = "+InfoBuffer"
-	}
-}
-
-# Folder where logs get saved
-Write-Debug -Message "[$ThisModule] Initialize module constant variable: LogsFolder"
-New-Variable -Name LogsFolder -Scope Script -Option Constant -Value ($ProjectRoot + "\Logs")
-
-#
 # Script imports
 #
 
@@ -81,3 +58,26 @@ foreach ($Script in $PublicScripts)
 	Write-Debug -Message "[$ThisModule] Importing script: $Script.ps1"
 	. ("{0}\Public\{1}.ps1" -f $PSScriptRoot, $Script)
 }
+
+#
+# Module variables
+#
+
+if (!(Get-Variable -Name CheckInitLogging -Scope Global -ErrorAction Ignore))
+{
+	Write-Debug -Message "[$ThisModule] Initialize global constant variable: CheckInitLogging"
+	# check if constants already initialized, used for module reloading
+	New-Variable -Name CheckInitLogging -Scope Global -Option Constant -Value $null
+
+	Write-Debug -Message "[$ThisModule] Initialize global constant variable: Logs"
+	# These defaults are for advanced functions to enable logging, do not modify!
+	New-Variable -Name Logs -Scope Global -Option Constant -Value @{
+		ErrorVariable = "+ErrorBuffer"
+		WarningVariable = "+WarningBuffer"
+		InformationVariable = "+InfoBuffer"
+	}
+}
+
+# Folder where to save logs
+Write-Debug -Message "[$ThisModule] Initialize module constant variable: LogsFolder"
+New-Variable -Name LogsFolder -Scope Script -Option Constant -Value ($ProjectRoot + "\Logs")

@@ -37,16 +37,6 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 # Script imports
 #
 
-$ExternalScripts = @(
-	"Get-SQLInstance"
-)
-
-foreach ($Script in $ExternalScripts)
-{
-	Write-Debug -Message "[$ThisModule] Importing script: $Script.ps1"
-	. ("{0}\External\{1}.ps1" -f $PSScriptRoot, $Script)
-}
-
 $PrivateScripts = @(
 	"Update-Table"
 	"Edit-Table"
@@ -61,6 +51,7 @@ foreach ($Script in $PrivateScripts)
 }
 
 $PublicScripts = @(
+	"External\Get-SQLInstance"
 	"Test-File"
 	"Test-Installation"
 	"Get-AppSID"
@@ -97,6 +88,7 @@ foreach ($Script in $PublicScripts)
 # Installation table holds user and program directory pair
 if ($Develop)
 {
+	# TODO: script scope variable should be exportable?
 	Write-Debug -Message "[$ThisModule] Initialize Global variable: InstallTable"
 	Remove-Variable -Name InstallTable -Scope Script -ErrorAction Ignore
 	Set-Variable -Name InstallTable -Scope Global -Value $null

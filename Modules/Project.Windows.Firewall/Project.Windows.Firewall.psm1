@@ -5,7 +5,6 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2020 Markus Scholtes
 Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -34,28 +33,16 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule $true
 . $PSScriptRoot\..\ModulePreferences.ps1
 
-<#
-Changes by metablaster - August 2020:
-1. Included variables needed by of project
-2. Included modules which are used in imported scripts
-3. Separated scripts into Public and Private folder
-4. Other significant changes and updates documented inside individual scripts
-#>
+#
+# Scripts imports
+#
 
 $PrivateScripts = @(
-	"Convert-ArrayToList"
-	"Convert-ListToArray"
+	"External\Convert-ArrayToList"
+	"External\Convert-ListToArray"
+	"External\Convert-ValueToBoolean"
 	"Convert-ListToMultiLine"
 	"Convert-MultiLineToList"
-	"Convert-ValueToBoolean"
-)
-
-$PublicScripts = @(
-	"Export-FirewallRules"
-	"Import-FirewallRules"
-	"Remove-FirewallRules"
-	"Format-Output"
-	"Find-RulePrincipal"
 )
 
 foreach ($Script in $PrivateScripts)
@@ -63,6 +50,14 @@ foreach ($Script in $PrivateScripts)
 	Write-Debug -Message "[$ThisModule] Importing private script: $Script.ps1"
 	. ("{0}\Private\{1}.ps1" -f $PSScriptRoot, $Script)
 }
+
+$PublicScripts = @(
+	"External\Export-FirewallRules"
+	"External\Import-FirewallRules"
+	"External\Remove-FirewallRules"
+	"Format-Output"
+	"Find-RulePrincipal"
+)
 
 foreach ($Script in $PublicScripts)
 {
