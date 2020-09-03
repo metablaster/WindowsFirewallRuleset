@@ -113,7 +113,7 @@ function Get-NetworkRange
 		{
 			try
 			{
-				$null = $PSBoundParameters.Remove('IncludeNetworkAndBroadcast')
+				$PSBoundParameters.Remove('IncludeNetworkAndBroadcast') | Out-Null
 				$Network = ConvertTo-Network @PSBoundParameters
 			}
 			catch

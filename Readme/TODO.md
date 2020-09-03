@@ -81,6 +81,7 @@ todo's in this file are categorized into following sections:
     - Implement Importing/Exporting rules, including rules with no group
     - auto detect interfaces, ie. to be used with InterfaceAlias parameter
     - For individual runs of rule scripts we should call gpupdate.exe
+    - $null corectness
 
 3. Rules
 

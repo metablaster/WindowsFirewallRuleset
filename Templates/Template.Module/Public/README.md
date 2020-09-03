@@ -1,4 +1,4 @@
 
 # About this directory
 
-This sub directory contains scripts (functions) that are exported from Template.Module
+Scripts (functions) that are exported from Template.Module

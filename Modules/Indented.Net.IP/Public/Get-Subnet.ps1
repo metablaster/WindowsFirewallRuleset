@@ -98,8 +98,7 @@ function Get-Subnet
 		[string] $NewSubnetMask
 	)
 
-	# TODO: replace all instances with Out-Null
-	$null = $PSBoundParameters.Remove('NewSubnetMask')
+	$PSBoundParameters.Remove('NewSubnetMask') | Out-Null
 
 	try
 	{

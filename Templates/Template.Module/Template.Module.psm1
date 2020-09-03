@@ -50,15 +50,6 @@ foreach ($Script in $PrivateScripts)
 	. ("{0}\Private\{1}.ps1" -f $PSScriptRoot, $Script)
 }
 
-$ExternalExports = @(
-)
-
-foreach ($Script in $ExternalExports)
-{
-	Write-Debug -Message "[$ThisModule] Importing script: $Script.ps1"
-	. ("{0}\External\{1}.ps1" -f $PSScriptRoot, $Script)
-}
-
 $PublicScripts = @(
 	"New-Function"
 )
