@@ -69,7 +69,7 @@ else
 Write-Information -Tags "Project" -MessageData "INFO: Starting pester tests"
 
 # Recursively get list of pester tests
-$PesterTests = Get-ChildItem -Path $ProjectRoot\Modules\Indented.Net.IP\Test\Public -Recurse -Filter *.ps1 @Logs
+$PesterTests = Get-ChildItem -Path $ProjectRoot\Modules\Project.AllPlatforms.IP\Test\Public -Recurse -Filter *.ps1 @Logs
 
 if ($PesterTests)
 {

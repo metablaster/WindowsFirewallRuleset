@@ -149,7 +149,7 @@ if ($Develop)
 		Remove-Module -Name Project.Windows.ComputerInfo -ErrorAction Ignore
 		Remove-Module -Name Project.Windows.ProgramInfo -ErrorAction Ignore
 		Remove-Module -Name Project.Windows.Firewall -ErrorAction Ignore
-		Remove-Module -Name Indented.Net.IP -ErrorAction Ignore
+		Remove-Module -Name Project.AllPlatforms.IP -ErrorAction Ignore
 	}
 }
 else # Normal use case

@@ -187,7 +187,7 @@ todo's in this file are categorized into following sections:
     see get-usergroup test for example
     - A lot of pester tests from NET.IP module require private function export, make sure the rest
     of a module works fine without these private exports
-    - there is no test for Get-Permutation in Indented.NET.IP
+    - there is no test for Get-Permutation in Project.AllPlatforms.IP
 
 5. Code style
 
