@@ -105,46 +105,46 @@ New-NetFirewallRule -Platform $Platform `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 	-Description "Inbound rule for the Cast to Device server to allow streaming using HTTP." @Logs | Format-Output @Logs
 
-$mdeserver = "%SystemRoot%\System32\mdeserver.exe"
-Test-File $mdeserver
+$MdeServer = "%SystemRoot%\System32\mdeserver.exe"
+Test-File $MdeServer
 
 New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Cast to Device streaming server (RTCP)" -Service Any -Program $mdeserver `
+	-DisplayName "Cast to Device streaming server (RTCP)" -Service Any -Program $MdeServer `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress PlayToDevice4 -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Inbound ror the Cast to Device server to allow streaming using RTSP and RTP." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Cast to Device streaming server (RTCP)" -Service Any -Program $mdeserver `
+	-DisplayName "Cast to Device streaming server (RTCP)" -Service Any -Program $MdeServer `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Cast to Device streaming server (RTCP)" -Service Any -Program $mdeserver `
+	-DisplayName "Cast to Device streaming server (RTCP)" -Service Any -Program $MdeServer `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $Interface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Cast to Device streaming server (RTSP)" -Service Any -Program $mdeserver `
+	-DisplayName "Cast to Device streaming server (RTSP)" -Service Any -Program $MdeServer `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress PlayToDevice4 -LocalPort 23554-23556 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any `
 	-Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Cast to Device streaming server (RTSP)" -Service Any -Program $mdeserver `
+	-DisplayName "Cast to Device streaming server (RTSP)" -Service Any -Program $MdeServer `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 23554-23556 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any `
 	-Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Cast to Device streaming server (RTSP)" -Service Any -Program $mdeserver `
+	-DisplayName "Cast to Device streaming server (RTSP)" -Service Any -Program $MdeServer `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $Interface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort 23554-23556 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any `

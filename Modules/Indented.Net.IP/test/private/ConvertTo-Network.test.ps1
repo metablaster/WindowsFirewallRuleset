@@ -61,15 +61,15 @@ if ((Get-Variable -Name Develop -Scope Global).Value -eq $false)
 
 if (-not $UseExisting)
 {
-	$moduleBase = $psscriptroot.Substring(0, $psscriptroot.IndexOf("\Test"))
-	$stubBase = Resolve-Path (Join-Path $moduleBase "Test*\Stub\*")
+	$ModuleBase = $PSScriptRoot.Substring(0, $PSScriptRoot.IndexOf("\Test"))
+	$StubBase = Resolve-Path (Join-Path $ModuleBase "Test*\Stub\*")
 
-	if ($null -ne $stubBase)
+	if ($null -ne $StubBase)
 	{
-		$stubBase | Import-Module -Force
+		$StubBase | Import-Module -Force
 	}
 
-	Import-Module $moduleBase -Force
+	Import-Module $ModuleBase -Force
 }
 #endregion
 
@@ -115,45 +115,45 @@ InModuleScope Indented.Net.IP {
 		}
 
 		It 'Translates the string 0/0 to 0.0.0.0/0 (mask 0.0.0.0)' {
-			$network = ConvertTo-Network 0/0
-			$network.IPAddress | Should -Be '0.0.0.0'
-			$network.SubnetMask | Should -Be '0.0.0.0'
-			$network.MaskLength | Should -Be 0
+			$Network = ConvertTo-Network 0/0
+			$Network.IPAddress | Should -Be '0.0.0.0'
+			$Network.SubnetMask | Should -Be '0.0.0.0'
+			$Network.MaskLength | Should -Be 0
 		}
 
 		It 'Translates the string 1.2/27 to 1.2.0.0/27 (mask 255.255.255.224)' {
-			$network = ConvertTo-Network 1.2/27
-			$network.IPAddress | Should -Be '1.2.0.0'
-			$network.SubnetMask | Should -Be '255.255.255.224'
-			$network.MaskLength | Should -Be 27
+			$Network = ConvertTo-Network 1.2/27
+			$Network.IPAddress | Should -Be '1.2.0.0'
+			$Network.SubnetMask | Should -Be '255.255.255.224'
+			$Network.MaskLength | Should -Be 27
 		}
 
 		It 'Translates a string containing "3.4.5 255.255.0.0" to 3.4.5.0/16 (mask 255.255.0.0)' {
-			$network = ConvertTo-Network "3.4.5 255.255.0.0"
-			$network.IPAddress | Should -Be '3.4.5.0'
-			$network.SubnetMask | Should -Be '255.255.0.0'
-			$network.MaskLength | Should -Be 16
+			$Network = ConvertTo-Network "3.4.5 255.255.0.0"
+			$Network.IPAddress | Should -Be '3.4.5.0'
+			$Network.SubnetMask | Should -Be '255.255.0.0'
+			$Network.MaskLength | Should -Be 16
 		}
 
 		It 'Translates IPAddress argument 1.2.3.4 and SubnetMask argument 24 to 1.2.3.4/24 (mask 255.255.255.0)' {
-			$network = ConvertTo-Network 1.2.3.4 -SubnetMask 24
-			$network.IPAddress | Should -Be '1.2.3.4'
-			$network.SubnetMask | Should -Be '255.255.255.0'
-			$network.MaskLength | Should -Be 24
+			$Network = ConvertTo-Network 1.2.3.4 -SubnetMask 24
+			$Network.IPAddress | Should -Be '1.2.3.4'
+			$Network.SubnetMask | Should -Be '255.255.255.0'
+			$Network.MaskLength | Should -Be 24
 		}
 
 		It 'Translates IPAddress argument 212.44.56.21 and SubnetMask argument 255.255.128.0 to 212.44.56.21/17' {
-			$network = ConvertTo-Network 212.44.56.21 255.255.128.0
-			$network.IPAddress | Should -Be '212.44.56.21'
-			$network.SubnetMask | Should -Be '255.255.128.0'
-			$network.MaskLength | Should -Be 17
+			$Network = ConvertTo-Network 212.44.56.21 255.255.128.0
+			$Network.IPAddress | Should -Be '212.44.56.21'
+			$Network.SubnetMask | Should -Be '255.255.128.0'
+			$Network.MaskLength | Should -Be 17
 		}
 
 		It 'Translates IPAddress argument 1.0.0.0 with no SubnetMask argument to 1.0.0.0/32 (mask 255.255.255.255)' {
-			$network = ConvertTo-Network 1.0.0.0
-			$network.IPAddress | Should -Be '1.0.0.0'
-			$network.SubnetMask | Should -Be '255.255.255.255'
-			$network.MaskLength | Should -Be 32
+			$Network = ConvertTo-Network 1.0.0.0
+			$Network.IPAddress | Should -Be '1.0.0.0'
+			$Network.SubnetMask | Should -Be '255.255.255.255'
+			$Network.MaskLength | Should -Be 32
 		}
 
 		It 'Converts CIDR formatted subnets from <MaskLength> to <Mask>' -TestCases $maskTable {
@@ -163,18 +163,18 @@ InModuleScope Indented.Net.IP {
 				$Mask
 			)
 
-			$errorRecord = $null
+			$ErrorRecord = $null
 			try
 			{
-				$network = ConvertTo-Network "10.0.0.0/$MaskLength"
+				$Network = ConvertTo-Network "10.0.0.0/$MaskLength"
 			}
 			catch
 			{
-				$errorRecord = $_
+				$ErrorRecord = $_
 			}
 
-			$errorRecord | Should -BeNullOrEmpty
-			$network.SubnetMask | Should -Be $Mask
+			$ErrorRecord | Should -BeNullOrEmpty
+			$Network.SubnetMask | Should -Be $Mask
 		}
 
 		It 'Converts dotted-decimal formatted subnets from <Mask> to <MaskLength>' -TestCases $maskTable {
@@ -184,24 +184,24 @@ InModuleScope Indented.Net.IP {
 				$Mask
 			)
 
-			$errorRecord = $null
+			$ErrorRecord = $null
 			try
 			{
-				$network = ConvertTo-Network 10.0.0.0 $Mask
+				$Network = ConvertTo-Network 10.0.0.0 $Mask
 			}
 			catch
 			{
-				$errorRecord = $_
+				$ErrorRecord = $_
 			}
 
-			$errorRecord | Should -BeNullOrEmpty
-			$network.MaskLength | Should -Be $MaskLength
+			$ErrorRecord | Should -BeNullOrEmpty
+			$Network.MaskLength | Should -Be $MaskLength
 		}
 
 		It 'Pads a partial subnet mask' {
-			$network = ConvertTo-Network "10.0.0.0" "255.255"
+			$Network = ConvertTo-Network "10.0.0.0" "255.255"
 
-			$network.SubnetMask | Should -Be '255.255.0.0'
+			$Network.SubnetMask | Should -Be '255.255.0.0'
 		}
 
 		It 'Raises a terminating error when the IP address is invalid' {

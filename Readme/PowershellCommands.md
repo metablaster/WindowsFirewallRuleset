@@ -153,8 +153,8 @@ user name, prefixed by its domain
 ### Well known SID's
 
 ```powershell
-$group = 'Administrators'
-$account = New-Object -TypeName System.Security.Principal.NTAccount($group)
+$Group = 'Administrators'
+$account = New-Object -TypeName System.Security.Principal.NTAccount($Group)
 $sid = $account.Translate([System.Security.Principal.SecurityIdentifier])
 ```
 

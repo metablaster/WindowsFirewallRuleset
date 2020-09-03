@@ -80,8 +80,8 @@ function ConvertTo-HexIP
 
 	process
 	{
-		$bytes = $IPAddress.GetAddressBytes()
-		[array]::Reverse($bytes)
-		'{0:x8}' -f [BitConverter]::ToUInt32($bytes, 0)
+		$Bytes = $IPAddress.GetAddressBytes()
+		[array]::Reverse($Bytes)
+		'{0:x8}' -f [BitConverter]::ToUInt32($Bytes, 0)
 	}
 }

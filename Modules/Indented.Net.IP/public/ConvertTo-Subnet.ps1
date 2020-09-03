@@ -100,18 +100,18 @@ function ConvertTo-Subnet
 		[IPAddress] $End
 	)
 
-	if ($pscmdlet.ParameterSetName -eq 'FromIPAndMask')
+	if ($PSCmdlet.ParameterSetName -eq 'FromIPAndMask')
 	{
 		try
 		{
-			$network = ConvertTo-Network @psboundparameters
+			$Network = ConvertTo-Network @PSBoundParameters
 		}
 		catch
 		{
-			$pscmdlet.ThrowTerminatingError($_)
+			$PSCmdlet.ThrowTerminatingError($_)
 		}
 	}
-	elseif ($pscmdlet.ParameterSetName -eq 'FromStartAndEnd')
+	elseif ($PSCmdlet.ParameterSetName -eq 'FromStartAndEnd')
 	{
 		if ($Start -eq $End)
 		{
@@ -140,33 +140,33 @@ function ConvertTo-Subnet
 
 		try
 		{
-			$network = ConvertTo-Network $Start $MaskLength
+			$Network = ConvertTo-Network $Start $MaskLength
 		}
 		catch
 		{
-			$pscmdlet.ThrowTerminatingError($_)
+			$PSCmdlet.ThrowTerminatingError($_)
 		}
 	}
 
-	$hostAddresses = [math]::Pow(2, (32 - $network.MaskLength)) - 2
+	$hostAddresses = [math]::Pow(2, (32 - $Network.MaskLength)) - 2
 
 	if ($hostAddresses -lt 0)
 	{
 		$hostAddresses = 0
 	}
 
-	$subnet = [PSCustomObject]@{
-		NetworkAddress = Get-NetworkAddress $network.ToString()
-		BroadcastAddress = Get-BroadcastAddress $network.ToString()
-		SubnetMask = $network.SubnetMask
-		MaskLength = $network.MaskLength
+	$Subnet = [PSCustomObject]@{
+		NetworkAddress = Get-NetworkAddress $Network.ToString()
+		BroadcastAddress = Get-BroadcastAddress $Network.ToString()
+		SubnetMask = $Network.SubnetMask
+		MaskLength = $Network.MaskLength
 		HostAddresses = $hostAddresses
 		PSTypeName = 'Indented.Net.IP.Subnet'
 	}
 
-	$subnet | Add-Member ToString -MemberType ScriptMethod -Force -Value {
+	$Subnet | Add-Member ToString -MemberType ScriptMethod -Force -Value {
 		return '{0}/{1}' -f $this.NetworkAddress, $this.MaskLength
 	}
 
-	$subnet
+	$Subnet
 }

@@ -82,45 +82,45 @@ function Resolve-IPAddress
 
 	process
 	{
-		$groups = [regex]::Matches($IPAddress, '\[(?:(?<Range>\d+(?:-\d+))|(?<Selected>(?:\d+, *)*\d+))\]|(?<All>\*)').Groups.Captures |
+		$Groups = [regex]::Matches($IPAddress, '\[(?:(?<Range>\d+(?:-\d+))|(?<Selected>(?:\d+, *)*\d+))\]|(?<All>\*)').Groups.Captures |
 		Where-Object { $_ -and $_.Name -ne '0' } | ForEach-Object {
-			$group = $_
+			$Group = $_
 
-			$values = switch ($group.Name)
+			$Values = switch ($Group.Name)
 			{
 				'Range'
 				{
-					[int32] $start, [int32] $end = $group.Value -split '-'
+					[int32] $Start, [int32] $End = $Group.Value -split '-'
 
-					if ($start, $end -gt 255)
+					if ($Start, $End -gt 255)
 					{
-						$errorRecord = [System.Management.Automation.ErrorRecord]::new(
+						$ErrorRecord = [System.Management.Automation.ErrorRecord]::new(
 							[ArgumentException]::new('Value ranges to resolve must use a start and end values between 0 and 255'),
 							'RangeExpressionOutOfRange',
 							'InvalidArgument',
-							$group.Value
+							$Group.Value
 						)
-						$pscmdlet.ThrowTerminatingError($errorRecord)
+						$PSCmdlet.ThrowTerminatingError($ErrorRecord)
 					}
 
-					$start..$end
+					$Start..$End
 				}
 				'Selected'
 				{
-					$values = [int[]]($group.Value -split ', *')
+					$Values = [int[]]($Group.Value -split ', *')
 
-					if ($values -gt 255)
+					if ($Values -gt 255)
 					{
-						$errorRecord = [System.Management.Automation.ErrorRecord]::new(
+						$ErrorRecord = [System.Management.Automation.ErrorRecord]::new(
 							[ArgumentException]::new('All selected values must be between 0 and 255'),
 							'SelectionExpressionOutOfRange',
 							'InvalidArgument',
-							$group.Value
+							$Group.Value
 						)
-						$pscmdlet.ThrowTerminatingError($errorRecord)
+						$PSCmdlet.ThrowTerminatingError($ErrorRecord)
 					}
 
-					$values
+					$Values
 				}
 				'All'
 				{
@@ -131,14 +131,14 @@ function Resolve-IPAddress
 			[PSCustomObject]@{
 				Name = $_.Name
 				Position = [int32] $IPAddress.Substring(0, $_.Index).Split('.').Count - 1
-				ReplaceWith = $values
+				ReplaceWith = $Values
 				PSTypeName = 'ExpansionGroupInfo'
 			}
 		}
 
-		if ($groups)
+		if ($Groups)
 		{
-			Get-Permutation $groups -BaseAddress $IPAddress
+			Get-Permutation $Groups -BaseAddress $IPAddress
 		}
 		elseif (-not [IPAddress]::TryParse(($IPAddress -replace '/\d+$'), [ref] $null))
 		{

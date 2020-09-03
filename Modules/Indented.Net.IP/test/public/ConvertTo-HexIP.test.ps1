@@ -55,15 +55,15 @@ param (
 
 if (-not $UseExisting)
 {
-	$moduleBase = $psscriptroot.Substring(0, $psscriptroot.IndexOf("\Test"))
-	$stubBase = Resolve-Path (Join-Path $moduleBase "Test*\Stub\*")
+	$ModuleBase = $PSScriptRoot.Substring(0, $PSScriptRoot.IndexOf("\Test"))
+	$StubBase = Resolve-Path (Join-Path $ModuleBase "Test*\Stub\*")
 
-	if ($null -ne $stubBase)
+	if ($null -ne $StubBase)
 	{
-		$stubBase | Import-Module -Force
+		$StubBase | Import-Module -Force
 	}
 
-	Import-Module $moduleBase -Force
+	Import-Module $ModuleBase -Force
 }
 #endregion
 

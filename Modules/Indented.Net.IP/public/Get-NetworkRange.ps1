@@ -109,37 +109,37 @@ function Get-NetworkRange
 
 	process
 	{
-		if ($pscmdlet.ParameterSetName -eq 'FromIPAndMask')
+		if ($PSCmdlet.ParameterSetName -eq 'FromIPAndMask')
 		{
 			try
 			{
-				$null = $psboundparameters.Remove('IncludeNetworkAndBroadcast')
-				$network = ConvertTo-Network @psboundparameters
+				$null = $PSBoundParameters.Remove('IncludeNetworkAndBroadcast')
+				$Network = ConvertTo-Network @PSBoundParameters
 			}
 			catch
 			{
-				$pscmdlet.ThrowTerminatingError($_)
+				$PSCmdlet.ThrowTerminatingError($_)
 			}
 
-			$decimalIP = ConvertTo-DecimalIP $network.IPAddress
-			$decimalMask = ConvertTo-DecimalIP $network.SubnetMask
+			$DecimalIP = ConvertTo-DecimalIP $Network.IPAddress
+			$DecimalMask = ConvertTo-DecimalIP $Network.SubnetMask
 
-			$startDecimal = $decimalIP -band $decimalMask
-			$endDecimal = $decimalIP -bor (-bnot $decimalMask -band [UInt32]::MaxValue)
+			$StartDecimal = $DecimalIP -band $DecimalMask
+			$EndDecimal = $DecimalIP -bor (-bnot $DecimalMask -band [UInt32]::MaxValue)
 
 			if (-not $IncludeNetworkAndBroadcast)
 			{
-				$startDecimal++
-				$endDecimal--
+				$StartDecimal++
+				$EndDecimal--
 			}
 		}
 		else
 		{
-			$startDecimal = ConvertTo-DecimalIP $Start
-			$endDecimal = ConvertTo-DecimalIP $End
+			$StartDecimal = ConvertTo-DecimalIP $Start
+			$EndDecimal = ConvertTo-DecimalIP $End
 		}
 
-		for ($i = $startDecimal; $i -le $endDecimal; $i++)
+		for ($i = $StartDecimal; $i -le $EndDecimal; $i++)
 		{
 			[IPAddress]([IPAddress]::NetworkToHostOrder([int64] $i) -shr 32 -band [UInt32]::MaxValue)
 		}

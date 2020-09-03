@@ -86,17 +86,17 @@ function Get-Permutation
 		[int32] $Index
 	)
 
-	foreach ($value in $Group[$Index].ReplaceWith)
+	foreach ($Value in $Group[$Index].ReplaceWith)
 	{
-		$octets = $BaseAddress -split '\.'
-		$octets[$Group[$Index].Position] = $value
-		$address = $octets -join '.'
+		$Octets = $BaseAddress -split '\.'
+		$Octets[$Group[$Index].Position] = $Value
+		$Address = $Octets -join '.'
 
 		if ($Index -lt $Group.Count - 1)
 		{
-			$address = Get-Permutation $Group -Index ($Index + 1) -BaseAddress $address
+			$Address = Get-Permutation $Group -Index ($Index + 1) -BaseAddress $Address
 		}
 
-		$address
+		$Address
 	}
 }

@@ -110,8 +110,8 @@ function Test-SubnetMember
 
 	try
 	{
-		$subjectNetwork = ConvertTo-Network $SubjectIPAddress $SubjectSubnetMask
-		$objectNetwork = ConvertTo-Network $ObjectIPAddress $ObjectSubnetMask
+		$SubjectNetwork = ConvertTo-Network $SubjectIPAddress $SubjectSubnetMask
+		$ObjectNetwork = ConvertTo-Network $ObjectIPAddress $ObjectSubnetMask
 	}
 	catch
 	{
@@ -119,18 +119,18 @@ function Test-SubnetMember
 	}
 
 	# A simple check, if the mask is shorter (larger network) then it won't be a subnet of the object anyway.
-	if ($subjectNetwork.MaskLength -lt $objectNetwork.MaskLength)
+	if ($SubjectNetwork.MaskLength -lt $ObjectNetwork.MaskLength)
 	{
 		return $false
 	}
 
-	$subjectDecimalIP = ConvertTo-DecimalIP $subjectNetwork.IPAddress
-	$objectDecimalNetwork = ConvertTo-DecimalIP (Get-NetworkAddress $objectNetwork)
-	$objectDecimalBroadcast = ConvertTo-DecimalIP (Get-BroadcastAddress $objectNetwork)
+	$SubjectDecimalIP = ConvertTo-DecimalIP $SubjectNetwork.IPAddress
+	$ObjectDecimalNetwork = ConvertTo-DecimalIP (Get-NetworkAddress $ObjectNetwork)
+	$ObjectDecimalBroadcast = ConvertTo-DecimalIP (Get-BroadcastAddress $ObjectNetwork)
 
 	# If the mask is longer (smaller network), then the decimal form of the address must be between the
 	# network and broadcast address of the object (the network we test against).
-	if ($subjectDecimalIP -ge $objectDecimalNetwork -and $subjectDecimalIP -le $objectDecimalBroadcast)
+	if ($SubjectDecimalIP -ge $ObjectDecimalNetwork -and $SubjectDecimalIP -le $ObjectDecimalBroadcast)
 	{
 		return $true
 	}

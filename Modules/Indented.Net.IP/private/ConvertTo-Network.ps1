@@ -85,7 +85,7 @@ function ConvertTo-Network
 		[string] $SubnetMask
 	)
 
-	$validSubnetMaskValues =
+	$ValidSubnetMaskValues =
 	"0.0.0.0", "128.0.0.0", "192.0.0.0",
 	"224.0.0.0", "240.0.0.0", "248.0.0.0", "252.0.0.0",
 	"254.0.0.0", "255.0.0.0", "255.128.0.0", "255.192.0.0",
@@ -96,7 +96,7 @@ function ConvertTo-Network
 	"255.255.255.224", "255.255.255.240", "255.255.255.248", "255.255.255.252",
 	"255.255.255.254", "255.255.255.255"
 
-	$network = [PSCustomObject]@{
+	$Network = [PSCustomObject]@{
 		IPAddress = $null
 		SubnetMask = $null
 		MaskLength = 0
@@ -104,11 +104,11 @@ function ConvertTo-Network
 	}
 
 	# Override ToString
-	$network | Add-Member ToString -MemberType ScriptMethod -Force -Value {
+	$Network | Add-Member ToString -MemberType ScriptMethod -Force -Value {
 		'{0}/{1}' -f $this.IPAddress, $this.MaskLength
 	}
 
-	if (-not $psboundparameters.ContainsKey('SubnetMask') -or $SubnetMask -eq '')
+	if (-not $PSBoundParameters.ContainsKey('SubnetMask') -or $SubnetMask -eq '')
 	{
 		$IPAddress, $SubnetMask = $IPAddress.Split([char[]]'\/ ', [StringSplitOptions]::RemoveEmptyEntries)
 	}
@@ -121,45 +121,45 @@ function ConvertTo-Network
 
 	if ([IPAddress]::TryParse($IPAddress, [ref] $null))
 	{
-		$network.IPAddress = [IPAddress] $IPAddress
+		$Network.IPAddress = [IPAddress] $IPAddress
 	}
 	else
 	{
-		$errorRecord = [System.Management.Automation.ErrorRecord]::new(
+		$ErrorRecord = [System.Management.Automation.ErrorRecord]::new(
 			[ArgumentException]'Invalid IP address.',
 			'InvalidIPAddress',
 			'InvalidArgument',
 			$IPAddress
 		)
 
-		$pscmdlet.ThrowTerminatingError($errorRecord)
+		$PSCmdlet.ThrowTerminatingError($ErrorRecord)
 	}
 
 	# SubnetMask
 	if ($null -eq $SubnetMask -or $SubnetMask -eq '')
 	{
-		$network.SubnetMask = [IPAddress] $validSubnetMaskValues[32]
-		$network.MaskLength = 32
+		$Network.SubnetMask = [IPAddress] $ValidSubnetMaskValues[32]
+		$Network.MaskLength = 32
 	}
 	else
 	{
-		$maskLength = 0
-		if ([int32]::TryParse($SubnetMask, [ref] $maskLength))
+		$MaskLength = 0
+		if ([int32]::TryParse($SubnetMask, [ref] $MaskLength))
 		{
-			if ($MaskLength -ge 0 -and $maskLength -le 32)
+			if ($MaskLength -ge 0 -and $MaskLength -le 32)
 			{
-				$network.SubnetMask = [IPAddress] $validSubnetMaskValues[$maskLength]
-				$network.MaskLength = $maskLength
+				$Network.SubnetMask = [IPAddress] $ValidSubnetMaskValues[$MaskLength]
+				$Network.MaskLength = $MaskLength
 			}
 			else
 			{
-				$errorRecord = [System.Management.Automation.ErrorRecord]::new(
+				$ErrorRecord = [System.Management.Automation.ErrorRecord]::new(
 					[ArgumentException]'Mask length out of range (expecting 0 to 32).',
 					'InvalidMaskLength',
 					'InvalidArgument',
 					$SubnetMask
 				)
-				$pscmdlet.ThrowTerminatingError($errorRecord)
+				$PSCmdlet.ThrowTerminatingError($ErrorRecord)
 			}
 		}
 		else
@@ -169,26 +169,26 @@ function ConvertTo-Network
 				$SubnetMask += '.0'
 			}
 
-			$maskLength = $validSubnetMaskValues.IndexOf($SubnetMask)
+			$MaskLength = $ValidSubnetMaskValues.IndexOf($SubnetMask)
 
-			if ($maskLength -ge 0)
+			if ($MaskLength -ge 0)
 			{
 				$Network.SubnetMask = [IPAddress] $SubnetMask
-				$Network.MaskLength = $maskLength
+				$Network.MaskLength = $MaskLength
 			}
 			else
 			{
-				$errorRecord = [System.Management.Automation.ErrorRecord]::new(
+				$ErrorRecord = [System.Management.Automation.ErrorRecord]::new(
 					[ArgumentException]'Invalid subnet mask.',
 					'InvalidSubnetMask',
 					'InvalidArgument',
 					$SubnetMask
 				)
 
-				$pscmdlet.ThrowTerminatingError($errorRecord)
+				$PSCmdlet.ThrowTerminatingError($ErrorRecord)
 			}
 		}
 	}
 
-	$network
+	$Network
 }

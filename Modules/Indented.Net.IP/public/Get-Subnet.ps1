@@ -99,40 +99,40 @@ function Get-Subnet
 	)
 
 	# TODO: replace all instances with Out-Null
-	$null = $psboundparameters.Remove('NewSubnetMask')
+	$null = $PSBoundParameters.Remove('NewSubnetMask')
 
 	try
 	{
-		$network = ConvertTo-Network @psboundparameters
-		$newNetwork = ConvertTo-Network 0 $NewSubnetMask
+		$Network = ConvertTo-Network @PSBoundParameters
+		$NewNetwork = ConvertTo-Network 0 $NewSubnetMask
 	}
 	catch
 	{
-		$pscmdlet.ThrowTerminatingError($_)
+		$PSCmdlet.ThrowTerminatingError($_)
 	}
 
-	if ($network.MaskLength -gt $newNetwork.MaskLength)
+	if ($Network.MaskLength -gt $NewNetwork.MaskLength)
 	{
-		$errorRecord = [System.Management.Automation.ErrorRecord]::new(
+		$ErrorRecord = [System.Management.Automation.ErrorRecord]::new(
 			[ArgumentException]'The subnet mask of the new network is shorter (masks fewer addresses) than the subnet mask of the existing network.',
 			'NewSubnetMaskTooShort',
 			'InvalidArgument',
 			$NewNetwork.MaskLength
 		)
 
-		$pscmdlet.ThrowTerminatingError($errorRecord)
+		$PSCmdlet.ThrowTerminatingError($ErrorRecord)
 	}
 
-	$numberOfNets = [math]::Pow(2, ($newNetwork.MaskLength - $network.MaskLength))
-	$numberOfAddresses = [math]::Pow(2, (32 - $newNetwork.MaskLength))
+	$NumberOfNets = [math]::Pow(2, ($NewNetwork.MaskLength - $Network.MaskLength))
+	$NumberOfAddresses = [math]::Pow(2, (32 - $NewNetwork.MaskLength))
 
-	$decimalAddress = ConvertTo-DecimalIP (Get-NetworkAddress $network.ToString())
-	for ($i = 0; $i -lt $numberOfNets; $i++)
+	$DecimalAddress = ConvertTo-DecimalIP (Get-NetworkAddress $Network.ToString())
+	for ($i = 0; $i -lt $NumberOfNets; $i++)
 	{
-		$networkAddress = ConvertTo-DottedDecimalIP $decimalAddress
+		$NetworkAddress = ConvertTo-DottedDecimalIP $DecimalAddress
 
-		ConvertTo-Subnet -IPAddress $networkAddress -SubnetMask $newNetwork.MaskLength
+		ConvertTo-Subnet -IPAddress $NetworkAddress -SubnetMask $NewNetwork.MaskLength
 
-		$decimalAddress += $numberOfAddresses
+		$DecimalAddress += $NumberOfAddresses
 	}
 }

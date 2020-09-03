@@ -86,11 +86,11 @@ function ConvertTo-DottedDecimalIP
 	{
 		try
 		{
-			[int64] $value = 0
+			[int64] $Value = 0
 
-			if ([int64]::TryParse($IPAddress, [ref] $value))
+			if ([int64]::TryParse($IPAddress, [ref] $Value))
 			{
-				return [IPAddress]([IPAddress]::NetworkToHostOrder([int64] $value) -shr 32 -band [UInt32]::MaxValue)
+				return [IPAddress]([IPAddress]::NetworkToHostOrder([int64] $Value) -shr 32 -band [UInt32]::MaxValue)
 			}
 			else
 			{
@@ -99,13 +99,13 @@ function ConvertTo-DottedDecimalIP
 		}
 		catch
 		{
-			$errorRecord = [System.Management.Automation.ErrorRecord]::new(
+			$ErrorRecord = [System.Management.Automation.ErrorRecord]::new(
 				[ArgumentException]'Cannot convert this format.',
 				'UnrecognizedFormat',
 				'InvalidArgument',
 				$IPAddress
 			)
-			Write-Error -ErrorRecord $errorRecord
+			Write-Error -ErrorRecord $ErrorRecord
 		}
 	}
 }

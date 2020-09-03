@@ -91,7 +91,7 @@ function Get-NetworkSummary
 	{
 		try
 		{
-			$network = ConvertTo-Network @psboundparameters
+			$Network = ConvertTo-Network @PSBoundParameters
 		}
 		catch
 		{
@@ -99,52 +99,52 @@ function Get-NetworkSummary
 		}
 
 		# TODO: variables casing not consistent with project
-		$decimalIP = ConvertTo-DecimalIP $Network.IPAddress
-		$decimalMask = ConvertTo-DecimalIP $Network.SubnetMask
-		$decimalNetwork = $decimalIP -band $decimalMask
-		$decimalBroadcast = $decimalIP -bor (-bnot $decimalMask -band [UInt32]::MaxValue)
+		$DecimalIP = ConvertTo-DecimalIP $Network.IPAddress
+		$DecimalMask = ConvertTo-DecimalIP $Network.SubnetMask
+		$DecimalNetwork = $DecimalIP -band $DecimalMask
+		$DecimalBroadcast = $DecimalIP -bor (-bnot $DecimalMask -band [UInt32]::MaxValue)
 
-		$networkSummary = [PSCustomObject]@{
-			NetworkAddress = $networkAddress = ConvertTo-DottedDecimalIP $decimalNetwork
-			NetworkDecimal = $decimalNetwork
-			BroadcastAddress = ConvertTo-DottedDecimalIP $decimalBroadcast
-			BroadcastDecimal = $decimalBroadcast
-			Mask = $network.SubnetMask
-			MaskLength = $maskLength = ConvertTo-MaskLength $network.SubnetMask
-			MaskHexadecimal = ConvertTo-HexIP $network.SubnetMask
-			CIDRNotation = '{0}/{1}' -f $networkAddress, $maskLength
+		$NetworkSummary = [PSCustomObject]@{
+			NetworkAddress = $NetworkAddress = ConvertTo-DottedDecimalIP $DecimalNetwork
+			NetworkDecimal = $DecimalNetwork
+			BroadcastAddress = ConvertTo-DottedDecimalIP $DecimalBroadcast
+			BroadcastDecimal = $DecimalBroadcast
+			Mask = $Network.SubnetMask
+			MaskLength = $MaskLength = ConvertTo-MaskLength $Network.SubnetMask
+			MaskHexadecimal = ConvertTo-HexIP $Network.SubnetMask
+			CIDRNotation = '{0}/{1}' -f $NetworkAddress, $MaskLength
 			HostRange = ''
-			NumberOfAddresses = $decimalBroadcast - $decimalNetwork + 1
-			NumberOfHosts = $decimalBroadcast - $decimalNetwork - 1
+			NumberOfAddresses = $DecimalBroadcast - $DecimalNetwork + 1
+			NumberOfHosts = $DecimalBroadcast - $DecimalNetwork - 1
 			Class = ''
 			IsPrivate = $false
 			PSTypeName = 'Indented.Net.IP.NetworkSummary'
 		}
 
-		if ($networkSummary.NumberOfHosts -lt 0)
+		if ($NetworkSummary.NumberOfHosts -lt 0)
 		{
-			$networkSummary.NumberOfHosts = 0
+			$NetworkSummary.NumberOfHosts = 0
 		}
-		if ($networkSummary.MaskLength -lt 31)
+		if ($NetworkSummary.MaskLength -lt 31)
 		{
-			$networkSummary.HostRange = '{0} - {1}' -f @(
-				(ConvertTo-DottedDecimalIP ($decimalNetwork + 1))
-				(ConvertTo-DottedDecimalIP ($decimalBroadcast - 1))
+			$NetworkSummary.HostRange = '{0} - {1}' -f @(
+				(ConvertTo-DottedDecimalIP ($DecimalNetwork + 1))
+				(ConvertTo-DottedDecimalIP ($DecimalBroadcast - 1))
 			)
 		}
 
-		$networkSummary.Class = switch -regex (ConvertTo-BinaryIP $network.IPAddress)
+		$NetworkSummary.Class = switch -regex (ConvertTo-BinaryIP $Network.IPAddress)
 		{
 			'^1111' { 'E'; break }
 			'^1110' { 'D'; break }
-			'^11000000\.10101000' { if ($networkSummary.MaskLength -ge 16) { $networkSummary.IsPrivate = $true } }
+			'^11000000\.10101000' { if ($NetworkSummary.MaskLength -ge 16) { $NetworkSummary.IsPrivate = $true } }
 			'^110' { 'C'; break }
-			'^10101100\.0001' { if ($networkSummary.MaskLength -ge 12) { $networkSummary.IsPrivate = $true } }
+			'^10101100\.0001' { if ($NetworkSummary.MaskLength -ge 12) { $NetworkSummary.IsPrivate = $true } }
 			'^10' { 'B'; break }
-			'^00001010' { if ($networkSummary.MaskLength -ge 8) { $networkSummary.IsPrivate = $true } }
+			'^00001010' { if ($NetworkSummary.MaskLength -ge 8) { $NetworkSummary.IsPrivate = $true } }
 			'^0' { 'A'; break }
 		}
 
-		$networkSummary
+		$NetworkSummary
 	}
 }

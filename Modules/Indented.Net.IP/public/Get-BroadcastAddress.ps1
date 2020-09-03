@@ -101,13 +101,13 @@ function Get-BroadcastAddress
 	{
 		try
 		{
-			$network = ConvertTo-Network @psboundparameters
+			$Network = ConvertTo-Network @PSBoundParameters
 
-			$networkAddress = [IPAddress]($network.IPAddress.Address -band $network.SubnetMask.Address)
+			$NetworkAddress = [IPAddress]($Network.IPAddress.Address -band $Network.SubnetMask.Address)
 
 			return [IPAddress](
-				$networkAddress.Address -bor
-				-bnot $network.SubnetMask.Address -band
+				$NetworkAddress.Address -bor
+				-bnot $Network.SubnetMask.Address -band
 				-bnot ([int64][UInt32]::MaxValue -shl 32)
 			)
 		}

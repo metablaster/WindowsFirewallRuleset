@@ -82,11 +82,11 @@ function ConvertTo-BinaryIP
 
 	process
 	{
-		$binary = foreach ($byte in $IPAddress.GetAddressBytes())
+		$Binary = foreach ($Byte in $IPAddress.GetAddressBytes())
 		{
-			[convert]::ToString($byte, 2).PadLeft(8, '0')
+			[convert]::ToString($Byte, 2).PadLeft(8, '0')
 		}
 
-		$binary -join '.'
+		$Binary -join '.'
 	}
 }

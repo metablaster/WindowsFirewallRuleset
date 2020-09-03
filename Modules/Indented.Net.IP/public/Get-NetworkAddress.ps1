@@ -97,8 +97,8 @@ function Get-NetworkAddress
 	{
 		try
 		{
-			$network = ConvertTo-Network @psboundparameters
-			return [IPAddress]($network.IPAddress.Address -band $network.SubnetMask.Address)
+			$Network = ConvertTo-Network @PSBoundParameters
+			return [IPAddress]($Network.IPAddress.Address -band $Network.SubnetMask.Address)
 		}
 		catch
 		{
