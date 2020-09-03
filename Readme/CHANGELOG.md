@@ -39,6 +39,7 @@ Here is a list of changes for each of the releases
 - Development
 
   - Updated templates and small portion of scripts according to templates
+  - Make variables casing consistent
 
 ## v0.6.0 (current release)
 
