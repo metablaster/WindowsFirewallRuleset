@@ -34,7 +34,8 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 
 # Imports
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule $true
-. $PSScriptRoot\..\ModulePreferences.ps1
+# TODO: Update path, this one is adjusted for testing template module
+. $PSScriptRoot\..\..\Modules\ModulePreferences.ps1
 
 #
 # Script imports
