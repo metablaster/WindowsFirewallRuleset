@@ -35,7 +35,7 @@ SOFTWARE.
 & "$ProjectRoot\Scripts\UnblockProject.ps1"
 
 # Check requirements
-Initialize-Project
+Initialize-Project -Abort
 Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $false
 
 # Imports

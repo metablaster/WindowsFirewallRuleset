@@ -44,6 +44,8 @@ Note that this parameter is managed by project settings
 .PARAMETER NoServicesCheck
 If supplied, checking if required system services are running will not be performed.
 Note that this parameter is managed by project settings
+.PARAMETER Abort
+If specified exit is called on failure instead of return
 .EXAMPLE
 PS> Initialize-Project
 Performs default requirements and recommendations checks managed by global settings,
@@ -82,7 +84,10 @@ function Initialize-Project
 		[switch] $NoModulesCheck = !$ModulesCheck,
 
 		[Parameter(ParameterSetName = "Project")]
-		[switch] $NoServicesCheck = !$ServicesCheck
+		[switch] $NoServicesCheck = !$ServicesCheck,
+
+		[Parameter(ParameterSetName = "Project")]
+		[switch] $Abort
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -96,7 +101,7 @@ function Initialize-Project
 
 	# Print watermark
 	Write-Output ""
-	Write-Output "Windows Firewall Ruleset v$($ProjectVersion.ToString())"
+	Write-Output "Windows Firewall Ruleset v$ProjectVersion"
 	Write-Output "Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch"
 	Write-Output "https://github.com/metablaster/WindowsFirewallRuleset"
 	Write-Output ""
@@ -110,7 +115,9 @@ function Initialize-Project
 	{
 		Write-Error -Category OperationStopped -TargetObject $OSPlatform `
 			-Message "$OSPlatform platform is not supported, required platform is Win32NT"
-		exit
+
+		if ($Abort) { exit }
+		return
 	}
 
 	# Check OS version
@@ -120,8 +127,10 @@ function Initialize-Project
 	{
 		[string] $OSMajorMinorBuild = "$($TargetOSVersion.Major).$($TargetOSVersion.Minor).$($TargetOSVersion.Build)"
 		Write-Error -Category NotImplemented -TargetObject $TargetOSVersion `
-			-Message "Minimum supported operating system is 'Windows v$($RequireWindowsVersion.ToString())' but 'Windows v$OSMajorMinorBuild present"
-		exit
+			-Message "Minimum supported operating system is 'Windows v$RequireWindowsVersion' but 'Windows v$OSMajorMinorBuild present"
+
+		if ($Abort) { exit }
+		return
 	}
 
 	# Check if in elevated PowerShell
@@ -132,7 +141,9 @@ function Initialize-Project
 	{
 		Write-Error -Category PermissionDenied -TargetObject $Principal `
 			-Message "Elevation required, please open PowerShell as Administrator and try again"
-		exit
+
+		if ($Abort) { exit }
+		return
 	}
 
 	# Check OS is not Home edition
@@ -145,7 +156,9 @@ function Initialize-Project
 	{
 		Write-Error -Category OperationStopped -TargetObject $OSEdition `
 			-Message "Windows $OSEdition doesn't have Local Group Policy required by this project"
-		exit
+
+		if ($Abort) { exit }
+		return
 	}
 
 	# Check OS build version, the sole purpose is to write warning for out of date systems,
@@ -182,8 +195,10 @@ function Initialize-Project
 	if ($TargetPSVersion -lt $RequirePSVersion)
 	{
 		Write-Error -Category OperationStopped -TargetObject $TargetPSVersion `
-			-Message "Required PowerShell $PowerShellEdition is v$($RequirePSVersion.ToString()) but v$($TargetPSVersion.ToString()) present"
-		exit
+			-Message "Required PowerShell $PowerShellEdition is v$RequirePSVersion but v$TargetPSVersion present"
+
+		if ($Abort) { exit }
+		return
 	}
 
 	if (!$NoServicesCheck)
@@ -197,13 +212,21 @@ function Initialize-Project
 			"LanmanServer" # Server
 		)
 
-		if (!(Initialize-Service $RequiredServices)) { exit }
+		if (!(Initialize-Service $RequiredServices))
+		{
+			if ($Abort) { exit }
+			return
+		}
 
 		# NOTE: remote administration needs this service, see Enable-PSRemoting cmdlet
 		# NOTE: some tests depend on this service, project not ready for remoting
 		if ($Develop -and ($PolicyStore -ne [System.Environment]::MachineName))
 		{
-			if (!(Initialize-Service "WinRM")) { exit }
+			if (!(Initialize-Service "WinRM"))
+			{
+				if ($Abort) { exit }
+				return
+			}
 		}
 	}
 
@@ -224,15 +247,19 @@ function Initialize-Project
 			if (!$TargetNETVersion)
 			{
 				Write-Error -Category ObjectNotFound -TargetObject $TargetNETVersion `
-					-Message "Unable to determine installed .NET version, required .NET Framework is .NET v$($RequireNETVersion.ToString())"
-				exit
+					-Message "Unable to determine installed .NET version, required .NET Framework is .NET v$RequireNETVersion"
+
+				if ($Abort) { exit }
+				return
 			}
 
 			if ($TargetNETVersion -lt $RequireNETVersion)
 			{
 				Write-Error -Category OperationStopped -TargetObject $TargetNETVersion `
-					-Message "Minimum required .NET Framework is .NET v$($RequireNETVersion.ToString()) but v$($TargetNETVersion.ToString()) present"
-				exit
+					-Message "Minimum required .NET Framework is .NET v$RequireNETVersion but v$TargetNETVersion present"
+
+				if ($Abort) { exit }
+				return
 			}
 		}
 
@@ -240,27 +267,49 @@ function Initialize-Project
 
 		# Git is recommended for version control and by posh-git module
 		# NOTE: Other module scripts require this variable
-		Set-Variable -Name GitInstance -Scope Script -Option Constant -Value `
-		$(Get-Command git.exe -CommandType Application -ErrorAction SilentlyContinue)
+		# NOTE: Using ReadOnly option instead of Constant to be able to run Initialize-Project from command line multiple times
+		Set-Variable -Name GitInstance -Scope Script -Option ReadOnly -Force -Value `
+		(Get-Command git.exe -CommandType Application -ErrorAction SilentlyContinue)
 
-		if ($GitInstance)
+		if ($null -ne $GitInstance)
 		{
 			[version] $TargetGit = $GitInstance.Version
 
 			if ($TargetGit -lt $RequireGitVersion)
 			{
-				Write-Warning -Message "Git v$($TargetGit.ToString()) is out of date, recommended is git v$($RequireGitVersion.ToString())"
+				Write-Warning -Message "Git v$TargetGit is out of date, recommended is git v$RequireGitVersion"
 				Write-Information -Tags "Project" -MessageData "INFO: Please visit https://git-scm.com to download and update"
 			}
 			else
 			{
-				Write-Information -Tags "Project" -MessageData "INFO: git.exe v$($TargetGit.ToString()) meets >= v$RequireGitVersion "
+				Write-Information -Tags "Project" -MessageData "INFO: git v$TargetGit meets >= v$RequireGitVersion"
 			}
 		}
 		else
 		{
-			Write-Warning -Message "Git in the PATH minimum v$($RequireGitVersion.ToString()) is recommended but missing"
+			Write-Warning -Message "Git in the PATH minimum v$RequireGitVersion is recommended but missing"
 			Write-Information -Tags "User" -MessageData "INFO: Please verify PATH or visit https://git-scm.com to download and install"
+		}
+
+		[System.Management.Automation.ApplicationInfo] $VSCode = Get-Command code.cmd -CommandType Application -ErrorAction SilentlyContinue
+
+		if ($null -ne $VSCode)
+		{
+			[version] $TargetVSCode = (code --version)[0]
+
+			if ($TargetVSCode -lt $RequireVSCodeVersion)
+			{
+				Write-Warning -Message "VSCode v$TargetVSCode is out of date, recommended VSCode v$RequireVSCodeVersion)"
+			}
+			else
+			{
+				Write-Information -Tags "Project" -MessageData "INFO: VSCode v$TargetVSCode meets >= v$RequireVSCodeVersion "
+			}
+		}
+		else
+		{
+			Write-Warning -Message "VSCode in the PATH minimum v$RequireVSCodeVersion is recommended but missing"
+			Write-Information -Tags "User" -MessageData "INFO: Please verify PATH or visit https://code.visualstudio.com to download and install"
 		}
 	}
 
@@ -275,7 +324,11 @@ function Initialize-Project
 		# NOTE: Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider
 		# NOTE: Updating PackageManagement and PowerShellGet requires restarting PowerShell to switch to the latest version.
 		if (!(Initialize-Provider -Required @{ ModuleName = "NuGet"; ModuleVersion = $RequireNuGetVersion } `
-					-InfoMessage "Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider")) { exit }
+					-InfoMessage "Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider"))
+		{
+			if ($Abort) { exit }
+			return
+		}
 
 		Write-Information -Tags "User" -MessageData "INFO: Checking modules"
 
@@ -286,25 +339,40 @@ function Initialize-Project
 		# NOTE: PowerShellGet has a dependency on PackageManagement, it will install it if needed
 		# For systems with PowerShell 5.0 (or greater) PowerShellGet and PackageManagement can be installed together.
 		if (!(Initialize-Module -Required @{ ModuleName = "PowerShellGet"; ModuleVersion = $RequirePowerShellGetVersion } `
-					-InfoMessage "PowerShellGet >= $($RequirePowerShellGetVersion.ToString()) is required otherwise updating other modules might fail")) { exit }
+					-InfoMessage "PowerShellGet >= v$RequirePowerShellGetVersion is required otherwise updating other modules might fail"))
+		{
+			if ($Abort) { exit }
+			return
+		}
 
 		# PackageManagement is required otherwise updating modules might fail, will be installed by PowerShellGet
-		if (!(Initialize-Module -Required @{ ModuleName = "PackageManagement"; ModuleVersion = $RequirePackageManagementVersion } )) { exit }
+		if (!(Initialize-Module -Required @{ ModuleName = "PackageManagement"; ModuleVersion = $RequirePackageManagementVersion } ))
+		{
+			if ($Abort) { exit }
+			return
+		}
 
 		# Pester is required to run pester tests, required by PSScriptAnalyzer
 		if (!(Initialize-Module @{ ModuleName = "Pester"; ModuleVersion = $RequirePesterVersion } `
-					-InfoMessage "Pester >= $($RequirePesterVersion.ToString()) is required to run pester tests" )) { }
+					-InfoMessage "Pester >= v$RequirePesterVersion is required to run pester tests" )) { }
 
 		# PSScriptAnalyzer is required for code formattings and analysis
 		if (!(Initialize-Module -Required @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = $RequireAnalyzerVersion } `
-					-InfoMessage "PSScriptAnalyzer >= $($RequireAnalyzerVersion.ToString()) is required otherwise code will start missing while editing" )) { exit }
+					-InfoMessage "PSScriptAnalyzer >= v$RequireAnalyzerVersion is required otherwise code will start missing while editing" ))
+		{
+			if ($Abort) { exit }
+			return
+		}
 
 		# posh-git is recommended for better git experience in PowerShell
 		if (Initialize-Module @{ ModuleName = "posh-git"; ModuleVersion = $RequirePoshGitVersion } -AllowPrerelease `
-				-InfoMessage "posh-git >= $($RequirePoshGitVersion.ToString()) is recommended for better git experience in PowerShell" ) { }
+				-InfoMessage "posh-git >= v$RequirePoshGitVersion is recommended for better git experience in PowerShell" ) { }
 
 		if (Initialize-Module @{ ModuleName = "PSReadLine"; ModuleVersion = $RequirePSReadlineVersion } `
-				-InfoMessage "PSReadLine >= $($RequirePSReadlineVersion.ToString()) is recommended for command line editing experience of PowerShell" ) { }
+				-InfoMessage "PSReadLine >= v$RequirePSReadlineVersion is recommended for command line editing experience of PowerShell" ) { }
+
+		if (Initialize-Module @{ ModuleName = "platyPS"; ModuleVersion = $RequirePlatyPSVersion } `
+				-InfoMessage "platyPS >= v$RequirePlatyPSVersion is recommended to generate online help files for modules" ) { }
 
 		# Update help regardless of module updates
 		if ($Develop)
@@ -326,7 +394,7 @@ function Initialize-Project
 
 			if ($Decision -eq $Default)
 			{
-				Write-Information -Tags "User" -MessageData "INFO: Checking online for help updates"
+				Write-Information -Tags "User" -MessageData "INFO: Please wait, checking online for help updates..."
 
 				$CultureNames = "en-US"
 

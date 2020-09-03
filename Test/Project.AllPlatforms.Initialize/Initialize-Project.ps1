@@ -45,7 +45,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 Enter-Test $ThisScript
 
 Start-Test "Initialize-Project"
-Initialize-Project
+Initialize-Project -Abort
 
 Start-Test "Initialize-Project -NoModules"
 Initialize-Project -NoModulesCheck

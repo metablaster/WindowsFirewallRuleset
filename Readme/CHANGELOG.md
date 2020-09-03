@@ -22,7 +22,8 @@ Here is a list of changes for each of the releases
   - Improved SID conversion function
   - Added function to learn store app capabilities (ex. to see which store apps have networking capability)
   - Module manifests: replaced 1 duplicate and 1 wrong GUID, added required assembly entry,
-  replaced single with double quotes, reordered file list alphabetically, uncomment required entries
+  replaced single with double quotes, reordered file list alphabetically, uncomment required entries,
+  all modules are now recognized as manifest modules.
   - Reordered external module code and removed non file licenses
   - Indented.Net.IP: integrate into project, rename module, make variables casing consistent
 
@@ -32,6 +33,7 @@ Here is a list of changes for each of the releases
   - Rules for store apps are now created only for apps that have networking capabilities and
   remote address is adjusted according to app capabilities.
   - Added rule for curl shipped with system
+  - Updated rules for Visual Studio
 
 - New features
 
@@ -40,6 +42,12 @@ Here is a list of changes for each of the releases
 - Development
 
   - Updated templates and small portion of scripts according to templates
+  - Updated project initialization functions
+  - Added platyPS module to list of recommended modules to be able to generate online help files
+
+- Bugfix
+
+  - Fix bug with Initialize-Module failing to update module due to invalid parameter
 
 ## v0.6.0 (current release)
 

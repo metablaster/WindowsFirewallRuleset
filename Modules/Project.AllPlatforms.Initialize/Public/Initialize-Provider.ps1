@@ -100,17 +100,19 @@ function Initialize-Provider
 		[System.Management.Automation.Host.ChoiceDescription[]] $Choices = @()
 		$Accept = [System.Management.Automation.Host.ChoiceDescription]::new("&Yes")
 		$Deny = [System.Management.Automation.Host.ChoiceDescription]::new("&No")
-		$Deny.HelpMessage = "Skip operation"
 	}
 	process
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
+		[string] $ProviderName = $FullyQualifiedName.ModuleName
+		$Deny.HelpMessage = "Skip operation, provider $ProviderName will not be installed or updated"
+
 		# Validate module specification
 		if (!($FullyQualifiedName.Count -ge 2 -and
 				($FullyQualifiedName.ContainsKey("ModuleName") -and $FullyQualifiedName.ContainsKey("ModuleVersion"))))
 		{
-			$Message = "ModuleSpecification parameter for: $($FullyQualifiedName.ModuleName) is not valid"
+			$Message = "ModuleSpecification parameter for: $ProviderName is not valid"
 			if ($Required)
 			{
 				Write-Error -Category InvalidArgument -TargetObject $FullyQualifiedName -Message $Message
@@ -122,7 +124,6 @@ function Initialize-Provider
 		}
 
 		# Get required provider package from input
-		[string] $ProviderName = $FullyQualifiedName.ModuleName
 		[version] $RequireVersion = $FullyQualifiedName.ModuleVersion
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if provider $ProviderName is installed and which version"

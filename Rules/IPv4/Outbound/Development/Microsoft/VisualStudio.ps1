@@ -29,7 +29,7 @@ SOFTWARE.
 . $PSScriptRoot\..\..\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements
-Initialize-Project
+Initialize-Project -Abort
 
 # Imports
 . $PSScriptRoot\..\..\DirectionSetup.ps1
@@ -40,6 +40,7 @@ Import-Module -Name Project.Windows.UserInfo
 # Setup local variables
 $Group = "Development - Microsoft Visual Studio"
 $FirewallProfile = "Private, Public"
+# Only Administrators can update VS
 $VSUpdateUsers = Get-SDDL -Group "Users", "Administrators" @Logs
 
 $ExtensionAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM" @Logs
@@ -209,8 +210,8 @@ foreach ($Instance in $VSInstances)
 	# NOTE: Get-ChildItem doesn't recognize environment variables
 	$MSVCVersion = Get-ChildItem -Directory -Name -Path "$($Instance.InstallationPath)\VC\Tools\MSVC"
 
-	# There should be only one directory, but just in case let's select first one
-	$MSVCVersion = $MSVCVersion | Select-Object -First 1
+	# There should be only one directory, but just in case let's select highest version
+	$MSVCVersion = $MSVCVersion | Select-Object -Last 1
 
 	$Program = "$VSRoot\VC\Tools\MSVC\$script:MSVCVersion\bin\Hostx86\x64\vctip.exe"
 	Test-File $Program @Logs
@@ -284,7 +285,7 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot) @Logs) -
 		-DisplayName "VS Installer - vs_Installershell" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-		-LocalUser $UsersGroupSDDL `
+		-LocalUser $VSUpdateUsers `
 		-Description "Run when running VS Installer for add new features" @Logs | Format-Output @Logs
 
 	# TODO: needs testing what users are needed for VSIX rules

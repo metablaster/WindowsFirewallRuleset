@@ -66,4 +66,4 @@ foreach ($Script in $PublicScripts)
 #
 
 # Template variable
-New-Variable -Name TemplateModuleVariable -Scope Global -Value $null
+Set-Variable -Name TemplateModuleVariable -Scope Global -Value $null

@@ -50,7 +50,7 @@ New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )
 
 # Check requirements
-Initialize-Project
+Initialize-Project -Abort
 
 # Imports
 # TODO: Include modules and scripts as needed

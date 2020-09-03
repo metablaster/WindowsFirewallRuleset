@@ -86,7 +86,7 @@ Type    Name
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements
-Initialize-Project
+Initialize-Project -Abort
 
 # Imports
 . $PSScriptRoot\DirectionSetup.ps1

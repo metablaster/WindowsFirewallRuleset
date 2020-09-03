@@ -192,7 +192,7 @@ function Initialize-Module
 	[System.Management.Automation.Host.ChoiceDescription[]] $Choices = @()
 	$Accept = [System.Management.Automation.Host.ChoiceDescription]::new("&Yes")
 	$Deny = [System.Management.Automation.Host.ChoiceDescription]::new("&No")
-	$Deny.HelpMessage = "Skip operation"
+	$Deny.HelpMessage = "Skip operation, module $ModuleName will not be installed or updated"
 
 	# TODO: remove?
 	# Check for PowerShellGet only if not processing PowerShellGet
@@ -415,11 +415,11 @@ function Initialize-Module
 
 				if ($TargetPowerShellGet -ge $Version2)
 				{
-					Update-Module -InputObject $FoundModule -Scope AllUsers
+					Update-Module $ModuleName -Scope AllUsers
 				}
 				else
 				{
-					Update-Module -InputObject $FoundModule
+					Update-Module $ModuleName
 				}
 			}
 			else # Shipped with system

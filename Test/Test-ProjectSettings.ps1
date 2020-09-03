@@ -45,7 +45,7 @@ if ((Get-Variable -Name Develop -Scope Global).Value -eq $false)
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Check requirements
-Initialize-Project
+Initialize-Project -Abort
 
 # User prompt
 Update-Context $TestContext $ThisScript @Logs

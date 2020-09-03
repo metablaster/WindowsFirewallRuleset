@@ -86,4 +86,4 @@ function New-Function
 #
 
 # Template variable
-New-Variable -Name TemplateVariable -Scope Global -Value $null
+Set-Variable -Name TemplateVariable -Scope Global -Value $null
