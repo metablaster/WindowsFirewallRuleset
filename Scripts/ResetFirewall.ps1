@@ -46,7 +46,7 @@ $Accept = "All firewall rules and settings will be restored to factory defaults"
 $Deny = "Skip operation, no change will be done to firewall"
 
 # User prompt
-Update-Context $Context $ThisScript @Logs
+Update-Context $ScriptContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 #

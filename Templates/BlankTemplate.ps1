@@ -60,5 +60,6 @@ Import-Module -Name Project.AllPlatforms.Logging
 # TODO: Update command line help messages
 $Accept = "Template accept help message"
 $Deny = "Skip operation, template deny help message"
-Update-Context $TestContext $ThisScript @Logs
+# TODO: Replace TemplateContext variable
+Update-Context $TemplateContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }

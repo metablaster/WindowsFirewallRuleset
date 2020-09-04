@@ -45,7 +45,7 @@ $Accept = "Accpet exporting firewall rules and settings to file"
 $Deny = "Skip operation, no firewall rules or settings will be exported"
 
 # User prompt
-Update-Context $Context $ThisScript @Logs
+Update-Context $ScriptContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 # NOTE: export speed is 10 rules per minute

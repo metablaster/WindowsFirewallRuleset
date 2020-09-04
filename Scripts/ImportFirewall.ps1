@@ -46,7 +46,7 @@ $Accept = "Accpet importing firewall rules and settings from file"
 $Deny = "Skip operation, no firewall rules or settings will be imported"
 
 # User prompt
-Update-Context $Context $ThisScript @Logs
+Update-Context $ScriptContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 # NOTE: import speed is 26 rules per minute, slowed down by "Test-TargetComputer" for store app rules

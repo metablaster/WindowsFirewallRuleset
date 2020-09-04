@@ -61,6 +61,7 @@ The intended use of the function. This content appears when the Get-Help command
 the Functionality parameter of Get-Help.
 #>
 
+# TODO: Remove or update script paraemters
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '',
 	Justification = 'This is template script parameter')]
 param (
@@ -86,10 +87,11 @@ Import-Module -Name Project.AllPlatforms.Logging
 # TODO: Update command line help messages
 $Accept = "Template accept help message"
 $Deny = "Skip operation, template deny help message"
-Update-Context $TestContext $ThisScript @Logs
+Update-Context $ScriptContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 # Setup local variables
+# TODO: define or remove variables
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '',
 	Justification = 'This is template variable')]
 $TemplateVariable = ""

@@ -30,4 +30,4 @@ SOFTWARE.
 # Context setup for scripts
 #
 
-New-Variable -Name Context -Scope Local -Option Constant -Value "Scripts"
+New-Variable -Name ScriptContext -Scope Local -Option Constant -Value "Scripts"

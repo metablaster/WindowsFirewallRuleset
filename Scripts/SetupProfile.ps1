@@ -46,7 +46,7 @@ $Accept = "Set global firewall behavior, adjust firewall settings and set up fir
 $Deny = "Skip operation, no change will be done to firewall or network profile"
 
 # User prompt
-Update-Context $Context $ThisScript @Logs
+Update-Context $ScriptContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 #

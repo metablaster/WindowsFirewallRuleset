@@ -81,6 +81,11 @@ Intermediate/
 # Project specific
 Logs/**
 !Logs/README.md
+
 Exports/**
 !Exports/README.md
+
 Rules/NetworkServices.txt
+
+Modules/**/Help/Content/
+Modules/**/Help/en-US/
