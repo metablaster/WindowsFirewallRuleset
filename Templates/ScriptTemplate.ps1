@@ -64,6 +64,7 @@ the Functionality parameter of Get-Help.
 # TODO: Remove or update script paraemters
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '',
 	Justification = 'This is template script parameter')]
+[CmdletBinding()]
 param (
 	$ScriptParam
 )
@@ -86,7 +87,7 @@ Import-Module -Name Project.AllPlatforms.Logging
 # User prompt
 # TODO: Update command line help messages
 $Accept = "Template accept help message"
-$Deny = "Skip operation, template deny help message"
+$Deny = "Abort operation, template deny help message"
 Update-Context $ScriptContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 

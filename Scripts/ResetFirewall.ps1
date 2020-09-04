@@ -43,7 +43,7 @@ Import-Module -Name Project.AllPlatforms.Logging
 
 # Setup local variables
 $Accept = "All firewall rules and settings will be restored to factory defaults"
-$Deny = "Skip operation, no change will be done to firewall"
+$Deny = "Abort operation, no change will be done to firewall"
 
 # User prompt
 Update-Context $ScriptContext $ThisScript @Logs

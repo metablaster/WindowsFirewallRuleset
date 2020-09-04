@@ -90,7 +90,7 @@ v0.7.0/Template.Module_66e38822-834d-4a90-b9c6-9e600a472a0a_en-US_HelpContent.ca
 
 ```none
 cd $ProjectRoot
-makecab.exe Templates\Template.Module\about_Template.Module.help.txt Template.Module_66e38822-834d-4a90-b9c6-9e600a472a0a_en-US_HelpContent.cab /V3 /L Config\UpdatableHelp
+makecab.exe Templates\Template.Module\about_Template.Module.help.txt Template.Module_66e38822-834d-4a90-b9c6-9e600a472a0a_en-US_HelpContent.cab /V3 /L Config\HelpContent
 ```
 
 ### Help content location

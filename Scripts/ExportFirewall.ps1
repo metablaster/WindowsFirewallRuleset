@@ -42,7 +42,7 @@ Import-Module -Name Project.AllPlatforms.Logging
 
 # Setup local variables
 $Accept = "Accpet exporting firewall rules and settings to file"
-$Deny = "Skip operation, no firewall rules or settings will be exported"
+$Deny = "Abort operation, no firewall rules or settings will be exported"
 
 # User prompt
 Update-Context $ScriptContext $ThisScript @Logs

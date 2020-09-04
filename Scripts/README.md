@@ -9,6 +9,7 @@ Contains following project scripts that are not part of modules
 4. `ResetFirewall.ps1` to restore GPO policy store to factory defaults
 5. `ExportFirewall.ps1` to export all firewall rules from GPO policy store
 6. `ImportFirewall.ps1` to import all exported firewall rules into GPO policy store
+7. `UpdateHelp.ps1`  generate new or update existing help files for all project modules
 
 **Warning:**\
 Export/Import of firewall rules might take a lot of time, it is recommended to either customize these\
