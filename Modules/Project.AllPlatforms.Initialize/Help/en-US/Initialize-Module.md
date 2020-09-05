@@ -1,7 +1,7 @@
 ---
 external help file: Project.AllPlatforms.Initialize-help.xml
 Module Name: Project.AllPlatforms.Initialize
-online version: https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Modules/Project.AllPlatforms.Initialize/Help/Initialize-Module.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Initialize/Help/en-US/Initialize-Module.md
 schema: 2.0.0
 ---
 
