@@ -1,4 +1,4 @@
----
+﻿---
 external help file: Project.Windows.Firewall-help.xml
 Module Name: Project.Windows.Firewall
 online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.Firewall/Help/en-US/Remove-FirewallRules.md
@@ -8,16 +8,18 @@ schema: 2.0.0
 # Remove-FirewallRules
 
 ## SYNOPSIS
+
 Removes firewall rules according to a list in a CSV or JSON file.
 
 ## SYNTAX
 
-```
+```none
 Remove-FirewallRules [[-PolicyStore] <String>] [[-Folder] <String>] [[-FileName] <String>] [-JSON] [-WhatIf]
  [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 Removes firewall rules according to a with Export-FirewallRules generated list in a CSV or JSON file.
 CSV files have to be separated with semicolons.
 Only the field Name or - if Name is missing - DisplayName
@@ -26,13 +28,15 @@ is used, all other fields can be omitted
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```none
 Remove-FirewallRules
 Removes all firewall rules according to a list in the CSV file FirewallRules.csv in the current directory.
 ```
 
 ### EXAMPLE 2
-```
+
+```none
 Remove-FirewallRules WmiRules.json -json
 Removes all firewall rules according to the list in the JSON file WmiRules.json.
 ```
@@ -40,6 +44,7 @@ Removes all firewall rules according to the list in the JSON file WmiRules.json.
 ## PARAMETERS
 
 ### -PolicyStore
+
 Policy store from which remove rules, default is local GPO.
 For more information about stores see:
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/FirewallParameters.md
@@ -57,6 +62,7 @@ Accept wildcard characters: False
 ```
 
 ### -Folder
+
 Folder in which file is located
 
 ```yaml
@@ -72,6 +78,7 @@ Accept wildcard characters: False
 ```
 
 ### -FileName
+
 File name according to which to delete rules
 
 ```yaml
@@ -87,6 +94,7 @@ Accept wildcard characters: False
 ```
 
 ### -JSON
+
 Input file in JSON instead of CSV format
 
 ```yaml
@@ -102,6 +110,7 @@ Accept wildcard characters: False
 ```
 
 ### -WhatIf
+
 Shows what would happen if the cmdlet runs.
 The cmdlet is not run.
 
@@ -118,6 +127,7 @@ Accept wildcard characters: False
 ```
 
 ### -Confirm
+
 Prompts you for confirmation before running the cmdlet.
 
 ```yaml
@@ -133,6 +143,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
@@ -140,7 +151,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ### System.Void
+
 ## NOTES
+
 Author: Markus Scholtes
 Version: 1.02
 Build date: 2020/02/15
@@ -161,3 +174,4 @@ Changed minor flow of execution
 TODO: implement removing rules not according to file
 
 ## RELATED LINKS
+

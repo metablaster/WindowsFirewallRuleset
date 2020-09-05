@@ -12,17 +12,17 @@ Locale: en-US
 
 ## Project.Windows.Firewall Cmdlets
 ### [Export-FirewallRules](Export-FirewallRules.md)
-{{ Fill in the Description }}
+Exports firewall rules to a CSV or JSON file.
 
 ### [Find-RulePrincipal](Find-RulePrincipal.md)
-{{ Fill in the Description }}
+Get all firewall rules with LocalUser value
 
 ### [Format-Output](Format-Output.md)
-{{ Fill in the Description }}
+Format firewall rule output for display
 
 ### [Import-FirewallRules](Import-FirewallRules.md)
-{{ Fill in the Description }}
+Imports firewall rules from a CSV or JSON file.
 
 ### [Remove-FirewallRules](Remove-FirewallRules.md)
-{{ Fill in the Description }}
+Removes firewall rules according to a list in a CSV or JSON file.
 

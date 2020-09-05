@@ -1,4 +1,4 @@
----
+﻿---
 external help file: Project.AllPlatforms.Utility-help.xml
 Module Name: Project.AllPlatforms.Utility
 online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Utility/Help/en-US/Update-Context.md
@@ -8,23 +8,26 @@ schema: 2.0.0
 # Update-Context
 
 ## SYNOPSIS
+
 Update context for Approve-Execute function
 
 ## SYNTAX
 
-```
+```none
 Update-Context [-Root] <String> [-Section] <String> [[-Subsection] <String>] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 Execution context is shown in the console every time Approve-Execute is called.
 It helps to know the state and progress of execution.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```none
 Update-Context "IPv4" "Outbound" "RuleGroup"
 ```
 
@@ -33,6 +36,7 @@ Update-Context "IPv4" "Outbound" "RuleGroup"
 ## PARAMETERS
 
 ### -Root
+
 First context string before .
 (dot)
 
@@ -49,6 +53,7 @@ Accept wildcard characters: False
 ```
 
 ### -Section
+
 Second context string after .
 (dot)
 
@@ -65,6 +70,7 @@ Accept wildcard characters: False
 ```
 
 ### -Subsection
+
 Additional string after -\> (arrow)
 
 ```yaml
@@ -80,6 +86,7 @@ Accept wildcard characters: False
 ```
 
 ### -WhatIf
+
 Shows what would happen if the cmdlet runs.
 The cmdlet is not run.
 
@@ -96,6 +103,7 @@ Accept wildcard characters: False
 ```
 
 ### -Confirm
+
 Prompts you for confirmation before running the cmdlet.
 
 ```yaml
@@ -111,15 +119,20 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### None. You cannot pipe objects to Update-Context
+
 ## OUTPUTS
 
 ### None. Script scope context variable is updated.
+
 ## NOTES
+
 None.
 
 ## RELATED LINKS
+

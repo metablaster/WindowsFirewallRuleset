@@ -1,4 +1,4 @@
----
+﻿---
 external help file: Project.AllPlatforms.IP-help.xml
 Module Name: Project.AllPlatforms.IP
 online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.IP/Help/en-US/Get-Permutation.md
@@ -8,27 +8,31 @@ schema: 2.0.0
 # Get-Permutation
 
 ## SYNOPSIS
+
 Gets permutations of an IP address expansion expression.
 
 ## SYNTAX
 
-```
+```none
 Get-Permutation [[-Group] <Object[]>] [[-BaseAddress] <String>] [[-Index] <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 Gets permutations of an IP address expansion expression.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```none
 TODO: add example
 ```
 
 ## PARAMETERS
 
 ### -Group
+
 TODO: describe parameter
 
 ```yaml
@@ -44,6 +48,7 @@ Accept wildcard characters: False
 ```
 
 ### -BaseAddress
+
 TODO: describe parameter
 
 ```yaml
@@ -59,6 +64,7 @@ Accept wildcard characters: False
 ```
 
 ### -Index
+
 TODO: describe parameter
 
 ```yaml
@@ -74,15 +80,19 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### None. You cannot pipe objects to Get-Permutation
+
 ## OUTPUTS
 
 ### TODO: describe outputs
+
 ## NOTES
+
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
 - For code to be consistent with project code formatting and symbol casing.
@@ -90,3 +100,4 @@ Following changes by metablaster:
 - Removed unnecessary position arguments, added default argument values explicitly.
 
 ## RELATED LINKS
+

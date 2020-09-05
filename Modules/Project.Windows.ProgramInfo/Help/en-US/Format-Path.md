@@ -1,4 +1,4 @@
----
+﻿---
 external help file: Project.Windows.ProgramInfo-help.xml
 Module Name: Project.Windows.ProgramInfo
 online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ProgramInfo/Help/en-US/Format-Path.md
@@ -8,15 +8,17 @@ schema: 2.0.0
 # Format-Path
 
 ## SYNOPSIS
+
 Format path into firewall compatible path
 
 ## SYNTAX
 
-```
+```none
 Format-Path [[-FilePath] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 Various paths drilled out of registry, and those specified by the user must be
 checked and properly formatted.
 Formatted paths will also help sorting rules in firewall GUI based on path.
@@ -24,13 +26,15 @@ Formatted paths will also help sorting rules in firewall GUI based on path.
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```none
 Format-Path "C:\Program Files\\Dir\"
 ```
 
 ## PARAMETERS
 
 ### -FilePath
+
 File path to format, can have environment variables, or consists of trailing slashes.
 
 ```yaml
@@ -46,15 +50,20 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### [string] File path to format
+
 ## OUTPUTS
 
 ### [string] formatted path, includes environment variables, stripped off of junk
+
 ## NOTES
+
 None.
 
 ## RELATED LINKS
+

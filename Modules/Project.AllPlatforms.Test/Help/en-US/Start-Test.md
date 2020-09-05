@@ -1,4 +1,4 @@
----
+﻿---
 external help file: Project.AllPlatforms.Test-help.xml
 Module Name: Project.AllPlatforms.Test
 online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Test/Help/en-US/Start-Test.md
@@ -8,22 +8,25 @@ schema: 2.0.0
 # Start-Test
 
 ## SYNOPSIS
+
 Start test case
 
 ## SYNTAX
 
-```
+```none
 Start-Test [-Message] <String> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 Start-Test writes output to host to separate test cases
 This function must be called before single test case starts executing
 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```none
 Start-Test "Get-Something"
 ```
 
@@ -34,6 +37,7 @@ Start-Test "Get-Something"
 ## PARAMETERS
 
 ### -Message
+
 Message to format and print before test case begins
 
 ```yaml
@@ -49,6 +53,7 @@ Accept wildcard characters: False
 ```
 
 ### -WhatIf
+
 Shows what would happen if the cmdlet runs.
 The cmdlet is not run.
 
@@ -65,6 +70,7 @@ Accept wildcard characters: False
 ```
 
 ### -Confirm
+
 Prompts you for confirmation before running the cmdlet.
 
 ```yaml
@@ -80,16 +86,21 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### None. You cannot pipe objects to Start-Test
+
 ## OUTPUTS
 
 ### None. Formatted message block is shown in the console
+
 ## NOTES
+
 TODO: switch for no new line, some tests will produce redundant new lines, ex.
 Format-Table in pipeline
 
 ## RELATED LINKS
+

@@ -12,14 +12,14 @@ Locale: en-US
 
 ## Project.AllPlatforms.Test Cmdlets
 ### [Enter-Test](Enter-Test.md)
-{{ Fill in the Description }}
+Initialize unit test
 
 ### [Exit-Test](Exit-Test.md)
-{{ Fill in the Description }}
+Exit unit test
 
 ### [Start-Test](Start-Test.md)
-{{ Fill in the Description }}
+Start test case
 
 ### [Stop-Test](Stop-Test.md)
-{{ Fill in the Description }}
+Stop test case
 

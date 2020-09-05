@@ -1,4 +1,4 @@
 
 # About HelpContent directory
 
-Contains CAB files for Update-Help commandlet
+Contains CAB files for `Update-Help` commandlet

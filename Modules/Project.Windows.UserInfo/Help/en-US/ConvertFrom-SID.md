@@ -1,4 +1,4 @@
----
+﻿---
 external help file: Project.Windows.UserInfo-help.xml
 Module Name: Project.Windows.UserInfo
 online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.UserInfo/Help/en-US/ConvertFrom-SID.md
@@ -8,15 +8,17 @@ schema: 2.0.0
 # ConvertFrom-SID
 
 ## SYNOPSIS
+
 Convert SID to user or computer account name
 
 ## SYNTAX
 
-```
+```none
 ConvertFrom-SID [-SID] <String[]> [-ComputerNames <String[]>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 Convert SID to user or computer account name, in case of pseudo and built in accounts
 only relevant login name is returned, not full reference name.
 In all other cases result if full account name in form of COMPUTERNAME\USERNAME
@@ -24,11 +26,13 @@ In all other cases result if full account name in form of COMPUTERNAME\USERNAME
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```none
 ConvertFrom-SID S-1-5-21-2139171146-395215898-1246945465-2359
 ```
 
 ### EXAMPLE 2
+
 ```
 '^S-1-5-32-580' | ConvertFrom-SID
 ```
@@ -36,6 +40,7 @@ ConvertFrom-SID S-1-5-21-2139171146-395215898-1246945465-2359
 ## PARAMETERS
 
 ### -SID
+
 One or more SIDs to convert
 
 ```yaml
@@ -51,6 +56,7 @@ Accept wildcard characters: False
 ```
 
 ### -ComputerNames
+
 One or more computers to check if SID is not known, default is localhost
 
 ```yaml
@@ -66,15 +72,19 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### [string[]] One or multiple SID's
+
 ## OUTPUTS
 
 ### [PSCustomObject[]] composed of SID information
+
 ## NOTES
+
 SID conversion for well known SIDs and display names from following links:
 1.
 http://support.microsoft.com/kb/243330
@@ -125,3 +135,4 @@ probably not for pseudo accounts but for built in accounts it makes sense
 TODO: need to implement CIM switch
 
 ## RELATED LINKS
+

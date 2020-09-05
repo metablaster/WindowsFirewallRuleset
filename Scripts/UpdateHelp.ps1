@@ -34,11 +34,16 @@ UpdateHelp.ps1 Updates existing or generates new help files for all modules
 that are part of "Windows Firewall Ruleset" repository
 These Help files are used for online help (Get-Help -Online) and
 updatable help for (Update-Help)
+.PARAMETER Module
+Specify module name for which to generate help files.
+The default is all repository modules
 .PARAMETER SupportedUICulture
 Supported UI cultures for which to generate help files, the default is en-US
 .PARAMETER IncrementVersion
 If specified, increments help version to match $ProjectVersion variable
 TODO: not implemented
+.PARAMETER Encoding
+Specify encoding for help files, the default is UTF8
 .EXAMPLE
 UpdateHelp.ps1
 .EXAMPLE
@@ -56,10 +61,19 @@ produce errors while generating online help and how to avoid them
 
 [CmdletBinding()]
 param (
+	[Parameter()]
+	[string[]] $Module,
+
+	[Parameter()]
 	[string[]] $SupportedUICulture = @(
 		"en-US"
 	),
-	[switch] $IncrementVersion
+
+	[Parameter()]
+	[switch] $IncrementVersion,
+
+	[Parameter()]
+	[System.Text.Encoding] $Encoding = [System.Text.Encoding]::UTF8
 )
 
 # Initialization
@@ -100,23 +114,22 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Setup local variables
-# Specifies the character encoding for markdown help files
-$UTF8 = New-Object System.Text.UTF8Encoding -ArgumentList $false @Logs
-
 # Root directory of help content for current module and culture
 [string] $HelpContent = "$ProjectRoot\Config\HelpContent\$ProjectVersion"
 
-# Generate new or update existing help files for all modules that are part of repository
-$TargetModules = Get-ChildItem -Path $ProjectRoot\Modules -Directory |
-Where-Object -Property Name -Like "Project.*" |
-Select-Object -Property Name
+if ([string]::IsNullOrEmpty($Module))
+{
+	# Generate new or update existing help files for all modules that are part of repository
+	$Module = Get-ChildItem -Path $ProjectRoot\Modules -Directory |
+	Where-Object -Property Name -Like "Project.*" |
+	Select-Object -ExpandProperty Name
+}
 
 # Counters for progress
 [int32] $ProgressCount = 0
 
-foreach ($ModuleDirectory in $TargetModules)
+foreach ($ModuleName in $Module)
 {
-	[string] $ModuleName = $ModuleDirectory.Name
 	Write-Debug -Message "[$ThisScript] Processing module: $ModuleName"
 
 	# NOTE: Module must be imported to avoid warnings from platyPS
@@ -136,7 +149,7 @@ foreach ($ModuleDirectory in $TargetModules)
 	if (!(Test-Path -Path $Readme))
 	{
 		New-Item -Path $Readme -ItemType File @Logs | Out-Null
-		Set-Content -Path $Readme -Encoding utf8 -Value @"
+		Set-Content -Path $Readme -Encoding $Encoding -Value @"
 
 # Help directory
 
@@ -166,30 +179,25 @@ While generating help files, temporary folders may appear in language specific s
 		# Module page file
 		[string] $ModulePage = "$OnlineHelp\$ModuleName.md"
 
-		# If module page exists, perform update
-		[bool] $Update = Test-Path -Path $ModulePage -PathType Leaf
-
 		# Both the help root folder and module page must exist to update
-		# NOTE: The folder must contain a module page from which this cmdlet can get the module name
-		if ($Update)
+		if (Test-Path -Path $ModulePage -PathType Leaf)
 		{
 			Write-Verbose -Message "[$ThisScript] Updating help: $ModuleName - $UICulture"
 
 			# If download link is out of date replace it
-			$FileData = Get-Content $ModulePage
-			if (!($FileData -match "^Download Help Link: $DownloadLink$").Length)
+			$FileData = Get-Content -Path $ModulePage -Encoding $Encoding
+			if ([string]::IsNullOrEmpty($FileData -match "^Download Help Link: $DownloadLink$"))
 			{
 				Write-Information -Tags "Project" -MessageData "INFO: Updating download link in $ModuleName.md"
 				$FileData -replace "(?<=Download Help Link: ).+", $DownloadLink |
-				Set-Content -Path $ModulePage -Encoding utf8
+				Set-Content -Path $ModulePage -Encoding $Encoding
 			}
 
 			# Updates existing help markdown files and creates markdown files for new cmdlets in a module
 			# NOTE: updates module page but not about_ topics
 			# NOTE: Generates blank module page if missing
-			# NOTE: We can't use Metadata parameter here to enter "online version:" link
 			# -Path string[] The folder must contain a module page from which this cmdlet can get the module name
-			Update-MarkdownHelpModule -Encoding $UTF8 -Path $OnlineHelp -UpdateInputOutput `
+			Update-MarkdownHelpModule -Encoding $Encoding -Path $OnlineHelp -UpdateInputOutput `
 				-LogPath $ProjectRoot\Logs\$ModuleName-UpdateHelp.log -UseFullTypeName `
 				-RefreshModulePage -Force -ModulePagePath $ModulePage |
 			Select-Object -ExpandProperty Name
@@ -201,7 +209,7 @@ While generating help files, temporary folders may appear in language specific s
 			# NOTE: Need to run to generate module page
 			# Regenerates all help files, new ones will be later updated to include "online version" metadata
 			# Create new markdown help files (module page included, about module not included)
-			New-MarkdownHelp -Module $ModuleName -Encoding $UTF8 -OutputFolder $OnlineHelp `
+			New-MarkdownHelp -Module $ModuleName -Encoding $Encoding -OutputFolder $OnlineHelp `
 				-UseFullTypeName -WithModulePage -HelpVersion $ProjectVersion -Locale $UICulture `
 				-FwLink $DownloadLink -ModulePagePath $ModulePage -Force @Logs |
 			Select-Object -ExpandProperty Name
@@ -209,23 +217,34 @@ While generating help files, temporary folders may appear in language specific s
 		}
 
 		# NOTE: Need to run to add "online version" metadata to newly generated files which are missing the link
+		# Also to perform formatting according to recommended markdown style
 		$ModuleCommands = ($ModuleInfo | Select-Object -ExpandProperty ExportedCommands).GetEnumerator() |
 		Select-Object -ExpandProperty Key
 
 		foreach ($Command in $ModuleCommands)
 		{
-			Write-Debug -Message "[$ThisScript] Processing command: $Command"
+			Write-Information -Tags "Project" -MessageData "INFO: Formatting document $Command.md"
+
+			# Read file and single line string preserving line break characters
+			$FileData = Get-Content -Path $OnlineHelp\$Command.md -Encoding $Encoding -Raw
+			$OnlineVersion = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/$ModuleName/Help/$UICulture/$Command.md"
 
 			# If online help link is out of date or missing set it
-			$FileData = Get-Content $OnlineHelp\$Command.md
-			[string] $OnlineVersion = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/$ModuleName/Help/$UICulture/$Command.md"
-
-			if (!($FileData -match "^online version:\s$OnlineVersion$").Length)
+			if (!($FileData -match "online version:\s$OnlineVersion"))
 			{
-				Write-Information -Tags "Project" -MessageData "INFO: Updating online help link in $Command.md"
-				$FileData -replace "(?<=online version:).*", " $OnlineVersion" |
-				Set-Content -Path $OnlineHelp\$Command.md -Encoding utf8
+				Write-Verbose -Message "[$ThisScript] Updating online help link in $Command.md"
+				$FileData = $FileData -replace "(?<=online version:).*", " $OnlineVersion"
 			}
+
+			# Blank line after heading
+			Write-Verbose -Message "[$ThisScript] Setting blank lines around headings in $Command.md"
+			$FileData = $FileData -replace '(?m)(?<heading>^#+\s.+$\n)(?=\S)', "`${heading}`r`n"
+
+			# Empty code fences
+			Write-Verbose -Message "[$ThisScript] Setting explicit code fences in $Command.md"
+			$FileData = $FileData -replace '(?m)(?<fence>^```)(?=\r\n\w+)', "`${fence}none"
+
+			Set-Content -Path $OnlineHelp\$Command.md -Value $FileData -Encoding $Encoding
 		}
 
 		# NOTE: Creating about_ topics is independent of both the Update and New-MarkdownHelp
@@ -246,7 +265,7 @@ While generating help files, temporary folders may appear in language specific s
 		# Create new XML help file and *.txt about file or override existing ones
 		# TODO: maybe global variable for line width, MaxAboutWidth affects only about_ files
 		# NOTE: Creates external help based on files or folders specified in -Path string[]
-		New-ExternalHelp -Path $OnlineHelp -Encoding $UTF8 -OutputPath $OnlineHelp\External -Force `
+		New-ExternalHelp -Path $OnlineHelp -Encoding $Encoding -OutputPath $OnlineHelp\External -Force `
 			-MaxAboutWidth 120 -ErrorLogFile $ProjectRoot\Logs\$ModuleName-ExternalHelp.log |
 		Select-Object -ExpandProperty Name
 		# -ShowProgress

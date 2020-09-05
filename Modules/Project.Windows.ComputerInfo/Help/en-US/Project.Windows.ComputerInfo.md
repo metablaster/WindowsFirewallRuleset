@@ -12,26 +12,26 @@ Locale: en-US
 
 ## Project.Windows.ComputerInfo Cmdlets
 ### [ConvertFrom-OSBuild](ConvertFrom-OSBuild.md)
-{{ Fill in the Description }}
+Convert from OS build number to OS version
 
 ### [Get-Broadcast](Get-Broadcast.md)
-{{ Fill in the Description }}
+Method to get broadcast addresses on local machine
 
 ### [Get-ComputerName](Get-ComputerName.md)
-{{ Fill in the Description }}
+Get localhost name
 
 ### [Get-ConfiguredAdapter](Get-ConfiguredAdapter.md)
-{{ Fill in the Description }}
+Method to get configured adapters
 
 ### [Get-InterfaceAlias](Get-InterfaceAlias.md)
-{{ Fill in the Description }}
+Method to get aliases of configured adapters
 
 ### [Get-IPAddress](Get-IPAddress.md)
-{{ Fill in the Description }}
+Method to get list of IP addresses on local machine
 
 ### [Get-SystemSKU](Get-SystemSKU.md)
-{{ Fill in the Description }}
+Get operating system SKU information
 
 ### [Test-TargetComputer](Test-TargetComputer.md)
-{{ Fill in the Description }}
+Test target computer (policy store) on which to apply firewall
 

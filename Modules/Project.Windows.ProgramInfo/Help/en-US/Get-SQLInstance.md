@@ -1,4 +1,4 @@
----
+﻿---
 external help file: Project.Windows.ProgramInfo-help.xml
 Module Name: Project.Windows.ProgramInfo
 online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-SQLInstance.md
@@ -8,15 +8,17 @@ schema: 2.0.0
 # Get-SQLInstance
 
 ## SYNOPSIS
+
 Retrieves SQL server information from a local or remote servers.
 
 ## SYNTAX
 
-```
+```none
 Get-SQLInstance [[-ComputerNames] <String[]>] [-CIM] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 Retrieves SQL server information from a local or remote servers.
 Pulls all
 instances from a SQL server and detects if in a cluster or not.
@@ -24,7 +26,8 @@ instances from a SQL server and detects if in a cluster or not.
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```none
 Get-SQLInstance -Computername DC1
 ```
 
@@ -51,7 +54,8 @@ ClusterNodes  : {}
 Caption       : SQL Server 2008
 
 ### EXAMPLE 2
-```
+
+```none
 Get-SQLInstance -Computername Server1, Server2 -CIM
 ```
 
@@ -90,6 +94,7 @@ ServiceStartMode : Auto
 ## PARAMETERS
 
 ### -ComputerNames
+
 Local or remote systems to query for SQL information.
 
 ```yaml
@@ -105,6 +110,7 @@ Accept wildcard characters: False
 ```
 
 ### -CIM
+
 If specified, try to pull and correlate CIM information for SQL
 
 TODO: limited testing was performed in matching up the service info to registry info.
@@ -122,6 +128,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
@@ -129,6 +136,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
+
 Name: Get-SQLInstance
 Author: Boe Prox, edited by cookie monster (to cover wow6432node, CIM tie in)
 
@@ -158,3 +166,4 @@ https://gallery.technet.microsoft.com/scriptcenter/Get-SQLInstance-9a3245a0
 TODO: update examples to include DTS directory
 
 ## RELATED LINKS
+

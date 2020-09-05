@@ -12,32 +12,32 @@ Locale: en-US
 
 ## Project.AllPlatforms.Utility Cmdlets
 ### [Approve-Execute](Approve-Execute.md)
-{{ Fill in the Description }}
+Used to ask user if he wants to run script
 
 ### [Confirm-FileEncoding](Confirm-FileEncoding.md)
-{{ Fill in the Description }}
+Verify file is correctly encoded
 
 ### [Convert-SDDLToACL](Convert-SDDLToACL.md)
-{{ Fill in the Description }}
+Convert SDDL entries to computer accounts
 
 ### [Get-FileEncoding](Get-FileEncoding.md)
-{{ Fill in the Description }}
+Gets the encoding of a file
 
 ### [Get-NetworkService](Get-NetworkService.md)
-{{ Fill in the Description }}
+Scan all scripts in this repository and get windows service names involved in rules
 
 ### [Get-TypeName](Get-TypeName.md)
-{{ Fill in the Description }}
+Returns .NET return type name for input object
 
 ### [Set-NetworkProfile](Set-NetworkProfile.md)
-{{ Fill in the Description }}
+Set network profile for physical network interfaces
 
 ### [Set-ScreenBuffer](Set-ScreenBuffer.md)
-{{ Fill in the Description }}
+Set vertical screen buffer to recommended value
 
 ### [Show-SDDL](Show-SDDL.md)
-{{ Fill in the Description }}
+Show-SDDL returns SDDL based on "object" such as path, or registry entry
 
 ### [Update-Context](Update-Context.md)
-{{ Fill in the Description }}
+Update context for Approve-Execute function
 

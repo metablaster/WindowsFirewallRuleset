@@ -1,4 +1,4 @@
----
+﻿---
 external help file: Project.AllPlatforms.IP-help.xml
 Module Name: Project.AllPlatforms.IP
 online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.IP/Help/en-US/Get-NetworkRange.md
@@ -8,36 +8,42 @@ schema: 2.0.0
 # Get-NetworkRange
 
 ## SYNOPSIS
+
 Get a list of IP addresses within the specified network.
 
 ## SYNTAX
 
 ### FromIPAndMask (Default)
-```
+
+```none
 Get-NetworkRange [-IPAddress] <String> [[-SubnetMask] <String>] [-IncludeNetworkAndBroadcast]
  [<CommonParameters>]
 ```
 
 ### FromStartAndEnd
-```
+
+```none
 Get-NetworkRange -Start <IPAddress> -End <IPAddress> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 Get-NetworkRange finds the network and broadcast address as decimal values
 then starts a counter between the two, returning IPAddress for each.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```none
 Get-NetworkRange 192.168.0.0 255.255.255.0
 ```
 
 Returns all IP addresses in the range 192.168.0.0/24.
 
 ### EXAMPLE 2
-```
+
+```none
 Get-NetworkRange 10.0.8.0/22
 ```
 
@@ -46,6 +52,7 @@ Returns all IP addresses in the range 192.168.0.0 255.255.252.0.
 ## PARAMETERS
 
 ### -IPAddress
+
 Either a literal IP address, a network range expressed as CIDR notation,
 or an IP address and subnet mask in a string.
 
@@ -62,6 +69,7 @@ Accept wildcard characters: False
 ```
 
 ### -SubnetMask
+
 A subnet mask as an IP address.
 
 ```yaml
@@ -77,6 +85,7 @@ Accept wildcard characters: False
 ```
 
 ### -IncludeNetworkAndBroadcast
+
 Include the network and broadcast addresses when generating a network address range.
 
 ```yaml
@@ -92,6 +101,7 @@ Accept wildcard characters: False
 ```
 
 ### -Start
+
 The start address of a range.
 
 ```yaml
@@ -107,6 +117,7 @@ Accept wildcard characters: False
 ```
 
 ### -End
+
 The end address of a range.
 
 ```yaml
@@ -122,18 +133,23 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### System.String
+
 ## OUTPUTS
 
 ### TODO: describe outputs
+
 ## NOTES
+
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
 - For code to be consistent with project code formatting and symbol casing.
 - Removed unnecessary position arguments, added default argument values explicitly.
 
 ## RELATED LINKS
+

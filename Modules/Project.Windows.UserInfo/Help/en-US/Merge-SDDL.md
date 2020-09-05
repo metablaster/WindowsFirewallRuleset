@@ -1,4 +1,4 @@
----
+﻿---
 external help file: Project.Windows.UserInfo-help.xml
 Module Name: Project.Windows.UserInfo
 online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.UserInfo/Help/en-US/Merge-SDDL.md
@@ -8,20 +8,23 @@ schema: 2.0.0
 # Merge-SDDL
 
 ## SYNOPSIS
+
 Merge 2 SDDL strings into one
 
 ## SYNTAX
 
-```
+```none
 Merge-SDDL [-RefSDDL] <PSReference> [-NewSDDL] <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 This function helps to merge 2 SDDL strings into one
 
 ## EXAMPLES
 
 ### EXAMPLE 1
+
 ```
 $RefSDDL = "D:(A;;CC;;;S-1-5-32-545)(A;;CC;;;S-1-5-32-544)
 $NewSDDL = "D:(A;;CC;;;S-1-5-32-333)(A;;CC;;;S-1-5-32-222)"
@@ -31,6 +34,7 @@ Merge-SDDL ([ref] $RefSDDL) $NewSDDL
 ## PARAMETERS
 
 ### -RefSDDL
+
 Reference to SDDL into which to merge new SDDL
 
 ```yaml
@@ -46,6 +50,7 @@ Accept wildcard characters: False
 ```
 
 ### -NewSDDL
+
 New SDDL string which to merge with reference SDDL
 
 ```yaml
@@ -61,17 +66,22 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### None. You cannot pipe objects to Merge-SDDL
+
 ## OUTPUTS
 
 ### None. Referenced SDDL is expanded with new one
+
 ## NOTES
+
 TODO: Validate input using regex
 TODO: Process an array of SDDL's
 TODO: Pipeline input
 
 ## RELATED LINKS
+

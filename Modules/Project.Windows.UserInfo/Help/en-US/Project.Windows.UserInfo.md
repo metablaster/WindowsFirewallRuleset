@@ -12,26 +12,26 @@ Locale: en-US
 
 ## Project.Windows.UserInfo Cmdlets
 ### [ConvertFrom-SID](ConvertFrom-SID.md)
-{{ Fill in the Description }}
+Convert SID to user or computer account name
 
 ### [ConvertFrom-UserAccount](ConvertFrom-UserAccount.md)
-{{ Fill in the Description }}
+Strip computer names out of computer accounts
 
 ### [Get-AccountSID](Get-AccountSID.md)
-{{ Fill in the Description }}
+Get SID for giver user account
 
 ### [Get-GroupPrincipal](Get-GroupPrincipal.md)
-{{ Fill in the Description }}
+Get computer accounts for a given user groups on given computers
 
 ### [Get-GroupSID](Get-GroupSID.md)
-{{ Fill in the Description }}
+Get SID of user groups for given computer
 
 ### [Get-SDDL](Get-SDDL.md)
-{{ Fill in the Description }}
+Generate SDDL string of multiple usernames or/and groups on a given domain
 
 ### [Get-UserGroup](Get-UserGroup.md)
-{{ Fill in the Description }}
+Get user groups on target computers
 
 ### [Merge-SDDL](Merge-SDDL.md)
-{{ Fill in the Description }}
+Merge 2 SDDL strings into one
 

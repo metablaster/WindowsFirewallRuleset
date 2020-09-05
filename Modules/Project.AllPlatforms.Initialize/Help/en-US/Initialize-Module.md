@@ -1,4 +1,4 @@
----
+﻿---
 external help file: Project.AllPlatforms.Initialize-help.xml
 Module Name: Project.AllPlatforms.Initialize
 online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Initialize/Help/en-US/Initialize-Module.md
@@ -8,16 +8,18 @@ schema: 2.0.0
 # Initialize-Module
 
 ## SYNOPSIS
+
 Check if module is installed or needs update
 
 ## SYNTAX
 
-```
+```none
 Initialize-Module [-FullyQualifiedName] <Hashtable> [-Repository <String>] [-RepositoryLocation <Uri>]
  [-InfoMessage <String>] [-Trusted] [-AllowPrerelease] [-Required] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 Test if recommended and up to date module is installed, if not user is
 prompted to install or update them.
 Outdated or missing modules can cause strange issues, this function ensures latest modules are
@@ -27,14 +29,16 @@ installing or updating modules
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```none
 Initialize-ModulesRequirement @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = "1.19.1" }
 Checks if PSScriptAnalyzer is up to date, if not user is prompted to update, and if repository
 specified by default is not registered user is prompted to do that too.
 ```
 
 ### EXAMPLE 2
-```
+
+```none
 Initialize-ModulesRequirement @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Repository `
 > "PSGallery" -RepositoryLocation "https://www.powershellgallery.com/api/v2"
 Checks if PackageManagement is up to date, if not user is prompted to update, and if repository
@@ -44,6 +48,7 @@ is not registered user is prompted to do that too.
 ## PARAMETERS
 
 ### -FullyQualifiedName
+
 Hash table with a minimum ModuleName and ModuleVersion keys, in the form of ModuleSpecification
 
 ```yaml
@@ -59,6 +64,7 @@ Accept wildcard characters: False
 ```
 
 ### -Repository
+
 Repository name from which to download module such as PSGallery,
 if repository is not registered user is prompted to register it
 
@@ -75,6 +81,7 @@ Accept wildcard characters: False
 ```
 
 ### -RepositoryLocation
+
 Repository location associated with repository name,
 this parameter is used only if repository is not registered
 
@@ -91,6 +98,7 @@ Accept wildcard characters: False
 ```
 
 ### -InfoMessage
+
 Help message used for default choice in host prompt
 
 ```yaml
@@ -106,6 +114,7 @@ Accept wildcard characters: False
 ```
 
 ### -Trusted
+
 If the supplied repository needs to be registered Trusted specifies
 whether repository is trusted or not.
 this parameter is used only if repository is not registered
@@ -123,6 +132,7 @@ Accept wildcard characters: False
 ```
 
 ### -AllowPrerelease
+
 whether to allow installing beta modules
 
 ```yaml
@@ -138,6 +148,7 @@ Accept wildcard characters: False
 ```
 
 ### -Required
+
 Controls whether module initialization must succeed, if initialization fails execution stops,
 otherwise only warning is generated
 
@@ -154,15 +165,19 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### None. You cannot pipe objects to Initialize-Module
+
 ## OUTPUTS
 
 ### None.
+
 ## NOTES
+
 This function main purpose is automated development environment setup to be able to perform quick
 setup on multiple computers and virtual operating systems, in cases such as frequent system restores
 for the purpose of testing project code for many environment scenarios that end users may have.
@@ -173,3 +188,4 @@ Updating PackageManagement and PowerShellGet requires restarting PowerShell to s
 TODO: Implement initializing for non Administrator users
 
 ## RELATED LINKS
+

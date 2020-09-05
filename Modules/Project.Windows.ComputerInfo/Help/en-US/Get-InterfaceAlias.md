@@ -1,4 +1,4 @@
----
+﻿---
 external help file: Project.Windows.ComputerInfo-help.xml
 Module Name: Project.Windows.ComputerInfo
 online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ComputerInfo/Help/en-US/Get-InterfaceAlias.md
@@ -8,23 +8,27 @@ schema: 2.0.0
 # Get-InterfaceAlias
 
 ## SYNOPSIS
+
 Method to get aliases of configured adapters
 
 ## SYNTAX
 
 ### Individual (Default)
-```
+
+```none
 Get-InterfaceAlias [[-AddressFamily] <String>] [-WildCardOption <WildcardOptions>] [-ExcludeHardware]
  [-IncludeVirtual] [-IncludeHidden] [-IncludeDisconnected] [<CommonParameters>]
 ```
 
 ### All
-```
+
+```none
 Get-InterfaceAlias [[-AddressFamily] <String>] [-WildCardOption <WildcardOptions>] [-ExcludeHardware]
  [-IncludeAll] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 Return list of interface aliases of all configured adapters.
 Applies to adapters which have an IP assigned regardless if connected to network.
 This may include virtual adapters as well such as Hyper-V adapters on all compartments.
@@ -32,18 +36,21 @@ This may include virtual adapters as well such as Hyper-V adapters on all compar
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```none
 Get-InterfaceAlias "IPv4"
 ```
 
 ### EXAMPLE 2
-```
+
+```none
 Get-InterfaceAlias "IPv6"
 ```
 
 ## PARAMETERS
 
 ### -AddressFamily
+
 IP version for which to obtain adapters, IPv4 or IPv6
 
 ```yaml
@@ -59,6 +66,7 @@ Accept wildcard characters: False
 ```
 
 ### -WildCardOption
+
 {{ Fill WildCardOption Description }}
 
 ```yaml
@@ -75,6 +83,7 @@ Accept wildcard characters: False
 ```
 
 ### -ExcludeHardware
+
 {{ Fill ExcludeHardware Description }}
 
 ```yaml
@@ -90,6 +99,7 @@ Accept wildcard characters: False
 ```
 
 ### -IncludeAll
+
 Include all possible adapter types present on target computer
 
 ```yaml
@@ -105,6 +115,7 @@ Accept wildcard characters: False
 ```
 
 ### -IncludeVirtual
+
 Whether to include virtual adapters
 
 ```yaml
@@ -120,6 +131,7 @@ Accept wildcard characters: False
 ```
 
 ### -IncludeHidden
+
 Whether to include hidden adapters
 
 ```yaml
@@ -135,6 +147,7 @@ Accept wildcard characters: False
 ```
 
 ### -IncludeDisconnected
+
 Whether to include disconnected
 
 ```yaml
@@ -150,15 +163,20 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### None. You cannot pipe objects to Get-InterfaceAlias
+
 ## OUTPUTS
 
 ### WildcardPattern[] Array of interface aliases
+
 ## NOTES
+
 None.
 
 ## RELATED LINKS
+

@@ -12,53 +12,53 @@ Locale: en-US
 
 ## Project.AllPlatforms.IP Cmdlets
 ### [ConvertFrom-HexIP](ConvertFrom-HexIP.md)
-{{ Fill in the Description }}
+Converts a hexadecimal IP address into a dotted decimal string.
 
 ### [ConvertTo-BinaryIP](ConvertTo-BinaryIP.md)
-{{ Fill in the Description }}
+Converts a Decimal IP address into a binary format.
 
 ### [ConvertTo-DecimalIP](ConvertTo-DecimalIP.md)
-{{ Fill in the Description }}
+Converts a Decimal IP address into a 32-bit unsigned integer.
 
 ### [ConvertTo-DottedDecimalIP](ConvertTo-DottedDecimalIP.md)
-{{ Fill in the Description }}
+Converts either an unsigned 32-bit integer or a dotted binary string to an IP Address.
 
 ### [ConvertTo-HexIP](ConvertTo-HexIP.md)
-{{ Fill in the Description }}
+Convert a dotted decimal IP address into a hexadecimal string.
 
 ### [ConvertTo-Mask](ConvertTo-Mask.md)
-{{ Fill in the Description }}
+Convert a mask length to a dotted-decimal subnet mask.
 
 ### [ConvertTo-MaskLength](ConvertTo-MaskLength.md)
-{{ Fill in the Description }}
+Convert a dotted-decimal subnet mask to a mask length.
 
 ### [ConvertTo-Network](ConvertTo-Network.md)
-{{ Fill in the Description }}
+Converts IP address formats to a set a known styles.
 
 ### [ConvertTo-Subnet](ConvertTo-Subnet.md)
-{{ Fill in the Description }}
+Convert a start and end IP address to the closest matching subnet.
 
 ### [Get-BroadcastAddress](Get-BroadcastAddress.md)
-{{ Fill in the Description }}
+Get the broadcast address for a network range.
 
 ### [Get-NetworkAddress](Get-NetworkAddress.md)
-{{ Fill in the Description }}
+Get the network address for a network range.
 
 ### [Get-NetworkRange](Get-NetworkRange.md)
-{{ Fill in the Description }}
+Get a list of IP addresses within the specified network.
 
 ### [Get-NetworkSummary](Get-NetworkSummary.md)
-{{ Fill in the Description }}
+Generates a summary describing several properties of a network range
 
 ### [Get-Permutation](Get-Permutation.md)
-{{ Fill in the Description }}
+Gets permutations of an IP address expansion expression.
 
 ### [Get-Subnet](Get-Subnet.md)
-{{ Fill in the Description }}
+Get a list of subnets of a given size within a defined supernet.
 
 ### [Resolve-IPAddress](Resolve-IPAddress.md)
-{{ Fill in the Description }}
+Resolves an IP address expression using wildcard expressions to individual IP addresses.
 
 ### [Test-SubnetMember](Test-SubnetMember.md)
-{{ Fill in the Description }}
+Tests an IP address to determine if it falls within IP address range.
 

@@ -1,4 +1,4 @@
----
+﻿---
 external help file: Project.AllPlatforms.Utility-help.xml
 Module Name: Project.AllPlatforms.Utility
 online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Utility/Help/en-US/Get-FileEncoding.md
@@ -8,15 +8,17 @@ schema: 2.0.0
 # Get-FileEncoding
 
 ## SYNOPSIS
+
 Gets the encoding of a file
 
 ## SYNTAX
 
-```
+```none
 Get-FileEncoding [-FilePath] <String> [[-DefaultEncoding] <Encoding>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 Gets the encoding of a file, if the encoding can't be determined, ex.
 the file
 contains unicode charaters but no BOM, then by default UTF-8 is assumed.
@@ -24,19 +26,22 @@ contains unicode charaters but no BOM, then by default UTF-8 is assumed.
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```none
 Get-FileEncoding .\utf8BOM.txt
 utf-8 with BOM
 ```
 
 ### EXAMPLE 2
-```
+
+```none
 Get-FileEncoding .\utf32.txt
 utf-32
 ```
 
 ### EXAMPLE 3
-```
+
+```none
 Get-FileEncoding .\utf32.txt
 utf-32
 ```
@@ -44,6 +49,7 @@ utf-32
 ## PARAMETERS
 
 ### -FilePath
+
 The path of the file to get the encoding of
 
 ```yaml
@@ -59,6 +65,7 @@ Accept wildcard characters: False
 ```
 
 ### -DefaultEncoding
+
 Default encoding for non ASCII files and without BOM
 
 ```yaml
@@ -74,17 +81,23 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### None. You cannot pipe objects to Get-FileEncoding
+
 ## OUTPUTS
 
 ### [string]
+
 ### Encoding type of a file
+
 ## NOTES
+
 TODO: utf-16LE detected as utf-16 with BOM
 NOTE: This function is based on (but is not) sample from "Windows PowerShell Cookbook"
 
 ## RELATED LINKS
+

@@ -1,4 +1,4 @@
----
+﻿---
 external help file: Project.AllPlatforms.Utility-help.xml
 Module Name: Project.AllPlatforms.Utility
 online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Utility/Help/en-US/Approve-Execute.md
@@ -8,16 +8,18 @@ schema: 2.0.0
 # Approve-Execute
 
 ## SYNOPSIS
+
 Used to ask user if he wants to run script
 
 ## SYNTAX
 
-```
+```none
 Approve-Execute [[-Default] <String>] [[-Title] <String>] [[-Question] <String>] [[-Accept] <String>]
  [[-Deny] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 In addition to prompt, execution context is shown.
 Asking for approval helps to let run master script and only execute specific
 scripts, thus loading only needed rules.
@@ -25,13 +27,15 @@ scripts, thus loading only needed rules.
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```none
 Approve-Execute "No" "Sample title" "Sample question"
 ```
 
 ## PARAMETERS
 
 ### -Default
+
 {{ Fill Default Description }}
 
 ```yaml
@@ -47,6 +51,7 @@ Accept wildcard characters: False
 ```
 
 ### -Title
+
 Title of the prompt
 
 ```yaml
@@ -62,6 +67,7 @@ Accept wildcard characters: False
 ```
 
 ### -Question
+
 Prompt question
 
 ```yaml
@@ -77,6 +83,7 @@ Accept wildcard characters: False
 ```
 
 ### -Accept
+
 {{ Fill Accept Description }}
 
 ```yaml
@@ -92,6 +99,7 @@ Accept wildcard characters: False
 ```
 
 ### -Deny
+
 {{ Fill Deny Description }}
 
 ```yaml
@@ -107,15 +115,20 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### None. You cannot pipe objects to Approve-Execute
+
 ## OUTPUTS
 
 ### None. true if user wants to continue, false otherwise
+
 ## NOTES
+
 None.
 
 ## RELATED LINKS
+

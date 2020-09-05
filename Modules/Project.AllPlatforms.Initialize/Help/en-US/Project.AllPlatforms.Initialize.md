@@ -12,14 +12,14 @@ Locale: en-US
 
 ## Project.AllPlatforms.Initialize Cmdlets
 ### [Initialize-Module](Initialize-Module.md)
-{{ Fill in the Description }}
+Check if module is installed or needs update
 
 ### [Initialize-Project](Initialize-Project.md)
-{{ Fill in the Description }}
+Check system requirements for this project
 
 ### [Initialize-Provider](Initialize-Provider.md)
-{{ Fill in the Description }}
+Test if recommended packages are installed
 
 ### [Initialize-Service](Initialize-Service.md)
-{{ Fill in the Description }}
+Check if required system services are started
 

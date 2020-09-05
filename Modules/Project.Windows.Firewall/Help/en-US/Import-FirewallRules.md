@@ -1,4 +1,4 @@
----
+﻿---
 external help file: Project.Windows.Firewall-help.xml
 Module Name: Project.Windows.Firewall
 online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.Firewall/Help/en-US/Import-FirewallRules.md
@@ -8,16 +8,18 @@ schema: 2.0.0
 # Import-FirewallRules
 
 ## SYNOPSIS
+
 Imports firewall rules from a CSV or JSON file.
 
 ## SYNTAX
 
-```
+```none
 Import-FirewallRules [[-PolicyStore] <String>] [[-Folder] <String>] [[-FileName] <String>] [-JSON]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 Imports firewall rules generated with Export-FirewallRules, CSV or JSON file.
 CSV files have to be separated with semicolons.
 Existing rules with same name will be overwritten.
@@ -25,14 +27,16 @@ Existing rules with same name will be overwritten.
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```none
 Import-FirewallRules
 Imports all firewall rules in the CSV file FirewallRules.csv
 If no file is specified, FirewallRules .csv or .json in the current directory is searched.
 ```
 
 ### EXAMPLE 2
-```
+
+```none
 Import-FirewallRules WmiRules.csv CSV
 Imports all firewall rules in the SCV file WmiRules.csv
 ```
@@ -40,6 +44,7 @@ Imports all firewall rules in the SCV file WmiRules.csv
 ## PARAMETERS
 
 ### -PolicyStore
+
 Policy store into which to import rules, default is local GPO.
 For more information about stores see:
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/FirewallParameters.md
@@ -57,6 +62,7 @@ Accept wildcard characters: False
 ```
 
 ### -Folder
+
 Path to directory where exported rules file is located
 
 ```yaml
@@ -72,6 +78,7 @@ Accept wildcard characters: False
 ```
 
 ### -FileName
+
 Input file
 
 ```yaml
@@ -87,6 +94,7 @@ Accept wildcard characters: False
 ```
 
 ### -JSON
+
 Input from JSON instead of CSV format
 
 ```yaml
@@ -102,6 +110,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
@@ -109,7 +118,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ### System.Void
+
 ## NOTES
+
 Author: Markus Scholtes
 Version: 1.02
 Build date: 2020/02/15
@@ -135,3 +146,4 @@ Make output formatted and colored
 Added progress bar
 
 ## RELATED LINKS
+

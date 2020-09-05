@@ -26,6 +26,10 @@
 	"editor.wordWrap": "off",
 	"editor.trimAutoWhitespace": true,
 	"editor.insertSpaces": false,
+	// "editor.codeActionsOnSave": {
+	// TODO: need to verify if useful
+	// 	"source.fixAll.markdownlint": true
+	// },
 	// PSUseConsistentIndentation
 	"editor.detectIndentation": false,
 	"editor.tabSize": 4,
