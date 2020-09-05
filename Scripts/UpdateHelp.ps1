@@ -43,7 +43,7 @@ Supported UI cultures for which to generate help files, the default is en-US
 If specified, increments help version to match $ProjectVersion variable
 TODO: not implemented
 .PARAMETER Encoding
-Specify encoding for help files, the default is UTF8
+Specify encoding for help files, the default is UTF8 no BOM
 .EXAMPLE
 UpdateHelp.ps1
 .EXAMPLE
@@ -73,7 +73,7 @@ param (
 	[switch] $IncrementVersion,
 
 	[Parameter()]
-	[System.Text.Encoding] $Encoding = [System.Text.Encoding]::UTF8
+	[System.Text.Encoding] $Encoding = (New-Object -TypeName System.Text.UTF8Encoding -ArgumentList $false)
 )
 
 # Initialization
@@ -162,7 +162,7 @@ While generating help files, temporary folders may appear in language specific s
 	foreach ($UICulture in $SupportedUICulture)
 	{
 		Write-Progress -Activity "Creating help files" -CurrentOperation $ModuleName -Status $UICulture `
-			-PercentComplete (++$ProgressCount / $TargetModules.Length * $SupportedUICulture.Length * 100)
+			-PercentComplete (++$ProgressCount / $Module.Length * $SupportedUICulture.Length * 100)
 
 		Write-Debug -Message "[$ThisScript] Processing culture: $UICulture"
 

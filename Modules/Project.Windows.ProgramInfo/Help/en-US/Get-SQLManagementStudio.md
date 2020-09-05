@@ -1,4 +1,4 @@
-﻿---
+---
 external help file: Project.Windows.ProgramInfo-help.xml
 Module Name: Project.Windows.ProgramInfo
 online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-SQLManagementStudio.md

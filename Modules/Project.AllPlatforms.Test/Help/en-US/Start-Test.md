@@ -1,4 +1,4 @@
-﻿---
+---
 external help file: Project.AllPlatforms.Test-help.xml
 Module Name: Project.AllPlatforms.Test
 online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Test/Help/en-US/Start-Test.md

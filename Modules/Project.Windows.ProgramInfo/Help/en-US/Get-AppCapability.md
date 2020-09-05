@@ -1,4 +1,4 @@
-﻿---
+---
 external help file: Project.Windows.ProgramInfo-help.xml
 Module Name: Project.Windows.ProgramInfo
 online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-AppCapability.md
@@ -136,6 +136,8 @@ None.
 [https://docs.microsoft.com/en-us/windows/uwp/packaging/app-capability-declarations](https://docs.microsoft.com/en-us/windows/uwp/packaging/app-capability-declarations)
 
 [https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/generate-package-manifest](https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/generate-package-manifest)
+
+
 
 
 

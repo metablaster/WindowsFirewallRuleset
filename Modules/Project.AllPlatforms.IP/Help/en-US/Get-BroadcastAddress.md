@@ -1,4 +1,4 @@
-﻿---
+---
 external help file: Project.AllPlatforms.IP-help.xml
 Module Name: Project.AllPlatforms.IP
 online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.IP/Help/en-US/Get-BroadcastAddress.md
