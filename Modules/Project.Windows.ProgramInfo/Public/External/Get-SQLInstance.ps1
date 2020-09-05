@@ -39,10 +39,9 @@ Local or remote systems to query for SQL information.
 .PARAMETER CIM
 If specified, try to pull and correlate CIM information for SQL
 
-I've done limited testing in matching up the service info to registry info.
-Suggestions would be appreciated!
+TODO: limited testing was performed in matching up the service info to registry info.
 .EXAMPLE
-Get-SQLInstance -Computername DC1
+PS> Get-SQLInstance -Computername DC1
 
 SQLInstance   : MSSQLSERVER
 Version       : 10.0.1600.22
@@ -66,12 +65,8 @@ ClusterName   :
 ClusterNodes  : {}
 Caption       : SQL Server 2008
 
-Description
------------
-Retrieves the SQL information from DC1
 .EXAMPLE
-# Get SQL instances on servers 1 and 2, match them up with service information from CIM
-Get-SQLInstance -Computername Server1, Server2 -CIM
+PS> Get-SQLInstance -Computername Server1, Server2 -CIM
 
 Computername     : Server1
 SQLInstance      : MSSQLSERVER
@@ -104,8 +99,6 @@ ServiceName      : SQL Server (MSSQLSERVER)
 ServiceState     : Running
 ServiceAccount   : domain\Server2SQL
 ServiceStartMode : Auto
-.FUNCTIONALITY
-	Computers
 .NOTES
 Name: Get-SQLInstance
 Author: Boe Prox, edited by cookie monster (to cover wow6432node, CIM tie in)

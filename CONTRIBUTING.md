@@ -6,6 +6,28 @@ extend this firewall project for your own personal or corporate needs.
 
 Here is a list of most important things to keep in mind.
 
+## Table of contents
+
+- [How to contribute](#how-to-contribute)
+  - [Table of contents](#table-of-contents)
+  - [General guidelines](#general-guidelines)
+  - [Environment setup](#environment-setup)
+  - [Code style](#code-style)
+    - [Automatic formatting](#automatic-formatting)
+    - [Rationale](#rationale)
+    - [Rule design](#rule-design)
+  - [Modules and 3rd party code](#modules-and-3rd-party-code)
+  - [Module design](#module-design)
+  - [Static analysis](#static-analysis)
+  - [Documentation and comments](#documentation-and-comments)
+  - [Writing rules](#writing-rules)
+  - [Testing code](#testing-code)
+  - [Commits and pull requests](#commits-and-pull-requests)
+  - [Portability and other systems](#portability-and-other-systems)
+  - [Making new scripts or modules](#making-new-scripts-or-modules)
+  - [Repository folder structure](#repository-folder-structure)
+  - [Final notes and where to start](#final-notes-and-where-to-start)
+
 ## General guidelines
 
 Below 2 pages explain general/starting guidelines regarding open source:\
@@ -226,39 +248,67 @@ then try again and keep repeating until OK.
 
 ## Documentation and comments
 
-Sections of code should be documented as shown in existing scripts.\
-To comment on things that need to be done add "TODO:" + comment,
-similarly for important notes add "NOTE:" + comment.\
-For any generic comments you might want to add, use line comments (preferred) and
-block comments only if comment is big.
+Documentation and comments reside in 6 places as follows:
 
-Provide documentation and official reference for your rules so that it can be easy to verify that
-these rules do not contain mistakes,  for example,
-for ICMP rules you would provide a link to [IANA](https://www.iana.org)
-with relevant reference document.
+1. In scripts (code comments)
 
-For things which are hard to resolve add "HACK:" + comment, and optionally some links such as github
-issues that may help to resolve problem in the future.
+    Sections of code should be documented as shown in existing scripts.\
+    To comment on things that need to be done add "TODO:" + comment,
+    similarly for important notes add "NOTE:" + comment.\
 
-it is important that each rule contains good description of it's purpose,
-when a user clicks on a rule in firewall GUI he wants to see
-what this rule is about and easily conclude whether to enable/disable rule or
-allow/block network traffic.
+    For things which are hard to resolve add "HACK:" + comment, and optionally some links such as
+    github issues that may help to resolve problem in the future.
 
-For comment based help see:
+    For any generic code comments you might want to add, use line comments (preferred) and
+    block comments only if comment is big.
 
-1. [About Comment-based Help](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_comment_based_help?view=powershell-7)
-2. [Examples of Comment-Based Help](https://docs.microsoft.com/en-us/powershell/scripting/developer/help/examples-of-comment-based-help?view=powershell-7)
+2. In rules (rule description)
 
-Documentation and comments reside in 5 places:
+    It is important that each firewall rule contains good description of it's purpose,
+    when a user clicks on a rule in firewall GUI he wants to see
+    what this rule is about and easily conclude whether to enable/disable rule or
+    allow/block network traffic.
 
-1. In scripts (for developers)
-2. In rules (for users)
-3. In command line prompts (for users)
-4. In comment based help (for module users and developers)
-5. In Readme folder (for detailed project documentation)
+3. In command line prompts (current execution help)
 
-Remember, commenting code is as important as writing it!
+    Every script that's being executed either directly or called by other script will not run
+    until the use accepts the prompt to run the script.
+
+    Each of these prompts have `?` which the user can type to get more information about possible
+    prompt choices.
+
+4. In comment based help (module main documentation source)
+
+    Functions that are part of a module must have comment based help.\
+    Purpose of comment based help is for module user to be able to run `Get-Help` on target function.
+
+    For examples and comment based syntax see:
+    - [About Comment-based Help](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_comment_based_help?view=powershell-7)
+    - [Examples of Comment-Based Help](https://docs.microsoft.com/en-us/powershell/scripting/developer/help/examples-of-comment-based-help?view=powershell-7)
+
+    You must avoid following comment based content to avoid errors while generating online help files:
+    - .LINK entries must contains only one link and nothing else
+    - Avoid dashes in comments such as `------`
+
+5. In module Help folder (module online documentation)
+
+    The `Scripts` folder contains `UpdateHelp.ps1` which when run will scan comment based help and
+    generate online documentation for `Get-Help -Online` and help content for `Update-Help` on
+    target module.
+
+    Generated module documentation is of markdown format, meaning the 3rd purpose is that project
+    users and repository visitors can read module documentation on github site.
+
+6. In Readme folder (general project documentation)
+
+    The `Readme` folder in repository root contains random documentation that covers wide range of
+    aspects such as troubleshooting, todo list, FAQ, changelog and general project documentation.
+
+In general regarding firewall rules, provide documentation and official reference for your rules
+so that it can be easy to verify that these rules don't contain mistakes, for example, for ICMP
+rules you would provide a link to [IANA](https://www.iana.org) with relevant reference document.
+
+Remember, documenting code and features is as important as writing it!
 
 ## Writing rules
 

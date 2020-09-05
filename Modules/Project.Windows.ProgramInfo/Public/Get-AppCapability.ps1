@@ -62,6 +62,7 @@ APPLICATION PACKAGE AUTHORITY\Your home or work networks
 None.
 .LINK
 https://docs.microsoft.com/en-us/windows/uwp/packaging/app-capability-declarations
+.LINK
 https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/generate-package-manifest
 #>
 function Get-AppCapability

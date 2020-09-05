@@ -50,7 +50,8 @@ None. You cannot pipe objects to UpdateHelp.ps1
 .OUTPUTS
 None. UpdateHelp.ps1 does not generate any output
 .NOTES
-None.
+See CONTRIBUTING.md in "documentation" section for examples of comment based help that will
+produce errors while generating online help and how to avoid them
 #>
 
 [CmdletBinding()]
@@ -108,17 +109,19 @@ $UTF8 = New-Object System.Text.UTF8Encoding -ArgumentList $false @Logs
 # Generate new or update existing help files for all modules that are part of repository
 $TargetModules = Get-ChildItem -Path $ProjectRoot\Modules -Directory |
 Where-Object -Property Name -Like "Project.*" |
-Select-Object -ExpandProperty Name
+Select-Object -Property Name
 
 # Counters for progress
 [int32] $ProgressCount = 0
 
-foreach ($ModuleName in $TargetModules)
+foreach ($ModuleDirectory in $TargetModules)
 {
+	[string] $ModuleName = $ModuleDirectory.Name
 	Write-Debug -Message "[$ThisScript] Processing module: $ModuleName"
 
+	# NOTE: Module must be imported to avoid warnings from platyPS
+	Import-Module -Name $ModuleName
 	[PSModuleInfo] $ModuleInfo = Get-Module -Name $ModuleName @Logs
-	# [string] $GUID = $ModuleInfo | Select-Object -ExpandProperty GUID
 
 	# Root directory of current module
 	[string] $ModuleRoot = $ModuleInfo.ModuleBase
