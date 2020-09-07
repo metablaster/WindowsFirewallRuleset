@@ -39,9 +39,6 @@ Specify module name for which to generate help files.
 The default is all repository modules
 .PARAMETER SupportedUICulture
 Supported UI cultures for which to generate help files, the default is en-US
-.PARAMETER IncrementVersion
-If specified, increments help version to match $ProjectVersion variable
-TODO: not implemented
 .PARAMETER Encoding
 Specify encoding for help files.
 The default is set by global variable, UTF8 no BOM for Core or UTF8 with BOM for Desktop edition
@@ -58,6 +55,7 @@ None. UpdateHelp.ps1 does not generate any output
 .NOTES
 See CONTRIBUTING.md in "documentation" section for examples of comment based help that will
 produce errors while generating online help and how to avoid them.
+Help version is automatically updated according to $ProjectVersion variable
 TODO: some markdown files will end up with additional blank line at the end of document for each
 update of help files.
 #>
@@ -71,9 +69,6 @@ param (
 	[string[]] $SupportedUICulture = @(
 		"en-US"
 	),
-
-	[Parameter()]
-	[switch] $IncrementVersion,
 
 	[Parameter()]
 	$Encoding = $null
@@ -209,6 +204,15 @@ While generating help files, temporary folders may appear in language specific s
 				-LogPath $ProjectRoot\Logs\$ModuleName-UpdateHelp.log -UseFullTypeName `
 				-RefreshModulePage -Force -ModulePagePath $ModulePage |
 			Select-Object -ExpandProperty Name
+
+			$FileData = Get-Content -Path $ModulePage -Encoding $Encoding
+			# If help version is out of date or missing set it
+			if ([string]::IsNullOrEmpty($FileData -match "Help Version:\s$ProjectVersion"))
+			{
+				Write-Information -Tags "Project" -MessageData "INFO: Updating module page version"
+				$FileData = $FileData -replace "(?<=Help Version:).*", " $ProjectVersion"
+				Set-Content -Path $ModulePage -Value $FileData -Encoding $Encoding
+			}
 		}
 		else # Generate new help files
 		{

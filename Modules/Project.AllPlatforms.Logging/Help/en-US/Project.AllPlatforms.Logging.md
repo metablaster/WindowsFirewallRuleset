@@ -1,8 +1,8 @@
 ---
 Module Name: Project.AllPlatforms.Logging
 Module Guid: 9be5568a-a48e-4e96-a6df-90f699cf1c8a
-Download Help Link: https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Config/Content/0.6.0
-Help Version: 0.6.0
+Download Help Link: https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Config/Content/0.7.0
+Help Version: 0.7.0
 Locale: en-US
 ---
 

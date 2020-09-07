@@ -12,7 +12,7 @@
 	RootModule = "Project.Windows.UserInfo.psm1"
 
 	# Version number of this module.
-	ModuleVersion = "0.6.0"
+	ModuleVersion = "0.7.0"
 
 	# Supported PSEditions
 	CompatiblePSEditions = @(
@@ -164,7 +164,7 @@
 	} # End of PrivateData hashtable
 
 	# HelpInfo URI of this module
-	# HelpInfoURI = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Modules/Project.Windows.UserInfo/Project.Windows.UserInfo_136254f4-4730-4ed1-b9e9-1ccecfe09ee9_HelpInfo.xml"
+	HelpInfoURI = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Modules/Project.Windows.UserInfo/Project.Windows.UserInfo_136254f4-4730-4ed1-b9e9-1ccecfe09ee9_HelpInfo.xml"
 
 	# Default prefix for commands exported from this module.
 	# Override the default prefix using Import-Module -Prefix.

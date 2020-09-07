@@ -13,7 +13,7 @@
 	RootModule = "Project.Windows.Firewall.psm1"
 
 	# Version number of this module.
-	ModuleVersion = "0.6.0"
+	ModuleVersion = "0.7.0"
 
 	# Supported PSEditions
 	CompatiblePSEditions = @(
@@ -158,7 +158,7 @@
 	} # End of PrivateData hashtable
 
 	# HelpInfo URI of this module
-	# HelpInfoURI = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Modules/Project.Windows.Firewall/Project.Windows.Firewall_3ee23849-8adf-46ee-95f9-7a02417e1f4b_HelpInfo.xml"
+	HelpInfoURI = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Modules/Project.Windows.Firewall/Project.Windows.Firewall_3ee23849-8adf-46ee-95f9-7a02417e1f4b_HelpInfo.xml"
 
 	# Default prefix for commands exported from this module.
 	# Override the default prefix using Import-Module -Prefix.

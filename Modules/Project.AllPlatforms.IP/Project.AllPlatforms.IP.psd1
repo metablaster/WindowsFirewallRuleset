@@ -12,7 +12,7 @@
 	RootModule = "Project.AllPlatforms.IP.psm1"
 
 	# Version number of this module.
-	ModuleVersion = "0.6.0"
+	ModuleVersion = "0.7.0"
 
 	# Supported PSEditions
 	CompatiblePSEditions = @(
@@ -208,7 +208,7 @@
 	} # End of PrivateData hashtable
 
 	# HelpInfo URI of this module
-	# HelpInfoURI = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Modules/Project.AllPlatforms.IP/Project.AllPlatforms.IP_2f356d8c-aad0-462f-9cd7-fff31c7ab1d0_HelpInfo.xml"
+	HelpInfoURI = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Modules/Project.AllPlatforms.IP/Project.AllPlatforms.IP_2f356d8c-aad0-462f-9cd7-fff31c7ab1d0_HelpInfo.xml"
 
 	# Default prefix for commands exported from this module.
 	# Override the default prefix using Import-Module -Prefix.

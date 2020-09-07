@@ -1,8 +1,8 @@
 ---
 Module Name: Project.Windows.ProgramInfo
 Module Guid: 49f11777-b8b6-4fed-bd82-32c8f48db81e
-Download Help Link: https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Config/Content/0.6.0
-Help Version: 0.6.0
+Download Help Link: https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Config/Content/0.7.0
+Help Version: 0.7.0
 Locale: en-US
 ---
 
