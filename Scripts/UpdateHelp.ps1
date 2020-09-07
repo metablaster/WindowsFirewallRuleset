@@ -43,20 +43,23 @@ Supported UI cultures for which to generate help files, the default is en-US
 If specified, increments help version to match $ProjectVersion variable
 TODO: not implemented
 .PARAMETER Encoding
-Specify encoding for help files, the default is UTF8 no BOM
+Specify encoding for help files.
+The default is set by global variable, UTF8 no BOM for Core or UTF8 with BOM for Desktop edition
 .EXAMPLE
 UpdateHelp.ps1
 .EXAMPLE
 UpdateHelp.ps1 -IncrementVersion
 .EXAMPLE
-UpdateHelp.ps1 SupportedUICulture @(en-US, fr-FR, jp-JP)
+UpdateHelp.ps1 SupportedUICulture @(en-US, fr-FR, jp-JP) -Encoding utf8
 .INPUTS
 None. You cannot pipe objects to UpdateHelp.ps1
 .OUTPUTS
 None. UpdateHelp.ps1 does not generate any output
 .NOTES
 See CONTRIBUTING.md in "documentation" section for examples of comment based help that will
-produce errors while generating online help and how to avoid them
+produce errors while generating online help and how to avoid them.
+TODO: some markdown files will end up with additional blank line at the end of document for each
+update of help files.
 #>
 
 [CmdletBinding()]
@@ -73,13 +76,18 @@ param (
 	[switch] $IncrementVersion,
 
 	[Parameter()]
-	[System.Text.Encoding] $Encoding = (New-Object -TypeName System.Text.UTF8Encoding -ArgumentList $false)
+	$Encoding = $null
 )
 
 # Initialization
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )
+
+if ($null -eq $Encoding)
+{
+	$Encoding = $DefaultEncoding
+}
 
 # TODO: Need logging solution for cases before project initialization
 if (!$Develop)
@@ -265,8 +273,8 @@ While generating help files, temporary folders may appear in language specific s
 		# Create new XML help file and *.txt about file or override existing ones
 		# TODO: maybe global variable for line width, MaxAboutWidth affects only about_ files
 		# NOTE: Creates external help based on files or folders specified in -Path string[]
-		New-ExternalHelp -Path $OnlineHelp -Encoding $Encoding -OutputPath $OnlineHelp\External -Force `
-			-MaxAboutWidth 120 -ErrorLogFile $ProjectRoot\Logs\$ModuleName-ExternalHelp.log |
+		New-ExternalHelp -Path $OnlineHelp -Encoding $Encoding -OutputPath $OnlineHelp\External `
+			-MaxAboutWidth 120 -ErrorLogFile $ProjectRoot\Logs\$ModuleName-ExternalHelp.log -Force |
 		Select-Object -ExpandProperty Name
 		# -ShowProgress
 
@@ -275,6 +283,7 @@ While generating help files, temporary folders may appear in language specific s
 		# Generate updatable help content
 		# NOTE: Requires the path to module page which contains required metadata to name cab file
 		# NOTE: Recommend to provide as content only about_ topics and the output from the New-ExternalHelp
+		# TODO: output info xml is UTF8 with BOM
 		New-ExternalHelpCab -CabFilesFolder $OnlineHelp\External -OutputFolder $OnlineHelp\Content `
 			-LandingPagePath $ModulePage @Logs | Out-Null
 		# -IncrementHelpVersion

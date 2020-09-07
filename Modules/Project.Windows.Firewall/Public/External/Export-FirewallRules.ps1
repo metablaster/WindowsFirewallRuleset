@@ -302,12 +302,12 @@ function Export-FirewallRules
 		{
 			# TODO: need to implement appending to JSON
 			Write-Warning -Message "Appending to JSON not implemented"
-			$FirewallRuleSet | ConvertTo-Json | Set-Content -Path "$Folder\$FileName" -Encoding utf8
+			$FirewallRuleSet | ConvertTo-Json | Set-Content -Path "$Folder\$FileName" -Encoding $DefaultEncoding
 		}
 		else
 		{
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Replacing content in JSON file"
-			$FirewallRuleSet | ConvertTo-Json | Set-Content -Path "$Folder\$FileName" -Encoding utf8
+			$FirewallRuleSet | ConvertTo-Json | Set-Content -Path "$Folder\$FileName" -Encoding $DefaultEncoding
 		}
 	}
 	else
@@ -327,7 +327,7 @@ function Export-FirewallRules
 			{
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Appending to CSV file"
 				$FirewallRuleSet | ConvertTo-Csv -NoTypeInformation -Delimiter ";" |
-				Select-Object -Skip 1 | Add-Content -Path "$Folder\$FileName" -Encoding utf8
+				Select-Object -Skip 1 | Add-Content -Path "$Folder\$FileName" -Encoding $DefaultEncoding
 				return
 			}
 			else
@@ -338,7 +338,7 @@ function Export-FirewallRules
 
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Replacing content in CSV file"
 		$FirewallRuleSet | ConvertTo-Csv -NoTypeInformation -Delimiter ";" |
-		Set-Content -Path "$Folder\$FileName" -Encoding utf8
+		Set-Content -Path "$Folder\$FileName" -Encoding $DefaultEncoding
 	}
 
 	Write-Information -Tags "User" -MessageData "INFO: Exporting firewall rules into: '$FileName' done"

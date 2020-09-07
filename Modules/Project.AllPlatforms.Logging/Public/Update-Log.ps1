@@ -85,7 +85,7 @@ function Update-Log
 
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending error to log file: $LogFile"
 				$ErrorBuffer | ForEach-Object {
-					$_ | Select-Object * | Out-File -Append -FilePath $LogFile -Encoding utf8
+					$_ | Select-Object * | Out-File -Append -FilePath $LogFile -Encoding $DefaultEncoding
 				}
 			}
 
@@ -117,7 +117,7 @@ function Update-Log
 				# write to same file (not same encoding)
 				$WarningBuffer | ForEach-Object {
 					"WARNING: $(Get-Date -Format "HH:mm:ss") $_" |
-					Out-File -Append -Encoding utf8 -FilePath $LogFile
+					Out-File -Append -Encoding $DefaultEncoding -FilePath $LogFile
 				}
 			}
 
@@ -135,7 +135,7 @@ function Update-Log
 
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending information to log file: $LogFile"
 				$InfoBuffer | ForEach-Object {
-					$_ | Select-Object * | Out-File -Append -FilePath $LogFile -Encoding utf8
+					$_ | Select-Object * | Out-File -Append -FilePath $LogFile -Encoding $DefaultEncoding
 				}
 			}
 

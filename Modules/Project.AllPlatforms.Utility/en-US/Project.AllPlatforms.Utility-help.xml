@@ -446,16 +446,16 @@
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
-          <maml:name>DefaultEncoding</maml:name>
+          <maml:name>Encoding</maml:name>
           <maml:Description>
-            <maml:para>Default encoding for non ASCII files and without BOM</maml:para>
+            <maml:para>Default encoding for non ASCII files. The default is set by global variable, UTF8 no BOM for Core or UTF8 with BOM for Desktop edition</maml:para>
           </maml:Description>
-          <command:parameterValue required="true" variableLength="false">System.Text.Encoding</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">System.Object</command:parameterValue>
           <dev:type>
-            <maml:name>System.Text.Encoding</maml:name>
+            <maml:name>System.Object</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>[System.Text.Encoding]::UTF8</dev:defaultValue>
+          <dev:defaultValue>$DefaultEncoding</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
@@ -473,16 +473,16 @@
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
-        <maml:name>DefaultEncoding</maml:name>
+        <maml:name>Encoding</maml:name>
         <maml:Description>
-          <maml:para>Default encoding for non ASCII files and without BOM</maml:para>
+          <maml:para>Default encoding for non ASCII files. The default is set by global variable, UTF8 no BOM for Core or UTF8 with BOM for Desktop edition</maml:para>
         </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.Text.Encoding</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">System.Object</command:parameterValue>
         <dev:type>
-          <maml:name>System.Text.Encoding</maml:name>
+          <maml:name>System.Object</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>[System.Text.Encoding]::UTF8</dev:defaultValue>
+        <dev:defaultValue>$DefaultEncoding</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>

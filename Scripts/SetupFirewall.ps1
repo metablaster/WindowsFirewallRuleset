@@ -53,7 +53,8 @@ Set-ScreenBuffer @Logs
 Test-File $ServiceHost @Logs
 Get-NetworkService $ProjectRoot\Rules
 Confirm-FileEncoding $ProjectRoot\Rules\NetworkServices.txt
-Get-Content -Path $ProjectRoot\Rules\NetworkServices.txt -Encoding utf8 | ForEach-Object {
+Get-Content -Path $ProjectRoot\Rules\NetworkServices.txt -Encoding $DefaultEncoding |
+ForEach-Object {
 	Test-Service $_ @Logs
 	Update-Log
 }

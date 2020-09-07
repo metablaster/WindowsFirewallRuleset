@@ -32,7 +32,7 @@ SOFTWARE.
 # 1. settings for development
 # 2. settings for release
 # 3. settings that apply to both use cases
-# NOTE: Make sure not to modify variables commend as "do not modify" or "do not decrement"
+# NOTE: Make sure not to modify variables commented as "do not modify" or "do not decrement"
 #
 
 param(
@@ -185,7 +185,6 @@ else # Normal use case
 	Remove-Variable -Name ModuleInformationPreference -Scope Global -ErrorAction Ignore
 }
 
-# TODO: encoding variable
 # Constant variables, not possible to change in any case.
 # These are set only once per session, changing these requires powershell restart
 if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore))
@@ -334,6 +333,22 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -Erro
 	# users and to affect them all set this value to non existent user
 	# TODO: needs testing info messages for this value
 	Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value "Default User"
+
+	# Default encoding used to write and read files
+	if ($PSVersionTable.PSEdition -eq "Core")
+	{
+		# UTF8 without BOM
+		# https://docs.microsoft.com/en-us/dotnet/api/system.text.encoding?view=netcore-3.1
+		Set-Variable -Name DefaultEncoding -Scope Global -Option ReadOnly -Force -Value (
+			New-Object -TypeName System.Text.UTF8Encoding -ArgumentList $false)
+	}
+	else
+	{
+		# TODO: need some workaround to make Windows PowerShell read/write BOM-less
+		# UTF8 with BOM
+		# https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.filesystemcmdletproviderencoding?view=powershellsdk-1.1.0
+		Set-Variable -Name DefaultEncoding -Scope Global -Option ReadOnly -Force -Value "utf8"
+	}
 }
 
 # Removable variables, meaning these can be modified by code at any time,

@@ -105,7 +105,7 @@ function Import-FirewallRules
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading JSON file"
 		Confirm-FileEncoding "$Folder\$FileName"
-		$FirewallRules = Get-Content "$Folder\$FileName" -Encoding utf8 | ConvertFrom-Json
+		$FirewallRules = Get-Content "$Folder\$FileName" -Encoding $DefaultEncoding | ConvertFrom-Json
 	}
 	else
 	{
@@ -122,7 +122,7 @@ function Import-FirewallRules
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading CSV file"
 		Confirm-FileEncoding "$Folder\$FileName"
-		$FirewallRules = Get-Content "$Folder\$FileName" -Encoding utf8 | ConvertFrom-Csv -Delimiter ";"
+		$FirewallRules = Get-Content "$Folder\$FileName" -Encoding $DefaultEncoding | ConvertFrom-Csv -Delimiter ";"
 	}
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Iterating rules"

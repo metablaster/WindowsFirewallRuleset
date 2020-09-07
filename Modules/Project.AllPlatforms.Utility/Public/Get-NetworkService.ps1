@@ -70,7 +70,7 @@ function Get-NetworkService
 	$Files | ForEach-Object {
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading file: $($_.FullName)"
 		Confirm-FileEncoding $_.FullName
-		Get-Content $_.FullName -Encoding utf8 | Where-Object {
+		Get-Content $_.FullName -Encoding $DefaultEncoding | Where-Object {
 			if ($_ -match "(?<= -Service )(.*)(?= -Program)")
 			{
 				$Content += $Matches[0]
@@ -104,7 +104,7 @@ function Get-NetworkService
 	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Writing filtered services to: $File"
-	Add-Content -Encoding utf8 -Path $File -Value $Content
+	Add-Content -Encoding $DefaultEncoding -Path $File -Value $Content
 
 	Write-Information -Tags "Project" -MessageData "INFO: $($Content.Count) services involved in firewall rules"
 }

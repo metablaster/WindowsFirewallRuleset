@@ -34,8 +34,9 @@ Gets the encoding of a file, if the encoding can't be determined, ex. the file
 contains unicode charaters but no BOM, then by default UTF-8 is assumed.
 .PARAMETER FilePath
 The path of the file to get the encoding of
-.PARAMETER DefaultEncoding
-Default encoding for non ASCII files and without BOM
+.PARAMETER Encoding
+Default encoding for non ASCII files.
+The default is set by global variable, UTF8 no BOM for Core or UTF8 with BOM for Desktop edition
 .EXAMPLE
 PS> Get-FileEncoding .\utf8BOM.txt
 utf-8 with BOM
@@ -62,8 +63,8 @@ function Get-FileEncoding
 		[Parameter(Mandatory = $true)]
 		[string] $FilePath,
 
-		[Parameter(Mandatory = $False)]
-		[System.Text.Encoding] $DefaultEncoding = [System.Text.Encoding]::UTF8
+		[Parameter()]
+		$Encoding = $DefaultEncoding
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -167,13 +168,14 @@ function Get-FileEncoding
 		# TODO: not sure what encoding should be default for this
 		if ($PSVersionTable.PSEdition -eq "Core")
 		{
-			$FileData = Get-Content -Path $FilePath -Encoding utf8NoBOM
+			$FileData = Get-Content -Path $FilePath -Encoding $Encoding
 		}
 		else
 		{
 			$FileData = Get-Content -Path $FilePath -Encoding Ascii
 		}
 
+		# TODO: there is no need to parse line by line
 		foreach ($Line in $FileData)
 		{
 			# ASCIIEncoding encodes Unicode characters as single 7-bit ASCII characters.
@@ -184,7 +186,7 @@ function Get-FileEncoding
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Non ASCII line: $Line"
 
 				# We only know it's not ASCII and there is no BOM, so use default encoding
-				$Result = $DefaultEncoding
+				$Result = $Encoding
 				break
 			}
 		}

@@ -14,7 +14,7 @@ Gets the encoding of a file
 ## SYNTAX
 
 ```none
-Get-FileEncoding [-FilePath] <String> [[-DefaultEncoding] <Encoding>] [<CommonParameters>]
+Get-FileEncoding [-FilePath] <String> [[-Encoding] <Object>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -64,18 +64,19 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DefaultEncoding
+### -Encoding
 
-Default encoding for non ASCII files and without BOM
+Default encoding for non ASCII files.
+The default is set by global variable, UTF8 no BOM for Core or UTF8 with BOM for Desktop edition
 
 ```yaml
-Type: System.Text.Encoding
+Type: System.Object
 Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: 2
-Default value: [System.Text.Encoding]::UTF8
+Default value: $DefaultEncoding
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
