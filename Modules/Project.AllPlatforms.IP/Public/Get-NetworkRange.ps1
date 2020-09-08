@@ -85,36 +85,36 @@ Following changes by metablaster:
 function Get-NetworkRange
 {
 	[OutputType([IPAddress])]
-	[CmdletBinding(DefaultParameterSetName = 'FromIPAndMask',
+	[CmdletBinding(DefaultParameterSetName = "FromIPAndMask",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.IP/Help/en-US/Get-NetworkRange.md")]
 	param (
 		[Parameter(Mandatory = $true, Position = 0,
-			ValueFromPipeline = $true, ParameterSetName = 'FromIPAndMask')]
+			ValueFromPipeline = $true, ParameterSetName = "FromIPAndMask")]
 		[string] $IPAddress,
 
 		[Parameter(Position = 1,
-			ParameterSetName = 'FromIPAndMask')]
+			ParameterSetName = "FromIPAndMask")]
 		[string] $SubnetMask,
 
-		[Parameter(ParameterSetName = 'FromIPAndMask')]
+		[Parameter(ParameterSetName = "FromIPAndMask")]
 		[switch] $IncludeNetworkAndBroadcast,
 
 		[Parameter(Mandatory = $true,
-			ParameterSetName = 'FromStartAndEnd')]
+			ParameterSetName = "FromStartAndEnd")]
 		[IPAddress] $Start,
 
 		[Parameter(Mandatory = $true,
-			ParameterSetName = 'FromStartAndEnd')]
+			ParameterSetName = "FromStartAndEnd")]
 		[IPAddress] $End
 	)
 
 	process
 	{
-		if ($PSCmdlet.ParameterSetName -eq 'FromIPAndMask')
+		if ($PSCmdlet.ParameterSetName -eq "FromIPAndMask")
 		{
 			try
 			{
-				$PSBoundParameters.Remove('IncludeNetworkAndBroadcast') | Out-Null
+				$PSBoundParameters.Remove("IncludeNetworkAndBroadcast") | Out-Null
 				$Network = ConvertTo-Network @PSBoundParameters
 			}
 			catch

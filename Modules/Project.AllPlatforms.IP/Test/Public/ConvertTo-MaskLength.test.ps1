@@ -48,7 +48,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #>
 
 #region:TestFileHeader
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'Number', Justification = 'Likely false positive')]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+	"PSReviewUnusedParameter", "Number", Justification = "Likely false positive")]
 param (
 	[bool] $UseExisting
 )
@@ -95,7 +96,8 @@ InModuleScope Project.AllPlatforms.IP {
 
 		It 'Example <Number> is valid' -TestCases (
 			(Get-Help ConvertTo-MaskLength).Examples.Example.Code | ForEach-Object -Begin {
-				[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignment', '', Justification = 'FalsePositive')]
+				[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+					"PSUseDeclaredVarsMoreThanAssignment", "", Justification = "FalsePositive")]
 				$Number = 1
 			} -Process {
 				@{ Number = $Number++; Code = $_ }

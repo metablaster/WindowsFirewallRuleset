@@ -30,7 +30,7 @@ SOFTWARE.
 # Unit test for Initialize-Table
 #
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-	'PSAvoidGlobalVars', '', Justification = 'Global variable used for testing only')]
+	"PSAvoidGlobalVars", "", Justification = "Global variable used for testing only")]
 param()
 
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1

@@ -89,16 +89,16 @@ function Resolve-IPAddress
 
 			$Values = switch ($Group.Name)
 			{
-				'Range'
+				"Range"
 				{
 					[int32] $Start, [int32] $End = $Group.Value -split '-'
 
 					if ($Start, $End -gt 255)
 					{
 						$ErrorRecord = [System.Management.Automation.ErrorRecord]::new(
-							[ArgumentException]::new('Value ranges to resolve must use a start and end values between 0 and 255'),
-							'RangeExpressionOutOfRange',
-							'InvalidArgument',
+							[ArgumentException]::new("Value ranges to resolve must use a start and end values between 0 and 255"),
+							"RangeExpressionOutOfRange",
+							"InvalidArgument",
 							$Group.Value
 						)
 						$PSCmdlet.ThrowTerminatingError($ErrorRecord)
@@ -106,16 +106,16 @@ function Resolve-IPAddress
 
 					$Start..$End
 				}
-				'Selected'
+				"Selected"
 				{
-					$Values = [int[]]($Group.Value -split ', *')
+					$Values = [int[]]($Group.Value -split ", *")
 
 					if ($Values -gt 255)
 					{
 						$ErrorRecord = [System.Management.Automation.ErrorRecord]::new(
-							[ArgumentException]::new('All selected values must be between 0 and 255'),
-							'SelectionExpressionOutOfRange',
-							'InvalidArgument',
+							[ArgumentException]::new("All selected values must be between 0 and 255"),
+							"SelectionExpressionOutOfRange",
+							"InvalidArgument",
 							$Group.Value
 						)
 						$PSCmdlet.ThrowTerminatingError($ErrorRecord)
@@ -123,7 +123,7 @@ function Resolve-IPAddress
 
 					$Values
 				}
-				'All'
+				"All"
 				{
 					0..255
 				}
@@ -133,7 +133,7 @@ function Resolve-IPAddress
 				Name = $_.Name
 				Position = [int32] $IPAddress.Substring(0, $_.Index).Split('.').Count - 1
 				ReplaceWith = $Values
-				PSTypeName = 'ExpansionGroupInfo'
+				PSTypeName = "ExpansionGroupInfo"
 			}
 		}
 
@@ -143,11 +143,11 @@ function Resolve-IPAddress
 		}
 		elseif (-not [IPAddress]::TryParse(($IPAddress -replace '/\d+$'), [ref] $null))
 		{
-			Write-Warning -Message 'The IPAddress argument is not a valid IP address and cannot be resolved'
+			Write-Warning -Message "The IPAddress argument is not a valid IP address and cannot be resolved"
 		}
 		else
 		{
-			Write-Debug 'No groups found to resolve'
+			Write-Debug "No groups found to resolve"
 		}
 	}
 }

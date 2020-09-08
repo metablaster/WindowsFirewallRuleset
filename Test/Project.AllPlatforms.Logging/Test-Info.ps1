@@ -63,7 +63,8 @@ function Test-Info
 #>
 function Test-Pipeline
 {
-	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Needed for test case')]
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+		"PSReviewUnusedParameter", "", Justification = "Needed for test case")]
 	[CmdletBinding()]
 	param (
 		[Parameter(ValueFromPipeline = $true)]

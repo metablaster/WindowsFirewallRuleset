@@ -51,7 +51,7 @@ currently it looks like we assign entry user group for program that applies to u
 function Update-Table
 {
 	[OutputType([void])]
-	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'None')]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "None")]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $SearchString,

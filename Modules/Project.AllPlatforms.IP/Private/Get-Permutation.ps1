@@ -63,7 +63,7 @@ TODO: add example
 .INPUTS
 None. You cannot pipe objects to Get-Permutation
 .OUTPUTS
-TODO: describe outputs
+TODO: describe outputs, specify OutputType
 .NOTES
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
@@ -76,7 +76,7 @@ function Get-Permutation
 	[CmdletBinding()]
 	param (
 		[Parameter()]
-		[PSTypeName('ExpansionGroupInfo')]
+		[PSTypeName("ExpansionGroupInfo")]
 		[Object[]] $Group,
 
 		[Parameter()]

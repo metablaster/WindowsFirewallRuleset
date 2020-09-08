@@ -35,7 +35,7 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 
 # TODO: should process must be implemented for system changes
 # if (!$PSCmdlet.ShouldProcess("ModuleName", "Update or install module if needed"))
-# SupportsShouldProcess = $true, ConfirmImpact = 'High'
+# SupportsShouldProcess = $true, ConfirmImpact = "High"
 
 #
 # Script imports

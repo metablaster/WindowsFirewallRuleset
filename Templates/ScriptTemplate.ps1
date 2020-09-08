@@ -62,8 +62,8 @@ the Functionality parameter of Get-Help.
 #>
 
 # TODO: Remove or update script paraemters
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '',
-	Justification = 'This is template script parameter')]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+	"PSReviewUnusedParameter", "", Justification = "This is template script parameter")]
 [CmdletBinding()]
 param (
 	$ScriptParam
@@ -93,8 +93,8 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 # Setup local variables
 # TODO: define or remove variables
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '',
-	Justification = 'This is template variable')]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+	"PSReviewUnusedParameter", "", Justification = "This is template variable")]
 $TemplateVariable = ""
 
 Update-Log

@@ -44,7 +44,7 @@ None.
 function Exit-Test
 {
 	[OutputType([void])]
-	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'None',
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "None",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Test/Help/en-US/Exit-Test.md")]
 	param()
 

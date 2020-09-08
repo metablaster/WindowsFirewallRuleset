@@ -66,7 +66,7 @@ TODO: Remove-Module if used prior uninstall
 function Uninstall-DuplicateModule
 {
 	[OutputType([void])]
-	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High',
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High",
 		DefaultParameterSetName = "Path")]
 	param (
 		[Parameter(Mandatory = $true, Position = 0, ParameterSetName = "Path")]

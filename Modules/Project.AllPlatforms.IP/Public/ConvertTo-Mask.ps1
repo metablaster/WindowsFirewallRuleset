@@ -78,7 +78,7 @@ function ConvertTo-Mask
 	param (
 		[Parameter(Mandatory = $true,
 			ValueFromPipeline = $true)]
-		[Alias('Length')]
+		[Alias("Length")]
 		[ValidateRange(0, 32)]
 		[byte] $MaskLength
 	)

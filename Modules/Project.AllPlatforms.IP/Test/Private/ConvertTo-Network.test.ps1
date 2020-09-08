@@ -76,7 +76,8 @@ if (-not $UseExisting)
 InModuleScope Project.AllPlatforms.IP {
 	Describe 'ConvertTo-Network' {
 		BeforeAll {
-			[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignment', '', Justification = 'FalsePositive')]
+			[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+				"PSUseDeclaredVarsMoreThanAssignment", "", Justification = "FalsePositive")]
 			$maskTable = @(
 				@{ MaskLength = 0; Mask = '0.0.0.0' }
 				@{ MaskLength = 1; Mask = '128.0.0.0' }

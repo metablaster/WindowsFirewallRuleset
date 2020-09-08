@@ -85,7 +85,7 @@ Following changes by metablaster:
 #>
 function Get-Subnet
 {
-	[OutputType('Project.AllPlatforms.IP.Subnet')]
+	[OutputType("Project.AllPlatforms.IP.Subnet")]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.IP/Help/en-US/Get-Subnet.md")]
 	param (
@@ -99,7 +99,7 @@ function Get-Subnet
 		[string] $NewSubnetMask
 	)
 
-	$PSBoundParameters.Remove('NewSubnetMask') | Out-Null
+	$PSBoundParameters.Remove("NewSubnetMask") | Out-Null
 
 	try
 	{
@@ -114,9 +114,9 @@ function Get-Subnet
 	if ($Network.MaskLength -gt $NewNetwork.MaskLength)
 	{
 		$ErrorRecord = [System.Management.Automation.ErrorRecord]::new(
-			[ArgumentException]'The subnet mask of the new network is shorter (masks fewer addresses) than the subnet mask of the existing network.',
-			'NewSubnetMaskTooShort',
-			'InvalidArgument',
+			[ArgumentException] "The subnet mask of the new network is shorter (masks fewer addresses) than the subnet mask of the existing network.",
+			"NewSubnetMaskTooShort",
+			"InvalidArgument",
 			$NewNetwork.MaskLength
 		)
 

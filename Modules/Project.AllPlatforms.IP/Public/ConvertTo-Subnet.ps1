@@ -80,28 +80,28 @@ Following changes by metablaster:
 #>
 function ConvertTo-Subnet
 {
-	[OutputType('Project.AllPlatforms.IP.Subnet')]
-	[CmdletBinding(DefaultParameterSetName = 'FromIPAndMask',
+	[OutputType("Project.AllPlatforms.IP.Subnet")]
+	[CmdletBinding(DefaultParameterSetName = "FromIPAndMask",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.IP/Help/en-US/ConvertTo-Subnet.md")]
 	param (
 		[Parameter(Mandatory = $true,
-			Position = 0, ParameterSetName = 'FromIPAndMask')]
+			Position = 0, ParameterSetName = "FromIPAndMask")]
 		[string] $IPAddress,
 
 		[Parameter(Position = 1,
-			ParameterSetName = 'FromIPAndMask')]
+			ParameterSetName = "FromIPAndMask")]
 		[string] $SubnetMask,
 
 		[Parameter(Mandatory = $true,
-			ParameterSetName = 'FromStartAndEnd')]
+			ParameterSetName = "FromStartAndEnd")]
 		[IPAddress] $Start,
 
 		[Parameter(Mandatory = $true,
-			ParameterSetName = 'FromStartAndEnd')]
+			ParameterSetName = "FromStartAndEnd")]
 		[IPAddress] $End
 	)
 
-	if ($PSCmdlet.ParameterSetName -eq 'FromIPAndMask')
+	if ($PSCmdlet.ParameterSetName -eq "FromIPAndMask")
 	{
 		try
 		{
