@@ -307,7 +307,7 @@ override those with `InterfaceAlias` parameter.
 
 ## Case 9: Epic games UDP traffic to 230.0.0.1 is blocked
 
-There is no need to troubleshoot this since Epic software is violating IANA rules,
-they have been notified about the problem which is present for already over 5 years.
+There is no need to troubleshoot this since Epic software uses addresses that are against IANA rules,
+they have been notified about the problem which is present for already some time.
 
 For more info see: [Please stop violating IANA rules](https://forums.unrealengine.com/unreal-engine/feedback-for-epic/1800085-please-stop-violating-iana-rules)

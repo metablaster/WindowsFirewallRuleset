@@ -1,7 +1,7 @@
 ---
 Module Name: Project.AllPlatforms.IP
 Module Guid: 2f356d8c-aad0-462f-9cd7-fff31c7ab1d0
-Download Help Link: https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Config/Content/0.7.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/develop/Config/HelpContent/0.7.0
 Help Version: 0.7.0
 Locale: en-US
 ---

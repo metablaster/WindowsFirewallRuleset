@@ -72,8 +72,8 @@ to run the commands multiple times, or to be able to share output in some comput
 somebody can help you out.
 
 ```powershell
-ipconfig /all > $home\Desktop\ipconfig.txt
-Get-NetAdapter | ? HardwareInterface | select * > $home\Desktop\adapter.txt
+ipconfig /all > $env:SystemDrive\ipconfig.txt
+Get-NetAdapter | ? HardwareInterface | select * > $env:SystemDrive\adapter.txt
 ```
 
 ## Ping hosts
@@ -81,8 +81,8 @@ Get-NetAdapter | ? HardwareInterface | select * > $home\Desktop\adapter.txt
 Pinging hosts is important to isolate specific routes/sites:
 
 ```powershell
-ping 8.8.8.8 > $home\Desktop\ping.txt
-ping google.com >> $home\Desktop\ping.txt
+ping 8.8.8.8 > $env:SystemDrive\ping.txt
+ping google.com >> $env:SystemDrive\ping.txt
 ```
 
 `ipconfig /all` command (above) will telly you IP address of your router,\
@@ -93,7 +93,7 @@ Default Gateway . . . . . . . . . : 192.168.4.1
 Now see if route to router is working by pinging address from your output:
 
 ```powershell
-ping 192.168.8.1 >> $home\Desktop\ping.txt
+ping 192.168.8.1 >> $env:SystemDrive\ping.txt
 ```
 
 You might also want to ping other computers on your local network, to find out their IP,\

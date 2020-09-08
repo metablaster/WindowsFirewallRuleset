@@ -58,6 +58,8 @@ produce errors while generating online help and how to avoid them.
 Help version is automatically updated according to $ProjectVersion variable
 TODO: some markdown files will end up with additional blank line at the end of document for each
 update of help files.
+TODO: Online hosting of help content is needed, for now the only purpose is to generate markdown
+help files
 #>
 
 [CmdletBinding()]
@@ -177,7 +179,7 @@ While generating help files, temporary folders may appear in language specific s
 
 		# Help content download link for Update-Help commandlet
 		# This value is required for .cab file creation. This value is used as markdown header metadata in the module page
-		[string] $DownloadLink = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Config/Content/$ProjectVersion"
+		[string] $DownloadLink = "https://github.com/metablaster/WindowsFirewallRuleset/tree/develop/Config/HelpContent/$ProjectVersion"
 
 		# Module page file
 		[string] $ModulePage = "$OnlineHelp\$ModuleName.md"

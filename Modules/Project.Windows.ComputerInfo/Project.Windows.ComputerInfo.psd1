@@ -157,7 +157,7 @@
 	} # End of PrivateData hashtable
 
 	# HelpInfo URI of this module
-	HelpInfoURI = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Modules/Project.Windows.ComputerInfo/Project.Windows.ComputerInfo_c68a812d-076d-47bd-a73d-8d4600bd3c51_HelpInfo.xml"
+	# HelpInfoURI = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Modules/Project.Windows.ComputerInfo/Project.Windows.ComputerInfo_c68a812d-076d-47bd-a73d-8d4600bd3c51_HelpInfo.xml"
 
 	# Default prefix for commands exported from this module.
 	# Override the default prefix using Import-Module -Prefix.

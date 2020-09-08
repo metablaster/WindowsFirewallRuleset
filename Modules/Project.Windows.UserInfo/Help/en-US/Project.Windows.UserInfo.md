@@ -1,7 +1,7 @@
 ---
 Module Name: Project.Windows.UserInfo
 Module Guid: 136254f4-4730-4ed1-b9e9-1ccecfe09ee9
-Download Help Link: https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Config/Content/0.7.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/develop/Config/HelpContent/0.7.0
 Help Version: 0.7.0
 Locale: en-US
 ---

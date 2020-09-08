@@ -50,7 +50,7 @@
 10. and the list goes on...
 
 - In addition to firewall rules you will find a number of PowerShell modules,
-scripts and functions used to gather info relevant for building a firewall such as:
+scripts and functions used to gather info relevant to build the firewall such as:
 
 1. computers on network
 2. installed programs
@@ -175,7 +175,7 @@ Note that `Scripts\SetupProfile.ps1` is automatically called by `Scripts\SetupFi
 ### Note
 
 - If you would like to modify basic behavior of execution, such as force loading rules and various
-default actions then visit `Config\ProjectSettings.ps1` and there you'll find global variables
+defaults then visit `Config\ProjectSettings.ps1` and there you'll find global variables
 which are used for this.
 - If you're running scripts for the first time it's highly recommended to load all rules for which you
 have programs installed on system,
@@ -188,9 +188,8 @@ if you want to fix some problem.
 - Any rule that results in "Access denied" while loading should be reloaded by executing specific
 script again.
 - If the project was manually downloaded, transferred from another computer or media then you should\
-[unblock all files](https://devblogs.microsoft.com/scripting/easily-unblock-all-files-in-a-directory-using-powershell/)
-in project first to avoid YES/NO spam questions for every executing script, by running
-`Scripts\UnblockProject.ps1` script.\
+unblock all files in project first to avoid YES/NO spam questions for every executing script,
+by running `Scripts\UnblockProject.ps1` script.\
 Master script `Scripts\SetupFirewall.ps1` does this in case if you forget, but initial YES/NO spam questions
 will still be visible in that case.
 - It's important to understand these rules are designed to be used as "Standard" user, not as
@@ -252,7 +251,7 @@ downloaded from internet:
     .\Scripts\UnblockProject.ps1
     ```
 
-    Make sure your answer is `R` that is `[R] Run once` as many time as needed to run the script
+    Make sure your answer is `R` that is `[R] Run once` as many times as needed to run the script
 
 10. Rules for programs such as internet browser, Visual Studio etc. depend on installation variables.\
 Most paths are auto-searched and variables are updated, otherwise you get warning and description
@@ -336,7 +335,7 @@ right click and delete.
 however you're advised to perform some tests before using it due to it's
 experimental state.
 
-1. To revert to your old firewall state (the one in control panel), you will need to delete all the
+3. To revert to your old firewall state (the one in control panel), you will need to delete all the
 rules from GPO,\
 and set all properties to `"Not configured"` when right clicking on node:\
 `Windows Defender Firewall with Advanced Security - Local Group Policy Object`
@@ -389,7 +388,7 @@ There are two methods to be up to date with firewall:
 
 1. First method requires you to download scripts, first use the "branch" button here on this site to
 switch to either master or develop branch, next use "Code" button and either clone or
-download project.
+download zip.
 
 2. Second method is good if you want to do it in powershell console without visiting this site,
 you will need [git](https://git-scm.com/downloads), [github account](https://github.com/join),
@@ -428,7 +427,7 @@ to tell git you want updates from master (stable) branch:
 Of course you can switch from one branch to another with git in powershell as many times as you
 want and all files will be auto updated without the need to re-download or re-setup anything.
 
-Keep in mind that you need to save and upload your modification to your fork,
+Keep in mind that you need to save and upload your modifications to your fork,
 for more info on how to use git see [git documentation](https://git-scm.com/doc)
 
 That's it, your scripts are now up to date, execute them as you desire (or follow steps from
@@ -451,9 +450,9 @@ that these rules don't contain mistakes, for example, for ICMP rules you would p
 but you can't push an update here, please open new issue here on github and provide details
 preferably with documentation.
 3. To contribute rules, it is also important that each rule contains good description of it's
-purpose, when a user clicks on a rule in firewall GUI he/she wants to see what this rule is about and
+purpose, when the user clicks on the rule in firewall GUI he/she wants to see what this rule is about and
 easily conclude whether to enable/disable the rule or allow/block the traffic.
-4. It is also important that a rule is very specific and not generic, that means specifying protocol,
+4. It is also important that the rule is very specific and not generic, that means specifying protocol,
 IP addresses, ports, system user, interface type and other relevant information.\
 for example just saying: allow TCP outbound port 80 for any address or any user or no explanation
 what is this supposed to allow or block is not acceptable.
@@ -461,7 +460,7 @@ what is this supposed to allow or block is not acceptable.
 ## Customization
 
 If you would like to customize project code or add more firewall rules to suit your private or corporate
-interests then first step is to set up development environment and learn about project best practices
+interests then the first step is to set up development environment and learn about project best practices
 all of which is explained in [CONTRIBUTING.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/CONTRIBUTING.md)
 
 Depending on your situation and target platform you might also want to read [Legacy Support](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/LegacySupport.md)

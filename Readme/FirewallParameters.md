@@ -69,7 +69,7 @@ and usually need googling out what they do.
 - `DHCP` DHCP Servers
 - `IntranetRemoteAccess` Remote Corp Network
 - `PlayToDevice` PlayTo Renderers
-- `?` Captive Portal Addresses
+- `<unknown>` Captive Portal Addresses
 
 ## Interface
 
@@ -92,7 +92,7 @@ except if InterfaceType is "Any", use just one of these two parameters.
 ## Users
 
 - `Localuser` Authorized local Principals
-- `?` Excepted local Principals
+- `<unknown>` Excepted local Principals
 - `Owner` Local User Owner
 - `RemoteUser` Authorized Users
 
@@ -138,8 +138,8 @@ so irrelevant for home users.
 
 The meaning of this parameter value depends on which parameter it is used:
 
-1. `"*"` Apply to services only / Apply to application packages only
-2. `Any` Apply to all programs + and services / and application packages / that meet the specified condition
+1. `"*"` Applies to services only / Apply to application packages only
+2. `Any` Applies to all programs + and services / and application packages / that meet the specified condition
 
 ## Parameter value example
 
@@ -184,8 +184,9 @@ Owner                 = "S-1-5-21-3337988176-3917481366-464002247-500"
 ## Log file fields
 
 Depending on settings, firewall log can contain dropped and allowed packets,
-setting in powershell allow us to log **ignored** packets too however this does not happen
-probably due to a bug.\
+setting in powershell allows us to log **ignored** packets too however this does not happen
+probably due to a bug.
+
 Sample values and their meaning in order how they appear in firewall log file:
 
 ```none

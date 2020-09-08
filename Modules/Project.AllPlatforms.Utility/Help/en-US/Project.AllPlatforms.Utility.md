@@ -1,7 +1,7 @@
 ---
 Module Name: Project.AllPlatforms.Utility
 Module Guid: 5f38e46f-1bc4-489d-90df-72755129cfdd
-Download Help Link: https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Config/Content/0.7.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/develop/Config/HelpContent/0.7.0
 Help Version: 0.7.0
 Locale: en-US
 ---

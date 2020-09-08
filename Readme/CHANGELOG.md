@@ -7,7 +7,7 @@ Here is a list of changes for each of the releases
 
 - [Changelog](#changelog)
   - [Table of contents](#table-of-contents)
-  - [v0.x.x (develop branch)](#v0xx-develop-branch)
+  - [v0.7.0 (develop branch)](#v070-develop-branch)
   - [v0.6.0 (current release)](#v060-current-release)
   - [v0.5.0](#v050)
   - [v0.4.1](#v041)
@@ -15,7 +15,7 @@ Here is a list of changes for each of the releases
   - [v0.3.0](#v030)
   - [v0.2](#v02)
 
-## v0.x.x (develop branch)
+## v0.7.0 (develop branch)
 
 - Modules
 
@@ -29,7 +29,7 @@ Here is a list of changes for each of the releases
 
 - Rules
 
-  - Fix rules for store apps that apply to multiple apps (ex. Administrators and temporary rule)
+  - Fix rules for store apps that apply to multiple apps (ex. Administrators and temporary rules)
   - Rules for store apps are now created only for apps that have networking capabilities and
   remote address is adjusted according to app capabilities.
   - Added rule for curl shipped with system
@@ -44,6 +44,10 @@ Here is a list of changes for each of the releases
   - Updated templates and small portion of scripts according to templates
   - Updated project initialization functions
   - Added platyPS module to list of recommended modules to be able to generate online help files
+
+- Documentation
+
+  - Generated online help files in markdown format for modules
 
 - Bugfix
 

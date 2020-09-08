@@ -1,7 +1,7 @@
 ---
 Module Name: Project.Windows.ComputerInfo
 Module Guid: c68a812d-076d-47bd-a73d-8d4600bd3c51
-Download Help Link: https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Config/Content/0.7.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/develop/Config/HelpContent/0.7.0
 Help Version: 0.7.0
 Locale: en-US
 ---

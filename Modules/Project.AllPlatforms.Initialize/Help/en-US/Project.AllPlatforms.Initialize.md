@@ -1,7 +1,7 @@
 ---
 Module Name: Project.AllPlatforms.Initialize
 Module Guid: 41585bd3-3f4d-4669-9919-2d19c0451b73
-Download Help Link: https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Config/Content/0.7.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/develop/Config/HelpContent/0.7.0
 Help Version: 0.7.0
 Locale: en-US
 ---

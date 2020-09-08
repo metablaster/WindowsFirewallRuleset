@@ -1,7 +1,7 @@
 
 # Windows firewall predefined (built in) rules
 
-Default Windows firewall has bunch of predefined rules,
+Default Windows firewall has a bunch of predefined rules,
 however this project will not make use of these rules,
 because they don't comply with project policy which is that a rule must be
 restrictive and contain a good comment.
@@ -11,7 +11,7 @@ or are missing other information which
 could be easily provided for custom built firewall, also comments are not very informative.
 In other words predefined rules are neither restrictive nor informative.
 
-Thus this project reinvents the wheel, and groups those predefined rules into custom groups.
+Thus we "reinvent the wheel", and group those predefined rules into custom groups.
 Custom rule groups don't interfere with predefined groups to be able to distinguish project rules
 from predefined rules.
 
