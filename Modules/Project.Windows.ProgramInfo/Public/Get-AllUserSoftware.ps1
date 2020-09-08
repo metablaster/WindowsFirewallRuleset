@@ -45,7 +45,8 @@ TODO: should be renamed into Get-InstallProperties
 function Get-AllUserSoftware
 {
 	[OutputType([PSCustomObject[]])]
-	[CmdletBinding()]
+	[CmdletBinding(
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-AllUserSoftware.md")]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]

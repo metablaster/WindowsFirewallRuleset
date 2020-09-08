@@ -84,7 +84,8 @@ function ConvertFrom-SID
 {
 	# TODO: test pipeline with multiple computers and SID's
 	[OutputType([PSCustomObject[]])]
-	[CmdletBinding(PositionalBinding = $false)]
+	[CmdletBinding(PositionalBinding = $false,
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.UserInfo/Help/en-US/ConvertFrom-SID.md")]
 	param(
 		[Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
 		[ValidatePattern('^S-1-\d[\d+-]+\d$')]

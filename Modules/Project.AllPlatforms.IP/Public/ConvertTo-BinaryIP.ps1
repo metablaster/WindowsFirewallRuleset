@@ -72,8 +72,9 @@ Following changes by metablaster:
 #>
 function ConvertTo-BinaryIP
 {
-	[CmdletBinding()]
 	[OutputType([string])]
+	[CmdletBinding(
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.IP/Help/en-US/ConvertTo-BinaryIP.md")]
 	param (
 		[Parameter(Mandatory = $true,
 			ValueFromPipeline = $true)]

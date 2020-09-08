@@ -58,7 +58,8 @@ function Get-TypeName
 	# TODO: make Diagnostics look like this in all files
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 		'PSUseProcessBlockForPipelineCommand', '', Justification = 'Must not be used here')]
-	[CmdletBinding()]
+	[CmdletBinding(
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Utility/Help/en-US/Get-TypeName.md")]
 	param (
 		[Parameter(Mandatory = $true,
 			ValueFromPipeline = $true)]

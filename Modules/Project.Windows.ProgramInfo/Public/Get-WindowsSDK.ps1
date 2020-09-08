@@ -48,7 +48,8 @@ function Get-WindowsSDK
 	[CmdletBinding()]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
-		[Parameter()]
+		[Parameter(
+			HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-WindowsSDK.md")]
 		[string] $ComputerName = [System.Environment]::MachineName
 	)
 

@@ -80,7 +80,8 @@ TODO: Implement initializing for non Administrator users
 function Initialize-Module
 {
 	[OutputType([bool])]
-	[CmdletBinding(PositionalBinding = $false)]
+	[CmdletBinding(PositionalBinding = $false,
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Initialize/Help/en-US/Initialize-Module.md" )]
 	param (
 		[Parameter(Mandatory = $true, Position = 0,
 			HelpMessage = "Specify module to check in the form of ModuleSpecification object")]

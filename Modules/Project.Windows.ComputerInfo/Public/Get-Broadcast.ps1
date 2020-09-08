@@ -51,7 +51,8 @@ None. You cannot pipe objects to Get-Broadcast
 function Get-Broadcast
 {
 	[OutputType([System.Net.IPAddress[]])]
-	[CmdletBinding(DefaultParameterSetName = "Individual")]
+	[CmdletBinding(DefaultParameterSetName = "Individual",
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ComputerInfo/Help/en-US/Get-Broadcast.md")]
 	param (
 		[Parameter(ParameterSetName = "All")]
 		[switch] $IncludeAll,

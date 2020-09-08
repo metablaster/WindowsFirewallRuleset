@@ -50,7 +50,8 @@ is supported only on Windows PowerShell
 function Get-UserGroup
 {
 	[OutputType([PSCustomObject[]])]
-	[CmdletBinding(PositionalBinding = $false)]
+	[CmdletBinding(PositionalBinding = $false,
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.UserInfo/Help/en-US/Get-UserGroup.md")]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter(Position = 0)]

@@ -51,7 +51,8 @@ which is needed for pipeline, need better design
 function Get-SystemSKU
 {
 	[OutputType([PSCustomObject[]])]
-	[CmdletBinding(PositionalBinding = $false)]
+	[CmdletBinding(PositionalBinding = $false,
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ComputerInfo/Help/en-US/Get-SystemSKU.md")]
 	param(
 		[Parameter(ValueFromPipeline = $true, ParameterSetName = "Number")]
 		[ValidatePattern("^[0-9]+$")]

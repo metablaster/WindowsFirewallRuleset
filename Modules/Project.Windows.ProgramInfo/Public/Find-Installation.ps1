@@ -48,7 +48,8 @@ None.
 function Find-Installation
 {
 	[OutputType([bool])]
-	[CmdletBinding()]
+	[CmdletBinding(
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ProgramInfo/Help/en-US/Find-Installation.md")]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $Program,

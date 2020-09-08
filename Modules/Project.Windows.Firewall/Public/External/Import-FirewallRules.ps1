@@ -70,7 +70,8 @@ Imports all firewall rules in the SCV file WmiRules.csv
 function Import-FirewallRules
 {
 	[OutputType([void])]
-	[CmdletBinding()]
+	[CmdletBinding(
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.Firewall/Help/en-US/Import-FirewallRules.md")]
 	param(
 		[Parameter()]
 		[string] $PolicyStore = [System.Environment]::MachineName,

@@ -45,7 +45,8 @@ TODO: additional work on function to make it more universal, see if we can make 
 function Show-SDDL
 {
 	[OutputType([string])]
-	[CmdletBinding()]
+	[CmdletBinding(
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Utility/Help/en-US/Show-SDDL.md"	)]
 	param (
 		[Parameter(Mandatory = $true,
 			ValueFromPipelineByPropertyName = $true)]

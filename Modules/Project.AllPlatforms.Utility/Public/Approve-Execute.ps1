@@ -51,7 +51,8 @@ None.
 function Approve-Execute
 {
 	[OutputType([bool])]
-	[CmdletBinding()]
+	[CmdletBinding(
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Utility/Help/en-US/Approve-Execute.md")]
 	param (
 		[Parameter()]
 		[ValidateSet("Yes", "No")]

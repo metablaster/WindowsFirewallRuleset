@@ -64,7 +64,7 @@ Returns the addresses 10.1.0.0/24, 10.1.1.0/24, 10.1.2.0/24, 10.2.0.0/24, and so
 .INPUTS
 System.String
 .OUTPUTS
-TODO: describe outputs
+TODO: describe outputs, define OutputType
 .NOTES
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions
@@ -73,7 +73,8 @@ Following changes by metablaster:
 #>
 function Resolve-IPAddress
 {
-	[CmdletBinding()]
+	[CmdletBinding(
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.IP/Help/en-US/Resolve-IPAddress.md")]
 	param (
 		[Parameter(Mandatory = $true,
 			ValueFromPipeline = $true)]

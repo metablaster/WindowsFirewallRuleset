@@ -58,7 +58,8 @@ NOTE: This function is based on (but is not) sample from "Windows PowerShell Coo
 function Get-FileEncoding
 {
 	[OutputType([string])]
-	[CmdletBinding()]
+	[CmdletBinding(
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Utility/Help/en-US/Get-FileEncoding.md")]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $FilePath,

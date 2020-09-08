@@ -68,7 +68,8 @@ function Remove-FirewallRules
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'There is no way to replace Write-Host here')]
 	[OutputType([void])]
-	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High',
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.Firewall/Help/en-US/Remove-FirewallRules.md")]
 	param(
 		[Parameter()]
 		[string] $PolicyStore = [System.Environment]::MachineName,

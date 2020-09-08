@@ -45,7 +45,8 @@ None.
 function Test-Service
 {
 	[OutputType([void])]
-	[CmdletBinding()]
+	[CmdletBinding(
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ProgramInfo/Help/en-US/Test-Service.md")]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $Service

@@ -70,7 +70,8 @@ Before updating PowerShellGet or PackageManagement, you should always install th
 function Initialize-Provider
 {
 	[OutputType([bool])]
-	[CmdletBinding(PositionalBinding = $false)]
+	[CmdletBinding(PositionalBinding = $false,
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Initialize/Help/en-US/Initialize-Provider.md")]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[hashtable] $FullyQualifiedName,

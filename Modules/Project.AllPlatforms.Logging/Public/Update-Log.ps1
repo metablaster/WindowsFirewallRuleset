@@ -54,7 +54,8 @@ TODO: when strict mode is on, errors captured by strict mode are not captured in
 function Update-Log
 {
 	[OutputType([void])]
-	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Low')]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Low',
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Logging/Help/en-US/Update-Log.md")]
 	param ()
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"

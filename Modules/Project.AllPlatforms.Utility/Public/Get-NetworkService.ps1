@@ -42,7 +42,8 @@ None.
 #>
 function Get-NetworkService
 {
-	[CmdletBinding()]
+	[CmdletBinding(
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Utility/Help/en-US/Get-NetworkService.md")]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $Folder

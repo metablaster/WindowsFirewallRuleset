@@ -76,8 +76,9 @@ Following changes by metablaster:
 #>
 function Get-NetworkSummary
 {
-	[CmdletBinding()]
 	[OutputType('Project.AllPlatforms.IP.NetworkSummary')]
+	[CmdletBinding(
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.IP/Help/en-US/Get-NetworkSummary.md")]
 	param (
 		[Parameter(Mandatory = $true,
 			ValueFromPipeline = $true)]

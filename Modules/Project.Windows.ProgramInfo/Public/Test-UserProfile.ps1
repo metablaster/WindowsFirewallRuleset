@@ -46,7 +46,8 @@ TODO: is it possible to nest this into Test-Environment somehow?
 function Test-UserProfile
 {
 	[OutputType([bool])]
-	[CmdletBinding()]
+	[CmdletBinding(
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ProgramInfo/Help/en-US/Test-UserProfile.md")]
 	param (
 		[string] $FilePath
 	)

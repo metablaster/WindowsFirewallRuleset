@@ -47,7 +47,8 @@ TODO: remote computers?
 #>
 function Get-AppSID
 {
-	[CmdletBinding()]
+	[CmdletBinding(
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-AppSID.md")]
 	param (
 		[Alias("User")]
 		[Parameter(Mandatory = $true)]

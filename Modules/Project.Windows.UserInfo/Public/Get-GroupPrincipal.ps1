@@ -52,7 +52,8 @@ TODO: should we handle NT AUTHORITY, BUILTIN and similar?
 function Get-GroupPrincipal
 {
 	[OutputType([PSCustomObject[]])]
-	[CmdletBinding(PositionalBinding = $false)]
+	[CmdletBinding(PositionalBinding = $false,
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.UserInfo/Help/en-US/Get-GroupPrincipal.md")]
 	param (
 		[Alias("Group")]
 		[Parameter(Mandatory = $true,

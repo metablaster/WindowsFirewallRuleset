@@ -59,7 +59,8 @@ is supported only on Windows PowerShell
 #>
 function Get-SDDL
 {
-	[CmdletBinding(PositionalBinding = $false)]
+	[CmdletBinding(PositionalBinding = $false,
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.UserInfo/Help/en-US/Get-SDDL.md")]
 	param (
 		[Alias("User")]
 		[Parameter(Mandatory = $true, ParameterSetName = "User")]

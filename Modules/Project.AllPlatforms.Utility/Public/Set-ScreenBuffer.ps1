@@ -43,7 +43,8 @@ None.
 #>
 function Set-ScreenBuffer
 {
-	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High',
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Utility/Help/en-US/Set-ScreenBuffer.md")]
 	param ()
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"

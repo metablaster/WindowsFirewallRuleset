@@ -46,7 +46,8 @@ TODO: We should return true or false and conditionally load rule
 function Test-File
 {
 	[OutputType([void])]
-	[CmdletBinding()]
+	[CmdletBinding(
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ProgramInfo/Help/en-US/Test-File.md")]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $FilePath

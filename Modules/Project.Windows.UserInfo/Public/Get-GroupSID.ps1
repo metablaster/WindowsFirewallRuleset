@@ -51,7 +51,8 @@ is supported only on Windows PowerShell
 #>
 function Get-GroupSID
 {
-	[CmdletBinding(PositionalBinding = $false)]
+	[CmdletBinding(PositionalBinding = $false,
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.UserInfo/Help/en-US/Get-GroupSID.md")]
 	param (
 		[Alias("Group")]
 		[Parameter(Mandatory = $true,

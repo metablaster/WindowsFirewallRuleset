@@ -50,7 +50,8 @@ if OneDrive can be installed for all users too.
 function Get-OneDrive
 {
 	[OutputType([PSCustomObject[]])]
-	[CmdletBinding()]
+	[CmdletBinding(
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-OneDrive.md")]
 	param (
 		[Alias("User")]
 		[Parameter(Mandatory = $true)]

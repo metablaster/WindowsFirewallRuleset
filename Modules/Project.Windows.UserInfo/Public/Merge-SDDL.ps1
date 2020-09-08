@@ -51,7 +51,8 @@ TODO: Pipeline input
 function Merge-SDDL
 {
 	[OutputType([void])]
-	[CmdletBinding()]
+	[CmdletBinding(
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.UserInfo/Help/en-US/Merge-SDDL.md")]
 	param (
 		[Parameter(Mandatory = $true)]
 		[ref] $RefSDDL,

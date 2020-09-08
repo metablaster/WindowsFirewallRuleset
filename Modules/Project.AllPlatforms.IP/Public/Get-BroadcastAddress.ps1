@@ -86,8 +86,9 @@ Following changes by metablaster:
 #>
 function Get-BroadcastAddress
 {
-	[CmdletBinding()]
 	[OutputType([IPAddress])]
+	[CmdletBinding(
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.IP/Help/en-US/Get-BroadcastAddress.md")]
 	param (
 		[Parameter(Mandatory = $true,
 			ValueFromPipeline = $true)]

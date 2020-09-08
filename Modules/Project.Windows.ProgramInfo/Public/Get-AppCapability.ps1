@@ -68,7 +68,8 @@ https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/gener
 function Get-AppCapability
 {
 	[OutputType([string[]])]
-	[CmdletBinding()]
+	[CmdletBinding(
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-AppCapability.md")]
 	param (
 		[Alias("App", "StoreApp")]
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true, Position = 0)]
