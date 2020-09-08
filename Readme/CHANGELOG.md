@@ -47,7 +47,7 @@ Here is a list of changes for each of the releases
 
 - Documentation
 
-  - Generated online help files in markdown format for modules
+  - Generated online help files in markdown format for modules, can be accessed with Get-Help -Online
 
 - Bugfix
 

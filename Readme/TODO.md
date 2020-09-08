@@ -234,7 +234,9 @@ todo's in this file are categorized into following sections:
     - User canceling operation should be displayed with warning instead of debug stream
     - Function/Table with list of executables that don't exist on specific editions of Windows is
     needed to prevent loading rules for such programs
-    - Modules should have online and updatable help
+    - Modules should have updatable help, and, there is no online version for about module topics
+    - Need a function to generate a list of files included in module and perform comparison with
+    manifest FileList entries
 
 2. Project scripts
 

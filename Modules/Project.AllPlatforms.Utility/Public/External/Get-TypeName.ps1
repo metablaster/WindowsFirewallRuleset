@@ -46,7 +46,7 @@ System.Object Any .NET object
 .NOTES
 Original code link: https://github.com/gravejester/Communary.PASM
 TODO: need better checking for input, on pipeline.
-
+TODO: needs testing for arrays vs single objects, it doesn't look right
 Modifications by metablaster year 2020:
 Added check when object is null
 Added comment based help
