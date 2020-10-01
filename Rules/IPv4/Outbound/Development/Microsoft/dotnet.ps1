@@ -38,54 +38,40 @@ Import-Module -Name Project.AllPlatforms.Logging
 Import-Module -Name Project.Windows.UserInfo
 
 # Setup local variables
-$Group = "Microsoft - One Drive"
+$Group = "Development - Microsoft dotnet"
 $FirewallProfile = "Private, Public"
-$Accept = "Outbound rules for One Drive will be loaded, recommended if One Drive is installed to let it access to network"
-$Deny = "Skip operation, outbound rules for One Drive will not be loaded into firewall"
+$Accept = "Outbound rules for dotnet which provides commands for working with .NET Core projects."
+$Deny = "Skip operation, outbound rules for dotnet will not be loaded into firewall"
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
+#
+# dotnet installation directories
+#
+$dotnetRoot = "%ProgramFiles%\dotnet"
+
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
 #
-# One Drive installation directories
-#
-$OneDriveRoot = "%ProgramFiles(x86)%\Microsoft OneDrive"
-
-#
-# Rules for One Drive
+# Rules for dotnet
 #
 
 # Test if installation exists on system
-if ((Test-Installation "OneDrive" ([ref] $OneDriveRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "dotnet" ([ref] $dotnetRoot) @Logs) -or $ForceLoad)
 {
-	$Program = "$OneDriveRoot\OneDriveStandaloneUpdater.exe"
+	$Program = "$dotnetRoot\dotnet.exe"
 	Test-File $Program @Logs
 
-	# NOTE: According to scheduled task the updating user is SYSTEM
-	# TODO: Rule (probably also) needed for user profile, path blocked in process explorer was:
-	# C:\Users\<USERNAME>\AppData\Local\Microsoft\OneDrive\OneDriveStandaloneUpdater.exe
-	# the rest of rule properties was the same, possibly run by schedules task, in which case SYSTEM not needed
+	# TODO: There could be more ports or specific users, needs complete testing...
 	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "OneDrive Update" -Service Any -Program $Program `
+		-DisplayName "dotnet" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $NT_AUTHORITY_System `
-		-Description "Updater for OneDrive" @Logs | Format-Output @Logs
-
-	# TODO: LocalUser should be explicit user because each user runs it's own instance
-	# and if there are multiple instances returned we need multiple rules for each user
-	$Program = "$OneDriveRoot\OneDrive.exe"
-	Test-File $Program @Logs
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "OneDrive" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "One drive for syncing user data" @Logs | Format-Output @Logs
+		-Description "provides commands for working with .NET Core projects." @Logs | Format-Output @Logs
 }
 
 Update-Log

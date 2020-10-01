@@ -100,14 +100,14 @@ function Get-FileEncoding
 	# Find all of the encodings understood by the .NET Framework. For each,
 	# determine the bytes at the start of the file (the preamble) that the .NET
 	# Framework uses to identify that encoding.
-	foreach ($Encoding in [System.Text.Encoding]::GetEncodings())
+	foreach ($LocalEncoding in [System.Text.Encoding]::GetEncodings())
 	{
-		$Preamble = $Encoding.GetEncoding().GetPreamble()
+		$Preamble = $LocalEncoding.GetEncoding().GetPreamble()
 
 		if ($Preamble)
 		{
 			$EncodingBytes = $Preamble -join '-'
-			$Encodings[$EncodingBytes] = $Encoding.GetEncoding()
+			$Encodings[$EncodingBytes] = $LocalEncoding.GetEncoding()
 		}
 	}
 
@@ -140,13 +140,13 @@ function Get-FileEncoding
 	foreach ($EncodingLength in $EncodingLengths | Sort-Object -Descending)
 	{
 		$Bytes = Get-Content @Params -ReadCount $EncodingLength -Path $FilePath | Select-Object -First 1
-		$Encoding = $Encodings[$Bytes -join '-']
+		$LocalEncoding = $Encodings[$Bytes -join '-']
 
 		# If we found an encoding that had the same preamble bytes,
 		# save that output and break.
-		if ($Encoding)
+		if ($LocalEncoding)
 		{
-			$Result = $Encoding
+			$Result = $LocalEncoding
 
 			# For UTF encoding this will match only if there is BOM in file
 			$BOM = switch ($Result | Select-Object -ExpandProperty BodyName)
@@ -160,7 +160,7 @@ function Get-FileEncoding
 			break
 		}
 
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Length: $EncodingLength, Encoding: $Encoding"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Length: $EncodingLength, Encoding: $LocalEncoding"
 	}
 
 	if (!$Result)

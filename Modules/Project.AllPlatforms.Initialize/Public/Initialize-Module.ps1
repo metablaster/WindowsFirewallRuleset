@@ -196,14 +196,14 @@ function Initialize-Module
 	$Deny.HelpMessage = "Skip operation, module $ModuleName will not be installed or updated"
 
 	# TODO: remove?
+	# NOTE: Importing module to learn version could result in error
+	[version] $TargetPowerShellGet = Get-Module -Name PowerShellGet -ListAvailable |
+	Sort-Object -Property Version | Select-Object -Last 1 -ExpandProperty Version
+
 	# Check for PowerShellGet only if not processing PowerShellGet
 	if ($ModuleName -ne "PowerShellGet")
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if module PowerShellGet v$RequirePowerShellGetVersion is installed"
-
-		# NOTE: Importing module to learn version could result in error
-		[version] $TargetPowerShellGet = Get-Module -Name PowerShellGet -ListAvailable |
-		Sort-Object -Property Version | Select-Object -Last 1 -ExpandProperty Version
 
 		if (!$TargetPowerShellGet -or ($TargetPowerShellGet -lt $RequirePowerShellGetVersion))
 		{

@@ -65,6 +65,7 @@ function Test-Installation
 	# If input path is valid just make sure it's formatted
 	# NOTE: for debugging purposes we want to ignore default installation variables
 	# and force searching programs
+	# NOTE: this will cause "converted" path message in all cases
 	if (!$Develop -and (Test-Environment $FilePath.Value))
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Formatting $FilePath"

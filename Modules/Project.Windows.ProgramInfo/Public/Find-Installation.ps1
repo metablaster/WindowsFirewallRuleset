@@ -70,6 +70,11 @@ function Find-Installation
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Start searching for $Program"
 	switch -Wildcard ($Program)
 	{
+		"dotnet"
+		{
+			# TODO: No algorithm to find this path
+			Edit-Table "%ProgramFiles%\dotnet"
+		}
 		"CMake"
 		{
 			Update-Table "CMake"

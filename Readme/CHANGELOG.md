@@ -34,6 +34,7 @@ Here is a list of changes for each of the releases
   remote address is adjusted according to app capabilities.
   - Added rule for curl shipped with system
   - Updated rules for Visual Studio
+  - Added initial rule for dotnet.exe
 
 - New features
 
@@ -52,6 +53,8 @@ Here is a list of changes for each of the releases
 - Bugfix
 
   - Fix bug with Initialize-Module failing to update module due to invalid parameter
+  - Fix bug with Initialize-Module failing to update PowerShellGet due to unset variable
+  - Fix bug with Get-FileEncoding due to overridden variable
 
 ## v0.6.0 (current release)
 
