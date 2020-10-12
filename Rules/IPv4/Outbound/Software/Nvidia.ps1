@@ -124,6 +124,8 @@ if ([System.Environment]::Is64BitOperatingSystem)
 		Write-Information -Tags "User" -MessageData "INFO: Querying driver store for NVDisplay Container..."
 
 		# TODO: we need to query drivers for all such programs in DriverStore, ex Get-DriverPath function
+		# TODO: might not work for DCH drivers, for difference with "standard" drivers see:
+		# https://nvidia.custhelp.com/app/answers/detail/a_id/4777/~/nvidia-dch%2Fstandard-display-drivers-for-windows-10-faq
 		[string] $Driver = Get-WindowsDriver -Online -All |
 		Where-Object -Property OriginalFileName -Like "*nv_dispi.inf" |
 		Sort-Object -Property Version -Descending |

@@ -222,7 +222,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	New-Variable -Name RequirePlatyPSVersion -Scope Global -Option Constant -Value ([version]::new(0, 14, 0))
 
 	# Recommended minimum VSCode version, do not decrement!
-	New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 49, 2))
+	New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 50, 0))
 
 	# Recommended minimum PSReadline version for command line editing experience of PowerShell
 	# Needs the 1.6.0 or a higher version of PowerShellGet to install the latest prerelease version of PSReadLine
