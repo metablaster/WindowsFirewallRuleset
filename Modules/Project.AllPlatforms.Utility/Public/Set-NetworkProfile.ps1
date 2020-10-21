@@ -54,7 +54,9 @@ function Set-NetworkProfile
 		[string[]] $HardwareInterfaces = Get-NetConnectionProfile |
 		Select-Object -ExpandProperty InterfaceAlias
 
-		if ($HardwareInterfaces.Length -eq 0)
+		# Interface could be null
+		# TODO: When could second check be true? (interfaces -eq 0)
+		if (!$HardwareInterfaces -or ($HardwareInterfaces.Length -eq 0))
 		{
 			# TODO: we should base this on IPv*Connectivity given by Get-NetConnectionProfile
 			Write-Warning -Message "Unable to set network profile, machine not connected to network"

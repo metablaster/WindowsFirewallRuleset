@@ -42,11 +42,11 @@ None, you can't p to ConvertFrom-OSBuild
 .OUTPUTS
 None.
 .NOTES
-None.
+TODO: OutputType not consistent
 #>
 function ConvertFrom-OSBuild
 {
-	[OutputType([int32])]
+	[OutputType([string])]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ComputerInfo/Help/en-US/ConvertFrom-OSBuild.md")]
 	param (
@@ -62,7 +62,7 @@ function ConvertFrom-OSBuild
 	{
 		if ($Info.Build -eq $WholePart)
 		{
-			return [int32] $Info.Version
+			return $Info.Version
 		}
 	}
 
@@ -73,6 +73,7 @@ function ConvertFrom-OSBuild
 <#
 https://docs.microsoft.com/en-us/windows/release-information/
 Version	Servicing option				Availability OS build	Latest revision date	End of service
+20H2	Semi-Annual Channel				2020-10-20	19042.572	2020-10-13	2022-05-10	2023-05-09
 2004	Semi-Annual Channel				2020-05-27	19041.450	2020-08-11	2021-12-14	2021-12-14	Microsoft recommends
 1909	Semi-Annual Channel				2019-11-12	18363.1049	2020-08-20	2021-05-11	2022-05-10
 1903	Semi-Annual Channel				2019-05-21	18362.1049	2020-08-20	2020-12-08	2020-12-08
@@ -92,6 +93,10 @@ Version		Servicing option					Availability OS build	Latest revision date	Mainstr
 #>
 
 Set-Variable -Name OSBuildInfo -Scope Script -Option Constant -Value ([PSCustomObject[]]@(
+		[hashtable]@{
+			Version = "20H2"
+			Build = 19042
+		}
 		[hashtable]@{
 			Version = 2004
 			Build = 19041

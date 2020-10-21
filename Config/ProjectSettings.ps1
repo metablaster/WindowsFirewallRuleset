@@ -222,7 +222,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	New-Variable -Name RequirePlatyPSVersion -Scope Global -Option Constant -Value ([version]::new(0, 14, 0))
 
 	# Recommended minimum VSCode version, do not decrement!
-	New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 50, 0))
+	New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 50, 1))
 
 	# Recommended minimum PSReadline version for command line editing experience of PowerShell
 	# Needs the 1.6.0 or a higher version of PowerShellGet to install the latest prerelease version of PSReadLine
@@ -230,7 +230,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 
 	# Recommended minimum Git version needed for contributing and required by posh-git
 	# https://github.com/dahlbyk/posh-git#prerequisites
-	New-Variable -Name RequireGitVersion -Scope Global -Option Constant -Value ([version]::new(2, 28, 0))
+	New-Variable -Name RequireGitVersion -Scope Global -Option Constant -Value ([version]::new(2, 29, 0))
 
 	# Recommended minimum PowerShell Core
 	# NOTE: 6.1.0 will not work, but 7.0.3 works, verify with PSUseCompatibleCmdlets

@@ -76,6 +76,7 @@ It should be used in conjunction with the rest of a module "Project.AllPlatforms
 Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider
 Updating PackageManagement and PowerShellGet requires restarting PowerShell to switch to the latest version
 TODO: Implement initializing for non Administrator users
+TODO: installing post-git in same session while installing other modules may fail, and PS restart is required.
 #>
 function Initialize-Module
 {
@@ -277,10 +278,27 @@ function Initialize-Module
 		{
 			Write-Information -Tags "User" -MessageData "INFO: Registering repository $Repository"
 
-			$IsTrusted = $Repositories[0].InstallationPolicy
+			# NOTE: It's unknown what was this supposed to do, stopped working since Windows 20H2
+			# $IsTrusted = $Repositories[0].InstallationPolicy
+			# TODO: here and also in Initialize-Provider we should ask if repository should set as trusted
+			$IsTrusted = "Untrusted"
 
-			# Register repository to be able to use it
-			Register-PSRepository -Name $Repository -SourceLocation $RepositoryLocation -InstallationPolicy $IsTrusted
+			if ($Trusted)
+			{
+				$IsTrusted = "Trusted"
+			}
+
+			if ($Repository -eq "PSGallery")
+			{
+				# To register PSGallery the -Default must be specified
+				# TODO: The -Default switch not documented at this point
+				Register-PSRepository -Default -InstallationPolicy $IsTrusted
+			}
+			else
+			{
+				# Register repository to be able to use it
+				Register-PSRepository -Name $Repository -SourceLocation $RepositoryLocation -InstallationPolicy $IsTrusted
+			}
 
 			$RepositoryObject = Get-PSRepository -Name $Repository # -ErrorAction SilentlyContinue
 
@@ -488,6 +506,7 @@ function Initialize-Module
 				"posh-git"
 				{
 					# TODO: shortened prompt, is valid only for user home path
+					# TODO: last test did not execute Add-PoshGitToProfile after failed and second attempt
 					Write-Information -Tags "User" -MessageData "INFO: Adding $ModuleName $($ModuleInfo.Version.ToString()) to profile"
 					Add-PoshGitToProfile -AllHosts
 				}

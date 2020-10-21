@@ -447,6 +447,7 @@ function Initialize-Project
 	# Everything OK, print environment status
 	# TODO: finally show loaded modules, providers and services stataus
 	Write-Host ""
+	# HACK: We don't know if it was successful, need to record errors and/or warnings
 	Write-Host "INFO: Checking project minimum requirements was successful!" -ForegroundColor Cyan
 
 	Write-Output ""
