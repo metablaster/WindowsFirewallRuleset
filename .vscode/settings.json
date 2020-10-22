@@ -154,5 +154,101 @@
 		"editor.wordWrap": "off",
 		"editor.detectIndentation": true,
 		"editor.insertSpaces": true,
-	}
+	},
+	// override the colors of the default log items:
+	// log.constant
+	// log.date
+	// log.verbose
+	// log.debug
+	// log.error
+	// log.exception
+	// log.info
+	// log.string
+	// log.exceptiontype
+	// log.warning
+	"editor.tokenColorCustomizations": {
+		"textMateRules": [
+			{
+				"scope": "log.date",
+				"settings": {
+					"foreground": "#b3aeae",
+					//"fontStyle": "bold"
+				}
+			}
+		]
+	},
+	// Custom highlighting patterns
+	// VS colors
+	// string D69D85
+	// comment 57A64A
+	// member func DCDCAA
+	// variables C8C8C8
+	// user types 1BC9B0
+	// enums B8D7A3
+	// functions FF8000
+	"logFileHighlighter.customPatterns": [
+		{
+			// Action drop fc3737
+			"pattern": "DROP",
+			"background": "#990404",
+			"foreground": "#ccc3c3"
+		},
+		{
+			// TCP protocol
+			"pattern": "TCP",
+			"foreground": "#57A64A"
+		},
+		{
+			// UDP protocol c4d112 f1a043
+			"pattern": "UDP",
+			"foreground": "#f1a043"
+		},
+		{
+			// ICMP protocol
+			"pattern": "ICMP",
+			"foreground": "#d5e40e"
+		},
+		{
+			// Other protocols d37811
+			"pattern": "(?<=(DROP|ACCEPT)\\s)\\d{1,3}",
+			"foreground": "#b3aeae"
+		},
+		{
+			// IPv4 address 5ca7ee
+			"pattern": "([0-9]{1,3}\\.){3}[0-9]{1,3}",
+			"foreground": "#5ca7ee"
+		},
+		{
+			// IPv6 address 7dbffd
+			"pattern": "(?<!-\\d+)\\s([a-f0-9:]+:)+[a-f0-9]+",
+			"foreground": "#1cdfce"
+		},
+		{
+			// Port numbers 1cdfce f17e7e
+			"pattern": "\\s[0-9]{1,5}\\s[0-9]{1,5}\\s(?=((\\d+|-)\\s){8})",
+			"foreground": "#f17e7e"
+		},
+		{
+			// Details, the rest of line
+			"pattern": "\\s((\\d+|-)\\s){8}(?=SEND|RECEIVE)",
+			"foreground": "#b3aeae"
+		},
+		{
+			// Direction inbound
+			"pattern": "(?<=(\\d|-)\\s)RECEIVE",
+			"foreground": "#fc3737"
+		},
+		{
+			// Direction outbound
+			"pattern": "(?<=(\\d|-)\\s)SEND",
+			"foreground": "#57A64A"
+		},
+		{
+			// Time
+			"pattern": "(?<=(-\\d+)\\s)\\d+:\\d+:\\d+",
+			"foreground": "#B8D7A3"
+		}
+	],
+	"autoscroll.autoScrollAllOpenedFiles": false,
+	"autoscroll.keepLastLineInCenter": true,
 }

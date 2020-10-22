@@ -12,10 +12,13 @@
 		"alefragnani.bookmarks",
 		"mechatroner.rainbow-csv",
 		"yzhang.markdown-all-in-one",
-		"dotjoshjohnson.xml"
+		"dotjoshjohnson.xml",
+		"emilast.logfilehighlighter",
+		"pejmannikram.vscode-auto-scroll"
 	],
 	// List of extensions recommended by VS Code that should not be recommended for users of this workspace.
 	"unwantedRecommendations": [
-		"donjayamanne.githistory"
+		"donjayamanne.githistory",
+		"berublan.vscode-log-viewer"
 	]
 }

@@ -11,6 +11,7 @@ This document explains how to monitor Windows firewall activity and network acti
   - [Monitor your firewall like a pro](#monitor-your-firewall-like-a-pro)
   - [Process Monitor](#process-monitor)
   - [mTail](#mtail)
+  - [Workspace extensions](#workspace-extensions)
   - [Event log](#event-log)
   - [WFP state and filter logs](#wfp-state-and-filter-logs)
   - [Windows Firewall](#windows-firewall)
@@ -74,6 +75,14 @@ firewall activity for individual firewall profiles as well as number of personal
 configuration files.
 
 [Download mTail](http://ophilipp.free.fr/op_tail.htm)
+
+## Workspace extensions
+
+- Repository settings include extensions and extension settings as an alternative for mTail
+- You only need to grant "read & exectue" to firewall logs located in
+`C:\Windows\System32\LogFiles\Firewall` and open individual log files with VSCode.
+
+![Alternate text]()
 
 ## Event log
 

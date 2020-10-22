@@ -92,7 +92,9 @@ function Find-Installation
 		}
 		"SQLManagementStudio"
 		{
-			$SQLManagementStudioRoot = Get-SQLManagementStudio | Select-Object -ExpandProperty InstallLocation
+			$SQLManagementStudioRoot = Get-SQLManagementStudio |
+			Select-Object -ExpandProperty InstallLocation
+
 			if ($SQLManagementStudioRoot)
 			{
 				Edit-Table $SQLManagementStudioRoot
@@ -101,7 +103,10 @@ function Find-Installation
 		}
 		"WindowsDefender"
 		{
-			$DefenderRoot = Get-WindowsDefender $ComputerName | Select-Object -ExpandProperty InstallLocation
+			# NOTE: On fresh installed system the path may be wrong (to ProgramFiles)
+			$DefenderRoot = Get-WindowsDefender $ComputerName |
+			Select-Object -ExpandProperty InstallLocation
+
 			if ($DefenderRoot)
 			{
 				Edit-Table $DefenderRoot
@@ -360,7 +365,17 @@ function Find-Installation
 		}
 		"MicrosoftOffice"
 		{
-			Update-Table "Microsoft Office"
+			# TODO: Returned path is missing \root\Office16
+			# versions: https://en.wikipedia.org/wiki/History_of_Microsoft_Office
+			# Update-Table "Microsoft Office"
+
+			$OfficeRoot = Get-ExecutablePath | Where-Object -Property Name -EQ "Winword.exe" |
+			Select-Object -ExpandProperty InstallLocation
+
+			if ($OfficeRoot)
+			{
+				Edit-Table $OfficeRoot
+			}
 			break
 		}
 		"TeamViewer"

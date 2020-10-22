@@ -192,6 +192,9 @@ unblock all files in project first to avoid YES/NO spam questions for every exec
 by running `Scripts\UnblockProject.ps1` script.\
 Master script `Scripts\SetupFirewall.ps1` does this in case if you forget, but initial YES/NO spam questions
 will still be visible in that case.
+- If you have "Ransomware protection" turned on in Windows Defender, make sure to whitelist either
+pwsh.exe or powershell.exe otherwise unblocking project files may fail.
+PowerShell must be restarted for "Controlled folder access" changes to take effect.
 - It's important to understand these rules are designed to be used as "Standard" user, not as
 Administrative user, if you're Administrator on your computer you'll have to either create standard
 user account and use that for your everyday life or modify rules to allow Administrator online access.

@@ -26,6 +26,7 @@ Here is a list of changes for each of the releases
   all modules are now recognized as manifest modules.
   - Reordered external module code and removed non file licenses
   - Indented.Net.IP: integrate into project, rename module, make variables casing consistent
+  - Improved search algorithm for Microsoft office installation root
 
 - Rules
 
@@ -55,6 +56,9 @@ Here is a list of changes for each of the releases
   - Fix bug with Initialize-Module failing to update module due to invalid parameter
   - Fix bug with Initialize-Module failing to update PowerShellGet due to unset variable
   - Fix bug with Get-FileEncoding due to overridden variable
+  - Don't show path correction message if there was no change to program path
+  - Show warning instead of code error if target machine not connected to network
+  - Registering repository would fail due to unknown trust policy
 
 ## v0.6.0 (current release)
 

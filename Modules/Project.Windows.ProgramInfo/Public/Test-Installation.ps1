@@ -123,8 +123,13 @@ function Test-Installation
 			$InstallLocation = $InstallTable | Select-Object -ExpandProperty InstallLocation
 		}
 
-		# Using single quotes to make emptiness obvious when the path is empty.
-		Write-Information -Tags "Project" -MessageData "INFO: Path corrected from: '$($FilePath.Value)' to: '$InstallLocation'"
+		# Don't show correction is found path is the same, taking case sensitivity into account.
+		if ($FilePath.Value -cne $InstallLocation)
+		{
+			# Using single quotes to make emptiness obvious when the path is empty.
+			Write-Information -Tags "Project" -MessageData "INFO: Path corrected from: '$($FilePath.Value)' to: '$InstallLocation'"
+		}
+
 		$FilePath.Value = $InstallLocation
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Installation for $Program found"
