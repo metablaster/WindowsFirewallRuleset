@@ -33,7 +33,7 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule $true
 . $PSScriptRoot\..\ModulePreferences.ps1
 
-# TODO: get a user account that is connected to a Microsoft account. see Get-LocalUser docs.
+# TODO: get user account that is connected to a Microsoft account. see Get-LocalUser docs.
 
 #
 # Script imports

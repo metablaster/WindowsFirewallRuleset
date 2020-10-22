@@ -69,6 +69,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $ServicesGroup -Directio
 #    blocked by rules with owner parameter specified
 # 7. All of this applies only to "Any" and "*" packages, for specific package only -Owner must be
 #    specified and -LocalUser is not valid for specific packages
+# TODO: Prompt or refuse running this script on server platforms (platforms with no apps)
 #
 
 #
@@ -272,6 +273,24 @@ New-NetFirewallRule -DisplayName "Windows License Manager Service" `
 	-LocalUser Any `
 	-InterfaceType $Interface `
 	-Description "Provides infrastructure support for the Microsoft Store." `
+	@Logs | Format-Output @Logs
+
+# https://docs.microsoft.com/en-us/archive/msdn-magazine/2017/april/uwp-apps-develop-hosted-web-apps-for-uwp
+$Program = "%SystemRoot%\System32\wwahost.exe"
+Test-File $Program @Logs
+
+New-NetFirewallRule -DisplayName "Microsoft WWA Host" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Service Any -Program $Program -Group $ProgramsGroup `
+	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Internet4 `
+	-LocalPort Any -RemotePort 80, 443 `
+	-LocalUser $AppAccounts `
+	-InterfaceType $Interface `
+	-Description "Microsoft WWA Host (wwahost.exe) is an app container for Web sites,
+which has a subset of features, compared to the browser.
+Used in scenario when the Web site is running in the context of an app.
+This rule is required to connect PC to Microsoft account" `
 	@Logs | Format-Output @Logs
 
 Update-Log

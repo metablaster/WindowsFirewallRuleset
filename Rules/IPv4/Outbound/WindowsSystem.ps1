@@ -134,6 +134,21 @@ Antivirus use." `
 		@Logs | Format-Output @Logs
 }
 
+# TODO: Missing description
+$Program = "%SystemRoot%\System32\MRT.exe"
+Test-File $Program @Logs
+
+New-NetFirewallRule -DisplayName "Malicious Software Removal Tool" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Internet4 `
+	-LocalPort Any -RemotePort 443 `
+	-LocalUser $NT_AUTHORITY_System `
+	-InterfaceType $Interface `
+	-Description "" `
+	@Logs | Format-Output @Logs
+
 $Program = "%SystemRoot%\System32\slui.exe"
 Test-File $Program @Logs
 
@@ -188,13 +203,28 @@ New-NetFirewallRule -DisplayName "Background task host" `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 22, 80 `
+	-LocalPort Any -RemotePort 22, 80, 443 `
 	-LocalUser Any `
 	-InterfaceType $Interface `
 	-Description "backgroundTaskHost.exe is the process that starts background tasks.
 So Cortana and the other Microsoft app registered a background task which is now started by Windows.
 Port 22 is most likely used for installation.
 https://docs.microsoft.com/en-us/windows/uwp/launch-resume/support-your-app-with-background-tasks" `
+	@Logs | Format-Output @Logs
+
+# NOTE: Was active while setting up MS account
+$Program = "%SystemRoot%\System32\BackgroundTransferHost.exe"
+Test-File $Program @Logs
+
+New-NetFirewallRule -DisplayName "Background transfer host" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Internet4 `
+	-LocalPort Any -RemotePort 443 `
+	-LocalUser $UsersGroupSDDL `
+	-InterfaceType $Interface `
+	-Description "Download/Upload Host" `
 	@Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\Speech_OneCore\common\SpeechRuntime.exe"
@@ -322,7 +352,8 @@ New-NetFirewallRule -DisplayName "File Explorer" `
 	-Description "File explorer checks for digital signatures verification, windows update." `
 	@Logs | Format-Output @Logs
 
-# TODO: possible deprecate
+# TODO: possibly deprecated since Windows 10
+# Seen outbound 443 while setting up MS account on fresh Windows account
 New-NetFirewallRule -DisplayName "File Explorer" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program $Program -Group $Group `
@@ -331,7 +362,7 @@ New-NetFirewallRule -DisplayName "File Explorer" `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser Any `
 	-InterfaceType $Interface `
-	-Description "Smart Screen Filter, possible no longer needed since windows 10." `
+	-Description "Smart Screen Filter" `
 	@Logs | Format-Output @Logs
 
 $Program = "%SystemRoot%\System32\ftp.exe"
@@ -661,7 +692,7 @@ Test-File $Program @Logs
 New-NetFirewallRule -DisplayName "OpenSSH" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program $Program -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 22 `
 	-LocalUser Any `
@@ -682,6 +713,31 @@ New-NetFirewallRule -DisplayName "Console Host" `
 	-LocalUser Any `
 	-InterfaceType $Interface `
 	-Description "" `
+	@Logs | Format-Output @Logs
+
+# NOTE: Was active while setting up MS account
+# NOTE: description from: https://www.tenforums.com/tutorials/110230-enable-disable-windows-security-windows-10-a.html
+$Program = "%SystemRoot%\System32\SecurityHealthService.exe"
+Test-File $Program @Logs
+
+New-NetFirewallRule -DisplayName "Windows Security Health Service" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Internet4 `
+	-LocalPort Any -RemotePort 443 `
+	-LocalUser $NT_AUTHORITY_System `
+	-InterfaceType $Interface `
+	-Description "Windows Defender AV and the Windows Security app use similarly named services for specific purposes.
+The Windows Security app uses the Windows Security Service (SecurityHealthService or Windows Security Health Service),
+which in turn utilizes the Security Center service (wscsvc) to ensure the app provides the most
+up-to-date information about the protection status on the endpoint,
+including protection offered by third-party antivirus products, Windows Defender Firewall,
+third-party firewalls, and other security protection.
+These services do not affect the state of Windows Defender AV.
+Disabling or modifying these services will not disable Windows Defender AV,
+and will lead to a lowered protection state on the endpoint,
+even if you are using a third-party antivirus product." `
 	@Logs | Format-Output @Logs
 
 #

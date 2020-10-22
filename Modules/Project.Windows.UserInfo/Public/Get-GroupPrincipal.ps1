@@ -148,9 +148,10 @@ function Get-GroupPrincipal
 					Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing group: '$Group'"
 
 					# Querying local machine
-					$GroupUsers = Get-LocalGroupMember -Group $Group |
-					Where-Object { $_.PrincipalSource -eq "Local" -and $_.ObjectClass -eq "User" } |
-					Select-Object -Property Name, SID
+					$GroupUsers = Get-LocalGroupMember -Group $Group | Where-Object {
+						$_.ObjectClass -eq "User" -and
+						($_.PrincipalSource -eq "Local" -or $_.PrincipalSource -eq "MicrosoftAccount")
+					} | Select-Object -Property Name, SID
 
 					if ([string]::IsNullOrEmpty($GroupUsers))
 					{

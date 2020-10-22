@@ -36,6 +36,8 @@ Here is a list of changes for each of the releases
   - Added rule for curl shipped with system
   - Updated rules for Visual Studio
   - Added initial rule for dotnet.exe
+  - Aded new rules for 20H2
+  - Added rule for Microsoft account
 
 - New features
 
@@ -46,6 +48,7 @@ Here is a list of changes for each of the releases
   - Updated templates and small portion of scripts according to templates
   - Updated project initialization functions
   - Added platyPS module to list of recommended modules to be able to generate online help files
+  - Added new recommended extensions and extension settings to tail firewall logs with VSCode
 
 - Documentation
 

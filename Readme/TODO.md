@@ -181,6 +181,8 @@ todo's in this file are categorized into following sections:
     - Rules for programs (ex. userprofile) which apply to multiple users should assign specific
     user to LocalUser instead of assigning user group, there are duplicate todo's in code about this,
     This also implies to todo's about returning installation table to rule scripts!
+    - If target program does not exist conditionally disable rule and update rule description,
+    or insert into rule name that the rule has no effect.
 
 4. Test and debugging
 
