@@ -47,7 +47,7 @@ you will also know which process and which user (either system or human user) in
 and several other stuff which you can enable as needed in options.
 - Process monitor is must have program, here is a screenshot while monitoring process network activity:\
 click on image to enlarge!
-![Alternate text](https://i.imgur.com/wNtDw8D.png)
+![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Readme/Screenshots/ProcessMonitor.png)
 - Inside the "Config" folder you will find process monitor configuration specialized for firewall
 monitoring which you can import into your copy of process monitor.
 - Note that configuration filters some network traffic which you might want to be able to see,
@@ -60,7 +60,7 @@ click on filter options to disable specific filters or add new ones.
 - mTail is another must have program, it will let you monitor firewall logs in real time.
 - Here is a screenshot while monitoring the logs, click on image to enlarge:
 
-![Alternate text](https://i.imgur.com/ljHcJss.png)
+![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Readme/Screenshots/mTail.png)
 
 - Default mTail does not have special coloring, the colors you see in the screenshot are which
 I made myself, you can grab this configuration from "Config" folder in this repository,
@@ -82,7 +82,7 @@ configuration files.
 - You only need to grant "read & exectue" to firewall logs located in
 `C:\Windows\System32\LogFiles\Firewall` and open individual log files with VSCode.
 
-![Alternate text]()
+![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Readme/Screenshots/LogView.png)
 
 ## Event log
 
@@ -94,7 +94,7 @@ I don't know, maybe we should ask Microsoft, anyway, at least here is how to gai
 firewall information.
 - Here is sample screenshot, click on image to enlarge:
 
-![Alternate text](https://i.imgur.com/8vo7aYD.png)
+![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Readme/Screenshots/EventLog.png)
 
 - To enable packet filter monitoring with event viewer you need to enable auditing option as follows:
 
@@ -114,9 +114,9 @@ and to focus on relevant, which is monitoring dropped packets)
 Another powerful tool which will let you gather more information about specific firewall event.
 click on image to enlarge:
 
-![Alternate text](https://i.imgur.com/NMw1bpB.png)
+![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Readme/Screenshots/wfpCommand.png)
 
-![Alternate text](https://i.imgur.com/UF6an7e.png)
+![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Readme/Screenshots/wfpView.png)
 
 - WFP stand for "Windows Filtering Platform", a low level packet filter upon which Windows firewall
 is built.
@@ -161,18 +161,18 @@ rules combined (aka. monitoring)
 
 Monitoring: (control panel firewall, Active store)
 
-![Alternate text](https://i.imgur.com/a97OEhS.png)
+![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Readme/Screenshots/ControlFirewall.png)
 
 Management (Local group policy, GPO store)
 
-![Alternate text](https://i.imgur.com/rB2vtsH.png)
+![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Readme/Screenshots/GPOFirewall.png)
 
 [Windows Firewall reference](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-firewall/windows-firewall-with-advanced-security)
 
 ## TCP View
 
 TCP view is another tool that wil let you see what programs are listening on which ports on local system
-![Alternate text](https://i.imgur.com/Joe7tMM.png)
+![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Readme/Screenshots/TCPView.png)
 
 [Download TCPView](https://docs.microsoft.com/en-us/sysinternals/downloads/tcpview)
 
@@ -183,6 +183,6 @@ it will give you information that isn't available in TCP View, such as which ser
 is involved in connection.
 - ie. useful to discover listening UDP related windows services or to show icmp statistics
 
-![Alternate text](https://i.imgur.com/JSf5TZk.png)
+![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Readme/Screenshots/NetStat.png)
 
 [netstat reference](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/netstat)
