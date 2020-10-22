@@ -118,6 +118,16 @@ Recommended extensions in workspace are as follows:
 
     Useful module xml files navigation
 
+11. [Log File Highlighter](https://marketplace.visualstudio.com/items?itemName=emilast.LogFileHighlighter)
+
+    Custom syntax highlighting for log files, useful for firewall logs as an alternative of mTail.
+    This extension complements "Auto Scroll"
+
+12. [Auto Scroll](https://marketplace.visualstudio.com/items?itemName=pejmannikram.vscode-auto-scroll)
+
+    Automatic scrolling of log files, useful to tail firewall logs.
+    This extension complements "Log File Highlighter"
+
 The continuation of before mentioned link for PowerShell, gpg, ssh etc. is to visit `Config\ProjectSettings.ps1`
 located in project root directory, at a minimum you should set following variables to `$true`
 before doing anything else:

@@ -78,8 +78,8 @@ configuration files.
 
 ## Workspace extensions
 
-- Repository settings include extensions and extension settings as an alternative for mTail
-- You only need to grant "read & exectue" to firewall logs located in
+- Repository settings include extension recommendations and settings as an alternative for mTail
+- You only need to grant "read & exectue" to firewall logs located in\
 `C:\Windows\System32\LogFiles\Firewall` and open individual log files with VSCode.
 
 ![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Readme/Screenshots/LogView.png)
