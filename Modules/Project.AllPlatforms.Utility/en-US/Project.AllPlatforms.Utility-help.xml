@@ -637,6 +637,161 @@ utf-32</dev:code>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
+      <command:name>Get-ProcessOutput</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>ProcessOutput</command:noun>
+      <maml:description>
+        <maml:para>Run process and capture output</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Run process with or without arguments, set wait time and capture output. If the target process results in an error, error message is formatted and shown in addition to standard output if any.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-ProcessOutput</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>FilePath</maml:name>
+          <maml:Description>
+            <maml:para>The application or document to start</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+          <maml:name>ArgumentList</maml:name>
+          <maml:Description>
+            <maml:para>A collection of command-line arguments to use when starting the application</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+          <maml:name>Wait</maml:name>
+          <maml:Description>
+            <maml:para>Number of milliseconds to wait for the associated process to exit Default is 0, which means wait indefinitely</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.UInt32</command:parameterValue>
+          <dev:type>
+            <maml:name>System.UInt32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>0</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>NoNewWindow</maml:name>
+          <maml:Description>
+            <maml:para>Whether to use the operating system shell to start the process</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>FilePath</maml:name>
+        <maml:Description>
+          <maml:para>The application or document to start</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <maml:name>ArgumentList</maml:name>
+        <maml:Description>
+          <maml:para>A collection of command-line arguments to use when starting the application</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>NoNewWindow</maml:name>
+        <maml:Description>
+          <maml:para>Whether to use the operating system shell to start the process</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+        <maml:name>Wait</maml:name>
+        <maml:Description>
+          <maml:para>Number of milliseconds to wait for the associated process to exit Default is 0, which means wait indefinitely</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.UInt32</command:parameterValue>
+        <dev:type>
+          <maml:name>System.UInt32</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>0</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Get-ProcessOutput</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None.</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>None.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Get-ProcessOutput -FilePath "git.exe" -ArgumentList "status" -NoNewWindow -Wait 3000</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Utility/Help/en-US/Get-ProcessOutput.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
       <command:name>Get-TypeName</command:name>
       <command:verb>Get</command:verb>
       <command:noun>TypeName</command:noun>

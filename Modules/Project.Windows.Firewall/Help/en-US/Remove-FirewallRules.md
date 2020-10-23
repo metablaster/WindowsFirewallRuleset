@@ -174,4 +174,3 @@ Changed minor flow of execution
 TODO: implement removing rules not according to file
 
 ## RELATED LINKS
-

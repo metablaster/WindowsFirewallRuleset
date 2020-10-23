@@ -73,7 +73,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [PSCustomObject[]] One Drive program info for specified user on a target computer
+### [PSCustomObject[]] OneDrive program info for specified user on a target computer
 
 ## NOTES
 
@@ -83,4 +83,3 @@ TODO: The logic of this function should probably be part of Get-UserSoftware, it
 if OneDrive can be installed for all users too.
 
 ## RELATED LINKS
-

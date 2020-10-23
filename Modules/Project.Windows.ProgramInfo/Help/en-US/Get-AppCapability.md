@@ -136,5 +136,3 @@ None.
 [https://docs.microsoft.com/en-us/windows/uwp/packaging/app-capability-declarations](https://docs.microsoft.com/en-us/windows/uwp/packaging/app-capability-declarations)
 
 [https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/generate-package-manifest](https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/generate-package-manifest)
-
-

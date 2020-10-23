@@ -26,6 +26,9 @@ Gets the encoding of a file
 ### [Get-NetworkService](Get-NetworkService.md)
 Scan all scripts in this repository and get windows service names involved in rules
 
+### [Get-ProcessOutput](Get-ProcessOutput.md)
+Run process and capture output
+
 ### [Get-TypeName](Get-TypeName.md)
 Returns .NET return type name for input object
 
@@ -40,4 +43,3 @@ Show-SDDL returns SDDL based on "object" such as path, or registry entry
 
 ### [Update-Context](Update-Context.md)
 Update context for Approve-Execute function
-

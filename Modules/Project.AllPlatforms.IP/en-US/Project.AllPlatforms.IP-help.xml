@@ -1576,7 +1576,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>TODO: describe outputs</maml:name>
+          <maml:name>TODO: describe outputs, specify OutputType</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1805,7 +1805,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>TODO: describe outputs</maml:name>
+          <maml:name>TODO: describe outputs, define OutputType</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>

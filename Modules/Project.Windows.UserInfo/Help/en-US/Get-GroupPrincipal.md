@@ -105,4 +105,3 @@ TODO: Switch is needed to list all accounts instead of only enabled
 TODO: should we handle NT AUTHORITY, BUILTIN and similar?
 
 ## RELATED LINKS
-

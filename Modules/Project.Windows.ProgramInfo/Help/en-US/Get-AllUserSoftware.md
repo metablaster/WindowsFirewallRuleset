@@ -64,4 +64,3 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 TODO: should be renamed into Get-InstallProperties
 
 ## RELATED LINKS
-

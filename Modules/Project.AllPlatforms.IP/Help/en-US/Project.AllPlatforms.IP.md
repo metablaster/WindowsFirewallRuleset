@@ -61,4 +61,3 @@ Resolves an IP address expression using wildcard expressions to individual IP ad
 
 ### [Test-SubnetMember](Test-SubnetMember.md)
 Tests an IP address to determine if it falls within IP address range.
-

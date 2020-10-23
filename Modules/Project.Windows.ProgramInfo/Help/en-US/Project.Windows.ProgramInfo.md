@@ -76,4 +76,3 @@ Check if service exists on system
 
 ### [Test-UserProfile](Test-UserProfile.md)
 Check if input path leads to user profile
-

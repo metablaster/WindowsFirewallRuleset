@@ -101,4 +101,3 @@ TODO: utf-16LE detected as utf-16 with BOM
 NOTE: This function is based on (but is not) sample from "Windows PowerShell Cookbook"
 
 ## RELATED LINKS
-

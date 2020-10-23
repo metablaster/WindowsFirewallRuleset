@@ -80,4 +80,3 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 TODO: We should make a query for an array of users, will help to save into variable
 
 ## RELATED LINKS
-

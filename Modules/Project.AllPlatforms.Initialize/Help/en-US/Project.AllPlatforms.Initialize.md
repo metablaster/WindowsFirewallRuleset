@@ -22,4 +22,3 @@ Test if recommended packages are installed
 
 ### [Initialize-Service](Initialize-Service.md)
 Check if required system services are started
-

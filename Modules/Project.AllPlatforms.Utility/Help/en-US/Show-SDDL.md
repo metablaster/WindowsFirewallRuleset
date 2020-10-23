@@ -66,4 +66,3 @@ Credits to: https://blogs.technet.microsoft.com/ashleymcglone/2011/08/29/powersh
 TODO: additional work on function to make it more universal, see if we can make use of it somehow, better help comment.
 
 ## RELATED LINKS
-

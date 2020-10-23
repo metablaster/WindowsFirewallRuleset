@@ -153,7 +153,7 @@
 	"[markdown]": {
 		"editor.wordWrap": "off",
 		"editor.detectIndentation": true,
-		"editor.insertSpaces": true,
+		"editor.insertSpaces": true
 	},
 	// override the colors of the default log items:
 	// log.constant

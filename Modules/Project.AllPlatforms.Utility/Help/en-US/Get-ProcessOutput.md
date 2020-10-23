@@ -1,44 +1,42 @@
 ---
 external help file: Project.AllPlatforms.Utility-help.xml
 Module Name: Project.AllPlatforms.Utility
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Utility/Help/en-US/Update-Context.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Utility/Help/en-US/Get-ProcessOutput.md
 schema: 2.0.0
 ---
 
-# Update-Context
+# Get-ProcessOutput
 
 ## SYNOPSIS
 
-Update context for Approve-Execute function
+Run process and capture output
 
 ## SYNTAX
 
 ```none
-Update-Context [-Root] <String> [-Section] <String> [[-Subsection] <String>] [-WhatIf] [-Confirm]
+Get-ProcessOutput [-FilePath] <String> [[-ArgumentList] <String>] [-NoNewWindow] [[-Wait] <UInt32>]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Execution context is shown in the console every time Approve-Execute is called.
-It helps to know the state and progress of execution.
+Run process with or without arguments, set wait time and capture output.
+If the target process results in an error, error message is formatted and shown in addition
+to standard output if any.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
 ```none
-Update-Context "IPv4" "Outbound" "RuleGroup"
+Get-ProcessOutput -FilePath "git.exe" -ArgumentList "status" -NoNewWindow -Wait 3000
 ```
-
-\[IPv4.Outbound -\> RuleGroup\]
 
 ## PARAMETERS
 
-### -Root
+### -FilePath
 
-First context string before .
-(dot)
+The application or document to start
 
 ```yaml
 Type: System.String
@@ -52,68 +50,51 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Section
+### -ArgumentList
 
-Second context string after .
-(dot)
+A collection of command-line arguments to use when starting the application
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Subsection
+### -NoNewWindow
 
-Additional string after -\> (arrow)
+Whether to use the operating system shell to start the process
 
 ```yaml
-Type: System.String
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Wait
+
+Number of milliseconds to wait for the associated process to exit
+Default is 0, which means wait indefinitely
+
+```yaml
+Type: System.UInt32
 Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: 3
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -WhatIf
-
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: (All)
-Aliases: wi
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Confirm
-
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -124,11 +105,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to Update-Context
+### None. You cannot pipe objects to Get-ProcessOutput
 
 ## OUTPUTS
 
-### None. Script scope context variable is updated.
+### None.
 
 ## NOTES
 

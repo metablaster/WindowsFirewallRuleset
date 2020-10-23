@@ -34,4 +34,3 @@ Get user groups on target computers
 
 ### [Merge-SDDL](Merge-SDDL.md)
 Merge 2 SDDL strings into one
-

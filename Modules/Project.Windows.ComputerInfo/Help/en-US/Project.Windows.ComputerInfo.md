@@ -34,4 +34,3 @@ Get operating system SKU information
 
 ### [Test-TargetComputer](Test-TargetComputer.md)
 Test target computer (policy store) on which to apply firewall
-

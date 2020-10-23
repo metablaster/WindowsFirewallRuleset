@@ -801,7 +801,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>[PSCustomObject[]] One Drive program info for specified user on a target computer</maml:name>
+          <maml:name>[PSCustomObject[]] OneDrive program info for specified user on a target computer</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>

@@ -60,6 +60,7 @@ TODO: some markdown files will end up with additional blank line at the end of d
 update of help files.
 TODO: Online hosting of help content is needed, for now the only purpose is to generate markdown
 help files
+TODO: Module page and about_ topic needs to be manually edited, currently we get template only
 #>
 
 [CmdletBinding()]
@@ -314,6 +315,7 @@ While generating help files, temporary folders may appear in language specific s
 			New-Item -Path $ExternalHelp -ItemType Container @Logs | Out-Null
 		}
 
+		# TODO: We're skipping copying about_ topic file to prevent overwriting original with template
 		Copy-Item -Path $OnlineHelp\External\* -Filter *.xml -Destination $ExternalHelp @Logs
 
 		Update-Log

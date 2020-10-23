@@ -46,7 +46,7 @@ None. You cannot pipe objects to Get-SQLManagementStudio
 [PSCustomObject[]] for installed Microsoft SQL Server Management Studio's
 .NOTES
 None.
- #>
+#>
 function Get-SQLManagementStudio
 {
 	[OutputType([PSCustomObject[]])]

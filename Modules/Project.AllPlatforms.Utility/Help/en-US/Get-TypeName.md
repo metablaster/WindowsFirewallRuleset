@@ -72,4 +72,3 @@ Removed unneeded parentheses
 Added input type to parameter
 
 ## RELATED LINKS
-

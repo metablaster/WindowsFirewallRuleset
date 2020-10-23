@@ -45,11 +45,11 @@ None.
 function Get-WindowsSDK
 {
 	[OutputType([PSCustomObject[]])]
-	[CmdletBinding()]
+	[CmdletBinding(
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-WindowsSDK.md")]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
-		[Parameter(
-			HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-WindowsSDK.md")]
+		[Parameter()]
 		[string] $ComputerName = [System.Environment]::MachineName
 	)
 

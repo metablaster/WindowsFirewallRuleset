@@ -65,4 +65,3 @@ TODO: We should attempt to fix the path if invalid here!
 TODO: We should return true or false and conditionally load rule
 
 ## RELATED LINKS
-

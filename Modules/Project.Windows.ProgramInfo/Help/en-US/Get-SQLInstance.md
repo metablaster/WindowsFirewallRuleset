@@ -166,4 +166,3 @@ https://gallery.technet.microsoft.com/scriptcenter/Get-SQLInstance-9a3245a0
 TODO: update examples to include DTS directory
 
 ## RELATED LINKS
-
