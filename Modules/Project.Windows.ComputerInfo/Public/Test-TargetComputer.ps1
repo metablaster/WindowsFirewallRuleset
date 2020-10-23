@@ -70,7 +70,7 @@ function Test-TargetComputer
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Information -Tags "User" -MessageData "INFO: Contacting computer $ComputerName"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer $ComputerName"
 
 	# Test parameters depend on PowerShell edition
 	# TODO: changes not reflected in calling code

@@ -81,20 +81,21 @@ function Get-OneDrive
 		}
 		else
 		{
-			Write-Information -MessageData "INFO: User '$UserName' is not logged into system"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] User '$UserName' is not logged into system"
 
 			# TODO: We need environment variable for remote computer
 			$UserRegConfig = "$env:SystemDrive\Users\$UserName\NTUSER.DAT"
 
-			# NOTE: Using TempUserName to minimize the chance of existing key with that name
-			$TempKey = $UserSID #"Temp$UserName"
+			# NOTE: Using TempUserName instead of SID to minimize the chance of existing key with
+			# that name or any kind of other unkown issues
+			$TempKey = "Temp-$UserName" # $UserSID
 
 			if (Test-Path -Path $UserRegConfig)
 			{
-				Write-Information -MessageData "INFO: loading offline hive for user '$UserName' to HKU:$TempKey"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Loading offline hive for user '$UserName' to HKU:$TempKey"
 				# NOTE: Start-Process is needed to make the command finish it's job and print status
 				$Status = Get-ProcessOutput -NoNewWindow -FilePath reg.exe -ArgumentList "load HKU\$TempKey $UserRegConfig"
-				Write-Information -Tags "Project" -MessageData "INFO: $Status"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] $Status"
 				$ReleaseHive = $true
 				$HKU = "$TempKey\Software\Microsoft\OneDrive"
 			}
@@ -115,7 +116,7 @@ function Get-OneDrive
 			Write-Debug -Message "Exception opening registry root key: HKU:$HKU"
 			if ($ReleaseHive)
 			{
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Unload and release hive HKU:$TempKey"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Unloading and release hive HKU:$TempKey"
 				[gc]::collect()
 				$Status = Get-ProcessOutput -NoNewWindow -FilePath reg.exe -ArgumentList "unload HKU\$TempKey"
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] $Status"
@@ -160,10 +161,10 @@ function Get-OneDrive
 
 			if ($ReleaseHive)
 			{
-				Write-Information -Tags "Project" -MessageData "INFO: Unload and release hive HKU:$TempKey"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Unload and release hive HKU:$TempKey"
 				[gc]::collect()
 				$Status = Get-ProcessOutput -NoNewWindow -FilePath reg.exe -ArgumentList "unload HKU\$TempKey"
-				Write-Information -Tags "Project" -MessageData "INFO: $Status"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] $Status"
 			}
 		}
 

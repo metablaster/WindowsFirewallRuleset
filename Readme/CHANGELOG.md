@@ -28,6 +28,7 @@ Here is a list of changes for each of the releases
   - Indented.Net.IP: integrate into project, rename module, make variables casing consistent
   - Improved search algorithm for Microsoft office installation root
   - Improved Test-Environment function to test for paths with no environment variables
+  - "Contacting computer" messages are now part of verbose stream
 
 - Rules
 

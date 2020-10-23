@@ -114,7 +114,7 @@ function Get-ProcessOutput
 	}
 	else
 	{
-		Write-Information -Tags "User" -MessageData "INFO: Waiting for Process '$($Process.ProcessName)' to finish"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Waiting for Process '$($Process.ProcessName)' to finish"
 		$Process.WaitForExit()
 	}
 

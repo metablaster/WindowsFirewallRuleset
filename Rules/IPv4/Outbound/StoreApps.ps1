@@ -104,6 +104,7 @@ Administrators should have limited or no connectivity at all for maximum securit
 # NOTE: updating apps will not work unless also "Extension users" are updated in
 # WindowsServices.ps1, meaning re-run the script.
 # TODO: We can learn app display name from manifest
+# TODO: OfficeHub app contains sub app 'LocalBridge' which is blocked
 #
 
 $Principals = Get-GroupPrincipal "Users" @Logs
