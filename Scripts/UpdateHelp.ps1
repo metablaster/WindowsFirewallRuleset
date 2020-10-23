@@ -192,6 +192,7 @@ While generating help files, temporary folders may appear in language specific s
 
 			# If download link is out of date replace it
 			$FileData = Get-Content -Path $ModulePage -Encoding $Encoding
+
 			if ([string]::IsNullOrEmpty($FileData -match "^Download Help Link: $DownloadLink$"))
 			{
 				Write-Information -Tags "Project" -MessageData "INFO: Updating download link in $ModuleName.md"
@@ -208,8 +209,9 @@ While generating help files, temporary folders may appear in language specific s
 				-RefreshModulePage -Force -ModulePagePath $ModulePage |
 			Select-Object -ExpandProperty Name
 
-			$FileData = Get-Content -Path $ModulePage -Encoding $Encoding
 			# If help version is out of date or missing set it
+			$FileData = Get-Content -Path $ModulePage -Encoding $Encoding
+
 			if ([string]::IsNullOrEmpty($FileData -match "Help Version:\s$ProjectVersion"))
 			{
 				Write-Information -Tags "Project" -MessageData "INFO: Updating module page version"
@@ -236,6 +238,34 @@ While generating help files, temporary folders may appear in language specific s
 		$ModuleCommands = ($ModuleInfo | Select-Object -ExpandProperty ExportedCommands).GetEnumerator() |
 		Select-Object -ExpandProperty Key
 
+		<#
+		.SYNOPSIS
+		Formatting according to recommended markdown style
+		.PARAMETER FileName
+		Markdown file
+		#>
+		function Format-Document
+		{
+			param (
+				[string] $FileName
+			)
+
+			Write-Information -Tags "Project" -MessageData "INFO: Formatting document $(Split-Path -Path $FileName -Leaf)"
+			$FileData = Get-Content -Path $FileName -Encoding $Encoding -Raw
+
+			# Blank line after heading
+			Write-Verbose -Message "[$ThisScript] Setting blank lines around headings in $Command.md"
+			$FileData = $FileData -replace '(?m)(?<heading>^#+\s.+$\n)(?=\S)', "`${heading}`r`n"
+
+			# Empty code fences
+			# NOTE: module page has no code fences
+			Write-Verbose -Message "[$ThisScript] Setting explicit code fences in $Command.md"
+			$FileData = $FileData -replace '(?m)(?<fence>^```)(?=\r\n\w+)', "`${fence}none"
+
+			# TODO: new line is inserted in module page, NoNewline ignored
+			Set-Content -NoNewline -Path $FileName -Value $FileData -Encoding $Encoding
+		}
+
 		foreach ($Command in $ModuleCommands)
 		{
 			Write-Information -Tags "Project" -MessageData "INFO: Formatting document $Command.md"
@@ -251,16 +281,14 @@ While generating help files, temporary folders may appear in language specific s
 				$FileData = $FileData -replace "(?<=online version:).*", " $OnlineVersion"
 			}
 
-			# Blank line after heading
-			Write-Verbose -Message "[$ThisScript] Setting blank lines around headings in $Command.md"
-			$FileData = $FileData -replace '(?m)(?<heading>^#+\s.+$\n)(?=\S)', "`${heading}`r`n"
+			# NOTE: NoNewline needed, otherwise each file ends up with 2 final new lines
+			Set-Content -NoNewline -Path $OnlineHelp\$Command.md -Value $FileData -Encoding $Encoding
 
-			# Empty code fences
-			Write-Verbose -Message "[$ThisScript] Setting explicit code fences in $Command.md"
-			$FileData = $FileData -replace '(?m)(?<fence>^```)(?=\r\n\w+)', "`${fence}none"
-
-			Set-Content -Path $OnlineHelp\$Command.md -Value $FileData -Encoding $Encoding
+			Format-Document $OnlineHelp\$Command.md
 		}
+
+		# Format module page
+		Format-Document $ModulePage
 
 		# NOTE: Creating about_ topics is independent of both the Update and New-MarkdownHelp
 		if (Test-Path -Path $OnlineHelp\about_$ModuleName.md -PathType Leaf)
@@ -274,6 +302,9 @@ While generating help files, temporary folders may appear in language specific s
 			# New about_ModuleName help topic
 			New-MarkdownAboutHelp -OutputFolder $OnlineHelp -AboutName $ModuleName @Logs
 		}
+
+		# Format about topic
+		Format-Document $OnlineHelp\about_$ModuleName.md
 
 		Write-Verbose -Message "[$ThisScript] Generating external help"
 

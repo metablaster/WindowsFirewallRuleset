@@ -7,21 +7,29 @@ Locale: en-US
 ---
 
 # Project.Windows.Firewall Module
+
 ## Description
+
 {{ Fill in the Description }}
 
 ## Project.Windows.Firewall Cmdlets
+
 ### [Export-FirewallRules](Export-FirewallRules.md)
+
 Exports firewall rules to a CSV or JSON file.
 
 ### [Find-RulePrincipal](Find-RulePrincipal.md)
+
 Get all firewall rules with LocalUser value
 
 ### [Format-Output](Format-Output.md)
+
 Format firewall rule output for display
 
 ### [Import-FirewallRules](Import-FirewallRules.md)
+
 Imports firewall rules from a CSV or JSON file.
 
 ### [Remove-FirewallRules](Remove-FirewallRules.md)
+
 Removes firewall rules according to a list in a CSV or JSON file.

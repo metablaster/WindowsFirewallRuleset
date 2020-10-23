@@ -7,18 +7,25 @@ Locale: en-US
 ---
 
 # Project.AllPlatforms.Initialize Module
+
 ## Description
+
 {{ Fill in the Description }}
 
 ## Project.AllPlatforms.Initialize Cmdlets
+
 ### [Initialize-Module](Initialize-Module.md)
+
 Check if module is installed or needs update
 
 ### [Initialize-Project](Initialize-Project.md)
+
 Check system requirements for this project
 
 ### [Initialize-Provider](Initialize-Provider.md)
+
 Test if recommended packages are installed
 
 ### [Initialize-Service](Initialize-Service.md)
+
 Check if required system services are started
