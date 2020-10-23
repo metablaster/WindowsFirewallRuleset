@@ -82,6 +82,8 @@ function Test-Installation
 
 		if ($Count -gt 1)
 		{
+			# TODO: Duplicate of global todo, need to prompt to handle all cases or choose one,
+			# TODO: Prompts should be inserted into table, ex. abort, all
 			Write-Information -Tags "User" -MessageData "INFO: Found multiple candidate installation directories for $Program"
 
 			# Sort the table by ID column in ascending order

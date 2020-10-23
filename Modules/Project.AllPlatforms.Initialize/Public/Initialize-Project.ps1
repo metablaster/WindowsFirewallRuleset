@@ -270,7 +270,7 @@ function Initialize-Project
 		# NOTE: Other module scripts require this variable
 		# NOTE: Using ReadOnly option instead of Constant to be able to run Initialize-Project from command line multiple times
 		Set-Variable -Name GitInstance -Scope Script -Option ReadOnly -Force -Value `
-		(Get-Command git.exe -CommandType Application -ErrorAction SilentlyContinue)
+		(Get-Command -Name git.exe -CommandType Application -ErrorAction SilentlyContinue)
 
 		if ($null -ne $GitInstance)
 		{

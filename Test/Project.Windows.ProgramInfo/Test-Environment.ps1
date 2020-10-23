@@ -102,6 +102,14 @@ $Result = "%HOME%\AppData\Local\OneDrive"
 Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
 
+$Result = "C:\Users\$UnitTester\AppData"
+Start-Test "Test-Environment: $Result"
+Test-Environment $Result @Logs
+
+$Result = "F:\Users\$UnitTester"
+Start-Test "Test-Environment: $Result"
+Test-Environment $Result @Logs
+
 $Result = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
 Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs

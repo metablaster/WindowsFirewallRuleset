@@ -152,6 +152,8 @@ todo's in this file are categorized into following sections:
     high level implementation
     - Some function variables such as "ComputerNames" take array or values, make sure this functionality
     actually makes sense, and also for naming consistency for ValueFromPipelineByPropertyName
+    - When drilling registry for programs in user profile we need lot load user hive into registry
+    if the user is not logged into PC, see implementation for OneDrive
 
 2. Project scripts
 

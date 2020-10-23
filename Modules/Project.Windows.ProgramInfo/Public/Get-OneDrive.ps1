@@ -40,7 +40,7 @@ Get-OneDrive "USERNAME"
 .INPUTS
 None. You cannot pipe objects to Get-UserSoftware
 .OUTPUTS
-[PSCustomObject[]] One Drive program info for specified user on a target computer
+[PSCustomObject[]] OneDrive program info for specified user on a target computer
 .NOTES
 TODO: We should make a query for an array of users, will help to save into variable,
 this is duplicate comment of Get-UserSoftware
@@ -67,17 +67,63 @@ function Get-OneDrive
 
 	if (Test-TargetComputer $ComputerName)
 	{
-		$HKU = Get-AccountSID $UserName -Computer $ComputerName
-		$HKU += "\Software\Microsoft\OneDrive"
+		$UserSID = Get-AccountSID $UserName -Computer $ComputerName
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::Users
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key HKU:$HKU"
-		$OneDriveKey = $RemoteKey.OpenSubkey($HKU)
+		# Check if target user is logged in (has it's reg hive loaded)
+		[bool] $ReleaseHive = $false
+		if ([array]::Find($RemoteKey.GetSubKeyNames(), [System.Predicate[string]] { $UserSID -eq $args[0] }))
+		{
+			$HKU = "$UserSID\Software\Microsoft\OneDrive"
+		}
+		else
+		{
+			Write-Information -MessageData "INFO: User '$UserName' is not logged into system"
+
+			# TODO: We need environment variable for remote computer
+			$UserRegConfig = "$env:SystemDrive\Users\$UserName\NTUSER.DAT"
+
+			# NOTE: Using TempUserName to minimize the chance of existing key with that name
+			$TempKey = $UserSID #"Temp$UserName"
+
+			if (Test-Path -Path $UserRegConfig)
+			{
+				Write-Information -MessageData "INFO: loading offline hive for user '$UserName' to HKU:$TempKey"
+				# NOTE: Start-Process is needed to make the command finish it's job and print status
+				$Status = Get-ProcessOutput -NoNewWindow -FilePath reg.exe -ArgumentList "load HKU\$TempKey $UserRegConfig"
+				Write-Information -Tags "Project" -MessageData "INFO: $Status"
+				$ReleaseHive = $true
+				$HKU = "$TempKey\Software\Microsoft\OneDrive"
+			}
+			else
+			{
+				Write-Warning -Message "Failed to locate user registry config: $UserRegConfig"
+				return
+			}
+		}
+
+		try
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key HKU:$HKU"
+			$OneDriveKey = $RemoteKey.OpenSubkey($HKU)
+		}
+		catch
+		{
+			Write-Debug -Message "Exception opening registry root key: HKU:$HKU"
+			if ($ReleaseHive)
+			{
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Unload and release hive HKU:$TempKey"
+				[gc]::collect()
+				$Status = Get-ProcessOutput -NoNewWindow -FilePath reg.exe -ArgumentList "unload HKU\$TempKey"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] $Status"
+			}
+		}
 
 		[PSCustomObject[]] $OneDriveInfo = @()
+
 		if (!$OneDriveKey)
 		{
 			Write-Warning -Message "Failed to open registry root key: HKU:$HKU"
@@ -106,6 +152,18 @@ function Get-OneDrive
 					"InstallLocation" = $InstallLocation
 					"UserFolder" = $OneDriveKey.GetValue("UserFolder")
 				}
+			}
+
+			# key loaded with 'reg load' has to be closed, if not 'reg unload' fails with "Access denied"
+			# TODO: We close the key regardless, other functions using registry should also implement closing keys
+			$OneDriveKey.Close()
+
+			if ($ReleaseHive)
+			{
+				Write-Information -Tags "Project" -MessageData "INFO: Unload and release hive HKU:$TempKey"
+				[gc]::collect()
+				$Status = Get-ProcessOutput -NoNewWindow -FilePath reg.exe -ArgumentList "unload HKU\$TempKey"
+				Write-Information -Tags "Project" -MessageData "INFO: $Status"
 			}
 		}
 

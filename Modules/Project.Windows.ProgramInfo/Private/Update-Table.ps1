@@ -187,49 +187,26 @@ function Update-Table
 
 				# TODO: We handle OneDrive case here but there may be more such programs in the future
 				# so this obviously means we need better approach to handle this
-				if ($SearchString -ne "OneDrive")
+				if ($SearchString -eq "OneDrive")
+				{
+					# NOTE: For one drive registry drilling procedure is different
+					$UserPrograms = Get-OneDrive $Principal.User
+				}
+				else
 				{
 					# NOTE: the story is different here, each user might have multiple matches for search string
 					# letting one match to have same principal would be mistake.
 					$UserPrograms = Get-UserSoftware $Principal.User | Where-Object -Property Name -Like "*$SearchString*"
-
-					if ($UserPrograms)
-					{
-						foreach ($Program in $UserPrograms)
-						{
-							# NOTE: Avoid spamming
-							# Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing program: $Program"
-
-							$InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
-
-							# Create a row
-							$Row = $InstallTable.NewRow()
-
-							# Enter data into row
-							$Row.ID = ++$RowIndex
-							$Row.SID = $Principal.SID
-							$Row.User = $Principal.User
-							# TODO: we should add group entry for users
-							# $Row.Group = $Principal.Group
-							$Row.Account = $Principal.Account
-							$Row.Computer = $Principal.Computer
-							$Row.InstallLocation = $InstallLocation
-
-							Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($Principal.Account) with $InstallLocation"
-
-							# Add the row to the table
-							$InstallTable.Rows.Add($Row)
-						}
-					}
 				}
-				else
-				{
-					# NOTE: For one drive there is different registry drilling procedure
-					$OneDriveInfo = Get-OneDrive $Principal.User
 
-					if ($OneDriveInfo)
+				if ($UserPrograms)
+				{
+					foreach ($Program in $UserPrograms)
 					{
-						$InstallLocation = $OneDriveInfo | Select-Object -ExpandProperty InstallLocation
+						# NOTE: Avoid spamming
+						# Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing program: $Program"
+
+						$InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
 
 						# Create a row
 						$Row = $InstallTable.NewRow()

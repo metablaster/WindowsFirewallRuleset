@@ -198,6 +198,7 @@ $Program = "%SystemRoot%\System32\backgroundTaskHost.exe"
 Test-File $Program @Logs
 
 # TODO: need to check if port 22 is OK.
+# TODO: Dropped connection (for admin?), likely reason for app downarrows
 New-NetFirewallRule -DisplayName "Background task host" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program $Program -Group $Group `

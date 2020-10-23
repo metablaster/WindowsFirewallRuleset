@@ -62,9 +62,11 @@ function Test-Environment
 		return $false
 	}
 
-	if ([array]::Find($UserProfileEnvironment, [System.Predicate[string]] { $FilePath -like "$($args[0])*" }))
+	# TODO: We need target computer system drive instead of localmachine systemdrive
+	if (($FilePath -like "$env:SystemDrive\Users\*") -or
+		[array]::Find($UserProfileEnvironment, [System.Predicate[string]] { $FilePath -like "$($args[0])*" }))
 	{
-		Write-Warning -Message "Rules with environment variable paths that lead to user profile are not valid"
+		Write-Warning -Message "Rules with environment variables or paths that lead to user profile are not valid"
 		Write-Information -Tags "Project" -MessageData "INFO: Bad path detected is: $FilePath"
 		return $false
 	}

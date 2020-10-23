@@ -27,6 +27,7 @@ Here is a list of changes for each of the releases
   - Reordered external module code and removed non file licenses
   - Indented.Net.IP: integrate into project, rename module, make variables casing consistent
   - Improved search algorithm for Microsoft office installation root
+  - Improved Test-Environment function to test for paths with no environment variables
 
 - Rules
 
@@ -38,10 +39,13 @@ Here is a list of changes for each of the releases
   - Added initial rule for dotnet.exe
   - Aded new rules for 20H2
   - Added rule for Microsoft account
+  - Search algorithm and rule creation choice for OneDrive now include all users,
+  including those not logged into machine
 
 - New features
 
   - Command line help is now fully functional, for each prompt you can type `?` to get more information
+  - New function "Get-ProcessOutput" to wait for and capture process (command) output when run in PS
 
 - Development
 

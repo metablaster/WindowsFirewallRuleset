@@ -45,6 +45,7 @@ $PublicScripts = @(
 	"Convert-SDDLToACL"
 	"Show-SDDL"
 	"Get-NetworkService"
+	"Get-ProcessOutput"
 	"Set-ScreenBuffer"
 	"Set-NetworkProfile"
 	"Get-FileEncoding"
