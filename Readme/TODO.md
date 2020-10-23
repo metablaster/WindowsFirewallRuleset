@@ -261,6 +261,7 @@ todo's in this file are categorized into following sections:
     - Write a script to add context menus for Windows PowerShell
     - Need variables that would avoid prompts and set up firewall with minimum user intervention
     - Adjust all scripts according to templates
+    - First time user notices should be handled with code (ex. ransomware protection setting)
 
 3. Rules
 

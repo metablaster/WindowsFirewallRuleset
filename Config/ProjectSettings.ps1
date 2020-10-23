@@ -362,6 +362,9 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 	# check if removable variables already initialized, do not modify!
 	Set-Variable -Name CheckRemovableVariables -Scope Global -Option ReadOnly -Force -Value $null
 
+	# Set to false to use IPv6 instead of IPv4
+	Set-Variable -Name ConnectionIPv4 -Scope Global -Value $true
+
 	# Amount of connection tests against remote computers
 	Set-Variable -Name ConnectionCount -Scope Global -Value 2
 

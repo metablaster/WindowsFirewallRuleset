@@ -48,8 +48,8 @@ None. You cannot pipe objects to Test-TargetMachine
 .OUTPUTS
 [bool] false or true if target host is responsive
 .NOTES
-TODO: avoid error message, check all references which handle errors (code bloat)
-TODO: this should probably be part of ComputerInfo module
+TODO: Avoid error message, check all references which handle errors (code bloat)
+TODO: We should check for common issues for GPO management, not just ping status (ex. Test-NetConnection)
 #>
 function Test-TargetComputer
 {
@@ -70,14 +70,24 @@ function Test-TargetComputer
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer $ComputerName"
+
+	# Be quiet for localhost
+	if ($ComputerName -ne [System.Environment]::MachineName)
+	{
+		Write-Information -Tags "Project" -MessageData "Contacting computer $ComputerName"
+	}
 
 	# Test parameters depend on PowerShell edition
 	# TODO: changes not reflected in calling code
 	# NOTE: Don't suppress error, error details can be of more use than just "unable to contact computer"
 	if ($PSVersionTable.PSEdition -eq "Core")
 	{
-		return Test-Connection -TargetName $ComputerName -Count $Count -TimeoutSeconds $Timeout -IPv4 -Quiet
+		if ($ConnectionIPv4)
+		{
+			return Test-Connection -TargetName $ComputerName -Count $Count -TimeoutSeconds $Timeout -Quiet -IPv4
+		}
+
+		return Test-Connection -TargetName $ComputerName -Count $Count -TimeoutSeconds $Timeout -Quiet -IPv6
 	}
 
 	return Test-Connection -ComputerName $ComputerName -Count $Count -Quiet

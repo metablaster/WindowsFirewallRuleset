@@ -63,8 +63,7 @@ function Test-Environment
 	}
 
 	# TODO: We need target computer system drive instead of localmachine systemdrive
-	# TODO: We need regex instead of wildcard here, ex. C:\\ or C:\ is both valid
-	if (($FilePath -like "$env:SystemDrive\Users\*") -or
+	if (($FilePath -match "^$env:SystemDrive\\+Users(\\*$|\\+(?=\w+))") -or
 		[array]::Find($UserProfileEnvironment, [System.Predicate[string]] { $FilePath -like "$($args[0])*" }))
 	{
 		Write-Warning -Message "Rules with environment variables or paths that lead to user profile are not valid"

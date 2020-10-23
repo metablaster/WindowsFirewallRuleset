@@ -78,6 +78,22 @@ $Result = "C:\Windows\Microsoft.NET\Framework64\v3.5\\"
 Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
 
+$Result = "C:\Users"
+Start-Test "Test-Environment: $Result"
+Test-Environment $Result @Logs
+
+$Result = "C:\Users\\"
+Start-Test "Test-Environment: $Result"
+Test-Environment $Result @Logs
+
+$Result = "C:\\UsersA\"
+Start-Test "Test-Environment: $Result"
+Test-Environment $Result @Logs
+
+$Result = "C:\\Users\3"
+Start-Test "Test-Environment: $Result"
+Test-Environment $Result @Logs
+
 $Result = "'C:\Windows\Microsoft.NET\Framework64\v3.5'"
 Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
