@@ -298,6 +298,9 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 
 	# To force loading rules regardless of presence of program set to true
 	New-Variable -Name ForceLoad -Scope Global -Option Constant -Value $false
+
+	# To force loading rules regardless of presence of program set to true
+	New-Variable -Name LogsFolder -Scope Global -Option Constant -Value "$ProjectRoot\Logs"
 }
 
 # Read only variables, meaning these can be modified by code at any time,

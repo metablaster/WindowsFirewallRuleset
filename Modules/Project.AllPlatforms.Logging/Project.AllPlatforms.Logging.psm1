@@ -77,7 +77,3 @@ if (!(Get-Variable -Name CheckInitLogging -Scope Global -ErrorAction Ignore))
 		InformationVariable = "+InfoBuffer"
 	}
 }
-
-# Folder where to save logs
-Write-Debug -Message "[$ThisModule] Initialize module constant variable: LogsFolder"
-New-Variable -Name LogsFolder -Scope Script -Option Constant -Value ($ProjectRoot + "\Logs")

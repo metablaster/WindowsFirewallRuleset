@@ -85,9 +85,9 @@ function Uninstall-DuplicateModule
 		# NOTE: can't be part of begin block
 		# TODO: not tested if replacing with "Requires RunAs Administrator"
 		Write-Information -Tags "User" -MessageData "INFO: Checking user account elevation"
-		$Principal = New-Object -TypeName Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+		$Principal = New-Object -TypeName Security.Principal.WindowsPrincipal([System.Security.Principal.WindowsIdentity]::GetCurrent())
 
-		if (!$Principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))
+		if (!$Principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator))
 		{
 			Write-Error -Category PermissionDenied -TargetObject $Principal `
 				-Message "Elevation required, please open PowerShell as Administrator and try again"

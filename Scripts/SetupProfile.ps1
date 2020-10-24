@@ -42,6 +42,7 @@ Initialize-Project -Abort
 Import-Module -Name Project.AllPlatforms.Logging
 
 # Setup local variables
+New-Variable -Name DefaultLogsFolder -Scope Script -Option Constant -Value "%SystemRoot%\System32\LogFiles\Firewall"
 $Accept = "Set global firewall behavior, adjust firewall settings and set up firewall and network profile"
 $Deny = "Skip operation, no change will be done to firewall or network profile"
 
@@ -54,6 +55,12 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 # TODO: it looks like private profile traffic is logged into public log and vice versa
 #
 
+# Create directory for firewall logs if it doesn't exist
+if (!(Test-Path -Path $LogsFolder\Firewall -PathType Container @Logs))
+{
+	New-Item -Path $LogsFolder\Firewall -ItemType Container @Logs | Out-Null
+}
+
 # Setting up profile seem to be slow, tell user what is going on
 Write-Information -Tags "User" -MessageData "INFO: Setting up public firewall profile..." @Logs
 
@@ -63,7 +70,7 @@ Set-NetFirewallProfile -Profile Public -PolicyStore $PolicyStore `
 	-NotifyOnListen True -EnableStealthModeForIPsec True -AllowUnicastResponseToMulticast False `
 	-LogAllowed False -LogBlocked True -LogIgnored True -LogMaxSizeKilobytes 1024 `
 	-AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
-	-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\PublicFirewall.log" @Logs
+	-LogFileName "$LogsFolder\Firewall\PublicFirewall.log" @Logs
 
 # Setting up profile seem to be slow, tell user what is going on
 Write-Information -Tags "User" -MessageData "INFO: Setting up private firewall profile..." @Logs
@@ -74,7 +81,7 @@ Set-NetFirewallProfile -Profile Private -PolicyStore $PolicyStore `
 	-NotifyOnListen True -EnableStealthModeForIPsec True -AllowUnicastResponseToMulticast True `
 	-LogAllowed False -LogBlocked True -LogIgnored True -LogMaxSizeKilobytes 1024 `
 	-AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
-	-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\PrivateFirewall.log" @Logs
+	-LogFileName "$LogsFolder\Firewall\PrivateFirewall.log" @Logs
 
 # Setting up profile seem to be slow, tell user what is going on
 Write-Information -Tags "User" -MessageData "INFO: Setting up domain firewall profile..." @Logs
@@ -85,7 +92,7 @@ Set-NetFirewallProfile -Profile Domain -PolicyStore $PolicyStore `
 	-NotifyOnListen True -EnableStealthModeForIPsec True -AllowUnicastResponseToMulticast True `
 	-LogAllowed False -LogBlocked True -LogIgnored True -LogMaxSizeKilobytes 1024 `
 	-AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
-	-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\DomainFirewall.log" @Logs
+	-LogFileName "$LogsFolder\Firewall\DomainFirewall.log" @Logs
 
 Write-Information -Tags "User" -MessageData "INFO: Setting up global firewall settings..." @Logs
 

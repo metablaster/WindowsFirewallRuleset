@@ -128,6 +128,10 @@ Recommended extensions in workspace are as follows:
     Automatic scrolling of log files, useful to tail firewall logs.
     This extension complements "Log File Highlighter"
 
+13. [Filter Line](https://marketplace.visualstudio.com/items?itemName=everettjf.filter-line)
+
+    Filter log files according to json config, string or regex pattern
+
 The continuation of before mentioned link for PowerShell, gpg, ssh etc. is to visit `Config\ProjectSettings.ps1`
 located in project root directory, at a minimum you should set following variables to `$true`
 before doing anything else:

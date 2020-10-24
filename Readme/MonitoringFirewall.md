@@ -11,7 +11,7 @@ This document explains how to monitor Windows firewall activity and network acti
   - [Monitor your firewall like a pro](#monitor-your-firewall-like-a-pro)
   - [Process Monitor](#process-monitor)
   - [mTail](#mtail)
-  - [Workspace extensions](#workspace-extensions)
+  - [mTail alternative](#mtail-alternative)
   - [Event log](#event-log)
   - [WFP state and filter logs](#wfp-state-and-filter-logs)
   - [Windows Firewall](#windows-firewall)
@@ -36,9 +36,13 @@ but have other drawbacks.
 For each program listed here you have a reference link (for tools built into Windows) and
 download link (for external programs).
 
-All of the tools listed here are signed by Microsoft, the only exception is mTail,
-many people use it so it's easy to verify it's trusted, anyway you can verify it's behavior with
-process monitor if you're suspicious.
+All of the tools listed here are digitally signed, the only exceptions are as follows:
+
+- mTail, to mark mTail as trusted you can verify it's behavior with process monitor or
+check it's user base online.
+
+- The alternative for mTail (described later) is a combination of VSCode extensions and predefined
+extension settings.
 
 ## Process Monitor
 
@@ -76,13 +80,21 @@ configuration files.
 
 [Download mTail](http://ophilipp.free.fr/op_tail.htm)
 
-## Workspace extensions
+## mTail alternative
 
-- Repository settings include extension recommendations and settings as an alternative for mTail
-- You only need to grant "read & exectue" to firewall logs located in\
-`C:\Windows\System32\LogFiles\Firewall` and open individual log files with VSCode.
+- Repository settings include extension recommendations and settings as an alternative for mTail,
+here is how it feels in VSCode.
 
 ![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Readme/Screenshots/LogView.png)
+
+- Prerequisites and setup for built-in log tailing are as follows:
+- Accept and install recommended workspace extentions for VSCode
+- If you're not Administrator then grant appropriate file system permissions to firewall logs which
+are written to "Logs\Firewall" directory inside repository.
+To grant permissions for your account run `.\Scripts\GrantLogs.ps1 YOUR_USERNAME`
+- Inside VSCode open individual firewall log file
+- To filter log contents open command palette (CTRL + SHIT + P) and type "Filter line by Config File"
+- Config file is located inside `.vscode\filterline.json` and supports regex
 
 ## Event log
 

@@ -14,7 +14,8 @@
 		"yzhang.markdown-all-in-one",
 		"dotjoshjohnson.xml",
 		"emilast.logfilehighlighter",
-		"pejmannikram.vscode-auto-scroll"
+		"pejmannikram.vscode-auto-scroll",
+		"everettjf.filter-line"
 	],
 	// List of extensions recommended by VS Code that should not be recommended for users of this workspace.
 	"unwantedRecommendations": [

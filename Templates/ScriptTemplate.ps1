@@ -46,7 +46,7 @@ The .NET Framework type of the objects that the cmdlet returns.
 You can also include a description of the returned objects.
 .NOTES
 Additional information about the script.
-TODO: Update Copyright and start writing test code
+TODO: Update Copyright and start writing code
 .LINK
 The name of a related topic. The value appears on the line below the ".LINK" keyword and must
 be preceded by a comment symbol # or included in the comment block.
