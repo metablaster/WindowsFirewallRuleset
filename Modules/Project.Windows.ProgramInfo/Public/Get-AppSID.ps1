@@ -36,7 +36,7 @@ Username for which to query app SID
 .PARAMETER AppName
 "PackageFamilyName" string
 .EXAMPLE
-sample: Get-AppSID "User" "Microsoft.MicrosoftEdge_8wekyb3d8bbwe"
+PS> Get-AppSID "User" "Microsoft.MicrosoftEdge_8wekyb3d8bbwe"
 .INPUTS
 None. You cannot pipe objects to Get-AppSID
 .OUTPUTS

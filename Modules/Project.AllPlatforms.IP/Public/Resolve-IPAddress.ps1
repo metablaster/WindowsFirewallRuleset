@@ -58,7 +58,7 @@ Specific values may be listed as a comma separated list.
 .PARAMETER IPAddress
 The IPAddress expression to resolve.
 .EXAMPLE
-Resolve-IPAddress "10.[1,2].[0-2].0/24"
+PS> Resolve-IPAddress "10.[1,2].[0-2].0/24"
 
 Returns the addresses 10.1.0.0/24, 10.1.1.0/24, 10.1.2.0/24, 10.2.0.0/24, and so on.
 .INPUTS

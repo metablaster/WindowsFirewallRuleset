@@ -26,9 +26,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Setup firewall profile, network profile and global firewall behavior
-#
+<#
+.SYNOPSIS
+Setup firewall profile, network profile and global firewall behavior
+.DESCRIPTION
+Set all 3 firewall profiles, network adapter profile (default profile)
+and global firewall behavior.
+.EXAMPLE
+PS> SetupProfile.ps1
+.INPUTS
+None.
+.OUTPUTS
+None.
+.NOTES
+None.
+#>
+
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (

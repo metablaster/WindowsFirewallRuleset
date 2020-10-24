@@ -58,6 +58,8 @@ Either a literal IP address, a network range expressed as CIDR notation,
 or an IP address and subnet mask in a string.
 .PARAMETER SubnetMask
 A subnet mask as an IP address.
+.EXAMPLE
+TODO: Provide example
 .INPUTS
 None. You cannot pipe objects to ConvertTo-Network
 .OUTPUTS

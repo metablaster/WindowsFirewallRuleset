@@ -34,6 +34,8 @@ Returns list of IPAddress objects for all configured adapters.
 This could include both physical and virtual adapters.
 .PARAMETER AddressFamily
 IP version for which to obtain address, IPv4 or IPv6
+.PARAMETER ExcludeHardware
+Exclude hardware/physical network adapters
 .PARAMETER IncludeAll
 Include all possible adapter types present on target computer
 .PARAMETER IncludeVirtual
@@ -43,9 +45,9 @@ Whether to include hidden adapters
 .PARAMETER IncludeDisconnected
 Whether to include disconnected
 .EXAMPLE
-Get-IPAddress "IPv4"
+PS> Get-IPAddress "IPv4"
 .EXAMPLE
-Get-IPAddress "IPv6"
+PS> Get-IPAddress "IPv6"
 .INPUTS
 None. You cannot pipe objects to Get-IPAddress
 .OUTPUTS

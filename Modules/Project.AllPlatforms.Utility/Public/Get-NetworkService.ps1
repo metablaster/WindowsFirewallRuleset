@@ -32,7 +32,7 @@ Scan all scripts in this repository and get windows service names involved in ru
 .PARAMETER Folder
 Root folder name which to scan recursively
 .EXAMPLE
-Get-NetworkService "C:\PathToRepo"
+PS> Get-NetworkService "C:\PathToRepo"
 .INPUTS
 None. You cannot pipe objects to Get-NetworkService
 .OUTPUTS

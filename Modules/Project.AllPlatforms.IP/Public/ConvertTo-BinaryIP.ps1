@@ -55,9 +55,8 @@ ConvertTo-BinaryIP uses System.Convert to switch between decimal and binary form
 The output from this function is dotted binary.
 .PARAMETER IPAddress
 An IP Address to convert.
-
 .EXAMPLE
-ConvertTo-BinaryIP 1.2.3.4
+PS> ConvertTo-BinaryIP 1.2.3.4
 
 Convert an IP address to a binary format.
 .INPUTS

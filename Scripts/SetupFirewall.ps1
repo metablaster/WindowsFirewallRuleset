@@ -26,9 +26,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Full firewall setup according to this repository
-#
+<#
+.SYNOPSIS
+Full firewall setup according to this repository
+.DESCRIPTION
+Master script for full firewall setup according Windows Firewall Ruleset
+.EXAMPLE
+PS> SetupFirewall.ps1
+.INPUTS
+None.
+.OUTPUTS
+None.
+.NOTES
+None.
+#>
+
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 
 # First unblock all files

@@ -36,9 +36,9 @@ One or more computers which to query for group users
 .PARAMETER CIM
 Whether to contact CIM server (required for remote computers)
 .EXAMPLE
-Get-GroupPrincipal "Users", "Administrators"
+PS> Get-GroupPrincipal "Users", "Administrators"
 .EXAMPLE
-Get-GroupPrincipal "Users" -Machine @(DESKTOP, LAPTOP) -CIM
+PS> Get-GroupPrincipal "Users" -Machine @(DESKTOP, LAPTOP) -CIM
 .INPUTS
 [string[]] User groups
 .OUTPUTS
@@ -48,6 +48,7 @@ CIM switch is not supported on PowerShell Core, meaning contacting remote comput
 is supported only on Windows PowerShell
 TODO: Switch is needed to list all accounts instead of only enabled
 TODO: should we handle NT AUTHORITY, BUILTIN and similar?
+TODO: plural parameter
 #>
 function Get-GroupPrincipal
 {

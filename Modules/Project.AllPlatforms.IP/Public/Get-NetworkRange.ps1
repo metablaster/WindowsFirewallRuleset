@@ -65,11 +65,11 @@ The start address of a range.
 .PARAMETER End
 The end address of a range.
 .EXAMPLE
-Get-NetworkRange 192.168.0.0 255.255.255.0
+PS> Get-NetworkRange 192.168.0.0 255.255.255.0
 
 Returns all IP addresses in the range 192.168.0.0/24.
 .EXAMPLE
-Get-NetworkRange 10.0.8.0/22
+PS> Get-NetworkRange 10.0.8.0/22
 
 Returns all IP addresses in the range 192.168.0.0 255.255.252.0.
 .INPUTS

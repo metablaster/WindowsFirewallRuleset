@@ -34,7 +34,7 @@ Check if service exists on system, if not show warning message
 .PARAMETER Service
 Service name (not display name)
 .EXAMPLE
-Test-Service dnscache
+PS> Test-Service dnscache
 .INPUTS
 None. You cannot pipe objects to Test-Service
 .OUTPUTS

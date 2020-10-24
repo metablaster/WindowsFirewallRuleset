@@ -32,9 +32,9 @@ Convert comma separated list to String array
 .DESCRIPTION
 Convert comma separated list to String array
 .PARAMETER List
-
+TODO: describe parameter
 .PARAMETER DefaultValue
-
+TODO: describe parameter
 .EXAMPLE
 TODO: provide example and description
 .INPUTS

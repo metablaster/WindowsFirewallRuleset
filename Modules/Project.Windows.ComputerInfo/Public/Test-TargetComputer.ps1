@@ -40,9 +40,9 @@ Valid only for PowerShell Core. Specifies the number of echo requests to send. T
 .PARAMETER Timeout
 Valid only for PowerShell Core. The test fails if a response isn't received before the timeout expires
 .EXAMPLE
-Test-TargetComputer "COMPUTERNAME" 2 1
+PS> Test-TargetComputer "COMPUTERNAME" 2 1
 .EXAMPLE
-Test-TargetComputer "COMPUTERNAME"
+PS> Test-TargetComputer "COMPUTERNAME"
 .INPUTS
 None. You cannot pipe objects to Test-TargetMachine
 .OUTPUTS

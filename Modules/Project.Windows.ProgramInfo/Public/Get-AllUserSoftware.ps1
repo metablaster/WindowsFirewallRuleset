@@ -34,7 +34,7 @@ TODO: add description
 .PARAMETER ComputerName
 Computer name which to check
 .EXAMPLE
-Get-AllUserSoftware "COMPUTERNAME"
+PS> Get-AllUserSoftware "COMPUTERNAME"
 .INPUTS
 None. You cannot pipe objects to Get-AllUserSoftware
 .OUTPUTS

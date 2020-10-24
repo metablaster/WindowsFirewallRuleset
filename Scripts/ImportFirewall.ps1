@@ -26,9 +26,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Import all previously exported firewall rules
-#
+<#
+.SYNOPSIS
+Import all previously exported firewall rules
+.DESCRIPTION
+ImportFirewall script imports all firewall rules that were previously
+exported with ExportFirewall.ps1 script
+.EXAMPLE
+PS> ImportFirewall.ps1
+.INPUTS
+None.
+.OUTPUTS
+None.
+.NOTES
+None.
+#>
+
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (

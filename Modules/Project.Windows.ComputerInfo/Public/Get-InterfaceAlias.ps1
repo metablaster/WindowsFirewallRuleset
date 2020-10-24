@@ -35,6 +35,10 @@ Applies to adapters which have an IP assigned regardless if connected to network
 This may include virtual adapters as well such as Hyper-V adapters on all compartments.
 .PARAMETER AddressFamily
 IP version for which to obtain adapters, IPv4 or IPv6
+.PARAMETER WildCardOption
+TODO: describe parameter
+.PARAMETER ExcludeHardware
+Exclude hardware/physical network adapters
 .PARAMETER IncludeAll
 Include all possible adapter types present on target computer
 .PARAMETER IncludeVirtual
@@ -44,9 +48,9 @@ Whether to include hidden adapters
 .PARAMETER IncludeDisconnected
 Whether to include disconnected
 .EXAMPLE
-Get-InterfaceAlias "IPv4"
+PS> Get-InterfaceAlias "IPv4"
 .EXAMPLE
-Get-InterfaceAlias "IPv6"
+PS> Get-InterfaceAlias "IPv6"
 .INPUTS
 None. You cannot pipe objects to Get-InterfaceAlias
 .OUTPUTS

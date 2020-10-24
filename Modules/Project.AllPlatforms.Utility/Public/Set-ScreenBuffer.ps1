@@ -33,7 +33,7 @@ Set vertical screen buffer to recommended value
 In some cases, depending on project settings a user might need larger buffer
 to preserve all the output in the console for review and scroll back.
 .EXAMPLE
-Set-ScreenBuffer
+PS> Set-ScreenBuffer
 .INPUTS
 None. You cannot pipe objects to Set-ScreenBuffer
 .OUTPUTS

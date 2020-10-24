@@ -44,6 +44,22 @@ Folder in which file is located
 File name according to which to delete rules
 .PARAMETER JSON
 Input file in JSON instead of CSV format
+.EXAMPLE
+PS> Remove-FirewallRules
+
+Removes all firewall rules according to a list in the CSV file FirewallRules.csv in the current directory.
+.EXAMPLE
+.INPUTS
+None. You cannot pipe objects to Remove-FirewallRules
+.OUTPUTS
+None.
+Remove-FirewallRules WmiRules.json -json
+
+Removes all firewall rules according to the list in the JSON file WmiRules.json.
+.INPUTS
+None. You cannot pipe objects to Remove-FirewallRules
+.OUTPUTS
+None.
 .NOTES
 Author: Markus Scholtes
 Version: 1.02
@@ -57,12 +73,6 @@ Changes by metablaster - August 2020:
 5. Make output formatted and colored
 6. Changed minor flow of execution
 TODO: implement removing rules not according to file
-.EXAMPLE
-Remove-FirewallRules
-Removes all firewall rules according to a list in the CSV file FirewallRules.csv in the current directory.
-.EXAMPLE
-Remove-FirewallRules WmiRules.json -json
-Removes all firewall rules according to the list in the JSON file WmiRules.json.
 #>
 function Remove-FirewallRules
 {

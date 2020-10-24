@@ -37,8 +37,8 @@ String which to convert
 .PARAMETER JSON
 Input string is from JSON file, meaning no need to decode
 .EXAMPLE
-Convert-ListToMultiLine "Some%%||String"
-Produces:
+PS> Convert-ListToMultiLine "Some%%||String"
+
 Some
 String
 .INPUTS

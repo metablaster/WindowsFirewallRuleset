@@ -34,7 +34,7 @@ TODO: add description
 .PARAMETER SDDL
 String array of one or more strings of SDDL syntax
 .EXAMPLE
-Convert-SDDLToACL $SomeSDDL, $SDDL2, "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
+PS> Convert-SDDLToACL $SomeSDDL, $SDDL2, "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
 .INPUTS
 None. You cannot pipe objects to Convert-SDDLToACL
 .OUTPUTS

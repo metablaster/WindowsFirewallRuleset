@@ -38,13 +38,13 @@ there are multiple type names chooses unique ones only.
 .PARAMETER InputObject
 Target object for which to retrieve type name
 .EXAMPLE
-Get-Process | Get-TypeName
+PS> Get-Process | Get-TypeName
 .INPUTS
 System.Object Any .NET object
 .OUTPUTS
 [string] type name or null
 .NOTES
-Original code link: https://github.com/gravejester/Communary.PASM
+See related links section for original code link:
 TODO: need better checking for input, on pipeline.
 TODO: needs testing for arrays vs single objects, it doesn't look right
 Modifications by metablaster year 2020:
@@ -52,6 +52,8 @@ Added check when object is null
 Added comment based help
 Removed unneeded parentheses
 Added input type to parameter
+.LINK
+https://github.com/gravejester/Communary.PASM
 #>
 function Get-TypeName
 {

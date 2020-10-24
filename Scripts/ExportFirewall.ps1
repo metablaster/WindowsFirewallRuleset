@@ -26,9 +26,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Export all firewall rules
-#
+<#
+.SYNOPSIS
+Export all firewall rules
+.DESCRIPTION
+ExportFirewall.ps1 script exports all firewall rules to "Exports" folder
+.EXAMPLE
+PS> ExportFirewall.ps1
+.INPUTS
+None.
+.OUTPUTS
+None.
+.NOTES
+None.
+#>
+
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )

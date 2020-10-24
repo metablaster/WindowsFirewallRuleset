@@ -91,7 +91,8 @@ here is how it feels in VSCode.
 - Accept and install recommended workspace extentions for VSCode
 - If you're not Administrator then grant appropriate file system permissions to firewall logs which
 are written to "Logs\Firewall" directory inside repository.
-To grant permissions for your account run `.\Scripts\GrantLogs.ps1 YOUR_USERNAME`
+- To grant permissions for your account run `.\Scripts\GrantLogs.ps1 YOUR_USERNAME`
+Permission is valid until system reboot or until manual permission removal.
 - Inside VSCode open individual firewall log file
 - To filter log contents open command palette (CTRL + SHIT + P) and type "Filter line by Config File"
 - Config file is located inside `.vscode\filterline.json` and supports regex

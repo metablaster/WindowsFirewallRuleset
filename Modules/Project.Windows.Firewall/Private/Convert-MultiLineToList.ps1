@@ -37,8 +37,9 @@ String array which to convert
 .PARAMETER JSON
 Input string will go to JSON file, meaning no need to encode
 .EXAMPLE
-Convert-MultiLineToList "Some`rnString"
-Produces: Some||String
+PS> Convert-MultiLineToList "Some`rnString"
+
+Some||String
 .INPUTS
 None. You cannot pipe objects to Convert-ArrayToList
 .OUTPUTS

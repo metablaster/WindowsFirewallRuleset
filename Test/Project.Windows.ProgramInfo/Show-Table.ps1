@@ -70,7 +70,7 @@ Show-Table
 
 Start-Test "-Executables switch - Fill table with PowerShell"
 Initialize-Table @Logs
-Update-Table "PowerShell.exe" -Executables
+Update-Table "PowerShell.exe" -Executable
 Show-Table
 
 Update-Log

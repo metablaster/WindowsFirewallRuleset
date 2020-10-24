@@ -46,9 +46,9 @@ Whether to include hidden adapters
 .PARAMETER IncludeDisconnected
 Whether to include disconnected
 .EXAMPLE
-Get-ConfiguredAdapter "IPv4"
+PS> Get-ConfiguredAdapter "IPv4"
 .EXAMPLE
-Get-ConfiguredAdapter "IPv6"
+PS> Get-ConfiguredAdapter "IPv6"
 .INPUTS
 None. You cannot pipe objects to Get-ConfiguredAdapter
 .OUTPUTS

@@ -40,14 +40,14 @@ If the export file already exists it's content will be replaced by default.
 Policy store from which to export rules, default is local GPO.
 For more information about stores see:
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/FirewallParameters.md
-.PARAMETER DisplayName
-Display name of the rules to be processed. Wildcard character * is allowed.
-.PARAMETER DisplayGroup
-Display group of the rules to be processed. Wildcard character * is allowed.
 .PARAMETER Folder
 Path into which to save file
 .PARAMETER FileName
 Output file, default is JSON format
+.PARAMETER DisplayName
+Display name of the rules to be processed. Wildcard character * is allowed.
+.PARAMETER DisplayGroup
+Display group of the rules to be processed. Wildcard character * is allowed.
 .PARAMETER JSON
 Output in JSON instead of CSV format
 .PARAMETER Inbound
@@ -65,14 +65,21 @@ Export blocking rules
 .PARAMETER Append
 Append exported rules to existing file instead of replacing
 .EXAMPLE
-Export-FirewallRules
+PS> Export-FirewallRules
+
 Exports all firewall rules to the CSV file FirewallRules.csv in the current directory.
 .EXAMPLE
-Export-FirewallRules -Inbound -Allow
+PS> Export-FirewallRules -Inbound -Allow
+
 Exports all inbound and allowing firewall rules to the CSV file FirewallRules.csv in the current directory.
 .EXAMPLE
-Export-FirewallRules snmp* SNMPRules.json -json
+PS> Export-FirewallRules snmp* SNMPRules.json -json
+
 Exports all SNMP firewall rules to the JSON file SNMPRules.json.
+.INPUTS
+None. You cannot pipe objects to Export-FirewallRules
+.OUTPUTS
+None. Exports rules to file.
 .NOTES
 Author: Markus Scholtes
 Version: 1.02
@@ -131,10 +138,10 @@ function Export-FirewallRules
 		[switch] $Disabled,
 
 		[Parameter()]
-		[switch] $Block,
+		[switch] $Allow,
 
 		[Parameter()]
-		[switch] $Allow,
+		[switch] $Block,
 
 		[Parameter()]
 		[switch] $Append

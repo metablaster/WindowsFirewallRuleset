@@ -32,9 +32,9 @@ Convert value to boolean
 .DESCRIPTION
 Convert value to boolean
 .PARAMETER Value
-
+TODO: describe parameter
 .PARAMETER DefaultValue
-
+TODO: describe parameter
 .EXAMPLE
 TODO: provide example and description
 .INPUTS

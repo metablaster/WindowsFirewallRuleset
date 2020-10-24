@@ -55,7 +55,7 @@ ConvertTo-HexIP takes a dotted decimal IP and returns a single hexadecimal strin
 .PARAMETER IPAddress
 An IP Address to convert.
 .EXAMPLE
-ConvertTo-HexIP 192.168.0.1
+PS> ConvertTo-HexIP 192.168.0.1
 
 Returns the hexadecimal string c0a80001.
 .INPUTS

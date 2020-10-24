@@ -33,14 +33,18 @@ Used to ask user if he wants to run script
 In addition to prompt, execution context is shown.
 Asking for approval helps to let run master script and only execute specific
 scripts, thus loading only needed rules.
-.PARAMETER DefaultAction
+.PARAMETER Default
 Default prompt action, either 'YES' or 'NO'
 .PARAMETER Title
 Title of the prompt
 .PARAMETER Question
 Prompt question
+.PARAMETER Accept
+Prompt help menu for default action
+.PARAMETER Deny
+Prompt help menu for deny action
 .EXAMPLE
-Approve-Execute "No" "Sample title" "Sample question"
+PS> Approve-Execute "No" "Sample title" "Sample question"
 .INPUTS
 None. You cannot pipe objects to Approve-Execute
 .OUTPUTS

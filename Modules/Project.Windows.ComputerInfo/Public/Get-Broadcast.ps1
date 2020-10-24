@@ -35,6 +35,8 @@ This includes both physical and virtual adapters.
 Returned broadcast addresses are only for IPv4
 .PARAMETER IncludeAll
 Include all possible adapter types present on target computer
+.PARAMETER ExcludeHardware
+Exclude hardware/physical network adapters
 .PARAMETER IncludeVirtual
 Whether to include virtual adapters
 .PARAMETER IncludeHidden
@@ -42,11 +44,13 @@ Whether to include hidden adapters
 .PARAMETER IncludeDisconnected
 Whether to include disconnected
 .EXAMPLE
-Get-Broadcast
+TODO: provide examples
 .INPUTS
 None. You cannot pipe objects to Get-Broadcast
 .OUTPUTS
 [IPAddress[]] Array of broadcast addresses
+.NOTES
+None.
 #>
 function Get-Broadcast
 {

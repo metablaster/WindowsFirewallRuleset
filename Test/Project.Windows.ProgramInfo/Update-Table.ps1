@@ -80,7 +80,7 @@ $global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
 
 Start-Test "-Executables switch - Fill table with PowerShell"
 Initialize-Table @Logs
-Update-Table "PowerShell.exe" -Executables
+Update-Table "PowerShell.exe" -Executable
 $global:InstallTable | Format-Table -AutoSize @Logs
 
 Start-Test "Install Path"

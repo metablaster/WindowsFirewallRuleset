@@ -35,7 +35,7 @@ installation directory exists or not, since some versions are built in
 .PARAMETER ComputerName
 Computer name for which to list installed installed framework
 .EXAMPLE
-Get-NetFramework COMPUTERNAME
+PS> Get-NetFramework COMPUTERNAME
 .INPUTS
 None. You cannot pipe objects to Get-NetFramework
 .OUTPUTS

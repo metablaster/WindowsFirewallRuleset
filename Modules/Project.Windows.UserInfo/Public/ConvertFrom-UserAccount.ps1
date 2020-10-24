@@ -32,12 +32,12 @@ Strip computer names out of computer accounts
 .DESCRIPTION
 ConvertFrom-UserAccount is a helper method to reduce typing common code
 related to splitting up user accounts
-.PARAMETER UserAccounts
-Array of user accounts in form of: COMPUTERNAME\USERNAME
+.PARAMETER UserAccount
+One or more user accounts in form of: COMPUTERNAME\USERNAME
 .EXAMPLE
-ConvertFrom-UserAccounts COMPUTERNAME\USERNAME
+PS> ConvertFrom-UserAccounts COMPUTERNAME\USERNAME
 .EXAMPLE
-ConvertFrom-UserAccounts SERVER\USER, COMPUTER\USER, SERVER2\USER2
+PS> ConvertFrom-UserAccounts SERVER\USER, COMPUTER\USER, SERVER2\USER2
 .INPUTS
 None. You cannot pipe objects to ConvertFrom-UserAccounts
 .OUTPUTS
@@ -53,13 +53,13 @@ function ConvertFrom-UserAccount
 	param(
 		[Alias("Account")]
 		[Parameter(Mandatory = $true)]
-		[string[]] $UserAccounts
+		[string[]] $UserAccount
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	[string[]] $UserNames = @()
-	foreach ($Account in $UserAccounts)
+	foreach ($Account in $UserAccount)
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting user name for account: $Account"
 		$UserNames += $Account.split("\")[1]

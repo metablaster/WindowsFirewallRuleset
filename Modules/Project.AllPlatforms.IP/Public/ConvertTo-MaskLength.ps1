@@ -55,7 +55,7 @@ A count of the number of 1's in a binary string.
 .PARAMETER SubnetMask
 A subnet mask to convert into length.
 .EXAMPLE
-ConvertTo-MaskLength 255.255.255.0
+PS> ConvertTo-MaskLength 255.255.255.0
 
 Returns 24, the length of the mask in bits.
 .INPUTS

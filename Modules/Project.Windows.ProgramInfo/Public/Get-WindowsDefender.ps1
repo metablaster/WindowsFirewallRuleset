@@ -34,7 +34,7 @@ TODO: add description
 .PARAMETER ComputerName
 Computer name for which to list installed Windows Defender
 .EXAMPLE
-Get-WindowsDefender COMPUTERNAME
+PS> Get-WindowsDefender COMPUTERNAME
 .INPUTS
 None. You cannot pipe objects to Get-WindowsDefender
 .OUTPUTS

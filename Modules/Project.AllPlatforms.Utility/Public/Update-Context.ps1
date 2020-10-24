@@ -39,7 +39,7 @@ Second context string after . (dot)
 .PARAMETER Subsection
 Additional string after -> (arrow)
 .EXAMPLE
-Update-Context "IPv4" "Outbound" "RuleGroup"
+PS> Update-Context "IPv4" "Outbound" "RuleGroup"
 
 [IPv4.Outbound -> RuleGroup]
 .INPUTS

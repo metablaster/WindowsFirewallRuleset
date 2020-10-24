@@ -34,7 +34,7 @@ TODO: add description
 .PARAMETER ComputerName
 Computer name for which to list installed installed framework
 .EXAMPLE
-Get-WindowsSDK COMPUTERNAME
+PS> Get-WindowsSDK COMPUTERNAME
 .INPUTS
 None. You cannot pipe objects to Get-WindowsSDK
 .OUTPUTS

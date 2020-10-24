@@ -28,22 +28,21 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Grant permission to read firewall logs files
+Grant permission to read and write firewall log files
 .DESCRIPTION
-Grant permission to read firewall logs files until system reboot.
+Grant permission to non administrative account to read firewall logs files until system reboot.
+Also grants firewall service to write logs to project specified location.
 The Microsoft Protection Service will automatically reset permissions on firewall logs on system boot.
 .PARAMETER Principal
-User account for which to grant permission
+Non administrative user account for which to grant permission
 .PARAMETER ComputerName
 Principal domain for which to grant permission.
-By default principal from local machine get permission
+By default principal from local machine gets permission
 .EXAMPLE
 PS> GrantLogs.ps1 USERNAME
 .EXAMPLE
 PS> GrantLogs.ps1 USERNAME -Computer COMPUTERNAME
 .NOTES
-None.
-.LINK
 None.
 #>
 
@@ -103,7 +102,7 @@ catch
 # Represents an abstraction of an access control entry (ACE) that defines an access rule for a file or directory
 $FirewallPermission = New-Object System.Security.AccessControl.FileSystemAccessRule($FirewallService, $FirewallRight, $Type) @Logs
 
-# Grant "Write" to firewall service for log folder
+# Grant "Write" to firewall service for logs folder
 Write-Information -Tags "User" -MessageData "INFO: Grant 'Write' permission to firewall service for: $LogsFolder\Firewall"
 $Acl = Get-Acl $LogsFolder\Firewall @Logs
 # The SetAccessRule method adds the specified access control list (ACL) rule or overwrites any

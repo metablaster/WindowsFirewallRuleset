@@ -50,7 +50,7 @@ todo's in this file are categorized into following sections:
         - `git clean -d -x --dry-run` `git clean -d -x -f`
         - `git prune --dry-run` `git prune`
         - `git repack -d -F`
-    - ProgramInfo and NET.IP module manifest, comment out unit test exports
+    - ProgramInfo and AllPlatforms.IP module manifest, comment out unit test exports
     - ProjectSettings.ps1 disable variables: Develop, ForceLoad,
     - ProjectSettings.ps1 restore variables: UnitTester, UnitTesterAdmin, DefaultUser
     - ProjectSettings.ps1 verify auto updated variables: ProjectCheck, ModulesCheck, ServicesCheck
@@ -188,13 +188,13 @@ todo's in this file are categorized into following sections:
 
 4. Test and debugging
 
-    - Move NET.IP tests into test folder, clean up directory add streams
+    - Move AllPlatforms.IP tests into test folder, clean up directory add streams
     - Many test cases are local to our environment, other people might get different results
     - Test everything on preview Windows
     - Some test outputs will be messed up, ex. some output might be shown prematurely,
     see get-usergroup test for example
-    - A lot of pester tests from NET.IP module require private function export, make sure the rest
-    of a module works fine without these private exports
+    - A lot of pester tests from AllPlatforms.IP module require private function export,
+    make sure the rest of a module works fine without these private exports
     - there is no test for Get-Permutation in Project.AllPlatforms.IP
 
 5. Code style

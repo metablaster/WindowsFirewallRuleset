@@ -35,11 +35,11 @@ Uninstall-DuplicateModule removes modules which are otherwise not removable, exa
 2. modules locked by other modules
 Case from point 2 is recommended only when there are 2 exactly same modules installed,
 but the duplicate you are trying to remove is used (locked) instead of first one
-.PARAMETER Module
-Explicit module object which to uninstall
 .PARAMETER ModulePath
 Full path to the module root installation directory,
 Warning, if the root directory contains multiple module versions all of them will be uninstalled
+.PARAMETER Module
+Explicit module object which to uninstall
 .EXAMPLE
 PS> Uninstall-DuplicateModule "C:\Users\User\Documents\PowerShell\Modules\PackageManagement"
 

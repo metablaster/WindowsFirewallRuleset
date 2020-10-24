@@ -65,19 +65,19 @@ A subnet mask as an IP address.
 .PARAMETER ObjectSubnetMask
 A subnet mask as an IP address.
 .EXAMPLE
-Test-SubnetMember -SubjectIPAddress 10.0.0.0/24 -ObjectIPAddress 10.0.0.0/16
+PS> Test-SubnetMember -SubjectIPAddress 10.0.0.0/24 -ObjectIPAddress 10.0.0.0/16
 
 Returns true as the subject network can be contained within the object network.
 .EXAMPLE
-Test-SubnetMember -SubjectIPAddress 192.168.0.0/16 -ObjectIPAddress 192.168.0.0/24
+PS> Test-SubnetMember -SubjectIPAddress 192.168.0.0/16 -ObjectIPAddress 192.168.0.0/24
 
 Returns false as the subject network is larger the object network.
 .EXAMPLE
-Test-SubnetMember -SubjectIPAddress 10.2.3.4/32 -ObjectIPAddress 10.0.0.0/8
+PS> Test-SubnetMember -SubjectIPAddress 10.2.3.4/32 -ObjectIPAddress 10.0.0.0/8
 
 Returns true as the subject IP address is within the object network.
 .EXAMPLE
-Test-SubnetMember -SubjectIPAddress 255.255.255.255 -ObjectIPAddress 0/0
+PS> Test-SubnetMember -SubjectIPAddress 255.255.255.255 -ObjectIPAddress 0/0
 
 Returns true as the subject IP address is the last in the object network range.
 .INPUTS

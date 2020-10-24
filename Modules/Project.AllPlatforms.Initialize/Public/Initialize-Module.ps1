@@ -43,12 +43,12 @@ if repository is not registered user is prompted to register it
 .PARAMETER RepositoryLocation
 Repository location associated with repository name,
 this parameter is used only if repository is not registered
+.PARAMETER InfoMessage
+Help message used for default choice in host prompt
 .PARAMETER Trusted
 If the supplied repository needs to be registered Trusted specifies
 whether repository is trusted or not.
 this parameter is used only if repository is not registered
-.PARAMETER InfoMessage
-Help message used for default choice in host prompt
 .PARAMETER AllowPrerelease
 whether to allow installing beta modules
 .PARAMETER Required

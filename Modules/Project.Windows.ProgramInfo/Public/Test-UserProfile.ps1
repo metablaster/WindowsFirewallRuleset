@@ -35,7 +35,7 @@ if this is true
 .PARAMETER FilePath
 File path to check, can be unformatted or have environment variables
 .EXAMPLE
-Test-UserProfile "C:\Users\User\AppData\Local\Google\Chrome\Application\chrome.exe"
+PS> Test-UserProfile "C:\Users\User\AppData\Local\Google\Chrome\Application\chrome.exe"
 .INPUTS
 None. You cannot pipe objects to Test-UserProfile
 .OUTPUTS

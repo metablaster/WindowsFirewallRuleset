@@ -37,8 +37,8 @@ Predefined program name for which to search
 .PARAMETER FilePath
 Reference to variable which holds a path to program (excluding executable)
 .EXAMPLE
-$MyProgram = "%ProgramFiles(x86)%\Microsoft Office\root\Office16"
-Test-Installation "Office" ([ref] $MyProgram)
+PS> $MyProgram = "%ProgramFiles(x86)%\Microsoft Office\root\Office16"
+PS> Test-Installation "Office" ([ref] $MyProgram)
 .INPUTS
 None. You cannot pipe objects to Test-Installation
 .OUTPUTS

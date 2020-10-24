@@ -32,7 +32,7 @@ Get localhost name
 .DESCRIPTION
 TODO: add description
 .EXAMPLE
-Get-ComputerName
+PS> Get-ComputerName
 .INPUTS
 None. You cannot pipe objects to Get-ComputerName
 .OUTPUTS

@@ -36,7 +36,7 @@ User name in form of "USERNAME"
 .PARAMETER ComputerName
 NETBIOS Computer name in form of "COMPUTERNAME"
 .EXAMPLE
-Get-UserSoftware "USERNAME"
+PS> Get-UserSoftware "USERNAME"
 .INPUTS
 None. You cannot pipe objects to Get-UserSoftware
 .OUTPUTS

@@ -35,7 +35,7 @@ registry path and child registry key name for target computer
 .PARAMETER ComputerName
 Computer name which to check
 .EXAMPLE
-Get-ExecutablePath "COMPUTERNAME"
+PS> Get-ExecutablePath "COMPUTERNAME"
 .INPUTS
 None. You cannot pipe objects to Get-ExecutablePath
 .OUTPUTS

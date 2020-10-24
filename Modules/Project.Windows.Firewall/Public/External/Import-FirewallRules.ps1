@@ -44,6 +44,19 @@ Path to directory where exported rules file is located
 Input file
 .PARAMETER JSON
 Input from JSON instead of CSV format
+.EXAMPLE
+PS> Import-FirewallRules
+
+Imports all firewall rules in the CSV file FirewallRules.csv
+If no file is specified, FirewallRules .csv or .json in the current directory is searched.
+.EXAMPLE
+PS> Import-FirewallRules WmiRules.csv CSV
+
+Imports all firewall rules in the SCV file WmiRules.csv
+.INPUTS
+None. You cannot pipe objects to Import-FirewallRules
+.OUTPUTS
+None.
 .NOTES
 Author: Markus Scholtes
 Version: 1.02
@@ -59,13 +72,6 @@ Changes by metablaster - August 2020:
 7. Changed minor flow and logic of execution
 8. Make output formatted and colored
 9. Added progress bar
-.EXAMPLE
-Import-FirewallRules
-Imports all firewall rules in the CSV file FirewallRules.csv
-If no file is specified, FirewallRules .csv or .json in the current directory is searched.
-.EXAMPLE
-Import-FirewallRules WmiRules.csv CSV
-Imports all firewall rules in the SCV file WmiRules.csv
 #>
 function Import-FirewallRules
 {

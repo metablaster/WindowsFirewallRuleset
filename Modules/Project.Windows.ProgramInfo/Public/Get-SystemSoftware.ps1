@@ -34,7 +34,7 @@ TODO: add description
 .PARAMETER ComputerName
 Computer name which to check
 .EXAMPLE
-Get-SystemSoftware "COMPUTERNAME"
+PS> Get-SystemSoftware "COMPUTERNAME"
 .INPUTS
 None. You cannot pipe objects to Get-SystemSoftware
 .OUTPUTS

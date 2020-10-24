@@ -61,13 +61,13 @@ The first IP address from a range.
 .PARAMETER End
 The last IP address from a range.
 .EXAMPLE
-ConvertTo-Subnet -Start 0.0.0.0 -End 255.255.255.255
+PS> ConvertTo-Subnet -Start 0.0.0.0 -End 255.255.255.255
 .EXAMPLE
-ConvertTo-Subnet -Start 192.168.0.1 -End 192.168.0.129
+PS> ConvertTo-Subnet -Start 192.168.0.1 -End 192.168.0.129
 .EXAMPLE
-ConvertTo-Subnet 10.0.0.23/24
+PS> ConvertTo-Subnet 10.0.0.23/24
 .EXAMPLE
-ConvertTo-Subnet 10.0.0.23 255.255.255.0
+PS> ConvertTo-Subnet 10.0.0.23 255.255.255.0
 .INPUTS
 None. You cannot pipe objects to ConvertTo-Subnet
 .OUTPUTS

@@ -33,7 +33,7 @@ Set network profile for physical network interfaces
 Set network profile for each physical/hardware network interfaces
 Recommended is 'Public' profile for maximum security, unless 'Private' is needed
 .EXAMPLE
-Set-NetworkProfile
+PS> Set-NetworkProfile
 .INPUTS
 None. You cannot pipe objects to Set-NetworkProfile
 .OUTPUTS

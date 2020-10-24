@@ -59,11 +59,11 @@ or an IP address and subnet mask in a string.
 .PARAMETER SubnetMask
 A subnet mask as an IP address.
 .EXAMPLE
-Get-NetworkSummary 192.168.0.1 255.255.255.0
+PS> Get-NetworkSummary 192.168.0.1 255.255.255.0
 .EXAMPLE
-Get-NetworkSummary 10.0.9.43/22
+PS> Get-NetworkSummary 10.0.9.43/22
 .EXAMPLE
-Get-NetworkSummary 0/0
+PS> Get-NetworkSummary 0/0
 .INPUTS
 System.String
 .OUTPUTS

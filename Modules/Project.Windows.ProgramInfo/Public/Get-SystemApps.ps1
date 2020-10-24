@@ -34,7 +34,7 @@ Search system wide installed store apps
 .PARAMETER ComputerName
 NETBIOS Computer name in form of "COMPUTERNAME"
 .EXAMPLE
-Get-SystemApps "COMPUTERNAME"
+PS> Get-SystemApps "COMPUTERNAME"
 .INPUTS
 None. You cannot pipe objects to Get-SystemApps
 .OUTPUTS

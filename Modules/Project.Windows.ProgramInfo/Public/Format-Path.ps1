@@ -36,7 +36,7 @@ Formatted paths will also help sorting rules in firewall GUI based on path.
 .PARAMETER FilePath
 File path to format, can have environment variables, or consists of trailing slashes.
 .EXAMPLE
-Format-Path "C:\Program Files\\Dir\"
+PS> Format-Path "C:\Program Files\\Dir\"
 .INPUTS
 [string] File path to format
 .OUTPUTS

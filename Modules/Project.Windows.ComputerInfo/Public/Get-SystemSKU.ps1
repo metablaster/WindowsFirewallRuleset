@@ -38,6 +38,7 @@ Operating system SKU number, can't be used with ComputerName parameter
 One or more computer names, can't be used with SKU parameter
 .EXAMPLE
 PS> Get-SystemSKU
+
 Home Premium N
 .INPUTS
 None. You cannot pipe objects to Get-SystemSKU

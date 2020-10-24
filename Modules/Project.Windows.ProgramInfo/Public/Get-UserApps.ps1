@@ -40,7 +40,7 @@ User name in form of:
 .PARAMETER ComputerName
 NETBIOS Computer name in form of "COMPUTERNAME"
 .EXAMPLE
-Get-UserApps "USERNAME"
+PS> Get-UserApps "USERNAME"
 .INPUTS
 None. You cannot pipe objects to Get-UserApps
 .OUTPUTS

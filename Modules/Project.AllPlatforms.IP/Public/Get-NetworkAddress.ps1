@@ -59,15 +59,15 @@ or an IP address and subnet mask in a string.
 .PARAMETER SubnetMask
 A subnet mask as an IP address.
 .EXAMPLE
-Get-NetworkAddress 192.168.0.243 255.255.255.0
+PS> Get-NetworkAddress 192.168.0.243 255.255.255.0
 
 Returns the address 192.168.0.0.
 .EXAMPLE
-Get-NetworkAddress 10.0.9/22
+PS> Get-NetworkAddress 10.0.9/22
 
 Returns the address 10.0.8.0.
 .EXAMPLE
-Get-NetworkAddress "10.0.23.21 255.255.255.224"
+PS> Get-NetworkAddress "10.0.23.21 255.255.255.224"
 
 Input values are automatically split into IP address and subnet mask. Returns the address 10.0.23.0.
 .INPUTS

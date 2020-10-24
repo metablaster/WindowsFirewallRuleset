@@ -36,10 +36,10 @@ to the table, as well as other information needed to make a firewall rule
 Search string which corresponds to the output of "Get programs" functions
 .PARAMETER UserProfile
 true if user profile is to be searched too, system locations only otherwise
-.PARAMETER Executables
+.PARAMETER Executable
 true if executable paths should be searched first.
 .EXAMPLE
-Update-Table "GoogleChrome"
+PS> Update-Table "GoogleChrome"
 .INPUTS
 None. You cannot pipe objects to Update-Table
 .OUTPUTS
@@ -60,7 +60,7 @@ function Update-Table
 		[switch] $UserProfile,
 
 		[Parameter()]
-		[switch] $Executables
+		[switch] $Executable
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -72,7 +72,7 @@ function Update-Table
 		# To reduce typing and make code clear
 		$UserGroups = Get-UserGroup -Computer $PolicyStore
 
-		if ($Executables)
+		if ($Executable)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching executable names for: $SearchString"
 

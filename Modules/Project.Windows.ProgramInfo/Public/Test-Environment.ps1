@@ -35,7 +35,7 @@ for firewall rules
 .PARAMETER FilePath
 Path to folder, Allows null or empty since input may come from other commandlets which can return empty or null
 .EXAMPLE
-Test-Environment %SystemDrive%
+PS> Test-Environment %SystemDrive%
 .INPUTS
 None. You cannot pipe objects to Test-Environment
 .OUTPUTS

@@ -26,9 +26,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Reset GPO firewall to factory defaults
-#
+<#
+.SYNOPSIS
+Reset GPO firewall to factory defaults
+.DESCRIPTION
+SetupFirewall script clears all GPO firewall rules and sets all GPO firewall
+parameter to their default values
+.EXAMPLE
+PS> ResetFirewall.ps1
+.INPUTS
+None.
+.OUTPUTS
+None.
+.NOTES
+None.
+#>
+
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (

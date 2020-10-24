@@ -55,9 +55,8 @@ ConvertTo-DecimalIP takes a decimal IP,
 uses a shift operation on each octet and returns a single UInt32 value.
 .PARAMETER IPAddress
 An IP Address to convert.
-
 .EXAMPLE
-ConvertTo-DecimalIP 1.2.3.4
+PS> ConvertTo-DecimalIP 1.2.3.4
 
 Converts an IP address to an unsigned 32-bit integer value.
 .INPUTS

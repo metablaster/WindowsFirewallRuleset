@@ -39,10 +39,12 @@ Error, Warning and info preferences and log switch can be overridden at any time
 and the Update-Log will pick up
 those values automatically since these 3 variables are local to script.
 .EXAMPLE
-Some-Function @Logs
+PS> Some-Function @Logs
+
 Update-Log
 .EXAMPLE
-Some-Function @Logs | Another-Function @Logs
+PS> Some-Function @Logs | Another-Function @Logs
+
 Update-Log
 .INPUTS
 None. You cannot pipe objects to Update-Log

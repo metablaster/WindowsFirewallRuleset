@@ -34,7 +34,7 @@ Prints found program data which includes program name, program ID, install locat
 .PARAMETER Caption
 Single line string to print before printing the table
 .EXAMPLE
-Show-Table "Table data"
+PS> Show-Table "Table data"
 .INPUTS
 None. You cannot pipe objects to Test-Installation
 .OUTPUTS

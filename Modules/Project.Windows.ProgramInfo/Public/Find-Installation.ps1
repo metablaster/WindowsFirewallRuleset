@@ -37,7 +37,7 @@ Predefined program name
 .PARAMETER ComputerName
 Computer name on which to look for program installation
 .EXAMPLE
-Find-Installation "Office"
+PS> Find-Installation "Office"
 .INPUTS
 None. You cannot pipe objects to Find-Installation
 .OUTPUTS
@@ -330,12 +330,12 @@ function Find-Installation
 		}
 		"PowerShellCore64"
 		{
-			Update-Table "pwsh.exe" -Executables
+			Update-Table "pwsh.exe" -Executable
 			break
 		}
 		"PowerShell64"
 		{
-			Update-Table "PowerShell.exe" -Executables
+			Update-Table "PowerShell.exe" -Executable
 			break
 		}
 		"PowerShell86"

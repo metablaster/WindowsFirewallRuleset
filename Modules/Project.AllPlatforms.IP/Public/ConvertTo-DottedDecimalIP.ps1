@@ -55,11 +55,11 @@ ConvertTo-DottedDecimalIP uses a regular expression match on the input string to
 .PARAMETER IPAddress
 A string representation of an IP address from either UInt32 or dotted binary.
 .EXAMPLE
-ConvertTo-DottedDecimalIP 11000000.10101000.00000000.00000001
+PS> ConvertTo-DottedDecimalIP 11000000.10101000.00000000.00000001
 
 Convert the binary form back to dotted decimal, resulting in 192.168.0.1.
 .EXAMPLE
-ConvertTo-DottedDecimalIP 3232235521
+PS> ConvertTo-DottedDecimalIP 3232235521
 
 Convert the decimal form back to dotted decimal, resulting in 192.168.0.1.
 .INPUTS

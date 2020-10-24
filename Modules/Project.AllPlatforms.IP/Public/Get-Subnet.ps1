@@ -61,11 +61,11 @@ The subnet mask of the network to split. Mandatory if the subnet mask is not inc
 .PARAMETER NewSubnetMask
 Split the existing network described by the IPAddress and subnet mask using this mask.
 .EXAMPLE
-Get-Subnet 10.0.0.0 255.255.255.0 -NewSubnetMask 255.255.255.192
+PS> Get-Subnet 10.0.0.0 255.255.255.0 -NewSubnetMask 255.255.255.192
 
 Four /26 networks are returned.
 .EXAMPLE
-Get-Subnet 0/22 -NewSubnetMask 24
+PS> Get-Subnet 0/22 -NewSubnetMask 24
 
 64 /24 networks are returned.
 .INPUTS

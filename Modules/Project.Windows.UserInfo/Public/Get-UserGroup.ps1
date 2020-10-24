@@ -36,9 +36,9 @@ One or more computers which to query for user groups
 .PARAMETER CIM
 Whether to contact CIM server (required for remote computers)
 .EXAMPLE
-Get-UserGroup "ServerPC"
+PS> Get-UserGroup "ServerPC"
 .EXAMPLE
-Get-UserGroup @(DESKTOP, LAPTOP) -CIM
+PS> Get-UserGroup @(DESKTOP, LAPTOP) -CIM
 .INPUTS
 [string[]] array of computer names
 .OUTPUTS

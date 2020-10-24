@@ -38,7 +38,8 @@ Path to folder where to save logs
 .PARAMETER FileLabel
 File label which precedes date an time, ie Warning or Error.
 .EXAMPLE
-Get-LogFile "C:\Logs" "Warning"
+PS> Get-LogFile "C:\Logs" "Warning"
+
 Warning_25.02.20 19h.log
 .INPUTS
 None. You cannot pipe objects to Get-LogFile

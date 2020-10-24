@@ -31,6 +31,8 @@ SOFTWARE.
 Show-SDDL returns SDDL based on "object" such as path, or registry entry
 .DESCRIPTION
 TODO: add description
+.PARAMETER SDDL
+TODO: describe parameter
 .EXAMPLE
 see Test\Show-SDDL.ps1 for example
 .INPUTS
@@ -50,7 +52,7 @@ function Show-SDDL
 	param (
 		[Parameter(Mandatory = $true,
 			ValueFromPipelineByPropertyName = $true)]
-		$SDDL
+		[string] $SDDL
 	)
 
 	process

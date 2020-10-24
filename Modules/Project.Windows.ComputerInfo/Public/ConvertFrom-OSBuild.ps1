@@ -36,6 +36,7 @@ Note that "OS version" is not the same as "OS release version"
 Operating system build number
 .EXAMPLE
 PS> ConvertFrom-OSBuild 18363.1049
+
 1909
 .INPUTS
 None, you can't p to ConvertFrom-OSBuild

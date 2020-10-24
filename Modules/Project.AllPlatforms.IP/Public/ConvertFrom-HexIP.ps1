@@ -56,7 +56,7 @@ An intermediate call is made to ConvertTo-DottedDecimalIP.
 .PARAMETER IPAddress
 An IP Address to convert.
 .EXAMPLE
-ConvertFrom-HexIP c0a80001
+PS> ConvertFrom-HexIP c0a80001
 
 Returns the IP address 192.168.0.1.
 .INPUTS

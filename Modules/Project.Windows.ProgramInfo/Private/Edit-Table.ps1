@@ -34,7 +34,7 @@ Based on path and if it's valid path fill the table with it and add principals a
 .PARAMETER InstallLocation
 Program installation directory
 .EXAMPLE
-Edit-Table "%ProgramFiles(x86)%\TeamViewer"
+PS> Edit-Table "%ProgramFiles(x86)%\TeamViewer"
 .INPUTS
 None. You cannot pipe objects to Edit-Table
 .OUTPUTS

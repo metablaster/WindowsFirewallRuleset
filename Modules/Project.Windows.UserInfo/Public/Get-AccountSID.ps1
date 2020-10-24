@@ -38,9 +38,9 @@ Target computer on which to perform query
 .PARAMETER CIM
 Whether to contact CIM server (required for remote computers)
 .EXAMPLE
-Get-AccountSID "USERNAME" -Server "COMPUTERNAME"
+PS> Get-AccountSID "USERNAME" -Server "COMPUTERNAME"
 .EXAMPLE
-Get-AccountSID @("USERNAME1", "USERNAME2") -CIM
+PS> Get-AccountSID @("USERNAME1", "USERNAME2") -CIM
 .INPUTS
 [string[]] array of user names
 .OUTPUTS
@@ -48,6 +48,7 @@ Get-AccountSID @("USERNAME1", "USERNAME2") -CIM
 .NOTES
 TODO: CIM switch is not supported on PowerShell Core, meaning contacting remote computers
 is supported only on Windows PowerShell
+TODO: plural parameter 'UserNames'
 #>
 function Get-AccountSID
 {

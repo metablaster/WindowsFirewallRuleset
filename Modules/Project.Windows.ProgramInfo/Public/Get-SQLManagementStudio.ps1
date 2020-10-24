@@ -34,7 +34,7 @@ TODO: add description
 .PARAMETER ComputerName
 Computer name for which to list installed installed framework
 .EXAMPLE
-Get-SQLManagementStudio COMPUTERNAME
+PS> Get-SQLManagementStudio COMPUTERNAME
 
 	RegKey ComputerName Version      InstallLocation
 	------ ------------ -------      -----------

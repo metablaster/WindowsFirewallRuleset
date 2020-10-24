@@ -37,7 +37,7 @@ Firewall rule to format
 .PARAMETER Label
 Optional new label to replace default one
 .EXAMPLE
-Net-NewFirewallRule ... | Format-Output
+PS> Net-NewFirewallRule ... | Format-Output
 .INPUTS
 Microsoft.Management.Infrastructure.CimInstance Firewall rule to format
 .OUTPUTS

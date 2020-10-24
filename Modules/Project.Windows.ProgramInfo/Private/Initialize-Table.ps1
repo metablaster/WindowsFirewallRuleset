@@ -37,7 +37,7 @@ Each entry in the table also has an ID to help choosing entries by ID
 .PARAMETER TableName
 Table name
 .EXAMPLE
-Initialize-Table
+PS> Initialize-Table
 .INPUTS
 None. You cannot pipe objects to Initialize-Table
 .OUTPUTS

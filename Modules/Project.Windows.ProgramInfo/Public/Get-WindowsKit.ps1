@@ -34,7 +34,7 @@ TODO: add description
 .PARAMETER ComputerName
 Computer name for which to list installed installed windows kits
 .EXAMPLE
-Get-WindowsKit COMPUTERNAME
+PS> Get-WindowsKit COMPUTERNAME
 .INPUTS
 None. You cannot pipe objects to Get-WindowsKit
 .OUTPUTS

@@ -32,7 +32,7 @@ Initialize unit test
 .DESCRIPTION
 Enter-Test initializes unit test, ie. to enable logging
 This function must be called before first test case in single unit test
-.PARAMETER UnitTest
+.PARAMETER File
 Specify name of of the unit test, ie. script file name
 .EXAMPLE
 PS> Enter-Test "Get-Something.ps1"

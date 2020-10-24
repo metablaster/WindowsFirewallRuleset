@@ -38,9 +38,9 @@ One or more SIDs to convert
 .PARAMETER ComputerNames
 One or more computers to check if SID is not known, default is localhost
 .EXAMPLE
-ConvertFrom-SID S-1-5-21-2139171146-395215898-1246945465-2359
+PS> ConvertFrom-SID S-1-5-21-2139171146-395215898-1246945465-2359
 .EXAMPLE
-'^S-1-5-32-580' | ConvertFrom-SID
+PS> '^S-1-5-32-580' | ConvertFrom-SID
 .INPUTS
 [string[]] One or multiple SID's
 .OUTPUTS

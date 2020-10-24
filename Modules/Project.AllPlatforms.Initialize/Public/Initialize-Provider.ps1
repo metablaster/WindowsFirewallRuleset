@@ -52,7 +52,7 @@ Optional information displayable to user for choice help message
 Controls whether the provider initialization must succeed, if initialization fails execution stops,
 otherwise only warning is generated
 .EXAMPLE
-Initialize-Provider @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Repository "powershellgallery.com"
+PS> Initialize-Provider @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Repository "powershellgallery.com"
 .INPUTS
 None. You cannot pipe objects to Initialize-Provider
 .OUTPUTS

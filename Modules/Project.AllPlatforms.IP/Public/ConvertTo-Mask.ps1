@@ -57,7 +57,7 @@ converts the string to an unsigned 32-bit integer then calls ConvertTo-DottedDec
 .PARAMETER MaskLength
 The number of bits which must be masked.
 .EXAMPLE
-ConvertTo-Mask 24
+PS> ConvertTo-Mask 24
 
 Returns the dotted-decimal form of the mask, 255.255.255.0.
 .INPUTS

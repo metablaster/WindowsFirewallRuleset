@@ -34,7 +34,7 @@ In addition to Test-Path of file, message and stack trace is shown
 .PARAMETER FilePath
 path to file
 .EXAMPLE
-Test-File "C:\Users\User\AppData\Local\Google\Chrome\Application\chrome.exe"
+PS> Test-File "C:\Users\User\AppData\Local\Google\Chrome\Application\chrome.exe"
 .INPUTS
 None. You cannot pipe objects to Test-File
 .OUTPUTS
