@@ -38,7 +38,7 @@ NETBIOS Computer name in form of "COMPUTERNAME"
 .EXAMPLE
 PS> Get-OneDrive "USERNAME"
 .INPUTS
-None. You cannot pipe objects to Get-UserSoftware
+None. You cannot pipe objects to Get-OneDrive
 .OUTPUTS
 [PSCustomObject[]] OneDrive program info for specified user on a target computer
 .NOTES

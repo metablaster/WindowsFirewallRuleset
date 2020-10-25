@@ -37,7 +37,7 @@ PS> Set-ScreenBuffer
 .INPUTS
 None. You cannot pipe objects to Set-ScreenBuffer
 .OUTPUTS
-None, Screen buffer is set for current powershell session
+None. Screen buffer is set for current powershell session
 .NOTES
 None.
 #>

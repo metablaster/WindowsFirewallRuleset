@@ -299,8 +299,14 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	# To force loading rules regardless of presence of program set to true
 	New-Variable -Name ForceLoad -Scope Global -Option Constant -Value $false
 
-	# To force loading rules regardless of presence of program set to true
+	# Project logs folder
 	New-Variable -Name LogsFolder -Scope Global -Option Constant -Value "$ProjectRoot\Logs"
+
+	# Firewall logs folder
+	# NOTE: Set this value to $LogsFolder\Firewall to enable reading logs in VSCode with syntax highlighting
+	# In that case for changes to take effect run Scripts\SetupProfile.ps1, clear folder and reboot system
+	# NOTE: The default is %SystemRoot%\System32\LogFiles\Firewall
+	New-Variable -Name FirewallLogsFolder -Scope Global -Option Constant -Value $LogsFolder\Firewall
 }
 
 # Read only variables, meaning these can be modified by code at any time,
@@ -333,6 +339,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -Erro
 	Set-Variable -Name UnitTester -Scope Global -Option ReadOnly -Force -Value "Unknown User"
 
 	# User account name for which to search executables in user profile and non standard paths by default
+	# Also used for other defaults where standard user account is expected, ex. development as standard user
 	# NOTE: Set this value to username for which to create rules by default, if there are multiple
 	# users and to affect them all set this value to non existent user
 	# TODO: needs testing info messages for this value

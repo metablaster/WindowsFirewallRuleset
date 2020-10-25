@@ -36,7 +36,7 @@ Single line string to print before printing the table
 .EXAMPLE
 PS> Show-Table "Table data"
 .INPUTS
-None. You cannot pipe objects to Test-Installation
+None. You cannot pipe objects to Show-Table
 .OUTPUTS
 None. Table data is printed to console
 .NOTES

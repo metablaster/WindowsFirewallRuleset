@@ -44,7 +44,7 @@ PS> Test-TargetComputer "COMPUTERNAME" 2 1
 .EXAMPLE
 PS> Test-TargetComputer "COMPUTERNAME"
 .INPUTS
-None. You cannot pipe objects to Test-TargetMachine
+None. You cannot pipe objects to Test-TargetComputer
 .OUTPUTS
 [bool] false or true if target host is responsive
 .NOTES

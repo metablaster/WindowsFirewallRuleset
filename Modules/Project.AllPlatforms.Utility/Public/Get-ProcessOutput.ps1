@@ -42,6 +42,8 @@ Whether to use the operating system shell to start the process
 .PARAMETER Wait
 Number of milliseconds to wait for the associated process to exit
 Default is 0, which means wait indefinitely
+.PARAMETER Format
+If specified formats standard output into INFO messages
 .EXAMPLE
 PS> Get-ProcessOutput -FilePath "git.exe" -ArgumentList "status" -NoNewWindow -Wait 3000
 .INPUTS
@@ -49,7 +51,8 @@ None. You cannot pipe objects to Get-ProcessOutput
 .OUTPUTS
 None.
 .NOTES
-None.
+TODO: Function needs improvements and more test cases
+TODO: consider renaming to Format-ProcessOutput
 #>
 function Get-ProcessOutput
 {
@@ -67,7 +70,10 @@ function Get-ProcessOutput
 		[switch] $NoNewWindow,
 
 		[Parameter()]
-		[uint32] $Wait = 0
+		[uint32] $Wait = 0,
+
+		[Parameter()]
+		[switch] $Format
 	)
 
 	$InputFile = Get-Command -Name $FilePath -CommandType Application -ErrorAction SilentlyContinue
@@ -100,7 +106,30 @@ function Get-ProcessOutput
 		$Process.StartInfo.Arguments = $ArgumentList
 	}
 
-	$Process.Start() | Out-Null
+	# # TODO: Not working as expected
+	# # Creating string builders to store stdout.
+	# $StdOutBuilder = New-Object -TypeName System.Text.StringBuilder
+
+	# # Adding event handler for stdout.
+	# $ScripBlock = {
+	# 	if (![String]::IsNullOrEmpty($EventArgs.Data))
+	# 	{
+	# 		$Event.MessageData.AppendLine($EventArgs.Data)
+	# 	}
+	# }
+
+	# $StdOutEvent = Register-ObjectEvent -InputObject $Process `
+	# 	-Action $ScripBlock -EventName 'OutputDataReceived' `
+	# 	-MessageData $StdOutBuilder
+
+	if (!$Process.Start())
+	{
+		Write-Warning -Message "Start process '$($Process.ProcessName)' failed"
+		return
+	}
+
+	# # NOTE: Part of commented code above
+	# $Process.BeginOutputReadLine()
 
 	if ($Wait -gt 0)
 	{
@@ -109,23 +138,42 @@ function Get-ProcessOutput
 
 		if (!$Status)
 		{
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] Process '$($Process.ProcessName)' is taking too long, abort waiting"
+			Write-Warning -Message "Process '$($Process.ProcessName)' is taking too long, aborting..."
+			$Process.Kill()
+			return
 		}
 	}
 	else
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Waiting for Process '$($Process.ProcessName)' to finish"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Waiting for Process '$($Process.ProcessName)' to finish..."
+
 		$Process.WaitForExit()
+
+		# # NOTE: Part of commented code above
+		# # Un-registering events to retrieve process output.
+		# Unregister-Event -SourceIdentifier $StdOutEvent.Name
+
+		# $StdOutBuilder.ToString()
+	}
+
+	if ($Format)
+	{
+		# Reads a line of characters from the current stream and returns the data as a string.
+		while ($null -ne ($StreamLine = $Process.StandardOutput.ReadLine()))
+		{
+			if ($StreamLine)
+			{
+				Write-Information -Tags "User" -MessageData "INFO: $StreamLine"
+			}
+		}
+	}
+	else
+	{
+		$Process.StandardOutput.ReadToEnd()
 	}
 
 	# Reads all characters from the current position to the end of the stream (returns [string])
-	$StandardOutput = $Process.StandardOutput.ReadToEnd()
 	$StandardError = $Process.StandardError.ReadToEnd()
-
-	if ($StandardOutput)
-	{
-		$StandardOutput
-	}
 
 	if ($StandardError)
 	{

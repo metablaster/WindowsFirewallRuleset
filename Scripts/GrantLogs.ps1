@@ -28,9 +28,9 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Grant permission to read and write firewall log files
+Grant permissions to read and write firewall log files
 .DESCRIPTION
-Grant permission to non administrative account to read firewall logs files until system reboot.
+Grant permissions to non administrative account to read firewall log files until system reboot.
 Also grants firewall service to write logs to project specified location.
 The Microsoft Protection Service will automatically reset permissions on firewall logs on system boot.
 .PARAMETER Principal
@@ -43,7 +43,7 @@ PS> GrantLogs.ps1 USERNAME
 .EXAMPLE
 PS> GrantLogs.ps1 USERNAME -Computer COMPUTERNAME
 .NOTES
-None.
+Running this script makes sense only for custom firewall log location inside repository
 #>
 
 [CmdletBinding()]
@@ -79,8 +79,11 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Setup local variables
 $Type = [System.Security.AccessControl.AccessControlType]::Allow
-$UserRight = [System.Security.AccessControl.FileSystemRights]::ReadAndExecute
-$FirewallRight = [System.Security.AccessControl.FileSystemRights]::Write
+$UserControl = [System.Security.AccessControl.FileSystemRights]::ReadAndExecute
+$FullControl = [System.Security.AccessControl.FileSystemRights]::FullControl
+
+$Inheritance = [Security.AccessControl.InheritanceFlags] 'ContainerInherit,ObjectInherit'
+$Propagation = [System.Security.AccessControl.PropagationFlags]::None
 
 try
 {
@@ -94,20 +97,31 @@ try
 }
 catch
 {
-	Write-Warning -Message "Specified parameters could not be resolved" @Logs
 	$_
+	Write-Warning -Message "Specified parameters could not be resolved" @Logs
 	return
 }
 
-# Represents an abstraction of an access control entry (ACE) that defines an access rule for a file or directory
-$FirewallPermission = New-Object System.Security.AccessControl.FileSystemAccessRule($FirewallService, $FirewallRight, $Type) @Logs
+$FolderOwner = New-Object -TypeName System.Security.Principal.NTAccount("System") @Logs
 
-# Grant "Write" to firewall service for logs folder
-Write-Information -Tags "User" -MessageData "INFO: Grant 'Write' permission to firewall service for: $LogsFolder\Firewall"
+# Represents an abstraction of an access control entry (ACE) that defines an access rule for a file or directory
+$AdminPermission = New-Object System.Security.AccessControl.FileSystemAccessRule("Administrators", $FullControl, $Inheritance, $Propagation, $Type) @Logs
+$SystemPermission = New-Object System.Security.AccessControl.FileSystemAccessRule("System", $FullControl, $Inheritance, $Propagation, $Type) @Logs
+$FirewallPermission = New-Object System.Security.AccessControl.FileSystemAccessRule($FirewallService, $FullControl, $Inheritance, $Propagation, $Type) @Logs
+
+# Grant "FullControl" to firewall service for logs folder
+Write-Information -Tags "User" -MessageData "INFO: Grant 'FullControl' to required principals for: $LogsFolder\Firewall"
 $Acl = Get-Acl $LogsFolder\Firewall @Logs
+
+$Acl.SetOwner($FolderOwner)
+$Acl.SetAccessRuleProtection($true, $false)
+
 # The SetAccessRule method adds the specified access control list (ACL) rule or overwrites any
 # identical ACL rules that match the FileSystemRights value of the rule parameter.
 $Acl.SetAccessRule($FirewallPermission)
+$Acl.SetAccessRule($AdminPermission)
+$Acl.SetAccessRule($SystemPermission)
+
 Set-Acl $LogsFolder\Firewall $Acl @Logs
 
 $StandardUser = $true
@@ -126,12 +140,18 @@ if ($StandardUser)
 {
 	# Grant "Read & Execute" to user for firewall logs
 	Write-Information -Tags "User" -MessageData "INFO: Grant 'Read & Execute' permission to user '$User' for: $LogsFolder\Firewall\*.log"
-	$UserPermission = New-Object System.Security.AccessControl.FileSystemAccessRule($User, $UserRight, $Type)
+	$UserFolderPermission = New-Object System.Security.AccessControl.FileSystemAccessRule($User, $UserControl, $Inheritance, $Propagation, $Type) @Logs
+	$UserFilePermission = New-Object System.Security.AccessControl.FileSystemAccessRule($User, $UserControl, $Type) @Logs
+
+	$Acl = Get-Acl $LogsFolder\Firewall @Logs
+	$Acl.SetAccessRule($UserFolderPermission)
+	Set-Acl $LogsFolder\Firewall $Acl @Logs
+
 	foreach ($LogFile in $(Get-ChildItem -Path $LogsFolder\Firewall -Filter *.log @Logs))
 	{
 		Write-Verbose -Message "[$ThisScript] Processing: $LogFile"
 		$Acl = Get-Acl $LogFile.FullName @Logs
-		$Acl.SetAccessRule($UserPermission)
+		$Acl.SetAccessRule($UserFilePermission)
 		Set-Acl $LogFile.Fullname $Acl @Logs
 	}
 }

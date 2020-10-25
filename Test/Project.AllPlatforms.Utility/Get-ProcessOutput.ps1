@@ -44,8 +44,14 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 Enter-Test $ThisScript
 
-Start-Test "Get-ProcessOutput"
-$Result = Get-ProcessOutput -FilePath "git.exe" -ArgumentList "status" -NoNewWindow -Wait 3000 @Logs
+Start-Test "gpupdate.exe /target:computer -Wait 100"
+Get-ProcessOutput -NoNewWindow -FilePath gpupdate.exe -ArgumentList "/target:computer" -Wait 100 @Logs
+
+Start-Test "gpupdate.exe /target:computer"
+Get-ProcessOutput -NoNewWindow -FilePath gpupdate.exe -ArgumentList "/target:computer" -Format @Logs
+
+Start-Test "git.exe status"
+$Result = Get-ProcessOutput -FilePath "git.exe" -ArgumentList "status" -NoNewWindow @Logs
 $Result
 
 Start-Test "Get-TypeName"

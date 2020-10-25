@@ -143,7 +143,7 @@ Write-Information -Tags "User" -MessageData "INFO: Removing IPSec rules..." @Log
 Remove-NetIPsecRule -All -PolicyStore $PolicyStore @Logs
 
 # Update Local Group Policy for changes to take effect
-gpupdate.exe
+gpupdate.exe /target:computer
 
 Write-Information -Tags "User" -MessageData "INFO: Firewall reset is done!" @Logs
 Write-Information -Tags "User" -MessageData "INFO: If internet connectivity problem remains, please reboot system" @Logs

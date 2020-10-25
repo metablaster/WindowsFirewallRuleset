@@ -124,13 +124,15 @@ The list of other untested but supported systems is in [The future](#the-future)
 or use [Windows PowerShell](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/WindowsPowerShell.md)
 which is already installed.
 - .NET Framework version 4.8 is required if using Windows PowerShell (Desktop edition)
-instead of PowerShell Core
+instead of PowerShell Core (Windows 10 v1903 and up already includes .NET 4.8)
 - You might want to have git to check out for updates,
 to easily switch between branches or to contribute code.
 - VS Code is preferred and recommended editor to navigate project and edit scripts for your
 needs or contribution.
 - If you get VSCode, you'll also need powershell extension for code navigation and
 PowerShell specific features.
+- To navigate and edit code with VSCode, `PSScriptAnalyzer` is recommended otherwise editing experience\
+may behave really odd due to other project settings.
 
 ## I don't meet the requirements
 
@@ -192,8 +194,8 @@ unblock all files in project first to avoid YES/NO spam questions for every exec
 by running `Scripts\UnblockProject.ps1` script.\
 Master script `Scripts\SetupFirewall.ps1` does this in case if you forget, but initial YES/NO spam questions
 will still be visible in that case.
-- If you have "Ransomware protection" turned on in Windows Defender, make sure to whitelist either
-`pwsh.exe` or `powershell.exe` otherwise unblocking project files may fail.
+- If you download project to location that is under "Ransomware protection" (in Windows Defender),
+make sure to whitelist either `pwsh.exe` or `powershell.exe` otherwise unblocking project files may fail.
 PowerShell must be restarted for "Controlled folder access" changes to take effect.
 - It's important to understand these rules are designed to be used as "Standard" user, not as
 Administrative user, if you're Administrator on your computer you'll have to either create standard

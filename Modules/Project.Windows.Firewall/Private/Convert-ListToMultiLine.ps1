@@ -42,7 +42,7 @@ PS> Convert-ListToMultiLine "Some%%||String"
 Some
 String
 .INPUTS
-None. You cannot pipe objects to Convert-ArrayToList
+None. You cannot pipe objects to Convert-ListToMultiLine
 .OUTPUTS
 [string] multi line string
 .NOTES

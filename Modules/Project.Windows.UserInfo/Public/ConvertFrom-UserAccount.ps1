@@ -35,11 +35,11 @@ related to splitting up user accounts
 .PARAMETER UserAccount
 One or more user accounts in form of: COMPUTERNAME\USERNAME
 .EXAMPLE
-PS> ConvertFrom-UserAccounts COMPUTERNAME\USERNAME
+PS> ConvertFrom-UserAccount COMPUTERNAME\USERNAME
 .EXAMPLE
-PS> ConvertFrom-UserAccounts SERVER\USER, COMPUTER\USER, SERVER2\USER2
+PS> ConvertFrom-UserAccount SERVER\USER, COMPUTER\USER, SERVER2\USER2
 .INPUTS
-None. You cannot pipe objects to ConvertFrom-UserAccounts
+None. You cannot pipe objects to ConvertFrom-UserAccount
 .OUTPUTS
 [string[]] array of usernames in form of: USERNAME
 .NOTES

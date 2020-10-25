@@ -387,12 +387,8 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny @
 
 Write-Information -Tags "User" -MessageData "INFO: Loading rules was completed" @Logs
 
-# Set up global firewall setting, network and firewall profile
+# Set up global firewall setting, network and firewall profile and apply GPO changes
 & "$ProjectRoot\Scripts\SetupProfile.ps1"
-
-# Update Local Group Policy for changes to take effect
-Write-Output ""
-gpupdate.exe
 
 if ($Develop)
 {

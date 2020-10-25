@@ -41,7 +41,7 @@ PS> Convert-MultiLineToList "Some`rnString"
 
 Some||String
 .INPUTS
-None. You cannot pipe objects to Convert-ArrayToList
+None. You cannot pipe objects to Convert-MultiLineToList
 .OUTPUTS
 [string] comma separated list
 .NOTES

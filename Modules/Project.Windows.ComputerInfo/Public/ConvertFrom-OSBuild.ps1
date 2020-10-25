@@ -39,7 +39,7 @@ PS> ConvertFrom-OSBuild 18363.1049
 
 1909
 .INPUTS
-None, you can't p to ConvertFrom-OSBuild
+None. you can't p to ConvertFrom-OSBuild
 .OUTPUTS
 None.
 .NOTES
