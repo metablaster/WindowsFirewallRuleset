@@ -14,7 +14,7 @@ Run process and capture output
 ## SYNTAX
 
 ```none
-Get-ProcessOutput [-FilePath] <String> [[-ArgumentList] <String>] [-NoNewWindow] [[-Wait] <UInt32>]
+Get-ProcessOutput [-FilePath] <String> [[-ArgumentList] <String>] [-NoNewWindow] [[-Wait] <UInt32>] [-Format]
  [<CommonParameters>]
 ```
 
@@ -95,6 +95,22 @@ Aliases:
 Required: False
 Position: 3
 Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Format
+
+If specified formats standard output into INFO messages
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

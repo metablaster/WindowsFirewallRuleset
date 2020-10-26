@@ -46,7 +46,7 @@
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>None, you can't p to ConvertFrom-OSBuild</maml:name>
+          <maml:name>None. you can't p to ConvertFrom-OSBuild</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1283,7 +1283,7 @@ Home Premium N</dev:code>
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>None. You cannot pipe objects to Test-TargetMachine</maml:name>
+          <maml:name>None. You cannot pipe objects to Test-TargetComputer</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>

@@ -115,9 +115,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to Import-FirewallRules
+
 ## OUTPUTS
 
-### System.Void
+### None.
 
 ## NOTES
 

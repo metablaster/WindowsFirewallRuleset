@@ -8,13 +8,13 @@ Also general questions and answers regarding firewall.
 
 - [Frequently Asked Questions](#frequently-asked-questions)
   - [Table of contents](#table-of-contents)
-  - [I applied the rule(s) but it doesn't work, program "foobar.exe" doesn't connect to internet](#i-applied-the-rules-but-it-doesnt-work-program-foobarexe-doesnt-connect-to-internet)
+  - [I applied the rule(s) but it doesn't work, program "some_program.exe" doesn't connect to internet](#i-applied-the-rules-but-it-doesnt-work-program-some_programexe-doesnt-connect-to-internet)
   - [I got an error "Network path not found" or "unable to contact computer"](#i-got-an-error-network-path-not-found-or-unable-to-contact-computer)
   - [Does this firewall project give me the right protection](#does-this-firewall-project-give-me-the-right-protection)
   - [Windows Firewall does not write logs](#windows-firewall-does-not-write-logs)
   - [What system and environment modifications are done by this project](#what-system-and-environment-modifications-are-done-by-this-project)
 
-## I applied the rule(s) but it doesn't work, program "foobar.exe" doesn't connect to internet
+## I applied the rule(s) but it doesn't work, program "some_program.exe" doesn't connect to internet
 
 First step is to open PowerShell as Administrator and run `gpupdate.exe`, if not working then:
 
@@ -143,9 +143,10 @@ So here is an overview to help you see what happens and whether using this proje
     - If you have existing rules or settings in GPO please export them first or note down.
     - If you make modifications after running these scripts, re-running again may override your modifications.
 
-2. Global firewall settings are modified as follows
+2. Some global firewall settings are modified as follows
 
     See [Set-NetFirewallSetting](https://docs.microsoft.com/en-us/powershell/module/netsecurity/set-netfirewallsetting?view=win10-ps)
+    For details on which settings are modified see `Scripts\SetupProfile.ps1`
 
 3. PowerShell module path is updated for current session only
 

@@ -49,10 +49,6 @@ PS> Remove-FirewallRules
 
 Removes all firewall rules according to a list in the CSV file FirewallRules.csv in the current directory.
 .EXAMPLE
-.INPUTS
-None. You cannot pipe objects to Remove-FirewallRules
-.OUTPUTS
-None.
 Remove-FirewallRules WmiRules.json -json
 
 Removes all firewall rules according to the list in the JSON file WmiRules.json.

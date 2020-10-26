@@ -55,7 +55,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None, you can't p to ConvertFrom-OSBuild
+### None. you can't p to ConvertFrom-OSBuild
 
 ## OUTPUTS
 

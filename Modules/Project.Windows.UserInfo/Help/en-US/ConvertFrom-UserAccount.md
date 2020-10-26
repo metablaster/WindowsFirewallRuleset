@@ -14,7 +14,7 @@ Strip computer names out of computer accounts
 ## SYNTAX
 
 ```none
-ConvertFrom-UserAccount [-UserAccounts] <String[]> [<CommonParameters>]
+ConvertFrom-UserAccount [-UserAccount] <String[]> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -38,9 +38,9 @@ ConvertFrom-UserAccounts SERVER\USER, COMPUTER\USER, SERVER2\USER2
 
 ## PARAMETERS
 
-### -UserAccounts
+### -UserAccount
 
-Array of user accounts in form of: COMPUTERNAME\USERNAME
+One or more user accounts in form of: COMPUTERNAME\USERNAME
 
 ```yaml
 Type: System.String[]
@@ -60,7 +60,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to ConvertFrom-UserAccounts
+### None. You cannot pipe objects to ConvertFrom-UserAccount
 
 ## OUTPUTS
 

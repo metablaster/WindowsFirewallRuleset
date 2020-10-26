@@ -16,7 +16,7 @@ Exports firewall rules to a CSV or JSON file.
 ```none
 Export-FirewallRules [[-PolicyStore] <String>] [[-Folder] <String>] [[-FileName] <String>]
  [[-DisplayName] <String>] [[-DisplayGroup] <String>] [-JSON] [-Inbound] [-Outbound] [-Enabled] [-Disabled]
- [-Block] [-Allow] [-Append] [<CommonParameters>]
+ [-Allow] [-Block] [-Append] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -218,9 +218,9 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Block
+### -Allow
 
-Export blocking rules
+Export allowing rules
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -234,9 +234,9 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Allow
+### -Block
 
-Export allowing rules
+Export blocking rules
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -272,9 +272,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to Export-FirewallRules
+
 ## OUTPUTS
 
-### System.Void
+### None. Exports rules to file.
 
 ## NOTES
 

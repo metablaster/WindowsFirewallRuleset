@@ -14,7 +14,7 @@ Retrieves SQL server information from a local or remote servers.
 ## SYNTAX
 
 ```none
-Get-SQLInstance [[-ComputerNames] <String[]>] [-CIM] [<CommonParameters>]
+Get-SQLInstance [[-ComputerName] <String[]>] [-CIM] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -93,7 +93,7 @@ ServiceStartMode : Auto
 
 ## PARAMETERS
 
-### -ComputerNames
+### -ComputerName
 
 Local or remote systems to query for SQL information.
 
@@ -133,7 +133,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to Get-SQLInstance
+
 ## OUTPUTS
+
+### None.
 
 ## NOTES
 

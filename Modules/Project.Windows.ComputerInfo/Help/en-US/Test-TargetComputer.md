@@ -96,7 +96,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to Test-TargetMachine
+### None. You cannot pipe objects to Test-TargetComputer
 
 ## OUTPUTS
 

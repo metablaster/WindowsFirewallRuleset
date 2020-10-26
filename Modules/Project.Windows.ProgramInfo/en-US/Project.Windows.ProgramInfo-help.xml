@@ -791,7 +791,7 @@
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>None. You cannot pipe objects to Get-UserSoftware</maml:name>
+          <maml:name>None. You cannot pipe objects to Get-OneDrive</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -845,7 +845,7 @@
       <command:syntaxItem>
         <maml:name>Get-SQLInstance</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="Servers, Machines">
-          <maml:name>ComputerNames</maml:name>
+          <maml:name>ComputerName</maml:name>
           <maml:Description>
             <maml:para>Local or remote systems to query for SQL information.</maml:para>
           </maml:Description>
@@ -872,7 +872,7 @@
     </command:syntax>
     <command:parameters>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="Servers, Machines">
-        <maml:name>ComputerNames</maml:name>
+        <maml:name>ComputerName</maml:name>
         <maml:Description>
           <maml:para>Local or remote systems to query for SQL information.</maml:para>
         </maml:Description>
@@ -897,8 +897,26 @@
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
     </command:parameters>
-    <command:inputTypes />
-    <command:returnValues />
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Get-SQLInstance</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None.</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
     <maml:alertSet>
       <maml:alert>
         <maml:para>Name: Get-SQLInstance Author: Boe Prox, edited by cookie monster (to cover wow6432node, CIM tie in)</maml:para>

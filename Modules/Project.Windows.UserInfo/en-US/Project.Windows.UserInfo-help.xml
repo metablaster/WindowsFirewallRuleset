@@ -136,9 +136,9 @@
       <command:syntaxItem>
         <maml:name>ConvertFrom-UserAccount</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Account">
-          <maml:name>UserAccounts</maml:name>
+          <maml:name>UserAccount</maml:name>
           <maml:Description>
-            <maml:para>Array of user accounts in form of: COMPUTERNAME\USERNAME</maml:para>
+            <maml:para>One or more user accounts in form of: COMPUTERNAME\USERNAME</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
@@ -151,9 +151,9 @@
     </command:syntax>
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Account">
-        <maml:name>UserAccounts</maml:name>
+        <maml:name>UserAccount</maml:name>
         <maml:Description>
-          <maml:para>Array of user accounts in form of: COMPUTERNAME\USERNAME</maml:para>
+          <maml:para>One or more user accounts in form of: COMPUTERNAME\USERNAME</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
         <dev:type>
@@ -166,7 +166,7 @@
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>None. You cannot pipe objects to ConvertFrom-UserAccounts</maml:name>
+          <maml:name>None. You cannot pipe objects to ConvertFrom-UserAccount</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>

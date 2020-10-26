@@ -697,6 +697,17 @@ utf-32</dev:code>
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Format</maml:name>
+          <maml:Description>
+            <maml:para>If specified formats standard output into INFO messages</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
@@ -747,6 +758,18 @@ utf-32</dev:code>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>0</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Format</maml:name>
+        <maml:Description>
+          <maml:para>If specified formats standard output into INFO messages</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -1059,7 +1082,7 @@ utf-32</dev:code>
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>None, Screen buffer is set for current powershell session</maml:name>
+          <maml:name>None. Screen buffer is set for current powershell session</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1107,9 +1130,9 @@ utf-32</dev:code>
           <maml:Description>
             <maml:para>{{ Fill SDDL Description }}</maml:para>
           </maml:Description>
-          <command:parameterValue required="true" variableLength="false">System.Object</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
-            <maml:name>System.Object</maml:name>
+            <maml:name>System.String</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -1122,9 +1145,9 @@ utf-32</dev:code>
         <maml:Description>
           <maml:para>{{ Fill SDDL Description }}</maml:para>
         </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.Object</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
-          <maml:name>System.Object</maml:name>
+          <maml:name>System.String</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>

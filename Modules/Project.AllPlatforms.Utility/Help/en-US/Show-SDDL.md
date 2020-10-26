@@ -14,7 +14,7 @@ Show-SDDL returns SDDL based on "object" such as path, or registry entry
 ## SYNTAX
 
 ```none
-Show-SDDL [-SDDL] <Object> [<CommonParameters>]
+Show-SDDL [-SDDL] <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -36,7 +36,7 @@ see Test\Show-SDDL.ps1 for example
 {{ Fill SDDL Description }}
 
 ```yaml
-Type: System.Object
+Type: System.String
 Parameter Sets: (All)
 Aliases:
 

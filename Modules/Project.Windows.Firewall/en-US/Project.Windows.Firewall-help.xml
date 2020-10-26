@@ -131,9 +131,9 @@
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Block</maml:name>
+          <maml:name>Allow</maml:name>
           <maml:Description>
-            <maml:para>Export blocking rules</maml:para>
+            <maml:para>Export allowing rules</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -142,9 +142,9 @@
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Allow</maml:name>
+          <maml:name>Block</maml:name>
           <maml:Description>
-            <maml:para>Export allowing rules</maml:para>
+            <maml:para>Export blocking rules</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -287,9 +287,9 @@
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Block</maml:name>
+        <maml:name>Allow</maml:name>
         <maml:Description>
-          <maml:para>Export blocking rules</maml:para>
+          <maml:para>Export allowing rules</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -299,9 +299,9 @@
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Allow</maml:name>
+        <maml:name>Block</maml:name>
         <maml:Description>
-          <maml:para>Export allowing rules</maml:para>
+          <maml:para>Export blocking rules</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -323,11 +323,20 @@
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
     </command:parameters>
-    <command:inputTypes />
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Export-FirewallRules</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>System.Void</maml:name>
+          <maml:name>None. Exports rules to file.</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -678,11 +687,20 @@ Exports all SNMP firewall rules to the JSON file SNMPRules.json.</dev:code>
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
     </command:parameters>
-    <command:inputTypes />
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Import-FirewallRules</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>System.Void</maml:name>
+          <maml:name>None.</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -881,11 +899,20 @@ Imports all firewall rules in the SCV file WmiRules.csv</dev:code>
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
     </command:parameters>
-    <command:inputTypes />
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Remove-FirewallRules</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>System.Void</maml:name>
+          <maml:name>None.</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>

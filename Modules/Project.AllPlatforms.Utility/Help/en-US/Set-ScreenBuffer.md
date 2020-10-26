@@ -75,7 +75,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### None, Screen buffer is set for current powershell session
+### None. Screen buffer is set for current powershell session
 
 ## NOTES
 
