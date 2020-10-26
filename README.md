@@ -173,6 +173,8 @@ WindowsSystem, WindowsServices, Multicast etc. also do not ignore IPv6, Windows 
 such as `stateful ftp` and `pptp` or global `IPSec` settings, if you need specific setup please visit
 `Scripts\SetupProfile.ps1` and take a look at `Set-NetFirewallSetting`.\
 Note that `Scripts\SetupProfile.ps1` is automatically called by `Scripts\SetupFirewall.ps1` script
+- Some scripts require network adapter to be connected to internet, for example to determine
+IPv4 broadcast address. (In these cases errors may be generated without completing the task)
 
 ### Note
 
@@ -187,8 +189,9 @@ what you might have missed.
 contains rules will be significantly slower (depends on number of existing rules)
 - All errors and warnings will be saved to `Logs` directory, so you can review these logs later
 if you want to fix some problem.
-- Any rule that results in "Access denied" while loading should be reloaded by executing specific
-script again.
+- Any rule that results in "access denied" while loading should be reloaded by executing specific
+script again, see [FAQ.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FAQ.md)
+for information on why this may happen.
 - If the project was manually downloaded, transferred from another computer or media then you should\
 unblock all files in project first to avoid YES/NO spam questions for every executing script,
 by running `Scripts\UnblockProject.ps1` script.\
@@ -455,8 +458,8 @@ that these rules don't contain mistakes, for example, for ICMP rules you would p
 but you can't push an update here, please open new issue here on github and provide details
 preferably with documentation.
 3. To contribute rules, it is also important that each rule contains good description of it's
-purpose, when the user clicks on the rule in firewall GUI he/she wants to see what this rule is about and
-easily conclude whether to enable/disable the rule or allow/block the traffic.
+purpose, when the user clicks on the rule in firewall GUI he/she wants to see what this rule is about
+and easily conclude whether to enable/disable the rule or allow/block the traffic.
 4. It is also important that the rule is very specific and not generic, that means specifying protocol,
 IP addresses, ports, system user, interface type and other relevant information.\
 for example just saying: allow TCP outbound port 80 for any address or any user or no explanation

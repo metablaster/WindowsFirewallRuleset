@@ -13,6 +13,7 @@ Also general questions and answers regarding firewall.
   - [Does this firewall project give me the right protection](#does-this-firewall-project-give-me-the-right-protection)
   - [Windows Firewall does not write logs](#windows-firewall-does-not-write-logs)
   - [What system and environment modifications are done by this project](#what-system-and-environment-modifications-are-done-by-this-project)
+  - [Why do I get "access denied" errors](#why-do-i-get-access-denied-errors)
 
 ## I applied the rule(s) but it doesn't work, program "some_program.exe" doesn't connect to internet
 
@@ -136,7 +137,8 @@ firewall service has write permissions for target directory and reboot system.
 - Can these scripts do any kind of harm to system or my privacy?
 - Sure, there is a lot of scripts and code and you might not have the time to investigate them all.
 
-So here is an overview to help you see what happens and whether using this project is acceptable for you:
+So here is an overview to help you see what happens and whether using this project is acceptable
+for you:
 
 1. Group policy firewall and most of it's settings are modifed and/or overridden completely.
 
@@ -180,4 +182,24 @@ before downloading modules, however this happens only if you enable "development
 - "development mode" may be enabled by default on "develop" branch but never on "master" branch
 - The scripts will gather all sorts of system information but only as needed to configure firewall,
 none of this information is ever sent anywhere, once you close down PowerShell it's all cleared.
-- As long as you don't do modifications that do unexpected things you're fine!
+- If you publish your modification online (ex. to your fork) make sure your modification don't include
+any personal information such as user names, email or system info.
+- Bugs might exist which could do odd things, while I do my best according to my skills to avoid bugs
+you might want to read your rights here: [LINK](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/LICENSE)
+- In short as long as you don't do modifications that do unexpected things you're fine!
+
+## Why do I get "access denied" errors
+
+You may see this error while loading firewall rules.
+
+In almost all cases this happens when `gpedit.msc` or `secpol.msc` is opened, especially if you
+do something with them (ex. refreshing group policy, viewing or modifying settings/rules)
+
+To minimize the chance of this error from appearing close down all management consoles and all
+software that is not essential to apply rules with scripts.
+
+Simple rule of thumb for applying rules with this project is the same as when you install drivers:
+
+- reboot system
+- close down all programs
+- please try agin

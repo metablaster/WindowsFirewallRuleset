@@ -30,6 +30,8 @@ Here is a list of most important things to keep in mind.
 
 ## General guidelines
 
+It's recommended to read up to date version of this document which is located on "develop" branch [here](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/CONTRIBUTING.md)
+
 Below 2 pages explain general/starting guidelines regarding open source:\
 [How to contribute to open source](https://opensource.guide/how-to-contribute)\
 [Open Source Contribution Etiquette](https://tirania.org/blog/archive/2010/Dec-31.html)
@@ -247,7 +249,7 @@ to distinguish project modules from 3rd party code.
 [PSStaticAnalyzer](https://github.com/PowerShell/PSScriptAnalyzer)
 is used to perform basic code quality analysis.
 
-The workspace includes static analysis settings file, so all you have to do is cd into project
+VSCode workspace includes static analysis settings file, so all you have to do is cd into project
 root directory and invoke analyzer as follows:
 
 ```powershell

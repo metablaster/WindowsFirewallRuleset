@@ -1,7 +1,8 @@
 
 # Changelog
 
-Here is a list of changes for each of the releases
+Here is a list of changes for each of the releases.\
+If you would like to see fresh changes done since last release you can do so on "develop" branch [HERE](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGELOG.md)
 
 ## Table of contents
 
@@ -38,7 +39,7 @@ Here is a list of changes for each of the releases
   - Added rule for curl shipped with system
   - Updated rules for Visual Studio
   - Added initial rule for dotnet.exe
-  - Aded new rules for 20H2
+  - Aded new rules for Windows version "20H2"
   - Added rule for Microsoft account
   - Search algorithm and rule creation choice for OneDrive now include all users,
   including those not logged into machine

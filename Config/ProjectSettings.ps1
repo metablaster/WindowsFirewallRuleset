@@ -333,17 +333,17 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -Erro
 	Set-Variable -Name RequireNuGetVersion -Scope Global -Option ReadOnly -Force -Value ([version]::new(3, 0, 0))
 
 	# Administrative user account name which will perform unit testing
-	Set-Variable -Name UnitTesterAdmin -Scope Global -Option ReadOnly -Force -Value "Unknown Admin"
+	Set-Variable -Name UnitTesterAdmin -Scope Global -Option ReadOnly -Force -Value "Emerald"#"Unknown Admin"
 
 	# Standard user account name which will perform unit testing
-	Set-Variable -Name UnitTester -Scope Global -Option ReadOnly -Force -Value "Unknown User"
+	Set-Variable -Name UnitTester -Scope Global -Option ReadOnly -Force -Value "Platinum"#"Unknown User"
 
 	# User account name for which to search executables in user profile and non standard paths by default
 	# Also used for other defaults where standard user account is expected, ex. development as standard user
 	# NOTE: Set this value to username for which to create rules by default, if there are multiple
 	# users and to affect them all set this value to non existent user
 	# TODO: needs testing info messages for this value
-	Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value "Unknown User"
+	Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value "Platinum"#"Unknown User"
 
 	# Default encoding used to write and read files
 	if ($PSVersionTable.PSEdition -eq "Core")

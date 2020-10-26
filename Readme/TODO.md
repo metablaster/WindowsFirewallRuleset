@@ -51,13 +51,14 @@ todo's in this file are categorized into following sections:
         - `git prune --dry-run` `git prune`
         - `git repack -d -F`
     - ProgramInfo and AllPlatforms.IP module manifest, comment out unit test exports
-    - ProjectSettings.ps1 disable variables: Develop, ForceLoad,
+    - ProjectSettings.ps1 disable variables: Develop, ForceLoad
     - ProjectSettings.ps1 restore variables: UnitTester, UnitTesterAdmin, DefaultUser
     - ProjectSettings.ps1 verify auto updated variables: ProjectCheck, ModulesCheck, ServicesCheck
     - Increment project version in all places mentioning version
     - Run script analyzer
     - Run all tests in both release and develop mode, both Desktop and Core editions
-    - Load rules on all target OS editions
+    - Run master script on all target OS editions
+    - Update CHANGELOG.md
     - Verify links to repository are pointing to master branch except if develop branch is wanted,
     this should be done after merge to master, and links should be then tested on master branch
 
