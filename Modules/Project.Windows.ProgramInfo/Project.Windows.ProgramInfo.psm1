@@ -100,23 +100,7 @@ else
 	Set-Variable -Name InstallTable -Scope Script -Value $null
 }
 
-Write-Debug -Message "[$ThisModule] Initialize module Constant variable: BlackListEnvironment"
 # Any environment variables to user profile or multiple paths are not valid for firewall
-New-Variable -Name BlackListEnvironment -Scope Script -Option Constant -Value @(
-	"%APPDATA%"
-	"%HOME%"
-	"%HOMEPATH%"
-	"%LOCALAPPDATA%"
-	"%OneDrive%"
-	"%OneDriveConsumer%"
-	"%Path%"
-	"%PSModulePath%"
-	"%TEMP%"
-	"%TMP%"
-	"%USERNAME%"
-	"%USERPROFILE%"
-)
-
 Write-Debug -Message "[$ThisModule] Initialize module Constant variable: UserProfileEnvironment"
 New-Variable -Name UserProfileEnvironment -Scope Script -Option Constant -Value @(
 	"%APPDATA%"
@@ -130,6 +114,13 @@ New-Variable -Name UserProfileEnvironment -Scope Script -Option Constant -Value 
 	"%USERNAME%"
 	"%USERPROFILE%"
 )
+
+Write-Debug -Message "[$ThisModule] Initialize module Constant variable: BlackListEnvironment"
+# NOTE: UserProfileEnvironment is listed last because search algorithm should try new values first
+New-Variable -Name BlackListEnvironment -Scope Script -Option Constant -Value (@(
+		"%Path%"
+		"%PSModulePath%"
+	) + $UserProfileEnvironment)
 
 Write-Debug -Message "[$ThisModule] Initialize module readonly variable: SystemPrograms"
 # Programs installed for all users

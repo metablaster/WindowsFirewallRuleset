@@ -135,6 +135,14 @@ Start-Test "Test-Environment: $Result"
 $Status = Test-Environment $Result @Logs
 $Status
 
+$Result = "C:\Users\Public\Public Downloads"
+Start-Test "Test-Environment: $Result"
+Test-Environment $Result @Logs
+
+$Result = "%Path%"
+Start-Test "Test-Environment: $Result"
+Test-Environment $Result @Logs
+
 $Result = ""
 Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs

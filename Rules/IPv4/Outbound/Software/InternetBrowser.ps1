@@ -59,7 +59,6 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # TODO: update path for all users?
 # TODO: returned path will miss browser updaters
 #
-$EdgeChromiumRoot = "%ProgramFiles(x86)%\Microsoft\Edge\Application"
 $ChromeRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Google"
 $FirefoxRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Mozilla Firefox"
 $YandexRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Yandex"
@@ -68,77 +67,6 @@ $TorRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Tor Browser"
 #
 # Internet browser rules
 #
-
-#
-# Microsoft Edge-Chromium
-#
-
-# Test if installation exists on system
-if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot) @Logs) -or $ForceLoad)
-{
-	# TODO: no FTP rule
-	$EdgeChromiumApp = "$EdgeChromiumRoot\msedge.exe"
-	Test-File $EdgeChromiumApp
-
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Edge-Chromium HTTP" -Service Any -Program $EdgeChromiumApp `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "Hyper text transfer protocol." @Logs | Format-Output @Logs
-
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Edge-Chromium QUIC" -Service Any -Program $EdgeChromiumApp `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
-		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-		-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "Quick UDP Internet Connections,
-	Experimental transport layer network protocol developed by Google and implemented in 2013." @Logs | Format-Output @Logs
-
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Edge-Chromium HTTPS" -Service Any -Program $EdgeChromiumApp `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "Hyper text transfer protocol over SSL." @Logs | Format-Output @Logs
-
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Edge-Chromium speedtest" -Service Any -Program $EdgeChromiumApp `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 5060, 8080 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "Ports needed for https://speedtest.net" @Logs | Format-Output @Logs
-
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Edge-Chromium FTP" -Service Any -Program $EdgeChromiumApp `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "File transfer protocol." @Logs | Format-Output @Logs
-
-	# TODO: Figure out why edge chromium needs this rule, do additional test and update description
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Edge-Chromium SSDP" -Service Any -Program $EdgeChromiumApp `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
-		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 239.255.255.250 -LocalPort Any -RemotePort 1900 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "" @Logs | Format-Output @Logs
-
-	# TODO: we should probably have a function for this and similar cases?
-	$EdgeUpdateRoot = "$(Split-Path -Path $(Split-Path -Path $EdgeChromiumRoot -Parent) -Parent)\EdgeUpdate"
-	$EdgeChromiumUpdate = "$EdgeUpdateRoot\MicrosoftEdgeUpdate.exe"
-	Test-File $EdgeChromiumUpdate
-
-	$UpdateAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM" @Logs
-	Merge-SDDL ([ref] $UpdateAccounts) $UsersGroupSDDL @Logs
-
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Edge-Chromium Update" -Service Any -Program $EdgeChromiumUpdate `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-		-LocalUser $UpdateAccounts `
-		-Description "Update Microsoft Edge" @Logs | Format-Output @Logs
-}
 
 #
 # Google Chrome

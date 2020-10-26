@@ -48,13 +48,13 @@ Enter-Test $ThisScript
 
 # Experiment with different path values to see what the ACL objects do
 # $TestPath = "C:\Users\" # Not inherited
-$TestPath = "C:\users\Public\desktop\" # Inherited
+# TODO: Funny how "C:\Users\Public\Public Desktop\" doesn't work
+$TestPath = "C:\Users\Public\Desktop\" # Inherited
 # $TestPath = "HKCU:\" # Not Inherited
 # $TestPath = "HKCU:\Software" # Inherited
 # $TestPath = "HKLM:\" # Not Inherited
 
-Start-Test "Path:"
-$TestPath
+Start-Test "Path: $TestPath"
 
 Start-Test "ACL.AccessToString"
 $ACL = Get-Acl $TestPath

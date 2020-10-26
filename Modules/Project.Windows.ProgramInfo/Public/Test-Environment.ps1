@@ -63,10 +63,18 @@ function Test-Environment
 	}
 
 	# TODO: We need target computer system drive instead of localmachine systemdrive
-	if (($FilePath -match "^$env:SystemDrive\\+Users(\\*$|\\+(?=\w+))") -or
-		[array]::Find($UserProfileEnvironment, [System.Predicate[string]] { $FilePath -like "$($args[0])*" }))
+	# NOTE: following would be mistake to use because paths without environment variables are fine
+	# ($FilePath -match "^$env:SystemDrive\\+Users(\\*$|\\+(?=\w+))") -or
+	if ([array]::Find($UserProfileEnvironment, [System.Predicate[string]] { $FilePath -like "$($args[0])*" }))
 	{
-		Write-Warning -Message "Rules with environment variables or paths that lead to user profile are not valid"
+		Write-Warning -Message "Path to program with environment variable that leads to user profile is not valid for firewall rule"
+		Write-Information -Tags "Project" -MessageData "INFO: Bad path detected is: $FilePath"
+		return $false
+	}
+
+	if ([array]::Find($BlackListEnvironment, [System.Predicate[string]] { $FilePath -like "$($args[0])*" }))
+	{
+		Write-Warning -Message "Path to program with specified environment variable is not valid for firewall rule"
 		Write-Information -Tags "Project" -MessageData "INFO: Bad path detected is: $FilePath"
 		return $false
 	}

@@ -136,6 +136,12 @@ $Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
 
+$TestPath = "C:\Users\Public\Public Downloads"
+Start-Test $TestPath
+$Result = Format-Path $TestPath @Logs
+$Result
+Test-Environment $Result @Logs
+
 $TestPath = ""
 Start-Test $TestPath
 $Result = Format-Path $TestPath @Logs

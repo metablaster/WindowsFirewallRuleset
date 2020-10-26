@@ -70,6 +70,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $ServicesGroup -Directio
 # 7. All of this applies only to "Any" and "*" packages, for specific package only -Owner must be
 #    specified and -LocalUser is not valid for specific packages
 # TODO: Prompt or refuse running this script on server platforms (platforms with no apps)
+# TODO: Rule display names don't have all consistent casing (ex. microsoft vs Microsoft)
 #
 
 #

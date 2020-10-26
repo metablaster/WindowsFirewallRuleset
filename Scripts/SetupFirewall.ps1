@@ -317,6 +317,7 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny @
 	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
 	{
 		# rules for Microsoft programs
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\EdgeChromium.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\MicrosoftOffice.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\OneDrive.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\SysInternals.ps1"

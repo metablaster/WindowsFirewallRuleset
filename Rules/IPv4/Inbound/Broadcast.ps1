@@ -40,13 +40,15 @@ Import-Module -Name Project.Windows.UserInfo
 # Setup local variables
 $FirewallProfile = "Private, Domain"
 $Group = "Broadcast"
-$BroadcastAddress = Get-Broadcast
 $Accept = "Inbound broadcast rules will be loaded, recommended for proper local network functioning"
 $Deny = "Skip operation, inbound broadcast rules will not be loaded into firewall"
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+
+# NOTE: Don't run if execute not approved
+$BroadcastAddress = Get-Broadcast
 
 # First remove all existing rules matching grou-Group $Group p
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs

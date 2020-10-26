@@ -264,7 +264,8 @@ downloaded from internet:
 10. Rules for programs such as internet browser, Visual Studio etc. depend on installation variables.\
 Most paths are auto-searched and variables are updated, otherwise you get warning and description
 on how to fix the problem,
-If needed, you can find these installation variables in individual scripts inside `Rules` folder.
+If needed, you can find these installation variables in individual scripts inside `Rules` folder.\
+It is recommended to close down all other programs before running master script in the next step
 
 11. Back to PowerShell console and type into console:
 
