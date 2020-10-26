@@ -28,7 +28,9 @@ SOFTWARE.
 
 #
 # Unit test for Confirm-FileEncoding
+# NOTE: As Administrator because of firewall logs in repository
 #
+#Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )
@@ -47,7 +49,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 Enter-Test $ThisScript
 
 Start-Test "Initialize ProjectFiles variable"
-$ProjectFiles = Get-ChildItem -Path $ProjectRoot -Recurse |
+$ProjectFiles = Get-ChildItem -Path $ProjectRoot -Recurse -Exclude *.cab, *.zip, *.png, *.wav, *.dll, *_HelpInfo.xml, *.pmc |
 Where-Object { $_.Mode -notlike "*d*" } | Select-Object -ExpandProperty FullName
 
 Start-Test "Confirm-FileEncoding"
