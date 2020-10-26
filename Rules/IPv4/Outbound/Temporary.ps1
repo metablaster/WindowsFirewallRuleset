@@ -213,7 +213,7 @@ if ($Develop)
 
 	# HACK: Temporary using network service account
 	# All troubleshooting rules except this one were set to "Enabled",
-	# they are now disabled because not not needed for everyday life
+	# they are now disabled because not needed for everyday life
 	New-NetFirewallRule -DisplayName "Troubleshoot BITS" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service Any -Program $ServiceHost -Group $Group `

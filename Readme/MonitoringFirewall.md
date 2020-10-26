@@ -91,10 +91,10 @@ here is how it feels in VSCode.
 - Accept and install recommended workspace extentions for VSCode
 - Modify variable `FirewallLogsFolder` in `Config\ProjectSettings.ps1` to value `$LogsFolder\Firewall`
 - Modify variable `DefaultUser` to your account username in `Config\ProjectSettings.ps1`
-- To apply this setting restart PowerShell and run `Scripts\SetupProfile` and reboot system
+- To apply this setting restart PowerShell then run `Scripts\SetupProfile` and reboot system
 - Next step is to grant appropriate file system permissions to firewall logs which are now written
 to "Logs\Firewall" directory inside repository.
-- To grant permissions for your account and firewall service run `Scripts\GrantLogs.ps1 YOUR_USERNAME`
+- To grant permissions for your account and firewall service run `Scripts\GrantLogs.ps1 YOUR_USERNAME`\
 Permission is valid until system reboot or until manual permission removal.
 - Inside VSCode open individual firewall log file under `Logs\Firewall` node
 - To filter log contents open command palette (CTRL + SHIT + P) and type "Filter line by Config File"

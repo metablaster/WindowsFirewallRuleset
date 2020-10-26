@@ -70,7 +70,7 @@ if ($Develop)
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP ports" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service Any -Program Any -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort 1900, 3702 -RemotePort Any `
 		-LocalUser $NT_AUTHORITY_LocalService -EdgeTraversalPolicy Block `
@@ -100,7 +100,7 @@ if ($Develop)
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP - mDNS" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service Any -Program Any -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress $ClassB, $ClassC -RemoteAddress Any `
 		-LocalPort 5353 -RemotePort 5353 `
 		-LocalUser $mDnsUsers -EdgeTraversalPolicy Block `

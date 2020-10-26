@@ -97,8 +97,8 @@ This project **"Windows Firewall Ruleset"** is licensed under **MIT** license.
 
 The project maintains **"per file"** license and Copyright notices.
 
-3rd party and sublicensed code is located either inside their own folders or inside folders called
-"External" for organizational purposes, each of these folders contains individual licenses.
+3rd party and sublicensed code is located either inside their own folders (with individual license file)
+or inside folders called "External" for organizational purposes.
 
 ## Requirements
 
@@ -174,7 +174,7 @@ such as `stateful ftp` and `pptp` or global `IPSec` settings, if you need specif
 `Scripts\SetupProfile.ps1` and take a look at `Set-NetFirewallSetting`.\
 Note that `Scripts\SetupProfile.ps1` is automatically called by `Scripts\SetupFirewall.ps1` script
 - Some scripts require network adapter to be connected to internet, for example to determine
-IPv4 broadcast address. (In these cases errors may be generated without completing the task)
+IPv4 broadcast address. (Otherwise errors may be generated without completing the task)
 
 ### Note
 
@@ -236,6 +236,9 @@ PowerShell Core as Administrator
     Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
     ```
 
+    You will be prompted to accept execution policy change, type `Y` and press enter to accept.\
+    For more information visit link given in the console description.
+
 7. Now if you don't have PowerShell context menu then move to C root drive by executing following 2
 lines, this is where you extracted your downloaded zip file:
 
@@ -259,11 +262,11 @@ downloaded from internet:
     .\Scripts\UnblockProject.ps1
     ```
 
-    Make sure your answer is `R` that is `[R] Run once` as many times as needed to run the script
+    Make sure your answer is `R` that is `[R] Run once` as many times as needed to unblock project.
 
 10. Rules for programs such as internet browser, Visual Studio etc. depend on installation variables.\
 Most paths are auto-searched and variables are updated, otherwise you get warning and description
-on how to fix the problem,
+on how to fix the problem.\
 If needed, you can find these installation variables in individual scripts inside `Rules` folder.\
 It is recommended to close down all other programs before running master script in the next step
 
@@ -273,7 +276,8 @@ It is recommended to close down all other programs before running master script 
     .\Scripts\SetupFirewall.ps1
     ```
 
-    hit enter and you will be prompted what kind of rulesets you want.
+    Hit enter and you will be prompted questions such as what kind of rulesets you want.\
+    If you need help to decide whether to run some rules or not, type `?` and press enter.
 
 12. Follow prompt output, (ex. hit enter to accept default action),
 it will take at least 10 minutes of your attention.
@@ -295,7 +299,6 @@ some rules, rules for programs which don't exist need to be made additionally.
 16. Now go ahead and test your internet connection (ex. with browser or some other program),
 If you're unable to connect to internet after applying these rules you have several options:
 
-- It is recommended that you reboot system first because some rules might not be active yet
 - you can temporarily open outbound firewall in GPO or [Disable firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/DisableFirewall.md)
 - you can troubleshoot problems: [Network troubleshooting detailed guide](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/NetworkTroubleshooting.md)
 - you can [Reset Firewall to previous state](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/ResetFirewall.md)
@@ -307,9 +310,11 @@ Rules are loaded into local group policy, follow below steps to open local group
 
 1. Press Windows key and type: `secpol.msc`
 2. Right click on `secpol.msc` and click `Run as administrator`
-3. Expand node: `Windows Defender Firewall with Advanced Security`
-4. Expand node: `Windows Defender Firewall with Advanced Security - Local Group Policy Object`
-5. Click on either `Inbound` or `Outbound` node to view and manage rules you applied with PowerShell.
+3. If prompted for password, enter administrator password and click "Yes" to continue
+4. Expand node: `Windows Defender Firewall with Advanced Security`
+5. Expand node: `Windows Defender Firewall with Advanced Security - Local Group Policy Object`
+6. Click on either `Inbound`, `Outbound` or `Windows Defender Firewall...` node to view and manage
+rules and settings applied with PowerShell.
 
 For more information about GPO see: [Configure security policy settings](https://docs.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/how-to-configure-security-policy-settings)
 
