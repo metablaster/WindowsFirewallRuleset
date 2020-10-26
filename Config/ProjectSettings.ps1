@@ -304,8 +304,8 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 
 	# Firewall logs folder
 	# NOTE: Set this value to $LogsFolder\Firewall to enable reading logs in VSCode with syntax highlighting
-	# In that case for changes to take effect run Scripts\SetupProfile.ps1, clear folder and reboot system
-	# NOTE: The default is %SystemRoot%\System32\LogFiles\Firewall
+	# In that case for changes to take effect run Scripts\SetupProfile.ps1 and reboot system
+	# NOTE: The system default is %SystemRoot%\System32\LogFiles\Firewall
 	New-Variable -Name FirewallLogsFolder -Scope Global -Option Constant -Value $LogsFolder\Firewall
 }
 
@@ -343,7 +343,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -Erro
 	# NOTE: Set this value to username for which to create rules by default, if there are multiple
 	# users and to affect them all set this value to non existent user
 	# TODO: needs testing info messages for this value
-	Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value "Default User"
+	Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value "Unknown User"
 
 	# Default encoding used to write and read files
 	if ($PSVersionTable.PSEdition -eq "Core")

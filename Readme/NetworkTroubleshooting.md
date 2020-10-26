@@ -42,6 +42,7 @@ This are the most basic troubleshooting procedures one should always perform whe
   - [Look at your hosts file](#look-at-your-hosts-file)
   - [Firewall issue](#firewall-issue)
   - [Check for Windows Auto-Tuning](#check-for-windows-auto-tuning)
+  - [Specific problems](#specific-problems)
   - [Troubleshoot or reinstall Windows](#troubleshoot-or-reinstall-windows)
   - [If nothing works](#if-nothing-works)
 
@@ -389,6 +390,12 @@ To enable setting run:
 ```powershell
 netsh int tcp set global autotuninglevel=normal
 ```
+
+## Specific problems
+
+Few external references for specific issues:
+
+- [Computer Name Won't Resolve on Network](https://www.infopackets.com/news/10369/how-fix-computer-name-wont-resolve-network-april-update)
 
 ## Troubleshoot or reinstall Windows
 

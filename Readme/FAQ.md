@@ -9,8 +9,10 @@ Also general questions and answers regarding firewall.
 - [Frequently Asked Questions](#frequently-asked-questions)
   - [Table of contents](#table-of-contents)
   - [I applied the rule(s) but it doesn't work, program "foobar.exe" doesn't connect to internet](#i-applied-the-rules-but-it-doesnt-work-program-foobarexe-doesnt-connect-to-internet)
-  - [I got an error "Network path not found"](#i-got-an-error-network-path-not-found)
-  - [Does this firewall give me the right protection](#does-this-firewall-give-me-the-right-protection)
+  - [I got an error "Network path not found" or "unable to contact computer"](#i-got-an-error-network-path-not-found-or-unable-to-contact-computer)
+  - [Does this firewall project give me the right protection](#does-this-firewall-project-give-me-the-right-protection)
+  - [Windows Firewall does not write logs](#windows-firewall-does-not-write-logs)
+  - [What system and environment modifications are done by this project](#what-system-and-environment-modifications-are-done-by-this-project)
 
 ## I applied the rule(s) but it doesn't work, program "foobar.exe" doesn't connect to internet
 
@@ -28,7 +30,7 @@ INFO: In addition to interfaces shown in GPO there are some hidden network inter
 until I figure out how to make rules based on those allow them all if this resolves the problem.\
 To troubleshoot hidden adapters see [ProblematicTraffic.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/ProblematicTraffic.md)
 
-## I got an error "Network path not found"
+## I got an error "Network path not found" or "unable to contact computer"
 
 Please make sure you have at a minimum following network services set to automatic and
 make sure they are running:
@@ -55,7 +57,11 @@ Otherwise if you're trying to administer firewall on remote machines, make sure 
 1. "Windows Remote Administration" service is running.
 2. "PowerShell remoting" is configured and enabled on remote machine
 
-## Does this firewall give me the right protection
+If this doesn't work take a look here:
+
+- [Computer Name Won't Resolve on Network](https://www.infopackets.com/news/10369/how-fix-computer-name-wont-resolve-network-april-update)
+
+## Does this firewall project give me the right protection
 
 Good firewall setup is essential for computer security, and, if not misused then the answer is yes
 but only for the firewall (network) part of protection.
@@ -100,3 +106,77 @@ By "not trusted" I mean, not trusted for:
 3. your anonymity and protection from identity theft.
 
 4. safety of your online accounts and passwords
+
+## Windows Firewall does not write logs
+
+This could happen if you change default log file location in Windows Firewall settings
+
+To resolve the issue ensure following:
+
+1. Verify current logging setting is enabled and is pointing to expected log file location.
+
+    To verify this open firewall properties in GPO and select current network profile tab,
+    - Under logging section click on "Customize" button
+    - Under "Name" verify location to log file is correct
+    - Under "Log dropped packet" make sure it's set to "Yes"
+
+2. Verify that both the target folder and all the logs inside that folder have write permission\
+for Windows Firewall service which is `"NT SERVICE\mpssvc"`
+
+3. For changes to take effect save your modifications and reboot system
+
+Keep in mind that setting additional permissions afterwards will be reset by Windows Firewall service
+on every system boot for security reasons.\
+If this doesn't resolve the problem remove all log files inside target directory, just make sure the
+firewall service has write permissions for target directory and reboot system.
+
+## What system and environment modifications are done by this project
+
+- You might be wondering what happens to my system if I run scripts from this project?
+- Can these scripts do any kind of harm to system or my privacy?
+- Sure, there is a lot of scripts and code and you might not have the time to investigate them all.
+
+So here is an overview to help you see what happens and whether using this project is acceptable for you:
+
+1. Group policy firewall and most of it's settings are modifed and/or overridden completely.
+
+    - If you have existing rules or settings in GPO please export them first or note down.
+    - If you make modifications after running these scripts, re-running again may override your modifications.
+
+2. Global firewall settings are modified as follows
+
+    See [Set-NetFirewallSetting](https://docs.microsoft.com/en-us/powershell/module/netsecurity/set-netfirewallsetting?view=win10-ps)
+
+3. PowerShell module path is updated for current session only
+
+    Running any script will add modules from this repository to module path for current PS session only
+
+4. All other system settings are left alone **by default** unless you demand or accept them as follows:
+
+    - Adjust console buffer size (valid until you close down PowerShell)
+    - Modify network profile for currently connected network adapter (ex. public or private)
+    - Update PowerShell module help files (only if you enable development mode)
+    - Install recommended or required PowerShell modules (only if you enable development mode)
+    - Install recommended VSCode extensions (if you accpet VSCode recommendation)
+    - Modify file system permissions (firewall logs inside this repository only by default)
+    - Modify settings for specific software (Process monitor and mTail only)
+
+    All of these modifications in point 4 are done in following situations:
+
+    - VScode might ask you to install recommended extensions
+    - The script might ask you to confirm whether you want this or that, and you're free to deny.
+    - You have enabled "development mode" project setting
+    - You run some script on demand that is not run by default (ex. `Scripts\GrantLogs`)
+    - You manually load software configuration from `Config` folder
+
+    Please keep in mind that all of this applies only to default project configuration,
+    for any modifications you do on your own you should of course understand what it does.
+
+5. There is nothing harmful here
+
+- Some scripts or code such as `initialize-module.ps1` might attempt to contact online PowerShell repository
+before downloading modules, however this happens only if you enable "development mode"
+- "development mode" may be enabled by default on "develop" branch but never on "master" branch
+- The scripts will gather all sorts of system information but only as needed to configure firewall,
+none of this information is ever sent anywhere, once you close down PowerShell it's all cleared.
+- As long as you don't do modifications that do unexpected things you're fine!
