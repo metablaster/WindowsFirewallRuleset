@@ -135,6 +135,7 @@ firewall service has write permissions for target directory and reboot system.
 
 - You might be wondering what happens to my system if I run scripts from this project?
 - Can these scripts do any kind of harm to system or my privacy?
+- Can I trust these scripts don't do anything bad?
 - Sure, there is a lot of scripts and code and you might not have the time to investigate them all.
 
 So here is an overview to help you see what happens and whether using this project is acceptable
@@ -152,7 +153,9 @@ for you:
 
 3. PowerShell module path is updated for current session only
 
-    Running any script will add modules from this repository to module path for current PS session only
+    - Running any script will add modules from this repository to module path for current PS session
+    only.
+    - Once you close down (or open new) PowerShell, module path modifications are lost.
 
 4. All other system settings are left alone **by default** unless you demand or accept them as follows:
 
@@ -175,7 +178,21 @@ for you:
     Please keep in mind that all of this applies only to default project configuration,
     for any modifications you do on your own you should of course understand what it does.
 
-5. There is nothing harmful here
+5. Here is a list of scripts from this project that you can consider "dangerous"
+
+    - Scripts\GrantLogs.ps1
+    - Scripts\ResetFirewall.ps1
+    - Initialize-Module.ps1
+    - Initialize-Provider.ps1
+    - Uninstall-DuplicateModule.ps1
+    - Find-UpdatableModule.ps1
+
+    - In fact these are not really dangerous but it's recommended that user reads script comments
+    and understand what they do before using or modifying them.\
+    - Note that last 4 script names listed above exist in multiple locations, but are not the same!
+    - By default none of these scripts run on its own, except as explained in point 4.
+
+6. There is nothing harmful here
 
 - Some scripts or code such as `initialize-module.ps1` might attempt to contact online PowerShell repository
 before downloading modules, however this happens only if you enable "development mode"
@@ -184,9 +201,9 @@ before downloading modules, however this happens only if you enable "development
 none of this information is ever sent anywhere, once you close down PowerShell it's all cleared.
 - If you publish your modification online (ex. to your fork) make sure your modification don't include
 any personal information such as user names, email or system info.
-- Bugs might exist which could do odd things, while I do my best according to my skills to avoid bugs
-you might want to read your rights here: [LINK](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/LICENSE)
-- In short as long as you don't do modifications that do unexpected things you're fine!
+- Bugs might exist which could break things, while I do my best to avoid bugs you might want to remind
+yourself that this is "free software": [LINK](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/LICENSE)
+- In short as long as you don't do modifications that do unexpected things you'll be just fine!
 
 ## Why do I get "access denied" errors
 

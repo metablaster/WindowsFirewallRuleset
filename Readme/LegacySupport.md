@@ -6,8 +6,14 @@ therefore not supported by this project.**
 
 There are workarounds for home editions however, but no help is provided here
 
-To be able to apply rules to older systems such as Windows 7 or Windows server 2008,
-you'll need to modify code.\
+These notices here are valid for the following Windows versions:
+
+1. Windows vista up to Windows 8.1
+2. Windows server 2008 up to Windows server 2016
+
+There is no help here for systems older than that, in which case good luck!
+
+To be able to apply rules to these systems you'll need to modify code.\
 At a bare minimum you should do the modifications described here
 
 ## Table of contents
