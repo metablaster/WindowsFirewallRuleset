@@ -52,11 +52,11 @@
 - In addition to firewall rules you will find a number of PowerShell modules,
 scripts and functions used to gather info relevant to build the firewall such as:
 
-1. computers on network
-2. installed programs
-3. users on system
-4. network configuration
-5. managing firewall etc.
+1. Computers on network
+2. Installed programs
+3. Users on system or network
+4. Network configuration
+5. Managing firewall etc.
 
 - Meaning this project is a good base to easily extend your firewall and include more rules and
 functionalities.
@@ -102,13 +102,14 @@ or inside folders called "External" for organizational purposes.
 
 ## Requirements
 
-1. Following x64 operating systems are currently actively tested:
+1. Following x64 operating systems are currently tested:
    - Windows 10 Professional
    - Windows 10 Enterprise
    - Windows 10 Education
    - Windows Server 2019 Standard
+   - Windows Server 2019 Datacenter
 2. PowerShell Core 7.0 or Windows PowerShell 5.1
-[Download PowerShell](https://github.com/PowerShell/PowerShell)
+[Download PowerShell Core](https://github.com/PowerShell/PowerShell)
 3. .NET Framework 4.8 (Windows PowerShell only) [Download Net Framework](https://dotnet.microsoft.com/download/dotnet-framework)
 4. Git (Optional) [Download Git](https://git-scm.com/downloads)
 5. Visual Studio Code (Recommended) [Download VSCode](https://code.visualstudio.com)
@@ -120,12 +121,13 @@ Requirements details:
 
 - All operating systems 10.0 (Major 10, Minor 0) and up are supported,
 but only those editions listed in point 1 are actively tested.\
-The list of other untested but supported systems is in [The future](#the-future)
-- PowerShell "Core" is not built into Windows, you will need to install it separately (recommended)
+The list of other untested but supported systems and features is in [The future](#the-future)
+- PowerShell "Core" is not built into Windows, you will need to install it separately (recommended)\
 or use [Windows PowerShell](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/WindowsPowerShell.md)
 which is already installed.
 - .NET Framework version 4.8 is required if using Windows PowerShell (Desktop edition)
-instead of PowerShell Core (Windows 10 v1903 and up already includes .NET 4.8)
+instead of PowerShell Core.\
+Windows 10 v1903 and up already includes .NET 4.8
 - You might want to have git to check out for updates,
 to easily switch between branches or to contribute code.
 - VS Code is preferred and recommended editor to navigate project and edit scripts for your
@@ -310,7 +312,7 @@ If you're unable to connect to internet after applying these rules you have seve
 
 ## Where are my rules
 
-Rules are loaded into local group policy, follow below steps to open local group policy.
+Rules are loaded into local group policy, follow steps below to open local group policy.
 
 1. Press Windows key and type: `secpol.msc`
 2. Right click on `secpol.msc` and click `Run as administrator`
@@ -413,7 +415,7 @@ you will need [git](https://git-scm.com/downloads), [github account](https://git
 a [fork](https://guides.github.com/activities/forking) of this repository in your github account and
 [SSH key](https://help.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account)
 to check for new updates on daily, weekly or what ever other basis you want,
-follow below steps to check for updates once you installed git and cloned your own fork:
+follow steps below to check for updates once you installed git and cloned your own fork:
 
 - Right click on Start button in Windows
 - Click `Windows PowerShell` to open PowerShell
@@ -504,7 +506,7 @@ Following features are desired and might be available at some point in the futur
 
    - Applying firewall configuration to remote computers on domain or home networks
 
-2. Comprehensive firewall rulesets for server platforms
+2. Comprehensive firewall rulesets for Windows Server editions
 
 3. On demand or scheduled registry scan to validate integrity of active firewall filtering policy
 
@@ -518,4 +520,3 @@ Following features are desired and might be available at some point in the futur
    - Windows 10 IoT Enterprise
    - Windows 10 S
    - Windows Server 2019 Essentials
-   - Windows Server 2019 Datacenter

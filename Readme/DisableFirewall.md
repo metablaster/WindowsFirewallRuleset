@@ -18,7 +18,7 @@ same steps.
 To disable GPO firewall all you have to do is to set it to "Not Configured", which means only firewall
 in control panel will be active, and GPO firewall will have no effect.
 
-To do this follow below steps:
+To do this follow steps below:
 
 1. Press start button
 2. type: secpol.msc
@@ -37,7 +37,7 @@ Disabling control panel firewall can be done in 2 ways with different results:
 - Making it not active by configuring GPO firewall.
 Which means GPO firewall will be active while control panel firewall will have no effect.
 
-To disable control panel firewall so that only GPO firewall works follow below steps:
+To disable control panel firewall so that only GPO firewall works follow steps below:
 
 1. Press start button
 2. type: secpol.msc

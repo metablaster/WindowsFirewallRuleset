@@ -151,7 +151,7 @@ function Export-FirewallRules
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting up variables"
 
 	# Filter rules?
-	# NOTE: because there are 3 possibilities for each of below switches we use -like operator
+	# NOTE: because there are 3 possibilities for each of the below switches we use -like operator
 	# Filter by direction
 	$Direction = "*"
 	if ($Inbound -and !$Outbound) { $Direction = "Inbound" }

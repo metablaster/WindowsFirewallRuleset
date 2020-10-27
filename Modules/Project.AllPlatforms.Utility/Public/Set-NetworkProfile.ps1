@@ -70,8 +70,21 @@ function Set-NetworkProfile
 		{
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing $Interface"
 
-			$Choices = "&Public", "P&rivate", "&Abort"
-			$Default = 0
+			# User prompt default values
+			[int32] $Default = 0
+			[System.Management.Automation.Host.ChoiceDescription[]] $Choices = @()
+			$Public = [System.Management.Automation.Host.ChoiceDescription]::new("&Public")
+			$Private = [System.Management.Automation.Host.ChoiceDescription]::new("P&rivate")
+			$Abort = [System.Management.Automation.Host.ChoiceDescription]::new("&Abort")
+
+			$Public.HelpMessage = "Your PC is hidden from other devices on the network"
+			$Private.HelpMessage = "Your PC is discoverable and can be used for file and printer sharing"
+			$Abort.HelpMessage = "Abort operation"
+
+			$Choices += $Public
+			$Choices += $Private
+			$Choices += $Abort
+
 			$Title = "Choose network profile"
 			$Question = "Which network profile to set for '$Interface' interface?"
 			$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
@@ -86,10 +99,11 @@ function Set-NetworkProfile
 			}
 			else
 			{
+				Write-Warning -Message "The operation has been canceled by the user"
 				return
 			}
 
-			Set-NetConnectionProfile -InterfaceAlias $HardwareInterfaces -NetworkCategory $NetworkCategory
+			Set-NetConnectionProfile -InterfaceAlias $Interface -NetworkCategory $NetworkCategory
 			Write-Information -Tags "User" -MessageData "INFO: Network profile set to '$NetworkCategory' for '$Interface' interface"
 		}
 	}

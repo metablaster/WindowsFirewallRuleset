@@ -131,7 +131,7 @@ Alternative way to reset network is by using "Settings" app in Windows 10 as fol
 
 Make sure your system and drivers are fully up to date:
 
-- See below link on how to update system:
+- See link below on how to update system:
 [Update Windows 10](https://support.microsoft.com/en-us/help/4027667/windows-10-update)
 
 It's good to continue checking for updates after they are installed, until there is no new updates,
@@ -153,7 +153,7 @@ Do it manually in this order:
 
 ## Troubleshoot WI-FI
 
-Below link explains how to troubleshoot WI-FI problems, some of the steps are already covered here:
+Link below explains how to troubleshoot WI-FI problems, some of the steps are already covered here:
 
 [Fix WI-FI issues](https://support.microsoft.com/en-us/help/10741/windows-fix-network-connection-issues)
 
@@ -183,7 +183,7 @@ tracert microsoft.com
 If nothing so far worked disable firewall and try all over again.\
 If things start to work it's likely misconfigured firewall.
 
-See below link on how to disable both GPO and Control Panel firewall:\
+See link below on how to disable both GPO and Control Panel firewall:\
 [Disable Firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/DisableFirewall.md)
 
 **NOTE:** If you experience this problem only while having firewall enabled from this project,
@@ -213,7 +213,7 @@ then disable and enable back.
 
 ## Change DNS server
 
-google DNS servers are fast and reliable, see below link to change your DNS settings to use
+google DNS servers are fast and reliable, see link below to change your DNS settings to use
 google DNS:
 
 [google DNS servers](https://developers.google.com/speed/public-dns/docs/using)
@@ -241,7 +241,7 @@ call your ISP and ask them what's the problem.
 
 ## Perform internet speed test
 
-If you're having problem with slow connection, visit below link to perform network speed test:
+If you're having problem with slow connection, visit link below to perform network speed test:
 
 [Internet speed test](https://www.speedtest.net)
 
@@ -309,13 +309,13 @@ remember, "Symmetric NAT (Dynamic NAT)" will cause you a lot of multiplayer trou
 
 ## Issues with LAN, Workgroup, Home group, Remote desktop or sharing
 
-Below link contains detailed guidelines:
+Link below contains detailed guidelines:
 
 [LAN Setup](https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Readme/LAN%20Setup)
 
 ## Reset firewall
 
-Below link explains how to reset both GPO firewall and firewall in control panel:
+Link Below explains how to reset both GPO firewall and firewall in control panel:
 
 [Reset Firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/ResetFirewall.md)
 

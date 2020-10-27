@@ -314,7 +314,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 # Read only variables, meaning these can be modified by code at any time,
 # and, only once per session by users.
 # Changing these requires powershell restart, except if Develop = $true
-# TODO: In Develop mode, this run will reset changes made by other scripts.
+# TODO: In Develop mode, this run will override changes made by other scripts.
 if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignore))
 {
 	Write-Debug -Message "[$SettingsScript] Setup read only variables"

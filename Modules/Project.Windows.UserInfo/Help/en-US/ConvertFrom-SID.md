@@ -93,7 +93,7 @@ https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/81d92bba-d2
 3.
 https://docs.microsoft.com/en-us/windows/security/identity-protection/access-control/security-identifiers
 
-To avoid confusion pseudo accounts ("Local Service" in below example) can be represented as:
+To avoid confusion pseudo accounts ("Local Service" in the example below) can be represented as:
 1.
 SID (S-1-5-19)
 2.
@@ -103,7 +103,7 @@ Reference Name (NT AUTHORITY\Local Service)
 4.
 Display Name (Local Service)
 
-On the other side built in accounts ("Administrator" in below example) can be represented as:
+On the other side built in accounts ("Administrator" in the example below) can be represented as:
 1.
 SID (S-1-5-21-500)
 2.

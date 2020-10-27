@@ -15,7 +15,8 @@ Each directory also contains a `README.md` with additional information
   - [Logs](#logs)
   - [Modules](#modules)
   - [Readme](#readme)
-    - [LAN](#lan)
+    - [LAN Setup](#lan-setup)
+    - [Screenshots](#screenshots)
   - [Rules](#rules)
     - [IPv4](#ipv4)
     - [IPv6](#ipv6)
@@ -26,6 +27,7 @@ Each directory also contains a `README.md` with additional information
       - [Software](#software)
         - [Microsoft](#microsoft)
     - [Inbound rules](#inbound-rules)
+  - [Scripts](#scripts)
   - [Templates](#templates)
   - [Test](#test)
 
@@ -57,9 +59,13 @@ Contains PowerShell modules
 
 Contains detailed project documentation
 
-### LAN
+### LAN Setup
 
 Contains notices for home network setup
+
+### Screenshots
+
+Screenshots for markdown documentation
 
 ## Rules
 
@@ -100,6 +106,10 @@ Rules which apply Microsoft programs
 ### Inbound rules
 
 Rules which apply to inbound traffic
+
+## Scripts
+
+Scripts which are not part of modules
 
 ## Templates
 

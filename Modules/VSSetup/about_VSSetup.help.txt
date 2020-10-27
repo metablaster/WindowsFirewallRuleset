@@ -11,7 +11,7 @@ LONG DESCRIPTION
     select instances that meet your criteria. For example, in a development
     environment you might have a script that finds an instance of Visual Studio
     with the the Managed Desktop workload for writing projects targeting the
-    .NET Framework. See below for more examples.
+    .NET Framework. See examples below for more information.
 
 VARIABLES
     You can get the version of this module or of the query API the module uses

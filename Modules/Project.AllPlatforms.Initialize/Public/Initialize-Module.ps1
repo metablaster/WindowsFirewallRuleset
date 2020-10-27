@@ -172,11 +172,11 @@ function Initialize-Module
 		{
 			if ($TargetVersion)
 			{
-				Write-Warning -Message "$ModuleName requires git in PATH but git.exe not present, aborting installation..."
+				Write-Warning -Message "$ModuleName requires git in PATH but git.exe not present, aborting update..."
 			}
 			else
 			{
-				$Message = "$ModuleName requires git.exe in PATH"
+				$Message = "$ModuleName requires git in PATH but git.exe not present, aborting installation..."
 				if ($Required)
 				{
 					Write-Error -Category NotInstalled -TargetObject $script:GitInstance -Message $Message

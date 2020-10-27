@@ -12,7 +12,7 @@ Note that Windows PowerShell is not the same thing as PowerShell Core, for more 
 `Replace Command Prompt with Windows Powershell in the menu when I right click the start button`
 3. Right click on start button in Windows
 4. Click `Windows Powershell (Admin)` to open Powershell as Administrator
-(Enter Admin password if asked)
+5. If prompted for password, enter administrator password and click "Yes" to continue
 
 ## Right click "Open Windows PowerShell here" context menu
 

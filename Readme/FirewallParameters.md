@@ -139,7 +139,8 @@ so irrelevant for home users.
 The meaning of this parameter value depends on which parameter it is used:
 
 1. `"*"` Applies to services only / Apply to application packages only
-2. `Any` Applies to all programs + and services / and application packages / that meet the specified condition
+2. `Any` Applies to all programs + and services / and application packages / that meet the specified
+condition
 
 ## Parameter value example
 

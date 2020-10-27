@@ -51,13 +51,13 @@ SID conversion for well known SIDs and display names from following links:
 2. https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/81d92bba-d22b-4a8c-908a-554ab29148ab
 3. https://docs.microsoft.com/en-us/windows/security/identity-protection/access-control/security-identifiers
 
-To avoid confusion pseudo accounts ("Local Service" in below example) can be represented as:
+To avoid confusion pseudo accounts ("Local Service" in the example below) can be represented as:
 1. SID (S-1-5-19)
 2. Name (NT AUTHORITY)
 3. Reference Name (NT AUTHORITY\Local Service)
 4. Display Name (Local Service)
 
-On the other side built in accounts ("Administrator" in below example) can be represented as:
+On the other side built in accounts ("Administrator" in the example below) can be represented as:
 1. SID (S-1-5-21-500)
 2. Name (Administrator)
 3. Reference Name (BUILTIN\Administrator)
@@ -72,7 +72,7 @@ not valid for multiple reasons such as:
 See also: https://docs.microsoft.com/en-us/windows/security/identity-protection/access-control/security-identifiers
 
 To solve the problem "Name" must be replaced with "Display Name", most "Name" values are OK,
-but those which are not are replaced with "Display Name" in below 'WellKnownSIDs' variable.
+but those which are not are replaced with "Display Name" in the 'WellKnownSIDs' variable below.
 
 TODO: Need to implement switch parameters for UPN and NETBIOS name format in addition to display name, see:
 https://docs.microsoft.com/en-us/windows/win32/secauthn/user-name-formats

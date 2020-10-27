@@ -32,7 +32,7 @@ Edit the module named `Project.AllPlatforms.Initialize` to allow execution for o
 
 ## Project settings
 
-edit script `Config\ProjectSettings.ps1` and define new variable that defines your system version,\
+Edit script `Config\ProjectSettings.ps1` and define new variable that defines your system version,\
 following variable is defined to target Windows 10.0 versions and above by default for all rules.\
 ```New-Variable -Name Platform -Option Constant -Scope Global -Value "10.0+""```
 
@@ -40,10 +40,14 @@ For example for Windows 7, define a new variable that looks like this:\
 ```New-Variable -Name PlatformWin7 -Option Constant -Scope Global -Value "6.1"```
 
 `Platform` variable specifies which version of Windows the associated rule applies.\
-The acceptable format for this parameter is a number in the Major.Minor format.
+The acceptable format for this parameter is a number in the `Major.Minor` format.
 
-For more information about other Windows systems and their version numbers see below link:\
+For more information about other Windows systems and their version numbers see link below:\
 [Operating System Version](https://docs.microsoft.com/en-us/windows/win32/sysinfo/operating-system-version)
+
+There are other variables inside `Config\ProjectSettings.ps1` that are worth changing, at a minimum
+set `Develop` to `$true` and restart PowerShell to enable debugging features and
+additional requirement checks.
 
 ## Target platform variable
 
@@ -71,12 +75,12 @@ It's hard to tell what software or module dependencies might be required for you
 and once you learn that you should modify version requirements in `Config\ProjectSettings.ps1`
 
 For example .NET framework version 4.5 for Windows PowerShell may be absolute minimum to be able to
-use commandlets from modules provided by Microsoft.
+use some commandlets from modules provided by Microsoft.
 
 ## Testing
 
 To save you some time debugging you should also run code analysis with [PSScriptAnalyzer](https://github.com/PowerShell/PSScriptAnalyzer)
-with following rules enabled:
+with the following rules enabled:
 
 1. PSUseCompatibleCmdlets
 2. PSUseCompatibleSyntax

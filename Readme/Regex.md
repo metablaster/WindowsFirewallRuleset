@@ -33,7 +33,7 @@ Note:
 
 ## Get -DisplayName parameter and it's value
 
-In below example multi cursor-ing all the matches in a script would allow to cut and paste all
+In the example below multi cursor-ing all the matches in a script would allow to cut and paste all
 regex matches onto a second line by using CTRL + X, Down Arrow to move and CTRL + V.
 
 ```powershell

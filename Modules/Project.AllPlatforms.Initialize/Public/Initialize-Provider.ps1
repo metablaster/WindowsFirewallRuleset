@@ -164,13 +164,21 @@ function Initialize-Provider
 
 			Write-Information -Tags "User" -MessageData "INFO: Provider $($FoundProvider.Name) v$($FoundProvider.Version.ToString()) is selected for download"
 
-			# Check package source is trusted
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if package source $($FoundProvider.Name) is trusted"
-
 			# TODO: If PowerShell asks to install NuGet during 'Find-PackageProvider' and if that fails
 			# it may return package source anyway (test with 'Desktop' edition)
 			# NOTE: This is controlled with powershell.promptToUpdatePackageManagement
 			[Microsoft.PackageManagement.Packaging.PackageSource] $PackageSource = $FoundProvider | Get-PackageSource
+
+			# If package source for 'FoundProvider' is not registered do nothing, this will be the cause with
+			# "Bootstrap" provider, which means NuGet was already installed during "Find-PackageProvider" above!
+			if (!((Get-PackageSource).ProviderName -like "$($PackageSource.ProviderName)"))
+			{
+				Write-Warning -Message "Not using $($PackageSource.ProviderName) provider to install package, provider not registered"
+				return $true
+			}
+
+			# Check package source is trusted
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if package source $($PackageSource.ProviderName) is trusted"
 
 			if (!$PackageSource.IsTrusted)
 			{
@@ -215,7 +223,12 @@ function Initialize-Provider
 		}
 
 		# Setup prompt for installation/update
+		$Accept.HelpMessage = $InfoMessage
+		$Choices = @()
+		$Choices += $Accept
+		$Choices += $Deny
 		$Title = "Recommended"
+
 		if ($Required)
 		{
 			$Title = "Required"

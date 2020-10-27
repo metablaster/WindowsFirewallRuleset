@@ -32,7 +32,7 @@ Here is a list of most important things to keep in mind.
 
 It's recommended to read up to date version of this document which is located on "develop" branch [here](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/CONTRIBUTING.md)
 
-Below 2 pages explain general/starting guidelines regarding open source:\
+2 pages below explain general/starting guidelines regarding open source:\
 [How to contribute to open source](https://opensource.guide/how-to-contribute)\
 [Open Source Contribution Etiquette](https://tirania.org/blog/archive/2010/Dec-31.html)
 

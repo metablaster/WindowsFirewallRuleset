@@ -24,7 +24,7 @@ not resolve your problems.\
 ## Problem still not resolved
 
 This should not be the case, but can happen if you modified firewall in control panel.\
-Follow below steps to reset default windows firewall:
+Follow steps below to reset default windows firewall:
 
 1. Open control panel and click on "Windows defender firewall"
 2. Click on "Restore defaults" to restore firewall to defaults
