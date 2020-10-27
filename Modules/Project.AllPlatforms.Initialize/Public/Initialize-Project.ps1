@@ -313,10 +313,13 @@ function Initialize-Project
 		}
 	}
 
-	# NOTE: Value should be set to $Develop
+	# NOTE: Result value should be equivalent to $Develop
 	if (!$NoModulesCheck)
 	{
 		Write-Information -Tags "User" -MessageData "INFO: Checking package providers"
+
+		# Check if PowerShell needs to restart
+		Set-Variable -Name Restart -Scope Script -Value $false
 
 		# TODO: "ModuleName" for Nuget here is actually "ProviderName" This is used in Initialize-Provider in
 		# same manner as "Repository" with Initialize-Module, needs to be renamed to avoid confusion
@@ -352,10 +355,15 @@ function Initialize-Project
 			return
 		}
 
-		# Pester is required to run pester tests, required by PSScriptAnalyzer
-		# NOTE: at this point PowerShell must be restarted to avoid errors
-		Write-Warning -Message "If installing pester and posh-git fails, please restart PowerShell"
+		if ($script:Restart)
+		{
+			# NOTE: at this point PowerShell should be restarted to avoid errors
+			# installing pester fails with signature, posh-git fails with -AllowPrerelease parameter
+			Write-Warning -Message "Please restart PowerShell for changes to take effect"
+			# exit
+		}
 
+		# Pester is required to run pester tests, required by PSScriptAnalyzer
 		if (!(Initialize-Module @{ ModuleName = "Pester"; ModuleVersion = $RequirePesterVersion } `
 					-InfoMessage "Pester >= v$RequirePesterVersion is required to run pester tests" )) { }
 

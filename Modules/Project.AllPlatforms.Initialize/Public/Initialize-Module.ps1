@@ -148,7 +148,7 @@ function Initialize-Module
 			}
 
 			# Up to date
-			# TODO: for AllowPrerelease we should check for prerelease, example required posh-git 0.7.3 if met, no prerelease will be  installed
+			# TODO: for AllowPrerelease we should check for prerelease, example required posh-git 0.7.3 if met, no prerelease will be installed
 			Write-Information -Tags "User" -MessageData "INFO: Module $ModuleName v$TargetVersion meets >= v$RequireVersion"
 			return $true
 		}
@@ -172,7 +172,7 @@ function Initialize-Module
 		{
 			if ($TargetVersion)
 			{
-				Write-Warning -Message "$ModuleName requires git in PATH, but git.exe not present"
+				Write-Warning -Message "$ModuleName requires git in PATH but git.exe not present, aborting installation..."
 			}
 			else
 			{
@@ -196,7 +196,6 @@ function Initialize-Module
 	$Deny = [System.Management.Automation.Host.ChoiceDescription]::new("&No")
 	$Deny.HelpMessage = "Skip operation, module $ModuleName will not be installed or updated"
 
-	# TODO: remove?
 	# NOTE: Importing module to learn version could result in error
 	[version] $TargetPowerShellGet = Get-Module -Name PowerShellGet -ListAvailable |
 	Sort-Object -Property Version | Select-Object -Last 1 -ExpandProperty Version
@@ -229,14 +228,14 @@ function Initialize-Module
 	[string] $RepositoryList = ""
 
 	# Available repositories
+	# NOTE: only one may exist with same name, using it as $Repositories[0]
 	[PSCustomObject[]] $Repositories = Get-PSRepository -Name $Repository -ErrorAction SilentlyContinue
 
 	if ($Repositories)
 	{
-		# TODO: could there be multiple repositories with same name in $Repositories variable?
-		$RepositoryList = $Repository
+		$RepositoryList = $Repositories[0].Name
 
-		if ($Repositories.InstallationPolicy -ne "Trusted")
+		if ($Repositories[0].InstallationPolicy -ne "Trusted")
 		{
 			# Setup choices
 			$Accept.HelpMessage = "Setting to trusted won't ask you for confirmation in the future"
@@ -252,7 +251,7 @@ function Initialize-Module
 				Set-PSRepository -Name $Repository -InstallationPolicy Trusted
 				$Repositories = Get-PSRepository -Name $Repository
 
-				if ($Repositories.InstallationPolicy -eq "Trusted")
+				if ($Repositories[0].InstallationPolicy -eq "Trusted")
 				{
 					Write-Debug -Message "Repository $Repository set to trusted"
 				}
@@ -261,7 +260,7 @@ function Initialize-Module
 
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Repository $Repository is registered"
 	}
-	else
+	else # Register input repository
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Repository $Repository is not registered"
 
@@ -278,11 +277,7 @@ function Initialize-Module
 		{
 			Write-Information -Tags "User" -MessageData "INFO: Registering repository $Repository"
 
-			# NOTE: It's unknown what was this supposed to do, stopped working since Windows 20H2
-			# $IsTrusted = $Repositories[0].InstallationPolicy
-			# TODO: here and also in Initialize-Provider we should ask if repository should set as trusted
 			$IsTrusted = "Untrusted"
-
 			if ($Trusted)
 			{
 				$IsTrusted = "Trusted"
@@ -304,32 +299,18 @@ function Initialize-Module
 
 			if ($RepositoryObject)
 			{
-				$Repositories += $RepositoryObject
+				$Repositories = $RepositoryObject
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Repository $Repository is registered and $IsTrusted)"
 			}
-			# else error should be displayed
+			# else error should be displayed and $Repositories variable is null
 		}
 		else
 		{
-			# Use default repositories registered by user
+			# TODO: Use default repositories registered by user?
 			$Repositories = Get-PSRepository
 		}
 
-		if (!$Repositories)
-		{
-			# Registering repository failed or no valid repository exists
-			$Message = "No registered repositories exist"
-
-			if ($Required)
-			{
-				Write-Error -Category ObjectNotFound -TargetObject $Repositories -Message $Message
-				return $false
-			}
-
-			Write-Warning -Message $Message
-			return $true
-		}
-		else
+		if ($Repositories)
 		{
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Constructing list of repositories for display"
 
@@ -341,6 +322,21 @@ function Initialize-Module
 			}
 
 			$RepositoryList = $RepositoryList.TrimEnd(", ")
+		}
+		else
+		{
+			# Registering repository failed or no valid repository exists
+			$Message = "No registered repositories exist"
+
+			if ($Required)
+			{
+				# $Repositories is null
+				Write-Error -Category ObjectNotFound -TargetObject $Repository -Message $Message
+				return $false
+			}
+
+			Write-Warning -Message $Message
+			return $true
 		}
 	}
 
@@ -390,6 +386,7 @@ function Initialize-Module
 			$FoundModule = Find-Module -Name $ModuleName -Repository $RepositoryItem.Name `
 				-MinimumVersion $RequireVersion # -ErrorAction SilentlyContinue
 		}
+
 		if ($FoundModule)
 		{
 			Write-Information -Tags "User" -MessageData "INFO: Module $ModuleName v$($FoundModule.Version.ToString()) is selected for download"
@@ -405,7 +402,7 @@ function Initialize-Module
 		if ($Required)
 		{
 			# Registering repository failed or no valid repository exists
-			Write-Error -Category ObjectNotFound -TargetObject $Repositories -Message $Message
+			Write-Error -Category ObjectNotFound -TargetObject $FullyQualifiedName -Message $Message
 			return $false
 		}
 
@@ -499,7 +496,7 @@ function Initialize-Module
 
 		if ($ModuleInfo)
 		{
-			Write-Information -Tags "User" -MessageData "INFO: Module $ModuleName v$($ModuleInfo.Version.ToString()) was installed/updated"
+			Write-Information -Tags "User" -MessageData "INFO: Module $ModuleName v$RequireVersion was installed/updated"
 
 			# Remove old module if it exists and is loaded
 			# TODO: It looks like this method doesn't solve the problem and we need to restart PowerShell anyway
@@ -513,20 +510,32 @@ function Initialize-Module
 				# PackageManagement must be reloaded too
 				# TODO: because of pester signature error?
 				Remove-Module -Name PackageManagement -Force -ErrorAction Ignore
+
+				# PowerShell needs to restart
+				Set-Variable -Name Restart -Scope Script -Value $true
 			}
 
-			Write-Information -Tags "User" -MessageData "INFO: Loading module $ModuleName v$($ModuleInfo.Version.ToString()) into session"
+			Write-Information -Tags "User" -MessageData "INFO: Loading module $ModuleName v$RequireVersion into session"
 
 			# Load new module into current session
 			# TODO: In case of PowerShellGet this should load PackageManagement too?
 			Import-Module -ModuleInfo $ModuleInfo -Scope Global
 
+			if (!(Get-Module -FullyQualifiedName $FullyQualifiedName))
+			{
+				# PowerShell needs to restart
+				Set-Variable -Name Restart -Scope Script -Value $true
+
+				Write-Warning -Message "$ModuleName provider v$RequireVersion could not be imported, please restart PowerShell and try again"
+			}
+
 			# Finishing work, update as needed
+			# TODO: will not run if module not imported?
 			if ($ModuleName -eq "posh-git")
 			{
 				# TODO: shortened prompt, is valid only for user home path
 				# TODO: last test did not execute Add-PoshGitToProfile after failed and second attempt
-				Write-Information -Tags "User" -MessageData "INFO: Adding $ModuleName $($ModuleInfo.Version.ToString()) to profile"
+				Write-Information -Tags "User" -MessageData "INFO: Adding $ModuleName v$RequireVersion to profile"
 				Add-PoshGitToProfile -AllHosts
 			}
 

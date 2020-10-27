@@ -135,71 +135,78 @@ function Initialize-Provider
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Provider $ProviderName not installed"
 		}
 
-		# Check if module could be downloaded
-		# [Microsoft.PackageManagement.Packaging.SoftwareIdentity]
-		[PSCustomObject] $FoundProvider = $null
+		# Check if provider could be downloaded
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if $ProviderName provider version >= v$RequireVersion is available for download"
 
 		# NOTE: Find-Package searches registered package sources (registered with Register-PackageSource)
 		# NOTE: Find-PackageProvider searches PowerShellGet (registered with PowerShellGet, that is Register-PSRepository) or Azure blob store
-		$FoundProvider = Find-PackageProvider -Name $ProviderName `
+		# NOTE: If Nuget is not installed PowerShell will ask to install it here
+		[Microsoft.PackageManagement.Packaging.SoftwareIdentity] $FoundProvider = Find-PackageProvider -Name $ProviderName `
 			-MinimumVersion $RequireVersion -IncludeDependencies -ErrorAction SilentlyContinue
 
 		if (!$FoundProvider)
 		{
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Finding provider $ProviderName for download failed, trying alternative solution"
 			# Try with Find-Package
-			# NOTE: For some reason -AllowPrereleaseVersions doesn't return any results
+			# NOTE: For some reason -AllowPrereleaseVersions may return no results
 			$FoundProvider = Find-Package -Name $ProviderName -IncludeDependencies `
 				-MinimumVersion $RequireVersion # -AllowPrereleaseVersions -ErrorAction SilentlyContinue
 		}
 
 		if ($FoundProvider)
 		{
+			if ($FoundProvider.Length -gt 1)
+			{
+				# TODO: If there are multiple finds, selecting first one
+				$FoundProvider = $FoundProvider[0]
+				Write-Warning -Message "Found multiple sources for provider $($FoundProvider.Name), selecting first one"
+			}
+
 			Write-Information -Tags "User" -MessageData "INFO: Provider $($FoundProvider.Name) v$($FoundProvider.Version.ToString()) is selected for download"
 
-			# Check download source is trusted
+			# Check package source is trusted
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if package source $($FoundProvider.Name) is trusted"
 
-			# TODO: If not found "PowerShell" may ask to install, and if that fails it may return package source anyway (seen in: Windows PowerShell)
+			# TODO: If PowerShell asks to install NuGet during 'Find-PackageProvider' and if that fails
+			# it may return package source anyway (test with 'Desktop' edition)
 			# NOTE: This is controlled with powershell.promptToUpdatePackageManagement
-			[PSCustomObject] $PackageSource = Get-PackageSource -ProviderName $FoundProvider.ProviderName
+			[Microsoft.PackageManagement.Packaging.PackageSource] $PackageSource = $FoundProvider | Get-PackageSource
 
 			if (!$PackageSource.IsTrusted)
 			{
 				# Setup choices
-				$Accept.HelpMessage = "Setting to trusted won't ask you in the future for confirmation"
+				$Accept.HelpMessage = "Setting $($PackageSource.Location) to trusted won't ask you in the future for confirmation"
 				$Choices += $Accept
 				$Choices += $Deny
 
-				$Title = "Package source $Name is not trusted"
-				$Question = "Set $Name as trusted now?"
+				$Title = "Package source $($PackageSource.ProviderName) is not trusted"
+				$Question = "Set $($PackageSource.ProviderName) as trusted now?"
 				$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
 
 				if ($Decision -eq $Default)
 				{
-					Set-PackageSource -Name $FoundProvider.Name -Trusted
-					Write-Debug -Message "Package source $($PackageSource.Name) set to trusted"
+					Set-PackageSource -Name $PackageSource.ProviderName -Trusted
+					Write-Debug -Message "Package source $($PackageSource.ProviderName) set to trusted"
 				}
 			}
 
-			Write-Information -Tags "User" -MessageData "INFO: Using following package sources: $($FoundProvider.Name)"
+			Write-Information -Tags "User" -MessageData "INFO: Using following package sources: $($PackageSource.ProviderName)"
 		}
 		else
 		{
 			if ($PSVersionTable.PSEdition -eq "Core")
 			{
 				Write-Warning -Message "Provider $ProviderName was not found because of a known issue with PowerShell Core"
-				Write-Information -Tags "User" -MessageData "INFO: https://github.com/OneGet/oneget/issues/360"
+				Write-Information -Tags "User" -MessageData "INFO: see https://github.com/OneGet/oneget/issues/360"
 
 				return !$Required
 			}
 
-			$Message = "$ProviderName provider version >= v$RequireVersion was not found in any of the following package sources: $SourcesList"
+			$Message = "$ProviderName provider version >= v$RequireVersion was not found"
 			if ($Required)
 			{
 				# Registering repository failed or no valid repository exists
-				Write-Error -Category ObjectNotFound -TargetObject $PackageSources -Message $Message
+				Write-Error -Category ObjectNotFound -TargetObject $FullyQualifiedName -Message $Message
 				return $false
 			}
 
@@ -207,7 +214,7 @@ function Initialize-Provider
 			return $true
 		}
 
-		# Setup prompt
+		# Setup prompt for installation/update
 		$Title = "Recommended"
 		if ($Required)
 		{
@@ -232,6 +239,7 @@ function Initialize-Provider
 		if ($Decision -eq $Default)
 		{
 			Write-Information -Tags "User" -MessageData "INFO: Installing provider $($FoundProvider.Name) v$($FoundProvider.Version.ToString())"
+			# TODO: Use InputObject? after ensuring there aren't multiple provider names
 			Install-PackageProvider -Name $FoundProvider.Name -Source $FoundProvider.Source
 
 			[version] $NewVersion = Get-PackageProvider -Name $FoundProvider.Name |
@@ -245,27 +253,47 @@ function Initialize-Provider
 				Import-PackageProvider -Name $ProviderName -RequiredVersion $NewVersion -Force
 
 				# If not imported into current session restart is required
-				if (!(Get-PackageProvider -Name $ProviderName))
+				if ((Get-PackageProvider -Name $ProviderName).Version -lt $NewVersion)
 				{
+					# PowerShell needs to restart
+					Set-Variable -Name Restart -Scope Script -Value $true
+
 					Write-Warning -Message "$ProviderName provider v$NewVersion could not be imported, please restart PowerShell and try again"
 					return $false
 				}
 
-				# Let other parts of a module know NuGet is up to date
-				Set-Variable -Name HasNuGet -Scope Script -Option ReadOnly -Force -Value $true
+				if ($ProviderName -eq "NuGet")
+				{
+					# PowerShell needs to restart
+					Set-Variable -Name Restart -Scope Script -Value $true
+
+					# Let other parts of a module know NuGet is up to date
+					Set-Variable -Name HasNuGet -Scope Script -Option ReadOnly -Force -Value $true
+				}
+
 				return $true
 			}
-			# else error should be shown
-			# TODO: was not installed or updated
+			else
+			{
+				$Message = "Module $ProviderName v$RequireVersion was not installed/updated"
+				if ($Required)
+				{
+					# Installation/update failed
+					Write-Error -Category NotInstalled -TargetObject $FullyQualifiedName -Message $Message
+					return $false
+				}
+
+				Write-Warning -Message $Message
+				return $true
+			}
 		}
 		else
 		{
 			# User refused default action
 			# TODO: should this be error? maybe switch
 			Write-Warning -Message "Installing provider $ProviderName aborted by user"
+			return !$Required
 		}
-
-		return !$Required
 	} # process
 }
 
