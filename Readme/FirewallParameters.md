@@ -183,31 +183,107 @@ Owner                 = "S-1-5-21-3337988176-3917481366-464002247-500"
 
 ## Log file fields
 
-Depending on settings, firewall log can contain dropped and allowed packets,
-setting in powershell allows us to log **ignored** packets too however this does not happen
-probably due to a bug.
+Their meaning in order how they appear in firewall log file:\
+[Interpreting the Windows Firewall Log](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2003/cc758040(v=ws.10))
 
-Sample values and their meaning in order how they appear in firewall log file:
+`#Version:`
 
-```none
-date        = 2019-12-21
-time        = 13:35:31
-action      = DROP
-protocol    = UDP
-src-ip      = 192.168.8.110
-dst-ip      = 224.0.0.22
-src-port    = 61148
-dst-port    = 3702
-size        = 0
-tcpflags    = -
-tcpsyn      = -
-tcpack      = -
-tcpwin      = -
-icmptype    = 134
-icmpcode    = 1
-info        = -
-path        = RECEIVE
-```
+- Displays which version of the Windows Firewall security log is installed
+
+`#Software:`
+
+- Displays the name of the software creating the log
+
+`#Time:`
+
+- Indicates that all of the timestamps in the log are in local time
+
+`#Fields:`
+
+- Displays a static list of fields that are available for security log entries, as follows:
+
+`date`
+
+- Displays the year, month, and day that the recorded transaction occurred
+
+`time`
+
+- Displays the hour, minute, and seconds at which the recorded transaction occurred
+
+`action`
+
+- Displays which operation was observed by Windows Firewall
+- The options available are OPEN, OPEN-INBOUND, CLOSE, DROP, and INFO-EVENTS-LOST
+
+`protocol`
+
+- Displays the protocol that was used for the communication
+- The options available are TCP, UDP, ICMP, and a protocol number for packets
+
+`src-ip`
+
+- Displays the source IP address (the IP address of the computer attempting to establish communication)
+
+`dst-ip`
+
+- Displays the destination IP address of a communication attempt
+
+`src-port`
+
+- Displays the source port number of the sending computer
+- Only TCP and UDP display a valid src-port entry
+- All other protocols display a src-port entry of `-`
+
+`dst-port`
+
+- Displays the port number of the destination computer
+- Only TCP and UDP display a valid dst-port entry
+- All other protocols display a dst-port entry of `-`
+
+`size`
+
+- Displays the packet size, in bytes.
+
+`tcpflags`
+
+- Displays the TCP control flags found in the TCP header of an IP packet:\
+`Ack` Acknowledgment field significant\
+`Fin` No more data from sender\
+`Psh` Push function\
+`Rst` Reset the connection\
+`Syn` Synchronize sequence numbers\
+`Urg` Urgent Pointer field significant
+
+`tcpsyn`
+
+- Displays the TCP sequence number in the packet
+
+`tcpack`
+
+- Displays the TCP acknowledgement number in the packet
+
+`tcpwin`
+
+- Displays the TCP window size, in bytes, in the packet
+
+`icmptype`
+
+- Displays a number that represents the Type field of the ICMP message
+
+`icmpcode`
+
+- Displays a number that represents the Code field of the ICMP message
+
+`info`
+
+- Displays an entry that depends on the type of action that occurred
+- For example, an INFO-EVENTS-LOST action will result in an entry of the number of events that occurred\
+but were not recorded in the log from the time of the last occurrence of this event type.
+
+`path`
+
+- Displays the direction of the communication
+- The options available are SEND, RECEIVE, FORWARD, and UNKNOWN
 
 Following are mappings between log file, Firewall GUI and PowerShell parameters
 

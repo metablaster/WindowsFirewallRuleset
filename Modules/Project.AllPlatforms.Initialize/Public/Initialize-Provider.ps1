@@ -150,12 +150,12 @@ function Initialize-Provider
 			# Try with Find-Package
 			# NOTE: For some reason -AllowPrereleaseVersions may return no results
 			$FoundProvider = Find-Package -Name $ProviderName -IncludeDependencies `
-				-MinimumVersion $RequireVersion # -AllowPrereleaseVersions -ErrorAction SilentlyContinue
+				-MinimumVersion $RequireVersion -ErrorAction SilentlyContinue # -AllowPrereleaseVersions
 		}
 
 		if ($FoundProvider)
 		{
-			if ($FoundProvider.Length -gt 1)
+			if (($FoundProvider | Measure-Object).Count -gt 1)
 			{
 				# TODO: If there are multiple finds, selecting first one
 				$FoundProvider = $FoundProvider[0]

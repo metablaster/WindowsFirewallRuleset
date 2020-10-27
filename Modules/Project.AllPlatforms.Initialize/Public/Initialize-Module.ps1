@@ -358,12 +358,6 @@ function Initialize-Module
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking repository $($RepositoryItem.Name) for updates"
 
-		[uri] $RepositoryURI = $RepositoryItem.SourceLocation
-		if (!(Test-NetConnection -ComputerName $RepositoryURI.Host -Port 443 -InformationLevel Quiet)) # -ErrorAction SilentlyContinue
-		{
-			Write-Warning -Message "Repository $($RepositoryItem.Name) could not be contacted"
-		}
-
 		# TODO: verify -AllowPrerelease will work in all cases
 		# if ($TargetPowerShellGet -ge $Version2) do not use -AllowPrerelease
 		# However then stable posh-git and similar modules will be installed because of $FoundModule variable

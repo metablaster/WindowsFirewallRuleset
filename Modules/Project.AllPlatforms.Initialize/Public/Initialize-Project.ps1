@@ -360,7 +360,7 @@ function Initialize-Project
 			# NOTE: at this point PowerShell should be restarted to avoid errors
 			# installing pester fails with signature, posh-git fails with -AllowPrerelease parameter
 			Write-Warning -Message "Please restart PowerShell for changes to take effect"
-			# exit
+			exit
 		}
 
 		# Pester is required to run pester tests, required by PSScriptAnalyzer

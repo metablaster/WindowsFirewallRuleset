@@ -12,7 +12,7 @@ Also general questions and answers regarding firewall.
   - [I got an error "Network path not found" or "unable to contact computer"](#i-got-an-error-network-path-not-found-or-unable-to-contact-computer)
   - [Does this firewall project give me the right protection](#does-this-firewall-project-give-me-the-right-protection)
   - [Windows Firewall does not write logs](#windows-firewall-does-not-write-logs)
-  - [What system and environment modifications are done by this project](#what-system-and-environment-modifications-are-done-by-this-project)
+  - [Can I trust scripts from this project](#can-i-trust-scripts-from-this-project)
   - [Why do I get "access denied" errors](#why-do-i-get-access-denied-errors)
 
 ## I applied the rule(s) but it doesn't work, program "some_program.exe" doesn't connect to internet
@@ -65,48 +65,40 @@ If this doesn't work take a look here:
 ## Does this firewall project give me the right protection
 
 Good firewall setup is essential for computer security, and, if not misused then the answer is yes
-but only for the firewall (network) part of protection.
+but only for the firewall part of protection.
 
 For maximum security you need much more than just good firewall, here is a minimum list:
 
-1. Using non Administrative Windows account for almost all use, if you already are Administrator then
-your system can no longer be trusted even if you're expert.\
-Administrative account should be used only for administration.
+1. Using non Administrative Windows account for almost all use.\
+Administrative account should be used for administration only.
 
-2. Installing and running only digitally signed software, and only those publishers you trust,
-if you really need to install warez and similar then it's already game over (uninstalling won't help).
+2. Installing and running only digitally signed software, and only those publishers you trust.\
+Installing cracks, warez and similar is the most common way to let hackers in.
 
-3. Visiting only trusted web sites, and double checking any web link before clicking on it,
-If you really need to visit odd sites and freely click around, then please do it in virtual machine
-(isolated browsing is OK too)
+3. Visiting only trusted web sites, preferably HTTPS, and checking links before clicking them.\
+To visit odd sites and freely click around please do it in virtual machine (isolated browsing is OK too)
 
-4. If you don't use password manager capable of auto typing passwords and with the support of
-virtual keyboard, then your accounts and passwords are not safe.\
-Never use hardware keyboard instead of virtual keyboard for passwords.
+4. Use password manager capable of auto typing passwords and with the support of virtual keyboard.\
+Don't use hardware keyboard to type passwords.
 
-As you can see, no mention of anti-virus, anti-spyware, firewall, VPN or any kind of similar
-"security software", because, if you strictly follow these 4 rules then most likely you don't need
-anything else.
+5. Don't let your email program or web interface to auto load mail content.\
+Also important not to open attachments you don't recognize or didn't ask for.
 
-If you don't follow these rules, no firewall, anti virus or security expert is going to help much,
-the real purpose of firewall or anti virus is to protect yourself from the following:
+6. Never disable antivirus or firewall except to troubleshoot issues.\
+Btw. Troubleshooting doesn't include installing software or visiting some web site.
 
-1. You made a mistake of accidentally breaking one of these 4 rules (your fault)
+7. VPN is not recommended except for business or to bypass your IP ban.\
+Even if VPN provider is considered "trusted".
 
-2. You are target of hackers. (not your fault)
+8. Protect your web browser maximum possible, and avoid using addons except one to block ads.
 
-In any case if any of the above 4 rules are broken, your system is not safe and usually that means
-it can no longer be trusted, only hard drive reformat and clean system reinstall can regain trust.
+If you don't follow these rules, no firewall, anti virus or security expert is going to help much.\
+Usually the purpose of firewall or anti virus is to protect yourself from your own mistakes.
 
-By "not trusted" I mean, not trusted for:
+Remember, the easiest way for hacker to get in is when **you** make a mistake!
 
-1. online payments, cash transfer, online banking etc.
-
-2. private data storage, personal data safety etc.
-
-3. your anonymity and protection from identity theft.
-
-4. safety of your online accounts and passwords
+If you recognize your mistakes from these rules on daily basis, your system can't be trusted,\
+only hard drive reformat and clean system reinstall can regain trust.
 
 ## Windows Firewall does not write logs
 
@@ -131,25 +123,24 @@ on every system boot for security reasons.\
 If this doesn't resolve the problem remove all log files inside target directory, just make sure the
 firewall service has write permissions for target directory and reboot system.
 
-## What system and environment modifications are done by this project
+## Can I trust scripts from this project
 
-- You might be wondering what happens to my system if I run scripts from this project?
-- Can these scripts do any kind of harm to system or my privacy?
+- You might be wondering, what happens to my system if I run scripts from this project?
+- Can these scripts do any kind of harm to my computer or privacy?
+- What system and environment modifications are done by this project?
 - Can I trust these scripts don't do anything bad?
-- Sure, there is a lot of scripts and code and you might not have the time to investigate them all.
+- Is there anything I should be aware of?
 
-So here is an overview to help you see what happens and whether using this project is acceptable
-for you:
+There is a lot of scripts and you might not have the time to investigate them all.\
+So here is an overview to help you see what they do hopefully answering all of your concerns.
 
 1. Group policy firewall and most of it's settings are modifed and/or overridden completely.
 
-    - If you have existing rules or settings in GPO please export them first or note down.
-    - If you make modifications after running these scripts, re-running again may override your modifications.
+    - If you make modifications to GPO firewall, re-running scripts again may override your modifications.
 
-2. Some global firewall settings are modified as follows
+2. Some global firewall settings are modified as explained here [Set-NetFirewallSetting](https://docs.microsoft.com/en-us/powershell/module/netsecurity/set-netfirewallsetting?view=win10-ps)
 
-    See [Set-NetFirewallSetting](https://docs.microsoft.com/en-us/powershell/module/netsecurity/set-netfirewallsetting?view=win10-ps)
-    For details on which settings are modified see `Scripts\SetupProfile.ps1`
+    - For details on which settings are modified see `Scripts\SetupProfile.ps1`
 
 3. PowerShell module path is updated for current session only
 
@@ -175,44 +166,44 @@ for you:
     - You run some script on demand that is not run by default (ex. `Scripts\GrantLogs`)
     - You manually load software configuration from `Config` folder
 
-    Please keep in mind that all of this applies only to default project configuration,
-    for any modifications you do on your own you should of course understand what it does.
+5. Here is a list of scripts that may do things you don't want
 
-5. Here is a list of scripts from this project that you can consider "dangerous"
+    - `Scripts\GrantLogs.ps1`
+    - `Scripts\ResetFirewall.ps1`
+    - `Modules\...\Initialize-Module.ps1`
+    - `Modules\...\Initialize-Provider.ps1`
+    - `Modules\...\Uninstall-DuplicateModule.ps1`
+    - `Modules\...\Find-UpdatableModule.ps1`
 
-    - Scripts\GrantLogs.ps1
-    - Scripts\ResetFirewall.ps1
-    - Initialize-Module.ps1
-    - Initialize-Provider.ps1
-    - Uninstall-DuplicateModule.ps1
-    - Find-UpdatableModule.ps1
-
-    - In fact these are not really dangerous but it's recommended that user reads script comments
-    and understand what they do before using or modifying them.\
-    - Note that last 4 script names listed above exist in multiple locations, but are not the same!
-    - By default none of these scripts run on its own, except as explained in point 4.
+    By default none of these scripts run on their own, except as explained in point 4.\
+    Note that last 4 scripts listed above exist also in `Test` folder.
 
 6. Following is a list of external executables that are run by some scripts
 
-    - gpupdate.exe (to apply GPO setting and avoid system restart)
-    - reg.exe (to load offline registry hive)
-    - code.cmd (to learn VSCode version)
-    - git.exe (to learn git version)
-    - icacls.exe (to set ACL and remove old duplicate modules)
-    - takeown.exe (to take ownership and remove old duplicate modules)
+    - [gpupdate.exe](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/gpupdate)
+    (Apply GPO to avoid system restart)
+    - [reg.exe](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/reg)
+    (To load offline registry hive)
+    - [code.cmd](https://code.visualstudio.com) (To learn VSCode version)
+    - [git.exe](https://git-scm.com) (To learn git version)
+    - [icacls.exe](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/icacls)
+    (To set permissions required to remove duplicate modules)
+    - [takeown.exe](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/takeown)
+    (To take ownership required to set permissions)
 
-7. There is nothing harmful here
+7. There is nothing dangerous here
 
-- Some scripts or code such as `initialize-module.ps1` might attempt to contact online PowerShell repository
-before downloading modules, however this happens only if you enable "development mode"
-- "development mode" may be enabled by default on "develop" branch but never on "master" branch
-- The scripts will gather all sorts of system information but only as needed to configure firewall,
-none of this information is ever sent anywhere, once you close down PowerShell it's all cleared.
-- If you publish your modification online (ex. to your fork) make sure your modification don't include
-any personal information such as user names, email or system info.
-- Bugs might exist which could break things, while I do my best to avoid bugs you might want to remind
-yourself that this is "free software": [LINK](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/LICENSE)
-- In short as long as you don't do modifications that do unexpected things you'll be just fine!
+   - Some scripts such as `initialize-module.ps1` will contact online PowerShell repository
+   to download modules, however this happens only if you enable "development mode"
+   - "development mode" may be enabled by default on "develop" branch but never on "master" branch
+   - The scripts will gather all sorts of system information but only as needed to configure firewall,
+   none of this information is ever sent anywhere, once you close down PowerShell it's all cleared.
+   - If you publish your modification online (ex. to your fork) make sure your modification don't include
+   any personal information such as user names, email or system info.
+   - Bugs might exist which could break things, while I do my best to avoid bugs you might want to remind
+   yourself that this is after all [free software](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/LICENSE)
+   - As you can see, there is nothing dangerous here, as long as you don't do modifications that do
+unexpected things you'll be just fine!
 
 ## Why do I get "access denied" errors
 
@@ -224,7 +215,7 @@ do something with them (ex. refreshing group policy, viewing or modifying settin
 To minimize the chance of this error from appearing close down all management consoles and all
 software that is not essential to apply rules with scripts.
 
-Simple rule of thumb for applying rules with this project is the same as when you install drivers:
+Simple rule of thumb before applying rules is the same as when you install drivers:
 
 - reboot system
 - close down all programs
