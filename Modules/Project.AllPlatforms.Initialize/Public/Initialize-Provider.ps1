@@ -62,7 +62,7 @@ function Initialize-Provider
 {
 	[OutputType([bool])]
 	[CmdletBinding(PositionalBinding = $false,
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Initialize/Help/en-US/Initialize-Provider.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Initialize/Help/en-US/Initialize-Provider.md")]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[hashtable] $FullyQualifiedName,
@@ -150,7 +150,7 @@ function Initialize-Provider
 			# Try with Find-Package
 			# NOTE: For some reason -AllowPrereleaseVersions may return no results
 			$FoundProvider = Find-Package -Name $ProviderName -IncludeDependencies `
-				-MinimumVersion $RequireVersion -ErrorAction SilentlyContinue # -AllowPrereleaseVersions
+				-minimumVersion $RequireVersion -ErrorAction SilentlyContinue # -AllowPrereleaseVersions
 		}
 
 		if ($FoundProvider)

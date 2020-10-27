@@ -59,8 +59,12 @@ todo's in this file are categorized into following sections:
     - Run all tests in both release and develop mode, both Desktop and Core editions
     - Run master script on all target OS editions
     - Update CHANGELOG.md
-    - Verify links to repository are pointing to master branch except if develop branch is wanted,
-    this should be done after merge to master, and links should be then tested on master branch
+    - After merge to master branch, verify links to repository are pointing to master except
+    if develop branch is wanted, links should be then tested on master branch.
+    - There are 3 kinds of links to check:\
+    WindowsFirewallRuleset/develop\
+    WindowsFirewallRuleset/blob/develop\
+    WindowsFirewallRuleset/tree/develop
 
 ## High priority
 

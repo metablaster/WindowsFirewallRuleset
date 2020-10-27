@@ -82,7 +82,7 @@ function ConvertTo-Subnet
 {
 	[OutputType("Project.AllPlatforms.IP.Subnet")]
 	[CmdletBinding(DefaultParameterSetName = "FromIPAndMask",
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.IP/Help/en-US/ConvertTo-Subnet.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.IP/Help/en-US/ConvertTo-Subnet.md")]
 	param (
 		[Parameter(Mandatory = $true,
 			Position = 0, ParameterSetName = "FromIPAndMask")]

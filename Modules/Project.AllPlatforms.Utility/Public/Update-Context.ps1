@@ -53,7 +53,7 @@ function Update-Context
 {
 	[OutputType([void])]
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Low",
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Utility/Help/en-US/Update-Context.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Utility/Help/en-US/Update-Context.md")]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $Root,

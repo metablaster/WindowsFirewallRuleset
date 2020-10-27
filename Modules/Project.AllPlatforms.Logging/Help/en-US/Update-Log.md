@@ -1,7 +1,7 @@
 ---
 external help file: Project.AllPlatforms.Logging-help.xml
 Module Name: Project.AllPlatforms.Logging
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Logging/Help/en-US/Update-Log.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Logging/Help/en-US/Update-Log.md
 schema: 2.0.0
 ---
 

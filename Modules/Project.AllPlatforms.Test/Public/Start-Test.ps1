@@ -51,7 +51,7 @@ function Start-Test
 {
 	[OutputType([void])]
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium",
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Test/Help/en-US/Start-Test.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Test/Help/en-US/Start-Test.md")]
 	param (
 		[AllowEmptyString()]
 		[Parameter(Mandatory = $true)]

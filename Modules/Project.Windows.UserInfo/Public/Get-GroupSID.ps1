@@ -53,7 +53,7 @@ TODO: plural parameter
 function Get-GroupSID
 {
 	[CmdletBinding(PositionalBinding = $false,
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.UserInfo/Help/en-US/Get-GroupSID.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.UserInfo/Help/en-US/Get-GroupSID.md")]
 	param (
 		[Alias("Group")]
 		[Parameter(Mandatory = $true,

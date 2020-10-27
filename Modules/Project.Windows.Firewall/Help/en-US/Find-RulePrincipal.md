@@ -1,7 +1,7 @@
 ---
 external help file: Project.Windows.Firewall-help.xml
 Module Name: Project.Windows.Firewall
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.Firewall/Help/en-US/Find-RulePrincipal.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.Firewall/Help/en-US/Find-RulePrincipal.md
 schema: 2.0.0
 ---
 

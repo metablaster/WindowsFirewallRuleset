@@ -27,8 +27,8 @@ SOFTWARE.
 #>
 
 # Make sure to check for updated content!
-# http://tools.ietf.org/html/rfc1918
-# http://www.iana.org/assignments/icmp-parameters/icmp-parameters.xhtml
+# https://tools.ietf.org/html/rfc1918
+# https://www.iana.org/assignments/icmp-parameters/icmp-parameters.xhtml
 # https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol
 # https://tools.ietf.org/html/rfc4861
 

@@ -48,7 +48,7 @@ function Format-Path
 {
 	[OutputType([string])]
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ProgramInfo/Help/en-US/Format-Path.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ProgramInfo/Help/en-US/Format-Path.md")]
 	param (
 		[Parameter(ValueFromPipeline = $true)]
 		[string] $FilePath

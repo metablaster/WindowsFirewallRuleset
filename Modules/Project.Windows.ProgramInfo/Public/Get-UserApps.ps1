@@ -55,7 +55,7 @@ https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage?view=win
 function Get-UserApps
 {
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-UserApps.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-UserApps.md")]
 	param (
 		[Alias("User")]
 		[Parameter(Mandatory = $true)]

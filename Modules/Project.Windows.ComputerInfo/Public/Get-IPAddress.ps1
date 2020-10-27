@@ -59,7 +59,7 @@ function Get-IPAddress
 {
 	[OutputType([System.Net.IPAddress[]])]
 	[CmdletBinding(DefaultParameterSetName = "Individual",
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ComputerInfo/Help/en-US/Get-IPAddress.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ComputerInfo/Help/en-US/Get-IPAddress.md")]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[ValidateSet("IPv4", "IPv6")]

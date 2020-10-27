@@ -76,7 +76,7 @@ function Initialize-Project
 		"PSAvoidUsingWriteHost", "", Justification = "There is no way to replace Write-Host here")]
 	[OutputType([void])]
 	[CmdletBinding(DefaultParameterSetName = "NoProject",
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Initialize/Help/en-US/Initialize-Project.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Initialize/Help/en-US/Initialize-Project.md")]
 	param (
 		[Parameter(ParameterSetName = "NoProject")]
 		[switch] $NoProjectCheck = !$ProjectCheck,

@@ -378,7 +378,7 @@ Exports all SNMP firewall rules to the JSON file SNMPRules.json.</dev:code>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.Firewall/Help/en-US/Export-FirewallRules.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.Firewall/Help/en-US/Export-FirewallRules.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -461,7 +461,7 @@ Exports all SNMP firewall rules to the JSON file SNMPRules.json.</dev:code>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.Firewall/Help/en-US/Find-RulePrincipal.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.Firewall/Help/en-US/Find-RulePrincipal.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -569,7 +569,7 @@ Exports all SNMP firewall rules to the JSON file SNMPRules.json.</dev:code>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.Firewall/Help/en-US/Format-Output.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.Firewall/Help/en-US/Format-Output.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -735,7 +735,7 @@ Imports all firewall rules in the SCV file WmiRules.csv</dev:code>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.Firewall/Help/en-US/Import-FirewallRules.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.Firewall/Help/en-US/Import-FirewallRules.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -946,7 +946,7 @@ Removes all firewall rules according to the list in the JSON file WmiRules.json.
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.Firewall/Help/en-US/Remove-FirewallRules.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.Firewall/Help/en-US/Remove-FirewallRules.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>

@@ -56,7 +56,7 @@ function Get-Broadcast
 {
 	[OutputType([System.Net.IPAddress[]])]
 	[CmdletBinding(DefaultParameterSetName = "Individual",
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ComputerInfo/Help/en-US/Get-Broadcast.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ComputerInfo/Help/en-US/Get-Broadcast.md")]
 	param (
 		[Parameter(ParameterSetName = "All")]
 		[switch] $IncludeAll,

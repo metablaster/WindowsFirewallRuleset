@@ -69,7 +69,7 @@ function Get-AppCapability
 {
 	[OutputType([string[]])]
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-AppCapability.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-AppCapability.md")]
 	param (
 		[Alias("App", "StoreApp")]
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true, Position = 0)]

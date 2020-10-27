@@ -8,15 +8,15 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - [Changelog](#changelog)
   - [Table of contents](#table-of-contents)
-  - [v0.7.0 (develop branch)](#v070-develop-branch)
-  - [v0.6.0 (current release)](#v060-current-release)
+  - [v0.7.0 (current release)](#v070-current-release)
+  - [v0.6.0](#v060)
   - [v0.5.0](#v050)
   - [v0.4.1](#v041)
   - [v0.4.0](#v040)
   - [v0.3.0](#v030)
   - [v0.2](#v02)
 
-## v0.7.0 (develop branch)
+## v0.7.0 (current release)
 
 - Modules
 
@@ -49,12 +49,12 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Command line help is now fully functional, for each prompt you can type `?` to get more information
   - New function "Get-ProcessOutput" to wait for and capture process (command) output when run in PS
-  - Project code and rules are now actively tested also on Windows 10 "Education" edition
+  - Project code is now tested also on these editions: Education, Server 2019 Datacenter
 
 - Development
 
   - Updated templates and small portion of scripts according to templates
-  - Updated project initialization functions
+  - Updated project and module initialization functions
   - Added platyPS module to list of recommended modules to be able to generate online help files
   - Added new recommended extensions and extension settings to tail firewall logs with VSCode
 
@@ -72,7 +72,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - Show warning instead of code error if target machine not connected to network
   - Registering PowerShell repository would fail due to unknown trust policy
 
-## v0.6.0 (current release)
+## v0.6.0
 
 - New features
 

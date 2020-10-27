@@ -58,7 +58,7 @@ function Get-ProcessOutput
 {
 	[OutputType([string])]
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Utility/Help/en-US/Get-ProcessOutput.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Utility/Help/en-US/Get-ProcessOutput.md")]
 	Param (
 		[Parameter(Mandatory = $true)]
 		[string] $FilePath,

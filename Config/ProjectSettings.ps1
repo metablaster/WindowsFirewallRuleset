@@ -50,7 +50,7 @@ Set-Variable -Name SettingsScript -Scope Local -Option ReadOnly -Value ($MyInvoc
 # 4. Enables some disabled unit tests and disables logging
 # 5. Enables setting preference variables for modules
 # NOTE: Changing variable requires PowerShell restart
-Set-Variable -Name Develop -Scope Global -Value $true
+Set-Variable -Name Develop -Scope Global -Value $false
 
 if ($Develop)
 {

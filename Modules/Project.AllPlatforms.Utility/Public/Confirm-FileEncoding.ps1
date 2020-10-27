@@ -49,7 +49,7 @@ function Confirm-FileEncoding
 {
 	[OutputType([void])]
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High",
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Utility/Help/en-US/Confirm-FileEncoding.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Utility/Help/en-US/Confirm-FileEncoding.md")]
 	param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
 		[string[]] $FilePath,

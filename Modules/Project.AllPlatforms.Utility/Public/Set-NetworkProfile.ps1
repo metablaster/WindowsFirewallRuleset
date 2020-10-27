@@ -44,7 +44,7 @@ None.
 function Set-NetworkProfile
 {
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High",
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Utility/Help/en-US/Set-NetworkProfile.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Utility/Help/en-US/Set-NetworkProfile.md")]
 	param ()
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"

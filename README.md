@@ -193,7 +193,7 @@ contains rules will be significantly slower (depends on number of existing rules
 - All errors and warnings will be saved to `Logs` directory, so you can review these logs later
 if you want to fix some problem.
 - Any rule that results in "access denied" while loading should be reloaded by executing specific
-script again, see [FAQ.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FAQ.md)
+script again, see [FAQ.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/FAQ.md)
 for information on why this may happen.
 - If the project was manually downloaded, transferred from another computer or media then you should\
 unblock all files in project first to avoid YES/NO spam questions for every executing script,

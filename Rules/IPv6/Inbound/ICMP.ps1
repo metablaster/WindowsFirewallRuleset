@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 # Make sure to check for updated content!
-# http://www.iana.org/assignments/icmpv6-parameters/icmpv6-parameters.xhtml
+# https://www.iana.org/assignments/icmpv6-parameters/icmpv6-parameters.xhtml
 
 
 <#

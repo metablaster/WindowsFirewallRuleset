@@ -48,7 +48,7 @@ TODO: This needs improvement to export matching rules to JSON
 function Find-RulePrincipal
 {
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.Firewall/Help/en-US/Find-RulePrincipal.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.Firewall/Help/en-US/Find-RulePrincipal.md")]
 	param (
 		[Parameter()]
 		[switch] $Empty

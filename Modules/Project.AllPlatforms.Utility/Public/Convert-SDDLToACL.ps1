@@ -46,7 +46,7 @@ function Convert-SDDLToACL
 {
 	[OutputType([string[]])]
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Utility/Help/en-US/Convert-SDDLToACL.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Utility/Help/en-US/Convert-SDDLToACL.md")]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string[]] $SDDL

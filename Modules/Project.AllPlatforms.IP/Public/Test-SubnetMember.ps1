@@ -94,7 +94,7 @@ function Test-SubnetMember
 {
 	[OutputType([bool])]
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.IP/Help/en-US/Test-SubnetMember.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.IP/Help/en-US/Test-SubnetMember.md")]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[string] $SubjectIPAddress,

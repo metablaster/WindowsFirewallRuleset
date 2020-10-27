@@ -1,7 +1,7 @@
 ---
 external help file: Project.Windows.ComputerInfo-help.xml
 Module Name: Project.Windows.ComputerInfo
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ComputerInfo/Help/en-US/Get-IPAddress.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ComputerInfo/Help/en-US/Get-IPAddress.md
 schema: 2.0.0
 ---
 

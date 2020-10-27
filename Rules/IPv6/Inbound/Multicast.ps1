@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 <#
-http://www.iana.org/assignments/ipv6-multicast-addresses/ipv6-multicast-addresses.xhtml
+https://www.iana.org/assignments/ipv6-multicast-addresses/ipv6-multicast-addresses.xhtml
 
 IPv6 multicast addresses are distinguished from unicast addresses by the value of the high-order
 octet of the addresses:
@@ -89,7 +89,7 @@ Import-Module -Name Project.Windows.UserInfo
 # Setup local variables
 $Group = "Multicast IPv6"
 $FirewallProfile = "Private, Domain"
-$Description = "http://www.iana.org/assignments/ipv6-multicast-addresses/ipv6-multicast-addresses.xhtml"
+$Description = "https://www.iana.org/assignments/ipv6-multicast-addresses/ipv6-multicast-addresses.xhtml"
 $MulticastUsers = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE", "LOCAL SERVICE" @Logs
 # NOTE: we need Any to include IPv6 loopback interface because IPv6 loopback rule does not work on
 # boot, (neither ::1 address nor interface alias)

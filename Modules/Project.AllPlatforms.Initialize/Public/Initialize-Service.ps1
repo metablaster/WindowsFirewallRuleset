@@ -58,7 +58,7 @@ function Initialize-Service
 {
 	[OutputType([bool])]
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Initialize/Help/en-US/Initialize-Service.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Initialize/Help/en-US/Initialize-Service.md")]
 	param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
 		[string[]] $Services

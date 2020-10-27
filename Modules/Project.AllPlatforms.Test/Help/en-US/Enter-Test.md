@@ -1,7 +1,7 @@
 ---
 external help file: Project.AllPlatforms.Test-help.xml
 Module Name: Project.AllPlatforms.Test
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Test/Help/en-US/Enter-Test.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Test/Help/en-US/Enter-Test.md
 schema: 2.0.0
 ---
 

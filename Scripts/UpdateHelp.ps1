@@ -180,7 +180,7 @@ While generating help files, temporary folders may appear in language specific s
 
 		# Help content download link for Update-Help commandlet
 		# This value is required for .cab file creation. This value is used as markdown header metadata in the module page
-		[string] $DownloadLink = "https://github.com/metablaster/WindowsFirewallRuleset/tree/develop/Config/HelpContent/$ProjectVersion"
+		[string] $DownloadLink = "https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/$ProjectVersion"
 
 		# Module page file
 		[string] $ModulePage = "$OnlineHelp\$ModuleName.md"
@@ -272,7 +272,7 @@ While generating help files, temporary folders may appear in language specific s
 
 			# Read file and single line string preserving line break characters
 			$FileData = Get-Content -Path $OnlineHelp\$Command.md -Encoding $Encoding -Raw
-			$OnlineVersion = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/$ModuleName/Help/$UICulture/$Command.md"
+			$OnlineVersion = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/$ModuleName/Help/$UICulture/$Command.md"
 
 			# If online help link is out of date or missing set it
 			if (!($FileData -match "online version:\s$OnlineVersion"))

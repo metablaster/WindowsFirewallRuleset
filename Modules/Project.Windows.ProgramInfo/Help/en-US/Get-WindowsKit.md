@@ -1,7 +1,7 @@
 ---
 external help file: Project.Windows.ProgramInfo-help.xml
 Module Name: Project.Windows.ProgramInfo
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-WindowsKit.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-WindowsKit.md
 schema: 2.0.0
 ---
 

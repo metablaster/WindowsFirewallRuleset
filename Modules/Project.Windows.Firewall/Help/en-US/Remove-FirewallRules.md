@@ -1,7 +1,7 @@
 ---
 external help file: Project.Windows.Firewall-help.xml
 Module Name: Project.Windows.Firewall
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.Firewall/Help/en-US/Remove-FirewallRules.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.Firewall/Help/en-US/Remove-FirewallRules.md
 schema: 2.0.0
 ---
 

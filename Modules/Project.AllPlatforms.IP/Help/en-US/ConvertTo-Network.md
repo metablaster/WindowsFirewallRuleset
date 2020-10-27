@@ -1,7 +1,7 @@
 ---
 external help file: Project.AllPlatforms.IP-help.xml
 Module Name: Project.AllPlatforms.IP
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.IP/Help/en-US/ConvertTo-Network.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.IP/Help/en-US/ConvertTo-Network.md
 schema: 2.0.0
 ---
 
@@ -24,13 +24,11 @@ This Cmdlet allows all other the other functions in this module to offload param
 
 ## EXAMPLES
 
-### Example 1
+### EXAMPLE 1
 
-```powershell
-PS C:\> {{ Add example code here }}
+```none
+TODO: Provide example
 ```
-
-{{ Add example description here }}
 
 ## PARAMETERS
 

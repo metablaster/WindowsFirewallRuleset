@@ -84,7 +84,7 @@ function Get-NetworkAddress
 {
 	[OutputType([IPAddress])]
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.IP/Help/en-US/Get-NetworkAddress.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.IP/Help/en-US/Get-NetworkAddress.md")]
 	param (
 		[Parameter(Mandatory = $true,
 			ValueFromPipeline = $true)]

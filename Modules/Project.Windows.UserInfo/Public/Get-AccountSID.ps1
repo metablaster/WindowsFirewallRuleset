@@ -53,7 +53,7 @@ TODO: plural parameter 'UserNames'
 function Get-AccountSID
 {
 	[CmdletBinding(PositionalBinding = $false,
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.UserInfo/Help/en-US/Get-AccountSID.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.UserInfo/Help/en-US/Get-AccountSID.md")]
 	param (
 		[Alias("User")]
 		[Parameter(Mandatory = $true,

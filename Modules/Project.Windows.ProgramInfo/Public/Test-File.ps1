@@ -47,7 +47,7 @@ function Test-File
 {
 	[OutputType([void])]
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ProgramInfo/Help/en-US/Test-File.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ProgramInfo/Help/en-US/Test-File.md")]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $FilePath

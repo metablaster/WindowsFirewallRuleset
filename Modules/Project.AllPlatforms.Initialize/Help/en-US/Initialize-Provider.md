@@ -1,7 +1,7 @@
 ---
 external help file: Project.AllPlatforms.Initialize-help.xml
 Module Name: Project.AllPlatforms.Initialize
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Initialize/Help/en-US/Initialize-Provider.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Initialize/Help/en-US/Initialize-Provider.md
 schema: 2.0.0
 ---
 
@@ -14,8 +14,7 @@ Test if recommended packages are installed
 ## SYNTAX
 
 ```none
-Initialize-Provider [-FullyQualifiedName] <Hashtable> [-Name <String>] [-Location <Uri>] [-Trusted]
- [-InfoMessage <String>] [-Required] [<CommonParameters>]
+Initialize-Provider [-FullyQualifiedName] <Hashtable> [-InfoMessage <String>] [-Required] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -48,57 +47,6 @@ Aliases:
 Required: True
 Position: 1
 Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Name
-
-Package source name which to assign to registered provider if registration is needed
-
-```yaml
-Type: System.String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: Nuget.org
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Location
-
-Repository name from which to download packages such as NuGet,
-if repository is not registered user is prompted to register it
-
-```yaml
-Type: System.Uri
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: Https://api.nuget.org/v3/index.json
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Trusted
-
-If the supplied repository needs to be registered Trusted specifies
-whether repository is trusted or not.
-this parameter is used only if repository is not registered
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

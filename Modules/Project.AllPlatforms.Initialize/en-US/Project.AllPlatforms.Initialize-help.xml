@@ -234,7 +234,7 @@ is not registered user is prompted to do that too.</dev:code>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Initialize/Help/en-US/Initialize-Module.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Initialize/Help/en-US/Initialize-Module.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -402,7 +402,7 @@ Error or warning message is shown if check failed, environment info otherwise.</
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Initialize/Help/en-US/Initialize-Project.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Initialize/Help/en-US/Initialize-Project.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -432,41 +432,6 @@ Error or warning message is shown if check failed, environment info otherwise.</
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Name</maml:name>
-          <maml:Description>
-            <maml:para>Package source name which to assign to registered provider if registration is needed</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-          <dev:type>
-            <maml:name>System.String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>Nuget.org</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Location</maml:name>
-          <maml:Description>
-            <maml:para>Repository name from which to download packages such as NuGet, if repository is not registered user is prompted to register it</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">System.Uri</command:parameterValue>
-          <dev:type>
-            <maml:name>System.Uri</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>Https://api.nuget.org/v3/index.json</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Trusted</maml:name>
-          <maml:Description>
-            <maml:para>If the supplied repository needs to be registered Trusted specifies whether repository is trusted or not. this parameter is used only if repository is not registered</maml:para>
-          </maml:Description>
-          <dev:type>
-            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>InfoMessage</maml:name>
@@ -505,42 +470,6 @@ Error or warning message is shown if check failed, environment info otherwise.</
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Name</maml:name>
-        <maml:Description>
-          <maml:para>Package source name which to assign to registered provider if registration is needed</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-        <dev:type>
-          <maml:name>System.String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>Nuget.org</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Location</maml:name>
-        <maml:Description>
-          <maml:para>Repository name from which to download packages such as NuGet, if repository is not registered user is prompted to register it</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.Uri</command:parameterValue>
-        <dev:type>
-          <maml:name>System.Uri</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>Https://api.nuget.org/v3/index.json</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Trusted</maml:name>
-        <maml:Description>
-          <maml:para>If the supplied repository needs to be registered Trusted specifies whether repository is trusted or not. this parameter is used only if repository is not registered</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-        <dev:type>
-          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>InfoMessage</maml:name>
@@ -605,7 +534,7 @@ Error or warning message is shown if check failed, environment info otherwise.</
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Initialize/Help/en-US/Initialize-Provider.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Initialize/Help/en-US/Initialize-Provider.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -699,7 +628,7 @@ $true if WinRM service was started $false otherwise</dev:code>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Initialize/Help/en-US/Initialize-Service.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Initialize/Help/en-US/Initialize-Service.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>

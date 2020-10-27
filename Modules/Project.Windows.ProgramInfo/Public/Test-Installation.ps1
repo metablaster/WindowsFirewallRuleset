@@ -51,7 +51,7 @@ function Test-Installation
 {
 	[OutputType([bool])]
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ProgramInfo/Help/en-US/Test-Installation.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ProgramInfo/Help/en-US/Test-Installation.md")]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[string] $Program,

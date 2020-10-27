@@ -59,7 +59,7 @@ function Get-FileEncoding
 {
 	[OutputType([string])]
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Utility/Help/en-US/Get-FileEncoding.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Utility/Help/en-US/Get-FileEncoding.md")]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $FilePath,

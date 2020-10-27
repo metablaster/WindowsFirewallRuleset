@@ -26,7 +26,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-<# http://www.iana.org/assignments/multicast-addresses/multicast-addresses.xhtml
+<# https://www.iana.org/assignments/multicast-addresses/multicast-addresses.xhtml
 Address Range					Size		CIDR				Designation
 -------------					----		-----------			-----------
 224.0.0.0 - 224.0.0.255			(/24)		224.0.0/24			Local Network Control Block

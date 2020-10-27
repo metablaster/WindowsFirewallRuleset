@@ -47,7 +47,7 @@ function Test-Environment
 {
 	[OutputType([bool])]
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ProgramInfo/Help/en-US/Test-Environment.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ProgramInfo/Help/en-US/Test-Environment.md")]
 	param (
 		[Parameter()]
 		[string] $FilePath = $null

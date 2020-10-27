@@ -53,7 +53,7 @@ function Get-SystemSKU
 {
 	[OutputType([PSCustomObject[]])]
 	[CmdletBinding(PositionalBinding = $false,
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ComputerInfo/Help/en-US/Get-SystemSKU.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ComputerInfo/Help/en-US/Get-SystemSKU.md")]
 	param(
 		[Parameter(ValueFromPipeline = $true, ParameterSetName = "Number")]
 		[ValidatePattern("^[0-9]+$")]

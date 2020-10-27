@@ -72,7 +72,7 @@ function ConvertTo-HexIP
 {
 	[OutputType([string])]
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.IP/Help/en-US/ConvertTo-HexIP.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.IP/Help/en-US/ConvertTo-HexIP.md")]
 	param (
 		[Parameter(Mandatory = $true,
 			ValueFromPipeline = $true)]

@@ -1,7 +1,7 @@
 ---
 external help file: Project.AllPlatforms.Utility-help.xml
 Module Name: Project.AllPlatforms.Utility
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.Utility/Help/en-US/Get-NetworkService.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Utility/Help/en-US/Get-NetworkService.md
 schema: 2.0.0
 ---
 

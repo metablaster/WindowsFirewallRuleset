@@ -60,7 +60,7 @@ function Get-ConfiguredAdapter
 {
 	# TODO: doesn't work [OutputType([System.Net.NetIPConfiguration])]
 	[CmdletBinding(DefaultParameterSetName = "Individual",
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.ComputerInfo/Help/en-US/Get-ConfiguredAdapter.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ComputerInfo/Help/en-US/Get-ConfiguredAdapter.md")]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[ValidateSet("IPv4", "IPv6")]

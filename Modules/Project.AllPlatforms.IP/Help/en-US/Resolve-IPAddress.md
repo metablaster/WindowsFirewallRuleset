@@ -1,7 +1,7 @@
 ---
 external help file: Project.AllPlatforms.IP-help.xml
 Module Name: Project.AllPlatforms.IP
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.AllPlatforms.IP/Help/en-US/Resolve-IPAddress.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.IP/Help/en-US/Resolve-IPAddress.md
 schema: 2.0.0
 ---
 

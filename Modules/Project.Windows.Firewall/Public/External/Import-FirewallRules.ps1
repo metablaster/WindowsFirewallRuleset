@@ -77,7 +77,7 @@ function Import-FirewallRules
 {
 	[OutputType([void])]
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.Firewall/Help/en-US/Import-FirewallRules.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.Firewall/Help/en-US/Import-FirewallRules.md")]
 	param(
 		[Parameter()]
 		[string] $PolicyStore = [System.Environment]::MachineName,

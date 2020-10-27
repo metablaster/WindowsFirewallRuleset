@@ -1,7 +1,7 @@
 ---
 external help file: Project.Windows.UserInfo-help.xml
 Module Name: Project.Windows.UserInfo
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Modules/Project.Windows.UserInfo/Help/en-US/ConvertFrom-SID.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.UserInfo/Help/en-US/ConvertFrom-SID.md
 schema: 2.0.0
 ---
 
