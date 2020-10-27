@@ -50,7 +50,7 @@ Set-Variable -Name SettingsScript -Scope Local -Option ReadOnly -Value ($MyInvoc
 # 4. Enables some disabled unit tests and disables logging
 # 5. Enables setting preference variables for modules
 # NOTE: Changing variable requires PowerShell restart
-Set-Variable -Name Develop -Scope Global -Value $true
+Set-Variable -Name Develop -Scope Global -Value $false
 
 if ($Develop)
 {
@@ -314,6 +314,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 # Read only variables, meaning these can be modified by code at any time,
 # and, only once per session by users.
 # Changing these requires powershell restart, except if Develop = $true
+# TODO: In Develop mode, this run will reset changes made by other scripts.
 if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignore))
 {
 	Write-Debug -Message "[$SettingsScript] Setup read only variables"

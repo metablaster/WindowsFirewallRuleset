@@ -159,13 +159,13 @@ function Initialize-Provider
 			Write-Information -Tags "User" -MessageData "INFO: Provider $($FoundProvider.Name) v$($FoundProvider.Version.ToString()) is selected for download"
 
 			# Check download source is trusted
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if package source $Name is trusted"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if package source $($FoundProvider.Name) is trusted"
 
 			# TODO: If not found "PowerShell" may ask to install, and if that fails it may return package source anyway (seen in: Windows PowerShell)
 			# NOTE: This is controlled with powershell.promptToUpdatePackageManagement
 			[PSCustomObject] $PackageSource = Get-PackageSource -ProviderName $FoundProvider.ProviderName
 
-			if (!$FoundProvider.IsTrusted)
+			if (!$PackageSource.IsTrusted)
 			{
 				# Setup choices
 				$Accept.HelpMessage = "Setting to trusted won't ask you in the future for confirmation"

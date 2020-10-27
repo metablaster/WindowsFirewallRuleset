@@ -228,7 +228,7 @@ lines, this is where you extracted your downloaded zip file:
 
     ```powershell
     c:
-    cd C:\
+    cd \
     ```
 
 6. cd into downloaded folder, of course rename the command if your extracted folder is called something
@@ -272,6 +272,8 @@ downloaded from internet:
     ```powershell
     Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
     ```
+
+    You will be again prompted to accept execution policy change, type `Y` and press enter to accept.
 
 11. Rules for programs such as internet browser, Visual Studio etc. depend on installation variables.\
 Most paths are auto-searched and variables are updated, otherwise you get warning and description

@@ -386,6 +386,7 @@ function Initialize-Module
 		}
 		else
 		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Finding module $ModuleName for download failed, trying alternative solution"
 			$FoundModule = Find-Module -Name $ModuleName -Repository $RepositoryItem.Name `
 				-MinimumVersion $RequireVersion # -ErrorAction SilentlyContinue
 		}
@@ -501,6 +502,7 @@ function Initialize-Module
 			Write-Information -Tags "User" -MessageData "INFO: Module $ModuleName v$($ModuleInfo.Version.ToString()) was installed/updated"
 
 			# Remove old module if it exists and is loaded
+			# TODO: It looks like this method doesn't solve the problem and we need to restart PowerShell anyway
 			Remove-Module -Name $ModuleName -Force -ErrorAction Ignore
 
 			if ($ModuleName -eq "PowerShellGet")

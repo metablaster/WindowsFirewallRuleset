@@ -353,6 +353,9 @@ function Initialize-Project
 		}
 
 		# Pester is required to run pester tests, required by PSScriptAnalyzer
+		# NOTE: at this point PowerShell must be restarted to avoid errors
+		Write-Warning -Message "If installing pester and posh-git fails, please restart PowerShell"
+
 		if (!(Initialize-Module @{ ModuleName = "Pester"; ModuleVersion = $RequirePesterVersion } `
 					-InfoMessage "Pester >= v$RequirePesterVersion is required to run pester tests" )) { }
 
