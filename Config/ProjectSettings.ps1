@@ -50,7 +50,7 @@ Set-Variable -Name SettingsScript -Scope Local -Option ReadOnly -Value ($MyInvoc
 # 4. Enables some disabled unit tests and disables logging
 # 5. Enables setting preference variables for modules
 # NOTE: Changing variable requires PowerShell restart
-Set-Variable -Name Develop -Scope Global -Value $false
+Set-Variable -Name Develop -Scope Global -Value $true
 
 if ($Develop)
 {
@@ -255,6 +255,8 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	# https://docs.microsoft.com/en-us/powershell/scripting/windows-powershell/install/windows-powershell-system-requirements?view=powershell-7.1
 	# NOTE: v1703 includes .NET 4.7
 	# NOTE: v1903-v2004 includes .NET 4.8
+	# TODO: Last test on Server 2019 which comes with .NET 4.7 run just fine,
+	# modules loaded even though .NET 4.8 is specified as minimum required
 	New-Variable -Name RequireNETVersion -Scope Global -Option Constant -Value ([version]::new(4, 8, 0))
 
 	# Repository root directory, reallocating scripts should be easy if root directory is constant
@@ -320,7 +322,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -Erro
 	Set-Variable -Name CheckReadOnlyVariables -Scope Global -Option ReadOnly -Force -Value $null
 
 	# Set to false to avoid checking system requirements
-	Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value (!$Develop)
+	Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $true
 
 	# Set to false to avoid checking if modules are up to date
 	Set-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Force -Value $Develop
@@ -328,9 +330,17 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -Erro
 	# Set to false to avoid checking if required system services are started
 	Set-Variable -Name ServicesCheck -Scope Global -Option ReadOnly -Force -Value $true
 
-	# Required minimum NuGet version prior to installing other modules
-	# NOTE: Core >= 3.0.0, Desktop >= 2.8.5, Desktop will be set in Initialize-Project
-	Set-Variable -Name RequireNuGetVersion -Scope Global -Option ReadOnly -Force -Value ([version]::new(3, 0, 0))
+	if ($PSVersionTable.PSEdition -eq "Core")
+	{
+		# Required minimum NuGet version prior to installing other modules
+		# NOTE: Core >= 3.0.0, Desktop >= 2.8.5
+		Set-Variable -Name RequireNuGetVersion -Scope Global -Option ReadOnly -Force -Value ([version]::new(3, 0, 0))
+	}
+	else
+	{
+		# NOTE: Setting this variable in Initialize-Project would override it in develop mode
+		Set-Variable -Name RequireNuGetVersion -Scope Global -Option ReadOnly -Force -Value ([version]::new(2, 8, 5))
+	}
 
 	# Administrative user account name which will perform unit testing
 	Set-Variable -Name UnitTesterAdmin -Scope Global -Option ReadOnly -Force -Value "Unknown Admin"

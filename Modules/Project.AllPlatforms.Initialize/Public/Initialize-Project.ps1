@@ -187,8 +187,6 @@ function Initialize-Project
 	}
 	else
 	{
-		# Default is set to 3.0.0 for Core editions in ProjectSettings
-		Set-Variable -Name RequireNuGetVersion -Scope Global -Force -Value ([version]::new(2, 8, 5))
 		Write-Warning -Message "Remote firewall administration with PowerShell $PowerShellEdition is partially implemented"
 	}
 
@@ -235,7 +233,7 @@ function Initialize-Project
 	if ($Develop)
 	{
 		# Check NET Framework version
-		# NOTE: Modules won't load if version isn't met, but scripts a lone may have requirements
+		# NOTE: Project modules won't load if version isn't met, scripts a lone may have requirements too
 		# NOTE: This prerequisite is valid for the PowerShell Desktop edition only
 		if ($PowerShellEdition -eq "Desktop")
 		{
@@ -258,6 +256,7 @@ function Initialize-Project
 			{
 				Write-Error -Category OperationStopped -TargetObject $TargetNETVersion `
 					-Message "Minimum required .NET Framework is .NET v$RequireNETVersion but v$TargetNETVersion present"
+				Write-Information -Tags "Project" -MessageData "INFO: Please visit https://dotnet.microsoft.com/download/dotnet-framework to download and install"
 
 				if ($Abort) { exit }
 				return

@@ -379,9 +379,16 @@ function Initialize-Module
 
 		# Try anyway, maybe port is wrong, only first match is considered
 		# NOTE: -InputObject can't be used with -AllowPrerelease, we'll use -AllowPrerelease here to be able to install what is found
-		$FoundModule = Find-Module -Name $ModuleName -Repository $RepositoryItem.Name `
-			-MinimumVersion $RequireVersion -AllowPrerelease:$AllowPrerelease # -ErrorAction SilentlyContinue
-
+		if ($TargetPowerShellGet -ge $Version2)
+		{
+			$FoundModule = Find-Module -Name $ModuleName -Repository $RepositoryItem.Name `
+				-MinimumVersion $RequireVersion -AllowPrerelease:$AllowPrerelease # -ErrorAction SilentlyContinue
+		}
+		else
+		{
+			$FoundModule = Find-Module -Name $ModuleName -Repository $RepositoryItem.Name `
+				-MinimumVersion $RequireVersion # -ErrorAction SilentlyContinue
+		}
 		if ($FoundModule)
 		{
 			Write-Information -Tags "User" -MessageData "INFO: Module $ModuleName v$($FoundModule.Version.ToString()) is selected for download"
@@ -443,7 +450,7 @@ function Initialize-Module
 			}
 			else # Shipped with system
 			{
-				Write-Information -Tags "User" -MessageData "INFO: Installing module $($FoundModule.Name) v$($FoundModule.Version)"
+				Write-Information -Tags "User" -MessageData "INFO: Installing module $($FoundModule.Name) v$($FoundModule.Version) side by side"
 
 				# Need force to install side by side, update not possible
 				if ($TargetPowerShellGet -ge $Version2)
@@ -492,30 +499,33 @@ function Initialize-Module
 		if ($ModuleInfo)
 		{
 			Write-Information -Tags "User" -MessageData "INFO: Module $ModuleName v$($ModuleInfo.Version.ToString()) was installed/updated"
-			Write-Information -Tags "User" -MessageData "INFO: Loading module $ModuleName v$($ModuleInfo.Version.ToString()) into session"
 
-			# TODO: last test didn't load fresh installed modules: pester, posh-git, PSScriptAnalyzer
 			# Remove old module if it exists and is loaded
-			Remove-Module -Name $ModuleName -ErrorAction Ignore
-			# Load new module in current session
-			Import-Module -ModuleInfo $ModuleInfo
-
-			# Finishing work, update as needed
-			switch ($ModuleName)
-			{
-				"posh-git"
-				{
-					# TODO: shortened prompt, is valid only for user home path
-					# TODO: last test did not execute Add-PoshGitToProfile after failed and second attempt
-					Write-Information -Tags "User" -MessageData "INFO: Adding $ModuleName $($ModuleInfo.Version.ToString()) to profile"
-					Add-PoshGitToProfile -AllHosts
-				}
-			}
+			Remove-Module -Name $ModuleName -Force -ErrorAction Ignore
 
 			if ($ModuleName -eq "PowerShellGet")
 			{
 				# Let other parts of a module know PowerShellGet is up to date
 				Set-Variable -Name HasPowerShellGet -Scope Script -Option ReadOnly -Force -Value $true
+
+				# PackageManagement must be reloaded too
+				# TODO: because of pester signature error?
+				Remove-Module -Name PackageManagement -Force -ErrorAction Ignore
+			}
+
+			Write-Information -Tags "User" -MessageData "INFO: Loading module $ModuleName v$($ModuleInfo.Version.ToString()) into session"
+
+			# Load new module into current session
+			# TODO: In case of PowerShellGet this should load PackageManagement too?
+			Import-Module -ModuleInfo $ModuleInfo -Scope Global
+
+			# Finishing work, update as needed
+			if ($ModuleName -eq "posh-git")
+			{
+				# TODO: shortened prompt, is valid only for user home path
+				# TODO: last test did not execute Add-PoshGitToProfile after failed and second attempt
+				Write-Information -Tags "User" -MessageData "INFO: Adding $ModuleName $($ModuleInfo.Version.ToString()) to profile"
+				Add-PoshGitToProfile -AllHosts
 			}
 
 			return $true

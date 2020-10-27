@@ -28,8 +28,9 @@ If you would like to see fresh changes done since last release you can do so on 
   - Reordered external module code and removed non file licenses
   - Indented.Net.IP: integrate into project, rename module, make variables casing consistent
   - Improved search algorithm for Microsoft office installation root
-  - Improved Test-Environment function to test for paths with no environment variables
+  - Improved Test-Environment function to test for invalid environment variables
   - "Contacting computer" messages are now part of verbose stream
+  - Improved provider and module initialization
 
 - Rules
 
@@ -41,13 +42,14 @@ If you would like to see fresh changes done since last release you can do so on 
   - Added initial rule for dotnet.exe
   - Aded new rules for Windows version "20H2"
   - Added rule for Microsoft account
-  - Search algorithm and rule creation choice for OneDrive now include all users,
+  - Search algorithm and rule creation choice for OneDrive now includes all users,
   including those not logged into machine
 
 - New features
 
   - Command line help is now fully functional, for each prompt you can type `?` to get more information
   - New function "Get-ProcessOutput" to wait for and capture process (command) output when run in PS
+  - Project code and rules are now actively tested also on Windows 10 "Education" edition
 
 - Development
 
@@ -58,7 +60,8 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - Documentation
 
-  - Generated online help files in markdown format for modules, can be accessed with Get-Help -Online
+  - Generated online help files in markdown format for modules, can be accessed with `Get-Help -Online`
+  - Revisited comment based help for mistakes, added missing comment based help for scripts
 
 - Bugfix
 
@@ -67,7 +70,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - Fix bug with Get-FileEncoding due to overridden variable
   - Don't show path correction message if there was no change to program path
   - Show warning instead of code error if target machine not connected to network
-  - Registering repository would fail due to unknown trust policy
+  - Registering PowerShell repository would fail due to unknown trust policy
 
 ## v0.6.0 (current release)
 

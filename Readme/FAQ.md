@@ -192,7 +192,16 @@ for you:
     - Note that last 4 script names listed above exist in multiple locations, but are not the same!
     - By default none of these scripts run on its own, except as explained in point 4.
 
-6. There is nothing harmful here
+6. Following is a list of external executables that are run by some scripts
+
+    - gpupdate.exe (to apply GPO setting and avoid system restart)
+    - reg.exe (to load offline registry hive)
+    - code.cmd (to learn VSCode version)
+    - git.exe (to learn git version)
+    - icacls.exe (to set ACL and remove old duplicate modules)
+    - takeown.exe (to take ownership and remove old duplicate modules)
+
+7. There is nothing harmful here
 
 - Some scripts or code such as `initialize-module.ps1` might attempt to contact online PowerShell repository
 before downloading modules, however this happens only if you enable "development mode"

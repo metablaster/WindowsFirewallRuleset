@@ -105,6 +105,7 @@ or inside folders called "External" for organizational purposes.
 1. Following x64 operating systems are currently actively tested:
    - Windows 10 Professional
    - Windows 10 Enterprise
+   - Windows 10 Education
    - Windows Server 2019 Standard
 2. PowerShell Core 7.0 or Windows PowerShell 5.1
 [Download PowerShell](https://github.com/PowerShell/PowerShell)
@@ -221,25 +222,8 @@ PowerShell Core as Administrator
 (Assumes you enabled context menu during installation of PowerShell Core) if not open it manually.
 4. If you would like to use Windows PowerShell 5.1 instead of PowerShell Core see:\
 [How to open Windows PowerShell](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/WindowsPowerShell.md)
-5. Type or copy/paste following commands and hit enter for each
 
-    ```powershell
-    Get-ExecutionPolicy
-    ```
-
-    Remember what the output of the above command is, note that PowerShell Core defaults to `RemoteSigned`
-    while Windows PowerShell defaults to `Restricted`
-
-6. Set new execution policy: (Note that `RemoteSigned` will work only if scripts are unblocked)
-
-    ```powershell
-    Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
-    ```
-
-    You will be prompted to accept execution policy change, type `Y` and press enter to accept.\
-    For more information visit link given in the console description.
-
-7. Now if you don't have PowerShell context menu then move to C root drive by executing following 2
+5. Now if you don't have PowerShell context menu then move to C root drive by executing following 2
 lines, this is where you extracted your downloaded zip file:
 
     ```powershell
@@ -247,12 +231,31 @@ lines, this is where you extracted your downloaded zip file:
     cd C:\
     ```
 
-8. cd into downloaded folder, of course rename the command if your extracted folder is called something
+6. cd into downloaded folder, of course rename the command if your extracted folder is called something
 else:
 
     ```powershell
     cd WindowsFirewallRuleset-master
     ```
+
+7. Type or copy/paste following commands and hit enter for each
+
+    ```powershell
+    Get-ExecutionPolicy
+    ```
+
+    Remember what the output of the above command is, note that PowerShell Core defaults to `RemoteSigned`
+    while Windows PowerShell defaults to `Restricted` on non server editions.
+
+8. Set execution policy to unrestricted to be able to unblock project files,
+(Note that `RemoteSigned` will work only once scripts are unblocked)
+
+    ```powershell
+    Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
+    ```
+
+    You will be prompted to accept execution policy change, type `Y` and press enter to accept.\
+    For more information see [About Execution Policies](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7)
 
 9. At this point you should "unblock" all project files first by executing the script called `Scripts\UnblockProject.ps1`,
 btw. project files were blocked by Windows to prevent users from running untrusted script code
@@ -264,13 +267,19 @@ downloaded from internet:
 
     Make sure your answer is `R` that is `[R] Run once` as many times as needed to unblock project.
 
-10. Rules for programs such as internet browser, Visual Studio etc. depend on installation variables.\
+10. Once project files are unblocked set execution policy to `RemoteSigned`:
+
+    ```powershell
+    Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+    ```
+
+11. Rules for programs such as internet browser, Visual Studio etc. depend on installation variables.\
 Most paths are auto-searched and variables are updated, otherwise you get warning and description
 on how to fix the problem.\
 If needed, you can find these installation variables in individual scripts inside `Rules` folder.\
 It is recommended to close down all other programs before running master script in the next step
 
-11. Back to PowerShell console and type into console:
+12. Back to PowerShell console and type into console:
 
     ```powershell
     .\Scripts\SetupFirewall.ps1
@@ -279,18 +288,11 @@ It is recommended to close down all other programs before running master script 
     Hit enter and you will be prompted questions such as what kind of rulesets you want.\
     If you need help to decide whether to run some rules or not, type `?` and press enter.
 
-12. Follow prompt output, (ex. hit enter to accept default action),
+13. Follow prompt output, (ex. hit enter to accept default action),
 it will take at least 10 minutes of your attention.
 
-13. If you encounter errors or warnings, you have options such as, ignore the errors/warnings
+14. If you encounter errors or warnings, you have options such as, ignore the errors/warnings
 or update script that produced the error and re-run that script once again later.
-
-14. Once execution is done recall execution policy from step 5 and type:
-(ie. if it was "RemoteSigned" which is default for PowerShell Core)
-
-    ```powershell
-    Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
-    ```
 
 15. Now that rules are applied you might need to adjust some of them in Local Group Policy,
 not all the rules are enabled by default and you might want to toggle default Allow/Block behavior for
@@ -502,15 +504,14 @@ Following features are desired and might be available at some point in the futur
 
 2. Comprehensive firewall rulesets for server platforms
 
-3. On demand registry scan to validate integrity of active firewall filtering policy
+3. On demand or scheduled registry scan to validate integrity of active firewall filtering policy
 
    - Any firewall rule in the registry that is not part of this repository is reported for review
    - Because, malware, hackers and even trusted software might attempt to bypass firewall at any time
 
-4. Full functionality for the following editions of Windows 10.0+
+4. Full functionality for the following editions of Windows 10.0
    - Windows 10 Pro for Workstations
    - Windows 10 Pro Education
-   - Windows 10 Education
    - Windows 10 IoT Core Blast
    - Windows 10 IoT Enterprise
    - Windows 10 S

@@ -37,15 +37,6 @@ installed and in correct order, taking into account failures that can happen whi
 installing or updating packages
 .PARAMETER FullyQualifiedName
 Hash table ProviderName, Version representing minimum required module
-.PARAMETER Name
-Package source name which to assign to registered provider if registration is needed
-.PARAMETER Location
-Repository name from which to download packages such as NuGet,
-if repository is not registered user is prompted to register it
-.PARAMETER Trusted
-If the supplied repository needs to be registered Trusted specifies
-whether repository is trusted or not.
-this parameter is used only if repository is not registered
 .PARAMETER InfoMessage
 Optional information displayable to user for choice help message
 .PARAMETER Required
@@ -75,17 +66,6 @@ function Initialize-Provider
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[hashtable] $FullyQualifiedName,
-
-		[Parameter()]
-		[string] $Name = "nuget.org",
-
-		[Parameter()]
-		[ValidatePattern("[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)")]
-		[uri] $Location = "https://api.nuget.org/v3/index.json",
-		# HACK: array https://www.nuget.org/api/v2 (used by PSGallery?)
-		# NOTE: suggested in Windows PowerShell: https://onegetcdn.azureedge.net/providers/Microsoft.PackageManagement.NuGetProvider-2.8.5.208.dll
-		[Parameter()]
-		[switch] $Trusted,
 
 		[Parameter()]
 		[string] $InfoMessage = "Accept operation",
@@ -147,6 +127,7 @@ function Initialize-Provider
 				return $true
 			}
 
+			# Out of date
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Provider $ProviderName v$TargetVersion found"
 		}
 		else
@@ -154,171 +135,57 @@ function Initialize-Provider
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Provider $ProviderName not installed"
 		}
 
-		# Check requested package source is registered
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if package source $ProviderName is registered"
+		# Check if module could be downloaded
+		# [Microsoft.PackageManagement.Packaging.SoftwareIdentity]
+		[PSCustomObject] $FoundProvider = $null
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if $ProviderName provider version >= v$RequireVersion is available for download"
 
-		# Package source name only list
-		[string] $SourcesList = ""
+		# NOTE: Find-Package searches registered package sources (registered with Register-PackageSource)
+		# NOTE: Find-PackageProvider searches PowerShellGet (registered with PowerShellGet, that is Register-PSRepository) or Azure blob store
+		$FoundProvider = Find-PackageProvider -Name $ProviderName `
+			-MinimumVersion $RequireVersion -IncludeDependencies -ErrorAction SilentlyContinue
 
-		# Available package sources if found have these sample properties:
-		# Name     : nuget.org
-		# Location : https://api.nuget.org/v3/index.json
-		# Source   : nuget.org
-		# ProviderName : NuGet
-		# Provider  : Microsoft.PackageManagement.Implementation.PackageProvider
-		# IsTrusted : False
-		# IsRegistered : True
-		# TODO: If not found "PowerShell" may ask to install, and if that fails it may return package source anyway (seen in: Windows PowerShell)
-		# NOTE: This is controlled with powershell.promptToUpdatePackageManagement
-		[PSCustomObject[]] $PackageSources = Get-PackageSource -ProviderName $ProviderName -ErrorAction SilentlyContinue # -Name $Name
-
-		if ($PackageSources)
+		if (!$FoundProvider)
 		{
-			$SourcesList = $ProviderName
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Finding provider $ProviderName for download failed, trying alternative solution"
+			# Try with Find-Package
+			# NOTE: For some reason -AllowPrereleaseVersions doesn't return any results
+			$FoundProvider = Find-Package -Name $ProviderName -IncludeDependencies `
+				-MinimumVersion $RequireVersion # -AllowPrereleaseVersions -ErrorAction SilentlyContinue
+		}
 
-			if (!$PackageSources.IsTrusted)
+		if ($FoundProvider)
+		{
+			Write-Information -Tags "User" -MessageData "INFO: Provider $($FoundProvider.Name) v$($FoundProvider.Version.ToString()) is selected for download"
+
+			# Check download source is trusted
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if package source $Name is trusted"
+
+			# TODO: If not found "PowerShell" may ask to install, and if that fails it may return package source anyway (seen in: Windows PowerShell)
+			# NOTE: This is controlled with powershell.promptToUpdatePackageManagement
+			[PSCustomObject] $PackageSource = Get-PackageSource -ProviderName $FoundProvider.ProviderName
+
+			if (!$FoundProvider.IsTrusted)
 			{
 				# Setup choices
 				$Accept.HelpMessage = "Setting to trusted won't ask you in the future for confirmation"
 				$Choices += $Accept
 				$Choices += $Deny
 
-				$Title = "Package source $ProviderName is not trusted"
-				$Question = "Set $ProviderName as trusted now?"
+				$Title = "Package source $Name is not trusted"
+				$Question = "Set $Name as trusted now?"
 				$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
 
 				if ($Decision -eq $Default)
 				{
-					Set-PackageSource -Name $ProviderName -Trusted
-					$PackageSources = Get-PackageSource -ProviderName $ProviderName
-
-					if ($PackageSources.IsTrusted)
-					{
-						Write-Debug -Message "Package source $ProviderName set to trusted"
-					}
+					Set-PackageSource -Name $FoundProvider.Name -Trusted
+					Write-Debug -Message "Package source $($PackageSource.Name) set to trusted"
 				}
 			}
 
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Package source $ProviderName is registered"
+			Write-Information -Tags "User" -MessageData "INFO: Using following package sources: $($FoundProvider.Name)"
 		}
-		else # Register provided package source
-		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Package source $ProviderName is not registered"
-
-			# Setup choices
-			$Accept.HelpMessage = "Add a package source for a specified package provider"
-			$Choices += $Accept
-			$Choices += $Deny
-
-			$Title = "Package source $ProviderName not registered"
-			$Question = "Register $ProviderName package source now?"
-			$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
-
-			if ($Decision -eq $Default)
-			{
-				Write-Information -Tags "User" -MessageData "INFO: Registering package source $ProviderName"
-
-				# Register package source to be able to use it
-				Register-PackageSource -Name $Name -ProviderName $ProviderName -Location $Location -Trusted:$Trusted
-
-				$SourceObject = Get-PackageSource -Name $Name -ProviderName $ProviderName # -ErrorAction SilentlyContinue
-
-				if ($SourceObject)
-				{
-					$PackageSources += $SourceObject
-					$IsTrusted = "UnTrusted"
-
-					if ($PackageSources[0].IsTrusted)
-					{
-						$IsTrusted = "Trusted"
-					}
-
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Package source $ProviderName is registered and $IsTrusted"
-				}
-				# else error should be displayed
-			}
-			else
-			{
-				# Use default registered package sources
-				$PackageSources = Get-PackageSource
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] User refused to register $ProviderName, using system default package sources"
-			}
-
-			if (!$PackageSources)
-			{
-				$Message = "No registered package source exist"
-				if ($Required)
-				{
-					# Registering repository failed or no valid package source exists
-					Write-Error -Category ObjectNotFound -TargetObject $PackageSources -Message $Message
-					return $false
-				}
-
-				Write-Warning -Message $Message
-				return $true
-			}
-			else
-			{
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Constructing list of package sources for display"
-
-				# Construct list for display on single line
-				foreach ($SourceItem in $PackageSources)
-				{
-					$SourcesList += $SourceItem.Name
-					$SourcesList += ", "
-				}
-
-				$SourcesList = $SourcesList.TrimEnd(", ")
-			}
-		}
-
-		# No need to specify type of repository, it's explained by user action
-		Write-Information -Tags "User" -MessageData "INFO: Using following package sources: $SourcesList"
-
-		# Check if module could be downloaded
-		# [Microsoft.PackageManagement.Packaging.SoftwareIdentity]
-		[PSCustomObject] $FoundProvider = $null
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if $ProviderName provider version >= v$RequireVersion is available for download"
-
-		# NOTE: $PackageSources may contains following 3 package sources in following order of possibility:
-		# 1. explicit source requested by user, there could be multiple that match and are registered
-		# 2. source offered during offer by PowerShell to install, (TODO: which may not be registered?)
-		# 3. source was not found on system, but it was manually registered
-		# 4. all available package sources registered on system
-		# Which means we need to handle all 4 possible cases
-		foreach ($SourceItem in $PackageSources)
-		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking repository $SourceItem for updates"
-
-			[uri] $SourceURI = $SourceItem.Location
-			if (!(Test-NetConnection -ComputerName $SourceURI.Host -Port 443 -InformationLevel Quiet)) # -ErrorAction SilentlyContinue
-			{
-				Write-Warning -Message "Package source $($SourceItem.Name) could not be contacted"
-			}
-
-			# This (handles all 4 cases) is handled in case when first call to Get-PackageSource offers installation,
-			# fails installing and returns source for download
-			$FoundProvider = Find-PackageProvider -Name $SourceItem.Name -Source $SourceItem.Location `
-				-MinimumVersion $RequireVersion -IncludeDependencies -ErrorAction SilentlyContinue
-
-			if (!$FoundProvider)
-			{
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Finding provider $ProviderName for download failed, trying alternative solution"
-				# Try with Find-Package
-				$FoundProvider = Find-Package -Name $SourceItem.Name -Source $SourceItem.Location -IncludeDependencies `
-					-MinimumVersion $RequireVersion -AllowPrereleaseVersions # -ErrorAction SilentlyContinue
-			}
-
-			if ($FoundProvider)
-			{
-				Write-Information -Tags "User" -MessageData "INFO: Provider $($FoundProvider.Name) v$($FoundProvider.Version.ToString()) is selected for download"
-				break
-			}
-			# else error should be displayed
-			# TODO: Check for older version and ask for confirmation
-		}
-
-		if (!$FoundProvider)
+		else
 		{
 			if ($PSVersionTable.PSEdition -eq "Core")
 			{

@@ -57,6 +57,7 @@ $OneDriveRoot = "%ProgramFiles(x86)%\Microsoft OneDrive"
 
 #
 # Rules for One Drive
+# TODO: does not exist on server platforms
 #
 
 # Test if installation exists on system
