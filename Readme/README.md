@@ -1,7 +1,7 @@
 
 # Readme directory
 
-Here you will find offline documentation and reference for things such as
+Here you will find documentation and reference for things such as
 
 1. Firewall troubleshooting
 2. Windows firewall reference

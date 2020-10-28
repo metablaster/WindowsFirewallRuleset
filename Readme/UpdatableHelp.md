@@ -79,8 +79,8 @@ makecab source destination /L TargetDir /V3
 
 Organize CAB files by module version into separate folders, ex:
 
-0.6.0/Template.Module_66e38822-834d-4a90-b9c6-9e600a472a0a_en-US_HelpContent.cab
-0.7.0/Template.Module_66e38822-834d-4a90-b9c6-9e600a472a0a_en-US_HelpContent.cab
+- `0.6.0/Template.Module_66e38822-834d-4a90-b9c6-9e600a472a0a_en-US_HelpContent.cab`
+- `0.7.0/Template.Module_66e38822-834d-4a90-b9c6-9e600a472a0a_en-US_HelpContent.cab`
 
 ### CAB file content syntax
 

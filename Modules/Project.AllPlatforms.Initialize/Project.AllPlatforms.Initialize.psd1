@@ -140,7 +140,7 @@
 			# IconUri = ""
 
 			# Prerelease string of this module
-			Prerelease = "https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGELOG.md"
+			Prerelease = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/CHANGELOG.md"
 
 			# ReleaseNotes of this module
 			# ReleaseNotes = ""
@@ -154,7 +154,7 @@
 	} # End of PrivateData hashtable
 
 	# HelpInfo URI of this module
-	# HelpInfoURI = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Modules/Project.AllPlatforms.Initialize/Project.AllPlatforms.Initialize_41585bd3-3f4d-4669-9919-2d19c0451b73_HelpInfo.xml"
+	# HelpInfoURI = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Modules/Project.AllPlatforms.Initialize/Project.AllPlatforms.Initialize_41585bd3-3f4d-4669-9919-2d19c0451b73_HelpInfo.xml"
 
 	# Default prefix for commands exported from this module.
 	# Override the default prefix using Import-Module -Prefix.

@@ -42,10 +42,6 @@ Convert a mask length to a dotted-decimal subnet mask.
 
 Convert a dotted-decimal subnet mask to a mask length.
 
-### [ConvertTo-Network](ConvertTo-Network.md)
-
-Converts IP address formats to a set a known styles.
-
 ### [ConvertTo-Subnet](ConvertTo-Subnet.md)
 
 Convert a start and end IP address to the closest matching subnet.
@@ -65,10 +61,6 @@ Get a list of IP addresses within the specified network.
 ### [Get-NetworkSummary](Get-NetworkSummary.md)
 
 Generates a summary describing several properties of a network range
-
-### [Get-Permutation](Get-Permutation.md)
-
-Gets permutations of an IP address expansion expression.
 
 ### [Get-Subnet](Get-Subnet.md)
 

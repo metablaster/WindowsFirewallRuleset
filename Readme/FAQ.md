@@ -1,7 +1,7 @@
 
 # Frequently Asked Questions
 
-Here are the most common problems running powershell scripts in this project and how to resolve them.
+Here are the most common problems running powershell scripts in this project and how to resolve them.\
 Also general questions and answers regarding firewall.
 
 ## Table of contents
@@ -190,6 +190,8 @@ So here is an overview to help you see what they do hopefully answering all of y
     (To set permissions required to remove duplicate modules)
     - [takeown.exe](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/takeown)
     (To take ownership required to set permissions)
+    - [makecab.exe](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/makecab)
+    (To make online help content)
 
 7. There is nothing dangerous here
 

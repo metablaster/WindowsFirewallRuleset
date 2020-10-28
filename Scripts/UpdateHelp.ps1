@@ -61,6 +61,7 @@ update of help files.
 TODO: Online hosting of help content is needed, for now the only purpose is to generate markdown
 help files
 TODO: Module page and about_ topic needs to be manually edited, currently we get template only
+To document private functions they must be exported first
 #>
 
 [CmdletBinding()]
