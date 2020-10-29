@@ -19,6 +19,10 @@ If you would like to see fresh changes done since last release you can do so on 
 
 ## v0.7.1 (development branch)
 
+- Rules
+
+  - Added rules for DHCP client and server
+
 - Modules
 
   - Added function to compare 2 paths for equality or similarity
@@ -29,6 +33,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - GrantLogs.ps1 did not set permission to create firewall log filter file
   - Checking for requirements would run for every script in development mode
+  - DHCP configured Computer won't connect to internet
 
 ## v0.7.0 (current release)
 

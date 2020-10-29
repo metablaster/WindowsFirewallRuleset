@@ -389,7 +389,7 @@ function Initialize-Project
 		if ($Develop)
 		{
 			# User prompt setup
-			[int32] $Default = 0
+			[int32] $Default = 1
 			[System.Management.Automation.Host.ChoiceDescription[]] $Choices = @()
 			$Accept = [System.Management.Automation.Host.ChoiceDescription]::new("&Yes")
 			$Deny = [System.Management.Automation.Host.ChoiceDescription]::new("&No")
@@ -403,7 +403,7 @@ function Initialize-Project
 			$Question = "Do you want to update help files?"
 			$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
 
-			if ($Decision -eq $Default)
+			if ($Decision -ne $Default)
 			{
 				Write-Information -Tags "User" -MessageData "INFO: Please wait, checking online for help updates..."
 

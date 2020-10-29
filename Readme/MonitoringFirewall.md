@@ -116,20 +116,36 @@ firewall information.
 
 - To enable packet filter monitoring with event viewer you need to enable auditing option as follows:
 
-1. click on start and type: `secpol.msc`
-2. Advanced Audit Policy Configuration
-3. Advanced Audit Policies - Local Group Policy Object
-4. Object Access
-5. Audit Filtering Platform Packet drop (Audit failure)
-6. Audit Filtering Platform Connection (Audit failure) (this is optional,
-I don't recommend enabling this to reduce amount of data,
+1. Click on start and type: `secpol.msc`, right click and "Run as Administrator"
+2. If prompted for password, enter administrator password and click "Yes" to continue
+3. Expand node: "Advanced Audit Policy Configuration"
+4. Expand node: "System Audit Policies - Local Group Policy Object"
+5. Click on "Object Access"
+6. Double click "Audit Filtering Platform Packet drop"
+7. Check "Configure the following audit events"
+8. Check "Audit Failure" and click OK to apply
+9. "Audit Filtering Platform Connection" (this is optional, I don't recommend enabling this to
+reduce amount of data,\
 and to focus on relevant, which is monitoring dropped packets)
+
+To open Event viewer to monitor configured packet filtering events follow steps below:
+
+1. Click on start and type: `compmgmt.msc`, right click and "Run as Administrator"
+2. If prompted for password, enter administrator password and click "Yes" to continue
+3. Expand node: "Computer Management (Local)
+4. Expand node: "Event Viewer"
+5. Expand node: "Windows Logs"
+6. Click on "Security"
+7. In the column "Task Category" look for "Filtering Platform Packet Drop"
+8. Click on individual event to see details about the event
 
 [Event logging reference](https://docs.microsoft.com/en-us/windows/win32/eventlog/event-logging)
 
 ## WFP state and filter logs
 
-Another powerful tool which will let you gather more information about specific firewall event.
+Are you unable to figure out why your rules don't work and why packets are dropped?\
+If so here is another powerful tool which will let you gather more information about specific firewall
+event.\
 click on image to enlarge:
 
 ![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Readme/Screenshots/wfpCommand.png)
@@ -149,14 +165,20 @@ the command, open this file with
 your code editor such VS Code.
 - what you are looking for here is an ID called "Filter Run-Time ID" and "Layer Run-Time ID",
 you can obtain these ID's from event viewer as shown in Event log (screen shot above).
-- select the "Filter Run-Time ID" number in event log
-(Filtering platform packet drop event of your choice), press CTRL + C to copy, go to VS Code,
-press CTRL + F to open "find box" and CTRL + V to paste the number,
-and hit enter to jump to this event.
-- here you are looking for "displayData" node which will tell what cause the drop,
-this will be the name of a firewall rule or default firewall action such as default action or
-boot time filter.
-- There are other cool informations you can get out of this file, go ahead and experiment.
+- Find and copy desired "Filter Run-Time ID" number in event log, press CTRL + C to copy, go to VS Code,\
+and open generated `wfpstate.xml` file then press CTRL + F to open "find box" and CTRL + V to paste
+the number, and hit enter to jump to this event.
+- "Filter Run-Time ID" and all of the event data is located inside `<item></item>` node
+- Inside this "item" you are looking for `<displayData></displayData>` node which will tell what
+caused the drop, this will be the name of a firewall rule or default firewall action such as default
+action or boot time filter.
+- If the cause was default firewall action such as "Default Outbound" which means there is no rule
+to allow this traffic, take a look back into event viewer to see which application initiated this
+traffic, as well as what ports and addresses were used, then verify you have firewall rule for this.
+- The `<layerKey></layerKey>` key will tell you which WFP filter caused the drop, for example the
+value `FWPM_LAYER_ALE_AUTH_CONNECT_V4` means WFP IPv4 application filter, which tells us program in
+question has no adequate allow rule so the default outbound action was hit.
+- There is other cool information you can get out of this file, go ahead and experiment.
 - NOTE: you need to enable at a minimum, auditing of dropped packet as explained in section
 "Event log" above.
 

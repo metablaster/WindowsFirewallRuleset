@@ -184,18 +184,6 @@ if ($Develop)
 		-Description "Temporary allow troublesome UDP traffic." `
 		@Logs | Format-Output @Logs
 
-	# NOTE: should be local service
-	New-NetFirewallRule -DisplayName "Troubleshoot UDP - DHCP" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
-		-Service Any -Program Any -Group $Group `
-		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
-		-LocalAddress Any -RemoteAddress Any `
-		-LocalPort 67, 68 -RemotePort 67, 68 `
-		-LocalUser $NT_AUTHORITY_System `
-		-InterfaceType Any `
-		-Description "Temporary allow troublesome UDP traffic." `
-		@Logs | Format-Output @Logs
-
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP - NetBIOS" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 		-Service Any -Program Any -Group $Group `
