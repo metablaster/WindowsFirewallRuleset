@@ -49,6 +49,7 @@ New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 
 # Check requirements
 Initialize-Project -Abort
+Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
@@ -67,18 +68,8 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 # TODO: it looks like private profile traffic is logged into public log and vice versa
 #
 
-# Grant permission only if firewall logs go to this location
-if ($FirewallLogsFolder -eq "$LogsFolder\Firewall")
-{
-	# Create directory for firewall logs if it doesn't exist
-	if (!(Test-Path -Path $LogsFolder\Firewall -PathType Container @Logs))
-	{
-		New-Item -Path $LogsFolder\Firewall -ItemType Container @Logs | Out-Null
-	}
-
-	# TODO: suppress approve-execute, ask for default user if not set
-	& "$ProjectRoot\Scripts\GrantLogs.ps1" $DefaultUser
-}
+# Verify permissions to write firewall logs if needed
+& "$ProjectRoot\Scripts\GrantLogs.ps1" $DefaultUser
 
 # Setting up profile seem to be slow, tell user what is going on
 Write-Information -Tags "User" -MessageData "INFO: Setting up public firewall profile..." @Logs

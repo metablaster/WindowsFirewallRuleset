@@ -49,6 +49,7 @@ New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 
 # Check requirements
 Initialize-Project -Abort
+Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1

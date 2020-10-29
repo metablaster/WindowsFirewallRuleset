@@ -64,22 +64,47 @@ New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 
 # Check requirements
 Initialize-Project -Abort
+Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
 
 # User prompt
-$Accept = "Grant permission to read firewall logs files until system reboot"
-$Deny = "Abort operation, no permission change is don on firewall logs"
+$Accept = "Grant permission to read firewall log files until system reboot"
+$Deny = "Abort operation, no permission change is done on firewall logs"
 Update-Context $ScriptContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
-Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
+Write-Verbose -Message "[$ThisScript] Verifying firewall log file location"
+
+if (!(Test-Environment -FilePath $FirewallLogsFolder) -or
+	!(Compare-Path -Loose $FirewallLogsFolder -ReferencePath "$ProjectRoot\*"))
+{
+	# Grant permission only if firewall logs go to valid location inside repository
+	Write-Warning -Message "Not granting permissions for $FirewallLogsFolder"
+	exit
+}
+elseif (!(Test-Path -Path $FirewallLogsFolder -PathType Container @Logs))
+{
+	# Create directory for firewall logs if it doesn't exist
+	New-Item -Path $FirewallLogsFolder -ItemType Container @Logs | Out-Null
+}
+
+# Change in logs location will require system reboot
+Write-Information -Tags "Project" -MessageData "INFO: Verifying if there is change in log location"
+$OldLogFiles = Get-NetFirewallProfile -PolicyStore $PolicyStore -All |
+Select-Object -ExpandProperty LogFileName | Split-Path
+
+[string[]] $OldLocation = @()
+foreach ($File in $OldLogFiles)
+{
+	$OldLocation += [System.Environment]::ExpandEnvironmentVariables($File)
+}
 
 # Setup local variables
 $Type = [System.Security.AccessControl.AccessControlType]::Allow
-$UserControl = [System.Security.AccessControl.FileSystemRights]::ReadAndExecute
+$UserControl = [System.Security.AccessControl.FileSystemRights] 'ReadAndExecute,WriteData'
 $FullControl = [System.Security.AccessControl.FileSystemRights]::FullControl
 
 $Inheritance = [Security.AccessControl.InheritanceFlags] 'ContainerInherit,ObjectInherit'
@@ -87,7 +112,7 @@ $Propagation = [System.Security.AccessControl.PropagationFlags]::None
 
 try
 {
-	Write-Information -Tags "User" -MessageData "INFO: Translating domain and user account"
+	Write-Information -Tags "User" -MessageData "INFO: Verifying if principals are valid"
 	$User = New-Object -TypeName System.Security.Principal.NTAccount($ComputerName, $Principal) @Logs
 	$FirewallService = New-Object -TypeName System.Security.Principal.NTAccount("NT SERVICE", "mpssvc") @Logs
 
@@ -110,8 +135,8 @@ $SystemPermission = New-Object System.Security.AccessControl.FileSystemAccessRul
 $FirewallPermission = New-Object System.Security.AccessControl.FileSystemAccessRule($FirewallService, $FullControl, $Inheritance, $Propagation, $Type) @Logs
 
 # Grant "FullControl" to firewall service for logs folder
-Write-Information -Tags "User" -MessageData "INFO: Grant 'FullControl' to required principals for: $LogsFolder\Firewall"
-$Acl = Get-Acl $LogsFolder\Firewall @Logs
+Write-Information -Tags "User" -MessageData "INFO: Granting full control to firewall service for log directory"
+$Acl = Get-Acl $FirewallLogsFolder @Logs
 
 $Acl.SetOwner($FolderOwner)
 $Acl.SetAccessRuleProtection($true, $false)
@@ -122,7 +147,7 @@ $Acl.SetAccessRule($FirewallPermission)
 $Acl.SetAccessRule($AdminPermission)
 $Acl.SetAccessRule($SystemPermission)
 
-Set-Acl $LogsFolder\Firewall $Acl @Logs
+Set-Acl $FirewallLogsFolder $Acl @Logs
 
 $StandardUser = $true
 foreach ($Admin in $(Get-GroupPrincipal -Group "Administrators" -Computer $ComputerName @Logs))
@@ -139,15 +164,16 @@ foreach ($Admin in $(Get-GroupPrincipal -Group "Administrators" -Computer $Compu
 if ($StandardUser)
 {
 	# Grant "Read & Execute" to user for firewall logs
-	Write-Information -Tags "User" -MessageData "INFO: Grant 'Read & Execute' permission to user '$User' for: $LogsFolder\Firewall\*.log"
+	Write-Information -Tags "User" -MessageData "INFO: Granting limited permissions to user '$Principal' for log directory"
 	$UserFolderPermission = New-Object System.Security.AccessControl.FileSystemAccessRule($User, $UserControl, $Inheritance, $Propagation, $Type) @Logs
 	$UserFilePermission = New-Object System.Security.AccessControl.FileSystemAccessRule($User, $UserControl, $Type) @Logs
 
-	$Acl = Get-Acl $LogsFolder\Firewall @Logs
+	$Acl = Get-Acl $FirewallLogsFolder @Logs
 	$Acl.SetAccessRule($UserFolderPermission)
-	Set-Acl $LogsFolder\Firewall $Acl @Logs
+	Set-Acl $FirewallLogsFolder $Acl @Logs
 
-	foreach ($LogFile in $(Get-ChildItem -Path $LogsFolder\Firewall -Filter *.log @Logs))
+	# NOTE: For -Exclude we need -Path DIRECTORY\* to get file names instead of file contents
+	foreach ($LogFile in $(Get-ChildItem -Path $FirewallLogsFolder\* -Filter *.log -Exclude *.filterline.log @Logs))
 	{
 		Write-Verbose -Message "[$ThisScript] Processing: $LogFile"
 		$Acl = Get-Acl $LogFile.FullName @Logs
@@ -156,5 +182,14 @@ if ($StandardUser)
 	}
 }
 
-Write-Information -Tags "User" -MessageData "INFO: All operations completed successfully"
+# If there is at least one change in logs location reboot is required
+foreach ($Location in $OldLocation)
+{
+	if (!(Compare-Path $Location $FirewallLogsFolder))
+	{
+		Write-Warning -Message "System reboot is required for firewall logging path changes"
+		break
+	}
+}
+
 Update-Log

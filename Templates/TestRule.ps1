@@ -51,6 +51,7 @@ New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 
 # Check requirements
 Initialize-Project -Abort
+Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
 # TODO: Include modules and scripts as needed

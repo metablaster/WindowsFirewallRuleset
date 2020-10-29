@@ -42,6 +42,7 @@ None. Warning message if file not found
 .NOTES
 TODO: We should attempt to fix the path if invalid here!
 TODO: We should return true or false and conditionally load rule
+TODO: This should probably be renamed to Test-Executable to make it less likely part of utility module
 #>
 function Test-File
 {

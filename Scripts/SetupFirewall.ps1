@@ -49,6 +49,7 @@ None.
 # Check requirements
 Initialize-Project -Abort
 Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $false
+Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
 Import-Module -Name Project.AllPlatforms.Logging

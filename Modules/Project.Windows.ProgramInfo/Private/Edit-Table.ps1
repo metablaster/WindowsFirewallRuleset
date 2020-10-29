@@ -67,7 +67,7 @@ function Edit-Table
 	if (Test-UserProfile $InstallLocation)
 	{
 		# Make sure user profile variables are removed
-		$InstallLocation = Format-Path ([System.Environment]::ExpandEnvironmentVariables($InstallLocation))
+		$InstallLocation = Format-Path $InstallLocation
 
 		# Create a row
 		$Row = $InstallTable.NewRow()

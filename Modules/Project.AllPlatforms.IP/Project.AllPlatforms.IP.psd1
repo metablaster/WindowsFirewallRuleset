@@ -12,7 +12,7 @@
 	RootModule = "Project.AllPlatforms.IP.psm1"
 
 	# Version number of this module.
-	ModuleVersion = "0.7.0"
+	ModuleVersion = "0.7.1"
 
 	# Supported PSEditions
 	CompatiblePSEditions = @(
@@ -91,8 +91,8 @@
 		"Resolve-IPAddress"
 		"Test-SubnetMember"
 		# Following exports only for unit testing
-		# "ConvertTo-Network"
-		# "Get-Permutation"
+		"ConvertTo-Network"
+		"Get-Permutation"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not

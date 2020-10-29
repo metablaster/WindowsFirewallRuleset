@@ -12,7 +12,7 @@
 	RootModule = "Project.AllPlatforms.Utility.psm1"
 
 	# Version number of this module.
-	ModuleVersion = "0.7.0"
+	ModuleVersion = "0.7.1"
 
 	# Supported PSEditions
 	CompatiblePSEditions = @(
@@ -77,6 +77,7 @@
 	# delete the entry, use an empty array if there are no functions to export.
 	FunctionsToExport = @(
 		"Approve-Execute"
+		"Compare-Path"
 		"Confirm-FileEncoding"
 		"Update-Context"
 		"Convert-SDDLToACL"
@@ -117,6 +118,7 @@
 		"en-US\about_Project.AllPlatforms.Utility.help.txt"
 		"Help\en-US\Get-TypeName.md"
 		"Help\en-US\Approve-Execute.md"
+		"Help\en-US\Compare-Path.md"
 		"Help\en-US\Confirm-FileEncoding.md"
 		"Help\en-US\Convert-SDDLToACL.md"
 		"Help\en-US\Get-FileEncoding.md"
@@ -130,6 +132,7 @@
 		"Public\External\Get-TypeName.ps1"
 		"Public\External\README.md"
 		"Public\Approve-Execute.ps1"
+		"Public\Compare-Path.ps1"
 		"Public\Confirm-FileEncoding.ps1"
 		"Public\Convert-SDDLToACL.ps1"
 		"Public\Get-FileEncoding.ps1"

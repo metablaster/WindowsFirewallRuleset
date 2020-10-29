@@ -43,6 +43,7 @@ None.
 #>
 function Set-NetworkProfile
 {
+	[OutputType([void])]
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Utility/Help/en-US/Set-NetworkProfile.md")]
 	param ()
@@ -79,7 +80,7 @@ function Set-NetworkProfile
 
 			$Public.HelpMessage = "Your PC is hidden from other devices on the network"
 			$Private.HelpMessage = "Your PC is discoverable and can be used for file and printer sharing"
-			$Abort.HelpMessage = "Abort operation"
+			$Abort.HelpMessage = "Abort operation, no change is done to network profile"
 
 			$Choices += $Public
 			$Choices += $Private

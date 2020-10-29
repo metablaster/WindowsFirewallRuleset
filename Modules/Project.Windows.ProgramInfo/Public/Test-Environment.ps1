@@ -30,7 +30,7 @@ SOFTWARE.
 .SYNOPSIS
 Test if path is valid for firewall rule
 .DESCRIPTION
-Same as Test-Path but expands system environment variables, and checks if path is compatible
+Same as Test-Path but expands environment variables, and checks if path is compatible
 for firewall rules
 .PARAMETER FilePath
 Path to folder, Allows null or empty since input may come from other commandlets which can return empty or null
@@ -41,7 +41,7 @@ None. You cannot pipe objects to Test-Environment
 .OUTPUTS
 [bool] true if path exists, false otherwise
 .NOTES
-None.
+TODO: This should proably be inside utility module
 #>
 function Test-Environment
 {
@@ -67,17 +67,25 @@ function Test-Environment
 	# ($FilePath -match "^$env:SystemDrive\\+Users(\\*$|\\+(?=\w+))") -or
 	if ([array]::Find($UserProfileEnvironment, [System.Predicate[string]] { $FilePath -like "$($args[0])*" }))
 	{
-		Write-Warning -Message "Path to program with environment variable that leads to user profile is not valid for firewall rule"
-		Write-Information -Tags "Project" -MessageData "INFO: Bad path detected is: $FilePath"
-		return $false
+		Write-Warning -Message "Path to program with environment variable that leads to user profile is not valid path for firewall"
 	}
-
-	if ([array]::Find($BlackListEnvironment, [System.Predicate[string]] { $FilePath -like "$($args[0])*" }))
+	elseif ([array]::Find($BlackListEnvironment, [System.Predicate[string]] { $FilePath -like "$($args[0])*" }))
 	{
-		Write-Warning -Message "Path to program with specified environment variable is not valid for firewall rule"
-		Write-Information -Tags "Project" -MessageData "INFO: Bad path detected is: $FilePath"
-		return $false
+		Write-Warning -Message "Path to program with the specified environment variable is not valid for firewall"
+	}
+	elseif (!(Test-Path -Path $FilePath -IsValid))
+	{
+		Write-Warning -Message "Specified path is of invalid syntax"
+	}
+	elseif (!(Test-Path -Path ([System.Environment]::ExpandEnvironmentVariables($FilePath)) -PathType Container))
+	{
+		Write-Warning -Message "Specified path is not valid path to directory"
+	}
+	else
+	{
+		return $true
 	}
 
-	return (Test-Path -Path ([System.Environment]::ExpandEnvironmentVariables($FilePath)) -PathType Container)
+	Write-Information -Tags "Project" -MessageData "INFO: Invalid path is: $FilePath"
+	return $false
 }

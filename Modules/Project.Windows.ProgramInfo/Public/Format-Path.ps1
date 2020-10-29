@@ -42,7 +42,7 @@ PS> Format-Path "C:\Program Files\\Dir\"
 .OUTPUTS
 [string] formatted path, includes environment variables, stripped off of junk
 .NOTES
-None.
+TODO: This should proably be inside utility module
 #>
 function Format-Path
 {
@@ -68,7 +68,7 @@ function Format-Path
 		}
 
 		# Make an array of (environment variable/path) value pair,
-		# excluding user profile environment variables
+		# excluding blacklisted environment variables
 		$Variables = @()
 		foreach ($Entry in @(Get-ChildItem Env:))
 		{

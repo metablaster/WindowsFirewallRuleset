@@ -8,6 +8,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - [Changelog](#changelog)
   - [Table of contents](#table-of-contents)
+  - [v0.7.1 (development branch)](#v071-development-branch)
   - [v0.7.0 (current release)](#v070-current-release)
   - [v0.6.0](#v060)
   - [v0.5.0](#v050)
@@ -15,6 +16,18 @@ If you would like to see fresh changes done since last release you can do so on 
   - [v0.4.0](#v040)
   - [v0.3.0](#v030)
   - [v0.2](#v02)
+
+## v0.7.1 (development branch)
+
+- Modules
+
+  - Added function to compare 2 paths for equality or similarity
+  - Improved function to detect invalid paths
+  - Improved function for setting permission to read firewall logs as standard user
+
+- Bugfix
+
+  - GrantLogs.ps1 did not set permission to create firewall log filter file
 
 ## v0.7.0 (current release)
 

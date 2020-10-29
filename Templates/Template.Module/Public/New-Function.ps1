@@ -72,6 +72,8 @@ function New-Function
 		[string] $Param
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+
 	# TODO: Update confirm description
 	# 'MESSAGE','TARGET','OPERATION',[ref]$reason
 	# https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.shouldprocessreason?view=powershellsdk-7.0.0

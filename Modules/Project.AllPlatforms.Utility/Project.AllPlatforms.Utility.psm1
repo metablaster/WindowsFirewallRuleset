@@ -40,6 +40,7 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 $PublicScripts = @(
 	"External\Get-TypeName"
 	"Approve-Execute"
+	"Compare-Path"
 	"Confirm-FileEncoding"
 	"Update-Context"
 	"Convert-SDDLToACL"

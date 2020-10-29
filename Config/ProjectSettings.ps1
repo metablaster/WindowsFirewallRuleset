@@ -50,7 +50,7 @@ Set-Variable -Name SettingsScript -Scope Local -Option ReadOnly -Value ($MyInvoc
 # 4. Enables some disabled unit tests and disables logging
 # 5. Enables setting preference variables for modules
 # NOTE: Changing variable requires PowerShell restart
-Set-Variable -Name Develop -Scope Global -Value $false
+Set-Variable -Name Develop -Scope Global -Value $true
 
 if ($Develop)
 {
@@ -196,7 +196,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	New-Variable -Name CheckProjectConstants -Scope Global -Option Constant -Value $null
 
 	# Project version, does not apply to non migrated 3rd party modules which follow their own version increment, do not modify!
-	New-Variable -Name ProjectVersion -Scope Global -Option Constant -Value ([version]::new(0, 7, 0))
+	New-Variable -Name ProjectVersion -Scope Global -Option Constant -Value ([version]::new(0, 7, 1))
 
 	# Required minimum PSScriptAnalyzer version for code editing, do not decrement!
 	# PSScriptAnalyzer >= 1.19.1 is required otherwise code will start missing while editing probably due to analyzer settings
@@ -308,7 +308,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	# NOTE: Set this value to $LogsFolder\Firewall to enable reading logs in VSCode with syntax highlighting
 	# In that case for changes to take effect run Scripts\SetupProfile.ps1 and reboot system
 	# NOTE: The system default is %SystemRoot%\System32\LogFiles\Firewall
-	New-Variable -Name FirewallLogsFolder -Scope Global -Option Constant -Value "%SystemRoot%\System32\LogFiles\Firewall" # $LogsFolder\Firewall
+	New-Variable -Name FirewallLogsFolder -Scope Global -Option Constant -Value $LogsFolder\Firewall\ # "%SystemRoot%\System32\LogFiles\Firewall"
 }
 
 # Read only variables, meaning these can be modified by code at any time,
@@ -323,7 +323,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -Erro
 	Set-Variable -Name CheckReadOnlyVariables -Scope Global -Option ReadOnly -Force -Value $null
 
 	# Set to false to avoid checking system requirements
-	Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $true
+	Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $false
 
 	# Set to false to avoid checking if modules are up to date
 	Set-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Force -Value $Develop
@@ -347,14 +347,14 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -Erro
 	Set-Variable -Name UnitTesterAdmin -Scope Global -Option ReadOnly -Force -Value "Unknown Admin"
 
 	# Standard user account name which will perform unit testing
-	Set-Variable -Name UnitTester -Scope Global -Option ReadOnly -Force -Value "Unknown User"
+	Set-Variable -Name UnitTester -Scope Global -Option ReadOnly -Force -Value "Unknown tester"
 
 	# User account name for which to search executables in user profile and non standard paths by default
 	# Also used for other defaults where standard user account is expected, ex. development as standard user
 	# NOTE: Set this value to username for which to create rules by default, if there are multiple
 	# users and to affect them all set this value to non existent user
 	# TODO: needs testing info messages for this value
-	Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value "Unknown User"
+	Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value "Unknown user"
 
 	# Default encoding used to write and read files
 	if ($PSVersionTable.PSEdition -eq "Core")

@@ -107,6 +107,7 @@ if ($null -eq $PlatyModule)
 
 # Check requirements
 Initialize-Project -Abort
+Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1

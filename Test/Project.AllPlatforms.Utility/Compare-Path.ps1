@@ -28,32 +28,20 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Test-Function
-.DESCRIPTION
-Use Test-Function.ps1 as a template to test out module functions
-.INPUTS
-None. You cannot pipe objects to Test-Function.ps1.
-.OUTPUTS
-None. Test-Function.ps1 does not generate any output.
+Unit test for Compare-Path
 .NOTES
-None.
-TODO: Update Copyright and start writing test code
-.LINK
 None.
 #>
 
 # Initialization
-# TODO: Adjust path to project settings
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )
 
 # Check requirements
 Initialize-Project -Abort
-Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
-# TODO: Include modules and scripts as needed
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
 
@@ -63,8 +51,26 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 Enter-Test $ThisScript
 
-Start-Test "Test-Function"
-$Result = Test-Function @Logs
+Start-Test "Compare-Path same path"
+Compare-Path "%SystemDrive%\Windows" "C:\Windows" @Logs
+
+Start-Test "Compare-Path relative path"
+Compare-Path "%SystemDrive%/Windows" "C:\Windows\System32\..\" @Logs
+
+Start-Test "Compare-Path non existent path"
+Compare-Path "%SystemDrive%\Windows" "Z:\Nonexistent" @Logs
+
+Start-Test "Compare-Path wildcards + relative path -Sensitive"
+Compare-Path "%SystemDrive%\Win*\System32\en-US\.." "C:\Wind*\System3?\" -Sensitive @Logs
+
+Start-Test "Compare-Path same -Loose"
+Compare-Path "%SystemDrive%\\Windows" "C:/Win*/" -Loose
+
+Start-Test "Compare-Path same wrong order -Loose"
+Compare-Path "C:\Win*" "%SystemDrive%\Windows" -Loose
+
+Start-Test "Compare-Path not same path"
+$Result = Compare-Path "%SystemDrive%\" "D:\" @Logs
 $Result
 
 Start-Test "Get-TypeName"

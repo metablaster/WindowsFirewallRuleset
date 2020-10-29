@@ -12,7 +12,7 @@
 	RootModule = "Project.Windows.ProgramInfo.psm1"
 
 	# Version number of this module.
-	ModuleVersion = "0.7.0"
+	ModuleVersion = "0.7.1"
 
 	# Supported PSEditions
 	CompatiblePSEditions = @(
@@ -100,10 +100,10 @@
 		"Get-SystemApps"
 		"Get-SQLInstance"
 		# Following exports only for unit testing
-		# "Update-Table"
-		# "Edit-Table"
-		# "Initialize-Table"
-		# "Show-Table"
+		"Update-Table"
+		"Edit-Table"
+		"Initialize-Table"
+		"Show-Table"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not
