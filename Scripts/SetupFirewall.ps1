@@ -42,6 +42,8 @@ None.
 #>
 
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
+	$MyInvocation.MyCommand.Name -replace ".{4}$" )
 
 # First unblock all files
 & "$ProjectRoot\Scripts\UnblockProject.ps1"

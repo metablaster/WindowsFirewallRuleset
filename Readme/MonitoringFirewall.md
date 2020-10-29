@@ -99,7 +99,7 @@ Permission is valid until system reboot or until manual permission removal.
 - Inside VSCode open individual firewall log file under `Logs\Firewall` node
 - To filter log contents open command palette (CTRL + SHIT + P) and type "Filter line by Config File"
 and press enter.
-- This action will create additional filtered log file in same directory called `FILENAME.filterling.log`
+- This action will create additional (filtered) log file in same directory called `FILENAME.filterline.log`
 - Config file is located inside `.vscode\filterline.json` and supports regex to fine tune your filter.
 
 ## Event log

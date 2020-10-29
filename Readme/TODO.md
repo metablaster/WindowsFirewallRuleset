@@ -267,6 +267,7 @@ todo's in this file are categorized into following sections:
     - Need variables that would avoid prompts and set up firewall with minimum user intervention
     - Adjust all scripts according to templates
     - First time user notices should be handled with code (ex. ransomware protection setting)
+    - Progress percentage in script context for master script
 
 3. Rules
 

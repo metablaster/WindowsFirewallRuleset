@@ -28,6 +28,7 @@ If you would like to see fresh changes done since last release you can do so on 
 - Bugfix
 
   - GrantLogs.ps1 did not set permission to create firewall log filter file
+  - Checking for requirements would run for every script in development mode
 
 ## v0.7.0 (current release)
 

@@ -49,7 +49,7 @@ Set-Variable -Name SettingsScript -Scope Local -Option ReadOnly -Value ($MyInvoc
 # 3. Performs additional requirements checks needed or recommended for development
 # 4. Enables some disabled unit tests and disables logging
 # 5. Enables setting preference variables for modules
-# NOTE: Changing variable requires PowerShell restart
+# NOTE: If set to $false, change requires PowerShell restart
 Set-Variable -Name Develop -Scope Global -Value $true
 
 if ($Develop)
@@ -311,11 +311,9 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	New-Variable -Name FirewallLogsFolder -Scope Global -Option Constant -Value $LogsFolder\Firewall\ # "%SystemRoot%\System32\LogFiles\Firewall"
 }
 
-# Read only variables, meaning these can be modified by code at any time,
-# and, only once per session by users.
-# Changing these requires powershell restart, except if Develop = $true
-# TODO: In Develop mode, this run will override changes made by other scripts.
-if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignore))
+# Read only variables, these can be only modified by code at any time, and, only once per session by users.
+# Changing these requires powershell restart
+if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignore))
 {
 	Write-Debug -Message "[$SettingsScript] Setup read only variables"
 
@@ -323,7 +321,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -Erro
 	Set-Variable -Name CheckReadOnlyVariables -Scope Global -Option ReadOnly -Force -Value $null
 
 	# Set to false to avoid checking system requirements
-	Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $false
+	Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $true
 
 	# Set to false to avoid checking if modules are up to date
 	Set-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Force -Value $Develop
@@ -331,14 +329,25 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -Erro
 	# Set to false to avoid checking if required system services are started
 	Set-Variable -Name ServicesCheck -Scope Global -Option ReadOnly -Force -Value $true
 
+	# NuGet version and Encoding used to write and read files
 	if ($PSVersionTable.PSEdition -eq "Core")
 	{
+		# UTF8 without BOM
+		# https://docs.microsoft.com/en-us/dotnet/api/system.text.encoding?view=netcore-3.1
+		Set-Variable -Name DefaultEncoding -Scope Global -Option ReadOnly -Force -Value (
+			New-Object -TypeName System.Text.UTF8Encoding -ArgumentList $false)
+
 		# Required minimum NuGet version prior to installing other modules
 		# NOTE: Core >= 3.0.0, Desktop >= 2.8.5
 		Set-Variable -Name RequireNuGetVersion -Scope Global -Option ReadOnly -Force -Value ([version]::new(3, 0, 0))
 	}
 	else
 	{
+		# TODO: need some workaround to make Windows PowerShell read/write BOM-less
+		# UTF8 with BOM
+		# https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.filesystemcmdletproviderencoding?view=powershellsdk-1.1.0
+		Set-Variable -Name DefaultEncoding -Scope Global -Option ReadOnly -Force -Value "utf8"
+
 		# NOTE: Setting this variable in Initialize-Project would override it in develop mode
 		Set-Variable -Name RequireNuGetVersion -Scope Global -Option ReadOnly -Force -Value ([version]::new(2, 8, 5))
 	}
@@ -347,35 +356,18 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables -Scope Global -Erro
 	Set-Variable -Name UnitTesterAdmin -Scope Global -Option ReadOnly -Force -Value "Unknown Admin"
 
 	# Standard user account name which will perform unit testing
-	Set-Variable -Name UnitTester -Scope Global -Option ReadOnly -Force -Value "Unknown tester"
+	Set-Variable -Name UnitTester -Scope Global -Option ReadOnly -Force -Value "Unknown Tester"
 
 	# User account name for which to search executables in user profile and non standard paths by default
 	# Also used for other defaults where standard user account is expected, ex. development as standard user
 	# NOTE: Set this value to username for which to create rules by default, if there are multiple
 	# users and to affect them all set this value to non existent user
 	# TODO: needs testing info messages for this value
-	Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value "Unknown user"
-
-	# Default encoding used to write and read files
-	if ($PSVersionTable.PSEdition -eq "Core")
-	{
-		# UTF8 without BOM
-		# https://docs.microsoft.com/en-us/dotnet/api/system.text.encoding?view=netcore-3.1
-		Set-Variable -Name DefaultEncoding -Scope Global -Option ReadOnly -Force -Value (
-			New-Object -TypeName System.Text.UTF8Encoding -ArgumentList $false)
-	}
-	else
-	{
-		# TODO: need some workaround to make Windows PowerShell read/write BOM-less
-		# UTF8 with BOM
-		# https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.filesystemcmdletproviderencoding?view=powershellsdk-1.1.0
-		Set-Variable -Name DefaultEncoding -Scope Global -Option ReadOnly -Force -Value "utf8"
-	}
+	Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value "Unknown User"
 }
 
-# Removable variables, meaning these can be modified by code at any time,
-# And, only once per session by users.
-# Changing these requires powershell restart, except if Develop = $true
+# Removable variables, these can be modified or removed by code at any time, and, only once per session by users
+# Changing these requires powershell restart if develop mode is off
 if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -ErrorAction Ignore))
 {
 	Write-Debug -Message "[$SettingsScript] Setup removable variables"
@@ -402,8 +394,8 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 	Set-Variable -Name InformationLogging -Scope Global -Value (!$Develop)
 }
 
-# Protected variables, meaning these can be modified but only by code (excluded from Develop mode)
-# These are initially set only once per session, changing these requires powershell restart.
+# Removable variables, these can be modified or removed by code at any time, and, only once per session by users
+# Changing these requires powershell restart
 if (!(Get-Variable -Name CheckProtectedVariables -Scope Global -ErrorAction Ignore))
 {
 	Write-Debug -Message "[$SettingsScript] Setup protected variables"

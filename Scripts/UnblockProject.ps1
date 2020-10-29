@@ -45,6 +45,8 @@ TODO: We should probably unblock only scripts, not all files.
 #>
 
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
+	$MyInvocation.MyCommand.Name -replace ".{4}$" )
 
 Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
