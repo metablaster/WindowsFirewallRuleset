@@ -104,10 +104,10 @@ foreach ($File in $OldLogFiles)
 
 # Setup local variables
 $Type = [System.Security.AccessControl.AccessControlType]::Allow
-$UserControl = [System.Security.AccessControl.FileSystemRights] 'ReadAndExecute,WriteData'
+$UserControl = [System.Security.AccessControl.FileSystemRights] "ReadAndExecute, WriteData, Write"
 $FullControl = [System.Security.AccessControl.FileSystemRights]::FullControl
 
-$Inheritance = [Security.AccessControl.InheritanceFlags] 'ContainerInherit,ObjectInherit'
+$Inheritance = [Security.AccessControl.InheritanceFlags] "ContainerInherit, ObjectInherit"
 $Propagation = [System.Security.AccessControl.PropagationFlags]::None
 
 try

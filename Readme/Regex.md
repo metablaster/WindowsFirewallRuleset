@@ -1,8 +1,10 @@
 
 # Regex expressions for quick project wide actions
 
-A list of regex expressions which are used to perform bulk operations against the rules inside the
-project.
+A list of regex expressions which are used to::
+
+1. Filter firewall logs
+2. Perform bulk operations on rules with VSCode.
 
 For example once your regex hits, you would use CTRL + SHIFT + L to enter
 [Multi cursor](https://code.visualstudio.com/docs/getstarted/tips-and-tricks#_multi-cursor-selection)
@@ -18,6 +20,10 @@ Note:
 
 - [Regex expressions for quick project wide actions](#regex-expressions-for-quick-project-wide-actions)
   - [Table of contents](#table-of-contents)
+  - [Filterline](#filterline)
+    - [Programs](#programs)
+    - [DHCPv6](#dhcpv6)
+    - [DHCPv4](#dhcpv4)
   - [Get -DisplayName parameter and it's value](#get--displayname-parameter-and-its-value)
   - [Get platform](#get-platform)
   - [Get group](#get-group)
@@ -30,6 +36,28 @@ Note:
   - [Get local and remote IPv6 address only in any notation](#get-local-and-remote-ipv6-address-only-in-any-notation)
   - [Get local and remote IPv4 address only in any notation](#get-local-and-remote-ipv4-address-only-in-any-notation)
   - [Get owner and package for store app](#get-owner-and-package-for-store-app)
+
+## Filterline
+
+Filterline regexes are to be used in `.vscode\filterline.json` to filter out firewall logs
+
+### Programs
+
+```regex
+"DROP TCP.*([0-9]{1,3}\\.){3}[0-9]{1,3}\\s\\d+\\s(80|443)"
+```
+
+### DHCPv6
+
+```regex
+"DROP UDP.*([a-f0-9:]+:)+[a-f0-9]+\\s(547|546)"
+```
+
+### DHCPv4
+
+```regex
+"DROP UDP.*([0-9]{1,3}\\.){3}[0-9]{1,3}\\s(67|68)"
+```
 
 ## Get -DisplayName parameter and it's value
 

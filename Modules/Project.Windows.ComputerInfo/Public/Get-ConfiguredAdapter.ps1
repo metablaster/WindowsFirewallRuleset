@@ -30,9 +30,9 @@ SOFTWARE.
 .SYNOPSIS
 Method to get configured adapters
 .DESCRIPTION
-Return list of all configured adapters and their configuration.
-Applies to adapters which have an IP assigned regardless if connected to network.
-This conditionally includes virtual and hidden adapters such as Hyper-V adapters on all compartments.
+Return a list of all configured adapters and their configuration.
+By default only physical adapters connected to network are returned
+Conditionally includes virtual, hidden or disconnected adapters such as Hyper-V adapters on all compartments.
 .PARAMETER AddressFamily
 IP version for which to obtain adapters, IPv4 or IPv6
 .PARAMETER ExcludeHardware
