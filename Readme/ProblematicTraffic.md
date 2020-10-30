@@ -240,7 +240,7 @@ firewall will tell you ::1 (loopback address) is not valid or unspecified addres
 ### Case 7: Troubleshoot
 
 - Define a rule that allows all possible traffic, but specify interface alias
-(applicable to powershell only) for loopback to limit such traffic to loopback interface only
+(applicable to PowerShell only) for loopback to limit such traffic to loopback interface only
 - Why firewall allows 127.0.0.1 but not ::1 is hard to tell, both are valid loopback addresses,
 need to look for more information on MSDN
 
@@ -251,7 +251,7 @@ have exactly the same alias.
 - Solution is to set interface to "Any" for ICMPv6 and IPv6 multicast rules, that will work across
 restarts, however shuting down system and turning back on will reproduce the problem regardless of rules.
 - Another possible cause could be that some other hidden interface is generating this traffic.
-- Additional investigation need by allowing all packets explicitly.
+- Additional investigation needed by allowing all packets explicitly.
 
 ## Case 8: Connection dropped when specific network interface is assigned to rule
 

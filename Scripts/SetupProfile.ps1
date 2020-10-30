@@ -69,7 +69,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 #
 
 # Verify permissions to write firewall logs if needed
-& "$ProjectRoot\Scripts\GrantLogs.ps1" $DefaultUser
+& "$ProjectRoot\Scripts\GrantLogs.ps1" -Principal $DefaultUser -SkipPrompt
 
 # NOTE: Reducing the default (4096 KB) log file size makes logs appear quicker but consumes more resources
 $LogSize = 1024

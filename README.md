@@ -29,7 +29,7 @@
 
 ## About Windows Firewall Ruleset
 
-- Windows firewall rules sorted into individual powershell scripts according to:
+- Windows firewall rules sorted into individual PowerShell scripts according to:
 
 1. Rule group
 2. Traffic direction
@@ -132,7 +132,7 @@ Windows 10 v1903 and up already includes .NET 4.8
 to easily switch between branches or to contribute code.
 - VS Code is preferred and recommended editor to navigate project and edit scripts for your
 needs or contribution.
-- If you get VSCode, you'll also need powershell extension for code navigation and
+- If you get VSCode, you'll also need PowerShell extension for code navigation and
 PowerShell specific features.
 - To navigate and edit code with VSCode, `PSScriptAnalyzer` is recommended otherwise editing experience\
 may behave really odd due to other project settings.
@@ -331,7 +331,7 @@ If you want to apply only specific rules there are 2 ways to do this:
 1. Execute `Scripts\SetupFirewall.ps1` and chose `Yes` only for rulesets you want, otherwise chose `No`
 and hit enter to skip current ruleset.
 
-2. Inside powershell navigate to folder containing the ruleset script you want,
+2. With PowerShell navigate to folder containing the ruleset script you want,
 and execute individual PowerShell script.
 
 3. You might want to run `Scripts\SetupProfile.ps1` afterwards to apply default firewall behavior if
@@ -410,7 +410,7 @@ There are two methods to be up to date with firewall:
 switch to either master or develop branch, next use "Code" button and either clone or
 download zip.
 
-2. Second method is good if you want to do it in powershell console without visiting this site,
+1. Second method is good if you want to do it with PowerShell console without visiting this site,
 you will need [git](https://git-scm.com/downloads), [github account](https://github.com/join),
 a [fork](https://guides.github.com/activities/forking) of this repository in your github account and
 [SSH key](https://help.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account)
@@ -444,7 +444,7 @@ to tell git you want updates from master (stable) branch:
 - Type: ```git fetch upstream```
 - Type: ```git merge upstream/develop```
 
-Of course you can switch from one branch to another with git in powershell as many times as you
+Of course you can switch from one branch to another with git in PowerShell as many times as you
 want and all files will be auto updated without the need to re-download or re-setup anything.
 
 Keep in mind that you need to save and upload your modifications to your fork,

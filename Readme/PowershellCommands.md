@@ -24,7 +24,9 @@ Powershell commands to help gather information useful for Windows firewall devel
     - [Well known SID's](#well-known-sids)
     - [Computer name](#computer-name)
   - [Get CIM classes and commandlets](#get-cim-classes-and-commandlets)
-  - [Get type name aliases](#get-type-name-aliases)
+  - [Data types and aliases](#data-types-and-aliases)
+    - [Get type name aliases](#get-type-name-aliases)
+    - [Add-Type](#add-type)
   - [Package provider management](#package-provider-management)
     - [List of package providers that are loaded or installed but not loaded](#list-of-package-providers-that-are-loaded-or-installed-but-not-loaded)
     - [List of package sources that are registered for a package provider](#list-of-package-sources-that-are-registered-for-a-package-provider)
@@ -186,10 +188,18 @@ Select-Object CimClassName
 Get-Command -Module CimCmdlets
 ```
 
-## Get type name aliases
+## Data types and aliases
+
+### Get type name aliases
 
 ```powershell
 [PSCustomObject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::get
+```
+
+### Add-Type
+
+```powershell
+Add-Type -AssemblyName "System.Management.Automation"
 ```
 
 ## Package provider management

@@ -53,7 +53,10 @@ param (
 
 	[Parameter()]
 	[Alias("Computer", "Server", "Domain", "Host", "Machine")]
-	[string] $ComputerName = [System.Environment]::MachineName
+	[string] $ComputerName = [System.Environment]::MachineName,
+
+	[Parameter()]
+	[switch] $SkipPrompt
 )
 
 # Initialization
@@ -71,10 +74,13 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 Import-Module -Name Project.AllPlatforms.Logging
 
 # User prompt
-$Accept = "Grant permission to read firewall log files until system reboot"
-$Deny = "Abort operation, no permission change is done on firewall logs"
-Update-Context $ScriptContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+if (!$SkipPrompt)
+{
+	$Accept = "Grant permission to read firewall log files until system reboot"
+	$Deny = "Abort operation, no permission change is done on firewall logs"
+	Update-Context $ScriptContext $ThisScript @Logs
+	if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+}
 
 Write-Verbose -Message "[$ThisScript] Verifying firewall log file location"
 
