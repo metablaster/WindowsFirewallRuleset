@@ -32,7 +32,9 @@ Restart network
 .DESCRIPTION
 Apply computer group policy settings
 Reset all physical adapters to their default values
+Set few esoteric default options
 Grant requested user and firewall service permissions to read/write logs into this repository
+Set network profile to private
 This is useful to troubleshoot problems or to generate network traffic that occurs only during
 first time connection or system boot such as DHCP or IGMP
 .EXAMPLE
@@ -242,22 +244,6 @@ if ($AdapterAlias)
 
 	Receive-Job -Name "ResetProperties" -Wait -AutoRemoveJob
 
-	# Reset IP, mask and gateway address
-	Start-Job -Name "ResetIP" -ArgumentList $AdapterAlias -ScriptBlock {
-		param ($AdapterAlias)
-		Remove-NetIPAddress -InterfaceAlias $AdapterAlias -IncludeAllCompartments -Confirm:$false
-	}
-
-	Receive-Job -Name "ResetIP" -Wait -AutoRemoveJob
-
-	# Reset primary and secondary DNS
-	Start-Job -Name "ResetDNS" -ArgumentList $AdapterAlias -ScriptBlock {
-		param ($AdapterAlias)
-		Set-DnsClientServerAddress -InterfaceAlias $AdapterAlias -ResetServerAddress
-	}
-
-	Receive-Job -Name "ResetDNS" -Wait -AutoRemoveJob
-
 	Start-Job -Name "ResetInterface6" -ArgumentList $AdapterAlias -ScriptBlock {
 		param ($AdapterAlias)
 
@@ -288,9 +274,9 @@ if ($AdapterAlias)
 
 	Receive-Job -Name "ResetAdvancedDNS" -Wait -AutoRemoveJob
 
-	# NOTE: Error code 72:
-	# An error occurred while accessing the registry for the requested information.
+	# NOTE: Error code 72: An error occurred while accessing the registry for the requested information.
 	# Invalid domain name (Action requires elevation)
+	# Error code 84: IP not enabled on adapter.
 	# https://docs.microsoft.com/en-us/windows/win32/cimwin32prov/settcpipnetbios-method-in-class-win32-networkadapterconfiguration
 	Start-Job -Name "NETBIOS" -ScriptBlock {
 		# NETBIOS Option:
@@ -307,12 +293,38 @@ if ($AdapterAlias)
 		Invoke-CimMethod -InputObject $Adapter -MethodName SetTcpipNetbios -Arguments @{ TcpipNetbiosOptions = 0 }
 	}
 
+	Receive-Job -Name "NETBIOS" -Wait -AutoRemoveJob
+
+	# TCP auto-tuning can improve throughput on high throughput, high latency networks
+	Start-Job -Name "AutoTuningLevelLocal" -ScriptBlock {
+		# Normal. Sets the TCP receive window to grow to accommodate almost all scenarios
+		Set-NetTCPSetting -AutoTuningLevelLocal Normal
+	}
+
+	Receive-Job -Name "AutoTuningLevelLocal" -Wait -AutoRemoveJob
+
 	# Clears the contents of the DNS client cache
 	Start-Job -Name "ClearDNSCache" -ScriptBlock {
 		Clear-DnsClientCache
 	}
 
 	Receive-Job -Name "ClearDNSCache" -Wait -AutoRemoveJob
+
+	# Reset IP, mask and gateway address
+	Start-Job -Name "ResetIP" -ArgumentList $AdapterAlias -ScriptBlock {
+		param ($AdapterAlias)
+		Remove-NetIPAddress -InterfaceAlias $AdapterAlias -IncludeAllCompartments -Confirm:$false
+	}
+
+	Receive-Job -Name "ResetIP" -Wait -AutoRemoveJob
+
+	# Reset primary and secondary DNS
+	Start-Job -Name "ResetDNS" -ArgumentList $AdapterAlias -ScriptBlock {
+		param ($AdapterAlias)
+		Set-DnsClientServerAddress -InterfaceAlias $AdapterAlias -ResetServerAddress
+	}
+
+	Receive-Job -Name "ResetDNS" -Wait -AutoRemoveJob
 
 	# Reset adapters for changes to take effect
 	Write-Information -Tags "User" -MessageData "INFO: Disabling adapters"
@@ -334,6 +346,13 @@ if ($AdapterAlias)
 	}
 
 	Receive-Job -Name "RegisterDNSClient" -Wait -AutoRemoveJob
+
+	Start-Job -Name "NetworkProfile" -ArgumentList $AdapterAlias -ScriptBlock {
+		param ($AdapterAlias)
+		Set-NetConnectionProfile -InterfaceAlias $AdapterAlias -NetworkCategory Private
+	}
+
+	Receive-Job -Name "NetworkProfile" -Wait -AutoRemoveJob
 }
 
 # Grant access to firewall logs

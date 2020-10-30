@@ -222,4 +222,19 @@ New-NetFirewallRule -DisplayName "Proximity sharing" `
 	-Description "Outbound rule for Proximity sharing over." `
 	@Logs | Format-Output @Logs
 
+#
+# Router access
+#
+
+New-NetFirewallRule -DisplayName "Router configuration (HTTP/S)" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
+	-Service Any -Program Any -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress DefaultGateway `
+	-LocalPort Any -RemotePort 80, 443 `
+	-LocalUser $UsersGroupSDDL `
+	-InterfaceType $Interface `
+	-Description "Allow router configuration trough browser" `
+	@Logs | Format-Output @Logs
+
 Update-Log

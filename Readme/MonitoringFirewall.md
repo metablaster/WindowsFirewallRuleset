@@ -101,6 +101,7 @@ Permission is valid until system reboot or until manual permission removal.
 and press enter.
 - This action will create additional (filtered) log file in same directory called `FILENAME.filterline.log`
 - Config file is located inside `.vscode\filterline.json` and supports regex to fine tune your filter.
+- For sample filterline regexes take a look into `Readme\Regex.md`
 
 ## Event log
 
@@ -154,14 +155,16 @@ click on image to enlarge:
 
 - WFP stand for "Windows Filtering Platform", a low level packet filter upon which Windows firewall
 is built.
+- **NOTE:** you need to enable at a minimum, auditing of dropped packet as explained in section
+"Event log" above.
 - you can access WFP logs, filter and state by executing following commands:\
 ```netsh wfp show state``` to show current state, such as detailed information about dropped or
 allowed network packets.
 ```netsh wfp show filters``` to show current firewall filters
 (filters are made of firewall rules btw,
 rules by them self are just high level specifications translated into these low level filters.)
-- when you execute show state, it will generate xml file in the same directory where you executed
-the command, open this file with
+- when you execute show state, it will generate xml file in the same directory where you execute
+command, open this file with
 your code editor such VS Code.
 - what you are looking for here is an ID called "Filter Run-Time ID" and "Layer Run-Time ID",
 you can obtain these ID's from event viewer as shown in Event log (screen shot above).
@@ -176,11 +179,10 @@ action or boot time filter.
 to allow this traffic, take a look back into event viewer to see which application initiated this
 traffic, as well as what ports and addresses were used, then verify you have firewall rule for this.
 - The `<layerKey></layerKey>` key will tell you which WFP filter caused the drop, for example the
-value `FWPM_LAYER_ALE_AUTH_CONNECT_V4` means WFP IPv4 application filter, which tells us program in
-question has no adequate allow rule so the default outbound action was hit.
-- There is other cool information you can get out of this file, go ahead and experiment.
-- NOTE: you need to enable at a minimum, auditing of dropped packet as explained in section
-"Event log" above.
+value `FWPM_LAYER_ALE_AUTH_CONNECT_V4` means IPv4 authorizing connect requests for outgoing connection,
+based on the first packet sent. which in turn tells us there was no adequate allow rule so the
+default outbound action was hit.
+- For detailed information on how to interpret WFP log see "Firewall" section in `Readme\Reference.md`
 
 [WFP Reference](https://docs.microsoft.com/en-us/windows/win32/fwp/about-windows-filtering-platform)
 

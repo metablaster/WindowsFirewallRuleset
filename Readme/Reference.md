@@ -22,6 +22,8 @@ customized scenarios.
   - [Virtualization](#virtualization)
   - [OS and software](#os-and-software)
   - [Protocols](#protocols)
+  - [Troubleshooting](#troubleshooting)
+  - [tools](#tools)
   - [Unclassified links](#unclassified-links)
 
 ## Visual Studio Code
@@ -107,6 +109,8 @@ Also few commandlets from these modules:
 
 ## Firewall
 
+[Windows Filtering Platform Architecture Overview](https://docs.microsoft.com/en-us/windows-hardware/drivers/network/windows-filtering-platform-architecture-overview)
+
 [WFP Operation](https://docs.microsoft.com/en-us/windows/win32/fwp/basic-operation)
 
 [Types of NAT](https://doc-kurento.readthedocs.io/en/6.9.0/knowledge/nat.html)
@@ -114,6 +118,10 @@ Also few commandlets from these modules:
 [Windows Firewall](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-firewall/windows-firewall-with-advanced-security)
 
 [Windows Filtering Platform](https://docs.microsoft.com/en-us/windows/win32/fwp/windows-filtering-platform-start-page)
+
+[WFP Monitoring](https://docs.microsoft.com/en-us/windows/win32/fwp/wfp-monitoring)
+
+[Windows Filtering Platform constants](https://docs.microsoft.com/en-us/windows-hardware/drivers/network/windows-filtering-platform-constants)
 
 ## Virtualization
 
@@ -139,12 +147,24 @@ Also few commandlets from these modules:
 
 [Active FTP vs. Passive FTP](http://slacksite.com/other/ftp.html)
 
+## Troubleshooting
+
+[Advanced troubleshooting for TCP/IP issues](https://docs.microsoft.com/en-us/windows/client-management/troubleshoot-tcpip)
+
+[WFP Monitoring](https://docs.microsoft.com/en-us/windows/win32/fwp/wfp-monitoring)
+
+## tools
+
+[makecab](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/makecab)
+
+[auditpol](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/auditpol)
+
+[gpupdate](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/gpupdate)
+
 ## Unclassified links
 
 [Check IP](https://whatismyipaddress.com/ip-lookup)
 
 [Check Domain](https://lookup.icann.org)
-
-[makecab](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/makecab)
 
 [Command-line syntax key](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/command-line-syntax-key)

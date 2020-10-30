@@ -258,7 +258,8 @@ todo's in this file are categorized into following sections:
     - Measure execution time for each or all scripts.
     - We use `Set-NetFirewallSetting` but use only a subset of parameters, other parameters are
     meaningful only with IPSec
-    - Write a set of scripts for network troubleshooting, such as WORKGROUP troubleshooting
+    - Write a set of scripts or module for network troubleshooting, such as WORKGROUP troubleshooting
+    or generating logs and reports.
     - Replace -Tags "tag_name" with global variable
     - All streams same convention:
     (ex. doing something $Variable v$Version instead of doing $Variable $Version),

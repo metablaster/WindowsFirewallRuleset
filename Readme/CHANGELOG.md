@@ -22,6 +22,7 @@ If you would like to see fresh changes done since last release you can do so on 
 - Rules
 
   - Added rules for DHCP client and server
+  - Added rule to allow router configuration
 
 - Modules
 
