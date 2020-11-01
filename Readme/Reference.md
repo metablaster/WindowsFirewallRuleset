@@ -123,6 +123,8 @@ Also few commandlets from these modules:
 
 [Windows Filtering Platform constants](https://docs.microsoft.com/en-us/windows-hardware/drivers/network/windows-filtering-platform-constants)
 
+[Understand TCP/IP addressing and subnetting basics](https://docs.microsoft.com/en-us/troubleshoot/windows-client/networking/tcpip-addressing-and-subnetting)
+
 ## Virtualization
 
 [What is the Hyper-V Virtual Switch and How Does it Work?](https://www.altaro.com/hyper-v/the-hyper-v-virtual-switch-explained-part-1/)

@@ -99,6 +99,7 @@ elseif (!(Test-Path -Path $FirewallLogsFolder -PathType Container @Logs))
 
 # Change in logs location will require system reboot
 Write-Information -Tags "Project" -MessageData "INFO: Verifying if there is change in log location"
+# TODO: Get-NetFirewallProfile: "An unexpected network error occurred", happens proably if network is down or adapter not configured?
 $OldLogFiles = Get-NetFirewallProfile -PolicyStore $PolicyStore -All |
 Select-Object -ExpandProperty LogFileName | Split-Path
 

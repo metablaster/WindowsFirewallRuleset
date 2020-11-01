@@ -74,6 +74,7 @@ function Find-Installation
 		{
 			# TODO: No algorithm to find this path
 			Edit-Table "%ProgramFiles%\dotnet"
+			break
 		}
 		"CMake"
 		{

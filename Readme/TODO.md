@@ -99,6 +99,11 @@ todo's in this file are categorized into following sections:
     - Now that common parameters are removed need to update the order of rule parameters,
     also not all are the same.
     - Variable to conditionally apply rules for Administrators
+    - Allow unicast response to multicast traffic option is there but we have multicast specific
+    rules, so it is a bad desing since we break the builtin feature, also it's not clear what effects
+    does does option provide.
+    - Rule display name, we need some conventional way to name them for sortability reasons and to
+    make them easy to spot in firewall GUI
 
 4. Test and debugging
 
@@ -182,6 +187,8 @@ todo's in this file are categorized into following sections:
     now, since comments must not be formatted, formatting would be visible in GUI.
     - Some rules apply to both IPv4 and IPv6 such as qBittorrent.ps1, for these we should group them
     into "hybrid" folder instead of IPv4 or IPv6 folder which should be IP version specific rules.
+    - Need to verify rule display description to include IPv4 or IPv6 in cases where these rules
+    apply to specific IP version to avoid confusion to what these rules apply.
     - We handle mostly client rules and no server rules, same case as with IPv4 vs IPv6
     grouping model, we should define a model for server rules (not necessarily Windows Server,
     workstation PC can also act as server)

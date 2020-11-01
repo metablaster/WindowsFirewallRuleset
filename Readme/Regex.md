@@ -24,6 +24,7 @@ Note:
     - [Programs](#programs)
     - [DHCPv6](#dhcpv6)
     - [DHCPv4](#dhcpv4)
+    - [LLMNRv4](#llmnrv4)
   - [Get -DisplayName parameter and it's value](#get--displayname-parameter-and-its-value)
   - [Get platform](#get-platform)
   - [Get group](#get-group)
@@ -57,6 +58,12 @@ Filterline regexes are to be used in `.vscode\filterline.json` to filter out fir
 
 ```regex
 "DROP UDP.*([0-9]{1,3}\\.){3}[0-9]{1,3}\\s(67|68)"
+```
+
+### LLMNRv4
+
+```regex
+"DROP UDP.*([0-9]{1,3}\\.){3}[0-9]{1,3}\\s\\d+(?<!5353)\\s5353"
 ```
 
 ## Get -DisplayName parameter and it's value
