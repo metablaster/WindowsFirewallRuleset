@@ -141,7 +141,9 @@ Select-AdapterAlias Disabled
 Select-AdapterAlias Operational -Adapter @("Ethernet", "Realtek WI-FI")
 
 .NOTES
-None.
+We select InterfaceAlias instead of adapter objects because of non consistent CIM parameters
+used by commandlets in this script resulting in errors
+TODO: Parameter to control strict selection
 #>
 function Select-AdapterAlias
 {
@@ -167,7 +169,6 @@ function Select-AdapterAlias
 	}
 	else
 	{
-		# TODO: Could there be one script scope variable for all adapters of intereset?
 		$TargetAdapter = Get-NetAdapter -Physical -Name *
 	}
 
@@ -184,25 +185,25 @@ function Select-AdapterAlias
 		# Disabled - adapter is disabled and disconnected
 		# Disconnected - adapter is enabled but disconnected from network
 		# Up - adapter is enabled and able to connect to internet
-		:inside1 switch -Wildcard ($Item.Status)
+		switch -Wildcard ($Item.Status)
 		{
 			"Not Present"
 			{
 				$ifStatus =	"Removed"
 				$AcceptStatus = @("Removed")
-				break inside1
+				break
 			}
 			"Disabled"
 			{
 				$ifStatus =	$Item.Status
 				$AcceptStatus = @("Disabled")
-				break inside1
+				break
 			}
 			"Disconnected"
 			{
 				$ifStatus =	"Enabled"
 				$AcceptStatus = @("Enabled")
-				break inside1
+				break
 			}
 			"Up"
 			{
@@ -213,13 +214,13 @@ function Select-AdapterAlias
 
 				if ($NetworkProfile)
 				{
-					:inside2 switch -Wildcard ($NetworkProfile.Name)
+					switch -Wildcard ($NetworkProfile.Name)
 					{
 						# NOTE: Known profiles when there is not internet access
 						# Identifying...
 						# Unidentified network
 						"Identifying*" { }
-						"Unidentified*" { break	inside2 }
+						"Unidentified*" { break }
 						default
 						{
 							$ifStatus = "Connected"
@@ -228,7 +229,7 @@ function Select-AdapterAlias
 					}
 				}
 
-				break inside1
+				break
 			}
 			default
 			{
@@ -294,7 +295,7 @@ function Wait-Adapter
 	{
 		[string[]] $Result = Select-AdapterAlias $Status -Adapter $Adapter
 
-		# If all adapters reach desired state
+		# If all adapters are in desired state
 		if ($Result -and ($Result.Count -eq $Adapter.Count))
 		{
 			return
@@ -308,7 +309,7 @@ function Wait-Adapter
 }
 
 # Ensure adapters are put into valid state for configuration
-[string[]] $AdapterAlias = Select-AdapterAlias Disabled
+[string[]] $AdapterAlias = Select-AdapterAlias Disabled @Logs
 
 if ($AdapterAlias)
 {
@@ -318,7 +319,8 @@ if ($AdapterAlias)
 	Wait-Adapter Enabled -Adapter $AdapterAlias
 }
 
-$AdapterAlias = Select-AdapterAlias Enabled
+# TODO: It's not clear which methods may fail with disconnected adapters
+$AdapterAlias = Select-AdapterAlias Enabled @Logs
 
 if (!$AdapterAlias)
 {
@@ -343,8 +345,8 @@ else
 
 		# NOTE: IPv4DefaultGateway not used, Get-NetRoute is simpler
 		# TypeName: Selected.NetIPConfiguration
-		$IPInfo = Get-NetIPConfiguration -All |
-		Select-Object -Property IPv4Address, DNSServer
+		$IPInfo = Get-NetIPConfiguration -All @Logs |
+		Select-Object -Property IPv4Address, DNSServer @Logs
 
 		# Typename: Microsoft.Management.Infrastructure.CimInstance#ROOT/StandardCimv2/MSFT_NetRoute
 		$GatewayInfo = Get-NetRoute -DestinationPrefix 0.0.0.0/0 -AddressFamily IPv4
@@ -353,8 +355,8 @@ else
 	if ($KeepIP)
 	{
 		# TypeName Selected.Microsoft.Management.Infrastructure.CimInstance
-		$PrefixInfo = Get-NetIPAddress -InterfaceAlias $AdapterAlias -AddressFamily IPv4 |
-		Select-Object -Property PrefixLength, InterfaceAlias
+		$PrefixInfo = Get-NetIPAddress -InterfaceAlias $AdapterAlias -AddressFamily IPv4 @Logs |
+		Select-Object -Property PrefixLength, InterfaceAlias @Logs
 	}
 
 	if ($Reset)
@@ -365,18 +367,18 @@ else
 		Start-Job -Name "AdvancedProperties" -ArgumentList $AdapterAlias -ScriptBlock {
 			param ($AdapterAlias)
 			Reset-NetAdapterAdvancedProperty -InterfaceAlias $AdapterAlias -DisplayName "*" -NoRestart
-		}
+		} @Logs
 
-		Receive-Job -Name "AdvancedProperties" -Wait -AutoRemoveJob
+		Receive-Job -Name "AdvancedProperties" -Wait -AutoRemoveJob @Logs
 
 		# Sets the interface-specific DNS client configurations on the computer
 		Start-Job -Name "AdvancedDNS" -ArgumentList $AdapterAlias -ScriptBlock {
 			param ($AdapterAlias)
 			Set-DnsClient -InterfaceAlias $AdapterAlias -RegisterThisConnectionsAddress $true -ResetConnectionSpecificSuffix `
 				-UseSuffixWhenRegistering $false
-		}
+		} @Logs
 
-		Receive-Job -Name "AdvancedDNS" -Wait -AutoRemoveJob
+		Receive-Job -Name "AdvancedDNS" -Wait -AutoRemoveJob @Logs
 
 		# Set NETBIOS adapter option
 		Start-Job -Name "NETBIOS" -ScriptBlock {
@@ -385,30 +387,34 @@ else
 			# 1 - Enable NetBIOS over TCP/IP
 			# 2 - Disable NetBIOS over TCP/IP
 
+			# NOTE: There is no InterfaceAlias in CIM selection
 			$Description = Get-NetAdapter -Physical | Where-Object Status -EQ "Up" |
 			Select-Object -ExpandProperty InterfaceDescription
 
-			$Adapter = Get-CimInstance -Namespace "root\cimv2" -QueryDialect "WQL" `
-				-Query "SELECT * FROM Win32_NetworkAdapterConfiguration WHERE Description LIKE '$Description'"
+			foreach ($Name in $Description)
+			{
+				$Adapter = Get-CimInstance -Namespace "root\cimv2" -QueryDialect "WQL" `
+					-Query "SELECT * FROM Win32_NetworkAdapterConfiguration WHERE Description LIKE '$Name'"
 
-			# NOTE: Error code 72: An error occurred while accessing the registry for the requested information.
-			# Invalid domain name (Action requires elevation)
-			# Error code 84: IP not enabled on adapter.
-			# https://docs.microsoft.com/en-us/windows/win32/cimwin32prov/settcpipnetbios-method-in-class-win32-networkadapterconfiguration
-			Invoke-CimMethod -InputObject $Adapter -MethodName SetTcpipNetbios -Arguments @{
-				TcpipNetbiosOptions = 0
-			} | Out-Null
-		}
+				# NOTE: Error code 72: An error occurred while accessing the registry for the requested information.
+				# Invalid domain name (Action requires elevation)
+				# NOTE: Error code 84: IP not enabled on adapter
+				# https://docs.microsoft.com/en-us/windows/win32/cimwin32prov/settcpipnetbios-method-in-class-win32-networkadapterconfiguration
+				Invoke-CimMethod -InputObject $Adapter -MethodName SetTcpipNetbios -Arguments @{
+					TcpipNetbiosOptions = 0
+				} | Out-Null
+			}
+		} @Logs
 
-		Receive-Job -Name "NETBIOS" -Wait -AutoRemoveJob
+		Receive-Job -Name "NETBIOS" -Wait -AutoRemoveJob @Logs
 
 		# TCP auto-tuning can improve throughput on high throughput, high latency networks
 		Start-Job -Name "AutoTuningLevel" -ScriptBlock {
 			# Normal. Sets the TCP receive window to grow to accommodate almost all scenarios
 			Set-NetTCPSetting -AutoTuningLevelLocal Normal
-		}
+		} @Logs
 
-		Receive-Job -Name "AutoTuningLevel" -Wait -AutoRemoveJob
+		Receive-Job -Name "AutoTuningLevel" -Wait -AutoRemoveJob @Logs
 	} # Reset
 
 	# NOTE: To set specific power saving options use Set-NetAdapterPowerManagement
@@ -423,98 +429,95 @@ else
 		Enable-NetAdapterPowerManagement -Name $AdapterAlias -NoRestart
 	}
 
-	# Clear routing table information for interface, removes the "default gateway" entry
-	# TODO: Set-NetIPInterface won't do it's job completely without this step?
-	# TODO: Should be called after IP and DNS addresses are removed
-	# NOTE: Routes are available only when adapter is enabled (and connected?)
+	# Remove primary and secondary DNS
+	Start-Job -Name "DNSServers" -ArgumentList $AdapterAlias -ScriptBlock {
+		param ($AdapterAlias)
+		Set-DnsClientServerAddress -InterfaceAlias $AdapterAlias -ResetServerAddress
+	} @Logs
+
+	Receive-Job -Name "DNSServers" -Wait -AutoRemoveJob @Logs
+
+	# Remove IP address and subnet mask
+	# NOTE: Adapter must be enabled
+	Start-Job -Name "IPAddress" -ArgumentList $AdapterAlias -ScriptBlock {
+		param ($AdapterAlias)
+		Remove-NetIPAddress -InterfaceAlias $AdapterAlias -IncludeAllCompartments -Confirm:$false
+	} @Logs
+
+	Receive-Job -Name "IPAddress" -Wait -AutoRemoveJob @Logs
+
+	# Remove "Default Gateway" entry and clear routing table for interface
+	# NOTE: Routes are available only when adapter is enabled (and in connected media state?)
 	# HACK: Remove-NetRoute: Element not found, error appears randomly
 	Start-Job -Name "RoutingTable" -ArgumentList $AdapterAlias -ScriptBlock {
 		param ($AdapterAlias)
 		Remove-NetRoute -InterfaceAlias $AdapterAlias -AddressFamily IPv4 -Confirm:$false
-	}
+	} @Logs
 
-	Receive-Job -Name "RoutingTable" -Wait -AutoRemoveJob
+	Receive-Job -Name "RoutingTable" -Wait -AutoRemoveJob @Logs
 
-	# Set IPv6 interface to "Obtain an IP address automatically"
+	# Set IPv6 interface to "Obtain an IP address automatically" and "Obtain DNS server address automatically"
 	Start-Job -Name "InterfaceIPv6" -ArgumentList $AdapterAlias -ScriptBlock {
 		param ($AdapterAlias)
 
-		# NOTE:By default, RouterDiscovery is ControlledByDHCP for IPv4 and Enabled for IPv6
+		# NOTE: By default, RouterDiscovery is ControlledByDHCP for IPv4 and Enabled for IPv6
 		# EcnMarking Allow an application or higher layer protocol, such as TCP, to decide how to apply ECN marking
 		# NOTE: In order for an application to fully control ECN capability value in the Network TCP setting must also be set to Enabled
 		Set-NetIPInterface -InterfaceAlias $AdapterAlias -RouterDiscovery Enabled -AutomaticMetric Enabled `
 			-NeighborDiscoverySupported Yes -AddressFamily IPv6 -EcnMarking AppDecide -Dhcp Enabled
-	}
+	} @Logs
 
-	Receive-Job -Name "InterfaceIPv6" -Wait -AutoRemoveJob
+	Receive-Job -Name "InterfaceIPv6" -Wait -AutoRemoveJob @Logs
 
-	# Set IPv4 interface to "Obtain an IP address automatically"
+	# Set IPv4 interface to "Obtain an IP address automatically" and "Obtain DNS server address automatically"
 	Start-Job -Name "InterfaceIPv4" -ArgumentList $AdapterAlias -ScriptBlock {
 		param ($AdapterAlias)
 
 		Set-NetIPInterface -InterfaceAlias $AdapterAlias -RouterDiscovery ControlledByDHCP -AutomaticMetric Enabled `
 			-NeighborDiscoverySupported Yes -AddressFamily IPv4 -EcnMarking AppDecide -Dhcp Enabled
-	}
+	} @Logs
 
-	Receive-Job -Name "InterfaceIPv4" -Wait -AutoRemoveJob
-
-	# Set interface to "Obtain DNS server address automatically", removes primary and secondary DNS
-	Start-Job -Name "DNSServers" -ArgumentList $AdapterAlias -ScriptBlock {
-		param ($AdapterAlias)
-		Set-DnsClientServerAddress -InterfaceAlias $AdapterAlias -ResetServerAddress
-	}
-
-	Receive-Job -Name "DNSServers" -Wait -AutoRemoveJob
-
-	# Remove IP, mask and gateway address
-	# NOTE: Adapter must be enabled
-	# TODO: not clear where to put this nor what it does since adapter entries are clear at this point
-	Start-Job -Name "IPAddress" -ArgumentList $AdapterAlias -ScriptBlock {
-		param ($AdapterAlias)
-		Remove-NetIPAddress -InterfaceAlias $AdapterAlias -IncludeAllCompartments -Confirm:$false
-	}
-
-	Receive-Job -Name "IPAddress" -Wait -AutoRemoveJob
+	Receive-Job -Name "InterfaceIPv4" -Wait -AutoRemoveJob @Logs
 
 	# Restart adapters for changes to take effect
 	Write-Information -Tags "User" -MessageData "INFO: Disabling network adapters"
 
 	# NOTE: Need to wait until registry is updated for IP removal
-	Disable-NetAdapter -InterfaceAlias $AdapterAlias -Confirm:$false
-	Wait-Adapter Disabled -Adapter $AdapterAlias
+	Disable-NetAdapter -InterfaceAlias $AdapterAlias -Confirm:$false @Logs
+	Wait-Adapter Disabled -Adapter $AdapterAlias @Logs
 
-	$NetworkTime = Get-Date -DisplayHint Time | Select-Object -ExpandProperty DateTime
+	$NetworkTime = Get-Date -DisplayHint Time @Logs | Select-Object -ExpandProperty DateTime @Logs
 	Write-Information -Tags "User" -MessageData "INFO: Network stop time is $NetworkTime"
 
 	Write-Information -Tags "User" -MessageData "INFO: Waiting 10 seconds to silence network"
-	Start-Sleep -Seconds 10
+	Start-Sleep -Seconds 10 @Logs
 
 	# Clears the contents of the DNS client cache
 	Start-Job -Name "ClearDNSCache" -ScriptBlock {
 		Clear-DnsClientCache
-	}
+	} @Logs
 
 	Receive-Job -Name "ClearDNSCache" -Wait -AutoRemoveJob
 
 	# Make changes done to GPO firewall effective
-	# gpupdate.exe /target:computer
+	gpupdate.exe /target:computer
 
 	Write-Information -Tags "User" -MessageData "INFO: Enabling network adapters"
 
 	# NOTE: Need to wait for firewall service to set up file system permissions for logs in final step
 	# Setting IP and DNS also requires enabled adapter
-	Enable-NetAdapter -InterfaceAlias $AdapterAlias
+	Enable-NetAdapter -InterfaceAlias $AdapterAlias @Logs
 	Wait-Adapter Operational -Adapter $AdapterAlias
 
 	$NetworkTime = Get-Date -DisplayHint Time | Select-Object -ExpandProperty DateTime
 	Write-Information -Tags "User" -MessageData "INFO: Network start time is $NetworkTime"
 
-	# Restore previous IP configuration
 	if ($KeepIP)
 	{
+		# Restore previous IP configuration
 		Write-Information -Tags "User" -MessageData "INFO: Restoring old IP configuration"
 
-		foreach ($Adapter in (Get-NetAdapter -Physical -Name $AdapterAlias))
+		foreach ($Adapter in (Get-NetAdapter -Physical -Name $AdapterAlias @Logs))
 		{
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing $($Adapter.InterfaceAlias) adapter"
 
@@ -554,12 +557,12 @@ else
 		}
 	}
 
-	# Restore previous DNS servers
 	if ($KeepIP -or $KeepDNS)
 	{
+		# Restore previous DNS servers
 		Write-Information -Tags "User" -MessageData "INFO: Restoring old DNS server addresses"
 
-		foreach ($Adapter in (Get-NetAdapter -Physical -Name $AdapterAlias))
+		foreach ($Adapter in (Get-NetAdapter -Physical -Name $AdapterAlias @Logs))
 		{
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing $($Adapter.InterfaceAlias) adapter"
 
@@ -575,34 +578,33 @@ else
 			}
 
 			# NOTE: Adapter cannot be in disconnected state when configuring the DNS server address
-			# TODO: -Validate does not work: "A general error occurred that is not covered by a more specific error code"
-			Set-DnsClientServerAddress -InterfaceAlias $Adapter.InterfaceAlias -ServerAddresses $DNSAddress4
+			# HACK: -Validate does not work: "A general error occurred that is not covered by a more specific error code"
+			Set-DnsClientServerAddress -InterfaceAlias $Adapter.InterfaceAlias -ServerAddresses $DNSAddress4 @Logs
 		}
 	}
 
 	# Registers all of the IP addresses on the computer onto the configured DNS server
 	Start-Job -Name "RegisterDNSClient" -ScriptBlock {
 		Register-DnsClient
-	}
+	} @Logs
 
-	Receive-Job -Name "RegisterDNSClient" -Wait -AutoRemoveJob
+	Receive-Job -Name "RegisterDNSClient" -Wait -AutoRemoveJob @Logs
 
-	# TODO: For Wait-Adapter we need to know if failed an don't run depended jobs
-	Wait-Adapter Connected -Adapter $AdapterAlias
+	Wait-Adapter Connected -Adapter $AdapterAlias @Logs
 
 	# TODO: Set to old profile, or define default profile in project settings
 	Start-Job -Name "NetworkProfile" -ArgumentList $AdapterAlias -ScriptBlock {
 		param ($AdapterAlias)
 		Set-NetConnectionProfile -InterfaceAlias $AdapterAlias -NetworkCategory Private
-	}
+	} @Logs
 
-	Receive-Job -Name "NetworkProfile" -Wait -AutoRemoveJob
+	Receive-Job -Name "NetworkProfile" -Wait -AutoRemoveJob @Logs
 }
 
 # Grant access to firewall logs
-# if (![string]::IsNullOrEmpty($Principal))
-# {
-# 	& "$ProjectRoot\Scripts\GrantLogs.ps1" -Principal $Principal -SkipPrompt
-# }
+if (![string]::IsNullOrEmpty($Principal))
+{
+	& "$ProjectRoot\Scripts\GrantLogs.ps1" -Principal $Principal -SkipPrompt
+}
 
 Update-Log
