@@ -28,22 +28,32 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Grant permissions to read and write firewall log files
+Grant permissions to read and write firewall logs in custom location
+
 .DESCRIPTION
-Grant permissions to non administrative account to read firewall log files until system reboot.
+When firewall is set to write logs into custom location inside repository neither firewall service
+not users can access them.
+Grant permissions to non administrative account to read firewall log files.
 Also grants firewall service to write logs to project specified location.
-The Microsoft Protection Service will automatically reset permissions on firewall logs on system boot.
+The Microsoft Protection Service will automatically reset permissions on firewall logs either
+on system reboot or network reconnect, for security reasons.
+
 .PARAMETER Principal
 Non administrative user account for which to grant permission
+
 .PARAMETER ComputerName
 Principal domain for which to grant permission.
-By default principal from local machine gets permission
+By default specified principal gets permission from local machine
+
 .EXAMPLE
 PS> GrantLogs.ps1 USERNAME
+
 .EXAMPLE
 PS> GrantLogs.ps1 USERNAME -Computer COMPUTERNAME
+
 .NOTES
-Running this script makes sense only for custom firewall log location inside repository
+Running this script makes sense only for custom firewall log location inside repository.
+The benefit is to have special syntax coloring and filtering functionality with VSCode.
 #>
 
 [CmdletBinding()]

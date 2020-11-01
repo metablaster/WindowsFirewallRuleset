@@ -39,7 +39,7 @@ PS> Test-Environment %SystemDrive%
 .INPUTS
 None. You cannot pipe objects to Test-Environment
 .OUTPUTS
-[bool] true if path exists, false otherwise
+None. true if path exists, false otherwise
 .NOTES
 TODO: This should proably be inside utility module
 #>

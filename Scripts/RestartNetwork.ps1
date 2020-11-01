@@ -332,7 +332,7 @@ else
 	# NOTE: The order of tasks is important because:
 	# 1. Keep network interface up as long as possible to capture precise network stop and start time
 	# 2. Some properties can be modified only in specific adapter state
-	# 3. Reset as many properties as possible before disabling network adapter
+	# 3. Reset as many properties as possible before restarting network adapter
 	# TODO: Reset adapter items (optionally reinstall them, which requires reboot?)
 	# HACK: Reset APIPA alternate IP fields
 	# HACK: Reset WINS and LMHOSTS options

@@ -43,6 +43,7 @@ None.
 #>
 
 # Initialization
+#Requires -RunAsAdministrator
 # TODO: Adjust path to project settings
 . $PSScriptRoot\..\..\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (

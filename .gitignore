@@ -89,3 +89,6 @@ Rules/NetworkServices.txt
 
 Modules/**/Help/**/Content/
 Modules/**/Help/**/External/
+
+# Sample test folder
+Test/Project.AllPlatforms.Utility/TestPermission/

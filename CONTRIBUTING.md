@@ -184,6 +184,12 @@ for more info about type casing run:
 [PSCustomObject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::get.GetEnumerator() | Sort-Object Key
 ```
 
+Use following command to see allowed verbs to name your functions
+
+```powershel
+Get-Verb | Select-Object Verb, Group, Description | Sort-Object Verb
+```
+
 Following link describes general rules about PowerShell code style if you like reading,
 however keep in mind, it is not in line of this project practices:\
 [The PowerShell Style Guide](https://poshcode.gitbooks.io/powershell-practice-and-style/Style-Guide/Introduction.html)

@@ -42,14 +42,15 @@ $PublicScripts = @(
 	"Approve-Execute"
 	"Compare-Path"
 	"Confirm-FileEncoding"
-	"Update-Context"
 	"Convert-SDDLToACL"
-	"Show-SDDL"
+	"Get-FileEncoding"
 	"Get-NetworkService"
 	"Get-ProcessOutput"
-	"Set-ScreenBuffer"
 	"Set-NetworkProfile"
-	"Get-FileEncoding"
+	"Set-Permission"
+	"Set-ScreenBuffer"
+	"Show-SDDL"
+	"Update-Context"
 )
 
 foreach ($Script in $PublicScripts)

@@ -352,6 +352,7 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 		Set-Variable -Name RequireNuGetVersion -Scope Global -Option ReadOnly -Force -Value ([version]::new(2, 8, 5))
 	}
 
+	# TODO: Rename to TestAdmin and TestUser
 	# Administrative user account name which will perform unit testing
 	Set-Variable -Name UnitTesterAdmin -Scope Global -Option ReadOnly -Force -Value "Unknown Admin"
 

@@ -177,6 +177,7 @@ todo's in this file are categorized into following sections:
     - Select-Object -Last 1 instead of -First 1 to get highest value, need to verify
     - Rules for services, need to check services are networking services, if not write warning,
     could be implemented in Test-Service function
+    - We should add `Scripts` folder to PS scripts path in ProjectSettings
 
 3. Rules
 

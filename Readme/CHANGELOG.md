@@ -30,11 +30,21 @@ If you would like to see fresh changes done since last release you can do so on 
   - Improved function to detect invalid paths
   - Improved function for setting permission to read firewall logs as standard user
 
+- New features
+
+  - Added script to restart/reset network with no need for reboot
+  - Added functions to set ownership and file saystem premissions
+
+- Documentation
+
+  - Comment based help, update formatting according to community quidelines
+
 - Bugfix
 
   - GrantLogs.ps1 did not set permission to create firewall log filter file
   - Checking for requirements would run for every script in development mode
-  - DHCP configured Computer won't connect to internet
+  - DHCP configured computer won't connect to internet
+  - Fixed random minor mistakes
 
 ## v0.7.0 (current release)
 

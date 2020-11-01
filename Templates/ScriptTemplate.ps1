@@ -71,8 +71,8 @@ param (
 )
 
 # Initialization
+# TODO: Adjust path to project settings and elevation requirement
 #Requires -RunAsAdministrator
-# TODO: adjust path to project settings
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )

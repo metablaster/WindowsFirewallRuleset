@@ -29,21 +29,24 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Unit test for Test-Function
+
 .DESCRIPTION
 Use Test-Function.ps1 as a template to test out module functions
+
 .INPUTS
-None. You cannot pipe objects to Test-Function.ps1.
+None. You cannot pipe objects to Test-Function.ps1
+
 .OUTPUTS
-None. Test-Function.ps1 does not generate any output.
+None. Test-Function.ps1 does not generate any output
+
 .NOTES
 None.
 TODO: Update Copyright and start writing test code
-.LINK
-None.
 #>
 
 # Initialization
-# TODO: Adjust path to project settings
+# TODO: Adjust path to project settings and elevation requirement
+#Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )
