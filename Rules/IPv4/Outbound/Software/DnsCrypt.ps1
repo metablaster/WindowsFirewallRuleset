@@ -58,6 +58,8 @@ $DnsCryptRoot = "%ProgramFiles%\Simple DNSCrypt x64"
 #
 # DnsCrypt rules
 # TODO: remote servers from file, explicit TCP or UDP
+# HACK: If localhost (DNSCrypt) is the only DNS server (no secondary DNS) then network status will be
+# "No internet access" even though internet works just fine
 #
 
 # Test if installation exists on system

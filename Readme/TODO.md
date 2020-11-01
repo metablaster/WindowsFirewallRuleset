@@ -293,6 +293,7 @@ todo's in this file are categorized into following sections:
 5. Code style
 
     - Separate comment based keywords so that there is one line between a comment and next keyword
+    - For variables with no explicitly decalred type, put "Typename" comment from Get-Member output
 
 6. Documentation
 

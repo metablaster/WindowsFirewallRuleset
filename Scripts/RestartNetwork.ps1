@@ -32,6 +32,7 @@ Restart and optionally reset network
 
 .DESCRIPTION
 Restart or reset all physical network adapters to their default values
+Without the need to reboot system.
 Reset few esoteric default options
 Set network profile to private
 Apply computer group policy settings
@@ -49,6 +50,10 @@ Skip clearing IP, mask and default gateway
 .PARAMETER Reset
 Reset all network properties in addition to restarting network
 
+.PARAMETER Performance
+Set adapter for maximum performance, all power management features are disabled
+By default, all supported power management features are enabled
+
 .EXAMPLE
 PS> .\RestartNetwork.ps1
 
@@ -60,6 +65,8 @@ PS> .\RestartNetwork.ps1 MyUsername -KeepDNS -Reset
 
 .NOTES
 TODO: IP protocol parameter
+TODO: Utilize all parameters for commandlets to make sure all is reset to default
+TODO: Optionally reset virtual and hidden adapters and their configuration
 
 .LINK
 https://devblogs.microsoft.com/scripting/enabling-and-disabling-network-adapters-with-powershell
@@ -77,7 +84,10 @@ param (
 	[switch] $KeepIP,
 
 	[Parameter()]
-	[switch] $Reset
+	[switch] $Reset,
+
+	[Parameter()]
+	[switch] $Performance
 )
 
 # Initialization
@@ -118,9 +128,10 @@ If successful aliases are returned back, otherwise warning message is show.
 
 .PARAMETER Status
 Specify minimum state of network adapters for which to get interface aliases:
+Removed - Network adapter is removed
 Disabled - Network adapter is disabled
 Enabled - Network adapter is enabled but disconnected
-Operational - Network adapter is able to connect to network
+Operational - Network adapter is enabled and able to connect to network
 Connected - Network adapter has internet access
 
 .EXAMPLE
@@ -156,6 +167,7 @@ function Select-AdapterAlias
 	}
 	else
 	{
+		# TODO: Could there be one script scope variable for all adapters of intereset?
 		$TargetAdapter = Get-NetAdapter -Physical -Name *
 	}
 
@@ -249,13 +261,13 @@ Wait until adapter is put into specified state
 A list of interface aliases which should be put into requested state
 
 .PARAMETER Seconds
-Maximum amount of time interval to wait, expressed in seconds
+Maximum time to wait for adapter state, expressed in seconds
 
 .EXAMPLE
 Wait-Adapter Enabled -Adapter "Ethernet"
 
 .EXAMPLE
-Wait-Adapter Disabled -Adapter "Ethernet" -Seconds 20
+Wait-Adapter Connected -Adapter "Ethernet" -Seconds 20
 
 .NOTES
 None.
@@ -295,6 +307,7 @@ function Wait-Adapter
 	Write-Warning -Message "Not all of the requested adapters are in '$Status' state"
 }
 
+# Ensure adapters are put into valid state for configuration
 [string[]] $AdapterAlias = Select-AdapterAlias Disabled
 
 if ($AdapterAlias)
@@ -307,30 +320,40 @@ if ($AdapterAlias)
 
 $AdapterAlias = Select-AdapterAlias Enabled
 
-# NOTE: The order of tasks is important because:
-# 1. keep network interface up as longer possible to capture precise network stop and start time
-# 2. Some properties can be modified only in specific adapter state
-# 3. Reset properties as much as possible before disabling network adapter
-# TODO: Reset adapter items (optionally reinstall them, which requires reboot?)
-# TODO: set power options
-# TODO: Reset APIPA alternate IP fields
-# TODO: Reset WINS and LMHOSTS options
-# TODO: Restart network services
-# TODO: Test network
-if ($AdapterAlias)
+if (!$AdapterAlias)
 {
+	# TODO: Use NetConnectionStatus property to get details
+	Write-Warning -Message "None of the adapters are ready for configuration"
+}
+else
+{
+	# NOTE: The order of tasks is important because:
+	# 1. Keep network interface up as long as possible to capture precise network stop and start time
+	# 2. Some properties can be modified only in specific adapter state
+	# 3. Reset as many properties as possible before disabling network adapter
+	# TODO: Reset adapter items (optionally reinstall them, which requires reboot?)
+	# HACK: Reset APIPA alternate IP fields
+	# HACK: Reset WINS and LMHOSTS options
+	# TODO: Restart network services
+	# TODO: Test network
+
 	if ($KeepIP -or $KeepDNS)
 	{
 		Write-Information -Tags "User" -MessageData "INFO: Saving IP configuration"
 
-		# TODO: Get-NetRoute for gateway
+		# NOTE: IPv4DefaultGateway not used, Get-NetRoute is simpler
+		# TypeName: Selected.NetIPConfiguration
 		$IPInfo = Get-NetIPConfiguration -All |
-		Select-Object -Property IPv4Address, IPv4DefaultGateway, DNSServer
+		Select-Object -Property IPv4Address, DNSServer
+
+		# Typename: Microsoft.Management.Infrastructure.CimInstance#ROOT/StandardCimv2/MSFT_NetRoute
+		$GatewayInfo = Get-NetRoute -DestinationPrefix 0.0.0.0/0 -AddressFamily IPv4
 	}
 
 	if ($KeepIP)
 	{
-		$PrefixLength = Get-NetIPAddress -InterfaceAlias $AdapterAlias -AddressFamily ipv4 |
+		# TypeName Selected.Microsoft.Management.Infrastructure.CimInstance
+		$PrefixInfo = Get-NetIPAddress -InterfaceAlias $AdapterAlias -AddressFamily IPv4 |
 		Select-Object -Property PrefixLength, InterfaceAlias
 	}
 
@@ -388,10 +411,23 @@ if ($AdapterAlias)
 		Receive-Job -Name "AutoTuningLevel" -Wait -AutoRemoveJob
 	} # Reset
 
-	# Clear routing table for interface, removes the "default gateway entry"
-	# NOTE: Set-NetIPInterface won't do it's job completely without this step
+	# NOTE: To set specific power saving options use Set-NetAdapterPowerManagement
+	if ($Performance)
+	{
+		Write-Information -Tags "User" -MessageData "INFO: Setting adapters for maximum performance"
+		Disable-NetAdapterPowerManagement -Name $AdapterAlias -NoRestart
+	}
+	else
+	{
+		Write-Information -Tags "User" -MessageData "INFO: Setting adapters for maximum power saving"
+		Enable-NetAdapterPowerManagement -Name $AdapterAlias -NoRestart
+	}
+
+	# Clear routing table information for interface, removes the "default gateway" entry
+	# TODO: Set-NetIPInterface won't do it's job completely without this step?
+	# TODO: Should be called after IP and DNS addresses are removed
 	# NOTE: Routes are available only when adapter is enabled (and connected?)
-	# TODO: Remove-NetRoute: Element not found
+	# HACK: Remove-NetRoute: Element not found, error appears randomly
 	Start-Job -Name "RoutingTable" -ArgumentList $AdapterAlias -ScriptBlock {
 		param ($AdapterAlias)
 		Remove-NetRoute -InterfaceAlias $AdapterAlias -AddressFamily IPv4 -Confirm:$false
@@ -430,7 +466,7 @@ if ($AdapterAlias)
 
 	Receive-Job -Name "DNSServers" -Wait -AutoRemoveJob
 
-	# Reset IP, mask and gateway address
+	# Remove IP, mask and gateway address
 	# NOTE: Adapter must be enabled
 	# TODO: not clear where to put this nor what it does since adapter entries are clear at this point
 	Start-Job -Name "IPAddress" -ArgumentList $AdapterAlias -ScriptBlock {
@@ -440,8 +476,7 @@ if ($AdapterAlias)
 
 	Receive-Job -Name "IPAddress" -Wait -AutoRemoveJob
 
-	# Reset adapters for changes to take effect
-	# Following
+	# Restart adapters for changes to take effect
 	Write-Information -Tags "User" -MessageData "INFO: Disabling network adapters"
 
 	# NOTE: Need to wait until registry is updated for IP removal
@@ -462,73 +497,88 @@ if ($AdapterAlias)
 	Receive-Job -Name "ClearDNSCache" -Wait -AutoRemoveJob
 
 	# Make changes done to GPO firewall effective
-	gpupdate.exe /target:computer
+	# gpupdate.exe /target:computer
 
 	Write-Information -Tags "User" -MessageData "INFO: Enabling network adapters"
 
-	# NOTE: Need to wait for firewall service to become active and to be able to
-	# set up file system permissions for logs in final step
-	# TODO: Adapter 'Up' state isn't the same as "Connected"
+	# NOTE: Need to wait for firewall service to set up file system permissions for logs in final step
+	# Setting IP and DNS also requires enabled adapter
 	Enable-NetAdapter -InterfaceAlias $AdapterAlias
 	Wait-Adapter Operational -Adapter $AdapterAlias
 
 	$NetworkTime = Get-Date -DisplayHint Time | Select-Object -ExpandProperty DateTime
 	Write-Information -Tags "User" -MessageData "INFO: Network start time is $NetworkTime"
 
-	# Restore adapter static IP configuration
+	# Restore previous IP configuration
 	if ($KeepIP)
 	{
 		Write-Information -Tags "User" -MessageData "INFO: Restoring old IP configuration"
 
-		# Restore previous IP configuration
 		foreach ($Adapter in (Get-NetAdapter -Physical -Name $AdapterAlias))
 		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing $($Adapter.InterfaceAlias) adapter"
+
 			$ifAlias = $Adapter.InterfaceAlias
 
-			$Prefix = $PrefixLength | Where-Object -Property InterfaceAlias -EQ $ifAlias |
+			[byte] $Prefix = $PrefixInfo | Where-Object -Property InterfaceAlias -EQ $ifAlias |
 			Select-Object -ExpandProperty PrefixLength
 
-			$Address = $IPInfo.IPv4Address | Where-Object -Property InterfaceAlias -EQ $ifAlias |
+			if (!$Prefix)
+			{
+				Write-Warning -Message "Restoring IP configuration ignored, subnet mask is missing"
+				continue
+			}
+
+			[string] $Address = $IPInfo.IPv4Address | Where-Object -Property InterfaceAlias -EQ $ifAlias |
 			Select-Object -ExpandProperty IPAddress
 
-			$DefaultGateway = $IPInfo.IPv4DefaultGateway | Where-Object {
-				$_ | Select-Object -ExpandProperty InterfaceAlias -EQ $ifAlias
-			} | Select-Object -ExpandProperty NextHop
+			if ([string]::IsNullOrEmpty($Address))
+			{
+				Write-Warning -Message "Restoring IP configuration ignored, IP address is missing"
+				continue
+			}
 
+			[string] $Gateway = $GatewayInfo | Where-Object -Property InterfaceAlias -EQ $ifAlias |
+			Select-Object -ExpandProperty NextHop
+
+			if ([string]::IsNullOrEmpty($Gateway))
+			{
+				Write-Warning -Message "Restoring IP configuration ignored, default gateway address is missing"
+				continue
+			}
+
+			# NOTE: For "Inconsistent parameters PolicyStore PersistentStore and Dhcp Enabled"
+			# Adapter cannot be in disconnected state when configuring the IP address
 			New-NetIPAddress -InterfaceAlias $ifAlias -AddressFamily IPv4 -IPAddress $Address `
-				-PrefixLength $Prefix -DefaultGateway $DefaultGateway
+				-PrefixLength $Prefix -DefaultGateway $Gateway | Out-Null
 		}
 	}
 
-	# Restore adapter DNS servers
+	# Restore previous DNS servers
 	if ($KeepIP -or $KeepDNS)
 	{
 		Write-Information -Tags "User" -MessageData "INFO: Restoring old DNS server addresses"
 
-		# Restore previous NDS servers
 		foreach ($Adapter in (Get-NetAdapter -Physical -Name $AdapterAlias))
 		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing $($Adapter.InterfaceAlias) adapter"
+
+			# NOTE: AddressFamily 2 = IPv4, 23 = IPv6
 			# https://docs.microsoft.com/en-us/dotnet/api/system.net.sockets.addressfamily?view=netcore-3.1
-			# AddressFamily 2 IPv4
-			# AddressFamily 23 IPv6
-			$DNSAddress4 = $IPInfo.DNSServer | Where-Object -Property interfacealias -EQ Ethernet |
+			[string[]] $DNSAddress4 = $IPInfo.DNSServer | Where-Object -Property InterfaceAlias -EQ $Adapter.InterfaceAlias |
 			Where-Object -Property AddressFamily -EQ 2 | Select-Object -ExpandProperty ServerAddresses
 
-			# NOTE: Adapter must be enabled
-			Set-DnsClientServerAddress -InterfaceIndex $Adapter.InterfaceIndex -ServerAddresses $DNSAddress4 # -Validate
+			if ([string]::IsNullOrEmpty($DNSAddress4))
+			{
+				Write-Warning -Message "Restoring DNS Server addresses ignored, DNS server addresses are missing"
+				continue
+			}
+
+			# NOTE: Adapter cannot be in disconnected state when configuring the DNS server address
+			# TODO: -Validate does not work: "A general error occurred that is not covered by a more specific error code"
+			Set-DnsClientServerAddress -InterfaceAlias $Adapter.InterfaceAlias -ServerAddresses $DNSAddress4
 		}
 	}
-
-	Wait-Adapter Connected -Adapter $AdapterAlias
-
-	# TODO: Set to old profile
-	# TODO: Unable to set NetworkCategory on a network marked 'Identifying...', Please wait for network identification to complete.
-	Start-Job -Name "NetworkProfile" -ArgumentList $AdapterAlias -ScriptBlock {
-		param ($AdapterAlias)
-		Set-NetConnectionProfile -InterfaceAlias $AdapterAlias -NetworkCategory Private
-	}
-
-	Receive-Job -Name "NetworkProfile" -Wait -AutoRemoveJob
 
 	# Registers all of the IP addresses on the computer onto the configured DNS server
 	Start-Job -Name "RegisterDNSClient" -ScriptBlock {
@@ -536,12 +586,23 @@ if ($AdapterAlias)
 	}
 
 	Receive-Job -Name "RegisterDNSClient" -Wait -AutoRemoveJob
+
+	# TODO: For Wait-Adapter we need to know if failed an don't run depended jobs
+	Wait-Adapter Connected -Adapter $AdapterAlias
+
+	# TODO: Set to old profile, or define default profile in project settings
+	Start-Job -Name "NetworkProfile" -ArgumentList $AdapterAlias -ScriptBlock {
+		param ($AdapterAlias)
+		Set-NetConnectionProfile -InterfaceAlias $AdapterAlias -NetworkCategory Private
+	}
+
+	Receive-Job -Name "NetworkProfile" -Wait -AutoRemoveJob
 }
 
 # Grant access to firewall logs
-if (![string]::IsNullOrEmpty($Principal))
-{
-	& "$ProjectRoot\Scripts\GrantLogs.ps1" -Principal $Principal -SkipPrompt
-}
+# if (![string]::IsNullOrEmpty($Principal))
+# {
+# 	& "$ProjectRoot\Scripts\GrantLogs.ps1" -Principal $Principal -SkipPrompt
+# }
 
 Update-Log
