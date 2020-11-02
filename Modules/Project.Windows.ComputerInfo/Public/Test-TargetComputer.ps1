@@ -54,7 +54,7 @@ PS> Test-TargetComputer "COMPUTERNAME"
 None. You cannot pipe objects to Test-TargetComputer
 
 .OUTPUTS
-[bool] false or true if target host is responsive
+[System.Boolean] false or true if target host is responsive
 
 .NOTES
 TODO: Avoid error message, check all references which handle errors (code bloat)

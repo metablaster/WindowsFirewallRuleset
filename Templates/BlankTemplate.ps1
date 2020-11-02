@@ -93,6 +93,7 @@ the Functionality parameter of Get-Help.
 -Functionality parameter displays help for items with the specified functionality.
 #>
 
+# TODO: Make Diagnostics attribute is formatted like this in all files
 # TODO: Remove or update parameter block
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 	"PSReviewUnusedParameter", "", Justification = "This is template script parameter")]

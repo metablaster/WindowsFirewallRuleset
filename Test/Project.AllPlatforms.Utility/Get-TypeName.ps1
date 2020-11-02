@@ -28,19 +28,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for for Get-TypeName
+Unit test for Get-TypeName
 
 .DESCRIPTION
-Unit test for for Get-TypeName
+Unit test for Get-TypeName
 
 .EXAMPLE
-PS> .\for Get-TypeName.ps1
+PS> .\ Get-TypeName.ps1
 
 .INPUTS
 None. You cannot pipe objects to for Get-TypeName.ps1
 
 .OUTPUTS
-None. for Get-TypeName.ps1 does not generate any output
+None. Get-TypeName.ps1 does not generate any output
 
 .NOTES
 None.
@@ -64,10 +64,24 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 <#
 .SYNOPSIS
-	Testing case when there is no return
+Test case when there is no return
 #>
-function Test-NoReturn
+function global:Test-NoReturn
 {
+	[OutputType([int32])]
+	[CmdletBinding()]
+	param ()
+
+	return $null
+}
+
+<#
+.SYNOPSIS
+Test case when there are multiple OutputType types
+#>
+function global:Test-Multiple
+{
+	[OutputType([int32], [System.String])]
 	[CmdletBinding()]
 	param ()
 
@@ -76,24 +90,86 @@ function Test-NoReturn
 
 Enter-Test $ThisScript
 
-Start-Test "Get-TypeName (single input)"
+#
+# Test default
+#
+
+Start-Test "Get-TypeName -> System.String"
 Get-TypeName ([System.Environment]::MachineName) @Logs
 
-Start-Test "Get-TypeName (pipeline single input)"
-Get-TypeName ([System.Environment]::MachineName) @Logs
+Start-Test "Get-TypeName -Accelerator -> string"
+Get-TypeName ([System.Environment]::MachineName) -Accelerator @Logs
 
-Start-Test "Get-TypeName (multiple inputs)"
+Start-Test "Get-TypeName -> System.Void"
+Get-TypeName (Test-NoReturn) @Logs
+
+Start-Test "Get-TypeName -Accelerator -> void"
+Get-TypeName (Test-NoReturn) -Accelerator @Logs
+
+#
+# Test command
+#
+
+Start-Test "Get-TypeName -Command -> int32"
+Get-TypeName -Command Test-NoReturn @Logs
+
+Start-Test "Get-TypeName -Command -> int32, System.String"
+Get-TypeName -Command Test-Multiple @Logs
+
+#
+# Test with Get-Process
+#
+
+Start-Test "Get-TypeName -> System.Diagnostics.Process"
 Get-TypeName (Get-Process) @Logs
 
-Start-Test "Get-TypeName (pipeline multiple inputs)"
-Get-Process | Get-TypeName @Logs
+Start-Test "Get-TypeName -Command -> Get-Process"
+Get-TypeName -Command Get-Process @Logs
 
-Start-Test "Get-TypeName (no input)"
-# TODO: ErrorAction not working
-Get-TypeName (Test-NoReturn) @Logs # -ErrorAction SilentlyContinue
+#
+# Test conversion
+#
 
-Start-Test "Get-TypeName (no pipeline input)"
-Test-NoReturn | Get-TypeName -ErrorAction SilentlyContinue @Logs
+Start-Test "Get-TypeName -Name -> System.Management.Automation.SwitchParameter"
+Get-TypeName -Name "switch"
+
+Start-Test "Get-TypeName -Name -Accelerator -> switch"
+Get-TypeName -Name "System.Management.Automation.SwitchParameter" -Accelerator
+
+Start-Test "Get-TypeName -Name -> FAIL"
+Get-TypeName -Name "System.String"
+
+Start-Test "Get-TypeName -Name -Accelerator -> FAIL"
+Get-TypeName -Name "string" -Accelerator
+
+#
+# Test default, pipeline
+#
+
+Write-Information -Tags "Test" -MessageData "INFO: Test default, pipeline"
+
+Start-Test "Get-TypeName -> System.String"
+([System.Environment]::MachineName) | Get-TypeName @Logs
+
+Start-Test "Get-TypeName -Accelerator -> string"
+([System.Environment]::MachineName) | Get-TypeName -Accelerator @Logs
+
+Start-Test "Get-TypeName -> System.Void"
+Test-NoReturn | Get-TypeName @Logs
+
+Start-Test "Get-TypeName -Accelerator -> void"
+Test-NoReturn | Get-TypeName -Accelerator @Logs
+
+#
+# Test with Get-Process
+#
+
+Start-Test "Get-TypeName -> System.Diagnostics.Process"
+Write-Warning -Message "Test aborted"
+# Get-Process | Get-TypeName @Logs
+
+Start-Test "Get-TypeName -> null"
+Get-TypeName @Logs
 
 Update-Log
 Exit-Test

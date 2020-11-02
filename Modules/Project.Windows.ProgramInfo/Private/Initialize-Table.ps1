@@ -46,7 +46,7 @@ PS> Initialize-Table
 None. You cannot pipe objects to Initialize-Table
 
 .OUTPUTS
-None. Module scope installation table with initial columns is created
+None. Initialize-Table does not generate any output
 
 .NOTES
 TODO: There should be a better way to drop the table instead of recreating it

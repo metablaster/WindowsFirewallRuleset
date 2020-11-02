@@ -28,19 +28,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for for Set-ScreenBuffer
+Unit test for Set-ScreenBuffer
 
 .DESCRIPTION
-Unit test for for Set-ScreenBuffer
+Unit test for Set-ScreenBuffer
 
 .EXAMPLE
-PS> .\for Set-ScreenBuffer.ps1
+PS> .\ Set-ScreenBuffer.ps1
 
 .INPUTS
 None. You cannot pipe objects to for Set-ScreenBuffer.ps1
 
 .OUTPUTS
-None. for Set-ScreenBuffer.ps1 does not generate any output
+None. Set-ScreenBuffer.ps1 does not generate any output
 
 .NOTES
 None.

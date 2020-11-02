@@ -44,6 +44,7 @@ $PublicScripts = @(
 	"Exit-Test"
 	"Start-Test"
 	"Stop-Test"
+	"Test-Output"
 )
 
 foreach ($Script in $PublicScripts)

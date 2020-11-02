@@ -98,7 +98,7 @@ Exports all SNMP firewall rules to the JSON file SNMPRules.json.
 None. You cannot pipe objects to Export-FirewallRules
 
 .OUTPUTS
-None. Exports rules to file.
+None. Export-FirewallRules does not generate any output
 
 .NOTES
 Author: Markus Scholtes

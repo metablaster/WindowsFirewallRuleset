@@ -51,7 +51,10 @@ Whether to include hidden adapters
 Whether to include disconnected
 
 .EXAMPLE
-TODO: provide examples
+PS> Get-Broadcast -IncludeAll
+
+.EXAMPLE
+PS> Get-Broadcast -IncludeAll -ExcludeHardware
 
 .INPUTS
 None. You cannot pipe objects to Get-Broadcast
@@ -60,7 +63,8 @@ None. You cannot pipe objects to Get-Broadcast
 [IPAddress[]] Array of broadcast addresses
 
 .NOTES
-None.
+TODO: Some parameters most likely make no sense, otherwise we should return custom object,
+separating addresses per adapter
 #>
 function Get-Broadcast
 {

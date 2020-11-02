@@ -43,7 +43,7 @@ PS> Show-Table "Table data"
 None. You cannot pipe objects to Show-Table
 
 .OUTPUTS
-None. Table data is printed to console
+None. Show-Table does not generate any output
 
 .NOTES
 This function is needed to avoid warning of write-host inside non "Show" function

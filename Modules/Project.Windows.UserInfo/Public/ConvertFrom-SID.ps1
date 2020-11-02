@@ -48,7 +48,7 @@ PS> ConvertFrom-SID S-1-5-21-2139171146-395215898-1246945465-2359
 PS> '^S-1-5-32-580' | ConvertFrom-SID
 
 .INPUTS
-[string[]] One or multiple SID's
+[System.String[]] One or multiple SID's
 
 .OUTPUTS
 [PSCustomObject[]] composed of SID information

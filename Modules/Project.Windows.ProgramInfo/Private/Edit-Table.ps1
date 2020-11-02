@@ -32,6 +32,7 @@ Manually add new program installation directory to the table
 
 .DESCRIPTION
 Based on path and if it's valid path fill the table with it and add principals and other information
+Module scope installation table is updated
 
 .PARAMETER InstallLocation
 Program installation directory
@@ -43,7 +44,7 @@ PS> Edit-Table "%ProgramFiles(x86)%\TeamViewer"
 None. You cannot pipe objects to Edit-Table
 
 .OUTPUTS
-None. Module scope installation table is updated
+None. Edit-Table does not generate any output
 
 .NOTES
 TODO: principal parameter?

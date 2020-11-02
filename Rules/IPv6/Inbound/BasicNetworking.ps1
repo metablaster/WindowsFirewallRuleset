@@ -58,7 +58,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # Loop back
 # TODO: why specifying loopback address ::1/128 doesn't work?
-# NOTE: even though we specify "IPv6 the loopback interface alias is the same for for IPv4 and IPv6,
+# NOTE: even though we specify "IPv6 the loopback interface alias is the same for IPv4 and IPv6,
 # meaning there is only one loopback interface!"
 # $Loopback = Get-NetIPInterface | Where-Object {
 # 	$_.InterfaceAlias -like "*Loopback*" -and $_.AddressFamily -eq "IPv6"

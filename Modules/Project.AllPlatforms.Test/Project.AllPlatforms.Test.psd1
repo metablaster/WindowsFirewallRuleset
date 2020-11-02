@@ -80,6 +80,7 @@
 		"Exit-Test"
 		"Start-Test"
 		"Stop-Test"
+		"Test-Output"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not
@@ -109,11 +110,13 @@
 		"Help\en-US\Exit-Test.md"
 		"Help\en-US\Start-Test.md"
 		"Help\en-US\Stop-Test.md"
+		"Help\en-US\Test-Output.md"
 		"Help\README.md"
 		"Public\Enter-Test.ps1"
 		"Public\Exit-Test.ps1"
 		"Public\Start-Test.ps1"
 		"Public\Stop-Test.ps1"
+		"Public\Test-Output.ps1"
 	)
 
 	# Private data to pass to the module specified in RootModule/ModuleToProcess.

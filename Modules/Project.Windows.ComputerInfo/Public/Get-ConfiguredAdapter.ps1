@@ -57,7 +57,7 @@ Whether to include disconnected
 PS> Get-ConfiguredAdapter "IPv4"
 
 .EXAMPLE
-PS> Get-ConfiguredAdapter "IPv6"
+PS> Get-ConfiguredAdapter "IPv6" -IncludeVirtual
 
 .INPUTS
 None. You cannot pipe objects to Get-ConfiguredAdapter

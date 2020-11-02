@@ -57,6 +57,6 @@ function Stop-Test
 
 	if ($PSCmdlet.ShouldProcess("Stop test case", $script:TestCase))
 	{
-		Write-Information -Tags "Test" -MessageData "INFO: Test case '$script:TestCase' done"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Test case '$script:TestCase' done"
 	}
 }

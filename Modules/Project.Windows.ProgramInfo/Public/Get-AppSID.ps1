@@ -46,7 +46,7 @@ PS> Get-AppSID "User" "Microsoft.MicrosoftEdge_8wekyb3d8bbwe"
 None. You cannot pipe objects to Get-AppSID
 
 .OUTPUTS
-[string] store app SID (security identifier) if app found
+[System.String] store app SID (security identifier) if app found
 
 .NOTES
 TODO: Test if path exists
@@ -54,6 +54,7 @@ TODO: remote computers?
 #>
 function Get-AppSID
 {
+	[OutputType([string])]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-AppSID.md")]
 	param (

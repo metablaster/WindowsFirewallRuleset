@@ -43,7 +43,7 @@ TODO: provide example and description
 None. You cannot pipe objects to Convert-ArrayToList
 
 .OUTPUTS
-[string] comma separated list
+[System.String] comma separated list
 
 .NOTES
 None.

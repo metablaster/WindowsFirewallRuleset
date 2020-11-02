@@ -43,7 +43,7 @@ PS> Test-Service dnscache
 None. You cannot pipe objects to Test-Service
 
 .OUTPUTS
-None. Warning and info message if service not found
+None. Test-Service does not generate any output
 
 .NOTES
 None.

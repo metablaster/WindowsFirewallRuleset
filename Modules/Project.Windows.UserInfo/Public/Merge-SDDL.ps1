@@ -32,6 +32,7 @@ Merge 2 SDDL strings into one
 
 .DESCRIPTION
 This function helps to merge 2 SDDL strings into one
+Referenced SDDL is expanded with new one
 
 .PARAMETER RefSDDL
 Reference to SDDL into which to merge new SDDL
@@ -48,7 +49,7 @@ Merge-SDDL ([ref] $RefSDDL) $NewSDDL
 None. You cannot pipe objects to Merge-SDDL
 
 .OUTPUTS
-None. Referenced SDDL is expanded with new one
+None. Merge-SDDL does not generate any output
 
 .NOTES
 TODO: Validate input using regex

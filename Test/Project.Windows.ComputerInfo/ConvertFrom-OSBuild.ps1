@@ -78,8 +78,7 @@ Start-Test "ConvertFrom-OSBuild 16299.2045 = 1079"
 $Result = ConvertFrom-OSBuild 16299.2045 @Logs
 $Result
 
-Start-Test "Get-TypeName"
-$Result | Get-TypeName @Logs
+Test-Output $Result -Command ConvertFrom-OSBuild
 
 Update-Log
 Exit-Test

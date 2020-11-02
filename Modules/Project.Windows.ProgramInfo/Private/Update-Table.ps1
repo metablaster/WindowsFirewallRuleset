@@ -31,6 +31,7 @@ SOFTWARE.
 Fill data table with principal and program location
 
 .DESCRIPTION
+Module scope installation table is updated
 Search system for programs with input search string, and add new program installation directory
 to the table, as well as other information needed to make a firewall rule
 
@@ -50,7 +51,7 @@ PS> Update-Table "GoogleChrome"
 None. You cannot pipe objects to Update-Table
 
 .OUTPUTS
-None. Module scope installation table is updated
+None. Update-Table does not generate any output
 
 .NOTES
 TODO: For programs in user profile rules should update LocalUser parameter accordingly,

@@ -49,10 +49,10 @@ PS> Get-GroupSID "USERNAME" -Machine "COMPUTERNAME"
 PS> Get-GroupSID @("USERNAME1", "USERNAME2") -CIM
 
 .INPUTS
-[string[]] array of group names
+[System.String[]] array of group names
 
 .OUTPUTS
-[string] SID's (security identifiers)
+[System.String] SID's (security identifiers)
 
 .NOTES
 CIM switch is not supported on PowerShell Core, meaning contacting remote computers
@@ -61,6 +61,7 @@ TODO: plural parameter
 #>
 function Get-GroupSID
 {
+	[OutputType([System.String])]
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.UserInfo/Help/en-US/Get-GroupSID.md")]
 	param (

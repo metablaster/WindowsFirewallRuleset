@@ -46,7 +46,7 @@ PS> Get-GroupPrincipal "Users", "Administrators"
 PS> Get-GroupPrincipal "Users" -Machine @(DESKTOP, LAPTOP) -CIM
 
 .INPUTS
-[string[]] User groups
+[System.String[]] User groups
 
 .OUTPUTS
 [PSCustomObject[]] Array of enabled user accounts in specified group

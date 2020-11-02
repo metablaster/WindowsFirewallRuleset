@@ -76,5 +76,8 @@ $Result
 Start-Test "Get-TypeName"
 $Result | Get-TypeName @Logs
 
+Start-Test "OutputType"
+(Get-Command Test-Function).OutputType.Name
+
 Update-Log
 Exit-Test

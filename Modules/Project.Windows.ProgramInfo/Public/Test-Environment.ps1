@@ -45,7 +45,7 @@ PS> Test-Environment %SystemDrive%
 None. You cannot pipe objects to Test-Environment
 
 .OUTPUTS
-None. true if path exists, false otherwise
+[System.String] true if path exists, false otherwise
 
 .NOTES
 TODO: This should proably be inside utility module

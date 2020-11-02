@@ -31,7 +31,8 @@ SOFTWARE.
 Check if file such as an *.exe exists
 
 .DESCRIPTION
-In addition to Test-Path of file, message and stack trace is shown
+In addition to Test-Path of file, message and stack trace is shown and
+warning message if file not found
 
 .PARAMETER FilePath
 path to file
@@ -43,7 +44,7 @@ PS> Test-File "C:\Users\User\AppData\Local\Google\Chrome\Application\chrome.exe"
 None. You cannot pipe objects to Test-File
 
 .OUTPUTS
-None. Warning message if file not found
+None. Test-File does not generate any output
 
 .NOTES
 TODO: We should attempt to fix the path if invalid here!

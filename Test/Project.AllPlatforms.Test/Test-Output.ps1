@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
+Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,19 +28,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Show-SDDL
+Unit test for Test-Output
 
 .DESCRIPTION
-Unit test for Show-SDDL
+Unit test for Test-Output
 
 .EXAMPLE
-PS> .\ Show-SDDL.ps1
+PS> .\Test-Output.ps1
 
 .INPUTS
-None. You cannot pipe objects to for Show-SDDL.ps1
+None. You cannot pipe objects to Test-Output.ps1
 
 .OUTPUTS
-None. Show-SDDL.ps1 does not generate any output
+None. Test-Output.ps1 does not generate any output
 
 .NOTES
 None.
@@ -53,6 +53,7 @@ New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 
 # Check requirements
 Initialize-Project -Abort
+Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
@@ -64,31 +65,13 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 Enter-Test $ThisScript
 
-# Experiment with different path values to see what the ACL objects do
-# $TestPath = "C:\Users\" # Not inherited
-# TODO: Funny how "C:\Users\Public\Public Desktop\" doesn't work
-$TestPath = "C:\Users\Public\Desktop\" # Inherited
-# $TestPath = "HKCU:\" # Not Inherited
-# $TestPath = "HKCU:\Software" # Inherited
-# $TestPath = "HKLM:\" # Not Inherited
+Start-Test "Test-Output"
+$NETObject = Test-Path $env:SystemDrive
+Test-Output $NETObject -Command Test-Path @Logs
 
-Start-Test "Path: $TestPath"
-
-Start-Test "ACL.AccessToString"
-$ACL = Get-Acl $TestPath
-$ACL.AccessToString
-
-Start-Test "ACL.Access | Format-list *"
-$ACL.Access | Format-List *
-
-Start-Test "ACL.SDDL"
-$ACL.SDDL
-
-Start-Test "Show-SDDL (pipeline)"
-$ACL | Show-SDDL @Logs
-
-Start-Test "Show-SDDL (parameter)"
-Show-SDDL $ACL.SDDL @Logs
+Start-Test "Test-Output FAIL"
+$ServiceController = Get-Service
+Test-Output $ServiceController -Command Get-Random @Logs
 
 Update-Log
 Exit-Test

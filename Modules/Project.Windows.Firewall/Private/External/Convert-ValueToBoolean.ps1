@@ -46,7 +46,7 @@ TODO: provide example and description
 None. You cannot pipe objects to Convert-ValueToBoolean
 
 .OUTPUTS
-[bool] of the input value
+[System.Boolean] of the input value
 
 .NOTES
 None.

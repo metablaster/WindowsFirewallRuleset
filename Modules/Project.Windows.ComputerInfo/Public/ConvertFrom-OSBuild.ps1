@@ -42,7 +42,7 @@ PS> ConvertFrom-OSBuild 18363.1049
 1909
 
 .INPUTS
-None. you can't p to ConvertFrom-OSBuild
+None. You cannot pipe objects to ConvertFrom-OSBuild
 
 .OUTPUTS
 [System.String]

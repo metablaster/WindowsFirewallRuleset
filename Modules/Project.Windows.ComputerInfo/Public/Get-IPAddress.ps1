@@ -62,7 +62,7 @@ PS> Get-IPAddress "IPv6"
 None. You cannot pipe objects to Get-IPAddress
 
 .OUTPUTS
-[IPAddress[]] Array of IP addresses and warning message if no adapter connected
+[System.Net.IPAddress[]] Array of IP addresses and warning message if no adapter connected
 
 .NOTES
 None.

@@ -28,19 +28,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for for Update-Context
+Unit test for Update-Context
 
 .DESCRIPTION
-Unit test for for Update-Context
+Unit test for Update-Context
 
 .EXAMPLE
-PS> .\for Update-Context.ps1
+PS> .\ Update-Context.ps1
 
 .INPUTS
 None. You cannot pipe objects to for Update-Context.ps1
 
 .OUTPUTS
-None. for Update-Context.ps1 does not generate any output
+None. Update-Context.ps1 does not generate any output
 
 .NOTES
 None.

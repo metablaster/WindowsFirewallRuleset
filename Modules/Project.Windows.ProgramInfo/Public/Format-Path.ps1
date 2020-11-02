@@ -42,10 +42,10 @@ File path to format, can have environment variables, or consists of trailing sla
 PS> Format-Path "C:\Program Files\\Dir\"
 
 .INPUTS
-[string] File path to format
+[System.String] File path to format
 
 .OUTPUTS
-[string] formatted path, includes environment variables, stripped off of junk
+[System.String] formatted path, includes environment variables, stripped off of junk
 
 .NOTES
 TODO: This should proably be inside utility module

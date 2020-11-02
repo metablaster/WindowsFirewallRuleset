@@ -28,58 +28,63 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Convert encoded single line string to multi line string array
+Verify TypeName and OutputType are identical
 
 .DESCRIPTION
-Convert encoded single line string to multi line CRLF string array
-Input string `r is encoded as %% and `n as ||
+The purpose of this test is is to ensure object output typename is identical as
+described by OutputType attribute.
+Comparison is case sensitive.
 
-.PARAMETER MultiLine
-String which to convert
+.PARAMETER OutputObject
+The actual .NET object that some function returns
 
-.PARAMETER JSON
-Input string is from JSON file, meaning no need to decode
+.PARAMETER Command
+CommandInfo object obtained from Get-Command
 
 .EXAMPLE
-PS> Convert-ListToMultiLine "Some%%||String"
-
-Some
-String
+PS> $Result = Some-Function
+PS> Test-Output $Result -Command Some-Function
 
 .INPUTS
-None. You cannot pipe objects to Convert-ListToMultiLine
+None. You cannot pipe objects to Test-Output
 
 .OUTPUTS
-[System.String] multi line string
+[System.String] TypeName and OutputType including equality test
 
 .NOTES
 None.
 #>
-function Convert-ListToMultiLine
+function Test-Output
 {
 	[OutputType([string])]
-	param(
-		[Parameter()]
-		[string] $MultiLine,
+	[CmdletBinding(PositionalBinding = $false)]
+	param (
+		[Parameter(Position = 0, Mandatory = $true)]
+		[System.Object] $OutputObject,
 
-		[Parameter()]
-		[switch] $JSON
+		[Parameter(Mandatory = $true)]
+		[string] $Command
 	)
 
-	if ([string]::IsNullOrEmpty($MultiLine))
-	{
-		return ""
-	}
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-	# replace encoded string with new line
-	if ($JSON)
+	Start-Test "Compare TypeName and OutputType"
+
+	$TypeName = Get-TypeName $OutputObject
+	$OutputType = Get-TypeName -Command $Command
+
+	"TypeName:`t$TypeName"
+	"OutputType:`t$OutputType"
+
+	if ($OutputType -ceq $TypeName)
 	{
-		return $MultiLine
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] TypeName and OutputType are identical"
 	}
 	else
 	{
-
-		# For CSV files need to encode multi line rule description into single line
-		return $MultiLine.Replace("%%", "`r").Replace("||", "`n")
+		Write-Error -Category InvalidResult -TargetObject $TypeName `
+			-Message "TypeName and OutputType are not identical"
 	}
+
+	Stop-Test
 }

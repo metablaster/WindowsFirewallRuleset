@@ -64,7 +64,7 @@ Removes all firewall rules according to the list in the JSON file WmiRules.json.
 None. You cannot pipe objects to Remove-FirewallRules
 
 .OUTPUTS
-None.
+None. Remove-FirewallRules does not generate any output
 
 .NOTES
 Author: Markus Scholtes

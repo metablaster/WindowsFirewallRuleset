@@ -28,19 +28,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for for Set-NetworkProfile
+Unit test for Set-NetworkProfile
 
 .DESCRIPTION
-Unit test for for Set-NetworkProfile
+Unit test for Set-NetworkProfile
 
 .EXAMPLE
-PS> .\for Set-NetworkProfile.ps1
+PS> .\ Set-NetworkProfile.ps1
 
 .INPUTS
 None. You cannot pipe objects to for Set-NetworkProfile.ps1
 
 .OUTPUTS
-None. for Set-NetworkProfile.ps1 does not generate any output
+None. Set-NetworkProfile.ps1 does not generate any output
 
 .NOTES
 None.

@@ -46,7 +46,7 @@ PS> Get-UserGroup "ServerPC"
 PS> Get-UserGroup @(DESKTOP, LAPTOP) -CIM
 
 .INPUTS
-[string[]] array of computer names
+[System.String[]] array of computer names
 
 .OUTPUTS
 [PSCustomObject[]] array of user groups on target computers

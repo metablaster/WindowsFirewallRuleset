@@ -66,7 +66,7 @@ PS> Get-InterfaceAlias "IPv6"
 None. You cannot pipe objects to Get-InterfaceAlias
 
 .OUTPUTS
-WildcardPattern[] Array of interface aliases
+[System.Management.Automation.WildcardPattern[]] Array of interface aliases
 
 .NOTES
 None.

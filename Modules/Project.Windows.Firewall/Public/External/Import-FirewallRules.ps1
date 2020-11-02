@@ -65,7 +65,7 @@ Imports all firewall rules in the SCV file WmiRules.csv
 None. You cannot pipe objects to Import-FirewallRules
 
 .OUTPUTS
-None.
+None. Import-FirewallRules does not generate any output
 
 .NOTES
 Author: Markus Scholtes

@@ -32,7 +32,7 @@ Format firewall rule output for display
 
 .DESCRIPTION
 Output of Net-NewFirewallRule is large, loading a lot of rules would spam the console
-very fast, this function helps to output only relevant content.
+very fast, this function helps to output only relevant, formatted and colored output
 
 .PARAMETER Rule
 Firewall rule to format
@@ -47,7 +47,7 @@ PS> Net-NewFirewallRule ... | Format-Output
 Microsoft.Management.Infrastructure.CimInstance Firewall rule to format
 
 .OUTPUTS
-None. Formatted and colored output
+None. Format-Output does not generate any output
 
 .NOTES
 None.
