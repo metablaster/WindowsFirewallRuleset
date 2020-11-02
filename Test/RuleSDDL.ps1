@@ -26,10 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for adding rules based on computer accounts
-#
+<#
+.SYNOPSIS
+Unit test for principal based rules
 
+.DESCRIPTION
+Unit test for adding rules based on computer accounts
+
+.EXAMPLE
+PS> .\RuleSDDL.ps1
+
+.INPUTS
+None. You cannot pipe objects to RuleSDDL.ps1
+
+.OUTPUTS
+None. RuleSDDL.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (

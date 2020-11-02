@@ -26,9 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Initialize-Service
-#
+<#
+.SYNOPSIS
+Unit test for Initialize-Service
+
+.DESCRIPTION
+Unit test for Initialize-Service
+
+.EXAMPLE
+PS> .\Initialize-Service.ps1
+
+.INPUTS
+None. You cannot pipe objects to Initialize-Service.ps1
+
+.OUTPUTS
+None. Initialize-Service.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (

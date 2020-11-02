@@ -29,6 +29,8 @@ SOFTWARE.
 #
 # Unit test for Approve-Execute
 #
+
+# Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )

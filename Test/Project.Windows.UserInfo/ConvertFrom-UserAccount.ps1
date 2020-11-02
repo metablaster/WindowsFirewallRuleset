@@ -26,9 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for ConvertFrom-UserAccount
-#
+<#
+.SYNOPSIS
+Unit test for ConvertFrom-UserAccount
+
+.DESCRIPTION
+Unit test for ConvertFrom-UserAccount
+
+.EXAMPLE
+PS> .\ConvertFrom-UserAccount.ps1
+
+.INPUTS
+None. You cannot pipe objects to ConvertFrom-UserAccount.ps1
+
+.OUTPUTS
+None. ConvertFrom-UserAccount.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )

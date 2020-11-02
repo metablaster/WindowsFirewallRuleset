@@ -29,6 +29,19 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Unit test for Compare-Path
+
+.DESCRIPTION
+Unit test for Compare-Path
+
+.EXAMPLE
+PS> .\Compare-Path.ps1
+
+.INPUTS
+None. You cannot pipe objects to Compare-Path.ps1
+
+.OUTPUTS
+None. Compare-Path.ps1 does not generate any output
+
 .NOTES
 None.
 #>

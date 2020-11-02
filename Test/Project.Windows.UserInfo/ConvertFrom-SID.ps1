@@ -26,9 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for ConvertFrom-SID
-#
+<#
+.SYNOPSIS
+Unit test for ConvertFrom-SID
+
+.DESCRIPTION
+Unit test for ConvertFrom-SID
+
+.EXAMPLE
+PS> .\ConvertFrom-SID.ps1
+
+.INPUTS
+None. You cannot pipe objects to ConvertFrom-SID.ps1
+
+.OUTPUTS
+None. ConvertFrom-SID.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (

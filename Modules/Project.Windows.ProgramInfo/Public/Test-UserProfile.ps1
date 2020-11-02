@@ -46,6 +46,7 @@ None. You cannot pipe objects to Test-UserProfile
 [bool] true if userprofile path or false otherwise
 
 .NOTES
+TODO: Good portion of this function is duplicate of Format-Path
 TODO: is it possible to nest this into Test-Environment somehow?
 TODO: This should proably be inside Utility or UserInfo module
 #>

@@ -26,10 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for adding rules for store apps based on computer users
-#
+<#
+.SYNOPSIS
+Unit test for rules based on store apps
 
+.DESCRIPTION
+Unit test for adding store apps rules based on computer users
+
+.EXAMPLE
+PS> .\RuleAppSID.ps1
+
+.INPUTS
+None. You cannot pipe objects to RuleAppSID.ps1
+
+.OUTPUTS
+None. RuleAppSID.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (

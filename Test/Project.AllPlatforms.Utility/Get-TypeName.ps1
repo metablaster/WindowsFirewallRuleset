@@ -26,9 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Get-TypeName
-#
+<#
+.SYNOPSIS
+Unit test for for Get-TypeName
+
+.DESCRIPTION
+Unit test for for Get-TypeName
+
+.EXAMPLE
+PS> .\for Get-TypeName.ps1
+
+.INPUTS
+None. You cannot pipe objects to for Get-TypeName.ps1
+
+.OUTPUTS
+None. for Get-TypeName.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )

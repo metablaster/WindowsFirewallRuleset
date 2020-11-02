@@ -26,9 +26,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Not an actual unit test but a playground for testing random stuff
-#
+<#
+.SYNOPSIS
+Unit test for rules with relative path
+
+.DESCRIPTION
+Unit test for adding rules based on relative paths
+
+.EXAMPLE
+PS> .\RuleRelativePath.ps1
+
+.INPUTS
+None. You cannot pipe objects to RuleRelativePath.ps1
+
+.OUTPUTS
+None. RuleRelativePath.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
+#Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )
@@ -41,9 +60,36 @@ Initialize-Project -Abort
 Import-Module -Name Project.AllPlatforms.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
+Set-Variable -Name Accept -Scope Local -Option ReadOnly -Force -Value "Load test rule into firewall"
+Update-Context $TestContext "IPv$IPVersion" $Direction
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+
+# Setup local variables
+$Group = "Test - Relative path"
+$FirewallProfile = "Any"
+$TargetProgramRoot = "C:\Program Files (x86)\Realtek\..\PokerStars.EU"
 
 Enter-Test $ThisScript
 
+# First remove all existing rules matching group
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+
+Start-Test "Relative path"
+
+# Test if installation exists on system
+$Program = "$TargetProgramRoot\PokerStars.exe"
+Test-File $Program @Logs
+
+New-NetFirewallRule -DisplayName "TargetProgram" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Internet4 `
+	-LocalPort Any -RemotePort 80, 443, 26002 `
+	-LocalUser $NT_AUTHORITY_LocalService `
+	-InterfaceType $Interface `
+	-Description "Relative path test" `
+	@Logs | Format-Output @Logs
+
+Update-Log
 Exit-Test

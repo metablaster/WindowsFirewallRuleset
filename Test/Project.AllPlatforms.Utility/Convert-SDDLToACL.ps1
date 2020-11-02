@@ -26,9 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Convert-SDDLToACL
-#
+<#
+.SYNOPSIS
+Unit test for Convert-SDDLToACL
+
+.DESCRIPTION
+Unit test for Convert-SDDLToACL
+
+.EXAMPLE
+PS> .\Convert-SDDLToACL.ps1
+
+.INPUTS
+None. You cannot pipe objects to Convert-SDDLToACL.ps1
+
+.OUTPUTS
+None. Convert-SDDLToACL.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )

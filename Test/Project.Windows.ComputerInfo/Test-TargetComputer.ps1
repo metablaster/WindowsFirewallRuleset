@@ -26,9 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Test-TargetComputer
-#
+<#
+.SYNOPSIS
+Unit test for Test-TargetComputer
+
+.DESCRIPTION
+Unit test for Test-TargetComputer
+
+.EXAMPLE
+PS> .\Test-TargetComputer.ps1
+
+.INPUTS
+None. You cannot pipe objects to Test-TargetComputer.ps1
+
+.OUTPUTS
+None. Test-TargetComputer.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )
@@ -48,6 +66,7 @@ Enter-Test $ThisScript
 
 Start-Test "Test-TargetComputer"
 $Result = Test-TargetComputer ([System.Environment]::MachineName) @Logs
+$Result
 
 Start-Test "Get-TypeName"
 $Result | Get-TypeName @Logs

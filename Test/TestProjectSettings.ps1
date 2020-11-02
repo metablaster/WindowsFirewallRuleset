@@ -26,9 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for ProjectSettings.ps1
-#
+<#
+.SYNOPSIS
+Unit test for project settings
+
+.DESCRIPTION
+Unit test to test global variables located in Config\ProjectSettings.ps1
+
+.EXAMPLE
+PS> .\TestProjectSettings.ps1
+
+.INPUTS
+None. You cannot pipe objects to TestProjectSettings.ps1
+
+.OUTPUTS
+None. TestProjectSettings.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )

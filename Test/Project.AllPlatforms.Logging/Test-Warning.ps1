@@ -26,9 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for warning logging
-#
+<#
+.SYNOPSIS
+Unit test for warning logging
+
+.DESCRIPTION
+Unit test for warning logging
+
+.EXAMPLE
+PS> .\Test-Warning.ps1
+
+.INPUTS
+None. You cannot pipe objects to Test-Warning.ps1
+
+.OUTPUTS
+None. Test-Warning.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )

@@ -26,9 +26,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Context and prompt setup for Test.Project.AllPlatforms.Test unit tests
-#
+<#
+.SYNOPSIS
+Context setup
+
+.DESCRIPTION
+Context and prompt setup for Test.Project.AllPlatforms.Test unit tests
+
+.INPUTS
+None. You cannot pipe objects to ContextSetup.ps1
+
+.OUTPUTS
+None. ContextSetup.ps1 does not generate any output
+
+.NOTES
+None.
+#>
 
 New-Variable -Name TestContext -Scope Local -Option Constant -Value "Test.Project.AllPlatforms.Test"
 New-Variable -Name Accept -Scope Local -Option Constant -Value "Run this unit test"

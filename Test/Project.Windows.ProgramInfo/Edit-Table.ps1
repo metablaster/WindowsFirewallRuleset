@@ -26,14 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Edit-Table
-# TODO: can we use Requires -PSSnapin here for Initialize-Table?
-#
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-	"PSAvoidGlobalVars", "", Justification = "Global variable used for testing only")]
-param()
+<#
+.SYNOPSIS
+Unit test for Edit-Table
 
+.DESCRIPTION
+Unit test for Edit-Table
+
+.EXAMPLE
+PS> .\Edit-Table.ps1
+
+.INPUTS
+None. You cannot pipe objects to Edit-Table.ps1
+
+.OUTPUTS
+None. Edit-Table.ps1 does not generate any output
+
+.NOTES
+TODO: can we use Requires -PSSnapin here for Initialize-Table?
+#>
+
+# Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )

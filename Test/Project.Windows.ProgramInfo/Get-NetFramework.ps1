@@ -26,9 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Get-NetFramework
-#
+<#
+.SYNOPSIS
+Unit test for Get-NetFramework
+
+.DESCRIPTION
+Unit test for Get-NetFramework
+
+.EXAMPLE
+PS> .\Get-NetFramework.ps1
+
+.INPUTS
+None. You cannot pipe objects to Get-NetFramework.ps1
+
+.OUTPUTS
+None. Get-NetFramework.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )

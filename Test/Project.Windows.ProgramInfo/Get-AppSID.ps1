@@ -26,10 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Get-AppSID
-#
+<#
+.SYNOPSIS
+Unit test for Get-AppSID
 
+.DESCRIPTION
+Unit test for Get-AppSID
+
+.EXAMPLE
+PS> .\Get-AppSID.ps1
+
+.INPUTS
+None. You cannot pipe objects to Get-AppSID.ps1
+
+.OUTPUTS
+None. Get-AppSID.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (

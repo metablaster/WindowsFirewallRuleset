@@ -26,9 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Set-ScreenBuffer
-#
+<#
+.SYNOPSIS
+Unit test for for Set-ScreenBuffer
+
+.DESCRIPTION
+Unit test for for Set-ScreenBuffer
+
+.EXAMPLE
+PS> .\for Set-ScreenBuffer.ps1
+
+.INPUTS
+None. You cannot pipe objects to for Set-ScreenBuffer.ps1
+
+.OUTPUTS
+None. for Set-ScreenBuffer.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )

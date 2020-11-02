@@ -26,9 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Find-RulePrincipal
-#
+<#
+.SYNOPSIS
+Unit test for Find-RulePrincipal
+
+.DESCRIPTION
+Unit test for Find-RulePrincipal
+
+.EXAMPLE
+PS> .\Find-RulePrincipal.ps1
+
+.INPUTS
+None. You cannot pipe objects to Find-RulePrincipal.ps1
+
+.OUTPUTS
+None. Find-RulePrincipal.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )

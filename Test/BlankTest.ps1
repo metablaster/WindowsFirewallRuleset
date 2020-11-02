@@ -26,9 +26,29 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Test-GlobalVariables
-#
+<#
+.SYNOPSIS
+Blank unit test
+
+.DESCRIPTION
+Use BlankTest.ps1 as a template for temporary tests
+
+.EXAMPLE
+PS> .\BlankTest.ps1
+
+.INPUTS
+None. You cannot pipe objects to BlankTest.ps1
+
+.OUTPUTS
+None. BlankTest.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
+# TODO: Remove elevation requirement if needed
+#Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )
@@ -39,42 +59,11 @@ Initialize-Project -Abort
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
-Import-Module -Name Project.Windows.UserInfo
 
 # User prompt
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 Enter-Test $ThisScript
-
-Start-Test "Project.AllPlatforms.Logs - Logs:"
-$Logs
-
-Start-Test "Project.AllPlatforms.Utility - ServiceHost:"
-$ServiceHost
-
-if ($Develop)
-{
-	Start-Test "Project.Windows.ProgramInfo - InstallTable:"
-	$InstallTable
-}
-
-Start-Test "Project.Windows.UserInfo - NT_AUTHORITY_UserModeDrivers:"
-$NT_AUTHORITY_UserModeDrivers
-
-Start-Test "Project.Windows.UserInfo - NT_AUTHORITY_NetworkService:"
-$NT_AUTHORITY_NetworkService
-
-Start-Test "Project.Windows.UserInfo - NT_AUTHORITY_LocalService:"
-$NT_AUTHORITY_LocalService
-
-Start-Test "Project.Windows.UserInfo - NT_AUTHORITY_System:"
-$NT_AUTHORITY_System
-
-Start-Test "Project.Windows.UserInfo - AdministratorsGroupSDDL:"
-$AdministratorsGroupSDDL
-
-Start-Test "Project.Windows.UserInfo - UsersGroupSDDL:"
-$UsersGroupSDDL
 
 Exit-Test

@@ -26,14 +26,32 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for:
-#
-# 1. Enter-Test
-# 2. Start-Test
-# 3. Stop-Test
-# 4. Exit-Test
-#
+<#
+.SYNOPSIS
+Unit test for Project.AllPlatforms.Test module
+
+.DESCRIPTION
+Unit test for:
+
+1. Enter-Test
+2. Start-Test
+3. Stop-Test
+4. Exit-Test
+
+.EXAMPLE
+PS> .\Test-UnitTest.ps1
+
+.INPUTS
+None. You cannot pipe objects to Test-UnitTest.ps1
+
+.OUTPUTS
+None. Test-UnitTest.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )

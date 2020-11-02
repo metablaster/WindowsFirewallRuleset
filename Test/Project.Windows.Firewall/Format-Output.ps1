@@ -26,10 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Format-Output
-#
+<#
+.SYNOPSIS
+Unit test for Format-Output
 
+.DESCRIPTION
+Unit test for Format-Output
+
+.EXAMPLE
+PS> .\Format-Output.ps1
+
+.INPUTS
+None. You cannot pipe objects to Format-Output.ps1
+
+.OUTPUTS
+None. Format-Output.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (

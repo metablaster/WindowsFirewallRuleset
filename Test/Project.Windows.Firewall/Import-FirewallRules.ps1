@@ -26,9 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Import-FirewallRules
-#
+<#
+.SYNOPSIS
+Unit test for Import-FirewallRules
+
+.DESCRIPTION
+Unit test for Import-FirewallRules
+
+.EXAMPLE
+PS> .\Import-FirewallRules.ps1
+
+.INPUTS
+None. You cannot pipe objects to Import-FirewallRules.ps1
+
+.OUTPUTS
+None. Import-FirewallRules.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (

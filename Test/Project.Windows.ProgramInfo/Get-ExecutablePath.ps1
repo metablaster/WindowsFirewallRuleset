@@ -26,9 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Get-ExecutablePath
-#
+<#
+.SYNOPSIS
+Unit test for Get-ExecutablePath
+
+.DESCRIPTION
+Unit test for Get-ExecutablePath
+
+.EXAMPLE
+PS> .\Get-ExecutablePath.ps1
+
+.INPUTS
+None. You cannot pipe objects to Get-ExecutablePath.ps1
+
+.OUTPUTS
+None. Get-ExecutablePath.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )

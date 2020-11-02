@@ -14,8 +14,9 @@ Here is a list of most important things to keep in mind.
   - [Environment setup](#environment-setup)
   - [Code style](#code-style)
     - [Automatic formatting](#automatic-formatting)
-    - [Rationale](#rationale)
+    - [Script desing](#script-desing)
     - [Rule design](#rule-design)
+    - [More information](#more-information)
   - [Modules and 3rd party code](#modules-and-3rd-party-code)
   - [Module design](#module-design)
   - [Static analysis](#static-analysis)
@@ -170,12 +171,6 @@ rule, workspace settings are configured to show rulers inside code editor.
 If you use some other code editor you should configure it according to these rules which are found
 in `.vscode`, `Config` and project root directory.
 
-### Rationale
-
-All of the scripts should use the same code style and order of code,
-without writing a long list of preferred code style\
-it should be enough to take a look at the existing scripts and figure it out right away.
-
 Not everything is automatically formatted, in short:\
 Use **PascalCase** for variables, types, symbols etc; **lowercase** for language keywords,
 for more info about type casing run:
@@ -184,35 +179,45 @@ for more info about type casing run:
 [PSCustomObject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::get.GetEnumerator() | Sort-Object Key
 ```
 
+### Script desing
+
+All of the scripts should use the same code style and order of code,
+without writing a long list of preferred code style\
+it should be enough to take a look at the existing scripts and figure it out right away.
+
 Use following command to see allowed verbs to name your functions
 
-```powershel
+```powershell
 Get-Verb | Select-Object Verb, Group, Description | Sort-Object Verb
 ```
 
-Following link describes general rules about PowerShell code style if you like reading,
-however keep in mind, it is not in line of this project practices:\
-[The PowerShell Style Guide](https://poshcode.gitbooks.io/powershell-practice-and-style/Style-Guide/Introduction.html)
+The order of code in scripts is ordered into "sections" which depends on purpose,\
+in the following way and may be different if needed for what ever reason:
+
+1. License notice
+2. Comment based help
+3. Initialization
+4. Imports (ex. modules and scripts)
+5. User input
+6. Local variables (ex. default installation directories)
+7. Removal of exiting rules / Unit test startup etc..
+8. Rules / functions / code etc..
 
 ### Rule design
 
-Each firewall rule uses exactly the same order or parameters split into exactly the same number of lines.\
+Each firewall rule uses exactly the same order of parameters split into exactly the same number of lines.\
 This is so that when you need to change or search for something or do some regex magic then it's
-easy to see what is where right away.
+easy to see what is where, easy to use advanced search/replace or multicursor tricks.
 
-Performing regex operations against firewall rules in combination with multicursor feature can be
+Performing regex operations on firewall rules in combination with multicursor feature can be
 done in a matter of minutes, without this strict rule design it would take an entry day and might
-result in serious bugs or security issues!
+result in bugs or security issues!
 
-The code in rule scripts is ordered into "sections" in the following way,
-and may be different if needed for what ever reason:
+### More information
 
-1. License notice
-2. Inclusions (modules, scripts)
-3. User input
-4. Installation directories
-5. Removal of exiting rules
-6. Rules
+Following link describes general rules about PowerShell code style if you like reading,
+however keep in mind, it's not completely in line with this repository best practices:\
+[The PowerShell Style Guide](https://poshcode.gitbooks.io/powershell-practice-and-style/Style-Guide/Introduction.html)
 
 ## Modules and 3rd party code
 

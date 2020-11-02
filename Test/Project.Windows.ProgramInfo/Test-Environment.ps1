@@ -26,9 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Test-Environment
-#
+<#
+.SYNOPSIS
+Unit test for Test-Environment
+
+.DESCRIPTION
+Unit test for Test-Environment
+
+.EXAMPLE
+PS> .\Test-Environment.ps1
+
+.INPUTS
+None. You cannot pipe objects to Test-Environment.ps1
+
+.OUTPUTS
+None. Test-Environment.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )

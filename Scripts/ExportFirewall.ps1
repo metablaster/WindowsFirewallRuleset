@@ -46,6 +46,7 @@ None. ExportFirewall.ps1 does not generate any output
 None.
 #>
 
+# Initialization
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )

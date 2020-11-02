@@ -28,15 +28,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Set-Permission
+Unit test for for Set-Permission
 
 .DESCRIPTION
-Unit test for Set-Permission
+Unit test for for Set-Permission
+
+.EXAMPLE
+PS> .\for Set-Permission.ps1
 
 .INPUTS
-None. You cannot pipe objects to Set-Permission.ps1
+None. You cannot pipe objects to for Set-Permission.ps1
+
 .OUTPUTS
-None. Set-Permission.ps1 does not generate any output
+None. for Set-Permission.ps1 does not generate any output
 
 .NOTES
 None.

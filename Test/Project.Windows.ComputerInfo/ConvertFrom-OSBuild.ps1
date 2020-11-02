@@ -26,11 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# TODO: Include modules you need, update Copyright and start writing test code
+<#
+.SYNOPSIS
+Unit test for ConvertFrom-OSBuild
 
-#
-# Unit test for ConvertFrom-OSBuild
-#
+.DESCRIPTION
+Unit test for ConvertFrom-OSBuild
+
+.EXAMPLE
+PS> .\ConvertFrom-OSBuild.ps1
+
+.INPUTS
+None. You cannot pipe objects to ConvertFrom-OSBuild.ps1
+
+.OUTPUTS
+None. ConvertFrom-OSBuild.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )

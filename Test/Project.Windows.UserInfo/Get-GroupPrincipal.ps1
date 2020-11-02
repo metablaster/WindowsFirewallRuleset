@@ -26,9 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Get-GroupPrincipal
-#
+<#
+.SYNOPSIS
+Unit test for Get-GroupPrincipal
+
+.DESCRIPTION
+Unit test for Get-GroupPrincipal
+
+.EXAMPLE
+PS> .\Get-GroupPrincipal.ps1
+
+.INPUTS
+None. You cannot pipe objects to Get-GroupPrincipal.ps1
+
+.OUTPUTS
+None. Get-GroupPrincipal.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )

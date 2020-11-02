@@ -26,6 +26,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+<#
+.SYNOPSIS
+Unit test for Get-ProcessOutput
+
+.DESCRIPTION
+Unit test for Get-ProcessOutput
+
+.EXAMPLE
+PS> .\Get-ProcessOutput.ps1
+
+.INPUTS
+None. You cannot pipe objects to Get-ProcessOutput.ps1
+
+.OUTPUTS
+None. Get-ProcessOutput.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
 # Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (

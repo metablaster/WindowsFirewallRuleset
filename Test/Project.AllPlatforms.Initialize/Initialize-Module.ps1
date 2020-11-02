@@ -26,9 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Initialize-Module
-#
+<#
+.SYNOPSIS
+Unit test for Initialize-Module
+
+.DESCRIPTION
+Unit test for Initialize-Module
+
+.EXAMPLE
+PS> .\Initialize-Module.ps1
+
+.INPUTS
+None. You cannot pipe objects to Initialize-Module.ps1
+
+.OUTPUTS
+None. Initialize-Module.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (

@@ -26,9 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Get-UserSoftware
-#
+<#
+.SYNOPSIS
+Unit test for Get-UserSoftware
+
+.DESCRIPTION
+Unit test for Get-UserSoftware
+
+.EXAMPLE
+PS> .\Get-UserSoftware.ps1
+
+.INPUTS
+None. You cannot pipe objects to Get-UserSoftware.ps1
+
+.OUTPUTS
+None. Get-UserSoftware.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )

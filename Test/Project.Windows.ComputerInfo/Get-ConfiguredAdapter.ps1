@@ -26,9 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Get-ConfiguredAdapter
-#
+<#
+.SYNOPSIS
+Unit test for Get-ConfiguredAdapter
+
+.DESCRIPTION
+Unit test for Get-ConfiguredAdapter
+
+.EXAMPLE
+PS> .\Get-ConfiguredAdapter.ps1
+
+.INPUTS
+None. You cannot pipe objects to Get-ConfiguredAdapter.ps1
+
+.OUTPUTS
+None. Get-ConfiguredAdapter.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )

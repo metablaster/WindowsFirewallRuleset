@@ -47,6 +47,7 @@ None. SetupProfile.ps1 does not generate any output
 None.
 #>
 
+# Initialization
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (

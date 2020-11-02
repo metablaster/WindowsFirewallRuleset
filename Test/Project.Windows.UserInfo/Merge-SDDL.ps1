@@ -26,9 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Merge-SDDL
-#
+<#
+.SYNOPSIS
+Unit test for Merge-SDDL
+
+.DESCRIPTION
+Unit test for Merge-SDDL
+
+.EXAMPLE
+PS> .\Merge-SDDL.ps1
+
+.INPUTS
+None. You cannot pipe objects to Merge-SDDL.ps1
+
+.OUTPUTS
+None. Merge-SDDL.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )
@@ -51,12 +69,12 @@ Enter-Test $ThisScript
 [string] $Domain = [System.Environment]::MachineName
 [string[]] $Groups = @("Users", "Administrators")
 
-Start-Test "Get-SDDL -User $Users -Group $Groups -Domain $Domain"
-$TestUsersSDDL = Get-SDDL -User $Users -Group $Groups -Domain $Domain @Logs
+Start-Test "Merge-SDDL -User $Users -Group $Groups -Domain $Domain"
+$TestUsersSDDL = Merge-SDDL -User $Users -Group $Groups -Domain $Domain @Logs
 $TestUsersSDDL
 
-Start-Test "Get-SDDL -Domain 'NT AUTHORITY' -User 'SYSTEM', 'USER MODE DRIVERS'"
-$NewSDDL = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "USER MODE DRIVERS" @Logs
+Start-Test "Merge-SDDL -Domain 'NT AUTHORITY' -User 'SYSTEM', 'USER MODE DRIVERS'"
+$NewSDDL = Merge-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "USER MODE DRIVERS" @Logs
 
 Start-Test "Merge-SDDL"
 Merge-SDDL ([ref] $TestUsersSDDL) $NewSDDL @Logs

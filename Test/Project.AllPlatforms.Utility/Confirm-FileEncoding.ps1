@@ -26,10 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Confirm-FileEncoding
-# NOTE: As Administrator because of firewall logs in repository
-#
+<#
+.SYNOPSIS
+Unit test for Confirm-FileEncoding
+
+.DESCRIPTION
+Unit test for Confirm-FileEncoding
+
+.EXAMPLE
+PS> .\Confirm-FileEncoding.ps1
+
+.INPUTS
+None. You cannot pipe objects to Confirm-FileEncoding.ps1
+
+.OUTPUTS
+None. Confirm-FileEncoding.ps1 does not generate any output
+
+.NOTES
+As Administrator because of firewall logs in repository
+#>
+
+# Initialization
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (

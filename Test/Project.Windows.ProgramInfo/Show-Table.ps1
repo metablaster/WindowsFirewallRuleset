@@ -26,9 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Show-Table
-#
+<#
+.SYNOPSIS
+Unit test for Show-Table
+
+.DESCRIPTION
+Unit test for Show-Table
+
+.EXAMPLE
+PS> .\Show-Table.ps1
+
+.INPUTS
+None. You cannot pipe objects to Show-Table.ps1
+
+.OUTPUTS
+None. Show-Table.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )

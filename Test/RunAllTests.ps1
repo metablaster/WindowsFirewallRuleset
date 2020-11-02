@@ -26,13 +26,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Run all unit tests located inside "Test" folder one by one
-# TODO: This script might yield odd and unexpected results
-# TODO: Output of some unit tests is either delayed or not displayed at all
-# TODO: Test should be run in order of module or function (or both) inter dependency
-#
+<#
+.SYNOPSIS
+Master unit test
 
+.DESCRIPTION
+Run all unit tests located inside "Test" folder one by one
+
+.EXAMPLE
+PS> .\RunAllTests.ps1
+
+.INPUTS
+None. You cannot pipe objects to RunAllTests.ps1
+
+.OUTPUTS
+None. RunAllTests.ps1 does not generate any output
+
+.NOTES
+TODO: This script might yield odd and unexpected results
+TODO: Output of some unit tests is either delayed or not displayed at all
+TODO: Test should be run in order of module or function (or both) inter dependency
+#>
+
+# Initialization
+#Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )

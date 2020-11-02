@@ -26,13 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Find-Installation
-#
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-	"PSAvoidGlobalVars", "", Justification = "Global variable used for testing only")]
-param()
+<#
+.SYNOPSIS
+Unit test for Find-Installation
 
+.DESCRIPTION
+Unit test for Find-Installation
+
+.EXAMPLE
+PS> .\Find-Installation.ps1
+
+.INPUTS
+None. You cannot pipe objects to Find-Installation.ps1
+
+.OUTPUTS
+None. Find-Installation.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )

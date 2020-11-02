@@ -26,9 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Export-FirewallRules
-#
+<#
+.SYNOPSIS
+Unit test for Export-FirewallRules
+
+.DESCRIPTION
+Unit test for Export-FirewallRules
+
+.EXAMPLE
+PS> .\Export-FirewallRules.ps1
+
+.INPUTS
+None. You cannot pipe objects to Export-FirewallRules.ps1
+
+.OUTPUTS
+None. Export-FirewallRules.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )

@@ -49,6 +49,7 @@ another computer or media, you should "unblock" scripts by using this code.
 TODO: We should probably unblock only scripts, not all files.
 #>
 
+# Initialization
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )

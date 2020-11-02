@@ -26,10 +26,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Verifies that a module manifest files accurately describe the contents of project modules
-# For binary files also verify digital signature is valid
-#
+<#
+.SYNOPSIS
+Unit test to test out module manifests
+
+.DESCRIPTION
+Verifies that a module manifest files accurately describe the contents of project modules
+For binary files also verify digital signature is valid
+
+.EXAMPLE
+PS> .\TestModuleManifest.ps1
+
+.INPUTS
+None. You cannot pipe objects to TestModuleManifest.ps1
+
+.OUTPUTS
+None. TestModuleManifest.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )

@@ -26,11 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for unresolved path
-#
+<#
+.SYNOPSIS
+Unit test to test global variables
 
-#Requires -RunAsAdministrator
+.DESCRIPTION
+Unit test to test global variables
+
+.EXAMPLE
+PS> .\TestGlobalVariables.ps1
+
+.INPUTS
+None. You cannot pipe objects to TestGlobalVariables.ps1
+
+.OUTPUTS
+None. TestGlobalVariables.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+# Initialization
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )
@@ -41,38 +57,42 @@ Initialize-Project -Abort
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
+Import-Module -Name Project.Windows.UserInfo
 
 # User prompt
-Set-Variable -Name Accept -Scope Local -Option ReadOnly -Force -Value "Load test rule into firewall"
-Update-Context $TestContext "IPv$IPVersion" $Direction
+Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
-
-# Setup local variables
-$Group = "Test - Unresolved path"
-$FirewallProfile = "Any"
-$TargetProgramRoot = "C:\Program Files (x86)\Realtek\..\PokerStars.EU"
 
 Enter-Test $ThisScript
 
-# First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Start-Test "Project.AllPlatforms.Logs - Logs:"
+$Logs
 
-Start-Test "Unresolved path"
+Start-Test "Project.AllPlatforms.Utility - ServiceHost:"
+$ServiceHost
 
-# Test if installation exists on system
-$Program = "$TargetProgramRoot\PokerStars.exe"
-Test-File $Program @Logs
+if ($Develop)
+{
+	Start-Test "Project.Windows.ProgramInfo - InstallTable:"
+	$InstallTable
+}
 
-New-NetFirewallRule -DisplayName "TargetProgram" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 80, 443, 26002 `
-	-LocalUser $NT_AUTHORITY_LocalService `
-	-InterfaceType $Interface `
-	-Description "Unresolved path test" `
-	@Logs | Format-Output @Logs
+Start-Test "Project.Windows.UserInfo - NT_AUTHORITY_UserModeDrivers:"
+$NT_AUTHORITY_UserModeDrivers
 
-Update-Log
+Start-Test "Project.Windows.UserInfo - NT_AUTHORITY_NetworkService:"
+$NT_AUTHORITY_NetworkService
+
+Start-Test "Project.Windows.UserInfo - NT_AUTHORITY_LocalService:"
+$NT_AUTHORITY_LocalService
+
+Start-Test "Project.Windows.UserInfo - NT_AUTHORITY_System:"
+$NT_AUTHORITY_System
+
+Start-Test "Project.Windows.UserInfo - AdministratorsGroupSDDL:"
+$AdministratorsGroupSDDL
+
+Start-Test "Project.Windows.UserInfo - UsersGroupSDDL:"
+$UsersGroupSDDL
+
 Exit-Test
