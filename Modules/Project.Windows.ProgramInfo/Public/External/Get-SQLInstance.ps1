@@ -31,14 +31,18 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Retrieves SQL server information from a local or remote servers.
+
 .DESCRIPTION
 Retrieves SQL server information from a local or remote servers. Pulls all
 instances from a SQL server and detects if in a cluster or not.
+
 .PARAMETER ComputerName
 Local or remote systems to query for SQL information.
+
 .PARAMETER CIM
 If specified, try to pull and correlate CIM information for SQL
 TODO: limited testing was performed in matching up the service info to registry info.
+
 .EXAMPLE
 PS> Get-SQLInstance -Computername DC1
 
@@ -98,10 +102,13 @@ ServiceName      : SQL Server (MSSQLSERVER)
 ServiceState     : Running
 ServiceAccount   : domain\Server2SQL
 ServiceStartMode : Auto
+
 .INPUTS
 None. You cannot pipe objects to Get-SQLInstance
+
 .OUTPUTS
 None.
+
 .NOTES
 Name: Get-SQLInstance
 Author: Boe Prox, edited by cookie monster (to cover wow6432node, CIM tie in)

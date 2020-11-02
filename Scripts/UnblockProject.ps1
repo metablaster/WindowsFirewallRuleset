@@ -29,15 +29,20 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Unblock project files that were downloaded from the Internet.
+
 .DESCRIPTION
 Unblock project files that were downloaded from the Internet, this is needed to
 unblock project that were downloaded from GitHub to prevent spamming YES/NO questions.
+
 .EXAMPLE
-PS> UnblockProject.ps1
+PS> .\UnblockProject.ps1
+
 .INPUTS
-None.
+None. You cannot pipe objects to UnblockProject.ps1
+
 .OUTPUTS
-None.
+None. UnblockProject.ps1 does not generate any output
+
 .NOTES
 If executing scripts after manual download from internet or transfer from
 another computer or media, you should "unblock" scripts by using this code.

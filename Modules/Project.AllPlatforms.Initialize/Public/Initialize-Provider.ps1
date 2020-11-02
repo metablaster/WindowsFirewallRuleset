@@ -29,25 +29,33 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Test if recommended packages are installed
+
 .DESCRIPTION
 Test if recommended and up to date packages are installed, if not user is
 prompted to install or update them.
 Outdated or missing packages can cause strange issues, this function ensures latest packages are
 installed and in correct order, taking into account failures that can happen while
 installing or updating packages
+
 .PARAMETER FullyQualifiedName
 Hash table ProviderName, Version representing minimum required module
+
 .PARAMETER InfoMessage
 Optional information displayable to user for choice help message
+
 .PARAMETER Required
 Controls whether the provider initialization must succeed, if initialization fails execution stops,
 otherwise only warning is generated
+
 .EXAMPLE
 PS> Initialize-Provider @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Repository "powershellgallery.com"
+
 .INPUTS
 None. You cannot pipe objects to Initialize-Provider
+
 .OUTPUTS
 None.
+
 .NOTES
 This function main purpose is automated development environment setup to be able to perform quick
 setup on multiple computers and virtual operating systems, in cases such as frequent system restores

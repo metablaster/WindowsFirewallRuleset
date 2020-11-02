@@ -29,16 +29,22 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Get store apps installed system wide
+
 .DESCRIPTION
 Search system wide installed store apps
+
 .PARAMETER ComputerName
 NETBIOS Computer name in form of "COMPUTERNAME"
+
 .EXAMPLE
 PS> Get-SystemApps "COMPUTERNAME"
+
 .INPUTS
 None. You cannot pipe objects to Get-SystemApps
+
 .OUTPUTS
 [Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage] store app information object
+
 .NOTES
 TODO: query remote computer not implemented
 TODO: multiple computers

@@ -29,18 +29,25 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Convert value to boolean
+
 .DESCRIPTION
 Convert value to boolean
+
 .PARAMETER Value
 TODO: describe parameter
+
 .PARAMETER DefaultValue
 TODO: describe parameter
+
 .EXAMPLE
 TODO: provide example and description
+
 .INPUTS
 None. You cannot pipe objects to Convert-ValueToBoolean
+
 .OUTPUTS
 [bool] of the input value
+
 .NOTES
 None.
 #>

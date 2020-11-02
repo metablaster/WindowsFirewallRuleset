@@ -66,6 +66,10 @@ todo's in this file are categorized into following sections:
     WindowsFirewallRuleset/blob/develop\
     WindowsFirewallRuleset/tree/develop
 
+5. Documentation
+
+    - Updating documentation, comment based help and rule description
+
 ## High priority
 
 1. Modules
@@ -128,7 +132,11 @@ todo's in this file are categorized into following sections:
     - Installation variables must be empty in development mode only to be able to test program
     search functions, for release providing a path is needed to prevent "fix" info messages
 
-7. Other
+7. Documentation
+
+    - INPUTS and OUTPUTS are not well described, these apply only to pipelines
+
+8. Other
 
     - Need convention for output streams, when to use which one, and also common format for quoting
     and pointing out local variables, some place are missing streams while others have too many of them,
@@ -290,6 +298,7 @@ todo's in this file are categorized into following sections:
 
     - Convert tests to use Pester if possible or separate them into pester tests and experiment tests
     - Testing with ISE, different PS hosts and environments
+    - Test templates
 
 5. Code style
 

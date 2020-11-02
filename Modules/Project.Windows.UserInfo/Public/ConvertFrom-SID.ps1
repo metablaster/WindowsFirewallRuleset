@@ -29,22 +29,30 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Convert SID to user or computer account name
+
 .DESCRIPTION
 Convert SID to user or computer account name, in case of pseudo and built in accounts
 only relevant login name is returned, not full reference name.
 In all other cases result if full account name in form of COMPUTERNAME\USERNAME
+
 .PARAMETER SID
 One or more SIDs to convert
+
 .PARAMETER ComputerNames
 One or more computers to check if SID is not known, default is localhost
+
 .EXAMPLE
 PS> ConvertFrom-SID S-1-5-21-2139171146-395215898-1246945465-2359
+
 .EXAMPLE
 PS> '^S-1-5-32-580' | ConvertFrom-SID
+
 .INPUTS
 [string[]] One or multiple SID's
+
 .OUTPUTS
 [PSCustomObject[]] composed of SID information
+
 .NOTES
 SID conversion for well known SIDs and display names from following links:
 1. http://support.microsoft.com/kb/243330

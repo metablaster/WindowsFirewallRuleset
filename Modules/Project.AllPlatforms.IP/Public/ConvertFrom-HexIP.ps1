@@ -50,19 +50,25 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 <#
 .SYNOPSIS
 Converts a hexadecimal IP address into a dotted decimal string.
+
 .DESCRIPTION
 ConvertFrom-HexIP takes a hexadecimal string and returns a dotted decimal IP address.
 An intermediate call is made to ConvertTo-DottedDecimalIP.
+
 .PARAMETER IPAddress
 An IP Address to convert.
+
 .EXAMPLE
 PS> ConvertFrom-HexIP c0a80001
 
 Returns the IP address 192.168.0.1.
+
 .INPUTS
 System.String
+
 .OUTPUTS
 TODO: describe outputs
+
 .NOTES
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions

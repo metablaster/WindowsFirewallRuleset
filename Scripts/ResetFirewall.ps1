@@ -29,15 +29,20 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Reset GPO firewall to factory defaults
+
 .DESCRIPTION
 SetupFirewall script clears all GPO firewall rules and sets all GPO firewall
 parameter to their default values
+
 .EXAMPLE
-PS> ResetFirewall.ps1
+PS> .\ResetFirewall.ps1
+
 .INPUTS
-None.
+None. You cannot pipe objects to ResetFirewall.ps1
+
 .OUTPUTS
-None.
+None. ResetFirewall.ps1 does not generate any output
+
 .NOTES
 None.
 #>

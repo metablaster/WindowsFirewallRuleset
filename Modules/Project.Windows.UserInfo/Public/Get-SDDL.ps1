@@ -29,16 +29,22 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Generate SDDL string of multiple usernames or/and groups on a given domain
+
 .DESCRIPTION
 Get SDDL string single or multiple user names and/or user groups on a single target computer
+
 .PARAMETER UserNames
 Array of users for which to generate SDDL string
+
 .PARAMETER UserGroups
 Array of user groups for which to generate SDDL string
+
 .PARAMETER ComputerName
 Single domain or computer such as remote computer name or builtin computer domain
+
 .PARAMETER CIM
 Whether to contact CIM server (required for remote computers)
+
 .EXAMPLE
 PS> [string[]] $Users = "User"
 PS> [string] $Server = COMPUTERNAME
@@ -47,12 +53,16 @@ PS> [string[]] $Groups = "Users", "Administrators"
 PS> $UsersSDDL1 = Get-SDDL -User $Users -Group $Groups
 PS> $UsersSDDL2 = Get-SDDL -User $Users -Machine $Server
 PS> $UsersSDDL3 = Get-SDDL -Group $Groups
+
 .EXAMPLE
 PS> $NewSDDL = Get-SDDL -Domain "NT AUTHORITY" -User "System"
+
 .INPUTS
 None. You cannot pipe objects to Get-SDDL
+
 .OUTPUTS
 [string] SDDL for given accounts or/and group for given domain
+
 .NOTES
 CIM switch is not supported on PowerShell Core, meaning contacting remote computers
 is supported only on Windows PowerShell

@@ -29,17 +29,24 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Test if path is valid for firewall rule
+
 .DESCRIPTION
 Same as Test-Path but expands environment variables, and checks if path is compatible
 for firewall rules
+
 .PARAMETER FilePath
-Path to folder, Allows null or empty since input may come from other commandlets which can return empty or null
+Path to folder, Allows null or empty since input may come from other commandlets which
+can return empty or null
+
 .EXAMPLE
 PS> Test-Environment %SystemDrive%
+
 .INPUTS
 None. You cannot pipe objects to Test-Environment
+
 .OUTPUTS
 None. true if path exists, false otherwise
+
 .NOTES
 TODO: This should proably be inside utility module
 #>

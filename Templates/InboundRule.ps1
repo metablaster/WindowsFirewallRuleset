@@ -29,17 +29,22 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Script for inbound rule set
+
 .DESCRIPTION
-Use Inbound.ps1 as a template for inbound firewall rule set
+Use InboundRule.ps1 as a template for inbound firewall rule set
+
+.EXAMPLE
+PS> .\InboundRule.ps1
+
 .INPUTS
-None. You cannot pipe objects to Inbound.ps1.
+None. You cannot pipe objects to InboundRule.ps1
+
 .OUTPUTS
-None. Inbound.ps1 does not generate any output.
+None. InboundRule.ps1 does not generate any output
+
 .NOTES
 None.
 TODO: Update Copyright and start writing test code
-.LINK
-None.
 #>
 
 # Initialization

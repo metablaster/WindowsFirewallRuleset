@@ -30,56 +30,76 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Exports firewall rules to a CSV or JSON file.
+
 .DESCRIPTION
 Exports firewall rules to a CSV or JSON file. Only local GPO rules are exported by default.
 CSV files are semicolon separated (Beware! Excel is not friendly to CSV files).
 All rules are exported by default, you can filter with parameter -Name, -Inbound, -Outbound,
 -Enabled, -Disabled, -Allow and -Block.
 If the export file already exists it's content will be replaced by default.
+
 .PARAMETER PolicyStore
 Policy store from which to export rules, default is local GPO.
 For more information about stores see:
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/FirewallParameters.md
+
 .PARAMETER Folder
 Path into which to save file
+
 .PARAMETER FileName
 Output file, default is JSON format
+
 .PARAMETER DisplayName
 Display name of the rules to be processed. Wildcard character * is allowed.
+
 .PARAMETER DisplayGroup
 Display group of the rules to be processed. Wildcard character * is allowed.
+
 .PARAMETER JSON
 Output in JSON instead of CSV format
+
 .PARAMETER Inbound
 Export inbound rules
+
 .PARAMETER Outbound
 Export outbound rules
+
 .PARAMETER Enabled
 Export enabled rules
+
 .PARAMETER Disabled
 Export disabled rules
+
 .PARAMETER Allow
 Export allowing rules
+
 .PARAMETER Block
 Export blocking rules
+
 .PARAMETER Append
 Append exported rules to existing file instead of replacing
+
 .EXAMPLE
 PS> Export-FirewallRules
 
 Exports all firewall rules to the CSV file FirewallRules.csv in the current directory.
+
 .EXAMPLE
 PS> Export-FirewallRules -Inbound -Allow
 
 Exports all inbound and allowing firewall rules to the CSV file FirewallRules.csv in the current directory.
+
 .EXAMPLE
 PS> Export-FirewallRules snmp* SNMPRules.json -json
 
 Exports all SNMP firewall rules to the JSON file SNMPRules.json.
+
 .INPUTS
 None. You cannot pipe objects to Export-FirewallRules
+
 .OUTPUTS
 None. Exports rules to file.
+
 .NOTES
 Author: Markus Scholtes
 Version: 1.02

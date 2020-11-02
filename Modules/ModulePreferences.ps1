@@ -28,9 +28,6 @@ SOFTWARE.
 
 Set-StrictMode -Version Latest
 
-# Imports
-# . $PSScriptRoot\..\Config\ProjectSettings.ps1 -InsideModule $true
-
 #
 # Module preferences
 #

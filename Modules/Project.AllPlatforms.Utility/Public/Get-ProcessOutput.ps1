@@ -29,27 +29,37 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Run process and capture output
+
 .DESCRIPTION
 Run process with or without arguments, set wait time and capture output.
 If the target process results in an error, error message is formatted and shown in addition
 to standard output if any.
+
 .PARAMETER FilePath
 The application or document to start
+
 .PARAMETER ArgumentList
 A collection of command-line arguments to use when starting the application
+
 .PARAMETER NoNewWindow
 Whether to use the operating system shell to start the process
+
 .PARAMETER Wait
 Number of milliseconds to wait for the associated process to exit
 Default is 0, which means wait indefinitely
+
 .PARAMETER Format
 If specified formats standard output into INFO messages
+
 .EXAMPLE
 PS> Get-ProcessOutput -FilePath "git.exe" -ArgumentList "status" -NoNewWindow -Wait 3000
+
 .INPUTS
 None. You cannot pipe objects to Get-ProcessOutput
+
 .OUTPUTS
 None.
+
 .NOTES
 TODO: Function needs improvements and more test cases
 TODO: consider renaming to Format-ProcessOutput

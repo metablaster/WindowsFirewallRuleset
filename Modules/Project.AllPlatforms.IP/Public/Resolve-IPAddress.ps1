@@ -50,21 +50,27 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 <#
 .SYNOPSIS
 Resolves an IP address expression using wildcard expressions to individual IP addresses.
+
 .DESCRIPTION
 Resolves an IP address expression using wildcard expressions to individual IP addresses.
 Resolve-IPAddress expands groups and values in square brackets to generate a list of IP addresses or networks using CIDR-notation.
 Ranges of values may be specified using a start and end value using "-" to separate the values.
 Specific values may be listed as a comma separated list.
+
 .PARAMETER IPAddress
 The IPAddress expression to resolve.
+
 .EXAMPLE
 PS> Resolve-IPAddress "10.[1,2].[0-2].0/24"
 
 Returns the addresses 10.1.0.0/24, 10.1.1.0/24, 10.1.2.0/24, 10.2.0.0/24, and so on.
+
 .INPUTS
 System.String
+
 .OUTPUTS
 TODO: describe outputs, define OutputType
+
 .NOTES
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions

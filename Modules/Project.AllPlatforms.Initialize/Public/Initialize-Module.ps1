@@ -29,44 +29,57 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Check if module is installed or needs update
+
 .DESCRIPTION
 Test if recommended and up to date module is installed, if not user is
 prompted to install or update them.
 Outdated or missing modules can cause strange issues, this function ensures latest modules are
 installed and in correct order, taking into account failures that can happen while
 installing or updating modules
+
 .PARAMETER FullyQualifiedName
 Hash table with a minimum ModuleName and ModuleVersion keys, in the form of ModuleSpecification
+
 .PARAMETER Repository
 Repository name from which to download module such as PSGallery,
 if repository is not registered user is prompted to register it
+
 .PARAMETER RepositoryLocation
 Repository location associated with repository name,
 this parameter is used only if repository is not registered
+
 .PARAMETER InfoMessage
 Help message used for default choice in host prompt
+
 .PARAMETER Trusted
 If the supplied repository needs to be registered Trusted specifies
 whether repository is trusted or not.
 this parameter is used only if repository is not registered
+
 .PARAMETER AllowPrerelease
 whether to allow installing beta modules
+
 .PARAMETER Required
 Controls whether module initialization must succeed, if initialization fails execution stops,
 otherwise only warning is generated
+
 .EXAMPLE
 PS> Initialize-ModulesRequirement @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = "1.19.1" }
 Checks if PSScriptAnalyzer is up to date, if not user is prompted to update, and if repository
 specified by default is not registered user is prompted to do that too.
+
 .EXAMPLE
 PS> Initialize-ModulesRequirement @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Repository `
 > "PSGallery" -RepositoryLocation "https://www.powershellgallery.com/api/v2"
 Checks if PackageManagement is up to date, if not user is prompted to update, and if repository
 is not registered user is prompted to do that too.
+
 .INPUTS
 None. You cannot pipe objects to Initialize-Module
+
 .OUTPUTS
 None.
+
 .NOTES
 This function main purpose is automated development environment setup to be able to perform quick
 setup on multiple computers and virtual operating systems, in cases such as frequent system restores

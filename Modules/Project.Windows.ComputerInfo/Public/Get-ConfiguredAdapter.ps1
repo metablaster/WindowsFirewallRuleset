@@ -29,30 +29,42 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Method to get configured adapters
+
 .DESCRIPTION
 Return a list of all configured adapters and their configuration.
 By default only physical adapters connected to network are returned
 Conditionally includes virtual, hidden or disconnected adapters such as Hyper-V adapters on all compartments.
+
 .PARAMETER AddressFamily
 IP version for which to obtain adapters, IPv4 or IPv6
+
 .PARAMETER ExcludeHardware
 Exclude hardware/physical network adapters
+
 .PARAMETER IncludeAll
 Include all possible adapter types present on target computer
+
 .PARAMETER IncludeVirtual
 Whether to include virtual adapters
+
 .PARAMETER IncludeHidden
 Whether to include hidden adapters
+
 .PARAMETER IncludeDisconnected
 Whether to include disconnected
+
 .EXAMPLE
 PS> Get-ConfiguredAdapter "IPv4"
+
 .EXAMPLE
 PS> Get-ConfiguredAdapter "IPv6"
+
 .INPUTS
 None. You cannot pipe objects to Get-ConfiguredAdapter
+
 .OUTPUTS
 [NetIPConfiguration] or error message if no adapter configured
+
 .NOTES
 TODO: Loopback interface is missing in the output
 #>

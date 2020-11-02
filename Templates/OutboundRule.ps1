@@ -29,17 +29,22 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Unit test for outbound rule set
+
 .DESCRIPTION
-Use Outbound.ps1 as a template for outbound firewall rule set
+Use OutboundRule.ps1 as a template for outbound firewall rule set
+
+.EXAMPLE
+PS> .\OutboundRule.ps1
+
 .INPUTS
-None. You cannot pipe objects to Outbound.ps1.
+None. You cannot pipe objects to OutboundRule.ps1
+
 .OUTPUTS
-None. Outbound.ps1 does not generate any output.
+None. OutboundRule.ps1 does not generate any output
+
 .NOTES
 None.
 TODO: Update Copyright and start writing test code
-.LINK
-None.
 #>
 
 # Initialization

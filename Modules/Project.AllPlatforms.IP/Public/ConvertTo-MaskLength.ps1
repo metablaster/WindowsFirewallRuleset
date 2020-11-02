@@ -50,18 +50,24 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 <#
 .SYNOPSIS
 Convert a dotted-decimal subnet mask to a mask length.
+
 .DESCRIPTION
 A count of the number of 1's in a binary string.
+
 .PARAMETER SubnetMask
 A subnet mask to convert into length.
+
 .EXAMPLE
 PS> ConvertTo-MaskLength 255.255.255.0
 
 Returns 24, the length of the mask in bits.
+
 .INPUTS
 System.Net.IPAddress
+
 .OUTPUTS
 TODO: describe outputs
+
 .NOTES
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions

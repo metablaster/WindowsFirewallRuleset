@@ -29,16 +29,22 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Get installed Windows SDK
+
 .DESCRIPTION
 TODO: add description
+
 .PARAMETER ComputerName
 Computer name for which to list installed installed framework
+
 .EXAMPLE
 PS> Get-WindowsSDK COMPUTERNAME
+
 .INPUTS
 None. You cannot pipe objects to Get-WindowsSDK
+
 .OUTPUTS
 [PSCustomObject[]] for installed Windows SDK versions and install paths
+
 .NOTES
 None.
 #>

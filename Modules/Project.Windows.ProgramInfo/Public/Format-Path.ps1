@@ -29,18 +29,24 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Format path into firewall compatible path
+
 .DESCRIPTION
 Various paths drilled out of registry, and those specified by the user must be
 checked and properly formatted.
 Formatted paths will also help sorting rules in firewall GUI based on path.
+
 .PARAMETER FilePath
 File path to format, can have environment variables, or consists of trailing slashes.
+
 .EXAMPLE
 PS> Format-Path "C:\Program Files\\Dir\"
+
 .INPUTS
 [string] File path to format
+
 .OUTPUTS
 [string] formatted path, includes environment variables, stripped off of junk
+
 .NOTES
 TODO: This should proably be inside utility module
 #>

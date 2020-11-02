@@ -50,20 +50,28 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 <#
 .SYNOPSIS
 Gets permutations of an IP address expansion expression.
+
 .DESCRIPTION
 Gets permutations of an IP address expansion expression.
+
 .PARAMETER Group
 TODO: describe parameter
+
 .PARAMETER BaseAddress
 TODO: describe parameter
+
 .PARAMETER Index
 TODO: describe parameter
+
 .EXAMPLE
 TODO: add example
+
 .INPUTS
 None. You cannot pipe objects to Get-Permutation
+
 .OUTPUTS
 TODO: describe outputs, specify OutputType
+
 .NOTES
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions

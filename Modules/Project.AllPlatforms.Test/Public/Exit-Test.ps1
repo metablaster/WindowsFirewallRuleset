@@ -29,15 +29,20 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Exit unit test
+
 .DESCRIPTION
 Exit-Test performs finishing steps after unit test is done, ie. to restore previous state
 This function must be called after all test cases are done in single unit test
+
 .EXAMPLE
 PS> Exit-Test
+
 .INPUTS
 None. You cannot pipe objects to Exit-Test
+
 .OUTPUTS
 None.
+
 .NOTES
 None.
 #>

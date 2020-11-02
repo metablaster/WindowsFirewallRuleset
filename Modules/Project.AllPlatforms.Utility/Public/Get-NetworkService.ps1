@@ -29,14 +29,19 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Scan all scripts in this repository and get windows service names involved in rules
+
 .PARAMETER Folder
 Root folder name which to scan recursively
+
 .EXAMPLE
 PS> Get-NetworkService "C:\PathToRepo"
+
 .INPUTS
 None. You cannot pipe objects to Get-NetworkService
+
 .OUTPUTS
 None, File with the list of services is made
+
 .NOTES
 None.
 #>

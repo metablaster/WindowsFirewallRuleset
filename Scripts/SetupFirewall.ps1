@@ -29,14 +29,19 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Full firewall setup according to this repository
+
 .DESCRIPTION
 Master script for full firewall setup according Windows Firewall Ruleset
+
 .EXAMPLE
-PS> SetupFirewall.ps1
+PS> .\SetupFirewall.ps1
+
 .INPUTS
-None.
+None. You cannot pipe objects to SetupFirewall.ps1
+
 .OUTPUTS
-None.
+None. SetupFirewall.ps1 does not generate any output
+
 .NOTES
 None.
 #>

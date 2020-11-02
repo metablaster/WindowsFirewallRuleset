@@ -29,20 +29,28 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Get computer accounts for a given user groups on given computers
+
 .PARAMETER UserGroups
 User group on local or remote computer
+
 .PARAMETER ComputerNames
 One or more computers which to query for group users
+
 .PARAMETER CIM
 Whether to contact CIM server (required for remote computers)
+
 .EXAMPLE
 PS> Get-GroupPrincipal "Users", "Administrators"
+
 .EXAMPLE
 PS> Get-GroupPrincipal "Users" -Machine @(DESKTOP, LAPTOP) -CIM
+
 .INPUTS
 [string[]] User groups
+
 .OUTPUTS
 [PSCustomObject[]] Array of enabled user accounts in specified group
+
 .NOTES
 CIM switch is not supported on PowerShell Core, meaning contacting remote computers
 is supported only on Windows PowerShell

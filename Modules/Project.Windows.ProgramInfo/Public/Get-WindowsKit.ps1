@@ -29,16 +29,22 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Get installed Windows Kits
+
 .DESCRIPTION
 TODO: add description
+
 .PARAMETER ComputerName
 Computer name for which to list installed installed windows kits
+
 .EXAMPLE
 PS> Get-WindowsKit COMPUTERNAME
+
 .INPUTS
 None. You cannot pipe objects to Get-WindowsKit
+
 .OUTPUTS
 [PSCustomObject[]] for installed Windows Kits versions and install paths
+
 .NOTES
 None.
 #>

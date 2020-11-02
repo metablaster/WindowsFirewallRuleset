@@ -29,17 +29,23 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Get list of install locations for executables and executable names
+
 .DESCRIPTION
 Returns a table of installed programs, with executable name, installation path,
 registry path and child registry key name for target computer
+
 .PARAMETER ComputerName
 Computer name which to check
+
 .EXAMPLE
 PS> Get-ExecutablePath "COMPUTERNAME"
+
 .INPUTS
 None. You cannot pipe objects to Get-ExecutablePath
+
 .OUTPUTS
 [PSCustomObject[]] list of executables, their installation path and additional information
+
 .NOTES
 None.
 #>

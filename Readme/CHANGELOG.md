@@ -33,7 +33,7 @@ If you would like to see fresh changes done since last release you can do so on 
 - New features
 
   - Added script to restart/reset network with no need for reboot
-  - Added functions to set ownership and file saystem premissions
+  - Added function to set ownership and file saystem premissions
 
 - Documentation
 
@@ -44,7 +44,12 @@ If you would like to see fresh changes done since last release you can do so on 
   - GrantLogs.ps1 did not set permission to create firewall log filter file
   - Checking for requirements would run for every script in development mode
   - DHCP configured computer won't connect to internet
-  - Fixed random minor mistakes
+  - Fixed various minor mistakes
+
+- In progress
+
+  - Improved Test-Environment function to handle more cases
+  - Calls to icacls, takeown and file system permission code replaced with call to Set-Permission
 
 ## v0.7.0 (current release)
 

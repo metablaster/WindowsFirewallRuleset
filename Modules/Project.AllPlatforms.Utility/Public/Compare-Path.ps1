@@ -29,36 +29,47 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Compare 2 paths for equality or similarity
+
 .DESCRIPTION
 Compare-Path depending on parameters either checks if 2 paths lead to same location
 taking into account environment variables, relative path locations and wildcards
 or it checks if 2 paths are similar which depends on wildcards contained in the input
+
 .PARAMETER ReferencePath
 The path against which to compare
+
 .PARAMETER TargetPath
 The path which to compare against the reference path
+
 .PARAMETER Loose
 if specified perform "loose" comparison:
 Does not attempt to resolve input paths, and respects wildcards all of which happens
 after input paths have been expanded off environment variables
+
 .PARAMETER Sensitive
 If specified performs case sensitive comparison
+
 .EXAMPLE
 PS> Compare-Path "%SystemDrive%\Windows" "C:\Win*" -Loose
 
 True
+
 .EXAMPLE
 PS> Compare-Path "%SystemDrive%\Win*\System32\en-US\.." "C:\Wind*\System3?\" -Sensitive
 
 True
+
 .EXAMPLE
 PS> Compare-Path "%SystemDrive%\" "D:\"
 
 False
+
 .INPUTS
 None.
+
 .OUTPUTS
 None. You cannot pipe objects to Compare-Path
+
 .NOTES
 None.
 #>

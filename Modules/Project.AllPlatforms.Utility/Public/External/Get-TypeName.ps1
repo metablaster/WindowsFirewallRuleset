@@ -32,17 +32,23 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Returns .NET return type name for input object
+
 .DESCRIPTION
 Unlike Get-Member commandlet returns only type name, and if
 there are multiple type names chooses unique ones only.
+
 .PARAMETER InputObject
 Target object for which to retrieve type name
+
 .EXAMPLE
 PS> Get-Process | Get-TypeName
+
 .INPUTS
 System.Object Any .NET object
+
 .OUTPUTS
 [string] type name or null
+
 .NOTES
 See related links section for original code link:
 TODO: need better checking for input, on pipeline.
@@ -52,6 +58,7 @@ Added check when object is null
 Added comment based help
 Removed unneeded parentheses
 Added input type to parameter
+
 .LINK
 https://github.com/gravejester/Communary.PASM
 #>

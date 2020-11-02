@@ -29,17 +29,23 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Get installed NET Frameworks
+
 .DESCRIPTION
 Get-NetFramework will return all NET frameworks installed regardless if
 installation directory exists or not, since some versions are built in
+
 .PARAMETER ComputerName
 Computer name for which to list installed installed framework
+
 .EXAMPLE
 PS> Get-NetFramework COMPUTERNAME
+
 .INPUTS
 None. You cannot pipe objects to Get-NetFramework
+
 .OUTPUTS
 [PSCustomObject[]] for installed NET Frameworks and install paths
+
 .NOTES
 None.
 #>

@@ -29,19 +29,26 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Format firewall rule output for display
+
 .DESCRIPTION
 Output of Net-NewFirewallRule is large, loading a lot of rules would spam the console
 very fast, this function helps to output only relevant content.
+
 .PARAMETER Rule
 Firewall rule to format
+
 .PARAMETER Label
 Optional new label to replace default one
+
 .EXAMPLE
 PS> Net-NewFirewallRule ... | Format-Output
+
 .INPUTS
 Microsoft.Management.Infrastructure.CimInstance Firewall rule to format
+
 .OUTPUTS
 None. Formatted and colored output
+
 .NOTES
 None.
 #>

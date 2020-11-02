@@ -29,19 +29,26 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Verify file is correctly encoded
+
 .DESCRIPTION
 Confirm-FileEncoding verifies target file is encoded as expected.
 Wrong encoding may return bad data resulting is unexpected behavior
+
 .PARAMETER FilePath
 Path to the file which to check
+
 .PARAMETER Encoding
 Expected encoding
+
 .EXAMPLE
 PS> Confirm-FileEncoding C:\SomeFile.txt utf16
+
 .INPUTS
 [string[]] One or more paths to file to check
+
 .OUTPUTS
 None.
+
 .NOTES
 None.
 #>

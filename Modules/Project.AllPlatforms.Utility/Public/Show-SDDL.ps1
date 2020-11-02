@@ -29,16 +29,22 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Show-SDDL returns SDDL based on "object" such as path, or registry entry
+
 .DESCRIPTION
 TODO: add description
+
 .PARAMETER SDDL
 TODO: describe parameter
+
 .EXAMPLE
 see Test\Show-SDDL.ps1 for example
+
 .INPUTS
 None. You cannot pipe objects to Show-SDDL
+
 .OUTPUTS
 TODO: describe outputs
+
 .NOTES
 This function is used only for debugging and discovery of object SDDL
 Credits to: https://blogs.technet.microsoft.com/ashleymcglone/2011/08/29/powershell-sid-walker-texas-ranger-part-1

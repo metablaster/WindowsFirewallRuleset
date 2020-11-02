@@ -29,21 +29,29 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Fill data table with principal and program location
+
 .DESCRIPTION
 Search system for programs with input search string, and add new program installation directory
 to the table, as well as other information needed to make a firewall rule
+
 .PARAMETER SearchString
 Search string which corresponds to the output of "Get programs" functions
+
 .PARAMETER UserProfile
 true if user profile is to be searched too, system locations only otherwise
+
 .PARAMETER Executable
 true if executable paths should be searched first.
+
 .EXAMPLE
 PS> Update-Table "GoogleChrome"
+
 .INPUTS
 None. You cannot pipe objects to Update-Table
+
 .OUTPUTS
 None. Module scope installation table is updated
+
 .NOTES
 TODO: For programs in user profile rules should update LocalUser parameter accordingly,
 currently it looks like we assign entry user group for program that applies to user only

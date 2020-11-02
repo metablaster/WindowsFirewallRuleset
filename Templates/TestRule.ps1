@@ -29,17 +29,22 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Unit test template to test firewall rules
+
 .DESCRIPTION
 Use TestRule.ps1 as a template to test out firewall rules
+
+.EXAMPLE
+PS> .\TestRule.ps1
+
 .INPUTS
 None. You cannot pipe objects to TestRule.ps1.
+
 .OUTPUTS
 None. TestRule.ps1 does not generate any output.
+
 .NOTES
 None.
 TODO: Update Copyright and start writing test code
-.LINK
-None.
 #>
 
 # Initialization

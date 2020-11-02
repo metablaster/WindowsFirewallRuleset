@@ -50,32 +50,43 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 <#
 .SYNOPSIS
 Get a list of IP addresses within the specified network.
+
 .DESCRIPTION
 Get-NetworkRange finds the network and broadcast address as decimal values
 then starts a counter between the two, returning IPAddress for each.
+
 .PARAMETER IPAddress
 Either a literal IP address, a network range expressed as CIDR notation,
 or an IP address and subnet mask in a string.
+
 .PARAMETER SubnetMask
 A subnet mask as an IP address.
+
 .PARAMETER IncludeNetworkAndBroadcast
 Include the network and broadcast addresses when generating a network address range.
+
 .PARAMETER Start
 The start address of a range.
+
 .PARAMETER End
 The end address of a range.
+
 .EXAMPLE
 PS> Get-NetworkRange 192.168.0.0 255.255.255.0
 
 Returns all IP addresses in the range 192.168.0.0/24.
+
 .EXAMPLE
 PS> Get-NetworkRange 10.0.8.0/22
 
 Returns all IP addresses in the range 192.168.0.0 255.255.252.0.
+
 .INPUTS
 System.String
+
 .OUTPUTS
 TODO: describe outputs
+
 .NOTES
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions

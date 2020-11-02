@@ -29,19 +29,26 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Find installation directory for given predefined program name
+
 .DESCRIPTION
 Find-Installation is called by Test-Installation, ie. only if test for existing path
 fails then this method kicks in
+
 .PARAMETER Program
 Predefined program name
+
 .PARAMETER ComputerName
 Computer name on which to look for program installation
+
 .EXAMPLE
 PS> Find-Installation "Office"
+
 .INPUTS
 None. You cannot pipe objects to Find-Installation
+
 .OUTPUTS
 [bool] true or false if installation directory if found, installation table is updated
+
 .NOTES
 None.
 #>

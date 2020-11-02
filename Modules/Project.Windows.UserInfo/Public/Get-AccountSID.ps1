@@ -29,22 +29,31 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Get SID for giver user account
+
 .DESCRIPTION
 Get SID's for single or multiple user names on a target computer
+
 .PARAMETER UserNames
 Array of user names
+
 .PARAMETER ComputerName
 Target computer on which to perform query
+
 .PARAMETER CIM
 Whether to contact CIM server (required for remote computers)
+
 .EXAMPLE
 PS> Get-AccountSID "USERNAME" -Server "COMPUTERNAME"
+
 .EXAMPLE
 PS> Get-AccountSID @("USERNAME1", "USERNAME2") -CIM
+
 .INPUTS
 [string[]] array of user names
+
 .OUTPUTS
 [string] SID's (security identifiers)
+
 .NOTES
 TODO: CIM switch is not supported on PowerShell Core, meaning contacting remote computers
 is supported only on Windows PowerShell

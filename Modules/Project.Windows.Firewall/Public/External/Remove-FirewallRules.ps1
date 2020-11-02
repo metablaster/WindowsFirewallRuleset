@@ -30,32 +30,42 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Removes firewall rules according to a list in a CSV or JSON file.
+
 .DESCRIPTION
 Removes firewall rules according to a with Export-FirewallRules generated list in a CSV or JSON file.
 CSV files have to be separated with semicolons. Only the field Name or - if Name is missing - DisplayName
 is used, all other fields can be omitted
+
 .PARAMETER PolicyStore
 Policy store from which remove rules, default is local GPO.
 For more information about stores see:
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/FirewallParameters.md
+
 .PARAMETER Folder
 Folder in which file is located
+
 .PARAMETER FileName
 File name according to which to delete rules
+
 .PARAMETER JSON
 Input file in JSON instead of CSV format
+
 .EXAMPLE
 PS> Remove-FirewallRules
 
 Removes all firewall rules according to a list in the CSV file FirewallRules.csv in the current directory.
+
 .EXAMPLE
 Remove-FirewallRules WmiRules.json -json
 
 Removes all firewall rules according to the list in the JSON file WmiRules.json.
+
 .INPUTS
 None. You cannot pipe objects to Remove-FirewallRules
+
 .OUTPUTS
 None.
+
 .NOTES
 Author: Markus Scholtes
 Version: 1.02

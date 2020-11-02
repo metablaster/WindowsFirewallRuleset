@@ -29,22 +29,29 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Get store apps for specific user
+
 .DESCRIPTION
 Search installed store apps in userprofile for specific user account
+
 .PARAMETER UserName
 User name in form of:
 - domain\user_name
 - user_name@fqn.domain.tld
 - user_name
 - SID-string
+
 .PARAMETER ComputerName
 NETBIOS Computer name in form of "COMPUTERNAME"
+
 .EXAMPLE
 PS> Get-UserApps "USERNAME"
+
 .INPUTS
 None. You cannot pipe objects to Get-UserApps
+
 .OUTPUTS
 [Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage] store app information object
+
 .NOTES
 TODO: query remote computer not implemented
 TODO: multiple computers

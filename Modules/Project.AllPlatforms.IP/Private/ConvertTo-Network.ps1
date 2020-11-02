@@ -50,20 +50,27 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 <#
 .SYNOPSIS
 Converts IP address formats to a set a known styles.
+
 .DESCRIPTION
 ConvertTo-Network ensures consistent values are recorded from parameters which must handle differing addressing formats.
 This Cmdlet allows all other the other functions in this module to offload parameter handling.
+
 .PARAMETER IPAddress
 Either a literal IP address, a network range expressed as CIDR notation,
 or an IP address and subnet mask in a string.
+
 .PARAMETER SubnetMask
 A subnet mask as an IP address.
+
 .EXAMPLE
 TODO: Provide example
+
 .INPUTS
 None. You cannot pipe objects to ConvertTo-Network
+
 .OUTPUTS
 TODO: describe outputs
+
 .NOTES
 Change log:
 	05/03/2016 - Chris Dent - Refactored and simplified.

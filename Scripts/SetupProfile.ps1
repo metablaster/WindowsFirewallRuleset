@@ -29,15 +29,20 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Setup firewall profile, network profile and global firewall behavior
+
 .DESCRIPTION
 Set all 3 firewall profiles, network adapter profile (default profile)
 and global firewall behavior.
+
 .EXAMPLE
-PS> SetupProfile.ps1
+PS> .\SetupProfile.ps1
+
 .INPUTS
-None.
+None. You cannot pipe objects to SetupProfile.ps1
+
 .OUTPUTS
-None.
+None. SetupProfile.ps1 does not generate any output
+
 .NOTES
 None.
 #>

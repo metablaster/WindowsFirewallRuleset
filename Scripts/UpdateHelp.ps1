@@ -29,29 +29,39 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Generate or update help files for all project modules
+
 .DESCRIPTION
 UpdateHelp.ps1 Updates existing or generates new help files for all modules
 that are part of "Windows Firewall Ruleset" repository
 These Help files are used for online help (Get-Help -Online) and
 updatable help for (Update-Help)
+
 .PARAMETER Module
 Specify module name for which to generate help files.
 The default is all repository modules
+
 .PARAMETER SupportedUICulture
 Supported UI cultures for which to generate help files, the default is en-US
+
 .PARAMETER Encoding
 Specify encoding for help files.
 The default is set by global variable, UTF8 no BOM for Core or UTF8 with BOM for Desktop edition
+
 .EXAMPLE
-UpdateHelp.ps1
+PS> .\UpdateHelp.ps1
+
 .EXAMPLE
-UpdateHelp.ps1 -IncrementVersion
+PS> .\UpdateHelp.ps1 -IncrementVersion
+
 .EXAMPLE
-UpdateHelp.ps1 SupportedUICulture @(en-US, fr-FR, jp-JP) -Encoding utf8
+PS> .\UpdateHelp.ps1 SupportedUICulture @(en-US, fr-FR, jp-JP) -Encoding utf8
+
 .INPUTS
 None. You cannot pipe objects to UpdateHelp.ps1
+
 .OUTPUTS
 None. UpdateHelp.ps1 does not generate any output
+
 .NOTES
 See CONTRIBUTING.md in "documentation" section for examples of comment based help that will
 produce errors while generating online help and how to avoid them.

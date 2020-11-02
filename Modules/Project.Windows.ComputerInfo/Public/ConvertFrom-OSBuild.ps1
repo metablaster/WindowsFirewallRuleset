@@ -29,19 +29,25 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Convert from OS build number to OS version
+
 .DESCRIPTION
 Convert from OS build number to OS version associated with build.
 Note that "OS version" is not the same as "OS release version"
+
 .PARAMETER Build
 Operating system build number
+
 .EXAMPLE
 PS> ConvertFrom-OSBuild 18363.1049
 
 1909
+
 .INPUTS
 None. you can't p to ConvertFrom-OSBuild
+
 .OUTPUTS
 None.
+
 .NOTES
 TODO: OutputType not consistent
 #>

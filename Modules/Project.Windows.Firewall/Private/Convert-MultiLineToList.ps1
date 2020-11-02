@@ -29,21 +29,28 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Convert multi line string array to single line string
+
 .DESCRIPTION
 Convert multi line string array to single line string
 `r is encoded as %% and `n as ||
+
 .PARAMETER MultiLine
 String array which to convert
+
 .PARAMETER JSON
 Input string will go to JSON file, meaning no need to encode
+
 .EXAMPLE
 PS> Convert-MultiLineToList "Some`rnString"
 
 Some||String
+
 .INPUTS
 None. You cannot pipe objects to Convert-MultiLineToList
+
 .OUTPUTS
 [string] comma separated list
+
 .NOTES
 None.
 #>

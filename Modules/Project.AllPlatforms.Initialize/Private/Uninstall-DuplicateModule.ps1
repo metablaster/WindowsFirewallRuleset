@@ -29,30 +29,38 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Force remove module
+
 .DESCRIPTION
 Uninstall-DuplicateModule removes modules which are otherwise not removable, example cases are:
 1. modules that ship with system
 2. modules locked by other modules
 Case from point 2 is recommended only when there are 2 exactly same modules installed,
 but the duplicate you are trying to remove is used (locked) instead of first one
+
 .PARAMETER ModulePath
 Full path to the module root installation directory,
 Warning, if the root directory contains multiple module versions all of them will be uninstalled
+
 .PARAMETER Module
 Explicit module object which to uninstall
+
 .EXAMPLE
 PS> Uninstall-DuplicateModule "C:\Users\User\Documents\PowerShell\Modules\PackageManagement"
 
 Module PackageManagement was removed
+
 .EXAMPLE
 PS> Get-Module SomeDupeModule | Uninstall-DuplicateModule
 
 Module SomeDupeModule was removed
+
 .INPUTS
 [string] path to module base
 [PSModuleInfo] module object
+
 .OUTPUTS
 None.
+
 .NOTES
 Target module must not be in use by:
 1. Other PowerShell session

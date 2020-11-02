@@ -29,28 +29,37 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Gets the encoding of a file
+
 .DESCRIPTION
 Gets the encoding of a file, if the encoding can't be determined, ex. the file
 contains unicode charaters but no BOM, then by default UTF-8 is assumed.
+
 .PARAMETER FilePath
 The path of the file to get the encoding of
+
 .PARAMETER Encoding
 Default encoding for non ASCII files.
 The default is set by global variable, UTF8 no BOM for Core or UTF8 with BOM for Desktop edition
+
 .EXAMPLE
 PS> Get-FileEncoding .\utf8BOM.txt
 utf-8 with BOM
+
 .EXAMPLE
 PS> Get-FileEncoding .\utf32.txt
 utf-32
+
 .EXAMPLE
 PS> Get-FileEncoding .\utf32.txt
 utf-32
+
 .INPUTS
 None. You cannot pipe objects to Get-FileEncoding
+
 .OUTPUTS
 [string]
 Encoding type of a file
+
 .NOTES
 TODO: utf-16LE detected as utf-16 with BOM
 NOTE: This function is based on (but is not) sample from "Windows PowerShell Cookbook"

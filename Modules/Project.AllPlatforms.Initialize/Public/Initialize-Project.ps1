@@ -29,36 +29,46 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Check system requirements for this project
+
 .DESCRIPTION
 Initialize-Project is designed for "Windows Firewall Ruleset", it first prints a short watermark,
 tests for OS, PowerShell version and edition, Administrator mode, .NET Framework version, checks if
 required system services are started and recommended modules installed.
 If not the function may exit and stop executing scripts.
+
 .PARAMETER NoProjectCheck
 If supplied, checking for project requirements and recommendations will not be performed,
 This is equivalent to function that does nothing.
 Note that this parameter is managed by project settings
+
 .PARAMETER NoModulesCheck
 If supplied, checking for required and recommended module updates will not be performed.
 Note that this parameter is managed by project settings
+
 .PARAMETER NoServicesCheck
 If supplied, checking if required system services are running will not be performed.
 Note that this parameter is managed by project settings
+
 .PARAMETER Abort
 If specified exit is called on failure instead of return
+
 .EXAMPLE
 PS> Initialize-Project
 Performs default requirements and recommendations checks managed by global settings,
 Error or warning message is shown if check failed, environment info otherwise.
+
 .EXAMPLE
 PS> Initialize-Project -NoModulesCheck
 Performs default requirements and recommendations checks managed by global settings,
 except installed modules are not validated.
 Error or warning message is shown if check failed, environment info otherwise.
+
 .INPUTS
 None. You cannot pipe objects to Initialize-Project
+
 .OUTPUTS
 None.
+
 .NOTES
 This function main purpose is automated development environment setup to be able to perform quick
 setup on multiple computers and virtual operating systems, in cases such as frequent system restores

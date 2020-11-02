@@ -29,18 +29,25 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Convert comma separated list to String array
+
 .DESCRIPTION
 Convert comma separated list to String array
+
 .PARAMETER List
 TODO: describe parameter
+
 .PARAMETER DefaultValue
 TODO: describe parameter
+
 .EXAMPLE
 TODO: provide example and description
+
 .INPUTS
 None. You cannot pipe objects to Convert-ListToArray
+
 .OUTPUTS
 [string[]] array from comma separated list
+
 .NOTES
 TODO: output type
 TODO: DefaultValue can't be string, try string[]

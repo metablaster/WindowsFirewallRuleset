@@ -29,16 +29,22 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Search program install properties for all users, system wide
+
 .DESCRIPTION
 TODO: add description
+
 .PARAMETER ComputerName
 Computer name which to check
+
 .EXAMPLE
 PS> Get-AllUserSoftware "COMPUTERNAME"
+
 .INPUTS
 None. You cannot pipe objects to Get-AllUserSoftware
+
 .OUTPUTS
 [PSCustomObject[]] list of programs installed for all users
+
 .NOTES
 TODO: should be renamed into Get-InstallProperties
 #>

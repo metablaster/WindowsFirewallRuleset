@@ -29,20 +29,27 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Merge 2 SDDL strings into one
+
 .DESCRIPTION
 This function helps to merge 2 SDDL strings into one
+
 .PARAMETER RefSDDL
 Reference to SDDL into which to merge new SDDL
+
 .PARAMETER NewSDDL
 New SDDL string which to merge with reference SDDL
+
 .EXAMPLE
 $RefSDDL = "D:(A;;CC;;;S-1-5-32-545)(A;;CC;;;S-1-5-32-544)
 $NewSDDL = "D:(A;;CC;;;S-1-5-32-333)(A;;CC;;;S-1-5-32-222)"
 Merge-SDDL ([ref] $RefSDDL) $NewSDDL
+
 .INPUTS
 None. You cannot pipe objects to Merge-SDDL
+
 .OUTPUTS
 None. Referenced SDDL is expanded with new one
+
 .NOTES
 TODO: Validate input using regex
 TODO: Process an array of SDDL's

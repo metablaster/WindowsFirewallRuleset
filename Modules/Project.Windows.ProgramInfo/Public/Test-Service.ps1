@@ -29,16 +29,22 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Check if service exists on system
+
 .DESCRIPTION
 Check if service exists on system, if not show warning message
+
 .PARAMETER Service
 Service name (not display name)
+
 .EXAMPLE
 PS> Test-Service dnscache
+
 .INPUTS
 None. You cannot pipe objects to Test-Service
+
 .OUTPUTS
 None. Warning and info message if service not found
+
 .NOTES
 None.
 #>

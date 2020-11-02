@@ -29,22 +29,29 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Convert encoded single line string to multi line string array
+
 .DESCRIPTION
 Convert encoded single line string to multi line CRLF string array
 Input string `r is encoded as %% and `n as ||
+
 .PARAMETER MultiLine
 String which to convert
+
 .PARAMETER JSON
 Input string is from JSON file, meaning no need to decode
+
 .EXAMPLE
 PS> Convert-ListToMultiLine "Some%%||String"
 
 Some
 String
+
 .INPUTS
 None. You cannot pipe objects to Convert-ListToMultiLine
+
 .OUTPUTS
 [string] multi line string
+
 .NOTES
 None.
 #>

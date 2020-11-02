@@ -50,19 +50,25 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 <#
 .SYNOPSIS
 Converts a Decimal IP address into a 32-bit unsigned integer.
+
 .DESCRIPTION
 ConvertTo-DecimalIP takes a decimal IP,
 uses a shift operation on each octet and returns a single UInt32 value.
+
 .PARAMETER IPAddress
 An IP Address to convert.
+
 .EXAMPLE
 PS> ConvertTo-DecimalIP 1.2.3.4
 
 Converts an IP address to an unsigned 32-bit integer value.
+
 .INPUTS
 System.Net.IPAddress
+
 .OUTPUTS
 TODO: describe outputs
+
 .NOTES
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions

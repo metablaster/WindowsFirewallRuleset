@@ -29,18 +29,25 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Get One Drive information for specific user
+
 .DESCRIPTION
 Search installed One Drive instance in userprofile for specific user account
+
 .PARAMETER UserName
 User name in form of "USERNAME"
+
 .PARAMETER ComputerName
 NETBIOS Computer name in form of "COMPUTERNAME"
+
 .EXAMPLE
 PS> Get-OneDrive "USERNAME"
+
 .INPUTS
 None. You cannot pipe objects to Get-OneDrive
+
 .OUTPUTS
 [PSCustomObject[]] OneDrive program info for specified user on a target computer
+
 .NOTES
 TODO: We should make a query for an array of users, will help to save into variable,
 this is duplicate comment of Get-UserSoftware

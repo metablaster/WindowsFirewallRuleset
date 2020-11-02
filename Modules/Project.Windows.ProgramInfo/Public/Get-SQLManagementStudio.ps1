@@ -29,10 +29,13 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Get installed Microsoft SQL Server Management Studios
+
 .DESCRIPTION
 TODO: add description
+
 .PARAMETER ComputerName
 Computer name for which to list installed installed framework
+
 .EXAMPLE
 PS> Get-SQLManagementStudio COMPUTERNAME
 
@@ -42,8 +45,10 @@ PS> Get-SQLManagementStudio COMPUTERNAME
 
 .INPUTS
 None. You cannot pipe objects to Get-SQLManagementStudio
+
 .OUTPUTS
 [PSCustomObject[]] for installed Microsoft SQL Server Management Studio's
+
 .NOTES
 None.
 #>

@@ -29,15 +29,20 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Set vertical screen buffer to recommended value
+
 .DESCRIPTION
 In some cases, depending on project settings a user might need larger buffer
 to preserve all the output in the console for review and scroll back.
+
 .EXAMPLE
 PS> Set-ScreenBuffer
+
 .INPUTS
 None. You cannot pipe objects to Set-ScreenBuffer
+
 .OUTPUTS
 None. Screen buffer is set for current powershell session
+
 .NOTES
 None.
 #>

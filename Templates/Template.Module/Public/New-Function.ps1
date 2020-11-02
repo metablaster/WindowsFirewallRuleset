@@ -28,48 +28,31 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-A brief description of the  function.
+A brief description of the function.
 This keyword can be used only once in each topic.
 
 .DESCRIPTION
-A detailed description of the  function.
+A detailed description of the function.
 This keyword can be used only once in each topic.
 
 .PARAMETER Param
-The description of a parameter. Add a ".PARAMETER" keyword for each parameter
-in the  function syntax.
+The description of a parameter.
+Repeat ".PARAMETER" keyword for each parameter.
 
 .EXAMPLE
-A sample command that uses the  function,
-optionally followed by sample output and a description. Repeat this keyword for each example.
+PS> New-Function
+
+Repeat ".EXAMPLE" keyword for each example.
 
 .INPUTS
-The Microsoft .NET Framework types of objects that can be piped to the  function.
-You can also include a description of the input objects.
+None. You cannot pipe objects to New-Function
 
 .OUTPUTS
-The .NET Framework type of the objects that the cmdlet returns.
-You can also include a description of the returned objects.
+None. New-Function does not generate any output
 
 .NOTES
-Additional information about the  function.
+None.
 TODO: Update Copyright and start implementing module function
-
-.LINK
-The name of a related topic. The value appears on the line below the ".LINK" keyword and must
-be preceded by a comment symbol # or included in the comment block.
-
-.COMPONENT
-The technology or feature that the  function uses, or to which it is related.
-This content appears when the Get-Help command includes the Component parameter of Get-Help.
-
-.ROLE
-The user role for the help topic. This content appears when the Get-Help command includes
-the Role parameter of Get-Help.
-
-.FUNCTIONALITY
-The intended use of the function. This content appears when the Get-Help command includes
-the Functionality parameter of Get-Help.
 #>
 function New-Function
 {

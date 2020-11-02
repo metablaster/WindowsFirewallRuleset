@@ -63,6 +63,12 @@ PS> .\RestartNetwork.ps1 -KeepIP
 .EXAMPLE
 PS> .\RestartNetwork.ps1 MyUsername -KeepDNS -Reset
 
+.INPUTS
+None. You cannot pipe objects to RestartNetwork.ps1
+
+.OUTPUTS
+None. RestartNetwork.ps1 does not generate any output
+
 .NOTES
 TODO: IP protocol parameter
 TODO: Utilize all parameters for commandlets to make sure all is reset to default

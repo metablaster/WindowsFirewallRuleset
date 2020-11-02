@@ -29,19 +29,25 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Get capabilities of Windows store app
+
 .DESCRIPTION
 Get-AppCapability returns a list of capabilities for an app in one of the following formats:
 2. Account display name
 3. Account full reference name
+
 .PARAMETER InputObject
 One or more Windows store apps for which to retrieve capabilities
+
 .PARAMETER User
 Specify user name for which to query app capabilities, this parameter
 is required only if input app is not obtained from main store
+
 .PARAMETER Authority
 If specified outputs full reference name
+
 .PARAMETER Networking
 If specified the result includes only networking capabilities
+
 .EXAMPLE
 PS> Get-AppxPackage -Name "*ZuneMusic*" | Get-AppCapability
 
@@ -49,19 +55,25 @@ Your Internet connection
 Your home or work networks
 Your music library
 Removable storage
+
 .EXAMPLE
 PS> Get-AppCapability -Authority -InputObject (Get-AppxPackage -Name "*ZuneMusic*") -Networking
 
 APPLICATION PACKAGE AUTHORITY\Your Internet connection
 APPLICATION PACKAGE AUTHORITY\Your home or work networks
+
 .INPUTS
 [Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage[]]
+
 .OUTPUTS
 [string[]] Capability names or full reference names for capabilities of an app
+
 .NOTES
 None.
+
 .LINK
 https://docs.microsoft.com/en-us/windows/uwp/packaging/app-capability-declarations
+
 .LINK
 https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/generate-package-manifest
 #>

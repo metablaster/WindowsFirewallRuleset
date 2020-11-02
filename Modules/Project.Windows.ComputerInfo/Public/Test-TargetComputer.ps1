@@ -29,24 +29,33 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Test target computer (policy store) on which to apply firewall
+
 .DESCRIPTION
 The purpose of this function is to reduce typing checks depending on whether PowerShell
 core or desktop edition is used, since parameters for Test-Connection are not the same
 for both PowerShell editions.
+
 .PARAMETER ComputerName
 Target computer which to test
+
 .PARAMETER Count
 Valid only for PowerShell Core. Specifies the number of echo requests to send. The default value is 4
+
 .PARAMETER Timeout
 Valid only for PowerShell Core. The test fails if a response isn't received before the timeout expires
+
 .EXAMPLE
 PS> Test-TargetComputer "COMPUTERNAME" 2 1
+
 .EXAMPLE
 PS> Test-TargetComputer "COMPUTERNAME"
+
 .INPUTS
 None. You cannot pipe objects to Test-TargetComputer
+
 .OUTPUTS
 [bool] false or true if target host is responsive
+
 .NOTES
 TODO: Avoid error message, check all references which handle errors (code bloat)
 TODO: We should check for common issues for GPO management, not just ping status (ex. Test-NetConnection)

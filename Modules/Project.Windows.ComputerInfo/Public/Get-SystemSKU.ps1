@@ -29,21 +29,28 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Get operating system SKU information
+
 .DESCRIPTION
 Get the SKU (Stock Keeping Unit) information for one or multiple target computers,
 or translate SKU number to SKU
+
 .PARAMETER SKU
 Operating system SKU number, can't be used with ComputerName parameter
+
 .PARAMETER ComputerName
 One or more computer names, can't be used with SKU parameter
+
 .EXAMPLE
 PS> Get-SystemSKU
 
 Home Premium N
+
 .INPUTS
 None. You cannot pipe objects to Get-SystemSKU
+
 .OUTPUTS
 [PSCustomObject[]] array with Computer/SKU value pairs
+
 .NOTES
 TODO: accept UPN and NETBIOS computer names
 TODO: ComputerName default value is just a placeholder to be able to use foreach

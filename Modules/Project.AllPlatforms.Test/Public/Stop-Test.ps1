@@ -29,15 +29,20 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Stop test case
+
 .DESCRIPTION
 Stop-Test writes output to console after test case is done
 This function must be called after single test case is done executing
+
 .EXAMPLE
 PS> Stop-Test
+
 .INPUTS
 None. You cannot pipe objects to Stop-Test
+
 .OUTPUTS
 None.
+
 .NOTES
 None.
 #>

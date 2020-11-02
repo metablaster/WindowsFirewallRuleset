@@ -29,15 +29,20 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Import all previously exported firewall rules
+
 .DESCRIPTION
 ImportFirewall script imports all firewall rules that were previously
 exported with ExportFirewall.ps1 script
+
 .EXAMPLE
-PS> ImportFirewall.ps1
+PS> .\ImportFirewall.ps1
+
 .INPUTS
-None.
+None. You cannot pipe objects to ImportFirewall.ps1
+
 .OUTPUTS
-None.
+None. ImportFirewall.ps1 does not generate any output
+
 .NOTES
 None.
 #>

@@ -29,16 +29,21 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Get modules that can be updated with no error
+
 .DESCRIPTION
 Find-UpdatableModule retrieves modules that can be updated without error,
 the list of modules can then be used for Update-Help to minimize Update-Help errors
 Without any parameters all available modules on system are checked
+
 .PARAMETER Module
 Optional list of module names for which to check if they can be updated
+
 .PARAMETER FullyQualifiedName
 Optional module to check in the form of ModuleSpecification object
+
 .PARAMETER UICulture
 Find updatable modules only for specified UI culture values
+
 .EXAMPLE
 PS> Find-UpdatableModule
 
@@ -47,12 +52,14 @@ PowerShellGet
 CimCmdlets
 Microsoft.PowerShell.Archive
 PSDesiredStateConfiguration
+
 .EXAMPLE
 PS> Find-UpdatableModule -FullyQualifiedName @{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" }
 
 Culture                        en-US
 CultureVersion                 5.0.0.0
 Name                           WindowsErrorReporting
+
 .EXAMPLE
 PS> @("PowerShellGet", "PackageManagement", "PSScriptAnalyzer") | Find-UpdatableModule
 
@@ -62,6 +69,7 @@ Name                           PowerShellGet
 Culture                        en-US
 CultureVersion                 5.2.0.0
 Name                           PackageManagement
+
 .EXAMPLE
 PS> Find-UpdatableModule "PowerShellGet" -UICulture ja-JP, en-US
 
@@ -73,11 +81,14 @@ Name                           PowerShellGet
 Culture                        ja-JP
 CultureVersion                 5.2.0.0
 Name                           PowerShellGet
+
 .INPUTS
 [string[]] one or multiple module names to check
 [hashtable] fully qualified module name in the form of ModuleSpecification object
+
 .OUTPUTS
 [PSCustomObject] module name ready for help files update
+
 .NOTES
 This function main purpose is automated development environment setup to be able to perform quick
 setup on multiple computers and virtual operating systems, in cases such as frequent system restores

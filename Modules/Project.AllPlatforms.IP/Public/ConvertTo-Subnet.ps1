@@ -50,28 +50,40 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 <#
 .SYNOPSIS
 Convert a start and end IP address to the closest matching subnet.
+
 .DESCRIPTION
 ConvertTo-Subnet attempts to convert a starting and ending IP address from a range to the closest subnet.
+
 .PARAMETER IPAddress
 Any IP address in the subnet.
+
 .PARAMETER SubnetMask
 A subnet mask.
+
 .PARAMETER Start
 The first IP address from a range.
+
 .PARAMETER End
 The last IP address from a range.
+
 .EXAMPLE
 PS> ConvertTo-Subnet -Start 0.0.0.0 -End 255.255.255.255
+
 .EXAMPLE
 PS> ConvertTo-Subnet -Start 192.168.0.1 -End 192.168.0.129
+
 .EXAMPLE
 PS> ConvertTo-Subnet 10.0.0.23/24
+
 .EXAMPLE
 PS> ConvertTo-Subnet 10.0.0.23 255.255.255.0
+
 .INPUTS
 None. You cannot pipe objects to ConvertTo-Subnet
+
 .OUTPUTS
 TODO: describe outputs
+
 .NOTES
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions

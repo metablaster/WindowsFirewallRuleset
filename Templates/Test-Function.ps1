@@ -33,6 +33,9 @@ Unit test for Test-Function
 .DESCRIPTION
 Use Test-Function.ps1 as a template to test out module functions
 
+.EXAMPLE
+PS> .\Test-Function.ps1
+
 .INPUTS
 None. You cannot pipe objects to Test-Function.ps1
 

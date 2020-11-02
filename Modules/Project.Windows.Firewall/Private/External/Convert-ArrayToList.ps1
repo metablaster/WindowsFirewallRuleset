@@ -29,16 +29,22 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Convert String array to comma separated list
+
 .DESCRIPTION
 Convert String array to comma separated list
+
 .PARAMETER StringArray
 String array which to convert
+
 .EXAMPLE
 TODO: provide example and description
+
 .INPUTS
 None. You cannot pipe objects to Convert-ArrayToList
+
 .OUTPUTS
 [string] comma separated list
+
 .NOTES
 None.
 #>

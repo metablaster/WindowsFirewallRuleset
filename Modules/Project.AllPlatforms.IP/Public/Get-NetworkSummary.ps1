@@ -50,24 +50,33 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 <#
 .SYNOPSIS
 Generates a summary describing several properties of a network range
+
 .DESCRIPTION
 Get-NetworkSummary uses many of the IP conversion commands to provide a summary of a
 network range from any IP address in the range and a subnet mask.
+
 .PARAMETER IPAddress
 Either a literal IP address, a network range expressed as CIDR notation,
 or an IP address and subnet mask in a string.
+
 .PARAMETER SubnetMask
 A subnet mask as an IP address.
+
 .EXAMPLE
 PS> Get-NetworkSummary 192.168.0.1 255.255.255.0
+
 .EXAMPLE
 PS> Get-NetworkSummary 10.0.9.43/22
+
 .EXAMPLE
 PS> Get-NetworkSummary 0/0
+
 .INPUTS
 System.String
+
 .OUTPUTS
 TODO: describe outputs
+
 .NOTES
 Following changes by metablaster:
 - Include licenses and move comment based help outside of functions

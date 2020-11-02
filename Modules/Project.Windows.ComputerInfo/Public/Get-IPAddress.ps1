@@ -29,29 +29,41 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Method to get list of IP addresses on local machine
+
 .DESCRIPTION
 Returns list of IPAddress objects for all configured adapters.
 This could include both physical and virtual adapters.
+
 .PARAMETER AddressFamily
 IP version for which to obtain address, IPv4 or IPv6
+
 .PARAMETER ExcludeHardware
 Exclude hardware/physical network adapters
+
 .PARAMETER IncludeAll
 Include all possible adapter types present on target computer
+
 .PARAMETER IncludeVirtual
 Whether to include virtual adapters
+
 .PARAMETER IncludeHidden
 Whether to include hidden adapters
+
 .PARAMETER IncludeDisconnected
 Whether to include disconnected
+
 .EXAMPLE
 PS> Get-IPAddress "IPv4"
+
 .EXAMPLE
 PS> Get-IPAddress "IPv6"
+
 .INPUTS
 None. You cannot pipe objects to Get-IPAddress
+
 .OUTPUTS
 [IPAddress[]] Array of IP addresses and warning message if no adapter connected
+
 .NOTES
 None.
 #>

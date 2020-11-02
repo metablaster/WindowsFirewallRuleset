@@ -29,21 +29,27 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Start test case
+
 .DESCRIPTION
 Start-Test writes output to host to separate test cases
 This function must be called before single test case starts executing
+
 .PARAMETER Message
 Message to format and print before test case begins
+
 .EXAMPLE
 PS> Start-Test "Get-Something"
 
 **************************
 * Testing: Get-Something *
 **************************
+
 .INPUTS
 None. You cannot pipe objects to Start-Test
+
 .OUTPUTS
 None. Formatted message block is shown in the console
+
 .NOTES
 TODO: switch for no new line, some tests will produce redundant new lines, ex. Format-Table in pipeline
 #>

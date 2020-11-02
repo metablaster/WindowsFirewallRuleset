@@ -29,19 +29,25 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Create data table used to hold information for a list of programs
+
 .DESCRIPTION
 Create data table which is filled with data about programs and principals such
 as users or groups and their SID for which given firewall rule applies
 This method is primarily used to reset the table
 Each entry in the table also has an ID to help choosing entries by ID
+
 .PARAMETER TableName
 Table name
+
 .EXAMPLE
 PS> Initialize-Table
+
 .INPUTS
 None. You cannot pipe objects to Initialize-Table
+
 .OUTPUTS
 None. Module scope installation table with initial columns is created
+
 .NOTES
 TODO: There should be a better way to drop the table instead of recreating it
 TODO: We should initialize table with complete list of programs and principals and

@@ -29,16 +29,22 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Check if input path leads to user profile
+
 .DESCRIPTION
 User profile paths are not valid for firewall rules, this method help to check if this is true
+
 .PARAMETER FilePath
 File path to check, can be unformatted or have environment variables
+
 .EXAMPLE
 PS> Test-UserProfile "C:\Users\User\AppData\Local\Google\Chrome\Application\chrome.exe"
+
 .INPUTS
 None. You cannot pipe objects to Test-UserProfile
+
 .OUTPUTS
 [bool] true if userprofile path or false otherwise
+
 .NOTES
 TODO: is it possible to nest this into Test-Environment somehow?
 TODO: This should proably be inside Utility or UserInfo module

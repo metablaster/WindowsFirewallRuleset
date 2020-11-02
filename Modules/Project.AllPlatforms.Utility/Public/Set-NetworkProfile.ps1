@@ -29,15 +29,20 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Set network profile for physical network interfaces
+
 .DESCRIPTION
 Set network profile for each physical/hardware network interfaces
 Recommended is 'Public' profile for maximum security, unless 'Private' is needed
+
 .EXAMPLE
 PS> Set-NetworkProfile
+
 .INPUTS
 None. You cannot pipe objects to Set-NetworkProfile
+
 .OUTPUTS
 None.
+
 .NOTES
 None.
 #>

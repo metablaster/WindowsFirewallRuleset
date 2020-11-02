@@ -29,16 +29,22 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Manually add new program installation directory to the table
+
 .DESCRIPTION
 Based on path and if it's valid path fill the table with it and add principals and other information
+
 .PARAMETER InstallLocation
 Program installation directory
+
 .EXAMPLE
 PS> Edit-Table "%ProgramFiles(x86)%\TeamViewer"
+
 .INPUTS
 None. You cannot pipe objects to Edit-Table
+
 .OUTPUTS
 None. Module scope installation table is updated
+
 .NOTES
 TODO: principal parameter?
 TODO: search executable paths

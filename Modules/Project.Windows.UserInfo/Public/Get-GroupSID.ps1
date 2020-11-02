@@ -29,22 +29,31 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Get SID of user groups for given computer
+
 .DESCRIPTION
 Get SID's for single or multiple user groups on a target computer
+
 .PARAMETER UserGroups
 Array of user groups or single group name
+
 .PARAMETER ComputerName
 Computer name which to query for group users
+
 .PARAMETER CIM
 Whether to contact CIM server (required for remote computers)
+
 .EXAMPLE
 PS> Get-GroupSID "USERNAME" -Machine "COMPUTERNAME"
+
 .EXAMPLE
 PS> Get-GroupSID @("USERNAME1", "USERNAME2") -CIM
+
 .INPUTS
 [string[]] array of group names
+
 .OUTPUTS
 [string] SID's (security identifiers)
+
 .NOTES
 CIM switch is not supported on PowerShell Core, meaning contacting remote computers
 is supported only on Windows PowerShell

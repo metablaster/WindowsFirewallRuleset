@@ -29,21 +29,28 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Test if given installation directory is valid
+
 .DESCRIPTION
 Test if given installation directory is valid and if not this method will search the
 system for valid path and return it via reference parameter
+
 .PARAMETER Program
 Predefined program name for which to search
+
 .PARAMETER FilePath
 Reference to variable which holds a path to program (excluding executable)
+
 .EXAMPLE
 PS> $MyProgram = "%ProgramFiles(x86)%\Microsoft Office\root\Office16"
 PS> Test-Installation "Office" ([ref] $MyProgram)
+
 .INPUTS
 None. You cannot pipe objects to Test-Installation
+
 .OUTPUTS
 [bool] true if path is ok or found false otherwise,
 via reference, if test OK same path, if not try to update path, else given path back is not modified
+
 .NOTES
 TODO: temporarily using ComputerName parameter
 #>

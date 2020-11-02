@@ -29,18 +29,25 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Get a list of programs installed by specific user
+
 .DESCRIPTION
 Search installed programs in userprofile for specific user account
+
 .PARAMETER UserName
 User name in form of "USERNAME"
+
 .PARAMETER ComputerName
 NETBIOS Computer name in form of "COMPUTERNAME"
+
 .EXAMPLE
 PS> Get-UserSoftware "USERNAME"
+
 .INPUTS
 None. You cannot pipe objects to Get-UserSoftware
+
 .OUTPUTS
 [PSCustomObject[]] list of programs for specified user on a target computer
+
 .NOTES
 TODO: We should make a query for an array of users, will help to save into variable
 #>

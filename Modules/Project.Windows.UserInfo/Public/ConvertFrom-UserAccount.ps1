@@ -29,19 +29,26 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Strip computer names out of computer accounts
+
 .DESCRIPTION
 ConvertFrom-UserAccount is a helper method to reduce typing common code
 related to splitting up user accounts
+
 .PARAMETER UserAccount
 One or more user accounts in form of: COMPUTERNAME\USERNAME
+
 .EXAMPLE
 PS> ConvertFrom-UserAccount COMPUTERNAME\USERNAME
+
 .EXAMPLE
 PS> ConvertFrom-UserAccount SERVER\USER, COMPUTER\USER, SERVER2\USER2
+
 .INPUTS
 None. You cannot pipe objects to ConvertFrom-UserAccount
+
 .OUTPUTS
 [string[]] array of usernames in form of: USERNAME
+
 .NOTES
 None.
 #>

@@ -29,18 +29,25 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Get store app SID
+
 .DESCRIPTION
 Get SID for single store app if the app exists
+
 .PARAMETER UserName
 Username for which to query app SID
+
 .PARAMETER AppName
 "PackageFamilyName" string
+
 .EXAMPLE
 PS> Get-AppSID "User" "Microsoft.MicrosoftEdge_8wekyb3d8bbwe"
+
 .INPUTS
 None. You cannot pipe objects to Get-AppSID
+
 .OUTPUTS
 [string] store app SID (security identifier) if app found
+
 .NOTES
 TODO: Test if path exists
 TODO: remote computers?

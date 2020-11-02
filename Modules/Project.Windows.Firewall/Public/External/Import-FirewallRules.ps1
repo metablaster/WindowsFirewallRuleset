@@ -30,33 +30,43 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Imports firewall rules from a CSV or JSON file.
+
 .DESCRIPTION
 Imports firewall rules generated with Export-FirewallRules, CSV or JSON file.
 CSV files have to be separated with semicolons.
 Existing rules with same name will be overwritten.
+
 .PARAMETER PolicyStore
 Policy store into which to import rules, default is local GPO.
 For more information about stores see:
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/FirewallParameters.md
+
 .PARAMETER Folder
 Path to directory where exported rules file is located
+
 .PARAMETER FileName
 Input file
+
 .PARAMETER JSON
 Input from JSON instead of CSV format
+
 .EXAMPLE
 PS> Import-FirewallRules
 
 Imports all firewall rules in the CSV file FirewallRules.csv
 If no file is specified, FirewallRules .csv or .json in the current directory is searched.
+
 .EXAMPLE
 PS> Import-FirewallRules WmiRules.csv CSV
 
 Imports all firewall rules in the SCV file WmiRules.csv
+
 .INPUTS
 None. You cannot pipe objects to Import-FirewallRules
+
 .OUTPUTS
 None.
+
 .NOTES
 Author: Markus Scholtes
 Version: 1.02

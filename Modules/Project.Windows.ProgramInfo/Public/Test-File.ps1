@@ -29,16 +29,22 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Check if file such as an *.exe exists
+
 .DESCRIPTION
 In addition to Test-Path of file, message and stack trace is shown
+
 .PARAMETER FilePath
 path to file
+
 .EXAMPLE
 PS> Test-File "C:\Users\User\AppData\Local\Google\Chrome\Application\chrome.exe"
+
 .INPUTS
 None. You cannot pipe objects to Test-File
+
 .OUTPUTS
 None. Warning message if file not found
+
 .NOTES
 TODO: We should attempt to fix the path if invalid here!
 TODO: We should return true or false and conditionally load rule

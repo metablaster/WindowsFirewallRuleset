@@ -29,16 +29,22 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Get installed Windows Defender
+
 .DESCRIPTION
 TODO: add description
+
 .PARAMETER ComputerName
 Computer name for which to list installed Windows Defender
+
 .EXAMPLE
 PS> Get-WindowsDefender COMPUTERNAME
+
 .INPUTS
 None. You cannot pipe objects to Get-WindowsDefender
+
 .OUTPUTS
 [PSCustomObject] for installed Windows Defender, version and install paths
+
 .NOTES
 None.
 #>

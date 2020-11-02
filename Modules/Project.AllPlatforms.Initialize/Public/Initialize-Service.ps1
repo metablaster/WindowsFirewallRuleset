@@ -29,23 +29,30 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Check if required system services are started
+
 .DESCRIPTION
 Test if required system services are started, if not all services on which target service depends
 are started before starting requested service and setting it to automatic startup.
 Some services are essential for correct firewall and network functioning,
 without essential services project code may result in errors hard to debug
+
 .PARAMETER Services
 An array of services to start
+
 .EXAMPLE
 PS> Initialize-Service @("lmhosts", "LanmanWorkstation", "LanmanServer")
 $true if all input services are started successfully $false otherwise
+
 .EXAMPLE
 PS> Initialize-Service "WinRM"
 $true if WinRM service was started $false otherwise
+
 .INPUTS
 [string[]] One or more service short names to check
+
 .OUTPUTS
 None.
+
 .NOTES
 This function main purpose is automated development environment setup to be able to perform quick
 setup on multiple computers and virtual operating systems, in cases such as frequent system restores

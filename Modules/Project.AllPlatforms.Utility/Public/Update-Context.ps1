@@ -29,23 +29,31 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Update context for Approve-Execute function
+
 .DESCRIPTION
 Execution context is shown in the console every time Approve-Execute is called.
 It helps to know the state and progress of execution.
+
 .PARAMETER Root
 First context string before . (dot)
+
 .PARAMETER Section
 Second context string after . (dot)
+
 .PARAMETER Subsection
 Additional string after -> (arrow)
+
 .EXAMPLE
 PS> Update-Context "IPv4" "Outbound" "RuleGroup"
 
 [IPv4.Outbound -> RuleGroup]
+
 .INPUTS
 None. You cannot pipe objects to Update-Context
+
 .OUTPUTS
 None. Script scope context variable is updated.
+
 .NOTES
 None.
 #>

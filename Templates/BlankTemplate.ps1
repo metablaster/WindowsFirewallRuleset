@@ -28,19 +28,57 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Blank template
+Script template
+
 .DESCRIPTION
-Use BlankTemplate.ps1 as a starting point to write generic tests or templates
+A detailed description of the script.
+This keyword can be used only once in each topic.
+
+.PARAMETER ParameterName
+The description of a parameter. Add a ".PARAMETER" keyword for each parameter
+in the script syntax.
+
+.EXAMPLE
+A sample command that uses the script,
+optionally followed by sample output and a description. Repeat this keyword for each example.
+
 .INPUTS
-None. You cannot pipe objects to BlankTemplate.ps1.
+The Microsoft .NET Framework types of objects that can be piped to the script.
+You can also include a description of the input objects.
+
 .OUTPUTS
-None. BlankTemplate.ps1 does not generate any output.
+The .NET Framework type of the objects that the cmdlet returns.
+You can also include a description of the returned objects.
+
 .NOTES
-None.
+Additional information about the script.
 TODO: Update Copyright and start writing code
+
 .LINK
-None.
+The name of a related topic. The value appears on the line below the ".LINK" keyword and must
+be preceded by a comment symbol # or included in the comment block.
+
+.COMPONENT
+The technology or feature that the script uses, or to which it is related.
+This content appears when the Get-Help command includes the Component parameter of Get-Help.
+
+.ROLE
+The user role for the help topic. This content appears when the Get-Help command includes
+the Role parameter of Get-Help.
+
+.FUNCTIONALITY
+The intended use of the function. This content appears when the Get-Help command includes
+the Functionality parameter of Get-Help.
 #>
+
+# TODO: Remove or update parameter block
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+	"PSReviewUnusedParameter", "", Justification = "This is template script parameter")]
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[ParameterType] $ParameterName
+)
 
 # Initialization
 # TODO: Adjust path to project settings and elevation requirement

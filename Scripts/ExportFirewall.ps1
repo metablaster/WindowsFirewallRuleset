@@ -29,14 +29,19 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Export all firewall rules
+
 .DESCRIPTION
 ExportFirewall.ps1 script exports all firewall rules to "Exports" folder
+
 .EXAMPLE
-PS> ExportFirewall.ps1
+PS> .\ExportFirewall.ps1
+
 .INPUTS
-None.
+None. You cannot pipe objects to ExportFirewall.ps1
+
 .OUTPUTS
-None.
+None. ExportFirewall.ps1 does not generate any output
+
 .NOTES
 None.
 #>

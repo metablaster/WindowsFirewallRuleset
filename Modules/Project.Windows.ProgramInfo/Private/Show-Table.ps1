@@ -29,16 +29,22 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Print installation directories to console
+
 .DESCRIPTION
 Prints found program data which includes program name, program ID, install location etc.
+
 .PARAMETER Caption
 Single line string to print before printing the table
+
 .EXAMPLE
 PS> Show-Table "Table data"
+
 .INPUTS
 None. You cannot pipe objects to Show-Table
+
 .OUTPUTS
 None. Table data is printed to console
+
 .NOTES
 This function is needed to avoid warning of write-host inside non "Show" function
 #>

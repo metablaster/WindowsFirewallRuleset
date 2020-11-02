@@ -29,22 +29,29 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Generates a log file name for Update-Log function
+
 .DESCRIPTION
 Generates a log file name composed of current date and time and appends to input
 log level label and input path.
 The function checks if a path to file exists, if not it creates one.
+
 .PARAMETER Folder
 Path to folder where to save logs
+
 .PARAMETER FileLabel
 File label which precedes date an time, ie Warning or Error.
+
 .EXAMPLE
 PS> Get-LogFile "C:\Logs" "Warning"
 
 Warning_25.02.20 19h.log
+
 .INPUTS
 None. You cannot pipe objects to Get-LogFile
+
 .OUTPUTS
 [string] full path to log file
+
 .NOTES
 TODO: Maybe a separate folder for each day?
 TODO: need to check if drive exists

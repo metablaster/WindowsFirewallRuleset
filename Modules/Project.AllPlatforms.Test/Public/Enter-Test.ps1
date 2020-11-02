@@ -29,17 +29,23 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Initialize unit test
+
 .DESCRIPTION
 Enter-Test initializes unit test, ie. to enable logging
 This function must be called before first test case in single unit test
+
 .PARAMETER File
 Specify name of of the unit test, ie. script file name
+
 .EXAMPLE
 PS> Enter-Test "Get-Something.ps1"
+
 .INPUTS
 None. You cannot pipe objects to Enter-Test
+
 .OUTPUTS
 None.
+
 .NOTES
 TODO: Get file name of unit test automatically
 #>

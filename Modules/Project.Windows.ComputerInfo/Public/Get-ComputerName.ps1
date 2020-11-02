@@ -29,14 +29,19 @@ SOFTWARE.
 <#
 .SYNOPSIS
 Get localhost name
+
 .DESCRIPTION
 TODO: add description
+
 .EXAMPLE
 PS> Get-ComputerName
+
 .INPUTS
 None. You cannot pipe objects to Get-ComputerName
+
 .OUTPUTS
 [string] computer name in form of COMPUTERNAME
+
 .NOTES
 TODO: implement querying computers on network by specifying IP address
 #>

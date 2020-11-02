@@ -46,10 +46,16 @@ Principal domain for which to grant permission.
 By default specified principal gets permission from local machine
 
 .EXAMPLE
-PS> GrantLogs.ps1 USERNAME
+PS> .\GrantLogs.ps1 USERNAME
 
 .EXAMPLE
-PS> GrantLogs.ps1 USERNAME -Computer COMPUTERNAME
+PS> .\GrantLogs.ps1 USERNAME -Computer COMPUTERNAME
+
+.INPUTS
+None. You cannot pipe objects to GrantLogs.ps1
+
+.OUTPUTS
+None. GrantLogs.ps1 does not generate any output
 
 .NOTES
 Running this script makes sense only for custom firewall log location inside repository.
