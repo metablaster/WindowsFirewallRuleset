@@ -35,12 +35,11 @@ A detailed description of the script.
 This keyword can be used only once in each topic.
 
 .PARAMETER ParameterName
-The description of a parameter. Add a ".PARAMETER" keyword for each parameter
-in the script syntax.
+The description of a parameter. Add a ".PARAMETER" keyword for each parameter in the script syntax.
 
 .EXAMPLE
-A sample command that uses the script,
-optionally followed by sample output and a description. Repeat this keyword for each example.
+A sample command that uses the script, optionally followed by sample output and a description.
+Repeat this keyword for each example.
 
 .INPUTS
 The Microsoft .NET Framework types of objects that can be piped to the script.
@@ -55,20 +54,43 @@ Additional information about the script.
 TODO: Update Copyright and start writing code
 
 .LINK
-The name of a related topic. The value appears on the line below the ".LINK" keyword and must
-be preceded by a comment symbol # or included in the comment block.
+The name of a related topic.
+The value appears on the line below the ".LINK" keyword and must be
+preceded by a comment symbol # or included in the comment block.
+
+Repeat the .LINK keyword for each related topic.
+This content appears in the Related Links section of the help topic.
+
+The .LINK keyword content can also include a Uniform Resource Identifier (URI)
+to an online version of the same help topic.
+
+The online version opens when you use the Online parameter of Get-Help.
+The URI must begin with "http" or "https".
+
+.LINK
+https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_comment_based_help?view=powershell-7
+
+.LINK
+https://docs.microsoft.com/en-us/powershell/scripting/developer/help/examples-of-comment-based-help?view=powershell-7
+
+.LINK
+https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/get-help?view=powershell-7
 
 .COMPONENT
 The technology or feature that the script uses, or to which it is related.
 This content appears when the Get-Help command includes the Component parameter of Get-Help.
+-Component parameter displays commands with the specified component value, such as "Exchange"
 
 .ROLE
-The user role for the help topic. This content appears when the Get-Help command includes
-the Role parameter of Get-Help.
+The user role for the help topic.
+This content appears when the Get-Help command includes the Role parameter of Get-Help.
+-Role parameter displays help customized for the specified user role.
+The role that the user plays in an organization.
 
 .FUNCTIONALITY
 The intended use of the function. This content appears when the Get-Help command includes
 the Functionality parameter of Get-Help.
+-Functionality parameter displays help for items with the specified functionality.
 #>
 
 # TODO: Remove or update parameter block
@@ -77,7 +99,7 @@ the Functionality parameter of Get-Help.
 [CmdletBinding()]
 param (
 	[Parameter()]
-	[ParameterType] $ParameterName
+	[string] $ParameterName
 )
 
 # Initialization

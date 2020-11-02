@@ -43,7 +43,7 @@ see Test\Show-SDDL.ps1 for example
 None. You cannot pipe objects to Show-SDDL
 
 .OUTPUTS
-TODO: describe outputs
+[System.String]
 
 .NOTES
 This function is used only for debugging and discovery of object SDDL
@@ -52,7 +52,7 @@ TODO: additional work on function to make it more universal, see if we can make 
 #>
 function Show-SDDL
 {
-	[OutputType([string[]])]
+	[OutputType([string])]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Utility/Help/en-US/Show-SDDL.md"	)]
 	param (

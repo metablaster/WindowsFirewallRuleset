@@ -66,7 +66,7 @@ PS> Resolve-IPAddress "10.[1,2].[0-2].0/24"
 Returns the addresses 10.1.0.0/24, 10.1.1.0/24, 10.1.2.0/24, 10.2.0.0/24, and so on.
 
 .INPUTS
-System.String
+[System.String]
 
 .OUTPUTS
 TODO: describe outputs, define OutputType

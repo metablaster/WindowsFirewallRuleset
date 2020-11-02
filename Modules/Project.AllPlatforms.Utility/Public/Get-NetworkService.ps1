@@ -30,6 +30,9 @@ SOFTWARE.
 .SYNOPSIS
 Scan all scripts in this repository and get windows service names involved in rules
 
+.DESCRIPTION
+A file with the list of services is made
+
 .PARAMETER Folder
 Root folder name which to scan recursively
 
@@ -40,13 +43,14 @@ PS> Get-NetworkService "C:\PathToRepo"
 None. You cannot pipe objects to Get-NetworkService
 
 .OUTPUTS
-None, File with the list of services is made
+None. Get-NetworkService does not generate any output
 
 .NOTES
 None.
 #>
 function Get-NetworkService
 {
+	[OutputType([void])]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Utility/Help/en-US/Get-NetworkService.md")]
 	param (

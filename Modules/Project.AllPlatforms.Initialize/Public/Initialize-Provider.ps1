@@ -54,7 +54,7 @@ PS> Initialize-Provider @{ ModuleName = "PackageManagement"; ModuleVersion = "1.
 None. You cannot pipe objects to Initialize-Provider
 
 .OUTPUTS
-None.
+[System.Boolean]
 
 .NOTES
 This function main purpose is automated development environment setup to be able to perform quick

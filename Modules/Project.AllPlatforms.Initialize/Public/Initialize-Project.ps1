@@ -67,7 +67,7 @@ Error or warning message is shown if check failed, environment info otherwise.
 None. You cannot pipe objects to Initialize-Project
 
 .OUTPUTS
-None.
+None. Initialize-Project does not generate any output
 
 .NOTES
 This function main purpose is automated development environment setup to be able to perform quick

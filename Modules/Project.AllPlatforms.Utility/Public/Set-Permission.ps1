@@ -102,7 +102,7 @@ Allows to ReadAndExecute, ListDirectory and Traverse to 'SomeFolder' and it's co
 None. You cannot pipe objects to Set-Permission
 
 .OUTPUTS
-None.
+[System.Boolean]
 
 .NOTES
 TODO: Manage audit entries

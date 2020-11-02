@@ -41,7 +41,7 @@ PS> Exit-Test
 None. You cannot pipe objects to Exit-Test
 
 .OUTPUTS
-None.
+None. Exit-Test does not generate any output
 
 .NOTES
 None.

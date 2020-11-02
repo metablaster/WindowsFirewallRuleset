@@ -63,10 +63,10 @@ PS> ConvertTo-MaskLength 255.255.255.0
 Returns 24, the length of the mask in bits.
 
 .INPUTS
-System.Net.IPAddress
+[System.Net.IPAddress] A dotted-decimal subnet mask
 
 .OUTPUTS
-TODO: describe outputs
+[System.String] Subnet mask length
 
 .NOTES
 Following changes by metablaster:
@@ -76,7 +76,7 @@ Following changes by metablaster:
 #>
 function ConvertTo-MaskLength
 {
-	[OutputType([int32])]
+	[OutputType([string])]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.IP/Help/en-US/ConvertTo-MaskLength.md")]
 	param (

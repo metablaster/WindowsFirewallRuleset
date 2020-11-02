@@ -52,7 +52,7 @@ PS> Update-Log
 None. You cannot pipe objects to Update-Log
 
 .OUTPUTS
-None. Log files are written to log directory.
+None. Update-Log does not generate any output
 
 .NOTES
 TODO: when strict mode is on, errors captured by strict mode are not captured into log buffers

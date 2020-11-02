@@ -87,7 +87,7 @@ Name                           PowerShellGet
 [hashtable] fully qualified module name in the form of ModuleSpecification object
 
 .OUTPUTS
-[PSCustomObject] module name ready for help files update
+[PSCustomObject] Module description object ready for help files update
 
 .NOTES
 This function main purpose is automated development environment setup to be able to perform quick
@@ -96,6 +96,7 @@ for the purpose of testing project code for many environment scenarios that end 
 It should be used in conjunction with the rest of a module "Project.AllPlatforms.Initialize"
 
 TODO: test UICulture from pipeline
+TODO: There can't be multiple inputs?
 #>
 function Find-UpdatableModule
 {
@@ -105,7 +106,7 @@ function Find-UpdatableModule
 		[Parameter(ValueFromPipeline = $true, ParameterSetName = "Name", Position = 0)]
 		[string[]] $Module = $null,
 
-		[Parameter(ValueFromPipeline = $true, ParameterSetName = "Full",
+		[Parameter(ValueFromPipeline = $true, ParameterSetName = "Full", Position = 0,
 			HelpMessage = "Specify module to check in the form of ModuleSpecification object")]
 		[hashtable] $FullyQualifiedName = $null,
 

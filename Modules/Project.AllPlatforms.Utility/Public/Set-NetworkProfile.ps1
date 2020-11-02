@@ -41,7 +41,7 @@ PS> Set-NetworkProfile
 None. You cannot pipe objects to Set-NetworkProfile
 
 .OUTPUTS
-None.
+None. Set-NetworkProfile does not generate any output
 
 .NOTES
 None.

@@ -31,7 +31,8 @@ SOFTWARE.
 Start test case
 
 .DESCRIPTION
-Start-Test writes output to host to separate test cases
+Start-Test writes output to host to separate test cases.
+Formatted message block is shown in the console.
 This function must be called before single test case starts executing
 
 .PARAMETER Message
@@ -48,7 +49,7 @@ PS> Start-Test "Get-Something"
 None. You cannot pipe objects to Start-Test
 
 .OUTPUTS
-None. Formatted message block is shown in the console
+None. Start-Test does not generate any output
 
 .NOTES
 TODO: switch for no new line, some tests will produce redundant new lines, ex. Format-Table in pipeline

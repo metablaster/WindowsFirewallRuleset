@@ -39,17 +39,16 @@ Operating system build number
 
 .EXAMPLE
 PS> ConvertFrom-OSBuild 18363.1049
-
 1909
 
 .INPUTS
 None. you can't p to ConvertFrom-OSBuild
 
 .OUTPUTS
-None.
+[System.String]
 
 .NOTES
-TODO: OutputType not consistent
+None.
 #>
 function ConvertFrom-OSBuild
 {
@@ -105,35 +104,35 @@ Set-Variable -Name OSBuildInfo -Scope Script -Option Constant -Value ([PSCustomO
 			Build = 19042
 		}
 		[hashtable]@{
-			Version = 2004
+			Version = "2004"
 			Build = 19041
 		}
 		[hashtable]@{
-			Version = 1909
+			Version = "1909"
 			Build = 18363
 		}
 		[hashtable]@{
-			Version = 1903
+			Version = "1903"
 			Build = 18362
 		}
 		[hashtable]@{
-			Version = 1809
+			Version = "1809"
 			Build = 17763
 		}
 		[hashtable]@{
-			Version = 1803
+			Version = "1803"
 			Build = 17134
 		}
 		[hashtable]@{
-			Version = 1709
+			Version = "1709"
 			Build = 16299
 		}
 		[hashtable]@{
-			Version = 1607
+			Version = "1607"
 			Build = 14393
 		}
 		[hashtable]@{
-			Version = 1507
+			Version = "1507"
 			Build = 10240
 		}
 	)

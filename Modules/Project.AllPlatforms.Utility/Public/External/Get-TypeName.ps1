@@ -44,10 +44,10 @@ Target object for which to retrieve type name
 PS> Get-Process | Get-TypeName
 
 .INPUTS
-System.Object Any .NET object
+[System.Object] Any .NET object
 
 .OUTPUTS
-[string] type name or null
+[System.String] type name or null
 
 .NOTES
 See related links section for original code link:
@@ -67,6 +67,7 @@ function Get-TypeName
 	# TODO: make Diagnostics look like this in all files
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 		"PSUseProcessBlockForPipelineCommand", "", Justification = "Must not be used here")]
+	[OutputType([System.String])]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Utility/Help/en-US/Get-TypeName.md")]
 	param (
@@ -82,5 +83,7 @@ function Get-TypeName
 		return $null
 	}
 
+	# TODO: ($InputObject).GetType().FullName
+	# TODO: (Get-Command $InputObject).OutputType
 	Write-Output ($InputObject | Get-Member).TypeName | Select-Object -Unique
 }

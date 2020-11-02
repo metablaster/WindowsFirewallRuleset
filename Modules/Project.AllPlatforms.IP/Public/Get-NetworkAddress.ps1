@@ -78,10 +78,10 @@ PS> Get-NetworkAddress "10.0.23.21 255.255.255.224"
 Input values are automatically split into IP address and subnet mask. Returns the address 10.0.23.0.
 
 .INPUTS
-System.String
+[System.String]
 
 .OUTPUTS
-TODO: describe outputs
+[IPAddress]
 
 .NOTES
 Following changes by metablaster:

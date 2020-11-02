@@ -63,10 +63,10 @@ PS> ConvertTo-HexIP 192.168.0.1
 Returns the hexadecimal string c0a80001.
 
 .INPUTS
-System.Net.IPAddress
+[System.Net.IPAddress]
 
 .OUTPUTS
-TODO: describe outputs
+[System.String] A hexadecimal string
 
 .NOTES
 Following changes by metablaster:

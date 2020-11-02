@@ -59,7 +59,7 @@ TODO: Update Copyright and start writing code
 [CmdletBinding()]
 param (
 	[Parameter()]
-	[ParameterType] $ParameterName
+	[string] $ParameterName
 )
 
 # Initialization

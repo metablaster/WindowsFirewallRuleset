@@ -70,7 +70,7 @@ TODO: add example
 None. You cannot pipe objects to Get-Permutation
 
 .OUTPUTS
-TODO: describe outputs, specify OutputType
+TODO: Describe outputs
 
 .NOTES
 Following changes by metablaster:
@@ -78,6 +78,7 @@ Following changes by metablaster:
 - For code to be consistent with project code formatting and symbol casing.
 - Rename function to approved verb
 - Removed unnecessary position arguments, added default argument values explicitly.
+TODO: specify OutputType
 #>
 function Get-Permutation
 {

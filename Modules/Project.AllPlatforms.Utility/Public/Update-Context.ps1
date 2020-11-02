@@ -31,6 +31,7 @@ SOFTWARE.
 Update context for Approve-Execute function
 
 .DESCRIPTION
+Script scope context variable is updated.
 Execution context is shown in the console every time Approve-Execute is called.
 It helps to know the state and progress of execution.
 
@@ -52,7 +53,7 @@ PS> Update-Context "IPv4" "Outbound" "RuleGroup"
 None. You cannot pipe objects to Update-Context
 
 .OUTPUTS
-None. Script scope context variable is updated.
+None. Update-Context does not generate any output
 
 .NOTES
 None.

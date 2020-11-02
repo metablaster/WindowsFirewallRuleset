@@ -69,7 +69,7 @@ TODO: Provide example
 None. You cannot pipe objects to ConvertTo-Network
 
 .OUTPUTS
-TODO: describe outputs
+"Project.AllPlatforms.IP.Network" Custom object
 
 .NOTES
 Change log:

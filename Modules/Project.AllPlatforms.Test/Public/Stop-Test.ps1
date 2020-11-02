@@ -41,7 +41,7 @@ PS> Stop-Test
 None. You cannot pipe objects to Stop-Test
 
 .OUTPUTS
-None.
+None. Stop-Test does not generate any output
 
 .NOTES
 None.

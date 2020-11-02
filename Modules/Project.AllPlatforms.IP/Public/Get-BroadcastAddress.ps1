@@ -82,10 +82,10 @@ PS> Get-BroadcastAddress "10.0.0.42 255.255.255.252"
 Input values are automatically split into IP address and subnet mask. Returns the address 10.0.0.43.
 
 .INPUTS
-System.String
+[System.String]
 
 .OUTPUTS
-TODO: describe outputs
+[IPAddress] The broadcast address
 
 .NOTES
 Following changes by metablaster:
@@ -118,7 +118,7 @@ function Get-BroadcastAddress
 			return [IPAddress](
 				$NetworkAddress.Address -bor
 				-bnot $Network.SubnetMask.Address -band
-				-bnot ([int64][UInt32]::MaxValue -shl 32)
+				-bnot ([int64][uint32]::MaxValue -shl 32)
 			)
 		}
 		catch

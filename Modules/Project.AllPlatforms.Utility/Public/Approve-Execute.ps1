@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Used to ask user if he wants to run script
+Used to prompt user to approve running script
 
 .DESCRIPTION
 In addition to prompt, execution context is shown.
@@ -57,7 +57,7 @@ PS> Approve-Execute "No" "Sample title" "Sample question"
 None. You cannot pipe objects to Approve-Execute
 
 .OUTPUTS
-None. true if user wants to continue, false otherwise
+[System.Boolean] True if user wants to continue, false otherwise
 
 .NOTES
 None.

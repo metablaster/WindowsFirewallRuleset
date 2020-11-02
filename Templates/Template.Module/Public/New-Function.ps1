@@ -35,7 +35,7 @@ This keyword can be used only once in each topic.
 A detailed description of the function.
 This keyword can be used only once in each topic.
 
-.PARAMETER Param
+.PARAMETER ParameterName
 The description of a parameter.
 Repeat ".PARAMETER" keyword for each parameter.
 
@@ -62,7 +62,7 @@ function New-Function
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium")]
 	param (
 		[Parameter(Mandatory = $true)]
-		[string] $Param
+		[string] $ParameterName
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"

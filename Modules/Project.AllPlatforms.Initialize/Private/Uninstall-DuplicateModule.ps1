@@ -59,7 +59,7 @@ Module SomeDupeModule was removed
 [PSModuleInfo] module object
 
 .OUTPUTS
-None.
+None. Uninstall-DuplicateModule does not generate any output
 
 .NOTES
 Target module must not be in use by:

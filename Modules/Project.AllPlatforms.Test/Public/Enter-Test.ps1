@@ -44,7 +44,7 @@ PS> Enter-Test "Get-Something.ps1"
 None. You cannot pipe objects to Enter-Test
 
 .OUTPUTS
-None.
+None. Enter-Test does not generate any output
 
 .NOTES
 TODO: Get file name of unit test automatically

@@ -62,13 +62,13 @@ The number of bits which must be masked.
 .EXAMPLE
 PS> ConvertTo-Mask 24
 
-Returns the dotted-decimal form of the mask, 255.255.255.0.
+Returns the dotted-decimal form of the mask, 255.255.255.0
 
 .INPUTS
-System.Int32
+[System.Byte] A mask length ranging between 0 and 32
 
 .OUTPUTS
-TODO: describe outputs
+[IPAddress] A dotted-decimal subnet mask
 
 .NOTES
 Following changes by metablaster:

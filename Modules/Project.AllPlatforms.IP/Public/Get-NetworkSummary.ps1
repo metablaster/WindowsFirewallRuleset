@@ -72,10 +72,10 @@ PS> Get-NetworkSummary 10.0.9.43/22
 PS> Get-NetworkSummary 0/0
 
 .INPUTS
-System.String
+[System.String]
 
 .OUTPUTS
-TODO: describe outputs
+"Project.AllPlatforms.IP.NetworkSummary" Custom object
 
 .NOTES
 Following changes by metablaster:
@@ -112,7 +112,7 @@ function Get-NetworkSummary
 		$DecimalIP = ConvertTo-DecimalIP $Network.IPAddress
 		$DecimalMask = ConvertTo-DecimalIP $Network.SubnetMask
 		$DecimalNetwork = $DecimalIP -band $DecimalMask
-		$DecimalBroadcast = $DecimalIP -bor (-bnot $DecimalMask -band [UInt32]::MaxValue)
+		$DecimalBroadcast = $DecimalIP -bor (-bnot $DecimalMask -band [uint32]::MaxValue)
 
 		$NetworkSummary = [PSCustomObject]@{
 			NetworkAddress = $NetworkAddress = ConvertTo-DottedDecimalIP $DecimalNetwork

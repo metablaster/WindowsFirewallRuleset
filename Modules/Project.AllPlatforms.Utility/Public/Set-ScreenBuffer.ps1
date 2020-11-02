@@ -31,6 +31,7 @@ SOFTWARE.
 Set vertical screen buffer to recommended value
 
 .DESCRIPTION
+Set-ScreenBuffer sets screenbuffer for current powershell session.
 In some cases, depending on project settings a user might need larger buffer
 to preserve all the output in the console for review and scroll back.
 
@@ -41,13 +42,14 @@ PS> Set-ScreenBuffer
 None. You cannot pipe objects to Set-ScreenBuffer
 
 .OUTPUTS
-None. Screen buffer is set for current powershell session
+None. Set-ScreenBuffer does not generate any output
 
 .NOTES
 None.
 #>
 function Set-ScreenBuffer
 {
+	[OutputType([void])]
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Utility/Help/en-US/Set-ScreenBuffer.md")]
 	param ()

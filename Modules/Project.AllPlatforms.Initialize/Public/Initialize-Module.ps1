@@ -78,7 +78,7 @@ is not registered user is prompted to do that too.
 None. You cannot pipe objects to Initialize-Module
 
 .OUTPUTS
-None.
+[System.Boolean]
 
 .NOTES
 This function main purpose is automated development environment setup to be able to perform quick

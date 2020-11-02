@@ -65,10 +65,10 @@ PS> Compare-Path "%SystemDrive%\" "D:\"
 False
 
 .INPUTS
-None.
+None. You cannot pipe objects to Compare-Path
 
 .OUTPUTS
-None. You cannot pipe objects to Compare-Path
+[System.Boolean]
 
 .NOTES
 None.

@@ -50,7 +50,7 @@ Warning_25.02.20 19h.log
 None. You cannot pipe objects to Get-LogFile
 
 .OUTPUTS
-[string] full path to log file
+None. Get-LogFile does not generate any output
 
 .NOTES
 TODO: Maybe a separate folder for each day?
@@ -58,7 +58,7 @@ TODO: need to check if drive exists
 #>
 function Get-LogFile
 {
-	[OutputType([string])]
+	[OutputType([void])]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]

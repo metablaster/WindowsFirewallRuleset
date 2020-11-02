@@ -62,11 +62,12 @@ An IP Address to convert.
 PS> ConvertTo-BinaryIP 1.2.3.4
 
 Convert an IP address to a binary format.
+
 .INPUTS
-System.Net.IPAddress
+[System.Net.IPAddress] Decimal IP address
 
 .OUTPUTS
-TODO: describe outputs
+[System.String] A dotted binary IP address
 
 .NOTES
 Following changes by metablaster:

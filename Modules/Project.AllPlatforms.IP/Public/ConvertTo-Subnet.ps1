@@ -82,7 +82,7 @@ PS> ConvertTo-Subnet 10.0.0.23 255.255.255.0
 None. You cannot pipe objects to ConvertTo-Subnet
 
 .OUTPUTS
-TODO: describe outputs
+"Project.AllPlatforms.IP.Subnet" Custom object
 
 .NOTES
 Following changes by metablaster:
@@ -146,7 +146,7 @@ function ConvertTo-Subnet
 			{
 				$i--
 			}
-			until (($DecimalStart -band ([UInt32]1 -shl $i)) -ne ($DecimalEnd -band ([UInt32]1 -shl $i)))
+			until (($DecimalStart -band ([uint32]1 -shl $i)) -ne ($DecimalEnd -band ([uint32]1 -shl $i)))
 
 			$MaskLength = 32 - $i - 1
 		}

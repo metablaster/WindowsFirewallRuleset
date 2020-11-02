@@ -64,10 +64,10 @@ PS> ConvertFrom-HexIP c0a80001
 Returns the IP address 192.168.0.1.
 
 .INPUTS
-System.String
+[System.String] Hexadecimal IP address
 
 .OUTPUTS
-TODO: describe outputs
+[IPAddress] A dotted decimal IP address
 
 .NOTES
 Following changes by metablaster:
