@@ -26,6 +26,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+using namespace System.Management.Automation.Host
+
 <#
 .SYNOPSIS
 Used to prompt user to approve running script
@@ -95,9 +97,9 @@ function Approve-Execute
 		"No" { 1 }
 	}
 
-	[System.Management.Automation.Host.ChoiceDescription[]] $Choices = @()
-	$AcceptChoice = [System.Management.Automation.Host.ChoiceDescription]::new("&Yes")
-	$DenyChoice = [System.Management.Automation.Host.ChoiceDescription]::new("&No")
+	[ChoiceDescription[]] $Choices = @()
+	$AcceptChoice = [ChoiceDescription]::new("&Yes")
+	$DenyChoice = [ChoiceDescription]::new("&No")
 
 	# Setup choices
 	$AcceptChoice.HelpMessage = $Accept

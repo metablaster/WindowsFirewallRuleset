@@ -39,7 +39,7 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 
 #
 # Script imports
-# TODO: remove unneeded imports
+# TODO: remove template imports
 #
 
 $PrivateScripts = @(

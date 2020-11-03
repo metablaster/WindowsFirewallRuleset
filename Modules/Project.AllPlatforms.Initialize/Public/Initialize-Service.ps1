@@ -26,6 +26,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+using namespace System.Management.Automation.Host
+
 <#
 .SYNOPSIS
 Check if required system services are started
@@ -75,9 +77,9 @@ function Initialize-Service
 	{
 		# User prompt default values
 		[int32] $Default = 0
-		[System.Management.Automation.Host.ChoiceDescription[]] $Choices = @()
-		$Accept = [System.Management.Automation.Host.ChoiceDescription]::new("&Yes")
-		$Deny = [System.Management.Automation.Host.ChoiceDescription]::new("&No")
+		[ChoiceDescription[]] $Choices = @()
+		$Accept = [ChoiceDescription]::new("&Yes")
+		$Deny = [ChoiceDescription]::new("&No")
 		$Deny.HelpMessage = "Skip operation"
 		[string] $Title = "Required service not running"
 		[bool] $StatusGood = $true

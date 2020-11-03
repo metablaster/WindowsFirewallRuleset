@@ -49,6 +49,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - In progress
 
+  - Renamed modules to "Ruleset.<...><...>"
   - Improved Test-Environment function to handle more cases
   - Calls to icacls, takeown and file system permission code replaced with call to Set-Permission
 

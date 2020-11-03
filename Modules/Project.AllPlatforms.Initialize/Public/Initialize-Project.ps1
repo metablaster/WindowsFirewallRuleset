@@ -26,6 +26,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+using namespace System.Management.Automation.Host
+
 <#
 .SYNOPSIS
 Check system requirements for this project
@@ -400,9 +402,9 @@ function Initialize-Project
 		{
 			# User prompt setup
 			[int32] $Default = 1
-			[System.Management.Automation.Host.ChoiceDescription[]] $Choices = @()
-			$Accept = [System.Management.Automation.Host.ChoiceDescription]::new("&Yes")
-			$Deny = [System.Management.Automation.Host.ChoiceDescription]::new("&No")
+			[ChoiceDescription[]] $Choices = @()
+			$Accept = [ChoiceDescription]::new("&Yes")
+			$Deny = [ChoiceDescription]::new("&No")
 
 			$Deny.HelpMessage = "No help files will be updated"
 			$Accept.HelpMessage = "Download and install the newest help files on your computer"

@@ -26,6 +26,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+using namespace System.Management.Automation.Host
+
 <#
 .SYNOPSIS
 Set network profile for physical network interfaces
@@ -78,10 +80,10 @@ function Set-NetworkProfile
 
 			# User prompt default values
 			[int32] $Default = 0
-			[System.Management.Automation.Host.ChoiceDescription[]] $Choices = @()
-			$Public = [System.Management.Automation.Host.ChoiceDescription]::new("&Public")
-			$Private = [System.Management.Automation.Host.ChoiceDescription]::new("P&rivate")
-			$Abort = [System.Management.Automation.Host.ChoiceDescription]::new("&Abort")
+			[ChoiceDescription[]] $Choices = @()
+			$Public = [ChoiceDescription]::new("&Public")
+			$Private = [ChoiceDescription]::new("P&rivate")
+			$Abort = [ChoiceDescription]::new("&Abort")
 
 			$Public.HelpMessage = "Your PC is hidden from other devices on the network"
 			$Private.HelpMessage = "Your PC is discoverable and can be used for file and printer sharing"

@@ -26,6 +26,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+using namespace System.Management.Automation.Host
+
 <#
 .SYNOPSIS
 Check if module is installed or needs update
@@ -204,9 +206,9 @@ function Initialize-Module
 
 	# User prompt default values
 	[int32] $Default = 0
-	[System.Management.Automation.Host.ChoiceDescription[]] $Choices = @()
-	$Accept = [System.Management.Automation.Host.ChoiceDescription]::new("&Yes")
-	$Deny = [System.Management.Automation.Host.ChoiceDescription]::new("&No")
+	[ChoiceDescription[]] $Choices = @()
+	$Accept = [ChoiceDescription]::new("&Yes")
+	$Deny = [ChoiceDescription]::new("&No")
 	$Deny.HelpMessage = "Skip operation, module $ModuleName will not be installed or updated"
 
 	# NOTE: Importing module to learn version could result in error

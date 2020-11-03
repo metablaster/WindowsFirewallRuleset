@@ -90,7 +90,8 @@ Sends typename for each input object down the pipeline
 [string]
 
 .NOTES
-None.
+TODO: There may be multiple accelerators for same type, for example:
+Get-TypeName -Name [System.Management.Automation.PSObject] -Accelerator
 #>
 function Get-TypeName
 {
