@@ -56,9 +56,9 @@ function Format-Output
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 		"PSAvoidUsingWriteHost", "", Justification = "There is no way to replace Write-Host here")]
-	[OutputType([void])]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.Firewall/Help/en-US/Format-Output.md")]
+	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true,
 			ValueFromPipeline = $true)]

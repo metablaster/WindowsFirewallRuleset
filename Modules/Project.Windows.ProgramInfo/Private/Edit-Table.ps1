@@ -52,8 +52,8 @@ TODO: search executable paths
 #>
 function Edit-Table
 {
-	[OutputType([void])]
 	[CmdletBinding()]
+	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $InstallLocation

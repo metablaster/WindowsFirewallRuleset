@@ -123,9 +123,9 @@ function Export-FirewallRules
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 		"PSAvoidUsingWriteHost", "", Justification = "There is no way to replace Write-Host here")]
-	[OutputType([void])]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.Firewall/Help/en-US/Export-FirewallRules.md")]
+	[OutputType([void])]
 	param(
 		[Parameter()]
 		[string] $PolicyStore = [System.Environment]::MachineName,

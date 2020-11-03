@@ -70,12 +70,13 @@ Current session prompt must not point to anywhere in target module path
 TODO: array input and implement foreach
 TODO: we make no automated use of this function except for manual module removal
 TODO: Remove-Module if used prior uninstall
+TODO: There can't be multiple inputs?
 #>
 function Uninstall-DuplicateModule
 {
-	[OutputType([void])]
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High",
 		DefaultParameterSetName = "Path")]
+	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0, ParameterSetName = "Path")]
 		[string] $ModulePath,

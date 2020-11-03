@@ -34,7 +34,7 @@ Unit test for Set-ScreenBuffer
 Unit test for Set-ScreenBuffer
 
 .EXAMPLE
-PS> .\ Set-ScreenBuffer.ps1
+PS> .\Set-ScreenBuffer.ps1
 
 .INPUTS
 None. You cannot pipe objects to for Set-ScreenBuffer.ps1

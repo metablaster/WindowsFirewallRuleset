@@ -70,9 +70,9 @@ TODO: Loopback interface is missing in the output
 #>
 function Get-ConfiguredAdapter
 {
-	# TODO: doesn't work [OutputType([System.Net.NetIPConfiguration])]
 	[CmdletBinding(DefaultParameterSetName = "Individual",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ComputerInfo/Help/en-US/Get-ConfiguredAdapter.md")]
+	# TODO: doesn't work [OutputType([System.Net.NetIPConfiguration])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[ValidateSet("IPv4", "IPv6")]

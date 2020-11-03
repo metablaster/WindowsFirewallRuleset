@@ -93,9 +93,9 @@ TODO: installing post-git in same session while installing other modules may fai
 #>
 function Initialize-Module
 {
-	[OutputType([bool])]
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Initialize/Help/en-US/Initialize-Module.md" )]
+	[OutputType([bool])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0,
 			HelpMessage = "Specify module to check in the form of ModuleSpecification object")]

@@ -140,13 +140,15 @@ TODO: update examples to include DTS directory
 #>
 function Get-SQLInstance
 {
-	[OutputType([PSCustomObject[]])]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-SQLInstance.md")]
+	[OutputType([PSCustomObject[]])]
 	param (
 		[Parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
 		[Alias("Servers", "Machines")]
 		[string[]] $ComputerName = [System.Environment]::MachineName,
+
+		[Parameter()]
 		[switch] $CIM
 	)
 

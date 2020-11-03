@@ -54,9 +54,9 @@ None.
 #>
 function ConvertFrom-UserAccount
 {
-	[OutputType([System.String[]])]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.UserInfo/Help/en-US/ConvertFrom-UserAccount.md")]
+	[OutputType([System.String[]])]
 	param(
 		[Alias("Account")]
 		[Parameter(Mandatory = $true)]

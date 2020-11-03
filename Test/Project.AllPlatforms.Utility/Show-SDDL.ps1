@@ -34,7 +34,7 @@ Unit test for Show-SDDL
 Unit test for Show-SDDL
 
 .EXAMPLE
-PS> .\ Show-SDDL.ps1
+PS> .\Show-SDDL.ps1
 
 .INPUTS
 None. You cannot pipe objects to for Show-SDDL.ps1

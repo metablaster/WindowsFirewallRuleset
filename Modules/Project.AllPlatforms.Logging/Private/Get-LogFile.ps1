@@ -58,8 +58,8 @@ TODO: need to check if drive exists
 #>
 function Get-LogFile
 {
-	[OutputType([void])]
 	[CmdletBinding()]
+	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $Folder,

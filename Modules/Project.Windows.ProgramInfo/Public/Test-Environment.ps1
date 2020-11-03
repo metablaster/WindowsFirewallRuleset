@@ -52,9 +52,9 @@ TODO: This should proably be inside utility module
 #>
 function Test-Environment
 {
-	[OutputType([bool])]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ProgramInfo/Help/en-US/Test-Environment.md")]
+	[OutputType([bool])]
 	param (
 		[Parameter()]
 		[string] $FilePath = $null

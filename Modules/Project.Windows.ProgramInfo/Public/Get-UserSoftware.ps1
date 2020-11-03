@@ -53,9 +53,9 @@ TODO: We should make a query for an array of users, will help to save into varia
 #>
 function Get-UserSoftware
 {
-	[OutputType([PSCustomObject[]])]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-UserSoftware.md")]
+	[OutputType([PSCustomObject[]])]
 	param (
 		[Alias("User")]
 		[Parameter(Mandatory = $true)]

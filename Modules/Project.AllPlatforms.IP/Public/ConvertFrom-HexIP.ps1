@@ -77,9 +77,9 @@ Following changes by metablaster:
 #>
 function ConvertFrom-HexIP
 {
-	[OutputType([IPAddress])]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.IP/Help/en-US/ConvertFrom-HexIP.md")]
+	[OutputType([IPAddress])]
 	param (
 		[Parameter(Mandatory = $true,
 			ValueFromPipeline = $true)]

@@ -56,9 +56,9 @@ TODO: temporarily using ComputerName parameter
 #>
 function Test-Installation
 {
-	[OutputType([bool])]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ProgramInfo/Help/en-US/Test-Installation.md")]
+	[OutputType([bool])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[string] $Program,

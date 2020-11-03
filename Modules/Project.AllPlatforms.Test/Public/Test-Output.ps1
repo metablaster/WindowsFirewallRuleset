@@ -28,18 +28,20 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Verify TypeName and OutputType are identical
+Verify TypeName and OutputType are referring to same type
 
 .DESCRIPTION
-The purpose of this test is is to ensure object output typename is identical as
-described by OutputType attribute.
-Comparison is case sensitive.
+This test case is to ensure object output typename is referring to
+same type as at least one of the types described by the OutputType attribute.
+Comparison is case sensitive for the matching typename part.
+TypeName and OutputType including equality test is printed to console
 
-.PARAMETER OutputObject
-The actual .NET object that some function returns
+.PARAMETER InputType
+The actual .NET typename which some function returns
 
 .PARAMETER Command
-CommandInfo object obtained from Get-Command
+Commandlet or function name for which to retrieve OutputType attribute values,
+and then compare InputType against those values.
 
 .EXAMPLE
 PS> $Result = Some-Function
@@ -49,44 +51,58 @@ PS> Test-Output $Result -Command Some-Function
 None. You cannot pipe objects to Test-Output
 
 .OUTPUTS
-[System.String] TypeName and OutputType including equality test
+None. Test-Output does not generate any output
 
 .NOTES
 None.
 #>
 function Test-Output
 {
-	[OutputType([string])]
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Test/Help/en-US/Test-Output.md")]
+	[OutputType([void])]
 	param (
-		[Parameter(Position = 0, Mandatory = $true)]
+		[Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
 		[AllowNull()]
-		[System.Object[]] $OutputObject,
+		[string] $InputType,
 
 		[Parameter(Mandatory = $true)]
 		[string] $Command
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
-	Start-Test "Compare TypeName and OutputType"
-
-	$TypeName = Get-TypeName $OutputObject
-	$OutputType = Get-TypeName -Command $Command
-
-	"TypeName:`t$TypeName"
-	"OutputType:`t$OutputType"
-
-	if ($OutputType -ceq $TypeName)
+	begin
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] TypeName and OutputType are identical"
+		Start-Test "Compare TypeName and OutputType"
 	}
-	else
+	process
 	{
-		Write-Error -Category InvalidResult -TargetObject $TypeName `
-			-Message "TypeName and OutputType are not identical"
-	}
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-	Stop-Test
+		# NOTE: OutputType variable may contain multiple valid entries
+		$OutputType = Get-TypeName -Command $Command
+		$TypeName = Get-TypeName -Name $InputType
+
+		Write-Information -Tags "Test" -MessageData "INFO: TypeName:`t`t$TypeName"
+		$OutputType | ForEach-Object {
+			Write-Information -Tags "Test" -MessageData "INFO: OutputType:`t$_"
+		}
+
+		if ($TypeName -ceq $OutputType)
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Typename and OutputType are identical"
+		}
+		elseif ($OutputType -clike "$TypeName*")
+		{
+			Write-Warning -Message "Typename is similar to OutputType but not named exactly the same"
+		}
+		else
+		{
+			Write-Error -Category InvalidResult -TargetObject $TypeName `
+				-Message "Typename and OutputType are not identical"
+		}
+	}
+	end
+	{
+		Stop-Test
+	}
 }

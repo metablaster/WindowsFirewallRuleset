@@ -53,6 +53,7 @@ None.
 #>
 function Convert-ValueToBoolean
 {
+	[CmdletBinding()]
 	[OutputType([bool])]
 	param(
 		[Parameter()]

@@ -47,9 +47,9 @@ TODO: implement querying computers on network by specifying IP address
 #>
 function Get-ComputerName
 {
-	[OutputType([string])]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ComputerInfo/Help/en-US/Get-ComputerName.md")]
+	[OutputType([string])]
 	param ()
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"

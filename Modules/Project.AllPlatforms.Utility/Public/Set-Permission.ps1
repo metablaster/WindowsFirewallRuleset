@@ -128,9 +128,9 @@ https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.object
 #>
 function Set-Permission
 {
-	[OutputType([bool])]
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High", PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Utility/Help/en-US/Set-Permission.md")]
+	[OutputType([bool])]
 	param (
 		[Alias("File", "Directory", "Key")]
 		[Parameter(Position = 0, Mandatory = $true, ParameterSetName = "Ownership")]

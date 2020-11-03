@@ -50,9 +50,9 @@ None.
 #>
 function Get-WindowsKit
 {
-	[OutputType([PSCustomObject[]])]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-WindowsKit.md")]
+	[OutputType([PSCustomObject[]])]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]

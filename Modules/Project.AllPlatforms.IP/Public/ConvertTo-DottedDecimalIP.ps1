@@ -81,9 +81,9 @@ Following changes by metablaster:
 #>
 function ConvertTo-DottedDecimalIP
 {
-	[OutputType([IPAddress])]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.IP/Help/en-US/ConvertTo-DottedDecimalIP.md")]
+	[OutputType([IPAddress])]
 	param (
 		[Parameter(Mandatory = $true,
 			ValueFromPipeline = $true)]

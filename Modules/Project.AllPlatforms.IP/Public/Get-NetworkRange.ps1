@@ -95,9 +95,9 @@ Following changes by metablaster:
 #>
 function Get-NetworkRange
 {
-	[OutputType([IPAddress])]
 	[CmdletBinding(DefaultParameterSetName = "FromIPAndMask",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.IP/Help/en-US/Get-NetworkRange.md")]
+	[OutputType([IPAddress])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0,
 			ValueFromPipeline = $true, ParameterSetName = "FromIPAndMask")]

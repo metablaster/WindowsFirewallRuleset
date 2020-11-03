@@ -94,9 +94,9 @@ Following changes by metablaster:
 #>
 function Get-Subnet
 {
-	[OutputType("Project.AllPlatforms.IP.Subnet")]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.IP/Help/en-US/Get-Subnet.md")]
+	[OutputType("Project.AllPlatforms.IP.Subnet")]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[string] $IPAddress,

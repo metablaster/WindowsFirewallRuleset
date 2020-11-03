@@ -66,9 +66,9 @@ TODO: consider renaming to Format-ProcessOutput
 #>
 function Get-ProcessOutput
 {
-	[OutputType([string])]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Utility/Help/en-US/Get-ProcessOutput.md")]
+	[OutputType([string])]
 	Param (
 		[Parameter(Mandatory = $true)]
 		[string] $FilePath,

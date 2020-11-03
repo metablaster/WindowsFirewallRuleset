@@ -63,9 +63,9 @@ It should be used in conjunction with the rest of a module "Project.AllPlatforms
 #>
 function Initialize-Service
 {
-	[OutputType([bool])]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Initialize/Help/en-US/Initialize-Service.md")]
+	[OutputType([bool])]
 	param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
 		[string[]] $Services

@@ -77,9 +77,9 @@ Following changes by metablaster:
 #>
 function ConvertTo-DecimalIP
 {
-	[OutputType([uint32])]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.IP/Help/en-US/ConvertTo-DecimalIP.md")]
+	[OutputType([uint32])]
 	param (
 		[Parameter(Mandatory = $true,
 			ValueFromPipeline = $true)]

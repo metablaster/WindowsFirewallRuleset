@@ -57,6 +57,7 @@ None.
 #>
 function Convert-ListToMultiLine
 {
+	[CmdletBinding()]
 	[OutputType([string])]
 	param(
 		[Parameter()]

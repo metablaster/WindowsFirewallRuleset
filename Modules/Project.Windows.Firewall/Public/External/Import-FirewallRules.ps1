@@ -85,9 +85,9 @@ Changes by metablaster - August 2020:
 #>
 function Import-FirewallRules
 {
-	[OutputType([void])]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.Firewall/Help/en-US/Import-FirewallRules.md")]
+	[OutputType([void])]
 	param(
 		[Parameter()]
 		[string] $PolicyStore = [System.Environment]::MachineName,

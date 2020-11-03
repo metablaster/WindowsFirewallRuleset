@@ -83,7 +83,7 @@ CultureVersion                 5.2.0.0
 Name                           PowerShellGet
 
 .INPUTS
-[string[]] one or multiple module names to check
+[string] one or multiple module names to check
 [hashtable] fully qualified module name in the form of ModuleSpecification object
 
 .OUTPUTS
@@ -100,8 +100,8 @@ TODO: There can't be multiple inputs?
 #>
 function Find-UpdatableModule
 {
-	[OutputType([PSCustomObject])]
 	[CmdletBinding(DefaultParameterSetName = "Name")]
+	[OutputType([PSCustomObject])]
 	param(
 		[Parameter(ValueFromPipeline = $true, ParameterSetName = "Name", Position = 0)]
 		[string[]] $Module = $null,

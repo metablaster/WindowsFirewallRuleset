@@ -34,7 +34,7 @@ Unit test for Set-Permission
 Unit test for Set-Permission
 
 .EXAMPLE
-PS> .\ Set-Permission.ps1
+PS> .\Set-Permission.ps1
 
 .INPUTS
 None. You cannot pipe objects to for Set-Permission.ps1

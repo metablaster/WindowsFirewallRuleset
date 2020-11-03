@@ -51,9 +51,9 @@ None.
 #>
 function New-Section
 {
-	[OutputType([void])]
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "None",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Test/Help/en-US/New-Section.md")]
+	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $Section

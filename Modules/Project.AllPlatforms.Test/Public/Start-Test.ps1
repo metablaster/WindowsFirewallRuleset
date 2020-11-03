@@ -56,9 +56,9 @@ TODO: switch for no new line, some tests will produce redundant new lines, ex. F
 #>
 function Start-Test
 {
-	[OutputType([void])]
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Test/Help/en-US/Start-Test.md")]
+	[OutputType([void])]
 	param (
 		[AllowEmptyString()]
 		[Parameter(Mandatory = $true)]

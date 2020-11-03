@@ -48,9 +48,9 @@ None.
 #>
 function Exit-Test
 {
-	[OutputType([void])]
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "None",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Test/Help/en-US/Exit-Test.md")]
+	[OutputType([void])]
 	param()
 
 	if ($PSCmdlet.ShouldProcess("Exit unit test", $script:UnitTest))

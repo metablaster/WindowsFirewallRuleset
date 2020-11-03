@@ -90,10 +90,10 @@ TODO: need to implement CIM switch
 #>
 function ConvertFrom-SID
 {
-	# TODO: test pipeline with multiple computers and SID's
-	[OutputType([PSCustomObject[]])]
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.UserInfo/Help/en-US/ConvertFrom-SID.md")]
+	# TODO: test pipeline with multiple computers and SID's
+	[OutputType([PSCustomObject[]])]
 	param(
 		[Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
 		[ValidatePattern('^S-1-\d[\d+-]+\d$')]

@@ -55,8 +55,8 @@ return the table by reference
 #>
 function Initialize-Table
 {
-	[OutputType([void])]
 	[CmdletBinding()]
+	[OutputType([void])]
 	param (
 		[Parameter()]
 		[string] $TableName = "InstallationTable"

@@ -62,9 +62,9 @@ TODO: We should check for common issues for GPO management, not just ping status
 #>
 function Test-TargetComputer
 {
-	[OutputType([bool])]
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ComputerInfo/Help/en-US/Test-TargetComputer.md")]
+	[OutputType([bool])]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter(Mandatory = $true,

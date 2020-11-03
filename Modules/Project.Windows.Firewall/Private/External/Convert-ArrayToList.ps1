@@ -50,6 +50,7 @@ None.
 #>
 function Convert-ArrayToList
 {
+	[CmdletBinding()]
 	[OutputType([string])]
 	param(
 		[Parameter()]

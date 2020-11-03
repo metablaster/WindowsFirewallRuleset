@@ -68,9 +68,9 @@ separating addresses per adapter
 #>
 function Get-Broadcast
 {
-	[OutputType([System.Net.IPAddress[]])]
 	[CmdletBinding(DefaultParameterSetName = "Individual",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ComputerInfo/Help/en-US/Get-Broadcast.md")]
+	[OutputType([System.Net.IPAddress[]])]
 	param (
 		[Parameter(ParameterSetName = "All")]
 		[switch] $IncludeAll,

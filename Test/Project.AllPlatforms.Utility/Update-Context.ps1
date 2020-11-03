@@ -34,7 +34,7 @@ Unit test for Update-Context
 Unit test for Update-Context
 
 .EXAMPLE
-PS> .\ Update-Context.ps1
+PS> .\Update-Context.ps1
 
 .INPUTS
 None. You cannot pipe objects to for Update-Context.ps1

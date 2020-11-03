@@ -50,8 +50,8 @@ This function is needed to avoid warning of write-host inside non "Show" functio
 #>
 function Show-Table
 {
-	[OutputType([void])]
 	[CmdletBinding()]
+	[OutputType([void])]
 	param (
 		[Parameter()]
 		[string] $Caption

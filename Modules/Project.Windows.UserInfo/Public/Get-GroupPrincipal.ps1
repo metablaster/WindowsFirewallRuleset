@@ -60,9 +60,9 @@ TODO: plural parameter
 #>
 function Get-GroupPrincipal
 {
-	[OutputType([PSCustomObject[]])]
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.UserInfo/Help/en-US/Get-GroupPrincipal.md")]
+	[OutputType([PSCustomObject[]])]
 	param (
 		[Alias("Group")]
 		[Parameter(Mandatory = $true,

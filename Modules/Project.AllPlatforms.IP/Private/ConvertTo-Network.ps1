@@ -83,8 +83,8 @@ Following changes by metablaster:
 #>
 function ConvertTo-Network
 {
-	[OutputType("Project.AllPlatforms.IP.Network")]
 	[CmdletBinding()]
+	[OutputType("Project.AllPlatforms.IP.Network")]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $IPAddress,

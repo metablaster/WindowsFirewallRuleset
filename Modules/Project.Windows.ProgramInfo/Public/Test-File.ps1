@@ -53,9 +53,9 @@ TODO: This should probably be renamed to Test-Executable to make it less likely 
 #>
 function Test-File
 {
-	[OutputType([void])]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ProgramInfo/Help/en-US/Test-File.md")]
+	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $FilePath

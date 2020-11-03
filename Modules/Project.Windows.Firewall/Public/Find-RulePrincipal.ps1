@@ -46,7 +46,7 @@ PS> Find-RulePrincipal -Empty
 None. You cannot pipe objects to Find-RulePrincipal
 
 .OUTPUTS
-TODO: Describe outputs
+TODO: Describe outputs and OutputType
 
 .NOTES
 TODO: This needs improvement to export matching rules to JSON

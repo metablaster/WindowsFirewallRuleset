@@ -91,9 +91,9 @@ Following changes by metablaster:
 #>
 function Get-NetworkAddress
 {
-	[OutputType([IPAddress])]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.IP/Help/en-US/Get-NetworkAddress.md")]
+	[OutputType([IPAddress])]
 	param (
 		[Parameter(Mandatory = $true,
 			ValueFromPipeline = $true)]

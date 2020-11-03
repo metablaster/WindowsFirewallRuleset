@@ -74,9 +74,9 @@ TODO: There is another function with the same name in Scripts folder
 #>
 function Get-InterfaceAlias
 {
-	[OutputType([System.Management.Automation.WildcardPattern[]])]
 	[CmdletBinding(DefaultParameterSetName = "Individual",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ComputerInfo/Help/en-US/Get-InterfaceAlias.md")]
+	[OutputType([System.Management.Automation.WildcardPattern[]])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[ValidateSet("IPv4", "IPv6")]

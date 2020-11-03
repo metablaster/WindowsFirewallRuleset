@@ -51,9 +51,9 @@ TODO: Get file name of unit test automatically
 #>
 function Enter-Test
 {
-	[OutputType([void])]
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Test/Help/en-US/Enter-Test.md")]
+	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $File

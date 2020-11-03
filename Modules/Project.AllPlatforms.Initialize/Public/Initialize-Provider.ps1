@@ -68,9 +68,9 @@ Before updating PowerShellGet or PackageManagement, you should always install th
 #>
 function Initialize-Provider
 {
-	[OutputType([bool])]
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Initialize/Help/en-US/Initialize-Provider.md")]
+	[OutputType([bool])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[hashtable] $FullyQualifiedName,
@@ -158,7 +158,7 @@ function Initialize-Provider
 			# Try with Find-Package
 			# NOTE: For some reason -AllowPrereleaseVersions may return no results
 			$FoundProvider = Find-Package -Name $ProviderName -IncludeDependencies `
-				-minimumVersion $RequireVersion -ErrorAction SilentlyContinue # -AllowPrereleaseVersions
+				-MinimumVersion $RequireVersion -ErrorAction SilentlyContinue # -AllowPrereleaseVersions
 		}
 
 		if ($FoundProvider)

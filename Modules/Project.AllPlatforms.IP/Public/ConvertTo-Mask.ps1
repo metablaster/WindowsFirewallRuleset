@@ -78,9 +78,9 @@ Following changes by metablaster:
 #>
 function ConvertTo-Mask
 {
-	[OutputType([IPAddress])]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.IP/Help/en-US/ConvertTo-Mask.md")]
+	[OutputType([IPAddress])]
 	param (
 		[Parameter(Mandatory = $true,
 			ValueFromPipeline = $true)]

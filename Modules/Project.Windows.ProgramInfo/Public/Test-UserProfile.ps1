@@ -52,9 +52,9 @@ TODO: This should proably be inside Utility or UserInfo module
 #>
 function Test-UserProfile
 {
-	[OutputType([bool])]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ProgramInfo/Help/en-US/Test-UserProfile.md")]
+	[OutputType([bool])]
 	param (
 		[string] $FilePath
 	)

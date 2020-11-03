@@ -52,9 +52,9 @@ None.
 #>
 function ConvertFrom-OSBuild
 {
-	[OutputType([string])]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ComputerInfo/Help/en-US/ConvertFrom-OSBuild.md")]
+	[OutputType([string])]
 	param (
 		[Parameter(Mandatory = $true)]
 		[ValidatePattern("^\d{5}(\.\d{3}\d{0,2})?$")]

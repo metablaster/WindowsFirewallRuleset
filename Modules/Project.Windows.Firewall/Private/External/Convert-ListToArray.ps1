@@ -54,6 +54,7 @@ TODO: DefaultValue can't be string, try string[]
 #>
 function Convert-ListToArray
 {
+	[CmdletBinding()]
 	[OutputType([string])]
 	param(
 		[Parameter()]

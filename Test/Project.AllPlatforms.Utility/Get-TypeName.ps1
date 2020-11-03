@@ -34,7 +34,7 @@ Unit test for Get-TypeName
 Unit test for Get-TypeName
 
 .EXAMPLE
-PS> .\ Get-TypeName.ps1
+PS> .\Get-TypeName.ps1
 
 .INPUTS
 None. You cannot pipe objects to for Get-TypeName.ps1
@@ -43,7 +43,8 @@ None. You cannot pipe objects to for Get-TypeName.ps1
 None. Get-TypeName.ps1 does not generate any output
 
 .NOTES
-None.
+TODO: Need to write test cases for non .NET types such as WMI or custom types,
+also more failure test cases.
 #>
 
 # Initialization
@@ -124,7 +125,8 @@ Get-TypeName -Command Test-Multiple @Logs
 New-Section "Test with Get-Process"
 
 Start-Test "Get-TypeName -> System.Diagnostics.Process"
-Get-TypeName (Get-Process) @Logs
+$Result = Get-TypeName (Get-Process) @Logs
+$Result
 
 Start-Test "Get-TypeName -Command -> Get-Process"
 Get-TypeName -Command Get-Process @Logs
@@ -169,9 +171,8 @@ Test-NoReturn | Get-TypeName -Accelerator @Logs
 New-Section "Test pipeline with Get-Process"
 
 Start-Test "Get-TypeName -> System.Diagnostics.Process"
-Write-Warning -Message "Test not shown"
-$Result = Get-Process | Get-TypeName @Logs
-$Result
+Write-Warning -Message "Test did not run to reduce output"
+# Get-Process | Get-TypeName @Logs -Verbose:$false -Debug:$false | Out-Null
 
 Start-Test "Get-TypeName -> null"
 Get-TypeName @Logs
