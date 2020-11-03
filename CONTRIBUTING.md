@@ -215,6 +215,9 @@ result in bugs or security issues!
 
 ### More information
 
+Following link explains must know style guidelines to write functions and commandlets:\
+[Cmdlet Development Guidelines](https://docs.microsoft.com/en-us/powershell/scripting/developer/cmdlet/cmdlet-development-guidelines?view=powershell-7)
+
 Following link describes general rules about PowerShell code style if you like reading,
 however keep in mind, it's not completely in line with this repository best practices:\
 [The PowerShell Style Guide](https://poshcode.gitbooks.io/powershell-practice-and-style/Style-Guide/Introduction.html)

@@ -53,13 +53,15 @@ None. New-Function does not generate any output
 .NOTES
 None.
 TODO: Update Copyright and start implementing module function
+TODO: Update HelpURI
 #>
 function New-Function
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 		"PSReviewUnusedParameter", "", Justification = "This is template function")]
 	[OutputType([void])]
-	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium")]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium",
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.PLATFORM.PURPOSE/Help/en-US/FUNCTION-NAME.md")]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $ParameterName

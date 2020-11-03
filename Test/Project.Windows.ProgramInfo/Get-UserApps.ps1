@@ -75,8 +75,7 @@ Start-Test "Get-UserApps"
 $Result = Get-UserApps -User $User @Logs
 $Result
 
-Start-Test "Get-TypeName"
-$Result[0] | Get-TypeName @Logs
+Test-Output $Result -Command Get-UserApps @Logs
 
 Update-Log
 Exit-Test

@@ -55,7 +55,10 @@ Start-Test "Approve-Execute -Default Yes"
 Approve-Execute -Default "Yes" @Logs
 
 Start-Test "Approve-Execute -Default No"
-Approve-Execute -Default "No" @Logs
+$Result = Approve-Execute -Default "No" @Logs
+$Result
+
+Test-Output $Result -Command Approve-Execute @Logs
 
 Update-Log
 Exit-Test

@@ -72,8 +72,11 @@ Update-Context "IPv$IPVersion" "Outbound" "ICMPv4" @Logs
 Approve-Execute @Logs | Out-Null
 
 Start-Test "Update-Context Test.Update-Context"
-Update-Context "Test" "Update-Context" @Logs
+$Result = Update-Context "Test" "Update-Context" @Logs
+$Result
 Approve-Execute @Logs | Out-Null
+
+Test-Output $Result -Command Update-Context @Logs
 
 Update-Log
 Exit-Test

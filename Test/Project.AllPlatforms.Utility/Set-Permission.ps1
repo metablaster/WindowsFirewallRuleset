@@ -139,8 +139,7 @@ $Result = Set-Permission -Principal "Remote Management Users" -Path "$TestFolder
 $Result
 
 # Test output type
-Start-Test "Get-TypeName"
-$Result | Get-TypeName @Logs
+Test-Output $Result -Command Set-Permission @Logs
 
 Update-Log
 Exit-Test

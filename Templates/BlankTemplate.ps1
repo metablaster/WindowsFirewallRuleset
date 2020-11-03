@@ -52,6 +52,9 @@ You can also include a description of the returned objects.
 .NOTES
 Additional information about the script.
 TODO: Update Copyright and start writing code
+NOTE: All of the features of function parameters, including the Parameter attribute and its named arguments,
+are also valid in scripts.
+NOTE: The OutputType attribute identifies the .NET Framework types returned by a cmdlet, function, or script.
 
 .LINK
 The name of a related topic.
@@ -93,15 +96,9 @@ the Functionality parameter of Get-Help.
 -Functionality parameter displays help for items with the specified functionality.
 #>
 
-# TODO: Make Diagnostics attribute is formatted like this in all files
-# TODO: Remove or update parameter block
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-	"PSReviewUnusedParameter", "", Justification = "This is template script parameter")]
 [CmdletBinding()]
-param (
-	[Parameter()]
-	[string] $ParameterName
-)
+[OutputType([System.Void])]
+param ()
 
 # Initialization
 # TODO: Adjust path to project settings and elevation requirement

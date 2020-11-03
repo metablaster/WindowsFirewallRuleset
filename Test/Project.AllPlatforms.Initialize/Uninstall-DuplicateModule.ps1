@@ -105,7 +105,10 @@ if ($TargetModule)
 $ModulePath = "C:\Users\$UnitTester\Documents\PowerShell\Modules\Pester"
 
 Start-Test "Uninstall-DuplicateModule Path"
-Uninstall-DuplicateModule $ModulePath @Logs
+$Result = Uninstall-DuplicateModule $ModulePath @Logs
+
+$Result
+Test-Output $Result -Command Uninstall-DuplicateModule @Logs
 
 Update-Log
 Exit-Test

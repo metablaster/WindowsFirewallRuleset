@@ -88,7 +88,10 @@ Start-Test "Show-SDDL (pipeline)"
 $ACL | Show-SDDL @Logs
 
 Start-Test "Show-SDDL (parameter)"
-Show-SDDL $ACL.SDDL @Logs
+$Result = Show-SDDL $ACL.SDDL @Logs
+$Result
+
+Test-Output $Result -Command Show-SDDL @Logs
 
 Update-Log
 Exit-Test

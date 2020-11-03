@@ -66,6 +66,9 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 Enter-Test $ThisScript
 
 Start-Test "Set-NetworkProfile"
-Set-NetworkProfile @Logs
+$Result = Set-NetworkProfile @Logs
 
+Test-Output $Result -Command Set-NetworkProfile @Logs
+
+Update-Log
 Exit-Test

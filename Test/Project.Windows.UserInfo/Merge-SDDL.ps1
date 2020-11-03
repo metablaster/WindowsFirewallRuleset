@@ -80,8 +80,7 @@ Start-Test "Merge-SDDL"
 Merge-SDDL ([ref] $TestUsersSDDL) $NewSDDL @Logs
 $TestUsersSDDL
 
-Start-Test "Get-TypeName"
-$TestUsersSDDL | Get-TypeName @Logs
+Test-Output $TestUsersSDDL -Command Merge-SDDL @Logs
 
 Update-Log
 Exit-Test

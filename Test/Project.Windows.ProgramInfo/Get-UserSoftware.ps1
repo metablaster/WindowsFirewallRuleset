@@ -78,8 +78,10 @@ foreach ($Principal in $Principals)
 	Get-UserSoftware $Principal.User @Logs
 }
 
-Start-Test "Get-TypeName"
-Get-UserSoftware $Principals[0].User @Logs | Get-TypeName @Logs
+$Result = Get-UserSoftware $Principals[0].User @Logs
+$Result
+
+Test-Output $Result -Command Get-UserSoftware @Logs
 
 Update-Log
 Exit-Test

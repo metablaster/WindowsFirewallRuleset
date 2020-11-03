@@ -73,8 +73,7 @@ foreach ($File in $TestFiles)
 	$Result
 }
 
-Start-Test "Get-TypeName"
-$Result | Get-TypeName @Logs
+Test-Output $Result -Command Get-FileEncoding @Logs
 
 Update-Log
 Exit-Test

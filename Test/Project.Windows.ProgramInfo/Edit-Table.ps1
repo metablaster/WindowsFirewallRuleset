@@ -46,6 +46,11 @@ None. Edit-Table.ps1 does not generate any output
 TODO: can we use Requires -PSSnapin here for Initialize-Table?
 #>
 
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+	"PSAvoidGlobalVars", "", Justification = "Needed in this unit test")]
+[CmdletBinding()]
+param ()
+
 # Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
@@ -88,11 +93,11 @@ $global:InstallTable | Format-Table -AutoSize @Logs
 
 Start-Test "Good user profile path"
 Initialize-Table @Logs
-Edit-Table "C:\\Users\$UnitTester\\AppData\\Roaming\\Adobe\" @Logs
+$Result = Edit-Table "C:\\Users\$UnitTester\\AppData\\Roaming\\Adobe\" @Logs
+$Result
 $global:InstallTable | Format-Table -AutoSize @Logs
 
-Start-Test "Get-TypeName"
-$global:InstallTable | Get-TypeName @Logs
+Test-Output $Result -Command Edit-Table @Logs
 
 Update-Log
 Exit-Test

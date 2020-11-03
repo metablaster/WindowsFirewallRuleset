@@ -86,14 +86,13 @@ Start-Test "Get-IPAddress IPv4 -IncludeHidden"
 Get-IPAddress IPv4 -IncludeHidden @Logs
 
 Start-Test "Get-IPAddress IPv4 -IncludeAll"
-$IPAddress = Get-IPAddress IPv4 -IncludeAll @Logs
-$IPAddress
+$Result = Get-IPAddress IPv4 -IncludeAll @Logs
+$Result
 
 Start-Test "Get-IPAddress IPv4 -IncludeAll -ExcludeHardware"
 Get-IPAddress IPv4 -IncludeAll -ExcludeHardware @Logs
 
-Start-Test "Get-TypeName"
-$IPAddress | Get-TypeName @Logs
+Test-Output $Result -Command Get-IPAddress @Logs
 
 Update-Log
 Exit-Test

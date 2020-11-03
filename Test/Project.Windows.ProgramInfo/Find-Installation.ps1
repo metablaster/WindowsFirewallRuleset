@@ -46,6 +46,11 @@ None. Find-Installation.ps1 does not generate any output
 None.
 #>
 
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+	"PSAvoidGlobalVars", "", Justification = "Needed in this unit test")]
+[CmdletBinding()]
+param ()
+
 # Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
@@ -98,14 +103,14 @@ Start-Test "Install Root Greenshot"
 $global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
 
 Start-Test "Find-Installation 'OneDrive'"
-Find-Installation "OneDrive" @Logs
+$Result = Find-Installation "OneDrive" @Logs
+$Result
 $global:InstallTable | Format-Table -AutoSize @Logs
 
 Start-Test "Install Root OneDrive"
 $global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
 
-Start-Test "Get-TypeName"
-$global:InstallTable | Get-TypeName @Logs
+Test-Output $Result -Command Find-Installation @Logs
 
 Update-Log
 Exit-Test

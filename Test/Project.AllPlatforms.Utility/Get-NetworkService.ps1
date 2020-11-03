@@ -68,8 +68,7 @@ Start-Test "Get-NetworkService"
 $Result = Get-NetworkService "$ProjectRoot\Rules" @Logs
 $Result
 
-Start-Test "Get-TypeName"
-$Result | Get-TypeName @Logs
+Test-Output $Result -Command Get-NetworkService @Logs
 
 Update-Log
 Exit-Test

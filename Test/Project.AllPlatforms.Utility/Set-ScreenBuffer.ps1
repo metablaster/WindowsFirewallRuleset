@@ -73,7 +73,10 @@ $NewSize.Height = $NewBuffer
 $psWindow.BufferSize = $NewSize
 
 Start-Test "Set-ScreenBuffer"
-Set-ScreenBuffer @Logs
+$Result = Set-ScreenBuffer @Logs
+$Result
+
+Test-Output $Result -Command Set-ScreenBuffer @Logs
 
 Update-Log
 Exit-Test

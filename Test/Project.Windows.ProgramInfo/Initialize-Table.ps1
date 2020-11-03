@@ -46,6 +46,11 @@ None. Initialize-Table.ps1 does not generate any output
 None.
 #>
 
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+	"PSAvoidGlobalVars", "", Justification = "Needed in this unit test")]
+[CmdletBinding()]
+param ()
+
 # Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
@@ -72,7 +77,8 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 Enter-Test $ThisScript
 
 Start-Test "Initialize-Table"
-Initialize-Table @Logs
+$Result = Initialize-Table @Logs
+$Result
 
 if (!$global:InstallTable)
 {
@@ -85,6 +91,9 @@ if ($global:InstallTable.Rows.Count -ne 0)
 	Write-Error -Message "Table not clear"
 	exit
 }
+
+Test-Output $Result -Command Initialize-Table @Logs
+Test-Output $global:InstallTable -Command Initialize-Table @Logs
 
 Update-Log
 Exit-Test

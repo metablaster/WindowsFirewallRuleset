@@ -114,8 +114,7 @@ Start-Test "Get-SDDL -Domain $AppDomain -User $AppUser"
 $TestUsersSDDL = Get-SDDL -Domain $AppDomain -User $AppUser @Logs
 $TestUsersSDDL
 
-Start-Test "Get-TypeName"
-$TestUsersSDDL | Get-TypeName @Logs
+Test-Output $TestUsersSDDL -Command Get-SDDL @Logs
 
 Update-Log
 Exit-Test

@@ -42,6 +42,7 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 $PublicScripts = @(
 	"Enter-Test"
 	"Exit-Test"
+	"New-Section"
 	"Start-Test"
 	"Stop-Test"
 	"Test-Output"

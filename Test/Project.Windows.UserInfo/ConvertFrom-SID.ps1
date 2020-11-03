@@ -73,6 +73,8 @@ Start-Test "Get-GroupPrincipal 'Users', 'Administrators', NT SYSTEM, NT LOCAL SE
 $UserAccounts = Get-GroupPrincipal "Users", "Administrators" @Logs
 $UserAccounts
 
+Test-Output $UserAccounts[0] -Command Get-GroupPrincipal @Logs
+
 Start-Test "Get-AccountSID NT SYSTEM, NT LOCAL SERVICE"
 $NTAccounts = Get-AccountSID -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE" @Logs
 $NTAccounts
@@ -114,11 +116,7 @@ $AppSID = "S-1-15-3-12345"
 $PackageResult = ConvertFrom-SID $AppSID @Logs
 $PackageResult | Format-Table
 
-Start-Test "Get-TypeName AppSID"
-$AppResult | Get-TypeName @Logs
-
-Start-Test "Get-TypeName UserAccounts"
-$UserAccounts[0] | Get-TypeName @Logs
+Test-Output $AppResult -Command ConvertFrom-SID @Logs
 
 Update-Log
 Exit-Test

@@ -94,8 +94,7 @@ catch
 	Write-Information -Tags "Test" -MessageData "Failure test success"
 }
 
-Start-Test "Get-TypeName"
-$Result | Get-TypeName @Logs
+Test-Output $Result -Command Get-SystemSKU @Logs
 
 Update-Log
 Exit-Test

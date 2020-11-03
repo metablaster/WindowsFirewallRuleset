@@ -86,7 +86,10 @@ foreach ($Principal in $Principals)
 }
 
 Start-Test "Get-TypeName - $($Principals[0].User)"
-Get-OneDrive $Principals[0].User @Logs | Get-TypeName @Logs
+$Result = Get-OneDrive $Principals[0].User @Logs | Get-TypeName @Logs
+$Result
+
+Test-Output $Result -Command Get-OneDrive @Logs
 
 Update-Log
 Exit-Test

@@ -74,8 +74,7 @@ Start-Test "git.exe status"
 $Result = Get-ProcessOutput -FilePath "git.exe" -ArgumentList "status" -NoNewWindow @Logs
 $Result
 
-Start-Test "Get-TypeName"
-$Result | Get-TypeName @Logs
+Test-Output $Result -Command Get-ProcessOutput @Logs
 
 Update-Log
 Exit-Test

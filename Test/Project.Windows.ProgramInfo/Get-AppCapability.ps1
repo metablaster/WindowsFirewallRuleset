@@ -80,8 +80,7 @@ Start-Test "Get-AppxPackage -Name '*ZuneMusic*' | Get-AppCapability -Authority"
 $Result = Get-AppCapability -InputObject (Get-AppxPackage -Name "*ZuneMusic*") -Authority -EA Ignore @Logs
 $Result
 
-Start-Test "Get-TypeName"
-$Result | Get-TypeName @Logs
+Test-Output $Result -Command Get-AppCapability @Logs
 
 Update-Log
 Exit-Test

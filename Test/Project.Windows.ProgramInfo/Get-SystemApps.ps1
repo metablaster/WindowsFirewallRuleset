@@ -69,8 +69,7 @@ Start-Test "Get-SystemApps"
 $Result = Get-SystemApps @Logs
 $Result
 
-Start-Test "Get-TypeName"
-$Result | Get-TypeName @Logs
+Test-Output $Result -Command Get-SystemApps @Logs
 
 Update-Log
 Exit-Test

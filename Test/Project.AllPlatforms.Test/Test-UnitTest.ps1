@@ -68,6 +68,12 @@ Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 Enter-Test $ThisScript
-Start-Test "Start-Test -Param input"
+Start-Test "Start-Test Test 1"
 Stop-Test
+
+New-Section "Sample Section"
+
+Start-Test "Start-Test Test 2"
+Stop-Test
+
 Exit-Test

@@ -94,11 +94,10 @@ Test-UserProfile $TestPath @Logs
 
 $TestPath = "C:\\"
 Start-Test "$TestPath"
-$Status = Test-UserProfile $TestPath @Logs
-$Status
+$Result = Test-UserProfile $TestPath @Logs
+$Result
 
-Start-Test "Get-TypeName"
-$Status | Get-TypeName @Logs
+Test-Output $Result -Command Test-UserProfile @Logs
 
 Update-Log
 Exit-Test

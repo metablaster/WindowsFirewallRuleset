@@ -73,6 +73,8 @@ Initialize-Project -NoModulesCheck
 # Initialize-Project -NoModulesCheck -NoProjectCheck:$false
 
 Start-Test "Initialize-Project -NoProjectCheck:$false"
-Initialize-Project -NoProjectCheck:$false
+$Result = Initialize-Project -NoProjectCheck:$false
+$Result
 
+Test-Output $Result -Command Initialize-Project @Logs
 Exit-Test

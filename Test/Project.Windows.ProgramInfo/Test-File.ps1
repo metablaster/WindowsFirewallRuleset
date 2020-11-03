@@ -74,7 +74,10 @@ Start-Test "$OfficeShared\ClickToRun\OfficeClickToRun.exe"
 Test-File "$OfficeShared\ClickToRun\OfficeClickToRun.exe" @Logs
 
 Start-Test "%ProgramFiles%\ClickToRun\OfficeClickToRun.exe"
-Test-File "%ProgramFiles%\ClickToRun\OfficeClickToRun.exe" @Logs
+$Result = Test-File "%ProgramFiles%\ClickToRun\OfficeClickToRun.exe" @Logs
+$Result
+
+Test-Output $Result -Command Test-File @Logs
 
 Update-Log
 Exit-Test

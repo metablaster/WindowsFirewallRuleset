@@ -89,7 +89,10 @@ Show-Table
 Start-Test "-Executables switch - Fill table with PowerShell"
 Initialize-Table @Logs
 Update-Table "PowerShell.exe" -Executable
-Show-Table
+$Result = Show-Table
+$Result
+
+Test-Output $Result -Command Show-Table @Logs
 
 Update-Log
 Exit-Test

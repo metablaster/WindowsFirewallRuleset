@@ -90,7 +90,10 @@ $Exports = "$ProjectRoot\Exports"
 # Export-FirewallRules -Inbound -Enabled -Block -Folder $Exports -JSON -FileName "InboundExport" @Logs
 
 Start-Test "Export-FirewallRules -DisplayGroup"
-Export-FirewallRules -DisplayName "Microsoft.BingWeather" -Outbound -Folder $Exports -FileName "StoreAppExport" @Logs # -DisplayName "Gwent"
+$Result = Export-FirewallRules -DisplayName "Microsoft.BingWeather" -Outbound -Folder $Exports -FileName "StoreAppExport" @Logs # -DisplayName "Gwent"
+$Result
+
+Test-Output $Result -Command Export-FirewallRules @Logs
 
 Update-Log
 Exit-Test

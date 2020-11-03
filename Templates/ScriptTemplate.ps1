@@ -53,6 +53,7 @@ None.
 TODO: Update Copyright and start writing code
 #>
 
+# TODO: Make Diagnostics attribute is formatted like this in all files
 # TODO: Remove or update parameter block
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 	"PSReviewUnusedParameter", "", Justification = "This is template script parameter")]

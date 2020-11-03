@@ -83,14 +83,13 @@ Start-Test "Get-Broadcast -IncludeHidden"
 Get-Broadcast -IncludeHidden @Logs
 
 Start-Test "Get-Broadcast -IncludeAll"
-$Broadcast = Get-Broadcast -IncludeAll @Logs
-$Broadcast
+$Result = Get-Broadcast -IncludeAll @Logs
+$Result
 
 Start-Test "Get-Broadcast -IncludeAll -ExcludeHardware"
 Get-Broadcast -IncludeAll -ExcludeHardware @Logs
 
-Start-Test "Get-TypeName"
-$Broadcast | Get-TypeName @Logs
+Test-Output $Result -Command Get-Broadcast @Logs
 
 Update-Log
 Exit-Test

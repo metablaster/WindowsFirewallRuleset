@@ -62,13 +62,14 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 Enter-Test $ThisScript
 
-Start-Test "Initialize-Service"
-$Result = @("lmhosts", "LanmanWorkstation", "LanmanServer") | Initialize-Service @Logs
+Start-Test "Initialize-Service pipeline"
+@("lmhosts", "LanmanWorkstation", "LanmanServer") | Initialize-Service @Logs
 
-Initialize-Service "WinRM" @Logs
+Start-Test "Initialize-Service WinRM"
+$Result = Initialize-Service "WinRM" @Logs
 
-Start-Test "Get-TypeName"
-$Result | Get-TypeName @Logs
+$Result
+Test-Output $Result -Command Initialize-Service @Logs
 
 Update-Log
 Exit-Test

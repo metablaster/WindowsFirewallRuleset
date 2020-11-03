@@ -77,8 +77,7 @@ Start-Test "Convert-SDDLToACL"
 $Result = Convert-SDDLToACL $SDDL1, $SDDL2 @Logs
 $Result
 
-Start-Test "Get-TypeName"
-$Result | Get-TypeName @Logs
+Test-Output $Result -Command Convert-SDDLToACL @Logs
 
 Update-Log
 Exit-Test

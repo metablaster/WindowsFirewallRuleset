@@ -73,11 +73,7 @@ Start-Test "Test-Function"
 $Result = Test-Function @Logs
 $Result
 
-Start-Test "Get-TypeName"
-$Result | Get-TypeName @Logs
-
-Start-Test "OutputType"
-(Get-Command Test-Function).OutputType.Name
+Test-Output $Result -Command Test-Function @Logs
 
 Update-Log
 Exit-Test

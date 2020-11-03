@@ -77,8 +77,7 @@ Get-SQLInstance @Logs | Select-Object -ExpandProperty SQLBinRoot @Logs
 Start-Test "Get-SQLInstance DTS directory"
 Get-SQLInstance @Logs | Select-Object -ExpandProperty SQLPath @Logs
 
-Start-Test "Get-TypeName"
-$Instances | Get-TypeName @Logs
+Test-Output $Instances -Command Get-SQLInstance @Logs
 
 Update-Log
 Exit-Test

@@ -65,7 +65,10 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 Enter-Test $ThisScript
 
 Start-Test "Get-WindowsDefender"
-Get-WindowsDefender @Logs #| Select-Object -ExpandProperty InstallLocation @Logs
+$Result = Get-WindowsDefender @Logs #| Select-Object -ExpandProperty InstallLocation @Logs
+$Result
+
+Test-Output $Result -Command Get-WindowsDefender @Logs
 
 Update-Log
 Exit-Test

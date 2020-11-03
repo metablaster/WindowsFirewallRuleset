@@ -87,8 +87,8 @@ $Result = Initialize-Module @{ ModuleName = "Pester"; ModuleVersion = $RequirePe
 	-Repository $Repository -Trusted `
 	-InfoMessage "Pester is required to run pester tests" @Logs
 
-Start-Test "Get-TypeName"
-$Result | Get-TypeName @Logs
+$Result
+Test-Output $Result -Command Initialize-Module @Logs
 
 Update-Log
 Exit-Test

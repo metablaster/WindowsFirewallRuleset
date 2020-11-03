@@ -80,8 +80,7 @@ Start-Test "Failure test"
 $FailedUsers = Get-GroupPrincipal "Nonexistent Users" @Logs -ErrorAction SilentlyContinue
 $FailedUsers
 
-Start-Test "Get-TypeName"
-$UsersTest | Get-TypeName @Logs
+Test-Output $UsersTest -Command Get-GroupPrincipal @Logs
 
 Update-Log
 Exit-Test

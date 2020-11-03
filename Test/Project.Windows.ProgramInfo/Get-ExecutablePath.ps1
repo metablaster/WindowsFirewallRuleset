@@ -72,8 +72,7 @@ Start-Test "Get-ExecutablePath pwsh.exe"
 $ExecutablePaths | Where-Object -Property Name -EQ "pwsh.exe" @Logs |
 Select-Object -ExpandProperty InstallLocation
 
-Start-Test "Get-TypeName"
-$ExecutablePaths | Get-TypeName @Logs
+Test-Output $ExecutablePaths -Command Get-ExecutablePath @Logs
 
 Update-Log
 Exit-Test

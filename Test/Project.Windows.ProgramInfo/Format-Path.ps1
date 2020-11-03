@@ -172,8 +172,7 @@ $Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
 
-Start-Test "Get-TypeName"
-$Result | Get-TypeName @Logs
+Test-Output $Result -Command Format-Path @Logs
 
 Update-Log
 Exit-Test

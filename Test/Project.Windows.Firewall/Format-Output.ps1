@@ -75,7 +75,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 Start-Test "Format-Output"
 
-New-NetFirewallRule -DisplayName "TargetProgram" `
+New-NetFirewallRule -DisplayName "TargetProgram1" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
@@ -83,8 +83,22 @@ New-NetFirewallRule -DisplayName "TargetProgram" `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
 	-InterfaceType $Interface `
-	-Description "TargetProgram test rule description" `
+	-Description "TargetProgram1 test rule description" `
 	@Logs | Format-Output @Logs
+
+$Result = New-NetFirewallRule -DisplayName "TargetProgram2" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Any `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser Any `
+	-InterfaceType $Interface `
+	-Description "TargetProgram2 test rule description" `
+	@Logs | Format-Output @Logs
+
+$Result
+Test-Output $Result -Command Format-Output @Logs
 
 Update-Log
 Exit-Test

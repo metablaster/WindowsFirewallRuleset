@@ -68,7 +68,10 @@ Start-Test "Test-Service FailureTest"
 Test-Service "FailureTest" @Logs
 
 Start-Test "Test-Service dnscache"
-Test-Service dnscache @Logs
+$Result = Test-Service dnscache @Logs
+$Result
+
+Test-Output $Result -Command Test-Service @Logs
 
 Update-Log
 Exit-Test

@@ -80,7 +80,10 @@ $Exports = "$ProjectRoot\Exports"
 # Import-FirewallRules -JSON -Folder $Exports -FileName "$Exports\NamedExport2.json" @Logs
 
 Start-Test "Import-FirewallRules -FileName StoreAppExport.csv"
-Import-FirewallRules -Folder $Exports -FileName "StoreAppExport.csv" @Logs
+$Result = Import-FirewallRules -Folder $Exports -FileName "StoreAppExport.csv" @Logs
+$Result
+
+Test-Output $Result -Command Import-FirewallRules @Logs
 
 Update-Log
 Exit-Test

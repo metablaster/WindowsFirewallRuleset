@@ -68,8 +68,7 @@ Start-Test "Get-AllUserSoftware"
 $Result = Get-AllUserSoftware @Logs
 $Result
 
-Start-Test "Get-TypeName"
-$Result | Get-TypeName @Logs
+Test-Output $Result -Command Get-AllUserSoftware @Logs
 
 Update-Log
 Exit-Test

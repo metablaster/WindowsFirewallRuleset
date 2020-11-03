@@ -78,8 +78,7 @@ Start-Test "Get-GroupSID 'Users' -CIM"
 $GroupsTest = Get-GroupSID $SingleGroup -CIM @Logs
 $GroupsTest
 
-Start-Test "Get-TypeName"
-$GroupsTest | Get-TypeName @Logs
+Test-Output $GroupsTest -Command Get-GroupSID @Logs
 
 #
 # Test array of groups
@@ -95,8 +94,7 @@ Start-Test "Get-GroupSID $GroupArray -CIM"
 $GroupsTest = Get-GroupSID $GroupArray -CIM @Logs
 $GroupsTest
 
-Start-Test "Get-TypeName"
-$GroupsTest | Get-TypeName @Logs
+Test-Output $GroupsTest -Command Get-GroupSID @Logs
 
 #
 # Test pipeline

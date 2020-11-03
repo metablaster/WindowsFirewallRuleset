@@ -76,8 +76,7 @@ if ($null -ne $WindowsKits)
 	Select-Object -Last 1 -ExpandProperty InstallLocation @Logs
 }
 
-Start-Test "Get-TypeName"
-$WindowsKits | Get-TypeName @Logs
+Test-Output $WindowsKits -Command Get-WindowsKit @Logs
 
 Update-Log
 Exit-Test

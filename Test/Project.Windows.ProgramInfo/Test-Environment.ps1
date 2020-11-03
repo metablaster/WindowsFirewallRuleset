@@ -169,8 +169,7 @@ $Result = $null
 Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
 
-Start-Test "Get-TypeName"
-$Status | Get-TypeName @Logs
+Test-Output $Status -Command Test-Environment @Logs
 
 Update-Log
 Exit-Test

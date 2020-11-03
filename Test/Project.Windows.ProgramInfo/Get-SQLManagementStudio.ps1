@@ -71,8 +71,7 @@ $Instances
 Start-Test "SQLManagementStudio - Install path"
 $Instances | Select-Object -ExpandProperty InstallLocation @Logs
 
-Start-Test "Get-TypeName"
-$Instances | Get-TypeName @Logs
+Test-Output $Instances -Command Get-SQLManagementStudio @Logs
 
 Update-Log
 Exit-Test

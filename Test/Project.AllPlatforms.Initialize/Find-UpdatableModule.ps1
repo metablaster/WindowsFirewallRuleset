@@ -95,8 +95,7 @@ $Result
 Start-Test '@("PowerShellGet", "PackageManagement", "PSScriptAnalyzer") | Find-UpdatableModule'
 @("PowerShellGet", "PackageManagement", "PSScriptAnalyzer") | Find-UpdatableModule @Logs
 
-Start-Test "Get-TypeName"
-$Result | Get-TypeName @Logs
+Test-Output $Result -Command Find-UpdatableModule @Logs
 
 Update-Log
 Exit-Test

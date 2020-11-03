@@ -28,65 +28,57 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Verify TypeName and OutputType are identical
+Print new unit test section
 
 .DESCRIPTION
-The purpose of this test is is to ensure object output typename is identical as
-described by OutputType attribute.
-Comparison is case sensitive.
+New-Section prints new section to group multiple test cases.
+Useful for unit test with a lof of test cases, for readability.
 
-.PARAMETER OutputObject
-The actual .NET object that some function returns
-
-.PARAMETER Command
-CommandInfo object obtained from Get-Command
+.PARAMETER Section
+Section title
 
 .EXAMPLE
-PS> $Result = Some-Function
-PS> Test-Output $Result -Command Some-Function
+PS> New-Section "This is new section"
 
 .INPUTS
-None. You cannot pipe objects to Test-Output
+None. You cannot pipe objects to New-Section
 
 .OUTPUTS
-[System.String] TypeName and OutputType including equality test
+None. New-Section does not generate any output
 
 .NOTES
 None.
 #>
-function Test-Output
+function New-Section
 {
-	[OutputType([string])]
-	[CmdletBinding(PositionalBinding = $false,
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Test/Help/en-US/Test-Output.md")]
+	[OutputType([void])]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "None",
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Test/Help/en-US/New-Section.md")]
 	param (
-		[Parameter(Position = 0, Mandatory = $true)]
-		[AllowNull()]
-		[System.Object[]] $OutputObject,
-
 		[Parameter(Mandatory = $true)]
-		[string] $Command
+		[string] $Section
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-	Start-Test "Compare TypeName and OutputType"
-
-	$TypeName = Get-TypeName $OutputObject
-	$OutputType = Get-TypeName -Command $Command
-
-	"TypeName:`t$TypeName"
-	"OutputType:`t$OutputType"
-
-	if ($OutputType -ceq $TypeName)
+	if ($PSCmdlet.ShouldProcess("Current unit test", "Print new section"))
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] TypeName and OutputType are identical"
-	}
-	else
-	{
-		Write-Error -Category InvalidResult -TargetObject $TypeName `
-			-Message "TypeName and OutputType are not identical"
-	}
+		$OutputString = "SECTION -> $Section <- SECTION"
+		# The constant is the number of asterisks + spaces on both sides set manually below
+		$Asterisks = ("*" * ($OutputString.Length + 22))
+		$Dashes = ("-" * ($OutputString.Length + 20))
 
-	Stop-Test
+		# NOTE: Write-Host would mess up test case outputs
+		Write-Output ""
+		Write-Output ""
+		Write-Output $Asterisks
+
+		Write-Output "*$Dashes*"
+		Write-Output "*--------- $OutputString ---------*"
+		Write-Output "*$Dashes*"
+
+		Write-Output $Asterisks
+		Write-Output ""
+		Write-Output ""
+	}
 }

@@ -70,13 +70,16 @@ $Exports = "$ProjectRoot\Exports"
 # TODO: need to test failure cases, see also module todo's for more info
 
 Start-Test "Remove-FirewallRules"
-Remove-FirewallRules -Folder $Exports -FileName "GroupExport" @Logs
+$Result = Remove-FirewallRules -Folder $Exports -FileName "GroupExport" @Logs
+$Result
 
 # Start-Test "Remove-FirewallRules"
 # Remove-FirewallRules -Folder $Exports -FileName "$Exports\NamedExport1.csv" @Logs
 
 # Start-Test "Remove-FirewallRules -JSON"
 # Remove-FirewallRules -JSON -Folder $Exports -FileName "$Exports\NamedExport2.json" @Logs
+
+Test-Output $Result -Command Remove-FirewallRules @Logs
 
 Update-Log
 Exit-Test

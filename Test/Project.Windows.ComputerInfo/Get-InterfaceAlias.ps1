@@ -103,8 +103,7 @@ Start-Test "Get-InterfaceAlias IPv4 -IncludeAll -ExcludeHardware"
 $Aliases = Get-InterfaceAlias IPv4 -IncludeAll -ExcludeHardware @Logs
 $Aliases.ToWql()
 
-Start-Test "Get-TypeName"
-$Aliases | Get-TypeName @Logs
+Test-Output $Aliases -Command Get-InterfaceAlias @Logs
 
 Update-Log
 Exit-Test

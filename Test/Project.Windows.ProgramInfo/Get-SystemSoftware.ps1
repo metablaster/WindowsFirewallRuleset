@@ -76,8 +76,7 @@ Select-Object -ExpandProperty InstallLocation @Logs
 Start-Test "Get-SystemSoftware"
 $SystemPrograms | Sort-Object -Property Name @Logs
 
-Start-Test "Get-TypeName"
-$SystemPrograms | Get-TypeName @Logs
+Test-Output $SystemPrograms -Command Get-SystemSoftware @Logs
 
 Update-Log
 Exit-Test

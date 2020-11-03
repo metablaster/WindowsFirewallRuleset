@@ -84,8 +84,7 @@ $Result = Get-SystemApps @Logs | ForEach-Object {
 }
 $Result
 
-Start-Test "Get-TypeName"
-$Result | Get-TypeName @Logs
+Test-Output $Result -Command Get-AppSID @Logs
 
 Update-Log
 Exit-Test

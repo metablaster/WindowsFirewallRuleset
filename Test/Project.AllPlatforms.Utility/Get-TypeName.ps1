@@ -91,8 +91,9 @@ function global:Test-Multiple
 Enter-Test $ThisScript
 
 #
-# Test default
+# Defaults test
 #
+New-Section "Test default"
 
 Start-Test "Get-TypeName -> System.String"
 Get-TypeName ([System.Environment]::MachineName) @Logs
@@ -109,6 +110,7 @@ Get-TypeName (Test-NoReturn) -Accelerator @Logs
 #
 # Test command
 #
+New-Section "Test command parameter"
 
 Start-Test "Get-TypeName -Command -> int32"
 Get-TypeName -Command Test-NoReturn @Logs
@@ -119,6 +121,7 @@ Get-TypeName -Command Test-Multiple @Logs
 #
 # Test with Get-Process
 #
+New-Section "Test with Get-Process"
 
 Start-Test "Get-TypeName -> System.Diagnostics.Process"
 Get-TypeName (Get-Process) @Logs
@@ -129,24 +132,24 @@ Get-TypeName -Command Get-Process @Logs
 #
 # Test conversion
 #
+New-Section "Test -Accelerator parameter"
 
 Start-Test "Get-TypeName -Name -> System.Management.Automation.SwitchParameter"
-Get-TypeName -Name "switch"
+Get-TypeName -Name [switch]
 
 Start-Test "Get-TypeName -Name -Accelerator -> switch"
-Get-TypeName -Name "System.Management.Automation.SwitchParameter" -Accelerator
+Get-TypeName -Name [System.Management.Automation.SwitchParameter] -Accelerator
 
 Start-Test "Get-TypeName -Name -> FAIL"
-Get-TypeName -Name "System.String"
+Get-TypeName -Name [System.String]
 
 Start-Test "Get-TypeName -Name -Accelerator -> FAIL"
-Get-TypeName -Name "string" -Accelerator
+Get-TypeName -Name [string] -Accelerator
 
 #
 # Test default, pipeline
 #
-
-Write-Information -Tags "Test" -MessageData "INFO: Test default, pipeline"
+New-Section "Test pipeline"
 
 Start-Test "Get-TypeName -> System.String"
 ([System.Environment]::MachineName) | Get-TypeName @Logs
@@ -161,15 +164,19 @@ Start-Test "Get-TypeName -Accelerator -> void"
 Test-NoReturn | Get-TypeName -Accelerator @Logs
 
 #
-# Test with Get-Process
+# Test pipeline with Get-Process
 #
+New-Section "Test pipeline with Get-Process"
 
 Start-Test "Get-TypeName -> System.Diagnostics.Process"
-Write-Warning -Message "Test aborted"
-# Get-Process | Get-TypeName @Logs
+Write-Warning -Message "Test not shown"
+$Result = Get-Process | Get-TypeName @Logs
+$Result
 
 Start-Test "Get-TypeName -> null"
 Get-TypeName @Logs
+
+Test-Output $Result -Command Get-Process @Logs
 
 Update-Log
 Exit-Test

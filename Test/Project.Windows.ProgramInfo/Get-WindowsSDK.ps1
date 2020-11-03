@@ -76,8 +76,7 @@ if ($null -ne $WindowsSDK)
 	Select-Object -Last 1 -ExpandProperty InstallLocation @Logs
 }
 
-Start-Test "Get-TypeName"
-$WindowsSDK | Get-TypeName @Logs
+Test-Output $WindowsSDK -Command Get-WindowsSDK @Logs
 
 Update-Log
 Exit-Test

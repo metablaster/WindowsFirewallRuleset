@@ -75,8 +75,7 @@ Start-Test "ConvertFrom-UserAccount:"
 $UserNames = ConvertFrom-UserAccount ($UserAccounts | Select-Object -ExpandProperty Account) @Logs
 $UserNames
 
-Start-Test "Get-TypeName"
-$UserNames | Get-TypeName @Logs
+Test-Output $UserNames -Command ConvertFrom-UserAccount @Logs
 
 Update-Log
 Exit-Test

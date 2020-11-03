@@ -68,8 +68,7 @@ Start-Test "Test-TargetComputer"
 $Result = Test-TargetComputer ([System.Environment]::MachineName) @Logs
 $Result
 
-Start-Test "Get-TypeName"
-$Result | Get-TypeName @Logs
+Test-Output $Result -Command Test-TargetComputer @Logs
 
 Update-Log
 Exit-Test

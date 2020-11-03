@@ -86,8 +86,8 @@ Start-Test "Get-ConfiguredAdapter IPv4 -IncludeHidden"
 Get-ConfiguredAdapter IPv4 -IncludeHidden @Logs
 
 Start-Test "Get-ConfiguredAdapter IPv4 -IncludeAll"
-$Adapters = Get-ConfiguredAdapter IPv4 -IncludeAll @Logs
-$Adapters
+$Result = Get-ConfiguredAdapter IPv4 -IncludeAll @Logs
+$Result
 
 Start-Test "Get-ConfiguredAdapter IPv4 -IncludeAll -ExcludeHardware"
 Get-ConfiguredAdapter IPv4 -IncludeAll -ExcludeHardware @Logs
@@ -95,8 +95,7 @@ Get-ConfiguredAdapter IPv4 -IncludeAll -ExcludeHardware @Logs
 Start-Test "Get-ConfiguredAdapter binding"
 Get-ConfiguredAdapter IPv4 @Logs | Select-Object -ExpandProperty IPv4Address @Logs
 
-Start-Test "Get-TypeName"
-$Adapters | Get-TypeName @Logs
+Test-Output $Result -Command Get-ConfiguredAdapter @Logs
 
 Update-Log
 Exit-Test

@@ -76,7 +76,9 @@ None.
 function Compare-Path
 {
 	[OutputType([bool])]
-	[CmdletBinding()]
+	[CmdletBinding(
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Utility/Help/en-US/Compare-Path.md"
+	)]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[string] $TargetPath,

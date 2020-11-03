@@ -65,11 +65,10 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 Enter-Test $ThisScript
 
 Start-Test "Get-ComputerName"
-$ComputerName = Get-ComputerName @Logs
-$ComputerName
+$Result = Get-ComputerName @Logs
+$Result
 
-Start-Test "Get-TypeName"
-$ComputerName | Get-TypeName @Logs
+Test-Output $Result -Command Get-ComputerName @Logs
 
 Update-Log
 Exit-Test

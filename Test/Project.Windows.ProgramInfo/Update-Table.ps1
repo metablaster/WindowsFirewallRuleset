@@ -46,6 +46,11 @@ None. Update-Table.ps1 does not generate any output
 None.
 #>
 
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+	"PSAvoidGlobalVars", "", Justification = "Needed in this unit test")]
+[CmdletBinding()]
+param ()
+
 # Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
@@ -102,11 +107,11 @@ $global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
 
 Start-Test "-UserProfile switch Fill table with OneDrive"
 Initialize-Table @Logs
-Update-Table "OneDrive" -UserProfile @Logs
+$Result = Update-Table "OneDrive" -UserProfile @Logs
+$Result
 $global:InstallTable | Format-Table -AutoSize @Logs
 
-Start-Test "Get-TypeName"
-$global:InstallTable | Get-TypeName @Logs
+Test-Output $Result -Command Update-Table @Logs
 
 Update-Log
 Exit-Test

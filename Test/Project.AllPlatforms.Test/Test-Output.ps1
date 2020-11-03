@@ -69,9 +69,23 @@ Start-Test "Test-Output"
 $NETObject = Test-Path $env:SystemDrive
 Test-Output $NETObject -Command Test-Path @Logs
 
+$TempError = $null
+
 Start-Test "Test-Output FAIL"
 $ServiceController = Get-Service
-Test-Output $ServiceController -Command Get-Random @Logs
+Test-Output $ServiceController -Command Get-Random -ErrorAction SilentlyContinue -EV TempError
+Write-Warning -Message "Error ignored: $TempError"
+
+<#
+.DESCRIPTION
+Null function
+#>
+function global:Test-NullFunction {}
+
+Start-Test "Test-Output NULL"
+$NullVariable = $null
+Test-Output $NullVariable -Command Test-NullFunction -ErrorAction SilentlyContinue -EV TempError
+Write-Warning -Message "Error ignored: $TempError"
 
 Update-Log
 Exit-Test

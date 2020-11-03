@@ -83,10 +83,10 @@ Start-Test "Test-Installation 'VisualStudio' $TestBadVariable"
 Test-Installation "VisualStudio" ([ref] $TestBadVariable) @Logs
 
 Start-Test "Test-Installation 'BadVariable' $TestBadVariable2"
-$Status = Test-Installation "BadVariable" ([ref] $TestBadVariable2) @Logs
+$Result = Test-Installation "BadVariable" ([ref] $TestBadVariable2) @Logs
+$Result
 
-Start-Test "Get-TypeName"
-$Status | Get-TypeName @Logs
+Test-Output $Result -Command Test-Installation @Logs
 
 Update-Log
 Exit-Test

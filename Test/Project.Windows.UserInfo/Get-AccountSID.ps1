@@ -120,8 +120,7 @@ $AccountSID3
 # $AccountSID3 = Get-AccountSID -Domain $AppDomain -User $AppUser -CIM @Logs
 # $AccountSID3
 
-Start-Test "Get-TypeName"
-$AccountSID3 | Get-TypeName @Logs
+Test-Output $AccountSID3 -Command Get-AccountSID @Logs
 
 Update-Log
 Exit-Test

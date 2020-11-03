@@ -32,12 +32,13 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - New features
 
-  - Added script to restart/reset network with no need for reboot
+  - Added script to restart/reset network and network configuration with no need for reboot
   - Added function to set ownership and file saystem premissions
 
 - Documentation
 
   - Comment based help, update formatting according to community quidelines
+  - Comment based help, check .INPUTS, .OUTPUTS and OutputType are specified and up to date
 
 - Bugfix
 

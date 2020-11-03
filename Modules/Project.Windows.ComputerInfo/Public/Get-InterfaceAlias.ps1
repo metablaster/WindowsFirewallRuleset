@@ -70,6 +70,7 @@ None. You cannot pipe objects to Get-InterfaceAlias
 
 .NOTES
 None.
+TODO: There is another function with the same name in Scripts folder
 #>
 function Get-InterfaceAlias
 {

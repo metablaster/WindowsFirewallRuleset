@@ -79,8 +79,7 @@ if ($null -ne $NETFramework)
 	$NETFrameworkRoot
 }
 
-Start-Test "Get-TypeName"
-$NETFrameworkRoot | Get-TypeName @Logs
+Test-Output $NETFramework -Command Get-NetFramework @Logs
 
 Update-Log
 Exit-Test

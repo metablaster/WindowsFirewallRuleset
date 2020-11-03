@@ -66,9 +66,9 @@ Enter-Test $ThisScript
 
 Start-Test "Find-RulePrincipal"
 $Result = Find-RulePrincipal @Logs
+$Result
 
-Start-Test "Find-RulePrincipal | Get-TypeName"
-$Result | Get-TypeName @Logs
+Test-Output $Result -Command Find-RulePrincipal @Logs
 
 Update-Log
 Exit-Test

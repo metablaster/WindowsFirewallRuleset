@@ -28,11 +28,13 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Returns .NET type name for input object or command name
+Get commandlet output type or convert to/from type accelerator
 
 .DESCRIPTION
+A wrapper around at a minimum Get-Member and Get-Command.
 Unlike Get-Member commandlet returns only type name, and if
-there are multiple types chooses unique ones only.
+there are multiple types chooses unique ones only, except for pipelines.
+In all/specific cases input can be translated to/from type accelerator.
 
 .PARAMETER InputObject
 Target object for which to retrieve output type name.
@@ -61,7 +63,7 @@ System.Diagnostics.FileVersionInfo
 System.Diagnostics.Process
 
 .EXAMPLE
-PS> Get-TypeName -Name "switch"
+PS> Get-TypeName -Name [switch]
 
 System.Management.Automation.SwitchParameter
 
@@ -83,6 +85,7 @@ System.String
 
 .NOTES
 None.
+TODO: [type] instead of string
 #>
 function Get-TypeName
 {
@@ -107,9 +110,11 @@ function Get-TypeName
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
+		[string] $TypeName = $null
+
 		if ($Name)
 		{
-			$TypeName = $Name
+			$TypeName = $Name.Trim("[", "]")
 		}
 		elseif ($InputObject)
 		{
@@ -118,10 +123,22 @@ function Get-TypeName
 		}
 		elseif ($Command)
 		{
-			if ($CommandName = Get-Command -Name $Command -ErrorAction Ignore)
+			# [System.Management.Automation.CmdletInfo]
+			if ($CmdletInfo = Get-Command -Name $Command -ErrorAction Ignore)
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing command: $($CommandName.Name)"
-				$TypeName = ($CommandName).OutputType.Name
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing command: $($CmdletInfo.Name)"
+				# [System.Management.Automation.PSTypeName]
+				$OutputType = ($CmdletInfo).OutputType
+
+				if ([string]::IsNullOrEmpty($OutputType))
+				{
+					Write-Warning -Message "Command: '$Command' does not have [OutputType()] attribute defined"
+					return
+				}
+				else
+				{
+					$TypeName = $OutputType.Name
+				}
 			}
 			else
 			{
@@ -132,7 +149,7 @@ function Get-TypeName
 		}
 		else
 		{
-			Write-Warning -Message "Input is null, typename set to: System.Void"
+			Write-Warning -Message "Input is null, typename implicitly set to: System.Void"
 			$TypeName = "System.Void"
 		}
 
@@ -148,21 +165,17 @@ function Get-TypeName
 			$ShortName = $KeyValue | Select-Object -ExpandProperty Key
 			$FullName = ($KeyValue | Select-Object -ExpandProperty Value).FullName
 
-			if ($Name)
+			if (!$Accelerator -and $Name)
 			{
-				$TypeName = $Name
-				if (!$Accelerator)
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Converting accelerator to full name for: $TypeName"
+				if ($TargetValue = [array]::Find($ShortName, [System.Predicate[string]] { $TypeName -like $args[0] }))
 				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Converting accelerator to full name for: $Name"
-					if ($TargetValue = [array]::Find($ShortName, [System.Predicate[string]] { $TypeName -like $args[0] }))
-					{
-						return $FullName[$([array]::IndexOf($ShortName, $TargetValue))]
-					}
-					else
-					{
-						Write-Warning -Message "Accelerator not recognized for: $Name"
-						return
-					}
+					return $FullName[$([array]::IndexOf($ShortName, $TargetValue))]
+				}
+				else
+				{
+					Write-Warning -Message "Typename not recognized as accelerator: $TypeName"
+					return
 				}
 			}
 
@@ -178,6 +191,7 @@ function Get-TypeName
 			}
 		}
 
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Success with result of: $TypeName"
 		Write-Output -InputObject $TypeName
 	}
 }

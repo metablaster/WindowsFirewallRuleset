@@ -86,8 +86,7 @@ Start-Test "Compare-Path not same path"
 $Result = Compare-Path "%SystemDrive%\" "D:\" @Logs
 $Result
 
-Start-Test "Get-TypeName"
-$Result | Get-TypeName @Logs
+Test-Output $Result -Command Compare-Path @Logs
 
 Update-Log
 Exit-Test
