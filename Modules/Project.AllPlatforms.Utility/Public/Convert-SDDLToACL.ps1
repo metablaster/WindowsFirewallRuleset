@@ -43,7 +43,7 @@ PS> Convert-SDDLToACL $SomeSDDL, $SDDL2, "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
 None. You cannot pipe objects to Convert-SDDLToACL
 
 .OUTPUTS
-[string[]] Array of computer accounts
+[string]
 
 .NOTES
 None.
@@ -52,7 +52,7 @@ function Convert-SDDLToACL
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Utility/Help/en-US/Convert-SDDLToACL.md")]
-	[OutputType([string[]])]
+	[OutputType([string])]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string[]] $SDDL

@@ -47,7 +47,7 @@ PS> ConvertFrom-UserAccount SERVER\USER, COMPUTER\USER, SERVER2\USER2
 None. You cannot pipe objects to ConvertFrom-UserAccount
 
 .OUTPUTS
-[System.String[]] array of usernames in form of: USERNAME
+[System.String] Usernames in form of: USERNAME
 
 .NOTES
 None.
@@ -56,7 +56,7 @@ function ConvertFrom-UserAccount
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.UserInfo/Help/en-US/ConvertFrom-UserAccount.md")]
-	[OutputType([System.String[]])]
+	[OutputType([System.String])]
 	param(
 		[Alias("Account")]
 		[Parameter(Mandatory = $true)]

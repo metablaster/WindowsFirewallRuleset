@@ -78,10 +78,10 @@ PS> Get-NetworkAddress "10.0.23.21 255.255.255.224"
 Input values are automatically split into IP address and subnet mask. Returns the address 10.0.23.0.
 
 .INPUTS
-[System.String]
+[string]
 
 .OUTPUTS
-[IPAddress]
+[ipaddress]
 
 .NOTES
 Following changes by metablaster:
@@ -93,10 +93,9 @@ function Get-NetworkAddress
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.IP/Help/en-US/Get-NetworkAddress.md")]
-	[OutputType([IPAddress])]
+	[OutputType([ipaddress])]
 	param (
-		[Parameter(Mandatory = $true,
-			ValueFromPipeline = $true)]
+		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
 		[string] $IPAddress,
 
 		[Parameter()]
@@ -108,7 +107,7 @@ function Get-NetworkAddress
 		try
 		{
 			$Network = ConvertTo-Network @PSBoundParameters
-			return [IPAddress]($Network.IPAddress.Address -band $Network.SubnetMask.Address)
+			return [ipaddress]($Network.IPAddress.Address -band $Network.SubnetMask.Address)
 		}
 		catch
 		{

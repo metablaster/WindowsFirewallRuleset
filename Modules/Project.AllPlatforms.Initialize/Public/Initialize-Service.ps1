@@ -51,7 +51,7 @@ $true if WinRM service was started $false otherwise
 [string[]] One or more service short names to check
 
 .OUTPUTS
-[System.Boolean]
+[bool]
 
 .NOTES
 This function main purpose is automated development environment setup to be able to perform quick

@@ -43,7 +43,7 @@ PS> Get-WindowsSDK COMPUTERNAME
 None. You cannot pipe objects to Get-WindowsSDK
 
 .OUTPUTS
-[PSCustomObject[]] for installed Windows SDK versions and install paths
+[PSCustomObject] for installed Windows SDK versions and install paths
 
 .NOTES
 None.
@@ -52,7 +52,7 @@ function Get-WindowsSDK
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-WindowsSDK.md")]
-	[OutputType([PSCustomObject[]])]
+	[OutputType([PSCustomObject])]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]

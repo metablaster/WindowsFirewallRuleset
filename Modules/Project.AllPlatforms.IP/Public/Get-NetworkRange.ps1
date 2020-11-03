@@ -82,10 +82,10 @@ PS> Get-NetworkRange 10.0.8.0/22
 Returns all IP addresses in the range 192.168.0.0 255.255.252.0.
 
 .INPUTS
-[System.String]
+[string]
 
 .OUTPUTS
-[IPAddress]
+[ipaddress]
 
 .NOTES
 Following changes by metablaster:
@@ -97,7 +97,7 @@ function Get-NetworkRange
 {
 	[CmdletBinding(DefaultParameterSetName = "FromIPAndMask",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.IP/Help/en-US/Get-NetworkRange.md")]
-	[OutputType([IPAddress])]
+	[OutputType([ipaddress])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0,
 			ValueFromPipeline = $true, ParameterSetName = "FromIPAndMask")]
@@ -112,11 +112,11 @@ function Get-NetworkRange
 
 		[Parameter(Mandatory = $true,
 			ParameterSetName = "FromStartAndEnd")]
-		[IPAddress] $Start,
+		[ipaddress] $Start,
 
 		[Parameter(Mandatory = $true,
 			ParameterSetName = "FromStartAndEnd")]
-		[IPAddress] $End
+		[ipaddress] $End
 	)
 
 	process
@@ -153,7 +153,7 @@ function Get-NetworkRange
 
 		for ($i = $StartDecimal; $i -le $EndDecimal; $i++)
 		{
-			[IPAddress]([IPAddress]::NetworkToHostOrder([int64] $i) -shr 32 -band [uint32]::MaxValue)
+			[ipaddress]([ipaddress]::NetworkToHostOrder([int64] $i) -shr 32 -band [uint32]::MaxValue)
 		}
 	}
 }

@@ -66,7 +66,7 @@ APPLICATION PACKAGE AUTHORITY\Your home or work networks
 [Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage[]]
 
 .OUTPUTS
-[string[]] Capability names or full reference names for capabilities of an app
+[string] Capability names or full reference names for capabilities of an app
 
 .NOTES
 None.
@@ -81,7 +81,7 @@ function Get-AppCapability
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-AppCapability.md")]
-	[OutputType([string[]])]
+	[OutputType([string])]
 	param (
 		[Alias("App", "StoreApp")]
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true, Position = 0)]

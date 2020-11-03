@@ -82,7 +82,7 @@ Test case when there are multiple OutputType types
 #>
 function global:Test-Multiple
 {
-	[OutputType([int32], [System.String])]
+	[OutputType([int32], [string])]
 	[CmdletBinding()]
 	param ()
 
@@ -143,7 +143,7 @@ Start-Test "Get-TypeName -Name -Accelerator -> switch"
 Get-TypeName -Name [System.Management.Automation.SwitchParameter] -Accelerator
 
 Start-Test "Get-TypeName -Name -> FAIL"
-Get-TypeName -Name [System.String]
+Get-TypeName -Name [string]
 
 Start-Test "Get-TypeName -Name -Accelerator -> FAIL"
 Get-TypeName -Name [string] -Accelerator

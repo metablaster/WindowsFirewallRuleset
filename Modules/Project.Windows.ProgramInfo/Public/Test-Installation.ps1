@@ -48,7 +48,7 @@ PS> Test-Installation "Office" ([ref] $MyProgram)
 None. You cannot pipe objects to Test-Installation
 
 .OUTPUTS
-[System.Boolean] true if path is ok or found false otherwise,
+[bool] true if path is ok or found false otherwise,
 via reference, if test OK same path, if not try to update path, else given path back is not modified
 
 .NOTES

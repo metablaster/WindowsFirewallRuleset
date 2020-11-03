@@ -107,7 +107,7 @@ ServiceStartMode : Auto
 None. You cannot pipe objects to Get-SQLInstance
 
 .OUTPUTS
-[PSCustomObject[]]
+[PSCustomObject]
 
 .NOTES
 Name: Get-SQLInstance
@@ -142,7 +142,7 @@ function Get-SQLInstance
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-SQLInstance.md")]
-	[OutputType([PSCustomObject[]])]
+	[OutputType([PSCustomObject])]
 	param (
 		[Parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
 		[Alias("Servers", "Machines")]

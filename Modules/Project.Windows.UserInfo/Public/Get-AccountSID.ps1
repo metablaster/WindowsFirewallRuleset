@@ -49,10 +49,10 @@ PS> Get-AccountSID "USERNAME" -Server "COMPUTERNAME"
 PS> Get-AccountSID @("USERNAME1", "USERNAME2") -CIM
 
 .INPUTS
-[System.String[]] array of user names
+[string[]] One or more user names
 
 .OUTPUTS
-[System.String] SID's (security identifiers)
+[string] SID's (security identifiers)
 
 .NOTES
 TODO: CIM switch is not supported on PowerShell Core, meaning contacting remote computers
@@ -63,11 +63,10 @@ function Get-AccountSID
 {
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.UserInfo/Help/en-US/Get-AccountSID.md")]
-	[OutputType([System.String])]
+	[OutputType([string])]
 	param (
 		[Alias("User")]
-		[Parameter(Mandatory = $true,
-			Position = 0,
+		[Parameter(Mandatory = $true, Position = 0,
 			ValueFromPipeline = $true)]
 		[string[]] $UserNames,
 

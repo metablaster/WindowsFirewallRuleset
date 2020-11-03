@@ -44,7 +44,7 @@ PS> Get-NetFramework COMPUTERNAME
 None. You cannot pipe objects to Get-NetFramework
 
 .OUTPUTS
-[PSCustomObject[]] for installed NET Frameworks and install paths
+[PSCustomObject] for installed NET Frameworks and install paths
 
 .NOTES
 None.
@@ -53,7 +53,7 @@ function Get-NetFramework
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-NetFramework.md")]
-	[OutputType([PSCustomObject[]])]
+	[OutputType([PSCustomObject])]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]

@@ -43,7 +43,7 @@ PS> Test-UserProfile "C:\Users\User\AppData\Local\Google\Chrome\Application\chro
 None. You cannot pipe objects to Test-UserProfile
 
 .OUTPUTS
-[System.Boolean] true if userprofile path or false otherwise
+[bool] true if userprofile path or false otherwise
 
 .NOTES
 TODO: Good portion of this function is duplicate of Format-Path

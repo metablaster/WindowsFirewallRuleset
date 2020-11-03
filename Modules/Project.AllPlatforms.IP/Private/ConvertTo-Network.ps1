@@ -128,9 +128,9 @@ function ConvertTo-Network
 		$IPAddress += '.0'
 	}
 
-	if ([IPAddress]::TryParse($IPAddress, [ref] $null))
+	if ([ipaddress]::TryParse($IPAddress, [ref] $null))
 	{
-		$Network.IPAddress = [IPAddress] $IPAddress
+		$Network.IPAddress = [ipaddress] $IPAddress
 	}
 	else
 	{
@@ -147,7 +147,7 @@ function ConvertTo-Network
 	# SubnetMask
 	if ($null -eq $SubnetMask -or $SubnetMask -eq '')
 	{
-		$Network.SubnetMask = [IPAddress] $ValidSubnetMaskValues[32]
+		$Network.SubnetMask = [ipaddress] $ValidSubnetMaskValues[32]
 		$Network.MaskLength = 32
 	}
 	else
@@ -157,7 +157,7 @@ function ConvertTo-Network
 		{
 			if ($MaskLength -ge 0 -and $MaskLength -le 32)
 			{
-				$Network.SubnetMask = [IPAddress] $ValidSubnetMaskValues[$MaskLength]
+				$Network.SubnetMask = [ipaddress] $ValidSubnetMaskValues[$MaskLength]
 				$Network.MaskLength = $MaskLength
 			}
 			else
@@ -182,7 +182,7 @@ function ConvertTo-Network
 
 			if ($MaskLength -ge 0)
 			{
-				$Network.SubnetMask = [IPAddress] $SubnetMask
+				$Network.SubnetMask = [ipaddress] $SubnetMask
 				$Network.MaskLength = $MaskLength
 			}
 			else

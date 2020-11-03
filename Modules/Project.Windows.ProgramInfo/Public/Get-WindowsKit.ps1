@@ -43,7 +43,7 @@ PS> Get-WindowsKit COMPUTERNAME
 None. You cannot pipe objects to Get-WindowsKit
 
 .OUTPUTS
-[PSCustomObject[]] for installed Windows Kits versions and install paths
+[PSCustomObject] for installed Windows Kits versions and install paths
 
 .NOTES
 None.
@@ -52,7 +52,7 @@ function Get-WindowsKit
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-WindowsKit.md")]
-	[OutputType([PSCustomObject[]])]
+	[OutputType([PSCustomObject])]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]

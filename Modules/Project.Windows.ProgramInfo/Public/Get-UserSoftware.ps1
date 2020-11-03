@@ -46,7 +46,7 @@ PS> Get-UserSoftware "USERNAME"
 None. You cannot pipe objects to Get-UserSoftware
 
 .OUTPUTS
-[PSCustomObject[]] list of programs for specified user on a target computer
+[PSCustomObject] list of programs for specified user on a target computer
 
 .NOTES
 TODO: We should make a query for an array of users, will help to save into variable
@@ -55,7 +55,7 @@ function Get-UserSoftware
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-UserSoftware.md")]
-	[OutputType([PSCustomObject[]])]
+	[OutputType([PSCustomObject])]
 	param (
 		[Alias("User")]
 		[Parameter(Mandatory = $true)]

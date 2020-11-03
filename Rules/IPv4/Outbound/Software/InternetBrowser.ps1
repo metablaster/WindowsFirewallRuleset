@@ -45,7 +45,7 @@ $Deny = "Skip operation, outbound rules for internet browsers will not be loaded
 
 # Chromecast IP
 # Adjust to Chromecast IP in your local network
-[IPAddress] $CHROMECAST_IP = "192.168.8.50"
+[ipaddress] $CHROMECAST_IP = "192.168.8.50"
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs

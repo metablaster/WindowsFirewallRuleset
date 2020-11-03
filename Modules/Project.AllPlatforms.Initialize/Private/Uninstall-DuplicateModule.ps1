@@ -55,7 +55,6 @@ PS> Get-Module SomeDupeModule | Uninstall-DuplicateModule
 Module SomeDupeModule was removed
 
 .INPUTS
-[string] path to module base
 [PSModuleInfo] module object
 
 .OUTPUTS
@@ -70,7 +69,6 @@ Current session prompt must not point to anywhere in target module path
 TODO: array input and implement foreach
 TODO: we make no automated use of this function except for manual module removal
 TODO: Remove-Module if used prior uninstall
-TODO: There can't be multiple inputs?
 #>
 function Uninstall-DuplicateModule
 {

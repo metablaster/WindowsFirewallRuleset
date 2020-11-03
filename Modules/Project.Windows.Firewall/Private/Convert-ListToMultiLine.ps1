@@ -50,7 +50,7 @@ String
 None. You cannot pipe objects to Convert-ListToMultiLine
 
 .OUTPUTS
-[System.String] multi line string
+[string] multi line string
 
 .NOTES
 None.

@@ -66,7 +66,7 @@ PS> Resolve-IPAddress "10.[1,2].[0-2].0/24"
 Returns the addresses 10.1.0.0/24, 10.1.1.0/24, 10.1.2.0/24, 10.2.0.0/24, and so on.
 
 .INPUTS
-[System.String]
+[string]
 
 .OUTPUTS
 TODO: describe outputs, define OutputType
@@ -82,8 +82,7 @@ function Resolve-IPAddress
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.IP/Help/en-US/Resolve-IPAddress.md")]
 	param (
-		[Parameter(Mandatory = $true,
-			ValueFromPipeline = $true)]
+		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
 		[string] $IPAddress
 	)
 
@@ -147,7 +146,7 @@ function Resolve-IPAddress
 		{
 			Get-Permutation $Groups -BaseAddress $IPAddress
 		}
-		elseif (-not [IPAddress]::TryParse(($IPAddress -replace '/\d+$'), [ref] $null))
+		elseif (-not [ipaddress]::TryParse(($IPAddress -replace '/\d+$'), [ref] $null))
 		{
 			Write-Warning -Message "The IPAddress argument is not a valid IP address and cannot be resolved"
 		}

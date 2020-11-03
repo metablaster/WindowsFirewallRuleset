@@ -63,10 +63,10 @@ PS> ConvertTo-MaskLength 255.255.255.0
 Returns 24, the length of the mask in bits.
 
 .INPUTS
-[System.Net.IPAddress] A dotted-decimal subnet mask
+[ipaddress] A dotted-decimal subnet mask
 
 .OUTPUTS
-[System.String] Subnet mask length
+[string] Subnet mask length
 
 .NOTES
 Following changes by metablaster:
@@ -80,14 +80,13 @@ function ConvertTo-MaskLength
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.IP/Help/en-US/ConvertTo-MaskLength.md")]
 	[OutputType([string])]
 	param (
-		[Parameter(Mandatory = $true,
-			ValueFromPipeline = $true)]
+		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
 		[Alias("Mask")]
-		[IPAddress] $SubnetMask
+		[ipaddress] $SubnetMask
 	)
 
 	process
 	{
-		[convert]::ToString([IPAddress]::HostToNetworkOrder($SubnetMask.Address), 2).Replace('0', '').Length
+		[convert]::ToString([ipaddress]::HostToNetworkOrder($SubnetMask.Address), 2).Replace('0', '').Length
 	}
 }

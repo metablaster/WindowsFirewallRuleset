@@ -40,10 +40,10 @@ TODO: describe parameter
 see Test\Show-SDDL.ps1 for example
 
 .INPUTS
-None. You cannot pipe objects to Show-SDDL
+[string]
 
 .OUTPUTS
-[System.String]
+[string]
 
 .NOTES
 This function is used only for debugging and discovery of object SDDL

@@ -68,7 +68,7 @@ False
 None. You cannot pipe objects to Compare-Path
 
 .OUTPUTS
-[System.Boolean]
+[bool]
 
 .NOTES
 None.

@@ -45,7 +45,7 @@ PS> ConvertFrom-OSBuild 18363.1049
 None. You cannot pipe objects to ConvertFrom-OSBuild
 
 .OUTPUTS
-[System.String]
+[string]
 
 .NOTES
 None.

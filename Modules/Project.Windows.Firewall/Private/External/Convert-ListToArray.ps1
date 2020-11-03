@@ -46,10 +46,9 @@ TODO: provide example and description
 None. You cannot pipe objects to Convert-ListToArray
 
 .OUTPUTS
-[System.String[]] array from comma separated list
+[string] comma separated list
 
 .NOTES
-TODO: output type
 TODO: DefaultValue can't be string, try string[]
 #>
 function Convert-ListToArray

@@ -64,10 +64,10 @@ PS> ConvertTo-DecimalIP 1.2.3.4
 Converts an IP address to an unsigned 32-bit integer value.
 
 .INPUTS
-[System.Net.IPAddress] A decimal IP address
+[ipaddress] A decimal IP address
 
 .OUTPUTS
-[System.UInt32] 32-bit unsigned integer value
+[uint32] 32-bit unsigned integer value
 
 .NOTES
 Following changes by metablaster:
@@ -81,13 +81,12 @@ function ConvertTo-DecimalIP
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.IP/Help/en-US/ConvertTo-DecimalIP.md")]
 	[OutputType([uint32])]
 	param (
-		[Parameter(Mandatory = $true,
-			ValueFromPipeline = $true)]
-		[IPAddress] $IPAddress
+		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+		[ipaddress] $IPAddress
 	)
 
 	process
 	{
-		[uint32]([IPAddress]::HostToNetworkOrder($IPAddress.Address) -shr 32 -band [uint32]::MaxValue)
+		[uint32]([ipaddress]::HostToNetworkOrder($IPAddress.Address) -shr 32 -band [uint32]::MaxValue)
 	}
 }

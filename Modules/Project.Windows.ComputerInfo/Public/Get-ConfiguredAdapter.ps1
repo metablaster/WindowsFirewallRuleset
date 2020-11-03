@@ -63,10 +63,11 @@ PS> Get-ConfiguredAdapter "IPv6" -IncludeVirtual
 None. You cannot pipe objects to Get-ConfiguredAdapter
 
 .OUTPUTS
-[NetIPConfiguration] or error message if no adapter configured
+[System.Net.NetIPConfiguration] or error message if no adapter configured
 
 .NOTES
 TODO: Loopback interface is missing in the output
+TODO: shorter parameter names: Virtual, All, Hidden, Hardware
 #>
 function Get-ConfiguredAdapter
 {

@@ -63,10 +63,10 @@ PS> ConvertTo-HexIP 192.168.0.1
 Returns the hexadecimal string c0a80001.
 
 .INPUTS
-[System.Net.IPAddress]
+[ipaddress]
 
 .OUTPUTS
-[System.String] A hexadecimal string
+[string] A hexadecimal string
 
 .NOTES
 Following changes by metablaster:
@@ -80,9 +80,8 @@ function ConvertTo-HexIP
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.IP/Help/en-US/ConvertTo-HexIP.md")]
 	[OutputType([string])]
 	param (
-		[Parameter(Mandatory = $true,
-			ValueFromPipeline = $true)]
-		[IPAddress] $IPAddress
+		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+		[ipaddress] $IPAddress
 	)
 
 	process

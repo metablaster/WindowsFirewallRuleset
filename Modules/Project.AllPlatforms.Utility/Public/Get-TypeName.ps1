@@ -87,7 +87,7 @@ Sends typename for each input object down the pipeline
 [System.Object]
 
 .OUTPUTS
-[System.String]
+[string]
 
 .NOTES
 None.
@@ -96,7 +96,7 @@ function Get-TypeName
 {
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Utility/Help/en-US/Get-TypeName.md")]
-	[OutputType([System.String])]
+	[OutputType([string])]
 	param (
 		[Parameter(Position = 0, ValueFromPipeline = $true, ParameterSetName = "Object")]
 		[System.Object[]] $InputObject,

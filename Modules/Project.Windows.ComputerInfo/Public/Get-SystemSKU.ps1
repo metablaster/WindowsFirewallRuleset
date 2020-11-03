@@ -46,21 +46,20 @@ PS> Get-SystemSKU
 Home Premium N
 
 .INPUTS
-None. You cannot pipe objects to Get-SystemSKU
+[int32]
 
 .OUTPUTS
-[PSCustomObject[]] array with Computer/SKU value pairs
+[PSCustomObject] Computer/SKU value pair
 
 .NOTES
 TODO: accept UPN and NETBIOS computer names
-TODO: ComputerName default value is just a placeholder to be able to use foreach
-which is needed for pipeline, need better design
+TODO: ComputerName default value is just a placeholder, need better design
 #>
 function Get-SystemSKU
 {
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ComputerInfo/Help/en-US/Get-SystemSKU.md")]
-	[OutputType([PSCustomObject[]])]
+	[OutputType([PSCustomObject])]
 	param(
 		[Parameter(ValueFromPipeline = $true, ParameterSetName = "Number")]
 		[ValidatePattern("^[0-9]+$")]

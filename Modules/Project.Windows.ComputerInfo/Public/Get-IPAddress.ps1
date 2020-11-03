@@ -62,7 +62,7 @@ PS> Get-IPAddress "IPv6"
 None. You cannot pipe objects to Get-IPAddress
 
 .OUTPUTS
-[System.Net.IPAddress[]] Array of IP addresses and warning message if no adapter connected
+[ipaddress] Array of IP addresses and warning message if no adapter connected
 
 .NOTES
 None.
@@ -71,7 +71,7 @@ function Get-IPAddress
 {
 	[CmdletBinding(DefaultParameterSetName = "Individual",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ComputerInfo/Help/en-US/Get-IPAddress.md")]
-	[OutputType([System.Net.IPAddress[]])]
+	[OutputType([ipaddress])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[ValidateSet("IPv4", "IPv6")]
@@ -111,7 +111,7 @@ function Get-IPAddress
 			-IncludeHidden:$IncludeHidden -IncludeDisconnected:$IncludeDisconnected
 	}
 
-	[IPAddress[]] $IPAddress = $ConfiguredAdapters |
+	[ipaddress[]] $IPAddress = $ConfiguredAdapters |
 	Select-Object -ExpandProperty ($AddressFamily + "Address") |
 	Select-Object -ExpandProperty IPAddress
 

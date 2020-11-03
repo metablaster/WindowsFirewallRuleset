@@ -78,7 +78,7 @@ if (-not $UseExisting)
 InModuleScope Project.AllPlatforms.IP {
 	Describe 'Get-NetworkAddress' {
 		It 'Returns an IPAddress' {
-			Get-NetworkAddress 1.2.3.4/24 | Should -BeOfType [IPAddress]
+			Get-NetworkAddress 1.2.3.4/24 | Should -BeOfType [ipaddress]
 		}
 
 		It 'Returns 255.255.255.255 when passed 255.255.255.255/32' {

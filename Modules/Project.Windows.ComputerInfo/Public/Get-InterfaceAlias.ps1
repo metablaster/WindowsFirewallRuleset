@@ -66,17 +66,18 @@ PS> Get-InterfaceAlias "IPv6"
 None. You cannot pipe objects to Get-InterfaceAlias
 
 .OUTPUTS
-[System.Management.Automation.WildcardPattern[]] Array of interface aliases
+[System.Management.Automation.WildcardPattern]
 
 .NOTES
 None.
 TODO: There is another function with the same name in Scripts folder
+TODO: shorter parameter names: Virtual, All, Hidden, Hardware
 #>
 function Get-InterfaceAlias
 {
 	[CmdletBinding(DefaultParameterSetName = "Individual",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ComputerInfo/Help/en-US/Get-InterfaceAlias.md")]
-	[OutputType([System.Management.Automation.WildcardPattern[]])]
+	[OutputType([System.Management.Automation.WildcardPattern])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[ValidateSet("IPv4", "IPv6")]

@@ -79,7 +79,7 @@ PS> Get-Subnet 0/22 -NewSubnetMask 24
 None. You cannot pipe objects to Get-Subnet
 
 .OUTPUTS
-"Project.AllPlatforms.IP.Subnet" Custom object
+"Project.AllPlatforms.IP.Subnet"
 
 .NOTES
 Change log:

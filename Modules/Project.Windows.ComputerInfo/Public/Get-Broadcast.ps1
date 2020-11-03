@@ -60,7 +60,7 @@ PS> Get-Broadcast -IncludeAll -ExcludeHardware
 None. You cannot pipe objects to Get-Broadcast
 
 .OUTPUTS
-[IPAddress[]] Array of broadcast addresses
+[ipaddress] Broadcast addresses
 
 .NOTES
 TODO: Some parameters most likely make no sense, otherwise we should return custom object,
@@ -70,7 +70,7 @@ function Get-Broadcast
 {
 	[CmdletBinding(DefaultParameterSetName = "Individual",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ComputerInfo/Help/en-US/Get-Broadcast.md")]
-	[OutputType([System.Net.IPAddress[]])]
+	[OutputType([ipaddress])]
 	param (
 		[Parameter(ParameterSetName = "All")]
 		[switch] $IncludeAll,
@@ -110,10 +110,10 @@ function Get-Broadcast
 
 	if ($Count -gt 0)
 	{
-		[IPAddress[]] $Broadcast = @()
+		[ipaddress[]] $Broadcast = @()
 		foreach ($Adapter in $ConfiguredAdapters)
 		{
-			[IPAddress] $IPAddress = $Adapter | Select-Object -ExpandProperty IPAddress
+			[ipaddress] $IPAddress = $Adapter | Select-Object -ExpandProperty IPAddress
 			$SubnetMask = ConvertTo-Mask ($Adapter | Select-Object -ExpandProperty PrefixLength)
 
 			$Broadcast += Get-NetworkSummary $IPAddress $SubnetMask |

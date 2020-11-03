@@ -40,7 +40,7 @@ PS> Get-ComputerName
 None. You cannot pipe objects to Get-ComputerName
 
 .OUTPUTS
-[System.String] computer name in form of COMPUTERNAME
+[string] computer name in form of COMPUTERNAME
 
 .NOTES
 TODO: implement querying computers on network by specifying IP address

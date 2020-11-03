@@ -61,7 +61,7 @@ PS> $NewSDDL = Get-SDDL -Domain "NT AUTHORITY" -User "System"
 None. You cannot pipe objects to Get-SDDL
 
 .OUTPUTS
-[System.String] SDDL for given accounts or/and group for given domain
+[string] SDDL for given accounts or/and group for given domain
 
 .NOTES
 CIM switch is not supported on PowerShell Core, meaning contacting remote computers
@@ -71,7 +71,7 @@ function Get-SDDL
 {
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.UserInfo/Help/en-US/Get-SDDL.md")]
-	[OutputType([System.String])]
+	[OutputType([string])]
 	param (
 		[Alias("User")]
 		[Parameter(Mandatory = $true, ParameterSetName = "User")]

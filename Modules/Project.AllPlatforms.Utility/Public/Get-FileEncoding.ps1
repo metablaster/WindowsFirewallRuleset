@@ -57,7 +57,7 @@ utf-32
 None. You cannot pipe objects to Get-FileEncoding
 
 .OUTPUTS
-[System.String]
+[string]
 
 .NOTES
 TODO: utf-16LE detected as utf-16 with BOM

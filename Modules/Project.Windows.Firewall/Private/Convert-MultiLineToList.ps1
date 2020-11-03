@@ -49,7 +49,7 @@ Some||String
 None. You cannot pipe objects to Convert-MultiLineToList
 
 .OUTPUTS
-[System.String] comma separated list
+[string] comma separated list
 
 .NOTES
 None.

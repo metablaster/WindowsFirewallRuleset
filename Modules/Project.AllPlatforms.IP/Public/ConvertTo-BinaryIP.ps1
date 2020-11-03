@@ -64,10 +64,10 @@ PS> ConvertTo-BinaryIP 1.2.3.4
 Convert an IP address to a binary format.
 
 .INPUTS
-[System.Net.IPAddress] Decimal IP address
+[ipaddress] Decimal IP address
 
 .OUTPUTS
-[System.String] A dotted binary IP address
+[string] Dotted binary IP address
 
 .NOTES
 Following changes by metablaster:
@@ -81,9 +81,8 @@ function ConvertTo-BinaryIP
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.IP/Help/en-US/ConvertTo-BinaryIP.md")]
 	[OutputType([string])]
 	param (
-		[Parameter(Mandatory = $true,
-			ValueFromPipeline = $true)]
-		[IPAddress] $IPAddress
+		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+		[ipaddress] $IPAddress
 	)
 
 	process

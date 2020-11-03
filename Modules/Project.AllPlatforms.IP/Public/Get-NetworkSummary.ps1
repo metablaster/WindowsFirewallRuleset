@@ -72,10 +72,10 @@ PS> Get-NetworkSummary 10.0.9.43/22
 PS> Get-NetworkSummary 0/0
 
 .INPUTS
-[System.String]
+[string]
 
 .OUTPUTS
-"Project.AllPlatforms.IP.NetworkSummary" Custom object
+"Project.AllPlatforms.IP.NetworkSummary"
 
 .NOTES
 Following changes by metablaster:
@@ -89,8 +89,7 @@ function Get-NetworkSummary
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.IP/Help/en-US/Get-NetworkSummary.md")]
 	[OutputType("Project.AllPlatforms.IP.NetworkSummary")]
 	param (
-		[Parameter(Mandatory = $true,
-			ValueFromPipeline = $true)]
+		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
 		[string] $IPAddress,
 
 		[Parameter()]

@@ -54,7 +54,7 @@ PS> Test-TargetComputer "COMPUTERNAME"
 None. You cannot pipe objects to Test-TargetComputer
 
 .OUTPUTS
-[System.Boolean] false or true if target host is responsive
+[bool] false or true if target host is responsive
 
 .NOTES
 TODO: Avoid error message, check all references which handle errors (code bloat)
@@ -67,8 +67,7 @@ function Test-TargetComputer
 	[OutputType([bool])]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
-		[Parameter(Mandatory = $true,
-			Position = 0)]
+		[Parameter(Mandatory = $true, Position = 0)]
 		[string] $ComputerName,
 
 		[Parameter()]

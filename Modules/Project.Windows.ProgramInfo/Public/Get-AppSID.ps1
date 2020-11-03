@@ -46,7 +46,7 @@ PS> Get-AppSID "User" "Microsoft.MicrosoftEdge_8wekyb3d8bbwe"
 None. You cannot pipe objects to Get-AppSID
 
 .OUTPUTS
-[System.String] store app SID (security identifier) if app found
+[string] store app SID (security identifier) if app found
 
 .NOTES
 TODO: Test if path exists

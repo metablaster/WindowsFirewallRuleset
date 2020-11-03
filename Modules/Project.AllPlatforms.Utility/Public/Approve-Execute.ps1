@@ -57,7 +57,7 @@ PS> Approve-Execute "No" "Sample title" "Sample question"
 None. You cannot pipe objects to Approve-Execute
 
 .OUTPUTS
-[System.Boolean] True if user wants to continue, false otherwise
+[bool] True if user wants to continue, false otherwise
 
 .NOTES
 None.

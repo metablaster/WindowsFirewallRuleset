@@ -46,10 +46,10 @@ PS> Get-GroupPrincipal "Users", "Administrators"
 PS> Get-GroupPrincipal "Users" -Machine @(DESKTOP, LAPTOP) -CIM
 
 .INPUTS
-[System.String[]] User groups
+[string[]] User groups
 
 .OUTPUTS
-[PSCustomObject[]] Array of enabled user accounts in specified group
+[PSCustomObject] Enabled user accounts in specified groups
 
 .NOTES
 CIM switch is not supported on PowerShell Core, meaning contacting remote computers
@@ -62,12 +62,10 @@ function Get-GroupPrincipal
 {
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.UserInfo/Help/en-US/Get-GroupPrincipal.md")]
-	[OutputType([PSCustomObject[]])]
+	[OutputType([PSCustomObject])]
 	param (
 		[Alias("Group")]
-		[Parameter(Mandatory = $true,
-			Position = 0,
-			ValueFromPipeline = $true)]
+		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
 		[string[]] $UserGroups,
 
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]

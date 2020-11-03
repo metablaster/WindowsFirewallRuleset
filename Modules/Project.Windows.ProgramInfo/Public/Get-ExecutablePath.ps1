@@ -44,7 +44,7 @@ PS> Get-ExecutablePath "COMPUTERNAME"
 None. You cannot pipe objects to Get-ExecutablePath
 
 .OUTPUTS
-[PSCustomObject[]] list of executables, their installation path and additional information
+[PSCustomObject] list of executables, their installation path and additional information
 
 .NOTES
 None.
@@ -53,7 +53,7 @@ function Get-ExecutablePath
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-ExecutablePath.md")]
-	[OutputType([PSCustomObject[]])]
+	[OutputType([PSCustomObject])]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]

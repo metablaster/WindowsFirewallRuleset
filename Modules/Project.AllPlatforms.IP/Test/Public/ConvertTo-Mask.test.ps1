@@ -71,7 +71,7 @@ if (-not $UseExisting)
 InModuleScope Project.AllPlatforms.IP {
 	Describe 'ConvertTo-Mask' {
 		It 'Returns an IPAddress' {
-			ConvertTo-Mask 1 | Should -BeOfType [IPAddress]
+			ConvertTo-Mask 1 | Should -BeOfType [ipaddress]
 		}
 
 		It 'Converts 0 to 0.0.0.0' {

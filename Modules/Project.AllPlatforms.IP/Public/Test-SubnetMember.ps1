@@ -94,7 +94,7 @@ Returns true as the subject IP address is the last in the object network range.
 None. You cannot pipe objects to Test-SubnetMember
 
 .OUTPUTS
-[System.Boolean]
+[bool]
 
 .NOTES
 Following changes by metablaster:

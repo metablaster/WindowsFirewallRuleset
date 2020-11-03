@@ -58,7 +58,7 @@ PS> Get-ProcessOutput -FilePath "git.exe" -ArgumentList "status" -NoNewWindow -W
 None. You cannot pipe objects to Get-ProcessOutput
 
 .OUTPUTS
-[System.String] If the 'Format' parameter is not specified
+[string] If the 'Format' parameter is not specified
 
 .NOTES
 TODO: Function needs improvements and more test cases

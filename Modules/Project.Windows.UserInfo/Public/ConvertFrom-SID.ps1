@@ -48,10 +48,10 @@ PS> ConvertFrom-SID S-1-5-21-2139171146-395215898-1246945465-2359
 PS> '^S-1-5-32-580' | ConvertFrom-SID
 
 .INPUTS
-[System.String[]] One or multiple SID's
+[string[]] One or multiple SID's
 
 .OUTPUTS
-[PSCustomObject[]] composed of SID information
+[PSCustomObject] composed of SID information
 
 .NOTES
 SID conversion for well known SIDs and display names from following links:
@@ -93,7 +93,7 @@ function ConvertFrom-SID
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.UserInfo/Help/en-US/ConvertFrom-SID.md")]
 	# TODO: test pipeline with multiple computers and SID's
-	[OutputType([PSCustomObject[]])]
+	[OutputType([PSCustomObject])]
 	param(
 		[Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
 		[ValidatePattern('^S-1-\d[\d+-]+\d$')]

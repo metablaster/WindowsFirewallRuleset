@@ -47,7 +47,7 @@ PS> Get-SQLManagementStudio COMPUTERNAME
 None. You cannot pipe objects to Get-SQLManagementStudio
 
 .OUTPUTS
-[PSCustomObject[]] for installed Microsoft SQL Server Management Studio's
+[PSCustomObject] for installed Microsoft SQL Server Management Studio's
 
 .NOTES
 None.
@@ -56,7 +56,7 @@ function Get-SQLManagementStudio
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-SQLManagementStudio.md")]
-	[OutputType([PSCustomObject[]])]
+	[OutputType([PSCustomObject])]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]

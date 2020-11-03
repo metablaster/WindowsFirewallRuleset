@@ -64,10 +64,10 @@ PS> ConvertFrom-HexIP c0a80001
 Returns the IP address 192.168.0.1.
 
 .INPUTS
-[System.String] Hexadecimal IP address
+[string] Hexadecimal IP address
 
 .OUTPUTS
-[IPAddress] A dotted decimal IP address
+[ipaddress] A dotted decimal IP address
 
 .NOTES
 Following changes by metablaster:
@@ -79,16 +79,15 @@ function ConvertFrom-HexIP
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.IP/Help/en-US/ConvertFrom-HexIP.md")]
-	[OutputType([IPAddress])]
+	[OutputType([ipaddress])]
 	param (
-		[Parameter(Mandatory = $true,
-			ValueFromPipeline = $true)]
+		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
 		[ValidatePattern('^(0x)?[0-9a-f]{8}$')]
 		[string] $IPAddress
 	)
 
 	process
 	{
-		[IPAddress][UInt64][convert]::ToUInt32($IPAddress, 16)
+		[ipaddress][uint64][convert]::ToUInt32($IPAddress, 16)
 	}
 }

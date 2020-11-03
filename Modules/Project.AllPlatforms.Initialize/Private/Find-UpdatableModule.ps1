@@ -83,8 +83,8 @@ CultureVersion                 5.2.0.0
 Name                           PowerShellGet
 
 .INPUTS
-[string] one or multiple module names to check
-[hashtable] fully qualified module name in the form of ModuleSpecification object
+[string] One or multiple module names to check
+[hashtable] Fully qualified module name in the form of ModuleSpecification object
 
 .OUTPUTS
 [PSCustomObject] Module description object ready for help files update

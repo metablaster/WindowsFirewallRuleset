@@ -71,7 +71,7 @@ if (-not $UseExisting)
 InModuleScope Project.AllPlatforms.IP {
 	Describe 'ConvertFrom-HexIP' {
 		It 'Returns an IPAddress' {
-			ConvertFrom-HexIP '12345678' | Should -BeOfType [IPAddress]
+			ConvertFrom-HexIP '12345678' | Should -BeOfType [ipaddress]
 		}
 
 		It 'Converts 30201000 to 48.32.16.0' {

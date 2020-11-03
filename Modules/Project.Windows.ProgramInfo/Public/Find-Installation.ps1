@@ -47,7 +47,7 @@ PS> Find-Installation "Office"
 None. You cannot pipe objects to Find-Installation
 
 .OUTPUTS
-[System.Boolean] true or false if installation directory if found, installation table is updated
+[bool] true or false if installation directory if found, installation table is updated
 
 .NOTES
 None.

@@ -43,7 +43,7 @@ PS> Get-SystemSoftware "COMPUTERNAME"
 None. You cannot pipe objects to Get-SystemSoftware
 
 .OUTPUTS
-[PSCustomObject[]] list of programs installed for all users
+[PSCustomObject] list of programs installed for all users
 
 .NOTES
 We should return empty PSCustomObject if test computer fails
@@ -52,7 +52,7 @@ function Get-SystemSoftware
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-SystemSoftware.md")]
-	[OutputType([PSCustomObject[]])]
+	[OutputType([PSCustomObject])]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]

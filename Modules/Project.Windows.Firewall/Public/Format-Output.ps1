@@ -44,7 +44,7 @@ Optional new label to replace default one
 PS> Net-NewFirewallRule ... | Format-Output
 
 .INPUTS
-Microsoft.Management.Infrastructure.CimInstance Firewall rule to format
+[Microsoft.Management.Infrastructure.CimInstance] Firewall rule to format
 
 .OUTPUTS
 None. Format-Output does not generate any output
@@ -60,8 +60,7 @@ function Format-Output
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.Firewall/Help/en-US/Format-Output.md")]
 	[OutputType([void])]
 	param (
-		[Parameter(Mandatory = $true,
-			ValueFromPipeline = $true)]
+		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
 		[Microsoft.Management.Infrastructure.CimInstance] $Rule,
 
 		[Parameter()]

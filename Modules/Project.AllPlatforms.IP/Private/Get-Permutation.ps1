@@ -86,7 +86,7 @@ function Get-Permutation
 	param (
 		[Parameter()]
 		[PSTypeName("ExpansionGroupInfo")]
-		[Object[]] $Group,
+		[System.Object[]] $Group,
 
 		[Parameter()]
 		[string] $BaseAddress,

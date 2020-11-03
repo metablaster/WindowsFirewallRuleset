@@ -46,10 +46,10 @@ PS> Get-UserGroup "ServerPC"
 PS> Get-UserGroup @(DESKTOP, LAPTOP) -CIM
 
 .INPUTS
-[System.String[]] array of computer names
+[string[]] One or more computer names
 
 .OUTPUTS
-[PSCustomObject[]] array of user groups on target computers
+[PSCustomObject] User groups on target computers
 
 .NOTES
 CIM switch is not supported on PowerShell Core, meaning contacting remote computers
@@ -59,7 +59,7 @@ function Get-UserGroup
 {
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.UserInfo/Help/en-US/Get-UserGroup.md")]
-	[OutputType([PSCustomObject[]])]
+	[OutputType([PSCustomObject])]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter(Position = 0)]

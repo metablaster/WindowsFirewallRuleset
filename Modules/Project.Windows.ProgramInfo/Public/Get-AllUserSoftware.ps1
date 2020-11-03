@@ -43,7 +43,7 @@ PS> Get-AllUserSoftware "COMPUTERNAME"
 None. You cannot pipe objects to Get-AllUserSoftware
 
 .OUTPUTS
-[PSCustomObject[]] list of programs installed for all users
+[PSCustomObject] list of programs installed for all users
 
 .NOTES
 TODO: should be renamed into Get-InstallProperties
@@ -52,7 +52,7 @@ function Get-AllUserSoftware
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.ProgramInfo/Help/en-US/Get-AllUserSoftware.md")]
-	[OutputType([PSCustomObject[]])]
+	[OutputType([PSCustomObject])]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
