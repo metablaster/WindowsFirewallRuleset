@@ -93,7 +93,7 @@ $global:InstallTable | Format-Table -AutoSize @Logs
 
 Start-Test "Good user profile path"
 Initialize-Table @Logs
-$Result = Edit-Table "C:\\Users\$UnitTester\\AppData\\Roaming\\Adobe\" @Logs
+$Result = Edit-Table "C:\\Users\$UnitTester\\AppData\\Roaming\\" @Logs
 $Result
 $global:InstallTable | Format-Table -AutoSize @Logs
 

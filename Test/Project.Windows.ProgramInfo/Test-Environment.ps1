@@ -64,63 +64,9 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 Enter-Test $ThisScript
 
-$Result = "C:\"
-Start-Test "Test-Environment: $Result"
-Test-Environment $Result @Logs
+New-Section "Root drive"
 
-$Result = "C:\\Windows\System32"
-Start-Test "Test-Environment: $Result"
-Test-Environment $Result @Logs
-
-$Result = "C:\\Windows\"
-Start-Test "Test-Environment: $Result"
-Test-Environment $Result @Logs
-
-$Result = "C:\Program Files (x86)\Windows Defender\"
-Start-Test "Test-Environment: $Result"
-Test-Environment $Result @Logs
-
-$Result = "C:\Program Files\WindowsPowerShell"
-Start-Test "Test-Environment: $Result"
-Test-Environment $Result @Logs
-
-$Result = '"C:\ProgramData\Git"'
-Start-Test "Test-Environment: $Result"
-Test-Environment $Result @Logs
-
-$Result = "C:\PerfLogs"
-Start-Test "Test-Environment: $Result"
-Test-Environment $Result @Logs
-
-$Result = "C:\Windows\Microsoft.NET\Framework64\v3.5\\"
-Start-Test "Test-Environment: $Result"
-Test-Environment $Result @Logs
-
-$Result = "C:\Users"
-Start-Test "Test-Environment: $Result"
-Test-Environment $Result @Logs
-
-$Result = "C:\Users\\"
-Start-Test "Test-Environment: $Result"
-Test-Environment $Result @Logs
-
-$Result = "C:\\UsersA\"
-Start-Test "Test-Environment: $Result"
-Test-Environment $Result @Logs
-
-$Result = "C:\\Users\3"
-Start-Test "Test-Environment: $Result"
-Test-Environment $Result @Logs
-
-$Result = "'C:\Windows\Microsoft.NET\Framework64\v3.5'"
-Start-Test "Test-Environment: $Result"
-Test-Environment $Result @Logs
-
-$Result = "D:\\microsoft\\windows"
-Start-Test "Test-Environment: $Result"
-Test-Environment $Result @Logs
-
-$Result = "D:\"
+$Result = "C:"
 Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
 
@@ -128,11 +74,75 @@ $Result = "C:\\"
 Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
 
-$Result = "%LOCALAPPDATA%\OneDrive"
+$Result = "D:\"
 Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
 
-$Result = "%HOME%\AppData\Local\OneDrive"
+New-Section "Default test"
+
+$Result = "C:\\Windows\System32"
+Start-Test "Test-Environment: $Result"
+Test-Environment $Result @Logs
+
+$Result = "C:/Windows/explorer.exe"
+Start-Test "Test-Environment -PathType Leaf: $Result"
+Test-Environment $Result -PathType Leaf @Logs
+
+$Result = "D:\\NoSuchFolder"
+Start-Test "Test-Environment: $Result"
+Test-Environment $Result @Logs
+
+New-Section "Invalid syntax"
+
+$Result = '"C:\ProgramData\ssh"'
+Start-Test "Test-Environment: $Result"
+Test-Environment $Result @Logs
+
+$Result = "'C:\Windows\Microsoft.NET\Framework64\v3.5'"
+Start-Test "Test-Environment: $Result"
+Test-Environment $Result @Logs
+
+New-Section "Users folder"
+
+$Result = "C:\Users"
+Start-Test "Test-Environment -UserProfile: $Result"
+Test-Environment -UserProfile $Result @Logs
+
+$Result = "C:\Users\\"
+Start-Test "Test-Environment -UserProfile: $Result"
+Test-Environment -UserProfile $Result @Logs
+
+$Result = "C:\\UsersA\"
+Start-Test "Test-Environment -UserProfile: $Result"
+Test-Environment -UserProfile $Result @Logs
+
+$Result = "C:\\Users\3"
+Start-Test "Test-Environment -UserProfile: $Result"
+Test-Environment -UserProfile $Result @Logs
+
+$Result = "C:\Users\Public\Downloads" # "\Public Downloads"
+Start-Test "Test-Environment -UserProfile: $Result"
+Test-Environment -UserProfile $Result @Logs
+
+$Result = "C:\Users\\"
+Start-Test "Test-Environment -Firewall: $Result"
+Test-Environment -Firewall $Result @Logs
+
+$Result = "C:\\UsersA\"
+Start-Test "Test-Environment -Firewall: $Result"
+Test-Environment -Firewall $Result @Logs
+
+$Result = "C:\\Users\3"
+Start-Test "Test-Environment -Firewall: $Result"
+Test-Environment -Firewall $Result @Logs
+
+New-Section "UserProfile"
+
+$Result = "%LOCALAPPDATA%\MicrosoftEdge"
+Start-Test "Test-Environment: $Result"
+Test-Environment $Result @Logs
+
+$Result = "%HOME%\AppData\Local\MicrosoftEdge"
 Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
 
@@ -144,29 +154,81 @@ $Result = "F:\Users\$UnitTester"
 Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
 
-$Result = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
-Start-Test "Test-Environment: $Result"
-Test-Environment $Result @Logs
+$Result = "%LOCALAPPDATA%\MicrosoftEdge"
+Start-Test "Test-Environment -UserProfile: $Result"
+Test-Environment -UserProfile $Result @Logs
+
+$Result = "%HOME%\AppData\Local\MicrosoftEdge"
+Start-Test "Test-Environment -UserProfile: $Result"
+Test-Environment -UserProfile $Result @Logs
+
+$Result = "C:\Users\$UnitTester\AppData"
+Start-Test "Test-Environment -UserProfile: $Result"
+Test-Environment -UserProfile $Result @Logs
+
+$Result = "F:\Users\$UnitTester"
+Start-Test "Test-Environment -UserProfile: $Result"
+Test-Environment -UserProfile $Result @Logs
+
+New-Section "Test firewall"
+
+$Result = "C:\\Windows\System32"
+Start-Test "Test-Environment -Firewall: $Result"
+Test-Environment -Firewall $Result @Logs
+
+$Result = "%LOCALAPPDATA%\MicrosoftEdge"
+Start-Test "Test-Environment -Firewall: $Result"
+Test-Environment -Firewall $Result @Logs
+
+$Result = "%HOME%\AppData\Local\MicrosoftEdge"
+Start-Test "Test-Environment -Firewall: $Result"
+Test-Environment -Firewall $Result @Logs
+
+$Result = "C:\Users\$UnitTester\AppData"
+Start-Test "Test-Environment -Firewall: $Result"
+Test-Environment -Firewall $Result @Logs
+
+$Result = "C:\Users\Public\Downloads" # "\Public Downloads"
+Start-Test "Test-Environment -Firewall: $Result"
+Test-Environment -Firewall $Result @Logs
+
+New-Section "Environment variables"
 
 $Result = "%SystemDrive%"
 Start-Test "Test-Environment: $Result"
 $Status = Test-Environment $Result @Logs
 $Status
 
-$Result = "C:\Users\Public\Public Downloads"
+$Result = "C:\Program Files (x86)\Windows Defender\"
 Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
 
 $Result = "%Path%"
-Start-Test "Test-Environment: $Result"
+Start-Test "Test-Environment: %Path%"
 Test-Environment $Result @Logs
 
+New-Section "-Firewall + -UserProfile"
+
+$Result = "%HOME%\AppData\Local\MicrosoftEdge"
+Start-Test "Test-Environment -Firewall: $Result"
+Test-Environment -Firewall -UserProfile $Result @Logs
+
+$Result = "C:\Users\$UnitTester\AppData"
+Start-Test "Test-Environment -Firewall: $Result"
+Test-Environment -Firewall -UserProfile $Result @Logs
+
+$Result = "C:\Program Files (x86)\Windows Defender"
+Start-Test "Test-Environment -Firewall: $Result"
+Test-Environment -Firewall -UserProfile $Result @Logs
+
+New-Section "Null test"
+
 $Result = ""
-Start-Test "Test-Environment: $Result"
+Start-Test "Test-Environment: '$Result'"
 Test-Environment $Result @Logs
 
 $Result = $null
-Start-Test "Test-Environment: $Result"
+Start-Test "Test-Environment: null"
 Test-Environment $Result @Logs
 
 Test-Output $Status -Command Test-Environment @Logs

@@ -77,33 +77,32 @@
 	# Functions to export from this module, for best performance, do not use wildcards and do not
 	# delete the entry, use an empty array if there are no functions to export.
 	FunctionsToExport = @(
-		"Test-File"
-		"Test-Installation"
-		"Get-AppSID"
-		"Test-Service"
-		"Format-Path"
-		"Test-UserProfile"
+		"Get-SQLInstance"
 		"Find-Installation"
-		"Test-Environment"
-		"Get-UserSoftware"
+		"Format-Path"
 		"Get-AllUserSoftware"
 		"Get-AppCapability"
-		"Get-SystemSoftware"
+		"Get-AppSID"
 		"Get-ExecutablePath"
 		"Get-NetFramework"
+		"Get-OneDrive"
+		"Get-SQLManagementStudio"
+		"Get-SystemApps"
+		"Get-SystemSoftware"
+		"Get-UserApps"
+		"Get-UserSoftware"
+		"Get-WindowsDefender"
 		"Get-WindowsKit"
 		"Get-WindowsSDK"
-		"Get-WindowsDefender"
-		"Get-SQLManagementStudio"
-		"Get-OneDrive"
-		"Get-UserApps"
-		"Get-SystemApps"
-		"Get-SQLInstance"
+		"Test-Environment"
+		"Test-File"
+		"Test-Installation"
+		"Test-Service"
 		# Following exports only for unit testing
-		"Update-Table"
 		"Edit-Table"
 		"Initialize-Table"
 		"Show-Table"
+		"Update-Table"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not
@@ -153,7 +152,6 @@
 		"Help\en-US\Test-File.md"
 		"Help\en-US\Test-Installation.md"
 		"Help\en-US\Test-Service.md"
-		"Help\en-US\Test-UserProfile.md"
 		"Help\README.md"
 		"Private\Edit-Table.ps1"
 		"Private\Initialize-Table.ps1"
@@ -181,7 +179,6 @@
 		"Public\Test-File.ps1"
 		"Public\Test-Installation.ps1"
 		"Public\Test-Service.ps1"
-		"Public\Test-UserProfile.ps1"
 	)
 
 	# Private data to pass to the module specified in RootModule/ModuleToProcess.

@@ -25,18 +25,21 @@ Note:
     - [DHCPv6](#dhcpv6)
     - [DHCPv4](#dhcpv4)
     - [LLMNRv4](#llmnrv4)
-  - [Get -DisplayName parameter and it's value](#get--displayname-parameter-and-its-value)
-  - [Get platform](#get-platform)
-  - [Get group](#get-group)
-  - [Get Interface](#get-interface)
-  - [Get Profile property if value also contains variable names](#get-profile-property-if-value-also-contains-variable-names)
-  - [Direction protocol pairs](#direction-protocol-pairs)
-  - [Get local and remote port parameters and values](#get-local-and-remote-port-parameters-and-values)
-  - [Get mapping pairs and their values](#get-mapping-pairs-and-their-values)
-  - [Get LocalUser and EdgeTraversalPolicy](#get-localuser-and-edgetraversalpolicy)
-  - [Get local and remote IPv6 address only in any notation](#get-local-and-remote-ipv6-address-only-in-any-notation)
-  - [Get local and remote IPv4 address only in any notation](#get-local-and-remote-ipv4-address-only-in-any-notation)
-  - [Get owner and package for store app](#get-owner-and-package-for-store-app)
+  - [Firewall rules](#firewall-rules)
+    - [Get -DisplayName parameter and it's value](#get--displayname-parameter-and-its-value)
+    - [Get platform](#get-platform)
+    - [Get group](#get-group)
+    - [Get Interface](#get-interface)
+    - [Get Profile property if value also contains variable names](#get-profile-property-if-value-also-contains-variable-names)
+    - [Direction protocol pairs](#direction-protocol-pairs)
+    - [Get local and remote port parameters and values](#get-local-and-remote-port-parameters-and-values)
+    - [Get mapping pairs and their values](#get-mapping-pairs-and-their-values)
+    - [Get LocalUser and EdgeTraversalPolicy](#get-localuser-and-edgetraversalpolicy)
+    - [Get local and remote IPv6 address only in any notation](#get-local-and-remote-ipv6-address-only-in-any-notation)
+    - [Get local and remote IPv4 address only in any notation](#get-local-and-remote-ipv4-address-only-in-any-notation)
+    - [Get owner and package for store app](#get-owner-and-package-for-store-app)
+  - [Random regexes](#random-regexes)
+    - [Match username in path](#match-username-in-path)
 
 ## Filterline
 
@@ -66,7 +69,9 @@ Filterline regexes are to be used in `.vscode\filterline.json` to filter out fir
 "DROP UDP.*([0-9]{1,3}\\.){3}[0-9]{1,3}\\s\\d+(?<!5353)\\s5353"
 ```
 
-## Get -DisplayName parameter and it's value
+## Firewall rules
+
+### Get -DisplayName parameter and it's value
 
 In the example below multi cursor-ing all the matches in a script would allow to cut and paste all
 regex matches onto a second line by using CTRL + X, Down Arrow to move and CTRL + V.
@@ -83,7 +88,7 @@ New-NetFirewallRule -DisplayName $_.Name -Service Any `
 
 [//]: # (Platform)
 
-## Get platform
+### Get platform
 
 ```powershell
 -Platform $Platform
@@ -93,7 +98,7 @@ New-NetFirewallRule -DisplayName $_.Name -Service Any `
 -Platform \$Platform ?
 ```
 
-## Get group
+### Get group
 
 ```powershell
 New-NetFirewallRule -Group $Group
@@ -104,7 +109,7 @@ New-NetFirewallRule -Group "Some rule group"
 -Group (([\$|\w]\w+)|(".*")) ?
 ```
 
-## Get Interface
+### Get Interface
 
 ```powershell
 New-NetFirewallRule -InterfaceType $Interface
@@ -119,7 +124,7 @@ New-NetFirewallRule -InterfaceType Wired, Wireless
 
 [//]: # (PolicyStore)
 
-## Get Profile property if value also contains variable names
+### Get Profile property if value also contains variable names
 
 ```powershell
 New-NetFirewallRule -Profile Any
@@ -131,7 +136,7 @@ New-NetFirewallRule -Profile Private, Domain
 -Profile [\$|\w]\w+,? ?\w+ ?
 ```
 
-## Direction protocol pairs
+### Direction protocol pairs
 
 ```powershell
 New-NetFirewallRule -Direction $Direction -Protocol UDP
@@ -144,7 +149,7 @@ New-NetFirewallRule -Direction Inbound -Protocol 41
 -Direction [\$|\w]\w+ -Protocol [\$|\w]\w+ -IcmpType \d+ ?
  ```
 
-## Get local and remote port parameters and values
+### Get local and remote port parameters and values
 
 ```powershell
 New-NetFirewallRule -LocalPort Any -RemotePort 547, 53
@@ -156,7 +161,7 @@ New-NetFirewallRule -LocalPort 22, 546-55, 54 -RemotePort Any
 -LocalPort [\w&&,&&\-&& ]+ -RemotePort [\w&&,&&\-&& ]+ ?
 ```
 
-## Get mapping pairs and their values
+### Get mapping pairs and their values
 
 ```powershell
 New-NetFirewallRule -LocalOnlyMapping $false -LooseSourceMapping $false
@@ -169,7 +174,7 @@ New-NetFirewallRule -LocalOnlyMapping $true -LooseSourceMapping $false
 
 [//]: # (If needed)
 
-## Get LocalUser and EdgeTraversalPolicy
+### Get LocalUser and EdgeTraversalPolicy
 
 ```powershell
 # TODO: can also be function call for SDDL
@@ -181,7 +186,7 @@ New-NetFirewallRule -LocalUser Any -EdgeTraversalPolicy DeferToApp
 -LocalUser [\$|\w]\w+ -EdgeTraversalPolicy \w+ ?
 ```
 
-## Get local and remote IPv6 address only in any notation
+### Get local and remote IPv6 address only in any notation
 
 ```powershell
 New-NetFirewallRule -LocalAddress ff01::/16 -RemoteAddress Any
@@ -192,7 +197,7 @@ New-NetFirewallRule -LocalAddress Any -RemoteAddress ff01::2
 -LocalAddress (?!.*\.)[\w&&:&&/]+ -RemoteAddress (?!.*\.)[\w&&:&&/]+ ?
 ```
 
-## Get local and remote IPv4 address only in any notation
+### Get local and remote IPv4 address only in any notation
 
 ```powershell
 New-NetFirewallRule -LocalAddress 224.3.0.44, 224.0.0.0-224.0.0.255, 224.3.0.44 -RemoteAddress Any
@@ -204,7 +209,7 @@ New-NetFirewallRule -LocalAddress LocalSubnet4 -RemoteAddress 224.3.0/24, 224.0/
 -LocalAddress (?!.*:)[,\.\w \-/]+ -RemoteAddress (?!.*:)[,\.\w \-/]+ ?
 ```
 
-## Get owner and package for store app
+### Get owner and package for store app
 
 ```powershell
 New-NetFirewallRule -Owner (Get-GroupSID "Administrators") -Package "*"
@@ -214,4 +219,12 @@ New-NetFirewallRule -Owner $Principal.SID -Package $PackageSID
 ```regex
 -Owner [\$|\w](\w|\.)+(?= -Package) -Package [\$|\w](\w|\.)+ ?
 -Owner (([\$|\w](\w|\.)+)|(\(.*\))) -Package ([\$|\w](\w|\.)+|".*") ?
+```
+
+## Random regexes
+
+### Match username in path
+
+```regex
+C:\\Users\USERNAME\\AppData\\Roaming\\ (?<=C:\\+Users\\+)\w+
 ```

@@ -70,10 +70,9 @@ function Test-Installation
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# If input path is valid just make sure it's formatted
-	# NOTE: for debugging purposes we want to ignore default installation variables
-	# and force searching programs
+	# NOTE: for debugging purposes we want to ignore default installation variables and force searching programs
 	# NOTE: this will cause "converted" path message in all cases
-	if (!$Develop -and (Test-Environment $FilePath.Value))
+	if (!$Develop -and (Test-Environment $FilePath.Value -Firewall))
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Formatting $FilePath"
 		$FilePath.Value = Format-Path $FilePath.Value
@@ -132,7 +131,7 @@ function Test-Installation
 			$InstallLocation = $InstallTable | Select-Object -ExpandProperty InstallLocation
 		}
 
-		# Don't show correction the path is same, taking case sensitivity into account.
+		# Don't show correction if the path is same, taking case sensitivity into account.
 		if ($FilePath.Value -cne $InstallLocation)
 		{
 			# Using single quotes to make emptiness obvious when the path is empty.

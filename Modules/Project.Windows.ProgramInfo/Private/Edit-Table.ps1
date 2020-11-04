@@ -62,26 +62,20 @@ function Edit-Table
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Attempt to insert new entry into installation table"
 
-	# Nothing to do if the path does not exist
-	if (!(Test-Environment $InstallLocation))
+	# Check if input path leads to user profile and is compatible with firewall
+	# TODO: Making 2 calls to Test-Environment here will show warning for bad path twice
+	if (Test-Environment $InstallLocation -UserProfile -Firewall)
 	{
-		# TODO: will be true also for user profile, we should try to fix the path if it leads to user profile instead of doing nothing.
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] $InstallLocation not found or invalid"
-		return
-	}
+		# Get a list of users to choose from, 3rd element in the path is user name
+		$Principal = Get-GroupPrincipal "Users" | Where-Object {
+			$InstallLocation -Match "^$Env:SystemDrive\\+Users\\+$($_.User)\\+"
+		}
 
-	# Check if input path leads to user profile
-	if (Test-UserProfile $InstallLocation)
-	{
-		# Make sure user profile variables are removed
+		# Make sure user profile variables are not present
 		$InstallLocation = Format-Path $InstallLocation
 
 		# Create a row
 		$Row = $InstallTable.NewRow()
-
-		# TODO: checking if Principal exists
-		# Get a list of users to choose from, 3rd element in the path is user name
-		$Principal = Get-GroupPrincipal "Users" | Where-Object -Property User -EQ ($InstallLocation.Split("\"))[2]
 
 		# Enter data into row
 		$Row.ID = ++$RowIndex
@@ -96,7 +90,7 @@ function Edit-Table
 		# Add the row to the table
 		$InstallTable.Rows.Add($Row)
 	}
-	else
+	elseif (Test-Environment $InstallLocation -Firewall)
 	{
 		$InstallLocation = Format-Path $InstallLocation
 
@@ -117,5 +111,12 @@ function Edit-Table
 
 		# Add the row to the table
 		$InstallTable.Rows.Add($Row)
+	}
+	else
+	{
+		# TODO: will be true also for user profile, we should try to fix the path if it leads to user profile instead of doing nothing.
+		# NOTE: This may be best done with Format-Path by reformatting
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] $InstallLocation not found or invalid"
+		return
 	}
 }

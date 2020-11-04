@@ -39,10 +39,10 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 #
 
 $PrivateScripts = @(
-	"Update-Table"
 	"Edit-Table"
 	"Initialize-Table"
 	"Show-Table"
+	"Update-Table"
 )
 
 foreach ($Script in $PrivateScripts)
@@ -53,27 +53,26 @@ foreach ($Script in $PrivateScripts)
 
 $PublicScripts = @(
 	"External\Get-SQLInstance"
-	"Test-File"
-	"Test-Installation"
-	"Get-AppSID"
-	"Test-Service"
-	"Format-Path"
-	"Test-UserProfile"
 	"Find-Installation"
-	"Test-Environment"
-	"Get-UserSoftware"
+	"Format-Path"
 	"Get-AllUserSoftware"
 	"Get-AppCapability"
-	"Get-SystemSoftware"
+	"Get-AppSID"
 	"Get-ExecutablePath"
 	"Get-NetFramework"
+	"Get-OneDrive"
+	"Get-SQLManagementStudio"
+	"Get-SystemApps"
+	"Get-SystemSoftware"
+	"Get-UserApps"
+	"Get-UserSoftware"
+	"Get-WindowsDefender"
 	"Get-WindowsKit"
 	"Get-WindowsSDK"
-	"Get-WindowsDefender"
-	"Get-SQLManagementStudio"
-	"Get-OneDrive"
-	"Get-UserApps"
-	"Get-SystemApps"
+	"Test-Environment"
+	"Test-File"
+	"Test-Installation"
+	"Test-Service"
 )
 
 foreach ($Script in $PublicScripts)
@@ -100,28 +99,6 @@ else
 	Remove-Variable -Name InstallTable -Scope Global -ErrorAction Ignore
 	Set-Variable -Name InstallTable -Scope Script -Value $null
 }
-
-# Any environment variables to user profile or multiple paths are not valid for firewall
-Write-Debug -Message "[$ThisModule] Initialize module Constant variable: UserProfileEnvironment"
-New-Variable -Name UserProfileEnvironment -Scope Script -Option Constant -Value @(
-	"%APPDATA%"
-	"%HOME%"
-	"%HOMEPATH%"
-	"%LOCALAPPDATA%"
-	"%OneDrive%"
-	"%OneDriveConsumer%"
-	"%TEMP%"
-	"%TMP%"
-	"%USERNAME%"
-	"%USERPROFILE%"
-)
-
-Write-Debug -Message "[$ThisModule] Initialize module Constant variable: BlackListEnvironment"
-# NOTE: UserProfileEnvironment is listed last because search algorithm should try new values first
-New-Variable -Name BlackListEnvironment -Scope Script -Option Constant -Value (@(
-		"%Path%"
-		"%PSModulePath%"
-	) + $UserProfileEnvironment)
 
 Write-Debug -Message "[$ThisModule] Initialize module readonly variable: SystemPrograms"
 # Programs installed for all users

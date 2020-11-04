@@ -47,6 +47,7 @@ None.
 #>
 
 # Initialization
+#Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )
@@ -65,13 +66,14 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 Enter-Test $ThisScript
 
 $OfficeRoot = "%ProgramFiles(x866666)%\Microsoft Office\root\Office16"
-$TeamViewerRoot = "%ProgramFiles(x86)%\TeamViewer"
+$TeamViewerRoot = "%ProgramFiles(x86)%\TeamViewerZZZZ"
 $TestBadVariable = "%UserProfile%\crazyFolder"
 $TestBadVariable2 = "%UserProfile%\crazyFolder"
-$Greenshot = "unknown"
+$OneDrive = "unknown"
 
-Start-Test "Test-Installation 'Greenshot' $Greenshot"
-Test-Installation "Greenshot" ([ref] $Greenshot) @Logs
+Start-Test "Test-Installation 'OneDrive' $OneDrive"
+$Result = Test-Installation "OneDrive" ([ref] $OneDrive) @Logs
+$Result
 
 Start-Test "Test-Installation 'MicrosoftOffice' $OfficeRoot"
 Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot) @Logs
@@ -83,8 +85,7 @@ Start-Test "Test-Installation 'VisualStudio' $TestBadVariable"
 Test-Installation "VisualStudio" ([ref] $TestBadVariable) @Logs
 
 Start-Test "Test-Installation 'BadVariable' $TestBadVariable2"
-$Result = Test-Installation "BadVariable" ([ref] $TestBadVariable2) @Logs
-$Result
+Test-Installation "BadVariable" ([ref] $TestBadVariable2) @Logs
 
 Test-Output $Result -Command Test-Installation @Logs
 

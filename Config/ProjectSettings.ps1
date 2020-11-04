@@ -351,20 +351,6 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 		# NOTE: Setting this variable in Initialize-Project would override it in develop mode
 		Set-Variable -Name RequireNuGetVersion -Scope Global -Option ReadOnly -Force -Value ([version]::new(2, 8, 5))
 	}
-
-	# TODO: Rename to TestAdmin and TestUser
-	# Administrative user account name which will perform unit testing
-	Set-Variable -Name UnitTesterAdmin -Scope Global -Option ReadOnly -Force -Value "Unknown Admin"
-
-	# Standard user account name which will perform unit testing
-	Set-Variable -Name UnitTester -Scope Global -Option ReadOnly -Force -Value "Unknown Tester"
-
-	# User account name for which to search executables in user profile and non standard paths by default
-	# Also used for other defaults where standard user account is expected, ex. development as standard user
-	# NOTE: Set this value to username for which to create rules by default, if there are multiple
-	# users and to affect them all set this value to non existent user
-	# TODO: needs testing info messages for this value
-	Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value "Unknown User"
 }
 
 # Removable variables, these can be modified or removed by code at any time, and, only once per session by users
@@ -393,6 +379,20 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 
 	# Set to false to disable logging information messages
 	Set-Variable -Name InformationLogging -Scope Global -Value (!$Develop)
+
+	# TODO: Rename to TestAdmin and TestUser
+	# Administrative user account name which will perform unit testing
+	Set-Variable -Name UnitTesterAdmin -Scope Global -Value "Unknown Admin"
+
+	# Standard user account name which will perform unit testing
+	Set-Variable -Name UnitTester -Scope Global -Value "Unknown User"
+
+	# User account name for which to search executables in user profile and non standard paths by default
+	# Also used for other defaults where standard user account is expected, ex. development as standard user
+	# NOTE: Set this value to username for which to create rules by default, if there are multiple
+	# users and to affect them all set this value to non existent user
+	# TODO: needs testing info messages for this value
+	Set-Variable -Name DefaultUser -Scope Global -Value "Unknown User"
 }
 
 # Removable variables, these can be modified or removed by code at any time, and, only once per session by users

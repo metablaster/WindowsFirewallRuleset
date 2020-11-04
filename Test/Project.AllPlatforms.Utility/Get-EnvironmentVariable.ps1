@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
+Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,19 +28,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Test-UserProfile
+Unit test for Get-EnvironmentVariable
 
 .DESCRIPTION
-Unit test for Test-UserProfile
+Unit test for Get-EnvironmentVariable
 
 .EXAMPLE
-PS> .\Test-UserProfile.ps1
+PS> .\Get-EnvironmentVariable.ps1
 
 .INPUTS
-None. You cannot pipe objects to Test-UserProfile.ps1
+None. You cannot pipe objects to Get-EnvironmentVariable.ps1
 
 .OUTPUTS
-None. Test-UserProfile.ps1 does not generate any output
+None. Get-EnvironmentVariable.ps1 does not generate any output
 
 .NOTES
 None.
@@ -53,6 +53,7 @@ New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 
 # Check requirements
 Initialize-Project -Abort
+Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
@@ -64,40 +65,28 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 Enter-Test $ThisScript
 
-$TestPath = "C:\Users\$UnitTester\source\repos\WindowsFirewallRuleset"
-Start-Test "$TestPath"
-Test-UserProfile $TestPath @Logs
-
-$TestPath = "%LOCALAPPDATA%\Microsoft"
-Start-Test "$TestPath"
-Test-UserProfile $TestPath @Logs
-
-$TestPath = "C:\\Users\$UnitTester\source\\repos\WindowsFirewallRuleset\"
-Start-Test "$TestPath"
-Test-UserProfile $TestPath @Logs
-
-$TestPath = "%LOCALAPPDATA%\\Microsoft\"
-Start-Test "$TestPath"
-Test-UserProfile $TestPath @Logs
-
-$TestPath = "C:\Program Files\\Microsoft SQL Server\140"
-Start-Test "$TestPath"
-Test-UserProfile $TestPath @Logs
-
-$TestPath = "%ProgramFiles(x86)%\Microsoft SQL Server\140\"
-Start-Test "$TestPath"
-Test-UserProfile $TestPath @Logs
-
-$TestPath = "C:\"
-Start-Test "$TestPath"
-Test-UserProfile $TestPath @Logs
-
-$TestPath = "C:\\"
-Start-Test "$TestPath"
-$Result = Test-UserProfile $TestPath @Logs
+Start-Test "Get-EnvironmentVariable UserProfile"
+$Result = Get-EnvironmentVariable UserProfile @Logs
 $Result
 
-Test-Output $Result -Command Test-UserProfile @Logs
+Start-Test "Select Name"
+$Result | Select-Object -ExpandProperty Name
+
+Start-Test "Get-EnvironmentVariable WhiteList | Sort"
+Get-EnvironmentVariable WhiteList @Logs | Sort-Object -Descending { $_.Value.Length }
+
+Start-Test "Get-EnvironmentVariable BlackList"
+$Result = Get-EnvironmentVariable BlackList @Logs
+$Result
+
+Start-Test "Select Value"
+$Result | Select-Object -ExpandProperty Value
+
+Start-Test "Get-EnvironmentVariable All"
+$Result = Get-EnvironmentVariable All @Logs
+$Result
+
+Test-Output $Result -Command Get-EnvironmentVariable @Logs
 
 Update-Log
 Exit-Test

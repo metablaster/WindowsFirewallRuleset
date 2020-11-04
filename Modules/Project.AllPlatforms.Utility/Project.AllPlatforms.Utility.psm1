@@ -44,6 +44,7 @@ $PublicScripts = @(
 	"Compare-Path"
 	"Confirm-FileEncoding"
 	"Convert-SDDLToACL"
+	"Get-EnvironmentVariable"
 	"Get-FileEncoding"
 	"Get-NetworkService"
 	"Get-ProcessOutput"

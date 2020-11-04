@@ -92,6 +92,13 @@ Sends typename for each input object down the pipeline
 .NOTES
 TODO: There may be multiple accelerators for same type, for example:
 Get-TypeName -Name [System.Management.Automation.PSObject] -Accelerator
+
+TODO: Use following code to detect .NET type:
+[System.AppDomain]::CurrentDomain.GetAssemblies() | ForEach-Object {
+	$_.GetTypes() | Where-Object {
+		$_.Name -like "TYPENAME_HERE"
+	}
+}
 #>
 function Get-TypeName
 {
@@ -132,7 +139,7 @@ function Get-TypeName
 				}
 				else
 				{
-					Write-Error -Category InvalidOperation -TargetObject $TypeName `
+					Write-Error -Category InvalidType -TargetObject $TypeName `
 						-Message "Input object '$TypeName' is not a .NET type"
 					return
 				}
@@ -178,7 +185,7 @@ function Get-TypeName
 
 					if (!$TypeName -or ($TypeName.Length -eq 0))
 					{
-						Write-Error -Category ObjectNotFound -TargetObject $TypeName `
+						Write-Error -Category InvalidType -TargetObject $TypeName `
 							-Message "The command '$Command' does not produce any .NET types"
 						return
 					}
@@ -211,7 +218,7 @@ function Get-TypeName
 			}
 			else
 			{
-				Write-Error -Category ObjectNotFound -TargetObject $TypeName `
+				Write-Error -Category InvalidType -TargetObject $TypeName `
 					-Message "Typename '$TypeName' is not a .NET type"
 				return
 			}

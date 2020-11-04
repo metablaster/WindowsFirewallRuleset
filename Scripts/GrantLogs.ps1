@@ -100,7 +100,7 @@ if (!$SkipPrompt)
 
 Write-Verbose -Message "[$ThisScript] Verifying firewall log file location"
 
-if (!(Test-Environment -FilePath $FirewallLogsFolder) -or
+if (!(Test-Environment -Path $FirewallLogsFolder) -or
 	!(Compare-Path -Loose $FirewallLogsFolder -ReferencePath "$ProjectRoot\*"))
 {
 	# Grant permission only if firewall logs go to valid location inside repository

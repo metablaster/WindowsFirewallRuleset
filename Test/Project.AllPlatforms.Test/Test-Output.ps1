@@ -43,7 +43,7 @@ None. You cannot pipe objects to Test-Output.ps1
 None. Test-Output.ps1 does not generate any output
 
 .NOTES
-None.
+TODO: More tests cases needed, in conjunction with Get-TypeName output
 #>
 
 # Initialization
@@ -73,8 +73,8 @@ $TempError = $null
 
 Start-Test "Test-Output FAIL"
 $ServiceController = Get-Service
-Test-Output $ServiceController -Command Get-Random -ErrorAction SilentlyContinue -EV TempError
-Write-Warning -Message "Error ignored: $TempError"
+Test-Output $ServiceController -Command Get-Random #-ErrorAction SilentlyContinue -EV TempError
+# Write-Warning -Message "Error ignored: $TempError"
 
 <#
 .DESCRIPTION

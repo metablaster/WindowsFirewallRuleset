@@ -156,23 +156,23 @@ Test-Environment $Result @Logs
 
 $TestPath = "C:\Users\Public\Public Downloads"
 Start-Test $TestPath
-$Result = Format-Path $TestPath @Logs
-$Result
-Test-Environment $Result @Logs
+$Result2 = Format-Path $TestPath @Logs
+$Result2
+Test-Environment $Result2 @Logs
 
 $TestPath = ""
-Start-Test $TestPath
+Start-Test '""'
 $Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
 
 $TestPath = $null
-Start-Test $TestPath
+Start-Test '$null'
 $Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
 
-Test-Output $Result -Command Format-Path @Logs
+Test-Output $Result2 -Command Format-Path @Logs
 
 Update-Log
 Exit-Test

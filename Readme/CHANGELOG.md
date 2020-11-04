@@ -26,14 +26,18 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - Modules
 
-  - Added function to compare 2 paths for equality or similarity
-  - Improved function to detect invalid paths
   - Improved function for setting permission to read firewall logs as standard user
+  - Improved Test-Environment function to handle more contexts for path validity detection
+  - Improved Format-Path function to be more efficient
+  - Improved Get-TypeName function to get precise type of an object such as function output.
+  - Removed Get-UserProfile function.
 
 - New features
 
   - Added script to restart/reset network and network configuration with no need for reboot
   - Added function to set ownership and file saystem premissions
+  - Added function Get-EnvironmentVariable to retrieve multiple variables of specific "group"
+  - Added function to compare 2 paths for equality or similarity
 
 - Documentation
 
@@ -47,10 +51,14 @@ If you would like to see fresh changes done since last release you can do so on 
   - DHCP configured computer won't connect to internet
   - Fixed various minor mistakes
 
+- Test
+
+  - Added Test-Output function to compare function outputs with OutputType attribute
+  - Added New-Section function to print new sections to separate test cases for readability
+
 - In progress
 
   - Renamed modules to "Ruleset.<...><...>"
-  - Improved Test-Environment function to handle more cases
   - Calls to icacls, takeown and file system permission code replaced with call to Set-Permission
 
 ## v0.7.0 (current release)

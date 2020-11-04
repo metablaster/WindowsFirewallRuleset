@@ -64,7 +64,7 @@ function Test-Output
 	param (
 		[Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
 		[AllowNull()]
-		[string] $InputType,
+		[System.Object[]] $InputType,
 
 		[Parameter(Mandatory = $true)]
 		[string] $Command
@@ -80,19 +80,31 @@ function Test-Output
 
 		# NOTE: OutputType variable may contain multiple valid entries
 		$OutputType = Get-TypeName -Command $Command
-		$TypeName = Get-TypeName -Name $InputType
+		$TypeName = Get-TypeName $InputType
 
 		Write-Information -Tags "Test" -MessageData "INFO: TypeName:`t`t$TypeName"
 		$OutputType | ForEach-Object {
 			Write-Information -Tags "Test" -MessageData "INFO: OutputType:`t$_"
 		}
 
-		if ($TypeName -ceq $OutputType)
+		if ([string]::IsNullOrEmpty($TypeName))
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Typename and OutputType are identical"
+			Write-Error -Category InvalidResult -TargetObject $InputType -Message "Unable to perform type comparison, missing object TypeName"
 		}
-		elseif ($OutputType -clike "$TypeName*")
+		elseif ([string]::IsNullOrEmpty($OutputType))
 		{
+			Write-Error -Category InvalidResult -TargetObject $Command -Message "Unable to perform type comparison, missing OutputType attribute"
+		}
+		elseif ($OutputType -ceq $TypeName)
+		{
+			# Output was defined by OutputType
+			Write-Information -Tags "Test" -MessageData "INFO: Typename and OutputType are identical"
+		}
+		elseif ($OutputType -like "$TypeName*" -or ($OutputType | Where-Object { $TypeName -like "$_*" }))
+		{
+			# Either typename is longer and contains one of OutputType's in it's name or
+			# typename is shorter and contained withing one of OutputTypes or
+			# both are the same but different casing used.
 			Write-Warning -Message "Typename is similar to OutputType but not named exactly the same"
 		}
 		else
