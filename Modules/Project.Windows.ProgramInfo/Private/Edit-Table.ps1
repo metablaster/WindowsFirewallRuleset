@@ -67,6 +67,8 @@ function Edit-Table
 	if (Test-Environment $InstallLocation -UserProfile -Firewall)
 	{
 		# Get a list of users to choose from, 3rd element in the path is user name
+		# NOTE: | Where-Object -Property User -EQ ($InstallLocation.Split("\"))[2]
+		# will not work if a path is inconsistent with bach or forward slashes
 		$Principal = Get-GroupPrincipal "Users" | Where-Object {
 			$InstallLocation -Match "^$Env:SystemDrive\\+Users\\+$($_.User)\\+"
 		}

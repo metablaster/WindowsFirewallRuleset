@@ -186,10 +186,6 @@ So here is an overview to help you see what they do hopefully answering all of y
     (To load offline registry hive)
     - [code.cmd](https://code.visualstudio.com) (To learn VSCode version)
     - [git.exe](https://git-scm.com) (To learn git version)
-    - [icacls.exe](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/icacls)
-    (To set permissions required to remove duplicate modules)
-    - [takeown.exe](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/takeown)
-    (To take ownership required to set permissions)
     - [makecab.exe](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/makecab)
     (To make online help content)
 

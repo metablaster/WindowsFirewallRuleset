@@ -57,10 +57,14 @@ If you would like to see fresh changes done since last release you can do so on 
   - Added Test-Output function to compare function outputs with OutputType attribute
   - Added New-Section function to print new sections to separate test cases for readability
 
+- Other
+
+  - Calls to icacls, takeown and file system permission code replaced with call to Set-Permission
+
 - In progress
 
   - Renamed modules to "Ruleset.<...><...>"
-  - Calls to icacls, takeown and file system permission code replaced with call to Set-Permission
+  - Add scripts to script path for current session
 
 ## v0.7.0 (current release)
 

@@ -28,31 +28,46 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Force remove module
+Force uninstall module
 
 .DESCRIPTION
-Uninstall-DuplicateModule removes modules which are otherwise not removable, example cases are:
-1. modules that ship with system
-2. modules locked by other modules
-Case from point 2 is recommended only when there are 2 exactly same modules installed,
-but the duplicate you are trying to remove is used (locked) instead of first one
+Uninstall-DuplicateModule uninstalls modules which are otherwise not uninstallable, example cases are:
+1. Modules that ship with system
+2. Modules locked by other modules
+3. Modules which prevent updating them
 
-.PARAMETER ModulePath
-Full path to the module root installation directory,
-Warning, if the root directory contains multiple module versions all of them will be uninstalled
+Updating modules which ship with system can't be done, only side by side installation is
+possible, with the help of this function those outdated and useless modules are removed from system.
+
+Case from point 2 is recommended only when there are 2 exactly same modules installed,
+but the duplicate you are trying to remove is used (locked) instead of first one.
 
 .PARAMETER Module
-Explicit module object which to uninstall
+One or more explicit module objects which to uninstall.
+No check for duplicity is performed and all supplied modules are removed.
+
+.PARAMETER Name
+One or more module names which to check for outdaness, and uninstall all outdated candidates.
+Unlike with 'Module' parameter, only outdated modules are uninstalled.
+
+.PARAMETER Location
+Predefined default locations where too search for outdated modules.
+Shipping: Modules installed as part of PowerShell
+System: Modules installed for all users
+User: Modules installed for current user
+
+.PARAMETER Force
+If specified, don't prompt for possibly dangerous actions
 
 .EXAMPLE
-PS> Uninstall-DuplicateModule "C:\Users\User\Documents\PowerShell\Modules\PackageManagement"
+Uninstall-DuplicateModule -Name PowerShellGet, PackageManagement -Location Shipping, System
 
-Module PackageManagement was removed
+Removes outdated PowerShellGet and PackageManagement modules excluding those installed in user scope
 
 .EXAMPLE
-PS> Get-Module SomeDupeModule | Uninstall-DuplicateModule
+PS> Get-Module -FullyQualifiedName @{ModuleName = "PackageManagement"; RequiredVersion = "1.0.0.1" } | Uninstall-DuplicateModule
 
-Module SomeDupeModule was removed
+First get module you know should be removed and pass it to pipeline
 
 .INPUTS
 [PSModuleInfo] module object
@@ -66,100 +81,207 @@ Target module must not be in use by:
 2. Some system process
 3. Session in VSCode
 Current session prompt must not point to anywhere in target module path
-TODO: array input and implement foreach
 TODO: we make no automated use of this function except for manual module removal
-TODO: Remove-Module if used prior uninstall
 #>
 function Uninstall-DuplicateModule
 {
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High",
-		DefaultParameterSetName = "Path")]
+		DefaultParameterSetName = "Name", PositionalBinding = $false)]
 	[OutputType([void])]
 	param (
-		[Parameter(Mandatory = $true, Position = 0, ParameterSetName = "Path")]
-		[string] $ModulePath,
-
-		[Parameter(Mandatory = $true, Position = 0,
+		[Parameter(Mandatory = $true,
 			ValueFromPipeline = $true, ParameterSetName = "Module")]
-		[PSModuleInfo] $Module
+		[PSModuleInfo[]] $Module,
+
+		[Parameter(Mandatory = $true, ParameterSetName = "Name")]
+		[string[]] $Name,
+
+		[Parameter(Mandatory = $true, ParameterSetName = "Name")]
+		[ValidateSet("Shipping", "System", "User")]
+		[string[]] $Location,
+
+		[Parameter()]
+		[switch] $Force
 	)
 
-	process
+	begin
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
 		# Check if in elevated PowerShell
 		# NOTE: can't be part of begin block
 		# TODO: not tested if replacing with "Requires RunAs Administrator"
-		Write-Information -Tags "User" -MessageData "INFO: Checking user account elevation"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking user account elevation"
 		$Principal = New-Object -TypeName Security.Principal.WindowsPrincipal([System.Security.Principal.WindowsIdentity]::GetCurrent())
 
 		if (!$Principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator))
 		{
 			Write-Error -Category PermissionDenied -TargetObject $Principal `
 				-Message "Elevation required, please open PowerShell as Administrator and try again"
-			return
+			throw $Principal
 		}
 
-		if ($Module)
+		if ($Name)
 		{
-			$ModuleName = $Module.Name
-			$ModuleRoot = $Module.ModuleBase
-		}
-		else
-		{
-			$ModuleName = Split-Path -Path $ModulePath -Leaf
-			$ModuleRoot = $ModulePath
-		}
-
-		if ($PSCmdlet.ShouldProcess($ModuleName, "Forced module removal"))
-		{
-			if (Test-Path -Path $ModuleRoot)
+			if ($PSVersionTable.PSEdition -eq "Desktop")
 			{
-				Write-Information -Tags "User" -MessageData "INFO: Taking ownership of $ModuleRoot"
-				# /a - Gives ownership to the Administrators group instead of the current user.
-				# /r - Performs a recursive operation on all files in the specified directory and subdirectories.
-				takeown /F $ModuleRoot /A /R
+				# This location is reserved for modules that ship with Windows.
+				# C:\Windows\System32\WindowsPowerShell\v1.0
+				$ShippingPath = "$PSHome\Modules"
 
-				Write-Information -MessageData "INFO: Replacing ACL's with default ACL's for $ModuleRoot"
-				# Replaces ACLs with default inherited ACLs for all matching files
-				icacls $ModuleRoot /reset
+				# This location is for system wide modules install
+				# C:\Program Files\WindowsPowerShell\Modules
+				$SystemPath = "$Env:ProgramFiles\WindowsPowerShell\Modules"
 
-				Write-Information -MessageData "INFO: Adding Administrator permissions for $ModuleRoot"
-				# /grant - Grants specified user access rights.
-				# Permissions replace previously granted explicit permissions.
-				# Not adding the :r, means that permissions are added to any previously granted explicit permissions.
-				# /inheritance - Sets the inheritance level, which can be:
-				# e - Enables inheritance
-				# d - Disables inheritance and copies the ACEs
-				# r - Removes all inherited ACEs
-				icacls $ModuleRoot /grant "*S-1-5-32-544:F" /inheritance:d /T
-
-				try
-				{
-					# Remove all folders and files of target module
-					Write-Information -Tags "User" -MessageData "INFO: Removing recursively $ModuleRoot"
-					Remove-Item -Path $ModuleRoot -Recurse -Force -Confirm:$false -ErrorAction Stop
-				}
-				catch
-				{
-					Write-Error -Message $_
-					Write-Warning -Message "Please close down all other PowerShell sessions including VSCode, then try again"
-					Write-Information -Tags "User" -MessageData "INFO: If this session is inside module path, the session must be restarted"
-					return
-				}
-
-				Write-Information -Tags "User" -MessageData "INFO: Module $ModuleName was removed"
+				# This location is for per user modules install
+				# C:\Users\Admin\Documents\WindowsPowerShell\Modules
+				$HomePath = "$Home\Documents\WindowsPowerShell\Modules"
 			}
 			else
 			{
-				Write-Error -Category ObjectNotFound -TargetObject $ModuleRoot `
-					-Message "Following module path was not found: $ModuleRoot"
-			} # Test-Path
-		}
-		else
+				# C:\Program Files\PowerShell\7\Modules
+				$ShippingPath = "$PSHome\Modules"
+
+				# C:\Program Files\PowerShell\Modules
+				$SystemPath = "$Env:ProgramFiles\PowerShell\Modules"
+
+				# C:\Users\Admin\Documents\PowerShell\Modules
+				$HomePath = "$Home\Documents\PowerShell\Modules"
+			}
+
+			# Total count of modules to uninstall
+			[int32] $TotalRemoveCount = 0
+
+			foreach ($ModuleName in $Name)
+			{
+				# All named candidates including most recent one
+				[PSModuleInfo[]] $AllTargetModule = Get-Module -Name $ModuleName -ListAvailable
+
+				if (!$AllTargetModule -or ($AllTargetModule.Length -lt 2))
+				{
+					Write-Warning -Message "No candidate modules for removal found with name '$ModuleName'"
+					# $Module is empty
+					return
+				}
+
+				# Named candidates for removal only
+				[PSModuleInfo[]] $TargetModule = @()
+
+				if ($Location -contains "Shipping")
+				{
+					$TargetModule += $AllTargetModule | Where-Object -Property ModuleBase -Like $ShippingPath*
+				}
+
+				if ($Location -contains "System")
+				{
+					$TargetModule += $AllTargetModule | Where-Object -Property ModuleBase -Like $SystemPath*
+				}
+
+				if ($Location -contains "User")
+				{
+					if ($Location.Length -gt 1)
+					{
+						Write-Warning "System wide modules might be removed in favor of user specific installation"
+						Write-Information -Tags "User" -MessageData "INFO: To avoid this warning, please don't mix 'User' location with other locations"
+
+						if (!($Force -or $PSCmdlet.ShouldContinue($Location, "Accept dangerous comparison on all specified module locations")))
+						{
+							$Module = @()
+							return # to process block
+						}
+					}
+
+					$TargetModule += $AllTargetModule | Where-Object -Property ModuleBase -Like $HomePath*
+				}
+
+				if (!$TargetModule -or ($TargetModule.Length -lt 2))
+				{
+					Write-Warning -Message "No duplicate modules for removal found with name '$ModuleName'"
+					$Module = @()
+					return # to process block
+				}
+
+				# Count of current modules to remove
+				$RemoveCount = $TargetModule.Length - 1
+
+				# Default sort, from lowest to highest version, to process oldest modules first
+				$TargetModule = $TargetModule | Sort-Object Version # -Descending = from highest to lowest
+
+				Write-Information -Tags "User" -MessageData "INFO: Following module $ModuleName is the most recent one and will be kept"
+				$TargetModule[$RemoveCount] | Select-Object -Property Name, ModuleBase, Version | Format-List
+
+				# Select all but most recent one
+				$Module += $TargetModule | Select-Object -First $RemoveCount
+				$TotalRemoveCount += $RemoveCount
+
+				Write-Information -Tags "User" -MessageData "INFO: The count of outdated $ModuleName modules selected for removal is $RemoveCount"
+			} # foreach
+
+			Write-Information -Tags "User" -MessageData "INFO: Total count of outdated modules selected for removal is $TotalRemoveCount as follows"
+			$Module | Select-Object -Property Name, ModuleBase, Version | Format-List
+		} # if Name
+	}
+	process
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+
+		foreach ($Item in $Module)
 		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Operation aborted by user"
-		} # ShouldProcess
+			$ModuleVersion = $Item.Version
+			$ModuleName = $Item.Name
+			$ModuleRoot = $Item.ModuleBase
+
+			if ($PSCmdlet.ShouldProcess("$ModuleName $ModuleVersion", "Forced module removal"))
+			{
+				if (Test-Path -Path $ModuleRoot -PathType Container)
+				{
+					Write-Information -Tags "User" -MessageData "INFO: Taking ownership of $ModuleName $ModuleVersion"
+					if (Set-Permission -Owner "Administrators" -Path $ModuleRoot -Recurse -Confirm:$false -Force)
+					{
+						Write-Information -MessageData "INFO: Granting permissions to Administrators group for $ModuleName $ModuleVersion"
+						if (Set-Permission -Principal "Administrators" -Path $ModuleRoot -Reset -Recurse -Grant "FullControl" -Confirm:$false -Force)
+						{
+							try
+							{
+								# First we need to remove module if it's being used by this session
+								[PSModuleInfo] $LoadedModule = Get-Module -Name $ModuleName
+
+								if ($LoadedModule)
+								{
+									# -Force, Indicates that this cmdlet removes read-only modules.
+									# By default, Remove-Module removes only read-write modules.
+									Write-Verbose -Message "[$($MyInvocation.InvocationName)] Attempting to remove module from current session"
+									Remove-Module -Name $ModuleName -Force -ErrorAction Stop
+								}
+
+								# Remove all folders and files of a target module
+								# TODO: This may fail if some files such as DLL's are in use by current session.
+								Write-Information -Tags "User" -MessageData "INFO: Removing recursively $ModuleName $ModuleVersion"
+								Remove-Item -Path $ModuleRoot -Recurse -Confirm:$false -Force -ErrorAction Stop
+							}
+							catch
+							{
+								Write-Error -Category $_.CategoryInfo.Category -TargetObject $_.TargetObject -Message $_.Exception.Message
+								Write-Warning -Message "Please close down all other PowerShell sessions including VSCode, then try again"
+								Write-Information -Tags "User" -MessageData "INFO: If this session is inside module path, the session must be restarted"
+								continue
+							}
+
+							Write-Information -Tags "User" -MessageData "INFO: Module $ModuleName was removed"
+							continue
+						}
+					}
+
+					Write-Warning "Removing module $ModuleName failed"
+				}
+				else
+				{
+					Write-Error -Category ObjectNotFound -TargetObject $ModuleRoot `
+						-Message "Following module path was not found: $ModuleRoot"
+				} # Test-Path
+			}
+			else
+			{
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Operation aborted by user"
+			} # ShouldProcess
+		}
 	}
 }

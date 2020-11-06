@@ -133,7 +133,6 @@ TODO: Which combination is for "Include inheritable permissions from this object
 Set-Permission function is a wrapper around *-Acl commandlets for easier ACL editing.
 This function also serves as replacement for takeown.exe and icacls.exe whose syntax is strange and
 using these in PowerShell is usually awkward.
-TODO: See Get-ChildItem -Force
 TODO: Test on registry
 TODO: See https://powershellexplained.com/2020-03-15-Powershell-shouldprocess-whatif-confirm-shouldcontinue-everything/
 Links listed below are provided for additional parameter description in order of how parameters are declared
@@ -286,6 +285,7 @@ function Set-Permission
 		# Explicit rules were all removed, inherited will now be either inherited, removed or converted to explicit rules.
 		$Acl.SetAccessRuleProtection($Protected, $PreserveInheritance)
 		Set-Acl -AclObject $Acl -Path $Path
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Reset was done on object: $Path"
 	}
 
 	if ($Principal)
@@ -318,6 +318,7 @@ function Set-Permission
 
 		$Acl.SetOwner($NTAccount)
 		Set-Acl -AclObject $Acl -Path $Path
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Granting ownership was done on object: $Path"
 	}
 	elseif ($Principal)
 	{
@@ -355,17 +356,19 @@ function Set-Permission
 		}
 
 		Set-Acl -AclObject $Acl -Path $Path
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Granting permissions was done on object: $Path"
 	}
 
 	if ($Recurse)
 	{
 		# TODO: Will fail with "-Reset -Recurse -Protected"
-		Write-Information -Tags "Project" -MessageData "INFO: Attempting to recursively set permissions on child objects"
+		Write-Information -Tags "Project" -MessageData "INFO: Attempting to perform recursive action"
 
 		try
 		{
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Attempting to recursively get target resource directory tree"
-			$ChildItems = Get-ChildItem -Path $Path -Recurse -ErrorAction Stop
+			# NOTE: -Force, Allows the cmdlet to get items that otherwise can't be accessed by the user, such as hidden or system files.
+			$ChildItems = Get-ChildItem -Path $Path -Recurse -Force -ErrorAction Stop
 		}
 		catch
 		{
@@ -393,18 +396,18 @@ function Set-Permission
 				Set-Permission -Path $Path -Principal $Principal -Rights $GrantFolders
 
 				# TODO: Not sure if this will work without "ReadPermissions, ChangePermissions"
-				Get-ChildItem -Path $Path -Directory | ForEach-Object {
+				Get-ChildItem -Path $Path -Directory -Force | ForEach-Object {
 					Write-Debug -Message "[$($MyInvocation.InvocationName)] Setting permissions for recursive actions on child container object: $($_.FullName)"
 					Set-Permission -Path $_.FullName -Principal $Principal -Rights $GrantFolders -Recurse
 				}
 
-				Get-ChildItem -Path $Path -File -Recurse | ForEach-Object {
+				Get-ChildItem -Path $Path -File -Recurse -Force | ForEach-Object {
 					Write-Debug -Message "[$($MyInvocation.InvocationName)] Setting permissions for recursive actions on child leaf object: $($_.FullName)"
 					Set-Permission -Path $_.FullName -Principal $Principal -Rights $GrantFiles
 				}
 
 				# Now we should be able to get it
-				$ChildItems = Get-ChildItem -Path $Path -Recurse -ErrorAction Stop
+				$ChildItems = Get-ChildItem -Path $Path -Recurse -Force -ErrorAction Stop
 			}
 			else
 			{
@@ -424,6 +427,8 @@ function Set-Permission
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Setting permissions on child object: $($_.FullName)"
 				Set-Permission -Path $_.FullName @PSBoundParameters
 			}
+
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Recursive action is done on object: $Path"
 		}
 	}
 

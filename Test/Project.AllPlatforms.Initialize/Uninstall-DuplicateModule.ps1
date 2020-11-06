@@ -46,6 +46,12 @@ None. Uninstall-DuplicateModule.ps1 does not generate any output
 None.
 #>
 
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
 # Initialization
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
@@ -66,49 +72,27 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 Enter-Test $ThisScript
 
-# NOTE: Install these outdated modules as standard user for testing,
-# make sure to to test Get-Module returns single module
-# Install-Module -Name PackageManagement -RequiredVersion "1.3.0.0" -Scope CurrentUser
-# Install-Module -Name Pester -RequiredVersion "5.0.2.0" -Scope CurrentUser
-# Install-Module -Name PowerShellGet -RequiredVersion "1.1.0.0" -Scope CurrentUser
-
-if ($PSVersionTable.PSEdition -eq "Desktop")
+if ($Force -or $PSCmdlet.ShouldContinue("Uninstall specified modules for testing", "Accept dangerous unit test"))
 {
-	# This location is reserved for modules that ship with Windows.
-	$ShippingPath = "$PSHome\Modules"
+	Start-Test "Get-Module"
+	[PSModuleInfo[]] $TargetModule = Get-Module -ListAvailable -Name Pester
+	$TargetModule += Get-Module -ListAvailable -Name PSReadline
 
-	# This location is for system wide modules install
-	$SystemPath = "$Env:ProgramFiles\WindowsPowerShell\Modules"
+	if ($TargetModule)
+	{
+		Start-Test "Uninstall-DuplicateModule Pipeline"
+		$TargetModule | Uninstall-DuplicateModule @Logs
+	}
 
-	# This location is for per user modules install
-	$HomePath = "$Home\Documents\WindowsPowerShell\Modules"
+	Start-Test "Uninstall-DuplicateModule -Name Pester"
+	Uninstall-DuplicateModule -Name Pester -Location Shipping, System, User @Logs
+
+	Start-Test "Uninstall-DuplicateModule -Name PowerShellGet, PackageManagement"
+	$Result = Uninstall-DuplicateModule -Name PowerShellGet, PackageManagement -Location Shipping, System @Logs
+	$Result
+
+	Test-Output $Result -Command Uninstall-DuplicateModule @Logs
 }
-else
-{
-	$ShippingPath = "$PSHome\Modules"
-	$SystemPath = "$Env:ProgramFiles\PowerShell\Modules"
-	$HomePath = "$Home\Documents\PowerShell\Modules"
-}
-
-Start-Test "Get-Module"
-[PSModuleInfo[]] $TargetModule = Get-Module -ListAvailable -FullyQualifiedName @{ModuleName = "PackageManagement"; RequiredVersion = "1.0.0.1" } |
-Where-Object -Property ModuleBase -Like $HomePath*
-$TargetModule += Get-Module -ListAvailable -FullyQualifiedName @{ModuleName = "PowerShellGet"; RequiredVersion = "1.0.0.1" } |
-Where-Object -Property ModuleBase -Like $HomePath*
-
-if ($TargetModule)
-{
-	Start-Test "Uninstall-DuplicateModule Pipeline"
-	$TargetModule | Uninstall-DuplicateModule @Logs
-}
-
-$ModulePath = "C:\Users\$UnitTester\Documents\PowerShell\Modules\Pester"
-
-Start-Test "Uninstall-DuplicateModule Path"
-$Result = Uninstall-DuplicateModule $ModulePath @Logs
-
-$Result
-Test-Output $Result -Command Uninstall-DuplicateModule @Logs
 
 Update-Log
 Exit-Test
