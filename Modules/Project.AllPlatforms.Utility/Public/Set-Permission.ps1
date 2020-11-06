@@ -56,11 +56,16 @@ Principal domain such as computer name or authority to which principal applies
 Access control type to either allow or deny specified rights
 
 .PARAMETER Rights
-Defines the access rights to use for principal when creating access and audit rules.
+Defines file system access rights to use for principal when creating access and audit rules.
 The default includes: ReadAndExecute, ListDirectory and Traverse
 Where:
 1. ReadAndExecute: Read and ExecuteFile
 2. Read: ReadData, ReadExtendedAttributes, ReadAttributes, and ReadPermissions.
+
+.PARAMETER RegistryRights
+Defines registry access rights to use for principal when creating access and audit rules.
+The default includes: ReadKey
+Where, ReadKey: QueryValues, Notify, EnumerateSubKeys and ReadPermissions
 
 .PARAMETER Inheritance
 Inheritance flags specify the semantics of inheritance for access control entries.
@@ -133,8 +138,10 @@ TODO: Which combination is for "Include inheritable permissions from this object
 Set-Permission function is a wrapper around *-Acl commandlets for easier ACL editing.
 This function also serves as replacement for takeown.exe and icacls.exe whose syntax is strange and
 using these in PowerShell is usually awkward.
-TODO: Test on registry
 TODO: See https://powershellexplained.com/2020-03-15-Powershell-shouldprocess-whatif-confirm-shouldcontinue-everything/
+TODO: switch to ignore errors and continue doing things, useful for recurse
+TODO: A bunch of other security options can be implemented
+
 Links listed below are provided for additional parameter description in order of how parameters are declared
 
 .LINK
@@ -144,6 +151,9 @@ https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.access
 https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.filesystemrights?view=dotnet-plat-ext-3.1
 
 .LINK
+https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registryrights?view=dotnet-plat-ext-3.1
+
+.LINK
 https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.inheritanceflags?view=dotnet-plat-ext-3.1
 
 .LINK
@@ -151,14 +161,18 @@ https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.propag
 
 .LINK
 https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.objectsecurity.setaccessruleprotection?view=dotnet-plat-ext-3.1
+
+.LINK
+https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registrysecurity?view=dotnet-plat-ext-3.1
 #>
 function Set-Permission
 {
-	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High", PositionalBinding = $false, DefaultParameterSetName = "Reset",
+	# DefaultParameterSetName = "Reset",
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High", PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Utility/Help/en-US/Set-Permission.md")]
 	[OutputType([bool])]
 	param (
-		[Alias("File", "Directory", "Key")]
+		[Alias("Directory", "File", "Key", "Item")]
 		[Parameter(Mandatory = $true, Position = 0)]
 		[string] $Path,
 
@@ -166,38 +180,49 @@ function Set-Permission
 		[string] $Owner,
 
 		[Alias("User")]
-		[Parameter(Mandatory = $true, ParameterSetName = "Permission")]
+		[Parameter(Mandatory = $true, ParameterSetName = "Registry")]
+		[Parameter(Mandatory = $true, ParameterSetName = "FileSystem")]
 		[string] $Principal,
 
-		[Alias("Computer", "Server", "ComputerName", "Host", "Machine")]
+		[Alias("Computer", "Server", "Host", "Machine")]
 		[Parameter()]
 		[string] $Domain,
 
-		[Parameter(ParameterSetName = "Permission")]
+		[Parameter(ParameterSetName = "Registry")]
+		[Parameter(ParameterSetName = "FileSystem")]
 		[AccessControl.AccessControlType] $Type = "Allow",
 
 		[Alias("Permission", "Grant")]
-		[Parameter(ParameterSetName = "Permission")]
-		[AccessControl.FileSystemRights] $Rights = "ReadAndExecute, ListDirectory, Traverse",
+		[Parameter(Mandatory = $true, ParameterSetName = "FileSystem")]
+		[AccessControl.FileSystemRights] $Rights, # = "ReadAndExecute, ListDirectory, Traverse",
 
-		[Parameter(ParameterSetName = "Permission")]
+		[Alias("RegPermission", "RegGrant")]
+		[Parameter(Mandatory = $true, ParameterSetName = "Registry")]
+		[AccessControl.RegistryRights] $RegistryRights, # = "ReadKey",
+
+		[Parameter(ParameterSetName = "Registry")]
+		[Parameter(ParameterSetName = "FileSystem")]
 		[AccessControl.InheritanceFlags] $Inheritance = "ContainerInherit, ObjectInherit",
 
-		[Parameter(ParameterSetName = "Permission")]
+		[Parameter(ParameterSetName = "Registry")]
+		[Parameter(ParameterSetName = "FileSystem")]
 		[AccessControl.PropagationFlags] $Propagation = "None",
 
 		[Parameter(ParameterSetName = "Reset")]
-		[Parameter(ParameterSetName = "Permission")]
+		[Parameter(ParameterSetName = "Registry")]
+		[Parameter(ParameterSetName = "FileSystem")]
 		[switch] $Protected,
 
 		[Parameter(ParameterSetName = "Reset")]
-		[Parameter(ParameterSetName = "Permission")]
+		[Parameter(ParameterSetName = "Registry")]
+		[Parameter(ParameterSetName = "FileSystem")]
 		[switch] $PreserveInheritance,
 
 		[Parameter()]
 		[switch] $Recurse,
 
-		[Parameter(ParameterSetName = "Permission")]
+		[Parameter(ParameterSetName = "Registry")]
+		[Parameter(ParameterSetName = "FileSystem")]
 		[Parameter(Mandatory = $true, ParameterSetName = "Reset")]
 		[switch] $Reset,
 
@@ -235,8 +260,27 @@ function Set-Permission
 
 	if (!(Test-Path -Path $Path))
 	{
-		Write-Error -TargetObject $Path -Category ObjectNotFound -Message "Specified resource could not be found: '$Path'"
-		return $false
+		# NOTE: [Microsoft.Win32.RegistryKey] Name might not have drive
+		if ($Path -like "HKEY_*")
+		{
+			try
+			{
+				# TODO: Debug, Verbose and other messages will not be clear with just 'RegKey'
+				New-PSDrive -Name RegKey -Scope Local -Root $Path -PSProvider Registry -ErrorAction Stop | Out-Null
+				$Path = "RegKey:\"
+				Test-Path -Path $Path -ErrorAction Stop
+			}
+			catch
+			{
+				Write-Error -Category $_.CategoryInfo.Category -TargetObject $_.TargetObject -Message $_.Exception.Message
+				return $false
+			}
+		}
+		else
+		{
+			Write-Error -TargetObject $Path -Category ObjectNotFound -Message "Specified resource could not be found: '$Path'"
+			return $false
+		}
 	}
 	elseif ($Recurse -and (Test-Path -Path $Path -PathType Leaf))
 	{
@@ -248,7 +292,9 @@ function Set-Permission
 
 	if ($Reset)
 	{
-		# TODO: Test we get permissions to reset
+		# TODO: "-Reset -Recurse -Protected" on it's own don't work because until recurse nobody has rights any more
+		# TODO: Reset ownership if that even makes sense?
+		# TODO: Test we get permissions to reset, reset fails without permissions
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Attempting to reset"
 
 		$IncludeExplicit = $true
@@ -332,13 +378,29 @@ function Set-Permission
 			{
 				# Leaf. An element that does not contain other elements, such as a file or registry entry.
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Input path is leaf: '$(Split-Path -Path $Path -Leaf)'"
-				$Permission = New-Object AccessControl.FileSystemAccessRule($NTAccount, $Rights, $Type)
+				if ($RegistryRights)
+				{
+					# https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registryaccessrule?view=dotnet-plat-ext-3.1
+					$Permission = New-Object AccessControl.RegistryAccessRule($NTAccount, $RegistryRights, $Type)
+				}
+				else
+				{
+					# https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.filesystemaccessrule?view=dotnet-plat-ext-3.1
+					$Permission = New-Object AccessControl.FileSystemAccessRule($NTAccount, $Rights, $Type)
+				}
 			}
 			else
 			{
 				# Container. An element that contains other elements, such as a directory or registry key.
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Input path is container: '$(Split-Path -Path $Path -Leaf)'"
-				$Permission = New-Object AccessControl.FileSystemAccessRule($NTAccount, $Rights, $Inheritance, $Propagation, $Type)
+				if ($RegistryRights)
+				{
+					$Permission = New-Object AccessControl.RegistryAccessRule($NTAccount, $RegistryRights, $Inheritance, $Propagation, $Type)
+				}
+				else
+				{
+					$Permission = New-Object AccessControl.FileSystemAccessRule($NTAccount, $Rights, $Inheritance, $Propagation, $Type)
+				}
 			}
 
 			# Sets or removes protection of the access rules associated with this resource.
@@ -372,6 +434,13 @@ function Set-Permission
 		}
 		catch
 		{
+			if (!$Principal)
+			{
+				Write-Warning -Message "You have no permission to finish recursive action, please specify Principal and Rights"
+				Write-Error -Category $_.CategoryInfo.Category -TargetObject $_.TargetObject -Message $_.Exception.Message
+				return $false
+			}
+
 			Write-Warning -Message "You have no permission to finish recursive action"
 			if ($Force -or $PSCmdlet.ShouldContinue($Path, "Set required permissions to list directories and change permissions recursively"))
 			{
@@ -381,33 +450,49 @@ function Set-Permission
 				# Set basic rights to change permissions on all child folders and files
 				if ($Owner)
 				{
-					[AccessControl.FileSystemRights] $GrantFolders = "ListDirectory, TakeOwnership"
-					[AccessControl.FileSystemRights] $GrantFiles = "TakeOwnership"
+					if ($RegistryRights)
+					{
+						[Accesscontrol.RegistryRights] $GrantContainer = "EnumerateSubKeys, ReadPermissions, TakeOwnership"
+						[Accesscontrol.RegistryRights] $GrantLeaf = "EnumerateSubKeys, ReadPermissions, TakeOwnership"
+					}
+					else
+					{
+						[AccessControl.FileSystemRights] $GrantContainer = "ListDirectory, TakeOwnership"
+						[AccessControl.FileSystemRights] $GrantLeaf = "TakeOwnership"
+					}
 				}
-				else
+				else # Setting permissions
 				{
-					# TODO: Why is taking ownership not required for recursive *permission* set up?
-					[AccessControl.FileSystemRights] $GrantFolders = "ListDirectory, ReadPermissions, ChangePermissions"
-					[AccessControl.FileSystemRights] $GrantFiles = "ReadPermissions, ChangePermissions"
+					if ($RegistryRights)
+					{
+						[Accesscontrol.RegistryRights] $GrantContainer = "EnumerateSubKeys, ReadPermissions"
+						[Accesscontrol.RegistryRights] $GrantLeaf = "EnumerateSubKeys, ReadPermissions"
+					}
+					else
+					{
+						# TODO: Why is taking ownership not required for recursive *permission* set up?
+						[AccessControl.FileSystemRights] $GrantContainer = "ListDirectory, ReadPermissions, ChangePermissions"
+						[AccessControl.FileSystemRights] $GrantLeaf = "ReadPermissions, ChangePermissions"
+					}
 				}
 
 				# NOTE: This may be called twice for each child container which fails in "try" block above,
 				# It's needed to initiate recursing on this container
-				Set-Permission -Path $Path -Principal $Principal -Rights $GrantFolders
+				Set-Permission -Path $Path -Principal $Principal -Rights $GrantContainer
 
-				# TODO: Not sure if this will work without "ReadPermissions, ChangePermissions"
+				# TODO: Not sure if this will work without "ReadPermissions, ChangePermissions", if yes remove them
 				Get-ChildItem -Path $Path -Directory -Force | ForEach-Object {
 					Write-Debug -Message "[$($MyInvocation.InvocationName)] Setting permissions for recursive actions on child container object: $($_.FullName)"
-					Set-Permission -Path $_.FullName -Principal $Principal -Rights $GrantFolders -Recurse
+					Set-Permission -Path $_.FullName -Principal $Principal -Rights $GrantContainer -Recurse
 				}
 
 				Get-ChildItem -Path $Path -File -Recurse -Force | ForEach-Object {
 					Write-Debug -Message "[$($MyInvocation.InvocationName)] Setting permissions for recursive actions on child leaf object: $($_.FullName)"
-					Set-Permission -Path $_.FullName -Principal $Principal -Rights $GrantFiles
+					Set-Permission -Path $_.FullName -Principal $Principal -Rights $GrantLeaf
 				}
 
 				# Now we should be able to get it
-				$ChildItems = Get-ChildItem -Path $Path -Recurse -Force -ErrorAction Stop
+				$ChildItems = Get-ChildItem -Path $Path -Recurse -Force
 			}
 			else
 			{
@@ -415,7 +500,8 @@ function Set-Permission
 				return $false
 			}
 		}
-		finally
+
+		if ($ChildItems)
 		{
 			# These are manually set or not used here
 			$PSBoundParameters.Remove("Path") | Out-Null
@@ -429,8 +515,14 @@ function Set-Permission
 			}
 
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Recursive action is done on object: $Path"
+			return $true
 		}
-	}
+		else
+		{
+			Write-Warning -Message "Recursive action failed on object: $Path"
+			return $false
+		}
+	} # Recurse
 
 	return $true
 }

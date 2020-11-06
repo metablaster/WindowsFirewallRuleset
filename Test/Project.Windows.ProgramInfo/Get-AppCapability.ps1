@@ -67,7 +67,7 @@ Enter-Test $ThisScript
 Start-Test "Get-SystemApps | Get-AppCapability -Networking"
 Get-SystemApps | Get-AppCapability -Networking
 
-Start-Test "Get-UserApps -User 'Platinum' | Get-AppCapability -Networking"
+Start-Test "Get-UserApps -User $UnitTester | Get-AppCapability -Networking"
 Get-UserApps -User $UnitTester | Get-AppCapability -User $UnitTester -Networking
 
 Start-Test 'Get-AppxPackage -Name "*ZuneMusic*" | Get-AppCapability'

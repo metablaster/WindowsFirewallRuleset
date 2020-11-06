@@ -68,7 +68,7 @@ PS> Test-Environment "%HOME%\AppData\Local\MicrosoftEdge" -Firewall -UserProfile
 False, the path leads to userprofile but will not work for firewall rule
 
 .EXAMPLE
-PS> Test-Environment "%SystemDrive%\Users\User\AppData\Local\MicrosoftEdge" -Firewall -UserProfile
+PS> Test-Environment "%SystemDrive%\Users\USERNAME\AppData\Local\MicrosoftEdge" -Firewall -UserProfile
 
 True, the path leads to userprofile and is good for firewall rule, and it exists
 

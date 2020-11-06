@@ -132,7 +132,7 @@ function Uninstall-DuplicateModule
 				$SystemPath = "$Env:ProgramFiles\WindowsPowerShell\Modules"
 
 				# This location is for per user modules install
-				# C:\Users\Admin\Documents\WindowsPowerShell\Modules
+				# C:\Users\USERNAME\Documents\WindowsPowerShell\Modules
 				$HomePath = "$Home\Documents\WindowsPowerShell\Modules"
 			}
 			else
@@ -143,7 +143,7 @@ function Uninstall-DuplicateModule
 				# C:\Program Files\PowerShell\Modules
 				$SystemPath = "$Env:ProgramFiles\PowerShell\Modules"
 
-				# C:\Users\Admin\Documents\PowerShell\Modules
+				# C:\Users\USERNAME\Documents\PowerShell\Modules
 				$HomePath = "$Home\Documents\PowerShell\Modules"
 			}
 
@@ -158,8 +158,7 @@ function Uninstall-DuplicateModule
 				if (!$AllTargetModule -or ($AllTargetModule.Length -lt 2))
 				{
 					Write-Warning -Message "No candidate modules for removal found with name '$ModuleName'"
-					# $Module is empty
-					return
+					continue
 				}
 
 				# Named candidates for removal only
@@ -184,8 +183,7 @@ function Uninstall-DuplicateModule
 
 						if (!($Force -or $PSCmdlet.ShouldContinue($Location, "Accept dangerous comparison on all specified module locations")))
 						{
-							$Module = @()
-							return # to process block
+							continue
 						}
 					}
 
@@ -195,8 +193,7 @@ function Uninstall-DuplicateModule
 				if (!$TargetModule -or ($TargetModule.Length -lt 2))
 				{
 					Write-Warning -Message "No duplicate modules for removal found with name '$ModuleName'"
-					$Module = @()
-					return # to process block
+					continue
 				}
 
 				# Count of current modules to remove

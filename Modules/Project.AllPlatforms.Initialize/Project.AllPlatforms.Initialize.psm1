@@ -54,6 +54,7 @@ foreach ($Script in $PrivateScripts)
 }
 
 $PublicScripts = @(
+	"Add-PSContextMenu"
 	"Initialize-Project"
 	"Initialize-Service"
 	"Initialize-Module"
