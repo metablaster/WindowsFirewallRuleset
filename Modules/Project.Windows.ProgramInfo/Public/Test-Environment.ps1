@@ -34,7 +34,7 @@ Test if a path is valid with additional checks
 Similar to Test-Path but expands environment variables and performs additional checks if desired:
 1. check if input path is compatible for firewall rules.
 2. check if the path leads to user profile
-Both of which can be limited to either container of leaf path type.
+Both of which can be limited to either container or leaf path type.
 
 .PARAMETER Path
 Path to folder, Allows null or empty since input may come from other commandlets which
@@ -44,7 +44,7 @@ can return empty or null
 A type of path to test, can be one of the following:
 1. Leaf -The path is file or registry entry
 2. Container - the path is container such as folder or registry key
-3. Any - Leaf or Container
+3. Any - Either Leaf or Container
 
 .PARAMETER Firewall
 Ensures the path is valid for firewall rule
@@ -53,7 +53,29 @@ Ensures the path is valid for firewall rule
 Checks if the path leads to user profile
 
 .EXAMPLE
-PS> Test-Environment %SystemDrive%
+PS> Test-Environment "%Windir%"
+
+True, The path is valid, and it exists
+
+.EXAMPLE
+PS> Test-Environment "'%Windir%\System32'"
+
+False, Invalid path syntax
+
+.EXAMPLE
+PS> Test-Environment "%HOME%\AppData\Local\MicrosoftEdge" -Firewall -UserProfile
+
+False, the path leads to userprofile but will not work for firewall rule
+
+.EXAMPLE
+PS> Test-Environment "%SystemDrive%\Users\User\AppData\Local\MicrosoftEdge" -Firewall -UserProfile
+
+True, the path leads to userprofile and is good for firewall rule, and it exists
+
+.EXAMPLE
+Test-Environment "%LOCALAPPDATA%\MicrosoftEdge" -UserProfile
+
+True, the path lead to user profile, and it exists
 
 .INPUTS
 None. You cannot pipe objects to Test-Environment
@@ -62,7 +84,9 @@ None. You cannot pipe objects to Test-Environment
 [bool] true if path exists, false otherwise
 
 .NOTES
-TODO: This should proably be part of utility module
+TODO: This should proably be part of utility module.
+This function should be used only to verify paths for external usage, not for commandles which
+don't expand system environment variables.
 #>
 function Test-Environment
 {
@@ -99,17 +123,15 @@ function Test-Environment
 	{
 		$UserVariables = Get-EnvironmentVariable UserProfile | Select-Object -ExpandProperty Name
 
-		# Status to check Path is valid with UserProfile and Firewall
-		[bool] $Status = $true
-
 		if ($UserProfile -or $Firewall)
 		{
 			if ([array]::Find($UserVariables, [System.Predicate[string]] { $Path -like "$($args[0])*" }))
 			{
 				if ($Firewall)
 				{
-					$Status = $false
 					Write-Warning -Message "Paths including environment variables which lead to user profile are not valid for firewall"
+					Write-Information -Tags "Project" -MessageData "INFO: Invalid path is: $Path"
+					return $false
 				}
 			}
 			# TODO: We need target computer system drive instead of localmachine systemdrive
@@ -122,23 +144,20 @@ function Test-Environment
 			}
 		}
 
-		if ($Status)
+		if (Test-Path -Path ([System.Environment]::ExpandEnvironmentVariables($Path)) -PathType $PathType)
 		{
-			if (Test-Path -Path ([System.Environment]::ExpandEnvironmentVariables($Path)) -PathType $PathType)
-			{
-				return $true
-			}
+			return $true
+		}
 
-			# Why it failed:
-			$BadVariables = Get-EnvironmentVariable BlackList | Select-Object -ExpandProperty Name
-			if ([array]::Find($BadVariables, [System.Predicate[string]] { $Path -like "$($args[0])*" }))
-			{
-				Write-Warning -Message "Specified environment variable is not valid for paths"
-			}
-			else
-			{
-				Write-Warning -Message "Specified path does not exist"
-			}
+		# else Why it failed:
+		$BadVariables = Get-EnvironmentVariable BlackList | Select-Object -ExpandProperty Name
+		if ([array]::Find($BadVariables, [System.Predicate[string]] { $Path -like "$($args[0])*" }))
+		{
+			Write-Warning -Message "Specified environment variable is not valid for paths"
+		}
+		else
+		{
+			Write-Warning -Message "Specified path does not exist"
 		}
 	}
 	else # -IsValid

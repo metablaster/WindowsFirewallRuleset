@@ -26,16 +26,17 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - Modules
 
-  - Improved function for setting permission to read firewall logs as standard user
+  - Improved script for setting permission to read firewall logs as standard user
   - Improved Test-Environment function to handle more contexts for path validity detection
   - Improved Format-Path function to be more efficient
   - Improved Get-TypeName function to get precise type of an object such as function output.
   - Removed Get-UserProfile function.
+  - Other minor module improvements
 
 - New features
 
   - Added script to restart/reset network and network configuration with no need for reboot
-  - Added function to set ownership and file saystem premissions
+  - Added function Set-Permission to set ownership and file saystem premissions
   - Added function Get-EnvironmentVariable to retrieve multiple variables of specific "group"
   - Added function to compare 2 paths for equality or similarity
 

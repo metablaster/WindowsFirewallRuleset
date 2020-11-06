@@ -119,7 +119,7 @@ if ($Develop)
 	$InformationPreference = "Continue"
 	# $VerbosePreference = "Continue"
 	# $DebugPreference = "Continue"
-	# $ConfirmPreference = "Medium"
+	# $ConfirmPreference = "None"
 
 	# Must be after debug preference
 	Write-Debug -Message "[$SettingsScript] Setup clean environment"

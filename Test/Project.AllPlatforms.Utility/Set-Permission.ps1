@@ -73,20 +73,23 @@ $TestFolders = @(
 	"DenyRights"
 	"Inheritance"
 	"Protected"
+	"Recurse"
 )
 $TestFiles = @(
 	"NT Service.txt"
 	"LocalService.txt"
 	"Remote Management Users.txt"
+	"Recurse.txt"
 )
 
-# Create test files
+# Create root test folder
 if (!(Test-Path -PathType Container -Path $TestFolder))
 {
 	Write-Information -Tags "Test" -MessageData "INFO: Creating new test directory: $TestFolder"
 	New-Item -ItemType Container -Path $TestFolder | Out-Null
 }
 
+# Create subfolder files and directories
 $FileIndex = 0
 foreach ($Folder in $TestFolders)
 {
@@ -94,12 +97,14 @@ foreach ($Folder in $TestFolders)
 	{
 		Write-Information -Tags "Test" -MessageData "INFO: Creating new test directory: $Folder"
 		New-Item -ItemType Container -Path $TestFolder\$Folder | Out-Null
+		New-Item -ItemType Container -Path $TestFolder\$Folder\$Folder | Out-Null
 		New-Item -ItemType File -Path $TestFolder\$Folder\$($TestFiles[$FileIndex]) | Out-Null
 	}
 
 	++$FileIndex
 }
 
+# Create test files
 foreach ($File in $TestFiles)
 {
 	if (!(Test-Path -PathType Leaf -Path $TestFolder\$File))
@@ -140,6 +145,19 @@ $Result
 
 # Test output type
 Test-Output $Result -Command Set-Permission @Logs
+
+# Test reset/recurse
+Start-Test "Reset permissions inheritance to explicit"
+Set-Permission -Path "$TestFolder\Protected\Remote Management Users.txt" -Reset -Protected -PreserveInheritance
+
+Start-Test "Reset permissions recurse"
+Set-Permission -Principal "Administrators" -Grant "FullControl" -Path $TestFolder -Reset -Recurse @Logs
+
+Start-Test "Recursive ownership on folder"
+Set-Permission -Owner "Replicator" -Path $TestFolder -Recurse @Logs
+
+Start-Test "Recursively clear all rules or folder"
+Set-Permission -Path $TestFolder -Reset -Recurse -Protected @Logs
 
 Update-Log
 Exit-Test
