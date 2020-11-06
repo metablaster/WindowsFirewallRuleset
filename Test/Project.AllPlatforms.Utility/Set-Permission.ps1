@@ -98,11 +98,11 @@ if ($FileSystem)
 	{
 		# Test ownership
 		Start-Test "Set-Permission ownership"
-		Set-Permission -Owner $UnitTester -Domain $Computer -Path $TestFolder -Recurse @Logs
+		Set-Permission -Owner $TestUser -Domain $Computer -Path $TestFolder -Recurse @Logs
 
 		# Reset existing tree for re-test
 		Start-Test "Reset existing tree"
-		Set-Permission -Principal $UnitTester -Domain $Computer -Path $TestFolder -Reset -Grant $Access -Recurse @Logs
+		Set-Permission -Principal $TestUser -Domain $Computer -Path $TestFolder -Reset -Grant $Access -Recurse @Logs
 	}
 
 	$TestFolders = @(
@@ -152,7 +152,7 @@ if ($FileSystem)
 
 	# Test ownership
 	Start-Test "Set-Permission ownership"
-	Set-Permission -Owner $UnitTester -Domain $Computer -Path $TestFolder @Logs
+	Set-Permission -Owner $TestUser -Domain $Computer -Path $TestFolder @Logs
 
 	# Test defaults
 	Start-Test "Set-Permission - NT SERVICE\LanmanServer permission on file"
@@ -237,8 +237,8 @@ elseif ($Registry)
 			Set-Permission -Principal "TrustedInstaller" -Domain "NT SERVICE" -Path $KeyLocation -Reset -RegistryRight "ReadKey"
 			Set-Permission -Owner "TrustedInstaller" -Domain "NT SERVICE" -Path $KeyLocation
 
-			Set-Permission -Principal $UnitTester -Path $KeyLocation -Reset -RegistryRight "ReadKey"
-			Set-Permission -Owner $UnitTester -Path $KeyLocation
+			Set-Permission -Principal $TestUser -Path $KeyLocation -Reset -RegistryRight "ReadKey"
+			Set-Permission -Owner $TestUser -Path $KeyLocation
 		}
 		else
 		{

@@ -69,7 +69,7 @@ Enter-Test $ThisScript
 # Test users
 #
 
-[string[]] $Users = @("Administrator", $UnitTester, $UnitTesterAdmin)
+[string[]] $Users = @("Administrator", $TestUser, $TestAdmin)
 
 Start-Test "Get-AccountSID -User $Users"
 $AccountSID1 = Get-AccountSID -User $Users @Logs

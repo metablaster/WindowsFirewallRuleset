@@ -65,7 +65,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 Enter-Test $ThisScript
 
-[string[]] $Users = @($UnitTester)
+[string[]] $Users = @($TestUser)
 [string] $Domain = [System.Environment]::MachineName
 [string[]] $Groups = @("Users", "Administrators")
 

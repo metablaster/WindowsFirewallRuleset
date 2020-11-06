@@ -52,7 +52,7 @@ todo's in this file are categorized into following sections:
         - `git repack -d -F`
     - ProgramInfo and AllPlatforms.IP module manifest, comment out unit test exports
     - ProjectSettings.ps1 disable variables: Develop, ForceLoad
-    - ProjectSettings.ps1 restore variables: UnitTester, UnitTesterAdmin, DefaultUser, FirewallLogsFolder
+    - ProjectSettings.ps1 restore variables: TestUser, TestAdmin, DefaultUser, FirewallLogsFolder
     - ProjectSettings.ps1 verify auto updated variables: ProjectCheck, ModulesCheck, ServicesCheck
     - Increment project version in all places mentioning version
     - Run script analyzer

@@ -136,7 +136,7 @@ $Result = Format-Path $TestPath @Logs
 $Result
 Test-Environment $Result @Logs
 
-$TestPath = "C:\Users\$UnitTester\AppData\Local\OneDrive"
+$TestPath = "C:\Users\$TestUser\AppData\Local\OneDrive"
 Start-Test $TestPath
 $Result = Format-Path $TestPath @Logs
 $Result

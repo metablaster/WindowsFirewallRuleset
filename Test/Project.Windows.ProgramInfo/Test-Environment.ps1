@@ -146,11 +146,11 @@ $Result = "%HOME%\AppData\Local\MicrosoftEdge"
 Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
 
-$Result = "C:\Users\$UnitTester\AppData"
+$Result = "C:\Users\$TestUser\AppData"
 Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
 
-$Result = "F:\Users\$UnitTester"
+$Result = "F:\Users\$TestUser"
 Start-Test "Test-Environment: $Result"
 Test-Environment $Result @Logs
 
@@ -162,11 +162,11 @@ $Result = "%HOME%\AppData\Local\MicrosoftEdge"
 Start-Test "Test-Environment -UserProfile: $Result"
 Test-Environment -UserProfile $Result @Logs
 
-$Result = "C:\Users\$UnitTester\AppData"
+$Result = "C:\Users\$TestUser\AppData"
 Start-Test "Test-Environment -UserProfile: $Result"
 Test-Environment -UserProfile $Result @Logs
 
-$Result = "F:\Users\$UnitTester"
+$Result = "F:\Users\$TestUser"
 Start-Test "Test-Environment -UserProfile: $Result"
 Test-Environment -UserProfile $Result @Logs
 
@@ -184,7 +184,7 @@ $Result = "%HOME%\AppData\Local\MicrosoftEdge"
 Start-Test "Test-Environment -Firewall: $Result"
 Test-Environment -Firewall $Result @Logs
 
-$Result = "C:\Users\$UnitTester\AppData"
+$Result = "C:\Users\$TestUser\AppData"
 Start-Test "Test-Environment -Firewall: $Result"
 Test-Environment -Firewall $Result @Logs
 
@@ -213,7 +213,7 @@ $Result = "%HOME%\AppData\Local\MicrosoftEdge"
 Start-Test "Test-Environment -Firewall: $Result"
 Test-Environment -Firewall -UserProfile $Result @Logs
 
-$Result = "C:\Users\$UnitTester\AppData"
+$Result = "C:\Users\$TestUser\AppData"
 Start-Test "Test-Environment -Firewall: $Result"
 Test-Environment -Firewall -UserProfile $Result @Logs
 
