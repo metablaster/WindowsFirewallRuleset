@@ -76,6 +76,7 @@
 	# Functions to export from this module, for best performance, do not use wildcards and do not
 	# delete the entry, use an empty array if there are no functions to export.
 	FunctionsToExport = @(
+		"ConvertFrom-OSBuild"
 		"Get-ComputerName"
 		"Get-ConfiguredAdapter"
 		"Get-InterfaceAlias"
@@ -83,7 +84,6 @@
 		"Get-Broadcast"
 		"Get-SystemSKU"
 		"Test-TargetComputer"
-		"ConvertFrom-OSBuild"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not

@@ -49,7 +49,11 @@ None. You cannot pipe objects to Convert-ArrayToList
 [string] comma separated list
 
 .NOTES
-None.
+Changes by metablaster:
+August 2020:
+- Make Convert-ArrayToList Advanced function
+September 2020:
+- Show warning for unexpected input
 #>
 function Convert-ArrayToList
 {
@@ -60,22 +64,20 @@ function Convert-ArrayToList
 		[string[]] $StringArray
 	)
 
-	if ($StringArray)
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+
+	[string] $Result = ""
+
+	if ($StringArray -and ($StringArray.Length -gt 0))
 	{
-		[string] $Result = ""
 		foreach ($Value In $StringArray)
 		{
-			if ($Result -ne "")
-			{
-				$Result += ","
-			}
-
-			$Result += $Value
+			$Result += "$Value,"
 		}
-		return $Result
+
+		return $Result.TrimEnd(",")
 	}
-	else
-	{
-		return ""
-	}
+
+	Write-Warning "Input is missing, result is empty string"
+	return $Result
 }

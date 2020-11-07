@@ -69,6 +69,9 @@ if ((Get-Variable -Name Develop -Scope Global).Value -eq $false)
 	return
 }
 
+Start-Test "Convert-ArrayToList null"
+$Result = Convert-ArrayToList @Logs
+
 Start-Test "Convert-ArrayToList"
 $Result = Convert-ArrayToList @("192.168.1.1", "192.168.2.1", "172.24.33.100") @Logs
 $Result

@@ -53,6 +53,11 @@ None. You cannot pipe objects to Convert-ListToArray
 
 .NOTES
 TODO: DefaultValue can't be string, try string[]
+Changes by metablaster:
+August 2020:
+- Make Convert-ListToArray Advanced function
+September 2020:
+- Show warning for unexpected input
 #>
 function Convert-ListToArray
 {
@@ -66,12 +71,15 @@ function Convert-ListToArray
 		$DefaultValue = "Any"
 	)
 
-	if (![string]::IsNullOrEmpty($List))
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+
+	if ([string]::IsNullOrEmpty($List))
 	{
-		return ($List -split ",")
+		Write-Warning "Input is missing, using default value of: $DefaultValue"
+		return $DefaultValue
 	}
 	else
 	{
-		return $DefaultValue
+		return ($List -split ",")
 	}
 }

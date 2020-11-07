@@ -31,25 +31,38 @@ SOFTWARE.
 Convert value to boolean
 
 .DESCRIPTION
-Convert value to boolean
+Several firewall rule attributes are boolean such as:
+True/False or 1/0
+Convert-ValueToBoolean converts these values to $true/$false
 
 .PARAMETER Value
-TODO: describe parameter
+Value which to convert to boolean
 
 .PARAMETER DefaultValue
-TODO: describe parameter
+If the Value is null or empty this value will be used as a result
 
 .EXAMPLE
-TODO: provide example and description
+PS> Convert-ValueToBoolean True
+
+$true
+
+.EXAMPLE
+PS> Convert-ValueToBoolean 0
+
+$false
 
 .INPUTS
 None. You cannot pipe objects to Convert-ValueToBoolean
 
 .OUTPUTS
-[bool] of the input value
+[bool]
 
 .NOTES
-None.
+Changes by metablaster:
+August 2020:
+- Make Convert-ValueToBoolean Advanced function
+September 2020:
+- Change logic to validate input and show warning or error for unexpected input
 #>
 function Convert-ValueToBoolean
 {
@@ -63,19 +76,42 @@ function Convert-ValueToBoolean
 		[bool] $DefaultValue = $false
 	)
 
-	if (![string]::IsNullOrEmpty($Value))
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+
+	if ([string]::IsNullOrEmpty($Value))
 	{
-		if (($Value -eq "True") -or ($Value -eq "1"))
-		{
-			return $true
-		}
-		else
-		{
-			return $false
-		}
-	}
-	else
-	{
+		Write-Warning "Input is missing, using default value of: $DefaultValue"
 		return $DefaultValue
 	}
+
+	$Result = switch ($Value)
+	{
+		"1"
+		{
+			$true
+			break
+		}
+		"True"
+		{
+			$true
+			break
+		}
+		"0"
+		{
+			$false
+			break
+		}
+		"False"
+		{
+			$false
+			break
+		}
+		default
+		{
+			Write-Error -Category InvalidArgument -TargetObject $Value -Message "Value '$Value' can't be converted to boolean"
+			$null
+		}
+	}
+
+	return $Result
 }

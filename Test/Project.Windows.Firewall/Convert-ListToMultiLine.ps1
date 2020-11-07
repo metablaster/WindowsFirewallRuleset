@@ -69,8 +69,11 @@ if ((Get-Variable -Name Develop -Scope Global).Value -eq $false)
 	return
 }
 
-Start-Test "Convert-ListToMultiLine"
-$Result = Convert-ListToMultiLine @Logs
+Start-Test "Convert-ListToMultiLine null"
+Convert-ListToMultiLine @Logs
+
+Start-Test "Convert-ListToMultiLine Some%%||String"
+$Result = Convert-ListToMultiLine "Some%%||String" @Logs
 $Result
 
 Test-Output $Result -Command Convert-ListToMultiLine @Logs

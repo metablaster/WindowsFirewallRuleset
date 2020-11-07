@@ -69,8 +69,28 @@ if ((Get-Variable -Name Develop -Scope Global).Value -eq $false)
 	return
 }
 
-Start-Test "Convert-ValueToBoolean"
-$Result = Convert-ValueToBoolean @Logs
+Start-Test "Convert-ValueToBoolean 0"
+Convert-ValueToBoolean "0" @Logs
+
+Start-Test "Convert-ValueToBoolean False"
+Convert-ValueToBoolean "False" @Logs
+
+Start-Test "Convert-ValueToBoolean 3"
+Convert-ValueToBoolean "3" -EA SilentlyContinue -EV CoversionError
+if ($CoversionError)
+{
+	Write-Warning "Error ignored by unit test: $CoversionError"
+}
+
+Start-Test "Convert-ValueToBoolean UNKNOWN"
+Convert-ValueToBoolean "UNKNOWN" -EA SilentlyContinue -EV CoversionError
+if ($CoversionError)
+{
+	Write-Warning "Error ignored by unit test: $CoversionError"
+}
+
+Start-Test "Convert-ValueToBoolean True"
+$Result = Convert-ValueToBoolean "True" @Logs
 $Result
 
 Test-Output $Result -Command Convert-ValueToBoolean @Logs

@@ -41,7 +41,7 @@ String array which to convert
 Input string will go to JSON file, meaning no need to encode
 
 .EXAMPLE
-PS> Convert-MultiLineToList "Some`rnString"
+PS> Convert-MultiLineToList "Some`r`nString"
 
 Some||String
 
@@ -66,8 +66,11 @@ function Convert-MultiLineToList
 		[switch] $JSON
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+
 	if ([string]::IsNullOrEmpty($MultiLine))
 	{
+		Write-Warning "Input is missing, result is empty string"
 		return ""
 	}
 
