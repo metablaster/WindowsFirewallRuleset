@@ -43,6 +43,7 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 #
 
 $PrivateScripts = @(
+	"Add-PSContextMenu"
 	"Find-UpdatableModule"
 	"Uninstall-DuplicateModule"
 )
@@ -54,7 +55,6 @@ foreach ($Script in $PrivateScripts)
 }
 
 $PublicScripts = @(
-	"Add-PSContextMenu"
 	"Initialize-Project"
 	"Initialize-Service"
 	"Initialize-Module"

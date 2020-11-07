@@ -270,7 +270,9 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 
 	# Add project script directory to session path
 	$SessionPath = [System.Environment]::GetEnvironmentVariable("Path")
+	$SessionPath = $SessionPath.TrimEnd(";")
 	$SessionPath += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Scripts"
+	$SessionPath += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Scripts\External"
 	[System.Environment]::SetEnvironmentVariable("Path", $SessionPath)
 
 	# Windows 10, Windows Server 2019 and above

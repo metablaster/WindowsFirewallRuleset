@@ -60,7 +60,7 @@ None. You cannot pipe objects to Add-PSContextMenu
 None. Add-PSContextMenu does not generate any output
 
 .NOTES
-HACK: Add-PSContextMenu is under construction and will likely never work
+Add-PSContextMenu is under construction
 
 .LINK
 https://www.tenforums.com/tutorials/60175-open-powershell-window-here-context-menu-add-windows-10-a.html
@@ -99,7 +99,6 @@ function Add-PSContextMenu
 
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening registry hive"
 
-			# Option 1
 			$RegistryHive = [Microsoft.Win32.RegistryHive]::ClassesRoot
 			$RegistryView = [Microsoft.Win32.RegistryView]::Registry64
 
@@ -110,62 +109,77 @@ function Add-PSContextMenu
 			catch
 			{
 				Write-Warning -Message "Failed to open registry root key: $RegistryHive"
+				Write-Error -Category $_.CategoryInfo.Category -TargetObject $_.TargetObject -Message $_.Exception.Message
 				return
 			}
 
-			# Option 2
-			$ClassesRoot = [Microsoft.Win32.Registry]::ClassesRoot
-			$Check = [Microsoft.Win32.RegistryKeyPermissionCheck]::ReadWriteSubTree
-			$Grant = [System.Security.AccessControl.RegistryRights]::TakeOwnership
-
+			Write-Information -Tags "Test" -MessageData "INFO: Setting special privileges for current session"
+			Set-Privilege -Privilege SeBackupPrivilege, SeRestorePrivilege, SeSecurityPrivilege, SeTakeOwnershipPrivilege
 
 			foreach ($Key in $TargetKeys)
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $Key"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: HKCR:\$Key"
+
+				$RegGrant = [System.Security.AccessControl.RegistryRights]::TakeOwnership
+				$PermissionCheck = [Microsoft.Win32.RegistryKeyPermissionCheck]::ReadWriteSubTree
 
 				try
 				{
-					# Option 1
-					Write-Information -Tags "Test" -MessageData "INFO: Option 1"
-					$SubKey = $RootKey.OpenSubkey($Key)
+					Write-Information -Tags "Test" -MessageData "INFO: Opening target key as $RegGrant"
+					$SubKey = $RootKey.OpenSubkey($Key, $PermissionCheck, $RegGrant)
 				}
 				catch
 				{
-					Write-Warning -Message "Option 1, failed to open registry root key: $Key"
+					Write-Warning -Message "Failed to open target key as $RegGrant"
+					Write-Error -Category $_.CategoryInfo.Category -TargetObject $_.TargetObject -Message $_.Exception.Message
 				}
 
-				try
-				{
-					# Option 2
-					Write-Information -Tags "Test" -MessageData "INFO: Option 2"
-					$SubKey2 = $ClassesRoot.OpenSubKey($Key, $Check, $Grant)
-				}
-				catch
-				{
-					Write-Warning -Message "Option 2, failed to open registry root key: $Key"
-				}
+				$NTAccount = New-Object -TypeName System.Security.Principal.NTAccount("Administrators")
 
-				if ($SubKey -or $SubKey2)
+				if ($SubKey)
 				{
-					if (!(Get-PSDrive -Name HKCR))
-					{
-						New-PSDrive -Name HKCR -Scope Global -PSProvider Registry -ErrorAction Stop `
-							-Root Microsoft.PowerShell.Core\Registry::HKEY_CLASSES_ROOT
-					}
-
-					# HACK: Exception calling "SetAccessControl" with "1" argument(s): "Cannot write to the registry key."
-					$NTAccount = New-Object -TypeName System.Security.Principal.NTAccount("Administrators")
-					$Permission = New-Object System.Security.AccessControl.RegistryAccessRule($NTAccount, $Grant, "Allow")
+					Write-Information -Tags "Test" -MessageData "INFO: Granting ownership to target key"
 					$Acl = $SubKey.GetAccessControl()
 					$Acl.SetOwner($NTAccount)
+					$SubKey.SetAccessControl($Acl)
+				}
+
+				$RegGrant = [System.Security.AccessControl.RegistryRights]::ChangePermissions
+
+				try
+				{
+					Write-Information -Tags "Test" -MessageData "INFO: Opening target key as $RegGrant"
+					$SubKey = $RootKey.OpenSubkey($Key, $PermissionCheck, $RegGrant)
+				}
+				catch
+				{
+					Write-Warning -Message "Failed to open target key as $RegGrant"
+					Write-Error -Category $_.CategoryInfo.Category -TargetObject $_.TargetObject -Message $_.Exception.Message
+				}
+
+				if ($SubKey)
+				{
+					$RegGrant = [System.Security.AccessControl.RegistryRights]::FullControl
+					Write-Information -Tags "Test" -MessageData "INFO: Granting permission $RegGrant to target key"
+					$Permission = New-Object System.Security.AccessControl.RegistryAccessRule($NTAccount, $RegGrant, "Allow")
+
+					$Acl = $SubKey.GetAccessControl()
 					$Acl.SetAccessRule($Permission)
 					$SubKey.SetAccessControl($Acl)
-
-					# Take ownership and set full control
-					# HACK: Requested registry access is not allowed.
-					Set-Permission -Owner "Administrators" -Path "HKCR:\$Key" # $SubKey.Name
-					Set-Permission -Principal "Administrators" -Path "HKCR:\$Key" -RegGrant "FullControl" # $SubKey.Name
 				}
+
+				return
+
+				if (!(Get-PSDrive -Name HKCR -ErrorAction Ignore))
+				{
+					New-PSDrive -Name HKCR -Scope Global -PSProvider Registry -ErrorAction Stop `
+						-Root Microsoft.PowerShell.Core\Registry::HKEY_CLASSES_ROOT
+				}
+
+				# Take ownership and set full control
+				# HACK: Requested registry access is not allowed.
+				Set-Permission -Owner "Administrators" -Path "HKCR:\$Key" # $SubKey.Name
+				Set-Permission -Principal "Administrators" -Path "HKCR:\$Key" -RegGrant "FullControl" # $SubKey.Name
 
 				# Restore defaults
 				# Set-Permission -Path $SubKey.Name -Reset

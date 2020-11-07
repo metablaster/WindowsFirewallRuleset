@@ -82,6 +82,12 @@
 		"Remove-FirewallRules"
 		"Format-Output"
 		"Find-RulePrincipal"
+		# Following exports only for unit testing
+		"Convert-ArrayToList"
+		"Convert-ListToArray"
+		"Convert-ValueToBoolean"
+		"Convert-ListToMultiLine"
+		"Convert-MultiLineToList"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not

@@ -31,13 +31,16 @@ SOFTWARE.
 Convert String array to comma separated list
 
 .DESCRIPTION
-Convert String array to comma separated list
+Convert String array to comma separated list.
+Used by Export-FirewallRules ex. to pack an array of IP addresses into a single string
 
 .PARAMETER StringArray
 String array which to convert
 
 .EXAMPLE
-TODO: provide example and description
+PS> Convert-ArrayToList @("192.168.1.1", "192.168.2.1", "172.24.33.100")
+
+"192.168.1.1,192.168.2.1,172.24.33.100"
 
 .INPUTS
 None. You cannot pipe objects to Convert-ArrayToList

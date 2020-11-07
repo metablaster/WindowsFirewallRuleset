@@ -28,25 +28,28 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Convert comma separated list to String array
+Convert comma separated list to string array
 
 .DESCRIPTION
-Convert comma separated list to String array
+Convert comma separated list to string array
+Used by Import-FirewallRules ex. to unpack a list of IP addresses back to string array
 
 .PARAMETER List
-TODO: describe parameter
+List of comma separated string values, previously packed with Convert-ArrayToList
 
 .PARAMETER DefaultValue
-TODO: describe parameter
+Value to return if a list is empty
 
 .EXAMPLE
-TODO: provide example and description
+PS> Convert-ArrayToList "192.168.1.1,192.168.2.1,172.24.33.100"
+
+"192.168.1.1", "192.168.2.1", "172.24.33.100"
 
 .INPUTS
 None. You cannot pipe objects to Convert-ListToArray
 
 .OUTPUTS
-[string] comma separated list
+[string]
 
 .NOTES
 TODO: DefaultValue can't be string, try string[]

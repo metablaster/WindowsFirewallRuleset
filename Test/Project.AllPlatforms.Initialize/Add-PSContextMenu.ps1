@@ -61,6 +61,7 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
+. $ProjectRoot\Modules\Project.AllPlatforms.Initialize\Private\Add-PSContextMenu.ps1
 Import-Module -Name Project.AllPlatforms.Logging
 
 # User prompt

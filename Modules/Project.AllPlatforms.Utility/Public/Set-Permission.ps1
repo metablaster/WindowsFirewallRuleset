@@ -293,7 +293,7 @@ function Set-Permission
 
 	if ($Reset)
 	{
-		# TODO: "-Reset -Recurse -Protected" on it's own don't work because until recurse nobody has rights any more
+		# TODO: "-Reset -Recurse -Protected" on it's own don't work because on first attempt to recurse nobody has rights any more
 		# TODO: Reset ownership if that even makes sense?
 		# TODO: Test we get permissions to reset, reset fails without permissions
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Attempting to reset"
@@ -492,8 +492,17 @@ function Set-Permission
 					Set-Permission -Path $_.FullName -Principal $Principal -Rights $GrantLeaf
 				}
 
-				# Now we should be able to get it
-				$ChildItems = Get-ChildItem -Path $Path -Recurse -Force
+				try
+				{
+					# Now we should be able to get it
+					$ChildItems = Get-ChildItem -Path $Path -Recurse -Force
+				}
+				catch
+				{
+					Write-Warning -Message "Recursive action failed on object: $Path"
+					Write-Error -Category $_.CategoryInfo.Category -TargetObject $_.TargetObject -Message $_.Exception.Message
+					return $false
+				}
 			}
 			else
 			{
@@ -520,7 +529,7 @@ function Set-Permission
 		}
 		else
 		{
-			Write-Warning -Message "Recursive action failed on object: $Path"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] There are no subobjects to recurse for: $Path"
 			return $false
 		}
 	} # Recurse
