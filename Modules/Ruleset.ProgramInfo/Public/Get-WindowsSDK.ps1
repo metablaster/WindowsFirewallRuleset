@@ -31,7 +31,7 @@ SOFTWARE.
 Get installed Windows SDK
 
 .DESCRIPTION
-TODO: add description
+Get installation information about installed Windows SDK
 
 .PARAMETER ComputerName
 Computer name for which to list installed installed framework

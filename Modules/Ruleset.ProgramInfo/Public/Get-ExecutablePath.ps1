@@ -47,7 +47,7 @@ None. You cannot pipe objects to Get-ExecutablePath
 [PSCustomObject] list of executables, their installation path and additional information
 
 .NOTES
-None.
+TODO: Name parameter accepting wildcard, why not getting specifics out?
 #>
 function Get-ExecutablePath
 {

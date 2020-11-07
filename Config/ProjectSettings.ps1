@@ -358,6 +358,13 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 		# NOTE: Setting this variable in Initialize-Project would override it in develop mode
 		Set-Variable -Name RequireNuGetVersion -Scope Global -Option ReadOnly -Force -Value ([version]::new(2, 8, 5))
 	}
+
+	# These drives will help to have shorter prompt and to be able to "jump" to them as desired
+	# TODO: should we use "root" drive instead of "ProjectRoot" variable?
+	New-PSDrive -Name root -Root $ProjectRoot -Scope Global -PSProvider FileSystem | Out-Null
+	New-PSDrive -Name test -Root "$ProjectRoot\Test" -Scope Global -PSProvider FileSystem | Out-Null
+	New-PSDrive -Name ipv4 -Root "$ProjectRoot\Rules\IPv4" -Scope Global -PSProvider FileSystem | Out-Null
+	New-PSDrive -Name ipv6 -Root "$ProjectRoot\Rules\IPv6" -Scope Global -PSProvider FileSystem | Out-Null
 }
 
 # Removable variables, these can be modified or removed by code at any time, and, only once per session by users

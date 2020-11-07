@@ -50,7 +50,7 @@ todo's in this file are categorized into following sections:
         - `git clean -d -x --dry-run` `git clean -d -x -f`
         - `git prune --dry-run` `git prune`
         - `git repack -d -F`
-    - Ruleset.ProgramInfo and Ruleset.IP module manifest, comment out unit test exports
+    - Module manifests, comment out unit test exports
     - ProjectSettings.ps1 disable variables: Develop, ForceLoad
     - ProjectSettings.ps1 restore variables: TestUser, TestAdmin, DefaultUser, FirewallLogsFolder
     - ProjectSettings.ps1 verify auto updated variables: ProjectCheck, ModulesCheck, ServicesCheck
@@ -149,7 +149,7 @@ todo's in this file are categorized into following sections:
 1. Modules
 
     - make possible to apply rules to remote machine, currently partially supported
-    - Provide following keywords in function comments: .DESCRIPTION .LINK .COMPONENT
+    - Provide following keywords in function comments: .DESCRIPTION .LINK .COMPONENT .ROLE .FUNCTIONALITY
     - DefaultParameterSetName for functions with parameter sets is missing
     - Revisit how functions return and what they return, return keyword vs Write-Output,
     if pipeline support is needed for that function
@@ -184,6 +184,7 @@ todo's in this file are categorized into following sections:
     - Rules for services, need to check services are networking services, if not write warning,
     could be implemented in Test-Service function
     - We should add `Scripts` folder to PS scripts path in ProjectSettings
+    - Instead of Approve-Execute we should use ShouldProcess or ShouldContinue passing in context variable.
 
 3. Rules
 

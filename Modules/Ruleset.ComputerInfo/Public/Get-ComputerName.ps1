@@ -43,7 +43,9 @@ None. You cannot pipe objects to Get-ComputerName
 [string] computer name in form of COMPUTERNAME
 
 .NOTES
-TODO: implement querying computers on network by specifying IP address
+TODO: Possible function purpose such as conversion from NETBIOS to UPN name or reading different
+formats of file with a list of computernames which are then converted to desired format.
+TODO: Maybe implement querying computers on network by specifying IP address and vice versa.
 #>
 function Get-ComputerName
 {

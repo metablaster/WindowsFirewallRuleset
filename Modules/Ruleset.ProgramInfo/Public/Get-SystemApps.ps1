@@ -31,7 +31,7 @@ SOFTWARE.
 Get store apps installed system wide
 
 .DESCRIPTION
-Search system wide installed store apps
+Search system wide installed store apps, those installed for all users or shipped with system.
 
 .PARAMETER ComputerName
 NETBIOS Computer name in form of "COMPUTERNAME"

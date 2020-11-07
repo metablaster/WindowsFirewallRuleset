@@ -46,6 +46,7 @@ None. RunAllTests.ps1 does not generate any output
 TODO: This script might yield odd and unexpected results
 TODO: Output of some unit tests is either delayed or not displayed at all
 TODO: Test should be run in order of module or function (or both) inter dependency
+TODO: We should handle to skip "dangerous" tests
 #>
 
 # Initialization
@@ -60,6 +61,8 @@ Initialize-Project -Abort
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Ruleset.Logging
+$OldLocation = Get-Location
+Set-Location -Path test:
 
 # User prompt
 Set-Variable -Name Accept -Scope Local -Option ReadOnly -Force -Value "Run all unit tests one by one"
@@ -101,6 +104,7 @@ else
 	Write-Error -Category ObjectNotFound -TargetObject $Files -Message "No powershell script files found" @Logs
 }
 
+Set-Location -Path $OldLocation
 Write-Information -Tags "Project" -MessageData "INFO: Running all tests done"
 
 Update-Log

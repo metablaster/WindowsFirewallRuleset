@@ -31,7 +31,7 @@ SOFTWARE.
 Search installed programs for all users, system wide
 
 .DESCRIPTION
-TODO: add description
+Get a list of software installed system wide, for all users.
 
 .PARAMETER ComputerName
 Computer name which to check

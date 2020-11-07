@@ -84,7 +84,8 @@ None. You cannot pipe objects to Test-Environment
 [bool] true if path exists, false otherwise
 
 .NOTES
-TODO: This should proably be part of utility module.
+TODO: This should proably be part of utility module,
+it's here since only this module uses this function.
 This function should be used only to verify paths for external usage, not for commandles which
 don't expand system environment variables.
 #>

@@ -28,10 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Convert SDDL entries to computer accounts
+Convert SDDL string to ACL
 
 .DESCRIPTION
-TODO: add description
+Convert SDDL strings to ACL entries
 
 .PARAMETER SDDL
 String array of one or more strings of SDDL syntax
@@ -46,7 +46,7 @@ None. You cannot pipe objects to Convert-SDDLToACL
 [string]
 
 .NOTES
-None.
+This is experimental function and needs a lot of improvements.
 #>
 function Convert-SDDLToACL
 {
@@ -65,7 +65,8 @@ function Convert-SDDLToACL
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing $Entry"
 
-		$ACLObject = New-Object -TypeName Security.AccessControl.DirectorySecurity
+		# TODO: DirectorySecurity is for file system, we need to handle more cases
+		$ACLObject = New-Object -TypeName System.Security.AccessControl.DirectorySecurity
 		$ACLObject.SetSecurityDescriptorSddlForm($Entry)
 		$ACL += $ACLObject.Access | Select-Object -ExpandProperty IdentityReference |
 		Select-Object -ExpandProperty Value

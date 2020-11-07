@@ -31,7 +31,7 @@ SOFTWARE.
 Get installed Windows Kits
 
 .DESCRIPTION
-TODO: add description
+Get installation information about installed Windows Kit's
 
 .PARAMETER ComputerName
 Computer name for which to list installed installed windows kits

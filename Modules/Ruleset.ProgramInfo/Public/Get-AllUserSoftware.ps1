@@ -31,7 +31,7 @@ SOFTWARE.
 Search program install properties for all users, system wide
 
 .DESCRIPTION
-TODO: add description
+Search separate location in the registry for programs installed for all users.
 
 .PARAMETER ComputerName
 Computer name which to check

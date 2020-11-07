@@ -32,6 +32,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - Improved Get-TypeName function to get precise type of an object such as function output.
   - Removed Get-UserProfile function.
   - Other minor module improvements
+  - Renamed modules to `Ruleset.<ModuleName>` because not time for other platforms.
 
 - New features
 
@@ -65,7 +66,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - In progress
 
-  - Renamed modules to "Ruleset.<...><...>"
+  - Function to add Windows PowerShell to right click context menu for faster test environment setup
 
 ## v0.7.0 (current release)
 

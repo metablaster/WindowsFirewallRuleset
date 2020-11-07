@@ -145,6 +145,13 @@ if ([string]::IsNullOrEmpty($Module))
 
 # Counters for progress
 [int32] $ProgressCount = 0
+[string] $UpgradeLogsDir = "$ProjectRoot\Logs\UpdateHelp"
+
+# NOTE: separate folder for upgrade logs
+if (!(Test-Path -PathType Container -Path $UpgradeLogsDir))
+{
+	New-Item -ItemType Container -Path $UpgradeLogsDir
+}
 
 foreach ($ModuleName in $Module)
 {
@@ -217,7 +224,7 @@ While generating help files, temporary folders may appear in language specific s
 			# NOTE: Generates blank module page if missing
 			# -Path string[] The folder must contain a module page from which this cmdlet can get the module name
 			Update-MarkdownHelpModule -Encoding $Encoding -Path $OnlineHelp -UpdateInputOutput `
-				-LogPath $ProjectRoot\Logs\$ModuleName-UpdateHelp.log -UseFullTypeName `
+				-LogPath $UpgradeLogsDir\$ModuleName-UpdateHelp.log -UseFullTypeName `
 				-RefreshModulePage -Force -ModulePagePath $ModulePage |
 			Select-Object -ExpandProperty Name
 
@@ -324,7 +331,7 @@ While generating help files, temporary folders may appear in language specific s
 		# TODO: maybe global variable for line width, MaxAboutWidth affects only about_ files
 		# NOTE: Creates external help based on files or folders specified in -Path string[]
 		New-ExternalHelp -Path $OnlineHelp -Encoding $Encoding -OutputPath $OnlineHelp\External `
-			-MaxAboutWidth 120 -ErrorLogFile $ProjectRoot\Logs\$ModuleName-ExternalHelp.log -Force |
+			-MaxAboutWidth 120 -ErrorLogFile $UpgradeLogsDir\$ModuleName-ExternalHelp.log -Force |
 		Select-Object -ExpandProperty Name
 		# -ShowProgress
 

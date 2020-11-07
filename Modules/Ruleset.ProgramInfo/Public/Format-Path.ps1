@@ -48,7 +48,8 @@ PS> Format-Path "C:\Program Files\\Dir\"
 [string] formatted path, includes environment variables, stripped off of junk
 
 .NOTES
-TODO: This should proably be inside utility module
+TODO: This should proably be inside utility module,
+it's here since only this module uses this function.
 #>
 function Format-Path
 {

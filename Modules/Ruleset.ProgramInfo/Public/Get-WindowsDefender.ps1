@@ -31,7 +31,7 @@ SOFTWARE.
 Get installed Windows Defender
 
 .DESCRIPTION
-TODO: add description
+Gets installation information about Windows defender.
 
 .PARAMETER ComputerName
 Computer name for which to list installed Windows Defender
