@@ -55,11 +55,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.Net.IPAddress
+### [ipaddress] A dotted-decimal subnet mask
 
 ## OUTPUTS
 
-### TODO: describe outputs
+### [string] Subnet mask length
 
 ## NOTES
 

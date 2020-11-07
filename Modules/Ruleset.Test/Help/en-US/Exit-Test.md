@@ -76,7 +76,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### None.
+### None. Exit-Test does not generate any output
 
 ## NOTES
 

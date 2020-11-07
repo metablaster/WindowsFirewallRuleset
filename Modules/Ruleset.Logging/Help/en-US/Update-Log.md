@@ -89,7 +89,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### None. Log files are written to log directory.
+### None. Update-Log does not generate any output
 
 ## NOTES
 

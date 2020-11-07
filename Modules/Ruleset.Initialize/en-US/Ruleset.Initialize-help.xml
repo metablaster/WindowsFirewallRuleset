@@ -197,7 +197,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>None.</maml:name>
+          <maml:name>[bool]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -206,7 +206,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This function main purpose is automated development environment setup to be able to perform quick setup on multiple computers and virtual operating systems, in cases such as frequent system restores for the purpose of testing project code for many environment scenarios that end users may have. It should be used in conjunction with the rest of a module "Project.AllPlatforms.Initialize"</maml:para>
+        <maml:para>This function main purpose is automated development environment setup to be able to perform quick setup on multiple computers and virtual operating systems, in cases such as frequent system restores for the purpose of testing project code for many environment scenarios that end users may have. It should be used in conjunction with the rest of a module "Ruleset.Initialize"</maml:para>
         <maml:para>Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider Updating PackageManagement and PowerShellGet requires restarting PowerShell to switch to the latest version TODO: Implement initializing for non Administrator users</maml:para>
       </maml:alert>
     </maml:alertSet>
@@ -234,7 +234,7 @@ is not registered user is prompted to do that too.</dev:code>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Initialize/Help/en-US/Initialize-Module.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Initialize-Module.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -365,7 +365,7 @@ is not registered user is prompted to do that too.</dev:code>
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>None.</maml:name>
+          <maml:name>None. Initialize-Project does not generate any output</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -374,7 +374,7 @@ is not registered user is prompted to do that too.</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This function main purpose is automated development environment setup to be able to perform quick setup on multiple computers and virtual operating systems, in cases such as frequent system restores for the purpose of testing project code for many environment scenarios that end users may have. It should be used in conjunction with the rest of a module "Project.AllPlatforms.Initialize"</maml:para>
+        <maml:para>This function main purpose is automated development environment setup to be able to perform quick setup on multiple computers and virtual operating systems, in cases such as frequent system restores for the purpose of testing project code for many environment scenarios that end users may have. It should be used in conjunction with the rest of a module "Ruleset.Initialize"</maml:para>
         <maml:para>TODO: learn repo dir automatically (using git?) TODO: we don't use logs in this module TODO: checking remote systems not implemented TODO: Any modules in standard user paths will override system wide modules</maml:para>
       </maml:alert>
     </maml:alertSet>
@@ -402,7 +402,7 @@ Error or warning message is shown if check failed, environment info otherwise.</
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Initialize/Help/en-US/Initialize-Project.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Initialize-Project.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -509,7 +509,7 @@ Error or warning message is shown if check failed, environment info otherwise.</
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>None.</maml:name>
+          <maml:name>[bool]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -518,7 +518,7 @@ Error or warning message is shown if check failed, environment info otherwise.</
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This function main purpose is automated development environment setup to be able to perform quick setup on multiple computers and virtual operating systems, in cases such as frequent system restores for the purpose of testing project code for many environment scenarios that end users may have. It should be used in conjunction with the rest of a module "Project.AllPlatforms.Initialize"</maml:para>
+        <maml:para>This function main purpose is automated development environment setup to be able to perform quick setup on multiple computers and virtual operating systems, in cases such as frequent system restores for the purpose of testing project code for many environment scenarios that end users may have. It should be used in conjunction with the rest of a module "Ruleset.Initialize"</maml:para>
         <maml:para>There is no "Repository" parameter here like in Initialize-Module, instead it's called ProviderName which is supplied in parameter FullyQualifiedName Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider</maml:para>
       </maml:alert>
     </maml:alertSet>
@@ -534,7 +534,7 @@ Error or warning message is shown if check failed, environment info otherwise.</
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Initialize/Help/en-US/Initialize-Provider.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Initialize-Provider.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -594,7 +594,7 @@ Error or warning message is shown if check failed, environment info otherwise.</
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>None.</maml:name>
+          <maml:name>[bool]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -603,7 +603,7 @@ Error or warning message is shown if check failed, environment info otherwise.</
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This function main purpose is automated development environment setup to be able to perform quick setup on multiple computers and virtual operating systems, in cases such as frequent system restores for the purpose of testing project code for many environment scenarios that end users may have. It should be used in conjunction with the rest of a module "Project.AllPlatforms.Initialize"</maml:para>
+        <maml:para>This function main purpose is automated development environment setup to be able to perform quick setup on multiple computers and virtual operating systems, in cases such as frequent system restores for the purpose of testing project code for many environment scenarios that end users may have. It should be used in conjunction with the rest of a module "Ruleset.Initialize"</maml:para>
         <maml:para>[System.ServiceProcess.ServiceController[]]</maml:para>
       </maml:alert>
     </maml:alertSet>
@@ -628,7 +628,7 @@ $true if WinRM service was started $false otherwise</dev:code>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Initialize/Help/en-US/Initialize-Service.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Initialize-Service.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>

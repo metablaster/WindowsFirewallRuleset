@@ -13,8 +13,22 @@ Returns .NET return type name for input object
 
 ## SYNTAX
 
+### Object
+
 ```none
-Get-TypeName [-InputObject] <Object> [<CommonParameters>]
+Get-TypeName [[-InputObject] <Object[]>] [-Accelerator] [<CommonParameters>]
+```
+
+### Command
+
+```none
+Get-TypeName -Command <String> [-Accelerator] [<CommonParameters>]
+```
+
+### Name
+
+```none
+Get-TypeName -Name <String> [-Accelerator] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -37,14 +51,68 @@ Get-Process | Get-TypeName
 Target object for which to retrieve type name
 
 ```yaml
-Type: System.Object
-Parameter Sets: (All)
+Type: System.Object[]
+Parameter Sets: Object
 Aliases:
 
-Required: True
+Required: False
 Position: 1
 Default value: None
 Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -Command
+
+Commandlet or function name for which to retrieve OutputType attribute value
+The command name can be specified either as "FUNCTIONNAME" or just FUNCTIONNAME
+
+```yaml
+Type: System.String
+Parameter Sets: Command
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Name
+
+Translate full type name to accelerator or accelerator to full typename.
+By default converts acceleartors to full typenames.
+No conversion is done if resultant type already is of desired format.
+The name of a type can be specified either as a "typename" or [typename] syntax
+
+```yaml
+Type: System.String
+Parameter Sets: Name
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Accelerator
+
+When used converts resultant full typename to accelerator.
+Otherwise if specified with 'Name' parameter, converts resultant accelerator to full name.
+No conversion is done if resultant type already is of desired format.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -54,11 +122,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.Object Any .NET object
+### [System.Object]
 
 ## OUTPUTS
 
-### [string] type name or null
+### [string]
 
 ## NOTES
 

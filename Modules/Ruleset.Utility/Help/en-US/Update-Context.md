@@ -128,7 +128,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### None. Script scope context variable is updated.
+### None. Update-Context does not generate any output
 
 ## NOTES
 

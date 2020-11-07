@@ -172,7 +172,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### WildcardPattern[] Array of interface aliases
+### [System.Management.Automation.WildcardPattern]
 
 ## NOTES
 

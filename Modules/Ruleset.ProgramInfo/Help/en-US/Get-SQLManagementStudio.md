@@ -61,7 +61,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [PSCustomObject[]] for installed Microsoft SQL Server Management Studio's
+### [PSCustomObject] for installed Microsoft SQL Server Management Studio's
 
 ## NOTES
 

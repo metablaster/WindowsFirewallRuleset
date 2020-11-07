@@ -91,7 +91,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### [string[]] array of user names
+### [string[]] One or more user names
 
 ## OUTPUTS
 

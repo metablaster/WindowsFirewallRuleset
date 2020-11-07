@@ -58,7 +58,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [PSCustomObject[]] for installed NET Frameworks and install paths
+### [PSCustomObject] for installed NET Frameworks and install paths
 
 ## NOTES
 

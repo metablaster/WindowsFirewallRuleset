@@ -70,11 +70,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### Microsoft.Management.Infrastructure.CimInstance Firewall rule to format
+### [Microsoft.Management.Infrastructure.CimInstance] Firewall rule to format
 
 ## OUTPUTS
 
-### None. Formatted and colored output
+### None. Format-Output does not generate any output
 
 ## NOTES
 

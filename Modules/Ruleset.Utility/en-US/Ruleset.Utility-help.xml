@@ -152,7 +152,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>None. true if user wants to continue, false otherwise</maml:name>
+          <maml:name>[bool] True if user wants to continue, false otherwise</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -176,7 +176,175 @@
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Utility/Help/en-US/Approve-Execute.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Approve-Execute.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Compare-Path</command:name>
+      <command:verb>Compare</command:verb>
+      <command:noun>Path</command:noun>
+      <maml:description>
+        <maml:para>Compare 2 paths for equality or similarity</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Compare-Path depending on parameters either checks if 2 paths lead to same location taking into account environment variables, relative path locations and wildcards or it checks if 2 paths are similar which depends on wildcards contained in the input</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Compare-Path</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>TargetPath</maml:name>
+          <maml:Description>
+            <maml:para>The path which to compare against the reference path</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+          <maml:name>ReferencePath</maml:name>
+          <maml:Description>
+            <maml:para>The path against which to compare</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Loose</maml:name>
+          <maml:Description>
+            <maml:para>if specified perform "loose" comparison: Does not attempt to resolve input paths, and respects wildcards all of which happens after input paths have been expanded off environment variables</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Sensitive</maml:name>
+          <maml:Description>
+            <maml:para>If specified performs case sensitive comparison</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>TargetPath</maml:name>
+        <maml:Description>
+          <maml:para>The path which to compare against the reference path</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <maml:name>ReferencePath</maml:name>
+        <maml:Description>
+          <maml:para>The path against which to compare</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Loose</maml:name>
+        <maml:Description>
+          <maml:para>if specified perform "loose" comparison: Does not attempt to resolve input paths, and respects wildcards all of which happens after input paths have been expanded off environment variables</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Sensitive</maml:name>
+        <maml:Description>
+          <maml:para>If specified performs case sensitive comparison</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Compare-Path</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>[bool]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>None.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Compare-Path "%SystemDrive%\Windows" "C:\Win*" -Loose</dev:code>
+        <dev:remarks>
+          <maml:para>True</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Compare-Path "%SystemDrive%\Win*\System32\en-US\.." "C:\Wind*\System3?\" -Sensitive</dev:code>
+        <dev:remarks>
+          <maml:para>True</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Compare-Path "%SystemDrive%\" "D:\"</dev:code>
+        <dev:remarks>
+          <maml:para>False</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Compare-Path.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -296,7 +464,7 @@
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>[string[]] One or more paths to file to check</maml:name>
+          <maml:name>[string] One or more paths to file to check</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -306,7 +474,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>None.</maml:name>
+          <maml:name>None. Confirm-FileEncoding does not generate any output</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -330,7 +498,7 @@
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Utility/Help/en-US/Confirm-FileEncoding.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Confirm-FileEncoding.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -390,7 +558,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>[string[]] Array of computer accounts</maml:name>
+          <maml:name>[string]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -414,7 +582,98 @@
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Utility/Help/en-US/Convert-SDDLToACL.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Convert-SDDLToACL.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-EnvironmentVariable</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>EnvironmentVariable</command:noun>
+      <maml:description>
+        <maml:para>Get a group of environment variables</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Get-EnvironmentVariable gets a predefined group of environment variables. This is useful to verify path patterns, ex. paths for firewall rules must not contain paths with userprofile environment variable.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-EnvironmentVariable</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>Group</maml:name>
+          <maml:Description>
+            <maml:para>A group of environment variables to get as follows: 1. UserProfile - Environment variables that leads to valid directory in user profile 2. WhiteList - Environment variables which are valid directories 3. BlackList - The opposite of WhiteList 4. All - Whitelist and BlackList together</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>Group</maml:name>
+        <maml:Description>
+          <maml:para>A group of environment variables to get as follows: 1. UserProfile - Environment variables that leads to valid directory in user profile 2. WhiteList - Environment variables which are valid directories 3. BlackList - The opposite of WhiteList 4. All - Whitelist and BlackList together</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Get-EnvironmentVariable</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>[System.Collections.DictionaryEntry]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>None.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Get-EnvironmentVariable UserProfile</dev:code>
+        <dev:remarks>
+          <maml:para>Returns all environment variables that lead to user profile</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Get-EnvironmentVariable All</dev:code>
+        <dev:remarks>
+          <maml:para>Returns all environment variables on computer</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Get-EnvironmentVariable.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -504,14 +763,6 @@
           <maml:para></maml:para>
         </maml:description>
       </command:returnValue>
-      <command:returnValue>
-        <dev:type>
-          <maml:name>Encoding type of a file</maml:name>
-        </dev:type>
-        <maml:description>
-          <maml:para></maml:para>
-        </maml:description>
-      </command:returnValue>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
@@ -547,7 +798,7 @@ utf-32</dev:code>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Utility/Help/en-US/Get-FileEncoding.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Get-FileEncoding.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -607,7 +858,7 @@ utf-32</dev:code>
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>None, File with the list of services is made</maml:name>
+          <maml:name>None. Get-NetworkService does not generate any output</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -631,7 +882,7 @@ utf-32</dev:code>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Utility/Help/en-US/Get-NetworkService.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Get-NetworkService.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -785,7 +1036,7 @@ utf-32</dev:code>
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>None.</maml:name>
+          <maml:name>[string] If the 'Format' parameter is not specified</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -809,7 +1060,7 @@ utf-32</dev:code>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Utility/Help/en-US/Get-ProcessOutput.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Get-ProcessOutput.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -828,38 +1079,137 @@ utf-32</dev:code>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-TypeName</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
           <maml:name>InputObject</maml:name>
           <maml:Description>
             <maml:para>Target object for which to retrieve type name</maml:para>
           </maml:Description>
-          <command:parameterValue required="true" variableLength="false">System.Object</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">System.Object[]</command:parameterValue>
           <dev:type>
-            <maml:name>System.Object</maml:name>
+            <maml:name>System.Object[]</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Accelerator</maml:name>
+          <maml:Description>
+            <maml:para>When used converts resultant full typename to accelerator. Otherwise if specified with 'Name' parameter, converts resultant accelerator to full name. No conversion is done if resultant type already is of desired format.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-TypeName</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Command</maml:name>
+          <maml:Description>
+            <maml:para>Commandlet or function name for which to retrieve OutputType attribute value The command name can be specified either as "FUNCTIONNAME" or just FUNCTIONNAME</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Accelerator</maml:name>
+          <maml:Description>
+            <maml:para>When used converts resultant full typename to accelerator. Otherwise if specified with 'Name' parameter, converts resultant accelerator to full name. No conversion is done if resultant type already is of desired format.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-TypeName</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Name</maml:name>
+          <maml:Description>
+            <maml:para>Translate full type name to accelerator or accelerator to full typename. By default converts acceleartors to full typenames. No conversion is done if resultant type already is of desired format. The name of a type can be specified either as a "typename" or [typename] syntax</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Accelerator</maml:name>
+          <maml:Description>
+            <maml:para>When used converts resultant full typename to accelerator. Otherwise if specified with 'Name' parameter, converts resultant accelerator to full name. No conversion is done if resultant type already is of desired format.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
         <maml:name>InputObject</maml:name>
         <maml:Description>
           <maml:para>Target object for which to retrieve type name</maml:para>
         </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.Object</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">System.Object[]</command:parameterValue>
         <dev:type>
-          <maml:name>System.Object</maml:name>
+          <maml:name>System.Object[]</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Command</maml:name>
+        <maml:Description>
+          <maml:para>Commandlet or function name for which to retrieve OutputType attribute value The command name can be specified either as "FUNCTIONNAME" or just FUNCTIONNAME</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Name</maml:name>
+        <maml:Description>
+          <maml:para>Translate full type name to accelerator or accelerator to full typename. By default converts acceleartors to full typenames. No conversion is done if resultant type already is of desired format. The name of a type can be specified either as a "typename" or [typename] syntax</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Accelerator</maml:name>
+        <maml:Description>
+          <maml:para>When used converts resultant full typename to accelerator. Otherwise if specified with 'Name' parameter, converts resultant accelerator to full name. No conversion is done if resultant type already is of desired format.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>System.Object Any .NET object</maml:name>
+          <maml:name>[System.Object]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -869,7 +1219,7 @@ utf-32</dev:code>
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>[string] type name or null</maml:name>
+          <maml:name>[string]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -894,7 +1244,7 @@ utf-32</dev:code>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Utility/Help/en-US/Get-TypeName.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Get-TypeName.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -976,7 +1326,7 @@ utf-32</dev:code>
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>None.</maml:name>
+          <maml:name>None. Set-NetworkProfile does not generate any output</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1000,7 +1350,891 @@ utf-32</dev:code>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Utility/Help/en-US/Set-NetworkProfile.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Set-NetworkProfile.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Set-Permission</command:name>
+      <command:verb>Set</command:verb>
+      <command:noun>Permission</command:noun>
+      <maml:description>
+        <maml:para>Take ownership or set permissions on file system or registry object</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Set-Permission sets permission or ownership of a filesystem or registry object such as file, folder, registry key or registry item.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Set-Permission</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Directory, File, Key, Item">
+          <maml:name>Path</maml:name>
+          <maml:Description>
+            <maml:para>Resource on which to set ownership or permissions. Valid resources are files, directories, registry keys and registry entries. Environment variables are allowed.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Owner</maml:name>
+          <maml:Description>
+            <maml:para>Principal who will be the new owner of a resource. Using this parameter means taking ownership of a resource.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Computer, Server, Host, Machine">
+          <maml:name>Domain</maml:name>
+          <maml:Description>
+            <maml:para>Principal domain such as computer name or authority to which principal applies</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Recurse</maml:name>
+          <maml:Description>
+            <maml:para>If specified, applies specified operations to all subobjects. This parameter is ignored for Leaf objects, such as files or registry entries.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>If specified skips prompting for confirmation.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:Description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:Description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Set-Permission</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Directory, File, Key, Item">
+          <maml:name>Path</maml:name>
+          <maml:Description>
+            <maml:para>Resource on which to set ownership or permissions. Valid resources are files, directories, registry keys and registry entries. Environment variables are allowed.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="User">
+          <maml:name>Principal</maml:name>
+          <maml:Description>
+            <maml:para>Principal to which to grant specified permissions. Using this parameter means setting permissions on a resource.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Computer, Server, Host, Machine">
+          <maml:name>Domain</maml:name>
+          <maml:Description>
+            <maml:para>Principal domain such as computer name or authority to which principal applies</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Type</maml:name>
+          <maml:Description>
+            <maml:para>Access control type to either allow or deny specified rights</maml:para>
+          </maml:Description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">Allow</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Deny</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">System.Security.AccessControl.AccessControlType</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Security.AccessControl.AccessControlType</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Allow</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Permission, Grant">
+          <maml:name>Rights</maml:name>
+          <maml:Description>
+            <maml:para>Defines file system access rights to use for principal when creating access and audit rules. The default includes: ReadAndExecute, ListDirectory and Traverse Where: 1. ReadAndExecute: Read and ExecuteFile 2. Read: ReadData, ReadExtendedAttributes, ReadAttributes, and ReadPermissions.</maml:para>
+          </maml:Description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">ListDirectory</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ReadData</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">WriteData</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">CreateFiles</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">CreateDirectories</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">AppendData</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ReadExtendedAttributes</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">WriteExtendedAttributes</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Traverse</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ExecuteFile</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DeleteSubdirectoriesAndFiles</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ReadAttributes</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">WriteAttributes</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Write</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Delete</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ReadPermissions</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Read</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ReadAndExecute</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Modify</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ChangePermissions</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">TakeOwnership</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Synchronize</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">FullControl</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">System.Security.AccessControl.FileSystemRights</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Security.AccessControl.FileSystemRights</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Inheritance</maml:name>
+          <maml:Description>
+            <maml:para>Inheritance flags specify the semantics of inheritance for access control entries. This parameter is ignored for leaf objects, such as files or or registry entries. This parameter controls the "Applies to" column in advanced security dialog The default is "This folder, subfolders and files"</maml:para>
+          </maml:Description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">None</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ContainerInherit</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ObjectInherit</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">System.Security.AccessControl.InheritanceFlags</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Security.AccessControl.InheritanceFlags</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>ContainerInherit, ObjectInherit</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Propagation</maml:name>
+          <maml:Description>
+            <maml:para>Specifies how Access Control Entries (ACEs) are propagated to child objects. These flags are significant only if inheritance flags are present, (when Inheritance is not "None") This parameter is ignored for leaf objects, such as files or or registry entries. This parameter affects the "Applies to" column in advanced security dialog</maml:para>
+          </maml:Description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">None</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NoPropagateInherit</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">InheritOnly</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">System.Security.AccessControl.PropagationFlags</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Security.AccessControl.PropagationFlags</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Protected</maml:name>
+          <maml:Description>
+            <maml:para>If set, protect the specified access rules from inheritance. The default is to allow inheritance. Protected access rules cannot be modified by parent objects through inheritance. This parameter controls the "Enable/Disable Inheritance" button in advanced security dialog</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>PreserveInheritance</maml:name>
+          <maml:Description>
+            <maml:para>If set, preserve inherited access rules, which become explicit rules. The default is to remove inherited access rules. This parameter is ignored if Protected is not set. This parameter controls choices offered after "Enable/Disable Inheritance" button.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Recurse</maml:name>
+          <maml:Description>
+            <maml:para>If specified, applies specified operations to all subobjects. This parameter is ignored for Leaf objects, such as files or registry entries.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Reset</maml:name>
+          <maml:Description>
+            <maml:para>If specified, removes all explicit access rules and keeps only inherited. if "Protected" parameter is specified inherited rules are removed as well. If "Protected" is specified with "PreserveInheritance", then the inherited rules become explicit rules and everything else is removed.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>If specified skips prompting for confirmation.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:Description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:Description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Set-Permission</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Directory, File, Key, Item">
+          <maml:name>Path</maml:name>
+          <maml:Description>
+            <maml:para>Resource on which to set ownership or permissions. Valid resources are files, directories, registry keys and registry entries. Environment variables are allowed.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="User">
+          <maml:name>Principal</maml:name>
+          <maml:Description>
+            <maml:para>Principal to which to grant specified permissions. Using this parameter means setting permissions on a resource.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Computer, Server, Host, Machine">
+          <maml:name>Domain</maml:name>
+          <maml:Description>
+            <maml:para>Principal domain such as computer name or authority to which principal applies</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Type</maml:name>
+          <maml:Description>
+            <maml:para>Access control type to either allow or deny specified rights</maml:para>
+          </maml:Description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">Allow</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Deny</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">System.Security.AccessControl.AccessControlType</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Security.AccessControl.AccessControlType</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Allow</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="RegPermission, RegGrant">
+          <maml:name>RegistryRights</maml:name>
+          <maml:Description>
+            <maml:para>Defines registry access rights to use for principal when creating access and audit rules. The default includes: ReadKey Where, ReadKey: QueryValues, Notify, EnumerateSubKeys and ReadPermissions</maml:para>
+          </maml:Description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">QueryValues</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SetValue</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">CreateSubKey</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">EnumerateSubKeys</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Notify</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">CreateLink</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Delete</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ReadPermissions</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">WriteKey</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ExecuteKey</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ReadKey</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ChangePermissions</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">TakeOwnership</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">FullControl</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">System.Security.AccessControl.RegistryRights</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Security.AccessControl.RegistryRights</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Inheritance</maml:name>
+          <maml:Description>
+            <maml:para>Inheritance flags specify the semantics of inheritance for access control entries. This parameter is ignored for leaf objects, such as files or or registry entries. This parameter controls the "Applies to" column in advanced security dialog The default is "This folder, subfolders and files"</maml:para>
+          </maml:Description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">None</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ContainerInherit</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ObjectInherit</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">System.Security.AccessControl.InheritanceFlags</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Security.AccessControl.InheritanceFlags</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>ContainerInherit, ObjectInherit</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Propagation</maml:name>
+          <maml:Description>
+            <maml:para>Specifies how Access Control Entries (ACEs) are propagated to child objects. These flags are significant only if inheritance flags are present, (when Inheritance is not "None") This parameter is ignored for leaf objects, such as files or or registry entries. This parameter affects the "Applies to" column in advanced security dialog</maml:para>
+          </maml:Description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">None</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NoPropagateInherit</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">InheritOnly</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">System.Security.AccessControl.PropagationFlags</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Security.AccessControl.PropagationFlags</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Protected</maml:name>
+          <maml:Description>
+            <maml:para>If set, protect the specified access rules from inheritance. The default is to allow inheritance. Protected access rules cannot be modified by parent objects through inheritance. This parameter controls the "Enable/Disable Inheritance" button in advanced security dialog</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>PreserveInheritance</maml:name>
+          <maml:Description>
+            <maml:para>If set, preserve inherited access rules, which become explicit rules. The default is to remove inherited access rules. This parameter is ignored if Protected is not set. This parameter controls choices offered after "Enable/Disable Inheritance" button.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Recurse</maml:name>
+          <maml:Description>
+            <maml:para>If specified, applies specified operations to all subobjects. This parameter is ignored for Leaf objects, such as files or registry entries.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Reset</maml:name>
+          <maml:Description>
+            <maml:para>If specified, removes all explicit access rules and keeps only inherited. if "Protected" parameter is specified inherited rules are removed as well. If "Protected" is specified with "PreserveInheritance", then the inherited rules become explicit rules and everything else is removed.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>If specified skips prompting for confirmation.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:Description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:Description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Set-Permission</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Directory, File, Key, Item">
+          <maml:name>Path</maml:name>
+          <maml:Description>
+            <maml:para>Resource on which to set ownership or permissions. Valid resources are files, directories, registry keys and registry entries. Environment variables are allowed.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Computer, Server, Host, Machine">
+          <maml:name>Domain</maml:name>
+          <maml:Description>
+            <maml:para>Principal domain such as computer name or authority to which principal applies</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Protected</maml:name>
+          <maml:Description>
+            <maml:para>If set, protect the specified access rules from inheritance. The default is to allow inheritance. Protected access rules cannot be modified by parent objects through inheritance. This parameter controls the "Enable/Disable Inheritance" button in advanced security dialog</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>PreserveInheritance</maml:name>
+          <maml:Description>
+            <maml:para>If set, preserve inherited access rules, which become explicit rules. The default is to remove inherited access rules. This parameter is ignored if Protected is not set. This parameter controls choices offered after "Enable/Disable Inheritance" button.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Recurse</maml:name>
+          <maml:Description>
+            <maml:para>If specified, applies specified operations to all subobjects. This parameter is ignored for Leaf objects, such as files or registry entries.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Reset</maml:name>
+          <maml:Description>
+            <maml:para>If specified, removes all explicit access rules and keeps only inherited. if "Protected" parameter is specified inherited rules are removed as well. If "Protected" is specified with "PreserveInheritance", then the inherited rules become explicit rules and everything else is removed.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>If specified skips prompting for confirmation.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:Description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:Description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Directory, File, Key, Item">
+        <maml:name>Path</maml:name>
+        <maml:Description>
+          <maml:para>Resource on which to set ownership or permissions. Valid resources are files, directories, registry keys and registry entries. Environment variables are allowed.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Owner</maml:name>
+        <maml:Description>
+          <maml:para>Principal who will be the new owner of a resource. Using this parameter means taking ownership of a resource.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="User">
+        <maml:name>Principal</maml:name>
+        <maml:Description>
+          <maml:para>Principal to which to grant specified permissions. Using this parameter means setting permissions on a resource.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Computer, Server, Host, Machine">
+        <maml:name>Domain</maml:name>
+        <maml:Description>
+          <maml:para>Principal domain such as computer name or authority to which principal applies</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Type</maml:name>
+        <maml:Description>
+          <maml:para>Access control type to either allow or deny specified rights</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Security.AccessControl.AccessControlType</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Security.AccessControl.AccessControlType</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>Allow</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Permission, Grant">
+        <maml:name>Rights</maml:name>
+        <maml:Description>
+          <maml:para>Defines file system access rights to use for principal when creating access and audit rules. The default includes: ReadAndExecute, ListDirectory and Traverse Where: 1. ReadAndExecute: Read and ExecuteFile 2. Read: ReadData, ReadExtendedAttributes, ReadAttributes, and ReadPermissions.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Security.AccessControl.FileSystemRights</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Security.AccessControl.FileSystemRights</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="RegPermission, RegGrant">
+        <maml:name>RegistryRights</maml:name>
+        <maml:Description>
+          <maml:para>Defines registry access rights to use for principal when creating access and audit rules. The default includes: ReadKey Where, ReadKey: QueryValues, Notify, EnumerateSubKeys and ReadPermissions</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Security.AccessControl.RegistryRights</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Security.AccessControl.RegistryRights</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Inheritance</maml:name>
+        <maml:Description>
+          <maml:para>Inheritance flags specify the semantics of inheritance for access control entries. This parameter is ignored for leaf objects, such as files or or registry entries. This parameter controls the "Applies to" column in advanced security dialog The default is "This folder, subfolders and files"</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Security.AccessControl.InheritanceFlags</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Security.AccessControl.InheritanceFlags</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>ContainerInherit, ObjectInherit</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Propagation</maml:name>
+        <maml:Description>
+          <maml:para>Specifies how Access Control Entries (ACEs) are propagated to child objects. These flags are significant only if inheritance flags are present, (when Inheritance is not "None") This parameter is ignored for leaf objects, such as files or or registry entries. This parameter affects the "Applies to" column in advanced security dialog</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Security.AccessControl.PropagationFlags</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Security.AccessControl.PropagationFlags</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Protected</maml:name>
+        <maml:Description>
+          <maml:para>If set, protect the specified access rules from inheritance. The default is to allow inheritance. Protected access rules cannot be modified by parent objects through inheritance. This parameter controls the "Enable/Disable Inheritance" button in advanced security dialog</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>PreserveInheritance</maml:name>
+        <maml:Description>
+          <maml:para>If set, preserve inherited access rules, which become explicit rules. The default is to remove inherited access rules. This parameter is ignored if Protected is not set. This parameter controls choices offered after "Enable/Disable Inheritance" button.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Recurse</maml:name>
+        <maml:Description>
+          <maml:para>If specified, applies specified operations to all subobjects. This parameter is ignored for Leaf objects, such as files or registry entries.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Reset</maml:name>
+        <maml:Description>
+          <maml:para>If specified, removes all explicit access rules and keeps only inherited. if "Protected" parameter is specified inherited rules are removed as well. If "Protected" is specified with "PreserveInheritance", then the inherited rules become explicit rules and everything else is removed.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Force</maml:name>
+        <maml:Description>
+          <maml:para>If specified skips prompting for confirmation.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
+        <maml:Description>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:Description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Set-Permission</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>[bool]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>TODO: Manage audit entries TODO: Which combination is for "Replace all child object permissions with inheritable permissions from this object" TODO: Which combination is for "Include inheritable permissions from this object's parent" Set-Permission function is a wrapper around *-Acl commandlets for easier ACL editing. This function also serves as replacement for takeown.exe and icacls.exe whose syntax is strange and using these in PowerShell is usually awkward. TODO: See https://powershellexplained.com/2020-03-15-Powershell-shouldprocess-whatif-confirm-shouldcontinue-everything/ TODO: switch to ignore errors and continue doing things, useful for recurse TODO: A bunch of other security options can be implemented HACK: Set-Acl : Requested registry access is not allowed, unable to modify ownership</maml:para>
+        <maml:para>Links listed below are provided for additional parameter description in order of how parameters are declared</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Set-Permission -Principal "SomeUser" -Path "D:\SomePath"</dev:code>
+        <dev:remarks>
+          <maml:para>Sets function defaults for user SomeUser on path D:\SomePath</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Set-Permission -Principal "Remote Management Users" -Path "D:\SomePath" -Protected</dev:code>
+        <dev:remarks>
+          <maml:para>Only "Remote Management Users" have permissions on "D:\SomePath", other entries are removed</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Set-Permission -Principal "LanmanServer" -Domain "NT SERVICE" -Path "D:\SomeFolder" `
+	-Type "Deny" -Rights "TakeOwnership, Delete, Modify"</dev:code>
+        <dev:remarks>
+          <maml:para>LanmanServer service is denied specified rights for specified directory and all it's contents</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
+        <dev:code>Set-Permission -Principal SomeUser -Domain COMPUTERNAME -Path "D:\SomeFolder"</dev:code>
+        <dev:remarks>
+          <maml:para>Allows to ReadAndExecute, ListDirectory and Traverse to 'SomeFolder' and it's contents for COMPUTERNAME\SomeUser</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Set-Permission.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.accesscontroltype?view=dotnet-plat-ext-3.1</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.accesscontroltype?view=dotnet-plat-ext-3.1</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.filesystemrights?view=dotnet-plat-ext-3.1</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.filesystemrights?view=dotnet-plat-ext-3.1</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registryrights?view=dotnet-plat-ext-3.1</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registryrights?view=dotnet-plat-ext-3.1</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.inheritanceflags?view=dotnet-plat-ext-3.1</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.inheritanceflags?view=dotnet-plat-ext-3.1</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.propagationflags?view=dotnet-plat-ext-3.1</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.propagationflags?view=dotnet-plat-ext-3.1</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.objectsecurity.setaccessruleprotection?view=dotnet-plat-ext-3.1</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.objectsecurity.setaccessruleprotection?view=dotnet-plat-ext-3.1</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registrysecurity?view=dotnet-plat-ext-3.1</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registrysecurity?view=dotnet-plat-ext-3.1</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1082,7 +2316,7 @@ utf-32</dev:code>
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>None. Screen buffer is set for current powershell session</maml:name>
+          <maml:name>None. Set-ScreenBuffer does not generate any output</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1106,7 +2340,7 @@ utf-32</dev:code>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Utility/Help/en-US/Set-ScreenBuffer.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Set-ScreenBuffer.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1156,7 +2390,7 @@ utf-32</dev:code>
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>None. You cannot pipe objects to Show-SDDL</maml:name>
+          <maml:name>[string]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1166,7 +2400,7 @@ utf-32</dev:code>
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>TODO: describe outputs</maml:name>
+          <maml:name>[string]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1190,7 +2424,7 @@ utf-32</dev:code>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Utility/Help/en-US/Show-SDDL.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Show-SDDL.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1344,7 +2578,7 @@ utf-32</dev:code>
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>None. Script scope context variable is updated.</maml:name>
+          <maml:name>None. Update-Context does not generate any output</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1368,7 +2602,7 @@ utf-32</dev:code>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Utility/Help/en-US/Update-Context.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Update-Context.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>

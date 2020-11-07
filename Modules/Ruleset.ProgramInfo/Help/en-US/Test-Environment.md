@@ -14,7 +14,7 @@ Test if path is valid for firewall rule
 ## SYNTAX
 
 ```none
-Test-Environment [[-FilePath] <String>] [<CommonParameters>]
+Test-Environment [-Path] <String> [-PathType <String>] [-Firewall] [-UserProfile] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -32,9 +32,29 @@ Test-Environment %SystemDrive%
 
 ## PARAMETERS
 
-### -FilePath
+### -Path
 
-Path to folder, Allows null or empty since input may come from other commandlets which can return empty or null
+Path to folder, Allows null or empty since input may come from other commandlets which
+can return empty or null
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PathType
+
+A type of path to test, can be one of the following:
+1. Leaf -The path is file or registry entry
+2. Container - the path is container such as folder or registry key
+3. Any - Either Leaf or Container
 
 ```yaml
 Type: System.String
@@ -42,8 +62,40 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 1
-Default value: None
+Position: Named
+Default value: Container
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Firewall
+
+Ensures the path is valid for firewall rule
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -UserProfile
+
+Checks if the path leads to user profile
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

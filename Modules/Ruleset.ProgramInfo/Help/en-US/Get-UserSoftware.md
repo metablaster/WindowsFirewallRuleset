@@ -73,7 +73,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [PSCustomObject[]] list of programs for specified user on a target computer
+### [PSCustomObject] list of programs for specified user on a target computer
 
 ## NOTES
 

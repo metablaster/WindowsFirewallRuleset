@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.ProgramInfo
 Module Guid: 49f11777-b8b6-4fed-bd82-32c8f48db81e
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.7.0
-Help Version: 0.7.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.7.1
+Help Version: 0.7.1
 Locale: en-US
 ---
 
@@ -97,7 +97,3 @@ Test if given installation directory is valid
 ### [Test-Service](Test-Service.md)
 
 Check if service exists on system
-
-### [Test-UserProfile](Test-UserProfile.md)
-
-Check if input path leads to user profile

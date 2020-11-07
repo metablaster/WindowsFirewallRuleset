@@ -78,7 +78,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>None. Log files are written to log directory.</maml:name>
+          <maml:name>None. Update-Log does not generate any output</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -111,7 +111,7 @@ Update-Log</dev:code>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.AllPlatforms.Logging/Help/en-US/Update-Log.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Logging/Help/en-US/Update-Log.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>

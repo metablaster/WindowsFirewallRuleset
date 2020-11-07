@@ -154,7 +154,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [NetIPConfiguration] or error message if no adapter configured
+### [System.Net.NetIPConfiguration] or error message if no adapter configured
 
 ## NOTES
 

@@ -119,7 +119,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### None.
+### None. Import-FirewallRules does not generate any output
 
 ## NOTES
 

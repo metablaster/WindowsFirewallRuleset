@@ -58,7 +58,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [PSCustomObject[]] list of executables, their installation path and additional information
+### [PSCustomObject] list of executables, their installation path and additional information
 
 ## NOTES
 

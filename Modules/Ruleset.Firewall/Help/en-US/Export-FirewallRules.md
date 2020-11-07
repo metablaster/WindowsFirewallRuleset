@@ -276,7 +276,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### None. Exports rules to file.
+### None. Export-FirewallRules does not generate any output
 
 ## NOTES
 

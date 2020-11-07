@@ -81,9 +81,9 @@
 		"Initialize-Module"
 		"Initialize-Provider"
 		# Following exports only for unit testing
-		"Add-PSContextMenu"
-		"Find-UpdatableModule"
-		"Uninstall-DuplicateModule"
+		# "Add-PSContextMenu"
+		# "Find-UpdatableModule"
+		# "Uninstall-DuplicateModule"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not

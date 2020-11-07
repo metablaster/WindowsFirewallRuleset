@@ -57,7 +57,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [PSCustomObject[]] for installed Windows SDK versions and install paths
+### [PSCustomObject] for installed Windows SDK versions and install paths
 
 ## NOTES
 

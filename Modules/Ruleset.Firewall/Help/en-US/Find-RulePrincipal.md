@@ -60,7 +60,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### None.
+### TODO: Describe outputs and OutputType
 
 ## NOTES
 

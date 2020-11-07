@@ -55,11 +55,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.Net.IPAddress
+### [ipaddress]
 
 ## OUTPUTS
 
-### TODO: describe outputs
+### [string] A hexadecimal string
 
 ## NOTES
 

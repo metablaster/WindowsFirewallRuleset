@@ -57,11 +57,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.Int32
+### [byte] A mask length ranging between 0 and 32
 
 ## OUTPUTS
 
-### TODO: describe outputs
+### [ipaddress] A dotted-decimal subnet mask
 
 ## NOTES
 

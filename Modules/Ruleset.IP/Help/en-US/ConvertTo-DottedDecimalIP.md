@@ -63,11 +63,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.String
+### [string] IP address
 
 ## OUTPUTS
 
-### TODO: describe outputs
+### [ipaddress] IP address
 
 ## NOTES
 

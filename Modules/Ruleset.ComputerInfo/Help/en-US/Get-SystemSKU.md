@@ -79,11 +79,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to Get-SystemSKU
+### [int32]
 
 ## OUTPUTS
 
-### [PSCustomObject[]] array with Computer/SKU value pairs
+### [PSCustomObject] Computer/SKU value pair
 
 ## NOTES
 

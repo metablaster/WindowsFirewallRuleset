@@ -91,7 +91,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### [string[]] array of group names
+### [string[]] One or more group names
 
 ## OUTPUTS
 

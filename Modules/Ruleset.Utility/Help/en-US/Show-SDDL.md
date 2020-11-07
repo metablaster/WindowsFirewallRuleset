@@ -53,11 +53,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to Show-SDDL
+### [string]
 
 ## OUTPUTS
 
-### TODO: describe outputs
+### [string]
 
 ## NOTES
 

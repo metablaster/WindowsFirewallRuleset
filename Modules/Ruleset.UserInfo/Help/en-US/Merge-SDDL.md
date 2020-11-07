@@ -75,7 +75,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### None. Referenced SDDL is expanded with new one
+### None. Merge-SDDL does not generate any output
 
 ## NOTES
 

@@ -153,7 +153,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [IPAddress[]] Array of IP addresses and warning message if no adapter connected
+### [ipaddress] Array of IP addresses and warning message if no adapter connected
 
 ## NOTES
 

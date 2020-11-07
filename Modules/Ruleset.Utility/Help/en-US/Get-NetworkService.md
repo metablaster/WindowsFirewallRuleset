@@ -57,7 +57,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### None, File with the list of services is made
+### None. Get-NetworkService does not generate any output
 
 ## NOTES
 

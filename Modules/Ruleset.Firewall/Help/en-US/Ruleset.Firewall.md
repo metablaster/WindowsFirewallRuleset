@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.Firewall
 Module Guid: 3ee23849-8adf-46ee-95f9-7a02417e1f4b
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.7.0
-Help Version: 0.7.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.7.1
+Help Version: 0.7.1
 Locale: en-US
 ---
 
@@ -33,3 +33,4 @@ Imports firewall rules from a CSV or JSON file.
 ### [Remove-FirewallRules](Remove-FirewallRules.md)
 
 Removes firewall rules according to a list in a CSV or JSON file.
+

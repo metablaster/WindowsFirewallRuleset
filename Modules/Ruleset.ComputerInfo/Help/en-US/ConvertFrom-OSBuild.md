@@ -55,11 +55,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. you can't p to ConvertFrom-OSBuild
+### None. You cannot pipe objects to ConvertFrom-OSBuild
 
 ## OUTPUTS
 
-### None.
+### [string]
 
 ## NOTES
 

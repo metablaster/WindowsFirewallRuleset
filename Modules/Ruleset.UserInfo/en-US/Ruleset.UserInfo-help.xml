@@ -80,7 +80,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>[PSCustomObject[]] composed of SID information</maml:name>
+          <maml:name>[PSCustomObject] composed of SID information</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -116,7 +116,7 @@
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.UserInfo/Help/en-US/ConvertFrom-SID.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/ConvertFrom-SID.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -176,7 +176,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>[string[]] array of usernames in form of: USERNAME</maml:name>
+          <maml:name>[System.String] Usernames in form of: USERNAME</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -207,7 +207,7 @@
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.UserInfo/Help/en-US/ConvertFrom-UserAccount.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/ConvertFrom-UserAccount.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -304,7 +304,7 @@
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>[string[]] array of user names</maml:name>
+          <maml:name>[string[]] One or more user names</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -345,7 +345,7 @@
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.UserInfo/Help/en-US/Get-AccountSID.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-AccountSID.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -452,7 +452,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>[PSCustomObject[]] Array of enabled user accounts in specified group</maml:name>
+          <maml:name>[PSCustomObject] Enabled user accounts in specified groups</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -483,7 +483,7 @@
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.UserInfo/Help/en-US/Get-GroupPrincipal.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-GroupPrincipal.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -580,7 +580,7 @@
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>[string[]] array of group names</maml:name>
+          <maml:name>[string[]] One or more group names</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -621,7 +621,7 @@
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.UserInfo/Help/en-US/Get-GroupSID.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-GroupSID.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -823,7 +823,7 @@
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.UserInfo/Help/en-US/Get-SDDL.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-SDDL.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -896,7 +896,7 @@
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>[string[]] array of computer names</maml:name>
+          <maml:name>[string[]] One or more computer names</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -906,7 +906,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>[PSCustomObject[]] array of user groups on target computers</maml:name>
+          <maml:name>[PSCustomObject] User groups on target computers</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -937,7 +937,7 @@
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.UserInfo/Help/en-US/Get-UserGroup.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-UserGroup.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1021,7 +1021,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>None. Referenced SDDL is expanded with new one</maml:name>
+          <maml:name>None. Merge-SDDL does not generate any output</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1047,7 +1047,7 @@ Merge-SDDL ([ref] $RefSDDL) $NewSDDL</dev:code>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.Windows.UserInfo/Help/en-US/Merge-SDDL.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Merge-SDDL.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>

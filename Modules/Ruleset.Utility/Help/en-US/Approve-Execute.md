@@ -124,7 +124,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### None. true if user wants to continue, false otherwise
+### [bool] True if user wants to continue, false otherwise
 
 ## NOTES
 

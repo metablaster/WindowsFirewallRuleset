@@ -95,7 +95,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### None. Formatted message block is shown in the console
+### None. Start-Test does not generate any output
 
 ## NOTES
 

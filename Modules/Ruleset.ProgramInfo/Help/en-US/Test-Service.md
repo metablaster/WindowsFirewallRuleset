@@ -57,7 +57,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### None. Warning and info message if service not found
+### None. Test-Service does not generate any output
 
 ## NOTES
 

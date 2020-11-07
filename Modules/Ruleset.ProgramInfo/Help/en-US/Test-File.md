@@ -57,7 +57,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### None. Warning message if file not found
+### None. Test-File does not generate any output
 
 ## NOTES
 

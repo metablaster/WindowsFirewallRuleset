@@ -64,7 +64,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [string[]] array of usernames in form of: USERNAME
+### [System.String] Usernames in form of: USERNAME
 
 ## NOTES
 

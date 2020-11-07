@@ -92,7 +92,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### None.
+### None. Enter-Test does not generate any output
 
 ## NOTES
 

@@ -93,8 +93,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### [string]
 
-### Encoding type of a file
-
 ## NOTES
 
 TODO: utf-16LE detected as utf-16 with BOM

@@ -73,7 +73,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [PSCustomObject[]] OneDrive program info for specified user on a target computer
+### [PSCustomObject] OneDrive program info for specified user on a target computer
 
 ## NOTES
 

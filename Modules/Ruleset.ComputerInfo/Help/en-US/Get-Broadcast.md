@@ -131,7 +131,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [IPAddress[]] Array of broadcast addresses
+### [ipaddress] Broadcast addresses
 
 ## NOTES
 

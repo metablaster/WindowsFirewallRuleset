@@ -57,7 +57,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [PSCustomObject[]] list of programs installed for all users
+### [PSCustomObject] list of programs installed for all users
 
 ## NOTES
 

@@ -131,7 +131,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### TODO: describe outputs
+### "Ruleset.IP.Subnet" Custom object
 
 ## NOTES
 

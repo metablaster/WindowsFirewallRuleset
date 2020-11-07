@@ -81,7 +81,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [PSCustomObject[]] composed of SID information
+### [PSCustomObject] composed of SID information
 
 ## NOTES
 

@@ -103,11 +103,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### [string[]] One or more paths to file to check
+### [string] One or more paths to file to check
 
 ## OUTPUTS
 
-### None.
+### None. Confirm-FileEncoding does not generate any output
 
 ## NOTES
 

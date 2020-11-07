@@ -57,7 +57,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [string[]] Array of computer accounts
+### [string]
 
 ## NOTES
 

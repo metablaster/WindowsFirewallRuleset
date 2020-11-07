@@ -125,7 +125,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [string[]] Capability names or full reference names for capabilities of an app
+### [string] Capability names or full reference names for capabilities of an app
 
 ## NOTES
 

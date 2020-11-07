@@ -56,11 +56,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.Net.IPAddress
+### [ipaddress] Decimal IP address
 
 ## OUTPUTS
 
-### TODO: describe outputs
+### [string] Dotted binary IP address
 
 ## NOTES
 

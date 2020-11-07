@@ -75,11 +75,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### [string[]] array of computer names
+### [string[]] One or more computer names
 
 ## OUTPUTS
 
-### [PSCustomObject[]] array of user groups on target computers
+### [PSCustomObject] User groups on target computers
 
 ## NOTES
 

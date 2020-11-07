@@ -95,7 +95,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [PSCustomObject[]] Array of enabled user accounts in specified group
+### [PSCustomObject] Enabled user accounts in specified groups
 
 ## NOTES
 
