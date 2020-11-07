@@ -39,6 +39,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - Added function Set-Permission to set ownership and file saystem premissions
   - Added function Get-EnvironmentVariable to retrieve multiple variables of specific "group"
   - Added function to compare 2 paths for equality or similarity
+  - Added script Set-Privilege to let add or remove privileges to PowerShell process
 
 - Documentation
 

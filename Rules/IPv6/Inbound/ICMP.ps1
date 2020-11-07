@@ -95,8 +95,8 @@ Initialize-Project -Abort
 # Imports
 . $PSScriptRoot\DirectionSetup.ps1
 . $PSScriptRoot\..\IPSetup.ps1
-Import-Module -Name Project.AllPlatforms.Logging
-Import-Module -Name Project.Windows.UserInfo
+Import-Module -Name Ruleset.Logging
+Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "ICMPv6"

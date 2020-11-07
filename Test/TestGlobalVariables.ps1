@@ -56,8 +56,8 @@ Initialize-Project -Abort
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
-Import-Module -Name Project.AllPlatforms.Logging
-Import-Module -Name Project.Windows.UserInfo
+Import-Module -Name Ruleset.Logging
+Import-Module -Name Ruleset.UserInfo
 
 # User prompt
 Update-Context $TestContext $ThisScript @Logs
@@ -65,34 +65,34 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 Enter-Test $ThisScript
 
-Start-Test "Project.AllPlatforms.Logs - Logs:"
+Start-Test "Ruleset.Logs - Logs:"
 $Logs
 
-Start-Test "Project.AllPlatforms.Utility - ServiceHost:"
+Start-Test "Ruleset.Utility - ServiceHost:"
 $ServiceHost
 
 if ($Develop)
 {
-	Start-Test "Project.Windows.ProgramInfo - InstallTable:"
+	Start-Test "Ruleset.ProgramInfo - InstallTable:"
 	$InstallTable
 }
 
-Start-Test "Project.Windows.UserInfo - NT_AUTHORITY_UserModeDrivers:"
+Start-Test "Ruleset.UserInfo - NT_AUTHORITY_UserModeDrivers:"
 $NT_AUTHORITY_UserModeDrivers
 
-Start-Test "Project.Windows.UserInfo - NT_AUTHORITY_NetworkService:"
+Start-Test "Ruleset.UserInfo - NT_AUTHORITY_NetworkService:"
 $NT_AUTHORITY_NetworkService
 
-Start-Test "Project.Windows.UserInfo - NT_AUTHORITY_LocalService:"
+Start-Test "Ruleset.UserInfo - NT_AUTHORITY_LocalService:"
 $NT_AUTHORITY_LocalService
 
-Start-Test "Project.Windows.UserInfo - NT_AUTHORITY_System:"
+Start-Test "Ruleset.UserInfo - NT_AUTHORITY_System:"
 $NT_AUTHORITY_System
 
-Start-Test "Project.Windows.UserInfo - AdministratorsGroupSDDL:"
+Start-Test "Ruleset.UserInfo - AdministratorsGroupSDDL:"
 $AdministratorsGroupSDDL
 
-Start-Test "Project.Windows.UserInfo - UsersGroupSDDL:"
+Start-Test "Ruleset.UserInfo - UsersGroupSDDL:"
 $UsersGroupSDDL
 
 Exit-Test

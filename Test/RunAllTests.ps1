@@ -59,7 +59,7 @@ Initialize-Project -Abort
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
-Import-Module -Name Project.AllPlatforms.Logging
+Import-Module -Name Ruleset.Logging
 
 # User prompt
 Set-Variable -Name Accept -Scope Local -Option ReadOnly -Force -Value "Run all unit tests one by one"
@@ -86,7 +86,7 @@ else
 Write-Information -Tags "Project" -MessageData "INFO: Starting pester tests"
 
 # Recursively get list of pester tests
-$PesterTests = Get-ChildItem -Path $ProjectRoot\Modules\Project.AllPlatforms.IP\Test\Public -Recurse -Filter *.ps1 @Logs
+$PesterTests = Get-ChildItem -Path $ProjectRoot\Modules\Ruleset.IP\Test\Public -Recurse -Filter *.ps1 @Logs
 
 if ($PesterTests)
 {

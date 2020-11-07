@@ -1,0 +1,32 @@
+
+TOPIC
+	about_Ruleset.ProgramInfo
+
+SHORT DESCRIPTION
+	Query software installed on Windows systems
+
+LONG DESCRIPTION
+	Functions in Ruleset.ProgramInfo module can be used to query information about programs
+	installed on computer, installed system wide or installed by each user separately.
+	Also possible to query software which is built into operating system.
+	Querying remote computers is currently only partially supported.
+
+EXAMPLES
+	To get Windows defender instance:
+	Get-WindowsDefender COMPUTERNAME
+
+	To get installed WindowsSDK:
+	Get-WindowsSDK COMPUTERNAME
+
+	To get SID for store app:
+	Get-AppSID "User" "Microsoft.MicrosoftEdge_8wekyb3d8bbwe"
+
+KEYWORDS
+	Program
+	ProgramInfo
+	Software
+	SoftwareInfo
+	ComputerSoftware
+
+SEE ALSO
+	https://github.com/metablaster/WindowsFirewallRuleset

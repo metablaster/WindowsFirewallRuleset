@@ -114,7 +114,7 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 # Imports
 # TODO: Include modules and scripts as needed
 . $PSScriptRoot\ContextSetup.ps1
-Import-Module -Name Project.AllPlatforms.Logging
+Import-Module -Name Ruleset.Logging
 
 # User prompt
 # TODO: Update command line help messages

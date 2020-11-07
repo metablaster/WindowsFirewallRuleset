@@ -91,4 +91,4 @@ Modules/**/Help/**/Content/
 Modules/**/Help/**/External/
 
 # Sample test folder
-Test/Project.AllPlatforms.Utility/TestPermission/
+Test/Ruleset.Utility/TestPermission/

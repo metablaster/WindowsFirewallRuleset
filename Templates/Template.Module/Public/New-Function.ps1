@@ -61,7 +61,7 @@ function New-Function
 		"PSReviewUnusedParameter", "", Justification = "This is template function")]
 	[OutputType([void])]
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium",
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Project.PLATFORM.PURPOSE/Help/en-US/FUNCTION-NAME.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.MODULENAME/Help/en-US/FUNCTIONNAME.md")]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $ParameterName

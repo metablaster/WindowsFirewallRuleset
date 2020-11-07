@@ -57,7 +57,7 @@ Initialize-Project -Abort
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
-Import-Module -Name Project.AllPlatforms.Logging
+Import-Module -Name Ruleset.Logging
 
 # User prompt
 Set-Variable -Name Accept -Scope Local -Option ReadOnly -Force -Value "Load test rule into firewall"

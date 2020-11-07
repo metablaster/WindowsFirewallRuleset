@@ -59,7 +59,7 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
-Import-Module -Name Project.AllPlatforms.Logging
+Import-Module -Name Ruleset.Logging
 
 # Setup local variables
 $Accept = "All firewall rules and settings will be restored to factory defaults"

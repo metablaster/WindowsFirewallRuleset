@@ -23,7 +23,7 @@
 			"name": "Test: Get-IPAddress",
 			"type": "PowerShell",
 			"request": "launch",
-			"script": "${workspaceFolder}\\Test\\Project.Windows.ComputerInfo\\Get-IPAddress.ps1",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ComputerInfo\\Get-IPAddress.ps1",
 			"cwd": "${workspaceFolder}"
 		}
 	]

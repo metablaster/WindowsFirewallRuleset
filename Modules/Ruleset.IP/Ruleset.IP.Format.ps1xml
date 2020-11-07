@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Configuration>
+	<ViewDefinitions>
+		<View>
+			<Name>Ruleset.IP.Subnet</Name>
+			<ViewSelectedBy>
+				<TypeName>Ruleset.IP.Subnet</TypeName>
+			</ViewSelectedBy>
+			<TableControl>
+				<TableHeaders>
+					<TableColumnHeader>
+						<Label>NetworkAddress</Label>
+						<Alignment>left</Alignment>
+					</TableColumnHeader>
+					<TableColumnHeader>
+						<Label>BroadcastAddress</Label>
+						<Alignment>left</Alignment>
+					</TableColumnHeader>
+					<TableColumnHeader>
+						<Label>SubnetMask</Label>
+						<Alignment>left</Alignment>
+					</TableColumnHeader>
+					<TableColumnHeader>
+						<Label>MaskLength</Label>
+						<Alignment>left</Alignment>
+					</TableColumnHeader>
+					<TableColumnHeader>
+						<Label>HostAddresses</Label>
+						<Alignment>left</Alignment>
+					</TableColumnHeader>
+				</TableHeaders>
+				<TableRowEntries>
+					<TableRowEntry>
+						<TableColumnItems>
+							<TableColumnItem>
+								<PropertyName>NetworkAddress</PropertyName>
+							</TableColumnItem>
+							<TableColumnItem>
+								<PropertyName>BroadcastAddress</PropertyName>
+							</TableColumnItem>
+							<TableColumnItem>
+								<PropertyName>SubnetMask</PropertyName>
+							</TableColumnItem>
+							<TableColumnItem>
+								<PropertyName>MaskLength</PropertyName>
+							</TableColumnItem>
+							<TableColumnItem>
+								<PropertyName>HostAddresses</PropertyName>
+							</TableColumnItem>
+						</TableColumnItems>
+					</TableRowEntry>
+				</TableRowEntries>
+			</TableControl>
+		</View>
+
+	</ViewDefinitions>
+</Configuration>

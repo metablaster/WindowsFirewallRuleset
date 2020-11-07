@@ -28,7 +28,7 @@ At a bare minimum you should do the modifications described here
 
 ## Initialization module
 
-Edit the module named `Project.AllPlatforms.Initialize` to allow execution for older system.
+Edit the module named `Ruleset.Initialize` to allow execution for older system.
 
 ## Project settings
 

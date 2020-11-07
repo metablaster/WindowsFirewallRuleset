@@ -108,7 +108,7 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
-Import-Module -Name Project.AllPlatforms.Logging
+Import-Module -Name Ruleset.Logging
 
 # User prompt
 $Accept = "Restart all connected network adapters and reassign IP"

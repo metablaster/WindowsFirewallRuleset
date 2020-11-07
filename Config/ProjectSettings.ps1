@@ -142,15 +142,15 @@ if ($Develop)
 	{
 		# Skip removing modules if this script is called from module which would
 		# cause removing modules prematurely
-		Remove-Module -Name Project.AllPlatforms.Initialize -ErrorAction Ignore
-		Remove-Module -Name Project.AllPlatforms.Test -ErrorAction Ignore
-		Remove-Module -Name Project.AllPlatforms.Logging -ErrorAction Ignore
-		Remove-Module -Name Project.AllPlatforms.Utility -ErrorAction Ignore
-		Remove-Module -Name Project.Windows.UserInfo -ErrorAction Ignore
-		Remove-Module -Name Project.Windows.ComputerInfo -ErrorAction Ignore
-		Remove-Module -Name Project.Windows.ProgramInfo -ErrorAction Ignore
-		Remove-Module -Name Project.Windows.Firewall -ErrorAction Ignore
-		Remove-Module -Name Project.AllPlatforms.IP -ErrorAction Ignore
+		Remove-Module -Name Ruleset.Initialize -ErrorAction Ignore
+		Remove-Module -Name Ruleset.Test -ErrorAction Ignore
+		Remove-Module -Name Ruleset.Logging -ErrorAction Ignore
+		Remove-Module -Name Ruleset.Utility -ErrorAction Ignore
+		Remove-Module -Name Ruleset.UserInfo -ErrorAction Ignore
+		Remove-Module -Name Ruleset.ComputerInfo -ErrorAction Ignore
+		Remove-Module -Name Ruleset.ProgramInfo -ErrorAction Ignore
+		Remove-Module -Name Ruleset.Firewall -ErrorAction Ignore
+		Remove-Module -Name Ruleset.IP -ErrorAction Ignore
 	}
 }
 else # Normal use case

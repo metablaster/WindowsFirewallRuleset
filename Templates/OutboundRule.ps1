@@ -62,7 +62,7 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 # TODO: adjust paths
 . $PSScriptRoot\..\DirectionSetup.ps1
 . $PSScriptRoot\..\..\IPSetup.ps1
-Import-Module -Name Project.AllPlatforms.Logging
+Import-Module -Name Ruleset.Logging
 
 # Setup local variables
 $Group = "Template - TargetProgram"

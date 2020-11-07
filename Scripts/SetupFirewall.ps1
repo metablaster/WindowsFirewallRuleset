@@ -61,7 +61,7 @@ Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $fa
 Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
-Import-Module -Name Project.AllPlatforms.Logging
+Import-Module -Name Ruleset.Logging
 
 # Clear errors, error and warning status
 $Error.Clear()
@@ -405,7 +405,7 @@ if ($Develop)
 {
 	# TODO: why? probably no longer needed
 	# Need to re-import required module in develop mode
-	Import-Module -Name Project.AllPlatforms.Logging
+	Import-Module -Name Ruleset.Logging
 }
 
 # Show status of execution

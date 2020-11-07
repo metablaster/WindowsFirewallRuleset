@@ -246,16 +246,16 @@ separated into Public/Private folders, this is required for 2 valid reasons:
 1. To perform tests on private functions without exporting them from module
 2. For organizational purposes, to make it easy to maintain and navigate modules.
 
-Module naming convention consists of 3 words like this:
+Module naming convention which are part of this project is simple:
 
-`Origin.Platform.Purpose`
+`Ruleset.ModulePurpose`
 
 For example:
 
-1. `Project.Windows.ComputerInfo`
-2. `Project.AllPlatforms.Utility`
+1. `Ruleset.ComputerInfo`
+2. `Ruleset.Utility`
 
-3rd party modules must not follow this naming convention, that's what word "Project" means here,
+3rd party modules must not follow this naming convention, that's what word "Ruleset" means here,
 to distinguish project modules from 3rd party code.
 
 ## Static analysis
@@ -361,7 +361,7 @@ take a look there for examples.
 Pester is preferred method to write tests, however some testings needs other way around, or
 more specialized setup.
 
-There is a module called "Project.AllPlatforms.Test", which is customized for this project.\
+There is a module called "Ruleset.Test", which is customized for this project.\
 Tests must pass both Desktop and Core editions of PowerShell to be successful
 
 A hint to quickly run any function from any project module is to run following command in ex.

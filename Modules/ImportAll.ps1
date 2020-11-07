@@ -33,15 +33,15 @@ SOFTWARE.
 # Import all modules into current session, useful for debugging, ie. running individual functions
 #
 
-Import-Module -Name Project.AllPlatforms.Logging
-Import-Module -Name Project.AllPlatforms.Initialize @Logs
-Import-Module -Name Project.AllPlatforms.Test @Logs
-Import-Module -Name Project.AllPlatforms.Utility @Logs
+Import-Module -Name Ruleset.Logging
+Import-Module -Name Ruleset.Initialize @Logs
+Import-Module -Name Ruleset.Test @Logs
+Import-Module -Name Ruleset.Utility @Logs
 
-Import-Module -Name Project.Windows.UserInfo @Logs
-Import-Module -Name Project.Windows.ComputerInfo @Logs
-Import-Module -Name Project.Windows.ProgramInfo @Logs
+Import-Module -Name Ruleset.UserInfo @Logs
+Import-Module -Name Ruleset.ComputerInfo @Logs
+Import-Module -Name Ruleset.ProgramInfo @Logs
 
-Import-Module -Name Project.Windows.Firewall @Logs
-Import-Module -Name Project.AllPlatforms.IP @Logs
+Import-Module -Name Ruleset.Firewall @Logs
+Import-Module -Name Ruleset.IP @Logs
 Import-Module -Name VSSetup @Logs

@@ -351,7 +351,7 @@ At the moment there are 3 options to delete firewall rules:
 right click and delete.
 
 2. To delete rules according to file there is a function for this purpose, located in:\
-`Modules\Project.Windows.Firewall\Public\Remove-FirewallRules.ps1`\
+`Modules\Ruleset.Firewall\Public\Remove-FirewallRules.ps1`\
 however you're advised to perform some tests before using it due to it's
 experimental state.
 
@@ -378,7 +378,7 @@ unlike method from point 1 you can customize your export in almost any way you w
 If you want to import rules, importing by using GPO is same as for export, and to import with
 PowerShell just run `Scripts\ImportFirewall.ps1`
 
-To customize your export/import please take a look into `Modules\Project.Windows.Firewall\Public`,
+To customize your export/import please take a look into `Modules\Ruleset.Firewall\Public`,
 which is where you'll find description on how to use export\import PowerShell functions.
 
 ## Manage loaded rules

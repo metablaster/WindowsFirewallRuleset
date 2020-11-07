@@ -50,7 +50,7 @@ todo's in this file are categorized into following sections:
         - `git clean -d -x --dry-run` `git clean -d -x -f`
         - `git prune --dry-run` `git prune`
         - `git repack -d -F`
-    - ProgramInfo and AllPlatforms.IP module manifest, comment out unit test exports
+    - Ruleset.ProgramInfo and Ruleset.IP module manifest, comment out unit test exports
     - ProjectSettings.ps1 disable variables: Develop, ForceLoad
     - ProjectSettings.ps1 restore variables: TestUser, TestAdmin, DefaultUser, FirewallLogsFolder
     - ProjectSettings.ps1 verify auto updated variables: ProjectCheck, ModulesCheck, ServicesCheck
@@ -116,8 +116,8 @@ todo's in this file are categorized into following sections:
     - We should use try/catch in test scripts to avoid writing errors and write information instead,
     So that `Run-AllTests.ps1` gets clean output, not very useful if testing with PS Core since
     -CIM call will fail, see Get-SystemSKU test
-    - Unit tests for private functions in "Project.Windows.Firewall" module are missing
-    - Unit tests for "Project.AllPlatforms.Logging" include scripts are missing
+    - Unit tests for private functions in "Ruleset.Firewall" module are missing
+    - Unit tests for "Ruleset.Logging" include scripts are missing
 
 5. Code style
 
@@ -160,8 +160,6 @@ todo's in this file are categorized into following sections:
     for better description
     - Need to check if WinRM service is started when contacting computers via CIM
     - Some functions return multiple return types, how to use [OutputType()]?
-    - Modules are named "AllPlatforms" or "Windows" however they contain platform specific or
-    non platform specific functions, need to revisit naming convention
     - Functions which use ShouldProcess must not ask for additional input, but use additional
     ShouldProcess instead.
     - Write-Error will fail if -TargetObject is not set, in cases where this is possible we should
@@ -209,14 +207,14 @@ todo's in this file are categorized into following sections:
 
 4. Test and debugging
 
-    - Move AllPlatforms.IP tests into test folder, clean up directory add streams
+    - Move Ruleset.IP tests into test folder, clean up directory add streams
     - Many test cases are local to our environment, other people might get different results
     - Test everything on preview Windows
     - Some test outputs will be messed up, ex. some output might be shown prematurely,
     see get-usergroup test for example
-    - A lot of pester tests from AllPlatforms.IP module require private function export,
+    - A lot of pester tests from Ruleset.IP module require private function export,
     make sure the rest of a module works fine without these private exports
-    - there is no test for Get-Permutation in Project.AllPlatforms.IP
+    - there is no test for Get-Permutation in Ruleset.IP
 
 5. Code style
 
@@ -323,6 +321,8 @@ todo's in this file are categorized into following sections:
 1. Modules
     - Importing modules from withing modules should be imported into global scope
     - Versioning of module should be separate from project versioning
+    - Modules are named "AllPlatforms" or "Windows" however they contain platform specific or
+    non platform specific functions, need to revisit naming convention
 
 2. Project scripts
 

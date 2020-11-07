@@ -57,7 +57,7 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
-Import-Module -Name Project.AllPlatforms.Logging
+Import-Module -Name Ruleset.Logging
 
 # Setup local variables
 $Accept = "Accpet exporting firewall rules and settings to file"

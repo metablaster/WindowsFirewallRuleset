@@ -121,7 +121,7 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
-Import-Module -Name Project.AllPlatforms.Logging
+Import-Module -Name Ruleset.Logging
 
 # User prompt
 $Accept = "Generate new or update existing help files for all project modules"
@@ -139,7 +139,7 @@ if ([string]::IsNullOrEmpty($Module))
 {
 	# Generate new or update existing help files for all modules that are part of repository
 	$Module = Get-ChildItem -Path $ProjectRoot\Modules -Directory |
-	Where-Object -Property Name -Like "Project.*" |
+	Where-Object -Property Name -Like "Ruleset.*" |
 	Select-Object -ExpandProperty Name
 }
 
