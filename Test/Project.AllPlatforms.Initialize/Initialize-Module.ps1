@@ -46,6 +46,12 @@ None. Initialize-Module.ps1 does not generate any output
 None.
 #>
 
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
 # Initialization
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
@@ -61,34 +67,38 @@ Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 Enter-Test $ThisScript
-[string] $Repository = "PSGallery"
 
-Start-Test "Initialize-Module PackageManagement"
-Initialize-Module @{ ModuleName = "PackageManagement"; ModuleVersion = $RequirePackageManagementVersion } `
-	-Repository $Repository -Trusted @Logs
+if ($Force -or $PSCmdlet.ShouldContinue("Possible modify installed modules", "Accept dangerous unit test"))
+{
+	[string] $Repository = "PSGallery"
 
-Start-Test "Initialize-Module PowerShellGet"
-Initialize-Module @{ ModuleName = "PowerShellGet"; ModuleVersion = $RequirePowerShellGetVersion } `
-	-Repository $Repository -Trusted `
-	-InfoMessage "PowerShellGet >= $($RequirePowerShellGetVersion.ToString()) is required otherwise updating modules might fail" @Logs
+	Start-Test "Initialize-Module PackageManagement"
+	Initialize-Module @{ ModuleName = "PackageManagement"; ModuleVersion = $RequirePackageManagementVersion } `
+		-Repository $Repository -Trusted @Logs
 
-Start-Test "Initialize-Module posh-git"
-Initialize-Module @{ ModuleName = "posh-git"; ModuleVersion = $RequirePoshGitVersion }  `
-	-Repository $Repository -Trusted -AllowPrerelease `
-	-InfoMessage "posh-git is recommended for better git experience in PowerShell" @Logs
+	Start-Test "Initialize-Module PowerShellGet"
+	Initialize-Module @{ ModuleName = "PowerShellGet"; ModuleVersion = $RequirePowerShellGetVersion } `
+		-Repository $Repository -Trusted `
+		-InfoMessage "PowerShellGet >= $($RequirePowerShellGetVersion.ToString()) is required otherwise updating modules might fail" @Logs
 
-Start-Test "Initialize-Module PSScriptAnalyzer"
-Initialize-Module @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = $RequireAnalyzerVersion } `
-	-Repository $Repository -Trusted `
-	-InfoMessage "PSScriptAnalyzer >= $($RequireAnalyzerVersion.ToString()) is required otherwise code will start missing while editing" @Logs
+	Start-Test "Initialize-Module posh-git"
+	Initialize-Module @{ ModuleName = "posh-git"; ModuleVersion = $RequirePoshGitVersion }  `
+		-Repository $Repository -Trusted -AllowPrerelease `
+		-InfoMessage "posh-git is recommended for better git experience in PowerShell" @Logs
 
-Start-Test "Initialize-Module Pester"
-$Result = Initialize-Module @{ ModuleName = "Pester"; ModuleVersion = $RequirePesterVersion } `
-	-Repository $Repository -Trusted `
-	-InfoMessage "Pester is required to run pester tests" @Logs
+	Start-Test "Initialize-Module PSScriptAnalyzer"
+	Initialize-Module @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = $RequireAnalyzerVersion } `
+		-Repository $Repository -Trusted `
+		-InfoMessage "PSScriptAnalyzer >= $($RequireAnalyzerVersion.ToString()) is required otherwise code will start missing while editing" @Logs
 
-$Result
-Test-Output $Result -Command Initialize-Module @Logs
+	Start-Test "Initialize-Module Pester"
+	$Result = Initialize-Module @{ ModuleName = "Pester"; ModuleVersion = $RequirePesterVersion } `
+		-Repository $Repository -Trusted `
+		-InfoMessage "Pester is required to run pester tests" @Logs
+
+	$Result
+	Test-Output $Result -Command Initialize-Module @Logs
+}
 
 Update-Log
 Exit-Test

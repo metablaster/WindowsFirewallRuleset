@@ -46,6 +46,12 @@ None. Initialize-Project.ps1 does not generate any output
 None.
 #>
 
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
 # Initialization
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
@@ -62,19 +68,24 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 Enter-Test $ThisScript
 
-Start-Test "Initialize-Project"
-Initialize-Project -Abort
+if ($Force -or $PSCmdlet.ShouldContinue("Modify registry ownership", "Accept dangerous unit test"))
+{
+	Start-Test "Initialize-Project"
+	Initialize-Project -Abort
 
-Start-Test "Initialize-Project -NoModules"
-Initialize-Project -NoModulesCheck
+	Start-Test "Initialize-Project -NoModules"
+	Initialize-Project -NoModulesCheck
 
-# FAIL
-# Start-Test "Initialize-Project -NoModulesCheck -NoProjectCheck"
-# Initialize-Project -NoModulesCheck -NoProjectCheck:$false
+	# FAIL
+	# Start-Test "Initialize-Project -NoModulesCheck -NoProjectCheck"
+	# Initialize-Project -NoModulesCheck -NoProjectCheck:$false
 
-Start-Test "Initialize-Project -NoProjectCheck:$false"
-$Result = Initialize-Project -NoProjectCheck:$false
-$Result
+	Start-Test "Initialize-Project -NoProjectCheck:$false"
+	$Result = Initialize-Project -NoProjectCheck:$false
+	$Result
 
-Test-Output $Result -Command Initialize-Project @Logs
+	Test-Output $Result -Command Initialize-Project @Logs
+}
+
+Update-Log
 Exit-Test

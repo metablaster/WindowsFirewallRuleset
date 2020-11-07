@@ -198,8 +198,9 @@ if ($FileSystem)
 	Start-Test "Recursively clear all rules or folder"
 	Set-Permission -Path $TestFolder -Reset -Recurse -Protected @Logs
 }
-elseif ($Registry)
+elseif ($Registry -or $PSCmdlet.ShouldContinue("Modify registry ownership or permissions", "Accept dangerous unit test"))
 {
+	# NOTE: See \..Initialize\Private\Add-PSContextMenu.ps1 for more up to date test
 	# Ownership + Full control
 	$TestKey = "TestKey"
 

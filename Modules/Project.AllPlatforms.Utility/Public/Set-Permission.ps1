@@ -141,6 +141,7 @@ using these in PowerShell is usually awkward.
 TODO: See https://powershellexplained.com/2020-03-15-Powershell-shouldprocess-whatif-confirm-shouldcontinue-everything/
 TODO: switch to ignore errors and continue doing things, useful for recurse
 TODO: A bunch of other security options can be implemented
+HACK: Set-Acl : Requested registry access is not allowed, unable to modify ownership
 
 Links listed below are provided for additional parameter description in order of how parameters are declared
 

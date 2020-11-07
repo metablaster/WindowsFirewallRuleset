@@ -46,6 +46,12 @@ None. Find-RulePrincipal.ps1 does not generate any output
 None.
 #>
 
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
 # Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
@@ -64,11 +70,14 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 Enter-Test $ThisScript
 
-Start-Test "Find-RulePrincipal"
-$Result = Find-RulePrincipal @Logs
-$Result
+if ($Force -or $PSCmdlet.ShouldContinue("Export firewall rules", "Accept slow unit test"))
+{
+	Start-Test "Find-RulePrincipal"
+	$Result = Find-RulePrincipal @Logs
+	$Result
 
-Test-Output $Result -Command Find-RulePrincipal @Logs
+	Test-Output $Result -Command Find-RulePrincipal @Logs
+}
 
 Update-Log
 Exit-Test

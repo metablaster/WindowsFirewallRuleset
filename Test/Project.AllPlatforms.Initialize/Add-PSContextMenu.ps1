@@ -28,34 +28,28 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Test-Function
+Unit test for Add-PSContextMenu
 
 .DESCRIPTION
-Use Test-Function.ps1 as a template to test out module functions
+Unit test for Add-PSContextMenu
 
 .EXAMPLE
-PS> .\Test-Function.ps1
+PS> .\Add-PSContextMenu.ps1
 
 .INPUTS
-None. You cannot pipe objects to Test-Function.ps1
+None. You cannot pipe objects to Add-PSContextMenu.ps1
 
 .OUTPUTS
-None. Test-Function.ps1 does not generate any output
-
-.NOTES
-None.
-TODO: Update Copyright and start writing test code
+None. Add-PSContextMenu.ps1 does not generate any output
 #>
 
 [CmdletBinding()]
 param (
-	# TODO: Remove if not needed or test safe
 	[Parameter()]
 	[switch] $Force
 )
 
 # Initialization
-# TODO: Adjust path to project settings and elevation requirement
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
@@ -66,7 +60,6 @@ Initialize-Project -Abort
 Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
-# TODO: Include modules and scripts as needed
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Project.AllPlatforms.Logging
 
@@ -76,17 +69,13 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 Enter-Test $ThisScript
 
-# TODO: Keep this check if this test is:
-# 1. potentially dangerous
-# 2. it should not be part of RunAllTests.ps1
-# 3. it takes too much time to complete
-if ($Force -or $PSCmdlet.ShouldContinue("Template Target", "Accept dangerous unit test"))
+if ($Force -or $PSCmdlet.ShouldContinue("Modify registry ownership and permissions", "Accept dangerous unit test"))
 {
-	Start-Test "Test-Function"
-	$Result = Test-Function @Logs
+	Start-Test "Add-PSContextMenu"
+	$Result = Add-PSContextMenu @Logs
 	$Result
 
-	Test-Output $Result -Command Test-Function @Logs
+	Test-Output $Result -Command Add-PSContextMenu @Logs
 }
 
 Update-Log

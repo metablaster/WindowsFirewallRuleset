@@ -60,12 +60,11 @@ If you would like to see fresh changes done since last release you can do so on 
 - Other
 
   - Calls to icacls, takeown and file system permission code replaced with call to Set-Permission
+  - Add `Scripts` folder to path for current session
 
 - In progress
 
   - Renamed modules to "Ruleset.<...><...>"
-  - Add scripts to script path for current session
-  - Script to add Windows PowerShell context menu for fast development environment setup
 
 ## v0.7.0 (current release)
 

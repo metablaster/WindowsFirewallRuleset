@@ -46,6 +46,12 @@ None. Remove-FirewallRules.ps1 does not generate any output
 None.
 #>
 
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
 # Initialization
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
@@ -65,21 +71,24 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 Enter-Test $ThisScript
 
-$Exports = "$ProjectRoot\Exports"
+if ($Force -or $PSCmdlet.ShouldContinue("Export firewall rules", "Accept slow and experimental unit test"))
+{
+	$Exports = "$ProjectRoot\Exports"
 
-# TODO: need to test failure cases, see also module todo's for more info
+	# TODO: need to test failure cases, see also module todo's for more info
 
-Start-Test "Remove-FirewallRules"
-$Result = Remove-FirewallRules -Folder $Exports -FileName "GroupExport" @Logs
-$Result
+	Start-Test "Remove-FirewallRules"
+	$Result = Remove-FirewallRules -Folder $Exports -FileName "GroupExport" @Logs
+	$Result
 
-# Start-Test "Remove-FirewallRules"
-# Remove-FirewallRules -Folder $Exports -FileName "$Exports\NamedExport1.csv" @Logs
+	Start-Test "Remove-FirewallRules"
+	Remove-FirewallRules -Folder $Exports -FileName "$Exports\NamedExport1.csv" @Logs
 
-# Start-Test "Remove-FirewallRules -JSON"
-# Remove-FirewallRules -JSON -Folder $Exports -FileName "$Exports\NamedExport2.json" @Logs
+	Start-Test "Remove-FirewallRules -JSON"
+	Remove-FirewallRules -JSON -Folder $Exports -FileName "$Exports\NamedExport2.json" @Logs
 
-Test-Output $Result -Command Remove-FirewallRules @Logs
+	Test-Output $Result -Command Remove-FirewallRules @Logs
+}
 
 Update-Log
 Exit-Test

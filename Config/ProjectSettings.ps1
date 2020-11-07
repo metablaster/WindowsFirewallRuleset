@@ -222,7 +222,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	New-Variable -Name RequirePlatyPSVersion -Scope Global -Option Constant -Value ([version]::new(0, 14, 0))
 
 	# Recommended minimum VSCode version, do not decrement!
-	New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 50, 1))
+	New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 51, 0))
 
 	# Recommended minimum PSReadline version for command line editing experience of PowerShell
 	# Needs the 1.6.0 or a higher version of PowerShellGet to install the latest prerelease version of PSReadLine
@@ -267,6 +267,11 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	$ModulePath = [System.Environment]::GetEnvironmentVariable("PSModulePath")
 	$ModulePath += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Modules"
 	[System.Environment]::SetEnvironmentVariable("PSModulePath", $ModulePath)
+
+	# Add project script directory to session path
+	$SessionPath = [System.Environment]::GetEnvironmentVariable("Path")
+	$SessionPath += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Scripts"
+	[System.Environment]::SetEnvironmentVariable("Path", $SessionPath)
 
 	# Windows 10, Windows Server 2019 and above
 	New-Variable -Name Platform -Scope Global -Option Constant -Value "10.0+"

@@ -46,6 +46,12 @@ None. Initialize-Provider.ps1 does not generate any output
 None.
 #>
 
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
 # Initialization
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
@@ -63,12 +69,15 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 Enter-Test $ThisScript
 [string] $Name = "nuget.org"
 
-Start-Test "Initialize-ProviderNuGet"
-$Result = Initialize-Provider @{ ModuleName = "NuGet"; ModuleVersion = $RequireNuGetVersion } -Name $Name `
-	-InfoMessage "Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider" @Logs
+if ($Force -or $PSCmdlet.ShouldContinue("Possible modify PackageManagement", "Accept dangerous unit test"))
+{
+	Start-Test "Initialize-ProviderNuGet"
+	$Result = Initialize-Provider @{ ModuleName = "NuGet"; ModuleVersion = $RequireNuGetVersion } -Name $Name `
+		-InfoMessage "Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider" @Logs
 
-$Result
-Test-Output $Result -Command Initialize-Provider @Logs
+	$Result
+	Test-Output $Result -Command Initialize-Provider @Logs
+}
 
 Update-Log
 Exit-Test

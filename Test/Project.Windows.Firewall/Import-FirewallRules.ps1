@@ -46,6 +46,12 @@ None. Import-FirewallRules.ps1 does not generate any output
 None.
 #>
 
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
 # Initialization
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
@@ -65,25 +71,28 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 Enter-Test $ThisScript
 
-$Exports = "$ProjectRoot\Exports"
+if ($Force -or $PSCmdlet.ShouldContinue("Export firewall rules", "Accept slow unit test"))
+{
+	$Exports = "$ProjectRoot\Exports"
 
-# TODO: need to test failure cases, see also module todo's for more info
-# TODO: need to test store apps import for "Any" and "*" owner/package
+	# TODO: need to test failure cases, see also module todo's for more info
+	# TODO: need to test store apps import for "Any" and "*" owner/package
 
-# Start-Test "Import-FirewallRules -FileName GroupExport.csv"
-# Import-FirewallRules -Folder $Exports -FileName "GroupExport.csv" @Logs
+	Start-Test "Import-FirewallRules -FileName GroupExport.csv"
+	Import-FirewallRules -Folder $Exports -FileName "GroupExport.csv" @Logs
 
-# Start-Test "Import-FirewallRules -FileName NamedExport1.csv"
-# Import-FirewallRules -Folder $Exports -FileName "$Exports\NamedExport1.csv" @Logs
+	Start-Test "Import-FirewallRules -FileName NamedExport1.csv"
+	Import-FirewallRules -Folder $Exports -FileName "$Exports\NamedExport1.csv" @Logs
 
-# Start-Test "Import-FirewallRules -JSON -FileName NamedExport2.json"
-# Import-FirewallRules -JSON -Folder $Exports -FileName "$Exports\NamedExport2.json" @Logs
+	Start-Test "Import-FirewallRules -JSON -FileName NamedExport2.json"
+	Import-FirewallRules -JSON -Folder $Exports -FileName "$Exports\NamedExport2.json" @Logs
 
-Start-Test "Import-FirewallRules -FileName StoreAppExport.csv"
-$Result = Import-FirewallRules -Folder $Exports -FileName "StoreAppExport.csv" @Logs
-$Result
+	Start-Test "Import-FirewallRules -FileName StoreAppExport.csv"
+	$Result = Import-FirewallRules -Folder $Exports -FileName "StoreAppExport.csv" @Logs
+	$Result
 
-Test-Output $Result -Command Import-FirewallRules @Logs
+	Test-Output $Result -Command Import-FirewallRules @Logs
+}
 
 Update-Log
 Exit-Test

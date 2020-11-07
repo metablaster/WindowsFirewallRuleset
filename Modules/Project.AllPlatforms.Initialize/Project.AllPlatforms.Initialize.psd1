@@ -76,7 +76,6 @@
 	# Functions to export from this module, for best performance, do not use wildcards and do not
 	# delete the entry, use an empty array if there are no functions to export.
 	FunctionsToExport = @(
-		"Add-PSContextMenu"
 		"Initialize-Project"
 		"Initialize-Service"
 		"Initialize-Module"
@@ -106,15 +105,14 @@
 		"Project.AllPlatforms.Initialize.psm1"
 		"Project.AllPlatforms.Initialize_41585bd3-3f4d-4669-9919-2d19c0451b73_HelpInfo.xml"
 		"en-US\about_Project.AllPlatforms.Initialize.help.txt"
-		"Help\en-US\Add-PSContextMenu.md"
 		"Help\en-US\Initialize-Module.md"
 		"Help\en-US\Initialize-Project.md"
 		"Help\en-US\Initialize-Provider.md"
 		"Help\en-US\Initialize-Service.md"
 		"Help\README.md"
+		"Private\Add-PSContextMenu.ps1"
 		"Private\Find-UpdatableModule.ps1"
 		"Private\Uninstall-DuplicateModule.ps1"
-		"Public\Add-PSContextMenu.ps1"
 		"Public\Initialize-Module.ps1"
 		"Public\Initialize-Project.ps1"
 		"Public\Initialize-Provider.ps1"

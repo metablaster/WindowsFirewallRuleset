@@ -60,7 +60,7 @@ None. You cannot pipe objects to Add-PSContextMenu
 None. Add-PSContextMenu does not generate any output
 
 .NOTES
-TODO: Add-PSContextMenu is under construction
+HACK: Add-PSContextMenu is under construction and will likely never work
 
 .LINK
 https://www.tenforums.com/tutorials/60175-open-powershell-window-here-context-menu-add-windows-10-a.html
@@ -98,35 +98,78 @@ function Add-PSContextMenu
 			)
 
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening registry hive"
-			$RegistryHive = [Microsoft.Win32.RegistryHive]::ClassesRoot
-			$RootKey = [Microsoft.Win32.RegistryKey]::OpenBaseKey($RegistryHive)
 
-			if (!$RootKey)
+			# Option 1
+			$RegistryHive = [Microsoft.Win32.RegistryHive]::ClassesRoot
+			$RegistryView = [Microsoft.Win32.RegistryView]::Registry64
+
+			try
+			{
+				$RootKey = [Microsoft.Win32.RegistryKey]::OpenBaseKey($RegistryHive, $RegistryView)
+			}
+			catch
 			{
 				Write-Warning -Message "Failed to open registry root key: $RegistryHive"
 				return
 			}
 
+			# Option 2
+			$ClassesRoot = [Microsoft.Win32.Registry]::ClassesRoot
+			$Check = [Microsoft.Win32.RegistryKeyPermissionCheck]::ReadWriteSubTree
+			$Grant = [System.Security.AccessControl.RegistryRights]::TakeOwnership
+
+
 			foreach ($Key in $TargetKeys)
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $Key"
-				$SubKey = $RootKey.OpenSubkey($Key)
 
-				if ($SubKey)
+				try
 				{
-					# Take ownership and set full control
-					Set-Permission -Owner "Administrators" -Path $SubKey.Name
-					Set-Permission -Principal "Administrators" -Path $SubKey.Name -RegGrant "FullControl"
+					# Option 1
+					Write-Information -Tags "Test" -MessageData "INFO: Option 1"
+					$SubKey = $RootKey.OpenSubkey($Key)
 				}
-				else
+				catch
 				{
-					Write-Warning -Message "Failed to open registry sub key: $HKLMSubKey"
-					continue
+					Write-Warning -Message "Option 1, failed to open registry root key: $Key"
+				}
+
+				try
+				{
+					# Option 2
+					Write-Information -Tags "Test" -MessageData "INFO: Option 2"
+					$SubKey2 = $ClassesRoot.OpenSubKey($Key, $Check, $Grant)
+				}
+				catch
+				{
+					Write-Warning -Message "Option 2, failed to open registry root key: $Key"
+				}
+
+				if ($SubKey -or $SubKey2)
+				{
+					if (!(Get-PSDrive -Name HKCR))
+					{
+						New-PSDrive -Name HKCR -Scope Global -PSProvider Registry -ErrorAction Stop `
+							-Root Microsoft.PowerShell.Core\Registry::HKEY_CLASSES_ROOT
+					}
+
+					# HACK: Exception calling "SetAccessControl" with "1" argument(s): "Cannot write to the registry key."
+					$NTAccount = New-Object -TypeName System.Security.Principal.NTAccount("Administrators")
+					$Permission = New-Object System.Security.AccessControl.RegistryAccessRule($NTAccount, $Grant, "Allow")
+					$Acl = $SubKey.GetAccessControl()
+					$Acl.SetOwner($NTAccount)
+					$Acl.SetAccessRule($Permission)
+					$SubKey.SetAccessControl($Acl)
+
+					# Take ownership and set full control
+					# HACK: Requested registry access is not allowed.
+					Set-Permission -Owner "Administrators" -Path "HKCR:\$Key" # $SubKey.Name
+					Set-Permission -Principal "Administrators" -Path "HKCR:\$Key" -RegGrant "FullControl" # $SubKey.Name
 				}
 
 				# Restore defaults
-				Set-Permission -Path $SubKey.Name -Reset
-				Set-Permission -Owner "TrustedInstaller" -Domain "NT SERVICE" -Path $SubKey.Name
+				# Set-Permission -Path $SubKey.Name -Reset
+				# Set-Permission -Owner "TrustedInstaller" -Domain "NT SERVICE" -Path $SubKey.Name
 			}
 		}
 	}
