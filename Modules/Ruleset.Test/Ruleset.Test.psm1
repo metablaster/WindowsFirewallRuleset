@@ -51,6 +51,6 @@ $PublicScripts = @(
 
 foreach ($Script in $PublicScripts)
 {
-	Write-Debug -Message "[$ThisModule] Importing script: $Script.ps1"
+	Write-Debug -Message "[$ThisModule] Importing script: Public\$Script.ps1"
 	. ("{0}\Public\{1}.ps1" -f $PSScriptRoot, $Script)
 }

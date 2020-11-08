@@ -93,7 +93,6 @@ if ($global:InstallTable.Rows.Count -ne 0)
 }
 
 Test-Output $Result -Command Initialize-Table @Logs
-Test-Output $global:InstallTable -Command Initialize-Table @Logs
 
 Update-Log
 Exit-Test

@@ -48,7 +48,7 @@ $PrivateScripts = @(
 
 foreach ($Script in $PrivateScripts)
 {
-	Write-Debug -Message "[$ThisModule] Importing private script: $Script.ps1"
+	Write-Debug -Message "[$ThisModule] Importing private script: Private\$Script.ps1"
 	. ("{0}\Private\{1}.ps1" -f $PSScriptRoot, $Script)
 }
 
@@ -56,12 +56,12 @@ $PublicScripts = @(
 	"External\Export-FirewallRules"
 	"External\Import-FirewallRules"
 	"External\Remove-FirewallRules"
-	"Format-Output"
 	"Find-RulePrincipal"
+	"Format-Output"
 )
 
 foreach ($Script in $PublicScripts)
 {
-	Write-Debug -Message "[$ThisModule] Importing public script: $Script.ps1"
+	Write-Debug -Message "[$ThisModule] Importing public script: Public\$Script.ps1"
 	. ("{0}\Public\{1}.ps1" -f $PSScriptRoot, $Script)
 }

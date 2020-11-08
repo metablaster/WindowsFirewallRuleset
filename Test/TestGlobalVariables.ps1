@@ -63,7 +63,7 @@ Import-Module -Name Ruleset.UserInfo
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
-Enter-Test $ThisScript
+Enter-Test $ThisScript -Private
 
 Start-Test "Ruleset.Logs - Logs:"
 $Logs
@@ -73,6 +73,7 @@ $ServiceHost
 
 if ($Develop)
 {
+	Import-Module -Name Ruleset.ProgramInfo
 	Start-Test "Ruleset.ProgramInfo - InstallTable:"
 	$InstallTable
 }

@@ -63,14 +63,13 @@ Initialize-Project -Abort
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
-. $ProjectRoot\Modules\Ruleset.InitializeteModule.ps1
 Import-Module -Name Ruleset.Logging
 
 # User prompt
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
-Enter-Test $ThisScript
+Enter-Test $ThisScript -Private
 
 if ($Force -or $PSCmdlet.ShouldContinue("Uninstall specified modules for testing", "Accept dangerous unit test"))
 {
@@ -92,6 +91,8 @@ if ($Force -or $PSCmdlet.ShouldContinue("Uninstall specified modules for testing
 	$Result
 
 	Test-Output $Result -Command Uninstall-DuplicateModule @Logs
+
+	Remove-Module -Name Ruleset.UnitTest
 }
 
 Update-Log

@@ -99,10 +99,10 @@
 		"Test-Installation"
 		"Test-Service"
 		# Following exports only for unit testing
-		"Edit-Table"
-		"Initialize-Table"
-		"Show-Table"
-		"Update-Table"
+		# "Edit-Table"
+		# "Initialize-Table"
+		# "Show-Table"
+		# "Update-Table"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not
@@ -127,11 +127,9 @@
 
 	# List of all files packaged with this module
 	FileList = @(
-		"Ruleset.ProgramInfo.psd1"
-		"Ruleset.ProgramInfo.psm1"
-		"Ruleset.ProgramInfo_49f11777-b8b6-4fed-bd82-32c8f48db81e_HelpInfo.xml"
 		"en-US\about_Ruleset.ProgramInfo.help.txt"
-		"Help\en-US\Get-SQLInstance.md"
+		"en-US\Ruleset.ProgramInfo-help.xml"
+		"Help\en-US\about_Ruleset.ProgramInfo.md"
 		"Help\en-US\Find-Installation.md"
 		"Help\en-US\Format-Path.md"
 		"Help\en-US\Get-AllUserSoftware.md"
@@ -140,6 +138,7 @@
 		"Help\en-US\Get-ExecutablePath.md"
 		"Help\en-US\Get-NetFramework.md"
 		"Help\en-US\Get-OneDrive.md"
+		"Help\en-US\Get-SQLInstance.md"
 		"Help\en-US\Get-SQLManagementStudio.md"
 		"Help\en-US\Get-SystemApps.md"
 		"Help\en-US\Get-SystemSoftware.md"
@@ -148,6 +147,7 @@
 		"Help\en-US\Get-WindowsDefender.md"
 		"Help\en-US\Get-WindowsKit.md"
 		"Help\en-US\Get-WindowsSDK.md"
+		"Help\en-US\Ruleset.ProgramInfo.md"
 		"Help\en-US\Test-Environment.md"
 		"Help\en-US\Test-File.md"
 		"Help\en-US\Test-Installation.md"
@@ -179,6 +179,9 @@
 		"Public\Test-File.ps1"
 		"Public\Test-Installation.ps1"
 		"Public\Test-Service.ps1"
+		"Ruleset.ProgramInfo_49f11777-b8b6-4fed-bd82-32c8f48db81e_HelpInfo.xml"
+		"Ruleset.ProgramInfo.psd1"
+		"Ruleset.ProgramInfo.psm1"
 	)
 
 	# Private data to pass to the module specified in RootModule/ModuleToProcess.

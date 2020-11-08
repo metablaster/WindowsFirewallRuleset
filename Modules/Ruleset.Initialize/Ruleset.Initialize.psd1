@@ -81,9 +81,9 @@
 		"Initialize-Module"
 		"Initialize-Provider"
 		# Following exports only for unit testing
-		"Add-PSContextMenu"
-		"Find-UpdatableModule"
-		"Uninstall-DuplicateModule"
+		# "Add-PSContextMenu"
+		# "Find-UpdatableModule"
+		# "Uninstall-DuplicateModule"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not
@@ -105,14 +105,14 @@
 
 	# List of all files packaged with this module
 	FileList = @(
-		"Ruleset.Initialize.psd1"
-		"Ruleset.Initialize.psm1"
-		"Ruleset.Initialize_41585bd3-3f4d-4669-9919-2d19c0451b73_HelpInfo.xml"
 		"en-US\about_Ruleset.Initialize.help.txt"
+		"en-US\Ruleset.Initialize-help.xml"
+		"Help\en-US\about_Ruleset.Initialize.md"
 		"Help\en-US\Initialize-Module.md"
 		"Help\en-US\Initialize-Project.md"
 		"Help\en-US\Initialize-Provider.md"
 		"Help\en-US\Initialize-Service.md"
+		"Help\en-US\Ruleset.Initialize.md"
 		"Help\README.md"
 		"Private\Add-PSContextMenu.ps1"
 		"Private\Find-UpdatableModule.ps1"
@@ -121,6 +121,9 @@
 		"Public\Initialize-Project.ps1"
 		"Public\Initialize-Provider.ps1"
 		"Public\Initialize-Service.ps1"
+		"Ruleset.Initialize_41585bd3-3f4d-4669-9919-2d19c0451b73_HelpInfo.xml"
+		"Ruleset.Initialize.psd1"
+		"Ruleset.Initialize.psm1"
 	)
 
 	# Private data to pass to the module specified in RootModule/ModuleToProcess.

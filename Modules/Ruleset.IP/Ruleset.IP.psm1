@@ -61,36 +61,36 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 #
 
 $PrivateScripts = @(
-	'ConvertTo-Network'
-	'Get-Permutation'
+	"ConvertTo-Network"
+	"Get-Permutation"
 )
 
 foreach ($Script in $PrivateScripts)
 {
-	Write-Debug -Message "[$ThisModule] Importing script: 'Private\$Script.ps1'"
+	Write-Debug -Message "[$ThisModule] Importing script: Private\$Script.ps1"
 	. ("{0}\Private\{1}.ps1" -f $PSScriptRoot, $Script)
 }
 
 $PublicScripts = @(
-	'ConvertFrom-HexIP'
-	'ConvertTo-BinaryIP'
-	'ConvertTo-DecimalIP'
-	'ConvertTo-DottedDecimalIP'
-	'ConvertTo-HexIP'
-	'ConvertTo-Mask'
-	'ConvertTo-MaskLength'
-	'ConvertTo-Subnet'
-	'Get-BroadcastAddress'
-	'Get-NetworkAddress'
-	'Get-NetworkRange'
-	'Get-NetworkSummary'
-	'Get-Subnet'
-	'Resolve-IPAddress'
-	'Test-SubnetMember'
+	"ConvertFrom-HexIP"
+	"ConvertTo-BinaryIP"
+	"ConvertTo-DecimalIP"
+	"ConvertTo-DottedDecimalIP"
+	"ConvertTo-HexIP"
+	"ConvertTo-Mask"
+	"ConvertTo-MaskLength"
+	"ConvertTo-Subnet"
+	"Get-BroadcastAddress"
+	"Get-NetworkAddress"
+	"Get-NetworkRange"
+	"Get-NetworkSummary"
+	"Get-Subnet"
+	"Resolve-IPAddress"
+	"Test-SubnetMember"
 )
 
 foreach ($Script in $PublicScripts)
 {
-	Write-Debug -Message "[$ThisModule] Importing script: 'Public\$Script.ps1'"
+	Write-Debug -Message "[$ThisModule] Importing script: Public\$Script.ps1"
 	. ("{0}\Public\{1}.ps1" -f $PSScriptRoot, $Script)
 }

@@ -101,14 +101,17 @@
 
 	# List of all files packaged with this module
 	FileList = @(
-		"Ruleset.Logging.psd1"
-		"Ruleset.Logging.psm1"
-		"Ruleset.Logging_9be5568a-a48e-4e96-a6df-90f699cf1c8a_HelpInfo.xml"
 		"en-US\about_Ruleset.Logging.help.txt"
+		"en-US\Ruleset.Logging-help.xml"
+		"Help\en-US\about_Ruleset.Logging.md"
+		"Help\en-US\Ruleset.Logging.md"
 		"Help\en-US\Update-Log.md"
 		"Help\README.md"
 		"Private\Get-LogFile.ps1"
 		"Public\Update-Log.ps1"
+		"Ruleset.Logging_9be5568a-a48e-4e96-a6df-90f699cf1c8a_HelpInfo.xml"
+		"Ruleset.Logging.psd1"
+		"Ruleset.Logging.psm1"
 	)
 
 	# Private data to pass to the module specified in RootModule/ModuleToProcess.

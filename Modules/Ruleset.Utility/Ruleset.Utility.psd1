@@ -79,17 +79,17 @@
 		"Approve-Execute"
 		"Compare-Path"
 		"Confirm-FileEncoding"
-		"Update-Context"
 		"Convert-SDDLToACL"
 		"Get-EnvironmentVariable"
-		"Show-SDDL"
+		"Get-FileEncoding"
 		"Get-NetworkService"
 		"Get-ProcessOutput"
 		"Get-TypeName"
 		"Set-NetworkProfile"
 		"Set-Permission"
 		"Set-ScreenBuffer"
-		"Get-FileEncoding"
+		"Show-SDDL"
+		"Update-Context"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not
@@ -114,19 +114,19 @@
 
 	# List of all files packaged with this module
 	FileList = @(
-		"Ruleset.Utility.psd1"
-		"Ruleset.Utility.psm1"
-		"Ruleset.Utility_5f38e46f-1bc4-489d-90df-72755129cfdd_HelpInfo.xml"
 		"en-US\about_Ruleset.Utility.help.txt"
+		"en-US\Ruleset.Utility-help.xml"
+		"Help\en-US\about_Ruleset.Utility.md"
 		"Help\en-US\Approve-Execute.md"
 		"Help\en-US\Compare-Path.md"
 		"Help\en-US\Confirm-FileEncoding.md"
 		"Help\en-US\Convert-SDDLToACL.md"
-		"Help\en-US\Get-EnvironmentVariable.mc"
+		"Help\en-US\Get-EnvironmentVariable.md"
 		"Help\en-US\Get-FileEncoding.md"
 		"Help\en-US\Get-NetworkService.md"
 		"Help\en-US\Get-ProcessOutput.md"
 		"Help\en-US\Get-TypeName.md"
+		"Help\en-US\Ruleset.Utility.md"
 		"Help\en-US\Set-NetworkProfile.md"
 		"Help\en-US\Set-Permission.md"
 		"Help\en-US\Set-ScreenBuffer.md"
@@ -147,6 +147,9 @@
 		"Public\Set-ScreenBuffer.ps1"
 		"Public\Show-SDDL.ps1"
 		"Public\Update-Context.ps1"
+		"Ruleset.Utility_5f38e46f-1bc4-489d-90df-72755129cfdd_HelpInfo.xml"
+		"Ruleset.Utility.psd1"
+		"Ruleset.Utility.psm1"
 	)
 
 	# Private data to pass to the module specified in RootModule/ModuleToProcess.

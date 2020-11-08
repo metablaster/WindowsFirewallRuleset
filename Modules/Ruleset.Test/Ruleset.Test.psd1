@@ -103,13 +103,13 @@
 
 	# List of all files packaged with this module
 	FileList = @(
-		"Ruleset.Test.psd1"
-		"Ruleset.Test.psm1"
-		"Ruleset.Test_e40d3133-e3f2-47f3-9f81-572732cc7c91_HelpInfo.xml"
 		"en-US\about_Ruleset.Test.help.txt"
+		"en-US\Ruleset.Test-help.xml"
+		"Help\en-US\about_Ruleset.Test.md"
 		"Help\en-US\Enter-Test.md"
 		"Help\en-US\Exit-Test.md"
 		"Help\en-US\New-Section.md"
+		"Help\en-US\Ruleset.Test.md"
 		"Help\en-US\Start-Test.md"
 		"Help\en-US\Stop-Test.md"
 		"Help\en-US\Test-Output.md"
@@ -120,6 +120,9 @@
 		"Public\Start-Test.ps1"
 		"Public\Stop-Test.ps1"
 		"Public\Test-Output.ps1"
+		"Ruleset.Test_e40d3133-e3f2-47f3-9f81-572732cc7c91_HelpInfo.xml"
+		"Ruleset.Test.psd1"
+		"Ruleset.Test.psm1"
 	)
 
 	# Private data to pass to the module specified in RootModule/ModuleToProcess.

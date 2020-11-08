@@ -91,8 +91,8 @@
 		"Resolve-IPAddress"
 		"Test-SubnetMember"
 		# Following exports only for unit testing
-		"ConvertTo-Network"
-		"Get-Permutation"
+		# "ConvertTo-Network"
+		# "Get-Permutation"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not
@@ -114,13 +114,9 @@
 
 	# List of all files packaged with this module
 	FileList = @(
-		"Ruleset.IP.psd1"
-		"Ruleset.IP.psm1"
-		"Ruleset.IP_2f356d8c-aad0-462f-9cd7-fff31c7ab1d0_HelpInfo.xml"
 		"en-US\about_Ruleset.IP.help.txt"
-		"Ruleset.IP.Format.ps1xml"
-		"LICENSE"
-		"README.md"
+		"en-US\Ruleset.IP-help.xml"
+		"Help\en-US\about_Ruleset.IP.md"
 		"Help\en-US\ConvertFrom-HexIP.md"
 		"Help\en-US\ConvertTo-BinaryIP.md"
 		"Help\en-US\ConvertTo-DecimalIP.md"
@@ -135,6 +131,7 @@
 		"Help\en-US\Get-NetworkSummary.md"
 		"Help\en-US\Get-Subnet.md"
 		"Help\en-US\Resolve-IPAddress.md"
+		"Help\en-US\Ruleset.IP.md"
 		"Help\en-US\Test-SubnetMember.md"
 		"Help\README.md"
 		"Private\ConvertTo-Network.ps1"
@@ -170,6 +167,12 @@
 		"Test\Public\Get-Subnet.test.ps1"
 		"Test\Public\Resolve-IPAddress.test.ps1"
 		"Test\Public\Test-SubnetMember.test.ps1"
+		"LICENSE"
+		"README.md"
+		"Ruleset.IP_2f356d8c-aad0-462f-9cd7-fff31c7ab1d0_HelpInfo.xml"
+		"Ruleset.IP.Format.ps1xml"
+		"Ruleset.IP.psd1"
+		"Ruleset.IP.psm1"
 	)
 
 	# Private data to pass to the module specified in RootModule/ModuleToProcess.

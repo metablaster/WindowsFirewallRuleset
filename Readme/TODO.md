@@ -75,7 +75,8 @@ todo's in this file are categorized into following sections:
 1. Modules
 
     - Revisit code and make consistent PSCustomObject properties for all function outputs, consider
-    using formats for custom objects
+    using [formats](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_format.ps1xml?view=powershell-7)
+    for custom objects
     - Need to see which functions/commands may throw and setup try catch blocks
     - Revisit parameter validation for functions, specifically acceptance of NULL or empty
     - Registry drilling for some rules are complex and specific, such as for NVIDIA or OneDrive,

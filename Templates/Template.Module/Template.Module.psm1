@@ -47,7 +47,7 @@ $PrivateScripts = @(
 
 foreach ($Script in $PrivateScripts)
 {
-	Write-Debug -Message "[$ThisModule] Importing script: $Script.ps1"
+	Write-Debug -Message "[$ThisModule] Importing script: Private\$Script.ps1"
 	. ("{0}\Private\{1}.ps1" -f $PSScriptRoot, $Script)
 }
 
@@ -57,7 +57,7 @@ $PublicScripts = @(
 
 foreach ($Script in $PublicScripts)
 {
-	Write-Debug -Message "[$ThisModule] Importing script: $Script.ps1"
+	Write-Debug -Message "[$ThisModule] Importing script: Public\$Script.ps1"
 	. ("{0}\Public\{1}.ps1" -f $PSScriptRoot, $Script)
 }
 

@@ -53,14 +53,13 @@ New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
-. $ProjectRoot\Modules\Ruleset.Initializeule.ps1
 Import-Module -Name Ruleset.Logging
 
 # User prompt
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
-Enter-Test $ThisScript
+Enter-Test $ThisScript -Private
 
 Start-Test "Find-UpdatableModule"
 $Result = Find-UpdatableModule @Logs

@@ -61,14 +61,13 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
-. $ProjectRoot\Modules\Ruleset.Initialize.ps1
 Import-Module -Name Ruleset.Logging
 
 # User prompt
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
-Enter-Test $ThisScript
+Enter-Test $ThisScript -Private
 
 if ($Force -or $PSCmdlet.ShouldContinue("Modify registry ownership and permissions", "Accept dangerous unit test"))
 {

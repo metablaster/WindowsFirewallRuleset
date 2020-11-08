@@ -55,6 +55,15 @@ function Exit-Test
 
 	if ($PSCmdlet.ShouldProcess("Exit unit test", $script:UnitTest))
 	{
+		if (Get-Variable -Name DynamicModule -Scope Script -ErrorAction Ignore)
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing dynamic module '$script:DynamicModule'"
+
+			# Remove dynamic module previously imported by Enter-Test
+			Remove-Module -Name $script:DynamicModule
+			Remove-Variable -Name DynamicModule -Scope Script
+		}
+
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 		# restore logging errors

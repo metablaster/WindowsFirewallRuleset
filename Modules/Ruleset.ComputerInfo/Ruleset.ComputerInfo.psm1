@@ -39,18 +39,18 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 #
 
 $PublicScripts = @(
+	"ConvertFrom-OSBuild"
+	"Get-Broadcast"
 	"Get-ComputerName"
 	"Get-ConfiguredAdapter"
 	"Get-InterfaceAlias"
 	"Get-IPAddress"
-	"Get-Broadcast"
 	"Get-SystemSKU"
 	"Test-TargetComputer"
-	"ConvertFrom-OSBuild"
 )
 
 foreach ($Script in $PublicScripts)
 {
-	Write-Debug -Message "[$ThisModule] Importing script: $Script.ps1"
+	Write-Debug -Message "[$ThisModule] Importing script: Public\$Script.ps1"
 	. ("{0}\Public\{1}.ps1" -f $PSScriptRoot, $Script)
 }

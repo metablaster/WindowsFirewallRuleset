@@ -80,14 +80,14 @@
 		"Export-FirewallRules"
 		"Import-FirewallRules"
 		"Remove-FirewallRules"
-		"Format-Output"
 		"Find-RulePrincipal"
+		"Format-Output"
 		# Following exports only for unit testing
-		"Convert-ArrayToList"
-		"Convert-ListToArray"
-		"Convert-ValueToBoolean"
-		"Convert-ListToMultiLine"
-		"Convert-MultiLineToList"
+		# "Convert-ArrayToList"
+		# "Convert-ListToArray"
+		# "Convert-ValueToBoolean"
+		# "Convert-ListToMultiLine"
+		# "Convert-MultiLineToList"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not
@@ -109,15 +109,15 @@
 
 	# List of all files packaged with this module
 	FileList = @(
-		"Ruleset.Firewall.psd1"
-		"Ruleset.Firewall.psm1"
-		"Ruleset.Firewall_3ee23849-8adf-46ee-95f9-7a02417e1f4b_HelpInfo.xml"
 		"en-US\about_Ruleset.Firewall.help.txt"
+		"en-US\Ruleset.Firewall-help.xml"
+		"Help\en-US\about_Ruleset.Firewall.md"
 		"Help\en-US\Export-FirewallRules.md"
-		"Help\en-US\Import-FirewallRules.md"
-		"Help\en-US\Remove-FirewallRules.md"
 		"Help\en-US\Find-RulePrincipal.md"
 		"Help\en-US\Format-Output.md"
+		"Help\en-US\Import-FirewallRules.md"
+		"Help\en-US\Remove-FirewallRules.md"
+		"Help\en-US\Ruleset.Firewall.md"
 		"Help\README.md"
 		"Private\External\Convert-ArrayToList.ps1"
 		"Private\External\Convert-ListToArray.ps1"
@@ -127,10 +127,13 @@
 		"Private\Convert-MultiLineToList.ps1"
 		"Public\External\Export-FirewallRules.ps1"
 		"Public\External\Import-FirewallRules.ps1"
-		"Public\External\Remove-FirewallRules.ps1"
 		"Public\External\README.md"
+		"Public\External\Remove-FirewallRules.ps1"
 		"Public\Find-RulePrincipal.ps1"
 		"Public\Format-Output.ps1"
+		"Ruleset.Firewall_3ee23849-8adf-46ee-95f9-7a02417e1f4b_HelpInfo.xml"
+		"Ruleset.Firewall.psd1"
+		"Ruleset.Firewall.psm1"
 	)
 
 	# Private data to pass to the module specified in RootModule/ModuleToProcess.

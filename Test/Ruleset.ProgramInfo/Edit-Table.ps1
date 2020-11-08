@@ -74,7 +74,7 @@ Import-Module -Name Ruleset.Logging
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
-Enter-Test $ThisScript
+Enter-Test $ThisScript -Private
 
 Start-Test "Good system path"
 Initialize-Table @Logs

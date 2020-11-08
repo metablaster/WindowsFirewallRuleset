@@ -77,11 +77,11 @@
 	# delete the entry, use an empty array if there are no functions to export.
 	FunctionsToExport = @(
 		"ConvertFrom-OSBuild"
+		"Get-Broadcast"
 		"Get-ComputerName"
 		"Get-ConfiguredAdapter"
 		"Get-InterfaceAlias"
 		"Get-IPAddress"
-		"Get-Broadcast"
 		"Get-SystemSKU"
 		"Test-TargetComputer"
 	)
@@ -105,10 +105,9 @@
 
 	# List of all files packaged with this module
 	FileList = @(
-		"Ruleset.ComputerInfo.psd1"
-		"Ruleset.ComputerInfo.psm1"
-		"Ruleset.ComputerInfo_c68a812d-076d-47bd-a73d-8d4600bd3c51_HelpInfo.xml"
 		"en-US\about_Ruleset.ComputerInfo.help.txt"
+		"en-US\Ruleset.ComputerInfo-help.xml"
+		"Help\en-US\about_Ruleset.ComputerInfo.md"
 		"Help\en-US\ConvertFrom-OSBuild.md"
 		"Help\en-US\Get-Broadcast.md"
 		"Help\en-US\Get-ComputerName.md"
@@ -116,6 +115,7 @@
 		"Help\en-US\Get-InterfaceAlias.md"
 		"Help\en-US\Get-IPAddress.md"
 		"Help\en-US\Get-SystemSKU.md"
+		"Help\en-US\Ruleset.ComputerInfo.md"
 		"Help\en-US\Test-TargetComputer.md"
 		"Help\README.md"
 		"Public\ConvertFrom-OSBuild.ps1"
@@ -126,6 +126,9 @@
 		"Public\Get-IPAddress.ps1"
 		"Public\Get-SystemSKU.ps1"
 		"Public\Test-TargetComputer.ps1"
+		"Ruleset.ComputerInfo_c68a812d-076d-47bd-a73d-8d4600bd3c51_HelpInfo.xml"
+		"Ruleset.ComputerInfo.psd1"
+		"Ruleset.ComputerInfo.psm1"
 	)
 
 	# Private data to pass to the module specified in RootModule/ModuleToProcess.

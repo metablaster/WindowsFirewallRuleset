@@ -76,14 +76,14 @@
 	# Functions to export from this module, for best performance, do not use wildcards and do not
 	# delete the entry, use an empty array if there are no functions to export.
 	FunctionsToExport = @(
+		"ConvertFrom-SID"
 		"ConvertFrom-UserAccount"
 		"Get-AccountSID"
 		"Get-GroupPrincipal"
 		"Get-GroupSID"
 		"Get-SDDL"
-		"Merge-SDDL"
 		"Get-UserGroup"
-		"ConvertFrom-SID"
+		"Merge-SDDL"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not
@@ -113,10 +113,9 @@
 
 	# List of all files packaged with this module
 	FileList = @(
-		"Ruleset.UserInfo.psd1"
-		"Ruleset.UserInfo.psm1"
-		"Ruleset.UserInfo_136254f4-4730-4ed1-b9e9-1ccecfe09ee9_HelpInfo.xml"
 		"en-US\about_Ruleset.UserInfo.help.txt"
+		"en-US\Ruleset.UserInfo-help.xml"
+		"Help\en-US\about_Ruleset.UserInfo.md"
 		"Help\en-US\ConvertFrom-SID.md"
 		"Help\en-US\ConvertFrom-UserAccount.md"
 		"Help\en-US\Get-AccountSID.md"
@@ -125,6 +124,7 @@
 		"Help\en-US\Get-SDDL.md"
 		"Help\en-US\Get-UserGroup.md"
 		"Help\en-US\Merge-SDDL.md"
+		"Help\en-US\Ruleset.UserInfo.md"
 		"Help\README.md"
 		"Public\ConvertFrom-SID.ps1"
 		"Public\ConvertFrom-UserAccount.ps1"
@@ -134,6 +134,9 @@
 		"Public\Get-SDDL.ps1"
 		"Public\Get-UserGroup.ps1"
 		"Public\Merge-SDDL.ps1"
+		"Ruleset.UserInfo_136254f4-4730-4ed1-b9e9-1ccecfe09ee9_HelpInfo.xml"
+		"Ruleset.UserInfo.psd1"
+		"Ruleset.UserInfo.psm1"
 	)
 
 	# Private data to pass to the module specified in RootModule/ModuleToProcess.

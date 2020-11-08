@@ -100,8 +100,10 @@ function Get-OneDrive
 			if (Test-Path -Path $UserRegConfig)
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Loading offline hive for user '$UserName' to HKU:$TempKey"
+
 				# NOTE: Start-Process is needed to make the command finish it's job and print status
 				$Status = Get-ProcessOutput -NoNewWindow -FilePath reg.exe -ArgumentList "load HKU\$TempKey $UserRegConfig"
+
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] $Status"
 				$ReleaseHive = $true
 				$HKU = "$TempKey\Software\Microsoft\OneDrive"

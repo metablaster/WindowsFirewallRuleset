@@ -39,7 +39,6 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 #
 
 $PublicScripts = @(
-	"Get-TypeName"
 	"Approve-Execute"
 	"Compare-Path"
 	"Confirm-FileEncoding"
@@ -48,6 +47,7 @@ $PublicScripts = @(
 	"Get-FileEncoding"
 	"Get-NetworkService"
 	"Get-ProcessOutput"
+	"Get-TypeName"
 	"Set-NetworkProfile"
 	"Set-Permission"
 	"Set-ScreenBuffer"
@@ -57,7 +57,7 @@ $PublicScripts = @(
 
 foreach ($Script in $PublicScripts)
 {
-	Write-Debug -Message "[$ThisModule] Importing script: $Script.ps1"
+	Write-Debug -Message "[$ThisModule] Importing script: Public\$Script.ps1"
 	. ("{0}\Public\{1}.ps1" -f $PSScriptRoot, $Script)
 }
 

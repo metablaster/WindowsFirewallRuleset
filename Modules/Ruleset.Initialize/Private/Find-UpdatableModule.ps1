@@ -101,7 +101,7 @@ TODO: There can't be multiple inputs?
 function Find-UpdatableModule
 {
 	[CmdletBinding(DefaultParameterSetName = "Name")]
-	[OutputType([PSCustomObject])]
+	[OutputType([PSCustomObject], [void])]
 	param(
 		[Parameter(ValueFromPipeline = $true, ParameterSetName = "Name", Position = 0)]
 		[string[]] $Module = $null,

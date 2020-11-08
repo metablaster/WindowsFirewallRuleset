@@ -92,13 +92,7 @@ Sends typename for each input object down the pipeline
 .NOTES
 TODO: There may be multiple accelerators for same type, for example:
 Get-TypeName -Name [System.Management.Automation.PSObject] -Accelerator
-
-TODO: Use following code to detect .NET type:
-[System.AppDomain]::CurrentDomain.GetAssemblies() | ForEach-Object {
-	$_.GetTypes() | Where-Object {
-		$_.Name -like "TYPENAME_HERE"
-	}
-}
+TODO: Will not work to detect .NET types for formatted or custom data, see Get-FormatData
 #>
 function Get-TypeName
 {
@@ -119,6 +113,34 @@ function Get-TypeName
 		[switch] $Accelerator
 	)
 
+	begin
+	{
+		[scriptblock] $CheckType = {
+			param (
+				[Parameter()]
+				[System.Object] $Type
+			)
+
+			if ($Type -as [type])
+			{
+				return $true
+			}
+
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching assemblies for type: $($Type.ToString())"
+
+			# TODO: There is no need to run this every time, make static variable.
+			[System.AppDomain]::CurrentDomain.GetAssemblies() | ForEach-Object {
+				$Types = $_.GetTypes()
+				if ($Types -and ($Types.Name -like "*$Type*"))
+				{
+					return $true
+				}
+			}
+
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Searching assemblies for .NET type failed"
+			return $false
+		}
+	}
 	process
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -133,7 +155,7 @@ function Get-TypeName
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processed input object: $TypeName"
 
-				if ($TypeName -as [type])
+				if (& $CheckType $TypeName)
 				{
 					Write-Debug -Message "[$($MyInvocation.InvocationName)] Input object '$TypeName' is .NET type"
 				}
@@ -171,7 +193,7 @@ function Get-TypeName
 					# Exclude non .NET types from OutputType
 					foreach ($Type in $CommandOutputs)
 					{
-						if ($Type -as [type])
+						if (& $CheckType $Type)
 						{
 							$TypeName += $Type
 							Write-Debug -Message "[$($MyInvocation.InvocationName)] The command '$Command' produces '$Type' which is .NET type"
@@ -212,7 +234,7 @@ function Get-TypeName
 			$TypeName = $Name.Trim("[", "]")
 
 			# if Name is not '[]'
-			if (![string]::IsNullOrEmpty($TypeName) -and ($TypeName -as [type]))
+			if (![string]::IsNullOrEmpty($TypeName) -and (& $CheckType $TypeName))
 			{
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Typename '$TypeName' is .NET type"
 			}
@@ -238,6 +260,17 @@ function Get-TypeName
 			# ([type] $TypeName).Assembly.GetType($TypeName).Name.ToLower()
 			$KeyValue = [PSCustomObject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::get.GetEnumerator() |
 			Select-Object Key, Value
+
+			# TODO: Find duplicates and report issue
+			# $RefObject = $KeyValue | Select-Object -ExpandProperty Value -Unique
+			# $DiffObject = $KeyValue | Select-Object -ExpandProperty Value
+			# $Comparison = Compare-Object -ReferenceObject $RefObject -DifferenceObject $DiffObject
+			# $Duplicates = $Comparison | Select-Object -ExpandProperty InputObject
+
+			# if (($Duplicates.FullName -like $TypeName) -or ($Duplicates.Name -like $TypeName))
+			# {
+			# 	Write-Warning -Message "Duplicate typenames exist"
+			# }
 
 			$ShortName = $KeyValue | Select-Object -ExpandProperty Key
 			$FullName = ($KeyValue | Select-Object -ExpandProperty Value).FullName

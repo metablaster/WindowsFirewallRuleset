@@ -37,6 +37,9 @@ This function must be called before first test case in single unit test
 .PARAMETER File
 Specify name of of the unit test, ie. script file name
 
+.PARAMETER Private
+If specified temporarily exports private module functions into global scope
+
 .EXAMPLE
 PS> Enter-Test "Get-Something.ps1"
 
@@ -56,7 +59,10 @@ function Enter-Test
 	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true)]
-		[string] $File
+		[string] $File,
+
+		[Parameter()]
+		[switch] $Private
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -66,6 +72,21 @@ function Enter-Test
 
 	if ($PSCmdlet.ShouldProcess("Enter unit test", $script:UnitTest))
 	{
+		if ($Private)
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Importing dynamic module"
+
+			# Temporarily export private function to global scope
+			New-Module -Name Ruleset.UnitTest -ScriptBlock {
+				$PrivateData = Get-ChildItem -Path "$ProjectRoot\Modules" -Filter "Private" -Recurse -Depth 1 |
+				ForEach-Object { Get-ChildItem -Recurse -Filter *.ps1 $_ }
+				foreach ($File in $PrivateData.FullName) { . $File }
+			} | Import-Module -Scope Global
+
+			# Let Exit-Test know there is dynamic module to remove
+			Set-Variable -Name DynamicModule -Scope Script -Value Ruleset.UnitTest
+		}
+
 		Write-Output ""
 		Write-Information -Tags "Test" -MessageData "INFO: Entering unit test '$script:UnitTest'"
 

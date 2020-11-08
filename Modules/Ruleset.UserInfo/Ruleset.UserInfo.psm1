@@ -39,19 +39,19 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 #
 
 $PublicScripts = @(
+	"ConvertFrom-SID"
 	"ConvertFrom-UserAccount"
 	"Get-AccountSID"
 	"Get-GroupPrincipal"
 	"Get-GroupSID"
 	"Get-SDDL"
-	"Merge-SDDL"
 	"Get-UserGroup"
-	"ConvertFrom-SID"
+	"Merge-SDDL"
 )
 
 foreach ($Script in $PublicScripts)
 {
-	Write-Debug -Message "[$ThisModule] Importing script: $Script.ps1"
+	Write-Debug -Message "[$ThisModule] Importing script: Public\$Script.ps1"
 	. ("{0}\Public\{1}.ps1" -f $PSScriptRoot, $Script)
 }
 
