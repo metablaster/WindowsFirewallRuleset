@@ -90,8 +90,9 @@ Sends typename for each input object down the pipeline
 [string]
 
 .NOTES
-TODO: There may be multiple accelerators for same type, for example:
+There may be multiple accelerators for same type, for example:
 Get-TypeName -Name [System.Management.Automation.PSObject] -Accelerator
+It's possible to rework function to get the exact type if this is desired see being block
 TODO: Will not work to detect .NET types for formatted or custom data, see Get-FormatData
 #>
 function Get-TypeName
@@ -118,27 +119,40 @@ function Get-TypeName
 		[scriptblock] $CheckType = {
 			param (
 				[Parameter()]
-				[System.Object] $Type
+				[string] $TypeName
 			)
 
-			if ($Type -as [type])
+			# NOTE: The result for some types isn't the same here, ex:
+			# PSCustomObject -as Type is PSObject, while searching AppDomain it's PSCustomObject
+			$Result = $TypeName -as [type]
+			if (!$Result)
 			{
-				return $true
-			}
-
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching assemblies for type: $($Type.ToString())"
-
-			# TODO: There is no need to run this every time, make static variable.
-			[System.AppDomain]::CurrentDomain.GetAssemblies() | ForEach-Object {
-				$Types = $_.GetTypes()
-				if ($Types -and ($Types.Name -like "*$Type*"))
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching assemblies for type: $TypeName"
+				$Result = foreach ($Assembly in [System.AppDomain]::CurrentDomain.GetAssemblies())
 				{
-					return $true
+					$AssemblyTypes = $Assembly.GetTypes() | Where-Object {
+						($_.Name -eq $TypeName) -or
+						($_.FullName -eq $TypeName) -or
+						($_.FullName -like "*.$TypeName")
+					}
+
+					if ($AssemblyTypes)
+					{
+						$AssemblyTypes | ForEach-Object {
+							Write-Verbose -Message "[$($MyInvocation.InvocationName)] Found type $($_.FullName) in assembly: $($Assembly.Location)"
+							$_
+						} | Write-Output
+					}
+				}
+
+				if (!$Result)
+				{
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] Searching assemblies for .NET type failed"
+					return
 				}
 			}
 
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Searching assemblies for .NET type failed"
-			return $false
+			Write-Output -InputObject $Result
 		}
 	}
 	process
@@ -261,19 +275,14 @@ function Get-TypeName
 			$KeyValue = [PSCustomObject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::get.GetEnumerator() |
 			Select-Object Key, Value
 
-			# TODO: Find duplicates and report issue
-			# $RefObject = $KeyValue | Select-Object -ExpandProperty Value -Unique
-			# $DiffObject = $KeyValue | Select-Object -ExpandProperty Value
-			# $Comparison = Compare-Object -ReferenceObject $RefObject -DifferenceObject $DiffObject
-			# $Duplicates = $Comparison | Select-Object -ExpandProperty InputObject
-
-			# if (($Duplicates.FullName -like $TypeName) -or ($Duplicates.Name -like $TypeName))
-			# {
-			# 	Write-Warning -Message "Duplicate typenames exist"
-			# }
-
 			$ShortName = $KeyValue | Select-Object -ExpandProperty Key
 			$FullName = ($KeyValue | Select-Object -ExpandProperty Value).FullName
+
+			# NOTE: Find duplicates to report possible issues
+			$RefObject = $KeyValue | Select-Object -ExpandProperty Value -Unique
+			$DiffObject = $KeyValue | Select-Object -ExpandProperty Value
+			$Comparison = Compare-Object -ReferenceObject $RefObject -DifferenceObject $DiffObject
+			$Duplicates = ($Comparison | Select-Object -ExpandProperty InputObject).FullName
 
 			# -Name purpose is to convert in both cases
 			if (!$Accelerator -and $Name)
@@ -284,6 +293,11 @@ function Get-TypeName
 				if ($TargetValue = [array]::Find($ShortName, [System.Predicate[string]] { $TypeName -like $args[0] }))
 				{
 					$TypeName = $FullName[$([array]::IndexOf($ShortName, $TargetValue))]
+
+					if ($Duplicates -contains $TypeName)
+					{
+						Write-Warning -Message "Multiple accelerators exist for resulting type: $TypeName"
+					}
 				}
 				else
 				{
@@ -307,6 +321,11 @@ function Get-TypeName
 					if ($TargetValue = [array]::Find($FullName, [System.Predicate[string]] { $Type -like $args[0] }))
 					{
 						$TypeName += $ShortName[$([array]::IndexOf($FullName, $TargetValue))]
+
+						if ($Duplicates -contains $TargetValue)
+						{
+							Write-Warning -Message "Multiple accelerators exist for type: $TargetValue"
+						}
 					}
 					else
 					{
@@ -324,6 +343,11 @@ function Get-TypeName
 				if ($TargetValue = [array]::Find($FullName, [System.Predicate[string]] { $TypeName -like $args[0] }))
 				{
 					$TypeName = $ShortName[$([array]::IndexOf($FullName, $TargetValue))]
+
+					if ($Duplicates -contains $TargetValue)
+					{
+						Write-Warning -Message "Multiple accelerators exist for type: $TargetValue"
+					}
 				}
 				else
 				{
