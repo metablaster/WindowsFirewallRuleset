@@ -71,10 +71,12 @@ Test-Output $NETObject -Command Test-Path @Logs
 
 $TempError = $null
 
+# TODO: Unsure why error is shown from Get-TypeName if Ignore is specified
+# TODO: Ignore won't work with Windows PowerShell
 Start-Test "Test-Output FAIL"
 $ServiceController = Get-Service
-Test-Output $ServiceController -Command Get-Random #-ErrorAction SilentlyContinue -EV TempError
-# Write-Warning -Message "Error ignored: $TempError"
+Test-Output $ServiceController -Command Get-Random -ErrorAction SilentlyContinue -EV TempError
+Write-Warning -Message "Error ignored: $TempError"
 
 <#
 .DESCRIPTION

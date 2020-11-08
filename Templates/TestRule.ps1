@@ -47,6 +47,7 @@ None.
 TODO: Update Copyright and start writing test code
 #>
 
+#region Unit test header
 # Initialization
 #Requires -RunAsAdministrator
 # TODO: adjust path to project settings
@@ -73,6 +74,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 # Setup local variables
 $Group = "Test - Template rule"
 $FirewallProfile = "Any"
+#endregion
 
 Enter-Test $ThisScript
 

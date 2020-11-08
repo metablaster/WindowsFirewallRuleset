@@ -79,7 +79,7 @@ function Get-UserApps
 
 	if (Test-TargetComputer $ComputerName)
 	{
-		# TODO: show warning instead of error when fail (ex. in non elevated run check is Admin)
+		# TODO: show warning instead of error when failed (ex. in non elevated run check is Admin)
 		Get-AppxPackage -User $UserName -PackageTypeFilter Bundle
 	}
 }

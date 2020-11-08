@@ -58,7 +58,7 @@ function Get-OneDrive
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-OneDrive.md")]
-	[OutputType([PSCustomObject])]
+	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
 		[Alias("User")]
 		[Parameter(Mandatory = $true)]

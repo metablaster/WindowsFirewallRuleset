@@ -70,14 +70,15 @@ Get-SystemApps | Get-AppCapability -Networking
 Start-Test "Get-UserApps -User $TestUser | Get-AppCapability -Networking"
 Get-UserApps -User $TestUser | Get-AppCapability -User $TestUser -Networking
 
+# TODO: Once these specifics are implemented uncomment -EA SilentlyContinue
 Start-Test 'Get-AppxPackage -Name "*ZuneMusic*" | Get-AppCapability'
-Get-AppxPackage -Name "*ZuneMusic*" | Get-AppCapability -EA Ignore
+Get-AppxPackage -Name "*ZuneMusic*" | Get-AppCapability -EA SilentlyContinue
 
 Start-Test 'Get-AppCapability (Get-AppxPackage -Name "*ZuneMusic*") -Networking'
 Get-AppCapability (Get-AppxPackage -Name "*ZuneMusic*") -Networking
 
 Start-Test "Get-AppxPackage -Name '*ZuneMusic*' | Get-AppCapability -Authority"
-$Result = Get-AppCapability -InputObject (Get-AppxPackage -Name "*ZuneMusic*") -Authority -EA Ignore @Logs
+$Result = Get-AppCapability -InputObject (Get-AppxPackage -Name "*ZuneMusic*") -Authority -EA SilentlyContinue @Logs
 $Result
 
 Test-Output $Result -Command Get-AppCapability @Logs

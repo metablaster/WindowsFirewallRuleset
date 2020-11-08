@@ -47,6 +47,7 @@ None.
 TODO: Update Copyright and start writing test code
 #>
 
+#region Unit test header
 [CmdletBinding()]
 param (
 	# TODO: Remove if not needed or test safe
@@ -73,16 +74,9 @@ Import-Module -Name Ruleset.Logging
 # User prompt
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+#Endregion
 
 Enter-Test $ThisScript
-
-# TODO: Keep this for testing private functions
-if ((Get-Variable -Name Develop -Scope Global).Value -eq $false)
-{
-	Write-Error -Category NotEnabled -TargetObject "Variable 'Develop'" `
-		-Message "This unit test is enabled only when 'Develop' is set to $true"
-	return
-}
 
 # TODO: Keep this check if this test is:
 # 1. potentially dangerous

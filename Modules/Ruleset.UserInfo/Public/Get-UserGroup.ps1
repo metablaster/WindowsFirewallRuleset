@@ -59,7 +59,7 @@ function Get-UserGroup
 {
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-UserGroup.md")]
-	[OutputType([PSCustomObject])]
+	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter(Position = 0)]

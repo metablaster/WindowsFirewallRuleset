@@ -78,8 +78,7 @@ Start-Test '@($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-Sy
 @($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU @Logs -ErrorAction SilentlyContinue | Format-Table
 
 Start-Test '$Result = @($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU FAILURE TEST'
-$Result = @($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU @Logs -ErrorAction SilentlyContinue | Format-Table
-$Result
+@($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU @Logs -ErrorAction SilentlyContinue | Format-Table
 
 Start-Test 'Get-SystemSKU -ComputerName @($([System.Environment]::MachineName), "INVALID_COMPUTER") FAILURE TEST'
 Get-SystemSKU -ComputerName @($([System.Environment]::MachineName), "INVALID_COMPUTER") @Logs -ErrorAction SilentlyContinue | Format-Table

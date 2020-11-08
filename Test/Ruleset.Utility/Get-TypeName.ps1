@@ -174,10 +174,25 @@ Start-Test "Get-TypeName -> System.Diagnostics.Process"
 Write-Warning -Message "Test did not run to reduce output"
 # Get-Process | Get-TypeName @Logs -Verbose:$false -Debug:$false | Out-Null
 
+#
+# Other common issues
+#
 Start-Test "Get-TypeName -> null"
 Get-TypeName @Logs
 
-Test-Output $Result -Command Get-Process @Logs
+Start-Test "Get-TypeName False"
+$FalseType = $false
+$FalseType | Get-TypeName @Logs
+
+# TODO: These tests fail, Get-TypeName not implementing these
+# Start-Test "Get-TypeName Get-Service"
+# $ServiceController = Get-Service
+# Get-TypeName $ServiceController
+
+# Start-Test "Get-TypeName Get-Service"
+# Get-CimInstance -Class Win32_OperatingSystem | Get-TypeName
+
+Test-Output $Result -Command Get-TypeName @Logs
 
 Update-Log
 Exit-Test

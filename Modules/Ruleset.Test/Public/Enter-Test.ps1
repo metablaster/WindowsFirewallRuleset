@@ -79,8 +79,8 @@ function Enter-Test
 			# Temporarily export private function to global scope
 			New-Module -Name Ruleset.UnitTest -ScriptBlock {
 				$PrivateData = Get-ChildItem -Path "$ProjectRoot\Modules" -Filter "Private" -Recurse -Depth 1 |
-				ForEach-Object { Get-ChildItem -Recurse -Filter *.ps1 $_ }
-				foreach ($File in $PrivateData.FullName) { . $File }
+				ForEach-Object { Get-ChildItem -Path $_.FullName -Recurse -Filter *.ps1 }
+				foreach ($File in $PrivateData) { . $File.FullName }
 			} | Import-Module -Scope Global
 
 			# Let Exit-Test know there is dynamic module to remove

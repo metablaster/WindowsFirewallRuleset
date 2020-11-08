@@ -51,13 +51,6 @@ None.
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )
 
-if ((Get-Variable -Name Develop -Scope Global).Value -eq $false)
-{
-	Write-Error -Category NotEnabled -TargetObject "Variable 'Develop'" `
-		-Message "This unit test is enabled only when 'Develop' is set to $true"
-	return
-}
-
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Ruleset.Logging
@@ -78,12 +71,15 @@ Write-Information -Tags "Test" -MessageData "INFO: InformationPreference: $Infor
 Write-Information -Tags "Test" -MessageData "INFO: VerbosePreference: $VerbosePreference"
 Write-Information -Tags "Test" -MessageData "INFO: DebugPreference: $DebugPreference"
 
-Start-Test "Module level preferences"
-Write-Information -Tags "Test" -MessageData "INFO: ModuleErrorPreference: $ModuleErrorPreference"
-Write-Information -Tags "Test" -MessageData "INFO: ModuleWarningPreference: $ModuleWarningPreference"
-Write-Information -Tags "Test" -MessageData "INFO: ModuleInformationPreference: $ModuleInformationPreference"
-Write-Information -Tags "Test" -MessageData "INFO: ModuleVerbosePreference: $ModuleVerbosePreference"
-Write-Information -Tags "Test" -MessageData "INFO: ModuleDebugPreference: $ModuleDebugPreference"
+if ($Develop)
+{
+	Start-Test "Module level preferences"
+	Write-Information -Tags "Test" -MessageData "INFO: ModuleErrorPreference: $ModuleErrorPreference"
+	Write-Information -Tags "Test" -MessageData "INFO: ModuleWarningPreference: $ModuleWarningPreference"
+	Write-Information -Tags "Test" -MessageData "INFO: ModuleInformationPreference: $ModuleInformationPreference"
+	Write-Information -Tags "Test" -MessageData "INFO: ModuleVerbosePreference: $ModuleVerbosePreference"
+	Write-Information -Tags "Test" -MessageData "INFO: ModuleDebugPreference: $ModuleDebugPreference"
+}
 
 Start-Test "ProjectConstants"
 Write-Information -Tags "Test" -MessageData "INFO: PolicyStore: $PolicyStore"

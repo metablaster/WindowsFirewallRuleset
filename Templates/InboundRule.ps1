@@ -47,6 +47,7 @@ None.
 TODO: Update Copyright and start writing test code
 #>
 
+#region Ruleset header
 # Initialization
 #Requires -RunAsAdministrator
 # TODO: Adjust path to project settings
@@ -75,6 +76,7 @@ $Accept = "Template accept help message"
 $Deny = "Skip operation, template deny help message"
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+#endregion
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs

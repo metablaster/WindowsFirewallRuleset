@@ -45,6 +45,8 @@ None. RunAllTests.ps1 does not generate any output
 .NOTES
 TODO: This script might yield odd and unexpected results
 TODO: Output of some unit tests is either delayed or not displayed at all
+NOTE: Delay happens when mixing Write-Output with other streams (none waits)
+NOTE: This might get fixed with consistent outputs, formats and better pipelines
 TODO: Test should be run in order of module or function (or both) inter dependency
 TODO: We should handle to skip "dangerous" tests
 #>
@@ -61,14 +63,15 @@ Initialize-Project -Abort
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
 Import-Module -Name Ruleset.Logging
-$OldLocation = Get-Location
-Set-Location -Path test:
 
 # User prompt
 Set-Variable -Name Accept -Scope Local -Option ReadOnly -Force -Value "Run all unit tests one by one"
 Set-Variable -Name Deny -Scope Local -Option ReadOnly -Force -Value "Abort operation, no unit tests will run"
 Update-Context $TestContext $ThisScript
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+
+$OldLocation = Get-Location
+Set-Location -Path test:
 
 # Recursively get list of powershell scripts (unit tests)
 $UnitTests = Get-ChildItem -Path $ProjectRoot\Test -Recurse -Filter *.ps1 -Exclude "ContextSetup.ps1", "$ThisScript.ps1" @Logs
@@ -89,6 +92,7 @@ else
 Write-Information -Tags "Project" -MessageData "INFO: Starting pester tests"
 
 # Recursively get list of pester tests
+# TODO: Tests from Private folder excluded because out of date
 $PesterTests = Get-ChildItem -Path $ProjectRoot\Modules\Ruleset.IP\Test\Public -Recurse -Filter *.ps1 @Logs
 
 if ($PesterTests)

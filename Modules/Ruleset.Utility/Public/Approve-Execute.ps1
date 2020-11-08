@@ -38,10 +38,10 @@ Asking for approval helps to let run master script and only execute specific
 scripts, thus loading only needed rules.
 
 .PARAMETER Default
-Default prompt action, either 'YES' or 'NO'
+Default prompt action
 
 .PARAMETER Title
-Title of the prompt
+Prompt title
 
 .PARAMETER Question
 Prompt question
@@ -59,7 +59,7 @@ PS> Approve-Execute "No" "Sample title" "Sample question"
 None. You cannot pipe objects to Approve-Execute
 
 .OUTPUTS
-[bool] True if user wants to continue, false otherwise
+[bool] True if the user wants to continue, false otherwise
 
 .NOTES
 None.

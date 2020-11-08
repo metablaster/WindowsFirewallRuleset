@@ -58,6 +58,9 @@ Start-Test "Approve-Execute -Default No"
 $Result = Approve-Execute -Default "No" @Logs
 $Result
 
+Start-Test "Approve-Execute all positional"
+Approve-Execute "No" "Unable to locate 'SOME FOLDER'" "Do you want to try again?"
+
 Test-Output $Result -Command Approve-Execute @Logs
 
 Update-Log

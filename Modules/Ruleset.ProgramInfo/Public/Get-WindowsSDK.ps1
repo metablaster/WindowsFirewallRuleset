@@ -52,7 +52,7 @@ function Get-WindowsSDK
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-WindowsSDK.md")]
-	[OutputType([PSCustomObject])]
+	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]

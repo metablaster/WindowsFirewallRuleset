@@ -53,6 +53,7 @@ None.
 TODO: Update Copyright and start writing code
 #>
 
+#region Script header
 # TODO: Make Diagnostics attribute is formatted like this in all files
 # TODO: Remove or update parameter block
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
@@ -85,6 +86,7 @@ $Accept = "Template accept help message"
 $Deny = "Abort operation, template deny help message"
 Update-Context $ScriptContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+#endregion
 
 # Setup local variables
 # TODO: define or remove variables

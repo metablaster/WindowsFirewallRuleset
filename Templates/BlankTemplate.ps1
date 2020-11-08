@@ -96,6 +96,7 @@ the Functionality parameter of Get-Help.
 -Functionality parameter displays help for items with the specified functionality.
 #>
 
+#region Template header
 [CmdletBinding()]
 [OutputType([System.Void])]
 param ()
@@ -123,3 +124,4 @@ $Deny = "Skip operation, template deny help message"
 # TODO: Replace TemplateContext variable
 Update-Context $TemplateContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+#endregion

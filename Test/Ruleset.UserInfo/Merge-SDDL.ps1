@@ -69,18 +69,20 @@ Enter-Test $ThisScript
 [string] $Domain = [System.Environment]::MachineName
 [string[]] $Groups = @("Users", "Administrators")
 
-Start-Test "Merge-SDDL -User $Users -Group $Groups -Domain $Domain"
-$TestUsersSDDL = Merge-SDDL -User $Users -Group $Groups -Domain $Domain @Logs
+Start-Test "Get-SDDL -User $Users -Group $Groups -Domain $Domain"
+$TestUsersSDDL = Get-SDDL -User $Users -Group $Groups -Domain $Domain @Logs
 $TestUsersSDDL
 
-Start-Test "Merge-SDDL -Domain 'NT AUTHORITY' -User 'SYSTEM', 'USER MODE DRIVERS'"
-$NewSDDL = Merge-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "USER MODE DRIVERS" @Logs
+Start-Test "Get-SDDL -Domain 'NT AUTHORITY' -User 'SYSTEM', 'USER MODE DRIVERS'"
+$NewSDDL = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "USER MODE DRIVERS" @Logs
+$NewSDDL
 
 Start-Test "Merge-SDDL"
-Merge-SDDL ([ref] $TestUsersSDDL) $NewSDDL @Logs
+$Result = Merge-SDDL ([ref] $TestUsersSDDL) $NewSDDL @Logs
+$Result
 $TestUsersSDDL
 
-Test-Output $TestUsersSDDL -Command Merge-SDDL @Logs
+Test-Output $Result -Command Merge-SDDL @Logs
 
 Update-Log
 Exit-Test

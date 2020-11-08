@@ -43,7 +43,7 @@ None. You cannot pipe objects to Get-SQLInstance.ps1
 None. Get-SQLInstance.ps1 does not generate any output
 
 .NOTES
-None.
+TODO: Test not working in Windows PowerShell
 #>
 
 # Initialization

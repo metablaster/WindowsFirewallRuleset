@@ -69,7 +69,7 @@ APPLICATION PACKAGE AUTHORITY\Your home or work networks
 [string] Capability names or full reference names for capabilities of an app
 
 .NOTES
-None.
+TODO: According to unit test there are some capabilities not implemented here
 
 .LINK
 https://docs.microsoft.com/en-us/windows/uwp/packaging/app-capability-declarations
@@ -158,9 +158,9 @@ function Get-AppCapability
 
 				$Name = switch ($Capability)
 				{
-					"internetClient" { "Your Internet connection" }
-					"internetClientServer" { "Your Internet connection, including incoming connections from the Internet" }
-					"privateNetworkClientServer" { "Your home or work networks" }
+					"internetClient" { "Your Internet connection"; break }
+					"internetClientServer" { "Your Internet connection, including incoming connections from the Internet"; break }
+					"privateNetworkClientServer" { "Your home or work networks"; break }
 					default
 					{
 						if ($Networking)
@@ -170,16 +170,16 @@ function Get-AppCapability
 
 						switch ($Capability)
 						{
-							"picturesLibrary" { "Your pictures library" }
-							"videosLibrary" { "Your videos library" }
-							"musicLibrary" { "Your music library" }
-							"documentsLibrary" { "Your documents library" }
+							"picturesLibrary" { "Your pictures library"; break }
+							"videosLibrary" { "Your videos library"; break }
+							"musicLibrary" { "Your music library"; break }
+							"documentsLibrary" { "Your documents library"; break }
 							# TODO: there are multiple capabilities that could match this
 							# "" { "Your Windows credentials" }
-							"sharedUserCertificates" { "Software and hardware certificates or a smart card" }
-							"removableStorage" { "Removable storage" }
-							"appointments" { "Your Appointments" }
-							"contacts" { "Your Contacts" }
+							"sharedUserCertificates" { "Software and hardware certificates or a smart card"; break }
+							"removableStorage" { "Removable storage"; break }
+							"appointments" { "Your Appointments"; break }
+							"contacts" { "Your Contacts"; break }
 							default
 							{
 								Write-Error -Category NotImplemented -TargetObject $Capability `

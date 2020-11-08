@@ -38,6 +38,7 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 # Script imports
 # TODO: need test case function for failure tests
 # TODO: need test requirements function (ex. test user is OK, develop variable is set etc...)
+# TODO: Implement a set of Assert functions
 #
 
 $PublicScripts = @(

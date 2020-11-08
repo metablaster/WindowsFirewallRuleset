@@ -74,11 +74,11 @@ Start-Test "Get-GroupSID $SingleGroup"
 $GroupsTest = Get-GroupSID $SingleGroup @Logs
 $GroupsTest
 
+Test-Output $GroupsTest -Command Get-GroupSID @Logs
+
 Start-Test "Get-GroupSID 'Users' -CIM"
 $GroupsTest = Get-GroupSID $SingleGroup -CIM @Logs
 $GroupsTest
-
-Test-Output $GroupsTest -Command Get-GroupSID @Logs
 
 #
 # Test array of groups
@@ -90,11 +90,11 @@ Start-Test "Get-GroupSID $GroupArray"
 $GroupsTest = Get-GroupSID $GroupArray @Logs
 $GroupsTest
 
+Test-Output $GroupsTest -Command Get-GroupSID @Logs
+
 Start-Test "Get-GroupSID $GroupArray -CIM"
 $GroupsTest = Get-GroupSID $GroupArray -CIM @Logs
 $GroupsTest
-
-Test-Output $GroupsTest -Command Get-GroupSID @Logs
 
 #
 # Test pipeline

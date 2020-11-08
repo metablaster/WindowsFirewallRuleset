@@ -75,7 +75,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot) @Logs) -or $ForceLo
 
 	# Clicktorun.exe starts downloading the most recent version of itself.
 	# After finishing the download Clicktorun.exe starts THE DOWNLOADED Version which then downloads the new office version.
-	# For some odd fucking reason the downloaded clicktorun wants to communicate with ms servers directly completely ignoring the proxy.
+	# For some odd reason the downloaded clicktorun wants to communicate with ms servers directly completely ignoring the proxy.
 	# https://www.reddit.com/r/sysadmin/comments/7hync7/updating_office_2016_hb_click_to_run_through/
 	# TL;DR: netsh winhttp set proxy proxy-server="fubar" bypass-list="<local>"
 	$Program = "$OfficeShared\ClickToRun\OfficeClickToRun.exe"

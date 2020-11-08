@@ -52,12 +52,10 @@ param (
 	[bool] $UseExisting
 )
 
-if ((Get-Variable -Name Develop -Scope Global).Value -eq $false)
-{
-	Write-Error -Category NotEnabled -TargetObject "Variable 'Develop'" `
-		-Message "This unit test is enabled only when 'Develop' is set to $true"
-	return
-}
+# Initialization
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
+	$MyInvocation.MyCommand.Name -replace ".{4}$" )
+Enter-Test $ThisScript -Private
 
 if (-not $UseExisting)
 {
@@ -77,8 +75,8 @@ InModuleScope Ruleset.IP {
 	Describe 'ConvertTo-Network' {
 		BeforeAll {
 			[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-				"PSUseDeclaredVarsMoreThanAssignment", "", Justification = "FalsePositive")]
-			$maskTable = @(
+				"PSUseDeclaredVarsMoreThanAssignment", "", Justification = "Needs update")]
+			$MaskTable = @(
 				@{ MaskLength = 0; Mask = '0.0.0.0' }
 				@{ MaskLength = 1; Mask = '128.0.0.0' }
 				@{ MaskLength = 2; Mask = '192.0.0.0' }
@@ -157,7 +155,7 @@ InModuleScope Ruleset.IP {
 			$Network.MaskLength | Should -Be 32
 		}
 
-		It 'Converts CIDR formatted subnets from <MaskLength> to <Mask>' -TestCases $maskTable {
+		It 'Converts CIDR formatted subnets from <MaskLength> to <Mask>' -TestCases $MaskTable {
 			param (
 				$MaskLength,
 
@@ -178,7 +176,7 @@ InModuleScope Ruleset.IP {
 			$Network.SubnetMask | Should -Be $Mask
 		}
 
-		It 'Converts dotted-decimal formatted subnets from <Mask> to <MaskLength>' -TestCases $maskTable {
+		It 'Converts dotted-decimal formatted subnets from <Mask> to <MaskLength>' -TestCases $MaskTable {
 			param (
 				$MaskLength,
 
@@ -219,3 +217,5 @@ InModuleScope Ruleset.IP {
 		}
 	}
 }
+
+Exit-Test

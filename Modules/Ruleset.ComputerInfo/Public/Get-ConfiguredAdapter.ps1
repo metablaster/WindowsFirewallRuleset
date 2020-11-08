@@ -63,7 +63,7 @@ PS> Get-ConfiguredAdapter "IPv6" -IncludeVirtual
 None. You cannot pipe objects to Get-ConfiguredAdapter
 
 .OUTPUTS
-[System.Net.NetIPConfiguration] or error message if no adapter configured
+"NetIPConfiguration" or error message if no adapter configured
 
 .NOTES
 TODO: Loopback interface is missing in the output
@@ -73,7 +73,7 @@ function Get-ConfiguredAdapter
 {
 	[CmdletBinding(DefaultParameterSetName = "Individual",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Get-ConfiguredAdapter.md")]
-	[OutputType('NetIPConfiguration')]
+	[OutputType("NetIPConfiguration")]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[ValidateSet("IPv4", "IPv6")]

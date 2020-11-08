@@ -74,6 +74,7 @@ todo's in this file are categorized into following sections:
 
 1. Modules
 
+    - There are breaks missing for switches all over the place
     - Revisit code and make consistent PSCustomObject properties for all function outputs, consider
     using [formats](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_format.ps1xml?view=powershell-7)
     for custom objects
@@ -217,6 +218,7 @@ todo's in this file are categorized into following sections:
     - A lot of pester tests from Ruleset.IP module require private function export,
     make sure the rest of a module works fine without these private exports
     - there is no test for Get-Permutation in Ruleset.IP
+    - Pester tests are out of date and don't work well with Pester 5.x
 
 5. Code style
 

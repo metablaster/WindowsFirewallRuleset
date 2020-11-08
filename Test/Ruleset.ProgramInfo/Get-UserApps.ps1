@@ -66,13 +66,8 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 Enter-Test $ThisScript
 
-Start-Test "Get-GroupPrincipal -Group Users"
-[string[]] $Users = Get-GroupPrincipal -Group "Users" | Select-Object -ExpandProperty User
-$User = $Users[0]
-$User
-
 Start-Test "Get-UserApps"
-$Result = Get-UserApps -User $User @Logs
+$Result = Get-UserApps -User $TestUser @Logs
 $Result
 
 Test-Output $Result -Command Get-UserApps @Logs

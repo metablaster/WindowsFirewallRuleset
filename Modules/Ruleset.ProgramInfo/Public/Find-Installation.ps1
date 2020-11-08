@@ -558,7 +558,7 @@ function Find-Installation
 				}
 
 				Write-Warning -Message "Installation directory for '$Program' not found"
-				if (Approve-Execute "No" "Unable to locate '$InstallLocation'" "Do you want to try again?")
+				if (!(Approve-Execute "No" "Unable to locate '$InstallLocation'" "Do you want to try again?"))
 				{
 					break
 				}

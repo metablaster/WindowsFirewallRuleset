@@ -62,7 +62,7 @@ function Get-GroupPrincipal
 {
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-GroupPrincipal.md")]
-	[OutputType([PSCustomObject])]
+	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
 		[Alias("Group")]
 		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
@@ -113,7 +113,14 @@ function Get-GroupPrincipal
 						Select-Object -ExpandProperty PartComponent |
 						Select-Object -ExpandProperty Name
 
+						if ([string]::IsNullOrEmpty($GroupUsers))
+						{
+							Write-Warning -Message "Group '$Group' does not exist on computer: $Computer"
+							continue
+						}
+
 						# Get only enabled users, these include SID but also non group users
+						# TODO: or LocalAccount -eq "MicrosoftAccount"
 						$EnabledAccounts = Get-CimInstance -Class Win32_UserAccount -Namespace "root\cimv2" -ComputerName $Computer -Filter "LocalAccount = True" |
 						Where-Object -Property Disabled -NE False |
 						Select-Object -Property Name, Caption, SID, Domain
@@ -162,7 +169,7 @@ function Get-GroupPrincipal
 
 					if ([string]::IsNullOrEmpty($GroupUsers))
 					{
-						Write-Warning -Message "User group: '$Group' does not have any accounts on computer: $Computer"
+						Write-Warning -Message "User group: '$Group' does not exist or it does not have any accounts on computer: $Computer"
 						continue
 					}
 

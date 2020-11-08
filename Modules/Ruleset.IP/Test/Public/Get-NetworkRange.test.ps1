@@ -54,12 +54,10 @@ param (
 	[bool] $UseExisting
 )
 
-if ((Get-Variable -Name Develop -Scope Global).Value -eq $false)
-{
-	Write-Error -Category NotEnabled -TargetObject "Variable 'Develop'" `
-		-Message "This unit test is enabled only when 'Develop' is set to $true"
-	return
-}
+# Initialization
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
+	$MyInvocation.MyCommand.Name -replace ".{4}$" )
+Enter-Test $ThisScript -Private
 
 if (-not $UseExisting)
 {
@@ -132,3 +130,5 @@ InModuleScope Ruleset.IP {
 		}
 	}
 }
+
+Exit-Test

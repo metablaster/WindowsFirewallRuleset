@@ -60,14 +60,7 @@ Import-Module -Name Ruleset.Logging
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
-Enter-Test $ThisScript
-
-if ((Get-Variable -Name Develop -Scope Global).Value -eq $false)
-{
-	Write-Error -Category NotEnabled -TargetObject "Variable 'Develop'" `
-		-Message "This unit test is enabled only when 'Develop' is set to $true"
-	return
-}
+Enter-Test $ThisScript -Private
 
 Start-Test "Convert-ListToMultiLine null"
 Convert-ListToMultiLine @Logs

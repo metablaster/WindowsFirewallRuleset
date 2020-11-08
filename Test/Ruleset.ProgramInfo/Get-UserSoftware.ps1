@@ -69,18 +69,17 @@ $UserGroup = "Users"
 
 Start-Test "Get-GroupPrincipal $UserGroup"
 $Principals = Get-GroupPrincipal $UserGroup @Logs
-# TODO: FOR SOME ODD FUCKING REASON IF YOU REMOVE Format-Table THE TEST WILL NOT WORK!!
+# TODO: This Format-Table won't be needed once we have consistent outputs, formats and better pipelines
 $Principals | Format-Table
 
 foreach ($Principal in $Principals)
 {
 	Start-Test "Get-UserSoftware: $($Principal.User)"
-	Get-UserSoftware $Principal.User @Logs
+	$Result = Get-UserSoftware $Principal.User @Logs
+	$Result
 }
 
-$Result = Get-UserSoftware $Principals[0].User @Logs
-$Result
-
+# NOTE: Test won't work unless there are programs installed in user profile
 Test-Output $Result -Command Get-UserSoftware @Logs
 
 Update-Log

@@ -137,13 +137,12 @@ https://github.com/metablaster/WindowsFirewallRuleset
 https://gallery.technet.microsoft.com/scriptcenter/Get-SQLInstance-9a3245a0
 
 TODO: update examples to include DTS directory
-TODO: OutputType [System.Management.Automation.PSCustomObject] will work instead of just [PSCustomObject], Get-TypeName issue.
 #>
 function Get-SQLInstance
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SQLInstance.md")]
-	[OutputType([PSCustomObject])]
+	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
 		[Parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
 		[Alias("Servers", "Machines")]

@@ -94,6 +94,8 @@ There may be multiple accelerators for same type, for example:
 Get-TypeName -Name [System.Management.Automation.PSObject] -Accelerator
 It's possible to rework function to get the exact type if this is desired see being block
 TODO: Will not work to detect .NET types for formatted or custom data, see Get-FormatData
+TODO: Will not work for non .NET types because we have no use of it, but should be implemented,
+see Get-TypeName unit test
 #>
 function Get-TypeName
 {
@@ -116,6 +118,7 @@ function Get-TypeName
 
 	begin
 	{
+		# TODO: This scriptblock should probably be a separate function called "Trace-TypeName" which would serve for troubleshooting
 		[scriptblock] $CheckType = {
 			param (
 				[Parameter()]
@@ -160,7 +163,8 @@ function Get-TypeName
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 		[string] $TypeName = $null
 
-		if ($InputObject)
+		# NOTE: if ($InputObject) would not handle boolean objects set to false, resulting in Void type
+		if ($null -ne $InputObject)
 		{
 			# TODO: Could this fail somehow? if yes we need try/catch
 			$TypeName = ($InputObject | Get-Member).TypeName | Select-Object -Unique

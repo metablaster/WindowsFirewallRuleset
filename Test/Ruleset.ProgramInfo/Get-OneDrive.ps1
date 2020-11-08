@@ -70,7 +70,8 @@ $UserGroup = "Users"
 
 Start-Test "Get-GroupPrincipal $UserGroup"
 $Principals = Get-GroupPrincipal $UserGroup @Logs
-# TODO: see also @Get-UserSoftware IF YOU REMOVE Format-Table THE TEST WILL NOT WORK!!
+# TODO: see also @Get-UserSoftware,
+# This Format-Table won't be needed once we have consistent outputs, formats and better pipelines
 $Principals | Format-Table
 
 foreach ($Principal in $Principals)
@@ -86,7 +87,7 @@ foreach ($Principal in $Principals)
 }
 
 Start-Test "Get-TypeName - $($Principals[0].User)"
-$Result = Get-OneDrive $Principals[0].User @Logs | Get-TypeName @Logs
+$Result = Get-OneDrive $Principals[0].User @Logs
 $Result
 
 Test-Output $Result -Command Get-OneDrive @Logs

@@ -66,17 +66,15 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 Enter-Test $ThisScript
 
 Start-Test "Get-UserGroup"
-Get-UserGroup @Logs
+$Result = Get-UserGroup @Logs
+$Result
 
 Start-Test "Get-UserGroup CIM server"
-Get-UserGroup -CIM @Logs
+Get-UserGroup "localhost" -CIM @Logs
 
 Start-Test "Failure test"
-Get-UserGroup "ZOMBI_PC" -ErrorAction SilentlyContinue @Logs
-
-Start-Test "Get-TypeName"
-$Result = Get-UserGroup "localhost" -CIM @Logs | Get-TypeName @Logs
-$Result
+Get-UserGroup "FAILURETEST" -ErrorAction SilentlyContinue -EV Failure
+Write-Warning "Ignored error: $Failure"
 
 Test-Output $Result -Command Get-UserGroup @Logs
 
