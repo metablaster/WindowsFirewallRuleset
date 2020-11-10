@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.Initialize
 Module Guid: 41585bd3-3f4d-4669-9919-2d19c0451b73
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.7.1
-Help Version: 0.7.1
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.8.0
+Help Version: 0.8.0
 Locale: en-US
 ---
 

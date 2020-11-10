@@ -14,7 +14,7 @@ Initialize unit test
 ## SYNTAX
 
 ```none
-Enter-Test [-File] <String> [-WhatIf] [-Confirm] [<CommonParameters>]
+Enter-Test [-File] <String> [-Private] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -45,6 +45,22 @@ Aliases:
 Required: True
 Position: 1
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Private
+
+If specified temporarily exports private module functions into global scope
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

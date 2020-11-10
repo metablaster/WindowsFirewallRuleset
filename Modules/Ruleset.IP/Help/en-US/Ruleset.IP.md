@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.IP
 Module Guid: 2f356d8c-aad0-462f-9cd7-fff31c7ab1d0
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.7.1
-Help Version: 0.7.1
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.8.0
+Help Version: 0.8.0
 Locale: en-US
 ---
 

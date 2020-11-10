@@ -74,8 +74,8 @@ project root folder
 5. Spelling settings such as random good words which would be detected as misspelled.
 6. Many other minor workspace settings to improve coding experience
 
-To be able to open Windows PowerShell quickly in any folder see
-[Right click "Open PowerShell here" context menu](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/WindowsPowerShell.md#right-click-open-windows-powershell-here-context-menu)
+To work with Windows PowerShell quickly in any folder see:
+[WindowsPowerShell.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/WindowsPowerShell.md)
 
 Recommended extensions in workspace are as follows:
 

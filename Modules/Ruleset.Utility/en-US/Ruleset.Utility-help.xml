@@ -152,7 +152,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>[bool] True if user wants to continue, false otherwise</maml:name>
+          <maml:name>[bool] True if the user wants to continue, false otherwise</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>

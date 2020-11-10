@@ -530,7 +530,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>[System.Net.NetIPConfiguration] or error message if no adapter configured</maml:name>
+          <maml:name>"NetIPConfiguration" or error message if no adapter configured</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>

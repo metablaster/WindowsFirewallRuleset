@@ -19,7 +19,7 @@ Note that Windows PowerShell is not the same thing as PowerShell Core, for more 
 Most likely you want to open Windows PowerShell directly in some folder so that the prompt points to
 exactly that directory, for example:
 
-![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Readme/Screenshots/WindowsPowerShell.png)
+![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Readme/Screenshots/WindowsPowerShell.png)
 
 Here is how:
 

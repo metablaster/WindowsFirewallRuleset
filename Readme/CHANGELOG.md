@@ -8,8 +8,8 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - [Changelog](#changelog)
   - [Table of contents](#table-of-contents)
-  - [v0.7.1 (development branch)](#v071-development-branch)
-  - [v0.7.0 (current release)](#v070-current-release)
+  - [v0.8.0 (current release)](#v080-current-release)
+  - [v0.7.0](#v070)
   - [v0.6.0](#v060)
   - [v0.5.0](#v050)
   - [v0.4.1](#v041)
@@ -17,7 +17,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - [v0.3.0](#v030)
   - [v0.2](#v02)
 
-## v0.7.1 (development branch)
+## v0.8.0 (current release)
 
 - Rules
 
@@ -65,7 +65,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - Calls to icacls, takeown and file system permission code replaced with call to Set-Permission
   - Add `Scripts` folder to path for current session
 
-## v0.7.0 (current release)
+## v0.7.0
 
 - Modules
 
