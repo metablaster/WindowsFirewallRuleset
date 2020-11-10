@@ -130,6 +130,7 @@ if ($Develop)
 {
 	#
 	# Troubleshooting rules
+	# TODO: Some troubleshotting rules apply to both IPv4 and IPv6
 	# This traffic fails mostly with virtual adapters, it's not covered by regular rules
 	#
 
@@ -211,6 +212,42 @@ if ($Develop)
 		-LocalUser $ExtensionAccounts `
 		-InterfaceType $Interface `
 		-Description "Extension rule for active users to allow BITS to Internet gateway device (IGD)" `
+		@Logs | Format-Output @Logs
+
+	New-NetFirewallRule -DisplayName "Troubleshoot UDP LooseSourceMapping" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
+		-Service Any -Program Any -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+		-LocalAddress Any -RemoteAddress Any `
+		-LocalPort Any -RemotePort Any `
+		-LocalUser Any `
+		-InterfaceType Any `
+		-LocalOnlyMapping $false -LooseSourceMapping $true `
+		-Description "Temporary allow all UDP with LooseSourceMapping" `
+		@Logs | Format-Output @Logs
+
+	New-NetFirewallRule -DisplayName "Troubleshoot UDP LocalOnlyMapping" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
+		-Service Any -Program Any -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+		-LocalAddress Any -RemoteAddress Any `
+		-LocalPort Any -RemotePort Any `
+		-LocalUser Any `
+		-InterfaceType Any `
+		-LocalOnlyMapping $true -LooseSourceMapping $false `
+		-Description "Temporary allow all UDP with LocalOnlyMapping" `
+		@Logs | Format-Output @Logs
+
+	New-NetFirewallRule -DisplayName "Troubleshoot UDP LocalOnlyMapping + LooseSourceMapping" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
+		-Service Any -Program Any -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+		-LocalAddress Any -RemoteAddress Any `
+		-LocalPort Any -RemotePort Any `
+		-LocalUser Any `
+		-InterfaceType Any `
+		-LocalOnlyMapping $true -LooseSourceMapping $true `
+		-Description "Temporary allow all UDP with LooseSourceMapping" `
 		@Logs | Format-Output @Logs
 
 	Update-Log

@@ -40,7 +40,7 @@ Import-Module -Name Ruleset.UserInfo
 # Setup local variables
 $Group = "Internet Browser"
 $FirewallProfile = "Private, Public"
-$Accept = "Outbound rules for internet browsers will be loaded, recommended if internet browser is installed to let it access to network"
+$Accept = "Outbound rules for 3rd party internet browsers will be loaded, recommended if such browsers are installed to let them access to network"
 $Deny = "Skip operation, outbound rules for internet browsers will not be loaded into firewall"
 
 # Chromecast IP

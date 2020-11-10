@@ -46,7 +46,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Comment based help, update formatting according to community quidelines
   - Comment based help, check .INPUTS, .OUTPUTS and OutputType are specified and up to date
-  - Updated help notices for LAN setup
+  - Updated help notices for LAN setup, including workaround to make it work with this firewall.
 
 - Bugfix
 

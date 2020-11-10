@@ -40,7 +40,7 @@ Import-Module -Name Ruleset.UserInfo
 # Setup local variables
 $Group = "Software - OpenSSH"
 $FirewallProfile = "Private, Public"
-$Accept = "Outbound rules for OpenSSH software will be loaded, recommended if OpenSSH software is installed to let it access to network"
+$Accept = "Outbound rules for OpenSSH beta software will be loaded, recommended if OpenSSH software is manually installed"
 $Deny = "Skip operation, outbound rules for OpenSSH software will not be loaded into firewall"
 
 # User prompt
@@ -56,7 +56,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 $OpenSSHRoot = "%ProgramFiles%\OpenSSH-Win64"
 
 #
-# OpenSSH rules
+# OpenSSH rules for https://chocolatey.org/packages/openssh
 # TODO: there are other OpenSSH networking executables in install dir
 #
 

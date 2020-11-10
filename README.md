@@ -215,8 +215,9 @@ needed to update firewall for system changes that may happen at any time.
 ## Quick start
 
 1. If you don't have ssh keys and other setup required to clone via SSH then either clone with HTTPS
-or just download the released zip file by clicking on "Release" here on this site.\
-These steps assume you have downloaded a zip file.
+or just download released zip file by clicking on "Releases" here on this site, and then for latest
+release under "assets" download zip file.\
+These steps here assume you have downloaded a zip file from "assets" section under "Releases".
 2. Extract the archive somewhere, these steps assume you've extracted the zip (project root directory)
 into `C:\` root drive directly.
 3. Open the extracted folder, right click into an empty space and there is an option to run

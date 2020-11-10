@@ -74,9 +74,6 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 # TODO: it looks like private profile traffic is logged into public log and vice versa
 #
 
-# Verify permissions to write firewall logs if needed
-& "$ProjectRoot\Scripts\GrantLogs.ps1" -Principal $DefaultUser -SkipPrompt
-
 # NOTE: Reducing the default (4096 KB) log file size makes logs appear quicker but consumes more resources
 $LogSize = 1024
 
@@ -131,5 +128,8 @@ Set-NetworkProfile @Logs
 
 # Update Local Group Policy for changes to take effect
 gpupdate.exe /target:computer
+
+# Verify permissions to write firewall logs if needed
+& "$ProjectRoot\Scripts\GrantLogs.ps1" -Principal $DefaultUser -SkipPrompt
 
 Update-Log

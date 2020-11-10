@@ -34,12 +34,12 @@ using namespace System.Security
 Grant permissions to read and write firewall logs in custom location
 
 .DESCRIPTION
-When firewall is set to write logs into custom location inside repository neither firewall service
-not users can access them.
+When firewall is set to write logs into custom location inside repository, neither firewall service
+nor users can access them.
 Grant permissions to non administrative account to read firewall log files.
 Also grants firewall service to write logs to project specified location.
 The Microsoft Protection Service will automatically reset permissions on firewall logs either
-on system reboot or network reconnect, for security reasons.
+on system reboot, network reconnect or firewall restart, for security reasons.
 
 .PARAMETER Principal
 Non administrative user account for which to grant permission

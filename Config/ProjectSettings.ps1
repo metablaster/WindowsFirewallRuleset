@@ -50,7 +50,7 @@ Set-Variable -Name SettingsScript -Scope Local -Option ReadOnly -Value ($MyInvoc
 # 4. Enables some disabled unit tests and disables logging
 # 5. Enables setting preference variables for modules
 # NOTE: If set to $false, change requires PowerShell restart
-Set-Variable -Name Develop -Scope Global -Value $true
+Set-Variable -Name Develop -Scope Global -Value $false
 
 if ($Develop)
 {
@@ -315,7 +315,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	# NOTE: Set this value to $LogsFolder\Firewall to enable reading logs in VSCode with syntax highlighting
 	# In that case for changes to take effect run Scripts\SetupProfile.ps1 and reboot system
 	# NOTE: The system default is %SystemRoot%\System32\LogFiles\Firewall
-	New-Variable -Name FirewallLogsFolder -Scope Global -Option Constant -Value $LogsFolder\Firewall\ # "%SystemRoot%\System32\LogFiles\Firewall"
+	New-Variable -Name FirewallLogsFolder -Scope Global -Option Constant -Value "%SystemRoot%\System32\LogFiles\Firewall" # $LogsFolder\Firewall\
 }
 
 # Read only variables, these can be only modified by code at any time, and, only once per session by users.
@@ -328,7 +328,7 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 	Set-Variable -Name CheckReadOnlyVariables -Scope Global -Option ReadOnly -Force -Value $null
 
 	# Set to false to avoid checking system requirements
-	Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $false
+	Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $true
 
 	# Set to false to avoid checking if modules are up to date
 	Set-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Force -Value $Develop

@@ -340,6 +340,17 @@ Setting following GPO options explicitly makes no difference:
 - Turn on Mapper I/O (LLTDIO) driver
 - Turn on Responder (RSPNDR) driver
 
+Allowing default outbound and default inbound and no rules in place does not work.
+
+Rule properties do not show any unusual properties, however some are undocumented, ex:
+
+```powershell
+Get-NetFirewallRule -PolicyStore PersistentStore -DisplayGroup "network discovery" `
+-Direction Outbound -Enabled True | Get-NetFirewallPortFilter
+```
+
+"Incoming connections" troubleshooter tells us "security setting" is causing the issue
+
 Additional investigation needed with the help of event logs and WFP trace logs.
 
 ### Case 10: Audit result

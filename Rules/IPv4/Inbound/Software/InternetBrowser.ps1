@@ -44,7 +44,7 @@ $FirewallProfile = "Private, Public"
 # Chromecast IP
 # Adjust to the Chromecast IP in your local network
 [ipaddress] $CHROMECAST_IP = "192.168.8.50"
-$Accept = "Inbound rules for internet browsers will be loaded, recommended if internet browser is installed to let it access to network"
+$Accept = "Inbound rules for 3rd party internet browsers will be loaded, recommended if such browsers are installed to let them access to network"
 $Deny = "Skip operation, inbound rules for internet browsers will not be loaded into firewall"
 
 # User prompt

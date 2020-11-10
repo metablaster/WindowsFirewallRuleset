@@ -59,6 +59,7 @@ if ($Develop)
 {
 	#
 	# Troubleshooting rules
+	# TODO: Some troubleshotting rules apply to both IPv4 and IPv6
 	# This traffic fails mostly with virtual adapters, it's not covered by regular rules
 	#
 
@@ -93,6 +94,20 @@ if ($Develop)
 		-InterfaceType Any `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "Temporary allow troublesome UDP traffic." `
+		@Logs | Format-Output @Logs
+
+	# HACK: Inbound rule with "-LooseSourceMapping $true" can be created:
+	# Invalid flags specified.
+	New-NetFirewallRule -DisplayName "Troubleshoot UDP LocalOnlyMapping" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Service Any -Program Any -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+		-LocalAddress Any -RemoteAddress Any `
+		-LocalPort Any -RemotePort Any `
+		-LocalUser Any -EdgeTraversalPolicy Block `
+		-InterfaceType Any `
+		-LocalOnlyMapping $true -LooseSourceMapping $false `
+		-Description "Temporary allow all UDP with LocalOnlyMapping" `
 		@Logs | Format-Output @Logs
 
 	Update-Log
