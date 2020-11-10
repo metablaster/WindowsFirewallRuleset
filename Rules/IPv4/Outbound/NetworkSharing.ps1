@@ -52,6 +52,9 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # File and Printer sharing predefined rules
 # Rules apply to network sharing on LAN
+# HACK: Due to some magic with predefines rules these rules here don't work for home network setup (WORKGROUP)
+# Same applies to "Network Discovery" predefined rules
+# NOTE: Current workaround for home networks is to apply predefined "File and Printer sharing" rules into GPO.
 #
 
 New-NetFirewallRule -DisplayName "NetBIOS Session" `

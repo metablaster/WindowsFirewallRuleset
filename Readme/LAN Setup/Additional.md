@@ -1,6 +1,10 @@
 
 # Additional Settings
 
+Additional hints and notices that may shade some light to troubleshoot home network setup
+
+## NTLM and WINS
+
 1. NTLM authentication is still supported and must be used for Windows authentication with systems
    configured as a member of a workgroup.
 
@@ -17,19 +21,29 @@
 
 ## Services
 
-- Link-layer topology discovery mapper (to auto)
-- print spooler (to auto)
-- Internet connection sharing (to auto)
-- IP Translation configuration (to auto)
+Following services may help in specific scenarios:
+
+- Link-layer topology discovery mapper (lltdsvc, Manual)
+- print spooler (Spooler, Auto)
+- Internet connection sharing (SharedAccess, Manual - Trigger Start)
+- IP Translation configuration (IpxlatCfgSvc, Manual - Trigger Start)
+
+Following services may help with UNC name resolution:
+
+- Network Connections (Netman, Manual)
+- Peer Name Resolution Protocol (PNRPsvc, Manual)
+- Peer Networking Grouping (p2psvc, Manual)
+- Peer Networking Identity Manager (p2pimsvc, Manual)
 
 ## Troubleshooting discovery
 
-- again Settings -> System -> System info -> Advanced system settings ->
-  Computer name -> Network ID -> this is home computer
+- Again Settings -> System -> About -> Rename this PC (Advanced) -> Network ID -> this is home computer
 - Function Discovery Resource Publication to delayed start (or just restart for quick effect)
-- disable IPv6 (may cause unresponsiveness if router does not support IPv6)
+- Disable IPv6 (may cause unresponsiveness if router does not support IPv6)
 - Internet Protocol Version 4 (TCP/IPv4) -> WINS -> Enable LMHOSTS lookup
 - Remove/uninstall unneeded virtual adapters.
+- Set static (and unique) IP for each computer in LAN, (DHCP may result in bad workgroup name,
+  possible bug or bad router, see event log if that's the case)
 
 ## Make This PC Discoverable in PC settings
 
@@ -45,7 +59,10 @@ INFO: probably point 3 does that implicitly
 ```powershell
 nbtstat -c
 nbtstat -r
-netview
+net view
+Get-SmbClientConfiguration
+Get-SmbClientNetworkInterface
+Get-SmbShare
 ```
 
 ## more discovery tools

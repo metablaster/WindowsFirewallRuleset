@@ -12,6 +12,7 @@ This document explains how to monitor Windows firewall activity and network acti
   - [Process Monitor](#process-monitor)
   - [mTail](#mtail)
   - [mTail alternative](#mtail-alternative)
+  - [Tailing logs standard alternative](#tailing-logs-standard-alternative)
   - [Event log](#event-log)
   - [WFP state and filter logs](#wfp-state-and-filter-logs)
   - [Windows Firewall](#windows-firewall)
@@ -102,6 +103,14 @@ and press enter.
 - This action will create additional (filtered) log file in same directory called `FILENAME.filterline.log`
 - Config file is located inside `.vscode\filterline.json` and supports regex to fine tune your filter.
 - For sample filterline regexes take a look into `Readme\Regex.md`
+
+## Tailing logs standard alternative
+
+Yet another standard and quick way to monitor logs is with PowerShell commands, ex:
+
+```powershell
+Get-Content "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" -last 10 -Wait | Select-String "DROP"
+```
 
 ## Event log
 

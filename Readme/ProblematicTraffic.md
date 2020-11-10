@@ -35,6 +35,9 @@ meaning weakening the firewall just to fix the problem or to make firewall logs 
     - [Case 8: Troubleshooting](#case-8-troubleshooting)
     - [Case 8: Audit result](#case-8-audit-result)
   - [Case 9: Epic games UDP traffic to 230.0.0.1 is blocked](#case-9-epic-games-udp-traffic-to-230001-is-blocked)
+  - [Case 10: Discovery and file and printer sharing issue on home networks (WORKGROUP)](#case-10-discovery-and-file-and-printer-sharing-issue-on-home-networks-workgroup)
+    - [Case 10: Troubleshooting](#case-10-troubleshooting)
+    - [Case 10: Audit result](#case-10-audit-result)
 
 ## Case 1: List of Windows services failing to connect outbound
 
@@ -311,3 +314,35 @@ There is no need to troubleshoot this since Epic software uses addresses that ar
 they have been notified about the problem which is present for already some time.
 
 For more info see: [Please stop violating IANA rules](https://forums.unrealengine.com/unreal-engine/feedback-for-epic/1800085-please-stop-violating-iana-rules)
+
+## Case 10: Discovery and file and printer sharing issue on home networks (WORKGROUP)
+
+If you disable "Rule merging" option (which is default) and make no use of predefined rules then:
+
+- Other computers can't be discovered and this computer can't be discovered by other computers.
+- Even setting explicit allow rules won't make it work
+- No network packets are dropped at all to be able to troubleshoot firewall
+
+In addition, a message saying "File and printer sharing is turned off".
+
+### Case 10: Troubleshooting
+
+One of the following should make the difference to confirm the issuse:
+
+- Disable firewall
+- Allow rule merging
+- Apply "Network Discovery" predefined rules
+
+Setting following GPO options explicitly makes no difference:
+
+`Computer Configuration\Administrative Templates\Link-Layer Topology Discovery\`
+
+- Turn on Mapper I/O (LLTDIO) driver
+- Turn on Responder (RSPNDR) driver
+
+### Case 10: Audit result
+
+Current workaround for home networks is to apply predefined "Network Discovery" and
+"File and printer sharing" rules into GPO.
+
+Status: not resolved

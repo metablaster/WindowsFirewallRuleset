@@ -53,6 +53,9 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # Network Discovery predefined rules + additional rules
 # Rules apply to network discovery on LAN
+# HACK: Due to some magic with predefines rules these rules here don't work for home network setup (WORKGROUP)
+# Same applies to "File and printer sharing" predefined rules
+# NOTE: Current workaround for home networks is to apply predefined "Network Discovery" rules into GPO.
 #
 
 New-NetFirewallRule -DisplayName "Link Local Multicast Name Resolution" `

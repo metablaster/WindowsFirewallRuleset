@@ -2,10 +2,15 @@
 # File and Printer Sharing
 
 1. Enable SMB Direct. (In program features)
-   - If you have an older USB network drive or connecting to an older Windows than Windows 10,
-   - then you might need to also enable SMB1.
-   - SMB Direct will not be available in the Windows 10 Home edition. You will need to enable SMB1 instead.
-   - If you enable SMB1, be sure to uncheck Automatic Removal.
+
+    For older USB network drive or connecting to an older Windows than Windows 10 SMB1 might be required.\
+    You will/might need to enable SMB1 in following cases:
+
+    - Connecting to an older Windows than Windows 10
+    - An older USB network drive
+    - Using the Windows 10 Home edition
+
+    If you enable SMB1, be sure to uncheck Automatic Removal.
 
 2. Enable use sharing wizard in folder options.
 
@@ -22,8 +27,8 @@
      - Turn off network discovery and file and printer sharing.
 
    - All networks:
-     - Turn off password protected sharing.
+     - Turn on password protected sharing.
      - Use 128 bit encryption
-     - Turn of public folder sharing.
+     - Turn off public folder sharing.
 
 5. Configure all firewalls in the network to allow File and Printer sharing rules.

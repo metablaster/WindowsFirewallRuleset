@@ -1,57 +1,60 @@
 
 # Network Discovery
 
-Setup these services to autostart:
+Setup following services (in bold) to autostart (Here listed alphabetically):\
+NOTE: For smooth startup of services set dependent services to delayed start.
 
-- DNS Client
+- **DNS Client (Dnscache, Auto)**
+  - Ancillary Function Driver for Winsock (Driver)
+  - Network Store Interface Service ...
 
-- Network Store Interface Service
-  - NSI Proxy Service Driver (invisible: WIN32_SHARE_PROCESS, startup type = AUTO_START)
+- **Function Discovery Provider Host (fdPHost, Manual)**
+  - HTTP Service ...
+  - Remote Procedure Call (RPC) ...
+
+- **Function Discovery Resource Publication (FDResPub, Manual - Trigger Start)**
+  - HTTP Service (Driver: System32\drivers\HTTP.sys, startup type = DEMAND_START)
+    - MsQuic (Driver: system32\drivers\msquic.sys, startup type = DEMAND_START)
+  - Remote Procedure Call (RPC) ...
+  - Function Discovery Provider Host...
+
+- **Network Store Interface Service (nsi, Auto)**
+  - NSI Proxy Service Driver (Driver: WIN32_SHARE_PROCESS, startup type = AUTO_START)
   - Remote Procedure Call (RPC)
     - DCOM Server Process Launcher
     - RPC Endpoint Mapper
 
-- Function Discovery Resource Publication (auto (delayed start! probably needed so if IPv6 enabled)
-  - HTTP Service (invisible service: system32\drivers\HTTP.sys, startup type = DEMAND_START)
-    - WinQuic (invisible service: system32\drivers\winquic.sys, startup type = DEMAND_START)
-  - Remote Procedure Call (RPC) ...
-  - Function Discovery Provider Host
-    - Remote Procedure Call (RPC) ...
-    - HTTP Service ...
+- **Server (LanmanServer, Auto - Trigger Start)**
+  - Security Accounts Manager
+    - Remote Procedure Call (RPC)...
+  - Server SMB Driver (Driver)
+    - srvnet (Driver)
 
-- UPnP Device Host
+- **TCP/IP NetBIOS Helper (lmhosts, Manual - Trigger Start)**
+  - Ancillary Function Driver for Winsock (Driver)
+
+- **UPnP Device Host (upnphost, Manual)**
   - SSDP Discovery
     - HTTP Service ...
     - Network Store Interface Service ...
   - HTTP Service ...
 
-- Workstation
+- **Workstation (LanmanWorkstation, Auto)**
   - Network Store Interface Service ...
-  - Browser (invisible service)
-  - SMB Mini redirector (invisible service)
+  - Browser (Driver)
+  - SMB Mini redirector (Driver)
 
-- Server
-  - Security Accounts Manager
-    - Remote Procedure Call (RPC)...
-  - Server SMB Driver (invisible service)
-
-- TCP/IP NetBIOS Helper
-  - Ancillary Function Driver for Winsock (driver)
-
-- Computer Browser
+- *Computer Browser* (Available on older Windows, before Windows 10, "Browser" is now in Workstation)
   - Workstation...
   - Server...
 
 ## Additional
 
-1. Set static (and unique) IP for each computer in LAN, (DHCP may result in bad workgroup name,
-   possible bug or crappy router, see event log if that's the case)
+1. Turn on Network Discovery in Network and Sharing Center.
 
-2. Turn on Network Discovery in Network and Sharing Center.
+2. Configure all firewalls in the network to allow Network Discovery rules.
 
-3. Configure all firewalls in the network to allow Network Discovery rules.
-
-4. Settings -> System -> System info -> Advanced system settings -> Computer name -> Network ID ->
+3. Settings -> System -> System info -> Advanced system settings -> Computer name -> Network ID ->
    this is home computer
 
-5. Change -> rename computers and set them all to same workgroup.
+4. Change -> rename computers and set them all to same workgroup.

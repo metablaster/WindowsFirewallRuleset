@@ -1,12 +1,18 @@
 
 # Network Adapter Settings
 
-1. Network and sharing center -> Adapter settings:
+Following are minimum adapter settings:
 
-   - Client for Microsoft Networks
-   - File and Printer Sharing for Microsoft networks
-   - Internet Protocol Version 4 (TCP/IPv4)
-   - Link-Layer Topology Discovery Responder
-   - Link-Layer Topology Discovery Mapper I/O Driver
+## Adapter items
 
-2. Internet Protocol Version 4 (TCP/IPv4) -> WINS -> NetBIOS setting -> Default
+Network and sharing center -> Change adapter settings -> Adapter properties:
+
+- Client for Microsoft Networks
+- File and Printer Sharing for Microsoft networks
+- Internet Protocol Version 4 (TCP/IPv4)
+- Link-Layer Topology Discovery Responder
+- Link-Layer Topology Discovery Mapper I/O Driver
+
+## NETBIOS
+
+Internet Protocol Version 4 (TCP/IPv4) -> WINS -> NetBIOS setting -> Default

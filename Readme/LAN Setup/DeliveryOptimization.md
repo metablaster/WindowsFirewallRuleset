@@ -10,22 +10,22 @@ Look for a "NAT traversal" setting in your firewall to set this up.
 
 Delivery Optimization also communicates with its cloud service by using HTTP/HTTPS over port 80.
 
-1. Settings -> Updates & Security -> Allow download from other PC's (PC's on my local network)
+## Setting
 
-2. Services needed for Teredo:
+Settings -> Updates & Security -> Allow download from other PC's (PC's on my local network)
 
-## IP Helper
+## Services
 
-- Network Store Interface Service...
-- Remote Procedure call (RPC)...
-- TCP/IP Protocol Driver (invisible: KERNEL_DRIVER, startup type = BOOT_START)
-- Windows Management instrumentation
+For delivery optimization:
+
+- **Delivery Optimization (DoSvc)**
   - Remote Procedure call (RPC)...
+
+For teredo:
+
+- **IP Helper (iphlpsvc)**
+  - Network Store Interface Service...
+  - Remote Procedure call (RPC)...
+  - TCP/IP Protocol Driver (Driver: KERNEL_DRIVER, startup type = BOOT_START)
+  - Windows Management instrumentation
   - WinHTTP Web Proxy Auto-Discovery Service
-  - DHCP Client
-    - Ancillary Function Driver for Winsock (aka. AFD) (invisible: KERNEL_DRIVER, startup type = SYSTEM_START)
-    - Network Store Interface Service...
-
-## Delivery Optimization (default depends)
-
-- Remote Procedure call (RPC)...
