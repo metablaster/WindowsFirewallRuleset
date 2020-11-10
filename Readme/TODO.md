@@ -244,7 +244,7 @@ todo's in this file are categorized into following sections:
     - localhost != `[System.Environment]::MachineName` because strings are not the same
     - Write-Error streams should be extended to include exception record etc.
     - Write-Error categories should be checked, some are inconsistent with error
-    - Write-Error in catch blocks should include thrown object, see Add-PSContextMenu.ps1
+    - Write-Error in catch blocks should include thrown object, see Set-Permission.ps1
     - Some executables won't be found in cases where installed program didn't finish installing
     it self but is otherwise present on system, examples such as steam, games with launcher,
     or built in store apps.

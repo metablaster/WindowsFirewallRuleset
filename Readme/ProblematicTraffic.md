@@ -340,7 +340,11 @@ Setting following GPO options explicitly makes no difference:
 - Turn on Mapper I/O (LLTDIO) driver
 - Turn on Responder (RSPNDR) driver
 
+Additional investigation needed with the help of event logs and WFP trace logs.
+
 ### Case 10: Audit result
+
+From event logs it's obvious there is some name resolution issue.
 
 Current workaround for home networks is to apply predefined "Network Discovery" and
 "File and printer sharing" rules into GPO.

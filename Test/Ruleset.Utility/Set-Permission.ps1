@@ -200,7 +200,7 @@ if ($FileSystem)
 }
 elseif ($Registry -or $PSCmdlet.ShouldContinue("Modify registry ownership or permissions", "Accept dangerous unit test"))
 {
-	# NOTE: See \..Initialize\Private\Add-PSContextMenu.ps1 for more up to date test
+	# NOTE: This test may fail until Set-Privilege script is considered into Set-Permission function
 	# Ownership + Full control
 	$TestKey = "TestKey"
 

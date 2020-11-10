@@ -110,7 +110,6 @@
 		"Help\en-US\Initialize-Service.md"
 		"Help\en-US\Ruleset.Initialize.md"
 		"Help\README.md"
-		"Private\Add-PSContextMenu.ps1"
 		"Private\Find-UpdatableModule.ps1"
 		"Private\Uninstall-DuplicateModule.ps1"
 		"Public\Initialize-Module.ps1"

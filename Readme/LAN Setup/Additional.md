@@ -23,10 +23,10 @@ Additional hints and notices that may shade some light to troubleshoot home netw
 
 Following services may help in specific scenarios:
 
-- Link-layer topology discovery mapper (lltdsvc, Manual)
-- print spooler (Spooler, Auto)
 - Internet connection sharing (SharedAccess, Manual - Trigger Start)
 - IP Translation configuration (IpxlatCfgSvc, Manual - Trigger Start)
+- Link-layer topology discovery mapper (lltdsvc, Manual)
+- Print Spooler (Spooler, Auto)
 
 Following services may help with UNC name resolution:
 

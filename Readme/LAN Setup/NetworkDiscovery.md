@@ -2,9 +2,9 @@
 # Network Discovery
 
 Setup following services (in bold) to autostart (Here listed alphabetically):\
-NOTE: For smooth startup of services set dependent services to delayed start.
+**NOTE:** For smooth startup of services set dependent services to delayed start.
 
-- **DNS Client (Dnscache, Auto)**
+- **DNS Client (Dnscache, Auto - Trigger Start)**
   - Ancillary Function Driver for Winsock (Driver)
   - Network Store Interface Service ...
 

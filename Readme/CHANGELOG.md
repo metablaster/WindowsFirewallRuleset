@@ -46,6 +46,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Comment based help, update formatting according to community quidelines
   - Comment based help, check .INPUTS, .OUTPUTS and OutputType are specified and up to date
+  - Updated help notices for LAN setup
 
 - Bugfix
 
@@ -63,10 +64,6 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Calls to icacls, takeown and file system permission code replaced with call to Set-Permission
   - Add `Scripts` folder to path for current session
-
-- In progress
-
-  - Function to add Windows PowerShell to right click context menu for faster test environment setup
 
 ## v0.7.0 (current release)
 

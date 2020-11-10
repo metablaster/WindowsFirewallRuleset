@@ -60,7 +60,7 @@ This function main purpose is automated development environment setup to be able
 setup on multiple computers and virtual operating systems, in cases such as frequent system restores
 for the purpose of testing project code for many environment scenarios that end users may have.
 It should be used in conjunction with the rest of a module "Ruleset.Initialize"
-
+TODO: Optionally set services to automatic startup, most of services are needed only to run code.
 [System.ServiceProcess.ServiceController[]]
 #>
 function Initialize-Service

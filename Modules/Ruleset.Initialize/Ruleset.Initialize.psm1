@@ -43,7 +43,6 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 #
 
 $PrivateScripts = @(
-	"Add-PSContextMenu"
 	"Find-UpdatableModule"
 	"Uninstall-DuplicateModule"
 )
