@@ -47,8 +47,8 @@ $Deny = "Skip operation, outbound rules for DnsCrypt software will not be loaded
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
-# First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+# First remove -PolicyStore $PolicyStore all existing rules matching grou-Group $Group p
+Remove-NetFirewallRule -Direction $Direction -ErrorAction Ignore @Logs
 
 #
 # DnsCrypt installation directories
@@ -60,6 +60,7 @@ $DnsCryptRoot = "%ProgramFiles%\Simple DNSCrypt x64"
 # TODO: remote servers from file, explicit TCP or UDP
 # HACK: If localhost (DNSCrypt) is the only DNS server (no secondary DNS) then network status will be
 # "No internet access" even though internet works just fine
+# TODO: Add rule for "Global resolver", dnscrypt-proxy acting as server
 #
 
 # Test if installation exists on system
@@ -67,32 +68,42 @@ if ((Test-Installation "DnsCrypt" ([ref] $DnsCryptRoot) @Logs) -or $ForceLoad)
 {
 	$Program = "$DnsCryptRoot\dnscrypt-proxy\dnscrypt-proxy.exe"
 	Test-File $Program @Logs
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "dnscrypt-proxy" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+	New-NetFirewallRule -DisplayName "dnscrypt-proxy" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 443 `
 		-LocalUser $NT_AUTHORITY_System `
+		-InterfaceType $Interface `
 		-Description "DNSCrypt is a protocol that authenticates communications between a DNS client and a DNS resolver.
 	It prevents DNS spoofing. It uses cryptographic signatures to verify that responses originate from the chosen DNS resolver and haven't been tampered with.
 	This rule applies to Simple DnsCrypt which uses dnscrypt-proxy for DOH protocol" @Logs | Format-Output @Logs
 
 	# TODO: see if LooseSourceMapping is needed
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "dnscrypt-proxy" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
-		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-		-LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
+	New-NetFirewallRule -DisplayName "dnscrypt-proxy" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort Any `
+		-LocalUser $NT_AUTHORITY_System `
+		-LocalOnlyMapping $false -LooseSourceMapping $false `
+		-InterfaceType $Interface `
 		-Description "DNSCrypt is a protocol that authenticates communications between a DNS client and a DNS resolver.
 	It prevents DNS spoofing. It uses cryptographic signatures to verify that responses originate from the chosen DNS resolver and haven't been tampered with.
 	This rule applies to Simple DnsCrypt which uses dnscrypt-proxy for DnsCrypt Protocol" @Logs | Format-Output @Logs
 
 	$Program = "$DnsCryptRoot\SimpleDnsCrypt.exe"
 	Test-File $Program @Logs
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Simple DNS Crypt" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+	New-NetFirewallRule -DisplayName "Simple DNS Crypt" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $AdministratorsGroupSDDL `
+		-InterfaceType $Interface `
 		-Description "Simple DNS Crypt update check on startup" @Logs | Format-Output @Logs
 }
 

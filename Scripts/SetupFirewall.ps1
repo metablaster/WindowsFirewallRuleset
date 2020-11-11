@@ -110,7 +110,7 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny @
 	{
 		# Common rules
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\AdditionalNetworking.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\BasicNetworking.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\CoreNetworking.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Broadcast.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\ICMP.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Multicast.ps1"
@@ -201,7 +201,7 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny @
 	{
 		# Common rules
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\AdditionalNetworking.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\BasicNetworking.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\CoreNetworking.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Broadcast.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\ICMP.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Multicast.ps1"
@@ -360,7 +360,7 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny @
 	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
 	{
 		# Common rules
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\BasicNetworking.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\CoreNetworking.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\ICMP.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Multicast.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Temporary.ps1"
@@ -389,7 +389,7 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny @
 	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
 	{
 		# Common rules
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\BasicNetworking.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\CoreNetworking.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\ICMP.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Multicast.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Temporary.ps1"

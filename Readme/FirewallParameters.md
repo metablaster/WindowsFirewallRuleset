@@ -2,7 +2,7 @@
 # Firewall Parameters
 
 Parameters and their values are not the same as they are displayed in Firewall GUI such as
-GPO or Adv Windows firewall.
+GPO or Advanced Windows firewall.
 
 Explain what is what by mapping powershell parameters to GUI display equivalents.
 
@@ -27,10 +27,12 @@ and usually need googling out what they do.
   - [Edge traversal](#edge-traversal)
   - [Policy store](#policy-store)
   - [Application layer enforcement](#application-layer-enforcement)
+  - [Unicast response](#unicast-response)
   - [Parameter value example](#parameter-value-example)
   - [Log file fields](#log-file-fields)
-  - [Outbound](#outbound)
-  - [Inbound](#inbound)
+  - [Conversion of parameter direction](#conversion-of-parameter-direction)
+    - [Outbound](#outbound)
+    - [Inbound](#inbound)
 
 ## Port
 
@@ -56,6 +58,7 @@ and usually need googling out what they do.
 ## Address
 
 - *Keywords can be restricted to IPv4 or IPv6 by appending a 4 or 6*
+- Appending 4 or 6 to "Any" address is not valid
 
 ### RemoteAddress
 
@@ -141,6 +144,27 @@ The meaning of this parameter value depends on which parameter it is used:
 1. `"*"` Applies to services only / Apply to application packages only
 2. `Any` Applies to all programs + and services / and application packages / that meet the specified
 condition
+
+## Unicast response
+
+The option "Allow unicast response to multicast or broadcast traffic"
+
+Prevents this computer from receiving unicast responses to its outgoing multicast or broadcast messages.
+
+If you set this setting to "Yes (default)", and this computer sends a multicast or broadcast message
+to other computers, Windows Defender Firewall waits as long as three seconds for unicast responses
+from the other computers and then blocks all later responses.
+
+Otherwise if you set the option to "No", Windows Defender Firewall blocks the unicast responses
+sent by those other computers.
+
+"Not configured" is equivalent to "Yes (default)" as long as control panel firewall does not
+override this option.
+
+**NOTE:** This setting has no effect if the unicast message is a response to a DHCP broadcast message
+sent by this computer.
+Windows Defender Firewall always permits those DHCP unicast responses.
+However, this policy setting can interfere with the NetBIOS messages that detect name conflicts.
 
 ## Parameter value example
 
@@ -288,7 +312,12 @@ but were not recorded in the log from the time of the last occurrence of this ev
 
 Following are mappings between log file, Firewall GUI and PowerShell parameters
 
-## Outbound
+## Conversion of parameter direction
+
+The true meaning of source/destination is not straightforward, explanation is given in section above
+and here is how to convert this info to other firewall environments.
+
+### Outbound
 
 ```none
 Log         GUI               PowerShell
@@ -298,7 +327,7 @@ src-port    Local Port        LocalPort
 dst-port    Remote Port       RemotePort
 ```
 
-## Inbound
+### Inbound
 
 ```none
 Log         GUI               PowerShell

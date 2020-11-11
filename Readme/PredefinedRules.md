@@ -21,11 +21,14 @@ grouping exceptions are listed below.
 
 Predefined group -> new group
 
-1. mDNS -> Basic Networking - IPv4
-2. Wireless Display -> Wireless Networking
-3. Cast to Device -> Additional Networking
-4. Rules for store apps -> Store Apps and Store Apps - System
-5. Some Core networking rules -> "ICMPv4" and Windows Services
+1. mDNS -> "Core Networking - IPvX"
+2. Core Networking -> "Core Networking - IPvX"
+3. Wireless Display -> "Wireless Networking"
+4. Cast to Device -> "Additional Networking"
+5. Rules for store apps -> "Store Apps" and "Store Apps - System"
+6. Some Core networking rules -> "ICMP" and "Windows Services"
+7. File and printer sharing -> "Network Sharing"
+8. Network Discovery -> "Network Discovery"
 
 ## Unavoidable predefined rules
 

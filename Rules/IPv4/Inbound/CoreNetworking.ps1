@@ -38,10 +38,10 @@ Import-Module -Name Ruleset.Logging
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
-$Group = "Basic Networking - IPv4"
+$Group = "Core Networking - IPv4"
 $FirewallProfile = "Any"
-$Accept = "Inbound rules for basic networking will be loaded, required for proper network funcioning"
-$Deny = "Skip operation, inbound basic networking rules will not be loaded into firewall"
+$Accept = "Inbound rules for core networking will be loaded, required for proper network funcioning"
+$Deny = "Skip operation, inbound core networking rules will not be loaded into firewall"
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
@@ -65,18 +65,24 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 # TODO: is there a need or valid reason to make rules for "this machine"? (0.0.0.0)
 # TODO: should we use -InterfaceAlias set to Loopback pseudo interface?
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Loopback" -Service Any -Program Any `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType Any `
-	-Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress 127.0.0.1 -LocalPort Any -RemotePort Any `
-	-EdgeTraversalPolicy Block -LocalUser Any `
+New-NetFirewallRule -DisplayName "Loopback" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol Any `
+	-LocalAddress Any -RemoteAddress 127.0.0.1 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser Any -EdgeTraversalPolicy Block `
+	-InterfaceType Any `
 	-Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources." @Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Loopback" -Service Any -Program Any `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType Any `
-	-Direction $Direction -Protocol Any -LocalAddress 127.0.0.1 -RemoteAddress Any -LocalPort Any -RemotePort Any `
-	-EdgeTraversalPolicy Block -LocalUser Any `
+New-NetFirewallRule -DisplayName "Loopback" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol Any `
+	-LocalAddress 127.0.0.1 -RemoteAddress Any `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser Any -EdgeTraversalPolicy Block `
+	-InterfaceType Any `
 	-Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources." @Logs | Format-Output @Logs
 
 #
@@ -89,21 +95,29 @@ New-NetFirewallRule -Platform $Platform `
 # https://en.wikipedia.org/wiki/Multicast_DNS
 #
 
-New-NetFirewallRule -Platform $Platform -PolicyStore $PolicyStore `
-	-DisplayName "Multicast Domain Name System" -Service Dnscache -Program $ServiceHost `
-	-Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
-	-Direction $Direction -Protocol UDP -LocalAddress 224.0.0.251 -RemoteAddress LocalSubnet4 -LocalPort 5353 -RemotePort 5353 `
-	-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
+New-NetFirewallRule -DisplayName "Multicast DNS" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
+	-Service Dnscache -Program $ServiceHost -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress 224.0.0.251 -RemoteAddress LocalSubnet4 `
+	-LocalPort 5353 -RemotePort 5353 `
+	-LocalUser Any -EdgeTraversalPolicy Block `
+	-InterfaceType $Interface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
 within small networks that do not include a local name server.
 It is a zero-configuration service, using essentially the same programming interfaces,
 packet formats and operating semantics as the unicast Domain Name System (DNS)." @Logs | Format-Output @Logs
 
-New-NetFirewallRule -Platform $Platform -PolicyStore $PolicyStore `
-	-DisplayName "Multicast Domain Name System" -Service Dnscache -Program $ServiceHost `
-	-Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $Interface `
-	-Direction $Direction -Protocol UDP -LocalAddress 224.0.0.251 -RemoteAddress LocalSubnet4 -LocalPort 5353 -RemotePort 5353 `
-	-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
+New-NetFirewallRule -DisplayName "Multicast DNS" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
+	-Service Dnscache -Program $ServiceHost -Group $Group `
+	-Enabled False -Action Block -Direction $Direction -Protocol UDP `
+	-LocalAddress 224.0.0.251 -RemoteAddress LocalSubnet4 `
+	-LocalPort 5353 -RemotePort 5353 `
+	-LocalUser Any -EdgeTraversalPolicy Block `
+	-InterfaceType $Interface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
 within small networks that do not include a local name server.
 It is a zero-configuration service, using essentially the same programming interfaces,
@@ -163,34 +177,14 @@ requesting the offered address." `
 # IGMP (Internet Group Management Protocol)
 #
 
-New-NetFirewallRule -Platform $Platform -PolicyStore $PolicyStore `
-	-DisplayName "Internet Group Management Protocol" -Service Any -Program System `
-	-Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
-	-Direction $Direction -Protocol 2 -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
-	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
+New-NetFirewallRule -DisplayName "Internet Group Management Protocol" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Service Any -Program System -Group $Group `
+	-Enabled True -Action Allow `
+	-Direction $Direction -Protocol 2 -LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-InterfaceType $Interface `
 	-Description "IGMP messages are sent and received by nodes to create, join and depart multicast groups." @Logs | Format-Output @Logs
-
-#
-# IPHTTPS (IPv4 over HTTPS)
-#
-
-New-NetFirewallRule -Platform $Platform -PolicyStore $PolicyStore `
-	-DisplayName "IPv4 over HTTPS" -Service Any -Program System `
-	-Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort IPHTTPSIn -RemotePort Any `
-	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
-	-Description "Allow IPv4 IPHTTPS tunneling technology to provide connectivity across HTTP proxies and firewalls." @Logs | Format-Output @Logs
-
-#
-# Teredo
-#
-
-New-NetFirewallRule -Platform $Platform -PolicyStore $PolicyStore `
-	-DisplayName "Teredo" -Service iphlpsvc -Program $ServiceHost `
-	-Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
-	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Teredo -RemotePort Any `
-	-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Allow Teredo edge traversal, a technology that provides address assignment and automatic tunneling
-for unicast IPv6 traffic when an IPv6/IPv4 host is located behind an IPv4 network address translator." @Logs | Format-Output @Logs
 
 Update-Log

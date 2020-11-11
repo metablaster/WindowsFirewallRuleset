@@ -179,7 +179,7 @@ and leave only those in control panel.
 `Scripts\ExportFirewall.ps1` which may take some time or do it manually.\
 For manual export see [ManageGPOFirewall.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/ManageGPOFirewall.md)
 - The scripts will ask you what rules you want, to minimize internet connectivity trouble you should
-apply at least all generic networking and OS related rules such as BasicNetworking, ICMP,
+apply at least all generic networking and OS related rules such as CoreNetworking, ICMP,
 WindowsSystem, WindowsServices, Multicast etc. also do not ignore IPv6, Windows does need IPv6!
 - Default configuration will set global firewall behavior which is not configurable in GPO GUI,
 such as `stateful ftp` and `pptp` or global `IPSec` settings, if you need specific setup please visit

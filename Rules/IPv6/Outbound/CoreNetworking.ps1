@@ -38,11 +38,10 @@ Import-Module -Name Ruleset.Logging
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
-$Group = "Basic Networking - IPv6"
+$Group = "Core Networking - IPv6"
 $FirewallProfile = "Any"
-$ISATAP_Remotes = @("Internet6", "LocalSubnet6")
-$Accept = "Outbound rules for IPv6 basic networking will be loaded, required for proper network functioning"
-$Deny = "Skip operation, outbound IPv6 basic networking rules will not be loaded into firewall"
+$Accept = "Outbound rules for IPv6 core networking will be loaded, required for proper network functioning"
+$Deny = "Skip operation, outbound IPv6 core networking rules will not be loaded into firewall"
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
@@ -83,7 +82,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # DNS (Domain Name System)
 #
 
-New-NetFirewallRule -DisplayName "Domain Name System" `
+New-NetFirewallRule -DisplayName "DNS Client" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Dnscache -Program $ServiceHost -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
@@ -92,7 +91,7 @@ New-NetFirewallRule -DisplayName "Domain Name System" `
 	-LocalUser Any `
 	-InterfaceType $Interface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Rule to allow IPv6 DNS requests." `
+	-Description "Rule to allow IPv6 DNS (Domain Name System) requests." `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Domain Name System" `
@@ -104,7 +103,7 @@ New-NetFirewallRule -DisplayName "Domain Name System" `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $Interface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Rule to allow IPv6 DNS requests by System to default gateway." `
+	-Description "Rule to allow IPv6 DNS (Domain Name System) requests by System to default gateway." `
 	@Logs | Format-Output @Logs
 
 #
@@ -117,7 +116,7 @@ New-NetFirewallRule -DisplayName "Domain Name System" `
 # https://en.wikipedia.org/wiki/Multicast_DNS
 #
 
-New-NetFirewallRule -DisplayName "Multicast Domain Name System" `
+New-NetFirewallRule -DisplayName "Multicast DNS" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
 	-Service Dnscache -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
@@ -132,10 +131,10 @@ It is a zero-configuration service, using essentially the same programming inter
 packet formats and operating semantics as the unicast Domain Name System (DNS)." `
  @Logs | Format-Output @Logs
 
-New-NetFirewallRule -DisplayName "Multicast Domain Name System" `
+New-NetFirewallRule -DisplayName "Multicast DNS" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
 	-Service Dnscache -Program $ServiceHost -Group $Group `
-	-Enabled True -Action Block -Direction $Direction -Protocol UDP `
+	-Enabled False -Action Block -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress ff02::fb `
 	-LocalPort 5353 -RemotePort 5353 `
 	-LocalUser Any `
@@ -149,10 +148,11 @@ packet formats and operating semantics as the unicast Domain Name System (DNS)."
 
 #
 # DHCP (Dynamic Host Configuration Protocol)
+# TODO: Need a rule for DHCP server
 # https://tools.ietf.org/html/rfc8415
 #
 
-New-NetFirewallRule -DisplayName "Dynamic Host Configuration Protocol" `
+New-NetFirewallRule -DisplayName "DHCP Client" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Dhcp -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
@@ -161,7 +161,8 @@ New-NetFirewallRule -DisplayName "Dynamic Host Configuration Protocol" `
 	-LocalUser Any `
 	-InterfaceType $Interface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Allows DHCPv6 messages for stateful auto-configuration." `
+	-Description "Dynamic Host Configuration Protocol (DHCP) allows DHCPv6 messages for stateful
+auto-configuration." `
 	@Logs | Format-Output @Logs
 
 #
@@ -173,35 +174,67 @@ New-NetFirewallRule -DisplayName "Dynamic Host Configuration Protocol" `
 # much like Internet Group Management Protocol (IGMP) is used in IPv4.
 
 #
-# IPHTTPS (IPv6 over HTTPS)
+# IPHTTPS (IP over HTTPS)
+# https://en.wikipedia.org/wiki/IP-HTTPS
 #
 
-New-NetFirewallRule -DisplayName "IPv6 over HTTPS" `
+New-NetFirewallRule -DisplayName "IP over HTTPS" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
-	-Service Any -Program System -Group $Group `
+	-Service iphlpsvc -Program $ServiceHost -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet6 `
+	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort IPHTTPSout `
-	-LocalUser $NT_AUTHORITY_System `
+	-LocalUser Any `
 	-InterfaceType $Interface `
-	-Description "Allow IPv6 IPHTTPS tunneling technology to provide connectivity across HTTP
-proxies and firewalls." `
+	-Description "Allow IPHTTPS tunneling technology to provide connectivity across HTTP
+proxies and firewalls.
+IP over HTTPS is a Microsoft network tunneling protocol.
+The IP-HTTPS protocol transports IPv6 packets across non-IPv6 networks.
+It does a similar job as the earlier 6to4 or Teredo tunneling mechanisms." `
 	@Logs | Format-Output @Logs
 
 #
 # IPv6 Encapsulation
+# https://en.wikipedia.org/wiki/6to4
+# https://en.wikipedia.org/wiki/ISATAP
 #
 
 New-NetFirewallRule -DisplayName "IPv6 Encapsulation" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol 41 `
-	-LocalAddress Any -RemoteAddress $ISATAP_Remotes `
+	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $Interface `
 	-Description "Rule required to permit IPv6 traffic for
-ISATAP (Intra-Site Automatic Tunnel Addressing Protocol) and 6to4 tunneling services." `
+ISATAP (Intra-Site Automatic Tunnel Addressing Protocol) and 6to4 tunneling services.
+ISATAP is an IPv6 transition mechanism meant to transmit IPv6 packets between dual-stack nodes on
+top of an IPv4 network.
+6to4 ia a system that allows IPv6 packets to be transmitted over an IPv4 network" `
+	@Logs | Format-Output @Logs
+
+#
+# Teredo
+# https://en.wikipedia.org/wiki/Teredo_tunneling
+#
+
+New-NetFirewallRule -DisplayName "Teredo" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Service iphlpsvc -Program $ServiceHost -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress Any `
+	-LocalPort Any -RemotePort 3544 `
+	-LocalUser Any `
+	-InterfaceType $Interface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description "Allow Teredo edge traversal, a technology that provides address assignment and
+automatic tunneling for unicast IPv6 traffic when an IPv6/IPv4 host is located behind an IPv4
+network address translator.
+Teredo is a transition technology that gives full IPv6 connectivity for IPv6-capable hosts that are
+on the IPv4 Internet but have no native connection to an IPv6 network.
+Unlike similar protocols such as 6to4, it can perform its function even from behind network address
+translation (NAT) devices such as home routers." `
 	@Logs | Format-Output @Logs
 
 Update-Log

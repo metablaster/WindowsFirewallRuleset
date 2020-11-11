@@ -2,7 +2,7 @@
 	"type": "general",
 	"rules": [
 		{
-			"src": "DROP UDP.*([0-9]{1,3}\\.){3}[0-9]{1,3}\\s5353\\s5353"
+			"src": "DROP ICMP"
 		}
 	]
 }

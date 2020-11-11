@@ -38,10 +38,10 @@ Import-Module -Name Ruleset.Logging
 Import-Module -Name Ruleset.UserInfo
 #
 # Setup local variables
-$Group = "Basic Networking - IPv4"
+$Group = "Core Networking - IPv4"
 $FirewallProfile = "Any"
-$Accept = "Outbound rules for basic networking will be loaded, required for proper network funcioning"
-$Deny = "Skip operation, outbound basic networking rules will not be loaded into firewall"
+$Accept = "Outbound rules for core networking will be loaded, required for proper network funcioning"
+$Deny = "Skip operation, outbound core networking rules will not be loaded into firewall"
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
@@ -95,7 +95,7 @@ TCP/IP network resources." `
 #
 
 # TODO: official rule uses loose source mapping
-New-NetFirewallRule -DisplayName "Domain Name System" `
+New-NetFirewallRule -DisplayName "DNS Client" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Dnscache -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
@@ -104,7 +104,7 @@ New-NetFirewallRule -DisplayName "Domain Name System" `
 	-LocalUser Any `
 	-InterfaceType $Interface `
 	-LocalOnlyMapping $false -LooseSourceMapping $true `
-	-Description "Allow DNS requests.
+	-Description "Allow DNS (Domain Name System) requests.
 DNS responses based on requests that matched this rule will be permitted regardless of source
 address.
 This behavior is classified as loose source mapping." `
@@ -119,7 +119,7 @@ New-NetFirewallRule -DisplayName "Domain Name System" `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $Interface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Allow DNS requests by System to default gateway." `
+	-Description "Allow DNS (Domain Name System) requests by System to default gateway." `
 	@Logs | Format-Output @Logs
 
 #
@@ -134,7 +134,7 @@ New-NetFirewallRule -DisplayName "Domain Name System" `
 # would make any difference LocalOnlyMapping
 #
 
-New-NetFirewallRule -DisplayName "Multicast Domain Name System" `
+New-NetFirewallRule -DisplayName "Multicast DNS" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
 	-Service Dnscache -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
@@ -152,10 +152,10 @@ packet formats and operating semantics as the unicast Domain Name System (DNS)."
 
 # TODO: $PhysicalAdapters = Get-InterfaceAlias IPv4
 # -InterfaceAlias $PhysicalAdapters
-New-NetFirewallRule -DisplayName "Multicast Domain Name System" `
+New-NetFirewallRule -DisplayName "Multicast DNS" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
 	-Service Dnscache -Program $ServiceHost -Group $Group `
-	-Enabled True -Action Block -Direction $Direction -Protocol UDP `
+	-Enabled False -Action Block -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 224.0.0.251 `
 	-LocalPort 5353 -RemotePort 5353 `
 	-LocalUser Any `
@@ -230,40 +230,6 @@ New-NetFirewallRule -DisplayName "Internet Group Management Protocol" `
 	-InterfaceType $Interface `
 	-Description "IGMP messages are sent and received by nodes to create,
 join and depart multicast groups." `
-	@Logs | Format-Output @Logs
-
-#
-# IPHTTPS (IPv4 over HTTPS)
-#
-
-New-NetFirewallRule -DisplayName "IPv4 over HTTPS" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
-	-Service Any -Program System -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort IPHTTPSout `
-	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $Interface `
-	-Description "Allow IPv4 IPHTTPS tunneling technology to provide connectivity across HTTP
-proxies and firewalls." `
-	@Logs | Format-Output @Logs
-
-#
-# Teredo
-#
-
-New-NetFirewallRule -DisplayName "Teredo" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
-	-Service iphlpsvc -Program $ServiceHost -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 3544 `
-	-LocalUser Any `
-	-InterfaceType $Interface `
-	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Allow Teredo edge traversal, a technology that provides address assignment and
-automatic tunneling for unicast IPv6 traffic when an IPv6/IPv4 host is located behind an IPv4
-network address translator." `
 	@Logs | Format-Output @Logs
 
 Update-Log
