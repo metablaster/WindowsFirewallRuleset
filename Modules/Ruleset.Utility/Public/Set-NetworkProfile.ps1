@@ -46,7 +46,8 @@ None. You cannot pipe objects to Set-NetworkProfile
 None. Set-NetworkProfile does not generate any output
 
 .NOTES
-None.
+TODO: It looks like option to change network profile in settings app will be gone after using this
+function in an elevated prompt
 #>
 function Set-NetworkProfile
 {

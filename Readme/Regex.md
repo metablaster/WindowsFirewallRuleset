@@ -38,6 +38,7 @@ Note:
     - [Get local and remote IPv6 address only in any notation](#get-local-and-remote-ipv6-address-only-in-any-notation)
     - [Get local and remote IPv4 address only in any notation](#get-local-and-remote-ipv4-address-only-in-any-notation)
     - [Get owner and package for store app](#get-owner-and-package-for-store-app)
+    - [Get enabled or action flag](#get-enabled-or-action-flag)
   - [Random regexes](#random-regexes)
     - [Match username in path](#match-username-in-path)
 
@@ -219,6 +220,13 @@ New-NetFirewallRule -Owner $Principal.SID -Package $PackageSID
 ```regex
 -Owner [\$|\w](\w|\.)+(?= -Package) -Package [\$|\w](\w|\.)+ ?
 -Owner (([\$|\w](\w|\.)+)|(\(.*\))) -Package ([\$|\w](\w|\.)+|".*") ?
+```
+
+### Get enabled or action flag
+
+```regex
+-Enabled (True|False) ?
+-Action (Allow|Block) ?
 ```
 
 ## Random regexes

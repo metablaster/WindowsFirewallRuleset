@@ -278,7 +278,8 @@ Wait-Adapter Enabled -Adapter "Ethernet"
 Wait-Adapter Connected -Adapter "Ethernet" -Seconds 20
 
 .NOTES
-None.
+TODO: This script won't work if connecting via virtual switch, in which case physical adapter has
+no IP address assigned.
 #>
 function Wait-Adapter
 {

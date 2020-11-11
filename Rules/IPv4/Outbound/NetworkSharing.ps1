@@ -55,29 +55,40 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # HACK: Due to some magic with predefines rules these rules here don't work for home network setup (WORKGROUP)
 # Same applies to "Network Discovery" predefined rules
 # NOTE: Current workaround for home networks is to apply predefined "File and Printer sharing" rules into GPO.
+# NOTE: NETBIOS Name and datagram, LLMNR and ICMP rules required for network sharing which are part
+# of predefined rules are duplicate of Network Discovery equivalent rules
 #
 
 New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
 	-Service Any -Program System -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress LocalSubnet4 `
 	-LocalPort Any -RemotePort 139 `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $Interface `
-	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
 	-Service Any -Program System -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress Intranet4 `
+	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Intranet4, LocalSubnet4 `
 	-LocalPort Any -RemotePort 139 `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $Interface `
-	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." `
+	@Logs | Format-Output @Logs
+
+New-NetFirewallRule -DisplayName "NetBIOS Session" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
+	-Service Any -Program System -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalPort Any -RemotePort 139 `
+	-LocalUser $NT_AUTHORITY_System `
+	-InterfaceType $Interface `
 	-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." `
 	@Logs | Format-Output @Logs
 
@@ -97,7 +108,19 @@ New-NetFirewallRule -DisplayName "SMB" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Intranet4 `
+	-LocalAddress Any -RemoteAddress Intranet4, LocalSubnet4 `
+	-LocalPort Any -RemotePort 445 `
+	-LocalUser $NT_AUTHORITY_System `
+	-InterfaceType $Interface `
+	-Description "Rule for File and Printer Sharing to allow Server Message Block transmission and
+reception via Named Pipes." `
+	@Logs | Format-Output @Logs
+
+New-NetFirewallRule -DisplayName "SMB" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
+	-Service Any -Program System -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress LocalSubnet4 `
 	-LocalPort Any -RemotePort 445 `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $Interface `

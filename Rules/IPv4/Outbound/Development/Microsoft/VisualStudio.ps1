@@ -242,14 +242,15 @@ if ((Test-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot) @Logs) -
 		-LocalUser $UsersGroupSDDL `
 		-Description "Run when updating or using add features to VS in installer." @Logs | Format-Output @Logs
 
-	# TODO: testing: $ExtensionAccounts `
+	# NOTE: tested: $ExtensionAccounts, Administrator account was needed
+	# TODO: testing: $VSUpdateUsers
 	$Program = "$VSInstallerRoot\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\BackgroundDownload.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "VS Installer - ServiceHub" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-		-LocalUser $ExtensionAccounts `
+		-LocalUser $VSUpdateUsers `
 		-Description "Used when 'Automatically download updates' in VS2019?
 	Tools->Options->Environment->Product Updates->Automatically download updates." @Logs | Format-Output @Logs
 
