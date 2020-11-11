@@ -340,7 +340,7 @@ Setting following GPO options explicitly makes no difference:
 - Turn on Mapper I/O (LLTDIO) driver
 - Turn on Responder (RSPNDR) driver
 
-Allowing default outbound and default inbound and no rules in place does not work.
+Allowing default outbound, default inbound and no rules in place does not work.
 
 Rule properties do not show any unusual properties, however some are undocumented, ex:
 

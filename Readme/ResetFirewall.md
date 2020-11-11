@@ -15,11 +15,7 @@ not resolve your problems.\
 3. Right click on `secpol.msc` and click `Run as administrator`
 4. Expand node: `Windows Defender Firewall with Advanced Security`
 5. Right click on: `Windows Defender Firewall with Advanced Security - Local Group Policy Object`
-6. Select properties
-7. There are 3 tabs: "Domain", "Private" and "Public"
-8. set every available property to "Not configured", do so under "Customize" buttons too
-9. under "Inbound" and "outbound" node select all the rules right click and delete them all.
-10. If problem is not fixed right away you might need to reboot system
+6. Select "Clear Policy" and GPO firewall will be reset to factory defaults.
 
 ## Problem still not resolved
 

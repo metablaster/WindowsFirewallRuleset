@@ -50,7 +50,7 @@
 10. and the list goes on...
 
 - In addition to firewall rules you will find a number of PowerShell modules,
-scripts and functions used to gather info relevant to build the firewall such as:
+scripts and functions used to gather environment info relevant to build specialized firewall such as:
 
 1. Computers on network
 2. Installed programs
@@ -61,35 +61,44 @@ scripts and functions used to gather info relevant to build the firewall such as
 - Meaning this project is a good base to easily extend your firewall and include more rules and
 functionalities.
 - Currently there are some 650+ firewall rules included, 9 modules with 50+ functions,
-random scripts and useful documentation.
+various scripts and useful documentation.
 - You can choose which rules you want, and apply only those or apply them all with
 master script to your firewall.
-- All the rules are loaded into Local Group Policy (GPO),
+- All of the rules are loaded into Local Group Policy (GPO),
 giving you full power over the default Windows firewall.
 
 ## Core benefits of this firewall project
 
-1. Unlike firewall rules in control panel, these rules are loaded into GPO firewall
-(Local group policy), meaning random programs which install rules as part of their installation
-process or system settings changes will have no effect on firewall unless you
+1. System administrators usually just avoid boggling too much with firewall because detailed firewall
+configuration is very time consuming process, takes a lot of troubleshooting and it gets only worse
+when you want to deploy firewall to remote computers, for example not all computers might have same
+software environment.
+
+2. Unlike firewall rules in control panel, these rules are loaded into GPO firewall
+(Local group policy), meaning system settings changes or random programs which install rules as
+part of their installation process will have no effect on firewall unless you
 explicitly make an exception.
 
-2. Unlike default (built in) Windows firewall rules, these rules are more restrictive such as,
+3. Unlike default (built in) Windows firewall rules, these rules are more restrictive such as,
 tied to explicit user accounts, rules apply to specific ports,
 network interfaces, specific programs, services etc.
 
-3. Unlike default (or your own) rules you will know which rules have no effect or are redundant
-due to ie. uninstalled program or a missing Windows service which no longer exists or are
-redundant/invalid for what ever other reason.
+4. Unlike in usual scenario, you will know which rules have no effect or are redundant
+due to ex. uninstalled program, a missing Windows service which no longer exists or renamed
+executable after Windows upgrade or are redundant/invalid for what ever other reason.
 
-4. Changing rule attributes such as ports, addresses and similar is much easier since the rules
-are in scripts, so you can use editor tools such as CTRL + F or regex to perform bulk operations on
+5. Updating rule attributes such as ports, addresses and similar is much easier since these rules
+are in scripts, you can use editor tools such as CTRL + F or regex to perform bulk operations on
 your rules, doing this in Windows firewall GUI is beyond all pain.
 
-5. Default outbound is "block" unless there is a rule to explicitly allow network traffic,
+6. Default outbound is "block" unless there is a rule to explicitly allow network traffic,
 in default Windows firewall this is not possible unless you have rules for every possible
 program/service, thanks to this collection of rules setting default outbound to block
 requires very little additional work.
+
+7. A good portion of code is dedicated to provide unified and automated solution to build and define
+firewall specialized for target system, minimizing the need to do something manually and saving you
+valuable administration time.
 
 ## License
 

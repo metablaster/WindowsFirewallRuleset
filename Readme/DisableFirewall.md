@@ -27,7 +27,7 @@ To do this follow steps below:
 5. right click on: Windows Defender Firewall with Advanced Security - Local Group Policy Object
 6. Select properties
 7. There are 3 tabs: "Domain", "Private" and "Public"
-8. Set "Firewall state" to "Off" for all 3 profiles and click "Apply" for each
+8. Set "Firewall state" to "Not Configured" for all 3 profiles and click "Apply" for each
 9. You might need to reboot system if the effect is not immediate.
 
 ## Disable firewall in control panel
@@ -56,7 +56,7 @@ This is not recommended for security reasons except to troubleshoot problems.
 Which means it will not be active only if GPO firewall is not active too.
 
 To disable control panel firewall so that it's disabled only if GPO firewall is disabled then
-follow below steps:
+follow steps below:
 
 1. Press start button
 2. type: control panel
