@@ -114,11 +114,12 @@ New-NetFirewallRule -DisplayName "Domain Name System" `
 # IPv4 address 224.0.0.251 or IPv6 address ff02::fb
 # UDP port 5353
 # https://en.wikipedia.org/wiki/Multicast_DNS
+# NOTE: Multiple programs may require mDNS, not just dnscache
 #
 
 New-NetFirewallRule -DisplayName "Multicast DNS" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
-	-Service Dnscache -Program $ServiceHost -Group $Group `
+	-Service Any -Program Any -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress ff02::fb `
 	-LocalPort 5353 -RemotePort 5353 `
@@ -131,14 +132,15 @@ It is a zero-configuration service, using essentially the same programming inter
 packet formats and operating semantics as the unicast Domain Name System (DNS)." `
  @Logs | Format-Output @Logs
 
+# NOTE: Specifying interface or local port might not work for public profile
 New-NetFirewallRule -DisplayName "Multicast DNS" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
-	-Service Dnscache -Program $ServiceHost -Group $Group `
-	-Enabled False -Action Block -Direction $Direction -Protocol UDP `
+	-Service Any -Program Any -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress ff02::fb `
-	-LocalPort 5353 -RemotePort 5353 `
+	-LocalPort Any -RemotePort 5353 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType Any `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP
 addresses within small networks that do not include a local name server.

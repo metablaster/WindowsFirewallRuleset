@@ -343,6 +343,7 @@ New-NetFirewallRule -DisplayName "Error Reporting" `
 $Program = "%SystemRoot%\explorer.exe"
 Test-File $Program @Logs
 
+# TODO: remote to local subnet seen for shared folder access
 New-NetFirewallRule -DisplayName "File Explorer" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program $Program -Group $Group `

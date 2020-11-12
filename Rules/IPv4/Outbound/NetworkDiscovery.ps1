@@ -397,18 +397,50 @@ New-NetFirewallRule -DisplayName "FDPHost (WSD)" `
 	-Description "Rule for Network Discovery to discover devices via Function Discovery." `
 	@Logs | Format-Output @Logs
 
+# TODO: This executable is used by WI-FI direct group, see rules, it's also used for Network Discovery
+# see inbound rules, added here because predefined outbound do not define it.
+# NOTE: it's worth nothing that outbound port isn't the sam as for inbound
 New-NetFirewallRule -DisplayName "Device Association Framework Provider Host (WSD)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program "%SystemRoot%\System32\dasHost.exe" -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress DefaultGateway4 `
-	-LocalPort Any -RemotePort Any `
+	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalPort Any -RemotePort 5357 `
 	-LocalUser $NT_AUTHORITY_LocalService `
 	-InterfaceType $Interface `
 	-Description "Rule for Network Discovery to discover devices via Function Discovery.
 This service is new since Windows 8.
 Executable also known as Device Association Framework Provider Host" `
 	@Logs | Format-Output @Logs
+
+New-NetFirewallRule -DisplayName "Device Association Framework Provider Host (WSD)" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
+	-Service Any -Program "%SystemRoot%\System32\dasHost.exe" -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalPort Any -RemotePort 5357 `
+	-LocalUser $NT_AUTHORITY_LocalService `
+	-InterfaceType $Interface `
+	-Description "Rule for Network Discovery to discover devices via Function Discovery.
+This service is new since Windows 8.
+Executable also known as Device Association Framework Provider Host" `
+	@Logs | Format-Output @Logs
+
+# NOTE: Remote address of DefaultGateway4 changed with LocalSubnet4 (rule above),
+# both of which are needed, remote port was Any for router, set to 5357 for local subnet
+# disabled for testing
+# New-NetFirewallRule -DisplayName "Device Association Framework Provider Host (WSD)" `
+# 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+# 	-Service Any -Program "%SystemRoot%\System32\dasHost.exe" -Group $Group `
+# 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+# 	-LocalAddress Any -RemoteAddress DefaultGateway4 `
+# 	-LocalPort Any -RemotePort Any `
+# 	-LocalUser $NT_AUTHORITY_LocalService `
+# 	-InterfaceType $Interface `
+# 	-Description "Rule for Network Discovery to discover devices via Function Discovery.
+# This service is new since Windows 8.
+# Executable also known as Device Association Framework Provider Host" `
+# 	@Logs | Format-Output @Logs
 
 # TODO: missing local user
 New-NetFirewallRule -DisplayName "Network infrastructure discovery" `

@@ -110,6 +110,20 @@ address.
 This behavior is classified as loose source mapping." `
 	@Logs | Format-Output @Logs
 
+New-NetFirewallRule -DisplayName "DNS Client" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Service Dnscache -Program $ServiceHost -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress DNS4 `
+	-LocalPort Any -RemotePort 53 `
+	-LocalUser Any `
+	-InterfaceType $Interface `
+	-Description "Allow DNS (Domain Name System) requests over TCP.
+DNS responses based on requests that matched this rule will be permitted regardless of source
+address.
+This behavior is classified as loose source mapping." `
+	@Logs | Format-Output @Logs
+
 New-NetFirewallRule -DisplayName "Domain Name System" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
@@ -132,11 +146,12 @@ New-NetFirewallRule -DisplayName "Domain Name System" `
 # https://en.wikipedia.org/wiki/Multicast_DNS
 # TODO: both IPv4 and IPv6 have some dropped packets, need to test if LooseSourceMapping or
 # would make any difference LocalOnlyMapping
+# NOTE: Multiple programs may require mDNS, not just dnscache
 #
 
 New-NetFirewallRule -DisplayName "Multicast DNS" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
-	-Service Dnscache -Program $ServiceHost -Group $Group `
+	-Service Any -Program Any -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 224.0.0.251 `
 	-LocalPort 5353 -RemotePort 5353 `
@@ -152,14 +167,15 @@ packet formats and operating semantics as the unicast Domain Name System (DNS)."
 
 # TODO: $PhysicalAdapters = Get-InterfaceAlias IPv4
 # -InterfaceAlias $PhysicalAdapters
+# NOTE: Specifying interface or local port might not work for public profile
 New-NetFirewallRule -DisplayName "Multicast DNS" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
-	-Service Dnscache -Program $ServiceHost -Group $Group `
-	-Enabled False -Action Block -Direction $Direction -Protocol UDP `
+	-Service Any -Program Any -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 224.0.0.251 `
-	-LocalPort 5353 -RemotePort 5353 `
+	-LocalPort Any -RemotePort 5353 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType Any `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to
 IP addresses

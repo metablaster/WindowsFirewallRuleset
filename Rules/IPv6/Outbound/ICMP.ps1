@@ -97,7 +97,8 @@ Import-Module -Name Ruleset.UserInfo
 # Setup local variables
 $Group = "ICMPv6"
 $FirewallProfile = "Any"
-$RemoteAddr = @("Internet6", "LocalSubnet6")
+# NOTE: Set to "Any" because combination of internet + localsubnet excludes non local private addresses
+$RemoteAddr = "Any" # @("Internet6", "LocalSubnet6")
 $RouterSpace = @("LocalSubnet6", "ff02::2", "fe80::/64") # Messages to/from router
 $Description = "https://www.iana.org/assignments/icmpv6-parameters/icmpv6-parameters.xhtml"
 # NOTE: we need Any to include IPv6 loopback interface because IPv6 loopback rule does not work on
@@ -105,6 +106,16 @@ $Description = "https://www.iana.org/assignments/icmpv6-parameters/icmpv6-parame
 $ICMPInterface = "Any"
 $Accept = "Outbound rules for ICMPv6 will be loaded, recommended for proper network functioning"
 $Deny = "Skip operation, outbound ICMPv6 rules will not be loaded into firewall"
+
+# NOTE: Following rules were enabled according to predefined set of rules, but are otherwise not
+# detected as needed:
+# 1. Packet too big
+# 2. Parameter problem
+# 3. Time exceeded
+# 4. Multicast listenere Done, query and report
+# 5. Router advertisement
+# 6. Echo request
+$DefaultDisabled = "True"
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
@@ -131,7 +142,7 @@ New-NetFirewallRule -DisplayName "Destination Unreachable (1)" `
 New-NetFirewallRule -DisplayName "Packet Too Big (2)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 2 `
+	-Enabled $DefaultDisabled -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 2 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
@@ -142,7 +153,7 @@ New-NetFirewallRule -DisplayName "Packet Too Big (2)" `
 New-NetFirewallRule -DisplayName "Time Exceeded (3)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 3 `
+	-Enabled $DefaultDisabled -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 3 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
@@ -153,7 +164,7 @@ New-NetFirewallRule -DisplayName "Time Exceeded (3)" `
 New-NetFirewallRule -DisplayName "Parameter Problem (4)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 4 `
+	-Enabled $DefaultDisabled -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 4 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
@@ -168,7 +179,7 @@ New-NetFirewallRule -DisplayName "Parameter Problem (4)" `
 New-NetFirewallRule -DisplayName "Echo Request (128)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 128 `
+	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 128 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
@@ -179,7 +190,7 @@ New-NetFirewallRule -DisplayName "Echo Request (128)" `
 New-NetFirewallRule -DisplayName "Echo Reply (129)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 129 `
+	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv6 -IcmpType 129 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
@@ -190,7 +201,7 @@ New-NetFirewallRule -DisplayName "Echo Reply (129)" `
 New-NetFirewallRule -DisplayName "Multicast Listener Query (130)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 130 `
+	-Enabled $DefaultDisabled -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 130 `
 	-LocalAddress Any -RemoteAddress LocalSubnet6 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
@@ -201,7 +212,7 @@ New-NetFirewallRule -DisplayName "Multicast Listener Query (130)" `
 New-NetFirewallRule -DisplayName "Multicast Listener Report (131)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 131 `
+	-Enabled $DefaultDisabled -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 131 `
 	-LocalAddress Any -RemoteAddress LocalSubnet6 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
@@ -212,7 +223,7 @@ New-NetFirewallRule -DisplayName "Multicast Listener Report (131)" `
 New-NetFirewallRule -DisplayName "Multicast Listener Done (132)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 132 `
+	-Enabled $DefaultDisabled -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 132 `
 	-LocalAddress Any -RemoteAddress LocalSubnet6 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
@@ -234,7 +245,7 @@ New-NetFirewallRule -DisplayName "Router Solicitation (133)" `
 New-NetFirewallRule -DisplayName "Router Advertisement (134)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 134 `
+	-Enabled $DefaultDisabled -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 134 `
 	-LocalAddress Any -RemoteAddress $RouterSpace `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `

@@ -27,6 +27,7 @@ SOFTWARE.
 #>
 
 # For: AccessControl.FileSystemRights
+# TODO: This will hide comment based help
 using namespace System.Security
 
 <#
@@ -47,6 +48,9 @@ Non administrative user account for which to grant permission
 .PARAMETER ComputerName
 Principal domain for which to grant permission.
 By default specified principal gets permission from local machine
+
+.PARAMETER SkipPrompt
+If specified, no starting confirmation prompt is present
 
 .EXAMPLE
 PS> .\GrantLogs.ps1 USERNAME

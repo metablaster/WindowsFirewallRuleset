@@ -97,7 +97,7 @@ New-NetFirewallRule -DisplayName "Loopback" `
 
 New-NetFirewallRule -DisplayName "Multicast DNS" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
-	-Service Dnscache -Program $ServiceHost -Group $Group `
+	-Service Any -Program Any -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress 224.0.0.251 -RemoteAddress LocalSubnet4 `
 	-LocalPort 5353 -RemotePort 5353 `
@@ -111,8 +111,8 @@ packet formats and operating semantics as the unicast Domain Name System (DNS)."
 
 New-NetFirewallRule -DisplayName "Multicast DNS" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
-	-Service Dnscache -Program $ServiceHost -Group $Group `
-	-Enabled False -Action Block -Direction $Direction -Protocol UDP `
+	-Service Any -Program Any -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress 224.0.0.251 -RemoteAddress LocalSubnet4 `
 	-LocalPort 5353 -RemotePort 5353 `
 	-LocalUser Any -EdgeTraversalPolicy Block `

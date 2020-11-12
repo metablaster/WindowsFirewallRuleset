@@ -119,7 +119,7 @@ if ($Develop)
 	$InformationPreference = "Continue"
 	# $VerbosePreference = "Continue"
 	# $DebugPreference = "Continue"
-	# $ConfirmPreference = "None"
+	$ConfirmPreference = "None"
 
 	# Must be after debug preference
 	Write-Debug -Message "[$SettingsScript] Setup clean environment"
@@ -234,7 +234,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 
 	# Recommended minimum PowerShell Core
 	# NOTE: 6.1.0 will not work, but 7.0.3 works, verify with PSUseCompatibleCmdlets
-	New-Variable -Name RequireCoreVersion -Scope Global -Option Constant -Value ([version]::new(7, 0, 3))
+	New-Variable -Name RequireCoreVersion -Scope Global -Option Constant -Value ([version]::new(7, 1, 0))
 
 	# Required minimum Windows PowerShell, do not decrement!
 	# NOTE: 5.1.14393.206 (system v1607) will not work, but 5.1.19041.1 (system v2004) works, verify with PSUseCompatibleCmdlets
@@ -328,7 +328,7 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 	Set-Variable -Name CheckReadOnlyVariables -Scope Global -Option ReadOnly -Force -Value $null
 
 	# Set to false to avoid checking system requirements
-	Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $true
+	Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $false
 
 	# Set to false to avoid checking if modules are up to date
 	Set-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Force -Value $Develop
