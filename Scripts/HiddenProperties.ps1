@@ -97,22 +97,22 @@ Update-Context $ScriptContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 #endregion
 
-# Setup local variables
-$PredefinedRules = Get-NetFirewallRule -PolicyStore $PolicyStore -DisplayGroup $DisplayGroup -Direction $Direction
-$RuleCount = ($PredefinedRules | Measure-Object).Count
+$PredefinedRules = Get-NetFirewallRule -PolicyStore $PolicyStore -DisplayGroup $DisplayGroup -Direction $Direction @Logs
+$RuleCount = ($PredefinedRules | Measure-Object @Logs).Count
 
-$PredefinedHidden = $PredefinedRules | Select-Object DisplayName, PolicyDecisionStrategy, `
-	ConditionListType, ExecutionStrategy, SequencedActions, Profiles, LocalOnlyMapping, LooseSourceMapping
-
-$PredefinedServices = $PredefinedRules | Get-NetFirewallServiceFilter | Select-Object -Property ServiceName
-$PredefinedProgram = $PredefinedRules | Get-NetFirewallApplicationFilter | Select-Object -Property Program
-
-($PredefinedServices | Measure-Object).Count
+$PredefinedHidden = $PredefinedRules | Select-Object -Property DisplayName, StatusCode, Platforms, `
+	PolicyDecisionStrategy, ConditionListType, ExecutionStrategy, SequencedActions, Profiles, `
+	LocalOnlyMapping, LooseSourceMapping, EnforcementStatus @Logs
 
 for ($Index = 0; $Index -lt $RuleCount; ++$Index)
 {
-	$PredefinedHidden[$Index] | Add-Member -MemberType NoteProperty -Name "Program" -Value $PredefinedProgram[$Index].Program
-	$PredefinedHidden[$Index] | Add-Member -MemberType NoteProperty -Name "Service" -Value $PredefinedServices[$Index].ServiceName
+	# NOTE: We can't apply filter on all rules at once, because the result won't be sorted the same way
+	$Program = (Get-NetFirewallApplicationFilter -AssociatedNetFirewallRule $PredefinedRules[$Index] @Logs).Program
+	$Service = (Get-NetFirewallServiceFilter -AssociatedNetFirewallRule $PredefinedRules[$Index] @Logs).ServiceName
+
+	Write-Information -Tags "User" -MessageData "INFO: Assembling rule output for '$($PredefinedHidden[$Index].DisplayName)'" @Logs
+	$PredefinedHidden[$Index] | Add-Member -MemberType NoteProperty -Name "Program" -Value $Program @Logs
+	$PredefinedHidden[$Index] | Add-Member -MemberType NoteProperty -Name "Service" -Value $Service @Logs
 }
 
 $PredefinedHidden

@@ -33,6 +33,19 @@ and usually need googling out what they do.
   - [Conversion of parameter direction](#conversion-of-parameter-direction)
     - [Outbound](#outbound)
     - [Inbound](#inbound)
+  - [Hidden parameters](#hidden-parameters)
+    - [StatusCode](#statuscode)
+    - [PolicyDecisionStrategy](#policydecisionstrategy)
+    - [ConditionListType](#conditionlisttype)
+    - [ExecutionStrategy](#executionstrategy)
+    - [SequencedActions](#sequencedactions)
+    - [Profiles](#profiles)
+    - [EnforcementStatus](#enforcementstatus)
+    - [LSM](#lsm)
+    - [Platforms](#platforms)
+  - [UDP mapping](#udp-mapping)
+    - [LocalOnlyMapping](#localonlymapping)
+    - [LooseSourceMapping](#loosesourcemapping)
 
 ## Port
 
@@ -110,42 +123,59 @@ except if InterfaceType is "Any", use just one of these two parameters.
 
 ## Policy store
 
-1. Persistent Store (example: `-PolicyStore PersistentStore`)
-2. GPO              (example: `-PolicyStore localhost`)
-3. RSOP             (example: `-PolicyStore RSOP`)
-4. ActiveStore      (example: `-PolicyStore ActiveStore`)
+1. Persistent store
 
-- Persistent Store:
+   > Is what you see in Windows Firewall with Advanced security, accessed trough control panel or
+  System settings.
 
-> is what you see in Windows Firewall with Advanced security, accessed trough control panel or
-System settings.
+   Example: `-PolicyStore PersistentStore`
 
-- GPO Store:
+2. GPO store:
 
-> is specified as computer name, and it is what you see in Local group policy, accessed trough
-secpol.msc or gpedit.msc
+    > is specified as computer name, and it is what you see in Local group policy, accessed trough
+    secpol.msc or gpedit.msc
 
-- RSOP:
+    Example: `-PolicyStore ([System.Environment]::MachineName])`
 
-> stands for "resultant set of policy" and is collection of all GPO stores that apply to local computer.
-> this applies to domain computers, on your home computer RSOP consists of only single
-local GPO (group policy object)
+3. RSOP store:
 
-- Active Store:
+    > Stands for "resultant set of policy" and is collection of all GPO stores that apply to local computer.\
+    > This applies to domain computers, on home computer RSOP consists of single local GPO (group
+    policy object)
 
-> Active store is collection (sum) of Persistent store and all GPO stores (RSOP) that apply to
-local computer. in other words it's a master store.
+    Example: `-PolicyStore RSOP`
 
-There are other stores not mentioned here, which are used in corporate networks, AD's or Domains,
-so irrelevant for home users.
+4. Active store:
+
+    > Active store is collection (sum) of Persistent store and all GPO stores (RSOP) that apply to
+    local computer. in other words it's a master store.
+
+    Example: `-PolicyStore ActiveStore`
+
+5. SystemDefaults:
+
+    > Read-only store contains the default state of firewall rules that ship with Windows Server 2012.
+
+6. StaticServiceStore:
+
+    > Read-only store contains all the service restrictions that ship with Windows Server 2012.
+
+7. ConfigurableServiceStore:
+
+    > This read-write store contains all the service restrictions that are added for third-party services.
+    > In addition, network isolation rules that are created for Windows Store application containers
+    will appear in this policy store.
+
+For more information see [New-NetFirewallRule](https://docs.microsoft.com/en-us/powershell/module/netsecurity/new-netfirewallrule?view=winserver2012r2-ps&redirectedfrom=MSDN)
 
 ## Application layer enforcement
 
 The meaning of this parameter value depends on which parameter it is used:
 
-1. `"*"` Applies to services only / Apply to application packages only
-2. `Any` Applies to all programs + and services / and application packages / that meet the specified
-condition
+1. `"*"` Applies to: services only OR application packages only
+2. `Any` Applies to: all programs AND (services OR application packages)
+
+Both of which are applied only if a packet meet the specified rule conditions
 
 ## Unicast response
 
@@ -210,8 +240,7 @@ Owner                 = "S-1-5-21-3337988176-3917481366-464002247-500"
 
 ## Log file fields
 
-Their meaning in order how they appear in firewall log file:\
-[Interpreting the Windows Firewall Log](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2003/cc758040(v=ws.10))
+Their meaning in order how they appear in firewall log file:
 
 `#Version:`
 
@@ -312,12 +341,14 @@ but were not recorded in the log from the time of the last occurrence of this ev
 - Displays the direction of the communication
 - The options available are SEND, RECEIVE, FORWARD, and UNKNOWN
 
-Following are mappings between log file, Firewall GUI and PowerShell parameters
+For more information see [Interpreting the Windows Firewall Log](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2003/cc758040(v=ws.10))
 
 ## Conversion of parameter direction
 
+Following are mappings between log file, firewall UI and PowerShell parameters.
+
 The true meaning of source/destination is not straightforward, explanation is given in section above
-and here is how to convert this info to other firewall environments.
+and here is how to convert this info to other firewall/traffic contexts.
 
 ### Outbound
 
@@ -338,3 +369,123 @@ dst-ip      Local Address     LocalAddress
 src-port    Remote Port       RemotePort
 dst-port    Local Port        LocalPort
 ```
+
+## Hidden parameters
+
+Following hidden parameters are part of CIM class and are not visible in firewall UI
+
+### StatusCode
+
+The detailed status of the rule, as a numeric error code.\
+A value of `65536` means `STATUS_SUCCESS` or `NO_ERROR`, meaning there is no problem with this rule.
+
+### PolicyDecisionStrategy
+
+This field is ignored
+
+### ConditionListType
+
+This field is ignored
+
+### ExecutionStrategy
+
+This field is ignored.
+
+### SequencedActions
+
+This field is ignored.
+
+### Profiles
+
+Which profiles this rule is active on
+
+The meaning of a value is as follows:\
+**NOTE:** Combinations sum up, ex. a value of 5 means "Public" and "Domain"
+
+```none
+Any     = 0
+Public  = 4
+Private = 2
+Domain  = 1
+```
+
+### EnforcementStatus
+
+If this object is retrieved from the ActiveStore, describes the current enforcement status of the rule.
+
+```none
+0 = Invalid
+1 = Full
+2 = FirewallOffInProfile
+3 = CategoryOff
+4 = DisabledObject
+5 = InactiveProfile
+6 = LocalAddressResolutionEmpty
+7 = RemoteAddressResolutionEmpty
+8 = LocalPortResolutionEmpty
+9 = RemotePortResolutionEmpty
+10 = InterfaceResolutionEmpty
+11 = ApplicationResolutionEmpty
+12 = RemoteMachineEmpty
+13 = RemoteUserEmpty
+14 = LocalGlobalOpenPortsDisallowed
+15 = LocalAuthorizedApplicationsDisallowed
+16 = LocalFirewallRulesDisallowed
+17 = LocalConsecRulesDisallowed
+18 = NotTargetPlatform
+19 = OptimizedOut
+20 = LocalUserEmpty
+21 = TransportMachinesEmpty
+22 = TunnelMachinesEmpty
+23 = TupleResolutionEmpty
+```
+
+### LSM
+
+One might think this has something to do with "Local Session Manager" but it's a shorthand for
+"Loose Source Mapping", the meaning is the same as "LooseSourceMapping" property.
+
+### Platforms
+
+Specifies which platforms the rule is applicable on.\
+If null, the rule applies to all platforms (the default).\
+Each entry takes the form `Major.Minor+`
+
+If `+` is specified, then it means that the rule applies to that version or greater.\
+`+` may only be attached to the final item in the list.
+
+For more information see [MSFT_NetFirewallRule class](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/wfascimprov/msft-netfirewallrule)
+or [Second link](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/legacy/jj676843(v=vs.85))
+
+## UDP mapping
+
+Applies only to UDP.\
+UDP traffic is inferred by checking the following fields:
+
+1. local address
+2. remote address
+3. protocol,
+4. local port
+5. remote port
+
+TODO: Rules which do not specify some of these fields, how does the above apply then?\
+ex. only to new connections or existing connections. (statefull/stateless filtering)
+
+### LocalOnlyMapping
+
+Whether to group UDP packets into conversations based only upon the local address and port.
+
+If this parameter is set to True, then the remote address and port will be ignored when inferring
+remote sessions.\
+Sessions will be grouped based on local address, protocol, and local port.
+
+### LooseSourceMapping
+
+Whether to group UDP packets into conversations based upon the local address, local port,
+and remote port.
+
+If set, the rule accepts packets incoming from a host other than the one the packets were sent to.
+
+TODO: Explain why this parameter can't be specified for inbound rule
+
+For more information see [New-NetFirewallRule](https://docs.microsoft.com/en-us/powershell/module/netsecurity/new-netfirewallrule?view=winserver2012r2-ps&redirectedfrom=MSDN)

@@ -282,8 +282,9 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	New-Variable -Name PolicyStore -Scope Global -Option Constant -Value ([System.Environment]::MachineName)
 
 	# If you changed PolicyStore variable, but the project is not yet ready for remote administration
-	if ($Develop -and $PolicyStore -ne [System.Environment]::MachineName)
+	if ($Develop -and $PolicyStore -ne ([System.Environment]::MachineName))
 	{
+		# TODO: Need to verify non GPO stores to prevent asking for credentials for ex. "PersistentStore"
 		# To force loading rules regardless of presence of program set to true
 		New-Variable -Name RemoteCredentials -Scope Global -Option Constant -Value (
 			Get-Credential -Message "Credentials are required to access $PolicyStore")
