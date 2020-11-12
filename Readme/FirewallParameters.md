@@ -89,8 +89,10 @@ and usually need googling out what they do.
 precedence over InterfaceAlias, Mixing interfaceType with InterfaceAlias doesn't make sense,
 except if InterfaceType is "Any", use just one of these two parameters.
 
-- [WildCardPattern] ([string])
-- [WildCardPattern] ([string], [WildCardOptions])
+```powershell
+[WildCardPattern] ([string])
+[WildCardPattern] ([string], [WildCardOptions])
+```
 
 ## Users
 

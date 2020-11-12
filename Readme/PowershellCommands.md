@@ -38,6 +38,7 @@ Powershell commands to help gather information useful for Windows firewall devel
     - [Physical, virtual and loopback IP interfaces](#physical-virtual-and-loopback-ip-interfaces)
     - [All adapters configured with an IP regardless of connection state](#all-adapters-configured-with-an-ip-regardless-of-connection-state)
   - [Repository creation date](#repository-creation-date)
+  - [Get rule special properties](#get-rule-special-properties)
 
 ## Store Apps
 
@@ -284,4 +285,14 @@ For example to see creation date and time of this repository run:
 ```powershell
 curl https://api.github.com/repos/metablaster/WindowsFirewallRuleset |
 ConvertFrom-Json | Select-Object -ExpandProperty "created_at"
+```
+
+## Get rule special properties
+
+Update PolicyStore, DisplayGroup and direction before running
+
+```powershell
+Get-NetFirewallRule -PolicyStore PersistentStore -DisplayGroup "Network Discovery" -Direction Outbound |
+Select-Object DisplayName, PolicyDecisionStrategy, ConditionListType, ExecutionStrategy, `
+SequencedActions, Profiles, LocalOnlyMapping, LooseSourceMapping
 ```

@@ -59,7 +59,7 @@ New-NetFirewallRule -DisplayName "Link Local Multicast Name Resolution" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Dnscache -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 5355 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser Any -EdgeTraversalPolicy Block `
@@ -75,7 +75,7 @@ New-NetFirewallRule -DisplayName "Link Local Multicast Name Resolution" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
 	-Service Dnscache -Program $ServiceHost -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 5355 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser Any -EdgeTraversalPolicy Block `
@@ -91,7 +91,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Datagram" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 138 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
@@ -103,7 +103,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Datagram" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress Intranet4, LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress Intranet, LocalSubnet `
 	-LocalPort 138 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
@@ -115,7 +115,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Datagram" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 138 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
@@ -127,7 +127,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Name" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 137 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
@@ -139,7 +139,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Name" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress Intranet4, LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress Intranet, LocalSubnet `
 	-LocalPort 137 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
@@ -151,7 +151,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Name" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 137 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
@@ -159,11 +159,11 @@ New-NetFirewallRule -DisplayName "NetBIOS Name" `
 	-Description "Rule for Network Discovery to allow NetBIOS Name Resolution." `
 	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -DisplayName "Function Discovery Resource Publication (WSD)" `
+New-NetFirewallRule -DisplayName "WSD (FDResPub)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service FDResPub -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 3702 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser Any -EdgeTraversalPolicy Block `
@@ -174,11 +174,11 @@ If this rule is disabled, network resources will no longer be published and they
 by other computers on the network." `
 	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -DisplayName "Function Discovery Resource Publication (WSD)" `
+New-NetFirewallRule -DisplayName "WSD (FDResPub)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
 	-Service FDResPub -Program $ServiceHost -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 3702 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser Any -EdgeTraversalPolicy Block `
@@ -193,7 +193,7 @@ New-NetFirewallRule -DisplayName "SSDP Discovery" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service SSDPSRV -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 1900 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser Any -EdgeTraversalPolicy Block `
@@ -208,7 +208,7 @@ New-NetFirewallRule -DisplayName "SSDP Discovery" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
 	-Service SSDPSRV -Program $ServiceHost -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 1900 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser Any -EdgeTraversalPolicy Block `
@@ -223,7 +223,7 @@ New-NetFirewallRule -DisplayName "UPnP Device Host" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 2869 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
@@ -237,7 +237,7 @@ New-NetFirewallRule -DisplayName "UPnP Device Host" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Intranet4, LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress Intranet, LocalSubnet `
 	-LocalPort 2869 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
@@ -251,7 +251,7 @@ New-NetFirewallRule -DisplayName "UPnP Device Host" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 2869 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
@@ -265,7 +265,7 @@ New-NetFirewallRule -DisplayName "WSD Events" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 5357 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
@@ -276,7 +276,7 @@ New-NetFirewallRule -DisplayName "WSD Events" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Intranet4, LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress Intranet, LocalSubnet `
 	-LocalPort 5357 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
@@ -287,7 +287,7 @@ New-NetFirewallRule -DisplayName "WSD Events" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 5357 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
@@ -298,7 +298,7 @@ New-NetFirewallRule -DisplayName "WSD Events Secure" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 5358 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
@@ -309,7 +309,7 @@ New-NetFirewallRule -DisplayName "WSD Events Secure" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Intranet4, LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress Intranet, LocalSubnet `
 	-LocalPort 5358 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
@@ -320,18 +320,18 @@ New-NetFirewallRule -DisplayName "WSD Events Secure" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 5358 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
 	-Description "Rule for Network Discovery to allow Secure WSDAPI Events via Function Discovery." `
 	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -DisplayName "FDPHost (WSD)" `
+New-NetFirewallRule -DisplayName "WSD (FDPHost)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service fdPHost -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 3702 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser Any -EdgeTraversalPolicy Block `
@@ -339,11 +339,11 @@ New-NetFirewallRule -DisplayName "FDPHost (WSD)" `
 	-Description "Rule for Network Discovery to discover devices via Function Discovery." `
 	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -DisplayName "FDPHost (WSD)" `
+New-NetFirewallRule -DisplayName "WSD (FDPHost)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
 	-Service fdPHost -Program $ServiceHost -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 3702 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser Any -EdgeTraversalPolicy Block `
@@ -351,11 +351,11 @@ New-NetFirewallRule -DisplayName "FDPHost (WSD)" `
 	-Description "Rule for Network Discovery to discover devices via Function Discovery." `
 	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -DisplayName "Device Association Framework Provider Host (WSD)" `
+New-NetFirewallRule -DisplayName "WSD (Device Association Framework Provider Host)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program "%SystemRoot%\System32\dasHost.exe" -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 3702 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser $NT_AUTHORITY_LocalService -EdgeTraversalPolicy Block `
@@ -364,11 +364,11 @@ This service is new since Windows 8.
 Executable also known as Device Association Framework Provider Host" `
 	@Logs | Format-Output @Logs
 
-New-NetFirewallRule -DisplayName "Device Association Framework Provider Host (WSD)" `
+New-NetFirewallRule -DisplayName "WSD (Device Association Framework Provider Host)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
 	-Service Any -Program "%SystemRoot%\System32\dasHost.exe" -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 3702 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser $NT_AUTHORITY_LocalService -EdgeTraversalPolicy Block `
@@ -396,7 +396,7 @@ New-NetFirewallRule -DisplayName "Teredo UPnP Discovery" `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
 	-InterfaceType $Interface `
-	-LocalUser $NT_AUTHORITY_LocalService -EdgeTraversalPolicy Block `
+	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
 	-Description "Rule for Network Discovery to allow use of the Simple Service Discovery Protocol." `
 	@Logs | Format-Output @Logs
 
