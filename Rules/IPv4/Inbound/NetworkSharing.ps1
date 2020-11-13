@@ -55,13 +55,14 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Rules apply to network sharing on LAN
 # NOTE: NETBIOS Name and datagram, LLMNR and ICMP rules required for network sharing which are part
 # of predefined rules are duplicate of Network Discovery equivalent rules
+# TODO: Intranet4 and Intranet4 removed IPv4 restriction to troubleshoot homegroup
 #
 
 New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-Service Any -Program System -Group $Group `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 139 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
@@ -72,7 +73,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-Service Any -Program System -Group $Group `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Intranet4, LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress Intranet, LocalSubnet `
 	-LocalPort 139 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
@@ -83,7 +84,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-Service Any -Program System -Group $Group `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 139 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
@@ -94,7 +95,7 @@ New-NetFirewallRule -DisplayName "SMB" `
 	-Service Any -Program System -Group $Group `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 445 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
@@ -106,7 +107,7 @@ New-NetFirewallRule -DisplayName "SMB" `
 	-Service Any -Program System -Group $Group `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Intranet4, LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress Intranet, LocalSubnet `
 	-LocalPort 445 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
@@ -118,7 +119,7 @@ New-NetFirewallRule -DisplayName "SMB" `
 	-Service Any -Program System -Group $Group `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 445 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
@@ -130,7 +131,7 @@ New-NetFirewallRule -DisplayName "Spooler Service (RPC)" `
 	-Service Spooler -Program $ServiceHost -Group $Group `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort RPC -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser Any -EdgeTraversalPolicy Block `
@@ -144,7 +145,7 @@ New-NetFirewallRule -DisplayName "Spooler Service (RPC)" `
 	-Service Spooler -Program $ServiceHost -Group $Group `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Intranet4, LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress Intranet, LocalSubnet `
 	-LocalPort RPC -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser Any -EdgeTraversalPolicy Block `
@@ -158,7 +159,7 @@ New-NetFirewallRule -DisplayName "Spooler Service (RPC)" `
 	-Service Spooler -Program $ServiceHost -Group $Group `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Intranet4 `
+	-LocalAddress Any -RemoteAddress Intranet `
 	-LocalPort RPC -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser Any -EdgeTraversalPolicy Block `
@@ -172,7 +173,7 @@ New-NetFirewallRule -DisplayName "Spooler Service (RPC-EPMAP)" `
 	-Service RpcSs -Program $ServiceHost -Group $Group `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort RPCEPMap -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser Any -EdgeTraversalPolicy Block `
@@ -186,7 +187,7 @@ New-NetFirewallRule -DisplayName "Spooler Service (RPC-EPMAP)" `
 	-Service RpcSs -Program $ServiceHost -Group $Group `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Intranet4, LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress Intranet, LocalSubnet `
 	-LocalPort RPCEPMap -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser Any -EdgeTraversalPolicy Block `
@@ -200,7 +201,7 @@ New-NetFirewallRule -DisplayName "Spooler Service (RPC-EPMAP)" `
 	-Service RpcSs -Program $ServiceHost -Group $Group `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Intranet4 `
+	-LocalAddress Any -RemoteAddress Intranet `
 	-LocalPort RPCEPMap -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser Any -EdgeTraversalPolicy Block `
@@ -214,7 +215,7 @@ New-NetFirewallRule -DisplayName "SMBDirect (iWARP)" `
 	-Service Any -Program System -Group $Group `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 5445 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
@@ -228,7 +229,7 @@ New-NetFirewallRule -DisplayName "SMBDirect (iWARP)" `
 	-Service Any -Program System -Group $Group `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Intranet4, LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress Intranet, LocalSubnet `
 	-LocalPort 5445 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
@@ -242,7 +243,7 @@ New-NetFirewallRule -DisplayName "SMBDirect (iWARP)" `
 	-Service Any -Program System -Group $Group `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 5445 -RemotePort Any `
 	-InterfaceType $Interface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `

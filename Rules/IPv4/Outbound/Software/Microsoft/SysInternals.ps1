@@ -72,6 +72,8 @@ if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot) @Logs) -or $Forc
 		-LocalUser $SysInternalsUsers `
 		-Description "Access to VirusTotal" @Logs | Format-Output @Logs
 
+	# TODO: It also uses port 80 but not known for what, not setting here.
+	# Most likely to fetch symbols
 	$Program = "$SysInternalsRoot\ProcessExplorer\procexp64.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `

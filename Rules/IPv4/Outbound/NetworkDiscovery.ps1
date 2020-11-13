@@ -56,6 +56,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # HACK: Due to some magic with predefines rules these rules here don't work for home network setup (WORKGROUP)
 # Same applies to "File and printer sharing" predefined rules
 # NOTE: Current workaround for home networks is to apply predefined "Network Discovery" rules into GPO.
+# TODO: Intranet4 and Intranet4 removed IPv4 restriction to troubleshoot homegroup
 #
 
 New-NetFirewallRule -DisplayName "Link Local Multicast Name Resolution" `

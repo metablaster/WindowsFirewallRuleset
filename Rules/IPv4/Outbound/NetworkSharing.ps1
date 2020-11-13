@@ -57,13 +57,14 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # NOTE: Current workaround for home networks is to apply predefined "File and Printer sharing" rules into GPO.
 # NOTE: NETBIOS Name and datagram, LLMNR and ICMP rules required for network sharing which are part
 # of predefined rules are duplicate of Network Discovery equivalent rules
+# TODO: Intranet4 and Intranet4 removed IPv4 restriction to troubleshoot homegroup
 #
 
 New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort Any -RemotePort 139 `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $Interface `
@@ -74,7 +75,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Intranet4, LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress Intranet, LocalSubnet `
 	-LocalPort Any -RemotePort 139 `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $Interface `
@@ -85,7 +86,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort Any -RemotePort 139 `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $Interface `
@@ -96,7 +97,7 @@ New-NetFirewallRule -DisplayName "SMB" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort Any -RemotePort 445 `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $Interface `
@@ -108,7 +109,7 @@ New-NetFirewallRule -DisplayName "SMB" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Intranet4, LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress Intranet, LocalSubnet `
 	-LocalPort Any -RemotePort 445 `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $Interface `
@@ -120,7 +121,7 @@ New-NetFirewallRule -DisplayName "SMB" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort Any -RemotePort 445 `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $Interface `

@@ -53,6 +53,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # Network Discovery predefined rules + additional rules
 # Rules apply to network discovery on LAN
+# TODO: Intranet4 and Intranet4 removed IPv4 restriction to troubleshoot homegroup
 #
 
 New-NetFirewallRule -DisplayName "Link Local Multicast Name Resolution" `
