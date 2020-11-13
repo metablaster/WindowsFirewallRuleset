@@ -355,9 +355,32 @@ Additional investigation needed with the help of event logs and WFP trace logs.
 
 ### Case 10: Audit result
 
-From event logs it's obvious there is some name resolution issue.
+According to event logs it looks like there is some name resolution issue.
 
-Current workaround for home networks is to apply predefined "Network Discovery" and
+On another side there is some magic involved, Windows firewall requires at least 1 predefined rule
+from "Network Discovery" and at least 1 predefined rule from "File and printer sharing" group.
+
+These 2 rules don't have to be enabled, it's only important that the rule applies to current
+network profile, this might get rid of error message but will likely not work.
+
+Additional investigation needed to figure out why 2 disabled rules make the error message go away,
+it looks like Windows firewall loads some DLL's based on presence of at least one rule from group.
+
+Current workaround for home networks is to apply all predefined "Network Discovery" and
 "File and printer sharing" rules into GPO.
 
-Status: not resolved
+Following commands can be used for potential programatic solution:
+
+```powershell
+# netsh
+netsh advfirewall firewall set rule group="Network Discovery" new enable=No
+netsh advfirewall firewall set rule group="File and Printer Sharing" new enable=No
+
+# Windows PowerShell
+Set-NetFirewallRule -PolicyStore $PolicyStore -DisplayGroup "Network Discovery" -Enabled True
+Set-NetFirewallRule -PolicyStore $PolicyStore -DisplayGroup "File and Printer Sharing" -Enabled True
+```
+
+See also `NetTCPIP` module for TCP/UDP options
+
+Status: not completely resolved

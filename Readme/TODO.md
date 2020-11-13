@@ -97,8 +97,6 @@ todo's in this file are categorized into following sections:
     - Auto detect interfaces, ie. to be used with InterfaceAlias parameter
     - For individual runs of rule scripts we should call gpupdate.exe
     - $null corectness, in specific cases just `if (something)` doesn't work as it should
-    - Specify which on which adapters Windows firewall is filtering data, see option in
-    Windows firewall in control panel
 
 3. Rules
 
@@ -338,6 +336,8 @@ todo's in this file are categorized into following sections:
     - Use `Get-NetConnectionProfile` to aks user / set default network profile
     - Take out of deprecated scripts what can be used, remove the rest
     - We should add `Scripts` folder to PS scripts path in ProjectSettings
+    - Specify which on which adapters Windows firewall is filtering data, see option in
+    Windows firewall in control panel
 
 3. Rules
 

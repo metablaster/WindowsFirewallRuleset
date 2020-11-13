@@ -30,7 +30,7 @@ Following services may help in specific scenarios:
 - Internet connection sharing (SharedAccess, Manual - Trigger Start)
 - IP Translation configuration (IpxlatCfgSvc, Manual - Trigger Start)
 - Link-layer topology discovery mapper (lltdsvc, Manual)
-- Print Spooler (Spooler, Auto)
+- PNRP Machine Name Publication Service (PNRPAutoReg, Manual)
 
 Following services may help with UNC name resolution:
 
@@ -46,8 +46,8 @@ Following services may help with UNC name resolution:
 - Disable IPv6 (may cause unresponsiveness if router does not support IPv6)
 - Internet Protocol Version 4 (TCP/IPv4) -> WINS -> Enable LMHOSTS lookup
 - Remove/uninstall unneeded virtual adapters.
-- Set static (and unique) IP for each computer in LAN, (DHCP may result in bad workgroup name,
-  possible bug or bad router, see event log if that's the case)
+- Set static (and unique) IP for each computer on LAN, (Using DHCP may result in bad workgroup name,
+  see event log if that's the case)
 
 ## Make This PC Discoverable in PC settings
 
@@ -71,5 +71,14 @@ Get-SmbShare
 
 ## more discovery tools
 
-- restart on both PC's function discovery resource publication
-- restart on both PC's computer browser
+Restart following services on both computers:
+
+- Function discovery resource publication
+- Workstation ("Computer browser" on systems older than Windows 10)
+
+## Explicitly Set Link-Layer Topology Discovery
+
+`Computer Configuration\Administrative Templates\Network\Link-Layer Topology Discovery`
+
+- Turn on Mapper I/O (LLTDIO) driver
+- Turn on Responder (RSPNDR) driver

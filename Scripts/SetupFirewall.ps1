@@ -327,6 +327,7 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny @
 	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
 	{
 		# rules for Microsoft programs
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\BingWallpaper.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\EdgeChromium.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\MicrosoftOffice.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\OneDrive.ps1"
@@ -409,7 +410,7 @@ if ($Develop)
 }
 
 # Show status of execution
-if ($ErrorStatus)
+if ($ErrorLogging -and $ErrorStatus)
 {
 	Write-Output ""
 	Write-Warning -Message "Errors were generated" @Logs
@@ -419,7 +420,7 @@ if ($ErrorStatus)
 	Write-Information -Tags "User" -MessageData "INFO: If module is edited don't forget to restart Powershell" @Logs
 }
 
-if ($WarningStatus)
+if ($WarningLogging -and $WarningStatus)
 {
 	Write-Output ""
 	Write-Warning -Message "Warnings were generated" @Logs
@@ -427,14 +428,18 @@ if ($WarningStatus)
 	Write-Information -Tags "User" -MessageData "INFO: you can review these logs to see if you want to resolve some of them" @Logs
 }
 
-if (!$ErrorStatus -and !$WarningStatus)
+if ($ErrorStatus)
+{
+	Write-Information -Tags "User" -MessageData "INFO: Not all operations completed successfully" @Logs
+}
+else
 {
 	Write-Output ""
 	Write-Information -Tags "User" -MessageData "INFO: All operations completed successfully!" @Logs
 }
 
 Write-Output ""
-Write-Information -Tags "User" -MessageData "INFO: Make sure you visit Local Group Policy and adjust your rules as needed." @Logs
+Write-Information -Tags "User" -MessageData "INFO: Make sure to visit Local Group Policy and adjust rules as needed." @Logs
 Write-Output ""
 
 # Clear warning/error status

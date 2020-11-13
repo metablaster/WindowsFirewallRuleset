@@ -32,3 +32,13 @@
      - Turn off public folder sharing.
 
 5. Configure all firewalls in the network to allow File and Printer sharing rules.
+
+6. Following services are required
+
+- **Print Spooler (Spooler, Manual)**
+  - HTTP Service ...
+  - Remote Procedure Call (RPC) ...
+
+- **Remote Procedure Call (RPC) (RpcSs, Automatic)**
+  - DCOM Server Process Launcher
+  - RPC Endpoint Mapper

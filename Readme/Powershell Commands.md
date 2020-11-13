@@ -1,7 +1,14 @@
 
 # PowerShell commands(lets)
 
-Powershell commands to help gather information useful for Windows firewall development
+Powershell commands to help gather information useful for Windows firewall development.
+
+These commands are here primarily to quickly copy/paste them as needed to perform specific tasks
+by using console as opposed to running scripts.
+
+In addition to table below, see:
+
+[Windows PowerShell Cmdlets for Networking](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/jj717268(v=ws.11))
 
 ## Table of contents
 
@@ -39,6 +46,8 @@ Powershell commands to help gather information useful for Windows firewall devel
     - [All adapters configured with an IP regardless of connection state](#all-adapters-configured-with-an-ip-regardless-of-connection-state)
   - [Repository creation date](#repository-creation-date)
   - [Get rule special properties](#get-rule-special-properties)
+  - [Temporarily toggle all blocking rules](#temporarily-toggle-all-blocking-rules)
+  - [Get new services](#get-new-services)
 
 ## Store Apps
 
@@ -276,7 +285,7 @@ Get-NetIPConfiguration -AllCompartments -Detailed
 
 ## Repository creation date
 
-To figure out the date and time some repository was created run curl again following URL format:
+To figure out the date and time some repository was created run curl against following URL format:
 
 `https://api.github.com/repos/<REPO_OWNER>/<REPO_NAME>`
 
@@ -289,10 +298,38 @@ ConvertFrom-Json | Select-Object -ExpandProperty "created_at"
 
 ## Get rule special properties
 
-Update PolicyStore, DisplayGroup and direction before running
+Update `PolicyStore`, `DisplayGroup` and `Direction` before running
 
 ```powershell
 Get-NetFirewallRule -PolicyStore PersistentStore -DisplayGroup "Network Discovery" -Direction Outbound |
 Select-Object DisplayName, PolicyDecisionStrategy, ConditionListType, ExecutionStrategy, `
 SequencedActions, Profiles, LocalOnlyMapping, LooseSourceMapping
+```
+
+## Temporarily toggle all blocking rules
+
+To quickly troubleshoot packet drop, should be used in conjunction with allowing default inbound and
+outbound.
+
+```powershell
+$Rules = Get-NetFirewallRule -PolicyStore ([environment]::MachineName) |
+Where-Object { $_.Action -eq "Block" -and $_.Enabled -eq "True" }
+
+Disable-NetFirewallRule -InputObject $Rules
+Enable-NetFirewallRule -InputObject $Rules
+```
+
+## Get new services
+
+Quickly detect which services started after some system state change
+
+```powershell
+$ReferenceServices = Get-Service | Where-Object -Property Status -eq "Running"
+($ReferenceServices | Measure-Object).Count
+
+$DifferenceServices = Get-Service | Where-Object -Property Status -eq "Running"
+($DifferenceServices | Measure-Object).Count
+
+$NewServices = Compare-Object -ReferenceObject $ReferenceServices -DifferenceObject $DifferenceServices
+$NewServices | Select-Object -ExpandProperty InputObject
 ```

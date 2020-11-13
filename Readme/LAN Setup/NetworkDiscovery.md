@@ -30,6 +30,10 @@ Setup following services (in bold) to autostart (Here listed alphabetically):\
   - Server SMB Driver (Driver)
     - srvnet (Driver)
 
+- **SSDP Discovery (SSDPSRV - Manual)**
+  - HTTP Service ...
+  - Network Store Interface Service ...
+
 - **TCP/IP NetBIOS Helper (lmhosts, Manual - Trigger Start)**
   - Ancillary Function Driver for Winsock (Driver)
 

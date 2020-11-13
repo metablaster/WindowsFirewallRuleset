@@ -315,8 +315,15 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	# Firewall logs folder
 	# NOTE: Set this value to $LogsFolder\Firewall to enable reading logs in VSCode with syntax highlighting
 	# In that case for changes to take effect run Scripts\SetupProfile.ps1 and reboot system
-	# NOTE: The system default is %SystemRoot%\System32\LogFiles\Firewall
-	New-Variable -Name FirewallLogsFolder -Scope Global -Option Constant -Value $LogsFolder\Firewall\ # "%SystemRoot%\System32\LogFiles\Firewall"
+	# NOTE: System default is %SystemRoot%\System32\LogFiles\Firewall
+	if ($Develop)
+	{
+		New-Variable -Name FirewallLogsFolder -Scope Global -Option Constant -Value $LogsFolder\Firewall
+	}
+	else
+	{
+		New-Variable -Name FirewallLogsFolder -Scope Global -Option Constant -Value "%SystemRoot%\System32\LogFiles\Firewall"
+	}
 }
 
 # Read only variables, these can be only modified by code at any time, and, only once per session by users.
@@ -362,6 +369,7 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 
 	# These drives will help to have shorter prompt and to be able to "jump" to them as desired
 	# TODO: should we use "root" drive instead of "ProjectRoot" variable?
+	# TODO: Verify issues setting location with PowerShell core 7.1
 	New-PSDrive -Name root -Root $ProjectRoot -Scope Global -PSProvider FileSystem | Out-Null
 	New-PSDrive -Name test -Root "$ProjectRoot\Test" -Scope Global -PSProvider FileSystem | Out-Null
 	New-PSDrive -Name ipv4 -Root "$ProjectRoot\Rules\IPv4" -Scope Global -PSProvider FileSystem | Out-Null
@@ -395,18 +403,24 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 	# Set to false to disable logging information messages
 	Set-Variable -Name InformationLogging -Scope Global -Value (!$Develop)
 
-	# Administrative user account name which will perform unit testing
-	Set-Variable -Name TestAdmin -Scope Global -Value "Unknown Admin"
-
-	# Standard user account name which will perform unit testing
-	Set-Variable -Name TestUser -Scope Global -Value "Unknown User"
-
 	# User account name for which to search executables in user profile and non standard paths by default
 	# Also used for other defaults where standard user account is expected, ex. development as standard user
 	# NOTE: Set this value to username for which to create rules by default, if there are multiple
 	# users and to affect them all set this value to non existent user
 	# TODO: needs testing info messages for this value
-	Set-Variable -Name DefaultUser -Scope Global -Value "Unknown User"
+	Set-Variable -Name DefaultUser -Scope Global -Value (Split-Path -Path (Get-LocalGroupMember -Group Users | Where-Object {
+				$_.ObjectClass -EQ "User" -and
+				($_.PrincipalSource -eq "Local" -or $_.PrincipalSource -eq "MicrosoftAccount")
+			} | Select-Object -ExpandProperty Name -Last 1) -Leaf)
+
+	# Administrative user account name which will perform unit testing
+	Set-Variable -Name TestAdmin -Scope Global -Value (Split-Path -Path (Get-LocalGroupMember -Group Administrators | Where-Object {
+				$_.ObjectClass -EQ "User" -and
+				($_.PrincipalSource -eq "Local" -or $_.PrincipalSource -eq "MicrosoftAccount")
+			} | Select-Object -ExpandProperty Name -Last 1) -Leaf)
+
+	# Standard user account name which will perform unit testing
+	Set-Variable -Name TestUser -Scope Global -Value $DefaultUser
 }
 
 # Removable variables, these can be modified or removed by code at any time, and, only once per session by users

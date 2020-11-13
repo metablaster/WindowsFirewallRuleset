@@ -164,13 +164,14 @@ if ($StandardUser)
 {
 	# Grant "Read & Execute" to user for firewall logs
 	Write-Information -Tags "User" -MessageData "INFO: Granting limited permissions to user '$Principal' for log directory"
-	Set-Permission $TargetFolder -Principal $Principal -Computer $ComputerName -Rights $UserControl | Out-Null
-
-	# NOTE: For -Exclude we need -Path DIRECTORY\* to get file names instead of file contents
-	foreach ($LogFile in $(Get-ChildItem -Path $TargetFolder\* -Filter *.log -Exclude *.filterline.log @Logs))
+	if (Set-Permission $TargetFolder -Principal $Principal -Computer $ComputerName -Rights $UserControl)
 	{
-		Write-Verbose -Message "[$ThisScript] Processing: $LogFile"
-		Set-Permission $LogFile.FullName -Principal $Principal -Computer $ComputerName -Rights $UserControl | Out-Null
+		# NOTE: For -Exclude we need -Path DIRECTORY\* to get file names instead of file contents
+		foreach ($LogFile in $(Get-ChildItem -Path $TargetFolder\* -Filter *.log -Exclude *.filterline.log @Logs))
+		{
+			Write-Verbose -Message "[$ThisScript] Processing: $LogFile"
+			Set-Permission $LogFile.FullName -Principal $Principal -Computer $ComputerName -Rights $UserControl | Out-Null
+		}
 	}
 }
 

@@ -70,7 +70,6 @@ Update-Context $ScriptContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 #
-# TODO: how to set and reset settings found in IPSec tab?
 # TODO: it looks like private profile traffic is logged into public log and vice versa
 #
 
@@ -86,7 +85,9 @@ Set-NetFirewallProfile -Profile Public -PolicyStore $PolicyStore `
 	-NotifyOnListen True -EnableStealthModeForIPsec True -AllowUnicastResponseToMulticast False `
 	-LogAllowed False -LogBlocked True -LogIgnored True -LogMaxSizeKilobytes $LogSize `
 	-AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
-	-LogFileName "$FirewallLogsFolder\PublicFirewall.log" @Logs
+	-LogFileName "$FirewallLogsFolder\PublicFirewall.log" -DisabledInterfaceAliases @(
+	# Exclude interfaces for public profile here
+) @Logs
 
 # Setting up profile seem to be slow, tell user what is going on
 Write-Information -Tags "User" -MessageData "INFO: Setting up private firewall profile..." @Logs
@@ -97,7 +98,9 @@ Set-NetFirewallProfile -Profile Private -PolicyStore $PolicyStore `
 	-NotifyOnListen True -EnableStealthModeForIPsec True -AllowUnicastResponseToMulticast True `
 	-LogAllowed False -LogBlocked True -LogIgnored True -LogMaxSizeKilobytes $LogSize `
 	-AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
-	-LogFileName "$FirewallLogsFolder\PrivateFirewall.log" @Logs
+	-LogFileName "$FirewallLogsFolder\PrivateFirewall.log" -DisabledInterfaceAliases @(
+	# Exclude interfaces for private profile here
+) @Logs
 
 # Setting up profile seem to be slow, tell user what is going on
 Write-Information -Tags "User" -MessageData "INFO: Setting up domain firewall profile..." @Logs
@@ -108,13 +111,16 @@ Set-NetFirewallProfile -Profile Domain -PolicyStore $PolicyStore `
 	-NotifyOnListen True -EnableStealthModeForIPsec True -AllowUnicastResponseToMulticast True `
 	-LogAllowed False -LogBlocked True -LogIgnored True -LogMaxSizeKilobytes $LogSize `
 	-AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
-	-LogFileName "$FirewallLogsFolder\DomainFirewall.log" @Logs
+	-LogFileName "$FirewallLogsFolder\DomainFirewall.log" -DisabledInterfaceAliases @(
+	# Exclude interfaces for domain profile here
+) @Logs
 
 Write-Information -Tags "User" -MessageData "INFO: Setting up global firewall settings..." @Logs
 
 # Modify the global firewall settings of the target computer.
 # Configures properties that apply to the firewall and IPsec settings,
 # regardless of which network profile is currently in use.
+# TODO: Set and reset settings found in IPSec tab, see NetSecurity module
 Set-NetFirewallSetting -PolicyStore $PolicyStore `
 	-EnableStatefulFtp True -EnableStatefulPptp False -EnablePacketQueuing NotConfigured `
 	-Exemptions None -CertValidationLevel RequireCrlCheck `
