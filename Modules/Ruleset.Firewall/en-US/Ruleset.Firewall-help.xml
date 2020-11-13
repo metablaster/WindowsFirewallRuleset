@@ -18,7 +18,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>PolicyStore</maml:name>
           <maml:Description>
-            <maml:para>Policy store from which to export rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/FirewallParameters.md</maml:para>
+            <maml:para>Policy store from which to export rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Firewall%20Parameters.md</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -169,7 +169,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
         <maml:name>PolicyStore</maml:name>
         <maml:Description>
-          <maml:para>Policy store from which to export rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/FirewallParameters.md</maml:para>
+          <maml:para>Policy store from which to export rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Firewall%20Parameters.md</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -591,7 +591,7 @@ Exports all SNMP firewall rules to the JSON file SNMPRules.json.</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>PolicyStore</maml:name>
           <maml:Description>
-            <maml:para>Policy store into which to import rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/FirewallParameters.md</maml:para>
+            <maml:para>Policy store into which to import rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Firewall%20Parameters.md</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -641,7 +641,7 @@ Exports all SNMP firewall rules to the JSON file SNMPRules.json.</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
         <maml:name>PolicyStore</maml:name>
         <maml:Description>
-          <maml:para>Policy store into which to import rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/FirewallParameters.md</maml:para>
+          <maml:para>Policy store into which to import rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Firewall%20Parameters.md</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -757,7 +757,7 @@ Imports all firewall rules in the SCV file WmiRules.csv</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>PolicyStore</maml:name>
           <maml:Description>
-            <maml:para>Policy store from which remove rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/FirewallParameters.md</maml:para>
+            <maml:para>Policy store from which remove rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Firewall%20Parameters.md</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -829,7 +829,7 @@ Imports all firewall rules in the SCV file WmiRules.csv</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
         <maml:name>PolicyStore</maml:name>
         <maml:Description>
-          <maml:para>Policy store from which remove rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/FirewallParameters.md</maml:para>
+          <maml:para>Policy store from which remove rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Firewall%20Parameters.md</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>

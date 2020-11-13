@@ -29,7 +29,7 @@ all users or both, however allowing all interfaces or users should be only a tem
 
 INFO: In addition to interfaces shown in GPO there are some hidden network interfaces,
 until I figure out how to make rules based on those allow them all if this resolves the problem.\
-To troubleshoot hidden adapters see [ProblematicTraffic.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/ProblematicTraffic.md)
+To troubleshoot hidden adapters see [Problematic Traffic](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Problematic%20Traffic.md)
 
 ## I got an error "Network path not found" or "unable to contact computer"
 

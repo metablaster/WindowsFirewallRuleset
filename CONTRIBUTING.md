@@ -75,7 +75,7 @@ project root folder
 6. Many other minor workspace settings to improve coding experience
 
 To work with Windows PowerShell quickly in any folder see:
-[WindowsPowerShell.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/WindowsPowerShell.md)
+[Windows PowerShell](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Windows%20PowerShell.md)
 
 Recommended extensions in workspace are as follows:
 
@@ -405,7 +405,7 @@ These templates are fully aligned to rule design, code and formatting style of t
 
 ## Repository folder structure
 
-See [DirectoryStructure.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/DirectoryStructure.md)
+See [Directory Structure.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Directory%20Structure.md)
 
 ## Final notes and where to start
 

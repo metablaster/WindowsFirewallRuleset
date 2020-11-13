@@ -184,7 +184,7 @@ If nothing so far worked disable firewall and try all over again.\
 If things start to work it's likely misconfigured firewall.
 
 See link below on how to disable both GPO and Control Panel firewall:\
-[Disable Firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/DisableFirewall.md)
+[Disable Firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Disable%20Firewall.md)
 
 **NOTE:** If you experience this problem only while having firewall enabled from this project,
 feel free to open new issue and provide as much details (results) as possible from this document.
@@ -317,7 +317,7 @@ Link below contains detailed guidelines:
 
 Link Below explains how to reset both GPO firewall and firewall in control panel:
 
-[Reset Firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/ResetFirewall.md)
+[Reset Firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Reset%20Firewall.md)
 
 ## Run network troubleshooter
 
@@ -361,8 +361,8 @@ If any lines doesn't begin with hash, then either add hash to those lines or del
 
 To troubleshoot firewall take a look at:
 
-- [Monitoring firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/MonitoringFirewall.md)
-- [Problematic traffic](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/ProblematicTraffic.md)
+- [Monitoring Firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Monitoring%20Firewall.md)
+- [Problematic Traffic](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Problematic%20Traffic.md)
 - [Rest of documentation](https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Readme)
 
 ## Check for Windows Auto-Tuning

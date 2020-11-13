@@ -29,4 +29,4 @@ Follow steps below to reset default windows firewall:
 
 ## Still having problems
 
-See [Network troubleshooting detailed guide](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/NetworkTroubleshooting.md)
+See [Network troubleshooting detailed guide](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Network%20Troubleshooting.md)

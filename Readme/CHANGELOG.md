@@ -146,8 +146,8 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - Documentation
 
-  - Added steps to [disable firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/DisableFirewall.md)
-  - Added steps for [general network troubleshooting](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/NetworkTroubleshooting.md)
+  - Added steps to [disable firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Disable%20Firewall.md)
+  - Added steps for [general network troubleshooting](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Network%20Troubleshooting.md)
   - Documentation updated, spellchecked and formatted in full
 
 - Modules
@@ -307,7 +307,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - Support for Windows Server in addition to Windows 10
   - Rebalanced rules for administrators, disabled where not needed, added where needed
   - More and updated temporary rules
-  - Updated documentation, specifically main readme.md, FirewallParameters.md and more PS command
+  - Updated documentation, specifically main readme.md, `Firewall Parameters.md` and more PS command
     samples.
   - Add functions to query SQL Instances on network and SQL related software cmdlets.
   - Move configuration specific global variables into a separate file

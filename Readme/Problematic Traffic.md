@@ -267,7 +267,7 @@ configure rules for these interfaces, except allowing all interfaces.
 - It is absolute must to reboot system once for changes to be visible (sometimes twice to get log clear)
 - Use `Get-NetadApter`, `Get-NetIPConfiguration` and `Get-NetIPInterface` to gather hidden adapter info
 - Use `-InterfaceAlias` instead of `-InterfaceType` when defining firewall rule
-- See [PowerShellCommands.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/PowerShellCommands.md)
+- See [PowerShell Commands](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/PowerShell%20Commands.md)
 and [What is the Hyper-V Virtual Switch](https://www.altaro.com/hyper-v/the-hyper-v-virtual-switch-explained-part-1/)
 for details.
 - Module ComputerInfo now implements functions for this purpose, see also Test\Rule-InterfaceAlias.ps1

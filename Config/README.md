@@ -10,4 +10,4 @@ Directory for configuration files for this project and external programs.
 5. `WPA` contains settings for Windows Performance Analyzer
 
 For more information about using these settings to configure external tools see
-[MonitoringFirewall.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/MonitoringFirewall.md)
+[Monitoring Firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Monitoring%20Firewall.md)

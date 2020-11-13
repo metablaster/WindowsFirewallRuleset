@@ -227,10 +227,10 @@ todo's in this file are categorized into following sections:
 
 6. Documentation
 
-    - update FirewallParameters.md with a list of incompatible parameters for reference
+    - update `Firewall Parameters.md` with a list of incompatible parameters for reference
     - a lot of comment based documentation is missing comments
-    - FirewallParameters.md contains missing mapping
-    - FirewallParameters.md contains no info about compartments and IPSec setup
+    - `Firewall Parameters.md` contains missing mapping
+    - `Firewall Parameters.md` contains no info about compartments and IPSec setup
     - Universal and quick setup to install all required modules for all hosts and users.
 
 7. Other
@@ -311,8 +311,8 @@ todo's in this file are categorized into following sections:
 
 6. Documentation
 
-   - ManageGPOFirwall.md contains no documentation
-   - Predefined rule list in PredefinedRules.md is out of date
+   - `Manage GPO Firwall.md` does not contain enough documentation
+   - Predefined rule list in `Predefined Rules.md` is out of date
 
 7. Other
 

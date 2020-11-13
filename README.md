@@ -132,7 +132,7 @@ Requirements details:
 but only those editions listed in point 1 are actively tested.\
 The list of other untested but supported systems and features is in [The future](#the-future)
 - PowerShell "Core" is not built into Windows, you will need to install it separately (recommended)\
-or use [Windows PowerShell](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/WindowsPowerShell.md)
+or use [Windows PowerShell](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Windows%20PowerShell.md)
 which is already installed.
 - .NET Framework version 4.8 is required if using Windows PowerShell (Desktop edition)
 instead of PowerShell Core.\
@@ -156,7 +156,7 @@ need adjustment, full functionality for 32 bit system is work in progress.\
 For now you can load rules on 32 bit system just fine with the exception of few rules probably not
 relevant at all for your configuration.
 
-[This document](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/LegacySupport.md)
+[Legacy Support](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Legacy%20Support.md)
 describes how to make use of this project on older Windows systems such as Windows 7 or Windows Server
 2008
 
@@ -177,7 +177,7 @@ group name interfere with group names from this ruleset, however
 and leave only those in control panel.
 - If you want to be 100% sure please export your current GPO rules first, to do so either run
 `Scripts\ExportFirewall.ps1` which may take some time or do it manually.\
-For manual export see [ManageGPOFirewall.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/ManageGPOFirewall.md)
+For manual export see [Manage GPO Firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Manage%20GPO%20Firewall.md)
 - The scripts will ask you what rules you want, to minimize internet connectivity trouble you should
 apply at least all generic networking and OS related rules such as CoreNetworking, ICMP,
 WindowsSystem, WindowsServices, Multicast etc. also do not ignore IPv6, Windows does need IPv6!
@@ -233,7 +233,7 @@ into `C:\` root drive directly.
 PowerShell Core as Administrator
 (Assumes you enabled context menu during installation of PowerShell Core) if not open it manually.
 4. If you would like to use Windows PowerShell 5.1 instead of PowerShell Core see:\
-[How to open Windows PowerShell](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/WindowsPowerShell.md)
+[How to open Windows PowerShell](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Windows%20PowerShell.md)
 
 5. Now if you don't have PowerShell context menu then move to C root drive by executing following 2
 lines, this is where you extracted your downloaded zip file:
@@ -315,9 +315,9 @@ some rules, rules for programs which don't exist need to be made additionally.
 16. Now go ahead and test your internet connection (ex. with browser or some other program),
 If you're unable to connect to internet after applying these rules you have several options:
 
-- you can temporarily open outbound firewall in GPO or [Disable firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/DisableFirewall.md)
-- you can troubleshoot problems: [Network troubleshooting detailed guide](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/NetworkTroubleshooting.md)
-- you can [Reset Firewall to previous state](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/ResetFirewall.md)
+- you can temporarily open outbound firewall in GPO or [Disable firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Disable%20Firewall.md)
+- you can troubleshoot problems: [Network troubleshooting detailed guide](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Network%20Troubleshooting.md)
+- you can [Reset Firewall to previous state](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Reset%20Firewall.md)
 - take a look into `Readme` folder for more troubleshooting options and documentation
 
 ## Where are my rules
@@ -397,7 +397,7 @@ There are 2 ways to manage your rules:
 
 1. Using Local Group Policy, this method gives you basic freedom on what you can do with project rules,
 such as disabling them or changing some attributes and adding new rules. For more information see
-[ManageGPOFirewall.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/ManageGPOFirewall.md)
+[Manage GPO Firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Manage%20GPO%20Firewall.md)
 2. Editing PowerShell scripts, this method gives you full control, you can improve the rules,
 add new ones or screw them up.
 
@@ -493,7 +493,7 @@ If you would like to customize project code or add more firewall rules to suit y
 interests then the first step is to set up development environment and learn about project best practices
 all of which is explained in [CONTRIBUTING.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/CONTRIBUTING.md)
 
-Depending on your situation and target platform you might also want to read [Legacy Support](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/LegacySupport.md)
+Depending on your situation and target platform you might also want to read [Legacy Support](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Legacy%20Support.md)
 
 These 2 documents are bare minimum to get you started customizing this repository, the rest can be
 found in `Readme` folder and by doing your own research.
@@ -505,7 +505,7 @@ folder you will find useful information not only about this project but also gen
 how to troubleshoot firewall and network problems, or gather other relevant information.
 
 It might answer some of your questions, for example
-[MonitoringFirewall.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/MonitoringFirewall.md)
+[Monitoring Firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Monitoring%20Firewall.md)
 explains how to monitor firewall in real time.
 
 ## The future
