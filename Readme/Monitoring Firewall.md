@@ -200,17 +200,18 @@ default outbound action was hit.
 
 ## Windows Firewall
 
-And of course we have Windows firewall it self in it's full glory.
+And of course we have Windows firewall.
 
 - The firewall GUI will let you see and manage all your active rules in a user friendly way,
 you can access either GPO firewall interface, (which is where this project loads the rules) or
 open up firewall interface from control panel.
-- the difference is that GPO firewall has precedence over the firewall in control panel,
+- The difference is that GPO firewall has precedence over the firewall in control panel,
 (GPO store vs Persistent store, combined = Active Store)
 - btw. Other documents in this repository will give you a reference and explain more about these
 stores and what they are.
-- another difference is that only in firewall from control panel you can see inbound and outbound
+- Another difference is that only in firewall from control panel you can see inbound and outbound
 rules combined (aka. monitoring)
+- Once major benefit for monitoring firewall is to generate logs files which we can then filter.
 - Here is a screenshot on how to monitor the Active store, click on image to enlarge:
 
 Monitoring: (control panel firewall, Active store)
@@ -261,9 +262,9 @@ In some special scenarios you might want to have much more power than what you h
 logs.
 
 For example if you want to see ICMP traffic one way is to set firewall to log both allowed and
-dropped packets and then filter logs as needed. (ex. with `filterline` extension)
+dropped packets and then filter logs as needed, (ex. with `filterline` extension)
 
-Other times you want to analyse firewall or network performance.
+Other times you might want to analyse firewall or network performance.
 
 To handle these and similar scenarios there is network capture and tracing solution.
 
@@ -273,34 +274,29 @@ or [Windows ADK](https://docs.microsoft.com/en-us/windows-hardware/get-started/a
 
 Once you install it and open ETL (Event Trace Log) file here is sample screenshot of traffic analysis:
 
-![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Readme/Screenshots/TraceAnalyze.png)
+![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Readme/Screenshots/TraceAnalyze.png)
 
 To generate ETL file you have at least 3 options:
 
-First and the best one is to use "Windows Performance Recorder" which comes with Windows SDK or ADK.
-
-Other 2 methods are described in next 2 sections.
+First and the best one is to use "Windows Performance Recorder" which comes with Windows SDK or ADK.\
+Other 2 (worse) methods are described in next 2 sections.
 
 - [Windows Performance Analyzer Intro](https://devblogs.microsoft.com/performance-diagnostics/wpa-intro)
 - [Windows Performance Analyzer reference](https://docs.microsoft.com/en-us/windows-hardware/test/wpt/windows-performance-analyzer)
 
 ## netsh trace
 
+![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Readme/Screenshots/netsh.png)
+
 `netsh trace` option is similar to capturing "WFP state" and "Packet analysis" discused before.\
-There is no need to use legacy `netsh trace` except to avoid using Windows Performance Analyzer.
+There is no benefit to use this legacy program.
 
 Here are few examples for `netsh trace start`
 
-Capture all network traffic and stop when capture file grows to 300 MB
+Capture UDP traffic where source or destination IP matches `IPv4.Address` value
 
 ```powershell
-netsh trace start capture=yes fileMode=single maxSize=500 tracefile=C:\trace.etl
-```
-
-Capture network traffic where source or destination IP matches `IPv4.Address` value
-
-```powershell
-netsh trace start capture=yes Ethernet.Type=IPv4 IPv4.Address=192.168.33.33 tracefile=c:\temp\trace.etl
+netsh trace start capture=yes Ethernet.Type=IPv4 IPv4.Address=192.168.33.33 protocol=17 tracefile=c:\temp\trace.etl
 ```
 
 Capture only ICMPv6 traffic
@@ -309,17 +305,73 @@ Capture only ICMPv6 traffic
 netsh trace start capture=yes protocol=58 tracefile=c:\temp\trace.etl
 ```
 
-Capture only UDP traffic where source or destination IP matches `IPv4.Address` value
+Capture all network traffic on a specific Network Interface and stop when capture file grows to 300 MB
 
 ```powershell
-netsh trace start capture=yes Ethernet.Type=IPv4 IPv4.Address=192.168.33.33 protocol=17 tracefile=c:\temp\trace.etl
+netsh trace start capture=yes tracefile=c:\temp\trace.etl CaptureInterface="Ethernet interface" maxSize=300
 ```
 
-Capture all network traffic on a specific Network Interface
+To view status after running `netsh trace` run:
 
 ```powershell
-netsh trace start capture=yes tracefile=c:\temp\trace.etl CaptureInterface="Ethernet interface"
+netsh trace show status
 ```
+
+To stop tracing run:
+
+```powershell
+netsh trace stop
+```
+
+For more information run:
+
+```powershell
+netsh trace show capturefilterHelp
+```
+
+The meaning of options is as follows:
+
+**capture=yes|no**
+Specifies whether packet capturing is enabled in addition to tracing events.\
+The default is `no`
+
+**protocol**
+Specifies IP protocol for which to trace or capture traffic.\
+For valid values and their meaning see: [Assigned Internet Protocol Numbers](https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml)
+
+**traceFile=path\filename**
+Specifies the location and file name where to save the output.\
+The default is: `%LOCALAPPDATA%\Temp\NetTraces\NetTrace.etl`
+
+**persistent=yes|no**
+Specifies whether the tracing session resumes upon restarting the computer.\
+The default is `no`
+
+**fileMode= single|circular|append**
+Specifies which file mode is applied when tracing output is generated.\
+The meaning of options (probably) is as follows:
+
+- `single` Overwrite existing file and fill it with up to `maxSize` value
+- `circular` Discard older entries to make space for new ones once `maxSize` is reached
+- `append` Append to file up to `maxSize` value
+
+The default is `circular`
+
+**maxSize**
+Specifies maximum log file size in MB (Mega Bytes).\
+
+To specify the maxSize=0, you must also specify `filemode=single`\
+If the value is set to 0, then there is no maximum.`
+The default value is 250.
+
+**overwrite=yes|no**
+Specifies whether an existing trace output file will be overwritten.
+
+If parameter traceFile is not specified, then the default location and filename and any pre-existing
+version of the trace file is automatically overwritten.
+
+[Netsh Commands for Network Trace](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-R2-and-2012/jj129382(v=ws.11))\
+[Netsh reference](https://docs.microsoft.com/en-us/windows-server/networking/technologies/netsh/netsh-contexts)
 
 ## NetEventPacketCapture
 
@@ -327,12 +379,12 @@ NetEventPacketCapture is a PowerShell module that is a replacement for `netsh tr
 
 Almost everything `netsh trace` can do can be also done with NetEventPacketCapture module.
 
-Inside `Scripts` folder there are `StartTrace.ps1` and `StopTrace.ps1` scripts which you can use
-to quickly start and stop package capture.
+Inside `Scripts` folder there are sample `StartTrace.ps1` and `StopTrace.ps1` scripts which make use
+of NetEventPacketCapture module, you can use them to quickly start and stop packet capture.
 
 Keep in mind that both the `netsh trace` and `NetEventPacketCapture` generate an ETL file
-(Event Trace Log), problem in both cases is lack of executable involved.
+(Event Trace Log), problem in both cases is the lack of executable involved in traffic.
 
-This problem can be solved with the before explained method "Packet trace and analysis" by using
+This problem can be solved with "Windows Performance Recorder" which generates required symbols.
 
 [NetEventPacketCapture reference](https://docs.microsoft.com/en-us/powershell/module/neteventpacketcapture/?view=win10-ps)

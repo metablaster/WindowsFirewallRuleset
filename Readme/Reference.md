@@ -157,6 +157,8 @@ Also few commandlets from these modules:
 
 [WFP Monitoring](https://docs.microsoft.com/en-us/windows/win32/fwp/wfp-monitoring)
 
+[Capture Network Traffic with netsh trace command](https://www.computertechblog.com/capture-network-traffic-with-netsh-trace-windows-command)
+
 ## tools
 
 [makecab](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/makecab)
