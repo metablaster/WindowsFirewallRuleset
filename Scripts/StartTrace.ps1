@@ -35,6 +35,9 @@ Start capturing network traffic into an *.etl file for analysis.
 The file can be analyzed with "Windows performance analyzer", available in Windows SDK
 
 .PARAMETER Protocol
+Specifies an array of one or more IP protocols, such as TCP or UDP, on which to filter.
+The packet capture provider logs network traffic that matches this filter.
+
 1 ICMPv4
 2 IGMP
 6 TCP
@@ -43,6 +46,9 @@ The file can be analyzed with "Windows performance analyzer", available in Windo
 https://en.wikipedia.org/wiki/List_of_IP_protocol_numbers
 
 .PARAMETER Level
+Specifies the level of Event Tracing for Windows (ETW) events for the provider.
+Use the level of detail for the event to filter the events that are logged.
+
 0x5 Verbose
 0x4 Informational
 0x3 Warning
@@ -53,13 +59,38 @@ https://en.wikipedia.org/wiki/List_of_IP_protocol_numbers
 .PARAMETER Name
 Session name, also implies name of a file
 
-.PARAMETER WFP
+.PARAMETER CaptureType
+Specifies whether the packet capture is enabled for physical network adapters, virtual switches, or both.
+
+.PARAMETER IPAddresses
+Specifies an array of IP addresses.
+The provider logs network traffic that matches the addresses that this cmdlet specifies
+
+.PARAMETER LayerSet
 If specified captures Windows Firewall Platform (WFP) network events
 
-.EXAMPLE
-PS> .\StartTrace.ps1 Protocol -6 -Level 4
+.PARAMETER TCPPorts
+Specifies an array of TCP ports.
+The provider filters for and logs network traffic that matches the ports that this parameter specifies.
 
-Captures TCP traffic up to informational level
+.PARAMETER UDPPorts
+Specifies an array of UDP ports.
+The provider filters for and logs network traffic that matches the ports that this parameter specifies.
+
+.EXAMPLE
+PS> .\StartTrace.ps1 6 -Level 3
+
+Captures TCP traffic up to Warning level
+
+.EXAMPLE
+PS> .\StartTrace.ps1 1, 58
+
+Captures ICMP traffic for both IPv4 and IPv6
+
+.EXAMPLE
+PS> .\StartTrace.ps1 -LayerSet "IPv4Outbound" -TCPPorts 443
+
+Captures Outbound IPv4 traffic to remote port 443, at WFP level
 
 .INPUTS
 None. You cannot pipe objects to StartTrace.ps1
@@ -68,14 +99,29 @@ None. You cannot pipe objects to StartTrace.ps1
 None. StartTrace.ps1 does not generate any output
 
 .NOTES
-None.
+Unlike a Packet Capture provider, the WFP capture provider captures network traffic above the IP layer.
+TODO: WFP capture doesn't work because:
+"A general error occurred that is not covered by a more specific error code"
+TODO: More parameters could be customized, see links for more info
+
+.LINK
+https://docs.microsoft.com/en-us/powershell/module/neteventpacketcapture/new-neteventsession?view=win10-ps
+
+.LINK
+https://docs.microsoft.com/en-us/powershell/module/neteventpacketcapture/add-neteventpacketcaptureprovider?view=win10-ps
+
+.LINK
+https://docs.microsoft.com/en-us/powershell/module/neteventpacketcapture/add-neteventwfpcaptureprovider?view=win10-ps
+
+.LINK
+https://docs.microsoft.com/en-us/powershell/module/neteventpacketcapture/add-neteventprovider?view=win10-ps
 #>
 
 #region Script header
 [CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Protocol")]
 param (
 	[Parameter(Mandatory = $true, Position = 0, ParameterSetName = "Protocol")]
-	[ValidateRange(1, 255)]
+	[ValidateRange(0, 255)]
 	[byte[]] $Protocol,
 
 	[Parameter()]
@@ -188,7 +234,7 @@ else
 	}
 
 	# -TruncationLength default = 128
-	Add-NetEventPacketCaptureProvider -CaptureType BothPhysicalAndSwitch -IpProtocols $Protocol `
+	Add-NetEventPacketCaptureProvider -IpProtocols $Protocol `
 		-TruncationLength 128 @Params @Logs
 }
 

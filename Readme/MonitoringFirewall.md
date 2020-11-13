@@ -18,6 +18,9 @@ This document explains how to monitor Windows firewall activity and network acti
   - [Windows Firewall](#windows-firewall)
   - [TCP View](#tcp-view)
   - [netstat](#netstat)
+  - [Packet trace and analysis](#packet-trace-and-analysis)
+  - [netsh trace](#netsh-trace)
+  - [NetEventPacketCapture](#neteventpacketcapture)
 
 ## Monitor your firewall like a pro
 
@@ -236,4 +239,100 @@ is involved in connection.
 
 ![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Readme/Screenshots/NetStat.png)
 
+A few useful commands are as follows:
+
+Show all TCP connections and executables involved
+
+```powershell
+netstat -obnq -p tcp
+```
+
+Show ICMP statistics:
+
+```powershell
+netstat -s -p icmp
+```
+
 [netstat reference](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/netstat)
+
+## Packet trace and analysis
+
+In some special scenarios you might want to have much more power than what you have with firewall
+logs.
+
+For example if you want to see ICMP traffic one way is to set firewall to log both allowed and
+dropped packets and then filter logs as needed. (ex. with `filterline` extension)
+
+Other times you want to analyse firewall or network performance.
+
+To handle these and similar scenarios there is network capture and tracing solution.
+
+To actually view and analyse *.etl file you'll need to install "Windows Performance Analyzer" which
+is availabe as an optional installment of [Windows 10 SDK](https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk)
+or [Windows ADK](https://docs.microsoft.com/en-us/windows-hardware/get-started/adk-install)
+
+Once you install it and open ETL (Event Trace Log) file here is sample screenshot of traffic analysis:
+
+![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Readme/Screenshots/TraceAnalyze.png)
+
+To generate ETL file you have at least 3 options:
+
+First and the best one is to use "Windows Performance Recorder" which comes with Windows SDK or ADK.
+
+Other 2 methods are described in next 2 sections.
+
+- [Windows Performance Analyzer Intro](https://devblogs.microsoft.com/performance-diagnostics/wpa-intro)
+- [Windows Performance Analyzer reference](https://docs.microsoft.com/en-us/windows-hardware/test/wpt/windows-performance-analyzer)
+
+## netsh trace
+
+`netsh trace` option is similar to capturing "WFP state" and "Packet analysis" discused before.\
+There is no need to use legacy `netsh trace` except to avoid using Windows Performance Analyzer.
+
+Here are few examples for `netsh trace start`
+
+Capture all network traffic and stop when capture file grows to 300 MB
+
+```powershell
+netsh trace start capture=yes fileMode=single maxSize=500 tracefile=C:\trace.etl
+```
+
+Capture network traffic where source or destination IP matches `IPv4.Address` value
+
+```powershell
+netsh trace start capture=yes Ethernet.Type=IPv4 IPv4.Address=192.168.33.33 tracefile=c:\temp\trace.etl
+```
+
+Capture only ICMPv6 traffic
+
+```powershell
+netsh trace start capture=yes protocol=58 tracefile=c:\temp\trace.etl
+```
+
+Capture only UDP traffic where source or destination IP matches `IPv4.Address` value
+
+```powershell
+netsh trace start capture=yes Ethernet.Type=IPv4 IPv4.Address=192.168.33.33 protocol=17 tracefile=c:\temp\trace.etl
+```
+
+Capture all network traffic on a specific Network Interface
+
+```powershell
+netsh trace start capture=yes tracefile=c:\temp\trace.etl CaptureInterface="Ethernet interface"
+```
+
+## NetEventPacketCapture
+
+NetEventPacketCapture is a PowerShell module that is a replacement for `netsh trace`
+
+Almost everything `netsh trace` can do can be also done with NetEventPacketCapture module.
+
+Inside `Scripts` folder there are `StartTrace.ps1` and `StopTrace.ps1` scripts which you can use
+to quickly start and stop package capture.
+
+Keep in mind that both the `netsh trace` and `NetEventPacketCapture` generate an ETL file
+(Event Trace Log), problem in both cases is lack of executable involved.
+
+This problem can be solved with the before explained method "Packet trace and analysis" by using
+
+[NetEventPacketCapture reference](https://docs.microsoft.com/en-us/powershell/module/neteventpacketcapture/?view=win10-ps)

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WpaProfileContainer xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="2" xmlns="http://tempuri.org/SerializableElement.xsd">
+  <Content xsi:type="WpaProfile2">
+    <Sessions>
+      <Session Index="0">
+        <FileReferences />
+      </Session>
+    </Sessions>
+    <Views>
+      <View Guid="5346bb2f-913d-4eaf-9b3a-47f7caaaa1bc" IsVisible="true" Title="Analysis">
+        <Graphs>
+          <Graph Guid="21214383-88f8-4603-9eac-2a6422756b11" LayoutStyle="All" Color="#FF5FC7C7" GraphHeight="125" IsMinimized="false" IsShown="true" IsExpanded="false">
+            <Preset Name="Events by Count" GraphChartType="StackedBars" BarGraphIntervalCount="50" AggregationOverTime="Rate" IsThreadActivityTable="false" GraphColumnCount="16" KeyColumnCount="1" LeftFrozenColumnCount="3" RightFrozenColumnCount="4" InitialFilterShouldKeep="true" InitialSelectionQuery="([Event Type]:=Retransmit OR [Event Type]:=Error OR [Event Type]:=DupAck)" GraphFilterColumnGuid="aabbf5f7-fc6a-4ff6-af78-0d90f340968f" GraphFilterTopValue="0" GraphFilterThresholdValue="0">
+              <MetadataEntries>
+                <MetadataEntry Guid="869dba43-0f44-4572-9994-29d61aa43280" Name="Time" ColumnMetadata="StartTime" />
+              </MetadataEntries>
+              <HighlightEntries />
+              <Columns>
+                <Column Guid="aabbf5f7-fc6a-4ff6-af78-0d90f340968f" Name="Event Type" AggregationMode="UniqueCount" SortPriority="1" Width="120" IsVisible="true" />
+                <Column Guid="699ee728-cf1b-4c03-98d7-9d889220d40b" Name="Event" SortPriority="2" Width="110" IsVisible="true" />
+                <Column Guid="869dba43-0f44-4572-9994-29d61aa43280" Name="Time" AggregationMode="Max" SortPriority="3" Width="90" IsVisible="true">
+                  <DateTimeTimestampOptionsParameter DateTimeEnabled="false" />
+                </Column>
+                <Column Guid="b1ff4098-d080-48a4-ab78-5ebf571e6cf0" Name="Connection Id" SortPriority="4" Width="39" IsVisible="true" />
+                <Column Guid="bfdd92db-9783-49a1-9627-3562e237ea57" Name="Process" SortPriority="5" Width="312" IsVisible="true">
+                  <ProcessOptionsParameter />
+                </Column>
+                <Column Guid="08b8fe6b-4261-494a-9a03-b71f0c7c954e" Name="Protocol" SortOrder="Ascending" SortPriority="0" Width="72" IsVisible="true" />
+                <Column Guid="a84e5378-a9cc-4ee9-9d77-063646b7c2f9" Name="Local IP" SortPriority="6" Width="110" IsVisible="true" />
+                <Column Guid="e8b90424-59b2-47e8-ae64-65aad8b2563a" Name="Remote IP" SortPriority="7" Width="118" IsVisible="true" />
+                <Column Guid="d521059e-8452-4e18-9937-39cb1e4dc586" Name="Local Port" SortPriority="8" Width="70" IsVisible="true" />
+                <Column Guid="c7f95d9b-9a36-469e-86b8-7df7be2024c3" Name="Remote Port" SortPriority="9" Width="79" IsVisible="true" />
+                <Column Guid="ae3f2bb9-4d8e-4d72-8536-b42ecfca6b93" Name="Bytes" AggregationMode="Sum" SortPriority="10" Width="120" IsVisible="false" />
+                <Column Guid="09b7165c-4ce0-4bd7-9621-bc260f577f32" Name="Tcp Send State" AggregationMode="UniqueCount" SortPriority="11" Width="120" IsVisible="true" />
+                <Column Guid="aa93a320-6580-4664-9bb4-aa45dca9ac64" Name="Termination Reason" SortPriority="12" Width="182" IsVisible="true" />
+                <Column Guid="7aef84b7-38e4-41ba-8bcb-033a6e048f52" Name="Count" AggregationMode="Sum" SortPriority="13" Width="67" IsVisible="true" />
+              </Columns>
+            </Preset>
+          </Graph>
+        </Graphs>
+        <SessionIndices>
+          <SessionIndex>0</SessionIndex>
+        </SessionIndices>
+      </View>
+    </Views>
+    <ModifiedGraphs>
+      <GraphSchema Guid="21214383-88f8-4603-9eac-2a6422756b11">
+        <ModifiedPresets>
+          <Preset Name="Events by Count" GraphChartType="StackedBars" BarGraphIntervalCount="50" AggregationOverTime="Rate" IsThreadActivityTable="false" GraphColumnCount="16" KeyColumnCount="1" LeftFrozenColumnCount="3" RightFrozenColumnCount="4" InitialFilterShouldKeep="true" InitialSelectionQuery="([Event Type]:=Retransmit OR [Event Type]:=Error OR [Event Type]:=DupAck)" GraphFilterColumnGuid="aabbf5f7-fc6a-4ff6-af78-0d90f340968f" GraphFilterTopValue="0" GraphFilterThresholdValue="0">
+            <MetadataEntries>
+              <MetadataEntry Guid="869dba43-0f44-4572-9994-29d61aa43280" Name="Time" ColumnMetadata="StartTime" />
+            </MetadataEntries>
+            <HighlightEntries />
+            <Columns>
+              <Column Guid="aabbf5f7-fc6a-4ff6-af78-0d90f340968f" Name="Event Type" AggregationMode="UniqueCount" SortPriority="1" Width="120" IsVisible="true" />
+              <Column Guid="699ee728-cf1b-4c03-98d7-9d889220d40b" Name="Event" SortPriority="2" Width="110" IsVisible="true" />
+              <Column Guid="869dba43-0f44-4572-9994-29d61aa43280" Name="Time" AggregationMode="Max" SortPriority="3" Width="90" IsVisible="true">
+                <DateTimeTimestampOptionsParameter DateTimeEnabled="false" />
+              </Column>
+              <Column Guid="b1ff4098-d080-48a4-ab78-5ebf571e6cf0" Name="Connection Id" SortPriority="4" Width="39" IsVisible="true" />
+              <Column Guid="bfdd92db-9783-49a1-9627-3562e237ea57" Name="Process" SortPriority="5" Width="302" IsVisible="true">
+                <ProcessOptionsParameter />
+              </Column>
+              <Column Guid="08b8fe6b-4261-494a-9a03-b71f0c7c954e" Name="Protocol" SortOrder="Ascending" SortPriority="0" Width="72" IsVisible="true" />
+              <Column Guid="a84e5378-a9cc-4ee9-9d77-063646b7c2f9" Name="Local IP" SortPriority="6" Width="110" IsVisible="true" />
+              <Column Guid="e8b90424-59b2-47e8-ae64-65aad8b2563a" Name="Remote IP" SortPriority="7" Width="118" IsVisible="true" />
+              <Column Guid="d521059e-8452-4e18-9937-39cb1e4dc586" Name="Local Port" SortPriority="8" Width="70" IsVisible="true" />
+              <Column Guid="c7f95d9b-9a36-469e-86b8-7df7be2024c3" Name="Remote Port" SortPriority="9" Width="79" IsVisible="true" />
+              <Column Guid="ae3f2bb9-4d8e-4d72-8536-b42ecfca6b93" Name="Bytes" AggregationMode="Sum" SortPriority="10" Width="120" IsVisible="false" />
+              <Column Guid="09b7165c-4ce0-4bd7-9621-bc260f577f32" Name="Tcp Send State" AggregationMode="UniqueCount" SortPriority="11" Width="120" IsVisible="true" />
+              <Column Guid="aa93a320-6580-4664-9bb4-aa45dca9ac64" Name="Termination Reason" SortPriority="12" Width="182" IsVisible="true" />
+              <Column Guid="7aef84b7-38e4-41ba-8bcb-033a6e048f52" Name="Count" AggregationMode="Sum" SortPriority="13" Width="100" IsVisible="true" />
+            </Columns>
+          </Preset>
+        </ModifiedPresets>
+        <PersistedPresets>
+          <Preset Name="Events by Count" GraphChartType="StackedBars" BarGraphIntervalCount="50" AggregationOverTime="Rate" IsThreadActivityTable="false" GraphColumnCount="16" KeyColumnCount="1" LeftFrozenColumnCount="3" RightFrozenColumnCount="4" InitialFilterShouldKeep="true" InitialSelectionQuery="([Event Type]:=Retransmit OR [Event Type]:=Error OR [Event Type]:=DupAck)" GraphFilterColumnGuid="aabbf5f7-fc6a-4ff6-af78-0d90f340968f" GraphFilterTopValue="0" GraphFilterThresholdValue="0">
+            <MetadataEntries>
+              <MetadataEntry Guid="869dba43-0f44-4572-9994-29d61aa43280" Name="Time" ColumnMetadata="StartTime" />
+            </MetadataEntries>
+            <HighlightEntries />
+            <Columns>
+              <Column Guid="aabbf5f7-fc6a-4ff6-af78-0d90f340968f" Name="Event Type" AggregationMode="UniqueCount" SortPriority="1" Width="120" IsVisible="true" />
+              <Column Guid="699ee728-cf1b-4c03-98d7-9d889220d40b" Name="Event" SortPriority="2" Width="110" IsVisible="true" />
+              <Column Guid="869dba43-0f44-4572-9994-29d61aa43280" Name="Time" AggregationMode="Max" SortPriority="3" Width="90" IsVisible="true">
+                <DateTimeTimestampOptionsParameter DateTimeEnabled="false" />
+              </Column>
+              <Column Guid="b1ff4098-d080-48a4-ab78-5ebf571e6cf0" Name="Connection Id" SortPriority="4" Width="39" IsVisible="true" />
+              <Column Guid="bfdd92db-9783-49a1-9627-3562e237ea57" Name="Process" SortPriority="5" Width="312" IsVisible="true">
+                <ProcessOptionsParameter />
+              </Column>
+              <Column Guid="08b8fe6b-4261-494a-9a03-b71f0c7c954e" Name="Protocol" SortOrder="Ascending" SortPriority="0" Width="72" IsVisible="true" />
+              <Column Guid="a84e5378-a9cc-4ee9-9d77-063646b7c2f9" Name="Local IP" SortPriority="6" Width="110" IsVisible="true" />
+              <Column Guid="e8b90424-59b2-47e8-ae64-65aad8b2563a" Name="Remote IP" SortPriority="7" Width="118" IsVisible="true" />
+              <Column Guid="d521059e-8452-4e18-9937-39cb1e4dc586" Name="Local Port" SortPriority="8" Width="70" IsVisible="true" />
+              <Column Guid="c7f95d9b-9a36-469e-86b8-7df7be2024c3" Name="Remote Port" SortPriority="9" Width="79" IsVisible="true" />
+              <Column Guid="ae3f2bb9-4d8e-4d72-8536-b42ecfca6b93" Name="Bytes" AggregationMode="Sum" SortPriority="10" Width="120" IsVisible="false" />
+              <Column Guid="09b7165c-4ce0-4bd7-9621-bc260f577f32" Name="Tcp Send State" AggregationMode="UniqueCount" SortPriority="11" Width="120" IsVisible="true" />
+              <Column Guid="aa93a320-6580-4664-9bb4-aa45dca9ac64" Name="Termination Reason" SortPriority="12" Width="182" IsVisible="true" />
+              <Column Guid="7aef84b7-38e4-41ba-8bcb-033a6e048f52" Name="Count" AggregationMode="Sum" SortPriority="13" Width="67" IsVisible="true" />
+            </Columns>
+          </Preset>
+        </PersistedPresets>
+      </GraphSchema>
+    </ModifiedGraphs>
+  </Content>
+</WpaProfileContainer>
