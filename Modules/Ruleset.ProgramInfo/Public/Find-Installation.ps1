@@ -518,6 +518,11 @@ function Find-Installation
 
 			break
 		}
+		"BingWallpaper"
+		{
+			Edit-Table "%SystemDrive%\Users\$DefaultUser\AppData\Local\Microsoft\BingWallpaperApp"
+			break
+		}
 		default
 		{
 			Write-Warning -Message "Parameter '$Program' not recognized"

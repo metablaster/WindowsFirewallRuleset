@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for outbound rule set
+Outbound rule template
 
 .DESCRIPTION
 Use OutboundRule.ps1 as a template for outbound firewall rule set

@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Script for inbound rule set
+Inbound rule template
 
 .DESCRIPTION
 Use InboundRule.ps1 as a template for inbound firewall rule set

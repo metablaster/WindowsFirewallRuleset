@@ -167,6 +167,16 @@ Also few commandlets from these modules:
 
 [gpupdate](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/gpupdate)
 
+[netsh](https://docs.microsoft.com/en-us/windows-server/networking/technologies/netsh/netsh-contexts)
+
+[netsh trace](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-R2-and-2012/jj129382(v=ws.11))
+
+[icacls](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/icacls)
+
+[takeown](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/takeown)
+
+[Windows Performance Analyzer](https://docs.microsoft.com/en-us/windows-hardware/test/wpt/windows-performance-analyzer)
+
 ## Unclassified links
 
 [Check IP](https://whatismyipaddress.com/ip-lookup)
