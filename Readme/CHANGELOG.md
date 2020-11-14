@@ -8,6 +8,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - [Changelog](#changelog)
   - [Table of contents](#table-of-contents)
+  - [v0.8.1 (develop branch)](#v081-develop-branch)
   - [v0.8.0 (current release)](#v080-current-release)
   - [v0.7.0](#v070)
   - [v0.6.0](#v060)
@@ -16,6 +17,41 @@ If you would like to see fresh changes done since last release you can do so on 
   - [v0.4.0](#v040)
   - [v0.3.0](#v030)
   - [v0.2](#v02)
+
+## v0.8.1 (develop branch)
+
+- Rules
+
+  - Added rules for "Bing walpaper" app
+
+  - Improved following rules:
+    - ICMPv6,
+    - CoreNetworking,
+    - Multicast,
+    - NetworkDiscovery,
+    - NetworkSharing,
+    - DNSCrypt
+    - Broadcast
+
+- Modules
+
+  - Added new module `WindowsCompatibility` because Appx module no longer works with PowerShell Core
+
+- Documentation
+
+  - Updated/improved following docs:
+    - Manage GPO Firewall
+    - Monitoring Firewall
+    - Firewall Parameters
+    - Powershell Commands
+    - Reference
+    - Predefined Rules
+    - Problematic Traffic
+
+- New features
+
+  - Scripts to start/stop packet trace and capture.
+  - Script to get hidden rule properties
 
 ## v0.8.0 (current release)
 
