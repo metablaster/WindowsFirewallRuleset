@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2020 metablaster zebal@protonmail.ch
+Copyright (C) 2018, 2019 Microsoft Corporation. All rights reserved
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -38,6 +38,24 @@ or, in the case where there is no existing session,
 a new default session will be created.
 This behavior can be overridden using the additional parameters on this command.
 
+.PARAMETER Name
+Pattern to filter module names by
+
+.PARAMETER ComputerName
+If you don't want to use the default compatibility session, use this parameter to specify the name
+of the computer on which to create the compatibility session.
+
+.PARAMETER ConfigurationName
+Specifies the configuration to connect to when creating the compatibility session
+(Defaults to 'Microsoft.PowerShell')
+
+.PARAMETER Credential
+The credential to use when creating the compatibility session using the target machine/configuration
+
+.PARAMETER Full
+If specified, the complete deserialized module object
+will be returned instead of the abbreviated form returned by default.
+
 .EXAMPLE
 PS> Get-WinModule *PNP*
 
@@ -55,42 +73,33 @@ System.Management.Automation.PSObject
 
 .NOTES
 None.
-TODO: Update Copyright and start implementing module function
-TODO: Update HelpURI
+
+.LINK
+https://github.com/PowerShell/WindowsCompatibility
 #>
 function Get-WinModule
 {
-	[CmdletBinding()]
+	[CmdletBinding(
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Get-WinModule.md")]
 	[OutputType([PSObject])]
 	Param
 	(
-		# Pattern to filter module names by
 		[Parameter(Mandatory = $false, Position = 0)]
 		[String[]]
 		$Name = '*',
 
-		# If you don't want to use the default compatibility session, use
-		# this parameter to specify the name of the computer on which to create
-		# the compatibility session.
 		[Alias("cn")]
 		[String]
 		$ComputerName,
 
-		# Specifies the configuration to connect to when creating the compatibility session
-		# (Defaults to 'Microsoft.PowerShell')
 		[Parameter()]
 		[String]
 		$ConfigurationName,
 
-		# The credential to use when creating the compatibility session
-		# using the target machine/configuration
 		[Parameter()]
 		[PSCredential]
 		$Credential,
 
-		# If specified, the complete deserialized module object
-		# will be returned instead of the abbreviated form returned
-		# by default.
 		[Parameter()]
 		[Switch]
 		$Full

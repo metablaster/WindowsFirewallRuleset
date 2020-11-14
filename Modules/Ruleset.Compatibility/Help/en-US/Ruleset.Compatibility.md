@@ -6,13 +6,13 @@ Help Version: 0.0.0.1
 Locale: en-US
 ---
 
-# WindowsCompatibility Module
+# Ruleset.Compatibility Module
 
 ## Description
 
 This module provides PowerShell Core 6 compatibility with existing Windows PowerShell scripts.
 
-## WindowsCompatibility Cmdlets
+## Ruleset.Compatibility Cmdlets
 
 ### [Add-WindowsPSModulePath](Add-WindowsPSModulePath.md)
 

@@ -35,7 +35,8 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - Modules
 
-  - Added new module `WindowsCompatibility` because Appx module no longer works with PowerShell Core
+  - Added new module `Ruleset.Compatibility` because `Appx` module no longer works since PowerShell
+  Core 7.1
 
 - Documentation
 
@@ -51,7 +52,7 @@ If you would like to see fresh changes done since last release you can do so on 
 - New features
 
   - Scripts to start/stop packet trace and capture.
-  - Script to get hidden rule properties
+  - Utility script to list "hidden" rule properties
 
 ## v0.8.0 (current release)
 

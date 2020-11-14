@@ -1,10 +1,11 @@
+
 # Quick Start Guide
 
 This guide provides several simple examples for how to use this module.
 For more information on the commands in this module,
 please see the [Module Documentation][ModuleDocs].
 
-[ModuleDocs]: ./Module/WindowsCompatibility.md
+[ModuleDocs]: ./en-US/Ruleset.Compatibility.md
 
 ## View the Windows Event Log in PowerShell Core
 

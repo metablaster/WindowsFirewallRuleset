@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2020 metablaster zebal@protonmail.ch
+Copyright (C) 2018, 2019 Microsoft Corporation. All rights reserved
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -40,6 +40,24 @@ they will be available just like the other native modules for PowerShell Core.
 Note that if there already is a module in the destination corresponding to the module
 to be copied's name, it will not be copied.
 
+.PARAMETER Name
+Specifies names or name patterns of modules that will be copied.
+Wildcard characters are permitted.
+
+.PARAMETER ComputerName
+If you don't want to use the default compatibility session, use this parameter to specify the name
+of the computer on which to create the compatibility session.
+
+.PARAMETER ConfigurationName
+Specifies the configuration to connect to when creating the compatibility session
+(Defaults to 'Microsoft.PowerShell')
+
+.PARAMETER Credential
+If needed, use this parameter to specify credentials for the compatibility session
+
+.PARAMETER Destination
+The location where compatible modules should be copied to
+
 .EXAMPLE
 PS> Copy-WinModule hyper-v -WhatIf -Verbose
 
@@ -59,41 +77,34 @@ None. Copy-WinModule does not generate any output
 
 .NOTES
 None.
-TODO: Update Copyright and start implementing module function
-TODO: Update HelpURI
+
+.LINK
+https://github.com/PowerShell/WindowsCompatibility
 #>
 function Copy-WinModule
 {
-	[CmdletBinding(SupportsShouldProcess)]
+	[CmdletBinding(SupportsShouldProcess = $true,
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Copy-WinModule.md")]
 	[OutputType([void])]
 	Param
 	(
-		# Specifies names or name patterns of modules that will be copied.
-		# Wildcard characters are permitted.
 		[Parameter(Mandatory = $false, Position = 0)]
 		[String[]]
 		$Name = "*",
 
-		# If you don't want to use the default compatibility session, use
-		# this parameter to specify the name of the computer on which to create
-		# the compatibility session.
 		[Parameter()]
 		[String]
 		[Alias("cn")]
 		$ComputerName,
 
-		# Specifies the configuration to connect to when creating the compatibility session
-		# (Defaults to 'Microsoft.PowerShell')
 		[Parameter()]
 		[String]
 		$ConfigurationName,
 
-		# If needed, use this parameter to specify credentials for the compatibility session
 		[Parameter()]
 		[PSCredential]
 		$Credential,
 
-		# The location where compatible modules should be copied to
 		[Parameter()]
 		[String]
 		$Destination

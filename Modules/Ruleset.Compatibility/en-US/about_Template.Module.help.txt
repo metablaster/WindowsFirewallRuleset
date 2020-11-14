@@ -1,0 +1,51 @@
+
+TOPIC
+	about_Ruleset.Compatibility
+
+SHORT DESCRIPTION
+	Windows PowerShell Compatibility Pack
+
+LONG DESCRIPTION
+	This module provides PowerShell Core 6 compatibility with existing Windows PowerShell scripts
+
+EXAMPLES
+	Add-WindowsPSModulePath
+
+	Appends the existing Windows PowerShell PSModulePath to existing PSModulePath
+
+	Add-WinFunction
+
+	This command defines a global function that always runs in the compatibility session.
+
+	Compare-WinModule
+
+	Compare the set of modules for this version of PowerShell against those available in the compatibility session.
+
+	Copy-WinModule
+
+	Copy modules from the compatibility session that are directly usable in PowerShell Core.
+
+	Get-WinModule
+
+	Get a list of the available modules from the compatibility session
+
+	Import-WinModule
+
+	Import a compatibility module.
+
+	Initialize-WinSession
+
+	Initialize the connection to the compatibility session.
+
+	Invoke-WinCommand
+
+	Invoke a ScriptBlock that runs in the compatibility runspace.
+
+KEYWORDS
+	WindowsPowerShell
+	Compatibility
+	Core
+
+SEE ALSO
+	https://github.com/metablaster/WindowsFirewallRuleset/tree/develop/Modules/Ruleset.Compatibility/Help
+	https://github.com/PowerShell/WindowsCompatibility

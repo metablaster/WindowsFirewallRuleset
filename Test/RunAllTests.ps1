@@ -33,6 +33,9 @@ Master unit test
 .DESCRIPTION
 Run all unit tests located inside "Test" folder one by one
 
+.PARAMETER Pester
+If specified, run only pester tests
+
 .EXAMPLE
 PS> .\RunAllTests.ps1
 
@@ -51,6 +54,12 @@ TODO: Test should be run in order of module or function (or both) inter dependen
 TODO: We should handle to skip "dangerous" tests
 #>
 
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Pester
+)
+
 # Initialization
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
@@ -65,35 +74,52 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Set-Variable -Name Accept -Scope Local -Option ReadOnly -Force -Value "Run all unit tests one by one"
-Set-Variable -Name Deny -Scope Local -Option ReadOnly -Force -Value "Abort operation, no unit tests will run"
+New-Variable -Name Accept -Scope Local -Option ReadOnly -Force -Value "Run all unit tests one by one"
+New-Variable -Name Deny -Scope Local -Option ReadOnly -Force -Value "Abort operation, no unit tests will run"
+if ($Pester)
+{
+	Set-Variable -Name Accept -Scope Local -Option ReadOnly -Force -Value "Run all pester tests only, one by one"
+}
+
 Update-Context $TestContext $ThisScript
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 $OldLocation = Get-Location
 Set-Location -Path test:
 
-# Recursively get list of powershell scripts (unit tests)
-$UnitTests = Get-ChildItem -Path $ProjectRoot\Test -Recurse -Filter *.ps1 -Exclude "ContextSetup.ps1", "$ThisScript.ps1" @Logs
+if (!$Pester)
+{
+	# Recursively get list of powershell scripts (unit tests)
+	$UnitTests = Get-ChildItem -Path $ProjectRoot\Test -Recurse -Filter *.ps1 -Exclude "ContextSetup.ps1", "$ThisScript.ps1" @Logs
 
-if ($UnitTests)
-{
-	# Run them all
-	foreach ($Test in $UnitTests)
+	if ($UnitTests)
 	{
-		& $Test.FullName
+		# Run them all
+		foreach ($Test in $UnitTests)
+		{
+			& $Test.FullName
+		}
 	}
-}
-else
-{
-	Write-Error -Category ObjectNotFound -TargetObject $Files -Message "No powershell script files found" @Logs
+	else
+	{
+		Write-Error -Category ObjectNotFound -TargetObject $Files -Message "No powershell script files found" @Logs
+	}
 }
 
 Write-Information -Tags "Project" -MessageData "INFO: Starting pester tests"
 
 # Recursively get list of pester tests
 # TODO: Tests from Private folder excluded because out of date
-$PesterTests = Get-ChildItem -Path $ProjectRoot\Modules\Ruleset.IP\Test\Public -Recurse -Filter *.ps1 @Logs
+$PesterTests = Get-ChildItem -Path $ProjectRoot\Modules\Ruleset.IP\Test\Public -Filter *.ps1 @Logs
+
+if ($PSVersionTable.PSVersion -ge "6.1")
+{
+	$PesterTests = Get-ChildItem -Path $ProjectRoot\Modules\Ruleset.Compatibility\Test -Filter *.ps1 @Logs
+}
+else
+{
+	Write-Warning -Message "Tests for 'Ruleset.Compatibility' module skipped, PowerShell Core >= 6.1 required to run them"
+}
 
 if ($PesterTests)
 {

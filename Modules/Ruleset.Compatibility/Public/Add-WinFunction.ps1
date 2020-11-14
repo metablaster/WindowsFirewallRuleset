@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2020 metablaster zebal@protonmail.ch
+Copyright (C) 2018, 2019 Microsoft Corporation. All rights reserved
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,6 +39,23 @@ By default, when executing, the current compatibility session is used,
 or, in the case where there is no existing session, a new default session will be created.
 This behavior can be overridden using the additional parameters on the command.
 
+.PARAMETER Name
+The name of the function to define
+
+.PARAMETER ScriptBlock
+Scriptblock to use as the body of the function
+
+.PARAMETER ComputerName
+If you don't want to use the default compatibility session, use this parameter to specify the name
+of the computer on which to create the compatibility session.
+
+.PARAMETER ConfigurationName
+Specifies the configuration to connect to when creating the compatibility session
+(Defaults to 'Microsoft.PowerShell')
+
+.PARAMETER Credential
+The credential to use when creating the compatibility session using the target machine/configuration
+
 .EXAMPLE
 PS> Add-WinFunction myFunction {param ($n) "Hi $n!"; $PSVersionTable.PSEdition }
 PS> myFunction Bill
@@ -57,42 +74,35 @@ None. Add-WinFunction does not generate any output
 
 .NOTES
 None.
-TODO: Update Copyright and start implementing module function
-TODO: Update HelpURI
+
+.LINK
+https://github.com/PowerShell/WindowsCompatibility
 #>
 function Add-WinFunction
 {
-	[CmdletBinding()]
+	[CmdletBinding(
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Add-WinFunction.md")]
 	[OutputType([void])]
 	Param
 	(
-		# The name of the function to define
 		[Parameter(Mandatory, Position = 0)]
 		[String]
 		[Alias("FunctionName")]
 		$Name,
 
-		# Scriptblock to use as the body of the function
 		[Parameter(Mandatory, Position = 1)]
 		[ScriptBlock]
 		$ScriptBlock,
 
-		# If you don't want to use the default compatibility session, use
-		# this parameter to specify the name of the computer on which to create
-		# the compatibility session.
 		[Parameter()]
 		[String]
 		[Alias("Cn")]
 		$ComputerName,
 
-		# Specifies the configuration to connect to when creating the compatibility session
-		# (Defaults to 'Microsoft.PowerShell')
 		[Parameter()]
 		[String]
 		$ConfigurationName,
 
-		# The credential to use when creating the compatibility session
-		# using the target machine/configuration
 		[Parameter()]
 		[PSCredential]
 		$Credential

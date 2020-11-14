@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2020 metablaster zebal@protonmail.ch
+Copyright (C) 2018, 2019 Microsoft Corporation. All rights reserved
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -40,6 +40,20 @@ it will be closed and a new session will be retrieved.
 
 This command is called by the other commands in this module so you will rarely call this command directly.
 
+.PARAMETER ComputerName
+If you don't want to use the default compatibility session, use this parameter to specify the name
+of the computer on which to create the compatibility session.
+
+.PARAMETER ConfigurationName
+Specifies the configuration to connect to when creating the compatibility session
+(Defaults to 'Microsoft.PowerShell')
+
+.PARAMETER Credential
+The credential to use when connecting to the target machine/configuration
+
+.PARAMETER PassThru
+If present, the specified session object will be returned
+
 .EXAMPLE
 PS> Initialize-WinSession
 
@@ -58,35 +72,30 @@ System.Management.Automation.Runspaces.PSSession
 
 .NOTES
 None.
-TODO: Update Copyright and start implementing module function
-TODO: Update HelpURI
+
+.LINK
+https://github.com/PowerShell/WindowsCompatibility
 #>
 function Initialize-WinSession
 {
-	[CmdletBinding()]
+	[CmdletBinding(
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Initialize-WinSession.md")]
 	[OutputType([System.Management.Automation.Runspaces.PSSession])]
 	Param (
 
-		# If you don't want to use the default compatibility session, use
-		# this parameter to specify the name of the computer on which to create
-		# the compatibility session.
 		[Parameter(Mandatory = $false, Position = 0)]
 		[String]
 		[Alias("Cn")]
 		$ComputerName,
 
-		# Specifies the configuration to connect to when creating the compatibility session
-		# (Defaults to 'Microsoft.PowerShell')
 		[Parameter()]
 		[String]
 		$ConfigurationName,
 
-		# The credential to use when connecting to the target machine/configuration
 		[Parameter()]
 		[PSCredential]
 		$Credential,
 
-		# If present, the specified session object will be returned
 		[Parameter()]
 		[Switch]
 		$PassThru

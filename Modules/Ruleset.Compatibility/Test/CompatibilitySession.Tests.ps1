@@ -1,5 +1,6 @@
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# Licensed under the MIT License.
+
+# Copyright (C) 2018, 2019 Microsoft Corporation. All rights reserved
+# Licensed under the MIT License
 
 using namespace System.Management.Automation
 using namespace System.Management.Automation.Runspaces
@@ -9,7 +10,7 @@ $scriptPath = Split-Path $MyInvocation.MyCommand.Path -Parent
 Describe "Test the Windows PowerShell Compatibility Session functions" {
 
 	BeforeAll {
-		Import-Module -Force "$scriptPath\..\bin\WindowsCompatibility.psd1"
+		Import-Module -Force "$scriptPath\..\Ruleset.Compatibility.psd1"
 	}
 
 	It "Make sure the <command> command exists" -TestCases @(

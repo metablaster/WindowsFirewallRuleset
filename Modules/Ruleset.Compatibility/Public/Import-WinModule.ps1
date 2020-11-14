@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2020 metablaster zebal@protonmail.ch
+Copyright (C) 2018, 2019 Microsoft Corporation. All rights reserved
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -48,6 +48,39 @@ By default, when executing, the current compatibility session is used,
 or, in the case where there is no existing session, a new default session will be created.
 This behavior can be overridden using the additional parameters on the command.
 
+.PARAMETER Name
+Specifies the name of the module to be imported. Wildcards can be used.
+
+.PARAMETER Exclude
+A list of wildcard patterns matching the names of modules that should not be imported.
+
+.PARAMETER ComputerName
+If you don't want to use the default compatibility session, use this parameter to specify the name
+of the computer on which to create the compatibility session.
+
+.PARAMETER ConfigurationName
+Specifies the configuration to connect to when creating the compatibility session
+(Defaults to 'Microsoft.PowerShell')
+
+.PARAMETER Prefix
+Prefix to prepend to the imported command names
+
+.PARAMETER DisableNameChecking
+Disable warnings about non-standard verbs
+
+.PARAMETER NoClobber
+Don't overwrite any existing function definitions
+
+.PARAMETER Force
+Force reloading the module
+
+.PARAMETER Credential
+The credential to use when creating the compatibility session using the target machine/configuration
+
+.PARAMETER PassThru
+If present, the ModuleInfo objects will be written to the output pipe
+as deserialized (PSObject) objects
+
 .EXAMPLE
 PS> Import-WinModule PnpDevice; Get-Command -Module PnpDevice
 
@@ -73,68 +106,54 @@ System.Management.Automation.PSObject
 
 .NOTES
 None.
-TODO: Update Copyright and start implementing module function
-TODO: Update HelpURI
+
+.LINK
+https://github.com/PowerShell/WindowsCompatibility
 #>
 function Import-WinModule
 {
-	[CmdletBinding()]
+	[CmdletBinding(
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Import-WinModule.md")]
 	[OutputType([PSObject])]
 	Param
 	(
-		# Specifies the name of the module to be imported. Wildcards can be used.
 		[Parameter(Mandatory = $False, Position = 0)]
 		[String[]]
 		$Name = "*",
 
-		# A list of wildcard patterns matching the names of modules that
-		# should not be imported.
 		[Parameter()]
 		[string[]]
 		$Exclude = "",
 
-		# If you don't want to use the default compatibility session, use
-		# this parameter to specify the name of the computer on which to create
-		# the compatibility session.
 		[Parameter()]
 		[String]
 		[Alias("cn")]
 		$ComputerName,
 
-		# Specifies the configuration to connect to when creating the compatibility session
-		# (Defaults to 'Microsoft.PowerShell')
 		[Parameter()]
 		[String]
 		$ConfigurationName,
 
-		# Prefix to prepend to the imported command names
 		[Parameter()]
 		[string]
 		$Prefix = "",
 
-		# Disable warnings about non-standard verbs
 		[Parameter()]
 		[Switch]
 		$DisableNameChecking,
 
-		# Don't overwrite any existing function definitions
 		[Parameter()]
 		[Switch]
 		$NoClobber,
 
-		# Force reloading the module
 		[Parameter()]
 		[Switch]
 		$Force,
 
-		# The credential to use when creating the compatibility session
-		# using the target machine/configuration
 		[Parameter()]
 		[PSCredential]
 		$Credential,
 
-		# If present, the ModuleInfo objects will be written to the output pipe
-		# as deserialized (PSObject) objects
 		[Parameter()]
 		[Switch]
 		$PassThru
