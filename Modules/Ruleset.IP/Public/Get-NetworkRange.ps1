@@ -88,7 +88,7 @@ Returns all IP addresses in the range 192.168.0.0 255.255.252.0.
 [ipaddress]
 
 .NOTES
-Following changes by metablaster:
+Modifications by metablaster year 2019, 2020:
 - Include licenses and move comment based help outside of functions
 - For code to be consistent with project code formatting and symbol casing.
 - Removed unnecessary position arguments, added default argument values explicitly.

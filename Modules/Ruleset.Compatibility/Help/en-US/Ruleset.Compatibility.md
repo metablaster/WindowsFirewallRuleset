@@ -1,8 +1,8 @@
 ---
-Module Name: WindowsCompatibility
-Module Guid: 9d427bc5-2ae1-4806-b9d1-2ae62461767e
-Download Help Link:
-Help Version: 0.0.0.1
+Module Name: Ruleset.Compatibility
+Module Guid: eb203a5b-d397-4909-9fe9-00b0f083f36a
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.8.1
+Help Version: 0.8.1
 Locale: en-US
 ---
 

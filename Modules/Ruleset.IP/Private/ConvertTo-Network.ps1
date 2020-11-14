@@ -75,7 +75,8 @@ None. You cannot pipe objects to ConvertTo-Network
 Change log:
 	05/03/2016 - Chris Dent - Refactored and simplified.
 	14/01/2014 - Chris Dent - Created.
-Following changes by metablaster:
+
+Modifications by metablaster year 2019, 2020:
 - Include licenses and move comment based help outside of functions
 - For code to be consistent with project code formatting and symbol casing.
 - Rename function to approved verb

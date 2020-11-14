@@ -1,0 +1,1557 @@
+<?xml version="1.0" encoding="utf-8"?>
+<helpItems schema="maml" xmlns="http://msh">
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Add-WindowsPSModulePath</command:name>
+      <command:verb>Add</command:verb>
+      <command:noun>WindowsPSModulePath</command:noun>
+      <maml:description>
+        <maml:para>Appends the existing Windows PowerShell PSModulePath to existing PSModulePath</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>If the current PSModulePath does not contain the Windows PowerShell PSModulePath, it will be appended to the end.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Add-WindowsPSModulePath</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:Description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:Description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
+        <maml:Description>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:Description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Add-WindowsPSModulePath</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None. Add-WindowsPSModulePath does not generate any output</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Add-WindowsPSModulePath
+Import-Module Hyper-V</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Add-WindowsPSModulePath
+Get-Module -ListAvailable</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Add-WindowsPSModulePath.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Add-WinFunction</command:name>
+      <command:verb>Add</command:verb>
+      <command:noun>WinFunction</command:noun>
+      <maml:description>
+        <maml:para>This command defines a global function that always runs in the compatibility session.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>This command defines a global function that always runs in the compatibility session, returning serialized data to the calling session. Parameters can be specified using the 'param' statement but only positional parameters are supported.</maml:para>
+      <maml:para>By default, when executing, the current compatibility session is used, or, in the case where there is no existing session, a new default session will be created. This behavior can be overridden using the additional parameters on the command.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Add-WinFunction</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="FunctionName">
+          <maml:name>Name</maml:name>
+          <maml:Description>
+            <maml:para>The name of the function to define.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+          <maml:name>ScriptBlock</maml:name>
+          <maml:Description>
+            <maml:para>ScriptBlock to use as the body of the function.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.ScriptBlock</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.ScriptBlock</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Cn">
+          <maml:name>ComputerName</maml:name>
+          <maml:Description>
+            <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session. (Defaults to 'localhost')</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>localhost</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ConfigurationName</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the configuration to connect to when creating the compatibility session. (Defaults to 'Microsoft.PowerShell')</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>'Microsoft.PowerShell</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:Description>
+            <maml:para>The credential to use when creating the compatibility session using the target machine/configuration</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="FunctionName">
+        <maml:name>Name</maml:name>
+        <maml:Description>
+          <maml:para>The name of the function to define.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <maml:name>ScriptBlock</maml:name>
+        <maml:Description>
+          <maml:para>ScriptBlock to use as the body of the function.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.ScriptBlock</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.ScriptBlock</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Cn">
+        <maml:name>ComputerName</maml:name>
+        <maml:Description>
+          <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session. (Defaults to 'localhost')</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>localhost</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>ConfigurationName</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the configuration to connect to when creating the compatibility session. (Defaults to 'Microsoft.PowerShell')</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>'Microsoft.PowerShell</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:Description>
+          <maml:para>The credential to use when creating the compatibility session using the target machine/configuration</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Add-WinFunction</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None. Add-WinFunction does not generate any output</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Add-WinFunction myFunction {param ($n) "Hi $n!"; $PSVersionTable.PSEdition }
+myFunction Bill
+
+Hi Bill!
+Desktop</dev:code>
+        <dev:remarks>
+          <maml:para>This example defines a function called 'myFunction' with 1 parameter. When invoked it will print a message then return the PSVersion table from the compatibility session.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Add-WinFunction.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Compare-WinModule</command:name>
+      <command:verb>Compare</command:verb>
+      <command:noun>WinModule</command:noun>
+      <maml:description>
+        <maml:para>Compare the set of modules for this version of PowerShell against those available in the compatibility session.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Compare the set of modules for this version of PowerShell against those available in the compatibility session.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Compare-WinModule</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>Name</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the names or name patterns of for the modules to compare. Wildcard characters are permitted.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>*</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cn">
+          <maml:name>ComputerName</maml:name>
+          <maml:Description>
+            <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session. (Defaults to 'localhost')</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>localhost</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ConfigurationName</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the configuration to connect to when creating the compatibility session. (Defaults to 'Microsoft.PowerShell')</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Microsoft.PowerShell</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:Description>
+            <maml:para>If needed, use this parameter to specify credentials for the compatibility session.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>Name</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the names or name patterns of for the modules to compare. Wildcard characters are permitted.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>*</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cn">
+        <maml:name>ComputerName</maml:name>
+        <maml:Description>
+          <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session. (Defaults to 'localhost')</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>localhost</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>ConfigurationName</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the configuration to connect to when creating the compatibility session. (Defaults to 'Microsoft.PowerShell')</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>Microsoft.PowerShell</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:Description>
+          <maml:para>If needed, use this parameter to specify credentials for the compatibility session.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Compare-WinModule</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>[System.Management.Automation.PSObject]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Compare-WinModule</dev:code>
+        <dev:remarks>
+          <maml:para>This will return a list of all of the modules available in the compatibility session that are not currently available in the PowerShell Core environment.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Compare-WinModule A*</dev:code>
+        <dev:remarks>
+          <maml:para>This will return a list of all of the compatibility session modules matching the wildcard pattern 'A*'.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Compare-WinModule.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Copy-WinModule</command:name>
+      <command:verb>Copy</command:verb>
+      <command:noun>WinModule</command:noun>
+      <maml:description>
+        <maml:para>Copy modules from the compatibility session that are directly usable in PowerShell Core.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Copy modules from the compatibility session that are directly usable in PowerShell Core. By default, these modules will be copied to $Home/Documents/PowerShell/Modules. This can be overridden using the -Destination parameter. Once these modules have been copied, they will be available just like the other native modules for PowerShell Core.</maml:para>
+      <maml:para>Note that if there already is a module in the destination corresponding to the module to be copied's name, it will not be copied.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Copy-WinModule</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>Name</maml:name>
+          <maml:Description>
+            <maml:para>Specifies names or name patterns of modules that will be copied. Wildcard characters are permitted.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>*</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cn">
+          <maml:name>ComputerName</maml:name>
+          <maml:Description>
+            <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session. (Defaults to 'localhost')</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>localhost</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ConfigurationName</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the configuration to connect to when creating the compatibility session (Defaults to 'Microsoft.PowerShell')</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Microsoft.PowerShell</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:Description>
+            <maml:para>If needed, use this parameter to specify credentials for the compatibility session</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Destination</maml:name>
+          <maml:Description>
+            <maml:para>The location where compatible modules should be copied to</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:Description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:Description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>Name</maml:name>
+        <maml:Description>
+          <maml:para>Specifies names or name patterns of modules that will be copied. Wildcard characters are permitted.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>*</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cn">
+        <maml:name>ComputerName</maml:name>
+        <maml:Description>
+          <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session. (Defaults to 'localhost')</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>localhost</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>ConfigurationName</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the configuration to connect to when creating the compatibility session (Defaults to 'Microsoft.PowerShell')</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>Microsoft.PowerShell</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:Description>
+          <maml:para>If needed, use this parameter to specify credentials for the compatibility session</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Destination</maml:name>
+        <maml:Description>
+          <maml:para>The location where compatible modules should be copied to</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
+        <maml:Description>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:Description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Copy-WinModule</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None. Copy-WinModule does not generate any output</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Copy-WinModule hyper-v -WhatIf -Verbose</dev:code>
+        <dev:remarks>
+          <maml:para>Run the copy command with -WhatIf to see what would be copied to $PSHome/Modules. Also show Verbose information.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Copy-WinModule hyper-v -Destination ~/Documents/PowerShell/Modules</dev:code>
+        <dev:remarks>
+          <maml:para>Copy the specified module to your user module directory.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Copy-WinModule.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-WinModule</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>WinModule</command:noun>
+      <maml:description>
+        <maml:para>Get a list of the available modules from the compatibility session</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Get a list of the available modules from the compatibility session.</maml:para>
+      <maml:para>By default, when executing, the current compatibility session is used, or, in the case where there is no existing session, a new default session will be created. This behavior can be overridden using the additional parameters on this command.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-WinModule</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>Name</maml:name>
+          <maml:Description>
+            <maml:para>Pattern to filter module names by.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>*</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cn">
+          <maml:name>ComputerName</maml:name>
+          <maml:Description>
+            <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session. (Defaults to 'localhost')</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>localhost</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ConfigurationName</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the configuration to connect to when creating the compatibility session (Defaults to 'Microsoft.PowerShell')</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Microsoft.PowerShell</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:Description>
+            <maml:para>The credential to use when creating the compatibility session using the target machine/configuration</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Full</maml:name>
+          <maml:Description>
+            <maml:para>If specified, the complete deserialized module object will be returned instead of the abbreviated form returned by default.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>Name</maml:name>
+        <maml:Description>
+          <maml:para>Pattern to filter module names by.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>*</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cn">
+        <maml:name>ComputerName</maml:name>
+        <maml:Description>
+          <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session. (Defaults to 'localhost')</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>localhost</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>ConfigurationName</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the configuration to connect to when creating the compatibility session (Defaults to 'Microsoft.PowerShell')</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>Microsoft.PowerShell</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:Description>
+          <maml:para>The credential to use when creating the compatibility session using the target machine/configuration</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Full</maml:name>
+        <maml:Description>
+          <maml:para>If specified, the complete deserialized module object will be returned instead of the abbreviated form returned by default.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Get-WinModule</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSObject</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Get-WinModule *PNP*
+
+Name      Version Description
+----      ------- -----------
+PnpDevice 1.0.0.0</dev:code>
+        <dev:remarks>
+          <maml:para>This example looks for modules in the compatibility session with the string 'PNP' in their name.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Get-WinModule.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Import-WinModule</command:name>
+      <command:verb>Import</command:verb>
+      <command:noun>WinModule</command:noun>
+      <maml:description>
+        <maml:para>Import a compatibility module.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>This command allows you to import proxy modules from a local or remote session. These proxy modules will allow you to invoke cmdlets that are not directly supported in this version of PowerShell.</maml:para>
+      <maml:para>There are commands in the Windows PowerShell core modules that don't exist natively in PowerShell Core. If these modules are imported, proxies will only be created for the missing commands. Commands that already exist in PowerShell Core will not be overridden. The modules subject to this restriction are:</maml:para>
+      <maml:para>- Microsoft.PowerShell.Management</maml:para>
+      <maml:para>- Microsoft.PowerShell.Utility</maml:para>
+      <maml:para>- Microsoft.PowerShell.Security</maml:para>
+      <maml:para>- Microsoft.PowerShell.Diagnostics</maml:para>
+      <maml:para></maml:para>
+      <maml:para>By default, when executing, the current compatibility session is used, or, in the case where there is no existing session, a new default session will be created. This behavior can be overridden using the additional parameters on the command.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Import-WinModule</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>Name</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the name of the module to be imported. Wildcards can be used.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>*</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Exclude</maml:name>
+          <maml:Description>
+            <maml:para>A list of wildcard patterns matching the names of modules that should not be imported.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cn">
+          <maml:name>ComputerName</maml:name>
+          <maml:Description>
+            <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session. (Defaults to 'localhost')</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>localhost</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ConfigurationName</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the configuration to connect to when creating the compatibility session (Defaults to 'Microsoft.PowerShell')</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Microsoft.PowerShell</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Prefix</maml:name>
+          <maml:Description>
+            <maml:para>Prefix to prepend to the imported command names</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>DisableNameChecking</maml:name>
+          <maml:Description>
+            <maml:para>Disable warnings about non-standard verbs</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>NoClobber</maml:name>
+          <maml:Description>
+            <maml:para>Don't overwrite any existing function definitions.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>Force reloading the module</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:Description>
+            <maml:para>The credential to use when creating the compatibility session using the target machine/configuration</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>PassThru</maml:name>
+          <maml:Description>
+            <maml:para>If present, the ModuleInfo objects will be written to the output pipe as deserialized (PSObject) objects.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>Name</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the name of the module to be imported. Wildcards can be used.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>*</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Exclude</maml:name>
+        <maml:Description>
+          <maml:para>A list of wildcard patterns matching the names of modules that should not be imported.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cn">
+        <maml:name>ComputerName</maml:name>
+        <maml:Description>
+          <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session. (Defaults to 'localhost')</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>localhost</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>ConfigurationName</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the configuration to connect to when creating the compatibility session (Defaults to 'Microsoft.PowerShell')</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>Microsoft.PowerShell</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Prefix</maml:name>
+        <maml:Description>
+          <maml:para>Prefix to prepend to the imported command names</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>DisableNameChecking</maml:name>
+        <maml:Description>
+          <maml:para>Disable warnings about non-standard verbs</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>NoClobber</maml:name>
+        <maml:Description>
+          <maml:para>Don't overwrite any existing function definitions.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Force</maml:name>
+        <maml:Description>
+          <maml:para>Force reloading the module</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:Description>
+          <maml:para>The credential to use when creating the compatibility session using the target machine/configuration</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>PassThru</maml:name>
+        <maml:Description>
+          <maml:para>If present, the ModuleInfo objects will be written to the output pipe as deserialized (PSObject) objects.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Import-WinModule</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSObject</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Import-WinModule PnpDevice; Get-Command -Module PnpDevice</dev:code>
+        <dev:remarks>
+          <maml:para>This example imports the 'PnpDevice' module.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Import-WinModule Microsoft.PowerShell.Management; Get-Command Get-EventLog</dev:code>
+        <dev:remarks>
+          <maml:para>This example imports one of the core Windows PowerShell modules containing commands not natively available in PowerShell Core such as 'Get-EventLog'. Only commands not already present in PowerShell Core will be imported.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Import-WinModule PnpDevice -Verbose -Force</dev:code>
+        <dev:remarks>
+          <maml:para>This example forces a reload of the module 'PnpDevice' with verbose output turned on.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Import-WinModule.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Initialize-WinSession</command:name>
+      <command:verb>Initialize</command:verb>
+      <command:noun>WinSession</command:noun>
+      <maml:description>
+        <maml:para>Initialize the connection to the compatibility session.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Initialize the connection to the compatibility session. By default the compatibility session will be created on the localhost using the 'Microsoft.PowerShell' configuration. On subsequent calls, if a session matching the current specification is found, it will be returned rather than creating a new session. If a matching session is found, but can't be used, it will be closed and a new session will be retrieved.</maml:para>
+      <maml:para>This command is called by the other commands in this module so you will rarely call this command directly.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Initialize-WinSession</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Cn">
+          <maml:name>ComputerName</maml:name>
+          <maml:Description>
+            <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session. (Defaults to 'localhost')</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>localhost</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ConfigurationName</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the configuration to connect to when creating the compatibility session (Defaults to 'Microsoft.PowerShell')</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>$script:DefaultConfigurationName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:Description>
+            <maml:para>The credential to use when connecting to the target machine/configuration</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>PassThru</maml:name>
+          <maml:Description>
+            <maml:para>If present, the specified session object will be returned</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Cn">
+        <maml:name>ComputerName</maml:name>
+        <maml:Description>
+          <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session. (Defaults to 'localhost')</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>localhost</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>ConfigurationName</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the configuration to connect to when creating the compatibility session (Defaults to 'Microsoft.PowerShell')</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>$script:DefaultConfigurationName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:Description>
+          <maml:para>The credential to use when connecting to the target machine/configuration</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>PassThru</maml:name>
+        <maml:Description>
+          <maml:para>If present, the specified session object will be returned</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Initialize-WinSession</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Initialize-WinSession</dev:code>
+        <dev:remarks>
+          <maml:para>Initialize the default compatibility session.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Initialize-WinSession -ComputerName localhost -ConfigurationName Microsoft.PowerShell</dev:code>
+        <dev:remarks>
+          <maml:para>Initialize the compatibility session with a specific computer name and configuration</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Initialize-WinSession.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Invoke-WinCommand</command:name>
+      <command:verb>Invoke</command:verb>
+      <command:noun>WinCommand</command:noun>
+      <maml:description>
+        <maml:para>Invoke a ScriptBlock that runs in the compatibility runspace.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>This command takes a ScriptBlock and invokes it in the compatibility session. Parameters can be passed using the -ArgumentList parameter.</maml:para>
+      <maml:para>By default, when executing, the current compatibility session is used, or, in the case where there is no existing session, a new default session will be created. This behavior can be overridden using the additional parameters on the command.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Invoke-WinCommand</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>ScriptBlock</maml:name>
+          <maml:Description>
+            <maml:para>The ScriptBlock to invoke in the compatibility session.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.ScriptBlock</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.ScriptBlock</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cn">
+          <maml:name>ComputerName</maml:name>
+          <maml:Description>
+            <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session. (Defaults to 'localhost')</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>localhost</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ConfigurationName</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the configuration to connect to when creating the compatibility session (Defaults to 'Microsoft.PowerShell')</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Microsoft.PowerShell</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:Description>
+            <maml:para>The credential to use when connecting to the compatibility session.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ArgumentList</maml:name>
+          <maml:Description>
+            <maml:para>Arguments to pass to the ScriptBlock.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.Object[]</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Object[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>ScriptBlock</maml:name>
+        <maml:Description>
+          <maml:para>The ScriptBlock to invoke in the compatibility session.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.ScriptBlock</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.ScriptBlock</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cn">
+        <maml:name>ComputerName</maml:name>
+        <maml:Description>
+          <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session. (Defaults to 'localhost')</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>localhost</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>ConfigurationName</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the configuration to connect to when creating the compatibility session (Defaults to 'Microsoft.PowerShell')</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>Microsoft.PowerShell</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:Description>
+          <maml:para>The credential to use when connecting to the compatibility session.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>ArgumentList</maml:name>
+        <maml:Description>
+          <maml:para>Arguments to pass to the ScriptBlock.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Object[]</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Object[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Invoke-WinCommand</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSObject</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Invoke-WinCommand {param ($name) "Hello $name, how are you?"; $PSVersionTable.PSVersion} Jeffrey
+
+Hello Jeffrey, how are you?
+Major  Minor  Build  Revision PSComputerName
+-----  -----  -----  -------- --------------
+5      1      17134  1        localhost</dev:code>
+        <dev:remarks>
+          <maml:para>In this example, we're invoking a ScriptBlock with 1 parameter in the compatibility session. This ScriptBlock will simply print a message and then return the version number of the compatibility session.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Invoke-WinCommand {Get-EventLog -Log Application -New 10 }</dev:code>
+        <dev:remarks>
+          <maml:para>This examples invokes Get-EventLog in the compatibility session, returning the 10 newest events in the application log.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Invoke-WinCommand.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+</helpItems>

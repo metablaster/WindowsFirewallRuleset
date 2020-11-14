@@ -27,6 +27,7 @@ SOFTWARE.
 #>
 
 # TODO: Update Copyright and start writing code
+# TODO: If this is based on 3rd party module, include file changes here
 
 # Initialization
 Set-StrictMode -Version Latest

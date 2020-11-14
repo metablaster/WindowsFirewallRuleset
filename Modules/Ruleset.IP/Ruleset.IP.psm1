@@ -47,6 +47,11 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #>
 
+# NOTE: Following modifications by metablaster year 2020:
+# - Code formatting according to the rest of project design
+# - Added module boilerplate code
+# - Renamed module from "Indented.NET.IP" to "Ruleset.IP"
+
 # Initialization
 # TODO: does StrictMode apply to this script only or also all dot sourced scripts?
 Set-StrictMode -Version Latest

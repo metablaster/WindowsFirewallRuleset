@@ -85,7 +85,7 @@ None. You cannot pipe objects to ConvertTo-Subnet
 "Ruleset.IP.Subnet" Custom object
 
 .NOTES
-Following changes by metablaster:
+Modifications by metablaster year 2019, 2020:
 - Include licenses and move comment based help outside of functions
 - For code to be consistent with project code formatting and symbol casing.
 - Removed unnecessary position arguments, added default argument values explicitly.

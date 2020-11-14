@@ -72,6 +72,8 @@ TODO: Online hosting of help content is needed, for now the only purpose is to g
 help files
 TODO: Module page and about_ topic needs to be manually edited, currently we get template only
 To document private functions they must be exported first
+TODO: the "Module Name:" entry in help files (any maybe even "external help file:" entry),
+if not set to correct module name the command will fail
 #>
 
 [CmdletBinding()]
@@ -126,10 +128,46 @@ Import-Module -Name Ruleset.Logging
 # User prompt
 $Accept = "Generate new or update existing help files for all project modules"
 $Deny = "Abort operation, no change to help files is made"
+if ($Module)
+{
+	$Accept = "Generate new or update existing help files for requested modules"
+}
+
 Update-Context $ScriptContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
+
+<#
+.SYNOPSIS
+Formatting according to recommended markdown style
+
+.PARAMETER FileName
+Markdown file
+#>
+function Format-Document
+{
+	[CmdletBinding()]
+	param (
+		[Parameter()]
+		[string] $FileName
+	)
+
+	Write-Information -Tags "Project" -MessageData "INFO: Formatting document $(Split-Path -Path $FileName -Leaf)"
+	$FileData = Get-Content -Path $FileName -Encoding $Encoding -Raw
+
+	# Blank line after heading
+	Write-Verbose -Message "[$ThisScript] Setting blank lines around headings in $Command.md"
+	$FileData = $FileData -replace '(?m)(?<heading>^#+\s.+$\n)(?=\S)', "`${heading}`r`n"
+
+	# Empty code fences
+	# NOTE: module page has no code fences
+	Write-Verbose -Message "[$ThisScript] Setting explicit code fences in $Command.md"
+	$FileData = $FileData -replace '(?m)(?<fence>^```)(?=\r\n\w+)', "`${fence}none"
+
+	# TODO: new line is inserted in module page, NoNewline ignored
+	Set-Content -NoNewline -Path $FileName -Value $FileData -Encoding $Encoding
+}
 
 # Setup local variables
 # Root directory of help content for current module and culture
@@ -150,7 +188,7 @@ if ([string]::IsNullOrEmpty($Module))
 # NOTE: separate folder for upgrade logs
 if (!(Test-Path -PathType Container -Path $UpgradeLogsDir))
 {
-	New-Item -ItemType Container -Path $UpgradeLogsDir
+	New-Item -ItemType Container -Path $UpgradeLogsDir | Out-Null
 }
 
 foreach ($ModuleName in $Module)
@@ -178,9 +216,11 @@ foreach ($ModuleName in $Module)
 
 # Help directory
 
-Contains online help files
+Contains online help files in markdown format.\
+These files are used for online reading ex. with `Get-Help -Online`
 
-While generating help files, temporary folders may appear in language specific subfolders
+**NOTE:** The procedure to generate help files will create local only temporary folders in language
+specific subfolders
 "@
 	}
 
@@ -215,7 +255,7 @@ While generating help files, temporary folders may appear in language specific s
 			if ([string]::IsNullOrEmpty($FileData -match "^Download Help Link: $DownloadLink$"))
 			{
 				Write-Information -Tags "Project" -MessageData "INFO: Updating download link in $ModuleName.md"
-				$FileData -replace "(?<=Download Help Link: ).+", $DownloadLink |
+				$FileData -replace "(?<=Download Help Link:).*", " $DownloadLink" |
 				Set-Content -Path $ModulePage -Encoding $Encoding
 			}
 
@@ -254,38 +294,10 @@ While generating help files, temporary folders may appear in language specific s
 
 		# NOTE: Need to run to add "online version" metadata to newly generated files which are missing the link
 		# Also to perform formatting according to recommended markdown style
-		$ModuleCommands = ($ModuleInfo | Select-Object -ExpandProperty ExportedCommands).GetEnumerator() |
+		$ModuleFunctions = ($ModuleInfo | Select-Object -ExpandProperty ExportedFunctions).GetEnumerator() |
 		Select-Object -ExpandProperty Key
 
-		<#
-		.SYNOPSIS
-		Formatting according to recommended markdown style
-		.PARAMETER FileName
-		Markdown file
-		#>
-		function Format-Document
-		{
-			param (
-				[string] $FileName
-			)
-
-			Write-Information -Tags "Project" -MessageData "INFO: Formatting document $(Split-Path -Path $FileName -Leaf)"
-			$FileData = Get-Content -Path $FileName -Encoding $Encoding -Raw
-
-			# Blank line after heading
-			Write-Verbose -Message "[$ThisScript] Setting blank lines around headings in $Command.md"
-			$FileData = $FileData -replace '(?m)(?<heading>^#+\s.+$\n)(?=\S)', "`${heading}`r`n"
-
-			# Empty code fences
-			# NOTE: module page has no code fences
-			Write-Verbose -Message "[$ThisScript] Setting explicit code fences in $Command.md"
-			$FileData = $FileData -replace '(?m)(?<fence>^```)(?=\r\n\w+)', "`${fence}none"
-
-			# TODO: new line is inserted in module page, NoNewline ignored
-			Set-Content -NoNewline -Path $FileName -Value $FileData -Encoding $Encoding
-		}
-
-		foreach ($Command in $ModuleCommands)
+		foreach ($Command in $ModuleFunctions)
 		{
 			Write-Information -Tags "Project" -MessageData "INFO: Formatting document $Command.md"
 

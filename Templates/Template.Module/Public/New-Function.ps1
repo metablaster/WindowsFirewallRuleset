@@ -54,6 +54,7 @@ None. New-Function does not generate any output
 None.
 TODO: Update Copyright and start implementing module function
 TODO: Update HelpURI
+TODO: If this is based on 3rd party function, include file and/or function changes here
 #>
 function New-Function
 {

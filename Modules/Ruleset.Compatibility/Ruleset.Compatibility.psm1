@@ -26,6 +26,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+# NOTE: Following modifications by metablaster November 2020:
+# - Move functions into separate scripts
+# - Code formatting according to the rest of project design
+# - Added module boilerplate code
+# - Renamed module from "WindowsCompatibility" to "Ruleset.Compatibility"
+
 # Initialization
 using namespace System.Management.Automation.
 using namespace System.Management.Automation.Runspaces

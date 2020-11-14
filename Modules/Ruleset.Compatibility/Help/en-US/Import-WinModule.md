@@ -1,7 +1,7 @@
 ---
-external help file: WindowsCompatibility-help.xml
-Module Name: WindowsCompatibility
-online version:
+external help file: Ruleset.Compatibility-help.xml
+Module Name: Ruleset.Compatibility
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Import-WinModule.md
 schema: 2.0.0
 ---
 
@@ -13,7 +13,7 @@ Import a compatibility module.
 
 ## SYNTAX
 
-```
+```none
 Import-WinModule [[-Name] <String[]>] [-Exclude <String[]>] [-ComputerName <String>]
  [-ConfigurationName <String>] [-Prefix <String>] [-DisableNameChecking] [-NoClobber] [-Force]
  [-Credential <PSCredential>] [-PassThru] [<CommonParameters>]
@@ -68,6 +68,40 @@ This example forces a reload of the module 'PnpDevice' with verbose output turne
 
 ## PARAMETERS
 
+### -Name
+
+Specifies the name of the module to be imported.
+Wildcards can be used.
+
+```yaml
+Type: System.String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 1
+Default value: *
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Exclude
+
+A list of wildcard patterns matching the names of modules that
+should not be imported.
+
+```yaml
+Type: System.String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -ComputerName
 
 If you don't want to use the default compatibility session, use
@@ -76,7 +110,7 @@ the compatibility session.
 (Defaults to 'localhost')
 
 ```yaml
-Type: String
+Type: System.String
 Parameter Sets: (All)
 Aliases: cn
 
@@ -93,7 +127,7 @@ Specifies the configuration to connect to when creating the compatibility sessio
 (Defaults to 'Microsoft.PowerShell')
 
 ```yaml
-Type: String
+Type: System.String
 Parameter Sets: (All)
 Aliases:
 
@@ -104,12 +138,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Credential
+### -Prefix
 
-The credential to use when creating the compatibility session using the target machine/configuration
+Prefix to prepend to the imported command names
 
 ```yaml
-Type: PSCredential
+Type: System.String
 Parameter Sets: (All)
 Aliases:
 
@@ -125,63 +159,13 @@ Accept wildcard characters: False
 Disable warnings about non-standard verbs
 
 ```yaml
-Type: SwitchParameter
+Type: System.Management.Automation.SwitchParameter
 Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: Named
 Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Exclude
-
-A list of wildcard patterns matching the names of modules that
-should not be imported.
-
-```yaml
-Type: String[]
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Force
-
-Force reloading the module
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Name
-
-Specifies the name of the module to be imported.
-Wildcards can be used.
-
-```yaml
-Type: String[]
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 1
-Default value: *
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -191,7 +175,7 @@ Accept wildcard characters: False
 Don't overwrite any existing function definitions.
 
 ```yaml
-Type: SwitchParameter
+Type: System.Management.Automation.SwitchParameter
 Parameter Sets: (All)
 Aliases:
 
@@ -202,12 +186,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -PassThru
+### -Force
 
-If present, the ModuleInfo objects will be written to the output pipe as deserialized (PSObject) objects.
+Force reloading the module
 
 ```yaml
-Type: SwitchParameter
+Type: System.Management.Automation.SwitchParameter
 Parameter Sets: (All)
 Aliases:
 
@@ -218,12 +202,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Prefix
+### -Credential
 
-Prefix to prepend to the imported command names
+The credential to use when creating the compatibility session using the target machine/configuration
 
 ```yaml
-Type: String
+Type: System.Management.Automation.PSCredential
 Parameter Sets: (All)
 Aliases:
 
@@ -234,12 +218,29 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -PassThru
+
+If present, the ModuleInfo objects will be written to the output pipe as deserialized (PSObject) objects.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
+
+### None. You cannot pipe objects to Import-WinModule
 
 ## OUTPUTS
 

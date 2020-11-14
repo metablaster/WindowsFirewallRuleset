@@ -1,7 +1,7 @@
 ---
-external help file: WindowsCompatibility-help.xml
-Module Name: WindowsCompatibility
-online version:
+external help file: Ruleset.Compatibility-help.xml
+Module Name: Ruleset.Compatibility
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Invoke-WinCommand.md
 schema: 2.0.0
 ---
 
@@ -13,7 +13,7 @@ Invoke a ScriptBlock that runs in the compatibility runspace.
 
 ## SYNTAX
 
-```
+```none
 Invoke-WinCommand [-ScriptBlock] <ScriptBlock> [-ComputerName <String>] [-ConfigurationName <String>]
  [-Credential <PSCredential>] [-ArgumentList <Object[]>] [<CommonParameters>]
 ```
@@ -56,17 +56,17 @@ returning the 10 newest events in the application log.
 
 ## PARAMETERS
 
-### -ArgumentList
+### -ScriptBlock
 
-Arguments to pass to the ScriptBlock.
+The ScriptBlock to invoke in the compatibility session.
 
 ```yaml
-Type: Object[]
+Type: System.Management.Automation.ScriptBlock
 Parameter Sets: (All)
 Aliases:
 
-Required: False
-Position: Named
+Required: True
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -79,7 +79,7 @@ use this parameter to specify the name of the computer on which to create the co
 (Defaults to 'localhost')
 
 ```yaml
-Type: String
+Type: System.String
 Parameter Sets: (All)
 Aliases: cn
 
@@ -96,7 +96,7 @@ Specifies the configuration to connect to when creating the compatibility sessio
 (Defaults to 'Microsoft.PowerShell')
 
 ```yaml
-Type: String
+Type: System.String
 Parameter Sets: (All)
 Aliases:
 
@@ -112,7 +112,7 @@ Accept wildcard characters: False
 The credential to use when connecting to the compatibility session.
 
 ```yaml
-Type: PSCredential
+Type: System.Management.Automation.PSCredential
 Parameter Sets: (All)
 Aliases:
 
@@ -123,17 +123,17 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ScriptBlock
+### -ArgumentList
 
-The ScriptBlock to invoke in the compatibility session.
+Arguments to pass to the ScriptBlock.
 
 ```yaml
-Type: ScriptBlock
+Type: System.Object[]
 Parameter Sets: (All)
 Aliases:
 
-Required: True
-Position: 1
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -141,10 +141,11 @@ Accept wildcard characters: False
 
 ### CommonParameters
 
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
+
+### None. You cannot pipe objects to Invoke-WinCommand
 
 ## OUTPUTS
 

@@ -32,7 +32,7 @@ None. Set-Privilege.ps1 does not generate any output
 Author: Pyprohly
 GUID: 84990677-60ab-4984-9de1-fcfc19f5209d
 TODO: After runing this script, seems like some variables are removed, See Exit-Text "UnitTest" variable
-Following modifications done by metablaster:
+Following modifications by metablaster November 2020:
 1. Format code according to project best practices
 2. Added boilerplate code
 3. Make function produce some informational output

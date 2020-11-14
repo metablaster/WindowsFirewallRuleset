@@ -1,7 +1,7 @@
 ---
-external help file: WindowsCompatibility-help.xml
-Module Name: WindowsCompatibility
-online version:
+external help file: Ruleset.Compatibility-help.xml
+Module Name: Ruleset.Compatibility
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Add-WinFunction.md
 schema: 2.0.0
 ---
 
@@ -13,7 +13,7 @@ This command defines a global function that always runs in the compatibility ses
 
 ## SYNTAX
 
-```
+```none
 Add-WinFunction [-Name] <String> [-ScriptBlock] <ScriptBlock> [-ComputerName <String>]
  [-ConfigurationName <String>] [-Credential <PSCredential>] [<CommonParameters>]
 ```
@@ -37,7 +37,7 @@ Add-WinFunction myFunction {param ($n) "Hi $n!"; $PSVersionTable.PSEdition }
 myFunction Bill
 ```
 
-```
+```none
 Hi Bill!
 Desktop
 ```
@@ -47,6 +47,38 @@ When invoked it will print a message then return the PSVersion table from the co
 
 ## PARAMETERS
 
+### -Name
+
+The name of the function to define.
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases: FunctionName
+
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ScriptBlock
+
+ScriptBlock to use as the body of the function.
+
+```yaml
+Type: System.Management.Automation.ScriptBlock
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 2
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -ComputerName
 
 If you don't want to use the default compatibility session,
@@ -54,7 +86,7 @@ use this parameter to specify the name of the computer on which to create the co
 (Defaults to 'localhost')
 
 ```yaml
-Type: String
+Type: System.String
 Parameter Sets: (All)
 Aliases: Cn
 
@@ -71,7 +103,7 @@ Specifies the configuration to connect to when creating the compatibility sessio
 (Defaults to 'Microsoft.PowerShell')
 
 ```yaml
-Type: String
+Type: System.String
 Parameter Sets: (All)
 Aliases:
 
@@ -88,7 +120,7 @@ The credential to use when creating the compatibility session
 using the target machine/configuration
 
 ```yaml
-Type: PSCredential
+Type: System.Management.Automation.PSCredential
 Parameter Sets: (All)
 Aliases:
 
@@ -99,48 +131,17 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Name
-
-The name of the function to define.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: FunctionName
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ScriptBlock
-
-ScriptBlock to use as the body of the function.
-
-```yaml
-Type: ScriptBlock
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 2
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### CommonParameters
 
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
+### None. You cannot pipe objects to Add-WinFunction
+
 ## OUTPUTS
 
-### System.Void
+### None. Add-WinFunction does not generate any output
 
 ## NOTES
 

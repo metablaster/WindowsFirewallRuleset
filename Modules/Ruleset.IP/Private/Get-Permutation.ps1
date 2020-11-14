@@ -73,7 +73,7 @@ None. You cannot pipe objects to Get-Permutation
 TODO: Describe outputs
 
 .NOTES
-Following changes by metablaster:
+Modifications by metablaster year 2019, 2020:
 - Include licenses and move comment based help outside of functions
 - For code to be consistent with project code formatting and symbol casing.
 - Rename function to approved verb

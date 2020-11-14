@@ -66,7 +66,9 @@ None. You cannot pipe objects to Compare-WinModule
 [System.Management.Automation.PSObject]
 
 .NOTES
-None.
+Following modifications by metablaster November 2020:
+- Added comment based help based on original comments
+- Code formatting according to the rest of project design
 
 .LINK
 https://github.com/PowerShell/WindowsCompatibility

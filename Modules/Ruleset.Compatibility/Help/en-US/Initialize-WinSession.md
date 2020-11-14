@@ -1,7 +1,7 @@
 ---
-external help file: WindowsCompatibility-help.xml
-Module Name: WindowsCompatibility
-online version:
+external help file: Ruleset.Compatibility-help.xml
+Module Name: Ruleset.Compatibility
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Initialize-WinSession.md
 schema: 2.0.0
 ---
 
@@ -13,7 +13,7 @@ Initialize the connection to the compatibility session.
 
 ## SYNTAX
 
-```
+```none
 Initialize-WinSession [[-ComputerName] <String>] [-ConfigurationName <String>] [-Credential <PSCredential>]
  [-PassThru] [<CommonParameters>]
 ```
@@ -57,7 +57,7 @@ the compatibility session.
 (Defaults to 'localhost')
 
 ```yaml
-Type: String
+Type: System.String
 Parameter Sets: (All)
 Aliases: Cn
 
@@ -74,7 +74,7 @@ Specifies the configuration to connect to when creating the compatibility sessio
 (Defaults to 'Microsoft.PowerShell')
 
 ```yaml
-Type: String
+Type: System.String
 Parameter Sets: (All)
 Aliases:
 
@@ -90,7 +90,7 @@ Accept wildcard characters: False
 The credential to use when connecting to the target machine/configuration
 
 ```yaml
-Type: PSCredential
+Type: System.Management.Automation.PSCredential
 Parameter Sets: (All)
 Aliases:
 
@@ -106,7 +106,7 @@ Accept wildcard characters: False
 If present, the specified session object will be returned
 
 ```yaml
-Type: SwitchParameter
+Type: System.Management.Automation.SwitchParameter
 Parameter Sets: (All)
 Aliases:
 
@@ -119,10 +119,11 @@ Accept wildcard characters: False
 
 ### CommonParameters
 
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
+
+### None. You cannot pipe objects to Initialize-WinSession
 
 ## OUTPUTS
 

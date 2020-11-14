@@ -1,7 +1,7 @@
 ---
-external help file: WindowsCompatibility-help.xml
-Module Name: WindowsCompatibility
-online version:
+external help file: Ruleset.Compatibility-help.xml
+Module Name: Ruleset.Compatibility
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Get-WinModule.md
 schema: 2.0.0
 ---
 
@@ -13,7 +13,7 @@ Get a list of the available modules from the compatibility session
 
 ## SYNTAX
 
-```
+```none
 Get-WinModule [[-Name] <String[]>] [-ComputerName <String>] [-ConfigurationName <String>]
  [-Credential <PSCredential>] [-Full] [<CommonParameters>]
 ```
@@ -45,6 +45,22 @@ This example looks for modules in the compatibility session with the string 'PNP
 
 ## PARAMETERS
 
+### -Name
+
+Pattern to filter module names by.
+
+```yaml
+Type: System.String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 1
+Default value: *
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -ComputerName
 
 If you don't want to use the default compatibility session,
@@ -52,7 +68,7 @@ use this parameter to specify the name of the computer on which to create the co
 (Defaults to 'localhost')
 
 ```yaml
-Type: String
+Type: System.String
 Parameter Sets: (All)
 Aliases: cn
 
@@ -69,7 +85,7 @@ Specifies the configuration to connect to when creating the compatibility sessio
 (Defaults to 'Microsoft.PowerShell')
 
 ```yaml
-Type: String
+Type: System.String
 Parameter Sets: (All)
 Aliases:
 
@@ -85,7 +101,7 @@ Accept wildcard characters: False
 The credential to use when creating the compatibility session using the target machine/configuration
 
 ```yaml
-Type: PSCredential
+Type: System.Management.Automation.PSCredential
 Parameter Sets: (All)
 Aliases:
 
@@ -101,7 +117,7 @@ Accept wildcard characters: False
 If specified, the complete deserialized module object will be returned instead of the abbreviated form returned by default.
 
 ```yaml
-Type: SwitchParameter
+Type: System.Management.Automation.SwitchParameter
 Parameter Sets: (All)
 Aliases:
 
@@ -112,28 +128,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Name
-
-Pattern to filter module names by.
-
-```yaml
-Type: String[]
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 1
-Default value: *
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### CommonParameters
 
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
+
+### None. You cannot pipe objects to Get-WinModule
 
 ## OUTPUTS
 

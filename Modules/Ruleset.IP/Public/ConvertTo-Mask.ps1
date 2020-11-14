@@ -71,7 +71,7 @@ Returns the dotted-decimal form of the mask, 255.255.255.0
 [ipaddress] A dotted-decimal subnet mask
 
 .NOTES
-Following changes by metablaster:
+Modifications by metablaster year 2019, 2020:
 - Include licenses and move comment based help outside of functions
 - For code to be consistent with project code formatting and symbol casing.
 - Removed unnecessary position arguments, added default argument values explicitly.

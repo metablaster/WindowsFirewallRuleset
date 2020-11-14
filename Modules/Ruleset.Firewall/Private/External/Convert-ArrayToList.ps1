@@ -49,7 +49,7 @@ None. You cannot pipe objects to Convert-ArrayToList
 [string] comma separated list
 
 .NOTES
-Changes by metablaster:
+Following modifications by metablaster:
 August 2020:
 - Make Convert-ArrayToList Advanced function
 September 2020:
