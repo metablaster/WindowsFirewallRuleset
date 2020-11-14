@@ -57,7 +57,7 @@ function Show-Table
 		[string] $Caption
 	)
 
-	if (![String]::IsNullOrEmpty($Caption))
+	if (![string]::IsNullOrEmpty($Caption))
 	{
 		Write-Host $Caption
 	}

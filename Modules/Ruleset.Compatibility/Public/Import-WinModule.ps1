@@ -120,45 +120,35 @@ function Import-WinModule
 	Param
 	(
 		[Parameter(Mandatory = $False, Position = 0)]
-		[String[]]
-		$Name = "*",
+		[string[]] $Name = "*",
 
 		[Parameter()]
-		[string[]]
-		$Exclude = "",
+		[string[]] $Exclude = "",
 
 		[Parameter()]
-		[String]
 		[Alias("cn")]
-		$ComputerName,
+		[string] $ComputerName,
 
 		[Parameter()]
-		[String]
-		$ConfigurationName,
+		[string] $ConfigurationName,
 
 		[Parameter()]
-		[string]
-		$Prefix = "",
+		[string] $Prefix = "",
 
 		[Parameter()]
-		[Switch]
-		$DisableNameChecking,
+		[switch] $DisableNameChecking,
 
 		[Parameter()]
-		[Switch]
-		$NoClobber,
+		[switch] $NoClobber,
 
 		[Parameter()]
-		[Switch]
-		$Force,
+		[switch] $Force,
 
 		[Parameter()]
-		[PSCredential]
-		$Credential,
+		[PSCredential] $Credential,
 
 		[Parameter()]
-		[Switch]
-		$PassThru
+		[switch] $PassThru
 	)
 
 	[bool] $verboseFlag = $PSBoundParameters['Verbose']
@@ -171,6 +161,7 @@ function Import-WinModule
 		Credential = $Credential
 		PassThru = $true
 	}
+
 	[PSSession] $session = Initialize-WinSession @initializeWinSessionParameters
 
 	# Mapping wildcards to a regex
@@ -200,23 +191,28 @@ function Import-WinModule
 		PassThru = $PassThru
 		DisableNameChecking = $DisableNameChecking
 	}
+
 	if ($Prefix)
 	{
 		$importModuleParameters.Prefix = $Prefix
 	}
+
 	if ($PassThru)
 	{
 		$importModuleParameters.PassThru = $PassThru
 	}
+
 	if ($importNames)
 	{
 		# Extract the 'never clobber' modules from the list
 		$noClobberNames = $importNames.where{ $_ -in $script:NeverClobberList }
 		$importNames = $importNames.where{ $_ -notin $script:NeverClobberList }
+
 		if ($importNames)
 		{
 			Import-Module -Name $ImportNames -NoClobber:$NoClobber @importModuleParameters
 		}
+
 		if ($noClobberNames)
 		{
 			$importModuleParameters.PassThru = $true

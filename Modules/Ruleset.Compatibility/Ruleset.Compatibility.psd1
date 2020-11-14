@@ -177,7 +177,7 @@ commands much as if they were native to PowerShell Core.
 			Tags = @("WindowsPowerShell", "Compatibility", "Core")
 
 			# A URL to the license for this module.
-			LicenseUri = "https://github.com/metablaster/WindowsFirewallRuleset/master/Modules/Ruleset.Compatibility/LICENSE"
+			LicenseUri = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Modules/Ruleset.Compatibility/LICENSE"
 
 			# A URL to the main website for this project.
 			ProjectUri = "https://github.com/metablaster/WindowsFirewallRuleset"

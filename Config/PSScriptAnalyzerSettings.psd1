@@ -1,8 +1,8 @@
 
 # https://github.com/PowerShell/PSScriptAnalyzer/tree/master/RuleDocumentation
 # NOTE: PSGallery ruleset is a duplicate of these
-# TODO: check for new or updated settings
-# NOTE: last checked 23.8.2020. v1.19.1
+# TODO: Check for new or updated settings
+# NOTE: Last checked on 23.8.2020. v1.19.1
 
 @{
 	IncludeRules = @(

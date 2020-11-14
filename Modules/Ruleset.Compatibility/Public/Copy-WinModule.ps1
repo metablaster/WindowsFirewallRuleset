@@ -91,25 +91,20 @@ function Copy-WinModule
 	Param
 	(
 		[Parameter(Mandatory = $false, Position = 0)]
-		[String[]]
-		$Name = "*",
+		[string[]] $Name = "*",
 
 		[Parameter()]
-		[String]
 		[Alias("cn")]
-		$ComputerName,
+		[string] $ComputerName,
 
 		[Parameter()]
-		[String]
-		$ConfigurationName,
+		[string] $ConfigurationName,
 
 		[Parameter()]
-		[PSCredential]
-		$Credential,
+		[PSCredential] $Credential,
 
 		[Parameter()]
-		[String]
-		$Destination
+		[string] $Destination
 	)
 
 	[bool] $verboseFlag = $PSBoundParameters['Verbose']
@@ -131,11 +126,13 @@ function Copy-WinModule
 	{
 		throw "The destination path '$Destination' could not be resolved. Please ensure that the path exists and try the command again"
 	}
+
 	# Make sure it's a FileSystem location
 	if ($resolvedDestination.provider.ImplementingType -ne [Microsoft.PowerShell.Commands.FileSystemProvider] )
 	{
 		throw "Modules can only be installed to paths in the filesystem. Please choose a different location and try the command again"
 	}
+
 	$Destination = $resolvedDestination.Path
 
 	$initializeWinSessionParameters = @{
@@ -145,6 +142,7 @@ function Copy-WinModule
 		Credential = $Credential
 		PassThru = $true
 	}
+
 	[PSSession] $session = Initialize-WinSession @initializeWinSessionParameters
 
 	$copyItemParameters = @{
@@ -153,6 +151,7 @@ function Copy-WinModule
 		Confirm = $confirmFlag
 		Recurse = $true
 	}
+
 	if ($ComputerName -ne "localhost" -and $ComputerName -ne ".")
 	{
 		$copyItemParameters.FromSession = $session

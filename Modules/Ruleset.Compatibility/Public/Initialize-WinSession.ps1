@@ -86,21 +86,17 @@ function Initialize-WinSession
 	Param (
 
 		[Parameter(Mandatory = $false, Position = 0)]
-		[String]
 		[Alias("Cn")]
-		$ComputerName,
+		[string] $ComputerName,
 
 		[Parameter()]
-		[String]
-		$ConfigurationName,
+		[string] $ConfigurationName,
 
 		[Parameter()]
-		[PSCredential]
-		$Credential,
+		[PSCredential] $Credential,
 
 		[Parameter()]
-		[Switch]
-		$PassThru
+		[switch] $PassThru
 	)
 
 	[bool] $verboseFlag = $PSBoundParameters['Verbose']

@@ -137,7 +137,7 @@ InModuleScope 'Ruleset.IP' {
 				$Code
 			)
 
-			$ScriptBlock = [ScriptBlock]::Create($Code.Trim())
+			$ScriptBlock = [scriptblock]::Create($Code.Trim())
 			$ScriptBlock | Should -Not -Throw
 		}
 	}

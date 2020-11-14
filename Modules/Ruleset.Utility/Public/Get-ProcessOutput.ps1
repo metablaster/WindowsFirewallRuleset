@@ -122,7 +122,7 @@ function Get-ProcessOutput
 
 	# # Adding event handler for stdout.
 	# $ScripBlock = {
-	# 	if (![String]::IsNullOrEmpty($EventArgs.Data))
+	# 	if (![string]::IsNullOrEmpty($EventArgs.Data))
 	# 	{
 	# 		$Event.MessageData.AppendLine($EventArgs.Data)
 	# 	}

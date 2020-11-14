@@ -94,25 +94,20 @@ function Invoke-WinCommand
 	Param
 	(
 		[Parameter(Mandatory, Position = 0)]
-		[ScriptBlock]
-		$ScriptBlock,
+		[scriptblock] $ScriptBlock,
 
 		[Parameter()]
-		[String]
 		[Alias("cn")]
-		$ComputerName,
+		[string] $ComputerName,
 
 		[Parameter()]
-		[String]
-		$ConfigurationName,
+		[string] $ConfigurationName,
 
 		[Parameter()]
-		[PSCredential]
-		$Credential,
+		[PSCredential] $Credential,
 
 		[Parameter(ValueFromRemainingArguments)]
-		[object[]]
-		$ArgumentList
+		[Object[]] $ArgumentList
 	)
 
 	[void] $PSBoundParameters.Remove('ScriptBlock')

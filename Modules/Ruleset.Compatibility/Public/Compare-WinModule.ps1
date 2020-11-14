@@ -81,26 +81,23 @@ function Compare-WinModule
 	Param
 	(
 		[Parameter(Position = 0)]
-		[String[]]
-		$Name = "*",
+		[string[]] $Name = "*",
 
 		[Parameter()]
-		[String]
 		[Alias("cn")]
-		$ComputerName,
+		[string] $ComputerName,
 
 		[Parameter()]
-		[String]
-		$ConfigurationName,
+		[string] $ConfigurationName,
 
 		[Parameter()]
-		[PSCredential]
-		$Credential
+		[PSCredential] $Credential
 	)
 
 	[bool] $verboseFlag = $PSBoundParameters['Verbose']
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Initializing compatibility session"
+
 	$initializeWinSessionParameters = @{
 		Verbose = $verboseFlag
 		ComputerName = $ComputerName
@@ -108,6 +105,7 @@ function Compare-WinModule
 		Credential = $Credential
 		PassThru = $true
 	}
+
 	[PSSession] $session = Initialize-WinSession @initializeWinSessionParameters
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting local modules..."

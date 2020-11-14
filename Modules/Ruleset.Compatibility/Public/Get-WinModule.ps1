@@ -87,24 +87,20 @@ function Get-WinModule
 	Param
 	(
 		[Parameter(Mandatory = $false, Position = 0)]
-		[String[]]
-		$Name = '*',
+		[string[]] $Name = '*',
 
+		[Parameter()]
 		[Alias("cn")]
-		[String]
-		$ComputerName,
+		[string] $ComputerName,
 
 		[Parameter()]
-		[String]
-		$ConfigurationName,
+		[string] $ConfigurationName,
 
 		[Parameter()]
-		[PSCredential]
-		$Credential,
+		[PSCredential] $Credential,
 
 		[Parameter()]
-		[Switch]
-		$Full
+		[switch] $Full
 	)
 
 	[bool] $verboseFlag = $PSBoundParameters['Verbose']
@@ -117,6 +113,7 @@ function Get-WinModule
 		Credential = $Credential
 		PassThru = $true
 	}
+
 	[PSSession] $session = Initialize-WinSession @initializeWinSessionParameters
 
 	if ($name -ne '*')
@@ -133,6 +130,5 @@ function Get-WinModule
 		Get-Module -ListAvailable -Name $using:Name |
 		Where-Object Name -NotIn $using:NeverImportList |
 		Select-Object $using:propertiesToReturn
-	} | Select-Object $propertiesToReturn |
-	Sort-Object Name
+	} | Select-Object $propertiesToReturn | Sort-Object Name
 }
