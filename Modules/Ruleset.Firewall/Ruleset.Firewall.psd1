@@ -1,4 +1,31 @@
 
+<#
+MIT License
+
+This file is part of "Windows Firewall Ruleset" project
+Homepage: https://github.com/metablaster/WindowsFirewallRuleset
+
+Copyright (C) 2020 metablaster zebal@protonmail.ch
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+#>
+
 #
 # Module manifest for module "Ruleset.Firewall"
 #
@@ -119,12 +146,14 @@
 		"Private\External\README.md"
 		"Private\Convert-ListToMultiLine.ps1"
 		"Private\Convert-MultiLineToList.ps1"
+		"Private\README.md"
 		"Public\External\Export-FirewallRules.ps1"
 		"Public\External\Import-FirewallRules.ps1"
 		"Public\External\README.md"
 		"Public\External\Remove-FirewallRules.ps1"
 		"Public\Find-RulePrincipal.ps1"
 		"Public\Format-Output.ps1"
+		"Public\README.md"
 		"Ruleset.Firewall_3ee23849-8adf-46ee-95f9-7a02417e1f4b_HelpInfo.xml"
 		"Ruleset.Firewall.psd1"
 		"Ruleset.Firewall.psm1"
@@ -152,14 +181,14 @@
 			# A URL to an icon representing this module.
 			# IconUri = ""
 
-			# Prerelease string of this module
-			Prerelease = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/CHANGELOG.md"
-
 			# ReleaseNotes of this module
 			# ReleaseNotes = ""
 
+			# Prerelease string of this module
+			Prerelease = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/CHANGELOG.md"
+
 			# Flag to indicate whether the module requires explicit user acceptance for install, update, or save.
-			RequireLicenseAcceptance = $false
+			RequireLicenseAcceptance = $true
 
 			# A list of external modules that this module is dependent upon.
 			# ExternalModuleDependencies = @()

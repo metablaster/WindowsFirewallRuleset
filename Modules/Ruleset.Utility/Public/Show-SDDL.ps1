@@ -46,9 +46,11 @@ see Test\Show-SDDL.ps1 for example
 [string]
 
 .NOTES
-This function is used only for debugging and discovery of object SDDL
-Credits to: https://blogs.technet.microsoft.com/ashleymcglone/2011/08/29/powershell-sid-walker-texas-ranger-part-1
+This function is used only for debugging and discovery of object SDDL, credits to link in description.
 TODO: additional work on function to make it more universal, see if we can make use of it somehow, better help comment.
+
+.LINK
+https://blogs.technet.microsoft.com/ashleymcglone/2011/08/29/powershell-sid-walker-texas-ranger-part-1
 #>
 function Show-SDDL
 {

@@ -301,6 +301,8 @@ curl https://api.github.com/repos/metablaster/WindowsFirewallRuleset |
 ConvertFrom-Json | Select-Object -ExpandProperty "created_at"
 ```
 
+Another option is to use `git log --reverse`
+
 ## Troubleshooting
 
 Command useful to troubleshoot random issues

@@ -82,7 +82,7 @@ foreach ($Manifest in $Manifests)
 			-Message "HelpInfo file doesn't exist for module $($Module.Name) with GUID: $ThisGUID"
 	}
 
-	# Check no duplicate GUID exists among modules
+	# Check no module with duplicate GUID exists among modules
 	if ([array]::Find($GUID, [System.Predicate[string]] { $ThisGUID -eq $args[0] }))
 	{
 		Write-Error -Category InvalidData -TargetObject $ThisGUID -Message "Duplicate GUID: $ThisGUID"
