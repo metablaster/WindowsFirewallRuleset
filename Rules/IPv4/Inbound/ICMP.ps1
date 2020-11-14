@@ -82,6 +82,7 @@ They should not be manually assigned or assigned using DHCP.
 
 #
 # ICMP type filtering for All profiles
+# TODO: Echo request description is same as for echo reply
 #
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Echo Reply (0)" -Service Any -Program $Program `

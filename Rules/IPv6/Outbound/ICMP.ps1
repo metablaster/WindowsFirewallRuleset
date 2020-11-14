@@ -48,8 +48,8 @@ Type    Name
 132	Multicast Listener Done
 133	Router Solicitation
 134	Router Advertisement
-135	Neighbor Solicitation
-136	Neighbor Advertisement
+135	Neighbor Solicitation (Neighbor Discovery Solicitation)
+136	Neighbor Advertisement (Neighbor Discovery Advertisement)
 137	Redirect Message
 138	Router Renumbering
 139	ICMP Node Information Query
@@ -107,16 +107,6 @@ $ICMPInterface = "Any"
 $Accept = "Outbound rules for ICMPv6 will be loaded, recommended for proper network functioning"
 $Deny = "Skip operation, outbound ICMPv6 rules will not be loaded into firewall"
 
-# NOTE: Following rules were enabled according to predefined set of rules, but are otherwise not
-# detected as needed:
-# 1. Packet too big
-# 2. Parameter problem
-# 3. Time exceeded
-# 4. Multicast listenere Done, query and report
-# 5. Router advertisement
-# 6. Echo request
-$DefaultDisabled = "True"
-
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
@@ -131,45 +121,49 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 New-NetFirewallRule -DisplayName "Destination Unreachable (1)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 1 `
+	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv6 -IcmpType 1 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $ICMPInterface `
-	-Description $Description `
+	-Description "Destination Unreachable error messages are sent from any node that a packet
+traverses which is unable to forward the packet for any reason except congestion. $Description" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Packet Too Big (2)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
-	-Enabled $DefaultDisabled -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 2 `
+	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv6 -IcmpType 2 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $ICMPInterface `
-	-Description $Description `
+	-Description "Packet Too Big error messages are sent from any node that a packet traverses which
+is unable to forward the packet because the packet is too large for the next link. $Description" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Time Exceeded (3)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
-	-Enabled $DefaultDisabled -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 3 `
+	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv6 -IcmpType 3 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $ICMPInterface `
-	-Description $Description `
+	-Description "Time Exceeded error messages are generated from any node that a packet traverses
+if the Hop Limit value is decremented to zero at any point on the path. $Description" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Parameter Problem (4)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
-	-Enabled $DefaultDisabled -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 4 `
+	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv6 -IcmpType 4 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $ICMPInterface `
-	-Description $Description `
+	-Description "Parameter Problem error messages are sent by nodes as a result of incorrectly
+generated packets. $Description" `
 	@Logs | Format-Output @Logs
 
 #
@@ -184,7 +178,7 @@ New-NetFirewallRule -DisplayName "Echo Request (128)" `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $ICMPInterface `
-	-Description $Description `
+	-Description "Echo Request messages are sent as ping requests to other nodes. $Description" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Echo Reply (129)" `
@@ -195,40 +189,44 @@ New-NetFirewallRule -DisplayName "Echo Reply (129)" `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $ICMPInterface `
-	-Description $Description `
+	-Description "Echo Reply messages are sent as a response to Echo Request pings. $Description" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Multicast Listener Query (130)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
-	-Enabled $DefaultDisabled -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 130 `
+	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv6 -IcmpType 130 `
 	-LocalAddress Any -RemoteAddress LocalSubnet6 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $ICMPInterface `
-	-Description $Description `
+	-Description "An IPv6 multicast-capable router uses the Multicast Listener Query message to
+query a link for multicast group membership. $Description" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Multicast Listener Report (131)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
-	-Enabled $DefaultDisabled -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 131 `
+	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 131 `
 	-LocalAddress Any -RemoteAddress LocalSubnet6 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $ICMPInterface `
-	-Description $Description `
+	-Description "The Multicast Listener Report message is used by a listening node to either
+immediately report its interest in receiving multicast traffic at a specific multicast address or
+in response to a Multicast Listener Query. $Description" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Multicast Listener Done (132)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
-	-Enabled $DefaultDisabled -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 132 `
+	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 132 `
 	-LocalAddress Any -RemoteAddress LocalSubnet6 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $ICMPInterface `
-	-Description $Description `
+	-Description "Multicast Listener Done messages inform local routers that there are no longer
+any members remaining for a specific multicast address on the subnet. $Description" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Router Solicitation (133)" `
@@ -239,18 +237,20 @@ New-NetFirewallRule -DisplayName "Router Solicitation (133)" `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $ICMPInterface `
-	-Description $Description `
+	-Description "Router Solicitation messages are sent by nodes seeking routers to provide
+stateless auto-configuration. $Description" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Router Advertisement (134)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
-	-Enabled $DefaultDisabled -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 134 `
+	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv6 -IcmpType 134 `
 	-LocalAddress Any -RemoteAddress $RouterSpace `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $ICMPInterface `
-	-Description $Description `
+	-Description "Router Advertisement messages are sent by routers to other nodes for stateless
+auto-configuration. $Description" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Neighbor Solicitation (135)" `
@@ -261,7 +261,8 @@ New-NetFirewallRule -DisplayName "Neighbor Solicitation (135)" `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $ICMPInterface `
-	-Description $Description `
+	-Description "Neighbor Discovery Solicitations are sent by nodes to discover the link-layer
+address of another on-link IPv6 node. $Description" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Neighbor Advertisement (136)" `
@@ -272,7 +273,8 @@ New-NetFirewallRule -DisplayName "Neighbor Advertisement (136)" `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $ICMPInterface `
-	-Description $Description `
+	-Description "Neighbor Discovery Advertisement messages are sent by nodes to notify other nodes
+of link-layer address changes or in response to a Neighbor Discovery Solicitation request. $Description" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Redirect Message (137)" `
@@ -357,7 +359,9 @@ New-NetFirewallRule -DisplayName "Multicast Listener Report Version 2 (143)" `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $ICMPInterface `
-	-Description $Description `
+	-Description "Multicast Listener Report v2 message is used by a listening node to either
+immediately report its interest in receiving multicast traffic at a specific multicast address or
+in response to a Multicast Listener Query. $Description" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Home Agent Address Discovery Request Message (144)" `
@@ -625,7 +629,7 @@ New-NetFirewallRule -DisplayName "Extended Echo Request (160)" `
 New-NetFirewallRule -DisplayName "Extended Echo Reply (161)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 161 `
+	-Enabled False -Action Block -Direction $Direction -Protocol ICMPv6 -IcmpType 161 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `

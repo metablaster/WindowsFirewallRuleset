@@ -47,8 +47,10 @@ $Deny = "Skip operation, inbound broadcast rules will not be loaded into firewal
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
+# There is no point to create separate rule for virtual adapter, since virtual one may be the only
+# one if physical adapter is being shared with ex. Hyper-V
 # NOTE: Don't run if execute not approved
-$BroadcastAddress = Get-Broadcast
+$BroadcastAddress = Get-Broadcast -IncludeVirtual
 
 # First remove all existing rules matching grou-Group $Group p
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
@@ -94,20 +96,5 @@ New-NetFirewallRule -DisplayName "LAN Broadcast" `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "" `
 	@Logs | Format-Output @Logs
-
-# TODO: check if virtual adapter exists and apply rule
-
-<# New-NetFirewallRule -DisplayName "Microsoft Wireless WiFi adapter" `
--Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
--Service Any -Program System -Group $Group `
--Enabled True -Action Allow -Direction $Direction -Protocol UDP `
--LocalAddress Any -RemoteAddress 192.168.137.255 `
--LocalPort Any -RemotePort Any `
--LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
--InterfaceType $Interface `
--LocalOnlyMapping $false -LooseSourceMapping $false `
--Description "" `
-@Logs | Format-Output @Logs
- #>
 
 Update-Log

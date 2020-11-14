@@ -89,6 +89,7 @@ They should not be manually assigned or assigned using DHCP.
 
 #
 # ICMP type filtering for All profiles
+# TODO: Echo request description is same as for echo reply
 #
 
 New-NetFirewallRule -DisplayName "Echo Request (8)" `
