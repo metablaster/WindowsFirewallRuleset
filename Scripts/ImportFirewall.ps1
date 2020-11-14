@@ -133,3 +133,5 @@ if ((Get-Variable -Name OutboundMinutes -EA Ignore) -or (Get-Variable -Name Inbo
 
 	Write-Information -Tags "User" -MessageData "INFO: Total time needed to import entry firewall was: $TotalMinutes minutes"
 }
+
+Update-Log

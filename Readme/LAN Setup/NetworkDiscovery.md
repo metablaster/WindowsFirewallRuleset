@@ -1,10 +1,11 @@
 
 # Network Discovery
 
-Setup following services (in bold) to autostart (Here listed alphabetically):\
-**NOTE:** For smooth startup of services set dependent services to delayed start.
+Set or verify following services (in bold) are set to "Automatic" startup (Here listed alphabetically):\
+**NOTE:** For smooth startup of services set dependent services to delayed start.\
+**NOTE:** Values in parentheses are service short name and default startup type which should work too.
 
-- **DNS Client (Dnscache, Auto - Trigger Start)**
+- **DNS Client (Dnscache, Automatic - Trigger)**
   - Ancillary Function Driver for Winsock (Driver)
   - Network Store Interface Service ...
 
@@ -12,19 +13,19 @@ Setup following services (in bold) to autostart (Here listed alphabetically):\
   - HTTP Service ...
   - Remote Procedure Call (RPC) ...
 
-- **Function Discovery Resource Publication (FDResPub, Manual - Trigger Start)**
+- **Function Discovery Resource Publication (FDResPub, Manual - Trigger)**
   - HTTP Service (Driver: System32\drivers\HTTP.sys, startup type = DEMAND_START)
     - MsQuic (Driver: system32\drivers\msquic.sys, startup type = DEMAND_START)
   - Remote Procedure Call (RPC) ...
   - Function Discovery Provider Host...
 
-- **Network Store Interface Service (nsi, Auto)**
+- **Network Store Interface Service (nsi, Automatic)**
   - NSI Proxy Service Driver (Driver: WIN32_SHARE_PROCESS, startup type = AUTO_START)
   - Remote Procedure Call (RPC)
     - DCOM Server Process Launcher
     - RPC Endpoint Mapper
 
-- **Server (LanmanServer, Auto - Trigger Start)**
+- **Server (LanmanServer, Automatic - Trigger)**
   - Security Accounts Manager
     - Remote Procedure Call (RPC)...
   - Server SMB Driver (Driver)
@@ -34,7 +35,7 @@ Setup following services (in bold) to autostart (Here listed alphabetically):\
   - HTTP Service ...
   - Network Store Interface Service ...
 
-- **TCP/IP NetBIOS Helper (lmhosts, Manual - Trigger Start)**
+- **TCP/IP NetBIOS Helper (lmhosts, Manual - Trigger)**
   - Ancillary Function Driver for Winsock (Driver)
 
 - **UPnP Device Host (upnphost, Manual)**
@@ -43,7 +44,7 @@ Setup following services (in bold) to autostart (Here listed alphabetically):\
     - Network Store Interface Service ...
   - HTTP Service ...
 
-- **Workstation (LanmanWorkstation, Auto)**
+- **Workstation (LanmanWorkstation, Automatic)**
   - Network Store Interface Service ...
   - Browser (Driver)
   - SMB Mini redirector (Driver)

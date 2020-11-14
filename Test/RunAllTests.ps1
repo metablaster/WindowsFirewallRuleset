@@ -84,9 +84,6 @@ if ($Pester)
 Update-Context $TestContext $ThisScript
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
-$OldLocation = Get-Location
-Set-Location -Path test:
-
 if (!$Pester)
 {
 	# Recursively get list of powershell scripts (unit tests)
@@ -134,7 +131,6 @@ else
 	Write-Error -Category ObjectNotFound -TargetObject $Files -Message "No powershell script files found" @Logs
 }
 
-Set-Location -Path $OldLocation
 Write-Information -Tags "Project" -MessageData "INFO: Running all tests done"
 
 Update-Log

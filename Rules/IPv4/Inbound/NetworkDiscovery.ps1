@@ -38,7 +38,7 @@ Import-Module -Name Ruleset.Logging
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
-$Group = "Network Discovery"
+$Group = "Network Discovery - Experimental"
 $FirewallProfile = "Private, Domain"
 $Accept = "Inbound rules for network discovery will be loaded, required for host discovery in local networks"
 $Deny = "Skip operation, inbound network discovery rules will not be loaded into firewall"

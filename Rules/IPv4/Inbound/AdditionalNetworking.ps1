@@ -51,6 +51,11 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 #
 # Firewall predefined rules related to networking not handled by other more strict scripts
+# NOTE: following predefined groups are included:
+# 1. AllJoin Router
+# 2. Cast to device functionality
+# 3. Connected devices platform
+# 4. DIAL protocol server
 #
 
 #

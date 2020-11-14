@@ -25,7 +25,8 @@ this firewall project here:\
 
 ## Services
 
-Following services may help in specific scenarios:
+Following services may help in specific scenarios:\
+**NOTE:** Values in parentheses are service short name and default startup type which should work too.
 
 - Internet connection sharing (SharedAccess, Manual - Trigger Start)
 - IP Translation configuration (IpxlatCfgSvc, Manual - Trigger Start)

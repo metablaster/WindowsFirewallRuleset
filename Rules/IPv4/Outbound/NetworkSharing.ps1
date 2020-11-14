@@ -38,7 +38,7 @@ Import-Module -Name Ruleset.Logging
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
-$Group = "Network Sharing"
+$Group = "Network Sharing - Experimental"
 $Accept = "Outbound rules for network sharing will be loaded, required to share resources in local networks"
 $Deny = "Skip operation, outbound network sharing rules will not be loaded into firewall"
 

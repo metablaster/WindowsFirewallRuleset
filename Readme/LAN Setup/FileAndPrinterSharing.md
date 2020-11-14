@@ -33,7 +33,9 @@
 
 5. Configure all firewalls in the network to allow File and Printer sharing rules.
 
-6. Following services are required
+6. Set or verify following services (in bold) are set to "Automatic" startup:\
+**NOTE:** For smooth startup of services set dependent services to delayed start.\
+**NOTE:** Values in parentheses are service short name and default startup type which should work too.
 
 - **Print Spooler (Spooler, Manual)**
   - HTTP Service ...

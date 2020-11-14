@@ -34,16 +34,11 @@ SOFTWARE.
 #
 
 Import-Module -Name Ruleset.Logging
-Import-Module -Name Ruleset.Initialize @Logs
-Import-Module -Name Ruleset.Test @Logs
-Import-Module -Name Ruleset.Utility @Logs
+$ProjectModules = Get-ChildItem -Name -Path "$ProjectRoot\Modules" -Directory -Exclude "Ruleset.Logging" @Logs
 
-Import-Module -Name Ruleset.UserInfo @Logs
-Import-Module -Name Ruleset.ComputerInfo @Logs
-Import-Module -Name Ruleset.ProgramInfo @Logs
+foreach ($Module in $ProjectModules)
+{
+	Import-Module -Name $Module -Scope Global @Logs
+}
 
-Import-Module -Name Ruleset.Firewall @Logs
-Import-Module -Name Ruleset.IP @Logs
-
-Import-Module -Name Ruleset.Compatibility @Logs
-Import-Module -Name VSSetup @Logs
+Update-Log

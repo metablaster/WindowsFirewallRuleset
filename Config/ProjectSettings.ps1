@@ -49,7 +49,7 @@ Set-Variable -Name SettingsScript -Scope Local -Option ReadOnly -Value ($MyInvoc
 # 3. Performs additional requirements checks needed or recommended for development
 # 4. Enables some disabled unit tests and disables logging
 # 5. Enables setting preference variables for modules
-# NOTE: If set to $false, change requires PowerShell restart
+# NOTE: If set to $false, the change requires PowerShell restart
 Set-Variable -Name Develop -Scope Global -Value $true
 
 if ($Develop)
@@ -69,6 +69,14 @@ else
 	# The Set-StrictMode configures strict mode for the current scope and all child scopes
 	# Use it in a script or function to override the setting inherited from the global scope.
 	Set-StrictMode -Version Latest
+}
+
+# NOTE: This variable is needed early
+if (!(Get-Variable -Name ProjectRoot -Scope Global -ErrorAction Ignore))
+{
+	# Repository root directory, reallocating scripts should be easy if root directory is constant
+	New-Variable -Name ProjectRoot -Scope Global -Option Constant -Value (
+		Resolve-Path -Path "$PSScriptRoot\.." | Select-Object -ExpandProperty Path)
 }
 
 <#
@@ -142,16 +150,10 @@ if ($Develop)
 	{
 		# Skip removing modules if this script is called from module which would
 		# cause removing modules prematurely
-		Remove-Module -Name Ruleset.Initialize -ErrorAction Ignore
-		Remove-Module -Name Ruleset.Test -ErrorAction Ignore
-		Remove-Module -Name Ruleset.Logging -ErrorAction Ignore
-		Remove-Module -Name Ruleset.Utility -ErrorAction Ignore
-		Remove-Module -Name Ruleset.UserInfo -ErrorAction Ignore
-		Remove-Module -Name Ruleset.ComputerInfo -ErrorAction Ignore
-		Remove-Module -Name Ruleset.ProgramInfo -ErrorAction Ignore
-		Remove-Module -Name Ruleset.Firewall -ErrorAction Ignore
-		Remove-Module -Name Ruleset.IP -ErrorAction Ignore
-		Remove-Module -Name Ruleset.Compatibility -ErrorAction Ignore
+		foreach ($Module in @(Get-ChildItem -Name -Path "$ProjectRoot\Modules" -Directory))
+		{
+			Remove-Module -Name $Module -ErrorAction Ignore
+		}
 	}
 }
 else # Normal use case
@@ -260,10 +262,6 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	# modules loaded even though .NET 4.8 is specified as minimum required
 	New-Variable -Name RequireNETVersion -Scope Global -Option Constant -Value ([version]::new(4, 8, 0))
 
-	# Repository root directory, reallocating scripts should be easy if root directory is constant
-	New-Variable -Name ProjectRoot -Scope Global -Option Constant -Value (
-		Resolve-Path -Path "$PSScriptRoot\.." | Select-Object -ExpandProperty Path)
-
 	# Add project module directory to session module path
 	$ModulePath = [System.Environment]::GetEnvironmentVariable("PSModulePath")
 	$ModulePath += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Modules"
@@ -369,12 +367,14 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 	}
 
 	# These drives will help to have shorter prompt and to be able to "jump" to them as desired
-	# TODO: should we use "root" drive instead of "ProjectRoot" variable?
-	# TODO: Verify issues setting location with PowerShell core 7.1
+	# TODO: Should we use these drives instead of "ProjectRoot" variable?
+	# TODO: In some cases there is problem using those drives soon after being created
+	# for more info see: https://github.com/dsccommunity/SqlServerDsc/issues/118
 	New-PSDrive -Name root -Root $ProjectRoot -Scope Global -PSProvider FileSystem | Out-Null
 	New-PSDrive -Name test -Root "$ProjectRoot\Test" -Scope Global -PSProvider FileSystem | Out-Null
 	New-PSDrive -Name ipv4 -Root "$ProjectRoot\Rules\IPv4" -Scope Global -PSProvider FileSystem | Out-Null
 	New-PSDrive -Name ipv6 -Root "$ProjectRoot\Rules\IPv6" -Scope Global -PSProvider FileSystem | Out-Null
+	New-PSDrive -Name mod -Root "$ProjectRoot\Modules" -Scope Global -PSProvider FileSystem | Out-Null
 }
 
 # Removable variables, these can be modified or removed by code at any time, and, only once per session by users

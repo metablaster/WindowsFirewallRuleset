@@ -54,9 +54,11 @@ TODO: We should probably unblock only scripts, not all files.
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )
 
-Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
+Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))" @Logs
 
-Write-Information -Tags "User" -MessageData "INFO: Unblocking project files"
-Get-ChildItem $ProjectRoot -Recurse | Unblock-File
+Write-Information -Tags "User" -MessageData "INFO: Unblocking project files" @Logs
+Get-ChildItem $ProjectRoot -Recurse @Logs | Unblock-File @Logs
 
-Write-Information -Tags "User" -MessageData "INFO: Project files have been unblocked"
+Write-Information -Tags "User" -MessageData "INFO: Project files have been unblocked" @Logs
+
+Update-Log

@@ -58,7 +58,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # } | Select-Object -ExpandProperty InterfaceAlias
 
 #
-# Predefined rules from Core Networking are here
+# Predefined rules from Core Networking are here excluding ICMP
 #
 
 #

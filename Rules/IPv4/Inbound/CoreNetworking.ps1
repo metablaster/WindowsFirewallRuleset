@@ -55,7 +55,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # $Loopback = Get-NetIPInterface | Where-Object {$_.InterfaceAlias -like "*Loopback*" -and $_.AddressFamily -eq "IPv4"} | Select-Object -ExpandProperty InterfaceAlias
 
 #
-# Predefined rules from Core Networking are here
+# Predefined rules from Core Networking are here excluding ICMP
 #
 
 #

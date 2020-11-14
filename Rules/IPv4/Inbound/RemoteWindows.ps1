@@ -52,7 +52,10 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 #
 # Windows system rules
-# Rules that apply to Windows programs and utilities, which are not handled by predefined rules
+# Rules that apply to Windows programs and utilities for remoting
+# NOTE: Following rules from predefined groups are used:
+# 1. Remote Desktop
+# 2. Remote Desktop (WebSocket)
 #
 
 #

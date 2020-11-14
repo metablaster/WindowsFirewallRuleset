@@ -52,6 +52,11 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 #
 # Windows system predefined rules for Wireless Display
+# NOTE: following predefined groups are included:
+# 1. WI-FI Direct network discovery
+# 2. Wireless display
+# 3. Wireless protable devices
+# 4. WLAN Service WFD*
 #
 
 $Program = "%SystemRoot%\System32\WUDFHost.exe"

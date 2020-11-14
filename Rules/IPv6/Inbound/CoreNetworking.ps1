@@ -51,7 +51,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
 #
-# Predefined rules from Core Networking are here
+# Predefined rules from Core Networking are here excluding ICMP
 #
 
 #

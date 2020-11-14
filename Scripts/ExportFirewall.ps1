@@ -95,3 +95,5 @@ Write-Information -Tags "User" -MessageData "INFO: Time needed to export inbound
 
 $TotalMinutes = $OutboundMinutes + $InboundMinutes
 Write-Information -Tags "User" -MessageData "INFO: Total time needed to export entry firewall was: $TotalMinutes minutes"
+
+Update-Log

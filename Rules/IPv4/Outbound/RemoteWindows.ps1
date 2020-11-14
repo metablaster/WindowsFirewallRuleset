@@ -53,6 +53,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # Windows system rules
 # Rules that apply to Windows programs and utilities, which are not handled by predefined rules
+# NOTE: There are no predefined rules for remote desktop
 #
 
 $Program = "%SystemRoot%\System32\mstsc.exe"

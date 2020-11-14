@@ -16,14 +16,16 @@ Settings -> Updates & Security -> Allow download from other PC's (PC's on my loc
 
 ## Services
 
-For delivery optimization:
+For delivery optimization set or verify following services (in bold) to "Automatic" startup:\
+**NOTE:** For smooth startup of services set dependent services to delayed start.\
+**NOTE:** Values in parentheses are service short name and default startup type which should work too.
 
-- **Delivery Optimization (DoSvc)**
+- **Delivery Optimization (DoSvc, Automatic - Delayed, Trigger)**
   - Remote Procedure call (RPC)...
 
 For teredo:
 
-- **IP Helper (iphlpsvc)**
+- **IP Helper (iphlpsvc, Automatic)**
   - Network Store Interface Service...
   - Remote Procedure call (RPC)...
   - TCP/IP Protocol Driver (Driver: KERNEL_DRIVER, startup type = BOOT_START)
