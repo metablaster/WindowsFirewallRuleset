@@ -32,7 +32,7 @@ SOFTWARE.
 <#
 ISC License
 
-Copyright (C) 2016, Chris Dent
+Copyright (C) 2016 Chris Dent
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above

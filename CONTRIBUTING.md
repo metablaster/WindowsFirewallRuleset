@@ -49,6 +49,7 @@ The reason why not to set up SSH keys right away is because for PowerShell I mad
 Regarding license and Copyright practices adopted by this project see:\
 [Maintaining file-scope copyright notices](https://softwarefreedom.org/resources/2012/ManagingCopyrightInformation.html#maintaining-file-scope-copyright-notices)\
 [Requirements under U.S. and E.U. Copyright Law](http://softwarefreedom.org/resources/2007/originality-requirements.html)
+[Copyright Notices](https://www.gnu.org/prep/maintain/html_node/Copyright-Notices.html)
 
 Regarding versioning adopted see:\
 [Semantic Versioning 2.0.0](https://semver.org)
