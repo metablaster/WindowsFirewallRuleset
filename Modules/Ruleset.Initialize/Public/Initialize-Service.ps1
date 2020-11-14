@@ -112,7 +112,7 @@ function Initialize-Service
 					}
 					"WinRM"
 					{
-						"Required for remote firewall administration"
+						"Required for non 'Core' module compatibility and remote firewall administration"
 					}
 					default
 					{

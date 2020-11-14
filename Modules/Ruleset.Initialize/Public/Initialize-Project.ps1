@@ -38,18 +38,18 @@ tests for OS, PowerShell version and edition, Administrator mode, .NET Framework
 required system services are started and recommended modules installed.
 If not the function may exit and stop executing scripts.
 
-.PARAMETER NoProjectCheck
-If supplied, checking for project requirements and recommendations will not be performed,
+.PARAMETER SkipProjectCheck
+If specified, checking for project requirements and recommendations will not be performed,
 This is equivalent to function that does nothing.
-Note that this parameter is managed by project settings
+The default is managed by project settings.
 
-.PARAMETER NoModulesCheck
-If supplied, checking for required and recommended module updates will not be performed.
-Note that this parameter is managed by project settings
+.PARAMETER CheckModules
+If specified, checking for required and recommended module updates will be performed.
+The default is managed by project settings.
 
-.PARAMETER NoServicesCheck
-If supplied, checking if required system services are running will not be performed.
-Note that this parameter is managed by project settings
+.PARAMETER CheckServices
+If specified, checks if required system services are running.
+The default is managed by project settings.
 
 .PARAMETER Abort
 If specified exit is called on failure instead of return
@@ -60,9 +60,9 @@ Performs default requirements and recommendations checks managed by global setti
 Error or warning message is shown if check failed, environment info otherwise.
 
 .EXAMPLE
-PS> Initialize-Project -NoModulesCheck
+PS> Initialize-Project -CheckModules
 Performs default requirements and recommendations checks managed by global settings,
-except installed modules are not validated.
+in addition installed modules are updated or installed as needed.
 Error or warning message is shown if check failed, environment info otherwise.
 
 .INPUTS
@@ -91,13 +91,13 @@ function Initialize-Project
 	[OutputType([void])]
 	param (
 		[Parameter(ParameterSetName = "NoProject")]
-		[switch] $NoProjectCheck = !$ProjectCheck,
+		[switch] $SkipProjectCheck = !$ProjectCheck,
 
 		[Parameter(ParameterSetName = "Project")]
-		[switch] $NoModulesCheck = !$ModulesCheck,
+		[switch] $CheckModules = $ModulesCheck,
 
 		[Parameter(ParameterSetName = "Project")]
-		[switch] $NoServicesCheck = !$ServicesCheck,
+		[switch] $CheckServices = $ServicesCheck,
 
 		[Parameter(ParameterSetName = "Project")]
 		[switch] $Abort
@@ -106,7 +106,7 @@ function Initialize-Project
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# disabled when running scripts from SetupFirewall.ps1 script, in which case it runs only once
-	if ($NoProjectCheck)
+	if ($SkipProjectCheck)
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Project initialization skipped"
 		return
@@ -185,6 +185,7 @@ function Initialize-Project
 	}
 
 	# Check PowerShell edition
+	# TODO: Edition check should be combined with Import-WinModule below and Test-WSMan from ProjectSettings
 	Write-Information -Tags "User" -MessageData "INFO: Checking PowerShell edition"
 	$PowerShellEdition = $PSVersionTable.PSEdition
 
@@ -212,7 +213,7 @@ function Initialize-Project
 		return
 	}
 
-	if (!$NoServicesCheck)
+	if ($CheckServices)
 	{
 		Write-Information -Tags "User" -MessageData "INFO: Checking system services"
 
@@ -223,22 +224,31 @@ function Initialize-Project
 			"LanmanServer" # Server
 		)
 
+		# NOTE: For remote firewall administration we need this service, see Enable-PSRemoting cmdlet
+		# NOTE: Some tests depend on this service, project not ready for remoting
+		# NOTE: For PowerShell Core 7.1 this service is required for compatibility module
+		# TODO: PolicyStore comparison is bad, ex. PersistentStore is not physical computer
+		if (($TargetPSVersion -ge "7.1") -or ($PolicyStore -ne [System.Environment]::MachineName))
+		{
+			$RequiredServices += "WinRM"
+		}
+
 		if (!(Initialize-Service $RequiredServices))
 		{
 			if ($Abort) { exit }
 			return
 		}
+	}
 
-		# NOTE: remote administration needs this service, see Enable-PSRemoting cmdlet
-		# NOTE: some tests depend on this service, project not ready for remoting
-		if ($Develop -and ($PolicyStore -ne [System.Environment]::MachineName))
-		{
-			if (!(Initialize-Service "WinRM"))
-			{
-				if ($Abort) { exit }
-				return
-			}
-		}
+	# NOTE: WinRM must be started before running this
+	if (($PSVersionTable.PSEdition -eq "Core") -and ($TargetPSVersion -ge "7.1"))
+	{
+		# Since PowerShell Core 7.1 Using Appx no longer works, so we use a compatibility module
+		# https://github.com/PowerShell/PowerShell/issues/13138
+		# TODO: Future versions of PS Core will support more 'Desktop' edition modules,
+		# check to use compatibility only as needed
+		# TODO: Implement Scope parameter
+		Import-WinModule -Name Appx
 	}
 
 	# Modules and git is required only for development and editing scripts
@@ -326,7 +336,7 @@ function Initialize-Project
 	}
 
 	# NOTE: Result value should be equivalent to $Develop
-	if (!$NoModulesCheck)
+	if ($CheckModules)
 	{
 		Write-Information -Tags "User" -MessageData "INFO: Checking package providers"
 

@@ -44,6 +44,8 @@ None. You cannot pipe objects to Get-SystemApps
 
 .OUTPUTS
 [Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage] store app information object
+[Object] if using PowerShell Core which outputs deserialized object:
+[Deserialized.Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage]
 
 .NOTES
 TODO: query remote computer not implemented
@@ -55,7 +57,7 @@ function Get-SystemApps
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SystemApps.md")]
-	[OutputType([Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage])]
+	[OutputType([Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage], [Object])]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]

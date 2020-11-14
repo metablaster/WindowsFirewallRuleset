@@ -44,4 +44,6 @@ Import-Module -Name Ruleset.ProgramInfo @Logs
 
 Import-Module -Name Ruleset.Firewall @Logs
 Import-Module -Name Ruleset.IP @Logs
+
+Import-Module -Name WindowsCompatibility @Logs
 Import-Module -Name VSSetup @Logs

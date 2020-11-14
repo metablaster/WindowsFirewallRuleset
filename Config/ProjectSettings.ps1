@@ -151,6 +151,7 @@ if ($Develop)
 		Remove-Module -Name Ruleset.ProgramInfo -ErrorAction Ignore
 		Remove-Module -Name Ruleset.Firewall -ErrorAction Ignore
 		Remove-Module -Name Ruleset.IP -ErrorAction Ignore
+		Remove-Module -Name WindowsCompatibility -ErrorAction Ignore
 	}
 }
 else # Normal use case
@@ -336,7 +337,7 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 	Set-Variable -Name CheckReadOnlyVariables -Scope Global -Option ReadOnly -Force -Value $null
 
 	# Set to false to avoid checking system requirements
-	Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $false
+	Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $true
 
 	# Set to false to avoid checking if modules are up to date
 	Set-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Force -Value $Develop

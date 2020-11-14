@@ -19,3 +19,4 @@
 *.ini		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
 *.json		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
 *.md		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+*.png		binary

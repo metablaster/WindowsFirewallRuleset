@@ -130,6 +130,16 @@ function Get-TypeName
 			$Result = $TypeName -as [type]
 			if (!$Result)
 			{
+				if ($PSVersionTable.PSEdition -eq "Core")
+				{
+					if (([version] $PSVersionTable.PSVersion) -ge "7.1")
+					{
+						# NOTE: $Assembly.GetTypes() not compatible
+						Write-Warning -Message "Operation is not supported on PowerShell Core 7.1+"
+						return
+					}
+				}
+
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching assemblies for type: $TypeName"
 				$Result = foreach ($Assembly in [System.AppDomain]::CurrentDomain.GetAssemblies())
 				{

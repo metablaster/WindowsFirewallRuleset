@@ -45,9 +45,14 @@ In addition to table below, see:
     - [Physical, virtual and loopback IP interfaces](#physical-virtual-and-loopback-ip-interfaces)
     - [All adapters configured with an IP regardless of connection state](#all-adapters-configured-with-an-ip-regardless-of-connection-state)
   - [Repository creation date](#repository-creation-date)
-  - [Get rule special properties](#get-rule-special-properties)
-  - [Temporarily toggle all blocking rules](#temporarily-toggle-all-blocking-rules)
-  - [Get new services](#get-new-services)
+  - [Troubleshooting](#troubleshooting)
+    - [Get rule special properties](#get-rule-special-properties)
+    - [Temporarily toggle all blocking rules](#temporarily-toggle-all-blocking-rules)
+    - [Get new services](#get-new-services)
+  - [Code design and development](#code-design-and-development)
+    - [Get type accelerators](#get-type-accelerators)
+    - [Get approved verbs](#get-approved-verbs)
+    - [Invoke PSScriptAnalyzer](#invoke-psscriptanalyzer)
 
 ## Store Apps
 
@@ -296,7 +301,11 @@ curl https://api.github.com/repos/metablaster/WindowsFirewallRuleset |
 ConvertFrom-Json | Select-Object -ExpandProperty "created_at"
 ```
 
-## Get rule special properties
+## Troubleshooting
+
+Command useful to troubleshoot random issues
+
+### Get rule special properties
 
 Update `PolicyStore`, `DisplayGroup` and `Direction` before running
 
@@ -306,7 +315,7 @@ Select-Object DisplayName, PolicyDecisionStrategy, ConditionListType, ExecutionS
 SequencedActions, Profiles, LocalOnlyMapping, LooseSourceMapping
 ```
 
-## Temporarily toggle all blocking rules
+### Temporarily toggle all blocking rules
 
 To quickly troubleshoot packet drop, should be used in conjunction with allowing default inbound and
 outbound.
@@ -319,7 +328,7 @@ Disable-NetFirewallRule -InputObject $Rules
 Enable-NetFirewallRule -InputObject $Rules
 ```
 
-## Get new services
+### Get new services
 
 Quickly detect which services started after some system state change
 
@@ -332,4 +341,26 @@ $DifferenceServices = Get-Service | Where-Object -Property Status -eq "Running"
 
 $NewServices = Compare-Object -ReferenceObject $ReferenceServices -DifferenceObject $DifferenceServices
 $NewServices | Select-Object -ExpandProperty InputObject
+```
+
+## Code design and development
+
+Most useful commands for design
+
+### Get type accelerators
+
+```powershell
+[PSCustomObject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::get.GetEnumerator() | Sort-Object Key
+```
+
+### Get approved verbs
+
+```powershell
+Get-Verb | Select-Object Verb, Group, Description | Sort-Object Verb
+```
+
+### Invoke PSScriptAnalyzer
+
+```powershell
+Invoke-ScriptAnalyzer -Path .\ -Recurse -Settings Config\PSScriptAnalyzerSettings.psd1
 ```

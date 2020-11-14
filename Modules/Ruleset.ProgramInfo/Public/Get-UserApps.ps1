@@ -51,6 +51,8 @@ None. You cannot pipe objects to Get-UserApps
 
 .OUTPUTS
 [Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage] store app information object
+[Object] if using PowerShell Core which outputs deserialized object:
+[Deserialized.Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage]
 
 .NOTES
 TODO: query remote computer not implemented
@@ -63,7 +65,7 @@ function Get-UserApps
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserApps.md")]
-	[OutputType([Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage])]
+	[OutputType([Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage], [Object])]
 	param (
 		[Alias("User")]
 		[Parameter(Mandatory = $true)]
