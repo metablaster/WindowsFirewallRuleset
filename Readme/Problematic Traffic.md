@@ -267,7 +267,7 @@ configure rules for these interfaces, except allowing all interfaces.
 - It is absolute must to reboot system once for changes to be visible (sometimes twice to get log clear)
 - Use `Get-NetadApter`, `Get-NetIPConfiguration` and `Get-NetIPInterface` to gather hidden adapter info
 - Use `-InterfaceAlias` instead of `-InterfaceType` when defining firewall rule
-- See [PowerShell Commands](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/PowerShell%20Commands.md)
+- See [Command Help](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Command%Help.md)
 and [What is the Hyper-V Virtual Switch](https://www.altaro.com/hyper-v/the-hyper-v-virtual-switch-explained-part-1/)
 for details.
 - Module ComputerInfo now implements functions for this purpose, see also Test\Rule-InterfaceAlias.ps1
@@ -351,7 +351,7 @@ Get-NetFirewallRule -PolicyStore PersistentStore -DisplayGroup "network discover
 
 "Incoming connections" troubleshooter tells us "security setting" is causing the issue
 
-Additional investigation needed with the help of event logs and WFP trace logs.
+Setting our rules to be the same (or even more relaxing) as those predefined won't work.
 
 ### Case 10: Audit result
 
@@ -361,26 +361,26 @@ On another side there is some magic involved, Windows firewall requires at least
 from "Network Discovery" and at least 1 predefined rule from "File and printer sharing" group.
 
 These 2 rules don't have to be enabled, it's only important that the rule applies to current
-network profile, this might get rid of error message but will likely not work.
+network profile, this might get rid of the error message but will still not work.
 
-Additional investigation needed to figure out why 2 disabled rules make the error message go away,
-it looks like Windows firewall loads some DLL's based on presence of at least one rule from group.
+It looks like Windows firewall loads some DLL's based on presence of at least one rule from group.
 
-Current workaround for home networks is to apply all predefined "Network Discovery" and
-"File and printer sharing" rules into GPO.
+It turns out that Windows firewall does some magic based on `Group` parameter which isn't the same
+thing as `DisplayGroup` which can't be even specified.
 
-Following commands can be used for potential programatic solution:
+A solution is to get a built-in predefined group name and use it to create custom rules, for example:
 
 ```powershell
-# netsh
-netsh advfirewall firewall set rule group="Network Discovery" new enable=No
-netsh advfirewall firewall set rule group="File and Printer Sharing" new enable=No
-
-# Windows PowerShell
-Set-NetFirewallRule -PolicyStore $PolicyStore -DisplayGroup "Network Discovery" -Enabled True
-Set-NetFirewallRule -PolicyStore $PolicyStore -DisplayGroup "File and Printer Sharing" -Enabled True
+New-NetFirewallRule -DisplayName "Customized Predefined Rule" -Group "@FirewallAPI.dll,-32752" `
+-PolicyStore ([Environment]::MachineName) -Direction
 ```
 
-See also `NetTCPIP` module for TCP/UDP options
+Create as many rules as needed to override predefined rules, alternatively import predefined rules
+and modify as needed, for example:
 
-Status: not completely resolved
+```powershell
+Get-NetFirewallRule -PolicyStore SystemDefaults -DisplayGroup "Network Discovery" `
+-PolicyStoreSourceType Local | Copy-NetFirewallRule -NewPolicyStore ([Environment]::MachineName)
+```
+
+Status: Partialy resolved

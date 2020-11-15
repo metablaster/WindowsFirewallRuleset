@@ -38,17 +38,46 @@ Import-Module -Name Ruleset.Logging
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
-$Group = "Network Sharing - Experimental"
+$Group = "@FirewallAPI.dll,-28502"
+$DisplayGroup = "File and Printer Sharing"
 # $FirewallProfile = "Private, Domain"
 $Accept = "Inbound rules for network sharing will be loaded, required to share resources in local networks"
 $Deny = "Skip operation, inbound network sharing rules will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
+Update-Context "IPv$IPVersion" $Direction $DisplayGroup @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+
+Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $Group -Direction $Direction -NewPolicyStore $PolicyStore
+
+Get-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction | ForEach-Object {
+	$_ | Format-Output -Modify
+	[hashtable] $Params = @{
+		InputObject = $_
+		Enabled = "True"
+		LocalUser = "Any"
+		# TODO: most likely multicast is dropped
+		# InterfaceType = $Interface
+	}
+
+	if ($_.Profile -eq "Domain")
+	{
+		$Params["Enabled"] = "False"
+	}
+
+	if ((Get-NetFirewallApplicationFilter -AssociatedNetFirewallRule $_).Program -eq "System")
+	{
+		$Params["LocalUser"] = $NT_AUTHORITY_System
+	}
+
+	Set-NetFirewallRule @Params
+}
+
+# NOTE: Following rules are no longer relevant
+return
 
 #
 # File and Printer sharing predefined rules

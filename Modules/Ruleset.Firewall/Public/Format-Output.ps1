@@ -35,16 +35,19 @@ Output of Net-NewFirewallRule is large, loading a lot of rules would spam the co
 very fast, this function helps to output only relevant, formatted and colored output
 
 .PARAMETER Rule
-Firewall rule to format
+Firewall rule to format, by default output status represents loading rule
 
-.PARAMETER Label
-Optional new label to replace default one
+.PARAMETER Modify
+If specified, output status represents rule modification
+
+.PARAMETER Import
+If specified, output status represents importing rule
 
 .EXAMPLE
 PS> Net-NewFirewallRule ... | Format-Output
 
 .INPUTS
-[Microsoft.Management.Infrastructure.CimInstance] Firewall rule to format
+[Microsoft.Management.Infrastructure.CimInstance[]]
 
 .OUTPUTS
 None. Format-Output does not generate any output
@@ -56,20 +59,38 @@ function Format-Output
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 		"PSAvoidUsingWriteHost", "", Justification = "There is no way to replace Write-Host here")]
-	[CmdletBinding(
+	[CmdletBinding(DefaultParameterSetName = "None",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Format-Output.md")]
 	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-		[Microsoft.Management.Infrastructure.CimInstance] $Rule,
+		[Microsoft.Management.Infrastructure.CimInstance[]] $Rule,
 
-		[Parameter()]
-		[string] $Label = "Load Rule"
+		[Parameter(ParameterSetName = "Modify")]
+		[switch] $Modify,
+
+		[Parameter(ParameterSetName = "Import")]
+		[switch] $Import
 	)
 
+	begin
+	{
+		if ($Modify)
+		{
+			$Label = "Harden Rule"
+		}
+		elseif ($Import)
+		{
+			$Label = "Import Rule"
+		}
+		else
+		{
+			$Label = "Load Rule"
+		}
+	}
 	process
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-		Write-Host "$($Label): [$($Rule | Select-Object -ExpandProperty Group)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
+		Write-Host "$($Label): [$($Rule | Select-Object -ExpandProperty DisplayGroup)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
 	}
 }

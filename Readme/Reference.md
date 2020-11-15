@@ -125,6 +125,8 @@ Also few commandlets from these modules:
 
 [Understand TCP/IP addressing and subnetting basics](https://docs.microsoft.com/en-us/troubleshoot/windows-client/networking/tcpip-addressing-and-subnetting)
 
+[Firewall Rule Groups @FirewallAPI.dll](https://docs.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/networking-mpssvc-svc-firewallgroups)
+
 ## Virtualization
 
 [What is the Hyper-V Virtual Switch and How Does it Work?](https://www.altaro.com/hyper-v/the-hyper-v-virtual-switch-explained-part-1/)
@@ -184,3 +186,5 @@ Also few commandlets from these modules:
 [Check Domain](https://lookup.icann.org)
 
 [Command-line syntax key](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/command-line-syntax-key)
+
+[Windows PowerShell Cmdlets for Networking](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/jj717268(v=ws.11))

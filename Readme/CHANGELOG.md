@@ -44,7 +44,7 @@ If you would like to see fresh changes done since last release you can do so on 
     - Manage GPO Firewall
     - Monitoring Firewall
     - Firewall Parameters
-    - Powershell Commands
+    - Powershell Commands (now renamed to "Command Help")
     - Reference
     - Predefined Rules
     - Problematic Traffic

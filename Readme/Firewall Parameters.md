@@ -125,8 +125,9 @@ except if InterfaceType is "Any", use just one of these two parameters.
 
 1. Persistent store
 
-   > Is what you see in Windows Firewall with Advanced security, accessed trough control panel or
-  System settings.
+    > Is what you see in Windows Firewall with Advanced security, accessed trough control panel or
+    System settings.
+    > Rules created in this store are attached to the ActiveStore and activated on the computer immediately.
 
    Example: `-PolicyStore PersistentStore`
 
@@ -147,7 +148,7 @@ except if InterfaceType is "Any", use just one of these two parameters.
 
 4. Active store:
 
-    > Active store is collection (sum) of Persistent store and all GPO stores (RSOP) that apply to
+    > Active store is the sum of Persistent store and all GPO stores (RSOP) that apply to
     local computer. in other words it's a master store.
 
     Example: `-PolicyStore ActiveStore`
@@ -155,16 +156,27 @@ except if InterfaceType is "Any", use just one of these two parameters.
 5. SystemDefaults:
 
     > Read-only store contains the default state of firewall rules that ship with Windows Server 2012.
+    > In other words, all predefined firewall rules are here.
+
+    Example: `Get-NetFirewallRule -PolicyStore Systemdefaults`
 
 6. StaticServiceStore:
 
     > Read-only store contains all the service restrictions that ship with Windows Server 2012.
+    > Rules that cover optional and product-dependent features, can be used to harden firewall.
+
+    Example: `Get-NetFirewallRule -PolicyStore StaticServiceStore`
 
 7. ConfigurableServiceStore:
 
     > This read-write store contains all the service restrictions that are added for third-party services.
     > In addition, network isolation rules that are created for Windows Store application containers
     will appear in this policy store.
+    > Network isolation rules that are created for Windows Store application containers are stored
+    in the registry (and aren't accessible with Get-NetFirewallRule) under:
+    `HKLM:\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\RestrictedServices\AppIso\FirewallRules`
+
+    Example: `Get-NetFirewallRule -PolicyStore ConfigurableServiceStore`
 
 For more information see [New-NetFirewallRule](https://docs.microsoft.com/en-us/powershell/module/netsecurity/new-netfirewallrule?view=winserver2012r2-ps&redirectedfrom=MSDN)
 
