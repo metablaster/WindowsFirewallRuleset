@@ -39,7 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Software - FileZilla"
-$FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for FileZilla software will be loaded, recommended if FileZilla software is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for FileZilla software will not be loaded into firewall"
 
@@ -67,7 +66,7 @@ if ((Test-Installation "FileZilla" ([ref] $FileZillaRoot) @Logs) -or $ForceLoad)
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "FileZilla client (FTP)" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "FileZilla FTP protocol" @Logs | Format-Output @Logs
@@ -76,7 +75,7 @@ if ((Test-Installation "FileZilla" ([ref] $FileZillaRoot) @Logs) -or $ForceLoad)
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "FileZilla client (SFTP)" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21098 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "FileZilla SSH FTP protocol" @Logs | Format-Output @Logs

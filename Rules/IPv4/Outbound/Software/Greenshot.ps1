@@ -39,7 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Software - Greenshot"
-$FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for Greenshot software will be loaded, recommended if Greenshot software is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for Greenshot software will not be loaded into firewall"
 
@@ -66,7 +65,7 @@ if ((Test-Installation "Greenshot" ([ref] $GreenshotRoot) @Logs) -or $ForceLoad)
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Greenshot" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "Screen capture tool, needs rules to upload screenshots to imgur" @Logs | Format-Output @Logs

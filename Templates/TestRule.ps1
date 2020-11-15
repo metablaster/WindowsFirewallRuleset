@@ -73,7 +73,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 # Setup local variables
 $Group = "Test - Template rule"
-$FirewallProfile = "Any"
+$LocalProfile = "Any"
 #endregion
 
 Enter-Test $ThisScript
@@ -87,7 +87,7 @@ Start-Test "Test rule"
 # Outbound TCP test rule template
 # NOTE: for more rule templates see Inbound.ps1 and Outbound.ps1
 New-NetFirewallRule -DisplayName "Test rule" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Any `

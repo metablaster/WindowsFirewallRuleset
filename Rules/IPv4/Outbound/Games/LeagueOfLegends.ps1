@@ -39,7 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Games - League of Legends"
-$FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for League of Legends game will be loaded, recommended if League of Legends game is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for League of Legends game will not be loaded into firewall"
 
@@ -76,7 +75,7 @@ if ((Test-Installation "LoLGame" ([ref] $LoLRoot) @Logs) -or $ForceLoad)
 	Test-File $Program @Logs
 
 	New-NetFirewallRule -DisplayName "LoL launcher services" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
@@ -88,7 +87,7 @@ if ((Test-Installation "LoLGame" ([ref] $LoLRoot) @Logs) -or $ForceLoad)
 
 	# TODO: Official site says both 5222 and 5223 but 5222 is not used
 	New-NetFirewallRule -DisplayName "LoL launcher services - PVP.Net" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
@@ -103,7 +102,7 @@ if ((Test-Installation "LoLGame" ([ref] $LoLRoot) @Logs) -or $ForceLoad)
 
 	# TODO: rule not used or not tested
 	New-NetFirewallRule -DisplayName "LoL launcher services - user experience" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
@@ -117,7 +116,7 @@ if ((Test-Installation "LoLGame" ([ref] $LoLRoot) @Logs) -or $ForceLoad)
 	Test-File $Program @Logs
 
 	New-NetFirewallRule -DisplayName "LoL launcher client" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
@@ -130,7 +129,7 @@ for League of Legends." `
 		@Logs | Format-Output @Logs
 
 	New-NetFirewallRule -DisplayName "LoL launcher client - PVP.net" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
@@ -147,7 +146,7 @@ be used separately." `
 	Test-File $Program @Logs
 
 	New-NetFirewallRule -DisplayName "LoL launcher client - user experience" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
@@ -161,7 +160,7 @@ be used separately." `
 	Test-File $Program @Logs
 
 	New-NetFirewallRule -DisplayName "LoL game client - multiplayer" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress Any -RemoteAddress Internet4 `
@@ -173,7 +172,7 @@ be used separately." `
 		@Logs | Format-Output @Logs
 
 	New-NetFirewallRule -DisplayName "LoL game client - server" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
@@ -185,7 +184,7 @@ be used separately." `
 
 	# TODO: rule not used or not tested
 	New-NetFirewallRule -DisplayName "LoL game client - PVP.net" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
@@ -200,7 +199,7 @@ be used separately." `
 
 	# TODO: need to test spectator traffic
 	New-NetFirewallRule -DisplayName "LoL game client - spectator" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress Any -RemoteAddress Internet4 `
@@ -212,7 +211,7 @@ be used separately." `
 		@Logs | Format-Output @Logs
 
 	New-NetFirewallRule -DisplayName "LoL game client - spectator" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `

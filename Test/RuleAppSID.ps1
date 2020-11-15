@@ -67,7 +67,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 # Setup local variables
 $Group = "Test - AppSID"
-$FirewallProfile = "Any"
+$LocalProfile = "Any"
 
 Enter-Test $ThisScript
 
@@ -96,7 +96,7 @@ foreach ($Principal in $Principals)
 Start-Test "New-NetFirewallRule"
 
 New-NetFirewallRule -DisplayName "Get-AppSID" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Any `

@@ -39,7 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Games - Path of Exile"
-$FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for Path of Exile game will be loaded, recommended if Path of Exile game is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for Path of Exile game will not be loaded into firewall"
 
@@ -66,7 +65,7 @@ if ((Test-Installation "PathOfExile" ([ref] $PathOfExileRoot) @Logs) -or $ForceL
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Path of exile" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 6112, 20481 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "Needed for online gaming" @Logs | Format-Output @Logs

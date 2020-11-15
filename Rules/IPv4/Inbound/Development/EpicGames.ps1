@@ -39,7 +39,7 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Development - Epic Games"
-$FirewallProfile = "Any"
+$LocalProfile = "Any"
 $Accept = "Inbound rules for Epic Games launcher and engine will be loaded, recommended if Epic Games launcher and engine is installed to let it access to network"
 $Deny = "Skip operation, inbound rules for Epic Games launcher and engine will not be loaded into firewall"
 
@@ -72,14 +72,14 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot) @Logs) -or $ForceLoad)
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Unreal Engine - CrashReportClientEditor" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType Any `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType Any `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 		-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
 		-Description "" @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Unreal Engine - CrashReportClientEditor" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType Any `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType Any `
 		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 		-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "" @Logs | Format-Output @Logs
@@ -88,14 +88,14 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot) @Logs) -or $ForceLoad)
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Unreal Engine - SwarmAgent" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType Any `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType Any `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 		-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
 		-Description "Swarm agent is used for build farm." @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Unreal Engine - SwarmAgent" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType Any `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType Any `
 		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 		-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "Swarm agent is used for build farm." @Logs | Format-Output @Logs
@@ -104,14 +104,14 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot) @Logs) -or $ForceLoad)
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Unreal Engine - UnrealInsights" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 		-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
 		-Description "" @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Unreal Engine - UnrealInsights" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 		-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "" @Logs | Format-Output @Logs

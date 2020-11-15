@@ -39,7 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Development - Microsoft help viewer"
-$FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for Microsoft help viewer will be loaded, recommended if Microsoft help viewer is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for Microsoft help viewer will not be loaded into firewall"
 
@@ -68,7 +67,7 @@ if ((Test-Installation "HelpViewer" ([ref] $HelpViewerRoot) @Logs) -or $ForceLoa
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Help Viewer (Content manager)" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "" @Logs | Format-Output @Logs
@@ -77,7 +76,7 @@ if ((Test-Installation "HelpViewer" ([ref] $HelpViewerRoot) @Logs) -or $ForceLoa
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Help Viewer" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "Review downloadable content." @Logs | Format-Output @Logs

@@ -39,7 +39,7 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Core Networking - IPv6"
-$FirewallProfile = "Any"
+$LocalProfile = "Any"
 $Accept = "Inbound rules for IPv6 core networking will be loaded, required for proper network functioning"
 $Deny = "Skip operation, inbound IPv6 core networking rules will not be loaded into firewall"
 
@@ -68,7 +68,7 @@ if ($false)
 	} | Select-Object -ExpandProperty InterfaceAlias
 
 	New-NetFirewallRule -DisplayName "Loopback IP" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 		-Service Any -Program Any -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol Any `
 		-LocalAddress Any -RemoteAddress Any `
@@ -132,7 +132,7 @@ packet formats and operating semantics as the unicast Domain Name System (DNS)."
 #
 
 New-NetFirewallRule -DisplayName "DHCP Client" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Dhcp -Program $ServiceHost -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress DHCP6 `
@@ -158,7 +158,7 @@ auto-configuration." `
 #
 
 New-NetFirewallRule -DisplayName "IPv4 over HTTPS" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Any `
@@ -180,7 +180,7 @@ It does a similar job as the earlier 6to4 or Teredo tunneling mechanisms." `
 
 # TODO: edge traversal is missing
 New-NetFirewallRule -DisplayName "IPv6 Encapsulation" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol 41 `
 	-LocalAddress Any -RemoteAddress Any `
@@ -200,7 +200,7 @@ top of an IPv4 network.
 #
 
 New-NetFirewallRule -DisplayName "Teredo" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service iphlpsvc -Program $ServiceHost -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress Any `

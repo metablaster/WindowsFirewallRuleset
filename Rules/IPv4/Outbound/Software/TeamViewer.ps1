@@ -39,7 +39,7 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Software - TeamViewer"
-$FirewallProfile = "Any"
+$LocalProfile = "Any"
 $Accept = "Outbound rules for Team Viewer software will be loaded, recommended if Team Viewer software is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for Team Viewer software will not be loaded into firewall"
 
@@ -66,7 +66,7 @@ if ((Test-Installation "TeamViewer" ([ref] $TeamViewerRoot) @Logs) -or $ForceLoa
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Teamviewer Remote Control Application" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 80, 443, 5938 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "" @Logs | Format-Output @Logs
@@ -75,7 +75,7 @@ if ((Test-Installation "TeamViewer" ([ref] $TeamViewerRoot) @Logs) -or $ForceLoa
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Teamviewer Remote Control Service" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort 80, 443, 5938 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "" @Logs | Format-Output @Logs

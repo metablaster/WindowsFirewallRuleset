@@ -39,7 +39,7 @@ Import-Module -Name Ruleset.UserInfo
 #
 # Setup local variables
 $Group = "Core Networking - IPv4"
-$FirewallProfile = "Any"
+$LocalProfile = "Any"
 $Accept = "Outbound rules for core networking will be loaded, required for proper network funcioning"
 $Deny = "Skip operation, outbound core networking rules will not be loaded into firewall"
 
@@ -67,7 +67,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 New-NetFirewallRule -DisplayName "Loopback" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol Any `
 	-LocalAddress Any -RemoteAddress 127.0.0.1 `
@@ -79,7 +79,7 @@ TCP/IP network resources." `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Loopback" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol Any `
 	-LocalAddress 127.0.0.1 -RemoteAddress Any `
@@ -96,7 +96,7 @@ TCP/IP network resources." `
 
 # TODO: official rule uses loose source mapping
 New-NetFirewallRule -DisplayName "DNS Client" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Dnscache -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress DNS4 `
@@ -111,7 +111,7 @@ This behavior is classified as loose source mapping." `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "DNS Client" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Dnscache -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress DNS4 `
@@ -125,7 +125,7 @@ This behavior is classified as loose source mapping." `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Domain Name System" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress DefaultGateway4 `
@@ -193,7 +193,7 @@ packet formats and operating semantics as the unicast Domain Name System (DNS)."
 #
 
 New-NetFirewallRule -DisplayName "DHCP Client" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Dhcp -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress DHCP4 `
@@ -241,7 +241,7 @@ by sending a DHCPOFFER message to the client" `
 #
 
 New-NetFirewallRule -DisplayName "Internet Group Management Protocol" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Allow `
 	-Direction $Direction -Protocol 2 -LocalAddress Any -RemoteAddress LocalSubnet4 `

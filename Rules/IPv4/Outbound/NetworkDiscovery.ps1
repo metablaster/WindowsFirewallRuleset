@@ -40,7 +40,7 @@ Import-Module -Name Ruleset.UserInfo
 # Setup local variables
 $Group = "@FirewallAPI.dll,-32752"
 $DisplayGroup = "Network Discovery"
-$FirewallProfile = "Private, Domain"
+$LocalProfile = "Private, Domain"
 $Accept = "Outbound rules for network discovery will be loaded, required for host discovery in local networks"
 $Deny = "Skip operation, outbound network discovery rules will not be loaded into firewall"
 
@@ -89,7 +89,7 @@ return
 #
 
 New-NetFirewallRule -DisplayName "Link Local Multicast Name Resolution" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Dnscache -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
@@ -200,7 +200,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Name" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "WSD (FDResPub)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service FDResPub -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
@@ -232,7 +232,7 @@ discovered by other computers on the network." `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "SSDP Discovery" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service SSDPSRV -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
@@ -264,7 +264,7 @@ If this rule is disabled, SSDP-based devices will not be discovered." `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "UPnP Device Host" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service upnphost -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
@@ -404,7 +404,7 @@ New-NetFirewallRule -DisplayName "WSD Events Secure" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "WSD (FDPHost)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service fdPHost -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
@@ -431,7 +431,7 @@ New-NetFirewallRule -DisplayName "WSD (FDPHost)" `
 # see inbound rules, added here because predefined outbound do not define it.
 # NOTE: it's worth nothing that outbound port isn't the sam as for inbound
 New-NetFirewallRule -DisplayName "WSD (Device Association Framework Provider Host)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program "%SystemRoot%\System32\dasHost.exe" -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
@@ -460,7 +460,7 @@ Executable also known as Device Association Framework Provider Host" `
 # both of which are needed, remote port was Any for router, set to 5357 for local subnet
 # disabled for testing
 # New-NetFirewallRule -DisplayName "Device Association Framework Provider Host (WSD)" `
-# 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+# 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 # 	-Service Any -Program "%SystemRoot%\System32\dasHost.exe" -Group $Group `
 # 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 # 	-LocalAddress Any -RemoteAddress DefaultGateway4 `
@@ -474,7 +474,7 @@ Executable also known as Device Association Framework Provider Host" `
 
 # TODO: missing local user
 New-NetFirewallRule -DisplayName "Network infrastructure discovery" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service fdPHost -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress DefaultGateway4 `

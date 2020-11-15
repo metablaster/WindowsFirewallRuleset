@@ -42,7 +42,6 @@ $Group = "Store Apps"
 $ProgramsGroup = "Store Apps - Programs"
 $ServicesGroup = "Store Apps - Services"
 $SystemGroup = "Store Apps - System"
-$FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for store apps will be loaded, required for Windows store apps network access"
 $Deny = "Skip operation, outbound rules for store apps will not be loaded into firewall"
 
@@ -154,7 +153,7 @@ foreach ($Principal in $Principals)
 		if ($PackageSID)
 		{
 			New-NetFirewallRule -DisplayName $_.Name `
-				-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 				-Service Any -Program Any -Group $Group `
 				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 				-LocalAddress Any -RemoteAddress $RemoteAddress `
@@ -212,7 +211,7 @@ foreach ($Principal in $Principals)
 		if ($PackageSID)
 		{
 			New-NetFirewallRule -DisplayName $_.Name `
-				-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 				-Service Any -Program Any -Group $SystemGroup `
 				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 				-LocalAddress Any -RemoteAddress $RemoteAddress `
@@ -236,7 +235,7 @@ $Program = "%SystemRoot%\System32\RuntimeBroker.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "Runtime Broker" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $ProgramsGroup `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -255,7 +254,7 @@ $AppAccounts = Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -User "Your Inte
 Merge-SDDL ([ref] $AppAccounts) $UsersGroupSDDL @Logs
 
 New-NetFirewallRule -DisplayName "Authentication Host" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $ProgramsGroup `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -267,7 +266,7 @@ that uses authentication protocols like OpenID or OAuth, such as Facebook, Twitt
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Windows License Manager Service" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service LicenseManager -Program $ServiceHost -Group $ServicesGroup `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -282,7 +281,7 @@ $Program = "%SystemRoot%\System32\wwahost.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "Microsoft WWA Host" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $ProgramsGroup `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `

@@ -40,7 +40,7 @@ Import-Module -Name Ruleset.UserInfo
 # Setup local variables
 $Group = "@FirewallAPI.dll,-28502"
 $DisplayGroup = "File and Printer Sharing"
-# $FirewallProfile = "Private, Domain"
+# $LocalProfile = "Private, Domain"
 $Accept = "Inbound rules for network sharing will be loaded, required to share resources in local networks"
 $Deny = "Skip operation, inbound network sharing rules will not be loaded into firewall"
 

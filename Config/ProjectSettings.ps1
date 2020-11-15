@@ -307,7 +307,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	New-Variable -Name DefaultInterface -Scope Global -Option Constant -Value "Wired, Wireless"
 
 	# Default network profile to use if not locally specified.
-	# TODO: Rename Interface to DefaultInterface and make use of these by Force changing them as needed
+	# NOTE: Do not modify except to to debug rules or unless absolutely needed!
 	New-Variable -Name DefaultProfile -Scope Global -Option Constant -Value "Private, Public"
 
 	# To force loading rules regardless of presence of program set to true

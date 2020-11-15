@@ -39,7 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Software - Steam"
-$FirewallProfile = "Private, Public"
 $Accept = "Inbound rules for Steam client will be loaded, recommended if Steam client is installed to let it access to network"
 $Deny = "Skip operation, inbound rules for Steam client will not be loaded into firewall"
 
@@ -66,7 +65,7 @@ if ((Test-Installation "Steam" ([ref] $SteamRoot) @Logs) -or $ForceLoad)
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Steam Dedicated or Listen Servers" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort 27015 -RemotePort Any `
 		-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
 		-Description "SRCDS Rcon port" @Logs | Format-Output @Logs

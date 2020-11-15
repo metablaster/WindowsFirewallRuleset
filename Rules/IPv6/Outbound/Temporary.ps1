@@ -39,7 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Temporary - IPv6"
-$FirewallProfile = "Private, Public"
 $Accept = "Temporary outbound IPv6 rules will be loaded, recommended to temporarily enable specific IPv6 traffic"
 $Deny = "Skip operation, temporary outbound IPv6 rules will not be loaded into firewall"
 
@@ -68,7 +67,7 @@ if ($Develop)
 	# $TroubleshootingAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE" @Logs
 
 	New-NetFirewallRule -DisplayName "Services" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service "*" -Program $ServiceHost -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress $LinkScopedUnicast -RemoteAddress Any `
@@ -80,7 +79,7 @@ useful for troubleshooting, and disable ASAP." `
 		@Logs | Format-Output @Logs
 
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP - LLMNR" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program Any -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress $LinkScopedUnicast -RemoteAddress Any `
@@ -91,7 +90,7 @@ useful for troubleshooting, and disable ASAP." `
 		@Logs | Format-Output @Logs
 
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP ports" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program Any -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress $LinkScopedUnicast -RemoteAddress Any `
@@ -106,7 +105,7 @@ useful for troubleshooting, and disable ASAP." `
 
 	# NOTE: should be network service
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP - mDNS" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program Any -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress $LinkScopedUnicast -RemoteAddress Any `
@@ -117,7 +116,7 @@ useful for troubleshooting, and disable ASAP." `
 		@Logs | Format-Output @Logs
 
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP - DHCP" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program Any -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress $LinkScopedUnicast -RemoteAddress Any `

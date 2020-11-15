@@ -39,7 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Development - Microsoft VSCode"
-$FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for Microsoft VSCode will be loaded, recommended if Microsoft VSCode is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for Microsoft VSCode will not be loaded into firewall"
 
@@ -66,7 +65,7 @@ if ((Test-Installation "VSCode" ([ref] $VSCodeRoot) @Logs) -or $ForceLoad)
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Visual Studio Code" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "Visual Studio Code check for updates, extensions download, telemetry and settings sync." @Logs | Format-Output @Logs

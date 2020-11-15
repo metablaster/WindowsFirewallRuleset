@@ -100,7 +100,7 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "ICMPv6"
-$FirewallProfile = "Any"
+$LocalProfile = "Any"
 # NOTE: Set to "Any" because combination of internet + localsubnet excludes non local private addresses
 $RemoteAddr = "Any" # @("Internet6", "LocalSubnet6")
 $RouterSpace = @("LocalSubnet6", "ff02::2", "fe80::/64") # Messages to/from router
@@ -123,7 +123,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 New-NetFirewallRule -DisplayName "Destination Unreachable (1)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 1 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
@@ -135,7 +135,7 @@ traverses which is unable to forward the packet for any reason except congestion
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Packet Too Big (2)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 2 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
@@ -147,7 +147,7 @@ is unable to forward the packet because the packet is too large for the next lin
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Time Exceeded (3)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 3 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
@@ -159,7 +159,7 @@ if the Hop Limit value is decremented to zero at any point on the path. $Descrip
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Parameter Problem (4)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 4 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
@@ -175,7 +175,7 @@ generated packets. $Description" `
 #
 
 New-NetFirewallRule -DisplayName "Echo Request (128)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv6 -IcmpType 128 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
@@ -186,7 +186,7 @@ New-NetFirewallRule -DisplayName "Echo Request (128)" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Echo Reply (129)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 129 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
@@ -205,7 +205,7 @@ interest to those neighboring nodes.
 #>
 
 New-NetFirewallRule -DisplayName "Multicast Listener Query (130)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 130 `
 	-LocalAddress Any -RemoteAddress LocalSubnet6 `
@@ -217,7 +217,7 @@ query a link for multicast group membership. $Description" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Multicast Listener Report (131)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv6 -IcmpType 131 `
 	-LocalAddress Any -RemoteAddress LocalSubnet6 `
@@ -230,7 +230,7 @@ in response to a Multicast Listener Query. $Description" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Multicast Listener Done (132)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv6 -IcmpType 132 `
 	-LocalAddress Any -RemoteAddress LocalSubnet6 `
@@ -242,7 +242,7 @@ any members remaining for a specific multicast address on the subnet. $Descripti
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Router Solicitation (133)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv6 -IcmpType 133 `
 	-LocalAddress Any -RemoteAddress $RouterSpace `
@@ -254,7 +254,7 @@ stateless auto-configuration. $Description" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Router Advertisement (134)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 134 `
 	-LocalAddress Any -RemoteAddress $RouterSpace `
@@ -266,7 +266,7 @@ auto-configuration. $Description" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Neighbor Solicitation (135)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 135 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
@@ -278,7 +278,7 @@ address of another on-link IPv6 node. $Description" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Neighbor Advertisement (136)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 136 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
@@ -290,7 +290,7 @@ of link-layer address changes or in response to a Neighbor Discovery Solicitatio
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Redirect Message (137)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 137 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
@@ -304,7 +304,7 @@ the destination is in fact a neighbor." `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Router Renumbering (138)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 138 `
 	-LocalAddress Any -RemoteAddress $RouterSpace `
@@ -315,7 +315,7 @@ New-NetFirewallRule -DisplayName "Router Renumbering (138)" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "ICMP Node Information Query (139)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 139 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
@@ -328,7 +328,7 @@ fully-qualified domain name." `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "ICMP Node Information Response (140)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 140 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
@@ -341,7 +341,7 @@ fully-qualified domain name." `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Inverse Neighbor Discovery Solicitation Message (141)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 141 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
@@ -352,7 +352,7 @@ New-NetFirewallRule -DisplayName "Inverse Neighbor Discovery Solicitation Messag
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Inverse Neighbor Discovery Advertisement Message (142)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 142 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
@@ -363,7 +363,7 @@ New-NetFirewallRule -DisplayName "Inverse Neighbor Discovery Advertisement Messa
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Multicast Listener Report Version 2 (143)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv6 -IcmpType 143 `
 	-LocalAddress Any -RemoteAddress LocalSubnet6 `
@@ -377,7 +377,7 @@ in response to a Multicast Listener Query. $Description" `
 
 # TODO: unknown if edge traversal is needed
 New-NetFirewallRule -DisplayName "Home Agent Address Discovery Request Message (144)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 144 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
@@ -391,7 +391,7 @@ and authenticity of the Mobile Prefix Solicitations and Advertisements." `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Home Agent Address Discovery Reply Message (145)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 145 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
@@ -405,7 +405,7 @@ and authenticity of the Mobile Prefix Solicitations and Advertisements." `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Mobile Prefix Solicitation (146)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 146 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
@@ -416,7 +416,7 @@ New-NetFirewallRule -DisplayName "Mobile Prefix Solicitation (146)" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Mobile Prefix Advertisement (147)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 147 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
@@ -427,7 +427,7 @@ New-NetFirewallRule -DisplayName "Mobile Prefix Advertisement (147)" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Certification Path Solicitation Message (148)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 148 `
 	-LocalAddress Any -RemoteAddress LocalSubnet6 `
@@ -448,7 +448,7 @@ multicast address, or the address of the host's default router." `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Certification Path Advertisement Message (149)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 149 `
 	-LocalAddress Any -RemoteAddress LocalSubnet6 `
@@ -470,7 +470,7 @@ the link-scoped All-Nodes multicast address." `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "ICMP messages utilized by experimental mobility protocols such as Seamoby (150)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 150 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
@@ -481,7 +481,7 @@ New-NetFirewallRule -DisplayName "ICMP messages utilized by experimental mobilit
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Multicast Router Advertisement (151)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 151 `
 	-LocalAddress Any -RemoteAddress $RouterSpace `
@@ -492,7 +492,7 @@ New-NetFirewallRule -DisplayName "Multicast Router Advertisement (151)" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Multicast Router Solicitation (152)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 152 `
 	-LocalAddress Any -RemoteAddress $RouterSpace `
@@ -503,7 +503,7 @@ New-NetFirewallRule -DisplayName "Multicast Router Solicitation (152)" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Multicast Router Termination (153)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 153 `
 	-LocalAddress Any -RemoteAddress $RouterSpace `
@@ -515,7 +515,7 @@ New-NetFirewallRule -DisplayName "Multicast Router Termination (153)" `
 
 # TODO: go figure out if edge traversal is needed.
 New-NetFirewallRule -DisplayName "FMIPv6 Messages (154)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 154 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
@@ -528,7 +528,7 @@ to the Internet when moving from one Access Router to another, a process referre
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "RPL Control Message (155)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 155 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
@@ -548,7 +548,7 @@ The all-RPL-nodes multicast address is a new address with a value of ff02::1a." 
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "ILNPv6 Locator Update Message (156)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 156 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
@@ -577,7 +577,7 @@ The reach of a WPAN varies from a few centimeters to a few meters.
 #>
 
 New-NetFirewallRule -DisplayName "Duplicate Address Request (157)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 157 `
 	-LocalAddress Any -RemoteAddress LocalSubnet6 `
@@ -594,7 +594,7 @@ In a Duplicate Address Confirmation (DAC), this is just the source from the DAR.
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Duplicate Address Confirmation (158)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 158 `
 	-LocalAddress Any -RemoteAddress LocalSubnet6 `
@@ -629,7 +629,7 @@ in use." `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Extended Echo Request (160)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Block -Direction $Direction -Protocol ICMPv6 -IcmpType 160 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `
@@ -640,7 +640,7 @@ New-NetFirewallRule -DisplayName "Extended Echo Request (160)" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Extended Echo Reply (161)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv6 -IcmpType 161 `
 	-LocalAddress Any -RemoteAddress $RemoteAddr `

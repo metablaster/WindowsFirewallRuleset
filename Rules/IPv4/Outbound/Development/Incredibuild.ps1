@@ -39,7 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Development - Incredibuild"
-$FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for Incredibuild software will be loaded, recommended if Incredibuild software is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for Incredibuild software will not be loaded into firewall"
 
@@ -66,7 +65,7 @@ if ((Test-Installation "Incredibuild" ([ref] $IncredibuildRoot) @Logs) -or $Forc
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Incredibuild License" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "Used to connect to license server for activation" @Logs | Format-Output @Logs

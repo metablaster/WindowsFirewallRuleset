@@ -39,7 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Software - Riva Tuner Statistics Server"
-$FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for Riva Tuner software will be loaded, recommended if Riva Tuner software is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for Riva Tuner software will not be loaded into firewall"
 
@@ -66,7 +65,7 @@ if ((Test-Installation "RivaTuner" ([ref] $RivaTunerRoot) @Logs) -or $ForceLoad)
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Riva Tuner Statistics SErver" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "Comes with MSI afterburner, used for game screen overlay" @Logs | Format-Output @Logs

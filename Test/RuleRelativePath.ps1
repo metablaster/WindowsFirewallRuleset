@@ -66,7 +66,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 # Setup local variables
 $Group = "Test - Relative path"
-$FirewallProfile = "Any"
+$LocalProfile = "Any"
 $TargetProgramRoot = "C:\Program Files (x86)\Realtek\..\PokerStars.EU"
 
 Enter-Test $ThisScript
@@ -81,7 +81,7 @@ $Program = "$TargetProgramRoot\PokerStars.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "TargetProgram" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `

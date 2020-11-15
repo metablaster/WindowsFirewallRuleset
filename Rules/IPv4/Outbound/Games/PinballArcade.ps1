@@ -39,7 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Games - Pinball Arcade"
-$FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for Pinball Arcade game will be loaded, recommended if Pinball Arcade game is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for Pinball Arcade game will not be loaded into firewall"
 
@@ -66,7 +65,7 @@ if ((Test-Installation "PinballArcade" ([ref] $PinballArcadeRoot) @Logs) -or $Fo
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Pinball Arcade" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 27030-27050 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "login" @Logs | Format-Output @Logs
@@ -75,7 +74,7 @@ if ((Test-Installation "PinballArcade" ([ref] $PinballArcadeRoot) @Logs) -or $Fo
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Pinball Arcade DX11" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 27030-27050 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "" @Logs | Format-Output @Logs

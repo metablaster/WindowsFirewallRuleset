@@ -62,7 +62,7 @@ $Group = "Multicast - IPv4"
 # NOTE: Unlike with IPv6 multicast we can afford excluding "Public" profile since there aren't
 # as many different multicast addresses
 # TODO: We should exclude public profile conditionally when not essential (ex. no homegroup required)
-$FirewallProfile = "Any" #"Private, Domain"
+$MulticastProfile = "Any" #"Private, Domain"
 $MulticastUsers = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE", "LOCAL SERVICE" @Logs
 $Accept = "Outbound rules for IPv4 multicast will be loaded, recommended for proper network functioning"
 $Deny = "Skip operation, outbound IPv4 multicast rules will not be loaded into firewall"
@@ -82,7 +82,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 New-NetFirewallRule -DisplayName "Local Network Control Block" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $MulticastProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 224.0.0.0-224.0.0.255 `
@@ -95,7 +95,7 @@ Examples of this type of use include OSPFIGP All Routers (224.0.0.5)." `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Internetwork Control Block" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $MulticastProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 224.0.1.0-224.0.1.255 `
@@ -108,7 +108,7 @@ include 224.0.1.1 (Network Time Protocol (NTP)) and 224.0.1.68 (mdhcpdiscover)."
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "AD-HOC Block I" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $MulticastProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 224.0.2.0-224.0.255.255 `
@@ -125,7 +125,7 @@ Internetwork Control blocks will be made in AD-HOC Block III." `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "SDP/SAP Block" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $MulticastProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 224.2.0.0-224.2.255.255 `
@@ -138,7 +138,7 @@ through the Session Announcement Protocol for use via applications like the sess
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "AD-HOC Block II" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $MulticastProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 224.3.0.0-224.4.255.255 `
@@ -155,7 +155,7 @@ Internetwork Control blocks will be made in AD-HOC Block III." `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "DIS Transient Groups" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $MulticastProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 224.252.0.0-224.255.255.255 `
@@ -166,7 +166,7 @@ New-NetFirewallRule -DisplayName "DIS Transient Groups" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Source-Specific Multicast Block" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $MulticastProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 232.0.0.0-232.255.255.255 `
@@ -181,7 +181,7 @@ transient groups [IANA]." `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "GLOP Block" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $MulticastProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 233.0.0.0-233.251.255.255 `
@@ -198,7 +198,7 @@ or consider using IPv6 multicast addresses." `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "AD-HOC Block III" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $MulticastProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 233.252.0.0-233.255.255.255 `
@@ -216,7 +216,7 @@ for AD-HOC assignment." `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Unicast-Prefix-based IPv4 Multicast Addresses" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $MulticastProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 234.0.0.0-234.255.255.255 `
@@ -233,7 +233,7 @@ allocation protocol." `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Administratively Scoped Block" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $MulticastProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 239.0.0.0-239.255.255.255 `

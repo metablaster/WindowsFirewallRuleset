@@ -39,8 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Server - SQL"
-$FirewallProfile = "Private, Public"
-
 # TODO: this is most likely wrong
 $SQLUsers = Get-SDDL -Group "Users", "Administrators" @Logs
 $Accept = "Outbound rules for Microsoft SQL Server software will be loaded, recommended if Microsoft SQL Server software is installed to let it access to network"
@@ -73,7 +71,7 @@ if ((Test-Installation "SQLManagementStudio" ([ref] $SQLManagementStudioRoot) @L
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "SQL Server Management Studio" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $SQLUsers `
 		-Description "" @Logs | Format-Output @Logs
@@ -86,7 +84,7 @@ if ((Test-Installation "SQLDTS" ([ref] $SQLDTSRoot) @Logs) -or $ForceLoad)
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "SQL Server Import and Export Wizard" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $SQLUsers `
 		-Description "" @Logs | Format-Output @Logs

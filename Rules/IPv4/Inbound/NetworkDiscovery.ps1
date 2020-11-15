@@ -40,7 +40,7 @@ Import-Module -Name Ruleset.UserInfo
 # Setup local variables
 $Group = "@FirewallAPI.dll,-32752"
 $DisplayGroup = "Network Discovery"
-$FirewallProfile = "Private, Domain"
+$LocalProfile = "Private, Domain"
 $Accept = "Inbound rules for network discovery will be loaded, required for host discovery in local networks"
 $Deny = "Skip operation, inbound network discovery rules will not be loaded into firewall"
 
@@ -86,7 +86,7 @@ return
 #
 
 New-NetFirewallRule -DisplayName "Link Local Multicast Name Resolution" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Dnscache -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
@@ -190,7 +190,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Name" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "WSD (FDResPub)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service FDResPub -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
@@ -220,7 +220,7 @@ by other computers on the network." `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "SSDP Discovery" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service SSDPSRV -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
@@ -358,7 +358,7 @@ New-NetFirewallRule -DisplayName "WSD Events Secure" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "WSD (FDPHost)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service fdPHost -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
@@ -382,7 +382,7 @@ New-NetFirewallRule -DisplayName "WSD (FDPHost)" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "WSD (Device Association Framework Provider Host)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program "%SystemRoot%\System32\dasHost.exe" -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress LocalSubnet `

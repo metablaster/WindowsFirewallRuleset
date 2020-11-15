@@ -38,7 +38,7 @@ Import-Module -Name Ruleset.Logging
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
-$FirewallProfile = "Private, Domain"
+$LocalProfile = "Private, Domain"
 $Group = "Broadcast"
 $Accept = "Outbound broadcast rules will be loaded, recommended for proper local network functioning"
 $Deny = "Skip operation, outbound broadcast rules will not be loaded into firewall"
@@ -60,7 +60,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 New-NetFirewallRule -DisplayName "Limited Broadcast" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress $LimitedBroadcast `
@@ -72,7 +72,7 @@ New-NetFirewallRule -DisplayName "Limited Broadcast" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "LAN Broadcast" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress $BroadcastAddress `

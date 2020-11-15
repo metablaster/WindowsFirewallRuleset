@@ -39,7 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Software - CPUID"
-$FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for CPUID software will be loaded, recommended if CPUID software is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for CPUID software will not be loaded into firewall"
 
@@ -68,7 +67,7 @@ if ((Test-Installation "HWMonitor" ([ref] $HWMonitorRoot) @Logs) -or $ForceLoad)
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "HWMonitor" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 		-LocalUser $AdministratorsGroupSDDL `
 		-Description "Used for manual check for update" @Logs | Format-Output @Logs
@@ -81,7 +80,7 @@ if ((Test-Installation "CPU-Z" ([ref] $CPUZRoot) @Logs) -or $ForceLoad)
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "CPU-Z" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 		-LocalUser $AdministratorsGroupSDDL `
 		-Description "Used for manual check for update" @Logs | Format-Output @Logs

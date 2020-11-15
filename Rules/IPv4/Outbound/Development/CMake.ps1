@@ -39,7 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Development - CMake"
-$FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for CMake software will be loaded, recommended if CMake software is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for CMake software will not be loaded into firewall"
 
@@ -66,7 +65,7 @@ if ((Test-Installation "CMake" ([ref] $CMakeRoot) @Logs) -or $ForceLoad)
 	Test-File $Program @Logs
 
 	New-NetFirewallRule -DisplayName "CMake" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Any `

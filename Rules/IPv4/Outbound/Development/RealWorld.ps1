@@ -39,7 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Development - Real World"
-$FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for Real World  cursor editor will be loaded, recommended if Real World cursor editor is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for Real World  cursor editor will not be loaded into firewall"
 
@@ -66,7 +65,7 @@ if ((Test-Installation "RealWorld" ([ref] $RealWorldRoot) @Logs) -or $ForceLoad)
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Real World Cursor Editor" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "To get online resources and template projects" @Logs | Format-Output @Logs

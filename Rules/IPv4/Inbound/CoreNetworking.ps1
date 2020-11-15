@@ -39,7 +39,7 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Core Networking - IPv4"
-$FirewallProfile = "Any"
+$LocalProfile = "Any"
 $Accept = "Inbound rules for core networking will be loaded, required for proper network funcioning"
 $Deny = "Skip operation, inbound core networking rules will not be loaded into firewall"
 
@@ -66,7 +66,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # TODO: is there a need or valid reason to make rules for "this machine"? (0.0.0.0)
 # TODO: should we use -InterfaceAlias set to Loopback pseudo interface?
 New-NetFirewallRule -DisplayName "Loopback" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol Any `
 	-LocalAddress Any -RemoteAddress 127.0.0.1 `
@@ -76,7 +76,7 @@ New-NetFirewallRule -DisplayName "Loopback" `
 	-Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Loopback" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol Any `
 	-LocalAddress 127.0.0.1 -RemoteAddress Any `
@@ -132,7 +132,7 @@ packet formats and operating semantics as the unicast Domain Name System (DNS)."
 #
 
 New-NetFirewallRule -DisplayName "DHCP Client" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Dhcp -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress DHCP4 `
@@ -181,7 +181,7 @@ requesting the offered address." `
 #
 
 New-NetFirewallRule -DisplayName "Internet Group Management Protocol" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Allow `
 	-Direction $Direction -Protocol 2 -LocalAddress Any -RemoteAddress LocalSubnet4 `

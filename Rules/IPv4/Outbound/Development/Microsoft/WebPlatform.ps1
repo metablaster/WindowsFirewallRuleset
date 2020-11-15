@@ -39,7 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Development - Microsoft web platform"
-$FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for Microsoft web platform will be loaded, recommended if Microsoft web platform is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for Microsoft web platform will not be loaded into firewall"
 
@@ -66,7 +65,7 @@ if ((Test-Installation "WebPlatform" ([ref] $WebPlatformRoot) @Logs) -or $ForceL
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Web Platform Installer" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "" @Logs | Format-Output @Logs

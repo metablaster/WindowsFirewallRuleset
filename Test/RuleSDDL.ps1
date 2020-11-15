@@ -67,7 +67,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 # Setup local variables
 $Group = "Test - Get-SDDL"
-$FirewallProfile = "Any"
+$LocalProfile = "Any"
 
 Enter-Test $ThisScript
 # TODO: Need separate test cases for users, groups and built in domains
@@ -89,7 +89,7 @@ $RuleUsers
 Start-Test "New-NetFirewallRule"
 
 New-NetFirewallRule -DisplayName "Get-SDDL mix" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Any `
@@ -111,7 +111,7 @@ $RuleAppUsers
 Start-Test "Get-SDDL APPLICATION PACKAGE AUTHORITY"
 
 New-NetFirewallRule -DisplayName "Get-SDDL APPLICATION PACKAGE AUTHORITY" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `

@@ -39,7 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Windows System"
-$FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for built in system software will be loaded, required for proper functioning of operating system"
 $Deny = "Skip operation, outbound rules for built in system software will not be loaded into firewall"
 
@@ -71,7 +70,7 @@ $Program = "%SystemRoot%\System32\DataUsageLiveTileTask.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "DataSenseLiveTileTask" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -88,7 +87,7 @@ if ((Test-Installation "NETFramework" ([ref] $NETFrameworkRoot) @Logs) -or $Forc
 	$Program = "$NETFrameworkRoot\mscorsvw.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -DisplayName "CLR Optimization Service" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled True -Action Block -Direction $Direction -Protocol Any `
 		-LocalAddress Any -RemoteAddress Internet4 `
@@ -108,7 +107,7 @@ if ((Test-Installation "WindowsDefender" ([ref] $WindowsDefenderRoot) @Logs) -or
 	Test-File $Program @Logs
 
 	New-NetFirewallRule -DisplayName "Windows Defender" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
@@ -122,7 +121,7 @@ if ((Test-Installation "WindowsDefender" ([ref] $WindowsDefenderRoot) @Logs) -or
 	Test-File $Program @Logs
 
 	New-NetFirewallRule -DisplayName "Windows Defender CLI" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
@@ -139,7 +138,7 @@ $Program = "%SystemRoot%\System32\MRT.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "Malicious Software Removal Tool" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -153,7 +152,7 @@ $Program = "%SystemRoot%\System32\slui.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "Activation Client" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -167,7 +166,7 @@ $Program = "%SystemRoot%\System32\SppExtComObj.Exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "Activation KMS" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -182,7 +181,7 @@ New-NetFirewallRule -DisplayName "Activation KMS" `
 # Test-File $Program @Logs
 
 # New-NetFirewallRule -DisplayName "Application Block Detector" `
-# 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+# 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 # 	-Service Any -Program $Program -Group $Group `
 # 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 # 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -219,7 +218,7 @@ $Program = "%SystemRoot%\System32\BackgroundTransferHost.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "Background transfer host" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -234,7 +233,7 @@ Test-File $Program @Logs
 
 # TODO: no comment
 New-NetFirewallRule -DisplayName "Cortana Speech Runtime" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -248,7 +247,7 @@ $Program = "%SystemRoot%\System32\Speech_OneCore\common\SpeechModelDownload.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "Cortana Speech Model" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -262,7 +261,7 @@ $Program = "%SystemRoot%\System32\wsqmcons.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "Customer Experience Improvement Program" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -277,7 +276,7 @@ $Program = "%SystemRoot%\System32\CompatTelRunner.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "Microsoft Compatibility Telemetry" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -301,7 +300,7 @@ $Program = "%SystemRoot%\System32\SearchProtocolHost.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "Windows Indexing Service" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -316,7 +315,7 @@ $Program = "%SystemRoot%\System32\WerFault.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "Error Reporting" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -330,7 +329,7 @@ $Program = "%SystemRoot%\System32\wermgr.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "Error Reporting" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -345,7 +344,7 @@ Test-File $Program @Logs
 
 # TODO: remote to local subnet seen for shared folder access
 New-NetFirewallRule -DisplayName "File Explorer" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -358,7 +357,7 @@ New-NetFirewallRule -DisplayName "File Explorer" `
 # TODO: possibly deprecated since Windows 10
 # Seen outbound 443 while setting up MS account on fresh Windows account
 New-NetFirewallRule -DisplayName "File Explorer" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -374,7 +373,7 @@ Test-File $Program @Logs
 # TODO: need to test and adjust for passive vs active and various types of protocol:
 # FTP, SFPT, FTPS etc... All this have to be updated also for other FTP programs
 New-NetFirewallRule -DisplayName "FTP Client" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4, LocalSubnet4 `
@@ -388,7 +387,7 @@ $Program = "%SystemRoot%\HelpPane.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "Help pane" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -404,7 +403,7 @@ Test-File $Program @Logs
 
 # TODO: program possibly no longer uses networking since windows 10
 New-NetFirewallRule -DisplayName "DLL host process" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled False -Action Block -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -422,7 +421,7 @@ possibly no longer uses networking since windows 10." `
 
 # TODO: no comment
 # New-NetFirewallRule -DisplayName "Install Compatibility Advisor Inventory Tool" `
-# 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+# 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 # 	-Service Any -Program $Program -Group $Group `
 # 	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
 # 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -436,7 +435,7 @@ $Program = "%SystemRoot%\System32\msiexec.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "Installer" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -450,7 +449,7 @@ $Program = "%SystemRoot%\System32\lsass.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "Local Security Authority Process" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -468,7 +467,7 @@ $Program = "%SystemRoot%\System32\mmc.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "MMC Help Viewer" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -482,7 +481,7 @@ $Program = "%SystemRoot%\System32\nslookup.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "nslookup (Name server lookup)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress Internet4, DefaultGateway4 `
@@ -499,7 +498,7 @@ Test-File $Program @Logs
 
 # NOTE: Ports are specified only for some protocols
 New-NetFirewallRule -DisplayName "curl" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4, LocalSubnet4 `
@@ -516,7 +515,7 @@ $Program = "%SystemRoot%\System32\SettingSyncHost.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "Settings sync" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -533,7 +532,7 @@ $Program = "%SystemRoot%\System32\smartscreen.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "Smartscreen" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -547,7 +546,7 @@ $Program = "%SystemRoot%\ImmersiveControlPanel\SystemSettings.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "SystemSettings" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -563,7 +562,7 @@ $Program = "%SystemRoot%\System32\taskhostw.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "taskhostw" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -579,7 +578,7 @@ $Program = "%SystemRoot%\System32\sihclient.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "Service Initiated Healing" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -599,7 +598,7 @@ $Program = "%SystemRoot%\System32\DeviceCensus.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "Windows Update (Devicecensus)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -626,7 +625,7 @@ $Program = "%SystemRoot%\System32\usocoreworker.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "Update Session Orchestrator" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -646,7 +645,7 @@ $Program = "%SystemRoot%\System32\MoUsoCoreWorker.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "Mo Update Session Orchestrator" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -660,7 +659,7 @@ $Program = "%SystemRoot%\System32\usoclient.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "Update Session Orchestrator" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -679,7 +678,7 @@ $Program = "%SystemRoot%\System32\wbem\WmiPrvSE.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "WMI Provider Host" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -693,7 +692,7 @@ $Program = "%SystemRoot%\System32\OpenSSH\ssh.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "OpenSSH" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -708,7 +707,7 @@ $Program = "%SystemRoot%\System32\conhost.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "Console Host" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -724,7 +723,7 @@ $Program = "%SystemRoot%\System32\SecurityHealthService.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "Windows Security Health Service" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -751,7 +750,7 @@ $Program = "%SystemRoot%\System32\dmcertinst.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "Windows Device Management Certificate Installer" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -766,7 +765,7 @@ $Program = "%SystemRoot%\System32\deviceenroller.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "Windows Device Management Device Enroller" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -777,7 +776,7 @@ New-NetFirewallRule -DisplayName "Windows Device Management Device Enroller" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Windows Device Management Enrollment Service" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service DmEnrollmentSvc -Program $ServiceHost -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -791,7 +790,7 @@ $Program = "%SystemRoot%\System32\omadmclient.exe"
 Test-File $Program @Logs
 
 New-NetFirewallRule -DisplayName "Windows Device Management Sync Client" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `

@@ -39,7 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Development - Microsoft dotnet"
-$FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for dotnet which provides commands for working with .NET Core projects."
 $Deny = "Skip operation, outbound rules for dotnet will not be loaded into firewall"
 
@@ -68,7 +67,7 @@ if ((Test-Installation "dotnet" ([ref] $dotnetRoot) @Logs) -or $ForceLoad)
 	# TODO: There could be more ports or specific users, needs complete testing...
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "dotnet" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $NT_AUTHORITY_System `
 		-Description "Provides commands for working with .NET Core projects." @Logs | Format-Output @Logs

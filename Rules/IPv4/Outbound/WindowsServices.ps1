@@ -39,7 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Windows Services"
-$FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for system services will be loaded, required for proper functioning of operating system"
 $Deny = "Skip operation, outbound rules for system services will not be loaded into firewall"
 
@@ -110,7 +109,7 @@ or PCs on the Internet, based on your settings." `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Windows Modules Installer" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service TrustedInstaller -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -123,7 +122,7 @@ If this service is disabled, install or uninstall of Windows updates might fail 
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Windows Time (NTP/SNTP)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service W32Time -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -137,7 +136,7 @@ If this service is disabled, any services that explicitly depend on it will fail
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Windows Time (DayTime)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service W32Time -Program $ServiceHost -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -150,7 +149,7 @@ If this service is disabled, any services that explicitly depend on it will fail
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Windows Time (DayTime)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service W32Time -Program $ServiceHost -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -164,7 +163,7 @@ If this service is disabled, any services that explicitly depend on it will fail
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Windows Time (TIME)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service W32Time -Program $ServiceHost -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -177,7 +176,7 @@ If this service is disabled, any services that explicitly depend on it will fail
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Windows Time (TIME)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service W32Time -Program $ServiceHost -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -191,7 +190,7 @@ If this service is disabled, any services that explicitly depend on it will fail
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Windows Push Notifications System Service" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service WpnService -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -212,7 +211,7 @@ if ($Service)
 {
 	# TODO: Service may change it's name randomly, which makes this rule useless
 	New-NetFirewallRule -DisplayName "Windows Push Notifications User Service" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service $Service -Program $ServiceHost -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
@@ -230,7 +229,7 @@ else
 }
 
 New-NetFirewallRule -DisplayName "Windows Insider Service" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service wisvc -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -259,7 +258,7 @@ if the service is disabled." `
 
 # NOTE: Account detected is: SECURITY_LOCAL_SYSTEM_RID S-1-5-18 A special account used by the operating system.
 New-NetFirewallRule -DisplayName "Device Setup Manager" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service DsmSvc -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -285,7 +284,7 @@ If this rule is disabled, configuration information might be unavailable." `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Network services discovery" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service FDResPub -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress LocalSubnet4 `
@@ -300,7 +299,7 @@ It operates over TCP and UDP port 3702 and uses IP multicast address 239.255.255
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Router SSDP discovery" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service SSDPSRV -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress DefaultGateway4 `
@@ -322,7 +321,7 @@ If this rule is blocked, router SSDP-based services will not be discovered." `
 # TODO: network service use for wlidsvc doesn't seem to work, BITS also fails connecting to router
 # sometimes but receives data.
 New-NetFirewallRule -DisplayName "Extension rule for complex services" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -345,7 +344,7 @@ local service account" `
 
 # TODO: trying with localuser: Any
 New-NetFirewallRule -DisplayName "Background Intelligent Transfer Service" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service BITS -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -362,7 +361,7 @@ will be unable to automatically download programs and other information." `
 # BITS to Router info: https://docs.microsoft.com/en-us/windows/win32/bits/network-bandwidth
 # NOTE: Port was 48300, but other random ports can be used too
 New-NetFirewallRule -DisplayName "Router capability check (BITS)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service BITS -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress DefaultGateway4 `
@@ -384,7 +383,7 @@ and Universal Plug and Play (UPnP) must be enabled." `
 
 # TODO: fails on port 80 regardless of extension rule
 New-NetFirewallRule -DisplayName "Cryptographic Services" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service CryptSvc -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -401,7 +400,7 @@ Windows Update and enable scenarios such as SSL." `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Windows update service" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service wuauserv -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -416,7 +415,7 @@ and programs will not be able to use the Windows Update Agent (WUA) API." `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Microsoft Account Sign-in Assistant" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service wlidsvc -Program $ServiceHost -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `

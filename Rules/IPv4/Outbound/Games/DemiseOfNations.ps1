@@ -39,7 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Games - Demise of Nations"
-$FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for Demise of Nations game will be loaded, recommended if Demise of Nations game is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for Demise of Nations game will not be loaded into firewall"
 
@@ -66,7 +65,7 @@ if ((Test-Installation "DemiseOfNations" ([ref] $TargetProgramRoot) @Logs) -or $
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Demise of Nations" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "" @Logs | Format-Output @Logs

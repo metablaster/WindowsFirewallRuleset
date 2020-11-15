@@ -63,7 +63,6 @@ Import-Module -Name Ruleset.Logging
 
 # Setup local variables
 $Group = "Microsoft - Bing wallpaper"
-$FirewallProfile = "Private, Public"
 
 # User prompt
 $Accept = "Outbound rule for bing wallpaper app will be loaded"
@@ -89,7 +88,7 @@ if ((Test-Installation "BingWallpaper" ([ref] $BingWallpaperRoot) @Logs) -or $Fo
 	Test-File $Program @Logs
 
 	New-NetFirewallRule -DisplayName "Bing wallpaper" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `

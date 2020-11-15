@@ -39,7 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Software - DnsCrypt"
-$FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for DnsCrypt software will be loaded, recommended if DnsCrypt software is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for DnsCrypt software will not be loaded into firewall"
 
@@ -70,7 +69,7 @@ if ((Test-Installation "DnsCrypt" ([ref] $DnsCryptRoot) @Logs) -or $ForceLoad)
 	$Program = "$DnsCryptRoot\dnscrypt-proxy\dnscrypt-proxy.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -DisplayName "dnscrypt-proxy" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service dnscrypt-proxy -Program $Program -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
@@ -87,7 +86,7 @@ This rule applies to both TLS and HTTPS encrypted DNS using dnscrypt-proxy." `
 	# $NT_AUTHORITY_System
 	# TODO: see if LooseSourceMapping is needed
 	New-NetFirewallRule -DisplayName "dnscrypt-proxy" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service dnscrypt-proxy -Program $Program -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress Any -RemoteAddress Internet4 `
@@ -105,7 +104,7 @@ This rule applies to both TLS and HTTPS encrypted DNS using dnscrypt-proxy." `
 	$Program = "$DnsCryptRoot\SimpleDnsCrypt.exe"
 	Test-File $Program @Logs
 	New-NetFirewallRule -DisplayName "Simple DNS Crypt" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `

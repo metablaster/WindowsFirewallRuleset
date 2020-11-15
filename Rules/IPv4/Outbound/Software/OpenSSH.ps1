@@ -39,7 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Software - OpenSSH"
-$FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for OpenSSH beta software will be loaded, recommended if OpenSSH software is manually installed"
 $Deny = "Skip operation, outbound rules for OpenSSH software will not be loaded into firewall"
 
@@ -67,7 +66,7 @@ if ((Test-Installation "OpenSSH" ([ref] $OpenSSHRoot) @Logs) -or $ForceLoad)
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "OpenSSH" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 22 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "OpenSSH is connectivity tool for remote login with the SSH protocol,

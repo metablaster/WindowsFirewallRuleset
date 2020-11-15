@@ -39,7 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Windows Services"
-# $FirewallProfile = "Private, Public"
 $Accept = "Inbound rules for system services will be loaded, required for proper functioning of operating system"
 $Deny = "Skip operation, inbound rules for system services will not be loaded into firewall"
 

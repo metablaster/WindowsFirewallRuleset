@@ -39,7 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Remote Windows"
-# $FirewallProfile = "Private, Public"
 $Accept = "Inbound rules for remote Windows will be loaded, required for services such as remote desktop or remote registry"
 $Deny = "Skip operation, inbound rules for remote Windows will not be loaded into firewall"
 

@@ -39,7 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Games - Arena Chess"
-$FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for Arena Chess game will be loaded, recommended if Arena Chess game is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for Arena Chess game will not be loaded into firewall"
 
@@ -66,7 +65,7 @@ if ((Test-Installation "ArenaChess" ([ref] $ArenaChessRoot) @Logs) -or $ForceLoa
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Arena Chess" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 5000 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "Chess client program" @Logs | Format-Output @Logs

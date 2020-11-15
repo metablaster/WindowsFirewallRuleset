@@ -39,7 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Development - Chocolatey"
-$FirewallProfile = "Private, Public"
 $ChocolateyAccounts = Get-SDDL -Group "Users", "Administrators" @Logs
 $Accept = "Outbound rules for Chocolatey software will be loaded, recommended if Chocolatey software is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for Chocolatey software will not be loaded into firewall"
@@ -67,7 +66,7 @@ if ((Test-Installation "Chocolatey" ([ref] $ChocolateyRoot) @Logs) -or $ForceLoa
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Chocolatey" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $ChocolateyAccounts `
 		-Description "Chocolatey package manager" @Logs | Format-Output @Logs

@@ -39,7 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Temporary - IPv4"
-$FirewallProfile = "Private, Public"
 $Accept = "Temporary inbound IPv4 rules will be loaded, recommended to temporarily enable specific IPv4 traffic"
 $Deny = "Skip operation, temporary inbound IPv4 rules will not be loaded into firewall"
 
@@ -69,7 +68,7 @@ if ($Develop)
 	# NOTE: local address should include multicast
 	# NOTE: traffic can come from router
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP ports" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program Any -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress Any -RemoteAddress Any `
@@ -85,7 +84,7 @@ if ($Develop)
 
 	# NOTE: should be network service
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP - mDNS" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program Any -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress $ClassB, $ClassC -RemoteAddress Any `
@@ -99,7 +98,7 @@ if ($Develop)
 	# HACK: Inbound rule with "-LooseSourceMapping $true" can be created:
 	# Invalid flags specified.
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP LocalOnlyMapping" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program Any -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress Any -RemoteAddress Any `

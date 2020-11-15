@@ -66,7 +66,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 # Setup local variables
 $Group = "Test - Interface aliases"
-$FirewallProfile = "Any"
+$LocalProfile = "Any"
 
 Enter-Test $ThisScript
 
@@ -79,7 +79,7 @@ $VirtualAdapter = Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected -
 
 # Outbound rule to test virtual adapter rule
 New-NetFirewallRule -DisplayName "Virtual adapter rule no wildcard" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol Any `
 	-LocalAddress Any -RemoteAddress Any `
@@ -94,7 +94,7 @@ $VirtualAdapterCultureInvariant = Get-InterfaceAlias IPv4 -IncludeVirtual -Inclu
 
 # Outbound rule to test virtual adapter rule
 New-NetFirewallRule -DisplayName "Virtual adapter rule CultureInvariant" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol Any `
 	-LocalAddress Any -RemoteAddress Any `
@@ -109,7 +109,7 @@ $VirtualAdapterIgnoreCase = Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisc
 
 # Outbound rule to test virtual adapter rule
 New-NetFirewallRule -DisplayName "Virtual adapter rule IgnoreCase" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol Any `
 	-LocalAddress Any -RemoteAddress Any `
@@ -124,7 +124,7 @@ $VirtualAdapterNone = Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnect
 
 # Outbound rule to test virtual adapter rule
 New-NetFirewallRule -DisplayName "Virtual adapter rule None" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol Any `
 	-LocalAddress Any -RemoteAddress Any `
@@ -139,7 +139,7 @@ $VirtualAdapterCompiled = Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDiscon
 
 # Outbound rule to test virtual adapter rule
 New-NetFirewallRule -DisplayName "Virtual adapter rule Compiled" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol Any `
 	-LocalAddress Any -RemoteAddress Any `
@@ -154,7 +154,7 @@ $HardwareAdapter = Get-InterfaceAlias IPv4
 
 # Outbound rule to test hardware adapter rule
 New-NetFirewallRule -DisplayName "Hardware adapter rule" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol Any `
 	-LocalAddress Any -RemoteAddress Any `
@@ -169,7 +169,7 @@ $MultipleAdapters = Get-InterfaceAlias IPv4 -IncludeAll
 
 # Outbound rule to test hardware adapter rule
 New-NetFirewallRule -DisplayName "Multiple adapters rule" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol Any `
 	-LocalAddress Any -RemoteAddress Any `
@@ -185,7 +185,7 @@ $BadAdapters += [WildcardPattern]("Local Area Connection* 644")
 
 # Outbound rule to test nonexistent adapter rule
 New-NetFirewallRule -DisplayName "Bad adapter rule" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol Any `
 	-LocalAddress Any -RemoteAddress Any `

@@ -65,7 +65,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 # Setup local variables
 $Group = "Test - Format output"
-$FirewallProfile = "Any"
+$LocalProfile = "Any"
 $Direction = "Outbound"
 
 Enter-Test $ThisScript
@@ -76,7 +76,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 Start-Test "Format-Output"
 
 New-NetFirewallRule -DisplayName "TargetProgram1" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Any `
@@ -87,7 +87,7 @@ New-NetFirewallRule -DisplayName "TargetProgram1" `
 	@Logs | Format-Output @Logs
 
 $Result = New-NetFirewallRule -DisplayName "TargetProgram2" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Any `

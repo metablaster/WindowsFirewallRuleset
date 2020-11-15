@@ -39,7 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Games - Eve Online"
-$FirewallProfile = "Private, Public"
 $Accept = "Outbound rules for Eve Online game will be loaded, recommended if Eve Online game is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for Eve Online game will not be loaded into firewall"
 
@@ -66,7 +65,7 @@ if ((Test-Installation "EveOnline" ([ref] $EveOnlineRoot) @Logs) -or $ForceLoad)
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Eve Online" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443, 27030 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "" @Logs | Format-Output @Logs

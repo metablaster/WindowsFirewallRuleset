@@ -39,7 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Temporary - IPv4"
-$FirewallProfile = "Private, Public"
 $Accept = "Temporary outbound IPv4 rules will be loaded, recommended to temporarily enable specific IPv4 traffic"
 $Deny = "Skip operation, temporary outbound IPv4 rules will not be loaded into firewall"
 
@@ -56,7 +55,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 New-NetFirewallRule -DisplayName "Port 443" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -67,7 +66,7 @@ New-NetFirewallRule -DisplayName "Port 443" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Port 80" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -79,7 +78,7 @@ New-NetFirewallRule -DisplayName "Port 80" `
 
 # NOTE: to make use of this rule, it should be updated here and the script re-run
 New-NetFirewallRule -DisplayName "Installer" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -93,7 +92,7 @@ Add installer path in script and re-run Temporary.ps1" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Services" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service "*" -Program $ServiceHost -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol Any `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -113,7 +112,7 @@ Merge-SDDL ([ref] $UsersStoreAppsSDDL) (Get-SDDL -Domain "APPLICATION PACKAGE AU
 Merge-SDDL ([ref] $UsersStoreAppsSDDL) $UsersGroupSDDL
 
 New-NetFirewallRule -DisplayName "Store Apps" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
@@ -149,7 +148,7 @@ if ($Develop)
 		@Logs | Format-Output @Logs
 
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP - LLMNR" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program Any -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress Any -RemoteAddress Any `
@@ -160,7 +159,7 @@ if ($Develop)
 		@Logs | Format-Output @Logs
 
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP ports" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program Any -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress Any -RemoteAddress Any `
@@ -175,7 +174,7 @@ if ($Develop)
 
 	# NOTE: should be network service
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP - mDNS" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program Any -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress Any -RemoteAddress Any `
@@ -186,7 +185,7 @@ if ($Develop)
 		@Logs | Format-Output @Logs
 
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP - NetBIOS" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program Any -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress Any -RemoteAddress Any `
@@ -204,7 +203,7 @@ if ($Develop)
 	# All troubleshooting rules except this one were set to "Enabled",
 	# they are now disabled because not needed for everyday life
 	New-NetFirewallRule -DisplayName "Troubleshoot BITS" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $ServiceHost -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress DefaultGateway4 `

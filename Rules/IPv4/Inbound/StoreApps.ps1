@@ -40,7 +40,6 @@ Import-Module -Name Ruleset.UserInfo
 # Setup local variables
 $Group = "Store Apps"
 $SystemGroup = "Store Apps - System"
-$FirewallProfile = "Private, Public"
 $Accept = "Inbound rules for store apps will be loaded, required for Windows store apps network access"
 $Deny = "Skip operation, inbound rules for store apps will not be loaded into firewall"
 
@@ -123,7 +122,7 @@ foreach ($Principal in $Principals)
 		if ($PackageSID)
 		{
 			New-NetFirewallRule -DisplayName $_.Name `
-				-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 				-Service Any -Program Any -Group $Group `
 				-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 				-LocalAddress Any -RemoteAddress $RemoteAddress `
@@ -180,7 +179,7 @@ foreach ($Principal in $Principals)
 		if ($PackageSID)
 		{
 			New-NetFirewallRule -DisplayName $_.Name `
-				-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 				-Service Any -Program Any -Group $SystemGroup `
 				-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 				-LocalAddress Any -RemoteAddress $RemoteAddress `

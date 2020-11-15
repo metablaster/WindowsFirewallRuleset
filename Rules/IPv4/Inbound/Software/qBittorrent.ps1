@@ -39,7 +39,6 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Software - qBittorrent"
-$FirewallProfile = "Private, Public"
 $Accept = "Inbound rules for qBittorrent software will be loaded, recommended if qBittorrent software is installed to let it access to network"
 $Deny = "Skip operation, inbound rules for qBittorrent software will not be loaded into firewall"
 
@@ -68,7 +67,7 @@ if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot) @Logs) -or $ForceL
 
 	# TODO: requires uTP protocol?
 	New-NetFirewallRule -DisplayName "qBittorrent - DHT" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress Any -RemoteAddress Any `
@@ -80,7 +79,7 @@ if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot) @Logs) -or $ForceL
 		@Logs | Format-Output @Logs
 
 	New-NetFirewallRule -DisplayName "qBittorrent - Listening port" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Any `
@@ -91,7 +90,7 @@ if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot) @Logs) -or $ForceL
 		@Logs | Format-Output @Logs
 
 	New-NetFirewallRule -DisplayName "qBittorrent - Embedded tracker port" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Any `
@@ -116,7 +115,7 @@ torrents you are on." `
 		@Logs | Format-Output @Logs
 
 	New-NetFirewallRule -DisplayName "qBittorrent - Web UI" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Any `
