@@ -99,7 +99,7 @@ New-NetFirewallRule -DisplayName "Echo Request (8)" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 8 `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "The data received in the echo message must be returned in the echo reply message.
 The identifier and sequence number may be used by the echo sender to aid in matching the replies
 with the echo requests.
@@ -125,7 +125,7 @@ New-NetFirewallRule -DisplayName "Timestamp (13)" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 13 `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "The data received (a timestamp) in the message is returned in the reply together
 with an additional timestamp.
 The timestamp is 32 bits of milliseconds since midnight UT.
@@ -157,7 +157,7 @@ New-NetFirewallRule -DisplayName "Router Advertisement (9)" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 9 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "the ICMP Internet Router Discovery Protocol (IRDP), also called the
 Internet Router Discovery Protocol, is a protocol for computer hosts to discover the presence and
 location of routers on their IPv4 local area network.
@@ -181,7 +181,7 @@ New-NetFirewallRule -DisplayName "Redirect (5)" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 5 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "ICMP redirect messages are used by routers to notify the hosts on the data link
 that a better route is available for a particular destination.
 The gateway sends a redirect message to a host in the following situation.
@@ -217,7 +217,7 @@ New-NetFirewallRule -DisplayName "Echo Reply (0)" `
 	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv4 -IcmpType 0 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrWAN `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "The data received in the echo message must be returned in the echo reply message.
 The identifier and sequence number may be used by the echo sender to aid in matching the replies
 with the echo requests.
@@ -243,7 +243,7 @@ New-NetFirewallRule -DisplayName "Destination Unreachable (3)" `
 	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv4 -IcmpType 3 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrWAN `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "network specified in the RemoteAddress is unreachable, ie,
 the distance to the network is infinity, the gateway may send a destination unreachable message
 to the internet source host of the datagram.
@@ -269,7 +269,7 @@ New-NetFirewallRule -DisplayName "Router Solicitation (10)" `
 	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv4 -IcmpType 10 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "the ICMP Internet Router Discovery Protocol (IRDP), also called the
 Internet Router Discovery Protocol, is a protocol for computer hosts to discover the presence and
 location of routers on their IPv4 local area network.
@@ -288,7 +288,7 @@ New-NetFirewallRule -DisplayName "Time Exceeded (11)" `
 	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv4 -IcmpType 11 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrWAN `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "If the gateway processing a datagram finds the time to live field is zero it must
 discard the datagram.
 The gateway may also notify the source host via the time exceeded message.
@@ -313,7 +313,7 @@ New-NetFirewallRule -DisplayName "Parameter Problem (12)" `
 	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv4 -IcmpType 12 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrWAN `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "If the gateway or host processing a datagram finds a problem with the header
 parameters such that it cannot complete processing the datagram it must discard the datagram.
 One potential source of such a problem is with incorrect arguments in an option.
@@ -335,7 +335,7 @@ New-NetFirewallRule -DisplayName "Timestamp Reply (14)" `
 	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv4 -IcmpType 14 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrWAN `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "The data received (a timestamp) in the message is returned in the reply together
 with an additional timestamp.
 The timestamp is 32 bits of milliseconds since midnight UT.
@@ -371,7 +371,7 @@ New-NetFirewallRule -DisplayName "Echo Reply (0)" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 0 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "The data received in the echo message must be returned in the echo reply message.
 The identifier and sequence number may be used by the echo sender to aid in matching the replies
 with the echo requests.
@@ -397,7 +397,7 @@ New-NetFirewallRule -DisplayName "Destination Unreachable (3)" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 3 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "network specified in the RemoteAddress is unreachable, ie,
 the distance to the network is infinity, the gateway may send a destination unreachable message to
 the internet source host of the datagram.
@@ -423,7 +423,7 @@ New-NetFirewallRule -DisplayName "Router Solicitation (10)" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 10 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "the ICMP Internet Router Discovery Protocol (IRDP), also called the
 Internet Router Discovery Protocol, is a protocol for computer hosts to discover the presence and
 location of routers on their IPv4 local area network.
@@ -442,7 +442,7 @@ New-NetFirewallRule -DisplayName "Time Exceeded (11)" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 11 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "If the gateway processing a datagram finds the time to live field is zero it
 must discard the datagram.
 The gateway may also notify the source host via the time exceeded message.
@@ -468,7 +468,7 @@ New-NetFirewallRule -DisplayName "Parameter Problem (12)" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 12 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "If the gateway or host processing a datagram finds a problem with the header
 parameters such that it cannot complete processing the
 datagram it must discard the datagram. One potential source of such a problem is with incorrect
@@ -491,7 +491,7 @@ New-NetFirewallRule -DisplayName "Timestamp Reply (14)" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 14 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "The data received (a timestamp) in the message is returned in the reply together
 with an additional timestamp.
 The timestamp is 32 bits of milliseconds since midnight UT.

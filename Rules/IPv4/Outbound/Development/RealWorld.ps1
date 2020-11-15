@@ -66,7 +66,7 @@ if ((Test-Installation "RealWorld" ([ref] $RealWorldRoot) @Logs) -or $ForceLoad)
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Real World Cursor Editor" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "To get online resources and template projects" @Logs | Format-Output @Logs

@@ -67,7 +67,7 @@ if ((Test-Installation "XTU" ([ref] $IntelXTURoot) @Logs) -or $ForceLoad)
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Extreme tuning utility" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $AdministratorsGroupSDDL `
 		-Description "Extreme Tuning utility check for updates" @Logs | Format-Output @Logs
@@ -78,7 +78,7 @@ Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Intel telemetry" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $NT_AUTHORITY_System `
 	-Description "Uploader for the Intel(R) Product Improvement Program." @Logs | Format-Output @Logs
@@ -89,7 +89,7 @@ Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Intel PTT EK Recertification" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-Description "" @Logs | Format-Output @Logs

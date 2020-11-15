@@ -59,7 +59,7 @@ Get-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Directio
 		Enabled = "True"
 		LocalUser = "Any"
 		# NOTE: Requires allowing loopback and multicast elsewhere
-		InterfaceType = $Interface
+		InterfaceType = $DefaultInterface
 	}
 
 	if ($_.Profile -eq "Domain")
@@ -96,7 +96,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort Any -RemotePort 139 `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterfaceterface `
 	-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." `
 	@Logs | Format-Output @Logs
 
@@ -107,7 +107,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-LocalAddress Any -RemoteAddress Intranet, LocalSubnet `
 	-LocalPort Any -RemotePort 139 `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterfaceterface `
 	-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." `
 	@Logs | Format-Output @Logs
 
@@ -118,7 +118,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort Any -RemotePort 139 `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterfaceterface `
 	-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." `
 	@Logs | Format-Output @Logs
 
@@ -129,7 +129,7 @@ New-NetFirewallRule -DisplayName "SMB" `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort Any -RemotePort 445 `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterfaceterface `
 	-Description "Rule for File and Printer Sharing to allow Server Message Block transmission and
 reception via Named Pipes." `
 	@Logs | Format-Output @Logs
@@ -141,7 +141,7 @@ New-NetFirewallRule -DisplayName "SMB" `
 	-LocalAddress Any -RemoteAddress Intranet, LocalSubnet `
 	-LocalPort Any -RemotePort 445 `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterfaceterface `
 	-Description "Rule for File and Printer Sharing to allow Server Message Block transmission and
 reception via Named Pipes." `
 	@Logs | Format-Output @Logs
@@ -153,7 +153,7 @@ New-NetFirewallRule -DisplayName "SMB" `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort Any -RemotePort 445 `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterfaceterface `
 	-Description "Rule for File and Printer Sharing to allow Server Message Block transmission and
 reception via Named Pipes." `
 	@Logs | Format-Output @Logs

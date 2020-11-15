@@ -76,7 +76,7 @@ if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot) @Logs) -or $ForceL
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $Interface `
+		-InterfaceType $DefaultInterfaceterface `
 		-Description "HTTP check for updates, HTTPS for client unknown" `
 		@Logs | Format-Output @Logs
 
@@ -88,7 +88,7 @@ if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot) @Logs) -or $ForceL
 		-LocalAddress Any -RemoteAddress 224.0.0.0-239.255.255.255 `
 		-LocalPort Any -RemotePort 6771 `
 		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $Interface `
+		-InterfaceType $DefaultInterfaceterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "UDP multicast search to identify other peers in your subnet that are also on
 torrents you are on." `
@@ -101,7 +101,7 @@ torrents you are on." `
 		-LocalAddress Any -RemoteAddress 239.255.255.250 `
 		-LocalPort Any -RemotePort 1900 `
 		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $Interface `
+		-InterfaceType $DefaultInterfaceterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "" `
 		@Logs | Format-Output @Logs
@@ -114,7 +114,7 @@ torrents you are on." `
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort 1161 -RemotePort 1024-65535 `
 		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $Interface `
+		-InterfaceType $DefaultInterfaceterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "DHT (Distributed Hash Table, technical explanation) is a decentralized network
 that qbittorrent can use to find more peers without a tracker.
@@ -133,7 +133,7 @@ from various sources." `
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 6881-6968, 6970-6999 `
 		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $Interface `
+		-InterfaceType $DefaultInterfaceterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "BitTorrent part of full range of ports used most often (Trackers)	" `
 		@Logs | Format-Output @Logs
@@ -145,7 +145,7 @@ from various sources." `
 		-LocalAddress Any -RemoteAddress DefaultGateway4 `
 		-LocalPort Any -RemotePort 5351 `
 		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $Interface `
+		-InterfaceType $DefaultInterfaceterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "The NAT Port Mapping Protocol (NAT-PMP) is a network protocol for establishing
 network address translation (NAT) settings and port forwarding configurations automatically without
@@ -160,7 +160,7 @@ user effort." `
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 1024-65535 `
 		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $Interface `
+		-InterfaceType $DefaultInterfaceterface `
 		-Description "Torrent client" `
 		@Logs | Format-Output @Logs
 }

@@ -66,7 +66,7 @@ foreach ($Principal in $Principals)
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort Any -RemotePort Any `
 		-LocalUser Any -EdgeTraversalPolicy Block `
-		-InterfaceType $Interface `
+		-InterfaceType $DefaultInterfaceterface `
 		-Owner (Get-AccountSID $Principal.User) -Package * `
 		-Description "$($Principal.User) is administrative account,
 block $($Principal.User) from network activity for all store apps.
@@ -129,7 +129,7 @@ foreach ($Principal in $Principals)
 				-LocalAddress Any -RemoteAddress $RemoteAddress `
 				-LocalPort 80, 443 -RemotePort Any `
 				-LocalUser Any -EdgeTraversalPolicy Block `
-				-InterfaceType $Interface `
+				-InterfaceType $DefaultInterfaceterface `
 				-Owner $Principal.SID -Package $PackageSID `
 				-Description "Auto generated rule for $($_.Name) used by $($Principal.User)" `
 				@Logs | Format-Output @Logs
@@ -186,7 +186,7 @@ foreach ($Principal in $Principals)
 				-LocalAddress Any -RemoteAddress $RemoteAddress `
 				-LocalPort 80, 443 -RemotePort Any `
 				-LocalUser Any -EdgeTraversalPolicy Block `
-				-InterfaceType $Interface `
+				-InterfaceType $DefaultInterfaceterface `
 				-Owner $Principal.SID -Package $PackageSID `
 				-Description "Auto generated rule for $($_.Name) installed system wide and used by $($Principal.User)" `
 				@Logs | Format-Output @Logs

@@ -93,7 +93,7 @@ New-NetFirewallRule -DisplayName "Test rule" `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Test rule description" `
 	@Logs | Format-Output @Logs
 

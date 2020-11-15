@@ -66,7 +66,7 @@ if ((Test-Installation "OpenTTD" ([ref] $OpenTTDRoot) @Logs) -or $ForceLoad)
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "OpenTTD" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 3978 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "" @Logs | Format-Output @Logs

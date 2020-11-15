@@ -66,7 +66,7 @@ if ((Test-Installation "CounterStrikeGO" ([ref] $CounterStrikeRoot) @Logs) -or $
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Counter Strike GO (HTTP)" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "download maps" @Logs | Format-Output @Logs
@@ -75,7 +75,7 @@ if ((Test-Installation "CounterStrikeGO" ([ref] $CounterStrikeRoot) @Logs) -or $
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Counter Strike GO" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 27000-27100 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "" @Logs | Format-Output @Logs

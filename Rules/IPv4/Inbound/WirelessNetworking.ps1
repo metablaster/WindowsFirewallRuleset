@@ -39,7 +39,7 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Wireless Networking"
-$WNInterface = "Wireless"
+$WLANInterface = "Wireless"
 $Accept = "Inbound rules for wireless networking will be loaded, recommended in specific scenarios for wireless networks"
 $Deny = "Skip operation, inbound rules for wireless networking will not be loaded into firewall"
 
@@ -65,7 +65,7 @@ Test-File $Program @Logs
 # TODO: local user may need to be 'Any', needs testing.
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Wireless Display" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $WNInterface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $WLANInterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort 443 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_UserModeDrivers `
 	-Description "Driver Foundation - User-mode Driver Framework Host Process.
@@ -78,7 +78,7 @@ Test-File $Program @Logs
 # TODO: remote port unknown, rule added because predefined rule for UDP exists
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Wireless Display Infrastructure back channel" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $WNInterface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $WLANInterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort 7250 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any `
 	-Description "Miracast is a Wi-Fi display certification program announced by Wi-Fi Alliance for seamlessly displaying video between devices.
@@ -94,7 +94,7 @@ If the name is not resolvable via either DNS method, Windows 10 will fall back t
 # NOTE: WlanSvc not enable by default in Windows Server 2019
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "WLAN Service WFD ASP Coordination Protocol" -Service WlanSvc -Program $ServiceHost `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $WNInterface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $WLANInterface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 7325 -RemotePort 7325 `
 	-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "WLAN Service to allow coordination protocol for WFD Service sessions.
@@ -104,7 +104,7 @@ For more info see description of WLAN AutoConfig service." @Logs | Format-Output
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "WLAN Service WFD Driver-only" -Service Any -Program System `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $WNInterface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $WLANInterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 	-Description "Rule for drivers to communicate over WFD, WFD Services kernel mode driver rule.
@@ -114,7 +114,7 @@ For more info see description of WLAN AutoConfig service." @Logs | Format-Output
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "WLAN Service WFD Driver-only" -Service Any -Program System `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $WNInterface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $WLANInterface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for drivers to communicate over WFD, WFD Services kernel mode driver rule.
@@ -162,14 +162,14 @@ If you turn off this service, you won't be able to print or see your printers." 
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Wireless portable devices (SSDP)" -Service SSDPSRV -Program $ServiceHost `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $WNInterface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $WLANInterface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 1900 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Wireless Portable Devices to allow use of the Simple Service Discovery Protocol." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Wireless portable devices (UPnP)" -Service Any -Program System `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $WNInterface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $WLANInterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 2869 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 	-Description "Wireless Portable Devices to allow use of Universal Plug and Play." @Logs | Format-Output @Logs

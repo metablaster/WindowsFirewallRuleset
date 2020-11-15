@@ -66,7 +66,7 @@ if ((Test-Installation "GPG" ([ref] $GPGRoot) @Logs) -or $ForceLoad)
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Certificate key servers" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 53, 443 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "For Kleopatra server key lookup and key publish." @Logs | Format-Output @Logs

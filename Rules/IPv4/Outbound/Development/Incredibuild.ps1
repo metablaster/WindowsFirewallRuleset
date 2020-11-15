@@ -66,7 +66,7 @@ if ((Test-Installation "Incredibuild" ([ref] $IncredibuildRoot) @Logs) -or $Forc
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Incredibuild License" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "Used to connect to license server for activation" @Logs | Format-Output @Logs

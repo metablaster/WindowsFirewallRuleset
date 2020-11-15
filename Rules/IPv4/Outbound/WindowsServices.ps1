@@ -66,7 +66,7 @@ New-NetFirewallRule -DisplayName "Delivery Optimization" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 80, 443 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Service responsible for delivery optimization.
 Windows Update Delivery Optimization works by letting you get Windows updates and Microsoft Store
 apps from sources in addition to Microsoft, like other PCs on your local network, or PCs on the
@@ -83,7 +83,7 @@ New-NetFirewallRule -DisplayName "Delivery Optimization" `
 	-LocalAddress Any -RemoteAddress LocalSubnet4 `
 	-LocalPort Any -RemotePort 7680 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Service responsible for delivery optimization.
 Windows Update Delivery Optimization works by letting you get Windows updates and Microsoft Store
 apps from sources in addition to Microsoft, like other PCs on your local network, or PCs on the
@@ -99,7 +99,7 @@ New-NetFirewallRule -DisplayName "Delivery Optimization" `
 	-LocalAddress Any -RemoteAddress LocalSubnet4 `
 	-LocalPort Any -RemotePort 7680 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Service responsible for delivery optimization.
 Windows Update Delivery Optimization works by letting you get Windows updates and Microsoft Store
@@ -116,7 +116,7 @@ New-NetFirewallRule -DisplayName "Windows Modules Installer" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Enables installation, modification, and removal of Windows updates and optional
 components.
 If this service is disabled, install or uninstall of Windows updates might fail for this computer." `
@@ -129,7 +129,7 @@ New-NetFirewallRule -DisplayName "Windows Time (NTP/SNTP)" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 123 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Maintains date and time synchronization on all clients and servers in the network.
 If this service is stopped, date and time synchronization will be unavailable.
@@ -143,7 +143,7 @@ New-NetFirewallRule -DisplayName "Windows Time (DayTime)" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 13 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Maintains date and time synchronization on all clients and servers in the network.
 If this service is stopped, date and time synchronization will be unavailable.
 If this service is disabled, any services that explicitly depend on it will fail to start." `
@@ -156,7 +156,7 @@ New-NetFirewallRule -DisplayName "Windows Time (DayTime)" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 13 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Maintains date and time synchronization on all clients and servers in the network.
 If this service is stopped, date and time synchronization will be unavailable.
@@ -170,7 +170,7 @@ New-NetFirewallRule -DisplayName "Windows Time (TIME)" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 37 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Maintains date and time synchronization on all clients and servers in the network.
 If this service is stopped, date and time synchronization will be unavailable.
 If this service is disabled, any services that explicitly depend on it will fail to start." `
@@ -183,7 +183,7 @@ New-NetFirewallRule -DisplayName "Windows Time (TIME)" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 37 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Maintains date and time synchronization on all clients and servers in the network.
 If this service is stopped, date and time synchronization will be unavailable.
@@ -197,7 +197,7 @@ New-NetFirewallRule -DisplayName "Windows Push Notifications System Service" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "This service runs in session 0 and hosts the notification platform and connection
 provider which handles the connection between the device and WNS server." `
 	@Logs | Format-Output @Logs
@@ -218,7 +218,7 @@ if ($Service)
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 80, 443 `
 		-LocalUser Any `
-		-InterfaceType $Interface `
+		-InterfaceType $DefaultInterfaceterface `
 		-Description "This service hosts Windows notification platform which provides support for
 local and push notifications. Supported notifications are tile, toast and raw." `
 		@Logs | Format-Output @Logs
@@ -236,7 +236,7 @@ New-NetFirewallRule -DisplayName "Windows Insider Service" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Provides infrastructure support for the Windows Insider Program.
 This service must remain enabled for the Windows Insider Program to work." `
 	@Logs | Format-Output @Logs
@@ -248,7 +248,7 @@ New-NetFirewallRule -DisplayName "Group Policy Client" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "The service is responsible for applying settings configured by administrators for
 the computer and users through the Group Policy component.
 If the service is disabled, the settings will not be applied and applications and components will
@@ -265,7 +265,7 @@ New-NetFirewallRule -DisplayName "Device Setup Manager" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 80 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Enables the detection, download and installation of device-related software.
 If this service is disabled, devices may be configured with outdated software, and may not work
 correctly." `
@@ -278,7 +278,7 @@ New-NetFirewallRule -DisplayName "Network Location Awareness" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 80 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Collects and stores configuration information for the network and notifies
 programs when this information is modified.
 If this rule is disabled, configuration information might be unavailable." `
@@ -291,7 +291,7 @@ New-NetFirewallRule -DisplayName "Network services discovery" `
 	-LocalAddress Any -RemoteAddress LocalSubnet4 `
 	-LocalPort Any -RemotePort 3702 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Web Services Dynamic Discovery (WS-Discovery) is a technical specification that
 defines a multicast discovery protocol
@@ -306,7 +306,7 @@ New-NetFirewallRule -DisplayName "Router SSDP discovery" `
 	-LocalAddress Any -RemoteAddress DefaultGateway4 `
 	-LocalPort Any -RemotePort 48300 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "SSDP service discovers networked devices and services that use the SSDP discovery
 protocol, such as UPnP devices.
 Also announces SSDP devices and services running on the local computer.
@@ -328,7 +328,7 @@ New-NetFirewallRule -DisplayName "Extension rule for complex services" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $ExtensionAccounts `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Extension rule for active users and NT localsystem, following services need
 access based on logged on user:
 Cryptographic Services(CryptSvc),
@@ -351,7 +351,7 @@ New-NetFirewallRule -DisplayName "Background Intelligent Transfer Service" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 80, 443 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Used for background update,
 note that BITS is used by many third-party tools to download their own updates like AcrobatReader.
 Transfers files in the background using idle network bandwidth. If the service is disabled,
@@ -368,7 +368,7 @@ New-NetFirewallRule -DisplayName "Router capability check (BITS)" `
 	-LocalAddress Any -RemoteAddress DefaultGateway4 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "BITS (Background Intelligent Transfer Service) monitors the network traffic
 at the Internet gateway device (IGD) or the client's network interface card (NIC) and uses only the
 idle portion of the network bandwidth.
@@ -390,7 +390,7 @@ New-NetFirewallRule -DisplayName "Cryptographic Services" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 80, 443 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Provides three management services:
 Catalog Database Service, which confirms the signatures of Windows files and allows new programs
 to be installed;
@@ -407,7 +407,7 @@ New-NetFirewallRule -DisplayName "Windows update service" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 80, 443 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Enables the detection, download, and installation of updates for Windows and
 other programs.
 If this service is disabled, users of this computer will not be able to use Windows Update or its
@@ -422,7 +422,7 @@ New-NetFirewallRule -DisplayName "Microsoft Account Sign-in Assistant" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Enables user sign-in through Microsoft account identity services.
 If this service is stopped, users will not be able to logon to the computer with their
 Microsoft account." `
@@ -440,7 +440,7 @@ New-NetFirewallRule -DisplayName "Recommended Troubleshooting Client" `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort 80, 443 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Allow outbound HTTP/HTTPS traffic from Recommended Troubleshooting Client." `
 	@Logs | Format-Output @Logs
 
@@ -455,7 +455,7 @@ New-NetFirewallRule -DisplayName "Windows Camera Frame Server" `
 	-LocalAddress Any -RemoteAddress LocalSubnet4 `
 	-LocalPort Any -RemotePort 554, 8554-8558 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Service enables multiple clients to access video frames from camera devices." `
 	@Logs | Format-Output @Logs
 

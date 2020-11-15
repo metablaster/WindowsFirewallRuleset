@@ -82,7 +82,7 @@ New-NetFirewallRule -DisplayName "TargetProgram1" `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "TargetProgram1 test rule description" `
 	@Logs | Format-Output @Logs
 
@@ -93,7 +93,7 @@ $Result = New-NetFirewallRule -DisplayName "TargetProgram2" `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "TargetProgram2 test rule description" `
 	@Logs | Format-Output @Logs
 

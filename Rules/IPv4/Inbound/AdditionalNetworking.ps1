@@ -64,7 +64,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Cast to Device functionality (qWave)" -Service QWAVE -Program $ServiceHost `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress PlayToDevice4 -LocalPort 2177 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any `
 	-Description "Inbound rule for the Cast to Device functionality to allow use of the Quality Windows Audio Video Experience Service.
@@ -74,7 +74,7 @@ It provides mechanisms for admission control, run time monitoring and enforcemen
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Cast to Device functionality (qWave)" -Service QWAVE -Program $ServiceHost `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress PlayToDevice4 -LocalPort 2177 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Inbound rule for the Cast to Device functionality to allow use of the Quality Windows Audio Video Experience Service.
@@ -84,28 +84,28 @@ It provides mechanisms for admission control, run time monitoring and enforcemen
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Cast to Device SSDP Discovery" -Service SSDPSRV -Program $ServiceHost `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort PlayToDiscovery -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Inbound rule to allow discovery of Cast to Device targets using SSDP." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Cast to Device streaming server (HTTP)" -Service Any -Program System `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort 10246 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 	-Description "Inbound rule for the Cast to Device server to allow streaming using HTTP." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Cast to Device streaming server (HTTP)" -Service Any -Program System `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 10246 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 	-Description "Inbound rule for the Cast to Device server to allow streaming using HTTP." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Cast to Device streaming server (HTTP)" -Service Any -Program System `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress PlayToDevice4 -LocalPort 10246 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 	-Description "Inbound rule for the Cast to Device server to allow streaming using HTTP." @Logs | Format-Output @Logs
@@ -115,49 +115,49 @@ Test-File $MdeServer
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Cast to Device streaming server (RTCP)" -Service Any -Program $MdeServer `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress PlayToDevice4 -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Inbound ror the Cast to Device server to allow streaming using RTSP and RTP." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Cast to Device streaming server (RTCP)" -Service Any -Program $MdeServer `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Cast to Device streaming server (RTCP)" -Service Any -Program $MdeServer `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Cast to Device streaming server (RTSP)" -Service Any -Program $MdeServer `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress PlayToDevice4 -LocalPort 23554-23556 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any `
 	-Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Cast to Device streaming server (RTSP)" -Service Any -Program $MdeServer `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 23554-23556 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any `
 	-Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Cast to Device streaming server (RTSP)" -Service Any -Program $MdeServer `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort 23554-23556 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any `
 	-Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Cast to Device UPnP Events" -Service Any -Program System `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress PlayToDevice4 -LocalPort 2869 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 	-Description "Inbound rule to allow receiving UPnP Events from Cast to Device targets." @Logs | Format-Output @Logs
@@ -168,21 +168,21 @@ New-NetFirewallRule -Platform $Platform `
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Connected Devices Platform - Wi-Fi Direct Transport" -Service CDPSvc -Program $ServiceHost `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Public -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any `
 	-Description "Inbound rule to use Wi-Fi Direct traffic in the Connected Devices Platform." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Connected Devices Platform" -Service CDPSvc -Program $ServiceHost `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any `
 	-Description "Inbound rule for Connected Devices Platform traffic." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Connected Devices Platform" -Service CDPSvc -Program $ServiceHost `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Inbound rule for Connected Devices Platform traffic." @Logs | Format-Output @Logs
@@ -193,7 +193,7 @@ New-NetFirewallRule -Platform $Platform `
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "AllJoyn Router" -Service AJRouter -Program $ServiceHost `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort 9955 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any `
 	-Description "Inbound rule for AllJoyn Router traffic.
@@ -202,7 +202,7 @@ If this service is stopped the AllJoyn clients that do not have their own bundle
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "AllJoyn Router" -Service AJRouter -Program $ServiceHost `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Inbound rule for AllJoyn Router traffic.
@@ -219,7 +219,7 @@ Test-File $Program @Logs
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Proximity sharing" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any `
 	-Description "Inbound rule for Proximity sharing over." @Logs | Format-Output @Logs
@@ -230,7 +230,7 @@ New-NetFirewallRule -Platform $Platform `
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "DIAL protocol server (HTTP)" -Service Any -Program System `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 10247 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 	-Description "rule for DIAL protocol server to allow remote control of Apps using HTTP.
@@ -240,7 +240,7 @@ It relies on Universal Plug and Play (UPnP), Simple Service Discovery Protocol (
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "DIAL protocol server (HTTP)" -Service Any -Program System `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Domain -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Intranet4 -LocalPort 10247 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 	-Description "rule for DIAL protocol server to allow remote control of Apps using HTTP.

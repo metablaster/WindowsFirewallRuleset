@@ -69,7 +69,7 @@ New-NetFirewallRule -DisplayName "Cast to Device functionality (qWave)" `
 	-LocalAddress Any -RemoteAddress PlayToDevice4 `
 	-LocalPort Any -RemotePort 2177 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Outbound rule for the Cast to Device functionality to allow use of the
 Quality Windows Audio Video Experience Service.
 Quality Windows Audio Video Experience (qWave) is a networking platform for Audio Video (AV)
@@ -87,7 +87,7 @@ New-NetFirewallRule -DisplayName "Cast to Device functionality (qWave)" `
 	-LocalAddress Any -RemoteAddress PlayToDevice4 `
 	-LocalPort Any -RemotePort 2177 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Outbound rule for the Cast to Device functionality to allow use of the
 	Quality Windows Audio Video Experience Service.
@@ -108,7 +108,7 @@ New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTP)" `
 	-LocalAddress Any -RemoteAddress PlayToDevice4 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for the Cast to Device server to allow streaming using RTSP and RTP." `
 	@Logs | Format-Output @Logs
@@ -120,7 +120,7 @@ New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTP)" `
 	-LocalAddress Any -RemoteAddress LocalSubnet4 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for the Cast to Device server to allow streaming using RTSP and RTP." `
 	@Logs | Format-Output @Logs
@@ -132,7 +132,7 @@ New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTP)" `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for the Cast to Device server to allow streaming using RTSP and RTP." `
 	@Logs | Format-Output @Logs
@@ -148,7 +148,7 @@ New-NetFirewallRule -DisplayName "Connected Devices Platform - Wi-Fi Direct Tran
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Outbound rule to use Wi-Fi Direct traffic in the Connected Devices Platform." `
 	@Logs | Format-Output @Logs
 
@@ -159,7 +159,7 @@ New-NetFirewallRule -DisplayName "Connected Devices Platform" `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Outbound rule for Connected Devices Platform traffic." `
 	@Logs | Format-Output @Logs
 
@@ -170,7 +170,7 @@ New-NetFirewallRule -DisplayName "Connected Devices Platform" `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Outbound rule for Connected Devices Platform traffic." `
 	@Logs | Format-Output @Logs
@@ -186,7 +186,7 @@ New-NetFirewallRule -DisplayName "AllJoyn Router" `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Outbound rule for AllJoyn Router traffic.
 AllJoyn Router service routes AllJoyn messages for the local AllJoyn clients.
 If this service is stopped the AllJoyn clients that do not have their own bundled routers will be
@@ -200,7 +200,7 @@ New-NetFirewallRule -DisplayName "AllJoyn Router" `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Outbound rule for AllJoyn Router traffic.
 AllJoyn Router service routes AllJoyn messages for the local AllJoyn clients.
@@ -223,7 +223,7 @@ New-NetFirewallRule -DisplayName "Proximity sharing" `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Outbound rule for Proximity sharing over." `
 	@Logs | Format-Output @Logs
 
@@ -238,7 +238,7 @@ New-NetFirewallRule -DisplayName "Router configuration (HTTP/S)" `
 	-LocalAddress Any -RemoteAddress DefaultGateway `
 	-LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $UsersGroupSDDL `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Allow router configuration trough browser" `
 	@Logs | Format-Output @Logs
 

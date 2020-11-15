@@ -88,7 +88,7 @@ Write-Information -Tags "Test" -MessageData "INFO: ProjectRoot: $ProjectRoot"
 Write-Information -Tags "Test" -MessageData "INFO: PSModulePath:"
 Split-Path -Path $env:PSModulePath.Split(";")
 Write-Information -Tags "Test" -MessageData "INFO: Force: $ForceLoad"
-Write-Information -Tags "Test" -MessageData "INFO: Interface: $Interface"
+Write-Information -Tags "Test" -MessageData "INFO: Interface: $DefaultInterface"
 
 Start-Test "ReadOnlyVariables"
 Write-Information -Tags "Test" -MessageData "INFO: ProjectCheck: $ProjectCheck"

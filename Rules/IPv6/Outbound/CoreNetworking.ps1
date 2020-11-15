@@ -93,7 +93,7 @@ New-NetFirewallRule -DisplayName "DNS Client" `
 	-LocalAddress Any -RemoteAddress DNS6 `
 	-LocalPort Any -RemotePort 53 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule to allow IPv6 DNS (Domain Name System) requests." `
 	@Logs | Format-Output @Logs
@@ -105,7 +105,7 @@ New-NetFirewallRule -DisplayName "Domain Name System" `
 	-LocalAddress Any -RemoteAddress DefaultGateway6 `
 	-LocalPort Any -RemotePort 53 `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule to allow IPv6 DNS (Domain Name System) requests by System to default gateway." `
 	@Logs | Format-Output @Logs
@@ -130,7 +130,7 @@ if ($false)
 		-LocalAddress Any -RemoteAddress ff02::fb `
 		-LocalPort 5353 -RemotePort 5353 `
 		-LocalUser Any `
-		-InterfaceType $Interface `
+		-InterfaceType $DefaultInterfaceterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP
 addresses within small networks that do not include a local name server.
@@ -168,7 +168,7 @@ New-NetFirewallRule -DisplayName "DHCP Client" `
 	-LocalAddress Any -RemoteAddress DHCP6 `
 	-LocalPort 546 -RemotePort 547 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Dynamic Host Configuration Protocol (DHCP) allows DHCPv6 messages for stateful
 auto-configuration." `
@@ -194,7 +194,7 @@ New-NetFirewallRule -DisplayName "IP over HTTPS" `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort IPHTTPSout `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Allow IPHTTPS tunneling technology to provide connectivity across HTTP
 proxies and firewalls.
 IP over HTTPS is a Microsoft network tunneling protocol.
@@ -215,7 +215,7 @@ New-NetFirewallRule -DisplayName "IPv6 Encapsulation" `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Rule required to permit IPv6 traffic for
 ISATAP (Intra-Site Automatic Tunnel Addressing Protocol) and 6to4 tunneling services.
 ISATAP is an IPv6 transition mechanism meant to transmit IPv6 packets between dual-stack nodes on
@@ -235,7 +235,7 @@ New-NetFirewallRule -DisplayName "Teredo" `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort 3544 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Allow Teredo edge traversal, a technology that provides address assignment and
 automatic tunneling for unicast IPv6 traffic when an IPv6/IPv4 host is located behind an IPv4

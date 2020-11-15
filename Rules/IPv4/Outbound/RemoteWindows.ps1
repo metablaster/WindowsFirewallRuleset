@@ -66,7 +66,7 @@ New-NetFirewallRule -DisplayName "Remote desktop - User Mode" `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort 3389 `
 	-LocalUser $UsersGroupSDDL `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Remote desktop connection.
 Allows users to connect interactively to a remote computer.
@@ -81,7 +81,7 @@ New-NetFirewallRule -DisplayName "Remote desktop - User Mode" `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort 3389 `
 	-LocalUser $UsersGroupSDDL `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Remote desktop connection.
 Allows users to connect interactively to a remote computer.
 To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System

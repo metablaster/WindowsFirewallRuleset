@@ -87,7 +87,7 @@ New-NetFirewallRule -DisplayName "Local Network Control Block" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 224.0.0.0-224.0.0.255 `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Addresses in the Local Network Control Block are used for protocol control
 traffic that is not forwarded off link.
@@ -100,7 +100,7 @@ New-NetFirewallRule -DisplayName "Internetwork Control Block" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 224.0.1.0-224.0.1.255 `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Addresses in the Internetwork Control Block are used for protocol
 control traffic that MAY be forwarded through the Internet.  Examples
@@ -113,7 +113,7 @@ New-NetFirewallRule -DisplayName "AD-HOC Block I" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 224.0.2.0-224.0.255.255 `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Addresses in the AD-HOC blocks were
 traditionally used for assignments for those applications that don't fit in either the Local or
@@ -130,7 +130,7 @@ New-NetFirewallRule -DisplayName "SDP/SAP Block" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 224.2.0.0-224.2.255.255 `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Addresses in the SDP/SAP Block are used by applications that receive addresses
 through the Session Announcement Protocol for use via applications like the session directory tool
@@ -143,7 +143,7 @@ New-NetFirewallRule -DisplayName "AD-HOC Block II" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 224.3.0.0-224.4.255.255 `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Addresses in the AD-HOC blocks were
 traditionally used for assignments for those applications that don't fit in either the Local or
@@ -160,7 +160,7 @@ New-NetFirewallRule -DisplayName "DIS Transient Groups" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 224.252.0.0-224.255.255.255 `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "The statically assigned link-local scope is 224.0.0.0/24." `
 	@Logs | Format-Output @Logs
@@ -171,7 +171,7 @@ New-NetFirewallRule -DisplayName "Source-Specific Multicast Block" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 232.0.0.0-232.255.255.255 `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "SSM is an extension of IP Multicast in which traffic is forwarded to receivers
 from only those multicast sources for which the receivers have explicitly expressed interest and
@@ -186,7 +186,7 @@ New-NetFirewallRule -DisplayName "GLOP Block" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 233.0.0.0-233.251.255.255 `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Addresses in the GLOP Block are globally-scoped, statically-assigned addresses.
 The assignment is made, for a domain with a 16-bit Autonomous System Number (ASN),
@@ -203,7 +203,7 @@ New-NetFirewallRule -DisplayName "AD-HOC Block III" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 233.252.0.0-233.255.255.255 `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "[RFC3138] delegated to the RIRs the assignment of the GLOP sub-block mapped by
 the private Autonomous System (AS) space (64512-65534) and the IANA reserved ASN 65535.
@@ -221,7 +221,7 @@ New-NetFirewallRule -DisplayName "Unicast-Prefix-based IPv4 Multicast Addresses"
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 234.0.0.0-234.255.255.255 `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "This specification defines an extension to the multicast addressing architecture
 of the IP Version 4 protocol.
@@ -238,7 +238,7 @@ New-NetFirewallRule -DisplayName "Administratively Scoped Block" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 239.0.0.0-239.255.255.255 `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Addresses in the Administratively Scoped Block are for local use within a
 domain." `

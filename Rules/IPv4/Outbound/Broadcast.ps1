@@ -66,7 +66,7 @@ New-NetFirewallRule -DisplayName "Limited Broadcast" `
 	-LocalAddress Any -RemoteAddress $LimitedBroadcast `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "" `
 	@Logs | Format-Output @Logs
@@ -78,7 +78,7 @@ New-NetFirewallRule -DisplayName "LAN Broadcast" `
 	-LocalAddress Any -RemoteAddress $BroadcastAddress `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "" `
 	@Logs | Format-Output @Logs

@@ -302,12 +302,13 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 		}
 	}
 
-	# Default network interface card, change this to NIC which your target PC uses
-	New-Variable -Name Interface -Scope Global -Option Constant -Value "Wired, Wireless"
+	# Default network interface card to use if not locally specified
+	# TODO: We can learn this value programatically but, problem is the same as with specifying local IP
+	New-Variable -Name DefaultInterface -Scope Global -Option Constant -Value "Wired, Wireless"
 
-	# Default network interface card, change this to NIC which your target PC uses
+	# Default network profile to use if not locally specified.
 	# TODO: Rename Interface to DefaultInterface and make use of these by Force changing them as needed
-	# New-Variable -Name DefaultProfile -Scope Global -Option Constant -Value "Wired, Wireless"
+	New-Variable -Name DefaultProfile -Scope Global -Option Constant -Value "Private, Public"
 
 	# To force loading rules regardless of presence of program set to true
 	New-Variable -Name ForceLoad -Scope Global -Option Constant -Value $false

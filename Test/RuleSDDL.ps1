@@ -95,7 +95,7 @@ New-NetFirewallRule -DisplayName "Get-SDDL mix" `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $RuleUsers `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Get-SDDL test rule for mixture of NT AUTHORITY and users groups" `
 	@Logs | Format-Output @Logs
 
@@ -117,7 +117,7 @@ New-NetFirewallRule -DisplayName "Get-SDDL APPLICATION PACKAGE AUTHORITY" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $RuleAppUsers `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Get-SDDL test rule for APPLICATION PACKAGE AUTHORITY" `
 	@Logs | Format-Output @Logs
 

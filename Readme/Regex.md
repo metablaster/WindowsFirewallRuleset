@@ -113,7 +113,7 @@ New-NetFirewallRule -Group "Some rule group"
 ### Get Interface
 
 ```powershell
-New-NetFirewallRule -InterfaceType $Interface
+New-NetFirewallRule -InterfaceType $DefaultInterface
 New-NetFirewallRule -InterfaceType "Wired, Wireless"
 # TODO: is this valid? if yes regex needs update
 New-NetFirewallRule -InterfaceType Wired, Wireless

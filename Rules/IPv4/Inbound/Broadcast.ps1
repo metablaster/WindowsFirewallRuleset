@@ -67,7 +67,7 @@ New-NetFirewallRule -DisplayName "Limited Broadcast" `
 	-LocalAddress $LimitedBroadcast -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "" `
 	@Logs | Format-Output @Logs
@@ -80,7 +80,7 @@ New-NetFirewallRule -DisplayName "Limited Broadcast" `
 	-LocalAddress $LimitedBroadcast -RemoteAddress LocalSubnet4, Intranet4 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Explicitly deny broadcast traffic on public subnets" `
 	@Logs | Format-Output @Logs
@@ -92,7 +92,7 @@ New-NetFirewallRule -DisplayName "LAN Broadcast" `
 	-LocalAddress $BroadcastAddress -RemoteAddress LocalSubnet4 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "" `
 	@Logs | Format-Output @Logs

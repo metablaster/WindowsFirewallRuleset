@@ -87,7 +87,7 @@ foreach ($Principal in $Principals)
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort Any -RemotePort Any `
 		-LocalUser Any `
-		-InterfaceType $Interface `
+		-InterfaceType $DefaultInterfaceterface `
 		-Owner (Get-AccountSID $Principal.User) -Package * `
 		-Description "$($Principal.User) is administrative account,
 block $($Principal.User) from network activity for all store apps.
@@ -160,7 +160,7 @@ foreach ($Principal in $Principals)
 				-LocalAddress Any -RemoteAddress $RemoteAddress `
 				-LocalPort Any -RemotePort 80, 443 `
 				-LocalUser Any `
-				-InterfaceType $Interface `
+				-InterfaceType $DefaultInterfaceterface `
 				-Owner $Principal.SID -Package $PackageSID `
 				-Description "Auto generated rule for $($_.Name) used by $($Principal.User)" `
 				@Logs | Format-Output @Logs
@@ -218,7 +218,7 @@ foreach ($Principal in $Principals)
 				-LocalAddress Any -RemoteAddress $RemoteAddress `
 				-LocalPort Any -RemotePort 80, 443 `
 				-LocalUser Any `
-				-InterfaceType $Interface `
+				-InterfaceType $DefaultInterfaceterface `
 				-Owner $Principal.SID -Package $PackageSID `
 				-Description "Auto generated rule for $($_.Name) installed system wide and used by $($Principal.User)" `
 				@Logs | Format-Output @Logs
@@ -242,7 +242,7 @@ New-NetFirewallRule -DisplayName "Runtime Broker" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser $UsersGroupSDDL `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "The Runtime Broker is responsible for checking if a store app is declaring all of
 its permissions and informing the user whether or not its being allowed" `
 	@Logs | Format-Output @Logs
@@ -261,7 +261,7 @@ New-NetFirewallRule -DisplayName "Authentication Host" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $AppAccounts `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Connects Universal Windows Platform (UWP) app to an online identity provider
 that uses authentication protocols like OpenID or OAuth, such as Facebook, Twitter, Instagram, etc." `
 	@Logs | Format-Output @Logs
@@ -273,7 +273,7 @@ New-NetFirewallRule -DisplayName "Windows License Manager Service" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Provides infrastructure support for the Microsoft Store." `
 	@Logs | Format-Output @Logs
 
@@ -288,7 +288,7 @@ New-NetFirewallRule -DisplayName "Microsoft WWA Host" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $AppAccounts `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Microsoft WWA Host (wwahost.exe) is an app container for Web sites,
 which has a subset of features, compared to the browser.
 Used in scenario when the Web site is running in the context of an app.

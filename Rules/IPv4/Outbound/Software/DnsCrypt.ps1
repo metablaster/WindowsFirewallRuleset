@@ -76,7 +76,7 @@ if ((Test-Installation "DnsCrypt" ([ref] $DnsCryptRoot) @Logs) -or $ForceLoad)
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 443, 853 `
 		-LocalUser Any `
-		-InterfaceType $Interface `
+		-InterfaceType $DefaultInterfaceterface `
 		-Description "DNSCrypt is a protocol that authenticates communications between a DNS client
 and a DNS resolver. It prevents DNS spoofing.
 It uses cryptographic signatures to verify that responses originate from the chosen DNS resolver
@@ -94,7 +94,7 @@ This rule applies to both TLS and HTTPS encrypted DNS using dnscrypt-proxy." `
 		-LocalPort Any -RemotePort 443, 853 `
 		-LocalUser Any `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
-		-InterfaceType $Interface `
+		-InterfaceType $DefaultInterfaceterface `
 		-Description "DNSCrypt is a protocol that authenticates communications between a DNS client
 and a DNS resolver. It prevents DNS spoofing.
 It uses cryptographic signatures to verify that responses originate from the chosen DNS resolver and
@@ -111,7 +111,7 @@ This rule applies to both TLS and HTTPS encrypted DNS using dnscrypt-proxy." `
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $AdministratorsGroupSDDL `
-		-InterfaceType $Interface `
+		-InterfaceType $DefaultInterfaceterface `
 		-Description "Simple DNS Crypt update check on startup" `
 		@Logs | Format-Output @Logs
 }

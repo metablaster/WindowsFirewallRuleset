@@ -102,7 +102,7 @@ New-NetFirewallRule -DisplayName "DNS Client" `
 	-LocalAddress Any -RemoteAddress DNS4 `
 	-LocalPort Any -RemotePort 53 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $true `
 	-Description "Allow DNS (Domain Name System) requests.
 DNS responses based on requests that matched this rule will be permitted regardless of source
@@ -117,7 +117,7 @@ New-NetFirewallRule -DisplayName "DNS Client" `
 	-LocalAddress Any -RemoteAddress DNS4 `
 	-LocalPort Any -RemotePort 53 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "Allow DNS (Domain Name System) requests over TCP.
 DNS responses based on requests that matched this rule will be permitted regardless of source
 address.
@@ -131,7 +131,7 @@ New-NetFirewallRule -DisplayName "Domain Name System" `
 	-LocalAddress Any -RemoteAddress DefaultGateway4 `
 	-LocalPort Any -RemotePort 53 `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Allow DNS (Domain Name System) requests by System to default gateway." `
 	@Logs | Format-Output @Logs
@@ -158,7 +158,7 @@ if ($true)
 		-LocalAddress Any -RemoteAddress 224.0.0.251 `
 		-LocalPort 5353 -RemotePort 5353 `
 		-LocalUser Any `
-		-InterfaceType $Interface `
+		-InterfaceType $DefaultInterfaceterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to
 IP addresses
@@ -199,7 +199,7 @@ New-NetFirewallRule -DisplayName "DHCP Client" `
 	-LocalAddress Any -RemoteAddress DHCP4 `
 	-LocalPort 68 -RemotePort 67 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Allow DHCPv4 messages for stateful auto-configuration.
 UDP port number 67 is the destination port of a server, and UDP port number 68 is used by the client." `
@@ -212,7 +212,7 @@ New-NetFirewallRule -DisplayName "DHCP Client (Discovery)" `
 	-LocalAddress Any -RemoteAddress 255.255.255.255 `
 	-LocalPort 68 -RemotePort 67 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "The DHCP client broadcasts a DHCPDISCOVER message on the network subnet using
 the destination address 255.255.255.255 (limited broadcast) or
@@ -228,7 +228,7 @@ New-NetFirewallRule -DisplayName "DHCP Server" `
 	-LocalAddress Any -RemoteAddress 255.255.255.255 `
 	-LocalPort 67 -RemotePort 68 `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "When a DHCP server receives a DHCPDISCOVER message from a client, which is an IP
 address lease request, the DHCP server reserves an IP address for the client and makes a lease offer
@@ -247,7 +247,7 @@ New-NetFirewallRule -DisplayName "Internet Group Management Protocol" `
 	-Direction $Direction -Protocol 2 -LocalAddress Any -RemoteAddress LocalSubnet4 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Description "IGMP messages are sent and received by nodes to create,
 join and depart multicast groups." `
 	@Logs | Format-Output @Logs

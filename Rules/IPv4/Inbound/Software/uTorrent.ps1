@@ -66,28 +66,28 @@ if ((Test-Installation "uTorrent" ([ref] $uTorrentRoot) @Logs) -or $ForceLoad)
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "uTorrent - DHT" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort 1161 -RemotePort 1024-65535 `
 		-EdgeTraversalPolicy DeferToApp -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "BitTorrent UDP listener, usually for DHT." @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "uTorrent - Listening port" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort 1161 -RemotePort 1024-65535 `
 		-EdgeTraversalPolicy DeferToApp -LocalUser $UsersGroupSDDL `
 		-Description "BitTorrent TCP listener." @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "uTorrent - Local Peer discovery" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $Interface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol UDP -LocalAddress 224.0.0.0-239.255.255.255 -RemoteAddress LocalSubnet4 -LocalPort 6771 -RemotePort 6771 `
 		-EdgeTraversalPolicy DeferToApp -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "UDP multicast search to identify other peers in your subnet that are also on torrents you are on." @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "uTorrent - Web UI" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort 8080, 10000 -RemotePort Any `
 		-EdgeTraversalPolicy Allow -LocalUser $UsersGroupSDDL `
 		-Description "BitTorrent Remote control from browser." @Logs | Format-Output @Logs

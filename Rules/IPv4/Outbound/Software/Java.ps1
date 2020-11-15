@@ -68,7 +68,7 @@ if ((Test-Installation "JavaRuntime" ([ref] $JavaRuntimeRoot) @Logs) -or $ForceL
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Run java applets" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "Run java applets" @Logs | Format-Output @Logs
@@ -81,7 +81,7 @@ if ((Test-Installation "JavaUpdate" ([ref] $JavaUpdateRoot) @Logs) -or $ForceLoa
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Java update" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "Update java software" @Logs | Format-Output @Logs
@@ -94,7 +94,7 @@ if ((Test-Installation "JavaPlugin" ([ref] $JavaPluginRoot) @Logs) -or $ForceLoa
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Java Plugin HTTP" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "Run java applets" @Logs | Format-Output @Logs

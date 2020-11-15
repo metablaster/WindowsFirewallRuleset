@@ -66,7 +66,7 @@ if ((Test-Installation "GoogleDrive" ([ref] $GoogleDriveRoot) @Logs) -or $ForceL
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Google drive" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "Google drive synchronization service" @Logs | Format-Output @Logs

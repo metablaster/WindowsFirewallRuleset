@@ -66,7 +66,7 @@ if ((Test-Installation "VSCode" ([ref] $VSCodeRoot) @Logs) -or $ForceLoad)
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Visual Studio Code" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "Visual Studio Code check for updates, extensions download, telemetry and settings sync." @Logs | Format-Output @Logs

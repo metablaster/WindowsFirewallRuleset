@@ -82,7 +82,7 @@ if ((Test-Installation "LoLGame" ([ref] $LoLRoot) @Logs) -or $ForceLoad)
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $Interface `
+		-InterfaceType $DefaultInterfaceterface `
 		-Description "Game launcher services, server traffic" `
 		@Logs | Format-Output @Logs
 
@@ -94,7 +94,7 @@ if ((Test-Installation "LoLGame" ([ref] $LoLRoot) @Logs) -or $ForceLoad)
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 5223 `
 		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $Interface `
+		-InterfaceType $DefaultInterfaceterface `
 		-Description "Game launcher services - PVP.Net (game chat)" `
 		@Logs | Format-Output @Logs
 
@@ -109,7 +109,7 @@ if ((Test-Installation "LoLGame" ([ref] $LoLRoot) @Logs) -or $ForceLoad)
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $Interface `
+		-InterfaceType $DefaultInterfaceterface `
 		-Description "Game launcher services - user experience" `
 		@Logs | Format-Output @Logs
 
@@ -123,7 +123,7 @@ if ((Test-Installation "LoLGame" ([ref] $LoLRoot) @Logs) -or $ForceLoad)
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $Interface `
+		-InterfaceType $DefaultInterfaceterface `
 		-Description "Game launcher client - UI (user interface),
 The Launcher is the initial window that checks for game updates and launches the PVP.net client
 for League of Legends." `
@@ -136,7 +136,7 @@ for League of Legends." `
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 2099 `
 		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $Interface `
+		-InterfaceType $DefaultInterfaceterface `
 		-Description "PVP.net is a platform for League of Legends to launch from.
 It allows you to add friends, check the League of Legends store, and join chat rooms.
 PVP.net can be considered a separate entity from the actual game but the two are linked and cannot
@@ -153,7 +153,7 @@ be used separately." `
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $Interface `
+		-InterfaceType $DefaultInterfaceterface `
 		-Description "game client - UX (user experience)" `
 		@Logs | Format-Output @Logs
 
@@ -167,7 +167,7 @@ be used separately." `
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 5000-5500 `
 		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $Interface `
+		-InterfaceType $DefaultInterfaceterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "Game online multiplayer traffic" `
 		@Logs | Format-Output @Logs
@@ -179,7 +179,7 @@ be used separately." `
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $Interface `
+		-InterfaceType $DefaultInterfaceterface `
 		-Description "Game client server traffic" `
 		@Logs | Format-Output @Logs
 
@@ -191,7 +191,7 @@ be used separately." `
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 2099 `
 		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $Interface `
+		-InterfaceType $DefaultInterfaceterface `
 		-Description "PVP.net is a platform for League of Legends to launch from.
 It allows you to add friends, check the League of Legends store, and join chat rooms.
 PVP.net can be considered a separate entity from the actual game but the two are linked and cannot
@@ -206,7 +206,7 @@ be used separately." `
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 8088 `
 		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $Interface `
+		-InterfaceType $DefaultInterfaceterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "Game spectator UDP traffic" `
 		@Logs | Format-Output @Logs
@@ -218,7 +218,7 @@ be used separately." `
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 8088 `
 		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $Interface `
+		-InterfaceType $DefaultInterfaceterface `
 		-Description "Game spectator UDP traffic" `
 		@Logs | Format-Output @Logs
 }

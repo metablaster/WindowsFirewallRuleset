@@ -72,7 +72,7 @@ if ((Test-Installation "OneDrive" ([ref] $OneDriveRoot) @Logs) -or $ForceLoad)
 	# the rest of rule properties was the same, possibly run by schedules task, in which case SYSTEM not needed
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "OneDrive Update" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $NT_AUTHORITY_System `
 		-Description "Updater for OneDrive" @Logs | Format-Output @Logs
@@ -83,7 +83,7 @@ if ((Test-Installation "OneDrive" ([ref] $OneDriveRoot) @Logs) -or $ForceLoad)
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "OneDrive" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "One drive for syncing user data" @Logs | Format-Output @Logs

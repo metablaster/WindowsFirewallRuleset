@@ -102,7 +102,7 @@ New-NetFirewallRule -DisplayName "Get-AppSID" `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterface `
 	-Owner $OwnerSID -Package $PackageSID `
 	-Description "TargetProgram test rule description" `
 	@Logs | Format-Output @Logs

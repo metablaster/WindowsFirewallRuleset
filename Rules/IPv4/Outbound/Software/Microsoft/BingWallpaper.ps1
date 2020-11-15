@@ -95,7 +95,7 @@ if ((Test-Installation "BingWallpaper" ([ref] $BingWallpaperRoot) @Logs) -or $Fo
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $Interface `
+		-InterfaceType $DefaultInterfaceterface `
 		-Description "Bing wallpaper needs internet to download fresh wallpapers" `
 		@Logs | Format-Output @Logs
 }

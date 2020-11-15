@@ -82,7 +82,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Local Network Control Block" -Service Any -Program Any `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol UDP -LocalAddress 224.0.0.0-224.0.0.255 -RemoteAddress Any `
 	-EdgeTraversalPolicy Block -LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Addresses in the Local Network Control Block are used for protocol control traffic that is not forwarded off link.
@@ -90,7 +90,7 @@ Examples of this type of use include OSPFIGP All Routers (224.0.0.5)." @Logs | F
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Internetwork Control Block" -Service Any -Program Any `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol UDP -LocalAddress 224.0.1.0-224.0.1.255 -RemoteAddress Any `
 	-EdgeTraversalPolicy Block -LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Addresses in the Internetwork Control Block are used for protocol
@@ -99,7 +99,7 @@ include 224.0.1.1 (Network Time Protocol (NTP)) and 224.0.1.68 (mdhcpdiscover)."
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "AD-HOC Block I" -Service Any -Program Any `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol UDP -LocalAddress 224.0.2.0-224.0.255.255 -RemoteAddress Any `
 	-EdgeTraversalPolicy Block -LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Addresses in the AD-HOC blocks were
@@ -110,7 +110,7 @@ will be made in AD-HOC Block III." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "SDP/SAP Block" -Service Any -Program Any `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol UDP -LocalAddress 224.2.0.0-224.2.255.255 -RemoteAddress Any `
 	-EdgeTraversalPolicy Block -LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Addresses in the SDP/SAP Block are used by applications that receive addresses through the Session Announcement Protocol
@@ -118,7 +118,7 @@ for use via applications like the session directory tool (such as [SDR])." @Logs
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "AD-HOC Block II" -Service Any -Program Any `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol UDP -LocalAddress 224.3.0.0-224.4.255.255 -RemoteAddress Any `
 	-EdgeTraversalPolicy Block -LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Addresses in the AD-HOC blocks were
@@ -129,14 +129,14 @@ will be made in AD-HOC Block III." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "DIS Transient Groups" -Service Any -Program Any `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol UDP -LocalAddress 224.252.0.0-224.255.255.255 -RemoteAddress Any `
 	-EdgeTraversalPolicy Block -LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "The statically assigned link-local scope is 224.0.0.0/24." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Source-Specific Multicast Block" -Service Any -Program Any `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol UDP -LocalAddress 232.0.0.0-232.255.255.255 -RemoteAddress Any `
 	-EdgeTraversalPolicy Block -LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "SSM is an extension of IP Multicast in which traffic is forwarded to receivers from only those multicast sources for which
@@ -145,7 +145,7 @@ Note that this block was initially assigned to the Versatile Message Transaction
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "GLOP Block" -Service Any -Program Any `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol UDP -LocalAddress 233.0.0.0-233.251.255.255 -RemoteAddress Any `
 	-EdgeTraversalPolicy Block -LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Addresses in the GLOP Block are globally-scoped, statically-assigned addresses.
@@ -156,7 +156,7 @@ Domains with a 32-bit ASN MAY apply for space in AD-HOC Block III, or consider u
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "AD-HOC Block III" -Service Any -Program Any `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol UDP -LocalAddress 233.252.0.0-233.255.255.255 -RemoteAddress Any `
 	-EdgeTraversalPolicy Block -LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "[RFC3138] delegated to the RIRs the assignment of the GLOP sub-block mapped by the private Autonomous
@@ -168,7 +168,7 @@ and it is therefore appropriate to obsolete RFC 3138 and classify this address r
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Unicast-Prefix-based IPv4 Multicast Addresses" -Service Any -Program Any `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol UDP -LocalAddress 234.0.0.0-234.255.255.255 -RemoteAddress Any `
 	-EdgeTraversalPolicy Block -LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "This specification defines an extension to the multicast addressing architecture of the IP Version 4 protocol.
@@ -178,7 +178,7 @@ their multicast addresses without needing to run an inter-domain allocation prot
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Administratively Scoped Block" -Service Any -Program Any `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $DefaultInterfaceterface `
 	-Direction $Direction -Protocol UDP -LocalAddress 239.0.0.0-239.255.255.255 -RemoteAddress Any `
 	-EdgeTraversalPolicy Block -LocalUser $MulticastUsers -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Addresses in the Administratively Scoped Block are for local use within a domain." @Logs | Format-Output @Logs

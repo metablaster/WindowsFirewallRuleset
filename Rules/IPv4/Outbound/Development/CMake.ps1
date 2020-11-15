@@ -72,7 +72,7 @@ if ((Test-Installation "CMake" ([ref] $CMakeRoot) @Logs) -or $ForceLoad)
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $Interface `
+		-InterfaceType $DefaultInterfaceterface `
 		-Description "CMake package download" `
 		@Logs | Format-Output @Logs
 }

@@ -60,7 +60,7 @@ Get-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Directio
 		Enabled = "True"
 		LocalUser = "Any"
 		# NOTE: Requires allowing loopback and multicast elsewhere
-		InterfaceType = $Interface
+		InterfaceType = $DefaultInterface
 	}
 
 	if ($_.Profile -eq "Domain")
@@ -93,7 +93,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 139 -RemotePort Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterfaceterface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
 	-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." `
 	@Logs | Format-Output @Logs
@@ -104,7 +104,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Intranet, LocalSubnet `
 	-LocalPort 139 -RemotePort Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterfaceterface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
 	-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." `
 	@Logs | Format-Output @Logs
@@ -115,7 +115,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 139 -RemotePort Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterfaceterface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
 	-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." `
 	@Logs | Format-Output @Logs
@@ -126,7 +126,7 @@ New-NetFirewallRule -DisplayName "SMB" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 445 -RemotePort Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterfaceterface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
 	-Description "Rule for File and Printer Sharing to allow Server Message Block transmission and
 reception via Named Pipes." `
@@ -138,7 +138,7 @@ New-NetFirewallRule -DisplayName "SMB" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Intranet, LocalSubnet `
 	-LocalPort 445 -RemotePort Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterfaceterface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
 	-Description "Rule for File and Printer Sharing to allow Server Message Block transmission and
 reception via Named Pipes." `
@@ -150,7 +150,7 @@ New-NetFirewallRule -DisplayName "SMB" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 445 -RemotePort Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterfaceterface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
 	-Description "Rule for File and Printer Sharing to allow Server Message Block transmission and
 reception via Named Pipes." `
@@ -162,7 +162,7 @@ New-NetFirewallRule -DisplayName "Spooler Service (RPC)" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort RPC -RemotePort Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterfaceterface `
 	-LocalUser Any -EdgeTraversalPolicy Block `
 	-Description "Rule for File and Printer Sharing to allow the Print Spooler Service to
 communicate via TCP/RPC.
@@ -176,7 +176,7 @@ New-NetFirewallRule -DisplayName "Spooler Service (RPC)" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Intranet, LocalSubnet `
 	-LocalPort RPC -RemotePort Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterfaceterface `
 	-LocalUser Any -EdgeTraversalPolicy Block `
 	-Description "Rule for File and Printer Sharing to allow the Print Spooler Service to
 communicate via TCP/RPC.
@@ -190,7 +190,7 @@ New-NetFirewallRule -DisplayName "Spooler Service (RPC)" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Intranet `
 	-LocalPort RPC -RemotePort Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterfaceterface `
 	-LocalUser Any -EdgeTraversalPolicy Block `
 	-Description "Rule for File and Printer Sharing to allow the Print Spooler Service to
 communicate via TCP/RPC.
@@ -204,7 +204,7 @@ New-NetFirewallRule -DisplayName "Spooler Service (RPC-EPMAP)" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort RPCEPMap -RemotePort Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterfaceterface `
 	-LocalUser Any -EdgeTraversalPolicy Block `
 	-Description "Rule for the RPCSS service to allow RPC/TCP traffic for the Spooler Service.
 The RPCSS service is the Service Control Manager for COM and DCOM servers.
@@ -218,7 +218,7 @@ New-NetFirewallRule -DisplayName "Spooler Service (RPC-EPMAP)" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Intranet, LocalSubnet `
 	-LocalPort RPCEPMap -RemotePort Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterfaceterface `
 	-LocalUser Any -EdgeTraversalPolicy Block `
 	-Description "Rule for the RPCSS service to allow RPC/TCP traffic for the Spooler Service.
 The RPCSS service is the Service Control Manager for COM and DCOM servers.
@@ -232,7 +232,7 @@ New-NetFirewallRule -DisplayName "Spooler Service (RPC-EPMAP)" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Intranet `
 	-LocalPort RPCEPMap -RemotePort Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterfaceterface `
 	-LocalUser Any -EdgeTraversalPolicy Block `
 	-Description "Rule for the RPCSS service to allow RPC/TCP traffic for the Spooler Service.
 The RPCSS service is the Service Control Manager for COM and DCOM servers.
@@ -246,7 +246,7 @@ New-NetFirewallRule -DisplayName "SMBDirect (iWARP)" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 5445 -RemotePort Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterfaceterface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
 	-Description "Rule for File and Printer Sharing over SMBDirect to allow iWARP.
 The RPCSS service is the Service Control Manager for COM and DCOM servers.
@@ -260,7 +260,7 @@ New-NetFirewallRule -DisplayName "SMBDirect (iWARP)" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Intranet, LocalSubnet `
 	-LocalPort 5445 -RemotePort Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterfaceterface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
 	-Description "Rule for File and Printer Sharing over SMBDirect to allow iWARP.
 The RPCSS service is the Service Control Manager for COM and DCOM servers.
@@ -274,7 +274,7 @@ New-NetFirewallRule -DisplayName "SMBDirect (iWARP)" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 5445 -RemotePort Any `
-	-InterfaceType $Interface `
+	-InterfaceType $DefaultInterfaceterfaceterface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
 	-Description "Rule for File and Printer Sharing over SMBDirect to allow iWARP.
 The RPCSS service is the Service Control Manager for COM and DCOM servers.
