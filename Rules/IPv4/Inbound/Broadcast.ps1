@@ -49,6 +49,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 # There is no point to create separate rule for virtual adapters, since virtual adapter may be the
 # only one if physical adapter is shared with ex. Hyper-V
+# Also virtual adapters even though not connected to internet produce network traffic
 # NOTE: Don't run if execute not approved
 $BroadcastAddress = Get-Broadcast -IncludeAll
 

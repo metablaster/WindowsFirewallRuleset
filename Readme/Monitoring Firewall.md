@@ -211,7 +211,7 @@ open up firewall interface from control panel.
 stores and what they are.
 - Another difference is that only in firewall from control panel you can see inbound and outbound
 rules combined (aka. monitoring)
-- Once major benefit for monitoring firewall is to generate logs files which we can then filter.
+- One major benefit for firewall monitoring is to generate log files which we can then be filtered
 - Here is a screenshot on how to monitor the Active store, click on image to enlarge:
 
 Monitoring: (control panel firewall, Active store)
@@ -221,6 +221,25 @@ Monitoring: (control panel firewall, Active store)
 Management (Local group policy, GPO store)
 
 ![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Readme/Screenshots/GPOFirewall.png)
+
+To open GPO firewall follow steps bellow:
+
+1. Press Windows key and type: `secpol.msc`
+2. Right click on `secpol.msc` and click `Run as administrator`
+3. If prompted for password, enter administrator password and click "Yes" to continue
+4. Expand node: `Windows Defender Firewall with Advanced Security`
+5. Expand node: `Windows Defender Firewall with Advanced Security - Local Group Policy Object`
+6. Click on either `Inbound`, `Outbound` or `Windows Defender Firewall...` node
+
+When you open GPO firewall first thing you should do is add columns that are by default not
+visible and remove those which are useless and only waste space, for example add:
+
+- Service
+- InterfaceType
+- Edge Traversal
+
+Inside `Config\Windows` there is a `Firewall.msc` settings file, which saves you from doing these
+things every time you open GPO firewall, you can customize it and re-save your preferences.
 
 [Windows Firewall reference](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-firewall/windows-firewall-with-advanced-security)
 

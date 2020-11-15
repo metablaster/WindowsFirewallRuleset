@@ -11,6 +11,11 @@
 # and convert them to CRLF when the file is checked out.
 # whitespace attribute will help detect surplus spaces when using git diff
 ###############################################################################
+*.png		binary
+*.pmc		binary
+*.msc		binary
+*.wav		binary
+*.cab		binary
 *.ps1       text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
 *.psd1		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
 *.psm1		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
@@ -19,4 +24,5 @@
 *.ini		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
 *.json		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
 *.md		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
-*.png		binary
+*.wpaPresets	text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+*.wpaProfile	text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1

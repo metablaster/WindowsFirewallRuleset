@@ -371,14 +371,15 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 		Set-Variable -Name RequireNuGetVersion -Scope Global -Option ReadOnly -Force -Value ([version]::new(2, 8, 5))
 	}
 
-	# These drives will help to have shorter prompt and to be able to "jump" to them as desired
+	# These drives will help to have shorter prompt and to be able to jump to them with less typing
 	# TODO: Should we use these drives instead of "ProjectRoot" variable?
-	# TODO: In some cases there is problem using those drives soon after being created
+	# HACK: In some cases there is problem using those drives soon after being created, also running
+	# scripts while prompt at drive will cause issues setting location
 	# for more info see: https://github.com/dsccommunity/SqlServerDsc/issues/118
 	New-PSDrive -Name root -Root $ProjectRoot -Scope Global -PSProvider FileSystem | Out-Null
 	New-PSDrive -Name test -Root "$ProjectRoot\Test" -Scope Global -PSProvider FileSystem | Out-Null
-	New-PSDrive -Name ipv4 -Root "$ProjectRoot\Rules\IPv4" -Scope Global -PSProvider FileSystem | Out-Null
-	New-PSDrive -Name ipv6 -Root "$ProjectRoot\Rules\IPv6" -Scope Global -PSProvider FileSystem | Out-Null
+	New-PSDrive -Name ip4 -Root "$ProjectRoot\Rules\IPv4" -Scope Global -PSProvider FileSystem | Out-Null
+	New-PSDrive -Name ip6 -Root "$ProjectRoot\Rules\IPv6" -Scope Global -PSProvider FileSystem | Out-Null
 	New-PSDrive -Name mod -Root "$ProjectRoot\Modules" -Scope Global -PSProvider FileSystem | Out-Null
 }
 
