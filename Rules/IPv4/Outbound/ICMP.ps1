@@ -85,6 +85,7 @@ They should not be manually assigned or assigned using DHCP.
 #>
 
 # TODO: we don't use rules for APIPA or local subnet ranges
+# NOTE: APIPA is how Microsoft refers to Link-Local
 # $APIPA = "169.254.1.0-169.254.254.255"
 
 #

@@ -20,6 +20,7 @@ and usually need googling out what they do.
     - [LocalPort TCP Outbound](#localport-tcp-outbound)
   - [Address](#address)
     - [RemoteAddress](#remoteaddress)
+    - [Loopback address](#loopback-address)
   - [Interface](#interface)
     - [InterfaceType](#interfacetype)
     - [InterfaceAlias](#interfacealias)
@@ -86,6 +87,16 @@ and usually need googling out what they do.
 - `IntranetRemoteAccess` Remote Corp Network
 - `PlayToDevice` PlayTo Renderers
 - `<unknown>` Captive Portal Addresses
+
+### Loopback address
+
+From addresses below, only the IPv4 loopback range is valid for Windows firewall rule.
+
+|                     | IPv4        | IPv6    |
+|---------------------|-------------|---------|
+| Loopback Address    | 127.0.0.0/8 | ::1/128 |
+| Unspecified Address | 0.0.0.0/0   | ::/0    |
+|                     |             |         |
 
 ## Interface
 

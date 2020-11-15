@@ -56,27 +56,31 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 #
 # Loop back
-# TODO: why specifying loopback address ::1/128 doesn't work?
-# NOTE: IPv6 loopback rule does not work
-# NOTE: even though we specify "IPv6 the loopback interface alias is the same for IPv4 and IPv6,
-# meaning there is only one loopback interface!"
-# $Loopback = Get-NetIPInterface | Where-Object {
-# 	$_.InterfaceAlias -like "*Loopback*" -and $_.AddressFamily -eq "IPv6"
-# } | Select-Object -ExpandProperty InterfaceAlias
+# TODO: why specifying IPv6 loopback address ::1/128 doesn't work?
+# NOTE: even though we specify "IPv6 the loopback interface, interface alias is the same for IPv4
+# and IPv6, meaning there is only one loopback interface and this rule applies to both IPv6 and IPv6"
+if ($false)
+{
+	# HACK: Specifying loopback interface alias doesn't make IPv6 loopback traffic go trough
+	# NOTE: Current workaround is to set InterfaceType to Any for IPv6 multicast rules
+	$Loopback = Get-NetIPInterface | Where-Object {
+		$_.InterfaceAlias -like "*Loopback*" -and $_.AddressFamily -eq "IPv6"
+	} | Select-Object -ExpandProperty InterfaceAlias
 
-
-# New-NetFirewallRule -DisplayName "Loopback IP" `
-# 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
-# 	-Service Any -Program Any -Group $Group `
-# 	-Enabled True -Action Allow -Direction $Direction -Protocol Any `
-# 	-LocalAddress Any -RemoteAddress Any `
-# 	-LocalPort Any -RemotePort Any `
-# 	-LocalUser Any `
-#	-InterfaceType Any -InterfaceAlias $Loopback `
-# 	-Description "This rule covers both IPv4 and IPv6 loopback interface.
-# Network software and utilities use loopback address to access a local computer's TCP/IP network
-# resources." `
-# 	@Logs | Format-Output @Logs
+	New-NetFirewallRule -DisplayName "Loopback IP" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
+		-Service Any -Program Any -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol Any `
+		-LocalAddress Any -RemoteAddress Any `
+		-LocalPort Any -RemotePort Any `
+		-LocalUser Any `
+		-InterfaceType Any -InterfaceAlias $Loopback `
+		-Description "Due to limitations of 'Windows Firewall with Advanced Security', this rule applies
+to both IPv4 and IPv6 loopback traffic by allowing all traffic on loopback interface.
+Network software and utilities use loopback address to access a local computer's TCP/IP network
+resources." `
+		@Logs | Format-Output @Logs
+}
 
 #
 # DNS (Domain Name System)
@@ -116,37 +120,40 @@ New-NetFirewallRule -DisplayName "Domain Name System" `
 # https://en.wikipedia.org/wiki/Multicast_DNS
 # NOTE: Multiple programs may require mDNS, not just dnscache
 #
-
-New-NetFirewallRule -DisplayName "Multicast DNS" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
-	-Service Any -Program Any -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress ff02::fb `
-	-LocalPort 5353 -RemotePort 5353 `
-	-LocalUser Any `
-	-InterfaceType $Interface `
-	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP
+if ($false)
+{
+	# NOTE: Not applied because now handled by IPv6 multicast rules
+	New-NetFirewallRule -DisplayName "Multicast DNS" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
+		-Service Any -Program Any -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+		-LocalAddress Any -RemoteAddress ff02::fb `
+		-LocalPort 5353 -RemotePort 5353 `
+		-LocalUser Any `
+		-InterfaceType $Interface `
+		-LocalOnlyMapping $false -LooseSourceMapping $false `
+		-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP
 addresses within small networks that do not include a local name server.
 It is a zero-configuration service, using essentially the same programming interfaces,
 packet formats and operating semantics as the unicast Domain Name System (DNS)." `
- @Logs | Format-Output @Logs
+		@Logs | Format-Output @Logs
 
-# NOTE: Specifying interface or local port might not work for public profile
-New-NetFirewallRule -DisplayName "Multicast DNS" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
-	-Service Any -Program Any -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress ff02::fb `
-	-LocalPort Any -RemotePort 5353 `
-	-LocalUser Any `
-	-InterfaceType Any `
-	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP
+	# NOTE: Specifying interface or local port might not work for public profile
+	New-NetFirewallRule -DisplayName "Multicast DNS" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
+		-Service Any -Program Any -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+		-LocalAddress Any -RemoteAddress ff02::fb `
+		-LocalPort Any -RemotePort 5353 `
+		-LocalUser Any `
+		-InterfaceType Any `
+		-LocalOnlyMapping $false -LooseSourceMapping $false `
+		-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP
 addresses within small networks that do not include a local name server.
 It is a zero-configuration service, using essentially the same programming interfaces,
 packet formats and operating semantics as the unicast Domain Name System (DNS)." `
- @Logs | Format-Output @Logs
+		@Logs | Format-Output @Logs
+}
 
 #
 # DHCP (Dynamic Host Configuration Protocol)

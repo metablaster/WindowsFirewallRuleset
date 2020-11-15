@@ -40,6 +40,11 @@ Grant requested user and firewall service permissions to read/write logs into th
 This is useful to troubleshoot problems or to generate network traffic that occurs only during
 first time connection or system boot such as DHCP or IGMP
 
+.PARAMETER Principal
+If specified also set permissions for firewall log files.
+This is needed only for non standard log files locations, for more information see
+Scripts\GrantLogs.ps1
+
 .PARAMETER KeepDNS
 Skip clearing DNS server IP addresses
 This parameter is ignored if "KeepIP" is specified
@@ -78,7 +83,7 @@ TODO: Optionally reset virtual and hidden adapters and their configuration
 https://devblogs.microsoft.com/scripting/enabling-and-disabling-network-adapters-with-powershell
 #>
 
-[CmdletBinding()]
+[CmdletBinding(PositionalBinding = $false)]
 param (
 	[Parameter()]
 	[string] $Principal,

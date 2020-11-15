@@ -71,8 +71,8 @@ The benefit is to have special syntax coloring and filtering functionality with 
 
 [CmdletBinding()]
 param (
-	[Parameter(Mandatory = $true)]
-	[string] $Principal,
+	[Parameter(Mandatory = $false)]
+	[string] $Principal = $DefaultUser,
 
 	[Parameter()]
 	[Alias("Computer", "Server", "Domain", "Host", "Machine")]

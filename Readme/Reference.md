@@ -107,6 +107,8 @@ Also few commandlets from these modules:
 
 [TCP/UDP port list](https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers)
 
+[Link-Local address](https://en.wikipedia.org/wiki/Link-local_address)
+
 ## Firewall
 
 [Windows Filtering Platform Architecture Overview](https://docs.microsoft.com/en-us/windows-hardware/drivers/network/windows-filtering-platform-architecture-overview)

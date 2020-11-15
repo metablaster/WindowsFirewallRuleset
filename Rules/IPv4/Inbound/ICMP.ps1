@@ -69,6 +69,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
 <#
+NOTE: APIPA is how Microsoft refers to Link-Local
 If a network client fails to get an IP address using DHCP, it can discover an address on its own using APIPA.
 To get an IPv4 address, the client will select an address at random in the range 169.254.1.0 to 169.254.254.255 (inclusive), with a netmask of 255.255.0.0.
 The client will then send an ARP packet asking for the MAC address that corresponds to the randomly-generated IPv4 address.

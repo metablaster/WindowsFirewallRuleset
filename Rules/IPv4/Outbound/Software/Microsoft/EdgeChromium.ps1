@@ -103,13 +103,17 @@ if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot) @Logs) -or $Forc
 		-LocalUser $UsersGroupSDDL `
 		-Description "File transfer protocol." @Logs | Format-Output @Logs
 
-	# TODO: Figure out why edge chromium needs this rule, do additional test and update description
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Edge-Chromium SSDP" -Service Any -Program $EdgeChromiumApp `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
-		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 239.255.255.250 -LocalPort Any -RemotePort 1900 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "" @Logs | Format-Output @Logs
+	if ($false)
+	{
+		# NOTE: Not applied because now handled by IPv4 multicast rules
+		# TODO: Figure out why edge chromium needs this rule, do additional test and update description
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Edge-Chromium SSDP" -Service Any -Program $EdgeChromiumApp `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $FirewallProfile -InterfaceType $Interface `
+			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 239.255.255.250 -LocalPort Any -RemotePort 1900 `
+			-LocalUser $UsersGroupSDDL `
+			-Description "" @Logs | Format-Output @Logs
+	}
 
 	# TODO: we should probably have a function for this and similar cases?
 	$EdgeUpdateRoot = "$(Split-Path -Path $(Split-Path -Path $EdgeChromiumRoot -Parent) -Parent)\EdgeUpdate"

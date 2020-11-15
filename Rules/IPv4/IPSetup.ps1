@@ -33,6 +33,7 @@ SOFTWARE.
 New-Variable -Name IPVersion -Scope Local -Option Constant -Value 4
 
 <# http://en.wikipedia.org/wiki/Private_network
+NOTE: APIPA is how Microsoft refers to Link-Local
 Address							CIDR				Subnet Mask			Designation
 -------------					--------			-----------			-----------
 10.0.0.0 - 10.255.255.255		10.0.0.0/8			255.0.0.0			Class A

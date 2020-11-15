@@ -77,7 +77,7 @@ function Format-Output
 	{
 		if ($Modify)
 		{
-			$Label = "Harden Rule"
+			$Label = "Modify Rule"
 		}
 		elseif ($Import)
 		{

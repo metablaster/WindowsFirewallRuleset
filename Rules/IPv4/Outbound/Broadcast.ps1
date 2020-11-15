@@ -47,10 +47,10 @@ $Deny = "Skip operation, outbound broadcast rules will not be loaded into firewa
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
-# There is no point to create separate rule for virtual adapter, since virtual one may be the only
-# one if physical adapter is being shared with ex. Hyper-V
+# There is no point to create separate rule for virtual adapters, since virtual adapter may be the
+# only one if physical adapter is shared with ex. Hyper-V
 # NOTE: Don't run if execute not approved
-$BroadcastAddress = Get-Broadcast -IncludeVirtual
+$BroadcastAddress = Get-Broadcast -IncludeAll
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs

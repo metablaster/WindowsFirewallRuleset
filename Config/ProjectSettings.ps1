@@ -305,6 +305,10 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	# Default network interface card, change this to NIC which your target PC uses
 	New-Variable -Name Interface -Scope Global -Option Constant -Value "Wired, Wireless"
 
+	# Default network interface card, change this to NIC which your target PC uses
+	# TODO: Rename Interface to DefaultInterface and make use of these by Force changing them as needed
+	# New-Variable -Name DefaultProfile -Scope Global -Option Constant -Value "Wired, Wireless"
+
 	# To force loading rules regardless of presence of program set to true
 	New-Variable -Name ForceLoad -Scope Global -Option Constant -Value $false
 
@@ -409,6 +413,7 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 	# NOTE: Set this value to username for which to create rules by default, if there are multiple
 	# users and to affect them all set this value to non existent user
 	# TODO: needs testing info messages for this value
+	# TODO: We are only assuming about accounts here as a workaround due to often need to modify variable
 	Set-Variable -Name DefaultUser -Scope Global -Value (Split-Path -Path (Get-LocalGroupMember -Group Users | Where-Object {
 				$_.ObjectClass -EQ "User" -and
 				($_.PrincipalSource -eq "Local" -or $_.PrincipalSource -eq "MicrosoftAccount")

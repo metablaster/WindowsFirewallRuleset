@@ -58,8 +58,11 @@ Import-Module -Name Ruleset.Logging
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
-$Group = "Multicast IPv4"
-$FirewallProfile = "Private, Domain"
+$Group = "Multicast - IPv4"
+# NOTE: Unlike with IPv6 multicast we can afford excluding "Public" profile since there aren't
+# as many different multicast addresses
+# TODO: We should exclude public profile conditionally when not essential (ex. no homegroup required)
+$FirewallProfile = "Any" #"Private, Domain"
 $MulticastUsers = Get-SDDL -Domain "NT AUTHORITY" -User "LOCAL SERVICE", "NETWORK SERVICE" @Logs
 $Accept = "Inbound rules for IPv4 multicast will be loaded, recommended for proper network functioning"
 $Deny = "Skip operation, inbound IPv4 multicast rules will not be loaded into firewall"

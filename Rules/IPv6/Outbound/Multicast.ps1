@@ -87,16 +87,17 @@ Import-Module -Name Ruleset.Logging
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
-$Group = "Multicast IPv6"
-# TODO: For untested traffic default does not include public profile
-$DefaultProfile = "Private, Domain"
-$MulticastProfile = "Any"
+$Group = "Multicast - IPv6"
+# NOTE: Limiting public profile would require separate multicast rules per program (ex. to specify port)
+# which is counterproductive and hard to manage
+# TODO: We should exclude public profile conditionally when not essential (ex. no homegroup required)
+$DefaultProfile = "Any" # "Private, Domain"
 $Description = "https://www.iana.org/assignments/ipv6-multicast-addresses/ipv6-multicast-addresses.xhtml"
 $MulticastUsers = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE", "LOCAL SERVICE" @Logs
-
-# NOTE: we need Any to include IPv6 loopback interface because IPv6 loopback rule does not work
-# on boot, (neither ::1 address nor interface alias)
-$MulticastInterface = "Wired, Wireless"
+# NOTE: we probably need "Any" to include IPv6 loopback interface because IPv6 loopback rule
+# does not work on boot, (neither ::1 address nor interface alias)
+$MulticastInterface = "Any"
+# $MulticastInterface = "Wired, Wireless"
 $Accept = "Outbound rules for IPv6 multicast will be loaded, recommended for proper network functioning"
 $Deny = "Skip operation, outbound IPv6 multicast rules will not be loaded into firewall"
 
@@ -496,7 +497,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - Link Name" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - All DHCP Agents" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $MulticastProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress ff02::1:2 `
@@ -624,7 +625,7 @@ New-NetFirewallRule -DisplayName "Site-Local Multicast - mDNSv6" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Site-Local Multicast - All DHCP Servers" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $MulticastProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress ff05::1:3 `

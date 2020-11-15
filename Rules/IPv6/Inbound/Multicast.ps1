@@ -87,15 +87,17 @@ Import-Module -Name Ruleset.Logging
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
-$Group = "Multicast IPv6"
-# TODO: For untested traffic default does not include public profile
-$DefaultProfile = "Private, Domain"
-$MulticastProfile = "Any"
+$Group = "Multicast - IPv6"
+# NOTE: Limiting public profile would require separate multicast rules per program (ex. to specify port)
+# which is counterproductive and hard to manage
+# TODO: We should exclude public profile conditionally when not essential (ex. no homegroup required)
+$DefaultProfile = "Any" # "Private, Domain"
 $Description = "https://www.iana.org/assignments/ipv6-multicast-addresses/ipv6-multicast-addresses.xhtml"
 $MulticastUsers = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE", "LOCAL SERVICE" @Logs
-# NOTE: we need Any to include IPv6 loopback interface because IPv6 loopback rule does not work on
-# boot, (neither ::1 address nor interface alias)
-$MulticastInterface = "Wired, Wireless"
+# NOTE: we probably need "Any" to include IPv6 loopback interface because IPv6 loopback rule
+# does not work on boot, (neither ::1 address nor interface alias)
+$MulticastInterface = "Any"
+# $MulticastInterface = "Wired, Wireless"
 $Accept = "Inbound rules for IPv6 multicast will be loaded, recommended for proper network functioning"
 $Deny = "Skip operation, inbound IPv6 multicast rules will not be loaded into firewall"
 
@@ -305,7 +307,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - Mobile Agents" `
 New-NetFirewallRule -DisplayName "Link-Local Multicast - SSDP" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program Any -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::c -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers -EdgeTraversalPolicy Block `
@@ -473,7 +475,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - iADT Discovery" `
 New-NetFirewallRule -DisplayName "Link-Local Multicast - mDNSv6" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program Any -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::fb -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
@@ -495,7 +497,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - Link Name" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - All DHCP Agents" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $MulticastProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff02::1:2 -RemoteAddress Any `
@@ -623,7 +625,7 @@ New-NetFirewallRule -DisplayName "Site-Local Multicast - mDNSv6" `
 	@Logs | Format-Output @Logs
 
 New-NetFirewallRule -DisplayName "Site-Local Multicast - All DHCP Servers" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $MulticastProfile `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress ff05::1:3 -RemoteAddress Any `

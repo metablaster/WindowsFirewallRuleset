@@ -59,8 +59,8 @@ Get-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Directio
 		InputObject = $_
 		Enabled = "True"
 		LocalUser = "Any"
-		# TODO: most likely multicast is dropped
-		# InterfaceType = $Interface
+		# NOTE: Requires allowing loopback and multicast elsewhere
+		InterfaceType = $Interface
 	}
 
 	if ($_.Profile -eq "Domain")

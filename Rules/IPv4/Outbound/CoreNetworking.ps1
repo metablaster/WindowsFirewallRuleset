@@ -148,41 +148,44 @@ New-NetFirewallRule -DisplayName "Domain Name System" `
 # would make any difference LocalOnlyMapping
 # NOTE: Multiple programs may require mDNS, not just dnscache
 #
-
-New-NetFirewallRule -DisplayName "Multicast DNS" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
-	-Service Any -Program Any -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress 224.0.0.251 `
-	-LocalPort 5353 -RemotePort 5353 `
-	-LocalUser Any `
-	-InterfaceType $Interface `
-	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to
+if ($true)
+{
+	# NOTE: Not applied because now handled by IPv4 multicast rules
+	New-NetFirewallRule -DisplayName "Multicast DNS" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
+		-Service Any -Program Any -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+		-LocalAddress Any -RemoteAddress 224.0.0.251 `
+		-LocalPort 5353 -RemotePort 5353 `
+		-LocalUser Any `
+		-InterfaceType $Interface `
+		-LocalOnlyMapping $false -LooseSourceMapping $false `
+		-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to
 IP addresses
 within small networks that do not include a local name server.
 It is a zero-configuration service, using essentially the same programming interfaces,
 packet formats and operating semantics as the unicast Domain Name System (DNS)." `
-	@Logs | Format-Output @Logs
+		@Logs | Format-Output @Logs
 
-# TODO: $PhysicalAdapters = Get-InterfaceAlias IPv4
-# -InterfaceAlias $PhysicalAdapters
-# NOTE: Specifying interface or local port might not work for public profile
-New-NetFirewallRule -DisplayName "Multicast DNS" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
-	-Service Any -Program Any -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress 224.0.0.251 `
-	-LocalPort Any -RemotePort 5353 `
-	-LocalUser Any `
-	-InterfaceType Any `
-	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to
+	# TODO: $PhysicalAdapters = Get-InterfaceAlias IPv4
+	# -InterfaceAlias $PhysicalAdapters
+	# NOTE: Specifying interface or local port might not work for public profile
+	New-NetFirewallRule -DisplayName "Multicast DNS" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
+		-Service Any -Program Any -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+		-LocalAddress Any -RemoteAddress 224.0.0.251 `
+		-LocalPort Any -RemotePort 5353 `
+		-LocalUser Any `
+		-InterfaceType Any `
+		-LocalOnlyMapping $false -LooseSourceMapping $false `
+		-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to
 IP addresses
 within small networks that do not include a local name server.
 It is a zero-configuration service, using essentially the same programming interfaces,
 packet formats and operating semantics as the unicast Domain Name System (DNS)." `
-	@Logs | Format-Output @Logs
+		@Logs | Format-Output @Logs
+}
 
 #
 # DHCP (Dynamic Host Configuration Protocol)
@@ -234,13 +237,14 @@ by sending a DHCPOFFER message to the client" `
 
 #
 # IGMP (Internet Group Management Protocol)
+# NOTE: Address 224.0.0.0/24 removed because now handled by IPv4 multicast rules
 #
 
 New-NetFirewallRule -DisplayName "Internet Group Management Protocol" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $FirewallProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Allow `
-	-Direction $Direction -Protocol 2 -LocalAddress Any -RemoteAddress LocalSubnet4, 224.0.0.0/24 `
+	-Direction $Direction -Protocol 2 -LocalAddress Any -RemoteAddress LocalSubnet4 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $Interface `
