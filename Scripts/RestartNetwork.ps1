@@ -77,7 +77,8 @@ None. RestartNetwork.ps1 does not generate any output
 .NOTES
 TODO: IP protocol parameter
 TODO: Utilize all parameters for commandlets to make sure all is reset to default
-TODO: Optionally reset virtual and hidden adapters and their configuration
+TODO: Optionally reset virtual and hidden adapters and their configuration, in which case removing
+their IP addresses might now work as expected?
 
 .LINK
 https://devblogs.microsoft.com/scripting/enabling-and-disabling-network-adapters-with-powershell
@@ -155,7 +156,7 @@ Select-AdapterAlias Operational -Adapter @("Ethernet", "Realtek WI-FI")
 We select InterfaceAlias instead of adapter objects because of non consistent CIM parameters
 used by commandlets in this script resulting in errors
 TODO: Parameter to control strict selection
-TODO: This functionality should part of Get-ConfiguredAdapter somehow if possible
+TODO: This functionality should be part of Get-ConfiguredAdapter somehow if possible
 #>
 function Select-AdapterAlias
 {
@@ -177,11 +178,53 @@ function Select-AdapterAlias
 	[CimInstance[]] $TargetAdapter = @()
 	if ($Adapter)
 	{
-		$TargetAdapter = Get-NetAdapter -Name $Adapter
+		$TargetAdapter = Get-NetAdapter -InterfaceAlias $Adapter
 	}
 	else
 	{
 		$TargetAdapter = Get-NetAdapter -Physical -Name *
+
+		# If there are no physical adapters out of promiscuous mode
+		# https://en.wikipedia.org/wiki/Promiscuous_mode
+		# NOTE: ex. this happens when physical adapter is shared with Hyper-V
+		# TODO: This won't add physical adapters to the list for reset
+		# TODO: Not tested for internet connection sharing scenario
+		if ($TargetAdapter -and ($null -eq ($TargetAdapter | Where-Object -Property PromiscuousMode -EQ $false)))
+		{
+			# Get only operational non physical adapters
+			$VirtualAdapter = Get-NetAdapter -IncludeHidden | Where-Object {
+				($null -ne $_.MacAddress) -and ($_.HardwareInterface -eq $false)
+			}
+
+			if ($VirtualAdapter)
+			{
+				Write-Information -Tags "User" -MessageData "INFO: Setting up virtual switch"
+
+				$ExternalSwitch = @()
+				foreach ($Item in $TargetAdapter.InterfaceAlias)
+				{
+					# Once physical adapter is disabled, the attached virtual switch will be
+					# put into "Disconnected" mode
+					Disable-NetAdapter -InterfaceAlias $Item -Confirm:$false @Logs
+					Wait-Adapter Disabled -Adapter $Item
+
+					# HACK: This is improvisation and will pick up adapters that were already
+					# disconnected, but we want only external switches and nothing else
+					# NOTE: Get-VMSwitch -SwitchType External is of no use for this task
+					$ExternalSwitch += Get-NetAdapter -IncludeHidden | Where-Object {
+						($null -ne $_.MacAddress) -and
+						($_.HardwareInterface -eq $false) -and
+						($_.Status -eq "Disconnected")
+					}
+
+					Enable-NetAdapter -InterfaceAlias $Item -Confirm:$false @Logs
+					Wait-Adapter Enabled -Adapter $Item
+				}
+
+				$TargetAdapter = $ExternalSwitch
+			}
+			# else warning will be shown
+		}
 	}
 
 	[string[]] $AcceptStatus = @()
@@ -352,6 +395,8 @@ else
 	# TODO: Restart network services
 	# TODO: Test network
 
+	Write-Debug -Message "[$ThisScript] Restarting network for adapter: '$AdapterAlias'"
+
 	if ($KeepIP -or $KeepDNS)
 	{
 		Write-Information -Tags "User" -MessageData "INFO: Saving IP configuration"
@@ -394,14 +439,15 @@ else
 		Receive-Job -Name "AdvancedDNS" -Wait -AutoRemoveJob @Logs
 
 		# Set NETBIOS adapter option
-		Start-Job -Name "NETBIOS" -ScriptBlock {
+		Start-Job -Name "NETBIOS" -ArgumentList $AdapterAlias -ScriptBlock {
+			param ($AdapterAlias)
 			# NETBIOS Option:
 			# 0 - Use NetBIOS setting from the DHCP server
 			# 1 - Enable NetBIOS over TCP/IP
 			# 2 - Disable NetBIOS over TCP/IP
 
 			# NOTE: There is no InterfaceAlias in CIM selection
-			$Description = Get-NetAdapter -Physical | Where-Object Status -EQ "Up" |
+			$Description = Get-NetAdapter -InterfaceAlias $AdapterAlias | Where-Object Status -EQ "Up" |
 			Select-Object -ExpandProperty InterfaceDescription
 
 			foreach ($Name in $Description)
@@ -530,9 +576,10 @@ else
 		# Restore previous IP configuration
 		Write-Information -Tags "User" -MessageData "INFO: Restoring old IP configuration"
 
-		foreach ($Adapter in (Get-NetAdapter -Physical -Name $AdapterAlias @Logs))
+		# -Physical
+		foreach ($Adapter in (Get-NetAdapter -InterfaceAlias $AdapterAlias @Logs))
 		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing $($Adapter.InterfaceAlias) adapter"
+			Write-Debug -Message "[$ThisScript] Processing $($Adapter.InterfaceAlias) adapter"
 
 			$ifAlias = $Adapter.InterfaceAlias
 
@@ -575,9 +622,10 @@ else
 		# Restore previous DNS servers
 		Write-Information -Tags "User" -MessageData "INFO: Restoring old DNS server addresses"
 
-		foreach ($Adapter in (Get-NetAdapter -Physical -Name $AdapterAlias @Logs))
+		# -Physical
+		foreach ($Adapter in (Get-NetAdapter -InterfaceAlias $AdapterAlias @Logs))
 		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing $($Adapter.InterfaceAlias) adapter"
+			Write-Debug -Message "[$ThisScript] Processing $($Adapter.InterfaceAlias) adapter"
 
 			# NOTE: AddressFamily 2 = IPv4, 23 = IPv6
 			# https://docs.microsoft.com/en-us/dotnet/api/system.net.sockets.addressfamily?view=netcore-3.1

@@ -499,7 +499,7 @@ Inside the [Readme](Readme)
 folder you will find useful information not only about this project but also general information on
 how to troubleshoot firewall and network problems, or gather other relevant information.
 
-It might answer some of your questions, for example [Monitoring Firewall](MonitoringFirewall.md)
+It might answer some of your questions, for example [Monitoring Firewall](Readme/MonitoringFirewall.md)
 explains how to monitor firewall in real time.
 
 ## The future

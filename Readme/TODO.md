@@ -126,13 +126,7 @@ todo's in this file are categorized into following sections:
     - Need convention for variable naming, such as Group, Groups or User vs Principal, difference is
     that one is expanded property while other can be custom object. Many similar cases for naming.
 
-6. Documentation
-
-    - Links in markdown files should be handled with reference links instead of inline links with
-    relative paths, this way there is a minimum need to update them, also markdown formatting will
-    be much easier.
-
-7. Partially fixed, need testing and/or improvements
+6. Partially fixed, need testing and/or improvements
 
     - Most program query functions return multiple program instances,
     need to select latest or add multiple rules.
@@ -142,7 +136,7 @@ todo's in this file are categorized into following sections:
     - Implement Importing/Exporting rules, including rules with no group
     - Rules for store apps for administrators
 
-8. Other
+7. Other
 
     - Need convention for output streams, when to use which one, and also common format for quoting
     and pointing out local variables, some place are missing streams while others have too many of them,
@@ -361,6 +355,9 @@ todo's in this file are categorized into following sections:
 5. Documentation
 
     - INPUTS and OUTPUTS are not well described, these apply only to pipelines
+    - Links in markdown files should be handled with reference links instead of inline links with
+    relative paths, this way there is a minimum need to update them, also markdown formatting will
+    be much easier.
 
 6. Code style
 

@@ -34,6 +34,8 @@ If you would like to see fresh changes done since last release you can do so on 
     - DNSCrypt
     - Broadcast
 
+  - Network profile and interface type defaults are now controlable via global variable
+
 - Modules
 
   - Added new module `Ruleset.Compatibility` because `Appx` module no longer works since PowerShell
@@ -50,10 +52,17 @@ If you would like to see fresh changes done since last release you can do so on 
     - PredefinedRules
     - ProblematicTraffic
 
+  - Links in markdown are now reference links instead of inline links
+
 - New features
 
   - Scripts to start/stop packet trace and capture.
   - Utility script to list "hidden" rule properties
+
+- Bugfix
+
+  - `RestartNetwork.ps1` script didn't work for virtual adapters
+  - Rules for WORKGROUP didn't work (in progres..)
 
 ## v0.8.0 (current release)
 

@@ -127,7 +127,7 @@ if ($Develop)
 	$InformationPreference = "Continue"
 	# $VerbosePreference = "Continue"
 	# $DebugPreference = "Continue"
-	$ConfirmPreference = "None"
+	# $ConfirmPreference = "None"
 
 	# Must be after debug preference
 	Write-Debug -Message "[$SettingsScript] Setup clean environment"
