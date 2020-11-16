@@ -28,18 +28,18 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Outbound firewall rules for WebPlatform
 
 .DESCRIPTION
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\WebPlatform.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to WebPlatform.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. WebPlatform.ps1 does not generate any output
 
 .NOTES
 None.

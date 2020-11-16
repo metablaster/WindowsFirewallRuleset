@@ -28,21 +28,26 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Outbound firewall rules for non essential networking
 
 .DESCRIPTION
+Windows Firewall predefined rules related to networking not handled by other more strict scripts
+Following predefined groups are included:
+1. AllJoin Router
+2. Cast to device functionality
+3. Connected devices platform
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\AdditionalNetworking.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to AdditionalNetworking.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. AdditionalNetworking.ps1 does not generate any output
 
 .NOTES
-None.
+NOTE: There are no predefined outbound rules for connections to "DIAL protocol server"
 #>
 
 #region Initialization
@@ -69,15 +74,6 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
-
-#
-# Firewall predefined rules related to networking not handled by other more strict scripts
-# NOTE: following predefined groups are included:
-# 1. AllJoin Router
-# 2. Cast to device functionality
-# 3. Connected devices platform
-# NOTE: There are no predefined outbound rules for connections to "DIAL protocol server"
-#
 
 #
 # Cast to device predefined rules

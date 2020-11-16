@@ -28,18 +28,18 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Outbound firewall rules for MSI
 
 .DESCRIPTION
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\MSI.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to MSI.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. MSI.ps1 does not generate any output
 
 .NOTES
 None.

@@ -28,18 +28,18 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Outbound firewall rules for OneDrive
 
 .DESCRIPTION
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\OneDrive.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to OneDrive.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. OneDrive.ps1 does not generate any output
 
 .NOTES
 None.

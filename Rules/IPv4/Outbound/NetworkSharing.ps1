@@ -28,21 +28,30 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Outbound firewall rules for File and Printer sharing predefined rules
 
 .DESCRIPTION
+Outbound rules for File and Printer sharing predefined rules
+Rules apply to network sharing on LAN
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\NetworkSharing.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to NetworkSharing.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. NetworkSharing.ps1 does not generate any output
 
 .NOTES
-None.
+HACK: Due to some magic with predefines rules these rules here don't work for home network setup (WORKGROUP)
+Same applies to "Network Discovery" predefined rules
+
+NOTE: Current workaround for home networks is to apply predefined "File and Printer sharing" rules into GPO.
+NOTE: NETBIOS Name and datagram, LLMNR and ICMP rules required for network sharing which are part
+of predefined rules are duplicate of Network Discovery equivalent rules
+
+TODO: Intranet4 and Intranet4 removed IPv4 restriction to troubleshoot homegroup
 #>
 
 #region Initialization
@@ -101,13 +110,7 @@ return
 
 #
 # File and Printer sharing predefined rules
-# Rules apply to network sharing on LAN
-# HACK: Due to some magic with predefines rules these rules here don't work for home network setup (WORKGROUP)
-# Same applies to "Network Discovery" predefined rules
-# NOTE: Current workaround for home networks is to apply predefined "File and Printer sharing" rules into GPO.
-# NOTE: NETBIOS Name and datagram, LLMNR and ICMP rules required for network sharing which are part
-# of predefined rules are duplicate of Network Discovery equivalent rules
-# TODO: Intranet4 and Intranet4 removed IPv4 restriction to troubleshoot homegroup
+# TODO: separate custom rules with comment
 #
 
 New-NetFirewallRule -DisplayName "NetBIOS Session" `

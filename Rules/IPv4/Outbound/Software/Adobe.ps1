@@ -28,18 +28,18 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Outbound firewall rules for Adobe
 
 .DESCRIPTION
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\Adobe.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to Adobe.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. Adobe.ps1 does not generate any output
 
 .NOTES
 None.

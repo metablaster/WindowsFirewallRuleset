@@ -28,18 +28,20 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Inbound firewall rules forfirewall rules for Windows services
 
 .DESCRIPTION
+Windows services rules
+Rules that apply to Windows services which are not handled by predefined rules
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\WindowsServices.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to WindowsServices.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. WindowsServices.ps1 does not generate any output
 
 .NOTES
 None.
@@ -69,11 +71,6 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
-
-#
-# Windows services rules
-# Rules that apply to Windows services which are not handled by predefined rules
-#
 
 #
 # Delivery Optimization predefined rules

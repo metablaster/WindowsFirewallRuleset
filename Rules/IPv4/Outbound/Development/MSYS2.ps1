@@ -28,18 +28,18 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Outbound firewall rules for MSYS2
 
 .DESCRIPTION
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\MSYS2.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to MSYS2.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. MSYS2.ps1 does not generate any output
 
 .NOTES
 None.

@@ -28,21 +28,25 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Inbound firewall rules for  broadcast traffic
 
 .DESCRIPTION
+Inbound firewall rules for  broadcast traffic
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\Broadcast.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to Broadcast.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. Broadcast.ps1 does not generate any output
 
 .NOTES
-None.
+There is no point to create separate rule for virtual adapters, since virtual adapter may be the
+only one if physical adapter is shared with ex. Hyper-V
+Also virtual adapters even though not connected to internet produce network traffic
+TODO: currently handling only UDP, also broadcast falls into multicast space
 #>
 
 #region Initialization
@@ -68,9 +72,6 @@ Update-Context "IPv$IPVersion" $Direction $Group @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 #endregion
 
-# There is no point to create separate rule for virtual adapters, since virtual adapter may be the
-# only one if physical adapter is shared with ex. Hyper-V
-# Also virtual adapters even though not connected to internet produce network traffic
 # NOTE: Don't run if execute not approved
 $BroadcastAddress = Get-Broadcast -IncludeAll
 
@@ -78,7 +79,7 @@ $BroadcastAddress = Get-Broadcast -IncludeAll
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
 #
-# TODO: currently handling only UDP, also broadcast falls into multicast space
+# Broadcast rules
 #
 
 # NOTE: Limited broadcast can be used by DHCP

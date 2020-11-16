@@ -28,18 +28,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Outbound firewall rules for core networking
 
 .DESCRIPTION
+Predefined rules from Core Networking are here excluding ICMP
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\CoreNetworking.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to CoreNetworking.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. CoreNetworking.ps1 does not generate any output
 
 .NOTES
 None.

@@ -28,18 +28,18 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Inbound firewall rules for qBittorrent
 
 .DESCRIPTION
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\qBittorrent.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to qBittorrent.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. qBittorrent.ps1 does not generate any output
 
 .NOTES
 None.

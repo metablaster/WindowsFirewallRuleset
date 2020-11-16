@@ -28,21 +28,50 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Outbound firewall rules for store apps
 
 .DESCRIPTION
+Outbound rules for store apps
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\StoreApps.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to StoreApps.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. StoreApps.ps1 does not generate any output
 
 .NOTES
-None.
+TODO: exclude store apps rules for servers, store app folders seem to exist but empty.
+TODO: currently making rules for each user separately, is it possible to make rules for all users?
+
+NOTE: Following "rules" apply for store apps for blocking/allowing users
+1. -Owner - Only one explicit user account can be specified (not group, not capability etc...)
+2. -LocalUser - Anything can be specified
+3. Either -Owner or -LocalUser can be specified, not both which would make the rule not working and useless
+4. If the LocalUser is specified and rule is blocking, then another allow rule (with? or without owner) may take precedence over blocking rule
+5. If the owner is specified, the rule is well formed and normal "rules" apply as with all other rules
+6. Conclusion is, the -LocalUser parameter can be specified instead of -Owner only to allow traffic that was not already
+   blocked by rules with owner parameter specified
+7. All of this applies only to "Any" and "*" packages, for specific package only -Owner must be
+   specified and -LocalUser is not valid for specific packages
+
+TODO: Prompt or refuse running this script on server platforms (platforms with no apps)
+TODO: Rule display names don't have all consistent casing (ex. microsoft vs Microsoft)
+
+HACK: in Firewall GUI the rule may state wrong user in "Application packages" window,
+but the SID is the same for all users anyway, so OK,
+also it doesn't matter because in the GUI, SID radio button is checked, not the package name.
+
+TODO: rules for *some* apps which have not been updated by user will not work,
+example solitaire app; need to either update them or detect this case.
+
+NOTE: updating apps will not work unless also "Extension users" are updated in
+WindowsServices.ps1, meaning re-run the script.
+
+TODO: We can learn app display name from manifest
+TODO: OfficeHub app contains sub app 'LocalBridge' which is blocked
 #>
 
 #region Initialization
@@ -77,23 +106,6 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $ProgramsGroup -Directio
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $ServicesGroup -Direction $Direction -ErrorAction Ignore @Logs
 
 #
-# TODO: exclude store apps rules for servers, store app folders seem to exist but empty.
-# TODO: currently making rules for each user separately, is it possible to make rules for all users?
-# NOTE: Following "rules" apply for store apps for blocking/allowing users
-# 1. -Owner - Only one explicit user account can be specified (not group, not capability etc...)
-# 2. -LocalUser - Anything can be specified
-# 3. Either -Owner or -LocalUser can be specified, not both which would make the rule not working and useless
-# 4. If the LocalUser is specified and rule is blocking, then another allow rule (with? or without owner) may take precedence over blocking rule
-# 5. If the owner is specified, the rule is well formed and normal "rules" apply as with all other rules
-# 6. Conclusion is, the -LocalUser parameter can be specified instead of -Owner only to allow traffic that was not already
-#    blocked by rules with owner parameter specified
-# 7. All of this applies only to "Any" and "*" packages, for specific package only -Owner must be
-#    specified and -LocalUser is not valid for specific packages
-# TODO: Prompt or refuse running this script on server platforms (platforms with no apps)
-# TODO: Rule display names don't have all consistent casing (ex. microsoft vs Microsoft)
-#
-
-#
 # Block Administrators by default
 #
 $Principals = Get-GroupPrincipal "Administrators" @Logs
@@ -117,15 +129,6 @@ Administrators should have limited or no connectivity at all for maximum securit
 
 #
 # Create rules for all network apps for each standard user
-# HACK: in Firewall GUI the rule may state wrong user in "Application packages" window,
-# but the SID is the same for all users anyway, so OK,
-# also it doesn't matter because in the GUI, SID radio button is checked, not the package name.
-# TODO: rules for *some* apps which have not been updated by user will not work,
-# example solitaire app; need to either update them or detect this case.
-# NOTE: updating apps will not work unless also "Extension users" are updated in
-# WindowsServices.ps1, meaning re-run the script.
-# TODO: We can learn app display name from manifest
-# TODO: OfficeHub app contains sub app 'LocalBridge' which is blocked
 #
 
 $Principals = Get-GroupPrincipal "Users" @Logs

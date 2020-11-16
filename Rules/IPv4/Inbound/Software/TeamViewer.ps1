@@ -28,18 +28,18 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Inbound firewall rules for TeamViewer
 
 .DESCRIPTION
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\TeamViewer.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to TeamViewer.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. TeamViewer.ps1 does not generate any output
 
 .NOTES
 None.

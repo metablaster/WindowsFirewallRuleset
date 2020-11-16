@@ -27,8 +27,22 @@ SOFTWARE.
 #>
 
 <#
-https://www.iana.org/assignments/ipv6-multicast-addresses/ipv6-multicast-addresses.xhtml
+.SYNOPSIS
+Inbound firewall rules for IPv6 multicast traffic
 
+.DESCRIPTION
+Inbound firewall rules for IPv6 multicast traffic
+
+.EXAMPLE
+PS> .\Multicast.ps1
+
+.INPUTS
+None. You cannot pipe objects to Multicast.ps1
+
+.OUTPUTS
+None. Multicast.ps1 does not generate any output
+
+.NOTES
 IPv6 multicast addresses are distinguished from unicast addresses by the value of the high-order
 octet of the addresses:
 a value of 0xFF (binary 11111111) identifies an address as a multicast address;
@@ -70,28 +84,12 @@ corporation.
 
 Global scope:
 these IPv6 addresses are valid globally and are globally routable.
-#>
 
-# TODO: see if edge traversal should be Allow in some rules
-# TODO: local address should be known for outbound, for inbound rules remote should be known
+TODO: see if edge traversal should be Allow in some rules
+TODO: local address should be known for outbound, for inbound rules remote should be known
 
-<#
-.SYNOPSIS
-Outbound rules for
-
-.DESCRIPTION
-
-.EXAMPLE
-PS> .\OutboundRule.ps1
-
-.INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
-
-.OUTPUTS
-None. OutboundRule.ps1 does not generate any output
-
-.NOTES
-None.
+.LINK
+https://www.iana.org/assignments/ipv6-multicast-addresses/ipv6-multicast-addresses.xhtml
 #>
 
 #region Initialization

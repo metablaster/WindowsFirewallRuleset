@@ -28,18 +28,18 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Outbound firewall rules for OpenSSH
 
 .DESCRIPTION
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\OpenSSH.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to OpenSSH.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. OpenSSH.ps1 does not generate any output
 
 .NOTES
 None.

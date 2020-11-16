@@ -53,6 +53,7 @@ If you would like to see fresh changes done since last release you can do so on 
     - ProblematicTraffic
 
   - Links in markdown are now reference links instead of inline links
+  - Added comment based help for rule scripts
 
 - New features
 

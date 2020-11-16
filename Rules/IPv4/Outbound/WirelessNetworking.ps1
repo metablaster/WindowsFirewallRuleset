@@ -28,18 +28,23 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Outbound firewall rules for wireless networking
 
 .DESCRIPTION
+Following predefined groups are included:
+1. WI-FI Direct network discovery
+2. Wireless display
+3. Wireless protable devices
+4. WLAN Service WFD*
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\WirelessNetworking.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to WirelessNetworking.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. WirelessNetworking.ps1 does not generate any output
 
 .NOTES
 None.
@@ -73,14 +78,9 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 #
 # Windows system predefined rules for Wireless Display
-# NOTE: following predefined groups are included:
-# 1. WI-FI Direct network discovery
-# 2. Wireless display
-# 3. Wireless protable devices
-# 4. WLAN Service WFD*
 #
 
-# NOTE: several rules down use this path
+# NOTE: several rules below use this path
 $WUDFHost = "%SystemRoot%\System32\WUDFHost.exe"
 Test-File $WUDFHost
 

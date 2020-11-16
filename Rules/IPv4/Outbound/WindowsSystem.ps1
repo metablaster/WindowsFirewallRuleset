@@ -28,21 +28,22 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Outbound firewall rules for Windows system
 
 .DESCRIPTION
+Rules that apply to Windows programs and utilities, which are not handled by predefined rules
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\WindowsSystem.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to WindowsSystem.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. WindowsSystem.ps1 does not generate any output
 
 .NOTES
-None.
+TODO: LocalUser for most rules is missing?
 #>
 
 #region Initialization
@@ -79,9 +80,7 @@ $WindowsDefenderRoot = "" # "%ALLUSERSPROFILE%\Microsoft\Windows Defender\Platfo
 $NETFrameworkRoot = "" # "%SystemRoot%\Microsoft.NET\Framework64"
 
 #
-# Windows system rules
-# Rules that apply to Windows programs and utilities, which are not handled by predefined rules
-# TODO: LocalUser for most rules is missing?
+# Rules for Windows system
 #
 
 # TODO: remote port unknown, protocol assumed

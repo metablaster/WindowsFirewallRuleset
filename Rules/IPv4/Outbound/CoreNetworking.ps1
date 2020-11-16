@@ -28,21 +28,27 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Outbound firewall rules for core networking
 
 .DESCRIPTION
+Predefined rules from Core Networking are here excluding ICMP
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\CoreNetworking.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to CoreNetworking.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. CoreNetworking.ps1 does not generate any output
 
 .NOTES
-None.
+TODO: specifying -InterfaceAlias $Loopback does not work, dropped packets
+NOTE: even though we specify "IPv4 the loopback interface alias is the same for IPv4 and IPv6,
+meaning there is only one loopback interface!"
+$Loopback = Get-NetIPInterface | Where-Object {
+	$_.InterfaceAlias -like "*Loopback*" -and $_.AddressFamily -eq "IPv4"
+} | Select-Object -ExpandProperty InterfaceAlias
 #>
 
 #region Initialization
@@ -70,17 +76,6 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
-
-# TODO: specifying -InterfaceAlias $Loopback does not work, dropped packets
-# NOTE: even though we specify "IPv4 the loopback interface alias is the same for IPv4 and IPv6,
-# meaning there is only one loopback interface!"
-# $Loopback = Get-NetIPInterface | Where-Object {
-# 	$_.InterfaceAlias -like "*Loopback*" -and $_.AddressFamily -eq "IPv4"
-# } | Select-Object -ExpandProperty InterfaceAlias
-
-#
-# Predefined rules from Core Networking are here excluding ICMP
-#
 
 #
 # Loopback

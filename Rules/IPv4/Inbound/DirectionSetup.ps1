@@ -31,3 +31,4 @@ SOFTWARE.
 #
 
 New-Variable -Name Direction -Scope Local -Option Constant -Value "Inbound"
+. $PSScriptRoot\..\IPSetup.ps1

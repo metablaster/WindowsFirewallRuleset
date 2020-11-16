@@ -28,21 +28,26 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Outbound firewall rules for network discovery
 
 .DESCRIPTION
+Network Discovery predefined rules + additional rules
+Rules apply to network discovery on LAN
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\NetworkDiscovery.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to NetworkDiscovery.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. NetworkDiscovery.ps1 does not generate any output
 
 .NOTES
-None.
+HACK: Due to some magic with predefines rules these rules here don't work for home network setup (WORKGROUP)
+Same applies to "File and printer sharing" predefined rules
+NOTE: Current workaround for home networks is to apply predefined "Network Discovery" rules into GPO.
+TODO: Intranet4 and Intranet4 removed IPv4 restriction to troubleshoot homegroup
 #>
 
 #region Initialization
@@ -72,6 +77,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
+# NOTE: Testing predefined rules
 Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $Group -Direction $Direction -NewPolicyStore $PolicyStore
 
 Get-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction | ForEach-Object {
@@ -97,16 +103,12 @@ Get-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Directio
 	Set-NetFirewallRule @Params
 }
 
-# NOTE: Following rules are no longer relevant
+# NOTE: Following rules are no longer relevant during testing
 return
 
 #
-# Network Discovery predefined rules + additional rules
-# Rules apply to network discovery on LAN
-# HACK: Due to some magic with predefines rules these rules here don't work for home network setup (WORKGROUP)
-# Same applies to "File and printer sharing" predefined rules
-# NOTE: Current workaround for home networks is to apply predefined "Network Discovery" rules into GPO.
-# TODO: Intranet4 and Intranet4 removed IPv4 restriction to troubleshoot homegroup
+# Network Discovery rules
+# TODO: separate custom rules with comment
 #
 
 New-NetFirewallRule -DisplayName "Link Local Multicast Name Resolution" `

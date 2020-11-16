@@ -28,18 +28,18 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Outbound firewall rules for
 
 .DESCRIPTION
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\PasswordSafe.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to PasswordSafe.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. PasswordSafe.ps1 does not generate any output
 
 .NOTES
 None.

@@ -28,21 +28,26 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Inbound firewall rules for network discovery
 
 .DESCRIPTION
+Network Discovery predefined rules + additional rules
+Rules apply to network discovery on LAN
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\NetworkDiscovery.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to NetworkDiscovery.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. NetworkDiscovery.ps1 does not generate any output
 
 .NOTES
-None.
+HACK: Due to some magic with predefines rules these rules here don't work for home network setup (WORKGROUP)
+Same applies to "File and printer sharing" predefined rules
+NOTE: Current workaround for home networks is to apply predefined "Network Discovery" rules into GPO.
+TODO: Intranet4 and Intranet4 removed IPv4 restriction to troubleshoot homegroup
 #>
 
 #region Initialization
@@ -102,8 +107,7 @@ return
 
 #
 # Network Discovery predefined rules + additional rules
-# Rules apply to network discovery on LAN
-# TODO: Intranet4 and Intranet4 removed IPv4 restriction to troubleshoot homegroup
+# TODO: separate custom rules with comment
 #
 
 New-NetFirewallRule -DisplayName "Link Local Multicast Name Resolution" `

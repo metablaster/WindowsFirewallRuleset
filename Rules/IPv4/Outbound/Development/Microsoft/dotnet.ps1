@@ -28,18 +28,18 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Outbound firewall rules for dotnet
 
 .DESCRIPTION
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\dotnet.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to dotnet.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. dotnet.ps1 does not generate any output
 
 .NOTES
 None.

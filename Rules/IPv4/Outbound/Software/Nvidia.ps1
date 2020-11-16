@@ -28,18 +28,18 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Outbound firewall rules for Nvidia
 
 .DESCRIPTION
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\Nvidia.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to Nvidia.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. Nvidia.ps1 does not generate any output
 
 .NOTES
 None.

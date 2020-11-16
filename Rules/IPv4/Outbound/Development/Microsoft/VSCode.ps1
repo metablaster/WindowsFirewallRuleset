@@ -28,18 +28,18 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Outbound firewall rules for VSCode
 
 .DESCRIPTION
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\VSCode.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to VSCode.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. VSCode.ps1 does not generate any output
 
 .NOTES
 None.

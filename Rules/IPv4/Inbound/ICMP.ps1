@@ -26,39 +26,55 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# Make sure to check for updated content!
-# https://tools.ietf.org/html/rfc1918
-# https://www.iana.org/assignments/icmp-parameters/icmp-parameters.xhtml
-# https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol
-# https://tools.ietf.org/html/rfc4861
-
-# Deprecated, year 2019:
-# 4 Source Quench
-# 6	Alternate Host Address
-# 5 Information Request
-# 16 Information Reply
-# 17 Address Mask Request
-# 18 Address Mask Reply
-# 30 Traceroute
-# 31 to 39
-
 <#
 .SYNOPSIS
-Outbound rules for
+Inbound firewall rules for ICMPv4 traffic
 
 .DESCRIPTION
+Inbound firewall rules for ICMPv4 traffic
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\ICMP.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to ICMP.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. ICMP.ps1 does not generate any output
 
 .NOTES
-None.
+Make sure to check for updated content!
+https://tools.ietf.org/html/rfc1918
+https://www.iana.org/assignments/icmp-parameters/icmp-parameters.xhtml
+https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol
+https://tools.ietf.org/html/rfc4861
+
+Deprecated, year 2019:
+4 Source Quench
+6	Alternate Host Address
+5 Information Request
+16 Information Reply
+17 Address Mask Request
+18 Address Mask Reply
+30 Traceroute
+31 to 39
+
+TODO: we don't use rules for APIPA or local subnet ranges
+If a network client fails to get an IP address using DHCP, it can discover an address on its own
+using APIPA.
+To get an IPv4 address, the client will select an address at random in the range
+169.254.1.0 to 169.254.254.255 (inclusive), with a netmask of 255.255.0.0.
+The client will then send an ARP packet asking for the MAC address that corresponds to the
+randomly-generated IPv4 address.
+
+If any other machine is using that address, the client will generate another random address and
+try again.
+
+The entire address range 169.254.0.0/16 has been set aside for "link local" addresses
+(the first and last 256 addresses have been reserved for future use).
+They should not be manually assigned or assigned using DHCP.
+NOTE: APIPA is how Microsoft refers to Link-Local
+ex. $APIPA = "169.254.1.0-169.254.254.255"
 #>
 
 #region Initialization
@@ -89,23 +105,11 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
-<#
-NOTE: APIPA is how Microsoft refers to Link-Local
-If a network client fails to get an IP address using DHCP, it can discover an address on its own using APIPA.
-To get an IPv4 address, the client will select an address at random in the range 169.254.1.0 to 169.254.254.255 (inclusive), with a netmask of 255.255.0.0.
-The client will then send an ARP packet asking for the MAC address that corresponds to the randomly-generated IPv4 address.
-
-If any other machine is using that address, the client will generate another random address and try again.
-
-The entire address range 169.254.0.0/16 has been set aside for "link local" addresses (the first and last 256 addresses have been reserved for future use).
-They should not be manually assigned or assigned using DHCP.
-#>
-# $APIPA = "169.254.1.0-169.254.254.255"
-
 #
 # ICMP type filtering for All profiles
-# TODO: Echo request description is same as for echo reply
 #
+
+# TODO: Echo request description is same as for echo reply
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Echo Reply (0)" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $DefaultInterfaceterface `

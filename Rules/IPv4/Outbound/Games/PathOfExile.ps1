@@ -28,18 +28,18 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Outbound firewall rules for PathOfExile
 
 .DESCRIPTION
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\PathOfExile.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to PathOfExile.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. PathOfExile.ps1 does not generate any output
 
 .NOTES
 None.

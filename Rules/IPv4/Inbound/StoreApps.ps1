@@ -28,18 +28,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Inbound firewall rules for store apps
 
 .DESCRIPTION
+Inbound firewall rules for store apps
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\StoreApps.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to StoreApps.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. StoreApps.ps1 does not generate any output
 
 .NOTES
 None.

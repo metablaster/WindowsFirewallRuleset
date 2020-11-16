@@ -28,18 +28,18 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Outbound firewall rules for
 
 .DESCRIPTION
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\Metatrader.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to Metatrader.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. Metatrader.ps1 does not generate any output
 
 .NOTES
 None.

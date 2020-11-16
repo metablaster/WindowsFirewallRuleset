@@ -28,21 +28,23 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Temporary outbound firewall rules
 
 .DESCRIPTION
+Temporary rules are enable on demand only to let some program do it's internet work, or
+to troubleshoot firewall without shuting it down completely.
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\Temporary.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to Temporary.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. Temporary.ps1 does not generate any output
 
 .NOTES
-None.
+TODO: Assign IPv6 addresses to rules
 #>
 
 #region Initialization
@@ -70,13 +72,6 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
-#
-# Temporary rules are enable on demand only to let some program do it's internet work, or
-# to troubleshoot firewall without shuting it down completely.
-#
-
-# TODO: Assign IPv6 addresses to rules
-
 if ($Develop)
 {
 	#
@@ -84,7 +79,7 @@ if ($Develop)
 	# This traffic fails mostly with virtual adapters, it's not covered by regular rules
 	#
 
-	# Accounts used for troubleshooting rules
+	# TODO: Accounts used for troubleshooting rules
 	# $TroubleshootingAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE" @Logs
 
 	New-NetFirewallRule -DisplayName "Services" `

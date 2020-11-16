@@ -28,18 +28,18 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Outbound firewall rules for SQLServer
 
 .DESCRIPTION
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\SQLServer.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to SQLServer.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. SQLServer.ps1 does not generate any output
 
 .NOTES
 None.

@@ -26,11 +26,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# Make sure to check for updated content!
-# https://www.iana.org/assignments/icmpv6-parameters/icmpv6-parameters.xhtml
-
-
 <#
+.SYNOPSIS
+Inbound firewall rules for ICMPv6 traffic
+
+.DESCRIPTION
+Inbound firewall rules for ICMPv6 traffic
+
+.EXAMPLE
+PS> .\ICMP.ps1
+
+.INPUTS
+None. You cannot pipe objects to ICMP.ps1
+
+.OUTPUTS
+None. ICMP.ps1 does not generate any output
+
+.NOTES
+Make sure to check for updated content, see link in description
+
 Type    Name
 0   Reserved
 1	Destination Unreachable
@@ -80,30 +94,14 @@ Type    Name
 200	Private experimentation
 201	Private experimentation
 255	Reserved for expansion of ICMPv6 informational messages
-#>
 
-# TODO: edge traversal unknown for some ICMPv6 rules
-# TODO: local and remote addresses need to be adjusted
-# TODO: add block rules based on remote address
-# TODO: add rule for ISATAP and 4to6
+TODO: edge traversal unknown for some ICMPv6 rules
+TODO: local and remote addresses need to be adjusted
+TODO: add block rules based on remote address
+TODO: add rule for ISATAP and 4to6
 
-<#
-.SYNOPSIS
-Outbound rules for
-
-.DESCRIPTION
-
-.EXAMPLE
-PS> .\OutboundRule.ps1
-
-.INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
-
-.OUTPUTS
-None. OutboundRule.ps1 does not generate any output
-
-.NOTES
-None.
+.LINK
+https://www.iana.org/assignments/icmpv6-parameters/icmpv6-parameters.xhtml
 #>
 
 #region Initialization

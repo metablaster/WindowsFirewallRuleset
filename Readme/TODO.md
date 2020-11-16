@@ -309,6 +309,8 @@ todo's in this file are categorized into following sections:
 
    - `Manage GPO Firwall.md` does not contain enough documentation
    - Predefined rule list in `PredefinedRules.md` is out of date
+   - Several rule scripts contain duplicate comments, need to keep them in one location and
+   and referencing it from other related scripts
 
 7. Other
 

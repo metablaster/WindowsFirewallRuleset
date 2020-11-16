@@ -28,10 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Inbound rule template
+Inbound rule template firewall rules for template program
 
 .DESCRIPTION
-Use InboundRule.ps1 as a template for inbound firewall rule set
+Detailed descritpion of this inbound rule group or the program and it's networking requirements
 
 .EXAMPLE
 PS> .\InboundRule.ps1

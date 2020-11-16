@@ -28,18 +28,18 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Outbound firewall rules for NuGet
 
 .DESCRIPTION
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\NuGet.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to NuGet.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. NuGet.ps1 does not generate any output
 
 .NOTES
 None.

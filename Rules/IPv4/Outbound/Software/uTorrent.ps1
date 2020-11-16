@@ -28,18 +28,18 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Outbound firewall rules for uTorrent
 
 .DESCRIPTION
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\uTorrent.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to uTorrent.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. uTorrent.ps1 does not generate any output
 
 .NOTES
 None.

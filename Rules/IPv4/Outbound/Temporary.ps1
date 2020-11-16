@@ -28,18 +28,20 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Temporary outbound rules
 
 .DESCRIPTION
+Temporary rules are enabled on demand only to let some program do it's internet work, or
+to troubleshoot firewall without shuting it down completely.
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\Temporary.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to Temporary.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. Temporary.ps1 does not generate any output
 
 .NOTES
 None.
@@ -71,8 +73,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
 
 #
-# Temporary rules are enable on demand only to let some program do it's internet work, or
-# to troubleshoot firewall without shuting it down completely.
+# Temporary rules
 #
 
 New-NetFirewallRule -DisplayName "Port 443" `

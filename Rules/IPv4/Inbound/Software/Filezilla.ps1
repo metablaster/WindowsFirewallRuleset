@@ -28,18 +28,18 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Inbound firewall rules for Filezilla
 
 .DESCRIPTION
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\Filezilla.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to Filezilla.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. Filezilla.ps1 does not generate any output
 
 .NOTES
 None.

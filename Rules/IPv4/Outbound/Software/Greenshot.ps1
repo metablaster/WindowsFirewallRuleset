@@ -28,18 +28,18 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Outbound firewall rules for Greenshot
 
 .DESCRIPTION
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\Greenshot.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to Greenshot.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. Greenshot.ps1 does not generate any output
 
 .NOTES
 None.

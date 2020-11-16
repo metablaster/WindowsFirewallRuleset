@@ -28,10 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rule template
+Outbound firewall rules for template program
 
 .DESCRIPTION
-Use OutboundRule.ps1 as a template for outbound firewall rule set
+Detailed descritpion of this outbound rule group or the program and it's networking requirements
 
 .EXAMPLE
 PS> .\OutboundRule.ps1

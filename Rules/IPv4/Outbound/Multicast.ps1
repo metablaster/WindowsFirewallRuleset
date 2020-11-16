@@ -43,7 +43,7 @@ None. You cannot pipe objects to Multicast.ps1
 None. Multicast.ps1 does not generate any output
 
 .NOTES
-Boot time multicast dropped due to WFP Operation (Windows Filtering Platform), the transition from
+NOTE: Boot time multicast dropped due to WFP Operation (Windows Filtering Platform), the transition from
 boot-time to persistent filters could be several seconds, or even longer on a slow machine.
 
 Address Range					Size		CIDR				Designation

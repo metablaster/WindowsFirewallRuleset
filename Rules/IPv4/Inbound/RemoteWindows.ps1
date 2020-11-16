@@ -28,21 +28,25 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Inbound firewall rules for Windows remoting programs and services
 
 .DESCRIPTION
+Rules that apply to Windows remoting programs and services,
+which are not handled by predefined rules
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\RemoteWindows.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to RemoteWindows.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. RemoteWindows.ps1 does not generate any output
 
 .NOTES
-None.
+NOTE: Following rules from predefined groups are used:
+1. Remote Desktop
+2. Remote Desktop (WebSocket)
 #>
 
 #region Initialization
@@ -69,14 +73,6 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
-
-#
-# Windows system rules
-# Rules that apply to Windows programs and utilities for remoting
-# NOTE: Following rules from predefined groups are used:
-# 1. Remote Desktop
-# 2. Remote Desktop (WebSocket)
-#
 
 #
 # Predefined rules for remote desktop, here split for private and public profile

@@ -28,18 +28,18 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rules for
+Outbound firewall rules for Thunderbird
 
 .DESCRIPTION
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> .\Thunderbird.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to Thunderbird.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. Thunderbird.ps1 does not generate any output
 
 .NOTES
 None.
