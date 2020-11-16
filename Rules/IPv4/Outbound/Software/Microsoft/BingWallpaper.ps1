@@ -46,19 +46,15 @@ None. BingWallpaper.ps1 does not generate any output
 TODO: Search algorithms can't find this program
 #>
 
-#region Ruleset header
-# Initialization
+#region Initialization
+#Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\..\..\..\Config\ProjectSettings.ps1
-New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
-	$MyInvocation.MyCommand.Name -replace ".{4}$" )
 
 # Check requirements
 Initialize-Project -Abort
-Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
 . $PSScriptRoot\..\..\DirectionSetup.ps1
-. $PSScriptRoot\..\..\..\IPSetup.ps1
 Import-Module -Name Ruleset.Logging
 
 # Setup local variables

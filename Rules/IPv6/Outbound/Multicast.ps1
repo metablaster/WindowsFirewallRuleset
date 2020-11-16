@@ -75,6 +75,27 @@ these IPv6 addresses are valid globally and are globally routable.
 
 # TODO: local address should be known for outbound, for inbound rules remote should be known
 
+<#
+.SYNOPSIS
+Outbound rules for
+
+.DESCRIPTION
+
+.EXAMPLE
+PS> .\OutboundRule.ps1
+
+.INPUTS
+None. You cannot pipe objects to OutboundRule.ps1
+
+.OUTPUTS
+None. OutboundRule.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+#region Initialization
+#Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements
@@ -82,7 +103,6 @@ Initialize-Project -Abort
 
 # Imports
 . $PSScriptRoot\DirectionSetup.ps1
-. $PSScriptRoot\..\IPSetup.ps1
 Import-Module -Name Ruleset.Logging
 Import-Module -Name Ruleset.UserInfo
 
@@ -104,6 +124,7 @@ $Deny = "Skip operation, outbound IPv6 multicast rules will not be loaded into f
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+#endregion
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs

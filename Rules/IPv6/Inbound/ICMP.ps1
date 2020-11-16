@@ -87,6 +87,27 @@ Type    Name
 # TODO: add block rules based on remote address
 # TODO: add rule for ISATAP and 4to6
 
+<#
+.SYNOPSIS
+Outbound rules for
+
+.DESCRIPTION
+
+.EXAMPLE
+PS> .\OutboundRule.ps1
+
+.INPUTS
+None. You cannot pipe objects to OutboundRule.ps1
+
+.OUTPUTS
+None. OutboundRule.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+#region Initialization
+#Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements
@@ -94,7 +115,6 @@ Initialize-Project -Abort
 
 # Imports
 . $PSScriptRoot\DirectionSetup.ps1
-. $PSScriptRoot\..\IPSetup.ps1
 Import-Module -Name Ruleset.Logging
 Import-Module -Name Ruleset.UserInfo
 
@@ -114,6 +134,7 @@ $Deny = "Skip operation, inbound ICMPv6 rules will not be loaded into firewall"
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+#endregion
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs

@@ -26,6 +26,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+<#
+.SYNOPSIS
+Outbound rules for
+
+.DESCRIPTION
+
+.EXAMPLE
+PS> .\OutboundRule.ps1
+
+.INPUTS
+None. You cannot pipe objects to OutboundRule.ps1
+
+.OUTPUTS
+None. OutboundRule.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+#region Initialization
+#Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements
@@ -33,7 +54,6 @@ Initialize-Project -Abort
 
 # Imports
 . $PSScriptRoot\..\DirectionSetup.ps1
-. $PSScriptRoot\..\..\IPSetup.ps1
 Import-Module -Name Ruleset.Logging
 Import-Module -Name Ruleset.UserInfo
 
@@ -46,6 +66,7 @@ $Deny = "Skip operation, outbound rules for Chocolatey software will not be load
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+#endregion
 
 #
 # Chocolatey installation directories
