@@ -47,17 +47,13 @@ None.
 TODO: Update Copyright and start writing test code
 #>
 
-#region Ruleset header
-# Initialization
+#region Initialization
 #Requires -RunAsAdministrator
 # TODO: Adjust path to project settings
 . $PSScriptRoot\..\..\..\..\Config\ProjectSettings.ps1
-New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
-	$MyInvocation.MyCommand.Name -replace ".{4}$" )
 
 # Check requirements
 Initialize-Project -Abort
-Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
 # TODO: adjust paths

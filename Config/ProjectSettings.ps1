@@ -27,7 +27,7 @@ SOFTWARE.
 #>
 
 #
-# TODO: we could auto include this file with module manifests
+# TODO: we could auto include this file with module manifests or dynamic module
 # NOTE: In this file project settings and preferences are set, these are grouped into
 # 1. settings for development
 # 2. settings for release
