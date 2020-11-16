@@ -47,7 +47,7 @@ Imports all firewall rules in the SCV file WmiRules.csv
 
 Policy store into which to import rules, default is local GPO.
 For more information about stores see:
-https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Firewall%20Parameters.md
+https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md
 
 ```yaml
 Type: System.String

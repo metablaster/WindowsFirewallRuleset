@@ -190,3 +190,7 @@ Also few commandlets from these modules:
 [Command-line syntax key](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/command-line-syntax-key)
 
 [Windows PowerShell Cmdlets for Networking](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/jj717268(v=ws.11))
+
+[Windows .msc files overview](https://www.ghacks.net/2017/06/10/windows-msc-files-overview)
+
+[Create and Save a Custom Console by Using MMC](https://social.technet.microsoft.com/wiki/contents/articles/2046.create-and-save-a-custom-console-by-using-microsoft-management-console-mmc-using-the-msc-file-extension.aspx)

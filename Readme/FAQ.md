@@ -29,7 +29,7 @@ all users or both, however allowing all interfaces or users should be only a tem
 
 INFO: In addition to interfaces shown in GPO there are some hidden network interfaces,
 until I figure out how to make rules based on those allow them all if this resolves the problem.\
-To troubleshoot hidden adapters see [Problematic Traffic](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Problematic%20Traffic.md)
+To troubleshoot hidden adapters see [Problematic Traffic](ProblematicTraffic.md)
 
 ## I got an error "Network path not found" or "unable to contact computer"
 
@@ -60,7 +60,7 @@ Otherwise if you're trying to administer firewall on remote machines, make sure 
 
 If this doesn't work take a look here:
 
-- [Computer Name Won't Resolve on Network](https://www.infopackets.com/news/10369/how-fix-computer-name-wont-resolve-network-april-update)
+- [Computer Name Won't Resolve on Network][name resolution issue]
 
 ## Does this firewall project give me the right protection
 
@@ -138,7 +138,7 @@ So here is an overview to help you see what they do hopefully answering all of y
 
     - If you make modifications to GPO firewall, re-running scripts again may override your modifications.
 
-2. Some global firewall settings are modified as explained here [Set-NetFirewallSetting](https://docs.microsoft.com/en-us/powershell/module/netsecurity/set-netfirewallsetting?view=win10-ps)
+2. Some global firewall settings are modified as explained here [Set-NetFirewallSetting][netfirewallsetting]
 
     - For details on which settings are modified see `Scripts\SetupProfile.ps1`
 
@@ -180,14 +180,11 @@ So here is an overview to help you see what they do hopefully answering all of y
 
 6. Following is a list of external executables that are run by some scripts
 
-    - [gpupdate.exe](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/gpupdate)
-    (Apply GPO to avoid system restart)
-    - [reg.exe](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/reg)
-    (To load offline registry hive)
-    - [code.cmd](https://code.visualstudio.com) (To learn VSCode version)
-    - [git.exe](https://git-scm.com) (To learn git version)
-    - [makecab.exe](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/makecab)
-    (To make online help content)
+    - [gpupdate.exe][gpupdate] (Apply GPO to avoid system restart)
+    - [reg.exe][reg] (To load offline registry hive)
+    - [code.cmd][vscode] (To learn VSCode version)
+    - [git.exe][git] (To learn git version)
+    - [makecab.exe][makecab] (To make online help content)
 
 7. There is nothing dangerous here
 
@@ -199,7 +196,7 @@ So here is an overview to help you see what they do hopefully answering all of y
    - If you publish your modification online (ex. to your fork) make sure your modification don't include
    any personal information such as user names, email or system info.
    - Bugs might exist which could break things, while I do my best to avoid bugs you might want to remind
-   yourself that this is after all [free software](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/LICENSE)
+   yourself that this is after all [free software][license]
    - As you can see, there is nothing dangerous here, as long as you don't do modifications that do
 unexpected things you'll be just fine!
 
@@ -218,3 +215,12 @@ Simple rule of thumb before applying rules is the same as when you install drive
 - reboot system
 - close down all programs
 - please try agin
+
+[name resolution issue]: https://www.infopackets.com/news/10369/how-fix-computer-name-wont-resolve-network-april-update
+[netfirewallsetting]: https://docs.microsoft.com/en-us/powershell/module/netsecurity/set-netfirewallsetting?view=win10-ps "Visit Microsoft docs"
+[gpupdate]: https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/gpupdate "Visit Microsoft docs"
+[reg]: https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/reg "Visit Microsoft docs"
+[vscode]: https://code.visualstudio.com "Visual Studio Code"
+[git]: https://git-scm.com
+[makecab]: https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/makecab "Visit Microsoft docs"
+[license]: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/LICENSE

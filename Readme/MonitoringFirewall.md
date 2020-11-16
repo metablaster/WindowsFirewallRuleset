@@ -55,20 +55,22 @@ you will also know which process and which user (either system or human user) in
 and several other stuff which you can enable as needed in options.
 - Process monitor is must have program, here is a screenshot while monitoring process network activity:\
 click on image to enlarge!
-![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Readme/Screenshots/ProcessMonitor.png)
+
+![Alternate text](Screenshots/ProcessMonitor.png)
+
 - Inside the "Config" folder you will find process monitor configuration specialized for firewall
 monitoring which you can import into your copy of process monitor.
 - Note that configuration filters some network traffic which you might want to be able to see,
 click on filter options to disable specific filters or add new ones.
 
-- [Download process monitor](https://docs.microsoft.com/en-us/sysinternals/downloads/procmon)
+[Download process monitor][ref process monitor]
 
 ## mTail
 
 - mTail is another must have program, it will let you monitor firewall logs in real time.
 - Here is a screenshot while monitoring the logs, click on image to enlarge:
 
-![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Readme/Screenshots/mTail.png)
+![Alternate text](Screenshots/mTail.png)
 
 - Default mTail does not have special coloring, the colors you see in the screenshot are which
 I made myself, you can grab this configuration from "Config" folder in this repository,
@@ -82,14 +84,14 @@ firewall activity for individual firewall profiles as well as number of personal
 - Please keep in mind that settings configuration for mTail is highly buggy, and requires hacking
 configuration files.
 
-[Download mTail](http://ophilipp.free.fr/op_tail.htm)
+[Download mTail][ref mtail]
 
 ## mTail alternative
 
 - Repository settings include extension recommendations and settings as an alternative for mTail,
 here is how it feels in VSCode.
 
-![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Readme/Screenshots/LogView.png)
+![Alternate text](Screenshots/LogView.png)
 
 - Prerequisites and setup for built-in log tailing are as follows:
 - Accept and install recommended workspace extentions for VSCode
@@ -112,7 +114,7 @@ and press enter.
 Yet another standard and quick way to monitor logs is with PowerShell commands, ex:
 
 ```powershell
-Get-Content "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" -last 10 -Wait | Select-String "DROP"
+Get-Content "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" -Last 10 -Wait | Select-String "DROP"
 ```
 
 ## Event log
@@ -125,7 +127,7 @@ I don't know, maybe we should ask Microsoft, anyway, at least here is how to gai
 firewall information.
 - Here is sample screenshot, click on image to enlarge:
 
-![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Readme/Screenshots/EventLog.png)
+![Alternate text](Screenshots/EventLog.png)
 
 - To enable packet filter monitoring with event viewer you need to enable auditing option as follows:
 
@@ -152,18 +154,18 @@ To open Event viewer to monitor configured packet filtering events follow steps 
 7. In the column "Task Category" look for "Filtering Platform Packet Drop"
 8. Click on individual event to see details about the event
 
-[Event logging reference](https://docs.microsoft.com/en-us/windows/win32/eventlog/event-logging)
+[Event logging reference][ref event log]
 
 ## WFP state and filter logs
 
 Are you unable to figure out why your rules don't work and why packets are dropped?\
-If so here is another powerful tool which will let you gather more information about specific firewall
-event.\
+If so here is another powerful tool which will let you gather more information about specific
+firewall event.\
 click on image to enlarge:
 
-![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Readme/Screenshots/wfpCommand.png)
+![Alternate text](Screenshots/wfpCommand.png)
 
-![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Readme/Screenshots/wfpView.png)
+![Alternate text](Screenshots/wfpView.png)
 
 - WFP stand for "Windows Filtering Platform", a low level packet filter upon which Windows firewall
 is built.
@@ -196,7 +198,7 @@ based on the first packet sent. which in turn tells us there was no adequate all
 default outbound action was hit.
 - For detailed information on how to interpret WFP log see "Firewall" section in `Readme\Reference.md`
 
-[WFP Reference](https://docs.microsoft.com/en-us/windows/win32/fwp/about-windows-filtering-platform)
+[WFP Reference][ref WFP]
 
 ## Windows Firewall
 
@@ -216,11 +218,11 @@ rules combined (aka. monitoring)
 
 Monitoring: (control panel firewall, Active store)
 
-![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Readme/Screenshots/ControlFirewall.png)
+![Alternate text](Screenshots/ControlFirewall.png)
 
 Management (Local group policy, GPO store)
 
-![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Readme/Screenshots/GPOFirewall.png)
+![Alternate text](Screenshots/GPOFirewall.png)
 
 To open GPO firewall follow steps bellow:
 
@@ -241,14 +243,14 @@ visible and remove those which are useless and only waste space, for example add
 Inside `Config\Windows` there is a `Firewall.msc` settings file, which saves you from doing these
 things every time you open GPO firewall, you can customize it and re-save your preferences.
 
-[Windows Firewall reference](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-firewall/windows-firewall-with-advanced-security)
+[Windows Firewall reference][ref firewall]
 
 ## TCP View
 
 TCP view is another tool that wil let you see what programs are listening on which ports on local system
-![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Readme/Screenshots/TCPView.png)
+![Alternate text](Screenshots/TCPView.png)
 
-[Download TCPView](https://docs.microsoft.com/en-us/sysinternals/downloads/tcpview)
+[Download TCPView][ref tcpview]
 
 ## netstat
 
@@ -257,7 +259,7 @@ it will give you information that isn't available in TCP View, such as which ser
 is involved in connection.
 - ie. useful to discover listening UDP related windows services or to show icmp statistics
 
-![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Readme/Screenshots/NetStat.png)
+![Alternate text](Screenshots/NetStat.png)
 
 A few useful commands are as follows:
 
@@ -273,7 +275,7 @@ Show ICMP statistics:
 netstat -s -p icmp
 ```
 
-[netstat reference](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/netstat)
+[netstat reference][ref netstat]
 
 ## Packet trace and analysis
 
@@ -288,24 +290,23 @@ Other times you might want to analyse firewall or network performance.
 To handle these and similar scenarios there is network capture and tracing solution.
 
 To actually view and analyse *.etl file you'll need to install "Windows Performance Analyzer" which
-is availabe as an optional installment of [Windows 10 SDK](https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk)
-or [Windows ADK](https://docs.microsoft.com/en-us/windows-hardware/get-started/adk-install)
+is availabe as an optional installment of [Windows 10 SDK][windows sdk] or [Windows ADK][windwos adk]
 
 Once you install it and open ETL (Event Trace Log) file here is sample screenshot of traffic analysis:
 
-![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Readme/Screenshots/TraceAnalyze.png)
+![Alternate text](Screenshots/TraceAnalyze.png)
 
 To generate ETL file you have at least 3 options:
 
 First and the best one is to use "Windows Performance Recorder" which comes with Windows SDK or ADK.\
 Other 2 (worse) methods are described in next 2 sections.
 
-- [Windows Performance Analyzer Intro](https://devblogs.microsoft.com/performance-diagnostics/wpa-intro)
-- [Windows Performance Analyzer reference](https://docs.microsoft.com/en-us/windows-hardware/test/wpt/windows-performance-analyzer)
+- [Windows Performance Analyzer Intro][intro wpa]
+- [Windows Performance Analyzer reference][ref wpa]
 
 ## netsh trace
 
-![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Readme/Screenshots/netsh.png)
+![Alternate text](Screenshots/netsh.png)
 
 `netsh trace` option is similar to capturing "WFP state" and "Packet analysis" discused before.\
 There is no benefit to use this legacy program.
@@ -356,7 +357,7 @@ The default is `no`
 
 **protocol**
 Specifies IP protocol for which to trace or capture traffic.\
-For valid values and their meaning see: [Assigned Internet Protocol Numbers](https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml)
+For valid values and their meaning see: [Assigned Internet Protocol Numbers][protocol list]
 
 **traceFile=path\filename**
 Specifies the location and file name where to save the output.\
@@ -389,8 +390,8 @@ Specifies whether an existing trace output file will be overwritten.
 If parameter traceFile is not specified, then the default location and filename and any pre-existing
 version of the trace file is automatically overwritten.
 
-[Netsh Commands for Network Trace](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-R2-and-2012/jj129382(v=ws.11))\
-[Netsh reference](https://docs.microsoft.com/en-us/windows-server/networking/technologies/netsh/netsh-contexts)
+- [Netsh Commands for Network Trace][netsh]
+- [Netsh reference][ref netsh]
 
 ## NetEventPacketCapture
 
@@ -406,4 +407,20 @@ Keep in mind that both the `netsh trace` and `NetEventPacketCapture` generate an
 
 This problem can be solved with "Windows Performance Recorder" which generates required symbols.
 
-[NetEventPacketCapture reference](https://docs.microsoft.com/en-us/powershell/module/neteventpacketcapture/?view=win10-ps)
+[NetEventPacketCapture reference][ref netevent]
+
+[ref process monitor]: https://docs.microsoft.com/en-us/sysinternals/downloads/procmon
+[ref WFP]: https://docs.microsoft.com/en-us/windows/win32/fwp/about-windows-filtering-platform "Visit Microsoft docs"
+[ref mtail]: http://ophilipp.free.fr/op_tail.htm
+[ref event log]: https://docs.microsoft.com/en-us/windows/win32/eventlog/event-logging "Visit Microsoft docs"
+[ref firewall]: https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-firewall/windows-firewall-with-advanced-security "Visit Microsoft docs"
+[ref tcpview]: https://docs.microsoft.com/en-us/sysinternals/downloads/tcpview "Visit Microsoft docs"
+[ref netstat]: https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/netstat "Visit Microsoft docs"
+[windows sdk]: https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk
+[windwos adk]: https://docs.microsoft.com/en-us/windows-hardware/get-started/adk-install "Visit Microsoft docs"
+[intro wpa]: https://devblogs.microsoft.com/performance-diagnostics/wpa-intro
+[ref wpa]: https://docs.microsoft.com/en-us/windows-hardware/test/wpt/windows-performance-analyzer "Visit Microsoft docs"
+[protocol list]: https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml
+[netsh]: https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-R2-and-2012/jj129382(v=ws.11) "Visit Microsoft docs"
+[ref netsh]: https://docs.microsoft.com/en-us/windows-server/networking/technologies/netsh/netsh-contexts "Visit Microsoft docs"
+[ref netevent]: https://docs.microsoft.com/en-us/powershell/module/neteventpacketcapture/?view=win10-ps "Visit Microsoft docs"

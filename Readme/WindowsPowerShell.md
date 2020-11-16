@@ -3,7 +3,7 @@
 
 Note that Windows PowerShell is not the same thing as PowerShell Core, for more information see:
 
-[About PowerShell Editions](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_powershell_editions?view=powershell-7)
+[About PowerShell Editions][about pseditions]
 
 ## How to open Windows PowerShell
 
@@ -19,7 +19,7 @@ Note that Windows PowerShell is not the same thing as PowerShell Core, for more 
 Most likely you want to open Windows PowerShell directly in some folder so that the prompt points to
 exactly that directory, for example:
 
-![Alternate text](https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Readme/Screenshots/WindowsPowerShell.png)
+![Alternate text](Screenshots/WindowsPowerShell.png)
 
 Here is how:
 
@@ -33,8 +33,12 @@ Here is how:
 
 1. To add context menu on right click for "Windows PowerShell" for standard user see:
 
-    [Open PowerShell window here](https://www.tenforums.com/tutorials/60175-open-powershell-window-here-context-menu-add-windows-10-a.html)
+    [Open PowerShell window here][powershell here]
 
 2. To add context menu on right click for "Windows PowerShell as Administrator" see:
 
-    [Open PowerShell window here as Administrator](https://www.tenforums.com/tutorials/60177-add-open-powershell-window-here-administrator-windows-10-a.html)
+    [Open PowerShell window here as Administrator][powershell here as admin]
+
+[about pseditions]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_powershell_editions?view=powershell-7
+[powershell here]: https://www.tenforums.com/tutorials/60175-open-powershell-window-here-context-menu-add-windows-10-a.html
+[powershell here as admin]: https://www.tenforums.com/tutorials/60177-add-open-powershell-window-here-administrator-windows-10-a.html

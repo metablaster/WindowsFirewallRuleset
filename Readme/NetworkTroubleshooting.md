@@ -5,7 +5,7 @@ There are many ways to get stuck with networking, other documentation in this pr
 on how to work with or troubleshoot firewall, but here the aim is to make troubleshooting other
 network related problems in detail.
 
-It covers wide area of network problems and is based on [Process of elimination](https://en.wikipedia.org/wiki/Process_of_elimination)
+It covers wide area of network problems and is based on [Process of elimination][process elimination]
 meaning you go step by step and isolating each area making it less probable to be the cause of an issue.
 
 This are the most basic troubleshooting procedures one should always perform when facing network issues.
@@ -132,7 +132,7 @@ Alternative way to reset network is by using "Settings" app in Windows 10 as fol
 Make sure your system and drivers are fully up to date:
 
 - See link below on how to update system:
-[Update Windows 10](https://support.microsoft.com/en-us/help/4027667/windows-10-update)
+[Update Windows 10][update windows]
 
 It's good to continue checking for updates after they are installed, until there is no new updates,
 it's not bad to reboot system after update even if not asked to do so.
@@ -155,7 +155,7 @@ Do it manually in this order:
 
 Link below explains how to troubleshoot WI-FI problems, some of the steps are already covered here:
 
-[Fix WI-FI issues](https://support.microsoft.com/en-us/help/10741/windows-fix-network-connection-issues)
+[Fix WI-FI issues][fix wifi]
 
 ## Trace route to random hosts on internet
 
@@ -184,7 +184,7 @@ If nothing so far worked disable firewall and try all over again.\
 If things start to work it's likely misconfigured firewall.
 
 See link below on how to disable both GPO and Control Panel firewall:\
-[Disable Firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Disable%20Firewall.md)
+[Disable Firewall](DisableFirewall.md)
 
 **NOTE:** If you experience this problem only while having firewall enabled from this project,
 feel free to open new issue and provide as much details (results) as possible from this document.
@@ -213,10 +213,9 @@ then disable and enable back.
 
 ## Change DNS server
 
-google DNS servers are fast and reliable, see link below to change your DNS settings to use
-google DNS:
+google DNS servers are fast and reliable, see link below to change your DNS settings to use google DNS:
 
-[google DNS servers](https://developers.google.com/speed/public-dns/docs/using)
+[google DNS servers][google dns]
 
 ## Restart or reset router
 
@@ -243,7 +242,7 @@ call your ISP and ask them what's the problem.
 
 If you're having problem with slow connection, visit link below to perform network speed test:
 
-[Internet speed test](https://www.speedtest.net)
+[Internet speed test][speedtest]
 
 Try different servers to see if there is a difference, you might need to contact your ISP and
 ask them how much it will cost to get faster internet. (more pay = faster)
@@ -255,7 +254,7 @@ See if your ISP can install you optic cable into your house, and for what price.
 If your network speed is slow and related only to local network (ex. between computers behind router),
 you can test LAN speed with tool called NetIO:
 
-[NetIO-GUI](https://sourceforge.net/projects/netiogui)
+[NetIO-GUI][netio]
 
 ## Try another adapter
 
@@ -272,7 +271,7 @@ There are many different network adapters, most of them have settings which you 
 device manager.
 
 Make sure to open device manager as Administrator:\
-[Open device manager](https://support.microsoft.com/en-us/help/4026149/windows-open-device-manager)
+[Open device manager][device manager]
 
 Open your adapter properties and you'll find settings somewhere under "Advanced" tab or something
 like that.
@@ -280,10 +279,10 @@ Depending on your adapter, here are links that help explain the meaning of adapt
 
 **NOTE:** This settings are universal, not always limited to specific hardware vendor:
 
-- [Advanced Intel Wireless Adapter Settings](https://www.intel.com/content/www/us/en/support/articles/000005585/network-and-i-o/wireless.html)
-- [ADVANCED NETWORK ADAPTER DRIVER SETTINGS](http://techgenix.com/advanced-network-adapter-driver-settings/)
-- [Resolving Issues with Energy Efficient Ethernet (EEE) or Green Ethernet](https://www.dell.com/support/article/en-hr/sln79684/resolving-issues-with-energy-efficient-ethernet-eee-or-green-ethernet?lang=en)
-- [Optimal setting for advanced parameters for Realtek PCI-e GBE family network card](https://superuser.com/questions/853500/optimal-setting-for-advanced-parameters-for-realtek-pci-e-gbe-family-network-car)
+- [Advanced Intel Wireless Adapter Settings][adapter wifi settings]
+- [Advanced Network Aadapter Driver Settings][adapter eth settings]
+- [Resolving Issues with Energy Efficient Ethernet (EEE) or Green Ethernet][adapter eee issues]
+- [Optimal setting for advanced parameters for Realtek PCI-e GBE family network card][adapter realtek settings]
 
 ## Configure your router
 
@@ -294,7 +293,7 @@ Restarting router is recommended to check if new configuration makes any differe
 
 ## I have game multiplayer issues
 
-If your problem is MMO gaming (online multiplayer), LAN multiplayer, [Hotseat](https://en.wikipedia.org/wiki/Hotseat_(multiplayer_mode))
+If your problem is MMO gaming (online multiplayer), LAN multiplayer, [Hotseat][hotseat]
 and similar then you must make sure your router NAT settings are properly configured.
 
 Log in to your router and find "NAT" settings, possible options are:
@@ -311,13 +310,13 @@ remember, "Symmetric NAT (Dynamic NAT)" will cause you a lot of multiplayer trou
 
 Link below contains detailed guidelines:
 
-[LAN Setup](https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Readme/LAN%20Setup)
+[LAN Setup](LAN%20Setup)
 
 ## Reset firewall
 
 Link Below explains how to reset both GPO firewall and firewall in control panel:
 
-[Reset Firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Reset%20Firewall.md)
+[Reset Firewall](ResetFirewall.md)
 
 ## Run network troubleshooter
 
@@ -344,9 +343,9 @@ On another systems, alternative way is:
 Get-NetRoute
 ```
 
-More information about this command is [HERE](https://docs.microsoft.com/en-us/powershell/module/nettcpip/get-netroute?view=win10-ps)
+For more information about see [Get-NetRoute][ref netroute]
 
-More information about routing table is [HERE](https://en.wikipedia.org/wiki/Routing_table)
+For more information about routing table [routing table][wikipedia routing table]
 
 ## Look at your hosts file
 
@@ -361,9 +360,9 @@ If any lines doesn't begin with hash, then either add hash to those lines or del
 
 To troubleshoot firewall take a look at:
 
-- [Monitoring Firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Monitoring%20Firewall.md)
-- [Problematic Traffic](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Problematic%20Traffic.md)
-- [Rest of documentation](https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Readme)
+- [Monitoring Firewall](MonitoringFirewall.md)
+- [Problematic Traffic](ProblematicTraffic.md)
+- [Rest of documentation](/Readme)
 
 ## Check for Windows Auto-Tuning
 
@@ -395,17 +394,17 @@ netsh int tcp set global autotuninglevel=normal
 
 Few external references for specific issues:
 
-- [Computer Name Won't Resolve on Network](https://www.infopackets.com/news/10369/how-fix-computer-name-wont-resolve-network-april-update)
+[Computer Name Won't Resolve on Network][name resolution issue]
 
 ## Troubleshoot or reinstall Windows
 
 First see recovery options in Windows 10, you might be able to recover your system to previous good state.
 
-[Recovery options in Windows 10](https://support.microsoft.com/en-us/help/12415/windows-10-recovery-options)
+[Recovery options in Windows 10][recover windows]
 
 reinstalling is is last resort, if operating system is bad reinstall it:
 
-[Download Windows 10](https://www.microsoft.com/en-us/software-download/windows10)
+[Download Windows 10][download windows]
 
 ## If nothing works
 
@@ -419,3 +418,21 @@ To get good support in forums make sure you provide as much details as you can, 
 3. hardware information on your network such as routers, modems, cables etc.
 4. Description of things you did prior to your problem.
 5. Make it short and to the point, nobody likes to read long posts!
+
+[update windows]: https://support.microsoft.com/en-us/help/4027667/windows-10-update
+[fix wifi]: https://support.microsoft.com/en-us/help/10741/windows-fix-network-connection-issues
+[process elimination]: https://en.wikipedia.org/wiki/Process_of_elimination
+[google dns]: https://developers.google.com/speed/public-dns/docs/using
+[speedtest]: https://www.speedtest.net
+[netio]: https://sourceforge.net/projects/netiogui
+[device manager]: https://support.microsoft.com/en-us/help/4026149/windows-open-device-manager
+[adapter wifi settings]: https://www.intel.com/content/www/us/en/support/articles/000005585/network-and-i-o/wireless.html
+[adapter eth settings]: http://techgenix.com/advanced-network-adapter-driver-settings
+[adapter eee issues]: https://www.dell.com/support/article/en-hr/sln79684/resolving-issues-with-energy-efficient-ethernet-eee-or-green-ethernet?lang=en
+[adapter realtek settings]: https://superuser.com/questions/853500/optimal-setting-for-advanced-parameters-for-realtek-pci-e-gbe-family-network-car
+[hotseat]: https://en.wikipedia.org/wiki/Hotseat_(multiplayer_mode) "wikipedia hotseat"
+[ref netroute]: https://docs.microsoft.com/en-us/powershell/module/nettcpip/get-netroute?view=win10-ps
+[wikipedia routing table]: https://en.wikipedia.org/wiki/Routing_table
+[name resolution issue]: https://www.infopackets.com/news/10369/how-fix-computer-name-wont-resolve-network-april-update
+[recover windows]: https://support.microsoft.com/en-us/help/12415/windows-10-recovery-options
+[download windows]: https://www.microsoft.com/en-us/software-download/windows10

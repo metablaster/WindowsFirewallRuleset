@@ -42,7 +42,7 @@ $Group = "Windows Services"
 $Accept = "Outbound rules for system services will be loaded, required for proper functioning of operating system"
 $Deny = "Skip operation, outbound rules for system services will not be loaded into firewall"
 
-# Extension rules are special rules for problematic services, see "Problematic Traffic.md" for more info
+# Extension rules are special rules for problematic services, see "ProblematicTraffic.md" for more info
 $ExtensionAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE" @Logs
 Merge-SDDL ([ref] $ExtensionAccounts) $UsersGroupSDDL @Logs
 
@@ -314,7 +314,7 @@ If this rule is blocked, router SSDP-based services will not be discovered." `
 
 #
 # Windows services extension rules
-# see "Problematic Traffic.md" for more info
+# see "ProblematicTraffic.md" for more info
 #
 
 # TODO: how do we make use of an array of user accounts for Get-SDDLFromAccounts
@@ -339,7 +339,7 @@ local service account" `
 	@Logs | Format-Output @Logs
 
 #
-# Following rules are in "Problematic Traffic" pseudo group, these need extension rules (above)
+# Following rules are in "ProblematicTraffic" pseudo group, these need extension rules (above)
 #
 
 # TODO: trying with localuser: Any

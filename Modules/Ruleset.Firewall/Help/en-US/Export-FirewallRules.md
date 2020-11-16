@@ -58,7 +58,7 @@ Exports all SNMP firewall rules to the JSON file SNMPRules.json.
 
 Policy store from which to export rules, default is local GPO.
 For more information about stores see:
-https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Firewall%20Parameters.md
+https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md
 
 ```yaml
 Type: System.String

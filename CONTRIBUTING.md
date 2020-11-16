@@ -31,36 +31,37 @@ Here is a list of most important things to keep in mind.
 
 ## General guidelines
 
-It's recommended to read up to date version of this document which is located on "develop" branch [here](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/CONTRIBUTING.md)
+It's recommended to read up to date version of this document which is located on "develop" branch
+[here][contributing develop]
 
 2 pages below explain general/starting guidelines regarding open source:\
-[How to contribute to open source](https://opensource.guide/how-to-contribute)\
-[Open Source Contribution Etiquette](https://tirania.org/blog/archive/2010/Dec-31.html)
+[How to contribute to open source][contribute to open source]\
+[Open Source Contribution Etiquette][open source etiquette]
 
 First step is to fork a project:\
-[Forking projects](https://guides.github.com/activities/forking)
+[Forking projects][forking projects]
 
 Next if needed, you might want to set up your SSH keys (don't actually do it yet):\
-[Connecting to GitHub with SSH](https://help.github.com/en/enterprise/2.20/user/github/authenticating-to-github/connecting-to-github-with-ssh)
+[Connecting to GitHub with SSH][github ssh]
 
 The reason why not to set up SSH keys right away is because for PowerShell I made this tutorial:\
-[PowerShell GPG4Win, SSH, posh-git](https://gist.github.com/metablaster/52b1baac5be44e2f1e6d16800813f42f)
+[PowerShell GPG4Win, SSH, posh-git][tutorial]
 
 Regarding license and Copyright practices adopted by this project see:\
-[Maintaining file-scope copyright notices](https://softwarefreedom.org/resources/2012/ManagingCopyrightInformation.html#maintaining-file-scope-copyright-notices)\
-[Requirements under U.S. and E.U. Copyright Law](http://softwarefreedom.org/resources/2007/originality-requirements.html)
-[Copyright Notices](https://www.gnu.org/prep/maintain/html_node/Copyright-Notices.html)
+[Maintaining file-scope copyright notices][filescope copyright]\
+[Requirements under U.S. and E.U. Copyright Law][copyright law]\
+[Copyright Notices][copyright notices]
 
 Regarding versioning adopted see:\
-[Semantic Versioning 2.0.0](https://semver.org)
+[Semantic Versioning 2.0.0][semantic versioning]
 
 Few additional references regarding open source worth reading:\
-[Don't "Push" Your Pull Requests](https://www.igvita.com/2011/12/19/dont-push-your-pull-requests)\
-[Painless Bug Tracking](https://www.joelonsoftware.com/2000/11/08/painless-bug-tracking)
+[Don't "Push" Your Pull Requests][dont push]\
+[Painless Bug Tracking][bug tracking]
 
 And references for tools used by this project:\
-[PowerShell documentation](https://docs.microsoft.com/en-us/powershell/scripting/how-to-use-docs?view=powershell-7.1)\
-[Visual Studio Code](https://code.visualstudio.com/docs)
+[PowerShell documentation][powershell docs]\
+[Visual Studio Code][vscode docs]
 
 ## Environment setup
 
@@ -76,63 +77,63 @@ project root folder
 6. Many other minor workspace settings to improve coding experience
 
 To work with Windows PowerShell quickly in any folder see:
-[Windows PowerShell](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Windows%20PowerShell.md)
+[Windows PowerShell](Readme/WindowsPowerShell.md)
 
 Recommended extensions in workspace are as follows:
 
-1. [TODO tree](https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree)
+1. [TODO tree][extension todo-tree]
 
     Required to easily navigate TODO, HACK and NOTE comments located in source files.
 
-2. [PowerShell](https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell)
+2. [PowerShell][extension powershell]
 
     Should be obvious, syntax highlighting, intellisense, formatting etc.
 
-3. [Markdownlint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint)
+3. [Markdownlint][extension markdownlint]
 
     Helps to format and write better markdown, you get a list of problems in VSCode and fix them.
 
-4. [Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker)
+4. [Code Spell Checker][extension spellcheck]
 
     Helps to spell words correctly, you get a list of misspelled words in VSCode and fix them
 
-5. [Highlight Dodgy Characters](https://marketplace.visualstudio.com/items?itemName=nachocab.highlight-dodgy-characters)
+5. [Highlight Dodgy Characters][extension gremlins]
 
     Helps to detect bad chars aka. gremlins, which cause issues such as unable to save file
     in UTF-8 format
 
-6. [Bookmarks](https://marketplace.visualstudio.com/items?itemName=alefragnani.Bookmarks)
+6. [Bookmarks][extension bookmarks]
 
     Helps you to bookmark various places in project to easily navigate back and forth.
 
-7. [Rainbow CSV](https://marketplace.visualstudio.com/items?itemName=mechatroner.rainbow-csv)
+7. [Rainbow CSV][extension csv]
 
     Firewall rules can be exported into CSV file, this extension provides syntax highlighting for
     CSV files
 
-8. [GitLens](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens)
+8. [GitLens][extension gitlens]
 
     It provides so many great features for git inside VSCode it can't be explained in one line
 
-9. [Markdown All in One](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one)
+9. [Markdown All in One][extension markdown aio]
 
     Provides markdown language features
 
-10. [XML Tools](https://marketplace.visualstudio.com/items?itemName=DotJoshJohnson.xml)
+10. [XML Tools][extension xml]
 
     Useful module xml files navigation
 
-11. [Log File Highlighter](https://marketplace.visualstudio.com/items?itemName=emilast.LogFileHighlighter)
+11. [Log File Highlighter][extension logs]
 
     Custom syntax highlighting for log files, useful for firewall logs as an alternative of mTail.
     This extension complements "Auto Scroll"
 
-12. [Auto Scroll](https://marketplace.visualstudio.com/items?itemName=pejmannikram.vscode-auto-scroll)
+12. [Auto Scroll][extension scroll]
 
     Automatic scrolling of log files, useful to tail firewall logs.
     This extension complements "Log File Highlighter"
 
-13. [Filter Line](https://marketplace.visualstudio.com/items?itemName=everettjf.filter-line)
+13. [Filter Line][extension filterline]
 
     Filter log files according to json config, string or regex pattern
 
@@ -217,11 +218,11 @@ result in bugs or security issues!
 ### More information
 
 Following link explains must know style guidelines to write functions and commandlets:\
-[Cmdlet Development Guidelines](https://docs.microsoft.com/en-us/powershell/scripting/developer/cmdlet/cmdlet-development-guidelines?view=powershell-7)
+[Cmdlet Development Guidelines][develop cmdlets]
 
 Following link describes general rules about PowerShell code style if you like reading,
 however keep in mind, it's not completely in line with this repository best practices:\
-[The PowerShell Style Guide](https://poshcode.gitbooks.io/powershell-practice-and-style/Style-Guide/Introduction.html)
+[The PowerShell Style Guide][powershell style]
 
 ## Modules and 3rd party code
 
@@ -261,8 +262,7 @@ to distinguish project modules from 3rd party code.
 
 ## Static analysis
 
-[PSStaticAnalyzer](https://github.com/PowerShell/PSScriptAnalyzer)
-is used to perform basic code quality analysis.
+[PSStaticAnalyzer][module psscriptanalyzer] is used to perform basic code quality analysis.
 
 VSCode workspace includes static analysis settings file, so all you have to do is cd into project
 root directory and invoke analyzer as follows:
@@ -314,8 +314,8 @@ Documentation and comments reside in 6 places as follows:
     Purpose of comment based help is for module user to be able to run `Get-Help` on target function.
 
     For examples and comment based syntax see:
-    - [About Comment-based Help](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_comment_based_help?view=powershell-7)
-    - [Examples of Comment-Based Help](https://docs.microsoft.com/en-us/powershell/scripting/developer/help/examples-of-comment-based-help?view=powershell-7)
+    - [About Comment-based Help][about comment based help]
+    - [Examples of Comment-Based Help][comment based help examples]
 
     You must avoid following comment based content to avoid errors while generating online help files:
     - .LINK entries must contains only one link and nothing else
@@ -337,7 +337,7 @@ Documentation and comments reside in 6 places as follows:
 
 In general regarding firewall rules, provide documentation and official reference for your rules
 so that it can be easy to verify that these rules don't contain mistakes, for example, for ICMP
-rules you would provide a link to [IANA](https://www.iana.org) with relevant reference document.
+rules you would provide a link to [IANA][iana] with relevant reference document.
 
 Remember, documenting code and features is as important as writing it!
 
@@ -394,7 +394,7 @@ At the moment the focus is on Windows Firewall, if you want to port code to othe
 
 If you decide to port code it is mandatory that these code changes are done on separate branch.
 
-The plan is to expand this project to manage [nftables](https://en.wikipedia.org/wiki/Nftables)
+The plan is to expand this project to manage [nftables][nftables]
 firewall on linux and other systems.
 
 ## Making new scripts or modules
@@ -406,7 +406,7 @@ These templates are fully aligned to rule design, code and formatting style of t
 
 ## Repository folder structure
 
-See [Directory Structure.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Directory%20Structure.md)
+See [Directory Structure](Readme/DirectoryStructure.md)
 
 ## Final notes and where to start
 
@@ -415,6 +415,40 @@ described here, significant portion of code was written before this "CONTRIBUTIN
 
 So it's an ongoing effort that by no means gets fulfilled.
 
-I recommend you start at looking into [TODO](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/TODO.md)
-list and also use "todo-tree" extension to see even more todo's, unless you have specific ideas or
-recommendations.
+I recommend you start at looking into [TODO](Readme/TODO.md) list and also use "todo-tree"
+extension to see even more todo's, unless you have specific ideas or recommendations.
+
+[contributing develop]: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/CONTRIBUTING.md "latest CONTRIBUTING.md"
+[contribute to open source]: https://opensource.guide/how-to-contribute "How to contribute to open source"
+[open source etiquette]: https://tirania.org/blog/archive/2010/Dec-31.html "Open Source Contribution Etiquette"
+[forking projects]: https://guides.github.com/activities/forking "Forking projects"
+[github ssh]: https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/connecting-to-github-with-ssh "Connecting to GitHub with SSH"
+[tutorial]: https://gist.github.com/metablaster/52b1baac5be44e2f1e6d16800813f42f "Tutorial git, powershell, gpg4win, posh-git, commit signing, ssh and key caching"
+[filescope copyright]: https://softwarefreedom.org/resources/2012/ManagingCopyrightInformation.html#maintaining-file-scope-copyright-notices "Maintaining file-scope copyright notices"
+[copyright law]: http://softwarefreedom.org/resources/2007/originality-requirements.html "Requirements under U.S. and E.U. Copyright Law"
+[copyright notices]: https://www.gnu.org/prep/maintain/html_node/Copyright-Notices.html "Copyright Notices"
+[semantic versioning]: https://semver.org "Semantic Versionsing"
+[dont push]: https://www.igvita.com/2011/12/19/dont-push-your-pull-requests "Don't 'Push' Your Pull Requests"
+[bug tracking]: https://www.joelonsoftware.com/2000/11/08/painless-bug-tracking "Painless Bug Tracking"
+[powershell docs]: https://docs.microsoft.com/en-us/powershell/scripting/how-to-use-docs?view=powershell-7.1 "PowerShell documentation"
+[vscode docs]: https://code.visualstudio.com/docs "Visual Studio Code documentation"
+[extension todo-tree]: https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree "Visit Marketplace"
+[extension powershell]: https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell "Visit Marketplace"
+[extension markdownlint]: https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint "Visit Marketplace"
+[extension spellcheck]: https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker "Visit Marketplace"
+[extension gremlins]: https://marketplace.visualstudio.com/items?itemName=nachocab.highlight-dodgy-characters "Visit Marketplace"
+[extension bookmarks]: https://marketplace.visualstudio.com/items?itemName=alefragnani.Bookmarks "Visit Marketplace"
+[extension csv]: https://marketplace.visualstudio.com/items?itemName=mechatroner.rainbow-csv "Visit Marketplace"
+[extension gitlens]: https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens "Visit Marketplace"
+[extension markdown aio]: https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one "Visit Marketplace"
+[extension xml]: https://marketplace.visualstudio.com/items?itemName=DotJoshJohnson.xml "Visit Marketplace"
+[extension logs]: https://marketplace.visualstudio.com/items?itemName=emilast.LogFileHighlighter "Visit Marketplace"
+[extension scroll]: https://marketplace.visualstudio.com/items?itemName=pejmannikram.vscode-auto-scroll "Visit Marketplace"
+[extension filterline]: https://marketplace.visualstudio.com/items?itemName=everettjf.filter-line "Visit Marketplace"
+[develop cmdlets]: https://docs.microsoft.com/en-us/powershell/scripting/developer/cmdlet/cmdlet-development-guidelines?view=powershell-7 "Visit documentation"
+[powershell style]: https://poshcode.gitbooks.io/powershell-practice-and-style/Style-Guide/Introduction.html
+[module psscriptanalyzer]: https://github.com/PowerShell/PSScriptAnalyzer "Visit PSScriptAnalyzer repository"
+[about comment based help]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_comment_based_help?view=powershell-7 "Visit documentation"
+[comment based help examples]: https://docs.microsoft.com/en-us/powershell/scripting/developer/help/examples-of-comment-based-help?view=powershell-7 "Visit documentation"
+[iana]: https://www.iana.org "Internet Assigned Numbers Authority (IANA)"
+[nftables]: https://en.wikipedia.org/wiki/Nftables "Visit nftables wiki"

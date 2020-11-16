@@ -189,7 +189,7 @@ except if InterfaceType is "Any", use just one of these two parameters.
 
     Example: `Get-NetFirewallRule -PolicyStore ConfigurableServiceStore`
 
-For more information see [New-NetFirewallRule](https://docs.microsoft.com/en-us/powershell/module/netsecurity/new-netfirewallrule?view=winserver2012r2-ps&redirectedfrom=MSDN)
+For more information see [New-NetFirewallRule][netfirewallrule]
 
 ## Application layer enforcement
 
@@ -364,7 +364,7 @@ but were not recorded in the log from the time of the last occurrence of this ev
 - Displays the direction of the communication
 - The options available are SEND, RECEIVE, FORWARD, and UNKNOWN
 
-For more information see [Interpreting the Windows Firewall Log](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2003/cc758040(v=ws.10))
+For more information see [Interpreting the Windows Firewall Log][firewall logs]
 
 ## Conversion of parameter direction
 
@@ -477,8 +477,8 @@ Each entry takes the form `Major.Minor+`
 If `+` is specified, then it means that the rule applies to that version or greater.\
 `+` may only be attached to the final item in the list.
 
-For more information see [MSFT_NetFirewallRule class](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/wfascimprov/msft-netfirewallrule)
-or [Second link](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/legacy/jj676843(v=vs.85))
+For more information see [MSFT_NetFirewallRule class][netfirewallrule cim] or
+[Second link][netfirewallrule cim alternative]
 
 ## UDP mapping
 
@@ -511,4 +511,9 @@ If set, the rule accepts packets incoming from a host other than the one the pac
 
 TODO: Explain why this parameter can't be specified for inbound rule
 
-For more information see [New-NetFirewallRule](https://docs.microsoft.com/en-us/powershell/module/netsecurity/new-netfirewallrule?view=winserver2012r2-ps&redirectedfrom=MSDN)
+For more information see [New-NetFirewallRule][netfirewallrule]
+
+[firewall logs]: https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2003/cc758040(v=ws.10) "Visit Microsoft docs"
+[netfirewallrule]: https://docs.microsoft.com/en-us/powershell/module/netsecurity/new-netfirewallrule?view=winserver2012r2-ps&redirectedfrom=MSDN "Visit Microsoft docs"
+[netfirewallrule cim]: https://docs.microsoft.com/en-us/previous-versions/windows/desktop/wfascimprov/msft-netfirewallrule "Visit Microsoft docs"
+[netfirewallrule cim alternative]: https://docs.microsoft.com/en-us/previous-versions/windows/desktop/legacy/jj676843(v=vs.85) "Visit Microsoft docs"

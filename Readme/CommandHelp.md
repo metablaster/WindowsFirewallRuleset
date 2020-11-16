@@ -100,9 +100,9 @@ Get-AppxPackage -User User | Where-Object {$_.PackageFamilyName -like "*skype*"}
 Select-Object -ExpandProperty Name
 ```
 
-[Reference App Management](https://docs.microsoft.com/en-us/windows/application-management/apps-in-windows-10)
+[Reference App Management][reference app management]
 
-[Reference Get-AppxPackage](https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage?view=win10-ps)
+[Reference Get-AppxPackage][reference appxpackage]
 
 ### Get app details
 
@@ -413,3 +413,6 @@ Install-PackageProvider -Name Nuget -Verbose -Scope CurrentUser
 ```powershell
 # TODO: Package and module management
 ```
+
+[reference app management]: https://docs.microsoft.com/en-us/windows/application-management/apps-in-windows-10 "Visit Microsoft docs"
+[reference appxpackage]: https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage?view=win10-ps "Visit Microsoft docs"

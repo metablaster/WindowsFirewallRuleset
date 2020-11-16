@@ -1,7 +1,7 @@
 
 # Windows Firewall Ruleset
 
-![Alt Text](https://bitbucket.org/SuperAAAAA/shack/raw/60508e0e23d73aeb8f9a4fdc75b13ea94e56e62b/corporate.jpg)
+![Alt Text][corporate firewall]
 
 ## Table of Contents
 
@@ -117,14 +117,12 @@ or inside folders called "External" for organizational purposes.
    - Windows 10 Education
    - Windows Server 2019 Standard
    - Windows Server 2019 Datacenter
-2. PowerShell Core 7.0 or Windows PowerShell 5.1
-[Download PowerShell Core](https://github.com/PowerShell/PowerShell)
-3. .NET Framework 4.8 (Windows PowerShell only) [Download Net Framework](https://dotnet.microsoft.com/download/dotnet-framework)
-4. Git (Optional) [Download Git](https://git-scm.com/downloads)
-5. Visual Studio Code (Recommended) [Download VSCode](https://code.visualstudio.com)
-6. PowerShell Support for VSCode (Recommended)
-[Download extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell)
-7. PSScriptAnalyzer (Recommended) [Download PSScriptAnalyzer](https://github.com/PowerShell/PSScriptAnalyzer)
+2. PowerShell Core 7.0 or Windows PowerShell 5.1 [Download PowerShell Core][download core]
+3. .NET Framework 4.8 (Windows PowerShell only) [Download Net Framework][download .net]
+4. Git (Optional) [Download Git][download git]
+5. Visual Studio Code (Recommended) [Download VSCode][vscode]
+6. PowerShell Support for VSCode (Recommended) [Download extension][download powershell extension]
+7. PSScriptAnalyzer (Recommended) [Download PSScriptAnalyzer][module psscriptanalyzer]
 
 Requirements details:
 
@@ -132,7 +130,7 @@ Requirements details:
 but only those editions listed in point 1 are actively tested.\
 The list of other untested but supported systems and features is in [The future](#the-future)
 - PowerShell "Core" is not built into Windows, you will need to install it separately (recommended)\
-or use [Windows PowerShell](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Windows%20PowerShell.md)
+or use [Windows PowerShell](Readme/WindowsPowerShell.md)
 which is already installed.
 - .NET Framework version 4.8 is required if using Windows PowerShell (Desktop edition)
 instead of PowerShell Core.\
@@ -156,9 +154,8 @@ need adjustment, full functionality for 32 bit system is work in progress.\
 For now you can load rules on 32 bit system just fine with the exception of few rules probably not
 relevant at all for your configuration.
 
-[Legacy Support](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Legacy%20Support.md)
-describes how to make use of this project on older Windows systems such as Windows 7 or Windows Server
-2008
+[Legacy Support](Readme/LegacySupport.md) describes how to make use of this project on older
+Windows systems such as Windows 7 or Windows Server 2008
 
 ## First time user
 
@@ -177,7 +174,7 @@ group name interfere with group names from this ruleset, however
 and leave only those in control panel.
 - If you want to be 100% sure please export your current GPO rules first, to do so either run
 `Scripts\ExportFirewall.ps1` which may take some time or do it manually.\
-For manual export see [Manage GPO Firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Manage%20GPO%20Firewall.md)
+For manual export see [Manage GPO Firewall](Readme/ManageGPOFirewall.md)
 - The scripts will ask you what rules you want, to minimize internet connectivity trouble you should
 apply at least all generic networking and OS related rules such as CoreNetworking, ICMP,
 WindowsSystem, WindowsServices, Multicast etc. also do not ignore IPv6, Windows does need IPv6!
@@ -202,7 +199,7 @@ contains rules will be significantly slower (depends on number of existing rules
 - All errors and warnings will be saved to `Logs` directory, so you can review these logs later
 if you want to fix some problem.
 - Any rule that results in "access denied" while loading should be reloaded by executing specific
-script again, see [FAQ.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/FAQ.md)
+script again, see [FAQ.md](Readme/FAQ.md)
 for information on why this may happen.
 - If the project was manually downloaded, transferred from another computer or media then you should\
 unblock all files in project first to avoid YES/NO spam questions for every executing script,
@@ -215,8 +212,8 @@ PowerShell must be restarted for "Controlled folder access" changes to take effe
 - It's important to understand these rules are designed to be used as "Standard" user, not as
 Administrative user, if you're Administrator on your computer you'll have to either create standard
 user account and use that for your everyday life or modify rules to allow Administrator online access.
-See [FAQ](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/FAQ.md#does-this-firewall-give-me-the-right-protection)
-for more information why using Administrative account is dangerous security wise.
+See [FAQ entry](Readme/FAQ.md#does-this-firewall-project-give-me-the-right-protection) for more
+information why using Administrative account is dangerous security wise.
 - Windows or software updates may rename executables or their locations, also user accounts may be
 renamed by Administrator, therefore it's important to reload specific rules from time to time as
 needed to update firewall for system changes that may happen at any time.
@@ -233,7 +230,7 @@ into `C:\` root drive directly.
 PowerShell Core as Administrator
 (Assumes you enabled context menu during installation of PowerShell Core) if not open it manually.
 4. If you would like to use Windows PowerShell 5.1 instead of PowerShell Core see:\
-[How to open Windows PowerShell](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Windows%20PowerShell.md)
+[How to open Windows PowerShell](Readme/WindowsPowerShell.md)
 
 5. Now if you don't have PowerShell context menu then move to C root drive by executing following 2
 lines, this is where you extracted your downloaded zip file:
@@ -267,7 +264,7 @@ else:
     ```
 
     You will be prompted to accept execution policy change, type `Y` and press enter to accept.\
-    For more information see [About Execution Policies](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7)
+    For more information see [About Execution Policies][about execution policies]
 
 9. At this point you should "unblock" all project files first by executing the script called `Scripts\UnblockProject.ps1`,
 btw. project files were blocked by Windows to prevent users from running untrusted script code
@@ -315,9 +312,9 @@ some rules, rules for programs which don't exist need to be made additionally.
 16. Now go ahead and test your internet connection (ex. with browser or some other program),
 If you're unable to connect to internet after applying these rules you have several options:
 
-- you can temporarily open outbound firewall in GPO or [Disable firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Disable%20Firewall.md)
-- you can troubleshoot problems: [Network troubleshooting detailed guide](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Network%20Troubleshooting.md)
-- you can [Reset Firewall to previous state](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Reset%20Firewall.md)
+- you can temporarily open outbound firewall in GPO or [Disable Firewall](Readme/DisableFirewall.md)
+- you can troubleshoot problems: [Network troubleshooting detailed guide](Readme/NetworkTroubleshooting.md)
+- you can [Reset Firewall to previous state](Readme/ResetFirewall.md)
 - take a look into `Readme` folder for more troubleshooting options and documentation
 
 ## Where are my rules
@@ -332,7 +329,7 @@ Rules are loaded into local group policy, follow steps below to open local group
 6. Click on either `Inbound`, `Outbound` or `Windows Defender Firewall...` node to view and manage
 rules and settings applied with PowerShell.
 
-For more information about GPO see: [Configure security policy settings](https://docs.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/how-to-configure-security-policy-settings)
+For more information about GPO see: [Configure security policy settings][configure security policy settings]
 
 ## Applying individual rulesets
 
@@ -397,8 +394,8 @@ There are 2 ways to manage your rules:
 
 1. Using Local Group Policy, this method gives you basic freedom on what you can do with project rules,
 such as disabling them or changing some attributes and adding new rules. For more information see
-[Manage GPO Firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Manage%20GPO%20Firewall.md)
-2. Editing PowerShell scripts, this method gives you full control, you can improve the rules,
+[Manage GPO Firewall](Readme/ManageGPOFirewall.md)
+1. Editing PowerShell scripts, this method gives you full control, you can improve the rules,
 add new ones or screw them up.
 
 What ever your setup is, you will surely need to perform additional work such as adding more rules
@@ -421,11 +418,10 @@ switch to either master or develop branch, next use "Code" button and either clo
 download zip.
 
 1. Second method is good if you want to do it with PowerShell console without visiting this site,
-you will need [git](https://git-scm.com/downloads), [github account](https://github.com/join),
-a [fork](https://guides.github.com/activities/forking) of this repository in your github account and
-[SSH key](https://help.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account)
-to check for new updates on daily, weekly or what ever other basis you want,
-follow steps below to check for updates once you installed git and cloned your own fork:
+you will need [git][download git], [github account][github join], a [fork][github fork] of this
+repository in your github account and [SSH key][github ssh] to check for new updates on daily,
+weekly or what ever other basis you want, follow steps below to check for updates once you installed
+git and cloned your own fork:
 
 - Right click on Start button in Windows
 - Click `Windows PowerShell` to open PowerShell
@@ -458,7 +454,7 @@ Of course you can switch from one branch to another with git in PowerShell as ma
 want and all files will be auto updated without the need to re-download or re-setup anything.
 
 Keep in mind that you need to save and upload your modifications to your fork,
-for more info on how to use git see [git documentation](https://git-scm.com/doc)
+for more info on how to use git see [git documentation][git docs]
 
 That's it, your scripts are now up to date, execute them as you desire (or follow steps from
 "Quick start" section) to apply changes to your firewall.
@@ -466,8 +462,7 @@ That's it, your scripts are now up to date, execute them as you desire (or follo
 ## Contributing or suggestions
 
 Below are general notes for requesting to add your rules or ideas about rules to project.\
-If you would like to contribute by writing scripts you should read
-[CONTRIBUTING.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/CONTRIBUTING.md)
+If you would like to contribute by writing scripts you should read [CONTRIBUTING.md](CONTRIBUTING.md)
 instead.
 
 Feel free to suggest or contribute new rules, or improvements for existing rules or scripts.\
@@ -475,7 +470,7 @@ Just make sure you follow below notices:
 
 1. Provide some documentation or official reference for your rules so that it can be easy to verify
 that these rules don't contain mistakes, for example, for ICMP rules you would provide a link to
-[IANA](https://www.iana.org) with relevant reference document.
+[IANA][iana] with relevant reference document.
 2. If you would like to suggest new rules or improving existing ones,
 but you can't push an update here, please open new issue here on github and provide details
 preferably with documentation.
@@ -491,21 +486,20 @@ what is this supposed to allow or block is not acceptable.
 
 If you would like to customize project code or add more firewall rules to suit your private or corporate
 interests then the first step is to set up development environment and learn about project best practices
-all of which is explained in [CONTRIBUTING.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/CONTRIBUTING.md)
+all of which is explained in [CONTRIBUTING.md](CONTRIBUTING.md)
 
-Depending on your situation and target platform you might also want to read [Legacy Support](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Legacy%20Support.md)
+Depending on your situation and target platform you might also want to read [Legacy Support](Readme/LegacySupport.md)
 
 These 2 documents are bare minimum to get you started customizing this repository, the rest can be
 found in `Readme` folder and by doing your own research.
 
 ## More information and help
 
-Inside the [Readme](https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Readme)
+Inside the [Readme](Readme)
 folder you will find useful information not only about this project but also general information on
 how to troubleshoot firewall and network problems, or gather other relevant information.
 
-It might answer some of your questions, for example
-[Monitoring Firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Monitoring%20Firewall.md)
+It might answer some of your questions, for example [Monitoring Firewall](MonitoringFirewall.md)
 explains how to monitor firewall in real time.
 
 ## The future
@@ -530,3 +524,18 @@ Following features are desired and might be available at some point in the futur
    - Windows 10 IoT Enterprise
    - Windows 10 S
    - Windows Server 2019 Essentials
+
+[corporate firewall]: https://bitbucket.org/SuperAAAAA/shack/raw/60508e0e23d73aeb8f9a4fdc75b13ea94e56e62b/corporate.jpg "Corporate Firewall"
+[download core]: https://github.com/PowerShell/PowerShell "Download PowerShell Core"
+[download .net]: https://dotnet.microsoft.com/download/dotnet-framework "Download .NET Framework"
+[download git]: https://git-scm.com/downloads "Download git"
+[vscode]: https://code.visualstudio.com "Visual Studio Code"
+[download powershell extension]: https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell "Visit Marketplace"
+[module psscriptanalyzer]: https://github.com/PowerShell/PSScriptAnalyzer "Visit PSScriptAnalyzer repository"
+[about execution policies]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7 "About Execution Policies"
+[configure security policy settings]: https://docs.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/how-to-configure-security-policy-settings "Configure Security Policy Settings"
+[github join]: https://github.com/join "Join GitHub"
+[github fork]: https://guides.github.com/activities/forking "Create a fork on GitHub"
+[github ssh]: https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/connecting-to-github-with-ssh "Connecting to GitHub with SSH"
+[git docs]: https://git-scm.com/doc "Git Documentation"
+[iana]: https://www.iana.org "Internet Assigned Numbers Authority (IANA)"

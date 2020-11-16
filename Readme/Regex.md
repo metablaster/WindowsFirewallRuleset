@@ -7,8 +7,7 @@ A list of regex expressions which are used to::
 2. Perform bulk operations on rules with VSCode.
 
 For example once your regex hits, you would use CTRL + SHIFT + L to enter
-[Multi cursor](https://code.visualstudio.com/docs/getstarted/tips-and-tricks#_multi-cursor-selection)
-mode\
+[Multi cursor][multicursor] mode\
 and manipulate all regex matches however you like.
 
 Note:

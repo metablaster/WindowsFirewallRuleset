@@ -83,7 +83,7 @@ Background Intelligent Transfer Service
 firewall is set to block all outbound by default.
 and that means our allow rule did not work. (Possible bug in WFP or lack of information)
 
-[Reference for auditing](https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/event-5157)
+[Reference for auditing][ref auditing]
 
 ### Case 1: Audit result
 
@@ -138,7 +138,7 @@ there is nothing we can do about this.
 but that's not the case.
 - Additional investigation needed by allowing all ICMP and UDP explicitly.
 
-[Reference for WFP Operation](https://docs.microsoft.com/en-us/windows/win32/fwp/basic-operation)
+[Reference for WFP Operation][ref wfp]
 
 ## Case 3: Event log shows packet drops, firewall log does not show these drops
 
@@ -173,7 +173,7 @@ in this case SSL service runs on port 443. A client connects with a random port 
 - Additional investigation needed for possible firewall rule resolution,
 for now it's safer to ignore these than defining a rule that would possibly compromise system.
 
-[Reference for akamai](https://www.akamai.com/us/en/support/end-user-faq.jsp)
+[Reference for akamai][ref akamai]
 
 ## Case 4: Updating Microsoft Office fails
 
@@ -191,7 +191,7 @@ the new office version.
 bypassing our rules.
 - The downloaded clicktorun resides in folder whose name is random number of unknown meaning
 
-[Reference for ClickToRun](https://www.reddit.com/r/sysadmin/comments/7hync7/updating_office_2016_hb_click_to_run_through)
+[Reference for ClickToRun troubleshooting][issue clicktorun]
 
 ### Case 4: Audit result
 
@@ -267,8 +267,7 @@ configure rules for these interfaces, except allowing all interfaces.
 - It is absolute must to reboot system once for changes to be visible (sometimes twice to get log clear)
 - Use `Get-NetadApter`, `Get-NetIPConfiguration` and `Get-NetIPInterface` to gather hidden adapter info
 - Use `-InterfaceAlias` instead of `-InterfaceType` when defining firewall rule
-- See [Command Help](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Command%Help.md)
-and [What is the Hyper-V Virtual Switch](https://www.altaro.com/hyper-v/the-hyper-v-virtual-switch-explained-part-1/)
+- See [Command Help](Readme/CommandHelp.md) and [What is the Hyper-V Virtual Switch][hyperv switch]
 for details.
 - Module ComputerInfo now implements functions for this purpose, see also Test\Rule-InterfaceAlias.ps1
 - See networking options in Hyper-V powershell module for additional troubleshooting
@@ -282,8 +281,8 @@ means it's worth spending time to invent the rules, ie:
 2. Outbound UDP RemotePort 67, 68, 137, 547, 1900, 3702, 5353, 5355
 3. Outbound IGMP
 
-- Possible reason why rules won't work see: [LINK](https://aidanfinn.com/?p=15222)
-- Another consideration is the type of Hyper-V virtual switch, see [LINK](https://www.nakivo.com/blog/hyper-v-networking-virtual-switches/)
+- Possible reason why rules won't work see: [LINK][issue rule interface]
+- Another consideration is the type of Hyper-V virtual switch, see [LINK][issue rule interface2]
 
 ### Case 8: Audit result
 
@@ -313,7 +312,7 @@ override those with `InterfaceAlias` parameter.
 There is no need to troubleshoot this since Epic software uses addresses that are against IANA rules,
 they have been notified about the problem which is present for already some time.
 
-For more info see: [Please stop violating IANA rules](https://forums.unrealengine.com/unreal-engine/feedback-for-epic/1800085-please-stop-violating-iana-rules)
+For more info see: [Please stop violating IANA rules][issue epic games]
 
 ## Case 10: Discovery and file and printer sharing issue on home networks (WORKGROUP)
 
@@ -383,4 +382,13 @@ Get-NetFirewallRule -PolicyStore SystemDefaults -DisplayGroup "Network Discovery
 -PolicyStoreSourceType Local | Copy-NetFirewallRule -NewPolicyStore ([Environment]::MachineName)
 ```
 
-Status: Partialy resolved
+Status: Partially resolved
+
+[ref auditing]: https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/event-5157
+[ref wfp]: https://docs.microsoft.com/en-us/windows/win32/fwp/basic-operation
+[ref akamai]: https://www.akamai.com/us/en/support/end-user-faq.jsp
+[issue clicktorun]: https://www.reddit.com/r/sysadmin/comments/7hync7/updating_office_2016_hb_click_to_run_through
+[hyperv switch]: https://www.altaro.com/hyper-v/the-hyper-v-virtual-switch-explained-part-1
+[issue rule interface]: https://aidanfinn.com/?p=15222
+[issue rule interface2]: https://www.nakivo.com/blog/hyper-v-networking-virtual-switches
+[issue epic games]: https://forums.unrealengine.com/unreal-engine/feedback-for-epic/1800085-please-stop-violating-iana-rules

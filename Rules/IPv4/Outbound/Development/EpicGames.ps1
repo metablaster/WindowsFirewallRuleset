@@ -83,7 +83,7 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot) @Logs) -or $ForceLoad)
 		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 230.0.0.1 -LocalPort Any -RemotePort Any `
 		-LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "This address is reserved, Epic Games company doesn't respect IANA rules,
-For more info see 'Readme\Problematic Traffic.md' Case 9" @Logs | Format-Output @Logs
+For more info see 'Readme\ProblematicTraffic.md' Case 9" @Logs | Format-Output @Logs
 
 	# TODO: this executable exists only if the engine was built from source
 	$Program = "$EngineRoot\Binaries\DotNET\GitDependencies.exe"
@@ -123,7 +123,7 @@ For more info see 'Readme\Problematic Traffic.md' Case 9" @Logs | Format-Output 
 		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 230.0.0.1 -LocalPort Any -RemotePort Any `
 		-LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "This address is reserved, Epic Games company doesn't respect IANA rules,
-For more info see 'Readme\Problematic Traffic.md' Case 9" @Logs | Format-Output @Logs
+For more info see 'Readme\ProblematicTraffic.md' Case 9" @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Unreal Engine - Editor x64" -Service Any -Program $Program `
@@ -187,7 +187,7 @@ can install and keep their games up to date" `
 		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 230.0.0.1 -LocalPort Any -RemotePort Any `
 		-LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "This address is reserved, Epic Games company doesn't respect IANA rules,
-For more info see 'Readme\Problematic Traffic.md' Case 9" @Logs | Format-Output @Logs
+For more info see 'Readme\ProblematicTraffic.md' Case 9" @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Epic Games - Launcher x64" -Service Any -Program $Program `

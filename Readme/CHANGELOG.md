@@ -2,7 +2,8 @@
 # Changelog
 
 Here is a list of changes for each of the releases.\
-If you would like to see fresh changes done since last release you can do so on "develop" branch [HERE](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGELOG.md)
+If you would like to see fresh changes done since last release you can do so on "develop" branch
+[HERE][changelog]
 
 ## Table of contents
 
@@ -41,13 +42,13 @@ If you would like to see fresh changes done since last release you can do so on 
 - Documentation
 
   - Updated/improved following docs:
-    - Manage GPO Firewall
-    - Monitoring Firewall
-    - Firewall Parameters
-    - Powershell Commands (now renamed to "Command Help")
+    - ManageGPOFirewall
+    - MonitoringFirewall
+    - FirewallParameters
+    - PowershellCommands (now renamed to "CommandHelp")
     - Reference
-    - Predefined Rules
-    - Problematic Traffic
+    - PredefinedRules
+    - ProblematicTraffic
 
 - New features
 
@@ -183,8 +184,8 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - Documentation
 
-  - Added steps to [disable firewall](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Disable%20Firewall.md)
-  - Added steps for [general network troubleshooting](https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Network%20Troubleshooting.md)
+  - Added steps to [disable Firewall](DisableFirewall.md)
+  - Added steps for [general network troubleshooting](NetworkTroubleshooting.md)
   - Documentation updated, spellchecked and formatted in full
 
 - Modules
@@ -344,7 +345,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - Support for Windows Server in addition to Windows 10
   - Rebalanced rules for administrators, disabled where not needed, added where needed
   - More and updated temporary rules
-  - Updated documentation, specifically main readme.md, `Firewall Parameters.md` and more PS command
+  - Updated documentation, specifically main readme.md, `FirewallParameters.md` and more PS command
     samples.
   - Add functions to query SQL Instances on network and SQL related software cmdlets.
   - Move configuration specific global variables into a separate file
@@ -364,3 +365,5 @@ If you would like to see fresh changes done since last release you can do so on 
   - Expand modules to include correct comments, help and manifest files
   - A few more todo's, notes and relevant comments
   - Reorganize and split scripts with rules for multiple targets
+
+[changelog]: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGELOG.md "Visit latest changelog"

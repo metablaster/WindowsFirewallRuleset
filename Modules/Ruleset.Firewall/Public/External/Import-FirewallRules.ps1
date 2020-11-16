@@ -39,7 +39,7 @@ Existing rules with same name will be overwritten.
 .PARAMETER PolicyStore
 Policy store into which to import rules, default is local GPO.
 For more information about stores see:
-https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Firewall%20Parameters.md
+https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md
 
 .PARAMETER Folder
 Path to directory where exported rules file is located

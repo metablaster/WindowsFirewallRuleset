@@ -47,7 +47,7 @@ Removes all firewall rules according to the list in the JSON file WmiRules.json.
 
 Policy store from which remove rules, default is local GPO.
 For more information about stores see:
-https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Firewall%20Parameters.md
+https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md
 
 ```yaml
 Type: System.String

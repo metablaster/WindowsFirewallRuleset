@@ -43,7 +43,7 @@ For example for Windows 7, define a new variable that looks like this:\
 The acceptable format for this parameter is a number in the `Major.Minor` format.
 
 For more information about other Windows systems and their version numbers see link below:\
-[Operating System Version](https://docs.microsoft.com/en-us/windows/win32/sysinfo/operating-system-version)
+[Operating System Version][os version]
 
 There are other variables inside `Config\ProjectSettings.ps1` that are worth changing, at a minimum
 set `Develop` to `$true` and restart PowerShell to enable debugging features and
@@ -79,7 +79,7 @@ use some commandlets from modules provided by Microsoft.
 
 ## Testing
 
-To save you some time debugging you should also run code analysis with [PSScriptAnalyzer](https://github.com/PowerShell/PSScriptAnalyzer)
+To save you some time debugging you should also run code analysis with [PSScriptAnalyzer][module psscriptanalyzer]
 with the following rules enabled:
 
 1. PSUseCompatibleCmdlets
@@ -87,3 +87,6 @@ with the following rules enabled:
 
 Visit `Test` folder and run all tests individually to confirm modules and their functions work as
 expected, any failure should be fixed before loading rules to save yourself from frustration.
+
+[os version]: https://docs.microsoft.com/en-us/windows/win32/sysinfo/operating-system-version "Visit Microsoft docs"
+[module psscriptanalyzer]: https://github.com/PowerShell/PSScriptAnalyzer "Visit PSScriptAnalyzer repository"

@@ -77,8 +77,7 @@ todo's in this file are categorized into following sections:
 
     - There are breaks missing for switches all over the place
     - Revisit code and make consistent PSCustomObject properties for all function outputs, consider
-    using [formats](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_format.ps1xml?view=powershell-7)
-    for custom objects
+    using [formats][about format] for custom objects
     - Need to see which functions/commands may throw and setup try catch blocks
     - Revisit parameter validation for functions, specifically acceptance of NULL or empty
     - Registry drilling for some rules are complex and specific, such as for NVIDIA or OneDrive,
@@ -230,10 +229,10 @@ todo's in this file are categorized into following sections:
 
 6. Documentation
 
-    - update `Firewall Parameters.md` with a list of incompatible parameters for reference
+    - update `FirewallParameters.md` with a list of incompatible parameters for reference
     - a lot of comment based documentation is missing comments
-    - `Firewall Parameters.md` contains missing mapping
-    - `Firewall Parameters.md` contains no info about compartments and IPSec setup
+    - `FirewallParameters.md` contains missing mapping
+    - `FirewallParameters.md` contains no info about compartments and IPSec setup
     - Universal and quick setup to install all required modules for all hosts and users.
 
 7. Other
@@ -315,7 +314,7 @@ todo's in this file are categorized into following sections:
 6. Documentation
 
    - `Manage GPO Firwall.md` does not contain enough documentation
-   - Predefined rule list in `Predefined Rules.md` is out of date
+   - Predefined rule list in `PredefinedRules.md` is out of date
 
 7. Other
 
@@ -366,3 +365,5 @@ todo's in this file are categorized into following sections:
 6. Code style
 
     - Separate comment based keywords so that there is one line between a comment and next keyword
+
+[about format]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_format.ps1xml?view=powershell-7

@@ -40,9 +40,9 @@ Organize help files by UICulture into separate folders, ex. for en-US:
 
 ### XML file content syntax
 
-[HelpInfo XML Sample File](https://docs.microsoft.com/en-us/powershell/scripting/developer/help/helpinfo-xml-sample-file?view=powershell-7)
+[HelpInfo XML Sample File][sample helpifo]
 
-[HelpInfo XML Schema](https://docs.microsoft.com/en-us/powershell/scripting/developer/help/helpinfo-xml-schema?view=powershell-7)
+[HelpInfo XML Schema][sample helpifo schema]
 
 ### Module manifest
 
@@ -84,7 +84,7 @@ Organize CAB files by module version into separate folders, ex:
 
 ### CAB file content syntax
 
-[File Types Permitted in an Updatable Help CAB File](https://docs.microsoft.com/en-us/powershell/scripting/developer/help/file-types-permitted-in-an-updatable-help-cab-file?view=powershell-7)
+[File Types Permitted in an Updatable Help CAB File][updatable help file types]
 
 ### Make CAB Example
 
@@ -98,3 +98,7 @@ makecab.exe Templates\Template.Module\about_Template.Module.help.txt Template.Mo
 1. Put cab file somewhere into repository outside module directory
 2. Push repository and take URL to online directory containing cab file
 3. Put URL into `HelpContentUri` element in the HelpInfo XML file
+
+[sample helpifo]: https://docs.microsoft.com/en-us/powershell/scripting/developer/help/helpinfo-xml-sample-file?view=powershell-7
+[sample helpifo schema]: https://docs.microsoft.com/en-us/powershell/scripting/developer/help/helpinfo-xml-schema?view=powershell-7
+[updatable help file types]: https://docs.microsoft.com/en-us/powershell/scripting/developer/help/file-types-permitted-in-an-updatable-help-cab-file?view=powershell-7

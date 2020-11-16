@@ -3,11 +3,11 @@
 
 For general reference see:
 
-[Windows Defender Firewall with Advanced Security](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-firewall/windows-firewall-with-advanced-security)
+[Windows Defender Firewall with Advanced Security][ref firewall]
 
 Following is an older reference for servers with some unique information:
 
-[Windows Firewall with Advanced Security Administration with Windows PowerShell](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/hh831755(v=ws.11))
+[Windows Firewall with Advanced Security Administration with Windows PowerShell][ref firewall powershell]
 
 GPO firewall is located in the following location:
 
@@ -24,3 +24,6 @@ Options to control network profile are located in:
 Options to control IP security are located in:
 
 `Computer Configuration\Windows Settings\Security Settings\IP Security Policies on Local Computer`
+
+[ref firewall]: https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-firewall/windows-firewall-with-advanced-security "Visit Microsoft docs"
+[ref firewall powershell]: https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/hh831755(v=ws.11) "Visit Microsoft docs"

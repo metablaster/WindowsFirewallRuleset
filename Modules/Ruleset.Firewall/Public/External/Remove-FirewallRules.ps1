@@ -39,7 +39,7 @@ is used, all other fields can be omitted
 .PARAMETER PolicyStore
 Policy store from which remove rules, default is local GPO.
 For more information about stores see:
-https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/Firewall%20Parameters.md
+https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md
 
 .PARAMETER Folder
 Folder in which file is located
