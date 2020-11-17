@@ -37,8 +37,8 @@ In addition to prompt, execution context is shown.
 Asking for approval helps to let run master script and only execute specific
 scripts, thus loading only needed rules.
 
-.PARAMETER Default
-Default prompt action
+.PARAMETER Unsafe
+If specified the command is considered unsafe, and the default action is then 'No'
 
 .PARAMETER Title
 Prompt title
@@ -52,8 +52,21 @@ Prompt help menu for default action
 .PARAMETER Deny
 Prompt help menu for deny action
 
+.PARAMETER YesToAll
+True if user selects YesToAll.
+If this is already true, Approve-Execute will bypass the prompt and return true.
+
+.PARAMETER NoToAll
+true if user selects NoToAll.
+If this is already true, Approve-Execute will bypass the prompt and return false.
+
 .EXAMPLE
-PS> Approve-Execute "No" "Sample title" "Sample question"
+PS> Approve-Execute -Unsafe -Title "Sample title" -Question "Sample question"
+
+.EXAMPLE
+PS> [bool] $YesToAll = $false
+PS> [bool] $NoToAll = $false
+PS> Approve-Execute -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll)
 
 .INPUTS
 None. You cannot pipe objects to Approve-Execute
@@ -66,13 +79,12 @@ None.
 #>
 function Approve-Execute
 {
-	[CmdletBinding(
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "None",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Approve-Execute.md")]
 	[OutputType([bool])]
 	param (
 		[Parameter()]
-		[ValidateSet("Yes", "No")]
-		[string] $Default = "Yes",
+		[switch] $Unsafe,
 
 		[Parameter()]
 		[string] $Title = "Executing: " + (Split-Path -Leaf $MyInvocation.ScriptName),
@@ -84,57 +96,93 @@ function Approve-Execute
 		[string] $Accept = "Continue with only the next step of the operation",
 
 		[Parameter()]
-		[string] $Deny = "Skip this operation and proceed with the next operation"
+		[string] $Deny = "Skip this operation and proceed with the next operation",
+
+		[Parameter(Mandatory = $true, ParameterSetName = "ToAll")]
+		[ref] $YesToAll,
+
+		[Parameter(Mandatory = $true, ParameterSetName = "ToAll")]
+		[ref] $NoToAll
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Default is: $Default"
 
-	# User prompt default values
-	[int32] $DefaultAction = switch ($Default)
-	{
-		"Yes" { 0 }
-		"No" { 1 }
-	}
+	# NOTE: If Unsafe is specified it's 1, otherwise it's 0
+	[int32] $DefaultAction = !!$Unsafe
 
+	# Setup choices
 	[ChoiceDescription[]] $Choices = @()
 	$AcceptChoice = [ChoiceDescription]::new("&Yes")
 	$DenyChoice = [ChoiceDescription]::new("&No")
 
-	# Setup choices
 	$AcceptChoice.HelpMessage = $Accept
 	$DenyChoice.HelpMessage = $Deny
 	$Choices += $AcceptChoice # Decision 0
 	$Choices += $DenyChoice # Decision 1
 
+	if ($null -ne $YesToAll)
+	{
+		if ($YesToAll.Value -eq $true) { return $true }
+		if ($NoToAll.Value -eq $true) { return $false }
+
+		$YesAllChoice = [ChoiceDescription]::new("Yes To &All")
+		$NoAllChoice = [ChoiceDescription]::new("No To A&ll")
+
+		$YesAllChoice.HelpMessage = "Continue with all the steps of the operation"
+		$NoAllChoice.HelpMessage = "Skip this operation and all subsequent operations"
+
+		$Choices += $YesAllChoice # Decision 2
+		$Choices += $NoAllChoice # Decision 3
+	}
+
 	$Title += " [$Context]"
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] Default action is: $DefaultAction"
-
-	$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $DefaultAction)
-
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] Decision is: $Decision"
-
-	if ($Decision -eq $DefaultAction)
+	[bool] $Continue = switch ($Host.UI.PromptForChoice($Title, $Question, $Choices, $DefaultAction))
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] The user accepted default action"
+		0
+		{
+			$true
+			break
+		}
+		1
+		{
+			$false
+			break
+		}
+		2
+		{
+			$YesToAll.Value = $true
+			$true
+			break
+		}
+		default
+		{
+			$NoToAll.Value = $true
+			$false
+			break
+		}
 	}
-	else
-	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] The user refused default action"
-	}
 
-	if ($Decision -eq 0)
+	if ($Continue)
 	{
+		if ($Unsafe)
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] The user accepted default action"
+		}
+		else
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] The user refused default action"
+		}
+
 		return $true
 	}
-	elseif ($Default -eq "Yes")
+	elseif ($Unsafe)
 	{
-		Write-Warning -Message "The operation has been canceled by the user"
+		Write-Warning -Message "The operation has been canceled by default"
 	}
 	else
 	{
-		Write-Warning -Message "The operation has been canceled by default"
+		Write-Warning -Message "The operation has been canceled by the user"
 	}
 
 	return $false

@@ -546,7 +546,7 @@ function Find-Installation
 		Write-Information -Tags "User" -MessageData "INFO: or adjust the path in $Script and re-run the script later."
 		Write-Information -Tags "User" -MessageData "INFO: otherwise ignore this warning if $Program is not installed."
 
-		if (Approve-Execute "Yes" "Rule group for $Program" "Do you want to input path now?")
+		if (Approve-Execute -Title "Rule group for $Program" -Question "Do you want to input path now?")
 		{
 			while ($InstallTable.Rows.Count -eq 0)
 			{
@@ -563,7 +563,7 @@ function Find-Installation
 				}
 
 				Write-Warning -Message "Installation directory for '$Program' not found"
-				if (!(Approve-Execute "No" "Unable to locate '$InstallLocation'" "Do you want to try again?"))
+				if (!(Approve-Execute -Unsafe -Title "Unable to locate '$InstallLocation'" -Question "Do you want to try again?"))
 				{
 					break
 				}

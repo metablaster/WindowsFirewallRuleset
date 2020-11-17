@@ -64,14 +64,14 @@ function Update-Context
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Update-Context.md")]
 	[OutputType([void])]
 	param (
-		[Parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true, Position = 0)]
 		[string] $Root,
 
-		[Parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true, Position = 1)]
 		[string] $Section,
 
-		[Parameter(Mandatory = $false)]
-		[string] $Subsection = $null
+		[Parameter(Position = 2)]
+		[string] $Subsection
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"

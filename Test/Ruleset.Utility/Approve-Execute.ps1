@@ -48,18 +48,26 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
 Enter-Test $ThisScript
 
-Start-Test "Approve-Execute"
+[string] $Accept2 = "Accept test"
+[string] $Deny2 = "Deny test"
+
+Start-Test "Approve-Execute default"
 Approve-Execute @Logs
 
-Start-Test "Approve-Execute -Default Yes"
-Approve-Execute -Default "Yes" @Logs
-
 Start-Test "Approve-Execute -Default No"
-$Result = Approve-Execute -Default "No" @Logs
+$Result = Approve-Execute -Unsafe -Accept $Accept2 -Deny $Deny2 @Logs
 $Result
 
-Start-Test "Approve-Execute all positional"
-Approve-Execute "No" "Unable to locate 'SOME FOLDER'" "Do you want to try again?"
+Start-Test "Approve-Execute title question unsafe"
+Approve-Execute -Unsafe -Title "Unable to locate 'SOME FOLDER'" -Question "Do you want to try again?"
+
+[bool] $YesToAll = $false
+[bool] $NoToAll = $false
+Start-Test "Approve-Execute ToAll"
+Approve-Execute -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll) @Logs
+
+Start-Test "Approve-Execute ToAll full"
+Approve-Execute -Unsafe -Accept $Accept2 -Deny $Deny2 -Title "TITLE" -Question "QUESTION" -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll) @Logs
 
 Test-Output $Result -Command Approve-Execute @Logs
 
