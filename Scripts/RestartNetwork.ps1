@@ -102,7 +102,8 @@ param (
 	[switch] $Performance
 )
 
-# Initialization
+#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
@@ -126,6 +127,7 @@ if ($Reset)
 
 Update-Context $ScriptContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+#endregion
 
 <#
 .SYNOPSIS

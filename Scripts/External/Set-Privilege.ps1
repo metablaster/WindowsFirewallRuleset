@@ -56,7 +56,7 @@ None. Set-Privilege.ps1 does not generate any output
 Author: Pyprohly
 GUID: 84990677-60ab-4984-9de1-fcfc19f5209d
 
-NOTE: According to "PowerShell Gallery Terms of Use":
+NOTE: According to "PowerShell Gallery Terms of Use - February 2020":
 If third party programs are accessible on the Web Site without license terms,
 then any such third party programs without license terms may be used under the terms of the MIT
 License attached as Exhibit A
@@ -90,7 +90,7 @@ param (
 	[switch] $Disable
 )
 
-# Initialization
+#region Initialization
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
@@ -109,6 +109,7 @@ $Accept = "Add or remove privilege from current PowerShell process"
 $Deny = "Abort operation, no change to PowerShell process privilege is made"
 Update-Context $ScriptContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+#endregion
 
 <#
 .SYNOPSIS

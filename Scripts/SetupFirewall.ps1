@@ -46,7 +46,8 @@ None. SetupFirewall.ps1 does not generate any output
 None.
 #>
 
-# Initialization
+#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
@@ -80,6 +81,7 @@ ForEach-Object {
 	Test-Service $_ @Logs
 	Update-Log
 }
+#endregion
 
 #
 # Execute IPv4 rules

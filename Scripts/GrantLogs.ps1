@@ -82,7 +82,8 @@ param (
 	[switch] $SkipPrompt
 )
 
-# Initialization
+#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
@@ -104,6 +105,7 @@ if (!$SkipPrompt)
 	Update-Context $ScriptContext $ThisScript @Logs
 	if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 }
+#endregion
 
 Write-Verbose -Message "[$ThisScript] Verifying firewall log file location"
 

@@ -63,7 +63,6 @@ None. HiddenProperties.ps1 does not generate any output
 None.
 #>
 
-#region Script header
 [CmdletBinding(PositionalBinding = $false)]
 param (
 	[Parameter(Mandatory = $true, Position = 0)]
@@ -77,7 +76,8 @@ param (
 	[string] $PolicyStore = [System.Environment]::MachineName
 )
 
-# Initialization
+#region Initialization
+#Requires -Version 5.1
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )

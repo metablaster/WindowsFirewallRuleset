@@ -47,7 +47,8 @@ None. ImportFirewall.ps1 does not generate any output
 None.
 #>
 
-# Initialization
+#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
@@ -68,6 +69,7 @@ $Deny = "Abort operation, no firewall rules or settings will be imported"
 # User prompt
 Update-Context $ScriptContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+#endregion
 
 # NOTE: import speed is 26 rules per minute, slowed down by "Test-TargetComputer" for store app rules
 # 450 rules in 17 minutes on 3,6 Ghz quad core CPU with 16GB single channel RAM @2400 Mhz

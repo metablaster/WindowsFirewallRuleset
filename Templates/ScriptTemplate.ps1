@@ -53,7 +53,6 @@ None.
 TODO: Update Copyright and start writing code
 #>
 
-#region Script header
 # TODO: Make Diagnostics attribute is formatted like this in all files
 # TODO: Remove or update parameter block
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
@@ -64,7 +63,8 @@ param (
 	[string] $ParameterName
 )
 
-# Initialization
+#region Initialization
+#Requires -Version 5.1
 # TODO: Adjust path to project settings and elevation requirement
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
@@ -93,5 +93,24 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 	"PSReviewUnusedParameter", "", Justification = "This is template variable")]
 $TemplateVariable = ""
+
+# TODO: Update confirm parameters
+# 'TARGET', 'MESSAGE', 'OPERATION', [ref]$reason
+# https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.shouldprocessreason?view=powershellsdk-7.0.0
+# https://docs.microsoft.com/en-us/powershell/scripting/learn/deep-dives/everything-about-shouldprocess?view=powershell-7#quick-parameter-reference
+$CallReason
+if ($PSCmdlet.ShouldProcess("Template TARGET", "Template MESSAGE", "Template OPERATION", [ref] $CallReason))
+{
+	# NOTE: Sample output depens on amount of parameters (2, 3 or 4 parameters)
+	# Performing the operation "Template MESSAGE" on target "Template TARGET"
+	#
+	# OR
+	#
+	# "Template OPERATION"
+	# "Template MESSAGE"
+
+	$CallReason
+	return $null
+}
 
 Update-Log

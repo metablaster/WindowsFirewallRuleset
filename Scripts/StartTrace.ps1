@@ -117,7 +117,6 @@ https://docs.microsoft.com/en-us/powershell/module/neteventpacketcapture/add-net
 https://docs.microsoft.com/en-us/powershell/module/neteventpacketcapture/add-neteventprovider?view=win10-ps
 #>
 
-#region Script header
 [CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Protocol")]
 param (
 	[Parameter(Mandatory = $true, Position = 0, ParameterSetName = "Protocol")]
@@ -150,7 +149,8 @@ param (
 	[uint16[]] $UDPPorts
 )
 
-# Initialization
+#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (

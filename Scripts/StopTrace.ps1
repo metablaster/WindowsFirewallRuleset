@@ -49,7 +49,6 @@ None. StopTrace.ps1 does not generate any output
 None.
 #>
 
-#region Script header
 [CmdletBinding()]
 param (
 	[Parameter()]
@@ -59,7 +58,8 @@ param (
 	[switch] $WFP
 )
 
-# Initialization
+#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (

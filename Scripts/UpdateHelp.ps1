@@ -90,7 +90,8 @@ param (
 	$Encoding = $null
 )
 
-# Initialization
+#region Initialization
+#Requires -Version 5.1
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )
@@ -135,6 +136,7 @@ if ($Module)
 
 Update-Context $ScriptContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+#endregion
 
 Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 

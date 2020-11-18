@@ -96,12 +96,12 @@ the Functionality parameter of Get-Help.
 -Functionality parameter displays help for items with the specified functionality.
 #>
 
-#region Template header
 [CmdletBinding()]
-[OutputType([System.Void])]
+[OutputType([void])]
 param ()
 
-# Initialization
+#region Initialization
+#Requires -Version 5.1
 # TODO: Adjust path to project settings and elevation requirement
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
@@ -125,3 +125,5 @@ $Deny = "Skip operation, template deny help message"
 Update-Context $TemplateContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 #endregion
+
+Update-Log

@@ -47,7 +47,7 @@ Organize help files by UICulture into separate folders, ex. for en-US:
 ### Module manifest
 
 ```none
-HelpInfoURI = "https://URL_TO/Template.Module_66e38822-834d-4a90-b9c6-9e600a472a0a_HelpInfo.xml"
+HelpInfoURI = "https://URL_TO/Manifest.Module_66e38822-834d-4a90-b9c6-9e600a472a0a_HelpInfo.xml"
 ```
 
 ### Help info file location
@@ -79,8 +79,8 @@ makecab source destination /L TargetDir /V3
 
 Organize CAB files by module version into separate folders, ex:
 
-- `0.6.0/Template.Module_66e38822-834d-4a90-b9c6-9e600a472a0a_en-US_HelpContent.cab`
-- `0.7.0/Template.Module_66e38822-834d-4a90-b9c6-9e600a472a0a_en-US_HelpContent.cab`
+- `0.6.0/Manifest.Module_66e38822-834d-4a90-b9c6-9e600a472a0a_en-US_HelpContent.cab`
+- `0.7.0/Manifest.Module_66e38822-834d-4a90-b9c6-9e600a472a0a_en-US_HelpContent.cab`
 
 ### CAB file content syntax
 
@@ -90,7 +90,7 @@ Organize CAB files by module version into separate folders, ex:
 
 ```none
 cd $ProjectRoot
-makecab.exe Templates\Template.Module\about_Template.Module.help.txt Template.Module_66e38822-834d-4a90-b9c6-9e600a472a0a_en-US_HelpContent.cab /V3 /L Config\HelpContent
+makecab.exe Templates\Manifest.Module\Manifest.Module.help.txt Manifest.Module_66e38822-834d-4a90-b9c6-9e600a472a0a_en-US_HelpContent.cab /V3 /L Config\HelpContent
 ```
 
 ### Help content location

@@ -47,15 +47,15 @@ None.
 TODO: Update Copyright and start writing test code
 #>
 
-#region Unit test header
 [CmdletBinding()]
 param (
-	# TODO: Remove if not needed or test safe
+	# TODO: Remove if not needed or test is safe
 	[Parameter()]
 	[switch] $Force
 )
 
-# Initialization
+#region Initialization
+#Requires -Version 5.1
 # TODO: Adjust path to project settings and elevation requirement
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
@@ -76,7 +76,7 @@ Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 #Endregion
 
-Enter-Test $ThisScript
+Enter-Test
 
 # TODO: Keep this check if this test is:
 # 1. potentially dangerous

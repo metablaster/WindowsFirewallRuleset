@@ -49,12 +49,10 @@ another computer or media, you should "unblock" scripts by using this code.
 TODO: We should probably unblock only scripts, not all files.
 #>
 
-# Initialization
+#Requires -Version 5.1
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )
-
-Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))" @Logs
 
 Write-Information -Tags "User" -MessageData "INFO: Unblocking project files" @Logs
 Get-ChildItem $ProjectRoot -Recurse @Logs | Unblock-File @Logs

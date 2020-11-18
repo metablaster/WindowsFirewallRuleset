@@ -46,7 +46,8 @@ None. ExportFirewall.ps1 does not generate any output
 None.
 #>
 
-# Initialization
+#region Initialization
+#Requires -Version 5.1
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )
@@ -66,7 +67,7 @@ $Deny = "Abort operation, no firewall rules or settings will be exported"
 # User prompt
 Update-Context $ScriptContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
-
+#endregion
 
 # NOTE: export speed is 10 rules per minute
 # 450 rules in 46 minutes on 3,6 Ghz quad core CPU with 16GB single channel RAM @2400 Mhz

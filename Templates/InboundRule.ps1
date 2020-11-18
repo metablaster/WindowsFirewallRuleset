@@ -48,6 +48,7 @@ TODO: Update Copyright and start writing test code
 #>
 
 #region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
 # TODO: Adjust path to project settings
 . $PSScriptRoot\..\..\..\..\Config\ProjectSettings.ps1
@@ -56,9 +57,8 @@ TODO: Update Copyright and start writing test code
 Initialize-Project -Abort
 
 # Imports
-# TODO: adjust paths
-. $PSScriptRoot\..\DirectionSetup.ps1
-. $PSScriptRoot\..\..\IPSetup.ps1
+# TODO: adjust path
+. $PSScriptRoot\DirectionSetup.ps1
 Import-Module -Name Ruleset.Logging
 
 # Setup local variables

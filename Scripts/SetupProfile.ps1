@@ -47,7 +47,8 @@ None. SetupProfile.ps1 does not generate any output
 None.
 #>
 
-# Initialization
+#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
@@ -68,6 +69,7 @@ $Deny = "Skip operation, no change will be done to firewall or network profile"
 # User prompt
 Update-Context $ScriptContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+#endregion
 
 #
 # TODO: it looks like private profile traffic is logged into public log and vice versa
