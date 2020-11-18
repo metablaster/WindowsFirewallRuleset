@@ -3,6 +3,7 @@
 Microsoft Limited Public License (Ms-LPL)
 
 Copyright (C) 2010 Microsoft Corporation. All rights reserved.
+Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 This license governs use of the accompanying software.
 If you use the software, you accept this license.
@@ -49,6 +50,8 @@ merchantability, fitness for a particular purpose and non-infringement.
 or derivative works that you create that run on a Microsoft Windows operating system product.
 #>
 
+#Requires -Version 5.1
+
 <#
 .SYNOPSIS
 Fetches "Preference" variable values from the caller's scope.
@@ -76,17 +79,17 @@ This parameter may also specify names of variables that are not in the
 about_Preference_Variables help file, and the function will retrieve and set those as well.
 
 .EXAMPLE
-Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
+PS> Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
 
 Imports the default PowerShell preference variables from the caller into the local scope.
 
 .EXAMPLE
-Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState -Name 'ErrorActionPreference','SomeOtherVariable'
+PS> Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState -Name "ErrorActionPreference", "SomeOtherVariable"
 
 Imports only the ErrorActionPreference and SomeOtherVariable variables into the local scope.
 
 .EXAMPLE
-'ErrorActionPreference','SomeOtherVariable' | Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
+PS> "ErrorActionPreference", "SomeOtherVariable" | Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
 
 Same as Example 2, but sends variable names to the Name parameter via pipeline input.
 
@@ -96,8 +99,33 @@ String
 .OUTPUTS
 None. This function does not produce pipeline output.
 
+.NOTES
+Following changes by metablaster, November 2020:
+
+Removed max* variables as per: https://github.com/PowerShell/PowerShell/issues/2221
+- MaximumAliasCount
+- MaximumDriveCount
+- MaximumErrorCount
+- MaximumFunctionCount
+- MaximumVariableCount
+
+Added new variables:
+InformationPreference
+Transcript
+
+Added links and notes to (this) comment based help
+Added Write-* streams
+Added license and Copyright notice to (this) comment based help
+Added script invocation logic by removing function
+Changed a name and casing of local variables
+Changed PowerShell version requirement
+Replaced single quotes with double quotes
+Reordered preference variables
+Added OutputType and PositionalBinding attribute
+Fixed issue when the script was dot sources
+
 .LINK
-https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_preference_variables
+https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_preference_variables?view=powershell-7.1
 
 .LINK
 https://devblogs.microsoft.com/scripting/weekend-scripter-access-powershell-preference-variables/
@@ -105,116 +133,139 @@ https://devblogs.microsoft.com/scripting/weekend-scripter-access-powershell-pref
 .LINK
 https://gallery.technet.microsoft.com/scriptcenter/Inherit-Preference-82343b9d
 #>
-function Get-CallerPreference
+
+[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "AllVariables")]
+[OutputType([void])]
+param (
+	[Parameter(Mandatory = $true)]
+	[ValidateScript( { $_.GetType().FullName -eq "System.Management.Automation.PSScriptCmdlet" })]
+	$Cmdlet,
+
+	[Parameter(Mandatory = $true)]
+	[System.Management.Automation.SessionState] $SessionState,
+
+	[Parameter(ParameterSetName = "Filtered", ValueFromPipeline = $true)]
+	[string[]] $Name
+)
+
+begin
 {
-	[CmdletBinding(DefaultParameterSetName = 'AllVariables')]
-	param (
-		[Parameter(Mandatory = $true)]
-		[ValidateScript( { $_.GetType().FullName -eq 'System.Management.Automation.PSScriptCmdlet' })]
-		$Cmdlet,
+	New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
+		$MyInvocation.MyCommand.Name -replace ".{4}$" )
 
-		[Parameter(Mandatory = $true)]
-		[System.Management.Automation.SessionState] $SessionState,
-
-		[Parameter(ParameterSetName = 'Filtered', ValueFromPipeline = $true)]
-		[string[]] $Name
-	)
-
-	begin
+	$ParentScope = 1
+	if ($MyInvocation.InvocationName -eq ".")
 	{
-		$filterHash = @{}
+		$ParentScope = 0
 	}
 
-	process
+	Get-Variable -Scope $ParentScope -Name IsValidParent -ErrorAction Stop | Out-Null
+	Write-Debug "[$ThisScript] Parrent Scope: $((Get-PSCallStack)[1].Command)" -Debug
+	Write-Debug "[$ThisScript] Caller Scope: $((Get-PSCallStack)[2].Command)" -Debug
+
+	[hashtable] $FilterHash = @{}
+}
+
+process
+{
+	Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
+
+	if ($null -ne $Name)
 	{
-		if ($null -ne $Name)
+		foreach ($Entry in $Name)
 		{
-			foreach ($string in $Name)
+			Write-Information -MessageData "[$ThisScript] Processing preference variable: '$Entry'"
+			$FilterHash[$Entry] = $true
+		}
+	}
+}
+
+end
+{
+	# NOTE: List of preference variables taken from the about_Preference_Variables for PowerShell Core 7.1
+	[hashtable] $Preferences = @{
+		"ErrorActionPreference" = "ErrorAction"
+		"WarningPreference" = "WarningAction"
+		"InformationPreference" = "InformationAction"
+		"VerbosePreference" = "Verbose"
+		"DebugPreference" = "Debug"
+
+		"ConfirmPreference" = "Confirm"
+		"WhatIfPreference" = "WhatIf"
+
+		"ProgressPreference" = $null
+		"PSModuleAutoLoadingPreference" = $null
+		"PSDefaultParameterValues" = $null
+
+		"LogCommandHealthEvent" = $null
+		"LogCommandLifecycleEvent" = $null
+		"LogEngineHealthEvent" = $null
+		"LogEngineLifecycleEvent" = $null
+		"LogProviderHealthEvent" = $null
+		"LogProviderLifecycleEvent" = $null
+
+		"ErrorView" = $null
+		"MaximumHistoryCount" = $null
+		"FormatEnumerationLimit" = $null
+		"OFS" = $null
+		"PSEmailServer" = $null
+
+		"OutputEncoding" = $null
+
+		"PSSessionApplicationName" = $null
+		"PSSessionConfigurationName" = $null
+		"PSSessionOption" = $null
+
+		"Transcript" = $null
+	}
+
+	foreach ($Entry in $Preferences.GetEnumerator())
+	{
+		if (([string]::IsNullOrEmpty($Entry.Value) -or !$Cmdlet.MyInvocation.BoundParameters.ContainsKey($Entry.Value)) -and
+			($PSCmdlet.ParameterSetName -eq "AllVariables" -or $FilterHash.ContainsKey($Entry.Name)))
+		{
+			$Variable = $Cmdlet.SessionState.PSVariable.Get($Entry.Key)
+
+			if ($null -ne $Variable)
 			{
-				$filterHash[$string] = $true
+				if ($SessionState -eq $ExecutionContext.SessionState)
+				{
+					Write-Verbose -Message "[$ThisScript] Setting preference variable '$($Variable.Name)' in scope: $($SessionState.Module.Name)"
+					Set-Variable -Scope $ParentScope -Name $Variable.Name -Value $Variable.Value -Force -Confirm:$false -WhatIf:$false
+				}
+				else
+				{
+					Write-Verbose -Message "[$ThisScript] Setting preference variable '$($Variable.Name)' in session: $($SessionState.Module.Name)"
+					$SessionState.PSVariable.Set($Variable.Name, $Variable.Value)
+				}
 			}
 		}
 	}
 
-	end
+	if ($PSCmdlet.ParameterSetName -eq "Filtered")
 	{
-		# List of preference variables taken from the about_Preference_Variables help file in PowerShell version 4.0
+		Write-Verbose -Message "[$ThisScript] Filtering variables"
 
-		$vars = @{
-			'ErrorView' = $null
-			'FormatEnumerationLimit' = $null
-			'LogCommandHealthEvent' = $null
-			'LogCommandLifecycleEvent' = $null
-			'LogEngineHealthEvent' = $null
-			'LogEngineLifecycleEvent' = $null
-			'LogProviderHealthEvent' = $null
-			'LogProviderLifecycleEvent' = $null
-			'MaximumAliasCount' = $null
-			'MaximumDriveCount' = $null
-			'MaximumErrorCount' = $null
-			'MaximumFunctionCount' = $null
-			'MaximumHistoryCount' = $null
-			'MaximumVariableCount' = $null
-			'OFS' = $null
-			'OutputEncoding' = $null
-			'ProgressPreference' = $null
-			'PSDefaultParameterValues' = $null
-			'PSEmailServer' = $null
-			'PSModuleAutoLoadingPreference' = $null
-			'PSSessionApplicationName' = $null
-			'PSSessionConfigurationName' = $null
-			'PSSessionOption' = $null
-
-			'ErrorActionPreference' = 'ErrorAction'
-			'DebugPreference' = 'Debug'
-			'ConfirmPreference' = 'Confirm'
-			'WhatIfPreference' = 'WhatIf'
-			'VerbosePreference' = 'Verbose'
-			'WarningPreference' = 'WarningAction'
-		}
-
-		foreach ($entry in $vars.GetEnumerator())
+		foreach ($VariableName in $FilterHash.Keys)
 		{
-			if (([string]::IsNullOrEmpty($entry.Value) -or -not $Cmdlet.MyInvocation.BoundParameters.ContainsKey($entry.Value)) -and
-				($PSCmdlet.ParameterSetName -eq 'AllVariables' -or $filterHash.ContainsKey($entry.Name)))
+			if (!$Preferences.ContainsKey($VariableName))
 			{
-				$variable = $Cmdlet.SessionState.PSVariable.Get($entry.Key)
+				$Variable = $Cmdlet.SessionState.PSVariable.Get($VariableName)
 
-				if ($null -ne $variable)
+				if ($null -ne $Variable)
 				{
 					if ($SessionState -eq $ExecutionContext.SessionState)
 					{
-						Set-Variable -Scope 1 -Name $variable.Name -Value $variable.Value -Force -Confirm:$false -WhatIf:$false
+						Write-Verbose -Message "[$ThisScript] Setting filtered preference variable '$($Variable.Name)' in scope: $($SessionState.Module.Name)"
+						Set-Variable -Scope $ParentScope -Name $Variable.Name -Value $Variable.Value -Force -Confirm:$false -WhatIf:$false
 					}
 					else
 					{
-						$SessionState.PSVariable.Set($variable.Name, $variable.Value)
+						Write-Verbose -Message "[$ThisScript] Setting filtered preference variable '$($Variable.Name)' in session: $($ExecutionContext.SessionState.Module.Name)"
+						$SessionState.PSVariable.Set($Variable.Name, $Variable.Value)
 					}
 				}
 			}
 		}
-
-		if ($PSCmdlet.ParameterSetName -eq 'Filtered')
-		{
-			foreach ($varName in $filterHash.Keys)
-			{
-				if (-not $vars.ContainsKey($varName))
-				{
-					$variable = $Cmdlet.SessionState.PSVariable.Get($varName)
-
-					if ($null -ne $variable)
-					{
-						if ($SessionState -eq $ExecutionContext.SessionState)
-						{
-							Set-Variable -Scope 1 -Name $variable.Name -Value $variable.Value -Force -Confirm:$false -WhatIf:$false
-						}
-						else
-						{
-							$SessionState.PSVariable.Set($variable.Name, $variable.Value)
-						}
-					}
-				}
-			}
-		}
-	} # end
-} # function Get-CallerPreference
+	}
+} # end

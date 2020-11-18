@@ -1,5 +1,34 @@
 
 <#
+MIT License
+
+This file is part of "Windows Firewall Ruleset" project
+Homepage: https://github.com/metablaster/WindowsFirewallRuleset
+
+Copyright (C) 2017 Pyprohly
+Copyright (C) 2019 Microsoft Corporation
+Copyright (C) 2020 metablaster zebal@protonmail.ch
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+#>
+
+<#
 .SYNOPSIS
 Toggle security privileges for the current PowerShell session.
 
@@ -27,8 +56,14 @@ None. Set-Privilege.ps1 does not generate any output
 Author: Pyprohly
 GUID: 84990677-60ab-4984-9de1-fcfc19f5209d
 
+NOTE: According to "PowerShell Gallery Terms of Use":
+If third party programs are accessible on the Web Site without license terms,
+then any such third party programs without license terms may be used under the terms of the MIT
+License attached as Exhibit A
+
 TODO: After runing this script, seems like some variables are removed, See Exit-Text "UnitTest" variable
-Following modifications by metablaster November 2020:
+
+Following modifications by metablaster, November 2020:
 1. Format code according to project best practices
 2. Added boilerplate code
 3. Make function produce some informational output
@@ -37,15 +72,22 @@ Following modifications by metablaster November 2020:
 .LINK
 https://www.powershellgallery.com/packages/Set-Privilege/1.1.2
 
+.LINK
+https://www.powershellgallery.com/policies/Terms
+
 .COMPONENT
 Security
 Privilege
 TokenPrivilege
 #>
+
 [CmdletBinding()]
 param (
 	[Parameter(Mandatory = $true)]
-	[string[]] $Privilege
+	[string[]] $Privilege,
+
+	[Parameter()]
+	[switch] $Disable
 )
 
 # Initialization
@@ -74,10 +116,10 @@ Toggle security privileges for the current PowerShell session.
 #>
 function Set-Privilege
 {
-	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High")]
+	[CmdletBinding(PositionalBinding = $false, SupportsShouldProcess = $true, ConfirmImpact = "High")]
 	[OutputType([bool])]
 	param(
-		[Parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true, Position = 0)]
 		[ValidateSet(
 			'SeAssignPrimaryTokenPrivilege', 'AssignPrimaryToken',
 			'SeAuditPrivilege', 'Audit',
@@ -118,6 +160,7 @@ function Set-Privilege
 		[Alias('PrivilegeName')]
 		[string[]] $Name,
 
+		[Parameter()]
 		[switch] $Disable
 	)
 
@@ -191,7 +234,7 @@ function Set-Privilege
 
 if ($MyInvocation.InvocationName -ne '.')
 {
-	Set-Privilege $Privilege @Logs
+	Set-Privilege $Privilege -Disable:$Disable @Logs
 }
 
 Update-Log

@@ -66,19 +66,36 @@ Enter-Test
 
 # Test module preferences to verify preferences are set to expected values,
 # In addition show session preferences to verify difference.
-Start-Test "Script level preferences"
-. $PSScriptRoot\..\Config\ProjectSettings.ps1 -ShowPreference
+Start-Test "Script preferences"
 
+if ($DebugPreference -eq "Continue")
+{
+	$DebugPreference = "SilentlyContinue"
+}
+else
+{
+	$DebugPreference = "Continue"
+}
+
+Write-Debug -Message "[$ThisScript] DebugPreference before: $DebugPreference" -Debug
+. $PSScriptRoot\..\Config\ProjectSettings.ps1 -ShowPreference
+Write-Debug -Message "[$ThisScript] DebugPreference after: $DebugPreference" -Debug
+
+# NOTE: For this test to show correct result $DebugPreference in ProjectSettings must be "Continue"
 Start-Test "Script module preferences"
 $TestModule = New-Module -Name Dynamic.TestPreference -ErrorAction Stop -ScriptBlock {
 	Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value "Dynamic.TestPreference"
+	Write-Debug -Message "[Dynamic.TestPreference] DebugPreference before: $DebugPreference" -Debug
+
 	. $PSScriptRoot\..\Config\ProjectSettings.ps1 -ShowPreference -InsideModule
 	. $PSScriptRoot\..\Modules\ModulePreferences.ps1
-} | Import-Module -Scope Local -PassThru
+
+	Write-Debug -Message "[Dynamic.TestPreference] DebugPreference after: $DebugPreference" -Debug
+} | Import-Module -Scope Global -PassThru
 
 Start-Test "Script module no exports"
 $ExportCount = ($TestModule | Select-Object -ExpandProperty ExportedCommands | Measure-Object).Count
-if ($ExportCount)
+if ($ExportCount -gt 0)
 {
 	Write-Error -Category InvalidResult -TargetObject $TestModule `
 		-Message "Nothing should be exported from this module"

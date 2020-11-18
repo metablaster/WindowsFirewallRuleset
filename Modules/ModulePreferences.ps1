@@ -66,5 +66,6 @@ Set-StrictMode -Version Latest
 
 if ($ShowPreference)
 {
-	Dynamic.Preference\Show-Preference $ThisModule
+	Write-Debug -Message "[$ThisModule] DebugPreference after import: $DebugPreference" -Debug
+	Show-Preference -Target $ThisModule # -All
 }
