@@ -116,8 +116,8 @@ $Description = "https://www.iana.org/assignments/ipv6-multicast-addresses/ipv6-m
 $MulticastUsers = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE", "LOCAL SERVICE" @Logs
 # NOTE: we probably need "Any" to include IPv6 loopback interface because IPv6 loopback rule
 # does not work on boot, (neither ::1 address nor interface alias)
-$MulticastInterface = "Any"
-# $MulticastInterface = "Wired, Wireless"
+$LocalInterface = "Any"
+# $LocalInterface = "Wired, Wireless"
 $Accept = "Outbound rules for IPv6 multicast will be loaded, recommended for proper network functioning"
 $Deny = "Skip operation, outbound IPv6 multicast rules will not be loaded into firewall"
 
@@ -140,7 +140,7 @@ New-NetFirewallRule -DisplayName "Interface-Local Multicast" `
 	-LocalAddress Any -RemoteAddress ff01::/16 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -156,7 +156,7 @@ New-NetFirewallRule -DisplayName "Interface-Local Multicast - All Nodes" `
 	-LocalAddress Any -RemoteAddress ff01::1 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -168,7 +168,7 @@ New-NetFirewallRule -DisplayName "Interface-Local Multicast - All Routers" `
 	-LocalAddress Any -RemoteAddress ff01::2 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -180,7 +180,7 @@ New-NetFirewallRule -DisplayName "Interface-Local Multicast - mDNSv6" `
 	-LocalAddress Any -RemoteAddress ff01::fb `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -196,7 +196,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast" `
 	-LocalAddress Any -RemoteAddress ff02::/16 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -212,7 +212,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - All Nodes" `
 	-LocalAddress Any -RemoteAddress ff02::1 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -224,7 +224,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - All Routers" `
 	-LocalAddress Any -RemoteAddress ff02::2 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -236,7 +236,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - DVMRP Routers" `
 	-LocalAddress Any -RemoteAddress ff02::4 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -248,7 +248,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - OSPFIGP" `
 	-LocalAddress Any -RemoteAddress ff02::5 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -260,7 +260,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - OSPFIGP Designated Rout
 	-LocalAddress Any -RemoteAddress ff02::6 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -272,7 +272,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - ST Routers" `
 	-LocalAddress Any -RemoteAddress ff02::7 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -284,7 +284,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - ST Hosts" `
 	-LocalAddress Any -RemoteAddress ff02::8 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -296,7 +296,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - RIP Routers" `
 	-LocalAddress Any -RemoteAddress ff02::9 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -308,7 +308,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - EIGRP Routers" `
 	-LocalAddress Any -RemoteAddress ff02::a `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -320,7 +320,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - Mobile Agents" `
 	-LocalAddress Any -RemoteAddress ff02::b `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -332,7 +332,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - SSDP" `
 	-LocalAddress Any -RemoteAddress ff02::c `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -344,7 +344,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - All PIM Routers" `
 	-LocalAddress Any -RemoteAddress ff02::d `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -356,7 +356,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - RSVP ENCAPSULATION" `
 	-LocalAddress Any -RemoteAddress ff02::e `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -368,7 +368,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - UPnP" `
 	-LocalAddress Any -RemoteAddress ff02::f `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -380,7 +380,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - All BBF Access Nodes" `
 	-LocalAddress Any -RemoteAddress ff02::10 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -392,7 +392,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - VRRP" `
 	-LocalAddress Any -RemoteAddress ff02::12 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -404,7 +404,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - All MLDv2 capable route
 	-LocalAddress Any -RemoteAddress ff02::16 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -416,7 +416,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - All RPL nodes" `
 	-LocalAddress Any -RemoteAddress ff02::1a `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -428,7 +428,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - All Snoopers" `
 	-LocalAddress Any -RemoteAddress ff02::6a `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -440,7 +440,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - PTP pdelay" `
 	-LocalAddress Any -RemoteAddress ff02::6b `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -452,7 +452,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - Saratoga" `
 	-LocalAddress Any -RemoteAddress ff02::6c `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -464,7 +464,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - LL MANET Routers" `
 	-LocalAddress Any -RemoteAddress ff02::6d `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -476,7 +476,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - IGRS" `
 	-LocalAddress Any -RemoteAddress ff02::6e `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -488,7 +488,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - iADT Discovery" `
 	-LocalAddress Any -RemoteAddress ff02::6f `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -500,7 +500,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - mDNSv6" `
 	-LocalAddress Any -RemoteAddress ff02::fb `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -512,7 +512,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - Link Name" `
 	-LocalAddress Any -RemoteAddress ff02::1:1 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -524,7 +524,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - All DHCP Agents" `
 	-LocalAddress Any -RemoteAddress ff02::1:2 `
 	-LocalPort 546 -RemotePort 547 `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -536,7 +536,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - Link-local Multicast Na
 	-LocalAddress Any -RemoteAddress ff02::1:3 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -548,7 +548,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - DTCP Announcement" `
 	-LocalAddress Any -RemoteAddress ff02::1:4 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -560,7 +560,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - afore_vdp" `
 	-LocalAddress Any -RemoteAddress ff02::1:5 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -572,7 +572,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - Babel" `
 	-LocalAddress Any -RemoteAddress ff02::1:6 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -584,7 +584,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - Solicited Node Address"
 	-LocalAddress Any -RemoteAddress ff02::1:ff00:0000/104 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -596,7 +596,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - Node Information Querie
 	-LocalAddress Any -RemoteAddress FF02:0:0:0:0:2:FF00::/104 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -612,7 +612,7 @@ New-NetFirewallRule -DisplayName "Site-Local Multicast - All Routers" `
 	-LocalAddress Any -RemoteAddress ff05::/16 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -628,7 +628,7 @@ New-NetFirewallRule -DisplayName "Site-Local Multicast - All Routers" `
 	-LocalAddress Any -RemoteAddress ff05::2 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -640,7 +640,7 @@ New-NetFirewallRule -DisplayName "Site-Local Multicast - mDNSv6" `
 	-LocalAddress Any -RemoteAddress ff05::fb `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -652,7 +652,7 @@ New-NetFirewallRule -DisplayName "Site-Local Multicast - All DHCP Servers" `
 	-LocalAddress Any -RemoteAddress ff05::1:3 `
 	-LocalPort 546 -RemotePort 547 `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -664,7 +664,7 @@ New-NetFirewallRule -DisplayName "Site-Local Multicast - SL MANET ROUTERS" `
 	-LocalAddress Any -RemoteAddress ff05::1:5 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -680,7 +680,7 @@ New-NetFirewallRule -DisplayName "Realm-Local Multicast" `
 	-LocalAddress Any -RemoteAddress ff03::/16 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -696,7 +696,7 @@ New-NetFirewallRule -DisplayName "Admin-Local Multicast" `
 	-LocalAddress Any -RemoteAddress ff04::/16 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -712,7 +712,7 @@ New-NetFirewallRule -DisplayName "Organization-Local Multicast" `
 	-LocalAddress Any -RemoteAddress ff08::/16 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs
@@ -728,7 +728,7 @@ New-NetFirewallRule -DisplayName "Global scope Multicast" `
 	-LocalAddress Any -RemoteAddress ff0e::/16 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
-	-InterfaceType $MulticastInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description `
 	@Logs | Format-Output @Logs

@@ -53,33 +53,24 @@ function Exit-Test
 	[OutputType([void])]
 	param()
 
-	if ($PSCmdlet.ShouldProcess("Exit unit test", $script:UnitTest))
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+
+	if ($PSCmdlet.ShouldProcess("Exit unit test", $UnitTest))
 	{
-		if (Get-Variable -Name DynamicModule -Scope Script -ErrorAction Ignore)
-		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing dynamic module '$script:DynamicModule'"
-
-			# Remove dynamic module previously imported by Enter-Test
-			Remove-Module -Name $script:DynamicModule
-			Remove-Variable -Name DynamicModule -Scope Script
-		}
-
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
-		# restore logging errors
+		# restore logging errors, warnings and info messages
 		Set-Variable -Name ErrorLogging -Scope Global -Value $ErrorLoggingCopy
-
-		# restore logging warnings
 		Set-Variable -Name WarningLogging -Scope Global -Value $WarningLoggingCopy
-
-		# restore logging information messages
 		Set-Variable -Name InformationLogging -Scope Global -Value $InformationLoggingCopy
 
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] ErrorLogging restored to: $ErrorLogging"
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] WarningLogging restored to: $WarningLogging"
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] InformationLogging restored to: $InformationLogging"
 
+		# Remove resources created by Enter-Test
+		Remove-Module -Name Dynamic.UnitTest -Force
+
 		Write-Output ""
-		Write-Information -Tags "Test" -MessageData "INFO: Exiting unit test '$script:UnitTest'"
+		Write-Information -Tags "Test" -MessageData "INFO: Exiting unit test '$UnitTest'"
+		Remove-Variable -Name UnitTest -Scope Global -Force
 	}
 }

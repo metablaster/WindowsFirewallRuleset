@@ -26,22 +26,55 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# TODO: we could auto include this file with module manifests or dynamic module
-# NOTE: In this file project settings and preferences are set, these are grouped into
-# 1. settings for development
-# 2. settings for release
-# 3. settings that apply to both use cases
-# NOTE: Make sure not to modify variables commented as "do not modify" or "do not decrement"
-#
+<#
+.SYNOPSIS
+Global project settings and preferences
 
+.DESCRIPTION
+In this file project settings and preferences are set, these are grouped into
+1. settings for development
+2. settings for release
+3. settings that apply to both use cases
+
+.PARAMETER InsideModule
+Script modules must call this script with the value of $true
+
+.PARAMETER ToggleDevelop
+If specified toggles development features for current script only
+
+.PARAMETER ShowPreference
+If specified displays preferences at the end
+
+.EXAMPLE
+PS> .\ProjectSettings.ps1
+
+.INPUTS
+None. You cannot pipe objects to ProjectSettings.ps1
+
+.OUTPUTS
+None. ProjectSettings.ps1 does not generate any output
+
+.NOTES
+TODO: We could auto include this file with module manifests or dynamic module
+NOTE: Make sure not to modify variables commented as "do not modify" or "do not decrement"
+TODO: Use advanced parameters to control Verbose, Debug, Confirm and WhatIf locally
+#>
+
+[CmdletBinding(PositionalBinding = $false)]
 param(
-	# modules must call this script with the value of $true
-	[bool] $InsideModule = $false
+	[Parameter()]
+	[switch] $InsideModule,
+
+	[Parameter()]
+	[switch] $private:ToggleDevelop,
+
+	[Parameter()]
+	[switch] $ShowPreference
 )
 
 # Name of this script for debugging messages, do not modify!.
-Set-Variable -Name SettingsScript -Scope Local -Option ReadOnly -Value ($MyInvocation.MyCommand.Name -replace ".{4}$")
+Set-Variable -Name SettingsScript -Scope Local -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{4}$")
+Write-Debug -Message "[$SettingsScript] params($($PSBoundParameters.Values))"
 
 # Set to true to enable development features, it does following at a minimum:
 # 1. Forces reloading modules and removable variables.
@@ -51,6 +84,24 @@ Set-Variable -Name SettingsScript -Scope Local -Option ReadOnly -Value ($MyInvoc
 # 5. Enables setting preference variables for modules
 # NOTE: If set to $false, the change requires PowerShell restart
 Set-Variable -Name Develop -Scope Global -Value $true
+
+if ($private:ToggleDevelop)
+{
+	# NOTE: number for Get-PSCallStack is 2, which means 2 callers back in callstack
+	# call at 0 and 1 is this script
+	$private:CallingScript = (Get-PSCallStack)[2].Command
+
+	if ($Develop)
+	{
+		Write-Warning -Message "Development features are disabled for $($private:CallingScript) script"
+		Set-Variable -Name Develop -Scope Script -Value $false
+	}
+	else
+	{
+		Write-Warning -Message "Development features are enabled for $($private:CallingScript) script"
+		Set-Variable -Name Develop -Scope Script -Value $true
+	}
+}
 
 if ($Develop)
 {
@@ -63,6 +114,17 @@ if ($Develop)
 
 	# Override version set by et-PSDebug
 	Set-StrictMode -Version Latest
+
+	# Enable showing values of preference variables in requested scope
+	if ($PSBoundParameters.ContainsKey("ShowPreference"))
+	{
+		$PSBoundParameters.Remove("ShowPreference") | Out-Null
+		Set-Variable -Name ShowPreference -Scope Global -Value $true
+	}
+	else
+	{
+		Set-Variable -Name ShowPreference -Scope Global -Value $false
+	}
 }
 else
 {
@@ -81,74 +143,115 @@ if (!(Get-Variable -Name ProjectRoot -Scope Global -ErrorAction Ignore))
 
 <#
 Preference Variables default values
+# TODO: Add valid values column and defaults per edition
 https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_preference_variables?view=powershell-7
 
-$ConfirmPreference			High
-$DebugPreference			SilentlyContinue
 $ErrorActionPreference		Continue
-$ErrorView					ConciseView
-$FormatEnumerationLimit		4
+$WarningPreference			Continue
 $InformationPreference		SilentlyContinue
+$VerbosePreference			SilentlyContinue
+$DebugPreference			SilentlyContinue
+
+$ProgressPreference			Continue
+$ConfirmPreference			High
+$WhatIfPreference			False
+
+$PSModuleAutoLoadingPreference	All
+$PSDefaultParameterValues	(None - empty hash table)
+
 $LogCommandHealthEvent		False (not logged)
 $LogCommandLifecycleEvent	False (not logged)
 $LogEngineHealthEvent		True (logged)
 $LogEngineLifecycleEvent	True (logged)
 $LogProviderLifecycleEvent	True (logged)
 $LogProviderHealthEvent		True (logged)
-$MaximumHistoryCount		4096
-$OFS						(Space character (" "))
 
-Applies to how PowerShell communicates with external programs (what encoding PowerShell uses when sending strings to them)
-it has nothing to do with the encoding that the output redirection operators and PowerShell cmdlets use to save to files.
+$ErrorView					ConciseView
+$MaximumHistoryCount		4096
+$FormatEnumerationLimit		4
+$OFS						(Space character (" "))
+$PSEmailServer				(None)
+
+NOTE: Applies to how PowerShell communicates with external programs (what encoding PowerShell uses when
+sending strings to them) it has nothing to do with the encoding that the output redirection
+operators and PowerShell cmdlets use to save to files.
 $OutputEncoding				UTF8Encoding object
 
-$ProgressPreference	Continue
-$PSDefaultParameterValues	(None - empty hash table)
-$PSEmailServer				(None)
-$PSModuleAutoLoadingPreference	All
 $PSSessionApplicationName	wsman
 $PSSessionConfigurationName	https://schemas.microsoft.com/powershell/Microsoft.PowerShell
 $PSSessionOption			See $PSSessionOption
-$VerbosePreference			SilentlyContinue
-$WarningPreference			Continue
-$WhatIfPreference			False
 #>
 
-# These settings apply only for development phase
+# NOTE: Following preference settings always apply and should never be modified, do not modify!
+# The rest of preferences depend on "Develop" variable
+
+# To control how and if warnings are displayed
+# Visible in modules: No
+$WarningPreference = "Continue"
+
+# To control how and if informational messages are displayed
+# Visible in modules: No
+$InformationPreference = "Continue"
+
+# Determines how PowerShell responds to progress bar updates generated by the Write-Progress cmdlet
+# Visible in modules: Yes
+$ProgressPreference	= "Continue"
+
+# To control if modules automatically load
+# Values: All, ModuleQualified or None
+# Visible in modules: Yes
+$PSModuleAutoLoadingPreference = "All"
+
+# TODO: $PSDefaultParameterValues = $null
+
 if ($Develop)
 {
 	#
-	# Override preference defaults for scripts here
-	# NOTE: do not modify warning and information preference
+	# Following preferences apply only for development phase,
+	# these are here set to non default values, uncomment as desired
 	#
 
 	# $ErrorActionPreference = "SilentlyContinue"
-	# $WarningPreference = "SilentlyContinue"
-	$InformationPreference = "Continue"
 	# $VerbosePreference = "Continue"
 	# $DebugPreference = "Continue"
+
 	# $ConfirmPreference = "None"
+	# $WhatIfPreference = "True"
+	# TODO: $ErrorView = "ConciseView"
+
+	# Two variables for each of the three logging components:
+	# The engine (the PowerShell program), the providers and the commands.
+	# The LifeCycleEvent variables log normal starting and stopping events.
+	# The Health variables log error events.
+	# Visible in modules: Yes
+	# https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_eventlogs?view=powershell-5.1#selecting-events-for-the-windows-powershell-event-log
+
+	# TODO: Report issue, unable to set single SuppressMessageAttribute
+	# Logs the start and stop of PowerShell
+	$LogEngineLifeCycleEvent = $false
+
+	# Logs PowerShell program errors
+	$LogEngineHealthEvent = $false
+
+	# Logs the start and stop of PowerShell providers
+	$LogProviderLifeCycleEvent = $false
+
+	# Logs PowerShell provider errors
+	$LogProviderHealthEvent = $false
+
+	# Logs the starting and completion of commands
+	$LogCommandLifeCycleEvent = $false
+
+	# Logs command errors
+	$LogCommandHealthEvent = $false
 
 	# Must be after debug preference
-	Write-Debug -Message "[$SettingsScript] Setup clean environment"
-
-	#
-	# Preferences for modules
-	#
-
-	Set-Variable -Name ModuleErrorPreference -Scope Global -Value $ErrorActionPreference
-	Set-Variable -Name ModuleWarningPreference -Scope Global -Value $WarningPreference
-	Set-Variable -Name ModuleInformationPreference -Scope Global -Value $InformationPreference
-	Set-Variable -Name ModuleVerbosePreference -Scope Global -Value $VerbosePreference
-	Set-Variable -Name ModuleDebugPreference -Scope Global -Value $DebugPreference
-
-	#
-	# Remove loaded modules, useful for module debugging and to avoid restarting powershell every time.
-	#
+	Write-Debug -Message "[$SettingsScript] Cleaning up PowerShell session"
 
 	if (!$InsideModule)
 	{
-		# Skip removing modules if this script is called from module which would
+		# Remove loaded modules, useful for module debugging and to avoid restarting powershell every time.
+		# Skip removing modules if this script is called from inside a module which would
 		# cause removing modules prematurely
 		foreach ($Module in @(Get-ChildItem -Name -Path "$ProjectRoot\Modules" -Directory))
 		{
@@ -158,39 +261,30 @@ if ($Develop)
 }
 else # Normal use case
 {
-	# These are set to default values for normal use case,
-	# modify to customize your experience, note that this has no effect on modules
+	# These are set to default values for normal use case, the rest is default,
+	# modify to customize your experience
 
 	# To control how and if errors are displayed
+	# Visible in modules: No
 	$ErrorActionPreference = "Continue"
-
-	# To control how and if warnings are displayed, do not modify!
-	$WarningPreference = "Continue"
-
-	# To control how and if informational messages are displayed, do not modify!
-	$InformationPreference = "Continue"
 
 	# To show verbose output in the console set to "Continue"
 	# If you want to see a bit more
+	# Visible in modules: No
 	$VerbosePreference = "SilentlyContinue"
 
 	# To show debugging messages in the console set to "Continue"
-	# Not recommended except to troubleshoot problems with project
+	# Not recommended except to troubleshoot problems with code
+	# Visible in modules: No
 	$DebugPreference = "SilentlyContinue"
 
 	# Must be after verbose preference
 	Write-Verbose -Message "[$SettingsScript] Project mode: User"
-
-	# Preferences for modules not used in this context, do not modify
-	Remove-Variable -Name ModuleErrorPreference -Scope Global -ErrorAction Ignore
-	Remove-Variable -Name ModuleWarningPreference -Scope Global -ErrorAction Ignore
-	Remove-Variable -Name ModuleVerbosePreference -Scope Global -ErrorAction Ignore
-	Remove-Variable -Name ModuleDebugPreference -Scope Global -ErrorAction Ignore
-	Remove-Variable -Name ModuleInformationPreference -Scope Global -ErrorAction Ignore
 }
 
 # Constant variables, not possible to change in any case.
 # These are set only once per session, changing these requires powershell restart
+# TODO: Skip setting variables which are used only when checking specific requirements
 if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore))
 {
 	Write-Debug -Message "[$SettingsScript] Setup constant variables"
@@ -225,7 +319,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	New-Variable -Name RequirePlatyPSVersion -Scope Global -Option Constant -Value ([version]::new(0, 14, 0))
 
 	# Recommended minimum VSCode version, do not decrement!
-	New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 51, 0))
+	New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 51, 1))
 
 	# Recommended minimum PSReadline version for command line editing experience of PowerShell
 	# Needs the 1.6.0 or a higher version of PowerShellGet to install the latest prerelease version of PSReadLine
@@ -349,6 +443,7 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 	Set-Variable -Name ServicesCheck -Scope Global -Option ReadOnly -Force -Value $true
 
 	# NuGet version and Encoding used to write and read files
+	# TODO: use $OutputEncoding preference
 	if ($PSVersionTable.PSEdition -eq "Core")
 	{
 		# UTF8 without BOM
@@ -447,4 +542,62 @@ if (!(Get-Variable -Name CheckProtectedVariables -Scope Global -ErrorAction Igno
 	# Global variable to tell if warnings were generated, do not modify!
 	# Will not be set if WarningPreference is "SilentlyContinue"
 	Set-Variable -Name WarningStatus -Scope Global -Value $false
+}
+
+if ($ShowPreference)
+{
+	if (!(Get-Module -Name Dynamic.Preference))
+	{
+		# To avoid clutter of global space with this function
+		New-Module -Name Dynamic.Preference -ScriptBlock {
+			<#
+			.SYNOPSIS
+			Show values of preference variables in requested scope
+
+			.DESCRIPTION
+			Showing values of preference variables in different scopes is useful
+			to troubleshoot problems with preferences or just to confirm preferences are set as expected.
+
+			.PARAMETER TargetScript
+			A script which calls this function
+
+			.EXAMPLE
+			PS> Show-Preference ModuleName
+
+			.NOTES
+			None.
+			#>
+			function private:Show-Preference
+			{
+				[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+					"PSAvoidUsingWriteHost", "", Justification = "Needed to ensure showing preference output")]
+				param(
+					[Parameter(Mandatory = $true)]
+					[string] $TargetScript
+				)
+
+				Write-Host "[$TargetScript] ErrorActionPreference = $ErrorActionPreference" -ForegroundColor Cyan
+				Write-Host "[$TargetScript] WarningPreference = $WarningPreference" -ForegroundColor Cyan
+				Write-Host "[$TargetScript] InformationPreference = $InformationPreference" -ForegroundColor Cyan
+
+				Write-Host "[$TargetScript] DebugPreference = $DebugPreference" -ForegroundColor Cyan
+				Write-Host "[$TargetScript] VerbosePreference = $VerbosePreference" -ForegroundColor Cyan
+				Write-Host "[$TargetScript] ProgressPreference = $ProgressPreference" -ForegroundColor Cyan
+
+				Write-Host "[$TargetScript] PSModuleAutoLoadingPreference = $PSModuleAutoLoadingPreference" -ForegroundColor Cyan
+
+				Write-Host "[$TargetScript] LogEngineLifeCycleEvent = $LogEngineLifeCycleEvent" -ForegroundColor Cyan
+				Write-Host "[$TargetScript] LogEngineHealthEvent = $LogEngineHealthEvent" -ForegroundColor Cyan
+				Write-Host "[$TargetScript] LogProviderLifeCycleEvent = $LogProviderLifeCycleEvent" -ForegroundColor Cyan
+				Write-Host "[$TargetScript] LogProviderHealthEvent = $LogProviderHealthEvent" -ForegroundColor Cyan
+				Write-Host "[$TargetScript] LogCommandLifeCycleEvent = $LogCommandLifeCycleEvent" -ForegroundColor Cyan
+				Write-Host "[$TargetScript] LogCommandHealthEvent = $LogCommandHealthEvent" -ForegroundColor Cyan
+			}
+		} | Import-Module -Scope Global
+	}
+
+	if (!$InsideModule)
+	{
+		Dynamic.Preference\Show-Preference $SettingsScript
+	}
 }

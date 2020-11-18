@@ -18,7 +18,7 @@ customized scenarios.
   - [IPv6](#ipv6)
   - [IPv4](#ipv4)
   - [IP general](#ip-general)
-  - [Firewall](#firewall)
+  - [Windows Firewall](#windows-firewall)
   - [Virtualization](#virtualization)
   - [OS and software](#os-and-software)
   - [Protocols](#protocols)
@@ -109,7 +109,7 @@ Also few commandlets from these modules:
 
 [Link-Local address](https://en.wikipedia.org/wiki/Link-local_address)
 
-## Firewall
+## Windows Firewall
 
 [Windows Filtering Platform Architecture Overview](https://docs.microsoft.com/en-us/windows-hardware/drivers/network/windows-filtering-platform-architecture-overview)
 
@@ -128,6 +128,10 @@ Also few commandlets from these modules:
 [Understand TCP/IP addressing and subnetting basics](https://docs.microsoft.com/en-us/troubleshoot/windows-client/networking/tcpip-addressing-and-subnetting)
 
 [Firewall Rule Groups @FirewallAPI.dll](https://docs.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/networking-mpssvc-svc-firewallgroups)
+
+[Firewall Rules Needed for Common Transports](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/ics/firewall-rules-needed-for-common-transports)
+
+[Windows Firewall Technologies](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/ics/portal)
 
 ## Virtualization
 

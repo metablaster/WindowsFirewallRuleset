@@ -198,7 +198,10 @@ based on the first packet sent. which in turn tells us there was no adequate all
 default outbound action was hit.
 - For detailed information on how to interpret WFP log see "Firewall" section in `Readme\Reference.md`
 
-[WFP Reference][ref WFP]
+- [WFP Reference][ref WFP]
+- [WFP Auditing reference][ref WFP audit]
+- [Audit Filtering Platform Connection][WFP audit connection]
+- [Audit Filtering Platform Packet Drop][WFP audit drop]
 
 ## Windows Firewall
 
@@ -244,6 +247,7 @@ Inside `Config\Windows` there is a `Firewall.msc` settings file, which saves you
 things every time you open GPO firewall, you can customize it and re-save your preferences.
 
 [Windows Firewall reference][ref firewall]
+[Windows Firewall Technologies][ref firewall old]
 
 ## TCP View
 
@@ -411,9 +415,13 @@ This problem can be solved with "Windows Performance Recorder" which generates r
 
 [ref process monitor]: https://docs.microsoft.com/en-us/sysinternals/downloads/procmon
 [ref WFP]: https://docs.microsoft.com/en-us/windows/win32/fwp/about-windows-filtering-platform "Visit Microsoft docs"
+[ref WFP audit]: https://docs.microsoft.com/en-us/windows/win32/fwp/auditing-and-logging "Visit Microsoft docs"
+[WFP audit connection]: https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/audit-filtering-platform-connection "Visit Microsoft docs"
+[WFP audit drop]: https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/audit-filtering-platform-packet-drop "Visit Microsoft docs"
 [ref mtail]: http://ophilipp.free.fr/op_tail.htm
 [ref event log]: https://docs.microsoft.com/en-us/windows/win32/eventlog/event-logging "Visit Microsoft docs"
 [ref firewall]: https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-firewall/windows-firewall-with-advanced-security "Visit Microsoft docs"
+[ref firewall old]: https://docs.microsoft.com/en-us/previous-versions/windows/desktop/ics/portal
 [ref tcpview]: https://docs.microsoft.com/en-us/sysinternals/downloads/tcpview "Visit Microsoft docs"
 [ref netstat]: https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/netstat "Visit Microsoft docs"
 [windows sdk]: https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk

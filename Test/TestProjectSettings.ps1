@@ -31,7 +31,7 @@ SOFTWARE.
 Unit test for project settings
 
 .DESCRIPTION
-Unit test to test global variables located in Config\ProjectSettings.ps1
+Unit test to test global variables and preferences set in Config\ProjectSettings.ps1
 
 .EXAMPLE
 PS> .\TestProjectSettings.ps1
@@ -43,7 +43,7 @@ None. You cannot pipe objects to TestProjectSettings.ps1
 None. TestProjectSettings.ps1 does not generate any output
 
 .NOTES
-None.
+TODO: Needs update
 #>
 
 # Initialization
@@ -62,24 +62,31 @@ Initialize-Project -Abort
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
-Enter-Test $ThisScript
+Enter-Test
 
+# Test module preferences to verify preferences are set to expected values,
+# In addition show session preferences to verify difference.
 Start-Test "Script level preferences"
-Write-Information -Tags "Test" -MessageData "INFO: ErrorActionPreference: $ErrorActionPreference"
-Write-Information -Tags "Test" -MessageData "INFO: WarningPreference: $WarningPreference"
-Write-Information -Tags "Test" -MessageData "INFO: InformationPreference: $InformationPreference"
-Write-Information -Tags "Test" -MessageData "INFO: VerbosePreference: $VerbosePreference"
-Write-Information -Tags "Test" -MessageData "INFO: DebugPreference: $DebugPreference"
+. $PSScriptRoot\..\Config\ProjectSettings.ps1 -ShowPreference
 
-if ($Develop)
+Start-Test "Script module preferences"
+$TestModule = New-Module -Name Dynamic.TestPreference -ErrorAction Stop -ScriptBlock {
+	Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value "Dynamic.TestPreference"
+	. $PSScriptRoot\..\Config\ProjectSettings.ps1 -ShowPreference -InsideModule
+	. $PSScriptRoot\..\Modules\ModulePreferences.ps1
+} | Import-Module -Scope Local -PassThru
+
+Start-Test "Script module no exports"
+$ExportCount = ($TestModule | Select-Object -ExpandProperty ExportedCommands | Measure-Object).Count
+if ($ExportCount)
 {
-	Start-Test "Module level preferences"
-	Write-Information -Tags "Test" -MessageData "INFO: ModuleErrorPreference: $ModuleErrorPreference"
-	Write-Information -Tags "Test" -MessageData "INFO: ModuleWarningPreference: $ModuleWarningPreference"
-	Write-Information -Tags "Test" -MessageData "INFO: ModuleInformationPreference: $ModuleInformationPreference"
-	Write-Information -Tags "Test" -MessageData "INFO: ModuleVerbosePreference: $ModuleVerbosePreference"
-	Write-Information -Tags "Test" -MessageData "INFO: ModuleDebugPreference: $ModuleDebugPreference"
+	Write-Error -Category InvalidResult -TargetObject $TestModule `
+		-Message "Nothing should be exported from this module"
+
+	Write-Information -Tags "Test" -MessageData "INFO: $ExportCount exports: $($TestModule | Select-Object -ExpandProperty ExportedCommands)"
 }
+
+Remove-Module -Name Dynamic.TestPreference -ErrorAction Stop
 
 Start-Test "ProjectConstants"
 Write-Information -Tags "Test" -MessageData "INFO: PolicyStore: $PolicyStore"

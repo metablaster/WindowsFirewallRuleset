@@ -58,6 +58,8 @@ In addition to the table below, see:
     - [List of Package providers available for installation](#list-of-package-providers-available-for-installation)
     - [Install package provider](#install-package-provider)
   - [Module management](#module-management)
+  - [Windows System](#windows-system)
+    - [Clear event logs](#clear-event-logs)
 
 ## Store Apps
 
@@ -416,3 +418,21 @@ Install-PackageProvider -Name Nuget -Verbose -Scope CurrentUser
 
 [reference app management]: https://docs.microsoft.com/en-us/windows/application-management/apps-in-windows-10 "Visit Microsoft docs"
 [reference appxpackage]: https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage?view=win10-ps "Visit Microsoft docs"
+
+## Windows System
+
+Specifc system wide commands that are useful for firewall management
+
+### Clear event logs
+
+WFP and PowerShell may generate log entries
+
+**NOTE:** All credits to [How to Clear All Event Logs in Event Viewer in Windows][tenforums]
+
+```powershell
+Get-WinEvent -ListLog * | Where-Object { $_.RecordCount } | ForEach-Object {
+  [System.Diagnostics.Eventing.Reader.EventLogSession]::GlobalSession.ClearLog($_.LogName)
+}
+```
+
+[tenforums]: https://www.tenforums.com/tutorials/16588-clear-all-event-logs-event-viewer-windows.html

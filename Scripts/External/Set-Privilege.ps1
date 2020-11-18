@@ -1,10 +1,5 @@
 
 <#
-This file is part of "Windows Firewall Ruleset" project
-Homepage: https://github.com/metablaster/WindowsFirewallRuleset
-#>
-
-<#
 .SYNOPSIS
 Toggle security privileges for the current PowerShell session.
 
@@ -31,6 +26,7 @@ None. Set-Privilege.ps1 does not generate any output
 .NOTES
 Author: Pyprohly
 GUID: 84990677-60ab-4984-9de1-fcfc19f5209d
+
 TODO: After runing this script, seems like some variables are removed, See Exit-Text "UnitTest" variable
 Following modifications by metablaster November 2020:
 1. Format code according to project best practices

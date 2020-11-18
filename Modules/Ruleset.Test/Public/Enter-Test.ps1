@@ -34,9 +34,6 @@ Initialize unit test
 Enter-Test initializes unit test, ie. to enable logging
 This function must be called before first test case in single unit test
 
-.PARAMETER File
-Specify name of of the unit test, ie. script file name
-
 .PARAMETER Private
 If specified temporarily exports private module functions into global scope
 
@@ -50,7 +47,7 @@ None. You cannot pipe objects to Enter-Test
 None. Enter-Test does not generate any output
 
 .NOTES
-TODO: Get file name of unit test automatically
+None.
 #>
 function Enter-Test
 {
@@ -58,9 +55,6 @@ function Enter-Test
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Test/Help/en-US/Enter-Test.md")]
 	[OutputType([void])]
 	param (
-		[Parameter(Mandatory = $true)]
-		[string] $File,
-
 		[Parameter()]
 		[switch] $Private
 	)
@@ -68,43 +62,38 @@ function Enter-Test
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# Let Exit-Test know file name
-	Set-Variable -Name UnitTest -Scope Script -Value $File
+	Set-Variable -Name UnitTest -Scope Global -Option ReadOnly -Value ((Get-PSCallStack)[1].Command -replace ".{4}$")
 
-	if ($PSCmdlet.ShouldProcess("Enter unit test", $script:UnitTest))
+	Write-Output ""
+	Write-Information -Tags "Test" -MessageData "INFO: Entering unit test '$UnitTest'"
+
+	if ($PSCmdlet.ShouldProcess("Enter unit test", $UnitTest))
 	{
-		if ($Private)
-		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Importing dynamic module"
-
-			# Temporarily export private function to global scope
-			New-Module -Name Ruleset.UnitTest -ScriptBlock {
-				$PrivateData = Get-ChildItem -Path "$ProjectRoot\Modules" -Filter "Private" -Recurse -Depth 1 |
+		New-Module -Name Dynamic.UnitTest -ScriptBlock {
+			if ($Private)
+			{
+				# Temporarily export private functions to global scope
+				$PrivateScript = Get-ChildItem -Path "$ProjectRoot\Modules" -Filter "Private" -Recurse -Depth 1 |
 				ForEach-Object { Get-ChildItem -Path $_.FullName -Recurse -Filter *.ps1 }
-				foreach ($File in $PrivateData) { . $File.FullName }
-			} | Import-Module -Scope Global
+				foreach ($Script in $PrivateScript) { . $Script.FullName }
+			}
 
-			# Let Exit-Test know there is dynamic module to remove
-			Set-Variable -Name DynamicModule -Scope Script -Value Ruleset.UnitTest
-		}
+			# TODO: variable name can be same
+			# Disable logging errors, warnings and info messages for tests
+			New-Variable -Name ErrorLoggingCopy -Option ReadOnly -Value $ErrorLogging
+			New-Variable -Name WarningLoggingCopy -Option ReadOnly -Value $WarningLogging
+			New-Variable -Name InformationLoggingCopy -Option ReadOnly -Value $InformationLogging
 
-		Write-Output ""
-		Write-Information -Tags "Test" -MessageData "INFO: Entering unit test '$script:UnitTest'"
+			# TODO: disable?
+			Set-Variable -Name ErrorLogging -Scope Global -Value $true
+			Set-Variable -Name WarningLogging -Scope Global -Value $true
+			Set-Variable -Name InformationLogging -Scope Global -Value $true
 
-		# disable logging errors for tests
-		# TODO: variable name can be same
-		Set-Variable -Name ErrorLoggingCopy -Scope Script -Value $ErrorLogging
-		Set-Variable -Name ErrorLogging -Scope Global -Value $true
+			Write-Debug -Message "[Enter-Test] ErrorLogging changed to: $ErrorLogging"
+			Write-Debug -Message "[Enter-Test] WarningLogging changed to: $WarningLogging"
+			Write-Debug -Message "[Enter-Test] InformationLogging changed to: $InformationLogging"
 
-		# disable logging warnings for tests
-		Set-Variable -Name WarningLoggingCopy -Scope Script -Value $WarningLogging
-		Set-Variable -Name WarningLogging -Scope Global -Value $true
-
-		# disable logging information messages for tests
-		Set-Variable -Name InformationLoggingCopy -Scope Script -Value $InformationLogging
-		Set-Variable -Name InformationLogging -Scope Global -Value $true
-
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] ErrorLogging changed to: $ErrorLogging"
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] WarningLogging changed to: $WarningLogging"
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] InformationLogging changed to: $InformationLogging"
+			Export-ModuleMember -Variable ErrorLoggingCopy, WarningLoggingCopy, InformationLoggingCopy
+		} | Import-Module -Scope Global
 	}
 }

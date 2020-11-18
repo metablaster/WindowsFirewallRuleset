@@ -31,7 +31,7 @@ Set-StrictMode -Version Latest
 Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
 # Imports
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule $true
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule
 . $PSScriptRoot\..\ModulePreferences.ps1
 
 #

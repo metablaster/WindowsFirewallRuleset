@@ -64,7 +64,7 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Wireless Networking"
-$WLANInterface = "Wireless"
+$LocalInterface = "Wireless"
 $Accept = "Outbound rules for wireless networking will be loaded, recommended in specific scenarios for wireless networks"
 $Deny = "Skip operation, outbound rules for wireless networking will not be loaded into firewall"
 
@@ -92,7 +92,7 @@ New-NetFirewallRule -DisplayName "Wireless Display" `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser $NT_AUTHORITY_UserModeDrivers `
-	-InterfaceType $WLANInterface `
+	-InterfaceType $LocalInterface `
 	-Description "Driver Foundation - User-mode Driver Framework Host Process.
 The driver host process (Wudfhost.exe) is a child process of the driver manager service.
 loads one or more UMDF driver DLLs, in addition to the framework DLLs." `
@@ -106,7 +106,7 @@ New-NetFirewallRule -DisplayName "Wireless Display" `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_UserModeDrivers `
-	-InterfaceType $WLANInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Driver Foundation - User-mode Driver Framework Host Process.
 The driver host process (Wudfhost.exe) is a child process of the driver manager service.
@@ -124,7 +124,7 @@ New-NetFirewallRule -DisplayName "WLAN Service WFD ASP Coordination Protocol" `
 	-LocalAddress Any -RemoteAddress LocalSubnet4 `
 	-LocalPort 7325 -RemotePort 7325 `
 	-LocalUser Any `
-	-InterfaceType $WLANInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "WLAN Service to allow coordination protocol for WFD Service sessions.
 Wi-Fi Direct (WFD) Protocol Specifies: Proximity Extensions, which enable two or more devices that
@@ -140,7 +140,7 @@ New-NetFirewallRule -DisplayName "WLAN Service WFD Driver-only" `
 	-LocalAddress Any -RemoteAddress LocalSubnet4 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $WLANInterface `
+	-InterfaceType $LocalInterface `
 	-Description "Rule for drivers to communicate over WFD, WFD Services kernel mode driver rule.
 Wi-Fi Direct (WFD) Protocol Specifies: Proximity Extensions, which enable two or more devices that
 are running the same application to establish a direct connection without requiring an intermediary,
@@ -155,7 +155,7 @@ New-NetFirewallRule -DisplayName "WLAN Service WFD Driver-only" `
 	-LocalAddress Any -RemoteAddress LocalSubnet4 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $WLANInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for drivers to communicate over WFD, WFD Services kernel mode driver rule.
 Wi-Fi Direct (WFD) Protocol Specifies: Proximity Extensions, which enable two or more devices that
@@ -223,7 +223,7 @@ New-NetFirewallRule -DisplayName "Wireless portable devices (SSDP)" `
 	-LocalAddress Any -RemoteAddress LocalSubnet4 `
 	-LocalPort Any -RemotePort 1900 `
 	-LocalUser Any `
-	-InterfaceType $WLANInterface `
+	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Wireless Portable Devices to allow use of the
 Simple Service Discovery Protocol." `
@@ -236,7 +236,7 @@ New-NetFirewallRule -DisplayName "Wireless portable devices" `
 	-LocalAddress Any -RemoteAddress LocalSubnet4 `
 	-LocalPort Any -RemotePort 15740 `
 	-LocalUser Any `
-	-InterfaceType $WLANInterface `
+	-InterfaceType $LocalInterface `
 	-Description "Wireless Portable Devices to allow use of the Usermode Driver Framework." `
 	@Logs | Format-Output @Logs
 
@@ -247,7 +247,7 @@ New-NetFirewallRule -DisplayName "Wireless portable devices" `
 	-LocalAddress Any -RemoteAddress Intranet4 `
 	-LocalPort Any -RemotePort 15740 `
 	-LocalUser Any `
-	-InterfaceType $WLANInterface `
+	-InterfaceType $LocalInterface `
 	-Description "Wireless Portable Devices to allow use of the Usermode Driver Framework." `
 	@Logs | Format-Output @Logs
 
@@ -258,7 +258,7 @@ New-NetFirewallRule -DisplayName "Wireless portable devices (UPnPHost)" `
 	-LocalAddress Any -RemoteAddress LocalSubnet4 `
 	-LocalPort Any -RemotePort 2869 `
 	-LocalUser Any `
-	-InterfaceType $WLANInterface `
+	-InterfaceType $LocalInterface `
 	-Description "Wireless Portable Devices to allow use of Universal Plug and Play." `
 	@Logs | Format-Output @Logs
 
@@ -270,7 +270,7 @@ New-NetFirewallRule -DisplayName "Wireless portable devices (FDPHost)" `
 	-LocalAddress Any -RemoteAddress LocalSubnet4 `
 	-LocalPort Any -RemotePort 2869 `
 	-LocalUser Any `
-	-InterfaceType $WLANInterface `
+	-InterfaceType $LocalInterface `
 	-Description "Wireless Portable Devices to allow use of Function discovery provider host." `
 	@Logs | Format-Output @Logs
 

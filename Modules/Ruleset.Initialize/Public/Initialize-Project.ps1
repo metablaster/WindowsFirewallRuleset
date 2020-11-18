@@ -480,7 +480,7 @@ function Initialize-Project
 	# TODO: finally show loaded modules, providers and services stataus
 	Write-Host ""
 	# HACK: We don't know if it was successful, need to record errors and/or warnings
-	Write-Host "INFO: Checking project minimum requirements was successful!" -ForegroundColor Cyan
+	Write-Host "Checking project minimum requirements was successful!" -ForegroundColor Cyan
 
 	Write-Output ""
 	Write-Output "System:`t`t $OSCaption v$OSBuildVersion"

@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
+Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,29 +26,45 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+<#
+.SYNOPSIS
+Script module preferences
+
+.DESCRIPTION
+At the moment used only for testing purposes
+
+.EXAMPLE
+PS> .\ModulePreferences.ps1
+
+.INPUTS
+None. You cannot pipe objects to ModulePreferences.ps1
+
+.OUTPUTS
+None. ModulePreferences.ps1 does not generate any output
+
+.NOTES
+TODO: Preferences not set/used because valid only for script modules which should not be present
+in this project
+TODO: If a script module is present in project make use of Scripts\Get-CallerPreference
+#>
+
 Set-StrictMode -Version Latest
 
-#
-# Module preferences
-#
+# if ($Develop)
+# {
+# 	$ErrorActionPreference = $ModuleErrorPreference
+# 	$WarningPreference = $ModuleWarningPreference
+# 	$DebugPreference = $ModuleDebugPreference
+# 	$VerbosePreference = $ModuleVerbosePreference
+# 	$InformationPreference = $ModuleInformationPreference
+# }
+# else
+# {
+# 	# Everything is default except InformationPreference should be enabled
+# 	$InformationPreference = "Continue"
+# }
 
-if ($Develop)
+if ($ShowPreference)
 {
-	$ErrorActionPreference = $ModuleErrorPreference
-	$WarningPreference = $ModuleWarningPreference
-	$DebugPreference = $ModuleDebugPreference
-	$VerbosePreference = $ModuleVerbosePreference
-	$InformationPreference = $ModuleInformationPreference
-
-	Write-Debug -Message "[$ThisModule] ErrorActionPreference is $ErrorActionPreference"
-	Write-Debug -Message "[$ThisModule] WarningPreference is $WarningPreference"
-	Write-Debug -Message "[$ThisModule] DebugPreference is $DebugPreference"
-	Write-Debug -Message "[$ThisModule] VerbosePreference is $VerbosePreference"
-	Write-Debug -Message "[$ThisModule] InformationPreference is $InformationPreference"
-}
-else
-{
-	# Everything is default except InformationPreference should be enabled
-	$InformationPreference = "Continue"
-	Write-Debug -Message "[$ThisModule] Not in develop mode"
+	Dynamic.Preference\Show-Preference $ThisModule
 }
