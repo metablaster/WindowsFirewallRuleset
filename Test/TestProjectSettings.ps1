@@ -46,7 +46,7 @@ None. TestProjectSettings.ps1 does not generate any output
 TODO: Needs update
 #>
 
-# Initialization
+#region Initialization
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )
@@ -61,6 +61,7 @@ Initialize-Project -Abort
 # User prompt
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+#endregion
 
 Enter-Test
 

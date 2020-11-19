@@ -46,7 +46,7 @@ None. RuleRelativePath.ps1 does not generate any output
 None.
 #>
 
-# Initialization
+#region Initialization
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
@@ -69,7 +69,7 @@ $Group = "Test - Relative path"
 $LocalProfile = "Any"
 $TargetProgramRoot = "C:\Program Files (x86)\Realtek\..\PokerStars.EU"
 
-Enter-Test $ThisScript
+Enter-Test
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs

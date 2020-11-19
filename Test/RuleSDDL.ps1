@@ -46,7 +46,7 @@ None. RuleSDDL.ps1 does not generate any output
 None.
 #>
 
-# Initialization
+#region Initialization
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
@@ -69,7 +69,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 $Group = "Test - Get-SDDL"
 $LocalProfile = "Any"
 
-Enter-Test $ThisScript
+Enter-Test
 # TODO: Need separate test cases for users, groups and built in domains
 
 Start-Test "Remove-NetFirewallRule"

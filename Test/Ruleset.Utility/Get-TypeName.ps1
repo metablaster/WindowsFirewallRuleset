@@ -47,7 +47,7 @@ TODO: Need to write test cases for non .NET types such as WMI or custom types,
 also more failure test cases.
 #>
 
-# Initialization
+#region Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )
@@ -62,6 +62,7 @@ Import-Module -Name Ruleset.Logging
 # User prompt
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+#endregion
 
 <#
 .SYNOPSIS
@@ -89,7 +90,7 @@ function global:Test-Multiple
 	return $null
 }
 
-Enter-Test $ThisScript
+Enter-Test
 
 #
 # Defaults test

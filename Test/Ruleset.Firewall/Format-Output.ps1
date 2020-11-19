@@ -46,7 +46,7 @@ None. Format-Output.ps1 does not generate any output
 None.
 #>
 
-# Initialization
+#region Initialization
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
@@ -62,13 +62,14 @@ Import-Module -Name Ruleset.Logging
 # User prompt
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+#endregion
 
 # Setup local variables
 $Group = "Test - Format output"
 $LocalProfile = "Any"
 $Direction = "Outbound"
 
-Enter-Test $ThisScript
+Enter-Test
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs

@@ -46,7 +46,7 @@ None. RuleInterfaceAlias.ps1 does not generate any output
 None.
 #>
 
-# Initialization
+#region Initialization
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
@@ -68,7 +68,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 $Group = "Test - Interface aliases"
 $LocalProfile = "Any"
 
-Enter-Test $ThisScript
+Enter-Test
 
 Start-Test "Remove-NetFirewallRule"
 # Remove previous test

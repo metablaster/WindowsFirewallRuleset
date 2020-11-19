@@ -46,7 +46,7 @@ None. BlankTest.ps1 does not generate any output
 None.
 #>
 
-# Initialization
+#region Initialization
 # TODO: Remove elevation requirement if needed
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
@@ -64,6 +64,6 @@ Import-Module -Name Ruleset.Logging
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 
-Enter-Test $ThisScript
+Enter-Test
 
 Exit-Test

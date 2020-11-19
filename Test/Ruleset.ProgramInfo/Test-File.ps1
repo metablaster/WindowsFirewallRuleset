@@ -46,7 +46,7 @@ None. Test-File.ps1 does not generate any output
 None.
 #>
 
-# Initialization
+#region Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )
@@ -61,8 +61,9 @@ Import-Module -Name Ruleset.Logging
 # User prompt
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+#endregion
 
-Enter-Test $ThisScript
+Enter-Test
 
 $OfficeShared = "%ProgramFiles%\Common Files\microsoft shared"
 $VSInstallService = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.x86.exe"

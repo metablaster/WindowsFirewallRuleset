@@ -46,7 +46,7 @@ None. Test-Installation.ps1 does not generate any output
 None.
 #>
 
-# Initialization
+#region Initialization
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
@@ -62,8 +62,9 @@ Import-Module -Name Ruleset.Logging
 # User prompt
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+#endregion
 
-Enter-Test $ThisScript
+Enter-Test
 
 $OfficeRoot = "%ProgramFiles(x866666)%\Microsoft Office\root\Office16"
 $TeamViewerRoot = "%ProgramFiles(x86)%\TeamViewerZZZZ"

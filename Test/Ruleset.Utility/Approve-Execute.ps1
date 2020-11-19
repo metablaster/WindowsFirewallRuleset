@@ -30,7 +30,7 @@ SOFTWARE.
 # Unit test for Approve-Execute
 #
 
-# Initialization
+#region Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )
@@ -45,8 +45,9 @@ Import-Module -Name Ruleset.Logging
 # User prompt
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+#endregion
 
-Enter-Test $ThisScript
+Enter-Test
 
 [string] $Accept2 = "Accept test"
 [string] $Deny2 = "Deny test"

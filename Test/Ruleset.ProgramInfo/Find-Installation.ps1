@@ -51,7 +51,7 @@ None.
 [CmdletBinding()]
 param ()
 
-# Initialization
+#region Initialization
 # NOTE: As Administrator because of a test with OneDrive which loads reg hive of other users
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
@@ -75,8 +75,9 @@ Import-Module -Name Ruleset.Logging
 # User prompt
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+#endregion
 
-Enter-Test $ThisScript
+Enter-Test
 
 Start-Test "Find-Installation 'EdgeChromium'"
 Find-Installation "EdgeChromium" @Logs

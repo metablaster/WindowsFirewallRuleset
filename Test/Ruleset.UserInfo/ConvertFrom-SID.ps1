@@ -46,7 +46,7 @@ None. ConvertFrom-SID.ps1 does not generate any output
 None.
 #>
 
-# Initialization
+#region Initialization
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
@@ -63,11 +63,12 @@ Import-Module -Name Ruleset.UserInfo
 # User prompt
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+#endregion
 
 $VerbosePreference = "Continue"
 $DebugPreference = "Continue"
 
-Enter-Test $ThisScript
+Enter-Test
 
 Start-Test "Get-GroupPrincipal 'Users', 'Administrators', NT SYSTEM, NT LOCAL SERVICE"
 $UserAccounts = Get-GroupPrincipal "Users", "Administrators" @Logs

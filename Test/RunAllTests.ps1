@@ -60,7 +60,7 @@ param (
 	[switch] $Pester
 )
 
-# Initialization
+#region Initialization
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
@@ -83,6 +83,7 @@ if ($Pester)
 
 Update-Context $TestContext $ThisScript
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+#endregion
 
 if (!$Pester)
 {
