@@ -59,8 +59,8 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
@@ -86,13 +86,13 @@ Start-Test "ACL.SDDL"
 $ACL.SDDL
 
 Start-Test "Show-SDDL (pipeline)"
-$ACL | Show-SDDL @Logs
+$ACL | Show-SDDL
 
 Start-Test "Show-SDDL (parameter)"
-$Result = Show-SDDL $ACL.SDDL @Logs
+$Result = Show-SDDL $ACL.SDDL
 $Result
 
-Test-Output $Result -Command Show-SDDL @Logs
+Test-Output $Result -Command Show-SDDL
 
 Update-Log
 Exit-Test

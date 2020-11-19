@@ -63,12 +63,12 @@ $Accept = "Outbound rules for OBS Studio software will be loaded, recommended if
 $Deny = "Skip operation, outbound rules for OBS Studio software will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # OBSStudio installation directories
@@ -80,16 +80,16 @@ $OBSStudioRoot = "%ProgramFiles%\obs-studio\bin\64bit"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "OBSStudio" ([ref] $OBSStudioRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "OBSStudio" ([ref] $OBSStudioRoot)) -or $ForceLoad)
 {
 	$Program = "$OBSStudioRoot\obs64.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "OBSStudio" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "OBS Studio check for updates" @Logs | Format-Output @Logs
+		-Description "OBS Studio check for updates" | Format-Output
 }
 
 Update-Log

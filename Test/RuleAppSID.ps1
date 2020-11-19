@@ -63,7 +63,7 @@ Import-Module -Name Ruleset.UserInfo
 # User prompt
 Set-Variable -Name Accept -Scope Local -Option ReadOnly -Force -Value "Load test rule into firewall"
 Update-Context $TestContext "IPv$IPVersion" $Direction
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 # Setup local variables
 $Group = "Test - AppSID"
@@ -73,10 +73,10 @@ Enter-Test
 
 Start-Test "Remove-NetFirewallRule"
 # Remove previous test
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 Start-Test "Get-GroupPrincipal"
-$Principals = Get-GroupPrincipal "Users" @Logs
+$Principals = Get-GroupPrincipal "Users"
 $Principals
 
 [string] $PackageSID = ""
@@ -84,13 +84,13 @@ $Principals
 foreach ($Principal in $Principals)
 {
 	Start-Test "Processing for: $($Principal.Account)"
-	$OwnerSID = Get-AccountSID $Principal.User -Computer $Principal.Computer @Logs
+	$OwnerSID = Get-AccountSID $Principal.User -Computer $Principal.Computer
 	$OwnerSID
 
 	Get-UserApps -User $Principal.User | ForEach-Object {
 		$PackageSID = Get-AppSID $Principal.User $_.PackageFamilyName
 		$PackageSID
-	} @Logs
+	}
 }
 
 Start-Test "New-NetFirewallRule"
@@ -104,8 +104,8 @@ New-NetFirewallRule -DisplayName "Get-AppSID" `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
 	-Owner $OwnerSID -Package $PackageSID `
-	-Description "TargetProgram test rule description" `
-	@Logs | Format-Output @Logs
+	-Description "TargetProgram test rule description" |
+Format-Output
 
 Update-Log
 Exit-Test

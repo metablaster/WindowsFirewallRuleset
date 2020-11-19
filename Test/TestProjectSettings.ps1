@@ -59,8 +59,8 @@ Import-Module -Name Ruleset.Logging
 Initialize-Project -Abort
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test

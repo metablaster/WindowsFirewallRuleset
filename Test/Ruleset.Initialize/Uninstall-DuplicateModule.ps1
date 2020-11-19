@@ -66,8 +66,8 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test -Private
@@ -81,17 +81,17 @@ if ($Force -or $PSCmdlet.ShouldContinue("Uninstall specified modules for testing
 	if ($TargetModule)
 	{
 		Start-Test "Uninstall-DuplicateModule Pipeline"
-		$TargetModule | Uninstall-DuplicateModule @Logs
+		$TargetModule | Uninstall-DuplicateModule
 	}
 
 	Start-Test "Uninstall-DuplicateModule -Name Pester"
-	Uninstall-DuplicateModule -Name Pester -Location Shipping, System, User @Logs
+	Uninstall-DuplicateModule -Name Pester -Location Shipping, System, User
 
 	Start-Test "Uninstall-DuplicateModule -Name PowerShellGet, PackageManagement"
-	$Result = Uninstall-DuplicateModule -Name PowerShellGet, PackageManagement -Location Shipping, System @Logs
+	$Result = Uninstall-DuplicateModule -Name PowerShellGet, PackageManagement -Location Shipping, System
 	$Result
 
-	Test-Output $Result -Command Uninstall-DuplicateModule @Logs
+	Test-Output $Result -Command Uninstall-DuplicateModule
 
 	Remove-Module -Name Ruleset.UnitTest
 }

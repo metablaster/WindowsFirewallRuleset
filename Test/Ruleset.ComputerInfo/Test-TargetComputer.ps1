@@ -59,17 +59,17 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 Start-Test "Test-TargetComputer"
-$Result = Test-TargetComputer ([System.Environment]::MachineName) @Logs
+$Result = Test-TargetComputer ([System.Environment]::MachineName)
 $Result
 
-Test-Output $Result -Command Test-TargetComputer @Logs
+Test-Output $Result -Command Test-TargetComputer
 
 Update-Log
 Exit-Test

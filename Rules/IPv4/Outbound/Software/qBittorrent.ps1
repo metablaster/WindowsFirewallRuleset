@@ -63,8 +63,8 @@ $Accept = "Outbound rules for qBittorrent software will be loaded, recommended i
 $Deny = "Skip operation, outbound rules for qBittorrent software will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 #
@@ -73,7 +73,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 $qBittorrentRoot = "%ProgramFiles%\qBittorrent"
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Rules for qBittorrent
@@ -81,14 +81,14 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot)) -or $ForceLoad)
 {
 	# TODO: some apps such as this one let user to configure ports, in all cases where this is true
 	# we should either use default port or let user specify port.
 	# TODO: the client also listens on IPv6, not all rules are hybrid, ie. local peer discovery
 	# is known to search peers on local IPv6
 	$Program = "$qBittorrentRoot\qbittorrent.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -DisplayName "qBittorrent - HTTP/S" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
@@ -97,8 +97,8 @@ if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot) @Logs) -or $ForceL
 		-LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
 		-InterfaceType $DefaultInterface `
-		-Description "HTTP check for updates, HTTPS for client unknown" `
-		@Logs | Format-Output @Logs
+		-Description "HTTP check for updates, HTTPS for client unknown" |
+	Format-Output
 
 	# NOTE: local port can be other than 6771, client will fall back to 6771
 	New-NetFirewallRule -DisplayName "qbittorrent - Local Peer Discovery" `
@@ -111,8 +111,8 @@ if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot) @Logs) -or $ForceL
 		-InterfaceType $DefaultInterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "UDP multicast search to identify other peers in your subnet that are also on
-torrents you are on." `
-		@Logs | Format-Output @Logs
+torrents you are on." |
+	Format-Output
 
 	New-NetFirewallRule -DisplayName "qbittorrent - SSDP" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
@@ -123,8 +123,8 @@ torrents you are on." `
 		-LocalUser $UsersGroupSDDL `
 		-InterfaceType $DefaultInterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "" `
-		@Logs | Format-Output @Logs
+		-Description "" |
+	Format-Output
 
 	# NOTE: We start from port 1024 which is most widely used, but some peers may set it to lower
 	New-NetFirewallRule -DisplayName "qbittorrent - DHT" `
@@ -141,8 +141,8 @@ that qbittorrent can use to find more peers without a tracker.
 What this means is that your client will be able to find peers even when the tracker is down,
 or doesn't even exist anymore.
 You can also download .torrent files through DHT if you have a magnet link, which can be obtained
-from various sources." `
-	 @Logs | Format-Output @Logs
+from various sources." |
+	Format-Output
 
 	# NOTE: We use any local port instead of LocalPort 1161,
 	# but otherwise the rule overlaps with DHT rule
@@ -155,8 +155,8 @@ from various sources." `
 		-LocalUser $UsersGroupSDDL `
 		-InterfaceType $DefaultInterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "BitTorrent part of full range of ports used most often (Trackers)	" `
-		@Logs | Format-Output @Logs
+		-Description "BitTorrent part of full range of ports used most often (Trackers)	" |
+	Format-Output
 
 	New-NetFirewallRule -DisplayName "qbittorrent - NAT Port mapping protocol" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -169,8 +169,8 @@ from various sources." `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "The NAT Port Mapping Protocol (NAT-PMP) is a network protocol for establishing
 network address translation (NAT) settings and port forwarding configurations automatically without
-user effort." `
-	 @Logs | Format-Output @Logs
+user effort." |
+	Format-Output
 
 	# NOTE: We start from port 1024 which is most widely used, but some peers may set it to lower
 	New-NetFirewallRule -DisplayName "qBittorrent - Client to peers" `
@@ -181,8 +181,8 @@ user effort." `
 		-LocalPort Any -RemotePort 1024-65535 `
 		-LocalUser $UsersGroupSDDL `
 		-InterfaceType $DefaultInterface `
-		-Description "Torrent client" `
-		@Logs | Format-Output @Logs
+		-Description "Torrent client" |
+	Format-Output
 }
 
 Update-Log

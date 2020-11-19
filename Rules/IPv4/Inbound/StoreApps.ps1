@@ -65,19 +65,19 @@ $Accept = "Inbound rules for store apps will be loaded, required for Windows sto
 $Deny = "Skip operation, inbound rules for store apps will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $SystemGroup -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $SystemGroup -Direction $Direction -ErrorAction Ignore
 
 #
 # Block Administrators by default
 #
 
-$Principals = Get-GroupPrincipal "Administrators" @Logs
+$Principals = Get-GroupPrincipal "Administrators"
 foreach ($Principal in $Principals)
 {
 	New-NetFirewallRule -DisplayName "Store apps for $($Principal.User)" `
@@ -91,15 +91,15 @@ foreach ($Principal in $Principals)
 		-Owner (Get-AccountSID $Principal.User) -Package * `
 		-Description "$($Principal.User) is administrative account,
 block $($Principal.User) from network activity for all store apps.
-Administrators should have limited or no connectivity at all for maximum security." `
-		@Logs | Format-Output @Logs
+Administrators should have limited or no connectivity at all for maximum security." |
+	Format-Output
 }
 
 #
 # Create rules for all network apps for each standard user
 #
 
-$Principals = Get-GroupPrincipal "Users" @Logs
+$Principals = Get-GroupPrincipal "Users"
 foreach ($Principal in $Principals)
 {
 	#
@@ -152,8 +152,8 @@ foreach ($Principal in $Principals)
 				-LocalUser Any -EdgeTraversalPolicy Block `
 				-InterfaceType $DefaultInterface `
 				-Owner $Principal.SID -Package $PackageSID `
-				-Description "Auto generated rule for $($_.Name) used by $($Principal.User)" `
-				@Logs | Format-Output @Logs
+				-Description "Auto generated rule for $($_.Name) used by $($Principal.User)" |
+			Format-Output
 
 			Update-Log
 		}
@@ -209,8 +209,8 @@ foreach ($Principal in $Principals)
 				-LocalUser Any -EdgeTraversalPolicy Block `
 				-InterfaceType $DefaultInterface `
 				-Owner $Principal.SID -Package $PackageSID `
-				-Description "Auto generated rule for $($_.Name) installed system wide and used by $($Principal.User)" `
-				@Logs | Format-Output @Logs
+				-Description "Auto generated rule for $($_.Name) installed system wide and used by $($Principal.User)" |
+			Format-Output
 
 			Update-Log
 		}

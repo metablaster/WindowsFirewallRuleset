@@ -43,8 +43,8 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
@@ -53,10 +53,10 @@ Enter-Test
 [string] $Deny2 = "Deny test"
 
 Start-Test "Approve-Execute default"
-Approve-Execute @Logs
+Approve-Execute
 
 Start-Test "Approve-Execute -Default No"
-$Result = Approve-Execute -Unsafe -Accept $Accept2 -Deny $Deny2 @Logs
+$Result = Approve-Execute -Unsafe -Accept $Accept2 -Deny $Deny2
 $Result
 
 Start-Test "Approve-Execute title question unsafe"
@@ -65,12 +65,12 @@ Approve-Execute -Unsafe -Title "Unable to locate 'SOME FOLDER'" -Question "Do yo
 [bool] $YesToAll = $false
 [bool] $NoToAll = $false
 Start-Test "Approve-Execute ToAll"
-Approve-Execute -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll) @Logs
+Approve-Execute -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll)
 
 Start-Test "Approve-Execute ToAll full"
-Approve-Execute -Unsafe -Accept $Accept2 -Deny $Deny2 -Title "TITLE" -Question "QUESTION" -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll) @Logs
+Approve-Execute -Unsafe -Accept $Accept2 -Deny $Deny2 -Title "TITLE" -Question "QUESTION" -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll)
 
-Test-Output $Result -Command Approve-Execute @Logs
+Test-Output $Result -Command Approve-Execute
 
 Update-Log
 Exit-Test

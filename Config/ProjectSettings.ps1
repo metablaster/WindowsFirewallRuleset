@@ -201,9 +201,9 @@ $PSModuleAutoLoadingPreference = "All"
 
 if (!$InsideModule)
 {
-	$PSDefaultParameterValues = @{
-		"*:ErrorVariable" = "+ErrorBuffer"
-		"*:WarningVariable" = "+WarningBuffer"
+	$private:PSDefaultParameterValues = @{
+		"*:ErrorVariable" = "+ErrorBuffer";
+		"*:WarningVariable" = "+WarningBuffer";
 		"*:InformationVariable" = "+InfoBuffer"
 	}
 }

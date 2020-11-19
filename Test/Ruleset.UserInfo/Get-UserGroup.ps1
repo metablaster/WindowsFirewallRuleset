@@ -60,24 +60,24 @@ Import-Module -Name Ruleset.Logging
 Import-Module -Name Ruleset.UserInfo
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 Start-Test "Get-UserGroup"
-$Result = Get-UserGroup @Logs
+$Result = Get-UserGroup
 $Result
 
 Start-Test "Get-UserGroup CIM server"
-Get-UserGroup "localhost" -CIM @Logs
+Get-UserGroup "localhost" -CIM
 
 Start-Test "Failure test"
 Get-UserGroup "FAILURETEST" -ErrorAction SilentlyContinue -EV Failure
 Write-Warning "Ignored error: $Failure"
 
-Test-Output $Result -Command Get-UserGroup @Logs
+Test-Output $Result -Command Get-UserGroup
 
 Update-Log
 Exit-Test

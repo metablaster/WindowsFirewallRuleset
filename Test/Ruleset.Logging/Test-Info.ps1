@@ -59,8 +59,8 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 <#
@@ -72,8 +72,8 @@ function Test-Info
 	[CmdletBinding()]
 	param ()
 
-	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] info 1"
-	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] info 2"
+	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] INFO: info 1"
+	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] INFO: info 2"
 }
 
 <#
@@ -92,8 +92,8 @@ function Test-Pipeline
 
 	process
 	{
-		Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] End of pipe 1"
-		Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] End of pipe 2"
+		Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] INFO: End of pipe 1"
+		Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] INFO: End of pipe 2"
 	}
 }
 
@@ -106,8 +106,8 @@ function Test-Nested
 	[CmdletBinding()]
 	param ()
 
-	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] Nested 1"
-	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] Nested 2"
+	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] INFO: Nested 1"
+	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] INFO: Nested 2"
 }
 
 <#
@@ -119,9 +119,9 @@ function Test-Parent
 	[CmdletBinding()]
 	param ()
 
-	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] Parent 1"
+	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] INFO: Parent 1"
 	Test-Nested
-	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] Parent 2"
+	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] INFO: Parent 2"
 }
 
 <#
@@ -135,19 +135,19 @@ function Test-Combo
 
 	Write-Error -Message "[$($MyInvocation.MyCommand.Name)] combo" -Category PermissionDenied -ErrorId 11
 	Write-Warning -Message "[$($MyInvocation.InvocationName)] combo"
-	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.MyCommand.Name)] INFO: combo"
+	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] INFO: combo"
 }
 
 <#
 .SYNOPSIS
-	No info log
-.NOTES
-	Is this function called?
+	Pipeline helper
 #>
 function Test-Empty
 {
 	[CmdletBinding()]
 	param ()
+
+	Write-Output "Data.."
 }
 
 Enter-Test
@@ -159,19 +159,59 @@ $WarningPreference = "SilentlyContinue"
 $InformationPreference = "SilentlyContinue"
 
 Start-Test "No info"
-Get-ChildItem -Path "C:\" @Logs | Out-Null
+Get-ChildItem -Path "C:\" | Out-Null
 
 Start-Test "Test-Info"
-Test-Info @Logs
+Test-Info
+
+Start-Test "Update-Log first"
+Update-Log
+
+Start-Test "Test-Warning other actions"
+Test-Info -WarningAction Stop -ErrorAction Stop
 
 Start-Test "Test-Pipeline"
-Test-Empty @Logs | Test-Pipeline @Logs
+Test-Empty | Test-Pipeline
 
 Start-Test "Test-Parent"
-Test-Parent @Logs
+Test-Parent
 
 Start-Test "Test-Combo"
-Test-Combo @Logs
+Test-Combo
 
+Start-Test "Create module"
+New-Module -Name Dynamic.TestInfo -ScriptBlock {
+	. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule
+
+	# NOTE: Same thing as in parent scope, we test generating logs not what is shown in the console
+	$ErrorActionPreference = "SilentlyContinue"
+	$WarningPreference = "SilentlyContinue"
+	$InformationPreference = "SilentlyContinue"
+
+	# TODO: Start-Test cant be used here, see todo in Ruleset.Test module
+	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] INFO: $PSDefaultParameterValues in Dynamic.TestInfo:" -InformationAction "Continue"
+	$PSDefaultParameterValues
+
+	<#
+	.SYNOPSIS
+	Test default parameter values and information loging inside module function
+	#>
+	function Test-DynamicFunction
+	{
+		[CmdletBinding()]
+		param()
+
+		Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] INFO: $PSDefaultParameterValues in Test-DynamicFunction:" -InformationAction "Continue"
+		$PSDefaultParameterValues
+
+		Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] INFO: info in module"
+	}
+} | Import-Module
+
+New-Test "Test-DynamicFunction"
+Test-DynamicFunction
+Remove-Module -Name Dynamic.TestInfo
+
+Start-Test "Update-Log second"
 Update-Log
 Exit-Test

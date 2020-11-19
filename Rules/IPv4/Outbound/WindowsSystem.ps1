@@ -64,12 +64,12 @@ $Accept = "Outbound rules for built in system software will be loaded, required 
 $Deny = "Skip operation, outbound rules for built in system software will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Installation directories
@@ -87,7 +87,7 @@ $NETFrameworkRoot = "" # "%SystemRoot%\Microsoft.NET\Framework64"
 # TODO: does not exist in Windows Server 2019
 # NOTE: user can by any local human user
 $Program = "%SystemRoot%\System32\DataUsageLiveTileTask.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "DataSenseLiveTileTask" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -97,15 +97,15 @@ New-NetFirewallRule -DisplayName "DataSenseLiveTileTask" `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
-	-Description "Probably related to keeping bandwidth usage information up-to-date." `
-	@Logs | Format-Output @Logs
+	-Description "Probably related to keeping bandwidth usage information up-to-date." |
+Format-Output
 
 # Test if installation exists on system
-if ((Test-Installation "NETFramework" ([ref] $NETFrameworkRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "NETFramework" ([ref] $NETFrameworkRoot)) -or $ForceLoad)
 {
 	# TODO: are these really user accounts we need here
 	$Program = "$NETFrameworkRoot\mscorsvw.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -DisplayName "CLR Optimization Service" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
@@ -117,14 +117,14 @@ if ((Test-Installation "NETFramework" ([ref] $NETFrameworkRoot) @Logs) -or $Forc
 		-Description "mscorsvw.exe is precompiling .NET assemblies in the background.
 Once it's done, it will go away. Typically, after you install the .NET Redist,
 it will be done with the high priority assemblies in 5 to 10 minutes and then will wait until
-your computer is idle to process the low priority assemblies." `
-		@Logs | Format-Output @Logs
+your computer is idle to process the low priority assemblies." |
+	Format-Output
 }
 
-if ((Test-Installation "WindowsDefender" ([ref] $WindowsDefenderRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "WindowsDefender" ([ref] $WindowsDefenderRoot)) -or $ForceLoad)
 {
 	$Program = "$WindowsDefenderRoot\MsMpEng.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 
 	New-NetFirewallRule -DisplayName "Windows Defender" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -134,11 +134,11 @@ if ((Test-Installation "WindowsDefender" ([ref] $WindowsDefenderRoot) @Logs) -or
 		-LocalPort Any -RemotePort 443 `
 		-LocalUser $NT_AUTHORITY_System `
 		-InterfaceType $DefaultInterface `
-		-Description "Anti malware service executable." `
-		@Logs | Format-Output @Logs
+		-Description "Anti malware service executable." |
+	Format-Output
 
 	$Program = "$WindowsDefenderRoot\MpCmdRun.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 
 	New-NetFirewallRule -DisplayName "Windows Defender CLI" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -149,13 +149,13 @@ if ((Test-Installation "WindowsDefender" ([ref] $WindowsDefenderRoot) @Logs) -or
 		-LocalUser $NT_AUTHORITY_System `
 		-InterfaceType $DefaultInterface `
 		-Description "This utility can be useful when you want to automate Windows Defender
-Antivirus use." `
-		@Logs | Format-Output @Logs
+Antivirus use." |
+	Format-Output
 }
 
 # TODO: Missing description
 $Program = "%SystemRoot%\System32\MRT.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "Malicious Software Removal Tool" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -165,11 +165,11 @@ New-NetFirewallRule -DisplayName "Malicious Software Removal Tool" `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $DefaultInterface `
-	-Description "" `
-	@Logs | Format-Output @Logs
+	-Description "" |
+Format-Output
 
 $Program = "%SystemRoot%\System32\slui.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "Activation Client" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -179,11 +179,11 @@ New-NetFirewallRule -DisplayName "Activation Client" `
 	-LocalPort Any -RemotePort 80, 443 `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
-	-Description "Used to activate Windows." `
-	@Logs | Format-Output @Logs
+	-Description "Used to activate Windows." |
+Format-Output
 
 $Program = "%SystemRoot%\System32\SppExtComObj.Exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "Activation KMS" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -193,12 +193,12 @@ New-NetFirewallRule -DisplayName "Activation KMS" `
 	-LocalPort Any -RemotePort 1688 `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
-	-Description "Activate Office and KMS based software." `
-	@Logs | Format-Output @Logs
+	-Description "Activate Office and KMS based software." |
+Format-Output
 
 # TODO: this app no longer exists on system, MS changed executable name?
 # $Program = "%SystemRoot%\System32\CompatTel\QueryAppBlock.exe"
-# Test-File $Program @Logs
+# Test-File $Program
 
 # New-NetFirewallRule -DisplayName "Application Block Detector" `
 # 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -210,11 +210,11 @@ New-NetFirewallRule -DisplayName "Activation KMS" `
 # 	-InterfaceType $DefaultInterface `
 # 	-Description "Its purpose is to scans your hardware, devices, and installed programs for
 # known compatibility issues
-# with a newer Windows version by comparing them against a specific database." `
-# 	@Logs | Format-Output @Logs
+# with a newer Windows version by comparing them against a specific database." |
+# Format-Output
 
 $Program = "%SystemRoot%\System32\backgroundTaskHost.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 # TODO: need to check if port 22 is OK.
 # TODO: Dropped connection (for admin), likely reason for app downarrows
@@ -230,12 +230,12 @@ New-NetFirewallRule -DisplayName "Background task host" `
 	-Description "backgroundTaskHost.exe is the process that starts background tasks.
 So Cortana and the other Microsoft app registered a background task which is now started by Windows.
 Port 22 is most likely used for installation.
-https://docs.microsoft.com/en-us/windows/uwp/launch-resume/support-your-app-with-background-tasks" `
-	@Logs | Format-Output @Logs
+https://docs.microsoft.com/en-us/windows/uwp/launch-resume/support-your-app-with-background-tasks" |
+Format-Output
 
 # NOTE: Was active while setting up MS account
 $Program = "%SystemRoot%\System32\BackgroundTransferHost.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "Background transfer host" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -245,11 +245,11 @@ New-NetFirewallRule -DisplayName "Background transfer host" `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser $UsersGroupSDDL `
 	-InterfaceType $DefaultInterface `
-	-Description "Download/Upload Host" `
-	@Logs | Format-Output @Logs
+	-Description "Download/Upload Host" |
+Format-Output
 
 $Program = "%SystemRoot%\System32\Speech_OneCore\common\SpeechRuntime.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 # TODO: no comment
 New-NetFirewallRule -DisplayName "Cortana Speech Runtime" `
@@ -260,11 +260,11 @@ New-NetFirewallRule -DisplayName "Cortana Speech Runtime" `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
-	-Description "" `
-	@Logs | Format-Output @Logs
+	-Description "" |
+Format-Output
 
 $Program = "%SystemRoot%\System32\Speech_OneCore\common\SpeechModelDownload.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "Cortana Speech Model" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -274,11 +274,11 @@ New-NetFirewallRule -DisplayName "Cortana Speech Model" `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser $NT_AUTHORITY_NetworkService `
 	-InterfaceType $DefaultInterface `
-	-Description "" `
-	@Logs | Format-Output @Logs
+	-Description "" |
+Format-Output
 
 $Program = "%SystemRoot%\System32\wsqmcons.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "Customer Experience Improvement Program" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -289,11 +289,11 @@ New-NetFirewallRule -DisplayName "Customer Experience Improvement Program" `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
 	-Description "This program collects and sends usage data to Microsoft,
-can be disabled in GPO." `
-	@Logs | Format-Output @Logs
+can be disabled in GPO." |
+Format-Output
 
 $Program = "%SystemRoot%\System32\CompatTelRunner.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "Microsoft Compatibility Telemetry" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -313,11 +313,11 @@ This process also takes place when upgrading the operating system.
 To disable this program: Task Scheduler Library > Microsoft > Windows > Application Experience
 In the middle pane, you will see all the scheduled tasks, such as Microsoft Compatibility Appraiser,
 ProgramDataUpdater and StartupAppTask.
-Right-click on the Microsoft Compatibility Appraiser and select Disable." `
-	@Logs | Format-Output @Logs
+Right-click on the Microsoft Compatibility Appraiser and select Disable." |
+Format-Output
 
 $Program = "%SystemRoot%\System32\SearchProtocolHost.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "Windows Indexing Service" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -328,11 +328,11 @@ New-NetFirewallRule -DisplayName "Windows Indexing Service" `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
 	-Description "SearchProtocolHost.exe is part of the Windows Indexing Service,
-an application that indexes files on the local drive making them easier to search." `
-	@Logs | Format-Output @Logs
+an application that indexes files on the local drive making them easier to search." |
+Format-Output
 
 $Program = "%SystemRoot%\System32\WerFault.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "Error Reporting" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -342,11 +342,11 @@ New-NetFirewallRule -DisplayName "Error Reporting" `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
-	-Description "Report Windows errors back to Microsoft." `
-	@Logs | Format-Output @Logs
+	-Description "Report Windows errors back to Microsoft." |
+Format-Output
 
 $Program = "%SystemRoot%\System32\wermgr.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "Error Reporting" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -356,11 +356,11 @@ New-NetFirewallRule -DisplayName "Error Reporting" `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
-	-Description "Report Windows errors back to Microsoft." `
-	@Logs | Format-Output @Logs
+	-Description "Report Windows errors back to Microsoft." |
+Format-Output
 
 $Program = "%SystemRoot%\explorer.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 # TODO: remote to local subnet seen for shared folder access
 New-NetFirewallRule -DisplayName "File Explorer" `
@@ -371,8 +371,8 @@ New-NetFirewallRule -DisplayName "File Explorer" `
 	-LocalPort Any -RemotePort 80 `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
-	-Description "File explorer checks for digital signatures verification, windows update." `
-	@Logs | Format-Output @Logs
+	-Description "File explorer checks for digital signatures verification, windows update." |
+Format-Output
 
 # TODO: possibly deprecated since Windows 10
 # Seen outbound 443 while setting up MS account on fresh Windows account
@@ -384,11 +384,11 @@ New-NetFirewallRule -DisplayName "File Explorer" `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
-	-Description "Smart Screen Filter" `
-	@Logs | Format-Output @Logs
+	-Description "Smart Screen Filter" |
+Format-Output
 
 $Program = "%SystemRoot%\System32\ftp.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 # TODO: need to test and adjust for passive vs active and various types of protocol:
 # FTP, SFPT, FTPS etc... All this have to be updated also for other FTP programs
@@ -400,11 +400,11 @@ New-NetFirewallRule -DisplayName "FTP Client" `
 	-LocalPort Any -RemotePort 21 `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
-	-Description "File transfer protocol client." `
-	@Logs | Format-Output @Logs
+	-Description "File transfer protocol client." |
+Format-Output
 
 $Program = "%SystemRoot%\HelpPane.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "Help pane" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -415,11 +415,11 @@ New-NetFirewallRule -DisplayName "Help pane" `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
 	-Description "Get online help, looks like windows 10+ no longer uses this,
-it opens edge now to show help." `
-	@Logs | Format-Output @Logs
+it opens edge now to show help." |
+Format-Output
 
 $Program = "%SystemRoot%\System32\rundll32.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 # TODO: program possibly no longer uses networking since windows 10
 New-NetFirewallRule -DisplayName "DLL host process" `
@@ -432,12 +432,12 @@ New-NetFirewallRule -DisplayName "DLL host process" `
 	-InterfaceType $DefaultInterface `
 	-Description "Loads and runs 32-bit dynamic-link libraries (DLLs),
 There are no configurable settings for Rundll32.
-possibly no longer uses networking since windows 10." `
-	@Logs | Format-Output @Logs
+possibly no longer uses networking since windows 10." |
+Format-Output
 
 # TODO: this app no longer exists on system, MS changed executable name?
 # $Program = "%SystemRoot%\System32\CompatTel\wicainventory.exe"
-# Test-File $Program @Logs
+# Test-File $Program
 
 # TODO: no comment
 # New-NetFirewallRule -DisplayName "Install Compatibility Advisor Inventory Tool" `
@@ -448,11 +448,11 @@ possibly no longer uses networking since windows 10." `
 # 	-LocalPort Any -RemotePort 80 `
 # 	-LocalUser Any `
 # 	-InterfaceType $DefaultInterface `
-# 	-Description "" `
-# 	@Logs | Format-Output @Logs
+# 	-Description "" |
+# Format-Output
 
 $Program = "%SystemRoot%\System32\msiexec.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "Installer" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -462,11 +462,11 @@ New-NetFirewallRule -DisplayName "Installer" `
 	-LocalPort Any -RemotePort 80 `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
-	-Description "msiexec automatically check for updates for the program it is installing." `
-	@Logs | Format-Output @Logs
+	-Description "msiexec automatically check for updates for the program it is installing." |
+Format-Output
 
 $Program = "%SystemRoot%\System32\lsass.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "Local Security Authority Process" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -480,11 +480,11 @@ New-NetFirewallRule -DisplayName "Local Security Authority Process" `
 for enforcing the security policy on the system.
 It specifically deals with local security and login policies.It verifies users logging on to a
 Windows computer or server, handles password changes, and creates access tokens.
-It is also used for certificate revocation checks" `
-	@Logs | Format-Output @Logs
+It is also used for certificate revocation checks" |
+Format-Output
 
 $Program = "%SystemRoot%\System32\mmc.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "MMC Help Viewer" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -494,11 +494,11 @@ New-NetFirewallRule -DisplayName "MMC Help Viewer" `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
-	-Description "Display webpages in Microsoft MMC help view." `
-	@Logs | Format-Output @Logs
+	-Description "Display webpages in Microsoft MMC help view." |
+Format-Output
 
 $Program = "%SystemRoot%\System32\nslookup.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "nslookup (Name server lookup)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -510,11 +510,11 @@ New-NetFirewallRule -DisplayName "nslookup (Name server lookup)" `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Displays information that you can use to diagnose Domain Name System (DNS) infrastructure.
-The nslookup command-line tool is available only if you have installed the TCP/IP protocol." `
-	@Logs | Format-Output @Logs
+The nslookup command-line tool is available only if you have installed the TCP/IP protocol." |
+Format-Output
 
 $Program = "%SystemRoot%\System32\curl.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 # NOTE: Ports are specified only for some protocols
 New-NetFirewallRule -DisplayName "curl" `
@@ -528,11 +528,11 @@ New-NetFirewallRule -DisplayName "curl" `
 	-Description "curl is a commandline tool to transfer data from or to a server,
 using one of the supported protocols:
 (DICT, FILE, FTP, FTPS, GOPHER, HTTP, HTTPS, IMAP, IMAPS, LDAP, LDAPS, MQTT, POP3, POP3S, RTMP,
-RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" `
-	@Logs | Format-Output @Logs
+RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
+Format-Output
 
 $Program = "%SystemRoot%\System32\SettingSyncHost.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "Settings sync" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -545,11 +545,11 @@ New-NetFirewallRule -DisplayName "Settings sync" `
 	-Description "Host process for setting synchronization. Open your PC Settings and go to the
 'Sync your Settings' section.
 There are on/off switches for all the different things you can choose to sync.
-Just turn off the ones you don't want. Or you can just turn them all off at once at the top." `
-	@Logs | Format-Output @Logs
+Just turn off the ones you don't want. Or you can just turn them all off at once at the top." |
+Format-Output
 
 $Program = "%SystemRoot%\System32\smartscreen.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "Smartscreen" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -559,11 +559,11 @@ New-NetFirewallRule -DisplayName "Smartscreen" `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
-	-Description "" `
-	@Logs | Format-Output @Logs
+	-Description "" |
+Format-Output
 
 $Program = "%SystemRoot%\ImmersiveControlPanel\SystemSettings.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "SystemSettings" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -575,11 +575,11 @@ New-NetFirewallRule -DisplayName "SystemSettings" `
 	-InterfaceType $DefaultInterface `
 	-Description "Seems like it's connecting to display some 'useful tips' on the right hand side
  of the settings menu, NOTE: Configure the gpo 'Control Panel\allow online tips' to 'disabled'
- to stop generating this traffic." `
-	@Logs | Format-Output @Logs
+ to stop generating this traffic." |
+Format-Output
 
 $Program = "%SystemRoot%\System32\taskhostw.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "taskhostw" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -591,11 +591,11 @@ New-NetFirewallRule -DisplayName "taskhostw" `
 	-InterfaceType $DefaultInterface `
 	-Description "The main function of taskhostw.exe is to start the Windows Services based on
 DLLs whenever the computer boots up.
-It is a host for processes that are responsible for executing a DLL rather than an Exe." `
-	@Logs | Format-Output @Logs
+It is a host for processes that are responsible for executing a DLL rather than an Exe." |
+Format-Output
 
 $Program = "%SystemRoot%\System32\sihclient.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "Service Initiated Healing" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -611,11 +611,11 @@ This daily task runs the SIHC client (initiated by the healing server) to detect
 repair system components that are vital to
 automatically update Windows and the Microsoft software installed on the computer.
 The task can go online, assess the usefulness of the healing effect,
-download the necessary equipment to perform the action, and perform therapeutic actions.)" `
-	@Logs | Format-Output @Logs
+download the necessary equipment to perform the action, and perform therapeutic actions.)" |
+Format-Output
 
 $Program = "%SystemRoot%\System32\DeviceCensus.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "Windows Update (Devicecensus)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -633,16 +633,16 @@ In order to target builds to your machine, we need to know a few important thing
 - language
 - x86 or x64
 - selected Insider ring
-- etc." `
-	@Logs | Format-Output @Logs
+- etc." |
+Format-Output
 
 # TODO: USOAccounts testing with users, should be SYSTEM
-$USOAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM" @Logs
-Merge-SDDL ([ref] $USOAccounts) $UsersGroupSDDL @Logs
+$USOAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM"
+Merge-SDDL ([ref] $USOAccounts) $UsersGroupSDDL
 
 # TODO: Not available in Windows Server 2019
 $Program = "%SystemRoot%\System32\usocoreworker.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "Update Session Orchestrator" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -657,12 +657,12 @@ The command line tool has been replaced by usoclient.exe.
 When the system starts an update session, it launches usoclient.exe,
 which in turn launches usocoreworker.exe.
 Usocoreworker is the worker process for usoclient.exe and essentially it does all the work that
-the USO component needs done." `
-	@Logs | Format-Output @Logs
+the USO component needs done." |
+Format-Output
 
 # TODO: This one is present since Windows 10 v2004, needs description, not available in Server 2019
 $Program = "%SystemRoot%\System32\MoUsoCoreWorker.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "Mo Update Session Orchestrator" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -672,11 +672,11 @@ New-NetFirewallRule -DisplayName "Mo Update Session Orchestrator" `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser $USOAccounts `
 	-InterfaceType $DefaultInterface `
-	-Description "" `
-	@Logs | Format-Output @Logs
+	-Description "" |
+Format-Output
 
 $Program = "%SystemRoot%\System32\usoclient.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "Update Session Orchestrator" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -691,11 +691,11 @@ The command line tool has been replaced by usoclient.exe.
 When the system starts an update session, it launches usoclient.exe,
 which in turn launches usocoreworker.exe.
 Usocoreworker is the worker process for usoclient.exe and essentially it does all the work that the
-USO component needs done." `
-	@Logs | Format-Output @Logs
+USO component needs done." |
+Format-Output
 
 $Program = "%SystemRoot%\System32\wbem\WmiPrvSE.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "WMI Provider Host" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -705,11 +705,11 @@ New-NetFirewallRule -DisplayName "WMI Provider Host" `
 	-LocalPort Any -RemotePort 22 `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
-	-Description "" `
-	@Logs | Format-Output @Logs
+	-Description "" |
+Format-Output
 
 $Program = "%SystemRoot%\System32\OpenSSH\ssh.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "OpenSSH" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -720,11 +720,11 @@ New-NetFirewallRule -DisplayName "OpenSSH" `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
 	-Description "OpenSSH is connectivity tool for remote login with the SSH protocol,
-This rule applies to open source version of OpenSSH that is built into Windows." `
-	@Logs | Format-Output @Logs
+This rule applies to open source version of OpenSSH that is built into Windows." |
+Format-Output
 
 $Program = "%SystemRoot%\System32\conhost.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "Console Host" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -734,13 +734,13 @@ New-NetFirewallRule -DisplayName "Console Host" `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
-	-Description "" `
-	@Logs | Format-Output @Logs
+	-Description "" |
+Format-Output
 
 # NOTE: Was active while setting up MS account
 # NOTE: description from: https://www.tenforums.com/tutorials/110230-enable-disable-windows-security-windows-10-a.html
 $Program = "%SystemRoot%\System32\SecurityHealthService.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "Windows Security Health Service" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -759,15 +759,15 @@ third-party firewalls, and other security protection.
 These services do not affect the state of Windows Defender AV.
 Disabling or modifying these services will not disable Windows Defender AV,
 and will lead to a lowered protection state on the endpoint,
-even if you are using a third-party antivirus product." `
-	@Logs | Format-Output @Logs
+even if you are using a third-party antivirus product." |
+Format-Output
 
 #
 # Windows Device Management (predefined rules)
 #
 
 $Program = "%SystemRoot%\System32\dmcertinst.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "Windows Device Management Certificate Installer" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -778,11 +778,11 @@ New-NetFirewallRule -DisplayName "Windows Device Management Certificate Installe
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
 	-Description "Allow outbound TCP traffic from Windows Device Management
-Certificate Installer." `
-	@Logs | Format-Output @Logs
+Certificate Installer." |
+Format-Output
 
 $Program = "%SystemRoot%\System32\deviceenroller.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "Windows Device Management Device Enroller" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -792,8 +792,8 @@ New-NetFirewallRule -DisplayName "Windows Device Management Device Enroller" `
 	-LocalPort Any -RemotePort 80, 443 `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
-	-Description "Allow outbound TCP traffic from Windows Device Management Device Enroller" `
-	@Logs | Format-Output @Logs
+	-Description "Allow outbound TCP traffic from Windows Device Management Device Enroller" |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Windows Device Management Enrollment Service" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -803,11 +803,11 @@ New-NetFirewallRule -DisplayName "Windows Device Management Enrollment Service" 
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
-	-Description "Allow outbound TCP traffic from Windows Device Management Enrollment Service." `
-	@Logs | Format-Output @Logs
+	-Description "Allow outbound TCP traffic from Windows Device Management Enrollment Service." |
+Format-Output
 
 $Program = "%SystemRoot%\System32\omadmclient.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "Windows Device Management Sync Client" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -817,7 +817,7 @@ New-NetFirewallRule -DisplayName "Windows Device Management Sync Client" `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
-	-Description "Allow outbound TCP traffic from Windows Device Management Sync Client." `
-	@Logs | Format-Output @Logs
+	-Description "Allow outbound TCP traffic from Windows Device Management Sync Client." |
+Format-Output
 
 Update-Log

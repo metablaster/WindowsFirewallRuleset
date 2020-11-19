@@ -71,34 +71,34 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 Start-Test "Good system path"
-Initialize-Table @Logs
-Edit-Table "%SystemRoot%\System32\WindowsPowerShell\v1.0" @Logs
-$global:InstallTable | Format-Table -AutoSize @Logs
+Initialize-Table
+Edit-Table "%SystemRoot%\System32\WindowsPowerShell\v1.0"
+$global:InstallTable | Format-Table -AutoSize
 
 Start-Test "Bad system path"
-Initialize-Table @Logs
-Edit-Table "%ProgramFiles(x86)%\Microsoft Help Viewer\v2.3345345" @Logs
-$global:InstallTable | Format-Table -AutoSize @Logs
+Initialize-Table
+Edit-Table "%ProgramFiles(x86)%\Microsoft Help Viewer\v2.3345345"
+$global:InstallTable | Format-Table -AutoSize
 
 Start-Test "Bad user profile path"
-Initialize-Table @Logs
-Edit-Table "%HOME%\source\\repos\WindowsFirewallRuleset\" @Logs
-$global:InstallTable | Format-Table -AutoSize @Logs
+Initialize-Table
+Edit-Table "%HOME%\source\\repos\WindowsFirewallRuleset\"
+$global:InstallTable | Format-Table -AutoSize
 
 Start-Test "Good user profile path"
-Initialize-Table @Logs
-$Result = Edit-Table "C:\\Users\$TestUser\\AppData\\Roaming\\" @Logs
+Initialize-Table
+$Result = Edit-Table "C:\\Users\$TestUser\\AppData\\Roaming\\"
 $Result
-$global:InstallTable | Format-Table -AutoSize @Logs
+$global:InstallTable | Format-Table -AutoSize
 
-Test-Output $Result -Command Edit-Table @Logs
+Test-Output $Result -Command Edit-Table
 
 Update-Log
 Exit-Test

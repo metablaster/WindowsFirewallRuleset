@@ -60,8 +60,8 @@ Import-Module -Name Ruleset.Logging
 Import-Module -Name Ruleset.UserInfo
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
@@ -73,18 +73,18 @@ Enter-Test
 [string[]] $Users = @("Administrator", $TestUser, $TestAdmin)
 
 Start-Test "Get-AccountSID -User $Users"
-$AccountSID1 = Get-AccountSID -User $Users @Logs
+$AccountSID1 = Get-AccountSID -User $Users
 $AccountSID1
 
 Start-Test "Get-AccountSID -User $Users -CIM"
-$AccountSID1 = Get-AccountSID -User $Users -CIM @Logs
+$AccountSID1 = Get-AccountSID -User $Users -CIM
 $AccountSID1
 
 Start-Test "$Users | Get-AccountSID -CIM"
-$Users | Get-AccountSID -CIM @Logs
+$Users | Get-AccountSID -CIM
 
 Start-Test "Get-TypeName"
-$AccountSID1 | Get-TypeName @Logs
+$AccountSID1 | Get-TypeName
 
 #
 # Test NT AUTHORITY
@@ -94,16 +94,16 @@ $AccountSID1 | Get-TypeName @Logs
 [string] $NTDomain = "NT AUTHORITY"
 
 Start-Test "Get-AccountSID -Domain $NTDomain -User $NTUsers"
-$AccountSID2 = Get-AccountSID -Domain $NTDomain -User $NTUsers # @Logs
+$AccountSID2 = Get-AccountSID -Domain $NTDomain -User $NTUsers #
 $AccountSID2
 
 # NOTE: not valid
 # Start-Test "Get-AccountSID -Domain $NTDomain -User $NTUsers -CIM"
-# $AccountSID2 = Get-AccountSID -Domain $NTDomain -User $NTUsers -CIM @Logs
+# $AccountSID2 = Get-AccountSID -Domain $NTDomain -User $NTUsers -CIM
 # $AccountSID2
 
 Start-Test "Get-TypeName"
-$AccountSID2 | Get-TypeName @Logs
+$AccountSID2 | Get-TypeName
 
 #
 # Test APPLICATION PACKAGE AUTHORITY
@@ -113,15 +113,15 @@ $AccountSID2 | Get-TypeName @Logs
 [string] $AppUser = "Your Internet connection"
 
 Start-Test "Get-AccountSID -Domain $AppDomain -User $AppUser"
-$AccountSID3 = Get-AccountSID -Domain $AppDomain -User $AppUser @Logs
+$AccountSID3 = Get-AccountSID -Domain $AppDomain -User $AppUser
 $AccountSID3
 
 # NOTE: not valid
 # Start-Test "Get-AccountSID -Domain $AppDomain -User $AppUser -CIM"
-# $AccountSID3 = Get-AccountSID -Domain $AppDomain -User $AppUser -CIM @Logs
+# $AccountSID3 = Get-AccountSID -Domain $AppDomain -User $AppUser -CIM
 # $AccountSID3
 
-Test-Output $AccountSID3 -Command Get-AccountSID @Logs
+Test-Output $AccountSID3 -Command Get-AccountSID
 
 Update-Log
 Exit-Test

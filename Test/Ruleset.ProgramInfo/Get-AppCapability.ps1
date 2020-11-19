@@ -59,8 +59,8 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
@@ -79,10 +79,10 @@ Start-Test 'Get-AppCapability (Get-AppxPackage -Name "*ZuneMusic*") -Networking'
 Get-AppCapability (Get-AppxPackage -Name "*ZuneMusic*") -Networking
 
 Start-Test "Get-AppxPackage -Name '*ZuneMusic*' | Get-AppCapability -Authority"
-$Result = Get-AppCapability -InputObject (Get-AppxPackage -Name "*ZuneMusic*") -Authority -EA SilentlyContinue @Logs
+$Result = Get-AppCapability -InputObject (Get-AppxPackage -Name "*ZuneMusic*") -Authority -EA SilentlyContinue
 $Result
 
-Test-Output $Result -Command Get-AppCapability @Logs
+Test-Output $Result -Command Get-AppCapability
 
 Update-Log
 Exit-Test

@@ -61,8 +61,8 @@ Import-Module -Name Ruleset.Logging
 Import-Module -Name Ruleset.UserInfo
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 $VerbosePreference = "Continue"
@@ -71,13 +71,13 @@ $DebugPreference = "Continue"
 Enter-Test
 
 Start-Test "Get-GroupPrincipal 'Users', 'Administrators', NT SYSTEM, NT LOCAL SERVICE"
-$UserAccounts = Get-GroupPrincipal "Users", "Administrators" @Logs
+$UserAccounts = Get-GroupPrincipal "Users", "Administrators"
 $UserAccounts
 
-Test-Output $UserAccounts[0] -Command Get-GroupPrincipal @Logs
+Test-Output $UserAccounts[0] -Command Get-GroupPrincipal
 
 Start-Test "Get-AccountSID NT SYSTEM, NT LOCAL SERVICE"
-$NTAccounts = Get-AccountSID -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE" @Logs
+$NTAccounts = Get-AccountSID -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE"
 $NTAccounts
 
 Start-Test "ConvertFrom-SID users and admins"
@@ -86,12 +86,12 @@ foreach ($Account in $UserAccounts)
 {
 	$AccountSIDs += $Account.SID
 }
-$AccountSIDs | ConvertFrom-SID @Logs | Format-Table
+$AccountSIDs | ConvertFrom-SID | Format-Table
 
 Start-Test "ConvertFrom-SID NT AUTHORITY users"
 foreach ($Account in $NTAccounts)
 {
-	ConvertFrom-SID $Account @Logs | Format-Table
+	ConvertFrom-SID $Account | Format-Table
 }
 
 Start-Test "ConvertFrom-SID Unknown domain"
@@ -99,25 +99,25 @@ ConvertFrom-SID "S-1-5-21-0000-0000-1111-1111" -ErrorAction SilentlyContinue | F
 
 Start-Test "ConvertFrom-SID App SID"
 $AppSID = "S-1-15-2-2967553933-3217682302-2494645345-2077017737-3805576244-585965800-1797614741"
-$AppResult = ConvertFrom-SID $AppSID @Logs
+$AppResult = ConvertFrom-SID $AppSID
 $AppResult | Format-Table
 
 Start-Test "ConvertFrom-SID nonexistent App SID"
 $AppSID = "S-1-15-2-2967553933-3217682302-0000000000000000000-2077017737-3805576244-585965800-1797614741"
-$AppResult = ConvertFrom-SID $AppSID -ErrorAction SilentlyContinue @Logs
+$AppResult = ConvertFrom-SID $AppSID -ErrorAction SilentlyContinue
 $AppResult | Format-Table
 
 Start-Test "ConvertFrom-SID APPLICATION PACKAGE AUTHORITY"
 $AppSID = "S-1-15-2-2"
-$PackageResult = ConvertFrom-SID $AppSID @Logs
+$PackageResult = ConvertFrom-SID $AppSID
 $PackageResult | Format-Table
 
 Start-Test "ConvertFrom-SID Capability"
 $AppSID = "S-1-15-3-12345"
-$PackageResult = ConvertFrom-SID $AppSID @Logs
+$PackageResult = ConvertFrom-SID $AppSID
 $PackageResult | Format-Table
 
-Test-Output $AppResult -Command ConvertFrom-SID @Logs
+Test-Output $AppResult -Command ConvertFrom-SID
 
 Update-Log
 Exit-Test

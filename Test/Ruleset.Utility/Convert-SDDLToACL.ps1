@@ -60,25 +60,25 @@ Import-Module -Name Ruleset.Logging
 Import-Module -Name Ruleset.UserInfo
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 Start-Test "Get-SDDL: (user accounts)"
-$SDDL1 = Get-SDDL -Group "Users" @Logs
+$SDDL1 = Get-SDDL -Group "Users"
 $SDDL1
 
 Start-Test "Get-SDDL: (system accounts)"
-$SDDL2 = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE", "LOCAL SERVICE" @Logs
+$SDDL2 = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE", "LOCAL SERVICE"
 $SDDL2
 
 Start-Test "Convert-SDDLToACL"
-$Result = Convert-SDDLToACL $SDDL1, $SDDL2 @Logs
+$Result = Convert-SDDLToACL $SDDL1, $SDDL2
 $Result
 
-Test-Output $Result -Command Convert-SDDLToACL @Logs
+Test-Output $Result -Command Convert-SDDLToACL
 
 Update-Log
 Exit-Test

@@ -57,20 +57,20 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test -Private
 
 Start-Test "Convert-ListToMultiLine null"
-Convert-ListToMultiLine @Logs
+Convert-ListToMultiLine
 
 Start-Test "Convert-ListToMultiLine Some%%||String"
-$Result = Convert-ListToMultiLine "Some%%||String" @Logs
+$Result = Convert-ListToMultiLine "Some%%||String"
 $Result
 
-Test-Output $Result -Command Convert-ListToMultiLine @Logs
+Test-Output $Result -Command Convert-ListToMultiLine
 
 Update-Log
 Exit-Test

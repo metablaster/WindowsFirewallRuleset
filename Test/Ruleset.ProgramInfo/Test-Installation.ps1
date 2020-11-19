@@ -60,8 +60,8 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
@@ -73,22 +73,22 @@ $TestBadVariable2 = "%UserProfile%\crazyFolder"
 $OneDrive = "unknown"
 
 Start-Test "Test-Installation 'OneDrive' $OneDrive"
-$Result = Test-Installation "OneDrive" ([ref] $OneDrive) @Logs
+$Result = Test-Installation "OneDrive" ([ref] $OneDrive)
 $Result
 
 Start-Test "Test-Installation 'MicrosoftOffice' $OfficeRoot"
-Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot) @Logs
+Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)
 
 Start-Test "Test-Installation 'TeamViewer' $TeamViewerRoot"
-Test-Installation "TeamViewer" ([ref] $TeamViewerRoot) @Logs
+Test-Installation "TeamViewer" ([ref] $TeamViewerRoot)
 
 Start-Test "Test-Installation 'VisualStudio' $TestBadVariable"
-Test-Installation "VisualStudio" ([ref] $TestBadVariable) @Logs
+Test-Installation "VisualStudio" ([ref] $TestBadVariable)
 
 Start-Test "Test-Installation 'BadVariable' $TestBadVariable2"
-Test-Installation "BadVariable" ([ref] $TestBadVariable2) @Logs
+Test-Installation "BadVariable" ([ref] $TestBadVariable2)
 
-Test-Output $Result -Command Test-Installation @Logs
+Test-Output $Result -Command Test-Installation
 
 Update-Log
 Exit-Test

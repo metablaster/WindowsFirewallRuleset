@@ -63,12 +63,12 @@ $Accept = "Outbound rules for NuGet will be loaded, recommended if NuGet is inst
 $Deny = "Skip operation, outbound rules for NuGet will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # NuGet installation directories
@@ -80,16 +80,16 @@ $NuGetRoot = "%SystemDrive%\tools"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "NuGet" ([ref] $NuGetRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "NuGet" ([ref] $NuGetRoot)) -or $ForceLoad)
 {
 	$Program = "$NuGetRoot\nuget.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Nuget CLI" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "" @Logs | Format-Output @Logs
+		-Description "" | Format-Output
 }
 
 Update-Log

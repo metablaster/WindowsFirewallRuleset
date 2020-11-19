@@ -60,28 +60,28 @@ Import-Module -Name Ruleset.Logging
 Import-Module -Name Ruleset.UserInfo
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 Start-Test "Get-GroupPrincipal"
-$UsersTest = Get-GroupPrincipal "Users" @Logs
+$UsersTest = Get-GroupPrincipal "Users"
 $UsersTest
 
 Start-Test "Get-GroupPrincipal CIM server"
-$CIMTest = Get-GroupPrincipal "Users", "Administrators" -Computer "localhost" -CIM @Logs
+$CIMTest = Get-GroupPrincipal "Users", "Administrators" -Computer "localhost" -CIM
 $CIMTest
 
 Start-Test "Expand users"
-$UsersTest | Select-Object -ExpandProperty User @Logs
+$UsersTest | Select-Object -ExpandProperty User
 
 Start-Test "Failure test"
-$FailedUsers = Get-GroupPrincipal "Nonexistent Users" @Logs -ErrorAction SilentlyContinue
+$FailedUsers = Get-GroupPrincipal "Nonexistent Users" -ErrorAction SilentlyContinue
 $FailedUsers
 
-Test-Output $UsersTest -Command Get-GroupPrincipal @Logs
+Test-Output $UsersTest -Command Get-GroupPrincipal
 
 Update-Log
 Exit-Test

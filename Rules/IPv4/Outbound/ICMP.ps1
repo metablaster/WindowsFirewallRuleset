@@ -98,12 +98,12 @@ $Accept = "Outbound rules for ICMPv4 will be loaded, recommended for proper netw
 $Deny = "Skip operation, outbound ICMPv4 rules will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # ICMP type filtering for All profiles
@@ -133,8 +133,8 @@ the type code changed to 0, and the checksum recomputed.
 
 Code:
 0
-Code 0 may be received from a gateway or a host." `
-	@Logs | Format-Output @Logs
+Code 0 may be received from a gateway or a host." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Timestamp (13)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
@@ -165,8 +165,8 @@ reversed, the type code changed to 14, and the checksum recomputed.
 
 Code:
 0 = pointer indicates the error.
-Code 0 may be received from a gateway or a host." `
-	@Logs | Format-Output @Logs
+Code 0 may be received from a gateway or a host." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Router Advertisement (9)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
@@ -187,8 +187,8 @@ For instance, a router might advertise prefixes for stateless address autoconfig
 wishing to forward packets.
 Unsolicited Router Advertisements are not strictly periodic:
 the interval between subsequent transmissions is randomized to reduce the probability of
-synchronization with the advertisements from other routers on the same link." `
-	@Logs | Format-Output @Logs
+synchronization with the advertisements from other routers on the same link." |
+Format-Output
 
 # TODO: figure out if redirects can be unsolicited, to set up EdgeTraversalPolicy
 # (currently allowing by logic of comments)
@@ -221,8 +221,8 @@ Code:
 1 = Redirect datagrams for the Host.
 2 = Redirect datagrams for the Type of Service and Network.
 3 = Redirect datagrams for the Type of Service and Host.
-Codes 0, 1, 2, and 3 may be received from a gateway." `
-	@Logs | Format-Output @Logs
+Codes 0, 1, 2, and 3 may be received from a gateway." |
+Format-Output
 
 #
 # ICMP type filtering for public profile
@@ -251,8 +251,8 @@ the type code changed to 0, and the checksum recomputed.
 
 Code:
 0
-Code 0 may be received from a gateway or a host." `
-	@Logs | Format-Output @Logs
+Code 0 may be received from a gateway or a host." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Destination Unreachable (3)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -277,8 +277,8 @@ Code:
 4 = fragmentation needed and DF set;
 5 = source route failed.
 Codes 0, 1, 4, and 5 may be received from a gateway.
-Codes 2 and 3 may be received from a host." `
-	@Logs | Format-Output @Logs
+Codes 2 and 3 may be received from a host." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Router Solicitation (10)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -296,8 +296,8 @@ Sending Router Solicitations:
 When an interface becomes enabled, a host may be unwilling to wait for the next unsolicited Router
 Advertisement to locate default routers or learn prefixes.
 To obtain Router Advertisements quickly, a host SHOULD transmit up to MAX_RTR_SOLICITATIONS
-Router Solicitation messages, each separated by at least RTR_SOLICITATION_INTERVAL seconds." `
-	@Logs | Format-Output @Logs
+Router Solicitation messages, each separated by at least RTR_SOLICITATION_INTERVAL seconds." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Time Exceeded (11)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -321,8 +321,8 @@ Code:
 0 = time to live exceeded in transit;
 1 = fragment reassembly time exceeded.
 Code 0 may be received from a gateway.
-Code 1 may be received from a host." `
-	@Logs | Format-Output @Logs
+Code 1 may be received from a host." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Parameter Problem (12)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -343,8 +343,8 @@ The source network and address from the original datagram's data.
 
 Code:
 0 = pointer indicates the error.
-Code 0 may be received from a gateway or a host." `
-	@Logs | Format-Output @Logs
+Code 0 may be received from a gateway or a host." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Timestamp Reply (14)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -375,8 +375,8 @@ reversed, the type code changed to 14, and the checksum recomputed.
 
 Code:
 0 = pointer indicates the error.
-Code 0 may be received from a gateway or a host." `
-	@Logs | Format-Output @Logs
+Code 0 may be received from a gateway or a host." |
+Format-Output
 
 #
 # ICMP type filtering for private and domain profile
@@ -405,8 +405,8 @@ the type code changed to 0, and the checksum recomputed.
 
 Code:
 0
-Code 0 may be received from a gateway or a host." `
-	@Logs | Format-Output @Logs
+Code 0 may be received from a gateway or a host." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Destination Unreachable (3)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
@@ -431,8 +431,8 @@ Code:
 4 = fragmentation needed and DF set;
 5 = source route failed.
 Codes 0, 1, 4, and 5 may be received from a gateway.
-Codes 2 and 3 may be received from a host." `
-	@Logs | Format-Output @Logs
+Codes 2 and 3 may be received from a host." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Router Solicitation (10)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
@@ -450,8 +450,8 @@ Sending Router Solicitations:
 When an interface becomes enabled, a host may be unwilling to wait for the next unsolicited Router
 Advertisement to locate default routers or learn prefixes.
 To obtain Router Advertisements quickly, a host SHOULD transmit up to MAX_RTR_SOLICITATIONS
-Router Solicitation messages, each separated by at least RTR_SOLICITATION_INTERVAL seconds." `
-	@Logs | Format-Output @Logs
+Router Solicitation messages, each separated by at least RTR_SOLICITATION_INTERVAL seconds." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Time Exceeded (11)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
@@ -476,8 +476,8 @@ Code:
 0 = time to live exceeded in transit;
 1 = fragment reassembly time exceeded.
 Code 0 may be received from a gateway.
-Code 1 may be received from a host." `
-	@Logs | Format-Output @Logs
+Code 1 may be received from a host." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Parameter Problem (12)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
@@ -499,8 +499,8 @@ The source network and address from the original datagram's data.
 
 Code:
 0 = pointer indicates the error.
-Code 0 may be received from a gateway or a host." `
-	@Logs | Format-Output @Logs
+Code 0 may be received from a gateway or a host." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Timestamp Reply (14)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
@@ -531,7 +531,7 @@ reversed, the type code changed to 14, and the checksum recomputed.
 
 Code:
 0 = pointer indicates the error.
-Code 0 may be received from a gateway or a host." `
-	@Logs | Format-Output @Logs
+Code 0 may be received from a gateway or a host." |
+Format-Output
 
 Update-Log

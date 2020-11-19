@@ -59,21 +59,21 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 Start-Test "Get-ExecutablePath"
-$ExecutablePaths = Get-ExecutablePath @Logs | Sort-Object -Property Name
+$ExecutablePaths = Get-ExecutablePath | Sort-Object -Property Name
 $ExecutablePaths
 
 Start-Test "Get-ExecutablePath pwsh.exe"
-$ExecutablePaths | Where-Object -Property Name -EQ "pwsh.exe" @Logs |
+$ExecutablePaths | Where-Object -Property Name -EQ "pwsh.exe" |
 Select-Object -ExpandProperty InstallLocation
 
-Test-Output $ExecutablePaths -Command Get-ExecutablePath @Logs
+Test-Output $ExecutablePaths -Command Get-ExecutablePath
 
 Update-Log
 Exit-Test

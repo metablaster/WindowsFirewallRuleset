@@ -57,20 +57,20 @@ New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 Start-Test "Initialize-Service pipeline"
-@("lmhosts", "LanmanWorkstation", "LanmanServer") | Initialize-Service @Logs
+@("lmhosts", "LanmanWorkstation", "LanmanServer") | Initialize-Service
 
 Start-Test "Initialize-Service WinRM"
-$Result = Initialize-Service "WinRM" @Logs
+$Result = Initialize-Service "WinRM"
 
 $Result
-Test-Output $Result -Command Initialize-Service @Logs
+Test-Output $Result -Command Initialize-Service
 
 Update-Log
 Exit-Test

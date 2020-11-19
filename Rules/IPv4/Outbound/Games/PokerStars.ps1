@@ -63,12 +63,12 @@ $Accept = "Outbound rules for Poker Stars game will be loaded, recommended if Po
 $Deny = "Skip operation, outbound rules for Poker Stars game will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Steam installation directories
@@ -80,48 +80,48 @@ $PokerStarsRoot = "%ProgramFiles(x86)%\PokerStars.EU"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $ForceLoad)
 {
 	$Program = "$PokerStarsRoot\PokerStars.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "PokerStars - Client" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 26002 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "Main game interface." @Logs | Format-Output @Logs
+		-Description "Main game interface." | Format-Output
 
 	# NOTE: It looks like browser no longer needs any interface and any remote address
 	$Program = "$PokerStarsRoot\br\PokerStarsBr.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "PokerStars - Browser" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "In game HTML browser" @Logs | Format-Output @Logs
+		-Description "In game HTML browser" | Format-Output
 
 	$Program = "$PokerStarsRoot\PokerStarsOnlineUpdate.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "PokerStars - Online update" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "" @Logs | Format-Output @Logs
+		-Description "" | Format-Output
 
 	$Program = "$PokerStarsRoot\PokerStarsUpdate.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "PokerStars - Update" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "Game updater" @Logs | Format-Output @Logs
+		-Description "Game updater" | Format-Output
 }
 
 Update-Log

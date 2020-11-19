@@ -59,17 +59,17 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 Start-Test "Get-AllUserSoftware"
-$Result = Get-AllUserSoftware @Logs
+$Result = Get-AllUserSoftware
 $Result
 
-Test-Output $Result -Command Get-AllUserSoftware @Logs
+Test-Output $Result -Command Get-AllUserSoftware
 
 Update-Log
 Exit-Test

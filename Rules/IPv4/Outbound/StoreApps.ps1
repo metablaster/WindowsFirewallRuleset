@@ -95,20 +95,20 @@ $Accept = "Outbound rules for store apps will be loaded, required for Windows st
 $Deny = "Skip operation, outbound rules for store apps will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $SystemGroup -Direction $Direction -ErrorAction Ignore @Logs
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $ProgramsGroup -Direction $Direction -ErrorAction Ignore @Logs
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $ServicesGroup -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $SystemGroup -Direction $Direction -ErrorAction Ignore
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $ProgramsGroup -Direction $Direction -ErrorAction Ignore
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $ServicesGroup -Direction $Direction -ErrorAction Ignore
 
 #
 # Block Administrators by default
 #
-$Principals = Get-GroupPrincipal "Administrators" @Logs
+$Principals = Get-GroupPrincipal "Administrators"
 
 foreach ($Principal in $Principals)
 {
@@ -123,15 +123,15 @@ foreach ($Principal in $Principals)
 		-Owner (Get-AccountSID $Principal.User) -Package * `
 		-Description "$($Principal.User) is administrative account,
 block $($Principal.User) from network activity for all store apps.
-Administrators should have limited or no connectivity at all for maximum security." `
-		@Logs | Format-Output @Logs
+Administrators should have limited or no connectivity at all for maximum security." |
+	Format-Output
 }
 
 #
 # Create rules for all network apps for each standard user
 #
 
-$Principals = Get-GroupPrincipal "Users" @Logs
+$Principals = Get-GroupPrincipal "Users"
 foreach ($Principal in $Principals)
 {
 	#
@@ -185,8 +185,8 @@ foreach ($Principal in $Principals)
 				-LocalUser Any `
 				-InterfaceType $DefaultInterface `
 				-Owner $Principal.SID -Package $PackageSID `
-				-Description "Auto generated rule for $($_.Name) used by $($Principal.User)" `
-				@Logs | Format-Output @Logs
+				-Description "Auto generated rule for $($_.Name) used by $($Principal.User)" |
+			Format-Output
 
 			Update-Log
 		}
@@ -243,8 +243,8 @@ foreach ($Principal in $Principals)
 				-LocalUser Any `
 				-InterfaceType $DefaultInterface `
 				-Owner $Principal.SID -Package $PackageSID `
-				-Description "Auto generated rule for $($_.Name) installed system wide and used by $($Principal.User)" `
-				@Logs | Format-Output @Logs
+				-Description "Auto generated rule for $($_.Name) installed system wide and used by $($Principal.User)" |
+			Format-Output
 
 			Update-Log
 		}
@@ -256,7 +256,7 @@ foreach ($Principal in $Principals)
 #
 
 $Program = "%SystemRoot%\System32\RuntimeBroker.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "Runtime Broker" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -267,15 +267,15 @@ New-NetFirewallRule -DisplayName "Runtime Broker" `
 	-LocalUser $UsersGroupSDDL `
 	-InterfaceType $DefaultInterface `
 	-Description "The Runtime Broker is responsible for checking if a store app is declaring all of
-its permissions and informing the user whether or not its being allowed" `
-	@Logs | Format-Output @Logs
+its permissions and informing the user whether or not its being allowed" |
+Format-Output
 
 $Program = "%SystemRoot%\System32\AuthHost.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 # Accounts needed for store app web authentication
-$AppAccounts = Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -User "Your Internet connection" @Logs
-Merge-SDDL ([ref] $AppAccounts) $UsersGroupSDDL @Logs
+$AppAccounts = Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -User "Your Internet connection"
+Merge-SDDL ([ref] $AppAccounts) $UsersGroupSDDL
 
 New-NetFirewallRule -DisplayName "Authentication Host" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -286,8 +286,8 @@ New-NetFirewallRule -DisplayName "Authentication Host" `
 	-LocalUser $AppAccounts `
 	-InterfaceType $DefaultInterface `
 	-Description "Connects Universal Windows Platform (UWP) app to an online identity provider
-that uses authentication protocols like OpenID or OAuth, such as Facebook, Twitter, Instagram, etc." `
-	@Logs | Format-Output @Logs
+that uses authentication protocols like OpenID or OAuth, such as Facebook, Twitter, Instagram, etc." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Windows License Manager Service" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -297,12 +297,12 @@ New-NetFirewallRule -DisplayName "Windows License Manager Service" `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
-	-Description "Provides infrastructure support for the Microsoft Store." `
-	@Logs | Format-Output @Logs
+	-Description "Provides infrastructure support for the Microsoft Store." |
+Format-Output
 
 # https://docs.microsoft.com/en-us/archive/msdn-magazine/2017/april/uwp-apps-develop-hosted-web-apps-for-uwp
 $Program = "%SystemRoot%\System32\wwahost.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "Microsoft WWA Host" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -315,7 +315,7 @@ New-NetFirewallRule -DisplayName "Microsoft WWA Host" `
 	-Description "Microsoft WWA Host (wwahost.exe) is an app container for Web sites,
 which has a subset of features, compared to the browser.
 Used in scenario when the Web site is running in the context of an app.
-This rule is required to connect PC to Microsoft account" `
-	@Logs | Format-Output @Logs
+This rule is required to connect PC to Microsoft account" |
+Format-Output
 
 Update-Log

@@ -59,121 +59,121 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 $TestPath = "C:\"
 Start-Test $TestPath
-$Result = Format-Path $TestPath @Logs
+$Result = Format-Path $TestPath
 $Result
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 $TestPath = "C:\\Windows\System32"
 Start-Test $TestPath
-$Result = Format-Path $TestPath @Logs
+$Result = Format-Path $TestPath
 $Result
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 $TestPath = "C:\\Windows\"
 Start-Test $TestPath
-$Result = Format-Path $TestPath @Logs
+$Result = Format-Path $TestPath
 $Result
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 $TestPath = "C:\Program Files (x86)\Windows Defender\"
 Start-Test $TestPath
-$Result = Format-Path $TestPath @Logs
+$Result = Format-Path $TestPath
 $Result
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 $TestPath = "C:\Program Files\WindowsPowerShell"
 Start-Test $TestPath
-$Result = Format-Path $TestPath @Logs
+$Result = Format-Path $TestPath
 $Result
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 $TestPath = '"C:\ProgramData\Git"'
 Start-Test $TestPath
-$Result = Format-Path $TestPath @Logs
+$Result = Format-Path $TestPath
 $Result
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 $TestPath = "C:\PerfLogs"
 Start-Test $TestPath
-$Result = Format-Path $TestPath @Logs
+$Result = Format-Path $TestPath
 $Result
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 $TestPath = "C:\Windows\Microsoft.NET\Framework64\v3.5\\"
 Start-Test $TestPath
-$Result = Format-Path $TestPath @Logs
+$Result = Format-Path $TestPath
 $Result
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 $TestPath = "'C:\Windows\Microsoft.NET\Framework64\v3.5'"
 Start-Test $TestPath
-$Result = Format-Path $TestPath @Logs
+$Result = Format-Path $TestPath
 $Result
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 $TestPath = "D:\\microsoft\\windows"
 Start-Test $TestPath
-$Result = Format-Path $TestPath @Logs
+$Result = Format-Path $TestPath
 $Result
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 $TestPath = "C:\\"
 Start-Test $TestPath
-$Result = Format-Path $TestPath @Logs
+$Result = Format-Path $TestPath
 $Result
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 $TestPath = "D:\"
 Start-Test $TestPath
-$Result = Format-Path $TestPath @Logs
+$Result = Format-Path $TestPath
 $Result
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 $TestPath = "C:\Users\$TestUser\AppData\Local\OneDrive"
 Start-Test $TestPath
-$Result = Format-Path $TestPath @Logs
+$Result = Format-Path $TestPath
 $Result
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 $TestPath = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
 Start-Test $TestPath
-$Result = Format-Path $TestPath @Logs
+$Result = Format-Path $TestPath
 $Result
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 $TestPath = "%SystemDrive%"
 Start-Test $TestPath
-$Result = Format-Path $TestPath @Logs
+$Result = Format-Path $TestPath
 $Result
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 $TestPath = "C:\Users\Public\Public Downloads"
 Start-Test $TestPath
-$Result2 = Format-Path $TestPath @Logs
+$Result2 = Format-Path $TestPath
 $Result2
-Test-Environment $Result2 @Logs
+Test-Environment $Result2
 
 $TestPath = ""
 Start-Test '""'
-$Result = Format-Path $TestPath @Logs
+$Result = Format-Path $TestPath
 $Result
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 $TestPath = $null
 Start-Test '$null'
-$Result = Format-Path $TestPath @Logs
+$Result = Format-Path $TestPath
 $Result
-Test-Environment $Result @Logs
+Test-Environment $Result
 
-Test-Output $Result2 -Command Format-Path @Logs
+Test-Output $Result2 -Command Format-Path
 
 Update-Log
 Exit-Test

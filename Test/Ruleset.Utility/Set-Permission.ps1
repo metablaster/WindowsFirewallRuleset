@@ -80,8 +80,8 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
@@ -99,11 +99,11 @@ if ($FileSystem)
 	{
 		# Test ownership
 		Start-Test "Set-Permission ownership"
-		Set-Permission -Owner $TestUser -Domain $Computer -Path $TestFolder -Recurse @Logs
+		Set-Permission -Owner $TestUser -Domain $Computer -Path $TestFolder -Recurse
 
 		# Reset existing tree for re-test
 		Start-Test "Reset existing tree"
-		Set-Permission -Principal $TestUser -Domain $Computer -Path $TestFolder -Reset -Grant $Access -Recurse @Logs
+		Set-Permission -Principal $TestUser -Domain $Computer -Path $TestFolder -Reset -Grant $Access -Recurse
 	}
 
 	$TestFolders = @(
@@ -153,51 +153,51 @@ if ($FileSystem)
 
 	# Test ownership
 	Start-Test "Set-Permission ownership"
-	Set-Permission -Owner $TestUser -Domain $Computer -Path $TestFolder @Logs
+	Set-Permission -Owner $TestUser -Domain $Computer -Path $TestFolder
 
 	# Test defaults
 	Start-Test "Set-Permission - NT SERVICE\LanmanServer permission on file"
-	Set-Permission -Principal "LanmanServer" -Domain "NT SERVICE" -Path "$TestFolder\$($TestFiles[0])" -Grant $Access @Logs
+	Set-Permission -Principal "LanmanServer" -Domain "NT SERVICE" -Path "$TestFolder\$($TestFiles[0])" -Grant $Access
 
 	Start-Test "Set-Permission - Local Service permission on file"
-	Set-Permission -Principal "Local Service" -Path "$TestFolder\$($TestFiles[1])" -Grant $Access @Logs
+	Set-Permission -Principal "Local Service" -Path "$TestFolder\$($TestFiles[1])" -Grant $Access
 
 	Start-Test "Set-Permission - Group permission on file"
-	Set-Permission -Principal "Remote Management Users" -Path "$TestFolder\$($TestFiles[2])" -Grant $Access @Logs
+	Set-Permission -Principal "Remote Management Users" -Path "$TestFolder\$($TestFiles[2])" -Grant $Access
 
 	# Test parameters
 	Start-Test "Set-Permission - NT SERVICE\LanmanServer permission on folder"
 	Set-Permission -Principal "LanmanServer" -Domain "NT SERVICE" -Path "$TestFolder\$($TestFolders[0])" `
-		-Type "Deny" -Rights "TakeOwnership, Delete, Modify" @Logs
+		-Type "Deny" -Rights "TakeOwnership, Delete, Modify"
 
 	Start-Test "Set-Permission - Local Service permission on folder"
 	Set-Permission -Principal "Local Service" -Path "$TestFolder\$($TestFolders[1])" `
-		-Type "Allow" -Inheritance "ObjectInherit" -Propagation "NoPropagateInherit" -Grant $Access @Logs
+		-Type "Allow" -Inheritance "ObjectInherit" -Propagation "NoPropagateInherit" -Grant $Access
 
 	Start-Test "Set-Permission - Group permission on folder"
 	$Result = Set-Permission -Principal "Remote Management Users" -Path "$TestFolder\$($TestFolders[2])" -Grant $Access `
-		-Protected @Logs
+		-Protected
 
 	$Result
 
 	# Test output type
-	Test-Output $Result -Command Set-Permission @Logs
+	Test-Output $Result -Command Set-Permission
 
 	# Test reset/recurse
 	Start-Test "Reset permissions inheritance to explicit"
 	Set-Permission -Path "$TestFolder\Protected\Remote Management Users.txt" -Reset -Protected -PreserveInheritance
 
 	Start-Test "Reset permissions recurse"
-	Set-Permission -Principal "Administrators" -Grant "FullControl" -Path $TestFolder -Reset -Recurse @Logs
+	Set-Permission -Principal "Administrators" -Grant "FullControl" -Path $TestFolder -Reset -Recurse
 
 	Start-Test "Recursive ownership on folder"
-	Set-Permission -Owner "Replicator" -Path $TestFolder -Recurse @Logs
+	Set-Permission -Owner "Replicator" -Path $TestFolder -Recurse
 
 	Start-Test "Recursively reset"
-	Set-Permission -Path $TestFolder -Reset -Recurse @Logs
+	Set-Permission -Path $TestFolder -Reset -Recurse
 
 	Start-Test "Recursively clear all rules or folder"
-	Set-Permission -Path $TestFolder -Reset -Recurse -Protected @Logs
+	Set-Permission -Path $TestFolder -Reset -Recurse -Protected
 }
 elseif ($Registry -or $PSCmdlet.ShouldContinue("Modify registry ownership or permissions", "Accept dangerous unit test"))
 {

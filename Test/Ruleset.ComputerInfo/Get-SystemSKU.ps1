@@ -59,30 +59,30 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 Start-Test "Get-SystemSKU -ComputerName $([System.Environment]::MachineName)"
-Get-SystemSKU -ComputerName $([System.Environment]::MachineName) @Logs | Format-Table
+Get-SystemSKU -ComputerName $([System.Environment]::MachineName) | Format-Table
 
 Start-Test "Get-SystemSKU -SKU 4"
-$Result = Get-SystemSKU -SKU 48 @Logs
+$Result = Get-SystemSKU -SKU 48
 $Result | Format-Table
 
 Start-Test "34 | Get-SystemSKU"
-34 | Get-SystemSKU @Logs | Format-Table
+34 | Get-SystemSKU | Format-Table
 
 Start-Test '@($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU FAILURE TEST'
-@($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU @Logs -ErrorAction SilentlyContinue | Format-Table
+@($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU -ErrorAction SilentlyContinue | Format-Table
 
 Start-Test '$Result = @($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU FAILURE TEST'
-@($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU @Logs -ErrorAction SilentlyContinue | Format-Table
+@($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU -ErrorAction SilentlyContinue | Format-Table
 
 Start-Test 'Get-SystemSKU -ComputerName @($([System.Environment]::MachineName), "INVALID_COMPUTER") FAILURE TEST'
-Get-SystemSKU -ComputerName @($([System.Environment]::MachineName), "INVALID_COMPUTER") @Logs -ErrorAction SilentlyContinue | Format-Table
+Get-SystemSKU -ComputerName @($([System.Environment]::MachineName), "INVALID_COMPUTER") -ErrorAction SilentlyContinue | Format-Table
 
 try
 {
@@ -94,7 +94,7 @@ catch
 	Write-Information -Tags "Test" -MessageData "Failure test success"
 }
 
-Test-Output $Result -Command Get-SystemSKU @Logs
+Test-Output $Result -Command Get-SystemSKU
 
 Update-Log
 Exit-Test

@@ -63,8 +63,8 @@ $Accept = "Outbound rules for Path of Exile game will be loaded, recommended if 
 $Deny = "Skip operation, outbound rules for Path of Exile game will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 #
@@ -73,23 +73,23 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 $PathOfExileRoot = "%ProgramFiles(x86)%\Steam\steamapps\common\Path of Exile"
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Rules for TargetProgram
 #
 
 # Test if installation exists on system
-if ((Test-Installation "PathOfExile" ([ref] $PathOfExileRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "PathOfExile" ([ref] $PathOfExileRoot)) -or $ForceLoad)
 {
 	$Program = "$PathOfExileRoot\PathOfExile_x64Steam.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Path of exile" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 6112, 20481 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "Needed for online gaming" @Logs | Format-Output @Logs
+		-Description "Needed for online gaming" | Format-Output
 }
 
 Update-Log

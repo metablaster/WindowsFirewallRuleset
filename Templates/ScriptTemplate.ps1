@@ -84,8 +84,8 @@ Import-Module -Name Ruleset.Logging
 # TODO: Update command line help messages
 $Accept = "Template accept help message"
 $Deny = "Abort operation, template deny help message"
-Update-Context $ScriptContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $ScriptContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # Setup local variables

@@ -63,8 +63,8 @@ $Accept = "Outbound rules for CPUID software will be loaded, recommended if CPUI
 $Deny = "Skip operation, outbound rules for CPUID software will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 #
@@ -74,7 +74,7 @@ $HWMonitorRoot = "%ProgramFiles%\CPUID\HWMonitor"
 $CPUZRoot = "%ProgramFiles%\CPUID\CPU-Z"
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Rules for HWMonitor
@@ -82,29 +82,29 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "HWMonitor" ([ref] $HWMonitorRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "HWMonitor" ([ref] $HWMonitorRoot)) -or $ForceLoad)
 {
 	$Program = "$HWMonitorRoot\HWMonitor.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "HWMonitor" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 		-LocalUser $AdministratorsGroupSDDL `
-		-Description "Used for manual check for update" @Logs | Format-Output @Logs
+		-Description "Used for manual check for update" | Format-Output
 }
 
 # Test if installation exists on system
-if ((Test-Installation "CPU-Z" ([ref] $CPUZRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "CPU-Z" ([ref] $CPUZRoot)) -or $ForceLoad)
 {
 	$Program = "$CPUZRoot\cpuz.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "CPU-Z" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 		-LocalUser $AdministratorsGroupSDDL `
-		-Description "Used for manual check for update" @Logs | Format-Output @Logs
+		-Description "Used for manual check for update" | Format-Output
 }
 
 Update-Log

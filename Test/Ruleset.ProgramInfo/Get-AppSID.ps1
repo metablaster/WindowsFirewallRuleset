@@ -61,31 +61,31 @@ Import-Module -Name Ruleset.Logging
 Import-Module -Name Ruleset.UserInfo
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 Start-Test "Get-GroupPrincipal:"
-$GroupAccounts = Get-GroupPrincipal "Users", "Administrators" @Logs
+$GroupAccounts = Get-GroupPrincipal "Users", "Administrators"
 $GroupAccounts
 
 Start-Test "Get-AppSID: foreach User"
 foreach ($Account in $GroupAccounts)
 {
-	Get-UserApps -User $Account.User @Logs | ForEach-Object {
-		Get-AppSID $Account.User $_.PackageFamilyName @Logs
+	Get-UserApps -User $Account.User | ForEach-Object {
+		Get-AppSID $Account.User $_.PackageFamilyName
 	}
 }
 
 Start-Test "Get-AppSID: system apps"
-$Result = Get-SystemApps @Logs | ForEach-Object {
-	Get-AppSID $Account.User $_.PackageFamilyName @Logs
+$Result = Get-SystemApps | ForEach-Object {
+	Get-AppSID $Account.User $_.PackageFamilyName
 }
 $Result
 
-Test-Output $Result -Command Get-AppSID @Logs
+Test-Output $Result -Command Get-AppSID
 
 Update-Log
 Exit-Test

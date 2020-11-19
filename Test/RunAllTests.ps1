@@ -82,13 +82,13 @@ if ($Pester)
 }
 
 Update-Context $TestContext $ThisScript
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 if (!$Pester)
 {
 	# Recursively get list of powershell scripts (unit tests)
-	$UnitTests = Get-ChildItem -Path $ProjectRoot\Test -Recurse -Filter *.ps1 -Exclude "ContextSetup.ps1", "$ThisScript.ps1" @Logs
+	$UnitTests = Get-ChildItem -Path $ProjectRoot\Test -Recurse -Filter *.ps1 -Exclude "ContextSetup.ps1", "$ThisScript.ps1"
 
 	if ($UnitTests)
 	{
@@ -100,7 +100,7 @@ if (!$Pester)
 	}
 	else
 	{
-		Write-Error -Category ObjectNotFound -TargetObject $Files -Message "No powershell script files found" @Logs
+		Write-Error -Category ObjectNotFound -TargetObject $Files -Message "No powershell script files found"
 	}
 }
 
@@ -108,11 +108,11 @@ Write-Information -Tags "Project" -MessageData "INFO: Starting pester tests"
 
 # Recursively get list of pester tests
 # TODO: Tests from Private folder excluded because out of date
-$PesterTests = Get-ChildItem -Path $ProjectRoot\Modules\Ruleset.IP\Test\Public -Filter *.ps1 @Logs
+$PesterTests = Get-ChildItem -Path $ProjectRoot\Modules\Ruleset.IP\Test\Public -Filter *.ps1
 
 if ($PSVersionTable.PSVersion -ge "6.1")
 {
-	$PesterTests = Get-ChildItem -Path $ProjectRoot\Modules\Ruleset.Compatibility\Test -Filter *.ps1 @Logs
+	$PesterTests = Get-ChildItem -Path $ProjectRoot\Modules\Ruleset.Compatibility\Test -Filter *.ps1
 }
 else
 {
@@ -129,7 +129,7 @@ if ($PesterTests)
 }
 else
 {
-	Write-Error -Category ObjectNotFound -TargetObject $Files -Message "No powershell script files found" @Logs
+	Write-Error -Category ObjectNotFound -TargetObject $Files -Message "No powershell script files found"
 }
 
 Write-Information -Tags "Project" -MessageData "INFO: Running all tests done"

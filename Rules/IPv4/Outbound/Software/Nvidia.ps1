@@ -63,12 +63,12 @@ $Accept = "Outbound rules for Nvidia software will be loaded, recommended if Nvi
 $Deny = "Skip operation, outbound rules for Nvidia software will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Nvidia installation directories
@@ -80,7 +80,7 @@ Set-Variable -Name GeForce -Scope Script -Value $null
 # Some rules use multiple accounts
 # TODO: we should probably have better approach to assemble SDDL's for multiple domains
 $ContainerAccounts = $NT_AUTHORITY_System
-Merge-SDDL ([ref] $ContainerAccounts) $UsersGroupSDDL @Logs
+Merge-SDDL ([ref] $ContainerAccounts) $UsersGroupSDDL
 
 #
 # Rules for Nvidia 64bit executables
@@ -92,46 +92,46 @@ Merge-SDDL ([ref] $ContainerAccounts) $UsersGroupSDDL @Logs
 # Test if installation exists on system
 if ([System.Environment]::Is64BitOperatingSystem)
 {
-	if ((Test-Installation "Nvidia64" ([ref] $NvidiaRoot64) @Logs) -or $ForceLoad)
+	if ((Test-Installation "Nvidia64" ([ref] $NvidiaRoot64)) -or $ForceLoad)
 	{
 		# Dummy variable, needs to be known because Test-Installation will return same path as nvidia root
 		$GeForceRoot = "$NvidiaRoot64\NVIDIA GeForce Experience"
-		Set-Variable -Name GeForce -Scope Script -Value (Test-Installation "GeForceExperience" ([ref] $GeForceRoot) @Logs)
+		Set-Variable -Name GeForce -Scope Script -Value (Test-Installation "GeForceExperience" ([ref] $GeForceRoot))
 
 		# Test if GeForce experience exists on system, the path is same
 		# TODO: this is temporary measure, it should be checked with Test-File function
 		if ($script:GeForce -or $ForceLoad)
 		{
 			$Program = "$NvidiaRoot64\NvContainer\nvcontainer.exe"
-			Test-File $Program @Logs
+			Test-File $Program
 
 			New-NetFirewallRule -Platform $Platform `
 				-DisplayName "Nvidia Container x64" -Service Any -Program $Program `
 				-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 				-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 				-LocalUser $ContainerAccounts `
-				-Description "" @Logs | Format-Output @Logs
+				-Description "" | Format-Output
 
 			$Program = "$NvidiaRoot64\NVIDIA GeForce Experience\NVIDIA GeForce Experience.exe"
-			Test-File $Program @Logs
+			Test-File $Program
 
 			New-NetFirewallRule -Platform $Platform `
 				-DisplayName "Nvidia GeForce Experience x64" -Service Any -Program $Program `
 				-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 				-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 				-LocalUser $UsersGroupSDDL `
-				-Description "" @Logs | Format-Output @Logs
+				-Description "" | Format-Output
 
 			# TODO: this rule is not implemented for x86 system
 			$Program = "$NvidiaRoot64\Update Core\NvProfileUpdater64.exe"
-			Test-File $Program @Logs
+			Test-File $Program
 
 			New-NetFirewallRule -Platform $Platform `
 				-DisplayName "Nvidia Profile Updater" -Service Any -Program $Program `
 				-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 				-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 				-LocalUser $UsersGroupSDDL `
-				-Description "" @Logs | Format-Output @Logs
+				-Description "" | Format-Output
 		}
 
 		# NOTE: this program no longer exists in recent installations
@@ -165,13 +165,13 @@ if ([System.Environment]::Is64BitOperatingSystem)
 		}
 		else
 		{
-			Test-File $Program @Logs
+			Test-File $Program
 			New-NetFirewallRule -Platform $Platform `
 				-DisplayName "Nvidia NVDisplay Container x64" -Service Any -Program $Program `
 				-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 				-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 				-LocalUser $NT_AUTHORITY_System `
-				-Description "" @Logs | Format-Output @Logs
+				-Description "" | Format-Output
 		}
 	}
 }
@@ -181,63 +181,63 @@ if ([System.Environment]::Is64BitOperatingSystem)
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Nvidia86" ([ref] $NvidiaRoot86) @Logs) -or $ForceLoad)
+if ((Test-Installation "Nvidia86" ([ref] $NvidiaRoot86)) -or $ForceLoad)
 {
 	# Dummy variable, needs to be known because Test-Installation will return same path as nvidia root
-	$GeForceXProot = "$NvidiaRoot86\NVIDIA GeForce Experience"
+	$GeForceXPRoot = "$NvidiaRoot86\NVIDIA GeForce Experience"
 
 	# Test if GeForce experience exists on system, the path is same
 	# NOTE: This check is needed for current x64 bit setup to avoid double prompt
 	if ($null -eq $script:GeForce)
 	{
-		$script:GeForce = (Test-Installation "GeForceExperience" ([ref] $GeForceXProot) @Logs)
+		$script:GeForce = (Test-Installation "GeForceExperience" ([ref] $GeForceXPRoot))
 	}
 
 	# TODO: this is temporary measure, it should be checked with Test-File function
 	if ($script:GeForce -or $ForceLoad)
 	{
 		$Program = "$NvidiaRoot86\NvContainer\nvcontainer.exe"
-		Test-File $Program @Logs
+		Test-File $Program
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Nvidia Container x86" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $ContainerAccounts `
-			-Description "" @Logs | Format-Output @Logs
+			-Description "" | Format-Output
 
 		# NOTE: it's duplicate of x64 rule, should be fixed after testing x86 rules
 		if (![System.Environment]::Is64BitOperatingSystem)
 		{
 			$Program = "$NvidiaRoot86\NVIDIA GeForce Experience\NVIDIA GeForce Experience.exe"
-			Test-File $Program @Logs
+			Test-File $Program
 			New-NetFirewallRule -Platform $Platform `
 				-DisplayName "Nvidia GeForce Experience x86" -Service Any -Program $Program `
 				-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 				-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 				-LocalUser $UsersGroupSDDL `
-				-Description "" @Logs | Format-Output @Logs
+				-Description "" | Format-Output
 		}
 
 		# NOTE: this program no longer exists in recent installations, most likely changed!
 		# $Program = "$NvidiaRoot86\NvTelemetry\NvTelemetryContainer.exe"
-		# Test-File $Program @Logs
+		# Test-File $Program
 		# New-NetFirewallRule -Platform $Platform `
 		# 	-DisplayName "Nvidia Telemetry Container" -Service Any -Program $Program `
 		# 	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		# 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		# 	-LocalUser $UsersGroupSDDL `
-		# 	-Description "" @Logs | Format-Output @Logs
+		# 	-Description "" | Format-Output
 
 		$Program = "$NvidiaRoot86\NvNode\NVIDIA Web Helper.exe"
-		Test-File $Program @Logs
+		Test-File $Program
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Nvidia WebHelper TCP" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" @Logs | Format-Output @Logs
+			-Description "" | Format-Output
 	}
 }
 

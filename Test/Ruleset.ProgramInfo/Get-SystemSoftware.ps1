@@ -59,25 +59,25 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
-$SystemPrograms = Get-SystemSoftware @Logs
+$SystemPrograms = Get-SystemSoftware
 
 Start-Test "Get-SystemSoftware Name"
-$SystemPrograms | Sort-Object -Property Name @Logs | Select-Object -ExpandProperty Name @Logs
+$SystemPrograms | Sort-Object -Property Name | Select-Object -ExpandProperty Name
 
 Start-Test "Get-SystemSoftware InstallLocation"
-$SystemPrograms | Sort-Object -Property InstallLocation @Logs |
-Select-Object -ExpandProperty InstallLocation @Logs
+$SystemPrograms | Sort-Object -Property InstallLocation |
+Select-Object -ExpandProperty InstallLocation
 
 Start-Test "Get-SystemSoftware"
-$SystemPrograms | Sort-Object -Property Name @Logs
+$SystemPrograms | Sort-Object -Property Name
 
-Test-Output $SystemPrograms -Command Get-SystemSoftware @Logs
+Test-Output $SystemPrograms -Command Get-SystemSoftware
 
 Update-Log
 Exit-Test

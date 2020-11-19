@@ -59,17 +59,17 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 Start-Test "Get-WindowsDefender"
-$Result = Get-WindowsDefender @Logs #| Select-Object -ExpandProperty InstallLocation @Logs
+$Result = Get-WindowsDefender #| Select-Object -ExpandProperty InstallLocation
 $Result
 
-Test-Output $Result -Command Get-WindowsDefender @Logs
+Test-Output $Result -Command Get-WindowsDefender
 
 Update-Log
 Exit-Test

@@ -63,8 +63,8 @@ New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
@@ -74,10 +74,10 @@ if ($Force -or $PSCmdlet.ShouldContinue("Possible modify PackageManagement", "Ac
 {
 	Start-Test "Initialize-ProviderNuGet"
 	$Result = Initialize-Provider @{ ModuleName = "NuGet"; ModuleVersion = $RequireNuGetVersion } -Name $Name `
-		-InfoMessage "Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider" @Logs
+		-InfoMessage "Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider"
 
 	$Result
-	Test-Output $Result -Command Initialize-Provider @Logs
+	Test-Output $Result -Command Initialize-Provider
 }
 
 Update-Log

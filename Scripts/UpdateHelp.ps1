@@ -134,8 +134,8 @@ if ($Module)
 	$Accept = "Generate new or update existing help files for requested modules"
 }
 
-Update-Context $ScriptContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $ScriptContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
@@ -199,7 +199,7 @@ foreach ($ModuleName in $Module)
 
 	# NOTE: Module must be imported to avoid warnings from platyPS
 	Import-Module -Name $ModuleName
-	[PSModuleInfo] $ModuleInfo = Get-Module -Name $ModuleName @Logs
+	[PSModuleInfo] $ModuleInfo = Get-Module -Name $ModuleName
 
 	# Root directory of current module
 	[string] $ModuleRoot = $ModuleInfo.ModuleBase
@@ -207,13 +207,13 @@ foreach ($ModuleName in $Module)
 	# Populate help directory and readme if not present
 	if (!(Test-Path -Path $ModuleRoot\Help))
 	{
-		New-Item -Path $ModuleRoot\Help -ItemType Container @Logs | Out-Null
+		New-Item -Path $ModuleRoot\Help -ItemType Container | Out-Null
 	}
 
 	$Readme = "$ModuleRoot\Help\README.md"
 	if (!(Test-Path -Path $Readme))
 	{
-		New-Item -Path $Readme -ItemType File @Logs | Out-Null
+		New-Item -Path $Readme -ItemType File | Out-Null
 		Set-Content -Path $Readme -Encoding $Encoding -Value @"
 
 # Help directory
@@ -289,7 +289,7 @@ specific subfolders
 			# Create new markdown help files (module page included, about module not included)
 			New-MarkdownHelp -Module $ModuleName -Encoding $Encoding -OutputFolder $OnlineHelp `
 				-UseFullTypeName -WithModulePage -HelpVersion $ProjectVersion -Locale $UICulture `
-				-FwLink $DownloadLink -ModulePagePath $ModulePage -Force @Logs |
+				-FwLink $DownloadLink -ModulePagePath $ModulePage -Force |
 			Select-Object -ExpandProperty Name
 			# -Metadata $HelpMetadata
 		}
@@ -333,7 +333,7 @@ specific subfolders
 			Write-Verbose -Message "[$ThisScript] Generating new about_$ModuleName.md"
 
 			# New about_ModuleName help topic
-			New-MarkdownAboutHelp -OutputFolder $OnlineHelp -AboutName $ModuleName @Logs
+			New-MarkdownAboutHelp -OutputFolder $OnlineHelp -AboutName $ModuleName
 		}
 
 		# Format about topic
@@ -356,31 +356,31 @@ specific subfolders
 		# NOTE: Recommend to provide as content only about_ topics and the output from the New-ExternalHelp
 		# TODO: output info xml is UTF8 with BOM
 		New-ExternalHelpCab -CabFilesFolder $OnlineHelp\External -OutputFolder $OnlineHelp\Content `
-			-LandingPagePath $ModulePage @Logs | Out-Null
+			-LandingPagePath $ModulePage | Out-Null
 		# -IncrementHelpVersion
 
 		# TODO: maybe moving files instead of copying
 		Write-Information -Tags "Project" -MessageData "INFO: Copying generated help files to default location"
 
 		# Copy HelpInfo file to default destination
-		Copy-Item -Path $OnlineHelp\Content\* -Filter *.xml -Destination $ModuleRoot @Logs
+		Copy-Item -Path $OnlineHelp\Content\* -Filter *.xml -Destination $ModuleRoot
 
 		# Copy required help content to default destination
-		if (!(Test-Path -Path $HelpContent -PathType Container @Logs))
+		if (!(Test-Path -Path $HelpContent -PathType Container))
 		{
-			New-Item -Path $HelpContent -ItemType Container @Logs | Out-Null
+			New-Item -Path $HelpContent -ItemType Container | Out-Null
 		}
 
-		Copy-Item -Path $OnlineHelp\Content\* -Filter *.cab -Destination $HelpContent @Logs
+		Copy-Item -Path $OnlineHelp\Content\* -Filter *.cab -Destination $HelpContent
 
 		# Copy required external help to default destination
-		if (!(Test-Path -Path $ExternalHelp -PathType Container @Logs))
+		if (!(Test-Path -Path $ExternalHelp -PathType Container))
 		{
-			New-Item -Path $ExternalHelp -ItemType Container @Logs | Out-Null
+			New-Item -Path $ExternalHelp -ItemType Container | Out-Null
 		}
 
 		# TODO: We're skipping copying about_ topic file to prevent overwriting original with template
-		Copy-Item -Path $OnlineHelp\External\* -Filter *.xml -Destination $ExternalHelp @Logs
+		Copy-Item -Path $OnlineHelp\External\* -Filter *.xml -Destination $ExternalHelp
 
 		Update-Log
 	} # foreach culture

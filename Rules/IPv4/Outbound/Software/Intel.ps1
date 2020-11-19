@@ -63,8 +63,8 @@ $Accept = "Outbound rules for Intel software will be loaded, recommended if Inte
 $Deny = "Skip operation, outbound rules for Intel software will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 #
@@ -73,7 +73,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 $IntelXTURoot = "%ProgramFiles(x86)%\Intel\Intel(R) Extreme Tuning Utility\Client"
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Rules for Intel software
@@ -81,37 +81,37 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "XTU" ([ref] $IntelXTURoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "XTU" ([ref] $IntelXTURoot)) -or $ForceLoad)
 {
 	$Program = "$IntelXTURoot\PerfTune.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Extreme tuning utility" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $AdministratorsGroupSDDL `
-		-Description "Extreme Tuning utility check for updates" @Logs | Format-Output @Logs
+		-Description "Extreme Tuning utility check for updates" | Format-Output
 }
 
 $Program = "%ProgramFiles(x86)%\Intel\Telemetry 2.0\lrio.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Intel telemetry" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $NT_AUTHORITY_System `
-	-Description "Uploader for the Intel(R) Product Improvement Program." @Logs | Format-Output @Logs
+	-Description "Uploader for the Intel(R) Product Improvement Program." | Format-Output
 
 # TODO: port and protocol unknown for Intel PTT EK Recertification
 $Program = "%ProgramFiles%\Intel\Intel(R) Management Engine Components\iCLS\IntelPTTEKRecertification.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Intel PTT EK Recertification" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
-	-Description "" @Logs | Format-Output @Logs
+	-Description "" | Format-Output
 
 Update-Log

@@ -69,19 +69,19 @@ $Accept = "Inbound rules for wireless networking will be loaded, recommended in 
 $Deny = "Skip operation, inbound rules for wireless networking will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Windows system predefined rules for Wireless Display
 #
 
 $Program = "%SystemRoot%\System32\WUDFHost.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 # TODO: local user may need to be 'Any', needs testing.
 New-NetFirewallRule -Platform $Platform `
@@ -91,10 +91,10 @@ New-NetFirewallRule -Platform $Platform `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_UserModeDrivers `
 	-Description "Driver Foundation - User-mode Driver Framework Host Process.
 The driver host process (Wudfhost.exe) is a child process of the driver manager service.
-loads one or more UMDF driver DLLs, in addition to the framework DLLs." @Logs | Format-Output @Logs
+loads one or more UMDF driver DLLs, in addition to the framework DLLs." | Format-Output
 
 $Program = "%SystemRoot%\System32\CastSrv.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 # TODO: remote port unknown, rule added because predefined rule for UDP exists
 New-NetFirewallRule -Platform $Platform `
@@ -106,7 +106,7 @@ New-NetFirewallRule -Platform $Platform `
 Users attempt to connect to a Miracast receiver as they did previously.
 When the list of Miracast receivers is populated, Windows 10 will identify that the receiver is capable of supporting a connection over the infrastructure.
 When the user selects a Miracast receiver, Windows 10 will attempt to resolve the device's hostname via standard DNS, as well as via multicast DNS (mDNS).
-If the name is not resolvable via either DNS method, Windows 10 will fall back to establishing the Miracast session using the standard Wi-Fi direct connection." @Logs | Format-Output @Logs
+If the name is not resolvable via either DNS method, Windows 10 will fall back to establishing the Miracast session using the standard Wi-Fi direct connection." | Format-Output
 
 #
 # Windows system predefined rules for WiFi Direct
@@ -121,7 +121,7 @@ New-NetFirewallRule -Platform $Platform `
 	-Description "WLAN Service to allow coordination protocol for WFD Service sessions.
 Wi-Fi Direct (WFD) Protocol Specifies: Proximity Extensions, which enable two or more devices that are running the same application
 to establish a direct connection without requiring an intermediary, such as an infrastructure wireless access point (WAP).
-For more info see description of WLAN AutoConfig service." @Logs | Format-Output @Logs
+For more info see description of WLAN AutoConfig service." | Format-Output
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "WLAN Service WFD Driver-only" -Service Any -Program System `
@@ -131,7 +131,7 @@ New-NetFirewallRule -Platform $Platform `
 	-Description "Rule for drivers to communicate over WFD, WFD Services kernel mode driver rule.
 Wi-Fi Direct (WFD) Protocol Specifies: Proximity Extensions, which enable two or more devices that are running the same application
 to establish a direct connection without requiring an intermediary, such as an infrastructure wireless access point (WAP).
-For more info see description of WLAN AutoConfig service." @Logs | Format-Output @Logs
+For more info see description of WLAN AutoConfig service." | Format-Output
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "WLAN Service WFD Driver-only" -Service Any -Program System `
@@ -141,14 +141,14 @@ New-NetFirewallRule -Platform $Platform `
 	-Description "Rule for drivers to communicate over WFD, WFD Services kernel mode driver rule.
 Wi-Fi Direct (WFD) Protocol Specifies: Proximity Extensions, which enable two or more devices that are running the same application
 to establish a direct connection without requiring an intermediary, such as an infrastructure wireless access point (WAP).
-For more info see description of WLAN AutoConfig service." @Logs | Format-Output @Logs
+For more info see description of WLAN AutoConfig service." | Format-Output
 
 #
 # Windows system predefined rules for WiFi Direct Network Discovery
 #
 
 $Program = "%SystemRoot%\System32\dasHost.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 # TODO: missing protocol and port for WiFi Direct Network Discovery
 New-NetFirewallRule -Platform $Platform `
@@ -158,7 +158,7 @@ New-NetFirewallRule -Platform $Platform `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_LocalService `
 	-Description "Rule to discover WSD devices on Wi-Fi Direct networks.
 Host enables pairing between the system and wired or wireless devices. This service is new since Windows 8.
-Executable also known as Device Association Framework Provider Host" @Logs | Format-Output @Logs
+Executable also known as Device Association Framework Provider Host" | Format-Output
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Wi-Fi Direct Scan Service" -Service stisvc -Program $ServiceHost `
@@ -166,7 +166,7 @@ New-NetFirewallRule -Platform $Platform `
 	-Direction $Direction -Protocol Any -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any `
 	-Description "Rule to use WSD scanners on Wi-Fi Direct networks.
-Windows Image Acquisition (WIA) service provides image acquisition services for scanners and cameras." @Logs | Format-Output @Logs
+Windows Image Acquisition (WIA) service provides image acquisition services for scanners and cameras." | Format-Output
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Wi-Fi Direct Spooler Use" -Service Spooler -Program $ServiceHost `
@@ -175,7 +175,7 @@ New-NetFirewallRule -Platform $Platform `
 	-EdgeTraversalPolicy Block -LocalUser Any `
 	-Description "Rule to use WSD printers on Wi-Fi Direct networks.
 Print Spooler service spools print jobs and handles interaction with the printer.
-If you turn off this service, you won't be able to print or see your printers." @Logs | Format-Output @Logs
+If you turn off this service, you won't be able to print or see your printers." | Format-Output
 
 #
 # Windows system predefined rules for Wireless portable devices
@@ -186,13 +186,13 @@ New-NetFirewallRule -Platform $Platform `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $LocalInterface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 1900 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Wireless Portable Devices to allow use of the Simple Service Discovery Protocol." @Logs | Format-Output @Logs
+	-Description "Wireless Portable Devices to allow use of the Simple Service Discovery Protocol." | Format-Output
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Wireless portable devices (UPnP)" -Service Any -Program System `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $LocalInterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 2869 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
-	-Description "Wireless Portable Devices to allow use of Universal Plug and Play." @Logs | Format-Output @Logs
+	-Description "Wireless Portable Devices to allow use of Universal Plug and Play." | Format-Output
 
 Update-Log

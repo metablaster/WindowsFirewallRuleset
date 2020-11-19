@@ -59,8 +59,8 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
@@ -70,11 +70,11 @@ $TestFiles = Get-ChildItem -Path "$PSScriptRoot\Encoding\*" -Filter "*.txt"
 foreach ($File in $TestFiles)
 {
 	Start-Test "Get-FileEncoding $File"
-	$Result = Get-FileEncoding $File @Logs
+	$Result = Get-FileEncoding $File
 	$Result
 }
 
-Test-Output $Result -Command Get-FileEncoding @Logs
+Test-Output $Result -Command Get-FileEncoding
 
 Update-Log
 Exit-Test

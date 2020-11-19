@@ -63,8 +63,8 @@ $Accept = "Outbound rules for Pinball Arcade game will be loaded, recommended if
 $Deny = "Skip operation, outbound rules for Pinball Arcade game will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 #
@@ -73,32 +73,32 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 $PinballArcadeRoot = "%ProgramFiles(x86)%\Steam\steamapps\common\PinballArcade"
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Rules for Pinball Arcade
 #
 
 # Test if installation exists on system
-if ((Test-Installation "PinballArcade" ([ref] $PinballArcadeRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "PinballArcade" ([ref] $PinballArcadeRoot)) -or $ForceLoad)
 {
 	$Program = "$PinballArcadeRoot\PinballArcade.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Pinball Arcade" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 27030-27050 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "login" @Logs | Format-Output @Logs
+		-Description "login" | Format-Output
 
 	$Program = "$PinballArcadeRoot\PinballArcade11.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Pinball Arcade DX11" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 27030-27050 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "" @Logs | Format-Output @Logs
+		-Description "" | Format-Output
 }
 
 Update-Log

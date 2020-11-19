@@ -63,12 +63,12 @@ $Accept = "Inbound rules for Microsoft Office will be loaded, recommended if Mic
 $Deny = "Skip operation, inbound rules for Microsoft Office will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Office installation directories
@@ -80,53 +80,53 @@ $OfficeRoot = "%ProgramFiles%\Microsoft Office\root\Office16"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
 {
 	$Program = "$OfficeRoot\OUTLOOK.EXE"
-	Test-File $Program @Logs
+	Test-File $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Outlook" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort 6004 -RemotePort Any `
 		-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "" @Logs | Format-Output @Logs
+		-Description "" | Format-Output
 
 	# TODO: Skype for business has complex port requirements, see:
 	# https://docs.pexip.com/sfb/ports.htm
 	# https://docs.microsoft.com/en-us/skypeforbusiness/plan-your-deployment/network-requirements/ports-and-protocols
 	$Program = "$OfficeRoot\lync.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Skype for business" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
 		-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
-		-Description "Skype for business, previously lync." @Logs | Format-Output @Logs
+		-Description "Skype for business, previously lync." | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Skype for business" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
 		-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "Skype for business, previously lync." @Logs | Format-Output @Logs
+		-Description "Skype for business, previously lync." | Format-Output
 
 	$Program = "$OfficeRoot\UcMapi.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "UcMapi" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
 		-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
-		-Description "Unified Communications Messaging Application Programming Interface" @Logs | Format-Output @Logs
+		-Description "Unified Communications Messaging Application Programming Interface" | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "UcMapi" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
 		-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "Unified Communications Messaging Application Programming Interface" @Logs | Format-Output @Logs
+		-Description "Unified Communications Messaging Application Programming Interface" | Format-Output
 }
 
 Update-Log

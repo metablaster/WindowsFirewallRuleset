@@ -60,8 +60,8 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # Setup local variables
@@ -72,7 +72,7 @@ $Direction = "Outbound"
 Enter-Test
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 Start-Test "Format-Output"
 
@@ -84,8 +84,8 @@ New-NetFirewallRule -DisplayName "TargetProgram1" `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
-	-Description "TargetProgram1 test rule description" `
-	@Logs | Format-Output @Logs
+	-Description "TargetProgram1 test rule description" |
+Format-Output
 
 $Result = New-NetFirewallRule -DisplayName "TargetProgram2" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -95,11 +95,11 @@ $Result = New-NetFirewallRule -DisplayName "TargetProgram2" `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
-	-Description "TargetProgram2 test rule description" `
-	@Logs | Format-Output @Logs
+	-Description "TargetProgram2 test rule description" |
+Format-Output
 
 $Result
-Test-Output $Result -Command Format-Output @Logs
+Test-Output $Result -Command Format-Output
 
 Update-Log
 Exit-Test

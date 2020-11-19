@@ -59,20 +59,20 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 Start-Test "Test-Service FailureTest"
-Test-Service "FailureTest" @Logs
+Test-Service "FailureTest"
 
 Start-Test "Test-Service dnscache"
-$Result = Test-Service dnscache @Logs
+$Result = Test-Service dnscache
 $Result
 
-Test-Output $Result -Command Test-Service @Logs
+Test-Output $Result -Command Test-Service
 
 Update-Log
 Exit-Test

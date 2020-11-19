@@ -66,8 +66,8 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
@@ -80,19 +80,19 @@ if ($Force -or $PSCmdlet.ShouldContinue("Export firewall rules", "Accept slow un
 	# TODO: need to test store apps import for "Any" and "*" owner/package
 
 	Start-Test "Import-FirewallRules -FileName GroupExport.csv"
-	Import-FirewallRules -Folder $Exports -FileName "GroupExport.csv" @Logs
+	Import-FirewallRules -Folder $Exports -FileName "GroupExport.csv"
 
 	Start-Test "Import-FirewallRules -FileName NamedExport1.csv"
-	Import-FirewallRules -Folder $Exports -FileName "$Exports\NamedExport1.csv" @Logs
+	Import-FirewallRules -Folder $Exports -FileName "$Exports\NamedExport1.csv"
 
 	Start-Test "Import-FirewallRules -JSON -FileName NamedExport2.json"
-	Import-FirewallRules -JSON -Folder $Exports -FileName "$Exports\NamedExport2.json" @Logs
+	Import-FirewallRules -JSON -Folder $Exports -FileName "$Exports\NamedExport2.json"
 
 	Start-Test "Import-FirewallRules -FileName StoreAppExport.csv"
-	$Result = Import-FirewallRules -Folder $Exports -FileName "StoreAppExport.csv" @Logs
+	$Result = Import-FirewallRules -Folder $Exports -FileName "StoreAppExport.csv"
 	$Result
 
-	Test-Output $Result -Command Import-FirewallRules @Logs
+	Test-Output $Result -Command Import-FirewallRules
 }
 
 Update-Log

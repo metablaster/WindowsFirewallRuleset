@@ -59,8 +59,8 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
@@ -69,16 +69,16 @@ $OfficeShared = "%ProgramFiles%\Common Files\microsoft shared"
 $VSInstallService = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.x86.exe"
 
 Start-Test "$VSInstallService"
-Test-File $VSInstallService @Logs
+Test-File $VSInstallService
 
 Start-Test "$OfficeShared\ClickToRun\OfficeClickToRun.exe"
-Test-File "$OfficeShared\ClickToRun\OfficeClickToRun.exe" @Logs
+Test-File "$OfficeShared\ClickToRun\OfficeClickToRun.exe"
 
 Start-Test "%ProgramFiles%\ClickToRun\OfficeClickToRun.exe"
-$Result = Test-File "%ProgramFiles%\ClickToRun\OfficeClickToRun.exe" @Logs
+$Result = Test-File "%ProgramFiles%\ClickToRun\OfficeClickToRun.exe"
 $Result
 
-Test-Output $Result -Command Test-File @Logs
+Test-Output $Result -Command Test-File
 
 Update-Log
 Exit-Test

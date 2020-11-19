@@ -67,8 +67,8 @@ $Accept = "Set global firewall behavior, adjust firewall settings and set up fir
 $Deny = "Skip operation, no change will be done to firewall or network profile"
 
 # User prompt
-Update-Context $ScriptContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $ScriptContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 #
@@ -79,7 +79,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 $LogSize = 1024
 
 # Setting up profile seem to be slow, tell user what is going on
-Write-Information -Tags "User" -MessageData "INFO: Setting up public firewall profile..." @Logs
+Write-Information -Tags "User" -MessageData "INFO: Setting up public firewall profile..."
 
 Set-NetFirewallProfile -Profile Public -PolicyStore $PolicyStore `
 	-Enabled True -DefaultInboundAction Block -DefaultOutboundAction Block -AllowInboundRules True `
@@ -89,10 +89,10 @@ Set-NetFirewallProfile -Profile Public -PolicyStore $PolicyStore `
 	-AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
 	-LogFileName "$FirewallLogsFolder\PublicFirewall.log" -DisabledInterfaceAliases @(
 	# Exclude interfaces for public profile here
-) @Logs
+)
 
 # Setting up profile seem to be slow, tell user what is going on
-Write-Information -Tags "User" -MessageData "INFO: Setting up private firewall profile..." @Logs
+Write-Information -Tags "User" -MessageData "INFO: Setting up private firewall profile..."
 
 Set-NetFirewallProfile -Profile Private -PolicyStore $PolicyStore `
 	-Enabled True -DefaultInboundAction Block -DefaultOutboundAction Block -AllowInboundRules True `
@@ -102,10 +102,10 @@ Set-NetFirewallProfile -Profile Private -PolicyStore $PolicyStore `
 	-AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
 	-LogFileName "$FirewallLogsFolder\PrivateFirewall.log" -DisabledInterfaceAliases @(
 	# Exclude interfaces for private profile here
-) @Logs
+)
 
 # Setting up profile seem to be slow, tell user what is going on
-Write-Information -Tags "User" -MessageData "INFO: Setting up domain firewall profile..." @Logs
+Write-Information -Tags "User" -MessageData "INFO: Setting up domain firewall profile..."
 
 Set-NetFirewallProfile -Profile Domain -PolicyStore $PolicyStore `
 	-Enabled True -DefaultInboundAction Block -DefaultOutboundAction Block -AllowInboundRules True `
@@ -115,9 +115,9 @@ Set-NetFirewallProfile -Profile Domain -PolicyStore $PolicyStore `
 	-AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
 	-LogFileName "$FirewallLogsFolder\DomainFirewall.log" -DisabledInterfaceAliases @(
 	# Exclude interfaces for domain profile here
-) @Logs
+)
 
-Write-Information -Tags "User" -MessageData "INFO: Setting up global firewall settings..." @Logs
+Write-Information -Tags "User" -MessageData "INFO: Setting up global firewall settings..."
 
 # Modify the global firewall settings of the target computer.
 # Configures properties that apply to the firewall and IPsec settings,
@@ -129,10 +129,10 @@ Set-NetFirewallSetting -PolicyStore $PolicyStore `
 	-KeyEncoding UTF8 -RequireFullAuthSupport NotConfigured `
 	-MaxSAIdleTimeSeconds 300 -AllowIPsecThroughNAT NotConfigured `
 	-RemoteUserTransportAuthorizationList None -RemoteUserTunnelAuthorizationList None `
-	-RemoteMachineTransportAuthorizationList None -RemoteMachineTunnelAuthorizationList None @Logs `
+	-RemoteMachineTransportAuthorizationList None -RemoteMachineTunnelAuthorizationList None `
 
 # Set default firewall profile for network adapter
-Set-NetworkProfile @Logs
+Set-NetworkProfile
 
 # Update Local Group Policy for changes to take effect
 gpupdate.exe /target:computer

@@ -72,8 +72,8 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #Endregion
 
 Enter-Test
@@ -85,10 +85,10 @@ Enter-Test
 if ($Force -or $PSCmdlet.ShouldContinue("Template Target", "Accept dangerous unit test"))
 {
 	Start-Test "Test-Function"
-	$Result = Test-Function @Logs
+	$Result = Test-Function
 	$Result
 
-	Test-Output $Result -Command Test-Function @Logs
+	Test-Output $Result -Command Test-Function
 }
 
 Update-Log

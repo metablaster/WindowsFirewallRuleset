@@ -65,12 +65,12 @@ $Accept = "Outbound rules for IPv6 core networking will be loaded, required for 
 $Deny = "Skip operation, outbound IPv6 core networking rules will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Predefined rules from Core Networking are here excluding ICMP
@@ -100,8 +100,8 @@ if ($false)
 		-Description "Due to limitations of 'Windows Firewall with Advanced Security', this rule applies
 to both IPv4 and IPv6 loopback traffic by allowing all traffic on loopback interface.
 Network software and utilities use loopback address to access a local computer's TCP/IP network
-resources." `
-		@Logs | Format-Output @Logs
+resources." |
+	Format-Output
 }
 
 #
@@ -117,8 +117,8 @@ New-NetFirewallRule -DisplayName "DNS Client" `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Rule to allow IPv6 DNS (Domain Name System) requests." `
-	@Logs | Format-Output @Logs
+	-Description "Rule to allow IPv6 DNS (Domain Name System) requests." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Domain Name System" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -129,8 +129,8 @@ New-NetFirewallRule -DisplayName "Domain Name System" `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Rule to allow IPv6 DNS (Domain Name System) requests by System to default gateway." `
-	@Logs | Format-Output @Logs
+	-Description "Rule to allow IPv6 DNS (Domain Name System) requests by System to default gateway." |
+Format-Output
 
 #
 # mDNS (Multicast Domain Name System)
@@ -157,8 +157,8 @@ if ($false)
 		-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP
 addresses within small networks that do not include a local name server.
 It is a zero-configuration service, using essentially the same programming interfaces,
-packet formats and operating semantics as the unicast Domain Name System (DNS)." `
-		@Logs | Format-Output @Logs
+packet formats and operating semantics as the unicast Domain Name System (DNS)." |
+	Format-Output
 
 	# NOTE: Specifying interface or local port might not work for public profile
 	New-NetFirewallRule -DisplayName "Multicast DNS" `
@@ -173,8 +173,8 @@ packet formats and operating semantics as the unicast Domain Name System (DNS)."
 		-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP
 addresses within small networks that do not include a local name server.
 It is a zero-configuration service, using essentially the same programming interfaces,
-packet formats and operating semantics as the unicast Domain Name System (DNS)." `
-		@Logs | Format-Output @Logs
+packet formats and operating semantics as the unicast Domain Name System (DNS)." |
+	Format-Output
 }
 
 #
@@ -193,8 +193,8 @@ New-NetFirewallRule -DisplayName "DHCP Client" `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Dynamic Host Configuration Protocol (DHCP) allows DHCPv6 messages for stateful
-auto-configuration." `
-	@Logs | Format-Output @Logs
+auto-configuration." |
+Format-Output
 
 #
 # IGMP (Internet Group Management Protocol)
@@ -221,8 +221,8 @@ New-NetFirewallRule -DisplayName "IP over HTTPS" `
 proxies and firewalls.
 IP over HTTPS is a Microsoft network tunneling protocol.
 The IP-HTTPS protocol transports IPv6 packets across non-IPv6 networks.
-It does a similar job as the earlier 6to4 or Teredo tunneling mechanisms." `
-	@Logs | Format-Output @Logs
+It does a similar job as the earlier 6to4 or Teredo tunneling mechanisms." |
+Format-Output
 
 #
 # IPv6 Encapsulation
@@ -242,8 +242,8 @@ New-NetFirewallRule -DisplayName "IPv6 Encapsulation" `
 ISATAP (Intra-Site Automatic Tunnel Addressing Protocol) and 6to4 tunneling services.
 ISATAP is an IPv6 transition mechanism meant to transmit IPv6 packets between dual-stack nodes on
 top of an IPv4 network.
-6to4 ia a system that allows IPv6 packets to be transmitted over an IPv4 network" `
-	@Logs | Format-Output @Logs
+6to4 ia a system that allows IPv6 packets to be transmitted over an IPv4 network" |
+Format-Output
 
 #
 # Teredo
@@ -265,7 +265,7 @@ network address translator.
 Teredo is a transition technology that gives full IPv6 connectivity for IPv6-capable hosts that are
 on the IPv4 Internet but have no native connection to an IPv6 network.
 Unlike similar protocols such as 6to4, it can perform its function even from behind network address
-translation (NAT) devices such as home routers." `
-	@Logs | Format-Output @Logs
+translation (NAT) devices such as home routers." |
+Format-Output
 
 Update-Log

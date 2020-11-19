@@ -53,6 +53,7 @@ None. Start-Test does not generate any output
 
 .NOTES
 TODO: switch for no new line, some tests will produce redundant new lines, ex. Format-Table in pipeline
+TODO: Doesn't work starting tests inside dynamic modules
 #>
 function Start-Test
 {

@@ -122,8 +122,8 @@ Import-Module -Name Ruleset.Logging
 $Accept = "Template accept help message"
 $Deny = "Skip operation, template deny help message"
 # TODO: Replace TemplateContext variable
-Update-Context $TemplateContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TemplateContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Update-Log

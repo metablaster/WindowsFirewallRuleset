@@ -62,7 +62,7 @@ Import-Module -Name Ruleset.Logging
 # User prompt
 Set-Variable -Name Accept -Scope Local -Option ReadOnly -Force -Value "Load test rule into firewall"
 Update-Context $TestContext "IPv$IPVersion" $Direction
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 # Setup local variables
 $Group = "Test - Relative path"
@@ -72,13 +72,13 @@ $TargetProgramRoot = "C:\Program Files (x86)\Realtek\..\PokerStars.EU"
 Enter-Test
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 Start-Test "Relative path"
 
 # Test if installation exists on system
 $Program = "$TargetProgramRoot\PokerStars.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "TargetProgram" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -88,8 +88,8 @@ New-NetFirewallRule -DisplayName "TargetProgram" `
 	-LocalPort Any -RemotePort 80, 443, 26002 `
 	-LocalUser $NT_AUTHORITY_LocalService `
 	-InterfaceType $DefaultInterface `
-	-Description "Relative path test" `
-	@Logs | Format-Output @Logs
+	-Description "Relative path test" |
+Format-Output
 
 Update-Log
 Exit-Test

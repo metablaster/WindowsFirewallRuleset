@@ -93,7 +93,7 @@ function New-Function
 # TODO: Module scripts could have the following code to allow executing them outside the context of a module
 if ($MyInvocation.InvocationName -ne '.')
 {
-	New-Function -ParameterName "Whatever" @Logs
+	New-Function -ParameterName "Whatever"
 	Update-Log
 }
 

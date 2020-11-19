@@ -73,47 +73,47 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 Start-Test "Find-Installation 'EdgeChromium'"
-Find-Installation "EdgeChromium" @Logs
-$global:InstallTable | Format-Table -AutoSize @Logs
+Find-Installation "EdgeChromium"
+$global:InstallTable | Format-Table -AutoSize
 
 Start-Test "Install Root EdgeChromium"
-$global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
+$global:InstallTable | Select-Object -ExpandProperty InstallLocation
 
 Start-Test "Find-Installation 'TeamViewer'"
-Find-Installation "TeamViewer" @Logs
-$global:InstallTable | Format-Table -AutoSize @Logs
+Find-Installation "TeamViewer"
+$global:InstallTable | Format-Table -AutoSize
 
 Start-Test "Find-Installation 'FailureTest'"
-Find-Installation "FailureTest" @Logs
-$global:InstallTable | Format-Table -AutoSize @Logs
+Find-Installation "FailureTest"
+$global:InstallTable | Format-Table -AutoSize
 
 Start-Test "Find-Installation 'VisualStudio'"
-Find-Installation "VisualStudio" @Logs
-$global:InstallTable | Format-Table -AutoSize @Logs
+Find-Installation "VisualStudio"
+$global:InstallTable | Format-Table -AutoSize
 
 Start-Test "Find-Installation 'Greenshot'"
-Find-Installation "Greenshot" @Logs
-$global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
+Find-Installation "Greenshot"
+$global:InstallTable | Select-Object -ExpandProperty InstallLocation
 
 Start-Test "Install Root Greenshot"
-$global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
+$global:InstallTable | Select-Object -ExpandProperty InstallLocation
 
 Start-Test "Find-Installation 'OneDrive'"
-$Result = Find-Installation "OneDrive" @Logs
+$Result = Find-Installation "OneDrive"
 $Result
-$global:InstallTable | Format-Table -AutoSize @Logs
+$global:InstallTable | Format-Table -AutoSize
 
 Start-Test "Install Root OneDrive"
-$global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
+$global:InstallTable | Select-Object -ExpandProperty InstallLocation
 
-Test-Output $Result -Command Find-Installation @Logs
+Test-Output $Result -Command Find-Installation
 
 Update-Log
 Exit-Test

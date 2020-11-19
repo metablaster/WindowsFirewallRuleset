@@ -63,12 +63,12 @@ $Accept = "Outbound rules for Password Safe software will be loaded, recommended
 $Deny = "Skip operation, outbound rules for Password Safe software will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # PasswordSafe installation directories
@@ -80,16 +80,16 @@ $PasswordSafeRoot = "%ProgramFiles%\Password Safe"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "PasswordSafe" ([ref] $PasswordSafeRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "PasswordSafe" ([ref] $PasswordSafeRoot)) -or $ForceLoad)
 {
 	$Program = "$PasswordSafeRoot\pwsafe.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "PasswordSafe" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "Password safe check for updates." @Logs | Format-Output @Logs
+		-Description "Password safe check for updates." | Format-Output
 }
 
 Update-Log

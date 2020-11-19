@@ -86,17 +86,17 @@ $Group = "Multicast - IPv4"
 # as many different multicast addresses
 # TODO: We should exclude public profile conditionally when not essential (ex. no homegroup required)
 $LocalProfile = "Any" #"Private, Domain"
-$MulticastUsers = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE", "LOCAL SERVICE" @Logs
+$MulticastUsers = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE", "LOCAL SERVICE"
 $Accept = "Outbound rules for IPv4 multicast will be loaded, recommended for proper network functioning"
 $Deny = "Skip operation, outbound IPv4 multicast rules will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # IPv4 Multicast Address Space
@@ -112,8 +112,8 @@ New-NetFirewallRule -DisplayName "Local Network Control Block" `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Addresses in the Local Network Control Block are used for protocol control
 traffic that is not forwarded off link.
-Examples of this type of use include OSPFIGP All Routers (224.0.0.5)." `
-	@Logs | Format-Output @Logs
+Examples of this type of use include OSPFIGP All Routers (224.0.0.5)." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Internetwork Control Block" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -125,8 +125,8 @@ New-NetFirewallRule -DisplayName "Internetwork Control Block" `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Addresses in the Internetwork Control Block are used for protocol
 control traffic that MAY be forwarded through the Internet.  Examples
-include 224.0.1.1 (Network Time Protocol (NTP)) and 224.0.1.68 (mdhcpdiscover)." `
-	@Logs | Format-Output @Logs
+include 224.0.1.1 (Network Time Protocol (NTP)) and 224.0.1.68 (mdhcpdiscover)." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "AD-HOC Block I" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -142,8 +142,8 @@ Internetwork Control blocks.
 These addresses MAY be globally routed and are typically used by applications that require small
 blocks of addressing (e.g., less than a /24 ).
 Future assignments of blocks of addresses that do not fit in the Local Network or
-Internetwork Control blocks will be made in AD-HOC Block III." `
-	@Logs | Format-Output @Logs
+Internetwork Control blocks will be made in AD-HOC Block III." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "SDP/SAP Block" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -155,8 +155,8 @@ New-NetFirewallRule -DisplayName "SDP/SAP Block" `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Addresses in the SDP/SAP Block are used by applications that receive addresses
 through the Session Announcement Protocol for use via applications like the session directory tool
-(such as [SDR])." `
-	@Logs | Format-Output @Logs
+(such as [SDR])." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "AD-HOC Block II" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -172,8 +172,8 @@ Internetwork Control blocks.
 These addresses MAY be globally routed and are typically used by applications that require small
 blocks of addressing (e.g., less than a /24 ).
 Future assignments of blocks of addresses that do not fit in the Local Network or
-Internetwork Control blocks will be made in AD-HOC Block III." `
-	@Logs | Format-Output @Logs
+Internetwork Control blocks will be made in AD-HOC Block III." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "DIS Transient Groups" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -183,8 +183,8 @@ New-NetFirewallRule -DisplayName "DIS Transient Groups" `
 	-LocalUser $MulticastUsers `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "The statically assigned link-local scope is 224.0.0.0/24." `
-	@Logs | Format-Output @Logs
+	-Description "The statically assigned link-local scope is 224.0.0.0/24." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Source-Specific Multicast Block" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -198,8 +198,8 @@ New-NetFirewallRule -DisplayName "Source-Specific Multicast Block" `
 from only those multicast sources for which the receivers have explicitly expressed interest and
 is primarily targeted at one-to-many (broadcast) applications.
 Note that this block was initially assigned to the Versatile Message Transaction Protocol (VMTP)
-transient groups [IANA]." `
-	@Logs | Format-Output @Logs
+transient groups [IANA]." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "GLOP Block" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -215,8 +215,8 @@ by mapping a domain's autonomous system number, expressed in octets as X.Y, into
 octets of the GLOP Block, yielding an assignment of 233.X.Y.0/24.
 The mapping and assignment is defined in [RFC3180].
 Domains with a 32-bit ASN MAY apply for space in AD-HOC Block III,
-or consider using IPv6 multicast addresses." `
-	@Logs | Format-Output @Logs
+or consider using IPv6 multicast addresses." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "AD-HOC Block III" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -233,8 +233,8 @@ RFC 3138 should not have asked the RIRs to develop policies for the EGLOP space 
 reserves that to the IETF.
 It is important to make this space available for use by network operators,
 and it is therefore appropriate to obsolete RFC 3138 and classify this address range as available
-for AD-HOC assignment." `
-	@Logs | Format-Output @Logs
+for AD-HOC assignment." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Unicast-Prefix-based IPv4 Multicast Addresses" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -250,8 +250,8 @@ The extension presented in this document allows for unicast-prefix-based assignm
 multicast addresses.
 By delegating multicast addresses at the same time as unicast prefixes, network operators will
 be able to identify their multicast addresses without needing to run an inter-domain
-allocation protocol." `
-	@Logs | Format-Output @Logs
+allocation protocol." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Administratively Scoped Block" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -262,7 +262,7 @@ New-NetFirewallRule -DisplayName "Administratively Scoped Block" `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Addresses in the Administratively Scoped Block are for local use within a
-domain." `
-	@Logs | Format-Output @Logs
+domain." |
+Format-Output
 
 Update-Log

@@ -66,34 +66,34 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 Start-Test "-UserProfile switch Fill table with Greenshot"
-Initialize-Table @Logs
-Update-Table "Greenshot" -UserProfile @Logs
+Initialize-Table
+Update-Table "Greenshot" -UserProfile
 Show-Table
 
 Start-Test "Failure Test"
-Initialize-Table @Logs
-Update-Table "Failure" -UserProfile @Logs
+Initialize-Table
+Update-Table "Failure" -UserProfile
 Show-Table
 
 Start-Test "Test multiple paths"
-Initialize-Table @Logs
-Update-Table "Visual Studio" -UserProfile @Logs
+Initialize-Table
+Update-Table "Visual Studio" -UserProfile
 Show-Table
 
 Start-Test "-Executables switch - Fill table with PowerShell"
-Initialize-Table @Logs
+Initialize-Table
 Update-Table "PowerShell.exe" -Executable
 $Result = Show-Table
 $Result
 
-Test-Output $Result -Command Show-Table @Logs
+Test-Output $Result -Command Show-Table
 
 Update-Log
 Exit-Test

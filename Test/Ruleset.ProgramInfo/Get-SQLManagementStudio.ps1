@@ -59,20 +59,20 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 Start-Test "SQLManagementStudio"
-$Instances = Get-SQLManagementStudio @Logs
+$Instances = Get-SQLManagementStudio
 $Instances
 
 Start-Test "SQLManagementStudio - Install path"
-$Instances | Select-Object -ExpandProperty InstallLocation @Logs
+$Instances | Select-Object -ExpandProperty InstallLocation
 
-Test-Output $Instances -Command Get-SQLManagementStudio @Logs
+Test-Output $Instances -Command Get-SQLManagementStudio
 
 Update-Log
 Exit-Test

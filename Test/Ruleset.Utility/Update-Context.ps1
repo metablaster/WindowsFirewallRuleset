@@ -59,8 +59,8 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
@@ -69,15 +69,15 @@ Enter-Test
 $DebugPreference = "SilentlyContinue"
 
 Start-Test "Update-Context IPv4.Outbound -> ICMPv4"
-Update-Context "IPv$IPVersion" "Outbound" "ICMPv4" @Logs
-Approve-Execute @Logs | Out-Null
+Update-Context "IPv$IPVersion" "Outbound" "ICMPv4"
+Approve-Execute | Out-Null
 
 Start-Test "Update-Context Test.Update-Context"
-$Result = Update-Context "Test" "Update-Context" @Logs
+$Result = Update-Context "Test" "Update-Context"
 $Result
-Approve-Execute @Logs | Out-Null
+Approve-Execute | Out-Null
 
-Test-Output $Result -Command Update-Context @Logs
+Test-Output $Result -Command Update-Context
 
 Update-Log
 Exit-Test

@@ -60,18 +60,18 @@ Import-Module -Name Ruleset.Logging
 Import-Module -Name Ruleset.UserInfo
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 
 Enter-Test
 
 Start-Test "Get-UserApps"
-$Result = Get-UserApps -User $TestUser @Logs
+$Result = Get-UserApps -User $TestUser
 $Result
 
-Test-Output $Result -Command Get-UserApps @Logs
+Test-Output $Result -Command Get-UserApps
 
 Update-Log
 Exit-Test

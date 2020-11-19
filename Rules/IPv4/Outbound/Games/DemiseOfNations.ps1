@@ -63,8 +63,8 @@ $Accept = "Outbound rules for Demise of Nations game will be loaded, recommended
 $Deny = "Skip operation, outbound rules for Demise of Nations game will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 #
@@ -73,23 +73,23 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 $TargetProgramRoot = "%ProgramFiles(x86)%\Steam\steamapps\common\Demise of Nations - Rome"
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Rules for Demise of Nations
 #
 
 # Test if installation exists on system
-if ((Test-Installation "DemiseOfNations" ([ref] $TargetProgramRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "DemiseOfNations" ([ref] $TargetProgramRoot)) -or $ForceLoad)
 {
 	$Program = "$TargetProgramRoot\app_main.exe.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Demise of Nations" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "" @Logs | Format-Output @Logs
+		-Description "" | Format-Output
 }
 
 Update-Log

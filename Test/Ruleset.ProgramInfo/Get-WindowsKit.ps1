@@ -59,25 +59,25 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 Start-Test "Get-WindowsKit"
-$WindowsKits = Get-WindowsKit @Logs
+$WindowsKits = Get-WindowsKit
 $WindowsKits
 
 Start-Test "Get-WindowsKit DebuggersRoot latest"
 if ($null -ne $WindowsKits)
 {
 	$WindowsKits | Where-Object { $_.Product -like "WindowsDebuggersRoot*" } |
-	Sort-Object -Property Product @Logs |
-	Select-Object -Last 1 -ExpandProperty InstallLocation @Logs
+	Sort-Object -Property Product |
+	Select-Object -Last 1 -ExpandProperty InstallLocation
 }
 
-Test-Output $WindowsKits -Command Get-WindowsKit @Logs
+Test-Output $WindowsKits -Command Get-WindowsKit
 
 Update-Log
 Exit-Test

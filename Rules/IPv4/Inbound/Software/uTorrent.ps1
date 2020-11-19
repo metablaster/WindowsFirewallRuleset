@@ -63,12 +63,12 @@ $Accept = "Inbound rules for uTorrent software will be loaded, recommended if uT
 $Deny = "Skip operation, inbound rules for uTorrent software will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Steam installation directories
@@ -80,37 +80,37 @@ $uTorrentRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\uTorrent"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "uTorrent" ([ref] $uTorrentRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "uTorrent" ([ref] $uTorrentRoot)) -or $ForceLoad)
 {
 	$Program = "$uTorrentRoot\uTorrent.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "uTorrent - DHT" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort 1161 -RemotePort 1024-65535 `
 		-EdgeTraversalPolicy DeferToApp -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "BitTorrent UDP listener, usually for DHT." @Logs | Format-Output @Logs
+		-Description "BitTorrent UDP listener, usually for DHT." | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "uTorrent - Listening port" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort 1161 -RemotePort 1024-65535 `
 		-EdgeTraversalPolicy DeferToApp -LocalUser $UsersGroupSDDL `
-		-Description "BitTorrent TCP listener." @Logs | Format-Output @Logs
+		-Description "BitTorrent TCP listener." | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "uTorrent - Local Peer discovery" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol UDP -LocalAddress 224.0.0.0-239.255.255.255 -RemoteAddress LocalSubnet4 -LocalPort 6771 -RemotePort 6771 `
 		-EdgeTraversalPolicy DeferToApp -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "UDP multicast search to identify other peers in your subnet that are also on torrents you are on." @Logs | Format-Output @Logs
+		-Description "UDP multicast search to identify other peers in your subnet that are also on torrents you are on." | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "uTorrent - Web UI" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort 8080, 10000 -RemotePort Any `
 		-EdgeTraversalPolicy Allow -LocalUser $UsersGroupSDDL `
-		-Description "BitTorrent Remote control from browser." @Logs | Format-Output @Logs
+		-Description "BitTorrent Remote control from browser." | Format-Output
 }
 
 Update-Log

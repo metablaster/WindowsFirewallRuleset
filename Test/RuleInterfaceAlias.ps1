@@ -61,8 +61,8 @@ Import-Module -Name Ruleset.Logging
 
 # User prompt
 Set-Variable -Name Accept -Scope Local -Option ReadOnly -Force -Value "Load test rule into firewall"
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 # Setup local variables
 $Group = "Test - Interface aliases"
@@ -72,7 +72,7 @@ Enter-Test
 
 Start-Test "Remove-NetFirewallRule"
 # Remove previous test
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 Start-Test "Virtual adapter rule no wildcard"
 $VirtualAdapter = Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware
@@ -86,8 +86,8 @@ New-NetFirewallRule -DisplayName "Virtual adapter rule no wildcard" `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
 	-InterfaceAlias $VirtualAdapter.ToWql() `
-	-Description "Virtual adapter rule without WildcardPattern" `
-	@Logs | Format-Output @Logs
+	-Description "Virtual adapter rule without WildcardPattern" |
+Format-Output
 
 Start-Test "Virtual adapter rule CultureInvariant"
 $VirtualAdapterCultureInvariant = Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware -WildCardOption CultureInvariant
@@ -101,8 +101,8 @@ New-NetFirewallRule -DisplayName "Virtual adapter rule CultureInvariant" `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
 	-InterfaceAlias $VirtualAdapterCultureInvariant `
-	-Description "Virtual adapter rule using WildcardPattern" `
-	@Logs | Format-Output @Logs
+	-Description "Virtual adapter rule using WildcardPattern" |
+Format-Output
 
 Start-Test "Virtual adapter rule IgnoreCase"
 $VirtualAdapterIgnoreCase = Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware -WildCardOption IgnoreCase
@@ -116,8 +116,8 @@ New-NetFirewallRule -DisplayName "Virtual adapter rule IgnoreCase" `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
 	-InterfaceAlias $VirtualAdapterIgnoreCase `
-	-Description "Virtual adapter rule using WildcardPattern" `
-	@Logs | Format-Output @Logs
+	-Description "Virtual adapter rule using WildcardPattern" |
+Format-Output
 
 Start-Test "Virtual adapter rule None"
 $VirtualAdapterNone = Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware -WildCardOption None
@@ -131,8 +131,8 @@ New-NetFirewallRule -DisplayName "Virtual adapter rule None" `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
 	-InterfaceAlias $VirtualAdapterNone `
-	-Description "Virtual adapter rule using WildcardPattern" `
-	@Logs | Format-Output @Logs
+	-Description "Virtual adapter rule using WildcardPattern" |
+Format-Output
 
 Start-Test "Virtual adapter rule Compiled"
 $VirtualAdapterCompiled = Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware -WildCardOption Compiled
@@ -146,8 +146,8 @@ New-NetFirewallRule -DisplayName "Virtual adapter rule Compiled" `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
 	-InterfaceAlias $VirtualAdapterCompiled `
-	-Description "Virtual adapter rule using WildcardPattern" `
-	@Logs | Format-Output @Logs
+	-Description "Virtual adapter rule using WildcardPattern" |
+Format-Output
 
 Start-Test "Hardware adapter rule"
 $HardwareAdapter = Get-InterfaceAlias IPv4
@@ -161,8 +161,8 @@ New-NetFirewallRule -DisplayName "Hardware adapter rule" `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
 	-InterfaceAlias $HardwareAdapter `
-	-Description "Hardware test rule description" `
-	@Logs | Format-Output @Logs
+	-Description "Hardware test rule description" |
+Format-Output
 
 Start-Test "Multiple adapters rule"
 $MultipleAdapters = Get-InterfaceAlias IPv4 -IncludeAll
@@ -176,8 +176,8 @@ New-NetFirewallRule -DisplayName "Multiple adapters rule" `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
 	-InterfaceAlias $MultipleAdapters `
-	-Description "Multiple test rule description" `
-	@Logs | Format-Output @Logs
+	-Description "Multiple test rule description" |
+Format-Output
 
 Start-Test "Bad adapter rule FAILURE TEST"
 $BadAdapters = Get-InterfaceAlias IPv4 -IncludeAll
@@ -192,8 +192,8 @@ New-NetFirewallRule -DisplayName "Bad adapter rule" `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
 	-InterfaceAlias $BadAdapters `
-	-Description "Bad adapter test rule description" `
-	@Logs -ErrorAction SilentlyContinue | Format-Output @Logs
+	-Description "Bad adapter test rule description" -ErrorAction SilentlyContinue |
+Format-Output
 
 Update-Log
 Exit-Test

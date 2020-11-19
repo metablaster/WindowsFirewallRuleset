@@ -59,38 +59,38 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 Start-Test "Get-Broadcast"
-Get-Broadcast @Logs
+Get-Broadcast
 
 Start-Test "Get-Broadcast -IncludeDisconnected"
-Get-Broadcast -IncludeDisconnected @Logs
+Get-Broadcast -IncludeDisconnected
 
 Start-Test "Get-Broadcast -IncludeVirtual"
-Get-Broadcast -IncludeVirtual @Logs
+Get-Broadcast -IncludeVirtual
 
 Start-Test "Get-Broadcast -IncludeVirtual -IncludeDisconnected"
-Get-Broadcast -IncludeVirtual -IncludeDisconnected @Logs
+Get-Broadcast -IncludeVirtual -IncludeDisconnected
 
 Start-Test "Get-Broadcast -IncludeVirtual -IncludeDisconnected -ExcludeHardware"
-Get-Broadcast -IncludeVirtual -IncludeDisconnected -ExcludeHardware @Logs
+Get-Broadcast -IncludeVirtual -IncludeDisconnected -ExcludeHardware
 
 Start-Test "Get-Broadcast -IncludeHidden"
-Get-Broadcast -IncludeHidden @Logs
+Get-Broadcast -IncludeHidden
 
 Start-Test "Get-Broadcast -IncludeAll"
-$Result = Get-Broadcast -IncludeAll @Logs
+$Result = Get-Broadcast -IncludeAll
 $Result
 
 Start-Test "Get-Broadcast -IncludeAll -ExcludeHardware"
-Get-Broadcast -IncludeAll -ExcludeHardware @Logs
+Get-Broadcast -IncludeAll -ExcludeHardware
 
-Test-Output $Result -Command Get-Broadcast @Logs
+Test-Output $Result -Command Get-Broadcast
 
 Update-Log
 Exit-Test

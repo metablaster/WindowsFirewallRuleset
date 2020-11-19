@@ -59,23 +59,23 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 Start-Test "Compare-Path same path"
-Compare-Path "%SystemDrive%\Windows" "C:\Windows" @Logs
+Compare-Path "%SystemDrive%\Windows" "C:\Windows"
 
 Start-Test "Compare-Path relative path"
-Compare-Path "%SystemDrive%/Windows" "C:\Windows\System32\..\" @Logs
+Compare-Path "%SystemDrive%/Windows" "C:\Windows\System32\..\"
 
 Start-Test "Compare-Path non existent path"
-Compare-Path "%SystemDrive%\Windows" "Z:\Nonexistent" @Logs
+Compare-Path "%SystemDrive%\Windows" "Z:\Nonexistent"
 
 Start-Test "Compare-Path wildcards + relative path -Sensitive"
-Compare-Path "%SystemDrive%\Win*\System32\en-US\.." "C:\Wind*\System3?\" -Sensitive @Logs
+Compare-Path "%SystemDrive%\Win*\System32\en-US\.." "C:\Wind*\System3?\" -Sensitive
 
 Start-Test "Compare-Path same -Loose"
 Compare-Path "%SystemDrive%\\Windows" "C:/Win*/" -Loose
@@ -84,10 +84,10 @@ Start-Test "Compare-Path same wrong order -Loose"
 Compare-Path "C:\Win*" "%SystemDrive%\Windows" -Loose
 
 Start-Test "Compare-Path not same path"
-$Result = Compare-Path "%SystemDrive%\" "D:\" @Logs
+$Result = Compare-Path "%SystemDrive%\" "D:\"
 $Result
 
-Test-Output $Result -Command Compare-Path @Logs
+Test-Output $Result -Command Compare-Path
 
 Update-Log
 Exit-Test

@@ -65,19 +65,19 @@ $Accept = "Outbound rules for remote Windows will be loaded, required for servic
 $Deny = "Skip operation, outbound rules for remote Windows will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Remote Desktop rules
 #
 
 $Program = "%SystemRoot%\System32\mstsc.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -DisplayName "Remote desktop - User Mode" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
@@ -91,8 +91,8 @@ New-NetFirewallRule -DisplayName "Remote desktop - User Mode" `
 	-Description "Remote desktop connection.
 Allows users to connect interactively to a remote computer.
 To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System
-properties control panel item." `
-	@Logs | Format-Output @Logs
+properties control panel item." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Remote desktop - User Mode" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
@@ -105,7 +105,7 @@ New-NetFirewallRule -DisplayName "Remote desktop - User Mode" `
 	-Description "Remote desktop connection.
 Allows users to connect interactively to a remote computer.
 To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System
-properties control panel item." `
-	@Logs | Format-Output @Logs
+properties control panel item." |
+Format-Output
 
 Update-Log

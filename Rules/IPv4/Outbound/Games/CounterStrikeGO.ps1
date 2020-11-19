@@ -63,8 +63,8 @@ $Accept = "Outbound rules for CS:GO game will be loaded, recommended if CS:GO ga
 $Deny = "Skip operation, outbound rules for CS:GO game will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 #
@@ -73,32 +73,32 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 $CounterStrikeRoot = "%ProgramFiles(x86)%\Steam\steamapps\common\Counter-Strike Global Offensive"
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Rules for Counter Strike
 #
 
 # Test if installation exists on system
-if ((Test-Installation "CounterStrikeGO" ([ref] $CounterStrikeRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "CounterStrikeGO" ([ref] $CounterStrikeRoot)) -or $ForceLoad)
 {
 	$Program = "$CounterStrikeRoot\csgo.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Counter Strike GO (HTTP)" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "download maps" @Logs | Format-Output @Logs
+		-Description "download maps" | Format-Output
 
 	$Program = "$CounterStrikeRoot\csgo.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Counter Strike GO" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 27000-27100 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "" @Logs | Format-Output @Logs
+		-Description "" | Format-Output
 }
 
 Update-Log

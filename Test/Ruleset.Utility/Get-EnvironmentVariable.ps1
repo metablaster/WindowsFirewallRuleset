@@ -60,34 +60,34 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 Start-Test "Get-EnvironmentVariable UserProfile"
-$Result = Get-EnvironmentVariable UserProfile @Logs
+$Result = Get-EnvironmentVariable UserProfile
 $Result
 
 Start-Test "Select Name"
 $Result | Select-Object -ExpandProperty Name
 
 Start-Test "Get-EnvironmentVariable WhiteList | Sort"
-Get-EnvironmentVariable WhiteList @Logs | Sort-Object -Descending { $_.Value.Length }
+Get-EnvironmentVariable WhiteList | Sort-Object -Descending { $_.Value.Length }
 
 Start-Test "Get-EnvironmentVariable BlackList"
-$Result = Get-EnvironmentVariable BlackList @Logs
+$Result = Get-EnvironmentVariable BlackList
 $Result
 
 Start-Test "Select Value"
 $Result | Select-Object -ExpandProperty Value
 
 Start-Test "Get-EnvironmentVariable All"
-$Result = Get-EnvironmentVariable All @Logs
+$Result = Get-EnvironmentVariable All
 $Result
 
-Test-Output $Result -Command Get-EnvironmentVariable @Logs
+Test-Output $Result -Command Get-EnvironmentVariable
 
 Update-Log
 Exit-Test

@@ -59,8 +59,8 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
@@ -73,14 +73,14 @@ Start-Test "Get-NetFramework latest"
 if ($null -ne $NETFramework)
 {
 	$NETFrameworkRoot = $NETFramework |
-	Sort-Object -Property Version @Logs |
+	Sort-Object -Property Version |
 	Where-Object { $_.InstallLocation } |
-	Select-Object -Last 1 -ExpandProperty InstallLocation @Logs
+	Select-Object -Last 1 -ExpandProperty InstallLocation
 
 	$NETFrameworkRoot
 }
 
-Test-Output $NETFramework -Command Get-NetFramework @Logs
+Test-Output $NETFramework -Command Get-NetFramework
 
 Update-Log
 Exit-Test

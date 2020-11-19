@@ -59,22 +59,3 @@ foreach ($Script in $PublicScripts)
 	Write-Debug -Message "[$ThisModule] Importing script: Public\$Script.ps1"
 	. ("{0}\Public\{1}.ps1" -f $PSScriptRoot, $Script)
 }
-
-#
-# Module variables
-#
-
-if (!(Get-Variable -Name CheckInitLogging -Scope Global -ErrorAction Ignore))
-{
-	Write-Debug -Message "[$ThisModule] Initialize global constant variable: CheckInitLogging"
-	# check if constants already initialized, used for module reloading
-	New-Variable -Name CheckInitLogging -Scope Global -Option Constant -Value $null
-
-	Write-Debug -Message "[$ThisModule] Initialize global constant variable: Logs"
-	# These defaults are for advanced functions to enable logging, do not modify!
-	New-Variable -Name Logs -Scope Global -Option Constant -Value @{
-		ErrorVariable = "+ErrorBuffer"
-		WarningVariable = "+WarningBuffer"
-		InformationVariable = "+InfoBuffer"
-	}
-}

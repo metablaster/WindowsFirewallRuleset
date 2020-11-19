@@ -59,27 +59,27 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 Start-Test "ConvertFrom-OSBuild 17763 = 1809"
-ConvertFrom-OSBuild 17763 @Logs
+ConvertFrom-OSBuild 17763
 
 Start-Test "ConvertFrom-OSBuild 19041.450 = 2004"
-ConvertFrom-OSBuild 19041.450 @Logs
+ConvertFrom-OSBuild 19041.450
 
 # TODO: -ErrorAction Ignore doesn't work in Windows PowerShell (all tests)
 Start-Test "ConvertFrom-OSBuild 11111.1 = unknown"
-ConvertFrom-OSBuild 11111.133 -ErrorAction SilentlyContinue @Logs
+ConvertFrom-OSBuild 11111.133 -ErrorAction SilentlyContinue
 
 Start-Test "ConvertFrom-OSBuild 16299.2045 = 1079"
-$Result = ConvertFrom-OSBuild 16299.2045 @Logs
+$Result = ConvertFrom-OSBuild 16299.2045
 $Result
 
-Test-Output $Result -Command ConvertFrom-OSBuild @Logs
+Test-Output $Result -Command ConvertFrom-OSBuild
 
 Update-Log
 Exit-Test

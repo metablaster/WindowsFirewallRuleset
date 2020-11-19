@@ -70,15 +70,15 @@ Set-Variable -Name ErrorStatus -Scope Global -Value $false
 Set-Variable -Name WarningStatus -Scope Global -Value $false
 
 # Prompt to set screen buffer to recommended value
-Set-ScreenBuffer @Logs
+Set-ScreenBuffer
 
 # Check all rules that apply to windows services
-Test-File $ServiceHost @Logs
+Test-File $ServiceHost
 Get-NetworkService $ProjectRoot\Rules
 Confirm-FileEncoding $ProjectRoot\Rules\NetworkServices.txt
 Get-Content -Path $ProjectRoot\Rules\NetworkServices.txt -Encoding $DefaultEncoding |
 ForEach-Object {
-	Test-Service $_ @Logs
+	Test-Service $_
 	Update-Log
 }
 #endregion
@@ -99,16 +99,16 @@ $Direction = "Inbound"
 $RuleGroup = "inbound $IPVersion rules"
 $Accept = "Continue selecting which $RuleGroup to load"
 $Deny = "Skip operation, no rules from '$RuleGroup' group will be loaded"
-Update-Context $IPVersion $Direction @Logs
+Update-Context $IPVersion $Direction
 
-if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny @Logs)
+if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
 {
 	# Update user prompt strings
 	$Ruleset = "common rules"
 	$Accept = "Start executing scripts from '$Ruleset' ruleset, some of these rules are recommended for proper OS network functioning"
 	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
 
-	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
+	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
 	{
 		# Common rules
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\AdditionalNetworking.ps1"
@@ -129,9 +129,9 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny @
 	$Ruleset = "rules for developers"
 	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules if various 3rd party development software is installed"
 	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
-	Update-Context $IPVersion $Direction @Logs
+	Update-Context $IPVersion $Direction
 
-	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
+	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
 	{
 		# Rules for developers
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\EpicGames.ps1"
@@ -141,9 +141,9 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny @
 	$Ruleset = "rules for servers"
 	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules for server platforms and software"
 	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
-	Update-Context $IPVersion $Direction @Logs
+	Update-Context $IPVersion $Direction
 
-	if (Approve-Execute -Default "No" -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
+	if (Approve-Execute -Default "No" -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
 	{
 		# Rules for servers
 		# & "$ProjectRoot\Rules\$IPVersion\$Direction\Server\ScriptName.ps1"
@@ -155,9 +155,9 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny @
 	$Ruleset = "rules for 3rd party programs"
 	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules for 3rd party software"
 	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
-	Update-Context $IPVersion $Direction @Logs
+	Update-Context $IPVersion $Direction
 
-	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
+	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
 	{
 		# rules for programs
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\FileZilla.ps1"
@@ -171,9 +171,9 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny @
 	$Ruleset = "rules for Microsoft programs"
 	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules for software published by Microsoft"
 	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
-	Update-Context $IPVersion $Direction @Logs
+	Update-Context $IPVersion $Direction
 
-	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
+	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
 	{
 		# rules for programs
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\MicrosoftOffice.ps1"
@@ -190,16 +190,16 @@ $Direction = "Outbound"
 $RuleGroup = "outbound $IPVersion rules"
 $Accept = "Continue selecting which $RuleGroup to load"
 $Deny = "Skip operation, no rules from '$RuleGroup' group will be loaded"
-Update-Context $IPVersion $Direction @Logs
+Update-Context $IPVersion $Direction
 
-if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny @Logs)
+if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
 {
 	# Update user prompt strings
 	$Ruleset = "common rules"
 	$Accept = "Start executing scripts from '$Ruleset' ruleset, most of these rules are required for proper OS network functioning"
 	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
 
-	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
+	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
 	{
 		# Common rules
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\AdditionalNetworking.ps1"
@@ -221,9 +221,9 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny @
 	$Ruleset = "rules for developers, 3rd party tools"
 	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules if various 3rd party development software is installed"
 	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
-	Update-Context $IPVersion $Direction @Logs
+	Update-Context $IPVersion $Direction
 
-	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
+	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
 	{
 		# Rules for developers
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Chocolatey.ps1"
@@ -238,9 +238,9 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny @
 	$Ruleset = "rules for developers, Microsoft tools"
 	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules if various Microsoft development software is installed"
 	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
-	Update-Context $IPVersion $Direction @Logs
+	Update-Context $IPVersion $Direction
 
-	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
+	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
 	{
 		# Rules for developers
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\dotnet.ps1"
@@ -258,9 +258,9 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny @
 	$Ruleset = "rules for games"
 	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules if multiplayer games are installed"
 	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
-	Update-Context $IPVersion $Direction @Logs
+	Update-Context $IPVersion $Direction
 
-	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
+	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
 	{
 		# Rules for games
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\ArenaChess.ps1"
@@ -279,9 +279,9 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny @
 	$Ruleset = "rules for servers"
 	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules for server platforms and software"
 	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
-	Update-Context $IPVersion $Direction @Logs
+	Update-Context $IPVersion $Direction
 
-	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
+	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
 	{
 		# Rules for servers
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Server\SQLServer.ps1"
@@ -291,9 +291,9 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny @
 	$Ruleset = "rules for 3rd party programs"
 	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules for 3rd party software"
 	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
-	Update-Context $IPVersion $Direction @Logs
+	Update-Context $IPVersion $Direction
 
-	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
+	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
 	{
 		# rules for 3rd party programs
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Adobe.ps1"
@@ -324,9 +324,9 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny @
 	$Ruleset = "rules for Microsoft programs"
 	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules for software published by Microsoft"
 	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
-	Update-Context $IPVersion $Direction @Logs
+	Update-Context $IPVersion $Direction
 
-	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
+	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
 	{
 		# rules for Microsoft programs
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\BingWallpaper.ps1"
@@ -351,16 +351,16 @@ $Direction = "Inbound"
 $RuleGroup = "inbound $IPVersion Rules"
 $Accept = "Continue selecting which $RuleGroup to load"
 $Deny = "Skip operation, no rules from '$RuleGroup' group will be loaded"
-Update-Context $IPVersion $Direction @Logs
+Update-Context $IPVersion $Direction
 
-if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny @Logs)
+if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
 {
 	# Update user prompt strings
 	$Ruleset = "common rules"
 	$Accept = "Start executing scripts from '$Ruleset' ruleset, some of these rules are required for proper OS network functioning even if there is no IPv6 connectivity"
 	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
 
-	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
+	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
 	{
 		# Common rules
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\CoreNetworking.ps1"
@@ -380,16 +380,16 @@ $Direction = "Outbound"
 $RuleGroup = "outbound $IPVersion Rules"
 $Accept = "Continue selecting which $RuleGroup to load"
 $Deny = "Skip operation, no rules from '$RuleGroup' group will be loaded"
-Update-Context $IPVersion $Direction @Logs
+Update-Context $IPVersion $Direction
 
-if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny @Logs)
+if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
 {
 	# Update user prompt strings
 	$Ruleset = "common rules"
 	$Accept = "Start executing scripts from '$Ruleset' ruleset, most of these rules are required for proper OS network functioning even if there is no IPv6 connectivity"
 	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
 
-	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny @Logs)
+	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
 	{
 		# Common rules
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\CoreNetworking.ps1"
@@ -399,7 +399,7 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny @
 	}
 }
 
-Write-Information -Tags "User" -MessageData "INFO: Loading rules was completed" @Logs
+Write-Information -Tags "User" -MessageData "INFO: Loading rules was completed"
 
 # Set up global firewall setting, network and firewall profile and apply GPO changes
 & "$ProjectRoot\Scripts\SetupProfile.ps1"
@@ -415,37 +415,37 @@ if ($Develop)
 if ($ErrorLogging -and $ErrorStatus)
 {
 	Write-Output ""
-	Write-Warning -Message "Errors were generated" @Logs
+	Write-Warning -Message "Errors were generated"
 
 	Write-Output ""
-	Write-Information -Tags "User" -MessageData "INFO: All errors were saved to: $("$ProjectRoot\Logs")" @Logs
-	Write-Information -Tags "User" -MessageData "INFO: If module is edited don't forget to restart Powershell" @Logs
+	Write-Information -Tags "User" -MessageData "INFO: All errors were saved to: $("$ProjectRoot\Logs")"
+	Write-Information -Tags "User" -MessageData "INFO: If module is edited don't forget to restart Powershell"
 }
 
 if ($WarningLogging -and $WarningStatus)
 {
 	Write-Output ""
-	Write-Warning -Message "Warnings were generated" @Logs
-	Write-Information -Tags "User" -MessageData "INFO: All warnings were saved to: $("$ProjectRoot\Logs")" @Logs
-	Write-Information -Tags "User" -MessageData "INFO: you can review these logs to see if you want to resolve some of them" @Logs
+	Write-Warning -Message "Warnings were generated"
+	Write-Information -Tags "User" -MessageData "INFO: All warnings were saved to: $("$ProjectRoot\Logs")"
+	Write-Information -Tags "User" -MessageData "INFO: you can review these logs to see if you want to resolve some of them"
 }
 
 if ($ErrorStatus)
 {
-	Write-Information -Tags "User" -MessageData "INFO: Not all operations completed successfully" @Logs
+	Write-Information -Tags "User" -MessageData "INFO: Not all operations completed successfully"
 }
 else
 {
 	Write-Output ""
-	Write-Information -Tags "User" -MessageData "INFO: All operations completed successfully!" @Logs
+	Write-Information -Tags "User" -MessageData "INFO: All operations completed successfully!"
 }
 
 Write-Output ""
-Write-Information -Tags "User" -MessageData "INFO: Make sure to visit Local Group Policy and adjust rules as needed." @Logs
+Write-Information -Tags "User" -MessageData "INFO: Make sure to visit Local Group Policy and adjust rules as needed."
 Write-Output ""
 
 # Clear warning/error status
-Set-Variable -Name ErrorStatus -Scope Global -Value $false @Logs
-Set-Variable -Name WarningStatus -Scope Global -Value $false @Logs
+Set-Variable -Name ErrorStatus -Scope Global -Value $false
+Set-Variable -Name WarningStatus -Scope Global -Value $false
 
 Update-Log

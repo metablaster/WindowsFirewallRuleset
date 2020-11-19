@@ -7,7 +7,7 @@ SHORT DESCRIPTION
 
 LONG DESCRIPTION
 	A function which produces an error, warning and info streams must be advanced
-	function and must take @Logs splatting which is defined in this module.
+	function and must take splatting which is defined in this module.
 
 	Once in a while Update-Log is called, which writes generated data into log files.
 
@@ -18,11 +18,11 @@ VARIABLES
 	CheckInitLogging    Purpose is to prevent double initialization of constants
 
 EXAMPLES
-	Some-Function @Logs
+	Some-Function
 
-	Another-Function @Logs
+	Another-Function
 
-	Some-Function @Logs | Another-Function @Logs
+	Some-Function | Another-Function
 	Update-Log
 
 KEYWORDS

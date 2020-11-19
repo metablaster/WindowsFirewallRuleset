@@ -70,12 +70,12 @@ $Accept = "Inbound rules for network discovery will be loaded, required for host
 $Deny = "Skip operation, inbound network discovery rules will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $DisplayGroup @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $DisplayGroup
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $Group -Direction $Direction -NewPolicyStore $PolicyStore
 
@@ -123,8 +123,8 @@ New-NetFirewallRule -DisplayName "Link Local Multicast Name Resolution" `
 The DNS Client service (dnscache) caches Domain Name System (DNS) names and registers the full
 computer name for this computer.
 If the rule is disabled, DNS names will continue to be resolved.
-However, the results of DNS name queries will not be cached and the computer's name will not be registered." `
-	@Logs | Format-Output @Logs
+However, the results of DNS name queries will not be cached and the computer's name will not be registered." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Link Local Multicast Name Resolution" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -139,8 +139,8 @@ New-NetFirewallRule -DisplayName "Link Local Multicast Name Resolution" `
 The DNS Client service (dnscache) caches Domain Name System (DNS) names and registers the full
 computer name for this computer.
 If the rule is disabled, DNS names will continue to be resolved.
-However, the results of DNS name queries will not be cached and the computer's name will not be registered." `
-	@Logs | Format-Output @Logs
+However, the results of DNS name queries will not be cached and the computer's name will not be registered." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "NetBIOS Datagram" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
@@ -151,8 +151,8 @@ New-NetFirewallRule -DisplayName "NetBIOS Datagram" `
 	-InterfaceType $DefaultInterface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Rule for Network Discovery to allow NetBIOS Datagram transmission and reception." `
-	@Logs | Format-Output @Logs
+	-Description "Rule for Network Discovery to allow NetBIOS Datagram transmission and reception." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "NetBIOS Datagram" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
@@ -163,8 +163,8 @@ New-NetFirewallRule -DisplayName "NetBIOS Datagram" `
 	-InterfaceType $DefaultInterface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Rule for Network Discovery to allow NetBIOS Datagram transmission and reception." `
-	@Logs | Format-Output @Logs
+	-Description "Rule for Network Discovery to allow NetBIOS Datagram transmission and reception." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "NetBIOS Datagram" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -175,8 +175,8 @@ New-NetFirewallRule -DisplayName "NetBIOS Datagram" `
 	-InterfaceType $DefaultInterface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Rule for Network Discovery to allow NetBIOS Datagram transmission and reception." `
-	@Logs | Format-Output @Logs
+	-Description "Rule for Network Discovery to allow NetBIOS Datagram transmission and reception." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "NetBIOS Name" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
@@ -187,8 +187,8 @@ New-NetFirewallRule -DisplayName "NetBIOS Name" `
 	-InterfaceType $DefaultInterface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Rule for Network Discovery to allow NetBIOS Name Resolution." `
-	@Logs | Format-Output @Logs
+	-Description "Rule for Network Discovery to allow NetBIOS Name Resolution." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "NetBIOS Name" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
@@ -199,8 +199,8 @@ New-NetFirewallRule -DisplayName "NetBIOS Name" `
 	-InterfaceType $DefaultInterface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Rule for Network Discovery to allow NetBIOS Name Resolution." `
-	@Logs | Format-Output @Logs
+	-Description "Rule for Network Discovery to allow NetBIOS Name Resolution." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "NetBIOS Name" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -211,8 +211,8 @@ New-NetFirewallRule -DisplayName "NetBIOS Name" `
 	-InterfaceType $DefaultInterface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Rule for Network Discovery to allow NetBIOS Name Resolution." `
-	@Logs | Format-Output @Logs
+	-Description "Rule for Network Discovery to allow NetBIOS Name Resolution." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "WSD (FDResPub)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -226,8 +226,8 @@ New-NetFirewallRule -DisplayName "WSD (FDResPub)" `
 	-Description "Rule for Network Discovery to discover devices via Function Discovery.
 Publishes this computer and resources attached to this computer so they can be discovered over the network.
 If this rule is disabled, network resources will no longer be published and they will not be discovered
-by other computers on the network." `
-	@Logs | Format-Output @Logs
+by other computers on the network." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "WSD (FDResPub)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -241,8 +241,8 @@ New-NetFirewallRule -DisplayName "WSD (FDResPub)" `
 	-Description "Rule for Network Discovery to discover devices via Function Discovery.
 Publishes this computer and resources attached to this computer so they can be discovered over the network.
 If this rule is disabled, network resources will no longer be published and they will not be discovered
-by other computers on the network." `
-	@Logs | Format-Output @Logs
+by other computers on the network." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "SSDP Discovery" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -256,8 +256,8 @@ New-NetFirewallRule -DisplayName "SSDP Discovery" `
 	-Description "Rule for Network Discovery to allow use of the Simple Service Discovery Protocol.
 Service discovers networked devices and services that use the SSDP discovery protocol, such as UPnP devices.
 Also announces SSDP devices and services running on the local computer.
-If this rule is disabled, SSDP-based devices will not be discovered." `
-	@Logs | Format-Output @Logs
+If this rule is disabled, SSDP-based devices will not be discovered." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "SSDP Discovery" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -271,8 +271,8 @@ New-NetFirewallRule -DisplayName "SSDP Discovery" `
 	-Description "Rule for Network Discovery to allow use of the Simple Service Discovery Protocol.
 Service discovers networked devices and services that use the SSDP discovery protocol, such as UPnP devices.
 Also announces SSDP devices and services running on the local computer.
-If this rule is disabled, SSDP-based devices will not be discovered." `
-	@Logs | Format-Output @Logs
+If this rule is disabled, SSDP-based devices will not be discovered." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "UPnP Device Host" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
@@ -285,8 +285,8 @@ New-NetFirewallRule -DisplayName "UPnP Device Host" `
 	-Description "Rule for Network Discovery to allow use of Universal Plug and Play.
 Allows UPnP devices to be hosted on this computer.
 If this rule is disabled, any hosted UPnP devices will stop functioning and no additional hosted
-devices can be added." `
-	@Logs | Format-Output @Logs
+devices can be added." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "UPnP Device Host" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
@@ -299,8 +299,8 @@ New-NetFirewallRule -DisplayName "UPnP Device Host" `
 	-Description "Rule for Network Discovery to allow use of Universal Plug and Play.
 Allows UPnP devices to be hosted on this computer.
 If this rule is disabled, any hosted UPnP devices will stop functioning and no additional hosted
-devices can be added." `
-	@Logs | Format-Output @Logs
+devices can be added." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "UPnP Device Host" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -313,8 +313,8 @@ New-NetFirewallRule -DisplayName "UPnP Device Host" `
 	-Description "Rule for Network Discovery to allow use of Universal Plug and Play.
 Allows UPnP devices to be hosted on this computer.
 If this rule is disabled, any hosted UPnP devices will stop functioning and no additional hosted
-devices can be added." `
-	@Logs | Format-Output @Logs
+devices can be added." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "WSD Events" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
@@ -324,8 +324,8 @@ New-NetFirewallRule -DisplayName "WSD Events" `
 	-LocalPort 5357 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
-	-Description "Rule for Network Discovery to allow WSDAPI Events via Function Discovery." `
-	@Logs | Format-Output @Logs
+	-Description "Rule for Network Discovery to allow WSDAPI Events via Function Discovery." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "WSD Events" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
@@ -335,8 +335,8 @@ New-NetFirewallRule -DisplayName "WSD Events" `
 	-LocalPort 5357 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
-	-Description "Rule for Network Discovery to allow WSDAPI Events via Function Discovery." `
-	@Logs | Format-Output @Logs
+	-Description "Rule for Network Discovery to allow WSDAPI Events via Function Discovery." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "WSD Events" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -346,8 +346,8 @@ New-NetFirewallRule -DisplayName "WSD Events" `
 	-LocalPort 5357 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
-	-Description "Rule for Network Discovery to allow WSDAPI Events via Function Discovery." `
-	@Logs | Format-Output @Logs
+	-Description "Rule for Network Discovery to allow WSDAPI Events via Function Discovery." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "WSD Events Secure" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
@@ -357,8 +357,8 @@ New-NetFirewallRule -DisplayName "WSD Events Secure" `
 	-LocalPort 5358 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
-	-Description "Rule for Network Discovery to allow Secure WSDAPI Events via Function Discovery." `
-	@Logs | Format-Output @Logs
+	-Description "Rule for Network Discovery to allow Secure WSDAPI Events via Function Discovery." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "WSD Events Secure" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
@@ -368,8 +368,8 @@ New-NetFirewallRule -DisplayName "WSD Events Secure" `
 	-LocalPort 5358 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
-	-Description "Rule for Network Discovery to allow Secure WSDAPI Events via Function Discovery." `
-	@Logs | Format-Output @Logs
+	-Description "Rule for Network Discovery to allow Secure WSDAPI Events via Function Discovery." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "WSD Events Secure" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -379,8 +379,8 @@ New-NetFirewallRule -DisplayName "WSD Events Secure" `
 	-LocalPort 5358 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
-	-Description "Rule for Network Discovery to allow Secure WSDAPI Events via Function Discovery." `
-	@Logs | Format-Output @Logs
+	-Description "Rule for Network Discovery to allow Secure WSDAPI Events via Function Discovery." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "WSD (FDPHost)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -391,8 +391,8 @@ New-NetFirewallRule -DisplayName "WSD (FDPHost)" `
 	-InterfaceType $DefaultInterface `
 	-LocalUser Any -EdgeTraversalPolicy Block `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Rule for Network Discovery to discover devices via Function Discovery." `
-	@Logs | Format-Output @Logs
+	-Description "Rule for Network Discovery to discover devices via Function Discovery." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "WSD (FDPHost)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -403,8 +403,8 @@ New-NetFirewallRule -DisplayName "WSD (FDPHost)" `
 	-InterfaceType $DefaultInterface `
 	-LocalUser Any -EdgeTraversalPolicy Block `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Rule for Network Discovery to discover devices via Function Discovery." `
-	@Logs | Format-Output @Logs
+	-Description "Rule for Network Discovery to discover devices via Function Discovery." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "WSD (Device Association Framework Provider Host)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -416,8 +416,8 @@ New-NetFirewallRule -DisplayName "WSD (Device Association Framework Provider Hos
 	-LocalUser $NT_AUTHORITY_LocalService -EdgeTraversalPolicy Block `
 	-Description "Rule for Network Discovery to discover devices via Function Discovery.
 This service is new since Windows 8.
-Executable also known as Device Association Framework Provider Host" `
-	@Logs | Format-Output @Logs
+Executable also known as Device Association Framework Provider Host" |
+Format-Output
 
 New-NetFirewallRule -DisplayName "WSD (Device Association Framework Provider Host)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -429,8 +429,8 @@ New-NetFirewallRule -DisplayName "WSD (Device Association Framework Provider Hos
 	-LocalUser $NT_AUTHORITY_LocalService -EdgeTraversalPolicy Block `
 	-Description "Rule for Network Discovery to discover devices via Function Discovery.
 This service is new since Windows 8.
-Executable also known as Device Association Framework Provider Host" `
-	@Logs | Format-Output @Logs
+Executable also known as Device Association Framework Provider Host" |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Teredo SSDP Discovery" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -441,8 +441,8 @@ New-NetFirewallRule -DisplayName "Teredo SSDP Discovery" `
 	-InterfaceType $DefaultInterface `
 	-LocalUser Any -EdgeTraversalPolicy Block `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Rule for Network Discovery to allow use of the Simple Service Discovery Protocol." `
-	@Logs | Format-Output @Logs
+	-Description "Rule for Network Discovery to allow use of the Simple Service Discovery Protocol." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Teredo UPnP Discovery" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -452,7 +452,7 @@ New-NetFirewallRule -DisplayName "Teredo UPnP Discovery" `
 	-LocalPort Any -RemotePort Any `
 	-InterfaceType $DefaultInterface `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
-	-Description "Rule for Network Discovery to allow use of the Simple Service Discovery Protocol." `
-	@Logs | Format-Output @Logs
+	-Description "Rule for Network Discovery to allow use of the Simple Service Discovery Protocol." |
+Format-Output
 
 Update-Log

@@ -167,8 +167,8 @@ Import-Module -Name Ruleset.Logging
 # User prompt
 $Accept = "Start capturing network traffic into a file for analysis"
 $Deny = "Abort operation, no capture is started"
-Update-Context $ScriptContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $ScriptContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 if (!(Test-Path -Path $LogsFolder\Audit -PathType Container))
@@ -181,7 +181,7 @@ Write-Information -Tags "User" -MessageData "INFO: Creating new session '$Name'"
 
 # File size in megabytes, buffer (memory) size in kilobytes
 New-NetEventSession -Name $Name -CaptureMode SaveToFile -LocalFilePath $LogsFolder\Audit\$Name.etl `
-	-MaxFileSize 10 -TraceBufferSize 1024 @Logs
+	-MaxFileSize 10 -TraceBufferSize 1024
 
 [hashtable] $Params = @{SessionName = $Name; Level = $Level }
 
@@ -218,13 +218,13 @@ if ($null -ne $LayerSet)
 		$Params.Add("UDPPorts", $UDPPorts)
 	}
 
-	Add-NetEventWFPCaptureProvider @Params @Logs
+	Add-NetEventWFPCaptureProvider @Params
 }
 else
 {
 	Write-Information -Tags "User" -MessageData "INFO: Adding packet capture provider"
 
-	Add-NetEventProvider -Name "Microsoft-Windows-TCPIP" @Params @Logs
+	Add-NetEventProvider -Name "Microsoft-Windows-TCPIP" @Params
 
 	$Params.Add("CaptureType", $CaptureType)
 
@@ -235,11 +235,11 @@ else
 
 	# -TruncationLength default = 128
 	Add-NetEventPacketCaptureProvider -IpProtocols $Protocol `
-		-TruncationLength 128 @Params @Logs
+		-TruncationLength 128 @Params
 }
 
 Write-Information -Tags "User" -MessageData "INFO: Starting session '$Name'"
 
-Start-NetEventSession -Name $Name @Logs
+Start-NetEventSession -Name $Name
 
 Update-Log

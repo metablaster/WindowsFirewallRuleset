@@ -63,12 +63,12 @@ $Accept = "Outbound rules for Microsoft Windows SDK will be loaded, recommended 
 $Deny = "Skip operation, outbound rules for Microsoft Windows SDK will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Windows SDK installation directories
@@ -80,43 +80,43 @@ $SDKDebuggers = "Unknown Directory"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "WindowsKits" ([ref] $SDKDebuggers) @Logs) -or $ForceLoad)
+if ((Test-Installation "WindowsKits" ([ref] $SDKDebuggers)) -or $ForceLoad)
 {
 	$Program = "$SDKDebuggers\x86\windbg.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "WinDbg Symbol Server x86" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "WinDbg access to Symbols Server." @Logs | Format-Output @Logs
+		-Description "WinDbg access to Symbols Server." | Format-Output
 
 	$Program = "$SDKDebuggers\x64\windbg.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "WinDbg Symbol Server x64" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "WinDbg access to Symbols Server" @Logs | Format-Output @Logs
+		-Description "WinDbg access to Symbols Server" | Format-Output
 
 	$Program = "$SDKDebuggers\x86\symchk.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Symchk Symbol Server x86" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "WinDbg Symchk access to Symbols Server." @Logs | Format-Output @Logs
+		-Description "WinDbg Symchk access to Symbols Server." | Format-Output
 
 	$Program = "$SDKDebuggers\x64\symchk.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Symchk Symbol Server x64" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "WinDbg Symchk access to Symbols Server" @Logs | Format-Output @Logs
+		-Description "WinDbg Symchk access to Symbols Server" | Format-Output
 }
 
 Update-Log

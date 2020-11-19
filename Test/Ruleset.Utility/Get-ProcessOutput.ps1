@@ -59,23 +59,23 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 Start-Test "gpupdate.exe /target:computer -Wait 100"
-Get-ProcessOutput -NoNewWindow -FilePath gpupdate.exe -ArgumentList "/target:computer" -Wait 100 @Logs
+Get-ProcessOutput -NoNewWindow -FilePath gpupdate.exe -ArgumentList "/target:computer" -Wait 100
 
 Start-Test "gpupdate.exe /target:computer"
-Get-ProcessOutput -NoNewWindow -FilePath gpupdate.exe -ArgumentList "/target:computer" -Format @Logs
+Get-ProcessOutput -NoNewWindow -FilePath gpupdate.exe -ArgumentList "/target:computer" -Format
 
 Start-Test "git.exe status"
-$Result = Get-ProcessOutput -FilePath "git.exe" -ArgumentList "status" -NoNewWindow @Logs
+$Result = Get-ProcessOutput -FilePath "git.exe" -ArgumentList "status" -NoNewWindow
 $Result
 
-Test-Output $Result -Command Get-ProcessOutput @Logs
+Test-Output $Result -Command Get-ProcessOutput
 
 Update-Log
 Exit-Test

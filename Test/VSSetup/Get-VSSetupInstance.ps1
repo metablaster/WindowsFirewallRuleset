@@ -60,30 +60,30 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 $NullVariable = $null
-$EmptyVariable = Get-VSSetupInstance -All @Logs |
-Select-VSSetupInstance -Require 'FailureTest' -Latest @Logs |
-Select-Object -ExpandProperty InstallationPath @Logs
+$EmptyVariable = Get-VSSetupInstance -All |
+Select-VSSetupInstance -Require 'FailureTest' -Latest |
+Select-Object -ExpandProperty InstallationPath
 
 Start-Test "Get-VSSetupInstance"
-Get-VSSetupInstance @Logs
+Get-VSSetupInstance
 
 Start-Test "Get-VSSetupInstance path"
-Get-VSSetupInstance @Logs |
-Select-VSSetupInstance -Latest @Logs |
-Select-Object -ExpandProperty InstallationPath @Logs
+Get-VSSetupInstance |
+Select-VSSetupInstance -Latest |
+Select-Object -ExpandProperty InstallationPath
 
 Start-Test "Test-Installation 'NullVariable' $NullVariable"
-Test-Installation "MicrosoftOffice" ([ref] $NullVariable) @Logs
+Test-Installation "MicrosoftOffice" ([ref] $NullVariable)
 
 Start-Test "Test-Installation 'EmptyVariable' $EmptyVariable"
-Test-Installation "MicrosoftOffice" ([ref] $EmptyVariable) @Logs
+Test-Installation "MicrosoftOffice" ([ref] $EmptyVariable)
 
 Update-Log
 Exit-Test

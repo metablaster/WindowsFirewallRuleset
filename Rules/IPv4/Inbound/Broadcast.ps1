@@ -68,15 +68,15 @@ $Accept = "Inbound broadcast rules will be loaded, recommended for proper local 
 $Deny = "Skip operation, inbound broadcast rules will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # NOTE: Don't run if execute not approved
 $BroadcastAddress = Get-Broadcast -IncludeAll
 
 # First remove all existing rules matching grou-Group $Group p
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Broadcast rules
@@ -92,8 +92,8 @@ New-NetFirewallRule -DisplayName "Limited Broadcast" `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "" `
-	@Logs | Format-Output @Logs
+	-Description "" |
+Format-Output
 
 # TODO: unsure if Intranet makes sense here
 New-NetFirewallRule -DisplayName "Limited Broadcast" `
@@ -105,8 +105,8 @@ New-NetFirewallRule -DisplayName "Limited Broadcast" `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Explicitly deny broadcast traffic on public subnets" `
-	@Logs | Format-Output @Logs
+	-Description "Explicitly deny broadcast traffic on public subnets" |
+Format-Output
 
 New-NetFirewallRule -DisplayName "LAN Broadcast" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -117,7 +117,7 @@ New-NetFirewallRule -DisplayName "LAN Broadcast" `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "" `
-	@Logs | Format-Output @Logs
+	-Description "" |
+Format-Output
 
 Update-Log

@@ -73,48 +73,48 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 Start-Test "-UserProfile switch Fill table with Greenshot"
-Initialize-Table @Logs
-Update-Table "Greenshot" -UserProfile @Logs
-$global:InstallTable | Format-Table -AutoSize @Logs
+Initialize-Table
+Update-Table "Greenshot" -UserProfile
+$global:InstallTable | Format-Table -AutoSize
 
 Start-Test "Install Path"
-$global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
+$global:InstallTable | Select-Object -ExpandProperty InstallLocation
 
 Start-Test "Failure Test"
-Initialize-Table @Logs
-Update-Table "Failure" -UserProfile @Logs
-$global:InstallTable | Format-Table -AutoSize @Logs
+Initialize-Table
+Update-Table "Failure" -UserProfile
+$global:InstallTable | Format-Table -AutoSize
 
 Start-Test "Test multiple paths"
-Initialize-Table @Logs
-Update-Table "Visual Studio" -UserProfile @Logs
-$global:InstallTable | Format-Table -AutoSize @Logs
+Initialize-Table
+Update-Table "Visual Studio" -UserProfile
+$global:InstallTable | Format-Table -AutoSize
 
 Start-Test "Install Path"
-$global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
+$global:InstallTable | Select-Object -ExpandProperty InstallLocation
 
 Start-Test "-Executables switch - Fill table with PowerShell"
-Initialize-Table @Logs
+Initialize-Table
 Update-Table "PowerShell.exe" -Executable
-$global:InstallTable | Format-Table -AutoSize @Logs
+$global:InstallTable | Format-Table -AutoSize
 
 Start-Test "Install Path"
-$global:InstallTable | Select-Object -ExpandProperty InstallLocation @Logs
+$global:InstallTable | Select-Object -ExpandProperty InstallLocation
 
 Start-Test "-UserProfile switch Fill table with OneDrive"
-Initialize-Table @Logs
-$Result = Update-Table "OneDrive" -UserProfile @Logs
+Initialize-Table
+$Result = Update-Table "OneDrive" -UserProfile
 $Result
-$global:InstallTable | Format-Table -AutoSize @Logs
+$global:InstallTable | Format-Table -AutoSize
 
-Test-Output $Result -Command Update-Table @Logs
+Test-Output $Result -Command Update-Table
 
 Update-Log
 Exit-Test

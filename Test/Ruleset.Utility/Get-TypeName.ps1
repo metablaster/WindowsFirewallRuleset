@@ -60,8 +60,8 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 <#
@@ -98,16 +98,16 @@ Enter-Test
 New-Section "Test default"
 
 Start-Test "Get-TypeName -> System.String"
-Get-TypeName ([System.Environment]::MachineName) @Logs
+Get-TypeName ([System.Environment]::MachineName)
 
 Start-Test "Get-TypeName -Accelerator -> string"
-Get-TypeName ([System.Environment]::MachineName) -Accelerator @Logs
+Get-TypeName ([System.Environment]::MachineName) -Accelerator
 
 Start-Test "Get-TypeName -> System.Void"
-Get-TypeName (Test-NoReturn) @Logs
+Get-TypeName (Test-NoReturn)
 
 Start-Test "Get-TypeName -Accelerator -> void"
-Get-TypeName (Test-NoReturn) -Accelerator @Logs
+Get-TypeName (Test-NoReturn) -Accelerator
 
 #
 # Test command
@@ -115,10 +115,10 @@ Get-TypeName (Test-NoReturn) -Accelerator @Logs
 New-Section "Test command parameter"
 
 Start-Test "Get-TypeName -Command -> int32"
-Get-TypeName -Command Test-NoReturn @Logs
+Get-TypeName -Command Test-NoReturn
 
 Start-Test "Get-TypeName -Command -> int32, System.String"
-Get-TypeName -Command Test-Multiple @Logs
+Get-TypeName -Command Test-Multiple
 
 #
 # Test with Get-Process
@@ -126,11 +126,11 @@ Get-TypeName -Command Test-Multiple @Logs
 New-Section "Test with Get-Process"
 
 Start-Test "Get-TypeName -> System.Diagnostics.Process"
-$Result = Get-TypeName (Get-Process) @Logs
+$Result = Get-TypeName (Get-Process)
 $Result
 
 Start-Test "Get-TypeName -Command -> Get-Process"
-Get-TypeName -Command Get-Process @Logs
+Get-TypeName -Command Get-Process
 
 #
 # Test conversion
@@ -155,16 +155,16 @@ Get-TypeName -Name [string] -Accelerator
 New-Section "Test pipeline"
 
 Start-Test "Get-TypeName -> System.String"
-([System.Environment]::MachineName) | Get-TypeName @Logs
+([System.Environment]::MachineName) | Get-TypeName
 
 Start-Test "Get-TypeName -Accelerator -> string"
-([System.Environment]::MachineName) | Get-TypeName -Accelerator @Logs
+([System.Environment]::MachineName) | Get-TypeName -Accelerator
 
 Start-Test "Get-TypeName -> System.Void"
-Test-NoReturn | Get-TypeName @Logs
+Test-NoReturn | Get-TypeName
 
 Start-Test "Get-TypeName -Accelerator -> void"
-Test-NoReturn | Get-TypeName -Accelerator @Logs
+Test-NoReturn | Get-TypeName -Accelerator
 
 #
 # Test pipeline with Get-Process
@@ -173,17 +173,17 @@ New-Section "Test pipeline with Get-Process"
 
 Start-Test "Get-TypeName -> System.Diagnostics.Process"
 Write-Warning -Message "Test did not run to reduce output"
-# Get-Process | Get-TypeName @Logs -Verbose:$false -Debug:$false | Out-Null
+# Get-Process | Get-TypeName -Verbose:$false -Debug:$false | Out-Null
 
 #
 # Other common issues
 #
 Start-Test "Get-TypeName -> null"
-Get-TypeName @Logs
+Get-TypeName
 
 Start-Test "Get-TypeName False"
 $FalseType = $false
-$FalseType | Get-TypeName @Logs
+$FalseType | Get-TypeName
 
 # TODO: These tests fail, Get-TypeName not implementing these
 # Start-Test "Get-TypeName Get-Service"
@@ -193,7 +193,7 @@ $FalseType | Get-TypeName @Logs
 # Start-Test "Get-TypeName Get-Service"
 # Get-CimInstance -Class Win32_OperatingSystem | Get-TypeName
 
-Test-Output $Result -Command Get-TypeName @Logs
+Test-Output $Result -Command Get-TypeName
 
 Update-Log
 Exit-Test

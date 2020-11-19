@@ -59,8 +59,8 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 <#
@@ -92,8 +92,8 @@ function Test-Pipeline
 
 	process
 	{
-		Write-Warning -Message "[$($MyInvocation.InvocationName)] End of pipe 1"
-		Write-Warning -Message "[$($MyInvocation.InvocationName)] End of pipe 2"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] End of pipe 1 $Param"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] End of pipe 2 $Param"
 	}
 }
 
@@ -140,14 +140,14 @@ function Test-Combo
 
 <#
 .SYNOPSIS
-	No warning log
-.NOTES
-Is this function called?
+	Pipeline helper
 #>
 function Test-Empty
 {
 	[CmdletBinding()]
 	param ()
+
+	Write-Output "Data.."
 }
 
 Enter-Test
@@ -159,19 +159,59 @@ $WarningPreference = "SilentlyContinue"
 $InformationPreference = "SilentlyContinue"
 
 Start-Test "No warnings"
-Get-ChildItem -Path "C:\" @Logs | Out-Null
+Get-ChildItem -Path "C:\" | Out-Null
 
 Start-Test "Test-Warning"
-Test-Warning @Logs
+Test-Warning
+
+Start-Test "Update-Log first"
+Update-Log
+
+Start-Test "Test-Warning other actions"
+Test-Warning -InformationAction Ignore -ErrorAction "Continue"
 
 Start-Test "Test-Pipeline"
-Test-Empty @Logs | Test-Pipeline @Logs
+Test-Empty | Test-Pipeline
 
 Start-Test "Test-Parent"
-Test-Parent @Logs
+Test-Parent
 
 Start-Test "Test-Combo"
-Test-Combo @Logs
+Test-Combo
 
+Start-Test "Create module"
+New-Module -Name Dynamic.TestWarning -ScriptBlock {
+	. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule
+
+	# NOTE: Same thing as in parent scope, we test generating logs not what is shown in the console
+	$ErrorActionPreference = "SilentlyContinue"
+	$WarningPreference = "SilentlyContinue"
+	$InformationPreference = "SilentlyContinue"
+
+	# TODO: Start-Test cant be used here, see todo in Ruleset.Test module
+	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] $PSDefaultParameterValues in Dynamic.TestWarning:" -InformationAction "Continue"
+	$PSDefaultParameterValues
+
+	<#
+	.SYNOPSIS
+	Test default parameter values and Warning loging inside module function
+	#>
+	function Test-DynamicFunction
+	{
+		[CmdletBinding()]
+		param()
+
+		Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] $PSDefaultParameterValues in Test-DynamicFunction:" -InformationAction "Continue"
+		$PSDefaultParameterValues
+
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] warning in module"
+	}
+} | Import-Module
+
+New-Test "Test-DynamicFunction"
+Test-DynamicFunction
+Remove-Module -Name Dynamic.TestWarning
+
+Start-Test "Update-Log second"
 Update-Log
 Exit-Test

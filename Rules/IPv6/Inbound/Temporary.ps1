@@ -65,12 +65,12 @@ $Accept = "Temporary inbound IPv6 rules will be loaded, recommended to temporari
 $Deny = "Skip operation, temporary inbound IPv6 rules will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 if ($Develop)
 {
@@ -80,7 +80,7 @@ if ($Develop)
 	#
 
 	# Accounts used for troubleshooting rules
-	# $TroubleshootingAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE" @Logs
+	# $TroubleshootingAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE"
 
 	New-NetFirewallRule -DisplayName "Services" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -92,8 +92,8 @@ if ($Develop)
 		-InterfaceType Any `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "Enable only to let any service communicate on link local,
-useful for troubleshooting, and disable ASAP." `
-		@Logs | Format-Output @Logs
+useful for troubleshooting, and disable ASAP." |
+	Format-Output
 
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP ports" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -104,11 +104,11 @@ useful for troubleshooting, and disable ASAP." `
 		-LocalUser $NT_AUTHORITY_LocalService -EdgeTraversalPolicy Block `
 		-InterfaceType Any `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "Temporary allow troublesome UDP traffic." `
-		@Logs | Format-Output @Logs
+		-Description "Temporary allow troublesome UDP traffic." |
+	Format-Output
 
-	$mDnsUsers = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE" @Logs
-	Merge-SDDL ([ref] $mDnsUsers) $UsersGroupSDDL @Logs
+	$mDnsUsers = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE"
+	Merge-SDDL ([ref] $mDnsUsers) $UsersGroupSDDL
 
 	# NOTE: should be network service
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP - mDNS" `
@@ -120,8 +120,8 @@ useful for troubleshooting, and disable ASAP." `
 		-LocalUser $mDnsUsers -EdgeTraversalPolicy Block `
 		-InterfaceType Any `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "Temporary allow troublesome UDP traffic." `
-		@Logs | Format-Output @Logs
+		-Description "Temporary allow troublesome UDP traffic." |
+	Format-Output
 
 	Update-Log
 }

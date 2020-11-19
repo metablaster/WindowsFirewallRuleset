@@ -63,12 +63,12 @@ $Accept = "Outbound rules for Thuderbird software will be loaded, recommended if
 $Deny = "Skip operation, outbound rules for Thuderbird software will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Thunderbird installation directories
@@ -80,51 +80,51 @@ $ThunderbirdRoot = "%ProgramFiles%\Mozilla Thunderbird"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Thuderbird" ([ref] $ThunderbirdRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "Thuderbird" ([ref] $ThunderbirdRoot)) -or $ForceLoad)
 {
 	$Program = "$ThunderbirdRoot\thunderbird.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Mozilla thunderbird - HTTP/HTTPS" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "" @Logs | Format-Output @Logs
+		-Description "" | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Mozilla thunderbird - IMAP SSL" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 993 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "Incoming mail server over SSL" @Logs | Format-Output @Logs
+		-Description "Incoming mail server over SSL" | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Mozilla thunderbird - IMAP" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 143 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "Incoming mail server" @Logs | Format-Output @Logs
+		-Description "Incoming mail server" | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Mozilla thunderbird - POP3 SSL" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 110 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "Incoming mail server over SSL" @Logs | Format-Output @Logs
+		-Description "Incoming mail server over SSL" | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Mozilla thunderbird - POP3" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 995 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "Incoming mail server" @Logs | Format-Output @Logs
+		-Description "Incoming mail server" | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Mozilla thunderbird - SMTP" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 465 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "Outgoing mail server" @Logs | Format-Output @Logs
+		-Description "Outgoing mail server" | Format-Output
 }
 
 Update-Log

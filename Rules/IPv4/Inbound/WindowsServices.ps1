@@ -65,12 +65,12 @@ $Accept = "Inbound rules for system services will be loaded, required for proper
 $Deny = "Skip operation, inbound rules for system services will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Delivery Optimization predefined rules
@@ -84,7 +84,7 @@ New-NetFirewallRule -Platform $Platform `
 	-Description "Service responsible for delivery optimization.
 Windows Update Delivery Optimization works by letting you get Windows updates and Microsoft Store apps from sources in addition to Microsoft,
 like other PCs on your local network, or PCs on the Internet that are downloading the same files.
-Delivery Optimization also sends updates and apps from your PC to other PCs on your local network or PCs on the Internet, based on your settings." @Logs | Format-Output @Logs
+Delivery Optimization also sends updates and apps from your PC to other PCs on your local network or PCs on the Internet, based on your settings." | Format-Output
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Delivery Optimization" -Service DoSvc -Program $ServiceHost `
@@ -94,7 +94,7 @@ New-NetFirewallRule -Platform $Platform `
 	-Description "Service responsible for delivery optimization.
 Windows Update Delivery Optimization works by letting you get Windows updates and Microsoft Store apps from sources in addition to Microsoft,
 like other PCs on your local network, or PCs on the Internet that are downloading the same files.
-Delivery Optimization also sends updates and apps from your PC to other PCs on your local network or PCs on the Internet, based on your settings." @Logs | Format-Output @Logs
+Delivery Optimization also sends updates and apps from your PC to other PCs on your local network or PCs on the Internet, based on your settings." | Format-Output
 
 #
 # @FirewallAPI.dll,-80204 predefined rule
@@ -105,13 +105,13 @@ New-NetFirewallRule -Platform $Platform `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $DefaultInterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 554, 8554-8558 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any `
-	-Description "Service enables multiple clients to access video frames from camera devices." @Logs | Format-Output @Logs
+	-Description "Service enables multiple clients to access video frames from camera devices." | Format-Output
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Windows Camera Frame Server" -Service FrameServer -Program $ServiceHost `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $DefaultInterface `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 5000-5020 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Service enables multiple clients to access video frames from camera devices." @Logs | Format-Output @Logs
+	-Description "Service enables multiple clients to access video frames from camera devices." | Format-Output
 
 Update-Log

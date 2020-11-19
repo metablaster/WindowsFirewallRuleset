@@ -60,8 +60,8 @@ Import-Module -Name Ruleset.Logging
 Import-Module -Name Ruleset.UserInfo
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
@@ -72,13 +72,13 @@ Enter-Test
 
 [string] $SingleGroup = "Users"
 Start-Test "Get-GroupSID $SingleGroup"
-$GroupsTest = Get-GroupSID $SingleGroup @Logs
+$GroupsTest = Get-GroupSID $SingleGroup
 $GroupsTest
 
-Test-Output $GroupsTest -Command Get-GroupSID @Logs
+Test-Output $GroupsTest -Command Get-GroupSID
 
 Start-Test "Get-GroupSID 'Users' -CIM"
-$GroupsTest = Get-GroupSID $SingleGroup -CIM @Logs
+$GroupsTest = Get-GroupSID $SingleGroup -CIM
 $GroupsTest
 
 #
@@ -88,13 +88,13 @@ $GroupsTest
 [string[]] $GroupArray = @('Users', 'Hyper-V Administrators')
 
 Start-Test "Get-GroupSID $GroupArray"
-$GroupsTest = Get-GroupSID $GroupArray @Logs
+$GroupsTest = Get-GroupSID $GroupArray
 $GroupsTest
 
-Test-Output $GroupsTest -Command Get-GroupSID @Logs
+Test-Output $GroupsTest -Command Get-GroupSID
 
 Start-Test "Get-GroupSID $GroupArray -CIM"
-$GroupsTest = Get-GroupSID $GroupArray -CIM @Logs
+$GroupsTest = Get-GroupSID $GroupArray -CIM
 $GroupsTest
 
 #
@@ -104,20 +104,20 @@ $GroupsTest
 $GroupArray = @("Users", "Administrators")
 
 Start-Test "$GroupArray | Get-GroupSID"
-$GroupArray | Get-GroupSID @Logs
+$GroupArray | Get-GroupSID
 
 Start-Test "$GroupArray | Get-GroupSID -CIM"
-$GroupArray | Get-GroupSID -CIM @Logs
+$GroupArray | Get-GroupSID -CIM
 
 #
 # Test failure
 #
 
 Start-Test "FAILURE TEST NO CIM: Get-GroupSID @('Users', 'Hyper-V Administrators')"
-Get-GroupSID 'Users', 'Hyper-V Administrators' -Machine "CRAZYMACHINE" -ErrorAction SilentlyContinue @Logs
+Get-GroupSID 'Users', 'Hyper-V Administrators' -Machine "CRAZYMACHINE" -ErrorAction SilentlyContinue
 
 Start-Test "FAILURE TEST CONTACT: Get-GroupSID @('Users', 'Hyper-V Administrators')"
-Get-GroupSID 'Users', 'Hyper-V Administrators' -Machine "CRAZYMACHINE" -CIM -ErrorAction SilentlyContinue @Logs
+Get-GroupSID 'Users', 'Hyper-V Administrators' -Machine "CRAZYMACHINE" -CIM -ErrorAction SilentlyContinue
 
 Update-Log
 Exit-Test

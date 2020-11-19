@@ -63,12 +63,12 @@ $Accept = "Outbound rules for OpenSSH beta software will be loaded, recommended 
 $Deny = "Skip operation, outbound rules for OpenSSH software will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # OpenSSH installation directories
@@ -81,17 +81,17 @@ $OpenSSHRoot = "%ProgramFiles%\OpenSSH-Win64"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "OpenSSH" ([ref] $OpenSSHRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "OpenSSH" ([ref] $OpenSSHRoot)) -or $ForceLoad)
 {
 	$Program = "$OpenSSHRoot\ssh.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "OpenSSH" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 22 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "OpenSSH is connectivity tool for remote login with the SSH protocol,
-	This rule applies to open source version of OpenSSH." @Logs | Format-Output @Logs
+	This rule applies to open source version of OpenSSH." | Format-Output
 }
 
 Update-Log

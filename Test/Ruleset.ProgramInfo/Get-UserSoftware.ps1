@@ -60,8 +60,8 @@ Import-Module -Name Ruleset.Logging
 Import-Module -Name Ruleset.UserInfo
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
@@ -69,19 +69,19 @@ Enter-Test
 $UserGroup = "Users"
 
 Start-Test "Get-GroupPrincipal $UserGroup"
-$Principals = Get-GroupPrincipal $UserGroup @Logs
+$Principals = Get-GroupPrincipal $UserGroup
 # TODO: This Format-Table won't be needed once we have consistent outputs, formats and better pipelines
 $Principals | Format-Table
 
 foreach ($Principal in $Principals)
 {
 	Start-Test "Get-UserSoftware: $($Principal.User)"
-	$Result = Get-UserSoftware $Principal.User @Logs
+	$Result = Get-UserSoftware $Principal.User
 	$Result
 }
 
 # NOTE: Test won't work unless there are programs installed in user profile
-Test-Output $Result -Command Get-UserSoftware @Logs
+Test-Output $Result -Command Get-UserSoftware
 
 Update-Log
 Exit-Test

@@ -63,12 +63,12 @@ $Accept = "Outbound rules for CMake software will be loaded, recommended if CMak
 $Deny = "Skip operation, outbound rules for CMake software will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # CMake installation directories
@@ -80,10 +80,10 @@ $CMakeRoot = "%ProgramFiles%\CMakeFakePath"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "CMake" ([ref] $CMakeRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "CMake" ([ref] $CMakeRoot)) -or $ForceLoad)
 {
 	$Program = "$CMakeRoot\bin\cmake.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 
 	New-NetFirewallRule -DisplayName "CMake" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -93,8 +93,8 @@ if ((Test-Installation "CMake" ([ref] $CMakeRoot) @Logs) -or $ForceLoad)
 		-LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
 		-InterfaceType $DefaultInterface `
-		-Description "CMake package download" `
-		@Logs | Format-Output @Logs
+		-Description "CMake package download" |
+	Format-Output
 }
 
 Update-Log

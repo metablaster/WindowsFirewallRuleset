@@ -60,8 +60,8 @@ Import-Module -Name Ruleset.Logging
 Import-Module -Name Ruleset.UserInfo
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
@@ -73,11 +73,11 @@ Enter-Test
 [string[]] $Groups = @("Users", "Administrators")
 
 Start-Test "Get-SDDL -Group $Groups"
-$TestUsersSDDL = Get-SDDL -Group $Groups @Logs
+$TestUsersSDDL = Get-SDDL -Group $Groups
 $TestUsersSDDL
 
 Start-Test "Get-SDDL -Group $Groups -CIM"
-$TestUsersSDDL = Get-SDDL -Group $Groups -CIM @Logs
+$TestUsersSDDL = Get-SDDL -Group $Groups -CIM
 $TestUsersSDDL
 
 #
@@ -86,11 +86,11 @@ $TestUsersSDDL
 
 [string[]] $Users = "Administrator", $TestAdmin, $TestUser
 Start-Test "Get-SDDL -User $Users"
-$TestUsersSDDL = Get-SDDL -User $Users @Logs
+$TestUsersSDDL = Get-SDDL -User $Users
 $TestUsersSDDL
 
 Start-Test "Get-SDDL -User $Users -CIM"
-$TestUsersSDDL = Get-SDDL -User $Users -CIM @Logs
+$TestUsersSDDL = Get-SDDL -User $Users -CIM
 $TestUsersSDDL
 
 #
@@ -101,7 +101,7 @@ $TestUsersSDDL
 [string[]] $NTUsers = "SYSTEM", "LOCAL SERVICE"
 
 Start-Test "Get-SDDL -Domain $NTDomain -User $NTUsers"
-$TestUsersSDDL = Get-SDDL -Domain $NTDomain -User $NTUsers @Logs
+$TestUsersSDDL = Get-SDDL -Domain $NTDomain -User $NTUsers
 $TestUsersSDDL
 
 #
@@ -112,10 +112,10 @@ $TestUsersSDDL
 [string[]] $AppUser = "Your Internet connection", "Your pictures library"
 
 Start-Test "Get-SDDL -Domain $AppDomain -User $AppUser"
-$TestUsersSDDL = Get-SDDL -Domain $AppDomain -User $AppUser @Logs
+$TestUsersSDDL = Get-SDDL -Domain $AppDomain -User $AppUser
 $TestUsersSDDL
 
-Test-Output $TestUsersSDDL -Command Get-SDDL @Logs
+Test-Output $TestUsersSDDL -Command Get-SDDL
 
 Update-Log
 Exit-Test

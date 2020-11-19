@@ -70,12 +70,12 @@ $Accept = "Inbound rules for core networking will be loaded, required for proper
 $Deny = "Skip operation, inbound core networking rules will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Loopback
@@ -92,7 +92,7 @@ New-NetFirewallRule -DisplayName "Loopback" `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any -EdgeTraversalPolicy Block `
 	-InterfaceType Any `
-	-Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources." @Logs | Format-Output @Logs
+	-Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources." | Format-Output
 
 New-NetFirewallRule -DisplayName "Loopback" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -102,7 +102,7 @@ New-NetFirewallRule -DisplayName "Loopback" `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any -EdgeTraversalPolicy Block `
 	-InterfaceType Any `
-	-Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources." @Logs | Format-Output @Logs
+	-Description "Network software and utilities use loopback address to access a local computer's TCP/IP network resources." | Format-Output
 
 #
 # mDNS (Multicast Domain Name System)
@@ -128,7 +128,7 @@ if ($true)
 		-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
 within small networks that do not include a local name server.
 It is a zero-configuration service, using essentially the same programming interfaces,
-packet formats and operating semantics as the unicast Domain Name System (DNS)." @Logs | Format-Output @Logs
+packet formats and operating semantics as the unicast Domain Name System (DNS)." | Format-Output
 
 	New-NetFirewallRule -DisplayName "Multicast DNS" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -142,7 +142,7 @@ packet formats and operating semantics as the unicast Domain Name System (DNS)."
 		-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
 within small networks that do not include a local name server.
 It is a zero-configuration service, using essentially the same programming interfaces,
-packet formats and operating semantics as the unicast Domain Name System (DNS)." @Logs | Format-Output @Logs
+packet formats and operating semantics as the unicast Domain Name System (DNS)." | Format-Output
 }
 
 #
@@ -160,8 +160,8 @@ New-NetFirewallRule -DisplayName "DHCP Client" `
 	-InterfaceType $DefaultInterface -EdgeTraversalPolicy Block `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Allow DHCPv4 messages for stateful auto-configuration.
-UDP port number 67 is the destination port of a server, and UDP port number 68 is used by the client." `
-	@Logs | Format-Output @Logs
+UDP port number 67 is the destination port of a server, and UDP port number 68 is used by the client." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "DHCP Client (Discovery)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
@@ -176,8 +176,8 @@ New-NetFirewallRule -DisplayName "DHCP Client (Discovery)" `
 the destination address 255.255.255.255 (limited broadcast) or
 the specific subnet broadcast address (directed broadcast).
 In response to the DHCP offer, the client replies with a DHCPREQUEST message, broadcast to the server,
-requesting the offered address." `
-	@Logs | Format-Output @Logs
+requesting the offered address." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "DHCP Server" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
@@ -192,8 +192,8 @@ New-NetFirewallRule -DisplayName "DHCP Server" `
 the destination address 255.255.255.255 (limited broadcast) or
 the specific subnet broadcast address (directed broadcast).
 In response to the DHCP offer, the client replies with a DHCPREQUEST message, broadcast to the server,
-requesting the offered address." `
-	@Logs | Format-Output @Logs
+requesting the offered address." |
+Format-Output
 
 #
 # IGMP (Internet Group Management Protocol)
@@ -207,6 +207,6 @@ New-NetFirewallRule -DisplayName "Internet Group Management Protocol" `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
-	-Description "IGMP messages are sent and received by nodes to create, join and depart multicast groups." @Logs | Format-Output @Logs
+	-Description "IGMP messages are sent and received by nodes to create, join and depart multicast groups." | Format-Output
 
 Update-Log

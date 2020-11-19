@@ -34,11 +34,11 @@ SOFTWARE.
 #
 
 Import-Module -Name Ruleset.Logging
-$ProjectModules = Get-ChildItem -Name -Path "$ProjectRoot\Modules" -Directory -Exclude "Ruleset.Logging" @Logs
+$ProjectModules = Get-ChildItem -Name -Path "$ProjectRoot\Modules" -Directory -Exclude "Ruleset.Logging"
 
 foreach ($Module in $ProjectModules)
 {
-	Import-Module -Name $Module -Scope Global @Logs
+	Import-Module -Name $Module -Scope Global
 }
 
 Update-Log

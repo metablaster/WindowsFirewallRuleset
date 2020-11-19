@@ -63,12 +63,12 @@ $Accept = "Outbound rules for Github and GitHub Desktop will be loaded, recommen
 $Deny = "Skip operation, outbound rules for Github and GitHub Desktop will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Git and Git Desktop installation directories
@@ -82,12 +82,12 @@ $GithubRoot = "C:\Users\$DefaultUser\AppData\Local\Apps\2.0"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Git" ([ref] $GitRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "Git" ([ref] $GitRoot)) -or $ForceLoad)
 {
 	# Administrators are needed for scheduled task for git auto update
-	$CurlUsers = Get-SDDL -Group "Administrators", "Users" @Logs
+	$CurlUsers = Get-SDDL -Group "Administrators", "Users"
 	$Program = "$GitRoot\mingw64\bin\curl.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Git - curl" -Service Any -Program $Program `
@@ -98,36 +98,36 @@ if ((Test-Installation "Git" ([ref] $GitRoot) @Logs) -or $ForceLoad)
 curl is a commandline tool to transfer data from or to a server,
 using one of the supported protocols:
 (DICT, FILE, FTP, FTPS, GOPHER, HTTP, HTTPS, IMAP, IMAPS, LDAP, LDAPS, MQTT, POP3, POP3S, RTMP,
-RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" `
-		@Logs | Format-Output @Logs
+RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
+	Format-Output
 
 	# TODO: unsure if it's 443 or 80
 	$Program = "$GitRoot\mingw64\bin\git.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Git - git" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "" @Logs | Format-Output @Logs
+		-Description "" | Format-Output
 
 	$Program = "$GitRoot\mingw64\libexec\git-core\git-remote-https.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Git - remote-https" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "git HTTPS access (https cloning)" @Logs | Format-Output @Logs
+		-Description "git HTTPS access (https cloning)" | Format-Output
 
 	$Program = "$GitRoot\usr\bin\ssh.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Git - ssh" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 22 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "git SSH access" @Logs | Format-Output @Logs
+		-Description "git SSH access" | Format-Output
 }
 
 #
@@ -135,7 +135,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" `
 #
 
 # Test if installation exists on system
-if ((Test-Installation "GithubDesktop" ([ref] $GithubRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "GithubDesktop" ([ref] $GithubRoot)) -or $ForceLoad)
 {
 	$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($GithubRoot)
 	$VersionFolders = Get-ChildItem -Directory -Path $ExpandedPath -Filter app-* -Name
@@ -152,24 +152,24 @@ if ((Test-Installation "GithubDesktop" ([ref] $GithubRoot) @Logs) -or $ForceLoad
 		$Program = "$GithubRoot\GitHubDesktop.exe"
 	}
 
-	Test-File $Program @Logs
+	Test-File $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "GitHub Desktop - App" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "" @Logs | Format-Output @Logs
+		-Description "" | Format-Output
 
 	$Program = "$GithubRoot\Update.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "GitHub Desktop - Update" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "cloning repos" @Logs | Format-Output @Logs
+		-Description "cloning repos" | Format-Output
 
 	if ($VersionFoldersCount -gt 0)
 	{
@@ -182,14 +182,14 @@ if ((Test-Installation "GithubDesktop" ([ref] $GithubRoot) @Logs) -or $ForceLoad
 		$Program = "$GithubRoot\resources\app\git\mingw64\bin\git-remote-https.exe"
 	}
 
-	Test-File $Program @Logs
+	Test-File $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "GitHub Desktop - remote-https" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "cloning repos" @Logs | Format-Output @Logs
+		-Description "cloning repos" | Format-Output
 }
 
 Update-Log

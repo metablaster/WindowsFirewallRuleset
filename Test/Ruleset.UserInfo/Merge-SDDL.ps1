@@ -60,8 +60,8 @@ Import-Module -Name Ruleset.Logging
 Import-Module -Name Ruleset.UserInfo
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
@@ -71,19 +71,19 @@ Enter-Test
 [string[]] $Groups = @("Users", "Administrators")
 
 Start-Test "Get-SDDL -User $Users -Group $Groups -Domain $Domain"
-$TestUsersSDDL = Get-SDDL -User $Users -Group $Groups -Domain $Domain @Logs
+$TestUsersSDDL = Get-SDDL -User $Users -Group $Groups -Domain $Domain
 $TestUsersSDDL
 
 Start-Test "Get-SDDL -Domain 'NT AUTHORITY' -User 'SYSTEM', 'USER MODE DRIVERS'"
-$NewSDDL = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "USER MODE DRIVERS" @Logs
+$NewSDDL = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "USER MODE DRIVERS"
 $NewSDDL
 
 Start-Test "Merge-SDDL"
-$Result = Merge-SDDL ([ref] $TestUsersSDDL) $NewSDDL @Logs
+$Result = Merge-SDDL ([ref] $TestUsersSDDL) $NewSDDL
 $Result
 $TestUsersSDDL
 
-Test-Output $Result -Command Merge-SDDL @Logs
+Test-Output $Result -Command Merge-SDDL
 
 Update-Log
 Exit-Test

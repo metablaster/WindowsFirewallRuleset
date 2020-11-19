@@ -63,8 +63,8 @@ $Accept = "Outbound rules for Google software will be loaded, recommended if Goo
 $Deny = "Skip operation, outbound rules for Google software will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 #
@@ -73,23 +73,23 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 $GoogleDriveRoot = "%ProgramFiles%\Google\Drive"
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Rules for Google
 #
 
 # Test if installation exists on system
-if ((Test-Installation "GoogleDrive" ([ref] $GoogleDriveRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "GoogleDrive" ([ref] $GoogleDriveRoot)) -or $ForceLoad)
 {
 	$Program = "$GoogleDriveRoot\googledrivesync.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Google drive" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "Google drive synchronization service" @Logs | Format-Output @Logs
+		-Description "Google drive synchronization service" | Format-Output
 }
 
 Update-Log

@@ -65,8 +65,8 @@ $Accept = "Accpet exporting firewall rules and settings to file"
 $Deny = "Abort operation, no firewall rules or settings will be exported"
 
 # User prompt
-Update-Context $ScriptContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $ScriptContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # NOTE: export speed is 10 rules per minute
@@ -79,7 +79,7 @@ $StopWatch = [System.Diagnostics.Stopwatch]::new()
 
 $StopWatch.Start()
 # Export all outbound rules from GPO
-Export-FirewallRules -Outbound -Folder "$ProjectRoot\Exports" -FileName "OutboundGPO" -PolicyStore $PolicyStore @Logs
+Export-FirewallRules -Outbound -Folder "$ProjectRoot\Exports" -FileName "OutboundGPO" -PolicyStore $PolicyStore
 $StopWatch.Stop()
 
 $OutboundMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
@@ -88,7 +88,7 @@ Write-Information -Tags "User" -MessageData "INFO: Time needed to export outboun
 $StopWatch.Reset()
 $StopWatch.Start()
 # Export all inbound rules from GPO
-Export-FirewallRules -Inbound -Folder "$ProjectRoot\Exports" -FileName "InboundGPO" -PolicyStore $PolicyStore @Logs
+Export-FirewallRules -Inbound -Folder "$ProjectRoot\Exports" -FileName "InboundGPO" -PolicyStore $PolicyStore
 $StopWatch.Stop()
 
 $InboundMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes

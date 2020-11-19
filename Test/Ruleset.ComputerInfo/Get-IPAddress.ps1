@@ -59,41 +59,41 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 Start-Test "Get-IPAddress IPv4"
-Get-IPAddress IPv4 @Logs
+Get-IPAddress IPv4
 
 Start-Test "Get-IPAddress IPv6 FAILURE TEST"
-Get-IPAddress IPv6 -ErrorAction SilentlyContinue @Logs
+Get-IPAddress IPv6 -ErrorAction SilentlyContinue
 
 Start-Test "Get-IPAddress IPv4 -IncludeDisconnected"
-Get-IPAddress IPv4 -IncludeDisconnected @Logs
+Get-IPAddress IPv4 -IncludeDisconnected
 
 Start-Test "Get-IPAddress IPv4 -IncludeVirtual"
-Get-IPAddress IPv4 -IncludeVirtual @Logs
+Get-IPAddress IPv4 -IncludeVirtual
 
 Start-Test "Get-IPAddress IPv4 -IncludeVirtual -IncludeDisconnected"
-Get-IPAddress IPv4 -IncludeVirtual -IncludeDisconnected @Logs
+Get-IPAddress IPv4 -IncludeVirtual -IncludeDisconnected
 
 Start-Test "Get-IPAddress IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware"
-Get-IPAddress IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware @Logs
+Get-IPAddress IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware
 
 Start-Test "Get-IPAddress IPv4 -IncludeHidden"
-Get-IPAddress IPv4 -IncludeHidden @Logs
+Get-IPAddress IPv4 -IncludeHidden
 
 Start-Test "Get-IPAddress IPv4 -IncludeAll"
-$Result = Get-IPAddress IPv4 -IncludeAll @Logs
+$Result = Get-IPAddress IPv4 -IncludeAll
 $Result
 
 Start-Test "Get-IPAddress IPv4 -IncludeAll -ExcludeHardware"
-Get-IPAddress IPv4 -IncludeAll -ExcludeHardware @Logs
+Get-IPAddress IPv4 -IncludeAll -ExcludeHardware
 
-Test-Output $Result -Command Get-IPAddress @Logs
+Test-Output $Result -Command Get-IPAddress
 
 Update-Log
 Exit-Test

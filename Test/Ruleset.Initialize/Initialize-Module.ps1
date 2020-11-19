@@ -63,8 +63,8 @@ New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
@@ -75,30 +75,30 @@ if ($Force -or $PSCmdlet.ShouldContinue("Possible modify installed modules", "Ac
 
 	Start-Test "Initialize-Module PackageManagement"
 	Initialize-Module @{ ModuleName = "PackageManagement"; ModuleVersion = $RequirePackageManagementVersion } `
-		-Repository $Repository -Trusted @Logs
+		-Repository $Repository -Trusted
 
 	Start-Test "Initialize-Module PowerShellGet"
 	Initialize-Module @{ ModuleName = "PowerShellGet"; ModuleVersion = $RequirePowerShellGetVersion } `
 		-Repository $Repository -Trusted `
-		-InfoMessage "PowerShellGet >= $($RequirePowerShellGetVersion.ToString()) is required otherwise updating modules might fail" @Logs
+		-InfoMessage "PowerShellGet >= $($RequirePowerShellGetVersion.ToString()) is required otherwise updating modules might fail"
 
 	Start-Test "Initialize-Module posh-git"
 	Initialize-Module @{ ModuleName = "posh-git"; ModuleVersion = $RequirePoshGitVersion }  `
 		-Repository $Repository -Trusted -AllowPrerelease `
-		-InfoMessage "posh-git is recommended for better git experience in PowerShell" @Logs
+		-InfoMessage "posh-git is recommended for better git experience in PowerShell"
 
 	Start-Test "Initialize-Module PSScriptAnalyzer"
 	Initialize-Module @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = $RequireAnalyzerVersion } `
 		-Repository $Repository -Trusted `
-		-InfoMessage "PSScriptAnalyzer >= $($RequireAnalyzerVersion.ToString()) is required otherwise code will start missing while editing" @Logs
+		-InfoMessage "PSScriptAnalyzer >= $($RequireAnalyzerVersion.ToString()) is required otherwise code will start missing while editing"
 
 	Start-Test "Initialize-Module Pester"
 	$Result = Initialize-Module @{ ModuleName = "Pester"; ModuleVersion = $RequirePesterVersion } `
 		-Repository $Repository -Trusted `
-		-InfoMessage "Pester is required to run pester tests" @Logs
+		-InfoMessage "Pester is required to run pester tests"
 
 	$Result
-	Test-Output $Result -Command Initialize-Module @Logs
+	Test-Output $Result -Command Initialize-Module
 }
 
 Update-Log

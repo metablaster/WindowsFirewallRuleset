@@ -71,14 +71,14 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 Start-Test "Initialize-Table"
-$Result = Initialize-Table @Logs
+$Result = Initialize-Table
 $Result
 
 if (!$global:InstallTable)
@@ -93,7 +93,7 @@ if ($global:InstallTable.Rows.Count -ne 0)
 	exit
 }
 
-Test-Output $Result -Command Initialize-Table @Logs
+Test-Output $Result -Command Initialize-Table
 
 Update-Log
 Exit-Test

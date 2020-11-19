@@ -59,17 +59,17 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Microsoft - SysInternals"
-$SysInternalsUsers = Get-SDDL -Group "Users", "Administrators" @Logs
+$SysInternalsUsers = Get-SDDL -Group "Users", "Administrators"
 $Accept = "Outbound rules for SysInternals software will be loaded, recommended if SysInternals software is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for SysInternals software will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # SysInternals installation directories
@@ -81,54 +81,54 @@ $SysInternalsRoot = "%SystemDrive%\tools"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLoad)
 {
 	$Program = "$SysInternalsRoot\Autoruns\Autoruns64.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Sysinternals Autoruns" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $SysInternalsUsers `
-		-Description "Access to VirusTotal" @Logs | Format-Output @Logs
+		-Description "Access to VirusTotal" | Format-Output
 
 	# TODO: It also uses port 80 but not known for what, not setting here.
 	# Most likely to fetch symbols
 	$Program = "$SysInternalsRoot\ProcessExplorer\procexp64.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Sysinternals ProcessExplorer" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $SysInternalsUsers `
-		-Description "Access to VirusTotal" @Logs | Format-Output @Logs
+		-Description "Access to VirusTotal" | Format-Output
 
 	$Program = "$SysInternalsRoot\ProcessMonitor\Procmon.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Sysinternals ProcessMonitor" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $SysInternalsUsers `
-		-Description "Access to symbols server" @Logs | Format-Output @Logs
+		-Description "Access to symbols server" | Format-Output
 
 	$Program = "$SysInternalsRoot\TCPView\Tcpview.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Sysinternals TcpView" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 43 `
 		-LocalUser $SysInternalsUsers `
-		-Description "WhoIs access" @Logs | Format-Output @Logs
+		-Description "WhoIs access" | Format-Output
 
 	$Program = "$SysInternalsRoot\WhoIs\whois64.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Sysinternals WhoIs" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 43 `
 		-LocalUser $SysInternalsUsers `
-		-Description "" @Logs | Format-Output @Logs
+		-Description "" | Format-Output
 }
 
 Update-Log

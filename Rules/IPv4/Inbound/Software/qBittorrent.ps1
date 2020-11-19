@@ -63,8 +63,8 @@ $Accept = "Inbound rules for qBittorrent software will be loaded, recommended if
 $Deny = "Skip operation, inbound rules for qBittorrent software will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 #
@@ -73,7 +73,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 $qBittorrentRoot = "%ProgramFiles%\qBittorrent"
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Rules for qBittorrent
@@ -81,10 +81,10 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot)) -or $ForceLoad)
 {
 	$Program = "$qBittorrentRoot\qbittorrent.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 
 	# TODO: requires uTP protocol?
 	New-NetFirewallRule -DisplayName "qBittorrent - DHT" `
@@ -96,8 +96,8 @@ if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot) @Logs) -or $ForceL
 		-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy DeferToApp `
 		-InterfaceType $DefaultInterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "qBittorrent UDP listener, usually for DHT." `
-		@Logs | Format-Output @Logs
+		-Description "qBittorrent UDP listener, usually for DHT." |
+	Format-Output
 
 	New-NetFirewallRule -DisplayName "qBittorrent - Listening port" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -107,8 +107,8 @@ if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot) @Logs) -or $ForceL
 		-LocalPort 1161 -RemotePort 1024-65535 `
 		-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy DeferToApp `
 		-InterfaceType $DefaultInterface `
-		-Description "qBittorrent TCP listener." `
-		@Logs | Format-Output @Logs
+		-Description "qBittorrent TCP listener." |
+	Format-Output
 
 	New-NetFirewallRule -DisplayName "qBittorrent - Embedded tracker port" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -118,8 +118,8 @@ if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot) @Logs) -or $ForceL
 		-LocalPort 9000 -RemotePort 1024-65535 `
 		-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy DeferToApp `
 		-InterfaceType $DefaultInterface `
-		-Description "qBittorrent Embedded tracker port." `
-		@Logs | Format-Output @Logs
+		-Description "qBittorrent Embedded tracker port." |
+	Format-Output
 
 	# NOTE: remote port can be other than 6771, remote client will fall back to 6771
 	New-NetFirewallRule -DisplayName "qBittorrent - Local Peer discovery" `
@@ -132,8 +132,8 @@ if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot) @Logs) -or $ForceL
 		-InterfaceType $DefaultInterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "UDP multicast search to identify other peers in your subnet that are also on
-torrents you are on." `
-		@Logs | Format-Output @Logs
+torrents you are on." |
+	Format-Output
 
 	New-NetFirewallRule -DisplayName "qBittorrent - Web UI" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -143,8 +143,8 @@ torrents you are on." `
 		-LocalPort 8080 -RemotePort Any `
 		-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy Allow `
 		-InterfaceType $DefaultInterface `
-		-Description "qBittorrent Remote control from browser." `
-		@Logs | Format-Output @Logs
+		-Description "qBittorrent Remote control from browser." |
+	Format-Output
 }
 
 Update-Log

@@ -63,8 +63,8 @@ New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
@@ -85,7 +85,7 @@ if ($Force -or $PSCmdlet.ShouldContinue("Modify registry ownership", "Accept dan
 	$Result = Initialize-Project -NoProjectCheck:$false
 	$Result
 
-	Test-Output $Result -Command Initialize-Project @Logs
+	Test-Output $Result -Command Initialize-Project
 }
 
 Update-Log

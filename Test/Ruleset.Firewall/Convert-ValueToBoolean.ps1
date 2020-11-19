@@ -57,17 +57,17 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test -Private
 
 Start-Test "Convert-ValueToBoolean 0"
-Convert-ValueToBoolean "0" @Logs
+Convert-ValueToBoolean "0"
 
 Start-Test "Convert-ValueToBoolean False"
-Convert-ValueToBoolean "False" @Logs
+Convert-ValueToBoolean "False"
 
 Start-Test "Convert-ValueToBoolean 3"
 Convert-ValueToBoolean "3" -EA SilentlyContinue -EV CoversionError
@@ -84,10 +84,10 @@ if ($CoversionError)
 }
 
 Start-Test "Convert-ValueToBoolean True"
-$Result = Convert-ValueToBoolean "True" @Logs
+$Result = Convert-ValueToBoolean "True"
 $Result
 
-Test-Output $Result -Command Convert-ValueToBoolean @Logs
+Test-Output $Result -Command Convert-ValueToBoolean
 
 Update-Log
 Exit-Test

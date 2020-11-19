@@ -63,12 +63,12 @@ $Accept = "Outbound rules for PowerShell will be loaded, recommended if PowerShe
 $Deny = "Skip operation, outbound rules for PowerShell will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # PowerShell installation directories
@@ -83,63 +83,63 @@ $PowerShellCore64Root = "%PROGRAMFILES%\PowerShell\7"
 
 # TODO: add rule for Core x86
 # NOTE: administrators may need powershell, let them add them self temporary? currently adding them for PS x64
-$PowerShellUsers = Get-SDDL -Group "Users", "Administrators" @Logs
+$PowerShellUsers = Get-SDDL -Group "Users", "Administrators"
 
 # Test if installation exists on system
-if ((Test-Installation "Powershell64" ([ref] $PowerShell64Root) @Logs) -or $ForceLoad)
+if ((Test-Installation "Powershell64" ([ref] $PowerShell64Root)) -or $ForceLoad)
 {
 	$Program = "$PowerShell64Root\powershell_ise.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "PowerShell ISE x64" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "Rule to allow powershell help update" @Logs | Format-Output @Logs
+		-Description "Rule to allow powershell help update" | Format-Output
 
 	$Program = "$PowerShell64Root\powershell.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "PowerShell x64" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $PowerShellUsers `
-		-Description "Rule to allow powershell help update" @Logs | Format-Output @Logs
+		-Description "Rule to allow powershell help update" | Format-Output
 }
 
 # Test if installation exists on system
-if ((Test-Installation "PowershellCore64" ([ref] $PowerShellCore64Root) @Logs) -or $ForceLoad)
+if ((Test-Installation "PowershellCore64" ([ref] $PowerShellCore64Root)) -or $ForceLoad)
 {
 	$Program = "$PowerShellCore64Root\pwsh.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "PowerShell Core x64" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $PowerShellUsers `
-		-Description "Rule to allow powershell help update" @Logs | Format-Output @Logs
+		-Description "Rule to allow powershell help update" | Format-Output
 }
 
 # Test if installation exists on system
-if ((Test-Installation "Powershell86" ([ref] $PowerShell86Root) @Logs) -or $ForceLoad)
+if ((Test-Installation "Powershell86" ([ref] $PowerShell86Root)) -or $ForceLoad)
 {
 	$Program = "$PowerShell86Root\powershell_ise.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "PowerShell ISE x86" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "Rule to allow powershell help update" @Logs | Format-Output @Logs
+		-Description "Rule to allow powershell help update" | Format-Output
 
 	$Program = "$PowerShell86Root\powershell.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "PowerShell x86" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "Rule to allow powershell help update" @Logs | Format-Output @Logs
+		-Description "Rule to allow powershell help update" | Format-Output
 }
 
 Update-Log

@@ -63,12 +63,12 @@ $Accept = "Outbound rules for Edge Chromium browser will be loaded, recommended 
 $Deny = "Skip operation, outbound rules for internet browsers will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Browser installation directories
@@ -81,7 +81,7 @@ $EdgeChromiumRoot = "%ProgramFiles(x86)%\Microsoft\Edge\Application"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot)) -or $ForceLoad)
 {
 	# TODO: no FTP rule
 	$EdgeChromiumApp = "$EdgeChromiumRoot\msedge.exe"
@@ -92,7 +92,7 @@ if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot) @Logs) -or $Forc
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "Hyper text transfer protocol." @Logs | Format-Output @Logs
+		-Description "Hyper text transfer protocol." | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Edge-Chromium QUIC" -Service Any -Program $EdgeChromiumApp `
@@ -100,28 +100,28 @@ if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot) @Logs) -or $Forc
 		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "Quick UDP Internet Connections,
-	Experimental transport layer network protocol developed by Google and implemented in 2013." @Logs | Format-Output @Logs
+	Experimental transport layer network protocol developed by Google and implemented in 2013." | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Edge-Chromium HTTPS" -Service Any -Program $EdgeChromiumApp `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "Hyper text transfer protocol over SSL." @Logs | Format-Output @Logs
+		-Description "Hyper text transfer protocol over SSL." | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Edge-Chromium speedtest" -Service Any -Program $EdgeChromiumApp `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 5060, 8080 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "Ports needed for https://speedtest.net" @Logs | Format-Output @Logs
+		-Description "Ports needed for https://speedtest.net" | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Edge-Chromium FTP" -Service Any -Program $EdgeChromiumApp `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "File transfer protocol." @Logs | Format-Output @Logs
+		-Description "File transfer protocol." | Format-Output
 
 	if ($false)
 	{
@@ -132,7 +132,7 @@ if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot) @Logs) -or $Forc
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 239.255.255.250 -LocalPort Any -RemotePort 1900 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" @Logs | Format-Output @Logs
+			-Description "" | Format-Output
 	}
 
 	# TODO: we should probably have a function for this and similar cases?
@@ -140,15 +140,15 @@ if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot) @Logs) -or $Forc
 	$EdgeChromiumUpdate = "$EdgeUpdateRoot\MicrosoftEdgeUpdate.exe"
 	Test-File $EdgeChromiumUpdate
 
-	$UpdateAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM" @Logs
-	Merge-SDDL ([ref] $UpdateAccounts) $UsersGroupSDDL @Logs
+	$UpdateAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM"
+	Merge-SDDL ([ref] $UpdateAccounts) $UsersGroupSDDL
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Edge-Chromium Update" -Service Any -Program $EdgeChromiumUpdate `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UpdateAccounts `
-		-Description "Update Microsoft Edge" @Logs | Format-Output @Logs
+		-Description "Update Microsoft Edge" | Format-Output
 }
 
 Update-Log

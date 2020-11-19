@@ -59,8 +59,8 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
@@ -69,170 +69,170 @@ New-Section "Root drive"
 
 $Result = "C:"
 Start-Test "Test-Environment: $Result"
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 $Result = "C:\\"
 Start-Test "Test-Environment: $Result"
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 $Result = "D:\"
 Start-Test "Test-Environment: $Result"
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 New-Section "Default test"
 
 $Result = "C:\\Windows\System32"
 Start-Test "Test-Environment: $Result"
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 $Result = "C:/Windows/explorer.exe"
 Start-Test "Test-Environment -PathType Leaf: $Result"
-Test-Environment $Result -PathType Leaf @Logs
+Test-Environment $Result -PathType Leaf
 
 $Result = "D:\\NoSuchFolder"
 Start-Test "Test-Environment: $Result"
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 New-Section "Invalid syntax"
 
 $Result = '"C:\ProgramData\ssh"'
 Start-Test "Test-Environment: $Result"
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 $Result = "'C:\Windows\Microsoft.NET\Framework64\v3.5'"
 Start-Test "Test-Environment: $Result"
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 New-Section "Users folder"
 
 $Result = "C:\Users"
 Start-Test "Test-Environment -UserProfile: $Result"
-Test-Environment -UserProfile $Result @Logs
+Test-Environment -UserProfile $Result
 
 $Result = "C:\Users\\"
 Start-Test "Test-Environment -UserProfile: $Result"
-Test-Environment -UserProfile $Result @Logs
+Test-Environment -UserProfile $Result
 
 $Result = "C:\\UsersA\"
 Start-Test "Test-Environment -UserProfile: $Result"
-Test-Environment -UserProfile $Result @Logs
+Test-Environment -UserProfile $Result
 
 $Result = "C:\\Users\3"
 Start-Test "Test-Environment -UserProfile: $Result"
-Test-Environment -UserProfile $Result @Logs
+Test-Environment -UserProfile $Result
 
 $Result = "C:\Users\Public\Downloads" # "\Public Downloads"
 Start-Test "Test-Environment -UserProfile: $Result"
-Test-Environment -UserProfile $Result @Logs
+Test-Environment -UserProfile $Result
 
 $Result = "C:\Users\\"
 Start-Test "Test-Environment -Firewall: $Result"
-Test-Environment -Firewall $Result @Logs
+Test-Environment -Firewall $Result
 
 $Result = "C:\\UsersA\"
 Start-Test "Test-Environment -Firewall: $Result"
-Test-Environment -Firewall $Result @Logs
+Test-Environment -Firewall $Result
 
 $Result = "C:\\Users\3"
 Start-Test "Test-Environment -Firewall: $Result"
-Test-Environment -Firewall $Result @Logs
+Test-Environment -Firewall $Result
 
 New-Section "UserProfile"
 
 $Result = "%LOCALAPPDATA%\MicrosoftEdge"
 Start-Test "Test-Environment: $Result"
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 $Result = "%HOME%\AppData\Local\MicrosoftEdge"
 Start-Test "Test-Environment: $Result"
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 $Result = "C:\Users\$TestUser\AppData"
 Start-Test "Test-Environment: $Result"
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 $Result = "F:\Users\$TestUser"
 Start-Test "Test-Environment: $Result"
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 $Result = "%LOCALAPPDATA%\MicrosoftEdge"
 Start-Test "Test-Environment -UserProfile: $Result"
-Test-Environment -UserProfile $Result @Logs
+Test-Environment -UserProfile $Result
 
 $Result = "%HOME%\AppData\Local\MicrosoftEdge"
 Start-Test "Test-Environment -UserProfile: $Result"
-Test-Environment -UserProfile $Result @Logs
+Test-Environment -UserProfile $Result
 
 $Result = "C:\Users\$TestUser\AppData"
 Start-Test "Test-Environment -UserProfile: $Result"
-Test-Environment -UserProfile $Result @Logs
+Test-Environment -UserProfile $Result
 
 $Result = "F:\Users\$TestUser"
 Start-Test "Test-Environment -UserProfile: $Result"
-Test-Environment -UserProfile $Result @Logs
+Test-Environment -UserProfile $Result
 
 New-Section "Test firewall"
 
 $Result = "C:\\Windows\System32"
 Start-Test "Test-Environment -Firewall: $Result"
-Test-Environment -Firewall $Result @Logs
+Test-Environment -Firewall $Result
 
 $Result = "%LOCALAPPDATA%\MicrosoftEdge"
 Start-Test "Test-Environment -Firewall: $Result"
-Test-Environment -Firewall $Result @Logs
+Test-Environment -Firewall $Result
 
 $Result = "%HOME%\AppData\Local\MicrosoftEdge"
 Start-Test "Test-Environment -Firewall: $Result"
-Test-Environment -Firewall $Result @Logs
+Test-Environment -Firewall $Result
 
 $Result = "C:\Users\$TestUser\AppData"
 Start-Test "Test-Environment -Firewall: $Result"
-Test-Environment -Firewall $Result @Logs
+Test-Environment -Firewall $Result
 
 $Result = "C:\Users\Public\Downloads" # "\Public Downloads"
 Start-Test "Test-Environment -Firewall: $Result"
-Test-Environment -Firewall $Result @Logs
+Test-Environment -Firewall $Result
 
 New-Section "Environment variables"
 
 $Result = "%SystemDrive%"
 Start-Test "Test-Environment: $Result"
-$Status = Test-Environment $Result @Logs
+$Status = Test-Environment $Result
 $Status
 
 $Result = "C:\Program Files (x86)\Windows Defender\"
 Start-Test "Test-Environment: $Result"
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 $Result = "%Path%"
 Start-Test "Test-Environment: %Path%"
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 New-Section "-Firewall + -UserProfile"
 
 $Result = "%HOME%\AppData\Local\MicrosoftEdge"
 Start-Test "Test-Environment -Firewall: $Result"
-Test-Environment -Firewall -UserProfile $Result @Logs
+Test-Environment -Firewall -UserProfile $Result
 
 $Result = "C:\Users\$TestUser\AppData"
 Start-Test "Test-Environment -Firewall: $Result"
-Test-Environment -Firewall -UserProfile $Result @Logs
+Test-Environment -Firewall -UserProfile $Result
 
 $Result = "C:\Program Files (x86)\Windows Defender"
 Start-Test "Test-Environment -Firewall: $Result"
-Test-Environment -Firewall -UserProfile $Result @Logs
+Test-Environment -Firewall -UserProfile $Result
 
 New-Section "Null test"
 
 $Result = ""
 Start-Test "Test-Environment: '$Result'"
-Test-Environment $Result @Logs
+Test-Environment $Result
 
 $Result = $null
 Start-Test "Test-Environment: null"
-Test-Environment $Result @Logs
+Test-Environment $Result
 
-Test-Output $Status -Command Test-Environment @Logs
+Test-Output $Status -Command Test-Environment
 
 Update-Log
 Exit-Test

@@ -59,26 +59,26 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 Start-Test "Get-SQLInstance"
-$Instances = Get-SQLInstance @Logs
+$Instances = Get-SQLInstance
 $Instances
 
 Start-Test "Get-SQLInstance CIM"
-Get-SQLInstance -CIM @Logs
+Get-SQLInstance -CIM
 
 Start-Test "Get-SQLInstance binn directory"
-Get-SQLInstance @Logs | Select-Object -ExpandProperty SQLBinRoot @Logs
+Get-SQLInstance | Select-Object -ExpandProperty SQLBinRoot
 
 Start-Test "Get-SQLInstance DTS directory"
-Get-SQLInstance @Logs | Select-Object -ExpandProperty SQLPath @Logs
+Get-SQLInstance | Select-Object -ExpandProperty SQLPath
 
-Test-Output $Instances -Command Get-SQLInstance @Logs
+Test-Output $Instances -Command Get-SQLInstance
 
 Update-Log
 Exit-Test

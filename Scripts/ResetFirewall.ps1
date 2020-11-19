@@ -67,8 +67,8 @@ $Accept = "All firewall rules and settings will be restored to factory defaults"
 $Deny = "Abort operation, no change will be done to firewall"
 
 # User prompt
-Update-Context $ScriptContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $ScriptContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 #
@@ -77,7 +77,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 #
 
 # Setting up profile seem to be slow, tell user what is going on
-Write-Information -Tags "User" -MessageData "INFO: Resetting domain firewall profile..." @Logs
+Write-Information -Tags "User" -MessageData "INFO: Resetting domain firewall profile..."
 
 Set-NetFirewallProfile -Name Domain -PolicyStore $PolicyStore -Enabled NotConfigured `
 	-DefaultInboundAction NotConfigured -DefaultOutboundAction NotConfigured `
@@ -86,9 +86,9 @@ Set-NetFirewallProfile -Name Domain -PolicyStore $PolicyStore -Enabled NotConfig
 	-NotifyOnListen NotConfigured -EnableStealthModeForIPsec NotConfigured `
 	-LogAllowed NotConfigured -LogBlocked NotConfigured -LogIgnored NotConfigured `
 	-LogMaxSizeKilobytes 4096 -AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
-	-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" @Logs
+	-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log"
 
-Write-Information -Tags "User" -MessageData "INFO: Resetting private firewall profile..." @Logs
+Write-Information -Tags "User" -MessageData "INFO: Resetting private firewall profile..."
 
 Set-NetFirewallProfile -Name Private -PolicyStore $PolicyStore -Enabled NotConfigured `
 	-DefaultInboundAction NotConfigured -DefaultOutboundAction NotConfigured `
@@ -97,9 +97,9 @@ Set-NetFirewallProfile -Name Private -PolicyStore $PolicyStore -Enabled NotConfi
 	-NotifyOnListen NotConfigured -EnableStealthModeForIPsec NotConfigured `
 	-LogAllowed NotConfigured -LogBlocked NotConfigured -LogIgnored NotConfigured `
 	-LogMaxSizeKilobytes 4096 -AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
-	-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" @Logs
+	-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log"
 
-Write-Information -Tags "User" -MessageData "INFO: Resetting public firewall profile..." @Logs
+Write-Information -Tags "User" -MessageData "INFO: Resetting public firewall profile..."
 
 Set-NetFirewallProfile -Name Public -PolicyStore $PolicyStore -Enabled NotConfigured `
 	-DefaultInboundAction NotConfigured -DefaultOutboundAction NotConfigured `
@@ -108,9 +108,9 @@ Set-NetFirewallProfile -Name Public -PolicyStore $PolicyStore -Enabled NotConfig
 	-NotifyOnListen NotConfigured -EnableStealthModeForIPsec NotConfigured `
 	-LogAllowed NotConfigured -LogBlocked NotConfigured -LogIgnored NotConfigured `
 	-LogMaxSizeKilobytes 4096 -AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
-	-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" @Logs
+	-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log"
 
-Write-Information -Tags "User" -MessageData "INFO: Resetting global firewall settings..." @Logs
+Write-Information -Tags "User" -MessageData "INFO: Resetting global firewall settings..."
 
 # NOTE: MaxSAIdleTimeSeconds NotConfigured
 # This parameter value is case-sensitive and NotConfigured can only be specified using dot-notation
@@ -123,7 +123,7 @@ Set-NetFirewallSetting -PolicyStore $PolicyStore -EnablePacketQueuing NotConfigu
 	-RemoteUserTransportAuthorizationList NotConfigured `
 	-RemoteUserTunnelAuthorizationList NotConfigured `
 	-RemoteMachineTransportAuthorizationList NotConfigured `
-	-RemoteMachineTunnelAuthorizationList NotConfigured @Logs `
+	-RemoteMachineTunnelAuthorizationList NotConfigured `
 
 #
 # Remove all the rules
@@ -132,29 +132,29 @@ Set-NetFirewallSetting -PolicyStore $PolicyStore -EnablePacketQueuing NotConfigu
 
 # TODO: we need to check if there are rules present to avoid errors about "no object found"
 # Needed also to log actual rule removal errors
-Write-Information -Tags "User" -MessageData "INFO: Removing outbound rules..." @Logs
+Write-Information -Tags "User" -MessageData "INFO: Removing outbound rules..."
 $OutboundCount = (Get-NetFirewallRule -PolicyStore $PolicyStore -Direction Outbound -ErrorAction Ignore | Measure-Object).Count
 
 if ($OutboundCount -gt 0)
 {
-	Remove-NetFirewallRule -Direction Outbound -PolicyStore $PolicyStore @Logs
+	Remove-NetFirewallRule -Direction Outbound -PolicyStore $PolicyStore
 }
 
-Write-Information -Tags "User" -MessageData "INFO: Removing inbound rules..." @Logs
+Write-Information -Tags "User" -MessageData "INFO: Removing inbound rules..."
 $InboundCount = (Get-NetFirewallRule -PolicyStore $PolicyStore -Direction Inbound -ErrorAction Ignore | Measure-Object).Count
 
 if ($InboundCount -gt 0)
 {
-	Remove-NetFirewallRule -Direction Inbound -PolicyStore $PolicyStore @Logs
+	Remove-NetFirewallRule -Direction Inbound -PolicyStore $PolicyStore
 }
 
-Write-Information -Tags "User" -MessageData "INFO: Removing IPSec rules..." @Logs
-Remove-NetIPsecRule -All -PolicyStore $PolicyStore @Logs
+Write-Information -Tags "User" -MessageData "INFO: Removing IPSec rules..."
+Remove-NetIPsecRule -All -PolicyStore $PolicyStore
 
 # Update Local Group Policy for changes to take effect
 gpupdate.exe /target:computer
 
-Write-Information -Tags "User" -MessageData "INFO: Firewall reset is done!" @Logs
-Write-Information -Tags "User" -MessageData "INFO: If internet connectivity problem remains, please reboot system" @Logs
+Write-Information -Tags "User" -MessageData "INFO: Firewall reset is done!"
+Write-Information -Tags "User" -MessageData "INFO: If internet connectivity problem remains, please reboot system"
 
 Update-Log

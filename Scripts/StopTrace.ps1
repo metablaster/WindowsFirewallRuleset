@@ -76,8 +76,8 @@ Import-Module -Name Ruleset.Logging
 # User prompt
 $Accept = "Start capturing network traffic into a file for analysis"
 $Deny = "Abort operation, no capture is started"
-Update-Context $ScriptContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $ScriptContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 if (Get-NetEventSession -Name $Name -EA Ignore)

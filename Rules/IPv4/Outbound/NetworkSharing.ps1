@@ -73,12 +73,12 @@ $Accept = "Outbound rules for network sharing will be loaded, required to share 
 $Deny = "Skip operation, outbound network sharing rules will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $DisplayGroup @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $DisplayGroup
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $Group -Direction $Direction -NewPolicyStore $PolicyStore
 
@@ -121,8 +121,8 @@ New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-LocalPort Any -RemotePort 139 `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $DefaultInterface `
-	-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." `
-	@Logs | Format-Output @Logs
+	-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
@@ -132,8 +132,8 @@ New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-LocalPort Any -RemotePort 139 `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $DefaultInterface `
-	-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." `
-	@Logs | Format-Output @Logs
+	-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -143,8 +143,8 @@ New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-LocalPort Any -RemotePort 139 `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $DefaultInterface `
-	-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." `
-	@Logs | Format-Output @Logs
+	-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "SMB" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
@@ -155,8 +155,8 @@ New-NetFirewallRule -DisplayName "SMB" `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $DefaultInterface `
 	-Description "Rule for File and Printer Sharing to allow Server Message Block transmission and
-reception via Named Pipes." `
-	@Logs | Format-Output @Logs
+reception via Named Pipes." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "SMB" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
@@ -167,8 +167,8 @@ New-NetFirewallRule -DisplayName "SMB" `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $DefaultInterface `
 	-Description "Rule for File and Printer Sharing to allow Server Message Block transmission and
-reception via Named Pipes." `
-	@Logs | Format-Output @Logs
+reception via Named Pipes." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "SMB" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -179,7 +179,7 @@ New-NetFirewallRule -DisplayName "SMB" `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $DefaultInterface `
 	-Description "Rule for File and Printer Sharing to allow Server Message Block transmission and
-reception via Named Pipes." `
-	@Logs | Format-Output @Logs
+reception via Named Pipes." |
+Format-Output
 
 Update-Log

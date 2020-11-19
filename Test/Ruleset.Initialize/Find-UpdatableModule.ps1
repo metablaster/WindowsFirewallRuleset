@@ -56,46 +56,46 @@ New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test -Private
 
 Start-Test "Find-UpdatableModule"
-$Result = Find-UpdatableModule @Logs
+$Result = Find-UpdatableModule
 $Result
 
 Start-Test "Get-TypeName"
-$Result | Get-TypeName @Logs
+$Result | Get-TypeName
 
 Start-Test "'PowerShellGet' | Find-UpdatableModule"
-"PowerShellGet" | Find-UpdatableModule @Logs
+"PowerShellGet" | Find-UpdatableModule
 
 Start-Test "Find-UpdatableModule -Module 'PowerShellGet'"
-Find-UpdatableModule -Module "PowerShellGet" @Logs
+Find-UpdatableModule -Module "PowerShellGet"
 
 Start-Test 'Find-UpdatableModule "PowerShellGet" -UICulture ja-JP, en-US'
-Find-UpdatableModule "PowerShellGet" -UICulture ja-JP, en-US @Logs
+Find-UpdatableModule "PowerShellGet" -UICulture ja-JP, en-US
 
 Start-Test '@{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" } | Find-UpdatableModule'
-$Result = @{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" } | Find-UpdatableModule @Logs
+$Result = @{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" } | Find-UpdatableModule
 $Result
 
 Start-Test "Get-TypeName"
-$Result | Get-TypeName @Logs
+$Result | Get-TypeName
 
 Start-Test 'Find-UpdatableModule -FullyQualifiedName @{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" }'
-Find-UpdatableModule -FullyQualifiedName @{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" } @Logs
+Find-UpdatableModule -FullyQualifiedName @{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" }
 
 Start-Test 'Find-UpdatableModule @("PowerShellGet", "PackageManagement", "PSScriptAnalyzer")'
-$Result = Find-UpdatableModule @("PowerShellGet", "PackageManagement", "PSScriptAnalyzer") @Logs
+$Result = Find-UpdatableModule @("PowerShellGet", "PackageManagement", "PSScriptAnalyzer")
 $Result
 
 Start-Test '@("PowerShellGet", "PackageManagement", "PSScriptAnalyzer") | Find-UpdatableModule'
-@("PowerShellGet", "PackageManagement", "PSScriptAnalyzer") | Find-UpdatableModule @Logs
+@("PowerShellGet", "PackageManagement", "PSScriptAnalyzer") | Find-UpdatableModule
 
-Test-Output $Result -Command Find-UpdatableModule @Logs
+Test-Output $Result -Command Find-UpdatableModule
 
 Update-Log
 Exit-Test

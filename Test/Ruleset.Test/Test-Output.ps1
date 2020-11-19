@@ -60,15 +60,15 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 Start-Test "Test-Output"
 $NETObject = Test-Path $env:SystemDrive
-Test-Output $NETObject -Command Test-Path @Logs
+Test-Output $NETObject -Command Test-Path
 
 $TempError = $null
 

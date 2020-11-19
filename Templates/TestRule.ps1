@@ -68,8 +68,8 @@ Import-Module -Name Ruleset.Logging
 # TODO: Update command line help messages
 $Accept = "Template accept help message"
 $Deny = "Skip operation, template deny help message"
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # Setup local variables
@@ -80,7 +80,7 @@ Enter-Test $ThisScript
 
 # Remove previous test rule
 Start-Test "Remove-NetFirewallRule"
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 Start-Test "Test rule"
 
@@ -94,8 +94,8 @@ New-NetFirewallRule -DisplayName "Test rule" `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
-	-Description "Test rule description" `
-	@Logs | Format-Output @Logs
+	-Description "Test rule description" |
+Format-Output
 
 Update-Log
 Exit-Test

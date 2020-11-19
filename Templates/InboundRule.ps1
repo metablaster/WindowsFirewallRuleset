@@ -69,12 +69,12 @@ $PackageSID = "*"
 # TODO: Update command line help messages
 $Accept = "Template accept help message"
 $Deny = "Skip operation, template deny help message"
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 # TargetProgram installation directories
 $TargetProgramRoot = "%ProgramFiles%\TargetProgram"
@@ -84,10 +84,10 @@ $TargetProgramRoot = "%ProgramFiles%\TargetProgram"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot)) -or $ForceLoad)
 {
 	$Program = "$TargetProgramRoot\Steam.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 
 	# Following lines/options are not used:
 	# -Name (if used then on first line, DisplayName should be adjusted for 100 col. line)
@@ -108,8 +108,8 @@ if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot) @Logs) -or $Fo
 		-LocalPort Any -RemotePort Any `
 		-LocalUser Any -EdgeTraversalPolicy Block `
 		-InterfaceType $DefaultInterface `
-		-Description "Inbound TCP template description" `
-		@Logs | Format-Output @Logs
+		-Description "Inbound TCP template description" |
+	Format-Output
 
 	# Inbound UDP template
 	New-NetFirewallRule -DisplayName "Inbound UDP template" `
@@ -121,8 +121,8 @@ if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot) @Logs) -or $Fo
 		-LocalUser Any -EdgeTraversalPolicy Block `
 		-InterfaceType $DefaultInterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "Inbound UDP template description" `
-		@Logs | Format-Output @Logs
+		-Description "Inbound UDP template description" |
+	Format-Output
 
 	# Inbound ICMP template
 	New-NetFirewallRule -DisplayName "Inbound ICMP template" `
@@ -132,8 +132,8 @@ if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot) @Logs) -or $Fo
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalUser Any -EdgeTraversalPolicy Block `
 		-InterfaceType $DefaultInterface `
-		-Description "Inbound ICMP template description" `
-		@Logs | Format-Output @Logs
+		-Description "Inbound ICMP template description" |
+	Format-Output
 
 	# Inbound StoreApp TCP template
 	New-NetFirewallRule -DisplayName "Inbound StoreApp TCP template" `
@@ -145,8 +145,8 @@ if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot) @Logs) -or $Fo
 		-LocalUser Any -EdgeTraversalPolicy Block `
 		-InterfaceType $DefaultInterface `
 		-Owner $PrincipalSID -Package $PackageSID `
-		-Description "Inbound StoreApp TCP template description" `
-		@Logs | Format-Output @Logs
+		-Description "Inbound StoreApp TCP template description" |
+	Format-Output
 }
 
 Update-Log

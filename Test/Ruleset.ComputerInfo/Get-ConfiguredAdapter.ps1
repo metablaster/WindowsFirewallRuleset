@@ -59,44 +59,44 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 Start-Test "Get-ConfiguredAdapter IPv4"
-Get-ConfiguredAdapter IPv4 @Logs
+Get-ConfiguredAdapter IPv4
 
 Start-Test "Get-ConfiguredAdapter IPv6 FAILURE TEST"
-Get-ConfiguredAdapter IPv6 -ErrorAction SilentlyContinue @Logs
+Get-ConfiguredAdapter IPv6 -ErrorAction SilentlyContinue
 
 Start-Test "Get-ConfiguredAdapter IPv4 -IncludeDisconnected"
-Get-ConfiguredAdapter IPv4 -IncludeDisconnected @Logs
+Get-ConfiguredAdapter IPv4 -IncludeDisconnected
 
 Start-Test "Get-ConfiguredAdapter IPv4 -IncludeVirtual"
-Get-ConfiguredAdapter IPv4 -IncludeVirtual @Logs
+Get-ConfiguredAdapter IPv4 -IncludeVirtual
 
 Start-Test "Get-ConfiguredAdapter IPv4 -IncludeVirtual -IncludeDisconnected"
-Get-ConfiguredAdapter IPv4 -IncludeVirtual -IncludeDisconnected @Logs
+Get-ConfiguredAdapter IPv4 -IncludeVirtual -IncludeDisconnected
 
 Start-Test "Get-ConfiguredAdapter IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware"
-Get-ConfiguredAdapter IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware @Logs
+Get-ConfiguredAdapter IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware
 
 Start-Test "Get-ConfiguredAdapter IPv4 -IncludeHidden"
-Get-ConfiguredAdapter IPv4 -IncludeHidden @Logs
+Get-ConfiguredAdapter IPv4 -IncludeHidden
 
 Start-Test "Get-ConfiguredAdapter IPv4 -IncludeAll"
-$Result = Get-ConfiguredAdapter IPv4 -IncludeAll @Logs
+$Result = Get-ConfiguredAdapter IPv4 -IncludeAll
 $Result
 
 Start-Test "Get-ConfiguredAdapter IPv4 -IncludeAll -ExcludeHardware"
-Get-ConfiguredAdapter IPv4 -IncludeAll -ExcludeHardware @Logs
+Get-ConfiguredAdapter IPv4 -IncludeAll -ExcludeHardware
 
 Start-Test "Get-ConfiguredAdapter binding"
-Get-ConfiguredAdapter IPv4 @Logs | Select-Object -ExpandProperty IPv4Address @Logs
+Get-ConfiguredAdapter IPv4 | Select-Object -ExpandProperty IPv4Address
 
-Test-Output $Result -Command Get-ConfiguredAdapter @Logs
+Test-Output $Result -Command Get-ConfiguredAdapter
 
 Update-Log
 Exit-Test

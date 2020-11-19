@@ -63,8 +63,8 @@ $Accept = "Outbound rules for Adobe software will be loaded, recommended if Adob
 $Deny = "Skip operation, outbound rules for Adobe software will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 #
@@ -74,36 +74,36 @@ $AdobeARMRoot = "%ProgramFiles(x86)%\Common Files\Adobe\ARM\1.0"
 $AcrobatRoot = "%ProgramFiles(x86)%\Adobe\Acrobat Reader DC\Reader"
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Rules for Adobe
 #
 
 # Test if installation exists on system
-if ((Test-Installation "AdobeAcrobat" ([ref] $AcrobatRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "AdobeAcrobat" ([ref] $AcrobatRoot)) -or $ForceLoad)
 {
 	$Program = "$AcrobatRoot\AcroRd32.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Acrobat Reader" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "" @Logs | Format-Output @Logs
+		-Description "" | Format-Output
 }
 
 # Test if installation exists on system
-if ((Test-Installation "AdobeARM" ([ref] $AdobeARMRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "AdobeARM" ([ref] $AdobeARMRoot)) -or $ForceLoad)
 {
 	$Program = "$AdobeARMRoot\AdobeARM.exe.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Acrobat ARM" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "" @Logs | Format-Output @Logs
+		-Description "" | Format-Output
 }
 
 Update-Log

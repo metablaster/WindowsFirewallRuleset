@@ -60,8 +60,8 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
@@ -71,14 +71,14 @@ $ProjectFiles = Get-ChildItem -Path $ProjectRoot -Recurse -Exclude *.cab, *.zip,
 Where-Object { $_.Mode -notlike "*d*" } | Select-Object -ExpandProperty FullName
 
 Start-Test "Confirm-FileEncoding"
-$ProjectFiles | Confirm-FileEncoding @Logs
+$ProjectFiles | Confirm-FileEncoding
 
 Start-Test "Confirm-FileEncoding file"
 $TestFile = Resolve-Path -Path $PSScriptRoot\Encoding\utf8.txt
-$Result = Confirm-FileEncoding $TestFile @Logs
+$Result = Confirm-FileEncoding $TestFile
 $Result
 
-Test-Output $Result -Command Confirm-FileEncoding @Logs
+Test-Output $Result -Command Confirm-FileEncoding
 
 Update-Log
 Exit-Test

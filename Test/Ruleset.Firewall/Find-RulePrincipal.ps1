@@ -65,8 +65,8 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
@@ -74,10 +74,10 @@ Enter-Test
 if ($Force -or $PSCmdlet.ShouldContinue("Export firewall rules", "Accept slow unit test"))
 {
 	Start-Test "Find-RulePrincipal"
-	$Result = Find-RulePrincipal @Logs
+	$Result = Find-RulePrincipal
 	$Result
 
-	Test-Output $Result -Command Find-RulePrincipal @Logs
+	Test-Output $Result -Command Find-RulePrincipal
 }
 
 Update-Log

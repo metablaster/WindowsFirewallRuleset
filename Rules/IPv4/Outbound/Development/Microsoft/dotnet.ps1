@@ -63,8 +63,8 @@ $Accept = "Outbound rules for dotnet which provides commands for working with .N
 $Deny = "Skip operation, outbound rules for dotnet will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 #
@@ -73,17 +73,17 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 $dotnetRoot = "%ProgramFiles%\dotnet"
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Rules for dotnet
 #
 
 # Test if installation exists on system
-if ((Test-Installation "dotnet" ([ref] $dotnetRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "dotnet" ([ref] $dotnetRoot)) -or $ForceLoad)
 {
 	$Program = "$dotnetRoot\dotnet.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 
 	# TODO: There could be more ports or specific users, needs complete testing...
 	New-NetFirewallRule -Platform $Platform `
@@ -91,7 +91,7 @@ if ((Test-Installation "dotnet" ([ref] $dotnetRoot) @Logs) -or $ForceLoad)
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $NT_AUTHORITY_System `
-		-Description "Provides commands for working with .NET Core projects." @Logs | Format-Output @Logs
+		-Description "Provides commands for working with .NET Core projects." | Format-Output
 }
 
 Update-Log

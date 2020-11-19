@@ -63,12 +63,12 @@ $Accept = "Outbound rules for League of Legends game will be loaded, recommended
 $Deny = "Skip operation, outbound rules for League of Legends game will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # League of Legends installation directories
@@ -84,7 +84,7 @@ $LoLRoot = "%ProgramFiles(x86)%\Riot Games\League of Legends"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "LoLGame" ([ref] $LoLRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "LoLGame" ([ref] $LoLRoot)) -or $ForceLoad)
 {
 	# TODO: trimming such as the one below is present in multiple rule scripts, we should do
 	# this job universally inside "Test-Installation" function instead
@@ -93,7 +93,7 @@ if ((Test-Installation "LoLGame" ([ref] $LoLRoot) @Logs) -or $ForceLoad)
 	$LoLRoot = Split-Path $LoLRoot -Parent
 
 	$Program = "$LoLRoot\Riot Client\RiotClientServices.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 
 	New-NetFirewallRule -DisplayName "LoL launcher services" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -103,8 +103,8 @@ if ((Test-Installation "LoLGame" ([ref] $LoLRoot) @Logs) -or $ForceLoad)
 		-LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
 		-InterfaceType $DefaultInterface `
-		-Description "Game launcher services, server traffic" `
-		@Logs | Format-Output @Logs
+		-Description "Game launcher services, server traffic" |
+	Format-Output
 
 	# TODO: Official site says both 5222 and 5223 but 5222 is not used
 	New-NetFirewallRule -DisplayName "LoL launcher services - PVP.Net" `
@@ -115,11 +115,11 @@ if ((Test-Installation "LoLGame" ([ref] $LoLRoot) @Logs) -or $ForceLoad)
 		-LocalPort Any -RemotePort 5223 `
 		-LocalUser $UsersGroupSDDL `
 		-InterfaceType $DefaultInterface `
-		-Description "Game launcher services - PVP.Net (game chat)" `
-		@Logs | Format-Output @Logs
+		-Description "Game launcher services - PVP.Net (game chat)" |
+	Format-Output
 
 	$Program = "$LoLRoot\Riot Client\UX\RiotClientUx.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 
 	# TODO: rule not used or not tested
 	New-NetFirewallRule -DisplayName "LoL launcher services - user experience" `
@@ -130,11 +130,11 @@ if ((Test-Installation "LoLGame" ([ref] $LoLRoot) @Logs) -or $ForceLoad)
 		-LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
 		-InterfaceType $DefaultInterface `
-		-Description "Game launcher services - user experience" `
-		@Logs | Format-Output @Logs
+		-Description "Game launcher services - user experience" |
+	Format-Output
 
 	$Program = "$LolRoot\League of Legends\LeagueClient.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 
 	New-NetFirewallRule -DisplayName "LoL launcher client" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -146,8 +146,8 @@ if ((Test-Installation "LoLGame" ([ref] $LoLRoot) @Logs) -or $ForceLoad)
 		-InterfaceType $DefaultInterface `
 		-Description "Game launcher client - UI (user interface),
 The Launcher is the initial window that checks for game updates and launches the PVP.net client
-for League of Legends." `
-		@Logs | Format-Output @Logs
+for League of Legends." |
+	Format-Output
 
 	New-NetFirewallRule -DisplayName "LoL launcher client - PVP.net" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -160,11 +160,11 @@ for League of Legends." `
 		-Description "PVP.net is a platform for League of Legends to launch from.
 It allows you to add friends, check the League of Legends store, and join chat rooms.
 PVP.net can be considered a separate entity from the actual game but the two are linked and cannot
-be used separately." `
-		@Logs | Format-Output @Logs
+be used separately." |
+	Format-Output
 
 	$Program = "$LolRoot\League of Legends\LeagueClientUx.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 
 	New-NetFirewallRule -DisplayName "LoL launcher client - user experience" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -174,11 +174,11 @@ be used separately." `
 		-LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
 		-InterfaceType $DefaultInterface `
-		-Description "game client - UX (user experience)" `
-		@Logs | Format-Output @Logs
+		-Description "game client - UX (user experience)" |
+	Format-Output
 
 	$Program = "$LolRoot\League of Legends\Game\League of Legends.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 
 	New-NetFirewallRule -DisplayName "LoL game client - multiplayer" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -189,8 +189,8 @@ be used separately." `
 		-LocalUser $UsersGroupSDDL `
 		-InterfaceType $DefaultInterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "Game online multiplayer traffic" `
-		@Logs | Format-Output @Logs
+		-Description "Game online multiplayer traffic" |
+	Format-Output
 
 	New-NetFirewallRule -DisplayName "LoL game client - server" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -200,8 +200,8 @@ be used separately." `
 		-LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
 		-InterfaceType $DefaultInterface `
-		-Description "Game client server traffic" `
-		@Logs | Format-Output @Logs
+		-Description "Game client server traffic" |
+	Format-Output
 
 	# TODO: rule not used or not tested
 	New-NetFirewallRule -DisplayName "LoL game client - PVP.net" `
@@ -215,8 +215,8 @@ be used separately." `
 		-Description "PVP.net is a platform for League of Legends to launch from.
 It allows you to add friends, check the League of Legends store, and join chat rooms.
 PVP.net can be considered a separate entity from the actual game but the two are linked and cannot
-be used separately." `
-		@Logs | Format-Output @Logs
+be used separately." |
+	Format-Output
 
 	# TODO: need to test spectator traffic
 	New-NetFirewallRule -DisplayName "LoL game client - spectator" `
@@ -228,8 +228,8 @@ be used separately." `
 		-LocalUser $UsersGroupSDDL `
 		-InterfaceType $DefaultInterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "Game spectator UDP traffic" `
-		@Logs | Format-Output @Logs
+		-Description "Game spectator UDP traffic" |
+	Format-Output
 
 	New-NetFirewallRule -DisplayName "LoL game client - spectator" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -239,8 +239,8 @@ be used separately." `
 		-LocalPort Any -RemotePort 8088 `
 		-LocalUser $UsersGroupSDDL `
 		-InterfaceType $DefaultInterface `
-		-Description "Game spectator UDP traffic" `
-		@Logs | Format-Output @Logs
+		-Description "Game spectator UDP traffic" |
+	Format-Output
 }
 
 Update-Log

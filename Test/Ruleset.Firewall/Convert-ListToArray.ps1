@@ -57,20 +57,20 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test -Private
 
 Start-Test "Convert-ListToArray null"
-Convert-ListToArray @Logs
+Convert-ListToArray
 
 Start-Test "Convert-ListToArray"
-$Result = Convert-ListToArray "192.168.1.1,192.168.2.1,172.24.33.100" @Logs
+$Result = Convert-ListToArray "192.168.1.1,192.168.2.1,172.24.33.100"
 $Result
 
-Test-Output $Result -Command Convert-ListToArray @Logs
+Test-Output $Result -Command Convert-ListToArray
 
 Update-Log
 Exit-Test

@@ -67,33 +67,33 @@ $Accept = "Inbound rules for remote Windows will be loaded, required for service
 $Deny = "Skip operation, inbound rules for remote Windows will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Predefined rules for remote desktop, here split for private and public profile
 #
 
 $Program = "%SystemRoot%\System32\RdpSa.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Remote desktop - Shadow" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $DefaultInterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy DeferToApp -LocalUser Any `
-	-Description "Inbound rule for the Remote Desktop service to allow shadowing of an existing Remote Desktop session. " @Logs | Format-Output @Logs
+	-Description "Inbound rule for the Remote Desktop service to allow shadowing of an existing Remote Desktop session. " | Format-Output
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Remote desktop - Shadow" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $DefaultInterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
 	-EdgeTraversalPolicy DeferToApp -LocalUser Any `
-	-Description "Inbound rule for the Remote Desktop service to allow shadowing of an existing Remote Desktop session. " @Logs | Format-Output @Logs
+	-Description "Inbound rule for the Remote Desktop service to allow shadowing of an existing Remote Desktop session. " | Format-Output
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Remote desktop - User Mode" -Service TermService -Program $ServiceHost `
@@ -101,7 +101,7 @@ New-NetFirewallRule -Platform $Platform `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort 3389 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any `
 	-Description "Allows users to connect interactively to a remote computer.
-To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System properties control panel item." @Logs | Format-Output @Logs
+To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System properties control panel item." | Format-Output
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Remote desktop - User Mode" -Service TermService -Program $ServiceHost `
@@ -109,7 +109,7 @@ New-NetFirewallRule -Platform $Platform `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 3389 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any `
 	-Description "Allows users to connect interactively to a remote computer.
-To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System properties control panel item." @Logs | Format-Output @Logs
+To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System properties control panel item." | Format-Output
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Remote desktop - User Mode" -Service TermService -Program $ServiceHost `
@@ -117,7 +117,7 @@ New-NetFirewallRule -Platform $Platform `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort 3389 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Allows users to connect interactively to a remote computer.
-To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System properties control panel item." @Logs | Format-Output @Logs
+To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System properties control panel item." | Format-Output
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Remote desktop - User Mode" -Service TermService -Program $ServiceHost `
@@ -125,34 +125,34 @@ New-NetFirewallRule -Platform $Platform `
 	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 3389 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Allows users to connect interactively to a remote computer.
-To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System properties control panel item." @Logs | Format-Output @Logs
+To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System properties control panel item." | Format-Output
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Remote desktop - WebSocket" -Service Any -Program System `
 	-PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile Public -InterfaceType $DefaultInterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort 3387 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
-	-Description "rule for the Remote Desktop service to allow RDP over WebSocket traffic." @Logs | Format-Output @Logs
+	-Description "rule for the Remote Desktop service to allow RDP over WebSocket traffic." | Format-Output
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Remote desktop - WebSocket" -Service Any -Program System `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $DefaultInterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort 3387 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
-	-Description "rule for the Remote Desktop service to allow RDP over WebSocket traffic." @Logs | Format-Output @Logs
+	-Description "rule for the Remote Desktop service to allow RDP over WebSocket traffic." | Format-Output
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Remote desktop - WebSocket Secure" -Service Any -Program System `
 	-PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile Public -InterfaceType $DefaultInterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort 3392 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
-	-Description "rule for the Remote Desktop service to allow RDP over WebSocket traffic." @Logs | Format-Output @Logs
+	-Description "rule for the Remote Desktop service to allow RDP over WebSocket traffic." | Format-Output
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Remote desktop - WebSocket Secure" -Service Any -Program System `
 	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $DefaultInterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort 3392 -RemotePort Any `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
-	-Description "rule for the Remote Desktop service to allow RDP over WebSocket traffic." @Logs | Format-Output @Logs
+	-Description "rule for the Remote Desktop service to allow RDP over WebSocket traffic." | Format-Output
 
 Update-Log

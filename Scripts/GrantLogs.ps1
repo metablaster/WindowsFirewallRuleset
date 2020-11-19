@@ -102,8 +102,8 @@ if (!$SkipPrompt)
 {
 	$Accept = "Grant permission to read firewall log files until system reboot"
 	$Deny = "Abort operation, no permission change is done on firewall logs"
-	Update-Context $ScriptContext $ThisScript @Logs
-	if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+	Update-Context $ScriptContext $ThisScript
+	if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 }
 #endregion
 
@@ -120,10 +120,10 @@ if (!(Test-Environment -Path $FirewallLogsFolder) -or
 # NOTE: FirewallLogsFolder may contain environment variable
 $TargetFolder = [System.Environment]::ExpandEnvironmentVariables($FirewallLogsFolder)
 
-if (!(Test-Path -Path $TargetFolder -PathType Container @Logs))
+if (!(Test-Path -Path $TargetFolder -PathType Container))
 {
 	# Create directory for firewall logs if it doesn't exist
-	New-Item -Path $TargetFolder -ItemType Container @Logs | Out-Null
+	New-Item -Path $TargetFolder -ItemType Container | Out-Null
 }
 
 # Change in logs location will require system reboot
@@ -152,7 +152,7 @@ Set-Permission $TargetFolder -Principal "Administrators" -Rights $FullControl -P
 Set-Permission $TargetFolder -Principal "mpssvc" -Domain "NT SERVICE" -Rights $FullControl -Protected | Out-Null
 
 $StandardUser = $true
-foreach ($Admin in $(Get-GroupPrincipal -Group "Administrators" -Computer $ComputerName @Logs))
+foreach ($Admin in $(Get-GroupPrincipal -Group "Administrators" -Computer $ComputerName))
 {
 	if ($Principal -eq $Admin.User)
 	{
@@ -169,7 +169,7 @@ if ($StandardUser)
 	if (Set-Permission $TargetFolder -Principal $Principal -Computer $ComputerName -Rights $UserControl)
 	{
 		# NOTE: For -Exclude we need -Path DIRECTORY\* to get file names instead of file contents
-		foreach ($LogFile in $(Get-ChildItem -Path $TargetFolder\* -Filter *.log -Exclude *.filterline.log @Logs))
+		foreach ($LogFile in $(Get-ChildItem -Path $TargetFolder\* -Filter *.log -Exclude *.filterline.log))
 		{
 			Write-Verbose -Message "[$ThisScript] Processing: $LogFile"
 			Set-Permission $LogFile.FullName -Principal $Principal -Computer $ComputerName -Rights $UserControl | Out-Null

@@ -59,8 +59,8 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
@@ -74,10 +74,10 @@ $NewSize.Height = $NewBuffer
 $psWindow.BufferSize = $NewSize
 
 Start-Test "Set-ScreenBuffer"
-$Result = Set-ScreenBuffer @Logs
+$Result = Set-ScreenBuffer
 $Result
 
-Test-Output $Result -Command Set-ScreenBuffer @Logs
+Test-Output $Result -Command Set-ScreenBuffer
 
 Update-Log
 Exit-Test

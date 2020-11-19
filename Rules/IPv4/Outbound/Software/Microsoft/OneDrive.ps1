@@ -63,12 +63,12 @@ $Accept = "Outbound rules for One Drive will be loaded, recommended if One Drive
 $Deny = "Skip operation, outbound rules for One Drive will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # One Drive installation directories
@@ -81,10 +81,10 @@ $OneDriveRoot = "%ProgramFiles(x86)%\Microsoft OneDrive"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "OneDrive" ([ref] $OneDriveRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "OneDrive" ([ref] $OneDriveRoot)) -or $ForceLoad)
 {
 	$Program = "$OneDriveRoot\OneDriveStandaloneUpdater.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 
 	# NOTE: According to scheduled task the updating user is SYSTEM
 	# TODO: Rule (probably also) needed for user profile, path blocked in process explorer was:
@@ -95,18 +95,18 @@ if ((Test-Installation "OneDrive" ([ref] $OneDriveRoot) @Logs) -or $ForceLoad)
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $NT_AUTHORITY_System `
-		-Description "Updater for OneDrive" @Logs | Format-Output @Logs
+		-Description "Updater for OneDrive" | Format-Output
 
 	# TODO: LocalUser should be explicit user because each user runs it's own instance
 	# and if there are multiple instances returned we need multiple rules for each user
 	$Program = "$OneDriveRoot\OneDrive.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "OneDrive" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "One drive for syncing user data" @Logs | Format-Output @Logs
+		-Description "One drive for syncing user data" | Format-Output
 }
 
 Update-Log

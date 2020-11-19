@@ -67,8 +67,8 @@ $Accept = "Accpet importing firewall rules and settings from file"
 $Deny = "Abort operation, no firewall rules or settings will be imported"
 
 # User prompt
-Update-Context $ScriptContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $ScriptContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # NOTE: import speed is 26 rules per minute, slowed down by "Test-TargetComputer" for store app rules
@@ -90,7 +90,7 @@ else
 {
 	$StopWatch.Start()
 	# Import all outbound rules to GPO
-	Import-FirewallRules -Folder "$ProjectRoot\Exports" -FileName "OutboundGPO.csv" -PolicyStore $PolicyStore @Logs
+	Import-FirewallRules -Folder "$ProjectRoot\Exports" -FileName "OutboundGPO.csv" -PolicyStore $PolicyStore
 	$StopWatch.Stop()
 
 	$OutboundMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
@@ -109,7 +109,7 @@ else
 {
 	$StopWatch.Start()
 	# Import all inbound rules from GPO
-	Import-FirewallRules -Folder "$ProjectRoot\Exports" -FileName "InboundGPO" -PolicyStore $PolicyStore @Logs
+	Import-FirewallRules -Folder "$ProjectRoot\Exports" -FileName "InboundGPO" -PolicyStore $PolicyStore
 	$StopWatch.Stop()
 
 	$InboundMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes

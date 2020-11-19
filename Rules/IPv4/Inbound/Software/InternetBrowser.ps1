@@ -67,12 +67,12 @@ $Accept = "Inbound rules for 3rd party internet browsers will be loaded, recomme
 $Deny = "Skip operation, inbound rules for internet browsers will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Browser installation directories
@@ -88,7 +88,7 @@ $ChromeRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Google"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Chrome" ([ref] $ChromeRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "Chrome" ([ref] $ChromeRoot)) -or $ForceLoad)
 {
 	$ChromeApp = "$ChromeRoot\Chrome\Application\chrome.exe"
 	Test-File $ChromeApp
@@ -98,21 +98,21 @@ if ((Test-Installation "Chrome" ([ref] $ChromeRoot) @Logs) -or $ForceLoad)
 		-PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 224.0.0.251 -LocalPort 5353 -RemotePort 5353 `
 		-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "The multicast Domain Name System (mDNS) resolves host names to IP addresses within small networks that do not include a local name server." @Logs | Format-Output @Logs
+		-Description "The multicast Domain Name System (mDNS) resolves host names to IP addresses within small networks that do not include a local name server." | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Google Chrome mDNS IPv6" -Service Any -Program $ChromeApp `
 		-PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::fb -LocalPort 5353 -RemotePort 5353 `
 		-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "The multicast Domain Name System (mDNS) resolves host names to IP addresses within small networks that do not include a local name server." @Logs | Format-Output @Logs
+		-Description "The multicast Domain Name System (mDNS) resolves host names to IP addresses within small networks that do not include a local name server." | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Google Chrome Chromecast" -Service Any -Program $ChromeApp `
 		-PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress $CHROMECAST_IP.IPAddressToString -LocalPort 32768-61000 -RemotePort 32768-61000 `
 		-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "Allow Chromecast Inbound UDP data" @Logs | Format-Output @Logs
+		-Description "Allow Chromecast Inbound UDP data" | Format-Output
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Chrome QUIC" -Service Any -Program $ChromeApp `
@@ -120,7 +120,7 @@ if ((Test-Installation "Chrome" ([ref] $ChromeRoot) @Logs) -or $ForceLoad)
 		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort 443 -RemotePort Any `
 		-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "Quick UDP Internet Connections,
-	Experimental transport layer network protocol developed by Google and implemented in 2013." @Logs | Format-Output @Logs
+	Experimental transport layer network protocol developed by Google and implemented in 2013." | Format-Output
 }
 
 Update-Log

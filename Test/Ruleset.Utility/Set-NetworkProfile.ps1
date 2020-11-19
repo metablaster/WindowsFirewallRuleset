@@ -60,16 +60,16 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 Start-Test "Set-NetworkProfile"
-$Result = Set-NetworkProfile @Logs
+$Result = Set-NetworkProfile
 
-Test-Output $Result -Command Set-NetworkProfile @Logs
+Test-Output $Result -Command Set-NetworkProfile
 
 Update-Log
 Exit-Test

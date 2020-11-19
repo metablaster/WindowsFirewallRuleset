@@ -63,8 +63,8 @@ $Accept = "Outbound rules for Microsoft VSCode will be loaded, recommended if Mi
 $Deny = "Skip operation, outbound rules for Microsoft VSCode will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 #
@@ -73,23 +73,23 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 $VSCodeRoot = "%ProgramFiles%\Microsoft VS Code"
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Rules for Visual Studio Code
 #
 
 # Test if installation exists on system
-if ((Test-Installation "VSCode" ([ref] $VSCodeRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "VSCode" ([ref] $VSCodeRoot)) -or $ForceLoad)
 {
 	$Program = "$VSCodeRoot\Code.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Visual Studio Code" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
-		-Description "Visual Studio Code check for updates, extensions download, telemetry and settings sync." @Logs | Format-Output @Logs
+		-Description "Visual Studio Code check for updates, extensions download, telemetry and settings sync." | Format-Output
 }
 
 Update-Log

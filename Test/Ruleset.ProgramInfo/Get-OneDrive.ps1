@@ -61,8 +61,8 @@ Import-Module -Name Ruleset.Logging
 Import-Module -Name Ruleset.UserInfo
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
@@ -70,7 +70,7 @@ Enter-Test
 $UserGroup = "Users"
 
 Start-Test "Get-GroupPrincipal $UserGroup"
-$Principals = Get-GroupPrincipal $UserGroup @Logs
+$Principals = Get-GroupPrincipal $UserGroup
 # TODO: see also @Get-UserSoftware,
 # This Format-Table won't be needed once we have consistent outputs, formats and better pipelines
 $Principals | Format-Table
@@ -78,20 +78,20 @@ $Principals | Format-Table
 foreach ($Principal in $Principals)
 {
 	Start-Test "Get-OneDrive $($Principal.User)"
-	Get-OneDrive $Principal.User @Logs
+	Get-OneDrive $Principal.User
 }
 
 foreach ($Principal in $Principals)
 {
 	Start-Test "Get-OneDrive $($Principal.User) | InstallLocation"
-	Get-OneDrive $Principal.User @Logs | Select-Object -ExpandProperty InstallLocation
+	Get-OneDrive $Principal.User | Select-Object -ExpandProperty InstallLocation
 }
 
 Start-Test "Get-TypeName - $($Principals[0].User)"
-$Result = Get-OneDrive $Principals[0].User @Logs
+$Result = Get-OneDrive $Principals[0].User
 $Result
 
-Test-Output $Result -Command Get-OneDrive @Logs
+Test-Output $Result -Command Get-OneDrive
 
 Update-Log
 Exit-Test

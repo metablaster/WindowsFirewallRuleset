@@ -69,12 +69,12 @@ $Accept = "Outbound rules for wireless networking will be loaded, recommended in
 $Deny = "Skip operation, outbound rules for wireless networking will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Windows system predefined rules for Wireless Display
@@ -95,8 +95,8 @@ New-NetFirewallRule -DisplayName "Wireless Display" `
 	-InterfaceType $LocalInterface `
 	-Description "Driver Foundation - User-mode Driver Framework Host Process.
 The driver host process (Wudfhost.exe) is a child process of the driver manager service.
-loads one or more UMDF driver DLLs, in addition to the framework DLLs." `
-	@Logs | Format-Output @Logs
+loads one or more UMDF driver DLLs, in addition to the framework DLLs." |
+Format-Output
 
 # TODO: remote port unknown, rule added because predefined rule for UDP exists
 New-NetFirewallRule -DisplayName "Wireless Display" `
@@ -110,8 +110,8 @@ New-NetFirewallRule -DisplayName "Wireless Display" `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Driver Foundation - User-mode Driver Framework Host Process.
 The driver host process (Wudfhost.exe) is a child process of the driver manager service.
-loads one or more UMDF driver DLLs, in addition to the framework DLLs." `
-	@Logs | Format-Output @Logs
+loads one or more UMDF driver DLLs, in addition to the framework DLLs." |
+Format-Output
 
 #
 # Windows system predefined rules for WiFi Direct
@@ -130,8 +130,8 @@ New-NetFirewallRule -DisplayName "WLAN Service WFD ASP Coordination Protocol" `
 Wi-Fi Direct (WFD) Protocol Specifies: Proximity Extensions, which enable two or more devices that
 are running the same application to establish a direct connection without requiring an intermediary,
 such as an infrastructure wireless access point (WAP).
-For more info see description of WLAN AutoConfig service." `
-	@Logs | Format-Output @Logs
+For more info see description of WLAN AutoConfig service." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "WLAN Service WFD Driver-only" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
@@ -145,8 +145,8 @@ New-NetFirewallRule -DisplayName "WLAN Service WFD Driver-only" `
 Wi-Fi Direct (WFD) Protocol Specifies: Proximity Extensions, which enable two or more devices that
 are running the same application to establish a direct connection without requiring an intermediary,
 such as an infrastructure wireless access point (WAP).
-For more info see description of WLAN AutoConfig service." `
-	@Logs | Format-Output @Logs
+For more info see description of WLAN AutoConfig service." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "WLAN Service WFD Driver-only" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
@@ -161,15 +161,15 @@ New-NetFirewallRule -DisplayName "WLAN Service WFD Driver-only" `
 Wi-Fi Direct (WFD) Protocol Specifies: Proximity Extensions, which enable two or more devices that
 are running the same application to establish a direct connection without requiring an intermediary,
 such as an infrastructure wireless access point (WAP).
-For more info see description of WLAN AutoConfig service." `
-	@Logs | Format-Output @Logs
+For more info see description of WLAN AutoConfig service." |
+Format-Output
 
 #
 # Windows system predefined rules for WiFi Direct Network Discovery
 #
 
 $Program = "%SystemRoot%\System32\dasHost.exe"
-Test-File $Program @Logs
+Test-File $Program
 
 # TODO: missing protocol and port for WiFi Direct Network Discovery
 New-NetFirewallRule -DisplayName "Wi-Fi Direct Network Discovery" `
@@ -183,8 +183,8 @@ New-NetFirewallRule -DisplayName "Wi-Fi Direct Network Discovery" `
 	-Description "Rule to discover WSD devices on Wi-Fi Direct networks.
 Host enables pairing between the system and wired or wireless devices.
 This service is new since Windows 8.
-Executable also known as Device Association Framework Provider Host." `
-	@Logs | Format-Output @Logs
+Executable also known as Device Association Framework Provider Host." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Wi-Fi Direct Scan Service" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -196,8 +196,8 @@ New-NetFirewallRule -DisplayName "Wi-Fi Direct Scan Service" `
 	-InterfaceType Wired, Wireless `
 	-Description "Rule to use WSD scanners on Wi-Fi Direct networks.
 Windows Image Acquisition (WIA) service provides image acquisition services for scanners
-and cameras." `
-	@Logs | Format-Output @Logs
+and cameras." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Wi-Fi Direct Spooler Use" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -209,8 +209,8 @@ New-NetFirewallRule -DisplayName "Wi-Fi Direct Spooler Use" `
 	-InterfaceType Wired, Wireless `
 	-Description "Rule to use WSD printers on Wi-Fi Direct networks.
 Print Spooler service spools print jobs and handles interaction with the printer.
-If you turn off this service, you won't be able to print or see your printers." `
-	@Logs | Format-Output @Logs
+If you turn off this service, you won't be able to print or see your printers." |
+Format-Output
 
 #
 # Windows system predefined rules for Wireless portable devices
@@ -226,8 +226,8 @@ New-NetFirewallRule -DisplayName "Wireless portable devices (SSDP)" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Wireless Portable Devices to allow use of the
-Simple Service Discovery Protocol." `
-	@Logs | Format-Output @Logs
+Simple Service Discovery Protocol." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Wireless portable devices" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Public `
@@ -237,8 +237,8 @@ New-NetFirewallRule -DisplayName "Wireless portable devices" `
 	-LocalPort Any -RemotePort 15740 `
 	-LocalUser Any `
 	-InterfaceType $LocalInterface `
-	-Description "Wireless Portable Devices to allow use of the Usermode Driver Framework." `
-	@Logs | Format-Output @Logs
+	-Description "Wireless Portable Devices to allow use of the Usermode Driver Framework." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Wireless portable devices" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
@@ -248,8 +248,8 @@ New-NetFirewallRule -DisplayName "Wireless portable devices" `
 	-LocalPort Any -RemotePort 15740 `
 	-LocalUser Any `
 	-InterfaceType $LocalInterface `
-	-Description "Wireless Portable Devices to allow use of the Usermode Driver Framework." `
-	@Logs | Format-Output @Logs
+	-Description "Wireless Portable Devices to allow use of the Usermode Driver Framework." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Wireless portable devices (UPnPHost)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
@@ -259,8 +259,8 @@ New-NetFirewallRule -DisplayName "Wireless portable devices (UPnPHost)" `
 	-LocalPort Any -RemotePort 2869 `
 	-LocalUser Any `
 	-InterfaceType $LocalInterface `
-	-Description "Wireless Portable Devices to allow use of Universal Plug and Play." `
-	@Logs | Format-Output @Logs
+	-Description "Wireless Portable Devices to allow use of Universal Plug and Play." |
+Format-Output
 
 # TODO: possible bug in predefined rule, description is not consistent with service parameter
 New-NetFirewallRule -DisplayName "Wireless portable devices (FDPHost)" `
@@ -271,7 +271,7 @@ New-NetFirewallRule -DisplayName "Wireless portable devices (FDPHost)" `
 	-LocalPort Any -RemotePort 2869 `
 	-LocalUser Any `
 	-InterfaceType $LocalInterface `
-	-Description "Wireless Portable Devices to allow use of Function discovery provider host." `
-	@Logs | Format-Output @Logs
+	-Description "Wireless Portable Devices to allow use of Function discovery provider host." |
+Format-Output
 
 Update-Log

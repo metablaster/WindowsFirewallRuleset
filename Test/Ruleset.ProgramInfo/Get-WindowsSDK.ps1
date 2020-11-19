@@ -59,25 +59,25 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test
 
 Start-Test "Get-WindowsSDK"
-$WindowsSDK = Get-WindowsSDK @Logs
+$WindowsSDK = Get-WindowsSDK
 $WindowsSDK
 
 Start-Test "Get-WindowsSDK latest"
 if ($null -ne $WindowsSDK)
 {
-	$WindowsSDK | Sort-Object -Property Version @Logs |
+	$WindowsSDK | Sort-Object -Property Version |
 	Where-Object { $_.InstallLocation } |
-	Select-Object -Last 1 -ExpandProperty InstallLocation @Logs
+	Select-Object -Last 1 -ExpandProperty InstallLocation
 }
 
-Test-Output $WindowsSDK -Command Get-WindowsSDK @Logs
+Test-Output $WindowsSDK -Command Get-WindowsSDK
 
 Update-Log
 Exit-Test

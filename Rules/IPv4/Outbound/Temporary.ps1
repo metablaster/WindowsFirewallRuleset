@@ -65,12 +65,12 @@ $Accept = "Temporary outbound IPv4 rules will be loaded, recommended to temporar
 $Deny = "Skip operation, temporary outbound IPv4 rules will not be loaded into firewall"
 
 # User prompt
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Temporary rules
@@ -84,8 +84,8 @@ New-NetFirewallRule -DisplayName "Port 443" `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser $UsersGroupSDDL `
 	-InterfaceType $DefaultInterface `
-	-Description "Temporary open port 443 to internet, and disable ASAP." `
-	@Logs | Format-Output @Logs
+	-Description "Temporary open port 443 to internet, and disable ASAP." |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Port 80" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -95,8 +95,8 @@ New-NetFirewallRule -DisplayName "Port 80" `
 	-LocalPort Any -RemotePort 80 `
 	-LocalUser $UsersGroupSDDL `
 	-InterfaceType $DefaultInterface `
-	-Description "Temporary open port 80 to internet, and disable ASAP." `
-	@Logs | Format-Output @Logs
+	-Description "Temporary open port 80 to internet, and disable ASAP." |
+Format-Output
 
 # NOTE: to make use of this rule, it should be updated here and the script re-run
 New-NetFirewallRule -DisplayName "Installer" `
@@ -110,8 +110,8 @@ New-NetFirewallRule -DisplayName "Installer" `
 	-Description "Enable only to let some installer update or communicate to internet such as
 office update, and disable ASAP.
 required for ie. downloaded Click-to-Run which does not have persistent location.
-Add installer path in script and re-run Temporary.ps1" `
-	@Logs | Format-Output @Logs
+Add installer path in script and re-run Temporary.ps1" |
+Format-Output
 
 New-NetFirewallRule -DisplayName "Services" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -122,8 +122,8 @@ New-NetFirewallRule -DisplayName "Services" `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
 	-Description "Enable only to let any service communicate to internet,
-useful for troubleshooting, and disable ASAP." `
-	@Logs | Format-Output @Logs
+useful for troubleshooting, and disable ASAP." |
+Format-Output
 
 # NOTE: This applies to users only, for administrators there is a block rule which must be enabled,
 # if the blocking rule for administrators is not enabled this rule will also allow administrators
@@ -142,8 +142,8 @@ New-NetFirewallRule -DisplayName "Store Apps" `
 	-LocalUser $UsersStoreAppsSDDL -Owner Any -Package * `
 	-InterfaceType $DefaultInterface `
 	-Description "Enable only to let store apps for standard users communicate to internet,
-useful for troubleshooting, and disable ASAP." `
-	@Logs | Format-Output @Logs
+useful for troubleshooting, and disable ASAP." |
+Format-Output
 
 Update-Log
 
@@ -156,7 +156,7 @@ if ($Develop)
 	#
 
 	# Accounts used for troubleshooting rules
-	# $TroubleshootingAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE" @Logs
+	# $TroubleshootingAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE"
 
 	New-NetFirewallRule -DisplayName "Troubleshoot IGMP" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
@@ -166,8 +166,8 @@ if ($Develop)
 		-LocalPort Any -RemotePort Any `
 		-LocalUser Any `
 		-InterfaceType Any `
-		-Description "Temporary allow troublesome IGMP traffic." `
-		@Logs | Format-Output @Logs
+		-Description "Temporary allow troublesome IGMP traffic." |
+	Format-Output
 
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP - LLMNR" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -177,8 +177,8 @@ if ($Develop)
 		-LocalPort Any -RemotePort 5355 `
 		-LocalUser $NT_AUTHORITY_NetworkService `
 		-InterfaceType Any `
-		-Description "Temporary allow troublesome UDP traffic." `
-		@Logs | Format-Output @Logs
+		-Description "Temporary allow troublesome UDP traffic." |
+	Format-Output
 
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP ports" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -188,11 +188,11 @@ if ($Develop)
 		-LocalPort Any -RemotePort 1900, 3702 `
 		-LocalUser $NT_AUTHORITY_LocalService `
 		-InterfaceType Any `
-		-Description "Temporary allow troublesome UDP traffic." `
-		@Logs | Format-Output @Logs
+		-Description "Temporary allow troublesome UDP traffic." |
+	Format-Output
 
-	$mDnsUsers = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE" @Logs
-	Merge-SDDL ([ref] $mDnsUsers) $UsersGroupSDDL @Logs
+	$mDnsUsers = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE"
+	Merge-SDDL ([ref] $mDnsUsers) $UsersGroupSDDL
 
 	# NOTE: should be network service
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP - mDNS" `
@@ -203,8 +203,8 @@ if ($Develop)
 		-LocalPort 5353 -RemotePort 5353 `
 		-LocalUser $mDnsUsers `
 		-InterfaceType Any `
-		-Description "Temporary allow troublesome UDP traffic." `
-		@Logs | Format-Output @Logs
+		-Description "Temporary allow troublesome UDP traffic." |
+	Format-Output
 
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP - NetBIOS" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -214,12 +214,12 @@ if ($Develop)
 		-LocalPort 137 -RemotePort 137 `
 		-LocalUser $NT_AUTHORITY_System `
 		-InterfaceType Any `
-		-Description "Temporary allow troublesome UDP traffic." `
-		@Logs | Format-Output @Logs
+		-Description "Temporary allow troublesome UDP traffic." |
+	Format-Output
 
 	# Moved from WindowsServices.ps1, used for extension rule below
-	$ExtensionAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE" @Logs
-	Merge-SDDL ([ref] $ExtensionAccounts) $UsersGroupSDDL @Logs
+	$ExtensionAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE"
+	Merge-SDDL ([ref] $ExtensionAccounts) $UsersGroupSDDL
 
 	# HACK: Temporary using network service account
 	# All troubleshooting rules except this one were set to "Enabled",
@@ -232,8 +232,8 @@ if ($Develop)
 		-LocalPort Any -RemotePort 48300 `
 		-LocalUser $ExtensionAccounts `
 		-InterfaceType $DefaultInterface `
-		-Description "Extension rule for active users to allow BITS to Internet gateway device (IGD)" `
-		@Logs | Format-Output @Logs
+		-Description "Extension rule for active users to allow BITS to Internet gateway device (IGD)" |
+	Format-Output
 
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP LooseSourceMapping" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
@@ -244,8 +244,8 @@ if ($Develop)
 		-LocalUser Any `
 		-InterfaceType Any `
 		-LocalOnlyMapping $false -LooseSourceMapping $true `
-		-Description "Temporary allow all UDP with LooseSourceMapping" `
-		@Logs | Format-Output @Logs
+		-Description "Temporary allow all UDP with LooseSourceMapping" |
+	Format-Output
 
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP LocalOnlyMapping" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
@@ -256,8 +256,8 @@ if ($Develop)
 		-LocalUser Any `
 		-InterfaceType Any `
 		-LocalOnlyMapping $true -LooseSourceMapping $false `
-		-Description "Temporary allow all UDP with LocalOnlyMapping" `
-		@Logs | Format-Output @Logs
+		-Description "Temporary allow all UDP with LocalOnlyMapping" |
+	Format-Output
 
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP LocalOnlyMapping + LooseSourceMapping" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
@@ -268,8 +268,8 @@ if ($Develop)
 		-LocalUser Any `
 		-InterfaceType Any `
 		-LocalOnlyMapping $true -LooseSourceMapping $true `
-		-Description "Temporary allow all UDP with LooseSourceMapping" `
-		@Logs | Format-Output @Logs
+		-Description "Temporary allow all UDP with LooseSourceMapping" |
+	Format-Output
 
 	Update-Log
 }

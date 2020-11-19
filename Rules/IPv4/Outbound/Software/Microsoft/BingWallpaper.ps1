@@ -63,12 +63,12 @@ $Group = "Microsoft - Bing wallpaper"
 # User prompt
 $Accept = "Outbound rule for bing wallpaper app will be loaded"
 $Deny = "Skip operation, outbound rule for bing wallpaper app will not be loaded"
-Update-Context "IPv$IPVersion" $Direction $Group @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context "IPv$IPVersion" $Direction $Group
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # First remove all existing rules matching group
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 # BingWallpaper App installation directories
 $BingWallpaperRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Microsoft\BingWallpaperApp"
@@ -78,10 +78,10 @@ $BingWallpaperRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Microsoft\B
 #
 
 # Test if installation exists on system
-if ((Test-Installation "BingWallpaper" ([ref] $BingWallpaperRoot) @Logs) -or $ForceLoad)
+if ((Test-Installation "BingWallpaper" ([ref] $BingWallpaperRoot)) -or $ForceLoad)
 {
 	$Program = "$BingWallpaperRoot\BingWallpaperApp.exe"
-	Test-File $Program @Logs
+	Test-File $Program
 
 	New-NetFirewallRule -DisplayName "Bing wallpaper" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -91,8 +91,8 @@ if ((Test-Installation "BingWallpaper" ([ref] $BingWallpaperRoot) @Logs) -or $Fo
 		-LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
 		-InterfaceType $DefaultInterface `
-		-Description "Bing wallpaper needs internet to download fresh wallpapers" `
-		@Logs | Format-Output @Logs
+		-Description "Bing wallpaper needs internet to download fresh wallpapers" |
+	Format-Output
 }
 
 Update-Log
