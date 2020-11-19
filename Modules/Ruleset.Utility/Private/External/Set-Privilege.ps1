@@ -80,41 +80,6 @@ Security
 Privilege
 TokenPrivilege
 #>
-
-[CmdletBinding()]
-param (
-	[Parameter(Mandatory = $true)]
-	[string[]] $Privilege,
-
-	[Parameter()]
-	[switch] $Disable
-)
-
-#region Initialization
-#Requires -RunAsAdministrator
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
-New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
-	$MyInvocation.MyCommand.Name -replace ".{4}$" )
-
-# Check requirements
-Initialize-Project -Abort
-Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
-
-# Imports
-. $PSScriptRoot\..\ContextSetup.ps1
-Import-Module -Name Ruleset.Logging
-
-# User prompt
-$Accept = "Add or remove privilege from current PowerShell process"
-$Deny = "Abort operation, no change to PowerShell process privilege is made"
-Update-Context $ScriptContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
-#endregion
-
-<#
-.SYNOPSIS
-Toggle security privileges for the current PowerShell session.
-#>
 function Set-Privilege
 {
 	[CmdletBinding(PositionalBinding = $false, SupportsShouldProcess = $true, ConfirmImpact = "High")]
@@ -232,10 +197,3 @@ function Set-Privilege
 		}
 	}
 }
-
-if ($MyInvocation.InvocationName -ne '.')
-{
-	Set-Privilege $Privilege -Disable:$Disable @Logs
-}
-
-Update-Log

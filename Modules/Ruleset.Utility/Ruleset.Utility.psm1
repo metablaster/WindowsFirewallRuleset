@@ -38,6 +38,16 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 # Script imports
 #
 
+$PrivateScripts = @(
+	"External\Set-Privilege"
+)
+
+foreach ($Script in $PrivateScripts)
+{
+	Write-Debug -Message "[$ThisModule] Importing script: Private\$Script.ps1"
+	. ("{0}\Private\{1}.ps1" -f $PSScriptRoot, $Script)
+}
+
 $PublicScripts = @(
 	"Approve-Execute"
 	"Compare-Path"

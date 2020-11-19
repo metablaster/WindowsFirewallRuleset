@@ -304,6 +304,8 @@ todo's in this file are categorized into following sections:
 5. Code style
 
     - For variables with no explicitly decalred type, put "Typename" comment from Get-Member output
+    - After ensuring scripts can't run without edition or version check use $PSEdition instead of
+    longer $PSVersionTable.PSEdition
 
 6. Documentation
 

@@ -128,9 +128,10 @@ if (!(Get-Variable -Name ProjectRoot -Scope Global -ErrorAction Ignore))
 }
 
 <#
-Preference Variables default values
+Preference Variables default values (Core / Desktop)
 # TODO: Add valid values column and defaults per edition
 https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_preference_variables?view=powershell-7
+https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_preference_variables?view=powershell-5.1
 
 $ErrorActionPreference		Continue
 $WarningPreference			Continue
@@ -152,7 +153,7 @@ $LogEngineLifecycleEvent	True (logged)
 $LogProviderLifecycleEvent	True (logged)
 $LogProviderHealthEvent		True (logged)
 
-$ErrorView					ConciseView
+$ErrorView					ConciseView / NormalView
 $MaximumHistoryCount		4096
 $FormatEnumerationLimit		4
 $OFS						(Space character (" "))
@@ -162,13 +163,20 @@ NOTE: Applies to how PowerShell communicates with external programs
 (what encoding PowerShell uses when sending strings to them)
 it has nothing to do with the encoding that the output redirection operators and
 PowerShell cmdlets use to save to files.
-$OutputEncoding				UTF8Encoding object
+$OutputEncoding				System.Text.UTF8Encoding / System.Text.ASCIIEncoding
 
 $PSSessionApplicationName	wsman
 $PSSessionConfigurationName	https://schemas.microsoft.com/powershell/Microsoft.PowerShell
 $PSSessionOption			See $PSSessionOption
 
 $Transcript					$Home\My Documents directory as \PowerShell_transcript.<time-stamp>.txt
+
+NOTE: Windows PowerShell only
+$MaximumAliasCount		4096
+$MaximumDriveCount		4096
+$MaximumErrorCount		256
+$MaximumFunctionCount	4096
+$MaximumVariableCount	4096
 #>
 
 # NOTE: Following preferences should be always the same, do not modify!

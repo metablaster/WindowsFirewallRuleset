@@ -160,6 +160,7 @@ SOFTWARE.
 		"Help\en-US\Show-SDDL.md"
 		"Help\en-US\Update-Context.md"
 		"Help\README.md"
+		"Private\External\Set-Privilege.ps1"
 		"Public\Approve-Execute.ps1"
 		"Public\Compare-Path.ps1"
 		"Public\Confirm-FileEncoding.ps1"

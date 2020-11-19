@@ -102,7 +102,7 @@ None. This function does not produce pipeline output.
 .NOTES
 Following changes by metablaster, November 2020:
 
-Removed max* variables as per: https://github.com/PowerShell/PowerShell/issues/2221
+Removed max* variables for Core edition as per: https://github.com/PowerShell/PowerShell/issues/2221
 - MaximumAliasCount
 - MaximumDriveCount
 - MaximumErrorCount
@@ -160,7 +160,9 @@ begin
 	}
 
 	Get-Variable -Scope $ParentScope -Name IsValidParent -ErrorAction Stop | Out-Null
-	Write-Debug "[$ThisScript] Parrent Scope: $((Get-PSCallStack)[1].Command)" -Debug
+	$ParentScopeName = $((Get-PSCallStack)[1].Command)
+
+	Write-Debug "[$ThisScript] Parrent Scope: $ParentScopeName" -Debug
 	Write-Debug "[$ThisScript] Caller Scope: $((Get-PSCallStack)[2].Command)" -Debug
 
 	[hashtable] $FilterHash = @{}
@@ -219,6 +221,15 @@ end
 		"Transcript" = $null
 	}
 
+	if ($PSEdition -eq "Desktop")
+	{
+		$Preferences.Add("MaximumAliasCount", $null)
+		$Preferences.Add("MaximumDriveCount", $null)
+		$Preferences.Add("MaximumErrorCount", $null)
+		$Preferences.Add("MaximumFunctionCount", $null)
+		$Preferences.Add("MaximumVariableCount", $null)
+	}
+
 	foreach ($Entry in $Preferences.GetEnumerator())
 	{
 		if (([string]::IsNullOrEmpty($Entry.Value) -or !$Cmdlet.MyInvocation.BoundParameters.ContainsKey($Entry.Value)) -and
@@ -230,11 +241,12 @@ end
 			{
 				if ($SessionState -eq $ExecutionContext.SessionState)
 				{
-					Write-Verbose -Message "[$ThisScript] Setting preference variable '$($Variable.Name)' in scope: $($SessionState.Module.Name)"
+					Write-Verbose -Message "[$ThisScript] Setting preference variable '$($Variable.Name)' in scope: $ParentScopeName"
 					Set-Variable -Scope $ParentScope -Name $Variable.Name -Value $Variable.Value -Force -Confirm:$false -WhatIf:$false
 				}
 				else
 				{
+					# TODO: Verbose won't be correct if session scope is not module
 					Write-Verbose -Message "[$ThisScript] Setting preference variable '$($Variable.Name)' in session: $($SessionState.Module.Name)"
 					$SessionState.PSVariable.Set($Variable.Name, $Variable.Value)
 				}
@@ -256,12 +268,13 @@ end
 				{
 					if ($SessionState -eq $ExecutionContext.SessionState)
 					{
-						Write-Verbose -Message "[$ThisScript] Setting filtered preference variable '$($Variable.Name)' in scope: $($SessionState.Module.Name)"
+						Write-Verbose -Message "[$ThisScript] Setting filtered preference variable '$($Variable.Name)' in scope: $ParentScopeName"
 						Set-Variable -Scope $ParentScope -Name $Variable.Name -Value $Variable.Value -Force -Confirm:$false -WhatIf:$false
 					}
 					else
 					{
-						Write-Verbose -Message "[$ThisScript] Setting filtered preference variable '$($Variable.Name)' in session: $($ExecutionContext.SessionState.Module.Name)"
+						# TODO: Verbose won't be correct if session scope is not module
+						Write-Verbose -Message "[$ThisScript] Setting filtered preference variable '$($Variable.Name)' in session: $($SessionState.Module.Name)"
 						$SessionState.PSVariable.Set($Variable.Name, $Variable.Value)
 					}
 				}

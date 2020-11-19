@@ -31,6 +31,7 @@ SOFTWARE.
 # - Code formatting according to the rest of project design
 # - Added module boilerplate code
 # - Renamed module from "WindowsCompatibility" to "Ruleset.Compatibility"
+# TODO: Fix variable casing
 
 # Initialization
 using namespace System.Management.Automation.
