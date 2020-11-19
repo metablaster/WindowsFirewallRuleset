@@ -89,14 +89,14 @@ if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot) @Logs) -or $Forc
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Edge-Chromium HTTP" -Service Any -Program $EdgeChromiumApp `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "Hyper text transfer protocol." @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Edge-Chromium QUIC" -Service Any -Program $EdgeChromiumApp `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "Quick UDP Internet Connections,
@@ -104,21 +104,21 @@ if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot) @Logs) -or $Forc
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Edge-Chromium HTTPS" -Service Any -Program $EdgeChromiumApp `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "Hyper text transfer protocol over SSL." @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Edge-Chromium speedtest" -Service Any -Program $EdgeChromiumApp `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 5060, 8080 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "Ports needed for https://speedtest.net" @Logs | Format-Output @Logs
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Edge-Chromium FTP" -Service Any -Program $EdgeChromiumApp `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "File transfer protocol." @Logs | Format-Output @Logs
@@ -129,7 +129,7 @@ if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot) @Logs) -or $Forc
 		# TODO: Figure out why edge chromium needs this rule, do additional test and update description
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Edge-Chromium SSDP" -Service Any -Program $EdgeChromiumApp `
-			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 239.255.255.250 -LocalPort Any -RemotePort 1900 `
 			-LocalUser $UsersGroupSDDL `
 			-Description "" @Logs | Format-Output @Logs
@@ -145,7 +145,7 @@ if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot) @Logs) -or $Forc
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Edge-Chromium Update" -Service Any -Program $EdgeChromiumUpdate `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $UpdateAccounts `
 		-Description "Update Microsoft Edge" @Logs | Format-Output @Logs

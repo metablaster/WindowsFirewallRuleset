@@ -96,7 +96,7 @@ New-NetFirewallRule -DisplayName "DataSenseLiveTileTask" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "Probably related to keeping bandwidth usage information up-to-date." `
 	@Logs | Format-Output @Logs
 
@@ -113,7 +113,7 @@ if ((Test-Installation "NETFramework" ([ref] $NETFrameworkRoot) @Logs) -or $Forc
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort Any `
 		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $DefaultInterfaceterface `
+		-InterfaceType $DefaultInterface `
 		-Description "mscorsvw.exe is precompiling .NET assemblies in the background.
 Once it's done, it will go away. Typically, after you install the .NET Redist,
 it will be done with the high priority assemblies in 5 to 10 minutes and then will wait until
@@ -133,7 +133,7 @@ if ((Test-Installation "WindowsDefender" ([ref] $WindowsDefenderRoot) @Logs) -or
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 443 `
 		-LocalUser $NT_AUTHORITY_System `
-		-InterfaceType $DefaultInterfaceterface `
+		-InterfaceType $DefaultInterface `
 		-Description "Anti malware service executable." `
 		@Logs | Format-Output @Logs
 
@@ -147,7 +147,7 @@ if ((Test-Installation "WindowsDefender" ([ref] $WindowsDefenderRoot) @Logs) -or
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 443 `
 		-LocalUser $NT_AUTHORITY_System `
-		-InterfaceType $DefaultInterfaceterface `
+		-InterfaceType $DefaultInterface `
 		-Description "This utility can be useful when you want to automate Windows Defender
 Antivirus use." `
 		@Logs | Format-Output @Logs
@@ -164,7 +164,7 @@ New-NetFirewallRule -DisplayName "Malicious Software Removal Tool" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "" `
 	@Logs | Format-Output @Logs
 
@@ -178,7 +178,7 @@ New-NetFirewallRule -DisplayName "Activation Client" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 80, 443 `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "Used to activate Windows." `
 	@Logs | Format-Output @Logs
 
@@ -192,7 +192,7 @@ New-NetFirewallRule -DisplayName "Activation KMS" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 1688 `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "Activate Office and KMS based software." `
 	@Logs | Format-Output @Logs
 
@@ -207,7 +207,7 @@ New-NetFirewallRule -DisplayName "Activation KMS" `
 # 	-LocalAddress Any -RemoteAddress Internet4 `
 # 	-LocalPort Any -RemotePort 80 `
 # 	-LocalUser Any `
-# 	-InterfaceType $DefaultInterfaceterface `
+# 	-InterfaceType $DefaultInterface `
 # 	-Description "Its purpose is to scans your hardware, devices, and installed programs for
 # known compatibility issues
 # with a newer Windows version by comparing them against a specific database." `
@@ -226,7 +226,7 @@ New-NetFirewallRule -DisplayName "Background task host" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 22, 80, 443 `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "backgroundTaskHost.exe is the process that starts background tasks.
 So Cortana and the other Microsoft app registered a background task which is now started by Windows.
 Port 22 is most likely used for installation.
@@ -244,7 +244,7 @@ New-NetFirewallRule -DisplayName "Background transfer host" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser $UsersGroupSDDL `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "Download/Upload Host" `
 	@Logs | Format-Output @Logs
 
@@ -259,7 +259,7 @@ New-NetFirewallRule -DisplayName "Cortana Speech Runtime" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "" `
 	@Logs | Format-Output @Logs
 
@@ -273,7 +273,7 @@ New-NetFirewallRule -DisplayName "Cortana Speech Model" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser $NT_AUTHORITY_NetworkService `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "" `
 	@Logs | Format-Output @Logs
 
@@ -287,7 +287,7 @@ New-NetFirewallRule -DisplayName "Customer Experience Improvement Program" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 80, 443 `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "This program collects and sends usage data to Microsoft,
 can be disabled in GPO." `
 	@Logs | Format-Output @Logs
@@ -302,7 +302,7 @@ New-NetFirewallRule -DisplayName "Microsoft Compatibility Telemetry" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "The CompatTelRunner.exe process is used by Windows to perform system diagnostics
 to determine if there are any compatibility issues.
 It also collects program telemetry information (if that option is selected) for the
@@ -326,7 +326,7 @@ New-NetFirewallRule -DisplayName "Windows Indexing Service" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "SearchProtocolHost.exe is part of the Windows Indexing Service,
 an application that indexes files on the local drive making them easier to search." `
 	@Logs | Format-Output @Logs
@@ -341,7 +341,7 @@ New-NetFirewallRule -DisplayName "Error Reporting" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "Report Windows errors back to Microsoft." `
 	@Logs | Format-Output @Logs
 
@@ -355,7 +355,7 @@ New-NetFirewallRule -DisplayName "Error Reporting" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "Report Windows errors back to Microsoft." `
 	@Logs | Format-Output @Logs
 
@@ -370,7 +370,7 @@ New-NetFirewallRule -DisplayName "File Explorer" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 80 `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "File explorer checks for digital signatures verification, windows update." `
 	@Logs | Format-Output @Logs
 
@@ -383,7 +383,7 @@ New-NetFirewallRule -DisplayName "File Explorer" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "Smart Screen Filter" `
 	@Logs | Format-Output @Logs
 
@@ -399,7 +399,7 @@ New-NetFirewallRule -DisplayName "FTP Client" `
 	-LocalAddress Any -RemoteAddress Internet4, LocalSubnet4 `
 	-LocalPort Any -RemotePort 21 `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "File transfer protocol client." `
 	@Logs | Format-Output @Logs
 
@@ -413,7 +413,7 @@ New-NetFirewallRule -DisplayName "Help pane" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 80 `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "Get online help, looks like windows 10+ no longer uses this,
 it opens edge now to show help." `
 	@Logs | Format-Output @Logs
@@ -429,7 +429,7 @@ New-NetFirewallRule -DisplayName "DLL host process" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 80, 443 `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "Loads and runs 32-bit dynamic-link libraries (DLLs),
 There are no configurable settings for Rundll32.
 possibly no longer uses networking since windows 10." `
@@ -447,7 +447,7 @@ possibly no longer uses networking since windows 10." `
 # 	-LocalAddress Any -RemoteAddress Internet4 `
 # 	-LocalPort Any -RemotePort 80 `
 # 	-LocalUser Any `
-# 	-InterfaceType $DefaultInterfaceterface `
+# 	-InterfaceType $DefaultInterface `
 # 	-Description "" `
 # 	@Logs | Format-Output @Logs
 
@@ -461,7 +461,7 @@ New-NetFirewallRule -DisplayName "Installer" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 80 `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "msiexec automatically check for updates for the program it is installing." `
 	@Logs | Format-Output @Logs
 
@@ -475,7 +475,7 @@ New-NetFirewallRule -DisplayName "Local Security Authority Process" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 80 `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "Lsas.exe a process in Microsoft Windows operating systems that is responsible
 for enforcing the security policy on the system.
 It specifically deals with local security and login policies.It verifies users logging on to a
@@ -493,7 +493,7 @@ New-NetFirewallRule -DisplayName "MMC Help Viewer" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "Display webpages in Microsoft MMC help view." `
 	@Logs | Format-Output @Logs
 
@@ -507,7 +507,7 @@ New-NetFirewallRule -DisplayName "nslookup (Name server lookup)" `
 	-LocalAddress Any -RemoteAddress Internet4, DefaultGateway4 `
 	-LocalPort Any -RemotePort 53 `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Displays information that you can use to diagnose Domain Name System (DNS) infrastructure.
 The nslookup command-line tool is available only if you have installed the TCP/IP protocol." `
@@ -524,7 +524,7 @@ New-NetFirewallRule -DisplayName "curl" `
 	-LocalAddress Any -RemoteAddress Internet4, LocalSubnet4 `
 	-LocalPort Any -RemotePort 80, 110, 143, 443, 993, 995 `
 	-LocalUser $UsersGroupSDDL `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "curl is a commandline tool to transfer data from or to a server,
 using one of the supported protocols:
 (DICT, FILE, FTP, FTPS, GOPHER, HTTP, HTTPS, IMAP, IMAPS, LDAP, LDAPS, MQTT, POP3, POP3S, RTMP,
@@ -541,7 +541,7 @@ New-NetFirewallRule -DisplayName "Settings sync" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 80, 443 `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "Host process for setting synchronization. Open your PC Settings and go to the
 'Sync your Settings' section.
 There are on/off switches for all the different things you can choose to sync.
@@ -558,7 +558,7 @@ New-NetFirewallRule -DisplayName "Smartscreen" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "" `
 	@Logs | Format-Output @Logs
 
@@ -572,7 +572,7 @@ New-NetFirewallRule -DisplayName "SystemSettings" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $UsersGroupSDDL `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "Seems like it's connecting to display some 'useful tips' on the right hand side
  of the settings menu, NOTE: Configure the gpo 'Control Panel\allow online tips' to 'disabled'
  to stop generating this traffic." `
@@ -588,7 +588,7 @@ New-NetFirewallRule -DisplayName "taskhostw" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "The main function of taskhostw.exe is to start the Windows Services based on
 DLLs whenever the computer boots up.
 It is a host for processes that are responsible for executing a DLL rather than an Exe." `
@@ -604,7 +604,7 @@ New-NetFirewallRule -DisplayName "Service Initiated Healing" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "sihclient.exe SIH Client is the client for fixing system components that are
 important for automatic Windows updates.
 This daily task runs the SIHC client (initiated by the healing server) to detect and
@@ -624,7 +624,7 @@ New-NetFirewallRule -DisplayName "Windows Update (Devicecensus)" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "Devicecensus is used to gather information about your PC to target
 builds through Windows Update,
 In order to target builds to your machine, we need to know a few important things:
@@ -651,7 +651,7 @@ New-NetFirewallRule -DisplayName "Update Session Orchestrator" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser $USOAccounts `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "wuauclt.exe is deprecated on Windows 10 (and Server 2016 and newer).
 The command line tool has been replaced by usoclient.exe.
 When the system starts an update session, it launches usoclient.exe,
@@ -671,7 +671,7 @@ New-NetFirewallRule -DisplayName "Mo Update Session Orchestrator" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser $USOAccounts `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "" `
 	@Logs | Format-Output @Logs
 
@@ -685,7 +685,7 @@ New-NetFirewallRule -DisplayName "Update Session Orchestrator" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "wuauclt.exe is deprecated on Windows 10 (and Server 2016 and newer).
 The command line tool has been replaced by usoclient.exe.
 When the system starts an update session, it launches usoclient.exe,
@@ -704,7 +704,7 @@ New-NetFirewallRule -DisplayName "WMI Provider Host" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 22 `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "" `
 	@Logs | Format-Output @Logs
 
@@ -718,7 +718,7 @@ New-NetFirewallRule -DisplayName "OpenSSH" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 22 `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "OpenSSH is connectivity tool for remote login with the SSH protocol,
 This rule applies to open source version of OpenSSH that is built into Windows." `
 	@Logs | Format-Output @Logs
@@ -733,7 +733,7 @@ New-NetFirewallRule -DisplayName "Console Host" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "" `
 	@Logs | Format-Output @Logs
 
@@ -749,7 +749,7 @@ New-NetFirewallRule -DisplayName "Windows Security Health Service" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser $NT_AUTHORITY_System `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "Windows Defender AV and the Windows Security app use similarly named services for specific purposes.
 The Windows Security app uses the Windows Security Service (SecurityHealthService or Windows Security Health Service),
 which in turn utilizes the Security Center service (wscsvc) to ensure the app provides the most
@@ -776,7 +776,7 @@ New-NetFirewallRule -DisplayName "Windows Device Management Certificate Installe
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "Allow outbound TCP traffic from Windows Device Management
 Certificate Installer." `
 	@Logs | Format-Output @Logs
@@ -791,7 +791,7 @@ New-NetFirewallRule -DisplayName "Windows Device Management Device Enroller" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 80, 443 `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "Allow outbound TCP traffic from Windows Device Management Device Enroller" `
 	@Logs | Format-Output @Logs
 
@@ -802,7 +802,7 @@ New-NetFirewallRule -DisplayName "Windows Device Management Enrollment Service" 
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "Allow outbound TCP traffic from Windows Device Management Enrollment Service." `
 	@Logs | Format-Output @Logs
 
@@ -816,7 +816,7 @@ New-NetFirewallRule -DisplayName "Windows Device Management Sync Client" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "Allow outbound TCP traffic from Windows Device Management Sync Client." `
 	@Logs | Format-Output @Logs
 

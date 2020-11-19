@@ -47,8 +47,8 @@ None.
 TODO: Update Copyright and start writing test code
 #>
 
-#region Unit test header
-# Initialization
+#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
 # TODO: adjust path to project settings
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
@@ -70,11 +70,11 @@ $Accept = "Template accept help message"
 $Deny = "Skip operation, template deny help message"
 Update-Context $TestContext $ThisScript @Logs
 if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+#endregion
 
 # Setup local variables
 $Group = "Test - Template rule"
 $LocalProfile = "Any"
-#endregion
 
 Enter-Test $ThisScript
 
@@ -93,7 +93,7 @@ New-NetFirewallRule -DisplayName "Test rule" `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "Test rule description" `
 	@Logs | Format-Output @Logs
 

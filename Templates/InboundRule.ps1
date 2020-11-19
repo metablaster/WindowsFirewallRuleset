@@ -107,7 +107,7 @@ if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot) @Logs) -or $Fo
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort Any -RemotePort Any `
 		-LocalUser Any -EdgeTraversalPolicy Block `
-		-InterfaceType $DefaultInterfaceterface `
+		-InterfaceType $DefaultInterface `
 		-Description "Inbound TCP template description" `
 		@Logs | Format-Output @Logs
 
@@ -119,7 +119,7 @@ if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot) @Logs) -or $Fo
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort Any -RemotePort Any `
 		-LocalUser Any -EdgeTraversalPolicy Block `
-		-InterfaceType $DefaultInterfaceterface `
+		-InterfaceType $DefaultInterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "Inbound UDP template description" `
 		@Logs | Format-Output @Logs
@@ -131,7 +131,7 @@ if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot) @Logs) -or $Fo
 		-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 0 `
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalUser Any -EdgeTraversalPolicy Block `
-		-InterfaceType $DefaultInterfaceterface `
+		-InterfaceType $DefaultInterface `
 		-Description "Inbound ICMP template description" `
 		@Logs | Format-Output @Logs
 
@@ -143,7 +143,7 @@ if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot) @Logs) -or $Fo
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort Any -RemotePort Any `
 		-LocalUser Any -EdgeTraversalPolicy Block `
-		-InterfaceType $DefaultInterfaceterface `
+		-InterfaceType $DefaultInterface `
 		-Owner $PrincipalSID -Package $PackageSID `
 		-Description "Inbound StoreApp TCP template description" `
 		@Logs | Format-Output @Logs

@@ -94,7 +94,7 @@ if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot) @Logs) -or $ForceL
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort 1161 -RemotePort 1024-65535 `
 		-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy DeferToApp `
-		-InterfaceType $DefaultInterfaceterface `
+		-InterfaceType $DefaultInterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "qBittorrent UDP listener, usually for DHT." `
 		@Logs | Format-Output @Logs
@@ -106,7 +106,7 @@ if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot) @Logs) -or $ForceL
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort 1161 -RemotePort 1024-65535 `
 		-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy DeferToApp `
-		-InterfaceType $DefaultInterfaceterface `
+		-InterfaceType $DefaultInterface `
 		-Description "qBittorrent TCP listener." `
 		@Logs | Format-Output @Logs
 
@@ -117,7 +117,7 @@ if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot) @Logs) -or $ForceL
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort 9000 -RemotePort 1024-65535 `
 		-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy DeferToApp `
-		-InterfaceType $DefaultInterfaceterface `
+		-InterfaceType $DefaultInterface `
 		-Description "qBittorrent Embedded tracker port." `
 		@Logs | Format-Output @Logs
 
@@ -129,7 +129,7 @@ if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot) @Logs) -or $ForceL
 		-LocalAddress 224.0.0.0-239.255.255.255 -RemoteAddress LocalSubnet4 `
 		-LocalPort 6771 -RemotePort 6771 `
 		-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy DeferToApp `
-		-InterfaceType $DefaultInterfaceterface `
+		-InterfaceType $DefaultInterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "UDP multicast search to identify other peers in your subnet that are also on
 torrents you are on." `
@@ -142,7 +142,7 @@ torrents you are on." `
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort 8080 -RemotePort Any `
 		-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy Allow `
-		-InterfaceType $DefaultInterfaceterface `
+		-InterfaceType $DefaultInterface `
 		-Description "qBittorrent Remote control from browser." `
 		@Logs | Format-Output @Logs
 }

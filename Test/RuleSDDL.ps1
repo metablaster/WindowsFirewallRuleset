@@ -63,7 +63,7 @@ Import-Module -Name Ruleset.UserInfo
 # User prompt
 Set-Variable -Name Accept -Scope Local -Option ReadOnly -Force -Value "Load test rule into firewall"
 Update-Context $TestContext "IPv$IPVersion" $Direction
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 # Setup local variables
 $Group = "Test - Get-SDDL"
@@ -74,16 +74,16 @@ Enter-Test
 
 Start-Test "Remove-NetFirewallRule"
 # Remove previous test
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore @Logs
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
 # Test Groups, Users and NT AUTHORITY
 #
 
 Start-Test "Get-SDDL + Merge-SDDL"
-$RuleUsers = Get-SDDL -Group "Users", "Administrators" -User $TestUser, $TestAdmin @Logs
-$RuleSystemUsers = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE" @Logs
-Merge-SDDL ([ref] $RuleUsers) $RuleSystemUsers @Logs
+$RuleUsers = Get-SDDL -Group "Users", "Administrators" -User $TestUser, $TestAdmin
+$RuleSystemUsers = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE"
+Merge-SDDL ([ref] $RuleUsers) $RuleSystemUsers
 $RuleUsers
 
 Start-Test "New-NetFirewallRule"
@@ -95,17 +95,16 @@ New-NetFirewallRule -DisplayName "Get-SDDL mix" `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $RuleUsers `
-	-InterfaceType $DefaultInterfaceterface `
-	-Description "Get-SDDL test rule for mixture of NT AUTHORITY and users groups" `
-	@Logs | Format-Output @Logs
+	-InterfaceType $DefaultInterface `
+	-Description "Get-SDDL test rule for mixture of NT AUTHORITY and users groups" | Format-Output
 
 #
 # Test APPLICATION PACKAGE AUTHORITY
 #
 
 Start-Test "Get-SDDL + Merge-SDDL for APPLICATION PACKAGE AUTHORITY"
-$RuleAppUsers = Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -User "Your Internet connection" @Logs
-Merge-SDDL ([ref] $RuleAppUsers) $UsersGroupSDDL @Logs
+$RuleAppUsers = Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -User "Your Internet connection"
+Merge-SDDL ([ref] $RuleAppUsers) $UsersGroupSDDL
 $RuleAppUsers
 
 Start-Test "Get-SDDL APPLICATION PACKAGE AUTHORITY"
@@ -117,9 +116,8 @@ New-NetFirewallRule -DisplayName "Get-SDDL APPLICATION PACKAGE AUTHORITY" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $RuleAppUsers `
-	-InterfaceType $DefaultInterfaceterface `
-	-Description "Get-SDDL test rule for APPLICATION PACKAGE AUTHORITY" `
-	@Logs | Format-Output @Logs
+	-InterfaceType $DefaultInterface `
+	-Description "Get-SDDL test rule for APPLICATION PACKAGE AUTHORITY" | Format-Output
 
 Update-Log
 Exit-Test

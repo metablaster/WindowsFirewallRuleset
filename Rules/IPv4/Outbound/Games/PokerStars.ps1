@@ -87,7 +87,7 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot) @Logs) -or $ForceLoa
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "PokerStars - Client" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 26002 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "Main game interface." @Logs | Format-Output @Logs
@@ -98,7 +98,7 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot) @Logs) -or $ForceLoa
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "PokerStars - Browser" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "In game HTML browser" @Logs | Format-Output @Logs
@@ -108,7 +108,7 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot) @Logs) -or $ForceLoa
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "PokerStars - Online update" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "" @Logs | Format-Output @Logs
@@ -118,7 +118,7 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot) @Logs) -or $ForceLoa
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "PokerStars - Update" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "Game updater" @Logs | Format-Output @Logs

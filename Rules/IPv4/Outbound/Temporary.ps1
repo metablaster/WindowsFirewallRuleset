@@ -83,7 +83,7 @@ New-NetFirewallRule -DisplayName "Port 443" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
 	-LocalUser $UsersGroupSDDL `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "Temporary open port 443 to internet, and disable ASAP." `
 	@Logs | Format-Output @Logs
 
@@ -94,7 +94,7 @@ New-NetFirewallRule -DisplayName "Port 80" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 80 `
 	-LocalUser $UsersGroupSDDL `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "Temporary open port 80 to internet, and disable ASAP." `
 	@Logs | Format-Output @Logs
 
@@ -106,7 +106,7 @@ New-NetFirewallRule -DisplayName "Installer" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $UsersGroupSDDL `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "Enable only to let some installer update or communicate to internet such as
 office update, and disable ASAP.
 required for ie. downloaded Click-to-Run which does not have persistent location.
@@ -120,7 +120,7 @@ New-NetFirewallRule -DisplayName "Services" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "Enable only to let any service communicate to internet,
 useful for troubleshooting, and disable ASAP." `
 	@Logs | Format-Output @Logs
@@ -140,7 +140,7 @@ New-NetFirewallRule -DisplayName "Store Apps" `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $UsersStoreAppsSDDL -Owner Any -Package * `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "Enable only to let store apps for standard users communicate to internet,
 useful for troubleshooting, and disable ASAP." `
 	@Logs | Format-Output @Logs
@@ -231,7 +231,7 @@ if ($Develop)
 		-LocalAddress Any -RemoteAddress DefaultGateway4 `
 		-LocalPort Any -RemotePort 48300 `
 		-LocalUser $ExtensionAccounts `
-		-InterfaceType $DefaultInterfaceterface `
+		-InterfaceType $DefaultInterface `
 		-Description "Extension rule for active users to allow BITS to Internet gateway device (IGD)" `
 		@Logs | Format-Output @Logs
 

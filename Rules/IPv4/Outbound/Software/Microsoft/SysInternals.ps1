@@ -87,7 +87,7 @@ if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot) @Logs) -or $Forc
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Sysinternals Autoruns" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $SysInternalsUsers `
 		-Description "Access to VirusTotal" @Logs | Format-Output @Logs
@@ -98,7 +98,7 @@ if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot) @Logs) -or $Forc
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Sysinternals ProcessExplorer" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $SysInternalsUsers `
 		-Description "Access to VirusTotal" @Logs | Format-Output @Logs
@@ -107,7 +107,7 @@ if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot) @Logs) -or $Forc
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Sysinternals ProcessMonitor" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		-LocalUser $SysInternalsUsers `
 		-Description "Access to symbols server" @Logs | Format-Output @Logs
@@ -116,7 +116,7 @@ if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot) @Logs) -or $Forc
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Sysinternals TcpView" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 43 `
 		-LocalUser $SysInternalsUsers `
 		-Description "WhoIs access" @Logs | Format-Output @Logs
@@ -125,7 +125,7 @@ if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot) @Logs) -or $Forc
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Sysinternals WhoIs" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 43 `
 		-LocalUser $SysInternalsUsers `
 		-Description "" @Logs | Format-Output @Logs

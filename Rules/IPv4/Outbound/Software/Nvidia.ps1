@@ -107,7 +107,7 @@ if ([System.Environment]::Is64BitOperatingSystem)
 
 			New-NetFirewallRule -Platform $Platform `
 				-DisplayName "Nvidia Container x64" -Service Any -Program $Program `
-				-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
+				-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 				-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 				-LocalUser $ContainerAccounts `
 				-Description "" @Logs | Format-Output @Logs
@@ -117,7 +117,7 @@ if ([System.Environment]::Is64BitOperatingSystem)
 
 			New-NetFirewallRule -Platform $Platform `
 				-DisplayName "Nvidia GeForce Experience x64" -Service Any -Program $Program `
-				-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
+				-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 				-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 				-LocalUser $UsersGroupSDDL `
 				-Description "" @Logs | Format-Output @Logs
@@ -128,7 +128,7 @@ if ([System.Environment]::Is64BitOperatingSystem)
 
 			New-NetFirewallRule -Platform $Platform `
 				-DisplayName "Nvidia Profile Updater" -Service Any -Program $Program `
-				-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
+				-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 				-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 				-LocalUser $UsersGroupSDDL `
 				-Description "" @Logs | Format-Output @Logs
@@ -168,7 +168,7 @@ if ([System.Environment]::Is64BitOperatingSystem)
 			Test-File $Program @Logs
 			New-NetFirewallRule -Platform $Platform `
 				-DisplayName "Nvidia NVDisplay Container x64" -Service Any -Program $Program `
-				-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
+				-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 				-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 				-LocalUser $NT_AUTHORITY_System `
 				-Description "" @Logs | Format-Output @Logs
@@ -201,7 +201,7 @@ if ((Test-Installation "Nvidia86" ([ref] $NvidiaRoot86) @Logs) -or $ForceLoad)
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Nvidia Container x86" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
+			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $ContainerAccounts `
 			-Description "" @Logs | Format-Output @Logs
@@ -213,7 +213,7 @@ if ((Test-Installation "Nvidia86" ([ref] $NvidiaRoot86) @Logs) -or $ForceLoad)
 			Test-File $Program @Logs
 			New-NetFirewallRule -Platform $Platform `
 				-DisplayName "Nvidia GeForce Experience x86" -Service Any -Program $Program `
-				-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
+				-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 				-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 				-LocalUser $UsersGroupSDDL `
 				-Description "" @Logs | Format-Output @Logs
@@ -224,7 +224,7 @@ if ((Test-Installation "Nvidia86" ([ref] $NvidiaRoot86) @Logs) -or $ForceLoad)
 		# Test-File $Program @Logs
 		# New-NetFirewallRule -Platform $Platform `
 		# 	-DisplayName "Nvidia Telemetry Container" -Service Any -Program $Program `
-		# 	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
+		# 	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		# 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		# 	-LocalUser $UsersGroupSDDL `
 		# 	-Description "" @Logs | Format-Output @Logs
@@ -234,7 +234,7 @@ if ((Test-Installation "Nvidia86" ([ref] $NvidiaRoot86) @Logs) -or $ForceLoad)
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Nvidia WebHelper TCP" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
 			-Description "" @Logs | Format-Output @Logs

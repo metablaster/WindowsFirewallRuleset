@@ -112,7 +112,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # TODO: Echo request description is same as for echo reply
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Echo Reply (0)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $DefaultInterfaceterface `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $DefaultInterface `
 	-Direction $Direction -Protocol ICMPv4 -IcmpType 0 -LocalAddress Any -RemoteAddress Any `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 	-Description "The data received in the echo message must be returned in the echo reply message.
@@ -133,7 +133,7 @@ Code 0 may be received from a gateway or a host." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Destination Unreachable (3)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $DefaultInterfaceterface `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $DefaultInterface `
 	-Direction $Direction -Protocol ICMPv4 -IcmpType 3 -LocalAddress Any -RemoteAddress Any `
 	-EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_System `
 	-Description "network specified in the RemoteAddress is unreachable, ie,
@@ -155,7 +155,7 @@ Codes 2 and 3 may be received from a host." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Destination Unreachable Fragmentation Needed (3)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $DefaultInterfaceterface `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $DefaultInterface `
 	-Direction $Direction -Protocol ICMPv4 -IcmpType 3:4 -LocalAddress Any -RemoteAddress Any `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 	-Description "Destination Unreachable Fragmentation Needed error messages are sent from any node that a packet traverses which is
@@ -163,7 +163,7 @@ unable to forward the packet because fragmentation was needed and the don't frag
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Parameter Problem (12)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $DefaultInterfaceterface `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $DefaultInterface `
 	-Direction $Direction -Protocol ICMPv4 -IcmpType 12 -LocalAddress Any -RemoteAddress Any `
 	-EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_System `
 	-Description "If the gateway or host processing a datagram finds a problem with the header parameters such that it cannot complete processing the
@@ -181,7 +181,7 @@ Code 0 may be received from a gateway or a host." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Timestamp Reply (14)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $DefaultInterfaceterface `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $DefaultInterface `
 	-Direction $Direction -Protocol ICMPv4 -IcmpType 14 -LocalAddress Any -RemoteAddress Any `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 	-Description "The data received (a timestamp) in the message is returned in the reply together with an additional timestamp.
@@ -208,7 +208,7 @@ Code 0 may be received from a gateway or a host." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Time Exceeded (11)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $DefaultInterfaceterface `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Any -InterfaceType $DefaultInterface `
 	-Direction $Direction -Protocol ICMPv4 -IcmpType 11 -LocalAddress Any -RemoteAddress Any `
 	-EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_System `
 	-Description "If the gateway processing a datagram finds the time to live field is zero it must discard the datagram.
@@ -229,7 +229,7 @@ Code 1 may be received from a host." @Logs | Format-Output @Logs
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Router Solicitation (10)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $DefaultInterfaceterface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Any -InterfaceType $DefaultInterface `
 	-Direction $Direction -Protocol ICMPv4 -IcmpType 10 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 	-Description "the ICMP Internet Router Discovery Protocol (IRDP), also called the Internet Router Discovery Protocol,
@@ -248,7 +248,7 @@ each separated by at least RTR_SOLICITATION_INTERVAL seconds." @Logs | Format-Ou
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Echo Request (8)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $DefaultInterfaceterface `
+	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $DefaultInterface `
 	-Direction $Direction -Protocol ICMPv4 -IcmpType 8 -LocalAddress Any -RemoteAddress $RemoteAddrWAN `
 	-EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_System `
 	-Description "The data received in the echo message must be returned in the echo reply message.
@@ -285,7 +285,7 @@ it is still a recommended practice to disable ICMP redirect messages (ignore the
 # TODO: figure out if redirects can be unsolicited, to set up EdgeTraversalPolicy (currently allowing by logic of comments)
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Redirect (5)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $DefaultInterfaceterface `
+	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $DefaultInterface `
 	-Direction $Direction -Protocol ICMPv4 -IcmpType 5 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 	-Description "ICMP redirect messages are used by routers to notify the hosts on the data link that a better route is available for a particular destination.
@@ -313,7 +313,7 @@ Codes 0, 1, 2, and 3 may be received from a gateway." @Logs | Format-Output @Log
 # TODO: we should probably allow this in public profile
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Router Advertisement (9)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $DefaultInterfaceterface `
+	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $DefaultInterface `
 	-Direction $Direction -Protocol ICMPv4 -IcmpType 9 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 	-Description "the ICMP Internet Router Discovery Protocol (IRDP), also called the Internet Router Discovery Protocol,
@@ -329,7 +329,7 @@ the interval between subsequent transmissions is randomized to reduce the probab
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Timestamp (13)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $DefaultInterfaceterface `
+	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile Public -InterfaceType $DefaultInterface `
 	-Direction $Direction -Protocol ICMPv4 -IcmpType 13 -LocalAddress Any -RemoteAddress $RemoteAddrWAN `
 	-EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_System `
 	-Description "The data received (a timestamp) in the message is returned in the reply together with an additional timestamp.
@@ -359,7 +359,7 @@ Code 0 may be received from a gateway or a host." @Logs | Format-Output @Logs
 #
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Echo Request (8)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $DefaultInterfaceterface `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $DefaultInterface `
 	-Direction $Direction -Protocol ICMPv4 -IcmpType 8 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_System `
 	-Description "The data received in the echo message must be returned in the echo reply message.
@@ -396,7 +396,7 @@ it is still a recommended practice to disable ICMP redirect messages (ignore the
 # TODO: figure out if redirects can be unsolicited, to set up EdgeTraversalPolicy (currently allowing by logic of comments)
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Redirect (5)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $DefaultInterfaceterface `
+	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $DefaultInterface `
 	-Direction $Direction -Protocol ICMPv4 -IcmpType 5 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 	-Description "ICMP redirect messages are used by routers to notify the hosts on the data link that a better route is available for a particular destination.
@@ -423,7 +423,7 @@ Codes 0, 1, 2, and 3 may be received from a gateway." @Logs | Format-Output @Log
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Router Advertisement (9)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $DefaultInterfaceterface `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $DefaultInterface `
 	-Direction $Direction -Protocol ICMPv4 -IcmpType 9 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-EdgeTraversalPolicy Block -LocalUser $NT_AUTHORITY_System `
 	-Description "the ICMP Internet Router Discovery Protocol (IRDP), also called the Internet Router Discovery Protocol,
@@ -440,7 +440,7 @@ with the advertisements from other routers on the same link." @Logs | Format-Out
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Timestamp (13)" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $DefaultInterfaceterface `
+	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $DefaultInterface `
 	-Direction $Direction -Protocol ICMPv4 -IcmpType 13 -LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-EdgeTraversalPolicy Allow -LocalUser $NT_AUTHORITY_System `
 	-Description "The data received (a timestamp) in the message is returned in the reply together with an additional timestamp.

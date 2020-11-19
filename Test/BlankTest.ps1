@@ -67,3 +67,4 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
 Enter-Test
 
 Exit-Test
+Update-Log

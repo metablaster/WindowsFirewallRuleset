@@ -181,6 +181,7 @@ $MaximumVariableCount	4096
 
 # NOTE: Following preferences should be always the same, do not modify!
 # The rest of preferences are either default or depending on "Develop" variable
+# TODO: Need to take into account existing user preferences if possible
 
 # To control how and if errors are displayed
 $ErrorActionPreference = "Continue"
@@ -198,7 +199,14 @@ $ProgressPreference	= "Continue"
 # Values: All, ModuleQualified or None
 $PSModuleAutoLoadingPreference = "All"
 
-# TODO: $PSDefaultParameterValues = $null
+if (!$InsideModule)
+{
+	$PSDefaultParameterValues = @{
+		"*:ErrorVariable" = "+ErrorBuffer"
+		"*:WarningVariable" = "+WarningBuffer"
+		"*:InformationVariable" = "+InfoBuffer"
+	}
+}
 
 if ($Develop)
 {
@@ -210,8 +218,8 @@ if ($Develop)
 	$VerbosePreference = "SilentlyContinue"
 	$DebugPreference = "SilentlyContinue"
 	$ConfirmPreference = "High"
-	$WhatIfPreference = "False"
-	# TODO: $ErrorView = "ConciseView"
+	# TODO: Run with true, and resolve errors
+	$WhatIfPreference = $false
 
 	# Two variables for each of the three logging components:
 	# The engine (the PowerShell program), the providers and the commands.
@@ -491,13 +499,13 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 	Set-Variable -Name ConnectionTimeout -Scope Global -Value 1
 
 	# Set to false to disable logging errors
-	Set-Variable -Name ErrorLogging -Scope Global -Value (!$Develop)
+	Set-Variable -Name ErrorLogging -Scope Global -Value $true #(!$Develop)
 
 	# Set to false to disable logging warnings
-	Set-Variable -Name WarningLogging -Scope Global -Value (!$Develop)
+	Set-Variable -Name WarningLogging -Scope Global -Value $true #(!$Develop)
 
 	# Set to false to disable logging information messages
-	Set-Variable -Name InformationLogging -Scope Global -Value (!$Develop)
+	Set-Variable -Name InformationLogging -Scope Global -Value $true #(!$Develop)
 
 	# User account name for which to search executables in user profile and non standard paths by default
 	# Also used for other defaults where standard user account is expected, ex. development as standard user

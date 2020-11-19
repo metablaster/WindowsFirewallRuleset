@@ -119,7 +119,7 @@ if ($false)
 		-LocalAddress ff02::fb -RemoteAddress LocalSubnet6 `
 		-LocalPort 5353 -RemotePort 5353 `
 		-LocalUser Any -EdgeTraversalPolicy Block `
-		-InterfaceType $DefaultInterfaceterface `
+		-InterfaceType $DefaultInterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP
 addresses within small networks that do not include a local name server.
@@ -134,7 +134,7 @@ packet formats and operating semantics as the unicast Domain Name System (DNS)."
 		-LocalAddress ff02::fb -RemoteAddress LocalSubnet6 `
 		-LocalPort 5353 -RemotePort 5353 `
 		-LocalUser Any -EdgeTraversalPolicy Block `
-		-InterfaceType $DefaultInterfaceterface `
+		-InterfaceType $DefaultInterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP
 addresses within small networks that do not include a local name server.
@@ -156,7 +156,7 @@ New-NetFirewallRule -DisplayName "DHCP Client" `
 	-LocalAddress Any -RemoteAddress DHCP6 `
 	-LocalPort 546 -RemotePort 547 `
 	-LocalUser Any -EdgeTraversalPolicy Block `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Dynamic Host Configuration Protocol (DHCP) allows DHCPv6 messages for stateful
 auto-configuration." `
@@ -182,7 +182,7 @@ New-NetFirewallRule -DisplayName "IPv4 over HTTPS" `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort IPHTTPSIn -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "Allow IPHTTPS tunneling technology to provide connectivity across HTTP
 proxies and firewalls.
 IP over HTTPS is a Microsoft network tunneling protocol.
@@ -204,7 +204,7 @@ New-NetFirewallRule -DisplayName "IPv6 Encapsulation" `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "Rule required to permit IPv6 traffic for
 ISATAP (Intra-Site Automatic Tunnel Addressing Protocol) and 6to4 tunneling services.
 ISATAP is an IPv6 transition mechanism meant to transmit IPv6 packets between dual-stack nodes on
@@ -224,7 +224,7 @@ New-NetFirewallRule -DisplayName "Teredo" `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Teredo -RemotePort Any `
 	-LocalUser Any -EdgeTraversalPolicy Block `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Allow Teredo edge traversal, a technology that provides address assignment and
 automatic tunneling for unicast IPv6 traffic when an IPv6/IPv4 host is located behind an IPv4

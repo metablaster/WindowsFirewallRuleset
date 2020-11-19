@@ -59,8 +59,8 @@ Initialize-Project -Abort
 Import-Module -Name Ruleset.Logging
 
 # User prompt
-Update-Context $TestContext $ThisScript @Logs
-if (!(Approve-Execute -Accept $Accept -Deny $Deny @Logs)) { exit }
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 <#
@@ -148,22 +148,22 @@ $InformationPreference = "SilentlyContinue"
 
 Start-Test "Generate errors"
 $Folder = "C:\CrazyFolder"
-Get-ChildItem -Path $Folder @Logs
+Get-ChildItem -Path $Folder
 
 Start-Test "No errors"
-Get-ChildItem -Path "C:\" @Logs | Out-Null
+Get-ChildItem -Path "C:\" | Out-Null
 
 Start-Test "Test-Error"
-Test-Error @Logs
+Test-Error
 
 Start-Test "Test-Pipeline"
-Get-ChildItem -Path $Folder @Logs | Test-Pipeline @Logs
+Get-ChildItem -Path $Folder | Test-Pipeline
 
 Start-Test "Test-Parent"
-Test-Parent @Logs
+Test-Parent
 
 Start-Test "Test-Combo"
-Test-Combo @Logs
+Test-Combo
 
 Update-Log
 Exit-Test

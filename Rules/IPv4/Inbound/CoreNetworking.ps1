@@ -123,7 +123,7 @@ if ($true)
 		-LocalAddress 224.0.0.251 -RemoteAddress LocalSubnet4 `
 		-LocalPort 5353 -RemotePort 5353 `
 		-LocalUser Any -EdgeTraversalPolicy Block `
-		-InterfaceType $DefaultInterfaceterface `
+		-InterfaceType $DefaultInterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
 within small networks that do not include a local name server.
@@ -137,7 +137,7 @@ packet formats and operating semantics as the unicast Domain Name System (DNS)."
 		-LocalAddress 224.0.0.251 -RemoteAddress LocalSubnet4 `
 		-LocalPort 5353 -RemotePort 5353 `
 		-LocalUser Any -EdgeTraversalPolicy Block `
-		-InterfaceType $DefaultInterfaceterface `
+		-InterfaceType $DefaultInterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to IP addresses
 within small networks that do not include a local name server.
@@ -157,7 +157,7 @@ New-NetFirewallRule -DisplayName "DHCP Client" `
 	-LocalAddress Any -RemoteAddress DHCP4 `
 	-LocalPort 68 -RemotePort 67 `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface -EdgeTraversalPolicy Block `
+	-InterfaceType $DefaultInterface -EdgeTraversalPolicy Block `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Allow DHCPv4 messages for stateful auto-configuration.
 UDP port number 67 is the destination port of a server, and UDP port number 68 is used by the client." `
@@ -170,7 +170,7 @@ New-NetFirewallRule -DisplayName "DHCP Client (Discovery)" `
 	-LocalAddress 255.255.255.255 -RemoteAddress Any `
 	-LocalPort 68 -RemotePort 67 `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface -EdgeTraversalPolicy Block `
+	-InterfaceType $DefaultInterface -EdgeTraversalPolicy Block `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "The DHCP client broadcasts a DHCPDISCOVER message on the network subnet using
 the destination address 255.255.255.255 (limited broadcast) or
@@ -186,7 +186,7 @@ New-NetFirewallRule -DisplayName "DHCP Server" `
 	-LocalAddress 255.255.255.255 -RemoteAddress Any `
 	-LocalPort 67 -RemotePort 68 `
 	-LocalUser Any `
-	-InterfaceType $DefaultInterfaceterface -EdgeTraversalPolicy Block `
+	-InterfaceType $DefaultInterface -EdgeTraversalPolicy Block `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "The DHCP client broadcasts a DHCPDISCOVER message on the network subnet using
 the destination address 255.255.255.255 (limited broadcast) or
@@ -206,7 +206,7 @@ New-NetFirewallRule -DisplayName "Internet Group Management Protocol" `
 	-Direction $Direction -Protocol 2 -LocalAddress Any -RemoteAddress LocalSubnet4 `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
-	-InterfaceType $DefaultInterfaceterface `
+	-InterfaceType $DefaultInterface `
 	-Description "IGMP messages are sent and received by nodes to create, join and depart multicast groups." @Logs | Format-Output @Logs
 
 Update-Log

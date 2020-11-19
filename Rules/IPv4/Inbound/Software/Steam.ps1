@@ -86,7 +86,7 @@ if ((Test-Installation "Steam" ([ref] $SteamRoot) @Logs) -or $ForceLoad)
 	Test-File $Program @Logs
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Steam Dedicated or Listen Servers" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort 27015 -RemotePort Any `
 		-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
 		-Description "SRCDS Rcon port" @Logs | Format-Output @Logs
@@ -95,7 +95,7 @@ if ((Test-Installation "Steam" ([ref] $SteamRoot) @Logs) -or $ForceLoad)
 	# https://support.steampowered.com/kb_article.php?ref=8571-GLVN-8711
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Steam In-Home Streaming" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 27031, 27036 -RemotePort 27031, 27036 `
 		-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "Steam In-Home streaming, one PC sends its video and audio to another PC.
@@ -103,7 +103,7 @@ if ((Test-Installation "Steam" ([ref] $SteamRoot) @Logs) -or $ForceLoad)
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Steam In-Home Streaming" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $DefaultInterfaceterface `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 27036, 27037 -RemotePort 27036, 27037 `
 		-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
 		-Description "Steam In-Home streaming, one PC sends its video and audio to another PC.

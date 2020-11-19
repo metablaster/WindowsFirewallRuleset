@@ -41,6 +41,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - Added new module `Ruleset.Compatibility` because `Appx` module no longer works since PowerShell
   Core 7.1
   - Improved function `Approve-Execute`
+  - Logging without the need for @Logs hash (In progress...)
 
 - Documentation
 
@@ -60,6 +61,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Scripts to start/stop packet trace and capture.
   - Utility script to list "hidden" rule properties
+  - More control and utilization of preference variables, see: `ProjectSettings.ps1`
 
 - Bugfix
 
