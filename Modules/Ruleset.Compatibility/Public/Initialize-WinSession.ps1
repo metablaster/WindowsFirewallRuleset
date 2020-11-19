@@ -74,6 +74,7 @@ System.Management.Automation.Runspaces.PSSession
 Following modifications by metablaster November 2020:
 - Added comment based help based on original comments
 - Code formatting according to the rest of project design
+- Added HelpURI link to project location
 
 .LINK
 https://github.com/PowerShell/WindowsCompatibility
@@ -99,7 +100,7 @@ function Initialize-WinSession
 		[switch] $PassThru
 	)
 
-	[bool] $verboseFlag = $PSBoundParameters['Verbose']
+	[bool] $VerboseFlag = $PSBoundParameters["Verbose"]
 
 	if ($ComputerName -eq ".")
 	{
@@ -137,7 +138,7 @@ function Initialize-WinSession
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] The compatibility session name is '$script:SessionName'."
 
-	$session = Get-PSSession | Where-Object {
+	$Session = Get-PSSession | Where-Object {
 		$_.ComputerName -eq $ComputerName -and
 		$_.ConfigurationName -eq $ConfigurationName -and
 		$_.Name -eq $script:SessionName
@@ -146,26 +147,26 @@ function Initialize-WinSession
 	# Deal with the possibilities of multiple sessions. This might arise
 	# from the user hitting ctrl-C. We'll make the assumption that the
 	# first one returned is the correct one and we'll remove the rest.
-	$session, $rest = $session
-	if ($rest)
+	$Session, $Rest = $Session
+	if ($Rest)
 	{
-		foreach ($s in $rest)
+		foreach ($Entry in $Rest)
 		{
-			Remove-PSSession $s
+			Remove-PSSession $Entry
 		}
 	}
 
-	if ($session -and $session.State -ne "Opened")
+	if ($Session -and $Session.State -ne "Opened")
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing closed compatibility session."
-		Remove-PSSession $session
-		$session = $null
+		Remove-PSSession $Session
+		$Session = $null
 	}
 
-	if (-not $session)
+	if (-not $Session)
 	{
-		$newPSSessionParameters = @{
-			Verbose = $verboseFlag
+		$NewPSSessionParameters = @{
+			Verbose = $VerboseFlag
 			ComputerName = $ComputerName
 			Name = $script:sessionName
 			ConfigurationName = $configurationName
@@ -173,19 +174,19 @@ function Initialize-WinSession
 		}
 		if ($Credential)
 		{
-			$newPSSessionParameters.Credential = $Credential
+			$NewPSSessionParameters.Credential = $Credential
 		}
 		if ($ComputerName -eq "localhost" -or $ComputerName -eq [environment]::MachineName)
 		{
-			$newPSSessionParameters.EnableNetworkAccess = $true
+			$NewPSSessionParameters.EnableNetworkAccess = $true
 		}
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Created new compatibility session on host '$computername'"
-		$session = New-PSSession @newPSSessionParameters | Select-Object -First 1
-		if ($session.ComputerName -eq "localhost")
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Created new compatibility session on host '$Computername'"
+		$Session = New-PSSession @NewPSSessionParameters | Select-Object -First 1
+		if ($Session.ComputerName -eq "localhost")
 		{
-			$usingPath = (Get-Location).Path
-			Invoke-Command $session { Set-Location $using:usingPath }
+			$UsingPath = (Get-Location).Path
+			Invoke-Command $Session { Set-Location $using:usingPath }
 		}
 	}
 	else
@@ -195,6 +196,6 @@ function Initialize-WinSession
 
 	if ($PassThru)
 	{
-		return $session
+		return $Session
 	}
 }

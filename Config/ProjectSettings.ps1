@@ -58,7 +58,7 @@ TODO: Use advanced parameters to control Verbose, Debug, Confirm and WhatIf loca
 TODO: Variable description should be part of variable object
 #>
 
-[CmdletBinding(PositionalBinding = $false)]
+[CmdletBinding()]
 param(
 	[Parameter()]
 	[switch] $InsideModule,
@@ -102,7 +102,7 @@ if ($Develop)
 	Set-StrictMode -Version Latest
 
 	# Enable showing values of preference variables in requested scope
-	if ($PSBoundParameters.ContainsKey("ShowPreference"))
+	if ($ShowPreference)
 	{
 		$PSBoundParameters.Remove("ShowPreference") | Out-Null
 		Set-Variable -Name ShowPreference -Scope Global -Value $true

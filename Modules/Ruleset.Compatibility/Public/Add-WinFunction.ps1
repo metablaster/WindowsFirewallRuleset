@@ -76,6 +76,8 @@ None. Add-WinFunction does not generate any output
 Following modifications by metablaster November 2020:
 - Added comment based help based on original comments
 - Code formatting according to the rest of project design
+- Replace double quotes with single quotes
+- Added HelpURI link to project location
 
 .LINK
 https://github.com/PowerShell/WindowsCompatibility
@@ -106,14 +108,14 @@ function Add-WinFunction
 	)
 
 	# Make sure the session is initialized
-	[void] $PSBoundParameters.Remove('Name')
-	[void] $PSBoundParameters.Remove('ScriptBlock')
+	[void] $PSBoundParameters.Remove("Name")
+	[void] $PSBoundParameters.Remove("ScriptBlock")
 
 	# the session variable will be captured in the closure
-	$session = Initialize-WinSession @PSBoundParameters -PassThru
-	$wrapper = {
-		Invoke-Command -Session $session -ScriptBlock $ScriptBlock -ArgumentList $args
+	$Session = Initialize-WinSession @PSBoundParameters -PassThru
+	$Wrapper = {
+		Invoke-Command -Session $Session -ScriptBlock $ScriptBlock -ArgumentList $args
 	}
 
-	Set-Item function:Global:$Name $wrapper.GetNewClosure();
+	Set-Item function:Global:$Name $Wrapper.GetNewClosure();
 }

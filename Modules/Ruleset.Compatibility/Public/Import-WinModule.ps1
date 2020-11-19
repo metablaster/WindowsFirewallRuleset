@@ -82,9 +82,10 @@ If present, the ModuleInfo objects will be written to the output pipe
 as deserialized (PSObject) objects
 
 .EXAMPLE
-PS> Import-WinModule PnpDevice; Get-Command -Module PnpDevice
+PS> Import-WinModule PnpDevice
+PS> Get-Command -Module PnpDevice
 
-This example imports the 'PnpDevice' module.
+This example imports the "PnpDevice" module.
 
 .EXAMPLE
 PS> Import-WinModule Microsoft.PowerShell.Management; Get-Command Get-EventLog
@@ -108,6 +109,7 @@ System.Management.Automation.PSObject
 Following modifications by metablaster November 2020:
 - Added comment based help based on original comments
 - Code formatting according to the rest of project design
+- Added HelpURI link to project location
 
 .LINK
 https://github.com/PowerShell/WindowsCompatibility
@@ -151,81 +153,82 @@ function Import-WinModule
 		[switch] $PassThru
 	)
 
-	[bool] $verboseFlag = $PSBoundParameters['Verbose']
+	[bool] $VerboseFlag = $PSBoundParameters["Verbose"]
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Connecting to compatibility session."
-	$initializeWinSessionParameters = @{
-		Verbose = $verboseFlag
+	$InitializeWinSessionParameters = @{
+		Verbose = $VerboseFlag
 		ComputerName = $ComputerName
 		ConfigurationName = $ConfigurationName
 		Credential = $Credential
 		PassThru = $true
 	}
 
-	[PSSession] $session = Initialize-WinSession @initializeWinSessionParameters
+	[PSSession] $Session = Initialize-WinSession @InitializeWinSessionParameters
 
 	# Mapping wildcards to a regex
 	$Exclude = ($Exclude -replace "\*", ".*") -join "|"
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting module list..."
-	$importNames = Invoke-Command -Session $session {
+	$ImportNames = Invoke-Command -Session $Session {
 		# Running on the Remote Machine
-		$m = (Get-Module -ListAvailable -Name $using:Name).
-		Where{ $_.Name -notin $using:NeverImportList }
+		$Module = (Get-Module -ListAvailable -Name $using:Name).Where{
+			$_.Name -notin $using:NeverImportList
+		}
 
 		# These can use wildcards e.g. Az*,x* will probably be common
 		if ($using:Exclude)
 		{
-			$m = $m.Where{ $_.Name -NotMatch $using:Exclude }
+			$Module = $Module.Where{ $_.Name -NotMatch $using:Exclude }
 		}
 
-		$m.Name | Select-Object -Unique
+		$Module.Name | Select-Object -Unique
 	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Importing modules..."
-	$importModuleParameters = @{
+	$ImportModuleParameters = @{
 		Global = $true
 		Force = $Force
-		Verbose = $verboseFlag
-		PSSession = $session
+		Verbose = $VerboseFlag
+		PSSession = $Session
 		PassThru = $PassThru
 		DisableNameChecking = $DisableNameChecking
 	}
 
 	if ($Prefix)
 	{
-		$importModuleParameters.Prefix = $Prefix
+		$ImportModuleParameters.Prefix = $Prefix
 	}
 
 	if ($PassThru)
 	{
-		$importModuleParameters.PassThru = $PassThru
+		$ImportModuleParameters.PassThru = $PassThru
 	}
 
-	if ($importNames)
+	if ($ImportNames)
 	{
 		# Extract the 'never clobber' modules from the list
-		$noClobberNames = $importNames.where{ $_ -in $script:NeverClobberList }
-		$importNames = $importNames.where{ $_ -notin $script:NeverClobberList }
+		$NoClobberNames = $ImportNames.Where{ $_ -in $script:NeverClobberList }
+		$ImportNames = $ImportNames.Where{ $_ -notin $script:NeverClobberList }
 
-		if ($importNames)
+		if ($ImportNames)
 		{
-			Import-Module -Name $ImportNames -NoClobber:$NoClobber @importModuleParameters
+			Import-Module -Name $ImportNames -NoClobber:$NoClobber @ImportModuleParameters
 		}
 
-		if ($noClobberNames)
+		if ($NoClobberNames)
 		{
-			$importModuleParameters.PassThru = $true
-			foreach ($name in $noClobberNames)
+			$ImportModuleParameters.PassThru = $true
+			foreach ($name in $NoClobberNames)
 			{
-				$module = Import-Module -Name $name -NoClobber @importModuleParameters
+				$Module = Import-Module -Name $name -NoClobber @ImportModuleParameters
 				# Hack using private reflection to keep the proxy module from shadowing the real module.
 				$null = [PSModuleInfo].
-				GetMethod('SetName', [System.Reflection.BindingFlags]'Instance, NonPublic').
-				Invoke($module, @($module.Name + '.WinModule'))
+				GetMethod("SetName", [System.Reflection.BindingFlags]"Instance, NonPublic").
+				Invoke($Module, @($Module.Name + ".WinModule"))
 				if ($PassThru.IsPresent)
 				{
-					$module
+					$Module
 				}
 			}
 		}

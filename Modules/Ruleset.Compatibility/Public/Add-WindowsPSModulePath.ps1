@@ -52,6 +52,7 @@ None. Add-WindowsPSModulePath does not generate any output
 Following modifications by metablaster November 2020:
 - Added comment based help based on original comments
 - Code formatting according to the rest of project design
+- Added HelpURI link to project location
 
 .LINK
 https://github.com/PowerShell/WindowsCompatibility
@@ -73,7 +74,7 @@ function Add-WindowsPSModulePath
 		return
 	}
 
-	$paths = @(
+	$ModuleDirectory = @(
 		$Env:PSModulePath -split [System.IO.Path]::PathSeparator
 		"${Env:UserProfile}\Documents\WindowsPowerShell\Modules"
 		"${Env:ProgramFiles}\WindowsPowerShell\Modules"
@@ -84,21 +85,21 @@ function Add-WindowsPSModulePath
 			[System.EnvironmentVariableTarget]::Machine) -split [System.IO.Path]::PathSeparator
 	)
 
-	$pathTable = [ordered] @{}
+	$PathTable = [ordered] @{}
 
-	foreach ($path in $paths)
+	foreach ($PathEntry in $ModuleDirectory)
 	{
-		if ($pathTable[$path])
+		if ($PathTable[$PathEntry])
 		{
 			continue
 		}
 
-		if ($PSCmdlet.ShouldProcess($path, "Add to PSModulePath"))
+		if ($PSCmdlet.ShouldProcess($PathEntry, "Add to PSModulePath"))
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Adding '$path' to the PSModulePath."
-			$pathTable[$path] = $true
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Adding '$PathEntry' to the PSModulePath."
+			$PathTable[$PathEntry] = $true
 		}
 	}
 
-	$Env:PSModulePath = $pathTable.Keys -join [System.IO.Path]::PathSeparator
+	$Env:PSModulePath = $PathTable.Keys -join [System.IO.Path]::PathSeparator
 }

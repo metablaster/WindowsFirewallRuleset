@@ -79,6 +79,7 @@ None. Copy-WinModule does not generate any output
 Following modifications by metablaster November 2020:
 - Added comment based help based on original comments
 - Code formatting according to the rest of project design
+- Added HelpURI link to project location
 
 .LINK
 https://github.com/PowerShell/WindowsCompatibility
@@ -107,64 +108,64 @@ function Copy-WinModule
 		[string] $Destination
 	)
 
-	[bool] $verboseFlag = $PSBoundParameters['Verbose']
-	[bool] $whatIfFlag = $PSBoundParameters['WhatIf']
-	[bool] $confirmFlag = $PSBoundParameters['Confirm']
+	[bool] $VerboseFlag = $PSBoundParameters["Verbose"]
+	[bool] $WhatIfFlag = $PSBoundParameters["WhatIf"]
+	[bool] $ConfirmFlag = $PSBoundParameters["Confirm"]
 
 	if (-not $Destination)
 	{
 		# If the user hasn't specified a destination, default to the user module directory
-		$parts = [environment]::GetFolderPath([System.Environment+SpecialFolder]::MyDocuments),
+		$Parts = [System.Environment]::GetFolderPath([System.Environment+SpecialFolder]::MyDocuments),
 		"PowerShell",
 		"Modules"
-		$Destination = Join-Path @parts
+		$Destination = Join-Path @Parts
 	}
 
 	# Resolve the path which also verifies that the path exists
-	$resolvedDestination = Resolve-Path $Destination -ErrorAction SilentlyContinue
+	$ResolvedDestination = Resolve-Path $Destination -ErrorAction SilentlyContinue
 	if (-not $?)
 	{
 		throw "The destination path '$Destination' could not be resolved. Please ensure that the path exists and try the command again"
 	}
 
 	# Make sure it's a FileSystem location
-	if ($resolvedDestination.provider.ImplementingType -ne [Microsoft.PowerShell.Commands.FileSystemProvider] )
+	if ($ResolvedDestination.Provider.ImplementingType -ne [Microsoft.PowerShell.Commands.FileSystemProvider] )
 	{
 		throw "Modules can only be installed to paths in the filesystem. Please choose a different location and try the command again"
 	}
 
-	$Destination = $resolvedDestination.Path
+	$Destination = $ResolvedDestination.Path
 
-	$initializeWinSessionParameters = @{
-		Verbose = $verboseFlag
+	$InitializeWinSessionParameters = @{
+		Verbose = $VerboseFlag
 		ComputerName = $ComputerName
 		ConfigurationName = $ConfigurationName
 		Credential = $Credential
 		PassThru = $true
 	}
 
-	[PSSession] $session = Initialize-WinSession @initializeWinSessionParameters
+	[PSSession] $Session = Initialize-WinSession @InitializeWinSessionParameters
 
-	$copyItemParameters = @{
-		WhatIf = $whatIfFlag
-		Verbose = $verboseFlag
-		Confirm = $confirmFlag
+	$CopyItemParameters = @{
+		WhatIf = $WhatIfFlag
+		Verbose = $VerboseFlag
+		Confirm = $ConfirmFlag
 		Recurse = $true
 	}
 
 	if ($ComputerName -ne "localhost" -and $ComputerName -ne ".")
 	{
-		$copyItemParameters.FromSession = $session
+		$CopyItemParameters.FromSession = $Session
 	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching for compatible modules..."
-	$modulesToCopy = Invoke-Command $session {
+	$ModulesToCopy = Invoke-Command $Session {
 		Get-Module -ListAvailable -Name $using:CompatibleModules |
 		Select-Object Name, ModuleBase
 	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching for CIM modules..."
-	$modulesToCopy += Invoke-Command $session {
+	$ModulesToCopy += Invoke-Command $Session {
 		Get-Module -ListAvailable |
 		Where-Object { $_.NestedModules[0].path -match '\.cdxml$' } |
 		Select-Object Name, ModuleBase
@@ -172,23 +173,23 @@ function Copy-WinModule
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Copying modules to path '$Destination'"
 
-	$modulesToCopy = $modulesToCopy | Sort-Object -Unique -Property Name
-	foreach ($m in $modulesToCopy)
+	$ModulesToCopy = $ModulesToCopy | Sort-Object -Unique -Property Name
+	foreach ($Module in $ModulesToCopy)
 	{
 		# Skip modules that aren't on the named module list
-		if (-not ($name.Where{ $m.Name -like $_ }))
+		if (-not ($Name.Where{ $Module.Name -like $_ }))
 		{
 			continue
 		}
 
-		$fullDestination = Join-Path $Destination $m.name
-		if (-not (Test-Path $fullDestination))
+		$FullDestination = Join-Path $Destination $Module.name
+		if (-not (Test-Path $FullDestination))
 		{
-			Copy-Item -Path $m.ModuleBase -Destination $fullDestination @copyItemParameters
+			Copy-Item -Path $Module.ModuleBase -Destination $FullDestination @CopyItemParameters
 		}
 		else
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Skipping module '$($m.Name)'; module directory already exists"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Skipping module '$($Module.Name)'; module directory already exists"
 		}
 	}
 }

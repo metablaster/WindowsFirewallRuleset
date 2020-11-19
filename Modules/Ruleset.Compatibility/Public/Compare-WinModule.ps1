@@ -69,6 +69,7 @@ None. You cannot pipe objects to Compare-WinModule
 Following modifications by metablaster November 2020:
 - Added comment based help based on original comments
 - Code formatting according to the rest of project design
+- Added HelpURI link to project location
 
 .LINK
 https://github.com/PowerShell/WindowsCompatibility
@@ -94,30 +95,33 @@ function Compare-WinModule
 		[PSCredential] $Credential
 	)
 
-	[bool] $verboseFlag = $PSBoundParameters['Verbose']
+	[bool] $VerboseFlag = $PSBoundParameters["Verbose"]
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Initializing compatibility session"
 
-	$initializeWinSessionParameters = @{
-		Verbose = $verboseFlag
+	$InitializeWinSessionParameters = @{
+		Verbose = $VerboseFlag
 		ComputerName = $ComputerName
 		ConfigurationName = $ConfigurationName
 		Credential = $Credential
 		PassThru = $true
 	}
 
-	[PSSession] $session = Initialize-WinSession @initializeWinSessionParameters
+	[PSSession] $session = Initialize-WinSession @InitializeWinSessionParameters
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting local modules..."
-	$LocalModule = (Get-Module -ListAvailable -Verbose:$false).Where{ $_.Name -like $Name }
+	$LocalModule = (Get-Module -ListAvailable -Verbose:$false).Where{
+		$_.Name -like $Name
+	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting remote modules..."
 	# Use Invoke-Command here instead of the -PSSession option on Get-Module because
 	# we're only returning a subset of the data
 	$RemoteModule = @(Invoke-Command -Session $session {
-			(Get-Module -ListAvailable).
-			Where{ $_.Name -notin $using:NeverImportList -and $_.Name -like $using:Name } |
-			Select-Object Name, Version })
+			(Get-Module -ListAvailable).Where{
+				$_.Name -notin $using:NeverImportList -and $_.Name -like $using:Name
+			} |	Select-Object Name, Version
+		})
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Comparing module set..."
 	Compare-Object $LocalModule $RemoteModule -Property Name, Version |

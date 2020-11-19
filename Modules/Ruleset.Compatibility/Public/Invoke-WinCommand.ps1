@@ -82,6 +82,7 @@ System.Management.Automation.PSObject
 Following modifications by metablaster November 2020:
 - Added comment based help based on original comments
 - Code formatting according to the rest of project design
+- Added HelpURI link to project location
 
 .LINK
 https://github.com/PowerShell/WindowsCompatibility
@@ -110,12 +111,12 @@ function Invoke-WinCommand
 		[Object[]] $ArgumentList
 	)
 
-	[void] $PSBoundParameters.Remove('ScriptBlock')
-	[void] $PSBoundParameters.Remove('ArgumentList')
+	[void] $PSBoundParameters.Remove("ScriptBlock")
+	[void] $PSBoundParameters.Remove("ArgumentList")
 
 	# Make sure the session is initialized
-	[PSSession] $session = Initialize-WinSession @PSBoundParameters -PassThru
+	[PSSession] $Session = Initialize-WinSession @PSBoundParameters -PassThru
 
 	# And invoke the scriptblock in the session
-	Invoke-Command -Session $session -ScriptBlock $ScriptBlock -ArgumentList $ArgumentList
+	Invoke-Command -Session $Session -ScriptBlock $ScriptBlock -ArgumentList $ArgumentList
 }

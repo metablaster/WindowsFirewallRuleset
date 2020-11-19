@@ -75,6 +75,7 @@ System.Management.Automation.PSObject
 Following modifications by metablaster November 2020:
 - Added comment based help based on original comments
 - Code formatting according to the rest of project design
+- Added HelpURI link to project location
 
 .LINK
 https://github.com/PowerShell/WindowsCompatibility
@@ -103,32 +104,34 @@ function Get-WinModule
 		[switch] $Full
 	)
 
-	[bool] $verboseFlag = $PSBoundParameters['Verbose']
+	[bool] $VerboseFlag = $PSBoundParameters["Verbose"]
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Connecting to compatibility session"
-	$initializeWinSessionParameters = @{
-		Verbose = $verboseFlag
+	$InitializeWinSessionParameters = @{
+		Verbose = $VerboseFlag
 		ComputerName = $ComputerName
 		ConfigurationName = $ConfigurationName
 		Credential = $Credential
 		PassThru = $true
 	}
 
-	[PSSession] $session = Initialize-WinSession @initializeWinSessionParameters
+	[PSSession] $Session = Initialize-WinSession @InitializeWinSessionParameters
 
-	if ($name -ne '*')
+	if ($Name -ne "*")
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting the list of available modules matching '$name'."
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting the list of available modules matching '$Name'."
 	}
 	else
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting the list of available modules"
 	}
 
-	$propertiesToReturn = if ($Full) { '*' } else { 'Name', 'Version', 'Description' }
-	Invoke-Command -Session $session -ScriptBlock {
+	$PropertiesToReturn = if ($Full) { '*' }
+	else { 'Name', 'Version', 'Description' }
+
+	Invoke-Command -Session $Session -ScriptBlock {
 		Get-Module -ListAvailable -Name $using:Name |
 		Where-Object Name -NotIn $using:NeverImportList |
-		Select-Object $using:propertiesToReturn
-	} | Select-Object $propertiesToReturn | Sort-Object Name
+		Select-Object $using:PropertiesToReturn
+	} | Select-Object $PropertiesToReturn | Sort-Object Name
 }

@@ -6,7 +6,6 @@ This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
 Copyright (C) 2017 Pyprohly
-Copyright (C) 2019 Microsoft Corporation
 Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
