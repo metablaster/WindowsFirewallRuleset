@@ -43,7 +43,7 @@ None. You cannot pipe objects to TestProjectSettings.ps1
 None. TestProjectSettings.ps1 does not generate any output
 
 .NOTES
-TODO: Needs update
+None.
 #>
 
 #region Initialization
@@ -78,20 +78,20 @@ else
 	$DebugPreference = "Continue"
 }
 
-Write-Debug -Message "[$ThisScript] DebugPreference before: $DebugPreference" -Debug
+Write-Debug -Message "[$ThisScript] DebugPreference before: $DebugPreference" # -Debug
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 -ShowPreference
-Write-Debug -Message "[$ThisScript] DebugPreference after: $DebugPreference" -Debug
+Write-Debug -Message "[$ThisScript] DebugPreference after: $DebugPreference" # -Debug
 
 # NOTE: For this test to show correct result $DebugPreference in ProjectSettings must be "Continue"
 Start-Test "Script module preferences"
 $TestModule = New-Module -Name Dynamic.TestPreference -ErrorAction Stop -ScriptBlock {
 	Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value "Dynamic.TestPreference"
-	Write-Debug -Message "[Dynamic.TestPreference] DebugPreference before: $DebugPreference" -Debug
+	Write-Debug -Message "[Dynamic.TestPreference] DebugPreference before: $DebugPreference" # -Debug
 
 	. $PSScriptRoot\..\Config\ProjectSettings.ps1 -ShowPreference -InsideModule
 	. $PSScriptRoot\..\Modules\ModulePreferences.ps1
 
-	Write-Debug -Message "[Dynamic.TestPreference] DebugPreference after: $DebugPreference" -Debug
+	Write-Debug -Message "[Dynamic.TestPreference] DebugPreference after: $DebugPreference" # -Debug
 } | Import-Module -Scope Global -PassThru
 
 Start-Test "Script module no exports"
@@ -106,25 +106,26 @@ if ($ExportCount -gt 0)
 
 Remove-Module -Name Dynamic.TestPreference -ErrorAction Stop
 
-Start-Test "ProjectConstants"
-Write-Information -Tags "Test" -MessageData "INFO: PolicyStore: $PolicyStore"
-Write-Information -Tags "Test" -MessageData "INFO: Platform: $Platform"
-Write-Information -Tags "Test" -MessageData "INFO: ProjectRoot: $ProjectRoot"
-Write-Information -Tags "Test" -MessageData "INFO: PSModulePath:"
-Split-Path -Path $env:PSModulePath.Split(";")
-Write-Information -Tags "Test" -MessageData "INFO: Force: $ForceLoad"
-Write-Information -Tags "Test" -MessageData "INFO: Interface: $DefaultInterface"
+Start-Test "Don't show preferences"
+. $PSScriptRoot\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\Config\ProjectSettings.ps1 -ShowPreference:$false
 
-Start-Test "ReadOnlyVariables"
-Write-Information -Tags "Test" -MessageData "INFO: ProjectCheck: $ProjectCheck"
+$TestModule = New-Module -Name Dynamic.TestPreference -ErrorAction Stop -ScriptBlock {
+	Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value "Dynamic.TestPreference"
 
-Start-Test "RemovableVariables"
-Write-Information -Tags "Test" -MessageData "INFO: WarningStatus: $WarningStatus"
-Write-Information -Tags "Test" -MessageData "INFO: ErrorStatus: $ErrorStatus"
-Write-Information -Tags "Test" -MessageData "INFO: InformationLogging: $InformationLogging"
-Write-Information -Tags "Test" -MessageData "INFO: WarningLogging: $WarningLogging"
-Write-Information -Tags "Test" -MessageData "INFO: ErrorLogging: $ErrorLogging"
-Write-Information -Tags "Test" -MessageData "INFO: ConnectionTimeout: $ConnectionTimeout"
-Write-Information -Tags "Test" -MessageData "INFO: ConnectionCount: $ConnectionCount"
+	. $PSScriptRoot\..\Config\ProjectSettings.ps1 -InsideModule
+	. $PSScriptRoot\..\Modules\ModulePreferences.ps1
 
+	. $PSScriptRoot\..\Config\ProjectSettings.ps1 -InsideModule -ShowPreference:$false
+	. $PSScriptRoot\..\Modules\ModulePreferences.ps1
+} | Import-Module -Scope Global -PassThru
+
+Remove-Module -Name Dynamic.TestPreference -ErrorAction Stop
+
+Start-Test "Bad call"
+& $PSScriptRoot\..\Config\ProjectSettings.ps1 -EV ErrorCapture -IV InfoCapture -INFA SilentlyContinue -EA SilentlyContinue
+Write-Warning -Message "Failure test: $ErrorCapture"
+Write-Warning -Message "Failure test: $InfoCapture"
+
+Update-Log
 Exit-Test

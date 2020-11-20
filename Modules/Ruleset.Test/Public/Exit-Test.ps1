@@ -57,14 +57,18 @@ function Exit-Test
 
 	if ($PSCmdlet.ShouldProcess("Exit unit test", $UnitTest))
 	{
-		# restore logging errors, warnings and info messages
-		Set-Variable -Name ErrorLogging -Scope Global -Value $ErrorLoggingCopy
-		Set-Variable -Name WarningLogging -Scope Global -Value $WarningLoggingCopy
-		Set-Variable -Name InformationLogging -Scope Global -Value $InformationLoggingCopy
+		# TODO: temporarily disabled
+		if ($false)
+		{
+			# restore logging errors, warnings and info messages
+			Set-Variable -Name ErrorLogging -Scope Global -Value $TestLogging["ErrorLogging"]
+			Set-Variable -Name WarningLogging -Scope Global -Value $TestLogging["WarningLogging"]
+			Set-Variable -Name InformationLogging -Scope Global -Value $TestLogging["InformationLogging"]
 
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] ErrorLogging restored to: $ErrorLogging"
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] WarningLogging restored to: $WarningLogging"
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] InformationLogging restored to: $InformationLogging"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] ErrorLogging restored to: $ErrorLogging"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] WarningLogging restored to: $WarningLogging"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] InformationLogging restored to: $InformationLogging"
+		}
 
 		# Remove resources created by Enter-Test
 		Remove-Module -Name Dynamic.UnitTest -Force

@@ -67,9 +67,9 @@ function Update-Log
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if there is data to write logs"
-	$ErrorBuffer = $PSCmdlet.GetVariableValue('ErrorBuffer')
-	$WarningBuffer = $PSCmdlet.GetVariableValue('WarningBuffer')
-	$InfoBuffer = $PSCmdlet.GetVariableValue('InfoBuffer')
+	$ErrorBuffer = $PSCmdlet.GetVariableValue("ErrorBuffer")
+	$WarningBuffer = $PSCmdlet.GetVariableValue("WarningBuffer")
+	$InfoBuffer = $PSCmdlet.GetVariableValue("InfoBuffer")
 
 	if ($PSCmdlet.ShouldProcess("Log files", "write to log files"))
 	{
@@ -77,7 +77,7 @@ function Update-Log
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing Error message"
 
-			$Preference = $PSCmdlet.GetVariableValue('ErrorActionPreference')
+			$Preference = $PSCmdlet.GetVariableValue("ErrorActionPreference")
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller ErrorActionPreference is: $Preference"
 
 			if ($Preference -ne "SilentlyContinue")
@@ -104,7 +104,7 @@ function Update-Log
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing Warning message"
 
-			$Preference = $PSCmdlet.GetVariableValue('WarningPreference')
+			$Preference = $PSCmdlet.GetVariableValue("WarningPreference")
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller WarningPreference is: $Preference"
 
 			if ($Preference -ne "SilentlyContinue")

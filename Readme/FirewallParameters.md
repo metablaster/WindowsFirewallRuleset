@@ -169,7 +169,7 @@ except if InterfaceType is "Any", use just one of these two parameters.
     > Read-only store contains the default state of firewall rules that ship with Windows Server 2012.
     > In other words, all predefined firewall rules are here.
 
-    Example: `Get-NetFirewallRule -PolicyStore Systemdefaults`
+    Example: `Get-NetFirewallRule -PolicyStore SystemDefaults`
 
 6. StaticServiceStore:
 

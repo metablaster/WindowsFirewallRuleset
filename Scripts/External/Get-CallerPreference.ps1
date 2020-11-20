@@ -162,8 +162,8 @@ begin
 	Get-Variable -Scope $ParentScope -Name IsValidParent -ErrorAction Stop | Out-Null
 	$ParentScopeName = $((Get-PSCallStack)[1].Command)
 
-	Write-Debug "[$ThisScript] Parrent Scope: $ParentScopeName" -Debug
-	Write-Debug "[$ThisScript] Caller Scope: $((Get-PSCallStack)[2].Command)" -Debug
+	Write-Debug "[$ThisScript] Parrent Scope: $ParentScopeName" # -Debug
+	Write-Debug "[$ThisScript] Caller Scope: $((Get-PSCallStack)[2].Command)" # -Debug
 
 	[hashtable] $FilterHash = @{}
 }

@@ -227,8 +227,7 @@ function Initialize-Project
 		# NOTE: For remote firewall administration we need this service, see Enable-PSRemoting cmdlet
 		# NOTE: Some tests depend on this service, project not ready for remoting
 		# NOTE: For PowerShell Core 7.1 this service is required for compatibility module
-		# TODO: PolicyStore comparison is bad, ex. PersistentStore is not physical computer
-		if (($TargetPSVersion -ge "7.1") -or ($PolicyStore -ne [System.Environment]::MachineName))
+		if (($TargetPSVersion -ge "7.1") -or ($PolicyStore -notin $LocalStores))
 		{
 			$RequiredServices += "WinRM"
 		}
@@ -237,6 +236,22 @@ function Initialize-Project
 		{
 			if ($Abort) { exit }
 			return
+		}
+	}
+
+	# If you changed PolicyStore variable, but the project is not yet ready for remote administration
+	if ($PolicyStore -notin $LocalStores)
+	{
+		try
+		{
+			Write-Information -Tags "Project" -MessageData "Testing Windows Remote Management to: $PolicyStore"
+			Test-WSMan -ComputerName $PolicyStore -Credential $RemoteCredential
+		}
+		catch
+		{
+			Write-Error -TargetObject $_.TargetObject `
+				-Message "Windows Remote Management connection test to '$PolicyStore' failed: $_"
+			exit
 		}
 	}
 
@@ -251,7 +266,6 @@ function Initialize-Project
 		Import-WinModule -Name Appx
 	}
 
-	# Modules and git is required only for development and editing scripts
 	if ($Develop)
 	{
 		# Check NET Framework version
@@ -285,6 +299,31 @@ function Initialize-Project
 			}
 		}
 
+		[System.Management.Automation.ApplicationInfo] $VSCode = Get-Command code.cmd -CommandType Application -ErrorAction SilentlyContinue
+
+		if ($null -ne $VSCode)
+		{
+			[version] $TargetVSCode = (code --version)[0]
+
+			if ($TargetVSCode -lt $RequireVSCodeVersion)
+			{
+				Write-Warning -Message "VSCode v$TargetVSCode is out of date, recommended VSCode v$RequireVSCodeVersion)"
+			}
+			else
+			{
+				Write-Information -Tags "Project" -MessageData "INFO: VSCode v$TargetVSCode meets >= v$RequireVSCodeVersion "
+			}
+		}
+		else
+		{
+			Write-Warning -Message "VSCode in the PATH minimum v$RequireVSCodeVersion is recommended but missing"
+			Write-Information -Tags "User" -MessageData "INFO: Please verify PATH or visit https://code.visualstudio.com to download and install"
+		}
+	}
+
+	# Modules and git is required only for development and editing scripts
+	if ($Develop -or $CheckModules)
+	{
 		Write-Information -Tags "User" -MessageData "INFO: Checking git"
 
 		# Git is recommended for version control and by posh-git module
@@ -311,27 +350,6 @@ function Initialize-Project
 		{
 			Write-Warning -Message "Git in the PATH minimum v$RequireGitVersion is recommended but missing"
 			Write-Information -Tags "User" -MessageData "INFO: Please verify PATH or visit https://git-scm.com to download and install"
-		}
-
-		[System.Management.Automation.ApplicationInfo] $VSCode = Get-Command code.cmd -CommandType Application -ErrorAction SilentlyContinue
-
-		if ($null -ne $VSCode)
-		{
-			[version] $TargetVSCode = (code --version)[0]
-
-			if ($TargetVSCode -lt $RequireVSCodeVersion)
-			{
-				Write-Warning -Message "VSCode v$TargetVSCode is out of date, recommended VSCode v$RequireVSCodeVersion)"
-			}
-			else
-			{
-				Write-Information -Tags "Project" -MessageData "INFO: VSCode v$TargetVSCode meets >= v$RequireVSCodeVersion "
-			}
-		}
-		else
-		{
-			Write-Warning -Message "VSCode in the PATH minimum v$RequireVSCodeVersion is recommended but missing"
-			Write-Information -Tags "User" -MessageData "INFO: Please verify PATH or visit https://code.visualstudio.com to download and install"
 		}
 	}
 

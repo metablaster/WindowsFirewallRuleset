@@ -62,6 +62,7 @@ function Enter-Test
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# Let Exit-Test know file name
+	# NOTE: Global scope because this module could be removed before calling Exit-Test
 	Set-Variable -Name UnitTest -Scope Global -Option ReadOnly -Value ((Get-PSCallStack)[1].Command -replace ".{4}$")
 
 	Write-Output ""
@@ -78,22 +79,26 @@ function Enter-Test
 				foreach ($Script in $PrivateScript) { . $Script.FullName }
 			}
 
-			# TODO: variable name can be same
-			# Disable logging errors, warnings and info messages for tests
-			New-Variable -Name ErrorLoggingCopy -Option ReadOnly -Value $ErrorLogging
-			New-Variable -Name WarningLoggingCopy -Option ReadOnly -Value $WarningLogging
-			New-Variable -Name InformationLoggingCopy -Option ReadOnly -Value $InformationLogging
+			# TODO: temporarily disabled
+			if ($false)
+			{
+				# Disable logging errors, warnings and info messages for tests
+				New-Variable -Name TestLogging -Option ReadOnly -Value @{
+					ErrorLogging = $ErrorLogging
+					WarningLogging = $WarningLogging
+					InformationLogging = $InformationLogging
+				}
 
-			# TODO: disable?
-			Set-Variable -Name ErrorLogging -Scope Global -Value $true
-			Set-Variable -Name WarningLogging -Scope Global -Value $true
-			Set-Variable -Name InformationLogging -Scope Global -Value $true
+				Set-Variable -Name ErrorLogging -Scope Global -Value $false
+				Set-Variable -Name WarningLogging -Scope Global -Value $false
+				Set-Variable -Name InformationLogging -Scope Global -Value $false
 
-			Write-Debug -Message "[Enter-Test] ErrorLogging changed to: $ErrorLogging"
-			Write-Debug -Message "[Enter-Test] WarningLogging changed to: $WarningLogging"
-			Write-Debug -Message "[Enter-Test] InformationLogging changed to: $InformationLogging"
-
-			Export-ModuleMember -Variable ErrorLoggingCopy, WarningLoggingCopy, InformationLoggingCopy
+				Export-ModuleMember -Variable TestLogging
+			}
 		} | Import-Module -Scope Global
+
+		Write-Debug -Message "[Enter-Test] ErrorLogging changed to: $ErrorLogging"
+		Write-Debug -Message "[Enter-Test] WarningLogging changed to: $WarningLogging"
+		Write-Debug -Message "[Enter-Test] InformationLogging changed to: $InformationLogging"
 	}
 }

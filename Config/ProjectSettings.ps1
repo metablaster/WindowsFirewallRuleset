@@ -34,13 +34,13 @@ Global project settings and preferences
 In this file project settings and preferences are set, these are grouped into
 1. settings for development
 2. settings for release
-3. settings that apply to both use cases
+3. settings which apply to both use cases
 
 .PARAMETER InsideModule
 Script modules must call this script with this parameter
 
 .PARAMETER ShowPreference
-If specified displays preferences and/or variables of current scope
+If specified displays preferences and/or variables in current scope
 
 .EXAMPLE
 PS> .\ProjectSettings.ps1
@@ -67,6 +67,7 @@ param(
 	[switch] $ShowPreference
 )
 
+#region Initialization
 # Name of this script for debugging messages, do not modify!.
 Set-Variable -Name SettingsScript -Scope Local -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{4}$")
 Write-Debug -Message "[$SettingsScript] params($($PSBoundParameters.Values))"
@@ -74,9 +75,9 @@ Write-Debug -Message "[$SettingsScript] params($($PSBoundParameters.Values))"
 if ($MyInvocation.InvocationName -ne ".")
 {
 	Write-Error -Category InvalidOperation -TargetObject $SettingsScript `
-		-Message "$SettingsScript must be dot sourced"
+		-Message "$SettingsScript script must be dot sourced"
 
-	Write-Information -Tags "Project" -MessageData "$SettingsScript called from: $((Get-PSCallStack)[1].Command)"
+	Write-Information -Tags "Project" -MessageData "$SettingsScript script called from: $((Get-PSCallStack)[1].Command)"
 	exit
 }
 
@@ -93,31 +94,18 @@ if ($Develop)
 {
 	# The Set-PSDebug cmdlet turns script debugging features on and off, sets the trace level, and toggles strict mode.
 	# Strict: Turns on strict mode for the global scope, this is equivalent to Set-StrictMode -Version 1
+	# Trace 0: Turn script tracing off.
 	# Trace 1: each line of script is traced as it runs.
 	# Trace 2: variable assignments, function calls, and script calls are also traced.
 	# Step: You're prompted before each line of the script runs.
-	Set-PSDebug -Strict # -Trace 1
-
-	# Override version set by et-PSDebug
-	Set-StrictMode -Version Latest
-
-	# Enable showing values of preference variables in requested scope
-	if ($ShowPreference)
-	{
-		$PSBoundParameters.Remove("ShowPreference") | Out-Null
-		Set-Variable -Name ShowPreference -Scope Global -Value $true
-	}
-	else
-	{
-		Set-Variable -Name ShowPreference -Scope Global -Value $false
-	}
+	Set-PSDebug -Strict -Trace 0
 }
-else
-{
-	# The Set-StrictMode configures strict mode for the current scope and all child scopes
-	# Use it in a script or function to override the setting inherited from the global scope.
-	Set-StrictMode -Version Latest
-}
+
+# Overrides version set by Set-PSDebug
+# The Set-StrictMode configures strict mode for the current scope and all child scopes
+# Use it in a script or function to override the setting inherited from the global scope.
+# NOTE: Set-StrictMode is effective only in the scope in which it is set and in its child scopes
+Set-StrictMode -Version Latest
 
 # NOTE: This variable is needed early
 if (!(Get-Variable -Name ProjectRoot -Scope Global -ErrorAction Ignore))
@@ -126,10 +114,10 @@ if (!(Get-Variable -Name ProjectRoot -Scope Global -ErrorAction Ignore))
 	New-Variable -Name ProjectRoot -Scope Global -Option Constant -Value (
 		Resolve-Path -Path "$PSScriptRoot\.." | Select-Object -ExpandProperty Path)
 }
+#endregion
 
 <#
 Preference Variables default values (Core / Desktop)
-# TODO: Add valid values column and defaults per edition
 https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_preference_variables?view=powershell-7
 https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_preference_variables?view=powershell-5.1
 
@@ -179,9 +167,9 @@ $MaximumFunctionCount	4096
 $MaximumVariableCount	4096
 #>
 
+#region Preference variables
 # NOTE: Following preferences should be always the same, do not modify!
 # The rest of preferences are either default or depending on "Develop" variable
-# TODO: Need to take into account existing user preferences if possible
 
 # To control how and if errors are displayed
 $ErrorActionPreference = "Continue"
@@ -198,15 +186,6 @@ $ProgressPreference	= "Continue"
 # To control if modules automatically load
 # Values: All, ModuleQualified or None
 $PSModuleAutoLoadingPreference = "All"
-
-if (!$InsideModule)
-{
-	$private:PSDefaultParameterValues = @{
-		"*:ErrorVariable" = "+ErrorBuffer";
-		"*:WarningVariable" = "+WarningBuffer";
-		"*:InformationVariable" = "+InfoBuffer"
-	}
-}
 
 if ($Develop)
 {
@@ -246,27 +225,26 @@ if ($Develop)
 	# Logs command errors
 	$LogCommandHealthEvent = $false
 
-	# Must be after debug preference
-	Write-Debug -Message "[$SettingsScript] Clean up PowerShell session"
-
 	if (!$InsideModule)
 	{
+		# Must be after debug preference
+		Write-Debug -Message "[$SettingsScript] Removing loaded modules"
+
 		# Remove loaded modules, useful for module debugging and to avoid restarting powershell every time.
 		# Skip removing modules if this script is called from inside a module which would
 		# cause removing modules prematurely
 		foreach ($Module in @(Get-ChildItem -Name -Path "$ProjectRoot\Modules" -Directory))
 		{
-			Remove-Module -Name $Module -ErrorAction Ignore
+			Get-Module -Name $Module | Remove-Module
 		}
 	}
 }
 else # Normal use case
 {
 	# These are set to default values for normal use case, the rest is default,
-	# modify to customize your experience
+	# TODO: Need to take into account existing user preferences if possible
 
-	# To show verbose output in the console set to "Continue"
-	# If you want to see a bit more
+	# To show verbose output in the console set to "Continue" to see a bit more
 	$VerbosePreference = "SilentlyContinue"
 
 	# To show debugging messages in the console set to "Continue"
@@ -275,228 +253,24 @@ else # Normal use case
 
 	$ConfirmPreference = "High"
 
-	$WhatIfPreference = "False"
+	$WhatIfPreference = $false
 
 	# Must be after verbose preference
 	Write-Verbose -Message "[$SettingsScript] Project mode: Release"
 }
+#endregion
 
-# Constant variables, not possible to change in any case.
-# These are set only once per session, changing these requires powershell restart
-# TODO: Skip setting variables which are used only when checking specific requirements
-if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore))
-{
-	Write-Debug -Message "[$SettingsScript] Setup constant variables"
-
-	# check if constants already initialized, used for module reloading, do not modify!
-	New-Variable -Name CheckProjectConstants -Scope Global -Option Constant -Value $null
-
-	# Project version, does not apply to non migrated 3rd party modules which follow their own version increment, do not modify!
-	New-Variable -Name ProjectVersion -Scope Global -Option Constant -Value ([version]::new(0, 8, 1))
-
-	# Required minimum PSScriptAnalyzer version for code editing, do not decrement!
-	# PSScriptAnalyzer >= 1.19.1 is required otherwise code will start missing while editing probably due to analyzer settings
-	# https://github.com/PowerShell/PSScriptAnalyzer#requirements
-	New-Variable -Name RequireAnalyzerVersion -Scope Global -Option Constant -Value ([version]::new(1, 19, 1))
-
-	# Recommended minimum posh-git version for git in PowerShell
-	# NOTE: pre-release minimum 1.0.0-beta4 will be installed
-	New-Variable -Name RequirePoshGitVersion -Scope Global -Option Constant -Value ([version]::new(0, 7, 3))
-
-	# Recommended minimum Pester version for code testing
-	# NOTE: Analyzer 1.19.1 requires pester v5
-	# TODO: we need pester v4 for tests, but why does analyzer require pester?
-	New-Variable -Name RequirePesterVersion -Scope Global -Option Constant -Value ([version]::new(5, 0, 4))
-
-	# Required minimum PackageManagement version prior to installing other modules, do not decrement!
-	New-Variable -Name RequirePackageManagementVersion -Scope Global -Option Constant -Value ([version]::new(1, 4, 7))
-
-	# Required minimum PowerShellGet version prior to installing other modules, do not decrement!
-	New-Variable -Name RequirePowerShellGetVersion -Scope Global -Option Constant -Value ([version]::new(2, 2, 5))
-
-	# Recommended minimum platyPS version used to generate online help files for modules, do not decrement!
-	New-Variable -Name RequirePlatyPSVersion -Scope Global -Option Constant -Value ([version]::new(0, 14, 0))
-
-	# Recommended minimum VSCode version, do not decrement!
-	New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 51, 1))
-
-	# Recommended minimum PSReadline version for command line editing experience of PowerShell
-	# Needs the 1.6.0 or a higher version of PowerShellGet to install the latest prerelease version of PSReadLine
-	New-Variable -Name RequirePSReadlineVersion -Scope Global -Option Constant -Value ([version]::new(2, 1, 0))
-
-	# Recommended minimum Git version needed for contributing and required by posh-git
-	# https://github.com/dahlbyk/posh-git#prerequisites
-	New-Variable -Name RequireGitVersion -Scope Global -Option Constant -Value ([version]::new(2, 29, 0))
-
-	# Recommended minimum PowerShell Core
-	# NOTE: 6.1.0 will not work, but 7.0.3 works, verify with PSUseCompatibleCmdlets
-	New-Variable -Name RequireCoreVersion -Scope Global -Option Constant -Value ([version]::new(7, 1, 0))
-
-	# Required minimum Windows PowerShell, do not decrement!
-	# NOTE: 5.1.14393.206 (system v1607) will not work, but 5.1.19041.1 (system v2004) works, verify with PSUseCompatibleCmdlets
-	# NOTE: replacing build 19041 (system v2004) with 17763 (system v1809) which is minimum required for rules and .NET
-	New-Variable -Name RequirePowerShellVersion -Scope Global -Option Constant -Value ([version]::new(5, 1, 17763))
-
-	# Required minimum operating system version (v1809)
-	# TODO: v1809 needs to be replaced with minimum v1903, downgraded here because of Server 2019
-	# https://docs.microsoft.com/en-us/windows/release-information
-	# https://docs.microsoft.com/en-us/windows-server/get-started/windows-server-release-info
-	New-Variable -Name RequireWindowsVersion -Scope Global -Option Constant -Value ([version]::new(10, 0, 17763))
-
-	# Required minimum .NET version, valid for the PowerShell Desktop edition only, do not decrement!
-	# https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/versions-and-dependencies
-	# https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/how-to-determine-which-versions-are-installed
-	# https://docs.microsoft.com/en-us/dotnet/framework/get-started/system-requirements
-	# https://stackoverflow.com/questions/63520845/determine-net-and-clr-requirements-for-your-powershell-modules/63547710
-	# https://docs.microsoft.com/en-us/powershell/scripting/windows-powershell/install/windows-powershell-system-requirements?view=powershell-7.1
-	# NOTE: v1703 includes .NET 4.7
-	# NOTE: v1903-v2004 includes .NET 4.8
-	# TODO: Last test on Server 2019 which comes with .NET 4.7 run just fine,
-	# modules loaded even though .NET 4.8 is specified as minimum required
-	New-Variable -Name RequireNETVersion -Scope Global -Option Constant -Value ([version]::new(4, 8, 0))
-
-	# TODO: Should not be visible
-	# Add project module directory to session module path
-	New-Variable -Name TempPath -Scope Script -Value ([System.Environment]::GetEnvironmentVariable("PSModulePath"))
-	# $ModulePath = [System.Environment]::GetEnvironmentVariable("PSModulePath")
-	$TempPath += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Modules"
-	[System.Environment]::SetEnvironmentVariable("PSModulePath", $TempPath)
-
-	# Add project script directory to session path
-	$TempPath = [System.Environment]::GetEnvironmentVariable("Path")
-	$TempPath = $TempPath.TrimEnd(";")
-	$TempPath += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Scripts"
-	$TempPath += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Scripts\External"
-	[System.Environment]::SetEnvironmentVariable("Path", $TempPath)
-	Remove-Variable -Name TempPath -Scope Script
-
-	# Windows 10, Windows Server 2019 and above
-	New-Variable -Name Platform -Scope Global -Option Constant -Value "10.0+"
-
-	# Machine where to apply rules (default: Local Group Policy)
-	New-Variable -Name PolicyStore -Scope Global -Option Constant -Value ([System.Environment]::MachineName)
-
-	# If you changed PolicyStore variable, but the project is not yet ready for remote administration
-	if ($Develop -and $PolicyStore -ne ([System.Environment]::MachineName))
-	{
-		# TODO: Need to verify non GPO stores to prevent asking for credentials for ex. "PersistentStore"
-		# To force loading rules regardless of presence of program set to true
-		New-Variable -Name RemoteCredentials -Scope Global -Option Constant -Value (
-			Get-Credential -Message "Credentials are required to access $PolicyStore")
-
-		try
-		{
-			# TODO: should be part of Initialize-Project script
-			Write-Information -Tags "Project" -MessageData "Testing Windows Remote Management to: $PolicyStore"
-			Test-WSMan -ComputerName $PolicyStore -Credential $RemoteCredentials
-		}
-		catch
-		{
-			Write-Error -TargetObject $_.TargetObject `
-				-Message "Windows Remote Management connection test to '$PolicyStore' failed: $_"
-			exit
-		}
-	}
-
-	# Default network interface card to use if not locally specified
-	# TODO: We can learn this value programatically but, problem is the same as with specifying local IP
-	New-Variable -Name DefaultInterface -Scope Global -Option Constant -Value "Wired, Wireless"
-
-	# Default network profile to use if not locally specified.
-	# NOTE: Do not modify except to to debug rules or unless absolutely needed!
-	New-Variable -Name DefaultProfile -Scope Global -Option Constant -Value "Private, Public"
-
-	# To force loading rules regardless of presence of program set to true
-	New-Variable -Name ForceLoad -Scope Global -Option Constant -Value $false
-
-	# Project logs folder
-	New-Variable -Name LogsFolder -Scope Global -Option Constant -Value "$ProjectRoot\Logs"
-
-	# Firewall logs folder
-	# NOTE: Set this value to $LogsFolder\Firewall to enable reading logs in VSCode with syntax highlighting
-	# In that case for changes to take effect run Scripts\SetupProfile.ps1 and reboot system
-	# NOTE: System default is %SystemRoot%\System32\LogFiles\Firewall
-	if ($Develop)
-	{
-		New-Variable -Name FirewallLogsFolder -Scope Global -Option Constant -Value $LogsFolder\Firewall
-	}
-	else
-	{
-		New-Variable -Name FirewallLogsFolder -Scope Global -Option Constant -Value "%SystemRoot%\System32\LogFiles\Firewall"
-	}
-}
-
-# Read only variables, these can be only modified by code at any time, and, only once per session by users.
-# Changing these requires powershell restart
-if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignore))
-{
-	Write-Debug -Message "[$SettingsScript] Setup read only variables"
-
-	# check if read only variables already initialized, do not modify!
-	Set-Variable -Name CheckReadOnlyVariables -Scope Global -Option Constant -Force -Value $null
-
-	# Set to false to avoid checking system requirements
-	Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $false
-
-	# Set to false to avoid checking if modules are up to date
-	Set-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Force -Value $Develop
-
-	# Set to false to avoid checking if required system services are started
-	Set-Variable -Name ServicesCheck -Scope Global -Option ReadOnly -Force -Value $true
-
-	# NuGet version and Encoding used to write and read files
-	# TODO: use $OutputEncoding preference
-	if ($PSVersionTable.PSEdition -eq "Core")
-	{
-		# UTF8 without BOM
-		# https://docs.microsoft.com/en-us/dotnet/api/system.text.encoding?view=netcore-3.1
-		Set-Variable -Name DefaultEncoding -Scope Global -Option ReadOnly -Force -Value (
-			New-Object -TypeName System.Text.UTF8Encoding -ArgumentList $false)
-
-		# Required minimum NuGet version prior to installing other modules
-		# NOTE: Core >= 3.0.0, Desktop >= 2.8.5
-		Set-Variable -Name RequireNuGetVersion -Scope Global -Option ReadOnly -Force -Value ([version]::new(3, 0, 0))
-	}
-	else
-	{
-		# TODO: need some workaround to make Windows PowerShell read/write BOM-less
-		# UTF8 with BOM
-		# https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.filesystemcmdletproviderencoding?view=powershellsdk-1.1.0
-		Set-Variable -Name DefaultEncoding -Scope Global -Option ReadOnly -Force -Value "utf8"
-
-		# NOTE: Setting this variable in Initialize-Project would override it in develop mode
-		Set-Variable -Name RequireNuGetVersion -Scope Global -Option ReadOnly -Force -Value ([version]::new(2, 8, 5))
-	}
-
-	# These drives will help to have shorter prompt and to be able to jump to them with less typing
-	# TODO: Should we use these drives instead of "ProjectRoot" variable?
-	# HACK: In some cases there is problem using those drives soon after being created, also running
-	# scripts while prompt at drive will cause issues setting location
-	# for more info see: https://github.com/dsccommunity/SqlServerDsc/issues/118
-	New-PSDrive -Name root -Root $ProjectRoot -Scope Global -PSProvider FileSystem | Out-Null
-	New-PSDrive -Name test -Root "$ProjectRoot\Test" -Scope Global -PSProvider FileSystem | Out-Null
-	New-PSDrive -Name ip4 -Root "$ProjectRoot\Rules\IPv4" -Scope Global -PSProvider FileSystem | Out-Null
-	New-PSDrive -Name ip6 -Root "$ProjectRoot\Rules\IPv6" -Scope Global -PSProvider FileSystem | Out-Null
-	New-PSDrive -Name mod -Root "$ProjectRoot\Modules" -Scope Global -PSProvider FileSystem | Out-Null
-}
-
-# Removable variables, these can be modified or removed by code at any time, and, only once per session by users
-# Changing these requires powershell restart if develop mode is off
+#region Removable variables, these can be modified as follows:
+# 1. By project code at any time
+# 2. Only once by user before running any project scripts
+# 3. Any amount of time by user if "develop" mode is ON
+# In all other cases changing variable values requires PowerShell restart
 if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -ErrorAction Ignore))
 {
-	Write-Debug -Message "[$SettingsScript] Setup removable variables"
+	Write-Debug -Message "[$SettingsScript] Setting up removable variables"
 
 	# check if removable variables already initialized, do not modify!
 	Set-Variable -Name CheckRemovableVariables -Scope Global -Option ReadOnly -Force -Value $null
-
-	# Set to false to use IPv6 instead of IPv4
-	Set-Variable -Name ConnectionIPv4 -Scope Global -Value $true
-
-	# Amount of connection tests against remote computers
-	Set-Variable -Name ConnectionCount -Scope Global -Value 2
-
-	# Timeout in seconds to contact remote computers
-	Set-Variable -Name ConnectionTimeout -Scope Global -Value 1
 
 	# Set to false to disable logging errors
 	Set-Variable -Name ErrorLogging -Scope Global -Value $true #(!$Develop)
@@ -506,6 +280,98 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 
 	# Set to false to disable logging information messages
 	Set-Variable -Name InformationLogging -Scope Global -Value $true #(!$Develop)
+}
+#endregion
+
+#region Conditional preference variables
+# The value of these preference variables depend on existing variables, do not modify!
+if (!$InsideModule)
+{
+	# NOTE: Not using these parameters inside modules because they will be passed to module functions
+	# by top level advanced function in call stack which will pick up all Write-* streams in module functions
+	# NOTE: For functions outside module for same reason we need to declare PSDefaultParameterValues
+	# as private which will prevent propagating default parameters to functions in child scopes,
+	# In short advanced functions in child scopes and modules will receive these parameters by parent
+	# function, this is needed to avoid duplicate log entries.
+	$private:PSDefaultParameterValues = @{}
+
+	if ($ErrorLogging)
+	{
+		$private:PSDefaultParameterValues["*:ErrorVariable"] = "+ErrorBuffer"
+	}
+
+	if ($WarningLogging)
+	{
+		$private:PSDefaultParameterValues["*:WarningVariable"] = "+WarningBuffer"
+	}
+
+	if ($InformationLogging)
+	{
+		$private:PSDefaultParameterValues["*:InformationVariable"] = "+InfoBuffer"
+	}
+}
+#endregion
+
+#region Read only variables, these can be modified as follows:
+# 1. By project code at any time
+# 2. Only once by user before running any project scripts
+# In all other cases changing variable values requires PowerShell restart
+if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignore))
+{
+	Write-Debug -Message "[$SettingsScript] Setting up read only variables"
+
+	# check if read only variables already initialized, do not modify!
+	New-Variable -Name CheckReadOnlyVariables -Scope Global -Option Constant -Value $null
+
+	# Set to false to avoid checking system requirements
+	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $false
+
+	# Set to false to avoid checking if modules are up to date
+	New-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Value $Develop
+
+	# Set to false to avoid checking if required system services are started
+	New-Variable -Name ServicesCheck -Scope Global -Option ReadOnly -Value $true
+}
+#endregion
+
+#region Read only variables, these can be modified as follows:
+# 1. Never by project code
+# 2. Only once by user before running any project scripts
+# 3. Any amount of time by user if "develop" mode is ON
+# In all other cases changing variable values requires PowerShell restart
+if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -ErrorAction Ignore))
+{
+	Write-Debug -Message "[$SettingsScript] Setting up read only variables - user only"
+
+	# check if removable variables already initialized, do not modify!
+	Set-Variable -Name CheckReadOnlyVariables2 -Scope Global -Option ReadOnly -Force -Value $null
+
+	# Windows 10, Windows Server 2019 and above
+	Set-Variable -Name Platform -Scope Global -Option ReadOnly -Force -Value "10.0+"
+
+	# Machine where to apply rules (default: Local Group Policy)
+	Set-Variable -Name PolicyStore -Scope Global -Option ReadOnly -Force -Value ([System.Environment]::MachineName)
+
+	# Default network interface card to use if not locally specified
+	# TODO: We can learn this value programatically but, problem is the same as with specifying local IP
+	Set-Variable -Name DefaultInterface -Scope Global -Option ReadOnly -Force -Value "Wired, Wireless"
+
+	# Default network profile to use if not locally specified.
+	# NOTE: Do not modify except to to debug rules or unless absolutely needed!
+	Set-Variable -Name DefaultProfile -Scope Global -Option ReadOnly -Force -Value "Private, Public"
+
+	# To force loading rules regardless of presence of program set to true
+	Set-Variable -Name ForceLoad -Scope Global -Option ReadOnly -Force -Value $false
+
+	# Set to false to use IPv6 instead of IPv4
+	# TODO: There is also IPVersion variable hanging around
+	Set-Variable -Name ConnectionIPv4 -Scope Global -Option ReadOnly -Force -Value $true
+
+	# Amount of connection tests against remote computers
+	Set-Variable -Name ConnectionCount -Scope Global -Option ReadOnly -Force -Value 2
+
+	# Timeout in seconds to contact remote computers
+	Set-Variable -Name ConnectionTimeout -Scope Global -Option ReadOnly -Force -Value 1
 
 	# User account name for which to search executables in user profile and non standard paths by default
 	# Also used for other defaults where standard user account is expected, ex. development as standard user
@@ -513,41 +379,216 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 	# users and to affect them all set this value to non existent user
 	# TODO: needs testing info messages for this value
 	# TODO: We are only assuming about accounts here as a workaround due to often need to modify variable
-	Set-Variable -Name DefaultUser -Scope Global -Value (Split-Path -Path (Get-LocalGroupMember -Group Users | Where-Object {
+	Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value (Split-Path -Path (Get-LocalGroupMember -Group Users | Where-Object {
 				$_.ObjectClass -EQ "User" -and
 				($_.PrincipalSource -eq "Local" -or $_.PrincipalSource -eq "MicrosoftAccount")
 			} | Select-Object -ExpandProperty Name -Last 1) -Leaf)
 
 	# Administrative user account name which will perform unit testing
-	Set-Variable -Name TestAdmin -Scope Global -Value (Split-Path -Path (Get-LocalGroupMember -Group Administrators | Where-Object {
+	Set-Variable -Name TestAdmin -Scope Global -Option ReadOnly -Force -Value (Split-Path -Path (Get-LocalGroupMember -Group Administrators | Where-Object {
 				$_.ObjectClass -EQ "User" -and
 				($_.PrincipalSource -eq "Local" -or $_.PrincipalSource -eq "MicrosoftAccount")
 			} | Select-Object -ExpandProperty Name -Last 1) -Leaf)
 
 	# Standard user account name which will perform unit testing
-	Set-Variable -Name TestUser -Scope Global -Value $DefaultUser
+	Set-Variable -Name TestUser -Scope Global -Option ReadOnly -Force -Value $DefaultUser
 }
+#endregion
 
-# Removable variables, these can be modified or removed by code at any time, and, only once per session by users
-# Changing these requires powershell restart
+#region Constant variables, these can be modified as follows:
+# 1. Never by project code
+# 2. Only once by user before running any project scripts
+# In all other cases changing variable values requires PowerShell restart
+if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore))
+{
+	Write-Debug -Message "[$SettingsScript] Setting up constant variables"
+
+	# check if constants already initialized, used for module reloading, do not modify!
+	New-Variable -Name CheckProjectConstants -Scope Global -Option Constant -Value $null
+
+	# Project version, does not apply to non migrated 3rd party modules which follow their own version increment, do not modify!
+	New-Variable -Name ProjectVersion -Scope Global -Option Constant -Value ([version]::new(0, 8, 1))
+
+	# Required minimum operating system version (v1809)
+	# TODO: v1809 needs to be replaced with minimum v1903, downgraded here because of Server 2019
+	# https://docs.microsoft.com/en-us/windows/release-information
+	# https://docs.microsoft.com/en-us/windows-server/get-started/windows-server-release-info
+	New-Variable -Name RequireWindowsVersion -Scope Global -Option Constant -Value ([version]::new(10, 0, 17763))
+
+	# TODO: Conditionally set PS version based on edition
+	# Recommended minimum PowerShell Core
+	# NOTE: 6.1.0 will not work, but 7.0.3 works, verify with PSUseCompatibleCmdlets
+	New-Variable -Name RequireCoreVersion -Scope Global -Option Constant -Value ([version]::new(7, 1, 0))
+
+	# Required minimum Windows PowerShell, do not decrement!
+	# NOTE: 5.1.14393.206 (system v1607) will not work, but 5.1.19041.1 (system v2004) works, verify with PSUseCompatibleCmdlets
+	# NOTE: replacing build 19041 (system v2004) with 17763 (system v1809) which is minimum required for rules and .NET
+	New-Variable -Name RequirePowerShellVersion -Scope Global -Option Constant -Value ([version]::new(5, 1, 17763))
+
+	# Project logs folder
+	New-Variable -Name LogsFolder -Scope Global -Option Constant -Value "$ProjectRoot\Logs"
+
+	# These drives will help to have shorter prompt and to be able to jump to them with less typing
+	# TODO: Should we use these drives instead of "ProjectRoot" variable?
+	# HACK: In some cases there is problem using those drives soon after being created, also running
+	# scripts while prompt at drive will cause issues setting location
+	# for more info see: https://github.com/dsccommunity/SqlServerDsc/issues/118
+	New-PSDrive -Name root -Root $ProjectRoot -Scope Global -PSProvider FileSystem | Out-Null
+	New-PSDrive -Name ip4 -Root "$ProjectRoot\Rules\IPv4" -Scope Global -PSProvider FileSystem | Out-Null
+	New-PSDrive -Name ip6 -Root "$ProjectRoot\Rules\IPv6" -Scope Global -PSProvider FileSystem | Out-Null
+	New-PSDrive -Name mod -Root "$ProjectRoot\Modules" -Scope Global -PSProvider FileSystem | Out-Null
+	New-PSDrive -Name test -Root "$ProjectRoot\Test" -Scope Global -PSProvider FileSystem | Out-Null
+
+	# Policy stores on local computer
+	New-Variable -Name LocalStores -Scope Global -Option Constant -Value @(
+		([System.Environment]::MachineName)
+		"PersistentStore"
+		"ActiveStore"
+		"RSOP"
+		"SystemDefaults"
+		"StaticServiceStore"
+		"ConfigurableServiceStore"
+	)
+
+	# If you changed PolicyStore variable, but the project is not yet ready for remote administration
+	if ($PolicyStore -notin $LocalStores)
+	{
+		# Credentials for remote machine
+		New-Variable -Name RemoteCredential -Scope Global -Option Constant -Value (
+			Get-Credential -Message "Credentials are required to access $PolicyStore")
+	}
+
+	# Encoding used to write and read files
+	if ($PSVersionTable.PSEdition -eq "Core")
+	{
+		# UTF8 without BOM
+		# https://docs.microsoft.com/en-us/dotnet/api/system.text.encoding?view=netcore-3.1
+		Set-Variable -Name DefaultEncoding -Scope Global -Option Constant -Value (
+			New-Object -TypeName System.Text.UTF8Encoding -ArgumentList $false)
+	}
+	else
+	{
+		# TODO: need some workaround to make Windows PowerShell read/write BOM-less
+		# TODO: System.Text.ASCIIEncoding
+		# UTF8 with BOM
+		# https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.filesystemcmdletproviderencoding?view=powershellsdk-1.1.0
+		Set-Variable -Name DefaultEncoding -Scope Global -Option Constant -Value "utf8"
+	}
+
+	if ($ProjectCheck -and $ModulesCheck)
+	{
+		if ($PSVersionTable.PSEdition -eq "Core")
+		{
+			# Required minimum NuGet version prior to installing other modules
+			# NOTE: Core >= 3.0.0, Desktop >= 2.8.5
+			New-Variable -Name RequireNuGetVersion -Scope Global -Option Constant -Value ([version]::new(3, 0, 0))
+		}
+		else
+		{
+			# NOTE: Setting this variable in Initialize-Project would override it in develop mode
+			New-Variable -Name RequireNuGetVersion -Scope Global -Option Constant -Value ([version]::new(2, 8, 5))
+		}
+
+		# Required minimum PSScriptAnalyzer version for code editing, do not decrement!
+		# PSScriptAnalyzer >= 1.19.1 is required otherwise code will start missing while editing probably due to analyzer settings
+		# https://github.com/PowerShell/PSScriptAnalyzer#requirements
+		New-Variable -Name RequireAnalyzerVersion -Scope Global -Option Constant -Value ([version]::new(1, 19, 1))
+
+		# Recommended minimum posh-git version for git in PowerShell
+		# NOTE: pre-release minimum 1.0.0-beta4 will be installed
+		New-Variable -Name RequirePoshGitVersion -Scope Global -Option Constant -Value ([version]::new(0, 7, 3))
+
+		# Recommended minimum Pester version for code testing
+		# NOTE: Analyzer 1.19.1 requires pester v5
+		# TODO: we need pester v4 for tests, but why does analyzer require pester?
+		New-Variable -Name RequirePesterVersion -Scope Global -Option Constant -Value ([version]::new(5, 0, 4))
+
+		# Required minimum PackageManagement version prior to installing other modules, do not decrement!
+		New-Variable -Name RequirePackageManagementVersion -Scope Global -Option Constant -Value ([version]::new(1, 4, 7))
+
+		# Required minimum PowerShellGet version prior to installing other modules, do not decrement!
+		New-Variable -Name RequirePowerShellGetVersion -Scope Global -Option Constant -Value ([version]::new(2, 2, 5))
+
+		# Recommended minimum platyPS version used to generate online help files for modules, do not decrement!
+		New-Variable -Name RequirePlatyPSVersion -Scope Global -Option Constant -Value ([version]::new(0, 14, 0))
+
+		# Recommended minimum PSReadline version for command line editing experience of PowerShell
+		# Needs the 1.6.0 or a higher version of PowerShellGet to install the latest prerelease version of PSReadLine
+		New-Variable -Name RequirePSReadlineVersion -Scope Global -Option Constant -Value ([version]::new(2, 1, 0))
+	}
+
+	if ($Develop -or ($ProjectCheck -and $ModulesCheck))
+	{
+		# Recommended minimum Git version needed for contributing and required by posh-git
+		# https://github.com/dahlbyk/posh-git#prerequisites
+		New-Variable -Name RequireGitVersion -Scope Global -Option Constant -Value ([version]::new(2, 29, 0))
+	}
+
+	if ($Develop)
+	{
+		# Required minimum .NET version, valid for the PowerShell Desktop edition only, do not decrement!
+		# https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/versions-and-dependencies
+		# https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/how-to-determine-which-versions-are-installed
+		# https://docs.microsoft.com/en-us/dotnet/framework/get-started/system-requirements
+		# https://stackoverflow.com/questions/63520845/determine-net-and-clr-requirements-for-your-powershell-modules/63547710
+		# https://docs.microsoft.com/en-us/powershell/scripting/windows-powershell/install/windows-powershell-system-requirements?view=powershell-7.1
+		# NOTE: v1703 includes .NET 4.7
+		# NOTE: v1903-v2004 includes .NET 4.8
+		# TODO: Last test on Server 2019 which comes with .NET 4.7 run just fine,
+		# modules loaded even though .NET 4.8 is specified as minimum required
+		New-Variable -Name RequireNETVersion -Scope Global -Option Constant -Value ([version]::new(4, 8, 0))
+
+		# Recommended minimum VSCode version, do not decrement!
+		New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 51, 1))
+
+		# Firewall logs folder
+		# NOTE: Set this value to $LogsFolder\Firewall to enable reading logs in VSCode with syntax highlighting
+		# In that case for changes to take effect run Scripts\SetupProfile.ps1 and reboot system
+		New-Variable -Name FirewallLogsFolder -Scope Global -Option Constant -Value $LogsFolder\Firewall
+	}
+	else
+	{
+		# Firewall logs folder
+		# NOTE: System default is %SystemRoot%\System32\LogFiles\Firewall
+		New-Variable -Name FirewallLogsFolder -Scope Global -Option Constant -Value "%SystemRoot%\System32\LogFiles\Firewall"
+	}
+
+	# Add project module directory to session module path
+	New-Variable -Name PathEntry -Value (
+		[System.Environment]::GetEnvironmentVariable("PSModulePath").TrimEnd(";") -replace (";;", ";"))
+	$PathEntry += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Modules"
+	[System.Environment]::SetEnvironmentVariable("PSModulePath", $PathEntry)
+
+	# Add project script directory to session path
+	$PathEntry = [System.Environment]::GetEnvironmentVariable("Path").TrimEnd(";") -replace (";;", ";")
+	$PathEntry += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Scripts"
+	$PathEntry += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Scripts\External"
+	[System.Environment]::SetEnvironmentVariable("Path", $PathEntry)
+	Remove-Variable -Name PathEntry
+}
+#endregion
+
+#region Protected variables, these can be modified as follows:
+# 1. By project code at any time
+# 2. Never by user
 if (!(Get-Variable -Name CheckProtectedVariables -Scope Global -ErrorAction Ignore))
 {
-	Write-Debug -Message "[$SettingsScript] Setup protected variables"
+	Write-Debug -Message "[$SettingsScript] Setting up protected variables"
 
 	# check if removable variables already initialized, do not modify!
-	Set-Variable -Name CheckProtectedVariables -Scope Global -Option Constant -Force -Value $null
+	New-Variable -Name CheckProtectedVariables -Scope Global -Option Constant -Value $null
 
 	# Global variable to tell if errors were generated, do not modify!
 	# Will not be set if ErrorActionPreference is "SilentlyContinue"
-	Set-Variable -Name ErrorStatus -Scope Global -Value $false
+	New-Variable -Name ErrorStatus -Scope Global -Value $false
 
 	# Global variable to tell if warnings were generated, do not modify!
 	# Will not be set if WarningPreference is "SilentlyContinue"
-	Set-Variable -Name WarningStatus -Scope Global -Value $false
+	New-Variable -Name WarningStatus -Scope Global -Value $false
 }
+#endregion
 
-Remove-Module -Name Dynamic.Preference -ErrorAction Ignore
-
+#region Show variables and preferences
 if ($ShowPreference)
 {
 	# This function needs to run in a sanbox to prevent changing preferences for real
@@ -584,16 +625,19 @@ if ($ShowPreference)
 			)
 
 			Set-Variable -Name IsValidParent -Scope Local -Value "Scope test"
-			Write-Debug -Message "[Dynamic.Preference] DebugPreference before: $DebugPreference" -Debug
+			Write-Debug -Message "[Dynamic.Preference] DebugPreference before: $DebugPreference" # -Debug
 
 			& Get-CallerPreference.ps1 -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
-			Write-Debug -Message "[Dynamic.Preference] DebugPreference after: $DebugPreference" -Debug
+			Write-Debug -Message "[Dynamic.Preference] DebugPreference after: $DebugPreference" # -Debug
 
-			$Variables = Get-ChildItem -Path Variable:\*Preference
+			$Variables = Get-ChildItem -Path Variable:\*Preference |
+			Where-Object -Property Name -NE ShowPreference
+			$Variables = $Variables.GetEnumerator() | Sort-Object -Property Name
 
 			if ($All)
 			{
-				# TODO: This does not catch all the variables from this script
+				# TODO: This does not catch all of the variables from this script
+				# TODO: Ensure this is from caller's scope
 				$Variables += Get-ChildItem -Path Variable:\Log*Event,
 				Variable:\*Version,
 				"Variable:\Default*",
@@ -602,19 +646,48 @@ if ($ShowPreference)
 				Variable:\*Check,
 				Variable:\*Logging,
 				Variable:\Connection*
+
+				$Variables += Get-ChildItem -Path Variable:\ProjectRoot
+				$Variables += Get-ChildItem -Path Variable:\PolicyStore
+				$Variables += Get-ChildItem -Path Variable:\Platform
+				$Variables += Get-ChildItem -Path Variable:\ForceLoad
+				$Variables += Get-ChildItem -Path Variable:\ErrorStatus
+				$Variables += Get-ChildItem -Path Variable:\WarningStatus
 			}
 
-			$Variables = $Variables.GetEnumerator() | Sort-Object -Property Name
 			foreach ($Variable in $Variables)
 			{
 				Write-Host "[$Target] $($Variable.Name) = $($Variable.Value)" -ForegroundColor Cyan
+			}
+
+			if ($All)
+			{
+				foreach ($Entry in @($env:PSModulePath.Split(";")))
+				{
+					Write-Host "[$Target] ModulePath = $Entry" -ForegroundColor Cyan
+				}
+
+				foreach ($Entry in @($env:Path.Split(";")))
+				{
+					Write-Host "[$Target] Path = $Entry" -ForegroundColor Cyan
+				}
+
+				$DriveEntry = Get-PSDrive -PSProvider FileSystem -Name root, mod, ip4, ip6, test |
+				Select-Object -Property Name, Root
+
+				foreach ($Entry in $DriveEntry)
+				{
+					Write-Host "[$Target] $($Entry.Name):\ = $($Entry.Root)" -ForegroundColor Cyan
+				}
 			}
 		}
 	} | Import-Module -Scope Global
 
 	if (!$InsideModule)
 	{
-		Write-Debug -Message "[$SettingsScript] DebugPreference: $DebugPreference" -Debug
+		# Write-Debug -Message "[$SettingsScript] DebugPreference: $DebugPreference" -Debug
 		Show-Preference # -All
+		Remove-Module -Name Dynamic.Preference
 	}
 }
+#endregion

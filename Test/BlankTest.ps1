@@ -48,7 +48,6 @@ None.
 
 #region Initialization
 # TODO: Remove elevation requirement if needed
-#Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )
@@ -66,5 +65,5 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
-Exit-Test
 Update-Log
+Exit-Test
