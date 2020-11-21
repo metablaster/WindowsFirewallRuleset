@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for LeagueOfLegends
 
 .DESCRIPTION
+Outbound firewall rules for League Of Legends multiplayer game
 
 .EXAMPLE
 PS> .\LeagueOfLegends.ps1

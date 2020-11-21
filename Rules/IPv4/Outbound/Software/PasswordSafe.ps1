@@ -28,9 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound firewall rules for
+Outbound firewall rules for password safe
 
 .DESCRIPTION
+Outbound firewall rules for password safe program
 
 .EXAMPLE
 PS> .\PasswordSafe.ps1

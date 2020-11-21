@@ -31,6 +31,7 @@ SOFTWARE.
 Inbound firewall rules for qBittorrent
 
 .DESCRIPTION
+Inbound firewall rules for qBitTorrent torrent client
 
 .EXAMPLE
 PS> .\qBittorrent.ps1

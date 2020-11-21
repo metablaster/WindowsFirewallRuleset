@@ -28,9 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound firewall rules for
+Outbound firewall rules for sysinternals
 
 .DESCRIPTION
+Outbound firewall rules for sysinternals software suite
 
 .EXAMPLE
 PS> .\SysInternals.ps1

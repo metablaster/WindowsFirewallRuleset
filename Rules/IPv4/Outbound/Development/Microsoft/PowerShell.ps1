@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for PowerShell
 
 .DESCRIPTION
+Outbound firewall rules for PowerShell Core and Desktop editions
 
 .EXAMPLE
 PS> .\PowerShell.ps1

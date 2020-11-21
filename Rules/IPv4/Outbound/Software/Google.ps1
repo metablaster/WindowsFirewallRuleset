@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for Google
 
 .DESCRIPTION
+Outbound firewall rules for software from Google
 
 .EXAMPLE
 PS> .\Google.ps1

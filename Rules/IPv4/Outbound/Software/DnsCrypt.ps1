@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for DnsCrypt
 
 .DESCRIPTION
+Outbound firewall rules for dnscrypt-proxy and Simple DnsCrypt
 
 .EXAMPLE
 PS> .\DnsCrypt.ps1

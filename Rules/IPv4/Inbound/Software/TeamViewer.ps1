@@ -31,6 +31,7 @@ SOFTWARE.
 Inbound firewall rules for TeamViewer
 
 .DESCRIPTION
+Inbound firewall rules for Team Viewer remote control
 
 .EXAMPLE
 PS> .\TeamViewer.ps1

@@ -31,6 +31,7 @@ SOFTWARE.
 Inbound firewall rules for MicrosoftOffice
 
 .DESCRIPTION
+Inbound firewall rules for Microsoft Office software suite
 
 .EXAMPLE
 PS> .\MicrosoftOffice.ps1

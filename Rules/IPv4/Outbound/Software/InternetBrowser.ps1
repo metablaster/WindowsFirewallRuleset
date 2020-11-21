@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for InternetBrowser
 
 .DESCRIPTION
+Outbound firewall rules for 3rd party internet browsers
 
 .EXAMPLE
 PS> .\InternetBrowser.ps1

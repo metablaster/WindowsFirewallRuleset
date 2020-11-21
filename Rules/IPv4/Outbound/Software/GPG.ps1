@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for GPG
 
 .DESCRIPTION
+Outbound firewall rules for Gpg4Win and GPG related software
 
 .EXAMPLE
 PS> .\GPG.ps1

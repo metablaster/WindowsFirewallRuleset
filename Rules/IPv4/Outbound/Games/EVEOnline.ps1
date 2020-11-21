@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for EVEOnline
 
 .DESCRIPTION
+Outbound firewall rules for EVE Online MMO game
 
 .EXAMPLE
 PS> .\EVEOnline.ps1

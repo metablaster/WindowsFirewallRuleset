@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for MSYS2
 
 .DESCRIPTION
+Outbound firewall rules for MSYS2 software suite
 
 .EXAMPLE
 PS> .\MSYS2.ps1

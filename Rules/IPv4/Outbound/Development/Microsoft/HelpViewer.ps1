@@ -31,6 +31,8 @@ SOFTWARE.
 Outbound firewall rules for HelpViewer
 
 .DESCRIPTION
+Outbound firewall rules for Help Viewer,
+Microsoft's documentation help viewer
 
 .EXAMPLE
 PS> .\HelpViewer.ps1

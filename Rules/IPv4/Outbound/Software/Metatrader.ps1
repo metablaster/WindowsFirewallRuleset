@@ -28,9 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound firewall rules for
+Outbound firewall rules for Metatrader
 
 .DESCRIPTION
+Outbound firewall rules for Metatrader platform
 
 .EXAMPLE
 PS> .\Metatrader.ps1

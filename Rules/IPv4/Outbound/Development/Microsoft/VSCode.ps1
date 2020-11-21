@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for VSCode
 
 .DESCRIPTION
+Outbound firewall rules for Visual Studio Code
 
 .EXAMPLE
 PS> .\VSCode.ps1

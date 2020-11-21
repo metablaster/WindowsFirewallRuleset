@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for Adobe
 
 .DESCRIPTION
+Outbound firewall rules for software from Adobe
 
 .EXAMPLE
 PS> .\Adobe.ps1

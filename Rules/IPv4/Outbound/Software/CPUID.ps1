@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for CPUID
 
 .DESCRIPTION
+Outbound firewall rules for software from CPUID
 
 .EXAMPLE
 PS> .\CPUID.ps1

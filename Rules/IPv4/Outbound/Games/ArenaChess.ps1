@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for ArenaChess
 
 .DESCRIPTION
+Outbound firewall rules for Arena Chess game
 
 .EXAMPLE
 PS> .\ArenaChess.ps1

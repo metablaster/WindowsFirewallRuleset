@@ -28,9 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound firewall rules for
+Outbound firewall rules for qBitTorrent
 
 .DESCRIPTION
+Outbound firewall rules for qBitTorrent torrent client
 
 .EXAMPLE
 PS> .\qBittorrent.ps1

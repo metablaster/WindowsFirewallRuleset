@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for TeamViewer
 
 .DESCRIPTION
+Outbound firewall rules for Team Viewer remote control
 
 .EXAMPLE
 PS> .\TeamViewer.ps1

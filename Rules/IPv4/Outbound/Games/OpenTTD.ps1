@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for OpenTTD
 
 .DESCRIPTION
+Outbound firewall rules for Open TTD free game
 
 .EXAMPLE
 PS> .\OpenTTD.ps1

@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for VisualStudio
 
 .DESCRIPTION
+Outbound firewall rules for Visual Studio IDE
 
 .EXAMPLE
 PS> .\VisualStudio.ps1

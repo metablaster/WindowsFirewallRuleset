@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for WarThunder
 
 .DESCRIPTION
+Outbound firewall rules for War Thunder MMO game
 
 .EXAMPLE
 PS> .\WarThunder.ps1

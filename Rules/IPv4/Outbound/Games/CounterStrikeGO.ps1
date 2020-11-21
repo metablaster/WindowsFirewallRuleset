@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for CounterStrikeGO
 
 .DESCRIPTION
+Outbound firewall rules for CS:GO game
 
 .EXAMPLE
 PS> .\CounterStrikeGO.ps1

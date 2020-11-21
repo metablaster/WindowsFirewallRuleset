@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for MSI
 
 .DESCRIPTION
+Outbound firewall rules for software from MSI
 
 .EXAMPLE
 PS> .\MSI.ps1

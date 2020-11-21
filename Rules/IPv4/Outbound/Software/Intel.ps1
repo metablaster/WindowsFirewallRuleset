@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for Intel
 
 .DESCRIPTION
+Outbound firewall rules for Intel related software
 
 .EXAMPLE
 PS> .\Intel.ps1

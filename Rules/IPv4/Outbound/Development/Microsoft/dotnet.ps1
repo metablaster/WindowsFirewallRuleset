@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for dotnet
 
 .DESCRIPTION
+Outbound firewall rules for Microsoft's dotnet
 
 .EXAMPLE
 PS> .\dotnet.ps1

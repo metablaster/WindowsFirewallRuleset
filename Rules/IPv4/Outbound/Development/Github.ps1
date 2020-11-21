@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for Github
 
 .DESCRIPTION
+Outbound firewall rules for git and Github
 
 .EXAMPLE
 PS> .\Github.ps1

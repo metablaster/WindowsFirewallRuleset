@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for RealWorld
 
 .DESCRIPTION
+Outbound firewall rules for Real World cursor editor
 
 .EXAMPLE
 PS> .\RealWorld.ps1

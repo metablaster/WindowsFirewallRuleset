@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for Greenshot
 
 .DESCRIPTION
+Outbound firewall rules for Greenshot screenshot taker
 
 .EXAMPLE
 PS> .\Greenshot.ps1

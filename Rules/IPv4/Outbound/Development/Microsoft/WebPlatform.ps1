@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for WebPlatform
 
 .DESCRIPTION
+Outbound firewall rules for Web Platform
 
 .EXAMPLE
 PS> .\WebPlatform.ps1

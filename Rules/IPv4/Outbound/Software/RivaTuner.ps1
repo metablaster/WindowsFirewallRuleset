@@ -31,6 +31,8 @@ SOFTWARE.
 Outbound firewall rules for RivaTuner
 
 .DESCRIPTION
+Outbound firewall rules for Riva Tuner statistics server
+Used by furmark
 
 .EXAMPLE
 PS> .\RivaTuner.ps1
@@ -84,7 +86,7 @@ if ((Test-Installation "RivaTuner" ([ref] $RivaTunerRoot)) -or $ForceLoad)
 	$Program = "$RivaTunerRoot\RTSS.exe"
 	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Riva Tuner Statistics SErver" -Service Any -Program $Program `
+		-DisplayName "Riva Tuner Statistics Server" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `

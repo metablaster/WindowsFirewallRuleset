@@ -31,6 +31,7 @@ SOFTWARE.
 Inbound firewall rules for EpicGames
 
 .DESCRIPTION
+Inbound firewall rules for Epic Games game engine
 
 .EXAMPLE
 PS> .\EpicGames.ps1

@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for MicrosoftOffice
 
 .DESCRIPTION
+Outbound firewall rules for Microsoft Office software suite
 
 .EXAMPLE
 PS> .\MicrosoftOffice.ps1

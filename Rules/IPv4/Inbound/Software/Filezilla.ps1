@@ -31,6 +31,7 @@ SOFTWARE.
 Inbound firewall rules for Filezilla
 
 .DESCRIPTION
+Inbound firewall rules for FileZilla FTP client
 
 .EXAMPLE
 PS> .\Filezilla.ps1

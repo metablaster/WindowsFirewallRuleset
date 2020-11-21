@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for vcpkg
 
 .DESCRIPTION
+Outbound firewall rules for vcpkg C++ library manager
 
 .EXAMPLE
 PS> .\vcpkg.ps1

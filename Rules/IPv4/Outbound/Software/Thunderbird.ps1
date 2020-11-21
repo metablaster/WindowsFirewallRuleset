@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for Thunderbird
 
 .DESCRIPTION
+Outbound firewall rules for Thunderbird email client
 
 .EXAMPLE
 PS> .\Thunderbird.ps1

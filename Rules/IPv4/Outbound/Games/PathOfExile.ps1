@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for PathOfExile
 
 .DESCRIPTION
+Outbound firewall rules for Path Of Exile MMO game
 
 .EXAMPLE
 PS> .\PathOfExile.ps1

@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for NuGet
 
 .DESCRIPTION
+Outbound firewall rules for NuGet package installer and manager
 
 .EXAMPLE
 PS> .\NuGet.ps1

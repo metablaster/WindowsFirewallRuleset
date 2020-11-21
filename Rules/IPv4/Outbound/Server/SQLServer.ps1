@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for SQLServer
 
 .DESCRIPTION
+Outbound firewall rules for SQL Server instance
 
 .EXAMPLE
 PS> .\SQLServer.ps1

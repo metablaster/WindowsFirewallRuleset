@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for OpenSSH
 
 .DESCRIPTION
+Outbound firewall rules for non official build of OpenSSH portable
 
 .EXAMPLE
 PS> .\OpenSSH.ps1

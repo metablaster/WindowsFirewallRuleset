@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for Incredibuild
 
 .DESCRIPTION
+Outbound firewall rules for Incredibuild build farm
 
 .EXAMPLE
 PS> .\Incredibuild.ps1

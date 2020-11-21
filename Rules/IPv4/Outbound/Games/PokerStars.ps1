@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for PokerStars
 
 .DESCRIPTION
+Outbound firewall rules for Poker Stars online poker game
 
 .EXAMPLE
 PS> .\PokerStars.ps1

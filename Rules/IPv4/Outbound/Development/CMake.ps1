@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for CMake
 
 .DESCRIPTION
+Outbound firewall rules for CMake built tool
 
 .EXAMPLE
 PS> .\CMake.ps1

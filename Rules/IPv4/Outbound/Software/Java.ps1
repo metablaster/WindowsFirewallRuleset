@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for Java
 
 .DESCRIPTION
+Outbound firewall rules for Java software suite
 
 .EXAMPLE
 PS> .\Java.ps1

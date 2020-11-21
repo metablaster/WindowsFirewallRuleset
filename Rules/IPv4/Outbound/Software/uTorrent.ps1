@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for uTorrent
 
 .DESCRIPTION
+Outbound firewall rules for uTorrent torrent client
 
 .EXAMPLE
 PS> .\uTorrent.ps1

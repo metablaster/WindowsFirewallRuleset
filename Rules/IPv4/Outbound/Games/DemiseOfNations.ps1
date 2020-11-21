@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for DemiseOfNations
 
 .DESCRIPTION
+Outbound firewall rules for Demise Of Nations freeware game
 
 .EXAMPLE
 PS> .\DemiseOfNations.ps1

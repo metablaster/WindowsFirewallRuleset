@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for Nvidia
 
 .DESCRIPTION
+Outbound firewall rules for from Nvidia
 
 .EXAMPLE
 PS> .\Nvidia.ps1

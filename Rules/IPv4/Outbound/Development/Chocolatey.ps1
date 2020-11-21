@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for Chocolatey
 
 .DESCRIPTION
+Outbound firewall rules for Chocolatey package manager
 
 .EXAMPLE
 PS> .\Chocolatey.ps1

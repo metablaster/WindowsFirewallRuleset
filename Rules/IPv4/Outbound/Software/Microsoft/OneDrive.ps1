@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for OneDrive
 
 .DESCRIPTION
+Outbound firewall rules for One Drive
 
 .EXAMPLE
 PS> .\OneDrive.ps1

@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for EdgeChromium
 
 .DESCRIPTION
+Outbound firewall rules for Microsoft Edge Chromium browser
 
 .EXAMPLE
 PS> .\EdgeChromium.ps1

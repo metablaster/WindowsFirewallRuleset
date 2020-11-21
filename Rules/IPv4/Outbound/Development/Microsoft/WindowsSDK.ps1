@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for WindowsSDK
 
 .DESCRIPTION
+Outbound firewall rules for Windows SDK
 
 .EXAMPLE
 PS> .\WindowsSDK.ps1

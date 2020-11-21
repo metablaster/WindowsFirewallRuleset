@@ -28,9 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound firewall rules for
+Outbound firewall rules for OBSStudio
 
 .DESCRIPTION
+Outbound firewall rules for OBSStudio
 
 .EXAMPLE
 PS> .\OBSStudio.ps1

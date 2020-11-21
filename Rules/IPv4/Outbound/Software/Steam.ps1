@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for Steam
 
 .DESCRIPTION
+Outbound firewall rules for Steam client
 
 .EXAMPLE
 PS> .\Steam.ps1

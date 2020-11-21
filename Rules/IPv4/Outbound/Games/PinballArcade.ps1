@@ -31,6 +31,7 @@ SOFTWARE.
 Outbound firewall rules for PinballArcade
 
 .DESCRIPTION
+Outbound firewall rules for Pinball Arcade freeware game
 
 .EXAMPLE
 PS> .\PinballArcade.ps1
