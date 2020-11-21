@@ -354,7 +354,7 @@ specific subfolders
 		# Generate updatable help content
 		# NOTE: Requires the path to module page which contains required metadata to name cab file
 		# NOTE: Recommend to provide as content only about_ topics and the output from the New-ExternalHelp
-		# TODO: output info xml is UTF8 with BOM
+		# TODO: resulting helpinfo xml is UTF8 with BOM
 		New-ExternalHelpCab -CabFilesFolder $OnlineHelp\External -OutputFolder $OnlineHelp\Content `
 			-LandingPagePath $ModulePage | Out-Null
 		# -IncrementHelpVersion

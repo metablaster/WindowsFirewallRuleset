@@ -33,10 +33,6 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyI
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
 . $PSScriptRoot\..\ModulePreferences.ps1
 
-# TODO: should process must be implemented for system changes
-# if (!$PSCmdlet.ShouldProcess("ModuleName", "Update or install module if needed"))
-# SupportsShouldProcess = $true, ConfirmImpact = "High"
-
 #
 # Script imports
 #

@@ -63,6 +63,7 @@ function Enter-Test
 
 	# Let Exit-Test know file name
 	# NOTE: Global scope because this module could be removed before calling Exit-Test
+	# NOTE: This will fail if Exit-Test was not called, restart PowerShell in that case
 	Set-Variable -Name UnitTest -Scope Global -Option ReadOnly -Value ((Get-PSCallStack)[1].Command -replace ".{4}$")
 
 	Write-Output ""

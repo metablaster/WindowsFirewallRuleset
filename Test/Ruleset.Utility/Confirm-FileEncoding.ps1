@@ -66,7 +66,23 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 Enter-Test
 
 Start-Test "Initialize ProjectFiles variable"
-$ProjectFiles = Get-ChildItem -Path $ProjectRoot -Recurse -Exclude *.cab, *.zip, *.png, *.wav, *.dll, *_HelpInfo.xml, *.pmc |
+$Excludes = @(
+	"*.cab"
+	"*.zip"
+	"*.png"
+	"*.wav"
+	"*.dll"
+	"*.pmc"
+	"*.msc"
+)
+
+if ($PSVersionTable.PSEdition -eq "Core")
+{
+	# NOTE: Ignoring, see Update-Help.ps1 for more info
+	$Excludes += "*_HelpInfo.xml"
+}
+
+$ProjectFiles = Get-ChildItem -Path $ProjectRoot -Recurse -Exclude $Excludes |
 Where-Object { $_.Mode -notlike "*d*" } | Select-Object -ExpandProperty FullName
 
 Start-Test "Confirm-FileEncoding"

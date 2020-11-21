@@ -38,32 +38,21 @@ tests for OS, PowerShell version and edition, Administrator mode, .NET Framework
 required system services are started and recommended modules installed.
 If not the function may exit and stop executing scripts.
 
-.PARAMETER SkipProjectCheck
-If specified, checking for project requirements and recommendations will not be performed,
-This is equivalent to function that does nothing.
-The default is managed by project settings.
-
-.PARAMETER CheckModules
-If specified, checking for required and recommended module updates will be performed.
-The default is managed by project settings.
-
-.PARAMETER CheckServices
-If specified, checks if required system services are running.
-The default is managed by project settings.
-
 .PARAMETER Abort
 If specified exit is called on failure instead of return
 
 .EXAMPLE
 PS> Initialize-Project
-Performs default requirements and recommendations checks managed by global settings,
+
+Performs default requirements and recommendations checks managed by global settings.
 Error or warning message is shown if check failed, environment info otherwise.
 
 .EXAMPLE
-PS> Initialize-Project -CheckModules
-Performs default requirements and recommendations checks managed by global settings,
-in addition installed modules are updated or installed as needed.
-Error or warning message is shown if check failed, environment info otherwise.
+PS> Initialize-Project -Abort
+
+Performs default requirements and recommendations checks managed by global settings.
+Error or warning message is shown if check failed and all subsequent operations are halted.
+If successful environment info is shown.
 
 .INPUTS
 None. You cannot pipe objects to Initialize-Project
@@ -85,39 +74,30 @@ TODO: Any modules in standard user paths will override system wide modules
 function Initialize-Project
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-		"PSAvoidUsingWriteHost", "", Justification = "There is no way to replace Write-Host here")]
-	[CmdletBinding(DefaultParameterSetName = "NoProject",
+		"PSAvoidUsingWriteHost", "", Scope = "Function", Justification = "There is no way to replace Write-Host here")]
+	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initializenitialize-Project.md")]
 	[OutputType([void])]
 	param (
-		[Parameter(ParameterSetName = "NoProject")]
-		[switch] $SkipProjectCheck = !$ProjectCheck,
-
-		[Parameter(ParameterSetName = "Project")]
-		[switch] $CheckModules = $ModulesCheck,
-
-		[Parameter(ParameterSetName = "Project")]
-		[switch] $CheckServices = $ServicesCheck,
-
-		[Parameter(ParameterSetName = "Project")]
+		[Parameter()]
 		[switch] $Abort
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# disabled when running scripts from SetupFirewall.ps1 script, in which case it runs only once
-	if ($SkipProjectCheck)
+	if (!$ProjectCheck)
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Project initialization skipped"
 		return
 	}
 
 	# Print watermark
-	Write-Output ""
-	Write-Output "Windows Firewall Ruleset v$ProjectVersion"
-	Write-Output "Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch"
-	Write-Output "https://github.com/metablaster/WindowsFirewallRuleset"
-	Write-Output ""
+	Write-Host ""
+	Write-Host "Windows Firewall Ruleset v$ProjectVersion"
+	Write-Host "Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch"
+	Write-Host "https://github.com/metablaster/WindowsFirewallRuleset"
+	Write-Host ""
 
 	Write-Information -Tags "User" -MessageData "INFO: Checking operating system"
 
@@ -185,17 +165,11 @@ function Initialize-Project
 	}
 
 	# Check PowerShell edition
-	# TODO: Edition check should be combined with Import-WinModule below and Test-WSMan from ProjectSettings
 	Write-Information -Tags "User" -MessageData "INFO: Checking PowerShell edition"
 	$PowerShellEdition = $PSVersionTable.PSEdition
 
-	# Check PowerShell version
-	[version] $RequirePSVersion = $RequirePowerShellVersion
-	[version] $TargetPSVersion = $PSVersionTable.PSVersion
-
 	if ($PowerShellEdition -eq "Core")
 	{
-		$RequirePSVersion = $RequireCoreVersion
 		Write-Warning -Message "Remote firewall administration with PowerShell $PowerShellEdition is not implemented"
 	}
 	else
@@ -203,7 +177,10 @@ function Initialize-Project
 		Write-Warning -Message "Remote firewall administration with PowerShell $PowerShellEdition is partially implemented"
 	}
 
+	# Check PowerShell version
+	[version] $TargetPSVersion = $PSVersionTable.PSVersion
 	Write-Information -Tags "User" -MessageData "INFO: Checking PowerShell version"
+
 	if ($TargetPSVersion -lt $RequirePSVersion)
 	{
 		Write-Error -Category OperationStopped -TargetObject $TargetPSVersion `
@@ -213,7 +190,7 @@ function Initialize-Project
 		return
 	}
 
-	if ($CheckServices)
+	if ($ServicesCheck)
 	{
 		Write-Information -Tags "User" -MessageData "INFO: Checking system services"
 
@@ -255,8 +232,8 @@ function Initialize-Project
 		}
 	}
 
-	# NOTE: WinRM must be started before running this
-	if (($PSVersionTable.PSEdition -eq "Core") -and ($TargetPSVersion -ge "7.1"))
+	# NOTE: WinRM service must be started before running this
+	if ($TargetPSVersion -ge "7.1")
 	{
 		# Since PowerShell Core 7.1 Using Appx no longer works, so we use a compatibility module
 		# https://github.com/PowerShell/PowerShell/issues/13138
@@ -322,7 +299,7 @@ function Initialize-Project
 	}
 
 	# Modules and git is required only for development and editing scripts
-	if ($Develop -or $CheckModules)
+	if ($ModulesCheck -or $Develop)
 	{
 		Write-Information -Tags "User" -MessageData "INFO: Checking git"
 
@@ -354,7 +331,7 @@ function Initialize-Project
 	}
 
 	# NOTE: Result value should be equivalent to $Develop
-	if ($CheckModules)
+	if ($ModulesCheck)
 	{
 		Write-Information -Tags "User" -MessageData "INFO: Checking package providers"
 
@@ -500,8 +477,8 @@ function Initialize-Project
 	# HACK: We don't know if it was successful, need to record errors and/or warnings
 	Write-Host "Checking project minimum requirements was successful!" -ForegroundColor Cyan
 
-	Write-Output ""
-	Write-Output "System:`t`t $OSCaption v$OSBuildVersion"
-	Write-Output "Environment:`t PowerShell $PowerShellEdition $TargetPSVersion"
-	Write-Output ""
+	Write-Host ""
+	Write-Host "System:`t`t $OSCaption v$OSBuildVersion"
+	Write-Host "Environment:`t PowerShell $PowerShellEdition $TargetPSVersion"
+	Write-Host ""
 }

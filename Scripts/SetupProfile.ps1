@@ -137,6 +137,6 @@ Set-NetworkProfile
 gpupdate.exe /target:computer
 
 # Verify permissions to write firewall logs if needed
-& "$ProjectRoot\Scripts\GrantLogs.ps1" -Principal $DefaultUser -SkipPrompt
+& "$ProjectRoot\Scripts\GrantLogs.ps1" -SkipPrompt
 
 Update-Log

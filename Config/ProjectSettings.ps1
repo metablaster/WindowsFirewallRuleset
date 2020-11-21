@@ -69,7 +69,7 @@ param(
 
 #region Initialization
 # Name of this script for debugging messages, do not modify!.
-Set-Variable -Name SettingsScript -Scope Local -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{4}$")
+Set-Variable -Name SettingsScript -Scope Private -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{4}$")
 Write-Debug -Message "[$SettingsScript] params($($PSBoundParameters.Values))"
 
 if ($MyInvocation.InvocationName -ne ".")
@@ -116,8 +116,7 @@ if (!(Get-Variable -Name ProjectRoot -Scope Global -ErrorAction Ignore))
 }
 #endregion
 
-<#
-Preference Variables default values (Core / Desktop)
+<# Preference Variables default values (Core / Desktop)
 https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_preference_variables?view=powershell-7
 https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_preference_variables?view=powershell-5.1
 
@@ -323,7 +322,7 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 	# check if read only variables already initialized, do not modify!
 	New-Variable -Name CheckReadOnlyVariables -Scope Global -Option Constant -Value $null
 
-	# Set to false to avoid checking system requirements
+	# Set to false to avoid checking system and environment requirements
 	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $false
 
 	# Set to false to avoid checking if modules are up to date
@@ -334,7 +333,7 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 }
 #endregion
 
-#region Read only variables, these can be modified as follows:
+#region Read only variables 2, these can be modified as follows:
 # 1. Never by project code
 # 2. Only once by user before running any project scripts
 # 3. Any amount of time by user if "develop" mode is ON
@@ -363,29 +362,33 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 	# To force loading rules regardless of presence of program set to true
 	Set-Variable -Name ForceLoad -Scope Global -Option ReadOnly -Force -Value $false
 
-	# Set to false to use IPv6 instead of IPv4
-	# TODO: There is also IPVersion variable hanging around
-	Set-Variable -Name ConnectionIPv4 -Scope Global -Option ReadOnly -Force -Value $true
-
-	# Amount of connection tests against remote computers
+	# Amount of connection tests toward target policy store
 	Set-Variable -Name ConnectionCount -Scope Global -Option ReadOnly -Force -Value 2
 
-	# Timeout in seconds to contact remote computers
-	Set-Variable -Name ConnectionTimeout -Scope Global -Option ReadOnly -Force -Value 1
+	if ($PSVersionTable.PSEdition -eq "Core")
+	{
+		# Set to false to use IPv6 instead of IPv4 to test connection to target policy store
+		Set-Variable -Name ConnectionIPv4 -Scope Global -Option ReadOnly -Force -Value $true
+
+		# Timeout in seconds to contact target policy store
+		Set-Variable -Name ConnectionTimeout -Scope Global -Option ReadOnly -Force -Value 1
+	}
 
 	# User account name for which to search executables in user profile and non standard paths by default
 	# Also used for other defaults where standard user account is expected, ex. development as standard user
-	# NOTE: Set this value to username for which to create rules by default, if there are multiple
-	# users and to affect them all set this value to non existent user
+	# NOTE: If there are multiple users and to affect them all set this value to non existent user
 	# TODO: needs testing info messages for this value
 	# TODO: We are only assuming about accounts here as a workaround due to often need to modify variable
-	Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value (Split-Path -Path (Get-LocalGroupMember -Group Users | Where-Object {
+	# TODO: This should be used for LocalUser rule parameter too
+	Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value (
+		Split-Path -Path (Get-LocalGroupMember -Group Users | Where-Object {
 				$_.ObjectClass -EQ "User" -and
 				($_.PrincipalSource -eq "Local" -or $_.PrincipalSource -eq "MicrosoftAccount")
 			} | Select-Object -ExpandProperty Name -Last 1) -Leaf)
 
 	# Administrative user account name which will perform unit testing
-	Set-Variable -Name TestAdmin -Scope Global -Option ReadOnly -Force -Value (Split-Path -Path (Get-LocalGroupMember -Group Administrators | Where-Object {
+	Set-Variable -Name TestAdmin -Scope Global -Option ReadOnly -Force -Value (
+		Split-Path -Path (Get-LocalGroupMember -Group Administrators | Where-Object {
 				$_.ObjectClass -EQ "User" -and
 				($_.PrincipalSource -eq "Local" -or $_.PrincipalSource -eq "MicrosoftAccount")
 			} | Select-Object -ExpandProperty Name -Last 1) -Leaf)
@@ -414,16 +417,6 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	# https://docs.microsoft.com/en-us/windows/release-information
 	# https://docs.microsoft.com/en-us/windows-server/get-started/windows-server-release-info
 	New-Variable -Name RequireWindowsVersion -Scope Global -Option Constant -Value ([version]::new(10, 0, 17763))
-
-	# TODO: Conditionally set PS version based on edition
-	# Recommended minimum PowerShell Core
-	# NOTE: 6.1.0 will not work, but 7.0.3 works, verify with PSUseCompatibleCmdlets
-	New-Variable -Name RequireCoreVersion -Scope Global -Option Constant -Value ([version]::new(7, 1, 0))
-
-	# Required minimum Windows PowerShell, do not decrement!
-	# NOTE: 5.1.14393.206 (system v1607) will not work, but 5.1.19041.1 (system v2004) works, verify with PSUseCompatibleCmdlets
-	# NOTE: replacing build 19041 (system v2004) with 17763 (system v1809) which is minimum required for rules and .NET
-	New-Variable -Name RequirePowerShellVersion -Scope Global -Option Constant -Value ([version]::new(5, 1, 17763))
 
 	# Project logs folder
 	New-Variable -Name LogsFolder -Scope Global -Option Constant -Value "$ProjectRoot\Logs"
@@ -458,21 +451,29 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 			Get-Credential -Message "Credentials are required to access $PolicyStore")
 	}
 
-	# Encoding used to write and read files
 	if ($PSVersionTable.PSEdition -eq "Core")
 	{
-		# UTF8 without BOM
+		# Encoding used to write and read files, UTF8 without BOM
 		# https://docs.microsoft.com/en-us/dotnet/api/system.text.encoding?view=netcore-3.1
 		Set-Variable -Name DefaultEncoding -Scope Global -Option Constant -Value (
 			New-Object -TypeName System.Text.UTF8Encoding -ArgumentList $false)
+
+		# Recommended minimum PowerShell Core
+		# NOTE: 6.1.0 will not work, but 7.0.3 works, verify with PSUseCompatibleCmdlets
+		New-Variable -Name RequirePSVersion -Scope Global -Option Constant -Value ([version]::new(7, 1, 0))
 	}
 	else
 	{
-		# TODO: need some workaround to make Windows PowerShell read/write BOM-less
-		# TODO: System.Text.ASCIIEncoding
-		# UTF8 with BOM
+		# Encoding used to write and read files, UTF8 with BOM
 		# https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.filesystemcmdletproviderencoding?view=powershellsdk-1.1.0
+		# NOTE: System.Text.UTF8Encoding can't be used here because of ValidateSet which expected string
+		# TODO: need some workaround to make Windows PowerShell read/write BOM-less
 		Set-Variable -Name DefaultEncoding -Scope Global -Option Constant -Value "utf8"
+
+		# Required minimum Windows PowerShell, do not decrement!
+		# NOTE: 5.1.14393.206 (system v1607) will not work, but 5.1.19041.1 (system v2004) works, verify with PSUseCompatibleCmdlets
+		# NOTE: replacing build 19041 (system v2004) with 17763 (system v1809) which is minimum required for rules and .NET
+		New-Variable -Name RequirePSVersion -Scope Global -Option Constant -Value ([version]::new(5, 1, 17763))
 	}
 
 	if ($ProjectCheck -and $ModulesCheck)

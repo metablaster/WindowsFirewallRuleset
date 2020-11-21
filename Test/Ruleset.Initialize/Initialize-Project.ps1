@@ -70,21 +70,36 @@ Enter-Test
 
 if ($Force -or $PSCmdlet.ShouldContinue("Modify registry ownership", "Accept dangerous unit test"))
 {
-	Start-Test "Initialize-Project"
-	Initialize-Project -Abort
+	Start-Test "Initialize-Project -Abort"
+	Initialize-Project
 
-	Start-Test "Initialize-Project -NoModules"
-	Initialize-Project -NoModulesCheck
+	New-Variable -Name CopyCheck -Value @{
+		ProjectCheck = $ProjectCheck
+		ModulesCheck = $ModulesCheck
+		ServicesCheck = $ServicesCheck
+	}
 
-	# FAIL
-	# Start-Test "Initialize-Project -NoModulesCheck -NoProjectCheck"
-	# Initialize-Project -NoModulesCheck -NoProjectCheck:$false
+	Start-Test "Initialize-Project -SkipModules -SkipServices"
+	Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $true
+	Set-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Force -Value $false
+	Set-Variable -Name ServicesCheck -Scope Global -Option ReadOnly -Force -Value $false
+	Initialize-Project
 
-	Start-Test "Initialize-Project -NoProjectCheck:$false"
-	$Result = Initialize-Project -NoProjectCheck:$false
+	Start-Test "Initialize-Project -SkipModules"
+	Set-Variable -Name ServicesCheck -Scope Global -Option ReadOnly -Force -Value $true
+	Initialize-Project
+
+	Start-Test "Initialize-Project -SkipServices"
+	Set-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Force -Value $true
+	Set-Variable -Name ServicesCheck -Scope Global -Option ReadOnly -Force -Value $false
+	$Result = Initialize-Project
 	$Result
 
 	Test-Output $Result -Command Initialize-Project
+
+	Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $CopyCheck["ProjectCheck"]
+	Set-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Force -Value $CopyCheck["ModulesCheck"]
+	Set-Variable -Name ServicesCheck -Scope Global -Option ReadOnly -Force -Value $CopyCheck["ServicesCheck"]
 }
 
 Update-Log

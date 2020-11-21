@@ -62,7 +62,7 @@ TODO: We should check for common issues for GPO management, not just ping status
 #>
 function Test-TargetComputer
 {
-	[CmdletBinding(PositionalBinding = $false,
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Desktop",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Test-TargetComputer.md")]
 	[OutputType([bool])]
 	param (
@@ -71,10 +71,13 @@ function Test-TargetComputer
 		[string] $ComputerName,
 
 		[Parameter()]
+		[ValidateRange(1, [int16]::MaxValue)]
 		[int16] $Count = $ConnectionCount,
 
-		[Parameter()]
-		[int16] $Timeout = $ConnectionTimeout
+		[Parameter(ParameterSetName = "Core")]
+		[ValidateScript( { $PSVersionTable.PSEdition -eq "Core" })]
+		[ValidateRange(1, [int16]::MaxValue)]
+		[int16] $Timeout
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -90,6 +93,11 @@ function Test-TargetComputer
 	# NOTE: Don't suppress error, error details can be of more use than just "unable to contact computer"
 	if ($PSVersionTable.PSEdition -eq "Core")
 	{
+		if ($null -eq $Timeout)
+		{
+			$Timeout = $ConnectionTimeout
+		}
+
 		if ($ConnectionIPv4)
 		{
 			return Test-Connection -TargetName $ComputerName -Count $Count -TimeoutSeconds $Timeout -Quiet -IPv4

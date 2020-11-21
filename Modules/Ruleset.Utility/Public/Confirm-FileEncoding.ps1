@@ -88,7 +88,11 @@ function Confirm-FileEncoding
 			$TargetEncoding = Get-FileEncoding $File
 			$FileName = Split-Path -Path $File -Leaf
 
-			if (![array]::Find($Encoding, [System.Predicate[string]] { $TargetEncoding -eq $args[0] }))
+			if ([array]::Find($Encoding, [System.Predicate[string]] { $TargetEncoding -eq $args[0] }))
+			{
+				Write-Debug -Message "File $FileName encoded as $TargetEncoding verification passed"
+			}
+			else
 			{
 				Write-Error -Category ReadError -TargetObject $File -Message "File read operation expects $Encoding encoding on file $File but file encoded as $TargetEncoding"
 
@@ -96,14 +100,8 @@ function Confirm-FileEncoding
 				{
 					exit
 				}
-				else
-				{
-					Write-Warning -Message "$FileName, $TargetEncoding encoded might yield unexpected results"
-				}
-			}
-			else
-			{
-				Write-Debug -Message "File $FileName encoded as $TargetEncoding verification passed"
+
+				Write-Warning -Message "$FileName, $TargetEncoding encoded might yield unexpected results"
 			}
 		}
 	}
