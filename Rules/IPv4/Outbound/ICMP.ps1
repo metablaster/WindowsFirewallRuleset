@@ -114,6 +114,7 @@ New-NetFirewallRule -DisplayName "Echo Request (8)" `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 8 `
 	-LocalAddress Any -RemoteAddress Any `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $DefaultInterface `
 	-Description "The data received in the echo message must be returned in the echo reply message.
@@ -140,6 +141,7 @@ New-NetFirewallRule -DisplayName "Timestamp (13)" `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 13 `
 	-LocalAddress Any -RemoteAddress Any `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $DefaultInterface `
 	-Description "The data received (a timestamp) in the message is returned in the reply together
@@ -172,6 +174,7 @@ New-NetFirewallRule -DisplayName "Router Advertisement (9)" `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 9 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $DefaultInterface `
 	-Description "the ICMP Internet Router Discovery Protocol (IRDP), also called the
@@ -196,6 +199,7 @@ New-NetFirewallRule -DisplayName "Redirect (5)" `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 5 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $DefaultInterface `
 	-Description "ICMP redirect messages are used by routers to notify the hosts on the data link
@@ -232,6 +236,7 @@ New-NetFirewallRule -DisplayName "Echo Reply (0)" `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv4 -IcmpType 0 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrWAN `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $DefaultInterface `
 	-Description "The data received in the echo message must be returned in the echo reply message.
@@ -258,6 +263,7 @@ New-NetFirewallRule -DisplayName "Destination Unreachable (3)" `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv4 -IcmpType 3 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrWAN `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $DefaultInterface `
 	-Description "network specified in the RemoteAddress is unreachable, ie,
@@ -284,6 +290,7 @@ New-NetFirewallRule -DisplayName "Router Solicitation (10)" `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv4 -IcmpType 10 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $DefaultInterface `
 	-Description "the ICMP Internet Router Discovery Protocol (IRDP), also called the
@@ -303,6 +310,7 @@ New-NetFirewallRule -DisplayName "Time Exceeded (11)" `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv4 -IcmpType 11 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrWAN `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $DefaultInterface `
 	-Description "If the gateway processing a datagram finds the time to live field is zero it must
@@ -328,6 +336,7 @@ New-NetFirewallRule -DisplayName "Parameter Problem (12)" `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv4 -IcmpType 12 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrWAN `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $DefaultInterface `
 	-Description "If the gateway or host processing a datagram finds a problem with the header
@@ -350,6 +359,7 @@ New-NetFirewallRule -DisplayName "Timestamp Reply (14)" `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv4 -IcmpType 14 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrWAN `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $DefaultInterface `
 	-Description "The data received (a timestamp) in the message is returned in the reply together
@@ -386,6 +396,7 @@ New-NetFirewallRule -DisplayName "Echo Reply (0)" `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 0 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $DefaultInterface `
 	-Description "The data received in the echo message must be returned in the echo reply message.
@@ -412,6 +423,7 @@ New-NetFirewallRule -DisplayName "Destination Unreachable (3)" `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 3 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $DefaultInterface `
 	-Description "network specified in the RemoteAddress is unreachable, ie,
@@ -438,6 +450,7 @@ New-NetFirewallRule -DisplayName "Router Solicitation (10)" `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 10 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $DefaultInterface `
 	-Description "the ICMP Internet Router Discovery Protocol (IRDP), also called the
@@ -457,6 +470,7 @@ New-NetFirewallRule -DisplayName "Time Exceeded (11)" `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 11 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $DefaultInterface `
 	-Description "If the gateway processing a datagram finds the time to live field is zero it
@@ -483,6 +497,7 @@ New-NetFirewallRule -DisplayName "Parameter Problem (12)" `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 12 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $DefaultInterface `
 	-Description "If the gateway or host processing a datagram finds a problem with the header
@@ -506,6 +521,7 @@ New-NetFirewallRule -DisplayName "Timestamp Reply (14)" `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 14 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $DefaultInterface `
 	-Description "The data received (a timestamp) in the message is returned in the reply together

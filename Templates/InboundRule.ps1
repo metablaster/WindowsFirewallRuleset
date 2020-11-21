@@ -129,6 +129,7 @@ if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot)) -or $ForceLoa
 		-Service Any -Program $Program -Group $Group `
 		-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 0 `
 		-LocalAddress Any -RemoteAddress Any `
+		-LocalPort Any -RemotePort Any `
 		-LocalUser Any -EdgeTraversalPolicy Block `
 		-InterfaceType $DefaultInterface `
 		-Description "Inbound ICMP template description" |

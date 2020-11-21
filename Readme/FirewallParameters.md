@@ -17,7 +17,7 @@ and usually need googling out what they do.
     - [LocalPort/RemotePort](#localportremoteport)
     - [LocalPort TCP Inbound](#localport-tcp-inbound)
     - [LocalPort UDP Inbound](#localport-udp-inbound)
-    - [LocalPort TCP Outbound](#localport-tcp-outbound)
+    - [RemotePort TCP Outbound](#remoteport-tcp-outbound)
   - [Address](#address)
     - [RemoteAddress](#remoteaddress)
     - [Loopback address](#loopback-address)
@@ -50,6 +50,8 @@ and usually need googling out what they do.
 
 ## Port
 
+The docs say we can specify ICMP Type/Code with port parameter which doesn't work.
+
 ### LocalPort/RemotePort
 
 - `Any` All Ports
@@ -65,7 +67,7 @@ and usually need googling out what they do.
 - `PlayToDiscovery` PlayTo Discovery
 - `Teredo` Edge Traversal
 
-### LocalPort TCP Outbound
+### RemotePort TCP Outbound
 
 - `IPHTTPSOut` IPHTTPS
 

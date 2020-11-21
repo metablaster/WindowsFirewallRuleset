@@ -122,8 +122,8 @@ New-NetFirewallRule -DisplayName "Link Local Multicast Name Resolution" `
 The DNS Client service (dnscache) caches Domain Name System (DNS) names and registers the full
 computer name for this computer.
 If the rule is disabled, DNS names will continue to be resolved.
-However, the results of DNS name queries will not be cached and the computer's name will not be registered." |
-Format-Output
+However, the results of DNS name queries will not be cached and the computer's name will not be
+registered." | Format-Output
 
 New-NetFirewallRule -DisplayName "Link Local Multicast Name Resolution" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -138,8 +138,8 @@ New-NetFirewallRule -DisplayName "Link Local Multicast Name Resolution" `
 The DNS Client service (dnscache) caches Domain Name System (DNS) names and registers the full
 computer name for this computer.
 If the rule is disabled, DNS names will continue to be resolved.
-However, the results of DNS name queries will not be cached and the computer's name will not be registered." |
-Format-Output
+However, the results of DNS name queries will not be cached and the computer's name will not be
+registered." | Format-Output
 
 New-NetFirewallRule -DisplayName "NetBIOS Datagram" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
@@ -224,8 +224,8 @@ New-NetFirewallRule -DisplayName "WSD (FDResPub)" `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for Network Discovery to discover devices via Function Discovery.
 Publishes this computer and resources attached to this computer so they can be discovered over the network.
-If this rule is disabled, network resources will no longer be published and they will not be discovered
-by other computers on the network." |
+If this rule is disabled, network resources will no longer be published and they will not be
+discovered by other computers on the network." |
 Format-Output
 
 New-NetFirewallRule -DisplayName "WSD (FDResPub)" `
@@ -239,8 +239,8 @@ New-NetFirewallRule -DisplayName "WSD (FDResPub)" `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for Network Discovery to discover devices via Function Discovery.
 Publishes this computer and resources attached to this computer so they can be discovered over the network.
-If this rule is disabled, network resources will no longer be published and they will not be discovered
-by other computers on the network." |
+If this rule is disabled, network resources will no longer be published and they will not be
+discovered by other computers on the network." |
 Format-Output
 
 New-NetFirewallRule -DisplayName "SSDP Discovery" `

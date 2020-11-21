@@ -74,7 +74,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 # NOTE: Don't run if execute not approved
 $BroadcastAddress = Get-Broadcast -IncludeAll
 
-# First remove all existing rules matching grou-Group $Group p
+# First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #

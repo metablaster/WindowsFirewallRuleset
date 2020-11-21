@@ -64,9 +64,6 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 . $PSScriptRoot\ContextSetup.ps1
 
 # User prompt
-# TODO: Update command line help messages
-$Accept = "Template accept help message"
-$Deny = "Skip operation, template deny help message"
 Update-Context $TestContext $ThisScript
 if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion

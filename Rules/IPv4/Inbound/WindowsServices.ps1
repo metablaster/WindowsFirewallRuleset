@@ -75,42 +75,62 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Delivery Optimization predefined rules
 #
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Delivery Optimization" -Service DoSvc -Program $ServiceHost `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $DefaultInterface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 7680 -RemotePort Any `
-	-EdgeTraversalPolicy Allow -LocalUser Any `
+New-NetFirewallRule -DisplayName "Delivery Optimization" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
+	-Service DoSvc -Program $ServiceHost -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalPort 7680 -RemotePort Any `
+	-LocalUser Any -EdgeTraversalPolicy Allow `
+	-InterfaceType $DefaultInterface `
 	-Description "Service responsible for delivery optimization.
-Windows Update Delivery Optimization works by letting you get Windows updates and Microsoft Store apps from sources in addition to Microsoft,
+Windows Update Delivery Optimization works by letting you get Windows updates and Microsoft Store
+apps from sources in addition to Microsoft,
 like other PCs on your local network, or PCs on the Internet that are downloading the same files.
-Delivery Optimization also sends updates and apps from your PC to other PCs on your local network or PCs on the Internet, based on your settings." | Format-Output
+Delivery Optimization also sends updates and apps from your PC to other PCs on your local network or
+PCs on the Internet, based on your settings." | Format-Output
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Delivery Optimization" -Service DoSvc -Program $ServiceHost `
-	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile Private, Domain -InterfaceType $DefaultInterface `
-	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 7680 -RemotePort Any `
-	-EdgeTraversalPolicy Allow -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
+New-NetFirewallRule -DisplayName "Delivery Optimization" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
+	-Service DoSvc -Program $ServiceHost -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalPort 7680 -RemotePort Any `
+	-LocalUser Any -EdgeTraversalPolicy Allow `
+	-InterfaceType $DefaultInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Service responsible for delivery optimization.
-Windows Update Delivery Optimization works by letting you get Windows updates and Microsoft Store apps from sources in addition to Microsoft,
+Windows Update Delivery Optimization works by letting you get Windows updates and Microsoft Store
+apps from sources in addition to Microsoft,
 like other PCs on your local network, or PCs on the Internet that are downloading the same files.
-Delivery Optimization also sends updates and apps from your PC to other PCs on your local network or PCs on the Internet, based on your settings." | Format-Output
+Delivery Optimization also sends updates and apps from your PC to other PCs on your local network
+or PCs on the Internet, based on your settings." | Format-Output
 
 #
 # @FirewallAPI.dll,-80204 predefined rule
 #
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Windows Camera Frame Server" -Service FrameServer -Program $ServiceHost `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $DefaultInterface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 554, 8554-8558 -RemotePort Any `
-	-EdgeTraversalPolicy Block -LocalUser Any `
-	-Description "Service enables multiple clients to access video frames from camera devices." | Format-Output
+New-NetFirewallRule -DisplayName "Windows Camera Frame Server" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Public `
+	-Service FrameServer -Program $ServiceHost -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalPort 554, 8554-8558 -RemotePort Any `
+	-LocalUser Any -EdgeTraversalPolicy Block `
+	-InterfaceType $DefaultInterface `
+	-Description "Service enables multiple clients to access video frames from camera devices." |
+Format-Output
 
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Windows Camera Frame Server" -Service FrameServer -Program $ServiceHost `
-	-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private, Public -InterfaceType $DefaultInterface `
-	-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort 5000-5020 -RemotePort Any `
-	-EdgeTraversalPolicy Block -LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Service enables multiple clients to access video frames from camera devices." | Format-Output
+New-NetFirewallRule -DisplayName "Windows Camera Frame Server" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Public `
+	-Service FrameServer -Program $ServiceHost -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalPort 5000-5020 -RemotePort Any `
+	-LocalUser Any -EdgeTraversalPolicy Block `
+	-InterfaceType $DefaultInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description "Service enables multiple clients to access video frames from camera devices." |
+Format-Output
 
 Update-Log

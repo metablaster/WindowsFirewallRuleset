@@ -106,6 +106,7 @@ New-NetFirewallRule -DisplayName "Local Network Control Block" `
 	-Service Any -Program Any -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 224.0.0.0-224.0.0.255 `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
@@ -119,6 +120,7 @@ New-NetFirewallRule -DisplayName "Internetwork Control Block" `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 224.0.1.0-224.0.1.255 `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
@@ -132,6 +134,7 @@ New-NetFirewallRule -DisplayName "AD-HOC Block I" `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 224.0.2.0-224.0.255.255 `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
@@ -149,6 +152,7 @@ New-NetFirewallRule -DisplayName "SDP/SAP Block" `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 224.2.0.0-224.2.255.255 `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
@@ -162,6 +166,7 @@ New-NetFirewallRule -DisplayName "AD-HOC Block II" `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 224.3.0.0-224.4.255.255 `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
@@ -179,6 +184,7 @@ New-NetFirewallRule -DisplayName "DIS Transient Groups" `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 224.252.0.0-224.255.255.255 `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
@@ -190,6 +196,7 @@ New-NetFirewallRule -DisplayName "Source-Specific Multicast Block" `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 232.0.0.0-232.255.255.255 `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
@@ -205,6 +212,7 @@ New-NetFirewallRule -DisplayName "GLOP Block" `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 233.0.0.0-233.251.255.255 `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
@@ -222,6 +230,7 @@ New-NetFirewallRule -DisplayName "AD-HOC Block III" `
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 233.252.0.0-233.255.255.255 `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
@@ -240,6 +249,7 @@ New-NetFirewallRule -DisplayName "Unicast-Prefix-based IPv4 Multicast Addresses"
 	-Service Any -Program Any -Group $Group `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 234.0.0.0-234.255.255.255 `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
@@ -257,6 +267,7 @@ New-NetFirewallRule -DisplayName "Administratively Scoped Block" `
 	-Service Any -Program Any -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress 239.0.0.0-239.255.255.255 `
+	-LocalPort Any -RemotePort Any `
 	-LocalUser $MulticastUsers `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `

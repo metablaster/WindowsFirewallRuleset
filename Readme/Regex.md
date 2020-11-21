@@ -141,12 +141,13 @@ New-NetFirewallRule -Profile Private, Domain
 ```powershell
 New-NetFirewallRule -Direction $Direction -Protocol UDP
 New-NetFirewallRule -Direction Inbound -Protocol 41
--Direction $Direction -Protocol ICMPv4 -IcmpType 12
+-Direction $Direction -Protocol ICMPv6 -IcmpType 12
+-Direction $Direction -Protocol ICMPv4 -IcmpType 3:4
 ```
 
 ```regex
 -Direction [\$|\w]\w+ -Protocol [\$|\w]\w+ ?
--Direction [\$|\w]\w+ -Protocol [\$|\w]\w+ -IcmpType \d+ ?
+-Direction [\$|\w]\w+ -Protocol [\$|\w]\w+ -IcmpType \d+(:\d+)? ?
  ```
 
 ### Get local and remote port parameters and values

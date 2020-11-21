@@ -112,7 +112,7 @@ if ($Develop)
 		-Description "Temporary allow troublesome UDP traffic." |
 	Format-Output
 
-	# HACK: Inbound rule with "-LooseSourceMapping $true" can be created:
+	# HACK: Inbound rule with "-LooseSourceMapping $true" cant be created:
 	# Invalid flags specified.
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP LocalOnlyMapping" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
