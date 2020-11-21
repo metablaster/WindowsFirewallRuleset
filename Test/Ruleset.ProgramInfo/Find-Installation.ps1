@@ -70,7 +70,6 @@ Initialize-Project -Abort
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
-Import-Module -Name Ruleset.Logging
 
 # User prompt
 Update-Context $TestContext $ThisScript

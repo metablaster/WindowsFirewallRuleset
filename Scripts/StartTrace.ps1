@@ -162,7 +162,6 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
-Import-Module -Name Ruleset.Logging
 
 # User prompt
 $Accept = "Start capturing network traffic into a file for analysis"

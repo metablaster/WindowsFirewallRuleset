@@ -69,7 +69,6 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 # Imports
 # TODO: Include modules and scripts as needed
 . $PSScriptRoot\ContextSetup.ps1
-Import-Module -Name Ruleset.Logging
 
 # User prompt
 Update-Context $TestContext $ThisScript

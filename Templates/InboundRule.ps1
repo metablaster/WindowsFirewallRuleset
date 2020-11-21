@@ -59,7 +59,6 @@ Initialize-Project -Abort
 # Imports
 # TODO: adjust path
 . $PSScriptRoot\DirectionSetup.ps1
-Import-Module -Name Ruleset.Logging
 
 # Setup local variables
 $Group = "Template - TargetProgram"

@@ -62,7 +62,6 @@ Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $fa
 Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
-Import-Module -Name Ruleset.Logging
 
 # Clear errors, error and warning status
 $Error.Clear()
@@ -403,13 +402,6 @@ Write-Information -Tags "User" -MessageData "INFO: Loading rules was completed"
 
 # Set up global firewall setting, network and firewall profile and apply GPO changes
 & "$ProjectRoot\Scripts\SetupProfile.ps1"
-
-if ($Develop)
-{
-	# TODO: why? probably no longer needed
-	# Need to re-import required module in develop mode
-	Import-Module -Name Ruleset.Logging
-}
 
 # Show status of execution
 if ($ErrorLogging -and $ErrorStatus)

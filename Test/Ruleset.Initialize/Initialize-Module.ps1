@@ -60,7 +60,6 @@ New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
-Import-Module -Name Ruleset.Logging
 
 # User prompt
 Update-Context $TestContext $ThisScript
