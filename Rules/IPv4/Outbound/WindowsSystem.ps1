@@ -31,7 +31,7 @@ SOFTWARE.
 Outbound firewall rules for Windows system
 
 .DESCRIPTION
-Rules that apply to Windows programs and utilities, which are not handled by predefined rules
+Rules which apply to Windows programs and utilities, which are not handled by predefined rules
 
 .EXAMPLE
 PS> .\WindowsSystem.ps1

@@ -32,7 +32,7 @@ Outbound firewall rules for network discovery
 
 .DESCRIPTION
 Network Discovery predefined rules + additional rules
-Rules apply to network discovery on LAN
+Rules which apply to network discovery on LAN
 
 .EXAMPLE
 PS> .\NetworkDiscovery.ps1

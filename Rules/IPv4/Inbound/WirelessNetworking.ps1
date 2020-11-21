@@ -76,7 +76,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
-# Windows system predefined rules for Wireless Display
+# Predefined rules for Wireless Display
 #
 
 $Program = "%SystemRoot%\System32\WUDFHost.exe"
@@ -108,7 +108,7 @@ When the user selects a Miracast receiver, Windows 10 will attempt to resolve th
 If the name is not resolvable via either DNS method, Windows 10 will fall back to establishing the Miracast session using the standard Wi-Fi direct connection." | Format-Output
 
 #
-# Windows system predefined rules for WiFi Direct
+# Predefined rules for WiFi Direct
 #
 
 # NOTE: WlanSvc not enable by default in Windows Server 2019
@@ -143,7 +143,7 @@ to establish a direct connection without requiring an intermediary, such as an i
 For more info see description of WLAN AutoConfig service." | Format-Output
 
 #
-# Windows system predefined rules for WiFi Direct Network Discovery
+# Predefined rules for WiFi Direct Network Discovery
 #
 
 $Program = "%SystemRoot%\System32\dasHost.exe"
@@ -177,7 +177,7 @@ Print Spooler service spools print jobs and handles interaction with the printer
 If you turn off this service, you won't be able to print or see your printers." | Format-Output
 
 #
-# Windows system predefined rules for Wireless portable devices
+# Predefined rules for Wireless portable devices
 #
 
 New-NetFirewallRule -Platform $Platform `

@@ -190,7 +190,7 @@ Test-Combo
 
 Start-Test "Create module"
 New-Module -Name Dynamic.TestError -ScriptBlock {
-	. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule
+	. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
 
 	# NOTE: Same thing as in parent scope, we test generating logs not what is shown in the console
 	$ErrorActionPreference = "SilentlyContinue"

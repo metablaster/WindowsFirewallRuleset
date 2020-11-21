@@ -82,7 +82,7 @@ function Get-AccountSID
 	{
 		$PowerShellEdition = $PSVersionTable.PSEdition
 		[bool] $SpecialDomain = ![string]::IsNullOrEmpty(
-			[array]::Find($SpecialDomains, [System.Predicate[string]] { $ComputerName -eq "$($args[0])" }))
+			[array]::Find($KnownDomains, [System.Predicate[string]] { $ComputerName -eq "$($args[0])" }))
 	}
 	process
 	{
@@ -129,7 +129,7 @@ function Get-AccountSID
 				{
 					# For APPLICATION PACKAGE AUTHORITY we need to omit domain name
 					# TODO: this should be inside second try/catch to make omission of domain generic
-					if ($SpecialDomain -and [array]::Find($SpecialDomains, [System.Predicate[string]] { "APPLICATION PACKAGE AUTHORITY" -eq "$($args[0])" }))
+					if ($SpecialDomain -and [array]::Find($KnownDomains, [System.Predicate[string]] { "APPLICATION PACKAGE AUTHORITY" -eq "$($args[0])" }))
 					{
 						$NTAccount = New-Object -TypeName System.Security.Principal.NTAccount($User)
 						$AccountSID = $NTAccount.Translate([System.Security.Principal.SecurityIdentifier]).ToString()

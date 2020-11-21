@@ -83,7 +83,7 @@ $VSInstallerRoot = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
 
 #
 # Visual Studio rules for executables from root directory
-# Rules that apply to Microsoft Visual Studio
+# Rules which apply to Microsoft Visual Studio
 # TODO: Take Display name partially from Get-VSSetupInstance
 # TODO: No rule for C:\ProgramData\Microsoft\VisualStudio\SetupWMI\MofCompiler.exe
 #
@@ -245,7 +245,7 @@ foreach ($Instance in $VSInstances)
 
 #
 # Visual Studio rules for executables from installer directory
-# Rules that apply to Microsoft Visual Studio
+# Rules which apply to Microsoft Visual Studio
 # NOTE: these rules are global to all VS instances
 #
 

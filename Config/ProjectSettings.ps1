@@ -36,7 +36,7 @@ In this file project settings and preferences are set, these are grouped into
 2. settings for release
 3. settings which apply to both use cases
 
-.PARAMETER InsideModule
+.PARAMETER InModule
 Script modules must call this script with this parameter
 
 .PARAMETER ShowPreference
@@ -61,7 +61,7 @@ TODO: Variable description should be part of variable object
 [CmdletBinding()]
 param(
 	[Parameter()]
-	[switch] $InsideModule,
+	[switch] $InModule,
 
 	[Parameter()]
 	[switch] $ShowPreference
@@ -225,7 +225,7 @@ if ($Develop)
 	# Logs command errors
 	$LogCommandHealthEvent = $false
 
-	if (!$InsideModule)
+	if (!$InModule)
 	{
 		# Must be after debug preference
 		Write-Debug -Message "[$SettingsScript] Removing loaded modules"
@@ -285,7 +285,7 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 
 #region Conditional preference variables
 # The value of these preference variables depend on existing variables, do not modify!
-if (!$InsideModule)
+if (!$InModule)
 {
 	# NOTE: Not using these parameters inside modules because they will be passed to module functions
 	# by top level advanced function in call stack which will pick up all Write-* streams in module functions
@@ -683,7 +683,7 @@ if ($ShowPreference)
 		}
 	} | Import-Module -Scope Global
 
-	if (!$InsideModule)
+	if (!$InModule)
 	{
 		# Write-Debug -Message "[$SettingsScript] DebugPreference: $DebugPreference" -Debug
 		Show-Preference # -All

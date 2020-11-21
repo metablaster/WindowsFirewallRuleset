@@ -76,7 +76,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
-# Windows system predefined rules for Wireless Display
+# Predefined rules for Wireless Display
 #
 
 # NOTE: several rules below use this path
@@ -113,7 +113,7 @@ loads one or more UMDF driver DLLs, in addition to the framework DLLs." |
 Format-Output
 
 #
-# Windows system predefined rules for WiFi Direct
+# Predefined rules for WiFi Direct
 #
 
 New-NetFirewallRule -DisplayName "WLAN Service WFD ASP Coordination Protocol" `
@@ -164,7 +164,7 @@ For more info see description of WLAN AutoConfig service." |
 Format-Output
 
 #
-# Windows system predefined rules for WiFi Direct Network Discovery
+# Predefined rules for WiFi Direct Network Discovery
 #
 
 $Program = "%SystemRoot%\System32\dasHost.exe"
@@ -212,7 +212,7 @@ If you turn off this service, you won't be able to print or see your printers." 
 Format-Output
 
 #
-# Windows system predefined rules for Wireless portable devices
+# Predefined rules for Wireless portable devices
 #
 
 New-NetFirewallRule -DisplayName "Wireless portable devices (SSDP)" `

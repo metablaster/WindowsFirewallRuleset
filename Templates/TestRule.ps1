@@ -75,7 +75,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 $Group = "Test - Template rule"
 $LocalProfile = "Any"
 
-Enter-Test $ThisScript
+Enter-Test
 
 # Remove previous test rule
 Start-Test "Remove-NetFirewallRule"

@@ -48,8 +48,6 @@ in this project
 TODO: If a script module is present in project make use of Scripts\Get-CallerPreference
 #>
 
-Set-StrictMode -Version Latest
-
 # if ($Develop)
 # {
 # 	$ErrorActionPreference = $ModuleErrorPreference

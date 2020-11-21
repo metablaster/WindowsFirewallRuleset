@@ -34,13 +34,13 @@ Unit test to test global variables
 Unit test to test global variables
 
 .EXAMPLE
-PS> .\TestGlobalVariables.ps1
+PS> .\TestModuleVariables.ps1
 
 .INPUTS
-None. You cannot pipe objects to TestGlobalVariables.ps1
+None. You cannot pipe objects to TestModuleVariables.ps1
 
 .OUTPUTS
-None. TestGlobalVariables.ps1 does not generate any output
+None. TestModuleVariables.ps1 does not generate any output
 
 .NOTES
 None.
@@ -64,9 +64,6 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test -Private
-
-Start-Test "Ruleset.Logs - Logs:"
-$Logs
 
 Start-Test "Ruleset.Utility - ServiceHost:"
 $ServiceHost
@@ -96,4 +93,5 @@ $AdministratorsGroupSDDL
 Start-Test "Ruleset.UserInfo - UsersGroupSDDL:"
 $UsersGroupSDDL
 
+Update-Log
 Exit-Test

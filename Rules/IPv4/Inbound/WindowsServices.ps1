@@ -32,7 +32,7 @@ Inbound firewall rules forfirewall rules for Windows services
 
 .DESCRIPTION
 Windows services rules
-Rules that apply to Windows services which are not handled by predefined rules
+Rules which apply to Windows services which are not handled by predefined rules
 
 .EXAMPLE
 PS> .\WindowsServices.ps1

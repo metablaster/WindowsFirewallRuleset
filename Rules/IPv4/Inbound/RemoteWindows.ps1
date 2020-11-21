@@ -31,7 +31,7 @@ SOFTWARE.
 Inbound firewall rules for Windows remoting programs and services
 
 .DESCRIPTION
-Rules that apply to Windows remoting programs and services,
+Rules which apply to Windows remoting programs and services,
 which are not handled by predefined rules
 
 .EXAMPLE

@@ -30,11 +30,10 @@ SOFTWARE.
 # TODO: If this is based on 3rd party module, include file changes here
 
 # Initialization
-Set-StrictMode -Version Latest
 Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
 # Imports
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
 # TODO: Update path, this one is adjusted for testing template module
 . $PSScriptRoot\..\..\Modules\ModulePreferences.ps1
 

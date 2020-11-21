@@ -27,11 +27,10 @@ SOFTWARE.
 #>
 
 # Initialization
-Set-StrictMode -Version Latest
 Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
 # Imports
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
 . $PSScriptRoot\..\ModulePreferences.ps1
 
 #
@@ -83,7 +82,7 @@ if (!(Get-Variable -Name CheckInitUtility -Scope Global -ErrorAction Ignore))
 
 	Write-Debug -Message "[$ThisModule] Initialize global constant: ServiceHost"
 	# Most used program
-	# TODO: Should be part of ProgramInfo, which mean importing module
+	# TODO: Should be part of ProgramInfo, which means importing module
 	New-Variable -Name ServiceHost -Scope Global -Option Constant -Value "%SystemRoot%\System32\svchost.exe"
 }
 

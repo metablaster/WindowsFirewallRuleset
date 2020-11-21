@@ -27,11 +27,10 @@ SOFTWARE.
 #>
 
 # Initialization
-Set-StrictMode -Version Latest
 Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
 # Imports
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
 . $PSScriptRoot\..\ModulePreferences.ps1
 
 #
@@ -61,10 +60,9 @@ foreach ($Script in $PublicScripts)
 
 Write-Debug -Message "[$ThisModule] Initialize module constant variable: SpecialDomains"
 # Must be before constants
-# TODO: there must be a better more conventional name for this
-# TODO: We need to handle more cases, these 3 are known to work for now
+# TODO: We need to handle more cases, first 3 are known to work for now
 # TODO: only Get-AccountSID makes use of this, should be inside script?
-New-Variable -Name SpecialDomains -Scope Script -Option Constant -Value @(
+New-Variable -Name KnownDomains -Scope Script -Option Constant -Value @(
 	"NT AUTHORITY"
 	"APPLICATION PACKAGE AUTHORITY"
 	"BUILTIN"

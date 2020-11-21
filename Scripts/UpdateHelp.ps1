@@ -239,7 +239,8 @@ specific subfolders
 		[string] $OnlineHelp = "$ModuleRoot\Help\$UICulture"
 
 		# Help content download link for Update-Help commandlet
-		# This value is required for .cab file creation. This value is used as markdown header metadata in the module page
+		# This value is required for .cab file creation.
+		# This value is used as markdown header metadata in the module page
 		[string] $DownloadLink = "https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/$ProjectVersion"
 
 		# Module page file

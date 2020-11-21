@@ -55,7 +55,7 @@ param (
 # Initialization
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )
-Enter-Test $ThisScript -Private
+Enter-Test -Private
 
 if (-not $UseExisting)
 {

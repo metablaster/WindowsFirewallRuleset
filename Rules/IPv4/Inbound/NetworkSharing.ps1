@@ -32,7 +32,7 @@ Inbound firewall rules for File and Printer sharing predefined rules
 
 .DESCRIPTION
 Inbound rules for File and Printer sharing predefined rules
-Rules apply to network sharing on LAN
+Rules which apply to network sharing on LAN
 
 .EXAMPLE
 PS> .\NetworkSharing.ps1

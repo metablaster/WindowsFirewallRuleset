@@ -31,16 +31,14 @@ SOFTWARE.
 # - Code formatting according to the rest of project design
 # - Added module boilerplate code
 # - Renamed module from "WindowsCompatibility" to "Ruleset.Compatibility"
-# TODO: Fix variable casing
 
 # Initialization
 using namespace System.Management.Automation.
 using namespace System.Management.Automation.Runspaces
-Set-StrictMode -Version Latest
 Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
 
 # Imports
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InsideModule
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
 . $PSScriptRoot\..\..\Modules\ModulePreferences.ps1
 
 #
@@ -158,20 +156,20 @@ Set-Alias -Name Add-WinPSModulePath -Value Add-WindowsPSModulePath
 
 # Location Changed handler that keeps the compatibility session PWD in sync with the parent PWD
 # This only applies on localhost.
-$locationChangedHandler = {
-	[PSSession] $session = Initialize-WinSession -ComputerName $SessionComputerName -ConfigurationName $SessionConfigurationName -PassThru
-	if ($session.ComputerName -eq "localhost")
+$LocationChangedHandler = {
+	[PSSession] $Session = Initialize-WinSession -ComputerName $SessionComputerName -ConfigurationName $SessionConfigurationName -PassThru
+	if ($Session.ComputerName -eq "localhost")
 	{
-		$newPath = $_.newPath
-		Invoke-Command -Session $session { Set-Location $using:newPath }
+		$NewPath = $_.NewPath
+		Invoke-Command -Session $Session { Set-Location $using:NewPath }
 	}
 }
 
-$ExecutionContext.InvokeCommand.LocationChangedAction = $locationChangedHandler
+$ExecutionContext.InvokeCommand.LocationChangedAction = $LocationChangedHandler
 
 # Remove the location changed handler if the module is removed.
 $MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
-	if ($ExecutionContext.InvokeCommand.LocationChangedAction -eq $locationChangedHandler)
+	if ($ExecutionContext.InvokeCommand.LocationChangedAction -eq $LocationChangedHandler)
 	{
 		$ExecutionContext.InvokeCommand.LocationChangedAction = $null
 	}

@@ -63,6 +63,8 @@ Update-Context $TestContext $ThisScript
 if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
+Enter-Test
+
 $Manifests = Get-ChildItem -Name -Depth 1 -Recurse -Path "$ProjectRoot\Modules" -Filter "*.psd1"
 [string[]] $GUID = @()
 
@@ -98,3 +100,6 @@ $VSSetupDLL = @(
 )
 
 Get-AuthenticodeSignature -FilePath $VSSetupDLL | Select-Object -Property StatusMessage, Path
+
+Update-Log
+Exit-Test
