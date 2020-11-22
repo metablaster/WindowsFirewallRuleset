@@ -163,7 +163,7 @@ Format-Output
 # would make any difference LocalOnlyMapping
 # NOTE: Multiple programs may require mDNS, not just dnscache
 #
-if ($true)
+if ($false)
 {
 	# NOTE: Not applied because now handled by IPv4 multicast rules
 	New-NetFirewallRule -DisplayName "Multicast DNS" `
@@ -175,9 +175,8 @@ if ($true)
 		-LocalUser Any `
 		-InterfaceType $DefaultInterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to
-IP addresses
-within small networks that do not include a local name server.
+		-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames
+to IP addresses within small networks that do not include a local name server.
 It is a zero-configuration service, using essentially the same programming interfaces,
 packet formats and operating semantics as the unicast Domain Name System (DNS)." |
 	Format-Output
@@ -194,9 +193,8 @@ packet formats and operating semantics as the unicast Domain Name System (DNS)."
 		-LocalUser Any `
 		-InterfaceType Any `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames to
-IP addresses
-within small networks that do not include a local name server.
+		-Description "In computer networking, the multicast DNS (mDNS) protocol resolves hostnames
+to IP addresses within small networks that do not include a local name server.
 It is a zero-configuration service, using essentially the same programming interfaces,
 packet formats and operating semantics as the unicast Domain Name System (DNS)." |
 	Format-Output

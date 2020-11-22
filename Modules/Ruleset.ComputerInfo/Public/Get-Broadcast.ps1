@@ -31,7 +31,7 @@ SOFTWARE.
 Method to get broadcast addresses on local machine
 
 .DESCRIPTION
-Return multiple broadcast addresses, for each configured adapter.
+Return broadcast addresses, for each configured adapter.
 This includes both physical and virtual adapters.
 Returned broadcast addresses are only for IPv4
 

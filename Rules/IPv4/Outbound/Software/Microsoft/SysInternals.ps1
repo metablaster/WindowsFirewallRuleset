@@ -85,50 +85,94 @@ if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLoad)
 {
 	$Program = "$SysInternalsRoot\Autoruns\Autoruns64.exe"
 	Test-File $Program
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Sysinternals Autoruns" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+	New-NetFirewallRule -DisplayName "Sysinternals Autoruns" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 443 `
 		-LocalUser $SysInternalsUsers `
+		-InterfaceType $DefaultInterface `
 		-Description "Access to VirusTotal" | Format-Output
 
 	# TODO: It also uses port 80 but not known for what, not setting here.
 	# Most likely to fetch symbols
 	$Program = "$SysInternalsRoot\ProcessExplorer\procexp64.exe"
 	Test-File $Program
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Sysinternals ProcessExplorer" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+	New-NetFirewallRule -DisplayName "Sysinternals ProcessExplorer" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 443 `
 		-LocalUser $SysInternalsUsers `
+		-InterfaceType $DefaultInterface `
 		-Description "Access to VirusTotal" | Format-Output
 
 	$Program = "$SysInternalsRoot\ProcessMonitor\Procmon.exe"
 	Test-File $Program
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Sysinternals ProcessMonitor" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+	New-NetFirewallRule -DisplayName "Sysinternals ProcessMonitor" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 443 `
 		-LocalUser $SysInternalsUsers `
+		-InterfaceType $DefaultInterface `
 		-Description "Access to symbols server" | Format-Output
 
 	$Program = "$SysInternalsRoot\TCPView\Tcpview.exe"
 	Test-File $Program
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Sysinternals TcpView" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 43 `
+	New-NetFirewallRule -DisplayName "Sysinternals TcpView" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 43 `
 		-LocalUser $SysInternalsUsers `
+		-InterfaceType $DefaultInterface `
 		-Description "WhoIs access" | Format-Output
 
 	$Program = "$SysInternalsRoot\WhoIs\whois64.exe"
 	Test-File $Program
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Sysinternals WhoIs" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 43 `
+	New-NetFirewallRule -DisplayName "Sysinternals WhoIs" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 43 `
 		-LocalUser $SysInternalsUsers `
-		-Description "" | Format-Output
+		-InterfaceType $DefaultInterface `
+		-Description "WhoIs performs the registration record for the domain name or IP address
+that you specify" | Format-Output
+
+	$Program = "$SysInternalsRoot\PSTools\psping.exe"
+	Test-File $Program
+	New-NetFirewallRule -DisplayName "Sysinternals PSPing client" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol Any `
+		-LocalAddress Any -RemoteAddress Any `
+		-LocalPort Any -RemotePort Any `
+		-LocalUser $SysInternalsUsers `
+		-InterfaceType $DefaultInterface `
+		-Description "PsPing implements Ping functionality, TCP ping, latency and bandwidth measurement.
+Due to wide range of address and port options these should be set to Any.
+This rule serves to allow PSPing.exe to act as a client." | Format-Output
+
+	$Program = "$SysInternalsRoot\PSTools\psping64.exe"
+	Test-File $Program
+	New-NetFirewallRule -DisplayName "Sysinternals PSPing64 client" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol Any `
+		-LocalAddress Any -RemoteAddress Any `
+		-LocalPort Any -RemotePort Any `
+		-LocalUser $SysInternalsUsers `
+		-InterfaceType $DefaultInterface `
+		-Description "PsPing implements Ping functionality, TCP ping, latency and bandwidth measurement.
+Due to wide range of address and port options these should be set to Any.
+This rule serves to allow PSPing64.exe to act as a client." | Format-Output
 }
 
 Update-Log

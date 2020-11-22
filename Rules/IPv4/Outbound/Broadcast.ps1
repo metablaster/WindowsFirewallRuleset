@@ -93,7 +93,7 @@ New-NetFirewallRule -DisplayName "Limited Broadcast" `
 	-Description "" |
 Format-Output
 
-New-NetFirewallRule -DisplayName "LAN Broadcast" `
+New-NetFirewallRule -DisplayName "Directed Broadcast" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 	-Service Any -Program System -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `

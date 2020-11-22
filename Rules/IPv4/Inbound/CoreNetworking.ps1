@@ -114,7 +114,7 @@ TCP/IP network resources." | Format-Output
 # UDP port 5353
 # https://en.wikipedia.org/wiki/Multicast_DNS
 #
-if ($true)
+if ($false)
 {
 	# NOTE: Not applied because now handled by IPv4 multicast rules
 	New-NetFirewallRule -DisplayName "Multicast DNS" `

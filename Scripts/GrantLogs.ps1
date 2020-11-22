@@ -40,7 +40,7 @@ nor users can access them.
 Grant permissions to non administrative account to read firewall log files.
 Also grants firewall service to write logs to project specified location.
 The Microsoft Protection Service will automatically reset permissions on firewall logs either
-on system reboot, network reconnect or firewall restart, for security reasons.
+on system reboot, network reconnect or firewall settings change, for security reasons.
 
 .PARAMETER Principal
 Non administrative user account for which to grant permission
@@ -67,6 +67,10 @@ None. GrantLogs.ps1 does not generate any output
 .NOTES
 Running this script makes sense only for custom firewall log location inside repository.
 The benefit is to have special syntax coloring and filtering functionality with VSCode.
+First time setup requires turning off/on Windows firewall for current network profile in order for
+Windows firewall to start logging into new location.
+TODO: Need to verify if gpupdate is needed for first time setup and if so update SetupProfile.ps1
+TODO: Force could be used and propagated for this script, setupprofile and set-permission
 #>
 
 [CmdletBinding()]
@@ -108,10 +112,9 @@ if (!$SkipPrompt)
 
 Write-Verbose -Message "[$ThisScript] Verifying firewall log file location"
 
-if (!(Test-Environment -Path $FirewallLogsFolder) -or
-	!(Compare-Path -Loose $FirewallLogsFolder -ReferencePath "$ProjectRoot\*"))
+if (!(Compare-Path -Loose $FirewallLogsFolder -ReferencePath "$ProjectRoot\*"))
 {
-	# Grant permission only if firewall logs go to valid location inside repository
+	# Continue only if firewall logs go to location inside repository
 	Write-Warning -Message "Not granting permissions for $FirewallLogsFolder"
 	exit
 }

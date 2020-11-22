@@ -20,6 +20,11 @@ and usually need googling out what they do.
     - [RemotePort TCP Outbound](#remoteport-tcp-outbound)
   - [Address](#address)
     - [RemoteAddress](#remoteaddress)
+    - [LocalSubnet](#localsubnet)
+    - [Internet](#internet)
+    - [DefaultGateway](#defaultgateway)
+    - [DNS](#dns)
+    - [WINS](#wins)
     - [Loopback address](#loopback-address)
   - [Interface](#interface)
     - [InterfaceType](#interfacetype)
@@ -50,7 +55,8 @@ and usually need googling out what they do.
 
 ## Port
 
-The docs say we can specify ICMP Type/Code with port parameter which doesn't work.
+- Port(s) can be specified only for TCP/UDP
+- The docs say we can specify ICMP Type/Code with port parameter which doesn't work.
 
 ### LocalPort/RemotePort
 
@@ -89,6 +95,45 @@ The docs say we can specify ICMP Type/Code with port parameter which doesn't wor
 - `IntranetRemoteAccess` Remote Corp Network
 - `PlayToDevice` PlayTo Renderers
 - `<unknown>` Captive Portal Addresses
+
+Address sections bellow were tested with:\
+Private IP client TCP: `psping64 -4 192.168.8.104:555` and server TCP: `psping64 -4 -s 192.168.8.104:555`
+Directed broadcast, client ICMP: `psping64 -4 192.168.8.255`
+
+### LocalSubnet
+
+1. Private IP address within subnet mask - YES
+2. Private IP address on different subnet (segment) - YES
+3. Directed broadcast address within subnet mask - YES
+4. Directed broadcast address on different subnet (segment) - ? (send yes)
+5. Limited broadcast address - Unknown
+6. Multicast address space - ?
+
+### Internet
+
+1. Private IP address within subnet mask - NO
+2. Private IP address on different subnet (segment) - YES
+3. Directed broadcast address within subnet mask - YES
+4. Directed broadcast address on different subnet (segment) - ? (send yes)
+5. Limited broadcast address - Unknown
+6. Multicast address space - ?
+
+### DefaultGateway
+
+1. Gateway address specified during static IP assignemt - YES
+2. For dynamic assignment the default gateway address obtained from DHCP is used ?
+3. If disconnected from network - ?
+
+### DNS
+
+1. The addresses specified in DNS entries for configured adapter - YES
+2. For dynamic assignment the default gateway address is used - ?
+3. If disconnected from network - ?
+
+### WINS
+
+1. The addresses specified in WINS entries for configured adapter - YES
+2. If the WINS entry is empty - ?
 
 ### Loopback address
 

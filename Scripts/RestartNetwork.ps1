@@ -86,7 +86,7 @@ https://devblogs.microsoft.com/scripting/enabling-and-disabling-network-adapters
 
 [CmdletBinding(PositionalBinding = $false)]
 param (
-	[Parameter()]
+	[Parameter(Position = 0)]
 	[string] $Principal,
 
 	[Parameter()]

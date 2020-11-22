@@ -194,6 +194,12 @@
 			"foreground": "#ccc3c3"
 		},
 		{
+			// Action allow 066933
+			"pattern": "ALLOW",
+			"background": "#076338",
+			"foreground": "#ccc3c3"
+		},
+		{
 			// TCP protocol
 			"pattern": "TCP",
 			"foreground": "#57A64A"

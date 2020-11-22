@@ -101,6 +101,10 @@ Also few commandlets from these modules:
 
 [IPv4 link-local address aka APIPA](https://wiki.wireshark.org/APIPA)
 
+[Limited broadcast](https://www.omnisecu.com/tcpip/what-is-limited-broadcast-in-ipv4.php)
+
+[Directed broadcast](https://www.kareemccie.com/2018/08/what-is-use-of-ip-directed-broadcast.html)
+
 ## IP general
 
 [IP protocol numbers](https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml)
@@ -108,6 +112,10 @@ Also few commandlets from these modules:
 [TCP/UDP port list](https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers)
 
 [Link-Local address](https://en.wikipedia.org/wiki/Link-local_address)
+
+[Network segmentation](https://www.omnisecu.com/cisco-certified-network-associate-ccna/benefits-of-segmenting-a-network-using-a-router.php)
+
+[Collision Domain and Broadcast Domain](https://www.omnisecu.com/cisco-certified-network-associate-ccna/what-are-collision-domain-and-broadcast-domain.php)
 
 ## Windows Firewall
 
