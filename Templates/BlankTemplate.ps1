@@ -5,6 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
+TODO: Update Copyright date and author
 Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -51,7 +52,6 @@ You can also include a description of the returned objects.
 
 .NOTES
 Additional information about the script.
-TODO: Update Copyright and start writing code
 NOTE: All of the features of function parameters, including the Parameter attribute and its named arguments,
 are also valid in scripts.
 NOTE: The OutputType attribute identifies the .NET Framework types returned by a cmdlet, function, or script.

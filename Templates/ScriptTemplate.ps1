@@ -5,6 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
+TODO: Update Copyright date and author
 Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -50,14 +51,13 @@ None. ScriptTemplate.ps1 does not generate any output
 
 .NOTES
 None.
-TODO: Update Copyright and start writing code
 #>
 
 # TODO: Make Diagnostics attribute is formatted like this in all files
 # TODO: Remove or update parameter block
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 	"PSReviewUnusedParameter", "", Justification = "This is template script parameter")]
-[CmdletBinding()]
+[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium")]
 param (
 	[Parameter()]
 	[string] $ParameterName

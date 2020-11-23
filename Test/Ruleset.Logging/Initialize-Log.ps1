@@ -5,6 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
+TODO: Update Copyright date and author
 Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -26,26 +27,51 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# Initialization
-Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
+<#
+.SYNOPSIS
+Unit test for Initialize-Log
+
+.DESCRIPTION
+Unit test for Initialize-Log
+
+.EXAMPLE
+PS> .\Initialize-Log.ps1
+
+.INPUTS
+None. You cannot pipe objects to Initialize-Log.ps1
+
+.OUTPUTS
+None. Initialize-Log.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+#region Initialization
+#Requires -Version 5.1
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
+	$MyInvocation.MyCommand.Name -replace ".{4}$" )
+
+# Check requirements
+Initialize-Project -Abort
+Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
-. $PSScriptRoot\..\ModulePreferences.ps1
+. $PSScriptRoot\ContextSetup.ps1
 
-# TODO: stream logging instead of open/close file for performance
+# User prompt
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+#Endregion
 
-#
-# Script imports
-#
+Enter-Test
 
-$PublicScripts = @(
-	"Initialize-Log"
-	"Update-Log"
-)
+Start-Test "Initialize-Log"
+$Result = Initialize-Log $LogsFolder\Audit -Label System
+$Result
 
-foreach ($Script in $PublicScripts)
-{
-	Write-Debug -Message "[$ThisModule] Importing script: Public\$Script.ps1"
-	. ("{0}\Public\{1}.ps1" -f $PSScriptRoot, $Script)
-}
+Test-Output $Result -Command Initialize-Log
+
+Update-Log
+Exit-Test

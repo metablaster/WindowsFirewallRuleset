@@ -88,7 +88,7 @@ function Update-Log
 
 			if ($ErrorLogging)
 			{
-				$LogFile = Get-LogFile $LogsFolder "Error"
+				$LogFile = Initialize-Log $LogsFolder -Label "Error"
 
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending error to log file: $LogFile"
 				$ErrorBuffer | ForEach-Object {
@@ -115,7 +115,7 @@ function Update-Log
 
 			if ($WarningLogging)
 			{
-				$LogFile = Get-LogFile $LogsFolder "Warning"
+				$LogFile = Initialize-Log $LogsFolder -Label "Warning"
 
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending warnings to log file: $LogFile"
 
@@ -138,7 +138,7 @@ function Update-Log
 
 			if ($InformationLogging)
 			{
-				$LogFile = Get-LogFile $LogsFolder "Info"
+				$LogFile = Initialize-Log $LogsFolder -Label "Info"
 
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending information to log file: $LogFile"
 				$InfoBuffer | ForEach-Object {

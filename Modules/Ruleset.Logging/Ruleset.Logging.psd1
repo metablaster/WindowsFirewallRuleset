@@ -103,6 +103,7 @@ SOFTWARE.
 	# Functions to export from this module, for best performance, do not use wildcards and do not
 	# delete the entry, use an empty array if there are no functions to export.
 	FunctionsToExport = @(
+		"Initialize-Log"
 		"Update-Log"
 	)
 
@@ -111,10 +112,7 @@ SOFTWARE.
 	CmdletsToExport = @()
 
 	# Variables to export from this module
-	VariablesToExport = @(
-		"CheckInitLogging"
-		"Logs"
-	)
+	VariablesToExport = @()
 
 	# Aliases to export from this module, for best performance, do not use wildcards and do not
 	# delete the entry, use an empty array if there are no aliases to export.
@@ -134,8 +132,7 @@ SOFTWARE.
 		"Help\en-US\Ruleset.Logging.md"
 		"Help\en-US\Update-Log.md"
 		"Help\README.md"
-		"Private\Get-LogFile.ps1"
-		"Private\README.md"
+		"Public\Initialize-Log.ps1"
 		"Public\README.md"
 		"Public\Update-Log.ps1"
 		"Ruleset.Logging_9be5568a-a48e-4e96-a6df-90f699cf1c8a_HelpInfo.xml"

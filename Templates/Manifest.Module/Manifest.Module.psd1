@@ -5,6 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
+TODO: Update Copyright date and author
 Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -58,7 +59,7 @@ SOFTWARE.
 	# CompanyName = "Unknown"
 
 	# Copyright statement for this module
-	# TODO: Update Copyright
+	# TODO: Update Copyright date and author
 	Copyright = "Copyright (C) 2020 metablaster zebal@protonmail.ch"
 
 	# Description of the functionality provided by this module

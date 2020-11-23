@@ -31,50 +31,50 @@ SOFTWARE.
 Generates a log file name for Update-Log function
 
 .DESCRIPTION
-Generates a log file name composed of current date and time and appends to input
-log level label and input path.
-The function checks if a path to file exists, if not it creates one.
+Generates a log file name composed of current date and appends to requested label and path.
+The function checks if the path to log file exists, if not it creates directory but not log file.
 
 .PARAMETER Folder
-Path to folder where to save logs
+Path to directory where to save logs
 
-.PARAMETER FileLabel
-File label which precedes date an time, ie Warning or Error.
+.PARAMETER Label
+File label which precedes file date, ex. Warning or Error
 
 .EXAMPLE
-PS> Get-LogFile "C:\Logs" "Warning"
+PS> Initialize-Log "C:\Logs" -Label "Warning"
 
-Warning_25.02.20 19h.log
+Warning_25.02.20.log
 
 .INPUTS
-None. You cannot pipe objects to Get-LogFile
+None. You cannot pipe objects to Initialize-Log
 
 .OUTPUTS
-None. Get-LogFile does not generate any output
+[string] Full path to log file name
 
 .NOTES
-TODO: Maybe a separate folder for each day?
-TODO: need to check if drive exists
+None.
 #>
-function Get-LogFile
+function Initialize-Log
 {
-	[CmdletBinding()]
-	[OutputType([void])]
+	[CmdletBinding(PositionalBinding = $false)]
+	[OutputType([string])]
 	param (
-		[Parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true, Position = 0)]
+		[ValidateScript( { (Test-Path -Path (Split-Path -Path $_ -Qualifier)) })]
 		[string] $Folder,
 
 		[Parameter(Mandatory = $true)]
-		[string] $FileLabel
+		[string] $Label
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# Generate file name
-	$FileName = $FileLabel + "_$(Get-Date -Format "dd.MM.yy HH")h.log"
+	$FileName = $Label + "_$(Get-Date -Format "dd.MM.yy")h.log"
 	$LogFile = Join-Path -Path $Folder -ChildPath $FileName
 
 	# Create Logs directory if it doesn't exist
+	# TODO: Should we create file if it does not exist?
 	if (!(Test-Path -PathType Container -Path $Folder))
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating log directory $Folder"
