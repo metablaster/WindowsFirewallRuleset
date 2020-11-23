@@ -60,7 +60,7 @@ of the computer on which to create the compatibility session.
 
 .PARAMETER ConfigurationName
 Specifies the configuration to connect to when creating the compatibility session
-(Defaults to 'Microsoft.PowerShell')
+(Defaults to "Microsoft.PowerShell")
 
 .PARAMETER Prefix
 Prefix to prepend to the imported command names
@@ -91,13 +91,13 @@ This example imports the "PnpDevice" module.
 PS> Import-WinModule Microsoft.PowerShell.Management; Get-Command Get-EventLog
 
 This example imports one of the core Windows PowerShell modules containing commands
-not natively available in PowerShell Core such as 'Get-EventLog'.
+not natively available in PowerShell Core such as "Get-EventLog".
 Only commands not already present in PowerShell Core will be imported.
 
 .EXAMPLE
 PS> Import-WinModule PnpDevice -Verbose -Force
 
-This example forces a reload of the module 'PnpDevice' with verbose output turned on.
+This example forces a reload of the module "PnpDevice" with verbose output turned on.
 
 .INPUTS
 None. You cannot pipe objects to Import-WinModule
@@ -207,7 +207,7 @@ function Import-WinModule
 
 	if ($ImportNames)
 	{
-		# Extract the 'never clobber' modules from the list
+		# Extract the "never clobber" modules from the list
 		$NoClobberNames = $ImportNames.Where{ $_ -in $script:NeverClobberList }
 		$ImportNames = $ImportNames.Where{ $_ -notin $script:NeverClobberList }
 

@@ -58,7 +58,7 @@ PS> Get-ProcessOutput -FilePath "git.exe" -ArgumentList "status" -NoNewWindow -W
 None. You cannot pipe objects to Get-ProcessOutput
 
 .OUTPUTS
-[string] If the 'Format' parameter is not specified
+[string] If the "Format" parameter is not specified
 
 .NOTES
 TODO: Function needs improvements and more test cases
@@ -129,7 +129,7 @@ function Get-ProcessOutput
 	# }
 
 	# $StdOutEvent = Register-ObjectEvent -InputObject $Process `
-	# 	-Action $ScripBlock -EventName 'OutputDataReceived' `
+	# 	-Action $ScripBlock -EventName "OutputDataReceived" `
 	# 	-MessageData $StdOutBuilder
 
 	if (!$Process.Start())

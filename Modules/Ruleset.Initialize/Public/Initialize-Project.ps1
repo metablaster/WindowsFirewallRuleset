@@ -237,7 +237,7 @@ function Initialize-Project
 	{
 		# Since PowerShell Core 7.1 Using Appx no longer works, so we use a compatibility module
 		# https://github.com/PowerShell/PowerShell/issues/13138
-		# TODO: Future versions of PS Core will support more 'Desktop' edition modules,
+		# TODO: Future versions of PS Core will support more "Desktop" edition modules,
 		# check to use compatibility only as needed
 		# TODO: Implement Scope parameter
 		Import-WinModule -Name Appx

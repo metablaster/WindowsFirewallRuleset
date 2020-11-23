@@ -64,12 +64,12 @@ function Add-WindowsPSModulePath
 	[OutputType([void])]
 	param ()
 
-	if ($PSVersionTable.PSEdition -eq 'Core' -and -not $IsWindows)
+	if ($PSVersionTable.PSEdition -eq "Core" -and -not $IsWindows)
 	{
 		throw "This cmdlet is only supported on Windows"
 	}
 
-	if ($PSVersionTable.PSEdition -eq 'Desktop')
+	if ($PSVersionTable.PSEdition -eq "Desktop")
 	{
 		return
 	}
@@ -79,9 +79,9 @@ function Add-WindowsPSModulePath
 		"${Env:UserProfile}\Documents\WindowsPowerShell\Modules"
 		"${Env:ProgramFiles}\WindowsPowerShell\Modules"
 		"${Env:WinDir}\system32\WindowsPowerShell\v1.0\Modules"
-		[System.Environment]::GetEnvironmentVariable('PSModulePath',
+		[System.Environment]::GetEnvironmentVariable("PSModulePath",
 			[System.EnvironmentVariableTarget]::User) -split [System.IO.Path]::PathSeparator
-		[System.Environment]::GetEnvironmentVariable('PSModulePath',
+		[System.Environment]::GetEnvironmentVariable("PSModulePath",
 			[System.EnvironmentVariableTarget]::Machine) -split [System.IO.Path]::PathSeparator
 	)
 

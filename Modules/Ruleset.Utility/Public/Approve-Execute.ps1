@@ -38,7 +38,7 @@ Asking for approval helps to let run master script and only execute specific
 scripts, thus loading only needed rules.
 
 .PARAMETER Unsafe
-If specified the command is considered unsafe, and the default action is then 'No'
+If specified the command is considered unsafe, and the default action is then "No"
 
 .PARAMETER Title
 Prompt title

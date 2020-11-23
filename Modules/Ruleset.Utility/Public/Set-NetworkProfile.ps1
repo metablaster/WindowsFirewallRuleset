@@ -34,7 +34,7 @@ Set network profile for physical network interfaces
 
 .DESCRIPTION
 Set network profile for each physical/hardware network interfaces
-Recommended is 'Public' profile for maximum security, unless 'Private' is needed
+Recommended is "Public" profile for maximum security, unless "Private" is needed
 
 .EXAMPLE
 PS> Set-NetworkProfile

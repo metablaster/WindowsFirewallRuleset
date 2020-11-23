@@ -88,8 +88,8 @@ InModuleScope Ruleset.IP {
 		}
 
 		It 'Throws an error if passed something other than an IPAddress for Subject or Object' {
-			{ Test-SubnetMember -SubjectIPAddress 'abcd' -ObjectIPAddress 10.0.0.0/8 } | Should -Throw
-			{ Test-SubnetMember -SubjectIPAddress 10.0.0.0/8 -ObjectIPAddress 'abcd' } | Should -Throw
+			{ Test-SubnetMember -SubjectIPAddress "abcd" -ObjectIPAddress 10.0.0.0/8 } | Should -Throw
+			{ Test-SubnetMember -SubjectIPAddress 10.0.0.0/8 -ObjectIPAddress "abcd" } | Should -Throw
 		}
 
 		It 'Example <Number> is valid' -TestCases (

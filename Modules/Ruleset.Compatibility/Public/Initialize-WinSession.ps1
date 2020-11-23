@@ -32,7 +32,7 @@ Initialize the connection to the compatibility session.
 
 .DESCRIPTION
 Initialize the connection to the compatibility session.
-By default the compatibility session will be created on the localhost using the 'Microsoft.PowerShell' configuration.
+By default the compatibility session will be created on the localhost using the "Microsoft.PowerShell" configuration.
 On subsequent calls, if a session matching the current specification is found,
 it will be returned rather than creating a new session.
 If a matching session is found, but can't be used,
@@ -46,7 +46,7 @@ of the computer on which to create the compatibility session.
 
 .PARAMETER ConfigurationName
 Specifies the configuration to connect to when creating the compatibility session
-(Defaults to 'Microsoft.PowerShell')
+(Defaults to "Microsoft.PowerShell")
 
 .PARAMETER Credential
 The credential to use when connecting to the target machine/configuration

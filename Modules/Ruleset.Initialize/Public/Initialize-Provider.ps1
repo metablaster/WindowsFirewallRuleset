@@ -174,12 +174,12 @@ function Initialize-Provider
 
 			Write-Information -Tags "User" -MessageData "INFO: Provider $($FoundProvider.Name) v$($FoundProvider.Version.ToString()) is selected for download"
 
-			# TODO: If PowerShell asks to install NuGet during 'Find-PackageProvider' and if that fails
-			# it may return package source anyway (test with 'Desktop' edition)
+			# TODO: If PowerShell asks to install NuGet during "Find-PackageProvider" and if that fails
+			# it may return package source anyway (test with "Desktop" edition)
 			# NOTE: This is controlled with powershell.promptToUpdatePackageManagement
 			[Microsoft.PackageManagement.Packaging.PackageSource] $PackageSource = $FoundProvider | Get-PackageSource
 
-			# If package source for 'FoundProvider' is not registered do nothing, this will be the cause with
+			# If package source for "FoundProvider" is not registered do nothing, this will be the cause with
 			# "Bootstrap" provider, which means NuGet was already installed during "Find-PackageProvider" above!
 			if (!((Get-PackageSource).ProviderName -like "$($PackageSource.ProviderName)"))
 			{

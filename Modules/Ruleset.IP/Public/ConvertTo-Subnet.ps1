@@ -124,7 +124,7 @@ function ConvertTo-Subnet
 			$PSCmdlet.ThrowTerminatingError($_)
 		}
 	}
-	elseif ($PSCmdlet.ParameterSetName -eq 'FromStartAndEnd')
+	elseif ($PSCmdlet.ParameterSetName -eq "FromStartAndEnd")
 	{
 		if ($Start -eq $End)
 		{
@@ -174,7 +174,7 @@ function ConvertTo-Subnet
 		SubnetMask = $Network.SubnetMask
 		MaskLength = $Network.MaskLength
 		HostAddresses = $hostAddresses
-		PSTypeName = 'Ruleset.IP.Subnet'
+		PSTypeName = "Ruleset.IP.Subnet"
 	}
 
 	$Subnet | Add-Member ToString -MemberType ScriptMethod -Force -Value {

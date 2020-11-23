@@ -86,43 +86,43 @@ function Set-Privilege
 	param(
 		[Parameter(Mandatory = $true, Position = 0)]
 		[ValidateSet(
-			'SeAssignPrimaryTokenPrivilege', 'AssignPrimaryToken',
-			'SeAuditPrivilege', 'Audit',
-			'SeBackupPrivilege', 'Backup',
-			'SeChangeNotifyPrivilege', 'ChangeNotify',
-			'SeCreateGlobalPrivilege', 'CreateGlobal',
-			'SeCreatePagefilePrivilege', 'CreatePagefile',
-			'SeCreatePermanentPrivilege', 'CreatePermanent',
-			'SeCreateSymbolicLinkPrivilege', 'CreateSymbolicLink',
-			'SeCreateTokenPrivilege', 'CreateToken',
-			'SeDebugPrivilege', 'Debug',
-			'SeEnableDelegationPrivilege', 'EnableDelegation',
-			'SeImpersonatePrivilege', 'Impersonate',
-			'SeIncreaseBasePriorityPrivilege', 'IncreaseBasePriority',
-			'SeIncreaseQuotaPrivilege', 'IncreaseQuota',
-			'SeIncreaseWorkingSetPrivilege', 'IncreaseWorkingSet',
-			'SeLoadDriverPrivilege', 'LoadDriver',
-			'SeLockMemoryPrivilege', 'LockMemory',
-			'SeMachineAccountPrivilege', 'MachineAccount',
-			'SeManageVolumePrivilege', 'ManageVolume',
-			'SeProfileSingleProcessPrivilege', 'ProfileSingleProcess',
-			'SeRelabelPrivilege', 'Relabel',
-			'SeRemoteShutdownPrivilege', 'RemoteShutdown',
-			'SeRestorePrivilege', 'Restore',
-			'SeSecurityPrivilege', 'Security',
-			'SeShutdownPrivilege', 'Shutdown',
-			'SeSyncAgentPrivilege', 'SyncAgent',
-			'SeSystemEnvironmentPrivilege', 'SystemEnvironment',
-			'SeSystemProfilePrivilege', 'SystemProfile',
-			'SeSystemtimePrivilege', 'SystemTime',
-			'SeTakeOwnershipPrivilege', 'TakeOwnership',
-			'SeTcbPrivilege', 'Tcb', 'TrustedComputingBase',
-			'SeTimeZonePrivilege', 'TimeZone',
-			'SeTrustedCredManAccessPrivilege', 'TrustedCredManAccess',
-			'SeUndockPrivilege', 'Undock',
-			'SeUnsolicitedInputPrivilege', 'UnsolicitedInput'
+			"SeAssignPrimaryTokenPrivilege", "AssignPrimaryToken",
+			"SeAuditPrivilege", "Audit",
+			"SeBackupPrivilege", "Backup",
+			"SeChangeNotifyPrivilege", "ChangeNotify",
+			"SeCreateGlobalPrivilege", "CreateGlobal",
+			"SeCreatePagefilePrivilege", "CreatePagefile",
+			"SeCreatePermanentPrivilege", "CreatePermanent",
+			"SeCreateSymbolicLinkPrivilege", "CreateSymbolicLink",
+			"SeCreateTokenPrivilege", "CreateToken",
+			"SeDebugPrivilege", "Debug",
+			"SeEnableDelegationPrivilege", "EnableDelegation",
+			"SeImpersonatePrivilege", "Impersonate",
+			"SeIncreaseBasePriorityPrivilege", "IncreaseBasePriority",
+			"SeIncreaseQuotaPrivilege", "IncreaseQuota",
+			"SeIncreaseWorkingSetPrivilege", "IncreaseWorkingSet",
+			"SeLoadDriverPrivilege", "LoadDriver",
+			"SeLockMemoryPrivilege", "LockMemory",
+			"SeMachineAccountPrivilege", "MachineAccount",
+			"SeManageVolumePrivilege", "ManageVolume",
+			"SeProfileSingleProcessPrivilege", "ProfileSingleProcess",
+			"SeRelabelPrivilege", "Relabel",
+			"SeRemoteShutdownPrivilege", "RemoteShutdown",
+			"SeRestorePrivilege", "Restore",
+			"SeSecurityPrivilege", "Security",
+			"SeShutdownPrivilege", "Shutdown",
+			"SeSyncAgentPrivilege", "SyncAgent",
+			"SeSystemEnvironmentPrivilege", "SystemEnvironment",
+			"SeSystemProfilePrivilege", "SystemProfile",
+			"SeSystemtimePrivilege", "SystemTime",
+			"SeTakeOwnershipPrivilege", "TakeOwnership",
+			"SeTcbPrivilege", "Tcb", "TrustedComputingBase",
+			"SeTimeZonePrivilege", "TimeZone",
+			"SeTrustedCredManAccessPrivilege", "TrustedCredManAccess",
+			"SeUndockPrivilege", "Undock",
+			"SeUnsolicitedInputPrivilege", "UnsolicitedInput"
 		)]
-		[Alias('PrivilegeName')]
+		[Alias("PrivilegeName")]
 		[string[]] $Name,
 
 		[Parameter()]
@@ -141,9 +141,9 @@ function Set-Privilege
 		[scriptblock] $GetPrivilegeConstant = {
 			param($StringParam)
 
-			if ($StringParam -eq 'TrustedComputingBase')
+			if ($StringParam -eq "TrustedComputingBase")
 			{
-				return 'SeTcbPrivilege'
+				return "SeTcbPrivilege"
 			}
 			elseif ($StringParam -match '^Se.*Privilege$')
 			{

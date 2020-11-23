@@ -110,7 +110,7 @@ function ConvertTo-Network
 		IPAddress = $null
 		SubnetMask = $null
 		MaskLength = 0
-		PSTypeName = 'Ruleset.IP.Network'
+		PSTypeName = "Ruleset.IP.Network"
 	}
 
 	# Override ToString
@@ -118,7 +118,7 @@ function ConvertTo-Network
 		'{0}/{1}' -f $this.IPAddress, $this.MaskLength
 	}
 
-	if (-not $PSBoundParameters.ContainsKey('SubnetMask') -or $SubnetMask -eq '')
+	if (-not $PSBoundParameters.ContainsKey("SubnetMask") -or $SubnetMask -eq "")
 	{
 		$IPAddress, $SubnetMask = $IPAddress.Split([char[]]'\/ ', [StringSplitOptions]::RemoveEmptyEntries)
 	}
@@ -136,9 +136,9 @@ function ConvertTo-Network
 	else
 	{
 		$ErrorRecord = [System.Management.Automation.ErrorRecord]::new(
-			[ArgumentException]'Invalid IP address.',
-			'InvalidIPAddress',
-			'InvalidArgument',
+			[ArgumentException] "Invalid IP address.",
+			"InvalidIPAddress",
+			"InvalidArgument",
 			$IPAddress
 		)
 
@@ -146,7 +146,7 @@ function ConvertTo-Network
 	}
 
 	# SubnetMask
-	if ($null -eq $SubnetMask -or $SubnetMask -eq '')
+	if ($null -eq $SubnetMask -or $SubnetMask -eq "")
 	{
 		$Network.SubnetMask = [ipaddress] $ValidSubnetMaskValues[32]
 		$Network.MaskLength = 32
@@ -164,9 +164,9 @@ function ConvertTo-Network
 			else
 			{
 				$ErrorRecord = [System.Management.Automation.ErrorRecord]::new(
-					[ArgumentException]'Mask length out of range (expecting 0 to 32).',
-					'InvalidMaskLength',
-					'InvalidArgument',
+					[ArgumentException] "Mask length out of range (expecting 0 to 32).",
+					"InvalidMaskLength",
+					"InvalidArgument",
 					$SubnetMask
 				)
 				$PSCmdlet.ThrowTerminatingError($ErrorRecord)
@@ -174,9 +174,9 @@ function ConvertTo-Network
 		}
 		else
 		{
-			while ($SubnetMask.Split('.').Count -lt 4)
+			while ($SubnetMask.Split(".").Count -lt 4)
 			{
-				$SubnetMask += '.0'
+				$SubnetMask += ".0"
 			}
 
 			$MaskLength = $ValidSubnetMaskValues.IndexOf($SubnetMask)
@@ -189,9 +189,9 @@ function ConvertTo-Network
 			else
 			{
 				$ErrorRecord = [System.Management.Automation.ErrorRecord]::new(
-					[ArgumentException]'Invalid subnet mask.',
-					'InvalidSubnetMask',
-					'InvalidArgument',
+					[ArgumentException] "Invalid subnet mask.",
+					"InvalidSubnetMask",
+					"InvalidArgument",
 					$SubnetMask
 				)
 

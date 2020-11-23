@@ -147,10 +147,10 @@ Set-Variable -Name CompatibleModules -Scope Script -Value @(
 Set-Variable -Name SessionName -Scope Script -Value $null
 
 # The computer name to use if one isn't provided.
-$SessionComputerName = 'localhost'
+$SessionComputerName = "localhost"
 
 # Specifies the default configuration to connect to when creating the compatibility session
-$SessionConfigurationName = 'Microsoft.PowerShell'
+$SessionConfigurationName = "Microsoft.PowerShell"
 
 Set-Alias -Name Add-WinPSModulePath -Value Add-WindowsPSModulePath
 

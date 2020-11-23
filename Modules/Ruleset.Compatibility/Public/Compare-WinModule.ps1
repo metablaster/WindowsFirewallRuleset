@@ -43,7 +43,7 @@ of the computer on which to create the compatibility session.
 
 .PARAMETER ConfigurationName
 Specifies the configuration to connect to when creating the compatibility session
-(Defaults to 'Microsoft.PowerShell')
+(Defaults to "Microsoft.PowerShell")
 
 .PARAMETER Credential
 If needed, use this parameter to specify credentials for the compatibility session
@@ -57,7 +57,7 @@ that are not currently available in the PowerShell Core environment.
 .EXAMPLE
 PS> Compare-WinModule A*
 
-This will return a list of all of the compatibility session modules matching the wildcard pattern 'A*'.
+This will return a list of all of the compatibility session modules matching the wildcard pattern "A*".
 
 .INPUTS
 None. You cannot pipe objects to Compare-WinModule

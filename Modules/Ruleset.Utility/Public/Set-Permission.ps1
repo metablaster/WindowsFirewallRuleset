@@ -123,7 +123,7 @@ LanmanServer service is denied specified rights for specified directory and all 
 .EXAMPLE
 PS> Set-Permission -Principal SomeUser -Domain COMPUTERNAME -Path "D:\SomeFolder"
 
-Allows to ReadAndExecute, ListDirectory and Traverse to 'SomeFolder' and it's contents for COMPUTERNAME\SomeUser
+Allows to ReadAndExecute, ListDirectory and Traverse to "SomeFolder" and it's contents for COMPUTERNAME\SomeUser
 
 .INPUTS
 None. You cannot pipe objects to Set-Permission
@@ -268,7 +268,7 @@ function Set-Permission
 		{
 			try
 			{
-				# TODO: Debug, Verbose and other messages will not be clear with just 'RegKey'
+				# TODO: Debug, Verbose and other messages will not be clear with just "RegKey"
 				New-PSDrive -Name RegKey -Scope Local -Root $Path -PSProvider Registry -ErrorAction Stop | Out-Null
 				$Path = "RegKey:\"
 				Test-Path -Path $Path -ErrorAction Stop

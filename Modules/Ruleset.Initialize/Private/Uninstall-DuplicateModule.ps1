@@ -48,7 +48,7 @@ No check for duplicity is performed and all supplied modules are removed.
 
 .PARAMETER Name
 One or more module names which to check for outdaness, and uninstall all outdated candidates.
-Unlike with 'Module' parameter, only outdated modules are uninstalled.
+Unlike with "Module" parameter, only outdated modules are uninstalled.
 
 .PARAMETER Location
 Predefined default locations where too search for outdated modules.

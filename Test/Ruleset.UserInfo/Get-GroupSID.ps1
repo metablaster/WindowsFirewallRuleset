@@ -84,7 +84,7 @@ $GroupsTest
 # Test array of groups
 #
 
-[string[]] $GroupArray = @('Users', 'Hyper-V Administrators')
+[string[]] $GroupArray = @("Users", "Hyper-V Administrators")
 
 Start-Test "Get-GroupSID $GroupArray"
 $GroupsTest = Get-GroupSID $GroupArray
@@ -113,10 +113,10 @@ $GroupArray | Get-GroupSID -CIM
 #
 
 Start-Test "FAILURE TEST NO CIM: Get-GroupSID @('Users', 'Hyper-V Administrators')"
-Get-GroupSID 'Users', 'Hyper-V Administrators' -Machine "CRAZYMACHINE" -ErrorAction SilentlyContinue
+Get-GroupSID "Users", 'Hyper-V Administrators' -Machine "CRAZYMACHINE" -ErrorAction SilentlyContinue
 
 Start-Test "FAILURE TEST CONTACT: Get-GroupSID @('Users', 'Hyper-V Administrators')"
-Get-GroupSID 'Users', 'Hyper-V Administrators' -Machine "CRAZYMACHINE" -CIM -ErrorAction SilentlyContinue
+Get-GroupSID "Users", 'Hyper-V Administrators' -Machine "CRAZYMACHINE" -CIM -ErrorAction SilentlyContinue
 
 Update-Log
 Exit-Test

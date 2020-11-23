@@ -91,7 +91,7 @@ InModuleScope Ruleset.IP {
 		}
 
 		It 'Throws an error if passed something other than an IPAddress' {
-			{ ConvertTo-MaskLength 'abcd' } | Should -Throw
+			{ ConvertTo-MaskLength "abcd" } | Should -Throw
 		}
 
 		It 'Example <Number> is valid' -TestCases (

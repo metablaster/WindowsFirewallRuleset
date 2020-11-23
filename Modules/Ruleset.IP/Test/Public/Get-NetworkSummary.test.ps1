@@ -128,7 +128,7 @@ InModuleScope Ruleset.IP {
 		}
 
 		It 'Throws an error if passed something other than an IPAddress' {
-			{ Get-NetworkSummary 'abcd' } | Should -Throw
+			{ Get-NetworkSummary "abcd" } | Should -Throw
 		}
 
 		It 'Example <Number> is valid' -TestCases (

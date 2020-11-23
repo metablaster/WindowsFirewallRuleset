@@ -102,7 +102,7 @@ InModuleScope Ruleset.IP {
 		}
 
 		It 'Throws an error if passed something other than an IPAddress' {
-			{ Get-BroadcastAddress 'abcd' -ErrorAction Stop } | Should -Throw
+			{ Get-BroadcastAddress "abcd" -ErrorAction Stop } | Should -Throw
 		}
 
 		It 'Example <Number> is valid' -TestCases (

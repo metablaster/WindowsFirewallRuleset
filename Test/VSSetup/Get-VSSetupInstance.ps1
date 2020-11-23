@@ -67,7 +67,7 @@ Enter-Test
 
 $NullVariable = $null
 $EmptyVariable = Get-VSSetupInstance -All |
-Select-VSSetupInstance -Require 'FailureTest' -Latest |
+Select-VSSetupInstance -Require "FailureTest" -Latest |
 Select-Object -ExpandProperty InstallationPath
 
 Start-Test "Get-VSSetupInstance"

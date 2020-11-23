@@ -83,7 +83,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 $WUDFHost = "%SystemRoot%\System32\WUDFHost.exe"
 Test-File $WUDFHost
 
-# TODO: local user may need to be 'Any', needs testing.
+# TODO: local user may need to be "Any", needs testing.
 New-NetFirewallRule -DisplayName "Wireless Display" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
 	-Service Any -Program $WUDFHost -Group $Group `

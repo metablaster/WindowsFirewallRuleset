@@ -106,7 +106,7 @@ function Get-GroupPrincipal
 					foreach ($Group in $UserGroups)
 					{
 						# Get all users that belong to requested group,
-						# this includes non local principal source and non 'user' users
+						# this includes non local principal source and non "user" users
 						# it is also missing SID
 						$GroupUsers = Get-CimInstance -Class Win32_GroupUser -Namespace "root\cimv2" -ComputerName $Computer |
 						Where-Object { $_.GroupComponent.Name -eq $Group } |

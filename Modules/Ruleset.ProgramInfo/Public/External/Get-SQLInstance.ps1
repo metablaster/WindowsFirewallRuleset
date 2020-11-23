@@ -224,10 +224,10 @@ function Get-SQLInstance
 						Write-Warning -Message "Failed to open registry sub key: Instance Names\SQL"
 					}
 				}
-				elseif ($RootKey.GetValueNames() -contains 'InstalledInstances')
+				elseif ($RootKey.GetValueNames() -contains "InstalledInstances")
 				{
 					$isCluster = $false
-					$Instances = $RootKey.GetValue('InstalledInstances')
+					$Instances = $RootKey.GetValue("InstalledInstances")
 				}
 				else
 				{
@@ -257,11 +257,11 @@ function Get-SQLInstance
 							$isCluster = $true
 
 							Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening InstanceRegCluster sub key: Cluster"
-							$InstanceRegCluster = $InstanceReg.OpenSubKey('Cluster')
+							$InstanceRegCluster = $InstanceReg.OpenSubKey("Cluster")
 
 							if ($InstanceRegCluster)
 							{
-								$ClusterName = $InstanceRegCluster.GetValue('ClusterName')
+								$ClusterName = $InstanceRegCluster.GetValue("ClusterName")
 							}
 							else
 							{
@@ -277,7 +277,7 @@ function Get-SQLInstance
 							{
 								$ClusterReg.GetSubKeyNames() | ForEach-Object {
 									# TODO: check opening sub key
-									$Nodes.Add($ClusterReg.OpenSubKey($_).GetValue('NodeName')) | Out-Null
+									$Nodes.Add($ClusterReg.OpenSubKey($_).GetValue("NodeName")) | Out-Null
 								}
 							}
 							else
@@ -291,8 +291,8 @@ function Get-SQLInstance
 
 						if ($InstanceRegSetup)
 						{
-							$Edition = $InstanceRegSetup.GetValue('Edition')
-							$SQLBinRoot = $InstanceRegSetup.GetValue('SQLBinRoot')
+							$Edition = $InstanceRegSetup.GetValue("Edition")
+							$SQLBinRoot = $InstanceRegSetup.GetValue("SQLBinRoot")
 
 							if ([string]::IsNullOrEmpty($SQLBinRoot))
 							{
@@ -329,7 +329,7 @@ function Get-SQLInstance
 								} | Select-Object -First 1
 
 								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening Service sub key: $ServiceKey"
-								$Service = $ServicesReg.OpenSubKey($ServiceKey).GetValue('ImagePath')
+								$Service = $ServicesReg.OpenSubKey($ServiceKey).GetValue("ImagePath")
 
 								if ($Service)
 								{
@@ -345,7 +345,7 @@ function Get-SQLInstance
 						catch
 						{
 							# Use potentially less accurate version from registry
-							$Version = $InstanceRegSetup.GetValue('Version')
+							$Version = $InstanceRegSetup.GetValue("Version")
 						}
 						finally
 						{
@@ -401,17 +401,17 @@ function Get-SQLInstance
 								switch -Regex ($Version)
 								{
 									# https://en.wikipedia.org/wiki/History_of_Microsoft_SQL_Server
-									"^15"	{ 'SQL Server 2019'; break }
-									"^14"	{ 'SQL Server 2017'; break }
-									"^13"	{ 'SQL Server 2016'; break }
-									"^12"	{ 'SQL Server 2014'; break }
-									"^11"	{ 'SQL Server 2012'; break }
-									"^10\.5" { 'SQL Server 2008 R2'; break }
-									"^10"	{ 'SQL Server 2008'; break }
-									"^9"	{ 'SQL Server 2005'; break }
-									"^8"	{ 'SQL Server 2000'; break }
-									"^7"	{ 'SQL Server 7.0'; break }
-									default { 'Unknown' }
+									"^15"	{ "SQL Server 2019"; break }
+									"^14"	{ "SQL Server 2017"; break }
+									"^13"	{ "SQL Server 2016"; break }
+									"^12"	{ "SQL Server 2014"; break }
+									"^11"	{ "SQL Server 2012"; break }
+									"^10\.5" { "SQL Server 2008 R2"; break }
+									"^10"	{ "SQL Server 2008"; break }
+									"^9"	{ "SQL Server 2005"; break }
+									"^8"	{ "SQL Server 2000"; break }
+									"^7"	{ "SQL Server 7.0"; break }
+									default { "Unknown" }
 								}
 							}.InvokeReturnAsIs()
 
@@ -421,7 +421,7 @@ function Get-SQLInstance
 							ClusterNodes = ($Nodes -ne $Computer)
 
 							FullName = {
-								if ($Instance -eq 'MSSQLSERVER')
+								if ($Instance -eq "MSSQLSERVER")
 								{
 									$Computer
 								}

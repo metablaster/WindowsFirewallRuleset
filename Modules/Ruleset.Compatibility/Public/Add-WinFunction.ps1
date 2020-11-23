@@ -33,7 +33,7 @@ This command defines a global function that always runs in the compatibility ses
 .DESCRIPTION
 This command defines a global function that always runs in the compatibility session,
 returning serialized data to the calling session.
-Parameters can be specified using the 'param' statement but only positional parameters are supported.
+Parameters can be specified using the "param" statement but only positional parameters are supported.
 
 By default, when executing, the current compatibility session is used,
 or, in the case where there is no existing session, a new default session will be created.
@@ -51,7 +51,7 @@ of the computer on which to create the compatibility session.
 
 .PARAMETER ConfigurationName
 Specifies the configuration to connect to when creating the compatibility session
-(Defaults to 'Microsoft.PowerShell')
+(Defaults to "Microsoft.PowerShell")
 
 .PARAMETER Credential
 The credential to use when creating the compatibility session using the target machine/configuration
@@ -63,7 +63,7 @@ PS> myFunction Bill
 Hi Bill!
 Desktop
 
-This example defines a function called 'myFunction' with 1 parameter.
+This example defines a function called "myFunction" with 1 parameter.
 When invoked it will print a message then return the PSVersion table from the compatibility session.
 
 .INPUTS

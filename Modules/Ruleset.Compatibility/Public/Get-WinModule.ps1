@@ -47,7 +47,7 @@ of the computer on which to create the compatibility session.
 
 .PARAMETER ConfigurationName
 Specifies the configuration to connect to when creating the compatibility session
-(Defaults to 'Microsoft.PowerShell')
+(Defaults to "Microsoft.PowerShell")
 
 .PARAMETER Credential
 The credential to use when creating the compatibility session using the target machine/configuration
@@ -63,7 +63,7 @@ Name      Version Description
 ----      ------- -----------
 PnpDevice 1.0.0.0
 
-This example looks for modules in the compatibility session with the string 'PNP' in their name.
+This example looks for modules in the compatibility session with the string "PNP" in their name.
 
 .INPUTS
 None. You cannot pipe objects to Get-WinModule
@@ -88,7 +88,7 @@ function Get-WinModule
 	Param
 	(
 		[Parameter(Mandatory = $false, Position = 0)]
-		[string[]] $Name = '*',
+		[string[]] $Name = "*",
 
 		[Parameter()]
 		[Alias("cn")]
@@ -126,8 +126,8 @@ function Get-WinModule
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting the list of available modules"
 	}
 
-	$PropertiesToReturn = if ($Full) { '*' }
-	else { 'Name', 'Version', 'Description' }
+	$PropertiesToReturn = if ($Full) { "*" }
+	else { "Name", "Version", "Description" }
 
 	Invoke-Command -Session $Session -ScriptBlock {
 		Get-Module -ListAvailable -Name $using:Name |

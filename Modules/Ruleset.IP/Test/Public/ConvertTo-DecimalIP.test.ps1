@@ -87,7 +87,7 @@ InModuleScope Ruleset.IP {
 		}
 
 		It 'Throws an error if passed something other than an IPAddress' {
-			{ ConvertTo-DecimalIP 'abcd' } | Should -Throw
+			{ ConvertTo-DecimalIP "abcd" } | Should -Throw
 		}
 
 		It 'Example <Number> is valid' -TestCases (

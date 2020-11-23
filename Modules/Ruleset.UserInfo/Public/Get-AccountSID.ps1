@@ -57,7 +57,7 @@ PS> Get-AccountSID @("USERNAME1", "USERNAME2") -CIM
 .NOTES
 TODO: CIM switch is not supported on PowerShell Core, meaning contacting remote computers
 is supported only on Windows PowerShell
-TODO: plural parameter 'UserNames'
+TODO: plural parameter "UserNames"
 #>
 function Get-AccountSID
 {

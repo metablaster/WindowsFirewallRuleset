@@ -95,7 +95,7 @@ InModuleScope Ruleset.IP {
 		}
 
 		It 'Throws an error if passed something other than an IPAddress' {
-			{ ConvertTo-BinaryIP 'abcd' } | Should -Throw
+			{ ConvertTo-BinaryIP "abcd" } | Should -Throw
 		}
 
 		It 'Example <Number> is valid' -TestCases (

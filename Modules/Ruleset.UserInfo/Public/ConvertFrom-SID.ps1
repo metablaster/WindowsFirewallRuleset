@@ -80,7 +80,7 @@ not valid for multiple reasons such as:
 See also: https://docs.microsoft.com/en-us/windows/security/identity-protection/access-control/security-identifiers
 
 To solve the problem "Name" must be replaced with "Display Name", most "Name" values are OK,
-but those which are not are replaced with "Display Name" in the 'WellKnownSIDs' variable below.
+but those which are not are replaced with "Display Name" in the "WellKnownSIDs" variable below.
 
 TODO: Need to implement switch parameters for UPN and NETBIOS name format in addition to display name, see:
 https://docs.microsoft.com/en-us/windows/win32/secauthn/user-name-formats

@@ -107,9 +107,9 @@ function ConvertTo-DottedDecimalIP
 		catch
 		{
 			$ErrorRecord = [System.Management.Automation.ErrorRecord]::new(
-				[ArgumentException]'Cannot convert this format.',
-				'UnrecognizedFormat',
-				'InvalidArgument',
+				[ArgumentException] "Cannot convert this format.",
+				"UnrecognizedFormat",
+				"InvalidArgument",
 				$IPAddress
 			)
 			Write-Error -ErrorRecord $ErrorRecord

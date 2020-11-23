@@ -98,7 +98,7 @@ InModuleScope Ruleset.IP {
 		}
 
 		It 'Throws an error if passed something other than an IPAddress' {
-			{ Get-NetworkRange 'abcd' } | Should -Throw
+			{ Get-NetworkRange "abcd" } | Should -Throw
 		}
 
 		It 'Returns correct values when used with Start and End parameters' {
