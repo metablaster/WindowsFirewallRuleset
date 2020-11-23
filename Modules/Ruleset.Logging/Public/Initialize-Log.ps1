@@ -40,6 +40,10 @@ Path to directory where to save logs
 .PARAMETER Label
 File label which precedes file date, ex. Warning or Error
 
+.PARAMETER Header
+If specified, this header message will be at the top of a log file.
+This parameter is ignored for existing log files
+
 .EXAMPLE
 PS> Initialize-Log "C:\Logs" -Label "Warning"
 
@@ -64,21 +68,41 @@ function Initialize-Log
 		[string] $Folder,
 
 		[Parameter(Mandatory = $true)]
-		[string] $Label
+		[string] $Label,
+
+		[Parameter()]
+		[string] $Header
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# Generate file name
-	$FileName = $Label + "_$(Get-Date -Format "dd.MM.yy")h.log"
+	$FileName = $Label + "_$(Get-Date -Format "dd.MM.yy").log"
 	$LogFile = Join-Path -Path $Folder -ChildPath $FileName
 
 	# Create Logs directory if it doesn't exist
-	# TODO: Should we create file if it does not exist?
 	if (!(Test-Path -PathType Container -Path $Folder))
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating log directory $Folder"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating log directory: $Folder"
 		New-Item -ItemType Directory -Path $Folder -ErrorAction Stop | Out-Null
+	}
+
+	if (!(Test-Path -PathType Leaf -Path $LogFile))
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating log file: $FileName"
+		New-Item -ItemType File -Path $LogFile -ErrorAction Stop | Out-Null
+		Set-Content -Path $LogFile -Value "`n#`n# Windows Firewall Ruleset $ProjectVersion"
+
+		if ($Header)
+		{
+			Add-Content -Path $LogFile -Value "# $Header"
+		}
+
+		Add-Content -Path $LogFile -Value "#"
+	}
+	elseif ($Header)
+	{
+		Write-Warning -Message "Header parameter is valid for new log files only, ignored..."
 	}
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Logs folder is: $Folder"

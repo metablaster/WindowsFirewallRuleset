@@ -48,6 +48,7 @@ None.
 #>
 
 [CmdletBinding()]
+[OutputType([void])]
 param (
 	# TODO: Remove if not needed or test is safe
 	[Parameter()]

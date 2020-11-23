@@ -58,6 +58,7 @@ None.
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 	"PSReviewUnusedParameter", "", Justification = "This is template script parameter")]
 [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium")]
+[OutputType([void])]
 param (
 	[Parameter()]
 	[string] $ParameterName

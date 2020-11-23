@@ -31,13 +31,55 @@ SOFTWARE.
 Get firewall auditing logs
 
 .DESCRIPTION
-Gets firewall auditing logs from event viewer and saves result to file
+Gets firewall auditing logs from event viewer and saves result to log file
+
+.PARAMETER Direction
+Get entries only for specified direction
+
+.PARAMETER Protocol
+Get entries only for specified protocol
+https://en.wikipedia.org/wiki/List_of_IP_protocol_numbers
 
 .PARAMETER Last
 Get this amount of newest entries
 
+.PARAMETER Hours
+Get entries within last hours specified
+
+.PARAMETER EventID
+Get entries for this ID only
+The default is "The Windows Filtering Platform has blocked a packet"
+
+Event ID 5146: The Windows Filtering Platform has blocked a packet
+Event ID 5147: A more restrictive Windows Filtering Platform filter has blocked a packet
+Event ID 5148: The Windows Filtering Platform has detected a DoS attack and entered a defensive mode; packets associated with this attack will be discarded.
+Event ID 5149: The DoS attack has subsided and normal processing is being resumed.
+Event ID 5150: The Windows Filtering Platform has blocked a packet.
+Event ID 5151: A more restrictive Windows Filtering Platform filter has blocked a packet.
+Event ID 5152: The Windows Filtering Platform blocked a packet
+Event ID 5153: A more restrictive Windows Filtering Platform filter has blocked a packet
+Event ID 5154: The Windows Filtering Platform has permitted an application or service to listen on a port for incoming connections
+Event ID 5155: The Windows Filtering Platform has blocked an application or service from listening on a port for incoming connections
+Event ID 5156: The Windows Filtering Platform has allowed a connection
+Event ID 5157: The Windows Filtering Platform has blocked a connection
+Event ID 5158: The Windows Filtering Platform has permitted a bind to a local port
+Event ID 5159: The Windows Filtering Platform has blocked a bind to a local port
+
 .EXAMPLE
-PS> .\ParseAudit.ps1 -Last 50
+PS> .\ParseAudit.ps1 -Last 48
+Log last 48 packet drop entries for all directions, all protocols within 24 hours
+
+.EXAMPLE
+PS> .\ParseAudit.ps1 -Hours 48 -Direction Inbound -Protocol 6
+Log last 50 packet drop entries for inbound direction, UDP within 24 hours
+
+.EXAMPLE
+PS> .\ParseAudit.ps1 -Last 14 -Protocol ICMP -Hours 2
+Log last 14 packet drop entries for all directions, ICMP within last 2 hours
+
+.EXAMPLE
+PS> .\ParseAudit.ps1 -Hours 48 -Direction Outbound -Protocol TCP -EventID 5159
+Log last 50 blocking bind to local port entries for outbound direction, TCP protocol within 48 hours
 
 .INPUTS
 None. You cannot pipe objects to ParseAudit.ps1
@@ -46,7 +88,6 @@ None. You cannot pipe objects to ParseAudit.ps1
 None. ParseAudit.ps1 does not generate any output
 
 .NOTES
-TODO: This script is not finished
 
 .LINK
 https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.diagnostics/get-winevent?view=powershell-7.1
@@ -67,14 +108,22 @@ https://docs.microsoft.com/en-us/windows/win32/wes/consuming-events
 [CmdletBinding(PositionalBinding = $false)]
 param (
 	[Parameter()]
-	[uint32] $Last,
+	[ValidateSet("Inbound", "Outbound", "Any")]
+	[string] $Direction = "Any",
 
 	[Parameter()]
-	[uint32] $Hours = 24
+	[ValidatePattern("^TCP|UDP|ICMP|IGMP|ICMPv6|IPv6|Any|\b([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\b$")]
+	[string] $Protocol = "Any",
 
-	# [Parameter()]
-	# [ValidateSet("TCP", "UDP")]
-	# [string] $Protocol
+	[Parameter()]
+	[uint32] $Last = 50,
+
+	[Parameter()]
+	[uint32] $Hours = 24,
+
+	[Parameter()]
+	[ValidateRange(5146, 5159)]
+	[uint32] $EventID = 5152
 )
 
 #region Initialization
@@ -92,9 +141,8 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 . $PSScriptRoot\ContextSetup.ps1
 
 # User prompt
-# TODO: Update command line help messages
-$Accept = "Template accept help message"
-$Deny = "Abort operation, template deny help message"
+$Accept = "Parse firewall auditing entries from event viewer and write to log file"
+$Deny = "Abort operation"
 Update-Context $ScriptContext $ThisScript
 if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
@@ -104,69 +152,136 @@ $Date = (Get-Date).AddHours(-$Hours)
 $AuditFailure = [System.Diagnostics.Eventing.Reader.StandardEventKeywords]::AuditFailure
 $Level = [System.Diagnostics.Eventing.Reader.StandardEventLevel]::LogAlways
 
-[System.Diagnostics.Eventing.Reader.EventLogRecord[]] $Events = Get-WinEvent -MaxEvents $Last -FilterHashtable @{
-	LogName = 'Security'
-	ProviderName = 'Microsoft-Windows-Security-Auditing'
+[hashtable] $FilterHash = @{
+	LogName = "Security"
+	ProviderName = "Microsoft-Windows-Security-Auditing"
 	Keywords = $AuditFailure.value__
-	ID = 5152 # The Windows Filtering Platform has blocked a packet
+	ID = $EventID
 	Level = $Level.Value__
 	StartTime = $Date
-	# Protocol = 6
 }
 
-$File = Initialize-Log $LogsFolder\Audit -Label System
+[System.Diagnostics.Eventing.Reader.EventLogRecord[]] $Events = Get-WinEvent -MaxEvents $Last -FilterHashtable $FilterHash
+
+[string] $FileLabel = "Event"
+if ($Protocol -ne "Any")
+{
+	$FileLabel += "_$Protocol"
+}
+if ($Direction -ne "Any")
+{
+	$FileLabel += "_$Direction"
+}
+
+[string] $EventDescription = switch ($EventID)
+{
+	5146 { "The Windows Filtering Platform has blocked a packet" }
+	5147 { "A more restrictive Windows Filtering Platform filter has blocked a packet" }
+	5148 { "The Windows Filtering Platform has detected a DoS attack and entered a defensive mode; packets associated with this attack will be discarded" }
+	5149 { "The DoS attack has subsided and normal processing is being resumed." }
+	5150 { "The Windows Filtering Platform has blocked a packet." }
+	5151 { "A more restrictive Windows Filtering Platform filter has blocked a packet." }
+	5152 { "The Windows Filtering Platform blocked a packet" }
+	5153 { "A more restrictive Windows Filtering Platform filter has blocked a packet" }
+	5154 { "The Windows Filtering Platform has permitted an application or service to listen on a port for incoming connections" }
+	5155 { "The Windows Filtering Platform has blocked an application or service from listening on a port for incoming connections" }
+	5156 { "The Windows Filtering Platform has allowed a connection" }
+	5157 { "The Windows Filtering Platform has blocked a connection" }
+	5158 { "The Windows Filtering Platform has permitted a bind to a local port" }
+	5159 { "The Windows Filtering Platform has blocked a bind to a local port" }
+}
+$File = Initialize-Log $LogsFolder\Audit -Label $FileLabel -Header $EventDescription
+
+$ProtocolNumber = switch ($Protocol)
+{
+	"ICMP" { 1; break }
+	"IGMP" { 2; break }
+	"UDP" { 6; break }
+	"TCP" { 17; break }
+	"IPv6" { 41; break }
+	"ICMPv6" { 58; break }
+	default { [int32] $Protocol }
+}
+
+$DevicePath = & Get-DevicePath.ps1
 
 foreach ($Event in $Events)
 {
-	# Message field
-	[hashtable] $Data = @{}
-
 	# Convert the event to XML
 	[xml] $EventXML = $Event.ToXml()
 
-	# NOTE: To select individual element
 	# https://docs.microsoft.com/en-us/previous-versions/dotnet/netframework-4.0/ms256086(v=vs.100)
-	# $xmlns = New-Object -TypeName System.Xml.XmlNamespaceManager -ArgumentList $EventXML.NameTable
-	# $xmlns.AddNamespace("el", "http://schemas.microsoft.com/win/2004/08/events/event")
-	# $EventXML.SelectSingleNode("/el:Event/el:EventData/el:Data[@Name = 'Direction']/text()", $xmlns).Value
+	$xmlns = New-Object -TypeName System.Xml.XmlNamespaceManager -ArgumentList $EventXML.NameTable
+	$xmlns.AddNamespace("el", "http://schemas.microsoft.com/win/2004/08/events/event")
+	$EventProtocol = $EventXML.SelectSingleNode("/el:Event/el:EventData/el:Data[@Name = 'Protocol']/text()", $xmlns).Value
 
-	# Iterate through each one of the XML message properties
-	for ($i = 0; $i -lt $EventXML.Event.EventData.Data.Count; ++$i)
+	if ($EventProtocol -ne $ProtocolNumber)
 	{
-		$Name = $EventXML.Event.EventData.Data[$i].Name
-		$Value = $EventXML.Event.EventData.Data[$i].'#text'
-
-		if ($Name -eq "Protocol")
-		{
-			$Value = switch ($Value)
-			{
-				6 { "UDP"; break }
-				17 { "TCP"; break }
-				default { $Value }
-			}
-		}
-		if ($Name -eq "Direction")
-		{
-			if ($Value -eq "%%14593")
-			{
-				$Value = "Outbound"
-			}
-			elseif ($Value -eq "%%14592")
-			{
-				$Value = "Inbound"
-			}
-			else
-			{
-				throw "Unexpected"
-			}
-		}
-
-		$Data.Add($Name, $Value)
+		continue
 	}
 
-	$Data | Out-File -Append -FilePath $File -Encoding $DefaultEncoding
-}
+	# Message field
+	[hashtable] $Message = @{}
 
-# $Events | Select-Object -Property Application, Direction, SourceAddress, SourcePort, Protocol, DestAddress, DestPort
+	# Iterate through each one of the XML message properties
+	for ($Index = 0; $Index -lt $EventXML.Event.EventData.Data.Count; ++$Index)
+	{
+		$Name = $EventXML.Event.EventData.Data[$Index].Name
+		$Value = $EventXML.Event.EventData.Data[$Index].'#text'
+
+		$Value = switch ($Name)
+		{
+			"Protocol"
+			{
+				switch ($Value)
+				{
+					1 { "ICMP"; break }
+					2 { "IGMP"; break }
+					6 { "UDP"; break }
+					17 { "TCP"; break }
+					41 { "IPv6"; break }
+					58 { "ICMPv6"; break }
+					default { $Value }
+				}
+				break
+			}
+			"Direction"
+			{
+				switch ($Value)
+				{
+					"%%14592" { "Inbound"; break }
+					"%%14593" {	"Outbound"; break }
+					default { $Value }
+				}
+				break
+			}
+			"LayerName"
+			{
+				switch ($Value)
+				{
+					# TODO: Verify other entries
+					"%%14610" { "Receive/Accept"; break }
+					"%%14611" { "Connect"; break }
+					default { $Value }
+				}
+				break
+			}
+			"Application"
+			{
+				$DriveLetter = $DevicePath | Where-Object {
+					$Value -like "$($_.DevicePath)*"
+				} | Select-Object -ExpandProperty DriveLetter
+
+				$Value -replace "^\\device\\harddiskvolume\d+\\", "$DriveLetter\"
+				break
+			}
+			default { $Value }
+		}
+
+		$Message[$Name] = $Value
+	}
+
+	$Message | Out-File -Append -FilePath $File -Encoding $DefaultEncoding
+}
 
 Update-Log

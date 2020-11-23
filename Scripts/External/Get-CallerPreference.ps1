@@ -100,7 +100,7 @@ String
 None. This function does not produce pipeline output.
 
 .NOTES
-Following changes by metablaster, November 2020:
+Following modifications by metablaster, November 2020:
 
 Removed max* variables for Core edition as per: https://github.com/PowerShell/PowerShell/issues/2221
 - MaximumAliasCount
