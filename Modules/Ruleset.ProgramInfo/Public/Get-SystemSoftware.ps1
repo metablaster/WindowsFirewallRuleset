@@ -47,6 +47,7 @@ None. You cannot pipe objects to Get-SystemSoftware
 
 .NOTES
 We should return empty PSCustomObject if test computer fails
+TODO: Parameter for x64 vs x86 software, then update Find-Installation switch as needed
 #>
 function Get-SystemSoftware
 {

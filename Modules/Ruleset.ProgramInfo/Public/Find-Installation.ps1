@@ -248,21 +248,15 @@ function Find-Installation
 			Update-Table "PinballArcade"
 			break
 		}
-		"JavaPlugin"
-		{
-			# TODO: this is wrong, requires path search type
-			Update-Table "Java\jre1.8.0_45\bin"
-			break
-		}
 		"JavaUpdate"
 		{
-			Update-Table "Java Update"
+			Edit-Table "%ProgramFiles(x86)%\Common Files\Java\Java Update"
 			break
 		}
 		"JavaRuntime"
 		{
-			# TODO: this is wrong, requires path search type
-			Update-Table "Java\jre7\bin"
+			# TODO: This depends on x64 or x86 installation for plugin
+			Update-Table "Java"
 			break
 		}
 		"AdobeARM"

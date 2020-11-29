@@ -97,6 +97,9 @@ New-NetFirewallRule -DisplayName "Port 80" `
 	-Description "Temporary open port 80 to internet, and disable ASAP." |
 Format-Output
 
+$InstallerAccounts = $UsersGroupSDDL
+Merge-SDDL ([ref] $InstallerAccounts) $AdministratorsGroupSDDL
+
 # NOTE: to make use of this rule, it should be updated here and the script re-run
 New-NetFirewallRule -DisplayName "Installer" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -104,7 +107,7 @@ New-NetFirewallRule -DisplayName "Installer" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UsersGroupSDDL `
+	-LocalUser $InstallerAccounts `
 	-InterfaceType $DefaultInterface `
 	-Description "Enable only to let some installer update or communicate to internet such as
 office update, and disable ASAP.

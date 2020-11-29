@@ -74,10 +74,9 @@ function Test-TargetComputer
 		[ValidateRange(1, [int16]::MaxValue)]
 		[int16] $Count = $ConnectionCount,
 
-		[Parameter(ParameterSetName = "Core")]
-		[ValidateScript( { $PSVersionTable.PSEdition -eq "Core" })]
+		[ValidateScript( { $PSVersionTable.PSEdition -eq "Core" } )]
 		[ValidateRange(1, [int16]::MaxValue)]
-		[int16] $Timeout
+		[int16] $Timeout = $ConnectionTimeout
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -93,11 +92,6 @@ function Test-TargetComputer
 	# NOTE: Don't suppress error, error details can be of more use than just "unable to contact computer"
 	if ($PSVersionTable.PSEdition -eq "Core")
 	{
-		if ($null -eq $Timeout)
-		{
-			$Timeout = $ConnectionTimeout
-		}
-
 		if ($ConnectionIPv4)
 		{
 			return Test-Connection -TargetName $ComputerName -Count $Count -TimeoutSeconds $Timeout -Quiet -IPv4

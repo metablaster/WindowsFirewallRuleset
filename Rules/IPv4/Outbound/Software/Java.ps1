@@ -70,8 +70,9 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #
 # Java installation directories
 #
-$JavaRuntimeRoot = "%ProgramFiles%\Java\jre7\bin"
-$JavaPluginRoot = "%ProgramFiles(x86)%\Java\jre1.8.0_45\bin"
+$JavaRuntimeRoot = "%ProgramFiles%\Java"
+# TODO: temporarily not used, plugin is valid only for x86 installation
+# $JavaPluginRoot = "%ProgramFiles(x86)%\Java"
 $JavaUpdateRoot = "%ProgramFiles(x86)%\Common Files\Java\Java Update"
 
 # First remove all existing rules matching group
@@ -84,12 +85,22 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Test if installation exists on system
 if ((Test-Installation "JavaRuntime" ([ref] $JavaRuntimeRoot)) -or $ForceLoad)
 {
-	$Program = "$JavaRuntimeRoot\java.exe"
+	$Program = "$JavaRuntimeRoot\bin\java.exe"
 	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Run java applets" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $UsersGroupSDDL `
+		-Description "" | Format-Output
+
+	# TODO: This must be under "%ProgramFiles(x86)%\
+	$Program = "$JavaRuntimeRoot\bin\jp2launcher.exe"
+	Test-File $Program
+	New-NetFirewallRule -Platform $Platform `
+		-DisplayName "Java Plugin HTTP" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "Run java applets" | Format-Output
 }
@@ -105,19 +116,6 @@ if ((Test-Installation "JavaUpdate" ([ref] $JavaUpdateRoot)) -or $ForceLoad)
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $UsersGroupSDDL `
 		-Description "Update java software" | Format-Output
-}
-
-# Test if installation exists on system
-if ((Test-Installation "JavaPlugin" ([ref] $JavaPluginRoot)) -or $ForceLoad)
-{
-	$Program = "$JavaPluginRoot\jp2launcher.exe"
-	Test-File $Program
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Java Plugin HTTP" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "Run java applets" | Format-Output
 }
 
 Update-Log
