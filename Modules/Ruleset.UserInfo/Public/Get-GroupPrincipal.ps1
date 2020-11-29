@@ -162,6 +162,7 @@ function Get-GroupPrincipal
 					Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing group: '$Group'"
 
 					# Querying local machine
+					# TODO: The Microsoft.PowerShell.LocalAccounts module is not available in 32-bit PowerShell on a 64-bit system.
 					$GroupUsers = Get-LocalGroupMember -Group $Group | Where-Object {
 						$_.ObjectClass -eq "User" -and
 						($_.PrincipalSource -eq "Local" -or $_.PrincipalSource -eq "MicrosoftAccount")

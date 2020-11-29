@@ -260,6 +260,7 @@ todo's in this file are categorized into following sections:
     - Modules should have updatable help, and, there is no online version for about module topics
     - Need a function to generate a list of files included in module and perform comparison with
     manifest FileList entries
+    - Use Module-Qualified Cmdlet Names
 
 2. Project scripts
 

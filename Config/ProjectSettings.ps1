@@ -502,7 +502,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 		# Recommended minimum Pester version for code testing
 		# NOTE: Analyzer 1.19.1 requires pester v5
 		# TODO: we need pester v4 for tests, but why does analyzer require pester?
-		New-Variable -Name RequirePesterVersion -Scope Global -Option Constant -Value ([version]::new(5, 0, 4))
+		New-Variable -Name RequirePesterVersion -Scope Global -Option Constant -Value ([version]::new(5, 1, 0))
 
 		# Required minimum PackageManagement version prior to installing other modules, do not decrement!
 		New-Variable -Name RequirePackageManagementVersion -Scope Global -Option Constant -Value ([version]::new(1, 4, 7))
