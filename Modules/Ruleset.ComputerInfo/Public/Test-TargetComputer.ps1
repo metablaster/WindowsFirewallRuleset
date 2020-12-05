@@ -45,7 +45,7 @@ Valid only for PowerShell Core. Specifies the number of echo requests to send. T
 Valid only for PowerShell Core. The test fails if a response isn't received before the timeout expires
 
 .EXAMPLE
-PS> Test-TargetComputer "COMPUTERNAME" 2 1
+PS> Test-TargetComputer "COMPUTERNAME" -Count 2 -Timeout 1
 
 .EXAMPLE
 PS> Test-TargetComputer "COMPUTERNAME"
@@ -76,7 +76,7 @@ function Test-TargetComputer
 
 		[ValidateScript( { $PSVersionTable.PSEdition -eq "Core" } )]
 		[ValidateRange(1, [int16]::MaxValue)]
-		[int16] $Timeout = $ConnectionTimeout
+		[int16] $Timeout = $null
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -92,6 +92,8 @@ function Test-TargetComputer
 	# NOTE: Don't suppress error, error details can be of more use than just "unable to contact computer"
 	if ($PSVersionTable.PSEdition -eq "Core")
 	{
+		if ($null -eq $Timeout) { $Timeout = $ConnectionTimeout }
+
 		if ($ConnectionIPv4)
 		{
 			return Test-Connection -TargetName $ComputerName -Count $Count -TimeoutSeconds $Timeout -Quiet -IPv4

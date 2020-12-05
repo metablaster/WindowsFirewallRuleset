@@ -72,6 +72,8 @@ WindowsServices.ps1, meaning re-run the script.
 
 TODO: We can learn app display name from manifest
 TODO: OfficeHub app contains sub app "LocalBridge" which is blocked
+
+NOTE: If OneNote app fails to install, start "Print Spooler" service and try again
 #>
 
 #region Initialization

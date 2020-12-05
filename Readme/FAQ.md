@@ -40,6 +40,17 @@ make sure they are running:
 2. Server (LanmanServer)
 3. TCP/IP NetBIOS Helper service (lmhosts)
 
+Verify following adapter items are enabled and restart adapter for any changes to take effect:
+
+1. Client for Microsoft Networks
+2. File and Printer Sharing for Microsoft Networks
+3. Internet Protocol version 4 (TCP/IPv4)
+4. Internet Protocol version 6 (TCP/IPv6)
+5. Link-Layer Topology Discovery Responder
+6. Link-Layer Topology Discovery I/O Driver
+
+For more information about these items see [Adapter Items](LAN%20Setup\AdapterItems.md)
+
 If this doesn't work verify the command you are using, for example following command tries to get
 firewall rules from GPO and will produce this problem:
 
