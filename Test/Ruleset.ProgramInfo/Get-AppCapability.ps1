@@ -64,8 +64,8 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
-Start-Test "Get-SystemApps | Get-AppCapability -Networking"
-Get-SystemApps | Get-AppCapability -Networking
+Start-Test "Get-SystemApps $TestAdmin | Get-AppCapability -Networking"
+Get-SystemApps -User $TestAdmin | Get-AppCapability -Networking
 
 Start-Test "Get-UserApps -User $TestUser | Get-AppCapability -Networking"
 Get-UserApps -User $TestUser | Get-AppCapability -User $TestUser -Networking

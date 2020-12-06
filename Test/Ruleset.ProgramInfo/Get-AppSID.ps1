@@ -70,17 +70,17 @@ Start-Test "Get-GroupPrincipal:"
 $GroupAccounts = Get-GroupPrincipal "Users", "Administrators"
 $GroupAccounts
 
-Start-Test "Get-AppSID: foreach User"
 foreach ($Account in $GroupAccounts)
 {
+	Start-Test "Get-AppSID: $($Account.User)"
 	Get-UserApps -User $Account.User | ForEach-Object {
-		Get-AppSID $Account.User $_.PackageFamilyName
+		Get-AppSID $_.PackageFamilyName
 	}
 }
 
 Start-Test "Get-AppSID: system apps"
-$Result = Get-SystemApps | ForEach-Object {
-	Get-AppSID $Account.User $_.PackageFamilyName
+$Result = Get-SystemApps -User $TestAdmin | ForEach-Object {
+	Get-AppSID $_.PackageFamilyName
 }
 $Result
 

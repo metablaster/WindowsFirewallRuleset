@@ -44,6 +44,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - Added new module `Ruleset.Compatibility` because `Appx` module no longer works since PowerShell
   Core 7.1
   - Improved function `Approve-Execute`, `Test-TargetComputer`
+  - Improved function `Get-AppSID` big thanks to @ljani for awesome solution: https://github.com/ljani
   - Logging without the need for parameter splating, @Logs variable was removed
 
 - Documentation
@@ -56,6 +57,7 @@ If you would like to see fresh changes done since last release you can do so on 
     - Reference
     - PredefinedRules
     - ProblematicTraffic
+    - FAQ
 
   - Links in markdown are now reference links instead of inline links
   - Added comment based help for rule scripts

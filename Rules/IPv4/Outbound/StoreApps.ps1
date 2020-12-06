@@ -172,7 +172,7 @@ foreach ($Principal in $Principals)
 		}
 
 		$RemoteAddress = $RemoteAddress | Select-Object -Unique
-		$PackageSID = Get-AppSID $Principal.User $_.PackageFamilyName
+		$PackageSID = Get-AppSID $_.PackageFamilyName
 
 		# Possible package not found
 		if ($PackageSID)
@@ -197,7 +197,7 @@ foreach ($Principal in $Principals)
 	# Create rules for system apps
 	#
 
-	Get-SystemApps | ForEach-Object -Process {
+	Get-SystemApps -User $Principal.User | ForEach-Object -Process {
 		$NetworkCapabilities = $_ | Get-AppCapability -Networking
 
 		if (!$NetworkCapabilities)
@@ -230,7 +230,7 @@ foreach ($Principal in $Principals)
 		}
 
 		$RemoteAddress = $RemoteAddress | Select-Object -Unique
-		$PackageSID = Get-AppSID $Principal.User $_.PackageFamilyName
+		$PackageSID = Get-AppSID $_.PackageFamilyName
 
 		# Possible package not found
 		if ($PackageSID)

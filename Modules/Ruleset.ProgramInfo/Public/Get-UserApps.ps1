@@ -82,6 +82,20 @@ function Get-UserApps
 	if (Test-TargetComputer $ComputerName)
 	{
 		# TODO: show warning instead of error when failed (ex. in non elevated run check is Admin)
-		Get-AppxPackage -User $UserName -PackageTypeFilter Bundle
+		Get-AppxPackage -User $UserName -PackageTypeFilter Bundle | Where-Object {
+			# NOTE: This path will be missing for default apps Windows server
+			# It may also be missing in fresh installed OS before connecting to internet
+			# TODO: See if "$_.Status" property can be used to determine if app is valid
+			if (Test-Path -PathType Container -Path "$env:SystemDrive\Users\$UserName\AppData\Local\Packages\$($_.PackageFamilyName)\AC")
+			{
+				$true
+			}
+			else
+			{
+				Write-Warning -Message "Store app '$($_.Name)' is not installed by user '$UserName' or the app is missing"
+				Write-Information -Tags "User" -MessageData "INFO: To fix the problem let this user update all of it's apps in Windows store"
+				$false
+			}
+		}
 	}
 }

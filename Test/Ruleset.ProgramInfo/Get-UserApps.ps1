@@ -66,7 +66,10 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
-Start-Test "Get-UserApps"
+Start-Test "Get-UserApps $TestAdmin"
+Get-UserApps -User $TestAdmin
+
+Start-Test "Get-UserApps $TestUser"
 $Result = Get-UserApps -User $TestUser
 $Result
 

@@ -33,6 +33,13 @@ Get store apps installed system wide
 .DESCRIPTION
 Search system wide installed store apps, those installed for all users or shipped with system.
 
+.PARAMETER UserName
+User name in form of:
+- domain\user_name
+- user_name@fqn.domain.tld
+- user_name
+- SID-string
+
 .PARAMETER ComputerName
 NETBIOS Computer name in form of "COMPUTERNAME"
 
@@ -51,7 +58,6 @@ None. You cannot pipe objects to Get-SystemApps
 TODO: query remote computer not implemented
 TODO: multiple computers
 TODO: we should probably return custom object to be able to pipe to functions such as Get-AppSID
-TODO: it is possible to add -User parameter, what's the purpose? see also StoreApps.ps1
 #>
 function Get-SystemApps
 {
@@ -59,6 +65,10 @@ function Get-SystemApps
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SystemApps.md")]
 	[OutputType([Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage], [Object])]
 	param (
+		[Alias("User")]
+		[Parameter(Mandatory = $true)]
+		[string] $UserName,
+
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
 		[string] $ComputerName = [System.Environment]::MachineName
@@ -70,8 +80,23 @@ function Get-SystemApps
 	if (Test-TargetComputer $ComputerName)
 	{
 		# TODO: show warning instead of error when fail (ex. in non elevated run)
-		Get-AppxPackage -PackageTypeFilter Main | Where-Object {
+		# TODO: it is possible to add -User parameter, what's the purpose? see also StoreApps.ps1
+		Get-AppxPackage -User $UserName -PackageTypeFilter Main | Where-Object {
 			$_.SignatureKind -eq "System" -and $_.Name -like "Microsoft*"
+		} | Where-Object {
+			# NOTE: This path will be missing for default apps Windows server
+			# It may also be missing in fresh installed OS before connecting to internet
+			# TODO: See if "$_.Status" property can be used to determine if app is valid
+			if (Test-Path -PathType Container -Path "$env:SystemDrive\Users\$UserName\AppData\Local\Packages\$($_.PackageFamilyName)\AC")
+			{
+				$true
+			}
+			else
+			{
+				Write-Warning -Message "Store app '$($_.Name)' is not installed by user '$UserName' or the app is missing"
+				Write-Information -Tags "User" -MessageData "INFO: To fix the problem let this user update all of it's apps in Windows store"
+				$false
+			}
 		}
 	}
 }

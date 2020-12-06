@@ -65,8 +65,11 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
-Start-Test "Get-SystemApps"
-$Result = Get-SystemApps
+Start-Test "Get-SystemApps $TestAdmin"
+Get-SystemApps -User $TestAdmin
+
+Start-Test "Get-SystemApps $TestUser"
+$Result = Get-SystemApps -User $TestUser
 $Result
 
 Test-Output $Result -Command Get-SystemApps

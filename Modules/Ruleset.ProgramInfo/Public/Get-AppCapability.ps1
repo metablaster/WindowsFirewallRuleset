@@ -135,7 +135,16 @@ function Get-AppCapability
 			}
 			else
 			{
-				$PackageManifest = ($App | Get-AppxPackageManifest).Package
+				try
+				{
+					$PackageManifest = ($App | Get-AppxPackageManifest).Package
+				}
+				catch
+				{
+					# NOTE: This will be the cause with Microsoft account (non local Windows account)
+					Write-Warning -Message "Store app '$($App.Name) is missing manifest 'Package' property"
+					continue
+				}
 			}
 
 			if (!$PackageManifest.PSObject.Properties.Name.Contains("Capabilities"))

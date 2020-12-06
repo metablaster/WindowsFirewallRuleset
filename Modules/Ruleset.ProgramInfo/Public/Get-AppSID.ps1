@@ -33,14 +33,11 @@ Get store app SID
 .DESCRIPTION
 Get SID for single store app if the app exists
 
-.PARAMETER UserName
-Username for which to query app SID
-
 .PARAMETER AppName
 "PackageFamilyName" string
 
 .EXAMPLE
-PS> Get-AppSID "User" "Microsoft.MicrosoftEdge_8wekyb3d8bbwe"
+PS> Get-AppSID "Microsoft.MicrosoftEdge_8wekyb3d8bbwe"
 
 .INPUTS
 None. You cannot pipe objects to Get-AppSID
@@ -49,7 +46,7 @@ None. You cannot pipe objects to Get-AppSID
 [string] store app SID (security identifier) if app found
 
 .NOTES
-TODO: Test if path exists
+Big thanks to Jani for this awesome solution: https://github.com/ljani
 TODO: remote computers?
 #>
 function Get-AppSID
@@ -58,40 +55,20 @@ function Get-AppSID
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-AppSID.md")]
 	[OutputType([string])]
 	param (
-		[Alias("User")]
-		[Parameter(Mandatory = $true)]
-		[string] $UserName,
-
 		[Parameter(Mandatory = $true)]
 		[string] $AppName
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-	$TargetPath = "C:\Users\$UserName\AppData\Local\Packages\$AppName\AC"
-	if (Test-Path -PathType Container -Path $TargetPath)
+	$SHA256 = [System.Security.Cryptography.HashAlgorithm]::Create("sha256")
+	$Hash = $SHA256.ComputeHash([System.Text.Encoding]::Unicode.GetBytes($AppName.ToLowerInvariant()))
+
+	$SID = "S-1-15-2"
+	for ($i = 0; $i -lt 28; $i += 4)
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for app: $AppName"
-
-		# TODO: what if nothing is returned?
-		$ACL = Get-Acl $TargetPath
-		$ACE = $ACL.Access.IdentityReference.Value
-
-		foreach ($Entry in $ACE)
-		{
-			# NOTE: avoid spamming
-			# Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing: $Entry"
-
-			# package SID starts with S-1-15-2-
-			if ($Entry -match "S-1-15-2-")
-			{
-				return $Entry
-			}
-		}
+		$SID += "-" + [System.BitConverter]::ToUInt32($Hash, $i)
 	}
-	else
-	{
-		Write-Warning -Message "Store app '$AppName' is not installed by user '$UserName' or the app is missing"
-		Write-Information -Tags "User" -MessageData "INFO: To fix the problem let this user update all of it's apps in Windows store"
-	}
+
+	Write-Output $SID
 }
