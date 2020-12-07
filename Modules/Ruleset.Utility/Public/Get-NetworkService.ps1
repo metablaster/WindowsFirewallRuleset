@@ -81,7 +81,7 @@ function Get-NetworkService
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading file: $($_.FullName)"
 		Confirm-FileEncoding $_.FullName
 		Get-Content $_.FullName -Encoding $DefaultEncoding | Where-Object {
-			if ($_ -match "(?<= -Service )(.*)(?= -Program)")
+			if ($_ -match "(?<=-Service )(.*)(?= -Program)")
 			{
 				$Content += $Matches[0]
 			}
@@ -97,6 +97,12 @@ function Get-NetworkService
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Get rid of duplicate matches and known bad values"
 	$Content = $Content | Select-Object -Unique
 	$Content = $Content | Where-Object { $_ -ne '$Service' -and $_ -ne "Any" -and $_ -ne '"*"' }
+
+	if (!$Content)
+	{
+		Write-Warning -Message "No valid service matches found"
+		return
+	}
 
 	# File name where to save all matches
 	$File = "$ProjectRoot\Rules\NetworkServices.txt"

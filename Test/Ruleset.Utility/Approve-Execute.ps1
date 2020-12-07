@@ -54,7 +54,7 @@ Enter-Test
 Start-Test "Approve-Execute default"
 Approve-Execute
 
-Start-Test "Approve-Execute -Default No"
+Start-Test "Approve-Execute -Unsafe"
 $Result = Approve-Execute -Unsafe -Accept $Accept2 -Deny $Deny2
 $Result
 

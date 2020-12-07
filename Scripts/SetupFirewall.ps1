@@ -142,7 +142,7 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
 	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
 	Update-Context $IPVersion $Direction
 
-	if (Approve-Execute -Default "No" -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
+	if (Approve-Execute -Unsafe -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
 	{
 		# Rules for servers
 		# & "$ProjectRoot\Rules\$IPVersion\$Direction\Server\ScriptName.ps1"
@@ -411,7 +411,11 @@ if ($ErrorLogging -and $ErrorStatus)
 
 	Write-Output ""
 	Write-Information -Tags "User" -MessageData "INFO: All errors were saved to: $("$ProjectRoot\Logs")"
-	Write-Information -Tags "User" -MessageData "INFO: If module is edited don't forget to restart Powershell"
+
+	if (!$Develop)
+	{
+		Write-Information -Tags "User" -MessageData "INFO: If module is edited don't forget to restart Powershell"
+	}
 }
 
 if ($WarningLogging -and $WarningStatus)

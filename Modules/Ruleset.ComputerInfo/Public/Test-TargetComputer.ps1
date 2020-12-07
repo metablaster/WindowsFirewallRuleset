@@ -92,7 +92,12 @@ function Test-TargetComputer
 	# NOTE: Don't suppress error, error details can be of more use than just "unable to contact computer"
 	if ($PSVersionTable.PSEdition -eq "Core")
 	{
-		if ($null -eq $Timeout) { $Timeout = $ConnectionTimeout }
+		# TODO: It will be set to 0
+		if (!$Timeout)
+		{
+			# TODO: Can't modify Timeout parameter
+			$Timeout = $ConnectionTimeout
+		}
 
 		if ($ConnectionIPv4)
 		{
