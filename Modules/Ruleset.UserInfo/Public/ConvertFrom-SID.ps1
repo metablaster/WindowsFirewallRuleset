@@ -334,7 +334,7 @@ function ConvertFrom-SID
 
 									# TODO: instead of many for loops probably create hash table or array for match
 									$StoreApps = Get-UserApps -ComputerName $Computer -UserName $User
-									$StoreApps += Get-SystemApps -ComputerName $Computer
+									$StoreApps += Get-SystemApps -ComputerName $Computer -UserName $User
 
 									foreach ($App in $StoreApps)
 									{
@@ -342,7 +342,7 @@ function ConvertFrom-SID
 
 										# TODO: Get-AppSID should retrieve remote computer information see implementation
 										# NOTE: ignore warnings and info to reduce spam
-										if ($(Get-AppSID -UserName $User -AppName $App.PackageFamilyName -WA SilentlyContinue -INFA SilentlyContinue) -eq $InputSID)
+										if ($(Get-AppSID -AppName $App.PackageFamilyName -WA SilentlyContinue -INFA SilentlyContinue) -eq $InputSID)
 										{
 											$ResultName = $App.Name
 											# TODO: we probably also need to save target computer where this SID is valid

@@ -71,13 +71,17 @@ function Enter-Test
 
 	if ($PSCmdlet.ShouldProcess("Enter unit test", $UnitTest))
 	{
-		New-Module -Name Dynamic.UnitTest -ScriptBlock {
+		New-Module -Name Dynamic.UnitTest -ArgumentList $Private -ScriptBlock {
+			param ($Private)
+
 			if ($Private)
 			{
 				# Temporarily export private functions to global scope
-				$PrivateScript = Get-ChildItem -Path "$ProjectRoot\Modules" -Filter "Private" -Recurse -Depth 1 |
-				ForEach-Object { Get-ChildItem -Path $_.FullName -Recurse -Filter *.ps1 }
+				$PrivateScript = Get-ChildItem -Path "$ProjectRoot\Modules\*\Private" -Filter *.ps1 -Recurse
+				$PrivateScript += Get-ChildItem -Path "$ProjectRoot\Modules\*\Private\External" -Filter *.ps1 -Recurse
+
 				foreach ($Script in $PrivateScript) { . $Script.FullName }
+				Export-ModuleMember -Function *
 			}
 
 			# TODO: temporarily disabled

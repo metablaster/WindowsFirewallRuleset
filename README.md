@@ -126,7 +126,7 @@ or inside folders called "External" for organizational purposes.
 
 Requirements details:
 
-- All operating systems 10.0 (Major 10, Minor 0) and up are supported,
+- All operating systems 10.0 (Major 10, Minor 0) build 1809 and up are supported,
 but only those editions listed in point 1 are actively tested.\
 The list of other untested but supported systems and features is in [The future](#the-future)
 - PowerShell "Core" is not built into Windows, you will need to install it separately (recommended)\
@@ -312,10 +312,13 @@ some rules, rules for programs which don't exist need to be made additionally.
 16. Now go ahead and test your internet connection (ex. with browser or some other program),
 If you're unable to connect to internet after applying these rules you have several options:
 
-- you can temporarily open outbound firewall in GPO or [Disable Firewall](Readme/DisableFirewall.md)
-- you can troubleshoot problems: [Network troubleshooting detailed guide](Readme/NetworkTroubleshooting.md)
-- you can [Reset Firewall to previous state](Readme/ResetFirewall.md)
-- take a look into `Readme` folder for more troubleshooting options and documentation
+    - you can temporarily open outbound firewall in GPO or [Disable Firewall](Readme/DisableFirewall.md)
+    - you can troubleshoot problems: [Network troubleshooting detailed guide](Readme/NetworkTroubleshooting.md)
+    - you can [Reset Firewall to previous state](Readme/ResetFirewall.md)
+    - take a look into `Readme` folder for more troubleshooting options and documentation
+
+17. If you don't plan to remotely manage target machine make sure to undo changes done to
+WinRM service (Windows Remote Management), the service might have been set to automatic and started!
 
 ## Where are my rules
 

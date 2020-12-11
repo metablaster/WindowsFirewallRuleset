@@ -66,42 +66,39 @@ Enter-Test
 
 Start-Test "Get-InterfaceAlias IPv4"
 $Aliases = Get-InterfaceAlias IPv4
-$Aliases.ToWql()
+if ($Aliases) {	$Aliases.ToWql() }
 
 Start-Test "Get-InterfaceAlias IPv6 FAILURE TEST"
 $Aliases = Get-InterfaceAlias -ErrorAction SilentlyContinue IPv6
-if ($Aliases)
-{
-	$Aliases.ToWql()
-}
+if ($Aliases) {	$Aliases.ToWql() }
 
 Start-Test "Get-InterfaceAlias IPv4 -IncludeDisconnected -WildCardOption"
 $Aliases = Get-InterfaceAlias IPv4 -IncludeDisconnected -WildCardOption IgnoreCase
-$Aliases.ToWql()
+if ($Aliases) {	$Aliases.ToWql() }
 
 Start-Test "Get-InterfaceAlias IPv4 -IncludeVirtual"
 $Aliases = Get-InterfaceAlias IPv4 -IncludeVirtual
-$Aliases.ToWql()
+if ($Aliases) {	$Aliases.ToWql() }
 
 Start-Test "Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected"
 $Aliases = Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected
-$Aliases.ToWql()
+if ($Aliases) {	$Aliases.ToWql() }
 
 Start-Test "Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware"
 $Aliases = Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware
-$Aliases.ToWql()
+if ($Aliases) {	$Aliases.ToWql() }
 
 Start-Test "Get-InterfaceAlias IPv4 -IncludeHidden"
 $Aliases = Get-InterfaceAlias IPv4 -IncludeHidden
-$Aliases.ToWql()
+if ($Aliases) {	$Aliases.ToWql() }
 
 Start-Test "Get-InterfaceAlias IPv4 -IncludeAll"
 $Aliases = Get-InterfaceAlias IPv4 -IncludeAll
-$Aliases.ToWql()
+if ($Aliases) {	$Aliases.ToWql() }
 
 Start-Test "Get-InterfaceAlias IPv4 -IncludeAll -ExcludeHardware"
 $Aliases = Get-InterfaceAlias IPv4 -IncludeAll -ExcludeHardware
-$Aliases.ToWql()
+if ($Aliases) {	$Aliases.ToWql() }
 
 Test-Output $Aliases -Command Get-InterfaceAlias
 

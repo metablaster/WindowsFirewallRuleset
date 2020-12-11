@@ -51,7 +51,7 @@ https://tools.ietf.org/html/rfc4861
 
 Deprecated, year 2019:
 4 Source Quench
-6	Alternate Host Address
+6 Alternate Host Address
 5 Information Request
 16 Information Reply
 17 Address Mask Request

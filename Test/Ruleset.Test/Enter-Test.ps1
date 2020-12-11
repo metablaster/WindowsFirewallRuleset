@@ -28,32 +28,25 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Remove-FirewallRules
+Unit test for Enter-Test
 
 .DESCRIPTION
-Unit test for Remove-FirewallRules
+Unit test for Enter-Test
 
 .EXAMPLE
-PS> .\Remove-FirewallRules.ps1
+PS> .\Enter-Test.ps1
 
 .INPUTS
-None. You cannot pipe objects to Remove-FirewallRules.ps1
+None. You cannot pipe objects to Enter-Test.ps1
 
 .OUTPUTS
-None. Remove-FirewallRules.ps1 does not generate any output
+None. Enter-Test.ps1 does not generate any output
 
 .NOTES
 None.
 #>
 
-[CmdletBinding()]
-param (
-	[Parameter()]
-	[switch] $Force
-)
-
 #region Initialization
-#Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )
@@ -66,29 +59,13 @@ Initialize-Project -Abort
 
 # User prompt
 Update-Context $TestContext $ThisScript
-if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
-Enter-Test
+Start-Test "Enter-Test exported commands"
+Enter-Test -Private
+Write-Information -Tags "Test" -MessageData "INFO: DynamicModule exported commands"
+Get-Module -Name Dynamic.UnitTest | Select-Object -ExpandProperty ExportedCommands
 
-if ($Force -or $PSCmdlet.ShouldContinue("Export firewall rules", "Accept slow and experimental unit test"))
-{
-	$Exports = "$ProjectRoot\Exports"
-
-	# TODO: need to test failure cases, see also module todo's for more info
-
-	Start-Test "Remove-FirewallRules"
-	$Result = Remove-FirewallRules -Folder $Exports -FileName "GroupExport"
-	$Result
-
-	Start-Test "Remove-FirewallRules"
-	Remove-FirewallRules -Folder $Exports -FileName "$Exports\NamedExport1.csv"
-
-	Start-Test "Remove-FirewallRules -JSON"
-	Remove-FirewallRules -JSON -Folder $Exports -FileName "$Exports\NamedExport2.json"
-
-	Test-Output $Result -Command Remove-FirewallRules
-}
-
-Update-Log
 Exit-Test
+Stop-Test

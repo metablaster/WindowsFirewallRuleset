@@ -28,10 +28,11 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Scan all scripts in this repository and get windows service names involved in rules
+Get a list of windows services involved in rules
 
 .DESCRIPTION
-A file with the list of services is made
+Scan all scripts in this repository and get windows service names involved in rules,
+the result is saved to file and used to verify existence of these services on target system.
 
 .PARAMETER Folder
 Root folder name which to scan recursively

@@ -159,8 +159,8 @@ Format-Output
 # IPv4 address 224.0.0.251 or IPv6 address ff02::fb
 # UDP port 5353
 # https://en.wikipedia.org/wiki/Multicast_DNS
-# TODO: both IPv4 and IPv6 have some dropped packets, need to test if LooseSourceMapping or
-# would make any difference LocalOnlyMapping
+# TODO: both IPv4 and IPv6 have some dropped packets, need to test if LooseSourceMapping
+# would make any difference with LocalOnlyMapping
 # NOTE: Multiple programs may require mDNS, not just dnscache
 #
 if ($false)
@@ -181,8 +181,7 @@ It is a zero-configuration service, using essentially the same programming inter
 packet formats and operating semantics as the unicast Domain Name System (DNS)." |
 	Format-Output
 
-	# TODO: $PhysicalAdapters = Get-InterfaceAlias IPv4
-	# -InterfaceAlias $PhysicalAdapters
+	# TODO: $PhysicalAdapters = Get-InterfaceAlias IPv4 -InterfaceAlias $PhysicalAdapters
 	# NOTE: Specifying interface or local port might not work for public profile
 	New-NetFirewallRule -DisplayName "Multicast DNS" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile Public `

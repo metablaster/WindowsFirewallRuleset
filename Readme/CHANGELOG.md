@@ -26,7 +26,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - Added rules for "Bing walpaper" app
   - Added rules for PSPing from sysinternals
 
-  - Improved (overhaul) following rules (in progress..):
+  - Partially improved following rules:
     - ICMPv6
     - CoreNetworking
     - Multicast
@@ -34,8 +34,6 @@ If you would like to see fresh changes done since last release you can do so on 
     - NetworkSharing
     - DNSCrypt
     - Broadcast
-    - AdditionalNetworking
-    - WirelessNetworking
 
   - Network profile and interface type defaults are now controlable via global variable
 
@@ -53,7 +51,7 @@ If you would like to see fresh changes done since last release you can do so on 
     - ManageGPOFirewall
     - MonitoringFirewall
     - FirewallParameters
-    - PowershellCommands (now renamed to "CommandHelp")
+    - PowershellCommands (renamed to "CommandHelp")
     - Reference
     - PredefinedRules
     - ProblematicTraffic
@@ -64,7 +62,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - New features
 
-  - Scripts to start/stop packet trace and capture.
+  - Experimental scripts to start/stop packet trace and capture.
   - Utility script to list "hidden" rule properties
   - More control and utilization of preference variables, see: `ProjectSettings.ps1`
   - ProjectSettings script reworked to declare variables only as needed and to show variable status
@@ -74,7 +72,7 @@ If you would like to see fresh changes done since last release you can do so on 
 - Bugfix
 
   - `RestartNetwork.ps1` script didn't work for virtual adapters
-  - Rules for WORKGROUP didn't work (in progres..)
+  - Rules for WORKGROUP didn't work
 
 ## v0.8.0 (current release)
 

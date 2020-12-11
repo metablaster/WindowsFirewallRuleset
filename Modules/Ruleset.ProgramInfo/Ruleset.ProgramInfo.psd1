@@ -126,10 +126,10 @@ SOFTWARE.
 		"Test-Installation"
 		"Test-Service"
 		# TODO: Following exports only for unit testing
-		# "Edit-Table"
-		# "Initialize-Table"
-		# "Show-Table"
-		# "Update-Table"
+		"Edit-Table"
+		"Initialize-Table"
+		"Show-Table"
+		"Update-Table"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not
