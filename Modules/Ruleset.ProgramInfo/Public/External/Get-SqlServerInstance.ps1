@@ -44,7 +44,7 @@ If specified, try to pull and correlate CIM information for SQL
 TODO: limited testing was performed in matching up the service info to registry info.
 
 .EXAMPLE
-PS> Get-SQLInstance -Computername DC1
+PS> Get-SqlServerInstance -Computername DC1
 
 SQLInstance   : MSSQLSERVER
 Version       : 10.0.1600.22
@@ -69,7 +69,7 @@ ClusterNodes  : {}
 Caption       : SQL Server 2008
 
 .EXAMPLE
-PS> Get-SQLInstance -Computername Server1, Server2 -CIM
+PS> Get-SqlServerInstance -Computername Server1, Server2 -CIM
 
 Computername     : Server1
 SQLInstance      : MSSQLSERVER
@@ -104,13 +104,13 @@ ServiceAccount   : domain\Server2SQL
 ServiceStartMode : Auto
 
 .INPUTS
-None. You cannot pipe objects to Get-SQLInstance
+None. You cannot pipe objects to Get-SqlServerInstance
 
 .OUTPUTS
 [PSCustomObject]
 
 .NOTES
-Name: Get-SQLInstance
+Name: Get-SqlServerInstance
 Author: Boe Prox, edited by cookie monster (to cover wow6432node, CIM tie in)
 
 Version History:
@@ -130,22 +130,24 @@ Following modifications by metablaster based on both originals 15 Feb 2020:
 - update reported server versions
 - added more verbose and debug output, path formatting.
 - Replaced WMI calls with CIM calls which are more universal and cross platform that WMI
+- 12 December 2020:
+- Renamed from Get-SQLInstance to Get-SqlServerInstance because of name colision from SQLPS module
 
 Links to original and individual versions of code
 https://github.com/RamblingCookieMonster/PowerShell
 https://github.com/metablaster/WindowsFirewallRuleset
-https://gallery.technet.microsoft.com/scriptcenter/Get-SQLInstance-9a3245a0
+https://gallery.technet.microsoft.com/scriptcenter/Get-SqlServerInstance-9a3245a0
 
-TODO: update examples to include DTS directory
+TODO: Update examples to include DTS directory
 #>
-function Get-SQLInstance
+function Get-SqlServerInstance
 {
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SQLInstance.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SqlServerInstance.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
 		[Parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-		[Alias("Servers", "Machines")]
+		# [Alias("Servers", "Machines")]
 		[string[]] $ComputerName = [System.Environment]::MachineName,
 
 		[Parameter()]
@@ -446,7 +448,8 @@ function Get-SQLInstance
 					# Get the CIM info we care about.
 					$SQLServices = $null # TODO: what does this mean?
 					$SQLServices = @(
-						Get-CimInstance -ComputerName $Computer -ErrorAction stop `
+						Get-CimInstance -ComputerName $Computer -Namespace "root\cimv2" `
+							-OperationTimeoutSec $ConnectionTimeout -ErrorAction stop `
 							-Query "select DisplayName, Name, PathName, StartName, StartMode, State from win32_service where Name LIKE 'MSSQL%'" |
 						# This regex matches MSSQLServer and MSSQL$*
 						Where-Object { $_.Name -match "^MSSQL(Server$|\$)" } |

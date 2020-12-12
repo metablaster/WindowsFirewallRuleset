@@ -71,6 +71,7 @@ Start-Test "gpupdate.exe /target:computer"
 Get-ProcessOutput -NoNewWindow -FilePath gpupdate.exe -ArgumentList "/target:computer" -Format
 
 Start-Test "git.exe status"
+# TODO: Does not work with Desktop edition
 $Result = Get-ProcessOutput -FilePath "git.exe" -ArgumentList "status" -NoNewWindow
 $Result
 

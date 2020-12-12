@@ -34,6 +34,9 @@ Exit unit test
 Exit-Test performs finishing steps after unit test is done, ie. to restore previous state
 This function must be called after all test cases are done in single unit test
 
+.PARAMETER Pester
+Should be specified to exit private function pester test
+
 .EXAMPLE
 PS> Exit-Test
 
@@ -51,11 +54,14 @@ function Exit-Test
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "None",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Test/Help/en-US/Exit-Test.md")]
 	[OutputType([void])]
-	param()
+	param(
+		[Parameter()]
+		[switch] $Pester
+	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-	if ($PSCmdlet.ShouldProcess("Exit unit test", $UnitTest))
+	if (!$Pester -and $PSCmdlet.ShouldProcess("Exit unit test", $UnitTest))
 	{
 		# TODO: temporarily disabled
 		if ($false)

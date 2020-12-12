@@ -104,7 +104,8 @@ function Get-GroupSID
 				{
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $ComputerName"
 
-					$GroupSID = Get-CimInstance -Class Win32_Group -Namespace "root\cimv2" -ComputerName $ComputerName |
+					$GroupSID = Get-CimInstance -Class Win32_Group -Namespace "root\cimv2" `
+						-ComputerName $ComputerName -OperationTimeoutSec $ConnectionTimeout |
 					Where-Object -Property Name -EQ $Group | Select-Object -ExpandProperty SID
 				}
 				else

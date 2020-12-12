@@ -67,11 +67,11 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 Enter-Test
 
 Start-Test "Get-UserApps $TestAdmin"
-Get-UserApps -User $TestAdmin
+Get-UserApps -User $TestAdmin | Select-Object PackageFamilyName
 
 Start-Test "Get-UserApps $TestUser"
 $Result = Get-UserApps -User $TestUser
-$Result
+$Result | Select-Object PackageFamilyName
 
 Test-Output $Result -Command Get-UserApps
 

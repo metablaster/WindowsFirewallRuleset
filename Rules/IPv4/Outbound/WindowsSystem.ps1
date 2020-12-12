@@ -247,6 +247,24 @@ New-NetFirewallRule -DisplayName "Background transfer host" `
 	-Description "Download/Upload Host" |
 Format-Output
 
+# TODO: Not sure if also needed to allow Administrators for MS account here
+$Program = "%SystemRoot%\System32\UserAccountBroker.exe"
+Test-File $Program
+
+$MSAccountUsers = $UsersGroupSDDL
+Merge-SDDL ([ref] $MSAccountUsers) $AdministratorsGroupSDDL
+
+New-NetFirewallRule -DisplayName "Microsoft Account" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+	-Service Any -Program $Program -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Internet4 `
+	-LocalPort Any -RemotePort 443 `
+	-LocalUser $MSAccountUsers `
+	-InterfaceType $DefaultInterface `
+	-Description "UserAccountBroker is needed to create Microsoft account" |
+Format-Output
+
 $Program = "%SystemRoot%\System32\Speech_OneCore\common\SpeechRuntime.exe"
 Test-File $Program
 

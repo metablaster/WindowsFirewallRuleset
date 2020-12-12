@@ -80,7 +80,7 @@ $Kernel32 = $TypeBuilder.CreateType()
 $Max = 65536
 $StringBuilder = New-Object System.Text.StringBuilder($Max)
 
-Get-CimInstance -ClassName Win32_Volume -Namespace root/CIMV2 | Where-Object { $_.DriveLetter } |
+Get-CimInstance -ClassName Win32_Volume -Namespace "root\cimv2" | Where-Object { $_.DriveLetter } |
 ForEach-Object {
 	$ReturnLength = $Kernel32::QueryDosDevice($_.DriveLetter, $StringBuilder, $Max)
 

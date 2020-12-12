@@ -67,12 +67,18 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe)) { exit }
 #endregion
 
 Enter-Test
-[string] $Name = "nuget.org"
 
 if ($Force -or $PSCmdlet.ShouldContinue("Possible modify PackageManagement", "Accept dangerous unit test"))
 {
+	if (!($ProjectCheck -and $ModulesCheck))
+	{
+		Write-Error -Category NotEnabled -TargetObject $ThisScript `
+			-Message "This unit test requires ProjectCheck and ModulesCheck variables to be set"
+		return
+	}
+
 	Start-Test "Initialize-ProviderNuGet"
-	$Result = Initialize-Provider @{ ModuleName = "NuGet"; ModuleVersion = $RequireNuGetVersion } -Name $Name `
+	$Result = Initialize-Provider @{ ModuleName = "NuGet"; ModuleVersion = $RequireNuGetVersion } `
 		-InfoMessage "Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider"
 
 	$Result

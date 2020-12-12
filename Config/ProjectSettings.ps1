@@ -323,7 +323,7 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 	New-Variable -Name CheckReadOnlyVariables -Scope Global -Option Constant -Value $null
 
 	# Set to false to avoid checking system and environment requirements
-	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $false
+	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $true
 
 	# Set to false to avoid checking if modules are up to date
 	New-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Value $Develop
@@ -369,10 +369,12 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 	{
 		# Set to false to use IPv6 instead of IPv4 to test connection to target policy store
 		Set-Variable -Name ConnectionIPv4 -Scope Global -Option ReadOnly -Force -Value $true
-
-		# Timeout in seconds to contact target policy store
-		Set-Variable -Name ConnectionTimeout -Scope Global -Option ReadOnly -Force -Value 1
 	}
+
+	# Specifies the amount of time that the cmdlet waits for a response from target computer, where applicable
+	# the default for "Test-Connection" is 5 seconds,
+	# for Get-CimInstance the value of 0 means use the default timeout value for the server.
+	Set-Variable -Name ConnectionTimeout -Scope Global -Option ReadOnly -Force -Value 1
 
 	# User account name for which to search executables in user profile and non standard paths by default
 	# Also used for other defaults where standard user account is expected, ex. development as standard user

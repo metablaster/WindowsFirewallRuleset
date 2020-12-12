@@ -107,7 +107,8 @@ function Approve-Execute
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-	# NOTE: If Unsafe is specified it's 1, otherwise it's 0
+	# The index of the label in the Choices to be presented to the user as the default choice
+	# NOTE: Converts switch to int32, if Unsafe is specified it's 1, otherwise it's 0
 	[int32] $DefaultAction = !!$Unsafe
 
 	# Setup choices
@@ -167,11 +168,11 @@ function Approve-Execute
 	{
 		if ($Unsafe)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] The user accepted default action"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] The user refused default action"
 		}
 		else
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] The user refused default action"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] The user accepted default action"
 		}
 
 		return $true

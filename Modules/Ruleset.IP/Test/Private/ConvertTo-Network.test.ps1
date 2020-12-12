@@ -49,13 +49,13 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 #region:TestFileHeader
 param (
-	[bool] $UseExisting
+	[switch] $UseExisting
 )
 
 # Initialization
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )
-Enter-Test -Private
+Enter-Test -Private -Pester
 
 if (-not $UseExisting)
 {
@@ -218,4 +218,4 @@ InModuleScope Ruleset.IP {
 	}
 }
 
-Exit-Test
+Exit-Test -Pester

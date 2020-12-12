@@ -223,12 +223,13 @@ function Initialize-Project
 		}
 	}
 
-	# If you changed PolicyStore variable, but the project is not yet ready for remote administration
-	if ($PolicyStore -notin $LocalStores)
+	# If PolicyStore variable doesn't point to localhost, but the project is not yet ready for remote administration
+	if (Get-Variable -Scope Global -Name RemoteCredential -ErrorAction Ignore)
 	{
 		try
 		{
 			Write-Information -Tags "Project" -MessageData "Testing Windows Remote Management to: $PolicyStore"
+			# TODO: https://stackoverflow.com/questions/18284132/winrm-cannot-process-the-request-fails-only-over-a-specific-domain
 			Test-WSMan -ComputerName $PolicyStore -Credential $RemoteCredential
 		}
 		catch
@@ -473,7 +474,8 @@ function Initialize-Project
 	}
 
 	# TODO: CIM may not always work
-	$OSCaption = Get-CimInstance -Class Win32_OperatingSystem |
+	$OSCaption = Get-CimInstance -Class Win32_OperatingSystem -ComputerName $PolicyStore `
+		-OperationTimeoutSec $ConnectionTimeout -Namespace "root\cimv2" |
 	Select-Object -ExpandProperty Caption
 
 	$OSBuildVersion = ConvertFrom-OSBuild $TargetOSVersion.Build

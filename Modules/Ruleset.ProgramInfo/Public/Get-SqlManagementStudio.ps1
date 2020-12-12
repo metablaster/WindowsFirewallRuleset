@@ -37,14 +37,14 @@ TODO: add description
 Computer name for which to list installed installed framework
 
 .EXAMPLE
-PS> Get-SQLManagementStudio COMPUTERNAME
+PS> Get-SqlManagementStudio COMPUTERNAME
 
 	RegKey ComputerName Version      InstallLocation
 	------ ------------ -------      -----------
 	18     COMPUTERNAME   15.0.18206.0 %ProgramFiles(x86)%\Microsoft SQL Server Management Studio 18
 
 .INPUTS
-None. You cannot pipe objects to Get-SQLManagementStudio
+None. You cannot pipe objects to Get-SqlManagementStudio
 
 .OUTPUTS
 [PSCustomObject] for installed Microsoft SQL Server Management Studio's
@@ -52,10 +52,10 @@ None. You cannot pipe objects to Get-SQLManagementStudio
 .NOTES
 None.
 #>
-function Get-SQLManagementStudio
+function Get-SqlManagementStudio
 {
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SQLManagementStudio.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SqlManagementStudio.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]

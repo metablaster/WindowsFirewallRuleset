@@ -37,6 +37,9 @@ This function must be called before first test case in single unit test
 .PARAMETER Private
 If specified temporarily exports private module functions into global scope
 
+.PARAMETER Pester
+Should be specified to enter private function pester test
+
 .EXAMPLE
 PS> Enter-Test "Get-Something.ps1"
 
@@ -56,18 +59,36 @@ function Enter-Test
 	[OutputType([void])]
 	param (
 		[Parameter()]
-		[switch] $Private
+		[switch] $Private,
+
+		[Parameter()]
+		[ValidateScript( { $Private } )]
+		[switch] $Pester
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# Let Exit-Test know file name
-	# NOTE: Global scope because this module could be removed before calling Exit-Test
-	# NOTE: This will fail if Exit-Test was not called, restart PowerShell in that case
-	Set-Variable -Name UnitTest -Scope Global -Option ReadOnly -Value ((Get-PSCallStack)[1].Command -replace ".{4}$")
+	if ($Pester)
+	{
+		$UnitTest = (Get-PSCallStack)[1].Command -replace ".{4}$"
+	}
+	else
+	{
+		# NOTE: Global scope because this module could be removed before calling Exit-Test
+		# NOTE: This will fail if Exit-Test was not called, run Exit-Test manually in that case
+		if (Get-Variable -Scope Global -Name UnitTest -ErrorAction Ignore)
+		{
+			Write-Warning -Message "Either previous unit test did not complete or test module was reloaded"
+		}
+		else
+		{
+			Set-Variable -Name UnitTest -Scope Global -Option ReadOnly -Value ((Get-PSCallStack)[1].Command -replace ".{4}$")
+		}
 
-	Write-Output ""
-	Write-Information -Tags "Test" -MessageData "INFO: Entering unit test '$UnitTest'"
+		Write-Output ""
+		Write-Information -Tags "Test" -MessageData "INFO: Entering unit test '$UnitTest'"
+	}
 
 	if ($PSCmdlet.ShouldProcess("Enter unit test", $UnitTest))
 	{

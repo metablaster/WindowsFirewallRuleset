@@ -69,3 +69,13 @@ Get-Module -Name Dynamic.UnitTest | Select-Object -ExpandProperty ExportedComman
 
 Exit-Test
 Stop-Test
+
+Start-Test "Enter-Test -Private -Pester"
+Enter-Test -Private -Pester
+Exit-Test -Pester
+Stop-Test
+
+Start-Test "Enter-Test Pester FAIL"
+Enter-Test -Pester
+Exit-Test -Pester
+Stop-Test

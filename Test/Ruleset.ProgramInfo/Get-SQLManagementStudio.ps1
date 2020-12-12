@@ -28,19 +28,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Get-SQLManagementStudio
+Unit test for Get-SqlManagementStudio
 
 .DESCRIPTION
-Unit test for Get-SQLManagementStudio
+Unit test for Get-SqlManagementStudio
 
 .EXAMPLE
-PS> .\Get-SQLManagementStudio.ps1
+PS> .\Get-SqlManagementStudio.ps1
 
 .INPUTS
-None. You cannot pipe objects to Get-SQLManagementStudio.ps1
+None. You cannot pipe objects to Get-SqlManagementStudio.ps1
 
 .OUTPUTS
-None. Get-SQLManagementStudio.ps1 does not generate any output
+None. Get-SqlManagementStudio.ps1 does not generate any output
 
 .NOTES
 None.
@@ -64,14 +64,14 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
-Start-Test "SQLManagementStudio"
-$Instances = Get-SQLManagementStudio
+Start-Test "SqlManagementStudio"
+$Instances = Get-SqlManagementStudio
 $Instances
 
-Start-Test "SQLManagementStudio - Install path"
+Start-Test "SqlManagementStudio - Install path"
 $Instances | Select-Object -ExpandProperty InstallLocation
 
-Test-Output $Instances -Command Get-SQLManagementStudio
+Test-Output $Instances -Command Get-SqlManagementStudio
 
 Update-Log
 Exit-Test

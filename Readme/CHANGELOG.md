@@ -73,6 +73,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - `RestartNetwork.ps1` script didn't work for virtual adapters
   - Rules for WORKGROUP didn't work
+  - Maximum .NET Framework limitation in Windows PowerShell is 4.5
 
 ## v0.8.0 (current release)
 

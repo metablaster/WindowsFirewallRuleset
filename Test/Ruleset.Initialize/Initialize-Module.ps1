@@ -70,6 +70,13 @@ Enter-Test
 
 if ($Force -or $PSCmdlet.ShouldContinue("Possible modify installed modules", "Accept dangerous unit test"))
 {
+	if (!($ProjectCheck -and $ModulesCheck))
+	{
+		Write-Error -Category NotEnabled -TargetObject $ThisScript `
+			-Message "This unit test requires ProjectCheck and ModulesCheck variables to be set"
+		return
+	}
+
 	[string] $Repository = "PSGallery"
 
 	Start-Test "Initialize-Module PackageManagement"

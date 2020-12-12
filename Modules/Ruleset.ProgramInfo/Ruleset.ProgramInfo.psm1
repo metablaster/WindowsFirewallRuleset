@@ -51,7 +51,7 @@ foreach ($Script in $PrivateScripts)
 }
 
 $PublicScripts = @(
-	"External\Get-SQLInstance"
+	"External\Get-SqlServerInstance"
 	"Find-Installation"
 	"Format-Path"
 	"Get-AllUserSoftware"
@@ -60,7 +60,7 @@ $PublicScripts = @(
 	"Get-ExecutablePath"
 	"Get-NetFramework"
 	"Get-OneDrive"
-	"Get-SQLManagementStudio"
+	"Get-SqlManagementStudio"
 	"Get-SystemApps"
 	"Get-SystemSoftware"
 	"Get-UserApps"

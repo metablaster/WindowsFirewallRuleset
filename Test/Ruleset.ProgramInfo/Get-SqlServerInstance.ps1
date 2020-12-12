@@ -28,19 +28,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Get-SQLInstance
+Unit test for Get-SqlServerInstance
 
 .DESCRIPTION
-Unit test for Get-SQLInstance
+Unit test for Get-SqlServerInstance
 
 .EXAMPLE
-PS> .\Get-SQLInstance.ps1
+PS> .\Get-SqlServerInstance.ps1
 
 .INPUTS
-None. You cannot pipe objects to Get-SQLInstance.ps1
+None. You cannot pipe objects to Get-SqlServerInstance.ps1
 
 .OUTPUTS
-None. Get-SQLInstance.ps1 does not generate any output
+None. Get-SqlServerInstance.ps1 does not generate any output
 
 .NOTES
 TODO: Test not working in Windows PowerShell
@@ -64,20 +64,20 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
-Start-Test "Get-SQLInstance"
-$Instances = Get-SQLInstance
+Start-Test "Get-SqlServerInstance"
+$Instances = Get-SqlServerInstance
 $Instances
 
-Start-Test "Get-SQLInstance CIM"
-Get-SQLInstance -CIM
+Start-Test "Get-SqlServerInstance CIM"
+Get-SqlServerInstance -CIM
 
-Start-Test "Get-SQLInstance binn directory"
-Get-SQLInstance | Select-Object -ExpandProperty SQLBinRoot
+Start-Test "Get-SqlServerInstance binn directory"
+Get-SqlServerInstance | Select-Object -ExpandProperty SQLBinRoot
 
-Start-Test "Get-SQLInstance DTS directory"
-Get-SQLInstance | Select-Object -ExpandProperty SQLPath
+Start-Test "Get-SqlServerInstance DTS directory"
+Get-SqlServerInstance | Select-Object -ExpandProperty SQLPath
 
-Test-Output $Instances -Command Get-SQLInstance
+Test-Output $Instances -Command Get-SqlServerInstance
 
 Update-Log
 Exit-Test

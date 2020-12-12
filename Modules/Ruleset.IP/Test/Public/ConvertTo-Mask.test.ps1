@@ -51,7 +51,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 	"PSReviewUnusedParameter", "Number", Justification = "Likely false positive")]
 param (
-	[bool] $UseExisting
+	[switch] $UseExisting
 )
 
 if (-not $UseExisting)

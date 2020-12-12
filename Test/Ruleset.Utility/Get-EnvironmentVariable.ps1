@@ -63,6 +63,7 @@ Update-Context $TestContext $ThisScript
 if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
+# TODO: All except ExpandProperty will be blank in bulk test run in this unit
 Enter-Test
 
 Start-Test "Get-EnvironmentVariable UserProfile"

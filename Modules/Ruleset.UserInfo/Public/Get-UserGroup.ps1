@@ -82,7 +82,7 @@ function Get-UserGroup
 		{
 			if ($CIM)
 			{
-				# TODO: should work on windows, see Get-SQLInstance
+				# TODO: should work on windows, see Get-SqlServerInstance
 				if ($PowerShellEdition -ne "Desktop")
 				{
 					Write-Error -Category InvalidArgument -TargetObject $Computer `
@@ -97,7 +97,8 @@ function Get-UserGroup
 				{
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Computer"
 
-					$RemoteGroups = Get-CimInstance -Class Win32_Group -Namespace "root\cimv2" -ComputerName $Computer |
+					$RemoteGroups = Get-CimInstance -Class Win32_Group -Namespace "root\cimv2" `
+						-OperationTimeoutSec $ConnectionTimeout -ComputerName $Computer |
 					Where-Object -Property LocalAccount -EQ "True"
 
 					foreach ($Group in $RemoteGroups)

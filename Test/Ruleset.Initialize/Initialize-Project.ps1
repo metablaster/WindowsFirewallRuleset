@@ -70,36 +70,27 @@ Enter-Test
 
 if ($Force -or $PSCmdlet.ShouldContinue("Modify registry ownership", "Accept dangerous unit test"))
 {
+	if (!($ProjectCheck -and $ModulesCheck -and $ServicesCheck))
+	{
+		Write-Error -Category NotEnabled -TargetObject $ThisScript `
+			-Message "This unit test requires ProjectCheck, ModulesCheck and ServicesCheck variables to be set"
+		return
+	}
+
 	Start-Test "Initialize-Project -Abort"
 	Initialize-Project
 
-	New-Variable -Name CopyCheck -Value @{
-		ProjectCheck = $ProjectCheck
-		ModulesCheck = $ModulesCheck
-		ServicesCheck = $ServicesCheck
-	}
-
 	Start-Test "Initialize-Project -SkipModules -SkipServices"
-	Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $true
-	Set-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Force -Value $false
-	Set-Variable -Name ServicesCheck -Scope Global -Option ReadOnly -Force -Value $false
 	Initialize-Project
 
 	Start-Test "Initialize-Project -SkipModules"
-	Set-Variable -Name ServicesCheck -Scope Global -Option ReadOnly -Force -Value $true
 	Initialize-Project
 
 	Start-Test "Initialize-Project -SkipServices"
-	Set-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Force -Value $true
-	Set-Variable -Name ServicesCheck -Scope Global -Option ReadOnly -Force -Value $false
 	$Result = Initialize-Project
 	$Result
 
 	Test-Output $Result -Command Initialize-Project
-
-	Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $CopyCheck["ProjectCheck"]
-	Set-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Force -Value $CopyCheck["ModulesCheck"]
-	Set-Variable -Name ServicesCheck -Scope Global -Option ReadOnly -Force -Value $CopyCheck["ServicesCheck"]
 }
 
 Update-Log

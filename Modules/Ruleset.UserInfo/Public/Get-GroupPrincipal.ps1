@@ -98,7 +98,7 @@ function Get-GroupPrincipal
 
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Computer"
 
-				# Core: -TargetName $Computer -TimeoutSeconds $ConnectionTimeout -IPv4
+				# Core: -TimeoutSeconds $ConnectionTimeout -IPv4
 				if (Test-TargetComputer $Computer)
 				{
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Computer"
@@ -108,7 +108,8 @@ function Get-GroupPrincipal
 						# Get all users that belong to requested group,
 						# this includes non local principal source and non "user" users
 						# it is also missing SID
-						$GroupUsers = Get-CimInstance -Class Win32_GroupUser -Namespace "root\cimv2" -ComputerName $Computer |
+						$GroupUsers = Get-CimInstance -Class Win32_GroupUser -Namespace "root\cimv2" `
+							-ComputerName $Computer -OperationTimeoutSec $ConnectionTimeout |
 						Where-Object { $_.GroupComponent.Name -eq $Group } |
 						Select-Object -ExpandProperty PartComponent |
 						Select-Object -ExpandProperty Name
@@ -121,7 +122,8 @@ function Get-GroupPrincipal
 
 						# Get only enabled users, these include SID but also non group users
 						# TODO: or LocalAccount -eq "MicrosoftAccount"
-						$EnabledAccounts = Get-CimInstance -Class Win32_UserAccount -Namespace "root\cimv2" -ComputerName $Computer -Filter "LocalAccount = True" |
+						$EnabledAccounts = Get-CimInstance -Class Win32_UserAccount -Namespace "root\cimv2" `
+							-OperationTimeoutSec $ConnectionTimeout -ComputerName $Computer -Filter "LocalAccount = True" |
 						Where-Object -Property Disabled -NE False |
 						Select-Object -Property Name, Caption, SID, Domain
 

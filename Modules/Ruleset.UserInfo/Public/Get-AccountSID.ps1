@@ -108,7 +108,8 @@ function Get-AccountSID
 				{
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying CIM server on $ComputerName"
 
-					$AccountSID = Get-CimInstance -Class Win32_UserAccount -Namespace "root\cimv2" -ComputerName $ComputerName |
+					$AccountSID = Get-CimInstance -Class Win32_UserAccount -Namespace "root\cimv2" `
+					 -ComputerName $ComputerName -OperationTimeoutSec $ConnectionTimeout |
 					Where-Object -Property Name -EQ $User | Select-Object -ExpandProperty SID
 				}
 				else

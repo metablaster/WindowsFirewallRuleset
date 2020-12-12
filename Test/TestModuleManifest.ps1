@@ -65,7 +65,16 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
-$Manifests = Get-ChildItem -Name -Depth 1 -Recurse -Path "$ProjectRoot\Modules" -Filter "*.psd1"
+if ($PSVersionTable.PSEdition -eq "Desktop")
+{
+	# NOTE: Ruleset.Compatibility requires PowerShell Core
+	$Manifests = Get-ChildItem -Name -Depth 1 -Recurse -Path "$ProjectRoot\Modules" -Filter "*.psd1" -Exclude "*Ruleset.Compatibility*"
+}
+else
+{
+	$Manifests = Get-ChildItem -Name -Depth 1 -Recurse -Path "$ProjectRoot\Modules" -Filter "*.psd1"
+}
+
 [string[]] $GUID = @()
 
 foreach ($Manifest in $Manifests)

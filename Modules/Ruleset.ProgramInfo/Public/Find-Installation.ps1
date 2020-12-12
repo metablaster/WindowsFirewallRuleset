@@ -90,22 +90,22 @@ function Find-Installation
 		}
 		"SQLDTS"
 		{
-			# $SQLServerBinnRoot = Get-SQLInstance | Select-Object -ExpandProperty SQLBinRoot
-			$SQLDTSRoot = Get-SQLInstance | Select-Object -ExpandProperty SQLPath
+			# $SQLServerBinnRoot = Get-SqlServerInstance | Select-Object -ExpandProperty SQLBinRoot
+			$SQLDTSRoot = Get-SqlServerInstance | Select-Object -ExpandProperty SQLPath
 			if ($SQLDTSRoot)
 			{
 				Edit-Table $SQLDTSRoot
 			}
 			break
 		}
-		"SQLManagementStudio"
+		"SqlManagementStudio"
 		{
-			$SQLManagementStudioRoot = Get-SQLManagementStudio |
+			$SqlManagementStudioRoot = Get-SqlManagementStudio |
 			Select-Object -ExpandProperty InstallLocation
 
-			if ($SQLManagementStudioRoot)
+			if ($SqlManagementStudioRoot)
 			{
-				Edit-Table $SQLManagementStudioRoot
+				Edit-Table $SqlManagementStudioRoot
 			}
 			break
 		}

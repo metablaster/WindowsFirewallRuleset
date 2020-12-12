@@ -76,7 +76,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # SQLServer installation directories
 #
 # TODO: Unknown default installation directory
-$SQLManagementStudioRoot = ""
+$SqlManagementStudioRoot = ""
 $SQLDTSRoot = ""
 
 #
@@ -84,11 +84,11 @@ $SQLDTSRoot = ""
 #
 
 # Test if installation exists on system
-if ((Test-Installation "SQLManagementStudio" ([ref] $SQLManagementStudioRoot)) -or $ForceLoad)
+if ((Test-Installation "SqlManagementStudio" ([ref] $SqlManagementStudioRoot)) -or $ForceLoad)
 {
-	# TODO: old directory, our Get-SQLManagementStudio may not work as expected for older versions
+	# TODO: old directory, our Get-SqlManagementStudio may not work as expected for older versions
 	# $Program = "$SQLServerRoot\Tools\Binn\ManagementStudio\Ssms.exe"
-	$Program = "$SQLManagementStudioRoot\Common7\IDE\Ssms.exe"
+	$Program = "$SqlManagementStudioRoot\Common7\IDE\Ssms.exe"
 	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "SQL Server Management Studio" -Service Any -Program $Program `

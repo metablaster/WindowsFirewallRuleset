@@ -57,6 +57,15 @@ if ((Get-Variable -Name Develop -Scope Global).Value -eq $false)
 		-Message "This unit test is enabled only when 'Develop' is set to $true"
 	return
 }
+elseif (!((Get-Command -Name Initialize-Table -EA Ignore) -and
+		(Get-Command -Name Update-Table -EA Ignore) -and
+		(Get-Command -Name Show-Table -EA Ignore) -and
+		(Get-Variable -Scope Global -Name InstallTable -EA Ignore)))
+{
+	Write-Error -Category NotEnabled -TargetObject "Private Functions" `
+		-Message "This unit test is missing required private functions, please visit Ruleset.ProgramInfo.psd1 to adjust exports"
+	return
+}
 
 # Check requirements
 Initialize-Project -Abort

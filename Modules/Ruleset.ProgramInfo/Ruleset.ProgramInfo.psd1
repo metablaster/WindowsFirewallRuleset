@@ -73,7 +73,7 @@ SOFTWARE.
 
 	# Minimum version of Microsoft .NET Framework required by this module.
 	# This prerequisite is valid for the PowerShell Desktop edition only.
-	DotNetFrameworkVersion = "4.8"
+	DotNetFrameworkVersion = "4.5"
 
 	# Minimum version of the common language runtime (CLR) required by this module.
 	# This prerequisite is valid for the PowerShell Desktop edition only.
@@ -104,7 +104,7 @@ SOFTWARE.
 	# Functions to export from this module, for best performance, do not use wildcards and do not
 	# delete the entry, use an empty array if there are no functions to export.
 	FunctionsToExport = @(
-		"Get-SQLInstance"
+		"Get-SqlServerInstance"
 		"Find-Installation"
 		"Format-Path"
 		"Get-AllUserSoftware"
@@ -113,7 +113,7 @@ SOFTWARE.
 		"Get-ExecutablePath"
 		"Get-NetFramework"
 		"Get-OneDrive"
-		"Get-SQLManagementStudio"
+		"Get-SqlManagementStudio"
 		"Get-SystemApps"
 		"Get-SystemSoftware"
 		"Get-UserApps"
@@ -139,7 +139,7 @@ SOFTWARE.
 	# Variables to export from this module
 	VariablesToExport = @(
 		# TODO: Following exports only for unit testing
-		# "InstallTable"
+		"InstallTable"
 	)
 
 	# Aliases to export from this module, for best performance, do not use wildcards and do not
@@ -165,8 +165,8 @@ SOFTWARE.
 		"Help\en-US\Get-ExecutablePath.md"
 		"Help\en-US\Get-NetFramework.md"
 		"Help\en-US\Get-OneDrive.md"
-		"Help\en-US\Get-SQLInstance.md"
-		"Help\en-US\Get-SQLManagementStudio.md"
+		"Help\en-US\Get-SqlServerInstance.md"
+		"Help\en-US\Get-SqlManagementStudio.md"
 		"Help\en-US\Get-SystemApps.md"
 		"Help\en-US\Get-SystemSoftware.md"
 		"Help\en-US\Get-UserApps.md"
@@ -185,7 +185,7 @@ SOFTWARE.
 		"Private\README.md"
 		"Private\Show-Table.ps1"
 		"Private\Update-Table.ps1"
-		"Public\External\Get-SQLInstance.ps1"
+		"Public\External\Get-SqlServerInstance.ps1"
 		"Public\External\README.md"
 		"Public\Find-Installation.ps1"
 		"Public\Format-Path.ps1"
@@ -195,7 +195,7 @@ SOFTWARE.
 		"Public\Get-ExecutablePath.ps1"
 		"Public\Get-NetFramework.ps1"
 		"Public\Get-OneDrive.ps1"
-		"Public\Get-SQLManagementStudio.ps1"
+		"Public\Get-SqlManagementStudio.ps1"
 		"Public\Get-SystemApps.ps1"
 		"Public\Get-SystemSoftware.ps1"
 		"Public\Get-UserApps.ps1"
