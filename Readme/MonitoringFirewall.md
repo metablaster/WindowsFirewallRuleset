@@ -1,7 +1,7 @@
 
 # Monitoring Firewall
 
-This document explains how to monitor Windows firewall activity and network activity on local system.\
+This document explains how to monitor Windows firewall and network activity on local system.\
 *Note: all of these programs must be run as Administrator:*
 
 ## Table of contents
@@ -20,6 +20,13 @@ This document explains how to monitor Windows firewall activity and network acti
   - [netstat](#netstat)
   - [Packet trace and analysis](#packet-trace-and-analysis)
   - [netsh trace](#netsh-trace)
+    - [capture=yes|no](#captureyesno)
+    - [protocol](#protocol)
+    - [traceFile=path\filename](#tracefilepathfilename)
+    - [persistent=yes|no](#persistentyesno)
+    - [fileMode=single|circular|append](#filemodesinglecircularappend)
+    - [maxSize](#maxsize)
+    - [overwrite=yes|no](#overwriteyesno)
   - [NetEventPacketCapture](#neteventpacketcapture)
 
 ## Monitor your firewall like a pro
@@ -50,7 +57,7 @@ extension settings.
 
 ## Process Monitor
 
-- Process monitor will let you monitor process network activity, in addition of IP address and port
+- Process monitor will let you monitor process network activity, in addition to IP address and port
 you will also know which process and which user (either system or human user) initiated connection,
 and several other stuff which you can enable as needed in options.
 - Process monitor is must have program, here is a screenshot while monitoring process network activity:\
@@ -58,26 +65,26 @@ click on image to enlarge!
 
 ![Alternate text](Screenshots/ProcessMonitor.png)
 
-- Inside the "Config" folder you will find process monitor configuration specialized for firewall
-monitoring which you can import into your copy of process monitor.
-- Note that configuration filters some network traffic which you might want to be able to see,
-click on filter options to disable specific filters or add new ones.
+- Inside the `Config\sysinternals` folder you will find process monitor configuration specialized
+for firewall monitoring which you can import into your copy of process monitor.
+- Note that the configuration filters some network traffic which you might want to be able to see,
+click on filter options to disable specific filters or to add new ones.
 
 [Download process monitor][ref process monitor]
 
 ## mTail
 
-- mTail is another must have program, it will let you monitor firewall logs in real time.
-- Here is a screenshot while monitoring the logs, click on image to enlarge:
+- mTail is another useful (easy to use) program, it will let you monitor firewall logs in real time.
+- Here is a screenshot while monitoring logs, click on image to enlarge:
 
 ![Alternate text](Screenshots/mTail.png)
 
-- Default mTail does not have special coloring, the colors you see in the screenshot are which
-I made myself, you can grab this configuration from "Config" folder in this repository,
+- Default mTail does not have special firewall coloring, those colors you see in the screenshot are
+which I made myself, you can grab this configuration from `Config\mTail` folder inside repository,
 the config file is named `mtail_CC.ini`,
 just place it next to mTail executable, restart mTail and open firewall log,
-which is by default placed in *C:\Windows\System32\LogFiles\Firewall\pfirewall.log*\
-However `SetupProfile.ps1` script will separate logs for each firewall profile.
+which is by default placed into `C:\Windows\System32\LogFiles\Firewall\pfirewall.log\`
+However `SetupProfile.ps1` script will instruct firewall to write separate logs for each firewall profile.
 - There is another config file called `mtail.ini` which needs to be (re)placed into:
 `C:\Users\ADMINUSERNAME\Roaming\mtail\`, this config file contains configuration to monitor
 firewall activity for individual firewall profiles as well as number of personalized settings.
@@ -101,9 +108,9 @@ here is how it feels in VSCode.
 - Next step is to grant appropriate file system permissions to firewall logs which are now written
 to `Logs\Firewall` directory inside repository.
 - To grant permissions for your account and firewall service run `Scripts\GrantLogs.ps1 YOUR_USERNAME`\
-Permission is valid until system reboot or until manual permission removal.
+Permission is valid until system reboot, any firewall setting change, or manual permission removal.
 - Inside VSCode open individual firewall log file under `Logs\Firewall` node
-- To filter log contents open command palette (CTRL + SHIT + P) and type "Filter line by Config File"
+- To filter log contents open command palette `CTRL + SHIT + P`, type "Filter line by Config File"
 and press enter.
 - This action will create additional (filtered) log file in same directory called `FILENAME.filterline.log`
 - Config file is located inside `.vscode\filterline.json` and supports regex to fine tune your filter.
@@ -119,8 +126,8 @@ Get-Content "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" -Last 10 -Wa
 
 ## Event log
 
-- Event viewer is built into Windows, it will tell you stuff that no other program can tell you!\
-for example with this tool you can tell if somebody is intruding your firewall.
+- Event viewer is built into Windows, it will tell you specific stuff that no other program can,\
+for example with this tool you can tell if somebody is intruding your firewall from WAN.
 - Note that most of data you will see isn't available in firewall logs
 (even if you enable "log ignored packets"), why is that so?
 I don't know, maybe we should ask Microsoft, anyway, at least here is how to gain this hidden
@@ -167,7 +174,7 @@ click on image to enlarge:
 
 ![Alternate text](Screenshots/wfpView.png)
 
-- WFP stand for "Windows Filtering Platform", a low level packet filter upon which Windows firewall
+- WFP stand for "Windows Filtering Platform", native packet filter upon which Windows firewall
 is built.
 - **NOTE:** you need to enable at a minimum, auditing of dropped packet as explained in section
 "Event log" above.
@@ -175,13 +182,12 @@ is built.
 ```netsh wfp show state``` to show current state, such as detailed information about dropped or
 allowed network packets.
 ```netsh wfp show filters``` to show current firewall filters
-(filters are made of firewall rules btw,
-rules by them self are just high level specifications translated into these low level filters.)
-- when you execute show state, it will generate xml file in the same directory where you execute
+(filters define firewall rules, rules by themself are just incomplete high level specifications)
+- When you execute show state, it will generate xml file in the same directory where you execute
 command, open this file with
 your code editor such VS Code.
-- what you are looking for here is an ID called "Filter Run-Time ID" and "Layer Run-Time ID",
-you can obtain these ID's from event viewer as shown in Event log (screen shot above).
+- What you are looking for here is an ID called "Filter Run-Time ID" and "Layer Run-Time ID",
+you can obtain these ID's from event viewer as shown in Event log (screenshot above).
 - Find and copy desired "Filter Run-Time ID" number in event log, press CTRL + C to copy, go to VS Code,\
 and open generated `wfpstate.xml` file then press CTRL + F to open "find box" and CTRL + V to paste
 the number, and hit enter to jump to this event.
@@ -194,7 +200,7 @@ to allow this traffic, take a look back into event viewer to see which applicati
 traffic, as well as what ports and addresses were used, then verify you have firewall rule for this.
 - The `<layerKey></layerKey>` key will tell you which WFP filter caused the drop, for example the
 value `FWPM_LAYER_ALE_AUTH_CONNECT_V4` means IPv4 authorizing connect requests for outgoing connection,
-based on the first packet sent. which in turn tells us there was no adequate allow rule so the
+based on the first packet sent. Which btw. tells us there was no adequate allow rule so the
 default outbound action was hit.
 - For detailed information on how to interpret WFP log see "Firewall" section in `Readme\Reference.md`
 
@@ -207,8 +213,8 @@ default outbound action was hit.
 
 And of course we have Windows firewall.
 
-- The firewall GUI will let you see and manage all your active rules in a user friendly way,
-you can access either GPO firewall interface, (which is where this project loads the rules) or
+- The firewall GUI will let you see and manage all of your active rules in a user friendly way,
+you can access either GPO firewall interface, (which is where this project loads rules) or
 open up firewall interface from control panel.
 - The difference is that GPO firewall has precedence over the firewall in control panel,
 (GPO store vs Persistent store, combined = Active Store)
@@ -246,12 +252,13 @@ visible and remove those which are useless and only waste space, for example add
 Inside `Config\Windows` there is a `Firewall.msc` settings file, which saves you from doing these
 things every time you open GPO firewall, you can customize it and re-save your preferences.
 
-[Windows Firewall reference][ref firewall]
-[Windows Firewall Technologies][ref firewall old]
+- [Windows Firewall reference][ref firewall]
+- [Windows Firewall Technologies][ref firewall old]
 
 ## TCP View
 
-TCP view is another tool that wil let you see what programs are listening on which ports on local system
+TCP view is another tool that wil let you see which programs are listening on which ports on local system
+
 ![Alternate text](Screenshots/TCPView.png)
 
 [Download TCPView][ref tcpview]
@@ -296,11 +303,11 @@ To handle these and similar scenarios there is network capture and tracing solut
 To actually view and analyse *.etl file you'll need to install "Windows Performance Analyzer" which
 is availabe as an optional installment of [Windows 10 SDK][windows sdk] or [Windows ADK][windwos adk]
 
-Once you install it and open ETL (Event Trace Log) file here is sample screenshot of traffic analysis:
+Once you install it and open ETL (Event Trace Log) file here is sample traffic analysis screenshot:
 
 ![Alternate text](Screenshots/TraceAnalyze.png)
 
-To generate ETL file you have at least 3 options:
+To generate an ETL file you have at least 3 options:
 
 First and the best one is to use "Windows Performance Recorder" which comes with Windows SDK or ADK.\
 Other 2 (worse) methods are described in next 2 sections.
@@ -355,23 +362,28 @@ netsh trace show capturefilterHelp
 
 The meaning of options is as follows:
 
-**capture=yes|no**
+### capture=yes|no
+
 Specifies whether packet capturing is enabled in addition to tracing events.\
 The default is `no`
 
-**protocol**
+### protocol
+
 Specifies IP protocol for which to trace or capture traffic.\
 For valid values and their meaning see: [Assigned Internet Protocol Numbers][protocol list]
 
-**traceFile=path\filename**
+### traceFile=path\filename
+
 Specifies the location and file name where to save the output.\
 The default is: `%LOCALAPPDATA%\Temp\NetTraces\NetTrace.etl`
 
-**persistent=yes|no**
+### persistent=yes|no
+
 Specifies whether the tracing session resumes upon restarting the computer.\
 The default is `no`
 
-**fileMode= single|circular|append**
+### fileMode=single|circular|append
+
 Specifies which file mode is applied when tracing output is generated.\
 The meaning of options (probably) is as follows:
 
@@ -381,14 +393,16 @@ The meaning of options (probably) is as follows:
 
 The default is `circular`
 
-**maxSize**
+### maxSize
+
 Specifies maximum log file size in MB (Mega Bytes).\
 
 To specify the maxSize=0, you must also specify `filemode=single`\
 If the value is set to 0, then there is no maximum.`
 The default value is 250.
 
-**overwrite=yes|no**
+### overwrite=yes|no
+
 Specifies whether an existing trace output file will be overwritten.
 
 If parameter traceFile is not specified, then the default location and filename and any pre-existing
@@ -403,8 +417,9 @@ NetEventPacketCapture is a PowerShell module that is a replacement for `netsh tr
 
 Almost everything `netsh trace` can do can be also done with NetEventPacketCapture module.
 
-Inside `Scripts` folder there are sample `StartTrace.ps1` and `StopTrace.ps1` scripts which make use
-of NetEventPacketCapture module, you can use them to quickly start and stop packet capture.
+Inside `Scripts\Experimental` folder there are experimental `StartTrace.ps1` and `StopTrace.ps1` scripts
+which make use of `NetEventPacketCapture` module, you can use them to quickly start and stop packet
+capture.
 
 Keep in mind that both the `netsh trace` and `NetEventPacketCapture` generate an ETL file
 (Event Trace Log), problem in both cases is the lack of executable involved in traffic.

@@ -5,8 +5,9 @@ Applies to resetting firewall by hand after running Powershell scripts from this
 
 Useful if you encountered problems such as internet connectivity and you're unable to run\
 `ResetFirewall.ps1` script file located in project root directory, or if the script file did\
-not resolve your problems.\
-**NOTE: these steps will not save any previous rules in GPO**
+not resolve your problems.
+
+**WARNING:** These steps will not save any previous rules in GPO, all preferences will be gone.
 
 ## Follow below steps to revert firewall
 
@@ -19,13 +20,15 @@ not resolve your problems.\
 
 ## Problem still not resolved
 
-This should not be the case, but can happen if you modified firewall in control panel.\
+This should not be the case, but first step is to reboot system and double check GPO firewall is off.
+
+Otherwise it can happen if you modified firewall in control panel.\
 Follow steps below to reset default windows firewall:
 
-1. Open control panel and click on "Windows defender firewall"
-2. Click on "Restore defaults" to restore firewall to defaults
+1. Open control panel and click on `Windows Defender Firewall`
+2. Click on `Restore defaults` to restore firewall to defaults
 3. If problem is not fixed right away you may need to reboot system
-4. Also try disabling firewall in control panel.
+4. Otherwise try disabling firewall in control panel.
 
 ## Still having problems
 

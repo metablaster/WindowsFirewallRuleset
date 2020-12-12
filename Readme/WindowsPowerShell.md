@@ -8,11 +8,10 @@ Note that Windows PowerShell is not the same thing as PowerShell Core, for more 
 ## How to open Windows PowerShell
 
 1. Right click on the Task bar and select `Taskbar settings`
-2. Toggle **ON**
-`Replace Command Prompt with Windows Powershell in the menu when I right click the start button`
+2. Enable `Replace Command Prompt with Windows Powershell in the menu when I right click the start button`
 3. Right click on start button in Windows
 4. Click `Windows Powershell (Admin)` to open Powershell as Administrator
-5. If prompted for password, enter administrator password and click "Yes" to continue
+5. If prompted for password, enter Administrator password and click `Yes` to continue
 
 ## How to open Windows PowerShell in target folder
 
@@ -24,10 +23,10 @@ exactly that directory, for example:
 Here is how:
 
 1. Go to desired directory by using Windows explorer
-2. Click on "File" in top left explorer window
-3. To open PowerShell as standard user click on "Open Windows PowerShell"
-4. To open it as Administrator, in step 3 hover your mouse over "Open Windows PowerShell" and then\
-   select "Open Windows PowerShell as Administrator"
+2. Click on `File` in top left explorer window
+3. To open PowerShell as standard user click on `Open Windows PowerShell`
+4. To open it as Administrator, in step 3 hover your mouse over `Open Windows PowerShell` and then\
+   select `Open Windows PowerShell as Administrator`
 
 ## Right click "Open Windows PowerShell here" context menu
 

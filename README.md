@@ -19,7 +19,7 @@
   - [Where are my rules](#where-are-my-rules)
   - [Applying individual rulesets](#applying-individual-rulesets)
   - [Deleting rules](#deleting-rules)
-  - [Export/Import rules](#exportimport-rules)
+  - [Export\Import rules](#exportimport-rules)
   - [Manage loaded rules](#manage-loaded-rules)
   - [Checking for updates](#checking-for-updates)
   - [Contributing or suggestions](#contributing-or-suggestions)
@@ -60,8 +60,8 @@ scripts and functions used to gather environment info relevant to build speciali
 
 - Meaning this project is a good base to easily extend your firewall and include more rules and
 functionalities.
-- Currently there are some 650+ firewall rules included, 9 modules with 50+ functions,
-various scripts and useful documentation.
+- Currently there are some 800+ firewall rules, 10+ modules with 100+ functions, several scripts
+and a bunch of useful documentation.
 - You can choose which rules you want, and apply only those or apply them all with
 master script to your firewall.
 - All of the rules are loaded into Local Group Policy (GPO),
@@ -69,31 +69,31 @@ giving you full power over the default Windows firewall.
 
 ## Core benefits of this firewall project
 
-1. System administrators usually just avoid boggling too much with firewall because detailed firewall
-configuration is very time consuming process, takes a lot of troubleshooting and it gets only worse
-when you want to deploy firewall to remote computers, for example not all computers might have same
-software environment.
+1. System administrators would usually just avoid boggling too much with firewall because detailed
+firewall configuration is very time consuming process, takes a lot of troubleshooting, changes require
+testing and security auditing and it only gets worse if you want to deploy firewall to hundreds or
+thousands of remote computers, for example not all computers might have same software environment.
 
 2. Unlike firewall rules in control panel, these rules are loaded into GPO firewall
 (Local group policy), meaning system settings changes or random programs which install rules as
 part of their installation process will have no effect on firewall unless you
 explicitly make an exception.
 
-3. Unlike default (built in) Windows firewall rules, these rules are more restrictive such as,
+3. Unlike default (predefined) Windows firewall rules, these rules are more restrictive such as,
 tied to explicit user accounts, rules apply to specific ports,
 network interfaces, specific programs, services etc.
 
 4. Unlike in usual scenario, you will know which rules have no effect or are redundant
-due to ex. uninstalled program, a missing Windows service which no longer exists or renamed
+due to ex. uninstalled program, a missing Windows service which no longer exists, renamed
 executable after Windows upgrade or are redundant/invalid for what ever other reason.
 
 5. Updating rule attributes such as ports, addresses and similar is much easier since these rules
-are in scripts, you can use editor tools such as CTRL + F or regex to perform bulk operations on
-your rules, doing this in Windows firewall GUI is beyond all pain.
+are in scripts, you can use editor tools such as CTRL + F, regex or multicursor to perform bulk
+operations on your rules, doing this in Windows firewall GUI is beyond all pain.
 
 6. Default outbound is "block" unless there is a rule to explicitly allow network traffic,
 in default Windows firewall this is not possible unless you have rules for every possible
-program/service, thanks to this collection of rules setting default outbound to block
+program/service, thanks to this collection of rules, setting default outbound to block
 requires very little additional work.
 
 7. A good portion of code is dedicated to provide unified and automated solution to build and define
@@ -104,10 +104,10 @@ valuable administration time.
 
 This project **"Windows Firewall Ruleset"** is licensed under **MIT** license.
 
-The project maintains **"per file"** license and Copyright notices.
+License files and and Copyright notices are maintained **"per file"**.
 
 3rd party and sublicensed code is located either inside their own folders (with individual license file)
-or inside folders called "External" for organizational purposes.
+or inside folders called `External` for organizational purposes.
 
 ## Requirements
 
@@ -117,8 +117,8 @@ or inside folders called "External" for organizational purposes.
    - Windows 10 Education
    - Windows Server 2019 Standard
    - Windows Server 2019 Datacenter
-2. PowerShell Core 7.0 or Windows PowerShell 5.1 [Download PowerShell Core][download core]
-3. .NET Framework 4.8 (Windows PowerShell only) [Download Net Framework][download .net]
+2. Windows PowerShell 5.1 or PowerShell Core 7.1 [Download PowerShell Core][download core]
+3. .NET Framework 4.5 (Windows PowerShell only) [Download Net Framework][download .net]
 4. Git (Optional) [Download Git][download git]
 5. Visual Studio Code (Recommended) [Download VSCode][vscode]
 6. PowerShell Support for VSCode (Recommended) [Download extension][download powershell extension]
@@ -129,10 +129,9 @@ Requirements details:
 - All operating systems 10.0 (Major 10, Minor 0) build 1809 and up are supported,
 but only those editions listed in point 1 are actively tested.\
 The list of other untested but supported systems and features is in [The future](#the-future)
-- PowerShell "Core" is not built into Windows, you will need to install it separately (recommended)\
-or use [Windows PowerShell](Readme/WindowsPowerShell.md)
-which is already installed.
-- .NET Framework version 4.8 is required if using Windows PowerShell (Desktop edition)
+- PowerShell "Core" is not built into Windows, you will need to install it separately\
+or use [Windows PowerShell](Readme/WindowsPowerShell.md) which is already installed.
+- .NET Framework version 4.5 is required if using Windows PowerShell (Desktop edition)
 instead of PowerShell Core.\
 Windows 10 v1903 and up already includes .NET 4.8
 - You might want to have git to check out for updates,
@@ -141,8 +140,10 @@ to easily switch between branches or to contribute code.
 needs or contribution.
 - If you get VSCode, you'll also need PowerShell extension for code navigation and
 PowerShell specific features.
-- To navigate and edit code with VSCode, `PSScriptAnalyzer` is recommended otherwise editing experience\
-may behave really odd due to other project settings.
+- To navigate and edit code with VSCode, `PSScriptAnalyzer` is recommended otherwise editing
+experience may behave really odd due to other project settings.
+- Hardware requirements are min. 8GB of memory and SSD drive to work on project, otherwise to just
+apply rules to your personal firewall less than that should work just fine!
 
 ## I don't meet the requirements
 
@@ -175,25 +176,24 @@ and leave only those in control panel.
 - If you want to be 100% sure please export your current GPO rules first, to do so either run
 `Scripts\ExportFirewall.ps1` which may take some time or do it manually.\
 For manual export see [Manage GPO Firewall](Readme/ManageGPOFirewall.md)
-- The scripts will ask you what rules you want, to minimize internet connectivity trouble you should
+- You will be asked which rules to load, to minimize internet connectivity trouble you should
 apply at least all generic networking and OS related rules such as CoreNetworking, ICMP,
-WindowsSystem, WindowsServices, Multicast etc. also do not ignore IPv6, Windows does need IPv6!
+WindowsSystem, WindowsServices, Multicast etc; and all rules for which you have programs installed
+on system, also do not ignore IPv6, Windows does need IPv6!
+It should be easy to delete what you don't need in GPO, rather than later dig trough code to see
+what you might have missed.
 - Default configuration will set global firewall behavior which is not configurable in GPO GUI,
 such as `stateful ftp` and `pptp` or global `IPSec` settings, if you need specific setup please visit
 `Scripts\SetupProfile.ps1` and take a look at `Set-NetFirewallSetting`.\
 Note that `Scripts\SetupProfile.ps1` is automatically called by `Scripts\SetupFirewall.ps1` script
-- Some scripts require network adapter to be connected to internet, for example to determine
+- Some scripts require network adapter to be connected to network, for example to determine
 IPv4 broadcast address. (Otherwise errors may be generated without completing the task)
 
 ### Note
 
-- If you would like to modify basic behavior of execution, such as force loading rules and various
+- If you would like to customize how scripts run, such as force loading rules and various
 defaults then visit `Config\ProjectSettings.ps1` and there you'll find global variables
 which are used for this.
-- If you're running scripts for the first time it's highly recommended to load all rules for which you
-have programs installed on system,
-it should be easy to delete what you don't want in GPO, rather than later searching scripts for
-what you might have missed.
 - Loading rules into an empty GPO should be very fast, however loading into GPO which already
 contains rules will be significantly slower (depends on number of existing rules)
 - All errors and warnings will be saved to `Logs` directory, so you can review these logs later
@@ -226,12 +226,12 @@ release under "assets" download zip file.\
 These steps here assume you have downloaded a zip file from "assets" section under "Releases".
 2. Extract the archive somewhere, these steps assume you've extracted the zip (project root directory)
 into `C:\` root drive directly.
-3. Open the extracted folder, right click into an empty space and there is an option to run
-PowerShell Core as Administrator
-(Assumes you enabled context menu during installation of PowerShell Core) if not open it manually.
-4. If you would like to use Windows PowerShell 5.1 instead of PowerShell Core see:\
+3. If you would like to use Windows PowerShell 5.1 instead of PowerShell Core see:\
 [How to open Windows PowerShell](Readme/WindowsPowerShell.md)
-
+4. Otherwise procedure for both PowerShell Core and desktop is the same:\
+Open up extracted folder, right click into an empty space and there is an option to run
+PowerShell Core as Administrator (Assumes you enabled context menu during installment of PowerShell
+Core) if not open it manually.
 5. Now if you don't have PowerShell context menu then move to C root drive by executing following 2
 lines, this is where you extracted your downloaded zip file:
 
@@ -240,8 +240,8 @@ lines, this is where you extracted your downloaded zip file:
     cd \
     ```
 
-6. cd into downloaded folder, of course rename the command if your extracted folder is called something
-else:
+6. cd into downloaded folder, of course rename the command if your extracted folder is called
+something else:
 
     ```powershell
     cd WindowsFirewallRuleset-master
@@ -296,7 +296,7 @@ It is recommended to close down all other programs before running master script 
     .\Scripts\SetupFirewall.ps1
     ```
 
-    Hit enter and you will be prompted questions such as what kind of rulesets you want.\
+    Hit enter and you will be asked questions such as what kind of rulesets you want.\
     If you need help to decide whether to run some rules or not, type `?` and press enter.
 
 13. Follow prompt output, (ex. hit enter to accept default action),
@@ -312,13 +312,14 @@ some rules, rules for programs which don't exist need to be made additionally.
 16. Now go ahead and test your internet connection (ex. with browser or some other program),
 If you're unable to connect to internet after applying these rules you have several options:
 
-    - you can temporarily open outbound firewall in GPO or [Disable Firewall](Readme/DisableFirewall.md)
-    - you can troubleshoot problems: [Network troubleshooting detailed guide](Readme/NetworkTroubleshooting.md)
-    - you can [Reset Firewall to previous state](Readme/ResetFirewall.md)
-    - take a look into `Readme` folder for more troubleshooting options and documentation
+    - Temporarily open outbound firewall in GPO or [Disable Firewall](Readme/DisableFirewall.md)
+    - Troubleshoot problems: [Network troubleshooting detailed guide](Readme/NetworkTroubleshooting.md)
+    - You can [Reset Firewall to previous state](Readme/ResetFirewall.md)
+    - Take a look into `Readme` folder for more troubleshooting options and documentation
 
 17. If you don't plan to remotely manage target machine make sure to undo changes done to
-WinRM service (Windows Remote Management), the service might have been set to automatic and started!
+`WinRM` service (Windows Remote Management), the service might have been set to automatic and
+started as a prerequisite to setup firewall. (The default is "Manual" startup)
 
 ## Where are my rules
 
@@ -349,9 +350,8 @@ it's not set already, or you can do it manually in GPO but with limited power.
 "limited power" means `Scripts\SetupProfile.ps1` configures some firewall parameters which can't be
 adjusted in firewall GUI.
 
-In all 3 cases the script will delete all of the existing rules that match the rule group (if any),
-and load the rules from script
-into Local Group Policy.
+In all 3 cases the script will delete all of the existing rules that match rule group (if any),
+and load rules from script into Local Group Policy.
 
 ## Deleting rules
 
@@ -365,9 +365,8 @@ right click and delete.
 however you're advised to perform some tests before using it due to it's
 experimental state.
 
-3. To revert to your old firewall state (the one in control panel), you will need to delete all the
-rules from GPO,\
-and set all properties to `"Not configured"` when right clicking on node:\
+3. To revert to your old firewall state (the one in control panel), you will need to delete all off
+the rules from GPO, and set all properties to `"Not configured"` after right click on node:\
 `Windows Defender Firewall with Advanced Security - Local Group Policy Object`
 
     Deleting all rules or revetting to previous state can also be done with
@@ -375,11 +374,11 @@ and set all properties to `"Not configured"` when right clicking on node:\
 
     Note that you will also need to re-import your exported GPO rules if you had them.
 
-## Export/Import rules
+## Export\Import rules
 
 If you want to export rules from GPO there are 2 methods available:
 
-1. Export in local group policy by clicking on `Export Policy...` menu, after right clicking on node:\
+1. Export in local group policy by clicking on `Export Policy...` menu, after right click on node:\
 `Windows Defender Firewall with Advanced Security - Local Group Policy Object`
 
 2. To export using PowerShell run `Scripts\ExportFirewall.ps1` which is much slower process but
@@ -388,7 +387,7 @@ unlike method from point 1 you can customize your export in almost any way you w
 If you want to import rules, importing by using GPO is same as for export, and to import with
 PowerShell just run `Scripts\ImportFirewall.ps1`
 
-To customize your export/import please take a look into `Modules\Ruleset.Firewall\Public`,
+To customize your export\import please take a look into `Modules\Ruleset.Firewall\Public`,
 which is where you'll find description on how to use export\import PowerShell functions.
 
 ## Manage loaded rules
@@ -396,7 +395,7 @@ which is where you'll find description on how to use export\import PowerShell fu
 There are 2 ways to manage your rules:
 
 1. Using Local Group Policy, this method gives you basic freedom on what you can do with project rules,
-such as disabling them or changing some attributes and adding new rules. For more information see
+such as disabling them or changing some attributes and adding new rules. For more information see:\
 [Manage GPO Firewall](Readme/ManageGPOFirewall.md)
 1. Editing PowerShell scripts, this method gives you full control, you can improve the rules,
 add new ones or screw them up.
@@ -464,8 +463,8 @@ That's it, your scripts are now up to date, execute them as you desire (or follo
 
 ## Contributing or suggestions
 
-Below are general notes for requesting to add your rules or ideas about rules to project.\
-If you would like to contribute by writing scripts you should read [CONTRIBUTING.md](CONTRIBUTING.md)
+Below are general notes for requesting to add your rules or ideas about project.\
+If you would like to contribute by writing code you should read [CONTRIBUTING.md](CONTRIBUTING.md)
 instead.
 
 Feel free to suggest or contribute new rules, or improvements for existing rules or scripts.\
@@ -474,21 +473,21 @@ Just make sure you follow below notices:
 1. Provide some documentation or official reference for your rules so that it can be easy to verify
 that these rules don't contain mistakes, for example, for ICMP rules you would provide a link to
 [IANA][iana] with relevant reference document.
-2. If you would like to suggest new rules or improving existing ones,
-but you can't push an update here, please open new issue here on github and provide details
+2. If you would like to suggest new rules or various improvements to code or rules,
+but you can't upload an update here, please open new issue here on github and provide details
 preferably with documentation.
 3. To contribute rules, it is also important that each rule contains good description of it's
-purpose, when the user clicks on the rule in firewall GUI he/she wants to see what this rule is about
-and easily conclude whether to enable/disable the rule or allow/block the traffic.
+purpose, when the user clicks on rule in firewall GUI he/she wants to see what this rule is about
+and easily conclude whether to enable/disable rule or allow/block network traffic.
 4. It is also important that the rule is very specific and not generic, that means specifying protocol,
 IP addresses, ports, system user, interface type and other relevant information.\
-for example just saying: allow TCP outbound port 80 for any address or any user or no explanation
-what is this supposed to allow or block is not acceptable.
+for example just saying: allow TCP outbound port 443 for my new game without telling where, why
+or which user account to allow, or no explanation what is this supposed to allow or block is not acceptable.
 
 ## Customization
 
 If you would like to customize project code or add more firewall rules to suit your private or corporate
-interests then the first step is to set up development environment and learn about project best practices
+interests then first step is to set up development environment and learn about project best practices
 all of which is explained in [CONTRIBUTING.md](CONTRIBUTING.md)
 
 Depending on your situation and target platform you might also want to read [Legacy Support](Readme/LegacySupport.md)
@@ -498,9 +497,8 @@ found in `Readme` folder and by doing your own research.
 
 ## More information and help
 
-Inside the [Readme](Readme)
-folder you will find useful information not only about this project but also general information on
-how to troubleshoot firewall and network problems, or gather other relevant information.
+Inside [Readme](Readme) folder you will find useful information not only about this project but also
+general information on how to troubleshoot firewall and network problems, or gather other relevant information.
 
 It might answer some of your questions, for example [Monitoring Firewall](Readme/MonitoringFirewall.md)
 explains how to monitor firewall in real time.

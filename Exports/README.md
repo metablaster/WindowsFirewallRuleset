@@ -1,5 +1,4 @@
 
 # Exports directory
 
-Contains exported rules for import
-Exported rules are by default saved here
+Exported rules are by default saved here which can be reimported at any time.

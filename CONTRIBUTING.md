@@ -226,7 +226,7 @@ however keep in mind, it's not completely in line with this repository best prac
 
 ## Modules and 3rd party code
 
-The project contains few custom modules of various type grouped by relevance on
+Repository contains few custom modules of various type grouped by relevance on
 what the module is supposed to expose.
 
 Try to limit dependency on 3rd party modules.\
@@ -237,8 +237,6 @@ easily customized without too much change or learning curve.
 
 3rd party code/scripts are dot sourced into existing modules instead of copy pasted into module
 directly, this must be so, to easily see to which file does license/Copyright apply in full.
-
-3rd party code/module license/Copyright must of course be retained and compatible with existing licenses.
 
 ## Module design
 
@@ -285,28 +283,26 @@ Documentation and comments reside in 6 places as follows:
 
     Sections of code should be documented as shown in existing scripts.\
     To comment on things that need to be done add "TODO:" + comment,
-    similarly for important notes add "NOTE:" + comment.\
+    similarly for important notes add "NOTE:" + comment.
 
     For things which are hard to resolve add "HACK:" + comment, and optionally some links such as
     github issues that may help to resolve problem in the future.
 
     For any generic code comments you might want to add, use line comments (preferred) and
-    block comments only if comment is big.
+    block comments only if comment spans 10 or more lines.
 
 2. In rules (rule description)
 
     It is important that each firewall rule contains good description of it's purpose,
-    when a user clicks on a rule in firewall GUI he wants to see
-    what this rule is about and easily conclude whether to enable/disable rule or
-    allow/block network traffic.
+    when the user clicks on rule in firewall GUI he/she wants to see what this rule is about and
+    easily conclude whether to enable/disable rule or allow/block network traffic.
 
 3. In command line prompts (current execution help)
 
     Every script that's being executed either directly or called by other script will not run
-    until the use accepts the prompt to run the script.
+    until the user accepts the prompt to run script.
 
-    Each of these prompts have `?` which the user can type to get more information about possible
-    prompt choices.
+    Each of these prompts have `?` which the user can type to get more information about prompt choices.
 
 4. In comment based help (module main documentation source)
 
@@ -356,7 +352,7 @@ cases as possible, making changes to exiting code can then be easily tested.\
 If test case/concept expands to several functions or if it's completely
 unrelated to functions it should be a separate test.
 
-All tests reside in "Test" folder which contains subfolder for each module,
+All tests reside in "Test" folder which contains subfolders for each module,
 take a look there for examples.
 
 Pester is preferred method to write tests, however some testings needs other way around, or
@@ -372,7 +368,7 @@ integrated terminal in VSCode (assuming PowerShell prompt is at project root):
 Config\ProjectSettings
 ```
 
-This will add `Modules` to current session module path
+This will add all repository `Modules` to current session module path
 
 ## Commits and pull requests
 
@@ -380,7 +376,7 @@ Push small commits that solve or improve single or specific problem,
 to reduce merge conflicts and to be able to do `git revert` for specific stuff.
 
 Do not wait too much to push large commits which are not clear enough in terms
-what issue is supposed to be resolved or improved.
+of what issue is supposed to be resolved or which component was improved.
 
 If you see something unrelated that could be resolved, put TODO commont, don't fix it.\
 Then once you commit open todo-tree to review what to do next.
@@ -399,8 +395,8 @@ firewall on linux and other systems.
 
 ## Making new scripts or modules
 
-Inside "Templates" folder there are few template scripts as a starting point.\
-Copy them to target location, update code and start writing.
+Inside `Templates` folder there are few template scripts as a starting point.\
+Copy them to target location, update starting code and you're ready to start writing.
 
 These templates are fully aligned to rule design, code and formatting style of this project.
 

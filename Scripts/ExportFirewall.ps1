@@ -81,8 +81,9 @@ $StopWatch.Start()
 Export-FirewallRules -Outbound -Folder "$ProjectRoot\Exports" -FileName "OutboundGPO" -PolicyStore $PolicyStore
 $StopWatch.Stop()
 
+$OutboundHours = $StopWatch.Elapsed | Select-Object -ExpandProperty Hours
 $OutboundMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
-Write-Information -Tags "User" -MessageData "INFO: Time needed to export outbound rules was: $OutboundMinutes minutes"
+Write-Information -Tags "User" -MessageData "INFO: Time needed to export outbound rules was: $OutboundHours hours and $OutboundMinutes minutes"
 
 $StopWatch.Reset()
 $StopWatch.Start()
@@ -90,10 +91,19 @@ $StopWatch.Start()
 Export-FirewallRules -Inbound -Folder "$ProjectRoot\Exports" -FileName "InboundGPO" -PolicyStore $PolicyStore
 $StopWatch.Stop()
 
+$InboundHours = $StopWatch.Elapsed | Select-Object -ExpandProperty Hours
 $InboundMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
-Write-Information -Tags "User" -MessageData "INFO: Time needed to export inbound rules was: $InboundMinutes minutes"
+Write-Information -Tags "User" -MessageData "INFO: Time needed to export inbound rules was: $InboundHours hours and  $InboundMinutes minutes"
 
 $TotalMinutes = $OutboundMinutes + $InboundMinutes
+$TotalMinutes += $OutboundHours * 60
+$TotalMinutes += $InboundHours * 60
 Write-Information -Tags "User" -MessageData "INFO: Total time needed to export entry firewall was: $TotalMinutes minutes"
 
 Update-Log
+
+<# STATS
+Outbound export took over 1h and the result was 1 minute
+Time needed to export inbound rules was: 33 minutes
+Total time needed to export entry firewall was: 34 minutes (1h 34m)
+#>

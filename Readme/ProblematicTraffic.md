@@ -1,7 +1,7 @@
 
 # Problematic network traffic
 
-List of dropped packets, blocked programs, how to troubleshoot the problem and possible resolutions.
+List of dropped packets, blocked programs, how to troubleshoot well known issue and possible resolutions.
 
 Note that all of these resolutions here are "forced",
 meaning weakening the firewall just to fix the problem or to make firewall logs clean.
