@@ -256,12 +256,6 @@ do something with them (ex. refreshing group policy, viewing or modifying settin
 To minimize the chance of this error from appearing close down all management consoles and all
 software that is not essential to apply rules with scripts.
 
-Simple rule of thumb before applying rules is the same as when you install drivers:
-
-- Reboot system
-- Close down all programs
-- Please try agin
-
 [name resolution issue]: https://www.infopackets.com/news/10369/how-fix-computer-name-wont-resolve-network-april-update
 [netfirewallsetting]: https://docs.microsoft.com/en-us/powershell/module/netsecurity/set-netfirewallsetting?view=win10-ps "Visit Microsoft docs"
 [gpupdate]: https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/gpupdate "Visit Microsoft docs"

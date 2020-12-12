@@ -44,6 +44,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - Improved function `Approve-Execute`, `Test-TargetComputer`
   - Improved function `Get-AppSID` big thanks to @ljani for awesome solution: https://github.com/ljani
   - Logging without the need for parameter splating, @Logs variable was removed
+  - Improved program search algorithm
 
 - Documentation
 

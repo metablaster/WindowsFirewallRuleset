@@ -323,7 +323,7 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 	New-Variable -Name CheckReadOnlyVariables -Scope Global -Option Constant -Value $null
 
 	# Set to false to avoid checking system and environment requirements
-	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $true
+	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $false
 
 	# Set to false to avoid checking if modules are up to date
 	New-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Value $Develop

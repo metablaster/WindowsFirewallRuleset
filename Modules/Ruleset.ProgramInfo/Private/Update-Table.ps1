@@ -42,10 +42,16 @@ Search string which corresponds to the output of "Get programs" functions
 true if user profile is to be searched too, system locations only otherwise
 
 .PARAMETER Executable
-true if executable paths should be searched first.
+Optionally specify executable name which will be search first.
 
 .EXAMPLE
-PS> Update-Table "GoogleChrome"
+PS> Update-Table -Search "GoogleChrome"
+
+.EXAMPLE
+PS> Update-Table -Search "Microsoft Edge" -Executable "msedge.exe"
+
+.EXAMPLE
+PS> Update-Table -Search "Greenshot" -UserProfile
 
 .INPUTS
 None. You cannot pipe objects to Update-Table
@@ -59,35 +65,35 @@ currently it looks like we assign entry user group for program that applies to u
 #>
 function Update-Table
 {
-	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "None")]
+	[CmdletBinding(PositionalBinding = $false, SupportsShouldProcess = $true, ConfirmImpact = "None")]
 	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true)]
+		[Alias("Search")]
+		[AllowEmptyString()]
 		[string] $SearchString,
 
 		[Parameter()]
 		[switch] $UserProfile,
 
 		[Parameter()]
-		[switch] $Executable
+		[string] $Executable
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	if ($PSCmdlet.ShouldProcess("InstallTable", "Insert data into table"))
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Search string is: $SearchString"
-
 		# To reduce typing and make code clear
 		$UserGroups = Get-UserGroup -Computer $PolicyStore
 
-		if ($Executable)
+		if (![string]::IsNullOrEmpty($Executable))
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching executable names for: $SearchString"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching executable names for: $Executable"
 
 			# TODO: executable paths search is too weak, need to handle more properties here
 			$InstallLocation = $ExecutablePaths |
-			Where-Object -Property Name -EQ $SearchString |
+			Where-Object -Property Name -EQ $Executable |
 			Select-Object -ExpandProperty InstallLocation
 
 			if ($InstallLocation)
@@ -95,6 +101,7 @@ function Update-Table
 				# Create a row
 				$Row = $InstallTable.NewRow()
 
+				# TODO: Learn username from installation path, probably a function for this
 				$Principal = $UserGroups | Where-Object -Property Group -EQ "Users"
 
 				# Enter data into row
@@ -112,6 +119,11 @@ function Update-Table
 				# TODO: If the path is known there is no need to continue?
 				return
 			}
+		}
+		elseif ([string]::IsNullOrEmpty($SearchString))
+		{
+			# Function was called to search by executables only
+			return
 		}
 
 		# TODO: try to search also for path in addition to program name

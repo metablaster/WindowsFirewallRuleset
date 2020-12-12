@@ -52,7 +52,7 @@ function Get-AllUserSoftware
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-AllUserSoftware.md")]
-	[OutputType([System.Management.Automation.PSCustomObject])]
+	[OutputType([System.Management.Automation.PSCustomObject], [void])]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]

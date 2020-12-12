@@ -69,9 +69,9 @@ function Get-ExecutablePath
 		{
 			# 64 bit system
 			$HKLM = @(
+				# https://docs.microsoft.com/en-us/windows/win32/shell/app-registration
 				"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths"
-				# NOTE: It looks like this key is exact duplicate, not used
-				# even if there are both 32 and 64 bit, 32 bit applications on 64 bit system the path will point to 64 bit application
+				# NOTE: It looks like WOW6432Node key contains exact duplicate, not used
 				# "SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\App Paths"
 			)
 		}

@@ -85,7 +85,7 @@ function Find-Installation
 		}
 		"CMake"
 		{
-			Update-Table "CMake"
+			Update-Table -Search "CMake"
 			break
 		}
 		"SQLDTS"
@@ -190,27 +190,27 @@ function Find-Installation
 		}
 		"ArenaChess"
 		{
-			Update-Table "Arena Chess"
+			Update-Table -Search "Arena Chess"
 			break
 		}
 		"GoogleDrive"
 		{
-			Update-Table "Google Drive"
+			Update-Table -Search "Google Drive"
 			break
 		}
 		"RivaTuner"
 		{
-			Update-Table "RivaTuner Statistics Server"
+			Update-Table -Search "RivaTuner Statistics Server"
 			break
 		}
 		"Incredibuild"
 		{
-			Update-Table "Incredibuild"
+			Update-Table -Search "Incredibuild"
 			break
 		}
 		"Metatrader"
 		{
-			Update-Table "InstaTrader"
+			Update-Table -Search "InstaTrader"
 			break
 		}
 		"RealWorld"
@@ -220,32 +220,32 @@ function Find-Installation
 		}
 		"qBittorrent"
 		{
-			Update-Table "qBittorrent"
+			Update-Table -Search "qBittorrent"
 			break
 		}
 		"OpenTTD"
 		{
-			Update-Table "OpenTTD"
+			Update-Table -Search "OpenTTD"
 			break
 		}
 		"EveOnline"
 		{
-			Update-Table "Eve Online"
+			Update-Table -Search "Eve Online"
 			break
 		}
 		"DemiseOfNations"
 		{
-			Update-Table "Demise of Nations - Rome"
+			Update-Table -Search "Demise of Nations - Rome"
 			break
 		}
 		"CounterStrikeGO"
 		{
-			Update-Table "Counter-Strike Global Offensive"
+			Update-Table -Search "Counter-Strike Global Offensive"
 			break
 		}
 		"PinballArcade"
 		{
-			Update-Table "PinballArcade"
+			Update-Table -Search "PinballArcade"
 			break
 		}
 		"JavaUpdate"
@@ -256,73 +256,73 @@ function Find-Installation
 		"JavaRuntime"
 		{
 			# TODO: This depends on x64 or x86 installation for plugin
-			Update-Table "Java"
+			Update-Table -Search "Java"
 			break
 		}
 		"AdobeARM"
 		{
 			# TODO: this is wrong, requires path search type
-			Update-Table "Adobe\ARM"
+			Update-Table -Search "Adobe\ARM"
 			break
 		}
 		"AdobeAcrobat"
 		{
-			Update-Table "Acrobat Reader DC"
+			Update-Table -Search "Acrobat Reader DC"
 			break
 		}
 		"LoLGame"
 		{
-			Update-Table "League of Legends" -UserProfile
+			Update-Table -Search "League of Legends" -UserProfile
 			break
 		}
 		"FileZilla"
 		{
-			Update-Table "FileZilla FTP Client"
+			Update-Table -Search "FileZilla FTP Client"
 			break
 		}
 		"PathOfExile"
 		{
-			Update-Table "Path of Exile"
+			Update-Table -Search "Path of Exile"
 			break
 		}
 		"HWMonitor"
 		{
-			Update-Table "HWMonitor"
+			Update-Table -Search "HWMonitor"
 			break
 		}
 		"CPU-Z"
 		{
-			Update-Table "CPU-Z"
+			Update-Table -Search "CPU-Z"
 			break
 		}
 		"MSIAfterburner"
 		{
-			Update-Table "MSI Afterburner"
+			Update-Table -Search "MSI Afterburner"
 			break
 		}
 		"GPG"
 		{
-			Update-Table "GNU Privacy Guard"
+			Update-Table -Search "GNU Privacy Guard"
 			break
 		}
 		"OBSStudio"
 		{
-			Update-Table "OBSStudio"
+			Update-Table -Search "OBSStudio"
 			break
 		}
 		"PasswordSafe"
 		{
-			Update-Table "Password Safe"
+			Update-Table -Search "Password Safe"
 			break
 		}
 		"Greenshot"
 		{
-			Update-Table "Greenshot" -UserProfile
+			Update-Table -Search "Greenshot" -UserProfile
 			break
 		}
 		"DnsCrypt"
 		{
-			Update-Table "Simple DNSCrypt"
+			Update-Table -Search "Simple DNSCrypt"
 			break
 		}
 		"OpenSSH"
@@ -332,12 +332,12 @@ function Find-Installation
 		}
 		"PowerShellCore64"
 		{
-			Update-Table "pwsh.exe" -Executable
+			Update-Table -SearchStrig "" -Executable "pwsh.exe"
 			break
 		}
 		"PowerShell64"
 		{
-			Update-Table "PowerShell.exe" -Executable
+			Update-Table -SearchStrig "" -Executable "PowerShell.exe"
 			break
 		}
 		"PowerShell86"
@@ -351,7 +351,7 @@ function Find-Installation
 			# It was in appdata user folder
 			# Edit-Table "%ProgramFiles(x86)%\Microsoft OneDrive"
 
-			Update-Table "OneDrive" -UserProfile
+			Update-Table -Search "OneDrive" -UserProfile
 			break
 		}
 		"HelpViewer"
@@ -362,14 +362,14 @@ function Find-Installation
 		}
 		"VSCode"
 		{
-			Update-Table "Visual Studio Code"
+			Update-Table -Search "Visual Studio Code"
 			break
 		}
 		"MicrosoftOffice"
 		{
 			# TODO: Returned path is missing \root\Office16
 			# versions: https://en.wikipedia.org/wiki/History_of_Microsoft_Office
-			# Update-Table "Microsoft Office"
+			# Update-Table -Search "Microsoft Office"
 
 			$OfficeRoot = Get-ExecutablePath | Where-Object -Property Name -EQ "Winword.exe" |
 			Select-Object -ExpandProperty InstallLocation
@@ -382,28 +382,27 @@ function Find-Installation
 		}
 		"TeamViewer"
 		{
-			Update-Table "Team Viewer"
+			Update-Table -Search "Team Viewer"
 			break
 		}
 		"EdgeChromium"
 		{
-			# TODO: msedge.exe is found in executable paths, need to update search algorithm
-			Update-Table "Microsoft Edge"
+			Update-Table -Search "Microsoft Edge" -Executable "msedge.exe"
 			break
 		}
 		"Chrome"
 		{
-			Update-Table "Google Chrome" -UserProfile
+			Update-Table -Search "Google Chrome" -UserProfile
 			break
 		}
 		"Firefox"
 		{
-			Update-Table "Firefox" -UserProfile
+			Update-Table -Search "Firefox" -UserProfile
 			break
 		}
 		"Yandex"
 		{
-			Update-Table "Yandex" -UserProfile
+			Update-Table -Search "Yandex" -UserProfile
 			break
 		}
 		"Tor"
@@ -413,17 +412,17 @@ function Find-Installation
 		}
 		"uTorrent"
 		{
-			Update-Table "uTorrent" -UserProfile
+			Update-Table -Search "uTorrent" -UserProfile
 			break
 		}
 		"Thuderbird"
 		{
-			Update-Table "Thuderbird" -UserProfile
+			Update-Table -Search "Thuderbird" -UserProfile
 			break
 		}
 		"Steam"
 		{
-			Update-Table "Steam"
+			Update-Table -Search "Steam"
 			break
 		}
 		"Nvidia64"
@@ -442,7 +441,7 @@ function Find-Installation
 			# see also related todo in Nvidia.ps1
 			# NOTE: calling script must not use this path, it is used only to check if installation
 			# exists, the real path is obtained with "Nvidia" switch case
-			Update-Table "GeForce Experience"
+			Update-Table -Search "GeForce Experience"
 			break
 		}
 		"WarThunder"
@@ -452,7 +451,7 @@ function Find-Installation
 		}
 		"PokerStars"
 		{
-			Update-Table "PokerStars"
+			Update-Table -Search "PokerStars"
 			break
 		}
 		"VisualStudio"
@@ -471,27 +470,27 @@ function Find-Installation
 		}
 		"VisualStudioInstaller"
 		{
-			Update-Table "Visual Studio Installer"
+			Update-Table -Search "Visual Studio Installer"
 			break
 		}
 		"MSYS2"
 		{
-			Update-Table "MSYS2" -UserProfile
+			Update-Table -Search "MSYS2" -UserProfile
 			break
 		}
 		"Git"
 		{
-			Update-Table "Git"
+			Update-Table -Search "Git"
 			break
 		}
 		"GithubDesktop"
 		{
-			Update-Table "GitHub Desktop" -UserProfile
+			Update-Table -Search "GitHub Desktop" -UserProfile
 			break
 		}
 		"EpicGames"
 		{
-			Update-Table "Epic Games Launcher"
+			Update-Table -Search "Epic Games Launcher"
 			break
 		}
 		"UnrealEngine"
@@ -536,9 +535,8 @@ function Find-Installation
 		$Script = (Get-PSCallStack)[2].Command
 
 		# TODO: these loops seem to be skipped, probably missing Test-File, need to check
-		Write-Information -Tags "User" -MessageData "INFO: If you installed $Program elsewhere you can input the correct path now"
-		Write-Information -Tags "User" -MessageData "INFO: or adjust the path in $Script and re-run the script later."
-		Write-Information -Tags "User" -MessageData "INFO: otherwise ignore this warning if $Program is not installed."
+		Write-Information -Tags "User" -MessageData "INFO: If you installed $Program elsewhere you can input correct path now"
+		Write-Information -Tags "User" -MessageData "INFO: or adjust path in $Script and re-run the script later."
 
 		if (Approve-Execute -Title "Rule group for $Program" -Question "Do you want to input path now?")
 		{

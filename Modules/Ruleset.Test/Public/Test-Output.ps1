@@ -54,7 +54,7 @@ None. You cannot pipe objects to Test-Output
 None. Test-Output does not generate any output
 
 .NOTES
-None.
+TODO: For functions which may return null we should not compare
 #>
 function Test-Output
 {
