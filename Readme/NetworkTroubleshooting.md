@@ -310,7 +310,7 @@ remember, "Symmetric NAT (Dynamic NAT)" will cause you a lot of multiplayer trou
 
 Link below contains detailed guidelines:
 
-[LAN Setup](LAN%20Setup)
+[LAN Setup](/Readme/LAN%20Setup)
 
 ## Reset firewall
 
