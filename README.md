@@ -43,11 +43,12 @@
 3. Rules for Windows system
 4. Store apps
 5. Windows services
-6. Microsoft programs
-7. 3rd party programs
-8. broadcast traffic
-9. multicast traffic
-10. and the list goes on...
+6. Multiplayer Games
+7. Microsoft programs
+8. 3rd party programs
+9. broadcast traffic
+10. multicast traffic
+11. and the list goes on...
 
 - In addition to firewall rules you will find a number of PowerShell modules,
 scripts and functions used to gather environment info relevant to build specialized firewall such as:
@@ -385,10 +386,12 @@ If you want to export rules from GPO there are 2 methods available:
 unlike method from point 1 you can customize your export in almost any way you want.
 
 If you want to import rules, importing by using GPO is same as for export, and to import with
-PowerShell just run `Scripts\ImportFirewall.ps1`
+PowerShell just run `Scripts\ImportFirewall.ps1` which will pick up your previous export file.
 
 To customize your export\import please take a look into `Modules\Ruleset.Firewall\Public`,
-which is where you'll find description on how to use export\import PowerShell functions.
+which is where you'll find description on how to use export\import module functions.
+
+**NOTE:** Method 2 is experimental, very slow and not 100% reliable, you're advised to verify results.
 
 ## Manage loaded rules
 
@@ -470,19 +473,18 @@ instead.
 Feel free to suggest or contribute new rules, or improvements for existing rules or scripts.\
 Just make sure you follow below notices:
 
-1. Provide some documentation or official reference for your rules so that it can be easy to verify
-that these rules don't contain mistakes, for example, for ICMP rules you would provide a link to
-[IANA][iana] with relevant reference document.
-2. If you would like to suggest new rules or various improvements to code or rules,
-but you can't upload an update here, please open new issue here on github and provide details
-preferably with documentation.
+1. Provide some documentation or reference (preferably official) for your rules so that it can be
+easy to verify that these rules don't contain mistakes, ex. for ICMP rules you would provide a link
+to [IANA][iana] with relevant reference document.
+2. To suggest new rules or various rule and code improvements, please open new issue here on github
+and provide details preferably with documentation.
 3. To contribute rules, it is also important that each rule contains good description of it's
 purpose, when the user clicks on rule in firewall GUI he/she wants to see what this rule is about
 and easily conclude whether to enable/disable rule or allow/block network traffic.
 4. It is also important that the rule is very specific and not generic, that means specifying protocol,
 IP addresses, ports, system user, interface type and other relevant information.\
-for example just saying: allow TCP outbound port 443 for my new game without telling where, why
-or which user account to allow, or no explanation what is this supposed to allow or block is not acceptable.
+For example just saying: allow TCP outbound port 2891 for my new game without telling where, why
+or which user account to allow, or no explanation what this is supposed to allow or block is not acceptable.
 
 ## Customization
 

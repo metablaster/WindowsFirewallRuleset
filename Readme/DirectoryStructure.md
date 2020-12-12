@@ -5,7 +5,7 @@ Explains directory structure used in this repository\
 Each directory also contains a `README.md` with additional information
 
 In the following table duplicate folder names (in different trees) are excluded since
-the meaning selfexplanatory.
+the meaning is same or similar.
 
 ## Table of contents
 

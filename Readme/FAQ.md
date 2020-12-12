@@ -87,7 +87,7 @@ Administrative account should be used for administration only.
 Installing cracks, warez and similar is the most common way to let hackers in.
 
 3. Visiting only trusted web sites, preferably HTTPS, and checking links before clicking them.\
-To visit odd sites and freely click around please do it in virtual machine,
+To visit odd sites and freely click around please do it in virtual machine,\
 (isolated browser session is OK too as long as you don't misconfigure it)
 
 4. Use password manager capable of auto typing passwords and with the support of virtual keyboard.\
@@ -107,7 +107,7 @@ Even if VPN provider is considered "trusted".
 avoid using addons except one to block ads, which is known to be trusted by online community.
 
 9. Keep your system and anti virus patched maximum possible, that means checking for Windows and
-anti virus updates every on daily basis.
+anti virus updates on daily basis.
 
 10. High value data and larger financial transactions should be performed on separate computer whose
 only purpose is to do this an nothing else, and to keep valueable data protected away from network.
@@ -221,7 +221,7 @@ So here is an overview to help you see what they do hopefully answering all of y
     - [git.exe][git] (To learn git version)
     - [makecab.exe][makecab] (To make online help content)
 
-7. There is nothing dangerous here
+7. There is nothing harmful here
 
    - Some scripts such as `initialize-module.ps1` will contact online PowerShell repository
    to download modules, however this happens only if you enable "development mode"
@@ -235,8 +235,6 @@ So here is an overview to help you see what they do hopefully answering all of y
    don't include any personal information such as user names, email or system details.
    - Bugs might exist which could break things, while I do my best to avoid bugs you might want to remind
    yourself that this is after all [free software][license]
-   - As you can see, there is nothing dangerous here, as long as you don't do modifications that do
-unexpected things you'll be just fine!
 
 ## Why do I get "access denied" errors
 
