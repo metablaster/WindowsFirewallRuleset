@@ -49,7 +49,7 @@ Verify following adapter items are enabled and restart adapter for any changes t
 5. Link-Layer Topology Discovery Responder
 6. Link-Layer Topology Discovery I/O Driver
 
-For more information about these items see [Adapter Items](LAN%20Setup\AdapterItems.md)
+For more information about these items see [Adapter Items][lan setup]
 
 If this doesn't work verify the command you are using, for example following command tries to get
 firewall rules from GPO and will produce this problem:
@@ -260,3 +260,4 @@ Simple rule of thumb before applying rules is the same as when you install drive
 [git]: https://git-scm.com
 [makecab]: https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/makecab "Visit Microsoft docs"
 [license]: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/LICENSE
+[lan setup]: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/LAN%20Setup/AdapterItems.md
