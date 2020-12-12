@@ -16,11 +16,10 @@
     - [Warning](#warning)
     - [Note](#note)
   - [Quick start](#quick-start)
-  - [Where are my rules](#where-are-my-rules)
+  - [Manage loaded rules](#manage-loaded-rules)
   - [Applying individual rulesets](#applying-individual-rulesets)
   - [Deleting rules](#deleting-rules)
   - [Export\Import rules](#exportimport-rules)
-  - [Manage loaded rules](#manage-loaded-rules)
   - [Checking for updates](#checking-for-updates)
   - [Contributing or suggestions](#contributing-or-suggestions)
   - [Customization](#customization)
@@ -103,7 +102,7 @@ valuable administration time.
 
 ## License
 
-This project **"Windows Firewall Ruleset"** is licensed under **MIT** license.
+This project `Windows Firewall Ruleset` is licensed under `MIT` license.
 
 License files and and Copyright notices are maintained **"per file"**.
 
@@ -322,7 +321,19 @@ If you're unable to connect to internet after applying these rules you have seve
 `WinRM` service (Windows Remote Management), the service might have been set to automatic and
 started as a prerequisite to setup firewall. (The default is "Manual" startup)
 
-## Where are my rules
+## Manage loaded rules
+
+There are 2 mothods to manage your rules:
+
+1. Using Local Group Policy, this method gives you limited freedom on what you can do with project
+rules, such as disabling them, changing some attributes or adding new rules. For more information see:
+[Manage GPO Firewall](Readme/ManageGPOFirewall.md)
+
+2. Editing PowerShell scripts, this method gives you full control, you can change or remove existing
+with no restriction or add new ones.
+
+What ever your plan or setup is, you will surely need to perform additional work such as adding more
+rules in GPO to allow programs for which rules don't exist, or to reconfigure existing rules.
 
 Rules are loaded into local group policy, follow steps below to open local group policy.
 
@@ -393,19 +404,6 @@ which is where you'll find description on how to use export\import module functi
 
 **NOTE:** Method 2 is experimental, very slow and not 100% reliable, you're advised to verify results.
 
-## Manage loaded rules
-
-There are 2 ways to manage your rules:
-
-1. Using Local Group Policy, this method gives you basic freedom on what you can do with project rules,
-such as disabling them or changing some attributes and adding new rules. For more information see:\
-[Manage GPO Firewall](Readme/ManageGPOFirewall.md)
-1. Editing PowerShell scripts, this method gives you full control, you can improve the rules,
-add new ones or screw them up.
-
-What ever your setup is, you will surely need to perform additional work such as adding more rules
-in GPO to allow programs for which rules don't exist, or to reconfigure existing rules.
-
 ## Checking for updates
 
 This repository consists of 2 branches, `master` and `develop`, develop (possibly unstable) branch is
@@ -422,7 +420,7 @@ There are two methods to be up to date with firewall:
 switch to either master or develop branch, next use "Code" button and either clone or
 download zip.
 
-1. Second method is good if you want to do it with PowerShell console without visiting this site,
+2. Second method is good if you want to do it with PowerShell console without visiting this site,
 you will need [git][download git], [github account][github join], a [fork][github fork] of this
 repository in your github account and [SSH key][github ssh] to check for new updates on daily,
 weekly or what ever other basis you want, follow steps below to check for updates once you installed
@@ -476,11 +474,14 @@ Just make sure you follow below notices:
 1. Provide some documentation or reference (preferably official) for your rules so that it can be
 easy to verify that these rules don't contain mistakes, ex. for ICMP rules you would provide a link
 to [IANA][iana] with relevant reference document.
+
 2. To suggest new rules or various rule and code improvements, please open new issue here on github
 and provide details preferably with documentation.
+
 3. To contribute rules, it is also important that each rule contains good description of it's
 purpose, when the user clicks on rule in firewall GUI he/she wants to see what this rule is about
 and easily conclude whether to enable/disable rule or allow/block network traffic.
+
 4. It is also important that the rule is very specific and not generic, that means specifying protocol,
 IP addresses, ports, system user, interface type and other relevant information.\
 For example just saying: allow TCP outbound port 2891 for my new game without telling where, why

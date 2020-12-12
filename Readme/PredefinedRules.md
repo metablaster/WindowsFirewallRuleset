@@ -21,14 +21,14 @@ grouping exceptions are listed below.
 
 Predefined group -> new group
 
-1. mDNS -> "Multicast"
-2. Core Networking -> "Core Networking - IPvX"
-3. Rules related to Wireless -> "Wireless Networking"
-4. AllJoyn Router, Proximity sharing, Connected devices, Cast to device -> "Additional Networking"
-5. Rules for store apps -> "Store Apps" and "Store Apps - System"
-6. Some Core networking rules -> "ICMP" and "Windows Services"
-7. File and printer sharing -> "File and printer sharing"
-8. Network Discovery -> "Network Discovery"
+1. mDNS -> `Multicast`
+2. Core Networking -> `Core Networking - IPvX`
+3. Multiple rule groups related to Wireless -> `Wireless Networking`
+4. AllJoyn Router, Proximity sharing, Connected devices, Cast to device -> `Additional Networking`
+5. Rules for store apps -> `Store Apps` and `Store Apps - System`
+6. Some Core networking rules -> `ICMP` and `Windows Services`
+7. File and printer sharing -> `File and printer sharing`
+8. Network Discovery -> `Network Discovery`
 
 ## Unavoidable predefined rules
 

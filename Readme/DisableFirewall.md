@@ -15,7 +15,7 @@ same steps.
 
 ## Disable GPO firewall
 
-To disable GPO firewall all you have to do is to set it to "Not Configured", which means only firewall
+To disable GPO firewall all you have to do is to set it to `Not Configured`, which means only firewall
 in Control Panel will be active, and GPO firewall will have no effect.
 
 To do this follow steps below:
@@ -26,8 +26,8 @@ To do this follow steps below:
 4. Expand node: `Windows Defender Firewall with Advanced Security`
 5. Right click on: `Windows Defender Firewall with Advanced Security - Local Group Policy Object`
 6. Select `properties` in pop up menu
-7. There are 3 tabs: "Domain", "Private" and "Public"
-8. Set "Firewall state" to "Not Configured" for all 3 profiles and click "Apply" for each
+7. There are 3 tabs: `Domain`, `Private` and `Public`
+8. Set "Firewall state" to `Not Configured` for all 3 profiles and click "Apply" for each
 9. You might need to reboot system if the effect is not immediate.
 
 ## Disable firewall in Control Panel
@@ -46,7 +46,7 @@ To disable Control Panel firewall so that only GPO firewall works follow steps b
 4. Expand node: `Windows Defender Firewall with Advanced Security`
 5. Right click on: `Windows Defender Firewall with Advanced Security - Local Group Policy Object`
 6. Select `properties` in pop up menu
-7. There are 3 tabs: "Domain", "Private" and "Public"
+7. There are 3 tabs: `Domain`, `Private` and `Public`
 8. On each tab click under `settings` click on `Customize...` button
 9. Under `Rule merging` set `Apply local firewall rules` to `No`
 
@@ -70,14 +70,14 @@ Next follow steps below:
 4. Click on `Advanced settings`
 5. Right click on node `Windows Defender Firewall with Advanced Security on Local Computer`
 6. Select `properties` in pop up menu
-7. There are 3 tabs: "Domain", "Private" and "Public"
+7. There are 3 tabs: `Domain`, `Private` and `Public`
 8. Set `Firewall state` to `Off` for all 3 profiles and click `Apply` for each
 
 When done re-enable GPO firewall
 
 ## Disable firewall completely
 
-If you want to make sure both GPO and Control Panel firewalls are allways disabled follow section
+If you want to make sure both GPO and Control Panel firewalls are allways disabled follow section\
 "Make Control Panel firewall not active in Control Panel" but do not re-enable GPO firewall at the end.
 
 You might need to reboot system if the effect is not immediate.

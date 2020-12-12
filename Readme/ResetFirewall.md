@@ -7,7 +7,8 @@ Useful if you encountered problems such as internet connectivity and you're unab
 `ResetFirewall.ps1` script file located in project root directory, or if the script file did\
 not resolve your problems.
 
-**WARNING:** These steps will not save any previous rules in GPO, all preferences will be gone.
+**WARNING:** These steps will not save any GPO rules, all preferences will be gone, resetting
+Control Panel firewall leaves only default rules shipped with system and removes the rest.
 
 ## Follow below steps to revert firewall
 
