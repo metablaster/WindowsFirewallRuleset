@@ -6,20 +6,26 @@ SHORT DESCRIPTION
 	Functions to write powershell unit tests
 
 LONG DESCRIPTION
-	These simple functions are designed for unit testing of "Windows Firewall Ruleset" project
+	Specialized functions designed for unit testing of "Windows Firewall Ruleset" project
 
 EXAMPLES
-	To start unit test:
 	Enter-Test
+	Initialize unit test
 
-	To start a new test case:
 	Start-Test
+	Start test case
 
-	To end test case:
 	Stop-Test
+	Stop test case
 
-	To exit unit test:
 	Exit-Test
+	Un-initialize and exit unit test
+
+	New-Section
+	Print new unit test section
+
+	Test-Output
+	Verify TypeName and OutputType are referring to same type
 
 KEYWORDS
 	PowerShellTest
@@ -27,4 +33,4 @@ KEYWORDS
 	Test
 
 SEE ALSO
-	https://github.com/metablaster/WindowsFirewallRuleset
+	https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Modules/Ruleset.Test/Help/en-US

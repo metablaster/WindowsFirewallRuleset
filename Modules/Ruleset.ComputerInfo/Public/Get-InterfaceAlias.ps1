@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Method to get aliases of configured adapters
+Retrieve a aliases of configured network adapters
 
 .DESCRIPTION
 Return list of interface aliases of all configured adapters.

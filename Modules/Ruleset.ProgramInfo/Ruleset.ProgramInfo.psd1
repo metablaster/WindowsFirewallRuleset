@@ -226,7 +226,6 @@ SOFTWARE.
 				"ProgramInfo"
 				"Software"
 				"SoftwareInfo"
-				"ComputerSoftware"
 			)
 
 			# A URL to the license for this module.

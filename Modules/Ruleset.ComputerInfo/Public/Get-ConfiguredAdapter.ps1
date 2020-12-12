@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Method to get configured adapters
+Retrieve a list of configured network adapters
 
 .DESCRIPTION
 Return a list of all configured adapters and their configuration.

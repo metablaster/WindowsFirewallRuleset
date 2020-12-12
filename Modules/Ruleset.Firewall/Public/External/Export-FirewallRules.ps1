@@ -40,8 +40,6 @@ If the export file already exists it's content will be replaced by default.
 
 .PARAMETER PolicyStore
 Policy store from which to export rules, default is local GPO.
-For more information about stores see:
-https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md
 
 .PARAMETER Folder
 Path into which to save file

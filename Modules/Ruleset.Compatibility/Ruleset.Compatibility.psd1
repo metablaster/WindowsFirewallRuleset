@@ -175,7 +175,11 @@ commands much as if they were native to PowerShell Core.
 		PSData = @{
 
 			# Tags applied to this module. These help with module discovery in online galleries.
-			Tags = @("WindowsPowerShell", "Compatibility", "Core")
+			Tags = @(
+				"WindowsPowerShell"
+				"Compatibility"
+				"Core"
+			)
 
 			# A URL to the license for this module.
 			LicenseUri = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Modules/Ruleset.Compatibility/LICENSE"

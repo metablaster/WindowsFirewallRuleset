@@ -30,7 +30,7 @@ using namespace System.Management.Automation.Host
 
 <#
 .SYNOPSIS
-Check if module is installed or needs update
+Update or install specified out of date module
 
 .DESCRIPTION
 Test if recommended and up to date module is installed, if not user is

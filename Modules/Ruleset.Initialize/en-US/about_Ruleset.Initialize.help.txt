@@ -35,21 +35,21 @@ LONG DESCRIPTION
 	5. Internet connection
 
 EXAMPLES
-	To make explicit project initialization:
 	Initialize-Project
+	Check complete system requirements
 
-	To make explicit services initialization:
 	Initialize-Service
+	Configure and start required system services
 
-	To make explicit modules initialization:
 	Initialize-Module
+	Update or install out of date modules
 
-	To make explicit package provider initialization:
 	Initialize-Provider
+	Update or install out of date package providers
 
 KEYWORDS
 	Initialization
 	Environment
 
 SEE ALSO
-	https://github.com/metablaster/WindowsFirewallRuleset
+	https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Modules/Ruleset.Initialize/Help/en-US

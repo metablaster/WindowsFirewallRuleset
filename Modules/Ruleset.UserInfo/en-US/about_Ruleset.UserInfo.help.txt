@@ -2,34 +2,49 @@ TOPIC
 	about_Ruleset.UserInfo
 
 SHORT DESCRIPTION
-	Query user information on Windows systems
+	Query information about Windows users and groups
 
 LONG DESCRIPTION
 	Functions in UserInfo module can be used to query information about users
-	on computer.
+	and groups on computer.
 	Currently only localhost is supported.
 
 VARIABLES
 	UsersGroupSDDL:   			SDDL string for "Users" group
 	AdministratorsGroupSDDL:	SDDL string for "Administrators" group
 
-	# SDDL strings for following system users
+	# SDDL strings for the following system account
 	NT_AUTHORITY_System
 	NT_AUTHORITY_LocalService
 	NT_AUTHORITY_NetworkService
 	NT_AUTHORITY_UserModeDrivers
 
-	CheckInitUserInfo	Variable to prevent double initialization of constants
+	CheckInitUserInfo:	Variable to prevent double initialization of constants
 
 EXAMPLES
-	To get SDDL string for accounts:
-	Get-SDDL -Domain "NT AUTHORITY" -User @("NETWORK SERVICE", "LOCAL SERVICE")
+	ConvertFrom-SID
+	Convert SID to user or computer account name
 
-	To get user SID:
-	Get-AccountSID -User "TestUser" -Computer "localhost"
+	ConvertFrom-UserAccount
+	Strip computer names out of computer accounts
 
-	To get user accounts on system:
-	Get-GroupPrincipal "Administrators" "Users"
+	Get-AccountSID
+	Get SID for giver user account
+
+	Get-GroupPrincipal
+	Get computer accounts for a given user groups on target computers
+
+	Get-GroupSID
+	Get SID of user groups for given computer
+
+	Get-SDDL
+	Generate SDDL string of multiple usernames or/and groups on a given domain
+
+	Get-UserGroup
+	Get user groups on target computers
+
+	Merge-SDDL
+	Merge 2 SDDL strings into one
 
 KEYWORDS
 	UserInfo
@@ -37,4 +52,4 @@ KEYWORDS
 	Users
 
 SEE ALSO
-	https://github.com/metablaster/WindowsFirewallRuleset
+	https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Modules/Ruleset.UserInfo/Help/en-US

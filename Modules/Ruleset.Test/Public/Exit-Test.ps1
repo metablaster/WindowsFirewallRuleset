@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Exit unit test
+Un-initialize and exit unit test
 
 .DESCRIPTION
 Exit-Test performs finishing steps after unit test is done, ie. to restore previous state

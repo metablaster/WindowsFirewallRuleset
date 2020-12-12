@@ -210,9 +210,9 @@ SOFTWARE.
 
 			# Tags applied to this module. These help with module discovery in online galleries.
 			Tags = @(
-				"IPMaths"
+				"IPMath"
 				"IPCalculator"
-				"SubnetMaths"
+				"SubnetMath"
 			)
 
 			# A URL to the license for this module.

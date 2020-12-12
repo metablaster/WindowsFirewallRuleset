@@ -46,6 +46,7 @@ None. ModulePreferences.ps1 does not generate any output
 TODO: Preferences not set/used because valid only for script modules which should not be present
 in this project
 TODO: If a script module is present in project make use of Scripts\Get-CallerPreference
+NOTE: Preferences defined in caller scope are not inherited, only from ProjectSettings.ps1
 #>
 
 # if ($Develop)

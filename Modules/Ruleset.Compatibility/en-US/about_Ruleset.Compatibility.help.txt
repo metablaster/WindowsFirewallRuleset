@@ -10,35 +10,27 @@ LONG DESCRIPTION
 
 EXAMPLES
 	Add-WindowsPSModulePath
-
 	Appends the existing Windows PowerShell PSModulePath to existing PSModulePath
 
 	Add-WinFunction
-
 	This command defines a global function that always runs in the compatibility session.
 
 	Compare-WinModule
-
 	Compare the set of modules for this version of PowerShell against those available in the compatibility session.
 
 	Copy-WinModule
-
 	Copy modules from the compatibility session that are directly usable in PowerShell Core.
 
 	Get-WinModule
-
 	Get a list of the available modules from the compatibility session
 
 	Import-WinModule
-
 	Import a compatibility module.
 
 	Initialize-WinSession
-
 	Initialize the connection to the compatibility session.
 
 	Invoke-WinCommand
-
 	Invoke a ScriptBlock that runs in the compatibility runspace.
 
 KEYWORDS
@@ -47,5 +39,5 @@ KEYWORDS
 	Core
 
 SEE ALSO
-	https://github.com/metablaster/WindowsFirewallRuleset/tree/develop/Modules/Ruleset.Compatibility/Help
+	https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Modules/Ruleset.Compatibility/Help/en-US
 	https://github.com/PowerShell/WindowsCompatibility

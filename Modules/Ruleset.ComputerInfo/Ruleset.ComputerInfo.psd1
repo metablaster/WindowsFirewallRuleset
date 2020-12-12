@@ -60,7 +60,7 @@ SOFTWARE.
 	Copyright = "Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch"
 
 	# Description of the functionality provided by this module
-	Description = "Module to query computer information for 'Windows Firewall Ruleset' project"
+	Description = "Module to query computer, system and network information for 'Windows Firewall Ruleset' project"
 
 	# Minimum version of the Windows PowerShell engine required by this module
 	PowerShellVersion = "5.1"

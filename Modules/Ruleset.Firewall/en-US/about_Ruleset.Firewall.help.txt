@@ -24,11 +24,11 @@ EXAMPLES
 	Remove-FirewallRules
 	Removes specified firewall rules according to a list in the CSV or JSON file in the specified path.
 
-	Net-NewFirewallRule ... | Format-Output
-	Format output of the Net-NewFirewallRule commandlet
+	Get all firewall rules with or without LocalUser value, rules without this value are considered weak
+	Find-RulePrincipal
 
-	To query weak rules with no LocalUser value
-	Test-PrincipalRule -Empty
+	Format-Output
+	Format output of the Net-NewFirewallRule commandlet
 
 KEYWORDS
     Audit
@@ -38,4 +38,4 @@ KEYWORDS
 	FirewallRule
 
 SEE ALSO
-	https://github.com/metablaster/WindowsFirewallRuleset
+	https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Modules/Ruleset.Firewall/Help/en-US

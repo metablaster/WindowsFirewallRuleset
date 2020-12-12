@@ -3,27 +3,36 @@ TOPIC
 	about_Ruleset.ComputerInfo
 
 SHORT DESCRIPTION
-	Query information about computer and network configuration
+	Query computer, system and network information
 
 LONG DESCRIPTION
 	Functions in Ruleset.ComputerInfo module can be used to query information about computer,
 	operating system and network configuration, currently supported only for localhost.
 
 EXAMPLES
-	To get IPv4 address for computer:
-	Get-IPAddress IPv4
+	ConvertFrom-OSBuild
+	Convert from OS build number to OS version
 
-	To get computer name:
-	Get-ComputerName
-
-	To get broadcast address:
 	Get-Broadcast
+	Get broadcast addresses on the local machine
 
-	To get list of configured adapters
-	Get-ConfiguredAdapter IPv6
+	Get-ComputerName
+	Retrieves localhost NETBIOS name
 
-	To get list of interface aliases
-	Get-InterfaceAlias IPV4
+	Get-ConfiguredAdapter
+	Retrieve a list of configured network adapters
+
+	Get-InterfaceAlias
+	Retrieve a aliases of configured network adapters
+
+	Get-IPAddress IPv4
+	Retrieve a list of IP addresses on local machine
+
+	Get-SystemSKU
+	Get operating system SKU information
+
+	Test-TargetComputer
+	Test target computer (policy store) on which to apply firewall
 
 KEYWORDS
 	ComputerInfo
@@ -32,4 +41,4 @@ KEYWORDS
 	NetworkInfo
 
 SEE ALSO
-	https://github.com/metablaster/WindowsFirewallRuleset
+	https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Modules/Ruleset.ComputerInfo/Help/en-US

@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Method to get list of IP addresses on local machine
+Retrieve a list of IP addresses on local machine
 
 .DESCRIPTION
 Returns list of IPAddress objects for all configured adapters.

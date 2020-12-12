@@ -14,16 +14,52 @@ VARIABLES
 	CheckInitUtility:	Purpose is to prevent double initialization of constants
 
 EXAMPLES
-	To system services involved in firewall rules
-	Get-NetworkService
+	Approve-Execute
+	Used to prompt user to approve running script
 
-	To prompt user to set recommended screen buffer
+	Compare-Path
+	Compare 2 paths for equality or similarity
+
+	Confirm-FileEncoding
+	Verify file is correctly encoded
+
+	Convert-SDDLToACL
+	Convert SDDL string to ACL
+
+	Get-EnvironmentVariable
+	Get a group of environment variables
+
+	Get-FileEncoding
+	Gets the encoding of a file
+
+	Get-NetworkService
+	Get a list of windows services involved in rules
+
+	Get-ProcessOutput
+	Run process and capture output
+
+	Get-TypeName
+	Get .NET outputs of a commandlet or convert to/from type accelerator
+
+	Set-NetworkProfile
+	Set network profile for physical network interfaces
+
+	Set-Permission
+	Take ownership or set permissions on file system or registry object
+
 	Set-ScreenBuffer
+	Set vertical screen buffer to recommended value
+
+	Show-SDDL
+	Show-SDDL returns SDDL based on "object" such as path, or registry entry
+
+	Update-Context
+	Update context for Approve-Execute function
 
 KEYWORDS
-	Firewall
-	FirewallModule
-	FirewallHelper
+	Utility
+	FirewallUtility
+	Helper
 
 SEE ALSO
-	https://github.com/metablaster/WindowsFirewallRuleset
+	https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Modules/Ruleset.Utility/Help/en-US

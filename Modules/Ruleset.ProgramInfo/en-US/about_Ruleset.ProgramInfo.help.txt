@@ -12,21 +12,71 @@ LONG DESCRIPTION
 	Querying remote computers is currently only partially supported.
 
 EXAMPLES
-	To get Windows defender instance:
-	Get-WindowsDefender COMPUTERNAME
+	Find-Installation
+	Find installation directory for given predefined program name
 
-	To get installed WindowsSDK:
-	Get-WindowsSDK COMPUTERNAME
+	Format-Path
+	Format path into firewall compatible path
 
-	To get SID for store app:
-	Get-AppSID "User" "Microsoft.MicrosoftEdge_8wekyb3d8bbwe"
+	Get-AllUserSoftware
+	Search program install properties for all users, system wide
+
+	Get-AppCapability
+	Get capabilities of Windows store app
+
+	Get-AppSID
+	Get store app SID
+
+	Get-ExecutablePath
+	Get list of install locations for executables and executable names
+
+	Get-NetFramework
+	Get installed NET Frameworks
+
+	Get-OneDrive
+	Get One Drive information for specific user
+
+	Get-SqlManagementStudio
+	Get installed Microsoft SQL Server Management Studios
+
+	Get-SqlServerInstance
+	Retrieves SQL server information from a local or remote servers.
+
+	Get-SystemApps
+	Get store apps installed system wide
+
+	Get-UserApps
+	Search installed programs for all users, system wide
+
+	Get-UserSoftware
+	Get a list of programs installed by specific user
+
+	Get-WindowsDefender
+	Get installed Windows Defender
+
+	Get-WindowsKit
+	Get installed Windows Kits
+
+	Get-WindowsSDK
+	Get installed Windows SDK
+
+	Test-Environment
+	Test if a path is valid with additional checks
+
+	Test-File
+	Check if file such as an *.exe exists
+
+	Test-Installation
+	Test if given installation directory is valid
+
+	Test-Service
+	Check if service exists on system
 
 KEYWORDS
 	Program
 	ProgramInfo
 	Software
 	SoftwareInfo
-	ComputerSoftware
 
 SEE ALSO
-	https://github.com/metablaster/WindowsFirewallRuleset
+	https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Modules/Ruleset.ProgramInfo/Help/en-US

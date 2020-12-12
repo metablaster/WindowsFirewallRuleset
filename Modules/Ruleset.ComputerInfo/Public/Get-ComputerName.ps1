@@ -28,10 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Get localhost name
+Retrieve localhost NETBIOS name
 
 .DESCRIPTION
-TODO: add description
+Retrieve localhost NETBIOS name
 
 .EXAMPLE
 PS> Get-ComputerName

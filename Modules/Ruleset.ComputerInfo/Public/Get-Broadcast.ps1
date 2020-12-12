@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Method to get broadcast addresses on local machine
+Get broadcast addresses on the local machine
 
 .DESCRIPTION
 Return broadcast addresses, for each configured adapter.

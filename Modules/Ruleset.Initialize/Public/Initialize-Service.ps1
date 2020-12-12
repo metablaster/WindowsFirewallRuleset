@@ -30,7 +30,7 @@ using namespace System.Management.Automation.Host
 
 <#
 .SYNOPSIS
-Check if required system services are started
+Configure and start specified system services
 
 .DESCRIPTION
 Test if required system services are started, if not all services on which target service depends
