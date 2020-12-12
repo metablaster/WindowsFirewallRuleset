@@ -52,7 +52,7 @@ additional requirement checks.
 ## Target platform variable
 
 Edit individual ruleset scripts, and take a look which rules you want or need to be loaded on
-that system,\
+target system,\
 then simply replace ```-Platform $Platform``` with ie. ```-Platform $PlatformWin7```
 for each rule you want.
 
@@ -74,13 +74,13 @@ or alternatively revisit your edits and re-run individual scripts again.
 It's hard to tell what software or module dependencies might be required for your target environment,
 and once you learn that you should modify version requirements in `Config\ProjectSettings.ps1`
 
-For example .NET framework version 4.5 for Windows PowerShell may be absolute minimum to be able to
-use some commandlets from modules provided by Microsoft.
+For example .NET framework version 4.5 for Windows PowerShell may be required to be able to use some
+commandlets from modules, either those which ship with Windows or those which are part of this repository.
 
 ## Testing
 
-To save you some time debugging you should also run code analysis with [PSScriptAnalyzer][module psscriptanalyzer]
-with the following rules enabled:
+To save yourself some time debugging you should also run code analysis with
+[PSScriptAnalyzer][module psscriptanalyzer] with the following rules enabled:
 
 1. PSUseCompatibleCmdlets
 2. PSUseCompatibleSyntax

@@ -1,8 +1,8 @@
 
 # Command Help
 
-Powershell and other commands and command samples which are here primarily to quickly copy/paste
-them as needed, to recall things or to perform specific console tasks useful for Windows firewall
+Powershell and other commands and command samples are here primarily to quickly copy/paste them as
+needed, to recall things or to perform specific console tasks useful for Windows firewall
 development as opposed to running scripts.
 
 In addition to the table below, see:
@@ -65,15 +65,13 @@ In addition to the table below, see:
 
 There are two categories:
 
-1. Apps - All other apps, installed in C:\Program Files\WindowsApps. There are two classes of apps:
-    1. Provisioned: Installed in user account the first time you sign in with a new user account.
-    2. Installed: Installed as part of the OS.
-2. System apps - Apps that are installed in the C:\Windows* directory.
+1. Apps - All other apps, installed in `C:\Program Files\WindowsApps`. There are two classes of apps:
+    - Provisioned: Installed in user account the first time you sign in with a new user account.
+    - Installed: Installed as part of the OS.
+2. System apps - Apps that are installed in the `C:\Windows\*` directory.
 These apps are integral to the OS.
 
 ### List all system apps beginning with word "Microsoft"
-
-We use word "Microsoft" to filter out junk
 
 ```powershell
 Get-AppxPackage -PackageTypeFilter Main |
@@ -115,10 +113,10 @@ Select-Object -ExpandProperty Name
 ### Update store apps
 
 ```powershell
-$namespaceName = "root\cimv2\mdm\dmmap"
-$className = "MDM_EnterpriseModernAppManagement_AppManagement01"
-$wmiObj = Get-WmiObject -Namespace $namespaceName -Class $className
-$result = $wmiObj.UpdateScanMethod()
+$NamespaceName = "root\cimv2\mdm\dmmap"
+$ClassName = "MDM_EnterpriseModernAppManagement_AppManagement01"
+$WmiObj = Get-WmiObject -Namespace $NamespaceName -Class $ClassName
+$Result = $WmiObj.UpdateScanMethod()
 ```
 
 OR

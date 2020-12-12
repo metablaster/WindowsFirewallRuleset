@@ -537,9 +537,8 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 		# https://docs.microsoft.com/en-us/powershell/scripting/windows-powershell/install/windows-powershell-system-requirements?view=powershell-7.1
 		# NOTE: v1703 includes .NET 4.7
 		# NOTE: v1903-v2004 includes .NET 4.8
-		# TODO: Last test on Server 2019 which comes with .NET 4.7 run just fine,
-		# modules loaded even though .NET 4.8 is specified as minimum required
-		New-Variable -Name RequireNETVersion -Scope Global -Option Constant -Value ([version]::new(4, 8, 0))
+		# NOTE: Maximum allowed value to specify in manifest is 4.5
+		New-Variable -Name RequireNETVersion -Scope Global -Option Constant -Value ([version]::new(4, 5, 0))
 
 		# Recommended minimum VSCode version, do not decrement!
 		New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 52, 0))

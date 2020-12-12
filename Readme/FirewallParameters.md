@@ -249,18 +249,18 @@ Both of which are applied only if a packet meet the specified rule conditions
 
 ## Unicast response
 
-The option "Allow unicast response to multicast or broadcast traffic"
+The option `Allow unicast response to multicast or broadcast traffic`
 
 Prevents this computer from receiving unicast responses to its outgoing multicast or broadcast messages.
 
-If you set this setting to "Yes (default)", and this computer sends a multicast or broadcast message
+If you set this setting to `Yes (default)`, and this computer sends a multicast or broadcast message
 to other computers, Windows Defender Firewall waits as long as three seconds for unicast responses
 from the other computers and then blocks all later responses.
 
-Otherwise if you set the option to "No", Windows Defender Firewall blocks the unicast responses
+Otherwise if you set the option to `No`, Windows Defender Firewall blocks the unicast responses
 sent by those other computers.
 
-"Not configured" is equivalent to "Yes (default)" as long as control panel firewall does not
+`Not configured` is equivalent to `Yes (default)` as long as control panel firewall does not
 override this option.
 
 **NOTE:** This setting has no effect if the unicast message is a response to a DHCP broadcast message

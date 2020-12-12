@@ -78,55 +78,65 @@ If none of this works even after reboot, following link might help:
 Good firewall setup is essential for computer security, and, if not misused then the answer is yes
 but only for the firewall part of protection.
 
-For maximum security you need much more than just good firewall, here is a minimum list:
+For maximum security you'll need much more than just good firewall, here is a minimum list:
 
 1. Using non Administrative Windows account for almost all use.\
-Administrative account should be used for administration only.
+Administrative account should be used for administration only, preferably offline.
 
 2. Installing and running only digitally signed software, and only those publishers you trust.\
 Installing cracks, warez and similar is the most common way to let hackers in.
 
-3. Visiting only trusted web sites, preferably HTTPS, and checking links before clicking them.\
+3. Visit only known trusted web sites, preferably HTTPS, and check links before clicking them.\
 To visit odd sites and freely click around please do it in virtual machine,\
-(isolated browser session is OK too as long as you don't misconfigure it)
+(isolated browser session is OK too, as long as you don't misconfigure it)
 
 4. Use password manager capable of auto typing passwords and with the support of virtual keyboard.\
 Don't use hardware keyboard to type passwords.
 Your passwords should meet length and complexity requirements.
+Never use same password to log in to multiple places, use unique password for each login.
 
-5. Don't let your email program or web interface to auto load mail content.\
+5. Don't let your email program or web interface auto load mail content.\
 Also important not to open attachments you don't recognize or didn't ask for.
 
 6. Never disable antivirus or firewall except to troubleshoot issues.\
 Btw. Troubleshooting doesn't include installing software or visiting some web site.
 
-7. VPN is not recommended except for business or to bypass your IP ban.\
+7. VPN is not recommended except for business or to bypass your IP or geolocation ban.\
 Even if VPN provider is considered "trusted".
 
 8. Protect your web browser maximum possible by restrictively adjusting settings, and
 avoid using addons except one to block ads, which is known to be trusted by online community.
 
-9. Keep your system and anti virus patched maximum possible, that means checking for Windows and
-anti virus updates on daily basis.
+9. When it comes to privacy, briefly, there 2 very different defense categories:
 
-10. High value data and larger financial transactions should be performed on separate computer whose
+   - Prevent identity theft, this is worse than loosing data, being hacked or just being spied on
+   Go ahead and study worse identity theft cases and you'll understand
+
+   - Hide your activity, is what people usually refer to when talking about "privacy"
+   Understanding the difference is important, because how do you defend if the threat is unknown?
+
+10. Keep your operating system and anti virus patched maximum possible, that means checking for
+system and virus updates on daily basis.
+
+11. High value data and larger financial transactions should be performed on separate computer whose
 only purpose is to do this an nothing else, and to keep valueable data protected away from network.
 
-11. Encrypt your valueable hard drives or individual files, for computers such as those in point 10,
+12. Encrypt your valueable hard drives or individual files, for computers such as those in point 10,
 this is requirement not suggestion.
 
-12. Always keep a backup of everything on at least 1 drive that is offline and away from online machine.
+13. Always keep a backup of everything on at least 1 drive that is offline and away from online machine.
+If you have to bring it online, take down the rest of network.
 
-If you don't follow these rules, no firewall, anti virus or security expert is going to help you.\
-Usually the purpose of firewall or anti virus is to protect yourself from your own mistakes.
+If you don't follow this list, no firewall, anti virus or security expert is going to help much.\
+Usually the purpose of a firewall, anti virus or a paid expert is to protect you from your own mistakes.
 
 Remember, the most common ways for hackers "getting in" and stealing data is when **YOU** make a mistake!
 (not because of their skills)
 
-If you recognize your mistakes from these rules on regular basis, your system or network simply
-can't be trusted, only hard drive reformat and clean reinstall of operating system can regain trust
-to original value, in 99% of cases (hopefully) you won't need to throw your expensive hardware into
-trash can.
+If you recognize your mistakes from this list on regular basis, your system or network simply cannot
+be trusted, only hard drive reformat, network reset and clean reinstall of operating systems can regain
+trust to original value, in 99% of cases (hopefully) you won't need to throw your expensive hardware
+into trash can.
 
 ## Windows Firewall does not write logs
 
@@ -137,21 +147,21 @@ To resolve this issue ensure following:
 1. Verify current logging setting is enabled and is pointing to expected log file location.
 
     To verify this, open firewall properties in GPO and select current network profile tab,
-    - Under logging section click on "Customize" button
+    - Under logging section click on `Customize...` button
     - Under `Name` verify location to log file is correct
     - Under `Log dropped packet` make sure it's set to `Yes`
 
-2. Verify that both the target folder and all the logs inside that folder have write permission\
-for Windows Firewall service which is `"NT SERVICE\mpssvc"`
+2. Verify that both the target folder and all the logs inside that logs directory grants write
+permission for Windows Firewall service which is `"NT SERVICE\mpssvc"`
 
 3. For changes to take effect save your modifications and reboot system
 
-Keep in mind that setting additional permissions afterwards will be reset by Windows Firewall service
+Keep in mind that setting additional permissions afterwards will be reset by Windows firewall service
 on every system boot or firewall setting change for security reasons.\
 If this doesn't resolve the problem remove all log files inside target directory, to be able to do this,
-you'll have to instruct firewall to write to different location to set your logs free then reboot system.
+you'll have to instruct firewall to write to different location to set your logs free, then reboot system.
 
-Btw. firewall service can not be stopped or manipulated directly.
+Btw. firewall service can't be stopped or manipulated in any way except trough UI followed by reboot.
 
 ## Can I trust scripts from this repository
 
@@ -231,14 +241,14 @@ So here is an overview to help you see what they do hopefully answering all of y
    - "development mode" may be enabled by default on `develop` branch but never on `master` branch
    - The scripts will gather all sorts of system information but only as required to configure firewall,
    none of this information is ever sent anywhere, once you close down PowerShell it's all cleared.
-   - If you publish your code modifications online (ex. to your fork) make sure your modification
+   - If you publish your code modifications online (ex. to your fork) make sure your modifications
    don't include any personal information such as user names, email or system details.
    - Bugs might exist which could break things, while I do my best to avoid bugs you might want to remind
    yourself that this is after all [free software][license]
 
 ## Why do I get "access denied" errors
 
-You may see this error while loading firewall rules.
+You might see this error while loading firewall rules.
 
 In almost all cases this happens when `gpedit.msc` or `secpol.msc` is opened, especially if you
 do something with them (ex. refreshing group policy, viewing or modifying settings/rules)

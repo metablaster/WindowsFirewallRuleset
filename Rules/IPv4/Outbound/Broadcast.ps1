@@ -79,6 +79,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 #
 # Broadcast rules
+# TODO: Broadcast rules won't work for default switch in VM which changes IP on reboot?
 #
 
 New-NetFirewallRule -DisplayName "Limited Broadcast" `
