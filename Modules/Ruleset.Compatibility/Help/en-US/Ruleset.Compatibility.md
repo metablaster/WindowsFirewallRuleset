@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.Compatibility
 Module Guid: eb203a5b-d397-4909-9fe9-00b0f083f36a
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.8.1
-Help Version: 0.8.1
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.9.0
+Help Version: 0.9.0
 Locale: en-US
 ---
 

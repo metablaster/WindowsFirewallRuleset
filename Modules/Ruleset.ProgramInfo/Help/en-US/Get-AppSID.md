@@ -14,7 +14,7 @@ Get store app SID
 ## SYNTAX
 
 ```none
-Get-AppSID [-UserName] <String> [-AppName] <String> [<CommonParameters>]
+Get-AppSID [-AppName] <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -31,22 +31,6 @@ sample: Get-AppSID "User" "Microsoft.MicrosoftEdge_8wekyb3d8bbwe"
 
 ## PARAMETERS
 
-### -UserName
-
-Username for which to query app SID
-
-```yaml
-Type: System.String
-Parameter Sets: (All)
-Aliases: User
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -AppName
 
 "PackageFamilyName" string
@@ -57,7 +41,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 2
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

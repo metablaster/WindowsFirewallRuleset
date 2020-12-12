@@ -5,7 +5,7 @@ online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/maste
 schema: 2.0.0
 ---
 
-# Get-SQLManagementStudio
+# Get-SqlManagementStudio
 
 ## SYNOPSIS
 
@@ -14,7 +14,7 @@ Get installed Microsoft SQL Server Management Studios
 ## SYNTAX
 
 ```none
-Get-SQLManagementStudio [[-ComputerName] <String>] [<CommonParameters>]
+Get-SqlManagementStudio [[-ComputerName] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -57,7 +57,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to Get-SQLManagementStudio
+### None. You cannot pipe objects to Get-SqlManagementStudio
 
 ## OUTPUTS
 

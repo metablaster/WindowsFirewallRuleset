@@ -14,7 +14,7 @@ Initialize unit test
 ## SYNTAX
 
 ```none
-Enter-Test [-File] <String> [-Private] [-WhatIf] [-Confirm] [<CommonParameters>]
+Enter-Test [-Private] [-Pester] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -33,25 +33,25 @@ Enter-Test "Get-Something.ps1"
 
 ## PARAMETERS
 
-### -File
+### -Private
 
-{{ Fill File Description }}
+If specified temporarily exports private module functions into global scope
 
 ```yaml
-Type: System.String
+Type: System.Management.Automation.SwitchParameter
 Parameter Sets: (All)
 Aliases:
 
-Required: True
-Position: 1
-Default value: None
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Private
+### -Pester
 
-If specified temporarily exports private module functions into global scope
+Should be specified to enter private function pester test
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

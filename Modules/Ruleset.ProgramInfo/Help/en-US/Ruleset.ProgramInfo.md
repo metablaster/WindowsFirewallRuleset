@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.ProgramInfo
 Module Guid: 49f11777-b8b6-4fed-bd82-32c8f48db81e
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.8.0
-Help Version: 0.8.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.9.0
+Help Version: 0.9.0
 Locale: en-US
 ---
 
@@ -46,13 +46,13 @@ Get installed NET Frameworks
 
 Get One Drive information for specific user
 
-### [Get-SQLInstance](Get-SQLInstance.md)
-
-Retrieves SQL server information from a local or remote servers.
-
-### [Get-SQLManagementStudio](Get-SQLManagementStudio.md)
+### [Get-SqlManagementStudio](Get-SqlManagementStudio.md)
 
 Get installed Microsoft SQL Server Management Studios
+
+### [Get-SqlServerInstance](Get-SqlServerInstance.md)
+
+Retrieves SQL server information from a local or remote servers.
 
 ### [Get-SystemApps](Get-SystemApps.md)
 
@@ -97,3 +97,4 @@ Test if given installation directory is valid
 ### [Test-Service](Test-Service.md)
 
 Check if service exists on system
+

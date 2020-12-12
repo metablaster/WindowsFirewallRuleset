@@ -166,7 +166,7 @@ if ($ModuleName)
 }
 
 Update-Context $ScriptContext $ThisScript
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe)) { exit }
 #endregion
 
 Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"

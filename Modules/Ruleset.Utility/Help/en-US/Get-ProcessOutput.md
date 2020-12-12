@@ -125,7 +125,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [string] If the 'Format' parameter is not specified
+### [string] If the "Format" parameter is not specified
 
 ## NOTES
 

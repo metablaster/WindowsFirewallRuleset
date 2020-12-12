@@ -1,969 +1,990 @@
 <?xml version="1.0" encoding="utf-8"?>
-<helpItems schema="maml"
-	xmlns="http://msh">
-	<command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10"
-		xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10"
-		xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10"
-		xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
-		<command:details>
-			<command:name>Export-FirewallRules</command:name>
-			<command:verb>Export</command:verb>
-			<command:noun>FirewallRules</command:noun>
-			<maml:description>
-				<maml:para>Exports firewall rules to a CSV or JSON file.</maml:para>
-			</maml:description>
-		</command:details>
-		<maml:description>
-			<maml:para>Exports firewall rules to a CSV or JSON file. Only local GPO rules are exported by default. CSV files are semicolon separated (Beware! Excel is not friendly to CSV files). All rules are exported by default, you can filter with parameter -Name, -Inbound, -Outbound, -Enabled, -Disabled, -Allow and -Block. If the export file already exists it's content will be replaced by default.</maml:para>
-		</maml:description>
-		<command:syntax>
-			<command:syntaxItem>
-				<maml:name>Export-FirewallRules</maml:name>
-				<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
-					<maml:name>PolicyStore</maml:name>
-					<maml:Description>
-						<maml:para>Policy store from which to export rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md</maml:para>
-					</maml:Description>
-					<command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-					<dev:type>
-						<maml:name>System.String</maml:name>
-						<maml:uri />
-					</dev:type>
-					<dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
-				</command:parameter>
-				<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
-					<maml:name>Folder</maml:name>
-					<maml:Description>
-						<maml:para>Path into which to save file</maml:para>
-					</maml:Description>
-					<command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-					<dev:type>
-						<maml:name>System.String</maml:name>
-						<maml:uri />
-					</dev:type>
-					<dev:defaultValue>.</dev:defaultValue>
-				</command:parameter>
-				<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
-					<maml:name>FileName</maml:name>
-					<maml:Description>
-						<maml:para>Output file, default is JSON format</maml:para>
-					</maml:Description>
-					<command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-					<dev:type>
-						<maml:name>System.String</maml:name>
-						<maml:uri />
-					</dev:type>
-					<dev:defaultValue>FirewallRules</dev:defaultValue>
-				</command:parameter>
-				<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
-					<maml:name>DisplayName</maml:name>
-					<maml:Description>
-						<maml:para>Display name of the rules to be processed. Wildcard character * is allowed.</maml:para>
-					</maml:Description>
-					<command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-					<dev:type>
-						<maml:name>System.String</maml:name>
-						<maml:uri />
-					</dev:type>
-					<dev:defaultValue>*</dev:defaultValue>
-				</command:parameter>
-				<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none">
-					<maml:name>DisplayGroup</maml:name>
-					<maml:Description>
-						<maml:para>Display group of the rules to be processed. Wildcard character * is allowed.</maml:para>
-					</maml:Description>
-					<command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-					<dev:type>
-						<maml:name>System.String</maml:name>
-						<maml:uri />
-					</dev:type>
-					<dev:defaultValue>*</dev:defaultValue>
-				</command:parameter>
-				<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-					<maml:name>JSON</maml:name>
-					<maml:Description>
-						<maml:para>Output in JSON instead of CSV format</maml:para>
-					</maml:Description>
-					<dev:type>
-						<maml:name>System.Management.Automation.SwitchParameter</maml:name>
-						<maml:uri />
-					</dev:type>
-					<dev:defaultValue>False</dev:defaultValue>
-				</command:parameter>
-				<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-					<maml:name>Inbound</maml:name>
-					<maml:Description>
-						<maml:para>Export inbound rules</maml:para>
-					</maml:Description>
-					<dev:type>
-						<maml:name>System.Management.Automation.SwitchParameter</maml:name>
-						<maml:uri />
-					</dev:type>
-					<dev:defaultValue>False</dev:defaultValue>
-				</command:parameter>
-				<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-					<maml:name>Outbound</maml:name>
-					<maml:Description>
-						<maml:para>Export outbound rules</maml:para>
-					</maml:Description>
-					<dev:type>
-						<maml:name>System.Management.Automation.SwitchParameter</maml:name>
-						<maml:uri />
-					</dev:type>
-					<dev:defaultValue>False</dev:defaultValue>
-				</command:parameter>
-				<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-					<maml:name>Enabled</maml:name>
-					<maml:Description>
-						<maml:para>Export enabled rules</maml:para>
-					</maml:Description>
-					<dev:type>
-						<maml:name>System.Management.Automation.SwitchParameter</maml:name>
-						<maml:uri />
-					</dev:type>
-					<dev:defaultValue>False</dev:defaultValue>
-				</command:parameter>
-				<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-					<maml:name>Disabled</maml:name>
-					<maml:Description>
-						<maml:para>Export disabled rules</maml:para>
-					</maml:Description>
-					<dev:type>
-						<maml:name>System.Management.Automation.SwitchParameter</maml:name>
-						<maml:uri />
-					</dev:type>
-					<dev:defaultValue>False</dev:defaultValue>
-				</command:parameter>
-				<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-					<maml:name>Allow</maml:name>
-					<maml:Description>
-						<maml:para>Export allowing rules</maml:para>
-					</maml:Description>
-					<dev:type>
-						<maml:name>System.Management.Automation.SwitchParameter</maml:name>
-						<maml:uri />
-					</dev:type>
-					<dev:defaultValue>False</dev:defaultValue>
-				</command:parameter>
-				<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-					<maml:name>Block</maml:name>
-					<maml:Description>
-						<maml:para>Export blocking rules</maml:para>
-					</maml:Description>
-					<dev:type>
-						<maml:name>System.Management.Automation.SwitchParameter</maml:name>
-						<maml:uri />
-					</dev:type>
-					<dev:defaultValue>False</dev:defaultValue>
-				</command:parameter>
-				<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-					<maml:name>Append</maml:name>
-					<maml:Description>
-						<maml:para>Append exported rules to existing file instead of replacing</maml:para>
-					</maml:Description>
-					<dev:type>
-						<maml:name>System.Management.Automation.SwitchParameter</maml:name>
-						<maml:uri />
-					</dev:type>
-					<dev:defaultValue>False</dev:defaultValue>
-				</command:parameter>
-			</command:syntaxItem>
-		</command:syntax>
-		<command:parameters>
-			<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
-				<maml:name>PolicyStore</maml:name>
-				<maml:Description>
-					<maml:para>Policy store from which to export rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md</maml:para>
-				</maml:Description>
-				<command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-				<dev:type>
-					<maml:name>System.String</maml:name>
-					<maml:uri />
-				</dev:type>
-				<dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
-			</command:parameter>
-			<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
-				<maml:name>Folder</maml:name>
-				<maml:Description>
-					<maml:para>Path into which to save file</maml:para>
-				</maml:Description>
-				<command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-				<dev:type>
-					<maml:name>System.String</maml:name>
-					<maml:uri />
-				</dev:type>
-				<dev:defaultValue>.</dev:defaultValue>
-			</command:parameter>
-			<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
-				<maml:name>FileName</maml:name>
-				<maml:Description>
-					<maml:para>Output file, default is JSON format</maml:para>
-				</maml:Description>
-				<command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-				<dev:type>
-					<maml:name>System.String</maml:name>
-					<maml:uri />
-				</dev:type>
-				<dev:defaultValue>FirewallRules</dev:defaultValue>
-			</command:parameter>
-			<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
-				<maml:name>DisplayName</maml:name>
-				<maml:Description>
-					<maml:para>Display name of the rules to be processed. Wildcard character * is allowed.</maml:para>
-				</maml:Description>
-				<command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-				<dev:type>
-					<maml:name>System.String</maml:name>
-					<maml:uri />
-				</dev:type>
-				<dev:defaultValue>*</dev:defaultValue>
-			</command:parameter>
-			<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none">
-				<maml:name>DisplayGroup</maml:name>
-				<maml:Description>
-					<maml:para>Display group of the rules to be processed. Wildcard character * is allowed.</maml:para>
-				</maml:Description>
-				<command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-				<dev:type>
-					<maml:name>System.String</maml:name>
-					<maml:uri />
-				</dev:type>
-				<dev:defaultValue>*</dev:defaultValue>
-			</command:parameter>
-			<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-				<maml:name>JSON</maml:name>
-				<maml:Description>
-					<maml:para>Output in JSON instead of CSV format</maml:para>
-				</maml:Description>
-				<command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-				<dev:type>
-					<maml:name>System.Management.Automation.SwitchParameter</maml:name>
-					<maml:uri />
-				</dev:type>
-				<dev:defaultValue>False</dev:defaultValue>
-			</command:parameter>
-			<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-				<maml:name>Inbound</maml:name>
-				<maml:Description>
-					<maml:para>Export inbound rules</maml:para>
-				</maml:Description>
-				<command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-				<dev:type>
-					<maml:name>System.Management.Automation.SwitchParameter</maml:name>
-					<maml:uri />
-				</dev:type>
-				<dev:defaultValue>False</dev:defaultValue>
-			</command:parameter>
-			<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-				<maml:name>Outbound</maml:name>
-				<maml:Description>
-					<maml:para>Export outbound rules</maml:para>
-				</maml:Description>
-				<command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-				<dev:type>
-					<maml:name>System.Management.Automation.SwitchParameter</maml:name>
-					<maml:uri />
-				</dev:type>
-				<dev:defaultValue>False</dev:defaultValue>
-			</command:parameter>
-			<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-				<maml:name>Enabled</maml:name>
-				<maml:Description>
-					<maml:para>Export enabled rules</maml:para>
-				</maml:Description>
-				<command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-				<dev:type>
-					<maml:name>System.Management.Automation.SwitchParameter</maml:name>
-					<maml:uri />
-				</dev:type>
-				<dev:defaultValue>False</dev:defaultValue>
-			</command:parameter>
-			<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-				<maml:name>Disabled</maml:name>
-				<maml:Description>
-					<maml:para>Export disabled rules</maml:para>
-				</maml:Description>
-				<command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-				<dev:type>
-					<maml:name>System.Management.Automation.SwitchParameter</maml:name>
-					<maml:uri />
-				</dev:type>
-				<dev:defaultValue>False</dev:defaultValue>
-			</command:parameter>
-			<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-				<maml:name>Allow</maml:name>
-				<maml:Description>
-					<maml:para>Export allowing rules</maml:para>
-				</maml:Description>
-				<command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-				<dev:type>
-					<maml:name>System.Management.Automation.SwitchParameter</maml:name>
-					<maml:uri />
-				</dev:type>
-				<dev:defaultValue>False</dev:defaultValue>
-			</command:parameter>
-			<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-				<maml:name>Block</maml:name>
-				<maml:Description>
-					<maml:para>Export blocking rules</maml:para>
-				</maml:Description>
-				<command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-				<dev:type>
-					<maml:name>System.Management.Automation.SwitchParameter</maml:name>
-					<maml:uri />
-				</dev:type>
-				<dev:defaultValue>False</dev:defaultValue>
-			</command:parameter>
-			<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-				<maml:name>Append</maml:name>
-				<maml:Description>
-					<maml:para>Append exported rules to existing file instead of replacing</maml:para>
-				</maml:Description>
-				<command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-				<dev:type>
-					<maml:name>System.Management.Automation.SwitchParameter</maml:name>
-					<maml:uri />
-				</dev:type>
-				<dev:defaultValue>False</dev:defaultValue>
-			</command:parameter>
-		</command:parameters>
-		<command:inputTypes>
-			<command:inputType>
-				<dev:type>
-					<maml:name>None. You cannot pipe objects to Export-FirewallRules</maml:name>
-				</dev:type>
-				<maml:description>
-					<maml:para></maml:para>
-				</maml:description>
-			</command:inputType>
-		</command:inputTypes>
-		<command:returnValues>
-			<command:returnValue>
-				<dev:type>
-					<maml:name>None. Export-FirewallRules does not generate any output</maml:name>
-				</dev:type>
-				<maml:description>
-					<maml:para></maml:para>
-				</maml:description>
-			</command:returnValue>
-		</command:returnValues>
-		<maml:alertSet>
-			<maml:alert>
-				<maml:para>Author: Markus Scholtes Version: 1.02 Build date: 2020/02/15</maml:para>
-				<maml:para>Changes by metablaster - August 2020: 1. Applied formatting and code style according to project rules 2. Added switch to optionally append instead of replacing output file 3. Separated functions into their own scope 4. Added function to decode string into multi line 5. Added parameter to target specific policy store 6. Added parameter to let specify directory, and crate it if it doesn't exist 7. Added more output streams for debug, verbose and info 8. Added parameter to export according to rule group 9. Changed minor flow and logic of execution 10. Make output formatted and colored 11. Added progress bar TODO: export to excel</maml:para>
-			</maml:alert>
-		</maml:alertSet>
-		<command:examples>
-			<command:example>
-				<maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-				<dev:code>Export-FirewallRules
+<helpItems schema="maml" xmlns="http://msh">
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Export-FirewallRules</command:name>
+      <command:verb>Export</command:verb>
+      <command:noun>FirewallRules</command:noun>
+      <maml:description>
+        <maml:para>Exports firewall rules to a CSV or JSON file.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Exports firewall rules to a CSV or JSON file. Only local GPO rules are exported by default. CSV files are semicolon separated (Beware! Excel is not friendly to CSV files). All rules are exported by default, you can filter with parameter -Name, -Inbound, -Outbound, -Enabled, -Disabled, -Allow and -Block. If the export file already exists it's content will be replaced by default.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Export-FirewallRules</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>PolicyStore</maml:name>
+          <maml:Description>
+            <maml:para>Policy store from which to export rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+          <maml:name>Folder</maml:name>
+          <maml:Description>
+            <maml:para>Path into which to save file</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>.</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+          <maml:name>FileName</maml:name>
+          <maml:Description>
+            <maml:para>Output file, default is JSON format</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>FirewallRules</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
+          <maml:name>DisplayName</maml:name>
+          <maml:Description>
+            <maml:para>Display name of the rules to be processed. Wildcard character * is allowed.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>*</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none">
+          <maml:name>DisplayGroup</maml:name>
+          <maml:Description>
+            <maml:para>Display group of the rules to be processed. Wildcard character * is allowed.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>*</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>JSON</maml:name>
+          <maml:Description>
+            <maml:para>Output in JSON instead of CSV format</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Inbound</maml:name>
+          <maml:Description>
+            <maml:para>Export inbound rules</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Outbound</maml:name>
+          <maml:Description>
+            <maml:para>Export outbound rules</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Enabled</maml:name>
+          <maml:Description>
+            <maml:para>Export enabled rules</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Disabled</maml:name>
+          <maml:Description>
+            <maml:para>Export disabled rules</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Allow</maml:name>
+          <maml:Description>
+            <maml:para>Export allowing rules</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Block</maml:name>
+          <maml:Description>
+            <maml:para>Export blocking rules</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Append</maml:name>
+          <maml:Description>
+            <maml:para>Append exported rules to existing file instead of replacing</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>PolicyStore</maml:name>
+        <maml:Description>
+          <maml:para>Policy store from which to export rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <maml:name>Folder</maml:name>
+        <maml:Description>
+          <maml:para>Path into which to save file</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>.</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+        <maml:name>FileName</maml:name>
+        <maml:Description>
+          <maml:para>Output file, default is JSON format</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>FirewallRules</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
+        <maml:name>DisplayName</maml:name>
+        <maml:Description>
+          <maml:para>Display name of the rules to be processed. Wildcard character * is allowed.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>*</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none">
+        <maml:name>DisplayGroup</maml:name>
+        <maml:Description>
+          <maml:para>Display group of the rules to be processed. Wildcard character * is allowed.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>*</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>JSON</maml:name>
+        <maml:Description>
+          <maml:para>Output in JSON instead of CSV format</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Inbound</maml:name>
+        <maml:Description>
+          <maml:para>Export inbound rules</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Outbound</maml:name>
+        <maml:Description>
+          <maml:para>Export outbound rules</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Enabled</maml:name>
+        <maml:Description>
+          <maml:para>Export enabled rules</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Disabled</maml:name>
+        <maml:Description>
+          <maml:para>Export disabled rules</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Allow</maml:name>
+        <maml:Description>
+          <maml:para>Export allowing rules</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Block</maml:name>
+        <maml:Description>
+          <maml:para>Export blocking rules</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Append</maml:name>
+        <maml:Description>
+          <maml:para>Append exported rules to existing file instead of replacing</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Export-FirewallRules</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None. Export-FirewallRules does not generate any output</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Author: Markus Scholtes Version: 1.02 Build date: 2020/02/15</maml:para>
+        <maml:para>Changes by metablaster - August 2020: 1. Applied formatting and code style according to project rules 2. Added switch to optionally append instead of replacing output file 3. Separated functions into their own scope 4. Added function to decode string into multi line 5. Added parameter to target specific policy store 6. Added parameter to let specify directory, and crate it if it doesn't exist 7. Added more output streams for debug, verbose and info 8. Added parameter to export according to rule group 9. Changed minor flow and logic of execution 10. Make output formatted and colored 11. Added progress bar TODO: export to excel</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Export-FirewallRules
 Exports all firewall rules to the CSV file FirewallRules.csv in the current directory.</dev:code>
-				<dev:remarks>
-					<maml:para></maml:para>
-				</dev:remarks>
-			</command:example>
-			<command:example>
-				<maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-				<dev:code>Export-FirewallRules -Inbound -Allow
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Export-FirewallRules -Inbound -Allow
 Exports all inbound and allowing firewall rules to the CSV file FirewallRules.csv in the current directory.</dev:code>
-				<dev:remarks>
-					<maml:para></maml:para>
-				</dev:remarks>
-			</command:example>
-			<command:example>
-				<maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
-				<dev:code>Export-FirewallRules snmp* SNMPRules.json -json
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Export-FirewallRules snmp* SNMPRules.json -json
 Exports all SNMP firewall rules to the JSON file SNMPRules.json.</dev:code>
-				<dev:remarks>
-					<maml:para></maml:para>
-				</dev:remarks>
-			</command:example>
-		</command:examples>
-		<command:relatedLinks>
-			<maml:navigationLink>
-				<maml:linkText>Online Version:</maml:linkText>
-				<maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallRules.md</maml:uri>
-			</maml:navigationLink>
-		</command:relatedLinks>
-	</command:command>
-	<command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10"
-		xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10"
-		xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10"
-		xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
-		<command:details>
-			<command:name>Find-RulePrincipal</command:name>
-			<command:verb>Find</command:verb>
-			<command:noun>RulePrincipal</command:noun>
-			<maml:description>
-				<maml:para>Get all firewall rules with LocalUser value</maml:para>
-			</maml:description>
-		</command:details>
-		<maml:description>
-			<maml:para>Get all rules which are either missing or not missing LocalUser value Rules which are missing LocalUser are considered weak and need to be updated This operation is slow, intended for debugging.</maml:para>
-		</maml:description>
-		<command:syntax>
-			<command:syntaxItem>
-				<maml:name>Find-RulePrincipal</maml:name>
-				<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-					<maml:name>Empty</maml:name>
-					<maml:Description>
-						<maml:para>If specified returns rules with no local user value Otherwise only rules with local user are returned</maml:para>
-					</maml:Description>
-					<dev:type>
-						<maml:name>System.Management.Automation.SwitchParameter</maml:name>
-						<maml:uri />
-					</dev:type>
-					<dev:defaultValue>False</dev:defaultValue>
-				</command:parameter>
-			</command:syntaxItem>
-		</command:syntax>
-		<command:parameters>
-			<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-				<maml:name>Empty</maml:name>
-				<maml:Description>
-					<maml:para>If specified returns rules with no local user value Otherwise only rules with local user are returned</maml:para>
-				</maml:Description>
-				<command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-				<dev:type>
-					<maml:name>System.Management.Automation.SwitchParameter</maml:name>
-					<maml:uri />
-				</dev:type>
-				<dev:defaultValue>False</dev:defaultValue>
-			</command:parameter>
-		</command:parameters>
-		<command:inputTypes>
-			<command:inputType>
-				<dev:type>
-					<maml:name>None. You cannot pipe objects to Find-RulePrincipal</maml:name>
-				</dev:type>
-				<maml:description>
-					<maml:para></maml:para>
-				</maml:description>
-			</command:inputType>
-		</command:inputTypes>
-		<command:returnValues>
-			<command:returnValue>
-				<dev:type>
-					<maml:name>TODO: Describe outputs and OutputType</maml:name>
-				</dev:type>
-				<maml:description>
-					<maml:para></maml:para>
-				</maml:description>
-			</command:returnValue>
-		</command:returnValues>
-		<maml:alertSet>
-			<maml:alert>
-				<maml:para>TODO: This needs improvement to export matching rules to JSON</maml:para>
-			</maml:alert>
-		</maml:alertSet>
-		<command:examples>
-			<command:example>
-				<maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-				<dev:code>Find-RulePrincipal -Empty</dev:code>
-				<dev:remarks>
-					<maml:para></maml:para>
-				</dev:remarks>
-			</command:example>
-		</command:examples>
-		<command:relatedLinks>
-			<maml:navigationLink>
-				<maml:linkText>Online Version:</maml:linkText>
-				<maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Find-RulePrincipal.md</maml:uri>
-			</maml:navigationLink>
-		</command:relatedLinks>
-	</command:command>
-	<command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10"
-		xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10"
-		xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10"
-		xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
-		<command:details>
-			<command:name>Format-Output</command:name>
-			<command:verb>Format</command:verb>
-			<command:noun>Output</command:noun>
-			<maml:description>
-				<maml:para>Format firewall rule output for display</maml:para>
-			</maml:description>
-		</command:details>
-		<maml:description>
-			<maml:para>Output of Net-NewFirewallRule is large, loading a lot of rules would spam the console very fast, this function helps to output only relevant content.</maml:para>
-		</maml:description>
-		<command:syntax>
-			<command:syntaxItem>
-				<maml:name>Format-Output</maml:name>
-				<command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
-					<maml:name>Rule</maml:name>
-					<maml:Description>
-						<maml:para>Firewall rule to format</maml:para>
-					</maml:Description>
-					<command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimInstance</command:parameterValue>
-					<dev:type>
-						<maml:name>Microsoft.Management.Infrastructure.CimInstance</maml:name>
-						<maml:uri />
-					</dev:type>
-					<dev:defaultValue>None</dev:defaultValue>
-				</command:parameter>
-				<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
-					<maml:name>Label</maml:name>
-					<maml:Description>
-						<maml:para>Optional new label to replace default one</maml:para>
-					</maml:Description>
-					<command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-					<dev:type>
-						<maml:name>System.String</maml:name>
-						<maml:uri />
-					</dev:type>
-					<dev:defaultValue>Load Rule</dev:defaultValue>
-				</command:parameter>
-			</command:syntaxItem>
-		</command:syntax>
-		<command:parameters>
-			<command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
-				<maml:name>Rule</maml:name>
-				<maml:Description>
-					<maml:para>Firewall rule to format</maml:para>
-				</maml:Description>
-				<command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimInstance</command:parameterValue>
-				<dev:type>
-					<maml:name>Microsoft.Management.Infrastructure.CimInstance</maml:name>
-					<maml:uri />
-				</dev:type>
-				<dev:defaultValue>None</dev:defaultValue>
-			</command:parameter>
-			<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
-				<maml:name>Label</maml:name>
-				<maml:Description>
-					<maml:para>Optional new label to replace default one</maml:para>
-				</maml:Description>
-				<command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-				<dev:type>
-					<maml:name>System.String</maml:name>
-					<maml:uri />
-				</dev:type>
-				<dev:defaultValue>Load Rule</dev:defaultValue>
-			</command:parameter>
-		</command:parameters>
-		<command:inputTypes>
-			<command:inputType>
-				<dev:type>
-					<maml:name>[Microsoft.Management.Infrastructure.CimInstance] Firewall rule to format</maml:name>
-				</dev:type>
-				<maml:description>
-					<maml:para></maml:para>
-				</maml:description>
-			</command:inputType>
-		</command:inputTypes>
-		<command:returnValues>
-			<command:returnValue>
-				<dev:type>
-					<maml:name>None. Format-Output does not generate any output</maml:name>
-				</dev:type>
-				<maml:description>
-					<maml:para></maml:para>
-				</maml:description>
-			</command:returnValue>
-		</command:returnValues>
-		<maml:alertSet>
-			<maml:alert>
-				<maml:para>None.</maml:para>
-			</maml:alert>
-		</maml:alertSet>
-		<command:examples>
-			<command:example>
-				<maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-				<dev:code>Net-NewFirewallRule ... | Format-Output</dev:code>
-				<dev:remarks>
-					<maml:para></maml:para>
-				</dev:remarks>
-			</command:example>
-		</command:examples>
-		<command:relatedLinks>
-			<maml:navigationLink>
-				<maml:linkText>Online Version:</maml:linkText>
-				<maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Format-Output.md</maml:uri>
-			</maml:navigationLink>
-		</command:relatedLinks>
-	</command:command>
-	<command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10"
-		xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10"
-		xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10"
-		xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
-		<command:details>
-			<command:name>Import-FirewallRules</command:name>
-			<command:verb>Import</command:verb>
-			<command:noun>FirewallRules</command:noun>
-			<maml:description>
-				<maml:para>Imports firewall rules from a CSV or JSON file.</maml:para>
-			</maml:description>
-		</command:details>
-		<maml:description>
-			<maml:para>Imports firewall rules generated with Export-FirewallRules, CSV or JSON file. CSV files have to be separated with semicolons. Existing rules with same name will be overwritten.</maml:para>
-		</maml:description>
-		<command:syntax>
-			<command:syntaxItem>
-				<maml:name>Import-FirewallRules</maml:name>
-				<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
-					<maml:name>PolicyStore</maml:name>
-					<maml:Description>
-						<maml:para>Policy store into which to import rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md</maml:para>
-					</maml:Description>
-					<command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-					<dev:type>
-						<maml:name>System.String</maml:name>
-						<maml:uri />
-					</dev:type>
-					<dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
-				</command:parameter>
-				<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
-					<maml:name>Folder</maml:name>
-					<maml:Description>
-						<maml:para>Path to directory where exported rules file is located</maml:para>
-					</maml:Description>
-					<command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-					<dev:type>
-						<maml:name>System.String</maml:name>
-						<maml:uri />
-					</dev:type>
-					<dev:defaultValue>.</dev:defaultValue>
-				</command:parameter>
-				<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
-					<maml:name>FileName</maml:name>
-					<maml:Description>
-						<maml:para>Input file</maml:para>
-					</maml:Description>
-					<command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-					<dev:type>
-						<maml:name>System.String</maml:name>
-						<maml:uri />
-					</dev:type>
-					<dev:defaultValue>FirewallRules</dev:defaultValue>
-				</command:parameter>
-				<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-					<maml:name>JSON</maml:name>
-					<maml:Description>
-						<maml:para>Input from JSON instead of CSV format</maml:para>
-					</maml:Description>
-					<dev:type>
-						<maml:name>System.Management.Automation.SwitchParameter</maml:name>
-						<maml:uri />
-					</dev:type>
-					<dev:defaultValue>False</dev:defaultValue>
-				</command:parameter>
-			</command:syntaxItem>
-		</command:syntax>
-		<command:parameters>
-			<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
-				<maml:name>PolicyStore</maml:name>
-				<maml:Description>
-					<maml:para>Policy store into which to import rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md</maml:para>
-				</maml:Description>
-				<command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-				<dev:type>
-					<maml:name>System.String</maml:name>
-					<maml:uri />
-				</dev:type>
-				<dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
-			</command:parameter>
-			<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
-				<maml:name>Folder</maml:name>
-				<maml:Description>
-					<maml:para>Path to directory where exported rules file is located</maml:para>
-				</maml:Description>
-				<command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-				<dev:type>
-					<maml:name>System.String</maml:name>
-					<maml:uri />
-				</dev:type>
-				<dev:defaultValue>.</dev:defaultValue>
-			</command:parameter>
-			<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
-				<maml:name>FileName</maml:name>
-				<maml:Description>
-					<maml:para>Input file</maml:para>
-				</maml:Description>
-				<command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-				<dev:type>
-					<maml:name>System.String</maml:name>
-					<maml:uri />
-				</dev:type>
-				<dev:defaultValue>FirewallRules</dev:defaultValue>
-			</command:parameter>
-			<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-				<maml:name>JSON</maml:name>
-				<maml:Description>
-					<maml:para>Input from JSON instead of CSV format</maml:para>
-				</maml:Description>
-				<command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-				<dev:type>
-					<maml:name>System.Management.Automation.SwitchParameter</maml:name>
-					<maml:uri />
-				</dev:type>
-				<dev:defaultValue>False</dev:defaultValue>
-			</command:parameter>
-		</command:parameters>
-		<command:inputTypes>
-			<command:inputType>
-				<dev:type>
-					<maml:name>None. You cannot pipe objects to Import-FirewallRules</maml:name>
-				</dev:type>
-				<maml:description>
-					<maml:para></maml:para>
-				</maml:description>
-			</command:inputType>
-		</command:inputTypes>
-		<command:returnValues>
-			<command:returnValue>
-				<dev:type>
-					<maml:name>None. Import-FirewallRules does not generate any output</maml:name>
-				</dev:type>
-				<maml:description>
-					<maml:para></maml:para>
-				</maml:description>
-			</command:returnValue>
-		</command:returnValues>
-		<maml:alertSet>
-			<maml:alert>
-				<maml:para>Author: Markus Scholtes Version: 1.02 Build date: 2020/02/15</maml:para>
-				<maml:para>Changes by metablaster - August 2020: 1. Applied formatting and code style according to project rules 2. Added parameter to target specific policy store 3. Separated functions into their own scope 4. Added function to decode string into multi line 5. Added parameter to let specify directory 6. Added more output streams for debug, verbose and info 7. Changed minor flow and logic of execution 8. Make output formatted and colored 9. Added progress bar</maml:para>
-			</maml:alert>
-		</maml:alertSet>
-		<command:examples>
-			<command:example>
-				<maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-				<dev:code>Import-FirewallRules
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallRules.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Find-RulePrincipal</command:name>
+      <command:verb>Find</command:verb>
+      <command:noun>RulePrincipal</command:noun>
+      <maml:description>
+        <maml:para>Get all firewall rules with LocalUser value</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Get all rules which are either missing or not missing LocalUser value Rules which are missing LocalUser are considered weak and need to be updated This operation is slow, intended for debugging.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Find-RulePrincipal</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Empty</maml:name>
+          <maml:Description>
+            <maml:para>If specified returns rules with no local user value Otherwise only rules with local user are returned</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Empty</maml:name>
+        <maml:Description>
+          <maml:para>If specified returns rules with no local user value Otherwise only rules with local user are returned</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Find-RulePrincipal</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>TODO: Describe outputs and OutputType</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>TODO: This needs improvement to export matching rules to JSON</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Find-RulePrincipal -Empty</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Find-RulePrincipal.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Format-Output</command:name>
+      <command:verb>Format</command:verb>
+      <command:noun>Output</command:noun>
+      <maml:description>
+        <maml:para>Format firewall rule output for display</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Output of Net-NewFirewallRule is large, loading a lot of rules would spam the console very fast, this function helps to output only relevant content.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Format-Output</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
+          <maml:name>Rule</maml:name>
+          <maml:Description>
+            <maml:para>Firewall rule to format</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimInstance[]</command:parameterValue>
+          <dev:type>
+            <maml:name>Microsoft.Management.Infrastructure.CimInstance[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Modify</maml:name>
+          <maml:Description>
+            <maml:para>If specified, output status represents rule modification</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Format-Output</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
+          <maml:name>Rule</maml:name>
+          <maml:Description>
+            <maml:para>Firewall rule to format</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimInstance[]</command:parameterValue>
+          <dev:type>
+            <maml:name>Microsoft.Management.Infrastructure.CimInstance[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Import</maml:name>
+          <maml:Description>
+            <maml:para>If specified, output status represents importing rule</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
+        <maml:name>Rule</maml:name>
+        <maml:Description>
+          <maml:para>Firewall rule to format</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimInstance[]</command:parameterValue>
+        <dev:type>
+          <maml:name>Microsoft.Management.Infrastructure.CimInstance[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Modify</maml:name>
+        <maml:Description>
+          <maml:para>If specified, output status represents rule modification</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Import</maml:name>
+        <maml:Description>
+          <maml:para>If specified, output status represents importing rule</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>[Microsoft.Management.Infrastructure.CimInstance[]]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None. Format-Output does not generate any output</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>None.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Net-NewFirewallRule ... | Format-Output</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Format-Output.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Import-FirewallRules</command:name>
+      <command:verb>Import</command:verb>
+      <command:noun>FirewallRules</command:noun>
+      <maml:description>
+        <maml:para>Imports firewall rules from a CSV or JSON file.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Imports firewall rules generated with Export-FirewallRules, CSV or JSON file. CSV files have to be separated with semicolons. Existing rules with same name will be overwritten.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Import-FirewallRules</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>PolicyStore</maml:name>
+          <maml:Description>
+            <maml:para>Policy store into which to import rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+          <maml:name>Folder</maml:name>
+          <maml:Description>
+            <maml:para>Path to directory where exported rules file is located</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>.</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+          <maml:name>FileName</maml:name>
+          <maml:Description>
+            <maml:para>Input file</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>FirewallRules</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>JSON</maml:name>
+          <maml:Description>
+            <maml:para>Input from JSON instead of CSV format</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>PolicyStore</maml:name>
+        <maml:Description>
+          <maml:para>Policy store into which to import rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <maml:name>Folder</maml:name>
+        <maml:Description>
+          <maml:para>Path to directory where exported rules file is located</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>.</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+        <maml:name>FileName</maml:name>
+        <maml:Description>
+          <maml:para>Input file</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>FirewallRules</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>JSON</maml:name>
+        <maml:Description>
+          <maml:para>Input from JSON instead of CSV format</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Import-FirewallRules</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None. Import-FirewallRules does not generate any output</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Author: Markus Scholtes Version: 1.02 Build date: 2020/02/15</maml:para>
+        <maml:para>Changes by metablaster - August 2020: 1. Applied formatting and code style according to project rules 2. Added parameter to target specific policy store 3. Separated functions into their own scope 4. Added function to decode string into multi line 5. Added parameter to let specify directory 6. Added more output streams for debug, verbose and info 7. Changed minor flow and logic of execution 8. Make output formatted and colored 9. Added progress bar</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Import-FirewallRules
 Imports all firewall rules in the CSV file FirewallRules.csv
 If no file is specified, FirewallRules .csv or .json in the current directory is searched.</dev:code>
-				<dev:remarks>
-					<maml:para></maml:para>
-				</dev:remarks>
-			</command:example>
-			<command:example>
-				<maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-				<dev:code>Import-FirewallRules WmiRules.csv CSV
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Import-FirewallRules WmiRules.csv CSV
 Imports all firewall rules in the SCV file WmiRules.csv</dev:code>
-				<dev:remarks>
-					<maml:para></maml:para>
-				</dev:remarks>
-			</command:example>
-		</command:examples>
-		<command:relatedLinks>
-			<maml:navigationLink>
-				<maml:linkText>Online Version:</maml:linkText>
-				<maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallRules.md</maml:uri>
-			</maml:navigationLink>
-		</command:relatedLinks>
-	</command:command>
-	<command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10"
-		xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10"
-		xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10"
-		xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
-		<command:details>
-			<command:name>Remove-FirewallRules</command:name>
-			<command:verb>Remove</command:verb>
-			<command:noun>FirewallRules</command:noun>
-			<maml:description>
-				<maml:para>Removes firewall rules according to a list in a CSV or JSON file.</maml:para>
-			</maml:description>
-		</command:details>
-		<maml:description>
-			<maml:para>Removes firewall rules according to a with Export-FirewallRules generated list in a CSV or JSON file. CSV files have to be separated with semicolons. Only the field Name or - if Name is missing - DisplayName is used, all other fields can be omitted</maml:para>
-		</maml:description>
-		<command:syntax>
-			<command:syntaxItem>
-				<maml:name>Remove-FirewallRules</maml:name>
-				<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
-					<maml:name>PolicyStore</maml:name>
-					<maml:Description>
-						<maml:para>Policy store from which remove rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md</maml:para>
-					</maml:Description>
-					<command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-					<dev:type>
-						<maml:name>System.String</maml:name>
-						<maml:uri />
-					</dev:type>
-					<dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
-				</command:parameter>
-				<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
-					<maml:name>Folder</maml:name>
-					<maml:Description>
-						<maml:para>Folder in which file is located</maml:para>
-					</maml:Description>
-					<command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-					<dev:type>
-						<maml:name>System.String</maml:name>
-						<maml:uri />
-					</dev:type>
-					<dev:defaultValue>.</dev:defaultValue>
-				</command:parameter>
-				<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
-					<maml:name>FileName</maml:name>
-					<maml:Description>
-						<maml:para>File name according to which to delete rules</maml:para>
-					</maml:Description>
-					<command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-					<dev:type>
-						<maml:name>System.String</maml:name>
-						<maml:uri />
-					</dev:type>
-					<dev:defaultValue>FirewallRules</dev:defaultValue>
-				</command:parameter>
-				<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-					<maml:name>JSON</maml:name>
-					<maml:Description>
-						<maml:para>Input file in JSON instead of CSV format</maml:para>
-					</maml:Description>
-					<dev:type>
-						<maml:name>System.Management.Automation.SwitchParameter</maml:name>
-						<maml:uri />
-					</dev:type>
-					<dev:defaultValue>False</dev:defaultValue>
-				</command:parameter>
-				<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
-					<maml:name>WhatIf</maml:name>
-					<maml:Description>
-						<maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-					</maml:Description>
-					<dev:type>
-						<maml:name>System.Management.Automation.SwitchParameter</maml:name>
-						<maml:uri />
-					</dev:type>
-					<dev:defaultValue>False</dev:defaultValue>
-				</command:parameter>
-				<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
-					<maml:name>Confirm</maml:name>
-					<maml:Description>
-						<maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-					</maml:Description>
-					<dev:type>
-						<maml:name>System.Management.Automation.SwitchParameter</maml:name>
-						<maml:uri />
-					</dev:type>
-					<dev:defaultValue>False</dev:defaultValue>
-				</command:parameter>
-			</command:syntaxItem>
-		</command:syntax>
-		<command:parameters>
-			<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
-				<maml:name>PolicyStore</maml:name>
-				<maml:Description>
-					<maml:para>Policy store from which remove rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md</maml:para>
-				</maml:Description>
-				<command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-				<dev:type>
-					<maml:name>System.String</maml:name>
-					<maml:uri />
-				</dev:type>
-				<dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
-			</command:parameter>
-			<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
-				<maml:name>Folder</maml:name>
-				<maml:Description>
-					<maml:para>Folder in which file is located</maml:para>
-				</maml:Description>
-				<command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-				<dev:type>
-					<maml:name>System.String</maml:name>
-					<maml:uri />
-				</dev:type>
-				<dev:defaultValue>.</dev:defaultValue>
-			</command:parameter>
-			<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
-				<maml:name>FileName</maml:name>
-				<maml:Description>
-					<maml:para>File name according to which to delete rules</maml:para>
-				</maml:Description>
-				<command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-				<dev:type>
-					<maml:name>System.String</maml:name>
-					<maml:uri />
-				</dev:type>
-				<dev:defaultValue>FirewallRules</dev:defaultValue>
-			</command:parameter>
-			<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-				<maml:name>JSON</maml:name>
-				<maml:Description>
-					<maml:para>Input file in JSON instead of CSV format</maml:para>
-				</maml:Description>
-				<command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-				<dev:type>
-					<maml:name>System.Management.Automation.SwitchParameter</maml:name>
-					<maml:uri />
-				</dev:type>
-				<dev:defaultValue>False</dev:defaultValue>
-			</command:parameter>
-			<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
-				<maml:name>WhatIf</maml:name>
-				<maml:Description>
-					<maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-				</maml:Description>
-				<command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-				<dev:type>
-					<maml:name>System.Management.Automation.SwitchParameter</maml:name>
-					<maml:uri />
-				</dev:type>
-				<dev:defaultValue>False</dev:defaultValue>
-			</command:parameter>
-			<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
-				<maml:name>Confirm</maml:name>
-				<maml:Description>
-					<maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-				</maml:Description>
-				<command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-				<dev:type>
-					<maml:name>System.Management.Automation.SwitchParameter</maml:name>
-					<maml:uri />
-				</dev:type>
-				<dev:defaultValue>False</dev:defaultValue>
-			</command:parameter>
-		</command:parameters>
-		<command:inputTypes>
-			<command:inputType>
-				<dev:type>
-					<maml:name>None. You cannot pipe objects to Remove-FirewallRules</maml:name>
-				</dev:type>
-				<maml:description>
-					<maml:para></maml:para>
-				</maml:description>
-			</command:inputType>
-		</command:inputTypes>
-		<command:returnValues>
-			<command:returnValue>
-				<dev:type>
-					<maml:name>None. Remove-FirewallRules does not generate any output</maml:name>
-				</dev:type>
-				<maml:description>
-					<maml:para></maml:para>
-				</maml:description>
-			</command:returnValue>
-		</command:returnValues>
-		<maml:alertSet>
-			<maml:alert>
-				<maml:para>Author: Markus Scholtes Version: 1.02 Build date: 2020/02/15</maml:para>
-				<maml:para>Changes by metablaster - August 2020: 1. Applied formatting and code style according to project rules 2. Added parameter to target specific policy store 3. Added parameter to let specify directory 4. Added more output streams for debug, verbose and info 5. Make output formatted and colored 6. Changed minor flow of execution TODO: implement removing rules not according to file</maml:para>
-			</maml:alert>
-		</maml:alertSet>
-		<command:examples>
-			<command:example>
-				<maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-				<dev:code>Remove-FirewallRules
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallRules.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Remove-FirewallRules</command:name>
+      <command:verb>Remove</command:verb>
+      <command:noun>FirewallRules</command:noun>
+      <maml:description>
+        <maml:para>Removes firewall rules according to a list in a CSV or JSON file.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Removes firewall rules according to a with Export-FirewallRules generated list in a CSV or JSON file. CSV files have to be separated with semicolons. Only the field Name or - if Name is missing - DisplayName is used, all other fields can be omitted</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Remove-FirewallRules</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>PolicyStore</maml:name>
+          <maml:Description>
+            <maml:para>Policy store from which remove rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+          <maml:name>Folder</maml:name>
+          <maml:Description>
+            <maml:para>Folder in which file is located</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>.</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+          <maml:name>FileName</maml:name>
+          <maml:Description>
+            <maml:para>File name according to which to delete rules</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>FirewallRules</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>JSON</maml:name>
+          <maml:Description>
+            <maml:para>Input file in JSON instead of CSV format</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:Description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:Description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>PolicyStore</maml:name>
+        <maml:Description>
+          <maml:para>Policy store from which remove rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <maml:name>Folder</maml:name>
+        <maml:Description>
+          <maml:para>Folder in which file is located</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>.</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+        <maml:name>FileName</maml:name>
+        <maml:Description>
+          <maml:para>File name according to which to delete rules</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>FirewallRules</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>JSON</maml:name>
+        <maml:Description>
+          <maml:para>Input file in JSON instead of CSV format</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
+        <maml:Description>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:Description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Remove-FirewallRules</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None. Remove-FirewallRules does not generate any output</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Author: Markus Scholtes Version: 1.02 Build date: 2020/02/15</maml:para>
+        <maml:para>Changes by metablaster - August 2020: 1. Applied formatting and code style according to project rules 2. Added parameter to target specific policy store 3. Added parameter to let specify directory 4. Added more output streams for debug, verbose and info 5. Make output formatted and colored 6. Changed minor flow of execution TODO: implement removing rules not according to file</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Remove-FirewallRules
 Removes all firewall rules according to a list in the CSV file FirewallRules.csv in the current directory.</dev:code>
-				<dev:remarks>
-					<maml:para></maml:para>
-				</dev:remarks>
-			</command:example>
-			<command:example>
-				<maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-				<dev:code>Remove-FirewallRules WmiRules.json -json
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Remove-FirewallRules WmiRules.json -json
 Removes all firewall rules according to the list in the JSON file WmiRules.json.</dev:code>
-				<dev:remarks>
-					<maml:para></maml:para>
-				</dev:remarks>
-			</command:example>
-		</command:examples>
-		<command:relatedLinks>
-			<maml:navigationLink>
-				<maml:linkText>Online Version:</maml:linkText>
-				<maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Remove-FirewallRules.md</maml:uri>
-			</maml:navigationLink>
-		</command:relatedLinks>
-	</command:command>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Remove-FirewallRules.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
 </helpItems>

@@ -14,7 +14,7 @@ Get store apps installed system wide
 ## SYNTAX
 
 ```none
-Get-SystemApps [[-ComputerName] <String>] [<CommonParameters>]
+Get-SystemApps [-UserName] <String> [[-ComputerName] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -31,6 +31,26 @@ Get-SystemApps "COMPUTERNAME"
 
 ## PARAMETERS
 
+### -UserName
+
+User name in form of:
+- domain\user_name
+- user_name@fqn.domain.tld
+- user_name
+- SID-string
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases: User
+
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -ComputerName
 
 NETBIOS Computer name in form of "COMPUTERNAME"
@@ -41,7 +61,7 @@ Parameter Sets: (All)
 Aliases: Computer, Server, Domain, Host, Machine
 
 Required: False
-Position: 1
+Position: 2
 Default value: [System.Environment]::MachineName
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -58,6 +78,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ### [Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage] store app information object
+
+### [Object] if using PowerShell Core which outputs deserialized object:
+
+### [Deserialized.Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage]
 
 ## NOTES
 

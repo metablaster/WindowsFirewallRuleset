@@ -254,42 +254,6 @@ is not registered user is prompted to do that too.</dev:code>
       <command:syntaxItem>
         <maml:name>Initialize-Project</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>NoProjectCheck</maml:name>
-          <maml:Description>
-            <maml:para>If supplied, checking for project requirements and recommendations will not be performed, This is equivalent to function that does nothing. Note that this parameter is managed by project settings</maml:para>
-          </maml:Description>
-          <dev:type>
-            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>!$ProjectCheck</dev:defaultValue>
-        </command:parameter>
-      </command:syntaxItem>
-      <command:syntaxItem>
-        <maml:name>Initialize-Project</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>NoModulesCheck</maml:name>
-          <maml:Description>
-            <maml:para>If supplied, checking for required and recommended module updates will not be performed. Note that this parameter is managed by project settings</maml:para>
-          </maml:Description>
-          <dev:type>
-            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>!$ModulesCheck</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>NoServicesCheck</maml:name>
-          <maml:Description>
-            <maml:para>If supplied, checking if required system services are running will not be performed. Note that this parameter is managed by project settings</maml:para>
-          </maml:Description>
-          <dev:type>
-            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>!$ServicesCheck</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Abort</maml:name>
           <maml:Description>
             <maml:para>If specified exit is called on failure instead of return</maml:para>
@@ -303,42 +267,6 @@ is not registered user is prompted to do that too.</dev:code>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>NoProjectCheck</maml:name>
-        <maml:Description>
-          <maml:para>If supplied, checking for project requirements and recommendations will not be performed, This is equivalent to function that does nothing. Note that this parameter is managed by project settings</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-        <dev:type>
-          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>!$ProjectCheck</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>NoModulesCheck</maml:name>
-        <maml:Description>
-          <maml:para>If supplied, checking for required and recommended module updates will not be performed. Note that this parameter is managed by project settings</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-        <dev:type>
-          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>!$ModulesCheck</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>NoServicesCheck</maml:name>
-        <maml:Description>
-          <maml:para>If supplied, checking if required system services are running will not be performed. Note that this parameter is managed by project settings</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-        <dev:type>
-          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>!$ServicesCheck</dev:defaultValue>
-      </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Abort</maml:name>
         <maml:Description>

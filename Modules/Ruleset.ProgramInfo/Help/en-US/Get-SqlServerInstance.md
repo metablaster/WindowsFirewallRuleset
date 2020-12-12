@@ -1,11 +1,11 @@
 ---
 external help file: Ruleset.ProgramInfo-help.xml
 Module Name: Ruleset.ProgramInfo
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SQLInstance.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SqlServerInstance.md
 schema: 2.0.0
 ---
 
-# Get-SQLInstance
+# Get-SqlServerInstance
 
 ## SYNOPSIS
 
@@ -14,7 +14,7 @@ Retrieves SQL server information from a local or remote servers.
 ## SYNTAX
 
 ```none
-Get-SQLInstance [[-ComputerName] <String[]>] [-CIM] [<CommonParameters>]
+Get-SqlServerInstance [[-ComputerName] <String[]>] [-CIM] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -28,7 +28,7 @@ instances from a SQL server and detects if in a cluster or not.
 ### EXAMPLE 1
 
 ```none
-Get-SQLInstance -Computername DC1
+Get-SqlServerInstance -Computername DC1
 ```
 
 SQLInstance   : MSSQLSERVER
@@ -56,7 +56,7 @@ Caption       : SQL Server 2008
 ### EXAMPLE 2
 
 ```none
-Get-SQLInstance -Computername Server1, Server2 -CIM
+Get-SqlServerInstance -Computername Server1, Server2 -CIM
 ```
 
 Computername     : Server1
@@ -100,7 +100,7 @@ Local or remote systems to query for SQL information.
 ```yaml
 Type: System.String[]
 Parameter Sets: (All)
-Aliases: Servers, Machines
+Aliases:
 
 Required: False
 Position: 1
@@ -112,7 +112,6 @@ Accept wildcard characters: False
 ### -CIM
 
 If specified, try to pull and correlate CIM information for SQL
-
 TODO: limited testing was performed in matching up the service info to registry info.
 
 ```yaml
@@ -133,7 +132,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to Get-SQLInstance
+### None. You cannot pipe objects to Get-SqlServerInstance
 
 ## OUTPUTS
 
@@ -141,7 +140,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Name: Get-SQLInstance
+Name: Get-SqlServerInstance
 Author: Boe Prox, edited by cookie monster (to cover wow6432node, CIM tie in)
 
 Version History:
@@ -161,12 +160,14 @@ Following modifications by metablaster based on both originals 15 Feb 2020:
 - update reported server versions
 - added more verbose and debug output, path formatting.
 - Replaced WMI calls with CIM calls which are more universal and cross platform that WMI
+- 12 December 2020:
+- Renamed from Get-SQLInstance to Get-SqlServerInstance because of name colision from SQLPS module
 
 Links to original and individual versions of code
 https://github.com/RamblingCookieMonster/PowerShell
 https://github.com/metablaster/WindowsFirewallRuleset
-https://gallery.technet.microsoft.com/scriptcenter/Get-SQLInstance-9a3245a0
+https://gallery.technet.microsoft.com/scriptcenter/Get-SqlServerInstance-9a3245a0
 
-TODO: update examples to include DTS directory
+TODO: Update examples to include DTS directory
 
 ## RELATED LINKS

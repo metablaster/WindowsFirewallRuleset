@@ -15,19 +15,18 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Approve-Execute</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
-          <maml:name>Default</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Unsafe</maml:name>
           <maml:Description>
-            <maml:para>{{ Fill Default Description }}</maml:para>
+            <maml:para>If specified the command is considered unsafe, and the default action is then "No"</maml:para>
           </maml:Description>
-          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
-            <maml:name>System.String</maml:name>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>Yes</dev:defaultValue>
+          <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Title</maml:name>
           <maml:Description>
             <maml:para>Title of the prompt</maml:para>
@@ -39,7 +38,7 @@
           </dev:type>
           <dev:defaultValue>"Executing: " + (Split-Path -Leaf $MyInvocation.ScriptName)</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Question</maml:name>
           <maml:Description>
             <maml:para>Prompt question</maml:para>
@@ -51,7 +50,7 @@
           </dev:type>
           <dev:defaultValue>Do you want to run this script?</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Accept</maml:name>
           <maml:Description>
             <maml:para>{{ Fill Accept Description }}</maml:para>
@@ -63,7 +62,7 @@
           </dev:type>
           <dev:defaultValue>Continue with only the next step of the operation</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Deny</maml:name>
           <maml:Description>
             <maml:para>{{ Fill Deny Description }}</maml:para>
@@ -75,22 +74,46 @@
           </dev:type>
           <dev:defaultValue>Skip this operation and proceed with the next operation</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>YesToAll</maml:name>
+          <maml:Description>
+            <maml:para>True if user selects YesToAll. If this is already true, Approve-Execute will bypass the prompt and return true.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSReference</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSReference</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>NoToAll</maml:name>
+          <maml:Description>
+            <maml:para>true if user selects NoToAll. If this is already true, Approve-Execute will bypass the prompt and return false.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSReference</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSReference</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
-        <maml:name>Default</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Unsafe</maml:name>
         <maml:Description>
-          <maml:para>{{ Fill Default Description }}</maml:para>
+          <maml:para>If specified the command is considered unsafe, and the default action is then "No"</maml:para>
         </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
-          <maml:name>System.String</maml:name>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>Yes</dev:defaultValue>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Title</maml:name>
         <maml:Description>
           <maml:para>Title of the prompt</maml:para>
@@ -102,7 +125,7 @@
         </dev:type>
         <dev:defaultValue>"Executing: " + (Split-Path -Leaf $MyInvocation.ScriptName)</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Question</maml:name>
         <maml:Description>
           <maml:para>Prompt question</maml:para>
@@ -114,7 +137,7 @@
         </dev:type>
         <dev:defaultValue>Do you want to run this script?</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Accept</maml:name>
         <maml:Description>
           <maml:para>{{ Fill Accept Description }}</maml:para>
@@ -126,7 +149,7 @@
         </dev:type>
         <dev:defaultValue>Continue with only the next step of the operation</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Deny</maml:name>
         <maml:Description>
           <maml:para>{{ Fill Deny Description }}</maml:para>
@@ -137,6 +160,30 @@
           <maml:uri />
         </dev:type>
         <dev:defaultValue>Skip this operation and proceed with the next operation</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>YesToAll</maml:name>
+        <maml:Description>
+          <maml:para>True if user selects YesToAll. If this is already true, Approve-Execute will bypass the prompt and return true.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSReference</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSReference</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>NoToAll</maml:name>
+        <maml:Description>
+          <maml:para>true if user selects NoToAll. If this is already true, Approve-Execute will bypass the prompt and return false.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSReference</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSReference</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -1036,7 +1083,7 @@ utf-32</dev:code>
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>[string] If the 'Format' parameter is not specified</maml:name>
+          <maml:name>[string] If the "Format" parameter is not specified</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>

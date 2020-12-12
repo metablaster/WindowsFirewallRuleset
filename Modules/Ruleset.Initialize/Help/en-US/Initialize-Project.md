@@ -13,16 +13,8 @@ Check system requirements for this project
 
 ## SYNTAX
 
-### NoProject (Default)
-
 ```none
-Initialize-Project [-NoProjectCheck] [<CommonParameters>]
-```
-
-### Project
-
-```none
-Initialize-Project [-NoModulesCheck] [-NoServicesCheck] [-Abort] [<CommonParameters>]
+Initialize-Project [-Abort] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -53,65 +45,13 @@ Error or warning message is shown if check failed, environment info otherwise.
 
 ## PARAMETERS
 
-### -NoProjectCheck
-
-If supplied, checking for project requirements and recommendations will not be performed,
-This is equivalent to function that does nothing.
-Note that this parameter is managed by project settings
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: NoProject
-Aliases:
-
-Required: False
-Position: Named
-Default value: !$ProjectCheck
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -NoModulesCheck
-
-If supplied, checking for required and recommended module updates will not be performed.
-Note that this parameter is managed by project settings
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: Project
-Aliases:
-
-Required: False
-Position: Named
-Default value: !$ModulesCheck
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -NoServicesCheck
-
-If supplied, checking if required system services are running will not be performed.
-Note that this parameter is managed by project settings
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: Project
-Aliases:
-
-Required: False
-Position: Named
-Default value: !$ServicesCheck
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Abort
 
 If specified exit is called on failure instead of return
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
-Parameter Sets: Project
+Parameter Sets: (All)
 Aliases:
 
 Required: False

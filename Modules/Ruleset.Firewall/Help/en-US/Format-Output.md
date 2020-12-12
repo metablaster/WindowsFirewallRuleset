@@ -13,8 +13,22 @@ Format firewall rule output for display
 
 ## SYNTAX
 
+### None (Default)
+
 ```none
-Format-Output [-Rule] <CimInstance> [[-Label] <String>] [<CommonParameters>]
+Format-Output -Rule <CimInstance[]> [<CommonParameters>]
+```
+
+### Modify
+
+```none
+Format-Output -Rule <CimInstance[]> [-Modify] [<CommonParameters>]
+```
+
+### Import
+
+```none
+Format-Output -Rule <CimInstance[]> [-Import] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -37,29 +51,45 @@ Net-NewFirewallRule ... | Format-Output
 Firewall rule to format
 
 ```yaml
-Type: Microsoft.Management.Infrastructure.CimInstance
+Type: Microsoft.Management.Infrastructure.CimInstance[]
 Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 1
+Position: Named
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -Label
+### -Modify
 
-Optional new label to replace default one
+If specified, output status represents rule modification
 
 ```yaml
-Type: System.String
-Parameter Sets: (All)
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: Modify
 Aliases:
 
 Required: False
-Position: 2
-Default value: Load Rule
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Import
+
+If specified, output status represents importing rule
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: Import
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -70,7 +100,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### [Microsoft.Management.Infrastructure.CimInstance] Firewall rule to format
+### [Microsoft.Management.Infrastructure.CimInstance[]]
 
 ## OUTPUTS
 

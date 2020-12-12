@@ -296,9 +296,9 @@
           <maml:Description>
             <maml:para>One or more Windows store apps for which to retrieve capabilities</maml:para>
           </maml:Description>
-          <command:parameterValue required="true" variableLength="false">Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage[]</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">System.Object[]</command:parameterValue>
           <dev:type>
-            <maml:name>Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage[]</maml:name>
+            <maml:name>System.Object[]</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -345,9 +345,9 @@
         <maml:Description>
           <maml:para>One or more Windows store apps for which to retrieve capabilities</maml:para>
         </maml:Description>
-        <command:parameterValue required="true" variableLength="false">Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage[]</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">System.Object[]</command:parameterValue>
         <dev:type>
-          <maml:name>Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage[]</maml:name>
+          <maml:name>System.Object[]</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -390,6 +390,14 @@
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>[Object[]] Deserialized object on PowerShell Core 7.1+, otherwise</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
       <command:inputType>
         <dev:type>
           <maml:name>[Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage[]]</maml:name>
@@ -460,19 +468,7 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-AppSID</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="User">
-          <maml:name>UserName</maml:name>
-          <maml:Description>
-            <maml:para>Username for which to query app SID</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-          <dev:type>
-            <maml:name>System.String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>AppName</maml:name>
           <maml:Description>
             <maml:para>"PackageFamilyName" string</maml:para>
@@ -487,19 +483,7 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="User">
-        <maml:name>UserName</maml:name>
-        <maml:Description>
-          <maml:para>Username for which to query app SID</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-        <dev:type>
-          <maml:name>System.String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
         <maml:name>AppName</maml:name>
         <maml:Description>
           <maml:para>"PackageFamilyName" string</maml:para>
@@ -831,140 +815,9 @@
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
-      <command:name>Get-SQLInstance</command:name>
+      <command:name>Get-SqlManagementStudio</command:name>
       <command:verb>Get</command:verb>
-      <command:noun>SQLInstance</command:noun>
-      <maml:description>
-        <maml:para>Retrieves SQL server information from a local or remote servers.</maml:para>
-      </maml:description>
-    </command:details>
-    <maml:description>
-      <maml:para>Retrieves SQL server information from a local or remote servers. Pulls all instances from a SQL server and detects if in a cluster or not.</maml:para>
-    </maml:description>
-    <command:syntax>
-      <command:syntaxItem>
-        <maml:name>Get-SQLInstance</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="Servers, Machines">
-          <maml:name>ComputerName</maml:name>
-          <maml:Description>
-            <maml:para>Local or remote systems to query for SQL information.</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
-          <dev:type>
-            <maml:name>System.String[]</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>CIM</maml:name>
-          <maml:Description>
-            <maml:para>If specified, try to pull and correlate CIM information for SQL</maml:para>
-            <maml:para>TODO: limited testing was performed in matching up the service info to registry info.</maml:para>
-          </maml:Description>
-          <dev:type>
-            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>False</dev:defaultValue>
-        </command:parameter>
-      </command:syntaxItem>
-    </command:syntax>
-    <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="Servers, Machines">
-        <maml:name>ComputerName</maml:name>
-        <maml:Description>
-          <maml:para>Local or remote systems to query for SQL information.</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
-        <dev:type>
-          <maml:name>System.String[]</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>CIM</maml:name>
-        <maml:Description>
-          <maml:para>If specified, try to pull and correlate CIM information for SQL</maml:para>
-          <maml:para>TODO: limited testing was performed in matching up the service info to registry info.</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-        <dev:type>
-          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>False</dev:defaultValue>
-      </command:parameter>
-    </command:parameters>
-    <command:inputTypes>
-      <command:inputType>
-        <dev:type>
-          <maml:name>None. You cannot pipe objects to Get-SQLInstance</maml:name>
-        </dev:type>
-        <maml:description>
-          <maml:para></maml:para>
-        </maml:description>
-      </command:inputType>
-    </command:inputTypes>
-    <command:returnValues>
-      <command:returnValue>
-        <dev:type>
-          <maml:name>[PSCustomObject]</maml:name>
-        </dev:type>
-        <maml:description>
-          <maml:para></maml:para>
-        </maml:description>
-      </command:returnValue>
-    </command:returnValues>
-    <maml:alertSet>
-      <maml:alert>
-        <maml:para>Name: Get-SQLInstance Author: Boe Prox, edited by cookie monster (to cover wow6432node, CIM tie in)</maml:para>
-        <maml:para>Version History: 1.5 //Boe Prox - 31 May 2016 	- Added CIM queries for more information 	- Custom object type name 1.0 //Boe Prox -  07 Sept 2013 	- Initial Version</maml:para>
-        <maml:para>Following modifications by metablaster based on both originals 15 Feb 2020: - change syntax, casing, code style and function name</maml:para>
-        <maml:para>- resolve warnings, replacing aliases with full names</maml:para>
-        <maml:para>- change how function returns</maml:para>
-        <maml:para>- Add code to return SQL DTS Path</maml:para>
-        <maml:para>- separate support for 32 bit systems</maml:para>
-        <maml:para>- Include license into file (MIT all 3), links to original sites and add appropriate Copyright for each author/contributor</maml:para>
-        <maml:para>- update reported server versions</maml:para>
-        <maml:para>- added more verbose and debug output, path formatting.</maml:para>
-        <maml:para>- Replaced WMI calls with CIM calls which are more universal and cross platform that WMI</maml:para>
-        <maml:para></maml:para>
-        <maml:para>Links to original and individual versions of code https://github.com/RamblingCookieMonster/PowerShell https://github.com/metablaster/WindowsFirewallRuleset https://gallery.technet.microsoft.com/scriptcenter/Get-SQLInstance-9a3245a0</maml:para>
-        <maml:para>TODO: update examples to include DTS directory</maml:para>
-      </maml:alert>
-    </maml:alertSet>
-    <command:examples>
-      <command:example>
-        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Get-SQLInstance -Computername DC1</dev:code>
-        <dev:remarks>
-          <maml:para>SQLInstance   : MSSQLSERVER Version       : 10.0.1600.22 isCluster     : False Computername  : DC1 FullName      : DC1 isClusterNode : False Edition       : Enterprise Edition ClusterName   : ClusterNodes  : {} Caption       : SQL Server 2008</maml:para>
-          <maml:para>SQLInstance   : MINASTIRITH Version       : 10.0.1600.22 isCluster     : False Computername  : DC1 FullName      : DC1\MINASTIRITH isClusterNode : False Edition       : Enterprise Edition ClusterName   : ClusterNodes  : {} Caption       : SQL Server 2008</maml:para>
-        </dev:remarks>
-      </command:example>
-      <command:example>
-        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Get-SQLInstance -Computername Server1, Server2 -CIM</dev:code>
-        <dev:remarks>
-          <maml:para>Computername     : Server1 SQLInstance      : MSSQLSERVER SQLBinRoot       : D:\MSSQL11.MSSQLSERVER\MSSQL\Binn Edition          : Enterprise Edition: Core-based Licensing Version          : 11.0.3128.0 Caption          : SQL Server 2012 isCluster        : False isClusterNode    : False ClusterName      : ClusterNodes     : {} FullName         : Server1 ServiceName      : SQL Server (MSSQLSERVER) ServiceState     : Running ServiceAccount   : domain\Server1SQL ServiceStartMode : Auto</maml:para>
-          <maml:para>Computername     : Server2 SQLInstance      : MSSQLSERVER SQLBinRoot       : D:\Program Files\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQL\Binn Edition          : Enterprise Edition Version          : 10.50.4000.0 Caption          : SQL Server 2008 R2 isCluster        : False isClusterNode    : False ClusterName      : ClusterNodes     : {} FullName         : Server2 ServiceName      : SQL Server (MSSQLSERVER) ServiceState     : Running ServiceAccount   : domain\Server2SQL ServiceStartMode : Auto</maml:para>
-        </dev:remarks>
-      </command:example>
-    </command:examples>
-    <command:relatedLinks>
-      <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SQLInstance.md</maml:uri>
-      </maml:navigationLink>
-    </command:relatedLinks>
-  </command:command>
-  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
-    <command:details>
-      <command:name>Get-SQLManagementStudio</command:name>
-      <command:verb>Get</command:verb>
-      <command:noun>SQLManagementStudio</command:noun>
+      <command:noun>SqlManagementStudio</command:noun>
       <maml:description>
         <maml:para>Get installed Microsoft SQL Server Management Studios</maml:para>
       </maml:description>
@@ -974,7 +827,7 @@
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
-        <maml:name>Get-SQLManagementStudio</maml:name>
+        <maml:name>Get-SqlManagementStudio</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Computer, Server, Domain, Host, Machine">
           <maml:name>ComputerName</maml:name>
           <maml:Description>
@@ -1006,7 +859,7 @@
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>None. You cannot pipe objects to Get-SQLManagementStudio</maml:name>
+          <maml:name>None. You cannot pipe objects to Get-SqlManagementStudio</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1046,6 +899,137 @@
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
+      <command:name>Get-SqlServerInstance</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>SqlServerInstance</command:noun>
+      <maml:description>
+        <maml:para>Retrieves SQL server information from a local or remote servers.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Retrieves SQL server information from a local or remote servers. Pulls all instances from a SQL server and detects if in a cluster or not.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-SqlServerInstance</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="none">
+          <maml:name>ComputerName</maml:name>
+          <maml:Description>
+            <maml:para>Local or remote systems to query for SQL information.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>CIM</maml:name>
+          <maml:Description>
+            <maml:para>If specified, try to pull and correlate CIM information for SQL TODO: limited testing was performed in matching up the service info to registry info.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="none">
+        <maml:name>ComputerName</maml:name>
+        <maml:Description>
+          <maml:para>Local or remote systems to query for SQL information.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>CIM</maml:name>
+        <maml:Description>
+          <maml:para>If specified, try to pull and correlate CIM information for SQL TODO: limited testing was performed in matching up the service info to registry info.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Get-SqlServerInstance</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>[PSCustomObject]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Name: Get-SqlServerInstance Author: Boe Prox, edited by cookie monster (to cover wow6432node, CIM tie in)</maml:para>
+        <maml:para>Version History: 1.5 //Boe Prox - 31 May 2016 	- Added CIM queries for more information 	- Custom object type name 1.0 //Boe Prox -  07 Sept 2013 	- Initial Version</maml:para>
+        <maml:para>Following modifications by metablaster based on both originals 15 Feb 2020: - change syntax, casing, code style and function name</maml:para>
+        <maml:para>- resolve warnings, replacing aliases with full names</maml:para>
+        <maml:para>- change how function returns</maml:para>
+        <maml:para>- Add code to return SQL DTS Path</maml:para>
+        <maml:para>- separate support for 32 bit systems</maml:para>
+        <maml:para>- Include license into file (MIT all 3), links to original sites and add appropriate Copyright for each author/contributor</maml:para>
+        <maml:para>- update reported server versions</maml:para>
+        <maml:para>- added more verbose and debug output, path formatting.</maml:para>
+        <maml:para>- Replaced WMI calls with CIM calls which are more universal and cross platform that WMI</maml:para>
+        <maml:para>- 12 December 2020:</maml:para>
+        <maml:para>- Renamed from Get-SQLInstance to Get-SqlServerInstance because of name colision from SQLPS module</maml:para>
+        <maml:para></maml:para>
+        <maml:para>Links to original and individual versions of code https://github.com/RamblingCookieMonster/PowerShell https://github.com/metablaster/WindowsFirewallRuleset https://gallery.technet.microsoft.com/scriptcenter/Get-SqlServerInstance-9a3245a0</maml:para>
+        <maml:para>TODO: Update examples to include DTS directory</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Get-SqlServerInstance -Computername DC1</dev:code>
+        <dev:remarks>
+          <maml:para>SQLInstance   : MSSQLSERVER Version       : 10.0.1600.22 isCluster     : False Computername  : DC1 FullName      : DC1 isClusterNode : False Edition       : Enterprise Edition ClusterName   : ClusterNodes  : {} Caption       : SQL Server 2008</maml:para>
+          <maml:para>SQLInstance   : MINASTIRITH Version       : 10.0.1600.22 isCluster     : False Computername  : DC1 FullName      : DC1\MINASTIRITH isClusterNode : False Edition       : Enterprise Edition ClusterName   : ClusterNodes  : {} Caption       : SQL Server 2008</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Get-SqlServerInstance -Computername Server1, Server2 -CIM</dev:code>
+        <dev:remarks>
+          <maml:para>Computername     : Server1 SQLInstance      : MSSQLSERVER SQLBinRoot       : D:\MSSQL11.MSSQLSERVER\MSSQL\Binn Edition          : Enterprise Edition: Core-based Licensing Version          : 11.0.3128.0 Caption          : SQL Server 2012 isCluster        : False isClusterNode    : False ClusterName      : ClusterNodes     : {} FullName         : Server1 ServiceName      : SQL Server (MSSQLSERVER) ServiceState     : Running ServiceAccount   : domain\Server1SQL ServiceStartMode : Auto</maml:para>
+          <maml:para>Computername     : Server2 SQLInstance      : MSSQLSERVER SQLBinRoot       : D:\Program Files\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQL\Binn Edition          : Enterprise Edition Version          : 10.50.4000.0 Caption          : SQL Server 2008 R2 isCluster        : False isClusterNode    : False ClusterName      : ClusterNodes     : {} FullName         : Server2 ServiceName      : SQL Server (MSSQLSERVER) ServiceState     : Running ServiceAccount   : domain\Server2SQL ServiceStartMode : Auto</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SqlServerInstance.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
       <command:name>Get-SystemApps</command:name>
       <command:verb>Get</command:verb>
       <command:noun>SystemApps</command:noun>
@@ -1059,7 +1043,22 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-SystemApps</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Computer, Server, Domain, Host, Machine">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="User">
+          <maml:name>UserName</maml:name>
+          <maml:Description>
+            <maml:para>User name in form of: - domain\user_name</maml:para>
+            <maml:para>- user_name@fqn.domain.tld</maml:para>
+            <maml:para>- user_name</maml:para>
+            <maml:para>- SID-string</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="Computer, Server, Domain, Host, Machine">
           <maml:name>ComputerName</maml:name>
           <maml:Description>
             <maml:para>NETBIOS Computer name in form of "COMPUTERNAME"</maml:para>
@@ -1074,7 +1073,22 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Computer, Server, Domain, Host, Machine">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="User">
+        <maml:name>UserName</maml:name>
+        <maml:Description>
+          <maml:para>User name in form of: - domain\user_name</maml:para>
+          <maml:para>- user_name@fqn.domain.tld</maml:para>
+          <maml:para>- user_name</maml:para>
+          <maml:para>- SID-string</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="Computer, Server, Domain, Host, Machine">
         <maml:name>ComputerName</maml:name>
         <maml:Description>
           <maml:para>NETBIOS Computer name in form of "COMPUTERNAME"</maml:para>
@@ -1101,6 +1115,22 @@
       <command:returnValue>
         <dev:type>
           <maml:name>[Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage] store app information object</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>[Object] if using PowerShell Core which outputs deserialized object:</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>[Deserialized.Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1299,6 +1329,22 @@
       <command:returnValue>
         <dev:type>
           <maml:name>[Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage] store app information object</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>[Object] if using PowerShell Core which outputs deserialized object:</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>[Deserialized.Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>

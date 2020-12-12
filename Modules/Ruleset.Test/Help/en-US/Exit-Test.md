@@ -14,7 +14,7 @@ Exit unit test
 ## SYNTAX
 
 ```none
-Exit-Test [-WhatIf] [-Confirm] [<CommonParameters>]
+Exit-Test [-Pester] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -32,6 +32,22 @@ Exit-Test
 ```
 
 ## PARAMETERS
+
+### -Pester
+
+Should be specified to exit private function pester test
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -WhatIf
 

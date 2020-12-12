@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.Utility
 Module Guid: 5f38e46f-1bc4-489d-90df-72755129cfdd
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.8.0
-Help Version: 0.8.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.9.0
+Help Version: 0.9.0
 Locale: en-US
 ---
 
@@ -69,3 +69,4 @@ Show-SDDL returns SDDL based on "object" such as path, or registry entry
 ### [Update-Context](Update-Context.md)
 
 Update context for Approve-Execute function
+

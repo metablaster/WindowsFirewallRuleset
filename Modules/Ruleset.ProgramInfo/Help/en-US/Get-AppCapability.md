@@ -14,8 +14,7 @@ Get capabilities of Windows store app
 ## SYNTAX
 
 ```none
-Get-AppCapability [-InputObject] <AppxPackage[]> [-User <String>] [-Authority] [-Networking]
- [<CommonParameters>]
+Get-AppCapability [-InputObject] <Object[]> [-User <String>] [-Authority] [-Networking] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -55,7 +54,7 @@ APPLICATION PACKAGE AUTHORITY\Your home or work networks
 One or more Windows store apps for which to retrieve capabilities
 
 ```yaml
-Type: Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage[]
+Type: System.Object[]
 Parameter Sets: (All)
 Aliases: App, StoreApp
 
@@ -120,6 +119,8 @@ Accept wildcard characters: False
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
+
+### [Object[]] Deserialized object on PowerShell Core 7.1+, otherwise
 
 ### [Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage[]]
 

@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.UserInfo
 Module Guid: 136254f4-4730-4ed1-b9e9-1ccecfe09ee9
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.8.0
-Help Version: 0.8.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.9.0
+Help Version: 0.9.0
 Locale: en-US
 ---
 
@@ -45,3 +45,4 @@ Get user groups on target computers
 ### [Merge-SDDL](Merge-SDDL.md)
 
 Merge 2 SDDL strings into one
+

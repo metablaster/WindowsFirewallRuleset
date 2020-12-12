@@ -79,6 +79,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### [Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage] store app information object
 
+### [Object] if using PowerShell Core which outputs deserialized object:
+
+### [Deserialized.Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage]
+
 ## NOTES
 
 TODO: query remote computer not implemented

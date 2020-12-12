@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.Logging
 Module Guid: 9be5568a-a48e-4e96-a6df-90f699cf1c8a
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.8.0
-Help Version: 0.8.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.9.0
+Help Version: 0.9.0
 Locale: en-US
 ---
 
@@ -13,6 +13,10 @@ Locale: en-US
 {{ Fill in the Description }}
 
 ## Ruleset.Logging Cmdlets
+
+### [Initialize-Log](Initialize-Log.md)
+
+Generates a log file name for Update-Log function
 
 ### [Update-Log](Update-Log.md)
 

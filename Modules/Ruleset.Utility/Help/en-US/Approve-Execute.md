@@ -13,9 +13,18 @@ Used to ask user if he wants to run script
 
 ## SYNTAX
 
+### None (Default)
+
 ```none
-Approve-Execute [[-Default] <String>] [[-Title] <String>] [[-Question] <String>] [[-Accept] <String>]
- [[-Deny] <String>] [<CommonParameters>]
+Approve-Execute [-Unsafe] [-Title <String>] [-Question <String>] [-Accept <String>] [-Deny <String>]
+ [<CommonParameters>]
+```
+
+### ToAll
+
+```none
+Approve-Execute [-Unsafe] [-Title <String>] [-Question <String>] [-Accept <String>] [-Deny <String>]
+ -YesToAll <PSReference> -NoToAll <PSReference> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -34,18 +43,18 @@ Approve-Execute "No" "Sample title" "Sample question"
 
 ## PARAMETERS
 
-### -Default
+### -Unsafe
 
-{{ Fill Default Description }}
+If specified the command is considered unsafe, and the default action is then "No"
 
 ```yaml
-Type: System.String
+Type: System.Management.Automation.SwitchParameter
 Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 1
-Default value: Yes
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -60,7 +69,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 2
+Position: Named
 Default value: "Executing: " + (Split-Path -Leaf $MyInvocation.ScriptName)
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -76,7 +85,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 3
+Position: Named
 Default value: Do you want to run this script?
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -92,7 +101,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 4
+Position: Named
 Default value: Continue with only the next step of the operation
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -108,8 +117,42 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 5
+Position: Named
 Default value: Skip this operation and proceed with the next operation
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -YesToAll
+
+True if user selects YesToAll.
+If this is already true, Approve-Execute will bypass the prompt and return true.
+
+```yaml
+Type: System.Management.Automation.PSReference
+Parameter Sets: ToAll
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -NoToAll
+
+true if user selects NoToAll.
+If this is already true, Approve-Execute will bypass the prompt and return false.
+
+```yaml
+Type: System.Management.Automation.PSReference
+Parameter Sets: ToAll
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
