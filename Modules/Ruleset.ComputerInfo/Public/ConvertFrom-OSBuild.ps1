@@ -72,8 +72,14 @@ function ConvertFrom-OSBuild
 		}
 	}
 
+	if ($Build -gt $OSBuildInfo[0].Build)
+	{
+		# TODO: OS Version is still present and may be older than latest RTM version
+		return "Insider"
+	}
+
 	Write-Error -Category ObjectNotFound -TargetObject $Build `
-		-Message "Provided OS build number not recognized"
+		-Message "OS build number $Build unsupported or not recognized"
 }
 
 <#

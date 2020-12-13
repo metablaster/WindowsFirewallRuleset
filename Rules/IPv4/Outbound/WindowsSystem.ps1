@@ -333,6 +333,7 @@ ProgramDataUpdater and StartupAppTask.
 Right-click on the Microsoft Compatibility Appraiser and select Disable." |
 Format-Output
 
+# TODO: TCP port 80 NT AUTHORITY\SYSTEM seen in dev channel, testing SYSTEM account
 $Program = "%SystemRoot%\System32\SearchProtocolHost.exe"
 Test-File $Program
 
@@ -341,8 +342,8 @@ New-NetFirewallRule -DisplayName "Windows Indexing Service" `
 	-Service Any -Program $Program -Group $Group `
 	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 443 `
-	-LocalUser Any `
+	-LocalPort Any -RemotePort 80, 443 `
+	-LocalUser $NT_AUTHORITY_System `
 	-InterfaceType $DefaultInterface `
 	-Description "SearchProtocolHost.exe is part of the Windows Indexing Service,
 an application that indexes files on the local drive making them easier to search." |

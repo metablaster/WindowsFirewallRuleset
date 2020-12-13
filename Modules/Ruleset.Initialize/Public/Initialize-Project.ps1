@@ -472,6 +472,11 @@ function Initialize-Project
 			}
 		}
 	}
+	else
+	{
+		Write-Warning -Message "3rd party modules may be missing or outdated which could result in unexpected behavior"
+		Write-Information -Tags "Project" -MessageData "INFO: This can be automated by enabling 'ModulesCheck' variable in Config\ProjectSettings.ps1"
+	}
 
 	# TODO: CIM may not always work
 	$OSCaption = Get-CimInstance -Class Win32_OperatingSystem -ComputerName $PolicyStore `
@@ -487,7 +492,8 @@ function Initialize-Project
 	Write-Host "Checking project minimum requirements was successful!" -ForegroundColor Cyan
 
 	Write-Host ""
-	Write-Host "System:`t`t $OSCaption v$OSBuildVersion"
+	# NOTE: No 'v' prefix because of possible "Insider" string
+	Write-Host "System:`t`t $OSCaption $OSBuildVersion"
 	Write-Host "Environment:`t PowerShell $PowerShellEdition $TargetPSVersion"
 	Write-Host ""
 }

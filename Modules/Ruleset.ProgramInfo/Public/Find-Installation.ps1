@@ -261,13 +261,19 @@ function Find-Installation
 		}
 		"AdobeARM"
 		{
-			# TODO: this is wrong, requires path search type
-			Update-Table -Search "Adobe\ARM"
+			Edit-Table "%SystemDrive%\Program Files (x86)\Common Files\Adobe\ARM\1.0"
+			break
+		}
+		"AdobeReader"
+		{
+			# Adobe Acrobat Reader DC
+			Update-Table -Search "Acrobat Reader"
 			break
 		}
 		"AdobeAcrobat"
 		{
-			Update-Table -Search "Acrobat Reader DC"
+			# Adobe Acrobat DC
+			Update-Table -Search "Adobe Acrobat DC"
 			break
 		}
 		"LoLGame"

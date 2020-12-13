@@ -62,6 +62,8 @@ None. Update-Table does not generate any output
 .NOTES
 TODO: For programs in user profile rules should update LocalUser parameter accordingly,
 currently it looks like we assign entry user group for program that applies to user only
+TODO: Using "Executable" parameter should be possible without the use of "Search" parameter
+TODO: Consider optional parameter for search by regex, wildcard, case sensitive or positional search
 #>
 function Update-Table
 {

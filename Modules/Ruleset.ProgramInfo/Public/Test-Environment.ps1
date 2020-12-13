@@ -116,7 +116,7 @@ function Test-Environment
 
 	if ([string]::IsNullOrEmpty($Path))
 	{
-		Write-Warning -Message "Path name is null or empty"
+		Write-Warning -Message "The path name is null or empty"
 		# Write-Verbose -Message "[$($MyInvocation.InvocationName)] Returning false, file path is null or empty"
 		return $false
 	}

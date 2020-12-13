@@ -21,11 +21,13 @@ If you would like to see fresh changes done since last release you can do so on 
 
 ## v0.9.0 (develop branch)
 
+**NOTE:** Changes for unreleased version (develop branch) may change or be upfront
+
 - Rules
 
   - Added rules for "Bing walpaper" app
   - Added rules for PSPing from sysinternals
-  - Fixed rules and search for Adobe
+  - Fixed rules and search for Adobe reader and Acrobat
 
   - Partially improved following rules:
     - ICMPv6
