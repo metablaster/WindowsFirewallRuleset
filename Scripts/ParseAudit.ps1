@@ -194,6 +194,7 @@ $File = Initialize-Log $LogsFolder\Audit -Label $FileLabel -Header $EventDescrip
 
 $ProtocolNumber = switch ($Protocol)
 {
+	"Any" { $null; break }
 	"ICMP" { 1; break }
 	"IGMP" { 2; break }
 	"UDP" { 6; break }
@@ -215,7 +216,7 @@ foreach ($Event in $Events)
 	$xmlns.AddNamespace("el", "http://schemas.microsoft.com/win/2004/08/events/event")
 	$EventProtocol = $EventXML.SelectSingleNode("/el:Event/el:EventData/el:Data[@Name = 'Protocol']/text()", $xmlns).Value
 
-	if ($EventProtocol -ne $ProtocolNumber)
+	if (($null -ne $ProtocolNumber) -and ($EventProtocol -ne $ProtocolNumber))
 	{
 		continue
 	}

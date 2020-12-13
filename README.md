@@ -472,7 +472,7 @@ Feel free to suggest or contribute new rules, or improvements for existing rules
 Just make sure you follow below notices:
 
 1. Provide some documentation or reference (preferably official) for your rules so that it can be
-easy to verify that these rules don't contain mistakes, ex. for ICMP rules you would provide a link
+easy to verify these rules don't contain mistakes, ex. for ICMP rules you would provide a link
 to [IANA][iana] with relevant reference document.
 
 2. To suggest new rules or various rule and code improvements, please open new issue here on github

@@ -9,7 +9,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - [Changelog](#changelog)
   - [Table of contents](#table-of-contents)
-  - [v0.8.1 (develop branch)](#v081-develop-branch)
+  - [v0.9.0 (develop branch)](#v090-develop-branch)
   - [v0.8.0 (current release)](#v080-current-release)
   - [v0.7.0](#v070)
   - [v0.6.0](#v060)
@@ -19,12 +19,13 @@ If you would like to see fresh changes done since last release you can do so on 
   - [v0.3.0](#v030)
   - [v0.2](#v02)
 
-## v0.8.1 (develop branch)
+## v0.9.0 (develop branch)
 
 - Rules
 
   - Added rules for "Bing walpaper" app
   - Added rules for PSPing from sysinternals
+  - Fixed rules and search for Adobe
 
   - Partially improved following rules:
     - ICMPv6
@@ -45,19 +46,12 @@ If you would like to see fresh changes done since last release you can do so on 
   - Improved function `Get-AppSID` big thanks to @ljani for awesome solution: https://github.com/ljani
   - Logging without the need for parameter splating, @Logs variable was removed
   - Improved program search algorithm
+  - Inheritance of preference variables into module reworked and now valid for manifest modules only,
+  and only as defined in ProjectSettings.ps1, no inheritance from caller scope
 
 - Documentation
 
-  - Updated/improved following docs:
-    - ManageGPOFirewall
-    - MonitoringFirewall
-    - FirewallParameters
-    - PowershellCommands (renamed to "CommandHelp")
-    - Reference
-    - PredefinedRules
-    - ProblematicTraffic
-    - FAQ
-
+  - Updated/improved all docs
   - Links in markdown are now reference links instead of inline links
   - Added comment based help for rule scripts
 
@@ -74,7 +68,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - `RestartNetwork.ps1` script didn't work for virtual adapters
   - Rules for WORKGROUP didn't work
-  - Maximum .NET Framework limitation in Windows PowerShell is 4.5
+  - Maximum valid .NET Framework limitation in Windows PowerShell is 4.5 (4.8 not recognized)
 
 ## v0.8.0 (current release)
 

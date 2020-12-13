@@ -243,8 +243,8 @@ So here is an overview to help you see what they do hopefully answering all of y
    none of this information is ever sent anywhere, once you close down PowerShell it's all cleared.
    - If you publish your code modifications online (ex. to your fork) make sure your modifications
    don't include any personal information such as user names, email or system details.
-   - Bugs might exist which could break things, while I do my best to avoid bugs you might want to remind
-   yourself that this is after all [free software][license]
+   - Bugs might exist which could break things, while I do my best to avoid bugs you might want to
+   report your finds to be fixed.
 
 ## Why do I get "access denied" errors
 
@@ -263,4 +263,3 @@ software that is not essential to apply rules with scripts.
 [vscode]: https://code.visualstudio.com "Visual Studio Code"
 [git]: https://git-scm.com
 [makecab]: https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/makecab "Visit Microsoft docs"
-[license]: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/LICENSE
