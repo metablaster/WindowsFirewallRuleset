@@ -68,6 +68,7 @@ New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 
 # Check requirements
 Initialize-Project -Abort
+Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $false
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
@@ -83,6 +84,8 @@ if ($Pester)
 Update-Context $TestContext $ThisScript
 if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
+
+Write-Warning -Message "Output of some tests cases may be unexpected with RunAllTests.ps1"
 
 if (!$Pester)
 {

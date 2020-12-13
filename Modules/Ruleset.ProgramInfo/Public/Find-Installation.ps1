@@ -541,14 +541,17 @@ function Find-Installation
 		$Script = (Get-PSCallStack)[2].Command
 
 		# TODO: these loops seem to be skipped, probably missing Test-File, need to check
-		Write-Information -Tags "User" -MessageData "INFO: If you installed $Program elsewhere you can input correct path now"
-		Write-Information -Tags "User" -MessageData "INFO: or adjust path in $Script and re-run the script later."
+		Write-Information -Tags "User" -MessageData "INFO: If you installed $Program elsewhere you can input valid path now"
+		Write-Information -Tags "User" -MessageData "INFO: Alternatively adjust path in $Script and re-run the script later."
 
-		if (Approve-Execute -Title "Rule group for $Program" -Question "Do you want to input path now?")
+		$Accept = "Provide full path to '$Program' installation directory"
+		$Deny = "Skip operation, rules for '$Program' won't be loaded into firewall"
+
+		if (Approve-Execute -Accept $Accept -Deny $Deny -Title "Rule group for $Program" -Question "Do you want to input path now?")
 		{
 			while ($InstallTable.Rows.Count -eq 0)
 			{
-				[string] $InstallLocation = Read-Host "Input path to '$Program' root directory"
+				[string] $InstallLocation = Read-Host "Please input path to '$Program' root directory"
 
 				if (![string]::IsNullOrEmpty($InstallLocation))
 				{
@@ -560,8 +563,11 @@ function Find-Installation
 					}
 				}
 
+				$Accept = "Try again, required path may be deeper or shallower into/from root directory for '$Program'"
+				$Deny = "Stop asking for '$Program' and continue"
+
 				Write-Warning -Message "Installation directory for '$Program' not found"
-				if (!(Approve-Execute -Unsafe -Title "Unable to locate '$InstallLocation'" -Question "Do you want to try again?"))
+				if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Title "Unable to locate '$InstallLocation'" -Question "Do you want to try again?"))
 				{
 					break
 				}

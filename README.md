@@ -196,8 +196,8 @@ defaults then visit `Config\ProjectSettings.ps1` and there you'll find global va
 which are used for this.
 - Loading rules into an empty GPO should be very fast, however loading into GPO which already
 contains rules will be significantly slower (depends on number of existing rules)
-- All errors and warnings will be saved to `Logs` directory, so you can review these logs later
-if you want to fix some problem.
+- All errors and warnings will be saved to `Logs` directory, you can review these logs later if you
+want to fix some problem, most warnings can be safely ignored but errors should be resolved.
 - Any rule that results in "access denied" while loading should be reloaded by executing specific
 script again, see [FAQ.md](Readme/FAQ.md)
 for information on why this may happen.

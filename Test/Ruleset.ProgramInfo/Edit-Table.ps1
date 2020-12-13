@@ -59,7 +59,7 @@ New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 if ((Get-Variable -Name Develop -Scope Global).Value -eq $false)
 {
 	Write-Error -Category NotEnabled -TargetObject "Variable 'Develop'" `
-		-Message "This unit test is enabled only when 'Develop' is set to $true"
+		-Message "Unit test $ThisScript is enabled only when 'Develop' variable is set to `$true"
 	return
 }
 elseif (!((Get-Command -Name Initialize-Table -EA Ignore) -and

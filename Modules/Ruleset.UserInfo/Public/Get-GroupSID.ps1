@@ -94,7 +94,7 @@ function Get-GroupSID
 				if ($PowerShellEdition -ne "Desktop")
 				{
 					Write-Error -Category InvalidArgument -TargetObject $ComputerName `
-						-Message "Querying computers via CIM server with PowerShell '$PowerShellEdition' not implemented"
+						-Message "Querying computers from CIM server for PowerShell '$PowerShellEdition' not implemented"
 					return
 				}
 

@@ -166,6 +166,6 @@ function Test-Environment
 		Write-Warning -Message "The path syntax is invalid"
 	}
 
-	Write-Information -Tags "Project" -MessageData "INFO: Invalid path is: $Path"
+	Write-Information -Tags "Project" -MessageData "INFO: Invalid path is: '$Path'"
 	return $false
 }

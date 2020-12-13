@@ -71,14 +71,15 @@ Start-Test "Get-UserApps -User $TestUser | Get-AppCapability -Networking"
 Get-UserApps -User $TestUser | Get-AppCapability -User $TestUser -Networking
 
 # TODO: Once these specifics are implemented uncomment -EA SilentlyContinue
-Start-Test 'Get-AppxPackage -Name "*ZuneMusic*" | Get-AppCapability'
-Get-AppxPackage -Name "*ZuneMusic*" | Get-AppCapability -EA SilentlyContinue
+# NOTE: Using "AccountsControl" because "Microsoft.AccountsControl" is available on all OS editions
+Start-Test 'Get-AppxPackage -Name "*AccountsControl*" | Get-AppCapability'
+Get-AppxPackage -Name "*AccountsControl*" | Get-AppCapability -EA SilentlyContinue
 
-Start-Test 'Get-AppCapability (Get-AppxPackage -Name "*ZuneMusic*") -Networking'
-Get-AppCapability (Get-AppxPackage -Name "*ZuneMusic*") -Networking
+Start-Test 'Get-AppCapability (Get-AppxPackage -Name "*AccountsControl*") -Networking'
+Get-AppCapability (Get-AppxPackage -Name "*AccountsControl*") -Networking
 
-Start-Test "Get-AppxPackage -Name '*ZuneMusic*' | Get-AppCapability -Authority"
-$Result = Get-AppCapability -InputObject (Get-AppxPackage -Name "*ZuneMusic*") -Authority -EA SilentlyContinue
+Start-Test "Get-AppxPackage -Name '*AccountsControl*' | Get-AppCapability -Authority"
+$Result = Get-AppCapability -InputObject (Get-AppxPackage -Name "*AccountsControl*") -Authority -EA SilentlyContinue
 $Result
 
 Test-Output $Result -Command Get-AppCapability

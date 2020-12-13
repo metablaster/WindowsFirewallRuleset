@@ -92,7 +92,7 @@ function Get-GroupPrincipal
 				if ($PowerShellEdition -ne "Desktop")
 				{
 					Write-Error -Category InvalidArgument -TargetObject $Computer `
-						-Message "Querying computers via CIM server with PowerShell '$PowerShellEdition' not implemented"
+						-Message "Querying computers from CIM server for PowerShell '$PowerShellEdition' not implemented"
 					return
 				}
 

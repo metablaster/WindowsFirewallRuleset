@@ -75,7 +75,14 @@ Enter-Test -Private -Pester
 Exit-Test -Pester
 Stop-Test
 
-Start-Test "Enter-Test Pester FAIL"
-Enter-Test -Pester
-Exit-Test -Pester
-Stop-Test
+Start-Test "Enter-Test -Pester FAIL"
+try
+{
+	Enter-Test -Pester
+	Exit-Test -Pester
+	Stop-Test
+}
+catch
+{
+	Write-Information -Tags "Test" -MessageData "INFO: Test case failure success"
+}

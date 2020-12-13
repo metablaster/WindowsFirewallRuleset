@@ -46,13 +46,14 @@ None. You cannot pipe objects to Get-AllUserSoftware
 [PSCustomObject] list of programs installed for all users
 
 .NOTES
-TODO: should be renamed into Get-InstallProperties
+TODO: should be renamed into Get-InstallProperties or something else because it has nothing to do
+with system wide installed programs
 #>
 function Get-AllUserSoftware
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-AllUserSoftware.md")]
-	[OutputType([System.Management.Automation.PSCustomObject], [void])]
+	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]

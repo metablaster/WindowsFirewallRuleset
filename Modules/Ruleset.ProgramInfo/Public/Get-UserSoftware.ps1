@@ -55,7 +55,7 @@ function Get-UserSoftware
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserSoftware.md")]
-	[OutputType([System.Management.Automation.PSCustomObject], [void])]
+	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
 		[Alias("User")]
 		[Parameter(Mandatory = $true)]

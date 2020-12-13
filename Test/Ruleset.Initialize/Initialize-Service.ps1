@@ -57,7 +57,7 @@ New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 
 # User prompt
 Update-Context $TestContext $ThisScript
-if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 Enter-Test

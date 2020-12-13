@@ -74,6 +74,10 @@ ConvertFrom-OSBuild 19041.450
 Start-Test "ConvertFrom-OSBuild 11111.1 = unknown"
 ConvertFrom-OSBuild 11111.133 -ErrorAction SilentlyContinue
 
+# NOTE: This value must be updated once that build become RTM for test case to be success
+Start-Test "ConvertFrom-OSBuild 21277 = Insider"
+ConvertFrom-OSBuild 21277
+
 Start-Test "ConvertFrom-OSBuild 16299.2045 = 1079"
 $Result = ConvertFrom-OSBuild 16299.2045
 $Result

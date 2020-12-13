@@ -120,6 +120,7 @@ todo's in this file are categorized into following sections:
     -CIM call will fail, see Get-SystemSKU test
     - Unit tests for private functions in "Ruleset.Firewall" module are missing
     - Unit tests for "Ruleset.Logging" include scripts are missing
+    - Test cases for program search should test for either known program or complete failure
 
 5. Code style
 

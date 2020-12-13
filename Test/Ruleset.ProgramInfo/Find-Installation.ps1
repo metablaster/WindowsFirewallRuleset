@@ -61,7 +61,7 @@ New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 if ((Get-Variable -Name Develop -Scope Global).Value -eq $false)
 {
 	Write-Error -Category NotEnabled -TargetObject "Variable 'Develop'" `
-		-Message "This unit test is enabled only when 'Develop' is set to $true"
+		-Message "Unit test $ThisScript is enabled only when 'Develop' variable is set to `$true"
 	return
 }
 
@@ -84,10 +84,6 @@ $global:InstallTable | Format-Table -AutoSize
 
 Start-Test "Install Root EdgeChromium"
 $global:InstallTable | Select-Object -ExpandProperty InstallLocation
-
-Start-Test "Find-Installation 'TeamViewer'"
-Find-Installation "TeamViewer"
-$global:InstallTable | Format-Table -AutoSize
 
 Start-Test "Find-Installation 'FailureTest'"
 Find-Installation "FailureTest"

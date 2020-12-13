@@ -65,27 +65,27 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
+$VSCodeRoot = ""
+$OneDrive = "unknown"
 $OfficeRoot = "%ProgramFiles(x866666)%\Microsoft Office\root\Office16"
-$TeamViewerRoot = "%ProgramFiles(x86)%\TeamViewerZZZZ"
 $TestBadVariable = "%UserProfile%\crazyFolder"
 $TestBadVariable2 = "%UserProfile%\crazyFolder"
-$OneDrive = "unknown"
+
+Start-Test "Test-Installation 'VSCode' $VSCodeRoot"
+$Result = Test-Installation "VSCode" ([ref] $VSCodeRoot)
+$Result
 
 Start-Test "Test-Installation 'OneDrive' $OneDrive"
-$Result = Test-Installation "OneDrive" ([ref] $OneDrive)
-$Result
+Test-Installation "OneDrive" ([ref] $OneDrive)
 
 Start-Test "Test-Installation 'MicrosoftOffice' $OfficeRoot"
 Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)
 
-Start-Test "Test-Installation 'TeamViewer' $TeamViewerRoot"
-Test-Installation "TeamViewer" ([ref] $TeamViewerRoot)
-
 Start-Test "Test-Installation 'VisualStudio' $TestBadVariable"
 Test-Installation "VisualStudio" ([ref] $TestBadVariable)
 
-Start-Test "Test-Installation 'BadVariable' $TestBadVariable2"
-Test-Installation "BadVariable" ([ref] $TestBadVariable2)
+Start-Test "Test-Installation 'FailureTest' $TestBadVariable2"
+Test-Installation "FailureTest" ([ref] $TestBadVariable2)
 
 Test-Output $Result -Command Test-Installation
 

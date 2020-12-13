@@ -47,6 +47,7 @@ As Administrator because of firewall logs in repository
 #>
 
 #region Initialization
+# NOTE: As Administrator if firewall writes logs to repository
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
@@ -76,6 +77,16 @@ $Excludes = @(
 	"*.msc"
 )
 
+$TestFiles = @(
+	"ANSI.txt"
+	"ascii.txt"
+	"utf-16LE.txt"
+	"utf8.txt"
+	"utf8BOM.txt"
+	"utf16BE.txt"
+	"utf16LE.txt"
+)
+
 if ($PSVersionTable.PSEdition -eq "Core")
 {
 	# NOTE: Ignoring, see Update-Help.ps1 for more info
@@ -86,7 +97,26 @@ $ProjectFiles = Get-ChildItem -Path $ProjectRoot -Recurse -Exclude $Excludes |
 Where-Object { $_.Mode -notlike "*d*" } | Select-Object -ExpandProperty FullName
 
 Start-Test "Confirm-FileEncoding"
-$ProjectFiles | Confirm-FileEncoding
+# NOTE: Avoiding errors for test files only
+$ProjectFiles | ForEach-Object {
+	$FileName = Split-Path $_ -Leaf
+	if ($FileName -notin $TestFiles)
+	{
+		$_ | Confirm-FileEncoding
+	}
+	else # Test files
+	{
+		$_ | Confirm-FileEncoding -EV Err -EA SilentlyContinue
+		if ($Err)
+		{
+			Write-Information -Tags "Test" -MessageData "Encoding test on file $FileName success"
+		}
+		else
+		{
+			Write-Warning -Message "Encoding test on file $FileName expected to fail with PowerShell Desktop"
+		}
+	}
+}
 
 Start-Test "Confirm-FileEncoding file"
 $TestFile = Resolve-Path -Path $PSScriptRoot\Encoding\utf8.txt

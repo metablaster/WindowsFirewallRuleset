@@ -54,7 +54,7 @@ None. You cannot pipe objects to Test-Output
 None. Test-Output does not generate any output
 
 .NOTES
-TODO: For functions which may return null we should not compare
+None.
 #>
 function Test-Output
 {
@@ -79,12 +79,19 @@ function Test-Output
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 		# NOTE: OutputType variable may contain multiple valid entries
-		$OutputType = Get-TypeName -Command $Command
-		$TypeName = Get-TypeName $InputType
+		# Ignoring errors to reduce spamming console with errors
+		$OutputType = Get-TypeName -Command $Command -ErrorAction SilentlyContinue
+		$TypeName = Get-TypeName $InputType -ErrorAction SilentlyContinue
 
 		Write-Information -Tags "Test" -MessageData "INFO: TypeName:`t`t$TypeName"
 		$OutputType | ForEach-Object {
 			Write-Information -Tags "Test" -MessageData "INFO: OutputType:`t$_"
+		}
+
+		if (!$OutputType)
+		{
+			# This is for completeness, otherwise info message won't be shown, OR only "TypeName:" would be shown
+			Write-Information -Tags "Test" -MessageData "INFO: OutputType:"
 		}
 
 		if ([string]::IsNullOrEmpty($TypeName))
@@ -94,6 +101,10 @@ function Test-Output
 		elseif ([string]::IsNullOrEmpty($OutputType))
 		{
 			Write-Error -Category InvalidResult -TargetObject $Command -Message "Unable to perform type comparison, missing OutputType attribute"
+		}
+		elseif ($TypeName -eq "System.Void" -and ($OutputType -notlike "*Void"))
+		{
+			Write-Warning -Message "Type comparison was not performed because result was likely null"
 		}
 		elseif ($OutputType -ceq $TypeName)
 		{
