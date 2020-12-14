@@ -69,7 +69,7 @@ Set-Variable -Name ErrorStatus -Scope Global -Value $false
 Set-Variable -Name WarningStatus -Scope Global -Value $false
 
 # Prompt to set screen buffer to recommended value
-Set-ScreenBuffer
+Set-ScreenBuffer 4000
 
 # Check all rules that apply to windows services
 Test-File $ServiceHost

@@ -74,7 +74,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # SysInternals installation directories
 #
-$SysInternalsRoot = "%SystemDrive%\tools"
+$SysInternalsRoot = "Unknown path" #"%SystemDrive%\tools"
 
 #
 # Rules for SysInternals

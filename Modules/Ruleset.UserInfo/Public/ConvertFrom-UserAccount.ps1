@@ -50,7 +50,7 @@ None. You cannot pipe objects to ConvertFrom-UserAccount
 [System.String] Usernames in form of: USERNAME
 
 .NOTES
-None.
+TODO: Rename to ConvertFrom-Account
 #>
 function ConvertFrom-UserAccount
 {
@@ -69,7 +69,23 @@ function ConvertFrom-UserAccount
 	foreach ($Account in $UserAccount)
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting user name for account: $Account"
-		$UserNames += $Account.split("\")[1]
+
+		# https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nbte/6f06fa0e-1dc4-4c41-accb-355aaf20546d
+		if ($Account -match "^\w[-|\w]*\\\w+$")
+		{
+			$UserNames += $Account.split("\")[1]
+		}
+		elseif ($Account -match "^\w[-|\w]*\\\S{1,}@\S{2,}\.\S{2,}$")
+		{
+			# TODO: This is experimental, usually we want to figure out local account name instead of email address
+			$UserNames += $Account.split("\")[1]
+		}
+		else
+		{
+			Write-Error -Category InvalidArgument -TargetObject $Account `
+				-Message "The account '$Account' is not a valid account"
+			continue
+		}
 	}
 
 	return $UserNames

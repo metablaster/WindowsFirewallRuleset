@@ -96,8 +96,8 @@ foreach ($Account in $NTAccounts)
 Start-Test "ConvertFrom-SID Unknown domain"
 ConvertFrom-SID "S-1-5-21-0000-0000-1111-1111" -ErrorAction SilentlyContinue | Format-Table
 
-Start-Test "ConvertFrom-SID App SID"
-$AppSID = "S-1-15-2-2967553933-3217682302-2494645345-2077017737-3805576244-585965800-1797614741"
+Start-Test "ConvertFrom-SID App SID for Microsoft.AccountsControl"
+$AppSID = "S-1-15-2-969871995-3242822759-583047763-1618006129-3578262429-3647035748-2471858633"
 $AppResult = ConvertFrom-SID $AppSID
 $AppResult | Format-Table
 

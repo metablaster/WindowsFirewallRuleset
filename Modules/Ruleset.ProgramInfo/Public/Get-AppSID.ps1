@@ -33,11 +33,11 @@ Get store app SID
 .DESCRIPTION
 Get SID for single store app if the app exists
 
-.PARAMETER AppName
+.PARAMETER PackageFamilyName
 "PackageFamilyName" string
 
 .EXAMPLE
-PS> Get-AppSID "Microsoft.MicrosoftEdge_8wekyb3d8bbwe"
+PS> Get-AppSID -FamilyName "Microsoft.MicrosoftEdge_8wekyb3d8bbwe"
 
 .INPUTS
 None. You cannot pipe objects to Get-AppSID
@@ -55,14 +55,15 @@ function Get-AppSID
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-AppSID.md")]
 	[OutputType([string])]
 	param (
+		[Alias("FamilyName")]
 		[Parameter(Mandatory = $true)]
-		[string] $AppName
+		[string] $PackageFamilyName
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	$SHA256 = [System.Security.Cryptography.HashAlgorithm]::Create("sha256")
-	$Hash = $SHA256.ComputeHash([System.Text.Encoding]::Unicode.GetBytes($AppName.ToLowerInvariant()))
+	$Hash = $SHA256.ComputeHash([System.Text.Encoding]::Unicode.GetBytes($PackageFamilyName.ToLowerInvariant()))
 
 	$SID = "S-1-15-2"
 	for ($i = 0; $i -lt 28; $i += 4)

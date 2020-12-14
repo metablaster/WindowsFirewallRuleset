@@ -72,15 +72,12 @@ $UsersTest
 Start-Test "Get-GroupPrincipal Disabled Administrators"
 Get-GroupPrincipal "Administrators" -Disabled
 
-Start-Test "Get-GroupPrincipal CIM server"
+Start-Test "Get-GroupPrincipal Users, Administrators -CIM"
 $CIMTest = Get-GroupPrincipal "Users", "Administrators" -Computer "localhost" -CIM
 $CIMTest
 
-Start-Test "Get-GroupPrincipal CIM server disabled"
+Start-Test "Get-GroupPrincipal Disabled Users, Administrators -CIM"
 Get-GroupPrincipal "Users", "Administrators" -Computer "localhost" -CIM -Disabled
-
-Start-Test "Expand users"
-$UsersTest | Select-Object -ExpandProperty User
 
 Start-Test "Failure test"
 $FailedUsers = Get-GroupPrincipal "Nonexistent Users" -ErrorAction SilentlyContinue

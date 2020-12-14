@@ -109,7 +109,7 @@ function Test-Output
 		elseif ($OutputType -ceq $TypeName)
 		{
 			# Output was defined by OutputType
-			Write-Information -Tags "Test" -MessageData "INFO: Typename and OutputType are identical"
+			Write-Verbose -Message "Typename and OutputType are identical"
 		}
 		elseif ($OutputType -like "$TypeName*" -or ($OutputType | Where-Object { $TypeName -like "$_*" }))
 		{

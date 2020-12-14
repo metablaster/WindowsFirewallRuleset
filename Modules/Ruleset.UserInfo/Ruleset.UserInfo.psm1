@@ -67,6 +67,8 @@ New-Variable -Name KnownDomains -Scope Script -Option Constant -Value @(
 	"APPLICATION PACKAGE AUTHORITY"
 	"BUILTIN"
 	"NT SERVICE" # NEW: ex. TrustedInstaller
+	# See: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.localaccounts/get-localuser?view=powershell-5.1
+	"MicrosoftAccount"
 )
 
 # TODO: global configuration variables (in a separate script)?

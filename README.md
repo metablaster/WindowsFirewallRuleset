@@ -21,6 +21,11 @@
   - [Deleting rules](#deleting-rules)
   - [Export\Import rules](#exportimport-rules)
   - [Checking for updates](#checking-for-updates)
+    - [Manual release download](#manual-release-download)
+    - [Manual beta download](#manual-beta-download)
+    - [Using git command](#using-git-command)
+    - [Using GitHub Desktop app](#using-github-desktop-app)
+    - [Which update method is the best](#which-update-method-is-the-best)
   - [Contributing or suggestions](#contributing-or-suggestions)
   - [Customization](#customization)
   - [More information and help](#more-information-and-help)
@@ -30,35 +35,35 @@
 
 - Windows firewall rules sorted into individual PowerShell scripts according to:
 
-    - Rule group
-    - Traffic direction (ex. inbound, outbound or IPSec)
-    - Software type
-    - IP version (IPv4 / IPv6)
+  - Rule group
+  - Traffic direction (ex. inbound, outbound or IPSec)
+  - Software type
+  - IP version (IPv4 / IPv6)
 
 - Such as for example:
 
-    - ICMP traffic
-    - Browser rules
-    - Rules for Windows system
-    - Store apps
-    - Windows services
-    - Multiplayer Games
-    - Microsoft programs
-    - 3rd party programs
-    - broadcast traffic
-    - multicast traffic
+  - ICMP traffic
+  - Browser rules
+  - Rules for Windows system
+  - Store apps
+  - Windows services
+  - Multiplayer Games
+  - Microsoft programs
+  - 3rd party programs
+  - broadcast traffic
+  - multicast traffic
 
 - In addition to firewall rules you will find a number of PowerShell modules, scripts and
 functions used to gather environment info relevant to build specialized firewall such as:
 
-    - Computers on network
-    - Installed programs
-    - IP subnet math
-    - Remote or local system users
-    - Network configuration
-    - Firewall management
-    - Quick analysis of packet trace and audit logs
-    - Various firewall, system and network utility functions
+  - Computers on network
+  - Installed programs
+  - IP subnet math
+  - Remote or local system users
+  - Network configuration
+  - Firewall management
+  - Quick analysis of packet trace and audit logs
+  - Various firewall, system and network utility functions
 
 - Meaning this project is a good base to easily extend your firewall and include more rules and
 functionalities.
@@ -86,7 +91,7 @@ explicitly make an exception.
 
 3. Unlike default (aka predefined) Windows firewall rules, these rules are more restrictive such as,
 tied to explicit user accounts, rules apply to specific ports, network interfaces, specific executables,
-services etc. all of which is learned autmoatically from target system.
+services etc. all of which is learned automatically from target system.
 
 4. Unlike in usual scenario, you will know which rules have no effect or are redundant
 due to ex. uninstalled program, a missing system service which no longer exists, renamed
@@ -102,9 +107,9 @@ in default Windows firewall this is not possible unless you maintain rules for e
 program or service, thanks to this collection of rules, setting default outbound to block
 requires very little or no additional work.
 
-7. A good portion of code is dedicated to provide cross platform and automated solution to build and define
-firewall specialized for specific target system and users, minimizing the need to do something manually thus
-saving you much valuable administration time.
+7. A good portion of code is dedicated to provide cross platform and automated solution to build and
+define firewall specialized for specific target system and users, minimizing the need to do something
+manually thus saving you much valuable administration time.
 
 [Table of Contents](#table-of-contents)
 
@@ -122,7 +127,8 @@ or inside folders called `External` for organizational purposes.
 ## Requirements
 
 1. Following x64 operating systems are currently tested:
-   - Windows 10 Professional
+   - Windows 10 Pro
+   - Windows 10 Pro Education
    - Windows 10 Enterprise
    - Windows 10 Education
    - Windows Server 2019 Standard
@@ -208,7 +214,7 @@ IPv4 broadcast address. (Otherwise errors may be generated without completing th
 contains rules will be significantly slower (depends on number of existing rules)
 - All errors and warnings will be saved to `Logs` directory, you can review these logs later if you
 want to fix some problem, most warnings can be safely ignored but errors should be resolved.
-- Any rule that results in "access denied" while loading should be reloaded by executing specific
+- Any rule that results in "Access is denied" while loading should be reloaded by executing specific
 script again, see [FAQ.md](Readme/FAQ.md)
 for information on why this may happen.
 - If the project was manually downloaded, transferred from another computer or media then you should\
@@ -330,10 +336,11 @@ If you're unable to connect to internet after applying these rules you have seve
     - You can [Reset Firewall to previous state](Readme/ResetFirewall.md)
     - Take a look into `Readme` folder for more troubleshooting options and documentation
 
-17. As a prerequisite to deploy firewall, some system services have been started and set to automatic start,
-inside `Logs` directory you'll find `Services_DATE.log` to help you restore these services to default if
-desired.\
-For example `Windows Remote Management` service should not run if not needed (The default is "Manual" startup)
+17. As a prerequisite to deploy firewall, some system services have been started and set to automatic
+start, inside `Logs` directory you'll find `Services_DATE.log` to help you restore these services to
+default if desired.\
+For example `Windows Remote Management` service should not run if not needed (The default is "Manual"
+startup)
 
 ## Manage loaded rules
 
@@ -346,8 +353,8 @@ rules, such as disabling them, changing some attributes or adding new rules. For
 2. Editing PowerShell scripts, this method gives you full control, you can change or remove existing
 with no restriction or add new ones.
 
-What ever your plan or setup is, you will surely want to perform additional work such as customizing rules,
-or adding new rules for programs not yet covered in this project.
+What ever your plan or setup is, you will surely want to perform additional work such as customizing
+rules, or adding new rules for programs not yet covered in this project.
 
 Rules are loaded into local group policy, follow steps below to open local group policy.
 
@@ -370,14 +377,16 @@ If you want to apply only specific rules there are 2 ways to do this:
 1. Execute `Scripts\SetupFirewall.ps1` and chose `Yes` only for rulesets you want, otherwise chose `No`
 and hit enter to skip current ruleset.
 
-2. With PowerShell navigate (`cd`) to directory containing ruleset script you want and execute individual script.
+2. With PowerShell navigate (`cd`) to directory containing ruleset script you want and execute
+individual script.
 
 You might want to run `Scripts\SetupProfile.ps1` afterwards to apply default firewall behavior if
 it's not already set, or you can do it manually in GPO but with limited power.
 "limited power" means `Scripts\SetupProfile.ps1` configures some firewall parameters which can't be
 adjusted in firewall GUI.
 
-In all 3 cases the script will delete all rules that match ruleset display group, before loading rules into GPO.
+In all 3 cases the script will delete all rules that match ruleset display group, before loading
+rules into GPO.
 
 [Table of Contents](#table-of-contents)
 
@@ -423,31 +432,39 @@ which is where you'll find description on how to use export\import module functi
 
 ## Checking for updates
 
-Just like every other software on your computer, this firewall will go out of date as well,
+Just like any other software on your computer, this firewall will go out of date as well,
 become obsolete, and may no longer function properly.
 
 This repository consists of 2 branches, `master` (stable) and `develop` (possibly unstable).\
 The "develop" branch is where all updates directly go, so it's work in progress,
 unlike "master" branch which is updated from develop once in a while and not before all scripts
-are fully tested which is what makes master brach stable.
+are thoroughly tested on fresh installed systems, which is what makes master brach stable.
 
 If you want to experiment with development version to check out new stuff, switch to "develop" branch
 and try it out, however if it produces errors, you can either fix problems or switch back to "master".
 
 There are at least 4 methods to be up to date with this firewall, each with it's own benefits:
 
-1. First method requires you to simply download released scripts which can be found in
+### Manual release download
+
+This method requires you to simply download released scripts which can be found in
 [Releases](https://github.com/metablaster/WindowsFirewallRuleset/releases), this is always from "master"
 branch
 
-2. Second method is good if you want to download from "develop" branch, to do so, use the `branch` button
+### Manual beta download
+
+This method is good if you want to download from "develop" branch, to do so, use the `branch` button
 here on this site to switch to either master or develop branch, next use `Code` button and either clone
 or download zip.
 
-3. Third method is good if you want to do it in console without visiting this site,
+### Using git command
+
+This method is good if you want to do it in console without visiting this site,
 you will need [git][download git], [github account][github join], a [fork][github fork] of this
-repository in your github account and [SSH key][github ssh] to check for new updates on daily,
-weekly or what ever other basis you want, follow steps below to check for updates once you installed
+repository in your github account and [SSH keys][github ssh] to check for new updates on daily,
+weekly or what ever other basis you want.
+
+Follow steps below to check for updates once you installed
 git and cloned your own fork:
 
 - Right click on Start button in Windows
@@ -475,7 +492,7 @@ Next 2 sets of commands are typed each time you want to check for updates:
     - Type: ```git fetch upstream```
     - Type: ```git merge upstream/master```
 
-2. Otherwise to tell git you want updates from develop branch run:
+2. Otherwise to get updates from develop branch run:
 
     - Type: ```git checkout develop```
     - Type: ```git fetch upstream```
@@ -484,23 +501,31 @@ Next 2 sets of commands are typed each time you want to check for updates:
 For this to work, you need to make sure your working tree is "clean", which means
 you need to save and upload your modifications to your fork, for example:
 
-```powershell
-git add .
-git commit -m "my changes"
-git push
-```
+ ```powershell
+ git add .
+ git commit -m "my changes"
+ git push
+ ```
 
-Of course you can switch from one branch to another with git in PowerShell as many times as you
-want and all files will be auto updated without the need to re-download or re-setup anything.
+ Of course you can switch from one branch to another with git in PowerShell as many times as you
+ want and all files will be auto updated without the need to re-download or re-setup anything.
 
-For more info on how to use git see [git documentation][git docs]
+ For more info on how to use git see [git documentation][git docs]
 
-4. Fourth method is similar to method 3, but instead you'll use a graphical interface which you can
+### Using GitHub Desktop app
+
+This method is similar to method 3, but instead you'll use a graphical interface which you can
 get from here: [GitHub Desktop][github desktop]
 
 To configure GitHub Desktop see [GitHub Desktop Documentation][github desktop docs]
 
-That's it, your scripts are now up to date, execute them however you desire.
+### Which update method is the best
+
+If your goal is to just get updates and have graphical interface on your desktop then `GitHub Desktop`
+is cool, otherwise if your goal is firewall customization, using `git` command would be more productive.\
+
+You can have both setups in same time and use them as needed.\
+There isn't any benefit with manual zip download in comparison with git or GitHub Desktop.
 
 [Table of Contents](#table-of-contents)
 
@@ -576,7 +601,6 @@ Following features are desired and might be available at some point in the futur
 
 4. Full functionality for the following editions of Windows 10.0
    - Windows 10 Pro for Workstations
-   - Windows 10 Pro Education
    - Windows 10 IoT Core Blast
    - Windows 10 IoT Enterprise
    - Windows 10 S

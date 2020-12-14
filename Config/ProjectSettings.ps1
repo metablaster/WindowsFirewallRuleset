@@ -502,7 +502,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 		New-Variable -Name RequirePoshGitVersion -Scope Global -Option Constant -Value ([version]::new(0, 7, 3))
 
 		# Recommended minimum Pester version for code testing
-		# NOTE: Analyzer 1.19.1 requires pester v5
+		# NOTE: PScriptAnalyzer 1.19.1 requires pester v5
 		# TODO: we need pester v4 for tests, but why does analyzer require pester?
 		New-Variable -Name RequirePesterVersion -Scope Global -Option Constant -Value ([version]::new(5, 1, 1))
 

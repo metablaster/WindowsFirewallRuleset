@@ -174,7 +174,7 @@ foreach ($Principal in $Principals)
 		}
 
 		$RemoteAddress = $RemoteAddress | Select-Object -Unique
-		$PackageSID = Get-AppSID -AppName $_.PackageFamilyName
+		$PackageSID = Get-AppSID -FamilyName $_.PackageFamilyName
 
 		# Possible package not found
 		if ($PackageSID)
@@ -232,7 +232,7 @@ foreach ($Principal in $Principals)
 		}
 
 		$RemoteAddress = $RemoteAddress | Select-Object -Unique
-		$PackageSID = Get-AppSID -AppName $_.PackageFamilyName
+		$PackageSID = Get-AppSID -FamilyName $_.PackageFamilyName
 
 		# Possible package not found
 		if ($PackageSID)

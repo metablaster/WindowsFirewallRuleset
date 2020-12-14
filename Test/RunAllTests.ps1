@@ -85,6 +85,9 @@ Update-Context $TestContext $ThisScript
 if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
+# Prompt to set screen buffer to recommended value for tests
+Set-ScreenBuffer 3000
+
 Write-Warning -Message "Output of some tests cases may be unexpected with RunAllTests.ps1"
 
 if (!$Pester)

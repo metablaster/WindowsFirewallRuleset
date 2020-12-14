@@ -54,6 +54,12 @@ Home Premium N
 .NOTES
 TODO: accept UPN and NETBIOS computer names
 TODO: ComputerName default value is just a placeholder, need better design
+
+.LINK
+https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.operatingsystemsku?view=powershellsdk-1.1.0
+
+.LINK
+https://docs.microsoft.com/en-us/surface/surface-system-sku-reference
 #>
 function Get-SystemSKU
 {
@@ -106,6 +112,7 @@ function Get-SystemSKU
 					# Include just computer
 					$Result += [PSCustomObject] @{
 						Computer = $Computer
+						SystemSKU = ""
 						SKU = ""
 					}
 
@@ -185,14 +192,20 @@ function Get-SystemSKU
 				79 { "Server Standard (evaluation installation)"; break; }
 				80 { "Server Datacenter (evaluation installation)"; break; }
 				84 { "Enterprise N (evaluation installation)"; break; }
+				87 { "Windows Thin PC"; break }
+				89 { "Windows Embedded Industry"; break }
 				95 { "Storage Server Workgroup (evaluation installation)"; break; }
 				96 { "Storage Server Standard (evaluation installation)"; break; }
+				97 { "Windows RT"; break }
 				98 { "Windows 8 N"; break; }
 				99 { "Windows 8 China"; break; }
 				100 { "Windows 8 Single Language"; break; }
 				101 { "Windows 8"; break; }
 				103 { "Professional with Media Center"; break; }
-
+				104 { "Windows Mobile" }
+				118 { "Windows Embedded Handheld"; break }
+				123 { "Windows IoT (Internet of Things) Core"; break }
+				164 { "Windows 10 Pro Education"; break }
 				default
 				{
 					Write-Debug -Message "[$($MyInvocation.InvocationName)] Input SKU not recognized"
@@ -203,13 +216,14 @@ function Get-SystemSKU
 			if ([string]::IsNullOrEmpty($StringSKU))
 			{
 				Write-Error -Category ObjectNotFound -TargetObject $CimSKU `
-					-Message "Unknown SKU: + $($CimSKU.ToString())"
+					-Message "Unknown SKU: $($CimSKU.ToString())"
 				continue
 			}
 
 			$Result += [PSCustomObject] @{
 				Computer = $TargetComputer
-				SKU = $StringSKU
+				SystemSKU = $StringSKU
+				SKU = $CimSKU
 			}
 		} # foreach computer
 

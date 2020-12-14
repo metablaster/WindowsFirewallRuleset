@@ -74,13 +74,13 @@ foreach ($Account in $GroupAccounts)
 {
 	Start-Test "Get-AppSID: $($Account.User)"
 	Get-UserApps -User $Account.User | ForEach-Object {
-		Get-AppSID -AppName $_.PackageFamilyName
+		Get-AppSID -FamilyName $_.PackageFamilyName
 	}
 }
 
 Start-Test "Get-AppSID: system apps"
 $Result = Get-SystemApps -User $TestAdmin | ForEach-Object {
-	Get-AppSID -AppName $_.PackageFamilyName
+	Get-AppSID -FamilyName $_.PackageFamilyName
 }
 $Result
 

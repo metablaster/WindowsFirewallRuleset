@@ -142,7 +142,7 @@ function Get-AppCapability
 				catch
 				{
 					# NOTE: This will be the cause with Microsoft account (non local Windows account)
-					Write-Warning -Message "Store app '$($App.Name) is missing manifest 'Package' property"
+					Write-Warning -Message "Store app '$($App.Name)' is missing manifest 'Package' property"
 					continue
 				}
 			}

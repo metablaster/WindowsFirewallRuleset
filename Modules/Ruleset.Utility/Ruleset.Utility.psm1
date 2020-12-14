@@ -89,7 +89,3 @@ if (!(Get-Variable -Name CheckInitUtility -Scope Global -ErrorAction Ignore))
 Write-Debug -Message "[$ThisModule] Initialize module variable: Context"
 # Global execution context, used in Approve-Execute
 New-Variable -Name Context -Scope Script -Value "Context not set"
-
-Write-Debug -Message "[$ThisModule] Initialize module variable: RecommendedBuffer"
-# Recommended vertical host screen buffer value, to ensure user can scroll back all the output
-New-Variable -Name RecommendedBuffer -Scope Script -Option Constant -Value 5000

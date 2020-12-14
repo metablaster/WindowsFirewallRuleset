@@ -137,7 +137,7 @@ foreach ($Principal in $Principals)
 			return
 		}
 
-		$PackageSID = Get-AppSID -AppName $_.PackageFamilyName
+		$PackageSID = Get-AppSID -FamilyName $_.PackageFamilyName
 
 		# Possible package not found
 		if ($PackageSID)
@@ -194,7 +194,7 @@ foreach ($Principal in $Principals)
 			return
 		}
 
-		$PackageSID = Get-AppSID -AppName $_.PackageFamilyName
+		$PackageSID = Get-AppSID -FamilyName $_.PackageFamilyName
 
 		# Possible package not found
 		if ($PackageSID)

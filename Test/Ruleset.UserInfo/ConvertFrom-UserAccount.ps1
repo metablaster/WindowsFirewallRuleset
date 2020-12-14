@@ -69,9 +69,16 @@ Start-Test "Get-GroupPrincipal 'Users', 'Administrators'"
 $UserAccounts = Get-GroupPrincipal "Users", "Administrators"
 $UserAccounts
 
-Start-Test "ConvertFrom-UserAccount:"
+Start-Test "ConvertFrom-UserAccount"
 $UserNames = ConvertFrom-UserAccount ($UserAccounts | Select-Object -ExpandProperty Account)
 $UserNames
+
+Start-Test "ConvertFrom-UserAccount 'MicrosoftAccount\$TestUser@email.com'"
+ConvertFrom-UserAccount "MicrosoftAccount\$TestUser@email.com"
+
+Start-Test "ConvertFrom-UserAccount FAIL"
+$BadAccount = "\ac", "$TestUser@email"
+ConvertFrom-UserAccount $BadAccount
 
 Test-Output $UserNames -Command ConvertFrom-UserAccount
 

@@ -165,7 +165,7 @@ function Get-OneDrive
 				}
 			}
 
-			# key loaded with 'reg load' has to be closed, if not 'reg unload' fails with "Access denied"
+			# key loaded with 'reg load' has to be closed, if not 'reg unload' fails with "Access is denied"
 			# TODO: We close the key regardless, other functions using registry should also implement closing keys
 			$OneDriveKey.Close()
 

@@ -13,7 +13,7 @@ Also general questions and answers regarding firewall.
   - [Does this firewall project give me the right protection](#does-this-firewall-project-give-me-the-right-protection)
   - [Windows Firewall does not write logs](#windows-firewall-does-not-write-logs)
   - [Can I trust scripts from this repository](#can-i-trust-scripts-from-this-repository)
-  - [Why do I get "access denied" errors](#why-do-i-get-access-denied-errors)
+  - [Why do I get "Access is denied" errors](#why-do-i-get-access-is-denied-errors)
 
 ## Firewall rule doesn't work, program "some_program.exe" doesn't connect to internet
 
@@ -251,7 +251,7 @@ So here is an overview to help you see what they do hopefully answering all of y
    - Bugs might exist which could break things, while I do my best to avoid bugs you might want to
    report your finds to be fixed.
 
-## Why do I get "access denied" errors
+## Why do I get "Access is denied" errors
 
 You might see this error while loading firewall rules.
 

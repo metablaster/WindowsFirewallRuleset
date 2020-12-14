@@ -342,7 +342,7 @@ function ConvertFrom-SID
 
 										# TODO: Get-AppSID should retrieve remote computer information see implementation
 										# NOTE: ignore warnings and info to reduce spam
-										if ($(Get-AppSID -AppName $App.PackageFamilyName -WA SilentlyContinue -INFA SilentlyContinue) -eq $InputSID)
+										if ($(Get-AppSID -FamilyName $App.PackageFamilyName -WA SilentlyContinue -INFA SilentlyContinue) -eq $InputSID)
 										{
 											$ResultName = $App.Name
 											# TODO: we probably also need to save target computer where this SID is valid
