@@ -44,12 +44,13 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Added new module `Ruleset.Compatibility` because `Appx` module no longer works since PowerShell
   Core 7.1
-  - Improved function `Approve-Execute`, `Test-TargetComputer`
+  - Improved function `Approve-Execute`, `Test-TargetComputer` and `Get-GroupPrincipal`
   - Improved function `Get-AppSID` big thanks to @ljani for awesome solution: https://github.com/ljani
   - Logging without the need for parameter splating, @Logs variable was removed
   - Improved program search algorithm
   - Inheritance of preference variables into module reworked and now valid for manifest modules only,
   and only as defined in ProjectSettings.ps1, no inheritance from caller scope
+  - Various funny looking messages appearing in the console are now simplified
 
 - Documentation
 
@@ -65,12 +66,16 @@ If you would like to see fresh changes done since last release you can do so on 
   - ProjectSettings script reworked to declare variables only as needed and to show variable status
   on demand for current scope
   - Script to collect audit entries to help track down packet drop reason
+  - Changes done to services are now logged
 
 - Bugfix
 
   - `RestartNetwork.ps1` script didn't work for virtual adapters
   - Rules for WORKGROUP didn't work
   - Maximum valid .NET Framework limitation in Windows PowerShell is 4.5 (4.8 not recognized)
+  - Error starting dependent services because of invalid parameter name
+  - Getting One Drive installation directory would fail
+  - Connection errors when using Windows PowerShell because dependent service was not checked
 
 ## v0.8.0 (current release)
 

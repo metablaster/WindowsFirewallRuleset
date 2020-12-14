@@ -75,6 +75,8 @@ function Initialize-Service
 
 	begin
 	{
+		$LogFile = Initialize-Log $LogsFolder -Label "Services" -Header "Service status change"
+
 		# User prompt default values
 		[int32] $Default = 0
 		[ChoiceDescription[]] $Choices = @()
@@ -93,7 +95,8 @@ function Initialize-Service
 			$StatusGood = $true
 			$Service = Get-Service -Name $InputService
 
-			if ($Service.Status -ne "Running")
+			$ServiceOldStatus = $Service.Status
+			if ($ServiceOldStatus -ne "Running")
 			{
 				[string] $Question = "Do you want to start $($Service.DisplayName) service now?"
 				$Accept.HelpMessage = switch ($Service.Name)
@@ -128,15 +131,18 @@ function Initialize-Service
 
 				if ($Decision -eq $Default)
 				{
+					# Configure required services first
 					$RequiredServices = Get-Service -Name $Service.Name -RequiredServices
 
 					foreach ($Required in $RequiredServices)
 					{
-						# For dependent services print only failures
+						# For dependent services show only failures
+						$OldStatus = $Required.StartType
 						if ($Required.StartType -ne "Automatic")
 						{
 							Set-Service -Name $Required.Name -StartupType Automatic
-							$Startup = Get-Service -Name $Required.Name | Select-Object -ExpandProperty StartupType
+
+							$Startup = Get-Service -Name $Required.Name | Select-Object -ExpandProperty StartType
 
 							if ($Startup -ne "Automatic")
 							{
@@ -144,11 +150,16 @@ function Initialize-Service
 							}
 							else
 							{
+								# Write log for service status change
+								"$($Required.Name): $OldStatus -> Automatic" |
+								Out-File -Append -FilePath $LogFile -Encoding $DefaultEncoding
+
 								Write-Verbose -Message "Setting dependent $($Required.DisplayName) service to autostart succeeded"
 							}
 						}
 
-						if ($Required.Status -ne "Running")
+						$OldStatus = $Required.Status
+						if ($OldStatus -ne "Running")
 						{
 							Start-Service -Name $Required.Name
 							$Status = Get-Service -Name $Required.Name | Select-Object -ExpandProperty Status
@@ -162,6 +173,10 @@ function Initialize-Service
 							}
 							else
 							{
+								# Write log for service status change
+								"$($Required.Name): $OldStatus -> Running" |
+								Out-File -Append -FilePath $LogFile -Encoding $DefaultEncoding
+
 								Write-Verbose -Message "Starting dependent $($Required.DisplayName) service succeeded"
 							}
 						}
@@ -169,10 +184,11 @@ function Initialize-Service
 
 					# If decision is no, or if service is running there is no need to modify startup type
 					# Otherwise set startup type after requirements are met
-					if ($Service.StartType -ne "Automatic")
+					$OldStatus = $Service.StartType
+					if ($OldStatus -ne "Automatic")
 					{
 						Set-Service -Name $Service.Name -StartupType Automatic
-						$Startup = Get-Service -Name $Service.Name | Select-Object -ExpandProperty StartupType
+						$Startup = Get-Service -Name $Service.Name | Select-Object -ExpandProperty StartType
 
 						if ($Startup -ne "Automatic")
 						{
@@ -180,6 +196,10 @@ function Initialize-Service
 						}
 						else
 						{
+							# Write log for service status change
+							"$($Service.Name): $OldStatus -> Automatic" |
+							Out-File -Append -FilePath $LogFile -Encoding $DefaultEncoding
+
 							Write-Verbose -Message "Setting $($Service.DisplayName) service to autostart succeeded"
 						}
 					}
@@ -189,14 +209,18 @@ function Initialize-Service
 					Start-Service -Name $Service.Name
 					$Status = Get-Service -Name $Service.Name | Select-Object -ExpandProperty Status
 
-					if ($Status -eq "Running")
-					{
-						Write-Information -Tags "User" -MessageData "INFO: Starting $($Service.DisplayName) service succeeded"
-					}
-					else
+					if ($Status -ne "Running")
 					{
 						$StatusGood = $false
 						Write-Information -Tags "User" -MessageData "INFO: Starting $($Service.DisplayName) service failed, please start manually and try again"
+					}
+					else
+					{
+						# Write log for service status change
+						"$($Service.Name): $ServiceOldStatus -> Running" |
+						Out-File -Append -FilePath $LogFile -Encoding $DefaultEncoding
+
+						Write-Information -Tags "User" -MessageData "INFO: Starting $($Service.DisplayName) service succeeded"
 					}
 				}
 				else

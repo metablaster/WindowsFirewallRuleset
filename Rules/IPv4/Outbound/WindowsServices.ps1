@@ -261,6 +261,23 @@ New-NetFirewallRule -DisplayName "Windows Insider Service" `
 This service must remain enabled for the Windows Insider Program to work." |
 Format-Output
 
+# TODO: utcsvc was seen in "Education" edition but soon dissapeared
+# Looks like Diagnostic Tracking Service or DiagTrack
+# https://www.thewindowsclub.com/utcsvc-high-cpu-and-disk-usage
+
+New-NetFirewallRule -DisplayName "Connected User Experiences and Telemetry" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+	-Service DiagTrack -Program $ServiceHost -Group $Group `
+	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Internet4 `
+	-LocalPort Any -RemotePort 443 `
+	-LocalUser Any `
+	-InterfaceType $DefaultInterface `
+	-Description "Enables features that support in-application and connected user experiences.
+Additionally, this service manages the event driven collection and transmission of diagnostic and
+usage information when the diagnostics and usage privacy option settings are enabled under Feedback
+and Diagnostics." | Format-Output
+
 New-NetFirewallRule -DisplayName "Group Policy Client" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
 	-Service gpsvc -Program $ServiceHost -Group $Group `

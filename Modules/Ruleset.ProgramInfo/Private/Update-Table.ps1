@@ -71,9 +71,8 @@ function Update-Table
 	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true)]
-		[Alias("Search")]
 		[AllowEmptyString()]
-		[string] $SearchString,
+		[string] $Search,
 
 		[Parameter()]
 		[switch] $UserProfile,
@@ -122,7 +121,7 @@ function Update-Table
 				return
 			}
 		}
-		elseif ([string]::IsNullOrEmpty($SearchString))
+		elseif ([string]::IsNullOrEmpty($Search))
 		{
 			# Function was called to search by executables only
 			return
@@ -130,13 +129,15 @@ function Update-Table
 
 		# TODO: try to search also for path in addition to program name
 		# TODO: SearchString may pick up irrelevant paths (ie. unreal engine), or even miss
+		$SearchString = "*$Search*"
+
 		# Search system wide installed programs
-		if ($SystemPrograms -and $SystemPrograms.Name -like "*$SearchString*")
+		if ($SystemPrograms -and $SystemPrograms.Name -like $SearchString)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching system programs for $SearchString"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching system programs for $Search"
 
 			# TODO: need better mechanism for multiple matches
-			$TargetPrograms = $SystemPrograms | Where-Object -Property Name -Like "*$SearchString*"
+			$TargetPrograms = $SystemPrograms | Where-Object -Property Name -Like $SearchString
 			$Principal = $UserGroups | Where-Object -Property Group -EQ "Users"
 
 			foreach ($Program in $TargetPrograms)
@@ -160,10 +161,10 @@ function Update-Table
 			}
 		}
 		# Program not found on system, attempt alternative search
-		elseif ($AllUserPrograms -and $AllUserPrograms.Name -like "*$SearchString*")
+		elseif ($AllUserPrograms -and $AllUserPrograms.Name -like $SearchString)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching program install properties for $SearchString"
-			$TargetPrograms = $AllUserPrograms | Where-Object -Property Name -Like "*$SearchString*"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching program install properties for $Search"
+			$TargetPrograms = $AllUserPrograms | Where-Object -Property Name -Like $SearchString
 
 			foreach ($Program in $TargetPrograms)
 			{
@@ -206,11 +207,11 @@ function Update-Table
 
 			foreach ($Principal in $Principals)
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching $($Principal.Account) programs for $SearchString"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching $($Principal.Account) programs for $Search"
 
 				# TODO: We handle OneDrive case here but there may be more such programs in the future
 				# so this obviously means we need better approach to handle this
-				if ($SearchString -eq "OneDrive")
+				if ($Search -eq "OneDrive")
 				{
 					# NOTE: For one drive registry drilling procedure is different
 					$UserPrograms = Get-OneDrive $Principal.User
@@ -219,7 +220,7 @@ function Update-Table
 				{
 					# NOTE: the story is different here, each user might have multiple matches for search string
 					# letting one match to have same principal would be mistake.
-					$UserPrograms = Get-UserSoftware $Principal.User | Where-Object -Property Name -Like "*$SearchString*"
+					$UserPrograms = Get-UserSoftware $Principal.User | Where-Object -Property Name -Like $SearchString
 				}
 
 				if ($UserPrograms)

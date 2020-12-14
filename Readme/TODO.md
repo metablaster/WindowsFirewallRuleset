@@ -56,6 +56,8 @@ todo's in this file are categorized into following sections:
     - ProjectSettings.ps1 verify auto updated variables: ProjectCheck, ModulesCheck, ServicesCheck
     - Increment project version in all places mentioning version
     - Run PScriptAnalyzer
+    - Test machine should have 2 standard, 2 administrator and 2 MS accounts (one standard one admin),
+    and 1 disabled account for each of these 3 groups for best test results.
     - Run all tests in both release and develop mode, both Desktop and Core editions
     - Run master script on all target OS editions
     - Update CHANGELOG.md

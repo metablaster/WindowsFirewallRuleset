@@ -113,6 +113,8 @@ $Principals = Get-GroupPrincipal "Administrators"
 
 foreach ($Principal in $Principals)
 {
+	# TODO: Somehow Admin will be able to create MS accounts when this rule is disabled,
+	# expected behavior is that default outbound should block (wwahost.exe)
 	New-NetFirewallRule -DisplayName "Store apps for $($Principal.User)" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
 		-Service Any -Program Any -Group $Group `

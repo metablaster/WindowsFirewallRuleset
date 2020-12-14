@@ -93,9 +93,8 @@ function Get-OneDrive
 			# TODO: We need environment variable for remote computer
 			$UserRegConfig = "$env:SystemDrive\Users\$UserName\NTUSER.DAT"
 
-			# NOTE: Using TempUserName instead of SID to minimize the chance of existing key with
-			# that name or any kind of other unkown issues
-			$TempKey = "Temp-$UserName" # $UserSID
+			# NOTE: Using User-UserName instead of SID to minimize the chance of existing key with same name
+			$TempKey = "User-$UserName" # $UserSID
 
 			if (Test-Path -Path $UserRegConfig)
 			{
@@ -140,16 +139,18 @@ function Get-OneDrive
 		}
 		else
 		{
-			# NOTE: remove executable file name
-			$InstallLocation = Split-Path -Path $OneDriveKey.GetValue("OneDriveTrigger") -Parent
+			$OneDrivePath = $OneDriveKey.GetValue("OneDriveTrigger")
 
-			if ([string]::IsNullOrEmpty($InstallLocation))
+			if ([string]::IsNullOrEmpty($OneDrivePath))
 			{
 				Write-Warning -Message "Failed to read registry entry $HKU\OneDriveTrigger"
 			}
 			else
 			{
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $OneDriveKey"
+
+				# NOTE: remove executable file name
+				$InstallLocation = Split-Path -Path $OneDrivePath -Parent
 
 				# NOTE: Avoid spamming
 				$InstallLocation = Format-Path $InstallLocation #-Verbose:$false -Debug:$false

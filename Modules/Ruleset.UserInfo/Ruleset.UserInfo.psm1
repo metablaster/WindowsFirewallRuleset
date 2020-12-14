@@ -61,7 +61,7 @@ foreach ($Script in $PublicScripts)
 Write-Debug -Message "[$ThisModule] Initialize module constant variable: SpecialDomains"
 # Must be before constants
 # TODO: We need to handle more cases, first 3 are known to work for now
-# TODO: only Get-AccountSID makes use of this, should be inside script?
+# TODO: Only Get-AccountSID makes use of this, should be inside script?
 New-Variable -Name KnownDomains -Scope Script -Option Constant -Value @(
 	"NT AUTHORITY"
 	"APPLICATION PACKAGE AUTHORITY"

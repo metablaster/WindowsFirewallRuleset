@@ -72,6 +72,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 #
 # One Drive installation directories
+# TODO: This path is wrong since one drive become part of system, but we need some path even if wrong
 #
 $OneDriveRoot = "%ProgramFiles(x86)%\Microsoft OneDrive"
 

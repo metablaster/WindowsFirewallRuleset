@@ -9,7 +9,7 @@ Also general questions and answers regarding firewall.
 - [Frequently Asked Questions](#frequently-asked-questions)
   - [Table of contents](#table-of-contents)
   - [Firewall rule doesn't work, program "some_program.exe" doesn't connect to internet](#firewall-rule-doesnt-work-program-some_programexe-doesnt-connect-to-internet)
-  - [I got an error "Network path not found" or "Unable to contact computer"](#i-got-an-error-network-path-not-found-or-unable-to-contact-computer)
+  - [I get an error "Network path not found", "Unable to contact computer" or "The client cannot connect"](#i-get-an-error-network-path-not-found-unable-to-contact-computer-or-the-client-cannot-connect)
   - [Does this firewall project give me the right protection](#does-this-firewall-project-give-me-the-right-protection)
   - [Windows Firewall does not write logs](#windows-firewall-does-not-write-logs)
   - [Can I trust scripts from this repository](#can-i-trust-scripts-from-this-repository)
@@ -31,16 +31,10 @@ INFO: In addition to interfaces shown in GPO there are some hidden network inter
 until I figure out how to make rules based on those allow them all if this resolves the problem.\
 To troubleshoot hidden adapters see [Problematic Traffic](ProblematicTraffic.md)
 
-## I got an error "Network path not found" or "Unable to contact computer"
+## I get an error "Network path not found", "Unable to contact computer" or "The client cannot connect"
 
-Please make sure you have at a minimum following network services set to automatic and
-make sure they are running:
-
-1. Workstation (LanmanWorkstation)
-2. Server (LanmanServer)
-3. TCP/IP NetBIOS Helper service (lmhosts)
-
-Verify following adapter items are enabled and restart adapter for any changes to take effect:
+First verify following network adapter items are enabled (checked) and if not restart adapter for
+any changes to take effect:
 
 1. Client for Microsoft Networks
 2. File and Printer Sharing for Microsoft Networks
@@ -51,25 +45,36 @@ Verify following adapter items are enabled and restart adapter for any changes t
 
 For more information about these items see [Adapter Items](/Readme/LAN%20Setup/AdapterItems.md)
 
-If this doesn't work verify the command you are using, for example following command tries to get
-firewall rules from GPO and will produce this problem:
+Next ensure at a minimum following network services are `Running` and optionally set to `Automatic` startup
+
+1. LanmanWorkstation: `Workstation`
+2. LanmanServer: `Server`
+3. lmhosts: `TCP/IP NetBIOS Helper service`
+4. WinRM: `Windows Remote Management (WS-Management)`
+
+If this doesn't work verify the command that is causing this problem, for example following command
+tries to get firewall rules from GPO and will produce this problem:
 
 ```powershell
 Get-NetFirewallRule -PolicyStore [system.environment]::MachineName
 ```
 
-In this example to fix the problem modify this command to following and it should work just fine:
+In this example to fix the problem modify bad command to following and it should work just fine:
 
 ```powershell
 Get-NetFirewallRule -PolicyStore ([system.environment]::MachineName)
 ```
 
-Otherwise if you're trying to administer firewall on remote machines, make sure at a minimum following:
+Otherwise if you're trying to deploy or manage firewall remotely, make sure at a minimum
+following is configured on **remote** machine:
 
-1. WinRM "Windows Remote Management (WS-Management)" service is running and optionally set to Automatic.
-2. "PowerShell remoting" is configured and enabled on target machine
+1. WinRM - `Windows Remote Management (WS-Management)` service is `Running` and optionally set to
+`Automatic` startup.
+2. "PowerShell remoting" is configured and enabled, for more information about PowerShell remoting see:
+    - [Enable-PSRemoting][psremoting]
+    - [Running Remote Commands][remote commands]
 
-If none of this works even after reboot, following link might help:
+If none of this works even after reboot of all involved computers, following link might help:
 
 - [Computer Name Won't Resolve on Network][name resolution issue]
 
@@ -261,5 +266,7 @@ software that is not essential to apply rules with scripts.
 [gpupdate]: https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/gpupdate "Visit Microsoft docs"
 [reg]: https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/reg "Visit Microsoft docs"
 [vscode]: https://code.visualstudio.com "Visual Studio Code"
-[git]: https://git-scm.com
+[git]: https://git-scm.com "Visit git homepage"
 [makecab]: https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/makecab "Visit Microsoft docs"
+[psremoting]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/enable-psremoting?view=powershell-7.1 "Visit Microsoft docs"
+[remote commands]: https://docs.microsoft.com/en-us/powershell/scripting/learn/remoting/running-remote-commands?view=powershell-7.1 "Visit Microsoft docs"

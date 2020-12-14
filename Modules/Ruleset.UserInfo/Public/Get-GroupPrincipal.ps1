@@ -28,13 +28,16 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Get computer accounts for a given user groups on given computers
+Get computer accounts for specified user groups on target computers
 
 .PARAMETER UserGroups
 User group on local or remote computer
 
 .PARAMETER ComputerNames
 One or more computers which to query for group users
+
+.PARAMETER Disabled
+If specified, result is disabled accounts instead
 
 .PARAMETER CIM
 Whether to contact CIM server (required for remote computers)
@@ -54,7 +57,6 @@ PS> Get-GroupPrincipal "Users" -Machine @(DESKTOP, LAPTOP) -CIM
 .NOTES
 CIM switch is not supported on PowerShell Core, meaning contacting remote computers
 is supported only on Windows PowerShell
-TODO: Switch is needed to list all accounts instead of only enabled
 TODO: should we handle NT AUTHORITY, BUILTIN and similar?
 TODO: plural parameter
 #>
@@ -71,6 +73,9 @@ function Get-GroupPrincipal
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
 		[string[]] $ComputerNames = [System.Environment]::MachineName,
+
+		[Parameter()]
+		[switch] $Disabled,
 
 		[Parameter()]
 		[switch] $CIM
@@ -116,20 +121,19 @@ function Get-GroupPrincipal
 
 						if ([string]::IsNullOrEmpty($GroupUsers))
 						{
-							Write-Warning -Message "Group '$Group' does not exist on computer: $Computer"
+							Write-Warning -Message "User group '$Group' is empty or does not exist on computer: $Computer"
 							continue
 						}
 
 						# Get only enabled users, these include SID but also non group users
-						# TODO: or LocalAccount -eq "MicrosoftAccount"
+						# TODO: Does this include?: LocalAccount -eq "MicrosoftAccount"
 						$EnabledAccounts = Get-CimInstance -Class Win32_UserAccount -Namespace "root\cimv2" `
 							-OperationTimeoutSec $ConnectionTimeout -ComputerName $Computer -Filter "LocalAccount = True" |
-						Where-Object -Property Disabled -NE False |
-						Select-Object -Property Name, Caption, SID, Domain
+						Where-Object -Property Disabled -EQ $Disabled  #| Select-Object -Property Name, Caption, SID, Domain
 
 						if ([string]::IsNullOrEmpty($EnabledAccounts))
 						{
-							Write-Warning -Message "User group '$Group' does not have any accounts on computer: $Computer"
+							Write-Warning -Message "User group '$Group' does not have any enabled accounts on computer: $Computer"
 							continue
 						}
 
@@ -172,19 +176,33 @@ function Get-GroupPrincipal
 
 					if ([string]::IsNullOrEmpty($GroupUsers))
 					{
-						Write-Warning -Message "User group: '$Group' does not exist or it does not have any accounts on computer: $Computer"
+						Write-Warning -Message "User group '$Group' is empty or does not exist on computer: $Computer"
 						continue
 					}
 
-					foreach ($Account in $GroupUsers)
-					{
-						Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing account: $($Account.Name)"
+					# Get only enabled users, these include SID but also non group users
 
-						$UserAccounts += [PSCustomObject]@{
-							User = Split-Path -Path $Account.Name -Leaf
-							Account = $Account.Name
-							Computer = $Computer
-							SID = $Account.SID
+					# TODO: Does this include?: PrincipalSource -eq "MicrosoftAccount"
+					$EnabledAccounts = Get-LocalUser | Where-Object -Property Enabled -NE $Disabled #| Select-Object -Property Name, SID
+
+					if ([string]::IsNullOrEmpty($EnabledAccounts))
+					{
+						Write-Warning -Message "User group '$Group' does not have any enabled accounts on computer: $Computer"
+						continue
+					}
+
+					foreach ($Account in $EnabledAccounts)
+					{
+						if ($GroupUsers.Name -contains $("$Computer\$($Account.Name)"))
+						{
+							Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing account: $($Account.Name)"
+
+							$UserAccounts += [PSCustomObject]@{
+								User = Split-Path -Path $Account.Name -Leaf
+								Account = $Account.Name
+								Computer = $Computer
+								SID = $Account.SID
+							}
 						}
 					}
 				} # foreach ($Group in $UserGroups)

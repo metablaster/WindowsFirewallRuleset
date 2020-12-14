@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Get SID for giver user account
+Get SID for given user account
 
 .DESCRIPTION
 Get SID's for single or multiple user names on a target computer
@@ -81,7 +81,7 @@ function Get-AccountSID
 	begin
 	{
 		$PowerShellEdition = $PSVersionTable.PSEdition
-		[bool] $SpecialDomain = ![string]::IsNullOrEmpty(
+		[bool] $IsKnownDomain = ![string]::IsNullOrEmpty(
 			[array]::Find($KnownDomains, [System.Predicate[string]] { $ComputerName -eq "$($args[0])" }))
 	}
 	process
@@ -93,7 +93,7 @@ function Get-AccountSID
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing: $ComputerName\$User"
 
 			# TODO: should we query system accounts remotely?
-			if ($CIM -and !$SpecialDomain)
+			if ($CIM -and !$IsKnownDomain)
 			{
 				if ($PowerShellEdition -ne "Desktop")
 				{
@@ -117,7 +117,7 @@ function Get-AccountSID
 					return
 				}
 			}
-			elseif ($ComputerName -eq [System.Environment]::MachineName -or $SpecialDomain)
+			elseif ($ComputerName -eq [System.Environment]::MachineName -or $IsKnownDomain)
 			{
 				if ($CIM)
 				{
@@ -130,7 +130,7 @@ function Get-AccountSID
 				{
 					# For APPLICATION PACKAGE AUTHORITY we need to omit domain name
 					# TODO: this should be inside second try/catch to make omission of domain generic
-					if ($SpecialDomain -and [array]::Find($KnownDomains, [System.Predicate[string]] { "APPLICATION PACKAGE AUTHORITY" -eq "$($args[0])" }))
+					if ($IsKnownDomain -and [array]::Find($KnownDomains, [System.Predicate[string]] { "APPLICATION PACKAGE AUTHORITY" -eq "$($args[0])" }))
 					{
 						$NTAccount = New-Object -TypeName System.Security.Principal.NTAccount($User)
 						$AccountSID = $NTAccount.Translate([System.Security.Principal.SecurityIdentifier]).ToString()

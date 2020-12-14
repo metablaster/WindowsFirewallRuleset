@@ -407,23 +407,14 @@ Write-Information -Tags "User" -MessageData "INFO: Loading rules was completed"
 if ($ErrorLogging -and $ErrorStatus)
 {
 	Write-Output ""
-	Write-Warning -Message "Errors were generated"
-
-	Write-Output ""
-	Write-Information -Tags "User" -MessageData "INFO: All errors were saved to: $("$ProjectRoot\Logs")"
-
-	if (!$Develop)
-	{
-		Write-Information -Tags "User" -MessageData "INFO: If module is edited don't forget to restart Powershell"
-	}
+	Write-Warning -Message "Errors were generated and saved to: $("$ProjectRoot\Logs")"
+	Write-Information -Tags "User" -MessageData "INFO: you can review these logs to see if you want to resolve some of them"
 }
 
 if ($WarningLogging -and $WarningStatus)
 {
 	Write-Output ""
-	Write-Warning -Message "Warnings were generated"
-	Write-Information -Tags "User" -MessageData "INFO: All warnings were saved to: $("$ProjectRoot\Logs")"
-	Write-Information -Tags "User" -MessageData "INFO: you can review these logs to see if you want to resolve some of them"
+	Write-Warning -Message "Warnings were generated and saved to: $("$ProjectRoot\Logs")"
 }
 
 if ($ErrorStatus)
@@ -432,12 +423,9 @@ if ($ErrorStatus)
 }
 else
 {
-	Write-Output ""
 	Write-Information -Tags "User" -MessageData "INFO: All operations completed successfully!"
 }
 
-Write-Output ""
-Write-Information -Tags "User" -MessageData "INFO: Make sure to visit Local Group Policy and adjust rules as needed."
 Write-Output ""
 
 # Clear warning/error status

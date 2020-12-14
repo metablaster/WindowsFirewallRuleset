@@ -65,13 +65,19 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
-Start-Test "Get-GroupPrincipal"
+Start-Test "Get-GroupPrincipal Users"
 $UsersTest = Get-GroupPrincipal "Users"
 $UsersTest
+
+Start-Test "Get-GroupPrincipal Disabled Administrators"
+Get-GroupPrincipal "Administrators" -Disabled
 
 Start-Test "Get-GroupPrincipal CIM server"
 $CIMTest = Get-GroupPrincipal "Users", "Administrators" -Computer "localhost" -CIM
 $CIMTest
+
+Start-Test "Get-GroupPrincipal CIM server disabled"
+Get-GroupPrincipal "Users", "Administrators" -Computer "localhost" -CIM -Disabled
 
 Start-Test "Expand users"
 $UsersTest | Select-Object -ExpandProperty User

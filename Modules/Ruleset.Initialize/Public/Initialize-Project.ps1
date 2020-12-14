@@ -206,15 +206,12 @@ function Initialize-Project
 			"lmhosts" # TCP/IP NetBIOS Helper
 			"LanmanWorkstation" # Workstation
 			"LanmanServer" # Server
+			# NOTE: WinRM required for:
+			# 1. Remote firewall administration, see Enable-PSRemoting cmdlet, or when localhost is specified instad of NETBIOS name
+			# 2. For PowerShell Core 7.1+ this service is required for compatibility module
+			# 3. Required for CIM functions
+			"WinRM" # Windows Remote Management (WS-Management)
 		)
-
-		# NOTE: For remote firewall administration we need this service, see Enable-PSRemoting cmdlet
-		# NOTE: Some tests depend on this service, project not ready for remoting
-		# NOTE: For PowerShell Core 7.1 this service is required for compatibility module
-		if (($TargetPSVersion -ge "7.1") -or ($PolicyStore -notin $LocalStores))
-		{
-			$RequiredServices += "WinRM"
-		}
 
 		if (!(Initialize-Service $RequiredServices))
 		{
@@ -240,7 +237,6 @@ function Initialize-Project
 		}
 	}
 
-	# NOTE: WinRM service must be started before running this
 	if ($TargetPSVersion -ge "7.1")
 	{
 		# Since PowerShell Core 7.1 Using Appx no longer works, so we use a compatibility module
