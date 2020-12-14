@@ -128,6 +128,7 @@ param (
 
 #region Initialization
 #Requires -Version 5.1
+#requires -PSEdition Desktop
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
@@ -190,7 +191,9 @@ if ($Direction -ne "Any")
 	5158 { "The Windows Filtering Platform has permitted a bind to a local port" }
 	5159 { "The Windows Filtering Platform has blocked a bind to a local port" }
 }
-$File = Initialize-Log $LogsFolder\Audit -Label $FileLabel -Header $EventDescription
+
+# Log file header to use for this script
+Set-Variable -Name LogHeader -Scope Global -Value $EventDescription
 
 $ProtocolNumber = switch ($Protocol)
 {
@@ -282,7 +285,10 @@ foreach ($Event in $Events)
 		$Message[$Name] = $Value
 	}
 
-	$Message | Out-File -Append -FilePath $File -Encoding $DefaultEncoding
+	Write-LogFile -Path $LogsFolder\Audit -Tags "Audit" -Label $FileLabel -Hash $Message
 }
+
+# Restore header to default
+Set-Variable -Name LogHeader -Scope Global -Value $DefaultLogHeader
 
 Update-Log

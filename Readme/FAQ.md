@@ -14,6 +14,7 @@ Also general questions and answers regarding firewall.
   - [Windows Firewall does not write logs](#windows-firewall-does-not-write-logs)
   - [Can I trust scripts from this repository](#can-i-trust-scripts-from-this-repository)
   - [Why do I get "Access is denied" errors](#why-do-i-get-access-is-denied-errors)
+  - [I'm missing network profile settings in Settings App](#im-missing-network-profile-settings-in-settings-app)
 
 ## Firewall rule doesn't work, program "some_program.exe" doesn't connect to internet
 
@@ -259,7 +260,49 @@ In almost all cases this happens when `gpedit.msc` or `secpol.msc` is opened, es
 do something with them (ex. refreshing group policy, viewing or modifying settings/rules)
 
 To minimize the chance of this error from appearing close down all management consoles and all
-software that is not essential to apply rules with scripts.
+software that is not essential to deploy firewall.
+
+## I'm missing network profile settings in Settings App
+
+In `Settings -> Network & Internet -> Status -> Properties` there should be options to set private or
+public profile for your adapter, but what if these options are gone and how to get them back?
+
+These profile settings go missing when some privileged process has modified network profile such
+as 3rd party firewalls.
+
+Here in this case this will happen when you run `Set-NetworkProfile.ps1` which runs only on demand,
+however you won't notice this problem until system is rebooted.
+
+There are many options to troubleshoot this problem, most of which are just a workaround but don't
+actually bring these options back, so here are my favorites that should fix it instead:
+
+1. First open up Control Panel firewall and see if there is a message that says:\
+`For your security, some setting are controlled by Group Policy`
+
+   - If you do see this message, next step is to open up GPO firewall and quickly export your firewall
+   rules and settings because once the problem is resolved importing them back will be easy and quick.
+   - Next step is to reset GPO firewall to defaults by using `Scripts\ResetFirewall.ps1`,
+   but don't do anything to firewall in Control Panel.
+   - When done reboot system and see if this message was gone and also whether profile options are back.
+   - If the message is still there, you can try to recall any security policies you did in GPO, it
+   doesn't have to be related to firewall, ex. anti virus, network options and anything similar can
+   the cause for this message.
+
+2. If you can't get rid of a message and profile options are not back even after reboot, next step is to verify
+following location in GPO:\
+`Computer Configuration\Windows Settings\Security Settings\Network List Manager Policies`
+
+    - Here make sure everything is set to `Not Configured`, and if you change something reboot system to verify.
+
+3. If profile options are still not back there is only one option left which is resetting
+network settings as follows:
+
+   - `Settings -> Network & Internet -> Network Reset`
+   - Make sure not to reboot until required time has passed, usually 5 minutes, let it reboot on
+   it's own and profile optins should re-appear.
+
+- Finally you may want to import your exported firewall policy, this will not bring problem back.
+- Next time make sure not to run `Set-NetworkProfile` if there is no valid reason.
 
 [name resolution issue]: https://www.infopackets.com/news/10369/how-fix-computer-name-wont-resolve-network-april-update
 [netfirewallsetting]: https://docs.microsoft.com/en-us/powershell/module/netsecurity/set-netfirewallsetting?view=win10-ps "Visit Microsoft docs"

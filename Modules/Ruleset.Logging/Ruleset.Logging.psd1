@@ -106,6 +106,7 @@ SOFTWARE.
 	FunctionsToExport = @(
 		"Initialize-Log"
 		"Update-Log"
+		"Write-LogFile"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not
@@ -132,10 +133,12 @@ SOFTWARE.
 		"Help\en-US\about_Ruleset.Logging.md"
 		"Help\en-US\Ruleset.Logging.md"
 		"Help\en-US\Update-Log.md"
+		"Help\en-US\Write-LogFile.md"
 		"Help\README.md"
 		"Public\Initialize-Log.ps1"
 		"Public\README.md"
 		"Public\Update-Log.ps1"
+		"Public\Write-LogFile.ps1"
 		"Ruleset.Logging_9be5568a-a48e-4e96-a6df-90f699cf1c8a_HelpInfo.xml"
 		"Ruleset.Logging.psd1"
 		"Ruleset.Logging.psm1"

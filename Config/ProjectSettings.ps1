@@ -279,6 +279,9 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 
 	# Set to false to disable logging information messages
 	Set-Variable -Name InformationLogging -Scope Global -Value $true #(!$Develop)
+
+	# Holds temporary log header that may appear in log files as needed
+	Set-Variable -Name LogHeader -Scope Global -Value $null
 }
 #endregion
 
@@ -413,6 +416,9 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 
 	# Project version, does not apply to non migrated 3rd party modules which follow their own version increment, do not modify!
 	New-Variable -Name ProjectVersion -Scope Global -Option Constant -Value ([version]::new(0, 9, 0))
+
+	# Default header that will appear in log files
+	Set-Variable -Name DefaultLogHeader -Scope Global -Option Constant -Value "Administrator logs"
 
 	# Required minimum operating system version (v1809)
 	# TODO: v1809 needs to be replaced with minimum v1903, downgraded here because of Server 2019

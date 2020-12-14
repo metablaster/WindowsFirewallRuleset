@@ -328,7 +328,7 @@ then re-run that specific script once again later.
 not all rules are enabled by default or you might want to toggle default Allow/Block behavior.
 Rules which don't exist for specific programs need to be made additionally.
 
-16. Now go ahead and test your internet connection (ex. with browser or some other program),
+16. Now go ahead and test your internet connection (ex. with a browser or some other program),
 If you're unable to connect to internet after applying these rules you have several options:
 
     - Temporarily open outbound firewall in GPO or [Disable Firewall](Readme/DisableFirewall.md)

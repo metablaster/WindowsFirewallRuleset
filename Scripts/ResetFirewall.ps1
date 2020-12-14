@@ -78,6 +78,10 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 # Setting up profile seem to be slow, tell user what is going on
 Write-Information -Tags "User" -MessageData "INFO: Resetting domain firewall profile..."
 
+# NOTE: LogMaxSizeKilobytes: The default setting when managing a computer is 4096.
+# When managing a GPO, the default setting is NotConfigured.
+# LogFileName: "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log"
+# Not possible to do these 2 defaults here, use GPO instead
 Set-NetFirewallProfile -Name Domain -PolicyStore $PolicyStore -Enabled NotConfigured `
 	-DefaultInboundAction NotConfigured -DefaultOutboundAction NotConfigured `
 	-AllowInboundRules NotConfigured -AllowLocalFirewallRules NotConfigured `
@@ -85,7 +89,7 @@ Set-NetFirewallProfile -Name Domain -PolicyStore $PolicyStore -Enabled NotConfig
 	-NotifyOnListen NotConfigured -EnableStealthModeForIPsec NotConfigured `
 	-LogAllowed NotConfigured -LogBlocked NotConfigured -LogIgnored NotConfigured `
 	-LogMaxSizeKilobytes 4096 -AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
-	-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log"
+	-LogFileName NotConfigured
 
 Write-Information -Tags "User" -MessageData "INFO: Resetting private firewall profile..."
 
@@ -96,7 +100,7 @@ Set-NetFirewallProfile -Name Private -PolicyStore $PolicyStore -Enabled NotConfi
 	-NotifyOnListen NotConfigured -EnableStealthModeForIPsec NotConfigured `
 	-LogAllowed NotConfigured -LogBlocked NotConfigured -LogIgnored NotConfigured `
 	-LogMaxSizeKilobytes 4096 -AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
-	-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log"
+	-LogFileName NotConfigured
 
 Write-Information -Tags "User" -MessageData "INFO: Resetting public firewall profile..."
 
@@ -107,13 +111,13 @@ Set-NetFirewallProfile -Name Public -PolicyStore $PolicyStore -Enabled NotConfig
 	-NotifyOnListen NotConfigured -EnableStealthModeForIPsec NotConfigured `
 	-LogAllowed NotConfigured -LogBlocked NotConfigured -LogIgnored NotConfigured `
 	-LogMaxSizeKilobytes 4096 -AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
-	-LogFileName "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log"
+	-LogFileName NotConfigured
 
 Write-Information -Tags "User" -MessageData "INFO: Resetting global firewall settings..."
 
-# NOTE: MaxSAIdleTimeSeconds NotConfigured
-# This parameter value is case-sensitive and NotConfigured can only be specified using dot-notation
-# Otherwise default value is 300
+# NOTE: MaxSAIdleTimeSeconds: The default value when managing a local computer is 300 seconds (5 minutes).
+# When managing a GPO, the default value is NotConfigured.
+# Not possible to set this default here, use GPO instead
 Set-NetFirewallSetting -PolicyStore $PolicyStore -EnablePacketQueuing NotConfigured `
 	-EnableStatefulFtp NotConfigured -EnableStatefulPptp NotConfigured `
 	-Exemptions NotConfigured -CertValidationLevel NotConfigured `

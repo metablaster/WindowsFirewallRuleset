@@ -26,27 +26,49 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# Initialization
-Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
+<#
+.SYNOPSIS
+Unit test for Write-LogFile
+
+.DESCRIPTION
+Use Write-LogFile.ps1 as a template to test out module functions
+
+.EXAMPLE
+PS> .\Write-LogFile.ps1
+
+.INPUTS
+None. You cannot pipe objects to Write-LogFile.ps1
+
+.OUTPUTS
+None. Write-LogFile.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+#region Initialization
+#Requires -Version 5.1
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
+	$MyInvocation.MyCommand.Name -replace ".{4}$" )
+
+# Check requirements
+Initialize-Project -Abort
+Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
-. $PSScriptRoot\..\ModulePreferences.ps1
+. $PSScriptRoot\ContextSetup.ps1
 
-# TODO: stream logging instead of open/close file for performance
+# User prompt
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+#Endregion
 
-#
-# Script imports
-#
+Enter-Test
 
-$PublicScripts = @(
-	"Initialize-Log"
-	"Update-Log"
-	"Write-LogFile"
-)
+Start-Test "Write log"
+Set-Variable -Name LogHeader -Scope Global -Value "Test case entries"
+Write-LogFile -Tags "Test" -Message "Test message"
 
-foreach ($Script in $PublicScripts)
-{
-	Write-Debug -Message "[$ThisModule] Importing script: Public\$Script.ps1"
-	. ("{0}\Public\{1}.ps1" -f $PSScriptRoot, $Script)
-}
+Update-Log
+Exit-Test

@@ -78,17 +78,25 @@
 Build/
 Intermediate/
 
-# Project specific
-Logs/**
+# Log files
+!Logs/
+Logs/*
 !Logs/README.md
 
-Exports/**
+!Logs/*/
+Logs/*/*
+!Logs/*/README.md
+
+# Firewall exports
+!Exports/
+Exports/*
 !Exports/README.md
 
+# Auto generated files
 Rules/NetworkServices.txt
 
 Modules/**/Help/**/Content/
 Modules/**/Help/**/External/
 
-# Sample test folder
+# Auto generated test folder
 Test/Ruleset.Utility/TestPermission/

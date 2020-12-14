@@ -35,6 +35,7 @@ https://morgantechspace.com/2014/11/Get-Volume-Path-from-Drive-Name-using-Powers
 #region Initialization
 using namespace System
 #Requires -Version 5.1
+#requires -PSEdition Desktop
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
 	$MyInvocation.MyCommand.Name -replace ".{4}$" )

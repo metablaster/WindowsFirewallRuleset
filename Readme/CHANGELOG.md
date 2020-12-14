@@ -28,6 +28,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - Added rules for "Bing walpaper" app
   - Added rules for PSPing from sysinternals
   - Fixed rules and search for Adobe reader and Acrobat
+  - Updated rules for Java runtime
 
   - Partially improved following rules:
     - ICMPv6
@@ -44,13 +45,19 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Added new module `Ruleset.Compatibility` because `Appx` module no longer works since PowerShell
   Core 7.1
-  - Improved function `Approve-Execute`, `Test-TargetComputer` and `Get-GroupPrincipal`
-  - Improved function `Get-AppSID` big thanks to @ljani for awesome solution: https://github.com/ljani
+  - Improved functions:
+    - `Approve-Execute`
+    - `Test-TargetComputer`
+    - `Get-GroupPrincipal`
+    - `ConvertFrom-SID`
+    - `Get-AppSID` big thanks to @ljani for awesome solution: https://github.com/ljani
+    - `Get-SystemSKU`
   - Logging without the need for parameter splating, @Logs variable was removed
   - Improved program search algorithm
   - Inheritance of preference variables into module reworked and now valid for manifest modules only,
   and only as defined in ProjectSettings.ps1, no inheritance from caller scope
   - Various funny looking messages appearing in the console are now simplified
+  - Added `Write-FileLog` to write logs in addition to automated logging
 
 - Documentation
 
@@ -62,11 +69,16 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Experimental scripts to start/stop packet trace and capture.
   - Utility script to list "hidden" rule properties
-  - More control and utilization of preference variables, see: `ProjectSettings.ps1`
+  - More control and utilization of preference variables, see `ProjectSettings.ps1`
   - ProjectSettings script reworked to declare variables only as needed and to show variable status
   on demand for current scope
-  - Script to collect audit entries to help track down packet drop reason
+  - Script to collect audit entries to help track down packet drop reason (In progress...)
   - Changes done to services are now logged
+
+- Test
+
+  - Fix/improve experimental scripts functions (In progress...)
+  - Unit tests will generate logs to separate folder (In progress...)
 
 - Bugfix
 
@@ -76,6 +88,8 @@ If you would like to see fresh changes done since last release you can do so on 
   - Error starting dependent services because of invalid parameter name
   - Getting One Drive installation directory would fail
   - Connection errors when using Windows PowerShell because dependent service was not checked
+  - No longer asking to set network profile, because it results in missing profile settings in
+  `Settings -> "Network & Internet"`
 
 ## v0.8.0 (current release)
 

@@ -131,7 +131,8 @@ Set-NetFirewallSetting -PolicyStore $PolicyStore `
 	-RemoteMachineTransportAuthorizationList None -RemoteMachineTunnelAuthorizationList None `
 
 # Set default firewall profile for network adapter
-Set-NetworkProfile
+# TODO: Not used because setting in "Network & Internet" will be missing
+# Set-NetworkProfile
 
 # Update Local Group Policy for changes to take effect
 gpupdate.exe /target:computer

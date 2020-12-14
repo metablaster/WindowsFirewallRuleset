@@ -1,4 +1,5 @@
 
 # Exports directory
 
-Exported rules are by default saved here which can be reimported at any time.
+Exported firewall rules and settings are save to this directory.\
+Can be reimported automatically, or manually if multiple candidate exports exist.

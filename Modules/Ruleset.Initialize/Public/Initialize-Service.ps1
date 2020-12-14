@@ -75,8 +75,6 @@ function Initialize-Service
 
 	begin
 	{
-		$LogFile = Initialize-Log $LogsFolder -Label "Services" -Header "Service status change"
-
 		# User prompt default values
 		[int32] $Default = 0
 		[ChoiceDescription[]] $Choices = @()
@@ -85,6 +83,9 @@ function Initialize-Service
 		$Deny.HelpMessage = "Skip operation"
 		[string] $Title = "Required service not running"
 		[bool] $StatusGood = $true
+
+		# Log file header to use for this script
+		Set-Variable -Name LogHeader -Scope Global -Value "System services status change"
 	}
 	process
 	{
@@ -123,7 +124,7 @@ function Initialize-Service
 					}
 				}
 
-				$Choices.Clear()
+				$Choices = @()
 				$Choices += $Accept
 				$Choices += $Deny
 
@@ -146,15 +147,12 @@ function Initialize-Service
 
 							if ($Startup -ne "Automatic")
 							{
-								Write-Warning -Message "Dependent service $($Required.DisplayName) set to automatic failed"
+								Write-Warning -Message "Set dependent service '$($Required.Name)' to Automatic failed"
 							}
 							else
 							{
-								# Write log for service status change
-								"$($Required.Name): $OldStatus -> Automatic" |
-								Out-File -Append -FilePath $LogFile -Encoding $DefaultEncoding
-
-								Write-Verbose -Message "Setting dependent $($Required.DisplayName) service to autostart succeeded"
+								Write-LogFile -Label "Services" -Message "'$($Required.DisplayName)' ($($Required.Name)) $OldStatus -> Automatic"
+								Write-Information -Tags "Project" -MessageData "INFO: Set dependent service '$($Required.Name)' to Automatic succeeded"
 							}
 						}
 
@@ -168,16 +166,14 @@ function Initialize-Service
 							{
 								Write-Error -Category OperationStopped -TargetObject $Required `
 									-Message "Unable to proceed, Dependent services can't be started"
-								Write-Information -Tags "User" -MessageData "INFO: Starting dependent service '$($Required.DisplayName)' failed, please start manually and try again"
+								Write-Warning -Message "Start dependent service '$($Required.Name)' failed, please start manually and try again"
 								return $false
 							}
 							else
 							{
 								# Write log for service status change
-								"$($Required.Name): $OldStatus -> Running" |
-								Out-File -Append -FilePath $LogFile -Encoding $DefaultEncoding
-
-								Write-Verbose -Message "Starting dependent $($Required.DisplayName) service succeeded"
+								Write-LogFile -Label "Services" -Message "'$($Required.DisplayName)' ($($Required.Name)) $OldStatus -> Running"
+								Write-Information -Tags "Project" -MessageData "INFO: Start dependent service '$($Required.Name)' succeeded"
 							}
 						}
 					} # Required Services
@@ -192,15 +188,13 @@ function Initialize-Service
 
 						if ($Startup -ne "Automatic")
 						{
-							Write-Warning -Message "Set service $($Service.DisplayName) to automatic failed"
+							Write-Warning -Message "Set service '$($Service.Name)' to Automatic failed"
 						}
 						else
 						{
 							# Write log for service status change
-							"$($Service.Name): $OldStatus -> Automatic" |
-							Out-File -Append -FilePath $LogFile -Encoding $DefaultEncoding
-
-							Write-Verbose -Message "Setting $($Service.DisplayName) service to autostart succeeded"
+							Write-LogFile -Label "Services" -Message "'$($Service.DisplayName)' ($($Service.Name)) $OldStatus -> Automatic"
+							Write-Information -Tags "Project" -MessageData "INFO: Set '$($Service.Name)' service to Automatic succeeded"
 						}
 					}
 
@@ -212,15 +206,13 @@ function Initialize-Service
 					if ($Status -ne "Running")
 					{
 						$StatusGood = $false
-						Write-Information -Tags "User" -MessageData "INFO: Starting $($Service.DisplayName) service failed, please start manually and try again"
+						Write-Warning -Message "Start '$($Service.Name)' service failed, please start manually and try again"
 					}
 					else
 					{
 						# Write log for service status change
-						"$($Service.Name): $ServiceOldStatus -> Running" |
-						Out-File -Append -FilePath $LogFile -Encoding $DefaultEncoding
-
-						Write-Information -Tags "User" -MessageData "INFO: Starting $($Service.DisplayName) service succeeded"
+						Write-LogFile -Label "Services" -Message "'$($Service.DisplayName)' ($($Service.Name)) $ServiceOldStatus -> Running"
+						Write-Information -Tags "Project" -MessageData "INFO: Start '$($Service.Name)' service succeeded"
 					}
 				}
 				else
@@ -239,5 +231,10 @@ function Initialize-Service
 		} # foreach InputService
 
 		return $true
+	}
+	end
+	{
+		# Restore header to default
+		Set-Variable -Name LogHeader -Scope Global -Value $DefaultLogHeader
 	}
 }

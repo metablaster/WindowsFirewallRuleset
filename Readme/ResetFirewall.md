@@ -4,13 +4,12 @@
 Applies to resetting firewall by hand after running Powershell scripts from this project.
 
 Useful if you encountered problems such as internet connectivity and you're unable to run\
-`ResetFirewall.ps1` script file located in project root directory, or if the script file did\
-not resolve your problems.
+`Scripts\ResetFirewall.ps1` or if the script did not resolve your problems.
 
 **WARNING:** These steps will not save any GPO rules, all preferences will be gone, resetting
 Control Panel firewall leaves only default rules shipped with system and removes the rest.
 
-## Follow below steps to revert firewall
+## Follow below steps to reset GPO firewall
 
 1. Press start button
 2. type: `secpol.msc`

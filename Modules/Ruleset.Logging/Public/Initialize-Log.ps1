@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Generates a log file name for Update-Log function
+Generates a log file name for logging functions
 
 .DESCRIPTION
 Generates a log file name composed of current date and appends to requested label and path.
@@ -102,7 +102,7 @@ function Initialize-Log
 	}
 	elseif ($Header)
 	{
-		Write-Warning -Message "Header parameter is valid for new log files only, ignored..."
+		Write-Debug -Message "Header parameter is valid for new log files only, ignored..."
 	}
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Logs folder is: $Folder"
