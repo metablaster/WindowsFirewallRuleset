@@ -32,7 +32,7 @@ Un-initialize and exit unit test
 
 .DESCRIPTION
 Exit-Test performs finishing steps after unit test is done, ie. to restore previous state
-This function must be called after all test cases are done in single unit test
+Must be called in pair with Enter-Test and after all test cases are done in single unit test
 
 .PARAMETER Pester
 Should be specified to exit private function pester test
@@ -63,19 +63,6 @@ function Exit-Test
 
 	if (!$Pester -and $PSCmdlet.ShouldProcess("Exit unit test", $UnitTest))
 	{
-		# TODO: temporarily disabled
-		if ($false)
-		{
-			# restore logging errors, warnings and info messages
-			Set-Variable -Name ErrorLogging -Scope Global -Value $TestLogging["ErrorLogging"]
-			Set-Variable -Name WarningLogging -Scope Global -Value $TestLogging["WarningLogging"]
-			Set-Variable -Name InformationLogging -Scope Global -Value $TestLogging["InformationLogging"]
-
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] ErrorLogging restored to: $ErrorLogging"
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] WarningLogging restored to: $WarningLogging"
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] InformationLogging restored to: $InformationLogging"
-		}
-
 		# Remove resources created by Enter-Test
 		Remove-Module -Name Dynamic.UnitTest -Force
 

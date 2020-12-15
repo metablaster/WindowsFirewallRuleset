@@ -71,7 +71,7 @@ function Initialize-Log
 		[string] $Label,
 
 		[Parameter()]
-		[string] $Header = $DefaultLogHeader
+		[string] $Header
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -95,8 +95,7 @@ function Initialize-Log
 
 		if ([string]::IsNullOrEmpty($Header))
 		{
-			Write-Error -Category ObjectNotFound -TargetObject $HeaderStack `
-				-Message "Log header is missing or invalid"
+			Write-Warning -Message "Log header is missing or invalid"
 		}
 		else
 		{

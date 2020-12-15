@@ -85,10 +85,5 @@ Start-Test "Write log initial header"
 $HeaderStack.Pop() | Out-Null
 Write-LogFile -Tags "Test" -Message "Test initial header" -Label "TestLog5"
 
-Start-Test "Write log empty header"
-$HeaderStack.Push("")
-Write-LogFile -Tags "Test" -Message "Test initial header" -Label "TestLog6"
-$HeaderStack.Pop() | Out-Null
-
 Update-Log
 Exit-Test

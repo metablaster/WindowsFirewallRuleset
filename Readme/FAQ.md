@@ -1,22 +1,22 @@
 
 # Frequently Asked Questions
 
-Here are the most common problems running powershell scripts in this project and how to resolve them.\
+Here are the most common problems running PowerShell scripts in this project and how to resolve them.\
 Also general questions and answers regarding firewall.
 
 ## Table of contents
 
 - [Frequently Asked Questions](#frequently-asked-questions)
   - [Table of contents](#table-of-contents)
-  - [Firewall rule doesn't work, program "some_program.exe" doesn't connect to internet](#firewall-rule-doesnt-work-program-some_programexe-doesnt-connect-to-internet)
+  - [Firewall rule doesn't work, program "some_program.exe" fails to connect to internet](#firewall-rule-doesnt-work-program-some_programexe-fails-to-connect-to-internet)
   - [I get an error "Network path not found", "Unable to contact computer" or "The client cannot connect"](#i-get-an-error-network-path-not-found-unable-to-contact-computer-or-the-client-cannot-connect)
-  - [Does this firewall project give me the right protection](#does-this-firewall-project-give-me-the-right-protection)
+  - [Does this firewall project give me the right (or better) protection](#does-this-firewall-project-give-me-the-right-or-better-protection)
   - [Windows Firewall does not write logs](#windows-firewall-does-not-write-logs)
   - [Can I trust scripts from this repository](#can-i-trust-scripts-from-this-repository)
   - [Why do I get "Access is denied" errors](#why-do-i-get-access-is-denied-errors)
   - [I'm missing network profile settings in Settings App](#im-missing-network-profile-settings-in-settings-app)
 
-## Firewall rule doesn't work, program "some_program.exe" doesn't connect to internet
+## Firewall rule doesn't work, program "some_program.exe" fails to connect to internet
 
 First step is to open PowerShell as Administrator and run `gpupdate.exe`, if not working then:
 
@@ -79,7 +79,7 @@ If none of this works even after reboot of all involved computers, following lin
 
 - [Computer Name Won't Resolve on Network][name resolution issue]
 
-## Does this firewall project give me the right protection
+## Does this firewall project give me the right (or better) protection
 
 Good firewall setup is essential for computer security, and, if not misused then the answer is yes
 but only for the firewall part of protection.
@@ -173,8 +173,7 @@ Btw. firewall service can't be stopped or manipulated in any way except trough U
 
 - You might be wondering, what happens to my system if I run scripts from this repository?
 - Can these scripts do any kind of harm to my computer or privacy?
-- What system and environment modifications are done by this project?
-- Can I trust these scripts don't do anything bad such as break my system?
+- What system and environment modifications are done to setup firewall?
 - Is there anything I should be aware of?
 
 There is a lot of scripts and you might not have the time to investigate them all.\
@@ -194,12 +193,13 @@ So here is an overview to help you see what they do hopefully answering all of y
     only.
     - Once you close down (or open new) PowerShell session, module path modifications are lost.
 
-4. All other system settings are left alone **by default** unless you demand or accept them as follows:
+4. All other system or session settings are left alone **by default** unless you demand or accept
+them as follows:
 
     - Adjust console buffer size (valid until you close down PowerShell)
     - Modify network profile for currently connected network adapter (ex. public or private)
     - Update PowerShell module help files (only if you enable development mode)
-    - Install required or recommended PowerShell modules (only if you enable development mode)
+    - Install or update dependent PowerShell modules (only if you enable development mode)
     - Install recommended VSCode extensions (if you accpet VSCode recommendation)
     - Modify file system permissions (firewall logs inside this repository only by default)
     - Modify settings for specific software (Process monitor, mTail and Windows Performance Analyzer only)
@@ -213,21 +213,23 @@ So here is an overview to help you see what they do hopefully answering all of y
     - You manually load software configuration from `Config` folder
     - You run experimental or dangerous tests from `Test` folder (default action for these tests is `No`)
 
-5. Here is a list of scripts that may do things you don't want
+5. Here is a list of scripts that may behave unexpectedly because these are either experimental,
+   not intended for end user or hard to get right, therefore you should review them first to learn
+   their purpose
 
     - `Scripts\GrantLogs.ps1`
     - `Scripts\ResetFirewall.ps1`
-    - `Modules\...\Initialize-Module.ps1`
-    - `Modules\...\Initialize-Provider.ps1`
-    - `Modules\...\Uninstall-DuplicateModule.ps1`
-    - `Modules\...\Find-UpdatableModule.ps1`
     - `Test\Ruleset.Utility\Set-Permission.ps1`
-    - `Test\Ruleset.Firewall\Remove-FirewallRules.ps1`
-    - `Test\Ruleset.Firewall\Export-FirewallRules.ps1`
-    - `Test\Ruleset.Firewall\Import-FirewallRules.ps1`
+    - `...\Initialize-Module.ps1`
+    - `...\Initialize-Provider.ps1`
+    - `...\Uninstall-DuplicateModule.ps1`
+    - `...\Ruleset.Firewall\Remove-FirewallRules.ps1`
+    - `...\Ruleset.Firewall\Export-FirewallRules.ps1`
+    - `...\Ruleset.Firewall\Import-FirewallRules.ps1`
+    - `...\Ruleset.Utility\Set-NetworkProfile.ps1`
 
     By default none of these scripts run on their own, except as explained in point 4.\
-    Note that last 4 scripts listed above exist also in `Test` folder.
+    Those scripts listed above which begin with `...\` exist in both `Modules` and `Test` subdirectories.
 
 6. Following is a list of external executables that are run by some scripts
 
@@ -240,17 +242,18 @@ So here is an overview to help you see what they do hopefully answering all of y
 7. There is nothing harmful here
 
    - Some scripts such as `initialize-module.ps1` will contact online PowerShell repository
-   to download modules, however this happens only if you enable "development mode"
+   to download or update modules, however this happens only if you manually enable setting
    - Some scripts are potentially dangerous due to their experimental state such as
    `Uninstall-DuplicateModule.ps1` which may fail and leave you with broken modules that you would
    have to to fix with your own intervention.
-   - "development mode" may be enabled by default on `develop` branch but never on `master` branch
+   - "development mode" may be enabled by default on `develop` branch but never on `master` branch,
+   which means defaults described so far may no longer be defaults
    - The scripts will gather all sorts of system information but only as required to configure firewall,
-   none of this information is ever sent anywhere, once you close down PowerShell it's all cleared.
+   none of this information is ever sent anywhere and once you close down PowerShell it's all cleared.
    - If you publish your code modifications online (ex. to your fork) make sure your modifications
    don't include any personal information such as user names, email or system details.
    - Bugs might exist which could break things, while I do my best to avoid bugs you might want to
-   report your finds to be fixed.
+   report your findings to be fixed.
 
 ## Why do I get "Access is denied" errors
 

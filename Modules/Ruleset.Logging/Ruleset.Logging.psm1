@@ -62,5 +62,5 @@ if (!(Get-Variable -Name CheckInitLogging -Scope Global -ErrorAction Ignore))
 	New-Variable -Name CheckInitLogging -Scope Global -Option Constant -Value $null
 
 	# To prevent callers from overwriting a log header of each other we need a stack of headers
-	New-Variable -Name HeaderStack -Scope Global -Value ([System.Collections.Stack]::new(@($DefaultLogHeader)))
+	New-Variable -Name HeaderStack -Scope Global -Value ([System.Collections.Stack]::new(@("")))
 }

@@ -175,15 +175,6 @@ function Initialize-Project
 	Write-Information -Tags "User" -MessageData "INFO: Checking PowerShell edition"
 	$PowerShellEdition = $PSVersionTable.PSEdition
 
-	if ($PowerShellEdition -eq "Core")
-	{
-		Write-Warning -Message "Remote firewall administration with PowerShell $PowerShellEdition is not implemented"
-	}
-	else
-	{
-		Write-Warning -Message "Remote firewall administration with PowerShell $PowerShellEdition is partially implemented"
-	}
-
 	# Check PowerShell version
 	[version] $TargetPSVersion = $PSVersionTable.PSVersion
 	Write-Information -Tags "User" -MessageData "INFO: Checking PowerShell version"
@@ -223,6 +214,8 @@ function Initialize-Project
 	# If PolicyStore variable doesn't point to localhost, but the project is not yet ready for remote administration
 	if (Get-Variable -Scope Global -Name RemoteCredential -ErrorAction Ignore)
 	{
+		Write-Warning -Message "Remote firewall administration is not implemented"
+
 		try
 		{
 			Write-Information -Tags "Project" -MessageData "Testing Windows Remote Management to: $PolicyStore"

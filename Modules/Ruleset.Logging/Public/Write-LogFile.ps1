@@ -33,8 +33,16 @@ using namespace System.Management.Automation
 Write to log file
 
 .DESCRIPTION
-Outputs of the built in Write-* commandlets are automatically picked up and logs are
-written, however purpose of this function is to write logs manually
+Unlike Update-Log function which automatically picks up and logs Write-* streams,
+the purpose of this function is to write logs manually.
+
+Each script that uses Write-LogFile should first push a new header to "HeaderStack" variable,
+this header will then appear in newly created logs that describes this log.
+
+Before the script exits you should pop header from HeaderStack.
+
+To write new log to different log or location within same script, the HeaderStack should be pushed
+a new header, and popped before writing to previous log.
 
 .PARAMETER Message
 Message from which to construct "InformationRecord" and append to log file
@@ -52,8 +60,30 @@ Destination directory
 File label that is added to current date for resulting file name
 
 .EXAMPLE
-PS> $File = Initialize-Log -Folder "C:\logs" -Label "Settings" -Header "System changes"
-PS> Write-LogFile $File
+PS> $HeaderStack.Push("My Header")
+PS> Write-LogFile -Path "C:\logs" -Label "Settings" -Tags "MyTag" -Message "Sample message"
+PS> $HeaderStack.Pop() | Out-Null
+
+Will write "Sample message" InformationRecord to log C:\logs\Settings_15.12.20.log with a header set to "My Header"
+
+.EXAMPLE
+PS> $HeaderStack.Push("My Header")
+PS> [hashtable] $HashResult = Get-SomeHashTable
+PS> Write-LogFile -Path "C:\logs" -Label "Settings" -Tags "MyTag" -Hash $HashResult
+PS> $HeaderStack.Pop() | Out-Null
+
+Will write entry $HashResult to log C:\logs\Settings_15.12.20.log with a header set to "My Header"
+
+.EXAMPLE
+PS> $HeaderStack.Push("My Header")
+PS> Write-LogFile -Path "C:\logs" -Label "Settings" -Tags "MyTag" -Message "Sample message"
+PS> $HeaderStack.Push("Another Header")
+PS> Write-LogFile -Path "C:\logs\next" -Label "Admin" -Tags "NewTag" -Message "Another message"
+PS> $HeaderStack.Pop() | Out-Null
+PS> $HeaderStack.Pop() | Out-Null
+
+Will write "Sample message" InformationRecord to log C:\logs\Settings_15.12.20.log with a header set to "My Header"
+Will write "Another message" InformationRecord to log C:\logs\next\Admin_15.12.20.log with a header set to "Another Header"
 
 .INPUTS
 None. You cannot pipe objects to Write-LogFile
@@ -62,7 +92,7 @@ None. You cannot pipe objects to Write-LogFile
 None. Write-LogFile does not generate any output
 
 .NOTES
-None.
+Maybe there should be stack of labels and/or tags, but too early to see if this makes sense
 #>
 function Write-LogFile
 {
@@ -79,7 +109,7 @@ function Write-LogFile
 		[Parameter()]
 		[string] $Path = $LogsFolder,
 
-		[Parameter()]
+		[Parameter(ParameterSetName = "Message")]
 		[string[]] $Tags = "Administrator",
 
 		[Parameter()]
@@ -88,7 +118,7 @@ function Write-LogFile
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-	# If Peek() fails you have called Pop() more than Push()
+	# If Peek() fails you have called Pop() more times than Push()
 	$LogFile = Initialize-Log $Path -Label $Label -Header $HeaderStack.Peek()
 
 	if ($Message)

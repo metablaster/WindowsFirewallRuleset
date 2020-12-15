@@ -31,14 +31,14 @@ SOFTWARE.
 Initialize unit test
 
 .DESCRIPTION
-Enter-Test initializes unit test, ie. to enable logging
-This function must be called before first test case in single unit test
+Enter-Test initializes unit test
+Must be called before first test case in single unit test and in pair with Exit-Test
 
 .PARAMETER Private
 If specified temporarily exports private module functions into global scope
 
 .PARAMETER Pester
-Should be specified to enter private function pester test
+Should be specified to enter pester tests for private functions
 
 .EXAMPLE
 PS> Enter-Test "Get-Something.ps1"
@@ -83,7 +83,7 @@ function Enter-Test
 		}
 		else
 		{
-			Set-Variable -Name UnitTest -Scope Global -Option ReadOnly -Value ((Get-PSCallStack)[1].Command -replace ".{4}$")
+			New-Variable -Name UnitTest -Scope Global -Option ReadOnly -Value ((Get-PSCallStack)[1].Command -replace ".{4}$")
 		}
 
 		Write-Output ""
@@ -104,27 +104,6 @@ function Enter-Test
 				foreach ($Script in $PrivateScript) { . $Script.FullName }
 				Export-ModuleMember -Function *
 			}
-
-			# TODO: temporarily disabled
-			if ($false)
-			{
-				# Disable logging errors, warnings and info messages for tests
-				New-Variable -Name TestLogging -Option ReadOnly -Value @{
-					ErrorLogging = $ErrorLogging
-					WarningLogging = $WarningLogging
-					InformationLogging = $InformationLogging
-				}
-
-				Set-Variable -Name ErrorLogging -Scope Global -Value $false
-				Set-Variable -Name WarningLogging -Scope Global -Value $false
-				Set-Variable -Name InformationLogging -Scope Global -Value $false
-
-				Export-ModuleMember -Variable TestLogging
-			}
 		} | Import-Module -Scope Global
-
-		Write-Debug -Message "[Enter-Test] ErrorLogging changed to: $ErrorLogging"
-		Write-Debug -Message "[Enter-Test] WarningLogging changed to: $WarningLogging"
-		Write-Debug -Message "[Enter-Test] InformationLogging changed to: $InformationLogging"
 	}
 }

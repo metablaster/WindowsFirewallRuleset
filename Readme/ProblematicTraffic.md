@@ -16,7 +16,7 @@ meaning weakening the firewall just to fix the problem or to make firewall logs 
   - [Case 2: List of dropped outbound packets during system boot](#case-2-list-of-dropped-outbound-packets-during-system-boot)
     - [Case 2: Troubleshooting](#case-2-troubleshooting)
     - [Case 2: Audit result](#case-2-audit-result)
-  - [Case 3: Event log shows packet drops, firewall log does not show these drops](#case-3-event-log-shows-packet-drops-firewall-log-does-not-show-these-drops)
+  - [Case 3: Event log shows packet drops that are not logged into firewall log](#case-3-event-log-shows-packet-drops-that-are-not-logged-into-firewall-log)
     - [Case 3: Troubleshooting](#case-3-troubleshooting)
     - [Case 3: Audit result](#case-3-audit-result)
   - [Case 4: Updating Microsoft Office fails](#case-4-updating-microsoft-office-fails)
@@ -140,7 +140,7 @@ but that's not the case.
 
 [Reference for WFP Operation][ref wfp]
 
-## Case 3: Event log shows packet drops, firewall log does not show these drops
+## Case 3: Event log shows packet drops that are not logged into firewall log
 
 1. Inbound from DNS servers source port 53 to random local port
 2. Inbound from github source port 22 to random local port
@@ -177,7 +177,7 @@ for now it's safer to ignore these than defining a rule that would possibly comp
 
 ## Case 4: Updating Microsoft Office fails
 
-1. either manually or automatic,
+1. Either manually or automatic,
 updating office fails because outbound connection is blocked despite correct allow rules
 
 ### Case 4: Troubleshooting
@@ -194,6 +194,8 @@ bypassing our rules.
 [Reference for ClickToRun troubleshooting][issue clicktorun]
 
 ### Case 4: Audit result
+
+**Update** This no longer seems to be problem since more recent version of Office suite
 
 1. Impossible to define a rule which would monitor behavior of such stupidly designed programs.
 
@@ -311,8 +313,6 @@ override those with `InterfaceAlias` parameter.
 
 There is no need to troubleshoot this since Epic software uses addresses that are against IANA rules,
 they have been notified about the problem which is present for already some time.
-
-For more info see: [Please stop violating IANA rules][issue epic games]
 
 ## Case 10: Discovery and file and printer sharing issue on home networks (WORKGROUP)
 
