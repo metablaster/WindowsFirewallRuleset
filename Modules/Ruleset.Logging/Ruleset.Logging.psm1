@@ -50,3 +50,17 @@ foreach ($Script in $PublicScripts)
 	Write-Debug -Message "[$ThisModule] Importing script: Public\$Script.ps1"
 	. ("{0}\Public\{1}.ps1" -f $PSScriptRoot, $Script)
 }
+
+#
+# Module variables
+#
+
+if (!(Get-Variable -Name CheckInitLogging -Scope Global -ErrorAction Ignore))
+{
+	Write-Debug -Message "[$ThisModule] Initialize global constant: CheckInitLogging"
+	# check if constants already initialized, used for module reloading
+	New-Variable -Name CheckInitLogging -Scope Global -Option Constant -Value $null
+
+	# To prevent callers from overwriting a log header of each other we need a stack of headers
+	New-Variable -Name HeaderStack -Scope Global -Value ([System.Collections.Stack]::new(@($DefaultLogHeader)))
+}

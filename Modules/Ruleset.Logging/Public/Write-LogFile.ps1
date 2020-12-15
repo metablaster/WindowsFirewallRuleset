@@ -87,7 +87,9 @@ function Write-LogFile
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	$LogFile = Initialize-Log $Path -Label $Label -Header $LogHeader
+
+	# If Peek() fails you have called Pop() more than Push()
+	$LogFile = Initialize-Log $Path -Label $Label -Header $HeaderStack.Peek()
 
 	if ($Message)
 	{

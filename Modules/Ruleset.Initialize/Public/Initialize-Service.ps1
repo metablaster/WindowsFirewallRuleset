@@ -85,7 +85,7 @@ function Initialize-Service
 		[bool] $StatusGood = $true
 
 		# Log file header to use for this script
-		Set-Variable -Name LogHeader -Scope Global -Value "System services status change"
+		$HeaderStack.Push("System services status change")
 	}
 	process
 	{
@@ -235,6 +235,6 @@ function Initialize-Service
 	end
 	{
 		# Restore header to default
-		Set-Variable -Name LogHeader -Scope Global -Value $DefaultLogHeader
+		$HeaderStack.Pop() | Out-Null
 	}
 }

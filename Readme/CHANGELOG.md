@@ -77,8 +77,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - Test
 
-  - Fix/improve experimental scripts functions (In progress...)
-  - Unit tests will generate logs to separate folder (In progress...)
+  - Unit tests will write logs to separate folder (In progress...)
 
 - Bugfix
 

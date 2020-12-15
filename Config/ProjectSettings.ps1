@@ -70,7 +70,7 @@ param(
 #region Initialization
 # Name of this script for debugging messages, do not modify!.
 Set-Variable -Name SettingsScript -Scope Private -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{4}$")
-Write-Debug -Message "[$SettingsScript] params($($PSBoundParameters.Values))"
+Write-Debug -Message "[$SettingsScript] params($($PSBoundParameters.Values)) caller: $((Get-PSCallStack)[1].Command -replace ".{4}$")"
 
 if ($MyInvocation.InvocationName -ne ".")
 {
@@ -88,7 +88,7 @@ if ($MyInvocation.InvocationName -ne ".")
 # 4. Enables some disabled unit tests and disables logging
 # 5. Enables setting preference variables for modules
 # NOTE: If changed to $true, the change requires PowerShell restart
-Set-Variable -Name Develop -Scope Global -Value $false
+Set-Variable -Name Develop -Scope Global -Value $true
 
 if ($Develop)
 {
@@ -234,7 +234,12 @@ if ($Develop)
 		# cause removing modules prematurely
 		foreach ($Module in @(Get-ChildItem -Name -Path "$ProjectRoot\Modules" -Directory))
 		{
-			Get-Module -Name $Module | Remove-Module
+			$TargetModule = Get-Module -Name $Module
+			if ($TargetModule)
+			{
+				Write-Debug -Message "Removing module $Module"
+				Remove-Module -ModuleInfo $TargetModule -ErrorAction Stop
+			}
 		}
 	}
 }
@@ -279,9 +284,6 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 
 	# Set to false to disable logging information messages
 	Set-Variable -Name InformationLogging -Scope Global -Value $true #(!$Develop)
-
-	# Holds temporary log header that may appear in log files as needed
-	Set-Variable -Name LogHeader -Scope Global -Value $null
 }
 #endregion
 
@@ -326,7 +328,7 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 	New-Variable -Name CheckReadOnlyVariables -Scope Global -Option Constant -Value $null
 
 	# Set to false to avoid checking system and environment requirements
-	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $true
+	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $false
 
 	# Set to false to avoid checking if modules are up to date
 	New-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Value $Develop
@@ -418,7 +420,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	New-Variable -Name ProjectVersion -Scope Global -Option Constant -Value ([version]::new(0, 9, 0))
 
 	# Default header that will appear in log files
-	Set-Variable -Name DefaultLogHeader -Scope Global -Option Constant -Value "Administrator logs"
+	New-Variable -Name DefaultLogHeader -Scope Global -Option Constant -Value "Administrator logs"
 
 	# Required minimum operating system version (v1809)
 	# TODO: v1809 needs to be replaced with minimum v1903, downgraded here because of Server 2019
@@ -562,7 +564,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	}
 
 	# Add project module directory to session module path
-	New-Variable -Name PathEntry -Value (
+	New-Variable -Name PathEntry -Scope Local -Value (
 		[System.Environment]::GetEnvironmentVariable("PSModulePath").TrimEnd(";") -replace (";;", ";"))
 	$PathEntry += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Modules"
 	[System.Environment]::SetEnvironmentVariable("PSModulePath", $PathEntry)
@@ -572,7 +574,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	$PathEntry += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Scripts"
 	$PathEntry += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Scripts\External"
 	[System.Environment]::SetEnvironmentVariable("Path", $PathEntry)
-	Remove-Variable -Name PathEntry
+	Remove-Variable -Name PathEntry -Scope Local
 }
 #endregion
 
@@ -595,6 +597,12 @@ if (!(Get-Variable -Name CheckProtectedVariables -Scope Global -ErrorAction Igno
 	New-Variable -Name WarningStatus -Scope Global -Value $false
 }
 #endregion
+
+# Module autoload is triggered for functions only not for variable exports
+if (!$InModule -and !(Get-Module -Name Ruleset.Logging))
+{
+	Import-Module -Scope Global -Name Ruleset.Logging
+}
 
 #region Show variables and preferences
 if ($ShowPreference)

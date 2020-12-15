@@ -1,8 +1,8 @@
 
-# Firewall directory
+# Logs\Firewall directory
 
-Firewall can be configured to write logs into this directory, with the benefit for:
+Firewall can be configured to write logs into this directory, with the following benefits:
 
-- Be able to open logs as standard user
-- Custom syntax highlighting
-- Log filtering functionality
+- To open logs as standard user within VSCode
+- Custom syntax highlighting for firewall logs
+- Log filtering functionality to focus on specific log entries

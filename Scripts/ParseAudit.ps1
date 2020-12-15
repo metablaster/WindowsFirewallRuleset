@@ -37,11 +37,12 @@ Gets firewall auditing logs from event viewer and saves result to log file
 Get entries only for specified direction
 
 .PARAMETER Protocol
-Get entries only for specified protocol
+Get entries only for specified protocol, this can be either protocol number or
+predefined protocol keyword
 https://en.wikipedia.org/wiki/List_of_IP_protocol_numbers
 
 .PARAMETER Last
-Get this amount of newest entries
+Get maximum this amount of newest entries
 
 .PARAMETER Hours
 Get entries within last hours specified
@@ -131,8 +132,8 @@ param (
 #requires -PSEdition Desktop
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
-New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
-	$MyInvocation.MyCommand.Name -replace ".{4}$" )
+# TODO: 3 or 4? is there universal method to get rid of extension?
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath ).Basename)
 
 # Check requirements
 Initialize-Project -Abort
@@ -149,32 +150,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # Setup local variables
-$Date = (Get-Date).AddHours(-$Hours)
-$AuditFailure = [System.Diagnostics.Eventing.Reader.StandardEventKeywords]::AuditFailure
-$Level = [System.Diagnostics.Eventing.Reader.StandardEventLevel]::LogAlways
-
-[hashtable] $FilterHash = @{
-	LogName = "Security"
-	ProviderName = "Microsoft-Windows-Security-Auditing"
-	Keywords = $AuditFailure.value__
-	ID = $EventID
-	Level = $Level.Value__
-	StartTime = $Date
-}
-
-[System.Diagnostics.Eventing.Reader.EventLogRecord[]] $Events = Get-WinEvent -MaxEvents $Last -FilterHashtable $FilterHash
-
-[string] $FileLabel = "Event"
-if ($Protocol -ne "Any")
-{
-	$FileLabel += "_$Protocol"
-}
-if ($Direction -ne "Any")
-{
-	$FileLabel += "_$Direction"
-}
-
-[string] $EventDescription = switch ($EventID)
+$EventDescription = switch ($EventID)
 {
 	5146 { "The Windows Filtering Platform has blocked a packet" }
 	5147 { "A more restrictive Windows Filtering Platform filter has blocked a packet" }
@@ -192,8 +168,34 @@ if ($Direction -ne "Any")
 	5159 { "The Windows Filtering Platform has blocked a bind to a local port" }
 }
 
-# Log file header to use for this script
-Set-Variable -Name LogHeader -Scope Global -Value $EventDescription
+Write-Information -Tags "User" -MessageData "INFO: Parsing '$EventDescription'"
+
+# Log file header to use for this audit log
+$HeaderStack.Push($EventDescription)
+
+$Date = (Get-Date).AddHours(-$Hours)
+$AuditFailure = [System.Diagnostics.Eventing.Reader.StandardEventKeywords]::AuditFailure
+$Level = [System.Diagnostics.Eventing.Reader.StandardEventLevel]::LogAlways
+
+[hashtable] $FilterHash = @{
+	LogName = "Security"
+	ProviderName = "Microsoft-Windows-Security-Auditing"
+	Keywords = $AuditFailure.value__
+	ID = $EventID
+	Level = $Level.Value__
+	StartTime = $Date
+}
+
+# NOTE: EventID needed otherwise we'll get same log header for different events
+[string] $FileLabel = "Event-$EventID"
+if ($Protocol -ne "Any")
+{
+	$FileLabel += "_$Protocol"
+}
+if ($Direction -ne "Any")
+{
+	$FileLabel += "_$Direction"
+}
 
 $ProtocolNumber = switch ($Protocol)
 {
@@ -209,10 +211,13 @@ $ProtocolNumber = switch ($Protocol)
 
 $DevicePath = & Get-DevicePath.ps1
 
-foreach ($Event in $Events)
+# Get and parse events
+[System.Diagnostics.Eventing.Reader.EventLogRecord[]] $Events = Get-WinEvent -MaxEvents $Last -FilterHashtable $FilterHash
+
+foreach ($RawEvent in $Events)
 {
 	# Convert the event to XML
-	[xml] $EventXML = $Event.ToXml()
+	[xml] $EventXML = $RawEvent.ToXml()
 
 	# https://docs.microsoft.com/en-us/previous-versions/dotnet/netframework-4.0/ms256086(v=vs.100)
 	$xmlns = New-Object -TypeName System.Xml.XmlNamespaceManager -ArgumentList $EventXML.NameTable
@@ -222,6 +227,12 @@ foreach ($Event in $Events)
 	if (($null -ne $ProtocolNumber) -and ($EventProtocol -ne $ProtocolNumber))
 	{
 		continue
+	}
+
+	if ($VerbosePreference -ne "SilentlyContinue")
+	{
+		$EventIndex = [array]::IndexOf($Events, $Event)
+		Write-Verbose -Message "Processing event date: $($Events[$EventIndex].TimeCreated)"
 	}
 
 	# Message field
@@ -289,6 +300,6 @@ foreach ($Event in $Events)
 }
 
 # Restore header to default
-Set-Variable -Name LogHeader -Scope Global -Value $DefaultLogHeader
+$HeaderStack.Pop() | Out-Null
 
 Update-Log

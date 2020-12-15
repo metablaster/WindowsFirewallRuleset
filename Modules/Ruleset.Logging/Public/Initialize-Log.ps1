@@ -34,11 +34,11 @@ Generates a log file name for logging functions
 Generates a log file name composed of current date and appends to requested label and path.
 The function checks if the path to log file exists, if not it creates directory but not log file.
 
-.PARAMETER Folder
-Path to directory where to save logs
+.PARAMETER Path
+Path to directory where to write logs
 
 .PARAMETER Label
-File label which precedes file date, ex. Warning or Error
+File label which precedes file date, ex. "Warning" or "Error"
 
 .PARAMETER Header
 If specified, this header message will be at the top of a log file.
@@ -65,26 +65,26 @@ function Initialize-Log
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[ValidateScript( { (Test-Path -Path (Split-Path -Path $_ -Qualifier)) })]
-		[string] $Folder,
+		[string] $Path,
 
 		[Parameter(Mandatory = $true)]
 		[string] $Label,
 
 		[Parameter()]
-		[string] $Header
+		[string] $Header = $DefaultLogHeader
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# Generate file name
 	$FileName = $Label + "_$(Get-Date -Format "dd.MM.yy").log"
-	$LogFile = Join-Path -Path $Folder -ChildPath $FileName
+	$LogFile = Join-Path -Path $Path -ChildPath $FileName
 
 	# Create Logs directory if it doesn't exist
-	if (!(Test-Path -PathType Container -Path $Folder))
+	if (!(Test-Path -PathType Container -Path $Path))
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating log directory: $Folder"
-		New-Item -ItemType Directory -Path $Folder -ErrorAction Stop | Out-Null
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating log directory: $Path"
+		New-Item -ItemType Directory -Path $Path -ErrorAction Stop | Out-Null
 	}
 
 	if (!(Test-Path -PathType Leaf -Path $LogFile))
@@ -93,20 +93,28 @@ function Initialize-Log
 		New-Item -ItemType File -Path $LogFile -ErrorAction Stop | Out-Null
 		Set-Content -Path $LogFile -Value "`n#`n# Windows Firewall Ruleset $ProjectVersion"
 
-		if ($Header)
+		if ([string]::IsNullOrEmpty($Header))
+		{
+			Write-Error -Category ObjectNotFound -TargetObject $HeaderStack `
+				-Message "Log header is missing or invalid"
+		}
+		else
 		{
 			Add-Content -Path $LogFile -Value "# $Header"
 		}
 
 		Add-Content -Path $LogFile -Value "#"
 	}
-	elseif ($Header)
+	else
 	{
-		Write-Debug -Message "Header parameter is valid for new log files only, ignored..."
-	}
+		if (![string]::IsNullOrEmpty($Header))
+		{
+			Write-Debug -Message "Header parameter is valid for new log files only, ignored..."
+		}
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] Logs folder is: $Folder"
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] Generate log file name: $FileName"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Logs directory is: $Path"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Log file name: $FileName"
+	}
 
 	return $LogFile
 }

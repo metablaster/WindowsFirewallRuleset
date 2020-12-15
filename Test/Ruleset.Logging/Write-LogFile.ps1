@@ -66,9 +66,29 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
-Start-Test "Write log"
-Set-Variable -Name LogHeader -Scope Global -Value "Test case entries"
-Write-LogFile -Tags "Test" -Message "Test message"
+Start-Test "Write log no header"
+Write-LogFile -Tags "Test" -Message "Test no header" -Label "TestLog1"
+
+Start-Test "Write log new header"
+$HeaderStack.Push("Test case header 1")
+Write-LogFile -Tags "Test" -Message "Test header 1" -Label "TestLog2"
+
+Start-Test "Write log 2nd header"
+$HeaderStack.Push("Test case header 2")
+Write-LogFile -Tags "Test" -Message "Test header 2" -Label "TestLog3"
+
+Start-Test "Write log previous header"
+$HeaderStack.Pop() | Out-Null
+Write-LogFile -Tags "Test" -Message "Test previous header" -Label "TestLog4"
+
+Start-Test "Write log initial header"
+$HeaderStack.Pop() | Out-Null
+Write-LogFile -Tags "Test" -Message "Test initial header" -Label "TestLog5"
+
+Start-Test "Write log empty header"
+$HeaderStack.Push("")
+Write-LogFile -Tags "Test" -Message "Test initial header" -Label "TestLog6"
+$HeaderStack.Pop() | Out-Null
 
 Update-Log
 Exit-Test
