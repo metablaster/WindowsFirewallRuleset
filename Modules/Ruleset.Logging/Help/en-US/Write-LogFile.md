@@ -82,7 +82,7 @@ Will write "Another message" InformationRecord to log C:\logs\next\Admin_15.12.2
 Message from which to construct "InformationRecord" and append to log file
 
 ```yaml
-Type: String
+Type: System.String
 Parameter Sets: Message
 Aliases:
 
@@ -98,7 +98,7 @@ Accept wildcard characters: False
 Hash table or dictionary which to write to log file
 
 ```yaml
-Type: Object
+Type: System.Object
 Parameter Sets: Hash
 Aliases:
 
@@ -114,7 +114,7 @@ Accept wildcard characters: False
 Destination directory
 
 ```yaml
-Type: String
+Type: System.String
 Parameter Sets: (All)
 Aliases:
 
@@ -130,7 +130,7 @@ Accept wildcard characters: False
 One or more optional message tags
 
 ```yaml
-Type: String[]
+Type: System.String[]
 Parameter Sets: Message
 Aliases:
 
@@ -146,7 +146,7 @@ Accept wildcard characters: False
 File label that is added to current date for resulting file name
 
 ```yaml
-Type: String
+Type: System.String
 Parameter Sets: (All)
 Aliases:
 

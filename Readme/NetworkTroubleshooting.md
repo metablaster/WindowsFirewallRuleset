@@ -280,7 +280,7 @@ Depending on your adapter, here are links that help explain the meaning of adapt
 **NOTE:** This settings are universal, not always limited to specific hardware vendor:
 
 - [Advanced Intel Wireless Adapter Settings][adapter wifi settings]
-- [Advanced Network Aadapter Driver Settings][adapter eth settings]
+- [Advanced Network Adapter Driver Settings][adapter eth settings]
 - [Resolving Issues with Energy Efficient Ethernet (EEE) or Green Ethernet][adapter eee issues]
 - [Optimal setting for advanced parameters for Realtek PCI-e GBE family network card][adapter realtek settings]
 

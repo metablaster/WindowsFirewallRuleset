@@ -55,9 +55,9 @@ Imports all firewall rules in the CSV file FirewallRules.csv
 If no file is specified, FirewallRules .csv or .json in the current directory is searched.
 
 .EXAMPLE
-PS> Import-FirewallRules WmiRules.csv CSV
+PS> Import-FirewallRules -FileName WmiRules -JSON
 
-Imports all firewall rules in the SCV file WmiRules.csv
+Imports all firewall rules from the JSON file WmiRules
 
 .INPUTS
 None. You cannot pipe objects to Import-FirewallRules
@@ -83,7 +83,7 @@ Following modifications by metablaster August 2020:
 #>
 function Import-FirewallRules
 {
-	[CmdletBinding(
+	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallRules.md")]
 	[OutputType([void])]
 	param(

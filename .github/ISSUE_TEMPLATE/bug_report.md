@@ -31,7 +31,7 @@ Describe what is the actual result as opposed to "Expected behavior"
 Please provide detailed information about your system as needed:
 
 - Firewall version (look into: Config\ProjectSettings.ps1 and search for "ProjectVersion" variable)
-- OS: [ex. Windows 10 Pro v1903] (run: Winver.exe)
+- OS: [ex. Windows 10 Pro v1903] (run: winver.exe)
 - PowerShell: [ex. PowerShell core 7.1.0] (run: $PSVersionTable)
 - Network Adapter: (run: Get-NetAdapter | ? HardwareInterface | select *)
 - IP Configuration: (run: ipconfig /all)

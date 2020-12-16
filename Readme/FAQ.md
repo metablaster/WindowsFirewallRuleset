@@ -202,7 +202,8 @@ them as follows:
     - Install or update dependent PowerShell modules (only if you enable development mode)
     - Install recommended VSCode extensions (if you accpet VSCode recommendation)
     - Modify file system permissions (firewall logs inside this repository only by default)
-    - Modify settings for specific software (Process monitor, mTail and Windows Performance Analyzer only)
+    - Modify settings for specific software (Process monitor, mTail and Windows Performance Analyzer
+    only)
 
     All of these modifications in point 4 are done in following situations:
 
@@ -291,11 +292,12 @@ actually bring these options back, so here are my favorites that should fix it i
    doesn't have to be related to firewall, ex. anti virus, network options and anything similar can
    the cause for this message.
 
-2. If you can't get rid of a message and profile options are not back even after reboot, next step is to verify
-following location in GPO:\
+2. If you can't get rid of a message and profile options are not back even after reboot, next step
+is to verify following location in GPO:\
 `Computer Configuration\Windows Settings\Security Settings\Network List Manager Policies`
 
-    - Here make sure everything is set to `Not Configured`, and if you change something reboot system to verify.
+    - Here make sure everything is set to `Not Configured`, and if you change something reboot
+    system to verify.
 
 3. If profile options are still not back there is only one option left which is resetting
 network settings as follows:

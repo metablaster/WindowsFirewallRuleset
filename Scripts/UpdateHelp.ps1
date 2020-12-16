@@ -74,6 +74,7 @@ TODO: Module page and about_ topic needs to be manually edited, currently we get
 To document private functions they must be exported first
 TODO: the "Module Name:" entry in help files (any maybe even "external help file:" entry),
 if not set to correct module name the command will fail
+TODO: Log header is not inserted into logs
 #>
 
 [CmdletBinding()]

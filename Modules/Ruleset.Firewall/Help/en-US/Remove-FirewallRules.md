@@ -14,7 +14,7 @@ Removes firewall rules according to a list in a CSV or JSON file.
 ## SYNTAX
 
 ```none
-Remove-FirewallRules [[-PolicyStore] <String>] [[-Folder] <String>] [[-FileName] <String>] [-JSON] [-WhatIf]
+Remove-FirewallRules [-PolicyStore <String>] [-Folder <String>] [-FileName <String>] [-JSON] [-WhatIf]
  [-Confirm] [<CommonParameters>]
 ```
 
@@ -55,7 +55,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 1
+Position: Named
 Default value: [System.Environment]::MachineName
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -71,7 +71,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 2
+Position: Named
 Default value: .
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -87,7 +87,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 3
+Position: Named
 Default value: FirewallRules
 Accept pipeline input: False
 Accept wildcard characters: False

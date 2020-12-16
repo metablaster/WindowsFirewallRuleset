@@ -14,7 +14,7 @@ Imports firewall rules from a CSV or JSON file.
 ## SYNTAX
 
 ```none
-Import-FirewallRules [[-PolicyStore] <String>] [[-Folder] <String>] [[-FileName] <String>] [-JSON]
+Import-FirewallRules [-PolicyStore <String>] [-Folder <String>] [-FileName <String>] [-JSON]
  [<CommonParameters>]
 ```
 
@@ -55,7 +55,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 1
+Position: Named
 Default value: [System.Environment]::MachineName
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -71,7 +71,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 2
+Position: Named
 Default value: .
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -87,7 +87,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 3
+Position: Named
 Default value: FirewallRules
 Accept pipeline input: False
 Accept wildcard characters: False

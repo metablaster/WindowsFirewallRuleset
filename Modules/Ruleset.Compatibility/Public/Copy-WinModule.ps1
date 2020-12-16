@@ -38,7 +38,7 @@ Once these modules have been copied,
 they will be available just like the other native modules for PowerShell Core.
 
 Note that if there already is a module in the destination corresponding to the module
-to be copied's name, it will not be copied.
+to be copied name, it will not be copied.
 
 .PARAMETER Name
 Specifies names or name patterns of modules that will be copied.

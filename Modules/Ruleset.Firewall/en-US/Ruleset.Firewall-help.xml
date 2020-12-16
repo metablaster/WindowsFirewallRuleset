@@ -15,7 +15,7 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Export-FirewallRules</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>PolicyStore</maml:name>
           <maml:Description>
             <maml:para>Policy store from which to export rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md</maml:para>
@@ -27,7 +27,7 @@
           </dev:type>
           <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Folder</maml:name>
           <maml:Description>
             <maml:para>Path into which to save file</maml:para>
@@ -39,7 +39,7 @@
           </dev:type>
           <dev:defaultValue>.</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>FileName</maml:name>
           <maml:Description>
             <maml:para>Output file, default is JSON format</maml:para>
@@ -51,7 +51,7 @@
           </dev:type>
           <dev:defaultValue>FirewallRules</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>DisplayName</maml:name>
           <maml:Description>
             <maml:para>Display name of the rules to be processed. Wildcard character * is allowed.</maml:para>
@@ -63,7 +63,7 @@
           </dev:type>
           <dev:defaultValue>*</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>DisplayGroup</maml:name>
           <maml:Description>
             <maml:para>Display group of the rules to be processed. Wildcard character * is allowed.</maml:para>
@@ -166,7 +166,7 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>PolicyStore</maml:name>
         <maml:Description>
           <maml:para>Policy store from which to export rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md</maml:para>
@@ -178,7 +178,7 @@
         </dev:type>
         <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Folder</maml:name>
         <maml:Description>
           <maml:para>Path into which to save file</maml:para>
@@ -190,7 +190,7 @@
         </dev:type>
         <dev:defaultValue>.</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>FileName</maml:name>
         <maml:Description>
           <maml:para>Output file, default is JSON format</maml:para>
@@ -202,7 +202,7 @@
         </dev:type>
         <dev:defaultValue>FirewallRules</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>DisplayName</maml:name>
         <maml:Description>
           <maml:para>Display name of the rules to be processed. Wildcard character * is allowed.</maml:para>
@@ -214,7 +214,7 @@
         </dev:type>
         <dev:defaultValue>*</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>DisplayGroup</maml:name>
         <maml:Description>
           <maml:para>Display group of the rules to be processed. Wildcard character * is allowed.</maml:para>
@@ -625,7 +625,7 @@ Exports all SNMP firewall rules to the JSON file SNMPRules.json.</dev:code>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Import-FirewallRules</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>PolicyStore</maml:name>
           <maml:Description>
             <maml:para>Policy store into which to import rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md</maml:para>
@@ -637,7 +637,7 @@ Exports all SNMP firewall rules to the JSON file SNMPRules.json.</dev:code>
           </dev:type>
           <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Folder</maml:name>
           <maml:Description>
             <maml:para>Path to directory where exported rules file is located</maml:para>
@@ -649,7 +649,7 @@ Exports all SNMP firewall rules to the JSON file SNMPRules.json.</dev:code>
           </dev:type>
           <dev:defaultValue>.</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>FileName</maml:name>
           <maml:Description>
             <maml:para>Input file</maml:para>
@@ -675,7 +675,7 @@ Exports all SNMP firewall rules to the JSON file SNMPRules.json.</dev:code>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>PolicyStore</maml:name>
         <maml:Description>
           <maml:para>Policy store into which to import rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md</maml:para>
@@ -687,7 +687,7 @@ Exports all SNMP firewall rules to the JSON file SNMPRules.json.</dev:code>
         </dev:type>
         <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Folder</maml:name>
         <maml:Description>
           <maml:para>Path to directory where exported rules file is located</maml:para>
@@ -699,7 +699,7 @@ Exports all SNMP firewall rules to the JSON file SNMPRules.json.</dev:code>
         </dev:type>
         <dev:defaultValue>.</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>FileName</maml:name>
         <maml:Description>
           <maml:para>Input file</maml:para>
@@ -791,7 +791,7 @@ Imports all firewall rules in the SCV file WmiRules.csv</dev:code>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Remove-FirewallRules</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>PolicyStore</maml:name>
           <maml:Description>
             <maml:para>Policy store from which remove rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md</maml:para>
@@ -803,7 +803,7 @@ Imports all firewall rules in the SCV file WmiRules.csv</dev:code>
           </dev:type>
           <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Folder</maml:name>
           <maml:Description>
             <maml:para>Folder in which file is located</maml:para>
@@ -815,7 +815,7 @@ Imports all firewall rules in the SCV file WmiRules.csv</dev:code>
           </dev:type>
           <dev:defaultValue>.</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>FileName</maml:name>
           <maml:Description>
             <maml:para>File name according to which to delete rules</maml:para>
@@ -863,7 +863,7 @@ Imports all firewall rules in the SCV file WmiRules.csv</dev:code>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>PolicyStore</maml:name>
         <maml:Description>
           <maml:para>Policy store from which remove rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md</maml:para>
@@ -875,7 +875,7 @@ Imports all firewall rules in the SCV file WmiRules.csv</dev:code>
         </dev:type>
         <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Folder</maml:name>
         <maml:Description>
           <maml:para>Folder in which file is located</maml:para>
@@ -887,7 +887,7 @@ Imports all firewall rules in the SCV file WmiRules.csv</dev:code>
         </dev:type>
         <dev:defaultValue>.</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>FileName</maml:name>
         <maml:Description>
           <maml:para>File name according to which to delete rules</maml:para>

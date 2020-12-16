@@ -14,9 +14,9 @@ Exports firewall rules to a CSV or JSON file.
 ## SYNTAX
 
 ```none
-Export-FirewallRules [[-PolicyStore] <String>] [[-Folder] <String>] [[-FileName] <String>]
- [[-DisplayName] <String>] [[-DisplayGroup] <String>] [-JSON] [-Inbound] [-Outbound] [-Enabled] [-Disabled]
- [-Allow] [-Block] [-Append] [<CommonParameters>]
+Export-FirewallRules [-PolicyStore <String>] [-Folder <String>] [-FileName <String>] [-DisplayName <String>]
+ [-DisplayGroup <String>] [-JSON] [-Inbound] [-Outbound] [-Enabled] [-Disabled] [-Allow] [-Block] [-Append]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -66,7 +66,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 1
+Position: Named
 Default value: [System.Environment]::MachineName
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -82,7 +82,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 2
+Position: Named
 Default value: .
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -98,7 +98,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 3
+Position: Named
 Default value: FirewallRules
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -115,7 +115,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 4
+Position: Named
 Default value: *
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -132,7 +132,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 5
+Position: Named
 Default value: *
 Accept pipeline input: False
 Accept wildcard characters: False

@@ -88,9 +88,9 @@ PS> Export-FirewallRules -Inbound -Allow
 Exports all inbound and allowing firewall rules to the CSV file FirewallRules.csv in the current directory.
 
 .EXAMPLE
-PS> Export-FirewallRules snmp* SNMPRules.json -json
+PS> Export-FirewallRules -DisplayGroup ICMP* ICMPRules.json -json
 
-Exports all SNMP firewall rules to the JSON file SNMPRules.json.
+Exports all ICMP firewall rules to the JSON file ICMPRules.json.
 
 .INPUTS
 None. You cannot pipe objects to Export-FirewallRules
@@ -139,7 +139,7 @@ function Export-FirewallRules
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 		"PSAvoidUsingWriteHost", "", Justification = "There is no way to replace Write-Host here")]
-	[CmdletBinding(
+	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallRules.md")]
 	[OutputType([void])]
 	param(

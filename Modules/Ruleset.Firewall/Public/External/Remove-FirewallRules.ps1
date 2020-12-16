@@ -54,7 +54,7 @@ PS> Remove-FirewallRules
 Removes all firewall rules according to a list in the CSV file FirewallRules.csv in the current directory.
 
 .EXAMPLE
-Remove-FirewallRules WmiRules.json -json
+Remove-FirewallRules WmiRules.json -JSON
 
 Removes all firewall rules according to the list in the JSON file WmiRules.json.
 
@@ -82,7 +82,7 @@ function Remove-FirewallRules
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 		"PSAvoidUsingWriteHost", "", Justification = "There is no way to replace Write-Host here")]
-	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High",
+	[CmdletBinding(PositionalBinding = $false, SupportsShouldProcess = $true, ConfirmImpact = "High",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Remove-FirewallRules.md")]
 	[OutputType([void])]
 	param(
