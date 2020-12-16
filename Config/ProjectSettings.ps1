@@ -282,13 +282,13 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 	Set-Variable -Name CheckRemovableVariables -Scope Global -Option ReadOnly -Force -Value $null
 
 	# Set to false to disable logging errors
-	Set-Variable -Name ErrorLogging -Scope Global -Value $true #(!$Develop)
+	Set-Variable -Name ErrorLogging -Scope Global -Value $true
 
 	# Set to false to disable logging warnings
-	Set-Variable -Name WarningLogging -Scope Global -Value $true #(!$Develop)
+	Set-Variable -Name WarningLogging -Scope Global -Value $true
 
 	# Set to false to disable logging information messages
-	Set-Variable -Name InformationLogging -Scope Global -Value $true #(!$Develop)
+	Set-Variable -Name InformationLogging -Scope Global -Value $true
 }
 #endregion
 
@@ -392,11 +392,20 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 	# TODO: needs testing info messages for this value
 	# TODO: We are only assuming about accounts here as a workaround due to often need to modify variable
 	# TODO: This should be used for LocalUser rule parameter too
-	Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value (
-		Split-Path -Path (Get-LocalGroupMember -Group Users | Where-Object {
-				$_.ObjectClass -EQ "User" -and
-				($_.PrincipalSource -eq "Local" -or $_.PrincipalSource -eq "MicrosoftAccount")
-			} | Select-Object -ExpandProperty Name -Last 1) -Leaf)
+	try
+	{
+		# A workaround which will fail if there are no standard users
+		Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value (
+			Split-Path -Path (Get-LocalGroupMember -Group Users | Where-Object {
+					$_.ObjectClass -EQ "User" -and
+					($_.PrincipalSource -eq "Local" -or $_.PrincipalSource -eq "MicrosoftAccount")
+				} | Select-Object -ExpandProperty Name -Last 1) -Leaf)
+	}
+	catch
+	{
+		Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value "UnknownUser"
+		Write-Warning -Message "No users exists in 'Users' group"
+	}
 
 	# Administrative user account name which will perform unit testing
 	Set-Variable -Name TestAdmin -Scope Global -Option ReadOnly -Force -Value (

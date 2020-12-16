@@ -228,8 +228,7 @@ function Export-FirewallRules
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting rules - skip ungrouped rules"
 
-		$FirewallRules = Get-NetFirewallRule -DisplayName $DisplayName `
-			-DisplayGroup $DisplayGroup -PolicyStore $PolicyStore |
+		$FirewallRules = Get-NetFirewallRule -DisplayGroup $DisplayGroup -PolicyStore $PolicyStore |
 		Where-Object {
 			$_.Direction -like $Direction -and $_.Enabled -like $RuleState -and $_.Action -like $Action
 		}

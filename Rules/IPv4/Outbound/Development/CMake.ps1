@@ -72,6 +72,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 #
 # CMake installation directories
+# TODO: Good path needed if possible
 #
 $CMakeRoot = "%ProgramFiles%\CMakeFakePath"
 

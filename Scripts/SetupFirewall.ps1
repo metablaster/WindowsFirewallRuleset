@@ -110,8 +110,8 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
 	{
 		# Common rules
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\AdditionalNetworking.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\CoreNetworking.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Broadcast.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\CoreNetworking.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\ICMP.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Multicast.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\NetworkDiscovery.ps1"
@@ -133,6 +133,20 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
 	{
 		# Rules for developers
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\EpicGames.ps1"
+	}
+
+	# Update user prompt strings
+	$Ruleset = "rules for games"
+	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules if multiplayer games are installed"
+	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
+	Update-Context $IPVersion $Direction
+
+	if (Approve-Execute -Unsafe -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
+	{
+		# Rules for servers
+		# & "$ProjectRoot\Rules\$IPVersion\$Direction\Games\ScriptName.ps1"
+
+		Write-Warning -Message "No inbound rules for games exist"
 	}
 
 	# Update user prompt strings
@@ -175,6 +189,7 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
 	{
 		# rules for programs
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\MicrosoftOffice.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\SysInternals.ps1"
 	}
 }
 
@@ -201,8 +216,8 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
 	{
 		# Common rules
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\AdditionalNetworking.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\CoreNetworking.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Broadcast.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\CoreNetworking.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\ICMP.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Multicast.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\NetworkDiscovery.ps1"
@@ -225,6 +240,7 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
 	{
 		# Rules for developers
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Chocolatey.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\CMake.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\EpicGames.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Github.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Incredibuild.ps1"
@@ -407,7 +423,7 @@ if ($ErrorLogging -and $ErrorStatus)
 {
 	Write-Output ""
 	Write-Warning -Message "Errors were generated and saved to: $("$ProjectRoot\Logs")"
-	Write-Information -Tags "User" -MessageData "INFO: you can review these logs to see if you want to resolve some of them"
+	Write-Information -Tags "User" -MessageData "INFO: You can review these logs to see if you want to resolve some of them"
 }
 
 if ($WarningLogging -and $WarningStatus)

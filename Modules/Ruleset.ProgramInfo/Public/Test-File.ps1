@@ -77,6 +77,6 @@ function Test-File
 		Write-Warning -Message "Executable '$Executable' was not found, rules for '$Executable' won't have any effect"
 
 		Write-Information -Tags "User" -MessageData "INFO: Searched path was: $SearchPath"
-		Write-Information -Tags "User" -MessageData "INFO: To fix this problem find '$Executable' and adjust the path in $Script and re-run the script"
+		Write-Information -Tags "User" -MessageData "INFO: To fix this problem find '$Executable', adjust the path in $Script and re-run the script"
 	}
 }

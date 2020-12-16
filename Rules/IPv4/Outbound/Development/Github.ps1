@@ -138,6 +138,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 if ((Test-Installation "GithubDesktop" ([ref] $GithubRoot)) -or $ForceLoad)
 {
 	$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($GithubRoot)
+	# TODO: This will result in error with ForceLoad
 	$VersionFolders = Get-ChildItem -Directory -Path $ExpandedPath -Filter app-* -Name
 	$VersionFoldersCount = ($VersionFolders | Measure-Object).Count
 

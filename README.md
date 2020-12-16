@@ -282,7 +282,7 @@ something else:
     Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
     ```
 
-    You will be prompted to accept execution policy change, type `Y` and press enter to accept.\
+    You may be prompted to accept execution policy change, if so type `Y` and press enter to accept.\
     For more information see [About Execution Policies][about execution policies]
 
 9. At this point you should "unblock" all project files first by executing the script called `Scripts\UnblockProject.ps1`,
@@ -293,7 +293,8 @@ downloaded from internet:
     .\Scripts\UnblockProject.ps1
     ```
 
-    Make sure your answer is `R` that is `[R] Run once` as many times as needed to unblock project.
+    If asked, make sure your answer is `R` that is `[R] Run once` as many times as needed to unblock
+    project.
 
 10. Once project files are unblocked set execution policy to `RemoteSigned`:
 
@@ -301,7 +302,7 @@ downloaded from internet:
     Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
     ```
 
-    You will be again prompted to accept execution policy change, type `Y` and press enter to accept.
+    You may be again prompted to accept execution policy change, type `Y` and press enter to accept.
 
 11. Rules for programs such as your web browser, games etc. depend on installation variables.\
 Most paths are auto-searched and variables are updated, otherwise you get warning and description

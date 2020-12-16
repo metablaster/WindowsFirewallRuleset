@@ -151,20 +151,20 @@ if ([System.Environment]::Is64BitOperatingSystem)
 		Sort-Object -Property Version -Descending |
 		Select-Object -First 1 -ExpandProperty OriginalFilename
 
-		$Program = Split-Path $Driver -Parent | Format-Path
-		$Program += "\Display.NvContainer\NVDisplay.Container.exe"
-
-		if ([string]::IsNullOrEmpty($Program))
+		if ([string]::IsNullOrEmpty($Driver))
 		{
 			# TODO: This is from Test-File, Test-File should handle this, see also todo in Test-File
 			$NVDisplayExe = "NVDisplay.Container.exe"
 			Write-Warning -Message "Executable '$NVDisplayExe' was not found, rules for '$NVDisplayExe' won't have any effect"
 
 			Write-Information -Tags "User" -MessageData "INFO: Searched path was: %SystemRoot%\System32\DriverStore\FileRepository"
-			Write-Information -Tags "User" -MessageData "INFO: To fix this problem find '$NVDisplayExe' and adjust the path in $Script and re-run the script"
+			Write-Information -Tags "User" -MessageData "INFO: To fix this problem find '$NVDisplayExe' and adjust the path in $((Get-Item $PSCommandPath).Name) and re-run the script"
 		}
 		else
 		{
+			$Program = Split-Path -Path $Driver -Parent | Format-Path
+			$Program += "\Display.NvContainer\NVDisplay.Container.exe"
+
 			Test-File $Program
 			New-NetFirewallRule -Platform $Platform `
 				-DisplayName "Nvidia NVDisplay Container x64" -Service Any -Program $Program `

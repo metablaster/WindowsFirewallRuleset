@@ -230,7 +230,7 @@ them as follows:
     - `...\Ruleset.Utility\Set-NetworkProfile.ps1`
 
     By default none of these scripts run on their own, except as explained in point 4.\
-    Those scripts listed above which begin with `...\` exist in both `Modules` and `Test` subdirectories.
+    Those scripts listed above which begin with `...\` exist in at least `Modules` and `Test` subdirectories.
 
 6. Following is a list of external executables that are run by some scripts
 

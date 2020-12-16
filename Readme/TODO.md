@@ -52,6 +52,7 @@ Todo's in this file are categorized into following sections:
     - ProjectSettings.ps1 verify auto updated variables: ProjectCheck, ModulesCheck, ServicesCheck
     - Increment project version in all places mentioning version
     - Run PScriptAnalyzer
+    - Check master script includes all rule scripts
     - Test machine should have 2 standard, 2 administrator and 2 MS accounts (one standard one admin),
     and 1 disabled account for each of these 3 groups for best test results.
     - Run all tests in both release and develop mode, both Desktop and Core editions
@@ -150,6 +151,7 @@ Todo's in this file are categorized into following sections:
     Somewhere the same (ie. debug stream) can be put into 2 places in call stack, which one to chose?
     - Need global setting to allow more detailed warnings, which will list at a minimum function name
     where the warning was generated, or this additional data could be logged but not displayed.
+    - Any function that depend on "Users" group will fail if there are no users, just Administrator
 
 ## Medium priority
 

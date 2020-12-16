@@ -52,12 +52,12 @@ If you would like to see fresh changes done since last release you can do so on 
     - `ConvertFrom-SID`
     - `Get-AppSID` big thanks to @ljani for awesome solution: https://github.com/ljani
     - `Get-SystemSKU`
-  - Logging without the need for parameter splating, @Logs variable was removed
+  - Logging without the need for parameter splating, `@Logs` variable was removed
   - Improved program search algorithm
   - Inheritance of preference variables into module reworked and now valid for manifest modules only,
-  and only as defined in ProjectSettings.ps1, no inheritance from caller scope
-  - Various funny looking messages appearing in the console are now simplified
-  - Added `Write-FileLog` to write logs in addition to automated logging
+  and only as defined in `ProjectSettings.ps1`, no inheritance from caller scope
+  - Various funny looking messages appearing in the console are now simplified or removed
+  - Added `Write-FileLog` to write logs on demand in addition to automated logging
 
 - Documentation
 
@@ -70,19 +70,20 @@ If you would like to see fresh changes done since last release you can do so on 
   - Experimental scripts to start/stop packet trace and capture.
   - Utility script to list "hidden" rule properties
   - More control and utilization of preference variables, see `ProjectSettings.ps1`
-  - ProjectSettings script reworked to declare variables only as needed and to show variable status
+  - `ProjectSettings` script reworked to declare variables only as needed and to show variable status
   on demand for current scope
-  - Script to collect audit entries to help track down packet drop reason
-  - Changes done to services are now logged
+  - Script to quickly collect audit entries to help track down packet drop reason
+  - Changes done to services as part of prerequisite are now logged
 
 - Test
 
   - Unit tests will write logs to separate directory
+  - Fixed some pester tests
 
 - Bugfix
 
   - `RestartNetwork.ps1` script didn't work for virtual adapters
-  - Rules for WORKGROUP didn't work
+  - Rules for `WORKGROUP` didn't work
   - Maximum valid .NET Framework limitation in Windows PowerShell is 4.5 (4.8 not recognized)
   - Error starting dependent services because of invalid parameter name
   - Getting One Drive installation directory would fail
@@ -90,6 +91,9 @@ If you would like to see fresh changes done since last release you can do so on 
   - No longer asking to set network profile, because it results in missing profile settings in
   `Settings -> "Network & Internet"`
   - Update of help files would fail on system that never run `Update-Help`
+  - `Export-Firewall` would fail exporting by rule DisplayGroup
+  - Force loading rules for GitHub Desktop would result in error
+  - Force loading rules for NVIDIA resulted in error if no drivers are installed
 
 ## v0.8.0 (current release)
 

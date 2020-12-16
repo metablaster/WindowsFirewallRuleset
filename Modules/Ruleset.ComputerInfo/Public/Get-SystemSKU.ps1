@@ -204,6 +204,7 @@ function Get-SystemSKU
 				103 { "Professional with Media Center"; break; }
 				104 { "Windows Mobile" }
 				118 { "Windows Embedded Handheld"; break }
+				121 { "Windows 10 Education"; break }
 				123 { "Windows IoT (Internet of Things) Core"; break }
 				164 { "Windows 10 Pro Education"; break }
 				default
