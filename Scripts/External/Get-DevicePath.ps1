@@ -1,10 +1,19 @@
 
+using namespace System
+
 <#
 .SYNOPSIS
 Get disk volume path
 
 .DESCRIPTION
 Get mappings of disk volume letter and device path
+Optionally you can convert from drive letter to device path and vice versa
+
+.PARAMETER DriveLetter
+If specified the result is device path for given drive letter
+
+.PARAMETER DevicePath
+If specified result is drive letter for given device path
 
 .EXAMPLE
 PS> .\Get-DevicePath.ps1
@@ -14,26 +23,38 @@ DevicePath              DriveLetter
 \Device\HarddiskVolume1 D:
 \Device\HarddiskVolume4 C:
 
+.EXAMPLE
+PS> .\Get-DevicePath.ps1 -DevicePath "\Device\HarddiskVolume4"
+
+C:
+
+.EXAMPLE
+PS> .\Get-DevicePath.ps1 -DriveLetter C:"
+
+\Device\HarddiskVolume4
+
 .INPUTS
 None. You cannot pipe objects to Get-DevicePath.ps1
 
 .OUTPUTS
+[string]
 [PSCustomObject]
 
 .NOTES
-Following modifications by metablaster, November 2020:
-- Replace Get-WmiObject with Get-CimInstance
-- Applied code style and formatting
-- Added script boilerplace code
 TODO: Make it work with PowerShell Core, see: Add-WinFunction
-TODO: Make it convert from one path to another by using parameters
-
-.LINK
-https://morgantechspace.com/2014/11/Get-Volume-Path-from-Drive-Name-using-Powershell.html
 #>
 
+[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "None")]
+[OutputType([string], [System.Management.Automation.PSCustomObject])]
+param (
+	[Parameter(ParameterSetName = "Drive")]
+	[string] $DriveLetter,
+
+	[Parameter(ParameterSetName = "Path")]
+	[string] $DevicePath
+)
+
 #region Initialization
-using namespace System
 #Requires -Version 5.1
 #requires -PSEdition Desktop
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
@@ -77,22 +98,60 @@ $SetLastErrorCustomAttribute = New-Object Reflection.Emit.CustomAttributeBuilder
 $PInvokeMethod.SetCustomAttribute($SetLastErrorCustomAttribute)
 $Kernel32 = $TypeBuilder.CreateType()
 
+# The maximum number of characters that can be stored into the StringBuilder buffer
 $Max = 65536
+
+# A variable to a buffer that will receive the result of the query
 $StringBuilder = New-Object System.Text.StringBuilder($Max)
 
-Get-CimInstance -ClassName Win32_Volume -Namespace "root\cimv2" | Where-Object { $_.DriveLetter } |
-ForEach-Object {
+if ($DriveLetter)
+{
+	# An MS-DOS device name string specifying the target of the query.
+	# The device name cannot have a trailing backslash, for example,use "C:", not "C:\"
+	# This parameter can be NULL. In that case, the QueryDosDevice function will store a list
+	# of all existing MS-DOS device names into the StringBuilder buffer.
+	# If the function fails, the return value is zero
+	$ReturnLength = $Kernel32::QueryDosDevice($DriveLetter, $StringBuilder, $Max)
+
+	if ($ReturnLength)
+	{
+		Write-Output $StringBuilder.ToString()
+	}
+	else
+	{
+		Write-Warning -Message "Drive letter '$DriveLetter' not found"
+	}
+
+	Update-Log
+	return
+}
+
+$ResultTable = Get-CimInstance -ClassName Win32_Volume -Namespace "root\cimv2" |
+Where-Object { $_.DriveLetter } | ForEach-Object {
 	$ReturnLength = $Kernel32::QueryDosDevice($_.DriveLetter, $StringBuilder, $Max)
 
 	if ($ReturnLength)
 	{
-		$DriveMapping = @{
+		[PSCustomObject]@{
 			DriveLetter = $_.DriveLetter
 			DevicePath = $StringBuilder.ToString()
 		}
-
-		New-Object -TypeName PSCustomObject -Property $DriveMapping
 	}
 }
 
+if ($DevicePath)
+{
+	[string] $Result = $ResultTable | Where-Object {
+		$_.DevicePath -eq $DevicePath
+	} | Select-Object -ExpandProperty DriveLetter
+
+	if ([string]::IsNullOrEmpty($Result))
+	{
+		Write-Warning -Message "Device path '$DevicePath' not found"
+	}
+
+	return $Result
+}
+
+Write-Output $ResultTable
 Update-Log

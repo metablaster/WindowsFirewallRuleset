@@ -48,7 +48,7 @@ a new header, and popped before writing to previous log.
 Message from which to construct "InformationRecord" and append to log file
 
 .PARAMETER Hash
-Has table which to write to log file
+Hash table or dictionary which to write to log file
 
 .PARAMETER Tags
 One or more optional message tags
@@ -104,7 +104,7 @@ function Write-LogFile
 		[string] $Message,
 
 		[Parameter(Mandatory = $true, ParameterSetName = "Hash")]
-		[hashtable] $Hash,
+		$Hash,
 
 		[Parameter()]
 		[string] $Path = $LogsFolder,

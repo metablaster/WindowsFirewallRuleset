@@ -89,6 +89,7 @@ None. You cannot pipe objects to ParseAudit.ps1
 None. ParseAudit.ps1 does not generate any output
 
 .NOTES
+None.
 
 .LINK
 https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.diagnostics/get-winevent?view=powershell-7.1
@@ -213,6 +214,9 @@ $DevicePath = & Get-DevicePath.ps1
 # Get and parse events
 [System.Diagnostics.Eventing.Reader.EventLogRecord[]] $Events = Get-WinEvent -MaxEvents $Last -FilterHashtable $FilterHash
 
+# Within log file, newest events should be at the end
+$Events = $Events | Sort-Object -Property TimeCreated
+
 foreach ($RawEvent in $Events)
 {
 	# Convert the event to XML
@@ -237,6 +241,13 @@ foreach ($RawEvent in $Events)
 	# Message field
 	[hashtable] $Message = @{}
 
+	# Gets the event message in the current locale.
+	$FormattedMessage = $RawEvent.FormatDescription()
+
+	# TODO: Use FormatDescription(IEnumerable<Object>) to format events when and if possible
+	# https://github.com/dotnet/runtime/issues/28225
+	# $FormattedMessage = $RawEvent.FormatDescription($RawEvent.Properties.Value)
+
 	# Iterate through each one of the XML message properties
 	for ($Index = 0; $Index -lt $EventXML.Event.EventData.Data.Count; ++$Index)
 	{
@@ -255,28 +266,37 @@ foreach ($RawEvent in $Events)
 					17 { "TCP"; break }
 					41 { "IPv6"; break }
 					58 { "ICMPv6"; break }
-					default { $Value }
+					default
+					{
+						$Value
+						Write-Warning -Message "Formatting protocol '$Value' not implemented"
+					}
 				}
 				break
 			}
 			"Direction"
 			{
-				switch ($Value)
+				if ($FormattedMessage -match "(?<=Direction:\s+)\w+")
 				{
-					"%%14592" { "Inbound"; break }
-					"%%14593" {	"Outbound"; break }
-					default { $Value }
+					$matches[0]
+				}
+				else
+				{
+					Write-Warning -Message "Formatting direction '$Value' failed"
+					$Value
 				}
 				break
 			}
 			"LayerName"
 			{
-				switch ($Value)
+				if ($FormattedMessage -match "(?<=Layer Name:\s+)\w+")
 				{
-					# TODO: Verify other entries
-					"%%14610" { "Receive/Accept"; break }
-					"%%14611" { "Connect"; break }
-					default { $Value }
+					$matches[0]
+				}
+				else
+				{
+					Write-Warning -Message "Formatting layer name '$Value' failed"
+					$Value
 				}
 				break
 			}
@@ -286,7 +306,15 @@ foreach ($RawEvent in $Events)
 					$Value -like "$($_.DevicePath)*"
 				} | Select-Object -ExpandProperty DriveLetter
 
-				$Value -replace "^\\device\\harddiskvolume\d+\\", "$DriveLetter\"
+				if ($DriveLetter)
+				{
+					$Value -replace "^\\device\\harddiskvolume\d+\\", "$DriveLetter\"
+				}
+				else
+				{
+					Write-Warning -Message "Formatting application '$Value' failed"
+					$Value
+				}
 				break
 			}
 			default { $Value }
@@ -295,7 +323,24 @@ foreach ($RawEvent in $Events)
 		$Message[$Name] = $Value
 	}
 
-	Write-LogFile -Path $LogsFolder\Audit -Tags "Audit" -Label $FileLabel -Hash $Message
+	# Having entries in particular order makes it easier to interpret logs
+	$MessageData = [ordered]@{
+		TimeGenerated = $RawEvent.TimeCreated
+		Direction = $Message["Direction"]
+		Protocol = $Message["Protocol"]
+		SourceAddress = $Message["SourceAddress"]
+		DestAddress = $Message["DestAddress"]
+		DestPort = $Message["DestPort"]
+		SourcePort = $Message["SourcePort"]
+		MachineName = $RawEvent.MachineName
+		LayerName = $Message["LayerName"]
+		LayerRTID = $Message["LayerRTID"]
+		FilterRTID = $Message["FilterRTID"]
+		Application = $Message["Application"]
+	}
+
+	Write-LogFile -Path $LogsFolder\Audit -Label $FileLabel -Hash $MessageData
+	Update-Log
 }
 
 # Restore header to default

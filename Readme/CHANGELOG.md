@@ -72,7 +72,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - More control and utilization of preference variables, see `ProjectSettings.ps1`
   - ProjectSettings script reworked to declare variables only as needed and to show variable status
   on demand for current scope
-  - Script to collect audit entries to help track down packet drop reason (In progress...)
+  - Script to collect audit entries to help track down packet drop reason
   - Changes done to services are now logged
 
 - Test
