@@ -9,8 +9,8 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - [Changelog](#changelog)
   - [Table of contents](#table-of-contents)
-  - [v0.9.0 (develop branch)](#v090-develop-branch)
-  - [v0.8.0 (current release)](#v080-current-release)
+  - [v0.9.0 (current release)](#v090-current-release)
+  - [v0.8.0](#v080)
   - [v0.7.0](#v070)
   - [v0.6.0](#v060)
   - [v0.5.0](#v050)
@@ -19,9 +19,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - [v0.3.0](#v030)
   - [v0.2](#v02)
 
-## v0.9.0 (develop branch)
-
-**NOTE:** Changes for unreleased version (develop branch) may change or be upfront
+## v0.9.0 (current release)
 
 - Rules
 
@@ -95,7 +93,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - Force loading rules for GitHub Desktop would result in error
   - Force loading rules for NVIDIA resulted in error if no drivers are installed
 
-## v0.8.0 (current release)
+## v0.8.0
 
 - Rules
 

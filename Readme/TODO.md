@@ -1,7 +1,7 @@
 
 # List of tasks that needs to be done
 
-This is a project global todo list which applies to several or all scripts.
+This is a global todo list of this repository which applies to several or all scripts.
 
 For smaller todo's local to specific scripts and files see individual files, you can use workspace\
 recommended extension `todo-tree` to navigate `TODO`, `HACK` and `NOTE` tags.

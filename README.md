@@ -23,8 +23,8 @@
   - [Checking for updates](#checking-for-updates)
     - [Manual release download](#manual-release-download)
     - [Manual beta download](#manual-beta-download)
-    - [Using git command](#using-git-command)
     - [Using GitHub Desktop app](#using-github-desktop-app)
+    - [Using git command](#using-git-command)
     - [Which update method is the best](#which-update-method-is-the-best)
   - [Contributing or suggestions](#contributing-or-suggestions)
   - [Customization](#customization)
@@ -165,7 +165,7 @@ apply rules to your personal firewall less than that should work just fine!
 
 ## I don't meet the requirements
 
-At the moment this project is tested and designed for most recent Windows Desktop/Servers and that
+At the moment this firewall is tested and designed for most recent Windows Desktop/Servers and that
 is known to work, to make use of it on older systems requires additional work.
 
 Testing is done on 64 bit Windows, a small fraction of rules won't work for 32 bit system and
@@ -199,7 +199,7 @@ apply at least all generic networking and OS related rules such as "CoreNetworki
 on system, also do not ignore IPv6, Windows indeed needs IPv6 even if you're on IPv4 network.\
 It will be easy to delete what you don't need in GPO, rather than later digging through code finding
 what you have missed.
-- Default configuration will set global firewall behavior which is not configurable in GPO GUI,
+- Default configuration will set global firewall behavior which is not configurable in GPO,
 such as `stateful ftp` and `pptp` or global `IPSec` settings, if you need specific setup please visit
 `Scripts\SetupProfile.ps1` and take a look at `Set-NetFirewallSetting`.\
 Note that `Scripts\SetupProfile.ps1` is automatically called by `Scripts\SetupFirewall.ps1`
@@ -266,7 +266,8 @@ something else:
     cd WindowsFirewallRuleset-master
     ```
 
-7. To see current execution policy run (hint: you can use `TAB` key to auto complete commands)
+7. To see current execution policy run following command:\
+(**hint:** *you can use `TAB` key to auto complete commands*)
 
     ```powershell
     Get-ExecutionPolicy
@@ -317,10 +318,10 @@ It is recommended to close down all other programs before running master script 
     ```
 
     Hit enter and you will be asked questions such as what kind of rulesets you want.\
-    If you need help to decide whether to run some rules or not, type `?` and press enter.
+    If you need help to decide whether to run some ruleset or not, type `?` and press enter.
 
 13. Follow prompt output, (ex. hit enter to accept default action),
-it will take at least 10 minutes of your attention.
+it will take at least 15 minutes of your attention.
 
 14. If you encounter errors, you can either ignore errors or update script that produced the error
 then re-run that specific script once again later.
@@ -352,10 +353,10 @@ rules, such as disabling them, changing some attributes or adding new rules. For
 [Manage GPO Firewall](Readme/ManageGPOFirewall.md)
 
 2. Editing PowerShell scripts, this method gives you full control, you can change or remove existing
-with no restriction or add new ones.
+rules with no restriction or add new ones.
 
 What ever your plan or setup is, you will surely want to perform additional work such as customizing
-rules, or adding new rules for programs not yet covered in this project.
+rules, or adding new rules for programs not yet covered by this firewall.
 
 Rules are loaded into local group policy, follow steps below to open local group policy.
 
@@ -424,10 +425,10 @@ unlike method from point 1 you can customize your export in almost any way you w
 If you want to import rules, importing by using GPO is same as for export, and to import with
 PowerShell just run `Scripts\ImportFirewall.ps1` which will pick up your previous export file.
 
-To customize your export\import please take a look into `Modules\Ruleset.Firewall\Public`,
+To customize your export\import please take a look into `Modules\Ruleset.Firewall\Public\External`,
 which is where you'll find description on how to use export\import module functions.
 
-**NOTE:** Method 2 is experimental, very slow and not 100% reliable, you're advised to verify results.
+**NOTE:** Method 2 is experimental and really slow, you're advised to verify results.
 
 [Table of Contents](#table-of-contents)
 
@@ -458,12 +459,21 @@ This method is good if you want to download from "develop" branch, to do so, use
 here on this site to switch to either master or develop branch, next use `Code` button and either clone
 or download zip.
 
+### Using GitHub Desktop app
+
+This method is similar to the one that follows, but instead you'll use a graphical interface which
+you can get from here: [GitHub Desktop][github desktop]
+
+You will need [git][download git], [github account][github join], and a [fork][github fork] of this
+repository in your github account.
+
+To configure GitHub Desktop see [GitHub Desktop Documentation][github desktop docs]
+
 ### Using git command
 
-This method is good if you want to do it in console without visiting this site,
-you will need [git][download git], [github account][github join], a [fork][github fork] of this
-repository in your github account and [SSH keys][github ssh] to check for new updates on daily,
-weekly or what ever other basis you want.
+This method is similar to GitHub Desktop above but good if you want to do it in console,
+In addition to previously mentioned 3 requirements you will optionally also need a
+[SSH keys][github ssh] to check for new updates on daily, weekly or what ever other basis you want.
 
 Follow steps below to check for updates once you installed
 git and cloned your own fork:
@@ -477,11 +487,11 @@ git and cloned your own fork:
 
 Following 2 sets of commands are typed only once for initial setup:
 
-1. If you cloned your fork with SSH then run following command:
+1. If you cloned your fork with `SSH` then run following command:
 
     ```git remote add upstream git@github.com:metablaster/WindowsFirewallRuleset.git```
 
-2. Otherwise if you cloned your fork with HTTPS run:
+2. Otherwise if you cloned your fork with `HTTPS` run:
 
     ```git remote add upstream https://github.com/metablaster/WindowsFirewallRuleset.git```
 
@@ -513,20 +523,13 @@ you need to save and upload your modifications to your fork, for example:
 
  For more info on how to use git see [git documentation][git docs]
 
-### Using GitHub Desktop app
-
-This method is similar to method 3, but instead you'll use a graphical interface which you can
-get from here: [GitHub Desktop][github desktop]
-
-To configure GitHub Desktop see [GitHub Desktop Documentation][github desktop docs]
-
 ### Which update method is the best
 
 If your goal is to just get updates and have graphical interface on your desktop then `GitHub Desktop`
 is cool, otherwise if your goal is firewall customization, using `git` command would be more productive.\
 
-You can have both setups in same time and use them as needed.\
-There isn't any benefit with manual zip download in comparison with git or GitHub Desktop.
+You can have both setups in same time and use them as needed in specific situation.\
+There isn't any real benefit with manual zip download in comparison with git or GitHub Desktop.
 
 [Table of Contents](#table-of-contents)
 
@@ -539,7 +542,7 @@ If you would like to contribute by writing code you should read [CONTRIBUTING.md
 instead.
 
 Feel free to suggest or contribute new rules, or improvements for existing rules or scripts.\
-Just make sure you follow below notices:
+Just make sure you abide to notices below:
 
 1. If possible provide some documentation or links (preferably official) for your rules or changes
 so that it can be easy to verify these rules don't contain mistakes, ex. for ICMP rules you would
@@ -548,7 +551,7 @@ provide a link to [IANA][iana] with relevant reference document.
 2. To suggest new rules, report problems, or various rule and code improvements, please open new issue
 here on github and provide details as outlined in "New issue".
 
-3. To contribute rules, it is also desired that each rule contains good description of it's
+3. To contribute your own rules, it is also desired that each rule contains good description of it's
 purpose, when the user clicks on rule in firewall GUI he/she wants to see what this rule is about
 and easily conclude whether to enable/disable rule or allow/block network traffic.
 
@@ -572,8 +575,7 @@ all of which is explained in [CONTRIBUTING.md](CONTRIBUTING.md)
 
 Depending on your situation and target platform you might also want to read [Legacy Support](Readme/LegacySupport.md)
 
-These 2 documents are bare minimum to get you started customizing this repository, the rest can be
-found in `Readme` folder and by doing your own research.
+These 2 documents are bare minimum to get you started customizing this repository.
 
 ## More information and help
 
@@ -591,7 +593,7 @@ Following features are desired and might be available at some point in the futur
 
 1. Remote firewall administration
 
-   - Applying firewall configuration to remote computers on domain or home networks
+   - Deploying firewall configuration to remote computers on domain or home networks
 
 2. Comprehensive firewall rulesets for Windows Server editions
 
@@ -600,7 +602,7 @@ Following features are desired and might be available at some point in the futur
    - Any firewall rule in the registry that is not part of this repository is reported for review
    - Because, malware, hackers and even trusted software might attempt to bypass firewall at any time
 
-4. Full functionality for the following editions of Windows 10.0
+4. Full functionality for the following not yet tested editions of Windows 10.0
    - Windows 10 Pro for Workstations
    - Windows 10 IoT Core Blast
    - Windows 10 IoT Enterprise

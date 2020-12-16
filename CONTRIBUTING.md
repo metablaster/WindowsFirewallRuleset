@@ -1,8 +1,8 @@
 
 # How to contribute
 
-You can use this document not only to see how to contribute code but also to prepare yourself to
-extend this firewall project for your own personal or corporate needs.
+You can use this document not only to see how to contribute code but also to prepare yourself to\
+extend this firewall for your personal or corporate needs.
 
 Here is a list of most important things to keep in mind.
 
@@ -27,7 +27,7 @@ Here is a list of most important things to keep in mind.
   - [Portability and other systems](#portability-and-other-systems)
   - [Making new scripts or modules](#making-new-scripts-or-modules)
   - [Repository folder structure](#repository-folder-structure)
-  - [Final notes and where to start](#final-notes-and-where-to-start)
+  - [Where to start](#where-to-start)
 
 ## General guidelines
 
@@ -69,8 +69,8 @@ It is highly recommended to stick with Visual Studio Code, because this project 
 specific to Visual Studio Code, aka. "Workspace", these settings include:
 
 1. Code formatting settings which are automatically enforced, and can also be manually applied
-2. List of recommended extensions which are automatically listed for installation when you open
-project root folder
+2. List of recommended extensions which are automatically listed for installation once you open\
+repository root folder with VSCode
 3. Debugging and code analysis settings which you can use to debug code
 4. Settings for recommended extensions, ex. markdown and script formatting
 5. Spelling settings such as random good words which would be detected as misspelled.
@@ -111,33 +111,39 @@ Recommended extensions in workspace are as follows:
     Firewall rules can be exported into CSV file, this extension provides syntax highlighting for
     CSV files
 
-8. [GitLens][extension gitlens]
-
-    It provides so many great features for git inside VSCode it can't be explained in one line
-
-9. [Markdown All in One][extension markdown aio]
+8. [Markdown All in One][extension markdown aio]
 
     Provides markdown language features
 
-10. [XML Tools][extension xml]
+9. [XML Tools][extension xml]
 
     Useful module xml files navigation
 
-11. [Log File Highlighter][extension logs]
+10. [Log File Highlighter][extension logs]
 
     Custom syntax highlighting for log files, useful for firewall logs as an alternative of mTail.
     This extension complements "Auto Scroll"
 
-12. [Auto Scroll][extension scroll]
+11. [Auto Scroll][extension scroll]
 
     Automatic scrolling of log files, useful to tail firewall logs.
     This extension complements "Log File Highlighter"
 
-13. [Filter Line][extension filterline]
+12. [Filter Line][extension filterline]
 
     Filter log files according to json config, string or regex pattern
 
-The continuation of before mentioned link for PowerShell, gpg, ssh etc. is to visit `Config\ProjectSettings.ps1`
+Following 2 extensions are optional and will not be automatically offerred for installation:
+
+- [GitLens][extension gitlens]
+
+    It provides so many great features for git inside VSCode it can't be explained in one line
+
+- [GitHub Pull Requests and Issues][pull requests]
+
+    Review and manage your GitHub pull requests and issues directly in VS Code
+
+The continuation of before mentioned tutorial for PowerShell, gpg, ssh etc. is to visit `Config\ProjectSettings.ps1`
 located in project root directory, at a minimum you should set following variables to `$true`
 before doing anything else:
 
@@ -149,12 +155,12 @@ before doing anything else:
 6. WarningLogging
 
 Note that some of these may be auto adjusted after setting `Develop` to `$true`\
-Then restart PowerShell and run `.\SetupFirewall.ps1` to apply firewall, or at least run
+Then restart PowerShell and run `.\SetupFirewall.ps1` to deploy firewall, or at least run
 `Initialize-Project` function which will prompt you to perform recommended and required checks.
 
 Detailed description of variables is located in `Config\ProjectSettings.ps1`
 
-After project was intialized `ProjectCheck` variable should be disabled, logging variables can be
+Once repository was intialized `ProjectCheck` variable should be disabled, logging variables can be
 disabled too.
 
 If you don't have this environment setup, you'll have to do this some other way around for your
@@ -171,7 +177,7 @@ Lines should be kept within 100-120 columns, however it is not always practical,
 rule, workspace settings are configured to show rulers inside code editor.
 
 If you use some other code editor you should configure it according to these rules which are found
-in `.vscode`, `Config` and project root directory.
+in `.vscode`, `Config` and repository root directory.
 
 Not everything is automatically formatted, in short:\
 Use **PascalCase** for variables, types, symbols etc; **lowercase** for language keywords,
@@ -238,6 +244,8 @@ easily customized without too much change or learning curve.
 3rd party code/scripts are dot sourced into existing modules instead of copy pasted into module
 directly, this must be so, to easily see to which file does license/Copyright apply in full.
 
+Exception to this rule are complete modules which should retain their directory domain within repository.
+
 ## Module design
 
 Rules for code in modules is different, most important is to keep each function in it's own script,
@@ -273,7 +281,7 @@ Invoke-ScriptAnalyzer -Path .\ -Recurse -Settings Config\PSScriptAnalyzerSetting
 
 If you get an error such as:\
 `Invoke-ScriptAnalyzer: Object reference not set to an instance of an object.`\
-then try again and keep repeating until OK.
+then try again and keep repeating until OK, or cleanup repository and restart VSCode.
 
 ## Documentation and comments
 
@@ -282,11 +290,11 @@ Documentation and comments reside in 6 places as follows:
 1. In scripts (code comments)
 
     Sections of code should be documented as shown in existing scripts.\
-    To comment on things that need to be done add "TODO:" + comment,
-    similarly for important notes add "NOTE:" + comment.
+    To comment on things that need to be done add `TODO:` + comment,
+    similarly for important notes add `NOTE:` + comment.
 
-    For things which are hard to resolve add "HACK:" + comment, and optionally some links such as
-    github issues that may help to resolve problem in the future.
+    For things which are hard to resolve or require huge changes add `HACK:` + comment, and
+    optionally some links such as github issues that may help to resolve problem in the future.
 
     For any generic code comments you might want to add, use line comments (preferred) and
     block comments only if comment spans 10 or more lines.
@@ -304,27 +312,29 @@ Documentation and comments reside in 6 places as follows:
 
     Each of these prompts have `?` which the user can type to get more information about prompt choices.
 
-4. In comment based help (module main documentation source)
+4. In comment based help (module and script main documentation source)
 
-    Functions that are part of a module must have comment based help.\
-    Purpose of comment based help is for module user to be able to run `Get-Help` on target function.
+    Functions that are part of a module or solo scripts must have comment based help.\
+    Purpose of comment based help is for the end user to learn what the codes does or to be able to
+    run `Get-Help` on target function or script.
 
-    For examples and comment based syntax see:
+    For examples, and comment based syntax see:
     - [About Comment-based Help][about comment based help]
     - [Examples of Comment-Based Help][comment based help examples]
 
     You must avoid following comment based content to avoid errors while generating online help files:
     - .LINK entries must contains only one link and nothing else
     - Avoid dashes in comments such as `------`
+    - Avoid lines starting with a backslash `\` or any non alphanumeric character
 
 5. In module Help folder (module online documentation)
 
-    The `Scripts` folder contains `UpdateHelp.ps1` which when run will scan comment based help and
-    generate online documentation for `Get-Help -Online` and help content for `Update-Help` on
+    The `Scripts` folder contains `UpdateHelp.ps1` which when run will scan comment based help and\
+    generate online documentation for `Get-Help -Online` and help content for `Update-Help` on\
     target module.
 
-    Generated module documentation is of markdown format, meaning the 3rd purpose is that project
-    users and repository visitors can read module documentation on github site.
+    Generated module documentation is in markdown format, meaning the 3rd purpose is that project
+    users and repository visitors can read module documentation on github site with `Get-Help -Online`
 
 6. In Readme folder (general project documentation)
 
@@ -347,19 +357,20 @@ no explanation what is this supposed to allow or block is not acceptable.
 
 ## Testing code
 
-Each function should have it's own test script and each test should cover as much code/test
+Each function should have it's own unit test and each test should cover as much code/test
 cases as possible, making changes to exiting code can then be easily tested.\
 If test case/concept expands to several functions or if it's completely
 unrelated to functions it should be a separate test.
 
-All tests reside in "Test" folder which contains subfolders for each module,
+All tests reside in `Test` directory which contains subdirectories for each module,
 take a look there for examples.
 
-Pester is preferred method to write tests, however some testings needs other way around, or
+Pester is preferred method to write tests, however some test cases needs other ways around, or
 more specialized setup.
 
-There is a module called "Ruleset.Test", which is customized for this project.\
-Tests must pass both Desktop and Core editions of PowerShell to be successful
+There is a module called `Ruleset.Test`, which is customized for this project.\
+Tests must pass both Desktop and Core editions of PowerShell on multiple Windows editions to be
+successful
 
 A hint to quickly run any function from any project module is to run following command in ex.
 integrated terminal in VSCode (assuming PowerShell prompt is at project root):
@@ -375,28 +386,29 @@ This will add all repository `Modules` to current session module path
 Push small commits that solve or improve single or specific problem,
 to reduce merge conflicts and to be able to do `git revert` for specific stuff.
 
-Do not wait too much to push large commits which are not clear enough in terms
+Do not wait too much to push large commits which are then not clear enough in terms
 of what issue is supposed to be resolved or which component was improved.
 
-If you see something unrelated that could be resolved, put TODO commont, don't fix it.\
-Then once you commit open todo-tree to review what to do next.
+If you see something unrelated that could be resolved, put `TODO` comment, don't fix it.\
+Then once you commit, open `todo-tree` to review what to do next.
 
-**Avoid making huge changes to existing code** without first discussing the matter,
+**Please avoid making huge changes to existing code** without first attaching valid reasons,
 new code and additions is not problem though.
 
 ## Portability and other systems
 
-At the moment the focus is on Windows Firewall, if you want to port code to other firewalls go ahead.
+At the moment the focus is on Windows Firewall, if you want to extend code base to other firewalls
+go ahead, it surely won't be easy!
 
-If you decide to port code it is mandatory that these code changes are done on separate branch.
+If you decide to do so it is mandatory that these code additions are done on separate branch, which
+should then be regularly maintained for any changes on master branch, up until you are done.
 
-The plan is to expand this project to manage [nftables][nftables]
-firewall on linux and other systems.
+The plan is to expand this project to manage [nftables][nftables] firewall on linux and other systems.
 
 ## Making new scripts or modules
 
 Inside `Templates` folder there are few template scripts as a starting point.\
-Copy them to target location, update starting code and you're ready to start writing.
+Copy them to target location, update starting code and you're ready to start working.
 
 These templates are fully aligned to rule design, code and formatting style of this project.
 
@@ -404,15 +416,15 @@ These templates are fully aligned to rule design, code and formatting style of t
 
 See [Directory Structure](Readme/DirectoryStructure.md)
 
-## Final notes and where to start
+## Where to start
 
-Please keep in mind that large amount of existing code is not in line with all the guidelines
-described here, significant portion of code was written before this "CONTRIBUTING" file even existed.
+Please keep in mind that large amount of existing code is not in line with all the guidelines described
+here, significant portion of the code was written before this `CONTRIBUTING.md` file even existed.
 
 So it's an ongoing effort that by no means gets fulfilled.
 
-I recommend you start at looking into [TODO](Readme/TODO.md) list and also use "todo-tree"
-extension to see even more todo's, unless you have specific ideas or recommendations.
+I recommend you start at looking into [TODO](Readme/TODO.md) list and also use `todo-tree`
+extension to see more specific or smaller todo's, unless you have specific ideas or recommendations.
 
 [contributing develop]: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/CONTRIBUTING.md "latest CONTRIBUTING.md"
 [contribute to open source]: https://opensource.guide/how-to-contribute "How to contribute to open source"
@@ -448,3 +460,4 @@ extension to see even more todo's, unless you have specific ideas or recommendat
 [comment based help examples]: https://docs.microsoft.com/en-us/powershell/scripting/developer/help/examples-of-comment-based-help?view=powershell-7 "Visit documentation"
 [iana]: https://www.iana.org "Internet Assigned Numbers Authority (IANA)"
 [nftables]: https://en.wikipedia.org/wiki/Nftables "Visit nftables wiki"
+[pull requests]: https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-pull-request-github "Visit Marketplace"

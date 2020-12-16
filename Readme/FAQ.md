@@ -1,8 +1,9 @@
 
 # Frequently Asked Questions
 
-Here are the most common problems running PowerShell scripts in this project and how to resolve them.\
-Also general questions and answers regarding firewall.
+Here are the most common problems running PowerShell scripts from this repository and how to resolve
+them.\
+In addition, general questions and answers regarding this firewall.
 
 ## Table of contents
 
@@ -28,7 +29,7 @@ First step is to open PowerShell as Administrator and run `gpupdate.exe`, if not
 5. If still no luck, open rule properties in GPO and under advanced tab allow all interface types,
 all users or both, however allowing all interfaces or users should be only a temporary measure.
 
-INFO: In addition to interfaces shown in GPO there are some hidden network interfaces,
+**NOTE**: In addition to interfaces shown in GPO there are some hidden network interfaces,
 until I figure out how to make rules based on those allow them all if this resolves the problem.\
 To troubleshoot hidden adapters see [Problematic Traffic](ProblematicTraffic.md)
 
@@ -60,7 +61,7 @@ tries to get firewall rules from GPO and will produce this problem:
 Get-NetFirewallRule -PolicyStore [system.environment]::MachineName
 ```
 
-In this example to fix the problem modify bad command to following and it should work just fine:
+In this example to fix the problem modify bad command to the following and it should work:
 
 ```powershell
 Get-NetFirewallRule -PolicyStore ([system.environment]::MachineName)
@@ -84,7 +85,7 @@ If none of this works even after reboot of all involved computers, following lin
 Good firewall setup is essential for computer security, and, if not misused then the answer is yes
 but only for the firewall part of protection.
 
-For maximum security you'll need much more than just good firewall, here is a minimum list:
+For maximum security you'll need way more than just good firewall, here is a minimum list:
 
 1. Using non Administrative Windows account for almost all use.\
 Administrative account should be used for administration only, preferably offline.
@@ -98,10 +99,10 @@ To visit odd sites and freely click around please do it in virtual machine,\
 
 4. Use password manager capable of auto typing passwords and with the support of virtual keyboard.\
 Don't use hardware keyboard to type passwords.
-Your passwords should meet length and complexity requirements.
+Your passwords should meet length and complexity requirements.\
 Never use same password to log in to multiple places, use unique password for each login.
 
-5. Don't let your email program or web interface auto load mail content.\
+5. Don't let your email program or web interface auto load email content.\
 Also important not to open attachments you don't recognize or didn't ask for.
 
 6. Never disable antivirus or firewall except to troubleshoot issues.\
@@ -115,7 +116,7 @@ avoid using addons except one to block ads, which is known to be trusted by onli
 
 9. When it comes to privacy, briefly, there 2 very different defense categories:
 
-   - Prevent identity theft, this is worse than loosing data, being hacked or just being spied on
+   - Prevent identity theft, this is worse than loosing data, being hacked or just being spied on.\
    Go ahead and study worse identity theft cases and you'll understand
 
    - Hide your activity, is what people usually refer to when talking about "privacy"
@@ -134,15 +135,14 @@ this is requirement not suggestion.
 If you have to bring it online, take down the rest of network.
 
 If you don't follow this list, no firewall, anti virus or security expert is going to help much.\
-Usually the purpose of a firewall, anti virus or a paid expert is to protect you from your own mistakes.
+Usually the purpose of a firewall, anti virus or a paid expert is to protect you from your own mistakes.\
 
 Remember, the most common ways for hackers "getting in" and stealing data is when **YOU** make a mistake!
 (not because of their skills)
 
 If you recognize your mistakes from this list on regular basis, your system or network simply cannot
 be trusted, only hard drive reformat, network reset and clean reinstall of operating systems can regain
-trust to original value, in 99% of cases (hopefully) you won't need to throw your expensive hardware
-into trash can.
+trust to original value.
 
 ## Windows Firewall does not write logs
 
@@ -179,7 +179,7 @@ Btw. firewall service can't be stopped or manipulated in any way except trough U
 There is a lot of scripts and you might not have the time to investigate them all.\
 So here is an overview to help you see what they do hopefully answering all of your concerns.
 
-1. Group policy firewall and most of it's settings are modifed and/or overridden completely.
+1. Group policy firewall and all of it's settings are modifed and/or overridden completely.
 
     - If you make modifications to GPO firewall, re-running scripts again may override your modifications.
 
@@ -201,16 +201,17 @@ them as follows:
     - Update PowerShell module help files (only if you enable development mode)
     - Install or update dependent PowerShell modules (only if you enable development mode)
     - Install recommended VSCode extensions (if you accpet VSCode recommendation)
-    - Modify file system permissions (firewall logs inside this repository only by default)
+    - Modify file system permissions (ex. After setting firewall to log into this repository)
     - Modify settings for specific software (Process monitor, mTail and Windows Performance Analyzer
     only)
 
     All of these modifications in point 4 are done in following situations:
 
     - VScode might ask you to install recommended extensions
-    - The script might ask you to confirm whether you want this or that, and you're free to deny by default.
+    - Some script might ask you to confirm whether you want to do this or that, and you're free to
+    deny by default.
     - You have enabled "development mode" project setting
-    - You run some script on demand that is not run by default (ex. `Scripts\GrantLogs`)
+    - You run some script on demand that is not run by default (ex. `Set-Permission.ps1`)
     - You manually load software configuration from `Config` folder
     - You run experimental or dangerous tests from `Test` folder (default action for these tests is `No`)
 
@@ -253,18 +254,19 @@ them as follows:
    none of this information is ever sent anywhere and once you close down PowerShell it's all cleared.
    - If you publish your code modifications online (ex. to your fork) make sure your modifications
    don't include any personal information such as user names, email or system details.
-   - Bugs might exist which could break things, while I do my best to avoid bugs you might want to
+   - Bugs may exist which could break things, while I do my best to avoid bugs you might want to
    report your findings to be fixed.
 
 ## Why do I get "Access is denied" errors
 
 You might see this error while loading firewall rules.
 
-In almost all cases this happens when `gpedit.msc` or `secpol.msc` is opened, especially if you
-do something with them (ex. refreshing group policy, viewing or modifying settings/rules)
+In almost all cases this happens when you use one of the management consoles such as `gpedit.msc` or
+`secpol.msc`, especially if you do something with them (ex. refreshing group policy, viewing or
+modifying settings/rules)
 
 To minimize the chance of this error from appearing close down all management consoles and all
-software that is not essential to deploy firewall.
+software that is not essential to deploy firewall and try again.
 
 ## I'm missing network profile settings in Settings App
 
@@ -289,8 +291,8 @@ actually bring these options back, so here are my favorites that should fix it i
    but don't do anything to firewall in Control Panel.
    - When done reboot system and see if this message was gone and also whether profile options are back.
    - If the message is still there, you can try to recall any security policies you did in GPO, it
-   doesn't have to be related to firewall, ex. anti virus, network options and anything similar can
-   the cause for this message.
+   doesn't have to be related to firewall, ex. anti virus, network options or anything similar can
+   be the cause for this message.
 
 2. If you can't get rid of a message and profile options are not back even after reboot, next step
 is to verify following location in GPO:\
@@ -304,7 +306,7 @@ network settings as follows:
 
    - `Settings -> Network & Internet -> Network Reset`
    - Make sure not to reboot until required time has passed, usually 5 minutes, let it reboot on
-   it's own and profile optins should re-appear.
+   it's own and profile options should re-appear.
 
 - Finally you may want to import your exported firewall policy, this will not bring problem back.
 - Next time make sure not to run `Set-NetworkProfile` if there is no valid reason.

@@ -3,11 +3,11 @@
 
 A list of regex expressions which are used to:
 
-1. Filter firewall logs
-2. Perform bulk operations on rules with VSCode.
+- Filter firewall logs
+- Perform bulk operations on rules with VSCode.
 
-For example once your regex hits, you would use `CTRL + SHIFT + L` to enter
-[Multi cursor][multicursor] mode and manipulate all regex matches however you like.
+For example once your regex hits, you would use `CTRL + SHIFT + L` to enter [Multi cursor][multicursor]\
+mode and manipulate all regex matches however you like.
 
 Note:
 
