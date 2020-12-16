@@ -30,7 +30,7 @@ SOFTWARE.
 # TODO: If this is based on 3rd party module, include file changes here
 
 # Initialization
-Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{5}$")
+Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ((Get-Item $PSCommandPath).Basename)
 
 # Imports
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule

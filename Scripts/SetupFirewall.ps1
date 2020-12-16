@@ -50,8 +50,7 @@ None.
 #Requires -Version 5.1
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
-New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
-	$MyInvocation.MyCommand.Name -replace ".{4}$" )
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
 # First unblock all files
 & "$ProjectRoot\Scripts\UnblockProject.ps1"

@@ -150,8 +150,7 @@ param (
 
 begin
 {
-	New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
-		$MyInvocation.MyCommand.Name -replace ".{4}$" )
+	New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
 	$ParentScope = 1
 	if ($MyInvocation.InvocationName -eq ".")

@@ -53,8 +53,7 @@ param (
 )
 
 # Initialization
-New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
-	$MyInvocation.MyCommand.Name -replace ".{4}$" )
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 Enter-Test -Private -Pester
 
 if (-not $UseExisting)

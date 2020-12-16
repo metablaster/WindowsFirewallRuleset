@@ -69,15 +69,28 @@ param(
 
 #region Initialization
 # Name of this script for debugging messages, do not modify!.
-Set-Variable -Name SettingsScript -Scope Private -Option ReadOnly -Force -Value ($MyInvocation.MyCommand.Name -replace ".{4}$")
-Write-Debug -Message "[$SettingsScript] params($($PSBoundParameters.Values)) caller: $((Get-PSCallStack)[1].Command -replace ".{4}$")"
+Set-Variable -Name SettingsScript -Scope Private -Option ReadOnly -Force -Value ((Get-Item $PSCommandPath).Basename)
+
+if (!(Get-Variable -Name ProjectRoot -Scope Global -ErrorAction Ignore))
+{
+	# Repository root directory, reallocating scripts should be easy if root directory is constant
+	New-Variable -Name ProjectRoot -Scope Global -Option Constant -Value (
+		Resolve-Path -Path "$PSScriptRoot\.." | Select-Object -ExpandProperty Path)
+}
+
+# Assemble partial path name to calling script
+$Caller = [regex]::escape($ProjectRoot)
+if ((Get-PSCallStack)[1].ScriptName -match "(?<=$Caller\\).+")
+{
+	$Caller = $Matches[0]
+}
+
+Write-Debug -Message "[$SettingsScript] params($($PSBoundParameters.Values)) caller: $Caller)"
 
 if ($MyInvocation.InvocationName -ne ".")
 {
 	Write-Error -Category InvalidOperation -TargetObject $SettingsScript `
-		-Message "$SettingsScript script must be dot sourced"
-
-	Write-Information -Tags "Project" -MessageData "$SettingsScript script called from: $((Get-PSCallStack)[1].Command)"
+		-Message "$SettingsScript script must be dot sourced in $Caller"
 	exit
 }
 
@@ -106,14 +119,6 @@ if ($Develop)
 # Use it in a script or function to override the setting inherited from the global scope.
 # NOTE: Set-StrictMode is effective only in the scope in which it is set and in its child scopes
 Set-StrictMode -Version Latest
-
-# NOTE: This variable is needed early
-if (!(Get-Variable -Name ProjectRoot -Scope Global -ErrorAction Ignore))
-{
-	# Repository root directory, reallocating scripts should be easy if root directory is constant
-	New-Variable -Name ProjectRoot -Scope Global -Option Constant -Value (
-		Resolve-Path -Path "$PSScriptRoot\.." | Select-Object -ExpandProperty Path)
-}
 #endregion
 
 <# Preference Variables default values (Core / Desktop)

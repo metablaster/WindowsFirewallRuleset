@@ -51,8 +51,7 @@ TODO: We should probably unblock only scripts, not all files.
 
 #Requires -Version 5.1
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
-New-Variable -Name ThisScript -Scope Private -Option Constant -Value (
-	$MyInvocation.MyCommand.Name -replace ".{4}$" )
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
 Write-Information -Tags "User" -MessageData "INFO: Unblocking project files"
 Get-ChildItem $ProjectRoot -Recurse | Unblock-File

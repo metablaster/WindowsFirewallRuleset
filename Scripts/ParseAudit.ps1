@@ -132,8 +132,7 @@ param (
 #requires -PSEdition Desktop
 #Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
-# TODO: 3 or 4? is there universal method to get rid of extension?
-New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath ).Basename)
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
 # Check requirements
 Initialize-Project -Abort
