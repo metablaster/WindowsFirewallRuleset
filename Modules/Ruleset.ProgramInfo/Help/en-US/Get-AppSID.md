@@ -14,7 +14,7 @@ Get store app SID
 ## SYNTAX
 
 ```none
-Get-AppSID [-AppName] <String> [<CommonParameters>]
+Get-AppSID [-PackageFamilyName] <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -31,14 +31,14 @@ sample: Get-AppSID "User" "Microsoft.MicrosoftEdge_8wekyb3d8bbwe"
 
 ## PARAMETERS
 
-### -AppName
+### -PackageFamilyName
 
 "PackageFamilyName" string
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases:
+Aliases: FamilyName
 
 Required: True
 Position: 1

@@ -100,10 +100,10 @@ if ($null -eq $Encoding)
 	$Encoding = $DefaultEncoding
 }
 
-# TODO: Need logging solution for cases before project initialization
+# TODO: Logging solution needed for cases before project initialization
 if (!$Develop)
 {
-	# We run this script only to generate new or update existing online help
+	# Run this script only to generate new or update existing online help before release
 	Write-Error -Category NotEnabled -TargetObject $Develop `
 		-Message "This script is enabled only in development mode"
 	return

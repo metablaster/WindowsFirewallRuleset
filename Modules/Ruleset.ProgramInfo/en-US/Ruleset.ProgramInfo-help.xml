@@ -468,8 +468,8 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-AppSID</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
-          <maml:name>AppName</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="FamilyName">
+          <maml:name>PackageFamilyName</maml:name>
           <maml:Description>
             <maml:para>"PackageFamilyName" string</maml:para>
           </maml:Description>
@@ -483,8 +483,8 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
-        <maml:name>AppName</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="FamilyName">
+        <maml:name>PackageFamilyName</maml:name>
         <maml:Description>
           <maml:para>"PackageFamilyName" string</maml:para>
         </maml:Description>

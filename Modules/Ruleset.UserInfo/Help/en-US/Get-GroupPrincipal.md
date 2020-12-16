@@ -14,7 +14,7 @@ Get computer accounts for a given user groups on given computers
 ## SYNTAX
 
 ```none
-Get-GroupPrincipal [-UserGroups] <String[]> [-ComputerNames <String[]>] [-CIM] [<CommonParameters>]
+Get-GroupPrincipal [-UserGroups] <String[]> [-ComputerNames <String[]>] [-Disabled] [-CIM] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -65,6 +65,22 @@ Aliases: Computer, Server, Domain, Host, Machine
 Required: False
 Position: Named
 Default value: [System.Environment]::MachineName
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Disabled
+
+If specified, result is disabled accounts instead
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

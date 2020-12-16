@@ -4,7 +4,7 @@
 This is a project global todo list which applies to several or all scripts.
 
 For smaller todo's local to specific scripts and files see individual files, you can use workspace\
-recommended extension `todo-tree` to navigate TODO, HACK and NOTE tags.
+recommended extension `todo-tree` to navigate `TODO`, `HACK` and `NOTE` tags.
 
 Some todo's listed here are are duplicate of todo's inside individual scripts, this is\
 intentionally for important todo's to make is easier to tell where to look at while resolving this list.
@@ -69,7 +69,7 @@ Todo's in this file are categorized into following sections:
     - `git clean -d -x --dry-run` `git clean -d -x -f`
     - `git prune --dry-run` `git prune`
     - `git repack -d -F`
-    - Generate hashes
+    - Generate SHA
 
 5. Documentation
 

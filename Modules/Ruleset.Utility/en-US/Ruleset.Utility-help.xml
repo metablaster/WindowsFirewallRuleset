@@ -2300,6 +2300,18 @@ utf-32</dev:code>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Set-ScreenBuffer</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>BufferHeight</maml:name>
+          <maml:Description>
+            <maml:para>Sets screen buffer height to specified value</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.UInt16</command:parameterValue>
+          <dev:type>
+            <maml:name>System.UInt16</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>3000</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
           <maml:name>WhatIf</maml:name>
           <maml:Description>
@@ -2325,6 +2337,18 @@ utf-32</dev:code>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>BufferHeight</maml:name>
+        <maml:Description>
+          <maml:para>Sets screen buffer height to specified value</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.UInt16</command:parameterValue>
+        <dev:type>
+          <maml:name>System.UInt16</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>3000</dev:defaultValue>
+      </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
         <maml:name>WhatIf</maml:name>
         <maml:Description>

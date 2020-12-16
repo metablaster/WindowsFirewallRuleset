@@ -14,7 +14,7 @@ Set vertical screen buffer to recommended value
 ## SYNTAX
 
 ```none
-Set-ScreenBuffer [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-ScreenBuffer [[-BufferHeight] <UInt16>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -31,6 +31,22 @@ Set-ScreenBuffer
 ```
 
 ## PARAMETERS
+
+### -BufferHeight
+
+Sets screen buffer height to specified value
+
+```yaml
+Type: System.UInt16
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 1
+Default value: 3000
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -WhatIf
 
