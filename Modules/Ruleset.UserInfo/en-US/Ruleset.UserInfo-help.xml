@@ -93,7 +93,7 @@
         <maml:para>To avoid confusion pseudo accounts ("Local Service" in the example below) can be represented as: 1. SID (S-1-5-19) 2. Name (NT AUTHORITY) 3. Reference Name (NT AUTHORITY\Local Service) 4. Display Name (Local Service)</maml:para>
         <maml:para>On the other side built in accounts ("Administrator" in the example below) can be represented as: 1. SID (S-1-5-21-500) 2. Name (Administrator) 3. Reference Name (BUILTIN\Administrator) 4. Display Name (Administrator)</maml:para>
         <maml:para>This is important to understand because MSDN site (links in comment) just says "Name", but we can't just use given "Name" value to refer to user when defining rules because it's not valid for multiple reasons such as: 1. there are duplicate names, which SID do you want if "Name" is duplicate? 2. Some "names" are not login usernames or accounts, but we need either username or account 3. Some "names" are NULL, such as capability SID's See also: https://docs.microsoft.com/en-us/windows/security/identity-protection/access-control/security-identifiers</maml:para>
-        <maml:para>To solve the problem "Name" must be replaced with "Display Name", most "Name" values are OK, but those which are not are replaced with "Display Name" in below 'WellKnownSIDs' variable.</maml:para>
+        <maml:para>To solve the problem "Name" must be replaced with "Display Name", most "Name" values are OK, but those which are not are replaced with "Display Name" in the "WellKnownSIDs" variable below.</maml:para>
         <maml:para>TODO: Need to implement switch parameters for UPN and NETBIOS name format in addition to display name, see: https://docs.microsoft.com/en-us/windows/win32/secauthn/user-name-formats TODO: do we need to have consistent output ie. exactly DOMAIN\USER?, see test results, probably not for pseudo accounts but for built in accounts it makes sense TODO: need to implement CIM switch</maml:para>
       </maml:alert>
     </maml:alertSet>
@@ -185,20 +185,20 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>None.</maml:para>
+        <maml:para>TODO: Rename to ConvertFrom-Account</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>ConvertFrom-UserAccounts COMPUTERNAME\USERNAME</dev:code>
+        <dev:code>ConvertFrom-UserAccount COMPUTERNAME\USERNAME</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>ConvertFrom-UserAccounts SERVER\USER, COMPUTER\USER, SERVER2\USER2</dev:code>
+        <dev:code>ConvertFrom-UserAccount SERVER\USER, COMPUTER\USER, SERVER2\USER2</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -217,7 +217,7 @@
       <command:verb>Get</command:verb>
       <command:noun>AccountSID</command:noun>
       <maml:description>
-        <maml:para>Get SID for giver user account</maml:para>
+        <maml:para>Get SID for given user account</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -323,7 +323,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: CIM switch is not supported on PowerShell Core, meaning contacting remote computers is supported only on Windows PowerShell</maml:para>
+        <maml:para>TODO: CIM switch is not supported on PowerShell Core, meaning contacting remote computers is supported only on Windows PowerShell TODO: plural parameter "UserNames"</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -355,7 +355,7 @@
       <command:verb>Get</command:verb>
       <command:noun>GroupPrincipal</command:noun>
       <maml:description>
-        <maml:para>Get computer accounts for a given user groups on given computers</maml:para>
+        <maml:para>Get computer accounts for specified user groups on target computers</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -484,7 +484,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>CIM switch is not supported on PowerShell Core, meaning contacting remote computers is supported only on Windows PowerShell TODO: Switch is needed to list all accounts instead of only enabled TODO: should we handle NT AUTHORITY, BUILTIN and similar?</maml:para>
+        <maml:para>CIM switch is not supported on PowerShell Core, meaning contacting remote computers is supported only on Windows PowerShell TODO: should we handle NT AUTHORITY, BUILTIN and similar? TODO: plural parameter See also (according to docs but doesn't work): Get-LocalUser -Name "MicrosoftAccount\username@outlook.com"</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -622,7 +622,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>CIM switch is not supported on PowerShell Core, meaning contacting remote computers is supported only on Windows PowerShell</maml:para>
+        <maml:para>CIM switch is not supported on PowerShell Core, meaning contacting remote computers is supported only on Windows PowerShell TODO: plural parameter</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -829,10 +829,10 @@
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>[string[]] $Users = "User"
-[string] $Server = COMPUTERNAME
-[string[]] $Groups = "Users", "Administrators"</dev:code>
+PS&gt; [string] $Server = COMPUTERNAME
+PS&gt; [string[]] $Groups = "Users", "Administrators"</dev:code>
         <dev:remarks>
-          <maml:para>$UsersSDDL1 = Get-SDDL -User $Users -Group $Groups $UsersSDDL2 = Get-SDDL -User $Users -Machine $Server $UsersSDDL3 = Get-SDDL -Group $Groups</maml:para>
+          <maml:para>PS&gt; $UsersSDDL1 = Get-SDDL -User $Users -Group $Groups PS&gt; $UsersSDDL2 = Get-SDDL -User $Users -Machine $Server PS&gt; $UsersSDDL3 = Get-SDDL -Group $Groups</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -974,7 +974,7 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>This function helps to merge 2 SDDL strings into one</maml:para>
+      <maml:para>This function helps to merge 2 SDDL strings into one Referenced SDDL is expanded with new one</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>

@@ -9,11 +9,11 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Get SID for giver user account
+Get SID for given user account
 
 ## SYNTAX
 
-```none
+```powershell
 Get-AccountSID [-UserNames] <String[]> [-ComputerName <String>] [-CIM] [<CommonParameters>]
 ```
 
@@ -25,13 +25,13 @@ Get SID's for single or multiple user names on a target computer
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Get-AccountSID "USERNAME" -Server "COMPUTERNAME"
 ```
 
 ### EXAMPLE 2
 
-```none
+```powershell
 Get-AccountSID @("USERNAME1", "USERNAME2") -CIM
 ```
 
@@ -101,5 +101,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 TODO: CIM switch is not supported on PowerShell Core, meaning contacting remote computers
 is supported only on Windows PowerShell
+TODO: plural parameter "UserNames"
 
 ## RELATED LINKS

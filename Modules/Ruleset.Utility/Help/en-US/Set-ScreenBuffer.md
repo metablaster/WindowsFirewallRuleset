@@ -13,12 +13,13 @@ Set vertical screen buffer to recommended value
 
 ## SYNTAX
 
-```none
+```powershell
 Set-ScreenBuffer [[-BufferHeight] <UInt16>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
+Set-ScreenBuffer sets screenbuffer for current powershell session.
 In some cases, depending on project settings a user might need larger buffer
 to preserve all the output in the console for review and scroll back.
 
@@ -26,7 +27,7 @@ to preserve all the output in the console for review and scroll back.
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Set-ScreenBuffer
 ```
 

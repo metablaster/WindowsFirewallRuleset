@@ -15,32 +15,32 @@ Format firewall rule output for display
 
 ### None (Default)
 
-```none
+```powershell
 Format-Output -Rule <CimInstance[]> [<CommonParameters>]
 ```
 
 ### Modify
 
-```none
+```powershell
 Format-Output -Rule <CimInstance[]> [-Modify] [<CommonParameters>]
 ```
 
 ### Import
 
-```none
+```powershell
 Format-Output -Rule <CimInstance[]> [-Import] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
 Output of Net-NewFirewallRule is large, loading a lot of rules would spam the console
-very fast, this function helps to output only relevant content.
+very fast, this function helps to output only relevant, formatted and colored output
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Net-NewFirewallRule ... | Format-Output
 ```
 
@@ -48,7 +48,7 @@ Net-NewFirewallRule ... | Format-Output
 
 ### -Rule
 
-Firewall rule to format
+Firewall rule to format, by default output status represents loading rule
 
 ```yaml
 Type: Microsoft.Management.Infrastructure.CimInstance[]

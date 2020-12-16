@@ -16,7 +16,7 @@ Locale: en-US
 
 ### [Approve-Execute](Approve-Execute.md)
 
-Used to ask user if he wants to run script
+Used to prompt user to approve running script
 
 ### [Compare-Path](Compare-Path.md)
 
@@ -28,7 +28,7 @@ Verify file is correctly encoded
 
 ### [Convert-SDDLToACL](Convert-SDDLToACL.md)
 
-Convert SDDL entries to computer accounts
+Convert SDDL string to ACL
 
 ### [Get-EnvironmentVariable](Get-EnvironmentVariable.md)
 
@@ -40,7 +40,7 @@ Gets the encoding of a file
 
 ### [Get-NetworkService](Get-NetworkService.md)
 
-Scan all scripts in this repository and get windows service names involved in rules
+Get a list of windows services involved in rules
 
 ### [Get-ProcessOutput](Get-ProcessOutput.md)
 
@@ -48,7 +48,7 @@ Run process and capture output
 
 ### [Get-TypeName](Get-TypeName.md)
 
-Returns .NET return type name for input object
+Get .NET outputs of a commandlet or convert to/from type accelerator
 
 ### [Set-NetworkProfile](Set-NetworkProfile.md)
 

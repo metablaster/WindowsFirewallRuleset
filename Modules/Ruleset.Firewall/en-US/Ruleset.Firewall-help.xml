@@ -18,7 +18,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>PolicyStore</maml:name>
           <maml:Description>
-            <maml:para>Policy store from which to export rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md</maml:para>
+            <maml:para>Policy store from which to export rules, default is local GPO.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -169,7 +169,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>PolicyStore</maml:name>
         <maml:Description>
-          <maml:para>Policy store from which to export rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md</maml:para>
+          <maml:para>Policy store from which to export rules, default is local GPO.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -346,32 +346,43 @@
     <maml:alertSet>
       <maml:alert>
         <maml:para>Author: Markus Scholtes Version: 1.02 Build date: 2020/02/15</maml:para>
-        <maml:para>Changes by metablaster - August 2020: 1. Applied formatting and code style according to project rules 2. Added switch to optionally append instead of replacing output file 3. Separated functions into their own scope 4. Added function to decode string into multi line 5. Added parameter to target specific policy store 6. Added parameter to let specify directory, and crate it if it doesn't exist 7. Added more output streams for debug, verbose and info 8. Added parameter to export according to rule group 9. Changed minor flow and logic of execution 10. Make output formatted and colored 11. Added progress bar TODO: export to excel</maml:para>
+        <maml:para>Following modifications by metablaster August 2020: 1. Applied formatting and code style according to project rules 2. Added switch to optionally append instead of replacing output file 3. Separated functions into their own scope 4. Added function to decode string into multi line 5. Added parameter to target specific policy store 6. Added parameter to let specify directory, and crate it if it doesn't exist 7. Added more output streams for debug, verbose and info 8. Added parameter to export according to rule group 9. Changed minor flow and logic of execution 10. Make output formatted and colored 11. Added progress bar</maml:para>
+        <maml:para>TODO: export to excel TODO: Following rules (rule groups) failed to export with "WARNING: Input is missing, result is empty string": Outbound: - Broadcast</maml:para>
+        <maml:para>- Network Discovery</maml:para>
+        <maml:para>- File and Printer Sharing</maml:para>
+        <maml:para>- Github</maml:para>
+        <maml:para>- Development - Microsoft Visual Studio</maml:para>
+        <maml:para>- Software - Nvidia</maml:para>
+        <maml:para>- [Server - SQL] -&gt; SQL Server Management Studio</maml:para>
+        <maml:para>- [Microsoft - Office</maml:para>
+        <maml:para>- Windows System</maml:para>
+        <maml:para></maml:para>
+        <maml:para>Inbound: - Broadcast</maml:para>
+        <maml:para>- Network Discovery</maml:para>
+        <maml:para>- File and Printer Sharing</maml:para>
+        <maml:para>- Microsoft Office</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Export-FirewallRules
-Exports all firewall rules to the CSV file FirewallRules.csv in the current directory.</dev:code>
+        <dev:code>Export-FirewallRules</dev:code>
         <dev:remarks>
-          <maml:para></maml:para>
+          <maml:para>Exports all firewall rules to the CSV file FirewallRules.csv in the current directory.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Export-FirewallRules -Inbound -Allow
-Exports all inbound and allowing firewall rules to the CSV file FirewallRules.csv in the current directory.</dev:code>
+        <dev:code>Export-FirewallRules -Inbound -Allow</dev:code>
         <dev:remarks>
-          <maml:para></maml:para>
+          <maml:para>Exports all inbound and allowing firewall rules to the CSV file FirewallRules.csv in the current directory.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
-        <dev:code>Export-FirewallRules snmp* SNMPRules.json -json
-Exports all SNMP firewall rules to the JSON file SNMPRules.json.</dev:code>
+        <dev:code>Export-FirewallRules -DisplayGroup ICMP* ICMPRules.json -json</dev:code>
         <dev:remarks>
-          <maml:para></maml:para>
+          <maml:para>Exports all ICMP firewall rules to the JSON file ICMPRules.json.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -475,7 +486,7 @@ Exports all SNMP firewall rules to the JSON file SNMPRules.json.</dev:code>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Output of Net-NewFirewallRule is large, loading a lot of rules would spam the console very fast, this function helps to output only relevant content.</maml:para>
+      <maml:para>Output of Net-NewFirewallRule is large, loading a lot of rules would spam the console very fast, this function helps to output only relevant, formatted and colored output</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -483,7 +494,7 @@ Exports all SNMP firewall rules to the JSON file SNMPRules.json.</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
           <maml:name>Rule</maml:name>
           <maml:Description>
-            <maml:para>Firewall rule to format</maml:para>
+            <maml:para>Firewall rule to format, by default output status represents loading rule</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimInstance[]</command:parameterValue>
           <dev:type>
@@ -509,7 +520,7 @@ Exports all SNMP firewall rules to the JSON file SNMPRules.json.</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
           <maml:name>Rule</maml:name>
           <maml:Description>
-            <maml:para>Firewall rule to format</maml:para>
+            <maml:para>Firewall rule to format, by default output status represents loading rule</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimInstance[]</command:parameterValue>
           <dev:type>
@@ -535,7 +546,7 @@ Exports all SNMP firewall rules to the JSON file SNMPRules.json.</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
         <maml:name>Rule</maml:name>
         <maml:Description>
-          <maml:para>Firewall rule to format</maml:para>
+          <maml:para>Firewall rule to format, by default output status represents loading rule</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimInstance[]</command:parameterValue>
         <dev:type>
@@ -628,7 +639,7 @@ Exports all SNMP firewall rules to the JSON file SNMPRules.json.</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>PolicyStore</maml:name>
           <maml:Description>
-            <maml:para>Policy store into which to import rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md</maml:para>
+            <maml:para>Policy store into which to import rules, default is local GPO.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -678,7 +689,7 @@ Exports all SNMP firewall rules to the JSON file SNMPRules.json.</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>PolicyStore</maml:name>
         <maml:Description>
-          <maml:para>Policy store into which to import rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md</maml:para>
+          <maml:para>Policy store into which to import rules, default is local GPO.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -747,25 +758,22 @@ Exports all SNMP firewall rules to the JSON file SNMPRules.json.</dev:code>
     <maml:alertSet>
       <maml:alert>
         <maml:para>Author: Markus Scholtes Version: 1.02 Build date: 2020/02/15</maml:para>
-        <maml:para>Changes by metablaster - August 2020: 1. Applied formatting and code style according to project rules 2. Added parameter to target specific policy store 3. Separated functions into their own scope 4. Added function to decode string into multi line 5. Added parameter to let specify directory 6. Added more output streams for debug, verbose and info 7. Changed minor flow and logic of execution 8. Make output formatted and colored 9. Added progress bar</maml:para>
+        <maml:para>Following modifications by metablaster August 2020: 1. Applied formatting and code style according to project rules 2. Added parameter to target specific policy store 3. Separated functions into their own scope 4. Added function to decode string into multi line 5. Added parameter to let specify directory 6. Added more output streams for debug, verbose and info 7. Changed minor flow and logic of execution 8. Make output formatted and colored 9. Added progress bar</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Import-FirewallRules
-Imports all firewall rules in the CSV file FirewallRules.csv
-If no file is specified, FirewallRules .csv or .json in the current directory is searched.</dev:code>
+        <dev:code>Import-FirewallRules</dev:code>
         <dev:remarks>
-          <maml:para></maml:para>
+          <maml:para>Imports all firewall rules in the CSV file FirewallRules.csv If no file is specified, FirewallRules .csv or .json in the current directory is searched.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Import-FirewallRules WmiRules.csv CSV
-Imports all firewall rules in the SCV file WmiRules.csv</dev:code>
+        <dev:code>Import-FirewallRules -FileName WmiRules -JSON</dev:code>
         <dev:remarks>
-          <maml:para></maml:para>
+          <maml:para>Imports all firewall rules from the JSON file WmiRules</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -794,7 +802,7 @@ Imports all firewall rules in the SCV file WmiRules.csv</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>PolicyStore</maml:name>
           <maml:Description>
-            <maml:para>Policy store from which remove rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md</maml:para>
+            <maml:para>Policy store from which remove rules, default is local GPO.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -866,7 +874,7 @@ Imports all firewall rules in the SCV file WmiRules.csv</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>PolicyStore</maml:name>
         <maml:Description>
-          <maml:para>Policy store from which remove rules, default is local GPO. For more information about stores see: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md</maml:para>
+          <maml:para>Policy store from which remove rules, default is local GPO.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -965,18 +973,16 @@ Imports all firewall rules in the SCV file WmiRules.csv</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Remove-FirewallRules
-Removes all firewall rules according to a list in the CSV file FirewallRules.csv in the current directory.</dev:code>
+        <dev:code>Remove-FirewallRules</dev:code>
         <dev:remarks>
-          <maml:para></maml:para>
+          <maml:para>Removes all firewall rules according to a list in the CSV file FirewallRules.csv in the current directory.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Remove-FirewallRules WmiRules.json -json
-Removes all firewall rules according to the list in the JSON file WmiRules.json.</dev:code>
+        <dev:code>Remove-FirewallRules WmiRules.json -JSON</dev:code>
         <dev:remarks>
-          <maml:para></maml:para>
+          <maml:para>Removes all firewall rules according to the list in the JSON file WmiRules.json.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>

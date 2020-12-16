@@ -13,7 +13,7 @@ Get list of install locations for executables and executable names
 
 ## SYNTAX
 
-```none
+```powershell
 Get-ExecutablePath [[-ComputerName] <String>] [<CommonParameters>]
 ```
 
@@ -26,7 +26,7 @@ registry path and child registry key name for target computer
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Get-ExecutablePath "COMPUTERNAME"
 ```
 
@@ -62,6 +62,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-None.
+TODO: Name parameter accepting wildcard, why not getting specifics out?
 
 ## RELATED LINKS

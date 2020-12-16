@@ -13,7 +13,7 @@ Get installed NET Frameworks
 
 ## SYNTAX
 
-```none
+```powershell
 Get-NetFramework [[-ComputerName] <String>] [<CommonParameters>]
 ```
 
@@ -26,7 +26,7 @@ installation directory exists or not, since some versions are built in
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Get-NetFramework COMPUTERNAME
 ```
 

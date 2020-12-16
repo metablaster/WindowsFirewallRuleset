@@ -6,7 +6,7 @@
       <command:verb>Approve</command:verb>
       <command:noun>Execute</command:noun>
       <maml:description>
-        <maml:para>Used to ask user if he wants to run script</maml:para>
+        <maml:para>Used to prompt user to approve running script</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -29,7 +29,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Title</maml:name>
           <maml:Description>
-            <maml:para>Title of the prompt</maml:para>
+            <maml:para>Prompt title</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -53,7 +53,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Accept</maml:name>
           <maml:Description>
-            <maml:para>{{ Fill Accept Description }}</maml:para>
+            <maml:para>Prompt help menu for default action</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -65,7 +65,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Deny</maml:name>
           <maml:Description>
-            <maml:para>{{ Fill Deny Description }}</maml:para>
+            <maml:para>Prompt help menu for deny action</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -116,7 +116,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Title</maml:name>
         <maml:Description>
-          <maml:para>Title of the prompt</maml:para>
+          <maml:para>Prompt title</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -140,7 +140,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Accept</maml:name>
         <maml:Description>
-          <maml:para>{{ Fill Accept Description }}</maml:para>
+          <maml:para>Prompt help menu for default action</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -152,7 +152,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Deny</maml:name>
         <maml:Description>
-          <maml:para>{{ Fill Deny Description }}</maml:para>
+          <maml:para>Prompt help menu for deny action</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -214,7 +214,16 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Approve-Execute "No" "Sample title" "Sample question"</dev:code>
+        <dev:code>Approve-Execute -Unsafe -Title "Sample title" -Question "Sample question"</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>[bool] $YesToAll = $false
+PS&gt; [bool] $NoToAll = $false
+PS&gt; Approve-Execute -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll)</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -555,11 +564,11 @@
       <command:verb>Convert</command:verb>
       <command:noun>SDDLToACL</command:noun>
       <maml:description>
-        <maml:para>Convert SDDL entries to computer accounts</maml:para>
+        <maml:para>Convert SDDL string to ACL</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>TODO: add description</maml:para>
+      <maml:para>Convert SDDL strings to ACL entries</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -614,7 +623,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>None.</maml:para>
+        <maml:para>This is experimental function and needs a lot of improvements.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -855,11 +864,11 @@ utf-32</dev:code>
       <command:verb>Get</command:verb>
       <command:noun>NetworkService</command:noun>
       <maml:description>
-        <maml:para>Scan all scripts in this repository and get windows service names involved in rules</maml:para>
+        <maml:para>Get a list of windows services involved in rules</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{ Fill in the Description }}</maml:para>
+      <maml:para>Scan all scripts in this repository and get windows service names involved in rules, the result is saved to file and used to verify existence of these services on target system.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1092,7 +1101,7 @@ utf-32</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>None.</maml:para>
+        <maml:para>TODO: Function needs improvements and more test cases TODO: consider renaming to Format-ProcessOutput</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1117,11 +1126,11 @@ utf-32</dev:code>
       <command:verb>Get</command:verb>
       <command:noun>TypeName</command:noun>
       <maml:description>
-        <maml:para>Returns .NET return type name for input object</maml:para>
+        <maml:para>Get .NET outputs of a commandlet or convert to/from type accelerator</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Unlike Get-Member commandlet returns only type name, and if there are multiple type names chooses unique ones only.</maml:para>
+      <maml:para>Returns .NET output typename of a function or commandlet. When piped, object's output typenames are handled per input. In both cases input can be translated to/from type accelerator. The function fails if output type is not .NET type</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1129,7 +1138,7 @@ utf-32</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
           <maml:name>InputObject</maml:name>
           <maml:Description>
-            <maml:para>Target object for which to retrieve type name</maml:para>
+            <maml:para>Target object for which to retrieve output typenames. This is the actual output of some commandlet or function when passed to Get-TypeName, either via pipeline or directly.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">System.Object[]</command:parameterValue>
           <dev:type>
@@ -1141,7 +1150,7 @@ utf-32</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Accelerator</maml:name>
           <maml:Description>
-            <maml:para>When used converts resultant full typename to accelerator. Otherwise if specified with 'Name' parameter, converts resultant accelerator to full name. No conversion is done if resultant type already is of desired format.</maml:para>
+            <maml:para>When used converts resultant full typename to accelerator. Otherwise if specified with "Name" parameter, converts resultant accelerator to full name. No conversion is done if resultant type already is of desired format.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1167,7 +1176,7 @@ utf-32</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Accelerator</maml:name>
           <maml:Description>
-            <maml:para>When used converts resultant full typename to accelerator. Otherwise if specified with 'Name' parameter, converts resultant accelerator to full name. No conversion is done if resultant type already is of desired format.</maml:para>
+            <maml:para>When used converts resultant full typename to accelerator. Otherwise if specified with "Name" parameter, converts resultant accelerator to full name. No conversion is done if resultant type already is of desired format.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1193,7 +1202,7 @@ utf-32</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Accelerator</maml:name>
           <maml:Description>
-            <maml:para>When used converts resultant full typename to accelerator. Otherwise if specified with 'Name' parameter, converts resultant accelerator to full name. No conversion is done if resultant type already is of desired format.</maml:para>
+            <maml:para>When used converts resultant full typename to accelerator. Otherwise if specified with "Name" parameter, converts resultant accelerator to full name. No conversion is done if resultant type already is of desired format.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1207,7 +1216,7 @@ utf-32</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
         <maml:name>InputObject</maml:name>
         <maml:Description>
-          <maml:para>Target object for which to retrieve type name</maml:para>
+          <maml:para>Target object for which to retrieve output typenames. This is the actual output of some commandlet or function when passed to Get-TypeName, either via pipeline or directly.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.Object[]</command:parameterValue>
         <dev:type>
@@ -1243,7 +1252,7 @@ utf-32</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Accelerator</maml:name>
         <maml:Description>
-          <maml:para>When used converts resultant full typename to accelerator. Otherwise if specified with 'Name' parameter, converts resultant accelerator to full name. No conversion is done if resultant type already is of desired format.</maml:para>
+          <maml:para>When used converts resultant full typename to accelerator. Otherwise if specified with "Name" parameter, converts resultant accelerator to full name. No conversion is done if resultant type already is of desired format.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -1275,16 +1284,43 @@ utf-32</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Original code link: https://github.com/gravejester/Communary.PASM TODO: need better checking for input, on pipeline.</maml:para>
-        <maml:para>Modifications by metablaster year 2020: Added check when object is null Added comment based help Removed unneeded parentheses Added input type to parameter</maml:para>
+        <maml:para>There may be multiple accelerators for same type, for example: Get-TypeName -Name [System.Management.Automation.PSObject] -Accelerator It's possible to rework function to get the exact type if this is desired see being block TODO: Will not work to detect .NET types for formatted or custom data, see Get-FormatData TODO: Will not work for non .NET types because we have no use of it, but should be implemented, see Get-TypeName unit test</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Get-Process | Get-TypeName</dev:code>
+        <dev:code>Get-TypeName (Get-Process)</dev:code>
         <dev:remarks>
-          <maml:para></maml:para>
+          <maml:para>System.Diagnostics.Process</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Get-TypeName -Command Get-Process</dev:code>
+        <dev:remarks>
+          <maml:para>System.Diagnostics.ProcessModule System.Diagnostics.FileVersionInfo System.Diagnostics.Process</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Get-TypeName -Name [switch]</dev:code>
+        <dev:remarks>
+          <maml:para>System.Management.Automation.SwitchParameter</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
+        <dev:code>([System.Environment]::MachineName) | Get-TypeName -Accelerator</dev:code>
+        <dev:remarks>
+          <maml:para>string</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 5 --------------------------</maml:title>
+        <dev:code>Generate-Types | Get-TypeName | DealWith-TypeNames</dev:code>
+        <dev:remarks>
+          <maml:para>Sends typename for each input object down the pipeline</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -1305,7 +1341,7 @@ utf-32</dev:code>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Set network profile for each physical/hardware network interfaces Recommended is 'Public' profile for maximum security, unless 'Private' is needed</maml:para>
+      <maml:para>Set network profile for each physical/hardware network interfaces Recommended is "Public" profile for maximum security, unless "Private" is needed</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1382,7 +1418,7 @@ utf-32</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>None.</maml:para>
+        <maml:para>TODO: It looks like option to change network profile in settings app will be gone after using this function in an elevated prompt</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2215,7 +2251,7 @@ utf-32</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: Manage audit entries TODO: Which combination is for "Replace all child object permissions with inheritable permissions from this object" TODO: Which combination is for "Include inheritable permissions from this object's parent" Set-Permission function is a wrapper around *-Acl commandlets for easier ACL editing. This function also serves as replacement for takeown.exe and icacls.exe whose syntax is strange and using these in PowerShell is usually awkward. TODO: See https://powershellexplained.com/2020-03-15-Powershell-shouldprocess-whatif-confirm-shouldcontinue-everything/ TODO: switch to ignore errors and continue doing things, useful for recurse TODO: A bunch of other security options can be implemented HACK: Set-Acl : Requested registry access is not allowed, unable to modify ownership</maml:para>
+        <maml:para>TODO: Manage audit entries TODO: Which combination is for "Replace all child object permissions with inheritable permissions from this object" TODO: Which combination is for "Include inheritable permissions from this object's parent" Set-Permission function is a wrapper around *-Acl commandlets for easier ACL editing. This function also serves as replacement for takeown.exe and icacls.exe whose syntax is strange and using these in PowerShell is usually awkward. TODO: See https://powershellexplained.com/2020-03-15-Powershell-shouldprocess-whatif-confirm-shouldcontinue-everything/ TODO: switch to ignore errors and continue doing things, useful for recurse TODO: A bunch of other security options can be implemented TODO: Set-Acl : Requested registry access is not allowed, unable to modify ownership happens because PowerShell process does not have high enough privileges even if run as Administrator, a fix for this is in Scripts\External\Set-Privilege.ps1 which this function must make use of.</maml:para>
         <maml:para>Links listed below are provided for additional parameter description in order of how parameters are declared</maml:para>
       </maml:alert>
     </maml:alertSet>
@@ -2246,7 +2282,7 @@ utf-32</dev:code>
         <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
         <dev:code>Set-Permission -Principal SomeUser -Domain COMPUTERNAME -Path "D:\SomeFolder"</dev:code>
         <dev:remarks>
-          <maml:para>Allows to ReadAndExecute, ListDirectory and Traverse to 'SomeFolder' and it's contents for COMPUTERNAME\SomeUser</maml:para>
+          <maml:para>Allows to ReadAndExecute, ListDirectory and Traverse to "SomeFolder" and it's contents for COMPUTERNAME\SomeUser</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -2295,7 +2331,7 @@ utf-32</dev:code>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>In some cases, depending on project settings a user might need larger buffer to preserve all the output in the console for review and scroll back.</maml:para>
+      <maml:para>Set-ScreenBuffer sets screenbuffer for current powershell session. In some cases, depending on project settings a user might need larger buffer to preserve all the output in the console for review and scroll back.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -2433,7 +2469,7 @@ utf-32</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
           <maml:name>SDDL</maml:name>
           <maml:Description>
-            <maml:para>{{ Fill SDDL Description }}</maml:para>
+            <maml:para>TODO: describe parameter</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -2448,7 +2484,7 @@ utf-32</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
         <maml:name>SDDL</maml:name>
         <maml:Description>
-          <maml:para>{{ Fill SDDL Description }}</maml:para>
+          <maml:para>TODO: describe parameter</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -2480,7 +2516,7 @@ utf-32</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This function is used only for debugging and discovery of object SDDL Credits to: https://blogs.technet.microsoft.com/ashleymcglone/2011/08/29/powershell-sid-walker-texas-ranger-part-1 TODO: additional work on function to make it more universal, see if we can make use of it somehow, better help comment.</maml:para>
+        <maml:para>This function is used only for debugging and discovery of object SDDL, credits to link in description. TODO: additional work on function to make it more universal, see if we can make use of it somehow, better help comment.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2497,6 +2533,10 @@ utf-32</dev:code>
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Show-SDDL.md</maml:uri>
       </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://blogs.technet.microsoft.com/ashleymcglone/2011/08/29/powershell-sid-walker-texas-ranger-part-1</maml:linkText>
+        <maml:uri>https://blogs.technet.microsoft.com/ashleymcglone/2011/08/29/powershell-sid-walker-texas-ranger-part-1</maml:uri>
+      </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
@@ -2509,7 +2549,7 @@ utf-32</dev:code>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Execution context is shown in the console every time Approve-Execute is called. It helps to know the state and progress of execution.</maml:para>
+      <maml:para>Script scope context variable is updated. Execution context is shown in the console every time Approve-Execute is called. It helps to know the state and progress of execution.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>

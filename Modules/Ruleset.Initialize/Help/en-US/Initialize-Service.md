@@ -9,11 +9,11 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Check if required system services are started
+Configure and start specified system services
 
 ## SYNTAX
 
-```none
+```powershell
 Initialize-Service [-Services] <String[]> [<CommonParameters>]
 ```
 
@@ -28,14 +28,14 @@ without essential services project code may result in errors hard to debug
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Initialize-Service @("lmhosts", "LanmanWorkstation", "LanmanServer")
 $true if all input services are started successfully $false otherwise
 ```
 
 ### EXAMPLE 2
 
-```none
+```powershell
 Initialize-Service "WinRM"
 $true if WinRM service was started $false otherwise
 ```
@@ -76,7 +76,7 @@ This function main purpose is automated development environment setup to be able
 setup on multiple computers and virtual operating systems, in cases such as frequent system restores
 for the purpose of testing project code for many environment scenarios that end users may have.
 It should be used in conjunction with the rest of a module "Ruleset.Initialize"
-
+TODO: Optionally set services to automatic startup, most of services are needed only to run code.
 \[System.ServiceProcess.ServiceController\[\]\]
 
 ## RELATED LINKS

@@ -13,19 +13,19 @@ Get installed Windows Kits
 
 ## SYNTAX
 
-```none
+```powershell
 Get-WindowsKit [[-ComputerName] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-TODO: add description
+Get installation information about installed Windows Kit's
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Get-WindowsKit COMPUTERNAME
 ```
 

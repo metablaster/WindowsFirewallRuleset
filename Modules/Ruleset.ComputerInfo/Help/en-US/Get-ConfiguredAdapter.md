@@ -9,41 +9,41 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Method to get configured adapters
+Retrieve a list of configured network adapters
 
 ## SYNTAX
 
 ### Individual (Default)
 
-```none
+```powershell
 Get-ConfiguredAdapter [[-AddressFamily] <String>] [-ExcludeHardware] [-IncludeVirtual] [-IncludeHidden]
  [-IncludeDisconnected] [<CommonParameters>]
 ```
 
 ### All
 
-```none
+```powershell
 Get-ConfiguredAdapter [[-AddressFamily] <String>] [-ExcludeHardware] [-IncludeAll] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Return list of all configured adapters and their configuration.
-Applies to adapters which have an IP assigned regardless if connected to network.
-This conditionally includes virtual and hidden adapters such as Hyper-V adapters on all compartments.
+Return a list of all configured adapters and their configuration.
+By default only physical adapters connected to network are returned
+Conditionally includes virtual, hidden or disconnected adapters such as Hyper-V adapters on all compartments.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Get-ConfiguredAdapter "IPv4"
 ```
 
 ### EXAMPLE 2
 
-```none
-Get-ConfiguredAdapter "IPv6"
+```powershell
+Get-ConfiguredAdapter "IPv6" -IncludeVirtual
 ```
 
 ## PARAMETERS
@@ -159,5 +159,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 TODO: Loopback interface is missing in the output
+TODO: shorter parameter names: Virtual, All, Hidden, Hardware
 
 ## RELATED LINKS

@@ -13,21 +13,20 @@ Initialize unit test
 
 ## SYNTAX
 
-```none
+```powershell
 Enter-Test [-Private] [-Pester] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Enter-Test initializes unit test, ie.
-to enable logging
-This function must be called before first test case in single unit test
+Enter-Test initializes unit test
+Must be called before first test case in single unit test and in pair with Exit-Test
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Enter-Test "Get-Something.ps1"
 ```
 
@@ -51,7 +50,7 @@ Accept wildcard characters: False
 
 ### -Pester
 
-Should be specified to enter private function pester test
+Should be specified to enter pester tests for private functions
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -112,6 +111,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-TODO: Get file name of unit test automatically
+None.
 
 ## RELATED LINKS

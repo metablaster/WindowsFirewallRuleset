@@ -9,23 +9,23 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Get localhost name
+Retrieve localhost NETBIOS name
 
 ## SYNTAX
 
-```none
+```powershell
 Get-ComputerName [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-TODO: add description
+Retrieve localhost NETBIOS name
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Get-ComputerName
 ```
 
@@ -45,6 +45,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-TODO: implement querying computers on network by specifying IP address
+TODO: Possible function purpose such as conversion from NETBIOS to UPN name or reading different
+formats of file with a list of computernames which are then converted to desired format.
+TODO: Maybe implement querying computers on network by specifying IP address and vice versa.
 
 ## RELATED LINKS

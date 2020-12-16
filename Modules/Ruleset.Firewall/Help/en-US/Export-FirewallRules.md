@@ -13,7 +13,7 @@ Exports firewall rules to a CSV or JSON file.
 
 ## SYNTAX
 
-```none
+```powershell
 Export-FirewallRules [-PolicyStore <String>] [-Folder <String>] [-FileName <String>] [-DisplayName <String>]
  [-DisplayGroup <String>] [-JSON] [-Inbound] [-Outbound] [-Enabled] [-Disabled] [-Allow] [-Block] [-Append]
  [<CommonParameters>]
@@ -33,32 +33,33 @@ If the export file already exists it's content will be replaced by default.
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Export-FirewallRules
-Exports all firewall rules to the CSV file FirewallRules.csv in the current directory.
 ```
+
+Exports all firewall rules to the CSV file FirewallRules.csv in the current directory.
 
 ### EXAMPLE 2
 
-```none
+```powershell
 Export-FirewallRules -Inbound -Allow
-Exports all inbound and allowing firewall rules to the CSV file FirewallRules.csv in the current directory.
 ```
+
+Exports all inbound and allowing firewall rules to the CSV file FirewallRules.csv in the current directory.
 
 ### EXAMPLE 3
 
-```none
-Export-FirewallRules snmp* SNMPRules.json -json
-Exports all SNMP firewall rules to the JSON file SNMPRules.json.
+```powershell
+Export-FirewallRules -DisplayGroup ICMP* ICMPRules.json -json
 ```
+
+Exports all ICMP firewall rules to the JSON file ICMPRules.json.
 
 ## PARAMETERS
 
 ### -PolicyStore
 
 Policy store from which to export rules, default is local GPO.
-For more information about stores see:
-https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md
 
 ```yaml
 Type: System.String
@@ -284,7 +285,7 @@ Author: Markus Scholtes
 Version: 1.02
 Build date: 2020/02/15
 
-Changes by metablaster - August 2020:
+Following modifications by metablaster August 2020:
 1.
 Applied formatting and code style according to project rules
 2.
@@ -307,6 +308,24 @@ Changed minor flow and logic of execution
 Make output formatted and colored
 11.
 Added progress bar
+
 TODO: export to excel
+TODO: Following rules (rule groups) failed to export with "WARNING: Input is missing, result is empty string":
+Outbound:
+- Broadcast
+- Network Discovery
+- File and Printer Sharing
+- Github
+- Development - Microsoft Visual Studio
+- Software - Nvidia
+- \[Server - SQL\] -\> SQL Server Management Studio
+- \[Microsoft - Office
+- Windows System
+
+Inbound:
+- Broadcast
+- Network Discovery
+- File and Printer Sharing
+- Microsoft Office
 
 ## RELATED LINKS

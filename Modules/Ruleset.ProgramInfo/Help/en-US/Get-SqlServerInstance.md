@@ -13,7 +13,7 @@ Retrieves SQL server information from a local or remote servers.
 
 ## SYNTAX
 
-```none
+```powershell
 Get-SqlServerInstance [[-ComputerName] <String[]>] [-CIM] [<CommonParameters>]
 ```
 
@@ -27,7 +27,7 @@ instances from a SQL server and detects if in a cluster or not.
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Get-SqlServerInstance -Computername DC1
 ```
 
@@ -55,7 +55,7 @@ Caption       : SQL Server 2008
 
 ### EXAMPLE 2
 
-```none
+```powershell
 Get-SqlServerInstance -Computername Server1, Server2 -CIM
 ```
 

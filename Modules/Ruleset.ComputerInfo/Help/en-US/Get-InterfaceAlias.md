@@ -9,20 +9,20 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Method to get aliases of configured adapters
+Retrieve a aliases of configured network adapters
 
 ## SYNTAX
 
 ### Individual (Default)
 
-```none
+```powershell
 Get-InterfaceAlias [[-AddressFamily] <String>] [-WildCardOption <WildcardOptions>] [-ExcludeHardware]
  [-IncludeVirtual] [-IncludeHidden] [-IncludeDisconnected] [<CommonParameters>]
 ```
 
 ### All
 
-```none
+```powershell
 Get-InterfaceAlias [[-AddressFamily] <String>] [-WildCardOption <WildcardOptions>] [-ExcludeHardware]
  [-IncludeAll] [<CommonParameters>]
 ```
@@ -37,13 +37,13 @@ This may include virtual adapters as well such as Hyper-V adapters on all compar
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Get-InterfaceAlias "IPv4"
 ```
 
 ### EXAMPLE 2
 
-```none
+```powershell
 Get-InterfaceAlias "IPv6"
 ```
 
@@ -67,7 +67,7 @@ Accept wildcard characters: False
 
 ### -WildCardOption
 
-{{ Fill WildCardOption Description }}
+TODO: describe parameter
 
 ```yaml
 Type: System.Management.Automation.WildcardOptions
@@ -84,7 +84,7 @@ Accept wildcard characters: False
 
 ### -ExcludeHardware
 
-{{ Fill ExcludeHardware Description }}
+Exclude hardware/physical network adapters
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -177,5 +177,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 None.
+TODO: There is another function with the same name in Scripts folder
+TODO: shorter parameter names: Virtual, All, Hidden, Hardware
 
 ## RELATED LINKS

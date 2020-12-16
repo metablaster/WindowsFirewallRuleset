@@ -2,7 +2,7 @@
 
 ## about_Ruleset.ComputerInfo
 
-```none
+```powershell
 ABOUT TOPIC NOTE:
 The first header of the about topic should be the topic name.
 The second header contains the lookup name used by the help system.
@@ -22,7 +22,7 @@ The second header should have no spaces.
 
 {{ Short Description Placeholder }}
 
-```none
+```powershell
 ABOUT TOPIC NOTE:
 About topics can be no longer than 80 characters wide when rendered to text.
 Any topics greater than 80 characters will be automatically wrapped.

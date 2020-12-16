@@ -1,7 +1,7 @@
 ---
 external help file: Ruleset.ProgramInfo-help.xml
 Module Name: Ruleset.ProgramInfo
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SQLManagementStudio.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SqlManagementStudio.md
 schema: 2.0.0
 ---
 
@@ -13,7 +13,7 @@ Get installed Microsoft SQL Server Management Studios
 
 ## SYNTAX
 
-```none
+```powershell
 Get-SqlManagementStudio [[-ComputerName] <String>] [<CommonParameters>]
 ```
 
@@ -25,8 +25,8 @@ TODO: add description
 
 ### EXAMPLE 1
 
-```none
-Get-SQLManagementStudio COMPUTERNAME
+```powershell
+Get-SqlManagementStudio COMPUTERNAME
 ```
 
 RegKey ComputerName Version      InstallLocation

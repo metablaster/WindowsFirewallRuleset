@@ -13,7 +13,7 @@ Appends the existing Windows PowerShell PSModulePath to existing PSModulePath
 
 ## SYNTAX
 
-```none
+```powershell
 Add-WindowsPSModulePath [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -28,21 +28,22 @@ it will be appended to the end.
 
 ```powershell
 Add-WindowsPSModulePath
-Import-Module Hyper-V
+PS> Import-Module Hyper-V
 ```
 
 ### EXAMPLE 2
 
 ```powershell
 Add-WindowsPSModulePath
-Get-Module -ListAvailable
+PS> Get-Module -ListAvailable
 ```
 
 ## PARAMETERS
 
 ### -WhatIf
 
-Shows what would happen if the cmdlet runs. The cmdlet is not run.
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -86,4 +87,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
+Following modifications by metablaster November 2020:
+- Added comment based help based on original comments
+- Code formatting according to the rest of project design
+- Added HelpURI link to project location
+
 ## RELATED LINKS
+
+[https://github.com/PowerShell/WindowsCompatibility](https://github.com/PowerShell/WindowsCompatibility)

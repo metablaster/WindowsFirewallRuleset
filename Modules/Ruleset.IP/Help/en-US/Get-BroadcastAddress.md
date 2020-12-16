@@ -13,7 +13,7 @@ Get the broadcast address for a network range.
 
 ## SYNTAX
 
-```none
+```powershell
 Get-BroadcastAddress [-IPAddress] <String> [[-SubnetMask] <String>] [<CommonParameters>]
 ```
 
@@ -26,7 +26,7 @@ against the decimal forms of the IP address and inverted subnet mask.
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Get-BroadcastAddress 192.168.0.243 255.255.255.0
 ```
 
@@ -34,7 +34,7 @@ Returns the address 192.168.0.255.
 
 ### EXAMPLE 2
 
-```none
+```powershell
 Get-BroadcastAddress 10.0.9/22
 ```
 
@@ -42,7 +42,7 @@ Returns the address 10.0.11.255.
 
 ### EXAMPLE 3
 
-```none
+```powershell
 Get-BroadcastAddress 0/0
 ```
 
@@ -50,7 +50,7 @@ Returns the address 255.255.255.255.
 
 ### EXAMPLE 4
 
-```none
+```powershell
 Get-BroadcastAddress "10.0.0.42 255.255.255.252"
 ```
 
@@ -106,7 +106,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Following changes by metablaster:
+Modifications by metablaster year 2019, 2020:
 - Include licenses and move comment based help outside of functions
 - For code to be consistent with project code formatting and symbol casing.
 - Removed unnecessary position arguments, added default argument values explicitly.

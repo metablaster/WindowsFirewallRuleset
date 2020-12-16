@@ -13,19 +13,19 @@ Search program install properties for all users, system wide
 
 ## SYNTAX
 
-```none
+```powershell
 Get-AllUserSoftware [[-ComputerName] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-TODO: add description
+Search separate location in the registry for programs installed for all users.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Get-AllUserSoftware "COMPUTERNAME"
 ```
 
@@ -61,6 +61,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-TODO: should be renamed into Get-InstallProperties
+TODO: should be renamed into Get-InstallProperties or something else because it has nothing to do
+with system wide installed programs
 
 ## RELATED LINKS

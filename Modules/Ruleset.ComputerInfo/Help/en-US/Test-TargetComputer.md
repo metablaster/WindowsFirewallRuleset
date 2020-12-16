@@ -13,7 +13,7 @@ Test target computer (policy store) on which to apply firewall
 
 ## SYNTAX
 
-```none
+```powershell
 Test-TargetComputer [-ComputerName] <String> [-Count <Int16>] [-Timeout <Int16>] [<CommonParameters>]
 ```
 
@@ -27,13 +27,13 @@ for both PowerShell editions.
 
 ### EXAMPLE 1
 
-```none
-Test-TargetComputer "COMPUTERNAME" 2 1
+```powershell
+Test-TargetComputer "COMPUTERNAME" -Count 2 -Timeout 1
 ```
 
 ### EXAMPLE 2
 
-```none
+```powershell
 Test-TargetComputer "COMPUTERNAME"
 ```
 
@@ -85,7 +85,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: $ConnectionTimeout
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -104,7 +104,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-TODO: avoid error message, check all references which handle errors (code bloat)
-TODO: this should probably be part of ComputerInfo module
+TODO: Avoid error message, check all references which handle errors (code bloat)
+TODO: We should check for common issues for GPO management, not just ping status (ex.
+Test-NetConnection)
 
 ## RELATED LINKS

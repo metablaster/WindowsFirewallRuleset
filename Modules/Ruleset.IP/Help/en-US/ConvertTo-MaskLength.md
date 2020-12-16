@@ -13,7 +13,7 @@ Convert a dotted-decimal subnet mask to a mask length.
 
 ## SYNTAX
 
-```none
+```powershell
 ConvertTo-MaskLength [-SubnetMask] <IPAddress> [<CommonParameters>]
 ```
 
@@ -25,7 +25,7 @@ A count of the number of 1's in a binary string.
 
 ### EXAMPLE 1
 
-```none
+```powershell
 ConvertTo-MaskLength 255.255.255.0
 ```
 
@@ -63,7 +63,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Following changes by metablaster:
+Modifications by metablaster year 2019, 2020:
 - Include licenses and move comment based help outside of functions
 - For code to be consistent with project code formatting and symbol casing.
 - Removed unnecessary position arguments, added default argument values explicitly.

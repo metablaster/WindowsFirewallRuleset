@@ -13,7 +13,7 @@ Import a compatibility module.
 
 ## SYNTAX
 
-```none
+```powershell
 Import-WinModule [[-Name] <String[]>] [-Exclude <String[]>] [-ComputerName <String>]
  [-ConfigurationName <String>] [-Prefix <String>] [-DisableNameChecking] [-NoClobber] [-Force]
  [-Credential <PSCredential>] [-PassThru] [<CommonParameters>]
@@ -43,10 +43,11 @@ This behavior can be overridden using the additional parameters on the command.
 ### EXAMPLE 1
 
 ```powershell
-Import-WinModule PnpDevice; Get-Command -Module PnpDevice
+Import-WinModule PnpDevice
+PS> Get-Command -Module PnpDevice
 ```
 
-This example imports the 'PnpDevice' module.
+This example imports the "PnpDevice" module.
 
 ### EXAMPLE 2
 
@@ -55,7 +56,7 @@ Import-WinModule Microsoft.PowerShell.Management; Get-Command Get-EventLog
 ```
 
 This example imports one of the core Windows PowerShell modules containing commands
-not natively available in PowerShell Core such as 'Get-EventLog'.
+not natively available in PowerShell Core such as "Get-EventLog".
 Only commands not already present in PowerShell Core will be imported.
 
 ### EXAMPLE 3
@@ -64,7 +65,7 @@ Only commands not already present in PowerShell Core will be imported.
 Import-WinModule PnpDevice -Verbose -Force
 ```
 
-This example forces a reload of the module 'PnpDevice' with verbose output turned on.
+This example forces a reload of the module "PnpDevice" with verbose output turned on.
 
 ## PARAMETERS
 
@@ -87,8 +88,7 @@ Accept wildcard characters: False
 
 ### -Exclude
 
-A list of wildcard patterns matching the names of modules that
-should not be imported.
+A list of wildcard patterns matching the names of modules that should not be imported.
 
 ```yaml
 Type: System.String[]
@@ -104,10 +104,8 @@ Accept wildcard characters: False
 
 ### -ComputerName
 
-If you don't want to use the default compatibility session, use
-this parameter to specify the name of the computer on which to create
-the compatibility session.
-(Defaults to 'localhost')
+If you don't want to use the default compatibility session, use this parameter to specify the name
+of the computer on which to create the compatibility session.
 
 ```yaml
 Type: System.String
@@ -116,7 +114,7 @@ Aliases: cn
 
 Required: False
 Position: Named
-Default value: localhost
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -124,7 +122,7 @@ Accept wildcard characters: False
 ### -ConfigurationName
 
 Specifies the configuration to connect to when creating the compatibility session
-(Defaults to 'Microsoft.PowerShell')
+(Defaults to "Microsoft.PowerShell")
 
 ```yaml
 Type: System.String
@@ -133,7 +131,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: Microsoft.PowerShell
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -172,7 +170,7 @@ Accept wildcard characters: False
 
 ### -NoClobber
 
-Don't overwrite any existing function definitions.
+Don't overwrite any existing function definitions
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -220,7 +218,8 @@ Accept wildcard characters: False
 
 ### -PassThru
 
-If present, the ModuleInfo objects will be written to the output pipe as deserialized (PSObject) objects.
+If present, the ModuleInfo objects will be written to the output pipe
+as deserialized (PSObject) objects
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -248,4 +247,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
+Following modifications by metablaster November 2020:
+- Added comment based help based on original comments
+- Code formatting according to the rest of project design
+- Added HelpURI link to project location
+
 ## RELATED LINKS
+
+[https://github.com/PowerShell/WindowsCompatibility](https://github.com/PowerShell/WindowsCompatibility)

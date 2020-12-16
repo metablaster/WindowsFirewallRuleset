@@ -20,23 +20,23 @@ Convert from OS build number to OS version
 
 ### [Get-Broadcast](Get-Broadcast.md)
 
-Method to get broadcast addresses on local machine
+Get broadcast addresses on the local machine
 
 ### [Get-ComputerName](Get-ComputerName.md)
 
-Get localhost name
+Retrieve localhost NETBIOS name
 
 ### [Get-ConfiguredAdapter](Get-ConfiguredAdapter.md)
 
-Method to get configured adapters
+Retrieve a list of configured network adapters
 
 ### [Get-InterfaceAlias](Get-InterfaceAlias.md)
 
-Method to get aliases of configured adapters
+Retrieve a aliases of configured network adapters
 
 ### [Get-IPAddress](Get-IPAddress.md)
 
-Method to get list of IP addresses on local machine
+Retrieve a list of IP addresses on local machine
 
 ### [Get-SystemSKU](Get-SystemSKU.md)
 

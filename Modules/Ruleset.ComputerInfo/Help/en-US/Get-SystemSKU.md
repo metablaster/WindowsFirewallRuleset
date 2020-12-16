@@ -15,13 +15,13 @@ Get operating system SKU information
 
 ### Number
 
-```none
+```powershell
 Get-SystemSKU [-SKU <Int32>] [<CommonParameters>]
 ```
 
 ### Computer
 
-```none
+```powershell
 Get-SystemSKU [-ComputerName <String[]>] [<CommonParameters>]
 ```
 
@@ -34,10 +34,11 @@ or translate SKU number to SKU
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Get-SystemSKU
-Home Premium N
 ```
+
+Home Premium N
 
 ## PARAMETERS
 
@@ -88,7 +89,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 TODO: accept UPN and NETBIOS computer names
-TODO: ComputerName default value is just a placeholder to be able to use foreach
-which is needed for pipeline, need better design
+TODO: ComputerName default value is just a placeholder, need better design
 
 ## RELATED LINKS
+
+[https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.operatingsystemsku?view=powershellsdk-1.1.0](https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.operatingsystemsku?view=powershellsdk-1.1.0)
+
+[https://docs.microsoft.com/en-us/surface/surface-system-sku-reference](https://docs.microsoft.com/en-us/surface/surface-system-sku-reference)

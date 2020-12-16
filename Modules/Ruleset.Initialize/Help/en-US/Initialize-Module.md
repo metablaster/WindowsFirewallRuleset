@@ -9,11 +9,11 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Check if module is installed or needs update
+Update or install specified out of date module
 
 ## SYNTAX
 
-```none
+```powershell
 Initialize-Module [-FullyQualifiedName] <Hashtable> [-Repository <String>] [-RepositoryLocation <Uri>]
  [-InfoMessage <String>] [-Trusted] [-AllowPrerelease] [-Required] [<CommonParameters>]
 ```
@@ -30,7 +30,7 @@ installing or updating modules
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Initialize-ModulesRequirement @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = "1.19.1" }
 Checks if PSScriptAnalyzer is up to date, if not user is prompted to update, and if repository
 specified by default is not registered user is prompted to do that too.
@@ -38,7 +38,7 @@ specified by default is not registered user is prompted to do that too.
 
 ### EXAMPLE 2
 
-```none
+```powershell
 Initialize-ModulesRequirement @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Repository `
 > "PSGallery" -RepositoryLocation "https://www.powershellgallery.com/api/v2"
 Checks if PackageManagement is up to date, if not user is prompted to update, and if repository
@@ -186,5 +186,6 @@ It should be used in conjunction with the rest of a module "Ruleset.Initialize"
 Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider
 Updating PackageManagement and PowerShellGet requires restarting PowerShell to switch to the latest version
 TODO: Implement initializing for non Administrator users
+TODO: installing post-git in same session while installing other modules may fail, and PS restart is required.
 
 ## RELATED LINKS

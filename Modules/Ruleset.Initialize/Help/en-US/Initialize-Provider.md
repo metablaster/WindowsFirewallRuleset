@@ -9,11 +9,11 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Test if recommended packages are installed
+Update or install specified package provider
 
 ## SYNTAX
 
-```none
+```powershell
 Initialize-Provider [-FullyQualifiedName] <Hashtable> [-InfoMessage <String>] [-Required] [<CommonParameters>]
 ```
 
@@ -29,7 +29,7 @@ installing or updating packages
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Initialize-Provider @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Repository "powershellgallery.com"
 ```
 

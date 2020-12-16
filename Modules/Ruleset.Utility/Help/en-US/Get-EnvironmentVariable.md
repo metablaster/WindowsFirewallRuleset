@@ -13,7 +13,7 @@ Get a group of environment variables
 
 ## SYNTAX
 
-```none
+```powershell
 Get-EnvironmentVariable [-Group] <String> [<CommonParameters>]
 ```
 
@@ -28,7 +28,7 @@ contain paths with userprofile environment variable.
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Get-EnvironmentVariable UserProfile
 ```
 
@@ -36,7 +36,7 @@ Returns all environment variables that lead to user profile
 
 ### EXAMPLE 2
 
-```none
+```powershell
 Get-EnvironmentVariable All
 ```
 

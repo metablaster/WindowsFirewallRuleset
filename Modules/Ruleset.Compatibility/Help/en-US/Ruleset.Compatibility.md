@@ -10,7 +10,7 @@ Locale: en-US
 
 ## Description
 
-This module provides PowerShell Core 6 compatibility with existing Windows PowerShell scripts.
+{{ Fill in the Description }}
 
 ## Ruleset.Compatibility Cmdlets
 

@@ -13,7 +13,7 @@ Run process and capture output
 
 ## SYNTAX
 
-```none
+```powershell
 Get-ProcessOutput [-FilePath] <String> [[-ArgumentList] <String>] [-NoNewWindow] [[-Wait] <UInt32>] [-Format]
  [<CommonParameters>]
 ```
@@ -28,7 +28,7 @@ to standard output if any.
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Get-ProcessOutput -FilePath "git.exe" -ArgumentList "status" -NoNewWindow -Wait 3000
 ```
 
@@ -129,6 +129,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-None.
+TODO: Function needs improvements and more test cases
+TODO: consider renaming to Format-ProcessOutput
 
 ## RELATED LINKS

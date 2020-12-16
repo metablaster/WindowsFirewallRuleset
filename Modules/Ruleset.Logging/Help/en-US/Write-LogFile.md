@@ -15,13 +15,13 @@ Write to log file
 
 ### Message
 
-```none
+```powershell
 Write-LogFile -Message <String> [-Path <String>] [-Tags <String[]>] [-Label <String>] [<CommonParameters>]
 ```
 
 ### Hash
 
-```none
+```powershell
 Write-LogFile -Hash <Object> [-Path <String>] [-Label <String>] [<CommonParameters>]
 ```
 
@@ -42,7 +42,7 @@ a new header, and popped before writing to previous log.
 
 ### EXAMPLE 1
 
-```
+```powershell
 $HeaderStack.Push("My Header")
 PS> Write-LogFile -Path "C:\logs" -Label "Settings" -Tags "MyTag" -Message "Sample message"
 PS> $HeaderStack.Pop() | Out-Null
@@ -52,7 +52,7 @@ Will write "Sample message" InformationRecord to log C:\logs\Settings_15.12.20.l
 
 ### EXAMPLE 2
 
-```
+```powershell
 $HeaderStack.Push("My Header")
 PS> [hashtable] $HashResult = Get-SomeHashTable
 PS> Write-LogFile -Path "C:\logs" -Label "Settings" -Tags "MyTag" -Hash $HashResult
@@ -63,7 +63,7 @@ Will write entry $HashResult to log C:\logs\Settings_15.12.20.log with a header 
 
 ### EXAMPLE 3
 
-```
+```powershell
 $HeaderStack.Push("My Header")
 PS> Write-LogFile -Path "C:\logs" -Label "Settings" -Tags "MyTag" -Message "Sample message"
 PS> $HeaderStack.Push("Another Header")

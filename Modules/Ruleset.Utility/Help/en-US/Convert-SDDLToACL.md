@@ -9,23 +9,23 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Convert SDDL entries to computer accounts
+Convert SDDL string to ACL
 
 ## SYNTAX
 
-```none
+```powershell
 Convert-SDDLToACL [-SDDL] <String[]> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-TODO: add description
+Convert SDDL strings to ACL entries
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Convert-SDDLToACL $SomeSDDL, $SDDL2, "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
 ```
 
@@ -61,6 +61,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-None.
+This is experimental function and needs a lot of improvements.
 
 ## RELATED LINKS

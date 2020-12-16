@@ -13,7 +13,7 @@ Removes firewall rules according to a list in a CSV or JSON file.
 
 ## SYNTAX
 
-```none
+```powershell
 Remove-FirewallRules [-PolicyStore <String>] [-Folder <String>] [-FileName <String>] [-JSON] [-WhatIf]
  [-Confirm] [<CommonParameters>]
 ```
@@ -29,25 +29,25 @@ is used, all other fields can be omitted
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Remove-FirewallRules
-Removes all firewall rules according to a list in the CSV file FirewallRules.csv in the current directory.
 ```
+
+Removes all firewall rules according to a list in the CSV file FirewallRules.csv in the current directory.
 
 ### EXAMPLE 2
 
-```none
-Remove-FirewallRules WmiRules.json -json
-Removes all firewall rules according to the list in the JSON file WmiRules.json.
+```powershell
+Remove-FirewallRules WmiRules.json -JSON
 ```
+
+Removes all firewall rules according to the list in the JSON file WmiRules.json.
 
 ## PARAMETERS
 
 ### -PolicyStore
 
 Policy store from which remove rules, default is local GPO.
-For more information about stores see:
-https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md
 
 ```yaml
 Type: System.String

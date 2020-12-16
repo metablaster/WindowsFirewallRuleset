@@ -13,7 +13,7 @@ Strip computer names out of computer accounts
 
 ## SYNTAX
 
-```none
+```powershell
 ConvertFrom-UserAccount [-UserAccount] <String[]> [<CommonParameters>]
 ```
 
@@ -26,14 +26,14 @@ related to splitting up user accounts
 
 ### EXAMPLE 1
 
-```none
-ConvertFrom-UserAccounts COMPUTERNAME\USERNAME
+```powershell
+ConvertFrom-UserAccount COMPUTERNAME\USERNAME
 ```
 
 ### EXAMPLE 2
 
-```none
-ConvertFrom-UserAccounts SERVER\USER, COMPUTER\USER, SERVER2\USER2
+```powershell
+ConvertFrom-UserAccount SERVER\USER, COMPUTER\USER, SERVER2\USER2
 ```
 
 ## PARAMETERS
@@ -68,6 +68,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-None.
+TODO: Rename to ConvertFrom-Account
 
 ## RELATED LINKS

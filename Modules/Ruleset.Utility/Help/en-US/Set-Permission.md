@@ -15,14 +15,14 @@ Take ownership or set permissions on file system or registry object
 
 ### Ownership
 
-```none
+```powershell
 Set-Permission [-Path] <String> -Owner <String> [-Domain <String>] [-Recurse] [-Force] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
 ### FileSystem
 
-```none
+```powershell
 Set-Permission [-Path] <String> -Principal <String> [-Domain <String>] [-Type <AccessControlType>]
  -Rights <FileSystemRights> [-Inheritance <InheritanceFlags>] [-Propagation <PropagationFlags>] [-Protected]
  [-PreserveInheritance] [-Recurse] [-Reset] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
@@ -30,7 +30,7 @@ Set-Permission [-Path] <String> -Principal <String> [-Domain <String>] [-Type <A
 
 ### Registry
 
-```none
+```powershell
 Set-Permission [-Path] <String> -Principal <String> [-Domain <String>] [-Type <AccessControlType>]
  -RegistryRights <RegistryRights> [-Inheritance <InheritanceFlags>] [-Propagation <PropagationFlags>]
  [-Protected] [-PreserveInheritance] [-Recurse] [-Reset] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
@@ -38,7 +38,7 @@ Set-Permission [-Path] <String> -Principal <String> [-Domain <String>] [-Type <A
 
 ### Reset
 
-```none
+```powershell
 Set-Permission [-Path] <String> [-Domain <String>] [-Protected] [-PreserveInheritance] [-Recurse] [-Reset]
  [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
@@ -52,7 +52,7 @@ folder, registry key or registry item.
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Set-Permission -Principal "SomeUser" -Path "D:\SomePath"
 ```
 
@@ -60,7 +60,7 @@ Sets function defaults for user SomeUser on path D:\SomePath
 
 ### EXAMPLE 2
 
-```none
+```powershell
 Set-Permission -Principal "Remote Management Users" -Path "D:\SomePath" -Protected
 ```
 
@@ -68,7 +68,7 @@ Only "Remote Management Users" have permissions on "D:\SomePath", other entries 
 
 ### EXAMPLE 3
 
-```none
+```powershell
 Set-Permission -Principal "LanmanServer" -Domain "NT SERVICE" -Path "D:\SomeFolder" `
 	-Type "Deny" -Rights "TakeOwnership, Delete, Modify"
 ```
@@ -77,11 +77,11 @@ LanmanServer service is denied specified rights for specified directory and all 
 
 ### EXAMPLE 4
 
-```none
+```powershell
 Set-Permission -Principal SomeUser -Domain COMPUTERNAME -Path "D:\SomeFolder"
 ```
 
-Allows to ReadAndExecute, ListDirectory and Traverse to 'SomeFolder' and it's contents for COMPUTERNAME\SomeUser
+Allows to ReadAndExecute, ListDirectory and Traverse to "SomeFolder" and it's contents for COMPUTERNAME\SomeUser
 
 ## PARAMETERS
 
@@ -410,7 +410,9 @@ using these in PowerShell is usually awkward.
 TODO: See https://powershellexplained.com/2020-03-15-Powershell-shouldprocess-whatif-confirm-shouldcontinue-everything/
 TODO: switch to ignore errors and continue doing things, useful for recurse
 TODO: A bunch of other security options can be implemented
-HACK: Set-Acl : Requested registry access is not allowed, unable to modify ownership
+TODO: Set-Acl : Requested registry access is not allowed, unable to modify ownership happens because
+PowerShell process does not have high enough privileges even if run as Administrator, a fix for this
+is in Scripts\External\Set-Privilege.ps1 which this function must make use of.
 
 Links listed below are provided for additional parameter description in order of how parameters are declared
 

@@ -151,7 +151,7 @@ function Format-Document
 	# Empty code fences
 	# NOTE: module page has no code fences
 	Write-Verbose -Message "[$ThisScript] Setting explicit code fences in $MarkdownFile"
-	$FileData = $FileData -replace '(?m)(?<fence>^```)(?=\r\n\w+)', "`${fence}none"
+	$FileData = $FileData -replace '(?m)(?<fence>^```)(?=\r\n\w+)', "`${fence}powershell"
 
 	# TODO: new line is inserted in module page, NoNewline ignored
 	Set-Content -NoNewline -Path $FileName -Value $FileData -Encoding $Encoding

@@ -13,7 +13,7 @@ Check system requirements for this project
 
 ## SYNTAX
 
-```none
+```powershell
 Initialize-Project [-Abort] [<CommonParameters>]
 ```
 
@@ -28,20 +28,22 @@ If not the function may exit and stop executing scripts.
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Initialize-Project
-Performs default requirements and recommendations checks managed by global settings,
-Error or warning message is shown if check failed, environment info otherwise.
 ```
+
+Performs default requirements and recommendations checks managed by global settings.
+Error or warning message is shown if check failed, environment info otherwise.
 
 ### EXAMPLE 2
 
-```none
-Initialize-Project -NoModulesCheck
-Performs default requirements and recommendations checks managed by global settings,
-except installed modules are not validated.
-Error or warning message is shown if check failed, environment info otherwise.
+```powershell
+Initialize-Project -Abort
 ```
+
+Performs default requirements and recommendations checks managed by global settings.
+Error or warning message is shown if check failed and all subsequent operations are halted.
+If successful environment info is shown.
 
 ## PARAMETERS
 
@@ -80,9 +82,10 @@ setup on multiple computers and virtual operating systems, in cases such as freq
 for the purpose of testing project code for many environment scenarios that end users may have.
 It should be used in conjunction with the rest of a module "Ruleset.Initialize"
 
-TODO: learn repo dir automatically (using git?)
 TODO: we don't use logs in this module
 TODO: checking remote systems not implemented
 TODO: Any modules in standard user paths will override system wide modules
+TODO: Abort parameter no longer makes sense, -EA Stop would be better, to reproduce problem change
+Develop from false to true in clean session
 
 ## RELATED LINKS

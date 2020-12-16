@@ -13,19 +13,19 @@ Get installed Windows SDK
 
 ## SYNTAX
 
-```none
+```powershell
 Get-WindowsSDK [[-ComputerName] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-TODO: add description
+Get installation information about installed Windows SDK
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Get-WindowsSDK COMPUTERNAME
 ```
 

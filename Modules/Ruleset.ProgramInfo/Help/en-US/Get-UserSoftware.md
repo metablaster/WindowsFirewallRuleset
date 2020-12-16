@@ -13,7 +13,7 @@ Get a list of programs installed by specific user
 
 ## SYNTAX
 
-```none
+```powershell
 Get-UserSoftware [-UserName] <String> [[-ComputerName] <String>] [<CommonParameters>]
 ```
 
@@ -25,7 +25,7 @@ Search installed programs in userprofile for specific user account
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Get-UserSoftware "USERNAME"
 ```
 

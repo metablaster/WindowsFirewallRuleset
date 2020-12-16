@@ -65,7 +65,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Following changes by metablaster: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>
@@ -151,7 +151,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Following changes by metablaster: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>
@@ -237,7 +237,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Following changes by metablaster: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>
@@ -323,7 +323,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Following changes by metablaster: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>
@@ -416,7 +416,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Following changes by metablaster: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>
@@ -502,7 +502,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Following changes by metablaster: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>
@@ -512,7 +512,7 @@
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>ConvertTo-Mask 24</dev:code>
         <dev:remarks>
-          <maml:para>Returns the dotted-decimal form of the mask, 255.255.255.0.</maml:para>
+          <maml:para>Returns the dotted-decimal form of the mask, 255.255.255.0</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -588,7 +588,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Following changes by metablaster: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>
@@ -749,7 +749,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Following changes by metablaster: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>
@@ -880,7 +880,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Following changes by metablaster: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>
@@ -1011,7 +1011,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Following changes by metablaster: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>
@@ -1209,7 +1209,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Following changes by metablaster: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>
@@ -1326,7 +1326,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Following changes by metablaster: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>
@@ -1475,7 +1475,7 @@
     <maml:alertSet>
       <maml:alert>
         <maml:para>Change log: 	07/03/2016 - Chris Dent - Cleaned up code, added tests. 	12/12/2015 - Chris Dent - Redesigned. 	13/10/2011 - Chris Dent - Created.</maml:para>
-        <maml:para>Following changes by metablaster: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>
@@ -1568,7 +1568,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Following changes by metablaster: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>
@@ -1726,7 +1726,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Following changes by metablaster: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>

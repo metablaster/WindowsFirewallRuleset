@@ -13,7 +13,7 @@ Resolves an IP address expression using wildcard expressions to individual IP ad
 
 ## SYNTAX
 
-```none
+```powershell
 Resolve-IPAddress [-IPAddress] <String> [<CommonParameters>]
 ```
 
@@ -28,7 +28,7 @@ Specific values may be listed as a comma separated list.
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Resolve-IPAddress "10.[1,2].[0-2].0/24"
 ```
 
@@ -66,7 +66,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Following changes by metablaster:
+Modifications by metablaster year 2019, 2020:
 - Include licenses and move comment based help outside of functions
 - For code to be consistent with project code formatting and symbol casing.
 - Removed unnecessary position arguments, added default argument values explicitly.

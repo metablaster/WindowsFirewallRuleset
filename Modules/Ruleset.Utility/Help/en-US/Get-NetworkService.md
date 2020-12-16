@@ -9,23 +9,24 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Scan all scripts in this repository and get windows service names involved in rules
+Get a list of windows services involved in rules
 
 ## SYNTAX
 
-```none
+```powershell
 Get-NetworkService [-Folder] <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-{{ Fill in the Description }}
+Scan all scripts in this repository and get windows service names involved in rules,
+the result is saved to file and used to verify existence of these services on target system.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Get-NetworkService "C:\PathToRepo"
 ```
 

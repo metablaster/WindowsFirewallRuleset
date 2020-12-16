@@ -20,7 +20,7 @@ Initialize unit test
 
 ### [Exit-Test](Exit-Test.md)
 
-Exit unit test
+Un-initialize and exit unit test
 
 ### [New-Section](New-Section.md)
 
@@ -37,4 +37,3 @@ Stop test case
 ### [Test-Output](Test-Output.md)
 
 Verify TypeName and OutputType are referring to same type
-

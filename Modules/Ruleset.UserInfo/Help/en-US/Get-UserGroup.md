@@ -13,7 +13,7 @@ Get user groups on target computers
 
 ## SYNTAX
 
-```none
+```powershell
 Get-UserGroup [[-ComputerNames] <String[]>] [-CIM] [<CommonParameters>]
 ```
 
@@ -25,13 +25,13 @@ Get a list of all available user groups on target computers
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Get-UserGroup "ServerPC"
 ```
 
 ### EXAMPLE 2
 
-```none
+```powershell
 Get-UserGroup @(DESKTOP, LAPTOP) -CIM
 ```
 

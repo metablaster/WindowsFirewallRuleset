@@ -16,7 +16,7 @@ Locale: en-US
 
 ### [Initialize-Module](Initialize-Module.md)
 
-Check if module is installed or needs update
+Update or install specified out of date module
 
 ### [Initialize-Project](Initialize-Project.md)
 
@@ -24,8 +24,8 @@ Check system requirements for this project
 
 ### [Initialize-Provider](Initialize-Provider.md)
 
-Test if recommended packages are installed
+Update or install specified package provider
 
 ### [Initialize-Service](Initialize-Service.md)
 
-Check if required system services are started
+Configure and start specified system services

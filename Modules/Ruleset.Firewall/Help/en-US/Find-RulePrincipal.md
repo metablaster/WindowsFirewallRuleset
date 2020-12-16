@@ -13,7 +13,7 @@ Get all firewall rules with LocalUser value
 
 ## SYNTAX
 
-```none
+```powershell
 Find-RulePrincipal [-Empty] [<CommonParameters>]
 ```
 
@@ -27,7 +27,7 @@ This operation is slow, intended for debugging.
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Find-RulePrincipal -Empty
 ```
 

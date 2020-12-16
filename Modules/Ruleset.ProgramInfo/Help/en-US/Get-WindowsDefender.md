@@ -13,19 +13,19 @@ Get installed Windows Defender
 
 ## SYNTAX
 
-```none
+```powershell
 Get-WindowsDefender [[-ComputerName] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-TODO: add description
+Gets installation information about Windows defender.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Get-WindowsDefender COMPUTERNAME
 ```
 

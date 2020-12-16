@@ -13,7 +13,7 @@ Gets the encoding of a file
 
 ## SYNTAX
 
-```none
+```powershell
 Get-FileEncoding [-FilePath] <String> [[-Encoding] <Object>] [<CommonParameters>]
 ```
 
@@ -27,21 +27,21 @@ contains unicode charaters but no BOM, then by default UTF-8 is assumed.
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Get-FileEncoding .\utf8BOM.txt
 utf-8 with BOM
 ```
 
 ### EXAMPLE 2
 
-```none
+```powershell
 Get-FileEncoding .\utf32.txt
 utf-32
 ```
 
 ### EXAMPLE 3
 
-```none
+```powershell
 Get-FileEncoding .\utf32.txt
 utf-32
 ```

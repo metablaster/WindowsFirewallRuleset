@@ -13,19 +13,19 @@ Get store apps installed system wide
 
 ## SYNTAX
 
-```none
+```powershell
 Get-SystemApps [-UserName] <String> [[-ComputerName] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Search system wide installed store apps
+Search system wide installed store apps, those installed for all users or shipped with system.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Get-SystemApps "COMPUTERNAME"
 ```
 
@@ -88,7 +88,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 TODO: query remote computer not implemented
 TODO: multiple computers
 TODO: we should probably return custom object to be able to pipe to functions such as Get-AppSID
-TODO: it is possible to add -User parameter, what's the purpose?
-see also StoreApps.ps1
 
 ## RELATED LINKS

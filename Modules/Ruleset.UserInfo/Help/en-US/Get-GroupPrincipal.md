@@ -9,11 +9,11 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Get computer accounts for a given user groups on given computers
+Get computer accounts for specified user groups on target computers
 
 ## SYNTAX
 
-```none
+```powershell
 Get-GroupPrincipal [-UserGroups] <String[]> [-ComputerNames <String[]>] [-Disabled] [-CIM] [<CommonParameters>]
 ```
 
@@ -25,13 +25,13 @@ Get-GroupPrincipal [-UserGroups] <String[]> [-ComputerNames <String[]>] [-Disabl
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Get-GroupPrincipal "Users", "Administrators"
 ```
 
 ### EXAMPLE 2
 
-```none
+```powershell
 Get-GroupPrincipal "Users" -Machine @(DESKTOP, LAPTOP) -CIM
 ```
 
@@ -117,7 +117,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 CIM switch is not supported on PowerShell Core, meaning contacting remote computers
 is supported only on Windows PowerShell
-TODO: Switch is needed to list all accounts instead of only enabled
 TODO: should we handle NT AUTHORITY, BUILTIN and similar?
+TODO: plural parameter
+See also (according to docs but doesn't work): Get-LocalUser -Name "MicrosoftAccount\username@outlook.com"
 
 ## RELATED LINKS

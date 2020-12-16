@@ -13,7 +13,7 @@ Verify file is correctly encoded
 
 ## SYNTAX
 
-```none
+```powershell
 Confirm-FileEncoding [-FilePath] <String[]> [[-Encoding] <String[]>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -26,7 +26,7 @@ Wrong encoding may return bad data resulting is unexpected behavior
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Confirm-FileEncoding C:\SomeFile.txt utf16
 ```
 

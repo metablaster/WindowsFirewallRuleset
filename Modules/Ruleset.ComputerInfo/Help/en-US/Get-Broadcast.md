@@ -9,25 +9,25 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Method to get broadcast addresses on local machine
+Get broadcast addresses on the local machine
 
 ## SYNTAX
 
 ### Individual (Default)
 
-```none
+```powershell
 Get-Broadcast [-ExcludeHardware] [-IncludeVirtual] [-IncludeHidden] [-IncludeDisconnected] [<CommonParameters>]
 ```
 
 ### All
 
-```none
+```powershell
 Get-Broadcast [-IncludeAll] [-ExcludeHardware] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Return multiple broadcast addresses, for each configured adapter.
+Return broadcast addresses, for each configured adapter.
 This includes both physical and virtual adapters.
 Returned broadcast addresses are only for IPv4
 
@@ -35,8 +35,14 @@ Returned broadcast addresses are only for IPv4
 
 ### EXAMPLE 1
 
-```none
-Get-Broadcast
+```powershell
+Get-Broadcast -IncludeAll
+```
+
+### EXAMPLE 2
+
+```powershell
+Get-Broadcast -IncludeAll -ExcludeHardware
 ```
 
 ## PARAMETERS
@@ -59,7 +65,7 @@ Accept wildcard characters: False
 
 ### -ExcludeHardware
 
-{{ Fill ExcludeHardware Description }}
+Exclude hardware/physical network adapters
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -134,5 +140,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### [ipaddress] Broadcast addresses
 
 ## NOTES
+
+TODO: Some parameters most likely make no sense, otherwise we should return custom object,
+separating addresses per adapter
 
 ## RELATED LINKS

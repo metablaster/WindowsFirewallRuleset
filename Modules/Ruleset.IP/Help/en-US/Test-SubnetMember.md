@@ -13,7 +13,7 @@ Tests an IP address to determine if it falls within IP address range.
 
 ## SYNTAX
 
-```none
+```powershell
 Test-SubnetMember [-SubjectIPAddress] <String> [-ObjectIPAddress] <String> [-SubjectSubnetMask <String>]
  [-ObjectSubnetMask <String>] [<CommonParameters>]
 ```
@@ -28,7 +28,7 @@ compared to the decimal form of the submitted address.
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Test-SubnetMember -SubjectIPAddress 10.0.0.0/24 -ObjectIPAddress 10.0.0.0/16
 ```
 
@@ -36,7 +36,7 @@ Returns true as the subject network can be contained within the object network.
 
 ### EXAMPLE 2
 
-```none
+```powershell
 Test-SubnetMember -SubjectIPAddress 192.168.0.0/16 -ObjectIPAddress 192.168.0.0/24
 ```
 
@@ -44,7 +44,7 @@ Returns false as the subject network is larger the object network.
 
 ### EXAMPLE 3
 
-```none
+```powershell
 Test-SubnetMember -SubjectIPAddress 10.2.3.4/32 -ObjectIPAddress 10.0.0.0/8
 ```
 
@@ -52,7 +52,7 @@ Returns true as the subject IP address is within the object network.
 
 ### EXAMPLE 4
 
-```none
+```powershell
 Test-SubnetMember -SubjectIPAddress 255.255.255.255 -ObjectIPAddress 0/0
 ```
 
@@ -142,7 +142,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Following changes by metablaster:
+Modifications by metablaster year 2019, 2020:
 - Include licenses and move comment based help outside of functions
 - For code to be consistent with project code formatting and symbol casing.
 - Removed unnecessary position arguments, added default argument values explicitly.

@@ -13,7 +13,7 @@ Test if given installation directory is valid
 
 ## SYNTAX
 
-```none
+```powershell
 Test-Installation [-Program] <String> [-FilePath] <PSReference> [<CommonParameters>]
 ```
 
@@ -26,9 +26,9 @@ system for valid path and return it via reference parameter
 
 ### EXAMPLE 1
 
-```
+```powershell
 $MyProgram = "%ProgramFiles(x86)%\Microsoft Office\root\Office16"
-Test-Installation "Office" ([ref] $MyProgram)
+PS> Test-Installation "Office" ([ref] $MyProgram)
 ```
 
 ## PARAMETERS

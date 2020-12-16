@@ -6,7 +6,7 @@
       <command:verb>Initialize</command:verb>
       <command:noun>Module</command:noun>
       <maml:description>
-        <maml:para>Check if module is installed or needs update</maml:para>
+        <maml:para>Update or install specified out of date module</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -207,7 +207,7 @@
     <maml:alertSet>
       <maml:alert>
         <maml:para>This function main purpose is automated development environment setup to be able to perform quick setup on multiple computers and virtual operating systems, in cases such as frequent system restores for the purpose of testing project code for many environment scenarios that end users may have. It should be used in conjunction with the rest of a module "Ruleset.Initialize"</maml:para>
-        <maml:para>Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider Updating PackageManagement and PowerShellGet requires restarting PowerShell to switch to the latest version TODO: Implement initializing for non Administrator users</maml:para>
+        <maml:para>Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider Updating PackageManagement and PowerShellGet requires restarting PowerShell to switch to the latest version TODO: Implement initializing for non Administrator users TODO: installing post-git in same session while installing other modules may fail, and PS restart is required.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -303,27 +303,22 @@ is not registered user is prompted to do that too.</dev:code>
     <maml:alertSet>
       <maml:alert>
         <maml:para>This function main purpose is automated development environment setup to be able to perform quick setup on multiple computers and virtual operating systems, in cases such as frequent system restores for the purpose of testing project code for many environment scenarios that end users may have. It should be used in conjunction with the rest of a module "Ruleset.Initialize"</maml:para>
-        <maml:para>TODO: learn repo dir automatically (using git?) TODO: we don't use logs in this module TODO: checking remote systems not implemented TODO: Any modules in standard user paths will override system wide modules</maml:para>
+        <maml:para>TODO: we don't use logs in this module TODO: checking remote systems not implemented TODO: Any modules in standard user paths will override system wide modules TODO: Abort parameter no longer makes sense, -EA Stop would be better, to reproduce problem change Develop from false to true in clean session</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Initialize-Project
-Performs default requirements and recommendations checks managed by global settings,
-Error or warning message is shown if check failed, environment info otherwise.</dev:code>
+        <dev:code>Initialize-Project</dev:code>
         <dev:remarks>
-          <maml:para></maml:para>
+          <maml:para>Performs default requirements and recommendations checks managed by global settings. Error or warning message is shown if check failed, environment info otherwise.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Initialize-Project -NoModulesCheck
-Performs default requirements and recommendations checks managed by global settings,
-except installed modules are not validated.
-Error or warning message is shown if check failed, environment info otherwise.</dev:code>
+        <dev:code>Initialize-Project -Abort</dev:code>
         <dev:remarks>
-          <maml:para></maml:para>
+          <maml:para>Performs default requirements and recommendations checks managed by global settings. Error or warning message is shown if check failed and all subsequent operations are halted. If successful environment info is shown.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -340,7 +335,7 @@ Error or warning message is shown if check failed, environment info otherwise.</
       <command:verb>Initialize</command:verb>
       <command:noun>Provider</command:noun>
       <maml:description>
-        <maml:para>Test if recommended packages are installed</maml:para>
+        <maml:para>Update or install specified package provider</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -472,7 +467,7 @@ Error or warning message is shown if check failed, environment info otherwise.</
       <command:verb>Initialize</command:verb>
       <command:noun>Service</command:noun>
       <maml:description>
-        <maml:para>Check if required system services are started</maml:para>
+        <maml:para>Configure and start specified system services</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -531,8 +526,7 @@ Error or warning message is shown if check failed, environment info otherwise.</
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This function main purpose is automated development environment setup to be able to perform quick setup on multiple computers and virtual operating systems, in cases such as frequent system restores for the purpose of testing project code for many environment scenarios that end users may have. It should be used in conjunction with the rest of a module "Ruleset.Initialize"</maml:para>
-        <maml:para>[System.ServiceProcess.ServiceController[]]</maml:para>
+        <maml:para>This function main purpose is automated development environment setup to be able to perform quick setup on multiple computers and virtual operating systems, in cases such as frequent system restores for the purpose of testing project code for many environment scenarios that end users may have. It should be used in conjunction with the rest of a module "Ruleset.Initialize" TODO: Optionally set services to automatic startup, most of services are needed only to run code. [System.ServiceProcess.ServiceController[]]</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>

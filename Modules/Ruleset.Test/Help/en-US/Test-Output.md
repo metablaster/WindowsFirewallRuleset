@@ -13,7 +13,7 @@ Verify TypeName and OutputType are referring to same type
 
 ## SYNTAX
 
-```none
+```powershell
 Test-Output [-InputType] <Object[]> -Command <String> [<CommonParameters>]
 ```
 
@@ -28,7 +28,7 @@ TypeName and OutputType including equality test is printed to console
 
 ### EXAMPLE 1
 
-```
+```powershell
 $Result = Some-Function
 PS> Test-Output $Result -Command Some-Function
 ```

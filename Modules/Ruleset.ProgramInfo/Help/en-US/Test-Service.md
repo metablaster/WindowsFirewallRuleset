@@ -13,7 +13,7 @@ Check if service exists on system
 
 ## SYNTAX
 
-```none
+```powershell
 Test-Service [-Service] <String> [<CommonParameters>]
 ```
 
@@ -25,7 +25,7 @@ Check if service exists on system, if not show warning message
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Test-Service dnscache
 ```
 

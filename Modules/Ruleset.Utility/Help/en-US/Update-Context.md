@@ -13,13 +13,14 @@ Update context for Approve-Execute function
 
 ## SYNTAX
 
-```none
+```powershell
 Update-Context [-Root] <String> [-Section] <String> [[-Subsection] <String>] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
+Script scope context variable is updated.
 Execution context is shown in the console every time Approve-Execute is called.
 It helps to know the state and progress of execution.
 
@@ -27,7 +28,7 @@ It helps to know the state and progress of execution.
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Update-Context "IPv4" "Outbound" "RuleGroup"
 ```
 

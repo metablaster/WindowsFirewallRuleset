@@ -13,20 +13,20 @@ Set network profile for physical network interfaces
 
 ## SYNTAX
 
-```none
+```powershell
 Set-NetworkProfile [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
 Set network profile for each physical/hardware network interfaces
-Recommended is 'Public' profile for maximum security, unless 'Private' is needed
+Recommended is "Public" profile for maximum security, unless "Private" is needed
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Set-NetworkProfile
 ```
 
@@ -79,6 +79,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-None.
+TODO: It looks like option to change network profile in settings app will be gone after using this
+function in an elevated prompt
 
 ## RELATED LINKS

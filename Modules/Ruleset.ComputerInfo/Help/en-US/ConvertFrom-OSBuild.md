@@ -13,7 +13,7 @@ Convert from OS build number to OS version
 
 ## SYNTAX
 
-```none
+```powershell
 ConvertFrom-OSBuild [-Build] <String> [<CommonParameters>]
 ```
 
@@ -26,7 +26,7 @@ Note that "OS version" is not the same as "OS release version"
 
 ### EXAMPLE 1
 
-```none
+```powershell
 ConvertFrom-OSBuild 18363.1049
 1909
 ```

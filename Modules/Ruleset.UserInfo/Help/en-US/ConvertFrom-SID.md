@@ -13,7 +13,7 @@ Convert SID to user or computer account name
 
 ## SYNTAX
 
-```none
+```powershell
 ConvertFrom-SID [-SID] <String[]> [-ComputerNames <String[]>] [<CommonParameters>]
 ```
 
@@ -27,7 +27,7 @@ In all other cases result if full account name in form of COMPUTERNAME\USERNAME
 
 ### EXAMPLE 1
 
-```none
+```powershell
 ConvertFrom-SID S-1-5-21-2139171146-395215898-1246945465-2359
 ```
 
@@ -125,7 +125,7 @@ Some "names" are NULL, such as capability SID's
 See also: https://docs.microsoft.com/en-us/windows/security/identity-protection/access-control/security-identifiers
 
 To solve the problem "Name" must be replaced with "Display Name", most "Name" values are OK,
-but those which are not are replaced with "Display Name" in below 'WellKnownSIDs' variable.
+but those which are not are replaced with "Display Name" in the "WellKnownSIDs" variable below.
 
 TODO: Need to implement switch parameters for UPN and NETBIOS name format in addition to display name, see:
 https://docs.microsoft.com/en-us/windows/win32/secauthn/user-name-formats

@@ -13,7 +13,7 @@ Compare the set of modules for this version of PowerShell against those availabl
 
 ## SYNTAX
 
-```none
+```powershell
 Compare-WinModule [[-Name] <String[]>] [-ComputerName <String>] [-ConfigurationName <String>]
  [-Credential <PSCredential>] [<CommonParameters>]
 ```
@@ -39,7 +39,7 @@ that are not currently available in the PowerShell Core environment.
 Compare-WinModule A*
 ```
 
-This will return a list of all of the compatibility session modules matching the wildcard pattern 'A*'.
+This will return a list of all of the compatibility session modules matching the wildcard pattern "A*".
 
 ## PARAMETERS
 
@@ -62,9 +62,8 @@ Accept wildcard characters: False
 
 ### -ComputerName
 
-If you don't want to use the default compatibility session,
-use this parameter to specify the name of the computer on which to create the compatibility session.
-(Defaults to 'localhost')
+If you don't want to use the default compatibility session, use this parameter to specify the name
+of the computer on which to create the compatibility session.
 
 ```yaml
 Type: System.String
@@ -73,15 +72,15 @@ Aliases: cn
 
 Required: False
 Position: Named
-Default value: localhost
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -ConfigurationName
 
-Specifies the configuration to connect to when creating the compatibility session.
-(Defaults to 'Microsoft.PowerShell')
+Specifies the configuration to connect to when creating the compatibility session
+(Defaults to "Microsoft.PowerShell")
 
 ```yaml
 Type: System.String
@@ -90,14 +89,14 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: Microsoft.PowerShell
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -Credential
 
-If needed, use this parameter to specify credentials for the compatibility session.
+If needed, use this parameter to specify credentials for the compatibility session
 
 ```yaml
 Type: System.Management.Automation.PSCredential
@@ -125,4 +124,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
+Following modifications by metablaster November 2020:
+- Added comment based help based on original comments
+- Code formatting according to the rest of project design
+- Added HelpURI link to project location
+
 ## RELATED LINKS
+
+[https://github.com/PowerShell/WindowsCompatibility](https://github.com/PowerShell/WindowsCompatibility)

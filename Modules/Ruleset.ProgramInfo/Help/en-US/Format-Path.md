@@ -13,7 +13,7 @@ Format path into firewall compatible path
 
 ## SYNTAX
 
-```none
+```powershell
 Format-Path [[-FilePath] <String>] [<CommonParameters>]
 ```
 
@@ -27,7 +27,7 @@ Formatted paths will also help sorting rules in firewall GUI based on path.
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Format-Path "C:\Program Files\\Dir\"
 ```
 
@@ -63,6 +63,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-None.
+TODO: This should proably be inside utility module,
+it's here since only this module uses this function.
 
 ## RELATED LINKS

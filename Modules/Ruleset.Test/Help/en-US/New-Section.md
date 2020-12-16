@@ -13,7 +13,7 @@ Print new unit test section
 
 ## SYNTAX
 
-```none
+```powershell
 New-Section [-Section] <String> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -26,7 +26,7 @@ Useful for unit test with a lof of test cases, for readability.
 
 ### EXAMPLE 1
 
-```none
+```powershell
 New-Section "This is new section"
 ```
 

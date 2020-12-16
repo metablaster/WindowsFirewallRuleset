@@ -13,7 +13,7 @@ Get a list of subnets of a given size within a defined supernet.
 
 ## SYNTAX
 
-```none
+```powershell
 Get-Subnet [-IPAddress] <String> [[-SubnetMask] <String>] -NewSubnetMask <String> [<CommonParameters>]
 ```
 
@@ -26,7 +26,7 @@ the address class or a user-specified value.
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Get-Subnet 10.0.0.0 255.255.255.0 -NewSubnetMask 255.255.255.192
 ```
 
@@ -34,7 +34,7 @@ Four /26 networks are returned.
 
 ### EXAMPLE 2
 
-```none
+```powershell
 Get-Subnet 0/22 -NewSubnetMask 24
 ```
 
@@ -112,7 +112,7 @@ Change log:
 	12/12/2015 - Chris Dent - Redesigned.
 	13/10/2011 - Chris Dent - Created.
 
-Following changes by metablaster:
+Modifications by metablaster year 2019, 2020:
 - Include licenses and move comment based help outside of functions
 - For code to be consistent with project code formatting and symbol casing.
 - Removed unnecessary position arguments, added default argument values explicitly.

@@ -9,20 +9,20 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Used to ask user if he wants to run script
+Used to prompt user to approve running script
 
 ## SYNTAX
 
 ### None (Default)
 
-```none
+```powershell
 Approve-Execute [-Unsafe] [-Title <String>] [-Question <String>] [-Accept <String>] [-Deny <String>]
  [<CommonParameters>]
 ```
 
 ### ToAll
 
-```none
+```powershell
 Approve-Execute [-Unsafe] [-Title <String>] [-Question <String>] [-Accept <String>] [-Deny <String>]
  -YesToAll <PSReference> -NoToAll <PSReference> [<CommonParameters>]
 ```
@@ -37,8 +37,16 @@ scripts, thus loading only needed rules.
 
 ### EXAMPLE 1
 
-```none
-Approve-Execute "No" "Sample title" "Sample question"
+```powershell
+Approve-Execute -Unsafe -Title "Sample title" -Question "Sample question"
+```
+
+### EXAMPLE 2
+
+```
+[bool] $YesToAll = $false
+PS> [bool] $NoToAll = $false
+PS> Approve-Execute -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll)
 ```
 
 ## PARAMETERS
@@ -61,7 +69,7 @@ Accept wildcard characters: False
 
 ### -Title
 
-Title of the prompt
+Prompt title
 
 ```yaml
 Type: System.String
@@ -93,7 +101,7 @@ Accept wildcard characters: False
 
 ### -Accept
 
-{{ Fill Accept Description }}
+Prompt help menu for default action
 
 ```yaml
 Type: System.String
@@ -109,7 +117,7 @@ Accept wildcard characters: False
 
 ### -Deny
 
-{{ Fill Deny Description }}
+Prompt help menu for deny action
 
 ```yaml
 Type: System.String

@@ -173,7 +173,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>None.</maml:para>
+        <maml:para>TODO: This should proably be inside utility module, it's here since only this module uses this function.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -202,7 +202,7 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>TODO: add description</maml:para>
+      <maml:para>Search separate location in the registry for programs installed for all users.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -257,7 +257,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: should be renamed into Get-InstallProperties</maml:para>
+        <maml:para>TODO: should be renamed into Get-InstallProperties or something else because it has nothing to do with system wide installed programs</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -419,7 +419,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>None.</maml:para>
+        <maml:para>TODO: According to unit test there are some capabilities not implemented here</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -518,13 +518,13 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: Test if path exists TODO: remote computers?</maml:para>
+        <maml:para>Big thanks to Jani for this awesome solution: https://github.com/ljani TODO: remote computers?</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>sample: Get-AppSID "User" "Microsoft.MicrosoftEdge_8wekyb3d8bbwe"</dev:code>
+        <dev:code>Get-AppSID -FamilyName "Microsoft.MicrosoftEdge_8wekyb3d8bbwe"</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -602,7 +602,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>None.</maml:para>
+        <maml:para>TODO: Name parameter accepting wildcard, why not getting specifics out?</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -884,7 +884,7 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Get-SQLManagementStudio COMPUTERNAME</dev:code>
+        <dev:code>Get-SqlManagementStudio COMPUTERNAME</dev:code>
         <dev:remarks>
           <maml:para>RegKey ComputerName Version      InstallLocation 	------ ------------ -------      ----------- 	18     COMPUTERNAME   15.0.18206.0 %ProgramFiles(x86)%\Microsoft SQL Server Management Studio 18</maml:para>
         </dev:remarks>
@@ -893,7 +893,7 @@
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SQLManagementStudio.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SqlManagementStudio.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1038,7 +1038,7 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Search system wide installed store apps</maml:para>
+      <maml:para>Search system wide installed store apps, those installed for all users or shipped with system.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1139,7 +1139,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: query remote computer not implemented TODO: multiple computers TODO: we should probably return custom object to be able to pipe to functions such as Get-AppSID TODO: it is possible to add -User parameter, what's the purpose? see also StoreApps.ps1</maml:para>
+        <maml:para>TODO: query remote computer not implemented TODO: multiple computers TODO: we should probably return custom object to be able to pipe to functions such as Get-AppSID</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1168,7 +1168,7 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>TODO: add description</maml:para>
+      <maml:para>Get a list of software installed system wide, for all users.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1223,7 +1223,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>We should return empty PSCustomObject if test computer fails</maml:para>
+        <maml:para>We should return empty PSCustomObject if test computer fails TODO: Parameter for x64 vs x86 software, then update Find-Installation switch as needed</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1490,7 +1490,7 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>TODO: add description</maml:para>
+      <maml:para>Gets installation information about Windows defender.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1574,7 +1574,7 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>TODO: add description</maml:para>
+      <maml:para>Get installation information about installed Windows Kit's</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1658,7 +1658,7 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>TODO: add description</maml:para>
+      <maml:para>Get installation information about installed Windows SDK</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1738,11 +1738,11 @@
       <command:verb>Test</command:verb>
       <command:noun>Environment</command:noun>
       <maml:description>
-        <maml:para>Test if path is valid for firewall rule</maml:para>
+        <maml:para>Test if a path is valid with additional checks</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Same as Test-Path but expands system environment variables, and checks if path is compatible for firewall rules</maml:para>
+      <maml:para>Similar to Test-Path but expands environment variables and performs additional checks if desired: 1. check if input path is compatible for firewall rules. 2. check if the path leads to user profile Both of which can be limited to either container or leaf path type.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1867,15 +1867,43 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>None.</maml:para>
+        <maml:para>TODO: This should proably be part of utility module, it's here since only this module uses this function. This function should be used only to verify paths for external usage, not for commandles which don't expand system environment variables.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Test-Environment %SystemDrive%</dev:code>
+        <dev:code>Test-Environment "%Windir%"</dev:code>
         <dev:remarks>
-          <maml:para></maml:para>
+          <maml:para>True, The path is valid, and it exists</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Test-Environment "'%Windir%\System32'"</dev:code>
+        <dev:remarks>
+          <maml:para>False, Invalid path syntax</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Test-Environment "%HOME%\AppData\Local\MicrosoftEdge" -Firewall -UserProfile</dev:code>
+        <dev:remarks>
+          <maml:para>False, the path leads to userprofile but will not work for firewall rule</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
+        <dev:code>Test-Environment "%SystemDrive%\Users\USERNAME\AppData\Local\MicrosoftEdge" -Firewall -UserProfile</dev:code>
+        <dev:remarks>
+          <maml:para>True, the path leads to userprofile and is good for firewall rule, and it exists</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 5 --------------------------</maml:title>
+        <dev:code>Test-Environment "%LOCALAPPDATA%\MicrosoftEdge" -UserProfile</dev:code>
+        <dev:remarks>
+          <maml:para>True, the path lead to user profile, and it exists</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -1896,7 +1924,7 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>In addition to Test-Path of file, message and stack trace is shown</maml:para>
+      <maml:para>In addition to Test-Path of file, message and stack trace is shown and warning message if file not found</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1951,13 +1979,13 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: We should attempt to fix the path if invalid here! TODO: We should return true or false and conditionally load rule</maml:para>
+        <maml:para>TODO: We should attempt to fix the path if invalid here! TODO: We should return true or false and conditionally load rule TODO: This should probably be renamed to Test-Executable to make it less likely part of utility module</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Test-File "C:\Users\User\AppData\Local\Google\Chrome\Application\chrome.exe"</dev:code>
+        <dev:code>Test-File "C:\Users\USERNAME\AppData\Local\Google\Chrome\Application\chrome.exe"</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -2074,7 +2102,7 @@
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>$MyProgram = "%ProgramFiles(x86)%\Microsoft Office\root\Office16"
-Test-Installation "Office" ([ref] $MyProgram)</dev:code>
+PS&gt; Test-Installation "Office" ([ref] $MyProgram)</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>

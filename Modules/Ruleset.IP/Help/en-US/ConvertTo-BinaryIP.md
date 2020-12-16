@@ -13,7 +13,7 @@ Converts a Decimal IP address into a binary format.
 
 ## SYNTAX
 
-```none
+```powershell
 ConvertTo-BinaryIP [-IPAddress] <IPAddress> [<CommonParameters>]
 ```
 
@@ -26,7 +26,7 @@ The output from this function is dotted binary.
 
 ### EXAMPLE 1
 
-```none
+```powershell
 ConvertTo-BinaryIP 1.2.3.4
 ```
 
@@ -64,7 +64,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Following changes by metablaster:
+Modifications by metablaster year 2019, 2020:
 - Include licenses and move comment based help outside of functions
 - For code to be consistent with project code formatting and symbol casing.
 - Removed unnecessary position arguments, added default argument values explicitly.

@@ -13,7 +13,7 @@ Generates a summary describing several properties of a network range
 
 ## SYNTAX
 
-```none
+```powershell
 Get-NetworkSummary [-IPAddress] <String> [[-SubnetMask] <String>] [<CommonParameters>]
 ```
 
@@ -26,19 +26,19 @@ network range from any IP address in the range and a subnet mask.
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Get-NetworkSummary 192.168.0.1 255.255.255.0
 ```
 
 ### EXAMPLE 2
 
-```none
+```powershell
 Get-NetworkSummary 10.0.9.43/22
 ```
 
 ### EXAMPLE 3
 
-```none
+```powershell
 Get-NetworkSummary 0/0
 ```
 
@@ -91,7 +91,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Following changes by metablaster:
+Modifications by metablaster year 2019, 2020:
 - Include licenses and move comment based help outside of functions
 - For code to be consistent with project code formatting and symbol casing.
 - Removed unnecessary position arguments, added default argument values explicitly.

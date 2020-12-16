@@ -13,20 +13,21 @@ Start test case
 
 ## SYNTAX
 
-```none
+```powershell
 Start-Test [-Message] <String> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Start-Test writes output to host to separate test cases
+Start-Test writes output to host to separate test cases.
+Formatted message block is shown in the console.
 This function must be called before single test case starts executing
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Start-Test "Get-Something"
 ```
 
@@ -101,5 +102,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 TODO: switch for no new line, some tests will produce redundant new lines, ex.
 Format-Table in pipeline
+TODO: Doesn't work starting tests inside dynamic modules
 
 ## RELATED LINKS

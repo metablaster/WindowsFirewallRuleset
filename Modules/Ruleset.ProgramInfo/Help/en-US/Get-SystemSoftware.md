@@ -13,19 +13,19 @@ Search installed programs for all users, system wide
 
 ## SYNTAX
 
-```none
+```powershell
 Get-SystemSoftware [[-ComputerName] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-TODO: add description
+Get a list of software installed system wide, for all users.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Get-SystemSoftware "COMPUTERNAME"
 ```
 
@@ -62,5 +62,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 We should return empty PSCustomObject if test computer fails
+TODO: Parameter for x64 vs x86 software, then update Find-Installation switch as needed
 
 ## RELATED LINKS

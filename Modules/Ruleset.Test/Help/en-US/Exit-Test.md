@@ -9,11 +9,11 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Exit unit test
+Un-initialize and exit unit test
 
 ## SYNTAX
 
-```none
+```powershell
 Exit-Test [-Pester] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -21,13 +21,13 @@ Exit-Test [-Pester] [-WhatIf] [-Confirm] [<CommonParameters>]
 
 Exit-Test performs finishing steps after unit test is done, ie.
 to restore previous state
-This function must be called after all test cases are done in single unit test
+Must be called in pair with Enter-Test and after all test cases are done in single unit test
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Exit-Test
 ```
 

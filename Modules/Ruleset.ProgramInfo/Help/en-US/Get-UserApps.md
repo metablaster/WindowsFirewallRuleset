@@ -13,7 +13,7 @@ Get store apps for specific user
 
 ## SYNTAX
 
-```none
+```powershell
 Get-UserApps [-UserName] <String> [[-ComputerName] <String>] [<CommonParameters>]
 ```
 
@@ -25,7 +25,7 @@ Search installed store apps in userprofile for specific user account
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Get-UserApps "USERNAME"
 ```
 

@@ -91,11 +91,11 @@
       <command:verb>Get</command:verb>
       <command:noun>Broadcast</command:noun>
       <maml:description>
-        <maml:para>Method to get broadcast addresses on local machine</maml:para>
+        <maml:para>Get broadcast addresses on the local machine</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Return multiple broadcast addresses, for each configured adapter. This includes both physical and virtual adapters. Returned broadcast addresses are only for IPv4</maml:para>
+      <maml:para>Return broadcast addresses, for each configured adapter. This includes both physical and virtual adapters. Returned broadcast addresses are only for IPv4</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -114,7 +114,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ExcludeHardware</maml:name>
           <maml:Description>
-            <maml:para>{{ Fill ExcludeHardware Description }}</maml:para>
+            <maml:para>Exclude hardware/physical network adapters</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -128,7 +128,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ExcludeHardware</maml:name>
           <maml:Description>
-            <maml:para>{{ Fill ExcludeHardware Description }}</maml:para>
+            <maml:para>Exclude hardware/physical network adapters</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -187,7 +187,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>ExcludeHardware</maml:name>
         <maml:Description>
-          <maml:para>{{ Fill ExcludeHardware Description }}</maml:para>
+          <maml:para>Exclude hardware/physical network adapters</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -255,13 +255,20 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>TODO: Some parameters most likely make no sense, otherwise we should return custom object, separating addresses per adapter</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Get-Broadcast</dev:code>
+        <dev:code>Get-Broadcast -IncludeAll</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Get-Broadcast -IncludeAll -ExcludeHardware</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -280,11 +287,11 @@
       <command:verb>Get</command:verb>
       <command:noun>ComputerName</command:noun>
       <maml:description>
-        <maml:para>Get localhost name</maml:para>
+        <maml:para>Retrieve localhost NETBIOS name</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>TODO: add description</maml:para>
+      <maml:para>Retrieve localhost NETBIOS name</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -314,7 +321,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: implement querying computers on network by specifying IP address</maml:para>
+        <maml:para>TODO: Possible function purpose such as conversion from NETBIOS to UPN name or reading different formats of file with a list of computernames which are then converted to desired format. TODO: Maybe implement querying computers on network by specifying IP address and vice versa.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -339,11 +346,11 @@
       <command:verb>Get</command:verb>
       <command:noun>ConfiguredAdapter</command:noun>
       <maml:description>
-        <maml:para>Method to get configured adapters</maml:para>
+        <maml:para>Retrieve a list of configured network adapters</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Return list of all configured adapters and their configuration. Applies to adapters which have an IP assigned regardless if connected to network. This conditionally includes virtual and hidden adapters such as Hyper-V adapters on all compartments.</maml:para>
+      <maml:para>Return a list of all configured adapters and their configuration. By default only physical adapters connected to network are returned Conditionally includes virtual, hidden or disconnected adapters such as Hyper-V adapters on all compartments.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -539,7 +546,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: Loopback interface is missing in the output</maml:para>
+        <maml:para>TODO: Loopback interface is missing in the output TODO: shorter parameter names: Virtual, All, Hidden, Hardware</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -552,7 +559,7 @@
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Get-ConfiguredAdapter "IPv6"</dev:code>
+        <dev:code>Get-ConfiguredAdapter "IPv6" -IncludeVirtual</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -571,7 +578,7 @@
       <command:verb>Get</command:verb>
       <command:noun>InterfaceAlias</command:noun>
       <maml:description>
-        <maml:para>Method to get aliases of configured adapters</maml:para>
+        <maml:para>Retrieve a aliases of configured network adapters</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -595,7 +602,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>WildCardOption</maml:name>
           <maml:Description>
-            <maml:para>{{ Fill WildCardOption Description }}</maml:para>
+            <maml:para>TODO: describe parameter</maml:para>
           </maml:Description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">None</command:parameterValue>
@@ -613,7 +620,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ExcludeHardware</maml:name>
           <maml:Description>
-            <maml:para>{{ Fill ExcludeHardware Description }}</maml:para>
+            <maml:para>Exclude hardware/physical network adapters</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -650,7 +657,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>WildCardOption</maml:name>
           <maml:Description>
-            <maml:para>{{ Fill WildCardOption Description }}</maml:para>
+            <maml:para>TODO: describe parameter</maml:para>
           </maml:Description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">None</command:parameterValue>
@@ -668,7 +675,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ExcludeHardware</maml:name>
           <maml:Description>
-            <maml:para>{{ Fill ExcludeHardware Description }}</maml:para>
+            <maml:para>Exclude hardware/physical network adapters</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -727,7 +734,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>WildCardOption</maml:name>
         <maml:Description>
-          <maml:para>{{ Fill WildCardOption Description }}</maml:para>
+          <maml:para>TODO: describe parameter</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.WildcardOptions</command:parameterValue>
         <dev:type>
@@ -739,7 +746,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>ExcludeHardware</maml:name>
         <maml:Description>
-          <maml:para>{{ Fill ExcludeHardware Description }}</maml:para>
+          <maml:para>Exclude hardware/physical network adapters</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -819,7 +826,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>None.</maml:para>
+        <maml:para>None. TODO: There is another function with the same name in Scripts folder TODO: shorter parameter names: Virtual, All, Hidden, Hardware</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -851,7 +858,7 @@
       <command:verb>Get</command:verb>
       <command:noun>IPAddress</command:noun>
       <maml:description>
-        <maml:para>Method to get list of IP addresses on local machine</maml:para>
+        <maml:para>Retrieve a list of IP addresses on local machine</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -875,7 +882,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ExcludeHardware</maml:name>
           <maml:Description>
-            <maml:para>{{ Fill ExcludeHardware Description }}</maml:para>
+            <maml:para>Exclude hardware/physical network adapters</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -912,7 +919,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ExcludeHardware</maml:name>
           <maml:Description>
-            <maml:para>{{ Fill ExcludeHardware Description }}</maml:para>
+            <maml:para>Exclude hardware/physical network adapters</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -971,7 +978,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>ExcludeHardware</maml:name>
         <maml:Description>
-          <maml:para>{{ Fill ExcludeHardware Description }}</maml:para>
+          <maml:para>Exclude hardware/physical network adapters</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -1169,16 +1176,15 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: accept UPN and NETBIOS computer names TODO: ComputerName default value is just a placeholder to be able to use foreach which is needed for pipeline, need better design</maml:para>
+        <maml:para>TODO: accept UPN and NETBIOS computer names TODO: ComputerName default value is just a placeholder, need better design</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Get-SystemSKU
-Home Premium N</dev:code>
+        <dev:code>Get-SystemSKU</dev:code>
         <dev:remarks>
-          <maml:para></maml:para>
+          <maml:para>Home Premium N</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -1186,6 +1192,14 @@ Home Premium N</dev:code>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Get-SystemSKU.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.operatingsystemsku?view=powershellsdk-1.1.0</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.operatingsystemsku?view=powershellsdk-1.1.0</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://docs.microsoft.com/en-us/surface/surface-system-sku-reference</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/surface/surface-system-sku-reference</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1238,7 +1252,7 @@ Home Premium N</dev:code>
             <maml:name>System.Int16</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>$ConnectionTimeout</dev:defaultValue>
+          <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
@@ -1277,7 +1291,7 @@ Home Premium N</dev:code>
           <maml:name>System.Int16</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>$ConnectionTimeout</dev:defaultValue>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -1302,13 +1316,13 @@ Home Premium N</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: avoid error message, check all references which handle errors (code bloat) TODO: this should probably be part of ComputerInfo module</maml:para>
+        <maml:para>TODO: Avoid error message, check all references which handle errors (code bloat) TODO: We should check for common issues for GPO management, not just ping status (ex. Test-NetConnection)</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Test-TargetComputer "COMPUTERNAME" 2 1</dev:code>
+        <dev:code>Test-TargetComputer "COMPUTERNAME" -Count 2 -Timeout 1</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>

@@ -13,7 +13,7 @@ Show-SDDL returns SDDL based on "object" such as path, or registry entry
 
 ## SYNTAX
 
-```none
+```powershell
 Show-SDDL [-SDDL] <String> [<CommonParameters>]
 ```
 
@@ -25,7 +25,7 @@ TODO: add description
 
 ### EXAMPLE 1
 
-```none
+```powershell
 see Test\Show-SDDL.ps1 for example
 ```
 
@@ -33,7 +33,7 @@ see Test\Show-SDDL.ps1 for example
 
 ### -SDDL
 
-{{ Fill SDDL Description }}
+TODO: describe parameter
 
 ```yaml
 Type: System.String
@@ -61,8 +61,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-This function is used only for debugging and discovery of object SDDL
-Credits to: https://blogs.technet.microsoft.com/ashleymcglone/2011/08/29/powershell-sid-walker-texas-ranger-part-1
+This function is used only for debugging and discovery of object SDDL, credits to link in description.
 TODO: additional work on function to make it more universal, see if we can make use of it somehow, better help comment.
 
 ## RELATED LINKS
+
+[https://blogs.technet.microsoft.com/ashleymcglone/2011/08/29/powershell-sid-walker-texas-ranger-part-1](https://blogs.technet.microsoft.com/ashleymcglone/2011/08/29/powershell-sid-walker-texas-ranger-part-1)

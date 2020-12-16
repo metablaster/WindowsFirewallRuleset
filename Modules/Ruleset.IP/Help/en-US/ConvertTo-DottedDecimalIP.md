@@ -13,7 +13,7 @@ Converts either an unsigned 32-bit integer or a dotted binary string to an IP Ad
 
 ## SYNTAX
 
-```none
+```powershell
 ConvertTo-DottedDecimalIP [-IPAddress] <String> [<CommonParameters>]
 ```
 
@@ -25,7 +25,7 @@ ConvertTo-DottedDecimalIP uses a regular expression match on the input string to
 
 ### EXAMPLE 1
 
-```none
+```powershell
 ConvertTo-DottedDecimalIP 11000000.10101000.00000000.00000001
 ```
 
@@ -33,7 +33,7 @@ Convert the binary form back to dotted decimal, resulting in 192.168.0.1.
 
 ### EXAMPLE 2
 
-```none
+```powershell
 ConvertTo-DottedDecimalIP 3232235521
 ```
 
@@ -71,7 +71,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Following changes by metablaster:
+Modifications by metablaster year 2019, 2020:
 - Include licenses and move comment based help outside of functions
 - For code to be consistent with project code formatting and symbol casing.
 - Removed unnecessary position arguments, added default argument values explicitly.

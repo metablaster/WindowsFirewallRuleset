@@ -13,7 +13,7 @@ Imports firewall rules from a CSV or JSON file.
 
 ## SYNTAX
 
-```none
+```powershell
 Import-FirewallRules [-PolicyStore <String>] [-Folder <String>] [-FileName <String>] [-JSON]
  [<CommonParameters>]
 ```
@@ -28,26 +28,26 @@ Existing rules with same name will be overwritten.
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Import-FirewallRules
+```
+
 Imports all firewall rules in the CSV file FirewallRules.csv
 If no file is specified, FirewallRules .csv or .json in the current directory is searched.
-```
 
 ### EXAMPLE 2
 
-```none
-Import-FirewallRules WmiRules.csv CSV
-Imports all firewall rules in the SCV file WmiRules.csv
+```powershell
+Import-FirewallRules -FileName WmiRules -JSON
 ```
+
+Imports all firewall rules from the JSON file WmiRules
 
 ## PARAMETERS
 
 ### -PolicyStore
 
 Policy store into which to import rules, default is local GPO.
-For more information about stores see:
-https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/FirewallParameters.md
 
 ```yaml
 Type: System.String
@@ -127,7 +127,7 @@ Author: Markus Scholtes
 Version: 1.02
 Build date: 2020/02/15
 
-Changes by metablaster - August 2020:
+Following modifications by metablaster August 2020:
 1.
 Applied formatting and code style according to project rules
 2.

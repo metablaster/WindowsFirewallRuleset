@@ -15,13 +15,13 @@ Generate SDDL string of multiple usernames or/and groups on a given domain
 
 ### Group
 
-```none
+```powershell
 Get-SDDL [-UserNames <String[]>] -UserGroups <String[]> [-ComputerName <String>] [-CIM] [<CommonParameters>]
 ```
 
 ### User
 
-```none
+```powershell
 Get-SDDL -UserNames <String[]> [-ComputerName <String>] [-CIM] [<CommonParameters>]
 ```
 
@@ -33,19 +33,19 @@ Get SDDL string single or multiple user names and/or user groups on a single tar
 
 ### EXAMPLE 1
 
-```
+```powershell
 [string[]] $Users = "User"
-[string] $Server = COMPUTERNAME
-[string[]] $Groups = "Users", "Administrators"
+PS> [string] $Server = COMPUTERNAME
+PS> [string[]] $Groups = "Users", "Administrators"
 ```
 
-$UsersSDDL1 = Get-SDDL -User $Users -Group $Groups
-$UsersSDDL2 = Get-SDDL -User $Users -Machine $Server
-$UsersSDDL3 = Get-SDDL -Group $Groups
+PS\> $UsersSDDL1 = Get-SDDL -User $Users -Group $Groups
+PS\> $UsersSDDL2 = Get-SDDL -User $Users -Machine $Server
+PS\> $UsersSDDL3 = Get-SDDL -Group $Groups
 
 ### EXAMPLE 2
 
-```
+```powershell
 $NewSDDL = Get-SDDL -Domain "NT AUTHORITY" -User "System"
 ```
 

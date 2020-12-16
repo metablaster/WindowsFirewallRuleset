@@ -13,7 +13,7 @@ Convert a mask length to a dotted-decimal subnet mask.
 
 ## SYNTAX
 
-```none
+```powershell
 ConvertTo-Mask [-MaskLength] <Byte> [<CommonParameters>]
 ```
 
@@ -27,11 +27,11 @@ converts the string to an unsigned 32-bit integer then calls ConvertTo-DottedDec
 
 ### EXAMPLE 1
 
-```none
+```powershell
 ConvertTo-Mask 24
 ```
 
-Returns the dotted-decimal form of the mask, 255.255.255.0.
+Returns the dotted-decimal form of the mask, 255.255.255.0
 
 ## PARAMETERS
 
@@ -65,7 +65,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Following changes by metablaster:
+Modifications by metablaster year 2019, 2020:
 - Include licenses and move comment based help outside of functions
 - For code to be consistent with project code formatting and symbol casing.
 - Removed unnecessary position arguments, added default argument values explicitly.

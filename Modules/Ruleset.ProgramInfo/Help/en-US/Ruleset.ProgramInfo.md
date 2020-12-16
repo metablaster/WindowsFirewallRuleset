@@ -84,7 +84,7 @@ Get installed Windows SDK
 
 ### [Test-Environment](Test-Environment.md)
 
-Test if path is valid for firewall rule
+Test if a path is valid with additional checks
 
 ### [Test-File](Test-File.md)
 
@@ -97,4 +97,3 @@ Test if given installation directory is valid
 ### [Test-Service](Test-Service.md)
 
 Check if service exists on system
-

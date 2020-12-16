@@ -13,7 +13,7 @@ Converts a hexadecimal IP address into a dotted decimal string.
 
 ## SYNTAX
 
-```none
+```powershell
 ConvertFrom-HexIP [-IPAddress] <String> [<CommonParameters>]
 ```
 
@@ -26,7 +26,7 @@ An intermediate call is made to ConvertTo-DottedDecimalIP.
 
 ### EXAMPLE 1
 
-```none
+```powershell
 ConvertFrom-HexIP c0a80001
 ```
 
@@ -64,7 +64,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Following changes by metablaster:
+Modifications by metablaster year 2019, 2020:
 - Include licenses and move comment based help outside of functions
 - For code to be consistent with project code formatting and symbol casing.
 - Removed unnecessary position arguments, added default argument values explicitly.

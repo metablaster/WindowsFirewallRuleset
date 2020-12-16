@@ -13,20 +13,21 @@ Check if file such as an *.exe exists
 
 ## SYNTAX
 
-```none
+```powershell
 Test-File [-FilePath] <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-In addition to Test-Path of file, message and stack trace is shown
+In addition to Test-Path of file, message and stack trace is shown and
+warning message if file not found
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-```none
-Test-File "C:\Users\User\AppData\Local\Google\Chrome\Application\chrome.exe"
+```powershell
+Test-File "C:\Users\USERNAME\AppData\Local\Google\Chrome\Application\chrome.exe"
 ```
 
 ## PARAMETERS
@@ -63,5 +64,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 TODO: We should attempt to fix the path if invalid here!
 TODO: We should return true or false and conditionally load rule
+TODO: This should probably be renamed to Test-Executable to make it less likely part of utility module
 
 ## RELATED LINKS

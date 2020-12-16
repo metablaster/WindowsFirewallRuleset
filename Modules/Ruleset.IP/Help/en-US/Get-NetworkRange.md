@@ -15,14 +15,14 @@ Get a list of IP addresses within the specified network.
 
 ### FromIPAndMask (Default)
 
-```none
+```powershell
 Get-NetworkRange [-IPAddress] <String> [[-SubnetMask] <String>] [-IncludeNetworkAndBroadcast]
  [<CommonParameters>]
 ```
 
 ### FromStartAndEnd
 
-```none
+```powershell
 Get-NetworkRange -Start <IPAddress> -End <IPAddress> [<CommonParameters>]
 ```
 
@@ -35,7 +35,7 @@ then starts a counter between the two, returning IPAddress for each.
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Get-NetworkRange 192.168.0.0 255.255.255.0
 ```
 
@@ -43,7 +43,7 @@ Returns all IP addresses in the range 192.168.0.0/24.
 
 ### EXAMPLE 2
 
-```none
+```powershell
 Get-NetworkRange 10.0.8.0/22
 ```
 
@@ -146,7 +146,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Following changes by metablaster:
+Modifications by metablaster year 2019, 2020:
 - Include licenses and move comment based help outside of functions
 - For code to be consistent with project code formatting and symbol casing.
 - Removed unnecessary position arguments, added default argument values explicitly.

@@ -13,7 +13,7 @@ Invoke a ScriptBlock that runs in the compatibility runspace.
 
 ## SYNTAX
 
-```none
+```powershell
 Invoke-WinCommand [-ScriptBlock] <ScriptBlock> [-ComputerName <String>] [-ConfigurationName <String>]
  [-Credential <PSCredential>] [-ArgumentList <Object[]>] [<CommonParameters>]
 ```
@@ -35,12 +35,10 @@ This behavior can be overridden using the additional parameters on the command.
 Invoke-WinCommand {param ($name) "Hello $name, how are you?"; $PSVersionTable.PSVersion} Jeffrey
 ```
 
-```none
 Hello Jeffrey, how are you?
 Major  Minor  Build  Revision PSComputerName
 -----  -----  -----  -------- --------------
 5      1      17134  1        localhost
-```
 
 In this example, we're invoking a ScriptBlock with 1 parameter in the compatibility session.
 This ScriptBlock will simply print a message and then return the version number of the compatibility session.
@@ -58,7 +56,7 @@ returning the 10 newest events in the application log.
 
 ### -ScriptBlock
 
-The ScriptBlock to invoke in the compatibility session.
+The scriptblock to invoke in the compatibility session
 
 ```yaml
 Type: System.Management.Automation.ScriptBlock
@@ -74,9 +72,8 @@ Accept wildcard characters: False
 
 ### -ComputerName
 
-If you don't want to use the default compatibility session,
-use this parameter to specify the name of the computer on which to create the compatibility session.
-(Defaults to 'localhost')
+If you don't want to use the default compatibility session, use this parameter to specify the name
+of the computer on which to create the compatibility session.
 
 ```yaml
 Type: System.String
@@ -85,7 +82,7 @@ Aliases: cn
 
 Required: False
 Position: Named
-Default value: localhost
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -93,7 +90,7 @@ Accept wildcard characters: False
 ### -ConfigurationName
 
 Specifies the configuration to connect to when creating the compatibility session
-(Defaults to 'Microsoft.PowerShell')
+(Defaults to "Microsoft.PowerShell")
 
 ```yaml
 Type: System.String
@@ -102,7 +99,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: Microsoft.PowerShell
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -125,7 +122,7 @@ Accept wildcard characters: False
 
 ### -ArgumentList
 
-Arguments to pass to the ScriptBlock.
+Arguments to pass to the scriptblock
 
 ```yaml
 Type: System.Object[]
@@ -153,4 +150,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
+Following modifications by metablaster November 2020:
+- Added comment based help based on original comments
+- Code formatting according to the rest of project design
+- Added HelpURI link to project location
+
 ## RELATED LINKS
+
+[https://github.com/PowerShell/WindowsCompatibility](https://github.com/PowerShell/WindowsCompatibility)

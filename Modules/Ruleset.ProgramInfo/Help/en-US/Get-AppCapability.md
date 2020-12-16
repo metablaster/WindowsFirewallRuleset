@@ -13,7 +13,7 @@ Get capabilities of Windows store app
 
 ## SYNTAX
 
-```none
+```powershell
 Get-AppCapability [-InputObject] <Object[]> [-User <String>] [-Authority] [-Networking] [<CommonParameters>]
 ```
 
@@ -29,7 +29,7 @@ Account full reference name
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Get-AppxPackage -Name "*ZuneMusic*" | Get-AppCapability
 ```
 
@@ -40,7 +40,7 @@ Removable storage
 
 ### EXAMPLE 2
 
-```none
+```powershell
 Get-AppCapability -Authority -InputObject (Get-AppxPackage -Name "*ZuneMusic*") -Networking
 ```
 
@@ -130,7 +130,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-None.
+TODO: According to unit test there are some capabilities not implemented here
 
 ## RELATED LINKS
 

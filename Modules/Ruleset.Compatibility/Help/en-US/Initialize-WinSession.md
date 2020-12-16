@@ -13,7 +13,7 @@ Initialize the connection to the compatibility session.
 
 ## SYNTAX
 
-```none
+```powershell
 Initialize-WinSession [[-ComputerName] <String>] [-ConfigurationName <String>] [-Credential <PSCredential>]
  [-PassThru] [<CommonParameters>]
 ```
@@ -21,7 +21,7 @@ Initialize-WinSession [[-ComputerName] <String>] [-ConfigurationName <String>] [
 ## DESCRIPTION
 
 Initialize the connection to the compatibility session.
-By default the compatibility session will be created on the localhost using the 'Microsoft.PowerShell' configuration.
+By default the compatibility session will be created on the localhost using the "Microsoft.PowerShell" configuration.
 On subsequent calls, if a session matching the current specification is found,
 it will be returned rather than creating a new session.
 If a matching session is found, but can't be used,
@@ -51,10 +51,8 @@ Initialize the compatibility session with a specific computer name and configura
 
 ### -ComputerName
 
-If you don't want to use the default compatibility session, use
-this parameter to specify the name of the computer on which to create
-the compatibility session.
-(Defaults to 'localhost')
+If you don't want to use the default compatibility session, use this parameter to specify the name
+of the computer on which to create the compatibility session.
 
 ```yaml
 Type: System.String
@@ -63,7 +61,7 @@ Aliases: Cn
 
 Required: False
 Position: 1
-Default value: localhost
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -71,7 +69,7 @@ Accept wildcard characters: False
 ### -ConfigurationName
 
 Specifies the configuration to connect to when creating the compatibility session
-(Defaults to 'Microsoft.PowerShell')
+(Defaults to "Microsoft.PowerShell")
 
 ```yaml
 Type: System.String
@@ -80,7 +78,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: $script:DefaultConfigurationName
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -131,4 +129,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
+Following modifications by metablaster November 2020:
+- Added comment based help based on original comments
+- Code formatting according to the rest of project design
+- Added HelpURI link to project location
+
 ## RELATED LINKS
+
+[https://github.com/PowerShell/WindowsCompatibility](https://github.com/PowerShell/WindowsCompatibility)

@@ -13,7 +13,7 @@ Get store app SID
 
 ## SYNTAX
 
-```none
+```powershell
 Get-AppSID [-PackageFamilyName] <String> [<CommonParameters>]
 ```
 
@@ -25,8 +25,8 @@ Get SID for single store app if the app exists
 
 ### EXAMPLE 1
 
-```none
-sample: Get-AppSID "User" "Microsoft.MicrosoftEdge_8wekyb3d8bbwe"
+```powershell
+Get-AppSID -FamilyName "Microsoft.MicrosoftEdge_8wekyb3d8bbwe"
 ```
 
 ## PARAMETERS
@@ -61,7 +61,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-TODO: Test if path exists
+Big thanks to Jani for this awesome solution: https://github.com/ljani
 TODO: remote computers?
 
 ## RELATED LINKS

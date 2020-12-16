@@ -13,7 +13,7 @@ Copy modules from the compatibility session that are directly usable in PowerShe
 
 ## SYNTAX
 
-```none
+```powershell
 Copy-WinModule [[-Name] <String[]>] [-ComputerName <String>] [-ConfigurationName <String>]
  [-Credential <PSCredential>] [-Destination <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
@@ -27,7 +27,7 @@ Once these modules have been copied,
 they will be available just like the other native modules for PowerShell Core.
 
 Note that if there already is a module in the destination corresponding to the module
-to be copied's name, it will not be copied.
+to be copied name, it will not be copied.
 
 ## EXAMPLES
 
@@ -69,9 +69,8 @@ Accept wildcard characters: False
 
 ### -ComputerName
 
-If you don't want to use the default compatibility session,
-use this parameter to specify the name of the computer on which to create the compatibility session.
-(Defaults to 'localhost')
+If you don't want to use the default compatibility session, use this parameter to specify the name
+of the computer on which to create the compatibility session.
 
 ```yaml
 Type: System.String
@@ -80,7 +79,7 @@ Aliases: cn
 
 Required: False
 Position: Named
-Default value: localhost
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -88,7 +87,7 @@ Accept wildcard characters: False
 ### -ConfigurationName
 
 Specifies the configuration to connect to when creating the compatibility session
-(Defaults to 'Microsoft.PowerShell')
+(Defaults to "Microsoft.PowerShell")
 
 ```yaml
 Type: System.String
@@ -97,7 +96,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: Microsoft.PowerShell
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -181,4 +180,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
+Following modifications by metablaster November 2020:
+- Added comment based help based on original comments
+- Code formatting according to the rest of project design
+- Added HelpURI link to project location
+
 ## RELATED LINKS
+
+[https://github.com/PowerShell/WindowsCompatibility](https://github.com/PowerShell/WindowsCompatibility)

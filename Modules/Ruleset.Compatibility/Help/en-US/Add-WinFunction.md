@@ -13,7 +13,7 @@ This command defines a global function that always runs in the compatibility ses
 
 ## SYNTAX
 
-```none
+```powershell
 Add-WinFunction [-Name] <String> [-ScriptBlock] <ScriptBlock> [-ComputerName <String>]
  [-ConfigurationName <String>] [-Credential <PSCredential>] [<CommonParameters>]
 ```
@@ -22,7 +22,7 @@ Add-WinFunction [-Name] <String> [-ScriptBlock] <ScriptBlock> [-ComputerName <St
 
 This command defines a global function that always runs in the compatibility session,
 returning serialized data to the calling session.
-Parameters can be specified using the 'param' statement but only positional parameters are supported.
+Parameters can be specified using the "param" statement but only positional parameters are supported.
 
 By default, when executing, the current compatibility session is used,
 or, in the case where there is no existing session, a new default session will be created.
@@ -34,22 +34,20 @@ This behavior can be overridden using the additional parameters on the command.
 
 ```powershell
 Add-WinFunction myFunction {param ($n) "Hi $n!"; $PSVersionTable.PSEdition }
-myFunction Bill
+PS> myFunction Bill
 ```
 
-```none
 Hi Bill!
 Desktop
-```
 
-This example defines a function called 'myFunction' with 1 parameter.
+This example defines a function called "myFunction" with 1 parameter.
 When invoked it will print a message then return the PSVersion table from the compatibility session.
 
 ## PARAMETERS
 
 ### -Name
 
-The name of the function to define.
+The name of the function to define
 
 ```yaml
 Type: System.String
@@ -65,7 +63,7 @@ Accept wildcard characters: False
 
 ### -ScriptBlock
 
-ScriptBlock to use as the body of the function.
+Scriptblock to use as the body of the function
 
 ```yaml
 Type: System.Management.Automation.ScriptBlock
@@ -81,9 +79,8 @@ Accept wildcard characters: False
 
 ### -ComputerName
 
-If you don't want to use the default compatibility session,
-use this parameter to specify the name of the computer on which to create the compatibility session.
-(Defaults to 'localhost')
+If you don't want to use the default compatibility session, use this parameter to specify the name
+of the computer on which to create the compatibility session.
 
 ```yaml
 Type: System.String
@@ -92,15 +89,15 @@ Aliases: Cn
 
 Required: False
 Position: Named
-Default value: localhost
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -ConfigurationName
 
-Specifies the configuration to connect to when creating the compatibility session.
-(Defaults to 'Microsoft.PowerShell')
+Specifies the configuration to connect to when creating the compatibility session
+(Defaults to "Microsoft.PowerShell")
 
 ```yaml
 Type: System.String
@@ -109,15 +106,14 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: 'Microsoft.PowerShell
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -Credential
 
-The credential to use when creating the compatibility session
-using the target machine/configuration
+The credential to use when creating the compatibility session using the target machine/configuration
 
 ```yaml
 Type: System.Management.Automation.PSCredential
@@ -145,4 +141,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
+Following modifications by metablaster November 2020:
+- Added comment based help based on original comments
+- Code formatting according to the rest of project design
+- Replace double quotes with single quotes
+- Added HelpURI link to project location
+
 ## RELATED LINKS
+
+[https://github.com/PowerShell/WindowsCompatibility](https://github.com/PowerShell/WindowsCompatibility)

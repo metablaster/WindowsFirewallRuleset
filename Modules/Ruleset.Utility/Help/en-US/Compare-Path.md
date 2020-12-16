@@ -13,7 +13,7 @@ Compare 2 paths for equality or similarity
 
 ## SYNTAX
 
-```none
+```powershell
 Compare-Path [-TargetPath] <String> [-ReferencePath] <String> [-Loose] [-Sensitive] [<CommonParameters>]
 ```
 
@@ -27,7 +27,7 @@ or it checks if 2 paths are similar which depends on wildcards contained in the 
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Compare-Path "%SystemDrive%\Windows" "C:\Win*" -Loose
 ```
 
@@ -35,7 +35,7 @@ True
 
 ### EXAMPLE 2
 
-```none
+```powershell
 Compare-Path "%SystemDrive%\Win*\System32\en-US\.." "C:\Wind*\System3?\" -Sensitive
 ```
 
@@ -43,7 +43,7 @@ True
 
 ### EXAMPLE 3
 
-```none
+```powershell
 Compare-Path "%SystemDrive%\" "D:\"
 ```
 

@@ -13,7 +13,7 @@ Find installation directory for given predefined program name
 
 ## SYNTAX
 
-```none
+```powershell
 Find-Installation [-Program] <String> [[-ComputerName] <String>] [<CommonParameters>]
 ```
 
@@ -27,7 +27,7 @@ fails then this method kicks in
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Find-Installation "Office"
 ```
 

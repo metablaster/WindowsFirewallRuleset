@@ -13,7 +13,7 @@ Stop test case
 
 ## SYNTAX
 
-```none
+```powershell
 Stop-Test [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -26,7 +26,7 @@ This function must be called after single test case is done executing
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Stop-Test
 ```
 

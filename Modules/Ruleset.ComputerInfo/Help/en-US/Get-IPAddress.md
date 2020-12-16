@@ -9,20 +9,20 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Method to get list of IP addresses on local machine
+Retrieve a list of IP addresses on local machine
 
 ## SYNTAX
 
 ### Individual (Default)
 
-```none
+```powershell
 Get-IPAddress [[-AddressFamily] <String>] [-ExcludeHardware] [-IncludeVirtual] [-IncludeHidden]
  [-IncludeDisconnected] [<CommonParameters>]
 ```
 
 ### All
 
-```none
+```powershell
 Get-IPAddress [[-AddressFamily] <String>] [-ExcludeHardware] [-IncludeAll] [<CommonParameters>]
 ```
 
@@ -35,13 +35,13 @@ This could include both physical and virtual adapters.
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Get-IPAddress "IPv4"
 ```
 
 ### EXAMPLE 2
 
-```none
+```powershell
 Get-IPAddress "IPv6"
 ```
 
@@ -65,7 +65,7 @@ Accept wildcard characters: False
 
 ### -ExcludeHardware
 
-{{ Fill ExcludeHardware Description }}
+Exclude hardware/physical network adapters
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

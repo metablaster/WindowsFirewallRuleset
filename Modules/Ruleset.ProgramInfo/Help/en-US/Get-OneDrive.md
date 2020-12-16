@@ -13,7 +13,7 @@ Get One Drive information for specific user
 
 ## SYNTAX
 
-```none
+```powershell
 Get-OneDrive [-UserName] <String> [[-ComputerName] <String>] [<CommonParameters>]
 ```
 
@@ -25,7 +25,7 @@ Search installed One Drive instance in userprofile for specific user account
 
 ### EXAMPLE 1
 
-```none
+```powershell
 Get-OneDrive "USERNAME"
 ```
 
