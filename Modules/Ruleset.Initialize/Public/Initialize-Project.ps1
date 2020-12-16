@@ -218,14 +218,14 @@ function Initialize-Project
 
 		try
 		{
-			Write-Information -Tags "Project" -MessageData "Testing Windows Remote Management to: $PolicyStore"
+			Write-Information -Tags "Project" -MessageData "Testing Windows remote management service on computer: '$PolicyStore'"
 			# TODO: https://stackoverflow.com/questions/18284132/winrm-cannot-process-the-request-fails-only-over-a-specific-domain
 			Test-WSMan -ComputerName $PolicyStore -Credential $RemoteCredential
 		}
 		catch
 		{
-			Write-Error -TargetObject $_.TargetObject `
-				-Message "Windows Remote Management connection test to '$PolicyStore' failed: $_"
+			Write-Error -TargetObject $_.TargetObject -Category $_.CategoryInfo.Category `
+				-Message "Remote management test to computer '$PolicyStore' failed with: $($_.Exception.Message)"
 			exit
 		}
 	}
@@ -423,24 +423,30 @@ function Initialize-Project
 
 				$CultureNames = "en-US"
 
+				# NOTE: using UICulture en-US, otherwise errors may occur
+				$UpdateParams = @{
+					ErrorVariable = "UpdateError"
+					ErrorAction = "SilentlyContinue"
+					UICulture = $CultureNames
+				}
+
 				[string[]] $UpdatableModules = Find-UpdatableModule -UICulture $CultureNames |
 				Select-Object -ExpandProperty Name
 
 				if (!$UpdatableModules)
 				{
-					# HACK: may be null, failed on Enterprise edition with 0 found helpinfo files,
-					# even after updating modules and manually running Update-Help which btw. succeeded!
+					# HACK: UpdatableModules may be null, failed on Enterprise edition with 0 found
+					# helpinfo files.
+					# Even after updating modules and manually running Update-Help which btw. succeeded!
 					Write-Warning -Message "No modules contain HelpInfo files required to update help"
+
+					# Otherwise the cause may because Update-Help was never run which is required to
+					# download helpinfo.xml files
+					Update-Help @UpdateParams
 				}
 				else
 				{
-					# NOTE: using UICulture en-US, otherwise errors may occur
-					$UpdateParams = @{
-						ErrorVariable = "UpdateError"
-						ErrorAction = "SilentlyContinue"
-						UICulture = $CultureNames
-						Module = $UpdatableModules
-					}
+					$UpdateParams["Module"] = $UpdatableModules
 
 					if ($PowerShellEdition -eq "Core")
 					{

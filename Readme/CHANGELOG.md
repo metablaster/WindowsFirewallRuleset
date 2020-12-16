@@ -89,6 +89,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - Connection errors when using Windows PowerShell because dependent service was not checked
   - No longer asking to set network profile, because it results in missing profile settings in
   `Settings -> "Network & Internet"`
+  - Update of help files would fail on system that never run `Update-Help`
 
 ## v0.8.0 (current release)
 

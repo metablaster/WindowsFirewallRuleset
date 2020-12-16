@@ -39,8 +39,17 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ((Get
 # Script imports
 #
 
-$PublicScripts = @(
+$PrivateScripts = @(
 	"Initialize-Log"
+)
+
+foreach ($Script in $PrivateScripts)
+{
+	Write-Debug -Message "[$ThisModule] Importing script: Private\$Script.ps1"
+	. ("{0}\Private\{1}.ps1" -f $PSScriptRoot, $Script)
+}
+
+$PublicScripts = @(
 	"Update-Log"
 	"Write-LogFile"
 )

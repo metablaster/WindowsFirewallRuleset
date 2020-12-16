@@ -97,11 +97,13 @@ It should be used in conjunction with the rest of a module "Ruleset.Initialize"
 
 TODO: test UICulture from pipeline
 TODO: There can't be multiple inputs?
+NOTE: Before running this function Update-Help must be run as Administrator once on target system to
+download required helpinfo.xml files
 #>
 function Find-UpdatableModule
 {
 	[CmdletBinding(DefaultParameterSetName = "Name")]
-	[OutputType([PSCustomObject])]
+	[OutputType([System.Management.Automation.PSCustomObject])]
 	param(
 		[Parameter(ValueFromPipeline = $true, ParameterSetName = "Name", Position = 0)]
 		[string[]] $Module = $null,
@@ -156,7 +158,7 @@ function Find-UpdatableModule
 
 		if (!$Modules)
 		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] No modules found, aborting"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] No candidate modules found, aborting"
 		}
 
 		foreach ($TargetModule in $Modules)

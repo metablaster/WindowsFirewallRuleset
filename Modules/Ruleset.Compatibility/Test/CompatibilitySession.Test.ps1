@@ -100,14 +100,14 @@ Describe "Test the Windows PowerShell Compatibility Session functions" {
 	}
 
 	It "Compare-WinModule should return a non-null collection of modules" {
-		$pattern = 'Azure*'
+		$pattern = 'Microsoft*'
 		$modules = Compare-WinModule $pattern
 		$modules | Should -Not -BeNullOrEmpty
 		$modules[0].Name | Should -BeLike $pattern
 	}
 
 	It "Copy-WinModule should copy the specified module to the destination path" {
-		$tempDirToUse = Join-Path TestDrive: "tmp$(Get-Random)"
+		$tempDirToUse = Join-Path -Path $ProjectRoot\Modules\Ruleset.Compatibility\Test\TestDrive -ChildPath "tmp$(Get-Random)"
 		New-Item -ItemType directory $tempDirToUse
 
 		# Invoke the command to copy the module
@@ -119,7 +119,7 @@ Describe "Test the Windows PowerShell Compatibility Session functions" {
 		$psd1File = Join-Path -Path $tempDirToUse -ChildPath PnpDevice -AdditionalChildPath PnpDevice.psd1
 		$psd1File | Should -Exist
 		# Ensure that only 1 module got copied
-		(Get-ChildItem $tempDirToUse).Count | Should -BeExactly 1
+		(Get-ChildItem $tempDirToUse | Measure-Object).Count | Should -BeExactly 1
 
 		# Now verify that the local module can be loaded and used
 

@@ -116,7 +116,7 @@ $PesterTests = Get-ChildItem -Path $ProjectRoot\Modules\Ruleset.IP\Test\Public -
 
 if ($PSVersionTable.PSVersion -ge "6.1")
 {
-	$PesterTests = Get-ChildItem -Path $ProjectRoot\Modules\Ruleset.Compatibility\Test -Filter *.ps1
+	$PesterTests += Get-ChildItem -Path $ProjectRoot\Modules\Ruleset.Compatibility\Test -Filter *.ps1
 }
 else
 {

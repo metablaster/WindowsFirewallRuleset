@@ -64,7 +64,7 @@ Update-Context $TestContext $ThisScript
 if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #Endregion
 
-Enter-Test
+Enter-Test -Private
 
 Start-Test "Initialize-Log"
 $Result = Initialize-Log $LogsFolder\Audit -Label System

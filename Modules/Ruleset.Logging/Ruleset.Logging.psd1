@@ -104,7 +104,6 @@ SOFTWARE.
 	# Functions to export from this module, for best performance, do not use wildcards and do not
 	# delete the entry, use an empty array if there are no functions to export.
 	FunctionsToExport = @(
-		"Initialize-Log"
 		"Update-Log"
 		"Write-LogFile"
 	)
@@ -137,7 +136,8 @@ SOFTWARE.
 		"Help\en-US\Update-Log.md"
 		"Help\en-US\Write-LogFile.md"
 		"Help\README.md"
-		"Public\Initialize-Log.ps1"
+		"Private\Initialize-Log.ps1"
+		"Private\README.md"
 		"Public\README.md"
 		"Public\Update-Log.ps1"
 		"Public\Write-LogFile.ps1"

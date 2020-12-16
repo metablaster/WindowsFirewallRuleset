@@ -24,8 +24,8 @@ EXAMPLES
 	Remove-FirewallRules
 	Removes specified firewall rules according to a list in the CSV or JSON file in the specified path.
 
-	Get all firewall rules with or without LocalUser value, rules without this value are considered weak
 	Find-RulePrincipal
+	Get all firewall rules with or without LocalUser value, rules without this value are considered weak
 
 	Format-Output
 	Format output of the Net-NewFirewallRule commandlet

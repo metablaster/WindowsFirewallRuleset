@@ -31,7 +31,7 @@ SOFTWARE.
 Unit test for Find-UpdatableModule
 
 .DESCRIPTION
-Unit test for Find-UpdatableModule
+Test correctness of Find-UpdatableModule function
 
 .EXAMPLE
 PS> .\Find-UpdatableModule.ps1
@@ -64,8 +64,8 @@ Start-Test "Find-UpdatableModule"
 $Result = Find-UpdatableModule
 $Result
 
-Start-Test "Get-TypeName"
-$Result | Get-TypeName
+Start-Test "Test-Output"
+$Result | Test-Output -Command Find-UpdatableModule
 
 Start-Test "'PowerShellGet' | Find-UpdatableModule"
 "PowerShellGet" | Find-UpdatableModule

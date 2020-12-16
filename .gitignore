@@ -98,5 +98,6 @@ Rules/NetworkServices.txt
 Modules/**/Help/**/Content/
 Modules/**/Help/**/External/
 
-# Auto generated test folder
+# Auto generated test folders
 Test/Ruleset.Utility/TestPermission/
+Modules/Ruleset.Compatibility/Test/TestDrive

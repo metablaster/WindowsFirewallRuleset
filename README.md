@@ -97,10 +97,10 @@ services etc. all of which is learned automatically from target system.
 due to ex. uninstalled program, a missing system service which no longer exists, renamed
 executable after Windows update or are redundant/invalid for what ever other reason.
 
-5. Updating rule attributes such as ports, addresses and similar is much easier since these rules
-are in scripts, you can use editor tools such as `CTRL + F`, regex or multicursor to perform bulk
-operations on your rules, doing this in Windows firewall GUI is beyond all pain or not possible due
-to interface limitation.
+5. Updating, filtering or sorting rules and attributes such as ports, addresses and similar is much
+easier since these rules are in scripts, you can use editor tools such as `CTRL + F`, regex or
+multicursor to perform bulk operations on your rules, doing this in Windows firewall GUI is beyond
+all pain or not possible due to interface limitations.
 
 6. Default outbound is "block" unless there is a rule to explicitly allow network traffic,
 in default Windows firewall this is not possible unless you maintain rules for every possible
@@ -142,7 +142,7 @@ or inside folders called `External` for organizational purposes.
 
 Requirements details:
 
-- All operating systems 10.0 (Major 10, Minor 0) build 1809 and up are supported,
+- All operating systems 10.0 (Major 10, Minor 0) build 1809 and above are supported,
 but only those 64 bit editions listed in point 1 are actively tested.\
 A list of other untested but supported systems and features is in [The future](#the-future)
 - PowerShell "Core" is not built into Windows, you will need to install it separately\
@@ -533,7 +533,7 @@ There isn't any benefit with manual zip download in comparison with git or GitHu
 
 Do you want to suggest new rules, features, report problems or contribute?
 
-Below are general notes for requesting to add your rules or ideas about project.\
+Below are general notes for requesting new rules or features.\
 If you would like to contribute by writing code you should read [CONTRIBUTING.md](CONTRIBUTING.md)
 instead.
 

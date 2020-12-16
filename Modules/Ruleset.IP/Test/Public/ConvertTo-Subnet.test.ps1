@@ -97,7 +97,6 @@ InModuleScope Ruleset.IP {
 		# Default mocks
 		#
 
-
 		#
 		# Tests
 		#
