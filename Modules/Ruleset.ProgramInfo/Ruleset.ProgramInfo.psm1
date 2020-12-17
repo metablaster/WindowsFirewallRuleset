@@ -35,11 +35,21 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ((Get
 
 #
 # Script imports
-# TODO: Executables involved in rules which are install into ProgramFiles\Common Files require
+# TODO: Executables involved in rules which are installed into ProgramFiles\Common Files require
 # separate search algorithm (function) instead of using Update-Table, these are present only
 # if program in question is installed, likely into ProgramFiles
 # Example programs: Adobe and Java
 #
+
+$ScriptsToProcess = @(
+	"TargetProgram"
+)
+
+foreach ($Script in $ScriptsToProcess)
+{
+	Write-Debug -Message "[$ThisModule] Importing script: Scripts\$Script.ps1"
+	. "$PSScriptRoot\Scripts\$Script.ps1"
+}
 
 $PrivateScripts = @(
 	"Edit-Table"
@@ -51,7 +61,7 @@ $PrivateScripts = @(
 foreach ($Script in $PrivateScripts)
 {
 	Write-Debug -Message "[$ThisModule] Importing script: Private\$Script.ps1"
-	. ("{0}\Private\{1}.ps1" -f $PSScriptRoot, $Script)
+	. "$PSScriptRoot\Private\$Script.ps1"
 }
 
 $PublicScripts = @(
@@ -81,7 +91,7 @@ $PublicScripts = @(
 foreach ($Script in $PublicScripts)
 {
 	Write-Debug -Message "[$ThisModule] Importing script: Public\$Script.ps1"
-	. ("{0}\Public\{1}.ps1" -f $PSScriptRoot, $Script)
+	. "$PSScriptRoot\Public\$Script.ps1"
 }
 
 #
@@ -114,7 +124,6 @@ New-Variable -Name ExecutablePaths -Scope Script -Option ReadOnly -Value (Get-Ex
 Write-Debug -Message "[$ThisModule] Initialize module readonly variable: AllUserPrograms"
 # Programs installed for all users
 New-Variable -Name AllUserPrograms -Scope Script -Option ReadOnly -Value (Get-AllUserSoftware -Computer $PolicyStore)
-
 
 <# Opening keys, naming convention as you drill down the keys
 

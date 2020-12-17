@@ -59,7 +59,7 @@ function Find-Installation
 	[OutputType([bool])]
 	param (
 		[Parameter(Mandatory = $true)]
-		[string] $Program,
+		[TargetProgram] $Program,
 
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
@@ -76,8 +76,7 @@ function Find-Installation
 	# otherwise firewall GUI will show full paths which is not desired for sorting reasons
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Start searching for $Program"
 
-	# TODO: switch based on enumeration instead of strings, ex. enum TargetProgram { ... }
-	switch -Wildcard ($Program)
+	switch ($Program)
 	{
 		"dotnet"
 		{
@@ -526,7 +525,7 @@ function Find-Installation
 		}
 		default
 		{
-			Write-Warning -Message "Parameter '$Program' not recognized"
+			Write-Error -Category ObjectNotFound -TargetObject $Program -Message "Parameter '$Program' not implemented"
 		}
 	}
 

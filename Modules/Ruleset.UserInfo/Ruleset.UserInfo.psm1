@@ -51,14 +51,14 @@ $PublicScripts = @(
 foreach ($Script in $PublicScripts)
 {
 	Write-Debug -Message "[$ThisModule] Importing script: Public\$Script.ps1"
-	. ("{0}\Public\{1}.ps1" -f $PSScriptRoot, $Script)
+	. "$PSScriptRoot\Public\$Script.ps1"
 }
 
 #
 # Module variables
 #
 
-Write-Debug -Message "[$ThisModule] Initialize module constant variable: SpecialDomains"
+Write-Debug -Message "[$ThisModule] Initialize module constant variable: KnownDomains"
 # Must be before constants
 # TODO: We need to handle more cases, first 3 are known to work for now
 # TODO: Only Get-AccountSID makes use of this, should be inside script?
@@ -66,7 +66,7 @@ New-Variable -Name KnownDomains -Scope Script -Option Constant -Value @(
 	"NT AUTHORITY"
 	"APPLICATION PACKAGE AUTHORITY"
 	"BUILTIN"
-	"NT SERVICE" # NEW: ex. TrustedInstaller
+	"NT SERVICE"
 	# See: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.localaccounts/get-localuser?view=powershell-5.1
 	"MicrosoftAccount"
 )

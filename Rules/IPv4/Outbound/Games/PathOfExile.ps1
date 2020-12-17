@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound firewall rules for PathOfExile
+Outbound firewall rules for Path Of Exile
 
 .DESCRIPTION
 Outbound firewall rules for Path Of Exile MMO game
@@ -68,7 +68,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 #
-# PathOfExile installation directories
+# Path Of Exile installation directories
 #
 $PathOfExileRoot = "%ProgramFiles(x86)%\Steam\steamapps\common\Path of Exile"
 
@@ -76,7 +76,7 @@ $PathOfExileRoot = "%ProgramFiles(x86)%\Steam\steamapps\common\Path of Exile"
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
-# Rules for TargetProgram
+# Rules for Path Of Exile
 #
 
 # Test if installation exists on system

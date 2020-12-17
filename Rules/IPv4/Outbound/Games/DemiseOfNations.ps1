@@ -70,7 +70,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #
 # Demise of Nations installation directories
 #
-$TargetProgramRoot = "%ProgramFiles(x86)%\Steam\steamapps\common\Demise of Nations - Rome"
+$DemiseOfNationsRoot = "%ProgramFiles(x86)%\Steam\steamapps\common\Demise of Nations - Rome"
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
@@ -80,9 +80,9 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "DemiseOfNations" ([ref] $TargetProgramRoot)) -or $ForceLoad)
+if ((Test-Installation "DemiseOfNations" ([ref] $DemiseOfNationsRoot)) -or $ForceLoad)
 {
-	$Program = "$TargetProgramRoot\app_main.exe"
+	$Program = "$DemiseOfNationsRoot\app_main.exe"
 	Test-File $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Demise of Nations" -Service Any -Program $Program `

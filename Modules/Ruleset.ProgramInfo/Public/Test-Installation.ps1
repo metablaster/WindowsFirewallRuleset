@@ -61,7 +61,7 @@ function Test-Installation
 	[OutputType([bool])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
-		[string] $Program,
+		[TargetProgram] $Program,
 
 		[Parameter(Mandatory = $true, Position = 1)]
 		[ref] $FilePath

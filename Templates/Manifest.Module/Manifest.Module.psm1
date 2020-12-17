@@ -43,13 +43,22 @@ Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ((Get
 # TODO: try/catch for importing scripts
 #
 
+$ScriptsToProcess = @(
+)
+
+foreach ($Script in $ScriptsToProcess)
+{
+	Write-Debug -Message "[$ThisModule] Importing script: Scripts\$Script.ps1"
+	. "$PSScriptRoot\Scripts\$Script.ps1"
+}
+
 $PrivateScripts = @(
 )
 
 foreach ($Script in $PrivateScripts)
 {
 	Write-Debug -Message "[$ThisModule] Importing script: Private\$Script.ps1"
-	. ("{0}\Private\{1}.ps1" -f $PSScriptRoot, $Script)
+	. "$PSScriptRoot\Private\$Script.ps1"
 }
 
 $PublicScripts = @(
@@ -59,7 +68,7 @@ $PublicScripts = @(
 foreach ($Script in $PublicScripts)
 {
 	Write-Debug -Message "[$ThisModule] Importing script: Public\$Script.ps1"
-	. ("{0}\Public\{1}.ps1" -f $PSScriptRoot, $Script)
+	. "$PSScriptRoot\Public\$Script.ps1"
 }
 
 #
