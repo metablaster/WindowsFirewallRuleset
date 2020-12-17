@@ -75,6 +75,8 @@ function Find-Installation
 	# NOTE: we want to preserve system environment variables for firewall GUI,
 	# otherwise firewall GUI will show full paths which is not desired for sorting reasons
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Start searching for $Program"
+
+	# TODO: switch based on enumeration instead of strings, ex. enum TargetProgram { ... }
 	switch -Wildcard ($Program)
 	{
 		"dotnet"
@@ -489,7 +491,7 @@ function Find-Installation
 			Update-Table -Search "Git"
 			break
 		}
-		"GithubDesktop"
+		"GitHubDesktop"
 		{
 			Update-Table -Search "GitHub Desktop" -UserProfile
 			break
@@ -542,13 +544,16 @@ function Find-Installation
 
 		# TODO: these loops seem to be skipped, probably missing Test-File, need to check
 		Write-Information -Tags "User" -MessageData "INFO: If you installed $Program elsewhere you can input valid path now"
-		Write-Information -Tags "User" -MessageData "INFO: Alternatively adjust path in $Script and re-run the script later."
+		Write-Information -Tags "User" -MessageData "INFO: Alternatively adjust path in $Script and re-run the script later"
 
 		$Accept = "Provide full path to '$Program' installation directory"
 		$Deny = "Skip operation, rules for '$Program' won't be loaded into firewall"
 
 		if (Approve-Execute -Accept $Accept -Deny $Deny -Title "Rule group for $Program" -Question "Do you want to input path now?")
 		{
+			$Accept = "Try again, required path may be deeper or shallower into/from root directory for '$Program'"
+			$Deny = "Stop asking for '$Program' and continue"
+
 			while ($InstallTable.Rows.Count -eq 0)
 			{
 				[string] $InstallLocation = Read-Host "Please input path to '$Program' root directory"
@@ -562,9 +567,6 @@ function Find-Installation
 						return $true
 					}
 				}
-
-				$Accept = "Try again, required path may be deeper or shallower into/from root directory for '$Program'"
-				$Deny = "Stop asking for '$Program' and continue"
 
 				Write-Warning -Message "Installation directory for '$Program' not found"
 				if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Title "Unable to locate '$InstallLocation'" -Question "Do you want to try again?"))

@@ -242,7 +242,7 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Chocolatey.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\CMake.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\EpicGames.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Github.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\GitHub.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Incredibuild.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\MSYS2.ps1"
 		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\RealWorld.ps1"

@@ -310,12 +310,14 @@ Make output formatted and colored
 Added progress bar
 
 TODO: export to excel
-TODO: Following rules (rule groups) failed to export with "WARNING: Input is missing, result is empty string":
+TODO: Following rulesets failed to export with "WARNING: Input is missing, result is empty string"
+
 Outbound:
+
 - Broadcast
 - Network Discovery
 - File and Printer Sharing
-- Github
+- GitHub
 - Development - Microsoft Visual Studio
 - Software - Nvidia
 - \[Server - SQL\] -\> SQL Server Management Studio
@@ -323,6 +325,7 @@ Outbound:
 - Windows System
 
 Inbound:
+
 - Broadcast
 - Network Discovery
 - File and Printer Sharing

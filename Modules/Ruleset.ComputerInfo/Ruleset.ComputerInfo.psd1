@@ -39,7 +39,7 @@ SOFTWARE.
 	RootModule = "Ruleset.ComputerInfo.psm1"
 
 	# Version number of this module.
-	ModuleVersion = "0.9.0"
+	ModuleVersion = "0.9.1"
 
 	# Supported PSEditions
 	CompatiblePSEditions = @(

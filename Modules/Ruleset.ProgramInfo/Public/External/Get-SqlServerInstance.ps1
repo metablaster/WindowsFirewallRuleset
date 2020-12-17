@@ -110,17 +110,22 @@ None. You cannot pipe objects to Get-SqlServerInstance
 [PSCustomObject]
 
 .NOTES
-Name: Get-SqlServerInstance
+Name: Get-SqlServer
 Author: Boe Prox, edited by cookie monster (to cover wow6432node, CIM tie in)
 
 Version History:
-1.5 //Boe Prox - 31 May 2016
-	- Added CIM queries for more information
-	- Custom object type name
-1.0 //Boe Prox -  07 Sept 2013
-	- Initial Version
+
+v1.5 Boe Prox - 31 May 2016:
+
+- Added CIM queries for more information
+- Custom object type name
+
+v1.0 Boe Prox -  07 Sept 2013:
+
+- Initial Version
 
 Following modifications by metablaster based on both originals 15 Feb 2020:
+
 - change syntax, casing, code style and function name
 - resolve warnings, replacing aliases with full names
 - change how function returns
@@ -133,12 +138,18 @@ Following modifications by metablaster based on both originals 15 Feb 2020:
 - 12 December 2020:
 - Renamed from Get-SQLInstance to Get-SqlServerInstance because of name colision from SQLPS module
 
-Links to original and individual versions of code
-https://github.com/RamblingCookieMonster/PowerShell
-https://github.com/metablaster/WindowsFirewallRuleset
-https://gallery.technet.microsoft.com/scriptcenter/Get-SqlServerInstance-9a3245a0
+See links section for original and individual versions of code
 
 TODO: Update examples to include DTS directory
+
+.LINK
+https://github.com/RamblingCookieMonster/PowerShell
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset
+
+.LINK
+https://gallery.technet.microsoft.com/scriptcenter/Get-SqlServerInstance-9a3245a0
 #>
 function Get-SqlServerInstance
 {

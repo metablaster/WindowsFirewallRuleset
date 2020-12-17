@@ -117,23 +117,26 @@ Following modifications by metablaster August 2020:
 11. Added progress bar
 
 TODO: export to excel
-TODO: Following rules (rule groups) failed to export with "WARNING: Input is missing, result is empty string":
+TODO: Following rulesets failed to export with "WARNING: Input is missing, result is empty string"
+
 Outbound:
-- Broadcast
-- Network Discovery
-- File and Printer Sharing
-- Github
-- Development - Microsoft Visual Studio
-- Software - Nvidia
-- [Server - SQL] -> SQL Server Management Studio
-- [Microsoft - Office
-- Windows System
+
+Broadcast
+Network Discovery
+File and Printer Sharing
+GitHub
+Development - Microsoft Visual Studio
+Software - Nvidia
+[Server - SQL] -> SQL Server Management Studio
+[Microsoft - Office
+Windows System
 
 Inbound:
-- Broadcast
-- Network Discovery
-- File and Printer Sharing
-- Microsoft Office
+
+Broadcast
+Network Discovery
+File and Printer Sharing
+Microsoft Office
 #>
 function Export-FirewallRules
 {

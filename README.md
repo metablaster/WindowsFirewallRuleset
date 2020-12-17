@@ -464,19 +464,18 @@ or download zip.
 This method is similar to the one that follows, but instead you'll use a graphical interface which
 you can get from here: [GitHub Desktop][github desktop]
 
-You will need [git][download git], [github account][github join], and a [fork][github fork] of this
-repository in your github account.
+To use it you will need [github account][github join] and a [fork][github fork] of this repository
+in your GitHub account.
 
 To configure GitHub Desktop see [GitHub Desktop Documentation][github desktop docs]
 
 ### Using git command
 
-This method is similar to GitHub Desktop above but good if you want to do it in console,
-In addition to previously mentioned 3 requirements you will optionally also need a
-[SSH keys][github ssh] to check for new updates on daily, weekly or what ever other basis you want.
+This method is similar to GitHub Desktop above but good if you need to do it in console,
+In addition to 2 mentioned requirements for GitHub Desktop you will also need [git][download git]
+and optionally (but recommended) [SSH keys][github ssh]
 
-Follow steps below to check for updates once you installed
-git and cloned your own fork:
+Follow steps below to check for updates once you installed git and cloned your own fork:
 
 - Right click on Start button in Windows
 - Click `Windows PowerShell` to open PowerShell
@@ -525,8 +524,9 @@ you need to save and upload your modifications to your fork, for example:
 
 ### Which update method is the best
 
-If your goal is to just get updates and have graphical interface on your desktop then `GitHub Desktop`
-is cool, otherwise if your goal is firewall customization, using `git` command would be more productive.\
+If your goal is to just get updates then `GitHub Desktop` is cool, otherwise if your goal is
+firewall customization, using `git` command would be more productive because it offers specific
+functionalities that you might need.
 
 You can have both setups in same time and use them as needed in specific situation.\
 There isn't any real benefit with manual zip download in comparison with git or GitHub Desktop.

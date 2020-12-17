@@ -76,10 +76,10 @@ repository root folder with VSCode
 5. Spelling settings such as random good words which would be detected as misspelled.
 6. Many other minor workspace settings to improve coding experience
 
-To work with Windows PowerShell quickly in any folder see:
+To work with Windows PowerShell quickly in any directory see:
 [Windows PowerShell](Readme/WindowsPowerShell.md)
 
-Recommended extensions in workspace are as follows:
+Recommended workspace extensions are as follows:
 
 1. [TODO tree][extension todo-tree]
 
@@ -154,6 +154,12 @@ before doing anything else:
 5. ErrorLogging
 6. WarningLogging
 
+In addition verify following variables are set to desired user
+
+1. DefaultUser
+2. TestAdmin
+3. TestUser
+
 Note that some of these may be auto adjusted after setting `Develop` to `$true`\
 Then restart PowerShell and run `.\SetupFirewall.ps1` to deploy firewall, or at least run
 `Initialize-Project` function which will prompt you to perform recommended and required checks.
@@ -165,6 +171,9 @@ disabled too.
 
 If you don't have this environment setup, you'll have to do this some other way around for your
 code editor and the rest of environment.
+
+It is recommended to also enable specific development features in Windows which you can find in:\
+`Settings -> Update & Security -> For Developers`, here under `File Explorer` apply all settings.
 
 ## Code style
 
@@ -324,8 +333,9 @@ Documentation and comments reside in 6 places as follows:
 
     You must avoid following comment based content to avoid errors while generating online help files:
     - .LINK entries must contains only one link and nothing else
-    - Avoid dashes in comments such as `------`
-    - Avoid lines starting with a backslash `\` or any non alphanumeric character
+    - Do not use multiple dashes in comments such as `------`
+    - For anything else keep in mind that any markdown syntax in comments will be formatted in the
+    resulting markdown file as markdown not as plain text, which may give unexpected results.
 
 5. In module Help folder (module online documentation)
 

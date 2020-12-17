@@ -101,7 +101,7 @@ if ($MyInvocation.InvocationName -ne ".")
 # 4. Enables some disabled unit tests and disables logging
 # 5. Enables setting preference variables for modules
 # NOTE: If changed to $true, the change requires PowerShell restart
-Set-Variable -Name Develop -Scope Global -Value $false
+Set-Variable -Name Develop -Scope Global -Value $true
 
 if ($Develop)
 {
@@ -333,7 +333,7 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 	New-Variable -Name CheckReadOnlyVariables -Scope Global -Option Constant -Value $null
 
 	# Set to false to avoid checking system and environment requirements
-	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $true
+	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $false
 
 	# Set to false to avoid checking if modules are up to date
 	New-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Value $Develop
@@ -370,7 +370,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 	Set-Variable -Name DefaultProfile -Scope Global -Option ReadOnly -Force -Value "Private, Public"
 
 	# To force loading rules regardless of presence of program set to true
-	Set-Variable -Name ForceLoad -Scope Global -Option ReadOnly -Force -Value $false
+	Set-Variable -Name ForceLoad -Scope Global -Option ReadOnly -Force -Value $true
 
 	# Amount of connection tests toward target policy store
 	Set-Variable -Name ConnectionCount -Scope Global -Option ReadOnly -Force -Value 2
@@ -431,7 +431,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	New-Variable -Name CheckProjectConstants -Scope Global -Option Constant -Value $null
 
 	# Project version, does not apply to non migrated 3rd party modules which follow their own version increment, do not modify!
-	New-Variable -Name ProjectVersion -Scope Global -Option Constant -Value ([version]::new(0, 9, 0))
+	New-Variable -Name ProjectVersion -Scope Global -Option Constant -Value ([version]::new(0, 9, 1))
 
 	# Required minimum operating system version (v1809)
 	# TODO: v1809 needs to be replaced with minimum v1903, downgraded here because of Server 2019
@@ -560,7 +560,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 		New-Variable -Name RequireNETVersion -Scope Global -Option Constant -Value ([version]::new(4, 5, 0))
 
 		# Recommended minimum VSCode version, do not decrement!
-		New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 52, 0))
+		New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 52, 1))
 
 		# Firewall logs folder
 		# NOTE: Set this value to $LogsFolder\Firewall to enable reading logs in VSCode with syntax highlighting

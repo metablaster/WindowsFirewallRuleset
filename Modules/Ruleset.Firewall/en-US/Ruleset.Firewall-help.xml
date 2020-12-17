@@ -350,7 +350,7 @@
         <maml:para>TODO: export to excel TODO: Following rules (rule groups) failed to export with "WARNING: Input is missing, result is empty string": Outbound: - Broadcast</maml:para>
         <maml:para>- Network Discovery</maml:para>
         <maml:para>- File and Printer Sharing</maml:para>
-        <maml:para>- Github</maml:para>
+        <maml:para>- GitHub</maml:para>
         <maml:para>- Development - Microsoft Visual Studio</maml:para>
         <maml:para>- Software - Nvidia</maml:para>
         <maml:para>- [Server - SQL] -&gt; SQL Server Management Studio</maml:para>
