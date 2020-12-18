@@ -10,8 +10,11 @@ LONG DESCRIPTION
 	better windows firewall, specifically to write rules and provide better environment.
 
 VARIABLES
-	ServiceHost:		Windows service host
-	CheckInitUtility:	Purpose is to prevent double initialization of constants
+	ServiceHost
+	Windows service host
+
+	CheckInitUtility
+	Purpose is to prevent double initialization of constants
 
 EXAMPLES
 	Approve-Execute

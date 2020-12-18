@@ -10,30 +10,6 @@ LONG DESCRIPTION
 	setup on multiple computers and virtual operating systems, in cases such as frequent system restores
 	for the purpose of testing project code for many environment scenarios that end users may have.
 
-	Environment requirements for Windows Firewall Ruleset are:
-
-	1. Windows 10.0
-	2. Windows Powershell Desktop 5.1 or PowerShell core 7.0
-	3. NET Framework 3.5 for Desktop edition
-	4. Administrator account
-	5. TCP IP NetBios helper service
-	6. Workstation service
-	7. Server service
-
-	Environment recommendations for Windows Firewall Ruleset are:
-	1. Pester module
-	2. Git
-	3. posh-git module
-	4. x64 system
-	5. Windows 10 Pro/Enterprise or Windows Server 2019
-
-	Conditional requirements are:
-	1. Windows Remote Management service
-	2. NuGet package provider
-	3. PowerShellGet module
-	4. PackageManagement module
-	5. Internet connection
-
 EXAMPLES
 	Initialize-Project
 	Check complete system requirements

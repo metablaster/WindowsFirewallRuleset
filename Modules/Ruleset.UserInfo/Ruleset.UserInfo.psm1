@@ -79,7 +79,7 @@ if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 	# check if constants already initialized, used for module reloading
 	New-Variable -Name CheckInitUserInfo -Scope Global -Option Constant -Value $null
 
-	# Generate SDDL string for most common groups
+	# Generate SDDL string for the most common user groups
 	New-Variable -Name UsersGroupSDDL -Scope Global -Option Constant -Value (
 		Get-SDDL -Group "Users"
 	)
@@ -88,7 +88,7 @@ if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 		Get-SDDL -Group "Administrators"
 	)
 
-	# Generate SDDL string for most common system users
+	# Generate SDDL string for the most common system users
 	New-Variable -Name LocalSystem -Scope Global -Option Constant -Value (
 		Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM"
 	)
@@ -101,35 +101,3 @@ if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 		Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE"
 	)
 }
-
-<# naming convention for common variables, parameters and aliases
-type variable, parameter, alias - type[] ArrayVariable, ArrayParameters, alias
-
-UserName / UserNames
-UserGroup / UserGroups / Group
-UserAccount / UserAccounts / Account
-
-GroupUser / GroupUsers
-
-ComputerName / ComputerNames / Computer, Server, Machine, Host
-
-
-AccountSID / AccountsSID
-GroupSID / GroupsSID
-
-AccountSDDL/ AccountsSDDL
-GroupSDDL / GroupsSDDL
-
-
-SHOULD NOT BE USED:
-
-UserSID / UsersSID
-UserSDDL / UsersSDDL
-
-FOR GLOBAL/SCRIPT VARIABLES:
-<group_name>GroupSDDL
-<user_account>AccountSDDL
-
-SHOULD NOT BE USED IN GLOBAL/SCRIPT scopes
-<user_name>UserSID
-#>

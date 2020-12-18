@@ -230,6 +230,7 @@ if ($Develop)
 	# Logs command errors
 	$LogCommandHealthEvent = $false
 
+	# TODO: Use $InvocationInfo.MyCommand.ModuleName
 	if (!$InModule)
 	{
 		# Must be after debug preference
