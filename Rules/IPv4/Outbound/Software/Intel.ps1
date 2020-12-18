@@ -89,7 +89,7 @@ if ((Test-Installation "XTU" ([ref] $IntelXTURoot)) -or $ForceLoad)
 		-DisplayName "Extreme tuning utility" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-		-LocalUser $AdministratorsGroupSDDL `
+		-LocalUser $AdminGroupSDDL `
 		-Description "Extreme Tuning utility check for updates" | Format-Output
 }
 
@@ -100,7 +100,7 @@ New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Intel telemetry" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $NT_AUTHORITY_System `
+	-LocalUser $LocalSystem `
 	-Description "Uploader for the Intel(R) Product Improvement Program." | Format-Output
 
 # TODO: port and protocol unknown for Intel PTT EK Recertification
@@ -111,7 +111,7 @@ New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Intel PTT EK Recertification" -Service Any -Program $Program `
 	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System `
+	-LocalUser $LocalSystem `
 	-Description "" | Format-Output
 
 Update-Log

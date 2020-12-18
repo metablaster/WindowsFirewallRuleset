@@ -105,7 +105,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
 		-DisplayName "Click to Run" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-		-LocalUser $NT_AUTHORITY_System `
+		-LocalUser $LocalSystem `
 		-Description "Required for updates to work. Click-to-Run is an alternative to the traditional Windows Installer-based (MSI) method
 	of installing and updating Office, that utilizes streaming and virtualization technology
 	to reduce the time required to install Office and help run multiple versions of Office on the same computer." | Format-Output
@@ -117,7 +117,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
 		-DisplayName "ClickC2RClient" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-		-LocalUser $NT_AUTHORITY_System `
+		-LocalUser $LocalSystem `
 		-Description "Allows users to check for and install updates for Office on demand." | Format-Output
 
 	$Program = "$OfficeRoot\MSOSYNC.EXE"

@@ -95,7 +95,7 @@ Get-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Directio
 
 	if ((Get-NetFirewallApplicationFilter -AssociatedNetFirewallRule $_).Program -eq "System")
 	{
-		$Params["LocalUser"] = $NT_AUTHORITY_System
+		$Params["LocalUser"] = $LocalSystem
 	}
 
 	Set-NetFirewallRule @Params
@@ -148,7 +148,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Datagram" `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 138 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for Network Discovery to allow NetBIOS Datagram transmission and reception." |
 Format-Output
@@ -160,7 +160,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Datagram" `
 	-LocalAddress Any -RemoteAddress Intranet, LocalSubnet `
 	-LocalPort 138 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for Network Discovery to allow NetBIOS Datagram transmission and reception." |
 Format-Output
@@ -172,7 +172,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Datagram" `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 138 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for Network Discovery to allow NetBIOS Datagram transmission and reception." |
 Format-Output
@@ -184,7 +184,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Name" `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 137 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for Network Discovery to allow NetBIOS Name Resolution." |
 Format-Output
@@ -196,7 +196,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Name" `
 	-LocalAddress Any -RemoteAddress Intranet, LocalSubnet `
 	-LocalPort 137 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for Network Discovery to allow NetBIOS Name Resolution." |
 Format-Output
@@ -208,7 +208,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Name" `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 137 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for Network Discovery to allow NetBIOS Name Resolution." |
 Format-Output
@@ -280,7 +280,7 @@ New-NetFirewallRule -DisplayName "UPnP Device Host" `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 2869 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-Description "Rule for Network Discovery to allow use of Universal Plug and Play.
 Allows UPnP devices to be hosted on this computer.
 If this rule is disabled, any hosted UPnP devices will stop functioning and no additional hosted
@@ -294,7 +294,7 @@ New-NetFirewallRule -DisplayName "UPnP Device Host" `
 	-LocalAddress Any -RemoteAddress Intranet, LocalSubnet `
 	-LocalPort 2869 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-Description "Rule for Network Discovery to allow use of Universal Plug and Play.
 Allows UPnP devices to be hosted on this computer.
 If this rule is disabled, any hosted UPnP devices will stop functioning and no additional hosted
@@ -308,7 +308,7 @@ New-NetFirewallRule -DisplayName "UPnP Device Host" `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 2869 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-Description "Rule for Network Discovery to allow use of Universal Plug and Play.
 Allows UPnP devices to be hosted on this computer.
 If this rule is disabled, any hosted UPnP devices will stop functioning and no additional hosted
@@ -322,7 +322,7 @@ New-NetFirewallRule -DisplayName "WSD Events" `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 5357 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-Description "Rule for Network Discovery to allow WSDAPI Events via Function Discovery." |
 Format-Output
 
@@ -333,7 +333,7 @@ New-NetFirewallRule -DisplayName "WSD Events" `
 	-LocalAddress Any -RemoteAddress Intranet, LocalSubnet `
 	-LocalPort 5357 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-Description "Rule for Network Discovery to allow WSDAPI Events via Function Discovery." |
 Format-Output
 
@@ -344,7 +344,7 @@ New-NetFirewallRule -DisplayName "WSD Events" `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 5357 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-Description "Rule for Network Discovery to allow WSDAPI Events via Function Discovery." |
 Format-Output
 
@@ -355,7 +355,7 @@ New-NetFirewallRule -DisplayName "WSD Events Secure" `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 5358 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-Description "Rule for Network Discovery to allow Secure WSDAPI Events via Function Discovery." |
 Format-Output
 
@@ -366,7 +366,7 @@ New-NetFirewallRule -DisplayName "WSD Events Secure" `
 	-LocalAddress Any -RemoteAddress Intranet, LocalSubnet `
 	-LocalPort 5358 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-Description "Rule for Network Discovery to allow Secure WSDAPI Events via Function Discovery." |
 Format-Output
 
@@ -377,7 +377,7 @@ New-NetFirewallRule -DisplayName "WSD Events Secure" `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 5358 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-Description "Rule for Network Discovery to allow Secure WSDAPI Events via Function Discovery." |
 Format-Output
 
@@ -412,7 +412,7 @@ New-NetFirewallRule -DisplayName "WSD (Device Association Framework Provider Hos
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 3702 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
-	-LocalUser $NT_AUTHORITY_LocalService -EdgeTraversalPolicy Block `
+	-LocalUser $LocalService -EdgeTraversalPolicy Block `
 	-Description "Rule for Network Discovery to discover devices via Function Discovery.
 This service is new since Windows 8.
 Executable also known as Device Association Framework Provider Host" |
@@ -425,7 +425,7 @@ New-NetFirewallRule -DisplayName "WSD (Device Association Framework Provider Hos
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 3702 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
-	-LocalUser $NT_AUTHORITY_LocalService -EdgeTraversalPolicy Block `
+	-LocalUser $LocalService -EdgeTraversalPolicy Block `
 	-Description "Rule for Network Discovery to discover devices via Function Discovery.
 This service is new since Windows 8.
 Executable also known as Device Association Framework Provider Host" |
@@ -450,7 +450,7 @@ New-NetFirewallRule -DisplayName "Teredo UPnP Discovery" `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
 	-InterfaceType $DefaultInterface `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-Description "Rule for Network Discovery to allow use of the Simple Service Discovery Protocol." |
 Format-Output
 

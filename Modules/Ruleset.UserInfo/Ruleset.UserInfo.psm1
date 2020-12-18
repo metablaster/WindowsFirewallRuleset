@@ -27,11 +27,11 @@ SOFTWARE.
 #>
 
 # Initialization
-Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ((Get-Item $PSCommandPath).Basename)
+New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Value (Split-Path $PSScriptRoot -Leaf)
 
 # Imports
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
-. $PSScriptRoot\..\ModulePreferences.ps1
+. $ProjectRoot\Modules\ModulePreferences.ps1
 
 #
 # Script imports
@@ -58,7 +58,8 @@ foreach ($Script in $PublicScripts)
 # Module variables
 #
 
-Write-Debug -Message "[$ThisModule] Initialize module constant variable: KnownDomains"
+Write-Debug -Message "[$ThisModule] Initializing module variables"
+
 # Must be before constants
 # TODO: We need to handle more cases, first 3 are known to work for now
 # TODO: Only Get-AccountSID makes use of this, should be inside script?
@@ -71,32 +72,35 @@ New-Variable -Name KnownDomains -Scope Script -Option Constant -Value @(
 	"MicrosoftAccount"
 )
 
-# TODO: global configuration variables (in a separate script)?
 if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 {
-	Write-Debug -Message "[$ThisModule] Initialize global constant variable: CheckInitUserInfo"
+	Write-Debug -Message "[$ThisModule] Initializing module constants"
+
 	# check if constants already initialized, used for module reloading
 	New-Variable -Name CheckInitUserInfo -Scope Global -Option Constant -Value $null
 
-	# TODO: should not be used
 	# Generate SDDL string for most common groups
-	Write-Debug -Message "[$ThisModule] Initialize global constant variable: UsersGroupSDDL"
-	New-Variable -Name UsersGroupSDDL -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-32-545)"
-	Write-Debug -Message "[$ThisModule] Initialize global constant variable: AdministratorsGroupSDDL"
-	New-Variable -Name AdministratorsGroupSDDL -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-32-544)"
+	New-Variable -Name UsersGroupSDDL -Scope Global -Option Constant -Value (
+		Get-SDDL -Group "Users"
+	)
 
-	# TODO: shorter names
+	New-Variable -Name AdminGroupSDDL -Scope Global -Option Constant -Value (
+		Get-SDDL -Group "Administrators"
+	)
+
 	# Generate SDDL string for most common system users
-	Write-Debug -Message "[$ThisModule] Initialize global constant variables: NT AUTHORITY\..."
-	New-Variable -Name NT_AUTHORITY_System -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-18)"
-	New-Variable -Name NT_AUTHORITY_LocalService -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-19)"
-	New-Variable -Name NT_AUTHORITY_NetworkService -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-20)"
-	New-Variable -Name NT_AUTHORITY_UserModeDrivers -Scope Global -Option Constant -Value "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
-}
+	New-Variable -Name LocalSystem -Scope Global -Option Constant -Value (
+		Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM"
+	)
 
-#
-# System users SDDL strings
-#
+	New-Variable -Name LocalService -Scope Global -Option Constant -Value (
+		Get-SDDL -Domain "NT AUTHORITY" -User "LOCAL SERVICE"
+	)
+
+	New-Variable -Name NetworkService -Scope Global -Option Constant -Value (
+		Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE"
+	)
+}
 
 <# naming convention for common variables, parameters and aliases
 type variable, parameter, alias - type[] ArrayVariable, ArrayParameters, alias

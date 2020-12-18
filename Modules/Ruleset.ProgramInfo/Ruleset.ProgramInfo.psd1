@@ -209,6 +209,8 @@ SOFTWARE.
 		"Public\Test-File.ps1"
 		"Public\Test-Installation.ps1"
 		"Public\Test-Service.ps1"
+		"Scripts\README.md"
+		"Scripts\TargetProgram.ps1"
 		"Ruleset.ProgramInfo_49f11777-b8b6-4fed-bd82-32c8f48db81e_HelpInfo.xml"
 		"Ruleset.ProgramInfo.psd1"
 		"Ruleset.ProgramInfo.psm1"

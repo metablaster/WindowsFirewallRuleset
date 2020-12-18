@@ -99,7 +99,7 @@ Get-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Directio
 
 	if ((Get-NetFirewallApplicationFilter -AssociatedNetFirewallRule $_).Program -eq "System")
 	{
-		$Params["LocalUser"] = $NT_AUTHORITY_System
+		$Params["LocalUser"] = $LocalSystem
 	}
 
 	Set-NetFirewallRule @Params
@@ -120,7 +120,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 139 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." |
 Format-Output
 
@@ -131,7 +131,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-LocalAddress Any -RemoteAddress Intranet, LocalSubnet `
 	-LocalPort 139 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." |
 Format-Output
 
@@ -142,7 +142,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 139 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." |
 Format-Output
 
@@ -153,7 +153,7 @@ New-NetFirewallRule -DisplayName "SMB" `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 445 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-Description "Rule for File and Printer Sharing to allow Server Message Block transmission and
 reception via Named Pipes." |
 Format-Output
@@ -165,7 +165,7 @@ New-NetFirewallRule -DisplayName "SMB" `
 	-LocalAddress Any -RemoteAddress Intranet, LocalSubnet `
 	-LocalPort 445 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-Description "Rule for File and Printer Sharing to allow Server Message Block transmission and
 reception via Named Pipes." |
 Format-Output
@@ -177,7 +177,7 @@ New-NetFirewallRule -DisplayName "SMB" `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 445 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-Description "Rule for File and Printer Sharing to allow Server Message Block transmission and
 reception via Named Pipes." |
 Format-Output
@@ -273,7 +273,7 @@ New-NetFirewallRule -DisplayName "SMBDirect (iWARP)" `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 5445 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-Description "Rule for File and Printer Sharing over SMBDirect to allow iWARP.
 The RPCSS service is the Service Control Manager for COM and DCOM servers.
 It performs object activations requests, object exporter resolutions and distributed garbage
@@ -287,7 +287,7 @@ New-NetFirewallRule -DisplayName "SMBDirect (iWARP)" `
 	-LocalAddress Any -RemoteAddress Intranet, LocalSubnet `
 	-LocalPort 5445 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-Description "Rule for File and Printer Sharing over SMBDirect to allow iWARP.
 The RPCSS service is the Service Control Manager for COM and DCOM servers.
 It performs object activations requests, object exporter resolutions and distributed garbage
@@ -301,7 +301,7 @@ New-NetFirewallRule -DisplayName "SMBDirect (iWARP)" `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 5445 -RemotePort Any `
 	-InterfaceType $DefaultInterface `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-Description "Rule for File and Printer Sharing over SMBDirect to allow iWARP.
 The RPCSS service is the Service Control Manager for COM and DCOM servers.
 It performs object activations requests, object exporter resolutions and distributed garbage

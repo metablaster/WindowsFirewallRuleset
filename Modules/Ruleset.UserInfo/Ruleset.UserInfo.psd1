@@ -122,11 +122,10 @@ SOFTWARE.
 	VariablesToExport = @(
 		"CheckInitUserInfo"
 		"UsersGroupSDDL"
-		"AdministratorsGroupSDDL"
-		"NT_AUTHORITY_System"
-		"NT_AUTHORITY_LocalService"
-		"NT_AUTHORITY_NetworkService"
-		"NT_AUTHORITY_UserModeDrivers"
+		"AdminGroupSDDL"
+		"LocalSystem"
+		"LocalService"
+		"NetworkService"
 	)
 
 	# Aliases to export from this module, for best performance, do not use wildcards and do not

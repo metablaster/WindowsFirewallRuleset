@@ -145,7 +145,7 @@ New-NetFirewallRule -DisplayName "Domain Name System" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress DefaultGateway4 `
 	-LocalPort Any -RemotePort 53 `
-	-LocalUser $NT_AUTHORITY_System `
+	-LocalUser $LocalSystem `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Allow DNS (Domain Name System) requests by System to default gateway." |
@@ -258,7 +258,7 @@ New-NetFirewallRule -DisplayName "Internet Group Management Protocol" `
 	-Enabled True -Action Allow `
 	-Direction $Direction -Protocol 2 -LocalAddress Any -RemoteAddress LocalSubnet4 `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System `
+	-LocalUser $LocalSystem `
 	-InterfaceType $DefaultInterface `
 	-Description "IGMP messages are sent and received by nodes to create,
 join and depart multicast groups." |

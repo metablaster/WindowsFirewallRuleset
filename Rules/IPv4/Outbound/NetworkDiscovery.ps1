@@ -96,7 +96,7 @@ Get-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Directio
 
 	if ((Get-NetFirewallApplicationFilter -AssociatedNetFirewallRule $_).Program -eq "System")
 	{
-		$Params["LocalUser"] = $NT_AUTHORITY_System
+		$Params["LocalUser"] = $LocalSystem
 	}
 
 	Set-NetFirewallRule @Params
@@ -150,7 +150,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Datagram" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort Any -RemotePort 138 `
-	-LocalUser $NT_AUTHORITY_System `
+	-LocalUser $LocalSystem `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for Network Discovery to allow NetBIOS Datagram transmission and
@@ -163,7 +163,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Datagram" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress Intranet, LocalSubnet `
 	-LocalPort Any -RemotePort 138 `
-	-LocalUser $NT_AUTHORITY_System `
+	-LocalUser $LocalSystem `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for Network Discovery to allow NetBIOS Datagram transmission and
@@ -176,7 +176,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Datagram" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort Any -RemotePort 138 `
-	-LocalUser $NT_AUTHORITY_System `
+	-LocalUser $LocalSystem `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for Network Discovery to allow NetBIOS Datagram transmission and
@@ -191,7 +191,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Name" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort Any -RemotePort 137 `
-	-LocalUser $NT_AUTHORITY_System `
+	-LocalUser $LocalSystem `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for Network Discovery to allow NetBIOS Name Resolution." |
@@ -203,7 +203,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Name" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress Intranet, LocalSubnet `
 	-LocalPort Any -RemotePort 137 `
-	-LocalUser $NT_AUTHORITY_System `
+	-LocalUser $LocalSystem `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for Network Discovery to allow NetBIOS Name Resolution." |
@@ -215,7 +215,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Name" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort Any -RemotePort 137 `
-	-LocalUser $NT_AUTHORITY_System `
+	-LocalUser $LocalSystem `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for Network Discovery to allow NetBIOS Name Resolution." |
@@ -458,7 +458,7 @@ New-NetFirewallRule -DisplayName "WSD (Device Association Framework Provider Hos
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort Any -RemotePort 5357 `
-	-LocalUser $NT_AUTHORITY_LocalService `
+	-LocalUser $LocalService `
 	-InterfaceType $DefaultInterface `
 	-Description "Rule for Network Discovery to discover devices via Function Discovery.
 This service is new since Windows 8.
@@ -471,7 +471,7 @@ New-NetFirewallRule -DisplayName "WSD (Device Association Framework Provider Hos
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort Any -RemotePort 5357 `
-	-LocalUser $NT_AUTHORITY_LocalService `
+	-LocalUser $LocalService `
 	-InterfaceType $DefaultInterface `
 	-Description "Rule for Network Discovery to discover devices via Function Discovery.
 This service is new since Windows 8.
@@ -487,7 +487,7 @@ Format-Output
 # 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 # 	-LocalAddress Any -RemoteAddress DefaultGateway4 `
 # 	-LocalPort Any -RemotePort Any `
-# 	-LocalUser $NT_AUTHORITY_LocalService `
+# 	-LocalUser $LocalService `
 # 	-InterfaceType $DefaultInterface `
 # 	-Description "Rule for Network Discovery to discover devices via Function Discovery.
 # This service is new since Windows 8.

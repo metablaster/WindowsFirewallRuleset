@@ -74,20 +74,17 @@ if ($Develop)
 	$InstallTable
 }
 
-Start-Test "Ruleset.UserInfo - NT_AUTHORITY_UserModeDrivers:"
-$NT_AUTHORITY_UserModeDrivers
+Start-Test "Ruleset.UserInfo - NetworkService:"
+$NetworkService
 
-Start-Test "Ruleset.UserInfo - NT_AUTHORITY_NetworkService:"
-$NT_AUTHORITY_NetworkService
+Start-Test "Ruleset.UserInfo - LocalService:"
+$LocalService
 
-Start-Test "Ruleset.UserInfo - NT_AUTHORITY_LocalService:"
-$NT_AUTHORITY_LocalService
+Start-Test "Ruleset.UserInfo - LocalSystem:"
+$LocalSystem
 
-Start-Test "Ruleset.UserInfo - NT_AUTHORITY_System:"
-$NT_AUTHORITY_System
-
-Start-Test "Ruleset.UserInfo - AdministratorsGroupSDDL:"
-$AdministratorsGroupSDDL
+Start-Test "Ruleset.UserInfo - AdminGroupSDDL:"
+$AdminGroupSDDL
 
 Start-Test "Ruleset.UserInfo - UsersGroupSDDL:"
 $UsersGroupSDDL

@@ -31,15 +31,16 @@ SOFTWARE.
 # - Code formatting according to the rest of project design
 # - Added module boilerplate code
 # - Renamed module from "WindowsCompatibility" to "Ruleset.Compatibility"
+# - Fixed pester tests
 
 # Initialization
 using namespace System.Management.Automation.
 using namespace System.Management.Automation.Runspaces
-Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ((Get-Item $PSCommandPath).Basename)
+New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Value (Split-Path $PSScriptRoot -Leaf)
 
 # Imports
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
-. $PSScriptRoot\..\..\Modules\ModulePreferences.ps1
+. $ProjectRoot\Modules\ModulePreferences.ps1
 
 #
 # Script imports
@@ -66,9 +67,10 @@ foreach ($Script in $PublicScripts)
 # Module variables
 #
 
-###########################################################################################
+Write-Debug -Message "[$ThisModule] Initializing module variables"
+
 # A list of modules native to PowerShell Core that should never be imported
-Set-Variable -Name NeverImportList -Scope Script -Value @(
+New-Variable -Name NeverImportList -Scope Script -Value @(
 	"PSReadLine",
 	"PackageManagement",
 	"PowerShellGet",
@@ -77,22 +79,20 @@ Set-Variable -Name NeverImportList -Scope Script -Value @(
 	"Ruleset.Compatibility"
 )
 
-###########################################################################################
 # The following is a list of modules native to PowerShell Core that don't have all of
 # the functionality of Windows PowerShell 5.1 versions. These modules can be imported but
 # will not overwrite any existing PowerShell Core commands
-Set-Variable -Name NeverClobberList -Scope Script -Value @(
+New-Variable -Name NeverClobberList -Scope Script -Value @(
 	"Microsoft.PowerShell.Management",
 	"Microsoft.PowerShell.Utility",
 	"Microsoft.PowerShell.Security",
 	"Microsoft.PowerShell.Diagnostics"
 )
 
-###########################################################################################
 # A list of compatible modules that exist in Windows PowerShell that aren't available
 # to PowerShell Core by default. These modules, along with CIM modules can be installed
 # in the PowerShell Core module repository using the Copy-WinModule command.
-Set-Variable -Name CompatibleModules -Scope Script -Value @(
+New-Variable -Name CompatibleModules -Scope Script -Value @(
 	"AppBackgroundTask",
 	"AppLocker",
 	"Appx",
@@ -144,7 +144,7 @@ Set-Variable -Name CompatibleModules -Scope Script -Value @(
 )
 
 # Module-scope variable to hold the active compatibility session name
-Set-Variable -Name SessionName -Scope Script -Value $null
+New-Variable -Name SessionName -Scope Script -Value $null
 
 # The computer name to use if one isn't provided.
 $SessionComputerName = "localhost"
@@ -152,12 +152,14 @@ $SessionComputerName = "localhost"
 # Specifies the default configuration to connect to when creating the compatibility session
 $SessionConfigurationName = "Microsoft.PowerShell"
 
-Set-Alias -Name Add-WinPSModulePath -Value Add-WindowsPSModulePath
+New-Alias -Name Add-WinPSModulePath -Value Add-WindowsPSModulePath
 
 # Location Changed handler that keeps the compatibility session PWD in sync with the parent PWD
 # This only applies on localhost.
 $LocationChangedHandler = {
-	[PSSession] $Session = Initialize-WinSession -ComputerName $SessionComputerName -ConfigurationName $SessionConfigurationName -PassThru
+	[PSSession] $Session = Initialize-WinSession -ComputerName $SessionComputerName `
+		-ConfigurationName $SessionConfigurationName -PassThru
+
 	if ($Session.ComputerName -eq "localhost")
 	{
 		$NewPath = $_.NewPath
@@ -167,8 +169,14 @@ $LocationChangedHandler = {
 
 $ExecutionContext.InvokeCommand.LocationChangedAction = $LocationChangedHandler
 
-# Remove the location changed handler if the module is removed.
+#
+# Module cleanup
+#
+
 $MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
+	Write-Debug -Message "[$ThisModule] Cleanup module"
+
+	# Remove the location changed handler if the module is removed.
 	if ($ExecutionContext.InvokeCommand.LocationChangedAction -eq $LocationChangedHandler)
 	{
 		$ExecutionContext.InvokeCommand.LocationChangedAction = $null

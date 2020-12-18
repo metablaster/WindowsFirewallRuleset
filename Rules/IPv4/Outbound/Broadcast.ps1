@@ -88,7 +88,7 @@ New-NetFirewallRule -DisplayName "Limited Broadcast" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress $LimitedBroadcast `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System `
+	-LocalUser $LocalSystem `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "" |
@@ -100,7 +100,7 @@ New-NetFirewallRule -DisplayName "Directed Broadcast" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress $BroadcastAddress `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System `
+	-LocalUser $LocalSystem `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "" |

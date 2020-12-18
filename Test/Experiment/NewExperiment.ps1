@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
+Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,30 +26,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# Initialization
-New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Value (Split-Path $PSScriptRoot -Leaf)
+<#
+.SYNOPSIS
+Script experiment
 
-# Imports
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
-. $ProjectRoot\Modules\ModulePreferences.ps1
+.DESCRIPTION
+Use NewExperiment.ps1 to write temporary tests
 
-#
-# Script imports
-#
+.EXAMPLE
+PS> .\NewExperiment.ps1
 
-$PublicScripts = @(
-	"ConvertFrom-OSBuild"
-	"Get-Broadcast"
-	"Get-ComputerName"
-	"Get-ConfiguredAdapter"
-	"Get-InterfaceAlias"
-	"Get-IPAddress"
-	"Get-SystemSKU"
-	"Test-TargetComputer"
-)
+.INPUTS
+None. You cannot pipe objects to NewExperiment.ps1
 
-foreach ($Script in $PublicScripts)
-{
-	Write-Debug -Message "[$ThisModule] Importing script: Public\$Script.ps1"
-	. "$PSScriptRoot\Public\$Script.ps1"
-}
+.OUTPUTS
+None. NewExperiment.ps1 does not generate any output
+
+.NOTES
+None.
+#>
+
+#region Initialization
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
+
+Import-Module -Name $PSScriptRoot\Experiment.Module -Force
+
+Write-Information -MessageData "ThisScript: $ThisScript" -INFA "Continue"

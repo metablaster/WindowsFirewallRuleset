@@ -55,6 +55,7 @@ None. New-Function does not generate any output
 None.
 TODO: Update HelpURI
 TODO: If this is based on 3rd party function, include file and/or function changes here
+TODO: Remove unneeded template code
 #>
 function New-Function
 {
@@ -90,16 +91,19 @@ function New-Function
 	}
 }
 
-# TODO: Module scripts could have the following code to allow executing them outside the context of a module
-if ($MyInvocation.InvocationName -ne '.')
-{
-	New-Function -ParameterName "Whatever"
-	Update-Log
-}
-
 #
-# TODO: Module variables from this script
+# Script scope variables, makes sense only for self contained module functions
+# ex. when used out of a module context
 #
 
 # Template variable
-Set-Variable -Name TemplateVariable -Scope Global -Value $null
+New-Variable -Name TemplateVariable -Scope Script -Value $null
+
+# TODO: Self contained module scripts could have the following code to allow executing them
+# outside the context of a module
+
+# Out of a module context
+if ($MyInvocation.InvocationName -ne '.')
+{
+	New-Function -ParameterName $TemplateVariable
+}

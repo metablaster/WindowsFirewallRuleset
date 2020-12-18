@@ -75,7 +75,7 @@ function Get-AllUserSoftware
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
-		[PSCustomObject[]] $AllUserPrograms = @()
+		[PSCustomObject[]] $AllUserSoftware = @()
 		if (!$RootKey)
 		{
 			Write-Warning -Message "Failed to open registry root key: HKLM:$HKLM"
@@ -121,7 +121,7 @@ function Get-AllUserSoftware
 
 					# TODO: generate Principal entry in all registry functions
 					# Get more key entries as needed
-					$AllUserPrograms += [PSCustomObject]@{
+					$AllUserSoftware += [PSCustomObject]@{
 						"ComputerName" = $ComputerName
 						"RegKey" = $HKLMKey
 						"SIDKey" = $HKLSubMKey
@@ -132,7 +132,7 @@ function Get-AllUserSoftware
 				}
 			}
 
-			Write-Output $AllUserPrograms
+			Write-Output $AllUserSoftware
 		}
 	}
 }

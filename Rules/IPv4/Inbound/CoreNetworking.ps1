@@ -206,7 +206,7 @@ New-NetFirewallRule -DisplayName "Internet Group Management Protocol" `
 	-Enabled True -Action Allow `
 	-Direction $Direction -Protocol 2 -LocalAddress Any -RemoteAddress LocalSubnet4 `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "IGMP messages are sent and received by nodes to create,
 join and depart multicast groups." | Format-Output

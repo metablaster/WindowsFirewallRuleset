@@ -145,7 +145,7 @@ another PC on the same local network." | Format-Output
 		-DisplayName "SteamService" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-		-LocalUser $NT_AUTHORITY_System `
+		-LocalUser $LocalSystem `
 		-Description "" | Format-Output
 
 	# TODO: For all x86 rules we need checks, since those don't exist on x86 systems

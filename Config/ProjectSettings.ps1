@@ -79,6 +79,7 @@ if (!(Get-Variable -Name ProjectRoot -Scope Global -ErrorAction Ignore))
 }
 
 # Assemble partial path name to calling script
+# TODO: delete caller variable, and if no match show script leaf name
 $Caller = [regex]::escape($ProjectRoot)
 if ((Get-PSCallStack)[1].ScriptName -match "(?<=$Caller\\).+")
 {
@@ -610,7 +611,7 @@ if (!(Get-Variable -Name CheckProtectedVariables -Scope Global -ErrorAction Igno
 #endregion
 
 # Module autoload is triggered for functions only not for variable exports
-if (!$InModule -and !(Get-Module -Name Ruleset.Logging))
+if (!$InModule)
 {
 	Import-Module -Scope Global -Name Ruleset.Logging
 }

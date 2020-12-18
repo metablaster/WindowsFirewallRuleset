@@ -90,7 +90,7 @@ if ($Develop)
 		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort 1900, 3702 -RemotePort Any `
-		-LocalUser $NT_AUTHORITY_LocalService -EdgeTraversalPolicy Block `
+		-LocalUser $LocalService -EdgeTraversalPolicy Block `
 		-InterfaceType Any `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "Temporary allow troublesome UDP traffic." |

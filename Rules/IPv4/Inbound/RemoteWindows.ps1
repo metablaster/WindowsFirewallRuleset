@@ -158,7 +158,7 @@ New-NetFirewallRule -DisplayName "Remote desktop - WebSocket" `
 	-Enabled False -Action Block -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort 3387 -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "rule for the Remote Desktop service to allow RDP over WebSocket traffic." |
 Format-Output
@@ -169,7 +169,7 @@ New-NetFirewallRule -DisplayName "Remote desktop - WebSocket" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort 3387 -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "rule for the Remote Desktop service to allow RDP over WebSocket traffic." |
 Format-Output
@@ -180,7 +180,7 @@ New-NetFirewallRule -DisplayName "Remote desktop - WebSocket Secure" `
 	-Enabled False -Action Block -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort 3392 -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "rule for the Remote Desktop service to allow RDP over WebSocket traffic." |
 Format-Output
@@ -191,7 +191,7 @@ New-NetFirewallRule -DisplayName "Remote desktop - WebSocket Secure" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort 3392 -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "rule for the Remote Desktop service to allow RDP over WebSocket traffic." |
 Format-Output

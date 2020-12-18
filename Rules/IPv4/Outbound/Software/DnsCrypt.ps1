@@ -104,7 +104,7 @@ and haven't been tampered with.
 This rule applies to both TLS and HTTPS encrypted DNS using dnscrypt-proxy." |
 	Format-Output
 
-	# $NT_AUTHORITY_System
+	# $LocalSystem
 	# TODO: see if LooseSourceMapping is needed
 	New-NetFirewallRule -DisplayName "dnscrypt-proxy" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -130,7 +130,7 @@ This rule applies to both TLS and HTTPS encrypted DNS using dnscrypt-proxy." |
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 80, 443 `
-		-LocalUser $AdministratorsGroupSDDL `
+		-LocalUser $AdminGroupSDDL `
 		-InterfaceType $DefaultInterface `
 		-Description "Simple DNS Crypt update check on startup" |
 	Format-Output

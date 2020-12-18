@@ -115,7 +115,7 @@ New-NetFirewallRule -DisplayName "Echo Reply (0)" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 0 `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "The data received in the echo message must be returned in the echo reply message.
 The identifier and sequence number may be used by the echo sender to aid in matching the replies
@@ -140,7 +140,7 @@ New-NetFirewallRule -DisplayName "Destination Unreachable (3)" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 3 `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Allow `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Allow `
 	-InterfaceType $DefaultInterface `
 	-Description "network specified in the RemoteAddress is unreachable, ie,
 the distance to the network is infinity, the gateway may send a destination unreachable message to
@@ -166,7 +166,7 @@ New-NetFirewallRule -DisplayName "Destination Unreachable Fragmentation Needed (
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 3:4 `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "Destination Unreachable Fragmentation Needed error messages are sent from any node
 that a packet traverses which is
@@ -179,7 +179,7 @@ New-NetFirewallRule -DisplayName "Parameter Problem (12)" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 12 `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Allow `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Allow `
 	-InterfaceType $DefaultInterface `
 	-Description "If the gateway or host processing a datagram finds a problem with the header
 parameters such that it cannot complete processing the
@@ -202,7 +202,7 @@ New-NetFirewallRule -DisplayName "Timestamp Reply (14)" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 14 `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "The data received (a timestamp) in the message is returned in the reply together
 with an additional timestamp.
@@ -234,7 +234,7 @@ New-NetFirewallRule -DisplayName "Time Exceeded (11)" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 11 `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Allow `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Allow `
 	-InterfaceType $DefaultInterface `
 	-Description "If the gateway processing a datagram finds the time to live field is zero it must
 discard the datagram.
@@ -259,7 +259,7 @@ New-NetFirewallRule -DisplayName "Router Solicitation (10)" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 10 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "the ICMP Internet Router Discovery Protocol (IRDP),
 also called the Internet Router Discovery Protocol,
@@ -284,7 +284,7 @@ New-NetFirewallRule -DisplayName "Echo Request (8)" `
 	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv4 -IcmpType 8 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrWAN `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Allow `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Allow `
 	-InterfaceType $DefaultInterface `
 	-Description "The data received in the echo message must be returned in the echo reply message.
 The identifier and sequence number may be used by the echo sender to aid in matching the replies
@@ -329,7 +329,7 @@ New-NetFirewallRule -DisplayName "Redirect (5)" `
 	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv4 -IcmpType 5 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "ICMP redirect messages are used by routers to notify the hosts on the data link
 that a better route is available for a particular destination.
@@ -361,7 +361,7 @@ New-NetFirewallRule -DisplayName "Router Advertisement (9)" `
 	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv4 -IcmpType 9 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "the ICMP Internet Router Discovery Protocol (IRDP), also called the Internet
 Router Discovery Protocol, is a protocol for computer hosts to discover the presence and location
@@ -383,7 +383,7 @@ New-NetFirewallRule -DisplayName "Timestamp (13)" `
 	-Enabled True -Action Block -Direction $Direction -Protocol ICMPv4 -IcmpType 13 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrWAN `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Allow `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Allow `
 	-InterfaceType $DefaultInterface `
 	-Description "The data received (a timestamp) in the message is returned in the reply together
 with an additional timestamp.
@@ -418,7 +418,7 @@ New-NetFirewallRule -DisplayName "Echo Request (8)" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 8 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Allow `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Allow `
 	-InterfaceType $DefaultInterface `
 	-Description "The data received in the echo message must be returned in the echo reply message.
 The identifier and sequence number may be used by the echo sender to aid in matching the replies
@@ -463,7 +463,7 @@ New-NetFirewallRule -DisplayName "Redirect (5)" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 5 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "ICMP redirect messages are used by routers to notify the hosts on the data link
 that a better route is available for a particular destination.
@@ -494,7 +494,7 @@ New-NetFirewallRule -DisplayName "Router Advertisement (9)" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 9 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "the ICMP Internet Router Discovery Protocol (IRDP), also called the Internet
 Router Discovery Protocol, is a protocol for computer hosts to discover the presence and location
@@ -516,7 +516,7 @@ New-NetFirewallRule -DisplayName "Timestamp (13)" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 13 `
 	-LocalAddress Any -RemoteAddress $RemoteAddrLAN `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Allow `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Allow `
 	-InterfaceType $DefaultInterface `
 	-Description "The data received (a timestamp) in the message is returned in the reply together
 with an additional timestamp.

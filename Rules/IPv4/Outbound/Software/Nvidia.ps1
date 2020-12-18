@@ -79,7 +79,7 @@ Set-Variable -Name GeForce -Scope Script -Value $null
 
 # Some rules use multiple accounts
 # TODO: we should probably have better approach to assemble SDDL's for multiple domains
-$ContainerAccounts = $NT_AUTHORITY_System
+$ContainerAccounts = $LocalSystem
 Merge-SDDL ([ref] $ContainerAccounts) $UsersGroupSDDL
 
 #
@@ -170,7 +170,7 @@ if ([System.Environment]::Is64BitOperatingSystem)
 				-DisplayName "Nvidia NVDisplay Container x64" -Service Any -Program $Program `
 				-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 				-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-				-LocalUser $NT_AUTHORITY_System `
+				-LocalUser $LocalSystem `
 				-Description "" | Format-Output
 		}
 	}

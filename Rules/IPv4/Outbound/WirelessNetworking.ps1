@@ -79,6 +79,8 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Predefined rules for Wireless Display
 #
 
+$UserModeDrivers = Get-SDDL -Domain "NT AUTHORITY" -User "USER MODE DRIVERS"
+
 # NOTE: several rules below use this path
 $WUDFHost = "%SystemRoot%\System32\WUDFHost.exe"
 Test-File $WUDFHost
@@ -90,7 +92,7 @@ New-NetFirewallRule -DisplayName "Wireless Display" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort 443 `
-	-LocalUser $NT_AUTHORITY_UserModeDrivers `
+	-LocalUser $UserModeDrivers `
 	-InterfaceType $LocalInterface `
 	-Description "Driver Foundation - User-mode Driver Framework Host Process.
 The driver host process (Wudfhost.exe) is a child process of the driver manager service.
@@ -104,7 +106,7 @@ New-NetFirewallRule -DisplayName "Wireless Display" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_UserModeDrivers `
+	-LocalUser $UserModeDrivers `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Driver Foundation - User-mode Driver Framework Host Process.
@@ -138,7 +140,7 @@ New-NetFirewallRule -DisplayName "WLAN Service WFD Driver-only" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress LocalSubnet4 `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System `
+	-LocalUser $LocalSystem `
 	-InterfaceType $LocalInterface `
 	-Description "Rule for drivers to communicate over WFD, WFD Services kernel mode driver rule.
 Wi-Fi Direct (WFD) Protocol Specifies: Proximity Extensions, which enable two or more devices that
@@ -153,7 +155,7 @@ New-NetFirewallRule -DisplayName "WLAN Service WFD Driver-only" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress LocalSubnet4 `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System `
+	-LocalUser $LocalSystem `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for drivers to communicate over WFD, WFD Services kernel mode driver rule.
@@ -177,7 +179,7 @@ New-NetFirewallRule -DisplayName "Wi-Fi Direct Network Discovery" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol Any `
 	-LocalAddress Any -RemoteAddress LocalSubnet4 `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_LocalService `
+	-LocalUser $LocalService `
 	-InterfaceType Wired, Wireless `
 	-Description "Rule to discover WSD devices on Wi-Fi Direct networks.
 Host enables pairing between the system and wired or wireless devices.

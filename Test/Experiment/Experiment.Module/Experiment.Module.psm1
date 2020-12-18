@@ -5,7 +5,6 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-TODO: Update Copyright date and author
 Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,20 +26,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# TODO: If this is based on 3rd party module, include file changes here
-
 # Initialization
 New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Value (Split-Path $PSScriptRoot -Leaf)
 
 # Imports
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
+. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 -InModule
 . $ProjectRoot\Modules\ModulePreferences.ps1
-
-# TODO: Remove unneeded template code
 
 #
 # Script imports
-# TODO: try/catch for importing scripts
 #
 
 $ScriptsToProcess = @(
@@ -62,7 +56,7 @@ foreach ($Script in $PrivateScripts)
 }
 
 $PublicScripts = @(
-	"New-Function"
+	"Test-Function"
 )
 
 foreach ($Script in $PublicScripts)
@@ -78,7 +72,7 @@ foreach ($Script in $PublicScripts)
 Write-Debug -Message "[$ThisModule] Initializing module variables"
 
 # Template variable
-New-Variable -Name TemplateModuleVariable -Scope Global -Value $null
+New-Variable -Name ModuleVariable -Scope Global -Value "Module variable"
 
 #
 # Module cleanup
@@ -87,5 +81,5 @@ New-Variable -Name TemplateModuleVariable -Scope Global -Value $null
 $MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
 	Write-Debug -Message "[$ThisModule] Cleanup module"
 
-	Remove-Variable -Name TemplateModuleVariable -Scope Global
+	Remove-Variable -Name ModuleVariable -Scope Global
 }

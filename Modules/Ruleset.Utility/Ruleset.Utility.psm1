@@ -27,11 +27,11 @@ SOFTWARE.
 #>
 
 # Initialization
-Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ((Get-Item $PSCommandPath).Basename)
+New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Value (Split-Path $PSScriptRoot -Leaf)
 
 # Imports
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
-. $PSScriptRoot\..\ModulePreferences.ps1
+. $ProjectRoot\Modules\ModulePreferences.ps1
 
 #
 # Script imports
@@ -74,18 +74,19 @@ foreach ($Script in $PublicScripts)
 # Module variables
 #
 
+Write-Debug -Message "[$ThisModule] Initializing module variables"
+
+# Default execution context, used in Approve-Execute
+New-Variable -Name Context -Scope Script -Value "Context not set"
+
 if (!(Get-Variable -Name CheckInitUtility -Scope Global -ErrorAction Ignore))
 {
-	Write-Debug -Message "[$ThisModule] Initialize global constant: CheckInitUtility"
+	Write-Debug -Message "[$ThisModule] Initializing module constants"
+
 	# check if constants already initialized, used for module reloading
 	New-Variable -Name CheckInitUtility -Scope Global -Option Constant -Value $null
 
-	Write-Debug -Message "[$ThisModule] Initialize global constant: ServiceHost"
 	# Most used program
 	# TODO: Should be part of ProgramInfo, which means importing module
 	New-Variable -Name ServiceHost -Scope Global -Option Constant -Value "%SystemRoot%\System32\svchost.exe"
 }
-
-Write-Debug -Message "[$ThisModule] Initialize module variable: Context"
-# Global execution context, used in Approve-Execute
-New-Variable -Name Context -Scope Script -Value "Context not set"

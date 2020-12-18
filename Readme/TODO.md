@@ -192,6 +192,7 @@ Todo's in this file are categorized into following sections:
     could be implemented in `Test-Service` function
     - Instead of `Approve-Execute` we should use `ShouldProcess` or `ShouldContinue` passing in
     context variable and setting help if this is possible.
+    - Parameter HelpMessage for mandatory parameters
 
 3. Rules
 

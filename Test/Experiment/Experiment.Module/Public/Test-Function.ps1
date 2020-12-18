@@ -28,39 +28,45 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Blank unit test
+Module script experiment
 
 .DESCRIPTION
-Use BlankTest.ps1 as a template for temporary tests
+Use Test-Function.ps1 to write temporary module tests
 
 .EXAMPLE
-PS> .\BlankTest.ps1
+PS> Import-Module -Name Experiment.Module
+PS> Test-Function
 
 .INPUTS
-None. You cannot pipe objects to BlankTest.ps1
+None. You cannot pipe objects to Test-Function.ps1
 
 .OUTPUTS
-None. BlankTest.ps1 does not generate any output
+None. Test-Function.ps1 does not generate any output
 
 .NOTES
 None.
 #>
+function Test-Function
+{
+	[CmdletBinding()]
+	param (
+		[Parameter()]
+		[string] $Param
+	)
 
-#region Initialization
-. $PSScriptRoot\..\Config\ProjectSettings.ps1
-New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-# Check requirements
-Initialize-Project -Abort
+	$InformationPreference = "Continue"
 
-# Imports
-. $PSScriptRoot\ContextSetup.ps1
+	Write-Information -MessageData "Parameter: $Param"
+	Write-Information -MessageData "This module: $ThisModule"
+}
 
-# User prompt
-Update-Context $TestContext $ThisScript
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+# Template variable
+Set-Variable -Name TestVariable -Scope Script -Value "Test variable"
 
-Enter-Test
-
-Update-Log
-Exit-Test
+# Out of a module context
+if ($MyInvocation.InvocationName -ne '.')
+{
+	Test-Function $TestVariable
+}

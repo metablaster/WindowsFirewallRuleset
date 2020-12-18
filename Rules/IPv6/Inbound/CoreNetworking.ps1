@@ -180,7 +180,7 @@ New-NetFirewallRule -DisplayName "IPv4 over HTTPS" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort IPHTTPSIn -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "Allow IPHTTPS tunneling technology to provide connectivity across HTTP
 proxies and firewalls.
@@ -202,7 +202,7 @@ New-NetFirewallRule -DisplayName "IPv6 Encapsulation" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol 41 `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "Rule required to permit IPv6 traffic for
 ISATAP (Intra-Site Automatic Tunnel Addressing Protocol) and 6to4 tunneling services.

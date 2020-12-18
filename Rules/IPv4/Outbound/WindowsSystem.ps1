@@ -131,7 +131,7 @@ if ((Test-Installation "WindowsDefender" ([ref] $WindowsDefenderRoot)) -or $Forc
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 443 `
-		-LocalUser $NT_AUTHORITY_System `
+		-LocalUser $LocalSystem `
 		-InterfaceType $DefaultInterface `
 		-Description "Anti malware service executable." |
 	Format-Output
@@ -145,7 +145,7 @@ if ((Test-Installation "WindowsDefender" ([ref] $WindowsDefenderRoot)) -or $Forc
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 443 `
-		-LocalUser $NT_AUTHORITY_System `
+		-LocalUser $LocalSystem `
 		-InterfaceType $DefaultInterface `
 		-Description "This utility can be useful when you want to automate Windows Defender
 Antivirus use." |
@@ -162,7 +162,7 @@ New-NetFirewallRule -DisplayName "Malicious Software Removal Tool" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
-	-LocalUser $NT_AUTHORITY_System `
+	-LocalUser $LocalSystem `
 	-InterfaceType $DefaultInterface `
 	-Description "" |
 Format-Output
@@ -252,7 +252,7 @@ $Program = "%SystemRoot%\System32\UserAccountBroker.exe"
 Test-File $Program
 
 $MSAccountUsers = $UsersGroupSDDL
-Merge-SDDL ([ref] $MSAccountUsers) $AdministratorsGroupSDDL
+Merge-SDDL ([ref] $MSAccountUsers) $AdminGroupSDDL
 
 New-NetFirewallRule -DisplayName "Microsoft Account" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -289,7 +289,7 @@ New-NetFirewallRule -DisplayName "Cortana Speech Model" `
 	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
-	-LocalUser $NT_AUTHORITY_NetworkService `
+	-LocalUser $NetworkService `
 	-InterfaceType $DefaultInterface `
 	-Description "" |
 Format-Output
@@ -318,7 +318,7 @@ New-NetFirewallRule -DisplayName "Microsoft Compatibility Telemetry" `
 	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
-	-LocalUser $NT_AUTHORITY_System `
+	-LocalUser $LocalSystem `
 	-InterfaceType $DefaultInterface `
 	-Description "The CompatTelRunner.exe process is used by Windows to perform system diagnostics
 to determine if there are any compatibility issues.
@@ -343,7 +343,7 @@ New-NetFirewallRule -DisplayName "Windows Indexing Service" `
 	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $NT_AUTHORITY_System `
+	-LocalUser $LocalSystem `
 	-InterfaceType $DefaultInterface `
 	-Description "SearchProtocolHost.exe is part of the Windows Indexing Service,
 an application that indexes files on the local drive making them easier to search." |
@@ -702,7 +702,7 @@ New-NetFirewallRule -DisplayName "Update Session Orchestrator" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
-	-LocalUser $NT_AUTHORITY_System `
+	-LocalUser $LocalSystem `
 	-InterfaceType $DefaultInterface `
 	-Description "wuauclt.exe is deprecated on Windows 10 (and Server 2016 and newer).
 The command line tool has been replaced by usoclient.exe.
@@ -766,7 +766,7 @@ New-NetFirewallRule -DisplayName "Windows Security Health Service" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 443 `
-	-LocalUser $NT_AUTHORITY_System `
+	-LocalUser $LocalSystem `
 	-InterfaceType $DefaultInterface `
 	-Description "Windows Defender AV and the Windows Security app use similarly named services for specific purposes.
 The Windows Security app uses the Windows Security Service (SecurityHealthService or Windows Security Health Service),

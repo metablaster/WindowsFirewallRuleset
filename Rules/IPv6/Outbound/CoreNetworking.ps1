@@ -125,7 +125,7 @@ New-NetFirewallRule -DisplayName "Domain Name System" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress DefaultGateway6 `
 	-LocalPort Any -RemotePort 53 `
-	-LocalUser $NT_AUTHORITY_System `
+	-LocalUser $LocalSystem `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule to allow IPv6 DNS (Domain Name System) requests by System to default gateway." |
@@ -235,7 +235,7 @@ New-NetFirewallRule -DisplayName "IPv6 Encapsulation" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol 41 `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System `
+	-LocalUser $LocalSystem `
 	-InterfaceType $DefaultInterface `
 	-Description "Rule required to permit IPv6 traffic for
 ISATAP (Intra-Site Automatic Tunnel Addressing Protocol) and 6to4 tunneling services.

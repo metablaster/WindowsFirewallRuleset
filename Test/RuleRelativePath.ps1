@@ -84,7 +84,7 @@ New-NetFirewallRule -DisplayName "TargetProgram" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Internet4 `
 	-LocalPort Any -RemotePort 80, 443, 26002 `
-	-LocalUser $NT_AUTHORITY_LocalService `
+	-LocalUser $LocalService `
 	-InterfaceType $DefaultInterface `
 	-Description "Relative path test" |
 Format-Output

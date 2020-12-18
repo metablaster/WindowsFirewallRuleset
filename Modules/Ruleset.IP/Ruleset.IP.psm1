@@ -53,11 +53,11 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 # - Renamed module from "Indented.NET.IP" to "Ruleset.IP"
 
 # Initialization
-Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ((Get-Item $PSCommandPath).Basename)
+New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Value (Split-Path $PSScriptRoot -Leaf)
 
 # Imports
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
-. $PSScriptRoot\..\ModulePreferences.ps1
+. $ProjectRoot\Modules\ModulePreferences.ps1
 
 #
 # Script imports

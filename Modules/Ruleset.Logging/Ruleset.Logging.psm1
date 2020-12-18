@@ -27,11 +27,11 @@ SOFTWARE.
 #>
 
 # Initialization
-Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ((Get-Item $PSCommandPath).Basename)
+New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Value (Split-Path $PSScriptRoot -Leaf)
 
 # Imports
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
-. $PSScriptRoot\..\ModulePreferences.ps1
+. $ProjectRoot\Modules\ModulePreferences.ps1
 
 # TODO: stream logging instead of open/close file for performance
 
@@ -64,12 +64,17 @@ foreach ($Script in $PublicScripts)
 # Module variables
 #
 
-if (!(Get-Variable -Name CheckInitLogging -Scope Global -ErrorAction Ignore))
-{
-	Write-Debug -Message "[$ThisModule] Initialize global constant: CheckInitLogging"
-	# check if constants already initialized, used for module reloading
-	New-Variable -Name CheckInitLogging -Scope Global -Option Constant -Value $null
+Write-Debug -Message "[$ThisModule] Initializing module variables"
 
-	# To prevent callers from overwriting a log header of each other we need a stack of headers
-	New-Variable -Name HeaderStack -Scope Global -Value ([System.Collections.Stack]::new(@("")))
+# To prevent callers from overwriting log headers of each other we need a stack of headers
+New-Variable -Name HeaderStack -Scope Global -Value ([System.Collections.Stack]::new(@("")))
+
+#
+# Module cleanup
+#
+
+$MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
+	Write-Debug -Message "[$ThisModule] Cleanup module"
+
+	Remove-Variable -Name HeaderStack -Scope Global
 }

@@ -378,7 +378,7 @@ function Find-Installation
 			# versions: https://en.wikipedia.org/wiki/History_of_Microsoft_Office
 			# Update-Table -Search "Microsoft Office"
 
-			$OfficeRoot = Get-ExecutablePath | Where-Object -Property Name -EQ "Winword.exe" |
+			$OfficeRoot = $ExecutablePaths | Where-Object -Property Name -EQ "Winword.exe" |
 			Select-Object -ExpandProperty InstallLocation
 
 			if ($OfficeRoot)

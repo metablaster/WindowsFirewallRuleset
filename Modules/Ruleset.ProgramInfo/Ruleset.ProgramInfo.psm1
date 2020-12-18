@@ -27,11 +27,11 @@ SOFTWARE.
 #>
 
 # Initialization
-Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ((Get-Item $PSCommandPath).Basename)
+New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Value (Split-Path $PSScriptRoot -Leaf)
 
 # Imports
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
-. $PSScriptRoot\..\ModulePreferences.ps1
+. $ProjectRoot\Modules\ModulePreferences.ps1
 
 #
 # Script imports
@@ -97,33 +97,48 @@ foreach ($Script in $PublicScripts)
 #
 # Module variables
 #
+Write-Debug -Message "[$ThisModule] Initializing module variables"
 
 # Installation table holds user and program directory pair
 if ($Develop)
 {
 	# TODO: script scope variable should be exportable?
-	Write-Debug -Message "[$ThisModule] Initialize Global variable: InstallTable"
 	Remove-Variable -Name InstallTable -Scope Script -ErrorAction Ignore
-	Set-Variable -Name InstallTable -Scope Global -Value $null
+	New-Variable -Name InstallTable -Scope Global -Value $null
 }
 else
 {
-	Write-Debug -Message "[$ThisModule] Initialize module variable: InstallTable"
 	Remove-Variable -Name InstallTable -Scope Global -ErrorAction Ignore
-	Set-Variable -Name InstallTable -Scope Script -Value $null
+	New-Variable -Name InstallTable -Scope Script -Value $null
 }
 
-Write-Debug -Message "[$ThisModule] Initialize module readonly variable: SystemPrograms"
-# Programs installed for all users
-New-Variable -Name SystemPrograms -Scope Script -Option ReadOnly -Value (Get-SystemSoftware -Computer $PolicyStore)
+# Programs installed system wide
+New-Variable -Name SystemPrograms -Scope Script -Option ReadOnly -Value (
+	Get-SystemSoftware -Computer $PolicyStore
+)
 
-Write-Debug -Message "[$ThisModule] Initialize module readonly variable: ExecutablePaths"
-# Programs installed for all users
-New-Variable -Name ExecutablePaths -Scope Script -Option ReadOnly -Value (Get-ExecutablePath -Computer $PolicyStore)
+# Executable paths
+New-Variable -Name ExecutablePaths -Scope Script -Option ReadOnly -Value (
+	Get-ExecutablePath -Computer $PolicyStore
+)
 
-Write-Debug -Message "[$ThisModule] Initialize module readonly variable: AllUserPrograms"
-# Programs installed for all users
-New-Variable -Name AllUserPrograms -Scope Script -Option ReadOnly -Value (Get-AllUserSoftware -Computer $PolicyStore)
+# Program data
+New-Variable -Name AllUserPrograms -Scope Script -Option ReadOnly -Value (
+	Get-AllUserSoftware -Computer $PolicyStore
+)
+
+#
+# Module cleanup
+#
+
+$MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
+	Write-Debug -Message "[$ThisModule] Cleanup module"
+
+	if ($Develop)
+	{
+		Remove-Variable -Name InstallTable -Scope Global
+	}
+}
 
 <# Opening keys, naming convention as you drill down the keys
 

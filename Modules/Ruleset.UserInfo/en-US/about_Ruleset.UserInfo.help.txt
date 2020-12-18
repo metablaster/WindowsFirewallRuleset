@@ -10,16 +10,23 @@ LONG DESCRIPTION
 	Currently only localhost is supported.
 
 VARIABLES
-	UsersGroupSDDL:   			SDDL string for "Users" group
-	AdministratorsGroupSDDL:	SDDL string for "Administrators" group
+	UsersGroupSDDL
+	SDDL string for "Users" group
 
-	# SDDL strings for the following system account
-	NT_AUTHORITY_System
-	NT_AUTHORITY_LocalService
-	NT_AUTHORITY_NetworkService
-	NT_AUTHORITY_UserModeDrivers
+	AdminGroupSDDL
+	SDDL string for "Administrators" group
 
-	CheckInitUserInfo:	Variable to prevent double initialization of constants
+	LocalSystem
+	SDDL string for "NT AUTHORITY\SYSTEM"
+
+	LocalService
+	SDDL string for "NT AUTHORITY\LOCAL SERVICE"
+
+	NetworkService
+	SDDL string for "NT AUTHORITY\NETWORK SERVICE"
+
+	CheckInitUserInfo
+	To prevent double initialization of constants
 
 EXAMPLES
 	ConvertFrom-SID

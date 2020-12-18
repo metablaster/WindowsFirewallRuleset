@@ -79,6 +79,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Predefined rules for Wireless Display
 #
 
+$UserModeDrivers = Get-SDDL -Domain "NT AUTHORITY" -User "USER MODE DRIVERS"
 $Program = "%SystemRoot%\System32\WUDFHost.exe"
 Test-File $Program
 
@@ -89,7 +90,7 @@ New-NetFirewallRule -DisplayName "Wireless Display" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort 443 -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_UserModeDrivers -EdgeTraversalPolicy Block `
+	-LocalUser $UserModeDrivers -EdgeTraversalPolicy Block `
 	-InterfaceType $LocalInterface `
 	-Description "Driver Foundation - User-mode Driver Framework Host Process.
 The driver host process (Wudfhost.exe) is a child process of the driver manager service.
@@ -143,7 +144,7 @@ New-NetFirewallRule -DisplayName "WLAN Service WFD Driver-only" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress LocalSubnet4 `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $LocalInterface `
 	-Description "Rule for drivers to communicate over WFD, WFD Services kernel mode driver rule.
 Wi-Fi Direct (WFD) Protocol Specifies: Proximity Extensions, which enable two or more devices that
@@ -157,7 +158,7 @@ New-NetFirewallRule -DisplayName "WLAN Service WFD Driver-only" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress LocalSubnet4 `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for drivers to communicate over WFD, WFD Services kernel mode driver rule.
@@ -180,7 +181,7 @@ New-NetFirewallRule -DisplayName "Wi-Fi Direct Network Discovery" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol Any `
 	-LocalAddress Any -RemoteAddress LocalSubnet4 `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_LocalService -EdgeTraversalPolicy Block `
+	-LocalUser $LocalService -EdgeTraversalPolicy Block `
 	-InterfaceType Wired, Wireless  `
 	-Description "Rule to discover WSD devices on Wi-Fi Direct networks.
 Host enables pairing between the system and wired or wireless devices. This service is new since Windows 8.
@@ -232,7 +233,7 @@ New-NetFirewallRule -DisplayName "Wireless portable devices (UPnP)" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress LocalSubnet4 `
 	-LocalPort 2869 -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $LocalInterface `
 	-Description "Wireless Portable Devices to allow use of Universal Plug and Play." | Format-Output
 

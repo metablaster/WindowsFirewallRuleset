@@ -95,7 +95,7 @@ if ((Test-Installation "OneDrive" ([ref] $OneDriveRoot)) -or $ForceLoad)
 		-DisplayName "OneDrive Update" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-		-LocalUser $NT_AUTHORITY_System `
+		-LocalUser $LocalSystem `
 		-Description "Updater for OneDrive" | Format-Output
 
 	# TODO: LocalUser should be explicit user because each user runs it's own instance

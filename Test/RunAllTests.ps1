@@ -92,7 +92,8 @@ Write-Warning -Message "Output of some tests cases may be unexpected with RunAll
 if (!$Pester)
 {
 	# Recursively get list of powershell scripts (unit tests)
-	$UnitTests = Get-ChildItem -Path $ProjectRoot\Test -Recurse -Filter *.ps1 -Exclude "ContextSetup.ps1", "$ThisScript.ps1"
+	$UnitTests = Get-ChildItem -Path $ProjectRoot\Test -Recurse -Filter *.ps1 -Exclude "ContextSetup.ps1", "$ThisScript.ps1" |
+	Where-Object { $_.FullName -notlike "*\Experiment\*" }
 
 	if ($UnitTests)
 	{
@@ -104,7 +105,7 @@ if (!$Pester)
 	}
 	else
 	{
-		Write-Error -Category ObjectNotFound -TargetObject $Files -Message "No powershell script files found"
+		Write-Error -Category ObjectNotFound -TargetObject $Files -Message "No PowerShell test scripts found"
 	}
 }
 
@@ -133,7 +134,7 @@ if ($PesterTests)
 }
 else
 {
-	Write-Error -Category ObjectNotFound -TargetObject $Files -Message "No powershell script files found"
+	Write-Error -Category ObjectNotFound -TargetObject $Files -Message "No Pester test scripts found"
 }
 
 Write-Information -Tags "Project" -MessageData "INFO: Running all tests done"

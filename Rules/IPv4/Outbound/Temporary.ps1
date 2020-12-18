@@ -98,7 +98,7 @@ New-NetFirewallRule -DisplayName "Port 80" `
 Format-Output
 
 $InstallerAccounts = $UsersGroupSDDL
-Merge-SDDL ([ref] $InstallerAccounts) $AdministratorsGroupSDDL
+Merge-SDDL ([ref] $InstallerAccounts) $AdminGroupSDDL
 
 # NOTE: to make use of this rule, it should be updated here and the script re-run
 New-NetFirewallRule -DisplayName "Installer" `
@@ -177,7 +177,7 @@ if ($Develop)
 		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort Any -RemotePort 5355 `
-		-LocalUser $NT_AUTHORITY_NetworkService `
+		-LocalUser $NetworkService `
 		-InterfaceType Any `
 		-Description "Temporary allow troublesome UDP traffic." |
 	Format-Output
@@ -188,7 +188,7 @@ if ($Develop)
 		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort Any -RemotePort 1900, 3702 `
-		-LocalUser $NT_AUTHORITY_LocalService `
+		-LocalUser $LocalService `
 		-InterfaceType Any `
 		-Description "Temporary allow troublesome UDP traffic." |
 	Format-Output
@@ -214,7 +214,7 @@ if ($Develop)
 		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort 137 -RemotePort 137 `
-		-LocalUser $NT_AUTHORITY_System `
+		-LocalUser $LocalSystem `
 		-InterfaceType Any `
 		-Description "Temporary allow troublesome UDP traffic." |
 	Format-Output

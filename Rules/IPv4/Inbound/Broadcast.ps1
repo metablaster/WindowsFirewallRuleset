@@ -88,7 +88,7 @@ New-NetFirewallRule -DisplayName "Limited Broadcast" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress $LimitedBroadcast -RemoteAddress Any `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "" |
@@ -101,7 +101,7 @@ New-NetFirewallRule -DisplayName "Limited Broadcast" `
 	-Enabled True -Action Block -Direction $Direction -Protocol UDP `
 	-LocalAddress $LimitedBroadcast -RemoteAddress LocalSubnet4, Intranet4 `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Explicitly deny broadcast traffic on public subnets" |
@@ -113,7 +113,7 @@ New-NetFirewallRule -DisplayName "Directed Broadcast" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress $BroadcastAddress -RemoteAddress LocalSubnet4 `
 	-LocalPort Any -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "" |

@@ -99,7 +99,7 @@ useful for troubleshooting, and disable ASAP." |
 		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress $LinkScopedUnicast -RemoteAddress Any `
 		-LocalPort Any -RemotePort 5355 `
-		-LocalUser $NT_AUTHORITY_NetworkService `
+		-LocalUser $NetworkService `
 		-InterfaceType Any `
 		-Description "Temporary allow troublesome UDP traffic." |
 	Format-Output
@@ -110,7 +110,7 @@ useful for troubleshooting, and disable ASAP." |
 		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress $LinkScopedUnicast -RemoteAddress Any `
 		-LocalPort Any -RemotePort 1900, 3702 `
-		-LocalUser $NT_AUTHORITY_LocalService `
+		-LocalUser $LocalService `
 		-InterfaceType Any `
 		-Description "Temporary allow troublesome UDP traffic." |
 	Format-Output
@@ -136,7 +136,7 @@ useful for troubleshooting, and disable ASAP." |
 		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress $LinkScopedUnicast -RemoteAddress Any `
 		-LocalPort 546 -RemotePort 547 `
-		-LocalUser $NT_AUTHORITY_LocalService `
+		-LocalUser $LocalService `
 		-InterfaceType Any `
 		-Description "Temporary allow troublesome UDP traffic." |
 	Format-Output

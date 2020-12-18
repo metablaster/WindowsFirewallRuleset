@@ -132,7 +132,7 @@ New-NetFirewallRule -DisplayName "Cast to Device streaming server (HTTP)" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Any `
 	-LocalPort 10246 -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "Inbound rule for the Cast to Device server to allow streaming using HTTP." |
 Format-Output
@@ -143,7 +143,7 @@ New-NetFirewallRule -DisplayName "Cast to Device streaming server (HTTP)" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress LocalSubnet4 `
 	-LocalPort 10246 -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "Inbound rule for the Cast to Device server to allow streaming using HTTP." |
 Format-Output
@@ -154,7 +154,7 @@ New-NetFirewallRule -DisplayName "Cast to Device streaming server (HTTP)" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress PlayToDevice4 `
 	-LocalPort 10246 -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "Inbound rule for the Cast to Device server to allow streaming using HTTP." |
 Format-Output
@@ -237,7 +237,7 @@ New-NetFirewallRule -DisplayName "Cast to Device UPnP Events" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress PlayToDevice4 `
 	-LocalPort 2869 -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "Inbound rule to allow receiving UPnP Events from Cast to Device targets." |
 Format-Output
@@ -337,7 +337,7 @@ New-NetFirewallRule -DisplayName "DIAL protocol server (HTTP)" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress LocalSubnet4 `
 	-LocalPort 10247 -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "rule for DIAL protocol server to allow remote control of Apps using HTTP.
 Discovery and Launch (DIAL) is a protocol co-developed by Netflix and YouTube with help from Sony and Samsung.
@@ -351,7 +351,7 @@ New-NetFirewallRule -DisplayName "DIAL protocol server (HTTP)" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress Intranet4 `
 	-LocalPort 10247 -RemotePort Any `
-	-LocalUser $NT_AUTHORITY_System -EdgeTraversalPolicy Block `
+	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "rule for DIAL protocol server to allow remote control of Apps using HTTP.
 Discovery and Launch (DIAL) is a protocol co-developed by Netflix and YouTube with help from Sony and Samsung.
