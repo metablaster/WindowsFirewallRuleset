@@ -68,7 +68,7 @@ function Get-AccountSID
 		[Alias("User")]
 		[Parameter(Mandatory = $true, Position = 0,
 			ValueFromPipeline = $true)]
-		[string[]] $UserNames,
+		[string[]] $UserName,
 
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
@@ -88,7 +88,7 @@ function Get-AccountSID
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-		foreach ($User in $UserNames)
+		foreach ($User in $UserName)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing: $ComputerName\$User"
 

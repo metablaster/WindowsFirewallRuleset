@@ -18,8 +18,8 @@ Parameter names and aliases
 
 - [string] User
   - UserName
-- [string] Computer
-  - ComputerName
+- [string] ComputerName
+  - Computer
   - Domain
 - [string] Group
   - UserGroup

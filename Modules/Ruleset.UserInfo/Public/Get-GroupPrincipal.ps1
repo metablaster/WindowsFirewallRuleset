@@ -73,7 +73,7 @@ function Get-GroupPrincipal
 
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
-		[string[]] $ComputerNames = [System.Environment]::MachineName,
+		[string[]] $ComputerName = [System.Environment]::MachineName,
 
 		[Parameter()]
 		[switch] $Disabled,
@@ -91,7 +91,7 @@ function Get-GroupPrincipal
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-		foreach ($Computer in $ComputerNames)
+		foreach ($Computer in $ComputerName)
 		{
 			if ($CIM)
 			{
@@ -226,7 +226,7 @@ function Get-GroupPrincipal
 				Write-Error -Category NotImplemented -TargetObject $Computer `
 					-Message "Querying remote computers without CIM switch not implemented"
 			}
-		} # foreach ($Computer in $ComputerNames)
+		} # foreach ($Computer in $ComputerName)
 
 		Write-Output $UserAccounts
 	} # process

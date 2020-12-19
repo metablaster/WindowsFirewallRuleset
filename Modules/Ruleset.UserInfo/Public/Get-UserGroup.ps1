@@ -63,7 +63,7 @@ function Get-UserGroup
 	param (
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter(Position = 0)]
-		[string[]] $ComputerNames = [System.Environment]::MachineName,
+		[string[]] $ComputerName = [System.Environment]::MachineName,
 
 		[Parameter()]
 		[switch] $CIM
@@ -78,7 +78,7 @@ function Get-UserGroup
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-		foreach ($Computer in $ComputerNames)
+		foreach ($Computer in $ComputerName)
 		{
 			if ($CIM)
 			{
@@ -145,7 +145,7 @@ function Get-UserGroup
 				Write-Error -Category NotImplemented -TargetObject $Computer `
 					-Message "Querying remote computers without CIM switch not implemented"
 			} # if ($CIM)
-		} # foreach ($Computer in $ComputerNames)
+		} # foreach ($Computer in $ComputerName)
 
 		Write-Output $UserGroups
 	} # process

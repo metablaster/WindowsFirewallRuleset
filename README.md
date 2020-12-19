@@ -115,11 +115,13 @@ manually thus saving you much valuable administration time.
 
 ## License
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](/LICENSE)
+
 This project `Windows Firewall Ruleset` is licensed under `MIT` license.
 
 License files and and Copyright notices are maintained **"per file"**.
 
-3rd party and sublicensed code is located either inside their own folders (with individual license file)
+3rd party and sublicensed code is located either inside their own folders (with individual license file)\
 or inside folders called `External` for organizational purposes.
 
 [Table of Contents](#table-of-contents)

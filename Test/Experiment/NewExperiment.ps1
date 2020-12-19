@@ -46,10 +46,7 @@ None. NewExperiment.ps1 does not generate any output
 None.
 #>
 
-#region Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
 Import-Module -Name $PSScriptRoot\Experiment.Module -Force
-
-Write-Information -MessageData "ThisScript: $ThisScript" -INFA "Continue"

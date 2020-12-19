@@ -101,7 +101,7 @@ function ConvertFrom-SID
 
 		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
-		[string[]] $ComputerNames = [System.Environment]::MachineName
+		[string[]] $ComputerName = [System.Environment]::MachineName
 	)
 
 	process
@@ -313,7 +313,7 @@ function ConvertFrom-SID
 
 							# Check SID on all target computers until match
 							# TODO: could this result is incomplete information if multiple computers match?
-							:computer foreach ($Computer in $ComputerNames)
+							:computer foreach ($Computer in $ComputerName)
 							{
 								if (!(Test-TargetComputer $Computer))
 								{
@@ -373,7 +373,7 @@ function ConvertFrom-SID
 						{
 							# Check SID on all target computers until match
 							# TODO: could this result is incomplete information if multiple computers match?
-							:computer foreach ($Computer in $ComputerNames)
+							:computer foreach ($Computer in $ComputerName)
 							{
 								if (!(Test-TargetComputer $Computer))
 								{

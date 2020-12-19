@@ -59,7 +59,6 @@ function Test-Function
 	$InformationPreference = "Continue"
 
 	Write-Information -MessageData "Parameter: $Param"
-	Write-Information -MessageData "This module: $ThisModule"
 }
 
 # Template variable
