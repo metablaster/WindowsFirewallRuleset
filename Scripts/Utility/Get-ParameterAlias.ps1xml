@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration>
+	<ViewDefinitions>
+		<View>
+			<Name>ParameterAlias</Name>
+			<ViewSelectedBy>
+				<TypeName>ParameterAlias</TypeName>
+			</ViewSelectedBy>
+			<TableControl>
+				<TableHeaders>
+					<TableColumnHeader>
+						<Label>ParameterName</Label>
+						<Width>20</Width>
+					</TableColumnHeader>
+					<TableColumnHeader>
+						<Label>Alias</Label>
+						<Width>35</Width>
+					</TableColumnHeader>
+					<TableColumnHeader>
+						<Label>ParameterType</Label>
+						<Width>60</Width>
+					</TableColumnHeader>
+				</TableHeaders>
+				<TableRowEntries>
+					<TableRowEntry>
+						<TableColumnItems>
+							<TableColumnItem>
+								<PropertyName>ParameterName</PropertyName>
+							</TableColumnItem>
+							<TableColumnItem>
+								<PropertyName>Alias</PropertyName>
+							</TableColumnItem>
+							<TableColumnItem>
+								<PropertyName>ParameterType</PropertyName>
+							</TableColumnItem>
+						</TableColumnItems>
+					</TableRowEntry>
+				</TableRowEntries>
+			</TableControl>
+		</View>
+	</ViewDefinitions>
+</Configuration>

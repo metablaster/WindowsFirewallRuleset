@@ -78,9 +78,8 @@ if (!(Get-Variable -Name ProjectRoot -Scope Global -ErrorAction Ignore))
 		Resolve-Path -Path "$PSScriptRoot\.." | Select-Object -ExpandProperty Path)
 }
 
-# Assemble partial path name to calling script
-# TODO: delete caller variable, and if no match show script leaf name
-$Caller = [regex]::escape($ProjectRoot)
+# Assemble relative path name to calling script
+New-Variable -Name Caller -Scope Private -Value ([regex]::escape($ProjectRoot))
 if ((Get-PSCallStack)[1].ScriptName -match "(?<=$Caller\\).+")
 {
 	$Caller = $Matches[0]
@@ -94,6 +93,8 @@ if ($MyInvocation.InvocationName -ne ".")
 		-Message "$SettingsScript script must be dot sourced in $Caller"
 	exit
 }
+
+Remove-Variable -Name Caller -Scope Private
 
 # Set to true to enable development features, it does following at a minimum:
 # 1. Forces reloading modules and removable variables.
@@ -577,17 +578,25 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	}
 
 	# Add project module directory to session module path
-	New-Variable -Name PathEntry -Scope Local -Value (
+	New-Variable -Name PathEntry -Scope Private -Value (
 		[System.Environment]::GetEnvironmentVariable("PSModulePath").TrimEnd(";") -replace (";;", ";"))
+
 	$PathEntry += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Modules"
 	[System.Environment]::SetEnvironmentVariable("PSModulePath", $PathEntry)
 
-	# Add project script directory to session path
+	# Add project script directory to session script path
 	$PathEntry = [System.Environment]::GetEnvironmentVariable("Path").TrimEnd(";") -replace (";;", ";")
 	$PathEntry += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Scripts"
+	$PathEntry += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Scripts\Experiment"
 	$PathEntry += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Scripts\External"
+	$PathEntry += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Scripts\Utility"
 	[System.Environment]::SetEnvironmentVariable("Path", $PathEntry)
-	Remove-Variable -Name PathEntry -Scope Local
+
+	# Load format data into session
+	$PathEntry = Get-ChildItem -Path "$ProjectRoot\Scripts" -Filter *.ps1xml -Recurse
+	Update-FormatData -PrependPath $PathEntry.FullName
+
+	Remove-Variable -Name PathEntry -Scope Private
 }
 #endregion
 

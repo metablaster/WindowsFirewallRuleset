@@ -29,19 +29,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Test-Function
+Unit test for Test-Function or Test-Script
 
 .DESCRIPTION
-Use Test-Function.ps1 as a template to test out module functions
+Use TestTemplate.ps1 as a template to test out scripts and module functions
 
 .EXAMPLE
-PS> .\Test-Function.ps1
+PS> .\TestTemplate.ps1
 
 .INPUTS
-None. You cannot pipe objects to Test-Function.ps1
+None. You cannot pipe objects to TestTemplate.ps1
 
 .OUTPUTS
-None. Test-Function.ps1 does not generate any output
+None. TestTemplate.ps1 does not generate any output
 
 .NOTES
 None.
@@ -59,6 +59,7 @@ param (
 #Requires -Version 5.1
 # TODO: Adjust path to project settings and elevation requirement
 #Requires -RunAsAdministrator
+# TODO: adjust path to project settings
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 

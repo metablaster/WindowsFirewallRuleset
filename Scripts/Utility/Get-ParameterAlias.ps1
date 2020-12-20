@@ -26,129 +26,211 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+<#PSScriptInfo
+
+.VERSION 0.9.1
+
+.GUID 122f1ee2-ac42-4bd9-8dfb-9f21a5f3fd1f
+
+.AUTHOR metablaster zebal@protonmail.com
+
+.COPYRIGHT Copyright (C) 2020 metablaster zebal@protonmail.ch
+
+.TAGS TemplateTag
+
+.LICENSEURI https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/LICENSE
+
+.PROJECTURI https://github.com/metablaster/WindowsFirewallRuleset
+
+.RELEASENOTES
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/CHANGELOG.md
+#>
+
+#Requires -Version 5.1
+
 <#
 .SYNOPSIS
-Get function or commandlet parameter aliases
+Get function, commandlet or script parameter aliases
 
 .DESCRIPTION
-Gets aliases of all or specific parameters for one or multiple functions or commandlets
+Gets aliases of all or specific parameters for one or multiple functions, commandlets or scripts.
 
 .PARAMETER Command
-One or more commandlets or/and functions for which to get parameter aliases
+One or more commandlets, functions or script names for which to get parameter aliases
 
 .PARAMETER CommandType
-If specified, only commands of the specified type are processed
+If specified, only commands of the specified types are processed
 
-.PARAMETER Parameter
-If specified gets aliases only for those parameters that match wildcard pattern
+.PARAMETER ParameterName
+If specified, gets aliases only for those parameters that match wildcard pattern
 
 .PARAMETER Stream
 Specify this parameter when you want to stream output object through the pipeline,
 by default output object is formatted for output.
 
+.PARAMETER ShowCommon
+If specified, aliases for common parameters will be shown as well
+
+.PARAMETER Unique
+if specified, case sensitive unique list of aliases is shown
+
 .EXAMPLE
 PS> Get-ParameterAlias Test-DscConfiguration
+
+.EXAMPLE
+PS> Get-ParameterAlias "Start*", "Stop-Process" -ShowCommon
 
 .EXAMPLE
 PS> Get-Command Enable-NetAdapter* | Get-ParameterAlias -Type Function
 
 .EXAMPLE
-PS> Get-parameterAlias * -Parameter "Computer*"
+PS> Get-parameterAlias "Remove*" -Parameter "Computer*"
 
 .EXAMPLE
-PS> Get-parameterAlias * -Parameter "Computer*" -Stream | Where-Object { $_.Alias } |
-Select-Object -ExpandProperty Alias -Unique
+PS> Get-parameterAlias -Parameter "Computer*" -Stream -Unique
 
 .INPUTS
 [string]
 
 .OUTPUTS
+[string]
 [System.Management.Automation.PSCustomObject]
 
 .NOTES
-None.
+The intended purpose of this function is to help name your parameters and their aliases.
+For example if you want your function parameters to bind to pipeline by property name for
+any 3rd party function that conforms to community development guidelines.
+The end result is of course greater reusability of your code.
+TODO: Implement filtering by parameter type
 #>
-function Get-ParameterAlias
+
+[CmdletBinding(PositionalBinding = $false)]
+[OutputType([System.Management.Automation.PSCustomObject], [string])]
+param (
+	[Parameter(Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+	[Alias("Name")]
+	[SupportsWildcards()]
+	[string[]] $Command = "*",
+
+	[Parameter(ValueFromPipelineByPropertyName = $true)]
+	[Alias("Type")]
+	[ValidateSet("Cmdlet", "Function", "ExternalScript")]
+	[string[]] $CommandType = @("Cmdlet", "Function"),
+
+	[Parameter(ValueFromPipelineByPropertyName = $true)]
+	[Alias("Parameter")]
+	[SupportsWildcards()]
+	[string[]] $ParameterName = "*",
+
+	[Parameter(ParameterSetName = "All")]
+	[switch] $Stream,
+
+	[Parameter()]
+	[switch] $ShowCommon,
+
+	[Parameter(ParameterSetName = "Unique")]
+	[switch] $Unique
+)
+
+begin
 {
-	[CmdletBinding(PositionalBinding = $false)]
-	[OutputType([System.Management.Automation.PSCustomObject])]
-	param (
-		[Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true,
-			HelpMessage = "Enter the name of the commandlet or function")]
-		[Alias("Function")]
-		[SupportsWildcards()]
-		[string[]] $Command,
+	[array] $UniqueAlias = @()
+	$InformationPreference = "Continue"
 
-		[Parameter(ValueFromRemainingArguments = $true)]
-		[Alias("Type")]
-		[ValidateSet("Cmdlet", "Function")]
-		[string[]] $CommandType = @("Cmdlet", "Function"),
-
-		[Parameter()]
-		[SupportsWildcards()]
-		[string] $Parameter = "*",
-
-		[Parameter()]
-		[switch] $Stream
+	# Common parameters
+	$Common = @(
+		"Confirm"
+		"Debug"
+		"ErrorAction"
+		"ErrorVariable"
+		"InformationAction"
+		"InformationVariable"
+		"OutVariable"
+		"OutBuffer"
+		"PipelineVariable"
+		"Verbose"
+		"WarningAction"
+		"WarningVariable"
+		"WhatIf"
 	)
+}
+process
+{
+	Write-Debug -Message "params($($PSBoundParameters.Values))"
 
-	process
+	foreach ($TargetCommand in @(Get-Command -Name $Command -CommandType $CommandType -ParameterName $ParameterName -EA SilentlyContinue -EV +NotFound))
 	{
-		# TODO: Warning out these errors instead
-		foreach ($CommandItem in @(Get-Command -Name $Command -CommandType $CommandType -EA Ignore))
+		$Params = $TargetCommand.Parameters.Values
+		if (!$ShowCommon)
 		{
-			try
-			{
-				# Commands not valid for host or edition will report errors
-				$TargetCommand = Get-Command -Name $CommandItem.Name -EA Stop
+			# Skip common parameters by default
+			$Params = $Params | Where-Object {
+				$_.Name -notin $Common
 			}
-			catch [System.Management.Automation.CommandNotFoundException]
-			{
-				Write-Warning -Message "Command $($CommandItem.Name) not found"
-			}
-			catch
-			{
-				Write-Error -Category $_.CategoryInfo.Category -TargetObject $_.TargetObject -Message $_.Exception.Message
-			}
+		}
 
-			# Select only requested parameters and only those which have aliases
-			$Parameters = $TargetCommand.Parameters.Values |
-			Where-Object -Property Name -Like $Parameter |
-			Where-Object -Property Aliases
-
-			if ($Parameters)
+		[array] $OutputObject = @()
+		foreach ($Param in $Params)
+		{
+			# Select only those parameters which have aliases
+			if ($Param.Aliases.Count)
 			{
-				Write-Output ""
-				Write-Output "`tListing $($TargetCommand.CommandType): $($CommandItem.Name)"
-				Write-Output ""
-
-				$Format = !$Stream
-				if ($Format -and ($Parameters | Select-Object -Property Aliases | Measure-Object).Count -gt 1)
+				foreach ($ParameterItem in $ParameterName)
 				{
-					# If there are multiple parameters Format-Table would insert header for each one
-					Write-Verbose -Message "Forcing stream"
-					$Format = $false
+					# Select only those parameters which match requested parameter wildcard
+					if ($Param.Name -like $ParameterItem)
+					{
+						$OutputObject += [PSCustomObject]@{
+							Command = $TargetCommand.Name
+							$CommandType = $TargetCommand.CommandType
+							Parameter = $Param.Name
+							ParameterType = $Param.ParameterType
+							Alias = $Param | Select-Object -ExpandProperty Aliases
+							PSTypeName = "ParameterAlias"
+						}
+					}
 				}
 			}
+		}
 
-			foreach ($Param in $Parameters)
+		if ($OutputObject.Count)
+		{
+			if ($Unique)
 			{
-				$OutputObject = [PSCustomObject]@{
-					Parameter = $Param.Name
-					Alias = $Param | Select-Object -ExpandProperty Aliases
-				}
-
-				if ($Format)
-				{
-					Write-Verbose -Message "Formatting output"
-					Write-Output $OutputObject | Format-Table
-				}
-				else
-				{
-					Write-Verbose -Message "Streaming output"
-					Write-Output $OutputObject
+				$UniqueAlias += $OutputObject.Alias | Where-Object {
+					$_ -cnotin $UniqueAlias
 				}
 			}
+			elseif ($Stream)
+			{
+				Write-Debug -Message "Streaming output"
+				Write-Output $OutputObject
+			}
+			else
+			{
+				Write-Information ""
+				Write-Information "`tListing $($TargetCommand.CommandType): $($TargetCommand.Name)"
+				Write-Information ""
+
+				Write-Debug -Message "Formatting output"
+				Write-Output $OutputObject | Format-Table
+			}
+		}
+	}
+}
+end
+{
+	if ($Unique -and $UniqueAlias.Count)
+	{
+		Write-Output $UniqueAlias
+	}
+
+	if ($NotFound)
+	{
+		# Show non found commands at the end
+		foreach ($Item in $NotFound)
+		{
+			Write-Error -Message "Command $($Item.TargetObject) not found"
 		}
 	}
 }

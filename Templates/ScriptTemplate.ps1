@@ -27,6 +27,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+<#PSScriptInfo
+# TODO: Update script metadata, see Templates\New-PSScriptInfo.ps1 for details
+.VERSION 0.9.1
+
+.GUID 66e38822-834d-4a90-b9c6-9e600a472a0a
+
+.AUTHOR metablaster zebal@protonmail.com
+
+.COPYRIGHT Copyright (C) 2020 metablaster zebal@protonmail.ch
+
+.TAGS TemplateTag
+
+.LICENSEURI https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/LICENSE
+
+.PROJECTURI https://github.com/metablaster/WindowsFirewallRuleset
+
+.RELEASENOTES
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/CHANGELOG.md
+#>
+
 <#
 .SYNOPSIS
 Script template
@@ -68,6 +88,7 @@ param (
 #Requires -Version 5.1
 # TODO: Adjust path to project settings and elevation requirement
 #Requires -RunAsAdministrator
+# TODO: adjust path to project settings
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
