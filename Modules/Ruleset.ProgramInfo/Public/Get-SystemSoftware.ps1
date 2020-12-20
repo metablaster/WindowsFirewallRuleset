@@ -84,7 +84,6 @@ function Get-SystemSoftware
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
 
-		[PSCustomObject[]] $SystemSoftware = @()
 		foreach ($HKLMRootKey in $HKLM)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLMRootKey"
@@ -143,15 +142,16 @@ function Get-SystemSoftware
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKLMSubKey"
 
 				# Get more key entries as needed
-				$SystemSoftware += [PSCustomObject]@{
-					"ComputerName" = $ComputerName
-					"RegKey" = $HKLMSubKey
-					"Name" = $SubKey.GetValue("DisplayName")
-					"InstallLocation" = $InstallLocation
+				[PSCustomObject]@{
+					ComputerName = $ComputerName
+					Name = $SubKey.GetValue("DisplayName")
+					Version = $SubKey.GetValue("DisplayVersion")
+					Publisher = $SubKey.GetValue("Publisher")
+					InstallLocation = $InstallLocation
+					RegKey = $SubKey.ToString() -replace "HKEY_LOCAL_MACHINE", "HKLM:"
+					PSTypeName = "Ruleset.ProgramInfo"
 				}
 			}
 		}
-
-		Write-Output $SystemSoftware
 	}
 }

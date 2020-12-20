@@ -76,11 +76,13 @@ SOFTWARE.
 
 	# Minimum version of Microsoft .NET Framework required by this module.
 	# This prerequisite is valid for the PowerShell Desktop edition only.
-	# Maximum allowed value to specify is 4.5
+	# Maximum allowed value to specify is 4.5, other valid values are:
+	# 1.0 / 1.1 / 2.0 / 3.0 / 3.5 / 4 / 4.5
 	DotNetFrameworkVersion = "4.5"
 
 	# Minimum version of the common language runtime (CLR) required by this module.
 	# This prerequisite is valid for the PowerShell Desktop edition only.
+	# Valid values are: 1 / 1.1 / 2.0 / 4
 	CLRVersion = "4.0"
 
 	# Processor architecture (None, X86, Amd64) required by this module
@@ -99,7 +101,7 @@ SOFTWARE.
 	# TypesToProcess = @()
 
 	# Format files (.ps1xml) to be loaded when importing this module
-	# FormatsToProcess = @()
+	FormatsToProcess = @("Manifest.Module.Format.ps1xml")
 
 	# Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 	# NestedModules = @()
@@ -130,7 +132,20 @@ SOFTWARE.
 	# ModuleList = @()
 
 	# List of all files packaged with this module
-	FileList = @()
+	FileList = @(
+		"en-US\about_Manifest.Module.help.txt"
+		"en-US\Manifest.Module-help.xml"
+		"Help\README.md"
+		"Private\README.md"
+		"Public\External\README.md"
+		"Public\New-Function.ps1"
+		"Public\README.md"
+		"Scripts\README.md"
+		"Manifest.Module_66e38822-834d-4a90-b9c6-9e600a472a0a_HelpInfo.xml"
+		"Manifest.Module.Format.ps1xml"
+		"Manifest.Module.psd1"
+		"Manifest.Module.psm1"
+	)
 
 	# Private data to pass to the module specified in RootModule/ModuleToProcess.
 	# This may also contain a PSData hashtable with additional module metadata used by PowerShell.

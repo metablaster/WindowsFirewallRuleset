@@ -55,7 +55,7 @@ SOFTWARE.
 	CompanyName = "Microsoft Corporation"
 
 	# Copyright statement for this module
-	Copyright = "Copyright (C) Microsoft Corporation. All rights reserved"
+	Copyright = "Copyright (C) 2018, 2019 Microsoft Corporation. All rights reserved"
 
 	# Description of the functionality provided by this module
 	Description = @'
@@ -76,11 +76,13 @@ commands much as if they were native to PowerShell Core.
 
 	# Minimum version of Microsoft .NET Framework required by this module.
 	# This prerequisite is valid for the PowerShell Desktop edition only.
-	# Maximum allowed value to specify is 4.5
+	# Maximum allowed value to specify is 4.5, other valid values are:
+	# 1.0 / 1.1 / 2.0 / 3.0 / 3.5 / 4 / 4.5
 	# DotNetFrameworkVersion = "4.5"
 
 	# Minimum version of the common language runtime (CLR) required by this module.
 	# This prerequisite is valid for the PowerShell Desktop edition only.
+	# Valid values are: 1 / 1.1 / 2.0 / 4
 	# CLRVersion = "4.0"
 
 	# Processor architecture (None, X86, Amd64) required by this module

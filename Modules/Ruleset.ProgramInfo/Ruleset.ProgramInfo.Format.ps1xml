@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- https://github.com/PowerShell/PowerShell/blob/master/src/Schemas/Format.xsd -->
+<!-- Represents the top-level element of a formatting file. -->
+<Configuration>
+	<!-- Optional element. Defines the views used to display .NET objects. -->
+	<!-- These views can display the properties and script values of an object  in a table format, list format, wide format, and custom control format. -->
+	<ViewDefinitions>
+		<!-- Defines a view that is used to display one or more .NET objects. -->
+		<View>
+			<Name>Ruleset.ProgramInfo</Name>
+			<!-- Defines the .NET objects that are displayed by the view. -->
+			<!-- Each view must specify at least one .NET object. -->
+			<ViewSelectedBy>
+				<!-- Optional element. Specifies a .NET object that is displayed by the view. -->
+				<TypeName>Ruleset.ProgramInfo</TypeName>
+			</ViewSelectedBy>
+			<!-- Optional element. Defines a table format for the view. -->
+			<TableControl>
+				<!-- Required element. Defines the labels, the widths, and the alignment of the data for the columns of the table view. -->
+				<TableHeaders>
+					<!-- Optional element. Defines the label, the width, and the alignment of the data for a column of a table view. -->
+					<TableColumnHeader>
+						<!-- Optional element. Defines the label that is displayed at the top of the column. -->
+						<!-- If no label is specified, the name of the property whose value is displayed in the rows is used. -->
+						<Label>ComputerName</Label>
+						<!-- Required element. Specifies the width (in characters) of the column. -->
+						<Width>15</Width>
+						<!-- Optional element. Specifies how the label of the column is displayed. -->
+						<!-- If no alignment is specified, the label is aligned on the left. -->
+						<Alignment>Left</Alignment>
+					</TableColumnHeader>
+					<TableColumnHeader>
+						<Label>Name</Label>
+						<Width>50</Width>
+						<Alignment>Left</Alignment>
+					</TableColumnHeader>
+					<TableColumnHeader>
+						<Label>InstallLocation</Label>
+						<Width>80</Width>
+						<Alignment>Left</Alignment>
+					</TableColumnHeader>
+				</TableHeaders>
+				<!-- Optional element. Provides the definitions of the table view. -->
+				<TableRowEntries>
+					<!-- Required element. Defines the data that is displayed in a row of the table. -->
+					<TableRowEntry>
+						<!-- Required element. Defines the properties or scripts whose values are displayed. -->
+						<TableColumnItems>
+							<!-- Required element. Defines the property or script whose value is displayed in a column of the row. -->
+							<TableColumnItem>
+								<PropertyName>ComputerName</PropertyName>
+							</TableColumnItem>
+							<TableColumnItem>
+								<PropertyName>Name</PropertyName>
+							</TableColumnItem>
+							<TableColumnItem>
+								<PropertyName>InstallLocation</PropertyName>
+							</TableColumnItem>
+						</TableColumnItems>
+					</TableRowEntry>
+				</TableRowEntries>
+			</TableControl>
+		</View>
+	</ViewDefinitions>
+</Configuration>

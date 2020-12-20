@@ -417,7 +417,7 @@ NetEventPacketCapture is a PowerShell module that is a replacement for `netsh tr
 
 Almost everything `netsh trace` can do can be also done with NetEventPacketCapture module.
 
-Inside `Scripts\Experimental` folder there are experimental `StartTrace.ps1` and `StopTrace.ps1` scripts
+Inside `Scripts\Experiment` folder there are experimental `StartTrace.ps1` and `StopTrace.ps1` scripts
 which make use of `NetEventPacketCapture` module, you can use them to quickly start and stop packet
 capture.
 

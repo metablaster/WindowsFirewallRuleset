@@ -44,7 +44,7 @@ the meaning is same or similar.
           - [Microsoft](#microsoft)
       - [Inbound rules](#inbound-rules)
   - [Scripts](#scripts)
-    - [Experimental](#experimental)
+    - [Experiment](#experiment)
   - [Templates](#templates)
   - [Test](#test)
 
@@ -180,7 +180,7 @@ Rules which apply to inbound traffic
 
 Scripts which are not part of modules
 
-### Experimental
+### Experiment
 
 Experimental scripts, can be used for study and arequire improvements
 

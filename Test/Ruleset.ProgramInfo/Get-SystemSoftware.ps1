@@ -75,6 +75,9 @@ Select-Object -ExpandProperty InstallLocation
 Start-Test "Get-SystemSoftware"
 $SystemPrograms | Sort-Object -Property Name
 
+Start-Test "Get-SystemSoftware | Select *"
+$SystemPrograms | Sort-Object -Property Name | Select-Object *
+
 Test-Output $SystemPrograms -Command Get-SystemSoftware
 
 Update-Log
