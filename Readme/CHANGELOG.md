@@ -38,7 +38,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - Bugfix
 
-  - Function and script outputs are formatted with the help of Format.ps1xml file for consistent output
+  - Function and script outputs are formatted with the help of `Format.ps1xml` file for consistent output
 
 ## v0.9.0 (current release)
 

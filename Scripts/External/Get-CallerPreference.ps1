@@ -280,4 +280,7 @@ end
 			}
 		}
 	}
-} # end
+
+	# TODO: Will produce duplicate entry
+	Update-Log
+}
