@@ -26,6 +26,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+<#PSScriptInfo
+
+.VERSION 0.9.1
+
+.GUID bdaf45b1-a6cf-48b8-a87d-cde4f30eb574
+
+.AUTHOR metablaster zebal@protonmail.com
+
+.COPYRIGHT Copyright (C) 2020 metablaster zebal@protonmail.ch
+
+.TAGS Firewall
+
+.LICENSEURI https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/LICENSE
+
+.PROJECTURI https://github.com/metablaster/WindowsFirewallRuleset
+
+.RELEASENOTES
+https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGELOG.md
+#>
+
 <#
 .SYNOPSIS
 Export all firewall rules

@@ -26,6 +26,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+<#PSScriptInfo
+
+.VERSION 0.9.1
+
+.GUID 51f98c20-9f7b-4be2-bb16-86c76c883dda
+
+.AUTHOR metablaster zebal@protonmail.com
+
+.COPYRIGHT Copyright (C) 2020 metablaster zebal@protonmail.ch
+
+.TAGS Network
+
+.LICENSEURI https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/LICENSE
+
+.PROJECTURI https://github.com/metablaster/WindowsFirewallRuleset
+
+.RELEASENOTES
+https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGELOG.md
+#>
+
 <#
 .SYNOPSIS
 Restart and optionally reset network

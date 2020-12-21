@@ -26,6 +26,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+<#PSScriptInfo
+
+.VERSION 0.9.1
+
+.GUID 8d59584b-beeb-4ef3-8fa7-d1419034f088
+
+.AUTHOR metablaster zebal@protonmail.com
+
+.COPYRIGHT Copyright (C) 2020 metablaster zebal@protonmail.ch
+
+.TAGS Audit Security
+
+.LICENSEURI https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/LICENSE
+
+.PROJECTURI https://github.com/metablaster/WindowsFirewallRuleset
+
+.RELEASENOTES
+https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGELOG.md
+#>
+
 <#
 .SYNOPSIS
 Get firewall auditing logs

@@ -26,6 +26,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+<#PSScriptInfo
+
+.VERSION 0.9.1
+
+.GUID d6b158fc-ac3c-4979-a3d6-a7a656db11ec
+
+.AUTHOR metablaster zebal@protonmail.com
+
+.COPYRIGHT Copyright (C) 2020 metablaster zebal@protonmail.ch
+
+.TAGS Firewall
+
+.LICENSEURI https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/LICENSE
+
+.PROJECTURI https://github.com/metablaster/WindowsFirewallRuleset
+
+.RELEASENOTES
+https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGELOG.md
+#>
+
 <#
 .SYNOPSIS
 Get a list of hidden firewall rule properties

@@ -69,7 +69,8 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
-$Scripts = Get-ChildItem -Recurse -Path "$ProjectRoot\Scripts" -Filter "*.ps1"
+$Scripts = Get-ChildItem -Recurse -Path "$ProjectRoot\Scripts" -Filter *.ps1 -Exclude "ContextSetup.ps1", *.ps1xml |
+Where-Object { $_.FullName -notlike "*\External\*" }
 
 foreach ($Script in $Scripts)
 {

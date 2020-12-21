@@ -26,8 +26,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-using namespace System.Security
-
 <#
 .SYNOPSIS
 Unit test for Set-Permission
@@ -56,6 +54,8 @@ None. Set-Permission.ps1 does not generate any output
 .NOTES
 None.
 #>
+
+using namespace System.Security
 
 [CmdletBinding()]
 param (

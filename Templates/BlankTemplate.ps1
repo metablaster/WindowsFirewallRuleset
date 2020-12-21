@@ -55,6 +55,9 @@ Additional information about the script.
 NOTE: All of the features of function parameters, including the Parameter attribute and its named arguments,
 are also valid in scripts.
 NOTE: The OutputType attribute identifies the .NET Framework types returned by a cmdlet, function, or script.
+NOTE: Script help can be preceded in the script only by comments and blank lines.
+NOTE: If the first item in the script body (after the help) is a function declaration,
+there must be at least two blank lines between the end of the script help and the function declaration.
 
 .LINK
 The name of a related topic.

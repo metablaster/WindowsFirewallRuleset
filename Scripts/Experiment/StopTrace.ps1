@@ -26,6 +26,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+<#PSScriptInfo
+
+.VERSION 0.9.1
+
+.GUID fc9b92ef-9756-4721-8cf4-28f9a04e6c49
+
+.AUTHOR metablaster zebal@protonmail.com
+
+.COPYRIGHT Copyright (C) 2020 metablaster zebal@protonmail.ch
+
+.TAGS Security Network
+
+.LICENSEURI https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/LICENSE
+
+.PROJECTURI https://github.com/metablaster/WindowsFirewallRuleset
+
+.RELEASENOTES
+https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGELOG.md
+#>
+
 <#
 .SYNOPSIS
 Stop capturing network traffic
@@ -61,7 +81,7 @@ param (
 #region Initialization
 #Requires -Version 5.1
 #Requires -RunAsAdministrator
-. $PSScriptRoot\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
 # Check requirements
@@ -69,7 +89,7 @@ Initialize-Project -Abort
 Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
-. $PSScriptRoot\ContextSetup.ps1
+. $PSScriptRoot\..\ContextSetup.ps1
 
 # User prompt
 $Accept = "Start capturing network traffic into a file for analysis"

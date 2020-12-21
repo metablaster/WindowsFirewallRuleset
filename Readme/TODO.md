@@ -311,6 +311,7 @@ Todo's in this file are categorized into following sections:
     - Test cases to test templates
     - Some tests are very out of date because rarely useful, ex. `TestProjectSettings` or `TestGlobalVariables`
     - Almost all tests need more test cases and consistency improvements
+    - Test comment based help
 
 5. Code style
 

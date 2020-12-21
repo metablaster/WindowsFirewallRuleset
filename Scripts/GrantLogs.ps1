@@ -26,9 +26,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# For: AccessControl.FileSystemRights
-# TODO: This will hide comment based help
-using namespace System.Security
+<#PSScriptInfo
+
+.VERSION 0.9.1
+
+.GUID 16cf3c56-2a61-4a72-8f06-6f8165ed6115
+
+.AUTHOR metablaster zebal@protonmail.com
+
+.COPYRIGHT Copyright (C) 2020 metablaster zebal@protonmail.ch
+
+.TAGS Firewall Security
+
+.LICENSEURI https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/LICENSE
+
+.PROJECTURI https://github.com/metablaster/WindowsFirewallRuleset
+
+.RELEASENOTES
+https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGELOG.md
+#>
 
 <#
 .SYNOPSIS
@@ -72,6 +88,9 @@ Windows firewall to start logging into new location.
 TODO: Need to verify if gpupdate is needed for first time setup and if so update SetupProfile.ps1
 TODO: Force could be used and propagated for this script, setupprofile and set-permission
 #>
+
+# For: AccessControl.FileSystemRights
+using namespace System.Security
 
 [CmdletBinding()]
 param (

@@ -36,14 +36,14 @@ SOFTWARE.
 
 .COPYRIGHT Copyright (C) 2020 metablaster zebal@protonmail.ch
 
-.TAGS TemplateTag
+.TAGS Utility
 
 .LICENSEURI https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/LICENSE
 
 .PROJECTURI https://github.com/metablaster/WindowsFirewallRuleset
 
 .RELEASENOTES
-https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/CHANGELOG.md
+https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGELOG.md
 #>
 
 #Requires -Version 5.1

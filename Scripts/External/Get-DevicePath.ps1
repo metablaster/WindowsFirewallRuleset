@@ -1,6 +1,4 @@
 
-using namespace System
-
 <#
 .SYNOPSIS
 Get disk volume path
@@ -43,6 +41,8 @@ None. You cannot pipe objects to Get-DevicePath.ps1
 .NOTES
 TODO: Make it work with PowerShell Core, see: Add-WinFunction
 #>
+
+using namespace System
 
 [CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "None")]
 [OutputType([string], [System.Management.Automation.PSCustomObject])]
@@ -93,7 +93,8 @@ $SetLastErrorCustomAttribute = New-Object Reflection.Emit.CustomAttributeBuilder
 	$DllImportConstructor,
 	@("kernel32.dll"),
 	[Reflection.FieldInfo[]] @($SetLastError),
-	@($true))
+	@($true)
+)
 
 $PInvokeMethod.SetCustomAttribute($SetLastErrorCustomAttribute)
 $Kernel32 = $TypeBuilder.CreateType()
@@ -150,6 +151,7 @@ if ($DevicePath)
 		Write-Warning -Message "Device path '$DevicePath' not found"
 	}
 
+	Update-Log
 	return $Result
 }
 

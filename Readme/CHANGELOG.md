@@ -28,6 +28,18 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Updated rule script for git and GitHub Desktop
 
+- New features
+
+  - `Get-ParameterAlias` script to help harvest parameter aliases for naming convention
+
+- Design
+
+  - Pramenter names and aliases follow naming convention according to community development guidelines
+
+- Bugfix
+
+  - Function and script outputs are formatted with the help of Format.ps1xml file for consistent output
+
 ## v0.9.0 (current release)
 
 - Rules
