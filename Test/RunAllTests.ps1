@@ -137,6 +137,7 @@ else
 	Write-Error -Category ObjectNotFound -TargetObject $Files -Message "No Pester test scripts found"
 }
 
+Test-MarkdownLinks $ProjectRoot -Recurse
 Write-Information -Tags "Project" -MessageData "INFO: Running all tests done"
 
 Update-Log

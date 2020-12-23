@@ -72,11 +72,11 @@ Start-Test "Get-GroupPrincipal Disabled Administrators"
 Get-GroupPrincipal "Administrators" -Disabled
 
 Start-Test "Get-GroupPrincipal Users, Administrators -CIM"
-$CIMTest = Get-GroupPrincipal "Users", "Administrators" -Computer "localhost" -CIM
+$CIMTest = Get-GroupPrincipal "Users", "Administrators" -Domain "localhost" -CIM
 $CIMTest
 
 Start-Test "Get-GroupPrincipal Disabled Users, Administrators -CIM"
-Get-GroupPrincipal "Users", "Administrators" -Computer "localhost" -CIM -Disabled
+Get-GroupPrincipal "Users", "Administrators" -Domain "localhost" -CIM -Disabled
 
 Start-Test "Failure test"
 $FailedUsers = Get-GroupPrincipal "Nonexistent Users" -ErrorAction SilentlyContinue

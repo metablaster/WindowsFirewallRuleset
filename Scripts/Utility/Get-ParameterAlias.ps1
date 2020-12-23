@@ -72,7 +72,7 @@ If specified, gets parameter aliases of the specified parameter type
 Enter the full name or partial name of a parameter type.
 Wildcard characters are supported.
 
-.PARAMETER TotalCount
+.PARAMETER Count
 Specifies maximum number of matching commands to process.
 You can use this parameter to limit the output of a command.
 
@@ -80,7 +80,7 @@ You can use this parameter to limit the output of a command.
 Specify this parameter when you want to stream output object through the pipeline,
 by default output object is formatted for output.
 
-.PARAMETER Strict
+.PARAMETER Exact
 If specified, ParameterName pattern does not apply to parameter aliases.
 Only parameter names (not parameter aliases) are matched against ParameterName pattern.
 
@@ -153,15 +153,15 @@ param (
 	[System.Management.Automation.PSTypeName[]] $ParameterType = "*",
 
 	[Parameter(ValueFromPipelineByPropertyName = $true)]
-	[Alias("Count")]
+	[Alias("TotalCount")]
 	[ValidateRange(0, [int32]::MaxValue)]
-	[int32] $TotalCount = [int32]::MaxValue,
+	[int32] $Count = [int32]::MaxValue,
 
 	[Parameter(ParameterSetName = "Default")]
 	[switch] $Stream,
 
 	[Parameter()]
-	[switch] $Strict,
+	[switch] $Exact,
 
 	[Parameter()]
 	[switch] $ShowCommon,
@@ -284,7 +284,7 @@ process
 
 	# NOTE: Get-Command -ParameterName gets commands that have the specified parameter names or parameter aliases.
 	foreach ($TargetCommand in @(Get-Command -Name $Command -CommandType $CommandType -ParameterType $ParameterType `
-				-ParameterName $ParameterName -TotalCount $TotalCount -ListImported:$ListImported -EA SilentlyContinue -EV +NotFound))
+				-ParameterName $ParameterName -TotalCount $Count -ListImported:$ListImported -EA SilentlyContinue -EV +NotFound))
 	{
 		$Params = $TargetCommand.Parameters.Values
 		if (!$ShowCommon)
@@ -304,7 +304,7 @@ process
 				foreach ($NameWildcard in $ParameterName)
 				{
 					# Select only those parameters which match requested parameter name or conditionally alias wildcard
-					if (($Param.Name -like $NameWildcard) -or (!$Strict -and ($Param.Aliases -like $NameWildcard)))
+					if (($Param.Name -like $NameWildcard) -or (!$Exact -and ($Param.Aliases -like $NameWildcard)))
 					{
 						foreach ($TypeWildcard in $ParameterType)
 						{
@@ -349,6 +349,11 @@ process
 				else
 				{
 					$DisplayCommand = $TargetCommand.Name
+				}
+
+				if ($TargetCommand.ModuleName)
+				{
+					$DisplayCommand += " [$($TargetCommand.ModuleName)]"
 				}
 
 				Write-Information ""

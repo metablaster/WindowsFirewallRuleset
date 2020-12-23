@@ -32,14 +32,17 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - `Get-ParameterAlias` script to help harvest parameter aliases for naming convention
   - `Set-Shortcut` function to set desktop shortcut to personalized firewall management console
+  - `Test-MarkdownLinks` function to find dead links in markdown files
 
 - Design
 
-  - Pramenter names and aliases follow naming convention according to community development guidelines
+  - Pramenter names and aliases follow naming convention according to community development
+  guidelines (In progress...)
 
 - Bugfix
 
-  - Function and script outputs are formatted with the help of `Format.ps1xml` file for consistent output
+  - Function and script outputs are formatted with the help of `Format.ps1xml` file for consistent
+  output (In progress...)
 
 ## v0.9.0 (current release)
 

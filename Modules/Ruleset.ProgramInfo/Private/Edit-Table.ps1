@@ -56,7 +56,8 @@ function Edit-Table
 	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true)]
-		[string] $InstallLocation
+		[Alias("InstallLocation")]
+		[string] $Path
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -64,37 +65,37 @@ function Edit-Table
 
 	# Check if input path leads to user profile and is compatible with firewall
 	# TODO: Making 2 calls to Test-Environment here will show warning for bad path twice
-	if (Test-Environment $InstallLocation -UserProfile -Firewall)
+	if (Test-Environment $Path -UserProfile -Firewall)
 	{
 		# Get a list of users to choose from, 3rd element in the path is user name
-		# NOTE: | Where-Object -Property User -EQ ($InstallLocation.Split("\"))[2]
+		# NOTE: | Where-Object -Property User -EQ ($Path.Split("\"))[2]
 		# will not work if a path is inconsistent with bach or forward slashes
 		$Principal = Get-GroupPrincipal "Users" | Where-Object {
-			$InstallLocation -Match "^$Env:SystemDrive\\+Users\\+$($_.User)\\+"
+			$Path -match "^$Env:SystemDrive\\+Users\\+$($_.User)\\+"
 		}
 
 		# Make sure user profile variables are not present
-		$InstallLocation = Format-Path $InstallLocation
+		$Path = Format-Path $Path
 
 		# Create a row
 		$Row = $InstallTable.NewRow()
 
 		# Enter data into row
 		$Row.ID = ++$RowIndex
-		$Row.SID = $Principal.SID
 		$Row.User = $Principal.User
-		$Row.Account = $Principal.Account
-		$Row.Computer = $Principal.Computer
-		$Row.InstallLocation = $InstallLocation
+		$Row.Domain = $Principal.Domain
+		$Row.Principal = $Principal.Principal
+		$Row.SID = $Principal.SID
+		$Row.InstallLocation = $Path
 
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Editing table for $($Principal.Account) with $InstallLocation"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Editing table for $($Principal.Principal) with $Path"
 
 		# Add the row to the table
 		$InstallTable.Rows.Add($Row)
 	}
-	elseif (Test-Environment $InstallLocation -Firewall)
+	elseif (Test-Environment $Path -Firewall)
 	{
-		$InstallLocation = Format-Path $InstallLocation
+		$Path = Format-Path $Path
 
 		# Not user profile path, so it applies to all users
 		$Principal = Get-UserGroup -Computer $PolicyStore | Where-Object -Property Group -EQ "Users"
@@ -104,12 +105,13 @@ function Edit-Table
 
 		# Enter data into row
 		$Row.ID = ++$RowIndex
-		$Row.SID = $Principal.SID
 		$Row.Group = $Principal.Group
-		$Row.Computer = $Principal.Computer
-		$Row.InstallLocation = $InstallLocation
+		$Row.Domain = $Principal.Domain
+		$Row.Principal = $Principal.Principal
+		$Row.SID = $Principal.SID
+		$Row.InstallLocation = $Path
 
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Editing table for $($Principal.Caption) with $InstallLocation"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Editing table for $($Principal.Principal) with $Path"
 
 		# Add the row to the table
 		$InstallTable.Rows.Add($Row)
@@ -118,7 +120,7 @@ function Edit-Table
 	{
 		# TODO: will be true also for user profile, we should try to fix the path if it leads to user profile instead of doing nothing.
 		# NOTE: This may be best done with Format-Path by reformatting
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] $InstallLocation not found or invalid"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] $Path not found or invalid"
 		return
 	}
 }

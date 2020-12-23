@@ -46,6 +46,7 @@ $PublicScripts = @(
 	"New-Section"
 	"Start-Test"
 	"Stop-Test"
+	"Test-MarkdownLinks"
 	"Test-Output"
 )
 

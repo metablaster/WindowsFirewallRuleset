@@ -10,7 +10,7 @@
 				<TableHeaders>
 					<TableColumnHeader>
 						<Label>ParameterName</Label>
-						<Width>20</Width>
+						<Width>30</Width>
 					</TableColumnHeader>
 					<TableColumnHeader>
 						<Label>Alias</Label>

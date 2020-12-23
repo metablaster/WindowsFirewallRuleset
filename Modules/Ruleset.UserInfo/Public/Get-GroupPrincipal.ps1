@@ -30,10 +30,10 @@ SOFTWARE.
 .SYNOPSIS
 Get computer accounts for specified user groups on target computers
 
-.PARAMETER UserGroups
+.PARAMETER Group
 User group on local or remote computer
 
-.PARAMETER ComputerNames
+.PARAMETER Domain
 One or more computers which to query for group users
 
 .PARAMETER Disabled
@@ -67,13 +67,13 @@ function Get-GroupPrincipal
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-GroupPrincipal.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
-		[Alias("Group")]
+		[Alias("UserGroup")]
 		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
-		[string[]] $UserGroups,
+		[string[]] $Group,
 
-		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
+		[Alias("ComputerName", "CN")]
 		[Parameter()]
-		[string[]] $ComputerName = [System.Environment]::MachineName,
+		[string[]] $Domain = [System.Environment]::MachineName,
 
 		[Parameter()]
 		[switch] $Disabled,
@@ -91,7 +91,7 @@ function Get-GroupPrincipal
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-		foreach ($Computer in $ComputerName)
+		foreach ($Computer in $Domain)
 		{
 			if ($CIM)
 			{
@@ -109,19 +109,19 @@ function Get-GroupPrincipal
 				{
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Computer"
 
-					foreach ($Group in $UserGroups)
+					foreach ($UserGroup in $Group)
 					{
 						# Get all users that belong to requested group,
 						# this includes non local principal source and non "user" users
 						# it is also missing SID
 						$GroupUsers = Get-CimInstance -Class Win32_GroupUser -Namespace "root\cimv2" `
 							-ComputerName $Computer -OperationTimeoutSec $ConnectionTimeout |
-						Where-Object { $_.GroupComponent.Name -eq $Group } |
+						Where-Object { $_.GroupComponent.Name -eq $UserGroup } |
 						Select-Object -ExpandProperty PartComponent
 
 						if ([string]::IsNullOrEmpty($GroupUsers))
 						{
-							Write-Warning -Message "User group '$Group' is empty or does not exist on computer '$Computer'"
+							Write-Warning -Message "User group '$UserGroup' is empty or does not exist on computer '$Computer'"
 							continue
 						}
 
@@ -132,7 +132,7 @@ function Get-GroupPrincipal
 
 						if ([string]::IsNullOrEmpty($EnabledAccounts))
 						{
-							Write-Warning -Message "User group '$Group' does not have any enabled accounts on computer '$Computer'"
+							Write-Warning -Message "User group '$UserGroup' does not have any enabled accounts on computer '$Computer'"
 							continue
 						}
 
@@ -140,9 +140,9 @@ function Get-GroupPrincipal
 						foreach ($Account in $EnabledAccounts)
 						{
 							# Because $Computer may be "localhost"
-							$Domain = $Account.Domain
+							$TargetDomain = $Account.Domain
 							$UserName = [array]::Find([string[]] $GroupUsers.Name, [System.Predicate[string]] {
-									$Account.Caption -eq "$Domain\$($args[0])"
+									$Account.Caption -eq "$TargetDomain\$($args[0])"
 								})
 
 							if ($UserName)
@@ -154,11 +154,11 @@ function Get-GroupPrincipal
 								else { $PrincipalSource = "Unknown" }
 
 								$UserAccounts += [PSCustomObject]@{
-									Account = "$Domain\$UserName"
-									Computer = $Domain
 									User = $Account.Name
-									PrincipalSource = $PrincipalSource
+									Domain = $TargetDomain
+									Principal = "$TargetDomain\$UserName"
 									SID = $Account.SID
+									PrincipalSource = $PrincipalSource
 								}
 							}
 							else
@@ -173,20 +173,20 @@ function Get-GroupPrincipal
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying localhost"
 
-				foreach ($Group in $UserGroups)
+				foreach ($UserGroup in $Group)
 				{
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing group: '$Group'"
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing group: '$UserGroup'"
 
 					# Querying local machine
 					# TODO: The Microsoft.PowerShell.LocalAccounts module is not available in 32-bit PowerShell on a 64-bit system.
-					$GroupUsers = Get-LocalGroupMember -Group $Group | Where-Object {
+					$GroupUsers = Get-LocalGroupMember -Group $UserGroup | Where-Object {
 						$_.ObjectClass -eq "User" -and
 						($_.PrincipalSource -eq "Local" -or $_.PrincipalSource -eq "MicrosoftAccount")
 					}
 
 					if ([string]::IsNullOrEmpty($GroupUsers))
 					{
-						Write-Warning -Message "User group '$Group' is empty or does not exist on computer '$Computer'"
+						Write-Warning -Message "User group '$UserGroup' is empty or does not exist on computer '$Computer'"
 						continue
 					}
 
@@ -195,7 +195,7 @@ function Get-GroupPrincipal
 
 					if ([string]::IsNullOrEmpty($EnabledAccounts))
 					{
-						Write-Warning -Message "User group '$Group' does not have any enabled accounts on computer '$Computer'"
+						Write-Warning -Message "User group '$UserGroup' does not have any enabled accounts on computer '$Computer'"
 						continue
 					}
 
@@ -210,15 +210,15 @@ function Get-GroupPrincipal
 							Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing account: $($Account.Name)"
 
 							$UserAccounts += [PSCustomObject]@{
-								Account = $AccountName
-								Computer = $Computer
 								User = $Account.Name
-								PrincipalSource = $Account.PrincipalSource
+								Domain = $Computer
+								Principal = $AccountName
 								SID = $Account.SID
+								PrincipalSource = $Account.PrincipalSource
 							}
 						}
 					}
-				} # foreach ($Group in $UserGroups)
+				} # foreach ($UserGroup in $Group)
 			} # if ($CIM)
 			else
 			{
@@ -226,7 +226,7 @@ function Get-GroupPrincipal
 				Write-Error -Category NotImplemented -TargetObject $Computer `
 					-Message "Querying remote computers without CIM switch not implemented"
 			}
-		} # foreach ($Computer in $ComputerName)
+		} # foreach ($Computer in $Domain)
 
 		Write-Output $UserAccounts
 	} # process

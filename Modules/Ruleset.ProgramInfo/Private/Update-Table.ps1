@@ -35,7 +35,7 @@ Module scope installation table is updated
 Search system for programs with input search string, and add new program installation directory
 to the table, as well as other information needed to make a firewall rule
 
-.PARAMETER SearchString
+.PARAMETER Search
 Search string which corresponds to the output of "Get programs" functions
 
 .PARAMETER UserProfile
@@ -107,12 +107,12 @@ function Update-Table
 
 				# Enter data into row
 				$Row.ID = ++$RowIndex
-				$Row.SID = $Principal.SID
 				$Row.Group = $Principal.Group
-				$Row.Computer = $Principal.Computer
+				$Row.Domain = $Principal.Domain
+				$Row.SID = $Principal.SID
 				$Row.InstallLocation = $InstallLocation
 
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($Principal.Caption) with $InstallLocation"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($Principal.Principal) with $InstallLocation"
 
 				# Add row to the table
 				$InstallTable.Rows.Add($Row)
@@ -149,12 +149,12 @@ function Update-Table
 
 				# Enter data into row
 				$Row.ID = ++$RowIndex
-				$Row.SID = $Principal.SID
 				$Row.Group = $Principal.Group
-				$Row.Computer = $Principal.Computer
+				$Row.Domain = $Principal.Domain
+				$Row.SID = $Principal.SID
 				$Row.InstallLocation = $InstallLocation
 
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($Principal.Caption) with $InstallLocation"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($Principal.Principal) with $InstallLocation"
 
 				# Add row to the table
 				$InstallTable.Rows.Add($Row)
@@ -187,9 +187,9 @@ function Update-Table
 
 				# Enter data into row
 				$Row.ID = ++$RowIndex
-				$Row.SID = $Principal.SID
 				$Row.Group = $Principal.Group
-				$Row.Computer = $Principal.Computer
+				$Row.Domain = $Principal.Domain
+				$Row.SID = $Principal.SID
 				$Row.InstallLocation = $InstallLocation
 
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($Principal.Caption) with $InstallLocation"
@@ -207,7 +207,7 @@ function Update-Table
 
 			foreach ($Principal in $Principals)
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching $($Principal.Account) programs for $Search"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching $($Principal.Domain) programs for $Search"
 
 				# TODO: We handle OneDrive case here but there may be more such programs in the future
 				# so this obviously means we need better approach to handle this
@@ -237,15 +237,15 @@ function Update-Table
 
 						# Enter data into row
 						$Row.ID = ++$RowIndex
-						$Row.SID = $Principal.SID
 						$Row.User = $Principal.User
 						# TODO: we should add group entry for users
 						# $Row.Group = $Principal.Group
-						$Row.Account = $Principal.Account
-						$Row.Computer = $Principal.Computer
+						$Row.Domain = $Principal.Domain
+						$Row.Principal = $Principal.Principal
+						$Row.SID = $Principal.SID
 						$Row.InstallLocation = $InstallLocation
 
-						Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($Principal.Account) with $InstallLocation"
+						Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($Principal.Principal) with $InstallLocation"
 
 						# Add the row to the table
 						$InstallTable.Rows.Add($Row)

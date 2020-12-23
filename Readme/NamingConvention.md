@@ -14,32 +14,59 @@ This file contains naming convention rules for parameters and variables
 
 [Standard Cmdlet Parameter Names and Types][parameters]
 
+> Avoid using plural names for parameters
+***
+> Use Pascal Case for Parameter Names
+***
+> If a more specific name is required, use a standard parameter name,
+> and then specify a more specific name as an alias.
+***
+> Use Standard Types for Parameters
+
 Parameter names and aliases
 
 - [string] User
-  - UserName
-- [string] ComputerName
-  - Computer
-  - Domain
+  - UserName *
+- [string] Domain
+  - ComputerName *
+  - CN
 - [string] Group
   - UserGroup
 - [string] SID
   - UserSID
   - GroupSID
   - AppSID
-- [string] Account
+- [string] Principal (a unique identifiable entity for access)
+  - Account
   - UserAccount
-  - Principal
 - [string] SDDL
+- [string] Owner (the name of the owner of the resource)
 - [string] Name
+- [switch] Log (audit the actions of the cmdlet when the parameter is specified)
 - [string] LogName
-- [string] Path
-- [string] LiteralPath
-- [string] FilePath
-- [enum] $Program
+- [string] Path (the paths to a resource when wildcard characters are supported)
+  - FilePath
+- [string] LiteralPath (the path to a resource when wildcard characters are not supported)
+- [string] Interface (network interface name)
+- [IPAddress] IPAddress (specify an IP address)
+  - LocalAddress
+  - RemoteAddress
+- [uri] URL
+  - URI
 - [ValidateSet()] Encoding
-- [object] InputObject
-- [switch] Strict
+- [object] InputObject (when the cmdlet takes input from other cmdlets, ValueFromPipeline)
+- [enum] Application (specify an application)
+  - Program
+- [switch] Strict (all errors are handled as terminating errors)
+- [switch] Exact (the resource term must match the resource name exactly)
+- [ValidateSet()] Privilege (the right a cmdlet needs to perform an operation for a particular entity)
+- [string] Command (specify a command string to run)
+- [switch] Stream (stream multiple output objects through the pipeline)
+- [int32] Timeout (the timeout interval (in milliseconds))
+- [int32] Count (specify the number of objects to be processed)
+- [switch] recurse (the cmdlet recursively performs its actions on resources)
+- [switch] Unique
+- [switch] Disabled
 
 ## Registry keys
 

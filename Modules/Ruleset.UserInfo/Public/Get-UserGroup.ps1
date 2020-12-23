@@ -33,7 +33,7 @@ Get user groups on target computers
 .DESCRIPTION
 Get a list of all available user groups on target computers
 
-.PARAMETER ComputerNames
+.PARAMETER Domain
 One or more computers which to query for user groups
 
 .PARAMETER CIM
@@ -61,9 +61,9 @@ function Get-UserGroup
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-UserGroup.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
-		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
+		[Alias("ComputerName", "CN")]
 		[Parameter(Position = 0)]
-		[string[]] $ComputerName = [System.Environment]::MachineName,
+		[string[]] $Domain = [System.Environment]::MachineName,
 
 		[Parameter()]
 		[switch] $CIM
@@ -78,7 +78,7 @@ function Get-UserGroup
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-		foreach ($Computer in $ComputerName)
+		foreach ($Computer in $Domain)
 		{
 			if ($CIM)
 			{
@@ -105,8 +105,8 @@ function Get-UserGroup
 					{
 						$UserGroups += [PSCustomObject]@{
 							Group = $Group.Name
-							Caption = $Group.Caption
-							Computer = $Computer
+							Domain = $Computer
+							Principal = $Group.Caption
 							SID = $Group.SID
 						}
 					}
@@ -128,8 +128,8 @@ function Get-UserGroup
 				{
 					$UserGroups += [PSCustomObject]@{
 						Group = $Group.Name
-						Caption = Join-Path -Path $Computer -ChildPath $Group.Name
-						Computer = $Computer
+						Domain = $Computer
+						Principal = Join-Path -Path $Computer -ChildPath $Group.Name
 						SID = $Group.SID
 					}
 				}
@@ -145,7 +145,7 @@ function Get-UserGroup
 				Write-Error -Category NotImplemented -TargetObject $Computer `
 					-Message "Querying remote computers without CIM switch not implemented"
 			} # if ($CIM)
-		} # foreach ($Computer in $ComputerName)
+		} # foreach ($Computer in $Domain)
 
 		Write-Output $UserGroups
 	} # process

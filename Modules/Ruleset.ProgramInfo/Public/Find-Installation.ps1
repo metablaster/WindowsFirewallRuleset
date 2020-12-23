@@ -34,10 +34,10 @@ Find installation directory for given predefined program name
 Find-Installation is called by Test-Installation, ie. only if test for existing path
 fails then this method kicks in
 
-.PARAMETER Program
+.PARAMETER Application
 Predefined program name
 
-.PARAMETER ComputerName
+.PARAMETER Domain
 Computer name on which to look for program installation
 
 .EXAMPLE
@@ -54,16 +54,17 @@ None.
 #>
 function Find-Installation
 {
-	[CmdletBinding(
+	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Find-Installation.md")]
 	[OutputType([bool])]
 	param (
-		[Parameter(Mandatory = $true)]
-		[TargetProgram] $Program,
+		[Parameter(Mandatory = $true, Position = 0)]
+		[Alias("Program")]
+		[TargetProgram] $Application,
 
-		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
+		[Alias("ComputerName", "CN")]
 		[Parameter()]
-		[string] $ComputerName = [System.Environment]::MachineName
+		[string] $Domain = [System.Environment]::MachineName
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -74,9 +75,9 @@ function Find-Installation
 	# TODO: need to check some of these search strings (cases), also remove hardcoded directories
 	# NOTE: we want to preserve system environment variables for firewall GUI,
 	# otherwise firewall GUI will show full paths which is not desired for sorting reasons
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Start searching for $Program"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Start searching for $Application"
 
-	switch ($Program)
+	switch ($Application)
 	{
 		"dotnet"
 		{
@@ -113,7 +114,7 @@ function Find-Installation
 		"WindowsDefender"
 		{
 			# NOTE: On fresh installed system the path may be wrong (to ProgramFiles)
-			$DefenderRoot = Get-WindowsDefender $ComputerName |
+			$DefenderRoot = Get-WindowsDefender $Domain |
 			Select-Object -ExpandProperty InstallLocation
 
 			if ($DefenderRoot)
@@ -130,7 +131,7 @@ function Find-Installation
 		"NETFramework"
 		{
 			# Get latest NET Framework installation directory
-			$NETFramework = Get-NetFramework $ComputerName
+			$NETFramework = Get-NetFramework $Domain
 			if ($null -ne $NETFramework)
 			{
 				$NETFrameworkRoot = $NETFramework |
@@ -156,7 +157,7 @@ function Find-Installation
 		"WindowsKits"
 		{
 			# Get Windows SDK debuggers root (latest SDK)
-			$WindowsKits = Get-WindowsKit $ComputerName
+			$WindowsKits = Get-WindowsKit $Domain
 			if ($null -ne $WindowsKits)
 			{
 				$SDKDebuggers = $WindowsKits |
@@ -525,37 +526,37 @@ function Find-Installation
 		}
 		default
 		{
-			Write-Error -Category ObjectNotFound -TargetObject $Program -Message "Parameter '$Program' not implemented"
+			Write-Error -Category ObjectNotFound -TargetObject $Application -Message "Parameter '$Application' not implemented"
 		}
 	}
 
 	if ($InstallTable.Rows.Count -gt 0)
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Installation for $Program found"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Installation for $Application found"
 		return $true
 	}
 	else
 	{
-		Write-Warning -Message "Installation directory for '$Program' not found"
+		Write-Warning -Message "Installation directory for '$Application' not found"
 
 		# NOTE: number for Get-PSCallStack is 2, which means 3 function calls back and then get script name (call at 0 and 1 is this script)
 		$Script = (Get-PSCallStack)[2].Command
 
 		# TODO: these loops seem to be skipped, probably missing Test-File, need to check
-		Write-Information -Tags "User" -MessageData "INFO: If you installed $Program elsewhere you can input valid path now"
+		Write-Information -Tags "User" -MessageData "INFO: If you installed $Application elsewhere you can input valid path now"
 		Write-Information -Tags "User" -MessageData "INFO: Alternatively adjust path in $Script and re-run the script later"
 
-		$Accept = "Provide full path to '$Program' installation directory"
-		$Deny = "Skip operation, rules for '$Program' won't be loaded into firewall"
+		$Accept = "Provide full path to '$Application' installation directory"
+		$Deny = "Skip operation, rules for '$Application' won't be loaded into firewall"
 
-		if (Approve-Execute -Accept $Accept -Deny $Deny -Title "Rule group for $Program" -Question "Do you want to input path now?")
+		if (Approve-Execute -Accept $Accept -Deny $Deny -Title "Rule group for $Application" -Question "Do you want to input path now?")
 		{
-			$Accept = "Try again, required path may be deeper or shallower into/from root directory for '$Program'"
-			$Deny = "Stop asking for '$Program' and continue"
+			$Accept = "Try again, required path may be deeper or shallower into/from root directory for '$Application'"
+			$Deny = "Stop asking for '$Application' and continue"
 
 			while ($InstallTable.Rows.Count -eq 0)
 			{
-				[string] $InstallLocation = Read-Host "Please input path to '$Program' root directory"
+				[string] $InstallLocation = Read-Host "Please input path to '$Application' root directory"
 
 				if (![string]::IsNullOrEmpty($InstallLocation))
 				{
@@ -567,7 +568,7 @@ function Find-Installation
 					}
 				}
 
-				Write-Warning -Message "Installation directory for '$Program' not found"
+				Write-Warning -Message "Installation directory for '$Application' not found"
 				if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Title "Unable to locate '$InstallLocation'" -Question "Do you want to try again?"))
 				{
 					break
@@ -575,7 +576,7 @@ function Find-Installation
 			}
 		}
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] User skips input for $Program"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] User skips input for $Application"
 
 		# Finally status is bad
 		Set-Variable -Name WarningStatus -Scope Global -Value $true

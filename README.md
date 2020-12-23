@@ -128,24 +128,31 @@ or inside folders called `External` for organizational purposes.
 
 ## Requirements
 
-1. Following x64 operating systems are currently tested:
-   - Windows 10 Pro
-   - Windows 10 Pro Education
-   - Windows 10 Enterprise
-   - Windows 10 Education
-   - Windows Server 2019 Standard
-   - Windows Server 2019 Datacenter
-2. Windows PowerShell 5.1 or PowerShell Core 7.1 [Download PowerShell Core][download core]
-3. .NET Framework 4.5 (Windows PowerShell only) [Download Net Framework][download .net]
-4. Git (Optional) [Download Git][download git]
-5. Visual Studio Code (Recommended) [Download VSCode][vscode]
-6. PowerShell Support for VSCode (Recommended) [Download extension][download powershell extension]
-7. PSScriptAnalyzer (Recommended) [Download PSScriptAnalyzer][module psscriptanalyzer]
+Following table lists currently tested operating systems
+
+|         OS          |    Edition    |    Build    |  Architecture  |
+|---------------------|---------------|-------------|----------------|
+| Windows 10          | Pro           | 1809 - 20H2 |      x64       |
+| Windows 10          | Pro Education |    20H2     |      x64       |
+| Windows 10          | Enterprise    | 1809 - 20H2 |      x64       |
+| Windows 10          | Education     |    20H2     |      x64       |
+| Windows Server 2019 | Standard      |    1809     |      x64       |
+| Windows Server 2019 | Datacenter    |    1809     |      x64       |
+
+***
+
+1. Windows PowerShell 5.1 or PowerShell Core 7.1 [Download PowerShell Core][download core]
+2. .NET Framework 4.5 (Windows PowerShell only) [Download Net Framework][download .net]
+3. Git (Optional) [Download Git][download git]
+4. Visual Studio Code (Recommended) [Download VSCode][vscode]
+5. PowerShell Support for VSCode (Recommended) [Download extension][download powershell extension]
+6. PSScriptAnalyzer (Recommended) [Download PSScriptAnalyzer][module psscriptanalyzer]
 
 Requirements details:
 
-- All operating systems 10.0 (Major 10, Minor 0) build 1809 and above are supported,
-but only those 64 bit editions listed in point 1 are actively tested.\
+- All operating systems 10.0 (Major 10, Minor 0) and above are supported,
+but only those editions listed in the table are actively tested.\
+Build column indicates tested releases, however only latest builds continue to be tested.\
 A list of other untested but supported systems and features is in [The future](#the-future)
 - PowerShell "Core" is not built into Windows, you will need to install it separately\
 or use [Windows PowerShell](Readme/WindowsPowerShell.md) which is already installed.
