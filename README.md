@@ -15,7 +15,7 @@
   - [First time user](#first-time-user)
     - [Warning](#warning)
     - [Note](#note)
-  - [Quick start](#quick-start)
+    - [Quick start](#quick-start)
   - [Manage loaded rules](#manage-loaded-rules)
   - [Applying individual rulesets](#applying-individual-rulesets)
   - [Deleting rules](#deleting-rules)
@@ -224,9 +224,10 @@ unblock all files in project first to avoid YES/NO spam questions for every exec
 by running `Scripts\UnblockProject.ps1`\
 Master script `Scripts\SetupFirewall.ps1` does this in case if you forget, but initial YES/NO spam questions
 will still be present in that case.
-- If you download project to location that is under "Ransomware protection" (in Windows Defender),
-make sure to whitelist either `pwsh.exe` or `powershell.exe` otherwise unblocking project files may fail.
-PowerShell console must be restarted for "Controlled folder access" changes to take effect.
+- If you download code to location that is under "Ransomware protection" (in Windows Defender),
+make sure to whitelist either `pwsh.exe` (Core edition) or `powershell.exe` (Desktop edition)
+otherwise doing anything may be blocked.\
+PowerShell console may need to be restarted for "Controlled folder access" changes to take effect.
 - It's important to understand these rules are designed to be used as "Standard" user, not as
 user that is Administrator, if you're Administrator on your computer you'll have to either create standard
 user account and use that for your everyday life or modify code to allow Administrator online access.
@@ -238,7 +239,7 @@ needed to update firewall for system changes that may happen at any time.
 
 [Table of Contents](#table-of-contents)
 
-## Quick start
+### Quick start
 
 1. If you don't have ssh keys and other setup required to clone via SSH then either clone with HTTPS
 or just download released zip file by clicking on "Releases" here on this site, and then for latest
@@ -253,7 +254,7 @@ Open up extracted folder, right click into an empty space and there is an option
 PowerShell Core as Administrator (Assumes you enabled context menu during installment of PowerShell
 Core) if not open it manually.
 5. If you don't have PowerShell context menu then move to `C:\` root drive by executing following 2
-lines (Type or copy/paste following commands and hit enter for each),
+lines (type or copy/paste following commands and hit enter for each),
 this is where you extracted your downloaded zip file
 
     ```powershell
@@ -297,7 +298,7 @@ downloaded from internet:
     ```
 
     If asked, make sure your answer is `R` that is `[R] Run once` as many times as needed to unblock
-    project.
+    project. (approx. up to 8 times)
 
 10. Once project files are unblocked set execution policy to `RemoteSigned`:
 
@@ -346,6 +347,8 @@ default if desired.\
 For example `Windows Remote Management` service should not run if not needed (The default is "Manual"
 startup)
 
+[Table of Contents](#table-of-contents)
+
 ## Manage loaded rules
 
 There are 2 mothods to manage your rules:
@@ -360,7 +363,9 @@ rules with no restriction or add new ones.
 What ever your plan or setup is, you will surely want to perform additional work such as customizing
 rules, or adding new rules for programs not yet covered by this firewall.
 
-Rules are loaded into local group policy, follow steps below to open local group policy.
+Rules are loaded into local group policy, if during firewall setup you accepted creating shortcut to
+personalized firewall management console you can run the schortcut, otherwise follow steps below to
+open local group policy.
 
 1. Press Windows key and type: `secpol.msc`
 2. Right click on `secpol.msc` and click `Run as administrator`

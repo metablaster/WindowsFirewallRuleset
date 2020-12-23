@@ -60,6 +60,7 @@ $PublicScripts = @(
 	"Set-NetworkProfile"
 	"Set-Permission"
 	"Set-ScreenBuffer"
+	"Set-Shortcut"
 	"Show-SDDL"
 	"Update-Context"
 )

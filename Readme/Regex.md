@@ -39,6 +39,8 @@ Note:
     - [Get enabled or action flag](#get-enabled-or-action-flag)
   - [Random regexes](#random-regexes)
     - [Match username in path](#match-username-in-path)
+    - [Path validation](#path-validation)
+    - [Link validation](#link-validation)
 
 ## Filterline
 
@@ -234,6 +236,20 @@ New-NetFirewallRule -Owner $Principal.SID -Package $PackageSID
 
 ```regex
 C:\\Users\USERNAME\\AppData\\Roaming\\ (?<=C:\\+Users\\+)\w+
+```
+
+### Path validation
+
+File extention must be either `*.lnk` or `*.url`
+
+```powershell
+'^[a-z]:\\(?:[^\\/:*?"<>|\r\n]+\\)*[^\\/:*?"<>.|\r\n]*(\.(lnk|url))*$'
+```
+
+### Link validation
+
+```regex
+[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)
 ```
 
 [multicursor]: https://code.visualstudio.com/docs/getstarted/tips-and-tricks#_multi-cursor-selection

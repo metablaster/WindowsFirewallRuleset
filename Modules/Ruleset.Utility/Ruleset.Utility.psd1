@@ -118,6 +118,7 @@ SOFTWARE.
 		"Set-NetworkProfile"
 		"Set-Permission"
 		"Set-ScreenBuffer"
+		"Set-Shortcut"
 		"Show-SDDL"
 		"Update-Context"
 	)
@@ -160,6 +161,7 @@ SOFTWARE.
 		"Help\en-US\Set-NetworkProfile.md"
 		"Help\en-US\Set-Permission.md"
 		"Help\en-US\Set-ScreenBuffer.md"
+		"Help\en-US\Set-Shortcut.md"
 		"Help\en-US\Show-SDDL.md"
 		"Help\en-US\Update-Context.md"
 		"Help\README.md"
@@ -177,6 +179,7 @@ SOFTWARE.
 		"Public\Set-NetworkProfile.ps1"
 		"Public\Set-Permission.ps1"
 		"Public\Set-ScreenBuffer.ps1"
+		"Public\Set-Shortcut.ps1"
 		"Public\Show-SDDL.ps1"
 		"Public\Update-Context.ps1"
 		"Ruleset.Utility_5f38e46f-1bc4-489d-90df-72755129cfdd_HelpInfo.xml"

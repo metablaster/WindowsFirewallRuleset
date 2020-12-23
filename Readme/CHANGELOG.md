@@ -31,6 +31,7 @@ If you would like to see fresh changes done since last release you can do so on 
 - New features
 
   - `Get-ParameterAlias` script to help harvest parameter aliases for naming convention
+  - `Set-Shortcut` function to set desktop shortcut to personalized firewall management console
 
 - Design
 

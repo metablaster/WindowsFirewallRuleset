@@ -88,7 +88,7 @@ if ($FileSystem)
 {
 	# Set up test variables
 	$Computer = [System.Environment]::MachineName
-	$TestFolder = "$ProjectRoot\Test\Ruleset.Utility\TestPermission"
+	$TestFolder = "$ProjectRoot\Test\Ruleset.Utility\TestDrive"
 
 	[AccessControl.FileSystemRights] $Access = "ReadAndExecute, ListDirectory, Traverse"
 

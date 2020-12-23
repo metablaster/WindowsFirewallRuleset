@@ -438,6 +438,10 @@ Write-Information -Tags "User" -MessageData "INFO: Loading rules was completed"
 # Set up global firewall setting, network and firewall profile and apply GPO changes
 & "$ProjectRoot\Scripts\SetupProfile.ps1"
 
+# Set desktop shortcut to custom management console
+Set-Shortcut -Name "Firewall.lnk" -Path "AllUsersDesktop" -TargetPath "$ProjectRoot\Config\Windows\Firewall.msc" -Admin `
+	-Description "View and modify GPO firewall" -IconLocation "$Env:SystemDrive\Windows\System32\Shell32.dll" -IconIndex -19
+
 # Show status of execution
 if ($ErrorLogging -and $ErrorStatus)
 {

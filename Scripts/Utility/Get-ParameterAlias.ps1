@@ -80,11 +80,23 @@ You can use this parameter to limit the output of a command.
 Specify this parameter when you want to stream output object through the pipeline,
 by default output object is formatted for output.
 
+.PARAMETER Strict
+If specified, ParameterName pattern does not apply to parameter aliases.
+Only parameter names (not parameter aliases) are matched against ParameterName pattern.
+
 .PARAMETER ShowCommon
 If specified, aliases for common parameters will be shown as well
 
 .PARAMETER Unique
 if specified, only case sensitive unique list of aliases is shown
+
+.PARAMETER ListImported
+If specified, only commands already imported into current session are processed.
+By default modules for matched commands are imported into global scope.
+
+.PARAMETER Cleanup
+If specified removes all modules previously imported by Get-ParameterAlias from current session.
+Other parameters are ignored and nothing except cleanup is performed.
 
 .EXAMPLE
 PS> Get-ParameterAlias Test-DscConfiguration
@@ -116,11 +128,12 @@ The end result is of course greater reusability of your code.
 #>
 
 #Requires -Version 5.1
-
-[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "All")]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+	"PSAvoidGlobalVars", "", Scope = "Function", Justification = "Required for simplicity")]
+[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Default")]
 [OutputType([System.Management.Automation.PSCustomObject], [string])]
 param (
-	[Parameter(Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+	[Parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
 	[Alias("Name")]
 	[SupportsWildcards()]
 	[string[]] $Command = "*",
@@ -130,7 +143,7 @@ param (
 	[ValidateSet("Cmdlet", "Function", "ExternalScript", "Alias")]
 	[string[]] $CommandType = @("Cmdlet", "Function"),
 
-	[Parameter(ValueFromPipelineByPropertyName = $true)]
+	[Parameter(Position = 0, ValueFromPipelineByPropertyName = $true)]
 	[Alias("Parameter")]
 	[SupportsWildcards()]
 	[string[]] $ParameterName = "*",
@@ -144,20 +157,60 @@ param (
 	[ValidateRange(0, [int32]::MaxValue)]
 	[int32] $TotalCount = [int32]::MaxValue,
 
-	[Parameter(ParameterSetName = "All")]
+	[Parameter(ParameterSetName = "Default")]
 	[switch] $Stream,
+
+	[Parameter()]
+	[switch] $Strict,
 
 	[Parameter()]
 	[switch] $ShowCommon,
 
 	[Parameter(ParameterSetName = "Unique")]
-	[switch] $Unique
+	[switch] $Unique,
+
+	[Parameter(ValueFromPipelineByPropertyName = $true)]
+	[switch] $ListImported,
+
+	[Parameter()]
+	[switch] $Cleanup
 )
 
 begin
 {
-	[array] $UniqueAlias = @()
 	$InformationPreference = "Continue"
+
+	# If dot sourced update format data only for current session
+	if ($MyInvocation.InvocationName -eq ".")
+	{
+		$FormatFile = $($PSCommandPath + "xml")
+		Write-Information -MessageData "INFO: Updating format data from: $((Get-Item $FormatFile).Name)"
+		Update-FormatData -PrependPath $FormatFile
+		break
+	}
+
+	if ($Cleanup)
+	{
+		if (Get-Variable -Name ImportedModules -Scope Global -ErrorAction Ignore)
+		{
+			$global:ImportedModules | ForEach-Object {
+				Write-Information -MessageData "INFO: Removing module $($_.ModuleName) $($_.ModuleVersion)"
+				Remove-Module -FullyQualifiedName $_
+			}
+
+			Remove-Variable -Name ImportedModules -Scope Global
+		}
+
+		break
+	}
+
+	if (!(Get-Variable -Name ImportedModules -Scope Global -ErrorAction Ignore))
+	{
+		# [Microsoft.PowerShell.Commands.ModuleSpecification[]]
+		New-Variable -Name ImportedModules -Scope Global -Value @()
+	}
+
+	[array] $UniqueAlias = @()
 
 	# Common parameters
 	$Common = @(
@@ -175,14 +228,63 @@ begin
 		"WarningVariable"
 		"WhatIf"
 	)
+
+	$ImportParams = @{
+		NoClobber = $true
+		DisableNameChecking = $true
+		ErrorAction = "Stop"
+	}
+
+	if ($PSVersionTable.PSEdition -eq "Core")
+	{
+		$ImportParams.add("SkipEditionCheck", $true)
+	}
 }
 process
 {
 	Write-Debug -Message "params($($PSBoundParameters.Values))"
 
+	if (!$ListImported)
+	{
+		# NOTE: The ParameterName and ParameterType parameters search only commands in the current session
+		[array] $MissingModule = Get-Command -Name $Command -CommandType $CommandType | Where-Object {
+			![string]::IsNullOrEmpty($_.ModuleName)
+		} | Select-Object -ExpandProperty ModuleName -Unique
+
+		foreach ($ModuleName in $MissingModule)
+		{
+			if (Get-Module -Name $ModuleName)
+			{
+				Write-Verbose -Message "Module '$ModuleName' already imported"
+				continue
+			}
+
+			try
+			{
+				# [System.Management.Automation.PSModuleInfo]
+				Import-Module -Name $ModuleName -Scope Global @ImportParams
+				$ModuleInfo = Get-Module -Name $ModuleName | Select-Object Name, Version
+
+				if ($ModuleInfo)
+				{
+					Write-Information -MessageData "INFO: Importing module $($ModuleInfo.Name) $($ModuleInfo.Version)"
+					$global:ImportedModules += @{ModuleName = $ModuleInfo.Name; ModuleVersion = $ModuleInfo.Version }
+				}
+				else
+				{
+					Write-Warning -Message "Failed to import $ModuleName module"
+				}
+			}
+			catch
+			{
+				Write-Verbose -Message "$($_.Exception.Message)"
+			}
+		}
+	}
+
 	# NOTE: Get-Command -ParameterName gets commands that have the specified parameter names or parameter aliases.
 	foreach ($TargetCommand in @(Get-Command -Name $Command -CommandType $CommandType -ParameterType $ParameterType `
-				-ParameterName $ParameterName -TotalCount $TotalCount -EA SilentlyContinue -EV +NotFound))
+				-ParameterName $ParameterName -TotalCount $TotalCount -ListImported:$ListImported -EA SilentlyContinue -EV +NotFound))
 	{
 		$Params = $TargetCommand.Parameters.Values
 		if (!$ShowCommon)
@@ -201,8 +303,8 @@ process
 			{
 				foreach ($NameWildcard in $ParameterName)
 				{
-					# Select only those parameters which match requested parameter name or alias wildcard
-					if (($Param.Name -like $NameWildcard) -or ($Param.Aliases -like $NameWildcard))
+					# Select only those parameters which match requested parameter name or conditionally alias wildcard
+					if (($Param.Name -like $NameWildcard) -or (!$Strict -and ($Param.Aliases -like $NameWildcard)))
 					{
 						foreach ($TypeWildcard in $ParameterType)
 						{
@@ -215,6 +317,7 @@ process
 									ParameterName = $Param.Name
 									ParameterType = $Param.ParameterType
 									Alias = $Param | Select-Object -ExpandProperty Aliases
+									Module = $TargetCommand.ModuleName
 									PSTypeName = "ParameterAlias"
 								}
 							}
@@ -266,7 +369,8 @@ end
 	}
 
 	# Here to avoid duplicate log entries
-	Update-Log
+	# NOTE: Not used to avoid importing project modules
+	# Update-Log
 
 	if ($NotFound)
 	{

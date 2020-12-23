@@ -16,9 +16,8 @@ Here is a list of most important things to keep in mind.
     - [Automatic formatting](#automatic-formatting)
     - [Script desing](#script-desing)
     - [Rule design](#rule-design)
-    - [More information](#more-information)
-  - [Modules and 3rd party code](#modules-and-3rd-party-code)
-  - [Module design](#module-design)
+    - [Module design](#module-design)
+    - [Development Guidelines](#development-guidelines)
   - [Static analysis](#static-analysis)
   - [Documentation and comments](#documentation-and-comments)
   - [Writing rules](#writing-rules)
@@ -41,10 +40,10 @@ It's recommended to read up to date version of this document which is located on
 First step is to fork a project:\
 [Forking projects][forking projects]
 
-Next if needed, you might want to set up your SSH keys (don't actually do it yet):\
+Next if needed, you might want to set up your SSH keys:\
 [Connecting to GitHub with SSH][github ssh]
 
-The reason why not to set up SSH keys right away is because for PowerShell I made this tutorial:\
+Following optional tutorial may help you setting up git for PowerShell:\
 [PowerShell GPG4Win, SSH, posh-git][tutorial]
 
 Regarding license and Copyright practices adopted by this project see:\
@@ -62,6 +61,8 @@ Few additional references regarding open source worth reading:\
 And references for tools used by this project:\
 [PowerShell documentation][powershell docs]\
 [Visual Studio Code][vscode docs]
+
+[Table of Contents](#table-of-contents)
 
 ## Environment setup
 
@@ -143,7 +144,7 @@ Following 2 extensions are optional and will not be automatically offerred for i
 
     Review and manage your GitHub pull requests and issues directly in VS Code
 
-The continuation of before mentioned tutorial for PowerShell, gpg, ssh etc. is to visit `Config\ProjectSettings.ps1`
+Once your environment is set, next step is to visit `Config\ProjectSettings.ps1`
 located in project root directory, at a minimum you should set following variables to `$true`
 before doing anything else:
 
@@ -175,6 +176,8 @@ code editor and the rest of environment.
 It is recommended to also enable specific development features in Windows which you can find in:\
 `Settings -> Update & Security -> For Developers`, here under `File Explorer` apply all settings.
 
+[Table of Contents](#table-of-contents)
+
 ## Code style
 
 ### Automatic formatting
@@ -195,6 +198,8 @@ for more info about type casing run:
 ```powershell
 [PSCustomObject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::get.GetEnumerator() | Sort-Object Key
 ```
+
+[Table of Contents](#table-of-contents)
 
 ### Script desing
 
@@ -220,6 +225,8 @@ in the following way and may be different if needed for what ever reason:
 7. Removal of exiting rules / Unit test startup etc..
 8. Rules / functions / code etc..
 
+[Table of Contents](#table-of-contents)
+
 ### Rule design
 
 Each firewall rule uses exactly the same order of parameters split into exactly the same number of lines.\
@@ -230,16 +237,9 @@ Performing regex operations on firewall rules in combination with multicursor fe
 done in a matter of minutes, without this strict rule design it would take an entry day and might
 result in bugs or security issues!
 
-### More information
+[Table of Contents](#table-of-contents)
 
-Following link explains must know style guidelines to write functions and commandlets:\
-[Cmdlet Development Guidelines][develop cmdlets]
-
-Following link describes general rules about PowerShell code style if you like reading,
-however keep in mind, it's not completely in line with this repository best practices:\
-[The PowerShell Style Guide][powershell style]
-
-## Modules and 3rd party code
+### Module design
 
 Repository contains few custom modules of various type grouped by relevance on
 what the module is supposed to expose.
@@ -254,8 +254,6 @@ easily customized without too much change or learning curve.
 directly, this must be so, to easily see to which file does license/Copyright apply in full.
 
 Exception to this rule are complete modules which should retain their directory domain within repository.
-
-## Module design
 
 Rules for code in modules is different, most important is to keep each function in it's own script,
 separated into Public/Private folders, this is required for 2 valid reasons:
@@ -275,6 +273,17 @@ For example:
 3rd party modules must not follow this naming convention, that's what word "Ruleset" means here,
 to distinguish project modules from 3rd party code.
 
+[Table of Contents](#table-of-contents)
+
+### Development Guidelines
+
+Following link explains must know style guidelines to write functions and commandlets:\
+[Cmdlet Development Guidelines][develop cmdlets]
+
+Following link describes general rules about PowerShell code style if you like reading,
+however keep in mind, it's not completely in line with this repository best practices:\
+[The PowerShell Style Guide][powershell style]
+
 ## Static analysis
 
 [PSStaticAnalyzer][module psscriptanalyzer] is used to perform basic code quality analysis.
@@ -291,6 +300,8 @@ Invoke-ScriptAnalyzer -Path .\ -Recurse -Settings Config\PSScriptAnalyzerSetting
 If you get an error such as:\
 `Invoke-ScriptAnalyzer: Object reference not set to an instance of an object.`\
 then try again and keep repeating until OK, or cleanup repository and restart VSCode.
+
+[Table of Contents](#table-of-contents)
 
 ## Documentation and comments
 
@@ -357,6 +368,8 @@ rules you would provide a link to [IANA][iana] with relevant reference document.
 
 Remember, documenting code and features is as important as writing it!
 
+[Table of Contents](#table-of-contents)
+
 ## Writing rules
 
 It is important that a rule is very specific and not generic, that means specifying protocol,
@@ -364,6 +377,8 @@ IP addresses, ports, system user, interface type and other relevant information.
 
 For example just saying: allow TCP outbound port 80 for any address or any user or
 no explanation what is this supposed to allow or block is not acceptable.
+
+[Table of Contents](#table-of-contents)
 
 ## Testing code
 
@@ -391,6 +406,8 @@ Config\ProjectSettings
 
 This will add all repository `Modules` to current session module path
 
+[Table of Contents](#table-of-contents)
+
 ## Commits and pull requests
 
 Push small commits that solve or improve single or specific problem,
@@ -405,6 +422,8 @@ Then once you commit, open `todo-tree` to review what to do next.
 **Please avoid making huge changes to existing code** without first attaching valid reasons,
 new code and additions is not problem though.
 
+[Table of Contents](#table-of-contents)
+
 ## Portability and other systems
 
 At the moment the focus is on Windows Firewall, if you want to extend code base to other firewalls
@@ -415,12 +434,16 @@ should then be regularly maintained for any changes on master branch, up until y
 
 The plan is to expand this project to manage [nftables][nftables] firewall on linux and other systems.
 
+[Table of Contents](#table-of-contents)
+
 ## Making new scripts or modules
 
 Inside `Templates` folder there are few template scripts as a starting point.\
 Copy them to target location, update starting code and you're ready to start working.
 
 These templates are fully aligned to rule design, code and formatting style of this project.
+
+[Table of Contents](#table-of-contents)
 
 ## Repository folder structure
 
@@ -435,6 +458,8 @@ So it's an ongoing effort that by no means gets fulfilled.
 
 I recommend you start at looking into [TODO](Readme/TODO.md) list and also use `todo-tree`
 extension to see more specific or smaller todo's, unless you have specific ideas or recommendations.
+
+[Table of Contents](#table-of-contents)
 
 [contributing develop]: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/CONTRIBUTING.md "latest CONTRIBUTING.md"
 [contribute to open source]: https://opensource.guide/how-to-contribute "How to contribute to open source"
