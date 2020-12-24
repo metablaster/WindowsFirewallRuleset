@@ -6,6 +6,7 @@ This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
 Copyright (C) 2020 Markus Scholtes
+Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +35,7 @@ Convert String array to comma separated list
 Convert String array to comma separated list.
 Used by Export-FirewallRules ex. to pack an array of IP addresses into a single string
 
-.PARAMETER StringArray
+.PARAMETER InputObject
 String array which to convert
 
 .EXAMPLE
@@ -43,7 +44,7 @@ PS> Convert-ArrayToList @("192.168.1.1", "192.168.2.1", "172.24.33.100")
 "192.168.1.1,192.168.2.1,172.24.33.100"
 
 .INPUTS
-None. You cannot pipe objects to Convert-ArrayToList
+[string]
 
 .OUTPUTS
 [string] comma separated list
@@ -52,32 +53,48 @@ None. You cannot pipe objects to Convert-ArrayToList
 Following modifications by metablaster:
 August 2020:
 - Make Convert-ArrayToList Advanced function
+- Change code style to be same as the rest of a project code
 September 2020:
 - Show warning for unexpected input
+- Added Write-* stream
+December 2020:
+- Add pipline support
+- Rename parameter to standard name
 #>
 function Convert-ArrayToList
 {
 	[CmdletBinding()]
 	[OutputType([string])]
 	param(
-		[Parameter()]
-		[string[]] $StringArray
+		[Parameter(ValueFromPipeline = $true)]
+		[Alias("Array")]
+		[string[]] $InputObject
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
-	[string] $Result = ""
-
-	if ($StringArray -and ($StringArray.Length -gt 0))
+	begin
 	{
-		foreach ($Value In $StringArray)
-		{
-			$Result += "$Value,"
-		}
-
-		return $Result.TrimEnd(",")
+		[string] $Result = ""
 	}
+	process
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-	Write-Warning "Input is missing, result is empty string"
-	return $Result
+		if ($InputObject -and ($InputObject.Length -gt 0))
+		{
+			foreach ($Value In $InputObject)
+			{
+				$Result += "$Value,"
+			}
+
+			Write-Output $Result.TrimEnd(",")
+		}
+		else
+		{
+			Write-Warning "Input is missing, result is empty string"
+		}
+	}
+	end
+	{
+		Write-Output $Result
+	}
 }

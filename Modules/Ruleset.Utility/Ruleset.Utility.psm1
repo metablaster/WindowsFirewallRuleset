@@ -57,6 +57,7 @@ $PublicScripts = @(
 	"Get-NetworkService"
 	"Get-ProcessOutput"
 	"Get-TypeName"
+	"Resolve-Directory"
 	"Set-NetworkProfile"
 	"Set-Permission"
 	"Set-ScreenBuffer"

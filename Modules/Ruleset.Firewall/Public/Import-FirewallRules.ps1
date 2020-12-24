@@ -36,10 +36,10 @@ Imports firewall rules generated with Export-FirewallRules, CSV or JSON file.
 CSV files have to be separated with semicolons.
 Existing rules with same name will be overwritten.
 
-.PARAMETER PolicyStore
+.PARAMETER Domain
 Policy store into which to import rules, default is local GPO.
 
-.PARAMETER Folder
+.PARAMETER Path
 Path to directory where exported rules file is located
 
 .PARAMETER FileName
@@ -80,6 +80,9 @@ Following modifications by metablaster August 2020:
 7. Changed minor flow and logic of execution
 8. Make output formatted and colored
 9. Added progress bar
+December 2020:
+1. Rename parameters according to standard name convention
+2. Support resolving path wildcard pattern
 #>
 function Import-FirewallRules
 {
@@ -87,11 +90,13 @@ function Import-FirewallRules
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallRules.md")]
 	[OutputType([void])]
 	param(
+		[Alias("ComputerName", "CN")]
 		[Parameter()]
-		[string] $PolicyStore = [System.Environment]::MachineName,
+		[string] $Domain = [System.Environment]::MachineName,
 
-		[Parameter()]
-		[string] $Folder = ".",
+		[Parameter(Mandatory = $true)]
+		[SupportsWildcards()]
+		[System.IO.DirectoryInfo] $Path,
 
 		[Parameter()]
 		[string] $FileName = "FirewallRules",
@@ -101,6 +106,13 @@ function Import-FirewallRules
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+
+	$Path = Resolve-Path $Path
+	if (!$Path -or !$Path.Exists)
+	{
+		Write-Error -Category ResourceUnavailable -Message "The path was not: $Path"
+		return
+	}
 
 	# NOTE: (Split-Path -Extension $FileName) does not work in Windows PowerShell
 	$FileExtension = [System.IO.Path]::GetExtension($FileName)
@@ -119,8 +131,8 @@ function Import-FirewallRules
 		}
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading JSON file"
-		Confirm-FileEncoding "$Folder\$FileName"
-		$FirewallRules = Get-Content "$Folder\$FileName" -Encoding $DefaultEncoding | ConvertFrom-Json
+		Confirm-FileEncoding "$Path\$FileName"
+		$FirewallRules = Get-Content "$Path\$FileName" -Encoding $DefaultEncoding | ConvertFrom-Json
 	}
 	else
 	{
@@ -136,8 +148,8 @@ function Import-FirewallRules
 		}
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading CSV file"
-		Confirm-FileEncoding "$Folder\$FileName"
-		$FirewallRules = Get-Content "$Folder\$FileName" -Encoding $DefaultEncoding | ConvertFrom-Csv -Delimiter ";"
+		Confirm-FileEncoding "$Path\$FileName"
+		$FirewallRules = Get-Content "$Path\$FileName" -Encoding $DefaultEncoding | ConvertFrom-Csv -Delimiter ";"
 	}
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Iterating rules"
@@ -224,7 +236,7 @@ function Import-FirewallRules
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if rule exists"
 
 		$IsRemoved = @()
-		Remove-NetFirewallRule -Name $Rule.Name -PolicyStore $PolicyStore -ErrorAction SilentlyContinue -ErrorVariable IsRemoved
+		Remove-NetFirewallRule -Name $Rule.Name -PolicyStore $Domain -ErrorAction SilentlyContinue -ErrorVariable IsRemoved
 
 		if ($IsRemoved.Count -gt 0)
 		{
@@ -237,7 +249,7 @@ function Import-FirewallRules
 
 		# generate new firewall rule, parameters are assigned with splatting
 		# NOTE: If the script is not run as Administrator, the error says "Cannot create a file when that file already exists"
-		New-NetFirewallRule -PolicyStore $PolicyStore @RuleSplatHash | Format-Output -Import
+		New-NetFirewallRule -PolicyStore $Domain @RuleSplatHash | Format-Output -Import
 	}
 
 	Write-Information -Tags "User" -MessageData "INFO: Importing firewall rules from '$FileName' done"

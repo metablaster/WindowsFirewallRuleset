@@ -6,6 +6,7 @@ This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
 Copyright (C) 2020 Markus Scholtes
+Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,52 +29,52 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Convert value to boolean
+Convert comma separated list to string array
 
 .DESCRIPTION
-Several firewall rule attributes are boolean such as:
-True/False or 1/0
-Convert-ValueToBoolean converts these values to $true/$false
+Convert comma separated list to string array
+Used by Import-FirewallRules ex. to unpack a list of IP addresses back to string array
 
 .PARAMETER Value
-Value which to convert to boolean
+List of comma separated string values, previously packed with Convert-ArrayToList
 
 .PARAMETER DefaultValue
-If the Value is null or empty this value will be used as a result
+Value to return if a list is empty
 
 .EXAMPLE
-PS> Convert-ValueToBoolean True
+PS> Convert-ArrayToList "192.168.1.1,192.168.2.1,172.24.33.100"
 
-$true
-
-.EXAMPLE
-PS> Convert-ValueToBoolean 0
-
-$false
+"192.168.1.1", "192.168.2.1", "172.24.33.100"
 
 .INPUTS
-None. You cannot pipe objects to Convert-ValueToBoolean
+None. You cannot pipe objects to Convert-ListToArray
 
 .OUTPUTS
-[bool]
+[string]
 
 .NOTES
+TODO: DefaultValue can't be string, try string[]
 Following modifications by metablaster:
 August 2020:
-- Make Convert-ValueToBoolean Advanced function
+- Make Convert-ListToArray Advanced function
+- Change code style to be same as the rest of a project code
 September 2020:
-- Change logic to validate input and show warning or error for unexpected input
+- Show warning for unexpected input
+- Added Write-* stream
+December 2020:
+- Renamed parameter to standard name
 #>
-function Convert-ValueToBoolean
+function Convert-ListToArray
 {
 	[CmdletBinding()]
-	[OutputType([bool])]
+	[OutputType([string])]
 	param(
 		[Parameter()]
+		[Alias("List")]
 		[string] $Value,
 
 		[Parameter()]
-		[bool] $DefaultValue = $false
+		$DefaultValue = "Any"
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -81,37 +82,10 @@ function Convert-ValueToBoolean
 	if ([string]::IsNullOrEmpty($Value))
 	{
 		Write-Warning "Input is missing, using default value of: $DefaultValue"
-		return $DefaultValue
+		Write-Output $DefaultValue
 	}
-
-	$Result = switch ($Value)
+	else
 	{
-		"1"
-		{
-			$true
-			break
-		}
-		"True"
-		{
-			$true
-			break
-		}
-		"0"
-		{
-			$false
-			break
-		}
-		"False"
-		{
-			$false
-			break
-		}
-		default
-		{
-			Write-Error -Category InvalidArgument -TargetObject $Value -Message "Value '$Value' can't be converted to boolean"
-			$null
-		}
+		Write-Output ($Value -split ",")
 	}
-
-	return $Result
 }

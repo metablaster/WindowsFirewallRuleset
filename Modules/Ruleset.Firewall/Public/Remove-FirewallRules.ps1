@@ -36,10 +36,10 @@ Removes firewall rules according to a with Export-FirewallRules generated list i
 CSV files have to be separated with semicolons. Only the field Name or - if Name is missing - DisplayName
 is used, all other fields can be omitted
 
-.PARAMETER PolicyStore
+.PARAMETER Domain
 Policy store from which remove rules, default is local GPO.
 
-.PARAMETER Folder
+.PARAMETER Path
 Folder in which file is located
 
 .PARAMETER FileName
@@ -76,6 +76,9 @@ Changes by metablaster - August 2020:
 4. Added more output streams for debug, verbose and info
 5. Make output formatted and colored
 6. Changed minor flow of execution
+December 2020:
+1. Rename parameters according to standard name convention
+2. Support resolving path wildcard pattern
 TODO: implement removing rules not according to file
 #>
 function Remove-FirewallRules
@@ -86,11 +89,13 @@ function Remove-FirewallRules
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Remove-FirewallRules.md")]
 	[OutputType([void])]
 	param(
+		[Alias("ComputerName", "CN")]
 		[Parameter()]
-		[string] $PolicyStore = [System.Environment]::MachineName,
+		[string] $Domain = [System.Environment]::MachineName,
 
-		[Parameter()]
-		[string] $Folder = ".",
+		[Parameter(Mandatory = $true)]
+		[SupportsWildcards()]
+		[System.IO.DirectoryInfo] $Path,
 
 		[Parameter()]
 		[string] $FileName = "FirewallRules",
@@ -103,6 +108,13 @@ function Remove-FirewallRules
 
 	if ($PSCmdlet.ShouldProcess("Remove firewall rules according to file"))
 	{
+		$Path = Resolve-Path $Path
+		if (!$Path -or !$Path.Exists)
+		{
+			Write-Error -Category ResourceUnavailable -Message "The path was not: $Path"
+			return
+		}
+
 		# NOTE: (Split-Path -Extension $FileName) does not work in Windows PowerShell
 		$FileExtension = [System.IO.Path]::GetExtension($FileName)
 
@@ -120,8 +132,8 @@ function Remove-FirewallRules
 			}
 
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading JSON file"
-			Confirm-FileEncoding "$Folder\$FileName"
-			$FirewallRules = Get-Content "$Folder\$FileName" -Encoding $DefaultEncoding | ConvertFrom-Json
+			Confirm-FileEncoding "$Path\$FileName"
+			$FirewallRules = Get-Content "$Path\$FileName" -Encoding $DefaultEncoding | ConvertFrom-Json
 		}
 		else
 		{
@@ -137,8 +149,8 @@ function Remove-FirewallRules
 			}
 
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading CSV file"
-			Confirm-FileEncoding "$Folder\$FileName"
-			$FirewallRules = Get-Content "$Folder\$FileName" -Encoding $DefaultEncoding | ConvertFrom-Csv -Delimiter ";"
+			Confirm-FileEncoding "$Path\$FileName"
+			$FirewallRules = Get-Content "$Path\$FileName" -Encoding $DefaultEncoding | ConvertFrom-Csv -Delimiter ";"
 		}
 
 		# iterate rules
@@ -151,7 +163,7 @@ function Remove-FirewallRules
 			if (![string]::IsNullOrEmpty($Rule.Name))
 			{
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Get rule according to Name"
-				$CurrentRule = Get-NetFirewallRule -PolicyStore $PolicyStore -Name $Rule.Name -ErrorAction SilentlyContinue
+				$CurrentRule = Get-NetFirewallRule -PolicyStore $Domain -Name $Rule.Name -ErrorAction SilentlyContinue
 
 				if (!$CurrentRule)
 				{
@@ -165,7 +177,7 @@ function Remove-FirewallRules
 				if (![string]::IsNullOrEmpty($Rule.DisplayName))
 				{
 					Write-Debug -Message "[$($MyInvocation.InvocationName)] Get rule according to DisplayName"
-					$CurrentRule = Get-NetFirewallRule -PolicyStore $PolicyStore -DisplayName $Rule.DisplayName -ErrorAction SilentlyContinue
+					$CurrentRule = Get-NetFirewallRule -PolicyStore $Domain -DisplayName $Rule.DisplayName -ErrorAction SilentlyContinue
 
 					if (!$CurrentRule)
 					{
@@ -183,7 +195,7 @@ function Remove-FirewallRules
 			}
 
 			Write-Host "Remove Rule: [$($Rule | Select-Object -ExpandProperty Group)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
-			Remove-NetFirewallRule -PolicyStore $PolicyStore -Name $CurrentRule.Name
+			Remove-NetFirewallRule -PolicyStore $Domain -Name $CurrentRule.Name
 		}
 
 		Write-Information -Tags "User" -MessageData "INFO: Removing firewall rules according to '$FileName' done"

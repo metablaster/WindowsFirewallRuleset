@@ -33,6 +33,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - `Get-ParameterAlias` script to help harvest parameter aliases for naming convention
   - `Set-Shortcut` function to set desktop shortcut to personalized firewall management console
   - `Test-MarkdownLinks` function to find dead links in markdown files
+  - `Resolve-Directory` function to resolve path wildcard pattern and convert to `System.IO.DirectoryInfo`
 
 - Design
 

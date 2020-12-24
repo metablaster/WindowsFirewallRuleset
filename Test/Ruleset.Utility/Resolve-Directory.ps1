@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2020 Markus Scholtes
+Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,58 +28,52 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Convert comma separated list to string array
+Unit test for Resolve-Directory
 
 .DESCRIPTION
-Convert comma separated list to string array
-Used by Import-FirewallRules ex. to unpack a list of IP addresses back to string array
-
-.PARAMETER List
-List of comma separated string values, previously packed with Convert-ArrayToList
-
-.PARAMETER DefaultValue
-Value to return if a list is empty
+Test correctness of Resolve-Directory
 
 .EXAMPLE
-PS> Convert-ArrayToList "192.168.1.1,192.168.2.1,172.24.33.100"
-
-"192.168.1.1", "192.168.2.1", "172.24.33.100"
+PS> .\Resolve-Directory.ps1
 
 .INPUTS
-None. You cannot pipe objects to Convert-ListToArray
+None. You cannot pipe objects to Resolve-Directory.ps1
 
 .OUTPUTS
-[string]
+None. Resolve-Directory.ps1 does not generate any output
 
 .NOTES
-TODO: DefaultValue can't be string, try string[]
-Following modifications by metablaster:
-August 2020:
-- Make Convert-ListToArray Advanced function
-September 2020:
-- Show warning for unexpected input
+None.
 #>
-function Convert-ListToArray
-{
-	[CmdletBinding()]
-	[OutputType([string])]
-	param(
-		[Parameter()]
-		[string] $List,
 
-		[Parameter()]
-		$DefaultValue = "Any"
-	)
+#region Initialization
+#Requires -Version 5.1
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+# Check requirements
+Initialize-Project -Abort
+Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
-	if ([string]::IsNullOrEmpty($List))
-	{
-		Write-Warning "Input is missing, using default value of: $DefaultValue"
-		return $DefaultValue
-	}
-	else
-	{
-		return ($List -split ",")
-	}
-}
+# Imports
+. $PSScriptRoot\ContextSetup.ps1
+
+# User prompt
+Update-Context $TestContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+#Endregion
+
+Enter-Test
+
+$TestDrive = "$ProjectRoot\Tes?\Ru[l|r]eset.Uti*\TestDrive"
+
+Start-Test "Resolve-Directory 'DirInfo'"
+$TestPath = "$TestDrive\DirInfo"
+Resolve-Directory $TestPath -Create | Test-Output -Command Resolve-Directory
+
+Start-Test "Resolve-Directory 'AsString'"
+$TestPath = "$TestDrive\AsString"
+Resolve-Directory $TestPath -Create -As String | Test-Output -Command Resolve-Directory
+
+Update-Log
+Exit-Test

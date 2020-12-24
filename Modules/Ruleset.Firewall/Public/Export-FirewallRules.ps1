@@ -38,10 +38,10 @@ All rules are exported by default, you can filter with parameter -Name, -Inbound
 -Enabled, -Disabled, -Allow and -Block.
 If the export file already exists it's content will be replaced by default.
 
-.PARAMETER PolicyStore
+.PARAMETER Domain
 Policy store from which to export rules, default is local GPO.
 
-.PARAMETER Folder
+.PARAMETER Path
 Path into which to save file
 
 .PARAMETER FileName
@@ -115,7 +115,9 @@ Following modifications by metablaster August 2020:
 9. Changed minor flow and logic of execution
 10. Make output formatted and colored
 11. Added progress bar
-
+December 2020:
+1. Rename parameters according to standard name convention
+2. Support resolving path wildcard pattern
 TODO: export to excel
 TODO: Following rulesets failed to export with "WARNING: Input is missing, result is empty string"
 
@@ -146,11 +148,13 @@ function Export-FirewallRules
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallRules.md")]
 	[OutputType([void])]
 	param(
+		[Alias("ComputerName", "CN")]
 		[Parameter()]
-		[string] $PolicyStore = [System.Environment]::MachineName,
+		[string] $Domain = [System.Environment]::MachineName,
 
-		[Parameter()]
-		[string] $Folder = ".",
+		[Parameter(Mandatory = $true)]
+		[SupportsWildcards()]
+		[System.IO.DirectoryInfo] $Path,
 
 		[Parameter()]
 		[string] $FileName = "FirewallRules",
@@ -212,7 +216,7 @@ function Export-FirewallRules
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting rules - skip grouped rules"
 
-		$FirewallRules = Get-NetFirewallRule -DisplayName $DisplayName -PolicyStore $PolicyStore |
+		$FirewallRules = Get-NetFirewallRule -DisplayName $DisplayName -PolicyStore $Domain |
 		Where-Object {
 			$_.DisplayGroup -Like $DisplayGroup -and $_.Direction -like $Direction `
 				-and $_.Enabled -like $RuleState -and $_.Action -like $Action
@@ -222,7 +226,7 @@ function Export-FirewallRules
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting rules"
 
-		$FirewallRules = Get-NetFirewallRule -DisplayName $DisplayName -PolicyStore $PolicyStore |
+		$FirewallRules = Get-NetFirewallRule -DisplayName $DisplayName -PolicyStore $Domain |
 		Where-Object {
 			$_.Direction -like $Direction -and $_.Enabled -like $RuleState -and $_.Action -like $Action
 		}
@@ -231,7 +235,7 @@ function Export-FirewallRules
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting rules - skip ungrouped rules"
 
-		$FirewallRules = Get-NetFirewallRule -DisplayGroup $DisplayGroup -PolicyStore $PolicyStore |
+		$FirewallRules = Get-NetFirewallRule -DisplayGroup $DisplayGroup -PolicyStore $Domain |
 		Where-Object {
 			$_.Direction -like $Direction -and $_.Enabled -like $RuleState -and $_.Action -like $Action
 		}
@@ -325,11 +329,10 @@ function Export-FirewallRules
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Writing rules to file"
 
-	# Create target folder directory if it doesn't exist
-	if (!(Test-Path -PathType Container -Path $Folder))
+	$Path = Resolve-Path $Path -Create
+	if (!$Path)
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating exports directory $Folder"
-		New-Item -ItemType Directory -Path $Folder -ErrorAction Stop | Out-Null
+		return
 	}
 
 	# NOTE: (Split-Path -Extension $FileName) does not work in Windows PowerShell
@@ -348,12 +351,12 @@ function Export-FirewallRules
 		{
 			# TODO: need to implement appending to JSON
 			Write-Warning -Message "Appending to JSON not implemented"
-			$FirewallRuleSet | ConvertTo-Json | Set-Content -Path "$Folder\$FileName" -Encoding $DefaultEncoding
+			$FirewallRuleSet | ConvertTo-Json | Set-Content -Path "$Path\$FileName" -Encoding $DefaultEncoding
 		}
 		else
 		{
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Replacing content in JSON file"
-			$FirewallRuleSet | ConvertTo-Json | Set-Content -Path "$Folder\$FileName" -Encoding $DefaultEncoding
+			$FirewallRuleSet | ConvertTo-Json | Set-Content -Path "$Path\$FileName" -Encoding $DefaultEncoding
 		}
 	}
 	else
@@ -365,15 +368,13 @@ function Export-FirewallRules
 			$FileName += ".csv"
 		}
 
-		$FileExists = Test-Path -PathType Leaf -Path "$Folder\$FileName"
-
 		if ($Append)
 		{
-			if ($FileExists)
+			if (Test-Path -PathType Leaf -Path "$Path\$FileName")
 			{
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Appending to CSV file"
 				$FirewallRuleSet | ConvertTo-Csv -NoTypeInformation -Delimiter ";" |
-				Select-Object -Skip 1 | Add-Content -Path "$Folder\$FileName" -Encoding $DefaultEncoding
+				Select-Object -Skip 1 | Add-Content -Path "$Path\$FileName" -Encoding $DefaultEncoding
 				return
 			}
 			else
@@ -384,7 +385,7 @@ function Export-FirewallRules
 
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Replacing content in CSV file"
 		$FirewallRuleSet | ConvertTo-Csv -NoTypeInformation -Delimiter ";" |
-		Set-Content -Path "$Folder\$FileName" -Encoding $DefaultEncoding
+		Set-Content -Path "$Path\$FileName" -Encoding $DefaultEncoding
 	}
 
 	Write-Information -Tags "User" -MessageData "INFO: Exporting firewall rules into: '$FileName' done"

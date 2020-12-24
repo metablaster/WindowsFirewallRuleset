@@ -62,11 +62,15 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 Enter-Test -Private
 
 Start-Test "Convert-ArrayToList null"
-$Result = Convert-ArrayToList
+Convert-ArrayToList
+$null | Convert-ArrayToList
 
 Start-Test "Convert-ArrayToList"
-$Result = Convert-ArrayToList @("192.168.1.1", "192.168.2.1", "172.24.33.100")
+$Result = Convert-ArrayToList -InputObject @("192.168.1.1", "192.168.2.1", "172.24.33.100")
 $Result
+
+Start-Test "Convert-ArrayToList pipeline"
+@("192.168.1.1", "192.168.2.1", $null, "172.24.33.100") | Convert-ArrayToList
 
 Test-Output $Result -Command Convert-ArrayToList
 

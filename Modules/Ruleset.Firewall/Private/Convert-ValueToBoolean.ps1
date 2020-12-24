@@ -5,6 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
+Copyright (C) 2020 Markus Scholtes
 Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -28,62 +29,92 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Convert encoded single line string to multi line string array
+Convert value to boolean
 
 .DESCRIPTION
-Convert encoded single line string to multi line CRLF string array
-Input string `r is encoded as %% and `n as ||
+Several firewall rule attributes are boolean such as:
+True/False or 1/0
+Convert-ValueToBoolean converts these values to $true/$false
 
-.PARAMETER MultiLine
-String which to convert
+.PARAMETER Value
+Value which to convert to boolean
 
-.PARAMETER JSON
-Input string is from JSON file, meaning no need to decode
+.PARAMETER DefaultValue
+If the Value is null or empty this value will be used as a result
 
 .EXAMPLE
-PS> Convert-ListToMultiLine "Some%%||String"
+PS> Convert-ValueToBoolean True
 
-Some
-String
+$true
+
+.EXAMPLE
+PS> Convert-ValueToBoolean 0
+
+$false
 
 .INPUTS
-None. You cannot pipe objects to Convert-ListToMultiLine
+None. You cannot pipe objects to Convert-ValueToBoolean
 
 .OUTPUTS
-[string] multi line string
+[bool]
 
 .NOTES
-None.
+Following modifications by metablaster:
+August 2020:
+- Make Convert-ValueToBoolean Advanced function
+- Change code style to be same as the rest of a project code
+September 2020:
+- Change logic to validate input and show warning or error for unexpected input
+- Added Write-* stream
 #>
-function Convert-ListToMultiLine
+function Convert-ValueToBoolean
 {
 	[CmdletBinding()]
-	[OutputType([string])]
+	[OutputType([bool])]
 	param(
 		[Parameter()]
-		[Alias("List")]
 		[string] $Value,
 
 		[Parameter()]
-		[switch] $JSON
+		[bool] $DefaultValue = $false
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	if ([string]::IsNullOrEmpty($Value))
 	{
-		Write-Warning "Input is missing, result is empty string"
-		return ""
+		Write-Warning "Input is missing, using default value of: $DefaultValue"
+		return $DefaultValue
 	}
 
-	# replace encoded string with new line
-	if ($JSON)
+	$Result = switch ($Value)
 	{
-		return $Value
+		"1"
+		{
+			$true
+			break
+		}
+		"True"
+		{
+			$true
+			break
+		}
+		"0"
+		{
+			$false
+			break
+		}
+		"False"
+		{
+			$false
+			break
+		}
+		default
+		{
+			Write-Error -Category InvalidArgument -TargetObject $Value -Message "Value '$Value' can't be converted to boolean"
+			$null
+		}
 	}
-	else
-	{
-		# For CSV files need to encode multi line rule description into single line
-		return $Value.Replace("%%", "`r").Replace("||", "`n")
-	}
+
+	return $Result
 }

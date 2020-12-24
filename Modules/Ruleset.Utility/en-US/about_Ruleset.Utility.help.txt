@@ -44,6 +44,9 @@ EXAMPLES
 	Get-TypeName
 	Get .NET outputs of a commandlet or convert to/from type accelerator
 
+	Resolve-Directory
+	Ensure directory name wildcard pattern resolves to single path or fail
+
 	Set-NetworkProfile
 	Set network profile for physical network interfaces
 

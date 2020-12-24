@@ -69,6 +69,8 @@ Parameter names and aliases
 - [switch] `Recurse` (the cmdlet recursively performs its actions on resources)
 - [string] `From` (specify the reference object to get information from)
 - [switch] `Unique`
+- [object] `Value` (specify a value to provide to the cmdlet)
+- [switch] `Create` (to indicate that a resource is created if one does not already exist)
 
 `*` Used by most commandlets but should be aliases instead
 

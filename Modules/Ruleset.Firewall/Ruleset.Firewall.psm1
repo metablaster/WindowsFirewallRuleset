@@ -38,9 +38,9 @@ New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Value (Split-Path 
 #
 
 $PrivateScripts = @(
-	"External\Convert-ArrayToList"
-	"External\Convert-ListToArray"
-	"External\Convert-ValueToBoolean"
+	"Convert-ArrayToList"
+	"Convert-ListToArray"
+	"Convert-ValueToBoolean"
 	"Convert-ListToMultiLine"
 	"Convert-MultiLineToList"
 )
@@ -52,9 +52,9 @@ foreach ($Script in $PrivateScripts)
 }
 
 $PublicScripts = @(
-	"External\Export-FirewallRules"
-	"External\Import-FirewallRules"
-	"External\Remove-FirewallRules"
+	"Export-FirewallRules"
+	"Import-FirewallRules"
+	"Remove-FirewallRules"
 	"Find-RulePrincipal"
 	"Format-Output"
 )

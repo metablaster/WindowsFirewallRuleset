@@ -64,6 +64,9 @@ Enter-Test -Private
 Start-Test "Convert-ValueToBoolean 0"
 Convert-ValueToBoolean "0"
 
+Start-Test "Convert-ValueToBoolean 1"
+Convert-ValueToBoolean "1"
+
 Start-Test "Convert-ValueToBoolean False"
 Convert-ValueToBoolean "False"
 

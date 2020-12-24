@@ -60,7 +60,8 @@ function Convert-MultiLineToList
 	[OutputType([string])]
 	param(
 		[Parameter()]
-		[string] $MultiLine,
+		[Alias("Multiline")]
+		[string] $Value,
 
 		[Parameter()]
 		[switch] $JSON
@@ -68,7 +69,7 @@ function Convert-MultiLineToList
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-	if ([string]::IsNullOrEmpty($MultiLine))
+	if ([string]::IsNullOrEmpty($Value))
 	{
 		Write-Warning "Input is missing, result is empty string"
 		return ""
@@ -78,10 +79,10 @@ function Convert-MultiLineToList
 	# For CSV files need to encode multi line rule description into single line
 	if ($JSON)
 	{
-		return $MultiLine
+		return $Value
 	}
 	else
 	{
-		return $MultiLine.Replace("`r", "%%").Replace("`n", "||")
+		return $Value.Replace("`r", "%%").Replace("`n", "||")
 	}
 }
