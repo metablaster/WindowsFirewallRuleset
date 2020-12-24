@@ -47,7 +47,7 @@ None. You cannot pipe objects to New-Section
 None. New-Section does not generate any output
 
 .NOTES
-None.
+TODO: Write-Information instead of Write-Output
 #>
 function New-Section
 {
@@ -56,14 +56,14 @@ function New-Section
 	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true)]
-		[string] $Section
+		[string] $Message
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	if ($PSCmdlet.ShouldProcess("Current unit test", "Print new section"))
 	{
-		$OutputString = "SECTION -> $Section <- SECTION"
+		$OutputString = "SECTION -> $Message <- SECTION"
 		# The constant is the number of asterisks + spaces on both sides set manually below
 		$Asterisks = ("*" * ($OutputString.Length + 22))
 		$Dashes = ("-" * ($OutputString.Length + 20))

@@ -36,16 +36,18 @@ same type as at least one of the types described by the OutputType attribute.
 Comparison is case sensitive for the matching typename part.
 TypeName and OutputType including equality test is printed to console
 
-.PARAMETER InputType
-The actual .NET typename which some function returns
+.PARAMETER InputObject
+The actual .NET type that some function returns
 
 .PARAMETER Command
-Commandlet or function name for which to retrieve OutputType attribute values,
-and then compare InputType against those values.
+Commandlet or function name for which to retrieve OutputType attribute values.
 
 .EXAMPLE
 PS> $Result = Some-Function
 PS> Test-Output $Result -Command Some-Function
+
+.EXAMPLE
+PS> Some-Function | Test-Output -Command Some-Function
 
 .INPUTS
 None. You cannot pipe objects to Test-Output
@@ -64,7 +66,7 @@ function Test-Output
 	param (
 		[Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
 		[AllowNull()]
-		[System.Object[]] $InputType,
+		[System.Object[]] $InputObject,
 
 		[Parameter(Mandatory = $true)]
 		[string] $Command
@@ -81,7 +83,7 @@ function Test-Output
 		# NOTE: OutputType variable may contain multiple valid entries
 		# Ignoring errors to reduce spamming console with errors
 		$OutputType = Get-TypeName -Command $Command -ErrorAction SilentlyContinue
-		$TypeName = Get-TypeName $InputType -ErrorAction SilentlyContinue
+		$TypeName = Get-TypeName $InputObject -ErrorAction SilentlyContinue
 
 		Write-Information -Tags "Test" -MessageData "INFO: TypeName:`t`t$TypeName"
 		$OutputType | ForEach-Object {
@@ -96,7 +98,7 @@ function Test-Output
 
 		if ([string]::IsNullOrEmpty($TypeName))
 		{
-			Write-Error -Category InvalidResult -TargetObject $InputType -Message "Unable to perform type comparison, missing object TypeName"
+			Write-Error -Category InvalidResult -TargetObject $InputObject -Message "Unable to perform type comparison, missing object TypeName"
 		}
 		elseif ([string]::IsNullOrEmpty($OutputType))
 		{

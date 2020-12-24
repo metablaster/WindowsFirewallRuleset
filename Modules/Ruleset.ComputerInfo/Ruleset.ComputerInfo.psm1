@@ -34,6 +34,8 @@ New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Value (Split-Path 
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
 . $ProjectRoot\Modules\ModulePreferences.ps1
 
+# TODO: Functions for remote administration should be part of new module "Ruleset.NetworkInfo"
+
 #
 # Script imports
 #

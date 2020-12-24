@@ -45,7 +45,6 @@ None. You cannot pipe objects to Get-ComputerName
 .NOTES
 TODO: Possible function purpose such as conversion from NETBIOS to UPN name or reading different
 formats of file with a list of computernames which are then converted to desired format.
-TODO: Maybe implement querying computers on network by specifying IP address and vice versa.
 #>
 function Get-ComputerName
 {
@@ -56,8 +55,5 @@ function Get-ComputerName
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-	$ComputerName = [System.Environment]::MachineName
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Learning computer name: $ComputerName"
-
-	return $ComputerName
+	[System.Environment]::MachineName
 }

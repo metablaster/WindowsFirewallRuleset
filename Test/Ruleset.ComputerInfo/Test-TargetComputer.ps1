@@ -65,14 +65,17 @@ Enter-Test
 
 if ($PSVersionTable.PSEdition -eq "Core")
 {
-	Start-Test "Test-TargetComputer -Count 2 -Timeout 1"
-	Test-TargetComputer ([System.Environment]::MachineName) -Count 2 -Timeout 1
+	Start-Test "Test-TargetComputer -Retry 2 -Timeout 1"
+	Test-TargetComputer ([System.Environment]::MachineName) -Retry 2 -Timeout 1
 }
 else
 {
-	Start-Test "Test-TargetComputer -Count 2"
-	Test-TargetComputer ([System.Environment]::MachineName) -Count 2
+	Start-Test "Test-TargetComputer -Retry 2"
+	Test-TargetComputer ([System.Environment]::MachineName) -Retry 2
 }
+
+Start-Test "Test-TargetComputer FAILURE"
+Test-TargetComputer "FAILURE-COMPUTER" -Retry 2
 
 Start-Test "Test-TargetComputer"
 $Result = Test-TargetComputer ([System.Environment]::MachineName)

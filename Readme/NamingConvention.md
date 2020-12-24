@@ -64,7 +64,8 @@ Parameter names and aliases
 - [string] `Command` (specify a command string to run)
 - [switch] `Stream` (stream multiple output objects through the pipeline)
 - [int32] `Timeout` (the timeout interval (in milliseconds))
-- [int32] `Count` (specify the number of objects to be processed)
+- [int32] `Count` (specify the count or specify the number of objects to be processed)
+- [int32] `Retry` (the number of times the cmdlet will attempt an action)
 - [switch] `Recurse` (the cmdlet recursively performs its actions on resources)
 - [string] `From` (specify the reference object to get information from)
 - [switch] `Unique`
@@ -82,6 +83,7 @@ Parameter names and aliases
 - [switch] Connected
 - [switch] Hidden
 - [switch] Detailed
+- [string] Message
 
 ## Registry keys
 

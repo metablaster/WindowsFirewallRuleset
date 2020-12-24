@@ -378,7 +378,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 	Set-Variable -Name ForceLoad -Scope Global -Option ReadOnly -Force -Value $true
 
 	# Amount of connection tests toward target policy store
-	Set-Variable -Name ConnectionCount -Scope Global -Option ReadOnly -Force -Value 2
+	Set-Variable -Name RetryCount -Scope Global -Option ReadOnly -Force -Value 2
 
 	if ($PSVersionTable.PSEdition -eq "Core")
 	{

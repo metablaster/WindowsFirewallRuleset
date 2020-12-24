@@ -68,12 +68,12 @@ function Get-SystemSKU
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param(
 		[Parameter(ValueFromPipeline = $true, ParameterSetName = "Number")]
-		[ValidatePattern("^[0-9]+$")]
+		[ValidatePattern("^[0-9]{1,3}$")]
 		[int32] $SKU,
 
-		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
+		[Alias("ComputerName", "CN")]
 		[Parameter(ValueFromPipeline = $true, ParameterSetName = "Computer")]
-		[string[]] $ComputerName = [System.Environment]::MachineName
+		[string[]] $Domain = [System.Environment]::MachineName
 	)
 
 	process
@@ -84,7 +84,7 @@ function Get-SystemSKU
 		[string] $TargetComputer = ""
 		[PSCustomObject[]] $Result = @()
 
-		foreach ($Computer in $ComputerName)
+		foreach ($Computer in $Domain)
 		{
 			if ($SKU)
 			{

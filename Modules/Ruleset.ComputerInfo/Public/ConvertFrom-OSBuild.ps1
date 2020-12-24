@@ -39,6 +39,7 @@ Operating system build number
 
 .EXAMPLE
 PS> ConvertFrom-OSBuild 18363.1049
+
 1909
 
 .INPUTS

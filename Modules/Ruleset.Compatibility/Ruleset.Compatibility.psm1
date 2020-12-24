@@ -42,6 +42,8 @@ New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Value (Split-Path 
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
 . $ProjectRoot\Modules\ModulePreferences.ps1
 
+# TODO: -NoClobber, this module may already exist on target computer
+
 #
 # Script imports
 #

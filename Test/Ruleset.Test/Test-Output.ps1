@@ -64,9 +64,12 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
-Start-Test "Test-Output"
+Start-Test "Test-Path"
 $NETObject = Test-Path $env:SystemDrive
 Test-Output $NETObject -Command Test-Path
+
+Start-Test "Test-Path pipeline"
+Test-Path $env:SystemDrive | Test-Output -Command Test-Path
 
 $TempError = $null
 
