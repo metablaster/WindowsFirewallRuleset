@@ -64,7 +64,8 @@ Parameter names and aliases
 - [switch] Stream (stream multiple output objects through the pipeline)
 - [int32] Timeout (the timeout interval (in milliseconds))
 - [int32] Count (specify the number of objects to be processed)
-- [switch] recurse (the cmdlet recursively performs its actions on resources)
+- [switch] Recurse (the cmdlet recursively performs its actions on resources)
+- [string] From (specify the reference object to get information from)
 - [switch] Unique
 - [switch] Disabled
 

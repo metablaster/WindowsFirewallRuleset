@@ -32,10 +32,10 @@ EXAMPLES
 	ConvertFrom-SID
 	Convert SID to user or computer account name
 
-	ConvertFrom-UserAccount
+	ConvertFrom-Principal
 	Strip computer names out of computer accounts
 
-	Get-AccountSID
+	Get-PrincipalSID
 	Get SID for giver user account
 
 	Get-GroupPrincipal
@@ -52,6 +52,9 @@ EXAMPLES
 
 	Merge-SDDL
 	Merge 2 SDDL strings into one
+
+	Test-UPN
+	Validate Universal Principal Name
 
 KEYWORDS
 	UserInfo

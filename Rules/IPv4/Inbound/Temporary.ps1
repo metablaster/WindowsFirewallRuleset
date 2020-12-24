@@ -97,7 +97,7 @@ if ($Develop)
 	Format-Output
 
 	$mDnsUsers = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE"
-	Merge-SDDL ([ref] $mDnsUsers) $UsersGroupSDDL
+	Merge-SDDL ([ref] $mDnsUsers) -From $UsersGroupSDDL
 
 	# NOTE: should be network service
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP - mDNS" `

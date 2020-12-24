@@ -28,17 +28,17 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Convert SID to user or computer account name
+Convert SID to principal user or domain name
 
 .DESCRIPTION
-Convert SID to user or computer account name, in case of pseudo and built in accounts
+Convert SID to principal user or domain name, in case of pseudo and built in accounts
 only relevant login name is returned, not full reference name.
 In all other cases result if full account name in form of COMPUTERNAME\USERNAME
 
 .PARAMETER SID
 One or more SIDs to convert
 
-.PARAMETER ComputerNames
+.PARAMETER Domain
 One or more computers to check if SID is not known, default is localhost
 
 .EXAMPLE
@@ -84,7 +84,7 @@ but those which are not are replaced with "Display Name" in the "WellKnownSIDs" 
 
 TODO: Need to implement switch parameters for UPN and NETBIOS name format in addition to display name, see:
 https://docs.microsoft.com/en-us/windows/win32/secauthn/user-name-formats
-TODO: do we need to have consistent output ie. exactly DOMAIN\USER?, see test results,
+TODO: need to have consistent output ex. domain name, principal and username, see test results,
 probably not for pseudo accounts but for built in accounts it makes sense
 TODO: need to implement CIM switch
 #>
@@ -99,9 +99,9 @@ function ConvertFrom-SID
 		[ValidatePattern('^S-1-\d[\d+-]+\d$')]
 		[string[]] $SID,
 
-		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
+		[Alias("Computer", "CN")]
 		[Parameter()]
-		[string[]] $ComputerName = [System.Environment]::MachineName
+		[string[]] $Domain = [System.Environment]::MachineName
 	)
 
 	process
@@ -313,7 +313,7 @@ function ConvertFrom-SID
 
 							# Check SID on all target computers until match
 							# TODO: could this result is incomplete information if multiple computers match?
-							:computer foreach ($Computer in $ComputerName)
+							:computer foreach ($Computer in $Domain)
 							{
 								if (!(Test-TargetComputer $Computer))
 								{
@@ -323,9 +323,9 @@ function ConvertFrom-SID
 								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking store app SID on computer: '$Computer'"
 
 								# Find to which store app this SID belongs
-								$Groups = Get-UserGroup -ComputerNames $Computer | Select-Object -ExpandProperty Group
+								$Groups = Get-UserGroup -Domain $Computer | Select-Object -ExpandProperty Group
 								# NOTE: ignore warnings to reduce spam
-								$Users = Get-GroupPrincipal -ComputerNames $Computer -UserGroups $Groups -WA SilentlyContinue |
+								$Users = Get-GroupPrincipal -Domain $Computer -Group $Groups -WA SilentlyContinue |
 								Select-Object -ExpandProperty User
 
 								foreach ($User in $Users)
@@ -373,7 +373,7 @@ function ConvertFrom-SID
 						{
 							# Check SID on all target computers until match
 							# TODO: could this result is incomplete information if multiple computers match?
-							:computer foreach ($Computer in $ComputerName)
+							:computer foreach ($Computer in $Domain)
 							{
 								if (!(Test-TargetComputer $Computer))
 								{
@@ -424,7 +424,7 @@ function ConvertFrom-SID
 
 			# Finally figure out the type of a SID for well known SID, done here to avoid code bloat
 			# TODO: there are more categorizations
-			if ((![string]::IsNullOrEmpty($LoginName)) -and ($SidType -eq "Unknown"))
+			if (![string]::IsNullOrEmpty($LoginName) -and ($SidType -eq "Unknown"))
 			{
 				# Check if well known SID is domain SID
 				if ($InputSID -match '^S-1-5-21')

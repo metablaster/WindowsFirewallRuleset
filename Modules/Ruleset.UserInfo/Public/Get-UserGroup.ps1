@@ -52,8 +52,7 @@ PS> Get-UserGroup @(DESKTOP, LAPTOP) -CIM
 [PSCustomObject] User groups on target computers
 
 .NOTES
-CIM switch is not supported on PowerShell Core, meaning contacting remote computers
-is supported only on Windows PowerShell
+None.
 #>
 function Get-UserGroup
 {
@@ -72,7 +71,6 @@ function Get-UserGroup
 	begin
 	{
 		[PSCustomObject[]] $UserGroups = @()
-		$PowerShellEdition = $PSVersionTable.PSEdition
 	}
 	process
 	{
@@ -82,14 +80,6 @@ function Get-UserGroup
 		{
 			if ($CIM)
 			{
-				# TODO: should work on windows, see Get-SqlServerInstance
-				if ($PowerShellEdition -ne "Desktop")
-				{
-					Write-Error -Category InvalidArgument -TargetObject $Computer `
-						-Message "Querying computers from CIM server for PowerShell '$PowerShellEdition' not implemented"
-					return
-				}
-
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Computer"
 
 				# Core: -TimeoutSeconds $ConnectionTimeout -IPv4
@@ -105,16 +95,16 @@ function Get-UserGroup
 					{
 						$UserGroups += [PSCustomObject]@{
 							Group = $Group.Name
-							Domain = $Computer
+							Domain = $Group.Domain
 							Principal = $Group.Caption
 							SID = $Group.SID
+							LocalAccount = $Group.LocalAccount -eq "True"
 						}
 					}
 
 					if ([string]::IsNullOrEmpty($UserGroups))
 					{
 						Write-Warning -Message "There are no user groups on computer: $Computer"
-						continue
 					}
 				}
 			} # if ($CIM)
@@ -124,6 +114,7 @@ function Get-UserGroup
 
 				# Querying local machine
 				$LocalGroups = Get-LocalGroup
+
 				foreach ($Group in $LocalGroups)
 				{
 					$UserGroups += [PSCustomObject]@{
@@ -131,19 +122,19 @@ function Get-UserGroup
 						Domain = $Computer
 						Principal = Join-Path -Path $Computer -ChildPath $Group.Name
 						SID = $Group.SID
+						LocalAccount = $Group.PrincipalSource -eq "Local"
 					}
 				}
 
 				if ([string]::IsNullOrEmpty($UserGroups))
 				{
 					Write-Warning -Message "There are no user groups on computer: $Computer"
-					continue
 				}
 			} # if ($CIM)
 			else
 			{
 				Write-Error -Category NotImplemented -TargetObject $Computer `
-					-Message "Querying remote computers without CIM switch not implemented"
+					-Message "Querying remote computers without CIM switch not supported"
 			} # if ($CIM)
 		} # foreach ($Computer in $Domain)
 

@@ -252,7 +252,7 @@ $Program = "%SystemRoot%\System32\UserAccountBroker.exe"
 Test-File $Program
 
 $MSAccountUsers = $UsersGroupSDDL
-Merge-SDDL ([ref] $MSAccountUsers) $AdminGroupSDDL
+Merge-SDDL ([ref] $MSAccountUsers) -From $AdminGroupSDDL
 
 New-NetFirewallRule -DisplayName "Microsoft Account" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -656,7 +656,7 @@ Format-Output
 
 # TODO: USOAccounts testing with users, should be SYSTEM
 $USOAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM"
-Merge-SDDL ([ref] $USOAccounts) $UsersGroupSDDL
+Merge-SDDL ([ref] $USOAccounts) -From $UsersGroupSDDL
 
 # TODO: Not available in Windows Server 2019
 $Program = "%SystemRoot%\System32\usocoreworker.exe"

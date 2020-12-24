@@ -39,13 +39,14 @@ New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Value (Split-Path 
 
 $PublicScripts = @(
 	"ConvertFrom-SID"
-	"ConvertFrom-UserAccount"
-	"Get-AccountSID"
+	"ConvertFrom-Principal"
+	"Get-PrincipalSID"
 	"Get-GroupPrincipal"
 	"Get-GroupSID"
 	"Get-SDDL"
 	"Get-UserGroup"
 	"Merge-SDDL"
+	"Test-UPN"
 )
 
 foreach ($Script in $PublicScripts)
@@ -62,7 +63,7 @@ Write-Debug -Message "[$ThisModule] Initializing module variables"
 
 # Must be before constants
 # TODO: We need to handle more cases, first 3 are known to work for now
-# TODO: Only Get-AccountSID makes use of this, should be inside script?
+# TODO: Only Get-PrincipalSID makes use of this, should be inside script?
 New-Variable -Name KnownDomains -Scope Script -Option Constant -Value @(
 	"NT AUTHORITY"
 	"APPLICATION PACKAGE AUTHORITY"

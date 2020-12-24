@@ -98,7 +98,7 @@ New-NetFirewallRule -DisplayName "Port 80" `
 Format-Output
 
 $InstallerAccounts = $UsersGroupSDDL
-Merge-SDDL ([ref] $InstallerAccounts) $AdminGroupSDDL
+Merge-SDDL ([ref] $InstallerAccounts) -From $AdminGroupSDDL
 
 # NOTE: to make use of this rule, it should be updated here and the script re-run
 New-NetFirewallRule -DisplayName "Installer" `
@@ -131,9 +131,9 @@ Format-Output
 # if the blocking rule for administrators is not enabled this rule will also allow administrators
 # there is another todo about possible design in VisualStudio script
 $UsersStoreAppsSDDL = Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -UserNames "Your Internet connection, including incoming connections from the Internet"
-Merge-SDDL ([ref] $UsersStoreAppsSDDL) (Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -UserNames "Your Internet connection")
-Merge-SDDL ([ref] $UsersStoreAppsSDDL) (Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -UserNames "Your home or work networks")
-Merge-SDDL ([ref] $UsersStoreAppsSDDL) $UsersGroupSDDL
+Merge-SDDL ([ref] $UsersStoreAppsSDDL) -From (Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -UserNames "Your Internet connection")
+Merge-SDDL ([ref] $UsersStoreAppsSDDL) -From (Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -UserNames "Your home or work networks")
+Merge-SDDL ([ref] $UsersStoreAppsSDDL) -From $UsersGroupSDDL
 
 New-NetFirewallRule -DisplayName "Store Apps" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -194,7 +194,7 @@ if ($Develop)
 	Format-Output
 
 	$mDnsUsers = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE"
-	Merge-SDDL ([ref] $mDnsUsers) $UsersGroupSDDL
+	Merge-SDDL ([ref] $mDnsUsers) -From $UsersGroupSDDL
 
 	# NOTE: should be network service
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP - mDNS" `
@@ -221,7 +221,7 @@ if ($Develop)
 
 	# Moved from WindowsServices.ps1, used for extension rule below
 	$ExtensionAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE"
-	Merge-SDDL ([ref] $ExtensionAccounts) $UsersGroupSDDL
+	Merge-SDDL ([ref] $ExtensionAccounts) -From $UsersGroupSDDL
 
 	# HACK: Temporary using network service account
 	# All troubleshooting rules except this one were set to "Enabled",

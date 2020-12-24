@@ -34,16 +34,16 @@ Merge 2 SDDL strings into one
 This function helps to merge 2 SDDL strings into one
 Referenced SDDL is expanded with new one
 
-.PARAMETER RefSDDL
-Reference to SDDL into which to merge new SDDL
+.PARAMETER SDDL
+SDDL into which to merge new SDDL
 
-.PARAMETER NewSDDL
-New SDDL string which to merge with reference SDDL
+.PARAMETER From
+Reference SDDL string which to merge into original SDDL
 
 .EXAMPLE
-$RefSDDL = "D:(A;;CC;;;S-1-5-32-545)(A;;CC;;;S-1-5-32-544)
-$NewSDDL = "D:(A;;CC;;;S-1-5-32-333)(A;;CC;;;S-1-5-32-222)"
-Merge-SDDL ([ref] $RefSDDL) $NewSDDL
+$SDDL = "D:(A;;CC;;;S-1-5-32-545)(A;;CC;;;S-1-5-32-544)
+$RefSDDL = "D:(A;;CC;;;S-1-5-32-333)(A;;CC;;;S-1-5-32-222)"
+Merge-SDDL ([ref] $SDDL) -From $RefSDDL
 
 .INPUTS
 None. You cannot pipe objects to Merge-SDDL
@@ -58,16 +58,16 @@ TODO: Pipeline input
 #>
 function Merge-SDDL
 {
-	[CmdletBinding(
+	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Merge-SDDL.md")]
 	[OutputType([void])]
 	param (
-		[Parameter(Mandatory = $true)]
-		[ref] $RefSDDL,
+		[Parameter(Mandatory = $true, Position = 0)]
+		[ref] $SDDL,
 
 		[Parameter(Mandatory = $true)]
-		[string] $NewSDDL
+		[string] $From
 	)
 
-	$RefSDDL.Value += $NewSDDL.Substring(2)
+	$SDDL.Value += $From.Substring(2)
 }

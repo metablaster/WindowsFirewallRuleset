@@ -63,7 +63,7 @@ $Group = "Development - Microsoft Visual Studio"
 $VSUpdateUsers = Get-SDDL -Group "Users", "Administrators"
 
 $ExtensionAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM"
-Merge-SDDL ([ref] $ExtensionAccounts) $UsersGroupSDDL
+Merge-SDDL ([ref] $ExtensionAccounts) -From $UsersGroupSDDL
 $Accept = "Outbound rules for Microsoft Visual Studio will be loaded, recommended if Microsoft Visual Studio is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for Microsoft Visual Studio will not be loaded into firewall"
 

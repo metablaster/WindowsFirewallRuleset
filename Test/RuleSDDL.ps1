@@ -81,7 +81,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 Start-Test "Get-SDDL + Merge-SDDL"
 $RuleUsers = Get-SDDL -Group "Users", "Administrators" -User $TestUser, $TestAdmin
 $RuleSystemUsers = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE"
-Merge-SDDL ([ref] $RuleUsers) $RuleSystemUsers
+Merge-SDDL ([ref] $RuleUsers) -From $RuleSystemUsers
 $RuleUsers
 
 Start-Test "New-NetFirewallRule"
@@ -102,7 +102,7 @@ New-NetFirewallRule -DisplayName "Get-SDDL mix" `
 
 Start-Test "Get-SDDL + Merge-SDDL for APPLICATION PACKAGE AUTHORITY"
 $RuleAppUsers = Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -User "Your Internet connection"
-Merge-SDDL ([ref] $RuleAppUsers) $UsersGroupSDDL
+Merge-SDDL ([ref] $RuleAppUsers) -From $UsersGroupSDDL
 $RuleAppUsers
 
 Start-Test "Get-SDDL APPLICATION PACKAGE AUTHORITY"

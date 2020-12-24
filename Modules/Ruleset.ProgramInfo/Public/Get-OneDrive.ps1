@@ -74,7 +74,7 @@ function Get-OneDrive
 
 	if (Test-TargetComputer $ComputerName)
 	{
-		$UserSID = Get-AccountSID $UserName -Computer $ComputerName
+		$UserSID = Get-PrincipalSID $UserName -Computer $ComputerName
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::Users

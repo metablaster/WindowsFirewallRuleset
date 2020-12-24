@@ -55,10 +55,7 @@ PS> Get-GroupPrincipal "Users" -Machine @(DESKTOP, LAPTOP) -CIM
 [PSCustomObject] Enabled user accounts in specified groups
 
 .NOTES
-CIM switch is not supported on PowerShell Core, meaning contacting remote computers
-is supported only on Windows PowerShell
 TODO: should we handle NT AUTHORITY, BUILTIN and similar?
-TODO: plural parameter
 See also (according to docs but doesn't work): Get-LocalUser -Name "MicrosoftAccount\username@outlook.com"
 #>
 function Get-GroupPrincipal
@@ -85,7 +82,6 @@ function Get-GroupPrincipal
 	begin
 	{
 		[PSCustomObject[]] $UserAccounts = @()
-		$PowerShellEdition = $PSVersionTable.PSEdition
 	}
 	process
 	{
@@ -95,13 +91,6 @@ function Get-GroupPrincipal
 		{
 			if ($CIM)
 			{
-				if ($PowerShellEdition -ne "Desktop")
-				{
-					Write-Error -Category InvalidArgument -TargetObject $Computer `
-						-Message "Querying computers from CIM server for PowerShell '$PowerShellEdition' not implemented"
-					return
-				}
-
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Computer"
 
 				# Core: -TimeoutSeconds $ConnectionTimeout -IPv4
@@ -139,26 +128,22 @@ function Get-GroupPrincipal
 						# Finally compare these 2 results and assemble group users which are active, also includes SID
 						foreach ($Account in $EnabledAccounts)
 						{
-							# Because $Computer may be "localhost"
-							$TargetDomain = $Account.Domain
 							$UserName = [array]::Find([string[]] $GroupUsers.Name, [System.Predicate[string]] {
-									$Account.Caption -eq "$TargetDomain\$($args[0])"
+									# NOTE: Account.Domain Because $Computer may be set to "localhost"
+									$Account.Caption -eq "$($Account.Domain)\$($args[0])"
 								})
 
 							if ($UserName)
 							{
 								Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing account: $Account"
 
-								# TODO: Figure out if it's MS account using CIM
-								if ($Account.LocalAccount) { $PrincipalSource = "Local" }
-								else { $PrincipalSource = "Unknown" }
-
 								$UserAccounts += [PSCustomObject]@{
 									User = $Account.Name
-									Domain = $TargetDomain
-									Principal = "$TargetDomain\$UserName"
+									Domain = $Account.Domain
+									Principal = $Account.Caption
 									SID = $Account.SID
-									PrincipalSource = $PrincipalSource
+									# TODO: Figure out if it's MS account using CIM
+									LocalAccount = $Account.LocalAccount -eq "True"
 								}
 							}
 							else
@@ -214,7 +199,7 @@ function Get-GroupPrincipal
 								Domain = $Computer
 								Principal = $AccountName
 								SID = $Account.SID
-								PrincipalSource = $Account.PrincipalSource
+								LocalAccount = $Account.PrincipalSource -eq "Local"
 							}
 						}
 					}
@@ -224,7 +209,7 @@ function Get-GroupPrincipal
 			{
 				# NOTE: In case of implementation, Computer != $Computer
 				Write-Error -Category NotImplemented -TargetObject $Computer `
-					-Message "Querying remote computers without CIM switch not implemented"
+					-Message "Querying remote computers without CIM switch not supported"
 			}
 		} # foreach ($Computer in $Domain)
 

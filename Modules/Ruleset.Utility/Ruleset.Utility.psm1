@@ -72,6 +72,12 @@ foreach ($Script in $PublicScripts)
 }
 
 #
+# Module aliases
+#
+
+New-Alias -Name gt -Value Get-TypeName -Scope Global
+
+#
 # Module variables
 #
 

@@ -65,7 +65,7 @@ $Deny = "Skip operation, outbound rules for system services will not be loaded i
 
 # Extension rules are special rules for problematic services, see "ProblematicTraffic.md" for more info
 $ExtensionAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE"
-Merge-SDDL ([ref] $ExtensionAccounts) $UsersGroupSDDL
+Merge-SDDL ([ref] $ExtensionAccounts) -From $UsersGroupSDDL
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group

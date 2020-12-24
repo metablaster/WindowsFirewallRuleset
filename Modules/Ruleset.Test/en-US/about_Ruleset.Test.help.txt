@@ -24,6 +24,9 @@ EXAMPLES
 	New-Section
 	Print new unit test section
 
+	Test-MarkdownLinks
+	Test each link in markdown file and report if any link is dead
+
 	Test-Output
 	Verify TypeName and OutputType are referring to same type
 

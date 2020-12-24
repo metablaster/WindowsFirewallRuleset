@@ -33,13 +33,13 @@ Generate SDDL string of multiple usernames or/and groups on a given domain
 .DESCRIPTION
 Get SDDL string single or multiple user names and/or user groups on a single target computer
 
-.PARAMETER UserNames
+.PARAMETER User
 Array of users for which to generate SDDL string
 
-.PARAMETER UserGroups
+.PARAMETER Group
 Array of user groups for which to generate SDDL string
 
-.PARAMETER ComputerName
+.PARAMETER Domain
 Single domain or computer such as remote computer name or builtin computer domain
 
 .PARAMETER CIM
@@ -64,8 +64,7 @@ None. You cannot pipe objects to Get-SDDL
 [string] SDDL for given accounts or/and group for given domain
 
 .NOTES
-CIM switch is not supported on PowerShell Core, meaning contacting remote computers
-is supported only on Windows PowerShell
+None.
 #>
 function Get-SDDL
 {
@@ -73,18 +72,18 @@ function Get-SDDL
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-SDDL.md")]
 	[OutputType([string])]
 	param (
-		[Alias("User")]
+		[Alias("UserName")]
 		[Parameter(Mandatory = $true, ParameterSetName = "User")]
 		[Parameter(Mandatory = $false, ParameterSetName = "Group")]
-		[string[]] $UserNames,
+		[string[]] $User,
 
-		[Alias("Group")]
+		[Alias("UserGroup")]
 		[Parameter(Mandatory = $true, ParameterSetName = "Group")]
-		[string[]] $UserGroups,
+		[string[]] $Group,
 
-		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
+		[Alias("ComputerName", "CN")]
 		[Parameter(Mandatory = $false)]
-		[string] $ComputerName = [System.Environment]::MachineName,
+		[string] $Domain = [System.Environment]::MachineName,
 
 		[Parameter()]
 		[switch] $CIM
@@ -94,22 +93,22 @@ function Get-SDDL
 
 	[string] $SDDL = "D:"
 
-	foreach ($User in $UserNames)
+	foreach ($UserName in $User)
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL for account: $ComputerName\$User"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL for account: $Domain\$UserName"
 
-		$SID = Get-AccountSID $User -Domain $ComputerName -CIM:$CIM
+		$SID = Get-PrincipalSID $UserName -Domain $Domain -CIM:$CIM
 		if ($SID)
 		{
 			$SDDL += "(A;;CC;;;{0})" -f $SID
 		}
 	}
 
-	foreach ($Group in $UserGroups)
+	foreach ($UserGroup in $Group)
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL for group: $ComputerName\$Group"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL for group: $Domain\$UserGroup"
 
-		$SID = Get-GroupSID $Group -Domain $ComputerName -CIM:$CIM
+		$SID = Get-GroupSID $UserGroup -Domain $Domain -CIM:$CIM
 		if ($SID)
 		{
 			$SDDL += "(A;;CC;;;{0})" -f $SID

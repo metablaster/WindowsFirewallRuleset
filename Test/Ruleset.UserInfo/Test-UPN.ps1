@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
+Copyright (C) 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,58 +28,59 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for ConvertFrom-UserAccount
+Unit test for Test-UPN
 
 .DESCRIPTION
-Unit test for ConvertFrom-UserAccount
+Test correctness of Test-UPN function
 
 .EXAMPLE
-PS> .\ConvertFrom-UserAccount.ps1
+PS> .\Test-UPN.ps1
 
 .INPUTS
-None. You cannot pipe objects to ConvertFrom-UserAccount.ps1
+None. You cannot pipe objects to Test-UPN.ps1
 
 .OUTPUTS
-None. ConvertFrom-UserAccount.ps1 does not generate any output
+None. Test-UPN.ps1 does not generate any output
 
 .NOTES
 None.
 #>
 
 #region Initialization
+#Requires -Version 5.1
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
 # Check requirements
 Initialize-Project -Abort
+Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
-Import-Module -Name Ruleset.UserInfo
 
 # User prompt
 Update-Context $TestContext $ThisScript
 if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
-#endregion
+#Endregion
 
 Enter-Test
 
-Start-Test "Get-GroupPrincipal 'Users', 'Administrators'"
-$UserAccounts = Get-GroupPrincipal "Users", "Administrators"
-$UserAccounts
+$Domain = "domain.com"
 
-Start-Test "ConvertFrom-UserAccount"
-$UserNames = ConvertFrom-UserAccount ($UserAccounts | Select-Object -ExpandProperty Account)
-$UserNames
+Start-Test "Test-UPN $TestUser@$Domain"
+$Result = Test-UPN "$TestUser@$Domain"
+$Result
 
-Start-Test "ConvertFrom-UserAccount 'MicrosoftAccount\$TestUser@email.com'"
-ConvertFrom-UserAccount "MicrosoftAccount\$TestUser@email.com"
+Start-Test "Test-UPN $TestUser@$Domain"
+Test-UPN "MicrosoftAccount\$TestUser@$Domain"
 
-Start-Test "ConvertFrom-UserAccount FAIL"
-$BadAccount = "\ac", "$TestUser@email"
-ConvertFrom-UserAccount $BadAccount
+Start-Test "Test-UPN '$TestUser'"
+Test-UPN $TestUser -Prefix
 
-Test-Output $UserNames -Command ConvertFrom-UserAccount
+Start-Test "Test-UPN '$Domain'"
+Test-UPN $Domain -suffix
+
+Test-Output $Result -Command Test-UPN
 
 Update-Log
 Exit-Test

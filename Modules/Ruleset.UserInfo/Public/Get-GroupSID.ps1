@@ -33,10 +33,10 @@ Get SID of user groups for given computer
 .DESCRIPTION
 Get SID's for single or multiple user groups on a target computer
 
-.PARAMETER UserGroups
+.PARAMETER Group
 Array of user groups or single group name
 
-.PARAMETER ComputerName
+.PARAMETER Domain
 Computer name which to query for group users
 
 .PARAMETER CIM
@@ -55,9 +55,7 @@ PS> Get-GroupSID @("USERNAME1", "USERNAME2") -CIM
 [string] SID's (security identifiers)
 
 .NOTES
-CIM switch is not supported on PowerShell Core, meaning contacting remote computers
-is supported only on Windows PowerShell
-TODO: plural parameter
+None.
 #>
 function Get-GroupSID
 {
@@ -65,75 +63,64 @@ function Get-GroupSID
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-GroupSID.md")]
 	[OutputType([string])]
 	param (
-		[Alias("Group")]
+		[Alias("UserGroup")]
 		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
-		[string[]] $UserGroups,
+		[string[]] $Group,
 
-		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
+		[Alias("ComputerName", "CN")]
 		[Parameter()]
-		[string] $ComputerName = [System.Environment]::MachineName,
+		[string] $Domain = [System.Environment]::MachineName,
 
 		[Parameter()]
 		[switch] $CIM
 	)
 
-	begin
-	{
-		$PowerShellEdition = $PSVersionTable.PSEdition
-	}
 	process
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-		foreach ($Group in $UserGroups)
+		foreach ($UserGroup in $Group)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing: $ComputerName\$Group"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing: $Domain\$UserGroup"
 
 			if ($CIM)
 			{
-				if ($PowerShellEdition -ne "Desktop")
-				{
-					Write-Error -Category InvalidArgument -TargetObject $ComputerName `
-						-Message "Querying computers from CIM server for PowerShell '$PowerShellEdition' not implemented"
-					return
-				}
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Domain"
 
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
-
-				if (Test-TargetComputer $ComputerName)
+				if (Test-TargetComputer $Domain)
 				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $ComputerName"
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Domain"
 
 					$GroupSID = Get-CimInstance -Class Win32_Group -Namespace "root\cimv2" `
-						-ComputerName $ComputerName -OperationTimeoutSec $ConnectionTimeout |
-					Where-Object -Property Name -EQ $Group | Select-Object -ExpandProperty SID
+						-ComputerName $Domain -OperationTimeoutSec $ConnectionTimeout |
+					Where-Object -Property Name -EQ $UserGroup | Select-Object -ExpandProperty SID
 				}
 				else
 				{
 					continue
 				}
 			}
-			elseif ($ComputerName -eq [System.Environment]::MachineName)
+			elseif ($Domain -eq [System.Environment]::MachineName)
 			{
-				$GroupSID = Get-LocalGroup -Name $Group |
+				$GroupSID = Get-LocalGroup -Name $UserGroup |
 				Select-Object -ExpandProperty SID |
 				Select-Object -ExpandProperty Value
 			}
 			else
 			{
-				Write-Error -Category NotImplemented -TargetObject $ComputerName `
-					-Message "Querying remote computers without CIM switch not implemented"
+				Write-Error -Category NotImplemented -TargetObject $Domain `
+					-Message "Querying remote computers without CIM switch not supported"
 				return
 			} # if ($CIM)
 
 			if ([string]::IsNullOrEmpty($GroupSID))
 			{
-				Write-Error -TargetObject $Group -Message "User group '$Group' cannot be resolved to a SID."
+				Write-Error -TargetObject $UserGroup -Message "User group '$UserGroup' cannot be resolved to a SID."
 			}
 			else
 			{
 				Write-Output -InputObject $GroupSID
 			}
-		} # foreach ($Group in $UserGroups)
+		} # foreach ($UserGroup in $Group)
 	} # process
 }

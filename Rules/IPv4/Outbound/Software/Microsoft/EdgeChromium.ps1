@@ -141,7 +141,7 @@ if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot)) -or $ForceLoad)
 	Test-File $EdgeChromiumUpdate
 
 	$UpdateAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM"
-	Merge-SDDL ([ref] $UpdateAccounts) $UsersGroupSDDL
+	Merge-SDDL ([ref] $UpdateAccounts) -From $UsersGroupSDDL
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Edge-Chromium Update" -Service Any -Program $EdgeChromiumUpdate `

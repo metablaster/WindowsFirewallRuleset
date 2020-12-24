@@ -80,7 +80,7 @@ Set-Variable -Name GeForce -Scope Script -Value $null
 # Some rules use multiple accounts
 # TODO: we should probably have better approach to assemble SDDL's for multiple domains
 $ContainerAccounts = $LocalSystem
-Merge-SDDL ([ref] $ContainerAccounts) $UsersGroupSDDL
+Merge-SDDL ([ref] $ContainerAccounts) -From $UsersGroupSDDL
 
 #
 # Rules for Nvidia 64bit executables

@@ -56,6 +56,8 @@ TODO: We could auto include this file with module manifests or dynamic module
 NOTE: Make sure not to modify variables commented as "do not modify" or "do not decrement"
 TODO: Use advanced parameters to control Verbose, Debug, Confirm and WhatIf locally
 TODO: Variable description should be part of variable object
+TODO: Some version variables enabled for module initialization are needed in several modules
+such as PS edition, PS version etc...
 #>
 
 [CmdletBinding()]

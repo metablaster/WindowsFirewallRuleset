@@ -112,10 +112,10 @@ $GroupArray | Get-GroupSID -CIM
 #
 
 Start-Test "FAILURE TEST NO CIM: Get-GroupSID @('Users', 'Hyper-V Administrators')"
-Get-GroupSID "Users", 'Hyper-V Administrators' -Machine "CRAZYMACHINE" -ErrorAction SilentlyContinue
+Get-GroupSID "Users", 'Hyper-V Administrators' -Domain "CRAZYMACHINE" -ErrorAction SilentlyContinue
 
 Start-Test "FAILURE TEST CONTACT: Get-GroupSID @('Users', 'Hyper-V Administrators')"
-Get-GroupSID "Users", 'Hyper-V Administrators' -Machine "CRAZYMACHINE" -CIM -ErrorAction SilentlyContinue
+Get-GroupSID "Users", 'Hyper-V Administrators' -Domain "CRAZYMACHINE" -CIM -ErrorAction SilentlyContinue
 
 Update-Log
 Exit-Test

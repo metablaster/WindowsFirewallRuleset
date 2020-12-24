@@ -28,19 +28,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Get-AccountSID
+Unit test for Get-PrincipalSID
 
 .DESCRIPTION
-Unit test for Get-AccountSID
+Unit test for Get-PrincipalSID
 
 .EXAMPLE
-PS> .\Get-AccountSID.ps1
+PS> .\Get-PrincipalSID.ps1
 
 .INPUTS
-None. You cannot pipe objects to Get-AccountSID.ps1
+None. You cannot pipe objects to Get-PrincipalSID.ps1
 
 .OUTPUTS
-None. Get-AccountSID.ps1 does not generate any output
+None. Get-PrincipalSID.ps1 does not generate any output
 
 .NOTES
 None.
@@ -70,16 +70,16 @@ Enter-Test
 
 [string[]] $Users = @("Administrator", $TestUser, $TestAdmin)
 
-Start-Test "Get-AccountSID -User $Users"
-$AccountSID1 = Get-AccountSID -User $Users
+Start-Test "Get-PrincipalSID -User $Users"
+$AccountSID1 = Get-PrincipalSID -User $Users
 $AccountSID1
 
-Start-Test "Get-AccountSID -User $Users -CIM"
-$AccountSID1 = Get-AccountSID -User $Users -CIM
+Start-Test "Get-PrincipalSID -User $Users -CIM"
+$AccountSID1 = Get-PrincipalSID -User $Users -CIM
 $AccountSID1
 
-Start-Test "$Users | Get-AccountSID -CIM"
-$Users | Get-AccountSID -CIM
+Start-Test "$Users | Get-PrincipalSID -CIM"
+$Users | Get-PrincipalSID -CIM
 
 Start-Test "Get-TypeName"
 $AccountSID1 | Get-TypeName
@@ -91,13 +91,13 @@ $AccountSID1 | Get-TypeName
 [string[]] $NTUsers = @("SYSTEM", "LOCAL SERVICE", "USER MODE DRIVERS")
 [string] $NTDomain = "NT AUTHORITY"
 
-Start-Test "Get-AccountSID -Domain $NTDomain -User $NTUsers"
-$AccountSID2 = Get-AccountSID -Domain $NTDomain -User $NTUsers #
+Start-Test "Get-PrincipalSID -Domain $NTDomain -User $NTUsers"
+$AccountSID2 = Get-PrincipalSID -Domain $NTDomain -User $NTUsers #
 $AccountSID2
 
 # NOTE: not valid
-# Start-Test "Get-AccountSID -Domain $NTDomain -User $NTUsers -CIM"
-# $AccountSID2 = Get-AccountSID -Domain $NTDomain -User $NTUsers -CIM
+# Start-Test "Get-PrincipalSID -Domain $NTDomain -User $NTUsers -CIM"
+# $AccountSID2 = Get-PrincipalSID -Domain $NTDomain -User $NTUsers -CIM
 # $AccountSID2
 
 Start-Test "Get-TypeName"
@@ -110,16 +110,16 @@ $AccountSID2 | Get-TypeName
 [string] $AppDomain = "APPLICATION PACKAGE AUTHORITY"
 [string] $AppUser = "Your Internet connection"
 
-Start-Test "Get-AccountSID -Domain $AppDomain -User $AppUser"
-$AccountSID3 = Get-AccountSID -Domain $AppDomain -User $AppUser
+Start-Test "Get-PrincipalSID -Domain $AppDomain -User $AppUser"
+$AccountSID3 = Get-PrincipalSID -Domain $AppDomain -User $AppUser
 $AccountSID3
 
 # NOTE: not valid
-# Start-Test "Get-AccountSID -Domain $AppDomain -User $AppUser -CIM"
-# $AccountSID3 = Get-AccountSID -Domain $AppDomain -User $AppUser -CIM
+# Start-Test "Get-PrincipalSID -Domain $AppDomain -User $AppUser -CIM"
+# $AccountSID3 = Get-PrincipalSID -Domain $AppDomain -User $AppUser -CIM
 # $AccountSID3
 
-Test-Output $AccountSID3 -Command Get-AccountSID
+Test-Output $AccountSID3 -Command Get-PrincipalSID
 
 Update-Log
 Exit-Test

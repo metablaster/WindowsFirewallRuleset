@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2020 metablaster zebal@protonmail.ch
+Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,19 +28,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Merge-SDDL
+Unit test for ConvertFrom-Principal
 
 .DESCRIPTION
-Unit test for Merge-SDDL
+Unit test for ConvertFrom-Principal
 
 .EXAMPLE
-PS> .\Merge-SDDL.ps1
+PS> .\ConvertFrom-Principal.ps1
 
 .INPUTS
-None. You cannot pipe objects to Merge-SDDL.ps1
+None. You cannot pipe objects to ConvertFrom-Principal.ps1
 
 .OUTPUTS
-None. Merge-SDDL.ps1 does not generate any output
+None. ConvertFrom-Principal.ps1 does not generate any output
 
 .NOTES
 None.
@@ -64,24 +64,29 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
-[string[]] $Users = @($TestUser)
-[string] $Domain = [System.Environment]::MachineName
-[string[]] $Groups = @("Users", "Administrators")
+Start-Test "Get-GroupPrincipal 'Users', 'Administrators'"
+$UserAccounts = Get-GroupPrincipal "Users", "Administrators"
+$UserAccounts
 
-Start-Test "Get-SDDL -User $Users -Group $Groups -Domain $Domain"
-$TestUsersSDDL = Get-SDDL -User $Users -Group $Groups -Domain $Domain
-$TestUsersSDDL
+Start-Test "ConvertFrom-Principal"
+$UserNames = ConvertFrom-Principal ($UserAccounts | Select-Object -ExpandProperty Principal)
+$UserNames
 
-Start-Test "Get-SDDL -Domain 'NT AUTHORITY' -User 'SYSTEM', 'USER MODE DRIVERS'"
-$NewSDDL = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "USER MODE DRIVERS"
-$NewSDDL
+Start-Test "ConvertFrom-Principal -Machine"
+ConvertFrom-Principal ($UserAccounts | Select-Object -ExpandProperty Principal) -Machine
 
-Start-Test "Merge-SDDL"
-$Result = Merge-SDDL ([ref] $TestUsersSDDL) -From $NewSDDL
-$Result
-$TestUsersSDDL
 
-Test-Output $Result -Command Merge-SDDL
+Start-Test "ConvertFrom-Principal 'MicrosoftAccount\$TestUser@domain.com'"
+ConvertFrom-Principal "MicrosoftAccount\$TestUser@domain.com"
+
+Start-Test "ConvertFrom-Principal '$TestUser@domain.com' -Machine"
+ConvertFrom-Principal "$TestUser@domain.com" -Machine
+
+Start-Test "ConvertFrom-Principal FAIL"
+$BadAccount = "\ac", "$TestUser@email"
+ConvertFrom-Principal $BadAccount
+
+Test-Output $UserNames -Command ConvertFrom-Principal
 
 Update-Log
 Exit-Test

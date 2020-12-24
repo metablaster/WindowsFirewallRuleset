@@ -71,7 +71,7 @@ function Get-UserSoftware
 
 	if (Test-TargetComputer $ComputerName)
 	{
-		$HKU = Get-AccountSID $UserName -Computer $ComputerName
+		$HKU = Get-PrincipalSID $UserName -Computer $ComputerName
 		$HKU += "\Software\Microsoft\Windows\CurrentVersion\Uninstall"
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
