@@ -38,7 +38,7 @@ or it checks if 2 paths are similar which depends on wildcards contained in the 
 .PARAMETER ReferencePath
 The path against which to compare
 
-.PARAMETER TargetPath
+.PARAMETER Path
 The path which to compare against the reference path
 
 .PARAMETER Loose
@@ -46,7 +46,7 @@ if specified perform "loose" comparison:
 Does not attempt to resolve input paths, and respects wildcards all of which happens
 after input paths have been expanded off environment variables
 
-.PARAMETER Sensitive
+.PARAMETER CaseSensitive
 If specified performs case sensitive comparison
 
 .EXAMPLE
@@ -55,7 +55,7 @@ PS> Compare-Path "%SystemDrive%\Windows" "C:\Win*" -Loose
 True
 
 .EXAMPLE
-PS> Compare-Path "%SystemDrive%\Win*\System32\en-US\.." "C:\Wind*\System3?\" -Sensitive
+PS> Compare-Path "%SystemDrive%\Win*\System32\en-US\.." "C:\Wind*\System3?\" -CaseSensitive
 
 True
 
@@ -80,7 +80,8 @@ function Compare-Path
 	[OutputType([bool])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
-		[string] $TargetPath,
+		[SupportsWildcards()]
+		[string] $Path,
 
 		[Parameter(Mandatory = $true, Position = 1)]
 		[string] $ReferencePath,
@@ -89,13 +90,13 @@ function Compare-Path
 		[switch] $Loose,
 
 		[Parameter()]
-		[switch] $Sensitive
+		[switch] $CaseSensitive
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# Expand environment variables
-	[string] $ComparePath = [System.Environment]::ExpandEnvironmentVariables($TargetPath)
+	[string] $ComparePath = [System.Environment]::ExpandEnvironmentVariables($Path)
 	[string] $RefPath = [System.Environment]::ExpandEnvironmentVariables($ReferencePath)
 
 	if ($Loose)
@@ -110,7 +111,7 @@ function Compare-Path
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] TargetPath: $ComparePath"
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] ReferencePath: $RefPath"
 
-		if ($Sensitive)
+		if ($CaseSensitive)
 		{
 			return  $ComparePath -clike $RefPath
 		}
@@ -122,18 +123,24 @@ function Compare-Path
 	if (Test-Path -Path $RefPath)
 	{
 		$RefPath = Resolve-Path -Path $RefPath
-		$RefPath = $RefPath.TrimEnd("\")
+		if ($RefPath)
+		{
+			$RefPath = $RefPath.TrimEnd("\")
+		}
 	}
 	if (Test-Path -Path $ComparePath)
 	{
 		$ComparePath = Resolve-Path -Path $ComparePath
-		$ComparePath = $ComparePath.TrimEnd("\")
+		if ($ComparePath)
+		{
+			$ComparePath = $ComparePath.TrimEnd("\")
+		}
 	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] TargetPath: $ComparePath"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] ReferencePath: $RefPath"
 
-	if ($Sensitive)
+	if ($CaseSensitive)
 	{
 		return $ComparePath -ceq $RefPath
 	}

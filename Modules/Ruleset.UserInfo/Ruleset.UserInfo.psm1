@@ -38,8 +38,9 @@ New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Value (Split-Path 
 #
 
 $PublicScripts = @(
+	"ConvertFrom-SDDL"
 	"ConvertFrom-SID"
-	"ConvertFrom-Principal"
+	"Split-Principal"
 	"Get-PrincipalSID"
 	"Get-GroupPrincipal"
 	"Get-GroupSID"

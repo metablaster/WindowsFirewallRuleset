@@ -46,7 +46,7 @@ Whether to contact CIM server (required for remote computers)
 PS> Get-GroupPrincipal "Users", "Administrators"
 
 .EXAMPLE
-PS> Get-GroupPrincipal "Users" -Machine @(DESKTOP, LAPTOP) -CIM
+PS> Get-GroupPrincipal "Users" -Domain @(DESKTOP, LAPTOP) -CIM
 
 .INPUTS
 [string[]] User groups

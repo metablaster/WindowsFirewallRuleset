@@ -73,7 +73,7 @@ Start-Test "Compare-Path non existent path"
 Compare-Path "%SystemDrive%\Windows" "Z:\Nonexistent"
 
 Start-Test "Compare-Path wildcards + relative path -Sensitive"
-Compare-Path "%SystemDrive%\Win*\System32\en-US\.." "C:\Wind*\System3?\" -Sensitive
+Compare-Path "%SystemDrive%\Win*\System32\en-US\.." "C:\Wind*\System3?\" -CaseSensitive
 
 Start-Test "Compare-Path same -Loose"
 Compare-Path "%SystemDrive%\\Windows" "C:/Win*/" -Loose

@@ -100,7 +100,7 @@ function Format-Path
 
 		# TODO: sorted result will have multiple same variables,
 		# Sorting from longest paths which should be checked first
-		$Variables = Get-EnvironmentVariable WhiteList | Sort-Object -Descending { $_.Value.Length }
+		$Variables = Select-EnvironmentVariable WhiteList | Sort-Object -Descending { $_.Value.Length }
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if '$FilePath' already contains valid environment variable"
 		foreach ($Variable in $Variables)

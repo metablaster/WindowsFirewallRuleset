@@ -71,6 +71,8 @@ Parameter names and aliases
 - [switch] `Unique`
 - [object] `Value` (specify a value to provide to the cmdlet)
 - [switch] `Create` (to indicate that a resource is created if one does not already exist)
+- [string] `Privilege` (specify the right a cmdlet needs to perform an operation for a particular entity)
+- [switch] `CaseSensitive`
 
 `*` Used by most commandlets but should be aliases instead
 
@@ -86,6 +88,8 @@ Parameter names and aliases
 - [switch] Hidden
 - [switch] Detailed
 - [string] Message
+- `Reference*`
+- `Difference*`
 
 ## Registry keys
 

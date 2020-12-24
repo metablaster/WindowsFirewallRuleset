@@ -28,49 +28,52 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Convert SDDL string to ACL
+Convert SDDL string to Principal
 
 .DESCRIPTION
-Convert SDDL strings to ACL entries
+Convert one or multiple SDDL strings to Principals
 
 .PARAMETER SDDL
 String array of one or more strings of SDDL syntax
 
 .EXAMPLE
-PS> Convert-SDDLToACL $SomeSDDL, $SDDL2, "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
+PS> ConvertFrom-SDDL $SomeSDDL, $SDDL2, "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
+
+.EXAMPLE
+PS> $SomeSDDL, $SDDL2, "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)" | ConvertFrom-SDDL
 
 .INPUTS
-None. You cannot pipe objects to Convert-SDDLToACL
+[string]
 
 .OUTPUTS
 [string]
 
 .NOTES
-This is experimental function and needs a lot of improvements.
+None.
 #>
-function Convert-SDDLToACL
+function ConvertFrom-SDDL
 {
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Convert-SDDLToACL.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/ConvertFrom-SDDL.md")]
 	[OutputType([string])]
 	param (
-		[Parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
 		[string[]] $SDDL
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
-	[string[]] $ACL = @()
-	foreach ($Entry in $SDDL)
+	process
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing $Entry"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-		# TODO: DirectorySecurity is for file system, we need to handle more cases
-		$ACLObject = New-Object -TypeName System.Security.AccessControl.DirectorySecurity
-		$ACLObject.SetSecurityDescriptorSddlForm($Entry)
-		$ACL += $ACLObject.Access | Select-Object -ExpandProperty IdentityReference |
-		Select-Object -ExpandProperty Value
+		foreach ($Entry in $SDDL)
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing $Entry"
+
+			$ACLObject = New-Object -TypeName System.Security.AccessControl.DirectorySecurity
+			$ACLObject.SetSecurityDescriptorSddlForm($Entry)
+
+			Write-Output $ACLObject.Access | Select-Object -ExpandProperty IdentityReference |
+			Select-Object -ExpandProperty Value
+		}
 	}
-
-	return $ACL
 }

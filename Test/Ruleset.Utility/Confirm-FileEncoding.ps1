@@ -74,6 +74,7 @@ $Excludes = @(
 	"*.dll"
 	"*.pmc"
 	"*.msc"
+	"*.lnk"
 )
 
 $TestFiles = @(
@@ -119,7 +120,7 @@ $ProjectFiles | ForEach-Object {
 
 Start-Test "Confirm-FileEncoding file"
 $TestFile = Resolve-Path -Path $PSScriptRoot\Encoding\utf8.txt
-$Result = Confirm-FileEncoding $TestFile
+$Result = Confirm-FileEncoding $TestFile.Path
 $Result
 
 Test-Output $Result -Command Confirm-FileEncoding

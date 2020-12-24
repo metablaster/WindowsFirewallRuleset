@@ -51,7 +51,7 @@ PS> [string] $Server = COMPUTERNAME
 PS> [string[]] $Groups = "Users", "Administrators"
 
 PS> $UsersSDDL1 = Get-SDDL -User $Users -Group $Groups
-PS> $UsersSDDL2 = Get-SDDL -User $Users -Machine $Server
+PS> $UsersSDDL2 = Get-SDDL -User $Users -Domain $Server
 PS> $UsersSDDL3 = Get-SDDL -Group $Groups
 
 .EXAMPLE

@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2020 metablaster zebal@protonmail.ch
+Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,52 +28,65 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Resolve-Directory
+Unit test for Split-Principal
 
 .DESCRIPTION
-Test correctness of Resolve-Directory
+Unit test for Split-Principal
 
 .EXAMPLE
-PS> .\Resolve-Directory.ps1
+PS> .\Split-Principal.ps1
 
 .INPUTS
-None. You cannot pipe objects to Resolve-Directory.ps1
+None. You cannot pipe objects to Split-Principal.ps1
 
 .OUTPUTS
-None. Resolve-Directory.ps1 does not generate any output
+None. Split-Principal.ps1 does not generate any output
 
 .NOTES
 None.
 #>
 
 #region Initialization
-#Requires -Version 5.1
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
 # Check requirements
 Initialize-Project -Abort
-Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
+Import-Module -Name Ruleset.UserInfo
 
 # User prompt
 Update-Context $TestContext $ThisScript
 if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
-#Endregion
+#endregion
 
 Enter-Test
 
-$TestDrive = "$ProjectRoot\Tes?\Ru[l|r]eset.Uti*\TestDrive"
+Start-Test "Get-GroupPrincipal 'Users', 'Administrators'"
+$UserAccounts = Get-GroupPrincipal "Users", "Administrators"
+$UserAccounts
 
-Start-Test "Resolve-Directory 'DirInfo'"
-$TestPath = "$TestDrive\DirInfo"
-Resolve-Directory $TestPath -Create | Test-Output -Command Resolve-Directory
+Start-Test "Split-Principal"
+$UserNames = Split-Principal ($UserAccounts | Select-Object -ExpandProperty Principal)
+$UserNames
 
-Start-Test "Resolve-Directory 'AsString'"
-$TestPath = "$TestDrive\AsString"
-Resolve-Directory $TestPath -Create -As String | Test-Output -Command Resolve-Directory
+Start-Test "Split-Principal -DomainName"
+Split-Principal ($UserAccounts | Select-Object -ExpandProperty Principal) -DomainName
+
+
+Start-Test "Split-Principal 'MicrosoftAccount\$TestUser@domain.com'"
+Split-Principal "MicrosoftAccount\$TestUser@domain.com"
+
+Start-Test "Split-Principal '$TestUser@domain.com' -DomainName"
+Split-Principal "$TestUser@domain.com" -DomainName
+
+Start-Test "Split-Principal FAIL"
+$BadAccount = "\ac", "$TestUser@email"
+Split-Principal $BadAccount
+
+Test-Output $UserNames -Command Split-Principal
 
 Update-Log
 Exit-Test

@@ -28,19 +28,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Get-EnvironmentVariable
+Unit test for Select-EnvironmentVariable
 
 .DESCRIPTION
-Unit test for Get-EnvironmentVariable
+Unit test for Select-EnvironmentVariable
 
 .EXAMPLE
-PS> .\Get-EnvironmentVariable.ps1
+PS> .\Select-EnvironmentVariable.ps1
 
 .INPUTS
-None. You cannot pipe objects to Get-EnvironmentVariable.ps1
+None. You cannot pipe objects to Select-EnvironmentVariable.ps1
 
 .OUTPUTS
-None. Get-EnvironmentVariable.ps1 does not generate any output
+None. Select-EnvironmentVariable.ps1 does not generate any output
 
 .NOTES
 None.
@@ -65,28 +65,28 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 # TODO: All except ExpandProperty will be blank in bulk test run in this unit
 Enter-Test
 
-Start-Test "Get-EnvironmentVariable UserProfile"
-$Result = Get-EnvironmentVariable UserProfile
+Start-Test "Select-EnvironmentVariable UserProfile"
+$Result = Select-EnvironmentVariable UserProfile
 $Result
 
 Start-Test "Select Name"
 $Result | Select-Object -ExpandProperty Name
 
-Start-Test "Get-EnvironmentVariable WhiteList | Sort"
-Get-EnvironmentVariable WhiteList | Sort-Object -Descending { $_.Value.Length }
+Start-Test "Select-EnvironmentVariable WhiteList | Sort"
+Select-EnvironmentVariable WhiteList | Sort-Object -Descending { $_.Value.Length }
 
-Start-Test "Get-EnvironmentVariable BlackList"
-$Result = Get-EnvironmentVariable BlackList
+Start-Test "Select-EnvironmentVariable BlackList"
+$Result = Select-EnvironmentVariable BlackList
 $Result
 
 Start-Test "Select Value"
 $Result | Select-Object -ExpandProperty Value
 
-Start-Test "Get-EnvironmentVariable All"
-$Result = Get-EnvironmentVariable All
+Start-Test "Select-EnvironmentVariable All"
+$Result = Select-EnvironmentVariable All
 $Result
 
-Test-Output $Result -Command Get-EnvironmentVariable
+Test-Output $Result -Command Select-EnvironmentVariable
 
 Update-Log
 Exit-Test

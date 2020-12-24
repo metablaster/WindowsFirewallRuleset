@@ -106,8 +106,9 @@ SOFTWARE.
 	# Functions to export from this module, for best performance, do not use wildcards and do not
 	# delete the entry, use an empty array if there are no functions to export.
 	FunctionsToExport = @(
+		"ConvertFrom-SDDL"
 		"ConvertFrom-SID"
-		"ConvertFrom-Principal"
+		"Split-Principal"
 		"Get-PrincipalSID"
 		"Get-GroupPrincipal"
 		"Get-GroupSID"
@@ -146,8 +147,9 @@ SOFTWARE.
 		"en-US\about_Ruleset.UserInfo.help.txt"
 		"en-US\Ruleset.UserInfo-help.xml"
 		"Help\en-US\about_Ruleset.UserInfo.md"
+		"Help\en-US\ConvertFrom-SDDL.md"
 		"Help\en-US\ConvertFrom-SID.md"
-		"Help\en-US\ConvertFrom-Principal.md"
+		"Help\en-US\Split-Principal.md"
 		"Help\en-US\Get-PrincipalSID.md"
 		"Help\en-US\Get-GroupPrincipal.md"
 		"Help\en-US\Get-GroupSID.md"
@@ -157,8 +159,9 @@ SOFTWARE.
 		"Help\en-US\Test-UPN.md"
 		"Help\en-US\Ruleset.UserInfo.md"
 		"Help\README.md"
+		"Public\ConvertFrom-SDDL.ps1"
 		"Public\ConvertFrom-SID.ps1"
-		"Public\ConvertFrom-Principal.ps1"
+		"Public\Split-Principal.ps1"
 		"Public\Get-PrincipalSID.ps1"
 		"Public\Get-GroupPrincipal.ps1"
 		"Public\Get-GroupSID.ps1"

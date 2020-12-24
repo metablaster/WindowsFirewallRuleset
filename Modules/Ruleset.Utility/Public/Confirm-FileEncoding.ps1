@@ -34,7 +34,7 @@ Verify file is correctly encoded
 Confirm-FileEncoding verifies target file is encoded as expected.
 Wrong encoding may return bad data resulting is unexpected behavior
 
-.PARAMETER FilePath
+.PARAMETER Path
 Path to the file which to check
 
 .PARAMETER Encoding
@@ -59,7 +59,9 @@ function Confirm-FileEncoding
 	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-		[string[]] $FilePath,
+		[Alias("FilePath")]
+		[SupportsWildcards()]
+		[System.IO.FileInfo[]] $Path,
 
 		[Parameter()]
 		[string[]] $Encoding = @("utf-8", "us-ascii")
@@ -76,12 +78,14 @@ function Confirm-FileEncoding
 	}
 	process
 	{
-		foreach ($File in $FilePath)
+		foreach ($TargetFile in $Path)
 		{
-			if (!(Test-Path -Path $File -PathType Leaf))
+			$File = Resolve-WildcardPath -File $TargetFile
+
+			if (!($File -and $File.Exists))
 			{
-				Write-Error -Category ObjectNotFound -TargetObject $FilePath `
-					-Message "Cannot find path '$File' because it does not exist"
+				Write-Error -Category ObjectNotFound -TargetObject $TargetFile `
+					-Message "Cannot find path '$TargetFile' because it does not exist"
 				return
 			}
 

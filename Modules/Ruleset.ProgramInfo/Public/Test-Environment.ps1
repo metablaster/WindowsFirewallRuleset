@@ -122,7 +122,7 @@ function Test-Environment
 	}
 	elseif (Test-Path -Path $Path -IsValid)
 	{
-		$UserVariables = Get-EnvironmentVariable UserProfile | Select-Object -ExpandProperty Name
+		$UserVariables = Select-EnvironmentVariable UserProfile | Select-Object -ExpandProperty Name
 
 		if ($UserProfile -or $Firewall)
 		{
@@ -151,7 +151,7 @@ function Test-Environment
 		}
 
 		# else Why it failed:
-		$BadVariables = Get-EnvironmentVariable BlackList | Select-Object -ExpandProperty Name
+		$BadVariables = Select-EnvironmentVariable BlackList | Select-Object -ExpandProperty Name
 		if ([array]::Find($BadVariables, [System.Predicate[string]] { $Path -like "$($args[0])*" }))
 		{
 			Write-Warning -Message "Specified environment variable is not valid for paths"

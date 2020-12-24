@@ -31,11 +31,11 @@ SOFTWARE.
 Get a group of environment variables
 
 .DESCRIPTION
-Get-EnvironmentVariable gets a predefined group of environment variables.
+Select-EnvironmentVariable gets a predefined group of environment variables.
 This is useful to verify path patterns, ex. paths for firewall rules must not
 contain paths with userprofile environment variable.
 
-.PARAMETER Group
+.PARAMETER Scope
 A group of environment variables to get as follows:
 1. UserProfile - Environment variables that leads to valid directory in user profile
 2. WhiteList - Environment variables which are valid directories
@@ -43,17 +43,17 @@ A group of environment variables to get as follows:
 4. All - Whitelist and BlackList together
 
 .EXAMPLE
-PS> Get-EnvironmentVariable UserProfile
+PS> Select-EnvironmentVariable UserProfile
 
 Returns all environment variables that lead to user profile
 
 .EXAMPLE
-PS> Get-EnvironmentVariable All
+PS> Select-EnvironmentVariable All
 
 Returns all environment variables on computer
 
 .INPUTS
-None. You cannot pipe objects to Get-EnvironmentVariable
+None. You cannot pipe objects to Select-EnvironmentVariable
 
 .OUTPUTS
 [System.Collections.DictionaryEntry]
@@ -61,15 +61,15 @@ None. You cannot pipe objects to Get-EnvironmentVariable
 .NOTES
 None.
 #>
-function Get-EnvironmentVariable
+function Select-EnvironmentVariable
 {
 	[OutputType([System.Collections.DictionaryEntry])]
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Get-EnvironmentVariable.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Select-EnvironmentVariable.md")]
 	param (
 		[Parameter(Mandatory = $true)]
 		[ValidateSet("BlackList", "WhiteList", "UserProfile", "All")]
-		[string] $Group
+		[string] $Scope
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -131,7 +131,7 @@ function Get-EnvironmentVariable
 		New-Variable -Name BlackListEnvironment -Scope Script -Option Constant -Value $BlackListLocal
 	}
 
-	switch -Wildcard ($Group)
+	switch -Wildcard ($Scope)
 	{
 		"UserProfile"
 		{

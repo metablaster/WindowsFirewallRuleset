@@ -34,7 +34,7 @@ Gets the encoding of a file
 Gets the encoding of a file, if the encoding can't be determined, ex. the file
 contains unicode charaters but no BOM, then by default UTF-8 is assumed.
 
-.PARAMETER FilePath
+.PARAMETER Path
 The path of the file to get the encoding of
 
 .PARAMETER Encoding
@@ -70,7 +70,8 @@ function Get-FileEncoding
 	[OutputType([string])]
 	param (
 		[Parameter(Mandatory = $true)]
-		[string] $FilePath,
+		[SupportsWildcards()]
+		[System.IO.FileInfo] $Path,
 
 		[Parameter()]
 		$Encoding = $DefaultEncoding
@@ -78,10 +79,12 @@ function Get-FileEncoding
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-	if (!(Test-Path -Path $FilePath -PathType Leaf))
+	[System.IO.FileInfo] $File = Resolve-WildcardPath -File $Path
+
+	if (!($File -and $File.Exists))
 	{
-		Write-Error -Category ObjectNotFound -TargetObject $FilePath `
-			-Message "Cannot find path '$FilePath' because it does not exist"
+		Write-Error -Category ObjectNotFound -TargetObject $Path `
+			-Message "Cannot find path '$Path' because it does not exist"
 		return
 	}
 
@@ -89,7 +92,7 @@ function Get-FileEncoding
 	# 5 lines contain any non-printable characters.
 	# TODO: encoding parameter needed?
 	$NonPrintable = [char[]] (0..8 + 10..31 + 127 + 129 + 141 + 143 + 144 + 157)
-	$Lines = Get-Content -Path $FilePath -ErrorAction Ignore -TotalCount 5
+	$Lines = Get-Content -Path $File -ErrorAction Ignore -TotalCount 5
 
 	$Result = @($Lines | Where-Object {
 			$_.IndexOfAny($NonPrintable) -ge 0
@@ -147,7 +150,7 @@ function Get-FileEncoding
 	# bytes from the file, and then see if it matches one of the encodings we know about.
 	foreach ($EncodingLength in $EncodingLengths | Sort-Object -Descending)
 	{
-		$Bytes = Get-Content @Params -ReadCount $EncodingLength -Path $FilePath | Select-Object -First 1
+		$Bytes = Get-Content @Params -ReadCount $EncodingLength -Path $File | Select-Object -First 1
 		$LocalEncoding = $Encodings[$Bytes -join '-']
 
 		# If we found an encoding that had the same preamble bytes,
@@ -177,11 +180,11 @@ function Get-FileEncoding
 		# TODO: not sure what encoding should be default for this
 		if ($PSVersionTable.PSEdition -eq "Core")
 		{
-			$FileData = Get-Content -Path $FilePath -Encoding $Encoding
+			$FileData = Get-Content -Path $File -Encoding $Encoding
 		}
 		else
 		{
-			$FileData = Get-Content -Path $FilePath -Encoding Ascii
+			$FileData = Get-Content -Path $File -Encoding Ascii
 		}
 
 		# TODO: there is no need to parse line by line

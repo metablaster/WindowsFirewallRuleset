@@ -26,10 +26,7 @@ EXAMPLES
 	Confirm-FileEncoding
 	Verify file is correctly encoded
 
-	Convert-SDDLToACL
-	Convert SDDL string to ACL
-
-	Get-EnvironmentVariable
+	Select-EnvironmentVariable
 	Get a group of environment variables
 
 	Get-FileEncoding
@@ -44,7 +41,7 @@ EXAMPLES
 	Get-TypeName
 	Get .NET outputs of a commandlet or convert to/from type accelerator
 
-	Resolve-Directory
+	Resolve-WildcardPath
 	Ensure directory name wildcard pattern resolves to single path or fail
 
 	Set-NetworkProfile

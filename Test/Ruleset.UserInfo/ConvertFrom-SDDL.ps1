@@ -28,19 +28,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Convert-SDDLToACL
+Unit test for ConvertFrom-SDDL
 
 .DESCRIPTION
-Unit test for Convert-SDDLToACL
+Unit test for ConvertFrom-SDDL
 
 .EXAMPLE
-PS> .\Convert-SDDLToACL.ps1
+PS> .\ConvertFrom-SDDL.ps1
 
 .INPUTS
-None. You cannot pipe objects to Convert-SDDLToACL.ps1
+None. You cannot pipe objects to ConvertFrom-SDDL.ps1
 
 .OUTPUTS
-None. Convert-SDDLToACL.ps1 does not generate any output
+None. ConvertFrom-SDDL.ps1 does not generate any output
 
 .NOTES
 None.
@@ -72,11 +72,14 @@ Start-Test "Get-SDDL: (system accounts)"
 $SDDL2 = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE", "LOCAL SERVICE"
 $SDDL2
 
-Start-Test "Convert-SDDLToACL"
-$Result = Convert-SDDLToACL $SDDL1, $SDDL2
+Start-Test "ConvertFrom-SDDL"
+$Result = ConvertFrom-SDDL $SDDL1, $SDDL2
 $Result
 
-Test-Output $Result -Command Convert-SDDLToACL
+Start-Test "ConvertFrom-SDDL pipeline"
+$SDDL1, $SDDL2 | ConvertFrom-SDDL
+
+Test-Output $Result -Command ConvertFrom-SDDL
 
 Update-Log
 Exit-Test

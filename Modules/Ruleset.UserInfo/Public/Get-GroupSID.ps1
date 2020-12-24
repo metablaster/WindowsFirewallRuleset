@@ -43,7 +43,7 @@ Computer name which to query for group users
 Whether to contact CIM server (required for remote computers)
 
 .EXAMPLE
-PS> Get-GroupSID "USERNAME" -Machine "COMPUTERNAME"
+PS> Get-GroupSID "USERNAME" -Domain "COMPUTERNAME"
 
 .EXAMPLE
 PS> Get-GroupSID @("USERNAME1", "USERNAME2") -CIM

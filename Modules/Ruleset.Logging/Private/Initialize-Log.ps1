@@ -77,22 +77,22 @@ function Initialize-Log
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-	$Path = Resolve-Directory $Path
-	if (!$Path)
+	$Directory = Resolve-WildcardPath -Path $Path
+	if (!$Directory)
 	{
-		Write-Error -Category InvalidResult -TargetObject $Path -Message "Unable to resolve path: $($Path.FullName)"
+		Write-Error -Category InvalidResult -TargetObject $Path -Message "Unable to resolve path: $Path"
 		return $null
 	}
 
 	# Generate file name
 	$FileName = $LogName + "_$(Get-Date -Format "dd.MM.yy").log"
-	$LogFile = Join-Path -Path $Path -ChildPath $FileName
+	$LogFile = Join-Path -Path $Directory -ChildPath $FileName
 
 	# Create Logs directory if it doesn't exist
-	if (!$Path.Exists)
+	if (!$Directory.Exists)
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating log directory: $Path"
-		$Path.Create()
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating log directory: $Directory"
+		$Directory.Create()
 	}
 
 	if (!(Test-Path -PathType Leaf -Path $LogFile))
@@ -119,7 +119,7 @@ function Initialize-Log
 			Write-Debug -Message "Header parameter is valid for new log files only, ignored..."
 		}
 
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Logs directory is: $Path"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Logs directory is: $Directory"
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Log file name: $FileName"
 	}
 

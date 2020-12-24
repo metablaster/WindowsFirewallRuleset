@@ -29,10 +29,13 @@ VARIABLES
 	To prevent double initialization of constants
 
 EXAMPLES
+	ConvertFrom-SDDL
+	Convert SDDL string to ACL
+
 	ConvertFrom-SID
 	Convert SID to user or computer account name
 
-	ConvertFrom-Principal
+	Split-Principal
 	Strip computer names out of computer accounts
 
 	Get-PrincipalSID

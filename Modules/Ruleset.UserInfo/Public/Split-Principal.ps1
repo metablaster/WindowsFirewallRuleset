@@ -28,24 +28,22 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Strip computer names out of computer accounts
+Split principal to either user name or domain
 
 .DESCRIPTION
-ConvertFrom-Principal is a helper method to reduce typing common code
-related to splitting up user accounts
+Split principal, either UPN or NETBIOS name to user name or domain name
 
 .PARAMETER Principal
-One or more user accounts in form of UPN or NetBIOS Name ex:
-COMPUTERNAME\USERNAME or user@domain.lan
+One or more principals in form of UPN or NetBIOS Name.
 
-.PARAMETER Machine
+.PARAMETER DomainName
 If specified, the result is domain name instead of user name
 
 .EXAMPLE
-PS> ConvertFrom-Principal COMPUTERNAME\USERNAME
+PS> Split-Principal COMPUTERNAME\USERNAME
 
 .EXAMPLE
-PS> @(SERVER\USER, user@domain.lan, SERVER2\USER2) | ConvertFrom-Principal -Machine
+PS> @(SERVER\USER, user@domain.lan, SERVER2\USER2) | Split-Principal -DomainName
 
 .INPUTS
 [string]
@@ -56,10 +54,10 @@ PS> @(SERVER\USER, user@domain.lan, SERVER2\USER2) | ConvertFrom-Principal -Mach
 .NOTES
 None.
 #>
-function ConvertFrom-Principal
+function Split-Principal
 {
 	[CmdletBinding(PositionalBinding = $false,
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/ConvertFrom-Principal.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Split-Principal.md")]
 	[OutputType([string])]
 	param(
 		[Alias("Account")]
@@ -67,7 +65,7 @@ function ConvertFrom-Principal
 		[string[]] $Principal,
 
 		[Parameter()]
-		[switch] $Machine
+		[switch] $DomainName
 	)
 
 	process
@@ -81,14 +79,14 @@ function ConvertFrom-Principal
 			# https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nbte/6f06fa0e-1dc4-4c41-accb-355aaf20546d
 			if ($Account -match "^\w[-|\w]*\\\w+$")
 			{
-				if ($Machine) { $Index = 0 }
+				if ($DomainName) { $Index = 0 }
 				else { $Index = 1 }
 
 				$Account.Split("\")[$Index]
 			}
 			elseif (Test-UPN $Account -EA SilentlyContinue)
 			{
-				if ($Machine) { $Index = 1 }
+				if ($DomainName) { $Index = 1 }
 				else { $Index = 0 }
 
 				# https://docs.microsoft.com/en-us/windows/win32/secauthn/user-name-formats

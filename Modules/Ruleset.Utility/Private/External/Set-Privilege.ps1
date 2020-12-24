@@ -36,7 +36,7 @@ Toggle security privileges for the current PowerShell session.
 This is needed to gain privileged access to registry ie. to be able to take ownership
 or to set registry permissions to keys and values.
 
-.PARAMETER Name
+.PARAMETER Privilege
 Privilege name which to grant or remove
 
 .PARAMETER Disable
@@ -67,6 +67,8 @@ Following modifications by metablaster, November 2020:
 2. Added boilerplate code
 3. Make function produce some informational output
 4. Added comment based help
+December 2020:
+5. Rename parameter to standard parameter name
 
 .LINK
 https://www.powershellgallery.com/packages/Set-Privilege/1.1.2
@@ -123,7 +125,7 @@ function Set-Privilege
 			"SeUnsolicitedInputPrivilege", "UnsolicitedInput"
 		)]
 		[Alias("PrivilegeName")]
-		[string[]] $Name,
+		[string[]] $Privilege,
 
 		[Parameter()]
 		[switch] $Disable
@@ -164,14 +166,14 @@ function Set-Privilege
 	}
 	process
 	{
-		foreach ($Item in $Name)
+		foreach ($Name in $Privilege)
 		{
-			if ($PSCmdlet.ShouldProcess("PowerShell process", "$StatusMessage $Item privilege"))
+			if ($PSCmdlet.ShouldProcess("PowerShell process", "$StatusMessage $Name privilege"))
 			{
 				[long] $PrivID = $null
 				# https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-lookupprivilegevaluew
 				# If the function succeeds, the function returns nonzero.
-				if ([AdjPriv.Privilege]::LookupPrivilegeValue($null, (& $GetPrivilegeConstant $Item), [ref] $PrivID))
+				if ([AdjPriv.Privilege]::LookupPrivilegeValue($null, (& $GetPrivilegeConstant $Name), [ref] $PrivID))
 				{
 					[bool] $PreviousValue = $null
 
@@ -179,18 +181,18 @@ function Set-Privilege
 					# https://docs.microsoft.com/en-us/windows/win32/api/securitybaseapi/nf-securitybaseapi-adjusttokenprivileges
 					if (![bool][long][AdjPriv.Privilege]::SetPrivilege($PrivID, !$Disable, $false, [ref] $PreviousValue))
 					{
-						Write-Information -Tags "User" -MessageData "INFO: Previous value for $Item was: $PreviousValue"
-						Write-Information -Tags "User" -MessageData "INFO: Privilege $Item successfully $($StatusMessage.ToLower())"
+						Write-Information -Tags "User" -MessageData "INFO: Previous value for $Name was: $PreviousValue"
+						Write-Information -Tags "User" -MessageData "INFO: Privilege $Name successfully $($StatusMessage.ToLower())"
 					}
 					else
 					{
 						Write-Information -Tags "User" -MessageData "INFO: Previous value: $PreviousValue"
-						Write-Error -Category NotSpecified -TargetObject $Item -Message "Privilege '$Item' could not be set"
+						Write-Error -Category NotSpecified -TargetObject $Name -Message "Privilege '$Name' could not be set"
 					}
 				}
 				else
 				{
-					Write-Error -Category InvalidArgument -TargetObject $Item -Message "Privilege '$Item' could no be resolved"
+					Write-Error -Category InvalidArgument -TargetObject $Name -Message "Privilege '$Name' could no be resolved"
 				}
 			}
 		}
