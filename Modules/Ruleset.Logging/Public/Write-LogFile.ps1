@@ -56,12 +56,12 @@ One or more optional message tags
 .PARAMETER Path
 Destination directory
 
-.PARAMETER Label
+.PARAMETER LogFile
 File label that is added to current date for resulting file name
 
 .EXAMPLE
 PS> $HeaderStack.Push("My Header")
-PS> Write-LogFile -Path "C:\logs" -Label "Settings" -Tags "MyTag" -Message "Sample message"
+PS> Write-LogFile -Path "C:\logs" -LogName "Settings" -Tags "MyTag" -Message "Sample message"
 PS> $HeaderStack.Pop() | Out-Null
 
 Will write "Sample message" InformationRecord to log C:\logs\Settings_15.12.20.log with a header set to "My Header"
@@ -69,16 +69,16 @@ Will write "Sample message" InformationRecord to log C:\logs\Settings_15.12.20.l
 .EXAMPLE
 PS> $HeaderStack.Push("My Header")
 PS> [hashtable] $HashResult = Get-SomeHashTable
-PS> Write-LogFile -Path "C:\logs" -Label "Settings" -Tags "MyTag" -Hash $HashResult
+PS> Write-LogFile -Path "C:\logs" -LogName "Settings" -Tags "MyTag" -Hash $HashResult
 PS> $HeaderStack.Pop() | Out-Null
 
 Will write entry $HashResult to log C:\logs\Settings_15.12.20.log with a header set to "My Header"
 
 .EXAMPLE
 PS> $HeaderStack.Push("My Header")
-PS> Write-LogFile -Path "C:\logs" -Label "Settings" -Tags "MyTag" -Message "Sample message"
+PS> Write-LogFile -Path "C:\logs" -LogName "Settings" -Tags "MyTag" -Message "Sample message"
 PS> $HeaderStack.Push("Another Header")
-PS> Write-LogFile -Path "C:\logs\next" -Label "Admin" -Tags "NewTag" -Message "Another message"
+PS> Write-LogFile -Path "C:\logs\next" -LogName "Admin" -Tags "NewTag" -Message "Another message"
 PS> $HeaderStack.Pop() | Out-Null
 PS> $HeaderStack.Pop() | Out-Null
 
@@ -107,32 +107,36 @@ function Write-LogFile
 		$Hash,
 
 		[Parameter()]
-		[string] $Path = $LogsFolder,
+		[SupportsWildcards()]
+		[System.IO.DirectoryInfo] $Path = $LogsFolder,
 
 		[Parameter(ParameterSetName = "Message")]
 		[string[]] $Tags = "Administrator",
 
 		[Parameter()]
-		[string] $Label = "Admin"
+		[string] $LogName = "Admin"
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# If Peek() fails you have called Pop() more times than Push()
-	$LogFile = Initialize-Log $Path -Label $Label -Header $HeaderStack.Peek()
+	$LogFile = Initialize-Log $Path -LogName $LogName -Header $HeaderStack.Peek()
 
-	if ($Message)
+	if ($LogFile)
 	{
-		Write-Information -MessageData $Message -IV LocalBuffer -INFA "SilentlyContinue"
+		if ($Message)
+		{
+			Write-Information -MessageData $Message -IV LocalBuffer -INFA "SilentlyContinue"
 
-		$Caller = (Get-PSCallStack)[1].ScriptName
-		[InformationRecord] $Record = [InformationRecord]::new($LocalBuffer, $Caller)
+			$Caller = (Get-PSCallStack)[1].ScriptName
+			[InformationRecord] $Record = [InformationRecord]::new($LocalBuffer, $Caller)
 
-		$Record.Tags.AddRange($Tags)
-		$Record | Select-Object * | Out-File -Append -FilePath $LogFile -Encoding $DefaultEncoding
-	}
-	else
-	{
-		$Hash | Out-File -Append -FilePath $LogFile -Encoding $DefaultEncoding
+			$Record.Tags.AddRange($Tags)
+			$Record | Select-Object * | Out-File -Append -FilePath $LogFile -Encoding $DefaultEncoding
+		}
+		else
+		{
+			$Hash | Out-File -Append -FilePath $LogFile -Encoding $DefaultEncoding
+		}
 	}
 }

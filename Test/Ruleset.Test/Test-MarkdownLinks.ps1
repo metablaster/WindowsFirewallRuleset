@@ -28,23 +28,30 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Write-LogFile
+Unit test for Test-MarkdownLinks
 
 .DESCRIPTION
-Use Write-LogFile.ps1 as a template to test out module functions
+Test correctness of Test-MarkdownLinks function
 
 .EXAMPLE
-PS> .\Write-LogFile.ps1
+PS> .\Test-MarkdownLinks.ps1
 
 .INPUTS
-None. You cannot pipe objects to Write-LogFile.ps1
+None. You cannot pipe objects to Test-MarkdownLinks.ps1
 
 .OUTPUTS
-None. Write-LogFile.ps1 does not generate any output
+None. Test-MarkdownLinks.ps1 does not generate any output
 
 .NOTES
 None.
 #>
+
+[CmdletBinding()]
+[OutputType([void])]
+param (
+	[Parameter()]
+	[switch] $Force
+)
 
 #region Initialization
 #Requires -Version 5.1
@@ -65,24 +72,11 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
-Start-Test "Write log no header"
-Write-LogFile -Tags "Test" -Message "Test no header" -LogName "TestLog1"
-
-Start-Test "Write log new header"
-$HeaderStack.Push("Test case header 1")
-Write-LogFile -Tags "Test" -Message "Test header 1" -LogName "TestLog2"
-
-Start-Test "Write log 2nd header"
-$HeaderStack.Push("Test case header 2")
-Write-LogFile -Tags "Test" -Message "Test header 2" -LogName "TestLog3"
-
-Start-Test "Write log previous header"
-$HeaderStack.Pop() | Out-Null
-Write-LogFile -Tags "Test" -Message "Test previous header" -LogName "TestLog4"
-
-Start-Test "Write log initial header"
-$HeaderStack.Pop() | Out-Null
-Write-LogFile -Tags "Test" -Message "Test initial header" -LogName "TestLog5"
+if ($Force -or $PSCmdlet.ShouldContinue("Markdown files", "Run lengthy link test"))
+{
+	Start-Test "Test-MarkdownLinks"
+	Test-MarkdownLinks $ProjectRoot -Recurse | Test-Output -Command Test-MarkdownLinks
+}
 
 Update-Log
 Exit-Test

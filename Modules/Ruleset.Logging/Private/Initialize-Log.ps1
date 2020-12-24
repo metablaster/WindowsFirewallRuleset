@@ -31,13 +31,13 @@ SOFTWARE.
 Generates a log file name for logging functions
 
 .DESCRIPTION
-Generates a log file name composed of current date and appends to requested label and path.
+Generates a log file name composed of current date and appends to requested LogFile and Path.
 The function checks if the path to log file exists, if not it creates directory but not log file.
 
 .PARAMETER Path
-Path to directory where to write logs
+Path to directory into which to write logs
 
-.PARAMETER Label
+.PARAMETER LogName
 File label which precedes file date, ex. "Warning" or "Error"
 
 .PARAMETER Header
@@ -65,10 +65,11 @@ function Initialize-Log
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[ValidateScript( { (Test-Path -Path (Split-Path -Path $_ -Qualifier)) })]
-		[string] $Path,
+		[SupportsWildcards()]
+		[System.IO.DirectoryInfo] $Path,
 
 		[Parameter(Mandatory = $true)]
-		[string] $Label,
+		[string] $LogName,
 
 		[Parameter()]
 		[string] $Header
@@ -76,15 +77,28 @@ function Initialize-Log
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
+	# [System.Management.Automation.PathInfo] Try to resolve input path
+	$PathInfo = Resolve-Path -Path $Path.FullName
+
+	if (($PathInfo | Measure-Object).Count -eq 1)
+	{
+		$PathInfo = $PathInfo.Path
+	}
+	else
+	{
+		Write-Error -Category InvalidResult -TargetObject $Path -Message "Unable to resolve path: $($Path.FullName)"
+		return $null
+	}
+
 	# Generate file name
-	$FileName = $Label + "_$(Get-Date -Format "dd.MM.yy").log"
-	$LogFile = Join-Path -Path $Path -ChildPath $FileName
+	$FileName = $LogName + "_$(Get-Date -Format "dd.MM.yy").log"
+	$LogFile = Join-Path -Path $PathInfo -ChildPath $FileName
 
 	# Create Logs directory if it doesn't exist
-	if (!(Test-Path -PathType Container -Path $Path))
+	if (!(Test-Path -PathType Container -Path $PathInfo))
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating log directory: $Path"
-		New-Item -ItemType Directory -Path $Path -ErrorAction Stop | Out-Null
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating log directory: $PathInfo"
+		New-Item -ItemType Directory -Path $PathInfo -ErrorAction Stop | Out-Null
 	}
 
 	if (!(Test-Path -PathType Leaf -Path $LogFile))
@@ -111,7 +125,7 @@ function Initialize-Log
 			Write-Debug -Message "Header parameter is valid for new log files only, ignored..."
 		}
 
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Logs directory is: $Path"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Logs directory is: $PathInfo"
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Log file name: $FileName"
 	}
 

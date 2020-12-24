@@ -67,7 +67,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 Enter-Test -Private
 
 Start-Test "Initialize-Log"
-$Result = Initialize-Log $LogsFolder\Audit -Label System
+$Result = Initialize-Log $LogsFolder\Test -LogName TestLog
 $Result
 
 Test-Output $Result -Command Initialize-Log

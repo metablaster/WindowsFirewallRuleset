@@ -151,7 +151,7 @@ function Initialize-Service
 							}
 							else
 							{
-								Write-LogFile -Label "Services" -Message "'$($Required.DisplayName)' ($($Required.Name)) $OldStatus -> Automatic"
+								Write-LogFile -LogName "Services" -Message "'$($Required.DisplayName)' ($($Required.Name)) $OldStatus -> Automatic"
 								Write-Information -Tags "Project" -MessageData "INFO: Set dependent service '$($Required.Name)' to Automatic succeeded"
 							}
 						}
@@ -172,7 +172,7 @@ function Initialize-Service
 							else
 							{
 								# Write log for service status change
-								Write-LogFile -Label "Services" -Message "'$($Required.DisplayName)' ($($Required.Name)) $OldStatus -> Running"
+								Write-LogFile -LogName "Services" -Message "'$($Required.DisplayName)' ($($Required.Name)) $OldStatus -> Running"
 								Write-Information -Tags "Project" -MessageData "INFO: Start dependent service '$($Required.Name)' succeeded"
 							}
 						}
@@ -193,7 +193,7 @@ function Initialize-Service
 						else
 						{
 							# Write log for service status change
-							Write-LogFile -Label "Services" -Message "'$($Service.DisplayName)' ($($Service.Name)) $OldStatus -> Automatic"
+							Write-LogFile -LogName "Services" -Message "'$($Service.DisplayName)' ($($Service.Name)) $OldStatus -> Automatic"
 							Write-Information -Tags "Project" -MessageData "INFO: Set '$($Service.Name)' service to Automatic succeeded"
 						}
 					}
@@ -211,7 +211,7 @@ function Initialize-Service
 					else
 					{
 						# Write log for service status change
-						Write-LogFile -Label "Services" -Message "'$($Service.DisplayName)' ($($Service.Name)) $ServiceOldStatus -> Running"
+						Write-LogFile -LogName "Services" -Message "'$($Service.DisplayName)' ($($Service.Name)) $ServiceOldStatus -> Running"
 						Write-Information -Tags "Project" -MessageData "INFO: Start '$($Service.Name)' service succeeded"
 					}
 				}

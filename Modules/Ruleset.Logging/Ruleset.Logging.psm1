@@ -67,7 +67,10 @@ foreach ($Script in $PublicScripts)
 Write-Debug -Message "[$ThisModule] Initializing module variables"
 
 # To prevent callers from overwriting log headers of each other we need a stack of headers
-New-Variable -Name HeaderStack -Scope Global -Value ([System.Collections.Stack]::new(@("")))
+if (!(Get-Variable -Name HeaderStack -Scope Global -ErrorAction Ignore))
+{
+	New-Variable -Name HeaderStack -Scope Global -Value ([System.Collections.Stack]::new(@("")))
+}
 
 #
 # Module cleanup
@@ -76,5 +79,9 @@ New-Variable -Name HeaderStack -Scope Global -Value ([System.Collections.Stack]:
 $MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
 	Write-Debug -Message "[$ThisModule] Cleanup module"
 
-	Remove-Variable -Name HeaderStack -Scope Global
+	if ($HeaderStack.Count -eq 0)
+	{
+		# TODO: Need better solution to remove variable
+		Remove-Variable -Name HeaderStack -Scope Global
+	}
 }

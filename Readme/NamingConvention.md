@@ -44,7 +44,7 @@ Parameter names and aliases
 - [string] `Owner` (the name of the owner of the resource)
 - [string] `Name`
 - [switch] `Log` (audit the actions of the cmdlet when the parameter is specified)
-- [string] `LogName`
+- [string] `LogName` (the name of the log file to process or use)
 - [string] `Path` (the paths to a resource when wildcard characters are supported)
   - `FilePath`
 - [string] `LiteralPath` (the path to a resource when wildcard characters are not supported)

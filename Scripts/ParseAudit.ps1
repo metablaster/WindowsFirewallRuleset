@@ -359,7 +359,7 @@ foreach ($RawEvent in $Events)
 		Application = $Message["Application"]
 	}
 
-	Write-LogFile -Path $LogsFolder\Audit -Label $FileLabel -Hash $MessageData
+	Write-LogFile -Path $LogsFolder\Audit -LogName $FileLabel -Hash $MessageData
 	Update-Log
 }
 

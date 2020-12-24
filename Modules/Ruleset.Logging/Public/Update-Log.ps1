@@ -73,7 +73,8 @@ function Update-Log
 	[OutputType([void])]
 	param (
 		[Parameter()]
-		[string] $Path = $LogsFolder
+		[SupportsWildcards()]
+		[System.IO.DirectoryInfo] $Path = $LogsFolder
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -87,11 +88,11 @@ function Update-Log
 	if ((Get-PSCallStack)[1].ScriptName -like "$ProjectRoot\Test\*")
 	{
 		$Header = "Unit test generated "
-		$Path += "\Test"
+		$Path = "$Path\Test"
 	}
 	else
 	{
-		$Header = "Software generated "
+		$Header = "Script generated "
 	}
 
 	if ($PSCmdlet.ShouldProcess("Log files", "write to log files"))
@@ -111,11 +112,14 @@ function Update-Log
 
 			if ($ErrorLogging)
 			{
-				$LogFile = Initialize-Log $Path -Label "Error" -Header ($Header + "errors")
+				$LogFile = Initialize-Log $Path -LogName "Error" -Header ($Header + "errors")
 
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending error to log file: $LogFile"
-				$ErrorBuffer | ForEach-Object {
-					$_ | Select-Object * | Out-File -Append -FilePath $LogFile -Encoding $DefaultEncoding
+				if ($LogFile)
+				{
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending error to log file: $LogFile"
+					$ErrorBuffer | ForEach-Object {
+						$_ | Select-Object * | Out-File -Append -FilePath $LogFile -Encoding $DefaultEncoding
+					}
 				}
 			}
 
@@ -138,16 +142,19 @@ function Update-Log
 
 			if ($WarningLogging)
 			{
-				$LogFile = Initialize-Log $Path -Label "Warning" -Header ($Header + "warnings")
+				$LogFile = Initialize-Log $Path -LogName "Warning" -Header ($Header + "warnings")
 
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending warnings to log file: $LogFile"
+				if ($LogFile)
+				{
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending warnings to log file: $LogFile"
 
-				# NOTE: we have to add the WARNING label, it's not included in the message by design
-				# NOTE: Consistent encoding needed for cases where Core and Desktop editions
-				# write to same file (not same encoding)
-				$WarningBuffer | ForEach-Object {
-					"WARNING: $(Get-Date -Format "HH:mm:ss") $_" |
-					Out-File -Append -Encoding $DefaultEncoding -FilePath $LogFile
+					# NOTE: we have to add the WARNING label, it's not included in the message by design
+					# NOTE: Consistent encoding needed for cases where Core and Desktop editions
+					# write to same file (not same encoding)
+					$WarningBuffer | ForEach-Object {
+						"WARNING: $(Get-Date -Format "HH:mm:ss") $_" |
+						Out-File -Append -Encoding $DefaultEncoding -FilePath $LogFile
+					}
 				}
 			}
 
@@ -161,11 +168,14 @@ function Update-Log
 
 			if ($InformationLogging)
 			{
-				$LogFile = Initialize-Log $Path -Label "Info" -Header ($Header + "information entries")
+				$LogFile = Initialize-Log $Path -LogName "Info" -Header ($Header + "information entries")
 
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending information to log file: $LogFile"
-				$InfoBuffer | ForEach-Object {
-					$_ | Select-Object * | Out-File -Append -FilePath $LogFile -Encoding $DefaultEncoding
+				if ($LogFile)
+				{
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending information to log file: $LogFile"
+					$InfoBuffer | ForEach-Object {
+						$_ | Select-Object * | Out-File -Append -FilePath $LogFile -Encoding $DefaultEncoding
+					}
 				}
 			}
 
