@@ -5,6 +5,7 @@ This file contains naming convention rules for parameters and variables
 
 - [Naming convention](#naming-convention)
   - [Parameters](#parameters)
+    - [Unresolved](#unresolved)
   - [Registry keys](#registry-keys)
     - [Registry functions](#registry-functions)
     - [Return types](#return-types)
@@ -25,49 +26,62 @@ This file contains naming convention rules for parameters and variables
 
 Parameter names and aliases
 
-- [string] User
-  - UserName *
-- [string] Domain
-  - ComputerName *
-  - CN
-- [string] Group
-  - UserGroup
-- [string] SID
-  - UserSID
-  - GroupSID
-  - AppSID
-- [string] Principal (a unique identifiable entity for access)
-  - Account
-  - UserAccount
-- [string] SDDL
-- [string] Owner (the name of the owner of the resource)
-- [string] Name
-- [switch] Log (audit the actions of the cmdlet when the parameter is specified)
-- [string] LogName
-- [string] Path (the paths to a resource when wildcard characters are supported)
-  - FilePath
-- [string] LiteralPath (the path to a resource when wildcard characters are not supported)
-- [string] Interface (network interface name)
-- [IPAddress] IPAddress (specify an IP address)
-  - LocalAddress
-  - RemoteAddress
-- [uri] URL
-  - URI
-- [ValidateSet()] Encoding
-- [object] InputObject (when the cmdlet takes input from other cmdlets, ValueFromPipeline)
-- [enum] Application (specify an application)
-  - Program
-- [switch] Strict (all errors are handled as terminating errors)
-- [switch] Exact (the resource term must match the resource name exactly)
-- [ValidateSet()] Privilege (the right a cmdlet needs to perform an operation for a particular entity)
-- [string] Command (specify a command string to run)
-- [switch] Stream (stream multiple output objects through the pipeline)
-- [int32] Timeout (the timeout interval (in milliseconds))
-- [int32] Count (specify the number of objects to be processed)
-- [switch] Recurse (the cmdlet recursively performs its actions on resources)
-- [string] From (specify the reference object to get information from)
-- [switch] Unique
-- [switch] Disabled
+- [string] `User`
+  - `UserName` *
+- [string] `Domain`
+  - `ComputerName` *
+  - `CN`
+- [string] `Group`
+  - `UserGroup`
+- [string] `SID`
+  - `UserSID`
+  - `GroupSID`
+  - `AppSID`
+- [string] `Principal` (a unique identifiable entity for access)
+  - `Account`
+  - `UserAccount`
+- [string] `SDDL`
+- [string] `Owner` (the name of the owner of the resource)
+- [string] `Name`
+- [switch] `Log` (audit the actions of the cmdlet when the parameter is specified)
+- [string] `LogName`
+- [string] `Path` (the paths to a resource when wildcard characters are supported)
+  - `FilePath`
+- [string] `LiteralPath` (the path to a resource when wildcard characters are not supported)
+- [string] `Interface` (network interface name)
+- [IPAddress] `IPAddress` (specify an IP address)
+  - `LocalAddress`
+  - `RemoteAddress`
+- [uri] `URL`
+  - `URI`
+- [ValidateSet()] `Encoding`
+- [enum] `Application` (specify an application)
+  - `Program`
+- [object] `InputObject` (when the cmdlet takes input from other cmdlets, ValueFromPipeline)
+- [switch] `Strict` (all errors are handled as terminating errors)
+- [switch] `Exact` (the resource term must match the resource name exactly)
+- [ValidateSet()] `Privilege` (the right a cmdlet needs to perform an operation for a particular entity)
+- [string] `Command` (specify a command string to run)
+- [switch] `Stream` (stream multiple output objects through the pipeline)
+- [int32] `Timeout` (the timeout interval (in milliseconds))
+- [int32] `Count` (specify the number of objects to be processed)
+- [switch] `Recurse` (the cmdlet recursively performs its actions on resources)
+- [string] `From` (specify the reference object to get information from)
+- [switch] `Unique`
+
+`*` Used by most commandlets but should be aliases instead
+
+### Unresolved
+
+- [switch] `Disabled` (Disabled user accounts)
+- [switch] `Machine` (see: Test-UPN)
+- [ValidateSet()] `AddressFamily`
+  - `IPVersion`
+- [switch] Physical
+- [switch] Virtual
+- [switch] Connected
+- [switch] Hidden
+- [switch] Detailed
 
 ## Registry keys
 

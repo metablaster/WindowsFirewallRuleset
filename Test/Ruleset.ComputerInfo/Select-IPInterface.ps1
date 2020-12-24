@@ -28,19 +28,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Get-ConfiguredAdapter
+Unit test for Select-IPInterface
 
 .DESCRIPTION
-Unit test for Get-ConfiguredAdapter
+Unit test for Select-IPInterface
 
 .EXAMPLE
-PS> .\Get-ConfiguredAdapter.ps1
+PS> .\Select-IPInterface.ps1
 
 .INPUTS
-None. You cannot pipe objects to Get-ConfiguredAdapter.ps1
+None. You cannot pipe objects to Select-IPInterface.ps1
 
 .OUTPUTS
-None. Get-ConfiguredAdapter.ps1 does not generate any output
+None. Select-IPInterface.ps1 does not generate any output
 
 .NOTES
 None.
@@ -63,38 +63,35 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
-Start-Test "Get-ConfiguredAdapter IPv4"
-Get-ConfiguredAdapter IPv4
+Start-Test "Select-IPInterface"
+Select-IPInterface -Detailed
 
-Start-Test "Get-ConfiguredAdapter IPv6 FAILURE TEST"
-Get-ConfiguredAdapter IPv6 -ErrorAction SilentlyContinue
+Start-Test "Select-IPInterface IPv6 FAILURE TEST"
+Select-IPInterface -AddressFamily IPv6 -ErrorAction SilentlyContinue
 
-Start-Test "Get-ConfiguredAdapter IPv4 -IncludeDisconnected"
-Get-ConfiguredAdapter IPv4 -IncludeDisconnected
-
-Start-Test "Get-ConfiguredAdapter IPv4 -IncludeVirtual"
-Get-ConfiguredAdapter IPv4 -IncludeVirtual
-
-Start-Test "Get-ConfiguredAdapter IPv4 -IncludeVirtual -IncludeDisconnected"
-Get-ConfiguredAdapter IPv4 -IncludeVirtual -IncludeDisconnected
-
-Start-Test "Get-ConfiguredAdapter IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware"
-Get-ConfiguredAdapter IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware
-
-Start-Test "Get-ConfiguredAdapter IPv4 -IncludeHidden"
-Get-ConfiguredAdapter IPv4 -IncludeHidden
-
-Start-Test "Get-ConfiguredAdapter IPv4 -IncludeAll"
-$Result = Get-ConfiguredAdapter IPv4 -IncludeAll
+Start-Test "Select-IPInterface IPv4 -Physical"
+$Result = Select-IPInterface -AddressFamily IPv4 -Physical
 $Result
 
-Start-Test "Get-ConfiguredAdapter IPv4 -IncludeAll -ExcludeHardware"
-Get-ConfiguredAdapter IPv4 -IncludeAll -ExcludeHardware
+Start-Test "Select-IPInterface -Physical -Hidden"
+Select-IPInterface -Physical -Hidden
 
-Start-Test "Get-ConfiguredAdapter binding"
-Get-ConfiguredAdapter IPv4 | Select-Object -ExpandProperty IPv4Address
+Start-Test "Select-IPInterface IPv4 -Virtual"
+Select-IPInterface -AddressFamily IPv4 -Virtual
 
-Test-Output $Result -Command Get-ConfiguredAdapter
+Start-Test "Select-IPInterface -Virtual -Hidden"
+Select-IPInterface -Virtual -Hidden
+
+Start-Test "Select-IPInterface -Hidden"
+Select-IPInterface -Hidden
+
+Start-Test "Select-IPInterface -Connected"
+Select-IPInterface -Connected -Detailed
+
+Start-Test "Select-IPInterface binding"
+Select-IPInterface -AddressFamily IPv4 -Physical | Select-Object -ExpandProperty IPv4Address
+
+Test-Output $Result -Command Select-IPInterface
 
 Update-Log
 Exit-Test

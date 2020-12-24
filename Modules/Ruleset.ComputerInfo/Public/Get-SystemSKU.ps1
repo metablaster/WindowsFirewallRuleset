@@ -52,7 +52,7 @@ Home Premium N
 [PSCustomObject] Computer/SKU value pair
 
 .NOTES
-TODO: accept UPN and NETBIOS computer names
+TODO: Accept UPN and NETBIOS computer names
 TODO: ComputerName default value is just a placeholder, need better design
 
 .LINK

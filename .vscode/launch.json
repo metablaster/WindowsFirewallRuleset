@@ -20,10 +20,10 @@
 		},
 		// TODO: add test cases here
 		{
-			"name": "Test: Get-IPAddress",
+			"name": "Test: Resolve-Host",
 			"type": "PowerShell",
 			"request": "launch",
-			"script": "${workspaceFolder}\\Test\\Ruleset.ComputerInfo\\Get-IPAddress.ps1",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ComputerInfo\\Resolve-Host.ps1",
 			"cwd": "${workspaceFolder}"
 		}
 	]

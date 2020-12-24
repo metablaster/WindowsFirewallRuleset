@@ -19,14 +19,14 @@ EXAMPLES
 	Get-ComputerName
 	Retrieves localhost NETBIOS name
 
-	Get-ConfiguredAdapter
+	Select-IPInterface
 	Retrieve a list of configured network adapters
 
 	Get-InterfaceAlias
 	Retrieve a aliases of configured network adapters
 
-	Get-IPAddress IPv4
-	Retrieve a list of IP addresses on local machine
+	Resolve-Host
+	Resolve host to IP or IP to host
 
 	Get-SystemSKU
 	Get operating system SKU information

@@ -28,19 +28,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Get-IPAddress
+Unit test for Resolve-Host
 
 .DESCRIPTION
-Unit test for Get-IPAddress
+Unit test for Resolve-Host
 
 .EXAMPLE
-PS> .\Get-IPAddress.ps1
+PS> .\Resolve-Host.ps1
 
 .INPUTS
-None. You cannot pipe objects to Get-IPAddress.ps1
+None. You cannot pipe objects to Resolve-Host.ps1
 
 .OUTPUTS
-None. Get-IPAddress.ps1 does not generate any output
+None. Resolve-Host.ps1 does not generate any output
 
 .NOTES
 None.
@@ -63,35 +63,43 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
-Start-Test "Get-IPAddress IPv4"
-Get-IPAddress IPv4
+# Prepare test IP
+Start-Test "Get google IP"
+$NSLookup = Get-ProcessOutput -FilePath nslookup.exe -ArgumentList "google.com" -EA Ignore
+if ($NSLookup -and $NSLookup -match "(?<!\s)([0-9]{1,3}\.){3}[0-9]{1,3}")
+{
+	[ipaddress] $GoogleIP = $Matches[0]
+	$GoogleIP.IPAddressToString
+}
 
-Start-Test "Get-IPAddress IPv6 FAILURE TEST"
-Get-IPAddress IPv6 -ErrorAction SilentlyContinue
+Start-Test "Resolve-Host IPv4 LocalHost"
+Resolve-Host -AddressFamily IPv4 -Physical
 
-Start-Test "Get-IPAddress IPv4 -IncludeDisconnected"
-Get-IPAddress IPv4 -IncludeDisconnected
+Start-Test "Resolve-Host Virtual"
+Resolve-Host -Virtual
 
-Start-Test "Get-IPAddress IPv4 -IncludeVirtual"
-Get-IPAddress IPv4 -IncludeVirtual
+Start-Test "Resolve-Host LocalHost"
+Resolve-Host -Domain ([System.Environment]::MachineName)
 
-Start-Test "Get-IPAddress IPv4 -IncludeVirtual -IncludeDisconnected"
-Get-IPAddress IPv4 -IncludeVirtual -IncludeDisconnected
+Start-Test "Resolve-Host pipeline FlushDNS"
+Select-IPInterface -Physical | Resolve-Host -FlushDNS
 
-Start-Test "Get-IPAddress IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware"
-Get-IPAddress IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware
+Start-Test "Resolve-Host IPv4 microsoft.com"
+Resolve-Host -AddressFamily IPv4 -Domain "microsoft.com"
 
-Start-Test "Get-IPAddress IPv4 -IncludeHidden"
-Get-IPAddress IPv4 -IncludeHidden
-
-Start-Test "Get-IPAddress IPv4 -IncludeAll"
-$Result = Get-IPAddress IPv4 -IncludeAll
+Start-Test "Resolve-Host GoogleIP"
+$Result = Resolve-Host -IPAddress $GoogleIP
 $Result
 
-Start-Test "Get-IPAddress IPv4 -IncludeAll -ExcludeHardware"
-Get-IPAddress IPv4 -IncludeAll -ExcludeHardware
+Test-Output $Result -Command Resolve-Host
 
-Test-Output $Result -Command Get-IPAddress
+Start-Test "Resolve-Host microsoft.com FlushDNS"
+Resolve-Host -FlushDNS -Domain "microsoft.com"
+
+Start-Test "Resolve-Host GoogleIP FlushDNS"
+Resolve-Host -FlushDNS -IPAddress $GoogleIP
+
+Test-Output $Result -Command Resolve-Host
 
 Update-Log
 Exit-Test

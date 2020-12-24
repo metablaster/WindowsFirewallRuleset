@@ -176,7 +176,7 @@ Select-AdapterAlias Operational -Adapter @("Ethernet", "Realtek WI-FI")
 We select InterfaceAlias instead of adapter objects because of non consistent CIM parameters
 used by commandlets in this script resulting in errors
 TODO: Parameter to control strict selection
-TODO: This functionality should be part of Get-ConfiguredAdapter somehow if possible
+TODO: This functionality should be part of Select-IPInterface somehow if possible
 #>
 function Select-AdapterAlias
 {

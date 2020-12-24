@@ -28,33 +28,26 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Get broadcast addresses on the local machine
+Get broadcast address
 
 .DESCRIPTION
-Return broadcast addresses, for each configured adapter.
-This includes both physical and virtual adapters.
-Returned broadcast addresses are only for IPv4
+Get broadcast addresses, for specified network interfaces.
+Returned broadcast addresses are IPv4 and only for adapters connected to network.
 
-.PARAMETER IncludeAll
-Include all possible adapter types present on target computer
+.PARAMETER Physical
+If specified, include only physical adapters
 
-.PARAMETER ExcludeHardware
-Exclude hardware/physical network adapters
+.PARAMETER Virtual
+If specified, include only virtual adapters
 
-.PARAMETER IncludeVirtual
-Whether to include virtual adapters
-
-.PARAMETER IncludeHidden
-Whether to include hidden adapters
-
-.PARAMETER IncludeDisconnected
-Whether to include disconnected
+.PARAMETER Hidden
+If specified, only hidden interfaces are included
 
 .EXAMPLE
-PS> Get-Broadcast -IncludeAll
+PS> Get-Broadcast -Physical
 
 .EXAMPLE
-PS> Get-Broadcast -IncludeAll -ExcludeHardware
+PS> Get-Broadcast -Virtual -Hidden
 
 .INPUTS
 None. You cannot pipe objects to Get-Broadcast
@@ -63,46 +56,35 @@ None. You cannot pipe objects to Get-Broadcast
 [ipaddress] Broadcast addresses
 
 .NOTES
-TODO: Some parameters most likely make no sense, otherwise we should return custom object,
-separating addresses per adapter
+None.
 #>
 function Get-Broadcast
 {
-	[CmdletBinding(DefaultParameterSetName = "Individual",
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "None",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Get-Broadcast.md")]
 	[OutputType([ipaddress])]
 	param (
-		[Parameter(ParameterSetName = "All")]
-		[switch] $IncludeAll,
+		[Parameter(ParameterSetName = "Physical")]
+		[switch] $Physical,
 
-		[Parameter(ParameterSetName = "All")]
-		[Parameter(ParameterSetName = "Individual")]
-		[switch] $ExcludeHardware,
+		[Parameter(ParameterSetName = "Virtual")]
+		[switch] $Virtual,
 
-		[Parameter(ParameterSetName = "Individual")]
-		[switch] $IncludeVirtual,
-
-		[Parameter(ParameterSetName = "Individual")]
-		[switch] $IncludeHidden,
-
-		[Parameter(ParameterSetName = "Individual")]
-		[switch] $IncludeDisconnected
+		[Parameter()]
+		[switch] $Hidden
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting broadcast address of connected adapters"
 
 	# Broadcast address makes sense only for IPv4
-	if ($IncludeAll)
+	if ($Physical)
 	{
-		$ConfiguredAdapters = Get-ConfiguredAdapter IPv4 `
-			-IncludeAll:$IncludeAll -ExcludeHardware:$ExcludeHardware
+		$ConfiguredAdapters = Select-IPInterface -AddressFamily IPv4 -Connected -Physical:$Physical -Hidden:$Hidden
 	}
 	else
 	{
-		$ConfiguredAdapters = Get-ConfiguredAdapter IPv4 `
-			-IncludeVirtual:$IncludeVirtual -ExcludeHardware:$ExcludeHardware `
-			-IncludeHidden:$IncludeHidden -IncludeDisconnected:$IncludeDisconnected
+		$ConfiguredAdapters = Select-IPInterface -AddressFamily IPv4 -Connected -Virtual:$Virtual -Hidden:$Hidden
 	}
 
 	$ConfiguredAdapters = $ConfiguredAdapters | Select-Object -ExpandProperty IPv4Address
@@ -110,19 +92,19 @@ function Get-Broadcast
 
 	if ($Count -gt 0)
 	{
-		[ipaddress[]] $Broadcast = @()
+		[ipaddress[]] $BroadcastAddress = @()
 		foreach ($Adapter in $ConfiguredAdapters)
 		{
 			[ipaddress] $IPAddress = $Adapter | Select-Object -ExpandProperty IPAddress
 			$SubnetMask = ConvertTo-Mask ($Adapter | Select-Object -ExpandProperty PrefixLength)
 
-			$Broadcast += Get-NetworkSummary $IPAddress $SubnetMask |
+			$BroadcastAddress += Get-NetworkSummary $IPAddress $SubnetMask |
 			Select-Object -ExpandProperty BroadcastAddress |
 			Select-Object -ExpandProperty IPAddressToString
 		}
 
-		Write-Information -Tags "Result" -MessageData "INFO: Network broadcast addresses are: $Broadcast"
-		return $Broadcast
+		Write-Information -Tags "Result" -MessageData "INFO: Network broadcast addresses are: $BroadcastAddress"
+		Write-Output $BroadcastAddress
 	}
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] returns null"

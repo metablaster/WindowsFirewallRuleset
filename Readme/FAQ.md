@@ -193,7 +193,11 @@ So here is an overview to help you see what they do hopefully answering all of y
     only.
     - Once you close down (or open new) PowerShell session, module path modifications are lost.
 
-4. All other system or session settings are left alone **by default** unless you demand or accept
+4. Required system services are started and set to automatic startup
+
+    - Inside `Logs` you'll find `Services-DATE.LOG` to help you restore defaults
+
+5. All other system or session settings are left alone **by default** unless you demand or accept
 them as follows:
 
     - Adjust console buffer size (valid until you close down PowerShell)
@@ -215,7 +219,7 @@ them as follows:
     - You manually load software configuration from `Config` folder
     - You run experimental or dangerous tests from `Test` folder (default action for these tests is `No`)
 
-5. Here is a list of scripts that may behave unexpectedly because these are either experimental,
+6. Here is a list of scripts that may behave unexpectedly because these are either experimental,
    not intended for end user or hard to get right, therefore you should review them first to learn
    their purpose
 
@@ -233,7 +237,7 @@ them as follows:
     By default none of these scripts run on their own, except as explained in point 4.\
     Those scripts listed above which begin with `...\` exist in at least `Modules` and `Test` subdirectories.
 
-6. Following is a list of external executables that are run by some scripts
+7. Following is a list of external executables that are run by some scripts
 
     - [gpupdate.exe][gpupdate] (Apply GPO to avoid system restart)
     - [reg.exe][reg] (To load offline registry hive)
@@ -241,7 +245,7 @@ them as follows:
     - [git.exe][git] (To learn git version)
     - [makecab.exe][makecab] (To make online help content)
 
-7. There is nothing harmful here
+8. There is nothing harmful here
 
    - Some scripts such as `initialize-module.ps1` will contact online PowerShell repository
    to download or update modules, however this happens only if you manually enable setting

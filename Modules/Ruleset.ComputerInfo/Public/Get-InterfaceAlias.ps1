@@ -28,33 +28,39 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Retrieve a aliases of configured network adapters
+Get interface aliases of specified network adapters
 
 .DESCRIPTION
-Return list of interface aliases of all configured adapters.
-Applies to adapters which have an IP assigned regardless if connected to network.
-This may include virtual adapters as well such as Hyper-V adapters on all compartments.
+Get a list of interface aliases of specified network adapters.
+This function takes care of interface aliases with wildcard patterns, by replacing them with
+escape codes which is required to create valid fiewall rule based on interface alias.
 
 .PARAMETER AddressFamily
-IP version for which to obtain adapters, IPv4 or IPv6
+Obtain interface aliases configured for specific IP version
 
 .PARAMETER WildCardOption
-TODO: describe parameter
+Specify wildcard options that modify the wildcard patterns found in interface alias strings.
+Compiled:
+The wildcard pattern is compiled to an assembly.
+This yields faster execution but increases startup time.
+CultureInvariant:
+Specifies culture-invariant matching.
+IgnoreCase:
+Specifies case-insensitive matching.
+None:
+Indicates that no special processing is required.
 
-.PARAMETER ExcludeHardware
-Exclude hardware/physical network adapters
+.PARAMETER Physical
+If specified, include only physical adapters
 
-.PARAMETER IncludeAll
-Include all possible adapter types present on target computer
+.PARAMETER Virtual
+If specified, include only virtual adapters
 
-.PARAMETER IncludeVirtual
-Whether to include virtual adapters
+.PARAMETER Hidden
+If specified, only hidden interfaces are included
 
-.PARAMETER IncludeHidden
-Whether to include hidden adapters
-
-.PARAMETER IncludeDisconnected
-Whether to include disconnected
+.PARAMETER Connected
+If specified, only interfaces connected to network are returned
 
 .EXAMPLE
 PS> Get-InterfaceAlias "IPv4"
@@ -69,98 +75,73 @@ None. You cannot pipe objects to Get-InterfaceAlias
 [System.Management.Automation.WildcardPattern]
 
 .NOTES
-None.
 TODO: There is another function with the same name in Scripts folder
-TODO: shorter parameter names: Virtual, All, Hidden, Hardware
 #>
 function Get-InterfaceAlias
 {
-	[CmdletBinding(DefaultParameterSetName = "Individual",
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "None",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Get-InterfaceAlias.md")]
 	[OutputType([System.Management.Automation.WildcardPattern])]
 	param (
-		[Parameter(Mandatory = $true, Position = 0)]
-		[ValidateSet("IPv4", "IPv6")]
-		[Parameter(ParameterSetName = "All")]
-		[Parameter(ParameterSetName = "Individual")]
-		[string] $AddressFamily,
+		[Parameter()]
+		[Alias("IPVersion")]
+		[ValidateSet("IPv4", "IPv6", "Any")]
+		[string] $AddressFamily = "Any",
 
-		[Parameter(Mandatory = $false)]
-		[Parameter(ParameterSetName = "All")]
-		[Parameter(ParameterSetName = "Individual")]
-		[System.Management.Automation.WildcardOptions]
-		$WildCardOption = [System.Management.Automation.WildcardOptions]::None,
+		[Parameter()]
+		[WildcardOptions] $WildCardOption = [WildcardOptions]::None,
 
-		[Parameter(ParameterSetName = "All")]
-		[Parameter(ParameterSetName = "Individual")]
-		[switch] $ExcludeHardware,
+		[Parameter(ParameterSetName = "Physical")]
+		[switch] $Physical,
 
-		[Parameter(ParameterSetName = "All")]
-		[switch] $IncludeAll,
+		[Parameter(ParameterSetName = "Virtual")]
+		[switch] $Virtual,
 
-		[Parameter(ParameterSetName = "Individual")]
-		[switch] $IncludeVirtual,
+		[Parameter()]
+		[switch] $Hidden,
 
-		[Parameter(ParameterSetName = "Individual")]
-		[switch] $IncludeHidden,
-
-		[Parameter(ParameterSetName = "Individual")]
-		[switch] $IncludeDisconnected
+		[Parameter()]
+		[switch] $Connected
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting connected adapters for $AddressFamily network"
 
-	if ($IncludeAll)
+	if ($Physical)
 	{
-		$ConfiguredInterfaces = Get-ConfiguredAdapter $AddressFamily `
-			-IncludeAll:$IncludeAll -ExcludeHardware:$ExcludeHardware
+		$ConfiguredInterfaces = Select-IPInterface -AddressFamily:$AddressFamily `
+			-Connected:$Connected -Hidden:$Hidden -Physical:$Physical
 	}
 	else
 	{
-		$ConfiguredInterfaces = Get-ConfiguredAdapter $AddressFamily `
-			-IncludeVirtual:$IncludeVirtual -ExcludeHardware:$ExcludeHardware `
-			-IncludeHidden:$IncludeHidden -IncludeDisconnected:$IncludeDisconnected
+		$ConfiguredInterfaces = Select-IPInterface -AddressFamily:$AddressFamily `
+			-Connected:$Connected -Hidden:$Hidden -Virtual:$Virtual
 	}
 
 	if (!$ConfiguredInterfaces)
 	{
-		# NOTE: Error should be generated and shown by Get-ConfiguredAdapter
+		# NOTE: Error should be generated and shown by Select-IPInterface
 		return $null
 	}
 
-	[string[]] $InterfaceAliases = $ConfiguredInterfaces | Select-Object -ExpandProperty InterfaceAlias
-	if ($InterfaceAliases.Length -eq 0)
-	{
-		Write-Error -Category ObjectNotFound -TargetObject $InterfaceAliases `
-			-Message "None of the adapters matches search criteria to get interface aliases from"
-		return
-	}
+	[WildcardPattern[]] $EscapedAliasPattern = @()
+	$InterfaceAliases = $ConfiguredInterfaces | Select-Object -ExpandProperty InterfaceAlias
 
-	[WildcardPattern[]] $InterfaceAliasPattern = @()
 	foreach ($Alias in $InterfaceAliases)
 	{
 		if ([WildcardPattern]::ContainsWildcardCharacters($Alias))
 		{
-			Write-Warning -Message "$Alias Interface alias contains wildcard pattern"
+			Write-Warning -Message "$Alias interface alias contains wildcard pattern"
+
+			# NOTE: If WildCardOption == None, the pattern does not have wild cards
+			$AliasPattern = [WildcardPattern]::new($Alias, $WildCardOption)
+			$EscapedAliasPattern += [WildcardPattern]::Escape($AliasPattern)
 		}
 		else
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Interface alias '$Alias' does not contain wildcard pattern"
+			$EscapedAliasPattern += $Alias
 		}
-
-		$InterfaceAliasPattern += [WildcardPattern]::new($Alias, $WildCardOption)
 	}
 
-	if ($InterfaceAliasPattern.Length -eq 0)
-	{
-		Write-Error -Category ObjectNotFound -TargetObject $InterfaceAliasPattern `
-			-Message "Creating interface alias patterns failed"
-	}
-	elseif ($InterfaceAliasPattern.Length -gt 1)
-	{
-		Write-Information -Tags "User" -MessageData "INFO: Got multiple adapter aliases"
-	}
-
-	return $InterfaceAliasPattern
+	Write-Output $EscapedAliasPattern
 }

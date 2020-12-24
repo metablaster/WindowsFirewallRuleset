@@ -64,29 +64,17 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 Enter-Test
 
 Start-Test "Get-Broadcast"
-Get-Broadcast
-
-Start-Test "Get-Broadcast -IncludeDisconnected"
-Get-Broadcast -IncludeDisconnected
-
-Start-Test "Get-Broadcast -IncludeVirtual"
-Get-Broadcast -IncludeVirtual
-
-Start-Test "Get-Broadcast -IncludeVirtual -IncludeDisconnected"
-Get-Broadcast -IncludeVirtual -IncludeDisconnected
-
-Start-Test "Get-Broadcast -IncludeVirtual -IncludeDisconnected -ExcludeHardware"
-Get-Broadcast -IncludeVirtual -IncludeDisconnected -ExcludeHardware
-
-Start-Test "Get-Broadcast -IncludeHidden"
-Get-Broadcast -IncludeHidden
-
-Start-Test "Get-Broadcast -IncludeAll"
-$Result = Get-Broadcast -IncludeAll
+$Result = Get-Broadcast
 $Result
 
-Start-Test "Get-Broadcast -IncludeAll -ExcludeHardware"
-Get-Broadcast -IncludeAll -ExcludeHardware
+Start-Test "Get-Broadcast -Virtual"
+Get-Broadcast -Virtual
+
+Start-Test "Get-Broadcast -Physical"
+Get-Broadcast -Physical
+
+Start-Test "Get-Broadcast -Hidden"
+Get-Broadcast -Hidden
 
 Test-Output $Result -Command Get-Broadcast
 

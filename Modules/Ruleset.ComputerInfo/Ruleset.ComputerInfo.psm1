@@ -27,6 +27,7 @@ SOFTWARE.
 #>
 
 # Initialization
+using namespace System.Management.Automation # Get-InterfaceAlias
 New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Value (Split-Path $PSScriptRoot -Leaf)
 
 # Imports
@@ -41,9 +42,9 @@ $PublicScripts = @(
 	"ConvertFrom-OSBuild"
 	"Get-Broadcast"
 	"Get-ComputerName"
-	"Get-ConfiguredAdapter"
+	"Select-IPInterface"
 	"Get-InterfaceAlias"
-	"Get-IPAddress"
+	"Resolve-Host"
 	"Get-SystemSKU"
 	"Test-TargetComputer"
 )
