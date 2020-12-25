@@ -53,7 +53,7 @@ $PublicScripts = @(
 	"Confirm-FileEncoding"
 	"Select-EnvironmentVariable"
 	"Get-FileEncoding"
-	"Get-NetworkService"
+	"Find-NetworkService"
 	"Get-ProcessOutput"
 	"Get-TypeName"
 	"Resolve-WildcardPath"

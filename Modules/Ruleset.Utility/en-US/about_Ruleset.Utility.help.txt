@@ -32,7 +32,7 @@ EXAMPLES
 	Get-FileEncoding
 	Gets the encoding of a file
 
-	Get-NetworkService
+	Find-NetworkService
 	Get a list of windows services involved in rules
 
 	Get-ProcessOutput

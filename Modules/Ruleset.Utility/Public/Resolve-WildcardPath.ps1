@@ -28,31 +28,37 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Resolve directory to single path
+Resolve wildcard directory to single path
 
 .DESCRIPTION
-Ensure directory name wildcard pattern resolves to single path or fail.
-Unlike Resolve-Path which produces System.Management.Automation.PathInfo
-we use and produce System.IO.DirectoryInfo
+Ensure directory or file name wildcard pattern resolves to single location.
+Unlike Resolve-Path which uses [string] and produces [System.Management.Automation.PathInfo] object,
+this function uses and produces strong .NET type, either [System.IO.DirectoryInfo] or [System.IO.FileInfo]
 
 .PARAMETER Path
 Directory location to target path.
-The parent directory of the target path must exist.
+At least the parent directory of the target path must exist.
+Wildcard characters and relative paths are supported.
 
 .PARAMETER File
-File location to target file
-The parent directory of the target path must exist.
+File location to target file.
+At least the parent directory of the target path must exist.
+Wildcard characters and relative paths are supported.
 
 .PARAMETER Create
-If specified, target directory is created if it doesn't exist
+If specified, target directory or file is created if it doesn't exist
 
 .PARAMETER As
-Specify desired output type, the default depens on input:
-for directory it's System.IO.DirectoryInfo
-for file it's System.IO.FileInfo
+Optionally specify desired output type, the default depens on input:
+for directory it's [System.IO.DirectoryInfo],
+for file it's [System.IO.FileInfo]
+Specifying "String" produces resolved string object path.
 
 .EXAMPLE
-PS> Resolve-WildcardPath "C:\Win\System3*"
+PS> Resolve-WildcardPath "C:\Win\Sys?em3*"
+
+.EXAMPLE
+PS> Resolve-WildcardPath "..\..\Dir*"
 
 .INPUTS
 None. You cannot pipe objects to Resolve-WildcardPath
@@ -63,7 +69,7 @@ None. You cannot pipe objects to Resolve-WildcardPath
 [System.IO.FileInfo]
 
 .NOTES
-TODO: Implement [System.Management.Automation.PathInfo]
+TODO: If possible implement [System.Management.Automation.PathInfo]
 #>
 function Resolve-WildcardPath
 {
@@ -92,20 +98,21 @@ function Resolve-WildcardPath
 	if ($Path)
 	{
 		[string] $Item = "directory"
-		[string] $Original = $Path.FullName
-		[string] $Target = Resolve-Path -Path $Path.FullName
+		[string] $Original = $Path
+		[string] $Target = Resolve-Path -Path $Path
 	}
 	else
 	{
 		[string] $Item = "file"
-		[string] $Original = $File.FullName
-		[string] $Target = Resolve-Path -Path $File.FullName
+		[string] $Original = $File
+		[string] $Target = Resolve-Path -Path $File
 	}
 
 	$PathCount = ($Target | Measure-Object).Count
 
 	if ($PathCount -eq 0)
 	{
+		# If target item does not exist try to resolve path to parent directory
 		$ParentPath = Split-Path -Path $Original -Parent
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Resolving parent $Item $Original"
 
@@ -117,9 +124,15 @@ function Resolve-WildcardPath
 			$Target = "$Target\$(Split-Path -Path $Original -Leaf)"
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Parent $Item resolved to: $Target"
 		}
+		elseif (($PathCount -eq 0) -and !(Test-Path -Path $ParentPath -PathType Leaf -IsValid))
+		{
+			# This test is valid only for no match
+			Write-Warning -Message "Parent directory is not valid: $ParentPath"
+		}
 		else
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Failed to resolve parent $Item"
+			Write-Warning -Message "Failed to resolve parent directory of: $Original"
+			# Pass trough to show error
 		}
 	}
 
@@ -127,10 +140,26 @@ function Resolve-WildcardPath
 	{
 		if ($As -eq "String")
 		{
-			if ($Create -and !(Test-Path -Path $Target -PathType Container))
+			if ($Create)
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating $Item $Target"
-				New-Item -ItemType Directory -Path $Target -ErrorAction Stop | Out-Null
+				try
+				{
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating $Item $Target"
+
+					if ($Path -and !(Test-Path -Path $Target -PathType Container))
+					{
+						New-Item -ItemType Directory -Path $Target -ErrorAction Stop | Out-Null
+					}
+					elseif ($File -and !(Test-Path -Path $Target -PathType Leaf))
+					{
+						New-Item -ItemType File -Path $Target -ErrorAction Stop | Out-Null
+					}
+				}
+				catch
+				{
+					Write-Error -Category OperationStopped -TargetObject $Target -Message "The $Item cannot be created: $Target"
+					return $null
+				}
 			}
 
 			return $Target
@@ -154,7 +183,7 @@ function Resolve-WildcardPath
 			}
 			catch # IOException
 			{
-				Write-Error -Category InvalidResult -TargetObject $Path -Message "The $Item cannot be created: $TargetInfo"
+				Write-Error -Category OperationStopped -TargetObject $TargetInfo -Message "The $Item cannot be created: $TargetInfo"
 				return $null
 			}
 		}

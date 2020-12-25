@@ -63,15 +63,15 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
-Start-Test "gpupdate.exe /target:computer -Wait 100"
-Get-ProcessOutput -NoNewWindow -FilePath gpupdate.exe -ArgumentList "/target:computer" -Wait 100
+Start-Test "path to gpupdate.exe /target:computer -Wait 100"
+Get-ProcessOutput -Path "C:\WINDOWS\system32\gpupdate.exe" -NoNewWindow -ArgumentList "/target:computer" -Wait 100
 
 Start-Test "gpupdate.exe /target:computer"
-Get-ProcessOutput -NoNewWindow -FilePath gpupdate.exe -ArgumentList "/target:computer" -Format
+Get-ProcessOutput gpupdate.exe -NoNewWindow -ArgumentList "/target:computer" -Format
 
 Start-Test "git.exe status"
 # TODO: Does not work with Desktop edition
-$Result = Get-ProcessOutput -FilePath "git.exe" -ArgumentList "status" -NoNewWindow
+$Result = Get-ProcessOutput "git.exe" -ArgumentList "status" -NoNewWindow
 $Result
 
 Test-Output $Result -Command Get-ProcessOutput

@@ -35,8 +35,13 @@ Run process with or without arguments, set wait time and capture output.
 If the target process results in an error, error message is formatted and shown in addition
 to standard output if any.
 
-.PARAMETER FilePath
-The application or document to start
+.PARAMETER Application
+Executable name.
+Should be in PATH environment variable to resolve.
+
+.PARAMETER Path
+The path to application or document to start.
+Wildcard characters and relative paths are supported.
 
 .PARAMETER ArgumentList
 A collection of command-line arguments to use when starting the application
@@ -49,10 +54,10 @@ Number of milliseconds to wait for the associated process to exit
 Default is 0, which means wait indefinitely
 
 .PARAMETER Format
-If specified formats standard output into INFO messages
+If specified, formats standard output into INFO messages
 
 .EXAMPLE
-PS> Get-ProcessOutput -FilePath "git.exe" -ArgumentList "status" -NoNewWindow -Wait 3000
+PS> Get-ProcessOutput -Path "git.exe" -ArgumentList "status" -NoNewWindow -Wait 3000
 
 .INPUTS
 None. You cannot pipe objects to Get-ProcessOutput
@@ -66,12 +71,16 @@ TODO: consider renaming to Format-ProcessOutput
 #>
 function Get-ProcessOutput
 {
-	[CmdletBinding(
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Program",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Get-ProcessOutput.md")]
 	[OutputType([string])]
 	Param (
-		[Parameter(Mandatory = $true)]
-		[string] $FilePath,
+		[Parameter(Mandatory = $true, Position = 0, ParameterSetName = "Program")]
+		[string] $Application,
+
+		[Parameter(Mandatory = $true, ParameterSetName = "Path")]
+		[SupportsWildcards()]
+		[System.IO.FileInfo] $Path,
 
 		[Parameter()]
 		[string] $ArgumentList,
@@ -86,16 +95,25 @@ function Get-ProcessOutput
 		[switch] $Format
 	)
 
-	$InputFile = Get-Command -Name $FilePath -CommandType Application -ErrorAction SilentlyContinue
-	if (($InputFile | Measure-Object).Count -gt 1)
+	if ($Path)
 	{
-		Write-Error -Category InvalidArgument -TargetObject $FilePath -Message "Multiple results for '$FilePath' exist, please use full path to file and try again"
-		return
+		[System.IO.FileInfo] $FilePath = Resolve-WildcardPath -File $Path
+		if (!($FilePath -and $FilePath.Exists))
+		{
+			return
+		}
 	}
-	elseif (!$InputFile)
+	else
 	{
-		Write-Error -Category ObjectNotFound -TargetObject $InputFile -Message "File '$FilePath' does not exist, please verify spelling or PATH entry and try again"
-		return
+		[System.Management.Automation.ApplicationInfo] $Command = Get-Command -Name $Application -CommandType Application -ErrorAction SilentlyContinue
+
+		if (!$Command)
+		{
+			Write-Error -Category ObjectNotFound -TargetObject $Application -Message "The application '$Application' was not found"
+			return
+		}
+
+		[System.IO.FileInfo] $FilePath = $Command.Source
 	}
 
 	$Process = New-Object System.Diagnostics.Process
@@ -116,8 +134,8 @@ function Get-ProcessOutput
 		$Process.StartInfo.Arguments = $ArgumentList
 	}
 
-	# # TODO: Not working as expected
-	# # Creating string builders to store stdout.
+	# TODO: Not working as expected
+	# Creating string builders to store stdout.
 	# $StdOutBuilder = New-Object -TypeName System.Text.StringBuilder
 
 	# # Adding event handler for stdout.
@@ -138,7 +156,7 @@ function Get-ProcessOutput
 		return
 	}
 
-	# # NOTE: Part of commented code above
+	# NOTE: Part of commented code above
 	# $Process.BeginOutputReadLine()
 
 	if ($Wait -gt 0)
@@ -159,8 +177,8 @@ function Get-ProcessOutput
 
 		$Process.WaitForExit()
 
-		# # NOTE: Part of commented code above
-		# # Un-registering events to retrieve process output.
+		# NOTE: Part of commented code above
+		# Un-registering events to retrieve process output.
 		# Unregister-Event -SourceIdentifier $StdOutEvent.Name
 
 		# $StdOutBuilder.ToString()

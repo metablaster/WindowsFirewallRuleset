@@ -34,45 +34,48 @@ Get a list of windows services involved in rules
 Scan all scripts in this repository and get windows service names involved in rules,
 the result is saved to file and used to verify existence of these services on target system.
 
-.PARAMETER Folder
+.PARAMETER Path
 Root folder name which to scan recursively
 
 .EXAMPLE
-PS> Get-NetworkService "C:\PathToRepo"
+PS> Find-NetworkService "C:\PathToRepo"
 
 .INPUTS
-None. You cannot pipe objects to Get-NetworkService
+None. You cannot pipe objects to Find-NetworkService
 
 .OUTPUTS
-None. Get-NetworkService does not generate any output
+None. Find-NetworkService does not generate any output
 
 .NOTES
 None.
 #>
-function Get-NetworkService
+function Find-NetworkService
 {
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Get-NetworkService.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Find-NetworkService.md")]
 	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true)]
-		[string] $Folder
+		[SupportsWildcards()]
+		[System.IO.DirectoryInfo] $Path
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Scanning rules for network services"
 
-	if (!(Test-Path -Path $Folder))
+	[System.IO.DirectoryInfo] $Directory = Resolve-WildcardPath -Path $Path
+
+	if (!($Directory -and $Directory.Exists))
 	{
-		Write-Warning -Message "Unable to locate path '$Folder'"
+		Write-Warning -Message "Unable to locate path '$Path'"
 		return
 	}
 
 	# Recursively get powershell scripts in input folder
-	$Files = Get-ChildItem -Path $Folder -Recurse -Filter *.ps1
+	$Files = Get-ChildItem -Path $Directory -Recurse -Filter *.ps1
 	if (!$Files)
 	{
-		Write-Warning -Message "No powershell script files found in '$Folder'"
+		Write-Warning -Message "No powershell script files found in '$Directory'"
 		return
 	}
 

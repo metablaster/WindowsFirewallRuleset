@@ -28,19 +28,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Get-NetworkService
+Unit test for Find-NetworkService
 
 .DESCRIPTION
-Unit test for Get-NetworkService
+Unit test for Find-NetworkService
 
 .EXAMPLE
-PS> .\Get-NetworkService.ps1
+PS> .\Find-NetworkService.ps1
 
 .INPUTS
-None. You cannot pipe objects to Get-NetworkService.ps1
+None. You cannot pipe objects to Find-NetworkService.ps1
 
 .OUTPUTS
-None. Get-NetworkService.ps1 does not generate any output
+None. Find-NetworkService.ps1 does not generate any output
 
 .NOTES
 None.
@@ -63,11 +63,11 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
-Start-Test "Get-NetworkService"
-$Result = Get-NetworkService "$ProjectRoot\Rules"
+Start-Test "Find-NetworkService"
+$Result = Find-NetworkService "$ProjectRoot\Rules"
 $Result
 
-Test-Output $Result -Command Get-NetworkService
+Test-Output $Result -Command Find-NetworkService
 
 Update-Log
 Exit-Test

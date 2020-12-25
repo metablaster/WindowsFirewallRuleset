@@ -92,7 +92,7 @@ Set-ScreenBuffer 4000
 
 # Check all rules that apply to windows services
 Test-File $ServiceHost
-Get-NetworkService $ProjectRoot\Rules
+Find-NetworkService $ProjectRoot\Rules
 Confirm-FileEncoding $ProjectRoot\Rules\NetworkServices.txt
 Get-Content -Path $ProjectRoot\Rules\NetworkServices.txt -Encoding $DefaultEncoding |
 ForEach-Object {
