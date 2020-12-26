@@ -54,7 +54,7 @@ $PublicScripts = @(
 	"Select-EnvironmentVariable"
 	"Get-FileEncoding"
 	"Find-NetworkService"
-	"Get-ProcessOutput"
+	"Invoke-Process"
 	"Get-TypeName"
 	"Resolve-FileSystem"
 	"Set-NetworkProfile"

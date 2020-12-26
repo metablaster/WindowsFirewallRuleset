@@ -40,6 +40,9 @@ Path to the file which to check
 .PARAMETER Encoding
 Expected encoding
 
+.PARAMETER Binary
+If specified, handles binary files as well.
+
 .EXAMPLE
 PS> Confirm-FileEncoding C:\SomeFile.txt utf16
 
@@ -64,7 +67,10 @@ function Confirm-FileEncoding
 		[System.IO.FileInfo[]] $Path,
 
 		[Parameter()]
-		[string[]] $Encoding = @("utf-8", "us-ascii")
+		[string[]] $Encoding = @("utf-8", "us-ascii"),
+
+		[Parameter()]
+		[switch] $Binary
 	)
 
 	begin
@@ -90,6 +96,12 @@ function Confirm-FileEncoding
 			}
 
 			$TargetEncoding = Get-FileEncoding $File
+			if (($TargetEncoding -eq "Binary") -and !$Binary)
+			{
+				Write-Debug -Message "File $FileName encoded as $TargetEncoding verification skipped"
+				continue
+			}
+
 			$FileName = Split-Path -Path $File -Leaf
 
 			if ([array]::Find($Encoding, [System.Predicate[string]] { $TargetEncoding -eq $args[0] }))

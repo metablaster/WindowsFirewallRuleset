@@ -66,8 +66,7 @@ None. You cannot pipe objects to Resolve-FileSystem
 [System.IO.FileInfo]
 
 .NOTES
-None.
-TODO: Should be named something else because relative paths are accepted too, ex. Resolve-FSPath
+TODO: Implement -Relative parameter, see Resolve-Path
 #>
 function Resolve-FileSystem
 {
@@ -94,13 +93,14 @@ function Resolve-FileSystem
 
 	if (!(Test-Path -Path $TestPath -IsValid))
 	{
-		Write-Error -Category InvalidArgument -TargetObject $TestPath -Message "The path syntax is not valid: $TestPath"
+		Write-Error -Category SyntaxError -TargetObject $TestPath -Message "The path syntax is not valid: $TestPath"
 		return
 	}
 
-	# TODO: will not work for relative paths
+	# TODO: will not work for relative paths, see: Convert-Path
 	$TestPath = Split-Path -Path $Path -Qualifier
 
+	# TODO: What about root drives, ex. no parent?
 	if (Test-Path -Path $TestPath -IsValid)
 	{
 		$PSTarget = Resolve-Path -Path $TestPath -ErrorAction Ignore
@@ -202,5 +202,5 @@ function Resolve-FileSystem
 		return
 	}
 
-	Write-Error -Category InvalidArgument -TargetObject $TestPath -Message "Unable to resolve path: $TestPath"
+	Write-Error -Category ParserError -TargetObject $TestPath -Message "Unable to resolve path: $TestPath"
 }

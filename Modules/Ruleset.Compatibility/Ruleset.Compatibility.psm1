@@ -43,6 +43,7 @@ New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Value (Split-Path 
 . $ProjectRoot\Modules\ModulePreferences.ps1
 
 # TODO: -NoClobber, this module may already exist on target computer
+# TODO: Take time to load + hide blinking progress bar
 
 #
 # Script imports

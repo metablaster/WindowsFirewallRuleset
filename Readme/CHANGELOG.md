@@ -26,9 +26,8 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - Modules
 
-  Improved functions:
-  - `ConvertFrom-SDDL`
-  - `Get-SDDL`
+  - All module functions significantly improved
+  - Several functions were renamed to be more descriptive of their purpose
 
 - Rules
 
@@ -41,6 +40,9 @@ If you would like to see fresh changes done since last release you can do so on 
   - `Test-MarkdownLinks` function to find dead links in markdown files
   - `Resolve-FileSystem` function to resolve path wildcard pattern or relative paths to `System.IO.*Info`
   - `Reset-TestDrive` function to safely clear test drive directory for cleaner and smoother unit testing.
+  - `Resolve-Host` function used to resolve host to IP or an IP to host.
+  - `Test-UPN` function used to validate syntax of Universal Principal Name (UPN)
+  - `Convert-FromSDDL` function to resolve SDDL strings into principal, user name, SID and domain
 
 - Tests
 

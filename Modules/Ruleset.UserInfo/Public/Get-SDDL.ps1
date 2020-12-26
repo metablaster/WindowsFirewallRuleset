@@ -28,20 +28,20 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Generate SDDL string
+Get SDDL string of a user, group or from path
 
 .DESCRIPTION
 Get SDDL string for single or multiple user names and/or user groups, file system or registry
 locations on a single target computer
 
 .PARAMETER User
-One or more users for which to generate SDDL string
+One or more users for which to obtain SDDL string
 
 .PARAMETER Group
-One or more user groups for which to generate SDDL string
+One or more user groups for which to obtain SDDL string
 
-.PARAMETER LiteralPath
-One or multiple file system or registry locations from which to obtain SDDL
+.PARAMETER Path
+Single file system or registry location for which to obtain SDDL
 
 .PARAMETER Domain
 Single domain or computer such as remote computer name or builtin computer domain
@@ -53,22 +53,22 @@ Whether to contact CIM server (required for remote computers)
 If specified combines resultant SDDL strings into one
 
 .EXAMPLE
-PS> [string[]] $Users = "User"
-PS> [string] $Server = COMPUTERNAME
-PS> [string[]] $Groups = "Users", "Administrators"
-
-PS> $UsersSDDL1 = Get-SDDL -User $Users -Group $Groups
-PS> $UsersSDDL2 = Get-SDDL -User $Users -Domain $Server
-PS> $UsersSDDL3 = Get-SDDL -Group $Groups
+PS> Get-SDDL -User USERNAME -Domain COMPUTERNAME -CIM
 
 .EXAMPLE
-PS> $NewSDDL = Get-SDDL -Domain "NT AUTHORITY" -User "System"
+PS> Get-SDDL -Group @("Users", "Administrators") -Merge
+
+.EXAMPLE
+PS> Get-SDDL -Domain "NT AUTHORITY" -User "System"
+
+.EXAMPLE
+Get-SDDL -Path "HKLM:\SOFTWARE\Microsoft\Clipboard"
 
 .INPUTS
 None. You cannot pipe objects to Get-SDDL
 
 .OUTPUTS
-[string] SDDL for given accounts or/and group for given domain
+[string]
 
 .NOTES
 None.
@@ -86,10 +86,11 @@ function Get-SDDL
 
 		[Alias("UserGroup")]
 		[Parameter(Mandatory = $true, ParameterSetName = "Group")]
+		[SupportsWildcards()]
 		[string[]] $Group,
 
 		[Parameter(Mandatory = $true, ParameterSetName = "Path")]
-		[string[]] $LiteralPath,
+		[string] $Path,
 
 		[Alias("ComputerName", "CN")]
 		[Parameter(Mandatory = $false)]
@@ -104,48 +105,91 @@ function Get-SDDL
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-	[string] $SDDL = "D:"
+	# Glossary:
+	# SDDL: Security Descriptor Definition Language
+	# ACE: Access Control Entry (Describes what access rights a security principal has to the secured object)
+	# SID: Security IDentifier (Identifies a user or group)
+	# DACL: Discretionary Access Control List (ACEs in DACL identify the users and groups that are assigned or denied access permissions on an object)
+	# SACL: System Access Control List (ACEs in a SACL determine what types of access is logged in the Security Event Log)
+	# ACL: Access Control List (Base name for DACL and SACL, DACL and SACL are ACL's)
 
-	if ($LiteralPath)
+	# https://docs.microsoft.com/en-us/windows/win32/secauthz/ace-strings
+	# SDDL uses ACE strings in the DACL and SACL, each ACE is enclosed in parentheses.
+	# The fields of each ACE are separated by semicolons.
+	# ace_type;ace_flags;rights;object_guid;inherit_object_guid;account_sid;(resource_attribute)
+
+	# https://docs.microsoft.com/en-us/windows/win32/secauthz/security-descriptor-definition-language
+	# The four main components of SDDL are: owner SID (O:), primary group SID (G:), DACL flags (D:), and SACL flags (S:)
+
+	<# 	The DACL flags can be a concatenation of zero or more of the following strings:
+	"P"					SE_DACL_PROTECTED flag is set.
+	"AR"				SE_DACL_AUTO_INHERIT_REQ flag is set.
+	"AI"				SE_DACL_AUTO_INHERITED flag is set.
+	"NO_ACCESS_CONTROL"	ACL is null.
+	#>
+
+	[string] $SDDL = $null
+
+	if ($Path)
 	{
 		if ($CIM)
 		{
+			# TODO: Get-CimInstance something
 			Write-Error -Category NotImplemented -TargetObject $TargetPath `
 				-Message "Getting SDDL for path location from remote computers not implemented"
 			return
 		}
 
-		foreach ($PathItem in $LiteralPath)
+		# TODO: Multiple paths should be supported either here or trough path parameter
+		$TargetPath = Resolve-Path -Path $Path -ErrorAction Ignore
+		$ItemCount = ($TargetPath | Measure-Object).Count
+
+		if ($ItemCount -eq 0)
 		{
-			$TargetPath = Resolve-Path -Path $PathItem -ErrorAction Ignore
+			Write-Error -Category ObjectNotFound -TargetObject $Path -Message "The path could not be resolved: $Path"
+			return
+		}
+		elseif ($ItemCount -gt 1)
+		{
+			Write-Error -Category ObjectNotFound -TargetObject $Path -Message "The path resolves to multiple $($ItemCount) paths: $Path"
+			return
+		}
 
-			if (!$TargetPath)
+		$ACL = Get-Acl $TargetPath
+		if (!$ACL)
+		{
+			Write-Warning -Message "The path is missing SDDL entry: $TargetPath"
+			return
+		}
+
+		if ($Merge)
+		{
+			if ($ACL.Sddl -match "D\:\w+\(.+\)")
 			{
-				Write-Error -Category ObjectNotFound -TargetObject $PathItem -Message "The path does not exist: $PathItem"
-				continue
+				$SDDL = $Matches[0]
+			}
+		}
+		elseif ($ACL.Sddl -match "D\:\w+")
+		{
+			$SDDLSplit = $ACL.Sddl.Split("(").TrimEnd(")")
+			foreach ($Item in $SDDLSplit)
+			{
+				Write-Output "$($Matches[0])($Item)"
 			}
 
-			$ACL = Get-Acl $TargetPath
-			if ($ACL)
-			{
-				if ($Merge)
-				{
-					$SDDL += $ACL.Sddl
-				}
-				else
-				{
-					Write-Output $ACL.Sddl
-				}
-			}
-			else
-			{
-				Write-Warning -Message "The path contains no principals: $TargetPath"
-				continue
-			}
+			return
+		}
+
+		if ([string]::IsNullOrEmpty($SDDL))
+		{
+			Write-Warning -Message "The path is missing DACL entry: $TargetPath"
+			return
 		}
 	}
 	else
 	{
+		$SDDL = "D:"
+
 		foreach ($UserName in $User)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting user principal SDDL: $Domain\$UserName"
@@ -153,14 +197,14 @@ function Get-SDDL
 			$SID = Get-PrincipalSID $UserName -Domain $Domain -CIM:$CIM
 			if ($SID)
 			{
-				$NewSDDL = "(A;;CC;;;{0})" -f $SID
+				$NewSDDL = "(A;;CC;;;$SID)"
 				if ($Merge)
 				{
 					$SDDL += $NewSDDL
 				}
 				else
 				{
-					Write-Output $NewSDDL
+					Write-Output ($SDDL + $NewSDDL)
 				}
 			}
 		}
@@ -172,14 +216,14 @@ function Get-SDDL
 			$SID = Get-GroupSID $UserGroup -Domain $Domain -CIM:$CIM
 			if ($SID)
 			{
-				$NewSDDL = "(A;;CC;;;{0})" -f $SID
+				$NewSDDL = "(A;;CC;;;$SID)"
 				if ($Merge)
 				{
 					$SDDL += $NewSDDL
 				}
 				else
 				{
-					Write-Output $NewSDDL
+					Write-Output ($SDDL + $NewSDDL)
 				}
 			}
 		}
@@ -193,7 +237,7 @@ function Get-SDDL
 		}
 		else
 		{
-			return $SDDL
+			Write-Output $SDDL
 		}
 	}
 }

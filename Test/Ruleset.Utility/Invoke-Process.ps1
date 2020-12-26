@@ -28,19 +28,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Get-ProcessOutput
+Unit test for Invoke-Process
 
 .DESCRIPTION
-Unit test for Get-ProcessOutput
+Unit test for Invoke-Process
 
 .EXAMPLE
-PS> .\Get-ProcessOutput.ps1
+PS> .\Invoke-Process.ps1
 
 .INPUTS
-None. You cannot pipe objects to Get-ProcessOutput.ps1
+None. You cannot pipe objects to Invoke-Process.ps1
 
 .OUTPUTS
-None. Get-ProcessOutput.ps1 does not generate any output
+None. Invoke-Process.ps1 does not generate any output
 
 .NOTES
 None.
@@ -63,18 +63,27 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
-Start-Test "path to gpupdate.exe /target:computer -Wait 100"
-Get-ProcessOutput -Path "C:\WINDOWS\system32\gpupdate.exe" -NoNewWindow -ArgumentList "/target:computer" -Wait 100
-
 Start-Test "gpupdate.exe /target:computer"
-Get-ProcessOutput gpupdate.exe -NoNewWindow -ArgumentList "/target:computer" -Format
+$Result = Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer" -Format
+$Result
+
+Test-Output $Result -Command Invoke-Process
+
+Start-Test "path to gpupdate.exe /target:computer -Wait 100"
+Invoke-Process "C:\WINDOWS\system32\gpupdate.exe" -NoNewWindow -ArgumentList "/target:computer" -Wait 100
 
 Start-Test "git.exe status"
 # TODO: Does not work with Desktop edition
-$Result = Get-ProcessOutput "git.exe" -ArgumentList "status" -NoNewWindow
+$Result = Invoke-Process "git.exe" -ArgumentList "status" -NoNewWindow
 $Result
 
-Test-Output $Result -Command Get-ProcessOutput
+Test-Output $Result -Command Invoke-Process
+
+Start-Test "Bad path"
+Invoke-Process "C:\Program F*\Powe?Shell\777\pwsh.exe" -Format -Wait 5000
+
+Start-Test "Bad file"
+Invoke-Process "C:\Program F*\Powe?Shell\badfile.exe" -Format -Wait 5000
 
 Update-Log
 Exit-Test

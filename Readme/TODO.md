@@ -177,6 +177,7 @@ Todo's in this file are categorized into following sections:
     actually makes sense, and also for naming consistency for `ValueFromPipelineByPropertyName`
     - When drilling registry for programs in user profile we need to load hive for offline
     users into registry, see implementation for OneDrive
+    - If there is `Path` parameter then also `LiteralPath` is required
 
 2. Project scripts
 

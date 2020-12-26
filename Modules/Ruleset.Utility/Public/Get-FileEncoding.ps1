@@ -61,7 +61,7 @@ None. You cannot pipe objects to Get-FileEncoding
 
 .NOTES
 TODO: utf-16LE detected as utf-16 with BOM
-NOTE: This function is based on (but is not) sample from "Windows PowerShell Cookbook"
+TODO: Enumerate file encodings and implement parameter validation
 #>
 function Get-FileEncoding
 {
@@ -100,7 +100,7 @@ function Get-FileEncoding
 
 	if ($Result.Count -gt 0)
 	{
-		return "binary"
+		return "Binary"
 	}
 
 	# Next, check if it matches a well-known encoding.

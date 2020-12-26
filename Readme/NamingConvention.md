@@ -64,8 +64,10 @@ Parameter names and aliases
 - [string] `Command` (specify a command string to run)
 - [switch] `Stream` (stream multiple output objects through the pipeline)
 - [int32] `Timeout` (the timeout interval (in milliseconds))
-- [int32] `Count` (specify the count or specify the number of objects to be processed)
+- [switch] `Wait` (wait for user input before continuing)
+- [int32] `WaitTime` (the duration (in seconds) that the cmdlet will wait for user input)
 - [int32] `Retry` (the number of times the cmdlet will attempt an action)
+- [int32] `Count` (specify the count or specify the number of objects to be processed)
 - [switch] `Recurse` (the cmdlet recursively performs its actions on resources)
 - [string] `From` (specify the reference object to get information from)
 - [switch] `Unique`
@@ -73,6 +75,7 @@ Parameter names and aliases
 - [switch] `Create` (to indicate that a resource is created if one does not already exist)
 - [string] `Privilege` (specify the right a cmdlet needs to perform an operation for a particular entity)
 - [switch] `CaseSensitive`
+- [switch] `Binary` (the cmdlet handles binary values)
 
 `*` Used by most commandlets but should be aliases instead
 

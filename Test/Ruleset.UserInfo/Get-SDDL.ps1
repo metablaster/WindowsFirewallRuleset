@@ -140,11 +140,14 @@ $FileSystem = "C:\Users\Public\Desktop\" # Inherited
 $Registry1 = "HKCU:\" # Not Inherited
 $Registry2 = "HKLM:\SOFTWARE\Microsoft\Clipboard"
 
-Start-Test "Get-SDDL -LiteralPath FileSystem"
-Get-SDDL -LiteralPath $FileSystem
+Start-Test "Get-SDDL -Path FileSystem"
+Get-SDDL -Path $FileSystem
 
-Start-Test "Get-SDDL -LiteralPath Registry1 -Merge"
-$Result = Get-SDDL -LiteralPath @($Registry1, $Registry2) -Merge
+Start-Test "Get-SDDL -Path Registry1"
+Get-SDDL -Path $Registry1
+
+Start-Test "Get-SDDL -Path Registry2 -Merge"
+$Result = Get-SDDL -Path $Registry2 -Merge
 $Result
 
 Test-Output $Result -Command Get-SDDL

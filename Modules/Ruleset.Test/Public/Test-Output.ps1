@@ -56,7 +56,7 @@ None. You cannot pipe objects to Test-Output
 None. Test-Output does not generate any output
 
 .NOTES
-None.
+TODO: InputObject should be returned if pipeline is used
 #>
 function Test-Output
 {

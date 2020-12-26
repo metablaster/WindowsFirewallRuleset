@@ -35,7 +35,7 @@ EXAMPLES
 	Find-NetworkService
 	Get a list of windows services involved in rules
 
-	Get-ProcessOutput
+	Invoke-Process
 	Run process and capture output
 
 	Get-TypeName

@@ -101,7 +101,7 @@ function Get-OneDrive
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Loading offline hive for user '$UserName' to HKU:$TempKey"
 
 				# NOTE: Start-Process is needed to make the command finish it's job and print status
-				$Status = Get-ProcessOutput -NoNewWindow -FilePath reg.exe -ArgumentList "load HKU\$TempKey $UserRegConfig"
+				$Status = Invoke-Process -NoNewWindow reg.exe -ArgumentList "load HKU\$TempKey $UserRegConfig"
 
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] $Status"
 				$ReleaseHive = $true
@@ -126,7 +126,7 @@ function Get-OneDrive
 			{
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Unloading and release hive HKU:$TempKey"
 				[gc]::collect()
-				$Status = Get-ProcessOutput -NoNewWindow -FilePath reg.exe -ArgumentList "unload HKU\$TempKey"
+				$Status = Invoke-Process reg.exe -NoNewWindow -ArgumentList "unload HKU\$TempKey"
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] $Status"
 			}
 		}
@@ -173,7 +173,7 @@ function Get-OneDrive
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Unload and release hive HKU:$TempKey"
 				[gc]::collect()
-				$Status = Get-ProcessOutput -NoNewWindow -FilePath reg.exe -ArgumentList "unload HKU\$TempKey"
+				$Status = Invoke-Process reg.exe -NoNewWindow -ArgumentList "unload HKU\$TempKey"
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] $Status"
 			}
 		}
