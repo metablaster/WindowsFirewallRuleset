@@ -86,7 +86,6 @@ function Enter-Test
 			New-Variable -Name UnitTest -Scope Global -Option ReadOnly -Value ((Get-PSCallStack)[1].Command -replace ".{4}$")
 		}
 
-		Write-Output ""
 		Write-Information -Tags "Test" -MessageData "INFO: Entering unit test '$UnitTest'"
 	}
 

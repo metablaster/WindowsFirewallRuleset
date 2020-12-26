@@ -54,7 +54,7 @@ Specifies the name of the module to be imported. Wildcards can be used.
 .PARAMETER Exclude
 A list of wildcard patterns matching the names of modules that should not be imported.
 
-.PARAMETER ComputerName
+.PARAMETER Domain
 If you don't want to use the default compatibility session, use this parameter to specify the name
 of the computer on which to create the compatibility session.
 
@@ -116,20 +116,20 @@ https://github.com/PowerShell/WindowsCompatibility
 #>
 function Import-WinModule
 {
-	[CmdletBinding(
+	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Import-WinModule.md")]
 	[OutputType([PSObject])]
 	Param
 	(
-		[Parameter(Mandatory = $False, Position = 0)]
+		[Parameter(Position = 0)]
 		[string[]] $Name = "*",
 
 		[Parameter()]
 		[string[]] $Exclude = "",
 
 		[Parameter()]
-		[Alias("cn")]
-		[string] $ComputerName,
+		[Alias("ComputerName", "CN")]
+		[string] $Domain,
 
 		[Parameter()]
 		[string] $ConfigurationName,
@@ -158,7 +158,7 @@ function Import-WinModule
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Connecting to compatibility session."
 	$InitializeWinSessionParameters = @{
 		Verbose = $VerboseFlag
-		ComputerName = $ComputerName
+		ComputerName = $Domain
 		ConfigurationName = $ConfigurationName
 		Credential = $Credential
 		PassThru = $true
@@ -222,10 +222,11 @@ function Import-WinModule
 			foreach ($name in $NoClobberNames)
 			{
 				$Module = Import-Module -Name $name -NoClobber @ImportModuleParameters
+
 				# Hack using private reflection to keep the proxy module from shadowing the real module.
-				$null = [PSModuleInfo].
-				GetMethod("SetName", [System.Reflection.BindingFlags]"Instance, NonPublic").
-				Invoke($Module, @($Module.Name + ".WinModule"))
+				$null = [PSModuleInfo].GetMethod("SetName",
+					[System.Reflection.BindingFlags]"Instance, NonPublic").Invoke($Module, @($Module.Name + ".WinModule"))
+
 				if ($PassThru.IsPresent)
 				{
 					$Module

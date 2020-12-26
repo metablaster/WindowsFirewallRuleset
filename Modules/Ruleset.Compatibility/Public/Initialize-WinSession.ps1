@@ -40,7 +40,7 @@ it will be closed and a new session will be retrieved.
 
 This command is called by the other commands in this module so you will rarely call this command directly.
 
-.PARAMETER ComputerName
+.PARAMETER Domain
 If you don't want to use the default compatibility session, use this parameter to specify the name
 of the computer on which to create the compatibility session.
 
@@ -60,7 +60,7 @@ PS> Initialize-WinSession
 Initialize the default compatibility session.
 
 .EXAMPLE
-PS> Initialize-WinSession -ComputerName localhost -ConfigurationName Microsoft.PowerShell
+PS> Initialize-WinSession -Domain localhost -ConfigurationName Microsoft.PowerShell
 
 Initialize the compatibility session with a specific computer name and configuration
 
@@ -81,14 +81,14 @@ https://github.com/PowerShell/WindowsCompatibility
 #>
 function Initialize-WinSession
 {
-	[CmdletBinding(
+	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Initialize-WinSession.md")]
 	[OutputType([System.Management.Automation.Runspaces.PSSession])]
 	Param (
 
-		[Parameter(Mandatory = $false, Position = 0)]
-		[Alias("Cn")]
-		[string] $ComputerName,
+		[Parameter(Position = 0)]
+		[Alias("ComputerName", "CN")]
+		[string] $Domain,
 
 		[Parameter()]
 		[string] $ConfigurationName,
@@ -102,20 +102,20 @@ function Initialize-WinSession
 
 	[bool] $VerboseFlag = $PSBoundParameters["Verbose"]
 
-	if ($ComputerName -eq ".")
+	if ($Domain -eq ".")
 	{
-		$ComputerName = "localhost"
+		$Domain = "localhost"
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Initializing the compatibility session on host '$ComputerName'."
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Initializing the compatibility session on host '$Domain'."
 
-	if ($ComputerName)
+	if ($Domain)
 	{
-		$script:SessionComputerName = $ComputerName
+		$script:SessionComputerName = $Domain
 	}
 	else
 	{
-		$ComputerName = $script:SessionComputerName
+		$Domain = $script:SessionComputerName
 	}
 
 	if ($ConfigurationName)
@@ -129,17 +129,17 @@ function Initialize-WinSession
 
 	if ($Credential)
 	{
-		$script:SessionName = "wincompat-$ComputerName-$($Credential.UserName)"
+		$script:SessionName = "wincompat-$Domain-$($Credential.UserName)"
 	}
 	else
 	{
-		$script:SessionName = "wincompat-$ComputerName-$([environment]::UserName)"
+		$script:SessionName = "wincompat-$Domain-$([environment]::UserName)"
 	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] The compatibility session name is '$script:SessionName'."
 
 	$Session = Get-PSSession | Where-Object {
-		$_.ComputerName -eq $ComputerName -and
+		$_.ComputerName -eq $Domain -and
 		$_.ConfigurationName -eq $ConfigurationName -and
 		$_.Name -eq $script:SessionName
 	} | Select-Object -First 1
@@ -167,7 +167,7 @@ function Initialize-WinSession
 	{
 		$NewPSSessionParameters = @{
 			Verbose = $VerboseFlag
-			ComputerName = $ComputerName
+			ComputerName = $Domain
 			Name = $script:sessionName
 			ConfigurationName = $configurationName
 			ErrorAction = "Stop"
@@ -176,12 +176,12 @@ function Initialize-WinSession
 		{
 			$NewPSSessionParameters.Credential = $Credential
 		}
-		if ($ComputerName -eq "localhost" -or $ComputerName -eq [environment]::MachineName)
+		if ($Domain -eq "localhost" -or $Domain -eq [environment]::MachineName)
 		{
 			$NewPSSessionParameters.EnableNetworkAccess = $true
 		}
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Created new compatibility session on host '$Computername'"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Created new compatibility session on host '$Domain'"
 		$Session = New-PSSession @NewPSSessionParameters | Select-Object -First 1
 		if ($Session.ComputerName -eq "localhost")
 		{

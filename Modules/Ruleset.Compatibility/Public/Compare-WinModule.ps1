@@ -37,7 +37,7 @@ Compare the set of modules for this version of PowerShell against those availabl
 Specifies the names or name patterns of for the modules to compare.
 Wildcard characters are permitted.
 
-.PARAMETER ComputerName
+.PARAMETER Domain
 If you don't want to use the default compatibility session, use this parameter to specify the name
 of the computer on which to create the compatibility session.
 
@@ -76,7 +76,7 @@ https://github.com/PowerShell/WindowsCompatibility
 #>
 function Compare-WinModule
 {
-	[CmdletBinding(
+	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Compare-WinModule.md")]
 	[OutputType([PSObject])]
 	Param
@@ -85,8 +85,8 @@ function Compare-WinModule
 		[string[]] $Name = "*",
 
 		[Parameter()]
-		[Alias("cn")]
-		[string] $ComputerName,
+		[Alias("ComputerName", "CN")]
+		[string] $Domain,
 
 		[Parameter()]
 		[string] $ConfigurationName,
@@ -101,7 +101,7 @@ function Compare-WinModule
 
 	$InitializeWinSessionParameters = @{
 		Verbose = $VerboseFlag
-		ComputerName = $ComputerName
+		ComputerName = $Domain
 		ConfigurationName = $ConfigurationName
 		Credential = $Credential
 		PassThru = $true

@@ -82,7 +82,7 @@ Parameter names and aliases
 ### Unresolved
 
 - [switch] `Disabled` (Disabled user accounts)
-- [switch] `Machine` (see: Test-UPN)
+- [switch] `DomainName` (see: Test-UPN)
 - [ValidateSet()] `AddressFamily`
   - `IPVersion`
 - [switch] Physical

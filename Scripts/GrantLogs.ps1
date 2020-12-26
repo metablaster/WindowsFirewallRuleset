@@ -94,7 +94,7 @@ using namespace System.Security
 
 [CmdletBinding()]
 param (
-	[Parameter(Mandatory = $false)]
+	[Parameter()]
 	[string] $Principal = $DefaultUser,
 
 	[Parameter()]

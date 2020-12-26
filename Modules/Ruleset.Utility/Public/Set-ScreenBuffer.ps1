@@ -35,8 +35,8 @@ Set-ScreenBuffer sets screenbuffer for current powershell session.
 In some cases, depending on project settings a user might need larger buffer
 to preserve all the output in the console for review and scroll back.
 
-.PARAMETER BufferHeight
-Sets screen buffer height to specified value
+.PARAMETER Height
+New screen buffer height
 
 .EXAMPLE
 PS> Set-ScreenBuffer
@@ -57,7 +57,7 @@ function Set-ScreenBuffer
 	[OutputType([void])]
 	param (
 		[Parameter()]
-		[uint16] $BufferHeight = 3000
+		[uint16] $Height = 3000
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -66,15 +66,15 @@ function Set-ScreenBuffer
 	$psWindow = $psHost.UI.RawUI
 	$NewSize = $psWindow.BufferSize
 
-	if ($NewSize.Height -lt $BufferHeight)
+	if ($NewSize.Height -lt $Height)
 	{
-		Write-Warning -Message "Your screen buffer of $($NewSize.Height) is below recommended $BufferHeight to preserve all execution output"
+		Write-Warning -Message "Your screen buffer of $($NewSize.Height) is below recommended $Height to preserve all execution output"
 
 		if ($PSCmdlet.ShouldProcess((Get-Host).Name, "Increase Screen Buffer"))
 		{
-			$NewSize.Height = $BufferHeight
+			$NewSize.Height = $Height
 			$psWindow.BufferSize = $NewSize
-			Write-Information -Tags "User" -MessageData "INFO: Screen buffer changed to $BufferHeight"
+			Write-Information -Tags "User" -MessageData "INFO: Screen buffer changed to $Height"
 			return
 		}
 

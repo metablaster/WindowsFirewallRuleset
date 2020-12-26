@@ -88,7 +88,7 @@ function Get-AppCapability
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true, Position = 0)]
 		[Object[]] $InputObject,
 
-		[Parameter(Mandatory = $false)]
+		[Parameter()]
 		[string] $User,
 
 		[Parameter()]

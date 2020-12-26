@@ -44,7 +44,7 @@ to be copied name, it will not be copied.
 Specifies names or name patterns of modules that will be copied.
 Wildcard characters are permitted.
 
-.PARAMETER ComputerName
+.PARAMETER Domain
 If you don't want to use the default compatibility session, use this parameter to specify the name
 of the computer on which to create the compatibility session.
 
@@ -86,17 +86,17 @@ https://github.com/PowerShell/WindowsCompatibility
 #>
 function Copy-WinModule
 {
-	[CmdletBinding(SupportsShouldProcess = $true,
+	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Copy-WinModule.md")]
 	[OutputType([void])]
 	Param
 	(
-		[Parameter(Mandatory = $false, Position = 0)]
+		[Parameter(Position = 0)]
 		[string[]] $Name = "*",
 
 		[Parameter()]
-		[Alias("cn")]
-		[string] $ComputerName,
+		[Alias("ComputerName", "CN")]
+		[string] $Domain,
 
 		[Parameter()]
 		[string] $ConfigurationName,
@@ -138,7 +138,7 @@ function Copy-WinModule
 
 	$InitializeWinSessionParameters = @{
 		Verbose = $VerboseFlag
-		ComputerName = $ComputerName
+		ComputerName = $Domain
 		ConfigurationName = $ConfigurationName
 		Credential = $Credential
 		PassThru = $true
@@ -153,7 +153,7 @@ function Copy-WinModule
 		Recurse = $true
 	}
 
-	if ($ComputerName -ne "localhost" -and $ComputerName -ne ".")
+	if (($Domain -ne "localhost") -and ($Domain -ne "."))
 	{
 		$CopyItemParameters.FromSession = $Session
 	}

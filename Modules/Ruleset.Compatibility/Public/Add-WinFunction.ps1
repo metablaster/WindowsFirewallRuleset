@@ -84,21 +84,21 @@ https://github.com/PowerShell/WindowsCompatibility
 #>
 function Add-WinFunction
 {
-	[CmdletBinding(
+	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Add-WinFunction.md")]
 	[OutputType([void])]
 	Param
 	(
-		[Parameter(Mandatory, Position = 0)]
+		[Parameter(Mandatory = $true, Position = 0)]
 		[Alias("FunctionName")]
 		[string] $Name,
 
-		[Parameter(Mandatory, Position = 1)]
+		[Parameter(Mandatory = $true, Position = 1)]
 		[scriptblock] $ScriptBlock,
 
+		[Alias("ComputerName", "CN")]
 		[Parameter()]
-		[Alias("Cn")]
-		[string] $ComputerName,
+		[string] $Domain,
 
 		[Parameter()]
 		[string] $ConfigurationName,

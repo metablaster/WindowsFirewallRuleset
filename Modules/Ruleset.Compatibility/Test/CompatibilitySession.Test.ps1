@@ -29,12 +29,12 @@ SOFTWARE.
 using namespace System.Management.Automation
 using namespace System.Management.Automation.Runspaces
 
-New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Value (Split-Path $PSScriptRoot -Leaf)
+$ScriptPath = Split-Path $MyInvocation.MyCommand.Path -Parent
 
 Describe "Test the Windows PowerShell Compatibility Session functions" {
 
 	BeforeAll {
-		Import-Module -Force "$ThisModule\Ruleset.Compatibility.psd1"
+		Import-Module -Force "$ScriptPath\..\Ruleset.Compatibility.psd1"
 	}
 
 	It "Make sure the <command> command exists" -TestCases @(
@@ -131,7 +131,7 @@ Describe "Test the Windows PowerShell Compatibility Session functions" {
 	}
 
 	It "Copy-WinModule should copy the specified module to the destination path" {
-		$TestDrive = Join-Path -Path $DefaultTestDrive\$ThisModule -ChildPath "tmp$(Get-Random)"
+		$TestDrive = Join-Path -Path $DefaultTestDrive -ChildPath "tmp$(Get-Random)"
 		New-Item -ItemType Directory $TestDrive | Out-Null
 
 		# Invoke the command to copy the module

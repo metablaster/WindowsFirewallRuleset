@@ -41,7 +41,7 @@ This behavior can be overridden using the additional parameters on the command.
 .PARAMETER ScriptBlock
 The scriptblock to invoke in the compatibility session
 
-.PARAMETER ComputerName
+.PARAMETER Domain
 If you don't want to use the default compatibility session, use this parameter to specify the name
 of the computer on which to create the compatibility session.
 
@@ -89,17 +89,17 @@ https://github.com/PowerShell/WindowsCompatibility
 #>
 function Invoke-WinCommand
 {
-	[CmdletBinding(
+	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Invoke-WinCommand.md")]
 	[OutputType([PSObject])]
 	Param
 	(
-		[Parameter(Mandatory, Position = 0)]
+		[Parameter(Mandatory = $true, Position = 0)]
 		[scriptblock] $ScriptBlock,
 
 		[Parameter()]
-		[Alias("cn")]
-		[string] $ComputerName,
+		[Alias("ComputerName", "CN")]
+		[string] $Domain,
 
 		[Parameter()]
 		[string] $ConfigurationName,
@@ -108,7 +108,7 @@ function Invoke-WinCommand
 		[PSCredential] $Credential,
 
 		[Parameter(ValueFromRemainingArguments)]
-		[Object[]] $ArgumentList
+		[object[]] $ArgumentList
 	)
 
 	[void] $PSBoundParameters.Remove("ScriptBlock")
