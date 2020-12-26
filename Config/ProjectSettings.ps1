@@ -203,6 +203,8 @@ if ($Develop)
 	# must be explicitly set to avoid inheriting parent scope preferences
 	#
 
+	# $ErrorView = "NormalView"
+
 	$VerbosePreference = "SilentlyContinue"
 	$DebugPreference = "SilentlyContinue"
 	$ConfirmPreference = "High"

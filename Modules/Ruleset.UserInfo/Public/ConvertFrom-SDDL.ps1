@@ -69,68 +69,92 @@ function ConvertFrom-SDDL
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-		foreach ($Entry in $SDDL)
+		foreach ($SddlEntry in $SDDL)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing $Entry"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing SDDL: $SddlEntry"
 
-			$SDDLSplit = $Entry.Split("(")
+			# Case sensitive regex pattern to math exactly one DACL entry withing SDDL string
+			$RegMatch = [regex]::Matches($SddlEntry, "(D:\w*(\((\w*;\w*){4};((S(-\d+){2,12})|[A-Z]*)\))+){1}")
 
-			# Write-Output ""
-			# Write-Output "SDDL Split:"
-			# Write-Output "****************"
-
-			# $SDDLSplit
-
-			# Write-Output ""
-			# Write-Output "SDDL SID Parsing:"
-			# Write-Output "****************"
-			$Inherited = "?"
-
-			# Skip index 0 where owner and/or primary group are stored
-			for ($i = 1; $i -lt $SDDLSplit.Length; ++$i)
+			if ($RegMatch.Count -ne 1)
 			{
-				$ACLSplit = $SDDLSplit[$i].Split(";")
-				$ACLObject.SetSecurityDescriptorSddlForm($ACLSplit[1])
+				Write-Error -Category InvalidArgument -TargetObject $SddlEntry `
+					-Message "SDDL string to be valid must contain exactly one DACL entry: $SddlEntry"
+				continue
+			}
 
-				$Principal = $ACLObject.Access | Select-Object -ExpandProperty IdentityReference |
-				Select-Object -ExpandProperty Value
+			$SddlSplit = $SddlEntry.Split("(").TrimEnd(")")
+			$RegMatch = [regex]::Matches($SddlSplit[0], "D\:\w+")
 
-				if ($ACLSplit[1].Contains("ID"))
+			if ($RegMatch.Count -eq 1)
+			{
+				<# The DACL flags can be a concatenation of zero or more of the following strings:
+				"P"					SE_DACL_PROTECTED flag is set.
+				"AR"				SE_DACL_AUTO_INHERIT_REQ flag is set.
+				"AI"				SE_DACL_AUTO_INHERITED flag is set.
+				"NO_ACCESS_CONTROL"	ACL is null.
+				#>
+				$DaclFlags = $RegMatch.Captures.Value
+			}
+
+			# Iterate DACL entry for each ACE
+			# Index 0 - 6 (where index 6 is optional) are as follows:
+			# ace_type;ace_flags;rights;object_guid;inherit_object_guid;account_sid;(resource_attribute)
+			for ($Index = 1; $Index -lt $SddlSplit.Length; ++$Index)
+			{
+				$ACE = $SddlSplit[$Index]
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing ACE: $ACE"
+
+				$AceSplit = $ACE.Split(";")
+
+				if (!$AceSplit[1].Contains("ID")) # if (!"Inherited")
 				{
-					$Inherited = "Inherited"
-				}
-				else
-				{
-					$ACLEntrySID = $null
-
-					# Remove the trailing ")"
-					$ACLEntry = $ACLSplit[5].TrimEnd(")")
-
-					# Parse out the SID using a handy RegEx
-					$ACLEntrySIDMatches = [regex]::Matches($ACLEntry, "(S(-\d+){2,8})")
-
-					# NOTE: original changed from $ACLEntrySID = $_.value to $ACLEntrySID += $_.value
-					$ACLEntrySIDMatches | ForEach-Object {
-						$ACLEntrySID += $_.Value
-					}
-
-					if ($ACLEntrySID)
+					# TODO: Parse out the SID (store apps have 12 groups of digits in total, other SID's have 8)
+					# If the match is successful, the collection is populated with one [System.Text.RegularExpressions.Match]
+					# object for each match found in the input string.
+					[System.Text.RegularExpressions.MatchCollection] $RegMatch = [regex]::Matches($AceSplit[5], "(S(-\d+){2,12})")
+					if ($RegMatch.Count -eq 1)
 					{
-						$SID = $ACLEntrySID
+						$DACL = "$DaclFlags($ACE)"
+						$SID = $RegMatch.Captures.Value
+
+						try
+						{
+							# Set the security descriptor from the specified SDDL
+							$ACLObject.SetSecurityDescriptorSddlForm($DACL)
+						}
+						catch
+						{
+							Write-Error -Category InvalidArgument -TargetObject $DACL -Message "Invalid SDDL: '$($DACL)' $($_.Exception.Message)"
+							continue
+						}
+
+						# [System.Security.Principal.NTAccount]
+						$Principal = $ACLObject.Access | Select-Object -ExpandProperty IdentityReference |
+						Select-Object -ExpandProperty Value
+
+						[PSCustomObject]@{
+							User = Split-Principal $Principal
+							Domain = Split-Principal $Principal -DomainName
+							# TODO: Group = ?
+							Principal = $Principal
+							SID = $SID
+							SDDL = $DACL
+						}
+					}
+					elseif ($RegMatch.Count -gt 1)
+					{
+						# TODO: This must be always false, confirm maximum one SID can be in there
+						Write-Error -Category NotImplemented -TargetObject $RegMatch -Message "Expected 1 regex match, got multiple"
+						exit
 					}
 					else
 					{
-						$Inherited = "Not inherited"
+						# "Not inherited"
+						continue
 					}
 				}
 			}
-
-			[PSCustomObject]@{
-				Principal = $Principal
-				SID = $SID
-				# SDDL = $Entry
-				Inherited = $Inherited
-			}
-		} # foreach ($Entry in $SDDL)
+		} # foreach ($SddlEntry in $SDDL)
 	}
 }

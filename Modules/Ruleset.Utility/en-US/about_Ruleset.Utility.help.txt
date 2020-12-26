@@ -56,9 +56,6 @@ EXAMPLES
 	Set-Shortcut
 	Create or set shortcut to file or online location
 
-	Show-SDDL
-	Show-SDDL returns SDDL based on "object" such as path, or registry entry
-
 	Update-Context
 	Update context for Approve-Execute function
 

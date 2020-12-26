@@ -61,7 +61,6 @@ $PublicScripts = @(
 	"Set-Permission"
 	"Set-ScreenBuffer"
 	"Set-Shortcut"
-	"Show-SDDL"
 	"Update-Context"
 )
 

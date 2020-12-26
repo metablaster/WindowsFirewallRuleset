@@ -77,7 +77,7 @@ function Split-Principal
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting user name for account: $Account"
 
 			# https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nbte/6f06fa0e-1dc4-4c41-accb-355aaf20546d
-			if ($Account -match "^\w[-|\w]*\\\w+$")
+			if ($Account -match "^\w[-|\w|\s]*\w\\\w[\s|\w]*\w$")
 			{
 				if ($DomainName) { $Index = 0 }
 				else { $Index = 1 }

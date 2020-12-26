@@ -41,6 +41,7 @@ Note:
     - [Match username in path](#match-username-in-path)
     - [Path validation](#path-validation)
     - [Link validation](#link-validation)
+    - [DACL validation](#dacl-validation)
 
 ## Filterline
 
@@ -240,7 +241,7 @@ C:\\Users\USERNAME\\AppData\\Roaming\\ (?<=C:\\+Users\\+)\w+
 
 ### Path validation
 
-File extention must be either `*.lnk` or `*.url`
+Here file extention must be either `*.lnk` or `*.url`
 
 ```powershell
 '^[a-z]:\\(?:[^\\/:*?"<>|\r\n]+\\)*[^\\/:*?"<>.|\r\n]*(\.(lnk|url))*$'
@@ -250,6 +251,14 @@ File extention must be either `*.lnk` or `*.url`
 
 ```regex
 [(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)
+```
+
+### DACL validation
+
+DACL is part of a SDDL string
+
+```powershell
+"(D:\w*(\((\w*;\w*){4};((S(-\d+){2,12})|[A-Z]*)\))+){1}"
 ```
 
 [multicursor]: https://code.visualstudio.com/docs/getstarted/tips-and-tricks#_multi-cursor-selection

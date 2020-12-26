@@ -97,38 +97,58 @@ $SDDL3 = Get-SDDL -Domain $NTDomain -User $NTUser
 $SDDL3
 
 #
+# Test APPLICATION PACKAGE AUTHORITY
+#
+
+[string] $AppDomain = "APPLICATION PACKAGE AUTHORITY"
+[string[]] $AppUser = "Your Internet connection", "Your pictures library"
+
+Start-Test "Get-SDDL -Domain $AppDomain -User $AppUser"
+$SDDL4 = Get-SDDL -Domain $AppDomain -User $AppUser
+$SDDL4
+
+#
 # Test paths
 #
 
 $FileSystem = "C:\Users\Public\Desktop\" # Inherited
-$Registry1 = "HKCU:\" # Not Inherited
-$Registry2 = "HKLM:\SOFTWARE\Microsoft\Clipboard"
+$Registry = "HKLM:\SOFTWARE\Microsoft\Clipboard"
 
-Start-Test "Get-SDDL -LiteralPath FileSystem"
-Get-SDDL -LiteralPath $FileSystem
+Start-Test "Get-SDDL -Path FileSystem"
+$SDDL5 = Get-SDDL -Path $FileSystem
+$SDDL5
 
-Start-Test "Get-SDDL -LiteralPath Registry1 -Merge"
-$SDDL4 = Get-SDDL -LiteralPath @($Registry1, $Registry2) -Merge
-$SDDL4
+Start-Test "Get-SDDL -Path Registry"
+$SDDL6 = Get-SDDL -Path $Registry
+$SDDL6
 
 #
 # Test convert
 #
 
-Start-Test "ConvertFrom-SDDL"
+Start-Test "ConvertFrom-SDDL SDDL1, SDDL2, SDDL3"
 $Result = ConvertFrom-SDDL $SDDL1, $SDDL2, $SDDL3
 $Result
 
 Test-Output $Result -Command ConvertFrom-SDDL
 
-Start-Test "ConvertFrom-SDDL pipeline"
-$Result = $SDDL1, $SDDL2, $SDDL3 | ConvertFrom-SDDL
+# Start-Test "ConvertFrom-SDDL pipeline"
+# $Result = $SDDL1, $SDDL2, $SDDL3 | ConvertFrom-SDDL
+# $Result
+
+# Test-Output $Result -Command ConvertFrom-SDDL
+
+Start-Test "ConvertFrom-SDDL Store apps"
+$Result = ConvertFrom-SDDL $SDDL4
 $Result
 
 Test-Output $Result -Command ConvertFrom-SDDL
 
 Start-Test "ConvertFrom-SDDL file path"
-$Result = ConvertFrom-SDDL $SDDL4
+ConvertFrom-SDDL $SDDL5
+
+Start-Test "ConvertFrom-SDDL file path"
+$Result = ConvertFrom-SDDL $SDDL6
 $Result
 
 Test-Output $Result -Command ConvertFrom-SDDL

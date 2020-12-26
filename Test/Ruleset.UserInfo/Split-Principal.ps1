@@ -75,6 +75,11 @@ $UserNames
 Start-Test "Split-Principal -DomainName"
 Split-Principal ($UserAccounts | Select-Object -ExpandProperty Principal) -DomainName
 
+Start-Test "Split-Principal NT AUTHORITY"
+Split-Principal "NT AUTHORITY\NETWORK SERVICE"
+
+Start-Test "Split-Principal NT AUTHORITY -Domain"
+Split-Principal "NT AUTHORITY\NETWORK SERVICE" -Domain
 
 Start-Test "Split-Principal 'MicrosoftAccount\$TestUser@domain.com'"
 Split-Principal "MicrosoftAccount\$TestUser@domain.com"
