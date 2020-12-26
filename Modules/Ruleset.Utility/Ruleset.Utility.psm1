@@ -56,7 +56,7 @@ $PublicScripts = @(
 	"Find-NetworkService"
 	"Get-ProcessOutput"
 	"Get-TypeName"
-	"Resolve-WildcardPath"
+	"Resolve-FileSystem"
 	"Set-NetworkProfile"
 	"Set-Permission"
 	"Set-ScreenBuffer"

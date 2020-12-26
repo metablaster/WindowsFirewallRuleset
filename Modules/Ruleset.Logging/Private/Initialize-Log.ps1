@@ -77,7 +77,7 @@ function Initialize-Log
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-	$Directory = Resolve-WildcardPath -Path $Path
+	$Directory = Resolve-FileSystem $Path
 	if (!$Directory)
 	{
 		Write-Error -Category InvalidResult -TargetObject $Path -Message "Unable to resolve path: $Path"

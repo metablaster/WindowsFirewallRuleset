@@ -28,22 +28,29 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Generate SDDL string of multiple usernames or/and groups on a given domain
+Generate SDDL string
 
 .DESCRIPTION
-Get SDDL string single or multiple user names and/or user groups on a single target computer
+Get SDDL string for single or multiple user names and/or user groups, file system or registry
+locations on a single target computer
 
 .PARAMETER User
-Array of users for which to generate SDDL string
+One or more users for which to generate SDDL string
 
 .PARAMETER Group
-Array of user groups for which to generate SDDL string
+One or more user groups for which to generate SDDL string
+
+.PARAMETER LiteralPath
+One or multiple file system or registry locations from which to obtain SDDL
 
 .PARAMETER Domain
 Single domain or computer such as remote computer name or builtin computer domain
 
 .PARAMETER CIM
 Whether to contact CIM server (required for remote computers)
+
+.PARAMETER Merge
+If specified combines resultant SDDL strings into one
 
 .EXAMPLE
 PS> [string[]] $Users = "User"
@@ -81,46 +88,112 @@ function Get-SDDL
 		[Parameter(Mandatory = $true, ParameterSetName = "Group")]
 		[string[]] $Group,
 
+		[Parameter(Mandatory = $true, ParameterSetName = "Path")]
+		[string[]] $LiteralPath,
+
 		[Alias("ComputerName", "CN")]
 		[Parameter(Mandatory = $false)]
 		[string] $Domain = [System.Environment]::MachineName,
 
 		[Parameter()]
-		[switch] $CIM
+		[switch] $CIM,
+
+		[Parameter()]
+		[switch] $Merge
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	[string] $SDDL = "D:"
 
-	foreach ($UserName in $User)
+	if ($LiteralPath)
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL for account: $Domain\$UserName"
-
-		$SID = Get-PrincipalSID $UserName -Domain $Domain -CIM:$CIM
-		if ($SID)
+		if ($CIM)
 		{
-			$SDDL += "(A;;CC;;;{0})" -f $SID
+			Write-Error -Category NotImplemented -TargetObject $TargetPath `
+				-Message "Getting SDDL for path location from remote computers not implemented"
+			return
 		}
-	}
 
-	foreach ($UserGroup in $Group)
-	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL for group: $Domain\$UserGroup"
-
-		$SID = Get-GroupSID $UserGroup -Domain $Domain -CIM:$CIM
-		if ($SID)
+		foreach ($PathItem in $LiteralPath)
 		{
-			$SDDL += "(A;;CC;;;{0})" -f $SID
-		}
-	}
+			$TargetPath = Resolve-Path -Path $PathItem -ErrorAction Ignore
 
-	if ($SDDL.Length -lt 3)
-	{
-		Write-Error -TargetObject $SDDL -Message "Failed to assemble SDDL"
+			if (!$TargetPath)
+			{
+				Write-Error -Category ObjectNotFound -TargetObject $PathItem -Message "The path does not exist: $PathItem"
+				continue
+			}
+
+			$ACL = Get-Acl $TargetPath
+			if ($ACL)
+			{
+				if ($Merge)
+				{
+					$SDDL += $ACL.Sddl
+				}
+				else
+				{
+					Write-Output $ACL.Sddl
+				}
+			}
+			else
+			{
+				Write-Warning -Message "The path contains no principals: $TargetPath"
+				continue
+			}
+		}
 	}
 	else
 	{
-		return $SDDL
+		foreach ($UserName in $User)
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting user principal SDDL: $Domain\$UserName"
+
+			$SID = Get-PrincipalSID $UserName -Domain $Domain -CIM:$CIM
+			if ($SID)
+			{
+				$NewSDDL = "(A;;CC;;;{0})" -f $SID
+				if ($Merge)
+				{
+					$SDDL += $NewSDDL
+				}
+				else
+				{
+					Write-Output $NewSDDL
+				}
+			}
+		}
+
+		foreach ($UserGroup in $Group)
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting group principal SDDL: $Domain\$UserGroup"
+
+			$SID = Get-GroupSID $UserGroup -Domain $Domain -CIM:$CIM
+			if ($SID)
+			{
+				$NewSDDL = "(A;;CC;;;{0})" -f $SID
+				if ($Merge)
+				{
+					$SDDL += $NewSDDL
+				}
+				else
+				{
+					Write-Output $NewSDDL
+				}
+			}
+		}
+	}
+
+	if ($Merge)
+	{
+		if ($SDDL.Length -lt 3)
+		{
+			Write-Error -TargetObject $SDDL -Message "Failed to assemble SDDL"
+		}
+		else
+		{
+			return $SDDL
+		}
 	}
 }

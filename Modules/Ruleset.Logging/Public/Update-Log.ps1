@@ -164,7 +164,7 @@ function Update-Log
 
 		if ($InfoBuffer)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing Information message"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing information message"
 
 			if ($InformationLogging)
 			{

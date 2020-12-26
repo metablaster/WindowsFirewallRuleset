@@ -46,6 +46,8 @@ None. TestTemplate.ps1 does not generate any output
 
 .NOTES
 None.
+TODO: Common parameters, Verbose, Debug etc. don't work or are overridden by ProjectSettings,
+Make it possible to run test with verbose or debug flag
 #>
 
 [CmdletBinding()]

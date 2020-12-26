@@ -28,19 +28,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Resolve-WildcardPath
+Unit test for Reset-TestDrive
 
 .DESCRIPTION
-Test correctness of Resolve-WildcardPath
+Test correctness of Reset-TestDrive
 
 .EXAMPLE
-PS> .\Resolve-WildcardPath.ps1
+PS> .\Reset-TestDrive.ps1
 
 .INPUTS
-None. You cannot pipe objects to Resolve-WildcardPath.ps1
+None. You cannot pipe objects to Reset-TestDrive.ps1
 
 .OUTPUTS
-None. Resolve-WildcardPath.ps1 does not generate any output
+None. Reset-TestDrive.ps1 does not generate any output
 
 .NOTES
 None.
@@ -65,23 +65,38 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
-$TestDrive = "$ProjectRoot\Tes?\Ru[l|r]eset.Uti*\TestDrive"
 
-Start-Test "Resolve-WildcardPath 'DirInfo'"
-$DirectoryInfo = "$TestDrive\DirInfo"
-Resolve-WildcardPath -Path $DirectoryInfo -Create | Test-Output -Command Resolve-WildcardPath
+Remove-Item -Path $DefaultTestDrive -Recurse -ErrorAction Ignore
+$Principal = New-Object -TypeName Security.Principal.WindowsPrincipal([System.Security.Principal.WindowsIdentity]::GetCurrent())
 
-Start-Test "Resolve-WildcardPath 'AsString'"
-$DirectoryInfo = "$TestDrive\AsString"
-Resolve-WildcardPath -Path $DirectoryInfo -Create -As String | Test-Output -Command Resolve-WildcardPath
+if ($Principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::User))
+{
+	Start-Test "Reset-TestDrive non default new drive"
+	Reset-TestDrive $DefaultTestDrive\$ThisScript
 
-Start-Test "Resolve-WildcardPath 'DirInfo'"
-$FileInfo = "$TestDrive\DirInfo\infofile.txt"
-Resolve-WildcardPath -File $FileInfo -Create | Test-Output -Command Resolve-WildcardPath
+	Start-Test "Reset-TestDrive non default existing drive"
+	Remove-Item -Path $DefaultTestDrive\$ThisScript\README.md -Confirm
+	Reset-TestDrive $DefaultTestDrive\$ThisScript
+}
+else
+{
+	Start-Test "Reset-TestDrive as Administrator"
+	Reset-TestDrive $DefaultTestDrive\$ThisScript
 
-Start-Test "Resolve-WildcardPath 'AsString'"
-$FileInfo = "$TestDrive\stringfile.txt"
-Resolve-WildcardPath -File $FileInfo -Create -As String | Test-Output -Command Resolve-WildcardPath
+	Start-Test "Reset-TestDrive as Administrator"
+	Remove-Item -Path $DefaultTestDrive\$ThisScript\README.md -Confirm
+	Reset-TestDrive $DefaultTestDrive\$ThisScript
+}
+
+Start-Test "Reset-TestDrive new drive"
+Remove-Item -Path $DefaultTestDrive -Recurse -ErrorAction Ignore
+$Result = Reset-TestDrive
+$Result
+
+Start-Test "Reset-TestDrive existing drive"
+Reset-TestDrive
+
+Test-Output $Result -Command Reset-TestDrive
 
 Update-Log
 Exit-Test

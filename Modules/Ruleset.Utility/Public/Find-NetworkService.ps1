@@ -63,7 +63,7 @@ function Find-NetworkService
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Scanning rules for network services"
 
-	[System.IO.DirectoryInfo] $Directory = Resolve-WildcardPath -Path $Path
+	[System.IO.DirectoryInfo] $Directory = Resolve-FileSystem $Path
 
 	if (!($Directory -and $Directory.Exists))
 	{

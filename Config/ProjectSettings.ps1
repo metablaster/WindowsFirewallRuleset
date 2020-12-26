@@ -58,6 +58,7 @@ TODO: Use advanced parameters to control Verbose, Debug, Confirm and WhatIf loca
 TODO: Variable description should be part of variable object
 TODO: Some version variables enabled for module initialization are needed in several modules
 such as PS edition, PS version etc...
+HACK: Verbose, Debug etc. common parameters don't work per function or per script
 #>
 
 [CmdletBinding()]
@@ -599,6 +600,9 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	Update-FormatData -PrependPath $PathEntry.FullName
 
 	Remove-Variable -Name PathEntry -Scope Private
+
+	# Default output location for unit tests that produce file system output
+	New-Variable -Name DefaultTestDrive -Scope Global -Option Constant -Value $ProjectRoot\Test\TestDrive
 }
 #endregion
 

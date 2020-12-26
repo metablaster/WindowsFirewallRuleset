@@ -24,6 +24,12 @@ If you would like to see fresh changes done since last release you can do so on 
 
 **NOTE:** Changes for unreleased version (develop branch) may change or be upfront
 
+- Modules
+
+  Improved functions:
+  - `ConvertFrom-SDDL`
+  - `Get-SDDL`
+
 - Rules
 
   - Updated rule script for git and GitHub Desktop
@@ -33,7 +39,12 @@ If you would like to see fresh changes done since last release you can do so on 
   - `Get-ParameterAlias` script to help harvest parameter aliases for naming convention
   - `Set-Shortcut` function to set desktop shortcut to personalized firewall management console
   - `Test-MarkdownLinks` function to find dead links in markdown files
-  - `Resolve-WildcardPath` function to resolve path wildcard pattern and convert to `System.IO.*Info`
+  - `Resolve-FileSystem` function to resolve path wildcard pattern or relative paths to `System.IO.*Info`
+  - `Reset-TestDrive` function to safely clear test drive directory for cleaner and smoother unit testing.
+
+- Tests
+
+  - Unit tests have consistent test drive defined
 
 - Design
 

@@ -71,25 +71,37 @@ Enter-Test
 [string[]] $Groups = @("Users", "Administrators")
 
 Start-Test "Get-SDDL -Group $Groups"
-$TestUsersSDDL = Get-SDDL -Group $Groups
-$TestUsersSDDL
+Get-SDDL -Group $Groups
+
+Start-Test "Get-SDDL -Group $Groups -Merge"
+Get-SDDL -Group $Groups -Merge
 
 Start-Test "Get-SDDL -Group $Groups -CIM"
-$TestUsersSDDL = Get-SDDL -Group $Groups -CIM
-$TestUsersSDDL
+Get-SDDL -Group $Groups -CIM
+
+Start-Test "Get-SDDL -Group $Groups -CIM -Merge"
+Get-SDDL -Group $Groups -CIM -Merge
 
 #
 # Test users
 #
 
 [string[]] $Users = "Administrator", $TestAdmin, $TestUser
+
 Start-Test "Get-SDDL -User $Users"
-$TestUsersSDDL = Get-SDDL -User $Users
-$TestUsersSDDL
+Get-SDDL -User $Users
+
+Start-Test "Get-SDDL -User $Users -Merge"
+Get-SDDL -User $Users -Merge
 
 Start-Test "Get-SDDL -User $Users -CIM"
-$TestUsersSDDL = Get-SDDL -User $Users -CIM
-$TestUsersSDDL
+Get-SDDL -User $Users -CIM
+
+Start-Test "Get-SDDL -User $Users -CIM -Merge"
+$Result = Get-SDDL -User $Users -CIM -Merge
+$Result
+
+Test-Output $Result -Command Get-SDDL
 
 #
 # Test NT AUTHORITY
@@ -99,8 +111,10 @@ $TestUsersSDDL
 [string[]] $NTUsers = "SYSTEM", "LOCAL SERVICE"
 
 Start-Test "Get-SDDL -Domain $NTDomain -User $NTUsers"
-$TestUsersSDDL = Get-SDDL -Domain $NTDomain -User $NTUsers
-$TestUsersSDDL
+Get-SDDL -Domain $NTDomain -User $NTUsers
+
+Start-Test "Get-SDDL -Domain $NTDomain -User $NTUsers -Merge"
+Get-SDDL -Domain $NTDomain -User $NTUsers -Merge
 
 #
 # Test APPLICATION PACKAGE AUTHORITY
@@ -110,10 +124,30 @@ $TestUsersSDDL
 [string[]] $AppUser = "Your Internet connection", "Your pictures library"
 
 Start-Test "Get-SDDL -Domain $AppDomain -User $AppUser"
-$TestUsersSDDL = Get-SDDL -Domain $AppDomain -User $AppUser
-$TestUsersSDDL
+Get-SDDL -Domain $AppDomain -User $AppUser
 
-Test-Output $TestUsersSDDL -Command Get-SDDL
+Start-Test "Get-SDDL -Domain $AppDomain -User $AppUser -Merge"
+$Result = Get-SDDL -Domain $AppDomain -User $AppUser -Merge
+$Result
+
+Test-Output $Result -Command Get-SDDL
+
+#
+# Test paths
+#
+
+$FileSystem = "C:\Users\Public\Desktop\" # Inherited
+$Registry1 = "HKCU:\" # Not Inherited
+$Registry2 = "HKLM:\SOFTWARE\Microsoft\Clipboard"
+
+Start-Test "Get-SDDL -LiteralPath FileSystem"
+Get-SDDL -LiteralPath $FileSystem
+
+Start-Test "Get-SDDL -LiteralPath Registry1 -Merge"
+$Result = Get-SDDL -LiteralPath @($Registry1, $Registry2) -Merge
+$Result
+
+Test-Output $Result -Command Get-SDDL
 
 Update-Log
 Exit-Test

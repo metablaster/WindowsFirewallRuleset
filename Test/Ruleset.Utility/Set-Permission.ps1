@@ -88,7 +88,7 @@ if ($FileSystem)
 {
 	# Set up test variables
 	$Computer = [System.Environment]::MachineName
-	$TestFolder = "$ProjectRoot\Test\Ruleset.Utility\TestDrive"
+	$TestDrive = "$DefaultTestDrive\$ThisScript"
 
 	[AccessControl.FileSystemRights] $Access = "ReadAndExecute, ListDirectory, Traverse"
 
@@ -97,11 +97,11 @@ if ($FileSystem)
 	{
 		# Test ownership
 		Start-Test "Set-Permission ownership"
-		Set-Permission -Owner $TestUser -Domain $Computer -Path $TestFolder -Recurse
+		Set-Permission -Owner $TestUser -Domain $Computer -Path $TestDrive -Recurse
 
 		# Reset existing tree for re-test
 		Start-Test "Reset existing tree"
-		Set-Permission -Principal $TestUser -Domain $Computer -Path $TestFolder -Reset -Grant $Access -Recurse
+		Set-Permission -Principal $TestUser -Domain $Computer -Path $TestDrive -Reset -Grant $Access -Recurse
 	}
 
 	$TestFolders = @(
@@ -118,22 +118,22 @@ if ($FileSystem)
 	)
 
 	# Create root test folder
-	if (!(Test-Path -PathType Container -Path $TestFolder))
+	if (!(Test-Path -PathType Container -Path $TestDrive))
 	{
-		Write-Information -Tags "Test" -MessageData "INFO: Creating new test directory: $TestFolder"
-		New-Item -ItemType Container -Path $TestFolder | Out-Null
+		Write-Information -Tags "Test" -MessageData "INFO: Creating new test directory: $TestDrive"
+		New-Item -ItemType Container -Path $TestDrive | Out-Null
 	}
 
 	# Create subfolder files and directories
 	$FileIndex = 0
 	foreach ($Folder in $TestFolders)
 	{
-		if (!(Test-Path -PathType Container -Path $TestFolder\$Folder))
+		if (!(Test-Path -PathType Container -Path $TestDrive\$Folder))
 		{
 			Write-Information -Tags "Test" -MessageData "INFO: Creating new test directory: $Folder"
-			New-Item -ItemType Container -Path $TestFolder\$Folder | Out-Null
-			New-Item -ItemType Container -Path $TestFolder\$Folder\$Folder | Out-Null
-			New-Item -ItemType File -Path $TestFolder\$Folder\$($TestFiles[$FileIndex]) | Out-Null
+			New-Item -ItemType Container -Path $TestDrive\$Folder | Out-Null
+			New-Item -ItemType Container -Path $TestDrive\$Folder\$Folder | Out-Null
+			New-Item -ItemType File -Path $TestDrive\$Folder\$($TestFiles[$FileIndex]) | Out-Null
 		}
 
 		++$FileIndex
@@ -142,38 +142,38 @@ if ($FileSystem)
 	# Create test files
 	foreach ($File in $TestFiles)
 	{
-		if (!(Test-Path -PathType Leaf -Path $TestFolder\$File))
+		if (!(Test-Path -PathType Leaf -Path $TestDrive\$File))
 		{
 			Write-Information -Tags "Test" -MessageData "INFO: Creating new test file: $File"
-			New-Item -ItemType File -Path $TestFolder\$File | Out-Null
+			New-Item -ItemType File -Path $TestDrive\$File | Out-Null
 		}
 	}
 
 	# Test ownership
 	Start-Test "Set-Permission ownership"
-	Set-Permission -Owner $TestUser -Domain $Computer -Path $TestFolder
+	Set-Permission -Owner $TestUser -Domain $Computer -Path $TestDrive
 
 	# Test defaults
 	Start-Test "Set-Permission - NT SERVICE\LanmanServer permission on file"
-	Set-Permission -Principal "LanmanServer" -Domain "NT SERVICE" -Path "$TestFolder\$($TestFiles[0])" -Grant $Access
+	Set-Permission -Principal "LanmanServer" -Domain "NT SERVICE" -Path "$TestDrive\$($TestFiles[0])" -Grant $Access
 
 	Start-Test "Set-Permission - Local Service permission on file"
-	Set-Permission -Principal "Local Service" -Path "$TestFolder\$($TestFiles[1])" -Grant $Access
+	Set-Permission -Principal "Local Service" -Path "$TestDrive\$($TestFiles[1])" -Grant $Access
 
 	Start-Test "Set-Permission - Group permission on file"
-	Set-Permission -Principal "Remote Management Users" -Path "$TestFolder\$($TestFiles[2])" -Grant $Access
+	Set-Permission -Principal "Remote Management Users" -Path "$TestDrive\$($TestFiles[2])" -Grant $Access
 
 	# Test parameters
 	Start-Test "Set-Permission - NT SERVICE\LanmanServer permission on folder"
-	Set-Permission -Principal "LanmanServer" -Domain "NT SERVICE" -Path "$TestFolder\$($TestFolders[0])" `
+	Set-Permission -Principal "LanmanServer" -Domain "NT SERVICE" -Path "$TestDrive\$($TestFolders[0])" `
 		-Type "Deny" -Rights "TakeOwnership, Delete, Modify"
 
 	Start-Test "Set-Permission - Local Service permission on folder"
-	Set-Permission -Principal "Local Service" -Path "$TestFolder\$($TestFolders[1])" `
+	Set-Permission -Principal "Local Service" -Path "$TestDrive\$($TestFolders[1])" `
 		-Type "Allow" -Inheritance "ObjectInherit" -Propagation "NoPropagateInherit" -Grant $Access
 
 	Start-Test "Set-Permission - Group permission on folder"
-	$Result = Set-Permission -Principal "Remote Management Users" -Path "$TestFolder\$($TestFolders[2])" -Grant $Access `
+	$Result = Set-Permission -Principal "Remote Management Users" -Path "$TestDrive\$($TestFolders[2])" -Grant $Access `
 		-Protected
 
 	$Result
@@ -183,19 +183,19 @@ if ($FileSystem)
 
 	# Test reset/recurse
 	Start-Test "Reset permissions inheritance to explicit"
-	Set-Permission -Path "$TestFolder\Protected\Remote Management Users.txt" -Reset -Protected -PreserveInheritance
+	Set-Permission -Path "$TestDrive\Protected\Remote Management Users.txt" -Reset -Protected -PreserveInheritance
 
 	Start-Test "Reset permissions recurse"
-	Set-Permission -Principal "Administrators" -Grant "FullControl" -Path $TestFolder -Reset -Recurse
+	Set-Permission -Principal "Administrators" -Grant "FullControl" -Path $TestDrive -Reset -Recurse
 
 	Start-Test "Recursive ownership on folder"
-	Set-Permission -Owner "Replicator" -Path $TestFolder -Recurse
+	Set-Permission -Owner "Replicator" -Path $TestDrive -Recurse
 
 	Start-Test "Recursively reset"
-	Set-Permission -Path $TestFolder -Reset -Recurse
+	Set-Permission -Path $TestDrive -Reset -Recurse
 
 	Start-Test "Recursively clear all rules or folder"
-	Set-Permission -Path $TestFolder -Reset -Recurse -Protected
+	Set-Permission -Path $TestDrive -Reset -Recurse -Protected
 }
 elseif ($Registry -or $PSCmdlet.ShouldContinue("Modify registry ownership or permissions", "Accept dangerous unit test"))
 {

@@ -72,7 +72,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
-$TestDrive = "$ProjectRoot\Test\Ruleset.Utility\TestDrive"
+$TestDrive = "$DefaultTestDrive\$ThisScript"
 $Restricted = "$env:SystemDrive\Windows"
 
 if (!(Test-Path -Path $TestDrive -PathType Container))

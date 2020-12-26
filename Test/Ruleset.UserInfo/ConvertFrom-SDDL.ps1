@@ -64,20 +64,72 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
-Start-Test "Get-SDDL: (user accounts)"
-$SDDL1 = Get-SDDL -Group "Users"
+#
+# Test groups
+#
+
+[string[]] $Group = @("Users", "Administrators")
+
+Start-Test "Get-SDDL: $Group"
+$SDDL1 = Get-SDDL -Group $Group
 $SDDL1
 
-Start-Test "Get-SDDL: (system accounts)"
-$SDDL2 = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE", "LOCAL SERVICE"
+#
+# Test users
+#
+
+[string[]] $User = "Administrator", $TestAdmin, $TestUser
+
+Start-Test "Get-SDDL: $User"
+$SDDL2 = Get-SDDL -User $User
 $SDDL2
 
+#
+# Test NT AUTHORITY
+#
+
+[string] $NTDomain = "NT AUTHORITY"
+[string[]] $NTUser = "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE"
+
+
+Start-Test "Get-SDDL: $NTDomain"
+$SDDL3 = Get-SDDL -Domain $NTDomain -User $NTUser
+$SDDL3
+
+#
+# Test paths
+#
+
+$FileSystem = "C:\Users\Public\Desktop\" # Inherited
+$Registry1 = "HKCU:\" # Not Inherited
+$Registry2 = "HKLM:\SOFTWARE\Microsoft\Clipboard"
+
+Start-Test "Get-SDDL -LiteralPath FileSystem"
+Get-SDDL -LiteralPath $FileSystem
+
+Start-Test "Get-SDDL -LiteralPath Registry1 -Merge"
+$SDDL4 = Get-SDDL -LiteralPath @($Registry1, $Registry2) -Merge
+$SDDL4
+
+#
+# Test convert
+#
+
 Start-Test "ConvertFrom-SDDL"
-$Result = ConvertFrom-SDDL $SDDL1, $SDDL2
+$Result = ConvertFrom-SDDL $SDDL1, $SDDL2, $SDDL3
 $Result
 
+Test-Output $Result -Command ConvertFrom-SDDL
+
 Start-Test "ConvertFrom-SDDL pipeline"
-$SDDL1, $SDDL2 | ConvertFrom-SDDL
+$Result = $SDDL1, $SDDL2, $SDDL3 | ConvertFrom-SDDL
+$Result
+
+Test-Output $Result -Command ConvertFrom-SDDL
+
+Start-Test "ConvertFrom-SDDL file path"
+$Result = ConvertFrom-SDDL $SDDL4
+$Result
 
 Test-Output $Result -Command ConvertFrom-SDDL
 

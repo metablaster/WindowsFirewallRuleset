@@ -80,7 +80,7 @@ function Confirm-FileEncoding
 	{
 		foreach ($TargetFile in $Path)
 		{
-			$File = Resolve-WildcardPath -File $TargetFile
+			$File = Resolve-FileSystem $TargetFile -File
 
 			if (!($File -and $File.Exists))
 			{

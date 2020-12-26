@@ -97,7 +97,7 @@ function Get-ProcessOutput
 
 	if ($Path)
 	{
-		[System.IO.FileInfo] $FilePath = Resolve-WildcardPath -File $Path
+		[System.IO.FileInfo] $FilePath = Resolve-FileSystem $Path -File
 		if (!($FilePath -and $FilePath.Exists))
 		{
 			return

@@ -46,7 +46,7 @@ PS> $SomeSDDL, $SDDL2, "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)" | ConvertFrom-SDDL
 [string]
 
 .OUTPUTS
-[string]
+[PSCustomObject]
 
 .NOTES
 None.
@@ -55,12 +55,16 @@ function ConvertFrom-SDDL
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/ConvertFrom-SDDL.md")]
-	[OutputType([string])]
+	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
 		[string[]] $SDDL
 	)
 
+	begin
+	{
+		$ACLObject = New-Object -TypeName System.Security.AccessControl.DirectorySecurity
+	}
 	process
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -69,11 +73,64 @@ function ConvertFrom-SDDL
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing $Entry"
 
-			$ACLObject = New-Object -TypeName System.Security.AccessControl.DirectorySecurity
-			$ACLObject.SetSecurityDescriptorSddlForm($Entry)
+			$SDDLSplit = $Entry.Split("(")
 
-			Write-Output $ACLObject.Access | Select-Object -ExpandProperty IdentityReference |
-			Select-Object -ExpandProperty Value
-		}
+			# Write-Output ""
+			# Write-Output "SDDL Split:"
+			# Write-Output "****************"
+
+			# $SDDLSplit
+
+			# Write-Output ""
+			# Write-Output "SDDL SID Parsing:"
+			# Write-Output "****************"
+			$Inherited = "?"
+
+			# Skip index 0 where owner and/or primary group are stored
+			for ($i = 1; $i -lt $SDDLSplit.Length; ++$i)
+			{
+				$ACLSplit = $SDDLSplit[$i].Split(";")
+				$ACLObject.SetSecurityDescriptorSddlForm($ACLSplit[1])
+
+				$Principal = $ACLObject.Access | Select-Object -ExpandProperty IdentityReference |
+				Select-Object -ExpandProperty Value
+
+				if ($ACLSplit[1].Contains("ID"))
+				{
+					$Inherited = "Inherited"
+				}
+				else
+				{
+					$ACLEntrySID = $null
+
+					# Remove the trailing ")"
+					$ACLEntry = $ACLSplit[5].TrimEnd(")")
+
+					# Parse out the SID using a handy RegEx
+					$ACLEntrySIDMatches = [regex]::Matches($ACLEntry, "(S(-\d+){2,8})")
+
+					# NOTE: original changed from $ACLEntrySID = $_.value to $ACLEntrySID += $_.value
+					$ACLEntrySIDMatches | ForEach-Object {
+						$ACLEntrySID += $_.Value
+					}
+
+					if ($ACLEntrySID)
+					{
+						$SID = $ACLEntrySID
+					}
+					else
+					{
+						$Inherited = "Not inherited"
+					}
+				}
+			}
+
+			[PSCustomObject]@{
+				Principal = $Principal
+				SID = $SID
+				# SDDL = $Entry
+				Inherited = $Inherited
+			}
+		} # foreach ($Entry in $SDDL)
 	}
 }

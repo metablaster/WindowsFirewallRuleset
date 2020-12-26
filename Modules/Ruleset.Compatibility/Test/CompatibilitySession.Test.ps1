@@ -29,12 +29,12 @@ SOFTWARE.
 using namespace System.Management.Automation
 using namespace System.Management.Automation.Runspaces
 
-$scriptPath = Split-Path $MyInvocation.MyCommand.Path -Parent
+New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Value (Split-Path $PSScriptRoot -Leaf)
 
 Describe "Test the Windows PowerShell Compatibility Session functions" {
 
 	BeforeAll {
-		Import-Module -Force "$scriptPath\..\Ruleset.Compatibility.psd1"
+		Import-Module -Force "$ThisModule\Ruleset.Compatibility.psd1"
 	}
 
 	It "Make sure the <command> command exists" -TestCases @(
@@ -131,19 +131,19 @@ Describe "Test the Windows PowerShell Compatibility Session functions" {
 	}
 
 	It "Copy-WinModule should copy the specified module to the destination path" {
-		$tempDirToUse = Join-Path -Path $ProjectRoot\Modules\Ruleset.Compatibility\Test\TestDrive -ChildPath "tmp$(Get-Random)"
-		New-Item -ItemType directory $tempDirToUse
+		$TestDrive = Join-Path -Path $DefaultTestDrive\$ThisModule -ChildPath "tmp$(Get-Random)"
+		New-Item -ItemType Directory $TestDrive | Out-Null
 
 		# Invoke the command to copy the module
-		Copy-WinModule PnpDevice -Destination $tempDirToUse
+		Copy-WinModule PnpDevice -Destination $TestDrive
 
 		# Ensure that the module directory exists
-		Join-Path $tempDirToUse PnpDevice | Should -Exist
+		Join-Path $TestDrive PnpDevice | Should -Exist
 		# And the .psd1 file
-		$psd1File = Join-Path -Path $tempDirToUse -ChildPath PnpDevice -AdditionalChildPath PnpDevice.psd1
+		$psd1File = Join-Path -Path $TestDrive -ChildPath PnpDevice -AdditionalChildPath PnpDevice.psd1
 		$psd1File | Should -Exist
 		# Ensure that only 1 module got copied
-		(Get-ChildItem $tempDirToUse | Measure-Object).Count | Should -BeExactly 1
+		(Get-ChildItem $TestDrive | Measure-Object).Count | Should -BeExactly 1
 
 		# Now verify that the local module can be loaded and used
 
@@ -190,7 +190,7 @@ Describe "Test the Windows PowerShell Compatibility Session functions" {
 			$psd1File = Join-Path $fullModulePath PnpDevice.psd1
 			$psd1File | Should -Exist
 			# Ensure that only 1 module got copied
-			(Get-ChildItem $tempDirToUse).Count | Should -BeExactly 1
+			(Get-ChildItem $TestDrive).Count | Should -BeExactly 1
 
 			# Now verify that the local module can be loaded and used
 

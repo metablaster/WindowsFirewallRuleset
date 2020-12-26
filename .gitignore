@@ -99,5 +99,5 @@ Modules/**/Help/**/Content/
 Modules/**/Help/**/External/
 
 # Auto generated test folders
-Test/Ruleset.Utility/TestDrive/
+Test/TestDrive/
 Modules/Ruleset.Compatibility/Test/TestDrive/
