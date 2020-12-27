@@ -38,8 +38,8 @@ are started before starting requested service and setting it to automatic startu
 Some services are essential for correct firewall and network functioning,
 without essential services project code may result in errors hard to debug
 
-.PARAMETER Services
-An array of services to start
+.PARAMETER Name
+Enter one or more services to configure
 
 .EXAMPLE
 PS> Initialize-Service @("lmhosts", "LanmanWorkstation", "LanmanServer")
@@ -70,7 +70,7 @@ function Initialize-Service
 	[OutputType([bool])]
 	param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-		[string[]] $Services
+		[string[]] $Name
 	)
 
 	begin
@@ -91,7 +91,7 @@ function Initialize-Service
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-		foreach ($InputService in $Services)
+		foreach ($InputService in $Name)
 		{
 			$StatusGood = $true
 			$Service = Get-Service -Name $InputService

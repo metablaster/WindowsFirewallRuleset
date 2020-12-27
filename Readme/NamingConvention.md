@@ -76,11 +76,13 @@ Parameter names and aliases
 - [string] `Privilege` (specify the right a cmdlet needs to perform an operation for a particular entity)
 - [switch] `CaseSensitive`
 - [switch] `Binary` (the cmdlet handles binary values)
+- [switch] `Quiet`
 
 `*` Used by most commandlets but should be aliases instead
 
 ### Unresolved
 
+- [switch] `CIM` (Contact CIM server)
 - [switch] `Disabled` (Disabled user accounts)
 - [switch] `DomainName` (see: Test-UPN)
 - [ValidateSet()] `AddressFamily`

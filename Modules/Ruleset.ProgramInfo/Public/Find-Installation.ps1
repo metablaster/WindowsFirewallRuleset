@@ -62,8 +62,8 @@ function Find-Installation
 		[Alias("Program")]
 		[TargetProgram] $Application,
 
-		[Alias("ComputerName", "CN")]
 		[Parameter()]
+		[Alias("ComputerName", "CN")]
 		[string] $Domain = [System.Environment]::MachineName
 	)
 

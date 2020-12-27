@@ -35,8 +35,8 @@ Various paths drilled out of registry, and those specified by the user must be
 checked and properly formatted.
 Formatted paths will also help sorting rules in firewall GUI based on path.
 
-.PARAMETER FilePath
-File path to format, can have environment variables, or consists of trailing slashes.
+.PARAMETER LiteralPath
+File path to format, can have environment variables, or it may contain redundant or invalid characters.
 
 .EXAMPLE
 PS> Format-Path "C:\Program Files\\Dir\"
@@ -50,6 +50,7 @@ PS> Format-Path "C:\Program Files\\Dir\"
 .NOTES
 TODO: This should proably be inside utility module,
 it's here since only this module uses this function.
+TODO: Reference to path variable as second parameter set
 #>
 function Format-Path
 {
@@ -58,7 +59,7 @@ function Format-Path
 	[OutputType([string])]
 	param (
 		[Parameter(ValueFromPipeline = $true)]
-		[string] $FilePath
+		[string] $LiteralPath
 	)
 
 	process
@@ -66,59 +67,59 @@ function Format-Path
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 		# Impossible to know what the input may be
-		if ([string]::IsNullOrEmpty($FilePath))
+		if ([string]::IsNullOrEmpty($LiteralPath))
 		{
 			# TODO: why allowing empty path?
 			# NOTE: Avoid spamming
 			# Write-Debug -Message "[$($MyInvocation.InvocationName)] Returning false, file path is null or empty"
-			return $FilePath
+			return $LiteralPath
 		}
 
 		# Strip away quotations from path
-		$FilePath = $FilePath.Trim('"')
-		$FilePath = $FilePath.Trim("'")
+		$LiteralPath = $LiteralPath.Trim('"')
+		$LiteralPath = $LiteralPath.Trim("'")
 
 		# Some paths may have semicolon (ie. command paths)
-		$FilePath = $FilePath.TrimEnd(";")
+		$LiteralPath = $LiteralPath.TrimEnd(";")
 
 		# Replace double slashes with single ones
-		$FilePath = $FilePath.Replace("\\", "\")
+		$LiteralPath = $LiteralPath.Replace("\\", "\")
 
 		# NOTE: forward slashes while valid for firewall rule are not valid to format path into
 		# environment variable.
-		$FilePath = $FilePath.Replace("//", "\")
+		$LiteralPath = $LiteralPath.Replace("//", "\")
 
 		# Replace forward slashes with backward ones
-		$FilePath = $FilePath.Replace("/", "\")
+		$LiteralPath = $LiteralPath.Replace("/", "\")
 
 		# If input path is root drive, removing a slash would produce bad path
 		# Otherwise remove trailing slash for cases where entry path is convertible to variable
-		if ($FilePath.Length -gt 3)
+		if ($LiteralPath.Length -gt 3)
 		{
-			$FilePath = $FilePath.TrimEnd("\")
+			$LiteralPath = $LiteralPath.TrimEnd("\")
 		}
 
 		# TODO: sorted result will have multiple same variables,
 		# Sorting from longest paths which should be checked first
 		$Variables = Select-EnvironmentVariable WhiteList | Sort-Object -Descending { $_.Value.Length }
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if '$FilePath' already contains valid environment variable"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if '$LiteralPath' already contains valid environment variable"
 		foreach ($Variable in $Variables)
 		{
-			if ($FilePath -like "$($Variable.Name)*")
+			if ($LiteralPath -like "$($Variable.Name)*")
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input path already formatted: $FilePath"
-				return $FilePath
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input path already formatted: $LiteralPath"
+				return $LiteralPath
 			}
 			# NOTE: else if it contains bad environment variable, Test-Environment should be used
 			# to show warning or error message, we'll expand bad variables anyway.
 		}
 
 		# NOTE: The path may contain invalid or multiple environment variables, ex. those previously excluded
-		$FilePath = [System.Environment]::ExpandEnvironmentVariables($FilePath)
+		$LiteralPath = [System.Environment]::ExpandEnvironmentVariables($LiteralPath)
 
 		# Make a copy of file path because modification can be wrong
-		$SearchString = $FilePath
+		$SearchString = $LiteralPath
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if '$SearchString' is convertible to environment variable"
 		while (![string]::IsNullOrEmpty($SearchString))
@@ -128,9 +129,9 @@ function Format-Path
 				if ($Entry.Value -like $SearchString)
 				{
 					# Environment variable found, if this is first hit, trailing slash is already removed
-					$FilePath = $FilePath.Replace($SearchString, $Entry.Name)
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Formatting input path to: $FilePath"
-					return $FilePath
+					$LiteralPath = $LiteralPath.Replace($SearchString, $Entry.Name)
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Formatting input path to: $LiteralPath"
+					return $LiteralPath
 				}
 			}
 
@@ -140,7 +141,7 @@ function Format-Path
 		}
 
 		# The path has been reduced to root drive so get that
-		$SearchString = Split-Path -Path $FilePath -Qualifier
+		$SearchString = Split-Path -Path $LiteralPath -Qualifier
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] path has been reduced to root drive, now searching for: $SearchString"
 
 		# Find candidate replacements for the qualifier
@@ -152,7 +153,7 @@ function Format-Path
 			# There are no environment variables for this drive, just trim trailing slash
 			# NOTE: TrimEnd, this is here for drive root paths, drive root environment variables as
 			# well as all other paths returned from this function don't have ending slash either.
-			return $FilePath.TrimEnd("\")
+			return $LiteralPath.TrimEnd("\")
 		}
 		elseif (($Variables | Measure-Object).Count -gt 1)
 		{
@@ -168,9 +169,9 @@ function Format-Path
 		}
 
 		# Only root drive is converted, just trim away trailing slash if this is qualifier
-		$FilePath = $FilePath.Replace($SearchString, $Replacement).TrimEnd("\")
+		$LiteralPath = $LiteralPath.Replace($SearchString, $Replacement).TrimEnd("\")
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Only root drive is formatted: $FilePath"
-		return $FilePath
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Only root drive is formatted: $LiteralPath"
+		return $LiteralPath
 	}
 }

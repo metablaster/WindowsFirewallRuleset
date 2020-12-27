@@ -213,6 +213,18 @@ Use following command to see allowed verbs to name your functions
 Get-Verb | Select-Object Verb, Group, Description | Sort-Object Verb
 ```
 
+For function nouns prefer 1 word or maximum 2 (distinguished by first uppercase letter) for example:
+
+- `Sort-Data`
+- `Get-SqlServer`
+
+Sometimes this is not possible, for example `Get-SqlServer` function may collide with existing
+PowerShell commandlets, in this case it's better to use 3 words rather than naming your function to
+something that doesn't describe it's purpose, ex. `Get-SqlServerInstance` would be fine too although
+such exceptions should be rare.
+
+Noun words must be singular not plural, regardless if input or output is an array of objects.
+
 The order of code in scripts is ordered into "sections" which depends on purpose,\
 in the following way and may be different if needed for what ever reason:
 

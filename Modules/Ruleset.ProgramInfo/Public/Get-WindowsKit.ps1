@@ -33,7 +33,7 @@ Get installed Windows Kits
 .DESCRIPTION
 Get installation information about installed Windows Kit's
 
-.PARAMETER ComputerName
+.PARAMETER Domain
 Computer name for which to list installed installed windows kits
 
 .EXAMPLE
@@ -54,15 +54,15 @@ function Get-WindowsKit
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-WindowsKit.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
-		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
-		[string] $ComputerName = [System.Environment]::MachineName
+		[Alias("ComputerName", "CN")]
+		[string] $Domain = [System.Environment]::MachineName
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Domain"
 
-	if (Test-TargetComputer $ComputerName)
+	if (Test-TargetComputer $Domain)
 	{
 		if ([System.Environment]::Is64BitOperatingSystem)
 		{
@@ -75,10 +75,10 @@ function Get-WindowsKit
 			$HKLM = "SOFTWARE\Microsoft\Windows Kits\Installed Roots"
 		}
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
 		# TODO: try catch for remote registry access
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
-		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
+		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
@@ -111,7 +111,7 @@ function Get-WindowsKit
 				$InstallLocation = Format-Path $InstallLocation
 
 				$WindowsKits += [PSCustomObject]@{
-					"ComputerName" = $ComputerName
+					"ComputerName" = $Domain
 					"RegKey" = $RootKeyLeaf
 					"Product" = $RootKeyEntry
 					"InstallLocation" = $InstallLocation

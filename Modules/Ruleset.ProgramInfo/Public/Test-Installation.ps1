@@ -37,8 +37,8 @@ system for valid path and return it via reference parameter
 .PARAMETER Program
 Predefined program name for which to search
 
-.PARAMETER FilePath
-Reference to variable which holds a path to program (excluding executable)
+.PARAMETER Directory
+Reference to variable which will hold a path to program (excluding executable)
 
 .EXAMPLE
 PS> $MyProgram = "%ProgramFiles(x86)%\Microsoft Office\root\Office16"
@@ -64,7 +64,7 @@ function Test-Installation
 		[TargetProgram] $Program,
 
 		[Parameter(Mandatory = $true, Position = 1)]
-		[ref] $FilePath
+		[ref] $Directory
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -72,10 +72,10 @@ function Test-Installation
 	# If input path is valid just make sure it's formatted
 	# NOTE: for debugging purposes we want to ignore default installation variables and force searching programs
 	# NOTE: this will cause "converted" path message in all cases
-	if (!$Develop -and (Test-Environment $FilePath.Value -Firewall))
+	if (!$Develop -and (Test-Environment $Directory.Value -Firewall))
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Formatting $FilePath"
-		$FilePath.Value = Format-Path $FilePath.Value
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Formatting $Directory"
+		$Directory.Value = Format-Path $Directory.Value
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Installation path for $Program well known"
 		return $true # input path is correct
@@ -132,13 +132,13 @@ function Test-Installation
 		}
 
 		# Don't show correction if the path is same, taking case sensitivity into account.
-		if ($FilePath.Value -cne $InstallLocation)
+		if ($Directory.Value -cne $InstallLocation)
 		{
 			# Using single quotes to make emptiness obvious when the path is empty.
-			Write-Information -Tags "Project" -MessageData "INFO: Path corrected from: '$($FilePath.Value)' to: '$InstallLocation'"
+			Write-Information -Tags "Project" -MessageData "INFO: Path corrected from: '$($Directory.Value)' to: '$InstallLocation'"
 		}
 
-		$FilePath.Value = $InstallLocation
+		$Directory.Value = $InstallLocation
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Installation for $Program found"
 		return $true # installation path found

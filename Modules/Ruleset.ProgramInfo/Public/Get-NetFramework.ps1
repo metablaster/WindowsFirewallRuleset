@@ -34,7 +34,7 @@ Get installed NET Frameworks
 Get-NetFramework will return all NET frameworks installed regardless if
 installation directory exists or not, since some versions are built in
 
-.PARAMETER ComputerName
+.PARAMETER Domain
 Computer name for which to list installed installed framework
 
 .EXAMPLE
@@ -55,21 +55,21 @@ function Get-NetFramework
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-NetFramework.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
-		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
-		[string] $ComputerName = [System.Environment]::MachineName
+		[Alias("ComputerName", "CN")]
+		[string] $Domain = [System.Environment]::MachineName
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Domain"
 
-	if (Test-TargetComputer $ComputerName)
+	if (Test-TargetComputer $Domain)
 	{
 		$HKLM = "SOFTWARE\Microsoft\NET Framework Setup\NDP"
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
-		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
+		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
@@ -107,7 +107,7 @@ function Get-NetFramework
 
 					# we add entry regardless of presence of install path
 					$NetFramework += [PSCustomObject]@{
-						"ComputerName" = $ComputerName
+						"ComputerName" = $Domain
 						"RegKey" = $HKLMSubKey
 						"Version" = $Version
 						"InstallLocation" = $InstallLocation
@@ -145,7 +145,7 @@ function Get-NetFramework
 
 						# we add entry regardless of presence of install path
 						$NetFramework += [PSCustomObject]@{
-							"ComputerName" = $ComputerName
+							Domain = $Domain
 							"RegKey" = $HKLMKey
 							"Version" = $Version
 							"InstallLocation" = $InstallLocation

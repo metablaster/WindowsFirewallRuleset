@@ -63,7 +63,7 @@ APPLICATION PACKAGE AUTHORITY\Your Internet connection
 APPLICATION PACKAGE AUTHORITY\Your home or work networks
 
 .INPUTS
-[Object[]] Deserialized object on PowerShell Core 7.1+, otherwise
+[object[]] Deserialized object on PowerShell Core 7.1+, otherwise
 [Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage[]]
 
 .OUTPUTS
@@ -86,7 +86,7 @@ function Get-AppCapability
 	param (
 		[Alias("App", "StoreApp")]
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true, Position = 0)]
-		[Object[]] $InputObject,
+		[object[]] $InputObject,
 
 		[Parameter()]
 		[string] $User,

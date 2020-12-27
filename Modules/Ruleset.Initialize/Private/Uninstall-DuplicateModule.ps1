@@ -50,7 +50,7 @@ No check for duplicity is performed and all supplied modules are removed.
 One or more module names which to check for outdaness, and uninstall all outdated candidates.
 Unlike with "Module" parameter, only outdated modules are uninstalled.
 
-.PARAMETER Location
+.PARAMETER Scope
 Predefined default locations where too search for outdated modules.
 Shipping: Modules installed as part of PowerShell
 System: Modules installed for all users
@@ -98,7 +98,7 @@ function Uninstall-DuplicateModule
 
 		[Parameter(Mandatory = $true, ParameterSetName = "Name")]
 		[ValidateSet("Shipping", "System", "User")]
-		[string[]] $Location,
+		[string[]] $Scope,
 
 		[Parameter()]
 		[switch] $Force
@@ -164,24 +164,24 @@ function Uninstall-DuplicateModule
 				# Named candidates for removal only
 				[PSModuleInfo[]] $TargetModule = @()
 
-				if ($Location -contains "Shipping")
+				if ($Scope -contains "Shipping")
 				{
 					$TargetModule += $AllTargetModule | Where-Object -Property ModuleBase -Like $ShippingPath*
 				}
 
-				if ($Location -contains "System")
+				if ($Scope -contains "System")
 				{
 					$TargetModule += $AllTargetModule | Where-Object -Property ModuleBase -Like $SystemPath*
 				}
 
-				if ($Location -contains "User")
+				if ($Scope -contains "User")
 				{
-					if ($Location.Length -gt 1)
+					if ($Scope.Length -gt 1)
 					{
 						Write-Warning "System wide modules might be removed in favor of user specific installation"
 						Write-Information -Tags "User" -MessageData "INFO: To avoid this warning, please don't mix 'User' location with other locations"
 
-						if (!($Force -or $PSCmdlet.ShouldContinue($Location, "Accept dangerous comparison on all specified module locations")))
+						if (!($Force -or $PSCmdlet.ShouldContinue($Scope, "Accept dangerous comparison on all specified module locations")))
 						{
 							continue
 						}

@@ -34,8 +34,8 @@ Check if file such as an *.exe exists
 In addition to Test-Path of file, message and stack trace is shown and
 warning message if file not found
 
-.PARAMETER FilePath
-path to file
+.PARAMETER LiteralPath
+Full path to executable file
 
 .EXAMPLE
 PS> Test-File "C:\Users\USERNAME\AppData\Local\Google\Chrome\Application\chrome.exe"
@@ -50,6 +50,7 @@ None. Test-File does not generate any output
 TODO: We should attempt to fix the path if invalid here!
 TODO: We should return true or false and conditionally load rule
 TODO: This should probably be renamed to Test-Executable to make it less likely part of utility module
+TODO: Verify file is executable file (and path formatted?)
 #>
 function Test-File
 {
@@ -58,15 +59,15 @@ function Test-File
 	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true)]
-		[string] $FilePath
+		[string] $LiteralPath
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-	$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($FilePath)
+	$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($LiteralPath)
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking: $ExpandedPath"
 
-	# NOTE: or Test-Path -PathType Leaf ?
+	# TODO: or Test-Path -PathType Leaf ?
 	if (!([System.IO.File]::Exists($ExpandedPath)))
 	{
 		# NOTE: number for Get-PSCallStack is 1, which means 2 function calls back and then get script name (call at 0 is this script)

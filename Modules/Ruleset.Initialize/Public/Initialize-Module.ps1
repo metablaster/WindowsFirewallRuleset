@@ -46,7 +46,7 @@ Hash table with a minimum ModuleName and ModuleVersion keys, in the form of Modu
 Repository name from which to download module such as PSGallery,
 if repository is not registered user is prompted to register it
 
-.PARAMETER RepositoryLocation
+.PARAMETER URL
 Repository location associated with repository name,
 this parameter is used only if repository is not registered
 
@@ -110,7 +110,7 @@ function Initialize-Module
 
 		[Parameter()]
 		[ValidatePattern("[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)")]
-		[uri] $RepositoryLocation = "https://www.powershellgallery.com/api/v2",
+		[uri] $URL = "https://www.powershellgallery.com/api/v2",
 
 		[Parameter()]
 		[string] $InfoMessage = "Accept operation",
@@ -307,7 +307,7 @@ function Initialize-Module
 			else
 			{
 				# Register repository to be able to use it
-				Register-PSRepository -Name $Repository -SourceLocation $RepositoryLocation -InstallationPolicy $IsTrusted
+				Register-PSRepository -Name $Repository -SourceLocation $URL -InstallationPolicy $IsTrusted
 			}
 
 			$RepositoryObject = Get-PSRepository -Name $Repository # -ErrorAction SilentlyContinue

@@ -36,7 +36,7 @@ Retrieves SQL server information from a local or remote servers.
 Retrieves SQL server information from a local or remote servers. Pulls all
 instances from a SQL server and detects if in a cluster or not.
 
-.PARAMETER ComputerName
+.PARAMETER Domain
 Local or remote systems to query for SQL information.
 
 .PARAMETER CIM
@@ -158,8 +158,8 @@ function Get-SqlServerInstance
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
 		[Parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-		# [Alias("Servers", "Machines")]
-		[string[]] $ComputerName = [System.Environment]::MachineName,
+		[Alias("ComputerName", "CN")]
+		[string[]] $Domain = [System.Environment]::MachineName,
 
 		[Parameter()]
 		[switch] $CIM
@@ -189,7 +189,7 @@ function Get-SqlServerInstance
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 		[PSCustomObject[]] $AllInstances = @()
-		foreach ($Computer in $ComputerName)
+		foreach ($Computer in $Domain)
 		{
 			# TODO: what is this?
 			$Computer = $Computer -replace '(.*?)\..+', '$1'

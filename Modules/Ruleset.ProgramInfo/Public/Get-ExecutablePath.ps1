@@ -34,7 +34,7 @@ Get list of install locations for executables and executable names
 Returns a table of installed programs, with executable name, installation path,
 registry path and child registry key name for target computer
 
-.PARAMETER ComputerName
+.PARAMETER Domain
 Computer name which to check
 
 .EXAMPLE
@@ -55,15 +55,15 @@ function Get-ExecutablePath
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-ExecutablePath.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
-		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
-		[string] $ComputerName = [System.Environment]::MachineName
+		[Alias("ComputerName", "CN")]
+		[string] $Domain = [System.Environment]::MachineName
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Domain"
 
-	if (Test-TargetComputer $ComputerName)
+	if (Test-TargetComputer $Domain)
 	{
 		if ([System.Environment]::Is64BitOperatingSystem)
 		{
@@ -71,7 +71,7 @@ function Get-ExecutablePath
 			$HKLM = @(
 				# https://docs.microsoft.com/en-us/windows/win32/shell/app-registration
 				"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths"
-				# NOTE: It looks like WOW6432Node key contains exact duplicate, not used
+				# TODO: It looks like WOW6432Node key contains exact duplicate, maybe -Unique sort?
 				# "SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\App Paths"
 			)
 		}
@@ -81,9 +81,9 @@ function Get-ExecutablePath
 			$HKLM = "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths"
 		}
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
-		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
+		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
 
 		[PSCustomObject[]] $AppPaths = @()
 		foreach ($HKLMRootKey in $HKLM)
@@ -152,7 +152,7 @@ function Get-ExecutablePath
 				# Get more key entries as needed
 				# We want to separate leaf key name because some key names are holding alternative executable name
 				$AppPaths += [PSCustomObject]@{
-					"ComputerName" = $ComputerName
+					"Domain" = $Domain
 					"RegKey" = $HKLMSubKey
 					#"RegPath" = $SubKey.Name
 					"Name" = $Executable

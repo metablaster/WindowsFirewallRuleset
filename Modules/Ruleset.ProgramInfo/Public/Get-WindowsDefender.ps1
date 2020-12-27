@@ -33,7 +33,7 @@ Get installed Windows Defender
 .DESCRIPTION
 Gets installation information about Windows defender.
 
-.PARAMETER ComputerName
+.PARAMETER Domain
 Computer name for which to list installed Windows Defender
 
 .EXAMPLE
@@ -54,21 +54,21 @@ function Get-WindowsDefender
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-WindowsDefender.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
-		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
-		[string] $ComputerName = [System.Environment]::MachineName
+		[Alias("ComputerName", "CN")]
+		[string] $Domain = [System.Environment]::MachineName
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Domain"
 
-	if (Test-TargetComputer $ComputerName)
+	if (Test-TargetComputer $Domain)
 	{
 		$HKLM = "SOFTWARE\Microsoft\Windows Defender"
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
-		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
+		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
 
 		[PSCustomObject] $WindowsDefender = $null
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
@@ -92,7 +92,7 @@ function Get-WindowsDefender
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $RootKeyLeaf"
 
 				$WindowsDefender = [PSCustomObject]@{
-					"ComputerName" = $ComputerName
+					"ComputerName" = $Domain
 					"RegKey" = $RootKeyLeaf
 					"InstallLocation" = Format-Path $InstallLocation
 				}

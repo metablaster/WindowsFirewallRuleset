@@ -33,7 +33,7 @@ Get installed Windows SDK
 .DESCRIPTION
 Get installation information about installed Windows SDK
 
-.PARAMETER ComputerName
+.PARAMETER Domain
 Computer name for which to list installed installed framework
 
 .EXAMPLE
@@ -54,15 +54,15 @@ function Get-WindowsSDK
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-WindowsSDK.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
-		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
-		[string] $ComputerName = [System.Environment]::MachineName
+		[Alias("ComputerName", "CN")]
+		[string] $Domain = [System.Environment]::MachineName
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Domain"
 
-	if (Test-TargetComputer $ComputerName)
+	if (Test-TargetComputer $Domain)
 	{
 		if ([System.Environment]::Is64BitOperatingSystem)
 		{
@@ -75,9 +75,9 @@ function Get-WindowsSDK
 			$HKLM = "SOFTWARE\Microsoft\Microsoft SDKs\Windows"
 		}
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
-		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
+		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
 
 		[PSCustomObject[]] $WindowsSDK = @()
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
@@ -112,7 +112,7 @@ function Get-WindowsSDK
 				$InstallLocation = Format-Path $InstallLocation
 
 				$WindowsSDK += [PSCustomObject]@{
-					"ComputerName" = $ComputerName
+					"ComputerName" = $Domain
 					"RegKey" = $HKLMSubKey
 					"Product" = $SubKey.GetValue("ProductName")
 					"Version" = $SubKey.GetValue("ProductVersion")

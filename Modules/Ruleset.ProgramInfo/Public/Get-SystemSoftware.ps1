@@ -33,7 +33,7 @@ Search installed programs for all users, system wide
 .DESCRIPTION
 Get a list of software installed system wide, for all users.
 
-.PARAMETER ComputerName
+.PARAMETER Domain
 Computer name which to check
 
 .EXAMPLE
@@ -55,15 +55,15 @@ function Get-SystemSoftware
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SystemSoftware.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
-		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
-		[string] $ComputerName = [System.Environment]::MachineName
+		[Alias("ComputerName", "CN")]
+		[string] $Domain = [System.Environment]::MachineName
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Domain"
 
-	if (Test-TargetComputer $ComputerName)
+	if (Test-TargetComputer $Domain)
 	{
 		# TODO: Test-Path those keys first?
 		if ([System.Environment]::Is64BitOperatingSystem)
@@ -80,9 +80,9 @@ function Get-SystemSoftware
 			$HKLM = "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall"
 		}
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
-		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
+		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
 
 		foreach ($HKLMRootKey in $HKLM)
 		{
@@ -143,7 +143,7 @@ function Get-SystemSoftware
 
 				# Get more key entries as needed
 				[PSCustomObject]@{
-					ComputerName = $ComputerName
+					ComputerName = $Domain
 					Name = $SubKey.GetValue("DisplayName")
 					Version = $SubKey.GetValue("DisplayVersion")
 					Publisher = $SubKey.GetValue("Publisher")

@@ -33,10 +33,10 @@ Get One Drive information for specific user
 .DESCRIPTION
 Search installed One Drive instance in userprofile for specific user account
 
-.PARAMETER UserName
+.PARAMETER User
 User name in form of "USERNAME"
 
-.PARAMETER ComputerName
+.PARAMETER Domain
 NETBIOS Computer name in form of "COMPUTERNAME"
 
 .EXAMPLE
@@ -60,25 +60,25 @@ function Get-OneDrive
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-OneDrive.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
-		[Alias("User")]
+		[Alias("UserName")]
 		[Parameter(Mandatory = $true)]
-		[string] $UserName,
+		[string] $User,
 
-		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
-		[string] $ComputerName = [System.Environment]::MachineName
+		[Alias("ComputerName", "CN")]
+		[string] $Domain = [System.Environment]::MachineName
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Domain"
 
-	if (Test-TargetComputer $ComputerName)
+	if (Test-TargetComputer $Domain)
 	{
-		$UserSID = Get-PrincipalSID $UserName -Computer $ComputerName
+		$UserSID = Get-PrincipalSID $User -Computer $Domain
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::Users
-		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
+		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
 
 		# Check if target user is logged in (has it's reg hive loaded)
 		[bool] $ReleaseHive = $false
@@ -88,17 +88,17 @@ function Get-OneDrive
 		}
 		else
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] User '$UserName' is not logged into system"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] User '$User' is not logged into system"
 
 			# TODO: We need environment variable for remote computer
-			$UserRegConfig = "$env:SystemDrive\Users\$UserName\NTUSER.DAT"
+			$UserRegConfig = "$env:SystemDrive\Users\$User\NTUSER.DAT"
 
 			# NOTE: Using User-UserName instead of SID to minimize the chance of existing key with same name
-			$TempKey = "User-$UserName" # $UserSID
+			$TempKey = "User-$User" # $UserSID
 
 			if (Test-Path -Path $UserRegConfig)
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Loading offline hive for user '$UserName' to HKU:$TempKey"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Loading offline hive for user '$User' to HKU:$TempKey"
 
 				# NOTE: Start-Process is needed to make the command finish it's job and print status
 				$Status = Invoke-Process -NoNewWindow reg.exe -ArgumentList "load HKU\$TempKey $UserRegConfig"
@@ -157,7 +157,7 @@ function Get-OneDrive
 
 				# Get more key entries as needed
 				$OneDriveInfo += [PSCustomObject]@{
-					"ComputerName" = $ComputerName
+					"ComputerName" = $Domain
 					"RegKey" = Split-Path -Path $OneDriveKey.ToString() -Leaf
 					"Name" = "OneDrive"
 					"InstallLocation" = $InstallLocation

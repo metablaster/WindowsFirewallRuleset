@@ -33,14 +33,14 @@ Get store apps installed system wide
 .DESCRIPTION
 Search system wide installed store apps, those installed for all users or shipped with system.
 
-.PARAMETER UserName
+.PARAMETER User
 User name in form of:
 - domain\user_name
 - user_name@fqn.domain.tld
 - user_name
 - SID-string
 
-.PARAMETER ComputerName
+.PARAMETER Domain
 NETBIOS Computer name in form of "COMPUTERNAME"
 
 .EXAMPLE
@@ -51,7 +51,7 @@ None. You cannot pipe objects to Get-SystemApps
 
 .OUTPUTS
 [Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage] store app information object
-[Object] if using PowerShell Core which outputs deserialized object:
+[object] if using PowerShell Core which outputs deserialized object:
 [Deserialized.Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage]
 
 .NOTES
@@ -63,37 +63,37 @@ function Get-SystemApps
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SystemApps.md")]
-	[OutputType([Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage], [Object])]
+	[OutputType([Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage], [object])]
 	param (
-		[Alias("User")]
+		[Alias("UserName")]
 		[Parameter(Mandatory = $true)]
-		[string] $UserName,
+		[string] $User,
 
-		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
-		[string] $ComputerName = [System.Environment]::MachineName
+		[Alias("ComputerName", "CN")]
+		[string] $Domain = [System.Environment]::MachineName
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Domain"
 
-	if (Test-TargetComputer $ComputerName)
+	if (Test-TargetComputer $Domain)
 	{
 		# TODO: show warning instead of error when fail (ex. in non elevated run)
 		# TODO: it is possible to add -User parameter, what's the purpose? see also StoreApps.ps1
-		Get-AppxPackage -User $UserName -PackageTypeFilter Main | Where-Object {
+		Get-AppxPackage -User $User -PackageTypeFilter Main | Where-Object {
 			$_.SignatureKind -eq "System" -and $_.Name -like "Microsoft*"
 		} | Where-Object {
 			# NOTE: This path will be missing for default apps Windows server
 			# It may also be missing in fresh installed OS before connecting to internet
 			# TODO: See if "$_.Status" property can be used to determine if app is valid
-			if (Test-Path -PathType Container -Path "$env:SystemDrive\Users\$UserName\AppData\Local\Packages\$($_.PackageFamilyName)\AC")
+			if (Test-Path -PathType Container -Path "$env:SystemDrive\Users\$User\AppData\Local\Packages\$($_.PackageFamilyName)\AC")
 			{
 				$true
 			}
 			else
 			{
-				Write-Warning -Message "Store app '$($_.Name)' is not installed by user '$UserName' or the app is missing"
+				Write-Warning -Message "Store app '$($_.Name)' is not installed by user '$User' or the app is missing"
 				Write-Information -Tags "User" -MessageData "INFO: To fix the problem let this user update all of it's apps in Windows store"
 				$false
 			}

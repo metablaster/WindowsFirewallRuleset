@@ -33,7 +33,7 @@ Get installed Microsoft SQL Server Management Studios
 .DESCRIPTION
 TODO: add description
 
-.PARAMETER ComputerName
+.PARAMETER Domain
 Computer name for which to list installed installed framework
 
 .EXAMPLE
@@ -58,15 +58,15 @@ function Get-SqlManagementStudio
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SqlManagementStudio.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
-		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
-		[string] $ComputerName = [System.Environment]::MachineName
+		[Alias("ComputerName", "CN")]
+		[string] $Domain = [System.Environment]::MachineName
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Domain"
 
-	if (Test-TargetComputer $ComputerName)
+	if (Test-TargetComputer $Domain)
 	{
 		if ([System.Environment]::Is64BitOperatingSystem)
 		{
@@ -80,9 +80,9 @@ function Get-SqlManagementStudio
 			$HKLM = "SOFTWARE\Microsoft\Microsoft SQL Server Management Studio"
 		}
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
-		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
+		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
@@ -118,7 +118,7 @@ function Get-SqlManagementStudio
 				# TODO: Should we return object by object to make pipeline work?
 				# also try to get same set of properties for all req queries
 				$ManagementStudio += [PSCustomObject]@{
-					"ComputerName" = $ComputerName
+					"ComputerName" = $Domain
 					"RegKey" = $HKLMSubKey
 					"Version" = $SubKey.GetValue("Version")
 					"InstallLocation" = Format-Path $InstallLocation

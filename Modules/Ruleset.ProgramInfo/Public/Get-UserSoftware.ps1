@@ -33,10 +33,10 @@ Get a list of programs installed by specific user
 .DESCRIPTION
 Search installed programs in userprofile for specific user account
 
-.PARAMETER UserName
+.PARAMETER User
 User name in form of "USERNAME"
 
-.PARAMETER ComputerName
+.PARAMETER Domain
 NETBIOS Computer name in form of "COMPUTERNAME"
 
 .EXAMPLE
@@ -57,26 +57,26 @@ function Get-UserSoftware
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserSoftware.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
-		[Alias("User")]
+		[Alias("UserName")]
 		[Parameter(Mandatory = $true)]
-		[string] $UserName,
+		[string] $User,
 
-		[Alias("Computer", "Server", "Domain", "Host", "Machine")]
 		[Parameter()]
-		[string] $ComputerName = [System.Environment]::MachineName
+		[Alias("ComputerName", "CN")]
+		[string] $Domain = [System.Environment]::MachineName
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $ComputerName"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Domain"
 
-	if (Test-TargetComputer $ComputerName)
+	if (Test-TargetComputer $Domain)
 	{
-		$HKU = Get-PrincipalSID $UserName -Computer $ComputerName
+		$HKU = Get-PrincipalSID $User -Computer $Domain
 		$HKU += "\Software\Microsoft\Windows\CurrentVersion\Uninstall"
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $ComputerName"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::Users
-		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $ComputerName)
+		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key HKU:$HKU"
 		$UserKey = $RemoteKey.OpenSubkey($HKU)
@@ -115,7 +115,7 @@ function Get-UserSoftware
 
 				# Get more key entries as needed
 				$UserPrograms += [PSCustomObject]@{
-					"ComputerName" = $ComputerName
+					"ComputerName" = $Domain
 					"RegKey" = $HKUSubKey
 					"Name" = $SubKey.GetValue("displayname")
 					"InstallLocation" = $InstallLocation
