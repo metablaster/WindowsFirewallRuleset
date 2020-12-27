@@ -86,7 +86,7 @@ Get installed Windows SDK
 
 Test if a path is valid with additional checks
 
-### [Test-File](Test-File.md)
+### [Confirm-Executable](Confirm-Executable.md)
 
 Check if file such as an *.exe exists
 

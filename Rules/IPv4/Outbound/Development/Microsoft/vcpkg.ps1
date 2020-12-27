@@ -83,7 +83,7 @@ $vcpkgRoot = "Unknown Directory"
 if ((Test-Installation "vcpkg" ([ref] $vcpkgRoot)) -or $ForceLoad)
 {
 	$Program = "$vcpkgRoot\vcpkg.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "vcpkg" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -94,7 +94,7 @@ if ((Test-Installation "vcpkg" ([ref] $vcpkgRoot)) -or $ForceLoad)
 	# TODO: need to update for all users
 	# TODO: this bad path somehow gets into rule
 	$Program = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Temp\vcpkg\vcpkgmetricsuploader-2020.02.04.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "vcpkg (telemetry)" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -103,7 +103,7 @@ if ((Test-Installation "vcpkg" ([ref] $vcpkgRoot)) -or $ForceLoad)
 		-Description "vcpkg sends usage data to Microsoft" | Format-Output
 
 	$Program = "$vcpkgRoot\downloads\tools\powershell-core-6.2.1-windows\powershell.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "vcpkg (powershell)" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -113,7 +113,7 @@ if ((Test-Installation "vcpkg" ([ref] $vcpkgRoot)) -or $ForceLoad)
 
 	# TODO: if cmake in root and of required version it's used, needs conditional rule
 	# $Program = "$vcpkgRoot\downloads\tools\cmake-3.14.0-windows\cmake-3.14.0-win32-x86\bin\cmake.exe"
-	# Test-File $Program
+	# Confirm-Executable $Program
 	# New-NetFirewallRule -Platform $Platform `
 	# 	-DisplayName "vcpkg (cmake)" -Service Any -Program $Program `
 	# 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -124,7 +124,7 @@ if ((Test-Installation "vcpkg" ([ref] $vcpkgRoot)) -or $ForceLoad)
 	# TODO: Why cmd needs network to download packages, is it just temporary?
 	$Program = Format-Path "C:\Windows\SysWOW64"
 	$Program += "\cmd.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "cmd" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `

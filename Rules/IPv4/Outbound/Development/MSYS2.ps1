@@ -83,7 +83,7 @@ $MSYS2Root = "%SystemRoot%\dev\msys64"
 if ((Test-Installation "MSYS2" ([ref] $MSYS2Root)) -or $ForceLoad)
 {
 	$Program = "$MSYS2Root\usr\bin\curl.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "MSYS2 - curl" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -97,7 +97,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 	Format-Output
 
 	$Program = "$MSYS2Root\usr\bin\git.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "MSYS2 - git protocol" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -106,7 +106,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 		-Description "git access over git:// protocol" | Format-Output
 
 	$Program = "$MSYS2Root\usr\bin\git-remote-https.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "MSYS2 - git-remote-https" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -115,7 +115,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 		-Description "git over HTTPS in MSYS2 shell" | Format-Output
 
 	$Program = "$MSYS2Root\usr\bin\ssh.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "MSYS2 - git SSH" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -124,7 +124,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 		-Description "git over SSH in MSYS2 shell" | Format-Output
 
 	$Program = "$MSYS2Root\mingw64\bin\glade.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "MSYS2 - glade help" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -133,7 +133,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 		-Description "Get online help for glade" | Format-Output
 
 	$Program = "$MSYS2Root\usr\bin\pacman.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "MSYS2 - pacman" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -142,7 +142,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 		-Description "pacman package manager in MSYS2 shell" | Format-Output
 
 	$Program = "$MSYS2Root\usr\bin\pacman.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "MSYS2 - wget" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `

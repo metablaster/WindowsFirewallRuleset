@@ -83,7 +83,7 @@ $GreenshotRoot = "C:\Users\$DefaultUser\AppData\Local\Greenshot"
 if ((Test-Installation "Greenshot" ([ref] $GreenshotRoot)) -or $ForceLoad)
 {
 	$Program = "$GreenshotRoot\Greenshot.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Greenshot" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `

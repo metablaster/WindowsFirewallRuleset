@@ -1,11 +1,11 @@
 ---
 external help file: Ruleset.ProgramInfo-help.xml
 Module Name: Ruleset.ProgramInfo
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-File.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Confirm-Executable.md
 schema: 2.0.0
 ---
 
-# Test-File
+# Confirm-Executable
 
 ## SYNOPSIS
 
@@ -14,7 +14,7 @@ Check if file such as an *.exe exists
 ## SYNTAX
 
 ```powershell
-Test-File [-FilePath] <String> [<CommonParameters>]
+Confirm-Executable [-FilePath] <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -27,7 +27,7 @@ warning message if file not found
 ### EXAMPLE 1
 
 ```powershell
-Test-File "C:\Users\USERNAME\AppData\Local\Google\Chrome\Application\chrome.exe"
+Confirm-Executable "C:\Users\USERNAME\AppData\Local\Google\Chrome\Application\chrome.exe"
 ```
 
 ## PARAMETERS
@@ -54,11 +54,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to Test-File
+### None. You cannot pipe objects to Confirm-Executable
 
 ## OUTPUTS
 
-### None. Test-File does not generate any output
+### None. Confirm-Executable does not generate any output
 
 ## NOTES
 

@@ -83,7 +83,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 if ((Test-Installation "DemiseOfNations" ([ref] $DemiseOfNationsRoot)) -or $ForceLoad)
 {
 	$Program = "$DemiseOfNationsRoot\app_main.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Demise of Nations" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `

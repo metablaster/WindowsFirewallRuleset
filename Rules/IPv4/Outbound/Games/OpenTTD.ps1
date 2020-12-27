@@ -83,7 +83,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 if ((Test-Installation "OpenTTD" ([ref] $OpenTTDRoot)) -or $ForceLoad)
 {
 	$Program = "$OpenTTDRoot\openttd.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "OpenTTD" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `

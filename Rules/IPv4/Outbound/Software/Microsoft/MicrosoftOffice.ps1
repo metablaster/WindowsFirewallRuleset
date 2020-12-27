@@ -84,7 +84,7 @@ $OfficeShared = "%ProgramFiles%\Common Files\microsoft shared"
 if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
 {
 	$Program = "$OfficeRoot\MSACCESS.EXE"
-	Test-File $Program
+	Confirm-Executable $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Access" -Service Any -Program $Program `
@@ -99,7 +99,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
 	# https://www.reddit.com/r/sysadmin/comments/7hync7/updating_office_2016_hb_click_to_run_through/
 	# TL;DR: netsh winhttp set proxy proxy-server="fubar" bypass-list="<local>"
 	$Program = "$OfficeShared\ClickToRun\OfficeClickToRun.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Click to Run" -Service Any -Program $Program `
@@ -111,7 +111,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
 	to reduce the time required to install Office and help run multiple versions of Office on the same computer." | Format-Output
 
 	$Program = "$OfficeShared\ClickToRun\OfficeC2RClient.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "ClickC2RClient" -Service Any -Program $Program `
@@ -121,7 +121,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
 		-Description "Allows users to check for and install updates for Office on demand." | Format-Output
 
 	$Program = "$OfficeRoot\MSOSYNC.EXE"
-	Test-File $Program
+	Confirm-Executable $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Document Cache" -Service Any -Program $Program `
@@ -132,7 +132,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
 	to give you a way to see the state of files you are uploading to a SharePoint server. " | Format-Output
 
 	$Program = "$OfficeRoot\EXCEL.EXE"
-	Test-File $Program
+	Confirm-Executable $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Excel" -Service Any -Program $Program `
@@ -142,7 +142,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
 		-Description "" | Format-Output
 
 	$Program = "$OfficeRoot\ADDINS\Microsoft Power Query for Excel Integrated\bin\Microsoft.Mashup.Container.NetFX40.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Excel (Mashup Container)" -Service Any -Program $Program `
@@ -152,7 +152,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
 		-Description "Used to query data from web in excel." | Format-Output
 
 	$Program = "$OfficeRoot\CLVIEW.EXE"
-	Test-File $Program
+	Confirm-Executable $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Help" -Service Any -Program $Program `
@@ -162,7 +162,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
 		-Description "" | Format-Output
 
 	$Program = "$OfficeRoot\OUTLOOK.EXE"
-	Test-File $Program
+	Confirm-Executable $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Outlook (HTTP/S)" -Service Any -Program $Program `
@@ -207,7 +207,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
 		-Description "Outgoing mail server." | Format-Output
 
 	$Program = "$OfficeRoot\POWERPNT.EXE"
-	Test-File $Program
+	Confirm-Executable $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "PowerPoint" -Service Any -Program $Program `
@@ -217,7 +217,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
 		-Description "" | Format-Output
 
 	$Program = "$OfficeRoot\WINPROJ.EXE"
-	Test-File $Program
+	Confirm-Executable $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Project" -Service Any -Program $Program `
@@ -227,7 +227,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
 		-Description "" | Format-Output
 
 	$Program = "$OfficeRoot\MSPUB.EXE"
-	Test-File $Program
+	Confirm-Executable $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Publisher" -Service Any -Program $Program `
@@ -239,7 +239,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
 	# NOTE: If you load office rules soon after it has been installed sdxhelper may be missing
 	# reload again later when it appears
 	$Program = "$OfficeRoot\SDXHelper.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "sdxhelper" -Service Any -Program $Program `
@@ -249,7 +249,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
 		-Description "this executable is used when later Office versions are installed in parallel with an earlier version so that they can peacefully coexist." | Format-Output
 
 	$Program = "$OfficeRoot\lync.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Skype for business" -Service Any -Program $Program `
@@ -259,7 +259,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
 		-Description "Skype for business, previously lync." | Format-Output
 
 	$Program = "$OfficeRoot\msoia.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Telemetry Agent" -Service Any -Program $Program `
@@ -271,7 +271,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
 
 	# TODO: Visio and Project are not part of office by default
 	$Program = "$OfficeRoot\VISIO.EXE"
-	Test-File $Program
+	Confirm-Executable $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Visio" -Service Any -Program $Program `
@@ -281,7 +281,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
 		-Description "" | Format-Output
 
 	$Program = "$OfficeRoot\WINWORD.EXE"
-	Test-File $Program
+	Confirm-Executable $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Word" -Service Any -Program $Program `

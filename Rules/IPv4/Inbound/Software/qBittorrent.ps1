@@ -84,7 +84,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot)) -or $ForceLoad)
 {
 	$Program = "$qBittorrentRoot\qbittorrent.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 
 	# TODO: requires uTP protocol?
 	New-NetFirewallRule -DisplayName "qBittorrent - DHT" `

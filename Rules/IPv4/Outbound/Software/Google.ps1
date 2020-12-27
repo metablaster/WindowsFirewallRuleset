@@ -83,7 +83,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 if ((Test-Installation "GoogleDrive" ([ref] $GoogleDriveRoot)) -or $ForceLoad)
 {
 	$Program = "$GoogleDriveRoot\googledrivesync.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Google drive" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `

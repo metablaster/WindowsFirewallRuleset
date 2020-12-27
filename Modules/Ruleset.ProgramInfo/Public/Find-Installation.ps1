@@ -445,7 +445,7 @@ function Find-Installation
 		}
 		"GeForceExperience"
 		{
-			# TODO: this is temporary measure, it should be handled with Test-File function
+			# TODO: this is temporary measure, it should be handled with Confirm-Executable function
 			# see also related todo in Nvidia.ps1
 			# NOTE: calling script must not use this path, it is used only to check if installation
 			# exists, the real path is obtained with "Nvidia" switch case
@@ -542,7 +542,7 @@ function Find-Installation
 		# NOTE: number for Get-PSCallStack is 2, which means 3 function calls back and then get script name (call at 0 and 1 is this script)
 		$Script = (Get-PSCallStack)[2].Command
 
-		# TODO: these loops seem to be skipped, probably missing Test-File, need to check
+		# TODO: these loops seem to be skipped, probably missing Confirm-Executable, need to check
 		Write-Information -Tags "User" -MessageData "INFO: If you installed $Application elsewhere you can input valid path now"
 		Write-Information -Tags "User" -MessageData "INFO: Alternatively adjust path in $Script and re-run the script later"
 

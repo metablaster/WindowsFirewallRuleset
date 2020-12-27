@@ -1916,7 +1916,7 @@
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
-      <command:name>Test-File</command:name>
+      <command:name>Confirm-Executable</command:name>
       <command:verb>Test</command:verb>
       <command:noun>File</command:noun>
       <maml:description>
@@ -1928,7 +1928,7 @@
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
-        <maml:name>Test-File</maml:name>
+        <maml:name>Confirm-Executable</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>FilePath</maml:name>
           <maml:Description>
@@ -1960,7 +1960,7 @@
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>None. You cannot pipe objects to Test-File</maml:name>
+          <maml:name>None. You cannot pipe objects to Confirm-Executable</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1970,7 +1970,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>None. Test-File does not generate any output</maml:name>
+          <maml:name>None. Confirm-Executable does not generate any output</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1985,7 +1985,7 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Test-File "C:\Users\USERNAME\AppData\Local\Google\Chrome\Application\chrome.exe"</dev:code>
+        <dev:code>Confirm-Executable "C:\Users\USERNAME\AppData\Local\Google\Chrome\Application\chrome.exe"</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -1994,7 +1994,7 @@
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-File.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Confirm-Executable.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>

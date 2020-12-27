@@ -84,7 +84,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 if ((Test-Installation "XTU" ([ref] $IntelXTURoot)) -or $ForceLoad)
 {
 	$Program = "$IntelXTURoot\PerfTune.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Extreme tuning utility" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -94,7 +94,7 @@ if ((Test-Installation "XTU" ([ref] $IntelXTURoot)) -or $ForceLoad)
 }
 
 $Program = "%ProgramFiles(x86)%\Intel\Telemetry 2.0\lrio.exe"
-Test-File $Program
+Confirm-Executable $Program
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Intel telemetry" -Service Any -Program $Program `
@@ -105,7 +105,7 @@ New-NetFirewallRule -Platform $Platform `
 
 # TODO: port and protocol unknown for Intel PTT EK Recertification
 $Program = "%ProgramFiles%\Intel\Intel(R) Management Engine Components\iCLS\IntelPTTEKRecertification.exe"
-Test-File $Program
+Confirm-Executable $Program
 
 New-NetFirewallRule -Platform $Platform `
 	-DisplayName "Intel PTT EK Recertification" -Service Any -Program $Program `

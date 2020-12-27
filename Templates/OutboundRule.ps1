@@ -86,7 +86,7 @@ $TargetProgramRoot = "%ProgramFiles%\TargetProgram"
 if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot)) -or $ForceLoad)
 {
 	$Program = "$TargetProgramRoot\TargetProgram.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 
 	# Following lines/options are not used:
 	# -Name (if used then on first line, DisplayName should be adjusted for 100 col. line)

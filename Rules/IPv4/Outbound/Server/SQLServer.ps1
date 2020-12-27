@@ -89,7 +89,7 @@ if ((Test-Installation "SqlManagementStudio" ([ref] $SqlManagementStudioRoot)) -
 	# TODO: old directory, our Get-SqlManagementStudio may not work as expected for older versions
 	# $Program = "$SQLServerRoot\Tools\Binn\ManagementStudio\Ssms.exe"
 	$Program = "$SqlManagementStudioRoot\Common7\IDE\Ssms.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "SQL Server Management Studio" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -102,7 +102,7 @@ if ((Test-Installation "SqlManagementStudio" ([ref] $SqlManagementStudioRoot)) -
 if ((Test-Installation "SQLDTS" ([ref] $SQLDTSRoot)) -or $ForceLoad)
 {
 	$Program = "$SQLDTSRoot\Binn\DTSWizard.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "SQL Server Import and Export Wizard" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `

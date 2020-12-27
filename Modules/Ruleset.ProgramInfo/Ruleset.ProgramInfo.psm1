@@ -83,7 +83,7 @@ $PublicScripts = @(
 	"Get-WindowsKit"
 	"Get-WindowsSDK"
 	"Test-Environment"
-	"Test-File"
+	"Confirm-Executable"
 	"Test-Installation"
 	"Test-Service"
 )

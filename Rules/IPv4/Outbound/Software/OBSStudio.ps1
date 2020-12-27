@@ -83,7 +83,7 @@ $OBSStudioRoot = "%ProgramFiles%\obs-studio\bin\64bit"
 if ((Test-Installation "OBSStudio" ([ref] $OBSStudioRoot)) -or $ForceLoad)
 {
 	$Program = "$OBSStudioRoot\obs64.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "OBSStudio" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `

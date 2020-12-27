@@ -28,34 +28,71 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Check if file such as an *.exe exists
+Check if executable file exists and is valid.
 
 .DESCRIPTION
-In addition to Test-Path of file, message and stack trace is shown and
-warning message if file not found
+Confirm-Executable verifies the path to executable file is valid and that executable itself exists.
+File extension is then verified to confirm it is on the allowed list, ex. such as an *.exe
+The file is then verified to ensure it's digitaly signed, that is digital signature is present.
+If the file can't be found or verified, an error is genrated possibly with informational message,
+to explain if there is any problem with the path or file name syntax, otherwise information is
+present to the user to explain how to resolve the problem including a stack trace to script that
+is having this issue.
 
 .PARAMETER LiteralPath
-Full path to executable file
+Fully qualified path to executable file
+
+.PARAMETER Force
+If specified, lack of digital signature or signature mismatch produces a warning
+instead of an error.
 
 .EXAMPLE
-PS> Test-File "C:\Users\USERNAME\AppData\Local\Google\Chrome\Application\chrome.exe"
+PS> Confirm-Executable "C:\Windows\UnsignedFile.exe"
+
+ERROR: Digital signature verification failed for: C:\Windows\UnsignedFile.exe
+
+.EXAMPLE
+PS> Confirm-Executable "C:\Users\USERNAME\AppData\Application\chrome.exe"
+
+WARNING: Executable 'chrome.exe' was not found, firewall rule not loaded
+INFO: Searched path was: C:\Users\USERNAME\AppData\Application\chrome.exe
+INFO: To fix this problem find 'chrome.exe' and update installation directory in Confirm-Executable.ps1 script
+
+.EXAMPLE
+PS> Confirm-Executable "\\COMPUTERNAME\Directory\file.exe"
+
+ERROR: Specified file path is missing a file system qualifier: \\COMPUTERNAME\Directory\file.exe
+
+.EXAMPLE
+PS> Confirm-Executable ".\..\file.exe"
+
+ERROR: Specified file path is relative: .\..\file.exe
+
+.EXAMPLE
+PS> Confirm-Executable "C:\Bad\<Path>\Loca'tion"
+
+ERROR: Specified file path contains invalid characters: C:\Bad\<Path>\Loca'tion
 
 .INPUTS
-None. You cannot pipe objects to Test-File
+None. You cannot pipe objects to Confirm-Executable
 
 .OUTPUTS
-None. Test-File does not generate any output
+None. Confirm-Executable does not generate any output
 
 .NOTES
+Unlike Format-Path function which modifies path syntax, this function does not modify the path in any way.
+On another side Format-Path function does not verify path or file validity that it formats.
+Even though small portion of code does the same thing as Format-Path this is desired because formatted
+path may be modified or replaced by the user withing individual rule scripts.
 TODO: We should attempt to fix the path if invalid here!
 TODO: We should return true or false and conditionally load rule
 TODO: This should probably be renamed to Test-Executable to make it less likely part of utility module
 TODO: Verify file is executable file (and path formatted?)
 #>
-function Test-File
+function Confirm-Executable
 {
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-File.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Confirm-Executable.md")]
 	[OutputType([bool])]
 	param (
 		[Parameter(Mandatory = $true)]
@@ -65,7 +102,6 @@ function Test-File
 		[switch] $Force
 	)
 
-	# $VerbosePreference = "Continue"
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($LiteralPath)

@@ -88,7 +88,7 @@ if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot)) -or $ForceLoad)
 	# TODO: the client also listens on IPv6, not all rules are hybrid, ie. local peer discovery
 	# is known to search peers on local IPv6
 	$Program = "$qBittorrentRoot\qbittorrent.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -DisplayName "qBittorrent - HTTP/S" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `

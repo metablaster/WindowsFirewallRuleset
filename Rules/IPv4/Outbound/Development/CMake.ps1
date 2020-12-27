@@ -84,7 +84,7 @@ $CMakeRoot = "%ProgramFiles%\CMakeFakePath"
 if ((Test-Installation "CMake" ([ref] $CMakeRoot)) -or $ForceLoad)
 {
 	$Program = "$CMakeRoot\bin\cmake.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 
 	New-NetFirewallRule -DisplayName "CMake" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `

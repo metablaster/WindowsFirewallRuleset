@@ -83,7 +83,7 @@ $ThunderbirdRoot = "%ProgramFiles%\Mozilla Thunderbird"
 if ((Test-Installation "Thuderbird" ([ref] $ThunderbirdRoot)) -or $ForceLoad)
 {
 	$Program = "$ThunderbirdRoot\thunderbird.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Mozilla thunderbird - HTTP/HTTPS" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `

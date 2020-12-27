@@ -259,7 +259,7 @@ foreach ($Principal in $Principals)
 #
 
 $Program = "%SystemRoot%\System32\RuntimeBroker.exe"
-Test-File $Program
+Confirm-Executable $Program
 
 New-NetFirewallRule -DisplayName "Runtime Broker" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -274,7 +274,7 @@ its permissions and informing the user whether or not its being allowed" |
 Format-Output
 
 $Program = "%SystemRoot%\System32\AuthHost.exe"
-Test-File $Program
+Confirm-Executable $Program
 
 # Accounts needed for store app web authentication
 $AppAccounts = Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -User "Your Internet connection"
@@ -305,7 +305,7 @@ Format-Output
 
 # https://docs.microsoft.com/en-us/archive/msdn-magazine/2017/april/uwp-apps-develop-hosted-web-apps-for-uwp
 $Program = "%SystemRoot%\System32\wwahost.exe"
-Test-File $Program
+Confirm-Executable $Program
 
 New-NetFirewallRule -DisplayName "Microsoft WWA Host" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `

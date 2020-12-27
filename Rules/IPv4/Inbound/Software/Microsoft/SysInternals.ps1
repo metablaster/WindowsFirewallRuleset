@@ -84,7 +84,7 @@ $SysInternalsRoot = "%SystemDrive%\tools"
 if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLoad)
 {
 	$Program = "$SysInternalsRoot\PSTools\psping.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -DisplayName "Sysinternals PSPing server" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
@@ -98,7 +98,7 @@ Due to wide range of address and port options these should be set to Any.
 This rule serves to allow PSPing.exe to act as a server." | Format-Output
 
 	$Program = "$SysInternalsRoot\PSTools\psping64.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -DisplayName "Sysinternals PSPing64 server" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `

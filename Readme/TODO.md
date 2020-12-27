@@ -100,7 +100,7 @@ Todo's in this file are categorized into following sections:
 
 2. Project scripts
 
-    - Apply only rules for installed executables, `Test-File` function
+    - Apply only rules for installed executables, `Confirm-Executable` function
     - Auto detect interfaces, ex. to be used with InterfaceAlias parameter
     - For individual runs of rule scripts we should call `gpupdate.exe`
     - null corectness, in specific cases just `if (something)` doesn't work as in other languages

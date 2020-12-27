@@ -89,7 +89,7 @@ $PowerShellUsers = Get-SDDL -Group "Users", "Administrators"
 if ((Test-Installation "Powershell64" ([ref] $PowerShell64Root)) -or $ForceLoad)
 {
 	$Program = "$PowerShell64Root\powershell_ise.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "PowerShell ISE x64" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -98,7 +98,7 @@ if ((Test-Installation "Powershell64" ([ref] $PowerShell64Root)) -or $ForceLoad)
 		-Description "Rule to allow powershell help update" | Format-Output
 
 	$Program = "$PowerShell64Root\powershell.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "PowerShell x64" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -111,7 +111,7 @@ if ((Test-Installation "Powershell64" ([ref] $PowerShell64Root)) -or $ForceLoad)
 if ((Test-Installation "PowershellCore64" ([ref] $PowerShellCore64Root)) -or $ForceLoad)
 {
 	$Program = "$PowerShellCore64Root\pwsh.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "PowerShell Core x64" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -124,7 +124,7 @@ if ((Test-Installation "PowershellCore64" ([ref] $PowerShellCore64Root)) -or $Fo
 if ((Test-Installation "Powershell86" ([ref] $PowerShell86Root)) -or $ForceLoad)
 {
 	$Program = "$PowerShell86Root\powershell_ise.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "PowerShell ISE x86" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -133,7 +133,7 @@ if ((Test-Installation "Powershell86" ([ref] $PowerShell86Root)) -or $ForceLoad)
 		-Description "Rule to allow powershell help update" | Format-Output
 
 	$Program = "$PowerShell86Root\powershell.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "PowerShell x86" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `

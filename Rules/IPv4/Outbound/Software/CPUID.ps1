@@ -85,7 +85,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 if ((Test-Installation "HWMonitor" ([ref] $HWMonitorRoot)) -or $ForceLoad)
 {
 	$Program = "$HWMonitorRoot\HWMonitor.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "HWMonitor" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -98,7 +98,7 @@ if ((Test-Installation "HWMonitor" ([ref] $HWMonitorRoot)) -or $ForceLoad)
 if ((Test-Installation "CPU-Z" ([ref] $CPUZRoot)) -or $ForceLoad)
 {
 	$Program = "$CPUZRoot\cpuz.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "CPU-Z" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `

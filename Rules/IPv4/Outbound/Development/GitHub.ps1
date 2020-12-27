@@ -86,7 +86,7 @@ if ((Test-Installation "Git" ([ref] $GitRoot)) -or $ForceLoad)
 	# Administrators are needed for git auto update scheduled task
 	$CurlUsers = Get-SDDL -Group "Administrators", "Users"
 	$Program = "$GitRoot\mingw64\bin\curl.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 
 	New-NetFirewallRule -DisplayName "Git - curl" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -105,7 +105,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 
 	# TODO: unsure if it's 443 or 80, and not sure what's the purpose
 	$Program = "$GitRoot\mingw64\bin\git.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -DisplayName "Git - git" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
@@ -117,7 +117,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 		-Description "" | Format-Output
 
 	$Program = "$GitRoot\mingw64\libexec\git-core\git-remote-https.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -DisplayName "Git - remote-https" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
@@ -129,7 +129,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 		-Description "git HTTPS for clone, fetch, push, commit etc." | Format-Output
 
 	$Program = "$GitRoot\usr\bin\ssh.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -DisplayName "Git - ssh" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
@@ -172,7 +172,7 @@ if ((Test-Installation "GitHubDesktop" ([ref] $GitHubRoot)) -or $ForceLoad)
 		$Program = "$GitHubRoot\app-2.6.1\GitHubDesktop.exe"
 	}
 
-	Test-File $Program
+	Confirm-Executable $Program
 
 	New-NetFirewallRule -DisplayName "GitHub Desktop - Client" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -185,7 +185,7 @@ if ((Test-Installation "GitHubDesktop" ([ref] $GitHubRoot)) -or $ForceLoad)
 		-Description "At a minimum telemetry and authentication to GitHub" | Format-Output
 
 	$Program = "$GitHubRoot\Update.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 
 	New-NetFirewallRule -DisplayName "GitHub Desktop - Update" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -208,7 +208,7 @@ if ((Test-Installation "GitHubDesktop" ([ref] $GitHubRoot)) -or $ForceLoad)
 		$Program = "$GitHubRoot\app-2.6.1\resources\app\git\mingw64\bin\git-remote-https.exe"
 	}
 
-	Test-File $Program
+	Confirm-Executable $Program
 
 	New-NetFirewallRule -DisplayName "GitHub Desktop - Git" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `

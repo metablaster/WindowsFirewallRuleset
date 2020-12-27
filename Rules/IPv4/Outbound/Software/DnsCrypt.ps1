@@ -88,7 +88,7 @@ $DnsCryptRoot = "%ProgramFiles%\Simple DNSCrypt x64"
 if ((Test-Installation "DnsCrypt" ([ref] $DnsCryptRoot)) -or $ForceLoad)
 {
 	$Program = "$DnsCryptRoot\dnscrypt-proxy\dnscrypt-proxy.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -DisplayName "dnscrypt-proxy" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service dnscrypt-proxy -Program $Program -Group $Group `
@@ -123,7 +123,7 @@ This rule applies to both TLS and HTTPS encrypted DNS using dnscrypt-proxy." |
 	Format-Output
 
 	$Program = "$DnsCryptRoot\SimpleDnsCrypt.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -DisplayName "Simple DNS Crypt" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `

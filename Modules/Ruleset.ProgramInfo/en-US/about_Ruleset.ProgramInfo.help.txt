@@ -63,7 +63,7 @@ EXAMPLES
 	Test-Environment
 	Test if a path is valid with additional checks
 
-	Test-File
+	Confirm-Executable
 	Check if file such as an *.exe exists
 
 	Test-Installation

@@ -83,7 +83,7 @@ $UserModeDrivers = Get-SDDL -Domain "NT AUTHORITY" -User "USER MODE DRIVERS"
 
 # NOTE: several rules below use this path
 $WUDFHost = "%SystemRoot%\System32\WUDFHost.exe"
-Test-File $WUDFHost
+Confirm-Executable $WUDFHost
 
 # TODO: local user may need to be "Any", needs testing.
 New-NetFirewallRule -DisplayName "Wireless Display" `
@@ -170,7 +170,7 @@ Format-Output
 #
 
 $Program = "%SystemRoot%\System32\dasHost.exe"
-Test-File $Program
+Confirm-Executable $Program
 
 # TODO: missing protocol and port for WiFi Direct Network Discovery
 New-NetFirewallRule -DisplayName "Wi-Fi Direct Network Discovery" `

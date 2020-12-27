@@ -80,7 +80,7 @@ $BingWallpaperRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Microsoft\B
 if ((Test-Installation "BingWallpaper" ([ref] $BingWallpaperRoot)) -or $ForceLoad)
 {
 	$Program = "$BingWallpaperRoot\BingWallpaperApp.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 
 	New-NetFirewallRule -DisplayName "Bing wallpaper" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `

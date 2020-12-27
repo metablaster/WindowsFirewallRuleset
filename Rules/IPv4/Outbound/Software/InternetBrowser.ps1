@@ -96,7 +96,7 @@ $TorRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Tor Browser"
 if ((Test-Installation "Chrome" ([ref] $ChromeRoot)) -or $ForceLoad)
 {
 	$ChromeApp = "$ChromeRoot\Chrome\Application\chrome.exe"
-	Test-File $ChromeApp
+	Confirm-Executable $ChromeApp
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Chrome HTTP" -Service Any -Program $ChromeApp `
@@ -180,7 +180,7 @@ if ((Test-Installation "Chrome" ([ref] $ChromeRoot)) -or $ForceLoad)
 
 	$ChromeUpdate = "$ChromeRoot\Update\GoogleUpdate.exe"
 
-	Test-File $ChromeUpdate
+	Confirm-Executable $ChromeUpdate
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Chrome Update" -Service Any -Program $ChromeUpdate `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -197,7 +197,7 @@ if ((Test-Installation "Chrome" ([ref] $ChromeRoot)) -or $ForceLoad)
 if ((Test-Installation "Firefox" ([ref] $FirefoxRoot)) -or $ForceLoad)
 {
 	$FirefoxApp = "$FirefoxRoot\firefox.exe"
-	Test-File $FirefoxApp
+	Confirm-Executable $FirefoxApp
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Firefox HTTP" -Service Any -Program $FirefoxApp `
@@ -221,7 +221,7 @@ if ((Test-Installation "Firefox" ([ref] $FirefoxRoot)) -or $ForceLoad)
 		-Description "File transfer protocol." | Format-Output
 
 	$PingSender = "$FirefoxRoot\pingsender.exe"
-	Test-File $PingSender
+	Confirm-Executable $PingSender
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Firefox Telemetry" -Service Any -Program $PingSender `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -239,7 +239,7 @@ if ((Test-Installation "Firefox" ([ref] $FirefoxRoot)) -or $ForceLoad)
 if ((Test-Installation "Yandex" ([ref] $YandexRoot)) -or $ForceLoad)
 {
 	$YandexApp = "$YandexRoot\YandexBrowser\Application\browser.exe"
-	Test-File $YandexApp
+	Confirm-Executable $YandexApp
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Yandex HTTP" -Service Any -Program $YandexApp `
@@ -272,7 +272,7 @@ if ((Test-Installation "Yandex" ([ref] $YandexRoot)) -or $ForceLoad)
 if ((Test-Installation "Tor" ([ref] $TorRoot)) -or $ForceLoad)
 {
 	$TorApp = "$TorRoot\Browser\TorBrowser\Tor\tor.exe"
-	Test-File $TorApp
+	Confirm-Executable $TorApp
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Tor HTTP" -Service Any -Program $TorApp `

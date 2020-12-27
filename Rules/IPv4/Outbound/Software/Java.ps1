@@ -86,7 +86,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 if ((Test-Installation "JavaRuntime" ([ref] $JavaRuntimeRoot)) -or $ForceLoad)
 {
 	$Program = "$JavaRuntimeRoot\bin\java.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Run java applets" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -96,7 +96,7 @@ if ((Test-Installation "JavaRuntime" ([ref] $JavaRuntimeRoot)) -or $ForceLoad)
 
 	# TODO: This must be under "%ProgramFiles(x86)%\
 	$Program = "$JavaRuntimeRoot\bin\jp2launcher.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Java Plugin HTTP" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -109,7 +109,7 @@ if ((Test-Installation "JavaRuntime" ([ref] $JavaRuntimeRoot)) -or $ForceLoad)
 if ((Test-Installation "JavaUpdate" ([ref] $JavaUpdateRoot)) -or $ForceLoad)
 {
 	$Program = "$JavaUpdateRoot\jucheck.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Java update" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `

@@ -83,7 +83,7 @@ $WarThunderRoot = "%ProgramFiles(x86)%\Steam\steamapps\common\War Thunder"
 if ((Test-Installation "WarThunder" ([ref] $WarThunderRoot)) -or $ForceLoad)
 {
 	$Program = "$WarThunderRoot\win64\aces.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "WarThunder - aces" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -99,7 +99,7 @@ if ((Test-Installation "WarThunder" ([ref] $WarThunderRoot)) -or $ForceLoad)
 		-Description "" | Format-Output
 
 	$Program = "$WarThunderRoot\gaijin_downloader.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "WarThunder - gajin_downloader" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -115,7 +115,7 @@ if ((Test-Installation "WarThunder" ([ref] $WarThunderRoot)) -or $ForceLoad)
 		-Description "" | Format-Output
 
 	$Program = "$WarThunderRoot\gjagent.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "WarThunder - gjagent" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -124,7 +124,7 @@ if ((Test-Installation "WarThunder" ([ref] $WarThunderRoot)) -or $ForceLoad)
 		-Description "" | Format-Output
 
 	$Program = "$WarThunderRoot\launcher.exe"
-	Test-File $Program
+	Confirm-Executable $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "WarThunder - Launcher" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
