@@ -11,15 +11,17 @@
   - [Core benefits of this firewall project](#core-benefits-of-this-firewall-project)
   - [License](#license)
   - [Requirements](#requirements)
-  - [I don't meet the requirements](#i-dont-meet-the-requirements)
+    - [Requirements details](#requirements-details)
+    - [I don't meet the requirements](#i-dont-meet-the-requirements)
   - [First time user](#first-time-user)
     - [Warning](#warning)
     - [Note](#note)
     - [Quick start](#quick-start)
-  - [Manage loaded rules](#manage-loaded-rules)
-  - [Applying individual rulesets](#applying-individual-rulesets)
-  - [Deleting rules](#deleting-rules)
-  - [Export\Import rules](#exportimport-rules)
+  - [Firewall management](#firewall-management)
+    - [Manage loaded rules](#manage-loaded-rules)
+    - [Applying individual rulesets](#applying-individual-rulesets)
+    - [Deleting rules](#deleting-rules)
+    - [Export\Import rules](#exportimport-rules)
   - [Checking for updates](#checking-for-updates)
     - [Manual release download](#manual-release-download)
     - [Manual beta download](#manual-beta-download)
@@ -148,7 +150,7 @@ Following table lists currently tested operating systems
 5. PowerShell Support for VSCode (Recommended) [Download extension][download powershell extension]
 6. PSScriptAnalyzer (Recommended) [Download PSScriptAnalyzer][module psscriptanalyzer]
 
-Requirements details:
+### Requirements details
 
 - All operating systems 10.0 (Major 10, Minor 0) and above are supported,
 but only those editions listed in the table are actively tested.\
@@ -172,7 +174,7 @@ apply rules to your personal firewall less than that should work just fine!
 
 [Table of Contents](#table-of-contents)
 
-## I don't meet the requirements
+### I don't meet the requirements
 
 At the moment this firewall is tested and designed for most recent Windows Desktop/Servers and that
 is known to work, to make use of it on older systems requires additional work.
@@ -356,7 +358,9 @@ startup)
 
 [Table of Contents](#table-of-contents)
 
-## Manage loaded rules
+## Firewall management
+
+### Manage loaded rules
 
 There are 2 mothods to manage your rules:
 
@@ -386,7 +390,7 @@ For more information about GPO see: [Configure security policy settings][configu
 
 [Table of Contents](#table-of-contents)
 
-## Applying individual rulesets
+### Applying individual rulesets
 
 If you want to apply only specific rules there are 2 ways to do this:
 
@@ -406,7 +410,7 @@ rules into GPO.
 
 [Table of Contents](#table-of-contents)
 
-## Deleting rules
+### Deleting rules
 
 At the moment there are 3 options to delete firewall rules:
 
@@ -426,7 +430,7 @@ Note that you'll also need to re-import your exported GPO rules if you had them.
 
 [Table of Contents](#table-of-contents)
 
-## Export\Import rules
+### Export\Import rules
 
 If you want to export rules from GPO there are 2 methods available:
 

@@ -127,6 +127,49 @@ New-Variable -Name AllUserPrograms -Scope Script -Option ReadOnly -Value (
 	Get-AllUserSoftware -Computer $PolicyStore
 )
 
+# Allowed executable extensions
+New-Variable -Name WhiteListExecutable -Scope Script -Option Constant -Value @{
+	EXE	= "Executable"
+}
+
+# Blacklisted executable extensions
+New-Variable -Name BlackListExecutable -Scope Script -Option Constant -Value @{
+	BAT = "Batch File"
+	BIN = "Binary Executable"
+	CMD = "Command Script"
+	COM	= "Command File"
+	CPL	= "Control Panel Extension"
+	GADGET = "Windows Gadget"
+	INF1 = "Setup Information File"
+	INS = "Internet Communication Settings"
+	INX	= "InstallShield Compiled Script"
+	ISU	= "InstallShield Uninstaller Script"
+	JOB	= "Windows Task Scheduler Job File"
+	JSE	= "JScript Encoded File"
+	LNK	= "File Shortcut"
+	MSC	= "Microsoft Common Console Document"
+	MSI	= "Windows Installer Package"
+	MSP	= "Windows Installer Patch"
+	MST	= "Windows Installer Setup Transform File"
+	PAF	= "Portable Application Installer File"
+	PIF	= "Program Information File"
+	PS1	= "Windows PowerShell Cmdlet"
+	REG	= "Registry Data File"
+	RGS	= "Registry Script"
+	SCR	= "Screensaver Executable"
+	SCT	= "Windows Scriptlet"
+	SHB	= "Windows Document Shortcut"
+	SHS	= "Shell Scrap Object"
+	U3P	= "U3 Smart Application"
+	VB	= "VBScript File"
+	VBE	= "VBScript Encoded Script"
+	VBS	= "VBScript File"
+	VBSCRIPT = "Visual Basic Script"
+	WS	= "Windows Script"
+	WSF	= "Windows Script"
+	WSH	= "Windows Script Preference"
+}
+
 #
 # Module cleanup
 #
