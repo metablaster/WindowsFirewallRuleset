@@ -31,14 +31,14 @@ SOFTWARE.
 Validate User Principal Name
 
 .DESCRIPTION
-Validate User Principal Name (UPN) is of valid syntax
+Validate User Principal Name (UPN) has valid syntax
 
-.PARAMETER User
-Complete User Principal Name.
-User account name. Also known as the logon name.
-UPN suffix. Also known as the domain name.
-If Prefix is specified domain name can be omitted.
-If Suffix is specified logon name can be omitted.
+.PARAMETER Name
+User Principal Name in form of: someone@example.com
+User account name: Also known as the logon name.
+UPN suffix: Also known as the domain name. (or an IP address)
+If Prefix is specified, domain name can be omitted.
+If Suffix is specified, logon name can be omitted.
 
 .PARAMETER Prefix
 If specified, validate only the user name portion of a User Principal Name
@@ -46,11 +46,32 @@ If specified, validate only the user name portion of a User Principal Name
 .PARAMETER Suffix
 If specified, validate only the domain name portion of a User Principal Name
 
+.PARAMETER Quiet
+if specified errors are not shown, only true or false is returned.
+
 .EXAMPLE
 PS> Test-UPN Administrator@machine.lan
+True or False
 
 .EXAMPLE
 PS> Get-GroupPrincipal -Group "Users" | Test-UPN
+True or False
+
+.EXAMPLE
+PS> Test-UPN "Use!r" -Prefix
+False
+
+.EXAMPLE
+PS> Test-UPN "user@192.8.1.1"
+False
+
+.EXAMPLE
+PS> Test-UPN "user@[192.8.1.1]"
+True
+
+.EXAMPLE
+PS> Test-UPN "User@site.domain.-com" -Suffix
+False
 
 .INPUTS
 [string]
@@ -59,7 +80,18 @@ PS> Get-GroupPrincipal -Group "Users" | Test-UPN
 [bool]
 
 .NOTES
+user principal name (UPN)
+A user account name (sometimes referred to as the user logon name) and a domain name identifying the
+domain in which the user account is located.
+This is the standard usage for logging on to a Windows domain.
+The format is: someone@example.com (as for an email address).
 TODO: There is a thing such as: "MicrosoftAccount\TestUser@domain.com"
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Test-UPN.md
+
+.LINK
+https://docs.microsoft.com/en-us/windows/win32/secauthn/user-name-formats
 #>
 function Test-UPN
 {
@@ -68,107 +100,173 @@ function Test-UPN
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Test-UPN.md")]
 	param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true, Position = 0)]
-		[Alias("UserName")]
-		[string[]] $User,
+		[AllowEmptyString()]
+		[string[]] $Name,
 
 		[Parameter(ParameterSetName = "Prefix")]
 		[switch] $Prefix,
 
 		[Parameter(ParameterSetName = "Suffix")]
-		[switch] $Suffix
+		[switch] $Suffix,
+
+		[Parameter()]
+		[switch] $Quiet
 	)
 
+	begin
+	{
+		# Reserved characters that must be escaped: [ ] ( ) . \ ^ $ | ? * + { }
+		[regex] $SeparatorRegex = ("@")
+
+		# Invalid characters: ~ ! # $ % ^ & * ( ) + = [ ] { } \ / | ; : " < > ? ,
+		[regex] $NameRegex = '(\~|\!|\#|\$|\%|\^|\&|\*|\(|\)|\+|\=|\[|\]|\{|\}|\\|\/|\||\;|\:|"|\<|\>|\?|\,)'
+
+		# DomainRegex break down:
+		# TODO: Needs testing and/or simplification
+		# NOTE: (?( EXPRESSION ) YES | NO )
+		# Matches YES if the regular expression pattern designated by EXPRESSION matches; otherwise, matches the optional NO part.
+		# IF: (?(\[)
+		# YES (match IP address): (\[
+		# (\d{1,3}\.){3}\d{1,3}
+		# \])
+		# |
+		# NO (match ex: site.domain.com): (
+		# 	([0-9a-zA-Z][-0-9a-zA-Z]*[0-9a-zA-Z]*\.)+
+		#	[0-9a-zA-Z][-0-9a-zA-Z]{0,22}[0-9a-zA-Z]
+		# )
+		# )$
+		[regex] $DomainRegex = "(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-zA-Z][-0-9a-zA-Z]*[0-9a-zA-Z]*\.)+[0-9a-zA-Z][-0-9a-zA-Z]{0,22}[0-9a-zA-Z]))$"
+
+		if ($Quiet)
+		{
+			$WriteError = "SilentlyContinue"
+		}
+		else
+		{
+			$WriteError = $ErrorActionPreference
+		}
+	}
 	process
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-		foreach ($UPN in $User)
+		foreach ($UPN in $Name)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing: '$UPN'"
-			$Separator = 0
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing UPN: '$UPN'"
 
-			foreach ($Char in $UPN.ToCharArray())
-			{
-				if ($Char -eq "@")
-				{
-					++$Separator
-				}
-			}
+			$SeparatorCount = $SeparatorRegex.Matches($UPN).Count
 
-			$Name = $null
+			$User = $null
 			$Domain = $null
 
-			if ($Prefix -or $Suffix)
+			if ($Prefix)
 			{
-				if ($Separator -ne 0)
+				if ($SeparatorCount -eq 0)
 				{
-					Write-Error -Category SyntaxError -TargetObject $User -Message "Count of separator '@' must be 0 but $Separator present"
-					return $false
+					$User = $UPN
 				}
-				elseif ($Prefix)
+				elseif ($SeparatorCount -eq 1)
 				{
-					$Name = $UPN
+					$User = $UPN.Split("@")[0]
 				}
 				else
 				{
-					$Domain = $UPN
+					Write-Error -Category SyntaxError -TargetObject $UPN -ErrorAction $WriteError `
+						-Message "Count of separator '@' for user name only validation must be 0 or 1 but $SeparatorCount present"
+
+					return $false
+				}
+
+				if ([string]::IsNullOrEmpty($User))
+				{
+					Write-Error -Category InvalidArgument -TargetObject $UPN -ErrorAction $WriteError `
+						-Message "Unable to validate logon name because it's empty"
+					return $false
 				}
 			}
-			elseif ($Separator -ne 1)
+			elseif ($Suffix)
 			{
-				Write-Error -Category SyntaxError -TargetObject $User -Message "Count of separator '@' must be 1 but $Separator present"
+				if ($SeparatorCount -eq 0)
+				{
+					$Domain = $UPN
+				}
+				elseif ($SeparatorCount -eq 1)
+				{
+					$Domain = $UPN.Split("@")[1]
+				}
+				else
+				{
+					Write-Error -Category SyntaxError -TargetObject $UPN -ErrorAction $WriteError `
+						-Message "Count of separator '@' for domain name only validation must be 0 or 1 but $SeparatorCount present"
+
+					return $false
+				}
+
+				if ([string]::IsNullOrEmpty($Domain))
+				{
+					Write-Error -Category InvalidArgument -TargetObject $UPN -ErrorAction $WriteError `
+						-Message "Unable to validate domain name because it's empty"
+					return $false
+				}
+			}
+			elseif ($SeparatorCount -ne 1)
+			{
+				Write-Error -Category SyntaxError -TargetObject $UPN -ErrorAction $WriteError `
+					-Message "Count of separator '@' must be 1 but $SeparatorCount present"
+
 				return $false
 			}
 			else
 			{
-				$Name = $UPN.Split("@")[0]
+				$User = $UPN.Split("@")[0]
 				$Domain = $UPN.Split("@")[1]
+
+				if ([string]::IsNullOrEmpty($User) -or [string]::IsNullOrEmpty($Domain))
+				{
+					Write-Error -Category InvalidArgument -TargetObject $UPN -ErrorAction $WriteError `
+						-Message "Unable to validate UPN because of incomplete UPN"
+					return $false
+				}
 			}
 
-			if ($Name)
+			if ($User)
 			{
-				# Validate the user name portion of a User Principal Name
-				if ($Name.StartsWith(".") -or $Name.StartsWith("-") -or $Name.EndsWith(".") -or $Name.EndsWith("-"))
-				{
-					Write-Error -Category SyntaxError -TargetObject $User -Message "Logon name must not begin or end with: '.' or '-'"
-					return $false
-				}
-				elseif ($Name -match "\.\.+")
-				{
-					Write-Error -Category SyntaxError -TargetObject $User -Message "Logon name must not contain 2 or more subsequent dots '..'"
-					return $false
-				}
-				else
-				{
-					# Invalid characters: ~ ! # $ % ^ & * ( ) + = [ ] { } \ / | ; : " < > ? ,
-					# Reserved characters that must be escaped: [ ] ( ) . \ ^ $ | ? * + { }
-					[regex] $Regex = "(\~|\!|\#|\$|\%|\^|\&|\*|\(|\)|\+|\=|\[|\]|\{|\}|\\|\/|\||\;|\:|`"|\<|\>|\?|\,)"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Validating user name: $User"
 
-					if ($Regex.Matches($Name).Count -ne 0)
-					{
-						Write-Error -Category SyntaxError -TargetObject $User -Message "Invalid logon name syntax"
-						return $false
-					}
+				# Validate the user name portion of a User Principal Name
+				if ($User -match "^(\.|-)|(\.|-)$")
+				{
+					Write-Error -Category SyntaxError -TargetObject $User -ErrorAction $WriteError `
+						-Message "Logon name must not begin or end with: '.' or '-'"
+
+					return $false
+				}
+				elseif ($User -match "\.{2,}")
+				{
+					Write-Error -Category SyntaxError -TargetObject $User -ErrorAction $WriteError `
+						-Message "Logon name must not contain 2 or more subsequent dots '..'"
+
+					return $false
+				}
+				elseif ($NameRegex.Matches($User).Count -ne 0)
+				{
+					Write-Error -Category SyntaxError -TargetObject $User -ErrorAction $WriteError `
+						-Message "Invalid logon name syntax"
+
+					return $false
 				}
 			}
 
 			if ($Domain)
 			{
-				try
-				{
-					# Validate the domain name portion of a User Principal Name
-					# Reserved characters that must be escaped: [ ] ( ) . \ ^ $ | ? * + { }
-					[regex] $Regex = "(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-zA-Z][-0-9a-zA-Z]*[0-9a-zA-Z]*\.)+[0-9a-zA-Z][-0-9a-zA-Z]{0,22}[0-9a-zA-Z]))$"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Validating domain name: $Domain"
 
-					if ($Regex.Matches($Domain).Count -ne 1)
-					{
-						Write-Error -Category SyntaxError -TargetObject $Domain -Message "Invalid domain name syntax"
-						return $false
-					}
-				}
-				catch
+				# Validate the domain name portion of a User Principal Name
+				if ($DomainRegex.Matches($Domain).Count -ne 1)
 				{
-					Write-Error -Category $_.CategoryInfo.Category -TargetObject $_.TargetObject -Message $_.Exception.Message
+					Write-Error -Category SyntaxError -TargetObject $Domain -ErrorAction $WriteError `
+						-Message "Invalid domain name syntax"
+
 					return $false
 				}
 			}

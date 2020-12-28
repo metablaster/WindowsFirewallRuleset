@@ -76,7 +76,7 @@ Parameter names and aliases
 - [string] `Privilege` (specify the right a cmdlet needs to perform an operation for a particular entity)
 - [switch] `CaseSensitive`
 - [switch] `Binary` (the cmdlet handles binary values)
-- [switch] `Quiet`
+- [switch] `Quiet` (the cmdlet suppresses user feedback during its actions)
 
 `*` Used by most commandlets but should be aliases instead
 

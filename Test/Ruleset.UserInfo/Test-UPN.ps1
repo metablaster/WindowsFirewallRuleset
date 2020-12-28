@@ -64,6 +64,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #Endregion
 
 Enter-Test
+$private:PSDefaultParameterValues.Add("Test-UPN:Quiet", $true)
 
 $Domain = "domain.com"
 
@@ -71,14 +72,131 @@ Start-Test "Test-UPN $TestUser@$Domain"
 $Result = Test-UPN "$TestUser@$Domain"
 $Result
 
-Start-Test "Test-UPN $TestUser@$Domain"
+Start-Test "Test-UPN MicrosoftAccount\$TestUser@$Domain"
 Test-UPN "MicrosoftAccount\$TestUser@$Domain"
 
-Start-Test "Test-UPN '$TestUser'"
+$Domain = "si-te.domain-def.com"
+Start-Test "Test-UPN '$Domain' -Suffix"
+Test-UPN $Domain -Suffix
+
+$Domain = "[192.8.1.1]"
+Start-Test "Test-UPN '$Domain' -Suffix"
+Test-UPN $Domain -Suffix
+
+$Domain = "user@[192.8.1.1]"
+Start-Test "Test-UPN '$Domain'"
+Test-UPN $Domain
+
+#
+# Bad syntax
+#
+New-Section "Bad syntax"
+
+$BadUser = "User."
+Start-Test "Test-UPN '$BadUser' -Prefix"
+Test-UPN $BadUser -Prefix
+
+$BadUser = "Us...er"
+Start-Test "Test-UPN '$BadUser' -Prefix"
+Test-UPN $BadUser -Prefix
+
+$BadUser = "Use!r"
+Start-Test "Test-UPN '$BadUser' -Prefix"
+Test-UPN $BadUser -Prefix
+
+$BadDomain = "-domain.com"
+Start-Test "Test-UPN '$BadDomain' -Suffix"
+Test-UPN $BadDomain -Suffix
+
+$BadDomain = "domain.-com"
+Start-Test "Test-UPN '$BadDomain' -Suffix"
+Test-UPN $BadDomain -Suffix
+
+$BadDomain = "[192.8.1]"
+Start-Test "Test-UPN '$BadDomain' -Suffix"
+Test-UPN $BadDomain -Suffix
+
+$Domain = "user@192.8.1.1"
+Start-Test "Test-UPN '$Domain'"
+Test-UPN $Domain
+
+$BadUPN = "user.user@domain@domain2.lan"
+Start-Test "Test-UPN '$BadUPN'"
+Test-UPN $BadUPN
+
+$BadUPN = "@"
+Start-Test "Test-UPN '$BadUPN'"
+Test-UPN $BadUPN
+
+$BadDomain = "@domain.lan"
+Start-Test "Test-UPN '$BadDomain'"
+Test-UPN $BadDomain
+
+$BadUser = "user@"
+Start-Test "Test-UPN '$BadUser'"
+Test-UPN $BadUser
+
+$BadDomain = "@domain.lan -Prefix"
+Start-Test "Test-UPN '$BadDomain'"
+Test-UPN $BadDomain -Prefix
+
+$BadUser = "user@"
+Start-Test "Test-UPN '$BadUser' -Suffix"
+Test-UPN $BadUser -Suffix
+
+#
+# Suffix or Prefix
+#
+New-Section "Suffix or Prefix"
+
+Start-Test "Test-UPN '$TestUser' -Prefix"
 Test-UPN $TestUser -Prefix
 
+Start-Test "Test-UPN '$Domain' -Suffix"
+Test-UPN $Domain -Suffix
+
+Start-Test "Test-UPN '$TestUser'"
+Test-UPN $TestUser
+
 Start-Test "Test-UPN '$Domain'"
-Test-UPN $Domain -suffix
+Test-UPN $Domain
+
+Start-Test "Test-UPN $TestUser@$Domain -Prefix"
+Test-UPN "$TestUser@$Domain" -Prefix
+
+Start-Test "Test-UPN $TestUser@$Domain -Suffix"
+Test-UPN "$TestUser@$Domain" -Suffix
+
+#
+# null or empty test
+#
+New-Section "null or empty"
+
+Start-Test "Test-UPN null pipeline -Suffix"
+$NullString = @($null, $Domain, $null)
+$NullString | Test-UPN -Suffix
+
+$EmptyString = @("", $TestUser, "")
+Start-Test "Test-UPN empty pipeline -Prefix"
+$EmptyString | Test-UPN -Prefix
+
+Start-Test "Test-UPN empty -Suffix"
+$TestString = ""
+Test-UPN $TestString -Suffix
+
+Start-Test "Test-UPN empty"
+Test-UPN $TestString
+
+Start-Test "Test-UPN null -Prefix"
+$TestString = $null
+Test-UPN $TestString -Prefix
+
+Start-Test "Test-UPN null"
+Test-UPN $TestString
+
+Start-Test "Test-UPN separator only"
+$TestString = "@"
+Test-UPN $TestString
 
 Test-Output $Result -Command Test-UPN
 
