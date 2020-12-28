@@ -114,6 +114,7 @@ SOFTWARE.
 		"Resolve-Host"
 		"Get-SystemSKU"
 		"Test-TargetComputer"
+		"Test-UNC"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not
@@ -147,6 +148,7 @@ SOFTWARE.
 		"Help\en-US\Get-SystemSKU.md"
 		"Help\en-US\Ruleset.ComputerInfo.md"
 		"Help\en-US\Test-TargetComputer.md"
+		"Help\en-US\Test-UNC.md"
 		"Help\README.md"
 		"Public\ConvertFrom-OSBuild.ps1"
 		"Public\Get-Broadcast.ps1"
@@ -157,6 +159,7 @@ SOFTWARE.
 		"Public\Get-SystemSKU.ps1"
 		"Public\README.md"
 		"Public\Test-TargetComputer.ps1"
+		"Public\Test-UNC.ps1"
 		"Ruleset.ComputerInfo_c68a812d-076d-47bd-a73d-8d4600bd3c51_HelpInfo.xml"
 		"Ruleset.ComputerInfo.psd1"
 		"Ruleset.ComputerInfo.psm1"

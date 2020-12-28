@@ -81,6 +81,7 @@
         "executables",
         "FDPHOST",
         "flushdns",
+        "FQPN",
         "Getstarted",
         "gitattributes",
         "globbing",

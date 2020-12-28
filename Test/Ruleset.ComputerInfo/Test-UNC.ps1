@@ -28,25 +28,26 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Select-EnvironmentVariable
+Unit test for Test-UNC function
 
 .DESCRIPTION
-Unit test for Select-EnvironmentVariable
+Test correctness of Test-UNC function
 
 .EXAMPLE
-PS> .\Select-EnvironmentVariable.ps1
+PS> .\Test-UNC.ps1
 
 .INPUTS
-None. You cannot pipe objects to Select-EnvironmentVariable.ps1
+None. You cannot pipe objects to Test-UNC.ps1
 
 .OUTPUTS
-None. Select-EnvironmentVariable.ps1 does not generate any output
+None. Test-UNC.ps1 does not generate any output
 
 .NOTES
 None.
 #>
 
 #region Initialization
+#Requires -Version 5.1
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
@@ -60,40 +61,36 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 # User prompt
 Update-Context $TestContext $ThisScript
 if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
-#endregion
+#Endregion
 
-# TODO: All except ExpandProperty will be blank in bulk test run in this unit
 Enter-Test
 
-Start-Test "Select-EnvironmentVariable UserProfile"
-Select-EnvironmentVariable UserProfile -Force
-
-# Start-Test "Select Name"
-# $Result | Select-Object -ExpandProperty Name
-
-Start-Test "Select-EnvironmentVariable Rooted"
-Select-EnvironmentVariable Rooted -Force
-
-Start-Test "Select-EnvironmentVariable FileSystem"
-Select-EnvironmentVariable FileSystem -Force
-
-Start-Test "Select-EnvironmentVariable FullyQualified"
-Select-EnvironmentVariable FullyQualified -Force
-
-# Start-Test "Select-EnvironmentVariable WhiteList | Sort"
-# Select-EnvironmentVariable WhiteList | Sort-Object -Descending { $_.Value.Length }
-
-Start-Test "Select-EnvironmentVariable BlackList"
-Select-EnvironmentVariable BlackList -Force
-
-# Start-Test "Select Value"
-# $Result | Select-Object -ExpandProperty Value
-
-Start-Test "Select-EnvironmentVariable All"
-$Result = Select-EnvironmentVariable All -Force
+$TestString = "\\SERVER\Share"
+Start-Test $TestString
+$Result = Test-UNC $TestString
 $Result
 
-Test-Output $Result -Command Select-EnvironmentVariable
+$TestString = "\\SERVER"
+Start-Test $TestString
+Test-UNC $TestString -Strict
+
+$TestString = "\\SERVER-01\Share\Directory DIR\file.exe"
+Start-Test $TestString
+Test-UNC $TestString -Strict
+
+$TestString = "\\SERVER-01\Share Name\Directory Name"
+Start-Test $TestString
+Test-UNC $TestString -Strict
+
+$TestString = "\SERVER-01\Share\Directory DIR"
+Start-Test $TestString
+Test-UNC $TestString
+
+$TestString = "\\.\pipe\crashpad_2324_ZXWSDFBXANSTVSQE"
+Start-Test $TestString
+Test-UNC $TestString
+
+Test-Output $Result -Command Test-UNC
 
 Update-Log
 Exit-Test

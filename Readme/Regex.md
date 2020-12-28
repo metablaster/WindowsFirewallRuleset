@@ -40,8 +40,10 @@ Note:
   - [Random regexes](#random-regexes)
     - [Match username in path](#match-username-in-path)
     - [Path validation](#path-validation)
-    - [Link validation](#link-validation)
+    - [URL validation](#url-validation)
     - [DACL validation](#dacl-validation)
+    - [UNC validation](#unc-validation)
+    - [UPN validation](#upn-validation)
 
 ## Filterline
 
@@ -247,18 +249,36 @@ Here file extention must be either `*.lnk` or `*.url`
 '^[a-z]:\\(?:[^\\/:*?"<>|\r\n]+\\)*[^\\/:*?"<>.|\r\n]*(\.(lnk|url))*$'
 ```
 
-### Link validation
+### URL validation
 
-```regex
-[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)
+```powershell
+"[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)"
 ```
 
 ### DACL validation
 
-DACL is part of a SDDL string
+DACL is part of SDDL string
 
 ```powershell
 "(D:\w*(\((\w*;\w*){4};((S(-\d+){2,12})|[A-Z]*)\))+){1}"
+```
+
+### UNC validation
+
+Universal Name Convention
+
+```powershell
+"^\\\\[a-zA-Z0-9\.\-_]{1,}(\\[a-zA-Z0-9\-_\s\.]{1,}){1,}[\$]{0,1}"
+```
+
+### UPN validation
+
+Universal Principal Name
+
+Domain name portion:
+
+```powershell
+"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-zA-Z][-0-9a-zA-Z]*[0-9a-zA-Z]*\.)+[0-9a-zA-Z][-0-9a-zA-Z]{0,22}[0-9a-zA-Z]))$"
 ```
 
 [multicursor]: https://code.visualstudio.com/docs/getstarted/tips-and-tricks#_multi-cursor-selection

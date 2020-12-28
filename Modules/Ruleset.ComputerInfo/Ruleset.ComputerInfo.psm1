@@ -49,6 +49,7 @@ $PublicScripts = @(
 	"Resolve-Host"
 	"Get-SystemSKU"
 	"Test-TargetComputer"
+	"Test-UNC"
 )
 
 foreach ($Script in $PublicScripts)
