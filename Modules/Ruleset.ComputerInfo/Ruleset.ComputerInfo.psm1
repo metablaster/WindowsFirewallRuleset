@@ -44,10 +44,11 @@ $PublicScripts = @(
 	"ConvertFrom-OSBuild"
 	"Get-Broadcast"
 	"Get-ComputerName"
-	"Select-IPInterface"
 	"Get-InterfaceAlias"
-	"Resolve-Host"
 	"Get-SystemSKU"
+	"Resolve-Host"
+	"Select-IPInterface"
+	"Test-NetBiosName"
 	"Test-TargetComputer"
 	"Test-UNC"
 )

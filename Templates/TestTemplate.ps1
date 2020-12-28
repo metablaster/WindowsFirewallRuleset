@@ -80,6 +80,9 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
+# TODO Specify temporary Test-Function parameters
+# $private:PSDefaultParameterValues.Add("Test-Function:Parameter", Value)
+
 # TODO: Keep this check if this test is:
 # 1. potentially dangerous
 # 2. it should not be part of RunAllTests.ps1

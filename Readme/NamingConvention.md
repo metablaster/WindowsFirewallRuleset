@@ -77,6 +77,8 @@ Parameter names and aliases
 - [switch] `CaseSensitive`
 - [switch] `Binary` (the cmdlet handles binary values)
 - [switch] `Quiet` (the cmdlet suppresses user feedback during its actions)
+- [int32] `ErrorLevel` (specify the level of errors to report)
+- [switch] `Repair` (attempt to correct something from a broken state)
 
 `*` Used by most commandlets but should be aliases instead
 

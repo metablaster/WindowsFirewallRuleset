@@ -99,7 +99,7 @@ function Test-UPN
 	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "None",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Test-UPN.md")]
 	param (
-		[Parameter(Mandatory = $true, ValueFromPipeline = $true, Position = 0)]
+		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
 		[AllowEmptyString()]
 		[string[]] $Name,
 
@@ -172,7 +172,7 @@ function Test-UPN
 				else
 				{
 					Write-Error -Category SyntaxError -TargetObject $UPN -ErrorAction $WriteError `
-						-Message "Count of separator '@' for user name only validation must be 0 or 1 but $SeparatorCount present"
+						-Message "Count of separator '@' for user name only validation must be 0 or 1 but $SeparatorCount present: '$UPN'"
 
 					return $false
 				}
@@ -180,7 +180,7 @@ function Test-UPN
 				if ([string]::IsNullOrEmpty($User))
 				{
 					Write-Error -Category InvalidArgument -TargetObject $UPN -ErrorAction $WriteError `
-						-Message "Unable to validate logon name because it's empty"
+						-Message "Unable to validate logon name because it's empty: '$UPN'"
 					return $false
 				}
 			}
@@ -197,7 +197,7 @@ function Test-UPN
 				else
 				{
 					Write-Error -Category SyntaxError -TargetObject $UPN -ErrorAction $WriteError `
-						-Message "Count of separator '@' for domain name only validation must be 0 or 1 but $SeparatorCount present"
+						-Message "Count of separator '@' for domain name only validation must be 0 or 1 but $SeparatorCount present: '$UPN'"
 
 					return $false
 				}
@@ -205,14 +205,14 @@ function Test-UPN
 				if ([string]::IsNullOrEmpty($Domain))
 				{
 					Write-Error -Category InvalidArgument -TargetObject $UPN -ErrorAction $WriteError `
-						-Message "Unable to validate domain name because it's empty"
+						-Message "Unable to validate domain name because it's empty: '$UPN'"
 					return $false
 				}
 			}
 			elseif ($SeparatorCount -ne 1)
 			{
 				Write-Error -Category SyntaxError -TargetObject $UPN -ErrorAction $WriteError `
-					-Message "Count of separator '@' must be 1 but $SeparatorCount present"
+					-Message "Count of separator '@' must be 1 but $SeparatorCount present: '$UPN'"
 
 				return $false
 			}
@@ -224,7 +224,7 @@ function Test-UPN
 				if ([string]::IsNullOrEmpty($User) -or [string]::IsNullOrEmpty($Domain))
 				{
 					Write-Error -Category InvalidArgument -TargetObject $UPN -ErrorAction $WriteError `
-						-Message "Unable to validate UPN because of incomplete UPN"
+						-Message "Unable to validate UPN because of incomplete UPN: '$UPN'"
 					return $false
 				}
 			}
@@ -237,21 +237,21 @@ function Test-UPN
 				if ($User -match "^(\.|-)|(\.|-)$")
 				{
 					Write-Error -Category SyntaxError -TargetObject $User -ErrorAction $WriteError `
-						-Message "Logon name must not begin or end with: '.' or '-'"
+						-Message "Logon name '$User' must not begin or end with: '.' or '-'"
 
 					return $false
 				}
 				elseif ($User -match "\.{2,}")
 				{
 					Write-Error -Category SyntaxError -TargetObject $User -ErrorAction $WriteError `
-						-Message "Logon name must not contain 2 or more subsequent dots '..'"
+						-Message "Logon name '$User' must not contain 2 or more subsequent dots '..'"
 
 					return $false
 				}
 				elseif ($NameRegex.Matches($User).Count -ne 0)
 				{
 					Write-Error -Category SyntaxError -TargetObject $User -ErrorAction $WriteError `
-						-Message "Invalid logon name syntax"
+						-Message "Invalid logon name syntax: '$User'"
 
 					return $false
 				}
@@ -265,7 +265,7 @@ function Test-UPN
 				if ($DomainRegex.Matches($Domain).Count -ne 1)
 				{
 					Write-Error -Category SyntaxError -TargetObject $Domain -ErrorAction $WriteError `
-						-Message "Invalid domain name syntax"
+						-Message "Invalid domain name syntax: '$Domain'"
 
 					return $false
 				}

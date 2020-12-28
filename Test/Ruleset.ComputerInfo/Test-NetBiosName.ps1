@@ -28,19 +28,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Test-UNC function
+Unit test for Test-NetBiosName
 
 .DESCRIPTION
-Test correctness of Test-UNC function
+Test correctness of Test-NetBiosName function
 
 .EXAMPLE
-PS> .\Test-UNC.ps1
+PS> .\Test-NetBiosName.ps1
 
 .INPUTS
-None. You cannot pipe objects to Test-UNC.ps1
+None. You cannot pipe objects to Test-NetBiosName.ps1
 
 .OUTPUTS
-None. Test-UNC.ps1 does not generate any output
+None. Test-NetBiosName.ps1 does not generate any output
 
 .NOTES
 None.
@@ -64,34 +64,42 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #Endregion
 
 Enter-Test
-# $private:PSDefaultParameterValues.Add("Test-UNC:Quiet", $true)
+# $private:PSDefaultParameterValues.Add("Test-NetBiosName:Quiet", $true)
 
-$TestString = "\\SERVER\Share"
+$TestString = "*SERVER"
 Start-Test $TestString
-$Result = Test-UNC $TestString
+$Result = Test-NetBiosName $TestString
 $Result
 
-$TestString = "\\SERVER"
+$TestString = "SERVER"
 Start-Test $TestString
-Test-UNC $TestString
+Test-NetBiosName $TestString
 
-$TestString = "\\SERVER-01\Share\Directory DIR\file.exe"
+$TestString = "\\SERVER-01"
 Start-Test $TestString
-Test-UNC $TestString
+Test-NetBiosName $TestString
 
-$TestString = "\\SERVER-01\Share Name\Directory Name"
+$TestString = "-SERVER-01"
 Start-Test $TestString
-Test-UNC $TestString
+Test-NetBiosName $TestString
 
-$TestString = "\SERVER-01\Share\Directory DIR"
+$TestString = "-Server-01"
+Start-Test "$TestString -Strict"
+Test-NetBiosName $TestString -Strict
+
+$TestString = "site@domain.com"
 Start-Test $TestString
-Test-UNC $TestString
+Test-NetBiosName $TestString
 
-$TestString = "\\.\pipe\crashpad_2324_ZXWSDFBXANSTVSQE"
+$TestString = "site.domain.com"
 Start-Test $TestString
-Test-UNC $TestString
+Test-NetBiosName $TestString
 
-Test-Output $Result -Command Test-UNC
+$TestString = "site.domain.com"
+Start-Test "$TestString -Strict"
+Test-NetBiosName $TestString -Strict
+
+Test-Output $Result -Command Test-NetBiosName
 
 Update-Log
 Exit-Test

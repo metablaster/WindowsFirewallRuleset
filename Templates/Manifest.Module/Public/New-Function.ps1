@@ -53,41 +53,53 @@ None. New-Function does not generate any output
 
 .NOTES
 None.
-TODO: Update HelpURI
+TODO: Update HelpURI and first link
 TODO: If this is based on 3rd party function, include file and/or function changes here
 TODO: Remove unneeded template code
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.MODULENAME/Help/en-US/FUNCTIONNAME.md
 #>
 function New-Function
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 		"PSReviewUnusedParameter", "", Justification = "This is template function")]
 	[OutputType([void])]
-	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium",
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium", PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.MODULENAME/Help/en-US/FUNCTIONNAME.md")]
 	param (
-		[Parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
 		[string] $ParameterName
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
-	# TODO: Update confirm parameters
-	# "TARGET", "MESSAGE", "OPERATION", [ref]$reason
-	# https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.shouldprocessreason?view=powershellsdk-7.0.0
-	# https://docs.microsoft.com/en-us/powershell/scripting/learn/deep-dives/everything-about-shouldprocess?view=powershell-7#quick-parameter-reference
-	$CallReason
-	if ($PSCmdlet.ShouldProcess("Template TARGET", "Template MESSAGE", "Template OPERATION", [ref] $CallReason))
+	begin
 	{
-		# NOTE: Sample output depens on amount of parameters (2, 3 or 4 parameters)
-		# Performing the operation "Template MESSAGE" on target "Template TARGET"
-		#
-		# OR
-		#
-		# "Template OPERATION"
-		# "Template MESSAGE"
+	}
+	process
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-		$CallReason
-		return $null
+		foreach ($Value in $ParameterName)
+		{
+			# TODO: Update confirm parameters
+			# "TARGET", "MESSAGE", "OPERATION", [ref]$reason
+			# https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.shouldprocessreason?view=powershellsdk-7.0.0
+			# https://docs.microsoft.com/en-us/powershell/scripting/learn/deep-dives/everything-about-shouldprocess?view=powershell-7#quick-parameter-reference
+			$CallReason
+			if ($PSCmdlet.ShouldProcess("Template TARGET", "Template MESSAGE", "Template OPERATION", [ref] $CallReason))
+			{
+				# NOTE: Sample output depens on amount of parameters (2, 3 or 4 parameters)
+				# Performing the operation "Template MESSAGE" on target "Template TARGET"
+				#
+				# OR
+				#
+				# "Template OPERATION"
+				# "Template MESSAGE"
+
+				$CallReason
+				return $null
+			}
+		}
 	}
 }
 
